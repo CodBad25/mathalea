@@ -1,5 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
+import { penteAffineAnimee } from '../../lib/2d/PenteAffineAnimee'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import {
@@ -11,6 +12,7 @@ import {
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -102,7 +104,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
     return label
   }
 
-  private creerFigure(droites: DroiteAffine[]) {
+  private creerFigure(droites: DroiteAffine[], id = '') {
     const xMin = -5
     const xMax = 5
     const yMin = -6
@@ -169,6 +171,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         pixelsParCm: 25,
         scale: 0.72,
         center: true,
+        id,
       },
       objets,
     )
@@ -223,8 +226,19 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
       throw new Error('Aucune bonne droite générée.')
     }
     const mauvaisesDroites = droites.filter((droite) => !droite.estBonneReponse)
-    const figure = this.creerFigure(droites)
+    const figureId = `penteAffineEx${this.numeroExercice ?? 0}Q${this.indexQuestionHote ?? 0}`
+    const figure = this.creerFigure(droites, figureId)
     const fonction = reduireAxPlusB(a, b)
+    const animation =
+      context.isHtml && !context.isTypst
+        ? `<br>${penteAffineAnimee({
+            figureId,
+            b,
+            numerateur: a.num,
+            denominateur: a.den,
+            pixelsParCm: 25,
+          })}`
+        : ''
 
     this.enonce = `On considère la fonction affine $f$ définie sur $\\mathbb{R}$ par $f(x)=${fonction}$.<br>
 On a représenté ci-dessous quatre droites dans un repère.<br><br>
@@ -240,7 +254,8 @@ La droite qui représente la fonction $f$ est :`
 
     this.correction = `La représentation graphique de la fonction $f$ est la droite d'équation $y=${fonction}$.<br>
 Elle coupe l'axe des ordonnées en $${b}$ et son coefficient directeur est $${a.texFractionSimplifiee}$.<br>
-La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(d_${bonneDroite?.numero}\\right)`)}$.`
+On part donc du point $(0;${b})$ et on  avance de $${Math.abs(a.den)}$ vers la droite puis on ${a.num > 0 ? 'monte' : 'descend'} de $${Math.abs(a.num)}$ pour "retomber" sur la bonne droite.<br>
+La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(d_${bonneDroite?.numero}\\right)`)}$.${animation}`
   }
 
   versionOriginale = () => {

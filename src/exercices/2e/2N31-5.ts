@@ -1,29 +1,17 @@
-import PuissancesDeDix from '../4e/4C30'
-export const titre = 'Utiliser les règles de calculs avec des puissances de 10'
-export const interactifReady = true
+import SommeOuProduitFractions from '../4e/4C23'
+export const titre = 'Effectuer somme, différence ou produit de fractions'
+export const dateDeModifImportante = '07/05/2024'
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'qcmMono'
-export const dateDePublication = '05/09/2023'
-export const uuid = '6b2e5'
+export const interactifReady = true
+export const uuid = '6575c'
 
 export const refs = {
-  'fr-fr': ['2N31-5', 'BP2AutoE2'],
-  'fr-ch': ['10NO3D-21'],
+  'fr-fr': ['2N31-5', 'BP2AutoH4'],
+  'fr-ch': ['11-NO2-1', '1mCN-5'],
 }
-/**
- *
- */
-export default class PuissancesDeDix2 extends PuissancesDeDix {
+export default class SommeOuProduitFractions2nde extends SommeOuProduitFractions {
   constructor() {
     super()
-    this.sup = 3
-    this.correctionDetaillee = false
-    this.besoinFormulaireNumerique = [
-      'Règle à travailler',
-      3,
-      '1 : Calculs de base\n2 : Calculs plus complexes\n3 : Mélange',
-    ]
-    this.besoinFormulaire2Texte = false
+    this.sup = 4
   }
 }

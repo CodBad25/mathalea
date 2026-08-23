@@ -25,8 +25,8 @@
 
   if (isActivityChooser) {
     popup = document.querySelector('.modchooser')
-    SECTION = new URL(popup.querySelector('a[data-action="add-chooser-option"]').getAttribute('href')).searchParams.get('section')
-
+    SECTION = new URL(popup.querySelector('a[data-action="add-chooser-option"]').getAttribute('href')).searchParams.get('sectionid') || // moodle 5.1
+              new URL(popup.querySelector('a[data-action="add-chooser-option"]').getAttribute('href')).searchParams.get('section')      // before
     popup.setAttribute('style', 'max-width: 90% !important;')
     popup.querySelector('.modal-title').textContent = 'Ajouter une activité MathALÉA'
     popup.querySelector('.modal-footer').style.display = 'none'

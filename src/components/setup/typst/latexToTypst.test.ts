@@ -151,7 +151,7 @@ describe('latexMathToTypst', () => {
     // bloc et ne le referme pas prématurément
     expect(
       htmlToTypst('$387\\text{ m$^2$/h} = \\dfrac{387\\text{ m$^2$}}{1}$'),
-    ).toBe('#box($387#txt(" m")^2#txt("/h")= frac(387#txt(" m")^2, 1)$)')
+    ).toBe('$387#txt(" m")^2#txt("/h")= frac(387#txt(" m")^2, 1)$')
   })
 
   it('supprime le saut de ligne final qui échapperait le $ fermant', () => {
@@ -312,7 +312,7 @@ describe('htmlToTypst — schémas en barres (SchemaEnBoite)', () => {
 describe('htmlToTypst', () => {
   it('convertit du texte avec formules', () => {
     expect(htmlToTypst('Calculer $\\dfrac{1}{2}+\\dfrac{1}{3}$.')).toBe(
-      'Calculer #box($frac(1, 2) + frac(1, 3)$).',
+      'Calculer $frac(1, 2) + frac(1, 3)$.',
     )
   })
 
@@ -325,6 +325,31 @@ describe('htmlToTypst', () => {
     expect(htmlToTypst('Viens-tu à vélo ? \\\\\\medskip Suite')).toBe(
       'Viens-tu à vélo ? #v(0.5em)\nSuite',
     )
+  })
+
+  it('convertit les boîtes LaTeX en mode texte (énoncés CAN)', () => {
+    // can2a-2026 Q12 : un algorithme encadré, écrit en LaTeX texte
+    const code = htmlToTypst(
+      '\\hspace*{10mm}\\fbox{\\parbox{0.5\\linewidth}{\\setlength{\\parskip}{.5cm}' +
+        ' \\texttt{def mystere(a) :}\\newline \\hspace*{7mm}\\texttt{return 2*b}}}',
+    )
+    // la largeur de \parbox n'est pas reprise : la boîte prend celle de son
+    // contenu, sans quoi les lignes de l'algorithme se couperaient dans une
+    // cellule étroite du tableau « Course aux nombres »
+    expect(code).toBe(
+      '#h(10mm)#box(stroke: 0.6pt + luma(60), inset: (x: 6pt, y: 5pt))' +
+        '[#box[#raw("def mystere(a) :")\\\n#h(7mm)#raw("return 2*b")]]',
+    )
+    // un réglage de longueur n'a pas d'équivalent : il disparaît
+    expect(code).not.toContain('parskip')
+  })
+
+  it('garde l’italique des mathématiques dans une réponse mise en évidence', () => {
+    // miseEnEvidence() produit {\color{…}\boldsymbol{…}} : \boldsymbol est du
+    // gras *italique*, contrairement à \mathbf
+    expect(
+      htmlToTypst('$={\\color{#F15929}\\boldsymbol{x(3x+1)}}$'),
+    ).toBe('$= text(fill: #rgb("#F15929"), bold(x(3 x + 1)))$')
   })
 
   it('convertit les array LaTeX bordés en tableaux natifs', () => {
@@ -435,7 +460,7 @@ describe('htmlToTypst', () => {
     const result = htmlToTypst(
       'Angle : <span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">78^\\circ</annotation></semantics></math></span><span class="katex-html">78∘{\\color{black} \\scriptsize{78^\\circ}}78∘</span></span>',
     )
-    expect(result).toBe('Angle : #box($78^circle.small$)')
+    expect(result).toBe('Angle : $78^circle.small$')
     expect(result).not.toContain('78∘')
     expect(result).not.toContain('\\scriptsize')
   })
@@ -541,8 +566,8 @@ describe('htmlToTypst', () => {
         '</div><div class="m-2" id="resultatCheckEx1Q0"></div>',
     )
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ #box($1$)')
-    expect(result).toContain('+ #box($2$)')
+    expect(result).toContain('+ $1$')
+    expect(result).toContain('+ $2$')
     expect(result).not.toContain('#qcm-bonne')
   })
 
@@ -554,8 +579,8 @@ describe('htmlToTypst', () => {
         '</div>',
     )
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ #qcm-bonne[#box($8$)]')
-    expect(result).toContain('+ #box($4$)')
+    expect(result).toContain('+ #qcm-bonne[$8$]')
+    expect(result).toContain('+ $4$')
   })
 
   it('conserve le QCM quand une figure mathalea2d suit dans le même contenu', () => {
@@ -575,8 +600,8 @@ describe('htmlToTypst', () => {
       figures,
     )
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ #box($1$)')
-    expect(result).toContain('+ #box($2$)')
+    expect(result).toContain('+ $1$')
+    expect(result).toContain('+ $2$')
     expect(result).toContain('#mathalea-figure-block(1, fig-1-align, fig-1-zoom,')
     expect(result).not.toMatch(/(^|[^-\w])0($|[^.\w])/m)
     expect(figures).toHaveLength(1)
@@ -592,9 +617,9 @@ describe('htmlToTypst', () => {
     expect(result).toContain('#table(')
     expect(result).toContain('columns: 2')
     expect(result).toContain('stroke: 0.5pt')
-    expect(result).toContain('table.cell(fill: rgb("#d3d3d3"))[#box($x$)]')
-    expect(result).toContain('[#box($1$)]')
-    expect(result).toContain('[#box($f(x)$)]')
+    expect(result).toContain('table.cell(fill: rgb("#d3d3d3"))[$x$]')
+    expect(result).toContain('[$1$]')
+    expect(result).toContain('[$f(x)$]')
   })
 
   describe('protection des `&` bruts (tableau LaTeX) contre le round-trip DOM', () => {

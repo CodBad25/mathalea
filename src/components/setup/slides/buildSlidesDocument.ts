@@ -11,6 +11,7 @@ import {
 import {
   BREATHER_IMPORT,
   MATHALEA_ANCHOR_HELPER,
+  MATHALEA_INLINE_FORMULA_RULE,
 } from '../typst/buildTypstDocument'
 import { minimalCorrection } from '../typst/minimalCorrection'
 
@@ -553,6 +554,7 @@ export function buildSlidesDocument(
   lines.push('// police des formules ; le texte inséré garde la police du texte')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
+  lines.push(MATHALEA_INLINE_FORMULA_RULE)
   lines.push('// les fractions gardent leur taille normale au milieu du texte')
   lines.push('#show math.frac: it => math.display(it)')
   if (options.autoVerticalSpacing) {

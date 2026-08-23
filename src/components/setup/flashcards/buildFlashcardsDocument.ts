@@ -8,7 +8,10 @@ import {
   TASKIZE_IMPORT,
   htmlToTypst,
 } from '../typst/latexToTypst'
-import { MATHALEA_ANCHOR_HELPER } from '../typst/buildTypstDocument'
+import {
+  MATHALEA_ANCHOR_HELPER,
+  MATHALEA_INLINE_FORMULA_RULE,
+} from '../typst/buildTypstDocument'
 
 /**
  * Construction du document Typst des flash-cards : une carte par question,
@@ -244,6 +247,7 @@ export function buildFlashcardsDocument(
   lines.push('// police des formules ; le texte inséré garde la police du texte')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
+  lines.push(MATHALEA_INLINE_FORMULA_RULE)
   lines.push('// les fractions gardent leur taille normale au milieu du texte')
   lines.push('#show math.frac: it => math.display(it)')
   if (usesQcm) {

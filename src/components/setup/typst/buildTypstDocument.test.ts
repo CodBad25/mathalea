@@ -77,12 +77,12 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#tasks(columns: ex1-corr-colonnes')
     expect(code).toContain('#mathalea-anchor("tasks-corr", 1)')
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + #box($2 + 2$)\n      + #box($3 times 4$)\n    ]',
+      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + $2 + 2$\n      + $3 times 4$\n    ]',
     )
     expect(code).toContain('#if corrige [')
     // les corrections démarrent sur une nouvelle page
     expect(code).toContain('#pagebreak(weak: true)')
-    expect(code).toContain('#box($3 times 4 = 12$)')
+    expect(code).toContain('$3 times 4 = 12$')
   })
 
   it('ne déclare pas de réglages de questions pour un exercice à question unique', () => {
@@ -141,7 +141,7 @@ describe('buildTypstDocument', () => {
       exercise({ questions: ['a) $1+1$', 'b) $2+2$'], numbered: false }),
     ])
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + a) #box($1 + 1$)\n      + b) #box($2 + 2$)\n    ]',
+      '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + a) $1 + 1$\n      + b) $2 + 2$\n    ]',
     )
     expect(code).toContain('#let ex1-colonnes = "auto-fit"')
   })
@@ -412,6 +412,16 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#set text(font: police-texte, size: taille-texte')
     expect(code).toContain('#show math.equation: set text(font: police-maths)')
     expect(code).toContain('#let txt(corps) = text(font: police-texte, corps)')
+  })
+
+  it('met les formules en ligne dans une boîte sans perdre leur ligne de base', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
+    // la formule est émise nue : c'est la règle d'affichage du préambule qui
+    // l'enferme dans une boîte (voir MATHALEA_INLINE_FORMULA_RULE)
+    expect(code).toContain('$1 + 1$')
+    expect(code).not.toContain('#box($1 + 1$)')
+    expect(code).toContain('#show math.equation.where(block: false):')
+    expect(code).toContain('box(baseline: measure(')
   })
 
   it('règle la couleur des badges', () => {
@@ -1068,9 +1078,9 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code).toContain('#let can-tableau(')
     expect(code).toContain('#can-tableau(')
     // les questions des deux exercices se suivent dans le même tableau
-    expect(code).toContain('[#box($7 times 5$)],')
+    expect(code).toContain('[$7 times 5$],')
     expect(code).toContain('[Combien de boules ?],')
-    expect(code).toContain('[#box($...$) boules],')
+    expect(code).toContain('[$...$ boules],')
     // corrections numérotées à la suite, dans l'ordre des lignes, et
     // réparties en colonnes (les réponses tiennent en quelques caractères)
     expect(code).toContain('#if corrige [')
@@ -1078,7 +1088,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
       '#tasks(columns: "auto-fit", label: (..n) => strong(numbering("1.", ..n))',
     )
     expect(code).toContain(
-      '      + #box($35$)\n      + #box($66$)\n      + #box($12$) boules',
+      '      + $35$\n      + $66$\n      + $12$ boules',
     )
     // ni banque d'exercices ni badges : il n'y a plus de titre d'exercice
     expect(code).not.toContain('exercise-bank')
@@ -1099,7 +1109,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
       [],
       { exportMode: true },
     )
-    expect(code).toContain('[#box($7 times 5$)],')
+    expect(code).toContain('[$7 times 5$],')
     expect(code).not.toContain('Calculer')
   })
 
@@ -1112,7 +1122,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
       { exportMode: true },
     )
     expect(code).toContain(
-      '#can-tableau(\n    (\n      [#box($1 + 1$)],\n      [#box($2 + 2$)],\n    ),\n    (\n      [],\n      [],\n    ),\n  )',
+      '#can-tableau(\n    (\n      [$1 + 1$],\n      [$2 + 2$],\n    ),\n    (\n      [],\n      [],\n    ),\n  )',
     )
   })
 
@@ -1145,13 +1155,13 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // un repère « exo » par exercice, dans sa première cellule, et un repère
     // « can-row » dans chaque cellule (édition d'une ligne du tableau)
     expect(code).toContain(
-      '[#mathalea-anchor("exo", 1)\n      #mathalea-anchor("can-row", 1)\n      #box($1 + 1$)],',
+      '[#mathalea-anchor("exo", 1)\n      #mathalea-anchor("can-row", 1)\n      $1 + 1$],',
     )
     expect(code).toContain(
-      '[#mathalea-anchor("can-row", 2)\n      #box($2 + 2$)],',
+      '[#mathalea-anchor("can-row", 2)\n      $2 + 2$],',
     )
     expect(code).toContain(
-      '[#mathalea-anchor("exo", 2)\n      #mathalea-anchor("can-row", 3)\n      #box($3 + 3$)],',
+      '[#mathalea-anchor("exo", 2)\n      #mathalea-anchor("can-row", 3)\n      $3 + 3$],',
     )
     // seuls les deux gaps qui encadrent le tableau existent
     expect(code).toContain('#mathalea-anchor("gap", 0)')
@@ -1163,6 +1173,54 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code).toContain('#colbreak() // mathalea:insertion')
   })
 
+  it('regroupe les questions liées derrière un seul énoncé', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['Courbe de $f$', 'Courbe de $f$', '$1+1$'],
+          canAnswers: ['$f(0) = \\ldots$', '$S = \\ldots$', '$\\ldots$'],
+          // la question 1 se numérote 13 et déclare 14 comme liée ; la
+          // question 2 se numérote 14 et cite 13 en retour
+          canLinkNumbers: [13, 14, 0],
+          canLinkedTo: [[14], [13], []],
+        }),
+      ],
+      canOptions,
+    )
+    // un seul énoncé, dont la cellule couvre les deux lignes
+    expect(code).toContain('table.cell(rowspan: 2, breakable: false, [')
+    expect(code.match(/Courbe de \$f\$/g)).toHaveLength(1)
+    // la deuxième question n'a plus de cellule d'énoncé, seulement sa réponse
+    expect(code).toContain('none,')
+    expect(code).toContain('$S = ...$')
+    // la modale d'édition de cette ligne ne propose donc pas d'énoncé
+    expect(
+      getGeneratedCanRowCode(
+        [
+          exercise({
+            questions: ['Courbe de $f$', 'Courbe de $f$'],
+            canLinkNumbers: [13, 14],
+            canLinkedTo: [[14], [13]],
+          }),
+        ],
+        2,
+        canOptions,
+      ).sharesPreviousEnonce,
+    ).toBe(true)
+  })
+
+  it('plafonne la largeur des figures du tableau', () => {
+    const svg = '<svg width="600" height="300"><circle cx="24" cy="24" r="8"/></svg>'
+    const code = buildTypstDocument(
+      [exercise({ questions: [`Lire le graphique<br>${svg}`] })],
+      canOptions,
+    )
+    // 600 px valent 450 pt : sans plafond propre au tableau, la figure
+    // occuperait toute la cellule (voir CAN_FIGURE_MAX_WIDTH_PT)
+    expect(code).toContain('width: 120.0pt)')
+    expect(code).not.toContain('width: 450.0pt)')
+  })
+
   it('n’émet pas de repère hors de la première version', () => {
     const code = buildTypstDocument(
       [exercise({ questions: ['$1+1$'] })],
@@ -1171,7 +1229,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
       [[exercise({ questions: ['$5+5$'] })]],
     )
     expect(code).toContain('Sujet A')
-    expect(code).toContain('[#box($5 + 5$)],')
+    expect(code).toContain('[$5 + 5$],')
     // le compteur du paquet exercise-bank n'existe pas dans ce mode
     expect(code).not.toContain('#exo-counter.update(0)')
   })
@@ -1215,12 +1273,14 @@ describe('mode « Course aux nombres » (canMode)', () => {
 
     it('getGeneratedCanRowCode renvoie l’énoncé et la réponse générés de la ligne', () => {
       expect(getGeneratedCanRowCode(inputs, 1, canOptions)).toEqual({
-        enonce: '#box($1 + 1$)',
-        reponse: '#box($2$)',
+        enonce: '$1 + 1$',
+        reponse: '$2$',
+        sharesPreviousEnonce: false,
       })
       expect(getGeneratedCanRowCode(inputs, 3, canOptions)).toEqual({
-        enonce: '#box($3 + 3$)',
-        reponse: '#box($6$)',
+        enonce: '$3 + 3$',
+        reponse: '$6$',
+        sharesPreviousEnonce: false,
       })
     })
 
@@ -1327,7 +1387,7 @@ describe('correction minimale (minimalCorrections)', () => {
     expect(code).not.toContain('Le PGCD est')
     // les deux réponses se suivent, séparées par un cadratin
     expect(code).toContain(
-      '#box($text(fill: #rgb("#F15929"), upright(bold(6)))$)\u2003#box($text(fill: #rgb("#F15929"), upright(bold(60)))$)',
+      '$text(fill: #rgb("#F15929"), bold(6))$\u2003$text(fill: #rgb("#F15929"), bold(60))$',
     )
   })
 

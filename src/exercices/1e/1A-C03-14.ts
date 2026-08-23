@@ -1,4 +1,4 @@
-import calculPuissancesNegativeFraction from '../can/2e/can2N31-05'
+import calculPuissancesNegativeFraction from '../can/2e/can2N43-05'
 export const titre = 'Calculer $\\dfrac{1}{a}$ à la puissance $-1$ ou $-2$'
 export const dateDePublication = '02/02/2026'
 export const amcReady = true

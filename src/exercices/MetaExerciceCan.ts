@@ -952,7 +952,10 @@ export default class MetaExercice extends Exercice {
               )
 
               this.listeQuestions[indexQuestion] =
-                Question.consigne + '<br><br>' + questionHtml
+                (Question.introduction != null ? Question.introduction : '') +
+                Question.consigne +
+                '<br><br>' +
+                questionHtml
               if (tag === 'clique-figure') {
                 this.autoCorrection[indexQuestion] = {
                   ...(Question.autoCorrection[0] ?? {}),

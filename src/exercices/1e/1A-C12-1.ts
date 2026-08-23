@@ -1,4 +1,4 @@
-import CalculExpAvecValeurs from '../can/2e/can2N40-01'
+import CalculExpAvecValeurs from '../can/2e/can2L10-01'
 export const titre = 'Calculer une expression avec des valeurs'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true

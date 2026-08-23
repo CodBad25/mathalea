@@ -2,6 +2,7 @@ import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -63,7 +64,7 @@ export default class auto1AP1 extends ExerciceQcmA {
         $\\begin{aligned}
         x&=1-\\left(${texNombre(fraction1.val)}+${texNombre(fraction2.val)}+${texNombre(fraction3.val)}\\right)\\\\
         x&=${texNombre(fraction4.val)}\\\\
-         x&=${miseEnEvidence(fraction4.frac.texFraction)}
+        ${miseEnEvidence('x')}&${sp()}${miseEnEvidence('=' + fraction4.frac.texFraction)}
         \\end{aligned}$ <br>`
 
     // Distracteurs adaptés
@@ -86,8 +87,8 @@ export default class auto1AP1 extends ExerciceQcmA {
     & =1-\\left(\\dfrac{15}{30}+\\dfrac{5}{30}+\\dfrac{6}{30}\\right)\\\\
     & =1-\\dfrac{26}{30}\\\\
     &=\\dfrac{4}{30}\\\\
-    &=${miseEnEvidence('\\dfrac{2}{15}')}
-    \\end{aligned}$ <br>`
+    ${miseEnEvidence('x')}&${sp()}${miseEnEvidence('= \\dfrac{2}{15}')}
+        \\end{aligned}$ <br>`
 
     this.reponses = [
       '$x=\\dfrac{2}{15}$',
@@ -181,8 +182,8 @@ export default class auto1AP1 extends ExerciceQcmA {
         $\\begin{aligned}
         x&=1-\\left(${texNombre(tableau.fraction.val)}+${texNombre(autresDecimales[0])}+${texNombre(autresDecimales[1])}\\right)\\\\
         &=1-${texNombre(tableau.fraction.val + autresDecimales[0] + autresDecimales[1])}\\\\
-        &=${miseEnEvidence(texNombre(bonneReponse))}
-        \\end{aligned}$ <br>`
+        ${miseEnEvidence('x')}&${sp()}${miseEnEvidence('=' + texNombre(bonneReponse))}
+       \\end{aligned}$ <br>`
 
           this.reponses = [
             `$x=${texNombre(bonneReponse)}$`,
@@ -301,7 +302,7 @@ export default class auto1AP1 extends ExerciceQcmA {
         x&=1-\\left(${tableau.fraction1.frac.texFraction}+${tableau.fraction2.frac.texFraction}+${tableau.fraction3.frac.texFraction}\\right)\\\\
         x&=1-\\left(${tableau.fraction1.fracd.texFraction}+${tableau.fraction2.fracd.texFraction}+${tableau.fraction3.fracd.texFraction}\\right)\\\\
         x&=1-${tableau.fraction1.fracd.sommeFractions(tableau.fraction2.fracd, tableau.fraction3.fracd).texFraction}\\\\
-        x&=${miseEnEvidence(tableau.fraction4.frac.texFraction)}
+        ${miseEnEvidence('x')}&${sp()}${miseEnEvidence('=' + tableau.fraction4.frac.texFraction)}
         \\end{aligned}$ <br>`
 
           this.reponses = [

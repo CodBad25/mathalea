@@ -1,4 +1,4 @@
-import FatorisationEgR from '../can/2e/can2L12'
+import FatorisationEgR from '../can/2e/can2L12-06'
 export const titre = 'Factoriser avec une égalité remarquable'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true

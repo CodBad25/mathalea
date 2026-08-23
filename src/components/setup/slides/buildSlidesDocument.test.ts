@@ -15,8 +15,8 @@ describe('buildSlidesDocument', () => {
   it('génère une page 16/9 par question, puis les corrections', () => {
     const code = buildSlidesDocument(slides)
     expect(code).toContain('#set page(paper: "presentation-16-9"')
-    expect(code).toContain('#let diapo-1-question = [\n  #box($2 + 2$)\n]')
-    expect(code).toContain('#let diapo-1-correction = [\n  #box($4$)\n]')
+    expect(code).toContain('#let diapo-1-question = [\n  $2 + 2$\n]')
+    expect(code).toContain('#let diapo-1-correction = [\n  $4$\n]')
     expect(code).toContain('#let diapo-3-question = [\n  Le double de 8\n]')
     // toutes les questions dans l'ordre, puis toutes les corrections
     const pages = [...code.matchAll(/^#diapo\((\d+), diapo-\d+-(\w+),/gm)].map(
@@ -303,8 +303,8 @@ describe('buildSlidesDocument', () => {
       { ...defaultSlidesDocumentOptions, multivue: true },
     )
     // la diapositive multivue déclare une deuxième version...
-    expect(code).toContain('#let diapo-1-question-v2 = [\n  #box($3 + 3$)\n]')
-    expect(code).toContain('#let diapo-1-correction-v2 = [\n  #box($6$)\n]')
+    expect(code).toContain('#let diapo-1-question-v2 = [\n  $3 + 3$\n]')
+    expect(code).toContain('#let diapo-1-correction-v2 = [\n  $6$\n]')
     // ...et sa page appelle diapo-multi avec les deux versions
     expect(code).toContain(
       '#diapo-multi(1, (diapo-1-question, diapo-1-question-v2), taille: diapo-1-question-taille, alignement: diapo-1-question-align)',
@@ -376,7 +376,7 @@ describe('buildSlidesDocument', () => {
     expect(code).toContain('#let recap-1-reponse = [')
     expect(code).not.toContain('#let recap-1-reponse = diapo-1-correction')
     expect(code).toMatch(
-      /#let recap-1-reponse = \[\n {2}#box\(\$[^\n]*4[^\n]*\$\)\n\]/,
+      /#let recap-1-reponse = \[\n {2}\$[^\n]*4[^\n]*\$\n\]/,
     )
     // ...celle qui n'en a aucune est reprise telle quelle, sans être
     // convertie une seconde fois

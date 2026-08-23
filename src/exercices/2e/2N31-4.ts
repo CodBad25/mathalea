@@ -1,13 +1,14 @@
-import PrioritesEtRelatifsEtPuissances from '../4e/4C34'
-export const titre =
-  'Calculer en utilisant les priorités opératoires et les puissances'
+import ExerciceDiviserFractions from '../4e/4C22-2'
+
+export const titre = 'Diviser des fractions'
+export const amcReady = true
+export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCHybrides'
-export const uuid = '6fda8'
+export const uuid = 'cb572'
+
 export const refs = {
-  'fr-fr': ['2N31-4'],
+  'fr-fr': ['2N31-4', 'BP2AutoH3'],
   'fr-ch': ['NR'],
 }
-export default class PrioritesEtRelatifsEtPuissances2e extends PrioritesEtRelatifsEtPuissances {}
+export default class ExerciceDiviserFractions2nde extends ExerciceDiviserFractions {}

@@ -21,7 +21,7 @@ export const titre = 'Résoudre des équations avec un quotient'
 /**
  * Mettre au même dénominateur des expressions littérales
  * @author Gilles Mora
- * 2N41-8
+ * 2L11-8
  */
 export const uuid = 'b5828'
 

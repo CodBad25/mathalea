@@ -1,271 +1,621 @@
-import { texteGras } from '../../lib/format/style'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
+import { droite } from '../../lib/2d/droites'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { repere } from '../../lib/2d/reperes'
+import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
+import { Latex2d, latexParPoint, texteParPosition } from '../../lib/2d/textes'
+import { tracePoint } from '../../lib/2d/TracePoint'
+import { homothetie, translation } from '../../lib/2d/transformations'
+import { vecteur } from '../../lib/2d/Vecteur'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
+import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
 import {
-  ecritureAlgebrique,
-  ecritureParentheseSiNegatif,
-  rienSi1,
-} from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Déterminer une fonction affine'
+export const titre =
+  "Déterminer graphiquement l'expression d'une fonction affine"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModifImportante = '14/05/2023'
+export const amcReady = true
+export const amcType = 'AMCHybride'
+export const dateDeModifImportante = '25/05/2023'
 /**
- * Déterminer une fonction affine à partir de deux images
- * @author Stéphane Guyon et Gilles Mora
+
  */
-export const uuid = 'ef898'
+export const uuid = '93f13'
 
 export const refs = {
   'fr-fr': ['2F21-4'],
-  'fr-ch': ['11FA1B-11'],
+  'fr-ch': ['11FA1B-10'],
 }
-export default class Determinerfonctionaffine extends Exercice {
+/**
+ * @author = ???
+ */
+export default class Lecturefonctionaffine extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
-      'Niveau de difficulté',
-      4,
-      '1 : Avec deux images (nombres entiers)\n 2 : Avec deux images (fractions)\n 3 : Avec deux points\n 4 : Mélange des cas précédents',
+      'Choix des questions',
+      3,
+      '1 : Coefficient directeur entier\n2 :Coefficient directeur fractionnaire\n3 :Mélange',
     ]
-
-    this.nbQuestions = 3
-    this.spacingCorr = context.isHtml ? 2 : 1
+    this.nbQuestions = 1 // On complète le nb de questions
     this.sup = 1
-    this.comment = `Dans le premier cas, les nombres $a$ et $b$ obtenus sont des nombres entiers. <br>
-  Le deuxième cas est plus complexe puisque les nombres $a$ et $b$ sont des fractions. <br>
-  Dans le troisième cas, les nombres $a$ et $b$ sont quelconques.`
+    this.correctionDetaillee = false
+    this.correctionDetailleeDisponible = true
+    this.spacing = 2
+    this.besoinFormulaire2CaseACocher = [
+      'Énoncé sans le terme fonction affine',
+      false,
+    ]
   }
 
   nouvelleVersion() {
-    let typesDeQuestionsDisponibles: number[] = []
-    if (this.sup === 1) {
-      typesDeQuestionsDisponibles = [1] // on donne f(a)=b et f(c)=d cas entier
-    } else if (this.sup === 2) {
-      typesDeQuestionsDisponibles = [2] // on donne f(a)=b et f(c)=d cas fraction
-    } else if (this.sup === 3) {
-      typesDeQuestionsDisponibles = [3] // On donne 2 points A(a;b) et B(c;d)
-    } else {
-      typesDeQuestionsDisponibles = [1, 2, 3] // Mélange des cas précédents
-    }
+    const typeDeQuestionsDisponibles = []
+    if (this.sup !== 2) typeDeQuestionsDisponibles.push('typeE1')
+    if (this.sup !== 1) typeDeQuestionsDisponibles.push('typeE2')
 
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
+    const listeTypeQuestions = combinaisonListes(
+      typeDeQuestionsDisponibles,
       this.nbQuestions,
     )
+    const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
+    const listeFractions = [
+      [1, 3],
+      [2, 3],
+      [3, 7],
+      [2, 7],
+      [4, 3],
+      [3, 5],
+      [4, 7],
+      [1, 5],
+      [4, 5],
+      [3, 4],
+      [1, 4],
+      [2, 5],
+      [5, 3],
+      [6, 5],
+      [1, 6],
+      [5, 6],
+      [1, 7],
+    ]
+    // const listeTypeDeQuestions = combinaisonListes(typesDeQuestionsDisponibles, this.nbQuestions)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const typesDeQuestions = listeTypeDeQuestions[i]
+      // on rajoute les variables dont on a besoin
       let texte = ''
       let texteCorr = ''
-      let reponse: string = ''
-      const variables: number[] = []
-      switch (typesDeQuestions) {
-        case 1:
+      switch (
+        listeTypeQuestions[i] // Suivant le type de questions, le contenu sera différent
+      ) {
+        case 'typeE1':
           {
-            const k = randint(-6, 6, 0) // [-1,0,1]
-            const a = randint(1, 9) * choice([1, -1])
-            const c = randint(1, 9, [a, -a]) * choice([1, -1])
-            const p = randint(-9, 9)
-            const b = k * a + p
-            const d = k * c + p
-            texte = ` Déterminer l'expression algébrique de la fonction affine $f$ définie sur $\\mathbb R$, sachant que
-                        $f(${a})=${b}$ et que $f(${c})=${d}$.<br>`
-            if (context.isDiaporama) {
-              texteCorr = `$f(x)=${rienSi1(k)}x${k * a - b === 0 ? '' : `${ecritureAlgebrique(b - k * a)}`}$`
-            } else {
-              texteCorr = `$f$ est une fonction affine, elle a donc une expression de la forme  $f(x)=ax+b$ avec $a$ et $b$ des nombres réels.<br>`
-              texteCorr +=
-                "D'après le cours, on sait que pour $u\\neq v$, $a=\\dfrac{f(u)-f(v)}{u-v}$ <br>"
-              texteCorr += `Avec $u=${a}$ et  $v=${c}$, on obtient  :  $a=\\dfrac{f(${a})-f(${c})}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b}-${ecritureParentheseSiNegatif(d)}}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b - d}}{${a - c}}=${k}$.<br>`
-              if (b === d) {
-                // m=0 ; cas f constante
-                texteCorr +=
-                  '$f$ est une fonction constante, cas particulier des fonctions affines.<br>'
-                texteCorr += `On a donc : $f(x)=${b}$`
-              } else {
-                texteCorr +=
-                  "On en déduit que la fonction $f$ s'écrit sous la forme : "
-                texteCorr += `   $f(x)=${rienSi1(k)} x +b.$<br>`
-                texteCorr += `${texteGras('Remarque : ')}On obtient $b$ en utilisant (au choix) une des deux données de l'énoncé, par exemple $f(${a})=${b}$.<br>`
-                texteCorr += `Comme $f(x)=${rienSi1(k)}x +b$, alors $f(${a})=
-              ${abs((b - d) / (a - c)) === 1 ? `${k * a}+b` : `${k}\\times${a}+b=${k * a}+b`}$ . On en déduit :<br>`
-                texteCorr += `$\\begin{aligned}f(${a})=${b}&\\iff ${k * a}+b=${b}\\\\`
-                texteCorr += `&\\iff b=${b - k * a}\\\\`
-                texteCorr += '\\end{aligned}$<br>'
+            // coeff entier
+            const r = repere({
+              xMin: -4,
+              xMax: 4,
+              xUnite: 2,
+              yMin: -5,
+              yMax: 6,
+              yUnite: 1,
+              thickHauteur: 0.1,
+              xLabelMin: -3,
+              xLabelMax: 3,
+              yLabelMax: 5,
+              yLabelMin: -4,
+              axeXStyle: '->',
+              axeYStyle: '->',
+              grilleXDistance: 2,
+              yLabelDistance: 1,
+              yLabelEcart: 0.6,
+              grilleSecondaire: true,
+              grilleSecondaireYDistance: 1,
+              grilleSecondaireXDistance: 2,
+              grilleSecondaireYMin: -5.1,
+              grilleSecondaireYMax: 6.1,
+              grilleSecondaireXMin: -8.1,
+              grilleSecondaireXMax: 8.1,
+            })
+            let a = randint(-4, 4) // coeff dir
+            const b = randint(-4, 3) // ord origine
+            if (a === 0 && b === 0) {
+              a = 1
+            } // On évite la fonction nulle
+            const c = droite(a / 2, -1, b)
+            c.color = colorToLatexOrHTML('red')
+            c.epaisseur = 2
+            texte = `Déterminer l'expression algébrique de la fonction ${this.sup2 ? '' : 'affine'} $f$ représentée ${this.sup2 ? 'par la droite' : ''}  ci-dessous :<br>`
+            texte += mathalea2d(
+              {
+                xmin: -8,
+                ymin: -5.1,
+                xmax: 8.1,
+                ymax: 6,
+                pixelsParCm: 25,
+                scale: 0.6,
+              },
+              r,
+              c,
+              o,
+            ) // On trace le graphique
+            if (this.interactif) {
+              handleAnswers(this, i, {
+                reponse: {
+                  value: `${reduireAxPlusB(a, b)}`,
+                  options: { fonction: true, variable: 'x' },
+                },
+              })
+              texte += ajouteChampTexteMathLive(
+                this,
+                i,
+                KeyboardType.clavierDeBaseAvecVariable,
+                { texteAvant: '$f(x)=$' },
+              )
+            } else texte += '$f(x)=\\ldots$'
 
-                texteCorr += `On en déduit $f(x)=${rienSi1(k)}x${k * a - b === 0 ? '' : `${ecritureAlgebrique(b - k * a)}`}$.`
+            texteCorr = this.sup2
+              ? 'La fonction $f$ est représentée par une droite (non verticale), donc $f$ est une fonction affine de la forme $f(x)=ax+b$. <br>'
+              : 'Puisque $f$ est une fonction affine, on a : $f(x)=ax+b$.<br>'
+            if (a === 0) {
+              texteCorr += `La droite est horizontale. Elle représente une fonction affine constante ($a=0$).<br>
+          Ainsi, $f(x)=${b}$.`
+            } else {
+              texteCorr += `$\\bullet$ $b$ est l'ordonnée à l'origine de la droite. On lit $b=${b}$.<br>`
+              if (this.correctionDetaillee) {
+                texteCorr += `L'ordonnée à l'origine est l'ordonnée du point d'intersection entre la droite et l'axe des ordonnées.<br>
+              Ce point est le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>`
               }
-              reponse = `${k}x+${p}`
+              texteCorr += `$\\bullet$ $a$ est le coefficient directeur de la droite.<br>
+          Il est donné par le déplacement vertical correspondant à un déplacement horizontal d'une unité. On lit $a=${a}$.<br>`
+              if (this.correctionDetaillee) {
+                texteCorr += `Le coefficient directeur mesure l'inclinaison de la droite par rapport à l'horizontal (voir les traces graphiques ci-dessous).<br>
+          <br> `
+              }
+              texteCorr +=
+                " On peut en déduire que l'expression de la fonction $f$ est "
+              texteCorr += `$f(x)=${miseEnEvidence(reduireAxPlusB(a, b))}$.<br>`
+              let s1: Segment
+              let s2: Segment
+              let labs: Latex2d
+              let lord: Latex2d
+              if (b > -2 || a > 0) {
+                s1 = segment(0, b, 2, b, bleuMathalea)
+                s2 = segment(2, b, 2, b + a, 'green')
+                labs = texteParPosition(
+                  '$1$',
+                  1,
+                  a < 0 ? b + 0.4 : b - 0.8,
+                  0,
+                  bleuMathalea,
+                  1,
+                ) as Latex2d
+                lord = texteParPosition(
+                  `$${a}$`,
+                  2.8,
+                  (a + 2 * b) / 2,
+                  0,
+                  'green',
+                  1,
+                ) as Latex2d
+              } else {
+                s1 = segment(-4, -2 * a + b, -2, -2 * a + b, bleuMathalea)
+                s2 = segment(-2, -2 * a + b, -2, -1 * a + b, 'green')
+                labs = texteParPosition(
+                  '$1$',
+                  -3,
+                  -2 * a + b + 0.5,
+                  0,
+                  bleuMathalea,
+                  1,
+                ) as Latex2d
+                lord = texteParPosition(
+                  `$${a}$`,
+                  -1.5,
+                  (-3 * a + 2 * b) / 2,
+                  0,
+                  'green',
+                  1,
+                ) as Latex2d
+              }
+              s2.epaisseur = 2
+              s1.epaisseur = 2
+              s2.styleExtremites = '->'
+              s1.styleExtremites = '->'
+              const A = pointAbstrait(0, b)
+              const l = texteParPosition('A', -0.5, b + 0.5, 0, 'red', 1)
+              const t = tracePoint(A, 'red') // Variable qui trace les nom s A et B
+              t.taille = 3
+              t.epaisseur = 2
+
+              if (this.correctionDetaillee) {
+                if (a !== 0) {
+                  texteCorr += mathalea2d(
+                    {
+                      xmin: -8,
+                      ymin: -5.1,
+                      xmax: 8.1,
+                      ymax: 6,
+                      scale: 0.5,
+                    },
+                    r,
+                    s1,
+                    s2,
+                    t,
+                    c,
+                    l,
+                    o,
+                    labs,
+                    lord,
+                  ) //, labs, lord
+                }
+              }
             }
-            variables.push(a, b, c, d, p)
+            this.autoCorrectionAMC[i] = {
+              enonce: texte,
+              propositions: [
+                {
+                  type: 'AMCNum',
+                  propositions: [
+                    {
+                      texte: texteCorr,
+                      statut: '',
+                      reponse: {
+                        texte: 'coefficient a de $f(x)=ax+b$',
+                        valeur: a,
+                        param: {
+                          digits: 1,
+                          decimals: 0,
+                          signe: true,
+                          approx: 0,
+                        },
+                      },
+                    },
+                  ],
+                },
+                {
+                  type: 'AMCNum',
+                  propositions: [
+                    {
+                      texte: '',
+                      statut: '',
+                      reponse: {
+                        texte: 'valeur b de $f(x)=ax+b$',
+                        valeur: b,
+                        param: {
+                          digits: 1,
+                          decimals: 0,
+                          signe: true,
+                          approx: 0,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
-        case 2:
+        case 'typeE2':
           {
-            let k1 = randint(-6, 6, 0)
-            let k2 = randint(-6, 6, k1)
-            let a = randint(1, 10) * choice([1, -1])
-            let c = randint(1, 5, [a, -a]) * choice([1, -1])
-            let p = randint(-9, 9)
-            let b = k1 * a + p
-            let d = k2 * c + p
-
-            while (Number.isInteger((b - d) / (a - c))) {
-              k1 = randint(-6, 6, 0)
-              k2 = k1 + 1
-              a = randint(1, 9) * choice([1, -1])
-              c = randint(1, 9, [a, -a]) * choice([1, -1])
-              p = randint(-9, 9)
-              b = k1 * a + p
-              d = k2 * c + p
+            // cas du coeff directeur fractionnaire
+            const b = randint(-3, 3) // ordonnée à l'origine
+            const aFrac = choice(listeFractions)
+            const a = aFrac[0] * choice([-1, 1]) //
+            const d = aFrac[1] //
+            const r = repere({
+              xMin: -8,
+              xMax: 8,
+              xUnite: 1,
+              yMin: -6,
+              yMax: 6,
+              yUnite: 1,
+              thickHauteur: 0.1,
+              xLabelMin: -7,
+              xLabelMax: 7,
+              yLabelMax: 5,
+              yLabelMin: -5,
+              axeXStyle: '->',
+              axeYStyle: '->',
+              yLabelDistance: 1,
+              yLabelEcart: 0.6,
+              grilleSecondaire: true,
+              grilleSecondaireYDistance: 1,
+              grilleSecondaireXDistance: 1,
+              grilleSecondaireYMin: -6.1,
+              grilleSecondaireYMax: 6.1,
+              grilleSecondaireXMin: -8.1,
+              grilleSecondaireXMax: 8.1,
+            })
+            const c = droite(a / d, -1, b)
+            c.color = colorToLatexOrHTML('red')
+            c.epaisseur = 2
+            texte = `Déterminer l'expression algébrique de la fonction ${this.sup2 ? '' : 'affine'} $f$ représentée ${this.sup2 ? 'par la droite' : ''} ci-dessous :<br>`
+            texte += mathalea2d(
+              {
+                xmin: -8,
+                ymin: -6.1,
+                xmax: 8.1,
+                ymax: 6,
+                pixelsParCm: 25,
+                scale: 0.6,
+              },
+              r,
+              c,
+              o,
+            ) // On trace le graphique
+            texteCorr = this.sup2
+              ? 'La fonction $f$ est représentée par une droite (non verticale), donc $f$ est une fonction affine de la forme $f(x)=ax+b$. <br>'
+              : 'Puisque $f$ est une fonction affine, on a : $f(x)=ax+b$.<br>'
+            texteCorr += `$\\bullet$ $b$ est l'ordonnée à l'origine de la droite. On lit $b=${b}$.<br>`
+            if (this.correctionDetaillee) {
+              texteCorr += `L'ordonnée à l'origine est l'ordonnée du point d'intersection entre la droite et l'axe des ordonnées.<br>
+        Ce point est le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>`
             }
-            texte = ` Déterminer l'expression algébrique de la fonction affine $f$ définie sur $\\mathbb R$, sachant que
-                          $f(${a})=${b}$ et que $f(${c})=${d}$.<br>`
-            if (context.isDiaporama) {
-              if ((b * (a - c) - (b - d) * a) * (a - c) > 0) {
-                texteCorr = ` $f(x)=${texFractionReduite(b - d, a - c)}x+${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}$.`
+            texteCorr += `$\\bullet$ $a$ est le coefficient directeur de la droite.<br>
+          $a=\\dfrac{\\text{Dénivelé vertical}}{\\text{Déplacement horizontal}}=${texFractionReduite(a, d)}$.<br>
+       `
+            if (this.correctionDetaillee) {
+              texteCorr +=
+                '<br>On cherche un déplacement horizontal (en bleu) correspondant à un déplacement vertical entier (en vert).'
+              texteCorr += `<br>On lit que pour un déplacement vers la droite de ${texteEnCouleurEtGras(d + ' unités', bleuMathalea)}, il faut `
+              if (a > 0) {
+                texteCorr += 'monter de '
               }
-              if ((b * (a - c) - (b - d) * a) * (a - c) < 0) {
-                texteCorr = ` $f(x)=${texFractionReduite(b - d, a - c)}x-${texFractionReduite(abs(b * (a - c) - (b - d) * a), abs(a - c))}$.`
+              if (a < 0) {
+                texteCorr += 'descendre de '
               }
-              if ((b * (a - c) - (b - d) * a) * (a - c) === 0) {
-                texteCorr = `$f(x)=${texFractionReduite(b - d, a - c)}x.`
+              texteCorr += `${texteEnCouleurEtGras(Math.abs(a) + `${abs(a) === 1 ? ' unité' : ' unités'}`, 'green')}.<br>`
+            }
+            texteCorr +=
+              " On peut en déduire que l'expression de la fonction $f$ est "
+            if (b === 0) {
+              texteCorr += `$f(x)=${texFractionReduite(a, d)}x$`
+            } else {
+              texteCorr += `$f(x)=${texFractionReduite(a, d)}x${ecritureAlgebrique(b)}$`
+            }
+            // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
+            const textCorrSplit = texteCorr.split('=')
+            let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
+            aRemplacer = aRemplacer.replace('$', '')
+
+            texteCorr = ''
+            for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
+              texteCorr += textCorrSplit[ee] + '='
+            }
+            texteCorr += `$ $${miseEnEvidence(aRemplacer)}$` + '.<br>'
+            // Fin de cette uniformisation
+
+            if (context.isAmc) {
+              this.autoCorrectionAMC[i] = {
+                enonce: texte,
+                propositions: [
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: `$${texFractionReduite(a, d)}x${ecritureAlgebrique(b)}$`,
+                        statut: '',
+                        reponse: {
+                          texte:
+                            'numérateur (signé) n de $f(x)=\\dfrac{n}{d}x+b$',
+                          valeur: a,
+                          param: {
+                            digits: 1,
+                            decimals: 0,
+                            signe: true,
+                            approx: 0,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: '',
+                        statut: '',
+                        reponse: {
+                          texte: 'dénominateur d de $f(x)=\\dfrac{n}{d}x+b$',
+                          valeur: d,
+                          param: {
+                            digits: 1,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: '',
+                        statut: '',
+                        reponse: {
+                          texte: 'valeur b de $f(x)=ax+b$',
+                          valeur: b,
+                          param: {
+                            digits: 1,
+                            decimals: 0,
+                            signe: true,
+                            approx: 0,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
+            } else if (this.interactif) {
+              handleAnswers(this, i, {
+                reponse: {
+                  value: `${new FractionEtendue(a, d).texFractionSimplifiee}x${ecritureAlgebrique(b)}`,
+                  options: { fonction: true, variable: 'x' },
+                },
+              })
+              texte += ajouteChampTexteMathLive(
+                this,
+                i,
+                KeyboardType.clavierDeBaseAvecVariable,
+                { texteAvant: '$f(x)=$' },
+              )
+            } else texte += '$f(x)=\\ldots$'
+
+            let s1: Segment
+            let s2: Segment
+            let labs: Latex2d
+            let lord: Latex2d
+
+            if (a > 0) {
+              if (b > 2) {
+                s1 = segment(-d, b - a, 0, b - a, bleuMathalea)
+                s2 = segment(0, b - a, 0, b, 'green')
+                labs = texteParPosition(
+                  `$${d}$`,
+                  -d / 2,
+                  b - a - 0.8,
+                  0,
+                  bleuMathalea,
+                  1,
+                ) as Latex2d
+                lord = texteParPosition(
+                  `$${a}$`,
+                  0.5,
+                  (2 * b - a) / 2 - 0.3,
+                  0,
+                  'green',
+                  1,
+                ) as Latex2d
+              } else {
+                s1 = segment(0, b, d, b, bleuMathalea)
+                s2 = segment(d, b, d, a + b, 'green')
+                labs = texteParPosition(
+                  `$${d}$`,
+                  d / 2,
+                  b - 1,
+                  0,
+                  bleuMathalea,
+                  1,
+                ) as Latex2d
+                lord = texteParPosition(
+                  `$${a}$`,
+                  d + 0.5,
+                  (2 * b + a) / 2 - 0.3,
+                  0,
+                  'green',
+                  1,
+                ) as Latex2d
               }
             } else {
-              texteCorr = `$f$ est une fonction affine, elle a donc une expression de la forme  $f(x)=ax+b$ avec $a$ et $b$ des nombres réels.<br>
-                          `
-              texteCorr +=
-                "D'après le cours, on sait que pour $u\\neq v$, $a=\\dfrac{f(u)-f(v)}{u-v}$ <br>"
-              texteCorr += `Avec $u=${a}$ et  $v=${c}$, on obtient  :  $a=\\dfrac{f(${a})-f(${c})}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b}-${ecritureParentheseSiNegatif(d)}}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b - d}}{${a - c}}$.<br>`
-              texteCorr += `D'où $a=${texFractionReduite(b - d, a - c)}$.<br>`
-              if (b === d) {
-                // m=0 ; cas f constante
-                texteCorr +=
-                  '$f$ est une fonction constante, cas particulier des fonctions affines.<br>'
-                texteCorr += `On a donc : $f(x)=${b}$`
-                reponse = `${b}`
+              if (b < 1) {
+                s1 = segment(-d, -a + b, 0, -a + b, bleuMathalea)
+                s2 = segment(0, -a + b, 0, b, 'green')
+                labs = texteParPosition(
+                  `$${d}$`,
+                  -d / 2,
+                  -a + b + 0.5,
+                  0,
+                  bleuMathalea,
+                  1,
+                ) as Latex2d
+                lord = texteParPosition(
+                  `$${a}$`,
+                  0.5,
+                  (2 * b - a) / 2,
+                  0,
+                  'green',
+                  1,
+                ) as Latex2d
               } else {
-                texteCorr += `On en déduit que la fonction $f$ s'écrit sous la forme : $f(x)=${texFractionReduite(b - d, a - c)}x +b.$<br>`
-                texteCorr += `${texteGras('Remarque : ')}On obtient $b$ en utilisant (au choix)   une des deux données de l'énoncé, par exemple $f(${a})=${b}$.<br>`
-                texteCorr += `Comme $f(x)=${texFractionReduite(b - d, a - c)}x +b$, alors $f(${a})=${texFractionReduite(b - d, a - c)}\\times ${a}+b=${texFractionReduite((b - d) * a, a - c)}+b$. On en déduit :<br><br>`
-                texteCorr += `$\\begin{aligned}f(${a})=${b}&\\iff ${texFractionReduite((b - d) * a, a - c)}+b=${b}\\\\`
-                texteCorr += `&\\iff b=${b} ${(b - d) * a * (a - c) > 0 ? `${texFractionReduite((b - d) * a * -1, a - c)}` : `+${texFractionReduite(abs((b - d) * a), abs(a - c))}`}\\\\`
-                texteCorr += `&\\iff b=${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}\\\\`
-                texteCorr += '\\end{aligned}$<br>'
-                if ((b * (a - c) - (b - d) * a) * (a - c) > 0) {
-                  texteCorr += `Ainsi, $f(x)=${texFractionReduite(b - d, a - c)}x+${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}$.`
-                  reponse = `${texFractionReduite(b - d, a - c)}x+${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}`
-                }
-                if ((b * (a - c) - (b - d) * a) * (a - c) < 0) {
-                  texteCorr += `Ainsi, $f(x)=${texFractionReduite(b - d, a - c)}x-${texFractionReduite(abs(b * (a - c) - (b - d) * a), abs(a - c))}$.`
-                  reponse = `${texFractionReduite(b - d, a - c)}x-${texFractionReduite(abs(b * (a - c) - (b - d) * a), abs(a - c))}`
-                }
-                if ((b * (a - c) - (b - d) * a) * (a - c) === 0) {
-                  texteCorr += `Ainsi, $f(x)=${texFractionReduite(b - d, a - c)}x.`
-                  reponse = `${texFractionReduite(b - d, a - c)}x`
-                }
+                s1 = segment(0, b, d, b, bleuMathalea)
+                s2 = segment(d, b, d, b + a, 'green')
+                labs = texteParPosition(
+                  `$${d}$`,
+                  d / 2,
+                  b + 0.5,
+                  0,
+                  bleuMathalea,
+                  1,
+                ) as Latex2d
+                lord = texteParPosition(
+                  `$${a}$`,
+                  d + 0.5,
+                  (2 * b + a) / 2,
+                  0,
+                  'green',
+                  1,
+                ) as Latex2d
               }
             }
-            variables.push(a, b, c, d, p)
-          }
-          break
-        case 3:
-        default:
-          {
-            const k1 = randint(-6, 6, 0)
-            const k2 = randint(-6, 6, k1)
-            const a = randint(1, 10) * choice([1, -1])
-            const c = randint(1, 5, [a, -a]) * choice([1, -1])
-            const p = randint(-9, 9)
-            const b = k1 * a + p
-            const d = k2 * c + p
+            s2.epaisseur = 2
+            s1.epaisseur = 2
+            s2.styleExtremites = '->'
+            s1.styleExtremites = '->'
+            const A = pointAbstrait(0, b)
 
-            texte = `Déterminer, en détaillant les calculs, l'expression algébrique de la fonction affine $f$ dont la représentation  graphique $\\mathscr{C_f}$ passe par les points $A(${a};${b})$ et $B(${c};${d})$.<br>`
-            if (context.isDiaporama) {
-              if ((b * (a - c) - (b - d) * a) * (a - c) > 0) {
-                texteCorr = ` $f(x)=${texFractionReduite(b - d, a - c)}x+${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}$.`
+            const l = latexParPoint(
+              'A',
+              translation(
+                A,
+                homothetie(vecteur(-a, d), A, 0.5 / Math.sqrt(a ** 2 + d ** 2)),
+                'A',
+                'center',
+              ),
+              'red',
+              10,
+              10,
+              '',
+            ) // Variable qui trace les points avec une croix
+            const t = tracePoint(A, 'red') // Variable qui trace les nom s A et B
+            t.taille = 3
+            t.epaisseur = 2
+
+            // l.color = colorToLatexOrHTML('red')
+            if (this.correctionDetaillee) {
+              if (a !== 0) {
+                texteCorr += mathalea2d(
+                  {
+                    xmin: -8,
+                    ymin: -6.1,
+                    xmax: 8.1,
+                    ymax: 6,
+                    scale: 0.5,
+                  },
+                  r,
+                  s1,
+                  s2,
+                  t,
+                  l,
+                  c,
+                  o,
+                  labs,
+                  lord,
+                )
               }
-              if ((b * (a - c) - (b - d) * a) * (a - c) < 0) {
-                texteCorr = ` $f(x)=${texFractionReduite(b - d, a - c)}x-${texFractionReduite(abs(b * (a - c) - (b - d) * a), abs(a - c))}$.`
-              }
-              if ((b * (a - c) - (b - d) * a) * (a - c) === 0) {
-                texteCorr = `$f(x)=${texFractionReduite(b - d, a - c)}x.`
-              }
-            } else {
-              texteCorr = `$f$ est une fonction affine, elle a donc une expression de la forme  $f(x)=ax+b$ avec $a$ et $b$ des nombres réels.<br>
-                          `
-              texteCorr += `Comme $A(${a};${b})\\in \\mathscr{C_f}$, on a  $f(${a})=${b}$  et comme $B(${c};${d})\\in \\mathscr{C_f}$, on a $f(${c})=${d}$ <br>`
-              texteCorr +=
-                "D'après le cours, on sait que pour $u\\neq v$, $a=\\dfrac{f(u)-f(v)}{u-v}$ <br>"
-              texteCorr += `Avec $u=${a}$ et  $v=${c}$, on obtient  :  $a=\\dfrac{f(${a})-f(${c})}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b}-${ecritureParentheseSiNegatif(d)}}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b - d}}{${a - c}}$.<br>`
-              texteCorr += `D'où $a=${texFractionReduite(b - d, a - c)}$.<br>`
-              if (b === d) {
-                // m=0 ; cas f constante
-                texteCorr +=
-                  '$f$ est une fonction constante, cas particulier des fonctions affines.<br>'
-                texteCorr += `On a donc : $f(x)=${b}$`
-                reponse = `${b}`
-              } else {
-                texteCorr +=
-                  "On en déduit que la fonction $f$ s'écrit sous la forme : "
-                texteCorr += `   $f(x)=${texFractionReduite(b - d, a - c)}x +b.$<br>`
-                texteCorr += `${texteGras('Remarque : ')}On obtient $b$ en utilisant (au choix)   une des deux données de l'énoncé, par exemple $f(${a})=${b}$.<br>`
-                texteCorr += `Comme $f(x)=${texFractionReduite(b - d, a - c)}x +b$, alors $f(${a})=${texFractionReduite(b - d, a - c)}\\times ${a}+b=${texFractionReduite((b - d) * a, a - c)}+b$. On en déduit :<br><br>`
-                texteCorr += `$\\begin{aligned}f(${a})=${b}&\\iff ${texFractionReduite((b - d) * a, a - c)}+b=${b}\\\\`
-                texteCorr += `&\\iff b=${b} ${(b - d) * a * (a - c) > 0 ? `${texFractionReduite((b - d) * a * -1, a - c)}` : `+${texFractionReduite(abs((b - d) * a), abs(a - c))}`}\\\\`
-                texteCorr += `&\\iff b=${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}\\\\`
-                texteCorr += '\\end{aligned}$<br>'
-                if ((b * (a - c) - (b - d) * a) * (a - c) > 0) {
-                  texteCorr += `Ainsi, $f(x)=${texFractionReduite(b - d, a - c)}x+${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}$.`
-                  reponse = `${texFractionReduite(b - d, a - c)}x+${texFractionReduite(b * (a - c) - (b - d) * a, a - c)}`
-                }
-                if ((b * (a - c) - (b - d) * a) * (a - c) < 0) {
-                  texteCorr += `Ainsi, $f(x)=${texFractionReduite(b - d, a - c)}x-${texFractionReduite(abs(b * (a - c) - (b - d) * a), abs(a - c))}$.`
-                  reponse = `${texFractionReduite(b - d, a - c)}x-${texFractionReduite(abs(b * (a - c) - (b - d) * a), abs(a - c))}`
-                }
-                if ((b * (a - c) - (b - d) * a) * (a - c) === 0) {
-                  texteCorr += `Ainsi, $f(x)=${texFractionReduite(b - d, a - c)}x.`
-                  reponse = `${texFractionReduite(b - d, a - c)}x`
-                }
-              }
-            }
-            variables.push(a, b, c, d, p)
+            } // On trace le graphique
           }
           break
       }
-      // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
-      const textCorrSplit = texteCorr.split('=')
-      let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
-      aRemplacer = aRemplacer.replace('$', '')
-
-      texteCorr = ''
-      for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
-        texteCorr += textCorrSplit[ee] + '='
-      }
-      texteCorr += `$ $${miseEnEvidence(aRemplacer.slice(0, -1))}$` + '.' // Gestion du point final
-      // Fin de cette uniformisation
-
-      handleAnswers(this, i, {
-        reponse: { value: reponse, options: { fonction: true, variable: 'x' } },
-      })
-      texte += ajouteChampTexteMathLive(
-        this,
-        i,
-        KeyboardType.clavierDeBaseAvecVariable,
-        { texteAvant: '$f(x)=$' },
-      )
-      variables.push(typesDeQuestions)
-      if (this.questionJamaisPosee(i, variables.map(String).join(';'))) {
-        // Si la question n'a jamais été posée, on en créé une autre
+      if (this.questionJamaisPosee(i, texteCorr)) {
+        // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

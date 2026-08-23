@@ -6,6 +6,12 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees } from '../../lib/2d/textes'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
+import {
+  lireFormulaireComplexe,
+  serialiseFormulaireComplexe,
+  valeursParDefaut,
+  type FormulaireComplexe,
+} from '../../lib/formulaireComplexe'
 import Exercice from '../Exercice'
 
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -26,7 +32,7 @@ export const titre =
 export const dateDePublication = '14/02/2023'
 /**
  *
- * @author Gilles Mora
+ * @author Gilles Mora adaptation été 2026 : Stéphane Guyon
  */
 export const uuid = '277d3'
 
@@ -34,40 +40,63 @@ export const refs = {
   'fr-fr': ['2F23-2', 'BP1RGEI05'],
   'fr-ch': ['2mIneq-6'],
 }
+
+const formulaire: FormulaireComplexe = {
+  champs: [
+    {
+      type: 'liste',
+      nom: 'fonctions',
+      label: 'Fonctions de référence',
+      items: [
+        { nom: 'carre', label: 'Fonction carré', actif: true },
+        { nom: 'inverse', label: 'Fonction inverse', actif: true },
+        { nom: 'valeurAbsolue', label: 'Fonction valeur absolue', actif: true },
+        {
+          nom: 'cube',
+          label: 'Fonction cube (année de transition)',
+          actif: false,
+        },
+        {
+          nom: 'racineCarree',
+          label: 'Fonction racine carrée (année de transition)',
+          actif: false,
+        },
+      ],
+    },
+  ],
+}
+
 export default class ResoudreGraphFonctionRef extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Choix des questions',
-      4,
-      '1 : Avec la fonction carré\n2 : Avec la fonction inverse\n3 : Avec la fonction racine carrée\n4 : Mélange',
-    ]
+    this.besoinFormulaireComplexe = formulaire
+    this.sup = serialiseFormulaireComplexe(
+      formulaire,
+      valeursParDefaut(formulaire),
+    )
 
     this.nbQuestions = 1
-
-    this.sup = 4
 
     this.spacing = 1.5 // Interligne des questions
   }
 
   nouvelleVersion() {
-    let typeDeQuestionsDisponibles
-    if (this.sup === 1) {
-      typeDeQuestionsDisponibles = ['typeE1', 'typeE2']
-    } else if (this.sup === 2) {
-      typeDeQuestionsDisponibles = ['typeE3', 'typeE4']
-    } else if (this.sup === 3) {
-      typeDeQuestionsDisponibles = ['typeE5', 'typeE6']
-    } else {
-      typeDeQuestionsDisponibles = [
-        'typeE1',
-        'typeE2',
-        'typeE3',
-        'typeE4',
-        'typeE5',
-        'typeE6',
-      ]
+    const parametres = lireFormulaireComplexe(formulaire, this.sup)
+    const typesParFonction: Record<string, string[]> = {
+      carre: ['typeE1', 'typeE2'],
+      inverse: ['typeE3', 'typeE4'],
+      racineCarree: ['typeE5', 'typeE6'],
+      valeurAbsolue: ['typeE7', 'typeE8'],
+      cube: ['typeE9', 'typeE10'],
     }
+    const fonctionsCochees = parametres.listeActive('fonctions')
+    const fonctionsDisponibles =
+      fonctionsCochees.length > 0
+        ? fonctionsCochees
+        : parametres.declares('fonctions').filter((item) => item.poids > 0)
+    const typeDeQuestionsDisponibles = fonctionsDisponibles.flatMap(
+      (fonction) => typesParFonction[fonction.nom],
+    )
     //
     // variables communes à tous les cas et sortis des cases et même de la boucle.
     const o = latexParCoordonnees('O', -0.2, -0.3, 'black', 0, 0, '')
@@ -948,7 +977,6 @@ export default class ResoudreGraphFonctionRef extends Exercice {
           }
           break
         case 'typeE6': // sqrt(x)>k
-        default:
           {
             const a = randint(1, 12)
             const A = pointAbstrait(2.25, 1.5)
@@ -1074,6 +1102,223 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             $\\bullet$  Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de'} la droite.<br>`
             texteCorr += `${graphiqueC}`
             texteCorr += `Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $\\sqrt{x}${signeInégalité}${a}$ est : `
+          }
+          break
+
+        case 'typeE7': // |x|<k
+        case 'typeE8': // |x|>k
+          {
+            const inferieure = listeTypeQuestions[i] === 'typeE7'
+            const a = randint(1, 4)
+            const signeInégalité = inferieure
+              ? estInegStrict
+                ? '<'
+                : ' \\leqslant '
+              : estInegStrict
+                ? '>'
+                : ' \\geqslant '
+            const r1 = repere({
+              xMin: -5,
+              xMax: 5,
+              yMin: -1,
+              yMax: 5,
+              axeXStyle: '->',
+              axeYStyle: '->',
+              grilleX: false,
+              grilleY: false,
+            })
+            const droiteSeuil = droiteParPointEtPente(
+              pointAbstrait(0, a),
+              0,
+              '',
+              'green',
+            )
+            droiteSeuil.epaisseur = 2
+            const pointGauche = pointAbstrait(-a, 0)
+            const pointDroit = pointAbstrait(a, 0)
+            const segmentsSolutions = inferieure
+              ? [segment(pointGauche, pointDroit, 'red')]
+              : [
+                  segment(pointAbstrait(-5, 0), pointGauche, 'red'),
+                  segment(pointDroit, pointAbstrait(5, 0), 'red'),
+                ]
+            segmentsSolutions.forEach((objet) => (objet.epaisseur = 2))
+            const crochetsSolutions = inferieure
+              ? [
+                  estInegStrict
+                    ? crochetG(pointGauche, 'red')
+                    : crochetD(pointGauche, 'red'),
+                  estInegStrict
+                    ? crochetD(pointDroit, 'red')
+                    : crochetG(pointDroit, 'red'),
+                ]
+              : [
+                  estInegStrict
+                    ? crochetD(pointGauche, 'red')
+                    : crochetG(pointGauche, 'red'),
+                  estInegStrict
+                    ? crochetG(pointDroit, 'red')
+                    : crochetD(pointDroit, 'red'),
+                ]
+            const graphique = mathalea2d(
+              {
+                xmin: -5,
+                xmax: 5,
+                ymin: -1,
+                ymax: 5,
+                pixelsParCm: 30,
+                scale: 0.7,
+                display: 'block',
+              },
+              r1,
+              o,
+            )
+            const graphiqueC = mathalea2d(
+              {
+                xmin: -5,
+                xmax: 5,
+                ymin: -1,
+                ymax: 5,
+                pixelsParCm: 30,
+                scale: 1,
+                display: 'block',
+              },
+              courbe((x: number) => Math.abs(x), {
+                repere: r1,
+                color: bleuMathalea,
+                epaisseur: 2,
+              }),
+              droiteSeuil,
+              r1,
+              o,
+              segmentsSolutions,
+              crochetsSolutions,
+              latexParCoordonnees(`${-a}`, -a, -0.6, 'red', 0, 0, ''),
+              latexParCoordonnees(`${a}`, a, -0.6, 'red', 0, 0, ''),
+              latexParCoordonnees('y=|x|', 3.4, 3.7, bleuMathalea, 0, 0, ''),
+              latexParCoordonnees(`y=${a}`, 4, a + 0.3, 'green', 0, 0, ''),
+            )
+            texte = `Résoudre graphiquement l'inéquation : $|x|${signeInégalité}${a}$.<br>`
+            if (!context.isHtml) {
+              texte += 'On pourra utiliser le repère suivant.<br>'
+              texte += graphique
+            }
+            if (inferieure) {
+              ensembleSolutions = intervalleLaTex(
+                -a,
+                a,
+                estInegStrict,
+                estInegStrict,
+              )
+            } else {
+              ensembleSolutions =
+                intervalleLaTex('-\\infty', -a, true, estInegStrict) +
+                '\\cup' +
+                intervalleLaTex(a, '+\\infty', estInegStrict, true)
+            }
+            texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
+              $\\bullet$ On trace la courbe d'équation $y=|x|$. <br>
+              $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Elle coupe la courbe aux points d'abscisses $-${a}$ et $${a}$. <br>
+              $\\bullet$ Les solutions sont les abscisses des points de la courbe situés ${inferieure ? (estInegStrict ? 'strictement en dessous de' : 'sur ou sous') : estInegStrict ? 'strictement au-dessus de' : 'sur ou au-dessus de'} la droite.<br>
+              ${graphiqueC}
+              L'ensemble des solutions de l'inéquation $|x|${signeInégalité}${a}$ est : `
+          }
+          break
+
+        case 'typeE9': // x^3<k
+        case 'typeE10': // x^3>k
+        default:
+          {
+            const inferieure = listeTypeQuestions[i] === 'typeE9'
+            const borne = choice([-2, -1, 1, 2])
+            const a = borne ** 3
+            const signeInégalité = inferieure
+              ? estInegStrict
+                ? '<'
+                : ' \\leqslant '
+              : estInegStrict
+                ? '>'
+                : ' \\geqslant '
+            const r1 = repere({
+              xMin: -4,
+              xMax: 4,
+              yMin: -10,
+              yMax: 10,
+              axeXStyle: '->',
+              axeYStyle: '->',
+              grilleX: false,
+              grilleY: false,
+            })
+            const droiteSeuil = droiteParPointEtPente(
+              pointAbstrait(0, a),
+              0,
+              '',
+              'green',
+            )
+            droiteSeuil.epaisseur = 2
+            const pointBorne = pointAbstrait(borne, 0)
+            const segmentSolutions = inferieure
+              ? segment(pointAbstrait(-4, 0), pointBorne, 'red')
+              : segment(pointBorne, pointAbstrait(4, 0), 'red')
+            segmentSolutions.epaisseur = 2
+            const crochetSolution = inferieure
+              ? estInegStrict
+                ? crochetD(pointBorne, 'red')
+                : crochetG(pointBorne, 'red')
+              : estInegStrict
+                ? crochetG(pointBorne, 'red')
+                : crochetD(pointBorne, 'red')
+            const graphique = mathalea2d(
+              {
+                xmin: -4,
+                xmax: 4,
+                ymin: -10,
+                ymax: 10,
+                pixelsParCm: 25,
+                scale: 0.7,
+                display: 'block',
+              },
+              r1,
+              o,
+            )
+            const graphiqueC = mathalea2d(
+              {
+                xmin: -4,
+                xmax: 4,
+                ymin: -10,
+                ymax: 10,
+                pixelsParCm: 25,
+                scale: 1,
+                display: 'block',
+              },
+              courbe((x: number) => x ** 3, {
+                repere: r1,
+                color: bleuMathalea,
+                epaisseur: 2,
+              }),
+              droiteSeuil,
+              r1,
+              o,
+              segmentSolutions,
+              crochetSolution,
+              latexParCoordonnees(`${borne}`, borne, -1.2, 'red', 0, 0, ''),
+              latexParCoordonnees('y=x^3', 1.8, 6, bleuMathalea, 0, 0, ''),
+              latexParCoordonnees(`y=${a}`, 3, a + 0.7, 'green', 0, 0, ''),
+            )
+            texte = `Résoudre graphiquement l'inéquation : $x^3${signeInégalité}${a}$.<br>`
+            if (!context.isHtml) {
+              texte += 'On pourra utiliser le repère suivant.<br>'
+              texte += graphique
+            }
+            ensembleSolutions = inferieure
+              ? intervalleLaTex('-\\infty', borne, true, estInegStrict)
+              : intervalleLaTex(borne, '+\\infty', estInegStrict, true)
+            texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
+              $\\bullet$ On trace la courbe d'équation $y=x^3$. <br>
+              $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Elle coupe la courbe au point d'abscisse $${borne}$, car $${borne}^3=${a}$. <br>
+              $\\bullet$ Les solutions sont les abscisses des points de la courbe situés ${inferieure ? (estInegStrict ? 'strictement en dessous de' : 'sur ou sous') : estInegStrict ? 'strictement au-dessus de' : 'sur ou au-dessus de'} la droite.<br>
+              ${graphiqueC}
+              L'ensemble des solutions de l'inéquation $x^3${signeInégalité}${a}$ est : `
           }
           break
       }

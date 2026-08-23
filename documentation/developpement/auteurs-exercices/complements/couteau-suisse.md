@@ -11,7 +11,7 @@ exemple :
 - un `tableau-signes-variations` ;
 - un `mathalea-qcm`.
 
-L'exercice de référence est `src/exercices/2e/2F21-11.ts` : il enchaîne des
+L'exercice de référence est `src/exercices/2e/2F21-9.ts` : il enchaîne des
 calculs d'images, des calculs d'antécédents, un tableau de signes optionnel et
 un QCM sur une droite représentative.
 
@@ -125,7 +125,7 @@ comme un tableau de signes, fournir un barème local dans son `autoCorrection` :
 }
 ```
 
-Dans `2F21-11`, le barème obtenu est :
+Dans `2F21-9`, le barème obtenu est :
 
 - 1 point par calcul dans le `multi-mathfield` ;
 - 1 point pour le tableau de signes complet, quand il est demandé ;

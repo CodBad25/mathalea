@@ -180,7 +180,7 @@
     "titre": "Représenter algébriquement et graphiquement les fonctions"
   },
   "can2F30": {
-    "titre": "Exploiter l'équation $y=f(x)$ d'une courbe : appartenance, calcul de coordonnées"
+    "titre": "Exploiter l'équation y=f(x) d'une courbe : appartenance, calcul de coordonnées"
   },
   "can2F31": {
     "titre": "Modéliser par des fonctions des situations issues des mathématiques, des autres disciplines"
@@ -269,82 +269,121 @@
   "can2G34": {
     "titre": "Résoudre un système de deux équations linéaires à deux inconnues, déterminer le point d'intersection de deux droites sécantes"
   },
-  "can2L": {
-    "titre": "Calcul littéral"
-  },
   "can2N": {
     "titre": "Calcul numérique"
   },
+  "can2L": {
+    "titre": "Calcul littéral"
+  },
   "can2N1": {
-    "titre": "Manipuler les nombres réels"
+    "titre": "Nombres réels"
   },
   "can2N10": {
-    "titre": "Associer à chaque point de la droite graduée un unique nombre réel et réciproquement"
+    "titre": "Ensembles de nombres"
   },
   "can2N11": {
-    "titre": "Représenter un intervalle de la droite numérique. Déterminer si un nombre réel appartient à un intervalle donné"
+    "titre": "Intervalles de $\\mathbb{R}$"
   },
   "can2N12": {
-    "titre": "Donner un encadrement, d'amplitude donnée, d'un nombre réel par des décimaux"
+    "titre": "Notation valeur absolue"
   },
   "can2N13": {
-    "titre": "Dans le cadre de la résolution de problèmes, arrondir en donnant le nombre de chiffres significatifs adapté à la situation étudiée"
+    "titre": "Distance entre deux réels"
   },
   "can2N14": {
-    "titre": "Connaître les ensembles de nombres"
+    "titre": "Résoudre des inéquations avec une valeur absolue"
   },
   "can2N15": {
-    "titre": "Connaître et utiliser la notation $|a|$"
+    "titre": "Comparer des nombres réels"
   },
   "can2N2": {
-    "titre": "Utiliser les notions de multiple et de diviseur"
+    "titre": "Arithmétique"
   },
   "can2N20": {
-    "titre": "Modéliser et résoudre des problèmes mobilisant les notions de multiple, de diviseur, de nombre pair et de nombre impair"
+    "titre": "Définitions de multiple et de diviseur"
+  },
+  "can2N21": {
+    "titre": "Nombres pairs et impairs"
   },
   "can2N3": {
-    "titre": "Utiliser les fractions, les puissances et les racines carrées"
+    "titre": "Fractions"
   },
   "can2N30": {
-    "titre": "Effectuer des calculs numériques mettant en jeu des écritures fractionnaires"
+    "titre": "Simplifier, décomposer, comparer ou encadrer une fraction"
   },
   "can2N31": {
-    "titre": "Effectuer des calculs numériques mettant en jeu des puissances"
+    "titre": "Effectuer les quatre opérations élémentaires avec des fractions"
   },
   "can2N32": {
-    "titre": "Effectuer des calculs numériques mettant en jeu des racines carrées"
+    "titre": "Effectuer des calculs avec des fractions"
+  },
+  "can2N33": {
+    "titre": "Résoudre des problèmes avec des fractions"
   },
   "can2N4": {
-    "titre": "Utiliser le calcul littéral"
+    "titre": "Puissances"
   },
   "can2N40": {
-    "titre": "Les bases du calcul littéral"
+    "titre": "Définition et notation"
   },
   "can2N41": {
-    "titre": "Factoriser, développer avec, ou sans, les identités remarquables"
+    "titre": "Puissances de 10"
   },
   "can2N42": {
-    "titre": "Utiliser le calcul littéral"
+    "titre": "Notation scientifique"
+  },
+  "can2N43": {
+    "titre": "Calculer avec les puissances"
+  },
+  "can2N44": {
+    "titre": "Comparer et classer"
   },
   "can2N5": {
-    "titre": "Équations"
+    "titre": "Racines carrées"
   },
   "can2N50": {
-    "titre": "Modéliser un problème par une équation"
+    "titre": "Définition, existence et encadrement"
   },
   "can2N51": {
+    "titre": "Effectuer des calculs numériques avec les racines carrées"
+  },
+  "can2L1": {
+    "titre": "Utiliser le calcul littéral"
+  },
+  "can2L10": {
+    "titre": "Les bases du calcul littéral"
+  },
+  "can2L11": {
+    "titre": "Développer et factoriser sans identité remarquable"
+  },
+  "can2L12": {
+    "titre": "Développer et factoriser avec les identités remarquables"
+  },
+  "can2L13": {
+    "titre": "Effectuer des calculs complexes sur des expressions algébriques"
+  },
+  "can2L14": {
+    "titre": "Utiliser le calcul littéral"
+  },
+  "can2L2": {
+    "titre": "Équations"
+  },
+  "can2L20": {
+    "titre": "Modéliser un problème par une équation"
+  },
+  "can2L21": {
     "titre": "Résoudre une équation du premier degré"
   },
-  "can2N52": {
+  "can2L22": {
     "titre": "Résoudre une équation avec un produit nul"
   },
-  "can2N6": {
+  "can2L3": {
     "titre": "Inéquations"
   },
-  "can2N60": {
+  "can2L30": {
     "titre": "Résoudre une inéquation du premier degré"
   },
-  "can2N61": {
+  "can2L31": {
     "titre": "Résoudre une inéquation produit"
   },
   "can2S": {
@@ -1145,67 +1184,67 @@
   "CM2N3Q": {
     "titre": "Multiplier un nombre décimal par 50"
   },
-  "CM2N4": {
+  "CM2L1": {
     "titre": "Addition, soustraction, multiplication, division"
   },
-  "CM2N4A": {
+  "CM2L1A": {
     "titre": "Estimer le résultat d'une opération"
   },
-  "CM2N4B": {
+  "CM2L1B": {
     "titre": "Savoir réaliser un calcul contenant une ou deux paires de parenthèses"
   },
-  "CM2N4C": {
+  "CM2L1C": {
     "titre": "Poser et effectuer la multiplication d'un nombre décimal par un nombre entier"
   },
-  "CM2N4D": {
+  "CM2L1D": {
     "titre": "Poser et effectuer des divisions décimales avec un dividende entier et un diviseur à un chiffre"
   },
-  "CM2N4E": {
+  "CM2L1E": {
     "titre": "Poser et effectuer des divisions décimales avec un dividende décimal et un diviseur à un chiffre"
   },
-  "CM2N5": {
+  "CM2L2": {
     "titre": "Résolution de problèmes"
   },
-  "CM2N5A": {
+  "CM2L2A": {
     "titre": "Résoudre des problèmes additifs en une ou plusieurs étapes"
   },
-  "CM2N5B": {
+  "CM2L2B": {
     "titre": "Résoudre des problèmes multiplicatifs de type « parties-tout » en une étape"
   },
-  "CM2N5C": {
+  "CM2L2C": {
     "titre": "Résoudre des problèmes mixtes en plusieurs étapes"
   },
-  "CM2N5D": {
+  "CM2L2D": {
     "titre": "Résoudre des problèmes de comparaison multiplicative"
   },
-  "CM2N5E": {
+  "CM2L2E": {
     "titre": "Résoudre des problèmes de dénombrement"
   },
-  "CM2N5F": {
+  "CM2L2F": {
     "titre": "Résoudre des problèmes d'optimisation"
   },
-  "CM2N5G": {
+  "CM2L2G": {
     "titre": "Résoudre des problèmes préparant à l'utilisation d'algorithmes"
   },
-  "CM2N6": {
+  "CM2L3": {
     "titre": "Algèbre"
   },
-  "CM2N6A": {
+  "CM2L3A": {
     "titre": "Trouver le nombre manquant dans une égalité à trous"
   },
-  "CM2N6B": {
+  "CM2L3B": {
     "titre": "Résoudre des problèmes algébriques"
   },
-  "CM2N6C": {
+  "CM2L3C": {
     "titre": "Exécuter ou produire un programme de calcul"
   },
-  "CM2N6D": {
+  "CM2L3D": {
     "titre": "Identifier et formuler une règle de calcul pour poursuivre une suite de nombres"
   },
-  "CM2N6E": {
+  "CM2L3E": {
     "titre": "Identifier des régularités et poursuivre une suite de motifs évolutive"
   },
-  "CM2N6F": {
+  "CM2L3F": {
     "titre": "Trouver le nombre d'éléments pour une étape donnée dans une suite de motifs évolutive"
   },
   "CM2M1": {
@@ -1400,14 +1439,23 @@
   "6Auto": {
     "titre": "Automatismes"
   },
+  "6AutoA": {
+    "titre": "Aires"
+  },
   "6AutoA1": {
     "titre": "Comparer ou déterminer des aires sans recours à une unité"
   },
   "6AutoA2": {
     "titre": "Connaître les unités d'aires et leur relations"
   },
+  "6AutoE": {
+    "titre": "Espace"
+  },
   "6AutoE1": {
     "titre": "Identifier les solides"
+  },
+  "6AutoF": {
+    "titre": "Fractions"
   },
   "6AutoF1": {
     "titre": "Connaître et utiliser les fractions"
@@ -1417,6 +1465,9 @@
   },
   "6AutoF3": {
     "titre": "Calculer avec des fractions"
+  },
+  "6AutoG": {
+    "titre": "Configurations planes"
   },
   "6AutoG1": {
     "titre": "Connaître le lexique et les codages de base en géométrie"
@@ -1430,6 +1481,15 @@
   "6AutoG4": {
     "titre": "Savoir coder/construire une figure"
   },
+  "6AutoH": {
+    "titre": "Probabilités"
+  },
+  "6AutoH1": {
+    "titre": "???"
+  },
+  "6AutoL": {
+    "titre": "Longueurs"
+  },
   "6AutoL1": {
     "titre": "Connaître les préfixes et leur lien avec les unités de numération décimale"
   },
@@ -1438,6 +1498,9 @@
   },
   "6AutoL3": {
     "titre": "Calculer des périmètres"
+  },
+  "6AutoN": {
+    "titre": "Nombres et calcul"
   },
   "6AutoN1": {
     "titre": "Connaître les liens entre les fractions décimales"
@@ -1451,14 +1514,23 @@
   "6AutoN4": {
     "titre": "Multiplier ou diviser par 10, 100, 1000"
   },
+  "6AutoP": {
+    "titre": "Proportionnalité"
+  },
   "6AutoP1": {
     "titre": "Repérer les relations multiplicatives simples"
   },
   "6AutoP2": {
     "titre": "Associer Fois plus ou Fois moins à une multiplication ou à une division"
   },
+  "6AutoS": {
+    "titre": "Gestion de données"
+  },
   "6AutoS1": {
     "titre": "Lire un tableau, un diagramme (lecture immédiate)"
+  },
+  "6AutoT": {
+    "titre": "Temps et durée"
   },
   "6AutoT1": {
     "titre": "Se repérer dans le temps et les durées"
@@ -2693,76 +2765,118 @@
   "2N": {
     "titre": "Calcul numérique"
   },
+  "2L": {
+    "titre": "Calcul littéral"
+  },
   "2N1": {
-    "titre": "Manipuler les nombres réels"
+    "titre": "Nombres réels"
   },
   "2N10": {
-    "titre": "Associer à chaque point de la droite graduée un unique nombre réel et réciproquement"
+    "titre": "Ensembles de nombres"
   },
   "2N11": {
-    "titre": "Représenter un intervalle de la droite numérique. Déterminer si un nombre réel appartient à un intervalle donné"
+    "titre": "Intervalles de $\\mathbb{R}$"
   },
   "2N12": {
-    "titre": "Donner un encadrement, d'amplitude donnée, d'un nombre réel par des décimaux"
+    "titre": "Notation valeur absolue"
   },
   "2N13": {
-    "titre": "Dans le cadre de la résolution de problèmes, arrondir en donnant le nombre de chiffres significatifs adapté à la situation étudiée"
+    "titre": "Distance entre deux réels"
   },
   "2N14": {
-    "titre": "Connaître Les ensembles de nombres"
+    "titre": "Résoudre des inéquations avec une valeur absolue"
   },
   "2N15": {
-    "titre": "Connaître et utiliser la notation |a|"
+    "titre": "Comparer des nombres réels"
   },
   "2N2": {
-    "titre": "Utiliser les notions de multiple et de diviseur"
+    "titre": "Arithmétique"
   },
   "2N20": {
-    "titre": "Modéliser et résoudre des problèmes mobilisant les notions de multiple, de diviseur, de nombre pair et de nombre impair"
+    "titre": "Définitions de multiple et de diviseur"
+  },
+  "2N21": {
+    "titre": "Nombres pairs et impairs"
   },
   "2N3": {
-    "titre": "Utiliser les fractions, les puissances et les racines carrées"
+    "titre": "Fractions"
   },
   "2N30": {
-    "titre": "Effectuer des calculs numériques mettant en jeu des écritures fractionnaires"
+    "titre": "Simplifier, décomposer, comparer ou encadrer une fraction"
   },
   "2N31": {
-    "titre": "Effectuer des calculs numériques mettant en jeu des puissances"
+    "titre": "Effectuer les quatre opérations élémentaires avec des fractions"
   },
   "2N32": {
-    "titre": "Effectuer des calculs numériques mettant en jeu des racines carrées"
+    "titre": "Effectuer des calculs avec des fractions"
+  },
+  "2N33": {
+    "titre": "Résoudre des problèmes avec des fractions"
   },
   "2N4": {
-    "titre": "Utiliser le calcul littéral"
+    "titre": "Puissances"
   },
   "2N40": {
-    "titre": "Les bases du calcul littéral"
+    "titre": "Définition et notation"
   },
   "2N41": {
-    "titre": "Factoriser, développer avec, ou sans, les identités remarquables"
+    "titre": "Puissances de 10"
   },
   "2N42": {
-    "titre": "Utiliser le calcul littéral"
+    "titre": "Notation scientifique"
+  },
+  "2N43": {
+    "titre": "Calculer avec les puissances"
+  },
+  "2N44": {
+    "titre": "Comparer et classer"
   },
   "2N5": {
-    "titre": "Équations"
+    "titre": "Racines carrées"
   },
   "2N50": {
-    "titre": "Modéliser un problème par une équation"
+    "titre": "Définition, existence et encadrement"
   },
   "2N51": {
+    "titre": "Effectuer des calculs numériques avec les racines carrées"
+  },
+  "2L1": {
+    "titre": "Utiliser le calcul littéral"
+  },
+  "2L10": {
+    "titre": "Les bases du calcul littéral"
+  },
+  "2L11": {
+    "titre": "Développer et factoriser sans identité remarquable"
+  },
+  "2L12": {
+    "titre": "Développer et factoriser avec les identités remarquables"
+  },
+  "2L13": {
+    "titre": "Effectuer des calculs complexes sur des expressions algébriques"
+  },
+  "2L14": {
+    "titre": "Utiliser le calcul littéral"
+  },
+  "2L2": {
+    "titre": "Équations"
+  },
+  "2L20": {
+    "titre": "Modéliser un problème par une équation"
+  },
+  "2L21": {
     "titre": "Résoudre une équation du premier degré"
   },
-  "2N52": {
+  "2L22": {
     "titre": "Résoudre une équation avec un produit nul"
   },
-  "2N6": {
+  "2L3": {
     "titre": "Inéquations"
   },
-  "2N60": {
+  "2L30": {
     "titre": "Résoudre une inéquation du premier degré"
   },
-  "2N61": {
+  "2L31": {
     "titre": "Résoudre une inéquation produit"
   },
   "2G": {
@@ -2877,7 +2991,7 @@
     "titre": "Représenter algébriquement et graphiquement les fonctions"
   },
   "2F30": {
-    "titre": "Exploiter l'équation $y=f(x)$ d'une courbe : appartenance, calcul de coordonnées"
+    "titre": "Exploiter une équation $y=f(x)$  : appartenance à la courbe, calcul de coordonnées"
   },
   "2F31": {
     "titre": "Modéliser par des fonctions des situations issues des mathématiques, des autres disciplines"

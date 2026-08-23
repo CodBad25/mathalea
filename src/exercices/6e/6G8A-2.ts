@@ -13,7 +13,7 @@ export const titre = "Trouver le nom d'un solide par ses caractéristiques"
 export const uuid = '95371'
 export const dateDePublication = '09/06/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const refs = {
-  'fr-fr': ['6G8A-2'],
+  'fr-fr': ['6G8A-2', '6AutoE1-1'],
   'fr-ch': ['9ES2A-5', '10ES2A-7', '11ES2A-2'],
 }
 /**

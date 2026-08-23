@@ -15,10 +15,11 @@ export default defineConfig({
       'blockly/javascript',
       'blockly/msg/en',
     ],
+    exclude: ['scratch-blocks'],
   },
   build: {
     target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
-    sourcemap: true,
+    sourcemap: false,
     // Évite de calculer la taille gzip de chaque chunk (coûteux, purement cosmétique)
     reportCompressedSize: false,
     // À partir du 16/11/24 le build est devenu impossible sans options de chunking

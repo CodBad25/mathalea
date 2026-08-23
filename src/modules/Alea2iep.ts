@@ -22,6 +22,7 @@ import {
 import { vecteur } from '../lib/2d/Vecteur'
 import { bleuMathalea, orangeMathalea } from '../lib/colors'
 import { context } from './context'
+import { reporterAuCompas2pointsCentreDirection } from './iepMacros/compas'
 import {
   bissectriceAuCompas,
   cercleCirconscrit,
@@ -239,6 +240,8 @@ export default class Alea2iep {
 
   paralleleAuCompasAvecDescription = paralleleAuCompasAvecDescription
   paralleleAuCompas = paralleleAuCompas
+  reporterAuCompas2pointsCentreDirection =
+    reporterAuCompas2pointsCentreDirection
   mediatriceAuCompas = mediatriceAuCompas
   mediatriceRegleEquerre = mediatriceRegleEquerre
   hauteur = hauteur
@@ -1027,12 +1030,10 @@ export default class Alea2iep {
     B: PointAbstrait,
     options: OptionsCompas = {},
   ) {
-    this.compasMontrer(A, options)
-    this.compasDeplacer(A, options)
     const s = segment(A, B)
     s.isVisible = false
     const angle = s.angleAvecHorizontale
-    this.compasRotation(angle, options)
+    this.compasRotationTranslation(angle, A, options)
     this.compasEcarter(longueur(A, B), options)
   }
 

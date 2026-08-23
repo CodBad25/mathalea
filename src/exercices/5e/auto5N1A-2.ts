@@ -22,6 +22,6 @@ export default class CriteresDeDivisibilite2ou5ou10 extends CriteresDeDivisibili
   constructor() {
     super()
     this.besoinFormulaireNumerique = false
-    this.sup = '1'
+    this.sup = 1
   }
 }

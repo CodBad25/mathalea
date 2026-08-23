@@ -72,7 +72,7 @@ export default class nomExercice extends Exercice {
     ]
     this.sup = 1
     this.sup2 = 1
-    this.sup3 = '1'
+    this.sup3 = 1
     this.exoCustomResultat = true
     this.interactif = true
     this.comment =

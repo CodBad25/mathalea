@@ -36,6 +36,31 @@ Le rattachement d'un exercice à un thème se fait **par préfixe** : le script 
 
 L'apparence d'un noeud du menu dépend à la fois de sa profondeur dans `emptyRef2022.json` et de la fonction `themeCodeisSubthemeCode()` dans `ReferentielNode.svelte`. Cette fonction détecte certains formats de codes comme des sous-thèmes pour masquer le code et appliquer une typographie plus discrète. Les préfixes `auto` et `can` sont retirés avant cette détection : `2F12`, `auto2F12` et `can2F12` suivent donc la même règle d'affichage. Si un nouveau format de code est ajouté au référentiel, il peut être correctement placé dans l'arbre tout en étant affiché comme un thème principal tant que cette fonction ne reconnait pas son motif.
 
+Pour la Seconde, `2N` (« Calcul numérique ») contient `2N1` à `2N5`, et
+`2L` (« Calcul littéral ») contient `2L1` à `2L3`. La Course aux nombres suit
+la même organisation avec `can2N` et `can2L`. Les anciennes références
+globales `can2L01`, `can2L02`, etc. ont été reclassées dans les sous-thèmes
+`can2N*`, `can2L*`, `can2F*` ou `can2G*`.
+La rubrique `2N1` (« Nombres réels ») contient notamment `2N15` (« Comparer
+des nombres réels »), avec la feuille correspondante `can2N15` dans la
+Course aux nombres.
+La rubrique `2L1` (« Utiliser le calcul littéral ») distingue `2L10` (bases),
+`2L11` (développer et factoriser sans identité remarquable), `2L12` (avec
+les identités remarquables), `2L13` (calculs complexes sur des expressions
+algébriques) et `2L14` (utiliser le calcul littéral). Les codes `can2L1*`
+reprennent ce découpage.
+La rubrique `2N3` (« Fractions ») est elle-même divisée en `2N30`
+(simplifier, décomposer, comparer ou encadrer), `2N31` (quatre opérations),
+`2N32` (calculs avec des fractions) et `2N33` (problèmes) ; les codes `can2N3*`
+reprennent ce découpage.
+La rubrique `2N4` (« Puissances ») est divisée en `2N40` (définition et
+notation), `2N41` (puissances de 10), `2N42` (notation scientifique), `2N43`
+(calculs avec les puissances) et `2N44` (comparaison et classement), avec le
+même découpage sous `can2N4`.
+La rubrique `2N5` (« Racines carrées ») est divisée en `2N50` (définition,
+existence et encadrement) et `2N51` (calculs numériques avec les racines
+carrées). Les codes `can2N50` et `can2N51` reprennent ce découpage.
+
 Dans les rubriques du lycée (seconde, première et terminale), `ReferentielNode.svelte` place explicitement en tête les exercices dont la référence contient `-flash`. Cette priorité ne modifie pas l'ordre des référentiels du collège.
 
 ## Génération par `tasks/dictionnaireToReferentiel.js`

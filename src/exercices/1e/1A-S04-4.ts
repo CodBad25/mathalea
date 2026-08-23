@@ -40,6 +40,25 @@ export default class CalculMedianeHistogrammeQCM extends ExerciceQcmA {
     const q3 = maSerie.q3
     const moyenne = maSerie.moyenne()
 
+    const rangCentralMax = n % 2 === 0 ? n / 2 + 1 : Math.ceil(n / 2)
+    const lectureDesRangs = [...serie]
+      .sort(([valeurA], [valeurB]) => valeurA - valeurB)
+      .reduce<{ texte: string[]; effectifCumule: number }>(
+        (acc, [valeur, effectif]) => {
+          if (acc.effectifCumule < rangCentralMax) {
+            acc.texte.push(
+              acc.effectifCumule === 0
+                ? `les $${effectif}$ premières valeurs sont des « $${valeur}$ »`
+                : `les $${effectif}$ suivantes sont des « $${valeur}$ »`,
+            )
+          }
+          acc.effectifCumule += effectif
+          return acc
+        },
+        { texte: [], effectifCumule: 0 },
+      )
+      .texte.join(', puis ')
+
     this.reponses = [
       `${texNombre(mediane, 1)}`,
       `${texNombre(q1, 1)}`,
@@ -53,17 +72,20 @@ export default class CalculMedianeHistogrammeQCM extends ExerciceQcmA {
       n % 2 === 0
         ? `La médiane est une valeur qui partage la série statistique en deux parties égales.<br>
     Il y a un total de $${n}$ valeurs.<br>
-    La médiane est donc à prendre entre la valeur de rang $${n / 2}$ et celle de rang $${n / 2 + 1}$ (nous prendrons la moyenne de ces deux valeurs centrales).<br>
-    En regardant le diagramme, on constate que la valeur de rang $${n / 2}$ est $${values[n / 2 - 1]}$ et la valeur de rang $${n / 2 + 1}$ est $${values[n / 2]}$` +
+    La médiane est donc à prendre entre la valeur de rang $${n / 2}$ et celle de rang $${n / 2 + 1}$.<br>
+    On compte les effectifs à partir des plus petites valeurs : d'après le diagramme, ${lectureDesRangs}.<br>
+    Ainsi, la valeur de rang $${n / 2}$ est $${values[n / 2 - 1]}$ et la valeur de rang $${n / 2 + 1}$ est $${values[n / 2]}$` +
           (values[n / 2 - 1] === values[n / 2]
             ? ` aussi.<br>
       Donc la médiane de la série est $${miseEnEvidence(texNombre(mediane, 0))}$.`
             : `.<br>
+      Ces deux valeurs centrales étant différentes, on calcule leur moyenne.<br>
       La médiane est donc : $\\dfrac{${values[n / 2 - 1]}+${values[n / 2]}}{2}=${miseEnEvidence(texNombre(mediane, 1))}$.`)
         : `La médiane est la valeur qui partage la série statistique en deux parties égales.<br>
     Il y a un total de $${n}$ valeurs.<br>
     La médiane est donc la valeur de rang $${Math.ceil(n / 2)}$ (la valeur centrale car le nombre de valeurs est impair).<br>
-    En regardant le diagramme, on constate que la valeur de rang $${Math.ceil(n / 2)}$ est ${texNombre(mediane, 0)}.<br>
+    On compte les effectifs à partir des plus petites valeurs : d'après le diagramme, ${lectureDesRangs}.<br>
+    La valeur de rang $${Math.ceil(n / 2)}$ est donc un « $${texNombre(mediane, 0)}$ ».<br>
     Donc la médiane est égale à : $${miseEnEvidence(texNombre(mediane, 0))}$.`
   }
 
@@ -93,7 +115,6 @@ export default class CalculMedianeHistogrammeQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options.vertical = true
     this.versionAleatoire()
   }
 }

@@ -1,4 +1,4 @@
-import EquationPlusMoinsX2PlusAEgalB from '../can/2e/can2L01'
+import EquationPlusMoinsX2PlusAEgalB from '../can/2e/can2L22-01'
 export const titre =
   'Déterminer le nombre de solutions d’une équation se ramenant à $x^2=a$'
 export const dateDePublication = '22/07/2025'

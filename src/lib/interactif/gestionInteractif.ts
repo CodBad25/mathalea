@@ -923,6 +923,8 @@ export function handleAnswers(
           Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
         ? 'tableauMathlive'
         : (exercice.autoCorrection[question]?.formatInteractif ??
+          exercice.formatInteractif ??
+          exercice.interactifType ??
           'mathalea-mathfield'))
   if (context.isAmc) {
     if (exercice.autoCorrectionAMC == null) exercice.autoCorrectionAMC = []

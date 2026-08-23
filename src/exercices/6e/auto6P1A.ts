@@ -2,22 +2,30 @@ import { traceBarre } from '../../lib/2d/diagrammes'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { repere } from '../../lib/2d/reperes'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import {
+  addMultiMathfield,
+  type DataOptionsMultiMathfield,
+} from '../../lib/customElements/MultiMathfield'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   numAlpha,
   premiereLettreEnMajuscule,
 } from '../../lib/outils/outilString'
+import type { UneProposition, Valeur } from '../../lib/types'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Lire un diagramme en bâtons'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Lire un diagramme en bâtons
@@ -28,10 +36,18 @@ export const interactifType = 'qcm'
 export const uuid = '17bce'
 
 export const refs = {
-  'fr-fr': ['auto6P1A', 'BP1AUTO027'],
+  'fr-fr': ['auto6P1A', 'BP1AUTO027', '6AutoS1'],
   'fr-2016': ['6S10'],
   'fr-ch': ['9FA3A-3'],
 }
+
+type PropositionDiagramme = UneProposition & {
+  statut: boolean
+  reponse?: { texte: string }
+}
+
+type ChampDiagramme = 'champ1' | 'champ2' | 'champ3'
+
 export default class LectureDiagrammeBaton extends Exercice {
   constructor() {
     super()
@@ -45,6 +61,10 @@ export default class LectureDiagrammeBaton extends Exercice {
       2,
       '1 : Entre 1 et 100\n2 : Entre 100 et 1 000',
     ]
+    this.besoinFormulaire3Texte = [
+      'Types de questions',
+      "0: Toutes les questions\n1 : Les animaux les plus nombreux\n2 : Les animaux les moins nombreux\n3 : Encadrement du nombre d'un animal",
+    ]
 
     // this.consigne = "Répondre aux questions à l'aide du graphique."
     this.nbQuestions = 1
@@ -54,9 +74,22 @@ export default class LectureDiagrammeBaton extends Exercice {
     this.sup2 = 1
     this.spacing = 2
     this.spacingCorr = 2
+    this.sup3 = '1-2-3'
   }
 
   nouvelleVersion() {
+    let listeTypeDeQuestions = gestionnaireFormulaireTexte({
+      saisie: this.sup3,
+      nbQuestions: 0,
+      min: 1,
+      max: 3,
+      melange: 0,
+      defaut: 0,
+      shuffle: false,
+      enleveDoublons: true,
+    }).map((v) => Number(v) - 1)
+    if (listeTypeDeQuestions.length === 0) listeTypeDeQuestions = [0, 1, 2]
+
     const bornesinf = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
     const lstAnimaux = [
       'girafes',
@@ -114,9 +147,6 @@ export default class LectureDiagrammeBaton extends Exercice {
       default:
         nbAnimaux = 4
     }
-    const propa = []
-    const propb = []
-    const propc = []
     const lstAnimauxExo: string[] = [] // liste des animaux uniquement cités dans l'exercice
     const lstNombresAnimaux: number[] = [] // liste des effectifs de chaque animal
     let lstVal = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] // liste des valeurs à éviter pour les effectifs
@@ -165,18 +195,26 @@ export default class LectureDiagrammeBaton extends Exercice {
       'Dans le parc naturel de ' +
       choice(lstNomParc) +
       ", il y a beaucoup d'animaux.<br><br>Voici un diagramme en bâtons qui donne le nombre d'individus pour chaque espèce.<br>"
-    this.listeQuestions[0] = 'Quels sont les animaux les plus nombreux ?'
-    this.listeQuestions[1] = 'Quels sont les animaux les moins nombreux ?'
     const numAnimal = randint(0, nbAnimaux - 1)
-    this.listeQuestions[2] =
-      this.sup2 === 1
-        ? 'Donner un encadrement, à la dizaine, du nombre de ' +
-          lstAnimauxExo[numAnimal] +
-          ' ?'
-        : 'Donner un encadrement, à la centaine, du nombre de ' +
-          lstAnimauxExo[numAnimal] +
-          ' ?'
+    const reponse =
+      lstNombresAnimaux[lstAnimauxExo.indexOf(lstAnimauxExo[numAnimal])]
+    const reponseinf = 10 * coef * Math.floor(reponse / (10 * coef))
+    const reponsesup = reponseinf + 10 * coef
+    const textesQuestions = listeTypeDeQuestions.map((typeQuestion) => {
+      switch (typeQuestion) {
+        case 0:
+          return 'Quels sont les animaux les plus nombreux ?<br>'
+        case 1:
+          return 'Quels sont les animaux les moins nombreux ?<br>'
+        case 2:
+        default:
+          return this.sup2 === 1
+            ? `Donner un encadrement, à la dizaine, du nombre de ${lstAnimauxExo[numAnimal]} ?<br>`
+            : `Donner un encadrement, à la centaine, du nombre de ${lstAnimauxExo[numAnimal]} ?<br>`
+      }
+    })
     const lstElementGraph = []
+    const props: PropositionDiagramme[][] = []
     const bornesAEviter = [
       10 *
         coef *
@@ -185,7 +223,7 @@ export default class LectureDiagrammeBaton extends Exercice {
             (10 * coef),
         ),
     ]
-    for (let i = 0, borne, reponsea, reponseb, reponsec; i < nbAnimaux; i++) {
+    for (let i = 0; i < nbAnimaux; i++) {
       lstElementGraph.push(
         traceBarre(
           ((r.xMax - r.xMin) / (nbAnimaux + 1)) * (i + 1),
@@ -194,42 +232,9 @@ export default class LectureDiagrammeBaton extends Exercice {
           { unite: 0.1 / coef },
         ),
       )
-      reponsea = i === 0 ? { texte: '1) Animaux les plus nombreux :' } : {}
-      propa.push({
-        texte: premiereLettreEnMajuscule(lstAnimauxExo[i]),
-        statut: i === lstNombresAnimaux.indexOf(nMax),
-        reponse: reponsea,
-      })
-      reponseb = i === 0 ? { texte: '2) Animaux les moins nombreux :' } : {}
-      propb.push({
-        texte: premiereLettreEnMajuscule(lstAnimauxExo[i]),
-        statut: i === lstNombresAnimaux.indexOf(nMin),
-        reponse: reponseb,
-      })
-      reponsec =
-        i === 0
-          ? {
-              texte: `3) encadrement du nombre de ${lstAnimauxExo[numAnimal]} :`,
-            }
-          : {}
-      if (i === numAnimal) {
-        propc.push({
-          texte: `entre ${bornesAEviter[0]} et ${bornesAEviter[0] + 10 * coef}`,
-          statut: true,
-          reponse: reponsec,
-        })
-      } else {
-        borne = choice(bornesinf, bornesAEviter)
-        bornesAEviter.push(borne)
-        propc.push({
-          texte: `entre ${coef * borne} et ${(borne + 10) * coef}`,
-          statut: false,
-          reponse: reponsec,
-        })
-      }
     }
 
-    this.introduction = mathalea2d(
+    const diag = mathalea2d(
       Object.assign(
         { zoom: 1, scale: 0.5 },
         fixeBordures([r, ...lstElementGraph]),
@@ -237,80 +242,145 @@ export default class LectureDiagrammeBaton extends Exercice {
       r,
       lstElementGraph,
     )
+    for (let i = 0; i < listeTypeDeQuestions.length; i++) {
+      switch (listeTypeDeQuestions[i]) {
+        case 0:
+          {
+            const reponsea = { texte: `${i + 1}) Animaux les plus nombreux :` }
+            props[i] = [
+              ...lstAnimauxExo.map((_, index) => ({
+                texte: premiereLettreEnMajuscule(lstAnimauxExo[index]),
+                statut: index === lstNombresAnimaux.indexOf(nMax),
+                reponse: index === 0 ? reponsea : undefined,
+              })),
+            ]
+          }
+          break
+        case 1:
+          {
+            const reponseb = { texte: `${i + 1}) Animaux les moins nombreux :` }
+            props[i] = [
+              ...lstAnimauxExo.map((_, index) => ({
+                texte: premiereLettreEnMajuscule(lstAnimauxExo[index]),
+                statut: index === lstNombresAnimaux.indexOf(nMin),
+                reponse: index === 0 ? reponseb : undefined,
+              })),
+            ]
+          }
 
+          break
+        case 2:
+          props[i] = [
+            ...lstAnimauxExo.map((_, index) => {
+              if (index === numAnimal) {
+                return Object.assign(
+                  {},
+                  {
+                    texte: `entre ${bornesAEviter[0]} et ${bornesAEviter[0] + 10 * coef}`,
+                    statut: true,
+                    reponse: {
+                      texte: `${i + 1}) Encadrement du nombre de ${lstAnimauxExo[numAnimal]} :`,
+                    },
+                  },
+                )
+              } else {
+                const borne = choice(bornesinf, bornesAEviter)
+                bornesAEviter.push(borne)
+                return Object.assign(
+                  {},
+                  {
+                    texte: `entre ${coef * borne} et ${(borne + 10) * coef}`,
+                    statut: false,
+                    reponse: {
+                      texte: `${i + 1}) Encadrement du nombre de ${lstAnimauxExo[numAnimal]} :`,
+                    },
+                  },
+                )
+              }
+            }),
+          ]
+          break
+      }
+    }
+    const dataOptions: DataOptionsMultiMathfield = {}
+    const reponsesInteractives: Valeur = {}
+    const avecNumerotation = listeTypeDeQuestions.length > 1
+    const lignesQuestions = listeTypeDeQuestions.map(
+      (typeQuestion, indexQuestion) => {
+        const field = `champ${indexQuestion + 1}` as ChampDiagramme
+        const bonnesReponses = props[indexQuestion]
+          .filter((proposition) => proposition.statut)
+          .map((proposition) => proposition.texte)
+        dataOptions[field] = {
+          qcm: props[indexQuestion].map((proposition) => ({
+            label: proposition.texte,
+            value: proposition.texte,
+          })),
+          vertical: nbAnimaux > 5 || typeQuestion === 2,
+        }
+        reponsesInteractives[field] = { value: bonnesReponses[0] }
+        return `${avecNumerotation ? numAlpha(indexQuestion) : ''}${textesQuestions[indexQuestion]} %{${field}}`
+      },
+    )
+
+    this.listeQuestions[0] =
+      diag +
+      '<br>' +
+      addMultiMathfield(this, 0, {
+        dataTemplate: lignesQuestions.join('\n'),
+        dataOptions,
+      })
     // debut de la correction
     // question 1
-    this.listeCorrections[0] =
-      'Les animaux les plus nombreux sont les ' +
-      lstAnimauxExo[lstNombresAnimaux.indexOf(nMax)] +
-      '.<br>'
-    // question 2
-    this.listeCorrections[1] =
-      'Les animaux les moins nombreux sont les ' +
-      lstAnimauxExo[lstNombresAnimaux.indexOf(nMin)] +
-      '.<br>'
+    const listeCorrections = []
+    for (let i = 0; i < listeTypeDeQuestions.length; i++) {
+      switch (listeTypeDeQuestions[i]) {
+        case 0:
+          listeCorrections[i] =
+            'Les animaux les plus nombreux sont les ' +
+            lstAnimauxExo[lstNombresAnimaux.indexOf(nMax)] +
+            '.<br>'
+          break
+        case 1:
+          listeCorrections[i] =
+            'Les animaux les moins nombreux sont les ' +
+            lstAnimauxExo[lstNombresAnimaux.indexOf(nMin)] +
+            '.<br>'
+          break
+        case 2:
+          {
+            listeCorrections[i] =
+              `Il y a entre ${reponseinf} et ${reponsesup} ${lstAnimauxExo[numAnimal]}.<br>`
+          }
+          break
+      }
+    }
 
-    // question 3
-    const reponse =
-      lstNombresAnimaux[lstAnimauxExo.indexOf(lstAnimauxExo[numAnimal])]
-    const reponseinf = 10 * coef * Math.floor(reponse / (10 * coef))
-    const reponsesup = reponseinf + 10 * coef
-    this.listeCorrections[2] =
-      'Il y a entre ' +
-      reponseinf +
-      ' et ' +
-      reponsesup +
-      ' ' +
-      lstAnimauxExo[numAnimal] +
-      '.<br>'
+    this.listeCorrections[0] = listeCorrections
+      .map(
+        (correction, indexQuestion) =>
+          `${avecNumerotation ? numAlpha(indexQuestion) : ''}${correction}`,
+      )
+      .join('')
+
     if (context.isAmc) {
       this.autoCorrectionAMC[0] = {
         enonce: '',
-        propositions: [
-          {
-            type: 'qcmMono',
-            propositions: propa,
-            options: {
-              ordered: false,
-            },
-            enonce: this.introduction + numAlpha(0) + this.listeQuestions[0],
-          },
-          {
-            type: 'qcmMono',
-            options: { ordered: false },
-            enonce: numAlpha(1) + this.listeQuestions[1],
-            propositions: propb,
-          },
-          {
-            type: 'qcmMono',
-            options: { ordered: false },
-            enonce: numAlpha(2) + this.listeQuestions[2],
-            propositions: propc,
-          },
-        ],
+        propositions: listeTypeDeQuestions.map((_, indexQuestion) => ({
+          type: 'qcmMono',
+          propositions: props[indexQuestion],
+          options: { ordered: false },
+          enonce:
+            (indexQuestion === 0 ? diag + '<br>' : '') +
+            (avecNumerotation ? numAlpha(indexQuestion) : '') +
+            textesQuestions[indexQuestion],
+        })),
       }
       this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     } else {
-      this.autoCorrection[0] = {
-        propositions: propa,
-        options: { ordered: false, vertical: nbAnimaux > 5 },
-      }
-      this.autoCorrection[1] = {
-        propositions: propb,
-        options: { ordered: false, vertical: nbAnimaux > 5 },
-      }
-      this.autoCorrection[2] = {
-        propositions: propc,
-        options: { ordered: false, vertical: true },
-      }
-    }
-    if (!context.isAmc) {
-      const qcm0 = propositionsQcm(this, 0)
-      const qcm1 = propositionsQcm(this, 1)
-      const qcm2 = propositionsQcm(this, 2)
-      this.listeQuestions[0] += `<br>${qcm0.texte}`
-      this.listeQuestions[1] += `<br>${qcm1.texte}`
-      this.listeQuestions[2] += `<br>${qcm2.texte}`
+      handleAnswers(this, 0, reponsesInteractives, {
+        formatInteractif: 'multi-mathfield',
+      })
     }
     listeQuestionsToContenu(this)
   }

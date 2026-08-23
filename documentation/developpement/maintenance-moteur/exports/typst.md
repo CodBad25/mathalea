@@ -265,7 +265,10 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.canMode`) : pend
   (`canModeSetFromUrl`/`pageFormatSetFromUrl`/`coverTemplateSetFromUrl`/
   `headerStyleSetFromUrl`) : rouvrir une fiche déjà réglée autrement ne
   l'écrase pas.
-- Le tableau est produit par le helper Typst `#can-tableau(enonces, reponses, jury: true, entetes: ..., fond: ..., hauteur-ligne: ...)` (`MATHALEA_CAN_TABLE_HELPER` dans `buildTypstDocument.ts`), déclaré dans le préambule seulement quand il sert, comme les autres aides. `enonces` et `reponses` sont deux listes de contenus de même longueur ; les proportions des colonnes et l'en-tête répété en haut de chaque page reprennent le `longtblr` de l'environnement `TableauCan` (`lib/latex/preambuleTex.ts`). Les arguments nommés restent modifiables dans l'éditeur (retirer la colonne « Jury » avec `jury: false`, par exemple).
+- Le tableau est produit par le helper Typst `#can-tableau(enonces, reponses, jury: true, entetes: ..., fond: ..., hauteur-ligne: ...)` (`MATHALEA_CAN_TABLE_HELPER` dans `buildTypstDocument.ts`), déclaré dans le préambule seulement quand il sert, comme les autres aides. `enonces` et `reponses` sont deux listes de contenus de même longueur ; les proportions des colonnes et l'en-tête répété en haut de chaque page reprennent le `longtblr` de l'environnement `TableauCan` (`lib/latex/preambuleTex.ts`). Les arguments nommés restent modifiables dans l'éditeur : retirer la colonne « Jury » avec `jury: false`, ou resserrer les lignes avec `hauteur-ligne` (8 pt par défaut, l'espace ajouté au-dessus et au-dessous du contenu de chaque cellule).
+- **Questions liées** : deux questions consécutives peuvent partager un même énoncé — une courbe lue deux fois, par exemple. L'exercice le déclare avec `canNumeroLie` (le numéro que la question se donne) et `canLiee` (les numéros auxquels elle est liée), relevés par `MetaExerciceCan` dans `listeCanNumerosLies`/`listeCanLiees` et transmis par `TypstExerciseInput.canLinkNumbers`/`canLinkedTo`. `computeCanEnonceRowspans` en déduit, pour chaque question, le nombre de lignes que couvre sa cellule d'énoncé : la première du groupe porte une `table.cell(rowspan: n, …)`, les suivantes reçoivent `none` à la place de leur énoncé (le helper n'ouvre alors pas de cellule) et ne gardent que leur réponse à compléter — équivalent du `\SetCell[r=n]` de la sortie LaTeX (`lib/Latex.ts`). Le repère `can-row` d'une question liée part dans sa cellule « Réponse », et la modale d'édition de cette ligne ne propose que la réponse (`getGeneratedCanRowCode().sharesPreviousEnonce`). Seules des questions **contiguës** sont regroupées : une cellule fusionnée ne peut pas couvrir des lignes séparées.
+- Les figures de la colonne « Énoncé » sont plafonnées à `CAN_FIGURE_MAX_WIDTH_PT` (120 pt) : dessinées pour la pleine largeur du navigateur, elles rempliraient sinon toute la cellule et doubleraient le volume de la feuille de passation. Même ordre de grandeur que `TABLE_CELL_FIGURE_MAX_WIDTH_PT`, le plafond des figures des autres tableaux. Le zoom de chaque figure reste réglable depuis la palette de mise en page.
+- Aucune ligne ne se coupe entre deux pages (`table.cell(breakable: false)`, comportement du `longtblr` de la version LaTeX) : une figure serait sinon séparée de son numéro.
 - Les réponses à compléter viennent de `listeCanReponsesACompleter` (exposée par `TypstExerciseInput.canAnswers`), les énoncés de `listeCanEnonces` à défaut de `listeQuestions` (`canQuestions`) — même repli qu'en LaTeX. `buildInputs` (`Typst.svelte`) les renseigne comme les autres contenus, et `frozenInputs` les fige avec les questions quand le nombre de questions change.
 - La consigne et l'introduction des exercices ne sont pas reprises (comme en LaTeX) : le tableau ne montre que les énoncés.
 - Le paquet `exercise-bank` n'est pas importé (il n'y a plus de titre d'exercice à habiller) : les réglages « Fusionner les exercices », « Style des exercices », « Afficher la référence » et « QR-code » sont désactivés dans ce mode.
@@ -334,8 +337,47 @@ Particularités de la conversion des formules (`latexMathToTypst`) :
 - `\num`/`\numprint` dépliés en conservant les espaces fines (`\,`) ;
 - espaces LaTeX explicites (`\thinspace`, `\medspace`, `\thickspace`) normalisées vers les espaces mathématiques Typst ;
 - les espaces sources qui bordent une chaîne de texte (`#txt("…")`, `" "`) sont supprimées : contrairement à LaTeX, Typst rend en mode maths l'espace qui précède ou suit une chaîne, elle s'ajouterait donc à celle contenue dans le `\text{…}` (`5\text{ cm}`) ou à l'espace insécable qui précède (`5~\text{cm}`) et afficherait une double espace ;
-- la mise en évidence `{\color{...}\boldsymbol{...}}` de `miseEnEvidence` est convertie en `#text(fill: rgb("..."))` ;
+- la mise en évidence `{\color{...}\boldsymbol{...}}` de `miseEnEvidence` est convertie en `#text(fill: rgb("..."))` ; `\boldsymbol` devient `bold(...)` (gras **italique**, comme en LaTeX) et non `upright(bold(...))`, qui redresserait les variables des réponses en orange ;
 - en cas d'échec de conversion, la formule est insérée verbatim entre guillemets.
+
+Certains énoncés « Course aux nombres » sont écrits en LaTeX **mode texte**
+(hors `$...$`) plutôt qu'en HTML : `htmlToTypst` y traduit aussi `\quad`,
+`\qquad`, `\medskip`, `\underline`, `\newline`, `\hspace{…}`,
+`\texttt{…}` (`#raw`), `\fbox{…}`/`\framebox{…}` (cadre), `\parbox{L}{…}`
+(boîte) et supprime `\setlength{…}{…}`, sans équivalent Typst. La largeur de
+`\parbox` n'est pas reprise : les exercices l'expriment en fraction de
+`\linewidth`, mesure prise sur la page A4 de la sortie LaTeX, alors que la
+boîte atterrit souvent dans une cellule bien plus étroite (tableau « Course
+aux nombres »), où la largeur littérale couperait les lignes de l'algorithme
+encadré ; une boîte Typst sans largeur prend celle de son contenu et ne se
+replie que s'il déborde.
+Les arguments sont lus à accolades équilibrées (`replaceLatexCommand`), donc
+les boîtes imbriquées le sont aussi ; `\linewidth` et ses synonymes deviennent
+un pourcentage (`0.5\linewidth` → `50%`).
+
+#### Ligne de base des formules en ligne
+
+Une formule en ligne ne doit jamais être coupée entre deux lignes : c'est
+`box` qui l'en empêche, mais il aligne le **bas** de son contenu sur la ligne
+de base — une fraction (toutes sont en display, voir `#show math.frac` du
+préambule), une parenthèse haute ou un indice se retrouveraient entièrement
+au-dessus du texte qui les entoure.
+
+`MATHALEA_INLINE_FORMULA_RULE` (préambule, partagé par la fiche, les
+flash-cards et le diaporama) rend donc à la boîte la profondeur de la formule,
+que Typst n'expose pas : mesurée à côté d'une boîte plus haute qu'elle (dont
+la ligne de base est le bas, justement parce que `box` aligne par le bas), la
+formule ne dépasse que par le bas, et la hauteur de la ligne obtenue vaut
+celle du témoin plus la profondeur cherchée. Une formule qui contient déjà des
+retours à la ligne (`\begin{aligned}`) est alignée sur sa **première** ligne,
+mesurée à part.
+
+C'est une règle d'affichage et non un enrobage émis par le convertisseur
+(`latexSegmentToTypst` produit `$…$` nu) : l'énoncé garde ainsi un
+`math.equation` dans l'arbre de contenu, seule forme que `is-inline-content`
+(paquet taskize) reconnaît comme étant en ligne — sans quoi le numéro de la
+question serait aligné en haut de l'énoncé au lieu de partager sa première
+ligne (voir [Numérotation des questions](#numérotation-des-questions)).
 
 ### Numérotation des questions
 

@@ -1,4 +1,4 @@
-import ExprimerEnFonction from '../can/2e/can2L19'
+import ExprimerEnFonction from '../can/2e/can2L14-02'
 export const titre =
   'Exprimer une variable en fonction des autres (formules avec sommes/produits/quotients)'
 export const dateDePublication = '23/07/2025'

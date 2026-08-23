@@ -1,127 +1,98 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { extraireRacineCarree } from '../../../lib/outils/calculs'
+import {
+  obtenirListeFractionsIrreductibles,
+  texFractionFromString,
+} from '../../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Calculer avec une racine carrée'
+export const titre = 'Calculer un nombre connaissant son inverse'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-
+export const amcReady = true
+export const amcType = 'AMCNum'
+export const dateDePublication = '10/11/2022'
+export const dateDeModifImportante = '04/08/2025'
 /**
- * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
- * Date de publication
 */
-export const uuid = '2af85'
+
+export const uuid = 'd9488'
 
 export const refs = {
   'fr-fr': ['can2N32-02'],
-  'fr-ch': ['11NO3A-7'],
+  'fr-ch': [],
 }
-export default class CalculAvecRacineCarree2 extends ExerciceSimple {
+export default class NombreInverse extends ExerciceSimple {
   constructor() {
     super()
-
-    this.optionsChampTexte = { texteAvant: '<br>' }
+    this.versionQcmDisponible = true
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierFullOperations
-    this.optionsDeComparaison = { texteSansCasse: true }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 
   nouvelleVersion() {
-    const listeRacines1 = [
-      [2, 8],
-      [2, 32],
-      [2, 50],
-      [3, 27],
-      [5, 20],
-      [2, 18],
-      [2, 72],
-      [3, 48],
-      [5, 45],
-      [2, 200],
-      [3, 300],
-      [5, 500],
-      [6, 600],
-      [7, 700],
-    ] // couples pour simplifier des produits de racines carrées
-    let racine, a, b, reduction
-    switch (this.quotaChoice('cas', [1, 2])) {
-      case 1:
-        racine = choice(listeRacines1)
-        a = racine[0]
-        b = racine[1]
-        reduction = extraireRacineCarree(b)
-        if (choice([true, false])) {
-          this.question = `Écrire $\\sqrt{${a}}+\\sqrt{${b}}$ sous la forme $a\\sqrt{b}$ avec $a$ et $b$ entiers et $b$ le plus petit possible. `
-          this.correction = `On a  $${b}=${reduction[0]}^2\\times ${reduction[1]}$.<br>
-          Ainsi, $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times${reduction[1]}}=\\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
-    =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-    $\\begin{aligned}
-    \\sqrt{${a}}+\\sqrt{${b}}&=\\sqrt{${a}}+${reduction[0]}\\sqrt{${reduction[1]}}\\\\
-    &= ${miseEnEvidence(`${reduction[0] + 1}\\sqrt{${reduction[1]}}`)}
-    \\end{aligned}$
-  `
-        } else {
-          this.question = `Écrire $\\sqrt{${b}}+\\sqrt{${a}}$ sous la forme $a\\sqrt{b}$ avec $a$ et $b$ entiers et $b$ le plus petit possible. `
-          this.correction = `On a  $${b}=${reduction[0]}^2\\times ${reduction[1]}$.<br>
-          Ainsi, $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times${reduction[1]}}=\\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
-    =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-  $\\begin{aligned}
-  \\sqrt{${b}}+\\sqrt{${a}}&=${reduction[0]}\\sqrt{${reduction[1]}}+\\sqrt{${a}}\\\\
-  &= ${miseEnEvidence(`${reduction[0] + 1}\\sqrt{${reduction[1]}}`)}
-  \\end{aligned}$
-`
-        }
-        this.reponse = [`${reduction[0] + 1}\\sqrt${reduction[1]}`]
-        break
+    const maFraction = this.quotaChoice(
+      'maFraction',
+      obtenirListeFractionsIrreductibles(),
+    )
+    const a = this.quotaRandint('a', 1, 4)
+    const b = maFraction[0]
+    const c = maFraction[1]
+    const d = new FractionEtendue(a * c + b, c)
+    const e = new FractionEtendue(a * c - b, c)
+    const listeNom = ['R', 'x', 'y', 'T', 'z', 'U', 'A', 'B', 'C']
+    const Nom = choice(listeNom)
 
-      case 2:
-        racine = choice(listeRacines1)
-        a = racine[0]
-        b = racine[1]
-        reduction = extraireRacineCarree(b)
-        if (choice([true, false])) {
-          this.question = `Écrire $\\sqrt{${a}}-\\sqrt{${b}}$ sous la forme $a\\sqrt{b}$ avec $a$ et $b$ entiers et $b$ le plus petit possible. `
-          this.correction = `On a  $${b}=${reduction[0]}^2\\times ${reduction[1]}$.<br>
-          Ainsi, $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times${reduction[1]}}=\\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
-    =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-    $\\begin{aligned}
-    \\sqrt{${a}}-\\sqrt{${b}}&=\\sqrt{${a}}-${reduction[0]}\\sqrt{${reduction[1]}}\\\\
-    &= ${miseEnEvidence(`${1 - reduction[0]}\\sqrt{${reduction[1]}}`)}
-    \\end{aligned}$
-  `
-          if (1 - reduction[0] === -1) {
-            this.reponse = [`${1 - reduction[0]}\\sqrt${reduction[1]}`]
-          } else {
-            this.reponse = [
-              `${1 - reduction[0]}\\sqrt${reduction[1]}`,
-              `-\\sqrt${reduction[1]}`,
-            ]
-          }
-        } else {
-          this.question = `Écrire $\\sqrt{${b}}-\\sqrt{${a}}$ sous la forme $a\\sqrt{b}$ avec $a$ et $b$ entiers et $b$ le plus petit possible. `
-          this.correction = `On a  $${b}=${reduction[0]}^2\\times ${reduction[1]}$.<br>
-          Ainsi, $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times${reduction[1]}}=\\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
-    =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-  $\\begin{aligned}
-  \\sqrt{${b}}-\\sqrt{${a}}&=${reduction[0]}\\sqrt{${reduction[1]}}-\\sqrt{${a}}\\\\
-  &= ${miseEnEvidence(`${reduction[0] - 1}\\sqrt{${reduction[1]}}`)}
-  \\end{aligned}$
-`
-          if (1 - reduction[0] === 1) {
-            this.reponse = [
-              `${reduction[0] - 1}\\sqrt${reduction[1]}`,
-              `\\sqrt${reduction[1]}`,
-            ]
-          } else {
-            this.reponse = [`${reduction[0] - 1}\\sqrt${reduction[1]}`]
-          }
-        }
+    if (context.isAmc) this.versionQcm = false
+    if (this.quotaChoice('ordre', [true, false])) {
+      this.reponse = this.versionQcm
+        ? `$${Nom}=${new FractionEtendue(a * c + b, c).inverse().texFraction}$`
+        : new FractionEtendue(a * c + b, c).inverse().texFraction
+      this.question = this.versionQcm
+        ? `On considère l'égalité $\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$.<br> On a :`
+        : `Calculer $${Nom}$  sachant que : <br>
+     $\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$`
+      this.correction = `$\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)} = \\dfrac{${a} \\times ${c}}{${c}} + \\dfrac{${b}}{${c}} = \\dfrac{${a * c}}{${c}} + \\dfrac{${b}}{${c}}  =${d.texFraction}$<br><br>
+   L'inverse de $${Nom}$ vaut  $${d.texFraction}$, donc $${Nom}=${miseEnEvidence(`${d.inverse().texFraction}`)}$.`
+      this.canEnonce = `$\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$` // 'Compléter'
+      this.canReponseACompleter = `$${Nom}=\\ldots$`
 
-        break
+      if (this.versionQcm) {
+        this.distracteurs = [
+          `$${Nom}=${new FractionEtendue(a * c + b, c).texFraction}$`,
+          `$${Nom}=${new FractionEtendue(a + b, c).texFractionSimplifiee}$`,
+          `$${Nom}=${new FractionEtendue(a + b, c).inverse().texFractionSimplifiee}$`,
+          `$${Nom}=${new FractionEtendue(a * b + c, b).inverse().texFractionSimplifiee}$`,
+        ]
+      }
+    } else {
+      this.reponse = this.versionQcm
+        ? `$${Nom}=${new FractionEtendue(a * c - b, c).inverse().texFraction}$`
+        : new FractionEtendue(a * c - b, c).inverse().texFraction
+      this.question = this.versionQcm
+        ? `On considère l'égalité $\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$. <br>On a :`
+        : `Calculer $${Nom}$ sachant que : <br>
+         $\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$`
+      this.correction = `$\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)} = \\dfrac{${a} \\times ${c}}{${c}} - \\dfrac{${b}}{${c}} = \\dfrac{${a * c}}{${c}} - \\dfrac{${b}}{${c}}  =${e.texFraction}$<br><br>
+        L'inverse de $${Nom}$ vaut  $${e.texFraction}$, donc $${Nom}=${miseEnEvidence(`${e.inverse().texFraction}`)}$.`
+      this.canEnonce = `$\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$` // 'Compléter'
+      this.canReponseACompleter = `$${Nom}=\\ldots$`
+      this.optionsChampTexte = { texteAvant: `<br>$${Nom}=$` }
+
+      if (this.versionQcm) {
+        this.distracteurs = [
+          `$${Nom}=${new FractionEtendue(a * c - b, c).texFraction}$`,
+          `$${Nom}=${new FractionEtendue(a - b, c).texFractionSimplifiee}$`,
+          `${a - b === 0 ? `$${Nom}=${new FractionEtendue(a + b, c).inverse().texFractionSimplifiee}$` : `$${Nom}=${new FractionEtendue(a - b, c).inverse().texFractionSimplifiee}$`}`,
+          `$${Nom}=${new FractionEtendue(a * b + c, b).inverse().texFractionSimplifiee}$`,
+        ]
+      }
     }
   }
 }

@@ -13,18 +13,27 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation, translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import {
+  addMultiMathfield,
+  type DataOptionsMultiMathfield,
+} from '../../lib/customElements/MultiMathfield'
 import { texcolors } from '../../lib/format/style'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { numAlpha } from '../../lib/outils/outilString'
+import type { SharedQcmProposition, Valeur } from '../../lib/types'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Lire des données représentées dans un diagramme'
 export const interactifReady = true
-export const interactifType = 'qcm'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -35,10 +44,13 @@ export const amcType = 'AMCHybride'
 export const uuid = 'adac4'
 
 export const refs = {
-  'fr-fr': ['auto6P1A-1', '3AutoS03-1', 'BP1AUTO028'],
+  'fr-fr': ['auto6P1A-1', '3AutoS03-1', 'BP1AUTO028', '6AutoS1-1'],
   'fr-2016': ['6S10-1'],
   'fr-ch': ['9FA3A-4'],
 }
+
+type ChampDiagramme = 'champ1' | 'champ2' | 'champ3'
+
 export default class LireUnDiagramme extends Exercice {
   constructor() {
     super()
@@ -52,10 +64,16 @@ export default class LireUnDiagramme extends Exercice {
       5,
       '1 : Diagramme circulaire\n2 : Diagramme semi-circulaire\n3 : Diagramme en barres\n4 : Diagramme cartésien\n5 : Au hasard',
     ]
+    this.besoinFormulaire3Texte = [
+      'Types de questions',
+      "0: Toutes les questions\n1 : L'espèce la moins nombreuse\n2 : L'espèce la plus nombreuse\n3 : La part de l'espèce la plus nombreuse",
+    ]
 
     this.nbQuestions = 2
     this.sup = 3
     this.sup2 = 5
+    this.sup3 = '1-2-3'
+    this.spacing = 2
   }
 
   nouvelleVersion() {
@@ -71,6 +89,17 @@ export default class LireUnDiagramme extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
+    let listeSousQuestions = gestionnaireFormulaireTexte({
+      saisie: this.sup3,
+      nbQuestions: 0,
+      min: 1,
+      max: 3,
+      melange: 0,
+      defaut: 0,
+      shuffle: false,
+      enleveDoublons: true,
+    }).map((v) => Number(v) - 1)
+    if (listeSousQuestions.length === 0) listeSousQuestions = [0, 1, 2]
     let N = 0
     let nom
     let nbAnimaux = 4 // nombre d'animaux différents dans l'énoncé
@@ -79,7 +108,7 @@ export default class LireUnDiagramme extends Exercice {
     let lstVal: number[] = [] // liste des valeurs à éviter pour les effectifs
 
     let paramsEnonce, coef, r, lstElementGraph, g
-    let reponse1, reponse2, nbMin, nbMax, monQcm1, monQcm2, monQcm3
+    let reponse1, reponse2, nbMin, nbMax
     let objets
     const lstAnimaux = [
       'Girafes',
@@ -127,13 +156,7 @@ export default class LireUnDiagramme extends Exercice {
       lstVal = []
       lstAnimauxExo = []
       lstNombresAnimaux = []
-      if (!context.isAmc) {
-        this.autoCorrection[q * 3] = {}
-        this.autoCorrection[q * 3 + 1] = {}
-        this.autoCorrection[q * 3 + 2] = {}
-      } else {
-        this.autoCorrection[q] = {}
-      }
+      this.autoCorrection[q] = {}
 
       texteAMC =
         'Dans le parc naturel de ' +
@@ -411,7 +434,7 @@ export default class LireUnDiagramme extends Exercice {
       texte = texteAMC // Le texteAMC commun avec le texte (en non AMC) s'arrête ici !
 
       // Construction des QCM valables en interactif ET en AMC
-      const propositionsQcm1 = []
+      const propositionsQcm1: SharedQcmProposition[] = []
       for (let i = 0; i < nbAnimaux; i++) {
         propositionsQcm1.push({
           texte: `${lstAnimauxExo[i]}`,
@@ -419,7 +442,7 @@ export default class LireUnDiagramme extends Exercice {
         })
       }
 
-      const propositionsQcm2 = []
+      const propositionsQcm2: SharedQcmProposition[] = []
       for (let i = 0; i < nbAnimaux; i++) {
         propositionsQcm2.push({
           texte: `${lstAnimauxExo[i]}`,
@@ -427,7 +450,7 @@ export default class LireUnDiagramme extends Exercice {
         })
       }
 
-      const propositionsQcm3 = []
+      const propositionsQcm3: SharedQcmProposition[] = []
       propositionsQcm3.push(
         {
           texte: 'Plus de la moitié des animaux',
@@ -443,59 +466,80 @@ export default class LireUnDiagramme extends Exercice {
         },
       )
 
-      // La variation entre QCM Interactif et AMC commence ici
+      const propositionsParSousQuestion = [
+        propositionsQcm1,
+        propositionsQcm2,
+        propositionsQcm3,
+      ]
+      const textesSousQuestions = [
+        "Quelle est l'espèce la moins nombreuse ?<br>",
+        "Quelle est l'espèce la plus nombreuse ?<br>",
+        "L'espèce la plus nombreuse représente ...<br>",
+      ]
+      const correctionsSousQuestions = [
+        `L'animal le moins nombreux parmi ces espèces est : ${reponse1}.<br>`,
+        `L'animal le plus nombreux parmi ces espèces est : ${reponse2}.<br>`,
+        `L'animal le plus nombreux parmi ces espèces représente : ${
+          nbMax > effectiftotal / 2
+            ? 'plus de la moitié des animaux'
+            : nbMax < effectiftotal / 2
+              ? 'moins de la moitié des animaux'
+              : 'la moitié des animaux'
+        }.<br>`,
+      ]
+      const avecNumerotation = listeSousQuestions.length > 1
+      const dataOptions: DataOptionsMultiMathfield = {}
+      const reponsesInteractives: Valeur = {}
+      const lignesQuestions = listeSousQuestions.map(
+        (sousQuestion, indexQuestion) => {
+          const field = `champ${indexQuestion + 1}` as ChampDiagramme
+          const propositions = propositionsParSousQuestion[sousQuestion]
+          const bonneReponse = propositions.find(
+            (proposition) => proposition.statut,
+          )?.texte
+          dataOptions[field] = {
+            qcm: propositions.map((proposition) => ({
+              label: proposition.texte,
+              value: proposition.texte,
+            })),
+            vertical: sousQuestion === 2,
+          }
+          reponsesInteractives[field] = { value: bonneReponse ?? '' }
+          return `${avecNumerotation ? numAlpha(indexQuestion) : ''}${textesSousQuestions[sousQuestion]} %{${field}}`
+        },
+      )
+
       if (!context.isAmc) {
-        this.autoCorrection[q * 3].propositions = propositionsQcm1
-        this.autoCorrection[q * 3 + 1].propositions = propositionsQcm2
-        this.autoCorrection[q * 3 + 2].propositions = propositionsQcm3
-        this.autoCorrection[q * 3].options = {}
-        this.autoCorrection[q * 3 + 1].options = {}
-        this.autoCorrection[q * 3 + 2].options = {}
-        monQcm1 = propositionsQcm(this, q * 3)
-        monQcm2 = propositionsQcm(this, q * 3 + 1)
-        monQcm3 = propositionsQcm(this, q * 3 + 2)
-        texte +=
-          `${numAlpha(0)} Quelle est l'espèce la moins nombreuse ?` +
-          monQcm1.texte
-        texte +=
-          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(1)} Quelle est l'espèce la plus nombreuse ?` +
-          monQcm2.texte
-        texte +=
-          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(2)} L'espèce la plus nombreuse représente ...` +
-          monQcm3.texte
-        texteCorr =
-          `${numAlpha(0)} L'animal le moins nombreux parmi ces espèces est : ` +
-          monQcm1.texteCorr
-        texteCorr +=
-          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(1)} L'animal le plus nombreux parmi ces espèces est : ` +
-          monQcm2.texteCorr
-        texteCorr +=
-          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(2)} L'animal le plus nombreux parmi ces espèces représente : ` +
-          monQcm3.texteCorr
+        texte += addMultiMathfield(this, q, {
+          dataTemplate: lignesQuestions.join('\n'),
+          dataOptions,
+        })
+        texteCorr = listeSousQuestions
+          .map(
+            (sousQuestion, indexQuestion) =>
+              `${avecNumerotation ? numAlpha(indexQuestion) : ''}${correctionsSousQuestions[sousQuestion]}`,
+          )
+          .join('')
+        handleAnswers(this, q, reponsesInteractives)
       } else {
         // en AMC
+        this.autoCorrectionAMC[q] = {}
         this.autoCorrectionAMC[q].enonce = ''
-        this.questionsAMC[q] = amcConvert(this.autoCorrectionAMC[q])
-        this.autoCorrectionAMC[q].propositions = [
-          {
-            type: 'qcmMono',
-            propositions: propositionsQcm1,
-            enonce:
-              texteAMC +
-              `${numAlpha(0)} Quelle est l'espèce la moins nombreuse ?`,
+        this.autoCorrectionAMC[q].propositions = listeSousQuestions.map(
+          (sousQuestion, indexQuestion) => {
+            const questionAmc = {
+              type: 'qcmMono',
+              propositions: propositionsParSousQuestion[sousQuestion],
+              enonce:
+                (indexQuestion === 0 ? texteAMC : '') +
+                (avecNumerotation ? numAlpha(indexQuestion) : '') +
+                textesSousQuestions[sousQuestion],
+            }
+            return sousQuestion === 2
+              ? { ...questionAmc, options: { lastChoice: 2 } }
+              : questionAmc
           },
-          {
-            type: 'qcmMono',
-            propositions: propositionsQcm2,
-            enonce: `${numAlpha(1)} Quelle est l'espèce la plus nombreuse ?`,
-          },
-          {
-            type: 'qcmMono',
-            propositions: propositionsQcm3,
-            enonce: `${numAlpha(2)} L'espèce la plus nombreuse représente ?`,
-            options: { lastChoice: 2 },
-          },
-        ]
+        )
         this.questionsAMC[q] = amcConvert(this.autoCorrectionAMC[q])
       }
 

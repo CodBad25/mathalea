@@ -60,21 +60,50 @@ export async function cachedBytes(url: string): Promise<Uint8Array> {
   }
   if (cache != null) {
     const hit = await cache.match(url)
-    if (hit != null) return new Uint8Array(await hit.arrayBuffer())
+    if (hit != null) {
+      try {
+        return new Uint8Array(await hit.arrayBuffer())
+      } catch {
+        // Une réponse interrompue peut avoir été enregistrée avec un
+        // Content-Length supérieur à son corps. On l'écarte et on retélécharge.
+        await cache.delete(url).catch(() => false)
+      }
+    }
   }
   // un statut d'erreur (404, 429 de limitation de débit, etc.) n'est jamais
   // mis en cache ni renvoyé comme si c'était le fichier : le corps de la
   // réponse d'erreur (souvent du texte/JSON) serait sinon pris pour les
   // octets de l'image ou de la police, échouant plus loin de façon opaque
   // (ex. « Invalid PNG signature » au décodage Typst)
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(
-      `Échec du téléchargement de ${url} (HTTP ${response.status})`,
-    )
+  let derniereErreur: unknown
+  for (let tentative = 0; tentative < 2; tentative++) {
+    try {
+      const response = await fetch(
+        url,
+        tentative === 0 ? undefined : { cache: 'reload' },
+      )
+      if (!response.ok) {
+        throw new Error(
+          `Échec du téléchargement de ${url} (HTTP ${response.status})`,
+        )
+      }
+      const buffer = await response.arrayBuffer()
+      if (cache != null) {
+        // On reconstruit la réponse à partir des octets effectivement reçus :
+        // un Content-Length erroné du serveur ne contamine ainsi pas le cache.
+        const contentType = response.headers.get('content-type')
+        const headers =
+          contentType == null ? undefined : { 'content-type': contentType }
+        await cache
+          .put(url, new Response(buffer.slice(0), { headers }))
+          .catch(() => undefined)
+      }
+      return new Uint8Array(buffer)
+    } catch (error) {
+      derniereErreur = error
+    }
   }
-  if (cache != null) await cache.put(url, response.clone())
-  return new Uint8Array(await response.arrayBuffer())
+  throw derniereErreur
 }
 
 /**

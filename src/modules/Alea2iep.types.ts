@@ -222,6 +222,11 @@ export interface IAlea2iep {
   compasMasquer(options?: OptionsCompas): void
   compasDeplacer(A: PointAbstrait, options?: OptionsCompas): void
   compasRotation(angle: number | PointAbstrait, options?: OptionsCompas): void
+  compasRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options?: OptionsCompas,
+  ): void
   compasEcarter(l: number, options?: OptionsCompas): void
   compasEcarterAvecRegle(longueur: number, options?: OptionsCompas): void
   compasEcarter2Points(
@@ -243,6 +248,13 @@ export interface IAlea2iep {
   compasCercleCentrePoint(
     centre: PointAbstrait,
     point: PointAbstrait,
+    options?: OptionsCompas,
+  ): void
+  reporterAuCompas2pointsCentreDirection(
+    A: PointAbstrait,
+    B: PointAbstrait,
+    centre: PointAbstrait,
+    angle: number,
     options?: OptionsCompas,
   ): void
 
@@ -332,6 +344,11 @@ export interface IAlea2iep {
   compasMasquer(options?: OptionsCompas): void
   compasDeplacer(A: PointAbstrait, options?: OptionsCompas): void
   compasRotation(angle: number | PointAbstrait, options?: OptionsCompas): void
+  compasRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options?: OptionsCompas,
+  ): void
   compasEcarter(l: number, options?: OptionsCompas): void
   compasEcarterAvecRegle(longueur: number, options?: OptionsCompas): void
   compasEcarter2Points(

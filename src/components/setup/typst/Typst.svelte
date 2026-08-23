@@ -680,6 +680,12 @@
   /** Brouillons de la modale d'édition d'une ligne « Course aux nombres » */
   let canRowEditEnonceDraft = $state('')
   let canRowEditReponseDraft = $state('')
+  /**
+   * La ligne en cours d'édition partage l'énoncé de la précédente (questions
+   * liées) : elle n'a pas de cellule « Énoncé » propre, la modale n'en
+   * propose donc que la réponse.
+   */
+  let canRowEditSharesEnonce = $state(false)
   /** Message de confirmation affiché après un clic sur un bouton « Copier » de la modale */
   let codeCopyStatus = $state('')
   let codeCopyStatusTimer: ReturnType<typeof setTimeout>
@@ -1516,6 +1522,7 @@
       carryOver.codeOverridesCan?.[row] ?? generated?.enonce ?? ''
     canRowEditReponseDraft =
       carryOver.codeOverridesCanReponse?.[row] ?? generated?.reponse ?? ''
+    canRowEditSharesEnonce = generated?.sharesPreviousEnonce ?? false
     canRowEditNum = row
   }
 
@@ -2164,6 +2171,11 @@
       input.canAnswers = input.questions.map((_, i) =>
         format(exercise.listeCanReponsesACompleter?.[i] ?? ''),
       )
+      // questions liées : celles qui partagent l'énoncé de la précédente
+      // (une même courbe lue deux fois, par exemple) n'ont qu'une réponse à
+      // compléter, l'énoncé couvrant leurs lignes — comme en LaTeX
+      input.canLinkedTo = exercise.listeCanLiees
+      input.canLinkNumbers = exercise.listeCanNumerosLies
       // questions figées par la palette (nombre de questions modifié) : les
       // questions déjà affichées gardent leur contenu, seules les questions
       // ajoutées prennent le contenu fraîchement généré
@@ -4212,20 +4224,28 @@
           Code Typst de la ligne {row} du tableau
         </h2>
         <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
-          Modifiez le code ci-dessous : il remplacera l'énoncé et la réponse
-          générés de cette ligne. Videz un champ pour revenir à son contenu
-          généré automatiquement.
+          {#if canRowEditSharesEnonce}
+            Cette question partage l'énoncé de la précédente : seule sa réponse
+            lui appartient. Videz le champ pour revenir à son contenu généré
+            automatiquement.
+          {:else}
+            Modifiez le code ci-dessous : il remplacera l'énoncé et la réponse
+            générés de cette ligne. Videz un champ pour revenir à son contenu
+            généré automatiquement.
+          {/if}
         </p>
-        <label class="flex flex-col gap-1 text-sm">
-          Énoncé
-          <textarea
-            class="h-32 w-full rounded border border-gray-300 bg-coopmaths-canvas p-2 font-mono text-xs text-coopmaths-corpus dark:border-coopmathsdark-corpus-lightest dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-corpus"
-            bind:value={canRowEditEnonceDraft}
-            onkeydown={(e) => {
-              if (e.key === 'Escape') canRowEditNum = null
-            }}
-          ></textarea>
-        </label>
+        {#if !canRowEditSharesEnonce}
+          <label class="flex flex-col gap-1 text-sm">
+            Énoncé
+            <textarea
+              class="h-32 w-full rounded border border-gray-300 bg-coopmaths-canvas p-2 font-mono text-xs text-coopmaths-corpus dark:border-coopmathsdark-corpus-lightest dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-corpus"
+              bind:value={canRowEditEnonceDraft}
+              onkeydown={(e) => {
+                if (e.key === 'Escape') canRowEditNum = null
+              }}
+            ></textarea>
+          </label>
+        {/if}
         <label class="flex flex-col gap-1 text-sm">
           Réponse
           <textarea

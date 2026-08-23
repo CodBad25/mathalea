@@ -1,8 +1,12 @@
 import { context } from '../../modules/context'
 import { renderKatex } from '../mathalea'
 import {
+  formatFiltreNiveauQuestionsDeCours,
+  type ModeNiveauQuestionDeCours,
   NIVEAUX_QUESTIONS_DE_COURS,
   type NiveauQuestionDeCours,
+  parseFiltreNiveauQuestionsDeCours,
+  questionCorrespondAuNiveau,
   type QuestionDeCours,
   questionsDeCoursParTheme,
 } from '../questionsDeCours/banque'
@@ -22,13 +26,11 @@ import MathaleaCustomElement, {
  * le sélecteur sert d'aperçu.
  */
 
-type ModeNiveau = 'avant' | 'egal' | 'apres'
-
 /** Ce que l'enseignant a ouvert, cherché ou fait défiler. */
 type EtatInterface = {
   recherche: string
   niveau: NiveauQuestionDeCours
-  mode: ModeNiveau
+  mode: ModeNiveauQuestionDeCours
   themesOuverts: Set<string>
   defilement: number
   dernierIdCoche: string | null
@@ -78,6 +80,12 @@ export type QuestionsDeCoursSelecteurOptions = {
   selection: string[]
   /** Nombre de questions tirées, pour rester synchronisé avec la sélection. */
   nbQuestions: number
+  /**
+   * Le filtre de niveau mémorisé dans `sup2` (ex : `avant:5`), pour
+   * restaurer le sélecteur dans le même état après un partage d'URL. Vide
+   * quand aucun filtre n'est actif.
+   */
+  filtreNiveau?: string
 }
 
 export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
@@ -92,6 +100,7 @@ export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
     numeroExercice,
     selection,
     nbQuestions,
+    filtreNiveau,
   }: QuestionsDeCoursSelecteurOptions): string {
     if (!context.isHtml) return ''
     return super.create({
@@ -101,6 +110,7 @@ export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
       numeroExercice,
       selection: selection.join(','),
       nbQuestions,
+      filtreNiveau: filtreNiveau ?? '',
     })
   }
 
@@ -130,10 +140,16 @@ export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
   private get etat(): EtatInterface {
     let etat = etatsParExercice.get(this.numeroExercice)
     if (etat === undefined) {
+      // Au premier affichage de la session (ex : ouverture d'une URL
+      // partagée), on restaure le filtre mémorisé dans `sup2` plutôt que de
+      // repartir de « Terminale ».
+      const filtre = parseFiltreNiveauQuestionsDeCours(
+        this.getAttribute('filtre-niveau') ?? '',
+      )
       etat = {
         recherche: '',
-        niveau: 'T',
-        mode: 'avant',
+        niveau: filtre?.niveau ?? 'T',
+        mode: filtre?.mode ?? 'avant',
         themesOuverts: new Set(),
         defilement: 0,
         dernierIdCoche: null,
@@ -209,8 +225,11 @@ export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
     }
     mode.value = etat.mode
     mode.addEventListener('change', () => {
-      etat.mode = mode.value as ModeNiveau
+      etat.mode = mode.value as ModeNiveauQuestionDeCours
       this.remplitListe()
+      // Sans sélection explicite, ce filtre pilote directement le tirage au
+      // hasard (mémorisé dans `sup2`) : on régénère l'aperçu tout de suite.
+      if (this.selection.length === 0) this.demandeMiseAJour()
     })
     filtres.appendChild(mode)
 
@@ -227,6 +246,7 @@ export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
     niveau.addEventListener('change', () => {
       etat.niveau = niveau.value as NiveauQuestionDeCours
       this.remplitListe()
+      if (this.selection.length === 0) this.demandeMiseAJour()
     })
     filtres.appendChild(niveau)
 
@@ -250,15 +270,8 @@ export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
   /** Les questions visibles, thème par thème, filtres appliqués. */
   private questionsVisibles(): Map<string, QuestionDeCours[]> {
     const etat = this.etat
-    const rang = (niveau: string) =>
-      (NIVEAUX_QUESTIONS_DE_COURS as readonly string[]).indexOf(niveau)
-    const rangChoisi = rang(etat.niveau)
-    const correspondAuNiveau = (question: QuestionDeCours) => {
-      const rangQuestion = rang(question.level)
-      if (etat.mode === 'avant') return rangQuestion <= rangChoisi
-      if (etat.mode === 'apres') return rangQuestion >= rangChoisi
-      return rangQuestion === rangChoisi
-    }
+    const correspondAuNiveau = (question: QuestionDeCours) =>
+      questionCorrespondAuNiveau(question, etat.mode, etat.niveau)
     const recherche = normalise(etat.recherche.trim())
     const correspondALaRecherche = (question: QuestionDeCours) =>
       recherche === '' ||
@@ -409,10 +422,19 @@ export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
    * Demande à la vue enseignante de régénérer l'exercice avec la nouvelle
    * sélection. Le nombre de questions suit la sélection tant que l'enseignant
    * ne l'a pas réglé lui-même à une autre valeur.
+   *
+   * Sans sélection, le filtre de niveau du sélecteur est mémorisé dans
+   * `sup2` pour que le tirage au hasard s'y limite ; dès qu'une question est
+   * choisie, `sup2` est effacé pour ne pas rester actif à tort.
    */
   private demandeMiseAJour() {
-    const detail: { sup: string; nbQuestions?: number } = {
+    const etat = this.etat
+    const detail: { sup: string; sup2: string; nbQuestions?: number } = {
       sup: this.selection.join(','),
+      sup2:
+        this.selection.length === 0
+          ? formatFiltreNiveauQuestionsDeCours(etat.mode, etat.niveau)
+          : '',
     }
     const nbPrecedent = (this.getAttribute('selection') ?? '')
       .split(',')

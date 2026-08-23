@@ -1,10 +1,14 @@
-import FormeLitteraleIntroduireUneLettre from '../4e/4L13-1'
-export const titre =
-  'Produire une forme littérale en introduisant une lettre pour désigner une valeur inconnue'
-export const interactifReady = false
-export const uuid = '27741'
+import CalculValeurApprocheeRacineCarree from '../4e/4G20-6'
+export const titre = 'Encadrer une racine carrée'
+export const interactifReady = true
+export const interactifType = 'multi-mathfield'
+export const amcReady = true
+export const amcType = 'AMCHybride'
+export const dateDePublication = '09/05/2023'
+export const uuid = '99c85'
+
 export const refs = {
-  'fr-fr': ['2N50-2', 'BP2RES22'],
+  'fr-fr': ['2N50-2'],
   'fr-ch': ['NR'],
 }
-export default class FormeLitteraleIntroduireUneLettre2nde extends FormeLitteraleIntroduireUneLettre {}
+export default class CalculValeurApprocheeRacineCarreeS extends CalculValeurApprocheeRacineCarree {}

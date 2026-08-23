@@ -202,7 +202,7 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
       pasAge,
       habitantsParCarreau,
     )
-    this.enonce = `L'histogramme ci-dessous représente la répartition des âges des habitants d'un village des Cévennes.<br>
+    this.enonce = `le diagramme en barres ci-dessous représente la répartition des âges des habitants d'un village des Cévennes.<br>
       ${figure}<br>
       On note $c$ le nombre de classes d'âge, $N$ le nombre total d'habitants du village et $n$ le nombre d'habitants âgés de $${seuil}$ ans ou plus.<br>
       Soit $t=c+N+n$. Alors $t$ est égal à :`

@@ -1,4 +1,4 @@
-import ExprimerVariable from '../can/2e/can2L11'
+import ExprimerVariable from '../can/2e/can2L14-01'
 export const titre = "Exprimer une variable en fonction d'une autre"
 export const dateDePublication = '26/07/2025'
 export const amcReady = true

@@ -1,5 +1,6 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -43,7 +44,7 @@ On peut alors affirmer que la probabilité de n'obtenir aucun $6$ lors des ${n =
         explication = `On note $A$ l'événement « obtenir au moins un 6 » et $B$ l'événement « n'obtenir aucun 6 ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(B) = 1 - P(A)$.<br>
-$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${texNombre(probAucun, 3)}$`
+$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${miseEnEvidence(texNombre(probAucun, 3))}$`
         bonneReponse = probAucun
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAuMoinsUn // Valeur donnée
@@ -57,7 +58,7 @@ On peut alors affirmer que la probabilité d'obtenir au moins une fois $6$ lors 
         explication = `On note $A$ l'événement « obtenir au moins un 6 » et $B$ l'événement « n'obtenir aucun 6 ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(A) = 1 - P(B)$.<br>
-$P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
+$P(A) = 1 - ${texNombre(probAucun, 3)} = ${miseEnEvidence(texNombre(probAuMoinsUn, 3))}$`
         bonneReponse = probAuMoinsUn
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAucun // Valeur donnée
@@ -72,7 +73,7 @@ On peut alors affirmer que la probabilité de n'obtenir aucun Pile lors des ${n 
         explication = `On note $A$ l'événement « obtenir au moins un Pile » et $B$ l'événement « n'obtenir aucun Pile ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(B) = 1 - P(A)$.<br>
-$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${texNombre(probAucun, 3)}$`
+$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${miseEnEvidence(texNombre(probAucun, 3))}$`
         bonneReponse = probAucun
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAuMoinsUn // Valeur donnée
@@ -87,7 +88,7 @@ On peut alors affirmer que la probabilité d'obtenir au moins un Pile lors des $
         explication = `On note $A$ l'événement « obtenir au moins un Pile » et $B$ l'événement « n'obtenir aucun Pile ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(A) = 1 - P(B)$.<br>
-$P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
+$P(A) = 1 - ${texNombre(probAucun, 3)} = ${miseEnEvidence(texNombre(probAuMoinsUn, 3))}$`
         bonneReponse = probAuMoinsUn
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAucun // Valeur donnée
@@ -102,7 +103,7 @@ On peut alors affirmer que la probabilité qu'il rate ses ${n === 3 ? 'trois' : 
         explication = `On note $A$ l'événement « réussir au moins une fois un tir » et $B$ l'événement « rater tous les tirs ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(B) = 1 - P(A)$.<br>
-$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${texNombre(probAucun, 3)}$`
+$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${miseEnEvidence(texNombre(probAucun, 3))}$`
         bonneReponse = probAucun
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAuMoinsUn // Valeur donnée
@@ -116,7 +117,7 @@ On peut alors affirmer que la probabilité qu'il réussisse au moins une fois un
         explication = `On note $A$ l'événement « réussir au moins une fois un tir » et $B$ l'événement « rater tous les tirs ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(A) = 1 - P(B)$.<br>
-$P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
+$P(A) = 1 - ${texNombre(probAucun, 3)} = ${miseEnEvidence(texNombre(probAuMoinsUn, 3))}$`
         bonneReponse = probAuMoinsUn
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAucun // Valeur donnée
@@ -131,7 +132,7 @@ On peut alors affirmer que la probabilité qu'aucune pièce ne soit défectueuse
         explication = `On note $A$ l'événement « au moins une pièce est défectueuse » et $B$ l'événement « aucune pièce n'est défectueuse ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(B) = 1 - P(A)$.<br>
-$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${texNombre(probAucun, 3)}$`
+$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${miseEnEvidence(texNombre(probAucun, 3))}$`
         bonneReponse = probAucun
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAuMoinsUn // Valeur donnée
@@ -145,7 +146,7 @@ On peut alors affirmer que la probabilité qu'au moins une pièce soit défectue
         explication = `On note $A$ l'événement « au moins une pièce est défectueuse » et $B$ l'événement « aucune pièce n'est défectueuse ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(A) = 1 - P(B)$.<br>
-$P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
+$P(A) = 1 - ${texNombre(probAucun, 3)} = ${miseEnEvidence(texNombre(probAuMoinsUn, 3))}$`
         bonneReponse = probAuMoinsUn
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAucun // Valeur donnée
@@ -159,7 +160,7 @@ On peut alors affirmer que la probabilité qu'il ne pleuve aucun des ${n === 3 ?
         explication = `On note $A$ l'événement « il pleut au moins un jour » et $B$ l'événement « il ne pleut aucun jour ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(B) = 1 - P(A)$.<br>
-$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${texNombre(probAucun, 3)}$`
+$P(B) = 1 - ${texNombre(probAuMoinsUn, 3)} = ${miseEnEvidence(texNombre(probAucun, 3))}$`
         bonneReponse = probAucun
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAuMoinsUn // Valeur donnée
@@ -174,7 +175,7 @@ On peut alors affirmer que la probabilité qu'il pleuve au moins un jour est ég
         explication = `On note $A$ l'événement « il pleut au moins un jour » et $B$ l'événement « il ne pleut aucun jour ».<br>
 Les événements $A$ et $B$ sont contraires.<br>
 Donc : $P(A) = 1 - P(B)$.<br>
-$P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
+$P(A) = 1 - ${texNombre(probAucun, 3)} = ${miseEnEvidence(texNombre(probAuMoinsUn, 3))}$`
         bonneReponse = probAuMoinsUn
         dist1 = 1 - p // Complémentaire de p
         dist2 = probAucun // Valeur donnée

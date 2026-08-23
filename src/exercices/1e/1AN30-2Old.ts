@@ -220,7 +220,12 @@ export default class SimplifierExponentielles extends Exercice {
       if (this.interactif) {
         texte +=
           `<br><br> $${lettreDepuisChiffre(i + 1)} = $` +
-          ajouteChampTexteMathLive(this, i, KeyboardType.lycee)
+          ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierPersonnalisable,
+            { dataKeys: ['EXP'] },
+          )
         handleAnswers(this, i, { reponse: { value: answer } })
       }
       if (this.questionJamaisPosee(i, texte)) {

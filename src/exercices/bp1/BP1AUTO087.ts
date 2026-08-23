@@ -1,11 +1,11 @@
-import FactoriserIdentitesRemarquables2 from '../2e/2N41-7'
+import FactoriserIdentitesRemarquables2 from '../2e/2L12-9'
 export const titre = 'Factoriser une différence de deux carrés'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '30/07/2026'
 
 /**
- * Clone de 2N41-7 pour le Bac Pro Première.
+ * Clone de 2L11-7 pour le Bac Pro Première.
  * Seulement la factorisation de x² - a², a étant un entier naturel donné.
  */
 

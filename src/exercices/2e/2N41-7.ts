@@ -1,278 +1,137 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { rienSi1 } from '../../lib/outils/ecritures'
-import { pgcd } from '../../lib/outils/primalite'
-import { fraction } from '../../modules/fractions'
+import { propositionsQcm } from '../../lib/interactif/qcm'
+import { choice } from '../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
+import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-
-import { boutonReponsePredefinie } from '../../lib/interactif/boutonReponsePredefinie'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  miseEnEvidence,
-  texteEnCouleurEtGras,
-} from '../../lib/outils/embellissements'
-
-export const titre = 'Factoriser avec les identités remarquables'
+import { bleuMathalea } from '../../lib/colors'
+export const titre =
+  "Trouver l'exposant manquant dans des nombres écrits avec des puissances de 10"
+export const dateDePublication = '08/09/2023'
+export const amcReady = true
+export const amcType = 'qcmMono'
+export const interactifType = 'qcm'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
- * Factoriser en utilisant les 3 identités remarquables
- * @author Jean-claude Lhote
+ * On donne la notation scientifique d'un nombre et on doit trouver l'exposant manquant de 10 dans le membre de gauche.
+ * @author Jean-claude Lhote (adapté par Éric Elter)
  */
-export const uuid = '0bd00'
+export const uuid = 'f49ff'
 
 export const refs = {
-  'fr-fr': ['2N41-7', 'BP2AutoI18'],
-  'fr-ch': ['11FA4C-2'],
+  'fr-fr': ['2N41-7', 'BP2AutoE3'],
+  'fr-ch': ['10NO3F-7'],
 }
-
-export default class FactoriserIdentitesRemarquables2 extends Exercice {
-  /**
-   * Si vrai, seule la factorisation de x² - a² (a entier naturel) est proposée.
-   * Utilisé par le clone BP1AUTO087 (Bac Pro Première).
-   */
-  seulementDifferenceDeCarres = false
+export default class CalculsAvecPuissancesDeDixBis extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
       'Niveau de difficulté',
-      4,
-      '1 : Coefficient de x égal à 1\n 2 : Coefficient de x supérieur à 1\n 3 : Coefficient de x rationnel\n 4 : Mélange',
+      3,
+      '1 : Facile\n2 : Moyen\n3 : Difficile',
     ]
-    this.besoinFormulaire2CaseACocher = [
-      'Proposer une factorisation impossible',
-      false,
-    ]
-
-    this.nbQuestions = 5
+    this.besoinFormulaire2CaseACocher = ['Avec des exposants élevés', false]
     this.sup = 1
+    this.nbQuestions = 5
   }
 
   nouvelleVersion() {
-    const avecFactorisationImpossible = Boolean(this.sup2)
-    if (avecFactorisationImpossible) {
+    if (this.interactif) {
       this.consigne =
         this.nbQuestions === 1
-          ? "Factoriser, si possible, l'expression suivante."
-          : 'Factoriser, si possible, les expressions suivantes.'
+          ? "Choisir l'exposant manquant dans l'égalité suivante."
+          : "Choisir l'exposant manquant dans les égalités suivantes."
     } else {
       this.consigne =
         this.nbQuestions === 1
-          ? "Factoriser l'expression suivante."
-          : 'Factoriser les expressions suivantes.'
-    }
-    // Une seule des expressions n'est pas factorisable, tirée au hasard
-    const indiceImpossible = avecFactorisationImpossible
-      ? randint(0, this.nbQuestions - 1)
-      : -1
-    const listeFractions = [
-      [1, 2],
-      [1, 3],
-      [2, 3],
-      [1, 4],
-      [3, 4],
-      [1, 5],
-      [2, 5],
-      [3, 5],
-      [4, 5],
-      [1, 6],
-      [5, 6],
-      [1, 7],
-      [2, 7],
-      [3, 7],
-      [4, 7],
-      [5, 7],
-      [6, 7],
-      [1, 8],
-      [3, 8],
-      [5, 8],
-      [7, 8],
-      [1, 9],
-      [2, 9],
-      [4, 9],
-      [5, 9],
-      [7, 9],
-      [8, 9],
-      [1, 10],
-      [3, 10],
-      [7, 10],
-      [9, 10],
-    ]
-    let typesDeQuestionsDisponibles = []
-    if (this.sup === 1) {
-      typesDeQuestionsDisponibles = [1, 2, 3] // coef de x = 1
-    } else if (this.sup === 2) {
-      typesDeQuestionsDisponibles = [4, 5, 6] // coef de x > 1
-    } else if (this.sup === 3) {
-      typesDeQuestionsDisponibles = [7, 8, 9] // coef de x rationnel
-    } else {
-      typesDeQuestionsDisponibles = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    }
-    if (this.seulementDifferenceDeCarres) {
-      typesDeQuestionsDisponibles = [3] // x² - a²
+          ? "Trouver l'exposant manquant dans l'égalité suivante."
+          : "Trouver l'exposant manquant dans les égalités suivantes."
     }
 
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
-    for (
-      let i = 0, texte, texteCorr, cpt = 0, a, b, ns, ds, typesDeQuestions;
-      i < this.nbQuestions && cpt < 50;
-    ) {
-      typesDeQuestions = listeTypeDeQuestions[i]
-      a = randint(1, 9)
-      b = randint(2, 9)
-      const fractionChoisie = choice(listeFractions)
-      ns = fractionChoisie[0]
-      ds = fractionChoisie[1]
-      const fra = fraction(ns, ds)
-      const fraC = fra.produitFraction(fra)
-      const fraD = fra.multiplieEntier(2 * a)
-      let aImpossible = 0
-      let formeImpossible = ''
-      if (i === indiceImpossible) {
-        // Une unique expression de l'exercice n'est pas factorisable
-        aImpossible = randint(2, 9)
-        formeImpossible = choice(['doubleProduitIncorrect', 'sommeDeCarres'])
-        if (formeImpossible === 'doubleProduitIncorrect') {
-          // x²-ax+a² : le terme en x ne correspond pas au double produit de (x-a)²
-          texte = `$x^2-${aImpossible}x+${aImpossible * aImpossible}$`
-          texteCorr = `Le carré de $${aImpossible}$ est bien $${aImpossible * aImpossible}$, mais pour reconnaître $(x-${aImpossible})^2$, il faudrait que le terme en $x$ soit $-2\\times ${aImpossible}\\times x=-${2 * aImpossible}x$, or il vaut $-${aImpossible}x$.`
-          texteCorr += `<br>$x^2-${aImpossible}x+${aImpossible * aImpossible}$ n'est ${texteEnCouleurEtGras('pas factorisable')}.`
-        } else {
-          // x²+a² : une somme de deux carrés ne se factorise pas
-          texte = `$x^2+${aImpossible * aImpossible}$`
-          texteCorr = `$x^2+${aImpossible * aImpossible}=x^2+${aImpossible}^2$ est une somme de deux carrés, or seule une différence de deux carrés se factorise : $a^2-b^2=(a-b)(a+b)$.`
-          texteCorr += `<br>$x^2+${aImpossible * aImpossible}$ n'est ${texteEnCouleurEtGras('pas factorisable')}.`
-        }
-        handleAnswers(this, i, {
-          reponse: { value: '\\text{Pas factorisable}' },
-        })
-      } else {
-        let reponseAttendue
-        switch (typesDeQuestions) {
-          case 1:
-            texte = `$x^2+${2 * a}x+${a * a}$` // (x+a)²
-            texteCorr = `$x^2+${2 * a}x+${a * a}=x^2+2 \\times ${a} \\times x+${a}^2=(x+${a})^2$`
-            reponseAttendue = `(x+${a})^2`
-            break
-          case 2:
-            texte = `$x^2-${2 * a}x+${a * a}$` // (x-a)²
-            texteCorr = `$x^2-${2 * a}x+${a * a}=x^2-2 \\times ${a} \\times x+${a}^2=(x-${a})^2$`
-            reponseAttendue = `(x-${a})^2`
-            break
-          case 3:
-            texte = `$x^2-${a * a}$` // (x-a)(x+a)
-            texteCorr = `$x^2-${a * a}=x^2-${a}^2=(x-${a})(x+${a})$`
-            reponseAttendue = `(x-${a})(x+${a})`
-            break
-          case 4:
-            texte = `$${b * b}x^2+${2 * b * a}x+${a * a}$` // (bx+a)²  b>1
-            texteCorr = `$${b * b}x^2+${2 * b * a}x+${a * a}=(${b}x)^2+2 \\times ${b}x \\times ${a} + ${a}^2=(${b}x+${a})^2$`
-            if (pgcd(b, a) !== 1) {
-              const p = pgcd(b, a)
-              const a2 = a / p
-              const b2 = b / p
-              const p2 = p * p
-              texteCorr += `<br>Il est possible de mettre tout d'abord $${p2}$ en facteur avant d'utiliser une identité remarquable :<br>`
-              texteCorr += `$${b * b}x^2+${2 * b * a}x+${a * a}=${p2}\\left(${rienSi1(b2 * b2)}x^2+${2 * b2 * a2}x+${a2 * a2}\\right)=${p2}\\left(${b2 !== 1 ? '(' + b2 + 'x)' : 'x'}^2+2 \\times ${rienSi1(b2)}x ${a2 !== 1 ? '\\times ' + a2 : ''} + ${a2}^2\\right)=${p2}(${rienSi1(b2)}x+${a2})^2$`
-            }
-            reponseAttendue = `(${b}x+${a})^2`
-            break
-          case 5:
-            texte = `$${b * b}x^2-${2 * b * a}x+${a * a}$` // (bx-a)² b>1
-            texteCorr = `$${b * b}x^2-${2 * b * a}x+${a * a}=(${b}x)^2-2 \\times ${b}x \\times ${a} + ${a}^2=(${b}x-${a})^2$`
-            if (pgcd(b, a) !== 1) {
-              const p = pgcd(b, a)
-              const a2 = a / p
-              const b2 = b / p
-              const p2 = p * p
-              texteCorr += `<br>Il est possible de mettre tout d'abord $${p2}$ en facteur avant d'utiliser une identité remarquable :<br>`
-              texteCorr += `$${b * b}x^2-${2 * b * a}x+${a * a}=${p2}\\left(${rienSi1(b2 * b2)}x^2-${2 * b2 * a2}x+${a2 * a2}\\right)=${p2}\\left(${b2 !== 1 ? '(' + b2 + 'x)' : 'x'}^2-2 \\times ${rienSi1(b2)}x ${a2 !== 1 ? '\\times ' + a2 : ''} + ${a2}^2\\right)=${p2}(${rienSi1(b2)}x-${a2})^2$`
-            }
-            reponseAttendue = `(${b}x-${a})^2`
-            break
-          case 6:
-            texte = `$${b * b}x^2-${a * a}$` // (bx-a)(bx+a) b>1
-            texteCorr = `$${b * b}x^2-${a * a}=(${b}x)^2-${a}^2=(${b}x-${a})(${b}x+${a})$`
-            if (pgcd(b, a) !== 1) {
-              const p = pgcd(b, a)
-              const a2 = a / p
-              const b2 = b / p
-              const p2 = p * p
-              texteCorr += `<br>Il est possible de mettre tout d'abord $${p2}$ en facteur avant d'utiliser une identité remarquable :<br>`
-              texteCorr += `$${b * b}x^2-${a * a}=${p2}\\left(${rienSi1(b2 * b2)}x^2-${a2 * a2}\\right)=${p2}\\left(${b2 !== 1 ? '(' + b2 + 'x)' : 'x'}^2-${a2}^2\\right)=${p2}(${rienSi1(b2)}x+${a2})(${rienSi1(b2)}x-${a2})$`
-            }
-            reponseAttendue = `(${b}x-${a})(${b}x+${a})`
-            break
-          case 7:
-            texte = `$${fraC.texFraction}x^2+${fraD.texFraction}x+${a * a}$` // (kx+a)² k rationnel
-            texteCorr = `$${fraC.texFraction}x^2+${fraD.texFraction}x+${a * a}=\\left(${fra.texFraction}x\\right)^2+2 \\times ${fra.texFraction}x \\times ${a} + ${a}^2=\\left(${fra.texFraction}x+${a}\\right)^2$`
-            reponseAttendue = `(${fra.texFraction}x+${a})^2`
-            break
-          case 8:
-            texte = `$${fraC.texFraction}x^2-${fraD.texFraction}x+${a * a}$` // (kx-a)² k rationnel
-            texteCorr = `$${fraC.texFraction}x^2-${fraD.texFraction}x+${a * a}=\\left(${fra.texFraction}x\\right)^2-2 \\times ${fra.texFraction}x \\times ${a} + ${a}^2=\\left(${fra.texFraction}x-${a}\\right)^2$`
-            reponseAttendue = `(${fra.texFraction}x-${a})^2`
-            break
-          case 9:
-          default:
-            //  (bx-a)(bx+a) avec a entier et b rationnel simple
-            texte = `$${fraC.texFraction}x^2-${a * a}$` // b>1`
-            texteCorr = `$${fraC.texFraction}x^2-${a * a}=\\left(${fra.texFraction}x\\right)^2-${a}^2=\\left(${fra.texFraction}x-${a}\\right)\\left(${fra.texFraction}x+${a}\\right)$`
-            reponseAttendue = `(${fra.texFraction}x-${a})(${fra.texFraction}x+${a})`
-            break
-        }
-        reponseAttendue = reponseAttendue.replaceAll('dfrac', 'frac')
-        // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
-        const textCorrSplit = texteCorr.split('=')
-        let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
-        aRemplacer = aRemplacer.replace('$', '')
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      let decalage = 0
+      let mantisse = 0
+      let exp = 0
 
-        texteCorr = ''
-        for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
-          texteCorr += textCorrSplit[ee] + '='
-        }
-        texteCorr += `$ $${miseEnEvidence(aRemplacer)}$`
-        // Fin de cette uniformisation
-
-        handleAnswers(this, i, {
-          reponse: {
-            value: reponseAttendue,
-            options: { exclusifFactorisation: true },
-          },
-        })
+      switch (this.sup - 1) {
+        case 0:
+          decalage = randint(-1, 1, 0)
+          mantisse = randint(1, 9)
+          exp = !this.sup2
+            ? randint(decalage - 3, decalage + 3, [decalage, 0])
+            : choice(
+                rangeMinMax(decalage - 4, decalage + 8),
+                rangeMinMax(decalage - 2, decalage + 2),
+              )
+          break
+        case 1:
+          decalage = randint(-2, 2, 0)
+          mantisse = arrondi(randint(11, 99) / 10)
+          exp = !this.sup2
+            ? randint(decalage - 3, decalage + 3, [decalage, 0])
+            : choice(
+                rangeMinMax(decalage - 9, decalage + 9),
+                rangeMinMax(decalage - 3, decalage + 3),
+              )
+          break
+        case 2:
+          decalage = randint(-3, 3, 0)
+          if (randint(0, 1) === 1) mantisse = arrondi(randint(111, 999) / 100)
+          else mantisse = arrondi((randint(1, 9) * 100 + randint(1, 9)) / 100)
+          exp = !this.sup2
+            ? randint(decalage - 3, decalage + 3, [decalage, 0])
+            : choice(
+                rangeMinMax(decalage - 10, decalage + 10),
+                rangeMinMax(decalage - 4, decalage + 4),
+              )
+          break
+        /*        case 3:
+          decalage = randint(-4, 4, 0)
+          if (randint(0, 1) === 1) mantisse = calcul((randint(1, 9) * 1000 + randint(1, 19) * 5) / 1000)
+          else mantisse = calcul(randint(1111, 9999) / 1000)
+          exp = randint(3, 7, abs(decalage)) * choice([-1, 1])
+          break */
       }
-      // Quand une factorisation peut être impossible, le champ est sur une nouvelle
-      // ligne et sans le signe $=$ qui n'aurait pas de sens pour l'expression impossible
-      const champReponse = ajouteChampTexteMathLive(
-        this,
-        i,
-        KeyboardType.clavierDeBaseAvecVariable,
-        avecFactorisationImpossible ? {} : { texteAvant: ' $=$' },
-      )
-      texte +=
-        avecFactorisationImpossible && champReponse !== ''
-          ? '<br>' + champReponse
-          : champReponse
-      if (avecFactorisationImpossible && this.interactif) {
-        // Le bouton est proposé à toutes les questions pour ne pas trahir celle qui n'est pas factorisable
-        texte += boutonReponsePredefinie({
-          numeroExercice: this.numeroExercice,
-          indiceQuestion: i,
-          label: 'Pas factorisable',
-        })
+      // nombre = calcul(mantisse * 10 ** exp)
+      const mantisse1 = arrondi(mantisse * 10 ** decalage)
+      const exp1 = exp - decalage
+
+      // decimalstring = `${texNombre(mantisse1)} \\times 10^{${exp1}}`
+      const scientifiquestring = `${texNombre(mantisse)} \\times 10^{${exp}}`
+
+      const texteCorr = `$${scientifiquestring}=${miseEnEvidence(texNombre(mantisse1) + `\\times 10^{${-decalage}}`, bleuMathalea)}\\times  10^{${exp}}=${texNombre(mantisse1)} \\times 10^{${miseEnEvidence(-decalage + '+' + ecritureParentheseSiNegatif(exp), bleuMathalea)}}= ${mantisse1} \\times 10^{${miseEnEvidence(exp1)}}$`
+      let texte = `$${scientifiquestring}=${texNombre(mantisse1)}\\times 10^{${miseEnEvidence('....', 'black')}}$`
+      this.autoCorrection[i] = {}
+      this.autoCorrection[i].enonce = `${texte}\n`
+      this.autoCorrection[i].propositions = [
+        {
+          texte: `$${exp1}$`,
+          statut: true,
+        },
+        {
+          texte: `$${exp1 - 1}$`,
+          statut: false,
+        },
+        {
+          texte: `$${exp1 + 1}$`,
+          statut: false,
+        },
+        {
+          texte: `$${-exp1}$`,
+          statut: false,
+        },
+      ]
+      this.autoCorrection[i].options = {
+        ordered: false,
+        lastChoice: 5,
       }
-      const argumentsQuestion =
-        i === indiceImpossible
-          ? ['impossible', formeImpossible, aImpossible]
-          : [a, b, typesDeQuestions]
-      if (this.questionJamaisPosee(i, ...argumentsQuestion)) {
-        // Si la question n'a jamais été posée, on en créé une autre
+
+      const props = propositionsQcm(this, i)
+      if (this.interactif) texte += props.texte
+      if (this.questionJamaisPosee(i, decalage, mantisse, exp)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

@@ -9,6 +9,8 @@ import {
 } from '../../lib/interactif/questionMathLive'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
+  parseFiltreNiveauQuestionsDeCours,
+  questionCorrespondAuNiveau,
   type QuestionDeCours,
   questionDeCoursParId,
   questionsDeCours,
@@ -52,6 +54,7 @@ export default class QuestionsDeCours extends Exercice {
       'Identifiants séparés par des virgules. Laisser vide pour tirer au hasard dans toute la banque.',
     ]
     this.sup = ''
+    this.sup2 = ''
   }
 
   nouvelleVersion() {
@@ -137,7 +140,9 @@ export default class QuestionsDeCours extends Exercice {
   /**
    * Les questions retenues par l'enseignant, dans l'ordre de la banque. Une
    * sélection vide vaut « toute la banque » : l'exercice reste utilisable avant
-   * tout réglage.
+   * tout réglage. Si en plus un filtre de niveau a été réglé dans le
+   * sélecteur (mémorisé dans `sup2`, ex : « jusqu'au niveau 5e »), le tirage
+   * au hasard s'y limite plutôt que de piocher partout.
    */
   private selectionDeQuestions(): {
     choisies: QuestionDeCours[]
@@ -156,11 +161,16 @@ export default class QuestionsDeCours extends Exercice {
       if (question === undefined) inconnus.push(id)
       else if (!choisies.includes(question)) choisies.push(question)
     }
-    return {
-      choisies,
-      questions: choisies.length > 0 ? choisies : questionsDeCours,
-      inconnus,
+    let questions = choisies.length > 0 ? choisies : questionsDeCours
+    if (choisies.length === 0) {
+      const filtre = parseFiltreNiveauQuestionsDeCours(String(this.sup2 ?? ''))
+      if (filtre !== undefined) {
+        questions = questionsDeCours.filter((question) =>
+          questionCorrespondAuNiveau(question, filtre.mode, filtre.niveau),
+        )
+      }
     }
+    return { choisies, questions, inconnus }
   }
 
   /**
@@ -181,6 +191,7 @@ export default class QuestionsDeCours extends Exercice {
       numeroExercice: this.numeroExercice ?? 0,
       selection: choisies.map((question) => question.id),
       nbQuestions: this.nbQuestions,
+      filtreNiveau: choisies.length === 0 ? String(this.sup2 ?? '') : '',
     })
     if (inconnus.length === 0) return selecteur
     const pluriel = inconnus.length > 1 ? 's' : ''

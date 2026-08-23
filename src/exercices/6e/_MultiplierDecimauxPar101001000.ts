@@ -151,7 +151,7 @@ export default class MultiplierDecimauxPar101001000 extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
-      if (this.sup === 3 && !this.sup2) {
+      if (this.sup === '3' && !this.sup2) {
         if ([1, 2, 5, 6].includes(typesDeQuestions))
           texte =
             "Calculer et donner le résultat sous forme d'un nombre décimal.<br>"

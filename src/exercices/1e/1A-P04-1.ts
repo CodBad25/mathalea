@@ -34,8 +34,10 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
       ([premierDe, secondDe]) => premierDe + secondDe === somme,
     )
     const nombreIssuesFavorables = issuesFavorables.length
-    const bonneReponse = new FractionEtendue(nombreIssuesFavorables, 16)
-      .texFractionSimplifiee
+    const bonneReponse = new FractionEtendue(
+      nombreIssuesFavorables,
+      16,
+    ).simplifie()
 
     const candidats = [
       new FractionEtendue(nombreIssuesFavorables, 8).texFractionSimplifiee,
@@ -49,11 +51,11 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
         .texFractionSimplifiee,
     ]
     const distracteurs = [...new Set(candidats)].filter(
-      (reponse) => reponse !== bonneReponse,
+      (reponse) => reponse !== bonneReponse.texFraction,
     )
 
     this.reponses = [
-      `$${bonneReponse}$`,
+      `$${bonneReponse.texFraction}$`,
       ...distracteurs.slice(0, 3).map((reponse) => `$${reponse}$`),
     ]
 
@@ -71,8 +73,10 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
     Les issues qui réalisent l'événement $A$ sont : ${listeIssues}.<br>
     Ainsi, $\\operatorname{Card}(A)=${nombreIssuesFavorables}$.<br>
     On en déduit :
-    $P(A)=\\dfrac{\\operatorname{Card}(A)}{\\operatorname{Card}(\\Omega)}
-    =\\dfrac{${nombreIssuesFavorables}}{16}=${miseEnEvidence(bonneReponse)}$.`
+    $P(A)=\\dfrac{\\operatorname{Card}(A)}{\\operatorname{Card}(\\Omega)}`
+    if (nombreIssuesFavorables !== bonneReponse.simplifie().num)
+      this.correction += `=\\dfrac{${nombreIssuesFavorables}}{16}`
+    this.correction += `=${miseEnEvidence(bonneReponse)}$.`
   }
 
   versionAleatoire = () =>

@@ -1,4 +1,5 @@
 import Stat from '../../lib/mathFonctions/Stat'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import { creerSerieDeQuartiles } from '../../modules/outilsStat'
@@ -46,11 +47,11 @@ export default class LireFrequenceHistogrammeQCM extends ExerciceQcmA {
       `${texNombre(mediane, 0)}`,
       `${texNombre(max, 0)}`,
     ].map((r) => `$${r}$`)
-    this.enonce = `${histogramme}<br><br>Quelle est la valeur du 3e quartile de la série statistique étudiée sur ce diagramme des fréquences cumulées croissantes ?`
+    this.enonce = `${histogramme}<br><br>Quelle est la valeur du $3$e quartile de la série statistique étudiée sur ce diagramme des fréquences cumulées croissantes ?`
 
     // Correction : explication simple, claire
     this.correction = `Le troisième quartile $Q_3$ est la plus petite valeur de la série statistique pour laquelle au moins $75\\%$ des valeurs sont inférieures ou égales à $Q_3$.<br>
-     Sur ce diagramme des fréquences cumulées croissantes, on lit que la fréquence cumulée atteint $75\\%$ pour la valeur $${texNombre(q3, 0)}$.<br>`
+     Sur ce diagramme des fréquences cumulées croissantes, on lit que la fréquence cumulée atteint $75\\%$ pour la valeur $${miseEnEvidence(texNombre(q3, 0))}$.<br>`
   }
 
   versionOriginale: () => void = () => {
@@ -85,7 +86,6 @@ export default class LireFrequenceHistogrammeQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options.vertical = true
     this.versionAleatoire()
   }
 }

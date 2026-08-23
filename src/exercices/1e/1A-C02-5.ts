@@ -89,6 +89,7 @@ export default class auto1AC025 extends ExerciceQcmA {
     const diff = f2.differenceFraction(f1)
     const resProd2 = f2.produitFraction(a)
     const resDiv2 = f1.diviseFraction(f2)
+    const resSommeSimplif = new FractionEtendue(f1.num + diviseur, f1.den + diviseur)
 
     // Bonnes réponses avec leurs corrections
     const bonnesReponses = [
@@ -149,14 +150,14 @@ export default class auto1AC025 extends ExerciceQcmA {
         texte: `$\\dfrac{${f2.texFraction}}{${diviseur}}=\\dfrac{${f2.num * diviseur}}{${f2.den}}$`,
         corr: this.correctionMauvaiseReponse(
           `\\dfrac{${f2.texFraction}}{${diviseur}}=\\dfrac{${f2.num * diviseur}}{${f2.den}}`,
-          `$\\dfrac{${f2.texFraction}}{${diviseur}}=\\dfrac{${f2.num}}{${f2.den}\\times ${diviseur}}=\\dfrac{${f2.num}}{${f2.den * diviseur}}$`,
+          `$\\dfrac{${f2.texFraction}}{${diviseur}}=\\dfrac{${f2.num}}{${f2.den}\\times ${diviseur}}=\\dfrac{${f2.num}}{${f2.den * diviseur}}\\neq \\dfrac{${f2.num * diviseur}}{${f2.den}}$`,
         ),
       },
       {
         texte: `$${f1.texFraction}-${diviseur}=${f1.differenceFraction(diviseur).oppose().texFractionSimplifiee}$`,
         corr: this.correctionMauvaiseReponse(
           `${f1.texFraction}-${diviseur}=${f1.differenceFraction(diviseur).oppose().texFractionSimplifiee}`,
-          `$${f1.texFraction}-${diviseur}=${f1.texFraction}-\\dfrac{${diviseur}}{1}=\\dfrac{${f1.num}-${f1.den * diviseur}}{${f1.den}}=${f1.differenceFraction(diviseur).texFractionSimplifiee}$`,
+          `$${f1.texFraction}-${diviseur}=${f1.texFraction}-\\dfrac{${diviseur}}{1}=\\dfrac{${f1.num}-${f1.den * diviseur}}{${f1.den}}=${f1.differenceFraction(diviseur).texFractionSimplifiee}\\neq ${f1.differenceFraction(diviseur).oppose().texFractionSimplifiee}$`,
         ),
       },
       {
@@ -164,14 +165,14 @@ export default class auto1AC025 extends ExerciceQcmA {
         corr: this.correctionMauvaiseReponse(
           `${f1.texFraction}+${f2.texFraction}=\\dfrac{${f1.num + f2.num}}{${f1.den + f2.den}}`,
           `On ne peut pas additionner directement les numérateurs et les dénominateurs. <br>
-          Il faut d'abord mettre au même dénominateur : $${f1.texFraction}+${f2.texFraction}=${f1.sommeFraction(f2).texFractionSimplifiee}$.`,
+          Il faut d'abord mettre au même dénominateur : $${f1.texFraction}+${f2.texFraction}=${f1.sommeFraction(f2).texFractionSimplifiee}\\neq \\dfrac{${f1.num + f2.num}}{${f1.den + f2.den}}$.`,
         ),
       },
       {
         texte: `$\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=${f1.texFraction}$`,
         corr: this.correctionMauvaiseReponse(
           `\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=${f1.texFraction}`,
-          `On ne peut pas simplifier une fraction quand celle-ci comporte une somme au numérateur ou au  dénominateur.`,
+          `On ne peut pas simplifier  par $${diviseur}$ car $${diviseur}$ est additionné au numérateur et au dénominateur et pas multiplié.<br>On peut écrire : $\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=\\dfrac{${f1.num+diviseur}}{${f1.den+diviseur}}${resSommeSimplif.texSimplificationAvecEtapes(true)}\\neq ${f1.texFraction}$.`,
         ),
       },
       {
@@ -185,21 +186,21 @@ export default class auto1AC025 extends ExerciceQcmA {
         texte: `$${f2.texFraction}\\times\\dfrac{${f2.num + 2}}{${f2.den}}=\\dfrac{${f2.num * (f2.num + 2)}}{${f2.den}}$`,
         corr: this.correctionMauvaiseReponse(
           `${f2.texFraction}\\times\\dfrac{${f2.num + 2}}{${f2.den}}=\\dfrac{${f2.num * (f2.num + 2)}}{${f2.den}}`,
-          `$${f2.texFraction}\\times\\dfrac{${f2.num + 2}}{${f2.den}}=\\dfrac{${f2.num}\\times ${f2.num + 2}}{${f2.den}\\times ${f2.den}}=\\dfrac{${f2.num * (f2.num + 2)}}{${f2.den ** 2}}$`,
+          `$${f2.texFraction}\\times\\dfrac{${f2.num + 2}}{${f2.den}}=\\dfrac{${f2.num}\\times ${f2.num + 2}}{${f2.den}\\times ${f2.den}}=\\dfrac{${f2.num * (f2.num + 2)}}{${f2.den ** 2}}\\neq \\dfrac{${f2.num * (f2.num + 2)}}{${f2.den}}$`,
         ),
       },
       {
         texte: `$${diviseur}\\times ${f2.texFraction}=\\dfrac{${f2.num * diviseur}}{${f2.den * diviseur}}$`,
         corr: this.correctionMauvaiseReponse(
           `${diviseur}\\times ${f2.texFraction}=\\dfrac{${f2.num * diviseur}}{${f2.den * diviseur}}`,
-          `$${diviseur}\\times ${f2.texFraction}=\\dfrac{${diviseur}\\times ${f2.num}}{${f2.den}}=\\dfrac{${f2.num * diviseur}}{${f2.den}}$`,
+          `$${diviseur}\\times ${f2.texFraction}=\\dfrac{${diviseur}\\times ${f2.num}}{${f2.den}}=\\dfrac{${f2.num * diviseur}}{${f2.den}}\\neq \\dfrac{${f2.num * diviseur}}{${f2.den * diviseur}}$`,
         ),
       },
       {
         texte: `$${diviseur}\\div ${f2.texFraction}=\\dfrac{${f2.num}}{${f2.den * diviseur}}$`,
         corr: this.correctionMauvaiseReponse(
           `${diviseur}\\div ${f2.texFraction}=\\dfrac{${f2.num}}{${f2.den * diviseur}}`,
-          `$${diviseur}\\div ${f2.texFraction}=${diviseur}\\times \\dfrac{${f2.den}}{${f2.num}}=\\dfrac{${diviseur}\\times ${f2.den}}{${f2.num}}=\\dfrac{${diviseur * f2.den}}{${f2.num}}$`,
+          `$${diviseur}\\div ${f2.texFraction}=${diviseur}\\times \\dfrac{${f2.den}}{${f2.num}}=\\dfrac{${diviseur}\\times ${f2.den}}{${f2.num}}=\\dfrac{${diviseur * f2.den}}{${f2.num}}\\neq \\dfrac{${f2.num}}{${f2.den * diviseur}}$`,
         ),
       },
     ]

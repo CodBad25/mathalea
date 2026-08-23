@@ -12,7 +12,7 @@ export const interactifType = 'qcm'
 export const uuid = '316d2'
 
 export const refs = {
-  'fr-fr': ['auto6M1E'],
+  'fr-fr': ['auto6M1E', '6AutoL3-1'],
   'fr-2016': ['6M21-1'],
   'fr-ch': ['9GM1B-4'],
 }

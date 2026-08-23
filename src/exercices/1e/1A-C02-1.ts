@@ -1,4 +1,4 @@
-import ProgrammeCalcul2 from '../can/2e/can2N31-04'
+import ProgrammeCalcul2 from '../can/2e/can2N43-04'
 export const titre = 'Calculer avec un programme de calcul'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true

@@ -21,7 +21,7 @@ export const interactifType = 'mathLive'
 export const dateDePublication = '14/11/2020'
 /**
  * * Calcul mental autour des identités remarquables
- * * décliné en 2N40-6 => 07/10/2021
+ * * décliné en 2L10-6 => 07/10/2021
  * * décliné en can2C04 => 08/10/2021
  * * décliné en can2C05 => 10/10/2021
  * @author Sébastien Lozano

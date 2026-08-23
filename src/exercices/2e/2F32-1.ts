@@ -22,7 +22,7 @@ import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 
-export const titre = 'Résoudre graphiquement une équation du type $f(x)=k$'
+export const titre = 'Résoudre graphiquement $f(x)=k$'
 export const interactifReady = true
 export const interactifType = 'multi-mathfield'
 

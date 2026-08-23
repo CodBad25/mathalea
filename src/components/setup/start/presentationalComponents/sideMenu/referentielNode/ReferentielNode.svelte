@@ -79,7 +79,8 @@
   /**
    * Teste si le code du niveau correspond à un sous-thème :
    * sur la base de la syntaxe adoptée pour les codes des thèmes
-   * (à savoir :  <NB><LETTRE><NOMBRE> ou auto<NB><LETTRE><NOMBRE>),
+   * (à savoir : <NB><UNE OU DEUX LETTRES><NOMBRE>, avec éventuellement un
+   * préfixe `auto` ou `can`),
    * la fonction confronte le code à tester à une expression régulière afin de savoir si
    * une lettre suit le code de trois caractères.
    * @param {string} themeCode code du niveau
@@ -94,7 +95,7 @@
     const normalizedLevel = /^\d/.test(normalizedThemeCode)
       ? normalizedThemeCode[0]
       : level
-    const regexp = new RegExp(`^${normalizedLevel}[A-Z]\\d+[A-Z0-9]$`)
+    const regexp = new RegExp(`^${normalizedLevel}[A-Z]{1,2}\\d+[A-Z0-9]$`)
     const regexp3Auto = new RegExp(`^(3Auto)?[A-Z]\\d+[A-Z0-9]$`, `g`)
     const regexp1Auto = new RegExp(`^[12]A-[A-Z]\\d{1,2}$`, `g`)
     return (

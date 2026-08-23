@@ -1,92 +1,214 @@
-import { warnMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { choice } from '../../lib/outils/arrayOutils'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import {
   ecritureAlgebrique,
-  ecritureParentheseSiNegatif,
-  rienSi1,
+  ecritureAlgebriqueSauf1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
+import { lettreIndiceeDepuisChiffre, sp } from '../../lib/outils/outilString'
+import { pgcd } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { randint } from '../../modules/outils'
-import ExerciceSimple from '../ExerciceSimple'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
+import Exercice from '../Exercice'
+
 export const titre =
-  'Résoudre une équation du type $\\dfrac{ax+b}{c}=\\dfrac{d}{e}$'
+  'Simplifier une fraction pour supprimer la racine carrée de son dénominateur'
+export const dateDeModifImportante = '26/04/2024'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDePublication = '10/09/2025'
 
 /**
  *
- * @author Jean-Léon Henry
+ * @author Stéphane Guyon
  */
-export const uuid = '550cf'
+export const uuid = '4771d'
 
 export const refs = {
   'fr-fr': ['2N51-6'],
-  'fr-ch': ['10FA5C-5'],
+  'fr-ch': ['1mCN-12'],
 }
-export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
+export default class Rendreentier extends Exercice {
   constructor() {
     super()
-
-    this.typeExercice = 'simple'
+    this.besoinFormulaireTexte = [
+      'Type de questions',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Dénominateur « racine de a »',
+        '2 : Dénominateur « a + racine de b »',
+        '3 : Dénominateur « a + b racine de x »',
+        '4 : Mélange',
+      ].join('\n'),
+    ]
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.nbCols = 2
+    this.nbColsCorr = 2
+    this.sup = 2
+    this.listeAvecNumerotation = false
   }
 
   nouvelleVersion() {
-    // Paramètres
-    const a = randint(-10, 10, 0)
-    const b = randint(-10, 10, 0)
-    const c = randint(-10, 10, [-1, 0, 1])
-    let d = randint(-10, 10, 0)
-    let e = randint(-10, 10, [-1, 0, 1, d])
-    if (e * d >= 0) {
-      e = abs(e)
-      d = abs(d)
-    }
+    this.consigne =
+      ' Trouver une fraction égale à celle proposée en supprimant la racine carrée de son dénominateur.'
 
-    // Variables de calculs intermédiaires
-    const membre2 = new FractionEtendue(d, e)
-    const equation = (align = false) => {
-      return `\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(b)}}{${c}}${align ? '&=' : '='}${membre2.texFraction}`
-    }
-    const resultatFinal = new FractionEtendue(c * d - b * e, e * a)
+    const listeQuestions = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 3,
+      melange: 4,
+      defaut: 4,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
 
-    switch (choice([1])) {
-      case 1:
-        if (!this.interactif) {
-          this.question = ` Résoudre l'équation $${equation()}$.`
-        } else {
-          this.question = ` Donner la solution de l'équation $${equation()}$.`
-        }
-        this.correction = warnMessage(
-          `Pour tout réels $a$, $b$, $c$, $d$ tels que $b$ et $d$ soient non nuls : $\\dfrac{a}{b}=\\dfrac{c}{d}$ si et seulement si $ad=bc$.`,
-          'nombres',
-          'Rappel',
-        )
-        this.correction += `\\[
-\\begin{aligned}
-${equation(true)}\\\\
-${e}( ${rienSi1(a)}x${ecritureAlgebrique(b)} )&=${c} \\times ${ecritureParentheseSiNegatif(d)}\\\\
-${rienSi1(e * a)}x${ecritureAlgebrique(e * b)}&=${c * d}\\\\
-${rienSi1(e * a)}x&=${c * d}${ecritureAlgebrique(-b * e)}\\\\
-${rienSi1(e * a)}x&=${c * d - b * e}`
-        if (e * a !== 1) {
-          this.correction += `\\\\x&=${resultatFinal.texFSD}`
-          if (!resultatFinal.estIrreductible && resultatFinal.num !== 0) {
-            this.correction += `=${resultatFinal.texFractionSimplifiee}`
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      const a = randint(2, 11)
+      const b = randint(2, 11, [a, 4, 8, 9])
+      const c = randint(2, 9)
+      const d = randint(-7, 7, [-1, 0, 1])
+      let n = 0
+      let reponse = ''
+      let texte = ''
+      let texteCorr = ''
+      switch (listeQuestions[i]) {
+        case 1:
+          n = pgcd(a, b)
+          texte = `$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a} }{\\sqrt{${b}}} $`
+          reponse = texFractionFromString(a + `\\sqrt{${b}}`, b)
+          texteCorr = `Pour lever l'irrationnalité du dénominateur, il suffit de multiplier le numérateur et le dénominateur de la fraction par $\\sqrt{${b}}$.`
+          texteCorr += `<br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a} }{\\sqrt{${b}}}=\\dfrac{ ${a} \\times \\sqrt{${b}}} {\\sqrt{${b}} \\times \\sqrt{${b}}} $`
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=${n !== 1 ? reponse : miseEnEvidence(reponse)}$`
+          if (n !== 1) {
+            if (b === n && a === n)
+              reponse = texFractionFromString(`\\sqrt{${b}}`, 1)
+            else if (b === n)
+              reponse = texFractionFromString(`${a / n}\\sqrt{${b}}`, 1)
+            else if (a === n)
+              reponse = texFractionFromString(`\\sqrt{${b}}`, `${b / n}`)
+            else
+              reponse = texFractionFromString(
+                `${a / n} \\sqrt{${b}}`,
+                `${b / n}`,
+              )
+            texteCorr += `<br><br> $${lettreIndiceeDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
+          }
+          break
+        case 2:
+          texte = `$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a} }{${c}${ecritureAlgebrique(d)}\\sqrt{${b}}} $ `
+          texteCorr =
+            "Pour lever l'irrationnalité du dénominateur d'une fraction,  la stratégie consiste à utiliser sa \"quantité conjuguée\" pour faire apparaître l'identité remarquable $a^2-b^2$ au dénominateur."
+          texteCorr +=
+            '<br>Ici, il faut donc multiplier le numérateur et le dénominateur de la fraction par '
+          texteCorr += ` $${c}${ecritureAlgebrique(-d)}\\sqrt{${b}}$.`
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a} }{${c}${ecritureAlgebrique(d)}\\sqrt{${b}}}$`
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a}\\times (${c}${ecritureAlgebrique(-d)}\\sqrt{${b}}) }{(${c}${ecritureAlgebrique(d)}\\sqrt{${b}})(${c}${ecritureAlgebrique(-d)}\\sqrt{${b}})}$`
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a * c} ${ecritureAlgebrique(-a * d)}\\sqrt{${b}}}{(${c})^2-\\left(${abs(d)}\\sqrt{${b}}\\right)^2}$ `
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a * c} ${ecritureAlgebriqueSauf1(-a * d)}\\sqrt{${b}}}{${c * c}-(${d * d}\\times${b})}$`
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a * c} ${ecritureAlgebriqueSauf1(-a * d)}\\sqrt{${b}}}{${c * c}-${d * d * b}}$`
+          n = pgcd(a * c, -a * d, c * c - d * d * b)
+          if (n === 1) {
+            reponse = texFractionFromString(
+              `${a * c} ${ecritureAlgebriqueSauf1(-a * d)}\\sqrt{${b}}`,
+              c * c - d * d * b,
+            )
+            texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=${c * c - d * d * b < 0 ? reponse : miseEnEvidence(reponse)}$`
+            if (c * c - d * d * b < 0) {
+              reponse = texFractionFromString(
+                `${-a * c} ${ecritureAlgebriqueSauf1(a * d)}\\sqrt{${b}}`,
+                -c * c + d * d * b,
+              )
+              texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
+            }
+          } else {
+            texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a * c} ${ecritureAlgebriqueSauf1(-a * d)}\\sqrt{${b}}}{${c * c - d * d * b}}$`
+            reponse = texFractionFromString(
+              `${(a * c) / n} ${ecritureAlgebriqueSauf1((-a * d) / n)}\\sqrt{${b}}`,
+              (c * c) / n - (d * d * b) / n,
+            )
+            texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=${c * c - d * d * b < 0 ? reponse : miseEnEvidence(reponse)}$`
+            if (c * c - d * d * b < 0) {
+              reponse = texFractionFromString(
+                `${(-a * c) / n} ${ecritureAlgebriqueSauf1((a * d) / n)}\\sqrt{${b}}`,
+                (-c * c) / n + (d * d * b) / n,
+              )
+              texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
+            }
+          }
+          break
+        case 3:
+        default: {
+          const d = randint(2, 9)
+
+          texte = `$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a} }{${c}${ecritureAlgebrique(d)}\\sqrt{x}} $ définie sur $D=\\left]${new FractionEtendue(c ** 2, d ** 2).texFSD};+\\infty\\right[$`
+          texteCorr =
+            "Pour lever l'irrationnalité du dénominateur d'une fraction,  la stratégie consiste à utiliser sa \"quantité conjuguée\" pour faire apparaître l'identité remarquable $a^2-b^2$ au dénominateur."
+          texteCorr +=
+            '<br>Ici, il faut donc multiplier le numérateur et le dénominateur de la fraction par '
+          texteCorr += ` $ ${c}${ecritureAlgebrique(-d)}\\sqrt{x}$.<br>`
+          texteCorr +=
+            "On vérifie bien que cette expression ne s'annule pas sur $D$ :<br>"
+          texteCorr += ` $\\begin{aligned} \\phantom{\\iff} &${c}${ecritureAlgebrique(-d)}\\sqrt{x}=0\\\\`
+          texteCorr += ` \\iff & ${d}\\sqrt{x}=${c}\\\\`
+          const fractionAttendue = new FractionEtendue(c, d)
+          texteCorr +=
+            fractionAttendue.d === fractionAttendue.den
+              ? ''
+              : ` \\iff & \\sqrt{x}=${fractionAttendue.texFSD}\\\\`
+          texteCorr += ` \\iff & \\sqrt{x}=${fractionAttendue.texFractionSimplifiee}\\\\`
+          texteCorr += ` \\iff & x=${new FractionEtendue(c ** 2, d ** 2).texFractionSimplifiee}\\\\`
+          texteCorr += '\\end{aligned}$'
+          texteCorr += `<br>Comme $${new FractionEtendue(c ** 2, d ** 2).texFractionSimplifiee} \\notin D$, la "quantité conjuguée" $${c}${ecritureAlgebrique(-d)}\\sqrt{x}$ ne s'annule pas sur $D$.`
+          texteCorr += "<br>On peut donc simplifier l'expression :"
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a} }{${c}${ecritureAlgebrique(d)}\\sqrt{x}}$`
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a}\\times (${c}${ecritureAlgebrique(-d)}\\sqrt{x}) }{(${c}${ecritureAlgebrique(d)}\\sqrt{x})(${c}${ecritureAlgebrique(-d)}\\sqrt{x})}$`
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=\\dfrac{ ${a * c} ${ecritureAlgebrique(-a * d)}\\sqrt{x}}{(${c})^2-\\left(${abs(d)}\\sqrt{x}\\right)^2}$ `
+          reponse = texFractionFromString(
+            `${a * c} ${ecritureAlgebriqueSauf1(-a * d)}\\sqrt{x}`,
+            `${c * c}-${d * d} x`,
+          )
+          n = pgcd(a * d, c * c, d * d, a * c)
+          texteCorr += `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=${n !== 1 ? reponse : miseEnEvidence(reponse)}$`
+          if (n !== 1) {
+            reponse = texFractionFromString(
+              `${(a * c) / n} ${ecritureAlgebriqueSauf1((-a * d) / n)}\\sqrt{x}`,
+              `${(c * c) / n}${ecritureAlgebriqueSauf1((-d * d) / n)}x`,
+            )
+            texteCorr += `$${lettreIndiceeDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
           }
         }
-        this.correction += `
-\\end{aligned}
-\\]`
+      }
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierFullOperations,
+        {
+          texteAvant:
+            listeQuestions[i] < 3
+              ? `$${sp()}=$`
+              : `<br><br>$${lettreIndiceeDepuisChiffre(i + 1)}=$`,
+        },
+      )
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponse,
+          options: { fractionSansRacineCarree: true },
+        },
+      })
 
-        this.correction += `L'équation a donc pour unique solution : $${miseEnEvidence(resultatFinal.texFractionSimplifiee)}$.`
-        this.reponse = resultatFinal.simplifie()
-        break
+      if (this.questionJamaisPosee(i, a, b, c, d)) {
+        // <- laisser  le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+        i++
+      }
+      cpt++
     }
+    listeQuestionsToContenu(this)
   }
 }

@@ -1,4 +1,4 @@
-import CoordonneesPointIntersectionAxeAbscissesDroite from '../can/2e/can2L03'
+import CoordonneesPointIntersectionAxeAbscissesDroite from '../can/2e/can2G31-08'
 export const titre =
   'Calculer les coordonnées du point d’intersection entre l’axe des abscisses et une droite'
 export const dateDePublication = '26/07/2025'

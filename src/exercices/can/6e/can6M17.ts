@@ -25,7 +25,7 @@ export const amcReady = true
 export const uuid = 'a17d6'
 
 export const refs = {
-  'fr-fr': ['can6M17', 'auto6M2C-flash3'],
+  'fr-fr': ['can6M17', 'auto6M2C-flash3', '6AutoA1-3'],
   'fr-ch': ['9GM1C-4'],
 }
 export default class DifferenceAireParComptageCan extends ExerciceSimple {

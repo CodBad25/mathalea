@@ -80,8 +80,7 @@ export default class PourcentagePartieRestante extends ExerciceQcmA {
     pourcentageFraction,
   }: Donnees): void {
     const effectif = (total * pourcentageEffectif) / 100
-    const pourcentageDemande =
-      100 - pourcentageEffectif - pourcentageFraction
+    const pourcentageDemande = 100 - pourcentageEffectif - pourcentageFraction
     const effectifDemandee = (total * pourcentageDemande) / 100
 
     const propositions: string[] = []
@@ -94,15 +93,15 @@ export default class PourcentagePartieRestante extends ExerciceQcmA {
 
     this.enonce = `Une entreprise de $${total}$ salariés est composée de cadres, de techniciens et d'employés.<br>
     On compte $${effectif}$ ${categorieEffectif}.<br>
-    La proportion de ${categorieFraction} est égale à $${fraction.texFraction}$.<br><br>
-    Le pourcentage de ${categorieDemandee} parmi les salariés de l'entreprise est égal à :`
+    La proportion ${categorieFraction[0] === 'e' ? `d'${categorieFraction}` : `de ${categorieFraction}`} est égale à $${fraction.texFraction}$.<br><br>
+    Le pourcentage ${categorieDemandee[0] === 'e' ? `d'${categorieDemandee}` : `de ${categorieDemandee}`} parmi les salariés de l'entreprise est égal à :`
 
-    this.correction = `La proportion de ${categorieEffectif} est égale à :
+    this.correction = `La proportion ${categorieEffectif[0] === 'e' ? `d'${categorieEffectif}` : `de ${categorieEffectif}`} est égale à :
     $\\dfrac{${effectif}}{${total}}=\\dfrac{${pourcentageEffectif}}{100}=${formatPourcentage(pourcentageEffectif)}$.<br>
-    La proportion de ${categorieFraction} est égale à $${fraction.texFraction}$, c'est-à-dire $${formatPourcentage(pourcentageFraction)}$.<br>
+    La proportion ${categorieFraction[0] === 'e' ? `d'${categorieFraction}` : `de ${categorieFraction}`} est égale à $${fraction.texFraction}$, c'est-à-dire $${formatPourcentage(pourcentageFraction)}$.<br>
     Les trois catégories forment l'ensemble des salariés, donc la proportion de ${categorieDemandee} est :
     $100\\,\\%-${formatPourcentage(pourcentageEffectif)}-${formatPourcentage(pourcentageFraction)}=${formatPourcentage(pourcentageDemande)}$.<br>
-    Il y a donc $${effectifDemandee}$ ${categorieDemandee}, soit $${miseEnEvidence(formatPourcentage(pourcentageDemande))}$ des salariés.`
+    Donc $${miseEnEvidence(formatPourcentage(pourcentageDemande))}$ des salariés sont des ${categorieDemandee}.`
 
     this.reponses = completePropositions(propositions, pourcentageDemande)
   }

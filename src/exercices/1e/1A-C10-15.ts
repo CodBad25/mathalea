@@ -1,4 +1,4 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
@@ -24,6 +24,16 @@ export const dateDePublication = '17/12/2025'
  * @author Gilles Mora avec Claude ai
  *
  */
+type Proposition = {
+  inequation: string
+  type: 1 | 2
+  a: number
+  b: number
+  c?: number
+  d?: number
+  estSolution: boolean
+}
+
 export default class Auto1C10o extends ExerciceQcmA {
   private genererInequation1(
     x0: number,
@@ -84,56 +94,69 @@ export default class Auto1C10o extends ExerciceQcmA {
     }
   }
 
-  private cas1(x0: number): void {
-    const bonneInequationData = this.genererInequation1(x0, true)
-    const bonneInequation = bonneInequationData.inequation
+  private construireCorrection(
+    x0: number,
+    propositions: Proposition[],
+    bonneInequation: string,
+  ): string {
+    let correction = `On teste le nombre $${x0}$ dans chacune des inéquations proposées.`
+    for (const p of propositions) {
+      let membreGauche: number
+      let membreDroit: number
+      let gaucheTex: string
+      let droitTex: string
+      if (p.type === 1) {
+        membreGauche = p.a * x0 + p.b
+        membreDroit = (p.c as number) * x0 + (p.d as number)
+        gaucheTex = `${p.a} \\times (${x0}) + ${p.b} = ${texNombre(membreGauche)}`
+        droitTex = `${p.c} \\times (${x0}) + ${p.d} = ${texNombre(membreDroit)}`
+      } else {
+        membreGauche = x0 * x0
+        membreDroit = p.a * x0 + p.b
+        gaucheTex = `(${x0})^2 = ${texNombre(membreGauche)}`
+        droitTex = `${p.a} \\times (${x0}) + ${p.b} = ${texNombre(membreDroit)}`
+      }
+      correction += `<br>$\\bullet$ $${p.inequation}$ :<br>
+Membre de gauche : $${gaucheTex}$<br>
+Membre de droite : $${droitTex}$<br>`
+      if (p.estSolution) {
+        correction += `Comme $${texNombre(membreGauche)} < ${texNombre(membreDroit)}$, l'inéquation est vérifiée : $${x0}$ est solution.`
+      } else {
+        correction += `Comme $${texNombre(membreGauche)} > ${texNombre(membreDroit)}$, l'inéquation n'est pas vérifiée : $${x0}$ n'est pas solution.`
+      }
+    }
+    correction += `<br><br>Ainsi, la seule inéquation dont $${x0}$ est solution est $${miseEnEvidence(bonneInequation)}$.`
+    return correction
+  }
 
-    // Calculs pour la justification
-    const { a, b, c, d } = bonneInequationData
-    const membreGauche = a * x0 + b
-    const membreDroit = c * x0 + d
+  private cas1(x0: number): void {
+    const bonne = this.genererInequation1(x0, true)
+
+    const propositions: Proposition[] = [
+      { ...bonne, type: 1, estSolution: true },
+      { ...this.genererInequation1(x0, false), type: 1, estSolution: false },
+      { ...this.genererInequation2(x0, false), type: 2, estSolution: false },
+      { ...this.genererInequation2(x0, false), type: 2, estSolution: false },
+    ]
 
     this.enonce = `Le nombre $${x0}$ est solution de l'inéquation :`
-
-    this.correction = `On teste le nombre $${x0}$ dans chacune des inéquations proposées.<br>
-     Dans l'inéquation $${bonneInequation}$, on a :<br>
-Dans le membre de gauche, on obtient : $${a} \\times (${x0}) + ${b} = ${texNombre(membreGauche)}$<br>
-Dans le membre de droite, on obtient : $${c} \\times (${x0}) + ${d} = ${texNombre(membreDroit)}$<br>
-On a bien : $${texNombre(membreGauche)} < ${texNombre(membreDroit)}$<br>
-Ainsi, l'inéquation dont $${x0}$ est solution est $${miseEnEvidence(`${bonneInequation}`)}$.`
-
-    this.reponses = [
-      `$${bonneInequation}$`,
-      `$${this.genererInequation1(x0, false).inequation}$`,
-      `$${this.genererInequation2(x0, false).inequation}$`,
-      `$${this.genererInequation2(x0, false).inequation}$`,
-    ]
+    this.correction = this.construireCorrection(x0, propositions, bonne.inequation)
+    this.reponses = propositions.map((p) => `$${p.inequation}$`)
   }
 
   private cas2(x0: number): void {
-    const bonneInequationData = this.genererInequation2(x0, true)
-    const bonneInequation = bonneInequationData.inequation
+    const bonne = this.genererInequation2(x0, true)
 
-    // Calculs pour la justification
-    const { a, b } = bonneInequationData
-    const membreGauche = x0 * x0
-    const membreDroit = a * x0 + b
+    const propositions: Proposition[] = [
+      { ...bonne, type: 2, estSolution: true },
+      { ...this.genererInequation1(x0, false), type: 1, estSolution: false },
+      { ...this.genererInequation1(x0, false), type: 1, estSolution: false },
+      { ...this.genererInequation2(x0, false), type: 2, estSolution: false },
+    ]
 
     this.enonce = `Le nombre $${x0}$ est solution de l'inéquation :`
-
-    this.correction = `On teste le nombre $${x0}$ dans chacune des inéquations proposées.<br>
-     Dans l'inéquation $${bonneInequation}$, on a :<br>
-Dans le membre de gauche, on obtient : $(${x0})^2 = ${texNombre(membreGauche)}$<br>
-Dans le membre de droite, on obtient : $${a} \\times (${x0}) + ${b} = ${texNombre(membreDroit)}$<br>
-On a bien : $${texNombre(membreGauche)} < ${texNombre(membreDroit)}$<br>
-Ainsi, l'inéquation dont $${x0}$ est solution est $${miseEnEvidence(`${bonneInequation}`)}$.`
-
-    this.reponses = [
-      `$${bonneInequation}$`,
-      `$${this.genererInequation1(x0, false).inequation}$`,
-      `$${this.genererInequation1(x0, false).inequation}$`,
-      `$${this.genererInequation2(x0, false).inequation}$`,
-    ]
+    this.correction = this.construireCorrection(x0, propositions, bonne.inequation)
+    this.reponses = propositions.map((p) => `$${p.inequation}$`)
   }
 
   versionOriginale: () => void = () => {

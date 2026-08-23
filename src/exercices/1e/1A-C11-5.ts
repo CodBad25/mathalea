@@ -1,4 +1,4 @@
-import ExprimerEnFonctionRac from '../can/2e/can2L22'
+import ExprimerEnFonctionRac from '../can/2e/can2L14-03'
 export const titre =
   'Exprimer une variable en fonction des autres (formules avec carrés/racines carrées)'
 export const dateDePublication = '13/01/2026'

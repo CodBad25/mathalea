@@ -43,11 +43,15 @@ export default class auto1AC5 extends ExerciceQcmA {
         : (pourcentageArrondi * nombreArrondi) / 100
 
     // Énoncé
-    this.enonce = `La valeur la plus proche  de $${pourcentageReel}\\,\\%$ de $${texNombre(nombreReel)}$ est :`
+    this.enonce = `Parmi les valeurs proposées, la valeur la plus proche  de $${pourcentageReel}\\,\\%$ de $${texNombre(nombreReel)}$ est :`
 
     // Correction
     this.correction = `$${pourcentageReel}\\,\\%$ est proche de $${pourcentageArrondi}\\,\\%$ et $${texNombre(nombreReel)}$ est proche de $${texNombre(nombreArrondi)}$.<br>
-      Ainsi, le calcul de $${pourcentageReel}\\,\\%$ de $${texNombre(nombreReel)}$ est proche de $${pourcentageArrondi}\\,\\%$ de $${texNombre(nombreArrondi)}$ soit $${miseEnEvidence(texNombre(bonneReponse))}$.`
+      Ainsi, le calcul de $${pourcentageReel}\\,\\%$ de $${texNombre(nombreReel)}$ est proche de $${pourcentageArrondi}\\,\\%$ de $${texNombre(nombreArrondi)}$`
+    this.correction +=
+      pourcentageArrondi === 50
+        ? `, soit la moitié de $${texNombre(nombreArrondi)}$, soit $${miseEnEvidence(texNombre(bonneReponse))}$.`
+        : `.<br>Et $${pourcentageArrondi}\\,\\%$ de $${texNombre(nombreArrondi)}=\\dfrac{${pourcentageArrondi}}{100}\\times${texNombre(nombreArrondi)}=${pourcentageArrondi}\\times\\dfrac{${texNombre(nombreArrondi)}}{100}=${pourcentageArrondi}\\times${texNombre(nombreArrondi / 100)}=${miseEnEvidence(texNombre(bonneReponse))}$.`
 
     // Réponses
     if (reponsesPersonnalisees) {

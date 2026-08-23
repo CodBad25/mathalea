@@ -1,230 +1,205 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { rienSi1 } from '../../lib/outils/ecritures'
+import { lettreDepuisChiffre } from '../../lib/outils/outilString'
+import { ppcm } from '../../lib/outils/primalite'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Comparer deux nombres réels en étudiant leur différence'
-export const dateDePublication = '16/07/2026'
+export const titre = 'Effectuer des calculs complexes avec des fractions'
+export const dateDePublication = '15/08/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '92e90'
+export const uuid = '1fc02'
 
 export const refs = {
   'fr-fr': ['2N32-9'],
   'fr-ch': [],
 }
 
-type TypeQuestion = 'racineCarree' | 'pi' | 'variable'
+type Operation = '+' | '-'
 
-function normaliseComparateur(saisie: string): '<' | '>' | '' {
-  const saisieNormalisee = saisie
-    .replace(/\s/g, '')
-    .replace(/[$]/g, '')
-    .replace(/[{}]/g, '')
-    .replace(/\\(?:geqslant|geq|ge)/g, '>')
-    .replace(/\\(?:leqslant|leq|le)/g, '<')
-    .replace(/[≥⩾]/g, '>')
-    .replace(/[≤⩽]/g, '<')
-    .replace(/>=/g, '>')
-    .replace(/<=/g, '<')
+function etapesSommeOuDifference(
+  fraction1: FractionEtendue,
+  fraction2: FractionEtendue,
+  operation: Operation,
+): string[] {
+  const f1 = fraction1.simplifie()
+  const f2 = fraction2.simplifie()
+  const denominateurCommun = ppcm(f1.den, f2.den)
+  const f1Reduite = f1.reduire(denominateurCommun / f1.den)
+  const f2Reduite = f2.reduire(denominateurCommun / f2.den)
+  const numerateurResultat =
+    operation === '+'
+      ? f1Reduite.num + f2Reduite.num
+      : f1Reduite.num - f2Reduite.num
+  const resultat = new FractionEtendue(numerateurResultat, denominateurCommun)
 
-  if (saisieNormalisee === '>' || saisieNormalisee === '<') {
-    return saisieNormalisee
-  }
-  return ''
+  return [
+    `${f1Reduite.texFSD}${operation}${f2Reduite.texFSD}&\\text{On met au même dénominateur.}`,
+    `\\dfrac{${f1Reduite.num}${operation}${f2Reduite.num}}{${denominateurCommun}}&\\text{On calcule la somme ou la différence des numérateurs.}`,
+    ...(resultat.estIrreductible ? [] : [resultat.texFSD]),
+  ]
 }
 
-/**
- * Comparer a-b√c et d-e√c en étudiant le signe de leur différence.
- * @author Stéphane Guyon
- */
-export default class ComparerDeuxNombresAvecRacineCarree extends Exercice {
+export default class CalculsComplexesFractions extends Exercice {
   constructor() {
     super()
-    this.tip = `
-      <p style="margin: 0 0 10px 0;">
-        Pour déterminer lequel de deux nombres est le plus grand, on peut étudier le signe de leur différence.
-      </p>
-      <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0; line-height: 2;">
-        <li>Si $A-B > 0$, alors $A > B$.</li>
-        <li>Si $A-B < 0$, alors $A < B$.</li>
-      </ul>
-    `
-    this.nbQuestions = 2
+
+    this.consigne =
+      'Calculer et donner le résultat sous la forme d’une fraction irréductible.'
+    this.nbQuestions = 5
     this.nbCols = 2
-    this.nbColsCorr = 2
-    this.spacing = 2
+    this.nbColsCorr = 1
     this.spacingCorr = 2
     this.sup = 4
     this.besoinFormulaireNumerique = [
-      'Type de questions',
+      'Type de calculs',
       4,
-      '1 : avec une racine carrée\n2 : avec Pi\n3 : avec une variable\n4 : Mélange',
+      `1 : Somme avec priorité opératoire
+2 : Quotient de sommes
+3 : Somme de produits
+4 : Mélange`,
     ]
   }
 
   nouvelleVersion() {
-    this.consigne =
-      this.nbQuestions === 1
-        ? 'Comparer les deux nombres réels suivants en justifiant la réponse.'
-        : 'Comparer les deux nombres réels de chaque question en justifiant les réponses.'
-
-    const typesDisponibles: TypeQuestion[] =
-      this.sup === 1
-        ? ['racineCarree']
-        : this.sup === 2
-          ? ['pi']
-          : this.sup === 3
-            ? ['variable']
-            : ['racineCarree', 'pi', 'variable']
-    const typesDeQuestions = combinaisonListes(
-      typesDisponibles,
-      this.nbQuestions,
-    )
-    const valeursDeC = combinaisonListes(
-      [3, 5, 7, 11, 13, 15],
-      this.nbQuestions,
-    )
-    const sensDesComparaisons = combinaisonListes(
-      ['inferieur', 'superieur'],
+    const types = combinaisonListes(
+      this.sup === 4 ? [1, 2, 3] : [this.sup],
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const typeQuestion = typesDeQuestions[i]
-      const sensComparaison = sensDesComparaisons[i]
-      const d = randint(1, 9)
-      const e = randint(1, 6)
-      const b = e + 1
-      let a = 0
-      let donneeCaracteristique = 0
-      let reponse: '<' | '>'
-      let texte = ''
-      let texteCorr = ''
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      const type = types[i]
+      const operation: Operation = randint(0, 1) === 0 ? '-' : '+'
+      const operation2: Operation = randint(0, 1) === 0 ? '-' : '+'
+      const b = randint(2, 9)
+      const a = randint(1, b - 1)
+      const c = randint(type === 3 ? 2 : 1, 6)
+      const e = randint(2, 9)
+      const d = randint(1, e - 1)
+      const f = randint(type === 3 ? 2 : 1, 6)
+      const fractionA = new FractionEtendue(a, b)
+      let reponse: FractionEtendue
+      let expression = ''
+      let expressionCorrection = ''
+      let commentairePremiereEtape = ''
+      let etapes: string[] = []
 
-      if (typeQuestion === 'racineCarree') {
-        const c = valeursDeC[i]
-        const entierInferieur = Math.floor(Math.sqrt(c))
-        const differencePartiesEntieres =
-          sensComparaison === 'inferieur'
-            ? entierInferieur
-            : entierInferieur + 1
-        const carreDifference = differencePartiesEntieres ** 2
-        a = d + differencePartiesEntieres
-        donneeCaracteristique = c
-        reponse = carreDifference < c ? '<' : '>'
-
-        texte = `On pose $A=${a}-${rienSi1(b)}\\sqrt{${c}}$ et $B=${d}-${rienSi1(e)}\\sqrt{${c}}$.<br>`
-        texteCorr = `On calcule la différence $A-B$ :<br>
-        $\\begin{aligned}
-        A-B
-        &=\\left(${a}-${rienSi1(b)}\\sqrt{${c}}\\right)-\\left(${d}-${rienSi1(e)}\\sqrt{${c}}\\right)\\\\
-        &=${a}-${d}-${rienSi1(b)}\\sqrt{${c}}+${rienSi1(e)}\\sqrt{${c}}\\\\
-        &=${differencePartiesEntieres}-\\sqrt{${c}}.
-        \\end{aligned}$<br>`
-
-        if (carreDifference < c) {
-          texteCorr += `Comme $${differencePartiesEntieres}=\\sqrt{${carreDifference}}$ et $\\sqrt{${carreDifference}} < \\sqrt{${c}}$, on a
-          $${differencePartiesEntieres} < \\sqrt{${c}}$, donc $${differencePartiesEntieres}-\\sqrt{${c}} < 0$.<br>
-          Par conséquent, $${miseEnEvidence('A < B')}$.`
-        } else {
-          texteCorr += `Comme $${differencePartiesEntieres}=\\sqrt{${carreDifference}}$ et $\\sqrt{${carreDifference}} > \\sqrt{${c}}$, on a
-          $${differencePartiesEntieres} > \\sqrt{${c}}$, donc $${differencePartiesEntieres}-\\sqrt{${c}} > 0$.<br>
-          Par conséquent, $${miseEnEvidence('A > B')}$.`
+      switch (type) {
+        case 1: {
+          const fractionC = new FractionEtendue(c, b)
+          const fractionE = new FractionEtendue(e, f)
+          const produit = fractionC.produitFraction(fractionE)
+          reponse =
+            operation === '+'
+              ? fractionA.sommeFraction(produit)
+              : fractionA.differenceFraction(produit)
+          expression = `${fractionA.texFraction}${operation}${fractionC.texFraction}\\times${fractionE.texFraction}`
+          expressionCorrection = `${fractionA.texFraction}${operation}${miseEnEvidence(`${fractionC.texFraction}\\times${fractionE.texFraction}`, 'red')}`
+          commentairePremiereEtape = `&\\text{On repère la priorité de la multiplication sur ${operation === '+' ? 'l’addition' : 'la soustraction'}.}`
+          etapes = [
+            `${fractionA.texFraction}${operation}\\dfrac{${fractionC.num}\\times${fractionE.num}}{${fractionC.den}\\times${fractionE.den}}&\\text{On multiplie les numérateurs entre eux et les dénominateurs entre eux.}`,
+            `${fractionA.texFraction}${operation}${produit.texFSD}&\\text{On calcule le produit.}`,
+            ...(produit.estIrreductible
+              ? []
+              : [
+                  `${fractionA.texFraction}${operation}${produit.simplifie().texFSD}&\\text{On simplifie le produit.}`,
+                ]),
+            ...etapesSommeOuDifference(
+              fractionA,
+              produit.simplifie(),
+              operation,
+            ),
+          ]
+          break
         }
-      } else if (typeQuestion === 'pi') {
-        const differencePartiesEntieres =
-          sensComparaison === 'inferieur'
-            ? choice([1, 2, 3])
-            : choice([4, 5, 6])
-        a = d + differencePartiesEntieres
-        donneeCaracteristique = differencePartiesEntieres
-        reponse = differencePartiesEntieres <= 3 ? '<' : '>'
-
-        const comparaisonAvecPi =
-          differencePartiesEntieres < 3
-            ? `${differencePartiesEntieres} < 3 < \\pi`
-            : differencePartiesEntieres === 3
-              ? '3 < \\pi'
-              : differencePartiesEntieres === 4
-                ? '\\pi < 4'
-                : `\\pi < 4 < ${differencePartiesEntieres}`
-
-        texte = `On pose $A=${a}-${rienSi1(b)}\\pi$ et $B=${d}-${rienSi1(e)}\\pi$.<br>`
-        texteCorr = `On calcule la différence $A-B$ :<br>
-        $\\begin{aligned}
-        A-B
-        &=\\left(${a}-${rienSi1(b)}\\pi\\right)-\\left(${d}-${rienSi1(e)}\\pi\\right)\\\\
-        &=${a}-${d}-${rienSi1(b)}\\pi+${rienSi1(e)}\\pi\\\\
-        &=${differencePartiesEntieres}-\\pi.
-        \\end{aligned}$<br>
-        On sait que $3 < \\pi < 4$. Ainsi, $${comparaisonAvecPi}$. On a donc $${differencePartiesEntieres}-\\pi ${reponse === '<' ? '<' : '>'} 0$.<br>
-        Par conséquent, $${miseEnEvidence(
-          reponse === '<' ? 'A < B' : 'A > B',
-        )}$.`
-      } else {
-        const borneInferieure = randint(1, 8)
-        const differencePartiesEntieres =
-          sensComparaison === 'inferieur'
-            ? borneInferieure
-            : borneInferieure + 1
-        a = d + differencePartiesEntieres
-        donneeCaracteristique = borneInferieure
-        reponse =
-          differencePartiesEntieres === borneInferieure ? '<' : '>'
-
-        texte = `On pose $A=${a}-${rienSi1(b)}n$ et $B=${d}-${rienSi1(e)}n$, où $n$ est un nombre réel tel que $${borneInferieure} < n < ${borneInferieure + 1}$.<br>`
-        texteCorr = `On calcule la différence $A-B$ :<br>
-        $\\begin{aligned}
-        A-B
-        &=\\left(${a}-${rienSi1(b)}n\\right)-\\left(${d}-${rienSi1(e)}n\\right)\\\\
-        &=${a}-${d}-${rienSi1(b)}n+${rienSi1(e)}n\\\\
-        &=${differencePartiesEntieres}-n.
-        \\end{aligned}$<br>
-        Comme $${borneInferieure} < n < ${borneInferieure + 1}$, on a
-        $${differencePartiesEntieres}-n ${reponse === '<' ? '<' : '>'} 0$.<br>
-        Par conséquent, $${miseEnEvidence(
-          reponse === '<' ? 'A < B' : 'A > B',
-        )}$.`
+        case 2: {
+          const fractionD = new FractionEtendue(d, e)
+          const numerateur =
+            operation === '+'
+              ? fractionA.ajouteEntier(c)
+              : fractionA.ajouteEntier(-c)
+          const denominateur =
+            operation2 === '+'
+              ? fractionD.ajouteEntier(f)
+              : fractionD.ajouteEntier(-f)
+          reponse = numerateur.diviseFraction(denominateur)
+          expression = `\\dfrac{${fractionA.texFraction}${operation}${c}}{${fractionD.texFraction}${operation2}${f}}`
+          const entierC = new FractionEtendue(c * b, b)
+          const entierF = new FractionEtendue(f * e, e)
+          etapes = [
+            `\\dfrac{${fractionA.texFraction}${operation}${entierC.texFSD}}{${fractionD.texFraction}${operation2}${entierF.texFSD}}&\\text{On met au même dénominateur dans le numérateur et le dénominateur.}`,
+            `\\dfrac{\\dfrac{${a}${operation}${c * b}}{${b}}}{\\dfrac{${d}${operation2}${f * e}}{${e}}}&\\text{On calcule les sommes ou les différences.}`,
+            `\\dfrac{${numerateur.texFSD}}{${denominateur.texFSD}}`,
+            `${numerateur.simplifie().texFSD}\\times${denominateur.inverse().simplifie().texFSD}&\\text{Diviser par un réel non nul, c’est multiplier par son inverse.}`,
+            ...(reponse.estIrreductible ? [] : [reponse.texFSD]),
+          ]
+          break
+        }
+        case 3:
+        default: {
+          const fractionD = new FractionEtendue(d, e)
+          const produit1 = fractionA.multiplieEntier(c)
+          const produit2 = fractionD.multiplieEntier(f)
+          reponse =
+            operation === '+'
+              ? produit1.sommeFraction(produit2)
+              : produit1.differenceFraction(produit2)
+          expression = `${fractionA.texFraction}\\times${c}${operation}${fractionD.texFraction}\\times${f}`
+          expressionCorrection = `${miseEnEvidence(`${fractionA.texFraction}\\times${c}`, 'red')}${operation}${miseEnEvidence(`${fractionD.texFraction}\\times${f}`, 'red')}`
+          commentairePremiereEtape = `&\\text{On repère la priorité des multiplications sur ${operation === '+' ? 'l’addition' : 'la soustraction'}.}`
+          etapes = [
+            `${produit1.simplifie().texFSD}${operation}${produit2.simplifie().texFSD}&\\text{On effectue les multiplications en priorité.}`,
+            ...etapesSommeOuDifference(
+              produit1.simplifie(),
+              produit2.simplifie(),
+              operation,
+            ),
+          ]
+          break
+        }
       }
-
-      if (this.interactif) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          KeyboardType.clavierCompare,
-          {
-            texteAvant: '$A$',
-            texteApres: '$B$',
-          },
-        )
-      }
-
-      handleAnswers(this, i, {
-        reponse: {
-          value: reponse,
-          compare: (saisie) => ({
-            isOk: normaliseComparateur(saisie) === reponse,
-          }),
-        },
-      })
 
       if (
         this.questionJamaisPosee(
           i,
+          type,
+          operation,
+          operation2,
           a,
           b,
+          c,
           d,
           e,
-          typeQuestion,
-          donneeCaracteristique,
+          f,
         )
       ) {
+        const nom = lettreDepuisChiffre(i + 1)
+        let texte = `$${nom}=${expression}$`
+        texte += ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierDeBaseAvecFraction,
+          { texteAvant: '$=$' },
+        )
+
+        const resultat = reponse.simplifie()
+        const texteCorr =
+          `$\\begin{aligned}${nom}&=${expressionCorrection || expression}${commentairePremiereEtape}\\\\` +
+          etapes.map((etape) => `&=${etape}\\\\`).join('') +
+          `&=${miseEnEvidence(resultat.texFSD)}\\end{aligned}$`
+
+        handleAnswers(this, i, {
+          reponse: {
+            value: resultat.texFSD,
+            options: { fractionIrreductible: true },
+          },
+        })
+
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

@@ -36,8 +36,8 @@ export default class CalculEffectifQCM extends ExerciceQcmA {
       barres: true,
       valuesOn: true,
       effectifsOn: false,
-      titre: 'Notes obtenues par la classe de 1ère',
-      labelHorizontal: 'Notes sur 20',
+      titre: 'Notes obtenues par la classe de première',
+      labelHorizontal: `Notes sur $${noteMax}$`,
       labelVertical: "Nombre d'élèves",
     })
 
@@ -61,7 +61,7 @@ export default class CalculEffectifQCM extends ExerciceQcmA {
       `${texNombre(distracteur2, 0)}`,
       `${texNombre(distracteur3, 0)}`,
     ].map((r) => `$${r}$`)
-    this.enonce = `Voici la répartition des notes sur ${noteMax} d'une classe de première.<br>
+    this.enonce = `Voici la répartition des notes sur $${noteMax}$ d'une classe de première.<br>
       ${histogramme}<br><br>
       Quel est l'effectif total de cette classe ?`
 

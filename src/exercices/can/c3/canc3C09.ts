@@ -19,7 +19,7 @@ export const dateDePublication = '23/07/2022'
 export const uuid = 'a8e75'
 
 export const refs = {
-  'fr-fr': ['canc3C09', 'auto6P3B-flash1'],
+  'fr-fr': ['canc3C09', 'auto6P3B-flash1', '6AutoP2-1'],
   'fr-ch': [],
 }
 const listeObjets = ['biscuits', 'billes', 'bonbons', 'ballons', 'vis', 'clous']

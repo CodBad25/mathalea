@@ -24,7 +24,7 @@ export const amcReady = true
 export const uuid = 'b486a'
 
 export const refs = {
-  'fr-fr': ['can6M16', 'auto6M2C-flash2', 'BP1AUTO105'],
+  'fr-fr': ['can6M16', 'auto6M2C-flash2', 'BP1AUTO105', '6AutoA1-2'],
   'fr-ch': ['9GM1B-16'],
 }
 export default class AireUsuelleParComptageCan extends ExerciceSimple {

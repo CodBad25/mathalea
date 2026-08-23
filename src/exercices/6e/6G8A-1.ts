@@ -32,7 +32,7 @@ export const interactifType = 'mathLive'
 export const uuid = '5f115'
 
 export const refs = {
-  'fr-fr': ['6G8A-1'],
+  'fr-fr': ['6G8A-1', '6AutoE1-3'],
   'fr-2016': ['6G43'],
   'fr-ch': ['9ES2C-1'],
 }
@@ -126,7 +126,7 @@ export default class DenombrerCubes extends Exercice {
           // 3d dynamique avec Canvas3DElement
           if (!unitesCubes) {
             this.consigne =
-              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume manquant pour reconstruire un cube de 3 cm d\'arête."
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume manquant pour reconstruire un cube de 3 cm d'arête."
           } else {
             this.consigne =
               "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes manquant pour reconstruire un grand cube constitué de 3 cubes sur chaque arête."
@@ -147,7 +147,7 @@ export default class DenombrerCubes extends Exercice {
           // 3d dynamique avec Canvas3DElement
           if (!unitesCubes) {
             this.consigne =
-              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume le composant ou manquant pour reconstruire un cube de 3 cm d\'arête."
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume le composant ou manquant pour reconstruire un cube de 3 cm d'arête."
           } else {
             this.consigne =
               "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes le composant ou manquant pour reconstruire un grand cube constitué de 3 cubes sur chaque arête."

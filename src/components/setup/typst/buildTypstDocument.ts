@@ -96,6 +96,61 @@ export const INSERTION_TAG = '// mathalea:insertion'
 export const INSERTION_CORRECTION_TAG = '// mathalea:insertion-corr'
 
 /**
+ * Une formule en ligne ne doit jamais être coupée entre deux lignes (une
+ * partie sur chacune) : `box` l'en empêche, mais il aligne le *bas* de son
+ * contenu sur la ligne de base — une fraction, une parenthèse haute ou un
+ * indice se retrouveraient donc entièrement au-dessus du texte qui les
+ * entoure (flagrant avec les fractions, toutes en display ici).
+ *
+ * On rend donc à la boîte la profondeur de la formule (sa partie sous la
+ * ligne de base), que Typst n'expose pas directement : mise sur une ligne à
+ * côté d'une boîte plus haute qu'elle — dont la ligne de base est le bas,
+ * justement parce que `box` aligne par le bas —, la formule ne dépasse que
+ * par le bas ; la hauteur de cette ligne vaut donc celle de la boîte témoin
+ * plus la profondeur cherchée.
+ *
+ * C'est une règle d'affichage et non un enrobage émis par le convertisseur :
+ * l'énoncé garde ainsi un `math.equation` dans l'arbre de contenu, seule
+ * forme que `is-inline-content` (paquet taskize) reconnaît comme étant en
+ * ligne — sans quoi le numéro de la question serait aligné en haut de
+ * l'énoncé au lieu de partager sa première ligne (voir
+ * `MATHALEA_TASKS_HELPER`).
+ *
+ * Une formule qui contient déjà des retours à la ligne (calcul aligné sur
+ * plusieurs lignes, `\\begin{aligned}` de LaTeX) forme un cadre de plusieurs
+ * lignes, dont Typst place la ligne de base en bas : le texte qui l'entoure —
+ * le numéro de la question, surtout — se retrouverait sur sa dernière ligne.
+ * On l'aligne donc sur sa *première* ligne, en mesurant à part la hauteur de
+ * celle-ci (le témoin est cette fois entièrement sous la ligne de base, pour
+ * ne mesurer que ce qui la dépasse par le haut).
+ */
+export const MATHALEA_INLINE_FORMULA_RULE = `#let mathalea-formule-multiligne(corps) = {
+  if type(corps) != content { return false }
+  if repr(corps.func()) == "linebreak" { return true }
+  if corps.has("children") { return corps.children.any(mathalea-formule-multiligne) }
+  false
+}
+#let mathalea-formule-premiere-ligne(corps) = {
+  if type(corps) != content or not corps.has("children") { return corps }
+  let avant = ()
+  for enfant in corps.children {
+    if repr(enfant.func()) == "linebreak" { break }
+    avant.push(enfant)
+  }
+  avant.join()
+}
+#show math.equation.where(block: false): formule => context {
+  let temoin = 50em
+  if mathalea-formule-multiligne(formule.body) {
+    let premiere = math.equation(block: false, mathalea-formule-premiere-ligne(formule.body))
+    let hauteur = measure([#box(height: temoin, baseline: temoin)#premiere]).height - temoin
+    box(baseline: measure(formule).height - hauteur, formule)
+  } else {
+    box(baseline: measure([#box(height: temoin)#formule]).height - temoin, formule)
+  }
+}`
+
+/**
  * Lignes en pointillés insérables (fin d'exercice ou après chaque question),
  * pour que l'élève y écrive. `n` lignes espacées de `gutter` ; sans effet
  * visuel (ni espace) tant que `n` vaut 0, valeur de départ dans la palette.
@@ -114,6 +169,10 @@ export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2e
  * réponse manquante laisse la cellule vide) ; les proportions des colonnes
  * reprennent celles du `colspec` de la version LaTeX. L'en-tête se répète en
  * haut de chaque page, comme le `longtblr` de LaTeX.
+ *
+ * Un énoncé peut être une `table.cell(rowspan: n, …)` — questions liées, qui
+ * partagent un même énoncé — les lignes suivantes du groupe portant alors
+ * `none` à la place de leur énoncé (équivalent du `\\SetCell[r=n]` de LaTeX).
  */
 export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
   enonces,
@@ -121,15 +180,20 @@ export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
   jury: true,
   entetes: ([\\#], [Énoncé], [Réponse], [Jury]),
   fond: luma(230),
-  hauteur-ligne: 11pt,
+  hauteur-ligne: 8pt,
 ) = {
   let largeurs = if jury { (0.075fr, 0.545fr, 0.28fr, 0.1fr) } else { (0.08fr, 0.6fr, 0.32fr) }
+  // aucune ligne ne se coupe entre deux pages (comportement du \`longtblr\`
+  // de la version LaTeX) : une figure serait sinon séparée de son numéro
+  let cellule(corps) = if corps != none and corps.func() == table.cell { corps } else { table.cell(breakable: false, corps) }
   let cellules = ()
   for (i, enonce) in enonces.enumerate() {
-    cellules.push(table.cell(fill: fond)[*#(i + 1)*])
-    cellules.push(enonce)
-    cellules.push(reponses.at(i, default: []))
-    if jury { cellules.push([]) }
+    cellules.push(table.cell(fill: fond, breakable: false)[*#(i + 1)*])
+    // un énoncé \`none\` est celui d'une question liée à la précédente : sa
+    // cellule est déjà couverte par le \`rowspan\` de celle qui porte l'énoncé
+    if enonce != none { cellules.push(cellule(enonce)) }
+    cellules.push(cellule(reponses.at(i, default: [])))
+    if jury { cellules.push(table.cell(breakable: false)[]) }
   }
   table(
     columns: largeurs,
@@ -678,6 +742,20 @@ export interface TypstExerciseInput {
    * du tableau. Une entrée vide laisse la cellule vide.
    */
   canAnswers?: string[]
+  /**
+   * Mode « Course aux nombres » : pour chaque question, les numéros
+   * (`canNumeroLie`) des questions auxquelles son énoncé est lié
+   * (`listeCanLiees`). Deux questions liées partagent un seul énoncé — une
+   * courbe lue deux fois, par exemple : la première porte l'énoncé, les
+   * suivantes n'ont qu'une réponse à compléter.
+   */
+  canLinkedTo?: number[][]
+  /**
+   * Mode « Course aux nombres » : le numéro que chaque question se donne
+   * (`canNumeroLie`), celui que les questions liées citent dans
+   * `canLinkedTo`. Sans rapport avec sa position dans le tableau.
+   */
+  canLinkNumbers?: number[]
   /**
    * Exercice statique sans source `.typ` (énoncé image scannée seule) :
    * son énoncé n'est qu'un `<img>`, réglable en zoom par la palette
@@ -1526,6 +1604,7 @@ export function buildStandaloneExerciseCode(
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
+  lines.push(MATHALEA_INLINE_FORMULA_RULE)
   lines.push('#show math.frac: it => math.display(it)')
   if (options.autoVerticalSpacing) lines.push('#show: breathe')
   if (usesQcm) lines.push(MATHALEA_QCM_HELPERS)
@@ -1553,15 +1632,38 @@ export function buildStandaloneExerciseCode(
  * lisibles dans le code généré.
  */
 function typstContentArrayArgument(items: string[], indent: string): string[] {
+  return typstArrayArgument(
+    items.map((item) => `[${item}]`),
+    indent,
+  )
+}
+
+/**
+ * Même chose, pour des éléments qui sont déjà des expressions Typst (un
+ * `none`, une `table.cell(...)` d'énoncé partagé) et non des contenus à
+ * mettre entre crochets.
+ */
+function typstArrayArgument(items: string[], indent: string): string[] {
   if (items.length === 0) return [`${indent}(),`]
   return [
     `${indent}(`,
     ...items.map(
-      (item) => `${indent}  [${item.split('\n').join(`\n${indent}  `)}],`,
+      (item) => `${indent}  ${item.split('\n').join(`\n${indent}  `)},`,
     ),
     `${indent}),`,
   ]
 }
+
+/**
+ * Largeur maximale (pt) d'une figure dans la colonne « Énoncé » du tableau
+ * « Course aux nombres ». Les figures mathalea2d sont dessinées pour la
+ * pleine largeur du navigateur : laissées à leur taille (plafonnée seulement
+ * par la largeur de la colonne, voir `mathalea-figure-block`), elles
+ * remplissent toute la cellule et la feuille de passation double de volume.
+ * Même ordre de grandeur que `TABLE_CELL_FIGURE_MAX_WIDTH_PT`, le plafond des
+ * figures des autres tableaux.
+ */
+const CAN_FIGURE_MAX_WIDTH_PT = 120
 
 /** Une ligne (générée, sans surcharge) du tableau « Course aux nombres » */
 interface GeneratedCanRow {
@@ -1572,6 +1674,43 @@ interface GeneratedCanRow {
   exerciseNum: number
   /** Vrai pour la première ligne de son exercice (repère `exo`) */
   isFirstOfExercise: boolean
+  /**
+   * Nombre de lignes sur lesquelles s'étend la cellule « Énoncé » : 1 pour
+   * une question ordinaire, davantage quand les questions suivantes lui sont
+   * liées et partagent son énoncé (voir `TypstExerciseInput.canLinkedTo`).
+   */
+  enonceRowspan: number
+  /** Vrai pour une ligne dont l'énoncé est celui d'une ligne précédente */
+  sharesPreviousEnonce: boolean
+}
+
+/**
+ * Répartit les questions d'un exercice « Course aux nombres » en groupes de
+ * questions liées : la question qui porte l'énoncé, suivie de celles qui le
+ * partagent (`canLinkedTo` cite le `canLinkNumbers` de la première). Renvoie,
+ * pour chaque question, le nombre de lignes que couvre sa cellule d'énoncé
+ * (0 si elle n'en a pas, l'énoncé étant celui d'une question précédente) —
+ * équivalent du `\SetCell[r=n]` de la sortie LaTeX (`lib/Latex.ts`).
+ */
+function computeCanEnonceRowspans(
+  linkedTo: number[][] | undefined,
+  linkNumbers: number[] | undefined,
+  questionCount: number,
+): number[] {
+  const rowspans = Array.from({ length: questionCount }, () => 1)
+  if (linkedTo == null || linkNumbers == null) return rowspans
+  for (let i = 0; i < questionCount; i++) {
+    if (rowspans[i] === 0 || (linkedTo[i]?.length ?? 0) === 0) continue
+    // seules les questions qui suivent immédiatement partagent l'énoncé :
+    // deux questions liées mais séparées par une autre resteraient sur des
+    // lignes non contiguës, qu'une cellule fusionnée ne peut pas couvrir
+    for (let j = i + 1; j < questionCount; j++) {
+      if (!(linkedTo[j] ?? []).includes(linkNumbers[i])) break
+      rowspans[j] = 0
+      rowspans[i]++
+    }
+  }
+  return rowspans
 }
 
 /**
@@ -1599,17 +1738,41 @@ function computeGeneratedCanRows(
         correction: '',
         exerciseNum: k + 1,
         isFirstOfExercise: true,
+        enonceRowspan: 1,
+        sharesPreviousEnonce: false,
       })
       continue
     }
     const questions = exercise.canQuestions ?? exercise.questions
+    const rowspans = computeCanEnonceRowspans(
+      exercise.canLinkedTo,
+      exercise.canLinkNumbers,
+      questions.length,
+    )
     for (const [i, question] of questions.entries()) {
       rows.push({
-        enonce: htmlToTypst(question, figures),
-        reponse: htmlToTypst(exercise.canAnswers?.[i] ?? '', figures),
+        // une question liée à la précédente n'a pas d'énoncé propre : c'est
+        // la cellule de la première du groupe qui couvre sa ligne
+        enonce:
+          rowspans[i] === 0
+            ? ''
+            : htmlToTypst(
+                question,
+                figures,
+                undefined,
+                CAN_FIGURE_MAX_WIDTH_PT,
+              ),
+        reponse: htmlToTypst(
+          exercise.canAnswers?.[i] ?? '',
+          figures,
+          undefined,
+          CAN_FIGURE_MAX_WIDTH_PT,
+        ),
         correction: htmlToTypst(exercise.corrections[i] ?? '', figures),
         exerciseNum: k + 1,
         isFirstOfExercise: i === 0,
+        enonceRowspan: Math.max(1, rowspans[i]),
+        sharesPreviousEnonce: rowspans[i] === 0,
       })
     }
   }
@@ -1626,10 +1789,16 @@ export function getGeneratedCanRowCode(
   exercises: TypstExerciseInput[],
   row: number,
   options: TypstDocumentOptions = defaultTypstDocumentOptions,
-): { enonce: string; reponse: string } {
+): { enonce: string; reponse: string; sharesPreviousEnonce: boolean } {
   const rows = computeGeneratedCanRows(exercises, options, [])
   const found = rows[row - 1]
-  return { enonce: found?.enonce ?? '', reponse: found?.reponse ?? '' }
+  return {
+    enonce: found?.enonce ?? '',
+    reponse: found?.reponse ?? '',
+    // une question liée à la précédente n'a pas de cellule « Énoncé » : il
+    // n'y a rien à y surcharger (voir `buildCanVersionContent`)
+    sharesPreviousEnonce: found?.sharesPreviousEnonce ?? false,
+  }
 }
 
 /**
@@ -1672,21 +1841,36 @@ function buildCanVersionContent(
       : ''
     const enonceOverride = carryOver.codeOverridesCan?.[rowNum]
     const reponseOverride = carryOver.codeOverridesCanReponse?.[rowNum]
-    enonces.push(
-      `${exoAnchor}${rowAnchor}${
-        enonceOverride == null
-          ? row.enonce
-          : exportMode
-            ? enonceOverride
-            : wrapCodeOverrideCan(rowNum, enonceOverride)
-      }`,
-    )
-    reponses.push(
+    // Une question liée à la précédente n'a pas de cellule « Énoncé » : la
+    // cellule de la première question du groupe couvre sa ligne
+    // (`table.cell(rowspan: …)`), et `none` indique au helper de ne pas en
+    // ouvrir une nouvelle. Son repère de ligne (bouton d'édition de la
+    // palette) part alors dans sa cellule « Réponse », la seule qui lui
+    // reste.
+    const enonce =
+      enonceOverride == null
+        ? row.enonce
+        : exportMode
+          ? enonceOverride
+          : wrapCodeOverrideCan(rowNum, enonceOverride)
+    if (row.sharesPreviousEnonce) {
+      enonces.push('none')
+    } else {
+      const contenu = `[${exoAnchor}${rowAnchor}${enonce}]`
+      enonces.push(
+        row.enonceRowspan > 1
+          ? `table.cell(rowspan: ${row.enonceRowspan}, breakable: false, ${contenu})`
+          : contenu,
+      )
+    }
+    const reponse =
       reponseOverride == null
         ? row.reponse
         : exportMode
           ? reponseOverride
-          : wrapCodeOverrideCanReponse(rowNum, reponseOverride),
+          : wrapCodeOverrideCanReponse(rowNum, reponseOverride)
+    reponses.push(
+      row.sharesPreviousEnonce ? `${exoAnchor}${rowAnchor}${reponse}` : reponse,
     )
     corrections.push(row.correction)
   })
@@ -1703,7 +1887,7 @@ function buildCanVersionContent(
     ),
   )
   renderLines.push('  #can-tableau(')
-  renderLines.push(...typstContentArrayArgument(enonces, '    '))
+  renderLines.push(...typstArrayArgument(enonces, '    '))
   renderLines.push(...typstContentArrayArgument(reponses, '    '))
   renderLines.push('  )')
   if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${lastGap})`)
@@ -2351,6 +2535,7 @@ export function buildTypstDocument(
   // #txt : texte inséré dans une formule mais rendu avec la police du texte
   // (unités, mots) — le parseur convertit \text{…} en #txt("…")
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
+  lines.push(MATHALEA_INLINE_FORMULA_RULE)
   // \dfrac plutôt que \frac : les fractions gardent leur taille normale
   // (« display ») même au milieu d'une phrase, comme dans la version LaTeX
   lines.push('#show math.frac: it => math.display(it)')

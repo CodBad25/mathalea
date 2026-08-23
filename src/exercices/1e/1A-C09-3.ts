@@ -1,4 +1,4 @@
-import DeveloppementDouble from '../can/2e/can2L13'
+import DeveloppementDouble from '../can/2e/can2L11-01'
 export const titre = 'Développer avec la double distributivité'
 export const dateDePublication = '28/07/2025'
 export const dateDeModifImportante = '25/03/2026'

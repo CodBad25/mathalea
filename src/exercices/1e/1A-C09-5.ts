@@ -1,4 +1,4 @@
-import CalculCompose from '../can/2e/can2L20'
+import CalculCompose from '../can/2e/can2F10-02'
 export const titre = 'Calculer $f(x+a)$ avec $f$ affine'
 export const dateDePublication = '24/07/2025'
 export const amcReady = true

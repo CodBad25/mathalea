@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import * as exercice2N40_1 from '../../exercices/2e/2N40-1'
+import * as exercice2N40_1 from '../../exercices/2e/2L10-1'
 import { mathaleaHandleExerciceSimple } from '../mathalea'
 import {
   renderAMCCopyContent,

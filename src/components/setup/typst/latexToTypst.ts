@@ -437,8 +437,11 @@ function preprocessTex(tex: string): string {
   output = output.replace(/\\textbf\s*\{/g, '\\mathbf{')
   // \textbf sans accolades (\textbf, ou \textbf; etc.) : suppression de la commande
   output = output.replace(/\\textbf(?!\s*\{)/g, '')
-  // \boldsymbol{X} → \mathbf{X} (tex2typst ne connaît pas \boldsymbol)
-  output = output.replace(/\\boldsymbol\s*\{/g, '\\mathbf{')
+  // \boldsymbol{X} → \pmb{X} (tex2typst ne connaît pas \boldsymbol et rend
+  // \mathbf en `upright(bold(...))` : les variables y perdraient l'italique
+  // des mathématiques, alors que \boldsymbol la conserve — c'est la commande
+  // employée par `miseEnEvidence`, donc par toutes les réponses en orange)
+  output = output.replace(/\\boldsymbol\s*\{/g, '\\pmb{')
   // \texttt{X} → \text{X} (police machine à écrire, tex2typst décompose lettre par lettre)
   output = output.replace(/\\texttt\s*\{/g, '\\text{')
   // \text X (sans accolades, token unique) → \text{X} (tex2typst exige les accolades)
@@ -916,6 +919,79 @@ function replacePhantomCommands(text: string): string {
   }
   output += text.slice(index)
   return output
+}
+
+/**
+ * Remplace `\nom{…}…{…}` par le résultat de `rendu`, en lisant ses arguments
+ * à accolades équilibrées (`readBraced`) : les contenus imbriqués (une
+ * `\parbox` dans une `\fbox`, par exemple) sont donc traités correctement,
+ * là où une expression rationnelle s'arrêterait à la première accolade
+ * fermante. Une occurrence à qui il manque un argument est laissée telle
+ * quelle.
+ */
+function replaceLatexCommand(
+  text: string,
+  name: string,
+  argCount: number,
+  rendu: (args: string[]) => string,
+): string {
+  // l'étoile de `\hspace*` : même commande, l'espace est simplement conservée
+  // en début de ligne
+  const marker = new RegExp(`\\\\${name}\\*?\\s*(?=\\{)`, 'g')
+  let output = ''
+  let index = 0
+  let match: RegExpExecArray | null
+  while ((match = marker.exec(text)) != null) {
+    const args: string[] = []
+    let position = match.index + match[0].length
+    for (let n = 0; n < argCount; n++) {
+      const arg = readBraced(text, position)
+      if (arg == null) break
+      args.push(arg.value)
+      position = arg.end
+    }
+    if (args.length < argCount) {
+      marker.lastIndex = match.index + match[0].length
+      continue
+    }
+    output += text.slice(index, match.index) + rendu(args)
+    index = position
+    marker.lastIndex = position
+  }
+  output += text.slice(index)
+  return output
+}
+
+/** Jeton posé par `protect()` à la place d'un fragment Typst déjà converti */
+const PROTECTED_TOKEN = /\uE000\d+\uE001/
+
+/**
+ * Contenu de `\fbox`/`\framebox` : un cadre fin autour du contenu, laissé
+ * dans le flux de conversion entre le fragment protégé qui ouvre la boîte et
+ * celui qui la ferme.
+ */
+function encadre(contenu: string, protect: (fragment: string) => string) {
+  return `${protect('#box(stroke: 0.6pt + luma(60), inset: (x: 6pt, y: 5pt))[')}${contenu}${protect(']')}`
+}
+
+/**
+ * Longueur LaTeX (argument de `\hspace`) en longueur Typst. `\linewidth` et
+ * ses synonymes deviennent un pourcentage de la largeur disponible
+ * (`0.5\linewidth` → `50%`). Renvoie `null` pour tout ce qui n'est pas une
+ * longueur reconnue (l'appelant s'en passe alors).
+ */
+function latexLengthToTypst(longueur: string): string | null {
+  const texte = longueur.trim()
+  const relative = /^([+-]?\d*\.?\d*)\s*\\(?:line|text|column)width$/.exec(
+    texte,
+  )
+  if (relative != null) {
+    const facteur = relative[1] === '' ? 1 : Number(relative[1])
+    if (Number.isFinite(facteur)) return `${facteur * 100}%`
+  }
+  const absolue = /^([+-]?\d*\.?\d+)\s*(pt|mm|cm|in|em|ex)$/.exec(texte)
+  if (absolue != null) return `${Number(absolue[1])}${absolue[2]}`
+  return null
 }
 
 function splitTopLevel(text: string, separator: string): string[] {
@@ -1613,9 +1689,13 @@ function latexSegmentToTypst(
   const converted = latexMathToTypst(tex)
   if (converted.length === 0) return ''
   // Une formule en ligne ne doit jamais être coupée entre deux lignes (une
-  // partie sur chacune) : `box(...)` empêche Typst de la scinder au niveau
-  // d'un opérateur, comme il le ferait pour du texte normal.
-  return display ? `$ ${converted} $` : `#box($${converted}$)`
+  // partie sur chacune) : c'est le préambule qui s'en charge, en mettant
+  // toutes les formules en ligne dans une boîte (`MATHALEA_INLINE_FORMULA_RULE`).
+  // La règle vaut ainsi aussi pour les formules du code Typst brut des
+  // exercices statiques, et l'énoncé reste un `math.equation` dans l'arbre de
+  // contenu — ce dont dépend l'alignement du numéro de question
+  // (`MATHALEA_TASKS_HELPER`).
+  return display ? `$ ${converted} $` : `$${converted}$`
 }
 
 /**
@@ -2063,12 +2143,13 @@ function divLatexToTypstLabel(
 function mathalea2dContainerToTypst(
   html: string,
   figures?: string[],
+  maxWidthPt: number = MAX_FIGURE_WIDTH_PT,
 ): string | null {
   if (!/\bsvgContainer\b/.test(html)) return null
   const svgMatch = html.match(/<svg\b[\s\S]*?<\/svg>/i)
   if (svgMatch == null) return null
   if (figures == null) return missingBox('figure non convertie')
-  figures.push(svgToTypstImage(svgMatch[0]))
+  figures.push(svgToTypstImage(svgMatch[0], maxWidthPt))
   const figureIndex = figures.length
   const figureName = `fig-${figureIndex}`
   const zoomVar = `${figureName}-zoom`
@@ -2077,7 +2158,7 @@ function mathalea2dContainerToTypst(
   const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
   const widthPx = width != null ? parseFloat(width[1]) : 213.3
   const heightPx = height != null ? parseFloat(height[1]) : 120
-  const scaled = scaledFigureDimensions(widthPx, heightPx)
+  const scaled = scaledFigureDimensions(widthPx, heightPx, maxWidthPt)
   // les positions des labels sont en pixels de la figure d'origine : le
   // même facteur d'échelle que l'image doit leur être appliqué, sinon ils
   // se retrouvent mal placés une fois la figure plafonnée à MAX_FIGURE_WIDTH_PT
@@ -2114,6 +2195,7 @@ function protectMathalea2dContainers(
   html: string,
   protect: (typst: string) => string,
   figures?: string[],
+  maxWidthPt: number = MAX_FIGURE_WIDTH_PT,
 ): string {
   if (typeof document !== 'undefined') {
     const template = document.createElement('template')
@@ -2123,7 +2205,11 @@ function protectMathalea2dContainers(
     ]
     if (containers.length > 0) {
       for (const container of containers) {
-        const typst = mathalea2dContainerToTypst(container.outerHTML, figures)
+        const typst = mathalea2dContainerToTypst(
+          container.outerHTML,
+          figures,
+          maxWidthPt,
+        )
         if (typst != null) {
           // ligne vide après la figure : le texte qui suit reprend dans
           // un nouveau paragraphe du code généré (l'espacement fait partie
@@ -2146,7 +2232,8 @@ function protectMathalea2dContainers(
     /<div\b[^>]*\bclass=["'][^"']*\bsvgContainer\b[^"']*["'][\s\S]*?<\/div>\s*<\/div>/gi,
     (container) =>
       protect(
-        (mathalea2dContainerToTypst(container, figures) ?? container) + '\n\n',
+        (mathalea2dContainerToTypst(container, figures, maxWidthPt) ??
+          container) + '\n\n',
       ),
   )
 }
@@ -2160,9 +2247,13 @@ function protectMathalea2dContainers(
  * par le professeur et l'alignement, et place le repère invisible de la
  * palette de mise en page (mêmes contrôles que pour les figures mathalea2d).
  */
-function apigeomSvgToTypst(svgHtml: string, figures?: string[]): string | null {
+function apigeomSvgToTypst(
+  svgHtml: string,
+  figures?: string[],
+  maxWidthPt: number = MAX_FIGURE_WIDTH_PT,
+): string | null {
   if (figures == null) return missingBox('figure non convertie')
-  figures.push(svgToTypstImage(svgHtml))
+  figures.push(svgToTypstImage(svgHtml, maxWidthPt))
   const figureIndex = figures.length
   const figureName = `fig-${figureIndex}`
   return [
@@ -2176,10 +2267,12 @@ function protectApigeomSvgContainers(
   html: string,
   protect: (typst: string) => string,
   figures?: string[],
+  maxWidthPt: number = MAX_FIGURE_WIDTH_PT,
 ): string {
   return html.replace(
     /<svg\b[^>]*\bclass="[^"]*\bapigeom-svg\b[^"]*"[^>]*>[\s\S]*?<\/svg>/gi,
-    (svg) => protect((apigeomSvgToTypst(svg, figures) ?? svg) + '\n\n'),
+    (svg) =>
+      protect((apigeomSvgToTypst(svg, figures, maxWidthPt) ?? svg) + '\n\n'),
   )
 }
 
@@ -2616,6 +2709,14 @@ export function htmlToTypst(
   html: string,
   figures?: string[],
   zoomVariable?: string,
+  /**
+   * Largeur maximale des figures (pt). Par défaut la pleine page
+   * (`MAX_FIGURE_WIDTH_PT`) ; un contenu qui vit dans un espace plus étroit
+   * — une cellule du tableau « Course aux nombres » — passe un plafond plus
+   * serré, pour que la figure y garde des proportions raisonnables plutôt
+   * que d'occuper toute la cellule.
+   */
+  maxFigureWidthPt: number = MAX_FIGURE_WIDTH_PT,
 ): string {
   // 1. Les formules et les blocs générés sont protégés par des jetons
   //    pour traverser intacts l'échappement du texte.
@@ -2638,8 +2739,8 @@ export function htmlToTypst(
   text = protectQcm(renderScratchBlocksToSvg(text), protect, figures)
   text = protectSchemaContainers(text, protect)
   text = protectHtmlTables(text, protect, figures)
-  text = protectMathalea2dContainers(text, protect, figures)
-  text = protectApigeomSvgContainers(text, protect, figures)
+  text = protectMathalea2dContainers(text, protect, figures, maxFigureWidthPt)
+  text = protectApigeomSvgContainers(text, protect, figures, maxFigureWidthPt)
   text = protectKatexSpans(text, protect)
   // `~$€$` (pattern produit par `texPrix(val)~$€$`) : le `$€$` est un bloc math
   // imbriqué dans un autre `$...$`. En mode texte brut (pas de KaTeX rendu),
@@ -2688,11 +2789,49 @@ export function htmlToTypst(
     () => protect('#v(0.5em)\n'),
   )
 
+  // Mise en boîte LaTeX en mode texte, elle aussi propre aux énoncés des
+  // « Course aux nombres » (ex. can2a-2026 Q12, qui encadre un algorithme).
+  // Le contenu des boîtes est laissé dans le flux entre deux fragments
+  // protégés : il continue à traverser le reste de la conversion (formules
+  // déjà protégées, balises HTML, échappements).
+  text = text.replace(/\\setlength\s*\{[^{}]*\}\s*\{[^{}]*\}\s*/g, '')
+  text = text.replace(/\\newline\b\s*/g, '<br>')
+  text = replaceLatexCommand(text, 'hspace', 1, ([longueur]) => {
+    const ecart = latexLengthToTypst(longueur)
+    return ecart == null ? '' : protect(`#h(${ecart})`)
+  })
+  text = replaceLatexCommand(text, 'texttt', 1, ([code]) =>
+    // une chaîne `#raw` ne peut pas accueillir un fragment déjà protégé (une
+    // formule, par exemple) : son jeton n'y serait pas restauré. Le contenu
+    // reste alors dans le flux, sans police à chasse fixe.
+    PROTECTED_TOKEN.test(code)
+      ? code
+      : protect(`#raw(${typstStringLiteral(decodeEntities(code))})`),
+  )
+  text = replaceLatexCommand(text, 'fbox', 1, ([contenu]) =>
+    encadre(contenu, protect),
+  )
+  text = replaceLatexCommand(text, 'framebox', 1, ([contenu]) =>
+    encadre(contenu, protect),
+  )
+  // La largeur de `\parbox` n'est pas reprise : les exercices l'expriment en
+  // fraction de `\linewidth` (`0.5\linewidth`), mesure prise sur la page A4
+  // de la sortie LaTeX, alors que la boîte atterrit souvent dans une cellule
+  // bien plus étroite (tableau « Course aux nombres »), où la largeur
+  // littérale couperait les lignes de l'algorithme encadré. Une boîte sans
+  // largeur prend celle de son contenu, et ne se replie que s'il déborde.
+  text = replaceLatexCommand(
+    text,
+    'parbox',
+    2,
+    ([, contenu]) => `${protect('#box[')}${contenu}${protect(']')}`,
+  )
+
   // 2. Figures SVG (embarquées dans le document), puis éléments non
   //    convertis : images et tableaux
   text = text.replace(/<svg[\s\S]*?<\/svg>/gi, (svg) => {
     if (figures == null) return protect(missingBox('figure non convertie'))
-    figures.push(svgToTypstImage(svg))
+    figures.push(svgToTypstImage(svg, maxFigureWidthPt))
     // mathalea-fit réduit la figure si elle dépasse la largeur disponible ;
     // ligne vide après la figure : le texte qui suit reprend dans un
     // nouveau paragraphe du code généré

@@ -1070,7 +1070,7 @@ Ce helper déclare lui-même les données nécessaires à la vérification. Lire
 interactifs autonomes. Lire la page dédiée :
 [Mathalea Couteau Suisse](couteau-suisse.md).
 
-Exemple de référence : `src/exercices/2e/2F21-11.ts`.
+Exemple de référence : `src/exercices/2e/2F21-9.ts`.
 
 ## Scratch et Blockly
 

@@ -57,6 +57,7 @@ type TypeElementIntersectable =
   | 'cercleRayon'
   | 'arc'
   | 'arcPointPointCentre'
+  | 'reporterLongueurCompas'
   | 'parallele'
   | 'paralleleAObjet'
   | 'paralleleObjet'
@@ -93,6 +94,7 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'cercleRayon',
   'arc',
   'arcPointPointCentre',
+  'reporterLongueurCompas',
   'parallele',
   'paralleleAObjet',
   'paralleleObjet',
@@ -135,6 +137,7 @@ const prepositionElementIntersectable: Record<
   cercleRayon: 'du cercle',
   arc: 'de l’arc',
   arcPointPointCentre: 'de l’arc',
+  reporterLongueurCompas: 'de l’arc',
   parallele: 'de la parallèle',
   paralleleAObjet: 'de la parallèle',
   paralleleObjet: 'de la parallèle',
@@ -160,6 +163,7 @@ const nomsTypesElementsIntersectables: Record<
   cercleRayon: 'cercle',
   arc: 'arc',
   arcPointPointCentre: 'arc',
+  reporterLongueurCompas: 'arc',
   parallele: 'parallèle',
   paralleleAObjet: 'parallèle',
   paralleleObjet: 'parallèle',
@@ -171,6 +175,7 @@ const nomsTypesElementsIntersectables: Record<
 
 type InstructionIepBase = {
   protege?: boolean
+  couleur?: string
 }
 
 type InstructionIepSansOptions =
@@ -182,18 +187,30 @@ type InstructionIepSansOptions =
       distance: number
       angle: number
     }
-  | { type: 'segment'; p1: string; p2: string }
+  | { type: 'segment'; p1: string; p2: string; couleur?: string }
   | { type: 'trait'; p1: string; p2: string }
   | { type: 'polygone'; sommets: string }
-  | { type: 'polygoneRapide'; sommets: string }
+  | { type: 'polygoneRapide'; sommets: string; couleur?: string }
   | { type: 'droite'; p1: string; p2: string }
   | { type: 'droitePointPente'; p1: string; pente?: number | string }
-  | { type: 'demiDroite'; p1: string; p2: string }
-  | { type: 'demiDroitePointDirection'; p1: string; angle?: number | string }
+  | { type: 'demiDroite'; p1: string; p2: string; couleur?: string }
+  | {
+      type: 'demiDroitePointDirection'
+      p1: string
+      angle?: number | string
+      couleur?: string
+    }
   | { type: 'cercle'; p1: string; p2: string }
   | { type: 'cercleRayon'; p1: string; r: number }
   | { type: 'arc'; p1: string; p2: string }
   | { type: 'arcPointPointCentre'; p1: string; p2: string; p3: string }
+  | {
+      type: 'reporterLongueurCompas'
+      p1: string
+      p2: string
+      p3: string
+      angle: number
+    }
   | { type: 'milieu'; nom: string; p1: string; p2: string }
   | { type: 'demiTourPoint'; nom: string; p1: string; p2: string }
   | {
@@ -209,7 +226,12 @@ type InstructionIepSansOptions =
   | { type: 'parallele'; p1: string; p2: string; p3: string }
   | { type: 'paralleleAObjet'; etape: number; p1: string }
   | { type: 'paralleleObjet'; element: number; p1: string }
-  | { type: 'prolongerObjet'; etape: number; longueur?: number }
+  | {
+      type: 'prolongerObjet'
+      etape: number
+      longueur?: number
+      couleur?: string
+    }
   | { type: 'bissectrice'; p1: string; p2: string; p3: string }
   | { type: 'codageAngleDroit'; p1: string; p2: string; p3: string }
   | { type: 'demiDroiteAngle'; p1: string; p2: string; angle: number }
@@ -280,6 +302,7 @@ type ChampSpec = {
     | 'choix'
     | 'codageSegment'
     | 'codageAngle'
+    | 'couleurCrayon'
   label: string
   defaut?: number | string
   optionnel?: boolean
@@ -312,6 +335,22 @@ const optionsCodageAngle: string[] = [
   'pleinO',
 ]
 
+const optionsCouleurCrayon: { valeur: string; label: string }[] = [
+  { valeur: '', label: 'Couleur par défaut' },
+  { valeur: 'blue', label: 'Bleu' },
+  { valeur: 'red', label: 'Rouge' },
+  { valeur: 'green', label: 'Vert' },
+  { valeur: 'black', label: 'Noir' },
+  { valeur: 'gray', label: 'Gris' },
+]
+
+const champCouleur = {
+  cle: 'couleur',
+  genre: 'couleurCrayon',
+  label: 'Couleur',
+  optionnel: true,
+} satisfies ChampSpec
+
 const longueurObjetDirectionEditeurIep = 12
 const longueurProlongementObjetEditeurIep = 12
 const margeFigureStatiqueIep = 1
@@ -342,6 +381,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Extrémité 1' },
       { cle: 'p2', genre: 'point', label: 'Extrémité 2' },
+      champCouleur,
     ],
   },
   trait: {
@@ -349,6 +389,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Extrémité 1' },
       { cle: 'p2', genre: 'point', label: 'Extrémité 2' },
+      champCouleur,
     ],
   },
   polygone: {
@@ -360,6 +401,7 @@ const catalogue: Record<
         label: 'Sommets',
         defaut: 'A,B,C',
       },
+      champCouleur,
     ],
   },
   polygoneRapide: {
@@ -371,6 +413,7 @@ const catalogue: Record<
         label: 'Sommets',
         defaut: 'A,B,C',
       },
+      champCouleur,
     ],
   },
   droite: {
@@ -378,6 +421,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Point 1' },
       { cle: 'p2', genre: 'point', label: 'Point 2' },
+      champCouleur,
     ],
   },
   droitePointPente: {
@@ -385,6 +429,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Point' },
       { cle: 'pente', genre: 'texte', label: 'Pente', optionnel: true },
+      champCouleur,
     ],
   },
   demiDroite: {
@@ -392,6 +437,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Origine' },
       { cle: 'p2', genre: 'point', label: 'Direction' },
+      champCouleur,
     ],
   },
   demiDroitePointDirection: {
@@ -399,6 +445,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Origine' },
       { cle: 'angle', genre: 'texte', label: 'Angle (°)', optionnel: true },
+      champCouleur,
     ],
   },
   cercle: {
@@ -406,6 +453,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Centre' },
       { cle: 'p2', genre: 'point', label: 'Point du cercle' },
+      champCouleur,
     ],
   },
   cercleRayon: {
@@ -413,6 +461,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Centre' },
       { cle: 'r', genre: 'nombre', label: 'Rayon du cercle' },
+      champCouleur,
     ],
   },
   arc: {
@@ -420,6 +469,7 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Centre' },
       { cle: 'p2', genre: 'point', label: 'Point visé' },
+      champCouleur,
     ],
   },
   arcPointPointCentre: {
@@ -428,6 +478,17 @@ const catalogue: Record<
       { cle: 'p1', genre: 'point', label: 'Centre' },
       { cle: 'p2', genre: 'point', label: 'Extrémité 1' },
       { cle: 'p3', genre: 'point', label: 'Extrémité 2' },
+      champCouleur,
+    ],
+  },
+  reporterLongueurCompas: {
+    label: 'Reporter une longueur au compas',
+    champs: [
+      { cle: 'p1', genre: 'point', label: 'Longueur de' },
+      { cle: 'p2', genre: 'point', label: 'à' },
+      { cle: 'p3', genre: 'point', label: 'Centre' },
+      { cle: 'angle', genre: 'nombre', label: 'Direction (°)', defaut: 0 },
+      champCouleur,
     ],
   },
   milieu: {
@@ -436,6 +497,7 @@ const catalogue: Record<
       { cle: 'nom', genre: 'nom', label: 'Nom' },
       { cle: 'p1', genre: 'point', label: 'Extrémité 1' },
       { cle: 'p2', genre: 'point', label: 'Extrémité 2' },
+      champCouleur,
     ],
   },
   demiTourPoint: {
@@ -468,6 +530,7 @@ const catalogue: Record<
       { cle: 'p1', genre: 'point', label: 'Point 1 de la droite' },
       { cle: 'p2', genre: 'point', label: 'Point 2 de la droite' },
       { cle: 'p3', genre: 'point', label: 'Passant par' },
+      champCouleur,
     ],
   },
   perpendiculaireAObjet: {
@@ -475,6 +538,7 @@ const catalogue: Record<
     champs: [
       { cle: 'etape', genre: 'objetDirection', label: 'Objet' },
       { cle: 'p1', genre: 'point', label: 'Passant par' },
+      champCouleur,
     ],
   },
   parallele: {
@@ -483,6 +547,7 @@ const catalogue: Record<
       { cle: 'p1', genre: 'point', label: 'Point 1 de la droite' },
       { cle: 'p2', genre: 'point', label: 'Point 2 de la droite' },
       { cle: 'p3', genre: 'point', label: 'Passant par' },
+      champCouleur,
     ],
   },
   paralleleAObjet: {
@@ -490,6 +555,7 @@ const catalogue: Record<
     champs: [
       { cle: 'etape', genre: 'objetDirection', label: 'Objet' },
       { cle: 'p1', genre: 'point', label: 'Passant par' },
+      champCouleur,
     ],
   },
   paralleleObjet: {
@@ -497,6 +563,7 @@ const catalogue: Record<
     champs: [
       { cle: 'element', genre: 'objetDirection', label: 'Objet' },
       { cle: 'p1', genre: 'point', label: 'Passant par' },
+      champCouleur,
     ],
   },
   prolongerObjet: {
@@ -509,6 +576,7 @@ const catalogue: Record<
         label: 'Longueur (cm)',
         defaut: longueurProlongementObjetEditeurIep,
       },
+      champCouleur,
     ],
   },
   bissectrice: {
@@ -517,6 +585,7 @@ const catalogue: Record<
       { cle: 'p1', genre: 'point', label: 'Point sur un côté' },
       { cle: 'p2', genre: 'point', label: 'Sommet de l’angle' },
       { cle: 'p3', genre: 'point', label: 'Point sur l’autre côté' },
+      champCouleur,
     ],
   },
   codageAngleDroit: {
@@ -533,6 +602,7 @@ const catalogue: Record<
       { cle: 'p1', genre: 'point', label: 'Sommet' },
       { cle: 'p2', genre: 'point', label: 'Aligné avec' },
       { cle: 'angle', genre: 'nombre', label: 'Angle (°)', defaut: 60 },
+      champCouleur,
     ],
   },
   montrerOutil: {
@@ -624,6 +694,7 @@ const ordreCatalogue: TypeInstructionIep[] = [
   'cercleRayon',
   'arc',
   'arcPointPointCentre',
+  'reporterLongueurCompas',
   'milieu',
   'demiTourPoint',
   'intersection',
@@ -677,6 +748,7 @@ const categoriesCatalogue: CategorieInstructionIep[] = [
       'cercleRayon',
       'arc',
       'arcPointPointCentre',
+      'reporterLongueurCompas',
       'prolongerObjet',
     ],
   },
@@ -839,6 +911,8 @@ export function decrireInstruction(
       return `Tracer un arc de cercle de centre ${instr.p1} passant par ${instr.p2} au compas.`
     case 'arcPointPointCentre':
       return `Tracer un arc de cercle de centre ${instr.p1} allant de ${instr.p2} à ${instr.p3} au compas.`
+    case 'reporterLongueurCompas':
+      return `Reporter au compas la longueur ${instr.p1}${instr.p2} depuis ${instr.p3} dans la direction ${formateNombre(instr.angle)}°.`
     case 'milieu':
       return `Placer le milieu ${instr.nom} du segment [${instr.p1}${instr.p2}] à la règle graduée.`
     case 'demiTourPoint':
@@ -971,9 +1045,11 @@ function intersectionPeutAvoirDeuxPoints(
     estElementIntersectable(element2) &&
     (element1.type === 'cercle' ||
       element1.type === 'arc' ||
+      element1.type === 'reporterLongueurCompas' ||
       element1.type === 'cercleRayon' ||
       element2.type === 'cercle' ||
       element2.type === 'arc' ||
+      element2.type === 'reporterLongueurCompas' ||
       element2.type === 'cercleRayon')
   )
 }
@@ -1031,6 +1107,35 @@ function deuxPointsProlongementCentre(
     pointSurSegment(centre, A, demiLongueur),
     pointSurSegment(centre, B, demiLongueur),
   ] as const
+}
+
+function prolongementObjetDirection(
+  instr: InstructionIep | undefined,
+  points: Map<string, PointAbstrait>,
+  programme: InstructionIep[],
+  longueurTrace: number,
+): readonly [PointAbstrait, PointAbstrait] | undefined {
+  if (instr === undefined || !estElementDirection(instr)) return undefined
+  if (
+    instr.type === 'demiDroite' ||
+    instr.type === 'demiDroitePointDirection'
+  ) {
+    const O = points.get(instr.p1)
+    if (O === undefined) return undefined
+    const direction =
+      instr.type === 'demiDroite'
+        ? points.get(instr.p2)
+        : pointDepuisAngle(O, instr.angle)
+    if (direction === undefined) return undefined
+    return [O, pointSurSegment(O, direction, Math.abs(longueurTrace))] as const
+  }
+  const segmentVisible = segmentVisibleObjetDirection(instr, points, programme)
+  if (segmentVisible === undefined) return undefined
+  return deuxPointsProlongementCentre(
+    segmentVisible[0],
+    segmentVisible[1],
+    longueurTrace,
+  )
 }
 
 function segmentTraceParallele(
@@ -1103,15 +1208,30 @@ function tracerProlongementObjet(
   points: Map<string, PointAbstrait>,
   programme: InstructionIep[],
   longueurTrace: number,
+  options: { rapide?: boolean; couleur?: string } = {},
 ) {
-  const segmentVisible = segmentVisibleObjetDirection(instr, points, programme)
-  if (segmentVisible === undefined) return false
-  const [P, Q] = deuxPointsProlongementCentre(
-    segmentVisible[0],
-    segmentVisible[1],
+  const segmentVisible = prolongementObjetDirection(
+    instr,
+    points,
+    programme,
     longueurTrace,
   )
-  anim.regleSegment(P, Q, { longueur: Math.abs(longueurTrace) })
+  if (segmentVisible === undefined) return false
+  const [P, Q] = segmentVisible
+  if (options.rapide) {
+    anim.traitRapide(P, Q, { couleur: options.couleur })
+    anim.crayonMasquer({ tempo: 0 })
+    return true
+  }
+  const longueurAbsolue = Math.abs(longueurTrace)
+  const longueurRegleInitiale = anim.regle.longueur
+  const regleAllongee = longueurAbsolue > longueurRegleInitiale
+  if (regleAllongee) anim.regleModifierLongueur(longueurAbsolue)
+  anim.regleSegment(P, Q, {
+    longueur: longueurAbsolue,
+    couleur: options.couleur,
+  })
+  if (regleAllongee) anim.regleModifierLongueur(longueurRegleInitiale)
   return true
 }
 
@@ -1206,8 +1326,20 @@ type ElementGeometrique =
 
 type CommandeFigureStatiqueIep =
   | { type: 'point'; point: PointAbstrait; label?: string }
-  | { type: 'segment'; p1: PointAbstrait; p2: PointAbstrait }
+  | { type: 'segment'; p1: PointAbstrait; p2: PointAbstrait; couleur?: string }
   | { type: 'cercle'; centre: PointAbstrait; rayon: number }
+  | {
+      type: 'segmentCodage'
+      p1: PointAbstrait
+      p2: PointAbstrait
+      codage: string
+    }
+  | {
+      type: 'codageAngleDroit'
+      p1: PointAbstrait
+      p2: PointAbstrait
+      p3: PointAbstrait
+    }
   | { type: 'texte'; texte: string; x: number; y: number }
 
 type FigureStatiqueIep = {
@@ -1339,6 +1471,14 @@ function elementGeometrique(
     c.isVisible = false
     return { nature: 'cercle', objet: c }
   }
+  if (instr.type === 'reporterLongueurCompas') {
+    const B = points.get(instr.p2)
+    const centre = points.get(instr.p3)
+    if (B === undefined || centre === undefined) return undefined
+    const c = cercle(centre, longueur(A, B))
+    c.isVisible = false
+    return { nature: 'cercle', objet: c }
+  }
   const B = points.get(instr.p2)
   if (B === undefined) return undefined
   if (
@@ -1399,6 +1539,7 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
     case 'cercle':
     case 'arc':
     case 'arcPointPointCentre':
+    case 'reporterLongueurCompas':
     case 'mediatrice':
     case 'bissectrice':
       return ['compas', 'regle', 'crayon']
@@ -1432,6 +1573,36 @@ function outilsRequisParProgramme(programme: InstructionIep[]): OutilIep[] {
       outilsRequisParInstruction(instruction).includes(outil),
     ),
   )
+}
+
+function instructionIntermediaireSansRangement(instr: InstructionIep) {
+  return (
+    instr.type === 'point' ||
+    instr.type === 'pointADistance' ||
+    instr.type === 'intersection' ||
+    instr.type === 'texte' ||
+    instr.type === 'pause' ||
+    instr.type === 'attente'
+  )
+}
+
+function conserverCompasPourInstructionSuivante(
+  programme: InstructionIep[],
+  index: number,
+) {
+  const instructionCourante = programme[index]
+  if (
+    !outilsRequisParInstruction(instructionCourante).includes('compas') &&
+    !instructionIntermediaireSansRangement(instructionCourante)
+  ) {
+    return false
+  }
+  for (let i = index + 1; i < programme.length; i++) {
+    const outils = outilsRequisParInstruction(programme[i])
+    if (outils.includes('compas')) return true
+    if (!instructionIntermediaireSansRangement(programme[i])) return false
+  }
+  return false
 }
 
 function positionsRangementInstruments(
@@ -1484,7 +1655,8 @@ function jouerProgramme(
   }
   programme.forEach((instr, index) => {
     const tempoAvantInstruction = anim.tempo
-    if (index < nombreInstructionsImmediates) anim.tempo = 0
+    const instructionImmediate = index < nombreInstructionsImmediates
+    if (instructionImmediate) anim.tempo = 0
     // Récupère les points référencés par l'instruction, undefined si l'un manque
     const recupere = (...noms: string[]): PointAbstrait[] | undefined => {
       const resultat: PointAbstrait[] = []
@@ -1528,7 +1700,7 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.regleSegment(pts[0], pts[1])
+          anim.regleSegment(pts[0], pts[1], { couleur: instr.couleur })
           break
         }
         case 'trait': {
@@ -1537,7 +1709,7 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.traitRapide(pts[0], pts[1])
+          anim.traitRapide(pts[0], pts[1], { couleur: instr.couleur })
           break
         }
         case 'polygone': {
@@ -1546,7 +1718,11 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.polygoneTracer(...pts)
+          pts.forEach((point, indice) => {
+            anim.regleSegment(point, pts[(indice + 1) % pts.length], {
+              couleur: instr.couleur,
+            })
+          })
           break
         }
         case 'polygoneRapide': {
@@ -1555,7 +1731,7 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.polygoneRapide(...pts)
+          anim.polygoneRapide(...pts, { couleur: instr.couleur })
           break
         }
         case 'droite': {
@@ -1566,6 +1742,7 @@ function jouerProgramme(
           }
           anim.regleDroite(pts[0], pts[1], {
             longueur: longueurObjetDirectionEditeurIep,
+            couleur: instr.couleur,
           })
           break
         }
@@ -1579,6 +1756,7 @@ function jouerProgramme(
           }
           anim.regleDroite(pts[0], pente, {
             longueur: longueurObjetDirectionEditeurIep,
+            couleur: instr.couleur,
           })
           break
         }
@@ -1588,8 +1766,19 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
+          if (instructionImmediate) {
+            const extremite = pointSurSegment(
+              pts[0],
+              pts[1],
+              longueurObjetDirectionEditeurIep,
+            )
+            anim.traitRapide(pts[0], extremite, { couleur: instr.couleur })
+            anim.crayonMasquer({ tempo: 0 })
+            break
+          }
           anim.regleDemiDroite(pts[0], pts[1], {
             longueur: longueurObjetDirectionEditeurIep,
+            couleur: instr.couleur,
           })
           break
         }
@@ -1601,8 +1790,19 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
+          if (instructionImmediate) {
+            const extremite = pointAdistance(
+              pts[0],
+              longueurObjetDirectionEditeurIep,
+              angle,
+            )
+            anim.traitRapide(pts[0], extremite, { couleur: instr.couleur })
+            anim.crayonMasquer({ tempo: 0 })
+            break
+          }
           anim.regleDemiDroite(pts[0], angle, {
             longueur: longueurObjetDirectionEditeurIep,
+            couleur: instr.couleur,
           })
           break
         }
@@ -1612,7 +1812,9 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.compasCercleCentrePoint(pts[0], pts[1])
+          anim.compasCercleCentrePoint(pts[0], pts[1], {
+            couleurCompas: instr.couleur,
+          })
           break
         }
         case 'cercleRayon': {
@@ -1622,7 +1824,9 @@ function jouerProgramme(
             etapesIgnorees.push(index)
 
           const B = pointAdistance(A![0], r)
-          anim.compasCercleCentrePoint(A![0], B)
+          anim.compasCercleCentrePoint(A![0], B, {
+            couleurCompas: instr.couleur,
+          })
           break
         }
         case 'arc': {
@@ -1631,7 +1835,9 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.compasTracerArcCentrePoint(pts[0], pts[1])
+          anim.compasTracerArcCentrePoint(pts[0], pts[1], {
+            couleurCompas: instr.couleur,
+          })
           break
         }
         case 'arcPointPointCentre': {
@@ -1640,7 +1846,24 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.compasTracerArcCentre2extremites(pts[0], pts[1], pts[2])
+          anim.compasTracerArcCentre2extremites(pts[0], pts[1], pts[2], {
+            couleurCompas: instr.couleur,
+          })
+          break
+        }
+        case 'reporterLongueurCompas': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.reporterAuCompas2pointsCentreDirection(
+            pts[0],
+            pts[1],
+            pts[2],
+            instr.angle,
+            { ...optionsInstrument, couleurCompas: instr.couleur },
+          )
           break
         }
         case 'milieu': {
@@ -1726,7 +1949,7 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.mediatriceAuCompas(pts[0], pts[1])
+          anim.mediatriceAuCompas(pts[0], pts[1], { couleur: instr.couleur })
           break
         }
         case 'perpendiculaire': {
@@ -1739,7 +1962,7 @@ function jouerProgramme(
             pts[0],
             pts[1],
             pts[2],
-            optionsInstrument,
+            { ...optionsInstrument, couleur: instr.couleur },
           )
           break
         }
@@ -1757,7 +1980,7 @@ function jouerProgramme(
           anim.perpendiculaireRegleEquerreDroitePoint(
             element.objet,
             pts[0],
-            optionsInstrument,
+            { ...optionsInstrument, couleur: instr.couleur },
           )
           break
         }
@@ -1767,7 +1990,9 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.paralleleRegleEquerre2points3epoint(pts[0], pts[1], pts[2])
+          anim.paralleleRegleEquerre2points3epoint(pts[0], pts[1], pts[2], {
+            couleur: instr.couleur,
+          })
           break
         }
         case 'paralleleAObjet': {
@@ -1782,7 +2007,9 @@ function jouerProgramme(
             break
           }
           const [A, B] = deuxPointsSurDroitePourAnimation(element.objet)
-          anim.paralleleRegleEquerre2points3epoint(A, B, pts[0])
+          anim.paralleleRegleEquerre2points3epoint(A, B, pts[0], {
+            couleur: instr.couleur,
+          })
           break
         }
         case 'paralleleObjet': {
@@ -1797,7 +2024,9 @@ function jouerProgramme(
             break
           }
           const [A, B] = deuxPointsSurDroitePourAnimation(element.objet)
-          anim.paralleleRegleEquerre2points3epoint(A, B, pts[0])
+          anim.paralleleRegleEquerre2points3epoint(A, B, pts[0], {
+            couleur: instr.couleur,
+          })
           break
         }
         case 'prolongerObjet': {
@@ -1809,6 +2038,7 @@ function jouerProgramme(
             points,
             programme,
             longueurTrace,
+            { rapide: instructionImmediate, couleur: instr.couleur },
           )
           if (!ok) etapesIgnorees.push(index)
           break
@@ -1819,7 +2049,9 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.bissectriceAuCompas(pts[0], pts[1], pts[2])
+          anim.bissectriceAuCompas(pts[0], pts[1], pts[2], {
+            couleur: instr.couleur,
+          })
           break
         }
         case 'codageAngleDroit': {
@@ -1839,6 +2071,7 @@ function jouerProgramme(
           }
           anim.rapporteurTracerDemiDroiteAngle(pts[0], pts[1], instr.angle, {
             positionsRangementInstruments: positionsRangement,
+            couleur: instr.couleur,
           })
           break
         }
@@ -1916,9 +2149,15 @@ function jouerProgramme(
         }
       }
     }
-    if (rangerInstruments) {
+    if (rangerInstruments && !instructionImmediate) {
       anim.preserverVisibiliteInstruments(jouerInstruction, { tempo: 0 })
-      anim.rangerInstruments(positionsRangement, instrumentsRequis, {
+      const instrumentsARanger = conserverCompasPourInstructionSuivante(
+        programme,
+        index,
+      )
+        ? instrumentsRequis.filter((instrument) => instrument !== 'compas')
+        : instrumentsRequis
+      anim.rangerInstruments(positionsRangement, instrumentsARanger, {
         tempo: 0,
         vitesse: 20,
       })
@@ -2098,8 +2337,9 @@ function ajouterSegmentFigureStatique(
   commandes: CommandeFigureStatiqueIep[],
   p1: PointAbstrait,
   p2: PointAbstrait,
+  couleur?: string,
 ) {
-  commandes.push({ type: 'segment', p1, p2 })
+  commandes.push({ type: 'segment', p1, p2, couleur })
 }
 
 function ajouterCercleFigureStatique(
@@ -2220,7 +2460,12 @@ function construireCommandesFigureStatique(
       case 'trait': {
         const pts = recupere(instr.p1, instr.p2)
         if (pts !== undefined) {
-          ajouterSegmentFigureStatique(commandes, pts[0], pts[1])
+          ajouterSegmentFigureStatique(
+            commandes,
+            pts[0],
+            pts[1],
+            instr.type === 'segment' ? instr.couleur : undefined,
+          )
         }
         break
       }
@@ -2233,6 +2478,7 @@ function construireCommandesFigureStatique(
             commandes,
             point,
             pts[(index + 1) % pts.length],
+            instr.type === 'polygoneRapide' ? instr.couleur : undefined,
           )
         })
         break
@@ -2259,23 +2505,25 @@ function construireCommandesFigureStatique(
             commandes,
             segmentVisible[0],
             segmentVisible[1],
+            'couleur' in instr ? instr.couleur : undefined,
           )
         }
         break
       }
       case 'prolongerObjet': {
-        const segmentVisible = segmentVisibleObjetDirection(
+        const segmentVisible = prolongementObjetDirection(
           programme[instr.etape],
           points,
           programme,
-        )
-        if (segmentVisible === undefined) break
-        const [A, B] = deuxPointsProlongementCentre(
-          segmentVisible[0],
-          segmentVisible[1],
           instr.longueur ?? longueurProlongementObjetEditeurIep,
         )
-        ajouterSegmentFigureStatique(commandes, A, B)
+        if (segmentVisible === undefined) break
+        ajouterSegmentFigureStatique(
+          commandes,
+          segmentVisible[0],
+          segmentVisible[1],
+          instr.couleur,
+        )
         break
       }
       case 'cercle': {
@@ -2318,6 +2566,17 @@ function construireCommandesFigureStatique(
         }
         break
       }
+      case 'reporterLongueurCompas': {
+        const pts = recupere(instr.p1, instr.p2, instr.p3)
+        if (pts !== undefined) {
+          ajouterCercleFigureStatique(
+            commandes,
+            pts[2],
+            longueur(pts[0], pts[1]),
+          )
+        }
+        break
+      }
       case 'codageMilieu': {
         const pts = recupere(instr.p1, instr.p2, instr.p3)
         if (pts === undefined) break
@@ -2328,7 +2587,24 @@ function construireCommandesFigureStatique(
       case 'segmentCodage': {
         const pts = recupere(instr.p1, instr.p2)
         if (pts !== undefined) {
-          ajouterSegmentFigureStatique(commandes, pts[0], pts[1])
+          commandes.push({
+            type: 'segmentCodage',
+            p1: pts[0],
+            p2: pts[1],
+            codage: instr.codage,
+          })
+        }
+        break
+      }
+      case 'codageAngleDroit': {
+        const pts = recupere(instr.p1, instr.p2, instr.p3)
+        if (pts !== undefined) {
+          commandes.push({
+            type: 'codageAngleDroit',
+            p1: pts[0],
+            p2: pts[1],
+            p3: pts[2],
+          })
         }
         break
       }
@@ -2453,6 +2729,33 @@ function rendreFigureStatiqueSvg(figure: FigureStatiqueIep) {
   const hauteur = Math.max(1, (figure.ymax - figure.ymin) * pixelsParCm)
   const sx = (x: number) => (x - figure.xmin) * pixelsParCm
   const sy = (y: number) => (figure.ymax - y) * pixelsParCm
+  const pointsMarqueSegment = (
+    p1: PointAbstrait,
+    p2: PointAbstrait,
+    rang: number,
+    total: number,
+  ) => {
+    const x1 = sx(p1.x)
+    const y1 = sy(p1.y)
+    const x2 = sx(p2.x)
+    const y2 = sy(p2.y)
+    const dx = x2 - x1
+    const dy = y2 - y1
+    const norme = Math.hypot(dx, dy)
+    if (norme === 0) return undefined
+    const decalage = (rang - (total - 1) / 2) * 8
+    const mx = (x1 + x2) / 2 + decalage * (dx / norme)
+    const my = (y1 + y2) / 2 + decalage * (dy / norme)
+    const nx = -dy / norme
+    const ny = dx / norme
+    const demiLongueur = 5
+    return {
+      x1: mx - nx * demiLongueur,
+      y1: my - ny * demiLongueur,
+      x2: mx + nx * demiLongueur,
+      y2: my + ny * demiLongueur,
+    }
+  }
   const lignes = [
     `<svg width="${nombreFigureStatique(largeur)}" height="${nombreFigureStatique(hauteur)}" viewBox="0 0 ${nombreFigureStatique(largeur)} ${nombreFigureStatique(hauteur)}" xmlns="http://www.w3.org/2000/svg">`,
     '<g fill="none" stroke="black" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">',
@@ -2460,11 +2763,54 @@ function rendreFigureStatiqueSvg(figure: FigureStatiqueIep) {
   for (const commande of figure.commandes) {
     if (commande.type === 'segment') {
       lignes.push(
-        `<line x1="${nombreFigureStatique(sx(commande.p1.x))}" y1="${nombreFigureStatique(sy(commande.p1.y))}" x2="${nombreFigureStatique(sx(commande.p2.x))}" y2="${nombreFigureStatique(sy(commande.p2.y))}" />`,
+        `<line x1="${nombreFigureStatique(sx(commande.p1.x))}" y1="${nombreFigureStatique(sy(commande.p1.y))}" x2="${nombreFigureStatique(sx(commande.p2.x))}" y2="${nombreFigureStatique(sy(commande.p2.y))}"${commande.couleur ? ` stroke="${echapperXmlTexte(commande.couleur)}"` : ''} />`,
       )
     } else if (commande.type === 'cercle') {
       lignes.push(
         `<circle cx="${nombreFigureStatique(sx(commande.centre.x))}" cy="${nombreFigureStatique(sy(commande.centre.y))}" r="${nombreFigureStatique(commande.rayon * pixelsParCm)}" />`,
+      )
+    }
+  }
+  for (const commande of figure.commandes) {
+    if (commande.type === 'segmentCodage') {
+      const nombreMarques =
+        commande.codage === '///' ? 3 : commande.codage === '//' ? 2 : 1
+      for (let i = 0; i < nombreMarques; i++) {
+        const marque = pointsMarqueSegment(
+          commande.p1,
+          commande.p2,
+          i,
+          nombreMarques,
+        )
+        if (marque === undefined) continue
+        lignes.push(
+          `<line x1="${nombreFigureStatique(marque.x1)}" y1="${nombreFigureStatique(marque.y1)}" x2="${nombreFigureStatique(marque.x2)}" y2="${nombreFigureStatique(marque.y2)}" stroke="black" stroke-width="1.3" />`,
+        )
+      }
+    } else if (commande.type === 'codageAngleDroit') {
+      const sommet = commande.p2
+      const ux = commande.p1.x - sommet.x
+      const uy = commande.p1.y - sommet.y
+      const vx = commande.p3.x - sommet.x
+      const vy = commande.p3.y - sommet.y
+      const normeU = Math.hypot(ux, uy)
+      const normeV = Math.hypot(vx, vy)
+      if (normeU === 0 || normeV === 0) continue
+      const taille = 0.28
+      const A = {
+        x: sommet.x + (ux / normeU) * taille,
+        y: sommet.y + (uy / normeU) * taille,
+      }
+      const C = {
+        x: sommet.x + (vx / normeV) * taille,
+        y: sommet.y + (vy / normeV) * taille,
+      }
+      const M = {
+        x: A.x + C.x - sommet.x,
+        y: A.y + C.y - sommet.y,
+      }
+      lignes.push(
+        `<path d="M ${nombreFigureStatique(sx(A.x))} ${nombreFigureStatique(sy(A.y))} L ${nombreFigureStatique(sx(M.x))} ${nombreFigureStatique(sy(M.y))} L ${nombreFigureStatique(sx(C.x))} ${nombreFigureStatique(sy(C.y))}" stroke="black" stroke-width="1.3" fill="none" />`,
       )
     }
   }
@@ -3508,6 +3854,20 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           const option = document.createElement('option')
           option.value = valeur
           option.innerText = texte
+          select.appendChild(option)
+        }
+        if (valeursCourantes[champ.cle] !== undefined) {
+          select.value = valeursCourantes[champ.cle]
+        }
+        etiquette.appendChild(select)
+      } else if (champ.genre === 'couleurCrayon') {
+        const select = document.createElement('select')
+        select.classList.add(...classesSelect, 'min-w-36')
+        select.dataset.cle = champ.cle
+        for (const { valeur, label } of optionsCouleurCrayon) {
+          const option = document.createElement('option')
+          option.value = valeur
+          option.innerText = label
           select.appendChild(option)
         }
         if (valeursCourantes[champ.cle] !== undefined) {

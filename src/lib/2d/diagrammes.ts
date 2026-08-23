@@ -719,7 +719,7 @@ export class DiagrammeCirculaire extends ObjetMathalea2D {
         a.couleurDesHachures = colorToLatexOrHTML(texcolors(i + 1))
         a.couleurDeRemplissage = colorToLatexOrHTML(texcolors(i + 2))
       } else {
-        hachure = ''
+        hachure = false
         a.hachures = ''
       }
       a.opaciteDeRemplissage = 0.7

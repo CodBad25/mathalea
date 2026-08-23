@@ -142,6 +142,12 @@ première extrémité et `p3` la seconde extrémité. L'animation utilise
 `Alea2iep.compasTracerArcCentre2extremites()` et trace l'arc dans le sens
 indirect.
 
+L'instruction `reporterLongueurCompas` reporte une longueur au compas :
+`p1` et `p2` donnent l'écartement du compas, `p3` est le centre de l'arc tracé,
+et `angle` donne la direction, en degrés, du point autour duquel tracer la
+marque. L'animation utilise la macro
+`Alea2iep.reporterAuCompas2pointsCentreDirection()`.
+
 Les instructions `polygone` et `polygoneRapide` tracent un polygone fermé avec
 les méthodes Alea2iep correspondantes :
 

@@ -13,12 +13,14 @@ import { texNombre } from '../../lib/outils/texNombre'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import FractionEtendue from '../../modules/FractionEtendue'
 import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
+  lireFormulaireComplexe,
+  serialiseFormulaireComplexe,
+  valeursParDefaut,
+  type FormulaireComplexe,
+} from '../../lib/formulaireComplexe'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 export const titre =
   'Résoudre algébriquement une équation $f(x)=k$ avec une fonction de référence'
 export const dateDePublication = '07/01/2022'
@@ -29,7 +31,7 @@ export const interactifType = 'mathLive'
 /**
  *
  *
- * @author Gilles Mora // suppression des calcul des texNombre et simplification des racines carrées de fration par Jean-claude Lhote
+ * @author Gilles Mora // suppression des calcul des texNombre et simplification des racines carrées de fration par Jean-claude Lhote // adaptation été 2026 : Stéphane Guyon
  *
  */
 export const uuid = 'de0d1'
@@ -38,54 +40,82 @@ export const refs = {
   'fr-fr': ['2F23-1'],
   'fr-ch': [],
 }
+
+const formulaire: FormulaireComplexe = {
+  champs: [
+    {
+      type: 'liste',
+      nom: 'fonctions',
+      label: 'Fonctions de référence',
+      items: [
+        { nom: 'carre', label: '$x^2=k$', actif: true },
+        { nom: 'inverse', label: '$\\dfrac{1}{x}=k$', actif: true },
+        { nom: 'valeurAbsolue', label: '$|x|=k$', actif: true },
+        {
+          nom: 'cube',
+          label: '$x^3=k$ (année de transition)',
+          actif: false,
+        },
+        {
+          nom: 'racineCarree',
+          label: '$\\sqrt{x}=k$ (année de transition)',
+          actif: false,
+        },
+      ],
+    },
+    {
+      type: 'selection',
+      nom: 'typeEquation',
+      label: 'Choix des questions',
+      options: [
+        { valeur: 'directe', label: 'Équation directe' },
+        { valeur: 'indirecte', label: 'Équation indirecte' },
+        { valeur: 'melange', label: 'Mélange' },
+      ],
+      defaut: 'directe',
+    },
+  ],
+}
+
 export default class EquationsFonctionsRef extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaire2Numerique = [
-      'Choix des questions',
-      3,
-      '1 : Équation directe\n2 : Équation indirecte\n3 : Mélange',
-    ]
-
-    this.sup = 1
-    this.sup2 = 1
+    this.besoinFormulaireComplexe = formulaire
+    this.sup = serialiseFormulaireComplexe(
+      formulaire,
+      valeursParDefaut(formulaire),
+    )
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = false
 
-    this.nbQuestions = 2
-
-    this.besoinFormulaireTexte = [
-      'Type de questions',
-      [
-        'Nombres séparés par des tirets  :',
-        '1 : x^2=k',
-        '2 : sqrt(x)=k',
-        '3 : 1/x=k',
-        '4 : x^3=k',
-        '5 : Mélange',
-      ].join('\n'),
-    ]
+    this.nbQuestions = 3
   }
 
   nouvelleVersion() {
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      min: 1,
-      max: 4,
-      melange: 5,
-      defaut: 1,
-      nbQuestions: this.nbQuestions,
-    })
+    const parametres = lireFormulaireComplexe(formulaire, this.sup)
+    const numerosParFonction: Record<string, number> = {
+      carre: 1,
+      racineCarree: 2,
+      inverse: 3,
+      cube: 4,
+      valeurAbsolue: 5,
+    }
+    const fonctionsCochees = parametres.listeActive('fonctions')
+    const fonctionsDisponibles =
+      fonctionsCochees.length > 0
+        ? fonctionsCochees
+        : parametres.declares('fonctions').filter((item) => item.poids > 0)
     const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
+      fonctionsDisponibles.map((fonction) => numerosParFonction[fonction.nom]),
       this.nbQuestions,
     )
 
     let sousChoix
     // ça c'est casse-gueule ! Il faut que chaque type de question ait le même nombre de sous-choix !!!
-    if (this.sup2 === 1) {
+    const typeEquation = parametres.selection('typeEquation')
+    if (typeEquation === 'directe') {
       sousChoix = combinaisonListes([0], this.nbQuestions) // On ne prend que la première question de chaque catégorie
-    } else if (this.sup2 === 2) {
+    } else if (typeEquation === 'indirecte') {
       sousChoix = combinaisonListes([1, 2, 3], this.nbQuestions) // pour choisir aléatoirement des questions dans chaque catégorie
     } else {
       sousChoix = combinaisonListes([0, 1, 2, 3], this.nbQuestions)
@@ -664,7 +694,6 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
           break
 
         case 4: // 'x^3=k'
-        default:
           switch (
             sousChoix[i] // sousChoix[i] = randint(0, 5)
           ) {
@@ -777,6 +806,98 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               `
               reponse = `\\{${k1}\\}`
               break
+          }
+          break
+
+        case 5: // '|x|=k'
+        default:
+          switch (sousChoix[i]) {
+            case 0:
+              a = 1
+              b = 0
+              k = randint(-10, 10)
+              c = k
+              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+                ${sp(50)} $|x|=${k}$`
+              correction = `L'équation est de la forme $|x|=k$ avec $k=${k}$.<br>`
+              break
+
+            case 1:
+              a = 1
+              b = randint(-10, 10, 0)
+              k = randint(-10, 10)
+              c = k + b
+              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+                ${sp(50)} $|x|${ecritureAlgebrique(b)}=${c}$`
+              correction =
+                'On isole $|x|$ dans le membre de gauche pour obtenir une équation du type $|x|=k$.<br>'
+              if (b > 0) {
+                correction += `$\\begin{aligned}
+                  |x|${ecritureAlgebrique(b)}&=${c}\\\\
+                  |x|${ecritureAlgebrique(b)}-${miseEnEvidence(b)}&=${c}-${miseEnEvidence(b)}\\\\
+                  |x|&=${k}
+                \\end{aligned}$<br>`
+              } else {
+                correction += `$\\begin{aligned}
+                  |x|${ecritureAlgebrique(b)}&=${c}\\\\
+                  |x|${ecritureAlgebrique(b)}+${miseEnEvidence(-b)}&=${c}+${miseEnEvidence(-b)}\\\\
+                  |x|&=${k}
+                \\end{aligned}$<br>`
+              }
+              break
+
+            case 2:
+              a = -1
+              b = randint(-10, 10, 0)
+              k = randint(-10, 10)
+              c = b - k
+              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+                ${sp(50)} $-|x|${ecritureAlgebrique(b)}=${c}$`
+              correction = `On isole $|x|$ dans le membre de gauche pour obtenir une équation du type $|x|=k$.<br>
+                $\\begin{aligned}
+                  -|x|${ecritureAlgebrique(b)}&=${c}\\\\
+                  -|x|&=${c - b}\\\\
+                  |x|&=${b - c}
+                \\end{aligned}$<br>`
+              break
+
+            case 3:
+            default:
+              a = randint(-10, 10, [-1, 0, 1])
+              b = randint(-10, 10, 0)
+              k = randint(-10, 10)
+              c = a * k + b
+              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+                ${sp(50)} $${a}|x|${ecritureAlgebrique(b)}=${c}$`
+              correction = `On isole $|x|$ dans le membre de gauche pour obtenir une équation du type $|x|=k$.<br>`
+              if (b > 0) {
+                correction += `$\\begin{aligned}
+                  ${a}|x|${ecritureAlgebrique(b)}&=${c}\\\\
+                  ${a}|x|&=${c}-${b}\\\\
+                  |x|&=${texFractionReduite(c - b, a)}
+                \\end{aligned}$<br>`
+              } else {
+                correction += `$\\begin{aligned}
+                  ${a}|x|${ecritureAlgebrique(b)}&=${c}\\\\
+                  ${a}|x|&=${c}+${-b}\\\\
+                  |x|&=${texFractionReduite(c - b, a)}
+                \\end{aligned}$<br>`
+              }
+              break
+          }
+
+          if (k > 0) {
+            reponse = `\\{-${k};${k}\\}`
+            correction += `Comme $${k}>0$, les nombres dont la valeur absolue est égale à $${k}$ sont $-${k}$ et $${k}$.<br>
+              Ainsi, $S=${miseEnEvidence(`\\{-${k}${sp(1)};${sp(1)}${k}\\}`)}$.`
+          } else if (k === 0) {
+            reponse = '\\{0\\}'
+            correction += `Le seul nombre dont la valeur absolue est nulle est $0$.<br>
+              Ainsi, $S=${miseEnEvidence('\\{0\\}')}$.`
+          } else {
+            reponse = '\\emptyset'
+            correction += `Une valeur absolue est toujours positive ou nulle. Comme $${k}<0$, l'équation n'admet donc aucune solution.<br>
+              Ainsi, $S=${miseEnEvidence('\\emptyset')}$.`
           }
           break
       }

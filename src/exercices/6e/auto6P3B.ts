@@ -31,7 +31,7 @@ export const dateDePublication = '02/05/2025'
 export const uuid = 'c71fb'
 
 export const refs = {
-  'fr-fr': ['auto6P3B'],
+  'fr-fr': ['auto6P3B', '6AutoP2'],
   'fr-2016': ['6P11-3'],
   'fr-ch': [''], // Primaire anciennement :['9NO16-6'],
 }

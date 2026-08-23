@@ -1045,7 +1045,7 @@ table.tableauMathlive {
     }
     @apply border border-coopmaths-corpus dark:border-coopmathsdark-corpus p-2 m-0.75 text-center;
   }
-  @apply mx-auto mt-2 border-collapse text-center border-2 border-coopmaths-corpus dark:border-coopmathsdark-corpus;
+  @apply mt-2 border-collapse text-center border-2 border-coopmaths-corpus dark:border-coopmathsdark-corpus;
 }
 
 /* Cache le menu toggle de MathLive */
@@ -1421,7 +1421,11 @@ relier-etiquettes {
 
 .relier-etiquettes__etiquette.is-selected {
   border-color: var(--relier-accent);
-  background-color: color-mix(in srgb, var(--relier-accent) 14%, var(--relier-fond));
+  background-color: color-mix(
+    in srgb,
+    var(--relier-accent) 14%,
+    var(--relier-fond)
+  );
 }
 
 .relier-etiquettes__etiquette.is-cible:not(:disabled):not(.is-selected) {
@@ -1433,7 +1437,11 @@ relier-etiquettes {
 .relier-etiquettes__etiquette.is-survolee {
   border-style: solid;
   transform: scale(1.04);
-  background-color: color-mix(in srgb, var(--relier-accent) 18%, var(--relier-fond));
+  background-color: color-mix(
+    in srgb,
+    var(--relier-accent) 18%,
+    var(--relier-fond)
+  );
 }
 
 .relier-etiquettes__etiquette.is-flash {
@@ -1544,7 +1552,11 @@ relier-etiquettes {
 @keyframes relier-pulse {
   0%,
   100% {
-    border-color: color-mix(in srgb, var(--relier-accent) 40%, var(--relier-bordure));
+    border-color: color-mix(
+      in srgb,
+      var(--relier-accent) 40%,
+      var(--relier-bordure)
+    );
   }
   50% {
     border-color: var(--relier-accent);
@@ -1553,10 +1565,12 @@ relier-etiquettes {
 
 @keyframes relier-flash {
   from {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--relier-accent) 55%, transparent);
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--relier-accent) 55%, transparent);
   }
   to {
-    box-shadow: 0 0 0 16px color-mix(in srgb, var(--relier-accent) 0%, transparent);
+    box-shadow: 0 0 0 16px
+      color-mix(in srgb, var(--relier-accent) 0%, transparent);
   }
 }
 

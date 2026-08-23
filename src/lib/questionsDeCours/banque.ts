@@ -49,6 +49,11 @@ export type NiveauQuestionDeCours = (typeof NIVEAUX_QUESTIONS_DE_COURS)[number]
 export const TYPES_QUESTIONS_DE_COURS = ['math', 'qcm', 'text'] as const
 export type TypeQuestionDeCours = (typeof TYPES_QUESTIONS_DE_COURS)[number]
 
+/** Comment un niveau choisi filtre les questions : sélecteur enseignant et tirage au hasard. */
+export const MODES_NIVEAU_QUESTIONS_DE_COURS = ['avant', 'egal', 'apres'] as const
+export type ModeNiveauQuestionDeCours =
+  (typeof MODES_NIVEAU_QUESTIONS_DE_COURS)[number]
+
 /** Modes de comparaison hérités de l'app, traduits en options MathALÉA. */
 export const COMPARAISONS_QUESTIONS_DE_COURS = [
   'isEqual',
@@ -268,6 +273,55 @@ const questionsParId = new Map(
 /** La question de la banque, ou `undefined` si l'identifiant est inconnu. */
 export function questionDeCoursParId(id: string): QuestionDeCours | undefined {
   return questionsParId.get(id)
+}
+
+/** Une question correspond-elle au niveau choisi, selon le mode (avant/égal/après) ? */
+export function questionCorrespondAuNiveau(
+  question: QuestionDeCours,
+  mode: ModeNiveauQuestionDeCours,
+  niveau: NiveauQuestionDeCours,
+): boolean {
+  const rang = (n: string) =>
+    (NIVEAUX_QUESTIONS_DE_COURS as readonly string[]).indexOf(n)
+  const rangQuestion = rang(question.level)
+  const rangChoisi = rang(niveau)
+  if (mode === 'avant') return rangQuestion <= rangChoisi
+  if (mode === 'apres') return rangQuestion >= rangChoisi
+  return rangQuestion === rangChoisi
+}
+
+/**
+ * Encodage compact du filtre de niveau du sélecteur dans `sup2` (ex : `avant:5`).
+ * Utilisé quand l'enseignant n'a choisi aucune question mais a réglé ce
+ * filtre, pour que le tirage au hasard s'y limite plutôt que de piocher dans
+ * toute la banque.
+ */
+export function formatFiltreNiveauQuestionsDeCours(
+  mode: ModeNiveauQuestionDeCours,
+  niveau: NiveauQuestionDeCours,
+): string {
+  return `${mode}:${niveau}`
+}
+
+/** L'inverse de `formatFiltreNiveauQuestionsDeCours`, ou `undefined` si invalide. */
+export function parseFiltreNiveauQuestionsDeCours(
+  valeur: string,
+):
+  | { mode: ModeNiveauQuestionDeCours; niveau: NiveauQuestionDeCours }
+  | undefined {
+  const [mode, niveau] = valeur.split(':')
+  if (
+    !(MODES_NIVEAU_QUESTIONS_DE_COURS as readonly string[]).includes(mode)
+  ) {
+    return undefined
+  }
+  if (!(NIVEAUX_QUESTIONS_DE_COURS as readonly string[]).includes(niveau)) {
+    return undefined
+  }
+  return {
+    mode: mode as ModeNiveauQuestionDeCours,
+    niveau: niveau as NiveauQuestionDeCours,
+  }
 }
 
 /** Les questions regroupées par thème, dans l'ordre des JSON. */

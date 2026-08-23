@@ -18,8 +18,8 @@ describe('buildFlashcardsDocument', () => {
     expect(code).toContain('#set page(paper: "a4"')
     expect(code).toContain('#let cartes-par-ligne = 2')
     expect(code).toContain('#let lignes-par-page = 2')
-    expect(code).toContain('#let carte-1-recto = [\n  #box($2 + 2$)\n]')
-    expect(code).toContain('#let carte-1-verso = [\n  #box($4$)\n]')
+    expect(code).toContain('#let carte-1-recto = [\n  $2 + 2$\n]')
+    expect(code).toContain('#let carte-1-verso = [\n  $4$\n]')
     expect(code).toContain('#let carte-3-recto = [\n  Le double de 8\n]')
     // planche des questions : cartes dans l'ordre de lecture
     expect(code).toContain(

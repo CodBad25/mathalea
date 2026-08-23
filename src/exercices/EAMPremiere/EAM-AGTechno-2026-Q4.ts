@@ -38,6 +38,10 @@ ${debutPhrase} $${texNombre(temperatureCelsius, 2)}\\,^\\circ \\text{C}$, ${finP
 
     this.correction = `On applique la formule de conversion :<br>
 $F = 1,8\\times ${ecritureParentheseSiNegatif(temperatureCelsius)} + 32 =${texNombre(1.8 * temperatureCelsius, 2)} + 32 = ${miseEnEvidence(`${sol}\\,^\\circ \\text{F}`)}$.`
+    this.correction +=
+      '<br>On aurait aussi pu raisonner par valeur approchée de la façon suivante.<br>'
+    this.correction += `$${texNombre(1.8)}$ est proche de $2$ donc $1,8\\times ${ecritureParentheseSiNegatif(temperatureCelsius)} + 32$ est proche de $2\\times ${ecritureParentheseSiNegatif(temperatureCelsius)} + 32=${2 * temperatureCelsius + 32}$<br>`
+    this.correction += `Et parmi les $4$ valeurs proposées, la plus proche de $${2 * temperatureCelsius + 32}\\,^\\circ \\text{F}$ est $${miseEnEvidence(`${sol}\\,^\\circ \\text{F}`)}$.`
 
     this.reponses = [sol, dist1, dist2, dist3].map(
       (x) => `$${x}\\,^\\circ \\text{F}$`,

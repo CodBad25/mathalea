@@ -1,4 +1,4 @@
-import calculPuissancesAvecn from '../can/2e/can2N31-06'
+import calculPuissancesAvecn from '../can/2e/can2N43-06'
 export const titre = 'Déterminer une puissance dans une égalité'
 export const dateDePublication = '23/03/2026'
 export const amcReady = true

@@ -53,7 +53,7 @@ export default class CalculMoyenneHistogrammeQCM extends ExerciceQcmA {
     // Correction : explication simple, claire
     this.correction = `La moyenne est la somme des valeurs divisée par le nombre de valeurs.<br>
     Il y a un total de $${n}$ valeurs.<br>
-    En regardant le diagramme, on obtient la somme des valeurs suivante :<br>
+    En regardant le diagramme, on obtient la somme suivante des valeurs :<br>
     $${maSerie.serieTableau.map(([v, e]) => `${e} \\times ${v}`).join('+')}=${texNombre(somme, 0)}$.<br>
     Donc la moyenne est : $\\dfrac{${somme}}{${n}}=${miseEnEvidence(
       texNombre(moyenne, 3),
@@ -86,7 +86,6 @@ export default class CalculMoyenneHistogrammeQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options.vertical = true
     this.versionAleatoire()
   }
 }
