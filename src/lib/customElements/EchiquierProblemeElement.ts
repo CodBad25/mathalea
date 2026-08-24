@@ -115,7 +115,9 @@ export function addEchiquierProbleme(
     interactivityOn: exercice.interactif && (options.interactivityOn ?? true),
   })
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class EchiquierProblemeElement extends MathaleaCustomElement {
   static readonly elementTag = 'echiquier-probleme'
 

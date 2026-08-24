@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { Spline, spline } from '../../../lib/mathFonctions/Spline'
@@ -165,7 +166,7 @@ On en déduit `
     Résoudre l'inéquation  $f(x)${symbole}${y1}$.<br>` +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, center: true },
+          { pixelsParCm: 30, scale: 0.65, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

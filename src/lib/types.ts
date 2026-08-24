@@ -361,6 +361,7 @@ export type InteractivityType =
   | 'fill-in-the-blank'
   | 'mathalea-textfield'
   | 'tableau-mathlive'
+  | 'tableau-hybride'
   | 'mathalea-qcm'
   | 'mathalea-couteau-suisse'
   | 'mathalea-branching-qcm'
@@ -409,6 +410,7 @@ export function isInteractivityType(
     value === 'fill-in-the-blank' ||
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
+    value === 'tableau-hybride' ||
     value === 'mathalea-qcm' ||
     value === 'mathalea-couteau-suisse' ||
     value === 'mathalea-branching-qcm' ||
@@ -454,6 +456,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'fill-in-the-blank' ||
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
+    value === 'tableau-hybride' ||
     value === 'mathalea-qcm' ||
     value === 'mathalea-couteau-suisse' ||
     value === 'mathalea-branching-qcm' ||

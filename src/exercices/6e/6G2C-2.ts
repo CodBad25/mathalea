@@ -18,7 +18,7 @@ export const titre = 'Reporter un périmètre au compas'
 export const uuid = 'ec9ef'
 
 export const refs = {
-  'fr-fr': ['6G2C-2'],
+  'fr-fr': ['6G2C-2', '6AutoG2-3'],
   'fr-2016': [],
   'fr-ch': [],
 }
@@ -32,6 +32,7 @@ type PolyIEP = PointIEP[]
 type FormeIep = {
   points: PolyIEP
   sommets: string
+  fermee: boolean
 }
 
 const EPSILON_LONGUEUR = 0.25
@@ -42,6 +43,7 @@ const formes = [
   'Rectangle',
   'Triangle',
   'Quadrilatère quelconque',
+  'Ligne brisée',
 ] as const
 
 function tourneEtPlace(points: PolyIEP): PolyIEP {
@@ -111,11 +113,37 @@ function creerForme(typeForme: (typeof formes)[number]): FormeIep {
       ]
       break
     }
+    case 'Ligne brisée': {
+      const longueurs = [
+        randint(18, 24),
+        randint(25, 29),
+        randint(30, 34),
+        randint(35, 39),
+      ]
+        .sort(() => Math.random() - 0.5)
+        .map((longueur) => longueur / 10)
+      const angle1 = randint(30, 90)
+      const angle2 = randint(30, 90)
+      const signe = randint(0, 1) === 0 ? -1 : 1
+      const directions = [0, signe * angle1, 0, -signe * angle2]
+      points = [{ nom: 'B', x: 0, y: 0 }]
+      for (let i = 0; i < 4; i++) {
+        const precedent = points[i]
+        const angleRad = (directions[i] * Math.PI) / 180
+        points.push({
+          nom: lettreDepuisChiffre(3 + i),
+          x: precedent.x + longueurs[i] * Math.cos(angleRad),
+          y: precedent.y + longueurs[i] * Math.sin(angleRad),
+        })
+      }
+      break
+    }
   }
   const pointsTournes = tourneEtPlace(points)
   return {
     points: pointsTournes,
     sommets: pointsTournes.map((point) => point.nom).join(','),
+    fermee: typeForme !== 'Ligne brisée',
   }
 }
 
@@ -139,6 +167,7 @@ function codagesForme(typeForme: (typeof formes)[number]): InstructionIep[] {
       ]
     case 'Triangle':
     case 'Quadrilatère quelconque':
+    case 'Ligne brisée':
       return []
   }
 }
@@ -169,27 +198,39 @@ function pointSurDemiDroite(point: PointIEP, origine: PointIEP, angle: number) {
   )
 }
 
-function perimetrePolygoneInitial(
+function longueurFormeInitiale(
   programme: InstructionIep[],
   points: Map<string, PointIEP>,
 ) {
   const polygone = programme.find(
     (instruction) => instruction.type === 'polygoneRapide',
   )
-  if (polygone?.type !== 'polygoneRapide') return undefined
-  const sommets = polygone.sommets
-    .split(/[,;\s]+/)
-    .map((sommet) => sommet.trim())
-    .filter((sommet) => sommet !== '')
-  if (sommets.length < 3) return undefined
-  let perimetre = 0
-  for (let i = 0; i < sommets.length; i++) {
-    const A = points.get(sommets[i])
-    const B = points.get(sommets[(i + 1) % sommets.length])
-    if (A === undefined || B === undefined) return undefined
-    perimetre += distance(A, B)
+  if (polygone?.type === 'polygoneRapide') {
+    const sommets = polygone.sommets
+      .split(/[,;\s]+/)
+      .map((sommet) => sommet.trim())
+      .filter((sommet) => sommet !== '')
+    if (sommets.length < 3) return undefined
+    let perimetre = 0
+    for (let i = 0; i < sommets.length; i++) {
+      const A = points.get(sommets[i])
+      const B = points.get(sommets[(i + 1) % sommets.length])
+      if (A === undefined || B === undefined) return undefined
+      perimetre += distance(A, B)
+    }
+    return perimetre
   }
-  return perimetre
+  const traits = programme.filter((instruction) => instruction.type === 'trait')
+  if (traits.length === 0) return undefined
+  let longueurTotale = 0
+  for (const trait of traits) {
+    if (trait.type !== 'trait') continue
+    const A = points.get(trait.p1)
+    const B = points.get(trait.p2)
+    if (A === undefined || B === undefined) return undefined
+    longueurTotale += distance(A, B)
+  }
+  return longueurTotale
 }
 
 function demiDroiteInitiale(
@@ -213,9 +254,9 @@ const verifierReportPerimetreAuCompas: ElementIepVerificationCallback = ({
     string,
     PointIEP
   >
-  const perimetre = perimetrePolygoneInitial(studentProgram, points)
+  const longueurTotale = longueurFormeInitiale(studentProgram, points)
   const demiDroite = demiDroiteInitiale(studentProgram, points)
-  if (perimetre === undefined || demiDroite === undefined) {
+  if (longueurTotale === undefined || demiDroite === undefined) {
     return {
       isOk: false,
       feedback: 'La figure initiale est incomplète.',
@@ -233,7 +274,7 @@ const verifierReportPerimetreAuCompas: ElementIepVerificationCallback = ({
     const B = points.get(instruction.p2)
     if (A === undefined || B === undefined) return false
     const bonneLongueur =
-      Math.abs(distance(A, B) - perimetre) <= EPSILON_LONGUEUR
+      Math.abs(distance(A, B) - longueurTotale) <= EPSILON_LONGUEUR
     return (
       bonneLongueur &&
       pointSurDemiDroite(A, demiDroite.origine, demiDroite.angle) &&
@@ -244,8 +285,8 @@ const verifierReportPerimetreAuCompas: ElementIepVerificationCallback = ({
   return {
     isOk: segmentCorrect,
     feedback: segmentCorrect
-      ? 'Bravo, le périmètre est bien reporté sur la demi-droite.'
-      : 'On attend un segment rouge ou bleu, tracé sur la demi-droite, dont la longueur est égale au périmètre du polygone.',
+      ? 'Bravo, la longueur totale est bien reportée sur la demi-droite.'
+      : 'On attend un segment rouge ou bleu, tracé sur la demi-droite, dont la longueur est égale à la longueur totale de la figure.',
   }
 }
 
@@ -264,8 +305,8 @@ export default class ReporterPerimetreAuCompas extends Exercice {
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.besoinFormulaireNumerique = [
-      'Type de polygone',
-      4,
+      'Type de figure',
+      5,
       formes.map((f, index) => `${index + 1} : ${f}`).join('\n'),
     ]
   }
@@ -280,19 +321,33 @@ export default class ReporterPerimetreAuCompas extends Exercice {
         x: point.x,
         y: point.y,
       })),
-      { type: 'polygoneRapide', sommets: forme.sommets, couleur: 'gray' },
       ...codagesForme(f),
       { type: 'point', nom: 'A', x: -5, y: 0 },
     )
-    const etapeDemiDroite = conditionsInitiales.length
-    conditionsInitiales.push(
-      {
-        type: 'demiDroitePointDirection',
-        p1: 'A',
-        angle: 0.5,
+    if (forme.fermee) {
+      conditionsInitiales.splice(forme.points.length, 0, {
+        type: 'polygoneRapide',
+        sommets: forme.sommets,
         couleur: 'gray',
-      },
-    )
+      })
+    } else {
+      conditionsInitiales.splice(
+        forme.points.length,
+        0,
+        ...forme.points.slice(0, -1).map((point, index): InstructionIep => ({
+          type: 'trait',
+          p1: point.nom,
+          p2: forme.points[index + 1].nom,
+        })),
+      )
+    }
+    const etapeDemiDroite = conditionsInitiales.length
+    conditionsInitiales.push({
+      type: 'demiDroitePointDirection',
+      p1: 'A',
+      angle: 0.5,
+      couleur: 'gray',
+    })
     conditionsInitiales.push({
       type: 'prolongerObjet',
       etape: etapeDemiDroite,
@@ -307,7 +362,10 @@ export default class ReporterPerimetreAuCompas extends Exercice {
     const programmeAttendu: InstructionIep[] = []
     let prochainIndexProgrammeComplet = conditionsInitiales.length
     let pointDepartReport = 'A'
-    for (let i = 0; i < forme.points.length; i++) {
+    const nombreSegments = forme.fermee
+      ? forme.points.length
+      : forme.points.length - 1
+    for (let i = 0; i < nombreSegments; i++) {
       const A = forme.points[i]
       const B = forme.points[(i + 1) % forme.points.length]
       const etapeArc = prochainIndexProgrammeComplet
@@ -339,6 +397,7 @@ export default class ReporterPerimetreAuCompas extends Exercice {
       conditionsInitiales,
       instructionsDisponibles,
       programmeAttendu,
+      tailleLabelsPoints: 12,
       verifyCallbackName: VERIFICATION_REPORTER_PERIMETRE_CALLBACK_NAME,
     })
     handleAnswers(
@@ -349,7 +408,10 @@ export default class ReporterPerimetreAuCompas extends Exercice {
       },
       { formatInteractif: 'alea-iep-editeur' },
     )
-    this.listeQuestions[0] = `Reporter le périmètre du ${f.toLowerCase()} sur la demi-droite ci-dessous, puis, tracer un segment de cette longueur en bleu<br>${editeur}`
+    this.listeQuestions[0] =
+      f === 'Ligne brisée'
+        ? `Reporter la longueur totale de la ligne brisée sur la demi-droite ci-dessous, puis, tracer un segment de cette longueur en bleu<br>${editeur}`
+        : `Reporter le périmètre du ${f.toLowerCase()} sur la demi-droite ci-dessous, puis, tracer un segment de cette longueur en bleu<br>${editeur}`
 
     this.listeCorrections[0] = `Voici un programme de construction de la forme demandée :<br>
         ${addEditeurIep(this, 0, {
@@ -358,6 +420,7 @@ export default class ReporterPerimetreAuCompas extends Exercice {
           interactivityOn: false,
           programmeInitial: programmeAttendu,
           instructionsDisponibles,
+          tailleLabelsPoints: 11,
         })}`
   }
 }

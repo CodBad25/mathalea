@@ -224,6 +224,74 @@ handleAnswers(
 
 Le helper injecte un custom element `tableau-mathlive`.
 
+## Tableau hybride
+
+À utiliser quand certaines cellules d'un tableau doivent être complétées par des
+nombres et d'autres par des réponses textuelles choisies dans une liste
+déroulante.
+
+```ts
+import { creeTableauHybrideElement } from '../../lib/customElements/TableauHybride'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+
+texte += creeTableauHybrideElement({
+  numeroExercice: this.numeroExercice,
+  questionIndex: i,
+  tableau: {
+    rows: [
+      [
+        { type: 'text', texte: 'Jour', header: true },
+        { type: 'text', texte: 'Lundi', header: true },
+      ],
+      [
+        { type: 'text', texte: '8h - 9h', header: true },
+        {
+          type: 'select',
+          id: 'L1C1',
+          choices: [
+            { label: 'Choisir', value: '' },
+            { label: 'Mathématiques', value: 'Mathématiques' },
+            { label: 'Français', value: 'Français' },
+          ],
+          choix0: true,
+        },
+      ],
+    ],
+  },
+})
+
+handleAnswers(
+  this,
+  i,
+  {
+    L1C1: { value: 'Mathématiques' },
+  },
+  { formatInteractif: 'tableau-hybride' },
+)
+```
+
+Les cellules à compléter gardent les identifiants `LxCy`, comme
+`tableau-mathlive`. Une cellule `type: 'mathfield'` est corrigée avec la
+comparaison MathLive habituelle ; une cellule `type: 'select'` attend une valeur
+exacte parmi les choix proposés.
+
+Les cellules `type: 'text'` peuvent porter `header: true` pour styliser les
+en-têtes de ligne ou de colonne. Pour une liste déroulante avec une valeur
+d'attente, placer par convention `{ label: 'Choisir', value: '' }` en premier
+choix et activer `choix0: true`.
+
+Le helper suit le contrat des autres custom elements : `interactivityOn: false`
+produit un tableau statique à compléter, en laissant des `...` dans les cellules
+interactives. `correctionOn: true` produit un tableau complété statique. Dans ce
+mode de correction, les cellules `mathfield` et `select` doivent porter leur
+`value` ; les valeurs numériques sont affichées avec `miseEnEvidence`, les
+valeurs textuelles avec `texteEnCouleurEtGras`. Hors HTML, `create()` renvoie un
+tableau LaTeX statique ; en Typst, il renvoie le même rendu statique que le HTML
+sans interactivité.
+
+Lors de la vérification interactive, le composant passe en lecture seule sans
+reconstruire le tableau afin de conserver les saisies visibles dans les champs.
+
 ### Des champs dans les cellules d'un tableau
 
 Une cellule vide de `AddTabDbleEntryMathlive` ne contient qu'un seul champ. Quand une cellule doit contenir plusieurs trous (par exemple `\ldots + \dfrac{\ldots}{10} + \dfrac{\ldots}{100}`), on y place un `fill-in-the-blank` : la cellule est alors une cellule HTML (`latex: false`) dont le texte est le custom element.

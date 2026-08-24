@@ -12,7 +12,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'c988f'
 
 export const refs = {
-  'fr-fr': ['2S10-5', 'BP2AutoC5'],
+  'fr-fr': ['2I10-5', 'BP2AutoC5'],
   'fr-ch': [],
 }
 export default class EcritureFractionnaire1T extends FractionVersPourcentage {

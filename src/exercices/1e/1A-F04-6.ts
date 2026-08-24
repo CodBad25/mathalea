@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -92,7 +93,7 @@ export default class auto1AF4e extends ExerciceQcmA {
           ymax: 10,
           pixelsParCm: 20,
           scale: 0.45,
-          center: true,
+          center: !context.isHtml,
         },
         r,
         o,
@@ -225,7 +226,7 @@ export default class auto1AF4e extends ExerciceQcmA {
               ymax: 10,
               pixelsParCm: 20,
               scale: 0.45,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -339,7 +340,7 @@ export default class auto1AF4e extends ExerciceQcmA {
               ymax: 5,
               pixelsParCm: 20,
               scale: 0.45,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,

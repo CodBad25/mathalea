@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -178,7 +179,7 @@ export default class ComparerDeuxBoitesMoustaches extends ExerciceQcmA {
         ymax: 4.2,
         pixelsParCm: 30,
         scale: 0.75,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

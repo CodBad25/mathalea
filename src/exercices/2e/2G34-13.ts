@@ -1,355 +1,362 @@
-import FractionEtendue from '../../modules/FractionEtendue'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
+import { Droite, droite, droiteAvecNomLatex } from '../../lib/2d/droites'
+import { PointAbstrait } from '../../lib/2d/PointAbstrait'
+import { repere } from '../../lib/2d/reperes'
+import { texteParPosition } from '../../lib/2d/textes'
+import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
-import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
-import EquationSecondDegre from '../../modules/EquationSecondDegre'
+import { eqToLatex, printSystem } from '../../lib/outils/systemeEquations'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { mathalea2d } from '../../modules/mathalea2d'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
+
 export const titre =
-  "Déterminer l'ensemble des points d'intersection entre deux courbes"
-export const interactifReady = false
+  "Déterminer les points d'intersection de trois droites données graphiquement"
+export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDePublication = '05/01/2025'
+export const dateDePublication = '13/02/2026'
+
 /**
+ * Déterminer les points d'intersection de trois droites données graphiquement
  * @author Nathan Scheinmann
  */
 
-export const uuid = 'e37e2'
+export const uuid = 'd3e4f'
 export const refs = {
   'fr-fr': ['2G34-13'],
-  'fr-ch': ['1mF2-13'],
+  'fr-ch': [],
 }
-export default class IntersectionDroitesPoints extends Exercice {
+
+export default class IntersectionTroisDroites extends Exercice {
   constructor() {
     super()
-    this.consigne = ''
+
     this.nbQuestions = 1
+    this.sup = 1
+    this.correctionDetailleeDisponible = true
     this.besoinFormulaireNumerique = [
-      'Type de questions',
+      "Position des points d'intersection",
       3,
-      "1 : Aucun point d'intersection\n2 : Au moins un point d'intersection\n3 : Mélange",
+      '1 : Tous sur le graphique\n2 : Au moins un en dehors du graphique\n3 : Mélange',
     ]
-    this.besoinFormulaire2CaseACocher = ['Avec des fractions']
-    this.besoinFormulaire3Numerique = [
-      'Type de courbes',
-      4,
-      '1 : Deux droites\n2 : Une droite et une parabole\n3 : Deux paraboles\n4 : Mélange',
-    ]
-    this.sup2 = false
-    this.sup = 3
-    this.sup3 = 4
   }
 
   nouvelleVersion() {
-    this.listeQuestions = []
-    this.listeCorrections = []
-    this.autoCorrection = []
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      min: 1,
-      max: 2,
-      melange: 3,
-      defaut: 3,
-      listeOfCase: ['aucune', 'unOuDeux'],
-      nbQuestions: this.nbQuestions,
-      shuffle: true,
-    })
-    const typesDeCourbes = gestionnaireFormulaireTexte({
-      saisie: this.sup3,
-      min: 1,
-      max: 3,
-      melange: 4,
-      defaut: 3,
-      listeOfCase: ['droiteDroite', 'droitePara', 'paraPara'],
-      nbQuestions: this.nbQuestions,
-      shuffle: true,
-    })
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
+    let typeDeQuestionsDisponibles: ('troisDroitesSG' | 'troisDroitesHG')[]
+    if (this.sup === 1) {
+      typeDeQuestionsDisponibles = ['troisDroitesSG']
+    } else if (this.sup === 2) {
+      typeDeQuestionsDisponibles = ['troisDroitesHG']
+    } else {
+      typeDeQuestionsDisponibles = ['troisDroitesSG', 'troisDroitesHG']
+    }
+
+    const pointIntersectionExactDD = function (
+      d1: Array<FractionEtendue>,
+      d2: Array<FractionEtendue>,
+    ) {
+      const x = d2[1]
+        .differenceFraction(d1[1])
+        .diviseFraction(d1[0].differenceFraction(d2[0]))
+        .simplifie()
+      const y = d1[0].produitFraction(x).sommeFraction(d1[1]).simplifie()
+      return [x, y]
+    }
+
+    const inGraph = function (
+      p: PointAbstrait,
+      xMin = -8,
+      xMax = 8,
+      yMin = -6,
+      yMax = 6,
+    ) {
+      return p.x >= xMin && p.x <= xMax && p.y >= yMin && p.y <= yMax
+    }
+
+    const coordEntieres = function (p: PointAbstrait) {
+      return p.x % 1 === 0 && p.y % 1 === 0
+    }
+
+    const listeTypeQuestions = combinaisonListes(
+      typeDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      let texte = ''
-      let texteCorr = ''
-      let droite = [new FractionEtendue(0, 1), new FractionEtendue(0, 1)]
-      let courbe = [
-        new FractionEtendue(0, 1),
-        new FractionEtendue(0, 1),
-        new FractionEtendue(0, 1),
-      ]
-      let courbe2 = [
-        new FractionEtendue(0, 1),
-        new FractionEtendue(0, 1),
-        new FractionEtendue(0, 1),
-      ]
-      let droiteLit: PolynomePlusieursVariables
-      let courbeLit: PolynomePlusieursVariables
-      let courbeLit2: PolynomePlusieursVariables
-      let eqSeqDeg: EquationSecondDegre
-      let differenceCourbe: PolynomePlusieursVariables
-      let courbeChoix1: PolynomePlusieursVariables
-      let courbeChoix2: PolynomePlusieursVariables
-      if (typesDeCourbes[i] !== 'droiteDroite') {
-        do {
+
+    const o = texteParPosition(
+      'O',
+      -0.3,
+      -0.3,
+      undefined,
+      'black',
+      undefined,
+      'milieu',
+      undefined,
+      1,
+    )
+
+    const listeFractions = [
+      [1, 3],
+      [2, 3],
+      [3, 7],
+      [2, 7],
+      [4, 3],
+      [3, 5],
+      [4, 7],
+      [1, 5],
+      [4, 5],
+      [3, 4],
+      [1, 4],
+      [2, 5],
+      [5, 3],
+      [6, 5],
+      [1, 6],
+      [5, 6],
+      [1, 7],
+    ]
+
+    for (
+      let i = 0, vari, texte, texteCorr, cpt = 0;
+      i < this.nbQuestions && cpt < 50;
+    ) {
+      vari = ['x', 'y', '', 'x', 'y', '']
+      let c = new Droite(0, 1, 0, 'black', 'black')
+      let c2 = new Droite(0, 1, 0, 'black', 'black')
+      let c3 = new Droite(0, 1, 0, 'black', 'black')
+      let a: number = 0
+      let b: number = 0
+      let d: number = 0
+      let a2: number = 0
+      let b2: number = 0
+      let d2: number = 0
+      let a3: number = 0
+      let b3: number = 0
+      let d3: number = 0
+      let aFrac: Array<number> = []
+      let a2Frac: Array<number> = []
+      let a3Frac: Array<number> = []
+      let pAproxInt12 = new PointAbstrait(0, 0)
+      let pAproxInt13 = new PointAbstrait(0, 0)
+      let pAproxInt23 = new PointAbstrait(0, 0)
+
+      switch (listeTypeQuestions[i]) {
+        case 'troisDroitesSG':
           do {
-            if (this.sup2 === false) {
-              droite = [
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-                new FractionEtendue(randint(-10, 10), 1),
-              ]
-              courbe = [
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-                new FractionEtendue(randint(-10, 10), 1),
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-              ]
-              courbe2 = [
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-                new FractionEtendue(randint(-10, 10), 1),
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-              ]
-            } else {
-              droite = [
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-                new FractionEtendue(randint(-10, 10), randint(-10, 10, [0])),
-              ]
-              courbe = [
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-                new FractionEtendue(randint(-10, 10), randint(-10, 10, [0])),
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-              ]
-              courbe2 = [
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-                new FractionEtendue(randint(-10, 10), randint(-10, 10, [0])),
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-              ]
-            }
-            droiteLit = new PolynomePlusieursVariables([
-              new MonomePlusieursVariables(droite[0], {
-                variables: ['x'],
-                exposants: [0],
-              }),
-              new MonomePlusieursVariables(droite[1], {
-                variables: ['x'],
-                exposants: [1],
-              }),
-            ]).ordonner()
-            courbeLit = new PolynomePlusieursVariables([
-              new MonomePlusieursVariables(courbe[0], {
-                variables: ['x'],
-                exposants: [0],
-              }),
-              new MonomePlusieursVariables(courbe[1], {
-                variables: ['x'],
-                exposants: [1],
-              }),
-              new MonomePlusieursVariables(courbe[2], {
-                variables: ['x'],
-                exposants: [2],
-              }),
-            ]).ordonner()
-            courbeLit2 = new PolynomePlusieursVariables([
-              new MonomePlusieursVariables(courbe2[0], {
-                variables: ['x'],
-                exposants: [0],
-              }),
-              new MonomePlusieursVariables(courbe2[1], {
-                variables: ['x'],
-                exposants: [1],
-              }),
-              new MonomePlusieursVariables(courbe2[2], {
-                variables: ['x'],
-                exposants: [2],
-              }),
-            ]).ordonner()
-            if (typesDeCourbes[i] === 'droitePara') {
-              courbeChoix1 = droiteLit
-              courbeChoix2 = courbeLit
-            } else {
-              courbeChoix1 = courbeLit
-              courbeChoix2 = courbeLit2
-            }
-            differenceCourbe = courbeChoix2
-              .difference(courbeChoix1)
-              .ordonner()
-              .reduire()
-          } while (differenceCourbe.monomes.length < 3)
-          eqSeqDeg = EquationSecondDegre.aPartirDesCoefficients(
-            differenceCourbe.monomes[0].coefficient,
-            differenceCourbe.monomes[1].coefficient,
-            differenceCourbe.monomes[2].coefficient,
-            new FractionEtendue(0, 1),
-            new FractionEtendue(0, 1),
-            new FractionEtendue(0, 1),
-            { variable: 'x', format: 'reduit' },
-          )
-          differenceCourbe = differenceCourbe.reduire()
-        } while (
-          (listeTypeDeQuestions[i] === 'aucune' &&
-            eqSeqDeg.delta.signe === 1) ||
-          (listeTypeDeQuestions[i] === 'unOuDeux' &&
-            eqSeqDeg.delta.signe === -1) ||
-          (listeTypeDeQuestions[i] === 'unOuDeux' &&
-            (eqSeqDeg.solutionsListeTex[0].includes('sqrt') ||
-              eqSeqDeg.solutionsListeTex[0].includes(',')))
-        )
-        if (typesDeCourbes[i] === 'droitePara') {
-          texte += `Soit la droite $d$ d'équation $y=${courbeChoix1.toString()}$ et la parabole $\\mathcal{C}$ d'équation $y=${courbeChoix2.toString()}$.<br> Déterminer l'ensemble des points d'intersection de $d$ et $\\mathcal{C}$.`
-          texteCorr +=
-            "Afin de déterminer les points d'intersection de $d$ et $\\mathcal{C}$, on cherche les solutions de l'équation "
-        }
-        if (typesDeCourbes[i] === 'paraPara') {
-          texte += `Soit la parabole $\\mathcal{C_1}$ d'équation $y=${courbeChoix2.toString()}$ et la parabole $\\mathcal{C_2}$ d'équation $y=${courbeChoix1.toString()}$. <br>Déterminer l'ensemble des points d'intersection de $\\mathcal{C_1}$ et $\\mathcal{C_2}$.`
-          texteCorr +=
-            "Afin de déterminer les points d'intersection de $\\mathcal{C_1}$ et $\\mathcal{C_2}$, on cherche les solutions de l'équation "
-        }
-        texteCorr += `\\[${courbeChoix2.toString()}=${courbeChoix1.toString()}\\]
-    c'est-à-dire
-    \\[${eqSeqDeg.printToLatexMDG()}=0\\]
-    On résout cette équation en utilisant la méthode de résolution du deuxième degré. On calcule le discriminant $\\Delta=${eqSeqDeg.delta.texFractionSimplifiee}$.<br>`
-        if (eqSeqDeg.delta.num === 0) {
-          texteCorr += `Le discriminant étant nul, l'équation admet une unique solution réelle. Elle vaut $x_1=${eqSeqDeg.solutionsListeTex[0]}$.<br>`
-          texteCorr +=
-            "On détermine la deuxième coordonnée du point d'intersection en évaluant l'équation de la droite en $x=x_1$. On obtient"
-          texteCorr += `\\[y_1=${courbeChoix1.toStringEvaluate({ x: eqSeqDeg.solutionFrac()[0] as FractionEtendue })}=${courbeChoix1.evaluer({ x: eqSeqDeg.solutionFrac()[0] as FractionEtendue }).texFractionSimplifiee}\\]`
-          texteCorr += `On a ${typesDeCourbes[i] !== 'paraPara' ? `$${miseEnEvidence('d\\cap \\mathcal{C}')}$` : `$${miseEnEvidence('\\mathcal{C_1} \\cap \\mathcal{C_2}')}$`}$ ${miseEnEvidence(`=\\left\\{\\left(${eqSeqDeg.solutionsListeTex[0]}\\,;\\,${courbeChoix2.evaluer({ x: eqSeqDeg.solutionFrac()[0] as FractionEtendue }).texFractionSimplifiee}\\right)\\right\\}`)}$.<br>`
-        } else if (eqSeqDeg.delta.signe === 1) {
-          texteCorr += `Le discriminant étant positif, l'équation admet deux solutions réelles. Elles valent $x_1=${eqSeqDeg.solutionsListeTex[0]}$ et $x_2=${eqSeqDeg.solutionsListeTex[1]}$.<br> 
-        On détermine la deuxième coordonnée des points d'intersection en évaluant l'expression ${typesDeCourbes[i] === 'paraPara' ? "d'une des paraboles" : 'de la droite'} en $x=x_1$ et $x=x_2$. On obtient `
-          texteCorr += `\\[y_1=${courbeChoix1.toStringEvaluate({ x: eqSeqDeg.solutionFrac()[0] as FractionEtendue })}=${courbeChoix1.evaluer({ x: eqSeqDeg.solutionFrac()[0] as FractionEtendue }).texFractionSimplifiee}\\quad\\text{ et }\\quad y_2=${courbeChoix1.toStringEvaluate({ x: eqSeqDeg.solutionFrac()[1] as FractionEtendue })}=${courbeChoix1.evaluer({ x: eqSeqDeg.solutionFrac()[1] as FractionEtendue }).texFractionSimplifiee}\\]`
-          texteCorr += `On a ${typesDeCourbes[i] !== 'paraPara' ? `$${miseEnEvidence('d\\cap \\mathcal{C}')}$` : `$${miseEnEvidence('\\mathcal{C_1} \\cap \\mathcal{C_2}')}$`} $${miseEnEvidence(`=\\left\\{\\left(${eqSeqDeg.solutionsListeTex[0]}\\,;\\,${courbeChoix2.evaluer({ x: eqSeqDeg.solutionFrac()[0] as FractionEtendue }).texFractionSimplifiee}\\right)\\,;\\,\\left(${eqSeqDeg.solutionsListeTex[1]}\\,;\\,${courbeChoix2.evaluer({ x: eqSeqDeg.solutionFrac()[1] as FractionEtendue }).texFractionSimplifiee}\\right)\\right\\}`)}$.<br>`
-        } else {
-          texteCorr += `Le discriminant étant négatif, l'équation n'admet pas de solution réelle. ${typesDeCourbes[i] !== 'paraPara' ? `$${miseEnEvidence('d\\cap\\mathcal{C}=\\emptyset')}$` : `$${miseEnEvidence('\\mathcal{C_1}\\cap\\mathcal{C_2}=\\emptyset')}$.<br>`}`
-        }
-      } else if (typesDeCourbes[i] === 'droiteDroite') {
-        let droite1 = [new FractionEtendue(0, 1), new FractionEtendue(0, 1)]
-        let droite2 = [new FractionEtendue(0, 1), new FractionEtendue(0, 1)]
-        if (typesDeQuestionsDisponibles[i] !== 'aucune') {
-          do {
-            if (this.sup2 === false) {
-              droite1 = [
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-              ]
-              droite2 = [
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-              ]
-            } else {
-              droite1 = [
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-              ]
-              droite2 = [
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-              ]
-            }
+            do {
+              b = randint(-5, 5)
+              aFrac = choice(listeFractions)
+              a = aFrac[0] * choice([-1, 1])
+              d = aFrac[1]
+              b2 = randint(-5, 5)
+              a2Frac = choice(listeFractions)
+              a2 = a2Frac[0] * choice([-1, 1])
+              d2 = a2Frac[1]
+              b3 = randint(-5, 5)
+              a3Frac = choice(listeFractions)
+              a3 = a3Frac[0] * choice([-1, 1])
+              d3 = a3Frac[1]
+            } while (
+              Math.abs(a2 / d2 - a / d) < 0.5 ||
+              Math.abs(a3 / d3 - a / d) < 0.5 ||
+              Math.abs(a2 / d2 - a3 / d3) < 0.5
+            )
+            c = droite(a / d, -1, b)
+            c.color = colorToLatexOrHTML('red')
+            c.epaisseur = 1
+            c2 = droite(a2 / d2, -1, b2)
+            c2.color = colorToLatexOrHTML('red')
+            c2.epaisseur = 1
+            c3 = droite(a3 / d3, -1, b3)
+            c3.color = colorToLatexOrHTML('red')
+            c3.epaisseur = 1
+            pAproxInt12 = pointIntersectionDD(c, c2)
+            pAproxInt13 = pointIntersectionDD(c, c3)
+            pAproxInt23 = pointIntersectionDD(c2, c3)
           } while (
-            droite1[1].isEqual(droite2[1]) ||
-            droite1[0].isEqual(droite2[0])
+            !(
+              Math.abs(a2 / d2 - a / d) < 0.5 ||
+              Math.abs(a3 / d3 - a / d) < 0.5 ||
+              Math.abs(a2 / d2 - a3 / d3) < 0.5 ||
+              (inGraph(pAproxInt12) &&
+                inGraph(pAproxInt13) &&
+                inGraph(pAproxInt23))
+            ) ||
+            coordEntieres(pAproxInt12) ||
+            coordEntieres(pAproxInt13) ||
+            coordEntieres(pAproxInt23)
           )
-        } else {
+          break
+        case 'troisDroitesHG':
           do {
-            if (this.sup2 === false) {
-              droite1 = [
-                new FractionEtendue(randint(-10, 10, [0]), 1),
-                new FractionEtendue(randint(-10, 10), 1),
-              ]
-              droite2 = [new FractionEtendue(randint(-10, 10), 1), droite1[1]]
-            } else {
-              droite1 = [
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-                new FractionEtendue(randint(-10, 10), randint(-10, 10, [0])),
-              ]
-              droite2 = [
-                new FractionEtendue(
-                  randint(-10, 10, [0]),
-                  randint(-10, 10, [0]),
-                ),
-                droite1[1],
-              ]
-            }
-          } while (droite1[0].isEqual(droite2[0]))
-        }
-        courbeChoix1 = new PolynomePlusieursVariables([
-          new MonomePlusieursVariables(droite1[0], {
-            variables: ['x'],
-            exposants: [0],
-          }),
-          new MonomePlusieursVariables(droite1[1], {
-            variables: ['x'],
-            exposants: [1],
-          }),
-        ]).ordonner()
-        courbeChoix2 = new PolynomePlusieursVariables([
-          new MonomePlusieursVariables(droite2[0], {
-            variables: ['x'],
-            exposants: [0],
-          }),
-          new MonomePlusieursVariables(droite2[1], {
-            variables: ['x'],
-            exposants: [1],
-          }),
-        ]).ordonner()
-        differenceCourbe = courbeChoix1
-          .difference(courbeChoix2)
-          .ordonner()
-          .reduire()
-        differenceCourbe = differenceCourbe.reduire()
-        texte += `Soit la droite $d_1$ d'équation $y=${courbeChoix1.toString()}$ et la droite $d_2$ d'équation $y=${courbeChoix2.toString()}$. <br>Déterminer l'ensemble des points d'intersection de $d_1$ et $d_2$.`
-        if (typesDeQuestionsDisponibles[i] !== 'aucune') {
-          texteCorr +=
-            "Afin de déterminer les points d'intersection de $d_1$ et $d_2$, on cherche les solutions de l'équation "
-          texteCorr += `\\[${courbeChoix1.toString()}=${courbeChoix2.toString()} \\iff ${differenceCourbe.monomes[0].toString()}=${differenceCourbe.monomes[1].oppose().toString()}\\]`
-          const sol = differenceCourbe.monomes[1].coefficient.produitFraction(
-            differenceCourbe.monomes[0].coefficient.oppose().inverse(),
+            aFrac = choice(listeFractions)
+            a = aFrac[0] * choice([-1, 1])
+            d = aFrac[1]
+            b = randint(-5, 5)
+            a2Frac = choice(listeFractions)
+            a2 = a2Frac[0] * choice([-1, 1])
+            d2 = a2Frac[1]
+            b2 = randint(-5, 5)
+            a3Frac = choice(listeFractions)
+            a3 = a3Frac[0] * choice([-1, 1])
+            d3 = a3Frac[1]
+            b3 = randint(-5, 5)
+            if (
+              Math.abs(a2 / d2 - a / d) < 0.5 ||
+              Math.abs(a3 / d3 - a / d) < 0.5 ||
+              Math.abs(a2 / d2 - a3 / d3) < 0.5
+            )
+              continue
+            c = droite(a / d, -1, b)
+            c.color = colorToLatexOrHTML('red')
+            c.epaisseur = 1
+            c2 = droite(a2 / d2, -1, b2)
+            c2.color = colorToLatexOrHTML('red')
+            c2.epaisseur = 1
+            c3 = droite(a3 / d3, -1, b3)
+            c3.color = colorToLatexOrHTML('red')
+            c3.epaisseur = 1
+            pAproxInt12 = pointIntersectionDD(c, c2)
+            pAproxInt13 = pointIntersectionDD(c, c3)
+            pAproxInt23 = pointIntersectionDD(c2, c3)
+          } while (
+            Math.abs(a2 / d2 - a / d) < 0.5 ||
+            Math.abs(a3 / d3 - a / d) < 0.5 ||
+            Math.abs(a2 / d2 - a3 / d3) < 0.5 ||
+            inGraph(pAproxInt12) ||
+            coordEntieres(pAproxInt12) ||
+            coordEntieres(pAproxInt13) ||
+            coordEntieres(pAproxInt23)
           )
-          texteCorr += `L'équation admet une solution $x_1=${sol.texFractionSimplifiee}$.<br>
-        On détermine la deuxième coordonnée du point d'intersection en évaluant l'équation d'une des droites en $x=x_1$.`
-          texteCorr += `\\[y_1=${courbeChoix1.toStringEvaluate({ x: sol as FractionEtendue })}=${courbeChoix1.evaluer({ x: sol as FractionEtendue }).texFractionSimplifiee}\\]`
-          texteCorr += `Les points d'intersection de $${miseEnEvidence(`d_1\\cap d_2=\\left\\{\\left(${sol.texFractionSimplifiee}\\,;\\,${courbeChoix2.evaluer({ x: sol as FractionEtendue }).texFractionSimplifiee}\\right)\\right\\}`)}$.<br>`
-        } else {
-          texteCorr += `Les deux droites ont la même pente, mais une ordonnée à l'origine différente; elles sont donc parallèles. Ainsi, les droites $${miseEnEvidence('d_1 \\cap d_2=\\emptyset')}$.<br>`
-        }
+          break
       }
+
+      const droite1 = droiteAvecNomLatex(c, '(d_1)', 'red')
+      const droite2 = droiteAvecNomLatex(c2, '(d_2)', 'green')
+      const droite3 = droiteAvecNomLatex(c3, '(d_3)', bleuMathalea)
+      const droiteFrac1 = [new FractionEtendue(a, d), new FractionEtendue(b, 1)]
+      const droiteFrac2 = [
+        new FractionEtendue(a2, d2),
+        new FractionEtendue(b2, 1),
+      ]
+      const droiteFrac3 = [
+        new FractionEtendue(a3, d3),
+        new FractionEtendue(b3, 1),
+      ]
+      const eqD1ListeString = [0, 1, 0, droiteFrac1[0], 0, droiteFrac1[1]]
+      const eqD2ListeString = [0, 1, 0, droiteFrac2[0], 0, droiteFrac2[1]]
+      const eqD3ListeString = [0, 1, 0, droiteFrac3[0], 0, droiteFrac3[1]]
+      const pi12 = pointIntersectionExactDD(droiteFrac1, droiteFrac2)
+      const pi13 = pointIntersectionExactDD(droiteFrac1, droiteFrac3)
+      const pi23 = pointIntersectionExactDD(droiteFrac2, droiteFrac3)
+
+      const r = repere({
+        xMin: -8,
+        xMax: 8,
+        xUnite: 1,
+        yMin: -6,
+        yMax: 6,
+        yUnite: 1,
+        thickHauteur: 0.1,
+        thickEpaisseur: 1,
+        xLabelMin: -7,
+        xLabelMax: 7,
+        yLabelMax: 5,
+        yLabelMin: -5,
+        axeXStyle: '->',
+        axeYStyle: '->',
+        yLabelDistance: 1,
+        axesEpaisseur: 1,
+        yLabelEcart: 0.6,
+        grilleSecondaire: true,
+        grilleSecondaireYDistance: 1,
+        grilleSecondaireXDistance: 1,
+        grilleSecondaireYMin: -6,
+        grilleSecondaireYMax: 6,
+        grilleSecondaireXMin: -8,
+        grilleSecondaireXMax: 8,
+      })
+
+      texte =
+        "Déterminer les points d'intersection des droites suivantes.<br><br>"
+      texte += mathalea2d(
+        {
+          xmin: -8,
+          ymin: -6,
+          xmax: 8,
+          ymax: 6,
+          pixelsParCm: 25,
+          scale: 0.5,
+        },
+        r,
+        droite1,
+        droite2,
+        droite3,
+        o,
+      )
+
+      if (this.interactif) {
+        texte +=
+          "<br> Les points d'intersection des droites sont" +
+          remplisLesBlancs(
+            this,
+            i,
+            'I(d_1;d_2)=(%{champ1};%{champ2})\\quad I(d_1;d_3)=(%{champ3};%{champ4})\\quad I(d_2;d_3)=(%{champ5};%{champ6})',
+          )
+        handleAnswers(
+          this,
+          i,
+          {
+            bareme: (listePoints: number[]) => [
+              Math.min(listePoints[0], listePoints[1]) +
+                Math.min(listePoints[2], listePoints[3]) +
+                Math.min(listePoints[4], listePoints[5]),
+              3,
+            ],
+            champ1: { value: pi12[0].texFractionSimplifiee },
+            champ2: { value: pi12[1].texFractionSimplifiee },
+            champ3: { value: pi13[0].texFractionSimplifiee },
+            champ4: { value: pi13[1].texFractionSimplifiee },
+            champ5: { value: pi23[0].texFractionSimplifiee },
+            champ6: { value: pi23[1].texFractionSimplifiee },
+          },
+          { formatInteractif: 'fillInTheBlank' },
+        )
+      }
+
+      texteCorr = ''
+      if (this.correctionDetaillee) {
+        texteCorr =
+          texteCorr +
+          `Les équations des droites $d_1$ et $d_2$ sont \\[${eqToLatex([0, 0, 1, droiteFrac1[0], 0, droiteFrac1[1]], ['x', 'y', 'd_1(x)', 'x', 'y', ''], false)} \\quad ${eqToLatex([0, 0, 1, droiteFrac2[0], 0, droiteFrac2[1]], ['x', 'y', 'd_2(x)', 'x', 'y', ''], false)}\\]
+        On résout le système d'équations suivant pour déterminer le point d'intersection des droites $d_1$ et $d_2$: \\[${printSystem(eqToLatex(eqD1ListeString, vari, true), eqToLatex(eqD2ListeString, vari, true))}\\]<br> Ainsi, l`
+      } else {
+        texteCorr += '<br>L'
+      }
+      texteCorr =
+        texteCorr +
+        `e point d'intersection des droites $d_1$ et $d_2$ vaut $${miseEnEvidence(`\\left(${pi12[0].texFractionSimplifiee};${pi12[1].texFractionSimplifiee}\\right)`)}.$<br>`
+
+      if (this.correctionDetaillee) {
+        texteCorr += `L'équation de la droite $d_3$ est donnée par \\[${eqToLatex([0, 0, 1, droiteFrac3[0], 0, droiteFrac3[1]], ['x', 'y', 'd_3(x)', 'x', 'y', ''], false)}\\] <br> Afin de déterminer le point d'intersection des droites $d_1$ et $d_3$, on résout le système d'équations suivant: \\[ ${printSystem(eqToLatex(eqD1ListeString, vari, true), eqToLatex(eqD3ListeString, vari, true))}\\] On obtient que l`
+      } else {
+        texteCorr += '<br>L'
+      }
+      texteCorr += `e point d'intersection des droites $d_1$ et $d_3$ vaut $${miseEnEvidence(`\\left(${pi13[0].texFractionSimplifiee};${pi13[1].texFractionSimplifiee}\\right)`)}$.<br>`
+
+      if (this.correctionDetaillee) {
+        texteCorr += `<br> Afin de déterminer le point d'intersection des droites $d_2$ et $d_3$, on résout le système d'équations suivant: \\[ ${printSystem(eqToLatex(eqD2ListeString, vari, true), eqToLatex(eqD3ListeString, vari, true))}\\] On obtient que l`
+      } else {
+        texteCorr += '<br>L'
+      }
+      texteCorr += `e point d'intersection des droites $d_2$ et $d_3$ vaut $${miseEnEvidence(`\\left(${pi23[0].texFractionSimplifiee};${pi23[1].texFractionSimplifiee}\\right)`)}$.`
+
       if (this.listeQuestions.indexOf(texte) === -1) {
-        this.listeQuestions.push(texte)
-        this.listeCorrections.push(texteCorr)
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
         i++
       }
       cpt++

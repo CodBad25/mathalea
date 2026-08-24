@@ -241,7 +241,7 @@ export default class ClasseCan2023 {
             xmax: 15,
             ymax: 1.5,
             scale: 0.6,
-            center: true,
+            center: !context.isHtml,
           },
           d,
         ) +
@@ -688,7 +688,7 @@ export default class ClasseCan2023 {
       ? "Quel est le nombre écrit sous le point d'interrogation ?<br>\n" +
         mathalea2d(
           Object.assign(
-            { scale: 0.6, center: true },
+            { scale: 0.6, center: !context.isHtml },
             fixeBordures([d]),
           ),
           d,
@@ -797,7 +797,7 @@ export default class ClasseCan2023 {
         xmax: 6.1,
         ymax: b + 0.5,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       A,
       C,
@@ -958,7 +958,7 @@ export default class ClasseCan2023 {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         ) + '<br>'
@@ -1017,7 +1017,7 @@ export default class ClasseCan2023 {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         ) + '<br>'
@@ -1081,7 +1081,7 @@ export default class ClasseCan2023 {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         ) + '<br>'
@@ -1326,7 +1326,7 @@ export default class ClasseCan2023 {
           xmax: 12.1,
           ymax: 5.5,
           scale: 1,
-          center: true,
+          center: !context.isHtml,
         },
         C,
         A,
@@ -1366,7 +1366,7 @@ export default class ClasseCan2023 {
           xmax: 12.1,
           ymax: 6,
           scale: 1,
-          center: true,
+          center: !context.isHtml,
         },
         A,
         C,
@@ -1579,7 +1579,7 @@ Combien coûtent $2$ cahiers ?`
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.7,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )
@@ -1663,7 +1663,7 @@ Elle est donc égale à $${l2}\\times ${k}=${miseEnEvidence(sortie.reponse)}\\te
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.7,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )

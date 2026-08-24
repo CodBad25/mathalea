@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
@@ -110,7 +111,7 @@ function graphiqueCarreEtAire(): string {
       ymax: 10.5,
       pixelsParCm: 22,
       scale: 0.8,
-      center: true,
+      center: !context.isHtml,
       centerLatex: true,
     },
     r,

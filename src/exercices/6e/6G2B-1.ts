@@ -291,12 +291,16 @@ function traceShape(arcs: FormeDansLeCarre): string {
 
 export const titre = 'Reproduire une forme avec des arcs de cercles'
 export const uuid = 'ebaef'
+export const dateDePublication = '20/08/2026'
 
 export const refs = {
   'fr-fr': ['6G2B-1'],
   'fr-2016': [],
   'fr-ch': [],
 }
+/**
+ * @author Jean-Claude Lhote
+ */
 export default class FormeDansLeCarreATracer extends Exercice {
   constructor() {
     super()

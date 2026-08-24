@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -73,7 +74,7 @@ export default class perimetreCalcul extends ExerciceSimple {
       '<br>' +
       mathalea2d(
         Object.assign(
-          { scale: 0.4, center: true },
+          { scale: 0.4, center: !context.isHtml },
           fixeBordures(objets),
         ),
         objets,

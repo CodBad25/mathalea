@@ -1,5 +1,5 @@
 import { context } from '../../modules/context'
-import FonctionsProbabilite2 from '../2e/2S40-5'
+import FonctionsProbabilite2 from '../2e/2S30-5'
 export const interactifReady = true
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à deux épreuves'

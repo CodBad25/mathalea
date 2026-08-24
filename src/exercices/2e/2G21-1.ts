@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { grille } from '../../lib/2d/Grille'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { representantNomme } from '../../lib/2d/representantVecteur'
@@ -147,7 +148,7 @@ export default class ReconnaitreVecteurs extends Exercice {
               xmax,
               ymin,
               ymax,
-              center: true,
+              center: !context.isHtml,
               pixelsParCm: 30,
               scale: 0.75,
             },
@@ -213,7 +214,7 @@ export default class ReconnaitreVecteurs extends Exercice {
               xmax,
               ymin,
               ymax,
-              center: true,
+              center: !context.isHtml,
               pixelsParCm: 30,
               scale: 0.75,
             },
@@ -281,7 +282,7 @@ export default class ReconnaitreVecteurs extends Exercice {
               xmax,
               ymin,
               ymax,
-              center: true,
+              center: !context.isHtml,
               pixelsParCm: 30,
               scale: 0.75,
             },

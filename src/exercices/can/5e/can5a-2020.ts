@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
@@ -681,7 +682,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               mainlevee: false,
               amplitude: 0.5,
               scale: 1.2,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -698,7 +699,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1.2,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               ),

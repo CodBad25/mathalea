@@ -1,6 +1,6 @@
+import { renderMathInElement } from 'mathlive'
 import seedrandom from 'seedrandom'
 import { tex2typst } from 'tex2typst'
-import { renderMathInElement } from 'mathlive'
 import { context } from '../../modules/context'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -119,7 +119,12 @@ export interface LabyrintheRenderer {
    * @param width Largeur optionnelle d'une cellule en em
    * @param height Hauteur optionnelle d'une cellule en em
    */
-  render(root: ShadowRoot, snapshot: GameSnapshot, width?: number | null, height?: number | null): void
+  render(
+    root: ShadowRoot,
+    snapshot: GameSnapshot,
+    width?: number | null,
+    height?: number | null,
+  ): void
 
   /**
    * Affiche la correction visuelle (met en évidence toutes les bonnes cases).
@@ -245,7 +250,8 @@ export class Labyrinthe implements LabyrintheModel {
       this.seed = opts.seed ?? null
       this.rnd = this.seed != null ? seedrandom(this.seed) : Math.random
       // Create a separate RNG for values generation with a derived seed
-      this.valuesRnd = this.seed != null ? seedrandom(this.seed + '-values') : null
+      this.valuesRnd =
+        this.seed != null ? seedrandom(this.seed + '-values') : null
     }
     if (opts.orientation !== undefined) {
       this.orientationMode = opts.orientation
@@ -292,13 +298,11 @@ export class Labyrinthe implements LabyrintheModel {
       .map((_, r) =>
         Array(this.cols)
           .fill(0)
-          .map(
-            (__, c): CellState => ({
-              isGood: mask[r][c] === 1,
-              clicked: false,
-              text: '',
-            }),
-          ),
+          .map((__, c): CellState => ({
+            isGood: mask[r][c] === 1,
+            clicked: false,
+            text: '',
+          })),
       )
 
     // Redistribue les valeurs si elles ont été fournies auparavant
@@ -452,7 +456,12 @@ export class Labyrinthe implements LabyrintheModel {
 
   private tryGeneratePathOnce(
     orientation: Orientation,
-  ): { mask: number[][]; start: Coords; end: Coords; orientation: Orientation } | null {
+  ): {
+    mask: number[][]
+    start: Coords
+    end: Coords
+    orientation: Orientation
+  } | null {
     const mask = this.zeroMask()
 
     // Point de départ
@@ -469,7 +478,12 @@ export class Labyrinthe implements LabyrintheModel {
     mask[currentRow][currentCol] = 1
     const path: Array<[number, number]> = [[currentRow, currentCol]]
 
-    const touchesOnlyCurrent = (r: number, c: number, curR: number, curC: number) => {
+    const touchesOnlyCurrent = (
+      r: number,
+      c: number,
+      curR: number,
+      curC: number,
+    ) => {
       for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
           if (dr === 0 && dc === 0) continue
@@ -516,7 +530,8 @@ export class Labyrinthe implements LabyrintheModel {
       }
 
       // avance vers un voisin aléatoire
-      const [nextRow, nextCol] = neighbors[Math.floor(this.rnd() * neighbors.length)]
+      const [nextRow, nextCol] =
+        neighbors[Math.floor(this.rnd() * neighbors.length)]
       mask[nextRow][nextCol] = 1
       path.push([nextRow, nextCol])
       ;[currentRow, currentCol] = [nextRow, nextCol]
@@ -529,7 +544,10 @@ export class Labyrinthe implements LabyrintheModel {
     if (!this.isUniquePath(mask)) return null
 
     const start: Coords = { row: path[0][0], col: path[0][1] }
-    const end: Coords = { row: path[path.length - 1][0], col: path[path.length - 1][1] }
+    const end: Coords = {
+      row: path[path.length - 1][0],
+      col: path[path.length - 1][1],
+    }
 
     return { mask, start, end, orientation }
   }
@@ -578,7 +596,8 @@ export class Labyrinthe implements LabyrintheModel {
     }
     if (open.size < 2) return false
 
-    const inOpen = (r: number, c: number) => this.inBounds(r, c) && open.has(key(r, c))
+    const inOpen = (r: number, c: number) =>
+      this.inBounds(r, c) && open.has(key(r, c))
 
     const neighbors8 = (r: number, c: number) => {
       const out: Array<[number, number]> = []
@@ -662,17 +681,22 @@ export class Labyrinthe implements LabyrintheModel {
     }
 
     if (emptyCells > 0) {
-      console.warn(`assignValuesToGrid: ${emptyCells} cellules vides détectées`, {
-        goodUsed: gi,
-        goodAvailable: this.goodAnswers.length,
-        badUsed: bi,
-        badAvailable: this.badAnswers.length,
-      })
+      console.warn(
+        `assignValuesToGrid: ${emptyCells} cellules vides détectées`,
+        {
+          goodUsed: gi,
+          goodAvailable: this.goodAnswers.length,
+          badUsed: bi,
+          badAvailable: this.badAnswers.length,
+        },
+      )
     }
   }
 
   private cloneGrid(grid: CellGrid): CellGrid {
-    return grid.map((row) => row.map((c) => ({ isGood: c.isGood, clicked: c.clicked, text: c.text })))
+    return grid.map((row) =>
+      row.map((c) => ({ isGood: c.isGood, clicked: c.clicked, text: c.text })),
+    )
   }
 
   /**
@@ -697,12 +721,19 @@ export class Labyrinthe implements LabyrintheModel {
   }
 
   generateLatex(options: LatexOptions = {}): string {
-    const { correction = false, align = 'c', borders = true, rowSeparators = true } = options
+    const {
+      correction = false,
+      align = 'c',
+      borders = true,
+      rowSeparators = true,
+    } = options
     const snap = this.snapshot()
     const rows = snap.rows
     const cols = snap.cols
 
-    const colSpec = borders ? '|' + `${align}|`.repeat(cols) : `${align}`.repeat(cols)
+    const colSpec = borders
+      ? '|' + `${align}|`.repeat(cols)
+      : `${align}`.repeat(cols)
     const out: string[] = []
     out.push(`\\begin{tabular}{${colSpec}}`)
     if (rowSeparators) out.push(`\\hline`)
@@ -744,7 +775,9 @@ export class Labyrinthe implements LabyrintheModel {
     return out.join('\n')
   }
 
-  generateLatexCorrection(options: Omit<LatexOptions, 'correction'> = {}): string {
+  generateLatexCorrection(
+    options: Omit<LatexOptions, 'correction'> = {},
+  ): string {
     return this.generateLatex({ ...options, correction: true })
   }
 }
@@ -754,6 +787,7 @@ export class Labyrinthe implements LabyrintheModel {
  * - Aucune logique métier ici.
  * - Aucun binding d’événements (le contrôleur s’en charge via data-row/data-col).
  * - La composition mathématique est déléguée au MathRenderer fourni (optionnel).
+ * @author Rémi Angot
  */
 export class DomLabyrintheRenderer implements LabyrintheRenderer {
   private math?: MathRenderer
@@ -762,7 +796,12 @@ export class DomLabyrintheRenderer implements LabyrintheRenderer {
     this.math = math
   }
 
-  render(root: ShadowRoot, snapshot: GameSnapshot, width?: number | null, height?: number | null): void {
+  render(
+    root: ShadowRoot,
+    snapshot: GameSnapshot,
+    width?: number | null,
+    height?: number | null,
+  ): void {
     this.ensureStyle(root)
     const container = this.ensureContainer(root)
 
@@ -824,11 +863,15 @@ export class DomLabyrintheRenderer implements LabyrintheRenderer {
   }
 
   showCorrection(root: ShadowRoot, snapshot: GameSnapshot): void {
-    const container = root.querySelector('.grid-container') as HTMLDivElement | null
+    const container = root.querySelector(
+      '.grid-container',
+    ) as HTMLDivElement | null
     if (!container) return
     for (let r = 0; r < snapshot.rows; r++) {
       for (let c = 0; c < snapshot.cols; c++) {
-        const cell = container.querySelector(`.grid-cell[data-row="${r}"][data-col="${c}"]`) as HTMLDivElement | null
+        const cell = container.querySelector(
+          `.grid-cell[data-row="${r}"][data-col="${c}"]`,
+        ) as HTMLDivElement | null
         if (!cell) continue
         const isGood = snapshot.grid[r]?.[c]?.isGood
         if (isGood) {
@@ -840,7 +883,9 @@ export class DomLabyrintheRenderer implements LabyrintheRenderer {
   }
 
   setDisabled(root: ShadowRoot, disabled: boolean): void {
-    const container = root.querySelector('.grid-container') as HTMLDivElement | null
+    const container = root.querySelector(
+      '.grid-container',
+    ) as HTMLDivElement | null
     if (!container) return
     if (disabled) {
       container.classList.add('disabled')
@@ -858,7 +903,9 @@ export class DomLabyrintheRenderer implements LabyrintheRenderer {
   // Internals
 
   private ensureStyle(root: ShadowRoot): HTMLStyleElement {
-    let style = root.querySelector('style[data-labyrinthe-style="1"]') as HTMLStyleElement | null
+    let style = root.querySelector(
+      'style[data-labyrinthe-style="1"]',
+    ) as HTMLStyleElement | null
     if (style) return style
 
     style = document.createElement('style')
@@ -1044,7 +1091,9 @@ export class DomLabyrintheRenderer implements LabyrintheRenderer {
   }
 
   private ensureContainer(root: ShadowRoot): HTMLDivElement {
-    let container = root.querySelector('.grid-container') as HTMLDivElement | null
+    let container = root.querySelector(
+      '.grid-container',
+    ) as HTMLDivElement | null
     if (!container) {
       container = document.createElement('div')
       container.className = 'grid-container mx-auto'
@@ -1651,7 +1700,6 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
     labyrinthe.setValues(options.goodAnswers, options.badAnswers)
     return labyrinthe
   }
-
 }
 
 registerMathaleaCustomElement(MathaleaLabyrintheElement)

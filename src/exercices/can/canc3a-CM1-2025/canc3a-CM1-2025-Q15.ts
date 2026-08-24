@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
 import { PointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -52,7 +53,7 @@ export default class Can2025CM1Q15 extends ExerciceSimple {
     this.question = 'Donne la longueur du contour de cette figure.<br> '
     this.question += mathalea2d(
       Object.assign(
-        { scale: 0.5, center: true },
+        { scale: 0.5, center: !context.isHtml },
         fixeBordures(objets),
       ),
       objets,

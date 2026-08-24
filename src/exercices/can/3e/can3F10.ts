@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
@@ -108,7 +109,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
         ymax,
         pixelsParCm: 30,
         scale: 0.75,
-        center: true,
+        center: !context.isHtml,
       },
       courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
       r1,

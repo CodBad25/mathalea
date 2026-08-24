@@ -1,9 +1,9 @@
-import type { IExercice, UneProposition } from '../types'
 import { context } from '../../modules/context'
 import { addFeedback } from '../../modules/messages'
 import { get } from '../html/dom'
 import { texteGras } from '../outils/embellissements'
 import { lettreDepuisChiffre } from '../outils/outilString'
+import type { IExercice, UneProposition } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -27,7 +27,9 @@ type MathaleaQcmVerificationResult = {
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class MathaleaQcmElement extends MathaleaCustomElement {
   static readonly elementTag = 'mathalea-qcm'
 

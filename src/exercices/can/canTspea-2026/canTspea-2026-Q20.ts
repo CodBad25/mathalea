@@ -120,7 +120,7 @@ export const refs = {
 
     const graphique = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.75, center: true },
+        { pixelsParCm: 30, scale: 0.75, center: !context.isHtml },
         {
           xmin: bornes.xMin - 1,
           ymin: bornes.yMin - 1,

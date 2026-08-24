@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import {
@@ -85,7 +86,7 @@ export default class AutoF4 extends ExerciceQcmA {
     this.enonce +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.75, center: true },
+          { pixelsParCm: 30, scale: 0.75, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,
@@ -262,7 +263,7 @@ export default class AutoF4 extends ExerciceQcmA {
     this.enonce +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.75, center: true },
+          { pixelsParCm: 30, scale: 0.75, center: !context.isHtml },
           {
             xmin: bornes.xMin - 2,
             ymin: bornes.yMin - 1,

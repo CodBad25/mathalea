@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -120,7 +121,7 @@ export default class Can52026Q22 extends ExerciceCan {
             ymax: 7,
             pixelsParCm: 20,
             scale: 0.6,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         ) + '<br>Nombre de faces de ce solide'
@@ -158,7 +159,7 @@ export default class Can52026Q22 extends ExerciceCan {
             ymax: 5,
             scale: 0.6,
             pixelsParCm: 30,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         ) + '<br>Nombre de faces de ce solide'
@@ -199,7 +200,7 @@ export default class Can52026Q22 extends ExerciceCan {
 
             scale: 0.6,
             pixelsParCm: 30,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         ) + '<br>Nombre de faces de ce solide'

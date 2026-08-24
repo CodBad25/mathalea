@@ -6,7 +6,7 @@ import Question4 from '../EAMPremiere/EAM-AGTechno-2026-Q6'
 import Question5 from '../EAMPremiere/EAM-CESpe-2026-Q5'
 import Question6 from '../EAMPremiere/EAM-AGTechno-2026-Q11'
 import Question7 from '../EAMPremiere/EAM-CESpe-2026-Q8'
-export const titre = 'Sujet n°3'
+export const titre = 'Traiter le sujet n°3'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'd545c'

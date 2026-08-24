@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
@@ -76,7 +77,7 @@ export default class Can52026Q25 extends ExerciceCan {
         ymax: 3,
         scale: 1, // CORRECTION : scale à 1 pour avoir 2 carreaux = 1 unité visuellement
         pixelsParCm: 40,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       o,

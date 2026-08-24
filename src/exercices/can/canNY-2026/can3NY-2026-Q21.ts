@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -96,7 +97,7 @@ export default class calculerPythagore2026 extends ExerciceSimple {
           scale: 0.6,
           pixelsParCm: 18,
           mainlevee: false,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

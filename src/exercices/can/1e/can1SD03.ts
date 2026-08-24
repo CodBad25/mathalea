@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
@@ -79,7 +80,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
           ymax: 4, // Math.max(3, f(0) + 1),
           pixelsParCm: 25,
           scale: 0.6,
-          center: true,
+          center: !context.isHtml,
         },
         r,
         o,

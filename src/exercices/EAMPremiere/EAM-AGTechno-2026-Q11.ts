@@ -57,7 +57,7 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
 
     serie.isQualitative = true
     this.enonce = `${raisonDiag}.<br>
-    ${serie.diagrammeCirc({ percentVsEffectifs: true, effectifsOn: true })}<br>
+    ${serie.diagrammeCirc({ percentVsEffectifs: true, effectifsOn: true, valuesOn: false })}<br>
     La proportion de joueurs ${question} est :`
     let sol: string
     let dist1: string

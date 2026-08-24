@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -114,7 +115,7 @@ export default class auto1AF2 extends ExerciceQcmA {
  `,
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 20, scale: 0.6, center: true },
+          { pixelsParCm: 20, scale: 0.6, center: !context.isHtml },
           {
             xmin: -5,
             ymin: -5,
@@ -349,7 +350,7 @@ Leurs abscisses sont notées respectivement $${formaterListe(nomsPoints.map((nom
  `,
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 22, scale: 0.6, center: true },
+          { pixelsParCm: 22, scale: 0.6, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

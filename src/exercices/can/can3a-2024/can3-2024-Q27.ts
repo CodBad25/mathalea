@@ -80,7 +80,7 @@ export default class NomExercice extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 1,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )
@@ -142,7 +142,7 @@ export default class NomExercice extends ExerciceSimple {
             mainlevee: false,
             amplitude: 0.5,
             scale: 1,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )
@@ -206,7 +206,7 @@ export default class NomExercice extends ExerciceSimple {
             mainlevee: false,
             amplitude: 0.5,
             scale: 1,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )

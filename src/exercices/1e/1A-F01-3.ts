@@ -111,7 +111,7 @@ export default class AutoF01c extends ExerciceQcmA {
 
     this.enonce = `On considère une fonction $f$ dont la représentation graphique $\\mathscr{C}$ est tracée dans un repère ci-dessous.<br><br>`
     const optionsFigure = Object.assign(
-      { pixelsParCm: 30, scale: 1, center: true },
+      { pixelsParCm: 30, scale: 1, center: !context.isHtml },
       {
         xmin: bornes.xMin - 1,
         ymin: bornes.yMin - 1,

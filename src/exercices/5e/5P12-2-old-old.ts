@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { listeShapes2DInfos } from '../../lib/2d/figures2d/shapes2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import {
@@ -279,7 +280,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
           pixelsParCm: 20,
           scale: 0.6,
           display: 'block' as const,
-          center: true,
+          center: !context.isHtml,
           optionsTikz: 'transform shape',
         }),
         figureCorr,

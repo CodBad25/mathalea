@@ -104,7 +104,7 @@ export default class AutoF01d extends ExerciceQcmA {
     const optionsFigure = {
       pixelsParCm: 30,
       scale: 1,
-      center: true,
+      center: !context.isHtml,
       xmin: bornes.xMin - 1,
       ymin: bornes.yMin - 1,
       xmax: bornes.xMax + 1,

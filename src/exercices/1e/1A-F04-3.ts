@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import {
@@ -84,7 +85,7 @@ export default class AutoF4b extends ExerciceQcmA {
     this.enonce +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.9, center: true },
+          { pixelsParCm: 30, scale: 0.9, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,
@@ -259,7 +260,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
           this.enonce +=
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 1, center: true },
+                { pixelsParCm: 30, scale: 1, center: !context.isHtml },
                 {
                   xmin: bornes.xMin - 1,
                   ymin: bornes.yMin - 1,
@@ -436,7 +437,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
           this.enonce +=
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 1, center: true },
+                { pixelsParCm: 30, scale: 1, center: !context.isHtml },
                 {
                   xmin: bornes.xMin - 1,
                   ymin: bornes.yMin - 1,

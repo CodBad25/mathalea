@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
@@ -117,7 +118,7 @@ export default class NomExercice extends ExerciceSimple {
           mainlevee: true,
           amplitude: 0.5,
           scale: 0.8,
-          center: true,
+          center: !context.isHtml,
         },
         objets1,
       )
@@ -138,7 +139,7 @@ export default class NomExercice extends ExerciceSimple {
             mainlevee: true,
             amplitude: 0.5,
             scale: 0.8,
-            center: true,
+            center: !context.isHtml,
           },
           objets1,
         )
@@ -158,7 +159,7 @@ export default class NomExercice extends ExerciceSimple {
             mainlevee: true,
             amplitude: 0.5,
             scale: 0.8,
-            center: true,
+            center: !context.isHtml,
           },
           objets2,
         )

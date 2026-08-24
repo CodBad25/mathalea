@@ -170,7 +170,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         ymax: yMax + 1,
         pixelsParCm: 25,
         scale: 0.72,
-        center: true,
+        center: !context.isHtml,
         id,
       },
       objets,

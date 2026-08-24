@@ -142,7 +142,7 @@ export default class ImageSpline extends ExerciceSimple {
     })
     const objetsEnonce = [repere1, courbe1]
     const figureOptions = Object.assign(
-      { pixelsParCm: 30, scale: 0.7, center: true },
+      { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
       {
         xmin: bornes.xMin - 1,
         ymin: bornes.yMin - 1,

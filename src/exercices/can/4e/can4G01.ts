@@ -73,7 +73,7 @@ Calculer la longueur $${nom[0]}${nom[1]}$.<br>`
             ymax: C.y + b / 10 + 1,
             pixelsParCm: 140 / b,
             scale: 4 / b,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )
@@ -94,7 +94,7 @@ Calculer la longueur $${nom[0]}${nom[1]}$.<br>`
             ymax: C.y + b / 10 + 1,
             pixelsParCm: 140 / b,
             scale: 4 / b,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )
@@ -115,7 +115,7 @@ Calculer la longueur $${nom[0]}${nom[1]}$.<br>`
             ymax: C.y + b / 10 + 1,
             pixelsParCm: 140 / b,
             scale: 4 / b,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )

@@ -34,7 +34,9 @@ type TableauMathliveCreateOptions = TableauMathliveOptions & {
   numeroExercice: number
   questionIndex: number
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class TableauMathliveElement extends MathaleaCustomElement {
   static readonly elementTag = 'tableau-mathlive'
   private static readonly verificationCallbacks = new Map<
@@ -136,9 +138,9 @@ export class TableauMathliveElement extends MathaleaCustomElement {
 
   set value(nextValue: Record<string, string>) {
     Object.entries(nextValue).forEach(([id, value]) => {
-      const field = this.querySelector(`#${CSS.escape(id)}`) as
-        | { value?: string }
-        | null
+      const field = this.querySelector(`#${CSS.escape(id)}`) as {
+        value?: string
+      } | null
       if (field != null) field.value = value
     })
   }

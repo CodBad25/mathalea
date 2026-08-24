@@ -157,8 +157,14 @@ export default class Pourcentages extends ExerciceQcmA {
       // Si c'est la même chose, pas besoin de "soit encore"
       this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${miseEnEvidence(calculDeBase)}$.`
     } else {
-      // Si c'est différent, alors on peut dire "soit encore"
-      this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${texNombre(pourcentage / 100, 2)} \\times ${texNombre(nombre)}$, soit encore $${miseEnEvidence(bonneReponseSansSymboles)}$.`
+      // Si la bonne réponse est la fraction irréductible, on détaille le passage depuis la valeur décimale
+      if (!bonneReponseSansSymboles.includes('100')) {
+        this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${calculDeBase}$.<br>
+        Comme $${texNombre(pourcentage / 100, 2)} = \\dfrac{${pourcentage}}{100} = \\dfrac{${numSimp}}{${denSimp}}$, alors $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$ est égal à $${miseEnEvidence(bonneReponseSansSymboles)}$.`
+      } else {
+        // Si c'est différent, alors on peut dire "soit encore"
+        this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${texNombre(pourcentage / 100, 2)} \\times ${texNombre(nombre)}$, soit encore $${miseEnEvidence(bonneReponseSansSymboles)}$.`
+      }
     }
     // Construction du tableau final avec exactement 4 réponses
     this.reponses = [bonneReponse, ...troisMauvaisesReponses]

@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { ellipse } from '../../../lib/2d/projections3d'
@@ -84,7 +85,7 @@ export default class VolumeCylindre extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.5,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

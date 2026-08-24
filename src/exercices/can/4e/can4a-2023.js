@@ -380,7 +380,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.6,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -477,7 +477,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.8,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -516,7 +516,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.6,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )

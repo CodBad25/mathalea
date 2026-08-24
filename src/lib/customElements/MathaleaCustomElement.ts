@@ -22,6 +22,7 @@ export const listOfCustomElements = [
   'fill-in-the-blank',
   'mathalea-textfield',
   'tableau-mathlive',
+  'tableau-hybride',
   'mathalea-qcm',
   'mathalea-couteau-suisse',
   'mathalea-branching-qcm',
@@ -78,7 +79,9 @@ export function registerMathaleaCustomElement(
 }
 
 type CreateAttributes = Record<string, unknown>
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export default class MathaleaCustomElement extends HTMLElement {
   static readonly elementTag: string = ''
 

@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
@@ -66,7 +67,8 @@ export default class AutoQ9ANns2026 extends ExerciceQcmA {
       ymax: 6.05,
       pixelsParCm: 30,
       scale: 0.6,
-      display: 'block' as const, center: true,
+      display: 'block' as const,
+      center: !context.isHtml,
     }
 
     const figure = mathalea2d(fenetreMathalea2d, r, d, o)

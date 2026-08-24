@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
@@ -78,7 +79,7 @@ export default class Auto1AF076 extends ExerciceQcmA {
         ymax: 3.5,
         pixelsParCm: 25,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,
@@ -269,7 +270,7 @@ export default class Auto1AF076 extends ExerciceQcmA {
         ymax: 3.5,
         pixelsParCm: 25,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,

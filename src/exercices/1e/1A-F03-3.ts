@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import { repere } from '../../lib/2d/reperes'
@@ -168,7 +169,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         ymax: yMax + 1,
         pixelsParCm: 25,
         scale: 0.72,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

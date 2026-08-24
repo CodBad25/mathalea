@@ -576,7 +576,7 @@ export default class Stat {
     for (let i = 0; i < pairs.length; i++) {
       objets.push(arc(A, O, secteurs[i].angle, true, colors(i)))
       const P = rotation(A, O, secteurs[i].angle / 2)
-      const C = homothetie(P, O, 0.5)
+      const C = homothetie(P, O, 0.75)
       A = rotation(A, O, secteurs[i].angle)
 
       let Q: PointAbstrait
@@ -623,20 +623,17 @@ export default class Stat {
         if (percentVsEffectifs) {
           objets.push(
             latex2d(
-              `${valuesOn ? (this.isQualitative ? `\\text{${pairs[i][0]}}` : texNombre(Number(pairs[i][0]), 2)) : ''}${texNombre((pairs[i][1] / total) * 100, 2)}`,
+              `${texNombre((pairs[i][1] / total) * 100, 2)}\\,\\%`,
               C.x,
               C.y,
-              {},
+              { letterSize: 'small' },
             ),
           )
         } else {
           objets.push(
-            latex2d(
-              `${valuesOn ? (this.isQualitative ? `\\text{${pairs[i][0]}}` : texNombre(Number(pairs[i][0]), 2)) : ''}${texNombre(pairs[i][1], 2)}`,
-              C.x,
-              C.y,
-              {},
-            ),
+            latex2d(`${texNombre(pairs[i][1], 2)}`, C.x, C.y, {
+              letterSize: 'small',
+            }),
           )
         }
       }

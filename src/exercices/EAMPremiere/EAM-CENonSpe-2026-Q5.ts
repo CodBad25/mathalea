@@ -1,9 +1,11 @@
+import { context } from '../../modules/context'
 import Decimal from 'decimal.js'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
+import { tracePoint } from '../../lib/2d/TracePoint'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
@@ -11,7 +13,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { tracePoint } from '../../lib/2d/TracePoint'
 
 export const uuid = '49275'
 export const refs = {
@@ -32,7 +33,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5CEns2026 extends ExerciceQcmA {
-   // Droite de coefficient directeur m = rise/run et d'ordonnée à l'origine p.
+  // Droite de coefficient directeur m = rise/run et d'ordonnée à l'origine p.
   // On lit la pente par un triangle à pas ENTIER : avancer de « run », se décaler de « rise ».
   private appliquerLesValeurs(rise: number, run: number, p: number): void {
     const mDec = new Decimal(rise).div(run) // coefficient directeur
@@ -78,7 +79,8 @@ export default class AutoQ5CEns2026 extends ExerciceQcmA {
       ymax: 6.05,
       pixelsParCm: 30,
       scale: 0.6,
-      display: 'block' as const, center: true,
+      display: 'block' as const,
+      center: !context.isHtml,
     }
 
     const figure = mathalea2d(fenetreMathalea2d, r, d, marqueursAB, labelsAB, o)

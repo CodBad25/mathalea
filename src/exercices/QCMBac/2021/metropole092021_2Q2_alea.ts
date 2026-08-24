@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 // import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
@@ -87,7 +88,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
         ymax: 9,
         pixelsParCm: 30,
         scale: 1,
-        center: true,
+        center: !context.isHtml,
       },
       [
         courbe(f, {

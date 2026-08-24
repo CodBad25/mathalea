@@ -6,6 +6,9 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Jean-Claude Lhote
+ */
 export type PieAssessmentShape = 'pie' | 'semi-pie'
 export type PieAssessmentMode = 'auto' | 'angle' | 'effectif' | 'label'
 export type PieAssessmentColumn = 'label' | 'effectif' | 'angle'

@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -1013,7 +1014,7 @@ export default class SujetCAN2022troisieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -1069,7 +1070,7 @@ export default class SujetCAN2022troisieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )

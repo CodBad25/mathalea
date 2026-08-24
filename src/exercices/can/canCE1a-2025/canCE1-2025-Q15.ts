@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
@@ -90,7 +91,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.6,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       ) +
@@ -107,7 +108,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.6,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       ) + '<br>'

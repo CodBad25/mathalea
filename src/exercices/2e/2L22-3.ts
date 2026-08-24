@@ -1,118 +1,259 @@
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
-import { labelPoint, texteParPosition } from '../../lib/2d/textes'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { bleuMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import {
-  ecritureAlgebrique,
-  ecritureParentheseSiNegatif,
-} from '../../lib/outils/ecritures'
-import { context } from '../../modules/context'
-import { mathalea2d } from '../../modules/mathalea2d'
+  texFractionReduite,
+  texFractionSigne,
+} from '../../lib/outils/deprecatedFractions'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../lib/outils/embellissements'
+import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
-/* auteur Stéphane Guyon */
-export const titre = 'Résoudre une équation avec des valeurs absolues'
+export const dateDeModifImportante = '13/11/2025'
+export const interactifReady = true
+export const interactifType = 'mathLive'
+export const titre = 'Résoudre des équations se ramenant au produit-nul'
 
 /**
- * 2N15-2, ex 2N23
+ * Résoudre des équations se ramenant au produit-nul
  * @author Stéphane Guyon
  */
-export const uuid = 'e471c'
+export const uuid = '93432'
 
 export const refs = {
   'fr-fr': ['2L22-3'],
-  'fr-ch': [],
+  'fr-ch': ['11FA5B-9'],
 }
-export default class ValeurAbsolueEtEquation extends Exercice {
+export default class Equationspresqueproduitnulle extends Exercice {
   constructor() {
     super()
 
-    this.consigne = 'Résoudre dans $\\mathbb{R}$ les équations suivantes.'
-    this.nbQuestions = 4
-    this.nbCols = 2
-    this.nbColsCorr = 2
-    this.sup = 1 //
+    this.nbQuestions = 3
+    this.spacingCorr = 3
+    this.nbQuestions = 5
     this.correctionDetailleeDisponible = true
-    context.isHtml
-      ? (this.correctionDetaillee = true)
-      : (this.correctionDetaillee = false)
+    this.correctionDetaillee = true
   }
 
   nouvelleVersion() {
-    const typesDeQuestionsDisponibles = [1, 2, 2, 2, 2, 2]
-    const listeTypeDeQuestions = combinaisonListes(
+    this.consigne = `Résoudre dans $\\mathbb R$ ${this.nbQuestions > 1 ? 'les équations suivantes' : "l'équation suivante"}.`
+    if (this.interactif) {
+      this.consigne +=
+        "<br>On donnera la réponse sous forme d'un ensemble de solutions."
+    }
+    const typesDeQuestionsDisponibles = [1, 2, 3, 4, 5]
+    let valeursSolution
+
+    const listeTypeDeQuestions = combinaisonListesSansChangerOrdre(
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const typesDeQuestions = listeTypeDeQuestions[i]
-      let a: number
-      let b: number
-      let c: number
-      let texte = ''
-      let texteCorr = ''
-      switch (typesDeQuestions) {
-        // Cas par cas, on définit le type de nombres que l'on souhaite
-        // Combien de chiffres ? Quelles valeurs ?
-        case 1:
-          c = 0 // c'est pour éviter les warnings
-          a = randint(1, 15) * choice([-1, 1])
-          b = randint(1, 15) * -1
+    for (
+      let i = 0, texte, texteCorr, cpt = 0;
+      i < this.nbQuestions && cpt < 50;
 
-          texte = `$\\vert x ${ecritureAlgebrique(a)}\\vert =${b}$`
-          texteCorr = ` ${b} étant négatif, il n'existe pas de solution à cette équation. $S=\\emptyset$`
+    ) {
+      const typesDeQuestions = listeTypeDeQuestions[i]
+      const a = randint(-9, 9, [-1, 0, 1]) // on évite a=1, -1 ou 0
+      const b = randint(-9, 9, 0)
+      const c = randint(-9, 9, 0)
+      const d = randint(-9, 9, 0)
+      const e = randint(-9, 9, [0, c, -c]) // on évite que c+e et c-e soit égal à 0 et on évite e=0
+      const f = randint(-9, 9, [0, d, -d]) // on évite que d+f et d-f soit égal à 0 et on évite f=0
+
+      switch (typesDeQuestions) {
+        case 1: // (ax+b)(cx+d)+(ax+b)(ex+f)=0
+          texte = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$`
+          texteCorr = ` $(${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
+          if (this.correctionDetaillee) {
+            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
+            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})( ${reduireAxPlusB(c, d)})+(\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(e, f)})=0$<br>`
+            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big(( ${reduireAxPlusB(c, d)})+(${reduireAxPlusB(e, f)})\\Big)=0$<br>`
+          }
+          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c + e, d + f)})=0$<br>`
+          if (c + e === 0) {
+            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
+            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
+            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
+          } else {
+            texteCorr +=
+              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
+            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
+            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(c + e, d + f)}=0$<br>`
+            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-d - f, c + e)}$<br>
+                       On en déduit :  `
+            if ((-d - f) / (c + e) < -b / a) {
+              valeursSolution = `${fraction(-d - f, c + e).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
+            } else {
+              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-d - f, c + e).texFractionSimplifiee}`
+            }
+          }
 
           break
-        case 2:
-        default:
-          a = randint(1, 15) * choice([-1, 1])
-          b = randint(1, 15)
-          c = -a
-          texte = `$\\vert x ${ecritureAlgebrique(a)}\\vert =${b}$`
-
-          texteCorr = `Résoudre cette équation est équivalent à résoudre ces deux équations :<br>
-                    $x ${ecritureAlgebrique(a)} =${b}$ et    $x ${ecritureAlgebrique(a)} =${-b}$<br>
-                    Il existe donc deux solutions à cette équation :<br>
-                    $x_1=${c} ${ecritureAlgebrique(b)}$ et $x_2=${c} -${ecritureParentheseSiNegatif(b)}$<br>
-                    $S=\\{${c - b};${c + b}\\}$`
+        case 2: // (ax+b)(cx+d)+(ax+b)(ex+f)=0
+          texte = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-
+                    ( ${reduireAxPlusB(a, b)})( ${reduireAxPlusB(e, f)})=0$`
+          texteCorr = ` $(${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-
+                    ( ${reduireAxPlusB(a, b)})( ${reduireAxPlusB(e, f)})=0$<br>`
           if (this.correctionDetaillee) {
-            const s = segment(pointAbstrait(0, 0), pointAbstrait(12, 0))
-            s.styleExtremites = '->'
-            const x0 = pointAbstrait(3, 0)
-            x0.nom = String(c - b)
-            x0.positionLabel = 'below'
-            const A = pointAbstrait(6, 0, String(c))
-            A.positionLabel = 'below'
-            const x1 = pointAbstrait(9, 0, String(c + b), 'below')
-            x1.positionLabel = 'below'
-            const s1 = segmentAvecExtremites(x0, x1, bleuMathalea)
-            s1.epaisseur = 2
-            const s2 = segmentAvecExtremites(x0, A)
-            const l = labelPoint(A, x0, x1)
-            const cote = segment(pointAbstrait(3, 1), pointAbstrait(5.95, 1))
-            cote.styleExtremites = '<->'
-            const texteCote = texteParPosition(b, 4.5, 1.6)
-            const cote2 = segment(pointAbstrait(6.05, 1), pointAbstrait(9, 1))
-            cote2.styleExtremites = '<->'
-            const texteCote2 = texteParPosition(b, 7.5, 1.6)
-            texteCorr += mathalea2d(
-              { xmin: -1, xmax: 13, ymin: -2, ymax: 2.5 },
-              s,
-              s1,
-              s2,
-              l,
-              cote,
-              texteCote,
-              cote2,
-              texteCote2,
-            )
+            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
+            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})( ${reduireAxPlusB(c, d)})- (\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(e, f)})=0$<br>`
+            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big(( ${reduireAxPlusB(c, d)})-( ${reduireAxPlusB(e, f)})\\Big)=0$<br>`
+          }
+          if (e > 0)
+            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}${reduireAxPlusB(-e, -f)})=0$<br>`
+          else
+            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}+${reduireAxPlusB(-e, -f)})=0$<br>`
+          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c - e, d - f)})=0$<br>`
+          if (c - e === 0) {
+            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
+            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
+            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
+          } else {
+            texteCorr +=
+              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
+            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
+            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(c - e, d - f)}=0$<br>`
+            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-d + f, c - e)}$<br>
+                   On en déduit :  `
+            if ((-d + f) / (c - e) < -b / a) {
+              valeursSolution = `${fraction(-d + f, c - e).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
+            } else {
+              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-d + f, c - e).texFractionSimplifiee}`
+            }
+          }
+
+          break
+        case 3: // (ax+b)²+(ax+b)(ex+f)=0
+          texte = ` ($${reduireAxPlusB(a, b)})^{2}+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$`
+          texteCorr = ` $(${reduireAxPlusB(a, b)})^{2}+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
+          texteCorr += ` $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(a, b)})+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
+          if (this.correctionDetaillee) {
+            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
+            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})(${reduireAxPlusB(a, b)})+(\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(e, f)})=0$<br>`
+            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big((${reduireAxPlusB(a, b)})+(${reduireAxPlusB(e, f)})\\Big)=0$<br>`
+          }
+          if (e < 0)
+            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a, b)})${reduireAxPlusB(e, f)})=0$<br>`
+          else
+            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a, b)})+${reduireAxPlusB(e, f)})=0$<br>`
+          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a + e, b + f)})=0$<br>`
+          if (a + e === 0) {
+            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
+            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
+            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
+          } else {
+            texteCorr +=
+              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
+            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
+            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(a + e, b + f)}=0$<br>`
+            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-b - f, a + e)}$<br>
+               On en déduit :  `
+            if ((-b - f) / (a + e) < -b / a) {
+              valeursSolution = `${fraction(-b - f, a + e).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
+            } else {
+              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-b - f, a + e).texFractionSimplifiee}`
+            }
+          }
+
+          break
+        case 4: // (ax+b)(cx+d)-(ax+b)²=0
+          texte = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})^{2}=0$`
+          texteCorr = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})^{2}=0$<br>`
+          texteCorr += ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a, b)})=0$<br>`
+          if (this.correctionDetaillee) {
+            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
+            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})( ${reduireAxPlusB(c, d)})-(\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(a, b)})=0$<br>`
+            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big(( ${reduireAxPlusB(c, d)})-( ${reduireAxPlusB(a, b)})\\Big)=0$<br>`
+          }
+          if (a > 0)
+            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}${reduireAxPlusB(-a, -b)}))=0$<br>`
+          else
+            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}+${reduireAxPlusB(-a, -b)}))=0$<br>`
+          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c - a, d - b)})=0$<br>`
+          if (c - a === 0) {
+            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
+            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
+            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
+          } else {
+            texteCorr +=
+              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
+            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
+            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(c - a, d - b)}=0$<br>`
+            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-d + b, c - a)}$<br>
+           On en déduit :  `
+            if ((-d + b) / (c - b) < -b / a) {
+              valeursSolution = `${fraction(-d + b, c - a).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
+            } else {
+              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-d + b, c - a).texFractionSimplifiee}`
+            }
+          }
+
+          break
+
+        case 5: // (ax+b)(cx+d)=(ax+b)(ex+f)
+        default:
+          {
+            texte = `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})$`
+            texteCorr =
+              'Deux nombres sont égaux si et seulement si leur différence est nulle.<br>'
+            texteCorr += `$\\phantom{\\iff}(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})$<br>`
+            texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
+            if (this.correctionDetaillee) {
+              texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
+              texteCorr += `$\\phantom{\\iff}(\\underline{${reduireAxPlusB(a, b)}})(${reduireAxPlusB(c, d)})-(\\underline{${reduireAxPlusB(a, b)}})(${reduireAxPlusB(e, f)})=0$<br>`
+              texteCorr += `$\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big((${reduireAxPlusB(c, d)})-(${reduireAxPlusB(e, f)})\\Big)=0$<br>`
+            }
+            if (e < 0) {
+              texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)}+${reduireAxPlusB(-e, -f)})=0$<br>`
+            } else {
+              texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)}${reduireAxPlusB(-e, -f)})=0$<br>`
+            }
+            texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c - e, d - f)})=0$<br>`
+            texteCorr += `On reconnaît une équation produit-nul, donc on applique la propriété :<br>
+        ${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
+            texteCorr += `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c - e, d - f)})=0$<br>`
+            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$ ou $${reduireAxPlusB(c - e, d - f)}=0$<br>`
+            if (this.correctionDetaillee) {
+              // on ajoute les étapes de résolution si la correction détaillée est cochée.
+              texteCorr += `$\\iff ${reduireAxPlusB(a, 0)}=${-b}$ ou $ ${reduireAxPlusB(c - e, 0)}=${-d + f}$<br>`
+            }
+            const f1 = fraction(-b, a)
+            const f2 = fraction(-d + f, c - e)
+            texteCorr += `$\\iff x=${f1.texFraction}$ ou $ x=${f2.texFraction}$<br>On en déduit :  `
+            if (-b / a > (-d + f) / (c - e)) {
+              valeursSolution = `${f2.texFractionSimplifiee};${f1.texFractionSimplifiee}`
+            } else if (-b / a < (-d + f) / (c - e)) {
+              valeursSolution = `${f1.texFractionSimplifiee};${f2.texFractionSimplifiee}`
+            } else {
+              valeursSolution = `${f1.texFractionSimplifiee}`
+            }
           }
           break
       }
-
-      if (this.questionJamaisPosee(i, a, b, c, typesDeQuestions)) {
+      //  const solutions = valeursSolution?.split(';')
+      // texteCorr += `$S=\\left\\{${valeursSolution}\\right\\}$`
+      const solutions = valeursSolution?.split(';')
+      texteCorr += `$S=\\left\\{${solutions?.map((sol) => miseEnEvidence(sol)).join('~;~')}\\right\\}$.`
+      if (this.interactif) {
+        texte +=
+          '<br>$S=$' +
+          ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble)
+      }
+      handleAnswers(this, i, {
+        reponse: {
+          value: `\\{${valeursSolution}\\}`,
+          options: { ensembleDeNombres: true },
+        },
+      })
+      if (this.questionJamaisPosee(a, b, c, d, e, f)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

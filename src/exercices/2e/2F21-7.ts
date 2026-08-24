@@ -373,7 +373,7 @@ export default class Signefonctionaffine extends Exercice {
               ymin: -7,
               ymax: 7,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )

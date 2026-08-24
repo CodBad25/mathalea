@@ -22,7 +22,9 @@ type CliqueFigureVerificationResult = {
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class CliqueFigureElement extends MathaleaCustomElement {
   static readonly elementTag = 'clique-figure'
 

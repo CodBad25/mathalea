@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import Decimal from 'decimal.js'
 import { antecedentParDichotomie } from '../../lib/2d/antecedentParDichotomie'
 import { courbe } from '../../lib/2d/Courbe'
@@ -398,7 +399,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: 7,
                 pixelsParCm: 20,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               courbe(f, {
                 repere: r1,
@@ -559,7 +560,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: (f(s0) + 0.2) * 10,
                 pixelsParCm: 30,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               [
                 courbe(f, {
@@ -582,7 +583,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: (f(s0) + 0.2) * 10,
                 pixelsParCm: 30,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               [
                 courbe(f, {
@@ -732,7 +733,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: 31,
                 pixelsParCm: 20,
                 scale: 0.5,
-                center: true,
+                center: !context.isHtml,
               },
               TexteX,
               TexteY,

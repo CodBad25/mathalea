@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { orangeMathalea } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -79,7 +80,7 @@ export default class LireAbscisseFractionnaireQcm extends ExerciceQcmA {
         xmax: 14,
         ymax: 1.5,
         scale: 0.75,
-        center: true,
+        center: !context.isHtml,
       },
       droite,
     )

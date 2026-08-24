@@ -30,7 +30,7 @@ import Exercice from '../Exercice'
 export const titre = 'Construire un triangle avec les instruments'
 
 /**
- * Publié le 30/08/202
+ * Publié le 30/08/2022
  * @author Jean-claude Lhote
  * @author Rémi Angot
  *  (animation Instrumenpoche)

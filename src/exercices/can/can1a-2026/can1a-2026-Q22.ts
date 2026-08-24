@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -85,7 +86,7 @@ export default class Can1a2026Q22 extends ExerciceCan {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.5,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

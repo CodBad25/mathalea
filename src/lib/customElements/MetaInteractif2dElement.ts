@@ -1,12 +1,14 @@
 import type { MathfieldElement } from 'mathlive'
+import type { CompareResult } from '../interactif/checks/types'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutPourUnPoint } from '../interactif/fonctionsBaremes'
-import type { CompareResult } from '../interactif/checks/types'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class MetaInteractif2dElement extends MathaleaCustomElement {
   static readonly elementTag = 'meta-interactif-2d'
 

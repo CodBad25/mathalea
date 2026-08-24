@@ -46,6 +46,9 @@ const points = trigoCircleAngles.map((angle, index) => ({
   label: compactTexForSvg(angle.angleTex),
   coordinateLabel: `(${compactTexForSvg(angle.cosTex)};${compactTexForSvg(angle.sinTex)})`,
 }))
+/**
+ * @author Nathan Sheinmann + refactorisation en MathaleaCustomElement par Jean-Claude Lhote
+ */
 class TrigoCircleSelectionElement extends MathaleaCustomElement {
   static readonly elementTag = 'trigo-circle-selection'
 
@@ -80,8 +83,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     const resultatMesure = Number(cercleSelectionElement?.value ?? 0) // 0 signifie pas de réponse.
     const isCorrect = resultatMesure === Number(goodAnswer)
     if (cercleSelectionElement != null) {
-      exercice.answers[cercleSelectionElement.id] =
-        cercleSelectionElement.value
+      exercice.answers[cercleSelectionElement.id] = cercleSelectionElement.value
     }
     const spanResultat = document.querySelector(
       `#resultatCheckEx${exercice.numeroExercice}Q${questionIndex}`,
@@ -799,7 +801,7 @@ export function addTrigoCircleSelection(
   })
 
   const withResultSpan =
-    options.withResultSpan ?? (options.interactivityOn ?? true)
+    options.withResultSpan ?? options.interactivityOn ?? true
   if (!withResultSpan) return html
   return `${html}<span id="resultatCheckEx${exercice.numeroExercice}Q${questionIndex}"></span>`
 }

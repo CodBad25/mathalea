@@ -103,7 +103,9 @@ type SpreadsheetLike = {
   style?: Record<string, unknown>
   columns?: unknown[]
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class MySpreadsheetElement extends MathaleaCustomElement {
   static readonly elementTag = 'my-spreadsheet'
 
@@ -702,8 +704,7 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     try {
       if (this.getAttribute('data'))
         data = JSON.parse(this.getAttribute('data') ?? '') as (
-          | string
-          | number
+          string | number
         )[][]
     } catch {
       // Attribut data invalide, on conserve la valeur par défaut.

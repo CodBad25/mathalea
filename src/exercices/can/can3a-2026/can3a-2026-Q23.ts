@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
@@ -120,7 +121,7 @@ export default class Can32026Q23 extends ExerciceCan {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.4,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

@@ -11,6 +11,9 @@ export type DomReadyActionCallback<TPayload = unknown> = (
   context: DomReadyActionContext<TPayload>,
 ) => void | (() => void)
 
+/**
+ * @author Jean-Claude Lhote
+ */
 export class DomReadyActionElement extends MathaleaCustomElement {
   static readonly elementTag = 'mathalea-dom-ready'
   private static readonly callbacks = new Map<string, DomReadyActionCallback>()

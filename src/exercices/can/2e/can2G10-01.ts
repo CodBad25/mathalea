@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
@@ -74,7 +75,7 @@ export default class LectureCoordonnees extends ExerciceSimple {
         ymax: 2,
         scale: 1,
         pixelsParCm: 50,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       o,

@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
@@ -76,7 +77,7 @@ export default class CalculAmplitudeThermique extends ExerciceQcmA {
         ymax: hauteur + 1.2,
         pixelsParCm: 28,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       graphique,
       ligne,

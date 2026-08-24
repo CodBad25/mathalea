@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { latex2d } from '../../../lib/2d/textes'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -52,7 +53,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             ymax: 1,
             pixelsParCm: 35,
             scale: 0.6,
-            center: true,
+            center: !context.isHtml,
           },
           latex2d('A', (3 * a) / 4, 0.5, { color: bleuMathalea }),
           droiteGraduee({
@@ -91,7 +92,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             ymax: 1,
             pixelsParCm: 35,
             scale: 0.6,
-            center: true,
+            center: !context.isHtml,
           },
           latex2d('A', (3 * a) / 5, 0.5, { color: bleuMathalea }),
           droiteGraduee({

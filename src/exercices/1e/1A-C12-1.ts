@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2N40-01 pour les auto 1er
+ * Clone de can2N40-11 pour les auto 1er
  * @author Gilles Mora
  */
 

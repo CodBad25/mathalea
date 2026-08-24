@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -75,7 +76,7 @@ export default class SommeDeProduitsCompleter extends ExerciceSimple {
           xmax: 6,
           ymax: 2.5,
           scale: 0.7,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

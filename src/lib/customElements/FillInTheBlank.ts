@@ -52,7 +52,9 @@ type FillInTheBlankCreateOptions = FillInTheBlankOptions & {
   numeroExercice: number
   questionIndex: number
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class FillInTheBlankElement extends MathaleaCustomElement {
   static readonly elementTag = 'fill-in-the-blank'
   private static readonly verificationCallbacks = new Map<

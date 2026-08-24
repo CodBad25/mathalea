@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
@@ -105,7 +106,7 @@ export default class LectureGraphiqueParabole extends Exercice {
               ymax: 6,
               pixelsParCm: 25,
               scale: 0.65,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -166,7 +167,7 @@ export default class LectureGraphiqueParabole extends Exercice {
               ymax: 5,
               pixelsParCm: 25,
               scale: 0.65,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -225,7 +226,7 @@ export default class LectureGraphiqueParabole extends Exercice {
               ymax: 5,
               pixelsParCm: 25,
               scale: 0.65,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -286,7 +287,7 @@ export default class LectureGraphiqueParabole extends Exercice {
               ymax: 2,
               pixelsParCm: 25,
               scale: 0.65,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -347,7 +348,7 @@ export default class LectureGraphiqueParabole extends Exercice {
               ymax: 5,
               pixelsParCm: 25,
               scale: 0.65,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -409,7 +410,7 @@ export default class LectureGraphiqueParabole extends Exercice {
               ymax: 2,
               pixelsParCm: 25,
               scale: 0.65,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,

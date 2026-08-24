@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../../lib/2d/TracePoint'
@@ -98,7 +99,7 @@ export default class Perimetre extends ExerciceSimple {
           mainlevee: true,
           amplitude: 0.5,
           scale: 0.6,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

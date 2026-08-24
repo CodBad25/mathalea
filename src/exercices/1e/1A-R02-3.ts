@@ -1,4 +1,4 @@
-import CalculToutAvecPartie from '../can/2e/can2S10-02'
+import CalculToutAvecPartie from '../can/2e/can2I10-02'
 export const titre = 'Calculer le tout connaissant une partie'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true

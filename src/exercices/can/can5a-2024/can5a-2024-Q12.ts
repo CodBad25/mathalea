@@ -75,7 +75,7 @@ this.optionsChampTexte = { texteApres: '.' }
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.8,
-          center: true,
+          center: !context.isHtml,
         },
         objets1,
       )
@@ -95,7 +95,7 @@ this.optionsChampTexte = { texteApres: '.' }
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.8,
-            center: true,
+            center: !context.isHtml,
           },
           objets1,
         )
@@ -116,7 +116,7 @@ this.optionsChampTexte = { texteApres: '.' }
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.8,
-            center: true,
+            center: !context.isHtml,
           },
           objets2,
         )
@@ -136,7 +136,7 @@ this.optionsChampTexte = { texteApres: '.' }
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.8,
-            center: true,
+            center: !context.isHtml,
           },
           objets3,
         )

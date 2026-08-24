@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageAngle } from '../../../lib/2d/angles'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
@@ -642,7 +643,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.4,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -719,7 +720,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.4,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -792,7 +793,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.4,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -942,7 +943,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 xmax: 8,
                 ymax: 1.5,
                 scale: 0.8,
-                center: true,
+                center: !context.isHtml,
               },
               droiteGraduee({
                 Unite: 3,
@@ -1211,7 +1212,7 @@ export default class SujetCAN20215ieme extends Exercice {
               mainlevee: false,
               amplitude: 0.5,
               scale: 1.3,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -1396,7 +1397,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.3,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -1445,7 +1446,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )

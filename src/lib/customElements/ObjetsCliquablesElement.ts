@@ -95,7 +95,9 @@ const svgNS = 'http://www.w3.org/2000/svg'
 const hiddenOpacity = '0'
 const hoverOpacity = '0.45'
 const selectedOpacity = '0.75'
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class ObjetsCliquablesElement extends MathaleaCustomElement {
   static readonly elementTag = 'objets-cliquables'
   private static readonly verificationCallbacks = new Map<
@@ -225,9 +227,7 @@ export class ObjetsCliquablesElement extends MathaleaCustomElement {
   update(nextValue: string | ObjetCliquableData[]): void {
     const nextObjets = parseObjets(nextValue)
     if (nextObjets.length === 0) return
-    const stateById = new Map(
-      nextObjets.map((objet) => [objet.id, objet.etat]),
-    )
+    const stateById = new Map(nextObjets.map((objet) => [objet.id, objet.etat]))
     this.objets = this.objets.map((objet) => ({
       ...objet,
       etat: stateById.get(objet.id) ?? objet.etat,
@@ -573,7 +573,8 @@ export class ObjetsCliquablesElement extends MathaleaCustomElement {
       const tBottom = (yMax - p1.y) / dy
       pushIfInside({ x: p1.x + tBottom * dx, y: yMax })
     }
-    if (intersections.length < 2) return [objet.x1, objet.y1, objet.x2, objet.y2]
+    if (intersections.length < 2)
+      return [objet.x1, objet.y1, objet.x2, objet.y2]
     return [
       intersections[0].x / this.pixelsParCm,
       -intersections[0].y / this.pixelsParCm,
@@ -693,7 +694,8 @@ function parseObjets(value: unknown): ObjetCliquableData[] {
 function isObjetCliquableData(value: unknown): value is ObjetCliquableData {
   if (typeof value !== 'object' || value == null) return false
   const item = value as Partial<ObjetCliquableData>
-  if (typeof item.id !== 'string' || typeof item.etat !== 'boolean') return false
+  if (typeof item.id !== 'string' || typeof item.etat !== 'boolean')
+    return false
   switch (item.type) {
     case 'point':
       return typeof item.x === 'number' && typeof item.y === 'number'

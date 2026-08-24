@@ -99,7 +99,7 @@ export default class PavageEtReflexion2d extends Exercice {
 
   nouvelleVersion() {
     const nbSymetriques = Math.max(1, Math.min(7, parseInt(this.sup4)))
-    const videcouples = function (tableau: any[]) {
+    const videcouples = function (tableau: number[][]) {
       for (let k = 0; k < tableau.length; k++) {
         for (let j = k + 1; j < tableau.length; j++) {
           if (tableau[k][1] === tableau[j][0]) {
@@ -199,10 +199,10 @@ export default class PavageEtReflexion2d extends Exercice {
     let B
     let d
     let image
-    let couples = []
+    let couples: number[][] = []
     let tailles = []
     let monpavage: Pavage = pavage()
-    let fenetre: FenetreType = {
+    let fenetreMathalea2d: FenetreType = {
       xmin: 0,
       ymin: 0,
       xmax: 10,
@@ -247,12 +247,12 @@ export default class PavageEtReflexion2d extends Exercice {
       Nx = tailles[taillePavage - 1][typeDePavage - 1][0]
       Ny = tailles[taillePavage - 1][typeDePavage - 1][1]
       monpavage.construit(typeDePavage, Nx, Ny, 3) // On initialise toutes les propriétés de l'objet.
-      fenetre = monpavage.fenetre
+      fenetreMathalea2d = monpavage.fenetre
       context.fenetreMathalea2d = [
-        fenetre.xmin,
-        fenetre.ymin,
-        fenetre.xmax,
-        fenetre.ymax,
+        fenetreMathalea2d.xmin,
+        fenetreMathalea2d.ymin,
+        fenetreMathalea2d.xmax,
+        fenetreMathalea2d.ymax,
       ]
       while (couples.length < nbSymetriques && nombreTentatives < 5) {
         // On cherche d pour avoir suffisamment de couples

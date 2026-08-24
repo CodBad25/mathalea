@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -74,7 +75,7 @@ export default class longueurDansTriangle extends ExerciceSimple {
           xmax: 6,
           ymax: 2.5,
           scale: 0.7,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

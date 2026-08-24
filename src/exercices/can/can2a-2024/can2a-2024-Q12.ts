@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
@@ -43,7 +44,7 @@ export default class NomExercice extends ExerciceSimple {
           xmax: 15,
           ymax: 1.5,
           scale: 0.7,
-          center: true,
+          center: !context.isHtml,
         },
         texteParPosition('A', 5.5, 0.9, 0, bleuMathalea, 1.5),
         droiteGraduee({
@@ -78,7 +79,7 @@ export default class NomExercice extends ExerciceSimple {
             xmax: 14,
             ymax: 1.5,
             scale: 0.6,
-            center: true,
+            center: !context.isHtml,
           },
           texteParPosition('A', (3 * a) / 4, 0.9, 0, bleuMathalea, 2),
           droiteGraduee({
@@ -112,7 +113,7 @@ export default class NomExercice extends ExerciceSimple {
             xmax: 14,
             ymax: 1.5,
             scale: 0.6,
-            center: true,
+            center: !context.isHtml,
           },
           texteParPosition('A', (3 * a) / 5, 0.9, 0, bleuMathalea, 2),
           droiteGraduee({

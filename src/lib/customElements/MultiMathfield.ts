@@ -6,21 +6,21 @@ import { context } from '../../modules/context'
 import { bleuMathalea } from '../colors'
 import { setStyles } from '../html/dom'
 import {
-  buildDataKeyboardFromStyle,
-  KeyboardType,
-} from '../interactif/claviers/keyboard'
-import {
   compteChampsDeReponse,
   pointsMaxDuBareme,
 } from '../interactif/baremeExercice'
+import {
+  buildDataKeyboardFromStyle,
+  KeyboardType,
+} from '../interactif/claviers/keyboard'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutAUnPoint } from '../interactif/fonctionsBaremes'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import { optionsKatex } from '../latex/Katex'
 import type { IExercice, ValeurNames } from '../types'
-import type ListeDeroulanteElement from './ListeDeroulanteElement'
-import type { AllChoiceType, AllChoicesType } from './ListeDeroulanteElement'
 import './ListeDeroulanteElement'
+import type ListeDeroulanteElement from './ListeDeroulanteElement'
+import type { AllChoicesType, AllChoiceType } from './ListeDeroulanteElement'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -145,7 +145,9 @@ function renderKatexInElement(element: HTMLElement): void {
   })
   renderMathInElement(element, optionsKatex as any)
 }
-
+/**
+ * @author Jean-Claude Lhote + Rémi Angot
+ */
 export class MultiMathfieldElement extends MathaleaCustomElement {
   private static scoreFromResult(result: { isOk: boolean }): number {
     const score = (result as { score?: unknown }).score

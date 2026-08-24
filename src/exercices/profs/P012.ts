@@ -63,7 +63,7 @@ export default class Camemberts extends Exercice {
     // const secteurs = combinaisonListesSansChangerOrdre(nbParts, this.nbQuestions)
     // const unites = combinaisonListesSansChangerOrdre(nbDisques, this.nbQuestions)
     let f
-    const fenetre = {
+    const fenetreMathalea2d = {
       xmin: -2.5,
       xmax: 35,
       ymin: -2.5,
@@ -81,7 +81,7 @@ export default class Camemberts extends Exercice {
         'gateau',
         'white',
       )
-      this.contenu += mathalea2d(fenetre, f)
+      this.contenu += mathalea2d(fenetreMathalea2d, f)
       if (context.isHtml) {
         this.contenu += '<br>'
       } else {

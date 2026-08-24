@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { droite } from '../../../lib/2d/droites'
@@ -119,7 +120,7 @@ export default class CoeffDirecteurGraphique extends ExerciceSimple {
         ymax: ymax + 0.25,
         pixelsParCm: 25,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,
@@ -137,7 +138,7 @@ export default class CoeffDirecteurGraphique extends ExerciceSimple {
         ymax: ymax + 0.25,
         pixelsParCm: 25,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,

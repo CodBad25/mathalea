@@ -1,5 +1,5 @@
-import { context } from '../../modules/context'
 import { renderMathInElement } from 'mathlive'
+import { context } from '../../modules/context'
 import { uniformiseResults } from '../interactif/gestionInteractif'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -197,7 +197,9 @@ export function listeDeroulanteToQcm(
     }
   }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class ListeDeroulanteElement extends MathaleaCustomElement {
   static readonly elementTag = 'liste-deroulante'
 

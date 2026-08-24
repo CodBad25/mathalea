@@ -332,7 +332,7 @@ export default class nomExercice extends Exercice {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       ) +
@@ -486,7 +486,7 @@ export default class nomExercice extends Exercice {
     this.listeQuestions[i] = 'On donne le graphique d’une fonction $f$ : <br>'
     this.listeQuestions[i] += mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.55, center: true },
+        { pixelsParCm: 30, scale: 0.55, center: !context.isHtml },
         { xmin: -6, ymin: -5, xmax: 6, ymax: 4 },
       ),
       objetsEnonce,
@@ -508,7 +508,7 @@ export default class nomExercice extends Exercice {
     this.listeQuestions[i] = 'On donne le graphique d’une fonction $f$ : <br>'
     this.listeQuestions[i] += mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.55, center: true },
+        { pixelsParCm: 30, scale: 0.55, center: !context.isHtml },
         { xmin: -6, ymin: -5, xmax: 6, ymax: 4 },
       ),
       objetsEnonce,
@@ -528,7 +528,7 @@ export default class nomExercice extends Exercice {
     this.listeQuestions[i] = 'On donne le graphique d’une fonction $f$ : <br>'
     this.listeQuestions[i] += mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.55, center: true },
+        { pixelsParCm: 30, scale: 0.55, center: !context.isHtml },
         { xmin: -6, ymin: -5, xmax: 6, ymax: 4 },
       ),
       objetsEnonce,

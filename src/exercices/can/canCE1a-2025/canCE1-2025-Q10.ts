@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -49,7 +50,7 @@ export default class VocabulaireSolide extends ExerciceSimple {
         {
           pixelsParCm: 30,
           scale: 0.6,
-          display: 'block', center: true,
+          display: 'block', center: !context.isHtml,
         } as const,
         fixeBordures(objets, { rxmin: 0, rxmax: 0, rymax: 0, rymin: -0.5 }),
       ),
@@ -88,7 +89,7 @@ export default class VocabulaireSolide extends ExerciceSimple {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.6,
-            display: 'block', center: true,
+            display: 'block', center: !context.isHtml,
           } as const,
           fixeBordures(objets, { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0 }),
         ),

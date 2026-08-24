@@ -134,7 +134,7 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
         ymax: hauteurMax + 3.5,
         pixelsParCm: 28,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

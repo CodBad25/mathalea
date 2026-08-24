@@ -4,6 +4,10 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Jean-Claude Lhote
+ * élément non finalisé (draft)
+ */
 export type CartesianAssessmentPoint = {
   label: string
   x: number | null

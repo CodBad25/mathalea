@@ -139,7 +139,9 @@ export type GuideAneCreateOptions = GuideAneOptions & {
   numeroExercice?: number
   questionIndex?: number
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class GuideAne extends MathaleaCustomElement {
   static readonly elementTag = 'guide-ane'
 
@@ -529,12 +531,7 @@ export class GuideAne extends MathaleaCustomElement {
       stroke: string,
     ) =>
       `  #place(top + left, line(start: ${point(x1, y1)}, end: ${point(x2, y2)}, stroke: ${stroke}))`
-    const text = (
-      x: number,
-      y: number,
-      content: string,
-      anchor = 'center',
-    ) =>
+    const text = (x: number, y: number, content: string, anchor = 'center') =>
       `  #place(top + left, dx: ${typstLength(x + margin - 0.12)}, dy: ${typstLength(maxY - y - 0.12)}, box(width: 0.24cm)[#align(${anchor})[${content}]])`
     const pointOnAC = (i: number) => ({
       x: i * cosAlpha,

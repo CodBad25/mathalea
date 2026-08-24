@@ -151,6 +151,12 @@ AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest src/lib/amc/report-am
 
 Le job échoue si au moins un sous-test échoue.
 
+Pour `all_exercises`, les chemins de `CHANGED_FILES` situés dans `src/exercices/`
+sont d'abord agrégés puis résolus en exercices uniques. Le plafond
+`NB_EXOS_PAR_LOT` s'applique ensuite au lot global, pas à chaque fichier modifié,
+afin d'éviter une explosion du nombre de tests quand une MR touche beaucoup de
+fichiers d'exercices.
+
 Déclenchement :
 
 - demandes de fusion

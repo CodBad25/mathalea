@@ -40,7 +40,9 @@ type MathaleaMathfieldCreateOptions = MathaleaMathfieldOptions & {
   numeroExercice: number
   questionIndex: number
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class MathaleaMathfieldElement extends MathaleaCustomElement {
   static readonly elementTag = 'mathalea-mathfield'
   private static readonly verificationCallbacks = new Map<

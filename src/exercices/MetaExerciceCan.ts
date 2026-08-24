@@ -420,6 +420,13 @@ function estQuestionCustom(question: Exercice): boolean {
   ) {
     return false
   }
+  if (
+    question.autoCorrection[0]?.formatInteractif != null &&
+    question.autoCorrection[0].formatInteractif !== 'custom'
+  ) {
+    return false
+  }
+  if (question.autoCorrection[0]?.valeur != null) return false
   return (
     question.interactifType === 'custom' ||
     question.formatInteractif === 'custom' ||

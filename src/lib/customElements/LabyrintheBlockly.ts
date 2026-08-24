@@ -28,7 +28,9 @@ declare module 'blockly/core' {
     idkey?: string
   }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class LabyrintheBlocklyElement extends MathaleaCustomElement {
   static readonly elementTag = 'labyrinthe-blockly'
 
@@ -446,7 +448,7 @@ export class LabyrintheBlocklyElement extends MathaleaCustomElement {
     try {
       const avancer = () => this.avancer()
       const tourner = (direction: number) => this.tourner(direction)
-      // eslint-disable-next-line no-new-func
+
       new Function('avancer', 'tourner', String(code))(avancer, tourner)
     } catch (error) {
       console.error(error)
@@ -481,7 +483,7 @@ export class LabyrintheBlocklyElement extends MathaleaCustomElement {
         .filter((line) => line.trim() !== '')
         .map((line) => `${line}\nawait sleep(1000);`)
         .join('\n')
-      // eslint-disable-next-line no-new-func
+
       await new Function(
         'avancer',
         'tourner',

@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { grille } from '../../../lib/2d/Grille'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
@@ -83,7 +84,7 @@ export default class CalculLongueurGrille extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )
@@ -107,7 +108,7 @@ export default class CalculLongueurGrille extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objetsC,
       )
@@ -124,7 +125,7 @@ export default class CalculLongueurGrille extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

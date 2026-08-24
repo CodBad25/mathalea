@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -55,7 +56,7 @@ export default class auto1AF4c extends ExerciceQcmA {
    On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.7, center: true },
+          { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
           {
             xmin: -4,
             ymin: -4,
@@ -125,7 +126,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: true },
+                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -192,7 +193,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: true },
+                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -259,7 +260,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: true },
+                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -325,7 +326,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: true },
+                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
                 {
                   xmin: -4,
                   ymin: -4,

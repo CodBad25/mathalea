@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -53,7 +54,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
         ymax: 5,
         pixelsParCm: 20,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       rep,
       courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),
@@ -93,7 +94,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
           ymax: 5,
           pixelsParCm: 20,
           scale: 0.7,
-          center: true,
+          center: !context.isHtml,
         },
         rep,
         courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),
@@ -113,7 +114,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
           ymax: 5,
           pixelsParCm: 20,
           scale: 0.7,
-          center: true,
+          center: !context.isHtml,
         },
         rep,
         courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),
@@ -135,7 +136,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
         ymax: 5,
         pixelsParCm: 20,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       rep,
       courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),

@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
@@ -86,7 +87,7 @@ export default class AutoQ3FMns2026 extends ExerciceQcmA {
         pixelsParCm: 25,
         scale: 0.6,
         display: 'block',
-        center: true,
+        center: !context.isHtml,
       },
       r,
       courbe,

@@ -157,7 +157,7 @@ function graphiqueMars2023G1({
       ymax: yMax * yUnite + 0.25,
       pixelsParCm: 20,
       scale: 0.95,
-      center: true,
+      center: !context.isHtml,
       centerLatex: true,
     },
     r,

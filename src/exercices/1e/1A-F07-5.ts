@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
@@ -115,7 +116,7 @@ export default class Auto1AF075 extends ExerciceQcmA {
         ymax: ymax + 0.1,
         pixelsParCm: 30,
         scale: 0.75,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,
@@ -130,7 +131,7 @@ export default class Auto1AF075 extends ExerciceQcmA {
         ymax: ymax + 0.1,
         pixelsParCm: 30,
         scale: 0.75,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,
@@ -275,12 +276,12 @@ export default class Auto1AF075 extends ExerciceQcmA {
     })
 
     const objet = mathalea2d(
-      { xmin, xmax, ymin: ymin - 0.1, ymax: ymax + 0.1, pixelsParCm: 30, scale: 0.75, center: true },
+      { xmin, xmax, ymin: ymin - 0.1, ymax: ymax + 0.1, pixelsParCm: 30, scale: 0.75, center: !context.isHtml },
       d, r1, o,
     )
 
     const objetC = mathalea2d(
-      { xmin, xmax, ymin, ymax: ymax + 0.1, pixelsParCm: 30, scale: 0.75, center: true },
+      { xmin, xmax, ymin, ymax: ymax + 0.1, pixelsParCm: 30, scale: 0.75, center: !context.isHtml },
       d, r1, traceA, lA, lB, traceB, o, sABx, sBBx, lABx, lBBx,
     )
 

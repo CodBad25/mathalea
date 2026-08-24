@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { droite } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
@@ -98,7 +99,7 @@ export default class EquationReduite extends ExerciceSimple {
         ymax: ymax + 0.25,
         pixelsParCm: 30,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       o,
       d,

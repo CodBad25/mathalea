@@ -657,7 +657,7 @@ function createDigramm(
       ymax,
       mainlevee: false,
       scale: context.isHtml ? 1 : 0.5,
-      center: true,
+      center: !context.isHtml,
       optionsTikz: ['baseline=(current bounding box.north)'],
     },
     objets,

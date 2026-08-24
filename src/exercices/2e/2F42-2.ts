@@ -1,186 +1,304 @@
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { repere } from '../../lib/2d/reperes'
-import { texteParPosition } from '../../lib/2d/textes'
-import { bleuMathalea } from '../../lib/colors'
-import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
-import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { mathalea2d } from '../../modules/mathalea2d'
+import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { numAlpha, sp } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Déterminer graphiquement les extremums'
-export const interactifReady = true
-export const interactifType = 'multi-mathfield'
-
-export const dateDePublication = '27/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModificationImportante = '06/04/2026'
-export const uuid = 'd6c25' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
+export const titre =
+  "Déterminer un extremum ou encadrer par lecture d'un tableau de variations"
+export const dateDePublication = '20/12/2021'
+/**
+ * @author Gilles Mora
+ * Lintage et typage typescript incomplet à cause de tableauDeVariation qui n'est pas typé correctement
+ */
+export const uuid = 'acee0'
 
 export const refs = {
-  'fr-fr': ['2F42-2', 'BP1AUTO059'],
+  'fr-fr': ['2F42-2'],
   'fr-ch': [],
 }
-// une liste de nœuds pour définir une fonction Spline
-const noeuds1 = [
-  { x: -4, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: -3, y: 1, deriveeGauche: 2, deriveeDroit: 2, isVisible: false },
-  { x: -2, y: 4, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: -1, y: 1, deriveeGauche: -2, deriveeDroit: -2, isVisible: false },
-  { x: 0, y: -3, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: 2, y: 2, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: 3, y: -2, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: 4, y: 1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-]
-// une autre liste de nœuds...
-const noeuds2 = [
-  { x: -5, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: -3, y: 4, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: -1, y: -3, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: 2, y: 2, deriveeGauche: -0.5, deriveeDroit: -0.5, isVisible: true },
-]
-const noeuds3 = [
-  { x: -5, y: 0, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
-  { x: -4, y: -3, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: -2, y: 1, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: 0, y: 0, deriveeGauche: -0.5, deriveeDroit: -0.5, isVisible: true },
-]
-const noeuds4 = [
-  { x: -5, y: 0, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
-  { x: -4, y: -3, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: -2, y: 1, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-  { x: 0, y: 0, deriveeGauche: -0.5, deriveeDroit: -0.5, isVisible: true },
-]
-// une liste des listes
-const mesFonctions = [noeuds1, noeuds2, noeuds3, noeuds4] //, noeuds1, noeuds2, noeuds3, noeuds4
-
-/**
- * trouve les extrema mais ne fonctionne que si les extrema se trouvent en des noeuds.
- * @param {{x: number, y:number,deriveeGauche:number,deriveeDroit:number, isVisible:boolean}[]} nuage les noeuds
- * @returns {{yMin: number, yMax: number, xMax: number, xMin: number}}
- */
-function trouveMaxes(nuage: NoeudSpline[]) {
-  const xMin = Math.floor(Math.min(...nuage.map((el) => el.x)) - 1)
-  const yMin = Math.floor(Math.min(...nuage.map((el) => el.y)) - 1)
-  const xMax = Math.ceil(Math.max(...nuage.map((el) => el.x)) + 1)
-  const yMax = Math.ceil(Math.max(...nuage.map((el) => el.y)) + 1)
-  return { xMin, xMax, yMin, yMax }
-}
-
-/**
- * choisit les caractèristique de la transformation de la courbe
- * @returns {{coeffX: -1|1, deltaX: int, deltaY: int, coeffY: -1|1}}
- */
-function aleatoiriseCourbe() {
-  const coeffX = choice([-1, 1]) // symétries ou pas
-  const coeffY = choice([-1, 1])
-  const deltaX = randint(-2, +2) // translations
-  const deltaY = randint(-2, +2)
-  return { coeffX, coeffY, deltaX, deltaY }
-}
-
-/**
- * Aléatoirise une courbe et demande les antécédents d'une valeur entière (eux aussi entiers)
- * @author Gilles Mora (grâce au travail de Jean-claude Lhote)
-
- */
-export default class BetaModeleSpline extends Exercice {
+export default class LireUnTableauDevariations extends Exercice {
   constructor() {
     super()
+    this.besoinFormulaireNumerique = [
+      'Choix des questions',
+      3,
+      '1 : Minimum et maximum\n2 :Encadrement\n3 :Mélange',
+    ]
 
-    this.sup = '4'
-    this.nbQuestions = 1 // Nombre de questions par défaut
+    this.nbQuestions = 1
+    this.sup = 3 // Niveau de difficulté
   }
 
   nouvelleVersion() {
-    for (let i = 0; i < this.nbQuestions; i++) {
-      const { coeffX, coeffY, deltaX, deltaY } = aleatoiriseCourbe()
-      // la liste des noeuds de notre fonction
-      const nuage = choice(mesFonctions).map((noeud) =>
-        Object({
-          x: (noeud.x + deltaX) * coeffX,
-          y: (noeud.y + deltaY) * coeffY,
-          deriveeGauche: noeud.deriveeGauche * coeffX * coeffY,
-          deriveeDroit: noeud.deriveeDroit * coeffX * coeffY,
-          isVisible: noeud.isVisible,
-        }),
-      )
-      const maSpline = spline(nuage)
-      const { xMin, xMax, yMin, yMax } = trouveMaxes(nuage)
-      const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-      // le repère dans lequel sera tracé la courbe (il est important que xMin et yMin soient entiers d'où les arrondis lors de leur définition plus haut
-      const repere1 = repere({
-        xMin: xMin - 1,
-        xMax: xMax + 1,
-        yMin: yMin - 1,
-        yMax: yMax + 1,
-        grilleX: false,
-        grilleY: false,
-        grilleSecondaire: true,
-        grilleSecondaireYDistance: 1,
-        grilleSecondaireXDistance: 1,
-        grilleSecondaireYMin: yMin - 1,
-        grilleSecondaireYMax: yMax + 1,
-        grilleSecondaireXMin: xMin - 1,
-        grilleSecondaireXMax: xMax + 1,
-      })
-      const courbe1 = maSpline.courbe({
-        epaisseur: 1.5,
-        ajouteNoeuds: true,
-        optionsNoeuds: {
-          color: bleuMathalea,
-          taille: 1,
-          style: '.',
-          epaisseur: 2,
-        },
-        color: bleuMathalea,
-      })
-      const objetsEnonce = [repere1, courbe1]
-      let texteEnonce = `On donne la courbe représentative d'une fonction $f$ définie sur l'intervalle $[${maSpline.x[0]}\\,;\\,${maSpline.x[maSpline.n - 1]}]$. <br>`
-      texteEnonce += `
-      Déterminer les extremums de la fonction et préciser en quelles valeurs ils sont atteints.<br>`
-      texteEnonce += mathalea2d(
-        Object.assign({ scale: 0.7 }, fixeBordures(objetsEnonce)),
-        objetsEnonce,
-        o,
-      )
-      texteEnonce += `${addMultiMathfield(this, i, {
-        dataTemplate:
-          'Le maximum de $f$ est : %{champ1}. Il est atteint en $x=$ %{champ2}\nLe minimum de $f$ est : %{champ3}. Il est atteint en $x=$ %{champ4}',
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierDeBase },
-          champ2: { keyboard: KeyboardType.clavierDeBase },
-          champ3: { keyboard: KeyboardType.clavierDeBase },
-          champ4: { keyboard: KeyboardType.clavierDeBase },
-        },
-      })}`
-      // Les extrema sont atteints aux nœuds (dérivées nulles)
-      const fMax = Math.max(...nuage.map((el) => el.y))
-      const fMin = Math.min(...nuage.map((el) => el.y))
-      const solutionMax = nuage.find((el) => el.y === fMax)!.x
-      const solutionMin = nuage.find((el) => el.y === fMin)!.x
-      handleAnswers(
-        this,
-        i,
-        {
-          champ1: { value: `${fMax}` },
-          champ2: { value: `${solutionMax}` },
-          champ3: { value: `${fMin}` },
-          champ4: { value: `${solutionMin}` },
-        },
-        { formatInteractif: 'multi-mathfield' },
-      )
-
-      const texteCorrection = `Le point le plus haut de la courbe a pour coordonnées $(${solutionMax}\\,;\\,${fMax})$.<br>
-      On en déduit que le maximum de $f$ est $${miseEnEvidence(fMax)}$. Il est atteint en $x=${miseEnEvidence(solutionMax)}$.<br>
-      Le point le plus bas de la courbe a pour coordonnées $(${solutionMin}\\,;\\,${fMin})$.<br>
-      On en déduit que le minimum de $f$ est $${miseEnEvidence(fMin)}$. Il est atteint en $x=${miseEnEvidence(solutionMin)}$.`
-      this.listeQuestions.push(texteEnonce)
-      this.listeCorrections.push(texteCorrection)
+    let typeDeQuestionsDisponibles
+    if (this.sup === 1) {
+      typeDeQuestionsDisponibles = ['typeE1']
+    } else {
+      if (this.sup === 2) {
+        typeDeQuestionsDisponibles = ['typeE2']
+      } else {
+        typeDeQuestionsDisponibles = ['typeE1', 'typeE2']
+      }
     }
-    listeQuestionsToContenu(this) // On envoie l'exercice à la fonction de mise en page
+    const listeTypeQuestions = combinaisonListes(
+      typeDeQuestionsDisponibles,
+      this.nbQuestions,
+    ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      let texte = ''
+      let texteCorr = ''
+      // Boucle principale où i+1 correspond au numéro de la question
+      let x1: number,
+        x2: number,
+        x3: number,
+        x4: number,
+        y1: number,
+        y2: number,
+        y3: number,
+        y4: number,
+        M: number,
+        m: number,
+        M1: number,
+        M2: number,
+        m1: number,
+        choix: number
+      let ligne1: any[]
+      switch (
+        listeTypeQuestions[i] // Suivant le type de question, le contenu sera différent
+      ) {
+        case 'typeE1':
+          x1 = randint(-20, 10)
+          x2 = randint(x1 + 1, 15)
+          x3 = randint(x2 + 1, 20)
+          x4 = randint(x3 + 1, 25)
+          y1 = randint(-10, 10)
+          y2 = randint(y1 - 10, y1 - 1)
+          y3 = randint(y2 + 1, y2 + 10, y1)
+          y4 = randint(y3 - 10, y3 - 1, y2)
+          M = Math.max(y1, y2, y3, y4)
+          m = Math.min(y1, y2, y3, y4)
+          choix = randint(1, 2)
+          if (choix === 1) {
+            ligne1 = [
+              'Var',
+              10,
+              `+/$${y1}$`,
+              10,
+              `-/$${y2}$`,
+              10,
+              `+/$${y3}$`,
+              10,
+              `-/$${y4}$`,
+              10,
+            ]
+          } else {
+            ligne1 = [
+              'Var',
+              10,
+              `-/$${-y1}$`,
+              10,
+              `+/$${-y2}$`,
+              10,
+              `-/$${-y3}$`,
+              10,
+              `+/$${-y4}$`,
+              10,
+            ]
+          }
+          // xmin détermine la marge à gauche, ymin la hauteur réservée pour le tableau, xmax la largeur réservée pour le tableau et ymax la marge au dessus du tableau
+
+          texte = ` Voici le tableau de variations d'une fonction $f$ définie sur $[${x1};${x4}]$.<br><br>
+              `
+          texte += tableauDeVariation({
+            tabInit: [
+              [
+                // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
+                ['$x$', 2, 10],
+                ['$f(x)$', 4, 30],
+              ],
+              // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
+              [`$${x1}$`, 10, `$${x2}$`, 10, `$${x3}$`, 10, `$${x4}$`, 10],
+            ],
+            // tabLines ci-dessous contient les autres lignes du tableau.
+            tabLines: [ligne1],
+            espcl: 4, // taille en cm entre deux antécédents
+            deltacl: 1, // distance entre la bordure et les premiers et derniers antécédents
+            lgt: 3, // taille de la première colonne en cm,
+            scale: 0.6,
+          })
+
+          texte +=
+            ' <br>Déterminer le minimum et le maximum de $f$ sur son ensemble de définition. Préciser en quelles valeurs de $x$ ils sont atteints.'
+
+          texteCorr = `$\\bullet~$ $f$ admet un maximum en $a$ sur un intervalle $I$ signifie que pour tout réel $x$ de $I$, $f(x)\\leqslant f(a)$.<br>
+          Le nombre $f(a)$ est le maximum de $f$ sur $I$.<br>
+          $\\bullet~$ $f$ admet un minimum en $b$ sur un intervalle $I$ signifie que pour tout réel $x$ de $I$, $f(x)\\geqslant f(b)$.<br>
+          Le nombre $f(b)$ est le minimum de $f$ sur $I$.<br>
+          <br>`
+          if (choix === 1) {
+            if (M === y1) {
+              texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${y1}$, c'est-à-dire  $f(x)\\leqslant f(${x1})$.<br>
+           Ainsi, le maximum de $f$ est $${y1}$. Il est atteint en $x=${x1}$. `
+            } else {
+              texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${y3}$, c'est-à-dire  $f(x)\\leqslant f(${x3})$.<br>
+          Ainsi, le maximum de $f$ est $${y3}$. Il est atteint en $x=${x3}$.  `
+            }
+            if (m === y2) {
+              texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${y2}$, c'est-à-dire  $f(x)\\geqslant f(${x2})$.<br>
+          Ainsi, le minimum de $f$ est $${y2}$. Il est atteint en $x=${x2}$. `
+            } else {
+              texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${y4}$, c'est-à-dire  $f(x)\\geqslant f(${x4})$.<br>
+         Ainsi, le minimum de $f$ est $${y4}$. Il est atteint en $x=${x4}$.  `
+            }
+          } else {
+            if (M === y1) {
+              texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${-y1}$, c'est-à-dire  $f(x)\\geqslant f(${x1})$.<br>
+           Ainsi, le minimum de $f$ est $${-y1}$. Il est atteint en $x=${x1}$. `
+            } else {
+              texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${-y3}$, c'est-à-dire  $f(x)\\geqslant f(${x3})$.<br>
+          Ainsi, le minimum de $f$ est $${-y3}$. Il est atteint en $x=${x3}$.  `
+            }
+            if (m === y2) {
+              texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${-y2}$, c'est-à-dire  $f(x)\\leqslant f(${x2})$.<br>
+          Ainsi, le maximum de $f$ est $${-y2}$. Il est atteint en $x=${x2}$. `
+            } else {
+              texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${-y4}$, c'est-à-dire  $f(x)\\leqslant f(${x4})$.<br>
+         Ainsi, le maximum de $f$ est $${-y4}$. Il est atteint en $x=${x4}$.  `
+            }
+          }
+          break
+        case 'typeE2':
+        default:
+          x1 = randint(-20, 10)
+          x2 = randint(x1 + 1, 15)
+          x3 = randint(x2 + 1, 20)
+          x4 = randint(x3 + 1, 25)
+          y1 = randint(-10, 10)
+          y2 = randint(y1 - 10, y1 - 1)
+          y3 = randint(y2 + 1, y2 + 10, y1)
+          y4 = randint(y3 - 10, y3 - 1, y2)
+          M1 = Math.max(y1, y3)
+          M2 = Math.max(y1, y3)
+          m1 = Math.min(y2, y4)
+          choix = randint(1, 2)
+          if (choix === 1) {
+            ligne1 = [
+              'Var',
+              10,
+              `+/$${y1}$`,
+              10,
+              `-/$${y2}$`,
+              10,
+              `+/$${y3}$`,
+              10,
+              `-/$${y4}$`,
+              10,
+            ]
+          } else {
+            ligne1 = [
+              'Var',
+              10,
+              `-/$${-y1}$`,
+              10,
+              `+/$${-y2}$`,
+              10,
+              `-/$${-y3}$`,
+              10,
+              `+/$${-y4}$`,
+              10,
+            ]
+          }
+          texte = ` Voici le tableau de variations d'une fonction $f$ définie sur $[${x1};${x4}]$.<br><br>
+              `
+          texte += tableauDeVariation({
+            tabInit: [
+              [
+                // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
+                ['$x$', 2, 10],
+                ['$f(x)$', 4, 30],
+              ],
+              // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
+              [`$${x1}$`, 10, `$${x2}$`, 10, `$${x3}$`, 10, `$${x4}$`, 10],
+            ],
+            // tabLines ci-dessous contient les autres lignes du tableau.
+            tabLines: [ligne1],
+            espcl: 4, // taille en cm entre deux antécédents
+            deltacl: 1, // distance entre la bordure et les premiers et derniers antécédents
+            lgt: 3, // taille de la première colonne en cm
+            scale: 0.6,
+          })
+
+          texte +=
+            ' <br>Encadrer le plus précisément possible $f(x)$ (en déterminant les valeurs de $m$ et de $M$ telles que $m\\leqslant f(x)\\leqslant M$) dans chacun des cas suivants :<br>'
+          texte += numAlpha(0) + ` $x\\in[${x1};${x3}]$<br>`
+          texte += numAlpha(1) + ` $x\\in[${x2};${x4}]$`
+          texteCorr = ''
+          if (choix === 1) {
+            if (M1 === y1) {
+              texteCorr +=
+                numAlpha(0) +
+                `Sur $[${x1};${x3}]$, le minimum de $f$ est $${y2}$ et le maximum est
+          $${y1}$. <br>
+          Ainsi, pour $x\\in[${x1};${x3}]$, ${sp(3)} $${y2}\\leqslant f(x)\\leqslant ${y1}$.<br>`
+            } else {
+              texteCorr +=
+                numAlpha(0) +
+                `Sur $[${x1};${x3}]$, le minimum de $f$ est $${y2}$ et le maximum est
+          $${y3}$. <br>
+          Ainsi, pour $x\\in[${x1};${x3}]$, ${sp(3)} $${y2}\\leqslant f(x)\\leqslant ${y3}$.<br>`
+            }
+            if (m1 === y2) {
+              texteCorr +=
+                numAlpha(1) +
+                `Sur $[${x2};${x4}]$, le minimum de $f$ est $${y2}$ et le maximum est
+          $${y3}$. <br>
+          Ainsi, pour $x\\in[${x2};${x4}]$, ${sp(3)} $${y2}\\leqslant f(x)\\leqslant ${y3}$.<br>`
+            } else {
+              texteCorr +=
+                numAlpha(1) +
+                `Sur $[${x2};${x4}]$, le minimum de $f$ est $${y4}$ et le maximum est
+          $${y3}$. <br>
+          Ainsi, pour $x\\in[${x2};${x4}]$, ${sp(3)} $${y4}\\leqslant f(x)\\leqslant ${y3}$.<br>`
+            }
+          } else {
+            if (M2 === y1) {
+              texteCorr +=
+                numAlpha(0) +
+                `Sur $[${x1};${x3}]$, le minimum de $f$ est $${-y1}$ et le maximum est
+            $${-y2}$. <br>
+            Ainsi, pour $x\\in[${x1};${x3}]$, ${sp(3)} $${-y1}\\leqslant f(x)\\leqslant ${-y2}$.<br>`
+            } else {
+              texteCorr +=
+                numAlpha(0) +
+                `Sur $[${x1};${x3}]$, le minimum de $f$ est $${-y3}$ et le maximum est
+            $${-y2}$. <br>
+            Ainsi, pour $x\\in[${x1};${x3}]$, ${sp(3)} $${-y3}\\leqslant f(x)\\leqslant ${-y2}$.<br>`
+            }
+            if (m1 === y2) {
+              texteCorr +=
+                numAlpha(1) +
+                `Sur $[${x2};${x4}]$, le minimum de $f$ est $${-y3}$ et le maximum est
+            $${-y2}$. <br>
+            Ainsi, pour $x\\in[${x2};${x4}]$, ${sp(3)} $${-y3}\\leqslant f(x)\\leqslant ${-y2}$.<br>`
+            } else {
+              texteCorr +=
+                numAlpha(1) +
+                `Sur $[${x2};${x4}]$, le minimum de $f$ est $${-y3}$ et le maximum est
+            $${-y4}$. <br>
+            Ainsi, pour $x\\in[${x2};${x4}]$, ${sp(3)} $${-y3}\\leqslant f(x)\\leqslant ${-y4}$.<br>`
+            }
+          }
+          break
+      }
+      if (this.questionJamaisPosee(i, x1, x2, x3, x4, y1, y2, y3, y4)) {
+        // Si la question n'a jamais été posée, on en crée une autre
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+        i++
+      }
+      cpt++
+    }
+    listeQuestionsToContenu(this)
   }
 }

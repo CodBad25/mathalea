@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { choisitLettresDifferentes } from '../../../lib/outils/aleatoires'
@@ -54,7 +55,7 @@ export default class VecteursCol extends ExerciceSimple {
             xmax: 15.5,
             ymax: 1.5,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           droiteGraduee({
             Unite: 1.5,
@@ -94,7 +95,7 @@ export default class VecteursCol extends ExerciceSimple {
               xmax: 15.5,
               ymax: 1.5,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             droiteGraduee({
               Unite: 1.5,
@@ -129,7 +130,7 @@ export default class VecteursCol extends ExerciceSimple {
             xmax: 15.5,
             ymax: 1.5,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           droiteGraduee({
             Unite: 1.5,
@@ -169,7 +170,7 @@ export default class VecteursCol extends ExerciceSimple {
               xmax: 15.5,
               ymax: 1.5,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             droiteGraduee({
               Unite: 1.5,
@@ -205,7 +206,7 @@ export default class VecteursCol extends ExerciceSimple {
             xmax: 15.5,
             ymax: 1.5,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           droiteGraduee({
             Unite: 1.5,
@@ -245,7 +246,7 @@ export default class VecteursCol extends ExerciceSimple {
               xmax: 15.5,
               ymax: 1.5,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             droiteGraduee({
               Unite: 1.5,
@@ -281,7 +282,7 @@ export default class VecteursCol extends ExerciceSimple {
             xmax: 15.5,
             ymax: 1.5,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           droiteGraduee({
             Unite: 1.5,
@@ -321,7 +322,7 @@ export default class VecteursCol extends ExerciceSimple {
               xmax: 15.5,
               ymax: 1.5,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             droiteGraduee({
               Unite: 1.5,

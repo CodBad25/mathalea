@@ -42,7 +42,9 @@ export type VerifResult = {
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 }
-
+/**
+ * @author Jean-Claude Lhote enfin, c'est surtout l'IA qui a fait le gros du boulot, mais je prends quand même le crédit
+ */
 export class MetaCustomElement extends MathaleaCustomElement {
   static readonly elementTag = 'meta-custom'
 

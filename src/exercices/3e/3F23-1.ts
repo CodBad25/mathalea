@@ -47,6 +47,14 @@ export const dateDeModifImportante = '20/08/2026'
  * membre sans changer de signe, quotient inversé, développement incomplet).
  */
 
+// En mode QCM, l'énoncé énonce directement la question à choix ("... est :") ;
+// en mode calcul, il garde la formulation à l'infinitif ("Déterminer ...").
+function consigneQuestion(m: number, expr: string, versionQcm: boolean) {
+  return versionQcm
+    ? `L'antécédent de $${m}$ par la fonction $f$ définie par ${expr} est :`
+    : `Déterminer l'antécédent de $${m}$ par la fonction $f$ définie par ${expr}. `
+}
+
 export default class AntecedentParCalcul extends Exercice {
   constructor() {
     super()
@@ -59,7 +67,7 @@ export default class AntecedentParCalcul extends Exercice {
 
     this.consigne =
       'Répondre aux questions suivantes avec une valeur exacte simplifiée. '
-    this.nbQuestions = 4
+    this.nbQuestions = 1
 
     this.spacingCorr = context.isHtml ? 2 : 1
     this.sup = '1'
@@ -70,9 +78,13 @@ export default class AntecedentParCalcul extends Exercice {
     const versionQcm = Boolean(this.sup2)
     this.interactifType = versionQcm ? 'mathalea-qcm' : 'mathLive'
     this.consigne = versionQcm
-      ? 'Pour chaque question, choisir la bonne réponse. '
+      ? ''
       : 'Répondre aux questions suivantes avec une valeur exacte simplifiée. '
     const qcmOptions = { radio: true }
+    // Comme pour les autres QCM, les lettres A, B, C, D identifient les
+    // propositions en mode non interactif ; en mode interactif, ce sont des
+    // cases à cocher/boutons radio qui remplissent ce rôle.
+    const qcmFormat = this.interactif ? 'case' : 'lettre'
     // Une proposition s'écrit comme la bonne réponse : fraction simplifiée, signe
     // devant. Un dénominateur nul rend une chaîne vide, écartée avec les doublons.
     const enFraction = (num: number, den: number) =>
@@ -121,7 +133,7 @@ export default class AntecedentParCalcul extends Exercice {
           b = randint(-999, 999, [0])
           m = randint(-999, 999, [0])
           expr = `$f(x)=${a}x ${ecritureAlgebrique(b)}$`
-          texte += `Déterminer l'antécédent de $${m}$ par la fonction $f$ définie par ${expr}. `
+          texte += consigneQuestion(m, expr, versionQcm)
           texteCorr += '$\\begin{aligned} '
           texteCorr += ` ${a}x ${ecritureAlgebrique(b)}&= ${m} \\\\ `
           texteCorr += ` ${a}x &= ${m} ${ecritureAlgebrique(-b)}\\\\ `
@@ -137,7 +149,7 @@ export default class AntecedentParCalcul extends Exercice {
           c = randint(-20, 20, [0])
           m = randint(-20, 20)
           expr = `$f(x)=${a}(x ${ecritureAlgebrique(b)})${ecritureAlgebrique(c)}$`
-          texte += `Déterminer l'antécédent de $${m}$ par la fonction $f$ définie par ${expr}. `
+          texte += consigneQuestion(m, expr, versionQcm)
           texteCorr += '$\\begin{aligned} '
           texteCorr += `${a}(x ${ecritureAlgebrique(b)})${ecritureAlgebrique(c)} &= ${m}\\\\`
           texteCorr += `${a}x ${ecritureAlgebrique(a * b)}${ecritureAlgebrique(c)} &= ${m}\\\\`
@@ -164,7 +176,7 @@ export default class AntecedentParCalcul extends Exercice {
           e = randint(-20, 20, [0])
           m = randint(-20, 20)
           expr = `$f(x)=${a}(${b}x ${ecritureAlgebrique(c)})${ecritureAlgebrique(d)}x${ecritureAlgebrique(e)}$`
-          texte += `Déterminer l'antécédent de $${m}$ par la fonction $f$ définie par ${expr}. `
+          texte += consigneQuestion(m, expr, versionQcm)
           texteCorr += '$\\begin{aligned} '
           texteCorr += `${a}(${b}x ${ecritureAlgebrique(c)})${ecritureAlgebrique(d)}x${ecritureAlgebrique(e)} &= ${m}\\\\`
           texteCorr += `${a * b}x ${ecritureAlgebrique(a * c)}${ecritureAlgebrique(d)}x${ecritureAlgebrique(e)} &= ${m}\\\\`
@@ -194,7 +206,7 @@ export default class AntecedentParCalcul extends Exercice {
           b = randint(-20, 20)
           m = randint(-20, 20)
           expr = `$f(x)=${a}x ${ecritureAlgebrique(b)}$`
-          texte += `Déterminer l'antécédent de $${m}$ par la fonction $f$ définie par ${expr}. `
+          texte += consigneQuestion(m, expr, versionQcm)
 
           texteCorr += '$\\begin{aligned} '
           texteCorr += `${a}x ${ecritureAlgebrique(b)} &= ${m} \\\\ `
@@ -295,10 +307,14 @@ export default class AntecedentParCalcul extends Exercice {
           if (context.isHtml) {
             texte += addMathaleaQcm(this, i, {
               ...qcmOptions,
+              format: qcmFormat,
               interactivityOn: this.interactif,
             })
           } else if (!context.isAmc) {
-            const qcmLatex = propositionsQcm(this, i)
+            const qcmLatex = propositionsQcm(this, i, {
+              style: '',
+              format: qcmFormat,
+            })
             texte += qcmLatex.texte
             texteCorr += qcmLatex.texteCorr
           }

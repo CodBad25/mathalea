@@ -48,7 +48,7 @@ export default class PuissancesDeDix extends Exercice {
     this.sup = 1
     this.sup2 = 4
     this.sup3 = false
-    this.besoinFormulaireNumerique = false // Voir 2N31-5 pour voir besoinFormulaireNumerique à true
+    this.besoinFormulaireNumerique = false // Voir 2N32-1 pour voir besoinFormulaireNumerique à true
     this.besoinFormulaire2Texte = [
       'Type de calculs',
       'Nombres séparés par des tirets :\n1 : Produit de puissances\n2 : Quotient de puissances\n3 : Puissance de puissances\n4 : Mélange',

@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { spline } from '../../lib/mathFonctions/Spline'
@@ -73,7 +74,7 @@ export default class AutoQ3AGs2026 extends ExerciceQcmA {
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.55,
-        display: 'block', center: true,
+        display: 'block', center: !context.isHtml,
       },
       r,
       courbe,

@@ -1,4 +1,4 @@
-import CalculDeVolumes2nde from '../2e/2G11-5'
+import CalculDeVolumes2nde from '../2e/2G11-4'
 export const titre = 'Calculer des volumes'
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -7,7 +7,7 @@ export const interactifType = ['qcm', 'mathLive']
 export const dateDePublication = '30/07/2026'
 
 /**
- * Clone de 2G11-5 pour le Bac Pro Première.
+ * Clone de 2G11-4 pour le Bac Pro Première.
  * Seulement volume d'un cube, d'un pavé droit et d'un cylindre.
  */
 

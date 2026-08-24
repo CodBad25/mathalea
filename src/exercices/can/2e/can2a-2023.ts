@@ -39,7 +39,7 @@ import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 
-export const titre = 'CAN Seconde sujet 2023'
+export const titre = 'S’entraîner avec le sujet CAN Seconde 2023'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '03/04/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -623,7 +623,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.6,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -1001,7 +1001,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.6,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -1029,7 +1029,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.6,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -1102,7 +1102,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.6,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -1130,7 +1130,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.6,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -1336,7 +1336,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.5,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 questionData.objets,
               ) + `<br>`
@@ -1437,7 +1437,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 ymax: ymax + 0.25,
                 pixelsParCm: 30,
                 scale: 0.75,
-                center: true,
+                center: !context.isHtml,
               },
               d,
               r,
@@ -1472,7 +1472,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 ymax: ymax + 0.25,
                 pixelsParCm: 30,
                 scale: 0.75,
-                center: true,
+                center: !context.isHtml,
               },
               d,
               r,
@@ -1595,7 +1595,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 ymax: Math.max(y2 + 1, y0 + 1),
                 pixelsParCm: 30,
                 scale: 0.55,
-                center: true,
+                center: !context.isHtml,
               },
               r1,
               o,
@@ -1681,7 +1681,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 0.55,
-                center: true,
+                center: !context.isHtml,
               },
               r1,
               o,

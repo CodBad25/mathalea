@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
@@ -72,7 +73,7 @@ export default class QuestionsAiresEtPerimetres6 extends ExerciceSimple {
         mainlevee: true,
         amplitude: 0.5,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

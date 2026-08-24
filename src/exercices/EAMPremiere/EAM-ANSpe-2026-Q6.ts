@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
@@ -140,7 +141,7 @@ export default class AutoQ6ANs2026 extends ExerciceQcmA {
         ymax,
         pixelsParCm: b % 10 === 0 ? 40 : 30,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       r1,
       d,
@@ -196,7 +197,7 @@ export default class AutoQ6ANs2026 extends ExerciceQcmA {
         ymax,
         pixelsParCm: 30,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       r1,
       d,

@@ -43,9 +43,20 @@ export default class ExprimerEnFonction extends ExerciceSimple {
     ) {
       case 1:
         this.question = `Le degré Fahrenheit $F$ est une unité de mesure de la température utilisée aux États-Unis. <br>Il est lié au degré Celsius $C$ par la formule suivante : <br>`
+        /* Ancienne version
         this.question += choixQ
           ? `${texteCentre('$F=\\dfrac{9}{5}C+32$')}`
           : `${texteCentre('$C=\\dfrac{5}{9}(F-32)$')}`
+        */
+        // Nouvelle version
+        this.question += choixQ
+          ? context.isHtml
+            ? '$F=\\dfrac{9}{5}C+32$<br>'
+            : `${texteCentre('$F=\\dfrac{9}{5}C+32$')}`
+          : context.isHtml
+            ? '$F=\\dfrac{9}{5}C-32$<br>'
+            : `${texteCentre('$F=\\dfrac{9}{5}C-32$')}`
+        // Fin nouvelle version
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer $C$ est : `
@@ -74,6 +85,7 @@ export default class ExprimerEnFonction extends ExerciceSimple {
                 '$F=\\dfrac{9}{5}(C+32)$',
               ]
         }
+        /* Ancienne version
         choixQ
           ? (this.optionsChampTexte = {
               texteAvant: '<br> $C=$',
@@ -83,6 +95,18 @@ export default class ExprimerEnFonction extends ExerciceSimple {
               texteAvant: '<br> $F=$',
               texteApres: ' ',
             })
+            */
+        // Nouvelle version
+        this.optionsChampTexte = choixQ
+          ? {
+              texteAvant: '<br> $C=$',
+              texteApres: ' ',
+            }
+          : {
+              texteAvant: '<br> $F=$',
+              texteApres: ' ',
+            }
+        // Fin nouvelle version
         this.correction = choixQ
           ? `On part de la formule : $F = \\dfrac{9}{5}C + 32$.<br>
 En isolant  $C$, on obtient  : $F - 32 = \\dfrac{9}{5}C$.<br>
@@ -94,8 +118,12 @@ Puis en isolant  $F$, on obtient : $${miseEnEvidence('F = \\dfrac{9}{5}C + 32')}
       case 2:
         this.question = `Le taux d'évolution $T$ entre une valeur initiale $I$ et une valeur finale $F$ est donné par la formule : <br>`
         this.question += choixQ
-          ? `${texteCentre('$T=\\dfrac{F-I}{I}$')}`
-          : `${texteCentre('$F=I(1+T)$')}`
+          ? context.isHtml
+            ? '$T=\\dfrac{F-I}{I}$<br>'
+            : `${texteCentre('$T=\\dfrac{F-I}{I}$')}`
+          : context.isHtml
+            ? '$F=I(1+T)$<br>'
+            : `${texteCentre('$F=I(1+T)$')}`
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer $I$ est : `
@@ -116,15 +144,15 @@ Puis en isolant  $F$, on obtient : $${miseEnEvidence('F = \\dfrac{9}{5}C + 32')}
                 '$T=\\dfrac{F+I}{I}$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $I=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $T=$',
               texteApres: ' ',
-            })
+            }
         if (choixQ) {
           this.correction = `On part de la formule : $T = \\dfrac{F-I}{I}$.<br>
 En multipliant  par $I$ les deux membres, on obtient : $TI = F - I$.<br>
@@ -139,7 +167,9 @@ En isolant $T$, on obtient : $${miseEnEvidence('T = \\dfrac{F}{I} - 1 = \\dfrac{
 
       case 4:
         this.question = `L'aire $A$ d'un trapèze de petite base $b$, de grande base $B$ et de hauteur $h$ est donnée par :<br>`
-        this.question += texteCentre('$A=\\dfrac{(b+B)\\times h}{2}$')
+        this.question += context.isHtml
+          ? '$A=\\dfrac{(b+B)\\times h}{2}$<br>'
+          : texteCentre('$A=\\dfrac{(b+B)\\times h}{2}$')
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer la hauteur $h$ est : `
@@ -164,15 +194,15 @@ En isolant $T$, on obtient : $${miseEnEvidence('T = \\dfrac{F}{I} - 1 = \\dfrac{
                 '$B=\\dfrac{A}{h}-b$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $h=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $B=$',
               texteApres: ' ',
-            })
+            }
 
         if (choixQ) {
           this.correction = `On part de la formule : $A = \\dfrac{(b + B) \\times h}{2}$.<br>
@@ -186,8 +216,10 @@ En isolant $B$, on obtient : $${miseEnEvidence('B = \\dfrac{2A}{h} - b')}$.`
         }
         break
       case 3:
-        this.question = `Le périmètre $P$ d'un rectangle est donnée en fonction de sa longueur $L$ et sa largeur $\\ell$.<br>`
-        this.question += texteCentre('$P=2(L+\\ell)$')
+        this.question = `Le périmètre $P$ d'un rectangle est donnée en fonction de sa longueur $L$ et sa largeur $\\ell$ :<br>`
+        this.question += context.isHtml
+          ? '$P=2(L+\\ell)$<br>'
+          : texteCentre('$P=2(L+\\ell)$')
         this.reponse = choixQ ? '$\\dfrac{P}{2}-l$' : '$\\dfrac{P}{2}-L$'
         if (this.versionQcm) {
           this.question += choixQ
@@ -214,15 +246,15 @@ En isolant $B$, on obtient : $${miseEnEvidence('B = \\dfrac{2A}{h} - b')}$.`
                 '$\\ell=\\dfrac{P}{2L}$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $L=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $\\ell=$',
               texteApres: ' ',
-            })
+            }
 
         if (choixQ) {
           this.correction = `On part de la formule : $P = 2(L + \\ell)$.<br>
@@ -238,7 +270,9 @@ En isolant $2\\ell$, puis en divisant par $2$, on obtient : $2\\ell = P - 2L$, s
       case 5:
       default:
         this.question = `Le taux de marge $T$ d'un produit est donné par la formule suivante où $M$ est la marge et $C$ le coût d'achat :<br>`
-        this.question += texteCentre('$T=\\dfrac{M}{C}\\times 100$')
+        this.question += context.isHtml
+          ? '$T=\\dfrac{M}{C}\\times 100$<br>'
+          : texteCentre('$T=\\dfrac{M}{C}\\times 100$')
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer $M$ est : `
@@ -267,15 +301,15 @@ En isolant $2\\ell$, puis en divisant par $2$, on obtient : $2\\ell = P - 2L$, s
                 '$C=\\dfrac{T}{100M}$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $M=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $C=$',
               texteApres: ' ',
-            })
+            }
 
         if (choixQ) {
           this.correction = `On part de la formule : $T = \\dfrac{M}{C} \\times 100$.<br>

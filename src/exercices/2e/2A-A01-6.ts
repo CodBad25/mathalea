@@ -8,7 +8,7 @@ import Question6 from '../EAMPremiere/EAM-FMSpe-2026-Q6'
 import Question7 from '../EAMPremiere/EAM-FMSpe-2026-Q7'
 import Question8 from '../EAMPremiere/EAM-FMSpe-2026-Q8'
 import Question9 from '../EAMPremiere/EAM-PolynesieTechno-2026-Q8'
-export const titre = 'Sujet n°6'
+export const titre = 'Traiter le sujet n°6'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '7ae42'

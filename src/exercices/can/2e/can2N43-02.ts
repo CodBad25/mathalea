@@ -1,95 +1,134 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { abs } from '../../../lib/outils/nombres'
-import { sp } from '../../../lib/outils/outilString'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Calculer avec  des puissances*'
+export const titre = 'Calculer avec  des puissances'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
+export const dateDePublication = '15/09/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDeModifImportante = '25/03/2026'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
- * Créé pendant l'été 2021
+ *
+ */
 
- * Date de publication
-*/
-export const uuid = 'b1517'
+export const uuid = 'b31eb'
 
 export const refs = {
   'fr-fr': ['can2N43-02'],
   'fr-ch': [],
 }
-export default class CalculPuissance1 extends ExerciceSimple {
+export default class CalculPuissancesOperation extends ExerciceSimple {
   constructor() {
     super()
-
+    this.versionQcmDisponible = true
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+    this.optionsDeComparaison = { seulementCertainesPuissances: true }
   }
 
   nouvelleVersion() {
-    let a, b
+    if (!this.versionQcm) {
+      this.question = `Écrire sous la forme $a^n$ où $a$ et $n$  sont ${context.isDiaporama ? '<br>' : ''} des  entiers relatifs. <br>`
+    } else {
+      this.question = ''
+    }
+    let a, b, n, p, s
     switch (
       this.quotaChoice('type', ['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a':
-        a = choice([0.25, 0.5])
-        b = randint(2, 5)
-        this.question = `Calculer sous la forme ${context.isDiaporama ? '<br>' : ''} d'un  nombre   entier $4^{${b}} \\times ${texNombre(a)}^{${b}}$.`
-        this.correction = `On utilise la formule $a^n\\times b^n=(a\\times b)^{n}$
-         avec $a=4$,  $b=${texNombre(a)}$ et $n=${b}$.<br>
-        $4^{${b}}\\times ${texNombre(a)}^{${b}}=(4\\times ${texNombre(a)})^{${b}}=
-        ${4 * a}^${texNombre(b)}=${miseEnEvidence(texNombre(4 ** b * a ** b))} $`
-        this.reponse = 4 ** b * a ** b
+        a = randint(-9, 9, [0, 1, -1])
+        n = randint(-9, 9, [0, 1, -1])
+        p = randint(-9, 9, [0, 1, -1])
+        s = n + p
+        this.question += `$${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}$`
+        this.correction = `On utilise la formule $a^n\\times a^m=a^{n+m}$ avec $a=${a}$, $n=${n}$ et $p=${p}$.<br>
+        $${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}=${ecritureParentheseSiNegatif(a)}^{${n}+${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n + p}}`)}$`
+        this.distracteurs = [
+          `$${ecritureParentheseSiNegatif(a)}^{${n - p}}$`,
+          `$${ecritureParentheseSiNegatif(a)}^{${n * p}}$`,
+          `$${ecritureParentheseSiNegatif(a * a)}^{${n + p}}$`,
+        ]
+        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${n + p}}`
 
         break
       case 'b':
-        a = choice([0.2, 0.4])
-        b = randint(2, 5)
-        this.question = `Calculer sous la forme ${context.isDiaporama ? '<br>' : ''}d'un nombre  entier  $5^{${b}} \\times ${texNombre(a)}^{${b}}$.`
+        a = randint(-9, 9, [0, 1, -1])
+        b = randint(-9, 9, [0, 1, -1])
+        n = randint(-9, 9, [0, 1, -1])
+        p = a * b
+        this.question += `$${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(b)}^{${n}}$`
+        this.distracteurs = [
+          `$${ecritureParentheseSiNegatif(p)}^{${n + n}}$`,
+          `$${ecritureParentheseSiNegatif(p)}^{${n * n}}$`,
+          `$${ecritureParentheseSiNegatif(a * a * -1)}^{${n}}$`,
+        ]
         this.correction = `On utilise la formule $a^n\\times b^n=(a\\times b)^{n}$
-        avec $a=5$,  $b=${texNombre(a)}$ et $n=${b}$.<br>
-       $5^{${b}}\\times ${texNombre(a)}^{${b}}=(5\\times ${texNombre(a)})^{${b}}=
-       ${5 * a}^${texNombre(b)}=${miseEnEvidence(texNombre(5 ** b * a ** b))} $`
-        this.reponse = 5 ** b * a ** b
-
+        avec $a=${a}$,  $b=${b}$ et $n=${n}$.<br>
+        $${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(b)}^{${n}}=(${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(b)})^{${n}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(p)}^{${n}}`)}$ `
+        this.reponse = `${ecritureParentheseSiNegatif(p)}^{${n}}`
         break
 
       case 'c':
-        a = randint(-3, -1)
-        this.question = `Calculer sous la forme ${context.isDiaporama ? '<br>' : ''} d'un nombre  entier $2^{${a}} \\times 8$.`
-        this.correction = `Comme $a^{-n}=\\dfrac{1}{a^n}$, ${sp(4)}  $2^{${a}}=\\dfrac{1}{2^{${-a}}}=\\dfrac{1}{${2 ** -a}}$. <br>
-
-        
-        $2^{${a}}\\times 8=\\dfrac{1}{${2 ** abs(a)}}\\times 8=${miseEnEvidence(texNombre((8 * 1) / 2 ** -a))} $`
-        this.reponse = 2 ** a * 8
-
+        a = randint(-9, 9, [0, 1, -1])
+        p = randint(-9, 9, [0, 1])
+        n = randint(-9, 9, [0, 1, -1])
+        s = n * p
+        this.question += ` $\\left(${ecritureParentheseSiNegatif(a)}^{${n}}\\right)^{${p}}$`
+        this.distracteurs = [
+          `$${ecritureParentheseSiNegatif(a)}^{${n + p}}$`,
+          `$${ecritureParentheseSiNegatif(a * n)}^{${p}}$`,
+          `$${ecritureParentheseSiNegatif(a * p)}^{${n}}$`,
+        ]
+        this.correction = `On utilise la formule $\\left(a^n\\right)^p=a^{n\\times p}$
+        avec $a=${a}$,  $n=${n}$ et $p=${p}$.<br>
+        $\\left(${ecritureParentheseSiNegatif(a)}^{${n}}\\right)^{${p}}=${ecritureParentheseSiNegatif(a)}^{${n}\\times ${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n * p}}`)}$ `
+        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${s}}`
         break
+
       case 'd':
-        a = randint(-4, -1)
-        this.question = `Calculer sous la forme ${context.isDiaporama ? '<br>' : ''} d'un nombre  entier $2^{${a}} \\times 16$.`
-        this.correction = `Comme $a^{-n}=\\dfrac{1}{a^n}$, ${sp(4)}  $2^{${a}}=\\dfrac{1}{2^{${-a}}}=\\dfrac{1}{${2 ** -a}}$. <br>
-
-        
-        $2^{${a}}\\times 16=\\dfrac{1}{${2 ** abs(a)}}\\times 16=${miseEnEvidence(texNombre((16 * 1) / 2 ** -a))} $`
-        this.reponse = 2 ** a * 16
-
+        a = randint(-9, 9, [0, 1, -1])
+        p = randint(-9, 9, [0, 1])
+        n = randint(-9, 9, [0, 1, -1, p])
+        s = n - p
+        this.question += `$\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(a)}^{${p}}}$`
+        this.correction = `On utilise la formule $\\dfrac{a^n}{a^p}=a^{n-p}$ avec $a=${a}$,  $n=${n}$ et $p=${p}$.<br>
+        $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(a)}^{${p}}}=${ecritureParentheseSiNegatif(a)}^{${n}- ${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n - p}}`)}$`
+        this.distracteurs = [
+          `$${ecritureParentheseSiNegatif(a)}^{${n + p}}$`,
+          `$${ecritureParentheseSiNegatif(a)}^{${-s}}$`,
+          `$${ecritureParentheseSiNegatif(a)}^{${n * p}}$`,
+        ]
+        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${s}}`
         break
       case 'e':
-        a = randint(-5, -1)
-        this.question = `Calculer sous la forme ${context.isDiaporama ? '<br>' : ''} d'un nombre  entier $2^{${a}} \\times 32$.`
-        this.correction = `Comme $a^{-n}=\\dfrac{1}{a^n}$, ${sp(4)}  $2^{${a}}=\\dfrac{1}{2^{${-a}}}=\\dfrac{1}{${2 ** -a}}$. <br>
-
-        
-        $2^{${a}}\\times 32=\\dfrac{1}{${2 ** abs(a)}}\\times 32=${miseEnEvidence(texNombre((32 * 1) / 2 ** -a))} $`
-        this.reponse = 2 ** a * 32
-
+        b = randint(2, 6, [0, 1, -1])
+        a = choice([2, 3, 4, 5, 6, 7]) * b
+        n = randint(-9, 9, [0, 1, -1])
+        s = a / b
+        this.question += ` $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(b)}^{${n}}}$`
+        this.correction = `On utilise la formule $\\dfrac{a^n}{b^n}=\\left(\\dfrac{a}{b}\\right)^{n}$ avec
+        $a=${a}$,  $b=${b}$ et $n=${n}$.<br>
+        $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(b)}^{${n}}}=\\left(\\dfrac{${ecritureParentheseSiNegatif(a)}}{${ecritureParentheseSiNegatif(b)}}\\right)^{${n}}=${miseEnEvidence(`${s}^{${n}}`)}$
+        `
+        this.distracteurs = [
+          `$${ecritureParentheseSiNegatif(s)}^{${n - 2}}$`,
+          `$${ecritureParentheseSiNegatif(a)}^{0}$`,
+          `$${ecritureParentheseSiNegatif(s)}^{0}$`,
+        ]
+        this.reponse = `${s}^{${n}}`
         break
+    }
+    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
+    if (this.interactif || this.versionQcm) {
+      this.question += '$=$'
     }
   }
 }

@@ -66,7 +66,7 @@ export default class LireUnDiagramme extends Exercice {
     ]
     this.besoinFormulaire3Texte = [
       'Types de questions',
-      "0: Toutes les questions\n1 : L'espèce la moins nombreuse\n2 : L'espèce la plus nombreuse\n3 : La part de l'espèce la plus nombreuse",
+      "1 : L'espèce la moins nombreuse\n2 : L'espèce la plus nombreuse\n3 : La part de l'espèce la plus nombreuse",
     ]
 
     this.nbQuestions = 2
@@ -94,8 +94,8 @@ export default class LireUnDiagramme extends Exercice {
       nbQuestions: 0,
       min: 1,
       max: 3,
-      melange: 0,
       defaut: 0,
+      melange: 0,
       shuffle: false,
       enleveDoublons: true,
     }).map((v) => Number(v) - 1)
@@ -520,7 +520,9 @@ export default class LireUnDiagramme extends Exercice {
               `${avecNumerotation ? numAlpha(indexQuestion) : ''}${correctionsSousQuestions[sousQuestion]}`,
           )
           .join('')
-        handleAnswers(this, q, reponsesInteractives)
+        handleAnswers(this, q, reponsesInteractives, {
+          formatInteractif: 'multi-mathfield',
+        })
       } else {
         // en AMC
         this.autoCorrectionAMC[q] = {}

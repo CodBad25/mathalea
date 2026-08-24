@@ -23,7 +23,9 @@ type FractionCliquableConfig = {
 
 const fractionCliquableConfigs = new Map<string, FractionCliquableConfig>()
 const pendingFractionCliquableIds: string[] = []
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class FractionCliquableElement extends MathaleaCustomElement {
   static readonly elementTag = 'fraction-cliquable'
 

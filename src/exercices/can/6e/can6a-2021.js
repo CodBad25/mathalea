@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -242,7 +243,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 15,
                 ymax: 2,
                 scale: 0.6,
-                center: true,
+                center: !context.isHtml,
               },
               d,
             )
@@ -833,7 +834,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               mainlevee: false,
               amplitude: 0.5,
               scale: 0.8,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -864,7 +865,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 10,
                 ymax: 1.5,
                 scale: 0.8,
-                center: true,
+                center: !context.isHtml,
               },
               droiteGraduee({
                 Unite: 8,

@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { cercle } from '../../lib/2d/cercle'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -62,7 +63,7 @@ export default class PerimetreCercleQcm extends ExerciceQcmA {
     this.enonce = `Le cercle ci-dessous, sur lequel on a codé un ${donneLeDiametre ? 'diamètre' : 'rayon'}, n'est pas représenté à l'échelle.<br>
 ${mathalea2d(
   Object.assign(
-    { pixelsParCm: 25, scale: 0.8, center: true },
+    { pixelsParCm: 25, scale: 0.8, center: !context.isHtml },
     fixeBordures(objets),
   ),
   objets,

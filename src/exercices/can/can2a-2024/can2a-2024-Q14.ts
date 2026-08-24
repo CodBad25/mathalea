@@ -66,12 +66,12 @@ export default class NomExercice extends ExerciceSimple {
 
     this.question = question + qcm.texte
 
-    this.correction = ` $${valeurs[1]}\\,\\%$ de  $${texNombre(valeurs[0])}$ € est égal à $${texNombre((valeurs[0] * valeurs[1]) / 100, 2)}$ €. <br>
+    this.correction = ` $${valeurs[1]}\\,\\%$ de  $${texNombre(valeurs[0])}$ € est égal à $${texNombre((valeurs[0] * valeurs[1]) / 100, 2)}$ €.<br>
         Après la hausse de $${valeurs[1]}\\,\\%$, le prix est de $${texNombre(valeurs[0])}$ € $+$ $${texNombre((valeurs[0] * valeurs[1]) / 100, 2)}$ € $=${texNombre(val1, 2)}$ €.<br>
         $${valeurs[1]}\\,\\%$ de  $${texNombre(val1)}$ € est égal à $${texNombre((val1 * valeurs[1]) / 100, 2)}$ €. <br>
         Après la baisse de $${valeurs[1]}\\,\\%$, le prix est de  $${texNombre(val1)}$ € $-$ $${texNombre((val1 * valeurs[1]) / 100, 2)}$ € $=${texNombre(val1 - (val1 * valeurs[1]) / 100)}$ €.<br>
         Le nouveau prix est $${miseEnEvidence(texPrix(valeurs[2]))}$ €. <br>
-        ${texteGras('Autre méthode :<br> ')}
+        ${texteGras('Autre méthode : ')}<br>
         Augmenter de $${valeurs[1]}\\,\\%$ revient à multiplier par $${texNombre(1 + valeurs[1] / 100, 2)}$.<br>
 Diminuer de $${valeurs[1]}\\,\\%$ revient à multiplier par $${texNombre(1 - valeurs[1] / 100, 2)}$.<br>
 Donc le prix est multiplié par $${texNombre(1 + valeurs[1] / 100)}\\times ${texNombre(1 - valeurs[1] / 100, 2)}$, c'est-à-dire par $${texNombre((1 + valeurs[1] / 100) * (1 - valeurs[1] / 100), 2)}$.<br>

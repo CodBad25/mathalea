@@ -190,7 +190,7 @@ function graphique(
       ymax: ymax * yUnite + 0.3,
       pixelsParCm: 22,
       scale,
-      center: true,
+      center: !context.isHtml,
     },
     r,
     ...cadre,

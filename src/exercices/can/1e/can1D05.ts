@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
@@ -131,7 +132,7 @@ export default class ResolEquationDerivee extends ExerciceSimple {
     Déterminer le nombre de solutions de l'équation $f'(x)=0$.<br><br>` +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, center: true },
+          { pixelsParCm: 30, scale: 0.65, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 2,
@@ -156,7 +157,7 @@ export default class ResolEquationDerivee extends ExerciceSimple {
       "On donne la représentation graphique d'une fonction $f$. <br>" +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, center: true },
+          { pixelsParCm: 30, scale: 0.65, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

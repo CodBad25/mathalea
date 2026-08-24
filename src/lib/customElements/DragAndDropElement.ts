@@ -1,10 +1,10 @@
 import { context } from '../../modules/context'
-import type { IExercice } from '../types'
 import {
   attachDragAndDropListeners,
   type DragAndDropListenerRecord,
   verifDragAndDrop,
 } from '../interactif/DragAndDrop'
+import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -16,7 +16,9 @@ export type DragAndDropElementOptions = {
   innerHtml?: string
   interactivityOn?: boolean
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class DragAndDropElement extends MathaleaCustomElement {
   static readonly elementTag = 'drag-and-drop'
 
@@ -98,9 +100,11 @@ export class DragAndDropElement extends MathaleaCustomElement {
     const template = document.createElement('template')
     template.innerHTML = questionHtml
     const labels = new Map<string, string>()
-    template.content.querySelectorAll<HTMLElement>('.etiquette').forEach((el) => {
-      labels.set(el.id, cleanDragAndDropLabel(el.textContent ?? ''))
-    })
+    template.content
+      .querySelectorAll<HTMLElement>('.etiquette')
+      .forEach((el) => {
+        labels.set(el.id, cleanDragAndDropLabel(el.textContent ?? ''))
+      })
 
     return values
       .map((rawIds) =>

@@ -19,7 +19,7 @@ export const dateDePublication = '18/02/2022' // La date de publication initiale
 /**
  * Calculer avec des nombres en notation scientifique
  * @author Matthieu Devillers
- * 2N31-5
+ * 2N32-1
  */
 export default class CalculerAvecEcritureScientifique extends Exercice {
   constructor() {

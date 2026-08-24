@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
@@ -115,7 +116,7 @@ export default class Auto1AF6c extends ExerciceQcmA {
         ymax: ymax + 0.25,
         pixelsParCm: 30,
         scale: 0.75,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,
@@ -130,7 +131,7 @@ export default class Auto1AF6c extends ExerciceQcmA {
         ymax: ymax + 0.25,
         pixelsParCm: 30,
         scale: 0.75,
-        center: true,
+        center: !context.isHtml,
       },
       d,
       r1,

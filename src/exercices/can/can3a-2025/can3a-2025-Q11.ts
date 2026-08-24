@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
@@ -78,7 +79,7 @@ export default class Coordonnees extends ExerciceSimple {
         ymax: 3,
         scale: 0.7,
         pixelsParCm: 30,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       o,
@@ -100,7 +101,7 @@ export default class Coordonnees extends ExerciceSimple {
         ymax: 3,
         scale: 0.7,
         pixelsParCm: 30,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       o,

@@ -162,7 +162,7 @@ export default class AntecedentSpline extends ExerciceSimple {
     const solutions1 = theSpline.solve(y1)
     let reponse1
     const figureOptions = Object.assign(
-      { pixelsParCm: 30, scale: 0.65, center: true },
+      { pixelsParCm: 30, scale: 0.65, center: !context.isHtml },
       {
         xmin: bornes.xMin - 1,
         ymin: bornes.yMin - 1,

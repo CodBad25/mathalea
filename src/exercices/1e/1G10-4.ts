@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../lib/2d/CodageSegment'
@@ -129,7 +130,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -161,7 +162,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -193,7 +194,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -224,7 +225,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -255,7 +256,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -290,7 +291,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -361,7 +362,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -398,7 +399,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -477,7 +478,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -513,7 +514,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -549,7 +550,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -586,7 +587,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )

@@ -5,6 +5,9 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Jean-Claude Lhote
+ */
 Blockly.setLocale(En as unknown as { [key: string]: string })
 
 type BlocklyWorkspaceJson = Record<string, unknown>

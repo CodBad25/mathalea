@@ -5,150 +5,101 @@ import {
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
-  'Reconnaître des droites parallèles avec la colinéarité (V/F)'
+  'Reconnaître si trois points sont alignés avec la colinéarité (V/F)'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
-// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '20/04/26' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '18/04/26'
 
 /**
- * Modèle d'exercice très simple pour la course aux nombres
  * @author Stéphane Guyon
+ */
 
-*/
-export const uuid = '2ba43'
-
+export const uuid = '2ba44'
 export const refs = {
   'fr-fr': ['2G27-2'],
-  'fr-ch': ['3G93-7'],
+  'fr-ch': ['3G93-8'],
 }
 export default class DroitesParallelesVF extends Exercice {
   constructor() {
     super()
-
     this.nbQuestions = 1
   }
 
   nouvelleVersion() {
-    let xa, ya, xb, yb, xc, yc, xd, yd, abx, aby, k
+    let xa, ya, xb, yb, xc, yc, abx, aby, k, z
 
     for (
       let i = 0, texte, texteCorr, monQcm, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      switch (
-        choice([1, 2]) //
-      ) {
-        case 1:
-          xa = randint(-5, 5)
-          ya = randint(-5, 5)
-          xb = randint(-5, 5, xa)
-          yb = randint(-5, 5, ya)
-          abx = xb - xa
-          aby = yb - ya
-          xc = randint(-5, 5, [xa, xb])
-          yc = randint(-5, 5, [ya, yb])
-          k = randint(-5, 5, [0, 1])
-          xd = xc + k * abx
-          yd = yc + k * aby
-          texte = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$, $C(${xc}\\;;\\;${yc})$ et $D(${texNombre(xd)}\\;;\\;${yd})$.<br>
-        Déterminer si les droites $(AB)$ et $(CD)$ sont parallèles.`
-          this.canEnonce = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$, $C(${xc}\\;;\\;${yc})$ et $D(${texNombre(xd)}\\;;\\;${yd})$.<br>
-        Déterminer si les droites $(AB)$ et $(CD)$ sont parallèles.`
-          this.autoCorrection[i] = {
-            enonce: texte,
-            propositions: [
-              {
-                texte: 'Vrai',
-                statut: abx * (yd - yc) === aby * (xd - xc),
-              },
-              {
-                texte: 'Faux',
-                statut: xa === 50,
-              },
-            ],
-            options: { ordered: true, radio: true },
-          }
-          monQcm = propositionsQcm(this, i)
-          texte += monQcm.texte
-
-          texteCorr =
-            monQcm.texteCorr +
-            `Soient $A,B,C,D$ quatre points distincts. <br>Deux droites $(AB)$ et $(CD)$ sont parallèles si et seulement si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont colinéaires.<br>
-            Si $A(x_A\\;;\\;y_A)$, $B(x_B\\;;\\;y_B)$, $C(x_C\\;;\\;y_C)$ et $D(x_D\\;;\\;y_D)$, alors les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ ont pour coordonnées :<br>
-            $\\overrightarrow{AB}\\begin{pmatrix}x_B - x_A \\\\ y_B - y_A \\end{pmatrix}$ et $\\overrightarrow{CD}\\begin{pmatrix}x_D - x_C \\\\ y_D - y_C \\end{pmatrix}$.<br>
-            On a donc :<br>
-            $\\overrightarrow{AB}\\begin{pmatrix}${xb} ${ecritureAlgebrique(-xa)} \\\\ ${yb} ${ecritureAlgebrique(-ya)} \\end{pmatrix}$ donc             $\\overrightarrow{AB}\\begin{pmatrix}${xb - xa}  \\\\ ${yb - ya}  \\end{pmatrix}$.<br> 
-            $\\overrightarrow{CD}\\begin{pmatrix}${xd} ${ecritureAlgebrique(-xc)} \\\\ ${yd} ${ecritureAlgebrique(-yc)} \\end{pmatrix}$ donc $\\overrightarrow{CD}\\begin{pmatrix}${xd - xc}  \\\\ ${yd - yc}  \\end{pmatrix}$.<br> 
-              Le déterminant de ces deux vecteurs est égal à : <br>
-            $\\begin{aligned}
-            det\\left(\\overrightarrow{AB}\\,;\\,\\overrightarrow{CD}\\right)&=\\begin{vmatrix} ${xb - xa} & ${xd - xc} \\\\ ${yb - ya} & ${yd - yc} \\end{vmatrix}\\\\
-            &=
-            ${abx}\\times ${ecritureParentheseSiNegatif(yd - yc)}-${ecritureParentheseSiNegatif(aby)}\\times ${ecritureParentheseSiNegatif(xd - xc)}\\\\
-            &=${abx * (yd - yc)}-${ecritureParentheseSiNegatif(aby * (xd - xc))}\\\\
-            &=${abx * (yd - yc) - aby * (xd - xc)}\\end{aligned}$.<br>
-            Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les droites $(AB)$ et $(CD)$ sont parallèles. <br>
-            Il fallait donc cocher "${texteEnCouleurEtGras('Vrai')}".`
-          break
-        case 2:
-        default:
-          xa = randint(-5, 5)
-          ya = randint(-5, 5)
-          xb = randint(-5, 5, xa)
-          yb = randint(-5, 5, ya)
-          abx = xb - xa
-          aby = yb - ya
-          xc = randint(-5, 5, [xa, xb])
-          yc = randint(-5, 5, [ya, yb])
-          k = randint(-5, 5, [0, 1])
-          xd = xc + k * abx
-          yd = yc + k * aby + randint(-1, 1, 0)
-          texte = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$, $C(${xc}\\;;\\;${yc})$ et $D(${xd}\\;;\\;${yd})$.<br>
-        Déterminer si les droites $(AB)$ et $(CD)$ sont parallèles.`
-          this.canEnonce = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$, $C(${xc}\\;;\\;${yc})$ et $D(${xd}\\;;\\;${yd})$.<br>
-        Déterminer si les droites $(AB)$ et $(CD)$ sont parallèles.`
-          this.autoCorrection[i] = {
-            enonce: texte,
-            propositions: [
-              {
-                texte: 'Vrai',
-                statut: xa === 100,
-              },
-              {
-                texte: 'Faux',
-                statut: abx * (yd - yc) !== aby * (xd - xc),
-              },
-            ],
-            options: { ordered: true, radio: true },
-          }
-          monQcm = propositionsQcm(this, i)
-          texte += monQcm.texte
-
-          texteCorr =
-            monQcm.texteCorr +
-            `Soient $A,B,C,D$ quatre points distincts. <br>Deux droites $(AB)$ et $(CD)$ sont parallèles si et seulement si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont colinéaires.<br>
-            Si $A(x_A\\;;\\;y_A)$, $B(x_B\\;;\\;y_B)$, $C(x_C\\;;\\;y_C)$ et $D(x_D\\;;\\;y_D)$, alors les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ ont pour coordonnées :<br>
-            $\\overrightarrow{AB}\\begin{pmatrix}x_B - x_A \\\\ y_B - y_A \\end{pmatrix}$ et $\\overrightarrow{CD}\\begin{pmatrix}x_D - x_C \\\\ y_D - y_C \\end{pmatrix}$.<br>
-            On a donc :<br>
-            $\\overrightarrow{AB}\\begin{pmatrix}${xb} ${ecritureAlgebrique(-xa)} \\\\ ${yb} ${ecritureAlgebrique(-ya)} \\end{pmatrix}$ donc             $\\overrightarrow{AB}\\begin{pmatrix}${xb - xa}  \\\\ ${yb - ya}  \\end{pmatrix}$.<br> 
-            $\\overrightarrow{CD}\\begin{pmatrix}${xd} ${ecritureAlgebrique(-xc)} \\\\ ${yd} ${ecritureAlgebrique(-yc)} \\end{pmatrix}$ donc $\\overrightarrow{CD}\\begin{pmatrix}${xd - xc}  \\\\ ${yd - yc}  \\end{pmatrix}$.<br> 
-              Le déterminant de ces deux vecteurs est égal à : <br>
-            $\\begin{aligned}
-            det\\left(\\overrightarrow{AB}\\,;\\,\\overrightarrow{CD}\\right)&=\\begin{vmatrix} ${xb - xa} & ${xd - xc} \\\\ ${yb - ya} & ${yd - yc} \\end{vmatrix}\\\\
-            &=
-            ${abx}\\times ${ecritureParentheseSiNegatif(yd - yc)}-${ecritureParentheseSiNegatif(aby)}\\times ${ecritureParentheseSiNegatif(xd - xc)}\\\\
-            &=${abx * (yd - yc)}-${ecritureParentheseSiNegatif(aby * (xd - xc))}\\\\
-            &=${abx * (yd - yc) - aby * (xd - xc)}\\end{aligned}$<br>
-              Le déterminant étant non-nul, on peut en déduire que les deux vecteurs ne sont pas colinéaires, donc les droites $(AB)$ et $(CD)$ ne sont pas parallèles.
-                   <br>Il fallait donc cocher "${texteEnCouleurEtGras('Faux')}".`
-          break
+      xa = randint(-5, 5)
+      ya = randint(-5, 5)
+      xb = randint(-5, 5, xa)
+      yb = randint(-5, 5, ya)
+      abx = xb - xa
+      aby = yb - ya
+      k = randint(-5, 5, [0, 1])
+      xc = xa + k * abx
+      yc = ya + k * aby
+      z = 0
+      const aligne = choice(['true', 'false'])
+      if (aligne === 'false') {
+        z = randint(-1, 1, 0)
       }
-      if (this.questionJamaisPosee(i, xa, ya, xb, yb, xc, yc, xd, yd)) {
+      if (xc / 2 === xc % 2) {
+        xc = xc + z
+      } else {
+        yc = yc + z
+      }
+      texte = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$ et $C(${xc}\\;;\\;${yc})$.<br>
+        Les points $A$, $B$ et $C$ sont alignés.`
+      this.canEnonce = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$ et $C(${xc}\\;;\\;${yc})$.<br>
+        Les points $A$, $B$ et $C$ sont alignés.`
+      this.autoCorrection[i] = {
+        enonce: texte,
+        propositions: [
+          {
+            texte: 'Vrai',
+            statut: aligne === 'true',
+          },
+          {
+            texte: 'Faux',
+            statut: aligne !== 'true',
+          },
+        ],
+        options: { ordered: true, radio: true },
+      }
+      monQcm = propositionsQcm(this, i)
+      texte += monQcm.texte
+
+      texteCorr =
+        monQcm.texteCorr +
+        `Trois poins distincts $A,B,$ et $C$ sont alignés si et seulement si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont colinéaires.<br>
+            Si $A(x_A\\;;\\;y_A)$, $B(x_B\\;;\\;y_B)$, $C(x_C\\;;\\;y_C)$, alors les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ ont pour coordonnées :<br>
+            $\\overrightarrow{AB}\\begin{pmatrix}x_B - x_A \\\\ y_B - y_A \\end{pmatrix}$ et $\\overrightarrow{AC}\\begin{pmatrix}x_C - x_A \\\\ y_C - y_A \\end{pmatrix}$.<br>
+            On a donc :<br>
+            $\\overrightarrow{AB}\\begin{pmatrix}${xb} ${ecritureAlgebrique(-xa)} \\\\ ${yb} ${ecritureAlgebrique(-ya)} \\end{pmatrix}$ donc             $\\overrightarrow{AB}\\begin{pmatrix}${xb - xa}  \\\\ ${yb - ya}  \\end{pmatrix}$.<br>
+            $\\overrightarrow{AC}\\begin{pmatrix}${xc} ${ecritureAlgebrique(-xa)} \\\\ ${yc} ${ecritureAlgebrique(-ya)} \\end{pmatrix}$ donc $\\overrightarrow{AC}\\begin{pmatrix}${xc - xa}  \\\\ ${yc - ya}  \\end{pmatrix}$.<br>
+              Le déterminant de ces deux vecteurs est égal à : <br>
+            $\\begin{aligned}
+            det\\left(\\overrightarrow{AB}\\,;\\,\\overrightarrow{AC}\\right)&=\\begin{vmatrix} ${xb - xa} & ${xc - xa} \\\\ ${yb - ya} & ${yc - ya} \\end{vmatrix}\\\\
+            &=
+            ${abx}\\times ${ecritureParentheseSiNegatif(yc - ya)}-${ecritureParentheseSiNegatif(aby)}\\times ${ecritureParentheseSiNegatif(xc - xa)}\\\\
+            &=${abx * (yc - ya)}-${ecritureParentheseSiNegatif(aby * (xc - xa))}\\\\
+            &=${abx * (yc - ya) - aby * (xc - xa)}\\end{aligned}$.<br>`
+      if (aligne === 'true') {
+        texteCorr += `Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les points $A$, $B$ et $C$ sont alignés. <br>
+                Il fallait donc cocher "${texteEnCouleurEtGras('Vrai')}".`
+      } else {
+        texteCorr += `Le déterminant étant non nul, on peut en déduire que les deux vecteurs ne sont pas colinéaires, donc les points $A$, $B$ et $C$ ne sont pas alignés. <br>
+                Il fallait donc cocher "${texteEnCouleurEtGras('Faux')}".`
+      }
+
+      if (this.questionJamaisPosee(i, xa, ya, xb, yb, xc, yc)) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

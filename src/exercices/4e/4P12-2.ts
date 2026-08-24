@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { listeShapes2DInfos } from '../../lib/2d/figures2d/shapes2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import {
@@ -359,7 +360,7 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
                 pixelsParCm: 20,
                 scale: 0.6,
                 display: 'block' as const,
-                center: true,
+                center: !context.isHtml,
                 optionsTikz: 'transform shape',
               }),
               figureCorr,
@@ -431,7 +432,7 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
                   pixelsParCm: 20,
                   scale: 0.6,
                   display: 'block' as const,
-                  center: true,
+                  center: !context.isHtml,
                   optionsTikz: 'transform shape',
                 }),
                 figureCorr,

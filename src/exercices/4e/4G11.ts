@@ -151,7 +151,7 @@ export default class PavageEtTranslation2d extends Exercice {
     let couples: [number, number][] = []
     let Nx, Ny, A, B, image
     let monpavage = pavage()
-    let fenetre
+    let fenetreMathalea2d
     let texte = ''
     let texteCorr = ''
     let nombreTentatives
@@ -188,7 +188,7 @@ export default class PavageEtTranslation2d extends Exercice {
         Nx = tailles[taillePavage - 1][typeDePavage - 1][0]
         Ny = tailles[taillePavage - 1][typeDePavage - 1][1]
         monpavage.construit(typeDePavage, Nx, Ny, 3) // On initialise toutes les propriétés de l'objet.
-        fenetre = monpavage.fenetre
+        fenetreMathalea2d = monpavage.fenetre
         while (couples.length < this.nbQuestions + 2 && nombreTentatives < 30) {
           // On cherche d pour avoir suffisamment de couples
           couples = [] // On vide la liste des couples pour une nouvelle recherche
@@ -288,7 +288,7 @@ export default class PavageEtTranslation2d extends Exercice {
       // il faut afficher tous les polygones du pavage
       objets.push(monpavage.polygones[i])
     }
-    this.introduction = mathalea2d(fenetre, objets) // monpavage.fenetre est calibrée pour faire entrer le pavage dans une feuille A4
+    this.introduction = mathalea2d(fenetreMathalea2d, objets) // monpavage.fenetre est calibrée pour faire entrer le pavage dans une feuille A4
     if (index1 == null || index2 == null) {
       console.error('index1 ou index2 est null')
       return
@@ -338,7 +338,7 @@ export default class PavageEtTranslation2d extends Exercice {
       }
 
       if (this.correctionDetaillee) {
-        texteCorr += mathalea2d(fenetre, objets, objetsCorrection)
+        texteCorr += mathalea2d(fenetreMathalea2d, objets, objetsCorrection)
       }
       if (this.questionJamaisPosee(i, couples[i][0])) {
         // Si la question n'a jamais été posée, on en crée une autre

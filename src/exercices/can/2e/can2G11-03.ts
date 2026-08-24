@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
@@ -89,7 +90,7 @@ export default class CalculHypotenusePythagore extends ExerciceSimple {
             mainlevee: false,
             amplitude: 0.3,
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )

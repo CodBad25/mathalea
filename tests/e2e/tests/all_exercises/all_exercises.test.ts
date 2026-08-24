@@ -195,11 +195,11 @@ export function createURL(ex: IExercice) {
   if (ex.nbQuestions !== undefined)
     url.searchParams.append('n', ex.nbQuestions.toString())
   if (ex.duration != null) url.searchParams.append('d', ex.duration.toString())
-  if (ex.sup != null) url.searchParams.append('s', ex.sup)
-  if (ex.sup2 != null) url.searchParams.append('s2', ex.sup2)
-  if (ex.sup3 != null) url.searchParams.append('s3', ex.sup3)
-  if (ex.sup4 != null) url.searchParams.append('s4', ex.sup4)
-  if (ex.sup5 != null) url.searchParams.append('s5', ex.sup5)
+  if (ex.sup != null) url.searchParams.append('s', String(ex.sup))
+  if (ex.sup2 != null) url.searchParams.append('s2', String(ex.sup2))
+  if (ex.sup3 != null) url.searchParams.append('s3', String(ex.sup3))
+  if (ex.sup4 != null) url.searchParams.append('s4', String(ex.sup4))
+  if (ex.sup5 != null) url.searchParams.append('s5', String(ex.sup5))
   if ((ex as any).versionQcm != null)
     url.searchParams.append('qcm', String((ex as any).versionQcm))
   if (ex.interactif) url.searchParams.append('i', '1')
@@ -498,13 +498,21 @@ async function testRunAllLots(filter: string) {
     ? await findStatic(filter)
     : await findUuid(filter)
 
+  await testRunUuidEntries(filter, uuids, prefs.nbExosParLot)
+}
+
+async function testRunUuidEntries(
+  filter: string,
+  uuids: [string, string][],
+  maxExercises: number,
+) {
   // Exclure les exercices contenant "test" ou "beta" dans leur nom
   const filteredUuids = uuids
     .filter(([uuid, name]) => {
       const nameLower = name.toLowerCase()
       return !nameLower.includes('test') && !nameLower.includes('beta')
     })
-    .slice(0, prefs.nbExosParLot) // Limiter à 75 exercices pour éviter un temps d'exécution trop long
+    .slice(0, maxExercises) // Limiter le lot pour éviter un temps d'exécution trop long
 
   logIfVerbose(filteredUuids)
   if (filteredUuids.length === 0) {
@@ -557,6 +565,51 @@ async function testRunAllLots(filter: string) {
   }
 }
 
+function getChangedExerciseFilters(changedFilesEnv: string | undefined) {
+  const changedFiles =
+    changedFilesEnv
+      ?.split('\n')
+      .map((f) => f.split(' '))
+      .flat()
+      .filter(Boolean) ?? []
+  log(changedFiles)
+  log(
+    `fichiers écartés: ${changedFiles.filter((f) => f.replace('src/exercices/', '').split('/').length < 2)}`,
+  )
+  return [
+    ...new Set(
+      changedFiles
+        .filter(
+          (file) =>
+            file.startsWith('src/exercices/') &&
+            !file.includes('ressources') &&
+            !file.includes('apps') &&
+            file.replace('src/exercices/', '').split('/').length >= 2,
+        )
+        .map((file) =>
+          file
+            .replace(/^src\/exercices\//, '')
+            .replace(/\.ts$/, '.')
+            .replace(/\.js$/, '.')
+            .replaceAll(' ', ''),
+        ),
+    ),
+  ]
+}
+
+async function findUniqueChangedExerciseUuids(filters: string[]) {
+  const uuidsByKey = new Map<string, [string, string]>()
+  for (const filter of filters) {
+    const uuids = filter.includes('dnb')
+      ? await findStatic(filter)
+      : await findUuid(filter)
+    for (const [uuid, name] of uuids) {
+      uuidsByKey.set(`${uuid}:${name}`, [uuid, name])
+    }
+  }
+  return [...uuidsByKey.values()]
+}
+
 if (process.env.NIV !== null && process.env.NIV !== undefined) {
   // utiliser pour les tests d'intégration
   prefs.headless = true
@@ -565,7 +618,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
     : 75
   const filter = (process.env.NIV as string).replaceAll(' ', '')
   logIfVerbose(filter)
-  testRunAllLots(filter)
+  await testRunAllLots(filter)
 } else if (
   process.env.CI &&
   process.env.CHANGED_FILES !== null &&
@@ -575,28 +628,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   prefs.nbExosParLot = process.env.NB_EXOS_PAR_LOT
     ? parseInt(process.env.NB_EXOS_PAR_LOT)
     : 75
-  const changedFiles =
-    process.env.CHANGED_FILES?.split('\n')
-      .map((f) => f.split(' '))
-      .flat() ?? []
-  log(changedFiles)
-  log(
-    `fichiers écartés: ${changedFiles.filter((f) => f.replace('src/exercices/', '').split('/').length < 2)}`,
-  )
-  const filtered = changedFiles
-    .filter(
-      (file) =>
-        file.startsWith('src/exercices/') &&
-        !file.includes('ressources') &&
-        !file.includes('apps') &&
-        file.replace('src/exercices/', '').split('/').length >= 2,
-    )
-    .map((file) =>
-      file
-        .replace(/^src\/exercices\//, '')
-        .replace(/\.ts$/, '.')
-        .replace(/\.js$/, '.'),
-    )
+  const filtered = getChangedExerciseFilters(process.env.CHANGED_FILES)
   logIfVerbose(filtered)
   if (filtered.length === 0) {
     // aucun fichier concerné.. on sort
@@ -606,18 +638,15 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
       })
     })
   } else {
-    filtered.forEach((file, index) => {
-      const filter = file.replaceAll(' ', '')
-      logIfVerbose(
-        'launching test for:',
-        filter + `,  ${index + 1}/${filtered.length}`,
-      )
-      testRunAllLots(filter)
-    })
+    const uuids = await findUniqueChangedExerciseUuids(filtered)
+    log(
+      `all_exercises CHANGED_FILES: ${filtered.length} fichier(s) d'exercices, ${uuids.length} exercice(s) unique(s), ${Math.min(uuids.length, prefs.nbExosParLot)} testé(s)`,
+    )
+    await testRunUuidEntries('CHANGED_FILES', uuids, prefs.nbExosParLot)
   }
 } else {
   // testRunAllLots('2e/2F22-1')
-  testRunAllLots('CM2/CM2N2E-2')
+  await testRunAllLots('CM2/CM2N2E-2')
   // testRunAllLots('4e/4G52')
 
   // testRunAllLots('techno1')

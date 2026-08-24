@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint } from '../../lib/2d/textes'
@@ -49,7 +50,7 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
         pixelsParCm: 30,
         scale: 0.75,
         display: 'block',
-        center: true,
+        center: !context.isHtml,
       },
       repere({
         xMin,

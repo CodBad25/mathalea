@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -171,7 +172,7 @@ function graphique(
       ymax: yMax * yUnite + 0.35,
       pixelsParCm: 25,
       scale: 1,
-      center: true,
+      center: !context.isHtml,
     },
     r,
     ...cadre,

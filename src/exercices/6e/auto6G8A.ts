@@ -567,7 +567,7 @@ export default class ReconnaitreDesSolides extends Exercice {
         this.question = mathalea2d(
           Object.assign({}, fixeBordures(objets), {
             scale: 0.5,
-            center: true,
+            center: !context.isHtml,
           }),
           ...objets.flat(),
         )

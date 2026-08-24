@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -91,7 +92,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 7,
                 scale: 0.5,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -131,7 +132,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 7,
                 scale: 0.5,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -185,7 +186,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
               xmax: 11,
               ymax: 7,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -230,7 +231,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 6,
                 scale: 0.5,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -260,7 +261,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 6,
                 scale: 0.5,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -312,7 +313,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 6,
                 ymax: 3,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -346,7 +347,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 6,
                 ymax: 2.5,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -384,7 +385,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 6,
                 ymax: 2.5,
                 scale: 0.7,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )

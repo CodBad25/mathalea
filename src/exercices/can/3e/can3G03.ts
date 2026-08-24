@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -147,7 +148,7 @@ export default class CalculLongueurThales2 extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.2,
-          center: true,
+          center: !context.isHtml,
         },
       ),
       objets,

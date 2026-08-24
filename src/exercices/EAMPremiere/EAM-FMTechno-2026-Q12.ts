@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { arc } from '../../lib/2d/Arc'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -93,7 +94,7 @@ export default class AutoQ12FMt2026 extends ExerciceQcmA {
       Object.assign(
         {
           display: 'block',
-          center: true,
+          center: !context.isHtml,
           pixelsParCm: 20,
           scale: 0.5,
         } as const,

@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -180,7 +181,7 @@ export default class EquationsGSplineNombre extends ExerciceSimple {
     this.question +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 25, scale: 0.9, center: true },
+          { pixelsParCm: 25, scale: 0.9, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

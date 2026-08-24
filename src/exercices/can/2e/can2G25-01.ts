@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { nomVecteurParPosition } from '../../../lib/2d/NomVecteurParPosition'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
@@ -119,7 +120,7 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
           xmax,
           ymin,
           ymax,
-          center: true,
+          center: !context.isHtml,
           pixelsParCm: 30,
           scale: 0.75,
         },

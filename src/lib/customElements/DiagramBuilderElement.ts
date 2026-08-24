@@ -4,6 +4,9 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Jean-Claude Lhote
+ */
 export type DiagramType = 'pie' | 'semi-pie' | 'bar' | 'histogram' | 'cartesian'
 
 export type DiagramItem = {

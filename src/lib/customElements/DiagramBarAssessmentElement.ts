@@ -6,6 +6,9 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Jean-Claude Lhote
+ */
 export type BarAssessmentItem = {
   label: string
   effectif: number | null

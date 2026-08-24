@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -196,7 +197,7 @@ export default class BetaModeleSpline extends Exercice {
 
       const figure = mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.6, center: true },
+          { pixelsParCm: 30, scale: 0.6, center: !context.isHtml },
           { xmin: xMin - 1, ymin: yMin - 1, xmax: xMax + 1, ymax: yMax + 1 },
         ),
         objetsEnonce,

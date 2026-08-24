@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../../lib/2d/droites'
 import { repere } from '../../../lib/2d/reperes'
@@ -62,7 +63,7 @@ export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {
         ymax: 5,
         pixelsParCm: 20,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       c,
@@ -106,7 +107,7 @@ export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {
           ymax: 5,
           pixelsParCm: 20,
           scale: 0.7,
-          center: true,
+          center: !context.isHtml,
         },
         r,
         s1,
@@ -127,7 +128,7 @@ export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {
         ymax: 5,
         pixelsParCm: 20,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       c,

@@ -1,24 +1,24 @@
-import Alea2iep from '../../modules/Alea2iep';
-import { context } from '../../modules/context';
-import { cercle } from '../2d/cercle';
-import { droite } from '../2d/droites';
-import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait';
-import { projectionOrtho, rotation } from '../2d/transformations';
-import { longueur } from '../2d/utilitairesGeometriques';
+import Alea2iep from '../../modules/Alea2iep'
+import { context } from '../../modules/context'
+import { cercle } from '../2d/cercle'
+import { droite } from '../2d/droites'
+import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait'
+import { projectionOrtho, rotation } from '../2d/transformations'
+import { longueur } from '../2d/utilitairesGeometriques'
 import {
-    milieu,
-    pointAdistance,
-    pointIntersectionCC,
-    pointIntersectionDD,
-    pointIntersectionLC,
-    pointSurDroite,
-    pointSurSegment,
-} from '../2d/utilitairesPoint';
-import { stringNombre } from '../outils/texNombre';
-import type { IExercice } from '../types';
+  milieu,
+  pointAdistance,
+  pointIntersectionCC,
+  pointIntersectionDD,
+  pointIntersectionLC,
+  pointSurDroite,
+  pointSurSegment,
+} from '../2d/utilitairesPoint'
+import { stringNombre } from '../outils/texNombre'
+import type { IExercice } from '../types'
 import MathaleaCustomElement, {
-    registerMathaleaCustomElement,
-} from './MathaleaCustomElement';
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 
 /**
  * Éditeur d'animations de constructions aux instruments (Instrumenpoche)
@@ -28,7 +28,7 @@ import MathaleaCustomElement, {
  * - afficher/réordonner/supprimer les étapes du programme
  * - tester l'animation avec le lecteur Instrumenpoche (boutons de lecture)
  *
- * @author Rémi Angot
+ * @author Rémi Angot & Jean-Claude Lhote
  */
 
 export type OutilIep =
@@ -262,6 +262,7 @@ export type EditeurIepOptions = {
   loadSaveButtons?: boolean
   allowFullscreen?: boolean
   interactivityOn?: boolean
+  tailleLabelsPoints?: number
   verifyCallbackName?: string
   verifyCallback?: ElementIepVerificationCallback
 }
@@ -1501,6 +1502,7 @@ type OptionsLectureProgrammeIep = {
   rangerInstruments?: boolean
   instrumentsRequis?: OutilIep[]
   positionsRangement?: Partial<Record<OutilIep, PointAbstrait>>
+  tailleLabelsPoints?: number
 }
 
 const outilsIep: OutilIep[] = [
@@ -1635,7 +1637,9 @@ function jouerProgramme(
     rangerInstruments = false,
     instrumentsRequis = [],
     positionsRangement = {},
+    tailleLabelsPoints,
   } = optionsLecture
+
   const points = new Map<string, PointAbstrait>()
   const etapesIgnorees: number[] = []
   if (rangerInstruments) {
@@ -1674,7 +1678,10 @@ function jouerProgramme(
       switch (instr.type) {
         case 'point': {
           const A = pointAbstrait(instr.x, instr.y, instr.nom)
-          anim.pointCreer(A, { label: instr.nom })
+          anim.pointCreer(A, {
+            label: instr.nom,
+            taille: tailleLabelsPoints ?? 10,
+          })
           points.set(instr.nom, A)
           break
         }
@@ -1690,7 +1697,10 @@ function jouerProgramme(
             instr.angle ?? 0,
             instr.nom,
           )
-          anim.pointCreer(A, { label: instr.nom })
+          anim.pointCreer(A, {
+            label: instr.nom,
+            taille: tailleLabelsPoints ?? 10,
+          })
           points.set(instr.nom, A)
           break
         }
@@ -1939,7 +1949,10 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.pointCreer(A, { label: instr.nom })
+          anim.pointCreer(A, {
+            label: instr.nom,
+            taille: tailleLabelsPoints ?? 10,
+          })
           points.set(instr.nom, A)
           break
         }
@@ -1977,11 +1990,10 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.perpendiculaireRegleEquerreDroitePoint(
-            element.objet,
-            pts[0],
-            { ...optionsInstrument, couleur: instr.couleur },
-          )
+          anim.perpendiculaireRegleEquerreDroitePoint(element.objet, pts[0], {
+            ...optionsInstrument,
+            couleur: instr.couleur,
+          })
           break
         }
         case 'parallele': {
@@ -2184,12 +2196,13 @@ function jouerProgramme(
 export function construireAnimation(
   programme: InstructionIep[],
   nombreInstructionsImmediates = 0,
-  options: { rangerInstruments?: boolean } = {},
+  options: { rangerInstruments?: boolean; tailleLabelsPoints?: number } = {},
 ): Alea2iep {
   const programmeResolue = resoudreDirectionsAleatoires(programme)
   const brouillon = new Alea2iep()
   jouerProgramme(brouillon, programmeResolue, {
     nombreInstructionsImmediates,
+    tailleLabelsPoints: options.tailleLabelsPoints ?? 10,
   })
   const anim = new Alea2iep()
   const largeur = Math.max(600, (brouillon.xMax - brouillon.xMin + 6) * 30)
@@ -2204,6 +2217,7 @@ export function construireAnimation(
     rangerInstruments: options.rangerInstruments,
     instrumentsRequis,
     positionsRangement: positionsRangementInstruments(anim, largeur),
+    tailleLabelsPoints: options.tailleLabelsPoints ?? 10,
   })
   return anim
 }
@@ -2691,6 +2705,24 @@ function echapperXmlTexte(texte: string) {
 }
 
 function rendreFigureStatiqueLatex(figure: FigureStatiqueIep) {
+  const commandeMarqueSegmentLatex = (
+    p1: PointAbstrait,
+    p2: PointAbstrait,
+    rang: number,
+    total: number,
+  ) => {
+    const dx = p2.x - p1.x
+    const dy = p2.y - p1.y
+    const norme = Math.hypot(dx, dy)
+    if (norme === 0) return undefined
+    const decalage = (rang - (total - 1) / 2) * 0.12
+    const mx = (p1.x + p2.x) / 2 + decalage * (dx / norme)
+    const my = (p1.y + p2.y) / 2 + decalage * (dy / norme)
+    const nx = -dy / norme
+    const ny = dx / norme
+    const demiLongueur = 0.12
+    return `\\draw (${nombreFigureStatique(mx - nx * demiLongueur)},${nombreFigureStatique(my - ny * demiLongueur)}) -- (${nombreFigureStatique(mx + nx * demiLongueur)},${nombreFigureStatique(my + ny * demiLongueur)});`
+  }
   const lignes = [
     '\\begin{tikzpicture}[baseline]',
     `\\clip (${nombreFigureStatique(figure.xmin)},${nombreFigureStatique(figure.ymin)}) rectangle (${nombreFigureStatique(figure.xmax)},${nombreFigureStatique(figure.ymax)});`,
@@ -2705,17 +2737,57 @@ function rendreFigureStatiqueLatex(figure: FigureStatiqueIep) {
         `\\draw (${nombreFigureStatique(commande.centre.x)},${nombreFigureStatique(commande.centre.y)}) circle (${nombreFigureStatique(commande.rayon)});`,
       )
     } else if (commande.type === 'point') {
+      const x = nombreFigureStatique(commande.point.x)
+      const y = nombreFigureStatique(commande.point.y)
       lignes.push(
-        `\\node[thick,draw,cross out,inner sep=0pt,minimum width=5pt,minimum height=5pt] at (${nombreFigureStatique(commande.point.x)},${nombreFigureStatique(commande.point.y)}) {};`,
+        `\\draw (${nombreFigureStatique(commande.point.x - 0.08)},${nombreFigureStatique(commande.point.y - 0.08)}) -- (${nombreFigureStatique(commande.point.x + 0.08)},${nombreFigureStatique(commande.point.y + 0.08)});`,
+        `\\draw (${nombreFigureStatique(commande.point.x - 0.08)},${nombreFigureStatique(commande.point.y + 0.08)}) -- (${nombreFigureStatique(commande.point.x + 0.08)},${nombreFigureStatique(commande.point.y - 0.08)});`,
       )
       if (commande.label != null && commande.label !== '') {
         lignes.push(
-          `\\node[above right] at (${nombreFigureStatique(commande.point.x)},${nombreFigureStatique(commande.point.y)}) {${echapperLatexTexte(commande.label)}};`,
+          `\\node[above right] at (${x},${y}) {${echapperLatexTexte(commande.label)}};`,
         )
       }
     } else if (commande.type === 'texte') {
       lignes.push(
         `\\node at (${nombreFigureStatique(commande.x)},${nombreFigureStatique(commande.y)}) {${echapperLatexTexte(commande.texte)}};`,
+      )
+    } else if (commande.type === 'segmentCodage') {
+      const nombreMarques =
+        commande.codage === '///' ? 3 : commande.codage === '//' ? 2 : 1
+      for (let i = 0; i < nombreMarques; i++) {
+        const marque = commandeMarqueSegmentLatex(
+          commande.p1,
+          commande.p2,
+          i,
+          nombreMarques,
+        )
+        if (marque !== undefined) lignes.push(marque)
+      }
+    } else if (commande.type === 'codageAngleDroit') {
+      const sommet = commande.p2
+      const ux = commande.p1.x - sommet.x
+      const uy = commande.p1.y - sommet.y
+      const vx = commande.p3.x - sommet.x
+      const vy = commande.p3.y - sommet.y
+      const normeU = Math.hypot(ux, uy)
+      const normeV = Math.hypot(vx, vy)
+      if (normeU === 0 || normeV === 0) continue
+      const taille = 0.28
+      const A = {
+        x: sommet.x + (ux / normeU) * taille,
+        y: sommet.y + (uy / normeU) * taille,
+      }
+      const C = {
+        x: sommet.x + (vx / normeV) * taille,
+        y: sommet.y + (vy / normeV) * taille,
+      }
+      const M = {
+        x: A.x + C.x - sommet.x,
+        y: A.y + C.y - sommet.y,
+      }
+      lignes.push(
+        `\\draw (${nombreFigureStatique(A.x)},${nombreFigureStatique(A.y)}) -- (${nombreFigureStatique(M.x)},${nombreFigureStatique(M.y)}) -- (${nombreFigureStatique(C.x)},${nombreFigureStatique(C.y)});`,
       )
     }
   }
@@ -2848,6 +2920,29 @@ function rendreFigureStatiqueTypst(figure: FigureStatiqueIep) {
     Math.max(120, (figure.xmax - figure.xmin) * 28),
   )
   return `#image(bytes(${typstStringLiteral(svg)}), format: "svg", width: ${nombreFigureStatique(largeurPt)}pt)`
+}
+
+function figureStatiqueDepuisOptions({
+  conditionsInitiales = [],
+  programmeInitial = [],
+  programmeAttendu,
+  interactivityOn = true,
+}: Pick<
+  EditeurIepOptions,
+  | 'conditionsInitiales'
+  | 'programmeInitial'
+  | 'programmeAttendu'
+  | 'interactivityOn'
+>): FigureStatiqueIep {
+  const conditions = clonerProgramme(conditionsInitiales)
+  const programme = clonerProgramme(programmeInitial)
+  const programmeComplet = [...conditions, ...programme]
+  const programmeVisible = interactivityOn ? conditions : programmeComplet
+  const programmeCadre =
+    interactivityOn && programmeAttendu != null
+      ? [...conditions, ...clonerProgramme(programmeAttendu)]
+      : programmeComplet
+  return construireFigureStatiqueIep(programmeVisible, programmeCadre)
 }
 
 type ProgrammeSauvegardeIep = {
@@ -3022,6 +3117,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     loadSaveButtons = false,
     allowFullscreen = false,
     interactivityOn = true,
+    tailleLabelsPoints,
     verifyCallbackName,
     verifyCallback,
   }: EditeurIepOptions = {}): string {
@@ -3038,24 +3134,24 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       )
     }
     if (context.isTypst) {
-      const editor = new ElementIepEditeur()
-      editor.initialiserEtatPourRenduStatique({
+      const figure = figureStatiqueDepuisOptions({
         conditionsInitiales,
         programmeInitial,
         programmeAttendu,
         interactivityOn,
       })
-      return `<mathalea-typst>${editor.renderTypst()}</mathalea-typst>`
+      if (figure.commandes.length === 0) return ''
+      return `<mathalea-typst>${rendreFigureStatiqueTypst(figure)}</mathalea-typst>`
     }
     if (!context.isHtml) {
-      const editor = new ElementIepEditeur()
-      editor.initialiserEtatPourRenduStatique({
+      const figure = figureStatiqueDepuisOptions({
         conditionsInitiales,
         programmeInitial,
         programmeAttendu,
         interactivityOn,
       })
-      return editor.renderLatex()
+      if (figure.commandes.length === 0) return ''
+      return rendreFigureStatiqueLatex(figure)
     }
     return super.create({
       id: computedId,
@@ -3070,6 +3166,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       loadSaveButtons,
       allowFullscreen,
       interactivityOn,
+      tailleLabelsPoints,
       verifyCallbackName: computedCallbackName,
     })
   }
@@ -3182,6 +3279,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     return this.getAttribute('allowfullscreen') === 'true'
   }
 
+  private get tailleLabelsPoints(): number | undefined {
+    const valeur = Number(this.getAttribute('taille-labels-points'))
+    return Number.isFinite(valeur) && valeur > 0 ? valeur : 10
+  }
+
   connectedCallback() {
     super.connectedCallback()
     if (this.dataset.initialise === '1') return
@@ -3264,25 +3366,6 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   getProgramme(): InstructionIep[] {
     return this.programmeComplet()
-  }
-
-  private initialiserEtatPourRenduStatique({
-    conditionsInitiales = [],
-    programmeInitial = [],
-    programmeAttendu,
-    interactivityOn = true,
-  }: Pick<
-    EditeurIepOptions,
-    | 'conditionsInitiales'
-    | 'programmeInitial'
-    | 'programmeAttendu'
-    | 'interactivityOn'
-  >) {
-    this.conditionsInitiales = clonerProgramme(conditionsInitiales)
-    this.programme = clonerProgramme(programmeInitial)
-    this.programmeAttenduPourCadre =
-      programmeAttendu == null ? undefined : clonerProgramme(programmeAttendu)
-    this.interactivityOn = interactivityOn
   }
 
   private programmeComplet(): InstructionIep[] {
@@ -3409,6 +3492,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     const figureInitiale = this.construireFigureConditionsInitiales()
     if (figureInitiale != null) conteneur.appendChild(figureInitiale)
 
+    const aideConditionsInitiales = this.construireAideConditionsInitiales()
+    if (aideConditionsInitiales != null) {
+      conteneur.appendChild(aideConditionsInitiales)
+    }
+
     // --- Zone d'ajout d'une instruction ---
     this.zoneAjout = document.createElement('div')
     this.zoneAjout.classList.add(
@@ -3429,11 +3517,15 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     ligneAjout.classList.add('flex', 'flex-wrap', 'items-center', 'gap-2')
     this.selectCategorie = document.createElement('select')
     this.selectCategorie.classList.add(...classesSelect)
-    for (const categorie of this.categoriesDisponibles()) {
-      const option = document.createElement('option')
-      option.value = categorie.id
-      option.innerText = categorie.label
-      this.selectCategorie.appendChild(option)
+    if (this.selectionDirecteInstructions()) {
+      this.selectCategorie.classList.add('hidden')
+    } else {
+      for (const categorie of this.categoriesDisponibles()) {
+        const option = document.createElement('option')
+        option.value = categorie.id
+        option.innerText = categorie.label
+        this.selectCategorie.appendChild(option)
+      }
     }
     this.selectCategorie.onchange = () => {
       this.rafraichirSelectType()
@@ -3569,6 +3661,50 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     return conteneur
   }
 
+  private construireAideConditionsInitiales(): HTMLDetailsElement | undefined {
+    if (!this.interactivityOn || this.conditionsInitiales.length === 0) {
+      return undefined
+    }
+    const details = document.createElement('details')
+    details.classList.add(
+      'text-xs',
+      'border',
+      'border-gray-200',
+      'rounded',
+      'bg-gray-50',
+      'px-3',
+      'py-2',
+      'max-w-5xl',
+    )
+    details.onmouseenter = () => {
+      details.open = true
+    }
+    details.onmouseleave = () => {
+      details.open = false
+    }
+
+    const resume = document.createElement('summary')
+    resume.classList.add('cursor-pointer', 'font-medium', 'text-gray-700')
+    resume.innerText = 'Étapes déjà construites'
+    details.appendChild(resume)
+
+    const liste = document.createElement('ol')
+    liste.classList.add(
+      'list-decimal',
+      'list-inside',
+      'mt-2',
+      'space-y-1',
+      'text-gray-700',
+    )
+    this.conditionsInitiales.forEach((instr) => {
+      const item = document.createElement('li')
+      item.innerText = decrireInstruction(instr, this.conditionsInitiales)
+      liste.appendChild(item)
+    })
+    details.appendChild(liste)
+    return details
+  }
+
   private get instructionsDisponibles(): TypeInstructionIep[] {
     return lireTypesInstructionsDepuisAttribut(
       this.getAttribute('instructions-disponibles'),
@@ -3582,7 +3718,12 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     )
   }
 
+  private selectionDirecteInstructions() {
+    return this.instructionsDisponibles.length <= 6
+  }
+
   private typesDisponiblesDansCategorie(categorieId: string) {
+    if (this.selectionDirecteInstructions()) return this.instructionsDisponibles
     const typesDisponibles = new Set(this.instructionsDisponibles)
     const categorie =
       categoriesCatalogue.find((categorie) => categorie.id === categorieId) ??
@@ -3602,7 +3743,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   private rafraichirSelectType(typeAConserver?: TypeInstructionIep) {
     const typeCourant =
       typeAConserver ?? (this.selectType.value as TypeInstructionIep | '')
-    const types = this.typesDisponiblesDansCategorie(this.selectCategorie.value)
+    const types = this.selectionDirecteInstructions()
+      ? this.instructionsDisponibles
+      : this.typesDisponiblesDansCategorie(this.selectCategorie.value)
     const typeSelectionne = types.includes(typeCourant as TypeInstructionIep)
       ? (typeCourant as TypeInstructionIep)
       : types[0]
@@ -3617,6 +3760,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   private ajouterTypeInstructionAuSelectSiBesoin(type: TypeInstructionIep) {
+    if (this.selectionDirecteInstructions()) {
+      this.rafraichirSelectType(type)
+      return
+    }
     const categorie = this.categorieDuType(type)
     if (categorie !== undefined) {
       if (
@@ -3880,7 +4027,24 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         champTexte.dataset.cle = champ.cle
         if (champ.genre === 'nombre') {
           champTexte.type = 'number'
-          champTexte.step = 'any'
+          champTexte.inputMode = 'decimal'
+          champTexte.step = '0.1'
+          champTexte.lang = 'fr-FR'
+          champTexte.onkeydown = (event) => {
+            if (event.key !== '.') return
+            event.preventDefault()
+            try {
+              champTexte.setRangeText(
+                ',',
+                champTexte.selectionStart ?? champTexte.value.length,
+                champTexte.selectionEnd ?? champTexte.value.length,
+                'end',
+              )
+              champTexte.dispatchEvent(new Event('input', { bubbles: true }))
+            } catch {
+              // Certains navigateurs refusent la virgule dans un input number.
+            }
+          }
           champTexte.classList.add('w-20')
           champTexte.value = String(champ.defaut ?? 0)
         } else if (champ.genre === 'nom') {
@@ -4126,7 +4290,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       const vide = document.createElement('li')
       vide.classList.add('list-none', 'italic', 'text-gray-500')
       vide.innerText =
-        'Le programme est vide : ajoutez une première instruction (par exemple, placer deux points).'
+        this.conditionsInitiales.length === 0
+          ? 'Le programme est vide : ajoutez une première instruction (par exemple, placer deux points).'
+          : `Le programme contient déjà ${this.conditionsInitiales.length === 1 ? 'une instruction' : 'des instructions'}, vous pouvez ${this.conditionsInitiales.length === 1 ? 'la' : 'les'} consulter en déroulant "Étapes déjà construites". Ajoutez votre première instruction.`
       this.listeProgramme.appendChild(vide)
     }
     const programmeComplet = this.programmeComplet()
@@ -4281,7 +4447,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     const anim = construireAnimation(
       programmeComplet,
       this.conditionsInitiales.length,
-      { rangerInstruments: true },
+      {
+        rangerInstruments: true,
+        tailleLabelsPoints: this.tailleLabelsPoints ?? 10,
+      },
     )
     try {
       const { default: iepLoadPromise } = await import('instrumenpoche')

@@ -154,7 +154,7 @@ export default class Can2026CE2Q12 extends ExerciceCan {
         ymax: 0.9,
         pixelsParCm: 20,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       d,
     )
@@ -187,7 +187,7 @@ export default class Can2026CE2Q12 extends ExerciceCan {
           ymax: 1.5,
           pixelsParCm: 20,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         dCorrection,
       )
@@ -202,7 +202,7 @@ export default class Can2026CE2Q12 extends ExerciceCan {
         ymax: 0.8,
         pixelsParCm: 20,
         scale: 0.45,
-        center: true,
+        center: !context.isHtml,
       },
       dPDF,
     )

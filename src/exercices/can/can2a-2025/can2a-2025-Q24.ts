@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { grille } from '../../../lib/2d/Grille'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../../lib/2d/textes'
@@ -61,7 +62,7 @@ export default class CoefficientDeColinearite extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       ) + '<br>Compléter :'
@@ -80,7 +81,7 @@ export default class CoefficientDeColinearite extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.5,
         scale: 0.5,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

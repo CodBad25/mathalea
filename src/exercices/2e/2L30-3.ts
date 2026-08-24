@@ -1,361 +1,460 @@
-import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
-import { texteGras } from '../../lib/format/style'
+import { bleuMathalea } from '../../lib/colors'
+import { texSymbole } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { choice } from '../../lib/outils/arrayOutils'
+import {
+  texFractionFromString,
+  texFractionReduite,
+} from '../../lib/outils/deprecatedFractions'
 import {
   ecritureAlgebrique,
-  ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
+  reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { abs, arrondi } from '../../lib/outils/nombres'
-import { sp } from '../../lib/outils/outilString'
-import { texNombre } from '../../lib/outils/texNombre'
+import { abs, signe } from '../../lib/outils/nombres'
+import { pgcd } from '../../lib/outils/primalite'
+import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre =
-  "Utiliser les propriétés de conservation du sens d'une inégalité"
-export const dateDePublication = '14/02/2023'
-export const dateDeModifImportante = '07/04/2026'
-export const interactifType = ['multiMathfield', 'mathLive']
+
+type SymboleInegalite = '≤' | '≥' | '<' | '>'
+type Question =
+  | 'ax≤b'
+  | 'x+b≤c'
+  | 'ax+b≤c'
+  | 'ax+b≤0'
+  | 'ax+b≤cx+d'
+  | 'a(bx+c)≤dx+e'
 export const interactifReady = true
-
+export const interactifType = 'mathLive'
+export const titre = 'Résoudre une inéquation du premier degré'
+export const dateDeModifImportante = '08/10/2025'
 /**
- * @author Gilles Mora
+ * Inéquations du premier degré
+ * * Type 1 : x+a≤b ou ax≤b
+ * * Type 2 : ax+b≤c
+ * * Type 3 : ax+b≤cx+d
+ * * Tous les types
+ * @author Rémi Angot et Guillaume Valmont et Gilles Mora pour l'interactif
+ * 2L30-3, ex 2L13
  */
-
-export const uuid = 'e32f3'
+export const uuid = 'bc1e4'
 
 export const refs = {
-  'fr-fr': ['2L30-3'],
+  'fr-fr': ['2L30-3', 'BP2RES19'],
   'fr-ch': [],
 }
-export default class ProprietesInegalites extends Exercice {
+
+function buildConclusion(
+  borneInfinie: 'gauche' | 'droite',
+  borneFinie: FractionEtendue,
+  estStrict: boolean,
+): { reponse: string; correction: string } {
+  let reponse: string
+  if (borneInfinie === 'gauche') {
+    reponse = `\\left] -\\infty\\,;\\,${borneFinie.texFractionSimplifiee}\\right${estStrict ? '[' : ']'}`
+  } else {
+    reponse = `\\left${estStrict ? ']' : '['}${borneFinie.texFractionSimplifiee}\\,;\\,+\\infty\\right[`
+  }
+  return {
+    reponse,
+    correction: `L'ensemble de solutions de l'inéquation est $S = ${miseEnEvidence(reponse)}$.`,
+  }
+}
+
+export default class ExerciceInequation1 extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireTexte = [
-      'Type des questions',
-      [
-        'Nombres séparés par des tirets  :',
-        '1 : Encadrer des expressions avec des racines carrées',
-        '2 : Comparer une expression avec une inconnue',
-        '3 : Encadrer une expression avec une inconnue',
-        '4 : Encadrer une expression avec deux inconnues',
-        '5 : Mélange',
-      ].join('\n'),
+    this.besoinFormulaireCaseACocher = ['Avec des nombres relatifs']
+    this.besoinFormulaire2Texte = [
+      "Type d'inéquations",
+      '1 : ax≤b ou x+a≤b\n2 : ax+b≤c ou ax+b≤0\n3 : ax+b≤cx+d\n4 : a(bx+c)≤dx+e\n5 : Mélange',
     ]
 
-    this.nbQuestions = 1
-
-    this.sup = '5'
-
-    this.spacing = 1.5 // Interligne des questions
-    this.spacingCorr = 2 // Interligne des réponses
+    this.spacing = 1.5
+    this.spacingCorr = 1.5
+    this.spacingCorr = context.isHtml ? 2 : 1.5
+    this.correctionDetailleeDisponible = true
+    if (!context.isHtml) {
+      this.correctionDetaillee = false
+    }
+    this.sup = true // Avec des nombres relatifs
+    this.sup2 = 5 // Choix du type d'inéquation
+    this.nbQuestions = 2
   }
 
   nouvelleVersion() {
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
+    this.consigne =
+      'Résoudre ' +
+      (this.nbQuestions !== 1
+        ? 'les inéquations suivantes'
+        : "l'inéquation suivante") +
+      '.'
+    if (this.interactif) {
+      this.consigne +=
+        "<p>On donnera la réponse sous forme d'un intervalle.</p>"
+    }
+
+    const typeQuestionsPermis: Question[] = [
+      'ax≤b',
+      'x+b≤c',
+      'ax+b≤c',
+      'ax+b≤0', // pourquoi ce cas là est-il géré à part bien que non proposé explicitement à l'utilisateur
+      'ax+b≤cx+d',
+      'a(bx+c)≤dx+e',
+    ]
+    const listeTypeDeQuestions: Question[] = []
+    const typeDeQuestions = gestionnaireFormulaireTexte({
+      saisie: this.sup2,
+      min: 1,
       max: 4,
       melange: 5,
-      defaut: 5,
+      defaut: 1,
       nbQuestions: this.nbQuestions,
-      listeOfCase: ['typeE1', 'typeE2', 'typeE3', 'typeE4'],
     })
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      let texte = ''
-      let texteCorr = ''
-      let a: number
-      let m: number
-      let p: number
-      let enonceCalcul: string
-      let reponse1: string | number = 0
-      let reponse2 = 0
-      switch (
-        listeTypeDeQuestions[i] // Suivant le type de question, le contenu sera différent
-      ) {
-        case 'typeE1': //
-          {
-            a = randint(2, 30, [4, 9, 16, 25])
-            const rac = Math.sqrt(a)
-            m = randint(-10, 10, 0)
-            p = randint(-10, 10, 0)
-            const choix1 = choice([
-              ['<', '>'],
-              ['\\leqslant', '\\geqslant'],
-            ])
-            const choix2 = choice([
-              ['<', '>'],
-              ['\\leqslant', '\\geqslant'],
-            ])
-            enonceCalcul = `${rienSi1(m)}\\sqrt{${a}}${ecritureAlgebrique(p)}`
-            texte = ` Sachant que $${texNombre(Math.floor(100 * rac) / 100, 2)} ${choix1[0]} \\sqrt{${a}} ${choix2[0]} ${texNombre(Math.ceil(100 * rac) / 100, 2)}$,
-            encadrer, le plus précisément possible, $${enonceCalcul}$.
-                `
-            if (this.interactif)
-              texte +=
-                '<br>' +
-                addMultiMathfield(this, i, {
-                  dataTemplate: `%{champ1} $${m > 0 ? `${choix1[0]}` : `${choix2[0]}`} ${enonceCalcul} ${m > 0 ? `${choix2[0]}` : `${choix1[0]}`}$ %{champ2}`,
-                  dataOptions: {
-                    champ1: { keyboard: KeyboardType.clavierDeBase },
-                    champ2: { keyboard: KeyboardType.clavierDeBase },
-                  },
-                })
-            const reponseMax = arrondi((m * Math.ceil(100 * rac)) / 100 + p, 2)
-            const reponseMin = arrondi((m * Math.floor(100 * rac)) / 100 + p, 2)
-            reponse1 = m > 0 ? reponseMin : reponseMax
-            reponse2 = m < 0 ? reponseMin : reponseMax
-            texteCorr = `${texteGras('Méthode :')} en partant de l'encadrement initial de $\\sqrt{${a}}$,
-on forme, avec des opérations successives, $${rienSi1(m)}\\sqrt{${a}}${ecritureAlgebrique(p)}$.<br>
-$\\begin{aligned}\\phantom{'Ainsi, '}
-${texNombre(Math.floor(100 * rac) / 100, 2)}${choix1[0]}&\\sqrt{${a}}${choix2[0]}${texNombre(Math.ceil(100 * rac) / 100, 2)}\\\\`
-            texteCorr += `${m}\\times ${texNombre(Math.floor(100 * rac) / 100, 2)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}&${m}\\times \\sqrt{${a}} ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${m}\\times ${texNombre(Math.ceil(100 * rac) / 100, 2)}   ${sp(7)}\\text{ On multiplie par ${m > 0 ? `$${m}> 0$ ` : `$${m}< 0 $`}, le sens des inégalités ${m > 0 ? 'ne change pas' : 'change'}.}\\\\`
-            texteCorr += `${texNombre((m * Math.floor(100 * rac)) / 100, 2)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}& ${m}\\sqrt{${a}} ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}${texNombre((m * Math.ceil(100 * rac)) / 100, 2)} \\\\`
-            texteCorr += `${texNombre((m * Math.floor(100 * rac)) / 100, 2)} ${ecritureAlgebrique(p)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}& ${m}\\sqrt{${a}} ${ecritureAlgebrique(p)} ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}  ${texNombre((m * Math.ceil(100 * rac)) / 100, 2)} ${ecritureAlgebrique(p)} ${sp(7)}\\text{ On  ${p > 0 ? 'ajoute' : 'retranche'} ${abs(p)}.} \\\\`
-            const texteCorrBis = `${texNombre((m * Math.floor(100 * rac)) / 100 + p, 2)}  ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}&${m}\\sqrt{${a}} ${ecritureAlgebrique(p)}  ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${texNombre((m * Math.ceil(100 * rac)) / 100 + p, 2)}`
-            const [gauche, droite] = texteCorrBis.split('&')
-            texteCorr +=
-              m > 0
-                ? `${miseEnEvidence(gauche)}&${miseEnEvidence(droite)}` + '\\\\'
-                : texteCorrBis + '\\\\'
-            texteCorr += '\\end{aligned}$'
-            if (m < 0) {
-              texteCorr += `<br>Ainsi,  $${miseEnEvidence(`${texNombre(reponse1)}  ${choix2[0]}`)}${miseEnEvidence(`${m}\\sqrt{${a}} ${ecritureAlgebrique(p)} ${choix1[0]} ${texNombre(reponse2)}`)}$.`
-            }
-          }
+    for (let index = 0; index < this.nbQuestions; index++) {
+      switch (typeDeQuestions[index]) {
+        case 1:
+          listeTypeDeQuestions.push(choice(typeQuestionsPermis.slice(0, 2)))
           break
-
-        case 'typeE2':
-          {
-            a = randint(-10, 10, 0)
-            m = randint(-10, 10, [0, 1])
-            p = randint(-10, 10, 0)
-            const choix1 = choice([
-              ['<', '>'],
-              ['\\leqslant', '\\geqslant'],
-              ['>', '<'],
-              ['\\geqslant', '\\leqslant'],
-            ])
-            texte = ` Si $x${choix1[0]} ${a}$, que peut-on dire de $${rienSi1(m)}x${ecritureAlgebrique(p)}$ ?
-                `
-            if (this.interactif)
-              texte += ajouteChampTexteMathLive(
-                this,
-                i,
-                KeyboardType.clavierCompare + ' ' + KeyboardType.clavierNumbers,
-                {
-                  texteAvant: `<br>On peut dire que : $${rienSi1(m)}x${ecritureAlgebrique(p)}$`,
-                  texteApres: '.',
-                },
-              )
-            reponse1 = `${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}${texNombre(m * a + p)}`
-            handleAnswers(this, i, {
-              reponse: { value: reponse1, options: { texteSansCasse: true } },
-            })
-
-            texteCorr = `${texteGras('Méthode :')} en partant de l'inégalité vérifiée par $x$, on forme, avec des opérations successives, $${rienSi1(m)}x${ecritureAlgebrique(p)}$.<br>
-$\\begin{aligned}\\phantom{'Ainsi xxxx, '}
-x &${choix1[0]} ${a}\\\\`
-            texteCorr += `${m}\\times x&${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${m}\\times ${ecritureParentheseSiNegatif(a)} ${sp(7)}\\text{ On multiplie par ${m > 0 ? `$${m}> 0$ ` : `$${m}< 0 $`}, le sens des inégalités ${m > 0 ? 'ne change pas' : 'change'}.}\\\\`
-            texteCorr += `${m}x&${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}${texNombre(m * a)}   \\\\`
-            texteCorr += `${texNombre(m)}x ${ecritureAlgebrique(p)} &${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${texNombre(m * a)} ${ecritureAlgebrique(p)} ${sp(7)}\\text{ On  ${p > 0 ? 'ajoute' : 'retranche'} ${abs(p)}.}  \\\\`
-            texteCorr += '\\end{aligned}$'
-            texteCorr += `<br>Ainsi,  $${miseEnEvidence(`${texNombre(m)}x ${ecritureAlgebrique(p)} ${reponse1}`)}$.`
-          }
+        case 2:
+          listeTypeDeQuestions.push(choice(typeQuestionsPermis.slice(2, 4)))
           break
-        case 'typeE3':
-          {
-            a = randint(-10, 10, 0)
-            const b = a + randint(1, 10, 0)
-            m = randint(-10, 10, [0, 1])
-            p = randint(-10, 10, 0)
-            const choix1 = choice([
-              ['<', '>'],
-              ['\\leqslant', '\\geqslant'],
-            ])
-            const choix2 = choice([
-              ['<', '>'],
-              ['\\leqslant', '\\geqslant'],
-            ])
-            const enonceCalcul = `${rienSi1(m)}x${ecritureAlgebrique(p)}`
-            texte = ` Sachant que $${a} ${choix1[0]} x ${choix2[0]} ${b}$,
-            encadrer, le plus précisément possible,  $${enonceCalcul}$.
-                `
-            if (this.interactif)
-              texte +=
-                '<br>' +
-                addMultiMathfield(this, i, {
-                  dataTemplate: `%{champ1} $${m > 0 ? `${choix1[0]}` : `${choix2[0]}`} ${enonceCalcul} ${m > 0 ? `${choix2[0]}` : `${choix1[0]}`}$ %{champ2}`,
-                  dataOptions: {
-                    champ1: { keyboard: KeyboardType.clavierDeBase },
-                    champ2: { keyboard: KeyboardType.clavierDeBase },
-                  },
-                })
-            const reponseMax = m * a + p
-            const reponseMin = m * b + p
-            reponse1 = m < 0 ? reponseMin : reponseMax
-            reponse2 = m > 0 ? reponseMin : reponseMax
-
-            texteCorr = `${texteGras('Méthode :')} en partant de l'encadrement initial de $x$,
-on forme, avec des opérations successives, $${rienSi1(m)}x${ecritureAlgebrique(p)}$.<br>
-$\\begin{aligned}
-${a} ${choix1[0]}  x &${choix2[0]} ${b}\\\\`
-            texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)}
-${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${m}\\times x &${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${m}\\times ${ecritureParentheseSiNegatif(b)}   ${sp(7)}\\text{ On multiplie par ${m > 0 ? `$${m}> 0$ ` : `$${m}< 0 $`}, le sens des inégalités ${m > 0 ? 'ne change pas' : 'change'}.}\\\\`
-            texteCorr += `${texNombre(m * a)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}${rienSi1(m)}x &${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}  ${texNombre(m * b)}   \\\\`
-            texteCorr += `${texNombre(m * a)} ${ecritureAlgebrique(p)} ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${rienSi1(m)}x ${ecritureAlgebrique(p)} &${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}  ${texNombre(m * b)} ${ecritureAlgebrique(p)} ${sp(7)}\\text{ On  ${p > 0 ? 'ajoute' : 'retranche'} ${abs(p)}.}  \\\\`
-            const texteCorrBis = `${texNombre(m * a + p)}  ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${rienSi1(m)}x ${ecritureAlgebrique(p)}&${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${texNombre(m * b + p)}`
-            const [gauche, droite] = texteCorrBis.split('&')
-            texteCorr +=
-              m > 0
-                ? `${miseEnEvidence(gauche)}&${miseEnEvidence(droite)}` + '\\\\'
-                : texteCorrBis + '\\\\'
-            texteCorr += '\\end{aligned}$'
-            if (m < 0) {
-              texteCorr += `<br>
-           Ainsi,  $${miseEnEvidence(`${texNombre(m * b + p, 2)}  ${choix2[0]} ${rienSi1(m)}x ${ecritureAlgebrique(p)} ${choix1[0]} ${texNombre(m * a + p)}`)}$.`
-            }
-          }
+        case 3:
+          listeTypeDeQuestions.push(typeQuestionsPermis[4])
           break
-
-        case 'typeE4':
-        default:
-          {
-            a = randint(-10, 10, 0)
-            const b = a + randint(1, 10, 0)
-            const c = randint(-10, 10, 0)
-            const d = c + randint(1, 10, 0)
-            m = randint(-10, 10, [0, 1])
-            p = randint(-10, 10, [0, 1])
-            const choix1 = choice([
-              ['<', '>'],
-              ['\\leqslant', '\\geqslant'],
-            ])
-            const aEncadrer = `${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y`
-            texte = `Soit $x$ et $y$ deux réels tels que $${a} ${choix1[0]} x ${choix1[0]} ${b}$ et $${c} ${choix1[0]} y ${choix1[0]} ${d}$.<br>`
-            if (this.interactif) {
-              texte += `Que peut-on dire, le plus précisément possible, de $${aEncadrer}$ ?`
-              texte +=
-                '<br>' +
-                addMultiMathfield(this, i, {
-                  dataTemplate: `%{champ1} $${choix1[0]} ${aEncadrer} ${choix1[0]}$ %{champ2}`,
-                  dataOptions: {
-                    champ1: { keyboard: KeyboardType.clavierDeBase },
-                    champ2: { keyboard: KeyboardType.clavierDeBase },
-                  },
-                })
-            } else if (m > 0 && p > 0)
-              texte += `Démontrer que  $${m * a + p * c} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * b + p * d}$.`
-            else if (m > 0 && p < 0)
-              texte += `Démontrer que  $${m * a + p * d} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * b + p * c}$.`
-            else if (m < 0 && p > 0)
-              texte += `Démontrer que  $${m * b + p * c} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * a + p * d}$.`
-            else if (m < 0 && p < 0)
-              texte += `Démontrer que  $${m * b + p * d} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * a + p * c}$.<br> `
-
-            texteCorr = `On commence par encadrer $${rienSi1(m)}x$, puis on encadre $${p}y$.<br>`
-            texteCorr += ` $\\begin{aligned}
-              ${a} ${choix1[0]}  x &${choix1[0]} ${b}\\\\`
-            if (m > 0 && p > 0) {
-              texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[0]} ${m}\\times x &${choix1[0]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
-              texteCorr += `${m * a} ${choix1[0]} ${rienSi1(m)}x& ${choix1[0]} ${m * b}\\\\`
-              texteCorr += '\\end{aligned}$'
-              texteCorr += `<br>De même, <br>
-               $\\begin{aligned}
-               ${c} ${choix1[0]} y& ${choix1[0]} ${d}\\\\`
-              texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[0]} ${p}\\times y &${choix1[0]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
-              texteCorr += `${p * c} ${choix1[0]} ${rienSi1(p)}y& ${choix1[0]} ${p * d}\\\\`
-              texteCorr += '\\end{aligned}$'
-              reponse1 = m * a + p * c
-              reponse2 = m * b + p * d
-              texteCorr += `<br>
-              Ainsi, on a : $\\begin{cases}    ${m * a} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * b}\\\\    ${p * c} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * d}     \\end{cases} $.<br>
-              Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
-            } else if (m > 0 && p < 0) {
-              texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[0]} ${m}\\times x &${choix1[0]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
-              texteCorr += `${m * a} ${choix1[0]} ${rienSi1(m)}x& ${choix1[0]} ${m * b}\\\\`
-              texteCorr += '\\end{aligned}$'
-              texteCorr += `<br>De même, <br>
-                 $\\begin{aligned}
-                 ${c} ${choix1[0]} y &${choix1[0]} ${d}\\\\`
-              texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[1]} ${p}\\times y &${choix1[1]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} < 0 \\text{, le sens des inégalités change.}\\\\`
-              texteCorr += `${p * c} ${choix1[1]} ${rienSi1(p)}y& ${choix1[1]} ${p * d}\\\\`
-              texteCorr += '\\end{aligned}$'
-              reponse1 = m * a + p * d
-              reponse2 = m * b + p * c
-              texteCorr += `<br>
-                                Ainsi, on a : $\\begin{cases}    ${m * a} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * b}\\\\    ${p * d} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * c}     \\end{cases} $.<br>
-                Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
-            } else if (m < 0 && p > 0) {
-              texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[1]} ${m}\\times x &${choix1[1]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} < 0 \\text{, le sens des inégalités change.}\\\\`
-              texteCorr += `${m * a} ${choix1[1]} ${rienSi1(m)}x& ${choix1[1]} ${m * b}\\\\`
-              texteCorr += '\\end{aligned}$'
-              texteCorr += `<br>De même, <br>
-                   $\\begin{aligned}
-                   ${c} ${choix1[0]} y &${choix1[0]} ${d}\\\\`
-              texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[0]} ${p}\\times y &${choix1[0]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
-              texteCorr += `
-                  ${p * c} ${choix1[0]} ${rienSi1(p)}y& ${choix1[0]} ${p * d}\\\\`
-              texteCorr += '\\end{aligned}$'
-              reponse1 = m * b + p * c
-              reponse2 = m * a + p * d
-              texteCorr += `<br>
-                  Ainsi, on a : $\\begin{cases}    ${m * b} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * a}\\\\    ${p * c} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * d}     \\end{cases} $.<br>
-                  Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
-            } else if (m < 0 && p < 0) {
-              texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[1]} ${m}\\times x &${choix1[1]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} < 0 \\text{, le sens des inégalités change.}\\\\`
-              texteCorr += `
-                    ${m * a} ${choix1[1]} ${rienSi1(m)}x& ${choix1[1]} ${m * b}\\\\`
-              texteCorr += '\\end{aligned}$'
-              texteCorr += `<br>De même, <br>
-                    $\\begin{aligned}
-                    ${c} ${choix1[0]} y &${choix1[0]} ${d}\\\\`
-              texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[1]} ${p}\\times y &${choix1[1]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} < 0 \\text{, le sens des inégalités change.}\\\\`
-              texteCorr += `
-                   ${p * c} ${choix1[1]} ${rienSi1(p)}y& ${choix1[1]} ${p * d}\\\\`
-              texteCorr += '\\end{aligned}$'
-              reponse1 = m * b + p * d
-              reponse2 = m * a + p * c
-              texteCorr += `<br>
-                  Ainsi, on a : $\\begin{cases}    ${m * b} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * a}\\\\    ${p * d} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * c}     \\end{cases} $.<br>
-                  Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
-            }
-          }
+        case 4:
+          listeTypeDeQuestions.push(typeQuestionsPermis[5])
+          break
+        case 5:
+          listeTypeDeQuestions.push(choice(typeQuestionsPermis))
           break
       }
-      if (listeTypeDeQuestions[i] !== 'typeE2')
-        handleAnswers(
-          this,
+    }
+
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      // On limite le nombre d'essais pour chercher des valeurs nouvelles
+      let a = randint(2, 13)
+      let b = randint(1, 13)
+      let c = randint(1, 13)
+      let d = randint(1, 13)
+      let e = randint(1, 13) // sert seulement dans le dernier des types de questions
+      let symboleInegalite: SymboleInegalite | '\\' = '>'
+      let symboleInegaliteOppose: SymboleInegalite | '\\' = '<'
+      let texte = ''
+      let texteCorr = ''
+      let reponse = ''
+
+      switch (randint(1, 4)) {
+        case 1:
+          symboleInegalite = '<'
+          symboleInegaliteOppose = '>'
+          break
+        case 2:
+          symboleInegalite = '≤'
+          symboleInegaliteOppose = '≥'
+          break
+        case 3:
+          symboleInegalite = '>'
+          symboleInegaliteOppose = '<'
+          break
+        case 4:
+          symboleInegalite = '≥'
+          symboleInegaliteOppose = '≤'
+          break
+      }
+      const estStrict = ['<', '>'].includes(symboleInegalite)
+      if (this.sup) {
+        a *= choice([-1, 1])
+        b *= choice([-1, 1])
+        c *= choice([-1, 1])
+        d *= choice([-1, 1])
+        e *= choice([-1, 1])
+      }
+
+      if (
+        listeTypeDeQuestions[i] === 'ax+b≤0' ||
+        listeTypeDeQuestions[i] === 'ax+b≤c'
+      ) {
+        if (listeTypeDeQuestions[i] === 'ax+b≤0') {
+          c = 0
+        }
+        if (!this.sup && c < b) {
+          b = randint(1, 9)
+          c = randint(b, 15) // c sera plus grand que b pour que c-b≥0
+        }
+        texte = `$${a}x${ecritureAlgebrique(b)}${texSymbole(symboleInegalite)}${c}$`
+        texteCorr = texte + '<br>'
+        if (this.correctionDetaillee) {
+          if (b > 0) {
+            texteCorr += `On soustrait $${b}$ aux deux membres.<br>`
+          } else {
+            texteCorr += `On ajoute $${-1 * b}$ aux deux membres.<br>`
+          }
+        }
+        texteCorr += `$${a}x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${c}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}$<br>`
+        texteCorr += `$${a}x${texSymbole(symboleInegalite)}${c - b}$<br>`
+        if (this.correctionDetaillee) {
+          texteCorr += `On divise les deux membres par $${a}$.<br>`
+          if (a < 0) {
+            texteCorr += `Comme $${a}$ est négatif, l'inégalité change de sens.<br>`
+          }
+        }
+        if (a < 0) {
+          texteCorr += `$${a}x${miseEnEvidence(
+            '\\div' +
+              ecritureParentheseSiNegatif(a) +
+              texSymbole(symboleInegaliteOppose),
+            bleuMathalea,
+          )}${c - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
+          texteCorr += `$x${texSymbole(symboleInegaliteOppose)}${texFractionFromString(c - b, a)}$`
+          texteCorr += `<br>$x${texSymbole(symboleInegaliteOppose)}${texFractionReduite(c - b, a)}$`
+        } else {
+          texteCorr += `$${a}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}
+            ${texSymbole(symboleInegalite)}${c - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
+          texteCorr += `$x${texSymbole(symboleInegalite)}${texFractionFromString(c - b, a)}$`
+          if (pgcd(abs(a), abs(c - b)) > 1) {
+            texteCorr += `<br>$x${texSymbole(symboleInegalite)}${texFractionReduite(c - b, a)}$`
+          }
+        }
+        // Conclusion
+        const borneInfinie =
+          (symboleInegalite === '<' && a >= 0) ||
+          (symboleInegalite === '>' && a < 0) ||
+          (symboleInegalite === '≤' && a >= 0) ||
+          (symboleInegalite === '≥' && a < 0)
+            ? 'gauche'
+            : 'droite'
+        const borneFinie = new FractionEtendue(c - b, a)
+        const conclusion = buildConclusion(borneInfinie, borneFinie, estStrict)
+        reponse = conclusion.reponse
+        texteCorr += `<br> ${conclusion.correction}`
+      } else if (listeTypeDeQuestions[i] === 'x+b≤c') {
+        a = 1
+        if (!this.sup && c < b) {
+          b = randint(-9, 9, [0]) // b peut être négatif, ça sera une inéquation du type x-b=c
+          c = abs(randint(b, 15)) // c sera plus grand que b pour que c-b>0
+        }
+        texte = `$x${ecritureAlgebrique(b)}${texSymbole(symboleInegalite)}${c}$`
+        texteCorr = texte + '<br>'
+        if (this.correctionDetaillee) {
+          if (b > 0) {
+            texteCorr += `On soustrait $${b}$ aux deux membres.<br>`
+          } else {
+            texteCorr += `On ajoute $${-1 * b}$ aux deux membres.<br>`
+          }
+        }
+        texteCorr += `$x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${c}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}$<br>`
+        texteCorr += `$x${texSymbole(symboleInegalite)}${c - b}$`
+        // Conclusion
+        const borneInfinie =
+          (symboleInegalite === '<' && a >= 0) ||
+          (symboleInegalite === '>' && a < 0) ||
+          (symboleInegalite === '≤' && a >= 0) ||
+          (symboleInegalite === '≥' && a < 0)
+            ? 'gauche'
+            : 'droite'
+        const borneFinie = new FractionEtendue(c - b, 1)
+        const conclusion = buildConclusion(borneInfinie, borneFinie, estStrict)
+        reponse = conclusion.reponse
+        texteCorr += `<br> ${conclusion.correction}`
+      } else if (listeTypeDeQuestions[i] === 'ax≤b') {
+        texte = `$${a}x${texSymbole(symboleInegalite)}${b}$`
+        texteCorr = texte + '<br>'
+        if (this.correctionDetaillee) {
+          texteCorr += `On divise les deux membres par $${a}$.<br>`
+          if (a < 0) {
+            texteCorr += `Comme $${a}$ est négatif, l'inégalité change de sens.<br>`
+          }
+        }
+        if (a < 0) {
+          texteCorr += `$${a}x${miseEnEvidence(
+            '\\div' +
+              ecritureParentheseSiNegatif(a) +
+              texSymbole(symboleInegaliteOppose),
+            bleuMathalea,
+          )}${b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
+          texteCorr += `$x${texSymbole(symboleInegaliteOppose)}${texFractionFromString(b, a)}$`
+          texteCorr += `<br>$x${texSymbole(symboleInegaliteOppose)}${texFractionReduite(b, a)}$`
+        } else {
+          texteCorr += `$${a}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}
+            ${texSymbole(symboleInegalite)}${b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
+          texteCorr += `$x${texSymbole(symboleInegalite)}${texFractionFromString(b, a)}$`
+          if (pgcd(abs(a), abs(b)) > 1 || a < 0) {
+            texteCorr += `<br>$x${texSymbole(symboleInegalite)}${texFractionReduite(b, a)}$`
+          }
+        }
+        // Conclusion
+        const borneInfinie =
+          (symboleInegalite === '<' && a >= 0) ||
+          (symboleInegalite === '>' && a < 0) ||
+          (symboleInegalite === '≤' && a >= 0) ||
+          (symboleInegalite === '≥' && a < 0)
+            ? 'gauche'
+            : 'droite'
+        const borneFinie = new FractionEtendue(b, a)
+        const conclusion = buildConclusion(borneInfinie, borneFinie, estStrict)
+        reponse = conclusion.reponse
+        texteCorr += `<br> ${conclusion.correction}`
+      } else if (listeTypeDeQuestions[i] === 'ax+b≤cx+d') {
+        if (c === a) {
+          c = randint(1, 13, [a])
+        } // sinon on arrive à une division par 0
+        if (!this.sup && a < c) {
+          c = randint(1, 9)
+          a = randint(c + 1, 15) // a sera plus grand que c pour que a-c>0
+        }
+        if (!this.sup && d < b) {
+          b = randint(1, 9)
+          d = randint(b + 1, 15) // d sera plus grand que b pour que d-b>0
+        }
+        texte = `$${rienSi1(a)}x${ecritureAlgebrique(b)}${texSymbole(symboleInegalite)} ${rienSi1(c)}x${ecritureAlgebrique(d)}$`
+        texteCorr = texte + '<br>'
+        if (this.correctionDetaillee) {
+          if (c > 0) {
+            texteCorr += `On soustrait $${rienSi1(c)}x$ aux deux membres.<br>`
+          } else {
+            texteCorr += `On ajoute $${rienSi1(-1 * c)}x$ aux deux membres.<br>`
+          }
+        }
+        texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
+        texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}${texSymbole(symboleInegalite)}${d}$<br>`
+        if (this.correctionDetaillee) {
+          if (b > 0) {
+            texteCorr += `On soustrait $${b}$ aux deux membres.<br>`
+          } else {
+            texteCorr += `On ajoute $${-1 * b}$ aux deux membres.<br>`
+          }
+        }
+        texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${d}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}$<br>`
+        texteCorr += `$${rienSi1(a - c)}x${texSymbole(symboleInegalite)}${d - b}$<br>`
+
+        if (this.correctionDetaillee) {
+          texteCorr += `On divise les deux membres par $${a - c}$.<br>`
+          if (a - c < 0) {
+            texteCorr += `Comme $${a - c}$ est négatif, l'inégalité change de sens.<br>`
+          }
+        }
+        if (a - c < 0) {
+          texteCorr += `$${rienSi1(a - c)}x${miseEnEvidence(
+            '\\div' +
+              ecritureParentheseSiNegatif(a - c) +
+              texSymbole(symboleInegaliteOppose),
+            bleuMathalea,
+          )}${d - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), bleuMathalea)}$<br>`
+          texteCorr += `$x${texSymbole(symboleInegaliteOppose)}${texFractionFromString(d - b, a - c)}$`
+          texteCorr += `<br>$x${texSymbole(symboleInegaliteOppose)}${texFractionReduite(d - b, a - c)}$`
+        } else {
+          texteCorr += `$${rienSi1(a - c)}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), bleuMathalea)}
+            ${texSymbole(symboleInegalite)}${d - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), bleuMathalea)}$<br>`
+          texteCorr += `$x${texSymbole(symboleInegalite)}${texFractionFromString(d - b, a - c)}$`
+          if (pgcd(abs(d - b), abs(a - c)) > 1 || a - c < 0) {
+            texteCorr += `<br>$x${texSymbole(symboleInegalite)}${texFractionReduite(d - b, a - c)}$`
+          }
+        }
+        // Conclusion
+        const borneInfinie =
+          (symboleInegalite === '<' && a - c >= 0) ||
+          (symboleInegalite === '>' && a - c < 0) ||
+          (symboleInegalite === '≤' && a - c >= 0) ||
+          (symboleInegalite === '≥' && a - c < 0)
+            ? 'gauche'
+            : 'droite'
+        const borneFinie = new FractionEtendue(d - b, a - c)
+        const conclusion = buildConclusion(borneInfinie, borneFinie, estStrict)
+        reponse = conclusion.reponse
+        texteCorr += `<br> ${conclusion.correction}`
+      } else {
+        if (d === a * b) {
+          // évitons une division par 0
+          d = randint(1, 13, [a * b])
+        }
+        if (e === a * c) {
+          // évitons un résultat nul
+          e = randint(1, 13, [a * c])
+        }
+        texte = `$${a}(${reduireAxPlusB(b, c)}) ${texSymbole(symboleInegalite)} ${reduireAxPlusB(d, e)}$`
+        texteCorr = texte + '<br>'
+        texteCorr += 'On commence par développer le membre de gauche.<br>'
+        texteCorr += `$${a}\\times ${b === 1 ? '' : ecritureParentheseSiNegatif(b)}x${ecritureAlgebrique(a)}\\times${ecritureParentheseSiNegatif(c)}${texSymbole(symboleInegalite)}${reduireAxPlusB(d, e)}$<br>`
+        texteCorr += `$${reduireAxPlusB(a * b, a * c)}${texSymbole(symboleInegalite)}${reduireAxPlusB(d, e)}$<br>`
+        if (this.correctionDetaillee) {
+          if (d > 0) {
+            texteCorr += `On soustrait $${rienSi1(d)}x$ aux deux membres.<br>`
+          } else {
+            texteCorr += `On ajoute $${rienSi1(-d)}x$ aux deux membres.<br>`
+          }
+        }
+        texteCorr += `$${reduireAxPlusB(a * b, a * c)}${miseEnEvidence(signe(-1 * d) + rienSi1(abs(d)) + 'x', bleuMathalea)}${texSymbole(symboleInegalite)}${reduireAxPlusB(d, e)}${miseEnEvidence(signe(-1 * d) + rienSi1(abs(d)) + 'x', bleuMathalea)}$<br>`
+        texteCorr += `$${rienSi1(a * b - d)}x${ecritureAlgebrique(a * c)}${texSymbole(symboleInegalite)}${e}$<br>`
+        if (this.correctionDetaillee) {
+          if (a * c > 0) {
+            texteCorr += `On soustrait $${a * c}$ aux deux membres.<br>`
+          } else {
+            texteCorr += `On ajoute $${-a * c}$ aux deux membres.<br>`
+          }
+        }
+        texteCorr += `$${rienSi1(a * b - d)}x${ecritureAlgebrique(a * c)}${miseEnEvidence(ecritureAlgebrique(-a * c), bleuMathalea)}
+           ${texSymbole(symboleInegalite)}${e}${miseEnEvidence(ecritureAlgebrique(-a * c), bleuMathalea)}$<br>`
+        texteCorr += `$${rienSi1(a * b - d)}x${texSymbole(symboleInegalite)}${e - a * c}$<br>`
+        if (this.correctionDetaillee) {
+          texteCorr += `On divise les deux membres par $${a * b - d}$.<br>`
+          if (a * b - d < 0) {
+            texteCorr += `Comme $${a * b - d}$ est négatif, l'inégalité change de sens.<br>`
+          }
+        }
+        const borneFinie = new FractionEtendue(e - a * c, a * b - d)
+        const symboleInegaliteFinal =
+          a * b - d > 0 ? symboleInegalite : symboleInegaliteOppose
+        texteCorr += `$${rienSi1(a * b - d)}x${miseEnEvidence(
+          '\\div' +
+            ecritureParentheseSiNegatif(a * b - d) +
+            texSymbole(symboleInegaliteFinal),
+          bleuMathalea,
+        )}${e - a * c + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a * b - d), bleuMathalea)}$<br>`
+        texteCorr += `$x${texSymbole(symboleInegaliteFinal)}${borneFinie.texFraction}$`
+        if (!borneFinie.estIrreductible) {
+          texteCorr += `<br><br>$x${texSymbole(symboleInegaliteFinal)}${borneFinie.texFractionSimplifiee}$`
+        }
+
+        // Conclusion
+        const borneInfinie = ['≥', '>'].includes(symboleInegaliteFinal)
+          ? 'droite'
+          : 'gauche'
+        const conclusion = buildConclusion(borneInfinie, borneFinie, estStrict)
+        reponse = conclusion.reponse
+        texteCorr += `<br> ${conclusion.correction}`
+      }
+      // texte += `<br> Solution : $${reponse}$` // pour test
+      texte +=
+        '<br>' +
+        ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble, {
+          texteAvant: ' $S=$',
+        })
+      handleAnswers(this, i, {
+        reponse: { value: reponse, options: { intervalle: true } },
+      })
+      if (
+        this.questionJamaisPosee(
           i,
-          {
-            bareme: toutAUnPoint,
-            champ1: {
-              value: reponse1,
-              options: { nombreDecimalSeulement: true },
-            },
-            champ2: {
-              value: reponse2,
-              options: { nombreDecimalSeulement: true },
-            },
-          },
-          { formatInteractif: 'multi-mathfield' },
+          JSON.stringify([a, b, c, d, symboleInegalite]),
         )
-      if (this.questionJamaisPosee(i, a, m, p)) {
-        // Si la question n'a jamais été posée, on en crée une autre
+      ) {
+        // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

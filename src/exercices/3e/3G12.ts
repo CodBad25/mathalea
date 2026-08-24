@@ -171,7 +171,7 @@ export default class PavageEtRotation2D extends Exercice {
     let couples: number[][] = []
     let tailles = []
     let monpavage
-    let fenetre
+    let fenetreMathalea2d
     let texte = ''
     let texteCorr = ''
     let typeDePavage = contraindreValeur(1, 7, this.sup, 1) as
@@ -232,7 +232,7 @@ export default class PavageEtRotation2D extends Exercice {
       Nx = tailles[taillePavage - 1][typeDePavage - 1][0]
       Ny = tailles[taillePavage - 1][typeDePavage - 1][1]
       monpavage.construit(typeDePavage, Nx, Ny, 3) // On initialise toutes les propriétés de l'objet.
-      fenetre = monpavage.fenetre
+      fenetreMathalea2d = monpavage.fenetre
       do {
         // On cherche d pour avoir suffisamment de couples
         couples = [] // On vide la liste des couples pour une nouvelle recherche
@@ -250,10 +250,10 @@ export default class PavageEtRotation2D extends Exercice {
           A = monpavage.barycentres[index1] // Ou on choisit un barycentre
         }
         while (
-          A.x - 5 < fenetre.xmin ||
-          A.x + 5 > fenetre.xmax ||
-          A.y - 5 < fenetre.ymin ||
-          A.y + 5 > fenetre.ymax
+          A.x - 5 < fenetreMathalea2d.xmin ||
+          A.x + 5 > fenetreMathalea2d.xmax ||
+          A.y - 5 < fenetreMathalea2d.ymin ||
+          A.y + 5 > fenetreMathalea2d.ymax
         ) {
           index1 = randint(
             Math.floor(monpavage.nb_polygones / 3),
@@ -347,7 +347,7 @@ export default class PavageEtRotation2D extends Exercice {
         objets.push(monpavage.polygones[i])
       }
 
-      texte = mathalea2d(fenetre, objets, texteNoir) // monpavage.fenetre est calibrée pour faire entrer le pavage dans une feuille A4
+      texte = mathalea2d(fenetreMathalea2d, objets, texteNoir) // monpavage.fenetre est calibrée pour faire entrer le pavage dans une feuille A4
       texte += `Soit la rotation de centre $A$ et d'angle ${alpha}$^\\circ$ dans le sens `
       if (sensdirect === 1) {
         texte += "contraire des aiguilles d'une montre.<br>"
@@ -438,7 +438,12 @@ export default class PavageEtRotation2D extends Exercice {
         }
       }
       if (this.correctionDetaillee) {
-        texteCorr += mathalea2d(fenetre, objets, objetsCorrection, texteGris)
+        texteCorr += mathalea2d(
+          fenetreMathalea2d,
+          objets,
+          objetsCorrection,
+          texteGris,
+        )
       }
       if (context.isAmc) {
         this.autoCorrectionAMC[0] = {

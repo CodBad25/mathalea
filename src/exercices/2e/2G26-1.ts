@@ -1,285 +1,243 @@
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { Repere } from '../../lib/2d/reperes'
-import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
-import { labelPoint, texteParPosition } from '../../lib/2d/textes'
-import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { choice } from '../../lib/outils/arrayOutils'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
-import { creerNomDePolygone } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { nomVecteurParPosition } from '../../lib/2d/NomVecteurParPosition'
-import {
-  representant,
-  representantNomme,
-} from '../../lib/2d/representantVecteur'
-import { vecteur } from '../../lib/2d/Vecteur'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const titre =
-  "Calculer les coordonnées d'un vecteur à partir des coordonnées de deux points"
-export const dateDeModifImportante = '30/06/2023'
+export const titre = 'Calculer les coordonnées de la somme de deux vecteurs'
+export const dateDePublication = '21/05/2023'
 
 /**
- * Coordonnées d'un vecteur à partir de deux points
- * @author Stéphane Guyon
+ * Somme de deux vecteurs à l'aide des coordonnées
  * @author Stéphan Grignon
  *  Interactif Gilles Mora le 11 juin 2024
  */
-export const uuid = 'f71c1'
+export const uuid = '49570'
 
 export const refs = {
-  'fr-fr': ['2G26-1', 'BP1GV03'],
-  'fr-ch': ['3G92-1'],
+  'fr-fr': ['2G26-1', 'BP1GV04'],
+  'fr-ch': ['3G92-4'],
 }
-export default class Calculercoordonneesvecteurs extends Exercice {
+export default class Calculercoordonneessommevecteurs extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
       'Situations différentes ',
-      2,
-      '1 : Coordonnées entières\n 2 : Coordonnées en écriture fractionnaire',
+      4,
+      '1 : Coordonnées entières\n 2 : Coordonnées en écriture fractionnaire\n 3 : À partir de quatre points\n4 : Mélange',
     ]
 
     this.nbQuestions = 2
+
     this.sup = 1
     this.correctionDetaillee = false
     this.correctionDetailleeDisponible = true
   }
 
   nouvelleVersion() {
+    let typeDeQuestionsDisponibles
+    if (this.sup === 1) {
+      typeDeQuestionsDisponibles = ['t1'] // On donne 2 vecteurs à coordonnées entières
+    } else if (this.sup === 2) {
+      typeDeQuestionsDisponibles = ['t2'] // On donne 2 vecteurs à coordonnées fractionnaires
+    } else if (this.sup === 3) {
+      typeDeQuestionsDisponibles = ['t3'] // On donne 4 points à coordonnées entières
+    } else {
+      typeDeQuestionsDisponibles = ['t1', 't2', 't3']
+    }
+    const listeTypeDeQuestions = combinaisonListes(
+      typeDeQuestionsDisponibles,
+      this.nbQuestions,
+    )
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      const typesDeQuestions = listeTypeDeQuestions[i]
       let texte = ''
       let texteCorr = ''
-      let xA: number | FractionEtendue
-      let yA: number | FractionEtendue
-      let xB: number | FractionEtendue
-      let yB: number
-      let xABFraction: number | FractionEtendue
-      let yABFraction: number | FractionEtendue
-      let r: Repere
-      const nomsPoints = creerNomDePolygone(2, [
-        'Q',
-        'I',
-        'J',
-        'O',
-        'X',
-        'Y',
-        'Z',
-      ])
-      const objets = []
-      if (this.sup === 1) {
-        xA = randint(-4, 4)
-        yA = randint(-4, 4)
-        xABFraction = new FractionEtendue(randint(-4, 4), 1)
-        yABFraction = new FractionEtendue(
-          randint(-4, 4, [xABFraction.valeurDecimale]),
-          1,
-        )
-        xB = xA + xABFraction.valeurDecimale
-        yB = yA + yABFraction.valeurDecimale
-        r = new Repere({
-          xUnite: 1,
-          yUnite: 1,
-          xMin: Math.min(-2, xA - 2, xB - 2, 2),
-          yMin: Math.min(-2, yA - 2, yB - 2, 2),
-          xMax: Math.max(-2, xA + 2, xB + 2, 2),
-          yMax: Math.max(-2, yA + 2, yB + 2, 2),
-          thickHauteur: 0.1,
-          yLabelEcart: 0.4,
-          xLabelEcart: 0.3,
-          axeXStyle: '->',
-          axeYStyle: '->',
-        })
+      let wxFraction: FractionEtendue
+      let wyFraction: FractionEtendue
+      switch (typesDeQuestions) {
+        case 't1':
+          {
+            // On donne 2 vecteurs à coordonnées entières
+            const ux = randint(-9, 9)
+            let uy
+            if (ux === 0) {
+              uy = randint(-9, 9, [0])
+            } else {
+              uy = randint(-9, 9)
+            } // Premier vecteur jamais nul
+            const vx = randint(-9, 9)
+            let vy
+            if (vx === 0) {
+              vy = randint(-9, 9, [0])
+            } else {
+              vy = randint(-9, 9)
+            } // Second vecteur jamais nul
+            wxFraction = new FractionEtendue(ux + vx, 1)
+            wyFraction = new FractionEtendue(uy + vy, 1)
 
-        texte = `Dans un repère orthonormé $\\big(O\\,;\\,\\vec \\imath,\\,\\vec \\jmath\\big)$, on donne les points suivants : $${nomsPoints[0]}\\left(${xA}\\,;\\,${yA}\\right)$ et $${nomsPoints[1]}\\left(${xB}\\,;\\,${yB}\\right)$.<br>`
-        texte += `Déterminer les coordonnées du vecteur $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}$.`
+            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les vecteurs suivants : $\\vec{u}\\begin{pmatrix}${ux}\\\\${uy}\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}${vx}\\\\${vy}\\end{pmatrix}$.<br>`
+            texte +=
+              'Déterminer les coordonnées du vecteur $\\overrightarrow{w}=\\overrightarrow{u}+\\overrightarrow{v}$.'
 
-        texteCorr = `$\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${miseEnEvidence(xABFraction.texFSD)}\\\\[0.7em]${miseEnEvidence(yABFraction.texFSD)}\\end{pmatrix}$.<br>`
+            texteCorr = `$\\overrightarrow{w}\\begin{pmatrix}${ux}+${ecritureParentheseSiNegatif(vx)}\\\\${uy}+${ecritureParentheseSiNegatif(vy)}\\end{pmatrix}$, soit $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wxFraction.texFraction)}\\\\${miseEnEvidence(wyFraction.texFraction)}\\end{pmatrix}$.<br>`
+            if (this.correctionDetaillee) {
+              texteCorr =
+                "Soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br>"
+              texteCorr +=
+                "On sait d'après le cours que $\\overrightarrow{w}=\\overrightarrow{u}+\\overrightarrow{v}$ aura pour coordonnées $\\overrightarrow{w}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br>"
+              texteCorr += `On applique ici aux données de l'énoncé : $\\overrightarrow{w}\\begin{pmatrix}${ux}+${ecritureParentheseSiNegatif(vx)}\\\\${uy}+${ecritureParentheseSiNegatif(vy)}\\end{pmatrix}$.<br>`
+              texteCorr += `Ce qui donne au final : $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wxFraction.texFraction)}\\\\${miseEnEvidence(wyFraction.texFraction)}\\end{pmatrix}$.<br>`
+            }
+            if (
+              wxFraction.valeurDecimale === 0 &&
+              wyFraction.valeurDecimale === 0
+            ) {
+              texteCorr += 'Ici $\\overrightarrow{w}$ est un vecteur nul.<br>'
+              texteCorr +=
+                'Ce résultat était prévisible puisque $\\overrightarrow{u}$ et $\\overrightarrow{v}$ sont opposés $\\overrightarrow{u}=-\\overrightarrow{v}$.'
+            }
+          }
+          break
 
-        if (this.correctionDetaillee) {
-          texteCorr =
-            "On sait d'après le cours que si $A(x_A\\,;\\,y_A)$ et $B(x_B\\,;\\,y_B)$ sont deux points d'un repère, alors on a $\\overrightarrow{AB}\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}$.<br>"
-          texteCorr += `On applique ici aux données de l'énoncé : $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$.<br>`
-          texteCorr += `Ce qui donne au final : $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${miseEnEvidence(xABFraction.texFraction)}\\\\${miseEnEvidence(yABFraction.texFraction)}\\end{pmatrix}$.<br><br>`
-        }
-      } else {
-        const listeFractions1 = [
-          [1, 2],
-          [3, 2],
-          [5, 2],
-          [1, 3],
-          [2, 3],
-          [4, 3],
-          [5, 3],
-          [1, 4],
-          [3, 4],
-          [5, 4],
-          [1, 5],
-          [2, 5],
-          [3, 5],
-          [4, 5],
-          [1, 6],
-          [5, 6],
-        ]
-        const frac1 = choice(listeFractions1)
-        xA = new FractionEtendue(frac1[0], frac1[1])
-        xABFraction = new FractionEtendue(randint(-4, 4, [0]), 1)
-        xB = xA.sommeFractions(xABFraction).simplifie()
-        const frac2 = choice(listeFractions1)
-        yABFraction = new FractionEtendue(frac2[0], frac2[1])
-        yB = randint(-4, 4, [0])
-        yA = new FractionEtendue(yB * frac2[1] - frac2[0], frac2[1])
-        r = new Repere({
-          xUnite: 1,
-          yUnite: 1,
-          xMin: Math.min(
-            -2,
-            Math.trunc(xA.valeurDecimale - 2.5),
-            Math.trunc(xB.valeurDecimale - 2.5),
-            2,
-          ),
-          yMin: Math.min(
-            -2,
-            Math.trunc(yA.valeurDecimale - 2.5),
-            Math.trunc(yB - 2.5),
-            2,
-          ),
-          xMax: Math.max(
-            -2,
-            Math.trunc(xA.valeurDecimale + 2.5),
-            Math.trunc(xB.valeurDecimale + 2.5),
-            2,
-          ),
-          yMax: Math.max(
-            -2,
-            Math.trunc(yA.valeurDecimale + 2.5),
-            Math.trunc(yB + 2.5),
-            2,
-          ),
-          thickHauteur: 0.1,
-          yLabelEcart: 0.4,
-          xLabelEcart: 0.3,
-          axeXStyle: '->',
-          axeYStyle: '->',
-          grilleSecondaire: true,
-          grilleSecondaireXDistance: 1 / frac1[1],
-          grilleSecondaireYDistance: 1 / frac2[1],
-          grilleSecondaireYMin: Math.min(
-            -2,
-            Math.trunc(yA.valeurDecimale - 2.5),
-            Math.trunc(yB - 2.5),
-            2,
-          ),
-          grilleSecondaireYMax: Math.max(
-            -2,
-            Math.trunc(yA.valeurDecimale + 2.5),
-            Math.trunc(yB + 2.5),
-            2,
-          ),
-          grilleSecondaireXMin: Math.min(
-            -2,
-            Math.trunc(xA.valeurDecimale - 2.5),
-            Math.trunc(xB.valeurDecimale - 2.5),
-            2,
-          ),
-          grilleSecondaireXMax: Math.max(
-            -2,
-            Math.trunc(xA.valeurDecimale + 2.5),
-            Math.trunc(xB.valeurDecimale + 2.5),
-            2,
-          ),
-        }) // On définit le repère
+        case 't2':
+          {
+            // On donne 2 vecteurs à coordonnées fractionnaires
+            const listeFractions1 = [
+              [1, 2],
+              [3, 2],
+              [5, 2],
+              [1, 3],
+              [2, 3],
+              [4, 3],
+              [5, 3],
+              [1, 4],
+              [3, 4],
+              [5, 4],
+              [1, 5],
+              [2, 5],
+              [3, 5],
+              [4, 5],
+              [1, 6],
+              [5, 6],
+            ]
+            const frac1 = choice(listeFractions1)
+            const ux = new FractionEtendue(frac1[0], frac1[1])
+            const frac2 = choice(listeFractions1)
+            const uy = new FractionEtendue(frac2[0], frac2[1])
 
-        texte = `Dans un repère orthonormé $\\big(O\\,;\\,\\vec \\imath,\\,\\vec \\jmath\\big)$, on donne les points suivants : $${nomsPoints[0]}\\left(${xA.texFSD}\\,;\\,${yA.texFSD}\\right)$ et $${nomsPoints[1]}\\left(${xB.texFSD}\\,;\\,${yB}\\right)$.<br>`
-        texte += `Déterminer les coordonnées du vecteur $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}$.`
+            let frac3 = choice(listeFractions1)
+            while (frac3[1] === frac1[1]) {
+              frac3 = choice(listeFractions1)
+            }
+            const vx = new FractionEtendue(frac3[0], frac3[1])
+            let frac4 = choice(listeFractions1)
+            while (frac4[1] === frac2[1]) {
+              frac4 = choice(listeFractions1)
+            }
+            const vy = randint(-9, 9, [0])
 
-        texteCorr = `$\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${xB.texFSD}-${xA.texFSP}\\\\[0.7em]${yB}-${yA.texFSP}\\end{pmatrix}$, soit $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${miseEnEvidence(xABFraction.texFSD)}\\\\[0.7em]${miseEnEvidence(yABFraction.texFSD)}\\end{pmatrix}$.<br>`
-        if (this.correctionDetaillee) {
-          texteCorr =
-            "On sait d'après le cours que si $A(x_A\\,;\\,y_A)$ et $B(x_B\\,;\\,y_B)$ sont deux points d'un repère, alors on a $\\overrightarrow{AB}\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}$.<br>"
-          texteCorr += `On applique ici aux données de l'énoncé : $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${xB.texFSD}-${xA.texFSP}\\\\[0.7em]${yB}-${yA.texFSP}\\end{pmatrix}$.<br>`
-          texteCorr += `Ce qui donne au final : $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${miseEnEvidence(xABFraction.texFraction)}\\\\[0.7em]${miseEnEvidence(yABFraction.texFraction)}\\end{pmatrix}$.<br><br>`
-        }
-      }
-      const xDeA = xA instanceof FractionEtendue ? xA.valeurDecimale : xA // On récupère la valeur décimale de xA
-      const yDeA = yA instanceof FractionEtendue ? yA.valeurDecimale : yA // On récupère la valeur décimale de yA
-      const xDeB = xB instanceof FractionEtendue ? xB.valeurDecimale : xB // On récupère la valeur décimale de xB
-      const yDeB = yB
+            const a = frac1[0] * frac3[1] + frac3[0] * frac1[1]
+            const b = frac1[1] * frac3[1]
+            wxFraction = new FractionEtendue(a, b).simplifie()
 
-      const A = pointAbstrait(xDeA, yDeA, nomsPoints[0]) // On définit et on trace le point A
-      const B = pointAbstrait(xDeB, yDeB, nomsPoints[1]) // On définit et on trace le point B
-      const traceAetB = tracePoint(A, B, 'red') // Variable qui trace les points avec une croix
-      traceAetB.taille = 1.5
-      const labelAetB = labelPoint(A, B, 'red') // Variable qui trace les noms A et B
-      const vecteurAB = vecteur(A, B, 'red') // On créé le vecteur AB
-      const vecteurABRep = representant(vecteurAB, A, 'red') as Segment // On trace le vecteur AB
-      const O = pointAbstrait(0, 0, 'O') // On définit et on trace le point O
-      const nomO = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-      const I = pointAbstrait(1, 0) // On définit sans tracer le point I
-      const J = pointAbstrait(0, 1) // On définit sans tracer le point J
-      const vecteurOI = segment(O, I) // Variable qui trace [OI] en rouge
-      const vecteurOJ = segment(O, J) // Variable qui trace [OJ] en rouge
-      vecteurABRep.styleExtremites = '->' // Variable qui transforme [AB] en vecteur
-      vecteurOI.styleExtremites = '->' // Variable qui transforme [OI] en vecteur
-      vecteurOJ.styleExtremites = '->' // Variable qui transforme [OJ] en vecteur
-      vecteurABRep.epaisseur = 1.75 // Variable qui grossit le tracé du vecteur AB
-      vecteurOI.epaisseur = 1.75 // Variable qui grossit le tracé du vecteur OI
-      vecteurOJ.epaisseur = 1.75 // Variable qui grossit le tracé du vecteur OJ
-      vecteurOI.tailleExtremites = 2.5
-      vecteurOJ.tailleExtremites = 2.5
-      vecteurABRep.tailleExtremites = 2.5
-      const nomi = nomVecteurParPosition('i', 0.5, -0.7, 1.5, 0)
-      const nomj = nomVecteurParPosition('j', -0.7, 0.5, 1.5, 0)
-      const nomAB = representantNomme(
-        vecteurAB,
-        A,
-        nomsPoints[0] + nomsPoints[1],
-        1,
-        'red',
-      ) // affiche le nom du vecteur
-      // const nomAB = nomVecteurParPosition(nomsPoints[0] + nomsPoints[1], (xA + xB) / 2 + 1, (yA + yB) / 2 + 1, 1, 0) // affiche le nom du vecteur
-      objets.push(
-        r,
-        traceAetB,
-        labelAetB,
-        vecteurOI,
-        vecteurOJ,
-        vecteurABRep,
-        nomO,
-        nomi,
-        nomj,
-        nomAB,
-      )
+            const c = frac2[0] + frac2[1] * vy
+            const d = frac2[1]
+            wyFraction = new FractionEtendue(c, d).simplifie()
+            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les vecteurs suivants : $\\vec{u}\\begin{pmatrix}${ux.texFraction}\\\\[0.7em]${uy.texFraction}\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}${vx.texFraction}\\\\[0.7em]${vy}\\end{pmatrix}$.<br>`
+            texte +=
+              'Déterminer les coordonnées du vecteur $\\overrightarrow{w}=\\overrightarrow{u}+\\overrightarrow{v}$.'
 
-      if (this.correctionDetaillee) {
-        texteCorr += `On peux vérifier graphiquement ci-dessous les coordonnées du vecteur $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}$.<br>`
-        texteCorr += mathalea2d(
-          Object.assign({ zoom: 2 }, fixeBordures(objets)),
-          objets,
-        ) // On trace le graphique
+            texteCorr = `$\\overrightarrow{w}\\begin{pmatrix}${ux.texFraction}+${vx.texFraction}\\\\[0.7em]${uy.texFraction}+${ecritureParentheseSiNegatif(vy)}\\end{pmatrix}$`
+
+            texteCorr += ` soit $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wxFraction.texFraction)}\\\\[0.7em]
+          ${miseEnEvidence(wyFraction.texFraction)}\\end{pmatrix}$.<br>`
+
+            if (this.correctionDetaillee) {
+              texteCorr =
+                "Soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br>"
+              texteCorr +=
+                "On sait d'après le cours que $\\overrightarrow{w}=\\overrightarrow{u}+\\overrightarrow{v}$ aura pour coordonnées $\\overrightarrow{w}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br>"
+              texteCorr += `On applique ici aux données de l'énoncé :
+            $\\overrightarrow{w}\\begin{pmatrix}${ux.texFraction}+${vx.texFraction}\\\\[0.7em]${uy.texFraction}+${ecritureParentheseSiNegatif(vy)}\\end{pmatrix}$.<br>`
+
+              texteCorr += `Ce qui donne au final : $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wxFraction.texFraction)}\\\\[0.7em]${miseEnEvidence(wyFraction.texFraction)}\\end{pmatrix}$.<br>`
+            }
+            if (
+              wxFraction.valeurDecimale === 0 &&
+              wyFraction.valeurDecimale === 0
+            ) {
+              texteCorr += 'Ici $\\overrightarrow{w}$ est un vecteur nul.<br>'
+              texteCorr +=
+                'Ce résultat était prévisible puisque $\\overrightarrow{u}$ et $\\overrightarrow{v}$ sont opposés $\\overrightarrow{u}=-\\overrightarrow{v}$.'
+            }
+          }
+          break
+
+        case 't3':
+        default:
+          {
+            // On donne 4 points à coordonnées entières
+            const xA = randint(-9, 9)
+            const yA = randint(-9, 9, [xA])
+            const xB = randint(-9, 9)
+            const yB = randint(-9, 9, [xB])
+            const xC = randint(-9, 9)
+            const yC = randint(-9, 9, [xC])
+            const xD = randint(-9, 9)
+            const yD = randint(-9, 9, [xD])
+            wxFraction = new FractionEtendue(xB - xA + (xD - xC), 1)
+            wyFraction = new FractionEtendue(yB - yA + (yD - yC), 1)
+
+            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les points suivants : $A\\left(${xA}\\,;\\,${yA}\\right)$, $B\\left(${xB}\\,;\\,${yB}\\right)$, $C\\left(${xC}\\,;\\,${yC}\\right)$ et $D\\left(${xD}\\,;\\,${yD}\\right)$.<br>`
+            texte +=
+              'Déterminer les coordonnées du vecteur $\\overrightarrow{w}=\\overrightarrow{AB}+\\overrightarrow{CD}$.'
+
+            texteCorr = `$\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\end{pmatrix}$.<br><br>`
+            texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+            texteCorr += `$\\overrightarrow{w}\\begin{pmatrix}${xB - xA}+${ecritureParentheseSiNegatif(xD - xC)}\\\\${yB - yA}+${ecritureParentheseSiNegatif(yD - yC)}\\end{pmatrix}$, soit $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wxFraction.texFraction)}\\\\${miseEnEvidence(wyFraction.texFraction)}\\end{pmatrix}$.<br>`
+            if (this.correctionDetaillee) {
+              texteCorr =
+                "On sait d'après le cours que si $A(x_A;y_A)$ et $B(x_B;y_B)$ sont deux points d'un repère, alors on a $\\overrightarrow{AB}\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}$.<br>"
+              texteCorr += "On applique ici aux données de l'énoncé :<br><br>"
+              texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\end{pmatrix}$.<br><br>`
+              texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+              texteCorr +=
+                "Soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br>"
+              texteCorr +=
+                "On sait d'après le cours que $\\overrightarrow{w}=\\overrightarrow{u}+\\overrightarrow{v}$ aura pour coordonnées $\\overrightarrow{w}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br>"
+              texteCorr += `On applique ici aux données de l'énoncé : $\\overrightarrow{w}\\begin{pmatrix}${xB - xA}+${ecritureParentheseSiNegatif(xD - xC)}\\\\${yB - yA}+${ecritureParentheseSiNegatif(yD - yC)}\\end{pmatrix}$.<br>`
+              texteCorr += `Ce qui donne au final : $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wxFraction.texFraction)}\\\\${miseEnEvidence(wyFraction.texFraction)}\\end{pmatrix}$.<br>`
+            }
+            if (
+              wxFraction.valeurDecimale === 0 &&
+              wyFraction.valeurDecimale === 0
+            ) {
+              texteCorr += 'Ici $\\overrightarrow{w}$ est un vecteur nul.<br>'
+              texteCorr +=
+                'Ce résultat était prévisible puisque $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont opposés $\\overrightarrow{AB}=-\\overrightarrow{CD}$.'
+            }
+          }
+          break
       }
       handleAnswers(this, i, {
         bareme: (listePoints) => [Math.min(listePoints[0], listePoints[1]), 1],
-        champ1: { value: xABFraction.texFraction },
-        champ2: { value: yABFraction.texFraction },
+        champ1: { value: wxFraction.texFraction },
+        champ2: { value: wyFraction.texFraction },
       })
       if (this.interactif) {
         texte +=
-          `<br>$\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}$` +
+          '<br>' +
           remplisLesBlancs(
             this,
             i,
-            '\\begin{pmatrix}%{champ1}\\\\\\\\%{champ2}\\end{pmatrix}',
+            '\\overrightarrow{w}\\begin{pmatrix}%{champ1}\\\\\\\\%{champ2}\\end{pmatrix}',
             KeyboardType.clavierDeBaseAvecFraction,
           )
       }
@@ -287,8 +245,8 @@ export default class Calculercoordonneesvecteurs extends Exercice {
       if (
         this.questionJamaisPosee(
           i,
-          xABFraction.texFraction,
-          yABFraction.texFraction,
+          wxFraction.texFraction,
+          wyFraction.texFraction,
         )
       ) {
         // Si la question n'a jamais été posée, on en créé une autre

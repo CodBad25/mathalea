@@ -5,6 +5,7 @@ import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -60,7 +61,7 @@ export default class AutoF2f extends ExerciceQcmA {
           ymax: yMax,
           pixelsParCm: 20,
           scale: 0.6,
-          center: true,
+          center: !context.isHtml,
         },
         r,
         o,

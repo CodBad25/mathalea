@@ -31,7 +31,7 @@ import Question30 from '../canNY-2026/can3NY-2026-Q30'
 
 import MetaExercice from '../../MetaExerciceCan'
 
-export const titre = 'CAN Spéciale année 2026'
+export const titre = 'S’entraîner avec le sujet CAN spéciale année 2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '4294b'

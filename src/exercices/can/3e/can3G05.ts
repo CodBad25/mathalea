@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -142,7 +143,7 @@ export default class Trigo extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 4 / c,
-          center: true,
+          center: !context.isHtml,
         },
       ),
       objets,

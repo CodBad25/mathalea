@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
@@ -60,7 +61,7 @@ export default class AutoF2e extends ExerciceQcmA {
           ymax: yMax,
           pixelsParCm: 25,
           scale: 0.65,
-          center: true,
+          center: !context.isHtml,
         },
         r,
         o,

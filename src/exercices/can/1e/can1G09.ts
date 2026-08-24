@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { cercleCentrePoint } from '../../../lib/2d/cercle'
 import { grille } from '../../../lib/2d/Grille'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -114,7 +115,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         ymax: r + 1,
         pixelsParCm: 15,
         scale: 0.45,
-        center: true,
+        center: !context.isHtml,
       },
       c,
       s1,

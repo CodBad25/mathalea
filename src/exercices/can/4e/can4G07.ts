@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -68,7 +69,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
           pixelsParCm: 18,
           mainlevee: false,
           amplitude: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )
@@ -113,7 +114,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
           pixelsParCm: 18,
           mainlevee: false,
           amplitude: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

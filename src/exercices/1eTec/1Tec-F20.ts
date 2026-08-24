@@ -329,16 +329,16 @@ export default class ExpressionAParabole extends Exercice {
     pixelsParCm?: number
   }): string {
     const rapportY = 2
-    const optionsFenetre = {
+    const fenetreMathalea2d = {
       xmin: xmin * 1.1,
       xmax: xmax * 1.1,
       ymin: new Decimal(ymin).div(rapportY).toNumber(),
       ymax: new Decimal(ymax).div(rapportY).toNumber(),
       display: 'inline-block' as const,
     }
-    if (id !== undefined) Object.assign(optionsFenetre, { id })
+    if (id !== undefined) Object.assign(fenetreMathalea2d, { id })
     if (pixelsParCm !== undefined)
-      Object.assign(optionsFenetre, { pixelsParCm })
+      Object.assign(fenetreMathalea2d, { pixelsParCm })
     const r1 = repere({
       xMin: xmin,
       yMin: ymin,
@@ -353,7 +353,7 @@ export default class ExpressionAParabole extends Exercice {
       grilleY: false,
     })
     const graphe1 = mathalea2d(
-      optionsFenetre,
+      fenetreMathalea2d,
       r1,
       courbe(fonction, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
     )

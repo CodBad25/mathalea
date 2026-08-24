@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -97,7 +98,7 @@ function graphique(
       ymax: yMax * yUnite + 0.25,
       pixelsParCm,
       scale,
-      center: true,
+      center: !context.isHtml,
       centerLatex: true,
     },
     r,
@@ -345,7 +346,7 @@ const graphiqueJanvier2021 = () => {
       ymax: 4,
       pixelsParCm: 24,
       scale: 0.95,
-      center: true,
+      center: !context.isHtml,
       centerLatex: true,
     },
     r,

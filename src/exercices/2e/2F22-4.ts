@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -181,7 +182,7 @@ function construireGraphique(type: TypeCourbe): string {
       ymax: ymax + 0.2,
       pixelsParCm: 18,
       scale: 0.42,
-      center: true,
+      center: !context.isHtml,
     },
     r,
     ...courbes,

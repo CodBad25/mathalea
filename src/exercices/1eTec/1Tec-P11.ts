@@ -155,7 +155,7 @@ export default class ExtrapolerTendanceLineaire extends Exercice {
           ymin: yMin - 1,
           ymax: yMax + 1,
           display: 'block',
-          center: true,
+          center: !context.isHtml,
           scale: 0.5,
         },
         objetsFigure,

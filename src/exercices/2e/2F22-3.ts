@@ -181,7 +181,7 @@ export function construireGraphique(type: TypeCourbe): string {
       ymax: ymax + 0.2,
       pixelsParCm: 18,
       scale: 0.42,
-      center: true,
+      center: !context.isHtml,
     },
     r,
     ...courbes,

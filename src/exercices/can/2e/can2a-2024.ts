@@ -35,7 +35,7 @@ import Question30 from '../can2a-2024/can2a-2024-Q30'
 
 import MetaExercice from '../../MetaExerciceCan'
 
-export const titre = 'CAN Seconde sujet 2024'
+export const titre = 'S’entraîner avec le sujet CAN Seconde 2024'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '94d21'

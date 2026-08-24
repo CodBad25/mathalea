@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
@@ -66,7 +67,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
         ymax: 1,
         pixelsParCm: 30,
         scale: 1,
-        center: true,
+        center: !context.isHtml,
       },
       [
         courbe(f, {

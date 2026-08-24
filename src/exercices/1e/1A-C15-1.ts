@@ -1,4 +1,4 @@
-import ProblemeFractions from '../can/2e/can2N33-03'
+import ProblemeFractions from '../can/2e/can2N33-01'
 export const titre = 'Résoudre un problème avec des fractions'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true

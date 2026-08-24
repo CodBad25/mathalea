@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { droite } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -97,7 +98,7 @@ export default class ProblemesDeLongueurs extends ExerciceSimple {
           xmax: 16.5,
           ymax: 3.5,
           scale: 0.45,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

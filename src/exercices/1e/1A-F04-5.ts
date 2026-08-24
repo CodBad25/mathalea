@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -281,7 +282,7 @@ export default class auto1AF4d extends ExerciceQcmA {
           ...config.mathalea,
           pixelsParCm: 40,
           scale: 1,
-          center: true,
+          center: !context.isHtml,
         },
         r,
         o,
@@ -363,7 +364,7 @@ export default class auto1AF4d extends ExerciceQcmA {
           ...config.mathalea,
           pixelsParCm: 40,
           scale: 1,
-          center: true,
+          center: !context.isHtml,
         },
         r,
         o,

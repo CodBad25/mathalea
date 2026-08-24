@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
@@ -67,7 +68,7 @@ export default class SuiteSurDroiteGraduee extends ExerciceSimple {
         xmax: 15,
         ymax: 1.5,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       d,
     )

@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
@@ -113,7 +114,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               ymax: 10,
               pixelsParCm: 14,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -176,7 +177,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               ymax: 3,
               pixelsParCm: 14,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -238,7 +239,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               ymax: 12,
               pixelsParCm: 14,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -306,7 +307,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               ymax: 12,
               pixelsParCm: 14,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,
@@ -375,7 +376,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               ymax: 12,
               pixelsParCm: 14,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             r,
             o,

@@ -1,259 +1,369 @@
-import { bleuMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
-  texFractionReduite,
-  texFractionSigne,
-} from '../../lib/outils/deprecatedFractions'
-import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../lib/outils/embellissements'
-import { fraction } from '../../modules/fractions'
+  ecritureAlgebriqueSauf1,
+  reduireAxPlusB,
+  rienSi1,
+} from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
+import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-
-export const dateDeModifImportante = '13/11/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
-export const titre = 'Résoudre des équations se ramenant au produit-nul'
+export const interactifType = 'multi-mathfield'
+export const dateDePublication = '02/05/2023'
+export const dateDeModifImportante = '06/04/2026'
+export const titre = 'Résoudre des équations avec un quotient'
 
 /**
- * Résoudre des équations se ramenant au produit-nul
- * @author Stéphane Guyon
+ * Mettre au même dénominateur des expressions littérales
+ * @author Gilles Mora
+ * 2L11-8
  */
-export const uuid = '93432'
+export const uuid = '31017'
 
 export const refs = {
-  'fr-fr': ['2L22-4'],
-  'fr-ch': ['11FA5B-9'],
+  'fr-fr': ['2L22-4', 'BP2RES32'],
+  'fr-ch': [],
 }
-export default class Equationspresqueproduitnulle extends Exercice {
+export default class ResoudreEquationsQuotient extends Exercice {
   constructor() {
     super()
+    this.besoinFormulaireNumerique = [
+      "Type d'équations",
+      3,
+      '1 : A(x)/B(x)=0\n 2 : A(x)/B(x)=a ou a/A(x)=b/B(x)\n 3 : Mélange',
+    ]
 
-    this.nbQuestions = 3
-    this.spacingCorr = 3
-    this.nbQuestions = 5
-    this.correctionDetailleeDisponible = true
-    this.correctionDetaillee = true
+    this.nbQuestions = 2
+    this.sup = 3
   }
 
   nouvelleVersion() {
-    this.consigne = `Résoudre dans $\\mathbb R$ ${this.nbQuestions > 1 ? 'les équations suivantes' : "l'équation suivante"}.`
-    if (this.interactif) {
-      this.consigne +=
-        "<br>On donnera la réponse sous forme d'un ensemble de solutions."
-    }
-    const typesDeQuestionsDisponibles = [1, 2, 3, 4, 5]
-    let valeursSolution
+    let typesDeQuestionsDisponibles = []
+    if (this.sup === 1) {
+      typesDeQuestionsDisponibles = [1, 2]
+    } else if (this.sup === 2) {
+      typesDeQuestionsDisponibles = [3, 4]
+    } else {
+      typesDeQuestionsDisponibles = [1, 2, 3, 4]
+    } // 1, 2, 3, 4, 5, 6, 7
 
-    const listeTypeDeQuestions = combinaisonListesSansChangerOrdre(
+    const listeTypeDeQuestions = combinaisonListes(
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (
-      let i = 0, texte, texteCorr, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-
-    ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      let texte = ''
+      let texteCorr = ''
+      let a: number
+      let b: number
+      let c: number
+      let d: number
+      let k1: number
+      let k2: number
+      let choix: boolean
+      let e: number
+      let f: number
       const typesDeQuestions = listeTypeDeQuestions[i]
-      const a = randint(-9, 9, [-1, 0, 1]) // on évite a=1, -1 ou 0
-      const b = randint(-9, 9, 0)
-      const c = randint(-9, 9, 0)
-      const d = randint(-9, 9, 0)
-      const e = randint(-9, 9, [0, c, -c]) // on évite que c+e et c-e soit égal à 0 et on évite e=0
-      const f = randint(-9, 9, [0, d, -d]) // on évite que d+f et d-f soit égal à 0 et on évite f=0
-
+      const consigne1 =
+        "Préciser les valeurs interdites éventuelles, puis résoudre l'équation : "
+      let ensValeursInterdites: string
+      let ensSolutions: string
+      let valInterdite: FractionEtendue
+      let valInterdite2: FractionEtendue
+      let valSolution: FractionEtendue
       switch (typesDeQuestions) {
-        case 1: // (ax+b)(cx+d)+(ax+b)(ex+f)=0
-          texte = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$`
-          texteCorr = ` $(${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
-          if (this.correctionDetaillee) {
-            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
-            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})( ${reduireAxPlusB(c, d)})+(\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(e, f)})=0$<br>`
-            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big(( ${reduireAxPlusB(c, d)})+(${reduireAxPlusB(e, f)})\\Big)=0$<br>`
+        case 1: // (ax+b)/(cx+d)=0
+          a = randint(-3, 9, 0)
+          b = randint(-9, 9)
+          c = randint(-9, 9, 0)
+          d = randint(-9, 9)
+          while (a * d - b * c === 0) {
+            a = randint(-3, 9, 0)
+            b = randint(-9, 9)
+            c = randint(-9, 9, 0)
+            d = randint(-9, 9)
           }
-          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c + e, d + f)})=0$<br>`
-          if (c + e === 0) {
-            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
-            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
-            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
+          choix = choice([true, false])
+          texte = consigne1
+          if (b === 0) {
+            texte += `$\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}=0$.`
           } else {
-            texteCorr +=
-              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
-            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
-            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(c + e, d + f)}=0$<br>`
-            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-d - f, c + e)}$<br>
-                       On en déduit :  `
-            if ((-d - f) / (c + e) < -b / a) {
-              valeursSolution = `${fraction(-d - f, c + e).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
+            texte += `${choix ? `$\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}=0$` : `$\\dfrac{${b}${ecritureAlgebriqueSauf1(a)}x}{${reduireAxPlusB(c, d)}}=0$`}.`
+          }
+          if (context.isDiaporama) {
+            texteCorr = ''
+          } else {
+            if (b === 0) {
+              texteCorr =
+                "Déterminer les valeurs interdites revient à déterminer les valeurs qui annulent le dénominateur du quotient, puisque la division par $0$ n'existe pas.<br>"
             } else {
-              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-d - f, c + e).texFractionSimplifiee}`
+              texteCorr =
+                "Déterminer les valeurs interdites revient à déterminer les valeurs qui annulent le dénominateur du quotient, puisque la division par $0$ n'existe pas.<br>"
             }
+          }
+          // Constantes utiles
+          valInterdite = new FractionEtendue(-d, c)
+          valSolution = new FractionEtendue(-b, a)
+          ensValeursInterdites = `\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}`
+          ensSolutions = `\\left\\{${valSolution.texFractionSimplifiee}\\right\\}`
+
+          texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${valInterdite.texFractionSimplifiee}$. <br>
+          Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$. <br>`
+          if (b === 0) {
+            texteCorr += `Pour tout $x\\in \\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}$, <br>
+ $\\begin{aligned}
+ \\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}&=0 \\\\
+ ${reduireAxPlusB(a, b)}&=0 ${sp(7)} \\text{ car }\\dfrac{A(x)}{B(x)}=0 \\text{ si et seulement si } A(x)=0 \\text{ et } B(x)\\neq 0\\\\
+x&= ${valSolution.texFractionSimplifiee}
+\\end{aligned}$<br>`
+          } else {
+            texteCorr += `Pour tout $x\\in \\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}$,<br>
+ $\\begin{aligned}
+ ${choix ? `\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}&=0` : `\\dfrac{${b}${ecritureAlgebriqueSauf1(a)}x}{${reduireAxPlusB(c, d)}}&=0`}\\\\
+ ${choix ? `${reduireAxPlusB(a, b)}&=0` : `${b}${ecritureAlgebriqueSauf1(a)}x&=0`}${sp(7)} \\text{ car }\\dfrac{A(x)}{B(x)}=0 \\text{ si et seulement si } A(x)=0 \\text{ et } B(x)\\neq 0\\\\
+x&= ${valSolution.texFractionSimplifiee}
+\\end{aligned}$<br>`
+          }
+
+          texteCorr += ` $${valSolution.texFractionSimplifiee}$ n'est pas une valeur interdite, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.`
+          break
+        case 2: // (ax^2+/-b)/(cx+d)=0
+          a = randint(1, 4)
+          k1 = randint(1, 10)
+          b = a * k1 * k1
+          c = randint(-9, 9, 0)
+          k2 = randint(-4, 4, 0)
+          d = c * k2
+
+          choix = choice([true, false])
+          texte = consigne1
+          // WARN: c'est quoi cette condition alors qu'on déclare choix juste au dessus ?
+          if (choice([true, false])) {
+            texte += `${choix ? `$\\dfrac{${rienSi1(a)}x^2-${b}}{${reduireAxPlusB(c, d)}}=0$` : `$\\dfrac{${b}-${rienSi1(a)}x^2}{${reduireAxPlusB(c, d)}}=0$`}.`
+            if (context.isDiaporama) {
+              texteCorr = ''
+            } else {
+              texteCorr =
+                "Déterminer les valeurs interdites revient à déterminer les valeurs qui annulent le dénominateur du quotient, puisque la division par $0$ n'existe pas.<br>"
+            }
+            // Constantes utiles
+            valInterdite = new FractionEtendue(-k2, 1)
+            ensValeursInterdites = `\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}`
+
+            texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${valInterdite.texFractionSimplifiee}$. <br>
+          Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$.<br>
+          Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$, <br>
+            $\\begin{aligned}
+            ${choix ? `\\dfrac{${rienSi1(a)}x^2-${b}}{${reduireAxPlusB(c, d)}}&=0` : `\\dfrac{${b}-${rienSi1(a)}x^2}{${reduireAxPlusB(c, d)}}&=0`}\\\\
+            ${choix ? `${rienSi1(a)}x^2-${b}&=0` : `${b}-${rienSi1(a)}x^2&=0`}${sp(7)} \\text{ car }\\dfrac{A(x)}{B(x)}=0 \\text{ si et seulement si } A(x)=0 \\text{ et } B(x)\\neq 0\\\\
+            ${rienSi1(a)}x^2&=${b}\\\\
+            x^2&=${k1 * k1}\\\\
+           x= ${k1}&\\text{ ou } x= -${k1}
+           \\end{aligned}$<br>
+           `
+            if (-k2 === k1 || k2 === k1) {
+              if (-k2 === k1) {
+                ensSolutions = `\\left\\{${-k1}\\right\\}`
+                texteCorr += `  $${k1}$ est une valeur interdite, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.
+        `
+              } else {
+                ensSolutions = `\\left\\{${k1}\\right\\}`
+                texteCorr += `  $${-k1}$ est une valeur interdite, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.
+        `
+              }
+            } else {
+              ensSolutions = `\\left\\{${-k1}\\,;\\,${k1}\\right\\}`
+              texteCorr += `  $${-k1}$ et $${k1}$ ne sont pas des valeurs interdites, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.
+        `
+            }
+          } else {
+            texte += `${choix ? `$\\dfrac{${rienSi1(a)}x^2+${b}}{${reduireAxPlusB(c, d)}}=0$` : `$\\dfrac{${b}+${rienSi1(a)}x^2}{${reduireAxPlusB(c, d)}}=0$`}.`
+            if (context.isDiaporama) {
+              texteCorr = ''
+            } else {
+              texteCorr =
+                "Déterminer les valeurs interdites revient à déterminer les valeurs qui annulent le dénominateur du quotient, puisque la division par $0$ n'existe pas.<br>"
+            }
+            // Constantes utiles
+            ensValeursInterdites = `\\left\\{${-k2}\\right\\}`
+            ensSolutions = '\\emptyset'
+
+            texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${-k2}$. <br>
+Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$.<br>
+Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$, <br>
+  $\\begin{aligned}
+  ${choix ? `\\dfrac{${rienSi1(a)}x^2+${b}}{${reduireAxPlusB(c, d)}}&=0` : `\\dfrac{${b}+${rienSi1(a)}x^2}{${reduireAxPlusB(c, d)}}&=0`}\\\\
+  ${choix ? `${rienSi1(a)}x^2+${b}&=0` : `${b}+${rienSi1(a)}x^2&=0`}${sp(7)} \\text{ car }\\dfrac{A(x)}{B(x)}=0 \\text{ si et seulement si } A(x)=0 \\text{ et } B(x)\\neq 0\\\\
+  ${rienSi1(a)}x^2&=-${b}\\\\
+  x^2&=-${k1 * k1}
+ \\end{aligned}$<br>
+ `
+            texteCorr += `Puisque $-${k1 * k1}<0$, cette équation n'a pas de solution, donc l'ensemble des solutions est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.`
           }
 
           break
-        case 2: // (ax+b)(cx+d)+(ax+b)(ex+f)=0
-          texte = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-
-                    ( ${reduireAxPlusB(a, b)})( ${reduireAxPlusB(e, f)})=0$`
-          texteCorr = ` $(${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-
-                    ( ${reduireAxPlusB(a, b)})( ${reduireAxPlusB(e, f)})=0$<br>`
-          if (this.correctionDetaillee) {
-            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
-            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})( ${reduireAxPlusB(c, d)})- (\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(e, f)})=0$<br>`
-            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big(( ${reduireAxPlusB(c, d)})-( ${reduireAxPlusB(e, f)})\\Big)=0$<br>`
+        case 3: // (ax+b)/(cx+d)=e
+          a = randint(-3, 5, 0)
+          b = randint(-9, 9)
+          c = randint(-9, 9, 0)
+          d = randint(-9, 9)
+          e = randint(-9, 9, 0)
+          while (a * d - b * c === 0 || a - e * c === 0) {
+            a = randint(-3, 5)
+            b = randint(-9, 9)
+            c = randint(-9, 9, 0)
+            d = randint(-9, 9)
+            e = randint(-9, 9, 0)
           }
-          if (e > 0)
-            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}${reduireAxPlusB(-e, -f)})=0$<br>`
-          else
-            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}+${reduireAxPlusB(-e, -f)})=0$<br>`
-          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c - e, d - f)})=0$<br>`
-          if (c - e === 0) {
-            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
-            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
-            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
+          choix = choice([true, false])
+          texte = consigne1
+          if (b === 0) {
+            texte += `$\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}=${e}$.`
           } else {
-            texteCorr +=
-              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
-            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
-            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(c - e, d - f)}=0$<br>`
-            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-d + f, c - e)}$<br>
-                   On en déduit :  `
-            if ((-d + f) / (c - e) < -b / a) {
-              valeursSolution = `${fraction(-d + f, c - e).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
-            } else {
-              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-d + f, c - e).texFractionSimplifiee}`
-            }
+            texte += `${choix ? `$\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}=${e}$` : `$\\dfrac{${b}${ecritureAlgebriqueSauf1(a)}x}{${reduireAxPlusB(c, d)}}=${e}$`}.`
           }
-
-          break
-        case 3: // (ax+b)²+(ax+b)(ex+f)=0
-          texte = ` ($${reduireAxPlusB(a, b)})^{2}+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$`
-          texteCorr = ` $(${reduireAxPlusB(a, b)})^{2}+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
-          texteCorr += ` $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(a, b)})+(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
-          if (this.correctionDetaillee) {
-            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
-            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})(${reduireAxPlusB(a, b)})+(\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(e, f)})=0$<br>`
-            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big((${reduireAxPlusB(a, b)})+(${reduireAxPlusB(e, f)})\\Big)=0$<br>`
-          }
-          if (e < 0)
-            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a, b)})${reduireAxPlusB(e, f)})=0$<br>`
-          else
-            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a, b)})+${reduireAxPlusB(e, f)})=0$<br>`
-          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a + e, b + f)})=0$<br>`
-          if (a + e === 0) {
-            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
-            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
-            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
+          if (context.isDiaporama) {
+            texteCorr = ''
           } else {
-            texteCorr +=
-              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
-            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
-            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(a + e, b + f)}=0$<br>`
-            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-b - f, a + e)}$<br>
-               On en déduit :  `
-            if ((-b - f) / (a + e) < -b / a) {
-              valeursSolution = `${fraction(-b - f, a + e).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
-            } else {
-              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-b - f, a + e).texFractionSimplifiee}`
-            }
-          }
-
-          break
-        case 4: // (ax+b)(cx+d)-(ax+b)²=0
-          texte = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})^{2}=0$`
-          texteCorr = ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})^{2}=0$<br>`
-          texteCorr += ` ($${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})( ${reduireAxPlusB(a, b)})=0$<br>`
-          if (this.correctionDetaillee) {
-            texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
-            texteCorr += ` $\\phantom{\\iff} (\\underline{${reduireAxPlusB(a, b)}})( ${reduireAxPlusB(c, d)})-(\\underline{${reduireAxPlusB(a, b)})}( ${reduireAxPlusB(a, b)})=0$<br>`
-            texteCorr += ` $\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big(( ${reduireAxPlusB(c, d)})-( ${reduireAxPlusB(a, b)})\\Big)=0$<br>`
-          }
-          if (a > 0)
-            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}${reduireAxPlusB(-a, -b)}))=0$<br>`
-          else
-            texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c, d)}+${reduireAxPlusB(-a, -b)}))=0$<br>`
-          texteCorr += ` $\\iff (${reduireAxPlusB(a, b)})( ${reduireAxPlusB(c - a, d - b)})=0$<br>`
-          if (c - a === 0) {
-            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$<br>`
-            texteCorr += `$x=${texFractionSigne(-b, a)}$<br>`
-            texteCorr += `L'équation admet une unique solution : $S=\\left\\{${texFractionReduite(-b, a)}\\right\\}$.`
-          } else {
-            texteCorr +=
-              'On reconnaît une équation produit-nul, donc on applique la propriété :<br>'
-            texteCorr += `${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
-            texteCorr += ` $\\iff ${reduireAxPlusB(a, b)}=0\\quad$ ou bien $\\quad ${reduireAxPlusB(c - a, d - b)}=0$<br>`
-            texteCorr += `$\\iff x=${texFractionSigne(-b, a)}\\quad$ ou $\\quad x=${texFractionSigne(-d + b, c - a)}$<br>
-           On en déduit :  `
-            if ((-d + b) / (c - b) < -b / a) {
-              valeursSolution = `${fraction(-d + b, c - a).texFractionSimplifiee};${fraction(-b, a).texFractionSimplifiee}`
-            } else {
-              valeursSolution = `${fraction(-b, a).texFractionSimplifiee};${fraction(-d + b, c - a).texFractionSimplifiee}`
-            }
-          }
-
-          break
-
-        case 5: // (ax+b)(cx+d)=(ax+b)(ex+f)
-        default:
-          {
-            texte = `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})$`
             texteCorr =
-              'Deux nombres sont égaux si et seulement si leur différence est nulle.<br>'
-            texteCorr += `$\\phantom{\\iff}(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})$<br>`
-            texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})-(${reduireAxPlusB(a, b)})(${reduireAxPlusB(e, f)})=0$<br>`
-            if (this.correctionDetaillee) {
-              texteCorr += ` On observe que $(${reduireAxPlusB(a, b)})$ est un facteur commun dans les deux termes :<br>`
-              texteCorr += `$\\phantom{\\iff}(\\underline{${reduireAxPlusB(a, b)}})(${reduireAxPlusB(c, d)})-(\\underline{${reduireAxPlusB(a, b)}})(${reduireAxPlusB(e, f)})=0$<br>`
-              texteCorr += `$\\iff (\\underline{${reduireAxPlusB(a, b)}})\\Big((${reduireAxPlusB(c, d)})-(${reduireAxPlusB(e, f)})\\Big)=0$<br>`
-            }
-            if (e < 0) {
-              texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)}+${reduireAxPlusB(-e, -f)})=0$<br>`
+              "Déterminer les valeurs interdites revient à déterminer les valeurs qui annulent le dénominateur du quotient, puisque la division par $0$ n'existe pas.<br>"
+          }
+          valInterdite = new FractionEtendue(-d, c)
+          ensValeursInterdites = `\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}`
+          valSolution = new FractionEtendue(e * d - b, a - e * c)
+          texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${valInterdite.texFractionSimplifiee}$. <br>
+          Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$. <br>
+          Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$,<br>`
+          if (b === 0) {
+            texteCorr += `
+            $\\begin{aligned}
+            \\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}&=${e}\\\\
+            ${reduireAxPlusB(a, b)}&=${e}\\times(${reduireAxPlusB(c, d)})${sp(7)} \\text{ car les produits en croix sont égaux.}\\\\
+            ${reduireAxPlusB(a, b)}&= ${reduireAxPlusB(e * c, e * d)}\\\\
+           ${rienSi1(a - e * c)}x&= ${e * d - b} ${a - e * c === 1 ? '' : '\\\\'}
+          ${a - e * c === 1 ? '' : `x&=${valSolution.texFractionSimplifiee}`}
+           \\end{aligned}$<br>`
+          } else {
+            texteCorr += `
+            $\\begin{aligned}
+           ${choix ? `\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}&=${e}` : `\\dfrac{${b}${ecritureAlgebriqueSauf1(a)}x}{${reduireAxPlusB(c, d)}}&=${e}`}\\\\
+            ${choix ? `${reduireAxPlusB(a, b)}&=${e}\\times(${reduireAxPlusB(c, d)})` : `${b}${ecritureAlgebriqueSauf1(a)}x&=${e}\\times(${reduireAxPlusB(c, d)})`}${sp(7)}\\text{ car les produits en croix sont égaux.}\\\\
+            ${reduireAxPlusB(a, b)}&= ${reduireAxPlusB(e * c, e * d)}\\\\
+            ${rienSi1(a - e * c)}x&= ${e * d - b}\\\\
+           x&=${valSolution.texFractionSimplifiee}
+           \\end{aligned}$<br>`
+          }
+
+          if (-d * (a - e * c) - c * (e * d - b) === 0) {
+            ensSolutions = '\\emptyset'
+            texteCorr += `$${valSolution.texFractionSimplifiee}$ est  une valeur interdite, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.`
+          } else {
+            ensSolutions = `\\left\\{${valSolution.texFractionSimplifiee}\\right\\}`
+            texteCorr += `$${valSolution.texFractionSimplifiee}$ n'est pas une valeur interdite, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.`
+          }
+          break
+
+        case 4: // e/(ax+b)=f/(cx+d)
+        default:
+          a = randint(-3, 9, 0)
+          b = randint(-9, 9)
+          c = randint(-2, 9, [0, a])
+          d = randint(-9, 9)
+          e = randint(-9, 9, 0)
+          f = randint(-9, 9, 0)
+          while (
+            c * (f * b - a * d) === -d * (e * c - f * a) ||
+            a * (f * b - a * d) === -b * (e * c - f * a)
+          ) {
+            // pas de VI sol enfin normalement :-)
+            a = randint(-3, 9, 0)
+            b = randint(-9, 9)
+            c = randint(-2, 9, [0, a])
+            d = randint(-9, 9)
+            e = randint(-9, 9, 0)
+            f = randint(-9, 9, 0)
+          }
+
+          if (e * c - f * a === 0) {
+            e = e + 10
+          }
+          choix = choice([true, false])
+          texte = consigne1
+          texte += `$\\dfrac{${e}}{${reduireAxPlusB(a, b)}}=\\dfrac{${f}}{${reduireAxPlusB(c, d)}}$.`
+          if (context.isDiaporama) {
+            texteCorr = ''
+          } else {
+            texteCorr =
+              "Déterminer les valeurs interdites revient à déterminer les valeurs qui annulent les dénominateurs des quotients, puisque la division par $0$ n'existe pas.<br>"
+          }
+          valInterdite = new FractionEtendue(-d, c)
+          valInterdite2 = new FractionEtendue(-b, a)
+          valSolution = new FractionEtendue(-e * d + f * b, e * c - f * a)
+          if (-a * d + b * c === 0) {
+            ensValeursInterdites = `\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}`
+          } else {
+            // on ordonne les valeurs interdites par ordre croissant
+            if (-d / c < -b / a) {
+              ensValeursInterdites = `\\left\\{${valInterdite.texFractionSimplifiee}\\,;\\,${valInterdite2.texFractionSimplifiee} \\right\\}`
             } else {
-              texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)}${reduireAxPlusB(-e, -f)})=0$<br>`
+              ensValeursInterdites = `\\left\\{${valInterdite2.texFractionSimplifiee} \\, ; \\,${valInterdite.texFractionSimplifiee}\\right\\}`
             }
-            texteCorr += `$\\iff (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c - e, d - f)})=0$<br>`
-            texteCorr += `On reconnaît une équation produit-nul, donc on applique la propriété :<br>
-        ${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.', bleuMathalea)}<br>`
-            texteCorr += `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c - e, d - f)})=0$<br>`
-            texteCorr += `$\\iff ${reduireAxPlusB(a, b)}=0$ ou $${reduireAxPlusB(c - e, d - f)}=0$<br>`
-            if (this.correctionDetaillee) {
-              // on ajoute les étapes de résolution si la correction détaillée est cochée.
-              texteCorr += `$\\iff ${reduireAxPlusB(a, 0)}=${-b}$ ou $ ${reduireAxPlusB(c - e, 0)}=${-d + f}$<br>`
-            }
-            const f1 = fraction(-b, a)
-            const f2 = fraction(-d + f, c - e)
-            texteCorr += `$\\iff x=${f1.texFraction}$ ou $ x=${f2.texFraction}$<br>On en déduit :  `
-            if (-b / a > (-d + f) / (c - e)) {
-              valeursSolution = `${f2.texFractionSimplifiee};${f1.texFractionSimplifiee}`
-            } else if (-b / a < (-d + f) / (c - e)) {
-              valeursSolution = `${f1.texFractionSimplifiee};${f2.texFractionSimplifiee}`
-            } else {
-              valeursSolution = `${f1.texFractionSimplifiee}`
-            }
+          }
+          texteCorr += `Or $${reduireAxPlusB(a, b)}=0$ si et seulement si  $x = ${valInterdite2.texFractionSimplifiee}$ et $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x = ${valInterdite.texFractionSimplifiee} $. <br>Donc l'ensemble des valeurs interdites est $${miseEnEvidence(ensValeursInterdites)}$. <br>`
+
+          texteCorr += `Pour tout $x\\in \\mathbb{R}\\smallsetminus ${ensValeursInterdites}$,<br>
+ $\\begin{aligned}
+ \\dfrac{${e}}{${reduireAxPlusB(a, b)}}&=\\dfrac{${f}}{${reduireAxPlusB(c, d)}}\\\\
+ ${f}\\times (${reduireAxPlusB(a, b)})&=${e}\\times (${reduireAxPlusB(c, d)})${sp(7)} \\text{ car les produits en croix sont égaux.}\\\\
+ ${reduireAxPlusB(f * a, f * b)}&=${reduireAxPlusB(e * c, e * d)}\\\\
+${rienSi1(-e * c + f * a)}x&= ${e * d - f * b}${-e * c + f * a === 1 ? '' : '\\\\'}
+          ${-e * c + f * a === 1 ? '' : `x&=${valSolution.texFractionSimplifiee}`}
+\\end{aligned}$<br>`
+
+          if (-b * (e * c - f * a) === a * (-e * d + f * b)) {
+            ensSolutions = '\\emptyset'
+            texteCorr += ` $${valSolution.texFractionSimplifiee}$ est  une valeur interdite, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.`
+          } else {
+            ensSolutions = `\\left\\{${valSolution.texFractionSimplifiee}\\right\\}`
+            texteCorr += ` $${valSolution.texFractionSimplifiee}$ n'est pas une valeur interdite, donc l'ensemble des solutions de cette équation est  $${miseEnEvidence(`\\mathscr{S}=${ensSolutions}`)}$.`
           }
           break
       }
-      //  const solutions = valeursSolution?.split(';')
-      // texteCorr += `$S=\\left\\{${valeursSolution}\\right\\}$`
-      const solutions = valeursSolution?.split(';')
-      texteCorr += `$S=\\left\\{${solutions?.map((sol) => miseEnEvidence(sol)).join('~;~')}\\right\\}$.`
-      if (this.interactif) {
-        texte +=
-          '<br>$S=$' +
-          ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble)
-      }
-      handleAnswers(this, i, {
-        reponse: {
-          value: `\\{${valeursSolution}\\}`,
-          options: { ensembleDeNombres: true },
+      texte += '<br>'
+      texte += `${addMultiMathfield(this, i, {
+        dataTemplate:
+          'Ensemble des valeurs interdites : %{champ1}\nEnsemble des solutions : %{champ2}',
+        dataOptions: {
+          champ1: {
+            keyboard: KeyboardType.clavierEnsemble,
+          },
+          champ2: {
+            keyboard: KeyboardType.clavierEnsemble,
+          },
         },
-      })
-      if (this.questionJamaisPosee(a, b, c, d, e, f)) {
+      })}`
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: {
+            value: ensValeursInterdites,
+            options: { ensembleDeNombres: true },
+          },
+          champ2: {
+            value: ensSolutions,
+            options: { ensembleDeNombres: true },
+          },
+        },
+        { formatInteractif: 'multi-mathfield' },
+      )
+      if (this.questionJamaisPosee(i, a, b, c, d)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

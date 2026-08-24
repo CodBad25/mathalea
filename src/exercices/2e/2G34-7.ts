@@ -1,24 +1,25 @@
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
-  ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { ppcm } from '../../lib/outils/primalite'
 export const titre =
-  'Résoudre un système linéaire de deux équations à deux inconnues par substitution'
+  "Déterminer la nature des solutions d'un système linéaire de deux équations à deux inconnues"
 export const interactifReady = true
-export const interactifType = 'mathlive'
-export const dateDePublication = '08/04/2024'
-export const uuid = '521b6'
+export const interactifType = 'liste-deroulante'
+export const dateDePublication = '28/03/2024'
+export const uuid = 'fade2'
 export const refs = {
-  'fr-ch': ['11FA5A-5'],
+  'fr-ch': ['11FA5A-6'],
   'fr-fr': ['2G34-7'],
 }
 // export const dateDeModifImportante = '24/10/2021'
@@ -28,41 +29,58 @@ export const refs = {
  * @author Nathan Scheinmann
  */
 
-export default class systemeEquationsPremDegComp extends Exercice {
+export default class systemeEquationsPremDeg extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
-    this.sup = 1
+    this.sup = 3
     this.correctionDetailleeDisponible = true
     this.besoinFormulaireNumerique = [
       'Type de questions',
-      1,
-      '1 : Niveau 1\n2 : Niveau 2\n3 : Mélange',
+      3,
+      '1 : Niveau 1\n2 : Niveau 2\n4 : Mélange',
     ]
   }
 
   nouvelleVersion() {
     if (this.nbQuestions === 1) {
-      this.consigne = 'Résoudre le système suivant par substitution :'
+      this.consigne =
+        'Le système suivant a-t-il une, aucune ou une infinité de solutions ?'
     } else {
-      this.consigne = 'Résoudre les systèmes suivants par substitution :'
+      this.consigne =
+        'Les systèmes suivants ont-ils une, aucune ou une infinité de solutions ?'
     }
 
-    let typeQuestionsDisponibles: ('lv1' | 'lv2')[]
+    let typeQuestionsDisponibles: (
+      | 'lv1Uni'
+      | 'lv1Auc'
+      | 'lv1Inf'
+      | 'lv2Uni'
+      | 'lv2Auc'
+      | 'lv2Inf'
+    )[]
     if (this.sup === 1) {
-      typeQuestionsDisponibles = ['lv1']
+      typeQuestionsDisponibles = ['lv1Uni', 'lv1Auc', 'lv1Inf']
     } else if (this.sup === 2) {
-      typeQuestionsDisponibles = ['lv2']
+      typeQuestionsDisponibles = ['lv2Uni', 'lv2Auc', 'lv2Inf']
     } else {
-      typeQuestionsDisponibles = ['lv1', 'lv2']
+      typeQuestionsDisponibles = [
+        'lv1Uni',
+        'lv1Auc',
+        'lv1Inf',
+        'lv2Uni',
+        'lv2Auc',
+        'lv2Inf',
+      ]
     }
+
     const listeTypeQuestions = combinaisonListes(
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       this.comment =
-        'Dans cet exercice, un système est donné à résoudre. Les solutions sont entières comprises entre -10 et 10.<br>Le niveau 1 correspond à une substitution sans distributivité;<br>Le niveau 2 à une substitution avec distributivité.'
+        'Dans cet exercice, un système est donné à résoudre. Les solutions sont entières comprises entre -10 et 10.<br>Le niveau 1 correspond à des inconnues seulement dans les membres de gauche;<br>Le niveau 2 à des inconnues dans les deux membres, mais ordonnées;<br>Le niveau 3 à des inconnues dans le désordre dans les deux membres.'
       let texte = ''
       let texteCorr = ''
       const solX = randint(-10, 10)
@@ -86,6 +104,8 @@ export default class systemeEquationsPremDegComp extends Exercice {
           return x + vect2[i] * coeff
         })
       }
+      // error http://localhost:5173/alea/?uuid=5179b&n=3&d=10&s=4&alea=u0c8&cd=1
+      // http://localhost:5173/alea/?uuid=5179b&n=1&d=10&s=4&alea=PAwM&cd=1
       const eqEquiv = function (vect1: Array<number>, niveau: string) {
         let vectEquiv = vect1
         vectEquiv = multCoeff(vectEquiv, randint(-6, 6, [0]))
@@ -96,6 +116,7 @@ export default class systemeEquationsPremDegComp extends Exercice {
         }
         return vectEquiv
       }
+
       const eqToLatex = function (
         vect: Array<number>,
         nomVal: Array<string>,
@@ -156,281 +177,216 @@ export default class systemeEquationsPremDegComp extends Exercice {
           `\\begin{cases}\\begin{aligned}${eq1}\\\\${eq2}\\end{aligned}\\end{cases}`
         return expr
       }
-      const checkCoeff = function (eq: Array<number>, bound: number) {
-        return eq.every((item) => Math.abs(item) < bound)
-      }
-      const checkArray = function (arr: number[]): [boolean, number, string] {
-        const positionsToCheck = [0, 1, 3, 4]
-        let vari = ''
-
-        for (const pos of positionsToCheck) {
-          if (arr[pos] === 1 || arr[pos] === -1) {
-            if (pos === 0 || pos === 3) {
-              vari = 'x'
-            } else {
-              vari = 'y'
-            }
-            return [true, pos, vari]
-          }
-        }
-
-        return [false, 100, 'z']
-      }
       let eqInt1: Array<number> = []
       let eqInt2: Array<number> = []
       let eqSimpl1: Array<number> = []
       let eqSimpl2: Array<number> = []
-      const valComp = choice([0, 1])
-      do {
-        eqInt1 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
-        eqInt2 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
-        eqInt1 = addCombLin(
-          eqInt1,
-          [vectX, vectY][(valComp + 1) % 2],
-          -eqInt1[(valComp + 1) % 2],
-        )
-        eqInt2 = addCombLin(
-          eqInt2,
-          [vectX, vectY][(valComp + 1) % 2],
-          -eqInt2[(valComp + 1) % 2],
-        )
-        eqSimpl1 = addCombLin(eqInt1, vectX, -eqInt1[3])
-        eqSimpl1 = addCombLin(eqSimpl1, vectY, -eqInt1[4])
-        eqSimpl1 = addCombLin(eqSimpl1, vectConstant, -eqInt1[2])
-        eqSimpl2 = addCombLin(eqInt2, vectX, -eqInt2[3])
-        eqSimpl2 = addCombLin(eqSimpl2, vectY, -eqInt2[4])
-        eqSimpl2 = addCombLin(eqSimpl2, vectConstant, -eqInt2[2])
-      } while (
-        eqSimpl1[0] * eqSimpl2[1] - eqSimpl1[1] * eqSimpl2[0] === 0 ||
-        !(eqInt1[valComp] === 1) ||
-        !(eqInt2[valComp] === 1) ||
-        !checkCoeff(eqInt1, 20) ||
-        !checkCoeff(eqInt2, 20)
-      )
-      // a function that checks that all the coeff are smaller than 10
-      eqInt1 = multCoeff(eqInt1, randint(-4, 4, [-1, 0, 1]))
-      const shuffleEq = function (eq: Array<number>) {
-        const nRandomChoice = valComp
-        let eqTemp = eq
-        if (nRandomChoice === 0) {
-          eqTemp = addCombLin(eqTemp, vectX, -eqTemp[0])
-          eqTemp = addCombLin(eqTemp, vectY, -eqTemp[4])
-          return eqTemp
+      if (listeTypeQuestions[i].substring(3) === 'Uni') {
+        do {
+          switch (listeTypeQuestions[i].substring(0, 3)) {
+            case 'lv1':
+              eqInt1 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
+              eqInt2 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
+              break
+            case 'lv2':
+              eqInt1 = addCombLin(eqEquiv(eq1, 'lv2'), eqEquiv(eq2, 'lv2'), 1)
+              eqInt2 = addCombLin(eqEquiv(eq1, 'lv2'), eqEquiv(eq2, 'lv2'), 1)
+              break
+          }
+          eqSimpl1 = addCombLin(eqInt1, vectX, -eqInt1[3])
+          eqSimpl1 = addCombLin(eqSimpl1, vectY, -eqInt1[4])
+          eqSimpl1 = addCombLin(eqSimpl1, vectConstant, -eqInt1[2])
+          eqSimpl2 = addCombLin(eqInt2, vectX, -eqInt2[3])
+          eqSimpl2 = addCombLin(eqSimpl2, vectY, -eqInt2[4])
+          eqSimpl2 = addCombLin(eqSimpl2, vectConstant, -eqInt2[2])
+        } while (eqSimpl1[0] * eqSimpl2[1] - eqSimpl1[1] * eqSimpl2[0] === 0)
+      } else {
+        do {
+          switch (listeTypeQuestions[i].substring(0, 3)) {
+            case 'lv1':
+              eqInt1 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
+              eqInt2 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
+              break
+            case 'lv2':
+              eqInt1 = addCombLin(eqEquiv(eq1, 'lv2'), eqEquiv(eq2, 'lv2'), 1)
+              eqInt2 = addCombLin(eqEquiv(eq1, 'lv2'), eqEquiv(eq2, 'lv2'), 1)
+              break
+          }
+          // si ça contient Auc ou lv1
+          if (
+            listeTypeQuestions[i].substring(3) === 'Auc' &&
+            !(listeTypeQuestions[i].substring(0, 3) === 'lv1')
+          ) {
+            eqInt1 = addCombLin(
+              eqInt1,
+              choice([
+                [0, 0, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 1],
+              ]),
+              randint(-10, 10, [0]),
+            )
+          } else if (
+            listeTypeQuestions[i].substring(3) === 'Auc' &&
+            listeTypeQuestions[i].substring(0, 3) === 'lv1'
+          ) {
+            eqInt1 = addCombLin(
+              eqInt1,
+              choice([[0, 0, 0, 0, 0, 1]]),
+              randint(-10, 10, [0]),
+            )
+          }
+          eqSimpl1 = addCombLin(eqInt1, vectX, -eqInt1[3])
+          eqSimpl1 = addCombLin(eqSimpl1, vectY, -eqInt1[4])
+          eqSimpl1 = addCombLin(eqSimpl1, vectConstant, -eqInt1[2])
+          eqSimpl2 = addCombLin(eqInt2, vectX, -eqInt2[3])
+          eqSimpl2 = addCombLin(eqSimpl2, vectY, -eqInt2[4])
+          eqSimpl2 = addCombLin(eqSimpl2, vectConstant, -eqInt2[2])
+        } while (!(eqSimpl1[0] * eqSimpl2[1] - eqSimpl1[1] * eqSimpl2[0] === 0))
+      }
+      const eqInt1Droite = eqInt1.slice(0, 3)
+      const eqInt1Gauche = eqInt1.slice(3)
+      const eqInt2Droite = eqInt2.slice(0, 3)
+      const eqInt2Gauche = eqInt2.slice(3)
+      const listeVar = ['x', 'y', '', 'x', 'y', '']
+      const nomVal11 = ['x', 'y', '']
+      const nomVal12 = ['x', 'y', '']
+      const nomVal21 = ['x', 'y', '']
+      const nomVal22 = ['x', 'y', '']
+      const eqFinale1 = eqInt1Droite.concat(eqInt1Gauche)
+      const eqFinale2 = eqInt2Droite.concat(eqInt2Gauche)
+      const nomVal1 = nomVal12.concat(nomVal11)
+      const nomVal2 = nomVal22.concat(nomVal21)
+      const mX = ppcm(Math.abs(eqSimpl1[0]), Math.abs(eqSimpl2[0]))
+      const mY = ppcm(Math.abs(eqSimpl1[1]), Math.abs(eqSimpl2[1]))
+      let varElim = ''
+      let coeffElim = 0
+      let coeffEq = []
+      const eqSimpl1Abs = [Math.abs(eqSimpl1[0]), Math.abs(eqSimpl1[1])]
+      const eqSimpl2Abs = [Math.abs(eqSimpl2[0]), Math.abs(eqSimpl2[1])]
+      if (
+        (mX === eqSimpl1Abs[0] || mX === eqSimpl2Abs[0]) &&
+        (mY === eqSimpl1Abs[1] || mY === eqSimpl2Abs[1])
+      ) {
+        if (mY === eqSimpl1Abs[1] && mY === eqSimpl2Abs[1]) {
+          varElim = 'y'
+          coeffElim = mY
+          coeffEq = [eqSimpl1[1], eqSimpl2[1]]
+        } else if (mX === eqSimpl1Abs[0] && mX === eqSimpl2Abs[0]) {
+          varElim = 'x'
+          coeffElim = mX
+          coeffEq = [eqSimpl1[0], eqSimpl2[0]]
+        } else if (Math.abs(mX) <= Math.abs(mY)) {
+          varElim = 'x'
+          coeffElim = mX
+          coeffEq = [eqSimpl1[0], eqSimpl2[0]]
         } else {
-          eqTemp = addCombLin(eqTemp, vectX, -eqTemp[3])
-          eqTemp = addCombLin(eqTemp, vectY, -eqTemp[1])
-          return eqTemp
+          varElim = 'y'
+          coeffElim = mY
+          coeffEq = [eqSimpl1[1], eqSimpl2[1]]
+        }
+      } else if (mX === eqSimpl1Abs[0] || mX === eqSimpl2Abs[0]) {
+        varElim = 'x'
+        coeffElim = mX
+        coeffEq = [eqSimpl1[0], eqSimpl2[0]]
+      } else if (mY === eqSimpl1Abs[1] || mX === eqSimpl2Abs[1]) {
+        varElim = 'y'
+        coeffElim = mY
+        coeffEq = [eqSimpl1[1], eqSimpl2[1]]
+      } else {
+        if (Math.abs(mX) <= Math.abs(mY)) {
+          varElim = 'x'
+          coeffElim = mX
+          coeffEq = [eqSimpl1[0], eqSimpl2[0]]
+        } else {
+          varElim = 'y'
+          coeffElim = mY
+          coeffEq = [eqSimpl1[1], eqSimpl2[1]]
         }
       }
-      switch (listeTypeQuestions[i]) {
-        case 'lv1':
-          break
-        case 'lv2':
-          eqInt1 = shuffleEq(eqInt1)
-          eqInt2 = shuffleEq(eqInt2)
-          break
-      }
-      const tempEq = [eqInt1, eqInt2]
-      const randomChoice = choice([0, 1])
-      eqInt1 = tempEq[randomChoice]
-      eqInt2 = tempEq[(randomChoice + 1) % 2]
-      let eqCan1 = addCombLin(eqInt1, vectX, -eqInt1[0])
-      eqCan1 = addCombLin(eqCan1, vectY, -eqCan1[4])
-      eqCan1 = addCombLin(eqCan1, vectConstant, -eqCan1[2])
-      let eqCan2 = addCombLin(eqInt2, vectX, -eqInt2[0])
-      eqCan2 = addCombLin(eqCan2, vectY, -eqCan2[4])
-      eqCan2 = addCombLin(eqCan2, vectConstant, -eqCan2[2])
-      const listeVar = ['x', 'y', '', 'x', 'y', '']
       texte =
         texte +
-        `\\[${printSystem(eqToLatex(eqInt1, listeVar, true), eqToLatex(eqInt2, listeVar, true))}\\]`
-      const checkEq1 = checkArray(eqInt1)
-      const checkEq2 = checkArray(eqInt2)
-      let varIsol = ''
-      let varPasIsol = ''
-      let eqIsol = ''
-      let eqPasIsol = ''
-      const isoleCoeff = function (eq: Array<number>, posIso: number) {
-        let eqTemp = eq
-        if (eq[posIso] === 1) {
-          if (posIso === 0) {
-            eqTemp = addCombLin(eqTemp, vectY, -eqTemp[1])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[2])
-          } else if (posIso === 1) {
-            eqTemp = addCombLin(eqTemp, vectX, -eqTemp[0])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[2])
-          } else if (posIso === 3) {
-            eqTemp = addCombLin(eqTemp, vectY, -eqTemp[4])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[5])
-          } else if (posIso === 4) {
-            eqTemp = addCombLin(eqTemp, vectX, -eqTemp[3])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[5])
-          }
-        } else if (eq[posIso] === -1) {
-          if (posIso === 0) {
-            eqTemp = addCombLin(eqTemp, vectY, -eqTemp[4])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[5])
-            eqTemp = addCombLin(eqTemp, vectX, -eqTemp[0])
-          } else if (posIso === 1) {
-            eqTemp = addCombLin(eqTemp, vectX, -eqTemp[3])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[5])
-            eqTemp = addCombLin(eqTemp, vectY, -eqTemp[1])
-          } else if (posIso === 3) {
-            eqTemp = addCombLin(eqTemp, vectY, -eqTemp[1])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[2])
-            eqTemp = addCombLin(eqTemp, vectX, -eqTemp[3])
-          } else if (posIso === 4) {
-            eqTemp = addCombLin(eqTemp, vectX, -eqTemp[0])
-            eqTemp = addCombLin(eqTemp, vectConstant, -eqTemp[2])
-            eqTemp = addCombLin(eqTemp, vectY, -eqTemp[4])
-          }
-        } else {
-          console.error('Erreur dans la génération des équations')
-        }
-        return eqTemp
-      }
-      let eqPasIsolCoeff: number[] = []
-      let eqIsolCoeff: number[] = []
-      let coeffSub: number = 0
-      let varSub: string = ''
-      const listeVarSub: string[] = { ...listeVar }
-      let coeffSubPos: number = 0
-      const timesIfNotUn = function (valeur: number) {
-        if (valeur === 1 || valeur === -1) {
-          return ''
-        } else {
-          return '\\times'
-        }
-      }
-      if (checkEq1[0]) {
-        varIsol = checkEq1[2]
-        varPasIsol = varIsol === 'y' ? 'x' : 'y'
-        eqIsol = 'première'
-        eqPasIsol = 'deuxième'
-        eqPasIsolCoeff = eqInt2
-        eqIsolCoeff = isoleCoeff(eqInt1, checkEq1[1])
-        if (varIsol === 'y') {
-          coeffSubPos = eqInt2[1] !== 0 ? 1 : 4
-        } else {
-          coeffSubPos = eqInt2[0] !== 0 ? 0 : 3
-        }
-        coeffSub = eqInt2[coeffSubPos]
-      } else if (checkEq2[0]) {
-        varIsol = checkEq2[2]
-        varPasIsol = varIsol === 'y' ? 'x' : 'y'
-        eqIsol = 'deuxième'
-        eqPasIsol = 'première'
-        eqPasIsolCoeff = eqInt1
-        eqIsolCoeff = isoleCoeff(eqInt2, checkEq2[1])
-        if (varIsol === 'y') {
-          coeffSubPos = eqInt1[1] !== 0 ? 1 : 4
-        } else {
-          coeffSubPos = eqInt1[0] !== 0 ? 0 : 3
-        }
-        coeffSub = eqInt1[coeffSubPos]
-      } else {
-        console.error('Erreur dans la génération des équations')
-      }
-      const valIsol = varIsol === 'y' ? solY : solX
-      const valPasIsol = varPasIsol === 'y' ? solY : solX
-      const [left, right] = eqToLatex(eqIsolCoeff, listeVar, false).split('=')
-      const longestSideExpr = left.length > right.length ? left : right
-      varSub = timesIfNotUn(coeffSub) + `(${longestSideExpr})`
-      listeVarSub[coeffSubPos] = varSub
-      let eqSubReduit: number[] = []
-      let eqSubReduitInt: number[] = []
-      eqSubReduitInt = multCoeff(eqIsolCoeff, coeffSub)
-      eqSubReduit[0] = 0
-      eqSubReduit[1] = 0
-      eqSubReduit[2] = 0
-      if (coeffSubPos < 3) {
-        eqSubReduit = addCombLin(eqPasIsolCoeff, eqSubReduitInt, -1)
-        eqSubReduit = addCombLin(eqSubReduit, vectX, eqSubReduitInt[3])
-        eqSubReduit = addCombLin(eqSubReduit, vectY, eqSubReduitInt[4])
-        eqSubReduit = addCombLin(eqSubReduit, vectConstant, eqSubReduitInt[5])
-      } else {
-        eqSubReduit = addCombLin(eqPasIsolCoeff, eqSubReduitInt, 1)
-        eqSubReduit = addCombLin(eqSubReduit, vectX, -eqSubReduitInt[0])
-        eqSubReduit = addCombLin(eqSubReduit, vectY, -eqSubReduitInt[1])
-      }
-
-      switch (listeTypeQuestions[i]) {
-        case 'lv1':
-          break
+        ` $${printSystem(eqToLatex(eqFinale1, nomVal1, true), eqToLatex(eqFinale2, nomVal2, true))}$`
+      switch (listeTypeQuestions[i].substring(0, 3)) {
         case 'lv2':
           texteCorr =
             texteCorr +
-            `On isole la variable $${varIsol}$ dans la ${eqIsol} équation. On a le système équivalent :`
-          if (eqIsol === 'première') {
-            texteCorr =
-              texteCorr +
-              `\\[${printSystem(eqToLatex(eqIsolCoeff, listeVar, true), eqToLatex(eqPasIsolCoeff, listeVar, true))}\\]`
-          } else {
-            texteCorr =
-              texteCorr +
-              `\\[${printSystem(eqToLatex(eqPasIsolCoeff, listeVar, true), eqToLatex(eqIsolCoeff, listeVar, true))}\\]`
-          }
+            'On commence par réunir les inconnues dans les membres de gauche et les termes constants dans les membres de droite.<br>'
+          texteCorr =
+            texteCorr +
+            `On obtient alors le système équivalent suivant : \\[${printSystem(eqToLatex(eqSimpl1, listeVar, true), eqToLatex(eqSimpl2, listeVar, true))}\\]`
           break
       }
-      texteCorr =
-        texteCorr +
-        `On substitue la variable $${varIsol}$ dans la ${eqPasIsol} équation. On a le système équivalent :`
-      if (eqIsol === 'première') {
+      if (this.correctionDetaillee) {
         texteCorr =
           texteCorr +
-          `\\[${printSystem(eqToLatex(eqIsolCoeff, listeVar, true), eqToLatex(eqPasIsolCoeff, listeVarSub, true))}\\]`
-      } else {
-        texteCorr =
-          texteCorr +
-          `\\[${printSystem(eqToLatex(eqPasIsolCoeff, listeVarSub, true), eqToLatex(eqIsolCoeff, listeVar, true))}\\]`
-      }
-      texteCorr = texteCorr + `On réduit la ${eqPasIsol} équation :`
-      if (eqIsol === 'première') {
-        texteCorr =
-          texteCorr +
-          `\\[${printSystem(eqToLatex(eqIsolCoeff, listeVar, true), eqToLatex(eqSubReduit, listeVar, true))}\\]`
-      } else {
-        texteCorr =
-          texteCorr +
-          `\\[${printSystem(eqToLatex(eqSubReduit, listeVar, true), eqToLatex(eqIsolCoeff, listeVar, true))}\\]`
-      }
-      texteCorr =
-        texteCorr +
-        `On résout la ${eqPasIsol} équation pour obtenir la valeur de $${varPasIsol}=${String(valPasIsol)}$. On substitue dans la ${eqIsol} équation $${varPasIsol}$ par $${String(valPasIsol)}$, on obtient :`
-      if (varPasIsol === 'x') {
-        if (eqIsolCoeff[3] !== 0) {
-          listeVar[3] = `${timesIfNotUn(eqIsolCoeff[3])} ${ecritureParentheseSiNegatif(solX)}`
+          'On commence à résoudre ce système en utilisant la méthode de combinaison linéaire. '
+        if (
+          !(
+            coeffElim / coeffEq[0] === 1 ||
+            -coeffElim / coeffEq[1] === 1 ||
+            -coeffEq[0] === coeffEq[1]
+          )
+        ) {
+          texteCorr =
+            texteCorr +
+            `On multiplie la première équation par $${texNombre(coeffElim / coeffEq[0], 0)}$ et la deuxième par $${texNombre(-coeffElim / coeffEq[1], 0)}$ pour obtenir des coefficients opposé devant $${varElim}$.<br>`
+          texteCorr =
+            texteCorr +
+            `On obtient alors le système équivalent suivant : \\[${printSystem(eqToLatex(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), listeVar, true), eqToLatex(multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), listeVar, true))}\\]`
+        } else if (
+          coeffElim / coeffEq[0] === 1 &&
+          !(-coeffElim / coeffEq[1] === 1)
+        ) {
+          texteCorr =
+            texteCorr +
+            `On multiplie la deuxième équation par $${texNombre(-coeffElim / coeffEq[1], 0)}$ pour obtenir des coefficients opposé devant $${varElim}$.<br>`
+          texteCorr =
+            texteCorr +
+            `On obtient alors le système équivalent suivant : \\[${printSystem(eqToLatex(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), listeVar, true), eqToLatex(multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), listeVar, true))}\\]`
+        } else if (
+          !(coeffElim / coeffEq[0] === 1) &&
+          -coeffElim / coeffEq[1] === 1
+        ) {
+          texteCorr =
+            texteCorr +
+            `On multiplie la première équation par $${texNombre(coeffElim / coeffEq[0], 0)}$ pour obtenir des coefficients opposé devant $${varElim}$.<br>`
+          texteCorr =
+            texteCorr +
+            `On obtient alors le système équivalent suivant : \\[${printSystem(eqToLatex(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), listeVar, true), eqToLatex(multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), listeVar, true))}\\]`
         } else {
-          listeVar[0] = `${timesIfNotUn(eqIsolCoeff[0])} ${ecritureParentheseSiNegatif(solX)}`
+          texteCorr =
+            texteCorr +
+            `Les coefficients devant $${varElim}$ sont déjà opposés. `
         }
-      } else {
-        if (eqIsolCoeff[4] !== 0) {
-          listeVar[4] = `${timesIfNotUn(eqIsolCoeff[4])} ${ecritureParentheseSiNegatif(solY)}`
-        } else {
-          listeVar[1] = `${timesIfNotUn(eqIsolCoeff[1])} ${ecritureParentheseSiNegatif(solY)}`
-        }
+        texteCorr =
+          texteCorr +
+          `On additionne les deux equations pour élimer l'inconnue $${varElim}$ dans la deuxième équation. `
+        texteCorr =
+          texteCorr +
+          `On obtient alors le système équivalent suivant : \\[${printSystem(eqToLatex(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), listeVar, true), eqToLatex(addCombLin(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), 1), listeVar, true))}\\]`
       }
-      texteCorr = texteCorr + `\\[${eqToLatex(eqIsolCoeff, listeVar, false)}\\]`
-      texteCorr =
-        texteCorr + `On réduit pour obtenir $${varIsol}=${String(valIsol)}$.`
+      const choix = [
+        { label: 'Choisir une des réponses suivantes :', value: '' },
+        { label: 'admet une unique solution', value: 'Uni' },
+        { label: "n'admet pas de solution", value: 'Auc' },
+        { label: 'admet une infinité de solutions', value: 'Inf' },
+      ]
+      const rep = listeTypeQuestions[i].substring(3)
+
       texteCorr =
         texteCorr +
-        ` La solution du système est $${miseEnEvidence(`S=\\{(${texNombre(solX, 0)};${texNombre(solY, 1)})\\}`)}$.`
+        `Ainsi, le système ${texteEnCouleurEtGras(`${choix.find((el) => el.value === rep)?.label ?? ''}`)}.`
       if (this.interactif) {
         texte +=
-          '<br>' + remplisLesBlancs(this, i, 'S=\\{(%{champ1};%{champ2})\\}')
+          '<br>' +
+          "Le système d'équations" +
+          choixDeroulant(this, i, { choices: choix }) +
+          '.'
         handleAnswers(
           this,
           i,
-          {
-            bareme: (listePoints: number[]) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
-            ],
-            champ1: { value: String(solX) },
-            champ2: { value: String(solY) },
-          },
-          { formatInteractif: 'fillInTheBlank' },
+          { reponse: { value: rep, options: { texteSansCasse: true } } },
+          { formatInteractif: 'liste-deroulante' },
         )
       }
       if (this.questionJamaisPosee(i, solX, solY)) {

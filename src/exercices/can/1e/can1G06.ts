@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
@@ -110,7 +111,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -166,7 +167,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
                 mainlevee: false,
                 amplitude: 0.3,
                 scale: 0.5,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -189,7 +190,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
                 mainlevee: false,
                 amplitude: 0.3,
                 scale: 0.5,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -248,7 +249,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -274,7 +275,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -301,7 +302,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -330,7 +331,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -359,7 +360,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -418,7 +419,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -445,7 +446,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -472,7 +473,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -547,7 +548,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -578,7 +579,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -607,7 +608,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -638,7 +639,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -665,7 +666,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )
@@ -696,7 +697,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              center: true,
+              center: !context.isHtml,
             },
             objets,
           )

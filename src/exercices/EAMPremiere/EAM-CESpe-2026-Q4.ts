@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { droite } from '../../lib/2d/droites'
 import {  pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
@@ -50,7 +51,7 @@ private appliquerLesValeurs(
       pixelsParCm: 20,
       scale: 0.45,
       display: 'inline-block' as const,
-      center: true,
+      center: !context.isHtml,
     }
 
     // Fonction locale pour générer un repère et une droite (utilisée pour les 4 propositions)

@@ -11,6 +11,7 @@ import MathaleaCustomElement, {
  * Utilisation:
  * <my-calculator></my-calculator>
  * <my-calculator broken-keys="*,5"></my-calculator>
+ * @author Jean-Claude Lhote
  */
 class CalculatorElement extends MathaleaCustomElement {
   static readonly elementTag = 'my-calculator'
@@ -520,8 +521,7 @@ class CalculatorElement extends MathaleaCustomElement {
 
       return result
     } catch (e: unknown) {
-      const cause = e instanceof Error ? e : new Error(String(e))
-      throw new Error("Erreur d'évaluation", { cause })
+      throw new Error("Erreur d'évaluation", { cause: e })
     }
   }
 

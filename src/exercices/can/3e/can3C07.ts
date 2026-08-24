@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../../lib/2d/segmentsVecteurs'
@@ -65,7 +66,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.5,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

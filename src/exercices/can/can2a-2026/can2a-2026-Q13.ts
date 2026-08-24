@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
@@ -83,7 +84,7 @@ export default class Can2a2026Q13 extends ExerciceCan {
       {
         pixelsParCm: 40,
         scale: 0.8,
-        center: true,
+        center: !context.isHtml,
         xmin: -3,
         ymin: -2,
         xmax: 4,

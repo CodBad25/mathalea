@@ -1,5 +1,5 @@
-import * as ScratchBlocksModule from 'scratch-blocks/dist/vertical'
 import scratchFr from '@scratch2latex/scratch-core/json/scratchFr.json'
+import * as ScratchBlocksModule from 'scratch-blocks/dist/vertical'
 import {
   areArithmeticAstsEquivalent,
   blocklyWorkspaceToArithmeticAst,
@@ -220,7 +220,9 @@ class ScratchToolboxBuilder {
     ].join('')
   }
 
-  private static blockXml(block: ScratchToolboxCategory['blocks'][number]): string {
+  private static blockXml(
+    block: ScratchToolboxCategory['blocks'][number],
+  ): string {
     const opcode = typeof block === 'string' ? block : block.opcode
     const fields =
       typeof block === 'string'
@@ -348,7 +350,9 @@ class ScratchWorkspaceAdapter {
     this.workspace.dispose()
   }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class ScratchEditorElement extends MathaleaCustomElement {
   static readonly elementTag = 'scratch-editor'
   private static readonly verificationCallbacks = new Map<
@@ -918,13 +922,15 @@ function evaluateScratchValueBlock(
     return variables[variable] ?? 0
   }
 
-  const operationByType: Record<string, (left: number, right: number) => number> =
-    {
-      operator_add: (left, right) => left + right,
-      operator_subtract: (left, right) => left - right,
-      operator_multiply: (left, right) => left * right,
-      operator_divide: (left, right) => left / right,
-    }
+  const operationByType: Record<
+    string,
+    (left: number, right: number) => number
+  > = {
+    operator_add: (left, right) => left + right,
+    operator_subtract: (left, right) => left - right,
+    operator_multiply: (left, right) => left * right,
+    operator_divide: (left, right) => left / right,
+  }
   const operation = type == null ? undefined : operationByType[type]
   if (operation != null) {
     const leftBlock = readScratchValueBlock(block, 'NUM1')

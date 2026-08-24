@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
@@ -70,7 +71,7 @@ export default class AutoQ8FMt2026 extends ExerciceQcmA {
         ymax: yMax + 0.05,
         pixelsParCm: 25,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       courbe(f, { repere: r, color: 'red', epaisseur: 2 }),

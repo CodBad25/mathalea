@@ -30,7 +30,7 @@ import Question7 from '../can2a-2025C/can2a-2025C-Q7'
 import Question8 from '../can2a-2025C/can2a-2025C-Q8'
 import Question9 from '../can2a-2025C/can2a-2025C-Q9'
 
-export const titre = 'CAN Seconde 2025 - AEFE Champions'
+export const titre = 'S’entraîner avec le sujet CAN Seconde 2025 - AEFE Champions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '005bb'

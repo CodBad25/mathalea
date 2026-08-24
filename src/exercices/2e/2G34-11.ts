@@ -1,61 +1,48 @@
-import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { Droite, droite, droiteAvecNomLatex } from '../../lib/2d/droites'
-import { PointAbstrait } from '../../lib/2d/PointAbstrait'
-import { repere } from '../../lib/2d/reperes'
-import { texteParPosition } from '../../lib/2d/textes'
-import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { droite } from '../../lib/2d/droites'
+import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import {
+  pointIntersectionDD,
+  pointSurDroite,
+} from '../../lib/2d/utilitairesPoint'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { choice } from '../../lib/outils/arrayOutils'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  rienSi1,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { eqToLatex, printSystem } from '../../lib/outils/systemeEquations'
+import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-
 export const titre =
-  "Déterminer le point d'intersection de deux droites données graphiquement"
+  "Déterminer le point d'intersection de deux droites données par des points"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '20/04/2024'
-export const dateDeModifImportante = '13/02/2026'
-
 /**
- * Déterminer le point d'intersection de deux droites données graphiquement
+ *
  * @author Nathan Scheinmann
  */
 
-export const uuid = 'a1b2c'
+export const uuid = '4b211'
 export const refs = {
   'fr-fr': ['2G34-11'],
-  'fr-ch': ['11FA5A-10', '1mF2-10', '1mSE-2'],
+  'fr-ch': ['11FA5A-11', '1mF2-11'],
 }
-
-export default class IntersectionDeuxDroites extends Exercice {
+export default class IntersectionDroitesPoints extends Exercice {
   constructor() {
     super()
 
     this.nbQuestions = 1
-    this.sup = 1
+    this.correctionDetaillee = true
     this.correctionDetailleeDisponible = true
-    this.besoinFormulaireNumerique = [
-      "Position du point d'intersection",
-      3,
-      '1 : Sur le graphique\n2 : En dehors du graphique\n3 : Mélange',
-    ]
+    // this.besoinFormulaireNumerique = ['Type de questions', 1, '1 : Niveau 1\n2 : Niveau 2\n3 : Mélange']
   }
 
   nouvelleVersion() {
-    let typeDeQuestionsDisponibles: ('deuxDroitesSG' | 'deuxDroitesHG')[]
-    if (this.sup === 1) {
-      typeDeQuestionsDisponibles = ['deuxDroitesSG']
-    } else if (this.sup === 2) {
-      typeDeQuestionsDisponibles = ['deuxDroitesHG']
-    } else {
-      typeDeQuestionsDisponibles = ['deuxDroitesSG', 'deuxDroitesHG']
-    }
-
     const pointIntersectionExactDD = function (
       d1: Array<FractionEtendue>,
       d2: Array<FractionEtendue>,
@@ -67,38 +54,69 @@ export default class IntersectionDeuxDroites extends Exercice {
       const y = d1[0].produitFraction(x).sommeFraction(d1[1]).simplifie()
       return [x, y]
     }
-
-    const inGraph = function (
-      p: PointAbstrait,
-      xMin = -8,
-      xMax = 8,
-      yMin = -6,
-      yMax = 6,
+    const eqToLatex = function (
+      vect: Array<number | FractionEtendue>,
+      nomVal: Array<string>,
+      inSys: boolean,
     ) {
-      return p.x >= xMin && p.x <= xMax && p.y >= yMin && p.y <= yMax
+      let expr = ''
+      let checkPreviousNull = true
+      for (let i = 0; i < 3; i++) {
+        if (vect.slice(0, 3).every((item) => item === 0) && i === 0) {
+          expr = expr + '0'
+        } else if (!(vect[i] === 0) && checkPreviousNull) {
+          if (nomVal[i] === '') {
+            expr = expr + `${texNombre(vect[i], 0)}${nomVal[i]}`
+          } else {
+            expr = expr + `${rienSi1(vect[i])}${nomVal[i]}`
+          }
+          checkPreviousNull = false
+        } else if (!(vect[i] === 0) && !checkPreviousNull) {
+          if (nomVal[i] === '') {
+            expr = expr + `${ecritureAlgebrique(vect[i])}${nomVal[i]}`
+          } else {
+            expr = expr + `${ecritureAlgebriqueSauf1(vect[i])}${nomVal[i]}`
+          }
+          checkPreviousNull = false
+        }
+      }
+      if (inSys === true) {
+        expr = expr + ' &='
+      } else {
+        expr = expr + '='
+      }
+      checkPreviousNull = true
+      for (let i = 3; i < 6; i++) {
+        if (vect.slice(3).every((item) => item === 0) && i === 3) {
+          expr = expr + '0'
+        } else if (!(vect[i] === 0) && checkPreviousNull) {
+          if (nomVal[i] === '') {
+            expr = expr + `${texNombre(vect[i], 0)}${nomVal[i]}`
+          } else {
+            expr = expr + `${rienSi1(vect[i])}${nomVal[i]}`
+          }
+          checkPreviousNull = false
+        } else if (!(vect[i] === 0) && !checkPreviousNull) {
+          if (nomVal[i] === '') {
+            expr = expr + `${ecritureAlgebrique(vect[i])}${nomVal[i]}`
+          } else {
+            expr = expr + `${ecritureAlgebriqueSauf1(vect[i])}${nomVal[i]}`
+          }
+          checkPreviousNull = false
+        }
+      }
+      return expr
     }
-
+    const printSystem = function (eq1: string, eq2: string) {
+      let expr = ''
+      expr =
+        expr +
+        `\\begin{cases}\\begin{aligned}${eq1}\\\\${eq2}\\end{aligned}\\end{cases}`
+      return expr
+    }
     const coordEntieres = function (p: PointAbstrait) {
       return p.x % 1 === 0 && p.y % 1 === 0
     }
-
-    const listeTypeQuestions = combinaisonListes(
-      typeDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
-
-    const o = texteParPosition(
-      'O',
-      -0.3,
-      -0.3,
-      undefined,
-      'black',
-      undefined,
-      'milieu',
-      undefined,
-      1,
-    )
-
     const listeFractions = [
       [1, 3],
       [2, 3],
@@ -118,134 +136,99 @@ export default class IntersectionDeuxDroites extends Exercice {
       [5, 6],
       [1, 7],
     ]
-
+    // const listeTypeDeQuestions = combinaisonListes(typesDeQuestionsDisponibles, this.nbQuestions)
     for (
-      let i = 0, vari, texte, texteCorr, cpt = 0;
+      let i = 0,
+        droiteFrac1,
+        droiteFrac2,
+        c,
+        c2,
+        c3,
+        pi12,
+        aFrac,
+        a2Frac,
+        a3Frac,
+        vari,
+        eqD1ListeString,
+        eqD2ListeString,
+        p1x,
+        p2x,
+        p3x,
+        p4x,
+        p1y,
+        p2y,
+        p3y,
+        p4y,
+        texte,
+        texteCorr,
+        cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      // on rajoute les variables dont on a besoin
       vari = ['x', 'y', '', 'x', 'y', '']
-      let c = new Droite(0, 1, 0, 'black', 'black')
-      let c2 = new Droite(0, 1, 0, 'black', 'black')
-      let a: number = 0
-      let b: number = 0
-      let d: number = 0
-      let a2: number = 0
-      let b2: number = 0
-      let d2: number = 0
-      let aFrac: Array<number> = []
-      let a2Frac: Array<number> = []
-      let pAproxInt12 = new PointAbstrait(0, 0)
-
-      switch (listeTypeQuestions[i]) {
-        case 'deuxDroitesSG':
-          do {
-            do {
-              b = randint(-5, 5)
-              aFrac = choice(listeFractions)
-              a = aFrac[0] * choice([-1, 1])
-              d = aFrac[1]
-              b2 = randint(-5, 5)
-              a2Frac = choice(listeFractions)
-              a2 = a2Frac[0] * choice([-1, 1])
-              d2 = a2Frac[1]
-            } while (Math.abs(a2 / d2 - a / d) < 0.5)
-            c = droite(a / d, -1, b)
-            c.color = colorToLatexOrHTML('red')
-            c.epaisseur = 1
-            c2 = droite(a2 / d2, -1, b2)
-            c2.color = colorToLatexOrHTML('red')
-            c2.epaisseur = 1
-            pAproxInt12 = pointIntersectionDD(c, c2)
-          } while (
-            !(Math.abs(a2 / d2 - a / d) < 0.5 || inGraph(pAproxInt12)) ||
-            coordEntieres(pAproxInt12)
-          )
-          break
-        case 'deuxDroitesHG':
-          do {
-            aFrac = choice(listeFractions)
-            a = aFrac[0] * choice([-1, 1])
-            d = aFrac[1]
-            b = randint(-5, 5)
-            a2Frac = choice(listeFractions)
-            a2 = a2Frac[0] * choice([-1, 1])
-            d2 = a2Frac[1]
-            b2 = randint(-5, 5)
-            if (Math.abs(a2 / d2 - a / d) < 0.5) continue
-            c = droite(a / d, -1, b)
-            c.color = colorToLatexOrHTML('red')
-            c.epaisseur = 1
-            c2 = droite(a2 / d2, -1, b2)
-            c2.color = colorToLatexOrHTML('red')
-            c2.epaisseur = 1
-            pAproxInt12 = pointIntersectionDD(c, c2)
-          } while (
-            Math.abs(a2 / d2 - a / d) < 0.5 ||
-            inGraph(pAproxInt12) ||
-            coordEntieres(pAproxInt12)
-          )
-          break
-      }
-
-      const droite1 = droiteAvecNomLatex(c, '(d_1)', 'red')
-      const droite2 = droiteAvecNomLatex(c2, '(d_2)', 'green')
-      const droiteFrac1 = [new FractionEtendue(a, d), new FractionEtendue(b, 1)]
-      const droiteFrac2 = [
-        new FractionEtendue(a2, d2),
-        new FractionEtendue(b2, 1),
-      ]
-      const eqD1ListeString = [0, 1, 0, droiteFrac1[0], 0, droiteFrac1[1]]
-      const eqD2ListeString = [0, 1, 0, droiteFrac2[0], 0, droiteFrac2[1]]
-      const pi12 = pointIntersectionExactDD(droiteFrac1, droiteFrac2)
-
-      const r = repere({
-        xMin: -8,
-        xMax: 8,
-        xUnite: 1,
-        yMin: -6,
-        yMax: 6,
-        yUnite: 1,
-        thickHauteur: 0.1,
-        thickEpaisseur: 1,
-        xLabelMin: -7,
-        xLabelMax: 7,
-        yLabelMax: 5,
-        yLabelMin: -5,
-        axeXStyle: '->',
-        axeYStyle: '->',
-        yLabelDistance: 1,
-        axesEpaisseur: 1,
-        yLabelEcart: 0.6,
-        grilleSecondaire: true,
-        grilleSecondaireYDistance: 1,
-        grilleSecondaireXDistance: 1,
-        grilleSecondaireYMin: -6,
-        grilleSecondaireYMax: 6,
-        grilleSecondaireXMin: -8,
-        grilleSecondaireXMax: 8,
-      })
-
-      texte =
-        "Déterminer le point d'intersection des droites suivantes.<br><br>"
-      texte += mathalea2d(
-        {
-          xmin: -8,
-          ymin: -6,
-          xmax: 8,
-          ymax: 6,
-          pixelsParCm: 25,
-          scale: 0.5,
-        },
-        r,
-        droite1,
-        droite2,
-        o,
+      let a = 0
+      let b = 0
+      let d = 0
+      let a2 = 0
+      let b2 = 0
+      let d2 = 0
+      let a3 = 0
+      let b3 = 0
+      let d3 = 0
+      let pAproxInt12 = pointAbstrait(0, 0)
+      let pAproxInt13 = pointAbstrait(0, 0)
+      let pAproxInt23 = pointAbstrait(0, 0)
+      do {
+        do {
+          a = randint(-8, 8, [0]) // numérateut coefficient directeur non nul
+          b = randint(-8, 8) // ordonnée à l'origine
+          aFrac = choice(listeFractions)
+          a = aFrac[0] * choice([-1, 1]) //
+          d = aFrac[1] //
+          a2 = randint(-8, 8, [0]) // numérateut coefficient directeur non nul
+          b2 = randint(-8, 8) // ordonnée à l'origine
+          a2Frac = choice(listeFractions)
+          a2 = a2Frac[0] * choice([-1, 1]) //
+          d2 = a2Frac[1] //
+          a3 = randint(-8, 8, [0]) // numérateut coefficient directeur non nul
+          b3 = randint(-8, 8) // ordonnée à l'origine
+          a3Frac = choice(listeFractions)
+          a3 = a3Frac[0] * choice([-1, 1]) //
+          d3 = a3Frac[1] //
+          c = droite(a / d, -1, b)
+          c2 = droite(a2 / d2, -1, b2)
+          c3 = droite(a3 / d3, -1, b3)
+          c3.epaisseur = 2
+        } while (a2 / d2 === a / d || a3 / d3 === a / d || a2 / d2 === a3 / d3)
+        pAproxInt12 = pointIntersectionDD(c, c2)
+        pAproxInt13 = pointIntersectionDD(c, c3)
+        pAproxInt23 = pointIntersectionDD(c2, c3)
+      } while (
+        coordEntieres(pAproxInt12) ||
+        coordEntieres(pAproxInt13) ||
+        coordEntieres(pAproxInt23)
       )
+      do {
+        p1x = randint(-10, 10)
+        p1y = pointSurDroite(c, p1x, '').y
+        p2x = randint(-10, 10, [p1x])
+        p2y = pointSurDroite(c, p2x, '').y
+        p3x = randint(-10, 10)
+        p3y = pointSurDroite(c2, p3x, '').y
+        p4x = randint(-10, 10, [p3x])
+        p4y = pointSurDroite(c2, p4x, '').y
+      } while (p1y % 1 !== 0 || p2y % 1 !== 0 || p3y % 1 !== 0 || p4y % 1 !== 0)
 
+      droiteFrac1 = [new FractionEtendue(a, d), new FractionEtendue(b, 1)]
+      droiteFrac2 = [new FractionEtendue(a2, d2), new FractionEtendue(b2, 1)]
+      eqD1ListeString = [0, 1, 0, droiteFrac1[0], 0, droiteFrac1[1]]
+      eqD2ListeString = [0, 1, 0, droiteFrac2[0], 0, droiteFrac2[1]]
+      pi12 = pointIntersectionExactDD(droiteFrac1, droiteFrac2)
+      texte = `Soient les points $A(${p1x};${p1y}),\\,B(${p2x};${p2y}), \\;C(${p3x};${p3y})$ et $D(${p4x};${p4y})$. Déterminer, s'il existe, le point d'intersection entre la droite $(AB)$ et la droite $(CD)$.`
       if (this.interactif) {
         texte +=
-          "<br> Le point d'intersection des droites $d_1$ et $d_2$ est le point" +
-          remplisLesBlancs(this, i, '(%{champ1};%{champ2}).')
+          "<br> Le point d'intersection des droites $(AB)$ et $(CD)$ est le point" +
+          remplisLesBlancs(this, i, '(%{champ1};%{champ2})')
         handleAnswers(
           this,
           i,
@@ -260,7 +243,6 @@ export default class IntersectionDeuxDroites extends Exercice {
           { formatInteractif: 'fillInTheBlank' },
         )
       }
-
       texteCorr = ''
       if (this.correctionDetaillee) {
         texteCorr =
@@ -275,6 +257,7 @@ export default class IntersectionDeuxDroites extends Exercice {
         `e point d'intersection des droites $d_1$ et $d_2$ vaut $${miseEnEvidence(`\\left(${pi12[0].texFractionSimplifiee};${pi12[1].texFractionSimplifiee}\\right)`)}.$<br>`
 
       if (this.listeQuestions.indexOf(texte) === -1) {
+        // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

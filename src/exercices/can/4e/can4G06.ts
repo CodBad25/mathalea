@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { droite } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
@@ -117,7 +118,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )
@@ -186,7 +187,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objets,
       )

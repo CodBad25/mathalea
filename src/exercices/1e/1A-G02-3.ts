@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -64,7 +65,7 @@ export default class AireQuadrilatereDiagonalesCodeesQcm extends ExerciceQcmA {
 
 ${mathalea2d(
   Object.assign(
-    { pixelsParCm: 25, scale: 0.8, center: true },
+    { pixelsParCm: 25, scale: 0.8, center: !context.isHtml },
     fixeBordures(objets, {
       rxmin: -0.6,
       rxmax: 0.6,

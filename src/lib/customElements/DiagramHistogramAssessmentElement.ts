@@ -4,6 +4,10 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Jean-Claude Lhote
+ * élément non finalisé (draft)
+ */
 export type HistogramAssessmentBin = {
   from: number
   to: number

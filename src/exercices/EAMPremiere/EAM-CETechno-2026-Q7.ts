@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
@@ -100,7 +101,7 @@ export default class AutoQ7ANt2026 extends ExerciceQcmA {
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.6,
-        display: 'block', center: true,
+        display: 'block', center: !context.isHtml,
       },
       r,
       courbe,

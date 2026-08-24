@@ -10,7 +10,9 @@ export type PointCliquableData = {
   id: string
   etat: boolean
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export type PointsCliquablesOptions = {
   id?: string
   numeroExercice: number
@@ -77,7 +79,10 @@ export class PointsCliquablesElement extends MathaleaCustomElement {
     return `${elementHtml}<span id="resultatCheckEx${numeroExercice}Q${questionIndex}"></span><div id="feedbackEx${numeroExercice}Q${questionIndex}"></div>`
   }
 
-  static verifQuestion(exercice: IExercice, questionIndex: number): {
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): {
     isOk: boolean
     feedback: string
     score: { nbBonnesReponses: number; nbReponses: number }
@@ -100,7 +105,9 @@ export class PointsCliquablesElement extends MathaleaCustomElement {
   static formatStudentAnswer(rawAnswer: string): string {
     const points = parsePoints(rawAnswer)
     if (points.length === 0) return 'aucun'
-    const selected = points.filter((point) => point.etat).map((point) => point.id)
+    const selected = points
+      .filter((point) => point.etat)
+      .map((point) => point.id)
     return selected.length === 0 ? 'aucun' : selected.join(' ; ')
   }
 
@@ -121,7 +128,9 @@ export class PointsCliquablesElement extends MathaleaCustomElement {
   set value(nextValue: string | PointCliquableData[]) {
     const nextPoints = parsePoints(nextValue)
     if (nextPoints.length > 0) {
-      const stateById = new Map(nextPoints.map((point) => [point.id, point.etat]))
+      const stateById = new Map(
+        nextPoints.map((point) => [point.id, point.etat]),
+      )
       this.points = this.points.map((point) => ({
         ...point,
         etat: stateById.get(point.id) ?? point.etat,
@@ -188,10 +197,7 @@ export class PointsCliquablesElement extends MathaleaCustomElement {
     group.id = pointId
     group.pointId = point.id
     group.dataset.pointsCliquablesHost = this.id
-    group.replaceChildren(
-      ...this.createCross(point),
-      this.createHitZone(point),
-    )
+    group.replaceChildren(...this.createCross(point), this.createHitZone(point))
     if (existing == null) figure.appendChild(group)
     return group
   }

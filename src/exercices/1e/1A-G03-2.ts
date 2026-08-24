@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { codageAngle } from '../../lib/2d/angles'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -155,7 +156,7 @@ Quelle est la longueur $${coteCherche}$ ?<br>
 <em>Aide :</em> $\\sin ${angle}^\\circ=${valeurSinus}$, $\\cos ${angle}^\\circ=${valeurCosinus}$ et $\\tan ${angle}^\\circ=${valeurTangente}$.<br>
 ${mathalea2d(
   Object.assign(
-    { pixelsParCm: 25, scale: 0.9, center: true },
+    { pixelsParCm: 25, scale: 0.9, center: !context.isHtml },
     fixeBordures(objets, {
       rxmin: -0.6,
       rxmax: 0.6,

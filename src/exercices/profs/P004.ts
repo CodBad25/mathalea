@@ -1,12 +1,12 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { bleuMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { arrondi, troncature } from '../../lib/outils/nombres'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Construire des droites graduées avec zoom'
 
@@ -60,7 +60,7 @@ export default class FeuilleDeZooms extends Exercice {
         sC,
         sD,
         extremite,
-        fenetre
+        fenetreMathalea2d
       const objets = []
       if (this.sup === 1) {
         xmin = randint(5, 10) - 0.2
@@ -134,7 +134,7 @@ export default class FeuilleDeZooms extends Exercice {
         sA.pointilles = 5
         sB.pointilles = 5
         objets.push(d1, d2, sA, sB)
-        fenetre = {
+        fenetreMathalea2d = {
           xmin: -1.5,
           xmax: 35,
           ymin: -1,
@@ -263,7 +263,7 @@ export default class FeuilleDeZooms extends Exercice {
         sD = segment(pD1, pD2)
         sC.pointilles = 5
         sD.pointilles = 5
-        fenetre = {
+        fenetreMathalea2d = {
           xmin: -1.5,
           xmax: 35,
           ymin: -1.5,
@@ -273,7 +273,7 @@ export default class FeuilleDeZooms extends Exercice {
         }
         objets.push(d1, d2, d3, sA, sB, sC, sD)
       }
-      texte = mathalea2d(fenetre, objets)
+      texte = mathalea2d(fenetreMathalea2d, objets)
 
       this.listeQuestions.push(texte)
     }

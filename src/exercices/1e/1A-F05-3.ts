@@ -107,7 +107,7 @@ export default class TableauDeVariationsGraphique extends ExerciceQcmA {
         ymax: bornes.yMax + 1,
         pixelsParCm: 30,
         scale: 0.65,
-        center: true,
+        center: !context.isHtml,
       },
       repere1,
       courbe,

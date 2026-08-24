@@ -4,6 +4,9 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Rémi Angot + aggrégation des fichiers par Jean-Claude Lhote
+ */
 /** Une étiquette d'une des deux colonnes à relier. */
 export type EtiquetteRelier = {
   /** Identifiant stable, utilisé dans les liens et dans la réponse de l'élève. */
@@ -335,15 +338,11 @@ export function toTypst(config: RelierEtiquettesConfig): string {
 
   const ancreGauche = (index: number) => ({
     x: LARGEUR_ETIQUETTE_TYPST,
-    y:
-      ordonneeTypst(index, gauche.length, nbMax) +
-      HAUTEUR_ETIQUETTE_TYPST / 2,
+    y: ordonneeTypst(index, gauche.length, nbMax) + HAUTEUR_ETIQUETTE_TYPST / 2,
   })
   const ancreDroite = (index: number) => ({
     x: xDroite,
-    y:
-      ordonneeTypst(index, droite.length, nbMax) +
-      HAUTEUR_ETIQUETTE_TYPST / 2,
+    y: ordonneeTypst(index, droite.length, nbMax) + HAUTEUR_ETIQUETTE_TYPST / 2,
   })
 
   const indexGauche = new Map(gauche.map((item, i) => [item.id, i]))

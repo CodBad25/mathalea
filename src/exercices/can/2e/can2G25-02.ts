@@ -24,7 +24,7 @@ export const dateDeModifImportante = '18/05/2025'
 export const uuid = '3a0e1'
 
 export const refs = {
-  'fr-fr': ['can2G25-02', '2G25-flash1'],
+  'fr-fr': ['can2G25-02', '2G25-flash4'],
   'fr-ch': ['3G94-1'],
 }
 export default class NormeVecteur extends ExerciceSimple {

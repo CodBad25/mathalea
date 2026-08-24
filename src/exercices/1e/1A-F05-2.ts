@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 
 import { repere } from '../../lib/2d/reperes'
 import {  texteParPosition } from '../../lib/2d/textes'
@@ -78,7 +79,7 @@ export const dateDePublication = '02/02/2026'
 
     const figure = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.6, center: true },
+        { pixelsParCm: 30, scale: 0.6, center: !context.isHtml },
         { 
           xmin: bornes.xMin - 1, 
           ymin: bornes.yMin - 1, 
@@ -216,7 +217,7 @@ ${tableauSignes1}`
 
     const figure = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.6, center: true },
+        { pixelsParCm: 30, scale: 0.6, center: !context.isHtml },
         { 
           xmin: bornes.xMin - 1, 
           ymin: bornes.yMin - 1, 

@@ -1,49 +1,44 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import { signe } from '../../lib/outils/nombres'
-import Exercice from '../Exercice'
-
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { fraction } from '../../modules/fractions'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre =
-  "Calculer les coordonnées du produit d'un vecteur par un réel"
-export const dateDePublication = '28/05/2023'
-export const dateDeModifImportante = '14/06/2023'
+  "Calculer les coordonnées d'un point à partir d'une égalité vectorielle"
+export const dateDePublication = '12/06/2023'
 
 /**
- * Produit d'un vecteur par un réel
+ * Coordonnées d'un point à partir d'une égalité
  * @author Stéphan Grignon
- * @author Jean-claude Lhote
- * Interactif Gilles Mora le 11 juin 2024
+ *  Interactif Gilles Mora le 11 juin 2024
  */
-export const uuid = '68693'
+export const uuid = '222f6'
 
 export const refs = {
-  'fr-fr': ['2G26-4', 'BP1GV06'],
-  'fr-ch': ['3G92-6'],
+  'fr-fr': ['2G26-4'],
+  'fr-ch': ['3G92-7'],
 }
-export default class Calculercoordonneesproduitvecteurs extends Exercice {
+export default class Calculercoordonneesegalitevecteurs extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireTexte = [
       'Situations différentes ',
-      '1 : Coordonnées entières\n2 : Coordonnées en écriture fractionnaire\n3 : À partir de quatre points\n4 : Mélange',
+      "1 : À partir d'une égalité\n 2 : À partir d'une somme\n 3 : À partir d'un produit par un réel\n4 : Mélange",
     ]
 
     this.nbQuestions = 2
@@ -56,113 +51,148 @@ export default class Calculercoordonneesproduitvecteurs extends Exercice {
   nouvelleVersion() {
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
       max: 3,
       defaut: 1,
       melange: 4,
       nbQuestions: this.nbQuestions,
       listeOfCase: ['t1', 't2', 't3'],
-    }).map(String)
+    })
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      let xB: FractionEtendue
+      let yB: FractionEtendue
       let texte = ''
       let texteCorr = ''
-      let wx: FractionEtendue
-      let wy: FractionEtendue
       switch (listeTypeDeQuestions[i]) {
         case 't1':
           {
-            // On donne 2 vecteurs à coordonnées entières & k entier
-            let uy, vy
-            const ux = randint(-9, 9)
-            if (ux === 0) {
-              uy = randint(-9, 9, [0])
+            // On donne 2 points et 1 vecteur
+            const ux = randint(-9, 9, [0])
+            const uy = randint(-9, 9, [0])
+            const xA = randint(-9, 9, [0])
+            const yA = randint(-9, 9, [0])
+            const pr = choice(['A', 'B'])
+            const se = choice(['A', 'B'], [pr])
+            if (pr === 'A') {
+              xB = new FractionEtendue(ux + xA, 1)
+              yB = new FractionEtendue(uy + yA, 1)
             } else {
-              uy = randint(-9, 9)
-            } // Premier vecteur jamais nul
-            const vx = randint(-9, 9)
-            if (vx === 0) {
-              vy = randint(-9, 9, [0])
+              xB = new FractionEtendue(xA - ux, 1)
+              yB = new FractionEtendue(yA - uy, 1)
+            }
+
+            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne le point $A(${xA}\\,;\\,${yA})$ et le vecteur $\\vec{u}\\begin{pmatrix}${ux}\\\\${uy}\\end{pmatrix}$.<br>`
+            texte += `Déterminer les coordonnées du point $B$ tel que $\\overrightarrow{u}=\\overrightarrow{${pr}${se}}$.`
+
+            texteCorr = `$\\overrightarrow{u}=\\overrightarrow{${pr}${se}}$ `
+            if (pr === 'A') {
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=x_B-${ecritureParentheseSiNegatif(xA)}\\\\${uy}=y_B-${ecritureParentheseSiNegatif(yA)}\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}${ecritureAlgebrique(xA)}=x_B\\\\${uy}${ecritureAlgebrique(yA)}=y_B\\end{cases}$ `
             } else {
-              vy = randint(-9, 9)
-            } // Second vecteur jamais nul
-            const k = randint(-9, 9, [-1, 0, 1])
-            // wx et wy sont entier tout comme dans 't3' mais on uniformise avec 't2' la réponse pour l'interactif
-            wx = new FractionEtendue(ux + k * vx, 1)
-            wy = new FractionEtendue(uy + k * vy, 1)
-
-            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les vecteurs suivants : $\\vec{u}\\begin{pmatrix}${ux}\\\\${uy}\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}${vx}\\\\${vy}\\end{pmatrix}$.<br>`
-            texte += `Déterminer les coordonnées du vecteur $\\overrightarrow{w}=\\overrightarrow{u}${ecritureAlgebrique(k)}\\overrightarrow{v}$.`
-
-            texteCorr = `$\\overrightarrow{w}\\begin{pmatrix}${ux}${ecritureAlgebrique(k)}\\times${ecritureParentheseSiNegatif(vx)}\\\\${uy}${ecritureAlgebrique(k)}\\times${ecritureParentheseSiNegatif(vy)}\\end{pmatrix}$,  soit $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wx.texFSD)}\\\\${miseEnEvidence(wy.texFSD)}\\end{pmatrix}$.<br>`
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=${xA}-x_B\\\\${uy}=${yA}-y_B\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xA}-${ecritureParentheseSiNegatif(ux)}\\\\y_B=${yA}-${ecritureParentheseSiNegatif(uy)}\\end{cases}$ `
+            }
+            texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xB.texFraction}\\\\y_B=${yB.texFraction}\\end{cases}$, soit $B(${miseEnEvidence(xB.texFraction)}\\,;\\,${miseEnEvidence(yB.texFraction)})$.`
             if (this.correctionDetaillee) {
               texteCorr =
-                "Soit $k$ un nombre réel et soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br><br>"
+                'Soit $(x_B;y_B)$ les coordonnées du point que nous cherchons à déterminer.<br><br>'
               texteCorr +=
-                "On sait d'après le cours que $k\\overrightarrow{v}\\begin{pmatrix}k \\times x'\\\\k \\times y'\\end{pmatrix}$ et que $\\overrightarrow{u}+\\overrightarrow{v}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br><br>"
-              texteCorr += "Appliqué aux données de l'énoncé :<br><br>"
-              texteCorr += `$${k}\\overrightarrow{v}\\begin{pmatrix}${k}\\times${ecritureParentheseSiNegatif(vx)}\\\\${k}\\times${ecritureParentheseSiNegatif(vy)}\\end{pmatrix}$, soit $${k}\\overrightarrow{v}\\begin{pmatrix}${k * vx}\\\\${k * vy}\\end{pmatrix}$.<br><br>`
-              texteCorr += `$\\overrightarrow{u}${ecritureAlgebrique(k)}\\overrightarrow{v}\\begin{pmatrix}${ux}+${ecritureParentheseSiNegatif(k * vx)}\\\\${uy}+${ecritureParentheseSiNegatif(k * vy)}\\end{pmatrix}$<br><br>`
-              texteCorr += `Ce qui donne au final : $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wx.texFSD)}\\\\${miseEnEvidence(wy.texFSD)}\\end{pmatrix}$.<br>`
+                "On sait d'après le cours que si $M(x_M;y_M)$ et $N(x_N;y_N)$ sont deux points d'un repère, on a alors $\\overrightarrow{MN}\\begin{pmatrix}x_N-x_M\\\\y_N-y_M\\end{pmatrix}$.<br><br>"
+              texteCorr += "Appliqué aux données de l'énoncé : "
+              if (pr === 'A') {
+                texteCorr += `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}x_B-${ecritureParentheseSiNegatif(xA)}\\\\y_B-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$.<br><br>`
+                texteCorr +=
+                  "Soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br><br>"
+                texteCorr +=
+                  "On sait d'après le cours que $\\overrightarrow{u}=\\overrightarrow{v}$ équivaut à $\\begin{cases}x=x'\\\\y=y'\\end{cases}$.<br><br>"
+                texteCorr += `D'après l'énoncé $\\overrightarrow{u}=\\overrightarrow{${pr}${se}}$, ce qui équivaut à résoudre :<br><br>`
+                texteCorr += `$\\begin{cases}${ux}=x_B-${ecritureParentheseSiNegatif(xA)}\\\\${uy}=y_B-${ecritureParentheseSiNegatif(yA)}\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}${ecritureAlgebrique(xA)}=x_B\\\\${uy}${ecritureAlgebrique(yA)}=y_B\\end{cases}$<br><br>`
+              } else {
+                texteCorr += `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}${xA}-x_B\\\\${yA}-y_B\\end{pmatrix}$.<br><br>`
+                texteCorr +=
+                  "Soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br><br>"
+                texteCorr +=
+                  "On sait d'après le cours que $\\overrightarrow{u}=\\overrightarrow{v}$ équivaut à $\\begin{cases}x=x'\\\\y=y'\\end{cases}$.<br><br>"
+                texteCorr += `D'après l'énoncé $\\overrightarrow{u}=\\overrightarrow{${pr}${se}}$, ce qui équivaut à résoudre :<br><br>`
+                texteCorr += `$\\begin{cases}${ux}=${xA}-x_B\\\\${uy}=${yA}-y_B\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xA}-${ecritureParentheseSiNegatif(ux)}\\\\y_B=${yA}-${ecritureParentheseSiNegatif(uy)}\\end{cases}$<br><br>`
+              }
+              texteCorr += `Ce qui donne au final : $\\begin{cases}x_B=${xB.texFraction}\\\\y_B=${yB.texFraction}\\end{cases}$, soit $B(${miseEnEvidence(xB.texFraction)}\\,;\\,${miseEnEvidence(yB.texFraction)})$.`
             }
           }
           break
 
         case 't2':
           {
-            // On donne 1/2 vecteur à coordonnées fractionnaires & k fraction
-            const listeFractions1 = [
-              [1, 2],
-              [3, 2],
-              [5, 2],
-              [1, 3],
-              [2, 3],
-              [4, 3],
-              [5, 3],
-              [1, 4],
-              [3, 4],
-              [5, 4],
-              [1, 5],
-              [2, 5],
-              [3, 5],
-              [4, 5],
-              [1, 6],
-              [5, 6],
-            ]
-            // u vecteur à coordonnées entières
+            // On donne 1 vecteur, 3 points et une somme
             const ux = randint(-9, 9, [0])
             const uy = randint(-9, 9, [0])
-            const frac1 = choice(listeFractions1)
-            const k = new FractionEtendue(frac1[0], frac1[1])
-            const a = choice([-1, 1])
-            const frac2 = choice(listeFractions1)
-            const vx = new FractionEtendue(frac2[0], frac2[1])
-            // const vy = new FractionEtendue(randint(-9, 9, [0]), 1)
-            const vy = fraction(randint(-9, 9, [0]), 1)
-            wx = vx
-              .produitFraction(k.multiplieEntier(a))
-              .ajouteEntier(ux)
-              .simplifie()
-            // vy est un entier... pourquoi ne pas utiliser un number (Jean-claude Lhote le 21/01/2025 lors du passage à typescript)
-            //   wy = vy.produitFraction(k.multiplieEntier(a)).ajouteEntier(uy).simplifie()
-            wy = vy
-              .produitFraction(k.multiplieEntier(a))
-              .ajouteEntier(uy)
-              .simplifie()
-            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les vecteurs suivants : $\\vec{u}\\begin{pmatrix}${ux}\\\\[0.7em]${uy}\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}${vx.texFraction}\\\\[0.7em]${vy.texFraction}\\end{pmatrix}$.<br>`
-            texte += `Déterminer les coordonnées du vecteur $\\overrightarrow{w}=\\overrightarrow{u}${signe(a)}${k.texFSD}\\overrightarrow{v}$.`
+            const xA = randint(-9, 9, [0])
+            const yA = randint(-9, 9, [0])
+            const xC = randint(-9, 9, [0])
+            const yC = randint(-9, 9, [0])
+            const xD = randint(-9, 9, [0])
+            const yD = randint(-9, 9, [0])
+            const pr = choice(['A', 'B'])
+            const se = choice(['A', 'B'], [pr])
+            if (pr === 'A') {
+              xB = new FractionEtendue(ux + xC + xA - xD, 1)
+              yB = new FractionEtendue(uy + yC + yA - yD, 1)
+            } else {
+              xB = new FractionEtendue(xD - xC + xA - ux, 1)
+              yB = new FractionEtendue(yD - yC + yA - uy, 1)
+            }
 
-            texteCorr = `$\\overrightarrow{w}\\begin{pmatrix}${ux}${signe(a)}${k.texFraction}\\times ${vx.texFraction}\\\\[0.7em]${uy}${signe(a)}${k.texFSD}\\times${vy.ecritureParentheseSiNegatif}\\end{pmatrix}$, soit $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wx.texFraction)}\\\\[0.7em]${miseEnEvidence(wy.texFraction)}\\end{pmatrix}$.`
+            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les points $A(${xA}\\,;\\,${yA})$, $C(${xC}\\,;\\,${yC})$, $D(${xD}\\,;\\,${yD})$ et le vecteur $\\vec{u}\\begin{pmatrix}${ux}\\\\${uy}\\end{pmatrix}$.<br>`
+            texte += `Déterminer les coordonnées du point $B$ tel que $\\overrightarrow{u}=\\overrightarrow{${pr}${se}}+\\overrightarrow{CD}$.`
+
+            if (pr === 'A') {
+              texteCorr = `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}x_B-${ecritureParentheseSiNegatif(xA)}\\\\y_B-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$.<br><br>`
+            } else {
+              texteCorr = `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}${xA}-x_B\\\\${yA}-y_B\\end{pmatrix}$.<br><br>`
+            }
+            texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+            texteCorr += `$\\overrightarrow{u}=\\overrightarrow{${pr}${se}}+\\overrightarrow{CD}$ `
+            if (pr === 'A') {
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=x_B-${ecritureParentheseSiNegatif(xA)}+${ecritureParentheseSiNegatif(xD - xC)}\\\\${uy}=y_B-${ecritureParentheseSiNegatif(yA)}+${ecritureParentheseSiNegatif(yD - yC)}\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=x_B${ecritureAlgebrique(xD - xC - xA)}\\\\${uy}=y_B${ecritureAlgebrique(yD - yC - yA)}\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}${ecritureAlgebrique(xC + xA - xD)}=x_B\\\\${uy}${ecritureAlgebrique(yC + yA - yD)}=y_B\\end{cases}$ `
+            } else {
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=${xA}-x_B+${ecritureParentheseSiNegatif(xD - xC)}\\\\${uy}=${yA}-y_B+${ecritureParentheseSiNegatif(yD - yC)}\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=${xD - xC + xA}-x_B\\\\${uy}=${yD - yC + yA}-y_B\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xD - xC + xA}-${ecritureParentheseSiNegatif(ux)}\\\\y_B=${yD - yC + yA}-${ecritureParentheseSiNegatif(uy)}\\end{cases}$ `
+            }
+            texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xB.texFraction}\\\\y_B=${yB.texFraction}\\end{cases}$, soit $B(${miseEnEvidence(xB.texFraction)}\\,;\\,${miseEnEvidence(yB.texFraction)})$.`
             if (this.correctionDetaillee) {
               texteCorr =
-                "Soit $k$ un nombre réel et soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br><br>"
+                'Soit $(x_B;y_B)$ les coordonnées du point que nous cherchons à déterminer.<br><br>'
               texteCorr +=
-                "On sait d'après le cours que $k\\overrightarrow{v}\\begin{pmatrix}k \\times x'\\\\k \\times y'\\end{pmatrix}$ et que $\\overrightarrow{u}+\\overrightarrow{v}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br><br>"
+                "On sait d'après le cours que si $M(x_M;y_M)$ et $N(x_N;y_N)$ sont deux points d'un repère, on a alors $\\overrightarrow{MN}\\begin{pmatrix}x_N-x_M\\\\y_N-y_M\\end{pmatrix}$.<br><br>"
               texteCorr += "Appliqué aux données de l'énoncé :<br><br>"
-              texteCorr += `$${fraction(frac1[0] * a, frac1[1]).texFractionSimplifiee}\\overrightarrow{v}\\begin{pmatrix}${fraction(frac1[0] * a, frac1[1]).texFractionSimplifiee}\\times${vx.texFraction}\\\\[0.7em]${fraction(frac1[0] * a, frac1[1]).texFractionSimplifiee}\\times${vy.ecritureParentheseSiNegatif}\\end{pmatrix}$, soit $${fraction(frac1[0] * a, frac1[1]).texFractionSimplifiee}\\overrightarrow{v}\\begin{pmatrix}${fraction(a * frac1[0] * frac2[0], frac1[1] * frac2[1]).texFractionSimplifiee}\\\\[0.7em]${vy.multiplieEntier(a * frac1[0]).entierDivise(frac1[1]).texFraction}\\end{pmatrix}$.<br><br>`
-
-              texteCorr += `$\\overrightarrow{u}${signe(a)}${k.texFraction}\\overrightarrow{v}\\begin{pmatrix}${ux}+\\left(${fraction(a * frac1[0] * frac2[0], frac1[1] * frac2[1]).texFractionSimplifiee}\\right)\\\\[0.7em]${uy}+\\left(${vy.multiplieEntier(a * frac1[0]).entierDivise(frac1[1]).texFraction}\\right)\\end{pmatrix}$.<br><br>`
-
-              texteCorr += `Ce qui donne au final : $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wx.texFraction)}\\\\[0.7em]${miseEnEvidence(wy.texFraction)}\\end{pmatrix}$.<br>`
+              if (pr === 'A') {
+                texteCorr += `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}x_B-${ecritureParentheseSiNegatif(xA)}\\\\y_B-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$ et `
+                texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+                texteCorr +=
+                  "Soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br><br>"
+                texteCorr +=
+                  "On sait d'après le cours que $\\overrightarrow{u}=\\overrightarrow{v}$ équivaut à $\\begin{cases}x=x'\\\\y=y'\\end{cases}$ et que $\\vec{w}=\\vec{u}+\\vec{v}$ aura pour coordonnées $\\vec{w}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br><br>"
+                texteCorr += `D'après l'énoncé $\\overrightarrow{u}=\\overrightarrow{${pr}${se}}+\\overrightarrow{CD}$, ce qui équivaut à résoudre :<br><br>`
+                texteCorr += `$\\begin{cases}${ux}=x_B-${ecritureParentheseSiNegatif(xA)}+${ecritureParentheseSiNegatif(xD - xC)}\\\\${uy}=y_B-${ecritureParentheseSiNegatif(yA)}+${ecritureParentheseSiNegatif(yD - yC)}\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=x_B${ecritureAlgebrique(xD - xC - xA)}\\\\${uy}=y_B${ecritureAlgebrique(yD - yC - yA)}\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}${ecritureAlgebrique(xC + xA - xD)}=x_B\\\\${uy}${ecritureAlgebrique(yC + yA - yD)}=y_B\\end{cases}$<br><br>`
+              } else {
+                texteCorr += `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}${xA}-x_B\\\\${yA}-y_B\\end{pmatrix}$ et `
+                texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+                texteCorr +=
+                  "Soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br><br>"
+                texteCorr +=
+                  "On sait d'après le cours que $\\overrightarrow{u}=\\overrightarrow{v}$ équivaut à $\\begin{cases}x=x'\\\\y=y'\\end{cases}$ et que $\\vec{w}=\\vec{u}+\\vec{v}$ aura pour coordonnées $\\vec{w}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br><br>"
+                texteCorr += `D'après l'énoncé $\\overrightarrow{u}=\\overrightarrow{${pr}${se}}+\\overrightarrow{CD}$, ce qui équivaut à résoudre :<br><br>`
+                texteCorr += `$\\begin{cases}${ux}=${xA}-x_B+${ecritureParentheseSiNegatif(xD - xC)}\\\\${uy}=${yA}-y_B+${ecritureParentheseSiNegatif(yD - yC)}\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}${ux}=${xD - xC + xA}-x_B\\\\${uy}=${yD - yC + yA}-y_B\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xD - xC + xA}-${ecritureParentheseSiNegatif(ux)}\\\\y_B=${yD - yC + yA}-${ecritureParentheseSiNegatif(uy)}\\end{cases}$<br><br>`
+              }
+              texteCorr += `Ce qui donne au final : $\\begin{cases}x_B=${xB.texFraction}\\\\y_B=${yB.texFraction}\\end{cases}$, soit $B(${miseEnEvidence(xB)}\\,;\\,${miseEnEvidence(yB)})$.`
             }
           }
           break
@@ -170,50 +200,83 @@ export default class Calculercoordonneesproduitvecteurs extends Exercice {
         case 't3':
         default:
           {
-            // On donne 4 points à coordonnées entières & k entier
-            const xA = randint(-9, 9)
-            const yA = randint(-9, 9, xA)
-            const xB = randint(-9, 9, xA)
-            const yB = randint(-9, 9, [yA, xB])
-            const xC = randint(-9, 9)
-            const yC = randint(-9, 9, xC)
-            const xD = randint(-9, 9, xC)
-            const yD = randint(-9, 9, [yC, xD])
+            // On donne 3 points & k entier
+            const xA = randint(-9, 9, [0])
+            const yA = randint(-9, 9, [0])
+            const xC = randint(-9, 9, [0])
+            const yC = randint(-9, 9, [0])
+            const xD = randint(-9, 9, [0])
+            const yD = randint(-9, 9, [0])
             const k = randint(-9, 9, [-1, 0, 1])
-            wx = new FractionEtendue(xB - xA + k * (xD - xC), 1)
-            wy = new FractionEtendue(yB - yA + k * (yD - yC), 1)
+            const pr = choice(['A', 'B'])
+            const se = choice(['A', 'B'], [pr])
+            const a = new FractionEtendue(xD - xC, k).simplifie()
+            const b = new FractionEtendue(yD - yC, k).simplifie()
+            if (pr === 'A') {
+              xB = new FractionEtendue(xD - xC + k * xA, k).simplifie()
+              yB = new FractionEtendue(yD - yC + k * yA, k).simplifie()
+            } else {
+              xB = new FractionEtendue(k * xA - xD + xC, k).simplifie()
+              yB = new FractionEtendue(k * yA - yD + yC, k).simplifie()
+            }
 
-            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les points suivants : $A\\left(${xA}\\,;\\,${yA}\\right)$, $B\\left(${xB}\\,;\\,${yB}\\right)$, $C\\left(${xC}\\,;\\,${yC}\\right)$ et $D\\left(${xD}\\,;\\,${yD}\\right)$.<br>`
-            texte += `Déterminer les coordonnées du vecteur $\\overrightarrow{w}=\\overrightarrow{AB}${ecritureAlgebrique(k)}\\overrightarrow{CD}$.`
+            texte = `Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on donne les points suivants : $A(${xA};${yA})$, $C(${xC};${yC})$ et $D(${xD};${yD})$.<br>`
+            texte += `Déterminer les coordonnées du point $B$ tel que $\\overrightarrow{CD}=${k}\\overrightarrow{${pr}${se}}$.`
 
+            if (pr === 'A') {
+              texteCorr = `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}x_B-${ecritureParentheseSiNegatif(xA)}\\\\y_B-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$.<br><br>`
+            } else {
+              texteCorr = `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}${xA}-x_B\\\\${yA}-y_B\\end{pmatrix}$.<br><br>`
+            }
+            texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+            texteCorr += `$\\overrightarrow{CD}=${k}\\overrightarrow{${pr}${se}}$ `
+            if (pr === 'A') {
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${xD - xC}=${k}(x_B-${ecritureParentheseSiNegatif(xA)})\\\\[0.7em]${yD - yC}=${k}(y_B-${ecritureParentheseSiNegatif(yA)})\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}\\dfrac{${xD - xC}}{${k}}=x_B-${ecritureParentheseSiNegatif(xA)}\\\\[0.7em]\\dfrac{${yD - yC}}{${k}}=y_B-${ecritureParentheseSiNegatif(yA)}\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${a.texFSD}${ecritureAlgebrique(xA)}=x_B\\\\[0.7em]${b.texFSD}${ecritureAlgebrique(yA)}=y_B\\end{cases}$ `
+            } else {
+              texteCorr += `$\\Leftrightarrow\\begin{cases}${xD - xC}=${k}(${xA}-x_B)\\\\[0.7em]${yD - yC}=${k}(${yA}-y_B)\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}\\dfrac{${xD - xC}}{${k}}=${xA}-x_B\\\\[0.7em]\\dfrac{${yD - yC}}{${k}}=${yA}-y_B\\end{cases}$ `
+              texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xA}-${a.texFSP}\\\\[0.7em]y_B=${yA}-${b.texFSP}\\end{cases}$ `
+            }
+            texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xB.texFSD}\\\\[0.7em]y_B=${yB.texFSD}\\end{cases}$, soit $B\\left(${miseEnEvidence(xB.texFSD)}\\,;\\,${miseEnEvidence(yB.texFSD)}\\right)$.`
             if (this.correctionDetaillee) {
               texteCorr =
-                "On sait d'après le cours que si $A(x_A;y_A)$ et $B(x_B;y_B)$ sont deux points d'un repère, alors on a $\\overrightarrow{AB}\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}$.<br>"
-              texteCorr += "On applique ici aux données de l'énoncé :<br><br>"
-            } else {
-              texteCorr = ''
-            }
-            texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\end{pmatrix}$.<br><br>`
-            texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
-            if (this.correctionDetaillee) {
+                'Soit $(x_B;y_B)$ les coordonnées du point que nous cherchons à déterminer.<br><br>'
+              texteCorr +=
+                "On sait d'après le cours que si $M(x_M;y_M)$ et $N(x_N;y_N)$ sont deux points d'un repère, on a alors $\\overrightarrow{MN}\\begin{pmatrix}x_N-x_M\\\\y_N-y_M\\end{pmatrix}$.<br><br>"
+              texteCorr += "Appliqué aux données de l'énoncé :<br><br>"
+              if (pr === 'A') {
+                texteCorr += `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}x_B-${ecritureParentheseSiNegatif(xA)}\\\\y_B-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$ et `
+                texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+              } else {
+                texteCorr += `$\\overrightarrow{${pr}${se}}\\begin{pmatrix}${xA}-x_B\\\\${yA}-y_B\\end{pmatrix}$ et `
+                texteCorr += `$\\overrightarrow{CD}\\begin{pmatrix}${xD}-${ecritureParentheseSiNegatif(xC)}\\\\${yD}-${ecritureParentheseSiNegatif(yC)}\\end{pmatrix}$, soit $\\overrightarrow{CD}\\begin{pmatrix}${xD - xC}\\\\${yD - yC}\\end{pmatrix}$.<br><br>`
+              }
               texteCorr +=
                 "Soit $k$ un nombre réel et soit $\\vec{u}\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$ deux vecteurs dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$.<br><br>"
               texteCorr +=
-                "On sait d'après le cours que $k\\overrightarrow{v}\\begin{pmatrix}k \\times x'\\\\k \\times y'\\end{pmatrix}$ et que $\\overrightarrow{u}+\\overrightarrow{v}\\begin{pmatrix}x+x'\\\\y+y'\\end{pmatrix}$.<br><br>"
-              texteCorr += "Appliqué aux données de l'énoncé :<br><br>"
-              texteCorr += `$${k}\\overrightarrow{CD}\\begin{pmatrix}${k}\\times${ecritureParentheseSiNegatif(xD - xC)}\\\\${k}\\times${ecritureParentheseSiNegatif(yD - yC)}\\end{pmatrix}$, soit $${k}\\overrightarrow{CD}\\begin{pmatrix}${k * (xD - xC)}\\\\${k * (yD - yC)}\\end{pmatrix}$.<br><br>`
-              texteCorr += `$\\overrightarrow{AB}${ecritureAlgebrique(k)}\\overrightarrow{CD}\\begin{pmatrix}${xB - xA}+${ecritureParentheseSiNegatif(k * (xD - xC))}\\\\${yB - yA}+${ecritureParentheseSiNegatif(k * (yD - yC))}\\end{pmatrix}$<br><br>`
-              texteCorr += `Ce qui donne au final : $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wx.texFSD)}\\\\${miseEnEvidence(wy.texFSD)}\\end{pmatrix}$.<br>`
-            } else {
-              texteCorr = `$\\overrightarrow{w}\\begin{pmatrix}${xB - xA}${ecritureAlgebrique(k)}\\times${ecritureParentheseSiNegatif(xD - xC)}\\\\${yB - yA}${ecritureAlgebrique(k)}\\times${ecritureParentheseSiNegatif(yD - yC)}\\end{pmatrix}$, soit $\\overrightarrow{w}\\begin{pmatrix}${miseEnEvidence(wx.texFSD)}\\\\${miseEnEvidence(wy.texFSD)}\\end{pmatrix}$.<br>`
+                "On sait d'après le cours que $k\\overrightarrow{u}\\begin{pmatrix}k \\times x\\\\k \\times y\\end{pmatrix}$ et que $\\overrightarrow{u}=\\overrightarrow{v}$ équivaut à $\\begin{cases}x=x'\\\\y=y'\\end{cases}$.<br><br>"
+              texteCorr += `D'après l'énoncé $\\overrightarrow{CD}=${k}\\overrightarrow{${pr}${se}}$, ce qui équivaut à résoudre :<br><br>`
+              if (pr === 'A') {
+                texteCorr += `$\\begin{cases}${xD - xC}=${k}(x_B-${ecritureParentheseSiNegatif(xA)})\\\\[0.7em]${yD - yC}=${k}(y_B-${ecritureParentheseSiNegatif(yA)})\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}\\dfrac{${xD - xC}}{${k}}=x_B-${ecritureParentheseSiNegatif(xA)}\\\\[0.7em]\\dfrac{${yD - yC}}{${k}}=y_B-${ecritureParentheseSiNegatif(yA)}\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}${a.texFSD}${ecritureAlgebrique(xA)}=x_B\\\\[0.7em]${b.texFSD}${ecritureAlgebrique(yA)}=y_B\\end{cases}$<br><br>`
+              } else {
+                texteCorr += `$\\begin{cases}${xD - xC}=${k}(${xA}-x_B)\\\\[0.7em]${yD - yC}=${k}(${yA}-y_B)\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}\\dfrac{${xD - xC}}{${k}}=${xA}-x_B\\\\[0.7em]\\dfrac{${yD - yC}}{${k}}=${yA}-y_B\\end{cases}$ `
+                texteCorr += `$\\Leftrightarrow\\begin{cases}x_B=${xA}-${a.texFSP}\\\\[0.7em]y_B=${yA}-${b.texFSP}\\end{cases}$<br><br>`
+              }
+              texteCorr += `Ce qui donne au final : $\\begin{cases}x_B=${xB.texFSD}\\\\[0.7em]y_B=${yB.texFSD}\\end{cases}$, soit $B\\left(${miseEnEvidence(xB.texFSD)};${miseEnEvidence(yB.texFSD)}\\right)$.`
             }
           }
           break
       }
+
       handleAnswers(this, i, {
         bareme: (listePoints) => [Math.min(listePoints[0], listePoints[1]), 1],
-        champ1: { value: wx.texFraction },
-        champ2: { value: wy.texFraction },
+        champ1: { value: xB.texFraction },
+        champ2: { value: yB.texFraction },
       })
       if (this.interactif) {
         texte +=
@@ -221,12 +284,12 @@ export default class Calculercoordonneesproduitvecteurs extends Exercice {
           remplisLesBlancs(
             this,
             i,
-            '\\overrightarrow{w}\\begin{pmatrix}%{champ1}\\\\\\\\%{champ2}\\end{pmatrix}',
+            'B(%{champ1}\\,;\\,%{champ2})',
             KeyboardType.clavierDeBaseAvecFraction,
           )
       }
 
-      if (this.questionJamaisPosee(i, wx, wy)) {
+      if (this.questionJamaisPosee(i, xB, yB)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

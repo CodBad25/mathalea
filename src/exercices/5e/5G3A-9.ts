@@ -195,7 +195,7 @@ export default class PavageEtDemiTour2D extends Exercice {
     let couples: [number, number][] = []
     let tailles = []
     let monpavage = pavage()
-    let fenetre
+    let fenetreMathalea2d
     let texte = ''
     let texteCorr = ''
     let typeDePavage = this.sup3
@@ -227,12 +227,12 @@ export default class PavageEtDemiTour2D extends Exercice {
       Nx = tailles[taillePavage - 1][typeDePavage - 1][0]
       Ny = tailles[taillePavage - 1][typeDePavage - 1][1]
       monpavage.construit(typeDePavage, Nx, Ny, 3) // On initialise toutes les propriétés de l'objet.
-      fenetre = monpavage.fenetre
+      fenetreMathalea2d = monpavage.fenetre
       context.fenetreMathalea2d = [
-        fenetre.xmin,
-        fenetre.ymin,
-        fenetre.xmax,
-        fenetre.ymax,
+        fenetreMathalea2d.xmin,
+        fenetreMathalea2d.ymin,
+        fenetreMathalea2d.xmax,
+        fenetreMathalea2d.ymax,
       ]
       while (couples.length < this.nbQuestions + 2 && nombreTentatives < 30) {
         // On cherche d pour avoir suffisamment de couples
@@ -251,10 +251,10 @@ export default class PavageEtDemiTour2D extends Exercice {
           A = monpavage.barycentres[index1] // Ou on choisit un barycentre
         }
         while (
-          A.x - 5 < fenetre.xmin ||
-          A.x + 5 > fenetre.xmax ||
-          A.y - 5 < fenetre.ymin ||
-          A.y + 5 > fenetre.ymax
+          A.x - 5 < fenetreMathalea2d.xmin ||
+          A.x + 5 > fenetreMathalea2d.xmax ||
+          A.y - 5 < fenetreMathalea2d.ymin ||
+          A.y + 5 > fenetreMathalea2d.ymax
         ) {
           index1 = randint(
             Math.floor(monpavage.nb_polygones / 3),
@@ -326,7 +326,7 @@ export default class PavageEtDemiTour2D extends Exercice {
       // il faut afficher tous les polygones du pavage
       objets.push(monpavage.polygones[i])
     }
-    texte = mathalea2d(fenetre, objets) // monpavage.fenetre est calibrée pour faire entrer le pavage dans une feuille A4
+    texte = mathalea2d(fenetreMathalea2d, objets) // monpavage.fenetre est calibrée pour faire entrer le pavage dans une feuille A4
     for (let i = 0; i < this.nbQuestions; i++) {
       texte += `Donner le numéro de l'image de la figure $${couples[i][0]}$ dans la symétrie de centre $A$.`
       setReponse(this, i, couples[i][1])
@@ -371,7 +371,7 @@ export default class PavageEtDemiTour2D extends Exercice {
       }
     }
     if (this.correctionDetaillee) {
-      texteCorr += mathalea2d(fenetre, objets, objetsCorrection)
+      texteCorr += mathalea2d(fenetreMathalea2d, objets, objetsCorrection)
     }
     this.listeQuestions.push(texte)
     this.listeCorrections.push(texteCorr)

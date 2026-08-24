@@ -17,7 +17,7 @@ export const dateDePublication = '30/10/2021' // La date de publication initiale
 export const uuid = 'eaebb'
 
 export const refs = {
-  'fr-fr': ['can2G26-02', '2G26-flash2'],
+  'fr-fr': ['can2G26-02', '2G25-flash2'],
   'fr-ch': ['3G92-3'],
 }
 export default class CoordonneesVecteur2 extends ExerciceSimple {

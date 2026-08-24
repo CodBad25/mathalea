@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
@@ -161,7 +162,7 @@ export default class SignesTabGSpline extends Exercice {
     Dresser le tableau de signes de sa fonction dérivée $f^\\prime$.<br>` +
         mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.55, center: true },
+            { pixelsParCm: 30, scale: 0.55, center: !context.isHtml },
             { xmin: xMin - 1, ymin: yMin - 1, xmax: xMax + 1, ymax: yMax + 1 },
           ),
           objetsEnonce,
@@ -171,7 +172,7 @@ export default class SignesTabGSpline extends Exercice {
         texte = "Voici la représentation graphique d'une fonction $f$ :<br>"
         texte += mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.55, center: true },
+            { pixelsParCm: 30, scale: 0.55, center: !context.isHtml },
             { xmin: xMin - 1, ymin: yMin - 1, xmax: xMax + 1, ymax: yMax + 1 },
           ),
           objetsEnonce,

@@ -175,7 +175,7 @@ export default class CalculerPointMoyenNuage extends Exercice {
           ymax: yMax,
           scale: 0.5,
           display: 'block',
-          center: true,
+          center: !context.isHtml,
         },
         objetsFigure,
       )
@@ -232,7 +232,7 @@ export default class CalculerPointMoyenNuage extends Exercice {
           ymax: yMax,
           display: 'block',
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         objetsFigureCorr,
       )

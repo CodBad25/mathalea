@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { demiDroite } from '../../../lib/2d/DemiDroite'
@@ -549,7 +550,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.8,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -689,7 +690,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                center: true,
+                center: !context.isHtml,
               },
               objets,
             )
@@ -806,7 +807,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1.2,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -844,7 +845,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -882,7 +883,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -1068,7 +1069,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -1149,7 +1150,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -1225,7 +1226,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )
@@ -1301,7 +1302,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  center: true,
+                  center: !context.isHtml,
                 },
                 objets,
               )

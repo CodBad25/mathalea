@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -68,7 +69,7 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 1,
-              center: true,
+              center: !context.isHtml,
             },
             fixeBordures(objets),
           ),
@@ -98,7 +99,7 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.8,
-              center: true,
+              center: !context.isHtml,
             },
             fixeBordures(objets),
           ),

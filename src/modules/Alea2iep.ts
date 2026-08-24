@@ -169,6 +169,7 @@ export type OptionsPoint = OptionsCrayon & {
   label?: string // Label du point
   dx?: number // Décalage horizontal du label du point
   dy?: number // Décalage vertical du label du point
+  taille?: number // Taille du label du point
 }
 
 export type OptionsTexte = OptionsIep & {
@@ -870,7 +871,11 @@ export default class Alea2iep {
       if (options.dy) {
         M.y += options.dy
       }
-      this.textePoint(`$${label}$`, M, { tempo: 0, couleur: couleurLabel })
+      this.textePoint(`$${label}$`, M, {
+        tempo: 0,
+        couleur: couleurLabel,
+        taille: options.taille,
+      })
     } else {
       codeXML = `<action abscisse="${this.x(A)}" ordonnee="${this.y(A)}" couleur="${couleur}" id="${A.id}" mouvement="creer" objet="point" tempo="${tempo}" />`
     }

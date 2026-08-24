@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import type { MathfieldElement } from 'mathlive'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { plot } from '../../../lib/2d/Plot'
@@ -145,7 +146,7 @@ export default class Can52026Q16 extends ExerciceCan {
 
     this.consigne = mathalea2d(
       Object.assign(
-        { center: true, scale: 0.5 },
+        { center: !context.isHtml, scale: 0.5 },
         fixeBordures(objets),
       ),
       objets,
@@ -165,7 +166,7 @@ La proportion de boules blanches est donc : ${pgcd(nbBlanches, total) !== 1 ? `$
     this.canEnonce =
       mathalea2d(
         Object.assign(
-          { center: true, scale: 0.5 },
+          { center: !context.isHtml, scale: 0.5 },
           fixeBordures(objets),
         ),
         objets,

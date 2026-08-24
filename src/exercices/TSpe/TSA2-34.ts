@@ -273,7 +273,7 @@ export default class EtudeFonctionInverse extends Exercice {
         ymax: yMax + 0.6,
         pixelsParCm: 25,
         scale: 0.65,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       asymptoteHorizontale,

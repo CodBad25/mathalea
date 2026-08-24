@@ -6,6 +6,10 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+/**
+ * @author Jean-Claude Lhote
+ */
+
 type ValeurPoint = {
   pointValue: number
   label: string
@@ -288,7 +292,8 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.partsCount = this.initialPartsCount
     this.showNegative = this.getAttribute('show-negative') === 'true'
     this.initialShowNegative = this.showNegative
-    this.showEqualityMarks = this.getAttribute('show-equality-marks') !== 'false'
+    this.showEqualityMarks =
+      this.getAttribute('show-equality-marks') !== 'false'
     this.allowMultiplePoints = this.getAttribute('multiple-points') === 'true'
     this.interactivityOn = this.getAttribute('interactivity-on') !== 'false'
     this.initialPoints = this.parsePointsAttribute(this.getAttribute('points'))

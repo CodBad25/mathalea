@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
@@ -69,7 +70,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.5,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

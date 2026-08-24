@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
@@ -53,7 +54,7 @@ export default class NomExercice extends ExerciceSimple {
             ymin: -1,
             ymax: 4,
             scale: 0.6,
-            center: true,
+            center: !context.isHtml,
           },
           objets,
         )

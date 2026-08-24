@@ -1,134 +1,267 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Calculer avec  des puissances'
+export const titre = 'Calculer avec un programme de calcul*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDePublication = '15/09/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '25/03/2026'
+export const dateDePublication = '16/11/2022'
+export const dateDeModifImportante = '04/08/2025'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
- *
  */
 
-export const uuid = 'b31eb'
+export const uuid = '04048'
 
 export const refs = {
   'fr-fr': ['can2N43-03'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
-export default class CalculPuissancesOperation extends ExerciceSimple {
+export default class ProgrammeCalcul2 extends ExerciceSimple {
   constructor() {
     super()
     this.versionQcmDisponible = true
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte =
-      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-    this.optionsDeComparaison = { seulementCertainesPuissances: true }
+
+    // ${texNombre(ecritureParenthesesSiNegatif(a / 5 - e))}^2=${texNombre((a / 5 - e) * (a / 5 - e))}$
   }
 
   nouvelleVersion() {
-    if (!this.versionQcm) {
-      this.question = `Écrire sous la forme $a^n$ où $a$ et $n$  sont ${context.isDiaporama ? '<br>' : ''} des  entiers relatifs. <br>`
-    } else {
-      this.question = ''
-    }
-    let a, b, n, p, s
+    let a, b, reponse, f1, f2
+
     switch (
-      this.quotaChoice('type', ['a', 'b', 'c', 'd', 'e']) //
+      this.quotaChoice('cas', [1, 2, 3, 4, 5, 6, 7, 8]) //
     ) {
-      case 'a':
-        a = randint(-9, 9, [0, 1, -1])
-        n = randint(-9, 9, [0, 1, -1])
-        p = randint(-9, 9, [0, 1, -1])
-        s = n + p
-        this.question += `$${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}$`
-        this.correction = `On utilise la formule $a^n\\times a^m=a^{n+m}$ avec $a=${a}$, $n=${n}$ et $p=${p}$.<br>
-        $${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}=${ecritureParentheseSiNegatif(a)}^{${n}+${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n + p}}`)}$`
+      case 1: // x^2+y^2
+        a = randint(-6, 6, 0)
+        b = randint(-10, 10, [0, a])
+
+        this.question = this.versionQcm
+          ? `Choisir deux nombres puis calculer la somme de leurs carrés.  <br>
+     Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} la somme de leurs carrés.  <br>
+     Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
+        this.reponse = this.versionQcm
+          ? `$${texNombre(a ** 2 + b ** 2)}$`
+          : a ** 2 + b ** 2
+        this.correction = `$${ecritureParentheseSiNegatif(a)}^2+${ecritureParentheseSiNegatif(b)}^2=${miseEnEvidence(a ** 2 + b ** 2)}$`
+
         this.distracteurs = [
-          `$${ecritureParentheseSiNegatif(a)}^{${n - p}}$`,
-          `$${ecritureParentheseSiNegatif(a)}^{${n * p}}$`,
-          `$${ecritureParentheseSiNegatif(a * a)}^{${n + p}}$`,
+          `${(a + b) ** 2 === a ** 2 + b ** 2 ? `$${texNombre((a - b) ** 2)}$` : `$${texNombre((a + b) ** 2)}$`}`,
+          `$${texNombre(a ** 2 + b)}$`,
+          `$${texNombre(a + b ** 2)}$`,
+          `$${texNombre(a - b ** 2)}$`,
         ]
-        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${n + p}}`
 
         break
-      case 'b':
-        a = randint(-9, 9, [0, 1, -1])
-        b = randint(-9, 9, [0, 1, -1])
-        n = randint(-9, 9, [0, 1, -1])
-        p = a * b
-        this.question += `$${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(b)}^{${n}}$`
+      case 2: // (x+y)^2
+        a = randint(-5, 5, 0)
+        b = randint(-7, 7, [0, a, -a])
+        reponse = (a + b) ** 2
+
+        this.question = this.versionQcm
+          ? `Choisir deux nombres puis calculer le carré de leur somme. <br>
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le carré de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
+
+        this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
+        this.correction = `$(${a}${ecritureAlgebrique(b)})^2=${miseEnEvidence(`${reponse}`)}$`
+
         this.distracteurs = [
-          `$${ecritureParentheseSiNegatif(p)}^{${n + n}}$`,
-          `$${ecritureParentheseSiNegatif(p)}^{${n * n}}$`,
-          `$${ecritureParentheseSiNegatif(a * a * -1)}^{${n}}$`,
+          `$${texNombre(a ** 2 + b ** 2)}$`, // Erreur : carré de la somme vs somme des carrés
+          `$${texNombre(a + b)}$`, // Erreur : oubli du carré
+          `$${texNombre(a ** 2 + 2 * a * b)}$`, // Erreur : développement incomplet
         ]
-        this.correction = `On utilise la formule $a^n\\times b^n=(a\\times b)^{n}$
-        avec $a=${a}$,  $b=${b}$ et $n=${n}$.<br>
-        $${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(b)}^{${n}}=(${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(b)})^{${n}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(p)}^{${n}}`)}$ `
-        this.reponse = `${ecritureParentheseSiNegatif(p)}^{${n}}`
         break
 
-      case 'c':
-        a = randint(-9, 9, [0, 1, -1])
-        p = randint(-9, 9, [0, 1])
-        n = randint(-9, 9, [0, 1, -1])
-        s = n * p
-        this.question += ` $\\left(${ecritureParentheseSiNegatif(a)}^{${n}}\\right)^{${p}}$`
+      case 3: // 2(x+y)^2
+        a = randint(-5, 5, 0)
+        b = randint(-5, 5, [0, a, -a])
+        reponse = 2 * (a + b) ** 2
+
+        this.question = this.versionQcm
+          ? `Choisir deux nombres puis calculer le double du carré de leur somme. <br>
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double du carré de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
+
+        this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
+        this.correction = `$2\\times (${a}+${ecritureParentheseSiNegatif(b)})^2=2\\times ${(a + b) ** 2}=${miseEnEvidence(`${reponse}`)}$`
+
         this.distracteurs = [
-          `$${ecritureParentheseSiNegatif(a)}^{${n + p}}$`,
-          `$${ecritureParentheseSiNegatif(a * n)}^{${p}}$`,
-          `$${ecritureParentheseSiNegatif(a * p)}^{${n}}$`,
+          `$${texNombre((2 * (a + b)) ** 2)}$`, // Erreur : (2(x+y))² au lieu de 2(x+y)²
+          `$${texNombre(2 * (a + b))}$`, // Erreur : oubli du carré
+          `$${texNombre((a + b) ** 2)}$`, // Erreur : oubli du facteur 2
         ]
-        this.correction = `On utilise la formule $\\left(a^n\\right)^p=a^{n\\times p}$
-        avec $a=${a}$,  $n=${n}$ et $p=${p}$.<br>
-        $\\left(${ecritureParentheseSiNegatif(a)}^{${n}}\\right)^{${p}}=${ecritureParentheseSiNegatif(a)}^{${n}\\times ${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n * p}}`)}$ `
-        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${s}}`
         break
 
-      case 'd':
-        a = randint(-9, 9, [0, 1, -1])
-        p = randint(-9, 9, [0, 1])
-        n = randint(-9, 9, [0, 1, -1, p])
-        s = n - p
-        this.question += `$\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(a)}^{${p}}}$`
-        this.correction = `On utilise la formule $\\dfrac{a^n}{a^p}=a^{n-p}$ avec $a=${a}$,  $n=${n}$ et $p=${p}$.<br>
-        $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(a)}^{${p}}}=${ecritureParentheseSiNegatif(a)}^{${n}- ${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n - p}}`)}$`
-        this.distracteurs = [
-          `$${ecritureParentheseSiNegatif(a)}^{${n + p}}$`,
-          `$${ecritureParentheseSiNegatif(a)}^{${-s}}$`,
-          `$${ecritureParentheseSiNegatif(a)}^{${n * p}}$`,
-        ]
-        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${s}}`
+      case 4: // 2(x*y) et 2*(x+y)
+        if (choice([true, false])) {
+          a = randint(-10, 10, 0)
+          b = randint(-5, 5, [0, a])
+          reponse = 2 * a * b
+
+          this.question = this.versionQcm
+            ? `Choisir deux nombres puis calculer le double de leur produit. <br>
+     Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+            : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double de leur produit. <br>
+     Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
+
+          this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
+          this.correction = `$2\\times${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(b)}=${miseEnEvidence(`${reponse}`)}$`
+
+          this.distracteurs = [
+            `$${texNombre(2 * (a + b))}$`, // Erreur : double de la somme au lieu du produit
+            `$${texNombre(a * b)}$`, // Erreur : oubli du facteur 2
+            `$${texNombre(2 * a + 2 * b)}$`, // Erreur : distributivité mal appliquée
+          ]
+        } else {
+          a = randint(-10, 10, 0)
+          b = randint(-10, 10, [0, a, -a])
+          reponse = 2 * (a + b)
+
+          this.question = this.versionQcm
+            ? `Choisir deux nombres puis calculer le double de leur somme. <br>
+       Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+            : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double de leur somme. <br>
+       Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
+
+          this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
+          this.correction = `$2\\times(${a}+${ecritureParentheseSiNegatif(b)})=${miseEnEvidence(`${reponse}`)}$`
+
+          this.distracteurs = [
+            `$${texNombre(2 * a * b)}$`, // Erreur : double du produit au lieu de la somme
+            `$${texNombre(a + b)}$`, // Erreur : oubli du facteur 2
+            `$${texNombre((a + b) ** 2)}$`, // Erreur : carré au lieu du double
+          ]
+        }
         break
-      case 'e':
-        b = randint(2, 6, [0, 1, -1])
-        a = choice([2, 3, 4, 5, 6, 7]) * b
-        n = randint(-9, 9, [0, 1, -1])
-        s = a / b
-        this.question += ` $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(b)}^{${n}}}$`
-        this.correction = `On utilise la formule $\\dfrac{a^n}{b^n}=\\left(\\dfrac{a}{b}\\right)^{n}$ avec
-        $a=${a}$,  $b=${b}$ et $n=${n}$.<br>
-        $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(b)}^{${n}}}=\\left(\\dfrac{${ecritureParentheseSiNegatif(a)}}{${ecritureParentheseSiNegatif(b)}}\\right)^{${n}}=${miseEnEvidence(`${s}^{${n}}`)}$
-        `
+
+      case 5: // 1/x+1/y
+        a = randint(-10, 10, 0)
+        b = randint(-4, 4, [-1, 0]) * a // b + a ne doit pas être nul
+        f1 = new FractionEtendue(1, a)
+        f2 = new FractionEtendue(1, b)
+        reponse = f1.sommeFraction(f2).simplifie()
+
+        this.question = this.versionQcm
+          ? `Choisir deux nombres puis calculer la somme de leur inverse. <br>
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} la somme de leur inverse. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
+
+        this.reponse = this.versionQcm
+          ? `$${reponse.texFractionSimplifiee}$`
+          : reponse
+        this.correction = `L'inverse de $${a}$ est : $${f1.texFraction}$ ;<br>
+  L'inverse de $${b}$ est : $${f2.texFraction}$ ;<br>
+  La somme des inverses est donc : $${f1.texFraction}+${f2.texFraction}=\\dfrac{1\\times${ecritureParentheseSiNegatif(b / a)}}{${a}\\times${ecritureParentheseSiNegatif(b / a)}}+${f2.texFraction}=
+  \\dfrac{${b / a}}{${b}}+${f2.texFraction}=
+  \\dfrac{${b / a + f2.n}}{${b}}=
+   ${miseEnEvidence(`${reponse.texFractionSimplifiee}`)}$`
+
         this.distracteurs = [
-          `$${ecritureParentheseSiNegatif(s)}^{${n - 2}}$`,
-          `$${ecritureParentheseSiNegatif(a)}^{0}$`,
-          `$${ecritureParentheseSiNegatif(s)}^{0}$`,
+          `$\\dfrac{1}{${a + b}}$`, // Erreur : inverse de la somme au lieu de somme des inverses
+          `$\\dfrac{2}{${a * b}}$`, // Erreur : mauvais calcul
+          `$${new FractionEtendue(2, a + b).texFractionSimplifiee}$`, // Erreur : résultat décimal au lieu de fraction
         ]
-        this.reponse = `${s}^{${n}}`
+        break
+
+      case 6: // 1/(x+y)
+        a = randint(-10, 10, 0)
+        b = randint(-10, 10, [0, -a])
+        reponse = new FractionEtendue(1, a + b)
+
+        this.question = this.versionQcm
+          ? `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
+
+        this.reponse = this.versionQcm
+          ? `$${reponse.texFractionSimplifiee}$`
+          : reponse
+        this.correction = `La somme de $${a}$ et $${b}$ est $${a + b}$. <br>
+  Son inverse est : $${miseEnEvidence(`${reponse.texFractionSimplifiee}`)}$.`
+
+        this.distracteurs = [
+          `$${new FractionEtendue(1, a + b).oppose().texFractionSimplifiee}$`,
+          `$${-a - b}$`,
+          `$${new FractionEtendue(a + b, a * b).texFractionSimplifiee}$`, //
+        ]
+        break
+
+      case 7: // 1/(x+y) avec x fraction
+        a = randint(2, 10)
+        b = randint(1, 10)
+        f1 = new FractionEtendue(1, a)
+        f2 = new FractionEtendue(1 + b * a, a)
+        reponse = new FractionEtendue(a, 1 + b * a)
+
+        this.question = this.versionQcm
+          ? `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
+   Le résultat obtenu, si on choisit comme nombres $${f1.texFraction}$ et $${b}$, est :`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${f1.texFraction}$ et $${b}$ ?`
+
+        this.reponse = this.versionQcm
+          ? `$${reponse.texFractionSimplifiee}$`
+          : reponse
+        this.correction = `La somme de $${f1.texFraction}$ et $${b}$ est : $${f1.texFraction}+${b}=${f1.texFraction}+\\dfrac{${b}\\times ${a}}{${a}}=
+  ${f1.texFraction}+\\dfrac{${b * a}}{${a}}=${f2.texFraction}$. <br>
+  <br>
+  Son inverse est : $${miseEnEvidence(`${reponse.texFractionSimplifiee}`)}$.`
+
+        this.distracteurs = [
+          `$${new FractionEtendue(1 + b * a, a).texFractionSimplifiee}$`, // Erreur : inverse de chaque terme séparément
+          `$\\dfrac{${a}}{${1 + b}}$`,
+          `$${new FractionEtendue(1, a + b).texFractionSimplifiee}$`, // Erreur : pas d'inversion
+        ]
+        break
+
+      case 8: // 1/(x+y)^2
+        a = randint(-9, 9, 0)
+        if (a < 0) {
+          b = randint(-2, 6, [0, -a])
+        } else {
+          b = randint(-6, 2, [0, -a])
+        }
+        reponse = new FractionEtendue(1, (a + b) ** 2)
+
+        this.question = this.versionQcm
+          ? `Choisir deux nombres puis calculer l'inverse du carré de leur somme. <br>
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse du carré de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
+
+        this.reponse = this.versionQcm
+          ? `$${reponse.texFractionSimplifiee}$`
+          : reponse
+        this.correction = `La somme de $${a}$ et $${b}$ est : $${a + b}$.<br>
+  Le carré de cette somme est : $${ecritureParentheseSiNegatif(a + b)}^2=${(a + b) ** 2}$.<br>
+  L'inverse de ce carré est :  $${miseEnEvidence(`${reponse.texFractionSimplifiee}`)}$.`
+
+        this.distracteurs = [
+          `$${new FractionEtendue(1, a + b).texFractionSimplifiee}$`, // Erreur : oubli du carré
+          `$${new FractionEtendue(1, a ** 2 + b ** 2).texFractionSimplifiee}$`, // Erreur : somme des carrés au lieu de carré de la somme
+          `$${new FractionEtendue(a ** 2 + b ** 2, a ** 2 * b ** 2).texFractionSimplifiee}$`, // Erreur : résultat décimal au lieu de fraction
+        ]
         break
     }
-    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
-    if (this.interactif || this.versionQcm) {
-      this.question += '$=$'
-    }
+    this.canEnonce = this.question // 'Compléter'
+    this.canReponseACompleter = ''
   }
 }

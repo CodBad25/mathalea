@@ -60,7 +60,9 @@ type BranchingQcmVerificationResult = {
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class MathaleaBranchingQcmElement extends MathaleaCustomElement {
   static readonly elementTag = 'mathalea-branching-qcm'
 

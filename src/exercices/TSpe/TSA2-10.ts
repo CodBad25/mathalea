@@ -156,7 +156,7 @@ export default class ConjecturerLimitesGraphiquement extends ExerciceQcmA {
         ymax: 6.8,
         pixelsParCm: 25,
         scale: 0.65,
-        center: true,
+        center: !context.isHtml,
       },
       r,
       c,

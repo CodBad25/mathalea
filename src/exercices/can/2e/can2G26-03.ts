@@ -19,7 +19,7 @@ export const dateDePublication = '04/03:2022' // La date de publication initiale
 export const uuid = '0dfad'
 
 export const refs = {
-  'fr-fr': ['can2G26-03', '2G26-flash3'],
+  'fr-fr': ['can2G26-03', '2G25-flash3'],
   'fr-ch': ['3G91-9'],
 }
 export default class TranslationVecteur extends ExerciceSimple {

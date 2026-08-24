@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -98,7 +99,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.5,
-        center: true,
+        center: !context.isHtml,
       },
       objets,
     )

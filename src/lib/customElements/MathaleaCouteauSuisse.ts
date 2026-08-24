@@ -24,7 +24,18 @@ type VerificationResult = {
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ * Permet d'agréger autant d'éléments interactifs que l'on veut dans un seul élément.
+ * Chaque élément interactif est rendu dans le DOM et peut être manipulé
+ * indépendamment des autres.
+ * La vérification de la question se fait en appelant la fonction `verifQuestion`
+ * de chaque élément interactif contenu dans le couteau suisse.
+ * Le résultat final est une agrégation des résultats de chaque élément.
+ * L'élément couteau suisse est utile pour créer des questions complexes qui
+ * nécessitent plusieurs types d'interactions, comme par exemple un QCM suivi
+ * d'un champ à remplir.
+ */
 export class MathaleaCouteauSuisseElement extends MathaleaCustomElement {
   static readonly elementTag = 'mathalea-couteau-suisse'
 

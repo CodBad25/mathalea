@@ -1,3 +1,4 @@
+import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -168,7 +169,7 @@ export default class EquationsGSpline extends ExerciceSimple {
     Résoudre l'équation  $f(x)=${y1}$.<br>` +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, center: true },
+          { pixelsParCm: 30, scale: 0.65, center: !context.isHtml },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

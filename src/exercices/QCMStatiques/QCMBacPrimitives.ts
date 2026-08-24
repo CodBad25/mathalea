@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
@@ -84,7 +85,7 @@ function graphiquePolynesie2024(avecAire = false): string {
       ymax: 4.5,
       pixelsParCm: 25,
       scale: 0.9,
-      center: true,
+      center: !context.isHtml,
       centerLatex: true,
     },
     r,

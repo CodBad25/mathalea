@@ -55,7 +55,7 @@ this.optionsChampTexte = { texteApres: '.' }
           xmax: 10,
           ymax: 1.5,
           scale: 0.6,
-          center: true,
+          center: !context.isHtml,
         },
         d,
       )
@@ -94,7 +94,7 @@ this.optionsChampTexte = { texteApres: '.' }
           xmax: 10,
           ymax: 1.2,
           scale: 0.6,
-          center: true,
+          center: !context.isHtml,
         },
         d,
       )

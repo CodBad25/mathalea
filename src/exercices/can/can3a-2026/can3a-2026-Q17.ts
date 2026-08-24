@@ -86,7 +86,7 @@ export default class Can32026Q17 extends ExerciceCan {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.7,
-        center: true,
+        center: !context.isHtml,
       },
       [triangle, labels, codages, angleC, angleA],
     )

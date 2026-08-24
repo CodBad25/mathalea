@@ -32,7 +32,9 @@ type MathaleaTextfieldCreateOptions = MathaleaTextfieldOptions & {
   numeroExercice: number
   questionIndex: number
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export class MathaleaTextfieldElement extends MathaleaCustomElement {
   static readonly elementTag = 'mathalea-textfield'
   private static readonly verificationCallbacks = new Map<

@@ -1,4 +1,4 @@
-import CalculPuissancesOperation from '../can/2e/can2N43-03'
+import CalculPuissancesOperation from '../can/2e/can2N43-02'
 export const titre = 'Simplifier avec les propriétés des puissances'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true

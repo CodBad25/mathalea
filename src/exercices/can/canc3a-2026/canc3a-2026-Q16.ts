@@ -97,7 +97,7 @@ export default class Can2026CM2Q16 extends ExerciceCan {
         ymax: 1.2,
         pixelsParCm: 20,
         scale: 0.6,
-        center: true,
+        center: !context.isHtml,
       },
       d,
     )
@@ -116,7 +116,7 @@ export default class Can2026CM2Q16 extends ExerciceCan {
           ymax: 1.5,
           pixelsParCm: 20,
           scale: 0.5,
-          center: true,
+          center: !context.isHtml,
         },
         dCorrection,
       )

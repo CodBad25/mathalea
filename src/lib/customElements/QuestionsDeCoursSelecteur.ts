@@ -3,8 +3,8 @@ import { renderKatex } from '../mathalea'
 import {
   formatFiltreNiveauQuestionsDeCours,
   type ModeNiveauQuestionDeCours,
-  NIVEAUX_QUESTIONS_DE_COURS,
   type NiveauQuestionDeCours,
+  NIVEAUX_QUESTIONS_DE_COURS,
   parseFiltreNiveauQuestionsDeCours,
   questionCorrespondAuNiveau,
   type QuestionDeCours,
@@ -87,7 +87,9 @@ export type QuestionsDeCoursSelecteurOptions = {
    */
   filtreNiveau?: string
 }
-
+/**
+ * @author Rémi Angot
+ */
 export class QuestionsDeCoursSelecteurElement extends MathaleaCustomElement {
   static readonly elementTag = 'questions-de-cours-selecteur'
 
