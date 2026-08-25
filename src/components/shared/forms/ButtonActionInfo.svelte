@@ -1,5 +1,6 @@
 <script lang="ts">
   import { buildMathAleaURL } from '../../../lib/components/urls'
+  import { copyTextToClipboard } from '../../../lib/components/clipboard'
   import { downloadFile } from '../../../lib/files'
   import BasicInfoModal from '../modal/BasicInfoModal.svelte'
   import ButtonIconTooltip from './ButtonIconTooltip.svelte'
@@ -46,24 +47,17 @@
       contentDisplayed = 'error'
       return
     }
-    navigator.clipboard
-      .writeText(
-        useCurrentUrl
-          ? buildMathAleaURL({ removeSeed }).toString()
-          : textToCopy,
-      )
-      .then(
-        () => {
-          contentDisplayed = 'success'
-        },
-        (err) => {
-          console.error(
-            'Impossible de copier le texte dans le presse-papier',
-            err,
-          )
-          contentDisplayed = 'error'
-        },
-      )
+    // copyTextToClipboard gère les contextes non sécurisés (http://IP-du-LAN)
+    // où navigator.clipboard est absent, via un repli execCommand.
+    const text = useCurrentUrl
+      ? buildMathAleaURL({ removeSeed }).toString()
+      : textToCopy
+    void copyTextToClipboard(text).then((success) => {
+      if (!success) {
+        console.error('Impossible de copier le texte dans le presse-papier')
+      }
+      contentDisplayed = success ? 'success' : 'error'
+    })
   }
 
   function download() {

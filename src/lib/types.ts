@@ -64,6 +64,11 @@ export interface InterfaceGlobalOptions {
   /** no chrono : course aux nombres sans chronomètre */
   canNC?: boolean
   lang?: Language
+  subject?: string // titre du quizz (vues quizzconf et quizz)
+  quizzParam?: string // paramètres du quizz encodés en base64 (vues quizzconf et quizz)
+  quizzRole?: 'manager' | 'player' // rôle dans une partie multi-joueurs (vue quizz)
+  pin?: string // PIN à 6 chiffres de la room multi-joueurs (vue quizz)
+  gameId?: string // identifiant serveur de la room multi-joueurs (vue quizz)
 }
 
 export interface InterfaceParams extends Partial<

@@ -44,7 +44,14 @@ export default class ExprimerEnFonctionRac extends ExerciceSimple {
         this.question = `Lorsqu'un point mobile suit une trajectoire circulaire de rayon $R$, 
   en mètre ($\\text{m}$), son accélération centripète $a$ (en $\\text{m/s}^2$) 
   et sa vitesse $v$ (en $\\text{m/s}$) sont liées par la relation : <br>
-  ${choixQ ? `${texteCentre('$a=\\dfrac{v^2}{R}$')}` : `${texteCentre('$v=\\sqrt{aR}$')}`}`
+  `
+        this.question += choixQ
+          ? context.isHtml
+            ? '$a=\\dfrac{v^2}{R}$<br>'
+            : `${texteCentre('$a=\\dfrac{v^2}{R}$')}`
+          : context.isHtml
+            ? '$v=\\sqrt{aR}$<br>'
+            : `${texteCentre('$v=\\sqrt{aR}$')}`
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer la vitesse $v$ est : `
@@ -61,6 +68,7 @@ export default class ExprimerEnFonctionRac extends ExerciceSimple {
             ? ['$v=aR^2$', '$v=\\sqrt{\\dfrac{a}{R}}$', '$v=\\dfrac{a^2}{R}$']
             : ['$a=v^2R$', '$a=\\dfrac{v}{\\sqrt{R}}$', '$a=\\dfrac{R}{v^2}$']
         }
+        /* Ancienne version
         choixQ
           ? (this.optionsChampTexte = {
               texteAvant: '<br> $v=$',
@@ -69,7 +77,20 @@ export default class ExprimerEnFonctionRac extends ExerciceSimple {
           : (this.optionsChampTexte = {
               texteAvant: '<br> $a=$',
               texteApres: ' ',
-            })
+            }) 
+        */
+        // Nouvelle version
+        this.optionsChampTexte = choixQ
+          ? {
+              texteAvant: '<br> $v=$',
+              texteApres: ' ',
+            }
+          : {
+              texteAvant: '<br> $a=$',
+              texteApres: ' ',
+            }
+        // Fin nouvelle version
+
         this.correction = choixQ
           ? `Puisque $a=\\dfrac{v^2}{R}$, alors $v^2 = a \\times R$. <br>Comme $a \\times R\\geqslant 0$, $${miseEnEvidence('v = \\sqrt{aR}')}$.`
           : `On part de la formule $v = \\sqrt{aR}$.<br>
@@ -80,8 +101,12 @@ Puis en isolant $a$, on obtient : $${miseEnEvidence('a = \\dfrac{v^2}{R}')}$.`
         this.question =
           'On considère $x$, $y$ et $v$ des nombres réels positifs non nuls liés par la relation : <br>'
         this.question += choixQ
-          ? `${texteCentre('$v=\\sqrt{\\dfrac{x}{y}}$')}`
-          : `${texteCentre('$y=(1+vx)^2$')}`
+          ? context.isHtml
+            ? '$v=\\sqrt{\\dfrac{x}{y}}$<br>'
+            : `${texteCentre('$v=\\sqrt{\\dfrac{x}{y}}$')}`
+          : context.isHtml
+            ? '$y=(1+vx)^2$<br>'
+            : `${texteCentre('$y=(1+vx)^2$')}`
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer $y$ est : `
@@ -93,9 +118,7 @@ Puis en isolant $a$, on obtient : $${miseEnEvidence('a = \\dfrac{v^2}{R}')}$.`
           this.question += choixQ
             ? `Donner l'expression permettant, à partir de cette formule, d'exprimer $y$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer $v$.`
-          this.reponse = choixQ
-            ? '\\dfrac{x}{v^2}'
-            : '\\dfrac{\\sqrt{y}-1}{x}'
+          this.reponse = choixQ ? '\\dfrac{x}{v^2}' : '\\dfrac{\\sqrt{y}-1}{x}'
         }
         if (this.versionQcm) {
           this.distracteurs = choixQ
@@ -106,15 +129,15 @@ Puis en isolant $a$, on obtient : $${miseEnEvidence('a = \\dfrac{v^2}{R}')}$.`
                 '$v=\\dfrac{1}{x \\times \\sqrt{y}}$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $y=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $v=$',
               texteApres: ' ',
-            })
+            }
         if (choixQ) {
           this.correction = `On part de la relation : $v = \\sqrt{\\dfrac{x}{y}}$.<br>
 En élevant les deux membres au carré, on obtient : $v^2 = \\dfrac{x}{y}$.<br>
@@ -154,7 +177,9 @@ En isolant $t$, on obtient : $${miseEnEvidence('t = \\sqrt{C} - 1')}$.`
 
       case 4:
         this.question = `Le volume $V$ d'un cylindre de hauteur $h$ et de rayon $r$ est égal à :<br>`
-        this.question += texteCentre('$V=\\pi r^2h$')
+        this.question += context.isHtml
+          ? '$V=\\pi r^2h$<br>'
+          : texteCentre('$V=\\pi r^2h$')
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer la hauteur $h$ est : `
@@ -193,15 +218,15 @@ En isolant $t$, on obtient : $${miseEnEvidence('t = \\sqrt{C} - 1')}$.`
                 '$r=\\dfrac{r^2}{\\pi V}$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $h=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $r=$',
               texteApres: ' ',
-            })
+            }
 
         if (choixQ) {
           this.correction = `On part de la formule : $V = \\pi r^2 h$.<br>
@@ -218,7 +243,9 @@ Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvid
 On cherche à isoler $h$. On a :`
         if (this.versionQcm) {
           this.question = `Le volume $V$ d'un cône de hauteur $h$ et de rayon $r$ est :`
-          this.question += texteCentre('$V=\\dfrac{1}{3}\\pi r^2h$')
+          this.question += context.isHtml
+            ? '$V=\\dfrac{1}{3}\\pi r^2h$<br>'
+            : texteCentre('$V=\\dfrac{1}{3}\\pi r^2h$')
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer la hauteur $h$ est : `
             : `L'expression permettant, à partir de cette formule, d'exprimer le rayon $r$ est : `
@@ -227,7 +254,9 @@ On cherche à isoler $h$. On a :`
             : '$r=\\sqrt{\\dfrac{3V}{\\pi h}}$'
         } else {
           this.question = `Le volume $V$ d'un cône de hauteur $h$ et de rayon $r$ est :`
-          this.question += texteCentre('$V=\\dfrac{1}{3}\\pi r^2h$')
+          this.question += context.isHtml
+            ? '$V=\\dfrac{1}{3}\\pi r^2h$<br>'
+            : texteCentre('$V=\\dfrac{1}{3}\\pi r^2h$')
           this.question += choixQ
             ? `Donner l'expression permettant, à partir de cette formule, d'exprimer la hauteur $h$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer le rayon $r$.`
@@ -258,15 +287,15 @@ On cherche à isoler $h$. On a :`
                 '$r=\\dfrac{\\sqrt{3V}}{\\pi h}$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $h=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $r=$',
               texteApres: ' ',
-            })
+            }
 
         if (choixQ) {
           this.correction = `On part de la formule : $V = \\dfrac{1}{3}\\pi r^2 h$.<br>
@@ -282,7 +311,9 @@ Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvid
       case 6:
       default:
         this.question = `L'énergie cinétique $E$ (en joules) d'un objet de masse $m$ (en kg) et de vitesse $v$ (en m/s) est donnée par :<br>`
-        this.question += texteCentre('$E=\\dfrac{1}{2}mv^2$')
+        this.question += context.isHtml
+          ? '$E=\\dfrac{1}{2}mv^2$<br>'
+          : texteCentre('$E=\\dfrac{1}{2}mv^2$')
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer la masse $m$ est : `
@@ -311,15 +342,15 @@ Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvid
                 '$v=\\sqrt{\\dfrac{E}{2m}}$',
               ]
         }
-        choixQ
-          ? (this.optionsChampTexte = {
+        this.optionsChampTexte = choixQ
+          ? {
               texteAvant: '<br> $m=$',
               texteApres: ' ',
-            })
-          : (this.optionsChampTexte = {
+            }
+          : {
               texteAvant: '<br> $v=$',
               texteApres: ' ',
-            })
+            }
 
         if (choixQ) {
           this.correction = `On part de la formule : $E = \\dfrac{1}{2}mv^2$.<br>

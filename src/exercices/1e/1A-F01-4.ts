@@ -100,7 +100,7 @@ export default class AutoF01d extends ExerciceQcmA {
 
     const objetsEnonce = [repere1, courbe1, o]
 
-    this.enonce = `On considère une fonction $f$ dont la représentation graphique  est tracée ci-dessous.<br>`
+    this.enonce = `On considère une fonction $f$ dont la représentation graphique  est tracée ci-dessous.<br><br>`
     const optionsFigure = {
       pixelsParCm: 30,
       scale: 1,
@@ -156,7 +156,7 @@ export default class AutoF01d extends ExerciceQcmA {
     const figureCorrectionId = `1A-F01-4-correctionEx${this.numeroExercice ?? 0}Q${questionId}`
     const objetsCorrection = [
       ...objetsEnonce,
-      ...[abs1, abs2].map((abs, index) =>
+      ...[abs1, abs2].map((abs, _index) =>
         lectureImage(
           theSpline.x[abs],
           theSpline.y[abs],

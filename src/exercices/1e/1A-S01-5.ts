@@ -159,7 +159,8 @@ export default class ChoisirRepresentationGraphique extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: true, ordered: context.isTypst }
+    this.options.ordered = context.isTypst
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

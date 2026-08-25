@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
@@ -10,6 +9,7 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -154,7 +154,7 @@ export default class ReconnaitreExpressionDepuisCourbeQcm extends ExerciceQcmA {
 
     this.enonce = `On a représenté ci-dessous la courbe d'une fonction $f$.<br><br>
 ${figure}<br><br>
-La seule expression algébrique possible de $f$ est`
+La seule expression algébrique possible de $f$ est :`
 
     this.reponses = [
       `$f(x)=${bonneReponse}$`,

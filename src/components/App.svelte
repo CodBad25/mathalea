@@ -39,6 +39,12 @@
   import Flashcards from './setup/flashcards/Flashcards.svelte'
   import Slides from './setup/slides/Slides.svelte'
   import Tbi from './display/tbi/Tbi.svelte'
+  import QuizzConf from './setup/quizz/QuizzConf.svelte'
+  import Quizz from './display/quizz/Quizz.svelte'
+  import QuizzMulti from './display/quizz/multi/QuizzMulti.svelte'
+  import EnConstruction from './shared/misc/EnConstruction.svelte'
+  import { decodeQuizzParams } from '../lib/quizz/quizzParams'
+  import type { InterfaceGlobalOptions } from '../lib/types'
   import CheckTest from './devtools/CheckTest.svelte'
   import CapytaleConnectionLostModal from './shared/modal/CapytaleConnectionLostModal.svelte'
   import Popup from './shared/modal/Popup.svelte'
@@ -126,6 +132,16 @@
     updateParamsFromUrl()
     updateContext()
     updateVendor()
+  }
+
+  /**
+   * Vue quizz multi-joueurs (V2) ? Vrai si l'URL porte un rôle explicite
+   * (manager/player) ou si les réglages du quizz indiquent le mode multi.
+   */
+  function isMultiQuizz(options: InterfaceGlobalOptions): boolean {
+    if (options.v !== 'quizz') return false
+    if (options.quizzRole != null) return true
+    return decodeQuizzParams(options.quizzParam).mode === 'multi'
   }
 
   function updateParamsFromUrl() {
@@ -248,6 +264,20 @@
     <Slides />
   {:else if $globalOptions.v === 'tbi'}
     <Tbi />
+  {:else if $globalOptions.v === 'quizzconf'}
+    <!-- PHASE-BETA-QUIZZ : pour ouvrir la vue à tous, supprimer ce bloc
+         {#if}…{/if} (et l'import de EnConstruction) en ne gardant que QuizzConf -->
+    {#if !$globalOptions.beta}
+      <EnConstruction feature="Quizz" />
+    {:else}
+      <QuizzConf />
+    {/if}
+  {:else if $globalOptions.v === 'quizz'}
+    {#if isMultiQuizz($globalOptions)}
+      <QuizzMulti />
+    {:else}
+      <Quizz />
+    {/if}
   {:else if $globalOptions.v === 'check-test'}
     <CheckTest />
   {:else if $globalOptions.v !== undefined}

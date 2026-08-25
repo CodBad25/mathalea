@@ -123,7 +123,7 @@ export default class ProbabiliteTirageJeton extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: context.isTypst }
+    this.options.ordered = context.isTypst
     this.versionAleatoire()
   }
 }

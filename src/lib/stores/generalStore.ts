@@ -287,6 +287,46 @@ export function updateGlobalOptionsInURL(url: URL) {
   if (options.v === 'tbi' && tbiParam.length > 0) {
     url.searchParams.append('tbiParam', tbiParam)
   }
+  // Pour les vues quizz, les réglages voyagent dans globalOptions :
+  // subject (titre du quizz) et quizzParam (blob base64 produit par quizzconf).
+  if (options.v === 'quizzconf' || options.v === 'quizz') {
+    if (options.subject != null && options.subject.length > 0) {
+      url.searchParams.append('subject', options.subject)
+    } else {
+      url.searchParams.delete('subject')
+    }
+    if (options.quizzParam != null && options.quizzParam.length > 0) {
+      url.searchParams.append('quizzParam', options.quizzParam)
+    } else {
+      url.searchParams.delete('quizzParam')
+    }
+  } else {
+    url.searchParams.delete('subject')
+    url.searchParams.delete('quizzParam')
+  }
+  // Mode multi-joueurs (vue quizz uniquement) : rôle, PIN et identifiant de
+  // room — le lien joueur minimal est ?v=quizz&quizzRole=player&pin=XXXXXX.
+  if (options.v === 'quizz') {
+    if (options.quizzRole != null) {
+      url.searchParams.append('quizzRole', options.quizzRole)
+    } else {
+      url.searchParams.delete('quizzRole')
+    }
+    if (options.pin != null && options.pin.length > 0) {
+      url.searchParams.append('pin', options.pin)
+    } else {
+      url.searchParams.delete('pin')
+    }
+    if (options.gameId != null && options.gameId.length > 0) {
+      url.searchParams.append('gameId', options.gameId)
+    } else {
+      url.searchParams.delete('gameId')
+    }
+  } else {
+    url.searchParams.delete('quizzRole')
+    url.searchParams.delete('pin')
+    url.searchParams.delete('gameId')
+  }
   urlToWrite = url
   // On ne met à jour l'url qu'une fois toutes les 0,5 s
   // pour éviter l'erreur Attempt to use history.pushState() more than 100 times per 30 seconds

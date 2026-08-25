@@ -1,7 +1,7 @@
-import { bleuMathalea } from '../../lib/colors'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -11,7 +11,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = 'be12d'
 export const refs = {
-  'fr-fr': ['TSA2-10','TCA2-10'],
+  'fr-fr': ['TSA2-10', 'TCA2-10'],
   'fr-ch': [],
 }
 export const interactifReady = true
@@ -245,7 +245,9 @@ export default class ConjecturerLimitesGraphiquement extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: true, ordered: context.isTypst }
+    this.options.ordered = context.isTypst
+    this.options.vertical = true
+
     this.versionAleatoire()
   }
 }

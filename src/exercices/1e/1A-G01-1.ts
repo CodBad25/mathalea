@@ -150,12 +150,18 @@ export default class Auto2AG10 extends ExerciceQcmA {
 
     this.enonce = `On considère le point $A$ d'abscisse $${texNombre(data.x, data.precision)}$.<br>
 Sur quelle droite graduée le point $A$ est-il correctement placé ?`
+    const laBonneDroite = this.buildLineWithPoint(data, data.x)
 
-    this.correction = `Le point $A$ doit être placé à l'abscisse $${texNombre(data.x, data.precision)}$.<br>
-Les autres propositions correspondent à des erreurs classiques : changement de signe ou confusion entre les puissances de 10.`
-
+    this.correction = `Voici les abscisses des différents points $A$ sur les droites graduées proposées :<br>`
+    this.corrections = [
+      `${laBonneDroite}$A(${texNombre(data.x, data.precision)})$`,
+      ...distractors.map(
+        (distractor) =>
+          `${this.buildLineWithPoint(data, distractor)}$A(${texNombre(distractor, data.precision)})$`,
+      ),
+    ]
     this.reponses = [
-      this.buildLineWithPoint(data, data.x),
+      laBonneDroite,
       ...distractors.map((distractor) =>
         this.buildLineWithPoint(data, distractor),
       ),

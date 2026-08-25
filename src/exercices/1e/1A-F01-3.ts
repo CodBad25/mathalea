@@ -32,7 +32,7 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
-  'Retrouver la phrase correcte avec des images et antécédents grahiquement'
+  'Retrouver, graphiquement, la phrase correcte avec des images et antécédents'
 
 /**
  *
@@ -121,37 +121,37 @@ export default class AutoF01c extends ExerciceQcmA {
     )
     const figureEnonce = mathalea2d(optionsFigure, objetsEnonce, o)
     this.enonce += figureEnonce + '<br><br>'
-    this.enonce += 'Une seule affirmation est correcte :'
+    this.enonce += 'Une seule affirmation est correcte. Laquelle ?'
 
     // Définir toutes les bonnes réponses possibles avec leur numéro d'ordre
     const bonnesReponses = [
       {
-        texte: `$${texNombre(theSpline.y[abs1])}$ est l'image de $${texNombre(theSpline.x[abs1])}$`,
+        texte: `$${texNombre(theSpline.y[abs1])}$ est l'image de $${texNombre(theSpline.x[abs1])}$.`,
         numero: 1,
         estCorrecte: true,
       },
       {
-        texte: `Un antécédent de $${texNombre(theSpline.y[abs1])}$ est $${texNombre(theSpline.x[abs1])}$`,
+        texte: `Un antécédent de $${texNombre(theSpline.y[abs1])}$ est $${texNombre(theSpline.x[abs1])}$.`,
         numero: 2,
         estCorrecte: true,
       },
       {
-        texte: `$${texNombre(theSpline.x[abs1])}$ est un antécédent de $${texNombre(theSpline.y[abs1])}$`,
+        texte: `$${texNombre(theSpline.x[abs1])}$ est un antécédent de $${texNombre(theSpline.y[abs1])}$.`,
         numero: 3,
         estCorrecte: true,
       },
       {
-        texte: `L'image de $${texNombre(theSpline.x[abs1])}$ est $${texNombre(theSpline.y[abs1])}$`,
+        texte: `L'image de $${texNombre(theSpline.x[abs1])}$ est $${texNombre(theSpline.y[abs1])}$.`,
         numero: 4,
         estCorrecte: true,
       },
       {
-        texte: `$${texNombre(theSpline.x[abs1])}$ a pour image $${texNombre(theSpline.y[abs1])}$`,
+        texte: `$${texNombre(theSpline.x[abs1])}$ a pour image $${texNombre(theSpline.y[abs1])}$.`,
         numero: 5,
         estCorrecte: true,
       },
       {
-        texte: `$${texNombre(theSpline.y[abs1])}$ a pour antécédent $${texNombre(theSpline.x[abs1])}$`,
+        texte: `$${texNombre(theSpline.y[abs1])}$ a pour antécédent $${texNombre(theSpline.x[abs1])}$.`,
         numero: 6,
         estCorrecte: true,
       },
@@ -159,23 +159,23 @@ export default class AutoF01c extends ExerciceQcmA {
 
     const mauvaisesReponses = [
       {
-        texte: `$${texNombre(theSpline.x[abs1])}$ est l'image de $${texNombre(theSpline.y[abs1])}$`,
+        texte: `$${texNombre(theSpline.x[abs1])}$ est l'image de $${texNombre(theSpline.y[abs1])}$.`,
         estCorrecte: false,
       },
       {
-        texte: `Un antécédent de $${texNombre(theSpline.x[abs1])}$ est $${texNombre(theSpline.y[abs1])}$`,
+        texte: `Un antécédent de $${texNombre(theSpline.x[abs1])}$ est $${texNombre(theSpline.y[abs1])}$.`,
         estCorrecte: false,
       },
       {
-        texte: `$${texNombre(theSpline.y[abs1])}$ est un antécédent de $${texNombre(theSpline.x[abs1])}$`,
+        texte: `$${texNombre(theSpline.y[abs1])}$ est un antécédent de $${texNombre(theSpline.x[abs1])}$.`,
         estCorrecte: false,
       },
       {
-        texte: `$${texNombre(theSpline.y[abs1])}$ a pour image $${texNombre(theSpline.x[abs1])}$`,
+        texte: `$${texNombre(theSpline.y[abs1])}$ a pour image $${texNombre(theSpline.x[abs1])}$.`,
         estCorrecte: false,
       },
       {
-        texte: `L'image de $${texNombre(theSpline.y[abs1])}$ est $${texNombre(theSpline.x[abs1])}$`,
+        texte: `L'image de $${texNombre(theSpline.y[abs1])}$ est $${texNombre(theSpline.x[abs1])}$.`,
         estCorrecte: false,
       },
     ]

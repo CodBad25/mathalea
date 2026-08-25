@@ -41,7 +41,7 @@ export default class FactoriserParNombreOux extends Exercice {
     super()
 
     this.sup = 4
-    this.nbQuestions = 8
+    this.nbQuestions = 3
     this.nbCols = 2
     this.nbColsCorr = 2
 

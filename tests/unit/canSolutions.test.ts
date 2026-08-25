@@ -41,10 +41,13 @@ import {
   formatStudentAnswer,
   stripInteractiveWidgets,
 } from '../../src/lib/components/canSolutions'
+import { addMultiMathfield } from '../../src/lib/customElements/MultiMathfield'
 import {
   listOfCustomElements,
   mathaleaCustomElementsRegistry,
 } from '../../src/lib/customElements/MathaleaCustomElement'
+import type { IExercice } from '../../src/lib/types'
+import { context } from '../../src/modules/context'
 
 beforeAll(() => {
   handleInteractiveClock()
@@ -160,12 +163,79 @@ describe('stripInteractiveWidgets', () => {
     expect(stripInteractiveWidgets(question)).toBe('La moitié de 90 est  ... .')
   })
 
+  it('remplace les champs libres des multi-mathfields par des pointillés', () => {
+    const question =
+      'Calculer <multi-mathfield id="multi-mathfieldEx0Q0" data-template="a) %{field0}" data-options="%7B%22field0%22%3A%7B%22ldots%22%3Atrue%7D%7D"></multi-mathfield>'
+    const result = stripInteractiveWidgets(question)
+    expect(result).toContain('a)</span>  ... ')
+    expect(result).not.toContain('multi-mathfield')
+  })
+
+  it('rend les listes deroulantes des multi-mathfields en QCM statique', () => {
+    const question =
+      'Choisir <multi-mathfield id="multi-mathfieldEx0Q0" data-template="%{field0}" data-options="%7B%22field0%22%3A%7B%22choices%22%3A%5B%7B%22label%22%3A%22Choisir%E2%80%A6%22%2C%22value%22%3A%22%22%7D%2C%7B%22label%22%3A%22Oui%22%2C%22value%22%3A%22oui%22%7D%2C%7B%22label%22%3A%22Non%22%2C%22value%22%3A%22non%22%7D%5D%7D%7D"></multi-mathfield>'
+    const result = stripInteractiveWidgets(question)
+    expect(result).toContain('Choisir <span class="mx-2 inline-block">')
+    expect(result).toContain('<input type="radio" disabled')
+    expect(result).toContain('<label id="labelEx0Q0R0"')
+    expect(result).toContain('>Oui</label>')
+    expect(result).toContain('>Non</label>')
+    expect(result).not.toContain('Choisir…')
+    expect(result).not.toContain(' ... ')
+  })
+
+  it('rend les qcm des multi-mathfields en version statique', () => {
+    const question =
+      'Répondre <multi-mathfield id="multi-mathfieldEx0Q0" data-template="%{field0}" data-options="%7B%22field0%22%3A%7B%22qcm%22%3A%5B%7B%22label%22%3A%22Vrai%22%2C%22value%22%3A%22vrai%22%7D%2C%7B%22label%22%3A%22Faux%22%2C%22value%22%3A%22faux%22%7D%5D%2C%22vertical%22%3Atrue%7D%7D"></multi-mathfield>'
+    const result = stripInteractiveWidgets(question)
+    expect(result).toContain('class="ex0  my-2 align-center"')
+    expect(result).toContain('>Vrai</label>')
+    expect(result).toContain('>Faux</label>')
+    expect(result).not.toContain(' ... ')
+  })
+
   it('conserve le mathfield des fillInTheBlanks en nettoyant les placeholders', () => {
     const question =
       'Compléter <math-field readonly>2+\\placeholder[champ1]{}</math-field>'
     expect(stripInteractiveWidgets(question)).toBe(
       'Compléter <math-field readonly>2+{...}</math-field>',
     )
+  })
+})
+
+describe('addMultiMathfield', () => {
+  it.each([
+    { label: 'hors interactif HTML', interactif: false, isTypst: false },
+    { label: 'en rendu Typst', interactif: true, isTypst: true },
+  ])('rend les qcm imbriques en statique $label', ({ interactif, isTypst }) => {
+    context.isHtml = true
+    context.isAmc = false
+    context.isTypst = isTypst
+    const exercice = {
+      interactif,
+      numeroExercice: 0,
+    } as IExercice
+
+    const result = addMultiMathfield(exercice, 0, {
+      dataTemplate: 'c) Réponse : %{champ3}',
+      dataOptions: {
+        champ3: {
+          qcm: [
+            { label: 'Oui', value: 'oui' },
+            { label: 'Non', value: 'non' },
+          ],
+        },
+      },
+    })
+
+    expect(result).toContain('<input type="radio" disabled')
+    expect(result).toContain('<label id="labelEx0Q0R0"')
+    expect(result).toContain('>Oui</label>')
+    expect(result).toContain('>Non</label>')
+    expect(result).not.toContain(' ... ')
+    expect(result).not.toContain('ldots')
+    expect(result).not.toContain('multi-mathfield')
+    context.isTypst = false
   })
 })
 

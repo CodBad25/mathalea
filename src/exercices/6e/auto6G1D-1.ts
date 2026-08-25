@@ -336,7 +336,7 @@ function creerFigure(type: TypeFigure): FigureAConstruire {
     string,
   ]
   const longueur = randint(40, 75) / 10
-  const largeur = randint(20, (longueur * 10 - 1) / 10)
+  const largeur = randint(20, longueur * 10 - 1) / 10
   const angleLosange = randint(50, 70)
   const angleRad = (angleLosange * Math.PI) / 180
   let coordonnees: Array<[number, number]>

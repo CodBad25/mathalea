@@ -1,14 +1,14 @@
-import { bleuMathalea } from '../../lib/colors'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { spline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import ExerciceQcmA from '../ExerciceQcmA'
 import { nombreElementsDifferents } from '../ExerciceQcm'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const titre = "Déterminer un tableau de variations à partir d'une courbe"
 export const dateDePublication = '06/08/2026'
@@ -211,7 +211,7 @@ export default class TableauDeVariationsGraphique extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: context.isTypst }
+    this.options.ordered = context.isTypst
     this.versionAleatoire()
   }
 }

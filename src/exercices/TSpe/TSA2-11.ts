@@ -5,7 +5,8 @@ import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = 'Déterminer des asymptotes à partir d’un tableau de variations'
+export const titre =
+  'Déterminer des asymptotes à partir d’un tableau de variations'
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -57,14 +58,7 @@ export default class AsymptotesEtTableauDeVariations extends ExerciceQcmA {
           ['$x$', 1.5, 10],
           ['$f(x)$', 4, 30],
         ],
-        [
-          '$-\\infty$',
-          10,
-          `$${abscisseIntermediaire}$`,
-          10,
-          '$+\\infty$',
-          10,
-        ],
+        ['$-\\infty$', 10, `$${abscisseIntermediaire}$`, 10, '$+\\infty$', 10],
       ],
       tabLines: [ligneVariations],
       espcl: 5,
@@ -248,7 +242,9 @@ export default class AsymptotesEtTableauDeVariations extends ExerciceQcmA {
     Parmi les affirmations suivantes, laquelle est correcte ?`
     if (context.isTypst) {
       this.enonce += `<br>${this.reponses
-        .map((reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`)
+        .map(
+          (reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`,
+        )
         .join('<br>')}`
     }
     this.correction = correction
@@ -269,7 +265,9 @@ export default class AsymptotesEtTableauDeVariations extends ExerciceQcmA {
       '1 : Uniquement horizontales\n2 : Uniquement verticales\n3 : Mélange des deux',
     ]
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: true, ordered: context.isTypst }
+    this.options.ordered = context.isTypst
+    this.options.vertical = true
+
     this.versionAleatoire()
   }
 }

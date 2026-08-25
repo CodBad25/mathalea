@@ -85,7 +85,7 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: context.isTypst }
+    this.options.ordered = context.isTypst
     this.versionAleatoire()
   }
 }

@@ -4,6 +4,7 @@ import {
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '16/07/2026'
@@ -160,7 +161,7 @@ export default class ReconnaitreFonctionAffine extends ExerciceQcmA {
     const nomD2 = noms[2]
     const nomD3 = noms[3]
 
-    this.enonce = `Parmi les $4$ fonctions définies ci-dessous, une seule est une fonction affine. <br>
+    this.enonce = `Parmi les $4$ fonctions dont on donne les expressions algébriques ci-dessous, une seule est une fonction affine. <br>
     Laquelle ?`
 
     this.correction = `L'expression algébrique d'une fonction affine s'écrit sous la forme $ax+b$ (où $a$ et $b$ sont des nombres réels).<br>
@@ -170,7 +171,8 @@ Seule la fonction $${nomBonne}$ vérifie cette condition.<br>`
       this.correction += `En effet, on a : $${nomBonne}(x) = ${bonne.etape}$.<br>`
     }
 
-    this.correction += `On identifie ainsi $a=${bonne.a}$ et $b=${bonne.b}$.`
+    this.correction += `On identifie ainsi $a=${bonne.a}$ et $b=${bonne.b}$.<br>
+    Ainsi, la seule fonction définissant une fonction affine est la fonction $${nomBonne}$ définie par $${miseEnEvidence(nomBonne)}${miseEnEvidence('(x) =\\,')} ${miseEnEvidence(bonne.expr)}$.`
 
     this.reponses = [
       `$${nomBonne}(x) = ${bonne.expr}$`,

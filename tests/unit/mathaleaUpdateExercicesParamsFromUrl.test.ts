@@ -189,8 +189,7 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
     // uuid 21518 est partagé par deux références : '1Gen-A102' et '1Tec-S104'
     // On choisit explicitement la seconde : elle ne doit pas être remplacée
     // par la première (comportement par défaut) lors du parsing de l'URL.
-    const url =
-      'https://coopmaths.fr/alea/?uuid=21518&id=1Tec-S104&alea=ABCD'
+    const url = 'https://coopmaths.fr/alea/?uuid=21518&id=1Tec-S104&alea=ABCD'
     const { mathaleaUpdateExercicesParamsFromUrl } =
       await import('../../src/lib/mathalea')
     mathaleaUpdateExercicesParamsFromUrl(url)
@@ -296,5 +295,42 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
     // globalOptions.update((current) => {
     //   return { ...current, ...options, recorder: tempRecorder, presMode: 'un_exo_par_page' }
     // })
+  })
+
+  describe('paramètre beta (phase de test du quizz)', () => {
+    it('parse beta=1 depuis l’URL', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      const result = mathaleaUpdateExercicesParamsFromUrl(
+        'https://coopmaths.fr/alea/?v=quizzconf&beta=1',
+      )
+      expect(result.beta).toBe(true)
+    })
+
+    it('beta est faux sans le paramètre', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      const result = mathaleaUpdateExercicesParamsFromUrl(
+        'https://coopmaths.fr/alea/?v=quizzconf',
+      )
+      expect(result.beta).toBe(false)
+    })
+
+    it('persiste beta dans l’URL reconstruite (updateGlobalOptionsInURL)', async () => {
+      const { updateGlobalOptionsInURL } =
+        await import('../../src/lib/stores/generalStore')
+      const { globalOptions } =
+        await import('../../src/lib/stores/globalOptions')
+      const previous = get(globalOptions)
+      globalOptions.set({ ...previous, beta: true, v: 'quizzconf' })
+      try {
+        const url = new URL('https://coopmaths.fr/alea/')
+        updateGlobalOptionsInURL(url)
+        expect(url.searchParams.get('beta')).toBe('1')
+        expect(url.searchParams.get('v')).toBe('quizzconf')
+      } finally {
+        globalOptions.set(previous)
+      }
+    })
   })
 })

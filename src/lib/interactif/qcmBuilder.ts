@@ -1,6 +1,6 @@
 import { createList } from '../format/lists'
 import { formaterReponse } from '../outils/ecritures'
-import { texteEnCouleurEtGras } from '../outils/embellissements'
+import { texteEnCouleurEtGras, texteGras } from '../outils/embellissements'
 import type {
   AnswerValueType,
   BuildQcmForExerciseParams,
@@ -44,9 +44,10 @@ function buildCorrectionsList(
     .map((proposition, index) => {
       if (proposition.correction == null || proposition.correction === '')
         return ''
-      // return `réponse ${(!exoInteractif && QCM_LETTERS[index]) ?? String(index + 1)} : ${proposition.correction}${
       return (
-        `${!exoInteractif && QCM_LETTERS[index] ? `réponse ${String(index + 1)} : ` : ''} ${proposition.correction}` +
+        // La lettre en gras, et non le rang : hors interactif les propositions sont
+        // étiquetées A, B, C… (format 'lettre'), tout comme le message final.
+        `${!exoInteractif && QCM_LETTERS[index] ? `réponse ${texteGras(QCM_LETTERS[index])} : ` : ''} ${proposition.correction}` +
         /* +`${ // Eric : J'ai enlevé les coches (21/08/2026)
         context.isHtml
           ? proposition.statut
@@ -141,10 +142,7 @@ export function buildQcmForExercise(
       },
     ) ?? []
 
-  let correctionTexte = buildCorrectionsList(
-    shuffledPropositions,
-    exercice.interactif,
-  )
+  let correctionTexte = `${correction ?? ''}${buildCorrectionsList(shuffledPropositions)}`
   if (correctionTexte === '') {
     correctionTexte = correction
     const extrasAreAdded = ajouteQcmCorr || !exercice.interactif
