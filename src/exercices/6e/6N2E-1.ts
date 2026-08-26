@@ -1,14 +1,9 @@
 import Decimal from 'decimal.js'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-import type { AutoCorrectionAMC } from '../../lib/amc/amcEngine'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -220,41 +215,7 @@ export default class MultiplierDecimaux extends Exercice {
         texteAvant: '$~=$',
       })
 
-      if (context.isAmc) {
-        setReponse(this, i, reponse)
-        const exerciseAny = this as any
-        if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
-          exerciseAny.autoCorrectionAMC = []
-          exerciseAny.questionsAMC = exerciseAny.autoCorrectionAMC.map(
-            (questionAMC: AutoCorrectionAMC) => amcConvert(questionAMC),
-          )
-        }
-        if (exerciseAny.autoCorrectionAMC[i] == null) {
-          exerciseAny.autoCorrectionAMC[i] = {}
-          exerciseAny.questionsAMC[i] = amcConvert(
-            exerciseAny.autoCorrectionAMC[i],
-          )
-        }
-        if (exerciseAny.autoCorrectionAMC[i].reponse == null) {
-          exerciseAny.autoCorrectionAMC[i].reponse = {}
-          exerciseAny.questionsAMC[i] = amcConvert(
-            exerciseAny.autoCorrectionAMC[i],
-          )
-        }
-        exerciseAny.autoCorrectionAMC[i].reponse.param = {
-          digits: 0,
-          decimals: 0,
-          signe: false,
-          exposantNbChiffres: 0,
-          exposantSigne: false,
-          approx: 0,
-        }
-        exerciseAny.questionsAMC[i] = amcConvert(
-          exerciseAny.autoCorrectionAMC[i],
-        )
-      } else {
-        handleAnswers(this, i, { reponse: { value: reponse } })
-      }
+      handleAnswers(this, i, { reponse: { value: reponse } })
 
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

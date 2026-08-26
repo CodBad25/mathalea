@@ -13,7 +13,7 @@ import {
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { couleurTab } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -449,8 +449,11 @@ export default class NommerUnAngle extends Exercice {
             KeyboardType.angles,
           )
         }
-        setReponse(this, i * this.sup + jj, resultat, {
-          formatInteractif: 'texte',
+        handleAnswers(this, i * this.sup + jj, {
+          reponse: {
+            value: resultat,
+            options: { texteAvecCasse: true },
+          },
         })
         objetsCorrection.push(
           codageAngle(

@@ -64,6 +64,10 @@ function getQcmAutoCorrection(
 function cloneQcmAutoCorrection(source: AutoCorrection): AutoCorrection {
   return {
     ...source,
+    // Une entrée portant des propositions est déjà identifiée comme un QCM.
+    // Le méta-exercice la réhéberge donc sous le format moderne, même si le
+    // sous-exercice historique n'avait pas renseigné `formatInteractif`.
+    formatInteractif: 'mathalea-qcm',
     options: source.options == null ? undefined : { ...source.options },
     propositions: source.propositions?.map((proposition) => ({
       ...proposition,
@@ -1056,10 +1060,10 @@ export default class MetaExercice extends Exercice {
               style: 'margin:0 3px 0 3px;',
               format: this.interactif ? 'case' : 'lettre',
             }) // update les références HTML
-            if (qcmAutoCorrection.formatInteractif === 'mathalea-qcm') {
-              this.autoCorrection[indexQuestion].formatInteractif =
-                'mathalea-qcm'
-            }
+            // `propositionsQcm()` utilise encore le marqueur historique `qcm`
+            // pendant le rendu. La question agrégée expose ensuite le format
+            // moderne qui doit piloter le dispatch et les exports.
+            this.autoCorrection[indexQuestion].formatInteractif = 'mathalea-qcm'
             this.listeCanReponsesACompleter[indexQuestion] =
               Question.canReponseACompleter != null
                 ? Question.canReponseACompleter

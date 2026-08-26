@@ -6,7 +6,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
@@ -72,17 +72,21 @@ export default class AjouterDesFractionsDunite extends Exercice {
 
       texte = `On place bout à bout 4 segments de longueurs respectives $${f[0].texFraction}$, $${f[1].texFraction}$, $${f[2].texFraction}$ et $${f[3].texFraction}$.<br>`
       texte += 'Quelle est la longueur du segment obtenu ?'
-      setReponse(
+      handleAnswers(
         this,
         i,
-        new FractionEtendue(num[0] + num[1] + num[2] + num[3], den),
+        {
+          reponse: {
+            value: new FractionEtendue(num[0] + num[1] + num[2] + num[3], den),
+            options: { fractionEgale: true },
+          },
+        },
         {
           digitsNum:
             nombreDeChiffresDe(num[0] + num[1] + num[2] + num[3]) +
             randint(0, 1),
           digitsDen: nombreDeChiffresDe(den) + randint(0, 1),
           signe: false,
-          formatInteractif: 'fractionEgale',
         },
       )
       if (this.interactif && !context.isAmc) {

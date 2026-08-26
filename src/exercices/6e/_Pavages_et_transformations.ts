@@ -32,7 +32,7 @@ import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d, type Vide2d } from '../../lib/2d/Vide2d'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -56,7 +56,6 @@ import {
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -2051,9 +2050,9 @@ export default class PavagesEtTransformations extends Exercice {
         )
         break
     }
-    setReponse(this, 0, String(num1))
-    setReponse(this, 1, String(num2))
-    setReponse(this, 2, String(num3))
+    handleAnswers(this, 0, { reponse: { value: String(num1) } })
+    handleAnswers(this, 1, { reponse: { value: String(num2) } })
+    handleAnswers(this, 2, { reponse: { value: String(num3) } })
     if (context.isHtml) {
       texteCorr += '<br>'
       texteCorr += `<button class="btn ui labeled icon button"  style="margin:10px" onclick="document.getElementById('anim${numeroExercice}A').beginElement()"><i class="redo circle icon"></i>Relancer l'animation verte</button>`

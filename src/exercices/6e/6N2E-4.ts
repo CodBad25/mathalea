@@ -1,16 +1,10 @@
-import { amcConvert } from '../../lib/amc/amcBuilders'
-import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -103,24 +97,13 @@ export default class DernierChiffreProduitDécimaux extends Exercice {
           texte +
           ' est :' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-        handleAnswers(this, i, {
-          reponse: {
-            value: resultat,
-            options: { nombreDecimalSeulement: true },
-          },
-        })
       }
-      if (context.isAmc) {
-        setReponse(this, i, resultat)
-        this.autoCorrectionAMC[i] = {
-          enonce: texte,
-          reponse: { texte: texteCorr, valeur: resultat },
-        }
-        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-        const amcParam = ensureAmcParam(this, i)
-        amcParam.digits = 1
-        amcParam.decimals = 0
-      }
+      handleAnswers(this, i, {
+        reponse: {
+          value: resultat,
+          options: { nombreDecimalSeulement: true },
+        },
+      })
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on la stocke dans la liste des questions
         this.listeQuestions[i] = texte

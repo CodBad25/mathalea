@@ -55,7 +55,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
           ]
           tableau = shuffle(tableau)
           this.distracteurs = tableau.slice(0, 3)
-          this.question = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.<br>`
+          this.question = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.`
           this.correction = `$\\begin{aligned}
             (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})&=${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)}\\\\
             &=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}
@@ -84,7 +84,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
           ]
           tableau = shuffle(tableau)
           this.distracteurs = tableau.slice(0, 3)
-          this.question = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.<br>`
+          this.question = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.`
           this.correction = `$\\begin{aligned}
             (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})&=${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)}\\\\
             &=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}
@@ -110,7 +110,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
           ]
           tableau = shuffle(tableau)
           this.distracteurs = tableau.slice(0, 3)
-          this.question = `Développer et réduire l'expression $(${b}${ecritureAlgebriqueSauf1(a)}x)(${reduireAxPlusB(c, d)})$.<br>`
+          this.question = `Développer et réduire l'expression $(${b}${ecritureAlgebriqueSauf1(a)}x)(${reduireAxPlusB(c, d)})$.`
           this.correction = `$\\begin{aligned}
             (${b}${ecritureAlgebriqueSauf1(a)}x)(${reduireAxPlusB(c, d)})&=${rienSi1(b * c)}x${ecritureAlgebrique(b * d)}${ecritureAlgebriqueSauf1(a * c)}x^2${ecritureAlgebrique(a * d)}x\\\\
             &=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}
@@ -122,6 +122,9 @@ export default class DeveloppementDouble extends ExerciceSimple {
         break
     }
     if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
+    if (!this.versionQcm) {
+      this.question += '<br>'
+    }
     this.canEnonce = this.question
     this.canReponseACompleter = ''
   }

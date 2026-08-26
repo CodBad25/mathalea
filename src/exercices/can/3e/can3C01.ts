@@ -4,12 +4,11 @@ import { context } from '../../../modules/context'
 
 import { ensureAmcParam } from '../../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 import { amcConvert } from '../../../lib/amc/amcBuilders'
-
 
 export const titre = 'Calculer avec des puissances'
 export const interactifReady = true
@@ -66,14 +65,17 @@ export default class CalculPuissanceSimple extends Exercice {
               i,
               KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             )
-          setReponse(this, i, [`${a}^{${b + 1}}`], {
-            formatInteractif: 'texte',
+          handleAnswers(this, i, {
+            reponse: {
+              value: [`${a}^{${b + 1}}`],
+              options: { texteAvecCasse: true },
+            },
           })
           texteCorr = `L${c[index][0]} de $${a}^{${b}}$ se calcule  par
        : <br>
        $${a}\\times ${a}^{${b}}=${a}^{${b} + 1}=${a}^{${miseEnEvidence(b + 1)}}$`
           if (context.isAmc) {
-            setReponse(this, i, a ** (b + 1), { formatInteractif: 'calcul' })
+            handleAnswers(this, i, { reponse: { value: a ** (b + 1) } })
             const amcParam = ensureAmcParam(this, i)
             amcParam.basePuissance = a
             amcParam.exposantPuissance = b + 1
@@ -90,15 +92,18 @@ export default class CalculPuissanceSimple extends Exercice {
               i,
               KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             )
-          setReponse(this, i, [`${a}^{${b - 1}}`], {
-            formatInteractif: 'texte',
+          handleAnswers(this, i, {
+            reponse: {
+              value: [`${a}^{${b - 1}}`],
+              options: { texteAvecCasse: true },
+            },
           })
           texteCorr = `L${c[index][1]} de $${a}^{${b}}$ se calcule  par
       : <br>
       
       $ ${a}^{${b}}\\div ${a}=\\dfrac{${a}^{${b}}}{${a}}=${a}^{${b} - 1}=${a}^{${miseEnEvidence(b - 1)}}$`
           if (context.isAmc) {
-            setReponse(this, i, a ** (b - 1), { formatInteractif: 'calcul' })
+            handleAnswers(this, i, { reponse: { value: a ** (b - 1) } })
             const amcParam = ensureAmcParam(this, i)
             amcParam.basePuissance = a
             amcParam.exposantPuissance = b - 1
@@ -119,12 +124,15 @@ export default class CalculPuissanceSimple extends Exercice {
               )
           }
 
-          setReponse(this, i, [`${a}^{${b + 2}}`], {
-            formatInteractif: 'texte',
+          handleAnswers(this, i, {
+            reponse: {
+              value: [`${a}^{${b + 2}}`],
+              options: { texteAvecCasse: true },
+            },
           })
           texteCorr = ` Comme $${a ** 2}=${a}^2$, alors $${a ** 2}\\times ${a}^{${b}}=${a}^2\\times ${a}^{${b}}=${a}^{${b}+2}=${a}^{${miseEnEvidence(2 + b)}}$`
           if (context.isAmc) {
-            setReponse(this, i, a ** (b + 2), { formatInteractif: 'calcul' })
+            handleAnswers(this, i, { reponse: { value: a ** (b + 2) } })
             const amcParam = ensureAmcParam(this, i)
             amcParam.basePuissance = a
             amcParam.exposantPuissance = b + 2
@@ -146,13 +154,16 @@ export default class CalculPuissanceSimple extends Exercice {
               )
           }
 
-          setReponse(this, i, [`${a}^{${b - 2}}`], {
-            formatInteractif: 'texte',
+          handleAnswers(this, i, {
+            reponse: {
+              value: [`${a}^{${b - 2}}`],
+              options: { texteAvecCasse: true },
+            },
           })
           texteCorr = `Comme $${a ** 2}=${a}^2$, alors $${a}^{${b}}\\div ${a ** 2}=
         \\dfrac{${a}^{${b}}}{${a}^2}=${a}^{${b}-2}=${a}^{${miseEnEvidence(b - 2)}}$`
           if (context.isAmc) {
-            setReponse(this, i, a ** (b - 2), { formatInteractif: 'calcul' })
+            handleAnswers(this, i, { reponse: { value: a ** (b - 2) } })
             const amcParam = ensureAmcParam(this, i)
             amcParam.basePuissance = a
             amcParam.exposantPuissance = b - 2

@@ -79,8 +79,12 @@ export type QuestionDeCours = {
   correction?: string
   /** Touches supplémentaires du clavier de l'app (non encore portées). */
   keys: string[]
-  /** Propositions du QCM ; simples suggestions pour les autres types. */
-  propositions: string[]
+  /**
+   * Fausses réponses du QCM ; la bonne réponse (`answers`) est ajoutée
+   * automatiquement par l'exercice, elle ne doit pas être répétée ici.
+   * Simples suggestions pour les autres types.
+   */
+  badPropositions: string[]
   comparison: ComparaisonQuestionDeCours
   type: TypeQuestionDeCours
 }
@@ -94,7 +98,7 @@ const CLES_AUTORISEES = new Set([
   'answer',
   'correction',
   'keys',
-  'propositions',
+  'badPropositions',
   'comparison',
   'type',
 ])
@@ -198,11 +202,13 @@ function valideQuestion(
   const keys =
     donnees.keys === undefined ? [] : versTableauDeChaines(donnees.keys)
   if (keys == null) return signale(`${id} : keys invalide`)
-  const propositions =
-    donnees.propositions === undefined
+  const badPropositions =
+    donnees.badPropositions === undefined
       ? []
-      : versTableauDeChaines(donnees.propositions)
-  if (propositions == null) return signale(`${id} : propositions invalide`)
+      : versTableauDeChaines(donnees.badPropositions)
+  if (badPropositions == null) {
+    return signale(`${id} : badPropositions invalide`)
+  }
   if (
     donnees.correction !== undefined &&
     typeof donnees.correction !== 'string'
@@ -210,15 +216,11 @@ function valideQuestion(
     return signale(`${id} : correction invalide`)
   }
   if (type === 'qcm') {
-    if (propositions.length === 0) {
-      return signale(`${id} : une question qcm doit avoir des propositions`)
-    }
-    for (const answer of answers) {
-      if (!propositions.includes(answer)) {
-        return signale(
-          `${id} : la réponse « ${answer} » ne fait pas partie des propositions`,
-        )
-      }
+    const bassin = new Set([...badPropositions, ...answers])
+    if (bassin.size < 2) {
+      return signale(
+        `${id} : une question qcm doit avoir au moins deux propositions distinctes (bonne réponse comprise)`,
+      )
     }
   }
   return {
@@ -230,7 +232,7 @@ function valideQuestion(
     answers,
     correction: donnees.correction as string | undefined,
     keys,
-    propositions,
+    badPropositions,
     comparison: comparison as ComparaisonQuestionDeCours,
     type: type as TypeQuestionDeCours,
   }

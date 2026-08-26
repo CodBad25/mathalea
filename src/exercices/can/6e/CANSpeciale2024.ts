@@ -9,10 +9,7 @@ import {
   texteParPosition,
 } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -285,7 +282,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texteCorr = `$${texNombre(2024)}\\times 3=${miseEnEvidence(texNombre(6072))}$`
             reponse = 6072
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += ajouteChampTexteMathLive(
             this,
             index,
@@ -317,7 +314,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texteCorr = `$${texNombre(2024)}\\times 3=${miseEnEvidence(texNombre(6072))}$`
             reponse = 6072
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += !this.interactif
             ? '.'
             : ajouteChampTexteMathLive(
@@ -336,7 +333,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             reponse = 20224 - a
             texte = `$${texNombre(2024)}-${texNombre(a, 2)}$`
             texteCorr = `$${texNombre(2024)}-${texNombre(a, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$`
-            setReponse(this, index, reponse.toFixed(2))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(2) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -379,7 +378,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 alors le plus petit multiple cherché est $${miseEnEvidence(texNombre(reponse))}$.`
               }
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -399,7 +398,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `$${texNombre(2024)}+${a}$`
             reponse = 2024 + a
             texteCorr = `$${texNombre(2024)}+${a}=${miseEnEvidence(texNombre(reponse, 0))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -419,7 +418,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `$${texNombre(2024)}-${a}$`
             reponse = 2024 - a
             texteCorr = `$${texNombre(2024)}-${a}=${miseEnEvidence(texNombre(reponse, 0))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -438,7 +437,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `$${a}-${texNombre(2024)}$`
             reponse = a - 2024
             texteCorr = `$${a}-${texNombre(2024)}=${miseEnEvidence(texNombre(reponse, 0))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -459,7 +458,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `Écriture scientifique de $${texNombre(a)}$`
             reponse = `2,024\\times 10^{${3 - exposant}}`
             texteCorr = `L'écriture scientifique de $${texNombre(a)}$ est $${miseEnEvidence(`${reponse}`)}$.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -479,7 +478,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(2024)}\\times ${calc1}$`
             texteCorr = `$${texNombre(2024)}\\times ${calc1}=${miseEnEvidence(texNombre(2024 * calc1, 0))}$`
             reponse = arrondi(calc1 * 2024, 0)
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -497,7 +496,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(2024)}\\times ${texNombre(a, 3)}$`
             texteCorr = `$${texNombre(2024)}\\times ${texNombre(a, 3)}=${miseEnEvidence(texNombre(2024 * Number(a), 3))}$`
             reponse = (a * 2024).toFixed(3)
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -520,7 +519,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             // arrondi(a * (choix ? calc1 : calc2), 3)
             texte = `$${texNombre(a, 3)}\\times ${texNombre(choix ? calc1 : calc2)}$`
             texteCorr = ` $${texNombre(a, 3)}\\times ${texNombre(choix ? calc1 : calc2)}=${miseEnEvidence(texNombre(a * (choix ? calc1 : calc2), 6))}$ `
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -542,7 +541,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `
           Comme $1\\text{ m}$ $=100\\text{ cm}$, alors $1\\text{ cm}$ $=0,01\\text{ m}$.<br>
           Ainsi  $${texNombre(2024)}\\text{ cm}=${miseEnEvidence(texNombre(2024 / 100, 2))}\\text{ m}$.  `
-              setReponse(this, index, reponse)
+              handleAnswers(this, index, { reponse: { value: reponse } })
               if (this.interactif) {
                 texte +=
                   ajouteChampTexteMathLive(
@@ -561,7 +560,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               reponse = 202400
               texte = `$${texNombre(2024)}\\text{ m}$  $=$ `
               texteCorr = ` Comme $1\\text{ m}$ $=100\\text{ cm}$,  alors $${texNombre(2024)}\\text{ m}=${miseEnEvidence(texNombre(202400))}\\text{ cm}$.`
-              setReponse(this, index, reponse)
+              handleAnswers(this, index, { reponse: { value: reponse } })
               if (this.interactif) {
                 texte += ajouteChampTexteMathLive(
                   this,
@@ -608,7 +607,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `$${texNombre(2024)}=${texNombre(a)}\\times ${texNombre((2024 - reponse) / a, 0)}+${reponse}$<br>
             Donc le reste est $${miseEnEvidence(reponse)}$.`
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -624,7 +623,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(a, 2)}-${b}$`
             reponse = a - b
             texteCorr = `$${texNombre(a, 2)}-${b}=${miseEnEvidence(texNombre(reponse, 2))}$`
-            setReponse(this, index, reponse.toFixed(2))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(2) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -643,7 +644,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(a, 4)}-${b}$`
             reponse = a - b
             texteCorr = `$${texNombre(a, 4)}-${b}=${miseEnEvidence(texNombre(reponse, 4))}$`
-            setReponse(this, index, reponse.toFixed(4))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(4) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -672,7 +675,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texte = `Écrire sous forme décimale $\\dfrac{${b}}{10}+\\dfrac{${texNombre(a)}}{100}$. `
               texteCorr = `$\\dfrac{${b}}{10}+\\dfrac{${texNombre(a)}}{100}=${texNombre(b / 10, 1)}+${texNombre(a / 100, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$<br>`
             }
-            setReponse(this, index, reponse.toFixed(2))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(2) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -693,7 +698,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texteCorr =
               prenom +
               ` aura $(${a}-${2024})$ ans, soit $${miseEnEvidence(texNombre(reponse))}$ ans.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -758,7 +763,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             reponse = 24 * x1 + abs0
             texteCorr = `Entre $${texNombre(abs0)}$ et $${texNombre(abs1)}$, il y a $${nbIntervalles}$ intervalles.<br>
                      Une graduation correspond donc à $8$ unités. Ainsi, l'abscisse du point $A$ est $${miseEnEvidence(texNombre(reponse))}$.`
-            setReponse(this, index, reponse.toFixed(0))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(0) },
+            })
             texte = "Déterminer l'abscisse du point $A$ ci-dessous"
             texte += !this.interactif
               ? '.'
@@ -869,7 +876,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 texteParPosition('A', 4 * Number(x1), 0.8, 0, bleuMathalea, 2),
                 d,
               )
-            setReponse(this, index, reponse.toFixed(2))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(2) },
+            })
             this.listeCanEnonces.push(texte)
           }
           break
@@ -929,7 +938,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
              \\end{aligned}$<br>
              La solution de l'équation est : $${miseEnEvidence(reponse)}$.
              `
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += this.interactif ? '<br>' : ''
             texte += ajouteChampTexteMathLive(
               this,
@@ -955,7 +964,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
         \\left(\\dfrac{${texNombre(2024 + b, 0)}}{2};\\dfrac{${texNombre(c + 2024, 0)}}{2}\\right)=
         ${miseEnEvidence(`(${texNombre((2024 + b) / 2, 1)};${texNombre((c + 2024) / 2, 1)})`)}$.<br>`
             reponse = `(${arrondi((2024 + b) / 2, 1)};${arrondi((c + 2024) / 2, 1)})`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -977,7 +986,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texteCorr = `$f(${c})=${a}\\times ${c}+${texNombre(2024)}$<br>`
             texteCorr += `$f(${c})=${a * c}+${texNombre(2024)}$<br>`
             texteCorr += `$f(${c})=${miseEnEvidence(texNombre(reponse))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1073,7 +1082,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               reponse = 0
             }
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += ajouteChampTexteMathLive(
             this,
             index,
@@ -1113,7 +1122,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               `${prefixes[typeDeQuestion][1]}${unite}`,
               `\\operatorname{${prefixes[typeDeQuestion][1]}${unite}}`,
             ]
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (unite === 'm')
               texte += ajouteChampTexteMathLive(
                 this,
@@ -1149,7 +1158,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               reponse = 2024 * 100
               texteCorr = `$${texNombre(2024)}$ centaines est égal à $${texNombre(2024)}\\times 100=${miseEnEvidence(texNombre(reponse, 0))}$.`
             }
-            setReponse(this, index, reponse.toFixed(3))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(3) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1175,7 +1186,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `Comme $${texNombre(a * 1000 + b * 100 + c * 10 + d)}=${a * 100 + b * 10 + c}\\times 10+${d}$, il y a $${miseEnEvidence(a * 100 + b * 10 + c)}$ ${m} dans $${texNombre(a * 1000 + b * 100 + c * 10 + d)}$.`
               reponse = a * 100 + b * 10 + c
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1260,7 +1271,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 objets,
               ) +
               "<br>La figure n'est pas à l'échelle."
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             this.listeCanEnonces.push(texte)
           }
           break
@@ -1286,7 +1297,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               reponse = val * 10
               texteCorr = `  $${choix ? `4 \\times ${texNombre(val, 3)}\\times 2,5` : `2,5 \\times ${texNombre(val, 3)}\\times 4`}=10 \\times ${texNombre(val, 3)}=${miseEnEvidence(texNombre(reponse, 3))}$`
             }
-            setReponse(this, index, reponse.toFixed(3))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(3) },
+            })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -1316,7 +1329,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               reponse = val * 10
               texteCorr = `$ ${coeff2}\\times ${texNombre(val, 3)}+ ${b2}\\times ${texNombre(val, 3)}=${texNombre(val, 3)}\\times\\underbrace{(${texNombre(coeff2)}+${texNombre(b2)})}_{10}=${miseEnEvidence(texNombre(reponse, 3))}$`
             }
-            setReponse(this, index, reponse.toFixed(3))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(3) },
+            })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -1351,7 +1366,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               =\\dfrac{1^{${texNombre(2024)}}}{1}=${miseEnEvidence('1')}$`
               reponse = 1
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1378,7 +1393,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               'L’intersection de deux intervalles $I$ et $J$ (notée $I\\cap J$) est l’ensemble qui contient les nombres appartenant à $I$ et à $J$.<br>' +
               `Ainsi, ${choix ? `$${crochet1} ${a}\\,;\\,${b}${crochet2}\\,\\cap \\,${crochet3}${c}\\,;\\,${d}${crochet4}$` : `$${crochet3}${c}\\,;\\,${d}${crochet4}\\,\\cap \\,${crochet1} ${a}\\,;\\,${b}${crochet2}$`} $= ${miseEnEvidence(`${crochet3}${c}\\,;\\,${b}${crochet2}`)}$.<br>
           Les nombres de l'intervalle $${crochet3}${texNombre(c)}\\,;\\,${texNombre(b)}${crochet2}$ appartiennent à l'intervalle $${crochet1} ${texNombre(a)}\\,;\\,${texNombre(b)}${crochet2}$ et à l'intervalle $${crochet3}${texNombre(c)}\\,;\\,${texNombre(d)}${crochet4}$.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -1406,7 +1421,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `${crochet1 === '[' ? `C'est $${miseEnEvidence(`${texNombre(-2024)}`)}$` : `C'est $${miseEnEvidence(`${texNombre(-2023)}`)}$`}.`
               reponse = `${crochet1 === '[' ? '-2024' : '-2023'}`
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1485,7 +1500,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 reponse = [`-\\dfrac{1}{${-nbre}}`, `\\dfrac{1}{${nbre}}`]
               }
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1503,7 +1518,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `$${texNombre(a)}${ecritureAlgebrique(b)}$`
             texteCorr = `$${texNombre(a)}${ecritureAlgebrique(b)} = ${miseEnEvidence(texNombre(a + b))} $`
             reponse = a + b
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1548,7 +1563,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             Le nombre est donc $${miseEnEvidence(`${texNombre(-nbre + 1)}`)}$.`
               reponse = -nbre + 1
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1571,7 +1586,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 Le nombre est donc $${miseEnEvidence(`-\\sqrt{${texNombre(2024)}}`)}$.`
             reponse = '-\\sqrt{2024}'
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += ajouteChampTexteMathLive(
             this,
             index,
@@ -1596,7 +1611,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = ` $\\sqrt{${ecritureParentheseSiNegatif(2024)}}+\\sqrt{${ecritureParentheseSiNegatif(2024)}}=${miseEnEvidence(`2\\sqrt{${texNombre(2024)}}`)}$.`
               reponse = '2\\sqrt{2024}'
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -1658,7 +1673,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 reponse = [`]-\\infty;${-b}[`, `]-\\infty;${-b}]`]
               }
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -1683,7 +1698,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               Il faudra donc attendre $${24 * (31 - date)}+${24 - nbre}$ heures, soit $${miseEnEvidence(24 * (31 - date) + 24 - nbre)}$ heures avant de se souhaiter la bonne année.
              `
             reponse = 24 * (31 - date) + 24 - nbre
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1699,7 +1714,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
         case 44: // EE : Pas très aléatoire cette question mais je vois pas comment la modifier
           if (choice([true, false])) {
             reponse = '20,4'
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte = `Compléter avec un nombre décimal :<br>
               $20$ h $24$ min $=$`
@@ -1752,7 +1767,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             const c = choice([13, 17, 19, 31])
             if (choice([true, false])) {
               reponse = '0'
-              setReponse(this, index, reponse)
+              handleAnswers(this, index, { reponse: { value: reponse } })
 
               texte = `Utiliser l'égalité $${texNombre(2024)} = ${b} \\times ${texNombre(2024 / b, 0)}$ pour donner le reste de la division euclidienne de $ ${texNombre(2024)} $ par $ ${b} $<br>`
               texteCorr = `L'égalité $ ${texNombre(2024)} = ${b} \\times ${texNombre(2024 / b, 0)} $ correspond bien à l'expression de la division euclidienne de $ ${texNombre(2024)} $ par $ ${b} $. <br> Le reste est $${miseEnEvidence(0)}$.`
@@ -1760,7 +1775,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texte = `Utiliser l'égalité $${texNombre(2024)} = ${c} \\times ${Math.floor(2024 / c)} + ${2024 - c * Math.floor(2024 / c)}$ pour donner le reste de la division euclidienne de $ ${texNombre(2024)} $ par $ ${c} $<br>`
               texteCorr = ` $${2024 - c * Math.floor(2024 / c)}$ est inférieur à $${c}$, l'égalité $ ${texNombre(2024)} = ${c} \\times ${Math.floor(2024 / c)} + ${2024 - c * Math.floor(2024 / c)} $ correspond bien à l'expression de la division euclidienne de $ ${texNombre(2024)} $ par ${c}. <br>Le reste est donc donné par  $${miseEnEvidence(2024 - c * Math.floor(2024 / c))}$.`
               reponse = `${2024 - c * Math.floor(2024 / c)}`
-              setReponse(this, index, reponse)
+              handleAnswers(this, index, { reponse: { value: reponse } })
             }
             texte += !this.interactif
               ? '.'
@@ -1792,7 +1807,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               Le reste est donc   $${miseEnEvidence(2024 - c * Math.floor(2024 / c))}$.`
               reponse = `${2024 - c * Math.floor(2024 / c)}`
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -1818,7 +1833,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texte = `Réduire l'écriture de $${texNombre(b, 1)}x-${texNombre(2024)}x$`
               texteCorr = `$${texNombre(b, 1)}x-${texNombre(2024)}x=(${texNombre(b, 1)}-${texNombre(2024)})x=${miseEnEvidence(texNombre(r2, 1) + 'x')}$ `
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -1837,7 +1852,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             const a = choice([2024, -2024])
             const dec = a / puissance10
             reponse = `\\dfrac{${a}}{10^{${puissance}}}`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte = `Écrire $${texNombre(dec, 5)}$ sous la forme $\\dfrac{a}{10^n}$ avec $a\\in \\mathbb{Z}$ et $n\\in \\mathbb{N}$, $n$ le plus petit possible`
             texteCorr = `$${texNombre(dec, 5)}=${miseEnEvidence(`\\dfrac{${texNombre(a, 0)}}{10^{${puissance}}}`)}$`
             texte += !this.interactif
@@ -1889,7 +1904,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 break
             }
             texteCorr += ` est $${miseEnEvidence(reponse)}$.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1932,7 +1947,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `Quel est le plus ${PGouPP === PlusGrand ? 'petit nombre entier strictement supérieur' : 'grand nombre entier strictement inférieur'} à $${texNombre(2024, 0)}$  dont le chiffre des unités est $${PGouPP[0]}$ ?`
             texteCorr = `Le plus ${PGouPP === PlusGrand ? 'petit nombre entier strictement supérieur' : 'grand nombre entier strictement inférieur'} à $${texNombre(2024, 0)}$  dont le chiffre des unités est $${PGouPP[0]}$ est $${miseEnEvidence(texNombre(PGouPP[1]))}$.`
             reponse = PGouPP[1]
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -1995,7 +2010,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `Quel est le nombre ${choixDiv[1]} fois plus ${resultat === resultat1 ? 'petit' : 'grand'} que $${texNombre(nbre, 2)}$ ?`
             texteCorr = `Il s'agit de : $${resultat === resultat1 ? `${texNombre(nbre, 3)}\\div ${choixDiv[0]}` : `${texNombre(nbre, 3)}\\times ${choixDiv[0]}`}=${miseEnEvidence(texNombre(resultat, 5))}$.`
             reponse = resultat
-            setReponse(this, index, reponse.toFixed(5))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(5) },
+            })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -2026,7 +2043,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
            `
               reponse = `${a * c}e^{${rienSi1(c)}x}`
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
                 "<br>$f'(x)=$" +
@@ -2115,7 +2132,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
              `
               reponse = '4048*x+2024'
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
                 "<br>$f'(x)=$" +
@@ -2140,7 +2157,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                `
             reponse = `${4048 * a + b}`
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -2174,7 +2191,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               reponse = 'x^2-2024'
             }
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -2210,7 +2227,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               reponse = `${2024 - a}`
             }
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -2234,7 +2251,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                  `
             reponse = 2024 * a
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -2260,7 +2277,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                    `
             reponse = (2024 - a) / 2
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -2299,7 +2316,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
           } else {
             texte += '$\\ldots$'
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           this.listeCanEnonces.push('Compléter.')
 
           break
@@ -2323,7 +2340,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               `$\\sin \\dfrac{${texNombre(2024)}\\pi}{3}=\\ldots$`,
             )
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -2353,7 +2370,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `$${texNombre(2024)}\\times \\dfrac{${texNombre(a)}}{${texNombre(2024)}}=\\dfrac{${texNombre(2024)}\\times ${texNombre(a)}}{${texNombre(2024)}}=${miseEnEvidence(`${texNombre(a)}`)}$`
               reponse = a
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             this.listeCanEnonces.push(texte)
             this.listeCanReponsesACompleter.push('')
             texte += !this.interactif
@@ -2421,7 +2438,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `Lorsque $${inconnue}=${texNombre(2024)}$, on a $${reduireAxPlusB(a, b, inconnue)}=${a}\\times 2024${ecritureAlgebrique(b)}=${miseEnEvidence(texNombre(reponse))}$.`
             }
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -2482,7 +2499,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                     Ainsi, $(-1)^{${texNombre(2023)}}\\times(-1)^{${texNombre(2024)}}=-1\\times 1=${miseEnEvidence(-1)}$.`
             }
             reponse = -1
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -2557,7 +2574,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texteCorr = `Il s'agit d'un carré. <br>
           Son périmètre est donc
          $4$ fois la longueur de son côté, soit $4\\times ${texNombre(a)}=${miseEnEvidence(`${texNombre(reponse, 3)}`)}\\text{ cm}$.`
-            setReponse(this, index, reponse.toFixed(3))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(3) },
+            })
 
             this.listeCanEnonces.push(texte)
             this.listeCanReponsesACompleter.push('$\\ldots\\text{ cm}$')
@@ -2601,7 +2620,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
      `
               reponse = a / 2
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -2693,7 +2712,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 `$${nom[0]}${nom[2]}=\\ldots$`,
               )
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -2757,7 +2776,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             }
             texteCorr = ` Le plus grand nombre entier est $${miseEnEvidence(`${texNombre(reponse)}`)}$.`
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -2786,7 +2805,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               "Comment s'écrit l'année dernière ($2023$) en chiffres romains ? "
             texteCorr = `$2023=${miseEnEvidence(reponse)}$`
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += ajouteChampTexteMathLive(
             this,
             index,
@@ -2848,7 +2867,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texteCorr = `Une fonction linéaire est une fonction de la forme $f(x)=ax$.<br>
           Comme $f(${texNombre(2024)})=${texNombre(a * 2024)}$, on a $${texNombre(a * 2024, 0)}=a\\times ${texNombre(2024)}$, soit $a=${a}$.<br>
           On obtient donc : $f(x)=${miseEnEvidence(`${rienSi1(a)}x`)}$.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -2874,7 +2893,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             Comme $f(0)=${texNombre(a, 0)}$, on a $p=${texNombre(a, 0)}$. Ainsi, $f(x)=mx+${ecritureParentheseSiNegatif(a)}$.<br>
             De plus, $f(${texNombre(a, 0)})=0$, donc $m\\times ${ecritureParentheseSiNegatif(a)}+${ecritureParentheseSiNegatif(a)}=0$, soit $m=-1$.<br>
             On obtient donc : $f(x)=${miseEnEvidence(`-x${ecritureAlgebrique(a)}`)}$.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -2902,7 +2921,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texteCorr = `Pour obtenir $${texNombre(2024)}$, on a ajouté $${texNombre(2024 - b)}$ à $${texNombre(b)}$ et le nombre qui, multiplié par $100$ donne $${texNombre(2024 - b)}$ est $${texNombre(reponse)}$.<br>
             Le nombre choisi au départ est donc $${miseEnEvidence(`${reponse}`)}$.`
 
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -2923,7 +2942,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `$${texNombre(2024)}+${a}$`
             reponse = 2024 + a
             texteCorr = `$${texNombre(2024)}+${a}=${miseEnEvidence(texNombre(reponse, 0))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -2943,7 +2962,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `$${texNombre(2024)}-${a}$`
             reponse = 2024 - a
             texteCorr = `$${texNombre(2024)}-${a}=${miseEnEvidence(texNombre(reponse, 0))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -2964,7 +2983,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(a, 3)}+${texNombre(b, 3)}$`
             reponse = a + b
             texteCorr = `$${texNombre(a, 3)}+${texNombre(b, 3)}=${miseEnEvidence(texNombre(reponse, 3))}$`
-            setReponse(this, index, reponse.toFixed(3))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(3) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -2985,7 +3006,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(a, 3)}-${texNombre(b, 3)}$`
             reponse = a - b
             texteCorr = `$${texNombre(a, 3)}-${texNombre(b, 3)}=${miseEnEvidence(texNombre(reponse, 3))}$`
-            setReponse(this, index, reponse.toFixed(3))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(3) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -3014,7 +3037,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(2024, 0)}+${texNombre(a, 0)}$`
             reponse = 2024 + a
             texteCorr = `$${texNombre(2024, 0)}+${texNombre(a, 0)}=${miseEnEvidence(texNombre(reponse, 4))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -3051,7 +3074,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = ` $${texNombre(a, 0)}-${texNombre(b, 0)}$`
             reponse = a - b
             texteCorr = `$${texNombre(a, 0)}-${texNombre(b, 0)}=${miseEnEvidence(texNombre(reponse, 4))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -3078,7 +3101,9 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte += `quelle est la valeur décimale de $${texNombre(aDiv, 3)} \\times ${texNombre(Nb2024Div, 3)}$ ?`
             reponse = aDiv * Nb2024Div
             texteCorr = `$${texNombre(aDiv, 3)} \\times ${texNombre(Nb2024Div, 3)}=${miseEnEvidence(texNombre(reponse, 6))}$`
-            setReponse(this, index, reponse.toFixed(6))
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(6) },
+            })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -3126,7 +3151,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `$(2 + 0) \\times (2 \\times 4)=2 \\times 8 = ${miseEnEvidence(texNombre(reponse, 4))}$`
               break
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += ajouteChampTexteMathLive(
             this,
             index,
@@ -3174,7 +3199,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `$${texNombre(2024)} + (20 \\times 4)=${texNombre(2024)} +80=${miseEnEvidence(texNombre(reponse, 4))}$`
               break
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += ajouteChampTexteMathLive(
             this,
             index,
@@ -3190,7 +3215,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte = `Calculer  $\\dfrac{1}{${texNombre(2024, 0)}}\\div \\dfrac{1}{${texNombre(2024, 0)}}\\div\\dfrac{1}{${texNombre(a, 0)}}$.`
             reponse = a
             texteCorr = `$\\dfrac{1}{${texNombre(2024, 0)}}\\div \\dfrac{1}{${texNombre(2024, 0)}}\\div\\dfrac{1}{${texNombre(a, 0)}}=1\\div \\dfrac{1}{${texNombre(a, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += !this.interactif
               ? '.'
               : ajouteChampTexteMathLive(
@@ -3225,7 +3250,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               texteCorr = `Le quotient de $a$ par $${texNombre(2024, 0)}$ se note  $${miseEnEvidence(`\\dfrac{a}{${texNombre(2024)}}`)}$.`
               break
           }
-          setReponse(this, index, reponse)
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte += ajouteChampTexteMathLive(
             this,
             index,
@@ -3254,8 +3279,8 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             $`
             texteCorr = `On constate que $${texNombre(b, 0)}=${texNombre(a, 0)}\\times ${texNombre(k, 1)}$.<br>
             Donc, la valeur cherchée est : $${texNombre(2024)}\\times ${texNombre(k, 1)} =${miseEnEvidence(texNombre(reponse, 0))}$.`
-            setReponse(this, index, reponse.toFixed(0), {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: reponse.toFixed(0) },
             })
             texte += ajouteChampTexteMathLive(
               this,
@@ -3305,7 +3330,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             }
             const reponse = 2024 - b
             texteCorr = ` L'algorithme retourne $2024-${b}=${miseEnEvidence(texNombre(reponse, 0))}$. `
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             texte += ajouteChampTexteMathLive(
               this,
               index,
@@ -3331,7 +3356,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             }
             texteCorr = `En additionnant les deux chiffres des unités, on trouve $4+${u}=${4 + u}$. <br>
             Le chiffre des unités est donc $${miseEnEvidence(texNombre(reponse, 0))}$.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -3358,7 +3383,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
              $${texNombre(2024)}$${sp(3)}; ${sp(3)}$${texNombre(nbre2)}$ ${sp(3)}; ${sp(3)}$${texNombre(nbre3)}$ ${sp(3)}; ${sp(3)}`
             reponse = nbre3 + k
             texteCorr = `$${texNombre(2024)}+${k}=${texNombre(nbre2)}$ et  $${texNombre(nbre2)}+${k}=${texNombre(nbre3)}$, donc le nombre suivant est  $${texNombre(nbre3)}+${k}=${miseEnEvidence(texNombre(reponse, 0))}$.`
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
 
             texte += !this.interactif
               ? '?'
@@ -3450,7 +3475,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             } else {
               texteCorr += `Comme $${texNombre(2024)}=${texNombre(2000)}+${texNombre(24)}=${texNombre(2000 / oliveParBouteille, 2)}\\times ${oliveParBouteille}+${texNombre(Math.floor(24 / oliveParBouteille))}\\times ${oliveParBouteille}+${texNombre(24 % oliveParBouteille)}=${reponse}\\times ${oliveParBouteille}+${texNombre(2024 % oliveParBouteille, 0)}$, il peut remplir $${miseEnEvidence(reponse)}$ bouteilles d'huile d'olive.`
             }
-            setReponse(this, index, reponse)
+            handleAnswers(this, index, { reponse: { value: reponse } })
 
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(

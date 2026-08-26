@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
@@ -120,13 +120,15 @@ export default class MultiplierEntierPar101001000 extends Exercice {
             b = c
           }
           texte = `$${texNombre(a)}\\times${texNombre(b)}$`
-          setReponse(this, i, [texNombre(a * b), a * b])
+          handleAnswers(this, i, {
+            reponse: { value: texNombre(a * b) },
+          })
           texteCorr = `$${texNombre(a)}\\times${texNombre(b)}=${texNombre(a * b)}$`
           break
         case 'division':
         default:
           texte = `$${texNombre(a * b)}\\div${texNombre(b)}$`
-          setReponse(this, i, a)
+          handleAnswers(this, i, { reponse: { value: a } })
           texteCorr = `$${texNombre(a * b)}\\div${texNombre(b)}=${texNombre(a)}$`
           break
       }

@@ -1,10 +1,7 @@
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ce from '../../lib/interactif/comparisonFunctions'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
@@ -110,11 +107,12 @@ export default class FractionVersPourcentage extends Exercice {
         this.interactifType = 'mathLive'
         texte = `$\\dfrac{${percenti}}{100}= $${context.isHtml && this.interactif ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' %' }) : '$\\ldots\\ldots\\%$'}`
         texteCorr = `$\\dfrac{${texNombre(percenti, 0)}}{100}=${texNombre(percenti, 0)}~\\%$`
-        setReponse(this, i, percenti, {
-          formatInteractif: 'calcul',
-          digits: 3,
-          decimals: 0,
-        })
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: percenti } },
+          { digits: 3, decimals: 0 },
+        )
       }
 
       if (this.questionJamaisPosee(i, den, num)) {

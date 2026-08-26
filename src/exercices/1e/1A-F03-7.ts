@@ -1,13 +1,16 @@
-import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '6e14c'
@@ -20,7 +23,7 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
-  "Connaître la représentation graphique d'une fonction affine"
+  "Connaître la représentation graphique d'une fonction constante, linéaire ou affine"
 export const dateDePublication = '17/07/2026'
 //
 /**
@@ -93,28 +96,47 @@ const carre = (): Fonction => {
   return { f: (x) => a * x * x, xmin: -4, xmax: 4, label: `${rienSi1(a)}x^2` }
 } // ax²
 
+const estAffine = (f: (x: number) => number): boolean => {
+  // Vérifie si la fonction est affine (droite non verticale)
+  const a = f(1) - f(0)
+  const b = f(0)
+  return f(2) === a * 2 + b
+}
 // Trace une courbe : axes fléchés uniquement (ni grille, ni graduations, ni O/i/j)
 function genererGraphique(obj: Fonction): string {
   const xmin = obj.repXMin ?? -4
   const xmax = obj.repXMax ?? 4
   const ymin = -4
   const ymax = 4
-
+  const objets: NestedObjetMathalea2dArray = []
   // Repère servant uniquement au calcul de la courbe (il n'est pas dessiné)
   const r = repere({ xMin: xmin, xMax: xmax, yMin: ymin, yMax: ymax })
-  const c = courbe(obj.f, {
-    repere: r,
-    color: 'blue',
-    epaisseur: 2,
-    xMin: obj.xmin,
-    xMax: obj.xmax,
-    step: 0.1,
-  })
+  if (estAffine(obj.f)) {
+    const d = droite(
+      pointAbstrait(xmin, obj.f(xmin)),
+      pointAbstrait(xmax, obj.f(xmax)),
+      '',
+      'blue',
+    )
+    d.epaisseur = 2
+    objets.push(d)
+  } else {
+    const c = courbe(obj.f, {
+      repere: r,
+      color: 'blue',
+      epaisseur: 2,
+      xMin: obj.xmin,
+      xMax: obj.xmax,
+      step: 0.1,
+    })
+    objets.push(c)
+  }
   const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
   const axeX = segment(xmin, 0, xmax, 0, 'black', '->')
   axeX.epaisseur = 1
   const axeY = segment(0, ymin, 0, ymax, 'black', '->')
   axeY.epaisseur = 1
+  objets.push(axeX, axeY, o)
 
   const fenetreMathalea2d = {
     xmin: xmin - 0.3,
@@ -127,7 +149,7 @@ function genererGraphique(obj: Fonction): string {
     center: !context.isHtml,
   }
 
-  return mathalea2d(fenetreMathalea2d, c, axeX, axeY, o)
+  return mathalea2d(fenetreMathalea2d, objets)
 }
 
 export default class ReconnaitreCourbeAffine extends ExerciceQcmA {

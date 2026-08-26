@@ -330,7 +330,7 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
   }
 
   static get observedAttributes() {
-    return ['config', 'value', 'disabled', 'readonly']
+    return ['config', 'value', 'disabled', 'readonly', 'interactivity-on']
   }
 
   static create({
@@ -340,6 +340,7 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
     config,
     className,
     readonly,
+    interactivityOn = true,
   }: TableauSignesVariationsCreateOptions): string {
     if (!context.isHtml) {
       return toLatex(config, {})
@@ -357,11 +358,13 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
     const computedId =
       id ??
       `${TableauSignesVariationsElement.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
-    const attrs: string[] = [`id="${computedId}"`]
-    if (className) attrs.push(`class="${className}"`)
-    if (readonly) attrs.push('readonly')
-    attrs.push(`config="${encodeURIComponent(JSON.stringify(config))}"`)
-    return `<tableau-signes-variations ${attrs.join(' ')}></tableau-signes-variations>`
+    return super.create({
+      id: computedId,
+      class: className,
+      readonly: readonly ? true : undefined,
+      interactivityOn,
+      config,
+    })
   }
 
   static formatStudentAnswer(rawAnswer: string): string {
@@ -470,6 +473,11 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
       return
     }
     if (name === 'disabled' || name === 'readonly') {
+      this.render()
+      return
+    }
+    if (name === 'interactivity-on') {
+      this.hydrateCommonAttributes()
       this.render()
     }
   }
@@ -624,7 +632,9 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
     if (!this._config) return
 
     const readonly =
-      this.hasAttribute('disabled') || this.hasAttribute('readonly')
+      this.hasAttribute('disabled') ||
+      this.hasAttribute('readonly') ||
+      !this.interactivityOn
 
     const { root, main, cells } = renderTableau({
       config: this._config,
@@ -1035,6 +1045,7 @@ export type TableauSignesVariationsOptions = {
   config: TableauSVConfig
   className?: string
   readonly?: boolean
+  interactivityOn?: boolean
   id?: string
 }
 
@@ -1050,6 +1061,8 @@ export interface CreerTableauOptions {
   numeroQuestion?: number
   /** Tableau en lecture seule (correction par exemple). */
   readonly?: boolean
+  /** Active ou désactive l'interactivité sans perdre l'affichage. */
+  interactivityOn?: boolean
   /** Classes CSS additionnelles. */
   className?: string
 }
@@ -1074,6 +1087,7 @@ export function creerTableauSignesVariations(
     questionIndex: options.numeroQuestion,
     className: options.className,
     readonly: options.readonly,
+    interactivityOn: options.interactivityOn,
   })
 }
 
@@ -1120,6 +1134,7 @@ export interface AddTableauSignesVariationsOptions {
   className?: string
   bareme?: number
   id?: string
+  interactivityOn?: boolean
 }
 
 /**
@@ -1140,7 +1155,7 @@ export function addTableauSignesVariations(
   questionIndex: number,
   options: AddTableauSignesVariationsOptions,
 ): string {
-  const { config, className, bareme, id } = options
+  const { config, className, bareme, id, interactivityOn } = options
 
   // En LaTeX, on inline directement le tkz-tab.
   if (!context.isHtml) {
@@ -1201,6 +1216,7 @@ export function addTableauSignesVariations(
     questionIndex,
     config,
     className,
+    interactivityOn,
   })
   return `${tag}<span id="resultatCheckEx${exercice.numeroExercice}Q${questionIndex}"></span>`
 }

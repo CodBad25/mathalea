@@ -19,7 +19,7 @@ import {
   rotation3d,
   vecteur3d,
 } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexte } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -608,7 +608,12 @@ export default class ReconnaitreDesSolides extends Exercice {
         if (this.sup2) {
           this.question += propositionsQcm(this, j).texte
         } else {
-          setReponse(this, j, reponse, { formatInteractif: 'ignorerCasse' })
+          handleAnswers(this, j, {
+            reponse: {
+              value: String(reponse).toLowerCase(),
+              options: { texteSansCasse: true },
+            },
+          })
           this.question += '<br>' + ajouteChampTexte(this, j)
         }
         this.listeQuestions[j] = this.question

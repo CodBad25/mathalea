@@ -1,6 +1,7 @@
 import { apigeomGraduatedLine } from '../../lib/apigeom/apigeomGraduatedLine'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import { orangeMathalea } from '../../lib/colors'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -154,10 +155,10 @@ Sur quelle droite graduée le point $A$ est-il correctement placé ?`
 
     this.correction = `Voici les abscisses des différents points $A$ sur les droites graduées proposées :<br>`
     this.corrections = [
-      `${laBonneDroite}$A(${texNombre(data.x, data.precision)})$`,
+      `$${miseEnEvidence(`A(${texNombre(data.x, data.precision)})`)}$${laBonneDroite}`,
       ...distractors.map(
         (distractor) =>
-          `${this.buildLineWithPoint(data, distractor)}$A(${texNombre(distractor, data.precision)})$`,
+          `$A(${texNombre(distractor, data.precision)})$${this.buildLineWithPoint(data, distractor)}`,
       ),
     ]
     this.reponses = [

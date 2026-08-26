@@ -3,7 +3,7 @@ import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { scratchblock } from '../../../modules/scratchblock'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { arrondi } from '../../../lib/outils/nombres'
@@ -66,7 +66,7 @@ export default class RepetitionScratch extends Exercice {
         prog += '} \n'
         prog += '\\end{scratch}'
         substitut = String(angleRot)
-        setReponse(this, 0, angleRot)
+        handleAnswers(this, 0, { reponse: { value: angleRot } })
         this.listeQuestions[0] =
           `${scratchblock(prog)}<br>Quel nombre doit-on écrire à la place des pointillés pour tracer un ${b[1]} ?` +
           ajouteChampTexteMathLive(this, 0, KeyboardType.clavierNumbers)
@@ -83,7 +83,7 @@ export default class RepetitionScratch extends Exercice {
         prog += `\\blockmove{tourner \\turnright{} de \\ovalnum{${angleRot}} degrés}\n`
         prog += '} \n'
         prog += '\\end{scratch}'
-        setReponse(this, 0, nbRep)
+        handleAnswers(this, 0, { reponse: { value: nbRep } })
         substitut = String(nbRep)
         this.listeQuestions[0] =
           `${scratchblock(prog)}<br>Quel nombre doit-on écrire à la place des pointillés pour tracer un ${b[1]} ?` +

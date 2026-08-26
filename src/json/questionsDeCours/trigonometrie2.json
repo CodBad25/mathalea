@@ -103,20 +103,20 @@
           "level": "1",
           "id": "trig11",
           "title": "Valeur de $\\cos\\left(\\frac{3\\pi}{2}\\right)$",
-          "question": "Compléter : $\\cos\\left(3\\frac{\\pi}{2}\\right)=\\ldots$",
+          "question": "Compléter : $\\cos\\left(\\frac{3\\pi}{2}\\right)=\\ldots$",
           "answer": "$0$",
           "keys": ["\\pi", "\\sqrt{#1}"],
-          "correction": "La valeur de $\\cos\\left(3\\frac{\\pi}{2}\\right)$ est $0$."
+          "correction": "La valeur de $\\cos\\left(\\frac{3\\pi}{2}\\right)$ est $0$."
         },
         {
           "themes": "Trigonométrie (valeurs remarquables cosinus et sinus)",
           "level": "1",
           "id": "trig12",
           "title": "Valeur de $\\sin\\left(\\frac{3\\pi}{2}\\right)$",
-          "question": "Compléter : $\\sin\\left(3\\frac{\\pi}{2}\\right)=\\ldots$",
+          "question": "Compléter : $\\sin\\left(\\frac{3\\pi}{2}\\right)=\\ldots$",
           "answer": "$-1$",
           "keys": ["\\pi", "\\sqrt{#1}"],
-          "correction": "La valeur de $\\sin\\left(3\\frac{\\pi}{2}\\right)$ est $-1$."
+          "correction": "La valeur de $\\sin\\left(\\frac{3\\pi}{2}\\right)$ est $-1$."
         },
         {
           "themes": "Trigonométrie (valeurs remarquables cosinus et sinus)",
@@ -206,7 +206,7 @@
           "title": "Formule de $\\sin(\\pi + x)$",
           "question": "Soit $x$ un réel. Compléter : $\\sin(\\pi + x)=\\ldots$",
           "answer": "$-\\sin(x)$",
-         "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+         "badPropositions": ["$\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\sin(\\pi + x) = -\\sin(x)$. Cette relation découle des propriétés des fonctions trigonométriques et de la symétrie du cercle trigonométrique."
         },
         {
@@ -217,7 +217,7 @@
           "title": "Formule de $\\cos(\\pi + x)$",
           "question": "Soit $x$ un réel.  Compléter : $\\cos(\\pi + x)=\\ldots$",
           "answer": "$-\\cos(x)$",
-          "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+          "badPropositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\cos(\\pi + x) = -\\cos(x)$. Cette relation découle des propriétés des fonctions trigonométriques et de la symétrie du cercle trigonométrique."
         },
         {
@@ -228,7 +228,7 @@
           "title": "Formule de $\\sin(\\pi - x)$",
           "question": "Soit $x$ un réel.  Compléter : $\\sin(\\pi - x)=\\ldots$",
           "answer": "$\\sin(x)$",
-          "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+          "badPropositions": ["$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\sin(\\pi - x) = \\sin(x)$. "
         },
         {
@@ -239,7 +239,7 @@
           "title": "Formule de $\\cos(\\pi - x)$",
           "question": "Soit $x$ un réel.  Compléter : $\\cos(\\pi - x)=\\ldots$",
           "answer": "$-\\cos(x)$",
-         "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+         "badPropositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\cos(\\pi - x) = -\\cos(x)$. "
         },
         {
@@ -250,7 +250,7 @@
           "title": "Formule de $\\sin(-x)$",
           "question": "Soit $x$ un réel.  Compléter : $\\sin(-x)=\\ldots$",
           "answer": "$-\\sin(x)$",
-         "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+         "badPropositions": ["$\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\sin(-x) = -\\sin(x)$. Cette relation découle de la parité de la fonction sinus, qui est impaire."
         },
         {
@@ -261,7 +261,7 @@
           "title": "Formule de $\\cos(-x)$",
           "question": "Soit $x$ un réel.  Compléter : $\\cos(-x)=\\ldots$",
           "answer": "$\\cos(x)$",
-          "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+          "badPropositions": ["$\\sin(x)$", "$-\\sin(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\cos(-x) = \\cos(x)$. Cette relation découle de la parité de la fonction cosinus, qui est paire."
         },
         {
@@ -272,7 +272,7 @@
           "title": "Formule de $\\sin\\left(\\frac{\\pi}{2} + x\\right)$",
           "question": "Soit $x$ un réel. Compléter : $\\sin\\left(\\frac{\\pi}{2} + x\\right) = \\ldots$",
           "answer": "$\\cos(x)$",
-          "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+          "badPropositions": ["$\\sin(x)$", "$-\\sin(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\sin\\left(\\frac{\\pi}{2} + x\\right) = \\cos(x)$. Cette relation découle des propriétés des fonctions trigonométriques et de la symétrie du cercle trigonométrique."
         },
         {
@@ -283,7 +283,7 @@
           "title": "Formule de $\\cos\\left(\\frac{\\pi}{2} + x\\right)$",
           "question": "Soit $x$ un réel. Compléter : $\\cos\\left(\\frac{\\pi}{2} + x\\right) = \\ldots$",
           "answer": "$-\\sin(x)$",
-          "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+          "badPropositions": ["$\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\cos\\left(\\frac{\\pi}{2} + x\\right) = -\\sin(x)$. Cette relation découle des propriétés des fonctions trigonométriques et de la symétrie du cercle trigonométrique."
         },
         {
@@ -294,7 +294,7 @@
           "title": "Formule de $\\sin\\left(\\frac{\\pi}{2} - x\\right)$",
           "question": "Soit $x$ un réel. Compléter : $\\sin\\left(\\frac{\\pi}{2} - x\\right) = \\ldots$",
           "answer": "$\\cos(x)$",
-          "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+          "badPropositions": ["$\\sin(x)$", "$-\\sin(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\sin\\left(\\frac{\\pi}{2} - x\\right) = \\cos(x)$. Cette relation découle des propriétés des fonctions trigonométriques et de la symétrie du cercle trigonométrique."
         },
         {
@@ -305,7 +305,7 @@
           "title": "Formule de $\\cos\\left(\\frac{\\pi}{2} - x\\right)$",
           "question": "Soit $x$ un réel. Compléter : $\\cos\\left(\\frac{\\pi}{2} - x\\right) = \\ldots$",
           "answer": "$\\sin(x)$",
-          "propositions": ["$\\sin(x)$", "$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
+          "badPropositions": ["$-\\sin(x)$", "$\\cos(x)$", "$-\\cos(x)$"],
           "correction": "Pour tout réel $x$, on a la formule $\\cos\\left(\\frac{\\pi}{2} - x\\right) = \\sin(x)$. Cette relation découle des propriétés des fonctions trigonométriques et de la symétrie du cercle trigonométrique."
         }
         

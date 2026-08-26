@@ -13,20 +13,23 @@ référentiel pour l'instant : il s'ouvre par `?uuid=afd39`.
 ## La banque
 
 Les questions vivent dans `src/json/questionsDeCours/`, un fichier JSON par
-thème. Ces fichiers sont **repris tels quels** du dépôt de l'app
+thème. Ces fichiers sont issus du dépôt de l'app
 ([questions-de-cours](https://forge.apps.education.fr/coopmaths/apps/questions-de-cours)) :
-leurs noms de champs restent en anglais pour que les deux dépôts puissent
-continuer à s'échanger des séries de questions.
+la plupart des noms de champs restent en anglais pour que les deux dépôts
+puissent continuer à s'échanger des séries de questions. Exception : le champ
+`propositions` de l'app a été renommé `badPropositions` côté MathALÉA (voir
+plus bas), une resynchronisation depuis l'app devra donc le renommer.
 
 Chaque question déclare `id`, `level`, `themes`, `title`, `question`, `answer`,
-et éventuellement `correction`, `keys`, `propositions`, `comparison`, `type`.
-Le README du dépôt de l'app décrit ce format en détail.
+et éventuellement `correction`, `keys`, `badPropositions`, `comparison`, `type`.
+Le README du dépôt de l'app décrit le format d'origine en détail (sous le nom
+`propositions`).
 
 `src/lib/questionsDeCours/banque.ts` charge, valide et indexe la banque :
 
 - la validation est écrite à la main (l'app utilisait `zod`, non embarqué ici) ;
   elle refuse les clés inconnues, ce qui attrape les fautes de frappe du type
-  `proposition` au lieu de `propositions` ;
+  `proposition` au lieu de `badPropositions` ;
 - une question invalide est ignorée en production et fait échouer
   `banque.test.ts`, qui vérifie l'intégralité de la banque à chaque `pnpm test:src` ;
 - `questionDeCoursParId()` et `questionsDeCoursParTheme` servent à l'exercice et
@@ -92,6 +95,13 @@ Chaque type de question est rendu par un custom element déjà enregistré, ce q
 | `text` | `mathalea-textfield` | `handleAnswers` + `texteSansCasse`                      |
 | `qcm`  | `mathalea-qcm`       | `handleAnswers` avec `formatInteractif: 'mathalea-qcm'` |
 
+Pour les questions `qcm`, `badPropositions` ne doit contenir que les fausses
+réponses (la bonne réponse ne doit pas y être recopiée, `banque.test.ts` le
+vérifie). À chaque génération, `selectionnePropositionsQcm()` pioche au hasard
+jusqu'à 4 propositions au total (la bonne réponse toujours comprise) parmi
+`badPropositions` ∪ `answer`, puis mélange leur ordre — la banque peut donc
+lister autant de fausses réponses qu'elle veut, sans se limiter à 4.
+
 Les modes de comparaison de la banque sont traduits en options de
 `fonctionComparaison` :
 
@@ -114,8 +124,8 @@ raccourcis compris (`POW`, `SQRT`, `PMATRIX11`…). Voir
 [Formats interactifs spécialisés](../../auteurs-exercices/complements/formats-interactifs.md#ajouter-des-touches-propres-à-une-question).
 
 Deux différences avec l'app : les touches déjà présentes sur le clavier de base
-n'y sont pas dédupliquées, et les `propositions` des questions `text` ne sont
-pas encore proposées comme touches-mots.
+n'y sont pas dédupliquées, et les `badPropositions` des questions `text` ne
+sont pas encore proposées comme touches-mots.
 
 ### Sorties
 

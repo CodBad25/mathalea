@@ -10,7 +10,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { bleuMathalea } from '../../../lib/colors'
 
@@ -42,7 +42,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
   nouvelleVersion() {
     let texte = ''
     let texteCorr = ''
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a = 0
       let b = 0
       let o
@@ -149,7 +149,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 texteAvant: '$b=$',
               },
             )
-            setReponse(this, i, b)
+            handleAnswers(this, i, { reponse: { value: b } })
           }
 
           texteCorr = `La valeur de $b$ est donnée par l'image de $0$ par la fonction $f$.<br>
@@ -258,7 +258,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 texteAvant: '$b=$',
               },
             )
-            setReponse(this, i, b)
+            handleAnswers(this, i, { reponse: { value: b } })
           }
 
           texteCorr = `La valeur de $b$ est donnée par l'image de $0$ par la fonction $f$.<br>

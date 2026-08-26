@@ -9,10 +9,7 @@ import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
@@ -217,7 +214,7 @@ export default class SujetCAN20215ieme extends Exercice {
           texte = `$${a} \\times ${b}=$ `
           texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           reponse = a * b
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -249,7 +246,7 @@ export default class SujetCAN20215ieme extends Exercice {
             reponse = b / 3
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -270,7 +267,7 @@ export default class SujetCAN20215ieme extends Exercice {
           texte = `$${a} - ${b}=$ `
           texteCorr = `$${a}-${b}=${miseEnEvidence(a - b)}$`
           reponse = arrondi(a - b)
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -290,7 +287,7 @@ export default class SujetCAN20215ieme extends Exercice {
           texteCorr = `$${texNombre(a)}+${texNombre(b)}=${miseEnEvidence(texNombre(a + b))}$ `
           reponse = arrondi(a + b)
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -315,7 +312,7 @@ export default class SujetCAN20215ieme extends Exercice {
             texteCorr = `$ ${miseEnEvidence(b)} \\times ${a}=${c}$`
           }
           reponse = b
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               '<br>' +
@@ -344,7 +341,7 @@ export default class SujetCAN20215ieme extends Exercice {
             texteCorr = `$1$ centième $=0,01$, d'où $${texNombre(b)}+0,01 =${miseEnEvidence(texNombre(b + 0.01))}$.`
             reponse = arrondi(b + 0.01, 3)
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -386,7 +383,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 $${k}\\times ${texNombre(d)}=${k}\\div 1000=0,${a}${b}\\underline{0}$.<br>
                   `
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -415,7 +412,7 @@ export default class SujetCAN20215ieme extends Exercice {
             texteCorr = `$ ${texNombre(c)}\\times ${texNombre(10000)}+ ${texNombre(b)}\\times ${texNombre(1000)} + ${texNombre(a)}\\times 10  =
       ${texNombre(c * 10000)}+ ${texNombre(b * 1000)} + ${texNombre(a * 10)} =${miseEnEvidence(texNombre(reponse))}$`
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -440,7 +437,7 @@ export default class SujetCAN20215ieme extends Exercice {
           texteCorr = `$${a}$ stylos identiques coûtent  $${texNombre(prix)}$ €, donc $${k * a}$
            de ces mêmes stylos coûtent  $${k}$ fois plus, soit $${k}\\times ${texNombre(prix)}=${miseEnEvidence(texNombre(k * prix))}$ €.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               '<br>' +
@@ -462,7 +459,7 @@ export default class SujetCAN20215ieme extends Exercice {
 
           texteCorr += `$${a}\\times 101 = ${a}\\times (100+1)=${a}\\times 100+${a}\\times 1=${texNombre(a * 100)}+${a}=${miseEnEvidence(texNombre(101 * a))}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -497,7 +494,7 @@ export default class SujetCAN20215ieme extends Exercice {
           $\\dfrac{1}{4}$ de $${a}=\\dfrac{${a}}{4}=${miseEnEvidence(texNombre(reponse))}$.
            `
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -517,7 +514,7 @@ export default class SujetCAN20215ieme extends Exercice {
           reponse = a * b + a * c
           texte = `Le produit de $${a}$ par la somme de $${b}$ et de $${c}$ est égal à : `
           texteCorr = `Le produit de $${a}$ par la somme de $${b}$ et de $${c}$ est égal à : $${a}\\times \\underbrace{(${b}+${c})}_{\\text{Somme de } ${b} \\text{ et } ${c}}=${a}\\times ${b + c}=${miseEnEvidence(a * b + a * c)}$.`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -542,7 +539,7 @@ export default class SujetCAN20215ieme extends Exercice {
           reponse =
             fraction1[0] -
             Math.floor(fraction1[0] / fraction1[1]) * fraction1[1]
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -801,7 +798,7 @@ export default class SujetCAN20215ieme extends Exercice {
                     Le périmètre de cette figure est donc : $3\\times ${c}+2\\times ${a}+${b}=${miseEnEvidence(3 * c + 2 * a + b)}\\text{ cm}$.   `
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += '$\\mathscr{P}=$'
             texte += ajouteChampTexteMathLive(
@@ -821,7 +818,7 @@ export default class SujetCAN20215ieme extends Exercice {
             reponse = a * 100
             texte = `$${a}\\text{ dm}^2=$`
             texteCorr = `$1\\text{ dm}^2= 100\\text{ cm}^2$, donc $${a}\\text{ dm}^2=${a}\\times 100\\text{ cm}^2=${miseEnEvidence(a * 100)}\\text{ cm}^2$.`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -837,7 +834,7 @@ export default class SujetCAN20215ieme extends Exercice {
             reponse = a / 100
             texte = `$${a}\\text{ cm}^2=$`
             texteCorr = `$1\\text{ cm}^2= 0,01\\text{ dm}^2$, donc $${a}\\text{ cm}^2=${a}\\times 0,01\\text{ dm}^2=${miseEnEvidence(texNombre(a / 100))}\\text{ dm}^2$.`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -853,7 +850,7 @@ export default class SujetCAN20215ieme extends Exercice {
             reponse = a * 100
             texte = `$${a}\\text{ m}^2=$`
             texteCorr = `$1\\text{ m}^2= 100\\text{ dm}^2$, donc $${a}\\text{ m}^2=${a}\\times 100\\text{ dm}^2=${miseEnEvidence(a * 100)}\\text{ dm}^2$.`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -869,7 +866,7 @@ export default class SujetCAN20215ieme extends Exercice {
             reponse = a / 100
             texte = `$${a}\\text{ dm}^2=$`
             texteCorr = `$1\\text{ dm}^2= 0,01\\text{ m}^2$, donc $${a}\\text{ dm}^2=${a}\\times 0,01\\text{ m}^2=${miseEnEvidence(texNombre(a / 100))}\\text{ m}^2$.`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -921,7 +918,7 @@ export default class SujetCAN20215ieme extends Exercice {
           }
           texteCorr = `Pour qu'un triangle soit constructible, il faut que la longueur du plus grand côté soit inférieure à la somme des deux autres.<br>
           Seule la longueur $${miseEnEvidence(texNombre(c))}$ est possible pour $BC$. `
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               '<br>' +
@@ -965,8 +962,8 @@ export default class SujetCAN20215ieme extends Exercice {
               }),
             )
           texteCorr = `L'unité est divisée en $${a}$. Ainsi, le point d'interrogation est   $\\dfrac{${miseEnEvidence(b)}}{${miseEnEvidence(a)}}$.`
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -1025,7 +1022,7 @@ export default class SujetCAN20215ieme extends Exercice {
           reponse = 0.9 * a
           texteCorr = `$10\\%$ de $${a}$ $=0,1\\times ${a}=${texNombre(0.1 * a)}$. <br>
           Le montant de la remise est $${texNombre(0.1 * a)}$ €. La brioche coûtera donc après remise : $${a}-${texNombre(0.1 * a)}=${miseEnEvidence(texNombre(0.9 * a))}$ €.`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1073,7 +1070,9 @@ export default class SujetCAN20215ieme extends Exercice {
           L' égalité $${a}x+${b}=${c}$ est vérifiée pour $x=${truc}$.<br>`
             texteCorr = `Pour $x=${truc}$, $${a}x+${b}=${a}\\times ${truc}+${b}=${a * truc + b}$.<br>
           Donc l'égalité n'est pas vérifiée (${texteEnCouleurEtGras('F')}).`
-            setReponse(this, index, ['F', 'f'], { formatInteractif: 'texte' })
+            handleAnswers(this, index, {
+              reponse: { value: ['F', 'f'], options: { texteAvecCasse: true } },
+            })
 
             if (this.interactif) {
               texte += 'Pour Vrai, écrire V et pour Faux : F'
@@ -1086,7 +1085,9 @@ export default class SujetCAN20215ieme extends Exercice {
             c = b + a * truc
             texte = `Vrai/Faux<br>
           L' égalité $${a}x+${b}=${c}$ est vérifiée pour $x=${truc}$.<br>`
-            setReponse(this, index, ['V', 'v'], { formatInteractif: 'texte' })
+            handleAnswers(this, index, {
+              reponse: { value: ['V', 'v'], options: { texteAvecCasse: true } },
+            })
             texteCorr = `Pour $x=${truc}$, $${a}x+${b}=${a}\\times ${truc}+${b}=${a * truc + b}$.<br>
           Donc l'égalité est vérifiée (${texteEnCouleurEtGras('V')}).`
             if (this.interactif) {
@@ -1106,7 +1107,7 @@ export default class SujetCAN20215ieme extends Exercice {
           texteCorr = ` Le dénominateur de $${a.texFraction}$ est multiplié par $${100 / fraction2[1]}$.<br>
           Il faut donc multiplier le numérateur par $${100 / fraction2[1]}$. On obtient : $${fraction2[0]}\\times ${100 / fraction2[1]}=${miseEnEvidence((fraction2[0] * 100) / fraction2[1])}$.`
           reponse = (fraction2[0] * 100) / fraction2[1]
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += '<br>$ \\ldots=$'
             texte += ajouteChampTexteMathLive(
@@ -1134,7 +1135,7 @@ export default class SujetCAN20215ieme extends Exercice {
             texteCorr = ` $${b}-(${a})=${b}+${-a}=${miseEnEvidence(b - a)}$`
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1220,7 +1221,7 @@ export default class SujetCAN20215ieme extends Exercice {
           texteCorr = `Dans un triangle, la somme des angles vaut $180°$.<br>
          ?$=180-${a}-${b}=${miseEnEvidence(180 - a - b)}^\\circ$.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1271,10 +1272,14 @@ export default class SujetCAN20215ieme extends Exercice {
             On en déduit que la plus grande est celle qui a le plus grand numérateur. <br>`
           }
           if (a > b) {
-            setReponse(this, index, '>', { formatInteractif: 'texte' })
+            handleAnswers(this, index, {
+              reponse: { value: '>', options: { texteAvecCasse: true } },
+            })
             texteCorr += `<br> Ainsi, $${a.texFraction} ${miseEnEvidence('>')} ${b.texFraction}$.`
           } else {
-            setReponse(this, index, '<', { formatInteractif: 'texte' })
+            handleAnswers(this, index, {
+              reponse: { value: '<', options: { texteAvecCasse: true } },
+            })
             texteCorr += `<br> Ainsi, $${a.texFraction} ${miseEnEvidence('<')} ${b.texFraction}$.`
           }
           if (this.interactif) {
@@ -1330,8 +1335,8 @@ export default class SujetCAN20215ieme extends Exercice {
              La fraction simplifiée (ou la valeur décimale exacte) sont d'autres réponses correctes.`
             reponse = fraction(a + b + c, a + b + c + d + e + f)
           }
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -1403,7 +1408,7 @@ export default class SujetCAN20215ieme extends Exercice {
             )
             texteCorr = ` Le quadrilatère est composé de $2$ segments de $${a}\\text{ cm}$ et de deux autres segments de même longueur.<br>
           Ainsi, $CD=(${b}-2\\times ${a})\\div 2=${miseEnEvidence(texNombre((b - 2 * a) / 2))}$  `
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$CD=$'
               texte += ajouteChampTexteMathLive(
@@ -1452,7 +1457,7 @@ export default class SujetCAN20215ieme extends Exercice {
             )
             texteCorr = ` Le quadrilatère est composé de $2$ segments de $${a}\\text{ cm}$ et de deux autres segments de même longueur.<br>
           Ainsi, $AE=(${b}-2\\times ${a})\\div 2=${miseEnEvidence(texNombre((b - 2 * a) / 2))}$  `
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$AE=$'
               texte += ajouteChampTexteMathLive(
@@ -1490,8 +1495,8 @@ export default class SujetCAN20215ieme extends Exercice {
           }
 
           reponse = a.sommeFraction(b)
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -1514,7 +1519,7 @@ export default class SujetCAN20215ieme extends Exercice {
           $${a}a+${b}+${c}a+${d}$`
           texteCorr = ` $${a}a+${b}+${c}a+${d}=${a}a+${c}a+${b}+${d}=${miseEnEvidence(`${a + c}a+${b + d}`)}$`
           reponse = `${rienSi1(a + c)}a${ecritureAlgebrique(b + d)}`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               '<br>' +
@@ -1545,7 +1550,7 @@ export default class SujetCAN20215ieme extends Exercice {
                       Le volume du cube est donc $${a}^3=${miseEnEvidence(a ** 3)}\\text{ cm}^3$.`
             reponse = a ** 3
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               '<br>' +

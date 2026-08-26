@@ -73,6 +73,7 @@ export default class QuestionsDeCours extends Exercice {
 
       if (question.type === 'qcm') {
         const optionsQcm = { radio: true, ordered: true, vertical: false }
+        const propositionsAffichees = selectionnePropositionsQcm(question)
         handleAnswers(
           this,
           i,
@@ -81,7 +82,7 @@ export default class QuestionsDeCours extends Exercice {
               enonce: texte,
               correction: texteCorr,
               options: optionsQcm,
-              propositions: question.propositions.map((proposition) => ({
+              propositions: propositionsAffichees.map((proposition) => ({
                 texte: proposition,
                 statut: question.answers.includes(proposition),
               })),
@@ -200,6 +201,32 @@ export default class QuestionsDeCours extends Exercice {
       `<span class="text-sm italic">Identifiant${pluriel} inconnu${pluriel} et ignoré${pluriel} : ${inconnus.join(', ')}.</span>`
     )
   }
+}
+
+/** Nombre de propositions affichées pour une question `qcm`, bonne réponse comprise. */
+const NB_PROPOSITIONS_QCM = 4
+
+/**
+ * Choisit au hasard les propositions affichées pour une question `qcm` : la
+ * (les) bonne(s) réponse(s) sont toujours présentes, complétées par des
+ * fausses réponses piochées dans `badPropositions` jusqu'à
+ * `NB_PROPOSITIONS_QCM`, puis l'ensemble est mélangé.
+ */
+function selectionnePropositionsQcm(question: QuestionDeCours): string[] {
+  const bonnesReponses = shuffle([...new Set(question.answers)]).slice(
+    0,
+    NB_PROPOSITIONS_QCM,
+  )
+  // Filet de sécurité : la bonne réponse ne devrait pas figurer dans
+  // `badPropositions`, mais on l'exclut au cas où pour ne pas la doubler.
+  const mauvaisesReponses = question.badPropositions.filter(
+    (proposition) => !question.answers.includes(proposition),
+  )
+  const mauvaisesRetenues = shuffle(mauvaisesReponses).slice(
+    0,
+    Math.max(0, NB_PROPOSITIONS_QCM - bonnesReponses.length),
+  )
+  return shuffle([...bonnesReponses, ...mauvaisesRetenues])
 }
 
 /**

@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -118,7 +118,7 @@ $${p}~\\%~\\text{de }${n}= ${p / 10} \\times ${n}\\div${10} =  ${texNombre((p * 
       }
       if (context.isHtml && this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-      setReponse(this, i, (n * p) / 100)
+      handleAnswers(this, i, { reponse: { value: (n * p) / 100 } })
       if (context.isAmc) {
         this.autoCorrectionAMC[i].enonce = texte + '='
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])

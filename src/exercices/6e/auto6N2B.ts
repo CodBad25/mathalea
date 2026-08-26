@@ -1,14 +1,7 @@
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
-import {
-  arrondi,
-  nombreDeChiffresDansLaPartieDecimale,
-  nombreDeChiffresDe,
-} from '../../lib/outils/nombres'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import {
@@ -152,28 +145,6 @@ export default class NombreDecimalOraliseDeDifferentesManieres extends Exercice 
             options: { fractionDecimale: true },
           },
         })
-      }
-      if (context.isAmc) {
-        const choixDigit = randint(0, 1)
-        if (this.sup2 === 2) {
-          setReponse(this, i, reponseAMC, {
-            digits:
-              nombreDeChiffresDe(reponseAMC) +
-              randint(choixDigit, choixDigit + 1),
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(reponseAMC) + choixDigit,
-            signe: false,
-          })
-        } else {
-          setReponse(this, i, fractionDecimale, {
-            digits:
-              nombreDeChiffresDe(reponseAMC) +
-              randint(choixDigit, choixDigit + 1),
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(reponseAMC) + choixDigit + 1,
-            signe: false,
-          })
-        }
       }
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
 

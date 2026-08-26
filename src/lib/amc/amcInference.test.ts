@@ -1,0 +1,758 @@
+import { describe, expect, it } from 'vitest'
+
+import DecimalToScientifique from '../../exercices/3e/3AutoN07-1'
+import AutoQ9Asiebrevet2026 from '../../exercices/dnbAutomatismes/dnb-2026-06-asie-Q9'
+import DeterminerDerniereOperationExpressionLitterale from '../../exercices/5e/5N5D-1'
+import { mathaleaHandleExerciceSimple } from '../mathalea'
+import { context } from '../../modules/context'
+import seedrandom from 'seedrandom'
+import { mathaleaEnsureAMCCompatibility } from './amcInference'
+import { exportQcmAmc } from './creerDocumentAmc'
+import { normalizeAMCNumBlocks } from './amcNormalize'
+
+function exercise(overrides: Record<string, unknown>) {
+  return {
+    titre: 'Exercice de test',
+    nbQuestions: 1,
+    autoCorrection: [],
+    listeQuestions: ['Énoncé LaTeX'],
+    listeCorrections: ['Correction LaTeX'],
+    questionJamaisPosee: () => true,
+    reinit: () => {},
+    nouvelleVersion: () => {},
+    ...overrides,
+  } as any
+}
+
+describe('inférence AMC depuis formatInteractif', () => {
+  it('conserve le QCM natif construit pendant la passe AMC d’une liste déroulante', () => {
+    const previousContext = { isAmc: context.isAmc, isHtml: context.isHtml }
+    const exercice = new DeterminerDerniereOperationExpressionLitterale()
+    const seed = 'liste-deroulante-qcm-amc'
+    exercice.seed = seed
+    exercice.amcReady = true
+    exercice.amcType = 'qcmMono'
+
+    try {
+      context.isHtml = true
+      context.isAmc = false
+      exercice.interactif = true
+      seedrandom(seed, { global: true })
+      exercice.nouvelleVersionWrapper()
+      ;(exercice as any).interactiveAutoCorrectionForAMC =
+        exercice.autoCorrection.map((item) => ({ ...item }))
+
+      context.isHtml = true
+      context.isAmc = false
+      exercice.interactif = false
+      ;(exercice as any).lastCallback = ''
+      seedrandom(seed, { global: true })
+      exercice.nouvelleVersionWrapper()
+
+      context.isHtml = false
+      context.isAmc = true
+      exercice.interactif = false
+      ;(exercice as any).lastCallback = ''
+      seedrandom(seed, { global: true })
+      exercice.nouvelleVersionWrapper()
+      expect(
+        exercice.autoCorrection.every(
+          (item) => (item.propositions?.length ?? 0) >= 4,
+        ),
+      ).toBe(true)
+      expect(exercice.autoCorrection).toHaveLength(4)
+      expect(exercice.listeQuestions).toHaveLength(4)
+
+      mathaleaEnsureAMCCompatibility(exercice)
+
+      expect(exercice.amcType).toBe('qcmMono')
+      expect(exercice.autoCorrectionAMC).toHaveLength(exercice.nbQuestions)
+      for (const item of exercice.autoCorrectionAMC ?? []) {
+        expect(item.propositions).toHaveLength(4)
+        expect(
+          item.propositions?.filter(({ statut }) => Boolean(statut)),
+        ).toHaveLength(1)
+      }
+    } finally {
+      context.isAmc = previousContext.isAmc
+      context.isHtml = previousContext.isHtml
+    }
+  })
+
+  it('infère les deux champs d’un exercice multi-mathfield référencé', () => {
+    const exercice = new AutoQ9Asiebrevet2026()
+    mathaleaHandleExerciceSimple(exercice, true, 0, 'multi-reference-amc')
+
+    expect(exercice.autoCorrection[0]?.formatInteractif).toBe('multi-mathfield')
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCHybride')
+    expect(exercice.autoCorrectionAMC?.[0].propositions).toHaveLength(2)
+    expect(
+      exercice.autoCorrectionAMC?.[0].propositions?.map(
+        (block) => block.propositions?.[0].reponse?.texte,
+      ),
+    ).toEqual(['Réponse 1', 'Réponse 2'])
+
+    const [latex] = exportQcmAmc(exercice, 0)
+    expect(latex.match(/\\AMCnumericChoices/g)).toHaveLength(2)
+    expect(latex).toContain('Réponse 1')
+    expect(latex).toContain('Réponse 2')
+  })
+
+  it('infère la grille scientifique d’un exercice référencé mathLive', () => {
+    let exercice: DecimalToScientifique | undefined
+
+    for (let seed = 0; seed < 20; seed++) {
+      const candidat = new DecimalToScientifique()
+      mathaleaHandleExerciceSimple(candidat, true, 0, `scientifique-${seed}`)
+      const options = candidat.autoCorrection[0]?.valeur?.reponse?.options
+      if (options?.ecritureScientifique === true) {
+        exercice = candidat
+        break
+      }
+    }
+
+    expect(exercice).toBeDefined()
+    expect(exercice?.autoCorrection[0]?.formatInteractif).toBe('mathlive')
+
+    mathaleaEnsureAMCCompatibility(exercice!)
+
+    expect(exercice?.amcType).toBe('AMCNum')
+    const blocks = normalizeAMCNumBlocks(
+      exercice?.autoCorrectionAMC?.[0].reponse,
+    )
+    expect(blocks).toHaveLength(1)
+    expect(blocks[0].options?.exponent).toBeGreaterThan(0)
+    expect(blocks[0].digits).toBeGreaterThan(0)
+  })
+
+  it.each(['qcm', 'mathalea-qcm'])(
+    'conserve toutes les propositions du format QCM %s',
+    (formatInteractif) => {
+      const exercice = exercise({
+        interactifType: formatInteractif,
+        autoCorrection: [
+          {
+            enonce: 'Choisir.',
+            formatInteractif,
+            propositions: [
+              { texte: 'A', statut: true },
+              { texte: 'B', statut: false },
+              { texte: 'C', statut: true },
+            ],
+          },
+        ],
+      })
+
+      mathaleaEnsureAMCCompatibility(exercice)
+
+      expect(exercice.amcReady).toBe(true)
+      expect(exercice.amcType).toBe('qcmMult')
+      expect(exercice.autoCorrectionAMC[0].propositions).toHaveLength(3)
+      expect(
+        exercice.autoCorrectionAMC[0].propositions.map(
+          (proposition: any) => proposition.statut,
+        ),
+      ).toEqual([true, false, true])
+    },
+  )
+
+  it('détecte un QCM moderne même sans interactifType au niveau exercice', () => {
+    const exercice = exercise({
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-qcm',
+          propositions: [
+            { texte: 'Vrai', statut: true },
+            { texte: 'Faux', statut: false },
+          ],
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('qcmMono')
+    expect(exercice.autoCorrectionAMC[0].enonce).toBe('Énoncé LaTeX')
+  })
+
+  it('choisit qcmMult si une question quelconque a plusieurs bonnes réponses', () => {
+    const exercice = exercise({
+      nbQuestions: 2,
+      interactifType: 'qcm',
+      listeQuestions: ['Q1', 'Q2'],
+      listeCorrections: ['C1', 'C2'],
+      autoCorrection: [
+        {
+          formatInteractif: 'qcm',
+          propositions: [
+            { texte: 'A', statut: true },
+            { texte: 'B', statut: false },
+          ],
+        },
+        {
+          formatInteractif: 'qcm',
+          propositions: [
+            { texte: 'A', statut: true },
+            { texte: 'B', statut: true },
+            { texte: 'C', statut: false },
+          ],
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('qcmMult')
+    expect(exercice.autoCorrectionAMC).toHaveLength(2)
+  })
+
+  it('ne laisse pas disparaître une question QCM sans autoCorrection', () => {
+    const exercice = exercise({
+      nbQuestions: 2,
+      interactifType: 'qcm',
+      listeQuestions: ['Q1', 'Q2'],
+      listeCorrections: ['C1', 'C2'],
+      autoCorrection: [
+        {
+          formatInteractif: 'qcm',
+          propositions: [
+            { texte: 'A', statut: true },
+            { texte: 'B', statut: false },
+          ],
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrectionAMC).toHaveLength(2)
+    expect(exercice.autoCorrectionAMC.map((item: any) => item.enonce)).toEqual([
+      'Q1',
+      'Q2',
+    ])
+  })
+
+  it.each(['mathlive', 'mathalea-mathfield', 'calcul'])(
+    'infère AMCNum pour une réponse numérique au format %s',
+    (formatInteractif) => {
+      const exercice = exercise({
+        interactifType: 'mathLive',
+        autoCorrection: [
+          {
+            formatInteractif,
+            valeur: { reponse: { value: 12.5 } },
+          },
+        ],
+      })
+
+      mathaleaEnsureAMCCompatibility(exercice)
+
+      expect(exercice.amcType).toBe('AMCNum')
+      expect(exercice.autoCorrectionAMC[0].reponse.valeur).toBe(12.5)
+    },
+  )
+
+  it('réduit une fraction égale entière avant de dimensionner AMCNum', () => {
+    const exercice = exercise({
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-mathfield',
+          valeur: {
+            reponse: {
+              value: '\\frac{100}{25}',
+              options: { fractionEgale: true },
+            },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCNum')
+    expect(exercice.autoCorrectionAMC[0].reponse.valeur).toBe(4)
+  })
+
+  it('utilise AMCOpen pour une fractionEgale non entière', () => {
+    const exercice = exercise({
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-mathfield',
+          valeur: {
+            reponse: {
+              value: '\\frac{5}{2}',
+              options: { fractionEgale: true },
+            },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrectionAMC[0].enonce).toBe('Énoncé LaTeX')
+  })
+
+  it('utilise AMCOpen pour une option de comparaison non transposable', () => {
+    const exercice = exercise({
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-mathfield',
+          valeur: {
+            reponse: {
+              value: '4',
+              options: { expressionNumerique: true },
+            },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+  })
+
+  it('infère AMCNum en notation scientifique avec mantisse et exposant', () => {
+    const exercice = exercise({
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-mathfield',
+          valeur: {
+            reponse: {
+              value: '3,14\\times 10^{-2}',
+              options: { ecritureScientifique: true },
+            },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCNum')
+    expect(exercice.autoCorrectionAMC[0].reponse).toMatchObject({
+      valeur: 0.0314,
+      param: {
+        digits: 3,
+        decimals: 2,
+        exposantNbChiffres: 1,
+        exposantSigne: true,
+      },
+    })
+  })
+
+  it('refuse une écriture scientifique dont la mantisse est invalide', () => {
+    const exercice = exercise({
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-mathfield',
+          valeur: {
+            reponse: {
+              value: '31e-1',
+              options: { ecritureScientifique: true },
+            },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+  })
+
+  it('utilise AMCOpen pour une comparaison spécialisée inconnue', () => {
+    const exercice = exercise({
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-mathfield',
+          valeur: {
+            reponse: {
+              value: '4',
+              compare: () => ({ isOk: true }),
+            },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+  })
+
+  it('complète un AMCNum explicite depuis autoCorrection sans effacer sa source', () => {
+    const source = {
+      formatInteractif: 'mathlive',
+      valeur: { reponse: { value: 17 } },
+    }
+    const exercice = exercise({
+      amcReady: true,
+      amcType: 'AMCNum',
+      interactifType: 'mathLive',
+      autoCorrection: [source],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCNum')
+    expect(exercice.autoCorrection[0]).toBe(source)
+    expect(exercice.autoCorrectionAMC[0].reponse.valeur).toBe(17)
+  })
+
+  it('replie en AMCOpen un AMCNum explicite dont la réponse est ambiguë', () => {
+    const exercice = exercise({
+      amcReady: true,
+      amcType: 'AMCNum',
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathlive',
+          valeur: { reponse: { value: ['1', '2'] } },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrectionAMC[0].propositions[0].statut).toBe(3)
+  })
+
+  it.each(['multi-mathfield', 'fill-in-the-blank', 'tableau-mathlive'])(
+    'infère AMCHybride pour plusieurs champs numériques au format %s',
+    (formatInteractif) => {
+      const exercice = exercise({
+        interactifType: formatInteractif,
+        autoCorrection: [
+          {
+            formatInteractif,
+            valeur: {
+              champ1: { value: 4 },
+              champ2: { value: -2.5 },
+            },
+          },
+        ],
+      })
+
+      mathaleaEnsureAMCCompatibility(exercice)
+
+      expect(exercice.amcType).toBe('AMCHybride')
+      expect(exercice.autoCorrectionAMC[0].propositions).toHaveLength(2)
+      expect(
+        exercice.autoCorrectionAMC[0].propositions.map(
+          (block: any) => block.propositions[0].reponse.valeur,
+        ),
+      ).toEqual([4, -2.5])
+    },
+  )
+
+  it('nomme les grilles d’un tableau par ligne et colonne', () => {
+    const exercice = exercise({
+      interactifType: 'tableau-mathlive',
+      autoCorrection: [
+        {
+          formatInteractif: 'tableau-mathlive',
+          valeur: {
+            L1C2: { value: 4 },
+            L3C1: { value: -2.5 },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(
+      exercice.autoCorrectionAMC[0].propositions.map(
+        (block: any) => block.propositions[0].reponse.texte,
+      ),
+    ).toEqual(['Ligne 1, colonne 2', 'Ligne 3, colonne 1'])
+  })
+
+  it('refuse une inférence numérique partielle dans un multi-mathfield', () => {
+    const exercice = exercise({
+      interactifType: 'multi-mathfield',
+      autoCorrection: [
+        {
+          formatInteractif: 'multi-mathfield',
+          valeur: {
+            champ1: { value: 4 },
+            champ2: { value: 'x+1' },
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+  })
+
+  it('conserve un barème multichamp équivalent au barème indépendant', () => {
+    const exercice = exercise({
+      interactifType: 'multi-mathfield',
+      autoCorrection: [
+        {
+          formatInteractif: 'multi-mathfield',
+          valeur: {
+            champ1: { value: 4 },
+            champ2: { value: 7 },
+            bareme: (points: number[]) => [
+              points.reduce((sum, point) => sum + point, 0),
+              points.length,
+            ],
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCHybride')
+  })
+
+  it.each([
+    {
+      label: 'barème couplé',
+      extra: {
+        bareme: (points: number[]) => [Math.min(...points), 1],
+      },
+    },
+    {
+      label: 'callback global',
+      extra: { callback: () => ({ isOk: true }) },
+    },
+  ])('utilise AMCOpen pour un $label multichamp', ({ extra }) => {
+    const exercice = exercise({
+      interactifType: 'multi-mathfield',
+      autoCorrection: [
+        {
+          formatInteractif: 'multi-mathfield',
+          valeur: {
+            champ1: { value: 4 },
+            champ2: { value: 7 },
+            ...extra,
+          },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+  })
+
+  it('infère un AMCHybride en conservant les blocs QCM et numériques', () => {
+    const exercice = exercise({
+      nbQuestions: 2,
+      amcReady: true,
+      amcType: 'qcmMono',
+      interactifType: 'qcm',
+      listeQuestions: ['Énoncé 1', 'Énoncé 2'],
+      listeCorrections: ['Correction 1', 'Correction 2'],
+      autoCorrection: [
+        {
+          formatInteractif: 'qcm',
+          valeur: { reponse: { value: 4 } },
+        },
+        {
+          formatInteractif: 'qcm',
+          propositions: [
+            { texte: 'A', statut: false },
+            { texte: 'B', statut: true },
+          ],
+        },
+        {
+          formatInteractif: 'mathalea-mathfield',
+          valeur: { reponse: { value: -2.5 } },
+        },
+        {
+          formatInteractif: 'qcm',
+          propositions: [
+            { texte: 'C', statut: true },
+            { texte: 'D', statut: true },
+            { texte: 'E', statut: false },
+          ],
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCHybride')
+    expect(exercice.autoCorrectionAMC).toHaveLength(2)
+    expect(exercice.autoCorrectionAMC[0].propositions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ type: 'AMCNum' }),
+        expect.objectContaining({
+          type: 'qcmMono',
+          propositions: [
+            expect.objectContaining({ statut: false }),
+            expect.objectContaining({ statut: true }),
+          ],
+        }),
+      ]),
+    )
+    expect(exercice.autoCorrectionAMC[1].propositions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ type: 'AMCNum' }),
+        expect.objectContaining({ type: 'qcmMult' }),
+      ]),
+    )
+  })
+
+  it('ne choisit pas arbitrairement une réponse parmi plusieurs valeurs acceptées', () => {
+    const exercice = exercise({
+      interactifType: 'mathLive',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathlive',
+          valeur: { reponse: { value: [0.5, '\\frac{1}{2}'] } },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+  })
+
+  it('utilise AMCOpen pour un format non transposable sans altérer autoCorrection', () => {
+    const source = {
+      formatInteractif: 'svg-selection',
+      valeur: { reponse: { value: '[1,2]' } },
+    }
+    const exercice = exercise({
+      interactifType: 'svg-selection',
+      autoCorrection: [source],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrection[0]).toBe(source)
+    expect(exercice.autoCorrectionAMC[0]).toMatchObject({
+      enonce: 'Énoncé LaTeX',
+      propositions: [
+        {
+          texte: 'Correction LaTeX',
+          statut: 3,
+          pointilles: true,
+        },
+      ],
+    })
+  })
+
+  it.each([
+    'texte',
+    'liste-deroulante',
+    'cliqueFigure',
+    'clique-figure',
+    'points-cliquables',
+    'objets-cliquables',
+    'fraction-cliquable',
+    'mathalea-labyrinthe',
+    'echiquier-probleme',
+    'dnd',
+    'drag-and-drop',
+    'custom',
+    'meta-custom',
+    'my-spreadsheet',
+    'MetaInteractif2d',
+    'meta-interactif-2d',
+    'svg-selection',
+    'trigo-circle-selection',
+    'interactive-clock',
+    'guide-ane',
+    'demi-droite-interactive',
+    'blockly-editor',
+    'scratch-editor',
+    'tableau-signes-variations',
+    'mathalea-textfield',
+    'tableau-hybride',
+    'mathalea-couteau-suisse',
+    'mathalea-branching-qcm',
+    'alea-iep-editeur',
+    'relier-etiquettes',
+    'diagram-builder',
+    'diagram-pie-assessment',
+    'diagram-bar-assessment',
+    'diagram-histogram-assessment',
+    'diagram-cartesian-assessment',
+    'format-inconnu',
+  ])('conserve le format non transposable %s sous forme AMCOpen', (format) => {
+    const exercice = exercise({
+      interactifType: format,
+      autoCorrection: [
+        {
+          formatInteractif: format,
+          valeur: { reponse: { value: 'réponse interactive' } },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcReady).toBe(true)
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrectionAMC[0]).toMatchObject({
+      enonce: 'Énoncé LaTeX',
+      propositions: [
+        expect.objectContaining({
+          texte: 'Correction LaTeX',
+          statut: 3,
+        }),
+      ],
+    })
+  })
+
+  it('ne confond pas une ancienne structure AMCOpen avec un QCM', () => {
+    const exercice = exercise({
+      autoCorrection: [
+        {
+          enonce: 'Démontrer.',
+          propositions: [
+            { texte: 'Correction', statut: 3, pointilles: true },
+            { texte: 'Barème alternatif', statut: 1, pointilles: false },
+          ],
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+  })
+
+  it('rend le contrat fallback avec énoncé, zone de travail et cases de notation', () => {
+    const exercice = exercise({
+      id: 'FALLBACK',
+      interactifType: 'drag-and-drop',
+      autoCorrection: [
+        {
+          formatInteractif: 'drag-and-drop',
+          valeur: { reponse: { value: 'état dynamique' } },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+    const [latex] = exportQcmAmc(exercice, 0)
+
+    expect(latex).toContain('Énoncé LaTeX')
+    expect(latex).toContain('Correction LaTeX')
+    expect(latex).toContain('\\notation{3}[false][true]')
+  })
+})

@@ -87,7 +87,7 @@
       "question": "Quel est le signe d'un polynôme de degré 2 qui a 2 racines distinctes ?",
       "answer": ["Du signe de $a$ à l'extérieur des racines."],
       "correction": "Du signe de $a$ à l'extérieur des racines.",
-      "propositions": ["Du signe de $a$ à l'extérieur des racines.","Du signe de $a$ à l'intérieur des racines.","positif sur $\\mathbb R$","négatif sur $\\mathbb R$"]
+      "badPropositions": ["Du signe de $a$ à l'intérieur des racines.", "positif sur $\\mathbb R$", "négatif sur $\\mathbb R$"]
     }, {
       "themes": "Second degré",
       "level": "1",

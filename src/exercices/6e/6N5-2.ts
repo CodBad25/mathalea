@@ -5,7 +5,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, enleveElementNo } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -343,7 +343,9 @@ export default class QuestionsMasses extends Exercice {
               KeyboardType.clavierDeBase,
               { texteApres: ' €' },
             ) + '<br><br>'
-          setReponse(this, nbCas * i + kk, reponseAMC)
+          handleAnswers(this, nbCas * i + kk, {
+            reponse: { value: reponseAMC },
+          })
         }
         if (context.isAmc) {
           if (kk === 0) enonceAMC = enonceAMCInit + enonceAMC

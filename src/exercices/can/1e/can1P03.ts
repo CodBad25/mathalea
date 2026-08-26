@@ -9,7 +9,7 @@ import Exercice from '../../Exercice'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre =
@@ -164,7 +164,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
       $P_{A}(B)=1-${texNombre(1 - pBsachantA.toNumber(), 1)}= ${texNombre(pBsachantA, 1)}$.<br>
       Ainsi, $P(A\\cap B)=P(A)\\times P_{A}(B)=${texNombre(pA, 1)}\\times ${texNombre(pBsachantA, 1)}=${texNombre(reponse1, 2)}$.
       `
-          setReponse(this, i, reponse1)
+          handleAnswers(this, i, { reponse: { value: reponse1 } })
           this.canEnonce = texte
 
           break
@@ -255,7 +255,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
         $P_{A}(\\overline{B})=1-${texNombre(pBsachantA, 1)}= ${texNombre(1 - pBsachantA.toNumber(), 1)}$.<br>
         Ainsi, $P(A\\cap \\overline{B})=P(A)\\times P_{A}(\\overline{B})=${texNombre(pA, 1)}\\times ${texNombre(1 - pBsachantA.toNumber(), 1)}=${texNombre(reponse2, 2)}$.
         `
-          setReponse(this, i, reponse2)
+          handleAnswers(this, i, { reponse: { value: reponse2 } })
           this.canEnonce = texte
 
           break
@@ -353,7 +353,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
         $P_{\\overline{A}}(B)=1-${texNombre(pBbarresachantAbarre, 1)}= ${texNombre(1 - pBbarresachantAbarre.toNumber(), 1)}$.<br>
         Ainsi, $P(\\overline{A}\\cap B)=P(\\overline{A})\\times P_{\\overline{A}}(B)=${texNombre(pAbarre, 1)}\\times ${texNombre(pBsachantAbarre, 1)}=${texNombre(reponse3, 2)}$.
         `
-          setReponse(this, i, reponse3)
+          handleAnswers(this, i, { reponse: { value: reponse3 } })
           this.canEnonce = texte
 
           break
@@ -451,7 +451,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
         $P_{\\overline{A}}(\\overline{B})=1-${texNombre(pBsachantAbarre, 1)}= ${texNombre(pBbarresachantAbarre, 1)}$.<br>
         Ainsi, $P(\\overline{A}\\cap \\overline{B})=P(\\overline{A})\\times P_{\\overline{A}}(\\overline{B})=${texNombre(pAbarre, 1)}\\times ${texNombre(pBbarresachantAbarre, 1)}=${texNombre(reponse4, 2)}$.
         `
-          setReponse(this, i, reponse4)
+          handleAnswers(this, i, { reponse: { value: reponse4 } })
           this.canEnonce = texte
 
           break

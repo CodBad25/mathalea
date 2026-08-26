@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -177,7 +177,7 @@ export default class DivisionFraction extends Exercice {
         })
         texteCorr += `<br>$${texFraction(texNombre(a), texNombre(b))}\\approx${miseEnEvidence(texNombre(q, 2))}$`
       }
-      setReponse(this, i, q)
+      handleAnswers(this, i, { reponse: { value: q } })
       if (context.isHtml && this.interactif) {
         if (this.sup === 1) {
           texte += '~=$'

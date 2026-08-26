@@ -1,11 +1,6 @@
-import { amcConvert } from '../../lib/amc/amcBuilders'
-import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -14,7 +9,6 @@ import {
 } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { context } from '../../modules/context'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -216,28 +210,13 @@ export default class DernierChiffreSommeDifférenceDécimaux extends Exercice {
           texte +
           ' est :' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-        handleAnswers(this, i, {
-          reponse: {
-            value: resultat,
-            options: { nombreDecimalSeulement: true },
-          },
-        })
       }
-      if (context.isAmc) {
-        setReponse(this, i, resultat)
-        this.autoCorrectionAMC[i].enonce =
-          texte.substring(0, texte.length - 1) +
-          '~=$<br>Le chiffre des unités est : '
-        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-        this.autoCorrectionAMC[i].reponse = {
-          texte: texteCorr,
-          valeur: resultat,
-        }
-        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-        const amcParam = ensureAmcParam(this, i)
-        amcParam.digits = 1
-        amcParam.decimals = 0
-      }
+      handleAnswers(this, i, {
+        reponse: {
+          value: resultat,
+          options: { nombreDecimalSeulement: true },
+        },
+      })
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on la stocke dans la liste des questions
         this.listeQuestions[i] = texte

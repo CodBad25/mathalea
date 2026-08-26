@@ -162,7 +162,7 @@ $\\begin{aligned}
         break
     }
     if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
-    if (context.isHtml) {
+    if (context.isHtml && !this.versionQcm) {
       this.question += '<br>'
     }
   }

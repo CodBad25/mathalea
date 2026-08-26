@@ -1,7 +1,7 @@
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import type { ReponseParams } from '../../lib/amc/amcTypes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -189,7 +189,9 @@ export default class DecompositionNombreDecimal extends Exercice {
             i,
             KeyboardType.clavierNumbers,
           )
-          setReponse(this, i, m! * 1000 + c! * 100 + d! * 10 + u!)
+          handleAnswers(this, i, {
+            reponse: { value: m! * 1000 + c! * 100 + d! * 10 + u! },
+          })
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 5
           amcParam.decimals = 0
@@ -204,7 +206,11 @@ export default class DecompositionNombreDecimal extends Exercice {
             i,
             KeyboardType.clavierNumbers,
           )
-          setReponse(this, i, arrondi(di! / 10 + ci! / 100 + mi! / 1000, 3))
+          handleAnswers(this, i, {
+            reponse: {
+              value: arrondi(di! / 10 + ci! / 100 + mi! / 1000, 3),
+            },
+          })
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 6
           amcParam.decimals = 4
@@ -219,7 +225,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, u!)
+            handleAnswers(this, i, { reponse: { value: u! } })
           } else {
             texte = `Le chiffre des dizaines du nombre $${n}$ est : `
             texteCorr = texte + `$${miseEnEvidence(d!)}$`
@@ -228,7 +234,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, d!)
+            handleAnswers(this, i, { reponse: { value: d! } })
           }
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 1
@@ -242,7 +248,7 @@ export default class DecompositionNombreDecimal extends Exercice {
             i,
             KeyboardType.clavierNumbers,
           )
-          setReponse(this, i, u!)
+          handleAnswers(this, i, { reponse: { value: u! } })
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 1
           amcParam.decimals = 0
@@ -258,7 +264,7 @@ export default class DecompositionNombreDecimal extends Exercice {
                 i,
                 KeyboardType.clavierNumbers,
               )
-              setReponse(this, i, u!)
+              handleAnswers(this, i, { reponse: { value: u! } })
             } else {
               texte = `Le chiffre des dizaines du nombre $${n}$ est : `
               texteCorr = texte + `$${miseEnEvidence(d!)}$`
@@ -267,7 +273,7 @@ export default class DecompositionNombreDecimal extends Exercice {
                 i,
                 KeyboardType.clavierNumbers,
               )
-              setReponse(this, i, d!)
+              handleAnswers(this, i, { reponse: { value: d! } })
             }
           } else {
             texte = `Le chiffre des centaines du nombre $${n}$ est : `
@@ -277,7 +283,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, c!)
+            handleAnswers(this, i, { reponse: { value: c! } })
           }
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 1
@@ -294,7 +300,7 @@ export default class DecompositionNombreDecimal extends Exercice {
                 i,
                 KeyboardType.clavierNumbers,
               )
-              setReponse(this, i, u!)
+              handleAnswers(this, i, { reponse: { value: u! } })
             } else {
               texte = `Le chiffre des centaines du nombre $${n}$ est : `
               texteCorr = texte + `$${miseEnEvidence(0)}$` // Pas de centaines pour < 100
@@ -303,7 +309,7 @@ export default class DecompositionNombreDecimal extends Exercice {
                 i,
                 KeyboardType.clavierNumbers,
               )
-              setReponse(this, i, 0)
+              handleAnswers(this, i, { reponse: { value: 0 } })
             }
           } else {
             texte = `Le chiffre des milliers du nombre $${n}$ est : `
@@ -313,7 +319,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, m!)
+            handleAnswers(this, i, { reponse: { value: m! } })
           }
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 1
@@ -327,7 +333,7 @@ export default class DecompositionNombreDecimal extends Exercice {
             i,
             KeyboardType.clavierNumbers,
           )
-          setReponse(this, i, di!)
+          handleAnswers(this, i, { reponse: { value: di! } })
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 1
           amcParam.decimals = 0
@@ -340,7 +346,7 @@ export default class DecompositionNombreDecimal extends Exercice {
             i,
             KeyboardType.clavierNumbers,
           )
-          setReponse(this, i, ci!)
+          handleAnswers(this, i, { reponse: { value: ci! } })
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 1
           amcParam.decimals = 0
@@ -353,7 +359,7 @@ export default class DecompositionNombreDecimal extends Exercice {
             i,
             KeyboardType.clavierNumbers,
           )
-          setReponse(this, i, mi!)
+          handleAnswers(this, i, { reponse: { value: mi! } })
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 1
           amcParam.decimals = 0
@@ -368,7 +374,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, di! + u! * 10)
+            handleAnswers(this, i, { reponse: { value: di! + u! * 10 } })
           } else {
             texte = `Le nombre de dizaines du nombre $${n}$ est : `
             const nombreDizaines =
@@ -379,7 +385,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, nombreDizaines)
+            handleAnswers(this, i, { reponse: { value: nombreDizaines } })
           }
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 6
@@ -400,7 +406,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, nombreCentiemes)
+            handleAnswers(this, i, { reponse: { value: nombreCentiemes } })
           } else {
             texte = `Le nombre de centaines du nombre $${n}$ est : `
             texteCorr = texte + `$${miseEnEvidence(texNombre(c! + m! * 10))}$`
@@ -409,7 +415,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, c! + m! * 10)
+            handleAnswers(this, i, { reponse: { value: c! + m! * 10 } })
           }
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 6
@@ -430,7 +436,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, nombreDixiemes)
+            handleAnswers(this, i, { reponse: { value: nombreDixiemes } })
             amcParam = ensureAmcParam(this, i)
             amcParam.digits = 6
             amcParam.decimals = 0
@@ -458,7 +464,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, i, nombreCentiemes)
+            handleAnswers(this, i, { reponse: { value: nombreCentiemes } })
             amcParam = ensureAmcParam(this, i)
             amcParam.digits = 6
             amcParam.decimals = 0

@@ -1,6 +1,8 @@
-import { context } from '../../modules/context'
-import { courbe } from '../../lib/2d/Courbe'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
+import { droite } from '../../lib/2d/droites'
 import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
+import { penteAffineAnimee } from '../../lib/2d/PenteAffineAnimee'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import {
@@ -13,6 +15,7 @@ import { shuffle } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -103,7 +106,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
     return label
   }
 
-  private creerFigure(droites: DroiteAffine[]) {
+  private creerFigure(droites: DroiteAffine[], id = '') {
     const xMin = -5
     const xMax = 5
     const yMin = -6
@@ -131,21 +134,16 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
 
     const objets: ObjetMathalea2D[] = [r, origine]
     const labelsUtilises: { x: number; y: number }[] = []
-    for (const droite of droites) {
-      objets.push(
-        courbe((x: number) => droite.pente * x + droite.ordonneeOrigine, {
-          repere: r,
-          color: droite.couleur,
-          epaisseur: 2,
-          xMin,
-          xMax,
-          yMin,
-          yMax,
-        }),
+    for (const uneDroite of droites) {
+      const d = droite(
+        pointAbstrait(0, uneDroite.ordonneeOrigine),
+        pointAbstrait(1, uneDroite.pente + uneDroite.ordonneeOrigine),
       )
+      d.color = colorToLatexOrHTML(uneDroite.couleur)
+      objets.push(d)
       const label = this.positionLabel(
-        droite.pente,
-        droite.ordonneeOrigine,
+        uneDroite.pente,
+        uneDroite.ordonneeOrigine,
         xMin,
         xMax,
         yMin,
@@ -153,8 +151,8 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         labelsUtilises,
       )
       objets.push(
-        latex2d(`\\left(d_${droite.numero}\\right)`, label.x, label.y, {
-          color: droite.couleur,
+        latex2d(`\\left(d_${uneDroite.numero}\\right)`, label.x, label.y, {
+          color: uneDroite.couleur,
           backgroundColor: 'white',
           letterSize: 'scriptsize',
         }),
@@ -170,37 +168,55 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         pixelsParCm: 25,
         scale: 0.72,
         center: !context.isHtml,
+        id,
       },
       objets,
     )
   }
 
-  private appliquerLesValeurs(a: number, b: number) {
+  private appliquerLesValeurs(
+    a: number,
+    b: number,
+    variationLineaire: boolean,
+  ) {
+    const couleursDesDroites = shuffle([
+      bleuMathalea,
+      coopmathsAction,
+      vertMathalea,
+      coopmathsCorpus,
+    ])
     let droites: DroiteAffine[] = [
       {
         pente: a,
         ordonneeOrigine: b,
         estBonneReponse: true,
-        couleur: bleuMathalea,
+        couleur: couleursDesDroites[0],
       },
       {
         pente: -a,
         ordonneeOrigine: b,
         estBonneReponse: false,
-        couleur: coopmathsAction,
+        couleur: couleursDesDroites[1],
       },
       {
         pente: 1 / a,
         ordonneeOrigine: b,
         estBonneReponse: false,
-        couleur: vertMathalea,
+        couleur: couleursDesDroites[2],
       },
-      {
-        pente: -1 / a,
-        ordonneeOrigine: -b,
-        estBonneReponse: false,
-        couleur: coopmathsCorpus,
-      },
+      variationLineaire
+        ? {
+            pente: a,
+            ordonneeOrigine: 0,
+            estBonneReponse: false,
+            couleur: couleursDesDroites[3],
+          }
+        : {
+            pente: -1 / a,
+            ordonneeOrigine: -b,
+            estBonneReponse: false,
+            couleur: couleursDesDroites[3],
+          },
     ]
 
     if (!this.sontDistinctes(droites)) {
@@ -208,7 +224,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         pente: a + 1,
         ordonneeOrigine: b - 1,
         estBonneReponse: false,
-        couleur: coopmathsCorpus,
+        couleur: couleursDesDroites[3],
       }
     }
 
@@ -222,8 +238,19 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
       throw new Error('Aucune bonne droite générée.')
     }
     const mauvaisesDroites = droites.filter((droite) => !droite.estBonneReponse)
-    const figure = this.creerFigure(droites)
+    const figureId = `penteAffineEx${this.numeroExercice ?? 0}Q${this.indexQuestionHote ?? 0}`
+    const figure = this.creerFigure(droites, figureId)
     const fonction = reduireAxPlusB(a, b)
+    const animation =
+      context.isHtml && !context.isTypst
+        ? `<br>${penteAffineAnimee({
+            figureId,
+            b,
+            numerateur: a,
+            denominateur: 1,
+            pixelsParCm: 25,
+          })}`
+        : ''
 
     this.enonce = `On considère la fonction affine $f$ définie sur $\\mathbb{R}$ par $f(x)=${fonction}$.<br>
 On a représenté ci-dessous quatre droites dans un repère.<br><br>
@@ -239,11 +266,11 @@ La droite qui représente la fonction $f$ est :`
 
     this.correction = `La représentation graphique de la fonction $f$ est la droite d'équation $y=${fonction}$.<br>
 Elle coupe l'axe des ordonnées en $${texNombre(b)}$ et son coefficient directeur est $${texNombre(a)}$.<br>
-La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(d_${bonneDroite?.numero}\\right)`)}$.`
+La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(d_${bonneDroite?.numero}\\right)`)}$.${animation}<br>`
   }
 
   versionOriginale = () => {
-    this.appliquerLesValeurs(2, 3)
+    this.appliquerLesValeurs(2, 3, false)
   }
 
   versionAleatoire = () => {
@@ -252,7 +279,7 @@ La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(
     while (b === a * a || b === -a * a) {
       b = randint(-4, 4, 0)
     }
-    this.appliquerLesValeurs(a, b)
+    this.appliquerLesValeurs(a, b, Math.random() < 0.5)
   }
 
   constructor() {

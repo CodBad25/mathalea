@@ -27,7 +27,7 @@
       "question": "Donner une fonction qui n'est pas dérivable sur son domaine de définition.",
       "answer": ["racine carrée"],
       "correction":"La fonction racine carrée n'est pas dérivable en $0$.",
-      "propositions": ["inverse", "carré", "racine carrée", "cube"],
+      "badPropositions": ["inverse", "carré", "cube"],
       "keys": []
     },
    {
@@ -48,7 +48,7 @@
       "type":"qcm",
       "question": "Soit $f$ une fonction dérivable en $a$. On a alors $f\\prime(a)=\\ldots$",
       "answer": ["$\\lim_{h\\to 0}\\dfrac{f(a+h)-f(a)}{h}$"],
-      "propositions": ["$\\lim_{h\\to 0}\\dfrac{f(a+h)-f(a)}{h}$","$\\lim_{h\\to 0}\\dfrac{f(a+h)-f(h)}{h}$", "$\\lim_{h\\to a}\\dfrac{f(a+h)-f(a)}{h}$", "$\\lim_{h\\to 0}\\dfrac{f(a+h)-f(a)}{a+h}$"],
+      "badPropositions": ["$\\lim_{h\\to 0}\\dfrac{f(a+h)-f(h)}{h}$", "$\\lim_{h\\to a}\\dfrac{f(a+h)-f(a)}{h}$", "$\\lim_{h\\to 0}\\dfrac{f(a+h)-f(a)}{a+h}$"],
      "correction" :"La définition du nombre dérivé est $f\\prime(a)=\\lim_{h\\to 0}\\dfrac{f(a+h)-f(a)}{h}$.",
      "keys": []    },{
       "themes": "Dérivées",

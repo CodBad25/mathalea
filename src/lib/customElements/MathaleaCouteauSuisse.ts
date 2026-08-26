@@ -47,7 +47,7 @@ export class MathaleaCouteauSuisseElement extends MathaleaCustomElement {
     contenu,
     interactivityOn = true,
   }: MathaleaCouteauSuisseOptions): string {
-    if (!context.isHtml) return ''
+    if (!context.isHtml || context.isTypst) return contenu
     const computedId =
       id ??
       `${MathaleaCouteauSuisseElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
@@ -168,7 +168,6 @@ export function addMathaleaCouteauSuisse(
     'numeroExercice' | 'questionIndex'
   >,
 ): string {
-  if (!context.isHtml) return ''
   exercice.autoCorrection[questionIndex] ??= {}
   const ac = exercice.autoCorrection[questionIndex] as {
     formatInteractif?: InteractivityType

@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   combinaisonListesSansChangerOrdre,
@@ -148,7 +148,7 @@ export default class ProduitDeDecimauxAPartirProduitConnuASupprimer extends Exer
       }
       if (context.isHtml && this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-      setReponse(this, i, reponse)
+      handleAnswers(this, i, { reponse: { value: reponse } })
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte,

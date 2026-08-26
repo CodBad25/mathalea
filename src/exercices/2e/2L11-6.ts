@@ -18,12 +18,12 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Factoriser une expression avec un facteur commun'
+export const titre = 'Factoriser une expression algébrique'
 export const dateDePublication = '24/08/2026'
 export const uuid = '0fe88'
 
 export const refs = {
-  'fr-fr': ['2L13-6'],
+  'fr-fr': ['2L11-6'],
   'fr-ch': [],
 }
 
@@ -38,22 +38,23 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
-    this.sup = '8'
+    this.sup = '9'
     this.spacing = 2
     this.spacingCorr = 2
     this.listeAvecNumerotation = false
     this.besoinFormulaireTexte = [
-      'Types de questions',
+      'Types de questions avec $A=ax+b$',
       [
         'Nombres séparés par des tirets :',
         '1 : $ax^2+bx$',
-        '2 : $x(ax+b)+kx$',
-        '3 : $(ax+b)(cx+d)+(ax+b)(ex+f)$',
-        '4 : $(ax+b)(cx+d)-(ax+b)(ex+f)$',
-        '5 : $(ax+b)^2+(ax+b)(ex+f)$',
-        '6 : $(ax+b)^2-(ax+b)(ex+f)$',
-        '7 : $x^2-a^2$ ou $a^2-x^2$',
-        '8 : Mélange',
+        '2 : $Ax+kx$',
+        '3 : $x^2-a^2$',
+        '4 : $x^2-a$ avec $a$ non carré parfait',
+        '5 : $AB+AC$',
+        '6 : $AB-AC$',
+        '7 : $A^2+AB$',
+        '8 : $A^2-AB$',
+        '9 : Mélange',
       ].join('\n'),
     ]
   }
@@ -68,9 +69,9 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
       gestionnaireFormulaireTexte({
         saisie: this.sup,
         min: 1,
-        max: 7,
-        melange: 8,
-        defaut: 8,
+        max: 8,
+        melange: 9,
+        defaut: 9,
         nbQuestions: this.nbQuestions,
       }),
       this.nbQuestions,
@@ -100,29 +101,34 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         c = k
       }
 
-      if (type === 3 || type === 4) {
+      if (type === 5 || type === 6) {
         while (
-          (type === 3 && (c + e === 0 || d + f === 0)) ||
-          (type === 4 && (c - e === 0 || d - f === 0))
+          (type === 5 && (c + e === 0 || d + f === 0)) ||
+          (type === 6 && (c - e === 0 || d - f === 0))
         ) {
           e = randint(-6, 6, [0, a, c])
           f = randint(-9, 9, [0, b, d])
         }
       }
 
-      if (type === 5 || type === 6) {
+      if (type === 7 || type === 8) {
         while (
-          (type === 5 && (a + e === 0 || b + f === 0)) ||
-          (type === 6 && (a - e === 0 || b - f === 0))
+          (type === 7 && (a + e === 0 || b + f === 0)) ||
+          (type === 8 && (a - e === 0 || b - f === 0))
         ) {
           e = randint(-6, 6, [0, a])
           f = randint(-9, 9, [0, b])
         }
       }
 
-      if (type === 7) {
+      if (type === 3) {
         a = randint(2, 12)
-        c = randint(0, 1)
+      }
+
+      if (type === 4) {
+        do {
+          a = randint(2, 99)
+        } while (Number.isInteger(Math.sqrt(a)))
       }
 
       const facteurCommun = reduireAxPlusB(a, b)
@@ -157,7 +163,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           \\end{aligned}$`
           break
         }
-        case 3: {
+        case 5: {
           expression = `(${facteurCommun})(${facteurC})+(${facteurCommun})(${facteurE})`
           reponse = `(${facteurCommun})(${reduireAxPlusB(c + e, d + f)})`
           correction = `On reconnaît le facteur commun $(${facteurCommun})$.<br>
@@ -167,7 +173,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           \\end{aligned}$`
           break
         }
-        case 4: {
+        case 6: {
           expression = `(${facteurCommun})(${facteurC})-(${facteurCommun})(${facteurE})`
           reponse = `(${facteurCommun})(${reduireAxPlusB(c - e, d - f)})`
           correction = `On reconnaît le facteur commun $(${facteurCommun})$.<br>
@@ -178,7 +184,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           \\end{aligned}$`
           break
         }
-        case 5: {
+        case 7: {
           expression = `(${facteurCommun})^2+(${facteurCommun})(${facteurE})`
           reponse = `(${facteurCommun})(${reduireAxPlusB(a + e, b + f)})`
           correction = `On reconnaît le facteur commun $(${facteurCommun})$.<br>
@@ -189,7 +195,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           \\end{aligned}$`
           break
         }
-        case 6: {
+        case 8: {
           expression = `(${facteurCommun})^2-(${facteurCommun})(${facteurE})`
           reponse = `(${facteurCommun})(${reduireAxPlusB(a - e, b - f)})`
           correction = `On reconnaît le facteur commun $(${facteurCommun})$.<br>
@@ -201,15 +207,22 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           \\end{aligned}$`
           break
         }
-        case 7: {
-          const xCarreEnPremier = c === 1
-          expression = xCarreEnPremier ? `x^2-${a}^2` : `${a}^2-x^2`
-          reponse = xCarreEnPremier
-            ? `(x-${a})(x+${a})`
-            : `(${a}-x)(${a}+x)`
-          correction = `On reconnaît l'identité remarquable $A^2-B^2=(A-B)(A+B)$.<br>
+        case 3: {
+          expression = `x^2-${a ** 2}`
+          reponse = `(x-${a})(x+${a})`
+          correction = `Comme $\\sqrt{${a ** 2}}=${a}$, on reconnaît l'identité remarquable $A^2-B^2=(A-B)(A+B)$.<br>
           $\\begin{aligned}
           ${expression}&=${miseEnEvidence(reponse)}.
+          \\end{aligned}$`
+          break
+        }
+        case 4: {
+          expression = `x^2-${a}`
+          reponse = `(x-\\sqrt{${a}})(x+\\sqrt{${a}})`
+          correction = `Comme $a=${a}$ est positif, on écrit $${a}=(\\sqrt{${a}})^2$. On reconnaît alors l'identité remarquable $A^2-B^2=(A-B)(A+B)$.<br>
+          $\\begin{aligned}
+          ${expression}&=x^2-(\\sqrt{${a}})^2\\\\
+          &=${miseEnEvidence(reponse)}.
           \\end{aligned}$`
           break
         }

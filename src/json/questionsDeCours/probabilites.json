@@ -27,10 +27,9 @@
       "title": "Évènements incompatibles",
       "question": "Si $P(A \\cap B) = 0$ alors $A$ et $B$ sont",
       "answer": ["incompatibles", "incompatible"],
-      "propositions": [
+      "badPropositions": [
         "indépendants",
         "impossibles",
-        "incompatibles",
         "irréalisables"
       ]
     },
@@ -42,10 +41,9 @@
       "title": "Évènements incompatibles (QCM)",
       "question": "Si $P(A \\cap B) = 0$ alors $A$ et $B$ sont",
       "answer": ["incompatibles"],
-      "propositions": [
+      "badPropositions": [
         "indépendants",
         "impossibles",
-        "incompatibles",
         "irréalisables"
       ]
     },
@@ -57,8 +55,7 @@
       "title": "Évènements indépendants (QCM)",
       "question": "Si $P(A \\cap B) = P(A)\\times P(B)$ alors $A$ et $B$ sont",
       "answer": ["indépendants"],
-      "propositions": [
-        "indépendants",
+      "badPropositions": [
         "impossibles",
         "incompatibles",
         "irréalisables"
@@ -72,8 +69,7 @@
       "title": "Évènements indépendants",
       "question": "Si $P(A \\cap B) = P(A)\\times P(B)$ alors $A$ et $B$ sont",
       "answer": ["indépendants"],
-      "propositions": [
-        "indépendants",
+      "badPropositions": [
         "impossibles",
         "incompatibles",
         "irréalisables"

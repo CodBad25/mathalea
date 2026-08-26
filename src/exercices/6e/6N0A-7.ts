@@ -6,10 +6,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
 export const titre = 'Écrire un nombre en chiffres ou en lettres'
@@ -109,7 +106,9 @@ export default class ÉcrireNombresEntiers extends Exercice {
         if (tranche[listeTypeDeQuestions[i] - 1] === 0) nombre = 0
       }
       if (typeDeConsigne[i] === 1) {
-        setReponse(this, i, nombreEnLettres(nombre))
+        handleAnswers(this, i, {
+          reponse: { value: nombreEnLettres(nombre) },
+        })
         if (context.vue !== 'diap')
           texte = `$${texNombre(nombre)} ${!this.interactif ? ' :  $' : '$ <br>' + ajouteChampTexteMathLive(this, i, KeyboardType.alphanumeric)}`
         else texte = `$${texNombre(nombre)}$`
@@ -117,7 +116,6 @@ export default class ÉcrireNombresEntiers extends Exercice {
           texteCorr = `$${texNombre(nombre)}$ : ${nombreEnLettres(nombre)}`
         else texteCorr = `${nombreEnLettres(nombre)}`
       } else {
-        setReponse(this, i, texNombre(nombre), { formatInteractif: 'texte' })
         handleAnswers(this, i, {
           reponse: {
             value: texNombre(nombre),

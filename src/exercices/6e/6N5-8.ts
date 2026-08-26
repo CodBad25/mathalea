@@ -1,9 +1,6 @@
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -422,8 +419,7 @@ export default class ProblemesDePlusEtDeMoins extends Exercice {
 
           break
       }
-      if (context.isAmc) setReponse(this, i, somme)
-      else handleAnswers(this, i, { reponse: { value: texPrix(somme) } })
+      handleAnswers(this, i, { reponse: { value: texPrix(somme) } })
 
       if (this.questionJamaisPosee(i, m, somme)) {
         // Si la question n'a jamais été posée, on en crée une autre

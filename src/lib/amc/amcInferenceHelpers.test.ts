@@ -3,10 +3,38 @@ import { describe, expect, it } from 'vitest'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import {
   inferAmcOptionsFromAnswerType,
+  inferScientificNotationForAMC,
   mergeNumericParamsFromOptions,
 } from './amcInferenceHelpers'
 
 describe('amcInferenceHelpers', () => {
+  it.each([
+    ['3.14e-2', 0.0314, 3, 2, 1, true],
+    ['-6,2\\times 10^{4}', -62000, 2, 1, 1, false],
+    ['1\\cdot10^0', 1, 1, 0, 1, false],
+  ] as const)(
+    'décompose la notation scientifique %s pour AMC',
+    (source, valeur, digits, decimals, exponentDigits, exponentSign) => {
+      expect(inferScientificNotationForAMC(source)).toEqual({
+        valeur,
+        param: {
+          digits,
+          decimals,
+          signe: valeur < 0,
+          exposantNbChiffres: exponentDigits,
+          exposantSigne: exponentSign,
+        },
+      })
+    },
+  )
+
+  it.each(['31e-1', '0.5e2', '3e1.5', '3\\times10^x'])(
+    'refuse la pseudo-notation scientifique %s',
+    (source) => {
+      expect(inferScientificNotationForAMC(source)).toBeUndefined()
+    },
+  )
+
   it('couvre les formes de {reponse: {value, compare, options}} et l inference associee', () => {
     const compare = fonctionComparaison
 

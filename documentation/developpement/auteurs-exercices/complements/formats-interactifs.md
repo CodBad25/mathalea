@@ -1120,14 +1120,21 @@ Le tableur a beaucoup d'options. Pour un nouvel exercice, copier d'abord un cas 
 À utiliser pour faire compléter un tableau de signes ou de variations.
 
 ```ts
-import { addTableauSignesVariations } from '../../lib/customElements/TableauSignesVariationsElement'
+import {
+  addTableauSignesVariations,
+  creerTableauSignesVariations,
+} from '../../lib/customElements/TableauSignesVariationsElement'
 
 texte += addTableauSignesVariations(this, i, {
-  tableau: tableauInteractif,
-  correction: tableauCorrection,
+  config,
+  interactivityOn: this.interactif,
 })
 
-texteCorr += 'Le tableau complété est donné ci-dessus.'
+texteCorr += creerTableauSignesVariations(configCorrigee, {
+  readonly: true,
+  numeroExercice: this.numeroExercice,
+  numeroQuestion: i,
+})
 ```
 
 Ce helper déclare lui-même les données nécessaires à la vérification. Lire aussi `src/lib/interactif/tableauSignesVariations/DOCUMENTATION.md` avant de créer un nouveau tableau.

@@ -6,7 +6,7 @@ import { texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../../lib/outils/ecritures'
@@ -44,7 +44,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
     let alpha: number
     let beta: number
     let a: number
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       alpha = randint(-3, 3)
       beta = randint(-2, 2)
       a = choice([-1, 1])
@@ -96,7 +96,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
           { texteAvant: '$b=$' },
         )
 
-        setReponse(this, i, -2 * a * alpha)
+        handleAnswers(this, i, { reponse: { value: -2 * a * alpha } })
       }
 
       texteCorr = `L'abscisse du sommet de la parabole est $${alpha}$.<br>

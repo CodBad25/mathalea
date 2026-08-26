@@ -1,6 +1,8 @@
-import { courbe } from '../../lib/2d/Courbe'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
+import { droite } from '../../lib/2d/droites'
 import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import { penteAffineAnimee } from '../../lib/2d/PenteAffineAnimee'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import {
@@ -132,21 +134,16 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
 
     const objets: ObjetMathalea2D[] = [r, origine]
     const labelsUtilises: { x: number; y: number }[] = []
-    for (const droite of droites) {
-      objets.push(
-        courbe((x: number) => droite.pente * x + droite.ordonneeOrigine, {
-          repere: r,
-          color: droite.couleur,
-          epaisseur: 2,
-          xMin,
-          xMax,
-          yMin,
-          yMax,
-        }),
+    for (const uneDroite of droites) {
+      const d = droite(
+        pointAbstrait(0, uneDroite.ordonneeOrigine),
+        pointAbstrait(1, uneDroite.pente + uneDroite.ordonneeOrigine),
       )
+      d.color = colorToLatexOrHTML(uneDroite.couleur)
+      objets.push(d)
       const label = this.positionLabel(
-        droite.pente,
-        droite.ordonneeOrigine,
+        uneDroite.pente,
+        uneDroite.ordonneeOrigine,
         xMin,
         xMax,
         yMin,
@@ -154,8 +151,8 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         labelsUtilises,
       )
       objets.push(
-        latex2d(`\\left(d_${droite.numero}\\right)`, label.x, label.y, {
-          color: droite.couleur,
+        latex2d(`\\left(d_${uneDroite.numero}\\right)`, label.x, label.y, {
+          color: uneDroite.couleur,
           backgroundColor: 'white',
           letterSize: 'scriptsize',
         }),
@@ -178,6 +175,12 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
   }
 
   private appliquerLesValeurs(a: FractionEtendue, b: number) {
+    const couleursDesDroites = shuffle([
+      bleuMathalea,
+      coopmathsAction,
+      vertMathalea,
+      coopmathsCorpus,
+    ])
     const pente = a.valeurDecimale
     const penteInverse = a.inverse().simplifie().valeurDecimale
     let droites: DroiteAffine[] = [
@@ -185,25 +188,25 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         pente,
         ordonneeOrigine: b,
         estBonneReponse: true,
-        couleur: bleuMathalea,
+        couleur: couleursDesDroites[0],
       },
       {
         pente: -pente,
         ordonneeOrigine: b,
         estBonneReponse: false,
-        couleur: coopmathsAction,
+        couleur: couleursDesDroites[1],
       },
       {
         pente: penteInverse,
         ordonneeOrigine: b,
         estBonneReponse: false,
-        couleur: vertMathalea,
+        couleur: couleursDesDroites[2],
       },
       {
         pente: -penteInverse,
         ordonneeOrigine: -b,
         estBonneReponse: false,
-        couleur: coopmathsCorpus,
+        couleur: couleursDesDroites[3],
       },
     ]
 
@@ -212,7 +215,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         pente: pente + 1,
         ordonneeOrigine: b - 1,
         estBonneReponse: false,
-        couleur: coopmathsCorpus,
+        couleur: couleursDesDroites[3],
       }
     }
 

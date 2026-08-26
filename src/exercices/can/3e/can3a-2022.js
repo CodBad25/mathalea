@@ -6,10 +6,7 @@ import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
@@ -159,7 +156,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `$${a} \\times ${b}=$ `
           texteCorr = `$${a} \\times ${b}=${a * b}$`
           reponse = a * b
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -248,7 +245,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             }
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -267,7 +264,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `$${a}-${b}=$ `
           texteCorr = `$${a}-${b}=${a}-${b + 1}+1=${a - b}$ `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -290,7 +287,7 @@ export default class SujetCAN2022troisieme extends Exercice {
         Comme $1\\text{ m}$ $=100\\text{ cm}$, alors $1\\text{ cm}$ $=0,01\\text{ m}$.<br>
         Ainsi pour passer des $\\text{m}$ au $\\text{cm}$, on divise par $100$.<br>
           Comme : $${a}\\div 100 =${texNombre(reponse, 2)}$<br> alors $${a}\\text{ cm}=${texNombre(reponse, 2)}\\text{ m}$.  `
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
                 ajouteChampTexteMathLive(
@@ -307,7 +304,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             texte = `$${texNombre(a, 1)}\\text{ m}$  $=$ `
             texteCorr = ` Comme $1\\text{ m}$ $=100\\text{ cm}$,  pour passer des $\\text{m}$ au $\\text{cm}$, on multiplie par $100$.<br>
                 Comme : $${texNombre(a, 1)}\\times 100 =${texNombre(reponse, 0)}$, alors $${texNombre(a, 2)}\\text{ m}=${texNombre(reponse, 0)}\\text{ cm}$.`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -352,7 +349,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             reponse = 100 * a
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -382,7 +379,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             ${texNombre(reponse, 3)}$
              `
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -401,7 +398,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `$${a}+${b}\\times ${c}=$`
           texteCorr = `La multiplication est prioritaire : $${a}+${b}\\times ${c}=${a}+${b * c}$
                                    `
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -421,7 +418,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `$${a}+${b}=$ `
           texteCorr = `$${a}+${b}=${a}+${b + 1}-1=${a + b}$ `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -458,7 +455,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             `$${texNombre(a.mul(b), 2)}$`,
           ])
           reponse = a.mul(b)
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           texte = `Recopie le résultat de  :
             $${texNombre(a, 1)}\\times ${texNombre(b, 1)}$<br>`
           texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}`
@@ -489,7 +486,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texteCorr += `
           $${f}\\times ${texNombre(d, 3)}=${f}\\div ${texNombre(Decimal.pow(d, -1), 0)}=${texNombre(reponse, 3).slice(0, -1)}\\underline{${texNombre(reponse, 3).slice(-1)}}$ `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -511,7 +508,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           Ainsi,  $\\dfrac{${a[0]}}{${a[1]}}=\\dfrac{${a[0] * k}}{${a[1] * k}}$.`
 
           reponse = a[0] * k
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -532,7 +529,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           reponse = a ** 2 + 2 * b ** 2
           texteCorr = `$a^2+2\\times b^2=${a}^2+2\\times ${b}^2=${a ** 2}+2\\times ${b ** 2}=${a ** 2}+${2 * b ** 2}=${reponse}$ `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -551,7 +548,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           texteCorr = `$${texNombre(a, 2)}=\\dfrac{${texNombre(reponse, 0)}}{100}=${texNombre(reponse, 0)} \\%$ `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -593,7 +590,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             reponse = a.mul(100)
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -622,7 +619,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           La moyenne est donc $${moy}$.`
 
           reponse = moy
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -666,7 +663,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texteCorr = `L'aire du triangle est $\\dfrac{\\text{AB}\\times \\text{AC}}{2}=\\dfrac{${a}\\times \\text{AC}}{2}$.<br>
           On obtient ainsi,  $\\dfrac{${a}\\times \\text{AC}}{2}=${c}$ soit $${a}\\times AC=2\\times ${c}$, soit $AC=\\dfrac{${c * 2}}{${a}}=${reponse}\\text{ cm}$.`
           texte += ' $AC= $'
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -724,7 +721,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${reponse}$.
            `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -755,7 +752,7 @@ export default class SujetCAN2022troisieme extends Exercice {
               `
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -781,7 +778,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texteCorr = `$${texNombre(a, 2)}\\div ${texNombre(b, 2)}=${texNombre(a, 2)}\\times ${texNombre(Decimal.pow(b, -1), 0)}=${texNombre(reponse, 2)}$.
           `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -825,7 +822,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texteCorr = `Le périmètre en cm est donné par :
           $2\\times ${texNombre(a, 1)}+2\\times ${texNombre(b, 1)} =2\\times(${texNombre(a, 1)}+${texNombre(b, 1)})=${texNombre(reponse, 0)}\\text{ cm}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ' <br>$\\mathscr{P}= $'
             texte += ajouteChampTexteMathLive(
@@ -886,8 +883,8 @@ export default class SujetCAN2022troisieme extends Exercice {
     $\\dfrac{${a}}{${a}}\\times\\dfrac{${b}}{${b}}\\times\\dfrac{${d}}{${d}}\\times\\dfrac{${e}}{${f}}=\\dfrac{${e}}{${f}}${simplificationDeFractionAvecEtapes(e, f)}$ .`
             }
           }
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -908,7 +905,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `Écriture décimale de $\\dfrac{${fraction23[0] * k}}{${fraction23[1] * k}}$.`
           texteCorr = `En simplifiant, on obtient : $\\dfrac{${fraction23[0] * k}}{${fraction23[1] * k}}=\\dfrac{${fraction23[0]}}{${fraction23[1]}}=${texNombre(reponse, 2)}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -928,7 +925,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           texteCorr = `Le nombre cherché est $${b}-${a}=${b - a}$.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += '$($'
             texte +=
@@ -953,7 +950,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texteCorr = `Le véhicule parcourt $${texNombre(reponse, 0)}\\text{ km}$.<br>
          En $${texNombre(b, 0)}$ minutes, il parcourt $${texNombre(a, 0)}$ fois moins de $\\text{km}$ qu'en $1$ heure, soit $\\dfrac{${texNombre(c, 0)}}{${texNombre(a, 0)}}=
           ${texNombre(reponse, 0)}\\text{ km}$.`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1079,7 +1076,7 @@ export default class SujetCAN2022troisieme extends Exercice {
                     On a $IJ^2=JK^2+IK^2$, soit $IJ^2=${b}^2+${a}^2=${b ** 2 + a ** 2}$.<br>
                     Par conséquent, $IJ=\\sqrt{${b ** 2 + a ** 2}}$.`
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += '<br>$IJ=$'
             texte += ajouteChampTexteMathLive(
@@ -1141,7 +1138,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -1164,7 +1161,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `Le ${b[0]} de $10^{${a}}$ est : `
           texteCorr = `Le ${b[0]} de $10^{${a}}$ est : $${b[1]}\\times 10^{${a}} =${b[1]}\\times${texNombre(10 ** a)}=${texNombre(b[1] * 10 ** a, 3)}$.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1230,7 +1227,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             }
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,

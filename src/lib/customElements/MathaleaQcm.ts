@@ -46,6 +46,25 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
     style = '',
     interactivityOn = true,
   }: MathaleaQcmOptions): string {
+    if (context.isTypst) {
+      return MathaleaQcmElement.createStaticHtml({
+        numeroExercice,
+        questionIndex,
+        propositions,
+        radio,
+        vertical,
+        format,
+        style,
+      })
+    }
+    if (!context.isHtml) {
+      return MathaleaQcmElement.createStaticLatex({
+        propositions,
+        radio,
+        vertical,
+        format,
+      })
+    }
     return super.create({
       id:
         id ??
@@ -59,6 +78,54 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
       propositionStyle: style,
       interactivityOn,
     })
+  }
+
+  private static createStaticHtml({
+    numeroExercice,
+    questionIndex,
+    propositions,
+    radio,
+    vertical,
+    format,
+    style,
+  }: Omit<MathaleaQcmOptions, 'id' | 'interactivityOn'>): string {
+    const inputType = radio ? 'radio' : 'checkbox'
+    const displayClass = vertical ? '' : 'inline-block'
+    const choices = propositions
+      .map((proposition, propositionIndex) => {
+        const inputId = `checkEx${numeroExercice}Q${questionIndex}R${propositionIndex}`
+        const input =
+          format === 'lettre'
+            ? ''
+            : `<input type="${inputType}" name="checkEx${numeroExercice}Q${questionIndex}" id="${inputId}">`
+        const letter =
+          format === 'case'
+            ? ''
+            : `<label class="ml-2" style="${style}">${texteGras(
+                lettreDepuisChiffre(propositionIndex + 1),
+              )}.</label>`
+        return `<div class="ex${numeroExercice} ${displayClass} my-2 align-center">${input}${letter}<label id="labelEx${numeroExercice}Q${questionIndex}R${propositionIndex}" class="ml-2" for="${inputId}" style="${style}">${proposition.texte}</label></div>`
+      })
+      .join('')
+
+    return `<div class="my-3">${choices}</div>`
+  }
+
+  private static createStaticLatex({
+    propositions,
+    vertical,
+    format,
+  }: Pick<
+    MathaleaQcmOptions,
+    'propositions' | 'radio' | 'vertical' | 'format'
+  >): string {
+    if (context.isAmc || propositions.length === 0) return ''
+    const cols = vertical ? 1 : propositions.length
+    const caseOption = format === 'lettre' ? '' : ', case'
+    const contenuTasks = propositions
+      .map((proposition) => `  \\task ${proposition.texte}`)
+      .join('\n')
+    return `\n\\begin{qcmprop}[cols=${cols}${caseOption}]\n${contenuTasks}\n\\end{qcmprop}\n`
   }
 
   static verifQuestion(
@@ -133,7 +200,7 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
         .join(' ')
 
       const inputId = `checkEx${numeroExercice}Q${questionIndex}R${propositionIndex}`
-      if (format !== 'lettre') {
+      if (format !== 'lettre' && this.interactivityOn) {
         const input = document.createElement('input')
         input.type = radio ? 'radio' : 'checkbox'
         input.name = `checkEx${numeroExercice}Q${questionIndex}`
@@ -148,7 +215,7 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
         propositionContainer.appendChild(input)
       }
 
-      if (format !== 'case') {
+      if (format !== 'case' || !this.interactivityOn) {
         const letterLabel = document.createElement('label')
         letterLabel.className = 'ml-2'
         letterLabel.style.cssText = propositionStyle
@@ -161,8 +228,9 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
       const propositionLabel = document.createElement('label')
       propositionLabel.id = `labelEx${numeroExercice}Q${questionIndex}R${propositionIndex}`
       propositionLabel.className = 'ml-2'
-      propositionLabel.htmlFor = inputId
+      if (this.interactivityOn) propositionLabel.htmlFor = inputId
       propositionLabel.style.cssText = propositionStyle
+      propositionLabel.style.cursor = this.interactivityOn ? '' : 'default'
       propositionLabel.innerHTML = proposition.texte
       propositionContainer.appendChild(propositionLabel)
       propositionContainer.append('\u2003')
@@ -195,6 +263,7 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
   }
 
   protected onInteractivityChanged(isOn: boolean): void {
+    this.render()
     this.querySelectorAll<HTMLInputElement>('input').forEach((input) => {
       if (isOn) input.disabled = false
       input.style.pointerEvents = isOn ? '' : 'none'
@@ -226,7 +295,6 @@ export function addMathaleaQcm(
     'numeroExercice' | 'questionIndex' | 'propositions'
   > = {},
 ): string {
-  if (!context.isHtml) return ''
   const autoCorrection = exercice.autoCorrection[questionIndex]
   autoCorrection.formatInteractif = MathaleaQcmElement.elementTag
   return MathaleaQcmElement.create({

@@ -1,9 +1,6 @@
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   ajouteChampTexte,
   ajouteChampTexteMathLive,
@@ -163,7 +160,7 @@ export default class ÉcrireNombresDecimal extends Exercice {
         } else {
           texteCorr = `$${texNombre(nombre)}$.`
         }
-        setReponse(this, i, nombre, { formatInteractif: 'calcul' })
+        handleAnswers(this, i, { reponse: { value: nombre } })
       }
 
       texte = texte.replace('et-un unités', 'et-une unités')

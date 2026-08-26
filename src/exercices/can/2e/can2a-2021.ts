@@ -24,10 +24,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
@@ -119,7 +116,7 @@ export default class SujetCAN2021Seconde extends Exercice {
       [11, 3],
     ]
 
-    for (let i = 0, index = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, index = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a = 0
       let b = 0
       let p = 0
@@ -137,7 +134,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texte = `$${a} \\times 99=$ `
           texteCorr = `$${a} \\times 99=${a}\\times 100-${a}=${a * 99}$`
           reponse = a * 99
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -162,7 +159,7 @@ export default class SujetCAN2021Seconde extends Exercice {
             $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${reponse}$.
            `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -218,7 +215,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texteCorr = `$\\sqrt{${b}}$ est le nombre positif dont le carré vaut $${b}$. Comme  $${a}^2=${b}$, alors $\\sqrt{${b}}=${a}$.`
 
           reponse = a
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -245,7 +242,7 @@ export default class SujetCAN2021Seconde extends Exercice {
 
             reponse = a * 2
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -268,7 +265,7 @@ export default class SujetCAN2021Seconde extends Exercice {
                `
           texteCorr = `Pour $x=${a}$, $x^2+${b}=(${a})^2+${b}=${a ** 2}+${b}=${reponse}$.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -326,7 +323,7 @@ export default class SujetCAN2021Seconde extends Exercice {
                                  x&=${reponse}
             \\end{aligned}$<br>
                       `
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -353,7 +350,7 @@ export default class SujetCAN2021Seconde extends Exercice {
             texteCorr = `$${a}\\times10^3+ 10^2+10^{${b}}=${a * 1000}+100+${texNombre(10 ** b, 2)}=${texNombre(a * 1000 + 100 + 10 ** b, 2)}$`
             reponse = a * 1000 + 100 + 10 ** b
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -374,7 +371,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texteCorr = `
         Pour avoir une moyenne de $10$, la somme des $3$ nombres doit être égale à $30$. <br>Par conséquent $n=30-${a}-${b}=${30 - a - b}$.
                    `
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -415,7 +412,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
                 Ici : $${texNombre(a, 6)}=\\underbrace{${texNombre(truc, 6)}}_{1\\leqslant ${texNombre(truc, 6)} <10}\\times 10^{-4}$. `
             }
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -468,7 +465,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               $(${b}x-${a})^2=(${b}x)^2-2 \\times ${b}x \\times ${a} + ${a}^2=${b * b}x^2-${2 * b * a}x+${a * a}$`
             reponse = [`${b * b}x^2-${2 * b * a}x+${a * a}`]
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -501,7 +498,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 2)}\\text{ m}^3=${texNombre(a, 2)}\\times 1000$ L$=${texNombre(a * 1000, 2)}$ L`
             }
 
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
                 ajouteChampTexteMathLive(
@@ -604,7 +601,7 @@ export default class SujetCAN2021Seconde extends Exercice {
       &=${100 * a}
       \\end{aligned}$`
           reponse = 100 * a
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -629,7 +626,9 @@ export default class SujetCAN2021Seconde extends Exercice {
         $\\left(\\dfrac{${a}+${b}}{2};\\dfrac{${c}+${d}}{2}\\right)=
         \\left(\\dfrac{${a + b}}{2};\\dfrac{${c + d}}{2}\\right)=
         (${texNombre((a + b) / 2, 1)};${texNombre((c + d) / 2, 1)})$.`
-          setReponse(this, index, reponse, { formatInteractif: 'texte' })
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { texteAvecCasse: true } },
+          })
           texte +=
             '<br>' +
             ajouteChampTexteMathLive(
@@ -706,7 +705,7 @@ export default class SujetCAN2021Seconde extends Exercice {
             texteCorr = `Le triangle $ACD$ est un agrandissement du triangle $EBC$. Le coefficient d'agrandissement est donné par : $\\dfrac{${b}}{${a}}=${k}$.<br>
           On obtient donc la longueur $EB$ en divisant par $${k}$ la longueur $AD$.<br>
           $EB=\\dfrac{${d}}{${k}}=${c}\\text{ cm}$.<br>`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$EB=$'
               texte += ajouteChampTexteMathLive(
@@ -744,7 +743,7 @@ export default class SujetCAN2021Seconde extends Exercice {
         `
               texteCorr = ` Comme $100\\,\\%$ est égal à $${100 / b}$ fois $${b}\\,\\%$, alors le nombre d'élèves dans ce lycée est : $${a}\\times ${100 / b}=${reponse}$.`
             }
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -785,7 +784,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texteCorr = ` On reconnaît une différence de deux carrés : $a^2-b^2$ avec $a=${b}$ et $b=${a}x$.<br>
             Comme $a^2-b^2=(a-b)(a+b)$, alors  $${b ** 2}-${a ** 2}x^2=(${b}-${a}x)(${b}+${a}x)$.`
             }
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -878,7 +877,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               reponse = a - b
             }
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -927,7 +926,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texteCorr = `Si l'aire du carré est $${a ** 2}\\text{ cm}^2$, la longueur de son côté est $\\sqrt{${a ** 2}}=${a}\\text{ cm}$. <br>
           On en déduit que le périmètre du carré est $4\\times ${a}=${4 * a}\\text{ cm}$. `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -993,7 +992,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texteCorr = `Dans une heure, il y a $3\\times 20$ minutes. <br>Ainsi en $20$ minutes, la voiture aura parcouru $${a}\\div 3=${a / 3}\\text{ km}$.
                                         `
             }
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -1065,7 +1064,7 @@ export default class SujetCAN2021Seconde extends Exercice {
             texteCorr = `Le théorème de Pythagore dans le triangle rectangle $ADB$ donne : <br>
             $DB^2=AD^2+AB^2$ soit $DB^2=${a}^2+${a}^2=2\\times ${a}^2=${2 * a ** 2}$.<br>
             Ainsi, $DB=\\sqrt{${2 * a ** 2}}$ ou encore $DB=${a}\\sqrt{2}$.`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$DB=$'
               texte += ajouteChampTexteMathLive(
@@ -1094,7 +1093,7 @@ export default class SujetCAN2021Seconde extends Exercice {
 
           `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1136,7 +1135,12 @@ Donner une valeur approchée de l'antécédent de $${a}$ par $f$ ?<br>`
             )
             texteCorr = `L'antécédent de $${a}$ par $f$ est l'abscisse du point de la courbe d'ordonnée $${a}$ : $${texNombre(Math.cbrt(2 * (a - b)), 1)}$ en est une valeur approchée. `
 
-            setReponse(this, index, reponse, { formatInteractif: 'intervalle' })
+            handleAnswers(this, index, {
+              reponse: {
+                value: `[${reponse[0]};${reponse[1]}]`,
+                options: { estDansIntervalle: true },
+              },
+            })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,

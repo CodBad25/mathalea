@@ -261,8 +261,8 @@ describe('mathaleaHandleExerciceSimple', () => {
     mathaleaHandleExerciceSimple(exercice, false, 0, 'seed')
     mathaleaEnsureAMCCompatibility(exercice)
 
-    expect(exercice.autoCorrection[0]).toBeDefined()
-    expect(exercice.autoCorrection[0].propositions?.[0].texte).toContain(
+    expect(exercice.autoCorrectionAMC?.[0]).toBeDefined()
+    expect(exercice.autoCorrectionAMC?.[0].propositions?.[0].texte).toContain(
       'deux et deux',
     )
     expect(exercice.amcType).toBe('AMCOpen')
@@ -286,6 +286,16 @@ describe('mathaleaEnsureAMCCompatibility', () => {
     expect(exercice.amcReady).toBe(true)
     expect(exercice.amcType).toBe('AMCOpen')
     expect(exercice.autoCorrection).toHaveLength(0)
+    expect(exercice.autoCorrectionAMC[0]).toMatchObject({
+      enonce: 'Question sans parametrage AMC',
+      propositions: [
+        {
+          texte: 'Correction par defaut',
+          statut: 3,
+          pointilles: true,
+        },
+      ],
+    })
   })
 
   it('alimente AMCOpen pour un interactif non supporte', () => {
@@ -304,8 +314,9 @@ describe('mathaleaEnsureAMCCompatibility', () => {
 
     expect(exercice.amcReady).toBe(true)
     expect(exercice.amcType).toBe('AMCOpen')
-    expect(exercice.autoCorrection[0]).toBeDefined()
-    expect(exercice.autoCorrection[0].propositions?.[0].texte).toContain(
+    expect(exercice.autoCorrection).toHaveLength(0)
+    expect(exercice.autoCorrectionAMC[0]).toBeDefined()
+    expect(exercice.autoCorrectionAMC[0].propositions?.[0].texte).toContain(
       'Correction par defaut',
     )
   })

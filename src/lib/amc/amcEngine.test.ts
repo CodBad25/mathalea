@@ -143,6 +143,66 @@ describe('amcEngine', () => {
     expect(normalized.blocks[0].options?.Tpoint).toBe(',')
   })
 
+  it('conserve les décimales de la mantisse en notation scientifique', () => {
+    const item: AutoCorrectionAMC = {
+      reponse: {
+        valeur: 0.0314,
+        param: {
+          digits: 3,
+          decimals: 2,
+          signe: false,
+          exposantNbChiffres: 1,
+          exposantSigne: true,
+        },
+      },
+    }
+
+    const normalized = normalizeAMCNum(item, {
+      ref: 'REF',
+      id: 'Q',
+      index: 2,
+      exercice: exerciceMock,
+    })
+
+    expect(normalized.blocks[0]).toMatchObject({
+      value: 0.0314,
+      digits: 3,
+      decimals: 2,
+      options: {
+        exponent: 1,
+        exposign: true,
+      },
+    })
+  })
+
+  it('rend les paramètres AMCnumericChoices de la notation scientifique', () => {
+    const latex = renderAMCNum(
+      {
+        reponse: {
+          valeur: 0.0314,
+          param: {
+            digits: 3,
+            decimals: 2,
+            exposantNbChiffres: 1,
+            exposantSigne: true,
+          },
+        },
+      },
+      {
+        ref: 'REF',
+        id: 'Q',
+        index: 0,
+        exercice: exerciceMock,
+      },
+    )
+
+    expect(latex).toContain('\\AMCnumericChoices{0.0314}')
+    expect(latex).toContain('digits=3')
+    expect(latex).toContain('decimals=2')
+    expect(latex).toContain('exponent=1')
+    expect(latex).toContain('exposign=true')
+  })
+
   it('normalise AMCNum entier avec un nombre de digits coherent par defaut', () => {
     const item: AutoCorrectionAMC = {
       reponse: {

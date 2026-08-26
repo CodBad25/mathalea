@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -303,8 +303,11 @@ export default class VocabulaireDivisionEuclidienne extends Exercice {
             '<br>' +
             ajouteChampTexteMathLive(this, i, KeyboardType.alphanumeric)
         }
-        setReponse(this, i, ReponsesCorrectes, {
-          formatInteractif: 'ignorerCasse',
+        handleAnswers(this, i, {
+          reponse: {
+            value: ReponsesCorrectes.map((reponse) => reponse.toLowerCase()),
+            options: { texteSansCasse: true },
+          },
         })
         if (context.isAmc) {
           this.autoCorrection[i].enonce = `${texte}\n`

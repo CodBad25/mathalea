@@ -164,7 +164,7 @@ Les QCM n'installent plus de listener de validation depuis `propositionsQcm()` :
 | `diagram-histogram-assessment` | `DiagramHistogramAssessment.verifQuestion()` dans `src/lib/customElements/DiagramHistogramAssessmentElement.ts`                                                              |
 | `diagram-cartesian-assessment` | `DiagramCartesianAssessment.verifQuestion()` dans `src/lib/customElements/DiagramCartesianAssessmentElement.ts`                                                              |
 | `custom`                       | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice              |
-| `meta-custom`                  | `MetaCustomElement.verifQuestion()` dans `src/lib/customElements/MetaCustomElement.ts`, qui appelle la `correctionInteractive` du sous-exercice enregistrée en callback       |
+| `meta-custom`                  | `MetaCustomElement.verifQuestion()` dans `src/lib/customElements/MetaCustomElement.ts`, qui appelle la `correctionInteractive` du sous-exercice enregistrée en callback      |
 
 Les fonctions de vérification retournent un résultat exploitable par le score et affichent le retour visuel associé à la question.
 
@@ -398,7 +398,7 @@ Un exercice `interactifType = 'custom'` corrige lui-même ses questions : il n'a
 
 `src/lib/customElements/MetaCustomElement.ts` répond au second : le méta-exercice enregistre la `correctionInteractive` du sous-exercice dans un registre statique, ajoute à l'énoncé une ancre invisible `<meta-custom callback-key="…">` et pose `autoCorrection[i].formatInteractif = 'meta-custom'`. Le dispatch, le barème, la vue CAN et la vue question par page passent alors par le registre des `MathaleaCustomElement` comme pour tout autre format. La fermeture enregistrée conserve le sous-exercice, ce qui garantit un `this` correct même quand `correctionInteractive` est une méthode de prototype.
 
-Le premier problème est réglé à la génération plutôt que par réécriture de chaîne. `Exercice.indexQuestionHote` porte l'index de la question dans l'exercice affiché ; `figureApigeom()` l'ajoute à son paramètre `i` pour fabriquer `apigeomEx{n}F{i}`, `resultatCheckEx{n}Q{i}` et `feedbackEx{n}Q{i}`. Une réécriture *a posteriori* ne conviendrait pas : l'attribut `action` du `<mathalea-dom-ready>` produit par `figureApigeom()` est la clé du registre statique de `DomReadyActionElement`, et la renommer empêcherait le montage de la figure ; l'identifiant du conteneur est par ailleurs capturé dans la fermeture de montage. La clé de `answers` étant l'identifiant de la figure, la générer directement à la bonne valeur est aussi ce qui permet à `collectAnswers()` (`Can.svelte`) et à la relecture de copie (`mathaleaWriteStudentPreviousAnswers()`) de retrouver la réponse.
+Le premier problème est réglé à la génération plutôt que par réécriture de chaîne. `Exercice.indexQuestionHote` porte l'index de la question dans l'exercice affiché ; `figureApigeom()` l'ajoute à son paramètre `i` pour fabriquer `apigeomEx{n}F{i}`, `resultatCheckEx{n}Q{i}` et `feedbackEx{n}Q{i}`. Une réécriture _a posteriori_ ne conviendrait pas : l'attribut `action` du `<mathalea-dom-ready>` produit par `figureApigeom()` est la clé du registre statique de `DomReadyActionElement`, et la renommer empêcherait le montage de la figure ; l'identifiant du conteneur est par ailleurs capturé dans la fermeture de montage. La clé de `answers` étant l'identifiant de la figure, la générer directement à la bonne valeur est aussi ce qui permet à `collectAnswers()` (`Can.svelte`) et à la relecture de copie (`mathaleaWriteStudentPreviousAnswers()`) de retrouver la réponse.
 
 Un exercice custom est donc agrégeable s'il respecte deux règles, vérifiées par `src/exercices/modèlesExos/20_exercice_classique_apigeom.ts` :
 
@@ -414,6 +414,7 @@ Deux cas particuliers subsistent :
 
 `interactifType` est un export de module, recopié sur l'instance par `mathaleaLoadExerciceFromUuid()` uniquement. Un sous-exercice construit directement par un méta-exercice ne le reçoit donc pas : `_automatismesCan.ts` le pose sur la classe (`Exercice.interactifTypeModule`) au chargement du module, et `MetaExerciceCan` le recopie sur l'instance.
 
+Pour les QCM, `MetaExerciceCan` ne dépend toutefois pas de cette métadonnée de module : il reconnaît structurellement une question dont `autoCorrection` contient des `propositions`. Après le rendu par l'API historique `propositionsQcm()`, il pose explicitement `autoCorrection[i].formatInteractif = 'mathalea-qcm'`. Un méta-exercice entièrement composé de QCM ne doit donc pas déclarer artificiellement `interactifType = 'mathLive'` ; chaque question agrégée porte son propre format moderne, utilisé par le dispatch interactif et par l'inférence AMC.
 
 ## Comparateurs
 

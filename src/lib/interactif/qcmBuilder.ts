@@ -33,7 +33,7 @@ function buildCorrectAnswersMessage(
     return `Les bonnes réponses sont les réponses ${texteEnCouleurEtGras(bonnesLettres.join(' ; '))}.`
   }
 
-  return `La bonne réponse est la réponse ${texteEnCouleurEtGras(bonnesLettres[0] ?? '')}.`
+  return `<br>La bonne réponse est la réponse ${texteEnCouleurEtGras(bonnesLettres[0] ?? '')}.`
 }
 
 function buildCorrectionsList(
@@ -142,7 +142,7 @@ export function buildQcmForExercise(
       },
     ) ?? []
 
-  let correctionTexte = `${correction ?? ''}${buildCorrectionsList(shuffledPropositions)}`
+  let correctionTexte = `${correction ?? ''}${buildCorrectionsList(shuffledPropositions, exercice.interactif)}`
   if (correctionTexte === '') {
     correctionTexte = correction
     const extrasAreAdded = ajouteQcmCorr || !exercice.interactif

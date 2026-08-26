@@ -9,7 +9,7 @@ import Exercice from '../../Exercice'
 
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre =
@@ -128,7 +128,7 @@ export default class ProbaLoiVA extends Exercice {
           Ainsi, $a=1-${texNombre(p1, 2)}-${texNombre(p2, 2)}=${texNombre(p3, 2)}$.
       `
           reponse = p3
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('$a=\\ldots$')
 
@@ -179,7 +179,9 @@ export default class ProbaLoiVA extends Exercice {
           Ainsi, $a=1-${f1.texFraction}-${f2.texFraction}=\\dfrac{${fraction[1] * fraction[3]}}{${fraction[1] * fraction[3]}}-\\dfrac{${fraction[0] * fraction[3]}}{${fraction[1] * fraction[3]}}-\\dfrac{${fraction[2] * fraction[1]}}{${fraction[1] * fraction[3]}}=${f3.texFraction}${f3.texSimplificationAvecEtapes()}$.
       `
           reponse = f3
-          setReponse(this, i, reponse, { formatInteractif: 'fractionEgale' })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
+          })
           this.canEnonce = texte
           this.canReponseACompleter = '$a=\\ldots$'
           break

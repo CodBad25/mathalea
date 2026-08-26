@@ -8,7 +8,7 @@
       "title": "Variations d'une suite",
       "question": "Si pour tout $n\\in\\mathbb N$, on a $u_{n+1}- u_n>0$, on peut dire que la suite $(u_n)$ est ...",
       "answer": ["croissante"],
-      "propositions": ["croissante", "décroissante", "positive", "négative"]
+      "badPropositions": ["décroissante", "positive", "négative"]
     },
     {
       "themes": "Suites",
@@ -18,7 +18,7 @@
       "title": "Vocabulaire des suites",
       "question": "On dit qu'une suite dont le terme général s'écrit en fonction de $n$ est donnée sous forme ....",
       "answer": ["explicite"],
-      "propositions": ["explicite", "générale", "récurrente", "absolue"]
+      "badPropositions": ["générale", "récurrente", "absolue"]
     },
     {
       "themes": "Suites",

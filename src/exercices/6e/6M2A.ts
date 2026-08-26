@@ -145,8 +145,8 @@ export default class convertirAiresVersion2025 extends Exercice {
       const operation = versUnitePlusPetite ? '~\\times~' : '~\\div~'
       texteCorr = `$1${unite1} = ${facteur} ${unite2}$ et donc la mesure en $${unite2}$ est $100$ fois plus ${adjectif} que la mesure en $${unite1}$`
       texteCorr += versUnitePlusPetite
-        ? ` ($1 ${unite1}$ est une centaine de $1 ${unite2}$)`
-        : ` ($1 ${unite1}$ est un centième de $1 ${unite2}$)`
+        ? ` ($1 ${unite1}$ est une centaine de $${unite2}$)`
+        : ` ($1 ${unite1}$ est un centième de $${unite2}$)`
       texteCorr += '.<br>'
       texteCorr += `$${texNombre(val)} ${unite1} = ${texNombre(val)} ${miseEnEvidence(`\\times 1${sp()}${unite1}`, bleuMathalea)}$ = `
       if (!versUnitePlusPetite)

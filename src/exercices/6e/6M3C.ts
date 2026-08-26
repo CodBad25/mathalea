@@ -16,7 +16,7 @@ import { cube3d } from '../../lib/3d/3dProjectionMathalea2d/Cube3dPerspectiveCav
 import { paveLPH3d } from '../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 
@@ -207,7 +207,7 @@ export default class VolumesPavesParDenombrement extends Exercice {
         )
       }
       if (dimensions.indexOf([l, p, h]) === -1) {
-        setReponse(this, q, l * p * h)
+        handleAnswers(this, q, { reponse: { value: l * p * h } })
         this.listeQuestions[q] = texte
         this.listeCorrections[q] = texteCorr
 

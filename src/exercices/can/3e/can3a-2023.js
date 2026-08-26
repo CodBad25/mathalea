@@ -48,10 +48,7 @@ import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { representationFraction } from '../../../modules/representationsFractions'
 
@@ -191,7 +188,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texte = `$${a} \\times ${b}$ `
           texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           reponse = a * b
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           this.listeCanEnonces.push(texte)
           if (this.interactif) {
             texte +=
@@ -253,7 +250,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               index,
               KeyboardType.clavierNumbers,
             )
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
           }
           this.listeCanEnonces.push(texte)
           nbChamps = 1
@@ -280,7 +277,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 texteApres: sp(5) + 'min',
               },
             )
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
           }
           nbChamps = 1
           this.listeCanEnonces.push(texte)
@@ -303,7 +300,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `Le double de $${k}$ est : $${k}\\times 2=${miseEnEvidence(reponse)}$.`
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -573,7 +570,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           }
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('? $=\\ldots ^\\circ$')
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -596,7 +593,7 @@ export default class SujetCAN2023troisieme extends Exercice {
 
             texteCorr = `
         Comme $1\\text{ m}^2$ $=100\\text{ dm}^2$, alors $${texNombre(a, 1)}\\text{ m}^2$  $=${texNombre(a, 1)}\\times 100\\text{ dm}^2=${miseEnEvidence(texNombre(reponse, 0))}\\text{ dm}^2$. `
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
                 ajouteChampTexteMathLive(
@@ -616,7 +613,7 @@ export default class SujetCAN2023troisieme extends Exercice {
 
             texteCorr = `
         Comme $1\\text{ dm}^2$ $=0,01\\text{ m}^2$, alors $${texNombre(a, 1)}\\text{ dm}^2$  $=${texNombre(a, 1)}\\times 0,01\\text{ m}^2=${miseEnEvidence(texNombre(reponse, 3))}\\text{ m}^2$. `
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
                 ajouteChampTexteMathLive(
@@ -654,7 +651,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               $${a / 2}$ ${a / 2 === 1 ? 'classeur coûte' : 'classeurs coûtent'}  $${texPrix(b / 2)}$ €.<br>
               Ainsi,   $${b}$ classeurs coûtent ${k > 2 ? `$2\\times ${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.` : `$${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.`}`
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -701,8 +698,8 @@ export default class SujetCAN2023troisieme extends Exercice {
           texte += context.isHtml ? '' : '\\end{center}'
           texteCorr = `L'aire grisée représente $${f.texFraction}$ de l'aire du disque.`
 
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -721,7 +718,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texte = `$${texNombre(a, 1)}+${texNombre(b, 2)}$ `
           texteCorr = `$${texNombre(a, 1)}+${texNombre(b, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           this.listeCanEnonces.push(texte)
           if (this.interactif) {
             texte +=
@@ -762,7 +759,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               reponse = arrondi(d, 2)
             }
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -901,7 +898,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               objets,
             )
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           this.listeCanEnonces.push(texte)
           if (this.interactif) {
             texte +=
@@ -937,7 +934,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texteCorr = `$${texNombre(e, 1)}$ s'obtient par la somme de $${texNombre(a, 1)}$ et $${c}$. <br>
           $x$ est donc la somme de $${b}$ et $${d}$. Ainsi, $x=${miseEnEvidence(b + d)}$.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('$x=\\ldots$')
           if (this.interactif) {
@@ -972,7 +969,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texteCorr = `Pour $x=${a}$, ${sp(2)} $${b}x^2=${b}\\times${ecritureParentheseSiNegatif(a)}^2=${miseEnEvidence(reponse)}$.`
           this.listeCanEnonces.push(`Pour $x=${a}$`)
           this.listeCanReponsesACompleter.push(`$${b}x^2=\\ldots$`)
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
 
           nbChamps = 1
           break
@@ -1185,7 +1182,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             this.listeCanReponsesACompleter.push('$BC=\\ldots$')
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1217,7 +1214,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texte = `$${texNombre(a, 2)}\\text{ h }=$ `
           texteCorr = `$${texNombre(a, 2)}\\text{ h }=${texNombre(a, 2)}\\times 60 \\text{ min }=${miseEnEvidence(texNombre(reponse, 0))} \\text{ min}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -1243,7 +1240,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texte = `$(${a})\\times (${b})\\times(${c})$ `
           texteCorr = `$(${a})\\times (${b})\\times(${c})=${miseEnEvidence(reponse)}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1263,7 +1260,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texte = `Écriture décimale de $${a}\\times 10^{${b}}$ `
           texteCorr = `$${a}\\times 10^{${b}}=${a}\\times ${texNombre(10 ** b, 4)}=${miseEnEvidence(texNombre(reponse, 4))}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1295,7 +1292,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               reponse = `${rienSi1(k * a)}${inconnue}^2${ecritureAlgebriqueSauf1(k * b)}${inconnue}`
             }
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1327,7 +1324,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             reponse = new Decimal(d).mul(100)
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1594,7 +1591,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `$a=\\dfrac{${c}-${b}}{2}=${miseEnEvidence(a)}$.`
           }
           reponse = a
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1653,8 +1650,8 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `$${a}-${f.texFraction} = \\dfrac{${a} \\times ${c}}{${c}} - \\dfrac{${b}}{${c}} = \\dfrac{${a * c}}{${c}} - \\dfrac{${b}}{${c}}  =${miseEnEvidence(e.texFraction)}$`
             reponse = e
           }
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -1677,7 +1674,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texteCorr = `La somme des $4$ valeurs est : $${a}+${b}+${c}+${d} =${e}$.<br>
  La moyenne est donc $\\dfrac{${e}}{4}=${miseEnEvidence(texNombre(e / 4, 0))}$.`
           reponse = arrondi(e / 4, 0)
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1778,7 +1775,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `Le triangle $ADC$ est un agrandissement du triangle $ABE$. Le coefficient d'agrandissement est donné par : $\\dfrac{${b}}{${a}}=${texNombre(b / a)}$.<br>
             On obtient donc la longueur $AE$ en divisant par $${k}$ la longueur $AD$.<br>
             $AE=\\dfrac{${d}}{${k}}=${miseEnEvidence(c)}$.<br>`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$AE=$'
               texte += ajouteChampTexteMathLive(
@@ -1882,7 +1879,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `Le triangle $ECD$ est un agrandissement du triangle $EAB$. La longueur $BE$ est $${k}$ fois plus grande que la longueur $AB$.
           On en déduit que la longueur $EC$ est $${k}$ fois plus grande que la longueur $CD$.<br>
           Ainsi, $CE=${k}\\times ${c}=${miseEnEvidence(reponse)}$.`
-            setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$CE=$'
               texte += ajouteChampTexteMathLive(
@@ -1978,7 +1975,9 @@ export default class SujetCAN2023troisieme extends Exercice {
             Ainsi : $D(${miseEnEvidence(xC)};${miseEnEvidence(yA)})$.
               `
           reponse = `${xC};${yA}`
-          setReponse(this, index, reponse, { formatInteractif: 'texte' })
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { texteAvecCasse: true } },
+          })
           if (this.interactif) {
             texte +=
               '$D($' +
@@ -2056,8 +2055,8 @@ export default class SujetCAN2023troisieme extends Exercice {
                 On a donc $${miseEnEvidence(choix1 ? `${a}` : `${b}`)}$ chances sur $${miseEnEvidence(a + b)}$ de tirer une boule ${choix1 ? 'rouge' : 'bleue'}.<br>
                 Ainsi, la probabilité de tirer une boule ${choix1 ? 'rouge' : 'bleue'} est $\\dfrac{${miseEnEvidence(choix1 ? `${a}` : `${b}`)}}{${miseEnEvidence(a + b)}}$.`
 
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -2118,8 +2117,8 @@ export default class SujetCAN2023troisieme extends Exercice {
               ),
             )
           texteCorr = `L'unité est divisée en $${a}$. Ainsi, la fraction sous le point d'interrogation est   $\\dfrac{${miseEnEvidence(b)}}{${miseEnEvidence(a)}}$.`
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -2152,7 +2151,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           \\end{aligned}$<br>
           La solution de l'équation est : $${miseEnEvidence(reponse)}$.
           `
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -2199,7 +2198,7 @@ export default class SujetCAN2023troisieme extends Exercice {
 
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('$\\ldots\\,\\%$')
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -2222,7 +2221,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               `
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('$\\ldots\\text{ km/h}$')
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(

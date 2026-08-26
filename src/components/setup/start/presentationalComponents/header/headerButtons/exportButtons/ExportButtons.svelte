@@ -44,14 +44,6 @@
 
   const exportOptions: ExportOption[] = [
     {
-      id: 'quizz',
-      label: 'Quizz',
-      description:
-        'Pour animer en classe un quiz façon Kahoot à partir des exercices QCM',
-      component: QuizzIcon,
-      action: () => exportAndClose('quizzconf'),
-    },
-    {
       id: 'latex2',
       label: 'PDF via LaTeX',
       description:

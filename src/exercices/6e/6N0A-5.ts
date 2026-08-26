@@ -1,6 +1,6 @@
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -8,7 +8,6 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Déterminer le dernier chiffre d'un calcul entre entiers"
 export const amcReady = true
@@ -81,7 +80,7 @@ export default class DernierChiffre extends Exercice {
           }
           texteCorr += `Le dernier chiffre de $${a} + ${b}$ est $${miseEnEvidence((b + a) % 10)}$.`
 
-          setReponse(this, i, (b + a) % 10)
+          handleAnswers(this, i, { reponse: { value: (b + a) % 10 } })
 
           break
         case 'produit':
@@ -95,7 +94,7 @@ export default class DernierChiffre extends Exercice {
           }
           texteCorr += `Le dernier chiffre de $${a} \\times ${b}$ est $${miseEnEvidence((b * a) % 10)}$.`
 
-          setReponse(this, i, (b * a) % 10)
+          handleAnswers(this, i, { reponse: { value: (b * a) % 10 } })
           break
 
         case 'difference':
@@ -112,7 +111,7 @@ export default class DernierChiffre extends Exercice {
           }
           texteCorr += `Le dernier chiffre de $${a} - ${b}$ est $${miseEnEvidence((a - b) % 10)}$.`
 
-          setReponse(this, i, (a - b) % 10)
+          handleAnswers(this, i, { reponse: { value: (a - b) % 10 } })
           break
       }
 

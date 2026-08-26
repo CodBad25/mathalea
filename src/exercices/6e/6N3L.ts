@@ -2,7 +2,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -224,9 +224,13 @@ export default class FractionDUnNombre extends Exercice {
         }
       }
 
-      setReponse(this, i, (n * a) / b)
+      handleAnswers(this, i, { reponse: { value: (n * a) / b } })
       if ((n * a) % b !== 0 && !context.isAmc) {
-        setReponse(this, i, [(n * a) / b, texFractionFromString(n * a, b)])
+        handleAnswers(this, i, {
+          reponse: {
+            value: new FractionEtendue(n * a, b).texFraction,
+          },
+        })
       }
       texte += ajouteChampTexteMathLive(
         this,

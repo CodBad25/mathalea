@@ -1,8 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -124,11 +121,9 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr +=
             "Donc le prix d'une tartelette est " +
             `$${miseEnEvidence(texPrix(prixTartelettes))}$ €.`
-          if (context.isAmc) setReponse(this, i, prixTartelettes)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texPrix(prixTartelettes) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texPrix(prixTartelettes) },
+          })
           break
         }
         case 2: {
@@ -157,9 +152,7 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr +=
             "Donc le prix d'un stylo est " +
             `$${miseEnEvidence(texPrix(prixStylos))}$ €.`
-          if (context.isAmc) setReponse(this, i, prixStylos)
-          else
-            handleAnswers(this, i, { reponse: { value: texPrix(prixStylos) } })
+          handleAnswers(this, i, { reponse: { value: texPrix(prixStylos) } })
           break
         }
         case 3: {
@@ -186,11 +179,9 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr += `Après avoir replanté, il y a $${texNombre(arbresInitiaux - arbresArraches)} + ${texNombre(nouveauxArbres)} = ${texNombre(arbresFinaux)}$ arbres.<br>`
           texteCorr += `Donc il y a $${miseEnEvidence(texNombre(arbresFinaux))}$ arbres dans le parc.`
 
-          if (context.isAmc) setReponse(this, i, arbresFinaux)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texNombre(arbresFinaux) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texNombre(arbresFinaux) },
+          })
           break
         }
         case 4: {
@@ -227,11 +218,9 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr += `On relâche $${groupesRelaches} \\times ${texNombre(tortuesParGroupeApres)} = ${texNombre(tortuesRelachees)}$ tortues.<br>`
           texteCorr += `Donc $${miseEnEvidence(texNombre(tortuesRelachees))}$ tortues ont été relâchées en mer.`
 
-          if (context.isAmc) setReponse(this, i, tortuesRelachees)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texNombre(tortuesRelachees) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texNombre(tortuesRelachees) },
+          })
           break
         }
         case 5: {
@@ -263,11 +252,9 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr += `Au total, l'école se procure $${texNombre(arbresAchetes)} + ${arbresCadeaux} = ${texNombre(arbresTotal)}$ arbres.<br>`
           texteCorr += `Donc l'école a pu se procurer $${miseEnEvidence(texNombre(arbresTotal))}$ arbres au total.`
 
-          if (context.isAmc) setReponse(this, i, arbresTotal)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texNombre(arbresTotal) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texNombre(arbresTotal) },
+          })
           break
         }
         case 6: {
@@ -295,9 +282,7 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr += `Le pop-corn coûte au total $${nbPaquets} \\times ${prixParPaquet} = ${texNombre(coutPopCorn)}$ €.<br>`
           texteCorr += `Le coût total est $${texNombre(coutBillets)} + ${texNombre(coutPopCorn)} = ${texNombre(coutTotal)}$ €.<br>`
           texteCorr += `Chaque ami dépense $${texNombre(coutTotal)} \\div ${nbAmis} = ${miseEnEvidence(texPrix(coutParAmi))}$ €.`
-          if (context.isAmc) setReponse(this, i, coutParAmi)
-          else
-            handleAnswers(this, i, { reponse: { value: texPrix(coutParAmi) } })
+          handleAnswers(this, i, { reponse: { value: texPrix(coutParAmi) } })
 
           break
         }
@@ -338,9 +323,7 @@ export default class ProblemesAvecOperations extends Exercice {
             'Donc chaque ami paie ' +
             `$${miseEnEvidence(texPrix(coutParAmi))}$ € au total.`
 
-          if (context.isAmc) setReponse(this, i, coutParAmi)
-          else
-            handleAnswers(this, i, { reponse: { value: texPrix(coutParAmi) } })
+          handleAnswers(this, i, { reponse: { value: texPrix(coutParAmi) } })
 
           break
         }
@@ -372,11 +355,9 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr +=
             'Donc ' +
             `$${miseEnEvidence(texNombre(bouteillesUtilisees))}$ bouteilles ont été utilisées.`
-          if (context.isAmc) setReponse(this, i, bouteillesUtilisees)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texPrix(bouteillesUtilisees) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texPrix(bouteillesUtilisees) },
+          })
 
           break
         }
@@ -413,11 +394,9 @@ export default class ProblemesAvecOperations extends Exercice {
             'Donc chaque personne reçoit ' +
             `$${miseEnEvidence(texPrix(gainParPersonne))}$ €.`
 
-          if (context.isAmc) setReponse(this, i, gainParPersonne)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texPrix(gainParPersonne) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texPrix(gainParPersonne) },
+          })
           break
         }
         case 10: {
@@ -450,11 +429,9 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr +=
             'Donc il me reste ' +
             `$${texNombre(oeufsPondus)} - ${texNombre(oeufsUtilises)} = ${miseEnEvidence(texNombre(oeufsRestants))}$ œufs de mes poules à la fin de la semaine .`
-          if (context.isAmc) setReponse(this, i, oeufsRestants)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texPrix(oeufsRestants) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texPrix(oeufsRestants) },
+          })
           break
         }
         case 11: {
@@ -486,11 +463,9 @@ export default class ProblemesAvecOperations extends Exercice {
           texteCorr +=
             'Donc il y a ' +
             `$${miseEnEvidence(texNombre(carburantParReservoir))}$ litres dans chaque réservoir.`
-          if (context.isAmc) setReponse(this, i, carburantParReservoir)
-          else
-            handleAnswers(this, i, {
-              reponse: { value: texPrix(carburantParReservoir) },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: texPrix(carburantParReservoir) },
+          })
           break
         }
       }

@@ -71,7 +71,7 @@ export default class ProblemeFractions extends ExerciceSimple {
     this.question = `Ce matin, ${prenom} a ouvert une bouteille d’eau.<br>
      Elle a bu $${frac1.texFraction}$ de la bouteille. Puis à midi, ${context.isDiaporama ? '<br>' : ''} elle a bu $${frac2.texFraction}$ du reste.<br> 
 Quelle fraction de la bouteille a-t-elle bu à midi ? `
-    if (this.interactif) {
+    if (this.interactif && !this.versionQcm) {
       this.question += '<br>'
     }
 

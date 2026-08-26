@@ -1,6 +1,5 @@
-import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -9,12 +8,7 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import {
-  nombreDeChiffresDansLaPartieDecimale,
-  nombreDeChiffresDansLaPartieEntiere,
-} from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
@@ -218,7 +212,7 @@ export default class CalculsImagesFonctions extends Exercice {
               tagImage = false
               break
           }
-          setReponse(this, i, reponses[i])
+          handleAnswers(this, i, { reponse: { value: reponses[i] } })
           break
         case 'affine':
           switch (sousChoix[i]) {
@@ -256,7 +250,7 @@ export default class CalculsImagesFonctions extends Exercice {
               tagImage = false
               break
           }
-          setReponse(this, i, reponses[i])
+          handleAnswers(this, i, { reponse: { value: reponses[i] } })
           break
         case 'polynôme':
           ant = x
@@ -290,7 +284,7 @@ export default class CalculsImagesFonctions extends Exercice {
               reponses[i] = m * x ** 2 - n * x + y
               break
           }
-          setReponse(this, i, reponses[i])
+          handleAnswers(this, i, { reponse: { value: reponses[i] } })
           break
         case 'fraction':
           ant = x
@@ -350,8 +344,11 @@ export default class CalculsImagesFonctions extends Exercice {
               break
             }
           }
-          setReponse(this, i, reponses[i], {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, i, {
+            reponse: {
+              value: reponses[i],
+              options: { fractionEgale: true },
+            },
           })
           break
       }
@@ -406,32 +403,5 @@ export default class CalculsImagesFonctions extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
-    let maxNbChiffresAvantLaVirgule = 0
-    let maxNbDecimals = 0
-    if (context.isAmc) {
-      for (let i = 0; i < this.nbQuestions; i++) {
-        const valeur = this.autoCorrectionAMC[i].reponse?.valeur
-        if (valeur != null) {
-          maxNbChiffresAvantLaVirgule = Math.max(
-            maxNbChiffresAvantLaVirgule,
-            nombreDeChiffresDansLaPartieEntiere(
-              Number(Array.isArray(valeur) ? valeur[0] : valeur),
-            ),
-          )
-          maxNbDecimals = Math.max(
-            maxNbDecimals,
-            nombreDeChiffresDansLaPartieDecimale(
-              Number(Array.isArray(valeur) ? valeur[0] : valeur),
-            ),
-          )
-        }
-      }
-      for (let i = 0; i < this.nbQuestions; i++) {
-        const amcParam = ensureAmcParam(this, i)
-        amcParam.digits = maxNbChiffresAvantLaVirgule + maxNbDecimals
-        amcParam.decimals = maxNbDecimals
-        amcParam.signe = true
-      }
-    }
   }
 }

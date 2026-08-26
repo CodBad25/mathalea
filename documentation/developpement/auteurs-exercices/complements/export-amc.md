@@ -44,6 +44,11 @@ Une puissance reste donc en `AMCNum` quand elle représente une seule réponse m
 
 Ne déclarez pas `AMCNum` si plusieurs réponses différentes doivent être acceptées sans consigne plus stricte. Par exemple, une fraction équivalente, une réponse dans un intervalle, une expression algébrique non unique ou une unité libre doivent être transformées en une réponse AMC unique, ou basculer en `AMCOpen`.
 
+L'inférence de la page d'export applique cette règle : un tableau de plusieurs
+réponses interactives acceptées n'est jamais tronqué à sa première valeur. En
+l'absence d'une traduction AMC exacte, la question reste visible sous forme
+`AMCOpen`.
+
 ## Déclarer les métadonnées
 
 Ajouter les exports à côté des autres métadonnées de l'exercice :
@@ -178,6 +183,12 @@ this.autoCorrectionAMC[i] = {
 ```
 
 Si l'interactivité accepte des fractions équivalentes, AMC ne sait pas corriger toutes les écritures possibles avec une seule zone. Modifiez alors la consigne AMC, par exemple "Donner la fraction irréductible", et fournissez cette fraction précise.
+
+Pour les exercices anciens utilisant `setReponse(..., {
+formatInteractif: 'fractionEgale' })`, ce format est un mode de comparaison
+legacy, et non le format de composant produit ensuite par `handleAnswers()`. La
+passe AMC réduit la fraction avant de calculer le nombre de cases ; si son
+dénominateur réduit vaut `1`, elle exporte directement l'entier correspondant.
 
 ### Intervalles et valeurs approchées
 

@@ -10,7 +10,7 @@ import {
   mathaleaCustomElementsRegistry,
 } from '../../src/lib/customElements/MathaleaCustomElement'
 import { exerciceInteractif } from '../../src/lib/interactif/gestionInteractif'
-import { setOutputHtml } from '../../src/modules/context'
+import { setOutputHtml, setOutputLatex } from '../../src/modules/context'
 
 const propositions = [
   { texte: '$4$', statut: true },
@@ -112,5 +112,27 @@ describe('MathaleaCouteauSuisseElement', () => {
       numberOfQuestions: 1,
       perQuestionIsOk: [true],
     })
+  })
+
+  it('conserve son contenu en sortie LaTeX', () => {
+    setOutputLatex()
+
+    const rendu = addMathaleaCouteauSuisse(exercice, 0, {
+      contenu: 'contenu statique',
+      elements: [
+        {
+          formatInteractif: 'mathalea-qcm',
+          autoCorrection: {
+            propositions,
+            options: {},
+          },
+        },
+      ],
+    })
+
+    expect(rendu).toBe('contenu statique')
+    expect(exercice.autoCorrection[0].formatInteractif).toBe(
+      'mathalea-couteau-suisse',
+    )
   })
 })

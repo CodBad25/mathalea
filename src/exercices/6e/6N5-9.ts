@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
@@ -404,7 +404,7 @@ export default class ProblemeCourse extends Exercice {
           break
       }
 
-      setReponse(this, i, reponse)
+      handleAnswers(this, i, { reponse: { value: reponse } })
       if (context.isAmc) {
         // @ts-expect-error this.autoCorrection[i] est bien défini
         this.autoCorrectionAMC[i].reponse.valeur = arrondi(reponse, 2)

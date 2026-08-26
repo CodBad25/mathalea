@@ -10,7 +10,7 @@
       "type":"qcm",
       "question": "Soit $X$ une variable aléatoire.  A quel indicateur correspond son espérance ? ",
       "answer": ["moyenne"],
-      "propositions": ["moyenne", "écart-type", "variance", "médiane"]
+      "badPropositions": ["écart-type", "variance", "médiane"]
         },
         {
       "themes": "Variables aléatoires",
@@ -20,7 +20,7 @@
       "type":"qcm",
       "question": "Soit $X$ une variable aléatoire.  Sa variance est un indicateur de ... ",
       "answer": ["dispersion"],
-       "propositions": ["dispersion", "position", "décalage", "variation"]
+       "badPropositions": ["position", "décalage", "variation"]
         }
         ,{
       "themes": "Variables aléatoires",
@@ -30,7 +30,7 @@
       "type":"qcm",
       "question": "Soit $X$ une variable aléatoire.  Son espérance est un indicateur de ... ",
       "answer": ["position"],
-       "propositions": ["dispersion", "position", "décalage", "variation"]
+       "badPropositions": ["dispersion", "décalage", "variation"]
         },
          {
       "themes": "Variables aléatoires",
@@ -40,7 +40,7 @@
       "type":"qcm",
       "question": "Soit $X$ une variable aléatoire.  $\\mathrm{E}(X)=\\ldots$ ",
       "answer": ["$\\sum_{i=1}^{n} x_i P(X=x_i)$"],
-       "propositions": ["$\\sum_{i=1}^{n} x_i P(X=x_i)$","$\\sum_{i=1}^{n} P(X=x_i)$", "$\\sum_{i=1}^{n} x_i^2 P(X=x_i)$", "$\\sum_{i=1}^{n} (x_i-i)^2 P(X=x_i)$"]
+       "badPropositions": ["$\\sum_{i=1}^{n} P(X=x_i)$", "$\\sum_{i=1}^{n} x_i^2 P(X=x_i)$", "$\\sum_{i=1}^{n} (x_i-i)^2 P(X=x_i)$"]
         }
         ,
          {"themes": "Variables aléatoires",
@@ -59,7 +59,7 @@
       "type":"qcm",
       "question": "Soit $X$ une variable aléatoire.  $\\mathrm{V}(X)=\\ldots$ ",
       "answer": ["$\\sum_{i=1}^{n} \\left(x_i-\\mathrm{E}(X)\\right)^2 P(X=x_i)$"],
-       "propositions": ["$\\sum_{i=1}^{n} x_i P(X=x_i)$","$\\sum_{i=1}^{n} \\left(x_i-\\mathrm{E}(X)\\right)^2 P(X=x_i)$", "$\\sum_{i=1}^{n} x_i^2 P(X=x_i)$", "$\\sum_{i=1}^{n} (x_i-i)^2 P(X=x_i)$"]
+       "badPropositions": ["$\\sum_{i=1}^{n} x_i P(X=x_i)$", "$\\sum_{i=1}^{n} x_i^2 P(X=x_i)$", "$\\sum_{i=1}^{n} (x_i-i)^2 P(X=x_i)$"]
         }
         ,
          {"themes": "Variables aléatoires",
@@ -78,7 +78,7 @@
       "type":"qcm",
       "question": "Soit $X$ une variable aléatoire.  $\\mathrm{V}(X)=\\ldots$ ",
       "answer": ["$\\mathrm{E}(X^2)-\\mathrm{E}(X)^2$"],
-       "propositions": ["$\\mathrm{E}(X^2)-\\mathrm{E}(X)^2$","$\\left(\\mathrm{E}(X^2)-\\mathrm{E}(X)\\right)^2$", "$\\mathrm{E}(X)^2-\\mathrm{E}(X^2)$"]
+       "badPropositions": ["$\\left(\\mathrm{E}(X^2)-\\mathrm{E}(X)\\right)^2$", "$\\mathrm{E}(X)^2-\\mathrm{E}(X^2)$"]
         }
         ,
          {"themes": "Variables aléatoires",

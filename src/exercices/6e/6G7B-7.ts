@@ -35,7 +35,7 @@ import { mediatrice } from '../../lib/2d/Mediatrice'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 
 export const titre =
@@ -368,7 +368,7 @@ export default class PavageEtReflexion2d extends Exercice {
       nbSymetriques,
     )
     for (let i = 0; i < nbSymetriques; i++) {
-      setReponse(this, i, couples[i][1])
+      handleAnswers(this, i, { reponse: { value: couples[i][1] } })
       texte +=
         numAlpha(i) +
         `Quelle est l'image de la figure $${couples[i][0]}$ dans la symétrie d'axe $(d)$ ?` +

@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -415,7 +415,9 @@ ${range(Math.abs(ecart - 1))
               ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +
               '$',
           )
-          setReponse(this, i, parseFloat(resultat.toString()))
+          handleAnswers(this, i, {
+            reponse: { value: parseFloat(resultat.toString()) },
+          })
         }
         if (context.isHtml) {
           texte = texte.replace(

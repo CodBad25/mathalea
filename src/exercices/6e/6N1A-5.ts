@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre =
   'Écrire un nombre à partir de son nombre de dizaines, de centaines, de milliers...'
 export const interactifReady = true
@@ -158,7 +157,6 @@ export default class ExerciceNumerationEntier extends Exercice {
       const nbReponse = this.sup2
         ? b * Math.pow(10, rangB) + a * Math.pow(10, rangA)
         : b * Math.pow(10, rangB - rangRef) + a * Math.pow(10, rangA - rangRef)
-      // setReponse(this, i, texNombre(reponse), { formatInteractif: 'texte' })
       handleAnswers(this, i, {
         reponse: { value: reponse, options: { nombreAvecEspace: true } },
       })

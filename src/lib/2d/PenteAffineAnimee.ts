@@ -10,6 +10,7 @@ type PenteAffineAnimeePayload = {
   denominateur: number
   pixelsParCm: number
   couleur: string
+  focusFigure: boolean
 }
 
 export type PenteAffineAnimeeOptions = {
@@ -19,6 +20,7 @@ export type PenteAffineAnimeeOptions = {
   denominateur: number
   pixelsParCm: number
   couleur?: string
+  focusFigure?: boolean
 }
 
 let penteAffineAnimeeRegistered = false
@@ -101,6 +103,12 @@ function registerPenteAffineAnimee() {
       }
 
       const playAnimation = () => {
+        if (payload.focusFigure) {
+          if (!svg.hasAttribute('tabindex')) svg.setAttribute('tabindex', '-1')
+          svg.focus({ preventScroll: true })
+          svg.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+
         svg
           .querySelector(`[data-pente-affine-animee="${payload.figureId}"]`)
           ?.remove()
@@ -175,6 +183,7 @@ export function penteAffineAnimee({
   denominateur,
   pixelsParCm,
   couleur = orangeMathalea,
+  focusFigure = true,
 }: PenteAffineAnimeeOptions): string {
   registerPenteAffineAnimee()
   return DomReadyActionElement.create({
@@ -186,6 +195,7 @@ export function penteAffineAnimee({
       denominateur,
       pixelsParCm,
       couleur,
+      focusFigure,
     },
   })
 }

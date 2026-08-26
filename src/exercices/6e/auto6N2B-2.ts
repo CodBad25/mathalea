@@ -13,7 +13,7 @@ import {
 import { cube3d } from '../../lib/3d/3dProjectionMathalea2d/Cube3dPerspectiveCavaliere'
 import { paveLPH3d } from '../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi } from '../../lib/outils/nombres'
 
@@ -150,7 +150,12 @@ export default class RecompositionDecimale extends Exercice {
         this.listeQuestions[q] = texte
         this.listeCorrections[q] = texteCorr
 
-        setReponse(this, q, reponses[q], { digits: 4, decimals: 3 })
+        handleAnswers(
+          this,
+          q,
+          { reponse: { value: reponses[q] } },
+          { digits: 4, decimals: 3 },
+        )
         q++
       }
       cpt++

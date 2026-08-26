@@ -51,7 +51,7 @@
       "title": "Variations (QCM)",
       "question": "Quelle est le sens de variation de la fonction exponentielle sur $\\mathbb R$ ?",
       "answer":"croissante",
-      "propositions": ["croissante","décroissante", "croissante puis décroissante", "décroissante puis croisante"]
+      "badPropositions": ["décroissante", "croissante puis décroissante", "décroissante puis croisante"]
   
     },
     {
@@ -72,7 +72,7 @@
       "title": "Signe (QCM)",
       "question": "Quelle est le signe de la fonction exponentielle sur $\\mathbb R$ ?",
       "answer":"positive",
-      "propositions": ["positive","négative", "positive puis négative", "négative puis positive"]
+      "badPropositions": ["négative", "positive puis négative", "négative puis positive"]
   
     },
     {

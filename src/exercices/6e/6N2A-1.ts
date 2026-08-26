@@ -7,7 +7,7 @@ import { vide2d } from '../../lib/2d/Vide2d'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { enleveElement } from '../../lib/outils/arrayOutils'
 import { nombreDeChiffresDe } from '../../lib/outils/nombres'
@@ -335,7 +335,7 @@ export default class AdditionsSoustractionsMultiplicationsPosees extends Exercic
         } // espacement entre les questions
         this.listeCorrections[i] = texteCorr
         if (!context.isAmc) {
-          setReponse(this, i, reponse, { digits: 0 }) // fonction qui va renseigner this.autocorrection[i]
+          handleAnswers(this, i, { reponse: { value: reponse } }, { digits: 0 })
         } else {
           this.autoCorrectionAMC[i] = {
             enonce: '',

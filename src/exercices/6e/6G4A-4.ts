@@ -11,10 +11,7 @@ import { angleModulo } from '../../lib/2d/utilitairesGeometriques'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -613,20 +610,13 @@ export default class CalculerUnAngle extends Exercice {
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
         texteApres: ' °',
       })
-      if (context.isAmc)
-        setReponse(this, i, Math.abs(reponse), {
-          digits: 3,
-          decimals: 0,
-          signe: false,
-        })
       // abs indispensable à cause du cas 8
-      else
-        handleAnswers(this, i, {
-          reponse: {
-            value: Math.abs(reponse),
-            options: { nombreDecimalSeulement: true },
-          },
-        })
+      handleAnswers(this, i, {
+        reponse: {
+          value: Math.abs(reponse),
+          options: { nombreDecimalSeulement: true },
+        },
+      })
 
       // Correction selon les cas
       // Les espaces (sp) sont nécessaires pour contrecarrer l'espace créé par les °.

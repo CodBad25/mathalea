@@ -4,7 +4,7 @@ import { texteParPoint } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -208,12 +208,12 @@ export default class CalculerUnPourcentage extends Exercice {
         },
         ...objets,
       )
-      setReponse(this, i, p3, {
-        formatInteractif: 'calcul',
-        digits: 3,
-        decimals: 0,
-        signe: false,
-      })
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: p3 } },
+        { digits: 3, decimals: 0, signe: false },
+      )
 
       if (this.questionJamaisPosee(i, moy1, moy2, moy3)) {
         // Si la question n'a jamais été posée, on en crée une autre

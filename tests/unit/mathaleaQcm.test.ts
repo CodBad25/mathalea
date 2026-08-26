@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
+import AutoCEtechno2026 from '../../src/exercices/1e/1A-A01-5'
 import MetaExercice from '../../src/exercices/MetaExerciceCan'
 import {
   addMathaleaQcm,
@@ -10,6 +11,7 @@ import {
   mathaleaCustomElementsRegistry,
 } from '../../src/lib/customElements/MathaleaCustomElement'
 import { listeDeroulanteToQcm } from '../../src/lib/customElements/ListeDeroulanteElement'
+import { mathaleaEnsureAMCCompatibility } from '../../src/lib/amc/amcInference'
 import {
   exerciceInteractif,
   handleAnswers,
@@ -120,18 +122,19 @@ describe('MathaleaQcmElement', () => {
     expect(third.checked).toBe(false)
   })
 
-  it('rend les controles inertes sans perdre la selection', () => {
+  it('respecte le contrat qcmBuilder en non interactif: lettres sans controles', () => {
     const qcm = appendQcm(exercice, { radio: true })
     qcm.value = '[0]'
 
     qcm.interactivityOn = false
 
-    const selected = qcm.querySelector('#checkEx2Q0R0') as HTMLInputElement
-    expect(selected.checked).toBe(true)
-    expect(selected.style.pointerEvents).toBe('none')
-    expect(selected.tabIndex).toBe(-1)
-    expect(selected.getAttribute('aria-disabled')).toBe('true')
-    expect(selected.classList.contains('qcm-locked-checked')).toBe(true)
+    expect(qcm.querySelector('input')).toBeNull()
+    expect(qcm.textContent).toContain('A.')
+    expect(qcm.textContent).toContain('B.')
+    expect(qcm.querySelector('#labelEx2Q0R0')?.getAttribute('for')).toBeNull()
+    expect(
+      (qcm.querySelector('#labelEx2Q0R0') as HTMLLabelElement).style.cursor,
+    ).toBe('default')
   })
 
   it('peut reactiver un QCM cree sans interactivite', () => {
@@ -142,11 +145,12 @@ describe('MathaleaQcmElement', () => {
       interactivityOn: false,
     })
     const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
-    const first = qcm.querySelector('#checkEx2Q0R0') as HTMLInputElement
-    expect(first.disabled).toBe(true)
+    expect(qcm.querySelector('input')).toBeNull()
 
     qcm.interactivityOn = true
 
+    const first = qcm.querySelector('#checkEx2Q0R0') as HTMLInputElement
+    expect(first).not.toBeNull()
     expect(first.disabled).toBe(false)
     expect(first.style.pointerEvents).toBe('')
     expect(first.tabIndex).toBe(0)
@@ -424,6 +428,35 @@ describe('MathaleaQcmElement', () => {
       ordered: true,
     })
     expect(meta.autoCorrection[1].formatInteractif).toBe('mathalea-qcm')
+  })
+
+  it('flèche les QCM historiques agrégés vers mathalea-qcm', () => {
+    const meta = new AutoCEtechno2026()
+    meta.numeroExercice = 0
+    meta.interactif = true
+
+    meta.nouvelleVersion()
+
+    expect(meta.autoCorrection).toHaveLength(8)
+    for (const question of meta.autoCorrection) {
+      expect(question.formatInteractif).toBe('mathalea-qcm')
+      expect(question.propositions?.length).toBeGreaterThan(1)
+      expect(question.propositions?.some(({ statut }) => statut)).toBe(true)
+    }
+
+    mathaleaEnsureAMCCompatibility(meta)
+
+    expect(meta.amcType).toBe('qcmMono')
+    expect(meta.autoCorrectionAMC).toHaveLength(8)
+    expect(
+      meta.autoCorrectionAMC?.map((question) =>
+        question.propositions?.map(({ statut }) => statut),
+      ),
+    ).toEqual(
+      meta.autoCorrection.map((question) =>
+        question.propositions?.map(({ statut }) => statut),
+      ),
+    )
   })
 
   it('rend une version HTML non interactive avec des lettres', () => {

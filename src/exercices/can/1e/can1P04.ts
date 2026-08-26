@@ -7,7 +7,7 @@ import Exercice from '../../Exercice'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 
@@ -120,7 +120,7 @@ export default class CalculProbaArbre2e extends Exercice {
       texteCorr += `Or $P(\\bar{A} \\cap C)=P(\\bar{A}) \\times P_{\\bar{A}}(C)=${texProba(pB)}x$.<br>`
       texteCorr += `Donc $${texProba(pB)}x=P(C)-P(A \\cap C)=${texProba(pC)}-${texProba(pA)}\\times ${texProba(pAC)}=${texProba(pC)}-${texProba(pA * pAC)}=${texProba(pC.toNumber() - pA * pAC)}$.<br>`
       texteCorr += `Donc $x=\\dfrac{${texProba(pC.toNumber() - pA * pAC)}}{${texProba(pB)}}=${miseEnEvidence(texProba(pBC))}$.`
-      setReponse(this, i, pBC)
+      handleAnswers(this, i, { reponse: { value: pBC } })
       this.canEnonce = `On donne l'arbre de probabilités ci-dessous et $P(C)=${texProba(pC)}$.<br>
       
       `

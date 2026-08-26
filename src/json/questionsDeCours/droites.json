@@ -72,7 +72,7 @@
       "title": "Coefficient directeur (QCM)",
       "question": "Comment appelle-t-on le coefficient $m$ dans l'équation réduite d'une droite d'équation $y = mx + p$ ?",
       "answer": ["coefficient directeur"],
-      "propositions": ["coefficient directeur", "vecteur directeur", "ordonnée à l'origine"]
+      "badPropositions": ["vecteur directeur", "ordonnée à l'origine"]
     },
      {
       "themes": "Droites",
@@ -82,7 +82,7 @@
       "title": "Coefficient directeur",
       "question": "Comment appelle-t-on le coefficient $m$ dans l'équation réduite d'une droite d'équation $y = mx + p$ ?",
       "answer": ["coefficient directeur"],
-      "propositions": ["coefficient directeur", "vecteur directeur", "ordonnée à l'origine"]
+      "badPropositions": ["vecteur directeur", "ordonnée à l'origine"]
     },
     {
       "themes": "Droites",
@@ -93,7 +93,7 @@
       "question": "Comment appelle-t-on le coefficient $p$ dans l'équation réduite d'une droite d'équation $y = mx + p$ ?",
       "answer": ["ordonnée à l'origine"],
       "keys": ["p"],
- "propositions": ["coefficient directeur", "vecteur directeur", "ordonnée à l'origine"]
+ "badPropositions": ["coefficient directeur", "vecteur directeur"]
     },
     {
       "themes": "Droites",
@@ -104,7 +104,7 @@
       "question": "Comment appelle-t-on le coefficient $p$ dans l'équation réduite d'une droite d'équation $y = mx + p$ ?",
       "answer": ["ordonnée à l'origine"],
       "keys": ["p"],
-       "propositions": ["ordonnée", "origine"]
+       "badPropositions": ["ordonnée", "origine"]
     }
 ]
 

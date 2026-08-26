@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { randint } from '../../modules/outils'
@@ -137,7 +137,7 @@ class OperationsReciproques extends Exercice {
       if (this.interactif) {
         texte +=
           '<br>' + ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
-        setReponse(this, i, depart)
+        handleAnswers(this, i, { reponse: { value: depart } })
       }
       if (this.questionJamaisPosee(i, depart, operande1, operande2)) {
         this.listeQuestions[i] = texte

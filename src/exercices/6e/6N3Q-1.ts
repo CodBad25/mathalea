@@ -1,6 +1,6 @@
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -87,12 +87,12 @@ export default class AppliquerUnPourcentage6N3Q extends Exercice {
           texteCorr = `On doit calculer $${pourcent[i]}${sp()}\\%$ de $${prix[i]}$${sp()}€ :<br>`
           texteCorr += `$${pourcent[i]}${sp()}\\%\\text{ de }${prix[i]}=${texFractionFromString(pourcent[i], 100)}\\times${prix[i]}=(${pourcent[i]}\\times${prix[i]})\\div100=${texNombre(pourcent[i] * prix[i])}\\div100=${texNombre(montant)}$<br>`
           texteCorr += `Le montant de la réduction est de $${miseEnEvidence(texPrix(montant))}$${sp()}€.`
-          setReponse(this, i, montant, {
-            formatInteractif: 'calcul',
-            digits: 5,
-            decimals: 2,
-            signe: false,
-          })
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: montant } },
+            { digits: 5, decimals: 2, signe: false },
+          )
           break
         case 2:
         default:
@@ -115,12 +115,12 @@ export default class AppliquerUnPourcentage6N3Q extends Exercice {
           texteCorr = `On doit calculer $${pourcent[i]}${sp()}\\%$ de $${masse[i]}$ grammes :<br>`
           texteCorr += `$${pourcent[i]}${sp()}\\%\\text{ de }${masse[i]}=${texFractionFromString(pourcent[i], 100)}\\times${masse[i]}=(${pourcent[i]}\\times${masse[i]})\\div100=${texNombre(pourcent[i] * masse[i])}\\div100=${texNombre(montant)}$<br>`
           texteCorr += `La masse a augmenté de $${miseEnEvidence(texNombre(montant))}$ g.`
-          setReponse(this, i, montant, {
-            formatInteractif: 'calcul',
-            digits: 4,
-            decimals: 2,
-            signe: false,
-          })
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: montant } },
+            { digits: 4, decimals: 2, signe: false },
+          )
           break
       }
       if (this.questionJamaisPosee(i, pourcent[i], choix[i], montant)) {

@@ -8,7 +8,7 @@
       "title": "Fonction paire",
       "question": "Si une fonction $f$ est paire, alors $f(-x)=$ ?",
       "answer": "f(x)",
-      "propositions": ["f(x)", "-f(x)", "f(-x)", "-f(-x)"]
+      "badPropositions": ["-f(x)", "f(-x)", "-f(-x)"]
     },
     {
       "themes": "Fonctions",
@@ -28,7 +28,7 @@
       "title": "Fonction impaire",
       "question": "Si une fonction $f$ est impaire, alors $f(-x)=$ ?",
       "answer": "-f(x)",
-      "propositions": ["f(x)", "-f(x)", "f(-x)", "-f(-x)"]
+      "badPropositions": ["f(x)", "f(-x)", "-f(-x)"]
     },
     {
       "themes": "Fonctions",

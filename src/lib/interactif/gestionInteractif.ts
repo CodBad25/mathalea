@@ -325,6 +325,20 @@ export function prepareExerciceCliqueFigure(exercice: IExercice) {
   prepareCliqueFigure(exercice)
 }
 
+export function normalizeLegacySetReponseValueForAMC(
+  value: LegacyReponse,
+  formatInteractif: ReponseParams['formatInteractif'],
+): LegacyReponse {
+  if (
+    formatInteractif !== 'fractionEgale' ||
+    !(value instanceof FractionEtendue)
+  )
+    return value
+
+  const simplified = value.simplifie()
+  return simplified.den === 1 ? simplified.num : simplified
+}
+
 /**
  * Précise la réponse attendue
  * Cette fonction est dépréciée : elle est remplacée par la fonction handleAnswers qu'elle appelle pour les anciens exercices
@@ -482,13 +496,21 @@ export function setReponse(
     }
 
     const valeur = Array.isArray(valeurs) ? valeurs[0] : valeurs
+    // `setReponse` conserve les anciens formats de comparaison, qui ne sont
+    // pas les `formatInteractif` normalisés de `handleAnswers`. Pour AMC, une
+    // fractionEgale doit être réduite avant d'en déduire le nombre de cases ;
+    // une fraction entière devient un entier (par exemple 100/25 -> 4).
+    const valeurAmc = normalizeLegacySetReponseValueForAMC(
+      valeur,
+      formatInteractif,
+    )
     const autoCorrectioAMC: AutoCorrectionAMC = exercice.autoCorrectionAMC[
       i
     ] as AutoCorrectionAMC
     const rep = autoCorrectioAMC ? (autoCorrectioAMC.reponse ?? {}) : {}
     if (params.digits == null && params.decimals == null) {
       const paramsAMCFromAnswerType = inferAmcOptionsFromAnswerType({
-        reponse: { value: valeur },
+        reponse: { value: valeurAmc },
       })
       params = {
         ...params,
@@ -498,7 +520,7 @@ export function setReponse(
     if (rep != null) {
       rep.param = params
       // @ts-expect-error Pour AMC on ne change pas le format de réponse
-      rep.valeur = valeur
+      rep.valeur = valeurAmc
     }
     exercice.autoCorrectionAMC[i].reponse = rep
     return // La réponse est prête pour AMC
@@ -950,7 +972,7 @@ export function handleAnswers(
       return val
     }
     if (
-      formatInteractif === 'mathlive' ||
+      String(formatInteractif).toLowerCase() === 'mathlive' ||
       formatInteractif === 'mathalea-mathfield'
     ) {
       const reponseValue =

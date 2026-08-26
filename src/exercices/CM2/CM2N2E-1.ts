@@ -378,7 +378,7 @@ function apigeomGraduatedLine({
   stepBis?: number
   points?: Array<{ x: number; label: string }>
 }): { figure: Figure; latex: string } {
-  const width = Math.floor((xMax - xMin + 0.4) * 30 * scale * 3 * scale)
+  const width = Math.floor((xMax - xMin + 0.4) * 15 * scale * 3 * scale)
   const height = 80
   const figure = new Figure({
     xMin: xMin - 0.2 / scale,

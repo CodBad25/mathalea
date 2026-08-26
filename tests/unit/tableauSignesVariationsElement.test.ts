@@ -69,4 +69,24 @@ describe('TableauSignesVariationsElement', () => {
     restored.value = exercice.answers?.['tableau-signes-variationsEx5Q0'] ?? ''
     expect(restored.getState()).toEqual({ L0C0: '0', L1C0: '+' })
   })
+
+  it('respecte interactivityOn=false dans les options de creation', () => {
+    const html = TableauSignesVariationsElement.create({
+      config,
+      interactivityOn: false,
+    })
+    document.body.innerHTML = html
+
+    const element = document.querySelector(
+      'tableau-signes-variations',
+    ) as TableauSignesVariationsElement
+    element.connectedCallback()
+
+    expect(element.interactivityOn).toBe(false)
+    expect(element.getAttribute('interactivity-on')).toBe('false')
+    expect(
+      element.shadowRoot?.querySelectorAll('.tab-sv__cell--editable').length,
+    ).toBe(0)
+    expect(element.shadowRoot?.querySelector('.tab-sv__toolbar')).toBeNull()
+  })
 })

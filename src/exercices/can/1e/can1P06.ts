@@ -9,7 +9,7 @@ import Exercice from '../../Exercice'
 
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre =
@@ -99,7 +99,9 @@ export default class CalculProbaTableau extends Exercice {
           texteCorr = ` $P_A(B)=\\dfrac{P(A\\cap B)}{P(A)}=\\dfrac{${texNombre(pAinterB, 2)}}{${texNombre(pA, 2)}}=${miseEnEvidence(`\\dfrac{${texNombre(pAinterB.toNumber() * 100, 0)}}{${texNombre(pA.toNumber() * 100, 0)}}`)}$
       `
           reponse = new FractionEtendue(pAinterB, pA.toNumber())
-          setReponse(this, i, reponse, { formatInteractif: 'fractionEgale' })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
+          })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P_A(B)=\\ldots$'
           break
@@ -120,7 +122,7 @@ export default class CalculProbaTableau extends Exercice {
           }
           texteCorr = ` $P(B)=${miseEnEvidence(texNombre(pB, 2))}$`
           reponse = pB
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P_A(B)=\\ldots$'
           break
@@ -143,7 +145,7 @@ export default class CalculProbaTableau extends Exercice {
           texteCorr = ` $P(\\overline{B})=${miseEnEvidence(texNombre(1 - pB.toNumber(), 2))}$
       `
           reponse = new Decimal(pB).mul(-1).add(1)
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P(\\overline{B})=\\ldots$'
           break
@@ -164,7 +166,7 @@ export default class CalculProbaTableau extends Exercice {
           }
           texteCorr = ` $P(A\\cap B))=${miseEnEvidence(texNombre(pAinterB, 2))}$ `
           reponse = pAinterB
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P(A\\cap B)=\\ldots$'
           break
@@ -186,7 +188,7 @@ export default class CalculProbaTableau extends Exercice {
           }
           texteCorr = ` $P(A\\cap \\overline{B})=${miseEnEvidence(texNombre(pA.toNumber() - pAinterB.toNumber(), 2))}$ `
           reponse = new Decimal(pA).sub(pAinterB)
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P(A\\cap \\overline{B})=\\ldots$'
           break
@@ -208,7 +210,7 @@ export default class CalculProbaTableau extends Exercice {
           }
           texteCorr = ` $P(\\overline{A}\\cap B)=${miseEnEvidence(texNombre(pB.toNumber() - pAinterB.toNumber(), 2))}$ `
           reponse = new Decimal(pB).sub(pAinterB)
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P(\\overline{A}\\cap B)=\\ldots$'
           break
@@ -231,7 +233,9 @@ export default class CalculProbaTableau extends Exercice {
           texteCorr = ` $P_B(A)=\\dfrac{P(A\\cap B)}{P(B)}=\\dfrac{${texNombre(pAinterB, 2)}}{${texNombre(pB, 2)}}=${miseEnEvidence(`\\dfrac{${texNombre(pAinterB.toNumber() * 100, 0)}}{${texNombre(pB.toNumber() * 100, 0)}}`)}$
         `
           reponse = new FractionEtendue(pAinterB, pB.toNumber())
-          setReponse(this, i, reponse, { formatInteractif: 'fractionEgale' })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
+          })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P_B(A)=\\ldots$'
           break
@@ -256,7 +260,9 @@ export default class CalculProbaTableau extends Exercice {
             pB.toNumber() - pAinterB.toNumber(),
             pB.toNumber(),
           )
-          setReponse(this, i, reponse, { formatInteractif: 'fractionEgale' })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
+          })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter = '$P_B(\\overline{A})=\\ldots$'
           break
@@ -278,7 +284,9 @@ export default class CalculProbaTableau extends Exercice {
           }
           texteCorr = ` $P_{\\overline{B}}(\\overline{A})=\\dfrac{P(\\overline{A}\\cap \\overline{B})}{P(\\overline{B})}=\\dfrac{${texNombre(pAbarreinterBbarre, 2)}}{${texNombre(1 - pB.toNumber(), 2)}}=${miseEnEvidence(`\\dfrac{${texNombre(pAbarreinterBbarre.toNumber() * 100, 0)}}{${texNombre((1 - pB.toNumber()) * 100, 0)}}`)}$ `
           reponse = new FractionEtendue(pAbarreinterBbarre, 1 - pB.toNumber())
-          setReponse(this, i, reponse, { formatInteractif: 'fractionEgale' })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
+          })
           this.canEnonce += `${tableau}<br>`
           this.canReponseACompleter =
             '$P_{\\overline{B}}(\\overline{A})=\\ldots$'

@@ -2,7 +2,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
@@ -219,7 +219,12 @@ function questionAchat(exo: Exercice, i: number) {
     `$${y}$ ${objet} coûtent donc $${miseEnEvidence(y, bleuMathalea)}$ fois plus que $${miseEnEvidence(texPrix(x / n), bleuMathalea)}$ €, le prix d'${listeDeChose[index1][index2]}.` +
     `$${miseEnEvidence(texPrix(x / n), bleuMathalea)}$ € $\\times ${miseEnEvidence(y, bleuMathalea)} = ${texPrix((x * y) / n)}$ €<br>` +
     ` ${texteEnCouleurEtGras('Conclusion :', 'black')} $${y}$ ${objet} coûtent $${miseEnEvidence(texPrix((x * y) / n))}$ €.`
-  setReponse(exo, i, arrondi((x * y) / n, 2))
+  handleAnswers(
+    exo,
+    i,
+    { reponse: { value: texNombre((x * y) / n, 2) } },
+    { formatInteractif: 'mathalea-mathfield' },
+  )
 
   return {
     qtexte: texte,
@@ -282,7 +287,12 @@ function questionRecette(exo: Exercice, i: number) {
     `Donc, il faut $${miseEnEvidence(nbPersonneFinal, bleuMathalea)}$ fois plus que ${liste[alea1].quantites_par_pers[alea3]} g de ${liste[alea1].ingredient} que pour $1$ personne pour faire sa recette.` +
     `$${miseEnEvidence(liste[alea1].quantites_par_pers[alea3], bleuMathalea)}$ g $\\times ${miseEnEvidence(nbPersonneFinal, bleuMathalea)} = ${quantiteReponse}$ g <br>
 ${texteEnCouleurEtGras('Conclusion : ', 'black')} ${prenoms[0]} doit utiliser $${miseEnEvidence(quantiteReponse)}$ g de ${liste[alea1].ingredient} pour $${nbPersonneFinal}$ personnes. `
-  setReponse(exo, i, arrondi(quantiteReponse, 6))
+  handleAnswers(
+    exo,
+    i,
+    { reponse: { value: texNombre(quantiteReponse, 0) } },
+    { formatInteractif: 'mathalea-mathfield' },
+  )
   return {
     qtexte: texte,
     qtexteCorr: texteCorr,
@@ -358,7 +368,16 @@ function questionDillution(exo: Exercice, i: number) {
     ` Il faut donc $${miseEnEvidence(volumeFinalAff, bleuMathalea)}$ fois plus de ${liste[alea1].solute} que $${texNombre(quantite / volumeInitial)}$ ${liste[alea1].unite_solute} :` +
     `$${miseEnEvidence(texNombre(quantite / volumeInitial), bleuMathalea)}$ ${liste[alea1].unite_solute} $\\times ${miseEnEvidence(volumeFinalAff, bleuMathalea)} = ${texNombre((quantite / volumeInitial) * volumeFinal)}$ ${liste[alea1].unite_solute}<br>` +
     `${texteEnCouleurEtGras('Conclusion :', 'black')} il faut prévoir $${miseEnEvidence(texNombre((quantite / volumeInitial) * volumeFinal))}$ ${liste[alea1].unite_solute} de  ${liste[alea1].solute}.`
-  setReponse(exo, i, arrondi((quantite / volumeInitial) * volumeFinal, 6))
+  handleAnswers(
+    exo,
+    i,
+    {
+      reponse: {
+        value: texNombre((quantite / volumeInitial) * volumeFinal, 6),
+      },
+    },
+    { formatInteractif: 'mathalea-mathfield' },
+  )
   return {
     qtexte: texte,
     qtexteCorr: texteCorr,
@@ -417,7 +436,16 @@ function questionDistance(exo: Exercice, i: number) {
     ` Le ${liste[alea1].locomotion} parcourt donc $${miseEnEvidence(dureeR, bleuMathalea)}$ fois plus de distance qu'en $1$ h.` +
     `$${miseEnEvidence(texNombre(liste[alea1].vitesse[alea2] * facteur), bleuMathalea)}\\text{ km} \\times ${miseEnEvidence(dureeR, bleuMathalea)} = ${texNombre(liste[alea1].vitesse[alea2] * dureeR * facteur)}\\text{ km}$ <br>` +
     `${texteEnCouleurEtGras('Conclusion :', 'black')} le ${liste[alea1].locomotion} parcourra en moyenne $${miseEnEvidence(texNombre(liste[alea1].vitesse[alea2] * dureeR * facteur))}\\text{ km}$ en $${dureeR}$ h.`
-  setReponse(exo, i, arrondi(liste[alea1].vitesse[alea2] * dureeR * facteur, 6))
+  handleAnswers(
+    exo,
+    i,
+    {
+      reponse: {
+        value: texNombre(liste[alea1].vitesse[alea2] * dureeR * facteur, 6),
+      },
+    },
+    { formatInteractif: 'mathalea-mathfield' },
+  )
   return {
     qtexte: texte,
     qtexteCorr: texteCorr,
@@ -451,10 +479,15 @@ function questionEchelle(exo: Exercice, i: number) {
     ` $${distanceCarte2}\\text{ cm}$, c'est $${miseEnEvidence(distanceCarte2, bleuMathalea)}$ fois $1\\text{ cm}$.` +
     `$${miseEnEvidence(texNombre(distanceReel / distanceCarte), bleuMathalea)}\\text{ km}\\times ${miseEnEvidence(distanceCarte2, bleuMathalea)} = ${texNombre((distanceCarte2 * distanceReel) / distanceCarte)}\\text{ km}$<br>` +
     `${texteEnCouleurEtGras('Conclusion :', 'black')} son trajet correspond en réalité à une distance de $${miseEnEvidence(texNombre((distanceCarte2 * distanceReel) / distanceCarte))}\\text{ km}$.`
-  setReponse(
+  handleAnswers(
     exo,
     i,
-    arrondi((distanceCarte2 * distanceReel) / distanceCarte, 6),
+    {
+      reponse: {
+        value: texNombre((distanceCarte2 * distanceReel) / distanceCarte, 6),
+      },
+    },
+    { formatInteractif: 'mathalea-mathfield' },
   )
   return {
     qtexte: texte,
@@ -524,7 +557,16 @@ function questionRecouvrirSurface(exo: Exercice, i: number) {
     ` $${texNombre(surfaceFinale)}\\text{ m}^2$, c'est $${miseEnEvidence(texNombre(surfaceFinale), bleuMathalea)}$ fois plus que $1\\text{ m}^2$.` +
     `$${miseEnEvidence(texNombre(quantite / surfaceInitiale), bleuMathalea)}$ ${liste[alea1].unite} $\\times ${miseEnEvidence(texNombre(surfaceFinale), bleuMathalea)} = ${texNombre((quantite * surfaceFinale) / surfaceInitiale)}$ ${liste[alea1].unite}<br>` +
     `${texteEnCouleurEtGras('Conclusion :', 'black')} ${prenoms[0]} aura besoin de $${miseEnEvidence(texNombre((quantite * surfaceFinale) / surfaceInitiale))}$ ${liste[alea1].unite} pour recouvrir $${texNombre(surfaceFinale)}\\text{ m}^2$.`
-  setReponse(exo, i, arrondi((quantite * surfaceFinale) / surfaceInitiale, 3))
+  handleAnswers(
+    exo,
+    i,
+    {
+      reponse: {
+        value: texNombre((quantite * surfaceFinale) / surfaceInitiale, 3),
+      },
+    },
+    { formatInteractif: 'mathalea-mathfield' },
+  )
   return {
     qtexte: texte,
     qtexteCorr: texteCorr,

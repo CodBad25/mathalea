@@ -1,4 +1,8 @@
 import katex from 'katex'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../outils/embellissements'
 import { internalPositionsFromFleches } from './latexExport'
 import type {
   ActiveCellInfo,
@@ -58,6 +62,23 @@ function renderLatex(latex: string): string {
     })
   } catch {
     return latex
+  }
+}
+
+function renderMaybeHighlightedLatex(latex: string, highlight?: boolean): string {
+  return renderLatex(highlight && latex !== '' ? miseEnEvidence(latex) : latex)
+}
+
+function renderSign(
+  element: HTMLElement,
+  value: string,
+  highlight?: boolean,
+): void {
+  const display = SIGNE_DISPLAY[value] ?? value
+  if (highlight && display !== '') {
+    element.innerHTML = texteEnCouleurEtGras(display)
+  } else {
+    element.textContent = display
   }
 }
 
@@ -124,6 +145,7 @@ export function renderTableau(opts: RenderOptions): RenderResult {
       const td = createValueCell({
         cellId,
         latex: state[cellId] ?? config.colonnes[j].valeur,
+        highlight: config.colonnes[j].highlight,
         editable: !!config.colonnes[j].editable && !readonly,
         mode: 'valeur',
         onCellActivate,
@@ -248,7 +270,7 @@ function renderLigneSigne(args: {
       addMarkerClass(td, markerClass(j / 2, N), markerKind)
     }
     td.dataset.cellId = cellId
-    td.textContent = SIGNE_DISPLAY[value] ?? ''
+    renderSign(td, value, cellule.highlight)
     if (!!cellule.editable && !readonly) {
       td.classList.add('tab-sv__cell--editable')
       td.setAttribute('tabindex', '0')
@@ -344,7 +366,7 @@ function renderLigneVariation(args: {
         'tab-sv__var-half--gauche',
         posGauche === 'haut' ? 'tab-sv__cell--var-top' : 'tab-sv__cell--var-bottom',
       )
-      spanG.innerHTML = renderLatex(latexG)
+      spanG.innerHTML = renderMaybeHighlightedLatex(latexG, configVal.highlight)
       if (!!configVal.editable && !readonly) {
         spanG.classList.add('tab-sv__cell--editable')
         spanG.setAttribute('tabindex', '0')
@@ -364,7 +386,7 @@ function renderLigneVariation(args: {
         'tab-sv__var-half--droite',
         posDroite === 'haut' ? 'tab-sv__cell--var-top' : 'tab-sv__cell--var-bottom',
       )
-      spanD.innerHTML = renderLatex(latexD)
+      spanD.innerHTML = renderMaybeHighlightedLatex(latexD, configVal.highlight)
       if (!!configVal.editable && !readonly) {
         spanD.classList.add('tab-sv__cell--editable')
         spanD.setAttribute('tabindex', '0')
@@ -412,7 +434,7 @@ function renderLigneVariation(args: {
       )
       addMarkerClass(tdVal, marker, effectiveMarkerKind)
       tdVal.dataset.cellId = valId
-      tdVal.innerHTML = renderLatex(latex)
+      tdVal.innerHTML = renderMaybeHighlightedLatex(latex, configVal.highlight)
       const markerEditable = marker !== '' && !readonly
       const valueEditable = !!configVal.editable && !readonly
       if (valueEditable || markerEditable) {
@@ -491,6 +513,7 @@ function renderLigneValeur(args: {
       const td = createValueCell({
         cellId,
         latex: value,
+        highlight: ligne.valeurs[j]?.highlight,
         editable: !!ligne.valeurs[j]?.editable && !readonly,
         mode: 'valeur',
         onCellActivate,
@@ -513,6 +536,7 @@ function renderLigneValeur(args: {
 function createValueCell(args: {
   cellId: string
   latex: string
+  highlight?: boolean
   editable: boolean
   mode: ToolbarMode
   onCellActivate: (info: ActiveCellInfo, cellEl: HTMLElement) => void
@@ -523,7 +547,7 @@ function createValueCell(args: {
   const td = document.createElement('td')
   td.classList.add('tab-sv__cell', 'tab-sv__cell--valeur')
   td.dataset.cellId = args.cellId
-  td.innerHTML = renderLatex(args.latex)
+  td.innerHTML = renderMaybeHighlightedLatex(args.latex, args.highlight)
   if (args.editable) {
     td.classList.add('tab-sv__cell--editable')
     td.setAttribute('tabindex', '0')

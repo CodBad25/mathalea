@@ -8,6 +8,8 @@ export type SensFleche = 'haut' | 'bas' | 'interdite' | ''
 export interface ColonneConfig {
   /** Antécédent (LaTeX), ex. '-\\infty', '0', '2', '+\\infty'. */
   valeur: string
+  /** Met la valeur en évidence dans un tableau de correction. */
+  highlight?: boolean
   /** Si true, l'élève peut modifier l'antécédent lui-même. */
   editable?: boolean
   /** Réponse attendue pour la cellule d'antécédent. */
@@ -18,6 +20,8 @@ export interface ColonneConfig {
 
 export interface CelluleSigne {
   symbole: SigneSymbol
+  /** Met le signe en évidence dans un tableau de correction. */
+  highlight?: boolean
   editable?: boolean
   expected?: SigneSymbol
 }
@@ -31,6 +35,8 @@ export interface CelluleFleche {
 export interface CelluleValeur {
   /** Contenu LaTeX (valeur unique, ou limite à gauche d'une discontinuité). */
   latex: string
+  /** Met la valeur en évidence dans un tableau de correction. */
+  highlight?: boolean
   /** Limite à droite d'une discontinuité. Si défini, la cellule affiche deux valeurs. */
   latexDroite?: string
   editable?: boolean

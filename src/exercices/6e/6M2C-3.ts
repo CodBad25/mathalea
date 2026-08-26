@@ -6,7 +6,7 @@ import {
   texteParPositionEchelle,
 } from '../../lib/2d/textes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -755,7 +755,7 @@ export default class ProblemesAiresRectangles extends Exercice {
       texte = tablo[0]
       texteCorr = tablo[1]
       reponse = tablo[2]
-      setReponse(this, q, reponse)
+      handleAnswers(this, q, { reponse: { value: reponse } })
       texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierNumbers, {
         texteAvant: 'Réponse : ',
         texteApres: this.sup4 === 1 ? '$ \\text{ cm}$' : '$ \\text{ cm}^2$',

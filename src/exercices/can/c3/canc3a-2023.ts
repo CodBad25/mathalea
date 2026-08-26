@@ -7,10 +7,7 @@ import { listeQuestionsToContenu } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Grandeur from '../../../modules/Grandeur'
 import ClasseCan2023 from './_Canc3a'
@@ -84,9 +81,7 @@ export default class SujetCAN2023CM2 extends Exercice {
             const produit = myCan.produitDeDeuxFacteurs(4, 9, 4, 9)
             texte = produit.texte
             texteCorr = produit.texteCorr
-            setReponse(this, index, produit.reponse, {
-              formatInteractif: 'calcul',
-            })
+            handleAnswers(this, index, { reponse: { value: produit.reponse } })
             if (this.interactif && !context.isAmc) {
               texte +=
                 ' $=$' +
@@ -107,9 +102,7 @@ export default class SujetCAN2023CM2 extends Exercice {
             const somme = myCan.ajouterDizaineMoinsUn()
             texte = somme.texte
             texteCorr = somme.texteCorr
-            setReponse(this, index, somme.reponse, {
-              formatInteractif: 'calcul',
-            })
+            handleAnswers(this, index, { reponse: { value: somme.reponse } })
             if (this.interactif && !context.isAmc) {
               texte +=
                 ' $=$' +
@@ -130,8 +123,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             const figureProduit = myCan.denombrementProduit()
             texte = figureProduit.texte
             texteCorr = figureProduit.texteCorr
-            setReponse(this, index, figureProduit.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: figureProduit.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -153,8 +146,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             const moitieDouble = myCan.moitieDouble()
             texte = moitieDouble.texte
             texteCorr = moitieDouble.texteCorr
-            setReponse(this, index, moitieDouble.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: moitieDouble.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte +=
@@ -178,7 +171,7 @@ export default class SujetCAN2023CM2 extends Exercice {
             const axe = myCan.lectureAbscisseEntiere()
             texte = axe.texte
             texteCorr = axe.texteCorr
-            setReponse(this, index, axe.reponse, { formatInteractif: 'calcul' })
+            handleAnswers(this, index, { reponse: { value: axe.reponse } })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -197,8 +190,11 @@ export default class SujetCAN2023CM2 extends Exercice {
             const facteursDUnProduit = myCan.trouverLesFacteursDUnProduit()
             texte = facteursDUnProduit.texte
             texteCorr = facteursDUnProduit.texteCorr
-            setReponse(this, index, facteursDUnProduit.reponse, {
-              formatInteractif: 'texte',
+            handleAnswers(this, index, {
+              reponse: {
+                value: facteursDUnProduit.reponse,
+                options: { texteAvecCasse: true },
+              },
             })
             if (this.interactif && !context.isAmc) {
               texte +=
@@ -249,9 +245,7 @@ export default class SujetCAN2023CM2 extends Exercice {
             const partages = myCan.partages()
             texte = partages.texte
             texteCorr = partages.texteCorr
-            setReponse(this, index, partages.reponse, {
-              formatInteractif: 'calcul',
-            })
+            handleAnswers(this, index, { reponse: { value: partages.reponse } })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -284,7 +278,9 @@ export default class SujetCAN2023CM2 extends Exercice {
                 this,
                 index,
                 KeyboardType.longueur,
-                { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
+                {
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
               )
             }
             nbChamps = 1
@@ -300,8 +296,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             const ecrireUnNombreEnChiffre = myCan.ecrireUnNombreEnChiffres()
             texte = ecrireUnNombreEnChiffre.texte
             texteCorr = ecrireUnNombreEnChiffre.texteCorr
-            setReponse(this, index, ecrireUnNombreEnChiffre.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: ecrireUnNombreEnChiffre.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -328,8 +324,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             }
             texte = dePlusDeMoins.texte
             texteCorr = dePlusDeMoins.texteCorr
-            setReponse(this, index, dePlusDeMoins.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: dePlusDeMoins.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -356,12 +352,12 @@ export default class SujetCAN2023CM2 extends Exercice {
             texte = ecritureDecimaleProduitEntierParDixiemesOuCentiemes.texte
             texteCorr =
               ecritureDecimaleProduitEntierParDixiemesOuCentiemes.texteCorr
-            setReponse(
-              this,
-              index,
-              ecritureDecimaleProduitEntierParDixiemesOuCentiemes.reponse,
-              { formatInteractif: 'calcul' },
-            )
+            handleAnswers(this, index, {
+              reponse: {
+                value:
+                  ecritureDecimaleProduitEntierParDixiemesOuCentiemes.reponse,
+              },
+            })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -385,8 +381,8 @@ export default class SujetCAN2023CM2 extends Exercice {
               myCan.lectureAbscisseEntiereOrigineZero()
             texte = lectureAbscisseEntiereOrigineZero.texte
             texteCorr = lectureAbscisseEntiereOrigineZero.texteCorr
-            setReponse(this, index, lectureAbscisseEntiereOrigineZero.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: lectureAbscisseEntiereOrigineZero.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -436,12 +432,12 @@ export default class SujetCAN2023CM2 extends Exercice {
             texte = decomposerUnNombreATroisChiffresEnDizainesUnites.texte
             texteCorr =
               decomposerUnNombreATroisChiffresEnDizainesUnites.texteCorr
-            setReponse(
-              this,
-              index,
-              decomposerUnNombreATroisChiffresEnDizainesUnites.reponse,
-              { formatInteractif: 'texte' },
-            )
+            handleAnswers(this, index, {
+              reponse: {
+                value: decomposerUnNombreATroisChiffresEnDizainesUnites.reponse,
+                options: { texteAvecCasse: true },
+              },
+            })
             if (this.interactif && !context.isAmc) {
               texte +=
                 "<br>Écris le nombre de dizaines puis d'unités dans cet ordre séparés par un point-virgule. "
@@ -495,8 +491,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             const determinerUnQuotient = myCan.determinerUnQuotient()
             texte = determinerUnQuotient.texte
             texteCorr = determinerUnQuotient.texteCorr
-            setReponse(this, index, determinerUnQuotient.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: determinerUnQuotient.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -525,8 +521,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             }
             texte = proportionnaliteParAddition.texte
             texteCorr = proportionnaliteParAddition.texteCorr
-            setReponse(this, index, proportionnaliteParAddition.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: proportionnaliteParAddition.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += `${ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers)} ${proportionnaliteParAddition.uniteInteractif} .`
@@ -578,8 +574,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             const multiplierParCinq = myCan.multiplierParCinq()
             texte = multiplierParCinq.texte
             texteCorr = multiplierParCinq.texteCorr
-            setReponse(this, index, multiplierParCinq.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: multiplierParCinq.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -604,8 +600,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             )
             texte = proportionnaliteEtVitesse.texte
             texteCorr = proportionnaliteEtVitesse.texteCorr
-            setReponse(this, index, proportionnaliteEtVitesse.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: proportionnaliteEtVitesse.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -631,8 +627,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             )
             texte = proportionnaliteEtVitesse.texte
             texteCorr = proportionnaliteEtVitesse.texteCorr
-            setReponse(this, index, proportionnaliteEtVitesse.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: proportionnaliteEtVitesse.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -655,8 +651,8 @@ export default class SujetCAN2023CM2 extends Exercice {
             const dansNCombienDeFoisP = myCan.dansNCombienDeFoisP()
             texte = dansNCombienDeFoisP.texte
             texteCorr = dansNCombienDeFoisP.texteCorr
-            setReponse(this, index, dansNCombienDeFoisP.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: dansNCombienDeFoisP.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -680,12 +676,12 @@ export default class SujetCAN2023CM2 extends Exercice {
             texte = determinerUnNombreDeDizainesDansUnEntierATroisChiffres.texte
             texteCorr =
               determinerUnNombreDeDizainesDansUnEntierATroisChiffres.texteCorr
-            setReponse(
-              this,
-              index,
-              determinerUnNombreDeDizainesDansUnEntierATroisChiffres.reponse,
-              { formatInteractif: 'calcul' },
-            )
+            handleAnswers(this, index, {
+              reponse: {
+                value:
+                  determinerUnNombreDeDizainesDansUnEntierATroisChiffres.reponse,
+              },
+            })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -709,12 +705,11 @@ export default class SujetCAN2023CM2 extends Exercice {
               myCan.tracerUneFigureAireDonneeEnFonctionUniteAire('cm2')
             texte = tracerUneFigureAireDonneeEnFonctionUniteAire.texte
             texteCorr = tracerUneFigureAireDonneeEnFonctionUniteAire.texteCorr
-            setReponse(
-              this,
-              index,
-              tracerUneFigureAireDonneeEnFonctionUniteAire.reponse,
-              { formatInteractif: 'calcul' },
-            )
+            handleAnswers(this, index, {
+              reponse: {
+                value: tracerUneFigureAireDonneeEnFonctionUniteAire.reponse,
+              },
+            })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -741,8 +736,8 @@ export default class SujetCAN2023CM2 extends Exercice {
               myCan.nombreDeDixiemesDansUnDecimal()
             texte = nombreDeDixiemesDansUnDecimal.texte
             texteCorr = nombreDeDixiemesDansUnDecimal.texteCorr
-            setReponse(this, index, nombreDeDixiemesDansUnDecimal.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: nombreDeDixiemesDansUnDecimal.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += `${ajouteChampTexteMathLive(
@@ -771,8 +766,8 @@ export default class SujetCAN2023CM2 extends Exercice {
                 : myCan.proportionnaliteEtDiviseur('cahiers')
             texte = proportionnaliteEtDiviseur.texte
             texteCorr = proportionnaliteEtDiviseur.texteCorr
-            setReponse(this, index, proportionnaliteEtDiviseur.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: proportionnaliteEtDiviseur.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
@@ -800,12 +795,9 @@ export default class SujetCAN2023CM2 extends Exercice {
                 : myCan.trouverUneDimensionAgrandieOuReduite('reduction')
             texte = trouverUneDimensionAgrandieOuReduite.texte
             texteCorr = trouverUneDimensionAgrandieOuReduite.texteCorr
-            setReponse(
-              this,
-              index,
-              trouverUneDimensionAgrandieOuReduite.reponse,
-              { formatInteractif: 'calcul' },
-            )
+            handleAnswers(this, index, {
+              reponse: { value: trouverUneDimensionAgrandieOuReduite.reponse },
+            })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -861,8 +853,8 @@ export default class SujetCAN2023CM2 extends Exercice {
                 : myCan.nombreDeCombinaisons('platDessert')
             texte = nombreDeCombinaisons.texte
             texteCorr = nombreDeCombinaisons.texteCorr
-            setReponse(this, index, nombreDeCombinaisons.reponse, {
-              formatInteractif: 'calcul',
+            handleAnswers(this, index, {
+              reponse: { value: nombreDeCombinaisons.reponse },
             })
             if (this.interactif && !context.isAmc) {
               texte += ajouteChampTexteMathLive(

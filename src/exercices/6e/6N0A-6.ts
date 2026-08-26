@@ -3,10 +3,7 @@
  */
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   ajouteChampTexte,
   ajouteChampTexteMathLive,
@@ -462,19 +459,12 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
           texteCorr = `$${texNombre(NombreAEcrire)}$ : ${nombreEnLettres(NombreAEcrire)}`
         else texteCorr = `${nombreEnLettres(NombreAEcrire)}`
       } else {
-        if (context.isAmc) {
-          setReponse(this, i, NombreAEcrire) // Utile uniquement pour l'AMC
-          this.autoCorrectionAMC[i].enonce =
-            this.consigne + '\\\\' + nombreEnLettres(NombreAEcrire) + '\\\\'
-          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-        } else {
-          handleAnswers(this, i, {
-            reponse: {
-              value: texNombre(NombreAEcrire),
-              options: { nombreAvecEspace: true },
-            },
-          })
-        }
+        handleAnswers(this, i, {
+          reponse: {
+            value: texNombre(NombreAEcrire),
+            options: { nombreAvecEspace: true },
+          },
+        })
         if (context.vue !== 'diap')
           texte = `${nombreEnLettres(NombreAEcrire)} ${!context.isHtml ? ': $\\pointilles[5cm]$' : !this.interactif ? ' : $\\dotfill$' : ' <br>' + ajouteChampTexteMathLive(this, i, KeyboardType.numbersSpace, { espace: true })}`
         else texte = `${nombreEnLettres(NombreAEcrire)}`

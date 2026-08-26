@@ -52,6 +52,8 @@ export async function loadExercise(entry: ExerciseEntry) {
   return {
     ExerciseClass,
     interactifType: mod.interactifType ?? 'mathLive',
+    amcReady: mod.amcReady,
+    amcType: mod.amcType,
     titre: String(mod.titre ?? entry.filePath),
   }
 }

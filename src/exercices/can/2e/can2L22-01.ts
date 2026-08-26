@@ -34,7 +34,7 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
       this.quotaChoice('cas', ['a', 'b', 'c', 'd']) //
     ) {
       case 'a':
-        this.question = ` Combien de solutions réelles possède l'équation  $-x^2+${a}=${b}$ ?<br>`
+        this.question = ` Combien de solutions réelles possède l'équation  $-x^2+${a}=${b}$ ?`
         if (a - b > 0) {
           this.correction = `L'équation est équivalente à $-x^2=${b}-${a}$, soit $x^2=${a - b}$.<br>
       $${a - b}$ étant strictement positif, cette équation a $${miseEnEvidence(2)}$ solutions : $${texRacineCarree(a - b)}$ et  $-${texRacineCarree(a - b)}$.`
@@ -65,7 +65,7 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
         }
         break
       case 'b':
-        this.question = ` Combien de solutions réelles possède l'équation $-${a}+x^2=-${b}$ ?<br>`
+        this.question = ` Combien de solutions réelles possède l'équation $-${a}+x^2=-${b}$ ?`
         if (a - b > 0) {
           this.correction = `L'équation est équivalente à $x^2=-${b}+${a}$, soit $x^2=${a - b}$.<br>
       $${a - b}$ étant strictement positif, cette équation a $${miseEnEvidence(2)}$ solutions : $${texRacineCarree(a - b)}$ et  $-${texRacineCarree(a - b)}$.`
@@ -96,7 +96,7 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
         }
         break
       case 'c':
-        this.question = ` Combien de solutions réelles possède l'équation $${b}=-x^2+${a}$ ?<br>`
+        this.question = ` Combien de solutions réelles possède l'équation $${b}=-x^2+${a}$ ?`
         if (a - b > 0) {
           this.correction = `L'équation est équivalente à $-x^2=${b}-${a}$, soit $x^2=${a - b}$.<br>
         $${a - b}$ étant strictement positif, cette équation a $${miseEnEvidence(2)}$ solutions : $${texRacineCarree(a - b)}$ et  $-${texRacineCarree(a - b)}$.`
@@ -127,7 +127,7 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
         }
         break
       case 'd':
-        this.question = ` Combien de solutions réelles possède l'équation  $-${b}=-x^2-${a}$ ?<br>`
+        this.question = ` Combien de solutions réelles possède l'équation  $-${b}=-x^2-${a}$ ?`
         if (b - a > 0) {
           this.correction = `L'équation est équivalente à $-x^2=-${b}+${a}$, soit $x^2=${b - a}$.<br>
         $${b - a}$ étant strictement positif, cette équation a $${miseEnEvidence(2)}$ solutions : $${texRacineCarree(b - a)}$ et  $-${texRacineCarree(b - a)}$.`
@@ -157,6 +157,9 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
           ]
         }
         break
+    }
+    if (!this.versionQcm) {
+      this.question += '<br>'
     }
   }
 }

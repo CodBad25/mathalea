@@ -5,10 +5,7 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -155,7 +152,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texte = `$${a} \\times ${b}=$ `
           texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           reponse = a * b
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -183,7 +180,7 @@ export default class SujetCAN20214ieme extends Exercice {
             reponse = b / 3
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -200,7 +197,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texte = `$${a} - ${b}=$ `
           texteCorr = `$${a}-${b}=${miseEnEvidence(a - b)}$`
           reponse = arrondi(a - b)
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -216,7 +213,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texteCorr = `$${texNombre(a)}+${texNombre(b)}=${miseEnEvidence(texNombre(a + b))}$ `
           reponse = arrondi(a + b)
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -237,7 +234,7 @@ export default class SujetCAN20214ieme extends Exercice {
             texteCorr = `$ ${miseEnEvidence(b)} \\times ${a}=${c}$`
           }
           reponse = b
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -264,7 +261,7 @@ export default class SujetCAN20214ieme extends Exercice {
             texteCorr = `$1$ centième $=0,01$, d'où $${texNombre(b)}+0,01 =${miseEnEvidence(texNombre(b + 0.01))}$`
             reponse = arrondi(b + 0.01, 3)
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -302,7 +299,7 @@ export default class SujetCAN20214ieme extends Exercice {
                 $${k}\\times ${texNombre(d)}=${k}\\div 1000=0,${a}${b}\\underline{0}$.<br>
                   `
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -327,7 +324,7 @@ export default class SujetCAN20214ieme extends Exercice {
             texteCorr = `$ ${texNombre(c)}\\times ${texNombre(10000)}+ ${texNombre(b)}\\times ${texNombre(1000)} + ${texNombre(a)}\\times 10  =
       ${texNombre(c * 10000)}+ ${texNombre(b * 1000)} + ${texNombre(a * 10)} =${miseEnEvidence(texNombre(reponse))}$`
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -348,7 +345,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texteCorr = `$${a}$ stylos identiques coûtent  $${texNombre(prix)}$ €, donc $${k * a}$
            de ces mêmes stylos coûtent  $${k}$ fois plus, soit $${k}\\times ${texNombre(prix)}=${miseEnEvidence(texNombre(k * prix))}$ €.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '') + ' €'
           }
@@ -363,7 +360,7 @@ export default class SujetCAN20214ieme extends Exercice {
 
           texteCorr += `$${a}\\times 101 = ${a}\\times (100+1)=${a}\\times 100+${a}\\times 1=${texNombre(a * 100)}+${a}=${miseEnEvidence(texNombre(101 * a))}$`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -378,7 +375,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texte = `$${a}-(${b})=$`
           texteCorr = `$${a}-(${b})=${a}+${texNombre(-b)}=${miseEnEvidence(a - b)}$.`
           reponse = a - b
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -419,7 +416,7 @@ export default class SujetCAN20214ieme extends Exercice {
           ])
           texte += `$\\square$ ${propositions[0]} ${sp(6)} $\\square$ ${propositions[1]} ${sp(6)} $\\square$ ${propositions[2]}`
           texteCorr = `$${a}^{${b}}$ est le produit de $${b}$ facteurs tous égaux à $${a}$. Ainsi, $${a}^{${b}}=${miseEnEvidence(a ** b)}$.`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -435,7 +432,7 @@ export default class SujetCAN20214ieme extends Exercice {
           On obtient donc sa largeur
             en divisant l'aire par sa longueur : $\\ell=${a}\\div ${L}=${miseEnEvidence(a / L)}$. `
           reponse = arrondi(a / L)
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '') + 'm'
           }
@@ -470,8 +467,8 @@ export default class SujetCAN20214ieme extends Exercice {
           }
 
           reponse = fraction(a.n * c + b.n, b.d)
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
@@ -490,7 +487,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texteCorr = `La voiture parcourt $${arrondi(c / a)}\\text{ km}$.<br>
          En $${b}$ minutes, elle parcourt $${a}$ fois moins de $\\text{km}$ qu'en $1$ heure, soit $\\dfrac{${c}}{${a}}=
           ${miseEnEvidence(arrondi(c / a))}\\text{ km}$.`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -510,7 +507,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texte = `$${a}+${b}\\times ${c}= $`
           texteCorr = `La multiplication est prioritaire. On obtient : <br>
           $${a}+${b}\\times ${c}=${a}+${b * c}=${miseEnEvidence(a + b * c)}$. `
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -526,7 +523,7 @@ export default class SujetCAN20214ieme extends Exercice {
           reponse = arrondi(a.n * c, 0)
           texte = `Écris sous la forme d'un entier : $${a.texFraction}\\times ${b}$`
           texteCorr = `$${a.texFraction}\\times ${b}= ${a.n}\\times\\dfrac{${b}}{${a.d}}=${a.n}\\times ${c}=${miseEnEvidence(reponse)}$`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -556,8 +553,8 @@ export default class SujetCAN20214ieme extends Exercice {
             reponse = e
           }
 
-          setReponse(this, index, reponse, {
-            formatInteractif: 'fractionEgale',
+          handleAnswers(this, index, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
           })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
@@ -574,7 +571,7 @@ export default class SujetCAN20214ieme extends Exercice {
     ${texNombre(10 ** a[0])}+${texNombre(10 ** a[1])}+${texNombre(10 ** a[2])}
     =${miseEnEvidence(texNombre(10 ** a[0] + 10 ** a[1] + 10 ** a[2]))}$`
           reponse = arrondi(10 ** a[0] + 10 ** a[1] + 10 ** a[2])
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -593,7 +590,7 @@ export default class SujetCAN20214ieme extends Exercice {
           Comme $10\\,\\%$  de $${a}$ vaut $${a / 10}$ (pour prendre $10\\,\\%$  d'une quantité, on la divise par $10$), alors
           $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${miseEnEvidence(reponse)}$.
          `
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           } else {
@@ -698,7 +695,7 @@ export default class SujetCAN20214ieme extends Exercice {
             $\\dfrac{${L}\\times ${l2}}{2}=${miseEnEvidence(texNombre((L * l2) / 2, 2))}\\text{ cm}^2$
             `
           }
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(this, index, '') + '$\\text{cm}^2$'
@@ -740,7 +737,7 @@ export default class SujetCAN20214ieme extends Exercice {
           reponse = truc
           texteCorr = `On cherche le nombre qui multiplié par $${a}\\times ${b}=${a * b}$ donne $${c}$, il s'agit de $\\dfrac{${c}}{${a * b}}=${miseEnEvidence(truc)}$. `
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -771,7 +768,7 @@ export default class SujetCAN20214ieme extends Exercice {
               Ainsi, on obtient la quatrième proportionnelle en augmentant $${c}$ de la moitié de $${c}$.<br>
               La valeur cherchée est donc $${c}+${c / 2}=${miseEnEvidence(c + c / 2)}$.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -784,7 +781,7 @@ export default class SujetCAN20214ieme extends Exercice {
           reponse = arrondi(a * 1000)
           texte = ` $${texNombre(a)}\\text{ m}^3=$`
           texteCorr = `Comme $1\\text{ m}^3$= $1000$ L, $${texNombre(a)}\\text{ m}^3=${miseEnEvidence(a * 1000)}$ L.`
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '') + 'L'
           } else {
@@ -801,7 +798,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texteCorr = `Pour $x=${truc}$, on obtient :  $${a}+${b}x=${a}+${b}\\times(${truc})=${miseEnEvidence(a + b * truc)}$.`
           reponse = arrondi(a + b * truc)
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -828,7 +825,7 @@ export default class SujetCAN20214ieme extends Exercice {
           Puisqu'il faut $${a}$ s pour remplir un litre, il en faut $${c}$ fois plus pour remplir un seau de
           $${c}$ L, soit $${a}\\times ${c}=${miseEnEvidence(a * c)}$ s.`
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '') + 'secondes'
           }
@@ -972,7 +969,7 @@ export default class SujetCAN20214ieme extends Exercice {
                   Par conséquent, $BC=${miseEnEvidence(a[2])}$.`
           }
 
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -992,7 +989,7 @@ export default class SujetCAN20214ieme extends Exercice {
           texte = `Donne l'écriture décimale de $${a.texFraction}$. <br>`
           texteCorr = `$\\dfrac{1}{5}=0,2$, ainsi  $${a.texFraction}=${fraction1[0]}\\times\\dfrac{1}{5}=${miseEnEvidence(texNombre(fraction1[0] / fraction1[1]))}$`
           reponse = arrondi(fraction1[0] / fraction1[1])
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
           }
@@ -1034,7 +1031,7 @@ export default class SujetCAN20214ieme extends Exercice {
   `
           }
           reponse = arrondi(a - (b * a) / 100)
-          setReponse(this, index, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '') + '€'
           }

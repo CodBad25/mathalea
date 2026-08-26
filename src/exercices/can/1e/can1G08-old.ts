@@ -10,7 +10,7 @@ import { egal, listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 
 export const titre =
   'Déterminer un vecteur normal avec une équation cartésienne'
@@ -40,7 +40,7 @@ export default class VecteurNormEqCart extends Exercice {
     let texte
     let texteCorr
 
-    for (let i = 0, a, b, c, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, a, b, c, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       a = randint(-9, 9, 0)
       b = randint(-9, 9, 0)
       c = randint(-5, 5, 0)
@@ -61,8 +61,8 @@ export default class VecteurNormEqCart extends Exercice {
             KeyboardType.clavierDeBase,
           ) + '$\\Bigg)$'
 
-        setReponse(this, 2 * i, a)
-        setReponse(this, 2 * i + 1, b)
+        handleAnswers(this, 2 * i, { reponse: { value: a } })
+        handleAnswers(this, 2 * i + 1, { reponse: { value: b } })
       }
       texteCorr = `Si l'équation est de la forme $ax+by+c=0$, on sait d'après le cours, qu'un vecteur normal $\\vec{u}$ a pour coordonnées $(a;b)$.<br>
     On en déduit qu'un vecteur normal de $d$ est $\\vec{u}(${a};${b})$.<br>

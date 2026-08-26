@@ -4,10 +4,7 @@ import { tableau } from '../../lib/2d/tableau'
 import { orangeMathalea } from '../../lib/colors'
 import { texMasse, texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sp } from '../../lib/outils/outilString'
@@ -171,11 +168,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pg)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pg },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = '€'
           } else if (a === 2) {
             index = randint(0, 7)
@@ -229,11 +230,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pg)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pg },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = 'kg'
           } else {
             index = randint(0, 7)
@@ -286,11 +291,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pg)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pg },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = 'cm$^3$'
           }
           break
@@ -341,11 +350,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pp)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pp },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = '€'
           } else if (a === 2) {
             np = randint(1, 10)
@@ -397,11 +410,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pp)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pp },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = 'm$^2$'
           } else {
             index = randint(0, 7)
@@ -455,11 +472,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pp)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pp },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = 'kg'
           }
           break
@@ -543,11 +564,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pg)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pg },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = '€'
           } else if (a === 2) {
             pu = randint(40, 60)
@@ -628,11 +653,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pg)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pg },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = 'm$^2$'
           } else {
             index = randint(0, 7)
@@ -715,11 +744,15 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            if (context.isAmc) setReponse(this, i, pg)
-            else
-              handleAnswers(this, i, {
+
+            handleAnswers(
+              this,
+              i,
+              {
                 reponse: { value: pg },
-              })
+              },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             texteApres = 'kg'
           }
           break
@@ -754,14 +787,18 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
               "On ne peut pas savoir car la pointure n'est pas proportionnelle à l'âge."
             texteApres = ''
           }
-          if (context.isAmc) setReponse(this, i, ['\\text{N}', 'N'])
-          else
-            handleAnswers(this, i, {
+
+          handleAnswers(
+            this,
+            i,
+            {
               reponse: {
                 value: ['\\text{N}', 'N'],
                 options: { texteSansCasse: true },
               },
-            })
+            },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           break
       }
       if (listeTypeQuestions[i] !== 4 && monTableau != null) {

@@ -28,7 +28,7 @@
 -->
 
 {#each items as item, index (item.nom)}
-  <div class="flex flex-row items-center gap-x-2">
+  <div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-1">
     <input
       id={idItem(item)}
       type="checkbox"

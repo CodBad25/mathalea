@@ -8,7 +8,7 @@
       "title": "Variations fonction carré",
       "question": "Sur $\\mathbb R$, la fonction carré est ",
       "answer": "non-monotone",
-      "propositions": ["croissante", "décroissante", "non-monotone"]
+      "badPropositions": ["croissante", "décroissante"]
     },
     {
       "themes": "Fonctions de référence",
@@ -18,7 +18,7 @@
       "title": "Variations fonction carré",
       "question": "Sur $\\mathbb R_{+}$, la fonction carré est ",
       "answer": "croissante",
-      "propositions": ["croissante", "décroissante", "non-monotone"]
+      "badPropositions": ["décroissante", "non-monotone"]
     },
     {
       "themes": "Fonctions de référence",
@@ -28,7 +28,7 @@
       "title": "Variations fonction carré",
       "question": "Sur $\\mathbb R_{-}$, la fonction carré est ",
       "answer": "décroissante",
-      "propositions": ["croissante", "décroissante", "non-monotone"]
+      "badPropositions": ["croissante", "non-monotone"]
     },
     {
     "themes": "Fonctions de référence",

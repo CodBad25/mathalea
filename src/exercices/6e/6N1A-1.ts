@@ -1,14 +1,7 @@
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
-import {
-  arrondi,
-  nombreDeChiffresDansLaPartieDecimale,
-  nombreDeChiffresDe,
-} from '../../lib/outils/nombres'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import {
@@ -138,17 +131,6 @@ export default class NombreDecimalOraliseDeDifferentesManieres extends Exercice 
             texteCorr = `$${a}+${texFractionFromString(b, 10)}+${texFractionFromString(c, 10)}=${a}+${texFractionFromString(b + c, 10)}=${a}+${texNombre((b + c) / 10)}=${texNombre(reponseAMC)}$`
           }
           break
-      }
-      if (context.isAmc) {
-        const choixDigit = randint(0, 1)
-        setReponse(this, i, reponseAMC, {
-          digits:
-            nombreDeChiffresDe(reponseAMC) +
-            randint(choixDigit, choixDigit + 1),
-          decimals:
-            nombreDeChiffresDansLaPartieDecimale(reponseAMC) + choixDigit,
-          signe: false,
-        })
       }
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
 

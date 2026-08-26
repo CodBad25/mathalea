@@ -1,10 +1,7 @@
 import Decimal from 'decimal.js'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -98,7 +95,7 @@ export default class ExerciceConversionsLongueurs extends Exercice {
     )
 
     const unite = this.sup4 === 1 ? 'm' : 'g'
-    for (let i = 0, a, k, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, a, k, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let resultat = 0
       let texte = ''
       let texteCorr = ''
@@ -210,7 +207,6 @@ export default class ExerciceConversionsLongueurs extends Exercice {
             options: { nombreDecimalSeulement: true },
           },
         })
-        if (context.isAmc) setReponse(this, i, arrondi(resultat, 7))
         // Si la question n'a jamais été posée, on en crée une autre
         if (context.vue === 'diap') {
           texte = texte.replace('= \\dotfills', '~\\text{en}')

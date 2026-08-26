@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -92,7 +92,12 @@ export default class TablesMultiplicationsDivisions extends Exercice {
         if (typesDeQuestions === 'classique') {
           // classique
           texte = '$ ' + a + ' \\times ' + b + ' = $'
-          setReponse(this, i, a * b)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: (a * b).toString() } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte =
               `$${a} \\times ${b} = $` +
@@ -123,7 +128,12 @@ export default class TablesMultiplicationsDivisions extends Exercice {
                     KeyboardType.clavierNumbers,
                   ) + `$ \\times ${b}  = ${a * b} $`
             }
-            setReponse(this, i, a)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: a.toString() } },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
           } else {
             // Sinon on demande forcément le 2e facteur
             texte = '$ ' + a + ' \\times \\ldots\\ldots = ' + a * b + ' $'
@@ -131,7 +141,12 @@ export default class TablesMultiplicationsDivisions extends Exercice {
               texte =
                 ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +
                 `$ \\times ${b}  = ${a * b} $`
-            setReponse(this, i, b)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: b.toString() } },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
           }
           texteCorr = '$ ' + a + ' \\times ' + b + ' = ' + a * b + ' $'
         }
@@ -139,7 +154,12 @@ export default class TablesMultiplicationsDivisions extends Exercice {
         if (typesDeQuestions === 'classique') {
           // classique
           texte = '$ ' + a * b + ' \\div ' + b + ' =$'
-          setReponse(this, i, a)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: a.toString() } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte =
               `$${a * b} \\div ${b} = $` +
@@ -148,7 +168,12 @@ export default class TablesMultiplicationsDivisions extends Exercice {
           // a trous
           if (choice([true, false])) {
             texte = `$ ${a * b} \\div \\ldots\\ldots = ${a}$`
-            setReponse(this, i, b)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: b.toString() } },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             if (this.interactif)
               texte =
                 `$${a * b} \\div $` +
@@ -156,7 +181,12 @@ export default class TablesMultiplicationsDivisions extends Exercice {
                 `$ = ${a}$`
           } else {
             texte = `$ \\ldots\\ldots \\div ${b}  = ${a}$`
-            setReponse(this, i, a * b)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: (a * b).toString() } },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
             if (this.interactif)
               texte =
                 ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +

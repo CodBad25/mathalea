@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { creerCouples, shuffle } from '../../lib/outils/arrayOutils'
@@ -167,7 +167,7 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
         texte += props.texte
       } else {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
-        setReponse(this, i, a * b)
+        handleAnswers(this, i, { reponse: { value: a * b } })
       }
       if (this.questionJamaisPosee(i, a, b)) {
         this.listeQuestions[i] = texte

@@ -12,7 +12,7 @@ import Exercice from '../../Exercice'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 
 export const titre = 'Lire une probabilité  à partir d’un arbre'
 export const dateDePublication = '03/07/2022'
@@ -132,7 +132,14 @@ export default class LectureProbabilite extends Exercice {
       objets = omega.represente(0, 7, 0, 1.5, true, 1, 10) // On crée l'arbre complet echelle 1.4 feuilles verticales sens gauche-droite
       texte = "On donne l'arbre de probabilités :<br><br>"
       texte += mathalea2d(
-        { xmin: -0.1, xmax: 14, ymin: 0, ymax: 7, display: 'inline', scale: 0.5 },
+        {
+          xmin: -0.1,
+          xmax: 14,
+          ymin: 0,
+          ymax: 7,
+          display: 'inline',
+          scale: 0.5,
+        },
         ...objets,
       )
       texte += '<br>Compléter avec la notation qui convient : '
@@ -152,54 +159,71 @@ export default class LectureProbabilite extends Exercice {
       if (choix === pA) {
         texteCorr += `$${texNombre(pA, 2)}$ n'est pas une probabilité conditionnelle, 
         $${miseEnEvidence(`P(${nom1})=${texNombre(pA, 2)}`)}$.`
-        setReponse(this, i, [`p(${nom1})`, `P(${nom1})`])
+        handleAnswers(this, i, {
+          reponse: { value: [`p(${nom1})`, `P(${nom1})`] },
+        })
       }
       if (choix === pB) {
         texteCorr += `$${texNombre(pA, 2)}$ n'est pas une probabilité conditionnelle, 
         $${miseEnEvidence(`P(\\overline{${nom1}})=${texNombre(pB, 2)}`)}$.`
-        setReponse(this, i, [
-          `p(\\overline{${nom1}})`,
-          `P(\\overline{${nom1}})`,
-        ])
+        handleAnswers(this, i, {
+          reponse: {
+            value: [`p(\\overline{${nom1}})`, `P(\\overline{${nom1}})`],
+          },
+        })
       }
       if (choix === pAC) {
         texteCorr += `$${texNombre(pAC, 2)}$ est une probabilité conditionnelle, 
         $${miseEnEvidence(`P_{${nom1}}(${nom2})=${texNombre(pAC, 2)}`)}$.`
-        setReponse(this, i, [`p_${nom1}({${nom2}})`, `P_${nom1}({${nom2}})`]) // Testé et Correct
+        handleAnswers(this, i, {
+          reponse: { value: [`p_${nom1}({${nom2}})`, `P_${nom1}({${nom2}})`] },
+        }) // Testé et Correct
       }
       if (choix === new Decimal(1).minus(pAC)) {
         texteCorr += `$${texNombre(new Decimal(1).minus(pAC), 2)}$ est une probabilité conditionnelle, 
         $${miseEnEvidence(`P_{${nom1}}(\\overline{${nom2}})=${texNombre(new Decimal(1).minus(pAC), 2)}`)}$.`
-        setReponse(this, i, [
-          `p_${nom1}({\\overline{${nom2}}})`,
-          `P_${nom1}({\\overline{${nom2}}})`,
-          `p_${nom1}(\\overline{{${nom2}}})`,
-          `P_${nom1}(\\overline{{${nom2}}})`,
-        ]) // Testé et Correct
+        handleAnswers(this, i, {
+          reponse: {
+            value: [
+              `p_${nom1}({\\overline{${nom2}}})`,
+              `P_${nom1}({\\overline{${nom2}}})`,
+              `p_${nom1}(\\overline{{${nom2}}})`,
+              `P_${nom1}(\\overline{{${nom2}}})`,
+            ],
+          },
+        }) // Testé et Correct
       }
       if (choix === pBC) {
         texteCorr += `$${texNombre(pBC, 2)}$ est une probabilité conditionnelle, 
         $${miseEnEvidence(`P_{\\overline{${nom1}}}(${nom2})=${texNombre(pBC, 2)}`)}$.`
-        setReponse(this, i, [
-          `p_{\\overline{${nom1}}}({${nom2}})`,
-          `P_{\\overline{${nom1}}}({${nom2}})`,
-          `p\\overline{_${nom1}}({${nom2}})`,
-          `P\\overline{_${nom1}}({${nom2}})`,
-        ]) // Testé et Correct
+        handleAnswers(this, i, {
+          reponse: {
+            value: [
+              `p_{\\overline{${nom1}}}({${nom2}})`,
+              `P_{\\overline{${nom1}}}({${nom2}})`,
+              `p\\overline{_${nom1}}({${nom2}})`,
+              `P\\overline{_${nom1}}({${nom2}})`,
+            ],
+          },
+        }) // Testé et Correct
       }
       if (choix === new Decimal(1).minus(pBC)) {
         texteCorr += `$${texNombre(new Decimal(1).minus(pBC), 2)}$ est une probabilité conditionnelle, 
         $${miseEnEvidence(`P_{\\overline{${nom1}}}(\\overline{${nom2}})=${texNombre(new Decimal(1).minus(pBC), 2)}`)}$.`
-        setReponse(this, i, [
-          `p_{\\overline{${nom1}}}({\\overline{${nom2}}})`,
-          `P_{\\overline{${nom1}}}({\\overline{${nom2}}})`,
-          `p\\overline{_${nom1}}(\\overline{{${nom2}}})`,
-          `P\\overline{_${nom1}}(\\overline{{${nom2}}})`,
-          `p_{\\overline{${nom1}}}(\\overline{{${nom2}}})`,
-          `P_{\\overline{${nom1}}}(\\overline{{${nom2}}})`,
-          `p\\overline{_${nom1}}({\\overline{${nom2}}})`,
-          `P\\overline{_${nom1}}({\\overline{${nom2}}})`,
-        ])
+        handleAnswers(this, i, {
+          reponse: {
+            value: [
+              `p_{\\overline{${nom1}}}({\\overline{${nom2}}})`,
+              `P_{\\overline{${nom1}}}({\\overline{${nom2}}})`,
+              `p\\overline{_${nom1}}(\\overline{{${nom2}}})`,
+              `P\\overline{_${nom1}}(\\overline{{${nom2}}})`,
+              `p_{\\overline{${nom1}}}(\\overline{{${nom2}}})`,
+              `P_{\\overline{${nom1}}}(\\overline{{${nom2}}})`,
+              `p\\overline{_${nom1}}({\\overline{${nom2}}})`,
+              `P\\overline{_${nom1}}({\\overline{${nom2}}})`,
+            ],
+          },
+        })
       }
       this.canEnonce = `On donne l'arbre de probabilités :<br>
       

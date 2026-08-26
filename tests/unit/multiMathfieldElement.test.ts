@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import { MultiMathfieldElement } from '../../src/lib/customElements/MultiMathfield'
 import { handleAnswers } from '../../src/lib/interactif/gestionInteractif'
-import { setOutputHtml } from '../../src/modules/context'
+import { setOutputHtml, setOutputLatex } from '../../src/modules/context'
 
 describe('MultiMathfieldElement', () => {
   beforeEach(() => {
@@ -66,7 +66,9 @@ describe('MultiMathfieldElement', () => {
     sourceMathfield.value = '42'
     source.shadowRoot?.appendChild(sourceMathfield)
 
-    const sourceList = document.createElement('liste-deroulante') as HTMLElement & {
+    const sourceList = document.createElement(
+      'liste-deroulante',
+    ) as HTMLElement & {
       choices: Array<{ label: string; value: string }>
       value: string
     }
@@ -88,7 +90,9 @@ describe('MultiMathfieldElement', () => {
     targetMathfield.value = ''
     target.shadowRoot?.appendChild(targetMathfield)
 
-    const targetList = document.createElement('liste-deroulante') as HTMLElement & {
+    const targetList = document.createElement(
+      'liste-deroulante',
+    ) as HTMLElement & {
       choices: Array<{ label: string; value: string }>
       value: string
     }
@@ -104,5 +108,53 @@ describe('MultiMathfieldElement', () => {
 
     expect(savedValue).toBe('{"champ1":"42","choix":"B"}')
     expect(target.getValue()).toEqual({ champ1: '42', choix: 'B' })
+  })
+
+  it('rend un contenu statique en sortie LaTeX', () => {
+    setOutputLatex()
+
+    const result = MultiMathfieldElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      dataTemplate:
+        'a) Calculer $g(1)=$%{champ1}<br>b) Calculer $g(2)=$%{champ2}',
+      dataOptions: {},
+    })
+
+    expect(result).not.toContain('<multi-mathfield')
+    expect(result).toContain('Calculer $g(1)=$')
+    expect(result).toContain('Calculer $g(2)=$')
+  })
+
+  it('rend des pointilles au lieu des champs quand l interactivite est desactivee', () => {
+    const rendu = MultiMathfieldElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      dataTemplate: '$g(1)=$%{champ1}',
+      dataOptions: {
+        champ1: { ldots: true },
+      },
+      interactivityOn: false,
+    })
+
+    expect(rendu).not.toContain('<multi-mathfield')
+    expect(rendu).toContain('...')
+
+    const multi = document.createElement(
+      'multi-mathfield',
+    ) as MultiMathfieldElement
+    multi.setAttribute('id', 'multi-mathfieldEx0Q0')
+    multi.setAttribute('numero-exercice', '0')
+    multi.setAttribute('question-index', '0')
+    multi.setAttribute('interactivity-on', 'false')
+    multi.setAttribute('data-template', '$g(1)=$%{champ1}')
+    multi.setAttribute(
+      'data-options',
+      encodeURIComponent(JSON.stringify({ champ1: { ldots: true } })),
+    )
+    document.body.appendChild(multi)
+
+    expect(multi.shadowRoot?.querySelector('math-field')).toBeNull()
+    expect(multi.shadowRoot?.textContent).toContain('...')
   })
 })

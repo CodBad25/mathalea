@@ -4,6 +4,7 @@
    * @author Jean-claude Lhote
    */
   import AmcEnonceHtml from './AmcEnonceHtml.svelte'
+  import { stripEmbeddedQcmFromAMCPreview } from '../../../../lib/amc/amcPreviewText'
 
   export let enonce = ''
   export let htmlContent = ''
@@ -13,26 +14,15 @@
     statut?: unknown
   }> = []
   export let mode: 'qcmMono' | 'qcmMult' = 'qcmMono'
+  export let vertical = false
 
   const isCorrectChoice = (statut: unknown): boolean =>
     statut === true || statut === 1 || statut === '1' || statut === 'true'
 
-  const stripEmbeddedQcmMarkup = (value: string): string => {
-    if (value.trim().length === 0) return ''
-    return value
-      .replace(
-        /<div[^>]*class="[^"]*my-3[^"]*"[^>]*>[\s\S]*?<\/div>\s*<div[^>]*id="resultatCheckEx[^"]*"[^>]*><\/div>/gi,
-        '',
-      )
-      .replace(/<div[^>]*id="resultatCheckEx[^"]*"[^>]*><\/div>/gi, '')
-      .replace(/(<br\s*\/?>\s*){2,}$/gi, '')
-      .trim()
-  }
-
   // En preview AMC, on garde un rendu stable: énoncé + liste de choix stylée AMC.
   // On garde l'énoncé HTML lorsqu'il est disponible, mais en retirant le bloc
   // QCM interactif/non-interactif injecté à la fin de `htmlContent`.
-  $: htmlStatement = stripEmbeddedQcmMarkup(htmlContent)
+  $: htmlStatement = stripEmbeddedQcmFromAMCPreview(htmlContent)
   $: previewContent = htmlStatement || htmlContent || enonce
 </script>
 
@@ -50,7 +40,14 @@
     </div>
   {/if}
   {#if choix.length > 0}
-    <ul class="mt-3 space-y-2">
+    <ul
+      class="mt-3"
+      class:flex={!vertical}
+      class:flex-wrap={!vertical}
+      class:gap-x-6={!vertical}
+      class:gap-y-2={!vertical}
+      class:space-y-2={vertical}
+    >
       {#each choix as option}
         <li
           class="flex items-start gap-2 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"

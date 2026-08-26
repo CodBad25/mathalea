@@ -76,10 +76,11 @@
       "themes": "Dénombrement",
       "level": "T",
       "id": "den9",
-      "title": "Somme des coefficients binomiaux (rappel)",
+      "type": "qcm",
+      "title": "Somme des coefficients binomiaux (QCM)",
       "question": "Combien vaut $\\displaystyle\\sum_{k=0}^n \\dbinom{n}{k}$ ?",
       "answer": ["2^n"],
-      "keys": ["n", "k", "PMATRIX11", "POW"]
+      "badPropositions": ["n^2", "2n", "n!"]
     }
   ]
 }

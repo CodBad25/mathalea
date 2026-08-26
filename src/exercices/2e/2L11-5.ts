@@ -1,5 +1,5 @@
 import FactoriserParNombreOux from '../3e/3L11-4'
-export const titre = 'Factoriser une expression'
+export const titre = 'Factoriser une expression simple'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true

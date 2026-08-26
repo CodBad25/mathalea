@@ -2,7 +2,7 @@ import { courbe } from '../../lib/2d/Courbe'
 import { integrale } from '../../lib/2d/Integrale'
 import { repere } from '../../lib/2d/reperes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -228,7 +228,12 @@ export default class CalculsLoiNormale extends Exercice {
               )
               calculstep.push(`&\\approx  ${resultatB} - ${resultatA} &&`)
             }
-            setReponse(this, i, resultat.toFixed(2))
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: resultat.toFixed(2) } },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
           }
           break
         case 'Nmusigma':
@@ -390,7 +395,12 @@ export default class CalculsLoiNormale extends Exercice {
               )
               calculstep.push(`&\\approx  ${resultatB} - ${resultatA} &&`)
             }
-            setReponse(this, i, resultat.toFixed(2))
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: resultat.toFixed(2) } },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
           }
           break
         case 'Nmusigmaintervallecentre':
@@ -490,7 +500,12 @@ export default class CalculsLoiNormale extends Exercice {
               ` &=  2\\times\\mathrm{P}(X < ${borneb}) - 1 && (\\text{symétrie de la loi normale})`,
             )
             calculstep.push(` &\\approx  2\\times ${resultatA} - 1 &&`)
-            setReponse(this, i, resultat.toFixed(2))
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: resultat.toFixed(2) } },
+              { formatInteractif: 'mathalea-mathfield' },
+            )
           }
           break
       }

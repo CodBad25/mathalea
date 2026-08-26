@@ -268,22 +268,29 @@ export function normalizeAMCNumBlocks(rep?: AutoCorrectionAMC['reponse']) {
     return blocks
   }
 
-  const { value, decimals, approx, alsocorrect } = computeDecimalAMC(rep)
-  const digits = Math.max(countDigits(value) + decimals, param.digits ?? 0)
+  const decimal = computeDecimalAMC(rep)
+  const usesScientificNotation = (param.exposantNbChiffres ?? 0) > 0
+  const decimals =
+    usesScientificNotation && param.decimals !== undefined
+      ? param.decimals
+      : decimal.decimals
+  const digits = usesScientificNotation
+    ? Math.max(param.digits ?? 0, decimals + 1)
+    : Math.max(countDigits(decimal.value) + decimals, param.digits ?? 0)
 
   blocks.push({
-    value,
+    value: decimal.value,
     digits,
     decimals,
     sign: param.signe ?? false,
     options: {
-      approx,
+      approx: decimal.approx,
       exponent:
         param.exposantNbChiffres !== undefined
           ? param.exposantNbChiffres
           : undefined,
       exposign: param.exposantSigne,
-      alsocorrect,
+      alsocorrect: decimal.alsocorrect,
       strict: param.strict,
       vertical: param.vertical,
       Tpoint: param.tpoint ?? ',',

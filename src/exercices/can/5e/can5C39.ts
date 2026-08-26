@@ -3,9 +3,9 @@ import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
+import { round } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { bleuMathalea } from '../../../lib/colors'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier astucieusement par 25'
@@ -35,17 +35,22 @@ export default class MultiplierParVingtCinq extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const quotient = this.quotaRandint('quotient', 2, 15)
-    const n = quotient * 4
-    this.reponse = quotient * 100
+    const n = this.quotaRandint('n', 10, 100)
+    const quotient = round(n / 4, 2)
+    this.reponse = n * 25
 
     this.question = `Calculer $${n} \\times 25$.`
 
-    this.correction = `$${n} \\times 25 = ${n} \\div 4 \\times 100 = ${quotient} \\times 100 = ${miseEnEvidence(texNombre(this.reponse))}$`
+    const quotientTex = texNombre(quotient)
+    const phraseDecalage = Number.isInteger(quotient)
+      ? `le chiffre des unités de $${quotientTex}$ devient le chiffre des centaines`
+      : `la virgule de $${quotientTex}$ se décale de $2$ rangs vers la droite`
+
+    this.correction = `$${n} \\times 25 = ${n} \\div 4 \\times 100 = ${quotientTex} \\times 100 = ${miseEnEvidence(texNombre(this.reponse))}$`
     this.correction += texteEnCouleur(
       `<br> Mentalement : <br>
 Multiplier par $25$ revient à diviser par $4$ puis multiplier par $100$, car $25 = \\dfrac{100}{4}$.<br>
-Ici, $${n} \\div 4 = ${quotient}$, puis quand on multiplie par $100$, le chiffre des unités de $${quotient}$ devient le chiffre des centaines : on obtient $${texNombre(this.reponse)}$.
+Ici, $${n} \\div 4 = ${quotientTex}$, puis quand on multiplie par $100$, ${phraseDecalage} : on obtient $${texNombre(this.reponse)}$.
   `,
       bleuMathalea,
     )

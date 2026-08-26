@@ -1,8 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -106,8 +103,7 @@ export default class ProblemesAvec4Opérations extends Exercice {
           texteCorr +=
             "Donc le prix d'une tartelette est " +
             `$${miseEnEvidence(texPrix(prixTartelettes))}$ €.`
-          if (context.isAmc) setReponse(this, i, prixTartelettes)
-          else handleAnswers(this, i, { reponse: { value: prixTartelettes } })
+          handleAnswers(this, i, { reponse: { value: prixTartelettes } })
           break
         }
         case 2: {
@@ -136,8 +132,7 @@ export default class ProblemesAvec4Opérations extends Exercice {
           texteCorr +=
             "Donc le prix d'un stylo est " +
             `$${miseEnEvidence(texPrix(prixTartelettes))}$ €.`
-          if (context.isAmc) setReponse(this, i, prixTartelettes)
-          else handleAnswers(this, i, { reponse: { value: prixTartelettes } })
+          handleAnswers(this, i, { reponse: { value: prixTartelettes } })
           break
         }
       }

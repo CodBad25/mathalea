@@ -1,9 +1,9 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { arrondi, range1 } from '../../lib/outils/nombres'
+import { range1 } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -52,7 +52,12 @@ export default class Moitie extends Exercice {
           a = randint(2, 9)
           texte = `$\\text{La moitié de }${a * 2}$`
           texteCorr = `$\\text{La moitié de }${a * 2} \\text{ est } ${miseEnEvidence(texNombre(a))}$`
-          setReponse(this, i, a)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: a.toString() } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -65,8 +70,13 @@ export default class Moitie extends Exercice {
           texte = `$\\text{La moitié de }${a * 2 + 1}$`
           texteCorr = `$\\text{La moitié de }${
             a * 2 + 1
-          } \\text{ est } ${miseEnEvidence(texNombre(a + 5 / 10))}$`
-          setReponse(this, i, arrondi(a + 5 / 10))
+          } \\text{ est } ${miseEnEvidence(texNombre(a + 5 / 10, 1))}$`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: texNombre(a + 5 / 10, 1) } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -79,8 +89,13 @@ export default class Moitie extends Exercice {
           texte = `$\\text{La moitié de }${texNombre(a * 2 * 100)}$`
           texteCorr = `$\\text{La moitié de }${texNombre(
             a * 2 * 100,
-          )} \\text{ est } ${miseEnEvidence(texNombre(a * 100))}$`
-          setReponse(this, i, a * 100)
+          )} \\text{ est } ${miseEnEvidence(texNombre(a * 100, 0))}$`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: texNombre(a * 100, 0) } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -90,11 +105,16 @@ export default class Moitie extends Exercice {
           break
         case 4: // a00 avec a impair
           a = randint(2, 9)
-          texte = `$\\text{La moitié de }${texNombre((a * 2 + 1) * 100)}$`
+          texte = `$\\text{La moitié de }${texNombre((a * 2 + 1) * 100, 0)}$`
           texteCorr = `$\\text{La moitié de }${texNombre(
             (a * 2 + 1) * 100,
-          )} \\text{ est } ${miseEnEvidence(texNombre(a * 100 + 50))}$`
-          setReponse(this, i, a * 100 + 50)
+          )} \\text{ est } ${miseEnEvidence(texNombre(a * 100 + 50, 0))}$`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: texNombre(a * 100 + 50, 0) } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -105,11 +125,16 @@ export default class Moitie extends Exercice {
         case 5: // a,b avec a et b pairs
           a = randint(2, 9)
           b = randint(2, 9)
-          texte = `$\\text{La moitié de }${texNombre(a * 2 + (b * 2) / 100)}$`
+          texte = `$\\text{La moitié de }${texNombre(a * 2 + (b * 2) / 100, 2)}$`
           texteCorr = `$\\text{La moitié de }${texNombre(
             a * 2 + (b * 2) / 100,
-          )} \\text{ est } ${miseEnEvidence(texNombre(a + b / 100))}$`
-          setReponse(this, i, arrondi(a + b / 100))
+          )} \\text{ est } ${miseEnEvidence(texNombre(a + b / 100, 2))}$`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: texNombre(a + b / 100, 2) } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -122,9 +147,14 @@ export default class Moitie extends Exercice {
           a = randint(2, 9)
           texte = `$\\text{La moitié de }${100 + a * 2}$`
           texteCorr = `$\\text{La moitié de }${100 + a * 2} \\text{ est } ${miseEnEvidence(
-            texNombre(50 + a),
+            texNombre(50 + a, 0),
           )}$`
-          setReponse(this, i, 50 + a)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: texNombre(50 + a, 0) } },
+            { formatInteractif: 'mathalea-mathfield' },
+          )
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,

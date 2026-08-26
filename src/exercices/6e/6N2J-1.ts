@@ -1,10 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -157,24 +154,28 @@ export default class DivisionsEuclidiennesEgaliteFondamentale extends Exercice {
             }),
           ) +
           `$${miseEnEvidence(`${texNombre(a)}=${b}\\times${texNombre(q)}`)}$`
-        setReponse(this, i, [
-          `${a}=${b}\\times${q}`,
-          `${a}=${q}\\times${b}`,
-          `${b}\\times${q}=${a}`,
-          `${q}\\times${b}=${a}`,
-          `${a}=${b}\\times ${q}+${0}`,
-          `${a}=${q}\\times ${b}+${0}`,
-          `${b}\\times ${q}+${0}=${a}`,
-          `${q}\\times ${b}+${0}=${a}`,
-          `${a}=(${b}\\times ${q})+${0}`,
-          `${a}=(${q}\\times ${b})+${0}`,
-          `(${b}\\times ${q})+${0}=${a}`,
-          `(${q}\\times ${b})+${0}=${a}`,
-          `${a}\\div${b}=${q}`,
-          `${a}\\div${q}=${b}`,
-          `${q}=${a}\\div${b}`,
-          `${b}=${a}\\div${q}`,
-        ])
+        handleAnswers(this, i, {
+          reponse: {
+            value: [
+              `${a}=${b}\\times${q}`,
+              `${a}=${q}\\times${b}`,
+              `${b}\\times${q}=${a}`,
+              `${q}\\times${b}=${a}`,
+              `${a}=${b}\\times ${q}+${0}`,
+              `${a}=${q}\\times ${b}+${0}`,
+              `${b}\\times ${q}+${0}=${a}`,
+              `${q}\\times ${b}+${0}=${a}`,
+              `${a}=(${b}\\times ${q})+${0}`,
+              `${a}=(${q}\\times ${b})+${0}`,
+              `(${b}\\times ${q})+${0}=${a}`,
+              `(${q}\\times ${b})+${0}=${a}`,
+              `${a}\\div${b}=${q}`,
+              `${a}\\div${q}=${b}`,
+              `${q}=${a}\\div${b}`,
+              `${b}=${a}\\div${q}`,
+            ],
+          },
+        })
       } else {
         texteCorr =
           String(

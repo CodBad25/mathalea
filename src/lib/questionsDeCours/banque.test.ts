@@ -48,12 +48,21 @@ describe('banque des questions de cours', () => {
     expect(erreurs).toEqual([])
   })
 
-  it('propose une bonne réponse parmi les propositions des QCM', () => {
+  it('propose au moins deux choix distincts pour les QCM', () => {
     for (const question of questionsDeCours) {
       if (question.type !== 'qcm') continue
-      expect(question.propositions.length).toBeGreaterThan(1)
+      const bassin = new Set([
+        ...question.badPropositions,
+        ...question.answers,
+      ])
+      expect(bassin.size).toBeGreaterThan(1)
+    }
+  })
+
+  it('ne recopie pas la bonne réponse dans badPropositions', () => {
+    for (const question of questionsDeCours) {
       for (const answer of question.answers) {
-        expect(question.propositions).toContain(answer)
+        expect(question.badPropositions).not.toContain(answer)
       }
     }
   })
