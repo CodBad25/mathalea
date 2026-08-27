@@ -6,7 +6,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const titre =
   'Trouver un  entier relatif (addition à trou, écriture simplifiée)'

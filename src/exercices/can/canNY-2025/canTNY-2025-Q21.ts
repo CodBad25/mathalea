@@ -13,7 +13,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une dérivée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4a964'
 export const refs = {
   'fr-fr': [],

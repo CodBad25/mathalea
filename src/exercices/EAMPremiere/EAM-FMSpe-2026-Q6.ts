@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Effectuer un calcul de conversion'
@@ -23,14 +22,14 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ6FMs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     minutes: number,
     secondes: number,
     totalImages: number,
     repOrigine?: string,
     d1Origine?: string,
     d2Origine?: string,
-    d3Origine?: string
+    d3Origine?: string,
   ): void {
     let dureeStr = `$${minutes}$ minute${minutes > 1 ? 's' : ''}`
     if (secondes > 0) {
@@ -54,11 +53,13 @@ private appliquerLesValeurs(
       d3 = d3Origine
     } else {
       correct = `${fps}`
-      
+
       // On utilise les cadences vidéos standards comme distracteurs réalistes
       const cadencesStandards = [15, 24, 30, 60, 120]
-      const optionsFaux = shuffle(cadencesStandards.filter(val => val !== fps))
-      
+      const optionsFaux = shuffle(
+        cadencesStandards.filter((val) => val !== fps),
+      )
+
       d1 = `${optionsFaux[0]}`
       d2 = `${optionsFaux[1]}`
       d3 = `${optionsFaux[2]}`
@@ -69,7 +70,7 @@ private appliquerLesValeurs(
       `$${correct}$ images/seconde`,
       `$${d1}$ images/seconde`,
       `$${d2}$ images/seconde`,
-      `$${d3}$ images/seconde`
+      `$${d3}$ images/seconde`,
     ]
 
     // Rédaction adaptative de la correction
@@ -79,7 +80,7 @@ private appliquerLesValeurs(
     } else {
       this.correction += `$${minutes}$ min $= ${totalSecondes}$ s.<br><br>`
     }
-    
+
     this.correction += `On divise ensuite le nombre total d'images par la durée en secondes : `
     this.correction += `$\\dfrac{${texNombre(totalImages, 0)}}{${totalSecondes}} = ${fps}$.<br><br>`
     this.correction += `La vidéo comporte donc $${miseEnEvidence(`${fps}`)}$ images/seconde.`
@@ -87,13 +88,7 @@ private appliquerLesValeurs(
 
   versionOriginale: () => void = () => {
     // Valeurs strictes de l'image (on ne passe que les nombres)
-    this.appliquerLesValeurs(
-      1, 40, 2400,
-      '24',
-      '60',
-      '120',
-      '15'
-    )
+    this.appliquerLesValeurs(1, 40, 2400, '24', '60', '120', '15')
   }
 
   versionAleatoire: () => void = () => {
@@ -112,10 +107,10 @@ private appliquerLesValeurs(
         { m: 1, s: 10 },
         { m: 1, s: 30 },
       ])
-      
+
       // Choix d'une cadence cible parmi les formats usuels
-      const fps = choice([20,30, 60]) 
-      
+      const fps = choice([20, 30, 60])
+
       const totalImages = (t.m * 60 + t.s) * fps
 
       this.appliquerLesValeurs(t.m, t.s, totalImages)

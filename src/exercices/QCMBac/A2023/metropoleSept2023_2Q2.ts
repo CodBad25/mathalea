@@ -6,7 +6,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Métropole 09/2024 : nature d'un triangle"

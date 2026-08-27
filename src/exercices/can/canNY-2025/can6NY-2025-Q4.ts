@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3df60'
 export const refs = {
   'fr-fr': [],

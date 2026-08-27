@@ -25,7 +25,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /** Styles d'expressions :
  1 : Fractions faciles, tout enchaînement d'opérations possibles
  2 : Fractions standards, tout enchaînement d'opérations possibles

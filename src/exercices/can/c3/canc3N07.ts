@@ -1,16 +1,15 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import Exercice from '../../Exercice'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import Exercice from '../../Exercice'
 
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 
 export const titre = 'Décomposer un nombre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '25/01/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '26/10/2024'
@@ -34,7 +33,7 @@ export default class DecompositionNombre extends Exercice {
 
   nouvelleVersion() {
     let texte, texteCorr, c, d, u, n, um
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
         choice([1, 2]) // 2
       ) {
@@ -44,9 +43,8 @@ export default class DecompositionNombre extends Exercice {
           c = randint(1, 9)
           n = c * 100 + d * 10 + u
           if (choice([true, false])) {
-         
             if (this.interactif) {
-                texte = 'Compléter : <br>'
+              texte = 'Compléter : <br>'
               texte += remplisLesBlancs(
                 this,
                 i,
@@ -102,10 +100,10 @@ export default class DecompositionNombre extends Exercice {
           d = randint(1, 9)
           c = randint(1, 9)
           n = um * 1000 + c * 100 + d * 10 + u
-        
+
           if (choice([true, false])) {
             if (this.interactif) {
-                texte = 'Compléter : <br>'
+              texte = 'Compléter : <br>'
               texte += remplisLesBlancs(
                 this,
                 i,

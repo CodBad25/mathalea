@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer un produit astucieusement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '973bb'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

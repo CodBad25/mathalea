@@ -7,7 +7,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Trouver la bonne unité'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -52,13 +52,13 @@ export default class LaBonneUnite extends Exercice {
       ['écran de téléphone', 10, 18, 'cm'],
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const choixType = randint(0, 1) // 0 pour hauteur, 1 pour longueur
       let liste: [string, number, number, string][]
       let typeObjet: string
       if (choixType === 0) {
         liste = hauteurs.slice(0) as [string, number, number, string][]
-        typeObjet = "hauteur "
+        typeObjet = 'hauteur '
       } else {
         liste = longueurs.slice(0) as [string, number, number, string][]
         typeObjet = "longueur d'un"

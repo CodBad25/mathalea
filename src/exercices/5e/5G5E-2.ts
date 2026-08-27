@@ -50,7 +50,6 @@ export const titre = 'Tracer une hauteur dans un triangle'
 
 export const dateDePublication = '13/01/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = 'c7c78'
 export const refs = {

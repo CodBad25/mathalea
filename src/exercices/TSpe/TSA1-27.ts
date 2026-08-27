@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 export const titre = 'Déterminer la limite d’une somme géométrique'
 export const dateDePublication = '05/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

@@ -30,7 +30,6 @@ import { sp } from '../../lib/outils/outilString'
 export const titre =
   "Donner l'écriture (décimale, en fraction décimale ou en pourcentage) d'une somme (ou différence) de nombres avec fractions décimales"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '20/01/2022'
 export const dateDeModifImportante = '14/01/2026'

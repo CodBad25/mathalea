@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Écrire la valeur décimale d'une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '30/03/2023'

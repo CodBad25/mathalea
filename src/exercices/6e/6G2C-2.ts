@@ -10,7 +10,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const interactifType = 'alea-iep-editeur'
+
 export const interactifReady = true
 export const dateDePublication = '22/08/2026'
 

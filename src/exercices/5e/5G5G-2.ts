@@ -29,7 +29,6 @@ export const titre = 'Tracer une médiane dans un triangle aux instruments'
 
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'editeur-iep'
 
 export const uuid = 'd8d88'
 export const refs = {

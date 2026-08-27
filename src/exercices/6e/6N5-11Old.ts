@@ -20,7 +20,7 @@ import {
 } from '../../lib/outils/embellissements'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre des problèmes (plus complexes)'
 export const dateDePublication = '27/11/2022'
 export const dateDeModifImportante = '17/02/2025'

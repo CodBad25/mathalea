@@ -1,14 +1,14 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Déterminer si un nombre est pair (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDePublication = '20/11/2021'
@@ -35,7 +35,6 @@ export default class PariteDunNombre extends Exercice {
     for (
       let i = 0, a, b, c, d, e, f, g, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (choice([1, 2, 3, 4, 5])) {
         case 1:
@@ -88,7 +87,7 @@ export default class PariteDunNombre extends Exercice {
           texteCorr = `On va retirer le plus grand multiple de 20 possible de $${e}$ :<br>`
           texteCorr += `Dans ${e} il va $${Math.floor(e / 20)}\\times 20=${e - (e % 20)}$ et il reste ${e % 20}.<br>`
           texteCorr += `Si on divise $${e % 20}$ par $2$ on trouve $${texNombre((e % 20) / 2)}$ qui est un nombre ${g % 2 === 0 ? 'pair' : 'impair'}.<br>`
-          texteCorr += `Or, $${e}\\div 2= (${e - (e % 20)} + ${e % 20})\\div 2 =${(e - (e % 20)) >> 1} + ${e % 20 >> 1}=${e >> 1}$.<br>`
+          texteCorr += `Or, $${e}\\div 2= (${e - (e % 20)} + ${e % 20})\\div 2 =${(e - (e % 20)) >> 1} + ${(e % 20) >> 1}=${e >> 1}$.<br>`
           texteCorr += `Donc le nombre $${e}\\div 2$ est ${g % 2 === 0 ? 'pair' : 'impair'}.`
           break
         case 4:

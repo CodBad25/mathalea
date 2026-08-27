@@ -1,7 +1,6 @@
 import IntervallesDeR from '../../2e/2N12-1'
 export const titre = "Donner l'inégalité associée à un intervalle"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '11/11/2025'
 

@@ -2,7 +2,7 @@ import AjouterSimpleNombre from './CPCA10'
 
 export const titre = 'Ajouter 9'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '17/12/2025'

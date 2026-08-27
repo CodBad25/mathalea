@@ -8,6 +8,7 @@ import { rotation } from '../../lib/2d/transformations'
 import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angleOriente } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -30,13 +31,11 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Agrandir ou réduire des figures, d'après une situation de proportionnalité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '13/03/2022'
@@ -102,7 +101,7 @@ class AgrandirReduireFigure extends Exercice {
     let indiceChampReponse = 0 // Cet indice permet de gérer les numéros de champs interactifs car ces champs ne sont pas de nombre égal selon les listeTypeQuestions[i].
     let iiAMC // Cet indice permet de gérer les numéros de champs AMC car ces champs ne sont pas de nombre égal selon les listeTypeQuestions[i].
     let nbDeChampsReponse = 0
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 200; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 200;) {
       let texte, texteCorr, absBFinal, coeffFinal, longueurMax
       do {
         nbDeChampsReponse = 0

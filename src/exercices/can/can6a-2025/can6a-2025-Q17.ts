@@ -13,7 +13,7 @@ import { randint } from '../../../modules/outils'
 
 export const titre = 'Calculer une longueur'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f2560'
 export const refs = {
   'fr-fr': [],

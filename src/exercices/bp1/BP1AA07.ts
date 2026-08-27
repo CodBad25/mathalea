@@ -1,7 +1,7 @@
 import SensDeVariationSuite from '../1e/1AL12-1'
 export const titre = "Déterminer le sens de variation d'une suite arithmétique"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '30/07/2026'
 
 /**

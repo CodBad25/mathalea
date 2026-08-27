@@ -418,7 +418,7 @@ describe('creerDocumentAmc templates', () => {
     const exerciseInferredQcm = {
       titre: 'QCM a inferer',
       nbQuestions: 1,
-      interactifType: 'qcm',
+      formatInteractif: 'qcm',
       autoCorrection: [
         {
           propositions: [
@@ -438,7 +438,7 @@ describe('creerDocumentAmc templates', () => {
     const exerciseInferredMathLive = {
       titre: 'MathLive a inferer',
       nbQuestions: 1,
-      interactifType: 'mathlive',
+      formatInteractif: 'mathlive',
       autoCorrection: [
         {
           reponse: {
@@ -459,7 +459,7 @@ describe('creerDocumentAmc templates', () => {
     const exerciseExplicitlyBlocked = {
       titre: 'AMC refuse',
       nbQuestions: 1,
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       amcReady: false,
       amcType: 'AMCOpen',
       autoCorrection: [],

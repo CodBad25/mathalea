@@ -10,7 +10,7 @@ import {
 } from '../../../lib/outils/ecritures'
 export const titre = 'Utiliser la distributivité simple et réduire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/05/2024'
 export const uuid = 'd6cd2'
 export const refs = {

@@ -10,7 +10,6 @@ export const dateDePublication = '16/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résoudre une inéquation du type ax+b < cx+d.

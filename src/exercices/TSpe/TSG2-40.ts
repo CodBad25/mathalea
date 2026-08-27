@@ -23,7 +23,7 @@ export const titre = "Déterminer une équation cartésienne d'un plan"
 export const dateDePublication = '06/12/2024'
 export const uuid = 'be5d4'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['TSG2-40'],
   'fr-ch': ['3G99-2'],
@@ -43,7 +43,7 @@ export default class EquationsLog extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const xA = randint(-10, 10)

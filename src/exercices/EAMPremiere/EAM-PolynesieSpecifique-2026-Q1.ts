@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Effectuer un calcul avec des fractions'
@@ -58,7 +58,8 @@ export default class AutoQ1PolynesieSpecifique2026 extends ExerciceQcmA {
         : `\\dfrac{${numerateur}}{${denominateur}}`
 
     if (
-      produit.texFractionSimplifiee !== produitNonSimplifie.texFractionSimplifiee
+      produit.texFractionSimplifiee !==
+      produitNonSimplifie.texFractionSimplifiee
     ) {
       etapesCalcul.push(
         `\\dfrac{${facteurCommunProduit}\\times ${produit.num}}{${facteurCommunProduit}\\times ${produit.den}}-${termeSoustrait.texFractionSimplifiee}`,
@@ -77,8 +78,7 @@ export default class AutoQ1PolynesieSpecifique2026 extends ExerciceQcmA {
       )
     } else {
       const denominateurCommun = ppcm(produit.den, termeSoustraitSimplifie.den)
-      const numerateurProduit =
-        produit.num * (denominateurCommun / produit.den)
+      const numerateurProduit = produit.num * (denominateurCommun / produit.den)
       const numerateurSoustrait =
         termeSoustraitSimplifie.num *
         (denominateurCommun / termeSoustraitSimplifie.den)

@@ -14,7 +14,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre un problème en utilisant la division décimale'
 export const dateDePublication = '09/05/2025'
 

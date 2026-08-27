@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   "Donner l'égalité fondamentale issue d'une division euclidienne"

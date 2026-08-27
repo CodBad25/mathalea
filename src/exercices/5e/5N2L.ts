@@ -38,7 +38,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Effectuer un enchaînement d'additions et de soustractions de nombres relatifs"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

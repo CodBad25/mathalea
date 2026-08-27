@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Déterminer la réunion de deux intervalles'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '26/10/2023'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

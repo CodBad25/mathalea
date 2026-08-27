@@ -6,7 +6,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Placer la virgule dans un produit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '25b8a'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

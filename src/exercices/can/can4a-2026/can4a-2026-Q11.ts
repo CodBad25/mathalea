@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Soustraire une fraction à 1'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4732e'
 export const refs = {
   'fr-fr': [],

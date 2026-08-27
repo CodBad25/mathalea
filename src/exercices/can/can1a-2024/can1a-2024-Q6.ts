@@ -7,7 +7,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Donner l'écriture décimale d'une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '96963'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

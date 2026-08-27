@@ -8,7 +8,6 @@ import Exercice from '../Exercice'
 export const titre = 'Retrouver le nombre de départ'
 export const dateDePublication = '11/11/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Retrouver le nombre de départ

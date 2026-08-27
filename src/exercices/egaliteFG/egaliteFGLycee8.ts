@@ -1,16 +1,20 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Choix de spécialités en médecine : un plan d\'inclusivité'
+export const titre = "Choix de spécialités en médecine : un plan d'inclusivité"
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6e064'
 export const refs = {
   'fr-fr': ['EgaliteFG6-1e-8'],
@@ -31,10 +35,14 @@ export default class EgaliteFGLycee8 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
-      "<br><br>Dans une université de médecine, les choix de spécialités restent très genrés. En 2025, les femmes représentent $67\\,\\%$ des $500$ étudiants en médecine, $30\\,\\%$ des femmes choisissent une spécialité chirurgicale, et $30\\,\\%$ des hommes choisissent la pédiatrie.<br>" +
+      '<br><br>Dans une université de médecine, les choix de spécialités restent très genrés. En 2025, les femmes représentent $67\\,\\%$ des $500$ étudiants en médecine, $30\\,\\%$ des femmes choisissent une spécialité chirurgicale, et $30\\,\\%$ des hommes choisissent la pédiatrie.<br>' +
       "Un plan d'inclusivité est mis en place : chaque année, le pourcentage de femmes en chirurgie augmente de $4$ points, et le pourcentage d'hommes en pédiatrie augmente de $10\\,\\%$ par rapport à l'année précédente.<br>" +
       "On note $f_n$ le pourcentage de femmes en chirurgie l'année $2025+n$, et $h_n$ le pourcentage d'hommes en pédiatrie l'année $2025+n$. On a donc $f_0=30$ et $h_0=30$."
     this.nbQuestions = 10
@@ -72,18 +80,26 @@ export default class EgaliteFGLycee8 extends Exercice {
       'Santé publ. et médecine du travail & 6 810 & 66,7 & 1,2 \\\\\n\\hline\n' +
       'TOTAL des médecins & 226 859 & 46,6 & 57,0 \\\\\n\\hline\n' +
       '\\end{tabular}\\end{center}\n' +
-      "Figure 1 -- Médecins suivant le statut et la spécialité en 2019 (source : Drees, RPPS)<br>"
+      'Figure 1 -- Médecins suivant le statut et la spécialité en 2019 (source : Drees, RPPS)<br>'
     this.commentaireDebat =
-      texteGras('Pour débattre') + '.<br>a. Quelle politique semble la plus efficace ?<br>b. Pourquoi est-il plus difficile de motiver les hommes à choisir la pédiatrie ?<br>c. On donne le tableau suivant :' +
+      texteGras('Pour débattre') +
+      '.<br>a. Quelle politique semble la plus efficace ?<br>b. Pourquoi est-il plus difficile de motiver les hommes à choisir la pédiatrie ?<br>c. On donne le tableau suivant :' +
       (context.isHtml ? tableauMedecinsHtml : tableauMedecinsLatex) +
-      'Qu\'en pensez-vous ?'
+      "Qu'en pensez-vous ?"
     this.besoinFormulaireCaseACocher = ['Afficher « Pour débattre »', true]
     this.sup = true
     this.commentaireApprofondir =
-      texteGras('Pour approfondir') + '.<br>Un article : ' +
-      ajouterLien('https://shs.cairn.info/revue-francaise-des-affaires-sociales-2005-1-page-59?lang=fr', 'Féminisation du corps médical et dynamiques professionnelles dans le champ de la santé') +
+      texteGras('Pour approfondir') +
+      '.<br>Un article : ' +
+      ajouterLien(
+        'https://shs.cairn.info/revue-francaise-des-affaires-sociales-2005-1-page-59?lang=fr',
+        'Féminisation du corps médical et dynamiques professionnelles dans le champ de la santé',
+      ) +
       '.<br>Une vidéo : ' +
-      ajouterLien('https://www.youtube.com/watch?v=J3XEo-85rO8', 'Le milieu médical est atteint d\'une maladie grave : le sexisme (URBANIA FR)') +
+      ajouterLien(
+        'https://www.youtube.com/watch?v=J3XEo-85rO8',
+        "Le milieu médical est atteint d'une maladie grave : le sexisme (URBANIA FR)",
+      ) +
       '.'
     this.besoinFormulaire2CaseACocher = ['Afficher « Pour approfondir »', true]
     this.sup2 = true
@@ -93,12 +109,16 @@ export default class EgaliteFGLycee8 extends Exercice {
     this.listeQuestions = []
     this.listeCorrections = []
 
-    const texte0 = texteGras('Partie A — Modélisation') + '<br>On note $f_n$ le pourcentage de femmes en chirurgie l\'année $2025+n$. Justifier pourquoi $f_0=30$.'
-    const correction0 =
-      `$f_0$ est le pourcentage de femmes en chirurgie l'année de référence $2025+0=2025$ : or l'énoncé donne, pour 2025, $30\\,\\%$ des femmes choisissant une spécialité chirurgicale. Donc $${miseEnEvidence('f_0=30')}$.`
+    const texte0 =
+      texteGras('Partie A — Modélisation') +
+      "<br>On note $f_n$ le pourcentage de femmes en chirurgie l'année $2025+n$. Justifier pourquoi $f_0=30$."
+    const correction0 = `$f_0$ est le pourcentage de femmes en chirurgie l'année de référence $2025+0=2025$ : or l'énoncé donne, pour 2025, $30\\,\\%$ des femmes choisissant une spécialité chirurgicale. Donc $${miseEnEvidence('f_0=30')}$.`
 
-    let texte1 = 'Quel est le pourcentage de femmes en chirurgie en 2026, soit $f_1$ ?'
-    if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
+    let texte1 =
+      'Quel est le pourcentage de femmes en chirurgie en 2026, soit $f_1$ ?'
+    if (this.interactif)
+      texte1 +=
+        ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 34 } })
     const correction1 = `Le pourcentage augmente de $4$ points par an : $f_1=30+4=${miseEnEvidence('34')}$.`
 
@@ -106,31 +126,33 @@ export default class EgaliteFGLycee8 extends Exercice {
     const correction2 =
       "Chaque année, le pourcentage de femmes en chirurgie augmente de $4$ points par rapport à l'année précédente, donc $f_{n+1}=f_n+4$."
 
-    const texteQ3 = 'Quelle est la nature de la suite $(f_n)$ ? En déduire l\'expression de $f_n$ en fonction de $n$.'
+    const texteQ3 =
+      "Quelle est la nature de la suite $(f_n)$ ? En déduire l'expression de $f_n$ en fonction de $n$."
     this.autoCorrection[3] = {
       enonce: texteQ3,
       options: { ordered: true, radio: true },
       propositions: [
         { texte: 'Arithmétique de raison $4$', statut: true },
         { texte: 'Géométrique de raison $4$', statut: false },
-        { texte: "Ni arithmétique, ni géométrique", statut: false },
+        { texte: 'Ni arithmétique, ni géométrique', statut: false },
       ],
     }
     const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 =
-      `$f_{n+1}=f_n+4$ : $(f_n)$ est arithmétique de raison $4$ et de premier terme $f_0=30$, donc $${miseEnEvidence('f_n=30+4n')}$.`
+    const correction3 = `$f_{n+1}=f_n+4$ : $(f_n)$ est arithmétique de raison $4$ et de premier terme $f_0=30$, donc $${miseEnEvidence('f_n=30+4n')}$.`
 
     let texte4 =
       "À partir de quelle année (donner $n$ tel que l'année soit $2025+n$) atteindra-t-on $50\\,\\%$ de femmes en chirurgie ?"
     if (this.interactif) texte4 += ajouteChampTexteMathLive(this, 4) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 5 } })
-    const correction4 =
-      `$30+4n=50 \\iff 4n=20 \\iff n=5$ : on atteint $50\\,\\%$ en $${miseEnEvidence('2025+5=2030')}$.`
+    const correction4 = `$30+4n=50 \\iff 4n=20 \\iff n=5$ : on atteint $50\\,\\%$ en $${miseEnEvidence('2025+5=2030')}$.`
 
-    let texte5 = "On note $h_n$ le pourcentage d'hommes en pédiatrie l'année $2025+n$. Quel est le pourcentage d'hommes en pédiatrie en 2026, soit $h_1$ ?"
-    if (this.interactif) texte5 += ajouteChampTexteMathLive(this, 5, '', { texteApres: '%' }) + '<br>'
+    let texte5 =
+      "On note $h_n$ le pourcentage d'hommes en pédiatrie l'année $2025+n$. Quel est le pourcentage d'hommes en pédiatrie en 2026, soit $h_1$ ?"
+    if (this.interactif)
+      texte5 +=
+        ajouteChampTexteMathLive(this, 5, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 5, { reponse: { value: 33 } })
     const correction5 = `$h_1=30\\times 1{,}1=${miseEnEvidence('33')}$.`
 
@@ -138,21 +160,21 @@ export default class EgaliteFGLycee8 extends Exercice {
     const correction6 =
       "Chaque année, le pourcentage d'hommes en pédiatrie augmente de $10\\,\\%$ par rapport à l'année précédente, donc $h_{n+1}=1{,}1\\times h_n$."
 
-    const texteQ7 = 'Quelle est la nature de la suite $(h_n)$ ? En déduire l\'expression de $h_n$ en fonction de $n$.'
+    const texteQ7 =
+      "Quelle est la nature de la suite $(h_n)$ ? En déduire l'expression de $h_n$ en fonction de $n$."
     this.autoCorrection[7] = {
       enonce: texteQ7,
       options: { ordered: true, radio: true },
       propositions: [
         { texte: 'Arithmétique de raison $1{,}1$', statut: false },
         { texte: 'Géométrique de raison $1{,}1$', statut: true },
-        { texte: "Ni arithmétique, ni géométrique", statut: false },
+        { texte: 'Ni arithmétique, ni géométrique', statut: false },
       ],
     }
     const monQcm7 = propositionsQcm(this, 7)
     let texte7 = texteQ7
     if (!context.isAmc) texte7 += monQcm7.texte
-    const correction7 =
-      `$h_{n+1}=1{,}1\\times h_n$ : $(h_n)$ est géométrique de raison $1{,}1$ et de premier terme $h_0=30$, donc $${miseEnEvidence('h_n=30\\times 1{,}1^n')}$.`
+    const correction7 = `$h_{n+1}=1{,}1\\times h_n$ : $(h_n)$ est géométrique de raison $1{,}1$ et de premier terme $h_0=30$, donc $${miseEnEvidence('h_n=30\\times 1{,}1^n')}$.`
 
     const texteQ8 =
       'Quand on atteint la parité ($50\\,\\%$) en chirurgie (en 2030), est-elle également atteinte en pédiatrie ? Expliquer.'
@@ -167,11 +189,11 @@ export default class EgaliteFGLycee8 extends Exercice {
     const monQcm8 = propositionsQcm(this, 8)
     let texte8 = texteQ8
     if (!context.isAmc) texte8 += monQcm8.texte
-    const correction8 =
-      `En 2030 ($n=5$), $h_5=30\\times 1{,}1^5\\approx 48{,}3\\,\\%<50\\,\\%$ : la parité $${miseEnEvidence("\\text{n'est pas encore tout à fait atteinte}")}$ en pédiatrie, même si elle en est proche.`
+    const correction8 = `En 2030 ($n=5$), $h_5=30\\times 1{,}1^5\\approx 48{,}3\\,\\%<50\\,\\%$ : la parité $${miseEnEvidence("\\text{n'est pas encore tout à fait atteinte}")}$ en pédiatrie, même si elle en est proche.`
 
     const texte9 =
-      texteGras('Partie B — Analyse') + "<br>L'université compte $500$ étudiants dont $67\\,\\%$ de femmes, soit $335$ femmes et $165$ hommes. Compléter le tableau suivant, en arrondissant les effectifs à l'unité."
+      texteGras('Partie B — Analyse') +
+      "<br>L'université compte $500$ étudiants dont $67\\,\\%$ de femmes, soit $335$ femmes et $165$ hommes. Compléter le tableau suivant, en arrondissant les effectifs à l'unité."
     const tableauEffectifsHtml =
       '<table style="border-collapse: collapse; margin: 10px 0;">' +
       '<tr><th style="border: 1px solid #888; padding: 4px 10px;">Année</th><th style="border: 1px solid #888; padding: 4px 10px;">$f_n$</th><th style="border: 1px solid #888; padding: 4px 10px;">Effectif</th><th style="border: 1px solid #888; padding: 4px 10px;">$h_n$</th><th style="border: 1px solid #888; padding: 4px 10px;">Effectif</th></tr>' +
@@ -195,7 +217,7 @@ export default class EgaliteFGLycee8 extends Exercice {
     const correction9 =
       "On calcule l'effectif de femmes en chirurgie chaque année par $335\\times f_n\\,\\%$ (arrondi à l'unité), et l'effectif d'hommes en pédiatrie par $165\\times h_n\\,\\%$ (arrondi à l'unité) :<br>" +
       (context.isHtml ? tableauEffectifsHtml : tableauEffectifsLatex) +
-      "Par exemple pour 2025 : $335\\times 0{,}30=100{,}5\\approx 101$ femmes en chirurgie, et $165\\times 0{,}30=49{,}5\\approx 50$ hommes en pédiatrie. Pour 2030 : $335\\times 0{,}50=167{,}5\\approx 168$ femmes en chirurgie, et $165\\times 0{,}483=79{,}695\\approx 80$ hommes en pédiatrie."
+      'Par exemple pour 2025 : $335\\times 0{,}30=100{,}5\\approx 101$ femmes en chirurgie, et $165\\times 0{,}30=49{,}5\\approx 50$ hommes en pédiatrie. Pour 2030 : $335\\times 0{,}50=167{,}5\\approx 168$ femmes en chirurgie, et $165\\times 0{,}483=79{,}695\\approx 80$ hommes en pédiatrie.'
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
@@ -217,8 +239,12 @@ export default class EgaliteFGLycee8 extends Exercice {
     this.listeCorrections[8] = correction8
     this.listeQuestions[9] = texte9
     this.listeCorrections[9] = correction9
-    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireDebat
-    if (this.sup2) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireApprofondir
+    if (this.sup)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireDebat
+    if (this.sup2)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireApprofondir
 
     listeQuestionsToContenu(this)
   }

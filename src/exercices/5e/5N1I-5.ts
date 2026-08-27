@@ -17,7 +17,6 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
 
 export const titre =
   "Dire si la solution d'un problème est un diviseur ou un multiple"

@@ -12,10 +12,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer la valeur d\'une expression du second degré'
+export const titre = "Calculer la valeur d'une expression du second degré"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -24,8 +24,13 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ6CEns2026 extends ExerciceQcmA {
- // Valeur de a x² + b x + c pour x = x0 (x0 < 0)
-  private appliquerLesValeurs(a: number, b: number, c: number, x0: number): void {
+  // Valeur de a x² + b x + c pour x = x0 (x0 < 0)
+  private appliquerLesValeurs(
+    a: number,
+    b: number,
+    c: number,
+    x0: number,
+  ): void {
     const sq = x0 * x0 // (x0)²
     const bx0 = b * x0 // b × x0
 
@@ -36,8 +41,6 @@ export default class AutoQ6CEns2026 extends ExerciceQcmA {
 
     // Affichage de l'expression avec la classe Polynome (coeffs par degré croissant)
     const P = new Polynome({ rand: false, coeffs: [c, b, a] })
-
-  
 
     this.enonce = `La valeur de l'expression $${P.toLatex()}$ pour $x = ${x0}$ est :`
 

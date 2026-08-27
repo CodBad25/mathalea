@@ -13,7 +13,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une longueur'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fec2f'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

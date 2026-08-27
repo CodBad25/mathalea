@@ -23,7 +23,6 @@ import { RedactionPythagore } from './_pythagore'
 export const titre = 'Résoudre des problèmes utilisant le théorème de Pythagore'
 export const dateDeModifImportante = '26/01/2025'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
 
 /**
  * Problèmes utilisant le théorème de Pythagore ou sa réciproque et des propriétés des quadrilatères particuliers.

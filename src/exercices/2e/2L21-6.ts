@@ -11,10 +11,9 @@ import { abs } from '../../lib/outils/nombres'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
-export const titre =
-  'Résoudre une équation $\\dfrac{ax+b}{c}=\\dfrac{d}{e}$'
+export const titre = 'Résoudre une équation $\\dfrac{ax+b}{c}=\\dfrac{d}{e}$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '10/09/2025'
 
 /**

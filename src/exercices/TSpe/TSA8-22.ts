@@ -10,7 +10,7 @@ import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Calculer une intégrale 2'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '05/04/2025'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -41,10 +41,10 @@ export default class IntegraleAffine extends ExerciceSimple {
     const racine = Math.floor(-d / c) + 1
     if (c > 0) {
       a = randint(racine, racine + 5)
-      b = randint(a, a + 5,a)
+      b = randint(a, a + 5, a)
     }
     if (c < 0) {
-      b = randint(racine - 6, racine - 2,a)
+      b = randint(racine - 6, racine - 2, a)
       a = randint(b - 6, b - 1)
     }
     const resultat = new FractionEtendue(c * b + d, c * a + d)

@@ -1,6 +1,6 @@
 import DenombrerCubes from '../../6e/6G8A-1'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const amcReady = true
 export const titre = 'Compter les cubes manquants'

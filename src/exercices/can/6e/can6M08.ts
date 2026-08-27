@@ -7,7 +7,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Comparer des aires (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -29,7 +29,7 @@ export default class QuestionDAires extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(2, 9)
       const b = randint(2, 9, a)
       const c = randint(1, 3)

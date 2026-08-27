@@ -19,7 +19,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const titre = 'Connaitre le vocabulaire de base des angles'

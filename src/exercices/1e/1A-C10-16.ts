@@ -4,8 +4,8 @@ import { randint } from '../../modules/outils'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
-import ExerciceQcmA from '../ExerciceQcmA'
 import FractionEtendue from '../../modules/FractionEtendue'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = 'e6b50'
 export const refs = {
@@ -13,30 +13,36 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Manipuler une équation du type $ax+b=c$"
+export const titre = 'Manipuler une équation du type $ax+b=c$'
 export const dateDePublication = '22/04/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
- * @author Gilles Mora 
+ * @author Gilles Mora
  *
  */
 export default class Auto1C10p extends ExerciceQcmA {
-   private appliquerLesValeurs(a: number, p: number, b: number, k: number, d: number): void {
+  private appliquerLesValeurs(
+    a: number,
+    p: number,
+    b: number,
+    k: number,
+    d: number,
+  ): void {
     // ax = p  =>  c = p + b
     // x = p/a
     // kx = kp/a
     // kx + d = kp/a + d
     const c = p + b
-    const fX = new FractionEtendue(p, a)                         
-    const fKX = new FractionEtendue(k * p, a)                  
-    const fReponse = fKX.ajouteEntier(d)                        
-    const fDist1 = fX                      
-    const fDist2 = new FractionEtendue(k * p+d, a).simplifie() 
-    const fDist3 = new FractionEtendue(p, a).ajouteEntier(d)    
+    const fX = new FractionEtendue(p, a)
+    const fKX = new FractionEtendue(k * p, a)
+    const fReponse = fKX.ajouteEntier(d)
+    const fDist1 = fX
+    const fDist2 = new FractionEtendue(k * p + d, a).simplifie()
+    const fDist3 = new FractionEtendue(p, a).ajouteEntier(d)
 
     this.enonce = `Si $${reduireAxPlusB(a, b)} = ${c}$, alors $${reduireAxPlusB(k, d)} =$`
 
@@ -71,10 +77,7 @@ export default class Auto1C10p extends ExerciceQcmA {
       const d = choice([-3, -2, -1, 1, 2, 3])
       this.appliquerLesValeurs(a, p, b, k, d)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true)
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

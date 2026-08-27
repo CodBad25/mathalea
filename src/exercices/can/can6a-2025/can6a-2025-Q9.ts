@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Compléter une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd4573'
 export const refs = {
   'fr-fr': [],

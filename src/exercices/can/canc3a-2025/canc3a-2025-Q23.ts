@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'ECalculer un rendu de monnaie'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4c0a8'
 export const refs = {
   'fr-fr': [],

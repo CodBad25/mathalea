@@ -6,7 +6,7 @@ import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 't8ona'
 export const refs = {
   'fr-fr': [],

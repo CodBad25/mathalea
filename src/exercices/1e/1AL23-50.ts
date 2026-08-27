@@ -1,5 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -20,12 +21,11 @@ import {
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Utiliser la représentation graphique d'un polynôme du second degré"
 export const dateDeModifImportante = '13/11/2025'
-export const interactifType = ['mathLive', 'qcm']
+
 export const interactifReady = true
 
 /**
@@ -80,7 +80,7 @@ export default class LireElementsCarac extends Exercice {
     let Ymax
     let Xmin
     let Xmax
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       fName.push(lettreMinusculeDepuisChiffre(i + 6))
       let texteCorr = ''
       let texte = ''

@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -9,6 +8,7 @@ import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -25,7 +25,7 @@ export const refs = {
 }
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

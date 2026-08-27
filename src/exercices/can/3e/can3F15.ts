@@ -8,7 +8,6 @@ export const titre =
 export const dateDePublication = '18/03/2026'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '7b38d'
 export const refs = {

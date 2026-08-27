@@ -30,7 +30,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculs numériques à représenter en code par blocs'
 export const interactifReady = true
-export const interactifType = 'blockly-editor'
 export const dateDePublication = '17/07/2026'
 
 /**
@@ -151,7 +150,7 @@ export default class CalculerFormuleParBlockly extends Exercice {
       ? 'Traduire chaque calcul avec les blocs (Quand drapeau vert cliqué => dire (le calcul) pendant $2$ s).'
       : 'Traduire chaque calcul avec les blocs (Démarrer => dire (le calcul) pendant $2$ s).'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const requestedType = listeTypesDeQuestion[i]
       const operationCount: 1 | 2 | 3 =
         requestedType <= 1 ? 1 : requestedType === 2 ? 2 : 3

@@ -3,7 +3,7 @@ export const titre =
   'Transformer une écriture de puissance en écriture décimale ou fractionnaire'
 export const dateDePublication = '14/06/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '53fbb'
 export const refs = {
   'fr-fr': ['2N40-1'],

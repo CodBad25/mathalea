@@ -6,7 +6,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 export const titre = 'Calculer une valeur dans un tableau de proportionnalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'yyalm'
 export const refs = {
   'fr-fr': [],

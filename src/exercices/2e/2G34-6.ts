@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre un système linéaire de deux équations à deux inconnues par substitution'
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const dateDePublication = '08/04/2024'
 export const uuid = '521b6'
 export const refs = {
@@ -60,7 +60,7 @@ export default class systemeEquationsPremDegComp extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.comment =
         'Dans cet exercice, un système est donné à résoudre. Les solutions sont entières comprises entre -10 et 10.<br>Le niveau 1 correspond à une substitution sans distributivité;<br>Le niveau 2 à une substitution avec distributivité.'
       let texte = ''

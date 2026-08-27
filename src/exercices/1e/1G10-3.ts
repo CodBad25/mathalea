@@ -20,7 +20,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Calculer un produit scalaire avec un angle'
 export const dateDePublication = '29/04/2025'
 

@@ -6,7 +6,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Trouver un représentant positif dans une congruence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/02/2025'
 export const uuid = '87535' // à adapter
 
@@ -27,7 +27,7 @@ export default class ExerciceCongruence extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 

@@ -20,7 +20,7 @@ export const refs = {
 export const titre =
   'Savoir résoudre un problème de proportionnalité : À la pêche aux coquillages'
 export const dateDePublication = '15/11/2024'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 /**
  * @Author Jean-claude Lhote

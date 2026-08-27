@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver le résultat d'un programme Python"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ca805'
 export const refs = {
   'fr-fr': [],

@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Réduire, si possible, une expression littérale simple'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Réduire et simplifier, si possible, une expression littérale simple

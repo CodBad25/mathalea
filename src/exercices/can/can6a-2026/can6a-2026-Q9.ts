@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une différence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9nw10'
 export const refs = {
   'fr-fr': [],
@@ -40,7 +40,6 @@ export default class Can20266Q9 extends ExerciceCan {
     }
 
     this.correction = `$${a}-${b}=${miseEnEvidence(texNombre(a - b))}$`
-
 
     this.canReponseACompleter = ``
   }

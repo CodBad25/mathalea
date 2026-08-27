@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer des sommes ou différences'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b799f'
 export const refs = {
   'fr-fr': [],
@@ -26,7 +26,9 @@ export default class CalculsNombres2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = this.canOfficielle ? 1 : this.quotaChoice('choix', [1, 2, 3, 4])
+    const choix = this.canOfficielle
+      ? 1
+      : this.quotaChoice('choix', [1, 2, 3, 4])
     if (choix === 1) {
       this.question = '$20+26$'
       this.correction = `$20+26=${miseEnEvidence(texNombre(46, 0))}$`

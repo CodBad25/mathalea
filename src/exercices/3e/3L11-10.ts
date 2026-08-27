@@ -20,7 +20,7 @@ export const titre = 'Compléter une table de double distributivité'
 export const dateDePublication = '23/02/2023'
 export const dateDeModifImportante = '29/12/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Développer des expressions de double distributivité à l'aide d'un tableau de  multiplication
  * @author Sébastien LOZANO ; Olivier Mimeau (passage TS - factorisation)

@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Différence de fracion'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '97290'
 export const refs = {
   'fr-fr': [],

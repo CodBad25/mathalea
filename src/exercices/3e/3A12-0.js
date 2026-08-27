@@ -1,6 +1,7 @@
 import { engrenages } from '../../lib/2d/engrenage'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea } from '../../lib/colors'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -16,9 +17,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

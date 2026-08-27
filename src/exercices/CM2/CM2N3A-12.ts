@@ -7,7 +7,7 @@ import Exercice from '../Exercice'
 export const titre = 'Ajouter 11'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 /**

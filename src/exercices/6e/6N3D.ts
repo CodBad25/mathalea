@@ -22,7 +22,7 @@ export const dateDePublication = '09/07/2025'
 export const titre =
   'Lire une abscisse fractionnaire grâce à des graduations régulièrement espacées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -60,7 +60,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
 
     const NbAbscissesAutreQueOrigine = contraindreValeur(1, 20, this.sup, 1)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.consigne = this.nbQuestions
         ? 'Sur cette droite, '
         : 'Sur chaque droite, '

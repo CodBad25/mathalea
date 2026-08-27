@@ -5,11 +5,11 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { propositionsQcm } from '../../lib/interactif/qcm'
 import { bleuMathalea } from '../../lib/colors'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 
 export const titre =

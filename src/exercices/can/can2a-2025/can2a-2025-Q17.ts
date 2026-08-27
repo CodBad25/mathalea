@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un coefficient directeur'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5b0ab'
 export const refs = {
   'fr-fr': [],

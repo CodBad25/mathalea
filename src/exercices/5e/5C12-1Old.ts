@@ -19,7 +19,6 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Organiser des calculs en une seule ligne'
 export const dateDePublication = '31/05/2024'

@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec un cosinus'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bdaaf'
 export const refs = {
   'fr-fr': [],

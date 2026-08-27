@@ -1,6 +1,9 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras, texteGras } from '../../lib/outils/embellissements'
+import {
+  texteEnCouleurEtGras,
+  texteGras,
+} from '../../lib/outils/embellissements'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '8e7a5'
@@ -9,7 +12,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = ''
@@ -21,9 +24,12 @@ export const dateDePublication = '05/06/2026'
  *
  */
 export default class AutoQ12ANns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(init: number[], add: number[]): void {
-    const n1 = init[0], n2 = init[1], n3 = init[2]
-    const a = add[0], b = add[1]
+  private appliquerLesValeurs(init: number[], add: number[]): void {
+    const n1 = init[0],
+      n2 = init[1],
+      n3 = init[2]
+    const a = add[0],
+      b = add[1]
 
     const mean1 = (n1 + n2 + n3) / 3
     const med1 = n2 // La liste initiale est déjà triée
@@ -33,10 +39,14 @@ export default class AutoQ12ANns2026 extends ExerciceQcmA {
     const mean2 = sum2 / 5
     const med2 = newSeries[2]
 
-    const propEqEq = 'Les moyennes des deux séries sont égales et les médianes sont égales.'
-    const propEqDiff = 'Les moyennes des deux séries sont égales et les médianes sont différentes.'
-    const propDiffEq = 'Les moyennes des deux séries sont différentes et les médianes sont égales.'
-    const propDiffDiff = 'Les moyennes des deux séries sont différentes et les médianes sont différentes.'
+    const propEqEq =
+      'Les moyennes des deux séries sont égales et les médianes sont égales.'
+    const propEqDiff =
+      'Les moyennes des deux séries sont égales et les médianes sont différentes.'
+    const propDiffEq =
+      'Les moyennes des deux séries sont différentes et les médianes sont égales.'
+    const propDiffDiff =
+      'Les moyennes des deux séries sont différentes et les médianes sont différentes.'
 
     let repCorrecte = ''
     if (mean1 === mean2 && med1 === med2) repCorrecte = propEqEq
@@ -68,7 +78,9 @@ export default class AutoQ12ANns2026 extends ExerciceQcmA {
     // On place la bonne réponse en premier, et on filtre pour les 3 autres
     this.reponses = [
       repCorrecte,
-      ...[propEqEq, propEqDiff, propDiffEq, propDiffDiff].filter(p => p !== repCorrecte)
+      ...[propEqEq, propEqDiff, propDiffEq, propDiffDiff].filter(
+        (p) => p !== repCorrecte,
+      ),
     ]
   }
 
@@ -86,21 +98,57 @@ export default class AutoQ12ANns2026 extends ExerciceQcmA {
     // Configurations pré-calculées pour garantir l'équité des 4 cas (et des moyennes rondes)
     const donnees: [number[], number[]][] = [
       // CAS A : Moyennes = et Médianes =
-      [[9, 11, 13], [10, 12]],
-      [[8, 12, 16], [10, 14]],
-      [[10, 14, 18], [12, 16]],
+      [
+        [9, 11, 13],
+        [10, 12],
+      ],
+      [
+        [8, 12, 16],
+        [10, 14],
+      ],
+      [
+        [10, 14, 18],
+        [12, 16],
+      ],
       // CAS B : Moyennes = et Médianes différentes
-      [[8, 10, 15], [11, 11]],
-      [[7, 9, 14], [10, 10]],
-      [[10, 12, 17], [13, 13]],
+      [
+        [8, 10, 15],
+        [11, 11],
+      ],
+      [
+        [7, 9, 14],
+        [10, 10],
+      ],
+      [
+        [10, 12, 17],
+        [13, 13],
+      ],
       // CAS C : Moyennes différentes et Médianes =
-      [[9, 11, 13], [10, 17]],
-      [[8, 12, 16], [11, 18]],
-      [[10, 14, 18], [12, 21]],
+      [
+        [9, 11, 13],
+        [10, 17],
+      ],
+      [
+        [8, 12, 16],
+        [11, 18],
+      ],
+      [
+        [10, 14, 18],
+        [12, 21],
+      ],
       // CAS D : Moyennes différentes et Médianes différentes
-      [[9, 11, 13], [14, 18]],
-      [[8, 12, 16], [5, 9]],
-      [[10, 14, 18], [15, 18]]
+      [
+        [9, 11, 13],
+        [14, 18],
+      ],
+      [
+        [8, 12, 16],
+        [5, 9],
+      ],
+      [
+        [10, 14, 18],
+        [15, 18],
+      ],
     ]
 
     let compteur = 0
@@ -114,6 +162,6 @@ export default class AutoQ12ANns2026 extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-     this.options = { vertical: true}
+    this.options = { vertical: true }
   }
 }

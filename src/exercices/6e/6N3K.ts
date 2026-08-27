@@ -1,6 +1,5 @@
 import CalculsFractionsSimples from '../CM2/CM2M2H-1'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Effectuer des calculs simples avec  des fractions'
 

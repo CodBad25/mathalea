@@ -24,7 +24,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Calculer et utiliser la distance entre deux points dans un repère'
 export const dateDeModifImportante = '24/04/2026'
@@ -68,7 +68,7 @@ export default class Distance extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       const variables: number[] = []
       let texte = ''

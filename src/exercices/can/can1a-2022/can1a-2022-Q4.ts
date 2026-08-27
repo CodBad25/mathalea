@@ -1,13 +1,14 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-export const titre = 'Donner l\'écriture décimale d\'une somme de puissances de 10'
+export const titre =
+  "Donner l'écriture décimale d'une somme de puissances de 10"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'h0hm9'
 export const refs = {
   'fr-fr': [],
@@ -21,9 +22,9 @@ export const refs = {
 export default class Can1a2022Q4 extends ExerciceCan {
   constructor() {
     super()
-      this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
-     this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsChampTexte = { texteAvant: '<br>' }
   }
 
   enonce(a?: number, b?: number, c?: number, d?: number, e?: number) {

@@ -1,7 +1,7 @@
 import PuissancesDunRelatif1 from '../4e/4C33-1'
 export const titre = 'Effectuer des calculs avec des puissances'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '09/05/2025'

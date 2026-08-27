@@ -20,7 +20,7 @@ import { arrondi } from '../../lib/outils/nombres'
 export const titre =
   'Recomposer un nombre décimal représenté par des fractions du cube unité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

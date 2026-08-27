@@ -6,7 +6,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Écrire une racine carrée sous la forme $\\;a\\sqrt{b}$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '01/11/2023' // Correction de l'interactivité par Rémi Angot (mathLive renvoie sqrt3 au lieu de sqrt{3})
 
 /**

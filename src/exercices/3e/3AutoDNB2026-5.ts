@@ -11,7 +11,7 @@ import Question9 from '../dnbAutomatismes/dnb-2026-06-polynesie-Q9'
 
 export const titre = 'Brevet - Polynésie - Automatismes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8de53'
 export const refs = {
   'fr-fr': ['3AutoDNB2026-5'],

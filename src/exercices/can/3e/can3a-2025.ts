@@ -2,16 +2,6 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/view.eleve.can.2025.3e.test.ts ⚠️
  */
 
-import Question1 from '../can5a-2025/can5a-2025-Q1'
-import Question2 from '../can5a-2025/can5a-2025-Q2'
-import Question3 from '../can5a-2025/can5a-2025-Q3'
-import Question4 from '../can5a-2025/can5a-2025-Q4'
-import Question5 from '../can5a-2025/can5a-2025-Q5'
-import Question6 from '../can5a-2025/can5a-2025-Q6'
-import Question7 from '../can5a-2025/can5a-2025-Q7'
-import Question8 from '../can5a-2025/can5a-2025-Q8'
-import Question9 from '../can5a-2025/can5a-2025-Q9'
-import Question10 from '../can5a-2025/can5a-2025-Q10'
 import Question11 from '../can3a-2025/can3a-2025-Q11'
 import Question12 from '../can3a-2025/can3a-2025-Q12'
 import Question13 from '../can3a-2025/can3a-2025-Q13'
@@ -32,12 +22,22 @@ import Question27 from '../can3a-2025/can3a-2025-Q27'
 import Question28 from '../can3a-2025/can3a-2025-Q28'
 import Question29 from '../can3a-2025/can3a-2025-Q29'
 import Question30 from '../can3a-2025/can3a-2025-Q30'
+import Question1 from '../can5a-2025/can5a-2025-Q1'
+import Question10 from '../can5a-2025/can5a-2025-Q10'
+import Question2 from '../can5a-2025/can5a-2025-Q2'
+import Question3 from '../can5a-2025/can5a-2025-Q3'
+import Question4 from '../can5a-2025/can5a-2025-Q4'
+import Question5 from '../can5a-2025/can5a-2025-Q5'
+import Question6 from '../can5a-2025/can5a-2025-Q6'
+import Question7 from '../can5a-2025/can5a-2025-Q7'
+import Question8 from '../can5a-2025/can5a-2025-Q8'
+import Question9 from '../can5a-2025/can5a-2025-Q9'
 
 import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN 3e sujet 2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '766ef'
 export const refs = {
   'fr-fr': ['can3a-2025'],

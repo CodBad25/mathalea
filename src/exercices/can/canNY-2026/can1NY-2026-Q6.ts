@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 export const titre = 'Écrire plus simplement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'mgcai'
 export const refs = {
   'fr-fr': [],

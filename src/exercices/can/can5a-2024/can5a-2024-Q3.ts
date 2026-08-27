@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une différence de deux entiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd63e8'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

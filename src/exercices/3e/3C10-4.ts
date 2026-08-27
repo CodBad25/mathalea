@@ -7,7 +7,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lire une puissance'
 export const interactifReady = true
-export const interactifType = 'dnd'
 export const dateDePublication = '12/11/2024'
 export const uuid = 'a9001'
 export const refs = {

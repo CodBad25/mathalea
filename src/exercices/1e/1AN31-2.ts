@@ -25,7 +25,6 @@ import Exercice from '../Exercice'
 export const titre = "Calculer la dérivée d'une fonction avec $\\mathrm{e}^x$"
 export const dateDePublication = '06/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer la dérivée d'une fonction avec exp
@@ -35,7 +34,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'e531b'
 
 export const refs = {
-  'fr-fr': ['1AN31-2','TSA3-25', 'TCA7-25'],
+  'fr-fr': ['1AN31-2', 'TSA3-25', 'TCA7-25'],
   'fr-ch': [''],
 }
 
@@ -61,7 +60,7 @@ export default class DeriveeExp1AN312 extends Exercice {
       defaut: 0,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let value = ''

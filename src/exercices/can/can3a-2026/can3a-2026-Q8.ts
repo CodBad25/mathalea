@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un prix avec une proportionnalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'mdzny'
 export const refs = {
   'fr-fr': [],

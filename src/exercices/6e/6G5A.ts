@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 export const uuid = '01875'
 export const titre = "Donner une mesure d'angle à l'aide de la bissectrice"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/08/2025'
 export const dateDeModifImportante = '05/12/2025'
 

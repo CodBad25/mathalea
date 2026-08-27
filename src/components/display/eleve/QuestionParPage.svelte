@@ -11,6 +11,7 @@
   } from '../../../lib/customElements/MathaleaCustomElement'
   import { verifQuestionCliqueFigure } from '../../../lib/customElements/CliqueFigureElement'
   import {
+    exerciceContientCliqueFigure,
     prepareExerciceCliqueFigure,
     uniformiseResults,
   } from '../../../lib/interactif/gestionInteractif'
@@ -109,15 +110,6 @@
     const exercice = exercices[indiceExercice[i]]
     let type: InteractivityType | OldFormatInteractifType | undefined =
       exercice.autoCorrection[indiceQuestionInExercice[i]]?.formatInteractif
-    if (type === undefined || type === null) {
-      const interactifType = exercice.interactifType
-      if (
-        isInteractivityType(interactifType) ||
-        isOldFormatInteractifType(interactifType)
-      ) {
-        type = interactifType
-      }
-    }
     if (type == null) {
       window.notify(
         'checkQuestion a été appelé pour un exercice non interactif',
@@ -305,7 +297,7 @@
       },
     })
     document.dispatchEvent(questionEvent)
-    if (exo && exo.interactifType === 'cliqueFigure' && exo.interactif) {
+    if (exo && exerciceContientCliqueFigure(exo) && exo.interactif) {
       prepareExerciceCliqueFigure(exo)
     }
   }

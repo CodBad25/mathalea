@@ -12,7 +12,6 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 export const titre =
   "Associer et utiliser différentes écritures d'un nombre décimal : écriture à virgule, fraction, nombre mixte, pourcentage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '09/08/2026'
 /**
@@ -42,7 +41,6 @@ export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice 
     ]
     this.sup2 = false
     this.spacingCorr = 3
-
   }
 
   nouvelleVersion() {

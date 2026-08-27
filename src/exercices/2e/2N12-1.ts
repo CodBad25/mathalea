@@ -27,7 +27,6 @@ export const dateDeModifImportante = '16/11/2025'
 export const titre =
   'Associer un intervalle de  $\\mathbb{R}$ à une inégalité et son schéma sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Stéphane Guyon
@@ -122,7 +121,7 @@ export default class IntervallesDeR extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeDeQuestion = listeTypeDeQuestions[i]
       let texte = ''
       let texteCorr = ''

@@ -3,7 +3,6 @@ import MultipleDistributivite from '../3e/3L11-3b'
 export const titre = 'Additionner des expressions à développer'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '20/02/2025'

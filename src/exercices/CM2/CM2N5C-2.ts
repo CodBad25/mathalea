@@ -1,7 +1,7 @@
 import QuestionsMasses from '../6e/6N5-2'
 export const titre = 'Résoudre des problèmes de masses'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

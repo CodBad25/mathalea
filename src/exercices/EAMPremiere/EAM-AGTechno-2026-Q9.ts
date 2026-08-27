@@ -14,7 +14,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Retrouver le tableau de signes d'une fonction"
@@ -62,7 +62,7 @@ export default class AutoQ9AGt2026 extends ExerciceQcmA {
         grilleX: { dx: 1 },
         grilleY: { dy: 1 },
       })
-      .setThickX({ xMax: sup+1, xMin: inf, dx: 1 })
+      .setThickX({ xMax: sup + 1, xMin: inf, dx: 1 })
       .setThickY({
         yMax: yMaxRep,
         yMin: yMinRep,
@@ -116,7 +116,7 @@ export default class AutoQ9AGt2026 extends ExerciceQcmA {
       },
     ]
     const s = spline(noeuds)
-    
+
     const largeurPremiereColonne = 2 // Première colonne
     const deltacl = 0.8 // Distance entre la bordure et les premiers et derniers antécédents
     const espcl = context.isHtml ? 2 : 2 // Espace entre les antécédents
@@ -248,12 +248,21 @@ export default class AutoQ9AGt2026 extends ExerciceQcmA {
     })
 
     const figure = mathalea2d(
-      { xmin: xMinRep, xmax: xMaxRep, ymin: yMinRep, ymax: yMaxRep, scale: 0.5 },
-      [repere, s.courbe({
-    color: 'red',
-    epaisseur: 1,
-    ajouteNoeuds: true,
-  })],
+      {
+        xmin: xMinRep,
+        xmax: xMaxRep,
+        ymin: yMinRep,
+        ymax: yMaxRep,
+        scale: 0.5,
+      },
+      [
+        repere,
+        s.courbe({
+          color: 'red',
+          epaisseur: 1,
+          ajouteNoeuds: true,
+        }),
+      ],
     )
     this.reponses = ['a', 'b', 'c', 'd'].map((x) => `$${x}$`)
     this.enonce = `Dans le repère ci-dessous, on a représenté la fonction $f$ définie sur l'intervalle $[${inf};${sup}]$.<br>

@@ -4,6 +4,7 @@ import { polygone, polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { homothetie } from '../../lib/2d/transformations'
+import type { AllChoicesType } from '../../lib/customElements/ListeDeroulanteElement'
 import {
   addMultiMathfield,
   type DataOptionsMultiMathfield,
@@ -12,7 +13,6 @@ import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import type { AllChoicesType } from '../../lib/customElements/ListeDeroulanteElement'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -34,7 +34,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Mettre un problème en équation et le résoudre'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '04/04/2022'
 export const dateDeModifImportante = '02/08/2026'

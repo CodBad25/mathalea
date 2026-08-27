@@ -1,12 +1,12 @@
-import ExerciceCan from '../../ExerciceCan'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
+import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Trouver la moitié d\'un nombre (QCM)'
+export const titre = "Trouver la moitié d'un nombre (QCM)"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'fd416'
 export const refs = {
   'fr-fr': [],
@@ -19,16 +19,14 @@ export const refs = {
 */
 
 export default class Can2026CE1Q1 extends ExerciceCan {
- enonce(nbre?: number, moitie?:number, prop2?: number, prop3?:number) {
-    if (nbre == null||moitie==null||prop2==null||prop3==null) {
+  enonce(nbre?: number, moitie?: number, prop2?: number, prop3?: number) {
+    if (nbre == null || moitie == null || prop2 == null || prop3 == null) {
       nbre = choice([30, 50, 70, 90])
       moitie = nbre / 2
-     prop2 = moitie -10
-     prop3 = moitie +10
+      prop2 = moitie - 10
+      prop3 = moitie + 10
     }
-    
-   
-    
+
     this.question = `Entoure la moitié de $${nbre}$.`
     this.autoCorrection[0] = {
       enonce: this.question,
@@ -46,7 +44,7 @@ export default class Can2026CE1Q1 extends ExerciceCan {
           statut: false,
         },
       ],
-    options: { vertical: !context.isHtml }
+      options: { vertical: !context.isHtml },
     }
     this.formatInteractif = 'qcm'
     const monQcm = propositionsQcm(this, 0)
@@ -60,6 +58,6 @@ export default class Can2026CE1Q1 extends ExerciceCan {
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(70, 35,15,25) : this.enonce()
+    this.canOfficielle ? this.enonce(70, 35, 15, 25) : this.enonce()
   }
 }

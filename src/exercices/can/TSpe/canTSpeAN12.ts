@@ -17,7 +17,7 @@ export const titre = 'Résoudre des inéquations du type a^x<b'
 export const dateDePublication = '4/5/2024'
 export const uuid = 'ce764'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['canTSpeAN12'],
   'fr-ch': [],
@@ -60,7 +60,7 @@ export default class ExerciceCalculsDeLog extends Exercice {
       defaut: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // on déclare les objets A et B qui servent à définir a et b
       let A: { base: number; exp: number }
       let B: { base: number; exp: number }

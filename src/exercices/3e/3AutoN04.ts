@@ -7,7 +7,6 @@ export const titre =
   "Prendre un tiers, un quart ou un cinquième d'un nombre donné"
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '05/12/2025'
 

@@ -4,7 +4,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Somme de nombre relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f0cad'
 export const refs = {
   'fr-fr': [],

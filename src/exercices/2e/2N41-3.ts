@@ -11,7 +11,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Lier calcul avec des puissances de 10 et les préfixes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '09/09/2023'
 export const dateDePublication = '05/02/2021'
 
@@ -59,7 +59,7 @@ export default class ConversionsPuissancesDe10 extends Exercice {
     let exposantReponse
 
     let correctionDetail
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = choice(
         [
           arrondi(randint(1, 9) + randint(1, 9) / 10),

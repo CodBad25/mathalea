@@ -40,7 +40,7 @@ export const refs = {
   'fr-ch': ['9FA4A-4'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Choisir le bon diagramme circulaire'

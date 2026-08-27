@@ -36,7 +36,7 @@ import Question9 from '../can6a-2026/can6a-2026-Q9'
 
 export const titre = 'CAN 6e sujet 2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '098c5'
 export const refs = {
   'fr-fr': ['can6a-2026'],

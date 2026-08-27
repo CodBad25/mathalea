@@ -10,8 +10,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { boutonReponsePredefinie } from '../../lib/interactif/boutonReponsePredefinie'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
@@ -20,7 +20,7 @@ import {
 export const titre =
   'Factoriser un polynôme du second degré avec racines entières'
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const dateDeModifImportante = '9/10/2024'
 
 /**

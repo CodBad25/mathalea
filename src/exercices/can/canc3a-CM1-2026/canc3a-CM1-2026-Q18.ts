@@ -4,9 +4,9 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Calculer la moitié d\'un nombre '
+export const titre = "Calculer la moitié d'un nombre "
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '51fac'
 export const refs = {
   'fr-fr': [],
@@ -18,18 +18,18 @@ export const refs = {
 
 */
 export default class Can2026CM1Q18 extends ExerciceCan {
-  constructor () {
+  constructor() {
     super()
     this.optionsChampTexte = { texteAvant: '<br>' }
     this.optionsDeComparaison = {
-      nombreDecimalSeulement: true
+      nombreDecimalSeulement: true,
     }
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
-  enonce (n?: number) {
+  enonce(n?: number) {
     if (n == null) {
-      n = choice([80, 100, 120, 140,  160, 180])
+      n = choice([80, 100, 120, 140, 160, 180])
     }
 
     this.reponse = texNombre(n / 2, 0)
@@ -41,9 +41,7 @@ export default class Can2026CM1Q18 extends ExerciceCan {
     this.canReponseACompleter = ''
   }
 
-  nouvelleVersion () {
-    this.canOfficielle || this.sup
-      ? this.enonce(120)
-      : this.enonce()
+  nouvelleVersion() {
+    this.canOfficielle || this.sup ? this.enonce(120) : this.enonce()
   }
 }

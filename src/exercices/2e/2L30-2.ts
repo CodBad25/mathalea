@@ -1,8 +1,8 @@
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -25,7 +25,7 @@ export const titre =
   "Utiliser les propriétés de conservation du sens d'une inégalité"
 export const dateDePublication = '14/02/2023'
 export const dateDeModifImportante = '07/04/2026'
-export const interactifType = ['multiMathfield', 'mathLive']
+
 export const interactifReady = true
 
 /**
@@ -75,7 +75,7 @@ export default class ProprietesInegalites extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number

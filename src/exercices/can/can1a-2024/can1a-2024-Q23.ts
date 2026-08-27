@@ -8,7 +8,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 
 export const titre = 'Résoudre une inéquation'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f0f67'
 /**
  * @author Gilles Mora

@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Utiliser la distributivité pour du calcul mental'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '26/11/2022'

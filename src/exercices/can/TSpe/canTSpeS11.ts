@@ -1,15 +1,14 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Raisonnement par récurrence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '19/02/2025'
 
 export const uuid = '667d6'
 export const refs = {
-  'fr-fr': [''],// exo déréférencé - Pose problème de rigueur - Stéphane Guyon
+  'fr-fr': [''], // exo déréférencé - Pose problème de rigueur - Stéphane Guyon
   'fr-ch': [],
 }
 

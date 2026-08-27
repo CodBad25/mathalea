@@ -5,7 +5,7 @@ import { texNombre, texPrix } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Déterminer le prix en fonction d’un tarif proportionnel'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'h66n9'
 export const refs = {
   'fr-fr': [],

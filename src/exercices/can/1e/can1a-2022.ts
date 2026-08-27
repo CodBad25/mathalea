@@ -32,7 +32,7 @@ import Question9 from '../can1a-2022/can1a-2022-Q9'
 
 export const titre = 'CAN Première sujet 2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '779b0'
 export const refs = {
   'fr-fr': ['can1a-2022'],

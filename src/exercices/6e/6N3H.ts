@@ -10,7 +10,7 @@ export const titre = 'Compléter les égalités entre fractions simples'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '27/08/2025'
 // Enoncés plus explicites avec la multiplication écrite pour le calcul intermédiaire (donc suppression de la correction personnalisée avec un callback)
 
@@ -244,9 +244,6 @@ export default class EgalitesEntreFractions extends Exercice {
             } else {
               texte = `$${a} ${context.isDiaporama ? '' : `=${stringTexFraction('\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')}`} =${stringTexFraction('\\ldots', d)}$`
             }
-            if (this.interactif && this.interactifType !== 'mathLive') {
-              texte = `$${a} = \\ldots$`
-            }
             texteCorr = `$${a} = \\dfrac{${a}}{1} =${stringTexFraction(a + miseEnEvidence('\\times' + d), '1' + miseEnEvidence('\\times' + d))} = ${stringTexFraction(c, d)}$`
             if (context.isAmc) {
               this.autoCorrection[i] = {}
@@ -295,9 +292,6 @@ export default class EgalitesEntreFractions extends Exercice {
                 champ2: { value: String(d) },
                 champ3: { value: String(d) },
               })
-            }
-            if (this.interactif && this.interactifType !== 'mathLive') {
-              texte = `$${a} = \\ldots$`
             }
             texteCorr = `$${a} = \\dfrac{${a}}{1} =${stringTexFraction(a + miseEnEvidence('\\times' + d), '1' + miseEnEvidence('\\times' + d))} = ${stringTexFraction(c, d)}$`
             if (context.isAmc) {

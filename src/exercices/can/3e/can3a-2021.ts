@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { demiDroite } from '../../../lib/2d/DemiDroite'
@@ -18,6 +17,7 @@ import {
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import Hms from '../../../modules/Hms'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -30,7 +30,7 @@ import type FractionEtendue from '../../../modules/FractionEtendue'
 
 export const titre = 'CAN 3e sujet 2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '30/03/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 

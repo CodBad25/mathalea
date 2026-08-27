@@ -18,7 +18,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const titre =
   "Construire un point à partir d'une égalité vectorielle sur une grille"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '17/08/2024'
 
 /** Construire un point à partir d'une égalité vectorielle sur une grille

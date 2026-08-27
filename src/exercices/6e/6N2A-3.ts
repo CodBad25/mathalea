@@ -22,7 +22,7 @@ export const dateDePublication = '28/01/2026'
 export const dateDeModifImportante = '27/03/2026'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 /**

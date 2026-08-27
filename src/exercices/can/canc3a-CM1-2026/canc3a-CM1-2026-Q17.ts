@@ -1,4 +1,3 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -7,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer la longueur d'un segment par comparaison"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '317bd'
 export const refs = {
   'fr-fr': [],
@@ -19,7 +18,7 @@ export const refs = {
 
 */
 export default class Can2025CM1Q17 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
@@ -28,8 +27,18 @@ export default class Can2025CM1Q17 extends ExerciceCan {
     }
   }
 
- enonce(nbKilos?: number, prixTotal?: number, nbKilosDemandes?: number, fruit?: string) {
-    if (nbKilos == null || prixTotal == null || nbKilosDemandes == null || fruit == null) {
+  enonce(
+    nbKilos?: number,
+    prixTotal?: number,
+    nbKilosDemandes?: number,
+    fruit?: string,
+  ) {
+    if (
+      nbKilos == null ||
+      prixTotal == null ||
+      nbKilosDemandes == null ||
+      fruit == null
+    ) {
       fruit = choice(['pommes', 'poires', 'pêches', 'cerises'])
       do {
         const k = choice([2, 3, 4, 5])
@@ -38,13 +47,12 @@ export default class Can2025CM1Q17 extends ExerciceCan {
         prixTotal = k * randint(2, 6)
       } while (prixTotal === nbKilos)
     }
-    const resultat = prixTotal * nbKilosDemandes / nbKilos
+    const resultat = (prixTotal * nbKilosDemandes) / nbKilos
 
     this.reponse = texNombre(resultat, 0)
     this.question = `$${texNombre(nbKilos, 0)}\\text{ kg}$ de ${fruit} coûtent $${texNombre(prixTotal, 0)}$ €.<br>
     Combien coûtent $${texNombre(nbKilosDemandes, 0)}\\text{ kg}$ de ${fruit} ?`
 
-    
     const rapport = nbKilos / nbKilosDemandes
 
     this.correction = `Pour passer de $${texNombre(nbKilos, 0)}\\text{ kg}$ à $${texNombre(nbKilosDemandes, 0)}\\text{ kg}$, on divise par $${texNombre(rapport, 0)}$.<br>

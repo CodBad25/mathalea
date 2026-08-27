@@ -1,7 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -20,7 +20,7 @@ export const titre = 'Multiplier deux entiers grâce à la distributivité'
 export const dateDePublication = '10/01/2026'
 // export const dateDeModifImportante = '04/01/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Développer des expressions de simple distributivité à l'aide d'un tableau de  multiplication
  * @author Jean-claude Lhote
@@ -64,7 +64,7 @@ export default class TableSimpleDistributivite extends Exercice {
       defaut: 3,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nbChiffres = nbChiffresSecondFacteur[i]
 
       const chiffres = shuffle(rangeMinMax(1, 9)).slice(0, nbChiffres)

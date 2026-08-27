@@ -3,7 +3,7 @@ export const titre = 'Parcourir un labyrinthe de multiples'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '30/03/2023'
 export const uuid = '40ae0'
 export const refs = {

@@ -20,7 +20,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const titre =
   'Convertir $1\\text{ m}^2$ en $\\text{dm}^2$ ou $1\\text{ dm}^2$ en $\\text{cm}^2$ et inversement'
 export const dateDePublication = '30/07/2025'

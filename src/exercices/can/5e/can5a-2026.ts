@@ -3,6 +3,7 @@
  */
 
 import Question1 from '../can3a-2026/can3a-2026-Q1'
+import Question10 from '../can3a-2026/can3a-2026-Q10'
 import Question2 from '../can3a-2026/can3a-2026-Q2'
 import Question3 from '../can3a-2026/can3a-2026-Q3'
 import Question4 from '../can3a-2026/can3a-2026-Q4'
@@ -11,7 +12,6 @@ import Question6 from '../can3a-2026/can3a-2026-Q6'
 import Question7 from '../can3a-2026/can3a-2026-Q7'
 import Question8 from '../can3a-2026/can3a-2026-Q8'
 import Question9 from '../can3a-2026/can3a-2026-Q9'
-import Question10 from '../can3a-2026/can3a-2026-Q10'
 import Question11 from '../can5a-2026/can5a-2026-Q11'
 import Question12 from '../can5a-2026/can5a-2026-Q12'
 import Question13 from '../can5a-2026/can5a-2026-Q13'
@@ -37,7 +37,7 @@ import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN 5e sujet 2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6fcba'
 export const refs = {
   'fr-fr': ['can5a-2026'],

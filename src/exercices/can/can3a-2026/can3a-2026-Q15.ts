@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une expression avec un carré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1pwa0'
 export const refs = {
   'fr-fr': [],

@@ -4,10 +4,9 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomF } from '../../../lib/outils/Personne'
-import { randint } from '../../../modules/outils'
 export const titre = 'Trouver une année'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'r2s5h'
 export const refs = {
   'fr-fr': [],

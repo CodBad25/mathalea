@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Numeration et ordre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '76efb'
 export const refs = {
   'fr-fr': [],

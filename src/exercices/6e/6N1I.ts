@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre = 'Comparer des nombres décimaux'
 export const amcReady = true
 export const amcType = 'AMCOpen'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 
 /**

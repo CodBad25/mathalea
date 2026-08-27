@@ -6,9 +6,8 @@ import MathaleaCustomElement, {
 /**
  * Élément d'ancrage d'une question `custom` réhébergée par un méta-exercice.
  *
- * Un exercice `interactifType = 'custom'` corrige lui-même ses questions via
- * `correctionInteractive(i)` : il n'a pas de custom element pour le faire à sa
- * place. Quand `MetaExerciceCan` agrège un tel exercice comme une question
+ * Certains exercices corrigent eux-mêmes leurs questions via
+ * `correctionInteractive(i)`. Quand `MetaExerciceCan` agrège un tel exercice
  * parmi d'autres, il faut pourtant que le moteur générique (barème, bouton
  * « Vérifier », vue CAN, question par page) sache la corriger comme n'importe
  * quelle autre.
@@ -176,6 +175,76 @@ export class MetaCustomElement extends MathaleaCustomElement {
       ),
       '',
     )
+  }
+}
+
+/**
+ * Raccorde les questions qui reposent encore uniquement sur
+ * `exercice.correctionInteractive(i)` au dispatch des MathaleaCustomElement.
+ * Les questions qui déclarent déjà un format moderne restent intactes.
+ */
+export function attachExerciseCustomCallbacks(exercice: IExercice): void {
+  if (
+    exercice.interactif !== true ||
+    typeof exercice.correctionInteractive !== 'function'
+  ) {
+    return
+  }
+  const numeroExercice = exercice.numeroExercice ?? 0
+  const localQuestionIndexes =
+    exercice.listeQuestions.length > 0
+      ? exercice.listeQuestions.map((_, i) => i)
+      : exercice.question != null
+        ? [0]
+        : []
+  const goodAnswers = (exercice as IExercice & { goodAnswers?: unknown[] })
+    .goodAnswers
+  const pointsMax =
+    Array.isArray(goodAnswers) && goodAnswers.length > 0
+      ? goodAnswers.length
+      : 1
+
+  for (const localIndex of localQuestionIndexes) {
+    const questionIndex = localIndex + (exercice.indexQuestionHote ?? 0)
+    const format = exercice.autoCorrection[localIndex]?.formatInteractif
+    if (
+      format != null &&
+      format !== 'custom' &&
+      format !== MetaCustomElement.elementTag
+    ) {
+      continue
+    }
+    const callbackKey = MetaCustomElement.keyFor(numeroExercice, questionIndex)
+    MetaCustomElement.registerCallback(callbackKey, {
+      exercice,
+      run: (i) => exercice.correctionInteractive!(i),
+      pointsMax,
+    })
+    exercice.autoCorrection[localIndex] = {
+      ...(exercice.autoCorrection[localIndex] ?? {}),
+      formatInteractif: MetaCustomElement.elementTag,
+    }
+    const anchor = MetaCustomElement.create({
+      numeroExercice,
+      questionIndex,
+      callbackKey,
+      pointsMax,
+    })
+    if (exercice.listeQuestions.length > 0) {
+      if (
+        !exercice.listeQuestions[localIndex].includes(
+          `<${MetaCustomElement.elementTag}`,
+        )
+      ) {
+        exercice.listeQuestions[localIndex] += anchor
+      }
+    } else {
+      exercice.formatInteractif = MetaCustomElement.elementTag
+      const question = String(exercice.question ?? '')
+      if (!question.includes(`<${MetaCustomElement.elementTag}`)) {
+        exercice.question = question + anchor
+      }
+    }
   }
 }
 

@@ -25,7 +25,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 
 export const titre = 'Course aux nombres CM1'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

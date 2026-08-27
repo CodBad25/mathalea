@@ -4,14 +4,14 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees } from '../../lib/2d/textes'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { arrondi } from '../../lib/outils/nombres'
 import {
   lireFormulaireComplexe,
   serialiseFormulaireComplexe,
   valeursParDefaut,
   type FormulaireComplexe,
 } from '../../lib/formulaireComplexe'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { arrondi } from '../../lib/outils/nombres'
 import Exercice from '../Exercice'
 
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -26,7 +26,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const titre =
   'Résoudre graphiquement une inéquation avec une fonction de référence'
 export const dateDePublication = '14/02/2023'

@@ -14,7 +14,6 @@ export const titre =
   'Résoudre des inéquations produit avec la fonction exponentielle'
 export const dateDePublication = '23/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résoudre des inéquations produit avec des exponentielles, sans logarithme.
@@ -24,7 +23,7 @@ export const interactifType = 'mathLive'
 export const uuid = '61ed3'
 
 export const refs = {
-  'fr-fr': ['1AN30-6','TSA3-24', 'TCA7-24'],
+  'fr-fr': ['1AN30-6', 'TSA3-24', 'TCA7-24'],
   'fr-ch': [''],
 }
 
@@ -338,7 +337,7 @@ export default class InequationsProduitExponentielles extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(-8, 8, 0)
       const b = randint(-6, 6)
       const c = randint(-8, 8, 0)

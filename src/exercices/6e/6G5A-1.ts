@@ -19,7 +19,7 @@ export const uuid = '91875'
 export const titre =
   "Donner une mesure d'angle à l'aide de la bissectrice (tableau)"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '31/09/2025'
 
 export const refs = {

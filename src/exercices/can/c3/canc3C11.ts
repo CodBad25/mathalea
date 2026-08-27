@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer la moitié d’un nombre impair'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '13/09/2022'

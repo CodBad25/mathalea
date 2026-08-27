@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Comparer deux périmètres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7d7ee'
 export const refs = {
   'fr-fr': [],

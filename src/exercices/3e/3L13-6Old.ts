@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre des problèmes en utilisant une équation'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '12/01/2026'
 

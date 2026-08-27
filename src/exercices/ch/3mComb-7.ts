@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre = 'Dénombrer des nombres avec contraintes sur les chiffres'
 export const dateDePublication = '05/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'brt23'
 export const refs = {
   'fr-fr': [],
@@ -63,7 +63,7 @@ export default class NombresContraintes extends Exercice {
       shuffle: true,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = 0

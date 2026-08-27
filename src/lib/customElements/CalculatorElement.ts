@@ -1,4 +1,7 @@
-import ce from '../interactif/comparisonFunctions'
+import { context } from '../../modules/context'
+import { latexCalculator } from '../calculatrice/latexCalculator'
+import ce, { fonctionComparaison } from '../interactif/comparisonFunctions'
+import type { IExercice, OptionsComparaisonType } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -13,7 +16,19 @@ import MathaleaCustomElement, {
  * <my-calculator broken-keys="*,5"></my-calculator>
  * @author Jean-Claude Lhote
  */
-class CalculatorElement extends MathaleaCustomElement {
+export type CalculatorOptions = {
+  id?: string
+  brokenKeys?: string[]
+  limitedKeys?: Array<{ key: string; limit: number }>
+  interactivityOn?: boolean
+}
+
+export type CalculatorCreateOptions = CalculatorOptions & {
+  numeroExercice?: number
+  questionIndex?: number
+}
+
+export class CalculatorElement extends MathaleaCustomElement {
   static readonly elementTag = 'my-calculator'
 
   private fullText: string = '0' // Texte complet affiché
@@ -23,6 +38,7 @@ class CalculatorElement extends MathaleaCustomElement {
   private keyUsageCount: Map<string, number> = new Map() // Compteur d'utilisations par touche
   private keyUsageLimit: Map<string, number> = new Map() // Limite d'utilisations par touche
   private linkedInput: HTMLInputElement | null = null
+  private lastResult = ''
 
   private buttons = [
     { label: '←', value: 'left', type: 'navigation' },
@@ -51,8 +67,9 @@ class CalculatorElement extends MathaleaCustomElement {
   ]
 
   connectedCallback() {
+    this.hydrateCommonAttributes()
     this.render()
-    this.addKeyboardSupport()
+    if (this.interactivityOn) this.addKeyboardSupport()
     this.appendContextElementsFromId()
   }
 
@@ -61,6 +78,7 @@ class CalculatorElement extends MathaleaCustomElement {
   }
 
   private keyboardHandler = (e: KeyboardEvent) => {
+    if (!this.interactivityOn) return
     // Empêcher le comportement par défaut pour certaines touches
     if (['ArrowLeft', 'ArrowRight', 'Enter'].includes(e.key)) {
       e.preventDefault()
@@ -139,7 +157,7 @@ class CalculatorElement extends MathaleaCustomElement {
 
   private appendContextElementsFromId() {
     const id = this.getAttribute('id') || ''
-    const match = id.match(/^CalculatriceEx(\d+)Q(\d+)$/)
+    const match = id.match(/^(?:Calculatrice|my-calculator)Ex(\d+)Q(\d+)$/)
     if (!match) return
 
     const exercice = match[1]
@@ -203,7 +221,7 @@ class CalculatorElement extends MathaleaCustomElement {
               class="calc-btn btn-${this.getBtnClass(btn.type)}"
               data-value="${btn.value}"
               data-type="${btn.type}"
-              ${isBroken ? 'disabled' : ''}
+              ${isBroken || !this.interactivityOn ? 'disabled' : ''}
               ${isBroken ? 'data-broken="true"' : ''}
             >
               ${btn.label}
@@ -439,6 +457,7 @@ class CalculatorElement extends MathaleaCustomElement {
       })
 
       this.fullText = resultStr
+      this.lastResult = resultStr
       this.cursorPosition = resultStr.length
       this.updateDisplay()
       if (this.linkedInput) {
@@ -456,6 +475,8 @@ class CalculatorElement extends MathaleaCustomElement {
     this.fullText = '0'
     this.cursorPosition = 1
     this.history = [] // Vider l'historique
+    this.lastResult = ''
+    if (this.linkedInput) this.linkedInput.value = ''
 
     // Réinitialiser les compteurs d'utilisation des touches limitées
     this.keyUsageCount.clear()
@@ -765,6 +786,120 @@ class CalculatorElement extends MathaleaCustomElement {
     return [...this.history] // Retourner une copie pour éviter les modifications externes
   }
 
+  get value(): string {
+    return this.lastResult
+  }
+
+  set value(nextValue: unknown) {
+    const value = nextValue == null ? '' : String(nextValue)
+    this.lastResult = value
+    this.fullText = value || '0'
+    this.cursorPosition = this.fullText.length
+    if (this.linkedInput) this.linkedInput.value = value
+    this.updateDisplay()
+  }
+
+  protected onInteractivityChanged(isOn: boolean): void {
+    if (isOn) this.addKeyboardSupport()
+    else this.removeKeyboardSupport()
+    this.querySelectorAll<HTMLButtonElement>('.calc-btn').forEach((button) => {
+      const value = button.dataset.value ?? ''
+      const reachedLimit =
+        this.keyUsageLimit.has(value) &&
+        (this.keyUsageCount.get(value) ?? 0) >=
+          (this.keyUsageLimit.get(value) ?? 0)
+      button.disabled =
+        !isOn || button.dataset.broken === 'true' || reachedLimit
+    })
+  }
+
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
+    const id = `${CalculatorElement.elementTag}Ex${exercice.numeroExercice}Q${questionIndex}`
+    const calculator = document.getElementById(id) as CalculatorElement | null
+    if (calculator == null) {
+      return {
+        isOk: false,
+        feedback: 'Calculatrice introuvable dans la question.',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+
+    const answer = calculator.value
+    exercice.answers ??= {}
+    exercice.answers[calculator.id] = answer
+
+    const expected = exercice.autoCorrection?.[questionIndex]?.valeur?.reponse
+    if (expected == null) {
+      return {
+        isOk: false,
+        feedback: 'Réponse attendue absente de l’autocorrection.',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+    const compare = expected.compare ?? fonctionComparaison
+    const expectedValues = Array.isArray(expected.value)
+      ? expected.value
+      : [expected.value]
+    let feedback = ''
+    const isOk = expectedValues.some((value) => {
+      const result = compare(
+        answer,
+        String(value),
+        expected.options as OptionsComparaisonType | undefined,
+      )
+      feedback ||= result.feedback ?? ''
+      return result.isOk
+    })
+
+    calculator.interactivityOn = false
+    const resultSpan = document.querySelector(
+      `#resultatCheckEx${exercice.numeroExercice}Q${questionIndex}`,
+    )
+    if (resultSpan != null) resultSpan.innerHTML = isOk ? '😎' : '☹️'
+    const feedbackDiv = document.querySelector(
+      `#feedbackEx${exercice.numeroExercice}Q${questionIndex}`,
+    )
+    if (feedbackDiv != null) feedbackDiv.innerHTML = isOk ? '' : feedback
+
+    return {
+      isOk,
+      feedback: isOk ? '' : feedback,
+      score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+    }
+  }
+
+  static create({
+    id,
+    numeroExercice = 0,
+    questionIndex = 0,
+    brokenKeys = [],
+    limitedKeys = [],
+    interactivityOn = true,
+  }: CalculatorCreateOptions = {}): string {
+    const computedId =
+      id ??
+      `${CalculatorElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
+    if (context.isTypst) {
+      return `<mathalea-typst>${renderCalculatorTypst(brokenKeys)}</mathalea-typst>`
+    }
+    if (!context.isHtml) return latexCalculator(brokenKeys)
+    return super.create({
+      id: computedId,
+      brokenKeys: brokenKeys.join(','),
+      limitedKeys: limitedKeys
+        .map(({ key, limit }) => `${key}:${limit}`)
+        .join(','),
+      interactivityOn,
+    })
+  }
+
   set brokenKeys(keys: string[]) {
     this.setAttribute('broken-keys', keys.join(','))
     this.render()
@@ -789,6 +924,62 @@ class CalculatorElement extends MathaleaCustomElement {
       return { key, limit: parseInt(limit, 10) }
     })
   }
+}
+
+function renderCalculatorTypst(brokenKeys: string[]): string {
+  const broken = new Set(brokenKeys)
+  const buttons = [
+    ['←', 'left'],
+    ['→', 'right'],
+    ['(', '('],
+    [')', ')'],
+    ['x²', '^2'],
+    ['7', '7'],
+    ['8', '8'],
+    ['9', '9'],
+    ['÷', '/'],
+    ['4', '4'],
+    ['5', '5'],
+    ['6', '6'],
+    ['×', '*'],
+    ['1', '1'],
+    ['2', '2'],
+    ['3', '3'],
+    ['−', '-'],
+    ['0', '0'],
+    ['.', '.'],
+    ['+/-', 'negate'],
+    ['+', '+'],
+    ['EXE', '='],
+  ]
+  const cells = buttons
+    .map(([label, value]) => {
+      const fill = broken.has(value) ? 'luma(230)' : 'white'
+      const textFill = broken.has(value) ? 'gray' : 'black'
+      return `box(width: 16mm, height: 9mm, fill: ${fill}, stroke: .5pt, radius: 1.5pt, align(center + horizon, text(fill: ${textFill})[${label}]))`
+    })
+    .join(',\n')
+  return `#box(fill: luma(245), stroke: .8pt, radius: 3pt, inset: 4pt)[
+  #box(width: 70mm, height: 10mm, fill: luma(220), stroke: .5pt, align(right + horizon)[0])
+  #v(3pt)
+  #grid(columns: (1fr, 1fr, 1fr, 1fr), gutter: 2pt, ${cells})
+]`
+}
+
+export function addCalculator(
+  exercice: IExercice,
+  questionIndex: number,
+  options: CalculatorOptions = {},
+): string {
+  exercice.autoCorrection ??= []
+  exercice.autoCorrection[questionIndex] ??= {}
+  exercice.autoCorrection[questionIndex].formatInteractif =
+    CalculatorElement.elementTag
+  return CalculatorElement.create({
+    ...options,
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
+  })
 }
 
 // Enregistrer le Web Component (uniquement si pas déjà défini)

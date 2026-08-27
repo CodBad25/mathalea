@@ -15,7 +15,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre =
   'Convertir des heures décimales en heures/minutes et inversement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '08/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 /**
  * @author Jean-claude Lhote & Gilles Mora

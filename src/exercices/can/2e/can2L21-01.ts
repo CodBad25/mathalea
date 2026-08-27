@@ -9,7 +9,7 @@ import { abs } from '../../../lib/outils/nombres'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation $\\dfrac{x+a}{b}=c$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '04/03/2022'
 
 /**
@@ -26,8 +26,8 @@ export const refs = {
 export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
   constructor() {
     super()
- this.optionsChampTexte = { texteAvant: '<br>' }
- this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsChampTexte = { texteAvant: '<br>' }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.typeExercice = 'simple'
     this.nbQuestions = 1
   }
@@ -63,7 +63,7 @@ export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
         this.reponse = b * c - a
         break
     }
-    
+
     this.canEnonce = this.question // 'Compléter'
     this.canReponseACompleter = ''
   }

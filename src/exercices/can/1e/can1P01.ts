@@ -11,7 +11,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre = 'Écrire une probabilité avec les notations'
 export const dateDePublication = '21/07/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *

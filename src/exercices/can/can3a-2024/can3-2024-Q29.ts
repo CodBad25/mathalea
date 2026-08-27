@@ -11,7 +11,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Compléter un schéma avec un nombre '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4dc1d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

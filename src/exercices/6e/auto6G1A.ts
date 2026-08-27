@@ -30,7 +30,6 @@ export const titre = 'Tracer des droites, segments, ...'
 export const dateDePublication = '05/10/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '20/09/2024'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Fonction générale pour construire des segments, droites et demi-droites

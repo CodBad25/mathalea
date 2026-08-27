@@ -164,7 +164,7 @@
                 icon="bx-printer text-3xl"
                 tooltip="Imprimer"
                 disabled={isExercisesListEmpty}
-                on:click={() => handleExport('a4')}
+                on:click={() => handleExport('typst')}
               />
             </div>
           {/if}

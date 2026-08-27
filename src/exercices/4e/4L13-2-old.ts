@@ -2,7 +2,7 @@ import ProblemesEnEquation from '../3e/3L13-3'
 export const titre =
   'Mettre un problème en équation et le résoudre (ancienne version)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

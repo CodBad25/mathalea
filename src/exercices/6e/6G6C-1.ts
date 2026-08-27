@@ -1,7 +1,7 @@
 import ConstructibiliteDesTriangles from '../5e/_Constructibilite_des_triangles'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

@@ -3,7 +3,7 @@ import ComparerAvecFctRef from './can2F3-06_old'
 export const titre =
   'Comparer deux nombres avec la fonction racine carrée (année de transition)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '18/08/2026'
 export const uuid = 'd28c9'
 export const refs = { 'fr-fr': ['can2F22-09'], 'fr-ch': [] }

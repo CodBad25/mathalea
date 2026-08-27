@@ -17,7 +17,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Calculer les coordonnées d'un point à partir d'une égalité vectorielle"
 export const dateDePublication = '12/06/2023'

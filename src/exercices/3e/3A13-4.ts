@@ -2,7 +2,6 @@ import APartirDeDivisionsEuclidiennes from '../6e/6N2K-4'
 export const titre = "Indiquer une égalité à partir d'une division euclidienne"
 
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const dateDePublication = '14/09/2022'
 

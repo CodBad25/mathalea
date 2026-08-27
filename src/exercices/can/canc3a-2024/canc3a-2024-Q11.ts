@@ -1,16 +1,16 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver le plus grand nombre'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '74ad3'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

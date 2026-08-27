@@ -32,7 +32,6 @@ export const dateDeModifImportante = '24/12/2025'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 type AngleParams = { O: number; A: number }
 type AnglesSecantesResult = {
@@ -188,7 +187,7 @@ export default class ExercicesAnglesAIC extends Exercice {
       shuffle: true,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       // Boucle principale où i+1 correspond au numéro de la question
       let exercice: { texte: string; texteCorr: string } = {
         texte: '',
@@ -217,12 +216,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               randint(-90, 0),
               randint(-90, 0),
             )
-          } while (
-            !(
-              abs(param.O - abs(param.A)) > 30 &&
-              abs(param.O - abs(param.B)) > 30
-            )
-          )
+          } while (!(
+            abs(param.O - abs(param.A)) > 30 && abs(param.O - abs(param.B)) > 30
+          ))
           const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
             homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
@@ -352,13 +348,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             })
 
             ab = createVariables(randint(0, 3), randint(0, 3))
-          } while (
-            !(
-              ab.a !== ab.b &&
-              (ab.a !== 2 || ab.b !== 0) &&
-              (ab.a !== 3 || ab.b !== 1)
-            )
-          )
+          } while (!(
+            ab.a !== ab.b &&
+            (ab.a !== 2 || ab.b !== 0) &&
+            (ab.a !== 3 || ab.b !== 1)
+          ))
 
           const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
@@ -634,13 +628,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             })
 
             ab = createVariables(randint(0, 3), randint(0, 3))
-          } while (
-            !(
-              ab.a !== ab.b &&
-              (ab.a !== 2 || ab.b !== 0) &&
-              (ab.a !== 3 || ab.b !== 1)
-            )
-          )
+          } while (!(
+            ab.a !== ab.b &&
+            (ab.a !== 2 || ab.b !== 0) &&
+            (ab.a !== 3 || ab.b !== 1)
+          ))
 
           const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
@@ -943,15 +935,13 @@ export default class ExercicesAnglesAIC extends Exercice {
               randint(-90, 90),
               randint(-90, 90),
             )
-          } while (
-            !(
-              param.O - param.A > 40 &&
-              param.O - param.A < 140 &&
-              param.O - param.B > 30 &&
-              param.O - param.B < 140 &&
-              abs(param.B - param.A) < 20
-            )
-          )
+          } while (!(
+            param.O - param.A > 40 &&
+            param.O - param.A < 140 &&
+            param.O - param.B > 30 &&
+            param.O - param.B < 140 &&
+            abs(param.B - param.A) < 20
+          ))
 
           const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
@@ -1178,15 +1168,13 @@ export default class ExercicesAnglesAIC extends Exercice {
               randint(-90, 90),
               randint(-90, 90),
             )
-          } while (
-            !(
-              param.O - param.A > 40 &&
-              param.O - param.A < 140 &&
-              param.O - param.B > 30 &&
-              param.O - param.B < 140 &&
-              abs(param.B - param.A) < 20
-            )
-          )
+          } while (!(
+            param.O - param.A > 40 &&
+            param.O - param.A < 140 &&
+            param.O - param.B > 30 &&
+            param.O - param.B < 140 &&
+            abs(param.B - param.A) < 20
+          ))
 
           const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
@@ -1368,13 +1356,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             })
 
             ab = createVariables(randint(0, 3), randint(0, 3))
-          } while (
-            !(
-              ab.a !== ab.b &&
-              (ab.a !== 2 || ab.b !== 0) &&
-              (ab.a !== 3 || ab.b !== 1)
-            )
-          )
+          } while (!(
+            ab.a !== ab.b &&
+            (ab.a !== 2 || ab.b !== 0) &&
+            (ab.a !== 3 || ab.b !== 1)
+          ))
 
           const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
@@ -1699,13 +1685,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             })
 
             ab = createVariables(randint(0, 3), randint(0, 3))
-          } while (
-            !(
-              ab.a !== ab.b &&
-              (ab.a !== 2 || ab.b !== 0) &&
-              (ab.a !== 3 || ab.b !== 1)
-            )
-          )
+          } while (!(
+            ab.a !== ab.b &&
+            (ab.a !== 2 || ab.b !== 0) &&
+            (ab.a !== 3 || ab.b !== 1)
+          ))
 
           const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(

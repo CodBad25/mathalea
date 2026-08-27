@@ -25,7 +25,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Travailler un sujet de synthèse avec la fonction exponentielle'
 export const interactifReady = false
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/12/2025'
 export const dateDeModifImportante = '23/01/2026'
 
@@ -73,7 +73,7 @@ export default class EtudeCompleteFonctionExponentielle extends Exercice {
       }).map(Number),
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a: number
       let b: number
       let m: number

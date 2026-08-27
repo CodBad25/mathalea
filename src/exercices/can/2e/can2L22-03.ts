@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import FactoriserIdentitesRemarquables2 from '../../2e/2L22-2'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre des équations avec un carré'
 export const dateDePublication = '22/02/2025'
 /**

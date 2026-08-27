@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Calculer une évolution en pourcentages, une valeur finale ou une valeur initiale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/01/2022'
 export const dateDeModifImportante = '04/10/2025'
 

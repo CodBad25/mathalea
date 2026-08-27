@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Écrire une fraction sur 100 puis sous la forme d'un pourcentage"
 export const interactifReady = true
-export const interactifType = ['custom', 'mathLive']
+
 export const dateDePublication = '06/02/2021'
 export const dateDeModifImportante = '03/04/2024'
 
@@ -75,7 +75,6 @@ export default class FractionVersPourcentage extends Exercice {
       }
       percenti = Math.round((num * 100) / den)
       if (this.sup === 1) {
-        this.interactifType = 'custom'
         if (this.interactif) {
           texte = remplisLesBlancs(
             this,
@@ -101,10 +100,9 @@ export default class FractionVersPourcentage extends Exercice {
             champ3: { value: String(percenti) },
             champ4: { value: String(percenti) },
           },
-          { formatInteractif: 'custom', digits: 3, decimals: 0 },
+          { formatInteractif: 'meta-custom', digits: 3, decimals: 0 },
         )
       } else {
-        this.interactifType = 'mathLive'
         texte = `$\\dfrac{${percenti}}{100}= $${context.isHtml && this.interactif ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' %' }) : '$\\ldots\\ldots\\%$'}`
         texteCorr = `$\\dfrac{${texNombre(percenti, 0)}}{100}=${texNombre(percenti, 0)}~\\%$`
         handleAnswers(

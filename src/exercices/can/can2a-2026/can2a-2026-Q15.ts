@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Calculer une puissance en utilisant les propriétés des exposants'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'idi01'
 export const refs = {
   'fr-fr': [],

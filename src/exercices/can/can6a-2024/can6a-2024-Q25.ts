@@ -1,14 +1,14 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
+import { texNombre } from '../../../lib/outils/texNombre'
 
 export const titre = 'Encadrer un décimal par deux entiers consécutifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ffbe9'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -5,6 +5,7 @@ import { context } from '../../../modules/context'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -12,11 +13,10 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une abscisse'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd734a'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

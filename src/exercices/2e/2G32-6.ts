@@ -1,24 +1,24 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
+import { choice } from '../../lib/outils/arrayOutils'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+  rienSi1,
+} from '../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
+import { pgcd } from '../../lib/outils/primalite'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import {
-  ecritureAlgebrique,
-  ecritureParentheseSiNegatif,
-  rienSi1,
-} from '../../lib/outils/ecritures'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import {
-  miseEnEvidence,
-  texteEnCouleurEtGras,
-} from '../../lib/outils/embellissements'
-import { pgcd } from '../../lib/outils/primalite'
-import { choice } from '../../lib/outils/arrayOutils'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const titre = "Montrer qu'un point appartient ou non à une droite"
 export const dateDePublication = '20/04/2026'
 
@@ -50,9 +50,19 @@ export default class PtSurDroiteEqCartesienne extends Exercice {
 
   nouvelleVersion() {
     this.autoCorrection = []
-    this.besoinFormulaireTexte = ['Type de question (nombres séparés par des tirets)','1: Le point appartient à la droite\n2: Le point n\'appartient pas à la droite\n3: Mélange']
-    const listeTypeDeQuestion = gestionnaireFormulaireTexte({saisie: this.sup, min:1, max: 2, melange:3, defaut: 3, nbQuestions: this.nbQuestions}).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    this.besoinFormulaireTexte = [
+      'Type de question (nombres séparés par des tirets)',
+      "1: Le point appartient à la droite\n2: Le point n'appartient pas à la droite\n3: Mélange",
+    ]
+    const listeTypeDeQuestion = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 2,
+      melange: 3,
+      defaut: 3,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nomPt = choice([
         'A',
         'B',
@@ -156,7 +166,7 @@ export default class PtSurDroiteEqCartesienne extends Exercice {
         case 2:
           texteCorr += `\\neq 0$ <br>L'équation n'est pas vérifiée, donc  $${miseEnEvidence(nomPt)}$ ${texteEnCouleurEtGras("n'appartient pas à la droite ")}$ ${miseEnEvidence('(d)')}$.<br>`
           break
-            }
+      }
 
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte

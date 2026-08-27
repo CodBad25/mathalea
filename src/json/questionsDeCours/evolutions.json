@@ -1,0 +1,52 @@
+{
+  "questions": [
+    {
+      "themes": "Évolutions",
+      "level": "2",
+      "id": "evo2q",
+      "type":"qcm",
+      "title": "Taux de variation (QCM)",
+      "question": "Quel est le taux de variation de la quantité V entre l'état $V_1$ et l'état $V_2$ ?",
+      "answer": ["$t_{1\\rightarrow 2}=\\dfrac{V_2-V_1}{V_1}$"],
+      "correction":"Le taux de variation mesure la variation absolue $V_2-V_1$ ramené en proportion de la valeur de départ $V_1$.",
+      "badPropositions": 
+        ["$t_{1\\rightarrow 2}=\\dfrac{V_2}{V_1}$",
+         "$t_{1\\rightarrow 2}=\\dfrac{V_2-V_1}{V_2}$",
+         "$t_{1\\rightarrow 2}=\\dfrac{V_1}{V_2}$"]
+    },
+    {
+      "themes": "Évolutions",
+      "level": "2",
+      "id": "evo2",
+      "title": "Taux de variation",
+      "question": "Quel est le taux de variation de la quantité V entre l'état $V_1$ et l'état $V_2$ ?",
+      "answer": ["\\dfrac{V_2-V_1}{V_1}"],
+      "correction":"Le taux de variation mesure la variation absolue $V_2-V_1$ ramené en proportion de la valeur de départ $V_1$.",
+      "keys": ["V", "INDICE"]
+    },
+    {
+      "themes": "Évolutions",
+      "level": "2",
+      "id": "evo3",
+      "title": "Conversion CM - Taux de variation",
+      "question": "Quel est le taux de variation t d'une évolution de coefficient multiplicateur CM ?",
+      "answer": ["CM-1","t=CM-1"],
+      "correction":"Comme $CM = 1+t$, on a $t=CM-1$.",
+      "keys": ["CM","t"]
+    },
+    {
+      "themes": "Évolutions",
+      "level": "2",
+      "id": "evo3q",
+      "type":"qcm",
+      "title": "Conversion CM - Taux de variation (QCM)",
+      "question": "Quel est le taux de variation t d'une évolution de coefficient multiplicateur CM ?",
+      "answer": ["$t=CM-1$"],
+      "correction":"Comme $CM = 1+t$, on a $t=CM-1$.",
+      "badPropositions": 
+        ["$t=1+CM$",
+         "$t=\\dfrac{1}{CM}$",
+         "$t=1-CM$"]
+    }
+    ]
+}

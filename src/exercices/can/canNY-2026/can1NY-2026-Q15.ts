@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Donner le nombre de solutions d'une équation"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'pz2gi'
 export const refs = {
   'fr-fr': [],

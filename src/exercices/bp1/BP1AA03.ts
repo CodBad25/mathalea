@@ -1,7 +1,7 @@
 import CalculerTermesSuiteArithmetiqueGeometrique from '../1e/1AL11-4'
 export const titre = "Calculer les termes d'une suite arithmétique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

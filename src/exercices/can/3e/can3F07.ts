@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -9,12 +8,12 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Lire graphiquement une fonction affine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '25/10/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 

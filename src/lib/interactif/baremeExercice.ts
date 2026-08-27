@@ -112,19 +112,9 @@ export function pointsMaxQuestion(exercice: IExercice, i: number): number {
 export function pointsMaxExercice(exercice?: IExercice | null): number {
   if (exercice == null) return 0
   if (!Array.isArray(exercice.autoCorrection)) return 0
-  const nbQuestions =
-    exercice.interactifType === 'custom'
-      ? Math.max(exercice.autoCorrection.length, exercice.nbQuestions ?? 0)
-      : exercice.autoCorrection.length
+  const nbQuestions = exercice.autoCorrection.length
   let total = 0
   for (let i = 0; i < nbQuestions; i++) {
-    if (
-      exercice.autoCorrection[i] == null &&
-      exercice.interactifType === 'custom'
-    ) {
-      total++
-      continue
-    }
     total += pointsMaxQuestion(exercice, i)
   }
   return total

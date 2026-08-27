@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
 import { PointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -7,11 +6,12 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer la longueur d'un contour"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '86c44'
 export const refs = {
   'fr-fr': [],

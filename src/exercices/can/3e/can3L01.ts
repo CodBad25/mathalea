@@ -2,7 +2,7 @@ import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $ax=b$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

@@ -9,7 +9,10 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { abs, arrondi, signe } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -20,10 +23,9 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Travailler un sujet de synthèse la fonction logarithme'
+export const titre = 'Travailler un sujet de synthèse la fonction logarithme'
 export const interactifReady = false
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '19/04/2026'
 
 export const uuid = 'c541a'
@@ -37,8 +39,6 @@ export const refs = {
   'fr-ch': [],
 }
 
-
-
 export default class EtudeCompleteFonctionLogarithmeAffine extends Exercice {
   constructor() {
     super()
@@ -51,9 +51,9 @@ export default class EtudeCompleteFonctionLogarithmeAffine extends Exercice {
         '2 : Calcul de la dérivée',
         '3 : Étude de variations',
         '4 : Étude de la convexité',
-        '5 : Déterminer les éventuels points d\'inflexion',
-        '6 : Résolution de l\'équation $f(x)=0$',
-                '7 : Toutes les questions',
+        "5 : Déterminer les éventuels points d'inflexion",
+        "6 : Résolution de l'équation $f(x)=0$",
+        '7 : Toutes les questions',
       ].join('\n'),
     ]
     this.sup = '7'
@@ -73,17 +73,15 @@ export default class EtudeCompleteFonctionLogarithmeAffine extends Exercice {
       }).map(Number),
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let b: number
-      
 
       const a = randint(-5, 5, 0)
       const k = -Math.sign(a) * randint(2, 5)
       const abscisseExtremum = new FractionEtendue(-k, a)
       const x0 = abscisseExtremum.valeurDecimale
       const seuil = k - k * Math.log(x0) // abscisse de l'extrémum de f(x) = ax + b + k ln(x)
-// f(x0) = b - seuil On doit donc s'assurer que b - seuil est de signe opposé à a pour que f(x)=0 admette des solutions.
+      // f(x0) = b - seuil On doit donc s'assurer que b - seuil est de signe opposé à a pour que f(x)=0 admette des solutions.
       if (a > 0) {
         b = Math.floor(seuil) - randint(1, 3)
       } else {
@@ -107,7 +105,6 @@ export default class EtudeCompleteFonctionLogarithmeAffine extends Exercice {
       const { root: x1 } = brent(f, borneGauche, x0, 1e-10, 200)
       const { root: x2 } = brent(f, x0, borneDroite, 1e-10, 200)
 
-     
       const questions: string[] = []
       const corrections: string[] = []
 
@@ -123,26 +120,28 @@ export default class EtudeCompleteFonctionLogarithmeAffine extends Exercice {
             case 1: {
               question +=
                 ' Étudier les limites de la fonction $f$ en $0$ et en $+\\infty$.'
-const corr1a =`On a : $\\displaystyle\\lim_{x\\to 0^+} ${reduireAxPlusB(a,b)}= ${b}$.<br> D'autre part, on sait que $\\displaystyle\\lim_{x\\to 0^+}\\ln(x)= -\\infty$ 
+              const corr1a = `On a : $\\displaystyle\\lim_{x\\to 0^+} ${reduireAxPlusB(a, b)}= ${b}$.<br> D'autre part, on sait que $\\displaystyle\\lim_{x\\to 0^+}\\ln(x)= -\\infty$ 
     
                   donc $\\displaystyle\\lim_{x\\to 0^+}${k}\\ln(x)= ${signe(-k)}\\infty$.<br>
                   Par somme, $${miseEnEvidence('\\displaystyle\\lim_{x\\to 0^+} f(x)=' + signe(-k) + '\\infty')}$.`
-                
 
-               let corr1b =`On a : $\\displaystyle\\lim_{x\\to +\\infty} ${reduireAxPlusB(a,b)}= ${signe(a)}\\infty$.<br>`
-               corr1b +=   `D'autre part, on sait que $\\displaystyle\\lim_{x\\to +\\infty}\\ln(x)= +\\infty$ <br>
+              let corr1b = `On a : $\\displaystyle\\lim_{x\\to +\\infty} ${reduireAxPlusB(a, b)}= ${signe(a)}\\infty$.<br>`
+              corr1b += `D'autre part, on sait que $\\displaystyle\\lim_{x\\to +\\infty}\\ln(x)= +\\infty$ <br>
                     donc $\\displaystyle\\lim_{x\\to +\\infty}${k}\\ln(x)= ${signe(k)}\\infty$.<br>`
-                  if (a*k > 0) {corr1b +=`On déduit par somme que $\\displaystyle\\lim_{x\\to +\\infty} f(x)= ${signe(k)}\\infty$.<br>`}
-                  else {corr1b +=`Nous observons une forme indéterminée du type $+\\infty - \\infty$. <br>
+              if (a * k > 0) {
+                corr1b += `On déduit par somme que $\\displaystyle\\lim_{x\\to +\\infty} f(x)= ${signe(k)}\\infty$.<br>`
+              } else {
+                corr1b += `Nous observons une forme indéterminée du type $+\\infty - \\infty$. <br>
                     Pour la lever, on factorise l'expression par $x$.<br>
                     Soit $x\\in ]0; +\\infty[$,<br> $\\begin{aligned}
                     f(x)&= ${reduireAxPlusB(a, b)} + ${k}\\ln(x)\\\\
                     &= x\\left(${a} + \\dfrac{${b}}{x} + \\dfrac{${k}\\ln(x)}{x}\\right)
                     \\end{aligned}
                     $<br>
-                    Or, $\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{${b}}{x}=0$ et ${texteEnCouleurEtGras('par croissance comparée','black')}, $\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{\\ln(x)}{x}=0$.<br>
+                    Or, $\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{${b}}{x}=0$ et ${texteEnCouleurEtGras('par croissance comparée', 'black')}, $\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{\\ln(x)}{x}=0$.<br>
                     Ainsi, $\\displaystyle\\lim_{x\\to +\\infty} \\left(${a} + \\dfrac{${b}}{x} + \\dfrac{${k}\\ln(x)}{x}\\right)=${a}$. Finalement, par produit,
-                    $${miseEnEvidence('\\displaystyle\\lim_{x\\to +\\infty} f(x)=' + signe(a) + '\\infty')}$.`}
+                    $${miseEnEvidence('\\displaystyle\\lim_{x\\to +\\infty} f(x)=' + signe(a) + '\\infty')}$.`
+              }
 
               correction += createList({
                 style: 'fleches',
@@ -160,7 +159,7 @@ const corr1a =`On a : $\\displaystyle\\lim_{x\\to 0^+} ${reduireAxPlusB(a,b)}= $
               &=\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(k)}}{x}
               \\end{aligned}$.<br>
               Ainsi, pour tout $x>0$, $${miseEnEvidence(`f'(x)=\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(k)}}{x}.`)}$<br>`
-               correction += corr2
+              correction += corr2
               break
             }
             case 3: {
@@ -188,22 +187,25 @@ const corr1a =`On a : $\\displaystyle\\lim_{x\\to 0^+} ${reduireAxPlusB(a,b)}= $
                       20,
                       '-/$-\\infty$',
                     ]
-                  
+
               question += ` Dresser le tableau de variations de la fonction $f$ sur $]0; +\\infty[$.`
               let corr3 = `Pour tout $x>0$, le signe de $f'(x)=\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(k)}}{x}$ est celui du numérateur
               $${rienSi1(a)}x${ecritureAlgebrique(k)}$.<br>
               On résout :<br>`
-if (a > 0) {corr3 += `
+              if (a > 0) {
+                corr3 += `
               $\\begin{aligned}
              &${rienSi1(a)}x${ecritureAlgebrique(k)}>0\\\\
               \\iff&${rienSi1(a)}x>${-k}\\\\
               \\iff&x>${abscisseExtremum.texFractionSimplifiee}
-              \\end{aligned}$<br>`}
-              else {corr3 += `              $\\begin{aligned}
+              \\end{aligned}$<br>`
+              } else {
+                corr3 += `              $\\begin{aligned}
              &${rienSi1(a)}x${ecritureAlgebrique(k)}>0\\\\
               \\iff&${rienSi1(a)}x>${-k}\\\\
               \\iff&x<${abscisseExtremum.texFractionSimplifiee}
-              \\end{aligned}$<br>`}
+              \\end{aligned}$<br>`
+              }
               if (a > 0) {
                 corr3 += `
                 Ainsi, $f'(x)>0$ pour $x>${abscisseExtremum.texFractionSimplifiee}$ et
@@ -212,7 +214,8 @@ if (a > 0) {corr3 += `
                 corr3 += `Ainsi, $f'(x)>0$ pour $x<${abscisseExtremum.texFractionSimplifiee}$ et
                 $f'(x)<0$ pour $x>${abscisseExtremum.texFractionSimplifiee}$.<br>`
               }
-            corr3 += 'On en déduit alors le tableau de variations de la fonction $f$ :<br>'
+              corr3 +=
+                'On en déduit alors le tableau de variations de la fonction $f$ :<br>'
               corr3 += tableauDeVariation({
                 tabInit: [
                   [
@@ -236,47 +239,59 @@ if (a > 0) {corr3 += `
                 hauteurLignes: [30, 30, 30],
               })
               corr3 += `<br>La fonction $f$ admet donc un extremum en $x_0=${abscisseExtremum.texFractionSimplifiee}$,`
-              if (x0===1) {
+              if (x0 === 1) {
                 corr3 += ` qui vaut $f(1)=${texNombre(extremum)}$.`
-              }
-               else
-              corr3 += ` qui vaut environ $f(${abscisseExtremum.texFractionSimplifiee})\\approx ${texNombre(arrondi(extremum, 1))}$.`
+              } else
+                corr3 += ` qui vaut environ $f(${abscisseExtremum.texFractionSimplifiee})\\approx ${texNombre(arrondi(extremum, 1))}$.`
               correction += corr3
               break
             }
             case 4: {
               question += ` Étudier la convexité de la fonction $f$.`
-              let corr4= `Pour tout $x>0$, la fonction $f$ est deux fois dérivable. Pour étudier sa convexité, on étudie le signe de sa dérivée seconde :<br>
+              let corr4 = `Pour tout $x>0$, la fonction $f$ est deux fois dérivable. Pour étudier sa convexité, on étudie le signe de sa dérivée seconde :<br>
               On a $f'(x)=${a}${signe(k)}\\dfrac{${abs(k)}}{x}$ donc $f''(x)=\\dfrac{${-k}}{x^2}$.<br>`
               if (k > 0) {
                 corr4 += `Donc $f''(x)<0$ sur $]0; +\\infty[$.<br>
-                La fonction $f$ est donc ${texteEnCouleurEtGras('concave')} sur $]0; +\\infty[$.<br>`}
-              
-                else {   corr4 += `Donc  $f''(x)>0$ sur $]0; +\\infty[$.<br>La fonction $f$ est donc ${texteEnCouleurEtGras('convexe')} sur $]0; +\\infty[$.<br>`}
-            correction += corr4
-                break}
-               case 5: {
-              question += ` Déterminer les éventuels points d'inflexion de la courbe représentative de $f$.`
-               let corr5 = `Pour déterminer les points d'inflexion, on étudie les changements de signes de la dérivée seconde.<br> Or, $f''(x)=\\dfrac{${-k}}{x^2}$ ne s'annule jamais et est de signe constant sur $]0; +\\infty[$.<br>`
-              
-              corr5 += `Ainsi, la courbe représentative de $f$ n'admet ${texteEnCouleurEtGras('pas de point d\'inflexion')}.`
-               correction += corr5
-               break
+                La fonction $f$ est donc ${texteEnCouleurEtGras('concave')} sur $]0; +\\infty[$.<br>`
+              } else {
+                corr4 += `Donc  $f''(x)>0$ sur $]0; +\\infty[$.<br>La fonction $f$ est donc ${texteEnCouleurEtGras('convexe')} sur $]0; +\\infty[$.<br>`
               }
-             
+              correction += corr4
               break
-            
+            }
+            case 5:
+              {
+                question += ` Déterminer les éventuels points d'inflexion de la courbe représentative de $f$.`
+                let corr5 = `Pour déterminer les points d'inflexion, on étudie les changements de signes de la dérivée seconde.<br> Or, $f''(x)=\\dfrac{${-k}}{x^2}$ ne s'annule jamais et est de signe constant sur $]0; +\\infty[$.<br>`
+
+                corr5 += `Ainsi, la courbe représentative de $f$ n'admet ${texteEnCouleurEtGras("pas de point d'inflexion")}.`
+                correction += corr5
+                break
+              }
+
+              break
+
             case 6: {
               const natureExtremum = a > 0 ? 'minimum' : 'maximum'
-              const variationGauche = a > 0 ? 'strictement décroissante' : 'strictement croissante'
-              const variationDroite = a > 0 ? 'strictement croissante' : 'strictement décroissante'
+              const variationGauche =
+                a > 0 ? 'strictement décroissante' : 'strictement croissante'
+              const variationDroite =
+                a > 0 ? 'strictement croissante' : 'strictement décroissante'
               const limZero = k > 0 ? '-\\infty' : '+\\infty'
               const limInf = a > 0 ? '+\\infty' : '-\\infty'
-              const intervalle1 = a > 0 ? `]0; ${abscisseExtremum.texFractionSimplifiee}[` : `[${abscisseExtremum.texFractionSimplifiee}; +\\infty[`
-              const intervalle2 = a > 0 ? `[${abscisseExtremum.texFractionSimplifiee}; +\\infty[` : `]0; ${abscisseExtremum.texFractionSimplifiee}[`  
-              const image1 = a > 0 ? `\\left[f\\left(${abscisseExtremum.texFractionSimplifiee}\\right);+\\infty\\right[` : `\\left]-\\infty; f\\left(${abscisseExtremum.texFractionSimplifiee}\\right)\\right]`
-              
-              
+              const intervalle1 =
+                a > 0
+                  ? `]0; ${abscisseExtremum.texFractionSimplifiee}[`
+                  : `[${abscisseExtremum.texFractionSimplifiee}; +\\infty[`
+              const intervalle2 =
+                a > 0
+                  ? `[${abscisseExtremum.texFractionSimplifiee}; +\\infty[`
+                  : `]0; ${abscisseExtremum.texFractionSimplifiee}[`
+              const image1 =
+                a > 0
+                  ? `\\left[f\\left(${abscisseExtremum.texFractionSimplifiee}\\right);+\\infty\\right[`
+                  : `\\left]-\\infty; f\\left(${abscisseExtremum.texFractionSimplifiee}\\right)\\right]`
+
               question += `Déterminer, en justifiant,  le nombre de solution(s) de l'équation $f(x)=0$, puis donner, à aide de la calculatrice les valeurs approchées de chacune d'elles.<br>
               On donnera le cas échéant, les solutions approchées au centième près.`
               let corr6 = `D'après l'étude précédente, la fonction $f$ admet un ${natureExtremum} en
@@ -326,4 +341,3 @@ if (a > 0) {corr3 += `
     listeQuestionsToContenu(this)
   }
 }
-

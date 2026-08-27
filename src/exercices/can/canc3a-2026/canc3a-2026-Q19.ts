@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { choice} from '../../../lib/outils/arrayOutils'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 
@@ -10,7 +10,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver le plus grand nombre (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '31b4c'
 export const refs = {
   'fr-fr': [],
@@ -22,18 +22,18 @@ export const refs = {
 
 */
 export default class Can2026CM2Q19 extends ExerciceCan {
- constructor () {
+  constructor() {
     super()
     this.formatInteractif = 'qcm'
   }
 
-  enonce (decimal?: number, num?: number, den?: number) {
+  enonce(decimal?: number, num?: number, den?: number) {
     if (decimal == null || num == null || den == null) {
       if (choice([true, false])) {
         // Cas 1 : décimal > 1 et fraction < 1
         decimal = 1 + randint(1, 9) * 0.1
         den = choice([3, 4, 5, 6, 7, 8, 9, 10])
-        num = den-1
+        num = den - 1
       } else {
         // Cas 2 : fraction > 1 et décimal < 1
         decimal = randint(1, 9) * 0.1
@@ -55,13 +55,13 @@ export default class Can2026CM2Q19 extends ExerciceCan {
       propositions: [
         {
           texte: `$${texNombre(decimal, 1)}$`,
-          statut: plusGrandEstDecimal
+          statut: plusGrandEstDecimal,
         },
         {
           texte: `$${frac.texFraction}$`,
-          statut: plusGrandEstFraction
-        }
-      ]
+          statut: plusGrandEstFraction,
+        },
+      ],
     }
     const qcm = propositionsQcm(this, 0)
     this.question += qcm.texte
@@ -83,9 +83,7 @@ export default class Can2026CM2Q19 extends ExerciceCan {
     this.canReponseACompleter = `$${texNombre(decimal, 1)}~~~~~${frac.texFraction}$`
   }
 
-  nouvelleVersion () {
-    this.canOfficielle || this.sup
-      ? this.enonce(1.3, 4, 5)
-      : this.enonce()
+  nouvelleVersion() {
+    this.canOfficielle || this.sup ? this.enonce(1.3, 4, 5) : this.enonce()
   }
 }

@@ -18,7 +18,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire des abscisses avec zoom sur l'axe"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '30/12/2025'
 
@@ -69,7 +68,7 @@ export default class GradueeZommGrdNombres extends Exercice {
       shuffle: true,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let classeDepart = 100 // choice([1, 10, 100])

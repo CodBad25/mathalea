@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Diviser par 5'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '17db4'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

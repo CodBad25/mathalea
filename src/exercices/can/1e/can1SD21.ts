@@ -1,3 +1,4 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -6,12 +7,11 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { abs } from '../../../lib/outils/nombres'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
 export const titre = 'Reconnaitre une fonction polynôme du second degré (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '24/09/2022'
 /**
  *
@@ -36,7 +36,7 @@ export default class ReconnaitreFonctionDegre2 extends Exercice {
   nouvelleVersion() {
     const nomF = [['f'], ['g'], ['h'], ['u'], ['v'], ['w'], ['r']]
     let nom, choix
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let monQcm = { texte: '', texteCorr: '' }

@@ -8,7 +8,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 
 export const titre = 'Placer la virgule dans un produit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '050b3'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -40,13 +40,12 @@ export default class PlaceVirguleProduit extends ExerciceSimple {
       facteur2 = randint(3, 9)
     }
     const resultatEntier = facteur1 * facteur2
-    this.question =
-      `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$, complète :`
+    this.question = `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$, complète :`
     this.question += `  $${texNombre(facteur1 / coeff, 3)}\\times ${texNombre(facteur2, 0)}=$`
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }
-    this.canEnonce=   `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$, complète :`
+    this.canEnonce = `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$, complète :`
     this.canReponseACompleter = `$${texNombre(facteur1 / coeff, 3)}\\times ${texNombre(facteur2, 0)}=\\ldots$`
     this.reponse = texNombre(resultatEntier / coeff, 3)
     const coeffInverse = new Decimal(1).div(coeff)

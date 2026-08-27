@@ -10,18 +10,18 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   doubleDeveloppement,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Additionner des expressions à développer'
 export const dateDePublication = '03/02/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 

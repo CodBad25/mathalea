@@ -1,13 +1,13 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Reconnaitre deux événements indépendants'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'd23db'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

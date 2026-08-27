@@ -17,7 +17,7 @@ function degCos(deg: number): number {
 }
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/06/2021'
 export const dateDeModifImportante = '18/09/2024'
 export const titre = 'Arrondir une racine carrée'

@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Comparer une fraction avec $1$ ou $\\dfrac12$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/07/2025'
 /**
  * @author Éric Elter

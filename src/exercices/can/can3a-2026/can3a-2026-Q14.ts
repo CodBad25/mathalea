@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer la moyenne de cinq nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7jkqc'
 export const refs = {
   'fr-fr': [],

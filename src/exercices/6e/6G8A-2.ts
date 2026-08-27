@@ -7,7 +7,6 @@ import Exercice from '../Exercice'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = "Trouver le nom d'un solide par ses caractéristiques"
 export const uuid = '95371'

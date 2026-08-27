@@ -6,7 +6,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une somme de nombres avec des unités'
 export const dateDePublication = '05/11/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Gilles Mora

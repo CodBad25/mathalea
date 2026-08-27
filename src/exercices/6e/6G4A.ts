@@ -30,7 +30,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Nommer un angle'
-export const interactifType = ['qcm', 'mathLive']
+
 export const interactifReady = true
 export const amcType = 'AMCHybride'
 export const amcReady = true
@@ -70,7 +70,6 @@ export default class NommerUnAngle extends Exercice {
   }
 
   nouvelleVersion() {
-    this.interactifType = this.sup2 === 2 ? 'mathLive' : 'qcm'
     let propositionsDuQcm = []
     for (
       let i = 0,
@@ -413,7 +412,7 @@ export default class NommerUnAngle extends Exercice {
         )
         if (
           (this.interactif || context.isAmc) &&
-          this.interactifType === 'qcm'
+          this.sup2 !== 2
         ) {
           texteAMC = 'Choisir tous les angles qui peuvent nommer'
         } else {
@@ -437,12 +436,12 @@ export default class NommerUnAngle extends Exercice {
             )
           : `${couleurRemplissageAngle[1]}`
         texteAMC +=
-          (this.interactif || context.isAmc) && this.interactifType === 'qcm'
+          (this.interactif || context.isAmc) && this.sup2 !== 2
             ? '.'
             : `${sp()}?`
         texte += this.sup > 1 ? `${jj === 0 ? '' : '<br>'}${numAlpha(jj)}` : ''
         texte += texteAMC
-        if (this.interactif && this.interactifType === 'mathLive') {
+        if (this.interactif && this.sup2 === 2) {
           texte += ajouteChampTexteMathLive(
             this,
             i * this.sup + jj,
@@ -517,7 +516,7 @@ export default class NommerUnAngle extends Exercice {
             statut: false,
           },
         ]
-        if (this.interactifType === 'qcm') {
+        if (this.sup2 !== 2) {
           this.autoCorrection[i * this.sup + jj].enonce = `${texte}\n`
           this.autoCorrection[i * this.sup + jj].propositions =
             propositionsDuQcm

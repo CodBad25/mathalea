@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { cercleCentrePoint } from '../../../lib/2d/cercle'
 import { grille } from '../../../lib/2d/Grille'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -10,12 +9,13 @@ import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Associer une mesure d'angle à un  point du cercle trigonométrique "
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '31/10/2022'
 export const dateDeModifImportante = '06/11/2024'
 /**

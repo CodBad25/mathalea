@@ -1,12 +1,12 @@
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { sp } from '../../../lib/outils/outilString'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Complément à la dizaine supérieure'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ccf0d'
 export const refs = {
   'fr-fr': [],

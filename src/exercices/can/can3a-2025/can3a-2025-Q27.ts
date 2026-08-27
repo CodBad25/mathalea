@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Mltiplier astucieusement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '71b1f'
 export const refs = {
   'fr-fr': [''],

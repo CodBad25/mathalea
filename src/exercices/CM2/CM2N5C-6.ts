@@ -23,7 +23,7 @@ export const refs = {
 export const titre =
   'La bouteille (problème de conversion avec fraction simple)'
 export const dateDePublication = '30/11/2024'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 /**
  * @Author Jean-claude Lhote

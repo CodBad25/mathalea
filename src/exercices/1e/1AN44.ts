@@ -16,7 +16,7 @@ export const dateDePublication = '13/11/2025'
 export const dateDeModifImportante = '13/11/2025'
 export const uuid = '03179'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['1AN44', 'BP1GEO04'],
   'fr-ch': [],
@@ -79,7 +79,7 @@ export default class ConvDegRad extends Exercice {
       { k: 2, d: 1 }, // 2π = 360°
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Nombre de questions à changer pour cas remarquable
       let texte = ''
       let texteCorr = ''

@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = 'Comparer des images dans un tableau de variations'
 export const dateDeModifImportante = '08/09/2024'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '2f857'
 export const refs = {
   'fr-fr': ['2F41-3'],

@@ -1,6 +1,5 @@
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
-import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { choice, shuffle, shuffle4tableaux } from '../../lib/outils/arrayOutils'
 import { enumeration } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
+
 export const dateDePublication = '14/02/2026'
 
 export const titre = 'Trouver le bon programme Scratch'
@@ -90,7 +89,7 @@ export default class TrouverLeBonProgramme extends Exercice {
           : this.sup2 === 3
             ? 2000
             : 4000
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeDeProgrammes = [
         getProgrammesAvancer,
         getProgrammesTourner,
@@ -153,7 +152,7 @@ export default class TrouverLeBonProgramme extends Exercice {
       )
       const ligne2 = programmes.programmesListe
       this.autoCorrection[i] = {}
-      setCliqueFigure(this.autoCorrection[i])
+      this.autoCorrection[i].formatInteractif = 'clique-figure'
       this.autoCorrection[i].enonce = programmes.enonce
       this.autoCorrection[i].propositions = [
         {

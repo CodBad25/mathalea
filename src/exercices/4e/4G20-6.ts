@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Encadrer une racine carrée et en donner un arrondi'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

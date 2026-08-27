@@ -2,8 +2,8 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rienSi1 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 export const titre = 'Comparer deux nombres réels en calculant leur différence'
 export const dateDePublication = '16/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2b00b'
 
 export const refs = {
@@ -96,7 +96,7 @@ export default class ComparerDeuxQuotientsAvecIrrationnel extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeQuestion = typesDeQuestions[i]
       const sensComparaison = sensDesComparaisons[i]
       let k = 0
@@ -158,13 +158,11 @@ export default class ComparerDeuxQuotientsAvecIrrationnel extends Exercice {
       const constructionsPossibles = structures.flatMap((structure) =>
         Array.from({ length: 10 }, (_, indice) => indice + 1)
           .map((constanteA) => {
-            const numerateurConstanteB =
-              k + structure.numerateurB * constanteA
+            const numerateurConstanteB = k + structure.numerateurB * constanteA
             if (numerateurConstanteB % structure.numerateurA !== 0) {
               return null
             }
-            const constanteB =
-              numerateurConstanteB / structure.numerateurA
+            const constanteB = numerateurConstanteB / structure.numerateurA
             if (
               pgcd(
                 structure.numerateurA,
@@ -191,8 +189,7 @@ export default class ComparerDeuxQuotientsAvecIrrationnel extends Exercice {
         constanteA,
         constanteB,
       } = choice(constructionsPossibles)
-      const reponse: '<' | '>' =
-        sensComparaison === 'inferieur' ? '<' : '>'
+      const reponse: '<' | '>' = sensComparaison === 'inferieur' ? '<' : '>'
       const denominateurA = `${constanteA}+${termeAvecX(coefficientA, x)}`
       const denominateurB = `${constanteB}+${termeAvecX(coefficientB, x)}`
 
@@ -236,9 +233,7 @@ export default class ComparerDeuxQuotientsAvecIrrationnel extends Exercice {
       \\end{aligned}$<br>
       Les deux facteurs du dénominateur sont positifs, donc leur produit est positif. Le signe de $A-B$ est ainsi celui de $${k}-${x}$.<br>
       ${justificationSigne}<br>
-      Par conséquent, $${miseEnEvidence(
-        reponse === '<' ? 'A < B' : 'A > B',
-      )}$.`
+      Par conséquent, $${miseEnEvidence(reponse === '<' ? 'A < B' : 'A > B')}$.`
 
       if (
         this.questionJamaisPosee(

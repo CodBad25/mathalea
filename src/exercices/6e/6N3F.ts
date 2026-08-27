@@ -18,7 +18,6 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /** Savoir que la fraction peut représenter un nombre entier, un nombre décimal non entier ou un nombre non décimal
  * @author Eric Elter

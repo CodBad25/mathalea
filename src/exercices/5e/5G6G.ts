@@ -7,6 +7,7 @@ import { parallelogramme2points1hauteur } from '../../lib/2d/polygonesParticulie
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { projectionOrtho } from '../../lib/2d/transformations'
 import { milieu, pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -20,13 +21,11 @@ import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Aire du parallélogramme'
 
 export const dateDeModifImportante = '05/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Des parallélogrammes sont tracés, on connaît les 2 côtés et une hauteur.

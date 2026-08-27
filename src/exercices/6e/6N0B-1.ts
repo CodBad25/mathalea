@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 export const titre = 'Traduire des phrases en calculs et réciproquement'
 export const dateDeModifImportante = '30/06/2024' // Ajout de l'interactivité par Jean-claude Lhote
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
 
 /**
  * Mettre en relation un calcul, une traduction en français, une expression, un résultat, pour les décliner dans différents exercices.

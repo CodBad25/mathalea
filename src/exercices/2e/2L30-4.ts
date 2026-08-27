@@ -1,3 +1,4 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -6,15 +7,14 @@ import {
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
 import { abs, signe } from '../../lib/outils/nombres'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { context } from '../../modules/context'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const dateDePublication = '22/05/2023'
 export const titre =
   "Montrer qu'un nombre est ou n'est pas solution d'une inéquation"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -38,7 +38,7 @@ export default class SolInequation extends Exercice {
 
   nouvelleVersion() {
     const listeTypeDeQuestions = combinaisonListes([1, 2, 3], this.nbQuestions) //, 2, 3
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
 
       const x0 = randint(-6, 6)

@@ -16,7 +16,7 @@ import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver la longueur d'un côté de triangle rectangle"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '01/10/2023'
 
 /**

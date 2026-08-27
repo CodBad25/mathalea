@@ -26,7 +26,7 @@ import { numAlpha, sp } from '../../lib/outils/outilString'
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
-export const interactifType = 'multi-mathfield'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

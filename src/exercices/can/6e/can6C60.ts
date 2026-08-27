@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Calculer la somme ou la différence d'un entier et d'une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '06/07/2025'

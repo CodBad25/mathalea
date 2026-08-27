@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Effectuer une conversion d'unités"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ssrbd'
 export const refs = {
   'fr-fr': [],

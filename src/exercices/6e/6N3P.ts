@@ -3,6 +3,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { texteParPoint } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -13,13 +14,12 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '27/03/2024'
 export const titre =
   'Résoudre des problèmes de calcul de pourcentage par complément à 100%'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const amcReady = true
 

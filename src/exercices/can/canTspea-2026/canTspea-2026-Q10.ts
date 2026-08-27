@@ -1,13 +1,12 @@
-
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { context } from '../../../modules/context'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-export const titre = 'Déterminer la parité d\'une puissance'
+import { context } from '../../../modules/context'
+import ExerciceCan from '../../ExerciceCan'
+export const titre = "Déterminer la parité d'une puissance"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 't6gg0'
 export const refs = {
   'fr-fr': [],
@@ -17,8 +16,8 @@ export const refs = {
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
-*/export default class Can2026TermQ10 extends ExerciceCan {
-   enonce(base?: number, exposant?: number): void {
+*/ export default class Can2026TermQ10 extends ExerciceCan {
+  enonce(base?: number, exposant?: number): void {
     if (base == null || exposant == null) {
       base = choice([2, 3, 4, 5, 6, 7, 8, 9])
       exposant = 2026

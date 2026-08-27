@@ -23,7 +23,7 @@ export const titre = 'Résoudre une équation simple avec le logarithme'
 export const dateDePublication = '22/7/2024'
 export const uuid = 'f1f9d'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],
@@ -79,7 +79,7 @@ export default class EquationsLog extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map((el) => Number(el))
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte: string
       let texteCorr: string
       const fracPlusInf = new FractionEtendue(10 ** 15, 1)

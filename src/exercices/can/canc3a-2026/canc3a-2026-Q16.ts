@@ -1,4 +1,5 @@
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -6,11 +7,10 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Compléter sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
+
 export const uuid = '1c3b0'
 export const refs = {
   'fr-fr': [],
@@ -45,7 +45,7 @@ export default class Can2026CM2Q16 extends ExerciceCan {
     const d = droiteGraduee({
       Unite: 10,
       Min: min,
-      Max: max+0.1,
+      Max: max + 0.1,
       x: 0,
       y: 0,
       thickDistance: 1,
@@ -131,9 +131,9 @@ export default class Can2026CM2Q16 extends ExerciceCan {
 
   nouvelleVersion() {
     this.optionsDeComparaison = {
-      texteSansCasse: true
+      texteSansCasse: true,
     }
-     this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.formatChampTexte = KeyboardType.clavierMajuscules
     this.enonce()
   }

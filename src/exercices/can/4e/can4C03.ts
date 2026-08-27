@@ -8,7 +8,7 @@ import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Effectuer une division avec une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '17/05/2025'

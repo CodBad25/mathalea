@@ -2,7 +2,7 @@ import Transformations from '../6e/_Transformations'
 export const titre =
   "Trouver l'image d'un point par une symétrie axiale ou centrale ou par une translation"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

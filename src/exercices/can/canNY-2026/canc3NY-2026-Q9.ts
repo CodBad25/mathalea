@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Compléter une multiplication'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'mfx47'
 export const refs = {
   'fr-fr': [],
@@ -30,7 +30,9 @@ export default class ProduitACompleter2026 extends ExerciceSimple {
     const a = 2026
     const b = this.canOfficielle ? 100 : this.quotaChoice('b', [10, 100, 1000])
     const resultat = new Decimal(a).mul(b)
-    const choix = this.canOfficielle ? true : this.quotaChoice('choix', [true, false])
+    const choix = this.canOfficielle
+      ? true
+      : this.quotaChoice('choix', [true, false])
     this.reponse = texNombre(b, 3)
     this.question = "Compléter l'égalité.<br>"
 

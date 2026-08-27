@@ -99,7 +99,7 @@ export interface InterfaceReferentiel {
   id: string
   url: string
   titre: string
-  tags: { interactif: boolean; interactifType: string; amc: boolean }
+  tags: { interactif: boolean; amc: boolean }
   datePublication?: string
   dateModification?: string
   annee?: string
@@ -348,9 +348,11 @@ export type InteractivityType =
   | 'drag-and-drop' // Non compatible AMC
   | 'custom' // Non compatible AMC
   | 'meta-custom' // Non compatible AMC : question custom réhébergée par un méta-exercice
+  | 'apigeom-figure' // Non compatible AMC
   // MathaleaCustomElement
   | 'liste-deroulante' // Compatible AMC si on remplace par un qcm
   | 'my-spreadsheet' // Difficile à faire rentrer dans AMC
+  | 'my-calculator' // Non compatible AMC
   | 'MetaInteractif2d' // Difficile à faire rentrer dans AMC
   | 'meta-interactif-2d' // Difficile à faire rentrer dans AMC
   | 'svg-selection' // inadapté clairement pour AMC
@@ -397,9 +399,11 @@ export function isInteractivityType(
     value === 'drag-and-drop' ||
     value === 'custom' ||
     value === 'meta-custom' ||
+    value === 'apigeom-figure' ||
     // MathleaCustomElement
     value === 'liste-deroulante' ||
     value === 'my-spreadsheet' ||
+    value === 'my-calculator' ||
     value === 'MetaInteractif2d' ||
     value === 'meta-interactif-2d' ||
     value === 'svg-selection' ||
@@ -443,9 +447,11 @@ export function isInteractivityType(
  */
 export function isMathaleaCustomElementFormat(value: unknown): boolean {
   return (
+    value === 'apigeom-figure' ||
     value === 'meta-custom' ||
     value === 'liste-deroulante' ||
     value === 'my-spreadsheet' ||
+    value === 'my-calculator' ||
     value === 'MetaInteractif2d' ||
     value === 'meta-interactif-2d' ||
     value === 'svg-selection' ||
@@ -1096,7 +1102,6 @@ export interface IExercice {
   interactif: boolean
   interactifObligatoire: boolean
   interactifReady: boolean
-  interactifType?: string
   /**
    * Index de la question dans l'exercice affiché quand cet exercice est
    * réhébergé comme une question d'un méta-exercice (`MetaExerciceCan`) :

@@ -21,6 +21,7 @@
   } from '../../../../../lib/interactif/baremeExercice'
   import {
     exerciceAUneUniteManquante,
+    exerciceContientCliqueFigure,
     exerciceInteractif,
     prepareExerciceCliqueFigure,
   } from '../../../../../lib/interactif/gestionInteractif'
@@ -286,10 +287,7 @@
       mathaleaRenderDiv(divExercice)
       if (isInteractif) {
         await loadMathLive()
-        if (
-          exercise?.interactifType === 'cliqueFigure' &&
-          !isCorrectionVisible
-        ) {
+        if (exerciceContientCliqueFigure(exercise) && !isCorrectionVisible) {
           prepareExerciceCliqueFigure(exercise)
         }
         // Ne pas être noté sur un exercice dont on a déjà vu la correction

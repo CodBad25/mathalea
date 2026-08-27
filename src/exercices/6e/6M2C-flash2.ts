@@ -8,7 +8,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Déterminer l'aire ou le côté d'un carré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/04/2023'
 
 export const uuid = '90e79'

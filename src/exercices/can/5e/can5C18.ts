@@ -1,10 +1,9 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import Exercice from '../../Exercice'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 export const titre = 'Reconnaitre une expression numérique (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '24/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -29,7 +28,7 @@ export default class ReconnaitreExp extends Exercice {
 
   nouvelleVersion() {
     let texte, texteCorr, a, b, c, d, choix, listeFractions1, fractionR, monQcm
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
         choice([1, 2, 3, 4]) // 1
       ) {

@@ -10,7 +10,7 @@ export const dateDeModifImportante = '06/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'fb646'
 export const refs = {
   'fr-fr': ['1A-P04-1', '2A-P4-1'],

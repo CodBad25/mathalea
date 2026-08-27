@@ -9,9 +9,9 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Donner la nature d\'un quadrilatère'
+export const titre = "Donner la nature d'un quadrilatère"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '7372a'
 export const refs = {
   'fr-fr': [],
@@ -23,12 +23,12 @@ export const refs = {
 
 */
 export default class Can20266Q25 extends ExerciceCan {
-  constructor () {
+  constructor() {
     super()
     this.formatInteractif = 'qcm'
   }
 
-  enonce () {
+  enonce() {
     // Carré posé sur une pointe (rotation 45°)
     const A = pointAbstrait(0, 2)
     const B = pointAbstrait(2, 0)
@@ -45,14 +45,20 @@ export default class Can20266Q25 extends ExerciceCan {
     const objets = [carre, marques, angleA, angleB, angleC, angleD]
     const figure = mathalea2d(
       Object.assign(
-        { pixelsParCm: 20, scale: 0.7,  mainlevee: true, },
-        fixeBordures(objets, { rxmin: -0.5, rxmax: 0.5, rymin: -0.5, rymax: 0.5 })
+        { pixelsParCm: 20, scale: 0.7, mainlevee: true },
+        fixeBordures(objets, {
+          rxmin: -0.5,
+          rxmax: 0.5,
+          rymin: -0.5,
+          rymax: 0.5,
+        }),
       ),
-      objets
+      objets,
     )
 
-    this.question = `${context.isHtml ? '<u>Vrai - Faux</u><br>' : '\\underline{Vrai - Faux}<br>'}
-    Ce quadrilatère est un carré.<br>` + figure 
+    this.question =
+      `${context.isHtml ? '<u>Vrai - Faux</u><br>' : '\\underline{Vrai - Faux}<br>'}
+    Ce quadrilatère est un carré.<br>` + figure
 
     this.autoCorrection[0] = {
       enonce: this.question,
@@ -60,26 +66,29 @@ export default class Can20266Q25 extends ExerciceCan {
       propositions: [
         {
           texte: 'Vrai',
-          statut: true
+          statut: true,
         },
         {
           texte: 'Faux',
-          statut: false
-        }
-      ]
+          statut: false,
+        },
+      ],
     }
     const monQcm = propositionsQcm(this, 0)
     this.question += monQcm.texte
 
     this.correction = `Vrai. Ce quadrilatère a $4$ côtés de même longueur et $4$ angles droits : c'est bien un carré.`
 
-    this.canEnonce = `\\underline{Vrai - Faux}<br>
-    Ce quadrilatère est un carré.<br>` + figure +`
+    this.canEnonce =
+      `\\underline{Vrai - Faux}<br>
+    Ce quadrilatère est un carré.<br>` +
+      figure +
+      `
     ${texteEnCouleurEtGras('Entoure la bonne réponse', 'black')}`
     this.canReponseACompleter = 'Vrai \\quad Faux'
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.enonce()
   }
 }

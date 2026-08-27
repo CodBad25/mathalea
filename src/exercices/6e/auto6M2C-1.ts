@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer une aire en carreaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '24/04/2024'
 export const dateDeModifImportante = '31/07/2025' // Rajout de différentes unités par Éric Elter

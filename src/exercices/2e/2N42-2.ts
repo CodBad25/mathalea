@@ -3,7 +3,7 @@ export const titre =
   'Donner le résultat de nombres écrits avec des puissances de 10 en notation scientifique'
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 export const dateDePublication = '08/09/2023'
 export const uuid = '816c8'

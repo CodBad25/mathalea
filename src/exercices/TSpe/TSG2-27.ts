@@ -22,7 +22,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer la distance d'un point à un plan"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '26/01/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
@@ -49,7 +48,7 @@ export default class NomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 

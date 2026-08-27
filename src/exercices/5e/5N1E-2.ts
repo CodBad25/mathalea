@@ -17,7 +17,7 @@ export const titre = 'Écrire un nombre sous différentes formes'
 export const dateDePublication = '03/11/2024'
 export const uuid = 'aa1bd'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['5N1E-2'],
   'fr-2016': ['5C11-4'],

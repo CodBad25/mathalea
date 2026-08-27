@@ -8,13 +8,13 @@ import { factorielle, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { numAlpha } from '../../lib/outils/outilString'
 export const titre =
   'Utiliser le dénombrement et les probabilités élémentaires.'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDePublication = '21/04/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 export const uuid = '5121f'
@@ -41,7 +41,7 @@ export default class nomExercice extends Exercice {
       "Sujet inspiré d'un exercice du sujet Bac Asie Juin 2021",
       'black',
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const n = randint(7, 10) // nombre de lettres
       // On limite à 6 voyelles (a, e, i, o, u, y) et on garde au moins 3 consonnes
       const voy = randint(3, Math.min(6, n - 3)) // nombre de voyelles dans le jeu

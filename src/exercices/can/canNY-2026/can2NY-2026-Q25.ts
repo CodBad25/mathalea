@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un antécédent'
-export const interactifType = 'qcm'
+
 export const uuid = 'fj2ix'
 export const refs = {
   'fr-fr': [],

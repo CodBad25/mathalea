@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Calculer les coordonnées d’un point défini par une combinaison de vecteurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '23/11/2024'
 export const dateDeModifImportante = '24/12/2025'
 export const uuid = '8e145'
@@ -29,7 +29,7 @@ export default class ExercicePointParCombinaison extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const xA = randint(-4, 4)
       const yA = randint(-4, 4)
       const zA = randint(-4, 4)

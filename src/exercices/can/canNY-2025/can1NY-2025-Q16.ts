@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = "Trouver une intersection d'intervalles"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0244d'
 export const refs = {
   'fr-fr': [],

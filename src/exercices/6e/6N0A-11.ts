@@ -10,7 +10,6 @@ export const titre = 'Comparer deux nombres entiers'
 export const dateDePublication = '07/08/2022'
 export const dateDeModifImportante = '14/10/2024'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Comparaison de deux nombres entiers avec deux niveaux de difficulté : avec un nombre de chiffres différents et avec le même nombre de chiffres

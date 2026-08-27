@@ -14,7 +14,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDePublication = '02/05/2023'
 export const dateDeModifImportante = '06/04/2026'
 export const titre = 'Résoudre des équations avec un quotient'
@@ -57,7 +57,7 @@ export default class ResoudreEquationsQuotient extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number

@@ -1,12 +1,12 @@
+import { orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { obtenirListeFractionsIrreductibles } from '../../../lib/outils/deprecatedFractions'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
-import { orangeMathalea } from '../../../lib/colors'
 
 export const titre = 'Rendre irréductible une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -32,7 +32,10 @@ export default class FractionIrreductibleCan extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const maFraction = this.quotaChoice('maFraction', obtenirListeFractionsIrreductibles())
+    const maFraction = this.quotaChoice(
+      'maFraction',
+      obtenirListeFractionsIrreductibles(),
+    )
     const k = this.quotaChoice('k', [2, 3, 4, 5, 9, 10, 20])
     const a = k * maFraction[0]
     const b = k * maFraction[1]

@@ -2,7 +2,7 @@ import CalculerCoordonneesPointsCourbe from '../2e/2F30-2'
 export const titre =
   "Calculer l'ordonnée d'un point d'une courbe connaissant son abscisse"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

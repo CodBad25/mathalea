@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Travailler sur différentes écritures d'un nombre complexe"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9c8d5'
 export const refs = {
   'fr-fr': ['TEC3-01'],
@@ -75,7 +75,7 @@ export default class AcosOmegaTPlusBSinOmegaT extends Exercice {
       defaut: 5,
       melange: 5,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       const { a, b, A, aSurA, bSurA, phi } = listeDeValeurs[i]
       let texte = 'Soit le nombre complexe '
       let texteCorr: string

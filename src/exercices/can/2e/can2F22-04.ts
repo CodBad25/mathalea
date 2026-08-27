@@ -3,7 +3,7 @@ import ImageFonctionsRefs from '../../2e/2F22-1'
 export const titre =
   'Calculer une image avec la fonction racine carrée (année de transition)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '19/08/2026'

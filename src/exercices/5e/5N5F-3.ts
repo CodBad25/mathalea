@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Réduire une expression de la forme $ax+bx$ '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

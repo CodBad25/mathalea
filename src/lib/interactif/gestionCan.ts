@@ -16,7 +16,7 @@ export function gestionCan(exercice: IExercice) {
   context.nbBonnesReponses = 0
   context.nbMauvaisesReponses = 0
   for (let i = 0; i < exercice.nbQuestions; i++) {
-    const type = exercice.interactifType ?? ''
+    const type = exercice.autoCorrection[i]?.formatInteractif ?? ''
     const button1question = document.querySelector(
       `#boutonVerifexercice${exercice.numeroExercice}Q${i}`,
     ) as ButtonWithMathaleaListener
@@ -41,9 +41,6 @@ export function gestionCan(exercice: IExercice) {
             customElementType !== 'clique-figure'
           ) {
             resultat = verifQuestionCliqueFigure(exercice, i)
-          }
-          if (type === 'custom' && exercice.correctionInteractive) {
-            resultat = exercice.correctionInteractive(i)
           }
           if (listOfCustomElements.includes(customElementType ?? '')) {
             // On traite le cas de tous les MathaleaCustomElement ici
@@ -76,10 +73,6 @@ export function gestionCan(exercice: IExercice) {
             }
             resultat = result
           }
-          if (type === 'qcm_mathLive')
-            throw Error(
-              "qcm_mathLive ça n'existe pas comme formatInteractif, c'est qcm ou mathlive",
-            )
           // Mise en couleur du numéro de la question dans le menu du haut
           if (
             (typeof resultat === 'string' && resultat === 'OK') ||

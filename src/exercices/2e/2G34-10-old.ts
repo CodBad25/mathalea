@@ -16,7 +16,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = "[Ancien] Déterminer le point d'intersection de droites"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/04/2024'
 /**
  *
@@ -52,10 +52,7 @@ export default class IntersectionDroites extends Exercice {
 
   nouvelleVersion() {
     let typeDeQuestionsDisponibles: (
-      | 'deuxDroitesSG'
-      | 'troisDroitesSG'
-      | 'deuxDroitesHG'
-      | 'troisDroitesHG'
+      'deuxDroitesSG' | 'troisDroitesSG' | 'deuxDroitesHG' | 'troisDroitesHG'
     )[]
     if (this.sup === 1 && this.sup2 === 1) {
       typeDeQuestionsDisponibles = ['deuxDroitesSG']

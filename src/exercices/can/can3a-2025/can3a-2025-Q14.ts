@@ -5,7 +5,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Déterminer l'inverse ou l'opposé d'une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '83663'
 export const refs = {
   'fr-fr': [''],

@@ -20,7 +20,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Comprendre un algorithme itératif sur des motifs en 3D'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '10/06/2025'

@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { grille } from '../../../lib/2d/Grille'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
@@ -10,12 +9,13 @@ import { tracePoint } from '../../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une longueur sur une grille'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9f2e3'
 export const refs = {
   'fr-fr': [],

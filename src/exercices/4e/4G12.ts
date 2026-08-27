@@ -10,6 +10,7 @@ import { homothetie, translation } from '../../lib/2d/transformations'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur, type Vecteur } from '../../lib/2d/Vecteur'
 import { vide2d, type Vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { centrage, deuxColonnes } from '../../lib/format/miseEnPage'
 import { texcolors } from '../../lib/format/style'
@@ -40,11 +41,10 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { transfoPoly } from './4G12-1'
 import { CHEMINS_PREDEFINIS } from './_4G12-paths'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Trouver une série de transformations'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

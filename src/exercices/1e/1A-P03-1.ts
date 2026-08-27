@@ -14,7 +14,7 @@ export const refs = {
   'fr-ch': ['3mQCM-3'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une probabilité dans un tableau'

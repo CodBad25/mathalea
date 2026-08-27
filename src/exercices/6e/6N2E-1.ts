@@ -18,7 +18,6 @@ export const dateDeModifImportante = '08/04/2026'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Poser des multiplications de nombres décimaux'
 

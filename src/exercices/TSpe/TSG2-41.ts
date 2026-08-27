@@ -29,7 +29,6 @@ export const titre =
 
 export const dateDePublication = '28/01/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '7c2e8'
 
@@ -54,7 +53,7 @@ export default class NomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 

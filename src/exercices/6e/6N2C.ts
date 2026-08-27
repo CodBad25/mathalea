@@ -12,7 +12,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const titre = 'Diviser par 10, 100, 1 000 revient à ....'
 export const dateDePublication = '07/06/2025'
 

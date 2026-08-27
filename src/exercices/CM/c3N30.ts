@@ -2,7 +2,7 @@ import ExerciceConversions from '../6e/_Exercice_conversions'
 export const titre =
   "Conversion d'unités des préfixes k,h,da vers unité de référence"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

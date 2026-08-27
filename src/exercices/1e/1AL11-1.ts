@@ -13,7 +13,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Reconnaitre une suite arithmétique/géométrique (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '23/11/2024'
 
 /**
@@ -24,7 +24,7 @@ export const dateDePublication = '23/11/2024'
 export const uuid = '42983'
 
 export const refs = {
-  'fr-fr': ['1AL11-1', '1Gen-A201', ],
+  'fr-fr': ['1AL11-1', '1Gen-A201'],
   'fr-ch': ['autres-2'],
 }
 export default class ReconnaitreSuites extends Exercice {

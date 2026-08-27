@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre = 'Trouver double, moitié, tiers, triple'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 /**

@@ -12,7 +12,7 @@ import { arrondi } from '../../../lib/outils/nombres'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier ou diviser par 0,1 ou 0,01 ou 0,001'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '19/02/2023'

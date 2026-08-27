@@ -1,3 +1,6 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import type { LimitValue } from '../../lib/mathFonctions/lectureLimitesGraphiques'
 import {
   answerKeyboard,
   commonRepere,
@@ -10,12 +13,9 @@ import {
   texLimit,
   verticalAsymptote,
 } from '../../lib/mathFonctions/lectureLimitesGraphiques'
-import type { LimitValue } from '../../lib/mathFonctions/lectureLimitesGraphiques'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { context } from '../../modules/context'
 import {
   gestionnaireFormulaireTexte,
@@ -27,7 +27,7 @@ import Exercice from '../Exercice'
 export const titre = "Lire une limite à partir d'un graphique"
 export const dateDePublication = '04/06/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '34de8'
 export const refs = {
   'fr-fr': [],
@@ -196,7 +196,7 @@ export default class LireLimiteGraphique extends Exercice {
     const listeTypes = combinaisonListes(types, this.nbQuestions)
     const paragraphBreak = context.isHtml ? '<br>' : '\n\n'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const type = listeTypes[i]
       let texte = ''
       let texteCorr = ''

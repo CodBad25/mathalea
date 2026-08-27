@@ -7,7 +7,7 @@ import Equation3L14 from './3L14'
 import Equation3L15 from './3L15'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '13/06/2026'
 export const titre = 'Exercice de synthèse sur les équations'
 
@@ -56,7 +56,7 @@ export default class EquationMelees extends Exercice {
     const typeDifficileFor3L15 = [6, 7]
     const typeMelangeFor3L15 = [1, 3, 4, 5, 6]
     const listeExos: number[] = combinaisonListes([0, 1, 2], this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let exo: Equation3L13 | Equation3L14 | Equation3L15
       let options: OptionsComparaisonType = {}
       if (listeExos[i] === 0) {

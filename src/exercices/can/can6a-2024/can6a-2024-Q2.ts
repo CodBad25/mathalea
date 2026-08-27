@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Ajouter un nombre se finissant par 9'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c3d56'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -28,7 +28,9 @@ export default class NomExercice extends ExerciceSimple {
       a = 35
       b = 19
     } else {
-      a = this.quotaRandint('aDizaine', 3, 6) * 10 + this.quotaRandint('aUnite', 3, 8)
+      a =
+        this.quotaRandint('aDizaine', 3, 6) * 10 +
+        this.quotaRandint('aUnite', 3, 8)
       b = this.quotaRandint('bDizaine', 1, 3) * 10 + 9
     }
     this.reponse = String(a + b)

@@ -9,7 +9,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre une équation $x^2 = a$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résoudre une équation de type x²=a

@@ -26,7 +26,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Compléter un tableau de valeurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '20/02/2023'

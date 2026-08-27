@@ -12,7 +12,7 @@ export const titre = 'Encadrer un nombre relatif'
 export const dateDePublication = '25/9/2024'
 export const uuid = '4b644'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['5N2F-2'],
   'fr-2016': ['5R13-2'],

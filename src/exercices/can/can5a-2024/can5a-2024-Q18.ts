@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Calculer le volume d'un cube"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8b4a4'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -20,7 +20,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBase
-this.optionsChampTexte = { texteApres: '.' }
+    this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 
@@ -36,7 +36,7 @@ this.optionsChampTexte = { texteApres: '.' }
       reponse = a ** 3
       this.question = `Le volume d'un cube d'arête $${texNombre(a, 1)}\\text{ cm}$ est : `
       this.correction = `Le volume du cube est : $${texNombre(a, 1)}^3=${miseEnEvidence(texNombre(a ** 3, 3))}\\text{ cm}^3$`
-      this.canEnonce= `Le volume d'un cube d'arête $${texNombre(a, 1)}\\text{ cm}$ est : `
+      this.canEnonce = `Le volume d'un cube d'arête $${texNombre(a, 1)}\\text{ cm}$ est : `
     }
 
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'

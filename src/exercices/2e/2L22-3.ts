@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '13/11/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre des équations se ramenant au produit-nul'
 
 /**
@@ -58,7 +58,6 @@ export default class Equationspresqueproduitnulle extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       const a = randint(-9, 9, [-1, 0, 1]) // on évite a=1, -1 ou 0

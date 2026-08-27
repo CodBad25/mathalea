@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Calculer une somme/différence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '84a4e'
 export const refs = {
   'fr-fr': [],

@@ -5,10 +5,36 @@ import { get } from 'svelte/store'
 import { canOptions } from '../../../src/lib/stores/canStore'
 import { globalOptions } from '../../../src/lib/stores/globalOptions'
 import { context } from '../../../src/modules/context'
+import type { IExercice } from '../types'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from '../customElements/MathaleaCustomElement'
 import { setupFractionFigureIfNeeded } from './setupFractionFigure'
 
-export class ApigeomFigureElement extends HTMLElement {
+export type ApigeomVerificationResult = {
+  isOk: boolean
+  feedback: string
+  score: { nbBonnesReponses: number; nbReponses: number }
+}
+
+export type ApigeomVerificationCallback = (
+  exercice: IExercice,
+  questionIndex: number,
+  element: ApigeomFigureElement,
+) => string | string[] | ApigeomVerificationResult
+
+type ApigeomVerificationEntry = {
+  callback: ApigeomVerificationCallback
+  pointsMax: number
+}
+
+export class ApigeomFigureElement extends MathaleaCustomElement {
+  static readonly elementTag = 'apigeom-figure'
   static autoIndex = 0
+  private static readonly verificationCallbacks = new Map<
+    string,
+    ApigeomVerificationEntry
+  >()
 
   static get observedAttributes() {
     return [
@@ -25,6 +51,8 @@ export class ApigeomFigureElement extends HTMLElement {
       'interactive',
       'has-feedback',
       'id-addendum',
+      'verify-callback-name',
+      'legacy-mount',
     ]
   }
 
@@ -46,7 +74,12 @@ export class ApigeomFigureElement extends HTMLElement {
   ============================== */
 
   connectedCallback() {
+    this.hydrateCommonAttributes()
     if (!context.isHtml) return
+    // `figureApigeom()` conserve l'instance Figure de l'exercice et fournit
+    // déjà son montage différé. Dans ce mode, l'élément ne sert que de wrapper
+    // MathALÉA pour router la vérification vers correctionInteractive().
+    if (this.hasAttribute('legacy-mount')) return
     this.render()
     this.createFigure()
     this.bindEvents()
@@ -69,7 +102,7 @@ export class ApigeomFigureElement extends HTMLElement {
      Rendering
      ============================== */
 
-  private render() {
+  render(): void {
     const index = Number(this.getAttribute('index') ?? 0)
     const numeroExercice = Number(this.getAttribute('numero-exercice') ?? 0)
     const hasFeedback = this.hasAttribute('has-feedback')
@@ -196,13 +229,89 @@ export class ApigeomFigureElement extends HTMLElement {
     this.figure?.destroy?.()
     this.figure = undefined
   }
+
+  static registerVerificationCallback(
+    name: string,
+    callback: ApigeomVerificationCallback,
+    pointsMax = 1,
+  ): void {
+    this.verificationCallbacks.set(name, {
+      callback,
+      pointsMax: Number.isFinite(pointsMax) && pointsMax > 0 ? pointsMax : 1,
+    })
+  }
+
+  static unregisterVerificationCallback(
+    name: string,
+    callback?: ApigeomVerificationCallback,
+  ): void {
+    if (
+      callback != null &&
+      this.verificationCallbacks.get(name)?.callback !== callback
+    ) {
+      return
+    }
+    this.verificationCallbacks.delete(name)
+  }
+
+  private static elementFor(
+    exercice: IExercice,
+    questionIndex: number,
+  ): ApigeomFigureElement | null {
+    return document.querySelector(
+      `${this.elementTag}[numero-exercice="${exercice.numeroExercice ?? 0}"][index="${questionIndex}"]`,
+    ) as ApigeomFigureElement | null
+  }
+
+  private static normalizeVerificationResult(
+    result: string | string[] | ApigeomVerificationResult,
+  ): ApigeomVerificationResult {
+    if (typeof result === 'object' && !Array.isArray(result)) return result
+    const results = Array.isArray(result) ? result : [result]
+    const nbBonnesReponses = results.filter((value) => value === 'OK').length
+    return {
+      isOk: results.length > 0 && nbBonnesReponses === results.length,
+      feedback: '',
+      score: { nbBonnesReponses, nbReponses: results.length },
+    }
+  }
+
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): ApigeomVerificationResult {
+    const element = this.elementFor(exercice, questionIndex)
+    const callbackName = element?.getAttribute('verify-callback-name')
+    const entry =
+      callbackName == null
+        ? undefined
+        : this.verificationCallbacks.get(callbackName)
+    if (element == null || entry == null) {
+      return {
+        isOk: false,
+        feedback: 'Vérificateur apiGeom introuvable.',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+    return this.normalizeVerificationResult(
+      entry.callback(exercice, questionIndex, element),
+    )
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
+    const element = this.elementFor(exercice, questionIndex)
+    const callbackName = element?.getAttribute('verify-callback-name')
+    return callbackName == null
+      ? 1
+      : (this.verificationCallbacks.get(callbackName)?.pointsMax ?? 1)
+  }
 }
 
 export default function handleApigeomFigureElement() {
-  if (!customElements.get('apigeom-figure')) {
-    customElements.define('apigeom-figure', ApigeomFigureElement)
-  }
+  registerMathaleaCustomElement(ApigeomFigureElement)
 }
+
+registerMathaleaCustomElement(ApigeomFigureElement)
 
 /**
  * Marge (px) ajoutée sur chaque bord du viewBox exporté : les labels sont

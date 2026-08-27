@@ -10,11 +10,11 @@ export const dateDePublication = '10/08/2025'
 export const uuid = '6ca02'
 // @Author Stéphane Guyon
 export const refs = {
-  'fr-fr': ['1AL11-4QCM', '1Gen-A202-1', ],
+  'fr-fr': ['1AL11-4QCM', '1Gen-A202-1'],
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer avec les suites arithmétiques'

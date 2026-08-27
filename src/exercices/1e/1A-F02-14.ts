@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': ['1mF3-15'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Reconnaître une parabole (forme factorisée)'

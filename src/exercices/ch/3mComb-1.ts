@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = "Compter le nombre d'anagrammes d'un mot"
 export const dateDePublication = '05/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bc62e'
 export const refs = {
   'fr-fr': [],
@@ -158,7 +158,7 @@ export default class Anagrammes extends Exercice {
       { mot: 'TARATATA', repetitions: { T: 3, A: 4 } },
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = 0

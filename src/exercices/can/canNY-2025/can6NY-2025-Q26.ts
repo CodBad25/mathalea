@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '603f6'
 export const refs = {
   'fr-fr': [],

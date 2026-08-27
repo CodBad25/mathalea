@@ -2,7 +2,7 @@ import PuissancesEncadrement from '../4e/4C30-1Old'
 export const titre = 'Encadrer des nombres relatifs avec des puissances de 10'
 export const dateDeModifImportante = '06/10/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8f56e'
 export const refs = {
   'fr-fr': [],

@@ -21,7 +21,6 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer dans un cône de révolution'
 export const dateDePublication = '13/06/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '9aeec'
 

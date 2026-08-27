@@ -55,7 +55,7 @@ export const titre = "Déterminer des longueurs dans la géométrie dans l'espac
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '19/12/2022'
 export const dateDeModifImportante = '19/03/2025'
 

@@ -1,5 +1,9 @@
 import { lampeMessage } from '../../lib/format/message'
-import { all, isEquation, isEquivalentEquation } from '../../lib/interactif/checks'
+import {
+  all,
+  isEquation,
+  isEquivalentEquation,
+} from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -27,7 +31,6 @@ export const titre =
   "Déterminer une équation cartésienne d'un plan contenant une droite et un point"
 export const dateDePublication = '19/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '9b4e1'
 
@@ -45,7 +48,7 @@ export default class EquationPlanDroitePointSystemeNormal extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let pointA: Vector3
       let pointD: Vector3
       let direction: Vector3
@@ -55,11 +58,7 @@ export default class EquationPlanDroitePointSystemeNormal extends Exercice {
       do {
         pointA = [randint(-5, 5), randint(-5, 5), randint(-5, 5)]
         pointD = [randint(-5, 5), randint(-5, 5), randint(-5, 5)]
-        direction = [
-          randint(-4, 4, 0),
-          randint(-4, 4, 0),
-          randint(-4, 4, 0),
-        ]
+        direction = [randint(-4, 4, 0), randint(-4, 4, 0), randint(-4, 4, 0)]
         vecteurAD = vectorBetween(pointA, pointD)
         normal = crossProduct(direction, vecteurAD)
       } while (
@@ -71,8 +70,7 @@ export default class EquationPlanDroitePointSystemeNormal extends Exercice {
       const [nx, ny, nz] = normal
       const d = -(nx * pointA[0] + ny * pointA[1] + nz * pointA[2])
       const resultat = equationPlanTex(nx, ny, nz, d)
-      const sommePoint =
-        nx * pointA[0] + ny * pointA[1] + nz * pointA[2]
+      const sommePoint = nx * pointA[0] + ny * pointA[1] + nz * pointA[2]
 
       let texte =
         "Dans l'espace muni d'un repère orthonormé, on considère la droite $d$ passant par le point "
@@ -95,7 +93,7 @@ export default class EquationPlanDroitePointSystemeNormal extends Exercice {
       texteCorr += lampeMessage({
         titre: 'Méthode :',
         texte:
-          "Un vecteur $\\vec n\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ normal au plan $\\alpha$ est orthogonal à deux vecteurs non colinéaires de ce plan. On impose donc $\\vec n\\cdot\\vec d=0$ et $\\vec n\\cdot\\overrightarrow{AD}=0$.",
+          'Un vecteur $\\vec n\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ normal au plan $\\alpha$ est orthogonal à deux vecteurs non colinéaires de ce plan. On impose donc $\\vec n\\cdot\\vec d=0$ et $\\vec n\\cdot\\overrightarrow{AD}=0$.',
       })
       texteCorr += `On pose $\\vec n\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ et on résout le système :<br>`
       texteCorr += `$\\begin{cases}

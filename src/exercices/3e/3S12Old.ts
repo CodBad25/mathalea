@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer des effectifs et des fréquences'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '07/02/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

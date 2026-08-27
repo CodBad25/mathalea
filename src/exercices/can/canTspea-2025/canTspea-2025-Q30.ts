@@ -11,7 +11,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une limite'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a09e5'
 export const refs = {
   'fr-fr': [],

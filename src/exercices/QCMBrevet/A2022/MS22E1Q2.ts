@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': ['9QCM-9'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Fraction irréductible (septembre 2022 Métropole)'

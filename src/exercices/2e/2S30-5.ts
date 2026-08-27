@@ -34,7 +34,6 @@ export const dateDeModifImportante = '20/06/2024'
 export const titre =
   'Résoudre un problème basé sur une expérience aléatoire à deux épreuves'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const uuid = '92022'
 

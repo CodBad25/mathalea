@@ -1,7 +1,7 @@
 import EqResolvantesThales from '../3e/3L13-2'
 export const titre = 'Déterminer une quatrième proportionnelle dans un tableau'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '15/12/2020'
 export const dateDeModifImportante = '15/06/2024'
 export const uuid = 'a6b5b'

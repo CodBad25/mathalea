@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Trouver une probabilité sous forme fractionnaire, décimale et en pourcentage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Éric Elter

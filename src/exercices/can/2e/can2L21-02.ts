@@ -6,7 +6,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation $1+\\dfrac{p}{100}=c$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '28/01/2026'
 
 /**

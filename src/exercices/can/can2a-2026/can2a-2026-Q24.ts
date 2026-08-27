@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Développer une expression du type $(ax - b)^2$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'nq187'
 export const refs = {
   'fr-fr': [],

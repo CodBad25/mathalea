@@ -18,7 +18,7 @@ import {
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Développer à l'aide des identités remarquables"
 export const dateDePublication = '19/11/2025'
 

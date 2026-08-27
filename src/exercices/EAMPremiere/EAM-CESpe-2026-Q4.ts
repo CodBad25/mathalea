@@ -1,13 +1,12 @@
-import { context } from '../../modules/context'
 import { droite } from '../../lib/2d/droites'
-import {  pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -18,10 +17,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Retrouver la représentation graphique d\'une droite à partir de son équation réduite'
+export const titre =
+  "Retrouver la représentation graphique d'une droite à partir de son équation réduite"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -30,13 +30,13 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ4CEs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     num: number,
     den: number,
     p: number,
     d1: [number, number, number],
     d2: [number, number, number],
-    d3: [number, number, number]
+    d3: [number, number, number],
   ): void {
     const fracM = new FractionEtendue(num, den)
     const equationTex = `$y = ${reduireAxPlusB(fracM, p)}$`
@@ -55,7 +55,12 @@ private appliquerLesValeurs(
     }
 
     // Fonction locale pour générer un repère et une droite (utilisée pour les 4 propositions)
-    const genererGraphique = (n: number, d_den: number, ord: number, avecCorrection = false) => {
+    const genererGraphique = (
+      n: number,
+      d_den: number,
+      ord: number,
+      avecCorrection = false,
+    ) => {
       const r = repere({
         xMin: -4,
         xMax: 4,
@@ -67,8 +72,8 @@ private appliquerLesValeurs(
         // Astuce infaillible : on place les graduations et les labels à 100, loin hors de la zone visible
         xThickListe: [100],
         yThickListe: [100],
-        xLabelListe: [100], 
-        yLabelListe: [100], 
+        xLabelListe: [100],
+        yLabelListe: [100],
       })
 
       // Définition de la droite
@@ -83,8 +88,12 @@ private appliquerLesValeurs(
       const vJ = segment(0, 0, 0, 1, 'black', '->')
       vJ.epaisseur = 0.3
       const o = latex2d('\\text{O}', -0.3, -0.6, { letterSize: 'scriptsize' })
-      const textI =   latex2d('\\vec{\\imath}', 0.7, -0.8, { letterSize: 'normalsize' })
-      const textJ = latex2d('\\vec{\\jmath}', -0.5, 0.25, { letterSize: 'normalsize' })
+      const textI = latex2d('\\vec{\\imath}', 0.7, -0.8, {
+        letterSize: 'normalsize',
+      })
+      const textJ = latex2d('\\vec{\\jmath}', -0.5, 0.25, {
+        letterSize: 'normalsize',
+      })
 
       // Type any[] pour éviter l'erreur TypeScript (ts2345) lors du push ultérieur
       const objets: any[] = [r, d_trace, o, vI, vJ, textI, textJ]
@@ -92,7 +101,7 @@ private appliquerLesValeurs(
       // Ajout de l'escalier explicatif si c'est la figure de correction
       if (avecCorrection) {
         const ptCorner = pointAbstrait(d_den, ord)
-        
+
         const sHoriz = segment(ptA, ptCorner, 'blue')
         sHoriz.epaisseur = 2
         sHoriz.pointilles = 5
@@ -102,9 +111,15 @@ private appliquerLesValeurs(
         sVert.pointilles = 5
 
         const decY = n > 0 ? -0.4 : 0.4
-        const lHoriz = latex2d(`+${d_den}`, d_den / 2, ord + decY, { color: 'blue', letterSize: 'scriptsize' })
+        const lHoriz = latex2d(`+${d_den}`, d_den / 2, ord + decY, {
+          color: 'blue',
+          letterSize: 'scriptsize',
+        })
         const lVertStr = n > 0 ? `+${n}` : `${n}`
-        const lVert = latex2d(lVertStr, d_den + 0.4, ord + n / 2, { color: 'green', letterSize: 'scriptsize' })
+        const lVert = latex2d(lVertStr, d_den + 0.4, ord + n / 2, {
+          color: 'green',
+          letterSize: 'scriptsize',
+        })
 
         objets.push(sHoriz, sVert, lHoriz, lVert)
       }
@@ -122,7 +137,7 @@ private appliquerLesValeurs(
       genererGraphique(num, den, p),
       genererGraphique(d1[0], d1[1], d1[2]),
       genererGraphique(d2[0], d2[1], d2[2]),
-      genererGraphique(d3[0], d3[1], d3[2])
+      genererGraphique(d3[0], d3[1], d3[2]),
     ]
   }
 
@@ -147,7 +162,7 @@ private appliquerLesValeurs(
       { num: 1, den: 2 },
       { num: -1, den: 2 },
       { num: 2, den: 3 },
-      { num: -2, den: 3 }
+      { num: -2, den: 3 },
     ]
 
     let compteur = 0
@@ -158,7 +173,7 @@ private appliquerLesValeurs(
       // Génération de pièges mathématiquement logiques
       const d1Num = coeff.den
       const d1Den = Math.abs(coeff.num) === 0 ? 1 : Math.abs(coeff.num)
-      
+
       const dist1: [number, number, number] = [d1Num, d1Den, p] // Piège : inverse fraction
       const dist2: [number, number, number] = [coeff.num, coeff.den, -p] // Piège : erreur de signe sur p
       const dist3: [number, number, number] = [-coeff.num, coeff.den, p] // Piège : erreur de signe sur m

@@ -4,7 +4,7 @@ export const titre = 'Poser des divisions euclidiennes'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '01/02/2026'
 /**
  * @author Éric Elter

@@ -31,7 +31,6 @@ export const titre =
 export const dateDePublication = '24/06/2024'
 export const dateDeModificationImportante = '10/01/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calcul d'équations cartésiennes de droites

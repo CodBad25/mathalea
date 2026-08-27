@@ -25,7 +25,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre =
@@ -62,7 +62,7 @@ export default class CalculDAngle extends Exercice {
 
   nouvelleVersion() {
     let listChoixRapportTrigo: string[] = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nom = creerNomDePolygone(3, 'QD')
       let texte = ''
       let texteCorr = ''

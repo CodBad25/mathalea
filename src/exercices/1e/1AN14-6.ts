@@ -19,7 +19,6 @@ export const titre = 'Dériver une fonction du type $\\dfrac{u}{v}$'
 export const dateDePublication = '22/01/2022'
 export const dateDeModifImportante = '27/01/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer la dérivée d'un quotient
@@ -30,23 +29,14 @@ export const interactifType = 'mathLive'
 
 export const uuid = 'b32f2'
 export const refs = {
-  'fr-fr': ['1AN14-6','TSA3-12', 'TCA7-12'],
+  'fr-fr': ['1AN14-6', 'TSA3-12', 'TCA7-12'],
   'fr-ch': [],
 }
 
 type TypeDeQuotient =
-  | 'poly1a/poly1'
-  | 'mon/poly1'
-  | 'poly/poly1'
-  | 'mon/poly2centre'
-  | 'exp/poly1'
+  'poly1a/poly1' | 'mon/poly1' | 'poly/poly1' | 'mon/poly2centre' | 'exp/poly1'
 type TypeDeFonction =
-  | 'mon'
-  | 'racine'
-  | 'poly1'
-  | 'poly2centre'
-  | 'poly'
-  | 'exp'
+  'mon' | 'racine' | 'poly1' | 'poly2centre' | 'poly' | 'exp'
 
 export default class DeriveeQuotient extends Exercice {
   constructor() {
@@ -98,7 +88,7 @@ export default class DeriveeQuotient extends Exercice {
       melange: 5,
       defaut: 1,
     }).map(String) as TypeDeQuotient[]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let expression = ''

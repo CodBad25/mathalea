@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Arrondir un nombre décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3ed97'
 export const refs = {
   'fr-fr': [],

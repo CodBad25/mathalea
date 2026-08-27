@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer $ax^2+bx+c$ pour différentes valeurs de $x$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/08/2026'
 export const uuid = '94f58'
 export const refs = { 'fr-fr': ['2L10-6'], 'fr-ch': ['NR'] }

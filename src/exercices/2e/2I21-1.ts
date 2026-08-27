@@ -11,7 +11,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = "Déterminer un taux d'évolution global"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/01/2022'
 export const dateDeModifImportante = '04/05/2023'
 /**

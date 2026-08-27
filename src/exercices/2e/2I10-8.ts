@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre = "Calculer la proportion d'une sous-population"
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
@@ -41,7 +41,7 @@ export default class nomExercice extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let N: number
       let n: number
       let texte = ''

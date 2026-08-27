@@ -2,7 +2,7 @@ import ComparerAvecFctRef from './can2F3-06_old'
 
 export const titre = 'Comparer deux nombres avec la valeur absolue'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '18/08/2026'
 export const uuid = 'b26a7'
 export const refs = { 'fr-fr': ['can2F22-08'], 'fr-ch': [] }

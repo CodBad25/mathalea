@@ -24,7 +24,6 @@ function degCos(deg: number): number {
 export const amcReady = true
 export const amcType = 'qcmMult'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre = 'Arrondir une valeur'
 

@@ -1,11 +1,11 @@
-import ExerciceCan from '../../ExerciceCan'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Choisir un nombre vérifiant trois conditions (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'a12ef'
 export const refs = {
   'fr-fr': [],
@@ -18,7 +18,15 @@ export const refs = {
 */
 
 export default class Can2026CE1Q5 extends ExerciceCan {
- enonce(c?: number, d?: number, u?: number, reference?: number, choixConditions?: number, prop2?: number, prop3?: number) {
+  enonce(
+    c?: number,
+    d?: number,
+    u?: number,
+    reference?: number,
+    choixConditions?: number,
+    prop2?: number,
+    prop3?: number,
+  ) {
     const situations = [
       // [c, d, u, reference, choixConditions (1:c+d, 2:c+u, 3:d+u), prop2, prop3]
       [3, 6, 3, 354, 2, 353, 303], // Officiel: c=3, u=3, après 354 → 363
@@ -32,9 +40,15 @@ export default class Can2026CE1Q5 extends ExerciceCan {
       [7, 5, 3, 738, 3, 743, 753], // d=5, u=3, après 738 → 753
       [2, 3, 8, 225, 3, 318, 338], // d=3, u=8, après 225 → 238
     ]
-    
+
     let situationChoisie
-    if (c == null || d == null || u == null || reference == null || choixConditions == null) {
+    if (
+      c == null ||
+      d == null ||
+      u == null ||
+      reference == null ||
+      choixConditions == null
+    ) {
       situationChoisie = choice(situations)
       c = situationChoisie[0]
       d = situationChoisie[1]
@@ -44,11 +58,11 @@ export default class Can2026CE1Q5 extends ExerciceCan {
       prop2 = situationChoisie[5]
       prop3 = situationChoisie[6]
     }
-    
+
     const nbre = c * 100 + d * 10 + u
-    
+
     let enonce = 'Entoure le nombre qui a '
-    
+
     if (choixConditions === 1) {
       // Donne centaines et dizaines
       enonce += `$${c}$ pour chiffre des centaines, $${d}$ pour chiffre des dizaines`
@@ -59,9 +73,9 @@ export default class Can2026CE1Q5 extends ExerciceCan {
       // Donne dizaines et unités
       enonce += `$${d}$ pour chiffre des dizaines, $${u}$ pour chiffre des unités`
     }
-    
+
     enonce += ` et qui vient juste après $${reference}$.`
-    
+
     this.question = enonce
     this.autoCorrection[0] = {
       enonce: this.question,
@@ -85,7 +99,8 @@ export default class Can2026CE1Q5 extends ExerciceCan {
     const monQcm = propositionsQcm(this, 0)
     this.reponse = nbre
     this.question += `${monQcm.texte}`
-    this.canEnonce = 'Entoure le nombre qui a $3$ pour chiffre des centaines, $3$ pour chiffre des unités et qui vient juste après $354$.'
+    this.canEnonce =
+      'Entoure le nombre qui a $3$ pour chiffre des centaines, $3$ pour chiffre des unités et qui vient juste après $354$.'
     this.canReponseACompleter = monQcm.texte
 
     this.correction =

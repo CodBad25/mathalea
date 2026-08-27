@@ -2,11 +2,12 @@ import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
-export const titre = 'Calculer une probabilité à partir de la probabilité de l\'événement contraire'
+import ExerciceCan from '../../ExerciceCan'
+export const titre =
+  "Calculer une probabilité à partir de la probabilité de l'événement contraire"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cpgry'
 export const refs = {
   'fr-fr': [],
@@ -18,7 +19,7 @@ export const refs = {
 
 */
 export default class Can2a2025CQ10 extends ExerciceCan {
-   enonce(pAuB?: Decimal, pBbar?: Decimal): void {
+  enonce(pAuB?: Decimal, pBbar?: Decimal): void {
     if (pAuB == null || pBbar == null) {
       // P(A∪B) = P(A) + P(B) car disjoints
       // P(B) = 1 - P(Bbar)
@@ -26,7 +27,7 @@ export default class Can2a2025CQ10 extends ExerciceCan {
       let pA: Decimal
       let pB: Decimal
       do {
-        pBbar = new Decimal(randint(1, 8,5)).div(10)
+        pBbar = new Decimal(randint(1, 8, 5)).div(10)
         pB = new Decimal(1).sub(pBbar)
         pA = new Decimal(randint(1, 4)).div(10)
         pAuB = pA.add(pB)
@@ -58,6 +59,8 @@ export default class Can2a2025CQ10 extends ExerciceCan {
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(new Decimal(0.7), new Decimal(0.6)) : this.enonce()
+    this.canOfficielle
+      ? this.enonce(new Decimal(0.7), new Decimal(0.6))
+      : this.enonce()
   }
 }

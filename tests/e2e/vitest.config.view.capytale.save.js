@@ -16,7 +16,7 @@ export default mergeConfig(
       },
     },
     test: {
-      include: ['./tests/view/view.capytale.save.*.test.ts'],
+      include: ['./tests/view/view.capytale.save{,.*}.test.ts'],
       hookTimeout: 600_000,
       testTimeout: 20000_000,
       reporters: ['html', 'junit', 'json', 'default'],

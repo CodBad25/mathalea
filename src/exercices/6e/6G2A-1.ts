@@ -24,7 +24,7 @@ export const titre =
   "Trouver la longueur d'un segment quand on connaît sa moitié (rayon, diamètre, milieu), et inversement"
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const dateDePublication = '08/10/2025'
 export const dateDeModificationImportante = '19/10/2025'

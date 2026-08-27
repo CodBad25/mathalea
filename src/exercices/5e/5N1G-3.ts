@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Effectuer des calculs avec des grands traits de fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '23/11/2024'
 
@@ -48,7 +47,7 @@ export default class CalculsAvecGrandsTraitsDeFraction extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let answer = 0

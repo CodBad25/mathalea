@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec les chiffres (relatifs)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '71793'
 export const refs = {
   'fr-fr': [],

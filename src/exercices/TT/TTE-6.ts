@@ -15,7 +15,7 @@ export const titre = 'Calculer en utilisant les propriétés des logarithmes'
 export const dateDePublication = '27/07/2024'
 export const uuid = '3e6bf'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['TTE-6'],
   'fr-ch': [],
@@ -60,7 +60,7 @@ export default class ExerciceCalculsProprietesLn extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // on déclare les objets A et B qui servent à définir a et b
       const A = { base: choice([2, 3, 5]), exp: randint(2, 5) }
       const B = {

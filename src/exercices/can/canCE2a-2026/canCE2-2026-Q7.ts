@@ -17,7 +17,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer des additions avec des sauts de 9 ou 19'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1473g'
 export const refs = {
   'fr-fr': [],

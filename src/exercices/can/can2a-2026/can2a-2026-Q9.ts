@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Développer et réduire un carré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'tpykz'
 export const refs = {
   'fr-fr': [],

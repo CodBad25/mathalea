@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Trouver un nombre à partir d'un programme"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '448b5'
 export const refs = {
   'fr-fr': [],

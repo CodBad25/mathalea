@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 export const titre = "Calculer l'angle formé par deux droites"
 export const dateDePublication = '11/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'c2d91'
 export const refs = {
@@ -77,7 +76,7 @@ export default class AngleAiguDeuxDroites extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const line1: Line = {
         slope: randint(-5, 5, 0),
         intercept: randint(-5, 5),

@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Utiliser la distributivité pour effectuer du calcul mental'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '14/11/2020'
 /**
  * * Calcul mental autour des identités remarquables

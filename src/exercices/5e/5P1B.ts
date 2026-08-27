@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer des variations en pourcentages'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '16/08/2021'
@@ -36,7 +36,6 @@ export default class VariationEnPourcentages extends Exercice {
 
     this.spacingCorr = 2
 
-    this.interactifType = 'mathLive'
   }
 
   nouvelleVersion() {

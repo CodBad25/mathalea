@@ -7,7 +7,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Résoudre $|z-z'|=|z-z''|$"
 export const interactifReady = false
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '05/02/2025'
 

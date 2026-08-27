@@ -6,7 +6,7 @@ import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Utiliser une égalité pour compléter un calcul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3321e'
 export const refs = {
   'fr-fr': [],

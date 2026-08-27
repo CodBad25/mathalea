@@ -6,7 +6,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const titre =
   'Différencier événements contraires, non contraires, compatibles, incompatibles (jeu de cartes)'
 export const dateDePublication = '30/07/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

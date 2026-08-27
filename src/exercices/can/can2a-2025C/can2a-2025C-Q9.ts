@@ -5,9 +5,9 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer un pourcentage d\'une quantité'
+export const titre = "Calculer un pourcentage d'une quantité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'kjlo6'
 export const refs = {
   'fr-fr': [],
@@ -19,14 +19,14 @@ export const refs = {
 
 */
 export default class Can2a2025CQ9 extends ExerciceCan {
- enonce(pourcentage?: number, quantite?: number, unite?: string): void {
+  enonce(pourcentage?: number, quantite?: number, unite?: string): void {
     if (pourcentage == null || quantite == null || unite == null) {
-      pourcentage = choice([ 20, 30, 40])
+      pourcentage = choice([20, 30, 40])
       // quantite dont le pourcentage tombe juste
-  
-      quantite = randint(12, 19) *10
+
+      quantite = randint(12, 19) * 10
       // Plus simple : on s'assure que pourcentage × quantite / 100 est entier
-     
+
       unite = choice(['g', 'kg'])
     }
 
@@ -40,7 +40,7 @@ export default class Can2a2025CQ9 extends ExerciceCan {
     } else {
       this.question += `$\\ldots$ ${unite}`
     }
-    this.correction = `$${pourcentage}\\,\\%$ de $${quantite} \\text{ ${unite}}=${texNombre(pourcentage/100)}\\times ${quantite}\\text{ ${unite}}=${miseEnEvidence(texNombre(resultat, 2))}$ ${unite}.`
+    this.correction = `$${pourcentage}\\,\\%$ de $${quantite} \\text{ ${unite}}=${texNombre(pourcentage / 100)}\\times ${quantite}\\text{ ${unite}}=${miseEnEvidence(texNombre(resultat, 2))}$ ${unite}.`
     this.canEnonce = `Combien pèsent les $${pourcentage}\\,\\%$ de $${quantite}$ ${unite} ?`
     this.canReponseACompleter = `$\\ldots$ ${unite}`
   }

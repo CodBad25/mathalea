@@ -1,10 +1,11 @@
-import { context } from '../../modules/context'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
+import { context } from '../../modules/context'
 
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -13,7 +14,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -24,7 +24,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
@@ -168,8 +168,8 @@ export default class Auto1AF2q extends ExerciceQcmA {
   versionAleatoire: () => void = () => {
     const listeFractions = [
       [1, 2],
-       [1, 4],
-        [-1, 4],
+      [1, 4],
+      [-1, 4],
       [1, 3],
       [1, 4],
       [1, 5],

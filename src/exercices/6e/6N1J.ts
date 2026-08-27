@@ -2,7 +2,6 @@ import RangerOrdreCroissantDecroissant from './6N0A-10'
 export const titre = 'Ranger des nombres décimaux'
 export const dateDePublication = '13/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * * Ranger une liste de nombres décimaux

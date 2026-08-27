@@ -1,7 +1,7 @@
 import problemesTrigoLongueur from './3G32-0'
 export const titre = "Calculer la largeur d'une rivière"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

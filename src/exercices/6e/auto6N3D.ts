@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const titre = 'Reconnaitre diviseur, multiple, divisible'
 
 export const dateDeModifImportante = '14/03/2026'

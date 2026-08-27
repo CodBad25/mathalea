@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Réduire une expression littérale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '04/11/2023'

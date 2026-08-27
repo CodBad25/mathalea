@@ -1,16 +1,16 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import FractionEtendue from '../../../modules/FractionEtendue'
 export const uuid = '6a9da'
 export const refs = {
   'fr-fr': ['3S2QCM-4', 'BP2FLUC5', 'BP1AUTO005'],
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Probabilités  (Juin 2022 Amérique du nord)'

@@ -6,9 +6,10 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Compléter une égalité avec une multiplication par 100 ou 1000'
+export const titre =
+  'Compléter une égalité avec une multiplication par 100 ou 1000'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd80w7'
 export const refs = {
   'fr-fr': [],
@@ -20,7 +21,7 @@ export const refs = {
 
 */
 export default class Can20266Q6 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = {
@@ -28,24 +29,28 @@ export default class Can20266Q6 extends ExerciceCan {
     }
   }
 
-   enonce(a?: number, b?:number) {
-    if (a == null||b==null) {
+  enonce(a?: number, b?: number) {
+    if (a == null || b == null) {
       a = randint(15, 19)
-      b=choice([100,1000])
+      b = choice([100, 1000])
     }
 
     this.reponse = b
-if (this.interactif) {this.question = `Complète.<br>`
-      
-    } else {  this.question = `Complète.<br>`
-this.question+=`$${a}\\times \\ldots = ${texNombre(a*b)}$`
+    if (this.interactif) {
+      this.question = `Complète.<br>`
+    } else {
+      this.question = `Complète.<br>`
+      this.question += `$${a}\\times \\ldots = ${texNombre(a * b)}$`
     }
-  this.optionsChampTexte = { texteAvant: `$${a}\\times$`, texteApres: `$= ${texNombre(a*b)}$`}
- 
-    this.correction = ` $${a}\\times ${miseEnEvidence(texNombre(b))} = ${texNombre(a*b)}$.`
+    this.optionsChampTexte = {
+      texteAvant: `$${a}\\times$`,
+      texteApres: `$= ${texNombre(a * b)}$`,
+    }
+
+    this.correction = ` $${a}\\times ${miseEnEvidence(texNombre(b))} = ${texNombre(a * b)}$.`
 
     this.canEnonce = `Complète.`
-    this.canReponseACompleter = `$${a}\\times ~\\ldots ~= ${texNombre(a*b)}$`
+    this.canReponseACompleter = `$${a}\\times ~\\ldots ~= ${texNombre(a * b)}$`
   }
 
   nouvelleVersion() {

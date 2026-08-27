@@ -2,6 +2,7 @@ import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -17,11 +18,10 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = "Lire l'abscisse relative d'un point"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -74,7 +74,7 @@ export default class LireAbscisseRelative extends Exercice {
         pas2 = 10
         precision = 3
       }
-      
+
       const x1 = randint(0, 6)
       const x11 = x1 === 6 ? randint(1, 3) : randint(1, 9)
       const abs1 = arrondi(abs0 + x1 / pas1 + x11 / pas1 / pas2, precision)

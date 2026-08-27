@@ -7,7 +7,7 @@ import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Convertir m$^3$ et Litres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a8e1d'
 export const refs = {
   'fr-fr': [],

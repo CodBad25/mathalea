@@ -9,7 +9,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '31/10/2024'
 /**
  * @author Gilles Mora
@@ -28,7 +28,7 @@ export default class egaliteCompleter extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a, b, c, choix

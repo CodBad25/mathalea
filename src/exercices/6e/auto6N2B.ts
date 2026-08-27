@@ -21,7 +21,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/09/2025'
 /**
  * Donner l\'écriture décimale d\'un nombre à partir de fraction décimale (ou inversement)

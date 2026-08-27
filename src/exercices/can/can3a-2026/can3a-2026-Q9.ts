@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer une expression avec des priorités d'opérations"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ctc94'
 export const refs = {
   'fr-fr': [],

@@ -7,7 +7,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Limite de $\\dfrac{u_n}{v_n}$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '10d04'
 export const refs = {

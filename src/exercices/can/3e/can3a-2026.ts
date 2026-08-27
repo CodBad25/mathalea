@@ -33,7 +33,7 @@ import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN 3e sujet 2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '43da8'
 export const refs = {
   'fr-fr': ['can3a-2026'],

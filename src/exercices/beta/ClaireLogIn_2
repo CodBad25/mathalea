@@ -14,7 +14,7 @@ export const titre = 'Résolution d\'inéquations du type a^x<b'
 export const dateDePublication = '4/5/2024'
 export const uuid = 'a1b6c'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 
 /**
  * 

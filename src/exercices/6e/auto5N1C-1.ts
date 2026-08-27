@@ -2,7 +2,7 @@ import TablesDeMultiplications from './_Tables_de_multiplications'
 
 export const titre = 'Réviser les tables de multiplication'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '15/07/2026'

@@ -15,7 +15,6 @@ import TrouverSolutionMathador from './_TrouverSolutionMathador'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = ['mathLive', 'custom']
 
 export const titre = "Traduire une succession d'opérations par une expression"
 export const dateDeModifImportante = '26/09/2024'
@@ -77,8 +76,10 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
         for (let j = 0; j < 4; j++) {
           texte += `$${calculsSuccessifs[j]}$<br>`
         }
-        this.interactifType = 'mathLive'
-      } else this.interactifType = 'custom'
+      } else {
+        this.autoCorrection[i] ??= {}
+        this.autoCorrection[i].formatInteractif = 'meta-custom'
+      }
 
       texte +=
         "Écrire la succession d'opérations en une seule expression." +

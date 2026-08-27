@@ -26,7 +26,6 @@ describe('MathaleaCouteauSuisseElement', () => {
     exercice = new Exercice()
     exercice.numeroExercice = 3
     exercice.nbQuestions = 1
-    exercice.interactifType = 'custom'
     exercice.autoCorrection[0] = {}
   })
 

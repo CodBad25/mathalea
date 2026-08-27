@@ -1,7 +1,11 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import { nombreElementsDifferents } from '../ExerciceQcm'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -12,7 +16,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Calculer un taux d'évolution entre deux grandeurs"
@@ -26,8 +30,6 @@ export default class TauxEvolution extends ExerciceQcmA {
     valeurInitiale: number,
     valeurFinale: number,
     evo: string,
-    base: number,
-    coeff: number,
   ): void {
     const taux = ((valeurFinale - valeurInitiale) / valeurInitiale) * 100
     const tauxInverse = ((valeurInitiale - valeurFinale) / valeurFinale) * 100
@@ -48,20 +50,20 @@ export default class TauxEvolution extends ExerciceQcmA {
       `Une ${evo}  de $${texNombre(abs(diffBrute))}\\, \\%$`,
       `Une ${evo}  de $${abs(distracteur)}\\, \\%$`,
     ]
-
+    const bonneReponseColoree = `${texteEnCouleurEtGras(`une ${evo} de `)}$${miseEnEvidence(`${texNombre(Math.round(abs(taux)))}\\ \\%`)}$`
     this.enonce = `Une grandeur passe de $${texNombre(valeurInitiale)}$ à  $${texNombre(valeurFinale)}$.<br>
     L'évolution est :`
 
     this.correction = `Le taux d'évolution $t$ est donné par la formule :<br>
     $t = \\dfrac{\\text{valeur finale} - \\text{valeur initiale}}{\\text{valeur initiale}}$<br><br>
     Ici :
-    $t=\\dfrac{${texNombre(valeurFinale)} - ${texNombre(valeurInitiale)}}{${texNombre(valeurInitiale)}}  = ${texNombre(taux / 100, 4)}$<br>
-    Le taux d'évolution est donc de $${miseEnEvidence(texNombre(taux))} \\,\\%$.`
+    $t=\\dfrac{${texNombre(valeurFinale)} - ${texNombre(valeurInitiale)}}{${texNombre(valeurInitiale)}}  = ${texNombre(taux / 100, 4)}=${new FractionEtendue(taux, 100).texFractionSignee}=${texNombre(taux)}\\,\\%  $<br>
+    Le taux d'évolution est donc ${bonneReponseColoree}.`
     this.reponse = ` $${texNombre(Math.round(abs(taux)))}\\, \\%$`
   }
 
   versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(80, 100, 'augmentation', 3, 2)
+    this.appliquerLesValeurs(80, 100, 'augmentation')
     this.reponses = [
       'Une augmentation  de $25\\, \\%$',
       'Une diminution de $-20\\, \\%$',
@@ -93,7 +95,7 @@ export default class TauxEvolution extends ExerciceQcmA {
       }
 
       const evo = valeurFinale < valeurInitiale ? 'diminution' : 'augmentation'
-      this.appliquerLesValeurs(valeurInitiale, valeurFinale, evo, base, coeff)
+      this.appliquerLesValeurs(valeurInitiale, valeurFinale, evo)
     } while (nombreElementsDifferents(this.reponses) < n)
   }
 

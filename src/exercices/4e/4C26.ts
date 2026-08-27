@@ -13,7 +13,7 @@ export const titre =
 
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 export const dateDePublication = '23/05/2021'
 export const dateDeModifImportante = '26/08/2023'

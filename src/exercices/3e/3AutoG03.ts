@@ -14,7 +14,6 @@ export const titre =
   "Calculer l'angle complémentaire dans un triangle rectangle"
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '06/12/2025'
 

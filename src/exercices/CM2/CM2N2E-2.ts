@@ -17,7 +17,6 @@ export const dateDePublication = '29/06/2021'
 export const dateDeModifImportante = '03/05/2024'
 export const titre = "Placer des points d'abscisses fractionnaires"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

@@ -11,7 +11,6 @@ export const dateDePublication = '05/07/2026'
 export const titre =
   'Placer une abscisse fractionnaire sur une demi-droite (fraction quotient)'
 export const interactifReady = true
-export const interactifType = 'demi-droite-interactive'
 
 /** Placer une abscisse fractionnaire sur une demi-droite graduée
  * @author Jean-Claude Lhote

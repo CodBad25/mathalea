@@ -1,11 +1,10 @@
-import ExerciceSimple from '../ExerciceSimple'
-import { factorielle, randint } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import { factorielle, randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Déterminer un nombre de combinaision.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '20/4/2025'
 

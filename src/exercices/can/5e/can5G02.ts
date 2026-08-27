@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -8,6 +7,7 @@ import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { bleuMathalea } from '../../../lib/colors'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -20,7 +20,6 @@ function degTan(deg: number): number {
 
 export const titre = 'Calculer un angle dans un triangle isocèle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

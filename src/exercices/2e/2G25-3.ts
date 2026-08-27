@@ -24,7 +24,7 @@ import { vecteur } from '../../lib/2d/Vecteur'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Calculer les coordonnées d'un vecteur à partir des coordonnées de deux points"
 export const dateDeModifImportante = '30/06/2023'

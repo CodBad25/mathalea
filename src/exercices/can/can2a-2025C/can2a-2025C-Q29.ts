@@ -2,9 +2,10 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Trouver une valeur à partir de la colinéarité de deux vecteurs'
+export const titre =
+  'Trouver une valeur à partir de la colinéarité de deux vecteurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fbylh'
 export const refs = {
   'fr-fr': [],
@@ -16,18 +17,18 @@ export const refs = {
 
 */
 export default class Can2a2025CQ29 extends ExerciceCan {
- enonce(yu?: number, xv?: number, yvCoeff?: number): void {
+  enonce(yu?: number, xv?: number, yvCoeff?: number): void {
     if (yu == null || xv == null || yvCoeff == null) {
       // On construit à l'envers : on choisit x négatif, puis on calcule les coefficients
       const xVal = randint(-3, -1)
       const xCarre = xVal * xVal
-      
+
       xv = randint(2, 6)
       yvCoeff = randint(1, 3) * 2 // yv = yvCoeff × x, pour que le déterminant donne un x² exploitable
-      
+
       // yvCoeff × x² = yu × xv => on calcule yu en fonction du reste
       yu = (yvCoeff * xCarre) / xv
-      
+
       if (!Number.isInteger(yu) || yu <= 0) {
         // Fallback si yu ne tombe pas juste ou est négatif
         yu = 2
@@ -47,7 +48,7 @@ export default class Can2a2025CQ29 extends ExerciceCan {
     this.question = `Dans une base $(\\vec{\\imath},\\vec{\\jmath})$ du plan, on donne $\\vec{u}(x\\,;\\,${yu})$ et $\\vec{v}(${xv}\\,;\\,${yvCoeff}x)$.<br>
     On sait que $x$ est un nombre réel négatif.<br>
     Déterminer sa valeur sachant que les vecteurs $\\vec{u}$ et $\\vec{v}$ sont colinéaires.<br>`
-    
+
     if (this.interactif) {
       this.question += '$x=$'
     } else {

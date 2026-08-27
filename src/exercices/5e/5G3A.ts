@@ -1,7 +1,7 @@
 import Transformations from '../6e/_Transformations'
 export const titre = "Trouver l'image d'un point par une symétrie centrale"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '02/05/2026'

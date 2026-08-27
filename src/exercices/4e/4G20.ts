@@ -35,7 +35,7 @@ export const titre = 'Calculer une longueur avec le théorème de Pythagore'
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 const mathliveButtonsAction = '4G20:mathlive-buttons'
 
 /**

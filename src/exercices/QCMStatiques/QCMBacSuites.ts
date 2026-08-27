@@ -8,7 +8,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Répondre à des QCM Bac : suites'
@@ -33,7 +33,10 @@ const qcmSuites: QcmItem[] = [
       'On considère la suite $\\left(v_n\\right)$ définie sur $\\N$ par $v_n = \\dfrac{3n}{n + 2}$. On cherche à déterminer la limite de $v_n$ lorsque $n$ tend vers $+\\infty$.',
     reponses: [
       { texte: '$\\displaystyle\\lim_{n \\to + \\infty}v_n = 1$' },
-      { texte: '$\\displaystyle\\lim_{n \\to + \\infty}v_n = 3$', statut: true },
+      {
+        texte: '$\\displaystyle\\lim_{n \\to + \\infty}v_n = 3$',
+        statut: true,
+      },
       { texte: '$\\displaystyle\\lim_{n \\to + \\infty}v_n = \\dfrac{3}{2}$' },
       { texte: 'On ne peut pas la déterminer' },
     ],
@@ -44,7 +47,10 @@ const qcmSuites: QcmItem[] = [
     enonce:
       'On considère les suites $\\left(u_n\\right)$ et $\\left(v_n\\right)$ telles que, pour tout entier naturel $n$, $u_n= 1-\\left(\\frac{1}{4}\\right)^n$ et $v_n=1+\\left(\\frac{1}{4}\\right)^n$.<br>On considère de plus une suite $\\left(w_n\\right)$ qui, pour tout entier naturel $n$, vérifie $u_n\\leqslant w_n\\leqslant v_n$.<br>On peut affirmer que :',
     reponses: [
-      { texte: 'Les suites $\\left(u_n\\right)$ et $\\left(v_n\\right)$ sont géométriques.' },
+      {
+        texte:
+          'Les suites $\\left(u_n\\right)$ et $\\left(v_n\\right)$ sont géométriques.',
+      },
       { texte: 'La suite $(w_n)$ converge vers 1.', statut: true },
       { texte: 'La suite $\\left(u_n\\right)$ est minorée par 1.' },
       { texte: 'La suite $\\left(w_n\\right)$ est croissante.' },
@@ -95,7 +101,9 @@ const qcmSuites: QcmItem[] = [
       { texte: '$a_n = 4 \\times \\left(\\dfrac13\\right)^n - 2$' },
       { texte: '$a_n = - \\dfrac{2}{3^n} + 4$', statut: true },
       { texte: '$a_n = 4 - \\left(\\dfrac13\\right)^n$' },
-      { texte: '$a_n = 2 \\times \\left(\\dfrac13\\right)^n + \\dfrac{8n}{3}$' },
+      {
+        texte: '$a_n = 2 \\times \\left(\\dfrac13\\right)^n + \\dfrac{8n}{3}$',
+      },
     ],
     correction:
       'Soit la suite $\\left(b_n\\right)$ définie pour tout naturel $n$ par $b_n = a_n + \\alpha$.<br>Alors $b_{n+1} = \\dfrac13b_n + \\dfrac{8 + 2\\alpha}{3}$.<br>Prenons $\\alpha = - 4$, alors $b_{n+1} = \\dfrac13b_n$ : cette égalité montre que la suite $\\left(b_n\\right)$ est une suite géométrique de raison $\\dfrac13$ et de premier terme $b_0 = a_0 + \\alpha = 2 - 4 = - 2$.<br>On sait qu’alors, quel que soit le naturel $n$, $b_n = b_0 \\times \\left(\\dfrac{1}{3}\\right)^n = - 2 \\times \\left(\\dfrac{1}{3}\\right)^n$.<br>Finalement $b_n = a_n - 4 \\iff a_n = 4 + b_n = 4 - 2\\times \\left(\\dfrac{1}{3}\\right)^n$. Réponse $\\mathbf{b}$.',
@@ -105,9 +113,15 @@ const qcmSuites: QcmItem[] = [
       'On considère une suite $\\left(b_n\\right)$ telle que, pour tout entier naturel $n$, on a : $b_{n+1} = b_n + \\ln \\left(\\dfrac{2}{\\left(b_n \\right)^2 + 3}\\right)$.<br>On peut affirmer que :',
     reponses: [
       { texte: 'la suite $\\left(b_n\\right)$ est croissante.' },
-      { texte: 'la suite $\\left(b_n\\right)$ est décroissante.', statut: true },
+      {
+        texte: 'la suite $\\left(b_n\\right)$ est décroissante.',
+        statut: true,
+      },
       { texte: "la suite $\\left(b_n\\right)$ n'est pas monotone." },
-      { texte: 'le sens de variation de la suite $\\left(b_n\\right)$ dépend de $b_0$.' },
+      {
+        texte:
+          'le sens de variation de la suite $\\left(b_n\\right)$ dépend de $b_0$.',
+      },
     ],
     correction:
       'On a quel que soit le naturel $n$, $b_{n+1} - b_n = \\ln \\left(\\dfrac{2}{\\left(b_n \\right)^2 + 3}\\right)$.<br>Or quel que soit le réel $b_n$, $b_n^2 \\geqslant 0$, donc $\\left(b_n\\right)^2 + 3 \\geqslant 3 > 2$, donc $\\dfrac{2}{\\left(b_n \\right)^2 + 3} < 1$ et enfin $\\ln \\left(\\dfrac{2}{\\left(b_n \\right)^2 + 3}\\right) < 0$.<br>Conclusion : $b_{n+1} - b_n < 0$ montre que la suite $\\left(b_n\\right)$ est décroissante. Réponse $\\mathbf{b}$.',
@@ -152,7 +166,10 @@ const qcmSuites: QcmItem[] = [
     enonce:
       'On considère les suites $\\left(u_n\\right)$ et $\\left(v_n\\right)$ définies par : $u_0 = 2$, $v_0 = 1$ et, pour tout entier naturel $n$ : $\\left\\{\\begin{array}{lcl}u_{n+1}&=&u_n + 3v_n\\\\v_{n+1}&=&u_n + v_n.\\end{array}\\right.$<br>On peut affirmer que :',
     reponses: [
-      { texte: '$\\left\\{\\begin{array}{lcl}u_2&=&5\\\\v_2&=&3\\end{array}\\right.$' },
+      {
+        texte:
+          '$\\left\\{\\begin{array}{lcl}u_2&=&5\\\\v_2&=&3\\end{array}\\right.$',
+      },
       { texte: '$u_2^2 - 3v_2^2 = - 2^2$' },
       { texte: '$\\dfrac{u_2}{v_2} = 1,75$', statut: true },
       { texte: '$5u_1 = 3v_1$' },
@@ -163,7 +180,9 @@ const qcmSuites: QcmItem[] = [
   {
     enonce:
       'On considère les suites $\\left(u_n\\right)$ et $\\left(v_n\\right)$ définies par : $u_0 = 2$, $v_0 = 1$ et, pour tout entier naturel $n$ : $\\left\\{\\begin{array}{lcl}u_{n+1}&=&u_n + 3v_n\\\\v_{n+1}&=&u_n + v_n.\\end{array}\\right.$<br>On considère le programme ci-dessous écrit en langage Python :' +
-      code('def valeurs() :\n    u = 2\n    v = 1\n    for k in range(1,11) :\n        c = u\n        u = u + 3*v\n        v = c + v\n    return (u, v)') +
+      code(
+        'def valeurs() :\n    u = 2\n    v = 1\n    for k in range(1,11) :\n        c = u\n        u = u + 3*v\n        v = c + v\n    return (u, v)',
+      ) +
       'Ce programme renvoie :',
     reponses: [
       { texte: '$u_{11}$ et $v_{11}$ ;' },
@@ -213,10 +232,27 @@ const qcmSuites: QcmItem[] = [
     enonce:
       'Une action est cotée à 57 € . Sa valeur augmente de $3\\,\\%$ tous les mois.<br>La fonction Python seuil() qui renvoie le nombre de mois à attendre pour que sa valeur dépasse 200 € est :',
     reponses: [
-      { texte: code('def seuil() :\n    m=0\n    v=57\n    while v < 200 :\n        m=m+1\n        v = v*1.03\n    return m'), statut: true },
-      { texte: code('def seuil() :\n    m=0\n    v=57\n    while v > 200 :\n        m=m+1\n        v = v*1.03\n    return m') },
-      { texte: code('def seuil() :\n    v=57\n    for i in range (200) :\n        v = v*1.03\n    return v') },
-      { texte: code('def seuil() :\n    m=0\n    v=57\n    if v < 200 :\n        m=m+1\n    else :\n        v = v*1.03\n    return m') },
+      {
+        texte: code(
+          'def seuil() :\n    m=0\n    v=57\n    while v < 200 :\n        m=m+1\n        v = v*1.03\n    return m',
+        ),
+        statut: true,
+      },
+      {
+        texte: code(
+          'def seuil() :\n    m=0\n    v=57\n    while v > 200 :\n        m=m+1\n        v = v*1.03\n    return m',
+        ),
+      },
+      {
+        texte: code(
+          'def seuil() :\n    v=57\n    for i in range (200) :\n        v = v*1.03\n    return v',
+        ),
+      },
+      {
+        texte: code(
+          'def seuil() :\n    m=0\n    v=57\n    if v < 200 :\n        m=m+1\n    else :\n        v = v*1.03\n    return m',
+        ),
+      },
     ],
     correction:
       'Pour que la fonction seuil fonctionne, il faut que la boucle while s’exécute tant que $v<200$ et que le nombre de mois soit augmenté de 1 à chaque exécution de la boucle. Réponse $\\mathbf{a}$.',
@@ -262,7 +298,10 @@ const qcmSuites: QcmItem[] = [
       'On considère la suite $\\left(a_n\\right)$ définie pour tout entier naturel $n$ par : $a_{n+1} = \\dfrac{\\mathrm{e}^n}{\\mathrm{e}^n + 1}a_n$ et $a_0 = 1$.<br>On peut affirmer que :',
     reponses: [
       { texte: 'la suite $\\left(a_n\\right)$ est strictement croissante.' },
-      { texte: 'la suite $\\left(a_n\\right)$ est strictement décroissante.', statut: true },
+      {
+        texte: 'la suite $\\left(a_n\\right)$ est strictement décroissante.',
+        statut: true,
+      },
       { texte: "la suite $\\left(a_n\\right)$ n'est pas monotone." },
       { texte: 'la suite $\\left(a_n\\right)$ est constante.' },
     ],
@@ -286,7 +325,11 @@ const qcmSuites: QcmItem[] = [
       'On considère trois suites $\\left(u_n\\right)$, $\\left(v_n\\right)$ et $\\left(w_n\\right)$. On sait que, pour tout entier naturel $n$, on a : $u_n \\leqslant v_n\\leqslant  w_n$ et de plus : $\\displaystyle\\lim_{n \\to + \\infty} u_n= 1$ et $\\displaystyle\\lim_{n \\to + \\infty} w_n= 3$.<br>On peut alors affirmer que :',
     reponses: [
       { texte: 'la suite $\\left(v_n\\right)$ converge ;' },
-      { texte: 'Si la suite $\\left(u_n\\right)$ est croissante alors la suite $\\left(v_n\\right)$ est minorée par $u_0$ ;', statut: true },
+      {
+        texte:
+          'Si la suite $\\left(u_n\\right)$ est croissante alors la suite $\\left(v_n\\right)$ est minorée par $u_0$ ;',
+        statut: true,
+      },
       { texte: '$1 \\leqslant  v_0 \\leqslant 3$ ;' },
       { texte: 'la suite $\\left(v_n\\right)$ diverge.' },
     ],
@@ -309,7 +352,9 @@ const qcmSuites: QcmItem[] = [
     enonce:
       'On considère $\\left(u_n\\right)$ une suite réelle telle que pour tout entier naturel $n$, on a : $n < u_n < n + 1$.<br>On peut affirmer que :',
     reponses: [
-      { texte: 'Il existe un entier naturel $N$ tel que $u_N$ est un entier ;' },
+      {
+        texte: 'Il existe un entier naturel $N$ tel que $u_N$ est un entier ;',
+      },
       { texte: 'la suite $\\left(u_n\\right)$ est croissante ;', statut: true },
       { texte: 'la suite $\\left(u_n\\right)$ est convergente ;' },
       { texte: "La suite $\\left(u_n\\right)$ n'a pas de limite." },
@@ -332,7 +377,9 @@ const qcmSuites: QcmItem[] = [
   {
     enonce:
       'On considère la suite $\\left(u_n\\right)$ définie sur $\\N$ par : $u_0 = 15$ et pour tout entier naturel $n$ : $u_{n+1} = 1,2u_n + 12$.<br>La fonction Python suivante, dont la ligne 4 est incomplète, doit renvoyer la plus petite valeur de l’entier $n$ telle que $u_n > 10000$.' +
-      code('def seuil() :\n    n=0\n    u=15\n    while ... ...:\n        n=n+1\n        u=1,2*u+12\n    return(n)') +
+      code(
+        'def seuil() :\n    n=0\n    u=15\n    while ... ...:\n        n=n+1\n        u=1,2*u+12\n    return(n)',
+      ) +
       'À la ligne 4, on complète par :',
     reponses: [
       { texte: '$u\\leqslant 10000$ ;', statut: true },
@@ -373,7 +420,10 @@ const qcmSuites: QcmItem[] = [
       { texte: '$\\ell = 3$' },
       { texte: '$\\ell \\geqslant 3$', statut: true },
       { texte: 'La suite $\\left(u_n\\right)$ est décroissante.' },
-      { texte: 'La suite $\\left(u_n\\right)$ est constante à partir d’un certain rang.' },
+      {
+        texte:
+          'La suite $\\left(u_n\\right)$ est constante à partir d’un certain rang.',
+      },
     ],
     correction: 'La limite est supérieure ou égale à 3. Réponse $\\mathbf{b}$.',
   },
@@ -416,7 +466,9 @@ const qcmSuites: QcmItem[] = [
   {
     enonce:
       'On considère la suite $\\left(u_n\\right)$ définie par $u_0 = 3$ et, pour tout entier naturel $n$, $u_{n+1} = \\dfrac12u_n + \\dfrac12n + 1$.<br>On considère la fonction ci-dessous, écrite de manière incomplète en langage Python. $n$ désigne un entier naturel non nul. On rappelle qu’en langage Python « i in range (n) » signifie que i varie de 0 à $n-1$.' +
-      code('def terme (n)\n    U=3\n    for i in range(n):\n        ...\n    return U') +
+      code(
+        'def terme (n)\n    U=3\n    for i in range(n):\n        ...\n    return U',
+      ) +
       'Pour que terme (n) renvoie la valeur de $u_n$, on peut compléter la ligne 4 par :',
     reponses: [
       { texte: 'U = U/2 + (i$+$1)/2+1' },
@@ -432,9 +484,15 @@ const qcmSuites: QcmItem[] = [
       'On considère deux suites $\\left(u_{n}\\right)$ et $\\left(v_{n}\\right)$ à termes strictement positifs telles que $\\displaystyle\\lim _{n \\rightarrow+\\infty} u_{n}=+\\infty$ et $\\left(v_{n}\\right)$ converge vers 0.<br>On peut affirmer que :',
     reponses: [
       { texte: 'la suite $\\left(\\frac{1}{v_{n}}\\right)$ converge.' },
-      { texte: 'la suite $\\left(\\frac{v_{n}}{u_{n}}\\right)$ converge.', statut: true },
+      {
+        texte: 'la suite $\\left(\\frac{v_{n}}{u_{n}}\\right)$ converge.',
+        statut: true,
+      },
       { texte: 'la suite $\\left(u_{n}\\right)$ est croissante.' },
-      { texte: '$\\displaystyle\\lim _{n \\rightarrow+\\infty}\\left(-u_{n}\\right)^{n}=-\\infty$' },
+      {
+        texte:
+          '$\\displaystyle\\lim _{n \\rightarrow+\\infty}\\left(-u_{n}\\right)^{n}=-\\infty$',
+      },
     ],
     correction: 'Limite du quotient de deux suites. Réponse $\\mathbf{b}$.',
   },
@@ -444,7 +502,10 @@ const qcmSuites: QcmItem[] = [
     reponses: [
       { texte: 'La suite $\\left(u_n\\right)$ est minorée.', statut: true },
       { texte: 'La suite $\\left(u_n\\right)$ est décroissante.' },
-      { texte: 'L’un des termes de la suite $\\left(u_n\\right)$ est égal à 2021.' },
+      {
+        texte:
+          'L’un des termes de la suite $\\left(u_n\\right)$ est égal à 2021.',
+      },
     ],
     correction:
       '$n^2 - 17n + 20 = \\left(n - \\frac{17}{2} \\right)^2 - \\frac{209}{4}$.<br>On a donc quel que soit $n$, $u_n \\geqslant - \\frac{209}{4}$ : la suite est donc minorée. Réponse A.',
@@ -452,10 +513,15 @@ const qcmSuites: QcmItem[] = [
   {
     enonce:
       'On considère la suite $\\left(u_n\\right)$ définie par $u_0 = 2$ et, pour tout entier naturel $n$, $u_{n+1} = 0,75u_n +5$.<br>On considère la fonction « seuil » suivante écrite en Python :' +
-      code('def seuil {} :\n    u = 2\n    n = 0\n    while u < 45 :\n        u = 0,75*u + 5\n        n = n+1\n    return n') +
+      code(
+        'def seuil {} :\n    u = 2\n    n = 0\n    while u < 45 :\n        u = 0,75*u + 5\n        n = n+1\n    return n',
+      ) +
       'Cette fonction renvoie :',
     reponses: [
-      { texte: 'la plus petite valeur de $n$ telle que $u_n \\geqslant 45$ ;', statut: true },
+      {
+        texte: 'la plus petite valeur de $n$ telle que $u_n \\geqslant 45$ ;',
+        statut: true,
+      },
       { texte: 'la plus petite valeur de $n$ telle que $u_n < 45$ ;' },
       { texte: 'la plus grande valeur de $n$ telle que $u_n \\geqslant 45$.' },
     ],

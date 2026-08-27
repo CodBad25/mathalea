@@ -12,7 +12,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
 export const titre = 'Développer $(a-b)^2$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Développer (a-b)²
  * @author Matthieu Devillers

@@ -3,7 +3,7 @@ export const titre = 'Calculer des volumes'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const dateDeModifImportante = '17/04/2025'
 export const uuid = 'acb80'
 export const refs = {

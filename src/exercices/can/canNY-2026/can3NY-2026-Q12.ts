@@ -7,7 +7,7 @@ import { abs } from '../../../lib/outils/nombres'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = 'Simplifier une fraction simple'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'yhwly'
 export const refs = {
   'fr-fr': [],

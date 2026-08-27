@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec un pourcentage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a0698'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

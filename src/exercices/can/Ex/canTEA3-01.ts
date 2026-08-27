@@ -6,7 +6,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Calculer un PGCD de tête'
 
 export const dateDePublication = '17/02/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

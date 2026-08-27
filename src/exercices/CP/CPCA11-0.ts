@@ -2,7 +2,7 @@ import AjouterPresqueDoubles from './CPCA11'
 
 export const titre = 'Ajouter des presque-doubles inférieurs à 6'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '22/12/2025'

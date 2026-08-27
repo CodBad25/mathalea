@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Factoriser ou développer une différence de deux carrés '
@@ -81,13 +81,21 @@ export default class AutoQ1AGs2026 extends ExerciceQcmA {
     }
 
     const fractions: [number, number][] = [
-      [1, 2], [1, 3], [2, 3], [1, 4], [3, 4],
-      [1, 5], [2, 5], [3, 5], [4, 5],
+      [1, 2],
+      [1, 3],
+      [2, 3],
+      [1, 4],
+      [3, 4],
+      [1, 5],
+      [2, 5],
+      [3, 5],
+      [4, 5],
     ]
 
     let compteur = 0
     do {
-      const sens = choice(['factorisation', 'developpement']) as 'factorisation' | 'developpement'
+      const sens = choice(['factorisation', 'developpement']) as
+        'factorisation' | 'developpement'
       const a = choice([2, 3, 4, 5])
       const [p, q] = choice(fractions)
       this.appliquerLesValeurs(sens, a, p, q)

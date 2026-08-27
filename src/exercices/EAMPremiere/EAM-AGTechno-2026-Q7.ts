@@ -1,7 +1,4 @@
-import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
@@ -22,7 +19,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Déterminer graphiquement l'équation réduite d'une droite"
@@ -50,7 +47,8 @@ export default class AutoQ7AGt2026 extends ExerciceQcmA {
     const xmax = 7
     const ymin = -1
     const ymax = 5
-    const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
+    const clamp = (v: number, lo: number, hi: number) =>
+      Math.max(lo, Math.min(hi, v))
 
     // Points d'intersection de la droite y = m x + p avec le cadre : on trace
     // uniquement le segment visible, pour ne jamais déborder de la fenêtre.
@@ -76,8 +74,16 @@ export default class AutoQ7AGt2026 extends ExerciceQcmA {
     // Étiquette (d) : près de l'extrémité haute du segment, mais gardée dans le cadre
     const haut = P1[1] >= P2[1] ? P1 : P2
     const bas = P1[1] >= P2[1] ? P2 : P1
-    const lx = clamp(haut[0] + 0.15 * (bas[0] - haut[0]) - 0.5, xmin + 0.3, xmax - 0.8)
-    const ly = clamp(haut[1] + 0.15 * (bas[1] - haut[1]), ymin + 0.3, ymax - 0.3)
+    const lx = clamp(
+      haut[0] + 0.15 * (bas[0] - haut[0]) - 0.5,
+      xmin + 0.3,
+      xmax - 0.8,
+    )
+    const ly = clamp(
+      haut[1] + 0.15 * (bas[1] - haut[1]),
+      ymin + 0.3,
+      ymax - 0.3,
+    )
     const labelD = latex2d('(d)', lx, ly, { letterSize: 'small', color: 'red' })
 
     const x = latex2d('x', 6.5, -0.4, { letterSize: 'small' })

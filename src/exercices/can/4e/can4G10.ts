@@ -17,7 +17,7 @@ import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import Exercice from '../../Exercice'
 export const titre = 'Déterminer si un triangle est rectangle'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDePublication = '01/10/2023'
@@ -39,7 +39,7 @@ export default class TripletsPythagoriciensOuPas extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeTripletsPythagoriciens = [
         [3, 4, 5],
         [5, 12, 13],

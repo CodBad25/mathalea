@@ -15,7 +15,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer l'aire d'un triangle rectangle"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1e8ea'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

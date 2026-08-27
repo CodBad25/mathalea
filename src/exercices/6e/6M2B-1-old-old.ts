@@ -29,7 +29,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer l’aire d’un carré ou d’un rectangle'
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
+
 export const dateDePublication = '10/01/2026'
 
 /**

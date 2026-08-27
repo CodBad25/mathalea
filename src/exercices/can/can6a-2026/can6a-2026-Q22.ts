@@ -6,7 +6,7 @@ import { aQ21, bQ21 } from './can6a-2026-Q21'
 
 export const titre = 'Calculer un produit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'q3sjw'
 export const refs = {
   'fr-fr': [],
@@ -18,7 +18,7 @@ export const refs = {
 
 */
 export default class Can20266Q22 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = {
@@ -36,7 +36,6 @@ export default class Can20266Q22 extends ExerciceCan {
 
     this.correction = `$${a * 4}\\times${b} =${miseEnEvidence(texNombre(a * b * 4, 0))}$`
 
-   
     this.canEnonce = ''
   }
 

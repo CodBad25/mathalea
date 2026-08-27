@@ -1,11 +1,11 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Travailler les racines carrées avec des phrases'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '19/12/2025'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

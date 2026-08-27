@@ -9,7 +9,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Donner le résultat de nombres écrits avec des puissances de 10 en écriture décimale'
 export const dateDePublication = '18/01/2022'

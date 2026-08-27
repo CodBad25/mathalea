@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une heure de début'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'dava4'
 export const refs = {
   'fr-fr': [],

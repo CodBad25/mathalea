@@ -4,7 +4,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Sommes de nombres entiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f343g'
 export const refs = {
   'fr-fr': [],

@@ -9,7 +9,6 @@ import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre = 'Calculer la dérivée de  $\\ln(u)$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '25135'
 export const refs = {
@@ -45,7 +44,7 @@ class DerivationLnU extends Exercice {
       melange: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let laFonctionFEnLatex: string
       let df: string
       let formeGeneraleDerivee: string

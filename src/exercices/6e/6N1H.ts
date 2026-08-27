@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire l'abscisse décimale d'un point"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '31/10/2023'

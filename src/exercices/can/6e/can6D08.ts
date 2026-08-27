@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Transformer des minutes en heures décimales'
 export const dateDePublication = '06/09/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

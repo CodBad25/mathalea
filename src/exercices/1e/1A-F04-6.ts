@@ -1,7 +1,7 @@
-import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 
 import { courbe } from '../../lib/2d/Courbe'
 import { bleuMathalea } from '../../lib/colors'
@@ -20,7 +20,7 @@ export const refs = {
   'fr-ch': ['2mIneq-9'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =

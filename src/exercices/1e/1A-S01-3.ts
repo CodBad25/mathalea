@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': ['9FA3A-2'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Interpréter un diagramme en barres'

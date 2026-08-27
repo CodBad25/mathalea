@@ -103,39 +103,49 @@ export function propositionsQcm(
     options?.style != null && options.style !== ''
       ? `class="ml-2" style="${options.style};" `
       : 'class="ml-2"'
-  if (context.isAmc) return { texte: '', texteCorr: '' }
-  if (exercice?.autoCorrection[i]?.propositions === undefined) {
+  if (context.isAmc) {
+    if (exercice.autoCorrection?.[i] != null) {
+      exercice.autoCorrection[i].formatInteractif = 'mathalea-qcm'
+    }
+    return { texte: '', texteCorr: '' }
+  }
+  if (exercice?.autoCorrection?.[i]?.propositions === undefined) {
     window.notify(
       'propositionsQcm a reçu une liste de propositions undefined',
       {
         autoCrorrection: exercice?.autoCorrection[i],
-        propositions: exercice?.autoCorrection[i].propositions,
+        propositions: exercice?.autoCorrection?.[i]?.propositions,
         exercise: exercice,
       },
     )
     return { texte: '', texteCorr: '' }
   } else if (exercice.autoCorrection[i].propositions.length === 0) {
-    window.notify('propositionsQcm a reçu une liste de propositions vide', {
-      autoCrorrection: exercice.autoCorrection[i],
-      propositions: exercice.autoCorrection[i].propositions,
-      exercise: exercice,
-    })
-    return { texte: '', texteCorr: '' }
-  } else if (exercice.autoCorrection[i].propositions.length === 1) {
-    window.notify(
-      'propositionsQcm a reçu une liste de propositions de taille 1',
-      {
+    if (!context.isAmc) {
+      window.notify('propositionsQcm a reçu une liste de propositions vide', {
         autoCrorrection: exercice.autoCorrection[i],
         propositions: exercice.autoCorrection[i].propositions,
         exercise: exercice,
-      },
-    )
+      })
+    }
+    return { texte: '', texteCorr: '' }
+  } else if (exercice.autoCorrection[i].propositions.length === 1) {
+    if (!context.isAmc) {
+      window.notify(
+        'propositionsQcm a reçu une liste de propositions de taille 1',
+        {
+          autoCrorrection: exercice.autoCorrection[i],
+          propositions: exercice.autoCorrection[i].propositions,
+          exercise: exercice,
+        },
+      )
+    }
     return { texte: '', texteCorr: '' }
   }
 
+  exercice.autoCorrection[i].formatInteractif = 'mathalea-qcm'
+
   if (context.isHtml) {
     espace = '&emsp;'
-    exercice.autoCorrection[i].formatInteractif = 'qcm'
   } else {
     espace = '\\qquad '
   }
@@ -143,6 +153,10 @@ export function propositionsQcm(
   indexes.push(...qcmPreparation.indexes)
   vertical = qcmPreparation.vertical
   nbCols = qcmPreparation.nbCols
+  if (context.isAmc) {
+    syncQcmAutoCorrectionToAmc(exercice, i)
+    return { texte: '', texteCorr: '' }
+  }
   if (!context.isHtml) {
     const propositions = exercice.autoCorrection[i].propositions
 

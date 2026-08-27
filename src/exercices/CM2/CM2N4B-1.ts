@@ -14,7 +14,6 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Calculer une expression avec des parenthèses'
 export const dateDePublication = '30/06/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -71,7 +70,7 @@ export default class nomExercice extends Exercice {
     this.consigne += this.interactif
       ? '.'
       : ' en détaillant les étapes de calculs.'
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const lettre = lettreDepuisChiffre(i + 1)
       let texte = '' // texte de la question
       let resultat = 0

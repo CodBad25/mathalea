@@ -1,17 +1,17 @@
+import { createList } from '../../../lib/format/lists'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import { createList } from '../../../lib/format/lists'
-import FractionEtendue from '../../../modules/FractionEtendue'
 export const uuid = '530db'
 export const refs = {
   'fr-fr': ['3S2QCM-5', 'BP2FLUC6', 'BP1AUTO006'],
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Probabilités  (septembre 2021 Métropole)'

@@ -28,14 +28,9 @@ import Exercice from '../Exercice'
 
 type SymboleInegalite = '≤' | '≥' | '<' | '>'
 type Question =
-  | 'ax≤b'
-  | 'x+b≤c'
-  | 'ax+b≤c'
-  | 'ax+b≤0'
-  | 'ax+b≤cx+d'
-  | 'a(bx+c)≤dx+e'
+  'ax≤b' | 'x+b≤c' | 'ax+b≤c' | 'ax+b≤0' | 'ax+b≤cx+d' | 'a(bx+c)≤dx+e'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre une inéquation du premier degré'
 export const dateDeModifImportante = '08/10/2025'
 /**
@@ -142,7 +137,7 @@ export default class ExerciceInequation1 extends Exercice {
       }
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       let a = randint(2, 13)
       let b = randint(1, 13)

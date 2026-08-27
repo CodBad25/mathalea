@@ -33,7 +33,6 @@ import {
 export const titre =
   "Définir une expression littérale à partir d'un motif itératif"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '23/06/2025'

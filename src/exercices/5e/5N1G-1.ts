@@ -25,7 +25,7 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer en utilisant les priorités opératoires'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 export const dateDeModifImportante = '20/06/2024' // Ajout de l'équilibre entre les questions et suppression du doublon de paramètre

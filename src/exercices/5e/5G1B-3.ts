@@ -11,7 +11,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Placer des points dans un repère'
 export const dateDePublication = '27/10/2023'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

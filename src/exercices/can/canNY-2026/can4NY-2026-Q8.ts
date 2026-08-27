@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 export const titre = 'Calculer avec des parenthèses'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cv4yu'
 export const refs = {
   'fr-fr': [],

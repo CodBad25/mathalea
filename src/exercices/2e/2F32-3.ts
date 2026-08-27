@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -6,6 +5,7 @@ import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
 import { Spline, spline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
@@ -14,14 +14,14 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
 import { ajouteChampTexte } from '../../lib/interactif/questionMathLive'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
-import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Déterminer le tableau de signes d'une fonction graphiquement"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/07/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '07/12/2023' // interactivité
 export const uuid = 'a7860' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
@@ -169,7 +169,12 @@ export default class BetaModeleSpline extends Exercice {
       const courbe1 = maSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 2, style: '.', epaisseur: 2 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 2,
+          style: '.',
+          epaisseur: 2,
+        },
         color: bleuMathalea,
       })
 

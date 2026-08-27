@@ -6,7 +6,7 @@ import Pyramide from '../../../modules/pyramide'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer dans une pyramide additive de fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '09/05/2022'

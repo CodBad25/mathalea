@@ -11,7 +11,7 @@ import Exercice from '../../Exercice'
 export const titre =
   'Écrire un nombre sous forme de fraction irréductible et sous forme décimale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/08/2026'
 
 /**

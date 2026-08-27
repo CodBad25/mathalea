@@ -1,11 +1,11 @@
-import { choice } from '../../lib/outils/arrayOutils'
-import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
-import { randint } from '../../modules/outils'
 import { propositionsQcm } from '../../lib/interactif/qcm'
+import { choice } from '../../lib/outils/arrayOutils'
 import SchemaEnBoite from '../../lib/outils/SchemaEnBoite'
+import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -33,7 +33,7 @@ export default class NumericPatterns extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const raison = choice([2, 3, 4, 5, 6, 8])
       const u0 = randint(2, 9)
       const k = this.sup ? randint(2, 5) : 0

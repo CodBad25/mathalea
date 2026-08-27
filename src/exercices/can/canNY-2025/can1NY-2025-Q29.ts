@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une différence de deux carrés'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd6f1f'
 export const refs = {
   'fr-fr': [],

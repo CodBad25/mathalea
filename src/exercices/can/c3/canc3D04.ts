@@ -14,7 +14,6 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = "Indiquer l'heure sur une horloge"
 export const interactifReady = true
-export const interactifType = 'interactive-clock'
 
 export const dateDePublication = '21/2/2025'
 
@@ -33,7 +32,6 @@ export default class ExerciceInteractiveClock extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.interactifType = interactifType // MGu obligatoire car chargé en statique avec la CAN2025
     handleInteractiveClock() // Obligatoire pour la gestion de l'élément custom <interactive-clock>
     this.besoinFormulaireCaseACocher = [
       "Moitié des questions sur les heures de l'après-midi",

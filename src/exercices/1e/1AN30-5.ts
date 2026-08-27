@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre des inéquations avec la fonction exponentielle'
 export const dateDePublication = '23/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résoudre des inéquations avec des exponentielles sans utiliser le logarithme.
@@ -25,7 +24,7 @@ export const interactifType = 'mathLive'
 export const uuid = '61ed2'
 
 export const refs = {
-  'fr-fr': ['1AN30-5','TSA3-23', 'TCA7-23'],
+  'fr-fr': ['1AN30-5', 'TSA3-23', 'TCA7-23'],
   'fr-ch': [''],
 }
 
@@ -164,7 +163,7 @@ export default class InequationsExponentielles extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let value = ''

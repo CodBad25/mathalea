@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -6,11 +5,12 @@ import { ellipse } from '../../../lib/2d/projections3d'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Vocabulaire dans un solide (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '3e8e3'
 export const refs = {
   'fr-fr': [],
@@ -50,7 +50,8 @@ export default class VocabulaireSolide extends ExerciceSimple {
         {
           pixelsParCm: 30,
           scale: 0.6,
-          display: 'block', center: !context.isHtml,
+          display: 'block',
+          center: !context.isHtml,
         } as const,
         fixeBordures(objets, { rxmin: 0, rxmax: 0, rymax: 0, rymin: -0.5 }),
       ),
@@ -89,7 +90,8 @@ export default class VocabulaireSolide extends ExerciceSimple {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.6,
-            display: 'block', center: !context.isHtml,
+            display: 'block',
+            center: !context.isHtml,
           } as const,
           fixeBordures(objets, { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0 }),
         ),

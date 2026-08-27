@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Trouver l'inverse d'un nombre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * * Calcul de l'inverse d'un nombre.

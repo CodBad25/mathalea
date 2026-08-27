@@ -2,7 +2,6 @@ import RepresentationParametrique from '../can/TSpe/canTSpeE03'
 export const titre = "Déterminer une représentation paramétrique d'une droite"
 export const dateDePublication = '05/10/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de CanTspeE03 pour les auto 1er

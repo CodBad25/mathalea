@@ -15,7 +15,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Calculer une distance avec le théorème de Thalès'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '23/12/2025'
 

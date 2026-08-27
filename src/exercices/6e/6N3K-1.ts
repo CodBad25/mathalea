@@ -21,7 +21,7 @@ import { context } from '../../modules/context'
 export const titre = 'Effectuer des calculs simples avec des fractions'
 export const dateDePublication = '20/11/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '19/06/2026'

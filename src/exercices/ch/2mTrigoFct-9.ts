@@ -20,7 +20,6 @@ export const titre =
 export const dateDePublication = '18/05/2026'
 export const uuid = 'f9e43'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['2mTrigoFct-9'],

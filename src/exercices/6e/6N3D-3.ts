@@ -19,7 +19,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Placer un point sur une droite graduée (abscisses fractionnaires niv 2)'
 export const interactifReady = true
-export const interactifType = 'points-cliquables'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '11/05/2023'

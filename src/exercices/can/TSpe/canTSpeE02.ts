@@ -1,16 +1,16 @@
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 export const titre = "Calculer les coordonnées d'un vecteur"
 export const dateDePublication = '04/10/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  *
  * @author Stéphane Guyon
@@ -30,7 +30,7 @@ export default class CoordonneesVecteur extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const choixLettre = randint(1, 23, [9, 10, 11, 15])

@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Résoudre un problème de reste'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f2c62'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

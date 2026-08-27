@@ -30,7 +30,6 @@ export const titre = 'Donner différentes écritures de nombres décimaux'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '26/07/2026'
 

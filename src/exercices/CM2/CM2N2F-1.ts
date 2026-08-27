@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lire des abscisses fractionnaires'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '14/01/2025'

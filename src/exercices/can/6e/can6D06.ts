@@ -5,7 +5,7 @@ export const titre =
   'Connaître des unités de mesure de durées longues et les relations qui les lient'
 export const dateDePublication = '02/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

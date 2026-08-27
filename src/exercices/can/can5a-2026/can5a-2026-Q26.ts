@@ -12,7 +12,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Déterminer le volume d'un pavé droit"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ltsv8'
 export const refs = {
   'fr-fr': [],

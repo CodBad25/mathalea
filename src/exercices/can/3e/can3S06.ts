@@ -3,7 +3,6 @@ import { sp } from '../../../lib/outils/outilString'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer le rang d’une médiane'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

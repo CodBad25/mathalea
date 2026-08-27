@@ -3,7 +3,7 @@ import ExercicePerimetresEtAiresOld from '../6e/_Exercice_perimetres_et_aires-ol
 export const titre =
   "Calculer le périmètre et l'aire de disques ou demi-disques"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

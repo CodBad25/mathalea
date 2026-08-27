@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Mettre des fractions sous un dénominateur commun'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/06/2026'
 
 /**
@@ -186,7 +186,7 @@ export default class EgalitesEntreFractions extends Exercice {
         .split(',')
         .map((v: string) => parseInt(v, 10)),
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let denom1 = 1

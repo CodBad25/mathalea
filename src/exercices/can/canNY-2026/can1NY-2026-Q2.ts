@@ -7,7 +7,7 @@ import Decimal from 'decimal.js'
 import { abs } from '../../../lib/outils/nombres'
 export const titre = 'Écrire un décimal sous une forme particulière'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'p2htj'
 export const refs = {
   'fr-fr': [],

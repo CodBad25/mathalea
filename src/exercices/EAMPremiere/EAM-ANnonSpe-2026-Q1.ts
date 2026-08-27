@@ -8,10 +8,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Utiliser les propriétés de la différence de deux nombres pour les comparer'
+export const titre =
+  'Utiliser les propriétés de la différence de deux nombres pour les comparer'
 export const dateDePublication = '05/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -20,7 +21,7 @@ export const dateDePublication = '05/06/2026'
  *
  */
 export default class AutoQ1ANns2026 extends ExerciceQcmA {
-    // condition : 'strictPos' | 'strictNeg' | 'nulle'
+  // condition : 'strictPos' | 'strictNeg' | 'nulle'
   // differenceAB : true => on parle de A - B ; false => B - A (échange de A et B)
   private appliquerLesValeurs(condition: string, differenceAB: boolean): void {
     const diffTex = differenceAB ? 'A-B' : 'B-A'

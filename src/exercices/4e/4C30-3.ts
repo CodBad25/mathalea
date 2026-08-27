@@ -17,7 +17,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 
 export const titre = "Donner l'écriture entière d'une puissance"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

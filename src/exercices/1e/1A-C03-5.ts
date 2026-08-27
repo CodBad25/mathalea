@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': ['10NO3D-15'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Appliquer la propriété des quotients avec des puissances'

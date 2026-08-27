@@ -3,7 +3,7 @@ export const titre = 'Multiplier ou/et diviser des fractions'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '29919'
 export const refs = {
   'fr-fr': ['2N31-2', 'BP2AutoH2'],

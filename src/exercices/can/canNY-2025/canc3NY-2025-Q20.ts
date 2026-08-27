@@ -6,7 +6,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomF } from '../../../lib/outils/Personne'
 export const titre = 'Résoudre un problème'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ffe8e'
 export const refs = {
   'fr-fr': [],

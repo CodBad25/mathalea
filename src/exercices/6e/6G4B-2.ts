@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre = 'Connaître la mesure de quelques angles particuliers'
 export const amcReady = false
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '04/12/2025'
 export const dateDeModifImportante = '14/12/2025'
 

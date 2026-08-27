@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 export const titre = 'Les filières technologiques : effectifs et fréquences'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9ca12'
 export const refs = {
   'fr-fr': ['EgaliteFG6-1e-16'],
@@ -27,9 +27,14 @@ export default class EgaliteFGLycee16 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
-    this.consigne += "<br><br>Voici les effectifs des classes de première technologique d'un lycée :<br>"
+    this.consigne +=
+      "<br><br>Voici les effectifs des classes de première technologique d'un lycée :<br>"
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Filles</th><th style="border: 1px solid #888; padding: 4px 10px;">Garçons</th><th style="border: 1px solid #888; padding: 4px 10px;">Total</th></tr>
       <tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STMG</td><td style="border: 1px solid #888; padding: 4px 10px;">54</td><td style="border: 1px solid #888; padding: 4px 10px;">90</td><td style="border: 1px solid #888; padding: 4px 10px;">144</td></tr>
@@ -58,7 +63,8 @@ export default class EgaliteFGLycee16 extends Exercice {
     this.listeQuestions = []
     this.listeCorrections = []
 
-    const texte0 = 'Construire le tableau des fréquences et des fréquences marginales associé.'
+    const texte0 =
+      'Construire le tableau des fréquences et des fréquences marginales associé.'
     const tableauFreqHtml =
       '<table style="border-collapse: collapse; margin: 10px 0;">' +
       '<tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Filles</th><th style="border: 1px solid #888; padding: 4px 10px;">Garçons</th><th style="border: 1px solid #888; padding: 4px 10px;">Total</th></tr>' +
@@ -83,37 +89,48 @@ export default class EgaliteFGLycee16 extends Exercice {
       (context.isHtml ? tableauFreqHtml : tableauFreqLatex) +
       "(chaque effectif est divisé par l'effectif total, $450$.)"
 
-    let texte1 = "Quel est le pourcentage d'élèves en 1re ST2S (arrondi au centième) ?"
-    if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
+    let texte1 =
+      "Quel est le pourcentage d'élèves en 1re ST2S (arrondi au centième) ?"
+    if (this.interactif)
+      texte1 +=
+        ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 17.11 } })
     const correction1 = `$\\dfrac{77}{450}\\times 100\\approx ${miseEnEvidence('17{,}11\\,\\%')}$.`
 
-    let texte2 = 'Quel est le pourcentage de filles en 1re STI2D (arrondi au centième) ?'
-    if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
+    let texte2 =
+      'Quel est le pourcentage de filles en 1re STI2D (arrondi au centième) ?'
+    if (this.interactif)
+      texte2 +=
+        ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 27.27 } })
     const correction2 = `$\\dfrac{27}{99}\\times 100\\approx ${miseEnEvidence('27{,}27\\,\\%')}$.`
 
-    let texte3 = 'Parmi les élèves de 1re STL, quel est le pourcentage de filles (arrondi au centième) ?'
-    if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3, '', { texteApres: '%' }) + '<br>'
+    let texte3 =
+      'Parmi les élèves de 1re STL, quel est le pourcentage de filles (arrondi au centième) ?'
+    if (this.interactif)
+      texte3 +=
+        ajouteChampTexteMathLive(this, 3, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 76.92 } })
     const correction3 = `$\\dfrac{60}{78}\\times 100\\approx ${miseEnEvidence('76{,}92\\,\\%')}$.`
 
     let texte4 =
       "Parmi les garçons, quel est le pourcentage d'élèves qui choisit de s'orienter en ST2S (arrondi au centième) ?"
-    if (this.interactif) texte4 += ajouteChampTexteMathLive(this, 4, '', { texteApres: '%' }) + '<br>'
+    if (this.interactif)
+      texte4 +=
+        ajouteChampTexteMathLive(this, 4, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 8.33 } })
     const correction4 = `$\\dfrac{18}{216}\\times 100\\approx ${miseEnEvidence('8{,}33\\,\\%')}$.`
 
     const texte5 =
-      "En construisant le tableau des fréquences conditionnelles par ligne, que peut-on déduire quant à la proportion des élèves dans chaque filière technologique au regard de leur genre ?"
+      'En construisant le tableau des fréquences conditionnelles par ligne, que peut-on déduire quant à la proportion des élèves dans chaque filière technologique au regard de leur genre ?'
     const correction5 =
       "On constate un très fort déséquilibre selon les filières : les filles sont largement majoritaires en ST2S ($\\approx 76{,}6\\,\\%$) et en STL ($\\approx 76{,}9\\,\\%$), alors qu'elles sont minoritaires en STI2D ($\\approx 27{,}3\\,\\%$). Ce contraste illustre une orientation encore très genrée selon les filières technologiques (santé/social et laboratoire perçus comme féminins, industrie perçue comme masculine)."
 
     const texte6 =
       "À l'aide du tableau des fréquences conditionnelles par colonne, donner une répartition sous forme de diagramme circulaire des différentes filières auprès des filles et auprès des garçons, puis comparer ces diagrammes entre eux."
     const correction6 =
-      "Chez les filles ($234$ élèves) : STMG $\\dfrac{54}{234}\\approx 23{,}1\\,\\%$, ST2S $\\dfrac{59}{234}\\approx 25{,}2\\,\\%$, STI2D $\\dfrac{27}{234}\\approx 11{,}5\\,\\%$, STL $\\dfrac{60}{234}\\approx 25{,}6\\,\\%$, STD2A $\\dfrac{34}{234}\\approx 14{,}5\\,\\%$.<br>" +
-      "Chez les garçons ($216$ élèves) : STMG $\\dfrac{90}{216}\\approx 41{,}7\\,\\%$, ST2S $\\dfrac{18}{216}\\approx 8{,}3\\,\\%$, STI2D $\\dfrac{72}{216}\\approx 33{,}3\\,\\%$, STL $\\dfrac{18}{216}\\approx 8{,}3\\,\\%$, STD2A $\\dfrac{18}{216}\\approx 8{,}3\\,\\%$.<br>" +
+      'Chez les filles ($234$ élèves) : STMG $\\dfrac{54}{234}\\approx 23{,}1\\,\\%$, ST2S $\\dfrac{59}{234}\\approx 25{,}2\\,\\%$, STI2D $\\dfrac{27}{234}\\approx 11{,}5\\,\\%$, STL $\\dfrac{60}{234}\\approx 25{,}6\\,\\%$, STD2A $\\dfrac{34}{234}\\approx 14{,}5\\,\\%$.<br>' +
+      'Chez les garçons ($216$ élèves) : STMG $\\dfrac{90}{216}\\approx 41{,}7\\,\\%$, ST2S $\\dfrac{18}{216}\\approx 8{,}3\\,\\%$, STI2D $\\dfrac{72}{216}\\approx 33{,}3\\,\\%$, STL $\\dfrac{18}{216}\\approx 8{,}3\\,\\%$, STD2A $\\dfrac{18}{216}\\approx 8{,}3\\,\\%$.<br>' +
       "Les deux diagrammes circulaires ont des profils très différents : chez les filles, les quatre filières hors STMG se partagent des parts comparables (entre $11$ et $26\\,\\%$), alors que chez les garçons, STMG et STI2D dominent nettement (à eux deux, $75\\,\\%$ des garçons), tandis que ST2S et STL restent marginales. Cela confirme, sous un autre angle, l'orientation très genrée observée par filière."
 
     this.listeQuestions[0] = texte0

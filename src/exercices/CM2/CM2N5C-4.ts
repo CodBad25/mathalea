@@ -19,7 +19,7 @@ export const titre =
   'Au marché (addition et soustraction de masses, conversions)'
 export const dateDePublication = '20/11/2024'
 export const dateDeModifImportante = '21/04/2025'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const prenoms = [
   // Féminins

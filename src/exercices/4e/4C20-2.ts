@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Comparer trois fractions (dénominateurs non multiples) et un nombre entier'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '25/10/2025'
 

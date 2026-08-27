@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer une quatrième proportionnelle dans un tableau de proportionnalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b3169'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

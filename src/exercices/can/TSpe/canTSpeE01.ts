@@ -1,17 +1,16 @@
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 export const titre = "Calculer les coordonnées du milieu d'un segment"
 export const dateDePublication = '05/10/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -32,7 +31,7 @@ export default class MilieuSegment extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const choixLettre = randint(1, 23, [9, 10, 11, 15])

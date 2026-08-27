@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer une somme ou une différence de fractions de même dénominateur'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '05/07/2025'

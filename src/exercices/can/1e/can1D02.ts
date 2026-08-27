@@ -7,11 +7,11 @@ import {
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un nombre dérivé'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/06/2022'
 
 /**
@@ -22,7 +22,7 @@ export const dateDePublication = '20/06/2022'
 export const uuid = 'a1ba2'
 
 export const refs = {
-  'fr-fr': ['can1D02', ],
+  'fr-fr': ['can1D02'],
   'fr-ch': [],
 }
 export default class NombreDerivee extends ExerciceSimple {

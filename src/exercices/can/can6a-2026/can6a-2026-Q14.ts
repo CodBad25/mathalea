@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une somme avec des décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 't2ctj'
 export const refs = {
   'fr-fr': [],
@@ -22,8 +22,8 @@ export default class Can20266Q14 extends ExerciceCan {
     super()
     this.enonce()
     this.optionsChampTexte = { texteAvant: '$~=~$' }
-       this.formatChampTexte = KeyboardType.clavierDeBase
-        this.optionsDeComparaison = {
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
       nombreDecimalSeulement: true,
     }
   }
@@ -38,8 +38,6 @@ export default class Can20266Q14 extends ExerciceCan {
     this.question = `$${texNombre(a, 2)}+${texNombre(b, 1)}$`
 
     this.correction = `$${texNombre(a, 2)}+${texNombre(b, 1)}=${texNombre(a, 2)}+${texNombre(b, 2, true)}=${miseEnEvidence(texNombre(a + b, 2))}$`
-
- 
   }
 
   nouvelleVersion() {

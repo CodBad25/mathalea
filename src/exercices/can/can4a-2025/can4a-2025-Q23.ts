@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Réduire une expression'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3422h'
 export const refs = {
   'fr-fr': [],

@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 export const titre = "Prendre 10 \\% d'une quantité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'zv53r'
 export const refs = {
   'fr-fr': [],

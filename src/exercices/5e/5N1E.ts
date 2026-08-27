@@ -20,7 +20,6 @@ import {
   type Operator,
 } from '../../lib/mathFonctions/expression'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Organiser des calculs en une seule ligne'
 export const dateDePublication = '31/05/2024'

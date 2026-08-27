@@ -1,6 +1,6 @@
 import identitesCalculs from '../../3e/3L11-5'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Calculer avec les identités remarquables*'
 export const uuid = '69522'
 export const refs = {

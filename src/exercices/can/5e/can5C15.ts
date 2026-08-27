@@ -4,7 +4,6 @@ import { abs } from '../../../lib/outils/nombres'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Rechercher un nombre à ajouter'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

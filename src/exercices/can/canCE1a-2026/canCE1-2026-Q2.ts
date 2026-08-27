@@ -1,11 +1,11 @@
-import ExerciceCan from '../../ExerciceCan'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver le résultat le plus petit (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '225c1'
 export const refs = {
   'fr-fr': [],
@@ -34,7 +34,8 @@ export default class Can2026CE1Q2 extends ExerciceCan {
     const plusPetit = Math.min(res1, res2)
     const reponse1 = `$${a}\\times ${b}$`
     const reponse2 = `$${c}\\times ${d}$`
-    const plusPetitOperation = plusPetit===res1 ? `${a}\\times ${b}` : `${c}\\times ${d}`
+    const plusPetitOperation =
+      plusPetit === res1 ? `${a}\\times ${b}` : `${c}\\times ${d}`
     this.question = `Entoure le résultat le plus petit.`
     this.autoCorrection[0] = {
       enonce: this.question,

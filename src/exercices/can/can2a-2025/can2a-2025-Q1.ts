@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier un entier avec un décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '26491'
 export const refs = {
   'fr-fr': [],

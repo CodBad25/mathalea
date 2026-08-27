@@ -8,7 +8,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Donner le nombre de faces d'un cube (QCM)"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '9552b'
 export const refs = {
   'fr-fr': [],
@@ -88,7 +88,7 @@ export default class Can2025CE2QXX extends ExerciceCan {
           statut: false,
         },
       ],
-      options: { vertical: !context.isHtml }
+      options: { vertical: !context.isHtml },
     }
 
     const dessin = this.dessinerCube()

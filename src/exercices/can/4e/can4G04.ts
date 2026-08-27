@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -14,11 +13,11 @@ import {
 } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre, texRacineCarree } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un côté avec le théorème de Pythagore'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

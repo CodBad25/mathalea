@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { arc } from '../../lib/2d/Arc'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -8,6 +7,7 @@ import { texteParPosition } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { texteGras } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =

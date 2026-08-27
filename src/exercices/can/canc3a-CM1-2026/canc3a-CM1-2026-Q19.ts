@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { choice} from '../../../lib/outils/arrayOutils'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 import { fraction } from '../../../modules/fractions'
@@ -9,7 +9,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver le plus grand nombre (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'a01f3'
 export const refs = {
   'fr-fr': [],
@@ -85,8 +85,6 @@ export default class Can2026CM1Q19 extends ExerciceCan {
   }
 
   nouvelleVersion() {
-    this.canOfficielle || this.sup
-      ? this.enonce(5, 4, true)
-      : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(5, 4, true) : this.enonce()
   }
 }

@@ -21,7 +21,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre des problèmes algébriques avec des balances'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '3/06/2025'
 

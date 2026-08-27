@@ -1,4 +1,4 @@
-import {  pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
@@ -7,9 +7,9 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = "Trouver la figure avec deux angles droits (QCM)"
+export const titre = 'Trouver la figure avec deux angles droits (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'b949c'
 export const refs = {
   'fr-fr': [],
@@ -83,7 +83,12 @@ export default class Can2026CE1Q15 extends ExerciceCan {
         const E = pointAbstrait(2 + offsetX, 0)
         const poly = polygone([A, B, C, D, E], 'black')
         poly.epaisseur = 2
-        polys.push({ poly, centreX: 1 + offsetX, centreY: 1, numero: index + 1 })
+        polys.push({
+          poly,
+          centreX: 1 + offsetX,
+          centreY: 1,
+          numero: index + 1,
+        })
       } else if (fig === 'trapeze_rectangle') {
         const A = pointAbstrait(0 + offsetX, 0)
         const B = pointAbstrait(0 + offsetX, 2)
@@ -214,7 +219,7 @@ export default class Can2026CE1Q15 extends ExerciceCan {
           statut: positionCorrecte === 4,
         },
       ],
-      options: { vertical: !context.isHtml }
+      options: { vertical: !context.isHtml },
     }
 
     this.formatInteractif = 'qcm'
@@ -238,8 +243,9 @@ export default class Can2026CE1Q15 extends ExerciceCan {
       'Coche le numéro de la figure qui a deux angles droits.' + dessin + '<br>'
 
     const monQcm = propositionsQcm(this, 0)
-    this.canEnonce =  'Coche le numéro de la figure qui a deux angles droits.<br>' + dessin 
-     
+    this.canEnonce =
+      'Coche le numéro de la figure qui a deux angles droits.<br>' + dessin
+
     this.question = `${monQcm.texte}`
 
     this.correction =

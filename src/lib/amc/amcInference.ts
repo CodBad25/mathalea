@@ -99,10 +99,7 @@ export function mathaleaEnsureAMCCompatibility(
 
   const getFormat = (item: InferenceAutoCorrectionItem | undefined): string =>
     String(
-      item?.formatInteractif ??
-        exercice.formatInteractif ??
-        exercice.interactifType ??
-        '',
+      item?.formatInteractif ?? exercice.formatInteractif ?? '',
     ).toLowerCase()
 
   const isQcmItem = (
@@ -350,18 +347,8 @@ export function mathaleaEnsureAMCCompatibility(
     return exercice as IExerciceAMC
   }
 
-  if (exercice.interactifType == null) {
-    // Si l'exercice n'est pas interactif, on suppose que c'est un exercice ouvert compatible avec AMC.
-    // Certains exercices modernes ne déclarent le format qu'au niveau de la
-    // question. Il faut donc examiner autoCorrection avant de conclure qu'ils
-    // ne sont pas interactifs (cas fréquent de mathalea-qcm).
-    if (applyQcmInference()) return exercice as IExerciceAMC
-    if (autoCorrectionSource.length === 0) return applyAMCOpenFallback()
-  }
-
-  // La donnée par question est plus précise que interactifType et couvre à la
-  // fois les QCM historiques ('qcm') et le custom element moderne.
   if (applyQcmInference()) return exercice as IExerciceAMC
+  if (autoCorrectionSource.length === 0) return applyAMCOpenFallback()
 
   // type interactifs non supportés par AMC : svg-selection, cliqueFigure, DragAndDrop, apiGeom, tableur, MetaInteractif2d : on les considère comme des AMCOpen car ils ne sont pas incompatibles avec AMC, mais ils nécessitent une correction personnalisée.
   if (
@@ -373,32 +360,20 @@ export function mathaleaEnsureAMCCompatibility(
       'MetaInteractif2d', // Difficile à faire rentrer dans AMC
       'texte', // inadapté pour AMC, mais on peut faire du AMCOpen
       'custom', // inadapté pour AMC (contient du apiGeom et autres), mais on peut faire du AMCOpen
-    ].includes(String(exercice.interactifType))
+    ].some((format) =>
+      autoCorrectionSource.some((item) => getFormat(item) === format),
+    )
   ) {
     return applyAMCOpenFallback()
   }
 
   if (
-    String(exercice.interactifType).toLowerCase() === 'qcm' ||
-    String(exercice.interactifType).toLowerCase() === 'mathalea-qcm'
+    autoCorrectionSource.some((item) => getFormat(item) === 'liste-deroulante')
   ) {
-    // Si l'exercice est de type QCM interactif, alors il est compatible avec AMC, et on peut inférer le type AMC à partir du nombre de bonnes réponses dans la première autoCorrection.
-    // Un QCM sans propositions exploitables ne doit pas produire silencieusement
-    // une question vide : le contrat AMCOpen reste imprimable et annotable.
-    if (!hasMixedGeneratedQuestions) return applyAMCOpenFallback()
-  }
-
-  // Si c'est un exercice de type liste déroulante interactif, on transforme la liste déroulante en propositions de type QCM pour l'autoCorrection AMC.
-  // On le signale car l'exo peut avoir un export AMC qcmMono en utilisant la fonction listeDeroulanteToQcm.
-  if (exercice.interactifType === 'listeDeroulante') {
     return applyAMCOpenFallback()
   }
 
-  if (
-    String(exercice.interactifType).toLowerCase() !== 'mathlive' &&
-    !hasOnlyPotentiallyNumericQuestions &&
-    !hasMixedGeneratedQuestions
-  ) {
+  if (!hasOnlyPotentiallyNumericQuestions && !hasMixedGeneratedQuestions) {
     // Pour ce qui ne rentre pas dans les cas précédents : fallback AMCOpen.
     return applyAMCOpenFallback()
   }
@@ -408,6 +383,7 @@ export function mathaleaEnsureAMCCompatibility(
   // On va essayer d'inférer un type AMCNum à partir des réponses numériques présentes dans les autoCorrections ou les réponses interactives mises en cache.
 
   const extractNumericFields = (item: AutoCorrection) => {
+    if (item == null) return []
     const format = getFormat(item)
     const isLegacyNumericItemMislabeledAsQcm =
       hasMixedGeneratedQuestions &&
@@ -518,22 +494,7 @@ export function mathaleaEnsureAMCCompatibility(
     statementQuestionCount > 0 &&
     autoCorrectionSource.length >= statementQuestionCount &&
     autoCorrectionSource.length % statementQuestionCount === 0
-  const allMixedItemsAreSupported = autoCorrectionSource.every(
-    (item, index) => {
-      if (item == null) return false
-      if (isQcmItem(item)) return true
-      const fields = numericFieldGroups[index]
-      return (
-        fields.length > 0 && fields.every((field) => field.valeur !== undefined)
-      )
-    },
-  )
-
-  if (
-    hasMixedGeneratedQuestions &&
-    canGroupByStatement &&
-    allMixedItemsAreSupported
-  ) {
+  if (hasMixedGeneratedQuestions && canGroupByStatement) {
     const blocksPerStatement =
       autoCorrectionSource.length / statementQuestionCount
     exerciseAny.autoCorrectionAMC = Array.from(
@@ -563,25 +524,42 @@ export function mathaleaEnsureAMCCompatibility(
               ]
             }
 
-            return numericFieldGroups[itemIndex].map(
-              (field, fieldIndex, fields) => ({
-                type: 'AMCNum',
-                propositions: [
-                  {
-                    texte:
-                      offset === blocksPerStatement - 1 &&
-                      fieldIndex === fields.length - 1
-                        ? (exercice.listeCorrections[statementIndex] ?? '')
-                        : '',
-                    reponse: {
-                      texte: getAMCFieldLabel(field.key, offset + fieldIndex),
-                      valeur: field.valeur,
-                      param: field.param,
+            const numericFields = numericFieldGroups[itemIndex]
+            const hasSupportedNumericFields =
+              numericFields.length > 0 &&
+              numericFields.every((field) => field.valeur !== undefined)
+            if (!hasSupportedNumericFields) {
+              return [
+                {
+                  type: 'AMCOpen',
+                  propositions: [
+                    {
+                      texte: exercice.listeCorrections[statementIndex] ?? '',
+                      statut: 3,
+                      enonce: item?.enonce ?? '',
                     },
+                  ],
+                },
+              ]
+            }
+
+            return numericFields.map((field, fieldIndex, fields) => ({
+              type: 'AMCNum',
+              propositions: [
+                {
+                  texte:
+                    offset === blocksPerStatement - 1 &&
+                    fieldIndex === fields.length - 1
+                      ? (exercice.listeCorrections[statementIndex] ?? '')
+                      : '',
+                  reponse: {
+                    texte: getAMCFieldLabel(field.key, offset + fieldIndex),
+                    valeur: field.valeur,
+                    param: field.param,
                   },
-                ],
-              }),
-            )
+                },
+              ],
+            }))
           })
 
         return {

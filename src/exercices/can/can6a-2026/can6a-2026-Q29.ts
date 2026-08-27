@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Ajouter un dixième ou un centième'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '132rb'
 export const refs = {
   'fr-fr': [],

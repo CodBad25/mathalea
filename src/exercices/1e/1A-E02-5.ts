@@ -18,7 +18,7 @@ export const refs = {
 
  */
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Retrouver le calcul pour obtenir la valeur initiale'
@@ -36,13 +36,13 @@ export default class Auto1AE025 extends ExerciceQcmA {
     const bonnesReponses = [
       {
         reponse: `$\\dfrac{${texNombre(prixFinal)}}{${coefficientTexte}}$`,
-        correction: `Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 -  ${texNombre(pourcentage/100,2)}=${coefficientTexte}$ (coefficient multiplicateur).<br>
+        correction: `Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 -  ${texNombre(pourcentage / 100, 2)}=${coefficientTexte}$ (coefficient multiplicateur).<br>
         Si $V_I$ est le prix initial, on a : $ V_I \\times ${coefficientTexte}=${texNombre(prixFinal)}$.<br>
         Ainsi, le prix initial est donné par : $${miseEnEvidence(`\\dfrac{${texNombre(prixFinal)}}{${coefficientTexte}}`)}$.`,
       },
       {
         reponse: `$\\dfrac{${texNombre(prixFinal)}}{1 - \\dfrac{${pourcentage}}{100}}$`,
-        correction: `Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 - ${texNombre(pourcentage/100,2)}$ (coefficient multiplicateur).<br>
+        correction: `Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 - ${texNombre(pourcentage / 100, 2)}$ (coefficient multiplicateur).<br>
         Si $V_I$ est le prix initial, on a : $ V_I \\times \\left(1 - \\dfrac{${pourcentage}}{100}\\right)=${texNombre(prixFinal)}$.<br>
         Ainsi, le prix initial est donné par : $${miseEnEvidence(`\\dfrac{${texNombre(prixFinal)}}{1 - \\dfrac{${pourcentage}}{100}}`)}$.`,
       },
@@ -55,7 +55,7 @@ Ainsi, le prix initial est donné par : $${miseEnEvidence(`\\dfrac{${texNombre(p
       },
       {
         reponse: `$\\dfrac{${texNombre(prixFinal)}}{1 - ${texNombre(pourcentage / 100, 2)}}$`,
-        correction: `Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 -  ${texNombre(pourcentage/100,2)}$ (coefficient multiplicateur).<br>
+        correction: `Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 -  ${texNombre(pourcentage / 100, 2)}$ (coefficient multiplicateur).<br>
 Si $V_I$ est le prix initial, on a : $ V_I \\times \\left(1 - ${texNombre(pourcentage / 100, 2)}\\right)=${texNombre(prixFinal)}$.<br>
 Ainsi, le prix initial est donné par : $${miseEnEvidence(`\\dfrac{${texNombre(prixFinal)}}{1 - ${texNombre(pourcentage / 100, 2)}}`)}$.`,
       },
@@ -67,7 +67,7 @@ Ainsi, le prix initial est donné par : $${miseEnEvidence(`${texNombre(prixFinal
       },
       {
         reponse: `$${texNombre(prixFinal)} \\div ${coefficientTexte}$`,
-        correction: `6Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 - ${texNombre(pourcentage/100,2)}=${coefficientTexte}$ (coefficient multiplicateur).<br>
+        correction: `6Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 - ${texNombre(pourcentage / 100, 2)}=${coefficientTexte}$ (coefficient multiplicateur).<br>
 Si $V_I$ est le prix initial, on a : $ V_I \\times ${coefficientTexte}=${texNombre(prixFinal)}$.<br>
 Ainsi, le prix initial est donné par : $${miseEnEvidence(`${texNombre(prixFinal)} \\div ${coefficientTexte}`)}$.`,
       },

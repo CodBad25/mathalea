@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Moitié d'un nombre décimal"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3422l'
 export const refs = {
   'fr-fr': [],

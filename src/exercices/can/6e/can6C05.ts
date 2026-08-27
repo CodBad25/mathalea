@@ -11,7 +11,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier astucieusement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -45,12 +45,19 @@ export default class MultiplierAstucieusement extends ExerciceSimple {
     const c = randint(1, 9, [a, b])
     const d = randint(1, 9, [a, b, c])
     // typeDeQuestions :  1, 2, 3, 4 : *100 // 5, 6 : *10 // 7 : *1000
-    const typeDeQuestions = this.quotaChoice('typeDeQuestions', [1, 2, 3, 4, 5, 6, 7])
+    const typeDeQuestions = this.quotaChoice(
+      'typeDeQuestions',
+      [1, 2, 3, 4, 5, 6, 7],
+    )
     let nombre = a * 1000 + b * 100
     nombre += this.sup ? choice([c * 10 + d, c * 10, 0]) : c * 10
     const facteur = nombre / 1000
     this.reponse =
-      typeDeQuestions < 5 ? nombre / 10 : typeDeQuestions < 7 ? nombre / 100 : nombre
+      typeDeQuestions < 5
+        ? nombre / 10
+        : typeDeQuestions < 7
+          ? nombre / 100
+          : nombre
     switch (typeDeQuestions) {
       case 1:
         this.question = `Calculer $4 \\times ${texNombre(facteur, 3)}\\times 25$.`

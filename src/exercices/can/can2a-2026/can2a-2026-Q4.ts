@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Ajouter ou soustraire des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'vacjb'
 export const refs = {
   'fr-fr': [],
@@ -62,8 +62,6 @@ export default class Can2a2026Q4 extends ExerciceCan {
     this.correction = `$\\begin{aligned}${f1.texFraction}${signe}${f2.texFraction}&=\\dfrac{${numerateur1}}{${denominateur}}${signe}\\dfrac{${numerateur2}}{${denominateur}}\\\\
 
     &=${miseEnEvidence(resultat.texFraction)}\\end{aligned}$`
-
-   
   }
 
   nouvelleVersion() {

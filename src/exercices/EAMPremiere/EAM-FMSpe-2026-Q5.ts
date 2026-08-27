@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer un ordre de grandeur'
@@ -23,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5FMs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     c: number,
     d: number,
     zN: number,
@@ -31,12 +30,12 @@ private appliquerLesValeurs(
     repOrigine?: string,
     d1Origine?: string,
     d2Origine?: string,
-    d3Origine?: string
+    d3Origine?: string,
   ): void {
     // N est construit pour commencer par c * d (ex: 5 * 3 = 15) suivi de zN zéros
     const nBase = c * d
     const N = nBase * Math.pow(10, zN)
-    
+
     // D est construit autour des milliers (ex: 3000) avec un décalage (ex: +200)
     const dArrondi = d * 1000
     const D = dArrondi + offset
@@ -46,7 +45,7 @@ private appliquerLesValeurs(
     // La bonne réponse correspond à la puissance calculée (zN - 3 car D est en milliers)
     const power = zN - 3
     const correctVal = c * Math.pow(10, power)
-    
+
     let correct: string
     let dist1: string, dist2: string, dist3: string
 
@@ -58,33 +57,28 @@ private appliquerLesValeurs(
       dist3 = d3Origine
     } else {
       correct = texNombre(correctVal, 0)
-      
+
       // Les propositions sont les 4 ordres de grandeurs classiques : c, c*10, c*100, c*1000
       const options = [c, c * 10, c * 100, c * 1000]
       const idx = options.indexOf(correctVal)
-      
+
       // On retire la bonne réponse des options pour créer les distracteurs
       if (idx > -1) {
         options.splice(idx, 1)
       } else {
         options.pop()
       }
-      
+
       dist1 = texNombre(options[0], 0)
       dist2 = texNombre(options[1], 0)
       dist3 = texNombre(options[2], 0)
     }
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${dist1}$`,
-      `$${dist2}$`,
-      `$${dist3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${dist1}$`, `$${dist2}$`, `$${dist3}$`]
 
     // Rédaction d'une correction très simple et visuelle
     const nSimp = N / 1000
-    
+
     this.correction = `On cherche d'abord un ordre de grandeur du dénominateur :<br>`
     this.correction += `$${texNombre(D, 0)} \\approx ${texNombre(dArrondi, 0)}$.<br><br>`
     this.correction += `Le calcul devient alors : $\\dfrac{${texNombre(N, 0)}}{${texNombre(dArrondi, 0)}}$.<br><br>`
@@ -108,9 +102,9 @@ private appliquerLesValeurs(
     do {
       const c = choice([2, 3, 4, 5, 6, 7, 8]) // Chiffre cible (le résultat)
       const d = choice([2, 3, 4, 5, 6, 7, 8]) // Chiffre du dénominateur
-      const zN = choice([3, 4, 5, 6])         // Nombre de zéros du numérateur (définit la réponse: 5, 50, 500, 5000)
+      const zN = choice([3, 4, 5, 6]) // Nombre de zéros du numérateur (définit la réponse: 5, 50, 500, 5000)
       const offset = choice([-200, -100, 100, 200, 300]) // Décalage (ex: +200 pour faire 3200)
-      
+
       this.appliquerLesValeurs(c, d, zN, offset)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer le plus petit dénominateur commun à deux fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '11/10/2025'

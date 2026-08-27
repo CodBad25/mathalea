@@ -17,7 +17,6 @@ export const titre = 'Connaître les tables de multiplication et de divisions'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Tables de multiplication et de divisions classiques, à trou ou un mélange des deux.

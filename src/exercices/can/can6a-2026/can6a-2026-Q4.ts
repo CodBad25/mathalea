@@ -15,7 +15,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une valeur dans un partage'
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d' // Pour Gilles
+// Pour Gilles
 export const uuid = 'dodgm'
 export const refs = {
   'fr-fr': [],
@@ -61,7 +61,8 @@ export default class Can20266Q4 extends ExerciceCan {
       letterSize: 'normalsize',
     })
       */
-    const input = new MetaInteractif2d( // Pour Gilles
+    const input = new MetaInteractif2d(
+      // Pour Gilles
       [
         {
           x: 0.5,

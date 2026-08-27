@@ -12,7 +12,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Développer et réduire un produit de deux binômes du 1er degré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3mq4t'
 export const refs = {
   'fr-fr': [],

@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une somme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '90b1e'
 export const refs = {
   'fr-fr': [],

@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Additionner deux fractions de dénominateurs comptatibles'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '60909'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

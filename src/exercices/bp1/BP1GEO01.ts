@@ -1,7 +1,7 @@
 import CosEtsin from '../1e/1AN40'
 export const titre = 'Cosinus et sinus des valeurs particulières'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

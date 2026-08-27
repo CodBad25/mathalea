@@ -7,7 +7,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Multiplier des décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'edbea'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

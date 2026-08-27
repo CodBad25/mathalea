@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { traceBarre } from '../../lib/2d/diagrammes'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -11,6 +10,7 @@ import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTab
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
@@ -21,7 +21,6 @@ export const titre =
 export const dateDePublication = '20/08/2026'
 export const uuid = 'b83f2'
 export const interactifReady = true
-export const interactifType = 'tableau-mathlive'
 
 export const refs = {
   'fr-fr': ['2S20-12'],

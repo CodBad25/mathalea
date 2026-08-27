@@ -1,7 +1,7 @@
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
@@ -16,7 +16,7 @@ import { bleuMathalea } from '../../../lib/colors'
 import { mathalea2d } from '../../../modules/mathalea2d'
 export const titre = 'Calculer un périmètre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'jcadx'
 export const refs = {
   'fr-fr': [],

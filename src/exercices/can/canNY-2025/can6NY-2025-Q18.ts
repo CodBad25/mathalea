@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Déterminer un chiffre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4297f'
 export const refs = {
   'fr-fr': [],

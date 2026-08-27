@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer le double d'un nombre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'pmbmg'
 export const refs = {
   'fr-fr': [],
@@ -17,7 +17,7 @@ export const refs = {
 
 */
 export default class Can20266Q5 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = {

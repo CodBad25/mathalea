@@ -16,7 +16,7 @@ import { egal, listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = false
-// export const interactifType = 'mathLive'
+//
 export const titre = 'Factoriser un polynôme du second degré'
 
 /**

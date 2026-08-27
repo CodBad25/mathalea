@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer une médiane'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7ab60'
 export const refs = {
   'fr-fr': [],

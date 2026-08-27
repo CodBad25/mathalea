@@ -1,16 +1,15 @@
-
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import ExerciceCan from '../../ExerciceCan'
-import { shuffle } from '../../../lib/outils/arrayOutils'
+import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { plot } from '../../../lib/2d/Plot'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { fixeBordures } from '../../../lib/2d/fixeBordures'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une fréquence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'pu78a'
 export const refs = {
   'fr-fr': [],
@@ -25,7 +24,10 @@ export default class Can1a2022Q7 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { nombreDecimalSeulement:true, fractionEgale: true }
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+      fractionEgale: true,
+    }
   }
 
   enonce(nbNoires?: number, nbTotal?: number) {

@@ -1,7 +1,7 @@
 import SerieDeTransformations from '../4e/4G12'
 export const titre = 'Trouver les symétries successives dans un damier'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '4/12/2021'

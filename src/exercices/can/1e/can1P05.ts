@@ -16,7 +16,7 @@ export const titre =
   'Utiliser la formule des probabilités totales dans un arbre'
 export const dateDePublication = '05/07/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

@@ -15,7 +15,7 @@ import { context } from '../../modules/context'
 
 export const titre = 'Calculer avec des priorités (Scratch)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/11/2024'
 export const dateDeModifImportante = '28/10/2025'
 

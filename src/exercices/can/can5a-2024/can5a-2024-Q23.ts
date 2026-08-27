@@ -10,7 +10,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 
 export const titre = 'Déterminer un nombre de cubes dans une pyramide'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5191d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

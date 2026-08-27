@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre = 'Le choix des spécialités en terminale générale'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '60f12'
 export const refs = {
   'fr-fr': ['EgaliteFG6-1e-9'],
@@ -28,7 +28,12 @@ export default class EgaliteFGLycee9 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles') + ' (source : DEPP, Système d\'information Scolarité)',
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ) +
+        " (source : DEPP, Système d'information Scolarité)",
     )
     this.consigne +=
       "<br><br>Depuis la réforme du lycée en 2019, de nombreuses enquêtes semblent montrer que le choix des enseignements de spécialité en première générale est dépendant du genre de l'élève. Voici la répartition des principaux enseignements de spécialité en terminale générale en 2022 et 2023 :<br>"
@@ -103,7 +108,7 @@ export default class EgaliteFGLycee9 extends Exercice {
       '<rect x="235" y="301" width="18.0" height="16" fill="#4c72b0" stroke="#2f4a72" />' +
       '<text x="257.0" y="314" font-size="9" fill="#333">12 %</text>' +
       '</svg>' +
-      "<p style=\"font-size:0.7rem; font-style:italic; opacity:0.7;\">Source : DEPP, Système d'information Scolarité</p>" +
+      '<p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Source : DEPP, Système d\'information Scolarité</p>' +
       '</div>'
     const combinaisonsLatex =
       '\\begin{center}' +
@@ -141,7 +146,7 @@ export default class EgaliteFGLycee9 extends Exercice {
       '\\node[anchor=east, font=\\scriptsize] at (0,3) {Mathématiques - Physique-chimie};' +
       '\\draw[fill=blue!60] (0,2.7) rectangle (1.85,3.3);' +
       '\\node[anchor=west, font=\\scriptsize] at (1.85,3) {37~\\%};' +
-      '\\node[anchor=east, font=\\scriptsize] at (0,2) {Mathématiques - Sciences de l\'ingénieur};' +
+      "\\node[anchor=east, font=\\scriptsize] at (0,2) {Mathématiques - Sciences de l'ingénieur};" +
       '\\draw[fill=blue!60] (0,1.7) rectangle (0.70,2.3);' +
       '\\node[anchor=west, font=\\scriptsize] at (0.70,2) {14~\\%};' +
       '\\node[anchor=east, font=\\scriptsize] at (0,1) {Mathématiques - Numérique, sciences informatiques};' +
@@ -161,7 +166,8 @@ export default class EgaliteFGLycee9 extends Exercice {
     this.listeQuestions = []
     this.listeCorrections = []
 
-    const texteQ0 = 'En 2023, quelle spécialité a la plus faible proportion de filles ?'
+    const texteQ0 =
+      'En 2023, quelle spécialité a la plus faible proportion de filles ?'
     this.autoCorrection[0] = {
       enonce: texteQ0,
       options: { ordered: true, radio: true },
@@ -176,7 +182,8 @@ export default class EgaliteFGLycee9 extends Exercice {
     if (!context.isAmc) texte0 += monQcm0.texte
     const correction0 = `C'est la spécialité « Numérique et sciences informatiques », avec seulement $${miseEnEvidence('15{,}2\\,\\%')}$ de filles.`
 
-    const texteQ1 = 'En 2023, quelle spécialité a la plus forte proportion de filles ?'
+    const texteQ1 =
+      'En 2023, quelle spécialité a la plus forte proportion de filles ?'
     this.autoCorrection[1] = {
       enonce: texteQ1,
       options: { ordered: true, radio: true },
@@ -193,7 +200,9 @@ export default class EgaliteFGLycee9 extends Exercice {
 
     let texte2 =
       "Calculer, en 2023, l'écart (en points de pourcentage) entre la proportion de filles en HLP et en NSI."
-    if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: 'points' }) + '<br>'
+    if (this.interactif)
+      texte2 +=
+        ajouteChampTexteMathLive(this, 2, '', { texteApres: 'points' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 66.5 } })
     const correction2 = `$81{,}7-15{,}2=${miseEnEvidence('66{,}5')}$ points.`
 
@@ -220,12 +229,13 @@ export default class EgaliteFGLycee9 extends Exercice {
 
     const texte5 =
       "Recueillir la « triplette » d'enseignements de spécialité de chaque élève de première de ton établissement, puis regrouper et traiter ces données dans une feuille de calcul du tableur."
-    const correction5 = "Réponse à adapter selon les données collectées par la classe."
+    const correction5 =
+      'Réponse à adapter selon les données collectées par la classe.'
 
     const texte6 =
-      "Ces données confirment-elles, dans ton lycée, que le genre exerce une influence sur le choix des enseignements de spécialité ? Argumenter."
+      'Ces données confirment-elles, dans ton lycée, que le genre exerce une influence sur le choix des enseignements de spécialité ? Argumenter.'
     const correction6 =
-      "Réponse à adapter selon les données collectées par la classe, en la comparant aux tendances nationales observées dans le tableau et le graphique ci-dessus."
+      'Réponse à adapter selon les données collectées par la classe, en la comparant aux tendances nationales observées dans le tableau et le graphique ci-dessus.'
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

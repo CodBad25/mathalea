@@ -2,7 +2,7 @@ import ProbabilitesUnionIntersection from '../2e/2S11-1'
 export const titre =
   'Calculer des probabilités dans une situation concrète (union, intersection, probabilité conditionnelle)'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDePublication = '30/07/2026'
 
 /**

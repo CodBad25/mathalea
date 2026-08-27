@@ -34,7 +34,7 @@ import Exercice from '../Exercice'
 export const titre = 'Résolution de triangles (cas non ambigus)'
 export const dateDePublication = '16/03/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a3f7b'
 export const refs = {
   'fr-fr': [],
@@ -61,7 +61,10 @@ function getTriangleFigureRenderMetrics(
   const largeur = Math.max(bordures.xmax - bordures.xmin, 1)
   const hauteur = Math.max(bordures.ymax - bordures.ymin, 1)
   return {
-    pixelsParCm: Math.max(18, Math.min(75, Math.min(250 / largeur, 180 / hauteur))),
+    pixelsParCm: Math.max(
+      18,
+      Math.min(75, Math.min(250 / largeur, 180 / hauteur)),
+    ),
     scale: Math.max(0.5, Math.min(1.2, Math.min(6 / largeur, 4.5 / hauteur))),
   }
 }
@@ -219,7 +222,7 @@ export default class ResolutionTrianglesNonAmbigus extends Exercice {
     })
     const listeTypes = combinaisonListes(typesDisponibles, this.nbQuestions)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeDeNomsDePolygones = ['QD']
       const nom = shuffleLettres(creerNomDePolygone(3, listeDeNomsDePolygones))
       listeDeNomsDePolygones.push(nom)
@@ -291,9 +294,13 @@ export default class ResolutionTrianglesNonAmbigus extends Exercice {
           champ3: { value: texResult(sideB) },
         })
         if (this.interactif) {
-          texte += '<br>' + remplisLesBlancs(this, i,
-            `\\widehat{${angC}} \\approx \\;%{champ1}°\\quad ${sa} \\approx \\;%{champ2}\\quad ${sb} \\approx \\;%{champ3}`,
-          )
+          texte +=
+            '<br>' +
+            remplisLesBlancs(
+              this,
+              i,
+              `\\widehat{${angC}} \\approx \\;%{champ1}°\\quad ${sa} \\approx \\;%{champ2}\\quad ${sb} \\approx \\;%{champ3}`,
+            )
         }
 
         // Correction
@@ -339,8 +346,10 @@ ${sb} &= \\dfrac{${sc} \\times \\sin(\\widehat{${angB}})}{\\sin(\\widehat{${angC
         } while (
           (angleC < 10 ||
             angleC > 170 ||
-            sideB < 1 || sideB > 20 ||
-            sideC < 1 || sideC > 20 ||
+            sideB < 1 ||
+            sideB > 20 ||
+            sideC < 1 ||
+            sideC > 20 ||
             Math.abs(angleA - 90) < 3 ||
             Math.abs(angleB - 90) < 3 ||
             Math.abs(angleC - 90) < 3) &&
@@ -369,9 +378,13 @@ ${sb} &= \\dfrac{${sc} \\times \\sin(\\widehat{${angB}})}{\\sin(\\widehat{${angC
           champ3: { value: texResult(sideC) },
         })
         if (this.interactif) {
-          texte += '<br>' + remplisLesBlancs(this, i,
-            `\\widehat{${angC}} \\approx \\;%{champ1}°\\quad ${sb} \\approx \\;%{champ2}\\quad ${sc} \\approx \\;%{champ3}`,
-          )
+          texte +=
+            '<br>' +
+            remplisLesBlancs(
+              this,
+              i,
+              `\\widehat{${angC}} \\approx \\;%{champ1}°\\quad ${sb} \\approx \\;%{champ2}\\quad ${sc} \\approx \\;%{champ3}`,
+            )
         }
 
         texteCorr = ''
@@ -398,7 +411,12 @@ ${sc} &= \\dfrac{${sa} \\times \\sin(\\widehat{${angC}})}{\\sin(\\widehat{${angA
 \\end{aligned}$`
       } else if (typeQ === 3) {
         // ======== CAC (côté-angle-côté) ========
-        let angleA: number, sideB: number, sideC: number, sideA: number, angleB: number, angleC: number
+        let angleA: number,
+          sideB: number,
+          sideC: number,
+          sideA: number,
+          angleB: number,
+          angleC: number
         let cptDo = 0
         do {
           cptDo++
@@ -407,10 +425,16 @@ ${sc} &= \\dfrac{${sa} \\times \\sin(\\widehat{${angC}})}{\\sin(\\widehat{${angA
           sideC = randint(3, 15) + randint(0, 99) / 100
           const angleARad = (angleA * Math.PI) / 180
           sideA = Math.sqrt(
-            sideB * sideB + sideC * sideC - 2 * sideB * sideC * Math.cos(angleARad),
+            sideB * sideB +
+              sideC * sideC -
+              2 * sideB * sideC * Math.cos(angleARad),
           )
-          const cosB = (sideA * sideA + sideC * sideC - sideB * sideB) / (2 * sideA * sideC)
-          const cosC = (sideA * sideA + sideB * sideB - sideC * sideC) / (2 * sideA * sideB)
+          const cosB =
+            (sideA * sideA + sideC * sideC - sideB * sideB) /
+            (2 * sideA * sideC)
+          const cosC =
+            (sideA * sideA + sideB * sideB - sideC * sideC) /
+            (2 * sideA * sideB)
           angleB = (Math.acos(cosB) * 180) / Math.PI
           angleC = (Math.acos(cosC) * 180) / Math.PI
         } while (
@@ -418,8 +442,10 @@ ${sc} &= \\dfrac{${sa} \\times \\sin(\\widehat{${angC}})}{\\sin(\\widehat{${angA
             Math.abs(angleA - 90) < 3 ||
             Math.abs(angleB - 90) < 3 ||
             Math.abs(angleC - 90) < 3 ||
-            angleB < 10 || angleC < 10 ||
-            isNaN(angleB) || isNaN(angleC)) &&
+            angleB < 10 ||
+            angleC < 10 ||
+            isNaN(angleB) ||
+            isNaN(angleC)) &&
           cptDo < 30
         )
 
@@ -444,9 +470,13 @@ ${sc} &= \\dfrac{${sa} \\times \\sin(\\widehat{${angC}})}{\\sin(\\widehat{${angA
           champ3: { value: texResult(angleC) },
         })
         if (this.interactif) {
-          texte += '<br>' + remplisLesBlancs(this, i,
-            `${sa} \\approx \\;%{champ1}\\quad \\widehat{${angB}} \\approx \\;%{champ2}°\\quad \\widehat{${angC}} \\approx \\;%{champ3}°`,
-          )
+          texte +=
+            '<br>' +
+            remplisLesBlancs(
+              this,
+              i,
+              `${sa} \\approx \\;%{champ1}\\quad \\widehat{${angB}} \\approx \\;%{champ2}°\\quad \\widehat{${angC}} \\approx \\;%{champ3}°`,
+            )
         }
 
         // Correction
@@ -499,19 +529,37 @@ $\\widehat{${angC}} = ${texDeg('180')} - \\widehat{${angA}} - \\widehat{${angB}}
           sideA = randint(3, 15) + randint(0, 99) / 100
           sideB = randint(3, 15) + randint(0, 99) / 100
           sideC = randint(3, 15) + randint(0, 99) / 100
-          if (sideA + sideB > sideC && sideA + sideC > sideB && sideB + sideC > sideA) {
-            const cosA = (sideB * sideB + sideC * sideC - sideA * sideA) / (2 * sideB * sideC)
-            const cosB = (sideA * sideA + sideC * sideC - sideB * sideB) / (2 * sideA * sideC)
-            const cosC = (sideA * sideA + sideB * sideB - sideC * sideC) / (2 * sideA * sideB)
+          if (
+            sideA + sideB > sideC &&
+            sideA + sideC > sideB &&
+            sideB + sideC > sideA
+          ) {
+            const cosA =
+              (sideB * sideB + sideC * sideC - sideA * sideA) /
+              (2 * sideB * sideC)
+            const cosB =
+              (sideA * sideA + sideC * sideC - sideB * sideB) /
+              (2 * sideA * sideC)
+            const cosC =
+              (sideA * sideA + sideB * sideB - sideC * sideC) /
+              (2 * sideA * sideB)
             angleA = (Math.acos(cosA) * 180) / Math.PI
             angleB = (Math.acos(cosB) * 180) / Math.PI
             angleC = (Math.acos(cosC) * 180) / Math.PI
           }
         } while (
-          (isNaN(angleA) || isNaN(angleB) || isNaN(angleC) ||
-            angleA < 10 || angleB < 10 || angleC < 10 ||
-            angleA > 170 || angleB > 170 || angleC > 170 ||
-            Math.abs(angleA - 90) < 3 || Math.abs(angleB - 90) < 3 || Math.abs(angleC - 90) < 3) &&
+          (isNaN(angleA) ||
+            isNaN(angleB) ||
+            isNaN(angleC) ||
+            angleA < 10 ||
+            angleB < 10 ||
+            angleC < 10 ||
+            angleA > 170 ||
+            angleB > 170 ||
+            angleC > 170 ||
+            Math.abs(angleA - 90) < 3 ||
+            Math.abs(angleB - 90) < 3 ||
+            Math.abs(angleC - 90) < 3) &&
           cptDo < 30
         )
 
@@ -535,9 +583,13 @@ $\\widehat{${angC}} = ${texDeg('180')} - \\widehat{${angA}} - \\widehat{${angB}}
           champ3: { value: texResult(angleC) },
         })
         if (this.interactif) {
-          texte += '<br>' + remplisLesBlancs(this, i,
-            `\\widehat{${angA}} \\approx \\;%{champ1}°\\quad \\widehat{${angB}} \\approx \\;%{champ2}°\\quad \\widehat{${angC}} \\approx \\;%{champ3}°`,
-          )
+          texte +=
+            '<br>' +
+            remplisLesBlancs(
+              this,
+              i,
+              `\\widehat{${angA}} \\approx \\;%{champ1}°\\quad \\widehat{${angB}} \\approx \\;%{champ2}°\\quad \\widehat{${angC}} \\approx \\;%{champ3}°`,
+            )
         }
 
         // Correction
@@ -650,9 +702,9 @@ function buildFigure({
   if (type === 'ACA') {
     // Given: angleA, angleB, sideC. Unknown: sideA, sideB, angleC
     objets.push(
-      labelSeg(texNombre(sideC, 2), A, B, C),     // sc value on AB
-      labelSeg(sa, B, C, A),                        // sa unknown on BC
-      labelSeg(sb, C, A, B),                        // sb unknown on CA
+      labelSeg(texNombre(sideC, 2), A, B, C), // sc value on AB
+      labelSeg(sa, B, C, A), // sa unknown on BC
+      labelSeg(sb, C, A, B), // sb unknown on CA
     )
     if (showAngleMeasures) {
       objets.push(
@@ -663,9 +715,9 @@ function buildFigure({
   } else if (type === 'AAC') {
     // Given: angleA, angleB, sideA. Unknown: sideB, sideC, angleC
     objets.push(
-      labelSeg(sc, A, B, C),                         // sc unknown on AB
-      labelSeg(texNombre(sideA!, 2), B, C, A),      // sa value on BC
-      labelSeg(sb, C, A, B),                        // sb unknown on CA
+      labelSeg(sc, A, B, C), // sc unknown on AB
+      labelSeg(texNombre(sideA!, 2), B, C, A), // sa value on BC
+      labelSeg(sb, C, A, B), // sb unknown on CA
     )
     if (showAngleMeasures) {
       objets.push(
@@ -676,21 +728,19 @@ function buildFigure({
   } else if (type === 'CAC') {
     // Given: sideB (AC), angleA, sideC (AB). Unknown: sideA (BC), angleB, angleC
     objets.push(
-      labelSeg(texNombre(sideC, 2), A, B, C),     // sc value on AB
-      labelSeg(texNombre(sideB!, 2), C, A, B),    // sb value on CA
-      labelSeg(sa, B, C, A),                        // sa unknown on BC
+      labelSeg(texNombre(sideC, 2), A, B, C), // sc value on AB
+      labelSeg(texNombre(sideB!, 2), C, A, B), // sb value on CA
+      labelSeg(sa, B, C, A), // sa unknown on BC
     )
     if (showAngleMeasures) {
-      objets.push(
-        measureAngle(B, A, C, angleA!),
-      )
+      objets.push(measureAngle(B, A, C, angleA!))
     }
   } else {
     // CCC: all sides given, all angles unknown
     objets.push(
-      labelSeg(texNombre(sideC, 2), A, B, C),     // sc on AB
-      labelSeg(texNombre(sideB!, 2), C, A, B),    // sb on CA
-      labelSeg(texNombre(sideA!, 2), B, C, A),    // sa on BC
+      labelSeg(texNombre(sideC, 2), A, B, C), // sc on AB
+      labelSeg(texNombre(sideB!, 2), C, A, B), // sb on CA
+      labelSeg(texNombre(sideA!, 2), B, C, A), // sa on BC
     )
   }
 

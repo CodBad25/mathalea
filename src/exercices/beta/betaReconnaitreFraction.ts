@@ -3,6 +3,7 @@ import {
   type BorderMode,
   type ShapeName,
 } from '../../lib/apps/fraction_visualizer'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
@@ -13,12 +14,11 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Reconnaître une fraction sur des représentations variées'
 export const dateDePublication = '02/11/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '35b4c'
 export const refs = {
   'fr-fr': [],
@@ -105,7 +105,7 @@ export default class ConnaitreQuart extends Exercice {
       typesFractionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const forme = getShapeNameFr(listeRepresentations[i])
       const shape = getShapeName(listeRepresentations[i])
       const typeFraction = getFractionType(listeTypesFractions[i])

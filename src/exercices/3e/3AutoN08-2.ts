@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -5,7 +6,6 @@ import {
 } from '../../lib/outils/embellissements'
 import { round } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { bleuMathalea } from '../../lib/colors'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
@@ -13,7 +13,6 @@ export const titre = 'Connaître les carrés de nombres décimaux'
 export const dateDePublication = '23/08/2026'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '2d311'
 export const refs = {

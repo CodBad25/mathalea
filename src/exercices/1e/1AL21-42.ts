@@ -18,7 +18,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre =
   'Factoriser un polynôme du second degré avec racine évidente'
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const dateDePublication = '13/01/2026'
 
 /**

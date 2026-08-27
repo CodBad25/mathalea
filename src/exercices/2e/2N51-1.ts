@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Connaitre les propriétés calculatoires des racines carrées'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDeModifImportante = '13/12/2023'
 /**
  * 2N32-2, ex 2N10-1

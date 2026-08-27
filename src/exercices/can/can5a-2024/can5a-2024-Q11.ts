@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer astucieusement une somme de deux décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3e52d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

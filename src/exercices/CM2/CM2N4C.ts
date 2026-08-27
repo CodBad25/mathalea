@@ -2,7 +2,6 @@ import MultiplierDecimauxParametres from '../6e/6N2E'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   'Poser des multiplications entre un nombre décimal et un entier'

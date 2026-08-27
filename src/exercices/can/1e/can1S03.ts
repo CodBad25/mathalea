@@ -12,13 +12,12 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un terme d’une suite récurrente*'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '15/02/2022'
 
 /**
  * @author Gilles Mora
-*/
+ */
 export const uuid = 'fccb4'
 
 export const refs = {

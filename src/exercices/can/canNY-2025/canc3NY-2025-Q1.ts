@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec les chiffres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a4cbf'
 export const refs = {
   'fr-fr': [],

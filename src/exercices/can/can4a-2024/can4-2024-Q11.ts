@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Passer des fractions d'heures en minutes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b8916'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

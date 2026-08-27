@@ -12,7 +12,7 @@ import {
 import Exercice from '../Exercice'
 export const titre = 'Effectuer un dénombrement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/04/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 export const uuid = '3a384'

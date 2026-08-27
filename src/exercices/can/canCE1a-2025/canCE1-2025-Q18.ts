@@ -11,7 +11,6 @@ import { randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Lire une heure sur une horloge'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const uuid = '0e237'
 export const refs = {
   'fr-fr': [],

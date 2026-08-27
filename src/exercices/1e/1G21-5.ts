@@ -23,7 +23,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre un problème de synthèse en géométrie repérée'
 
 export const dateDePublication = '4/5/2026'
@@ -47,7 +47,7 @@ export default class SyntheseGeometrieReperee extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const xA = randint(-5, 5, 0)
       const yA = randint(-5, 5, 0)
       let xC, yC: number
@@ -314,8 +314,22 @@ export default class SyntheseGeometrieReperee extends Exercice {
             compare: seq([isEqual()]),
           },
         })
-        this.listeQuestions = [question1, question2, question3, question4a, question4b, question5]
-        this.listeCorrections = [correction1, correction2, correction3, correction4a, correction4b, correction5]
+        this.listeQuestions = [
+          question1,
+          question2,
+          question3,
+          question4a,
+          question4b,
+          question5,
+        ]
+        this.listeCorrections = [
+          correction1,
+          correction2,
+          correction3,
+          correction4a,
+          correction4b,
+          correction5,
+        ]
         i++
       }
       cpt++

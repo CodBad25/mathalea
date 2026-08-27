@@ -3,7 +3,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec une factorisation'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '08/12/2025'
@@ -23,9 +23,9 @@ export default class MultiplierPar extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-this.optionsChampTexte = { texteAvant:'<br>' }
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.typeExercice = 'simple'
-    this.spacingCorr=1.5
+    this.spacingCorr = 1.5
   }
 
   nouvelleVersion() {

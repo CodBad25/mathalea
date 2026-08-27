@@ -7,7 +7,7 @@ import { sp } from '../../../lib/outils/outilString'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = 'Comparer des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'toc9u'
 export const refs = {
   'fr-fr': [],
@@ -35,7 +35,9 @@ export default class ComparerFractions2026 extends ExerciceSimple {
     const f1 = new FractionEtendue(a, annee)
     const f2 = new FractionEtendue(annee, a)
     const listeNombre1 = [f1.texFraction, f2.texFraction, 1]
-    const choix = this.canOfficielle ? true : this.quotaChoice('choix', [true, false])
+    const choix = this.canOfficielle
+      ? true
+      : this.quotaChoice('choix', [true, false])
     const Nombre1 = shuffle(listeNombre1)
     this.reponse = choix
       ? new FractionEtendue(a, annee).toLatex()

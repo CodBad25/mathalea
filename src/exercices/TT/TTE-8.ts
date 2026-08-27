@@ -12,7 +12,7 @@ export const titre = 'Exprimer en fonction de log(x)'
 export const dateDePublication = '22/7/2024'
 export const uuid = '2c0b2'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['TTE-8'],
   'fr-ch': ['2mLogExp-3'],
@@ -33,7 +33,6 @@ export default class ExpressionsLogX extends Exercice {
     this.spacingCorr = 3
     this.sup = '1'
     this.besoinFormulaire2CaseACocher = ['Type de logarithme', true]
-  
   }
 
   nouvelleVersion() {
@@ -43,7 +42,7 @@ export default class ExpressionsLogX extends Exercice {
     const pluriel = this.nbQuestions > 1 ? 's' : ''
     this.consigne = `Soit $x > 0$,exprimer le${pluriel} nombre${pluriel} suivant${pluriel} en fonction de $${logString} x$.`
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const [expA, expB, expC] = combinaisonListes(listeExposants, 3)
       const [a, b, c] = [
         randint(-5, 5, 0),

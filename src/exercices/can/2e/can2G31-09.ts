@@ -5,7 +5,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer les coordonnées du point d’intersection entre l’axe des ordonnées et une droite'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

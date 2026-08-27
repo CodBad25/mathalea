@@ -15,7 +15,7 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Calculer la dérivée de $\\lambda u$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ebd89'
 export const refs = {
   'fr-fr': [], //  exercice déréférencé et remplacé par 1AN14-1
@@ -61,7 +61,7 @@ class DerivationFonctionsUsuelles extends Exercice {
         'inverse2',
       ],
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let laFonction: string = ''
       let laDerivee: string = ''
       let df: string = ''

@@ -11,7 +11,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Donner la forme explicite d’une suite arithmétique/géométrique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '17/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -108,14 +107,14 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
         break
       case 'c': // suite géométrique
         if (!this.interactif) {
-          a = choice([randint(2, 15) * choice([-1, 1]), randint(1,99)/100])
+          a = choice([randint(2, 15) * choice([-1, 1]), randint(1, 99) / 100])
           u = randint(-15, 15, [0, 1, a, -a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$  définie pour tout   $n\\in \\mathbb{N}$, telle que
           $${s}_0=${u}$ et $q=${texNombre(a, 2)}$.<br>
           Donner l'expression de $${s}_n$ en fonction de $n$.`
           this.question += ''
         } else {
-          a = choice([randint(2, 15), randint(1,99)/100])
+          a = choice([randint(2, 15), randint(1, 99) / 100])
           u = randint(-15, 15, [0, 1, a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$  définie pour tout   $n\\in \\mathbb{N}$, telle que
           $${s}_0=${u}$ et $q=${texNombre(a, 2)}$.<br>
@@ -132,13 +131,13 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
         break
       case 'd': // suite géométrique sur N*
         if (!this.interactif) {
-          a = choice([randint(2, 15) * choice([-1, 1]), randint(1,99)/100])
+          a = choice([randint(2, 15) * choice([-1, 1]), randint(1, 99) / 100])
           u = randint(-15, 15, [0, 1, -1, a, -a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$ définie pour tout $n\\in\\mathbb{N}^*$, telle que
           $${s}_1=${u}$ et $q=${texNombre(a, 2)}$.<br>
           Donner l'expression de $${s}_n$ en fonction de $n$.`
         } else {
-          a = choice([randint(2, 15) , randint(1,99)/100])
+          a = choice([randint(2, 15), randint(1, 99) / 100])
           u = randint(-15, 15, [0, 1, -1, a, -a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$  définie pour tout   $n\\in\\mathbb{N}^*$, telle que
           $${s}_1=${u}$ et $q=${texNombre(a, 2)}$.<br>

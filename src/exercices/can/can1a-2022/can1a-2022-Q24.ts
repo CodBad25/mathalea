@@ -1,13 +1,12 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { rienSi1 } from '../../../lib/outils/ecritures'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Factoriser une différence de deux carrés'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bs86d'
 export const refs = {
   'fr-fr': [],
@@ -23,10 +22,10 @@ export default class Can1a2022Q24 extends ExerciceCan {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
     this.optionsDeComparaison = { exclusifFactorisation: true }
-       this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsChampTexte = { texteAvant: '<br>' }
   }
 
-   enonce(a?: number, b?: number, choix?: string) {
+  enonce(a?: number, b?: number, choix?: string) {
     if (a == null || b == null || choix == null) {
       a = randint(1, 2)
       b = randint(2, 10)

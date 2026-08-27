@@ -12,10 +12,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Trouver le plus grand ou le plus petit nombre avec des puissances'
+export const titre =
+  'Trouver le plus grand ou le plus petit nombre avec des puissances'
 export const dateDePublication = '06/07/2026'
 /**
  *
@@ -99,9 +100,7 @@ $${valeur4.replace('\\frac', '\\dfrac')} = \\dfrac{1}{${denExp}^{${denExp}}} = \
     do {
       den1 = choice([2, 3, 4])
       exp1 = choice([2, 3, 4], den1)
-      dec = choice([
-        0.01, 0.02, 0.04, 0.05, 0.025, 0.002, 0.005,
-      ])
+      dec = choice([0.01, 0.02, 0.04, 0.05, 0.025, 0.002, 0.005])
       denExp = choice([2, 3, 4], [den1, exp1])
       plusGrand = choice([true, false])
       this.appliquerLesValeurs(den1, exp1, dec, denExp, plusGrand)

@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec des entiers relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7b6ee'
 export const refs = {
   'fr-fr': [],

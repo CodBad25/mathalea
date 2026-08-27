@@ -13,7 +13,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Utiliser la somme des angles d'un triangle isocèle"
 export const dateDePublication = '06/06/2026'
 

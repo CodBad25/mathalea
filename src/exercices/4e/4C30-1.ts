@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '06/10/2025'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Encadrer des nombres positifs avec des puissances de 10'

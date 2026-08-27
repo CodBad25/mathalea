@@ -4,17 +4,17 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { rotation } from '../../../lib/2d/transformations'
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Trouve l'heure sur une horloge (QCM)"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'a2993'
 export const refs = {
   'fr-fr': [],
@@ -26,25 +26,36 @@ export const refs = {
 
 */
 export default class Can2026CE1Q18 extends ExerciceCan {
- constructor() {
+  constructor() {
     super()
     this.formatInteractif = 'qcm'
   }
 
-  creerHorloge(heures: number, minutes: number, offsetX: number, offsetY: number) {
+  creerHorloge(
+    heures: number,
+    minutes: number,
+    offsetX: number,
+    offsetY: number,
+  ) {
     const horloge = []
     const O = pointAbstrait(offsetX, offsetY)
     const C = cercle(O, 2)
     horloge.push(C)
 
     // Marques des heures (grands traits)
-    const s = segment(pointAbstrait(offsetX + 1.5, offsetY), pointAbstrait(offsetX + 1.9, offsetY))
+    const s = segment(
+      pointAbstrait(offsetX + 1.5, offsetY),
+      pointAbstrait(offsetX + 1.9, offsetY),
+    )
     for (let i = 0; i < 4; i++) {
       horloge.push(rotation(s, O, 90 * i))
     }
 
     // Marques des 5 minutes (petits traits)
-    const t = segment(pointAbstrait(offsetX + 1.7, offsetY), pointAbstrait(offsetX + 1.9, offsetY))
+    const t = segment(
+      pointAbstrait(offsetX + 1.7, offsetY),
+      pointAbstrait(offsetX + 1.9, offsetY),
+    )
     for (let i = 0; i < 4; i++) {
       horloge.push(rotation(t, O, 30 + i * 90), rotation(t, O, 60 + i * 90))
     }
@@ -86,9 +97,9 @@ export default class Can2026CE1Q18 extends ExerciceCan {
     if (this.canOfficielle) {
       // Version officielle avec les pendules exactes de l'image
       horloges = [
-        { h: 16, m: 30, correcte: true },   // Bonne réponse
-        { h: 15, m: 30, correcte: false },  // Mauvaise réponse 1
-        { h: 18, m: 20, correcte: false },  // Mauvaise réponse 2
+        { h: 16, m: 30, correcte: true }, // Bonne réponse
+        { h: 15, m: 30, correcte: false }, // Mauvaise réponse 1
+        { h: 18, m: 20, correcte: false }, // Mauvaise réponse 2
       ]
       heureCorrecte = 16
       minutesCorrectes = 30
@@ -145,12 +156,14 @@ export default class Can2026CE1Q18 extends ExerciceCan {
         0,
       )
       objets.push(...horlogeObjets)
-      
+
       // Ajouter le numéro entouré au-dessus de chaque horloge
       const cercleNumero = cercle(pointAbstrait(offsetX, 2.7), 0.4)
       cercleNumero.epaisseur = 1
       objets.push(cercleNumero)
-      objets.push(latex2d(`${i + 1}`, offsetX, 2.7, { letterSize: 'normalsize' }))
+      objets.push(
+        latex2d(`${i + 1}`, offsetX, 2.7, { letterSize: 'normalsize' }),
+      )
     }
 
     this.autoCorrection[0] = {
@@ -168,7 +181,7 @@ export default class Can2026CE1Q18 extends ExerciceCan {
           statut: positionCorrecte === 3,
         },
       ],
-      options: { vertical: !context.isHtml }
+      options: { vertical: !context.isHtml },
     }
 
     this.formatInteractif = 'qcm'

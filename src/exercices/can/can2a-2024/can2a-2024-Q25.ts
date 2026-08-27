@@ -9,7 +9,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Développer avec une identité remarquable'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7e2a2'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

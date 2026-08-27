@@ -13,7 +13,7 @@ export const refs = {
   'fr-ch': ['11FA2A-6'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une vitesse'

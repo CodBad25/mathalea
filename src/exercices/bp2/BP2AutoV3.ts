@@ -30,7 +30,7 @@ export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle
 export const dateDeModifImportante = '24/04/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 /**

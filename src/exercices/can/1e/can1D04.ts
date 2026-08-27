@@ -2,6 +2,7 @@ import { courbe } from '../../../lib/2d/Courbe'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import RepereBuilder from '../../../lib/2d/RepereBuilder'
 import { latexParCoordonnees, texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { deuxColonnesResp } from '../../../lib/format/miseEnPage'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -12,12 +13,10 @@ import {
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre =
   'Déterminer une équation de tangente à partir des courbes de $f$ et $f’$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '22/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

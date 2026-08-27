@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -14,10 +13,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Déterminer les coordonnées d\'un point sur une courbe'
+export const titre = "Déterminer les coordonnées d'un point sur une courbe"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -26,7 +25,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ6FMns2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     a: number,
     b: number,
     c: number,
@@ -70,18 +69,22 @@ private appliquerLesValeurs(
       const yD2 = a * xTest * xTest - b * xTest + c
 
       // On s'assure d'avoir 3 fausses ordonnées uniques
-      const faussesOrdonnees = [...new Set([yD1, yD2])].filter(y => y !== yTest)
+      const faussesOrdonnees = [...new Set([yD1, yD2])].filter(
+        (y) => y !== yTest,
+      )
       let decalage = 1
       while (faussesOrdonnees.length < 3) {
-        if (!faussesOrdonnees.includes(yTest + decalage)) faussesOrdonnees.push(yTest + decalage)
+        if (!faussesOrdonnees.includes(yTest + decalage))
+          faussesOrdonnees.push(yTest + decalage)
         if (faussesOrdonnees.length === 3) break
-        if (!faussesOrdonnees.includes(yTest - decalage)) faussesOrdonnees.push(yTest - decalage)
+        if (!faussesOrdonnees.includes(yTest - decalage))
+          faussesOrdonnees.push(yTest - decalage)
         decalage++
       }
 
       // On pioche 4 lettres au hasard pour nommer les points
       const noms = shuffle(['A', 'B', 'C', 'D', 'E', 'F', 'M', 'N', 'P'])
-      
+
       correct = `${noms[0]}(${xTestStr}\\,;\\,${texNombre(yTest, 1)})`
       d1 = `${noms[1]}(${xTestStr}\\,;\\,${texNombre(faussesOrdonnees[0], 1)})`
       d2 = `${noms[2]}(${xTestStr}\\,;\\,${texNombre(faussesOrdonnees[1], 1)})`
@@ -93,32 +96,32 @@ private appliquerLesValeurs(
     // Rédaction de la correction étape par étape
     this.correction = `Pour trouver l'ordonnée $y$ du point d'abscisse $x = ${xTestStr}$ situé sur la courbe, on remplace $x$ par $${xTestStr}$ dans l'équation de la courbe :<br><br>`
     this.correction += `$\\begin{aligned}`
-    
+
     // Utilisation de la fonction native pour gérer les parenthèses des nombres négatifs
     const xTestParen = ecritureParentheseSiNegatif(xTest)
-    
+
     this.correction += `y &= ${a} \\times ${xTestParen}^2 `
-    
+
     if (b === 1) this.correction += `+ ${xTestParen} `
     else if (b === -1) this.correction += `- ${xTestParen} `
     else if (b > 0) this.correction += `+ ${b} \\times ${xTestParen} `
     else if (b < 0) this.correction += `- ${-b} \\times ${xTestParen} `
-    
+
     if (c > 0) this.correction += `+ ${c} `
     else if (c < 0) this.correction += `- ${-c} `
-    
+
     this.correction += `\\\\[0.5em]`
 
     const carre = xTest * xTest
     this.correction += `y &= ${a} \\times ${texNombre(carre, 1)} `
-    
+
     const bx = b * xTest
     if (bx > 0) this.correction += `+ ${texNombre(bx, 1)} `
     else if (bx < 0) this.correction += `- ${texNombre(-bx, 1)} `
-    
+
     if (c > 0) this.correction += `+ ${c} `
     else if (c < 0) this.correction += `- ${-c} `
-    
+
     this.correction += `\\\\[0.5em]`
 
     this.correction += `y &= ${texNombre(yTest, 1)}`

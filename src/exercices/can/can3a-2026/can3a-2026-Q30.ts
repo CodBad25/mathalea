@@ -18,7 +18,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer Le volume d'une pyramide à base carrée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '45d05'
 export const refs = {
   'fr-fr': [],

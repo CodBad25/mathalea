@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer le coefficient directeur d’une droite'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '43ye2'
 export const refs = {
   'fr-fr': [],

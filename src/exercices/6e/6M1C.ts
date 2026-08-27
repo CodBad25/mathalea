@@ -3,7 +3,7 @@ import PerimetreAireDisques from '../5e/5G2E-1'
 export const titre = 'Calculer périmètre de disques'
 export const dateDePublication = '27/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

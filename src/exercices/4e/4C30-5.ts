@@ -20,7 +20,7 @@ import { context } from '../../modules/context'
 export const titre = 'Effectuer des calculs avec des puissances'
 export const dateDePublication = '02/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 /**

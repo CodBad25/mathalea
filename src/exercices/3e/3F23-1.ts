@@ -20,7 +20,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Déterminer un antécédent par une fonction affine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd341f'
 
 export const refs = {
@@ -76,7 +76,6 @@ export default class AntecedentParCalcul extends Exercice {
 
   nouvelleVersion() {
     const versionQcm = Boolean(this.sup2)
-    this.interactifType = versionQcm ? 'mathalea-qcm' : 'mathLive'
     this.consigne = versionQcm
       ? ''
       : 'Répondre aux questions suivantes avec une valeur exacte simplifiée. '

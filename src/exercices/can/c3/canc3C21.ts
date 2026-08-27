@@ -7,7 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre = 'Ajouter ou soustraire des dizaines à un près'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '03/02/2025'
 /**
  * @author Jean-claude Lhote

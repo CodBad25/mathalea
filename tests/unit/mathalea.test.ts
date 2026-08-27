@@ -225,7 +225,7 @@ describe('mathaleaHandleExerciceSimple', () => {
       constructor() {
         super()
         this.nbQuestions = 1
-        this.interactifType = 'mathlive'
+        this.formatInteractif = 'mathlive'
       }
 
       nouvelleVersion() {
@@ -247,7 +247,7 @@ describe('mathaleaHandleExerciceSimple', () => {
       constructor() {
         super()
         this.nbQuestions = 1
-        this.interactifType = 'texte'
+        this.formatInteractif = 'texte'
       }
 
       nouvelleVersion() {
@@ -300,7 +300,7 @@ describe('mathaleaEnsureAMCCompatibility', () => {
 
   it('alimente AMCOpen pour un interactif non supporte', () => {
     const exercice = {
-      interactifType: 'texte',
+      formatInteractif: 'texte',
       question: 'Question sans parametrage AMC',
       correction: 'Correction par defaut',
       autoCorrection: [],
@@ -323,7 +323,7 @@ describe('mathaleaEnsureAMCCompatibility', () => {
 
   it('inference qcmMono et qcmMult depuis autoCorrection', () => {
     const mono = {
-      interactifType: 'qcm',
+      formatInteractif: 'qcm',
       autoCorrection: [
         {
           propositions: [
@@ -342,7 +342,7 @@ describe('mathaleaEnsureAMCCompatibility', () => {
     expect(mono.amcType).toBe('qcmMono')
 
     const mult = {
-      interactifType: 'qcm',
+      formatInteractif: 'qcm',
       autoCorrection: [
         {
           propositions: [

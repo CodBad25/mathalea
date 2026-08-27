@@ -6,7 +6,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une probabilité sur un dé'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ith1o'
 export const refs = {
   'fr-fr': [],

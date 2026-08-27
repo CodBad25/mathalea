@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Trouver un angle à partir de son cosinus et de son sinus'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '81uz0'
 export const refs = {
   'fr-fr': [],

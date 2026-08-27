@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -11,10 +12,9 @@ import {
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une fonction affine avec deux images'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/04/2024'
 export const uuid = '571b2'
 export const refs = {

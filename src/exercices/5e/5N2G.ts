@@ -30,7 +30,6 @@ import { arrondi } from '../../lib/outils/nombres'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
 
 export const titre = 'Additionner deux nombres relatifs'
 export const dateDeModifImportante = '24/9/2024'
@@ -84,7 +83,6 @@ export default class ExerciceAdditionsRelatifs extends Exercice {
     this.nbCols = this.sup3 ? 2 : 3
     this.nbColsCorr = this.sup3 ? 2 : 3
 
-    this.interactifType = this.sup3 ? 'qcm' : 'mathLive'
     const partieDecimaleAUnChiffre = combinaisonListes(
       [true, true, false],
       this.nbQuestions,
@@ -146,24 +144,13 @@ export default class ExerciceAdditionsRelatifs extends Exercice {
       this.autoCorrection[i] = {}
       this.autoCorrection[i].options = {}
       this.autoCorrection[i].enonce = `${texte}\n`
-      this.autoCorrection[i].propositions = [
-        {
-          texte: `$${texNombre(a + b)}$`,
-          statut: true,
-        },
-        {
-          texte: `$${texNombre(a - b)}$`,
-          statut: false,
-        },
-        {
-          texte: `$${texNombre(-a + b)}$`,
-          statut: false,
-        },
-        {
-          texte: `$${texNombre(-a - b)}$`,
-          statut: false,
-        },
-      ]
+      const reponses = [a + b, a - b, -a + b, -a - b]
+      this.autoCorrection[i].propositions = reponses
+        .filter((reponse, index) => reponses.indexOf(reponse) === index)
+        .map((reponse, index) => ({
+          texte: `$${texNombre(reponse)}$`,
+          statut: index === 0,
+        }))
       if (this.sup3) {
         const qcm = propositionsQcm(this, i)
         texte += qcm.texte

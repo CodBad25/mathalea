@@ -37,7 +37,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Produire une forme littérale à partir d'une figure géométrique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * * Traduire la dépendance des grandeurs et produire une formule.

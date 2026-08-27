@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une probabilité avec un arbre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'yxwti'
 export const refs = {
   'fr-fr': [],
@@ -34,10 +34,9 @@ export const refs = {
     this.reponse = texNombre(pBsachantA, 2)
     this.formatChampTexte = KeyboardType.clavierDeBase
 
-      this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     const arbreProfCollege = `\\Proba[Arbre,Angle=30,Branche=3,Rayon=0.65,Incline=false]{A/,$\\overline{A}$/$${texNombre(pAbarre, 1)}$,B/,$\\overline{B}$/,B/,$\\overline{B}$/}`
 
-   
     const omega = new Arbre({
       racine: true,
       enfants: [

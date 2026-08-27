@@ -10,7 +10,7 @@ import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Décomposer un nombre décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/11/2024'
 /**
  * @author Gilles Mora
@@ -32,7 +32,7 @@ export default class decomposerDecimal extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const u = randint(1, 9)

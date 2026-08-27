@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Résoudre une équation du type $e^(x+a) = 1$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8u8my'
 export const refs = {
   'fr-fr': [],
@@ -16,10 +16,10 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ17 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
-   this.optionsDeComparaison = {  nombreDecimalSeulement: true }
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
   enonce(a?: number): void {
@@ -27,7 +27,6 @@ export const refs = {
       a = randint(-9, 9, 0)
     }
 
-    
     this.reponse = String(-a)
 
     this.question = `$\\text{e}^{x${ecritureAlgebrique(a)}}=1$<br>`

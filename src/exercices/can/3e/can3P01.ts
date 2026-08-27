@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Utiliser la proportionnalité sur une expression algébrique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/10/2021'
 
 /**

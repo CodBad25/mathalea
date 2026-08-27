@@ -1,15 +1,15 @@
-import { context } from '../../../modules/context'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea, orangeMathalea } from '../../../lib/colors'
 import { choisitLettresDifferentes } from '../../../lib/outils/aleatoires'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { orangeMathalea, bleuMathalea } from '../../../lib/colors'
 export const titre = 'Trouver un coefficient de colinéarité (graphique)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

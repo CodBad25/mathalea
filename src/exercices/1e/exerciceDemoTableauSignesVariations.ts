@@ -2,6 +2,7 @@ import {
   addTableauSignesVariations,
   creerTableauSignesVariations,
 } from '../../lib/customElements/TableauSignesVariationsElement'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   celluleFleche,
   celluleSigne,
@@ -15,13 +16,11 @@ import type {
   SigneSymbol,
   TableauSVConfig,
 } from '../../lib/interactif/tableauSignesVariations/types'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import { pgcd } from '../../lib/outils/primalite'
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 export const interactifReady = true
-export const interactifType = 'tableau-signes-variations'
 export const titre = 'Compléter un tableau de variations (démo)'
 export const dateDePublication = '2026-05-01'
 export const uuid = '39232'

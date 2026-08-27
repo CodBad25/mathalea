@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Multiplication par 100 de nombres décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343n'
 export const refs = {
   'fr-fr': [],

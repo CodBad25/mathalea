@@ -41,7 +41,7 @@ import Exercice from '../../Exercice'
 
 export const dateDePublication = '11/04/2021'
 export const titre = 'Noter la couleur (scratch)'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export type NoteLaCouleurParams = {
   x: number

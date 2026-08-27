@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer le reste dans une division euclidienne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6efd8'
 export const refs = {
   'fr-fr': [],

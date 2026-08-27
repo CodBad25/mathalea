@@ -5,7 +5,7 @@ export const dateDePublication = '4/5/2024'
 export const dateDeModifImportante = '18/07/2024'
 export const uuid = 'e7929'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['TSA5-21'],
   'fr-ch': [],

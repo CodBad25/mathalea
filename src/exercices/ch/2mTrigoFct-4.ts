@@ -22,7 +22,6 @@ export const titre = "Déterminer des paramètres d'une fonction trigonométriqu
 export const dateDePublication = '06/05/2026'
 export const uuid = 'f9e41'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['2mTrigoFct-4'],

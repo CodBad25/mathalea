@@ -11,7 +11,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Calculer un produit, une somme ou une différence d'images par une fonction affine"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '26/07/2025'

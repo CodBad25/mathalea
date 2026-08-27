@@ -1,14 +1,14 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une espérance'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '11/04/2024'
 export const uuid = 'b8fc9'
 export const refs = {

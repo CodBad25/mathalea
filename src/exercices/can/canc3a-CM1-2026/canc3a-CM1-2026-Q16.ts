@@ -1,19 +1,19 @@
-import { randint } from '../../../modules/outils'
-import ExerciceCan from '../../ExerciceCan'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { mathalea2d } from '../../../modules/mathalea2d'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { fixeBordures } from '../../../lib/2d/fixeBordures'
+import { MetaInteractif2d } from '../../../lib/2d/interactif2d'
+import { segment } from '../../../lib/2d/segmentsVecteurs'
+import { latex2d } from '../../../lib/2d/textes'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { MetaInteractif2d } from '../../../lib/2d/interactif2d'
-import { latex2d } from '../../../lib/2d/textes'
-import { segment } from '../../../lib/2d/segmentsVecteurs'
-import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
-import { fixeBordures } from '../../../lib/2d/fixeBordures'
+import { mathalea2d } from '../../../modules/mathalea2d'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Tracer une figure avec une aire donnée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '845fa'
 export const refs = {
   'fr-fr': [],
@@ -52,8 +52,12 @@ export default class Can2025CM1Q16 extends ExerciceCan {
       labelsPrincipaux: false,
     })
 
-    const labMin = latex2d(texNombre(min, 0), 0, -0.7, { letterSize: 'normalsize' })
-    const labMax = latex2d(texNombre(max, 0), nbGrad, -0.7, { letterSize: 'normalsize' })
+    const labMin = latex2d(texNombre(min, 0), 0, -0.7, {
+      letterSize: 'normalsize',
+    })
+    const labMax = latex2d(texNombre(max, 0), nbGrad, -0.7, {
+      letterSize: 'normalsize',
+    })
 
     const fleche = segment(position, -1.5, position, -0.5)
     fleche.styleExtremites = '->'

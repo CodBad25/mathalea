@@ -28,7 +28,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Calculer la valeur de formules à l'aide d'un programme en blocs"
 export const interactifReady = true
-export const interactifType = 'blockly-editor'
 export const dateDePublication = '17/07/2026'
 
 /**
@@ -516,8 +515,7 @@ function blocklyProgramToScratchXml(
 ): string {
   const firstBlock = (
     (solutionBlocks.blocks as Record<string, unknown> | undefined)?.blocks as
-      | Record<string, unknown>[]
-      | undefined
+      Record<string, unknown>[] | undefined
   )?.[0]
   if (firstBlock == null) {
     return '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
@@ -533,8 +531,7 @@ function blocklyProgramToScratchXml(
         (current.fields as Record<string, unknown> | undefined)?.VAR ?? ''
       const value = (
         current.inputs as
-          | Record<string, { block?: Record<string, unknown> }>
-          | undefined
+          Record<string, { block?: Record<string, unknown> }> | undefined
       )?.VALUE?.block
       xml.push(
         '<block type="data_setvariableto">',
@@ -548,8 +545,7 @@ function blocklyProgramToScratchXml(
     } else if (current.type === 'dire_2s') {
       const message = (
         current.inputs as
-          | Record<string, { block?: Record<string, unknown> }>
-          | undefined
+          Record<string, { block?: Record<string, unknown> }> | undefined
       )?.MESSAGE?.block
       xml.push(
         '<block type="looks_sayforsecs">',
@@ -1020,7 +1016,7 @@ export default class CalculerFormuleParBlockly2 extends Exercice {
       )
       scenarioIndexByType[type] = 0
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const requestedType = listeTypesDeQuestion[i]
       const scenario =
         listeScenariosByType[requestedType][

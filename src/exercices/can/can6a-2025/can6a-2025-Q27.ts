@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Convertir des fractions d'heure en minutes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '61128'
 export const refs = {
   'fr-fr': [],

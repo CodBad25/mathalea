@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Factoriser une expression du type ax² ± x'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'j33nh'
 export const refs = {
   'fr-fr': [],

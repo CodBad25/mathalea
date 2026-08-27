@@ -27,7 +27,6 @@ export const titre =
   "Déterminer les coordonnées du centre ou de sommets d'un parallèlogramme"
 export const dateDePublication = '25/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Jean-claude Lhote

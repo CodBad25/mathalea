@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lire des abscisses fractionnaires de points (niv 2)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '25/01/2024'

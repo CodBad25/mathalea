@@ -3,7 +3,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Trouver la moitié d'un nombre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '63ec7'
 export const refs = {
   'fr-fr': [],

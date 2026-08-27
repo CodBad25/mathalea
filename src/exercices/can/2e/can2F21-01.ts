@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -17,10 +18,8 @@ import {
   randint,
 } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer le signe d’une fonction affine (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

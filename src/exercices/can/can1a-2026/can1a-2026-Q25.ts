@@ -10,7 +10,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une fonction dérivée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1g19h'
 export const refs = {
   'fr-fr': [],
@@ -22,7 +22,6 @@ export const refs = {
 
 */
 export default class Can1a2026Q26 extends ExerciceCan {
-
   constructor() {
     super()
     this.formatChampTexte =
@@ -36,7 +35,6 @@ export default class Can1a2026Q26 extends ExerciceCan {
       b = randint(1, 5) * choice([-1, 1])
     }
 
-   
     this.reponse = reduireAxPlusB(2 * b, a)
     this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}x^2$, alors :<br>
     $f'(x)=$`

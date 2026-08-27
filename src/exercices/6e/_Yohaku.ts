@@ -15,7 +15,6 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Générer un Yohaku'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

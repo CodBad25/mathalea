@@ -24,8 +24,8 @@ import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi, troncature } from '../../lib/outils/nombres'
@@ -45,7 +45,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer périmètre et aire de figures composées'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '31/03/2026'

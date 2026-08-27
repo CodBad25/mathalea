@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Effectuer additions et soustractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer les points d'intersection de trois droites données graphiquement"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '13/02/2026'
 
 /**

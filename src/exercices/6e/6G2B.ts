@@ -21,7 +21,6 @@ export const titre = 'Utiliser la définition du cercle et du disque'
 
 export const dateDePublication = '15/01/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = 'f8dee'
 export const refs = {

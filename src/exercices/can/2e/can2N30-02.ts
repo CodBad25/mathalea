@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Changer l'écriture d'un nombre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '13/08/2026'
 
 /**

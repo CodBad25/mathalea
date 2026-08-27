@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer 10, 20 ou 30  $\\%$ d'un nombre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ttsnc'
 export const refs = {
   'fr-fr': [],

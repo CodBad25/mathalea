@@ -9,7 +9,6 @@ export const titre =
 export const dateDePublication = '11/11/2023'
 export const dateDeModifImportante = '30/03/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer les coordonnées du 4e sommet d\'un parallélogramme

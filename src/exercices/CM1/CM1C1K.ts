@@ -2,7 +2,7 @@ import NombreFois5 from '../can/6e/can6C02'
 export const dateDePublication = '01/02/2026'
 export const titre = 'Multiplier un nombre par 5'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

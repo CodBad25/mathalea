@@ -15,7 +15,7 @@ import { egal, listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Résoudre une équation du second degré (via sa forme canonique)'
 

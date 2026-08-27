@@ -44,7 +44,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Noter la couleur avec Scratch'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const dateDeModifImportante = '14/09/2024'
 export const dateDePublication = '11/04/2021'
 
@@ -271,7 +271,7 @@ export default class NoteLaCouleurC3 extends Exercice {
       ny: 8,
       pas: 20,
     })
-    for (let q = 0; q < this.nbQuestions; ) {
+    for (let q = 0; q < this.nbQuestions;) {
       objetsCorrection = []
       objetsEnonce = []
       objetsEnonce.push(lePlateauEnonce.objets)

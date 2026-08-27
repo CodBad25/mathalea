@@ -31,7 +31,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Trouver l'image d'une figure par symétrie centrale dans un pavage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '23/07/2023'
 
 /**

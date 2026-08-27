@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Exprimer une variable en fonction d'une autre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '14546'
 export const refs = {
   'fr-fr': [],

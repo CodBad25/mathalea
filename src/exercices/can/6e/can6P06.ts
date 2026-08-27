@@ -1,7 +1,7 @@
 import CalculerUnPourcentage from '../../6e/6N3P'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const amcReady = true
 export const titre =

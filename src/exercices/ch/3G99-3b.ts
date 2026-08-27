@@ -1,5 +1,9 @@
 import { lampeMessage } from '../../lib/format/message'
-import { all, isEquation, isEquivalentEquation } from '../../lib/interactif/checks'
+import {
+  all,
+  isEquation,
+  isEquivalentEquation,
+} from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -27,7 +31,6 @@ export const titre =
   "Déterminer une équation cartésienne d'un plan en cherchant un vecteur normal"
 export const dateDePublication = '19/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '7c2e9'
 
@@ -45,7 +48,7 @@ export default class EquationPlanTroisPointsSystemeNormal extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let pointA: Vector3
       let pointB: Vector3
       let pointC: Vector3
@@ -69,13 +72,13 @@ export default class EquationPlanTroisPointsSystemeNormal extends Exercice {
       const [nx, ny, nz] = normal
       const d = -(nx * pointA[0] + ny * pointA[1] + nz * pointA[2])
       const resultat = equationPlanTex(nx, ny, nz, d)
-      const sommePoint =
-        nx * pointA[0] + ny * pointA[1] + nz * pointA[2]
+      const sommePoint = nx * pointA[0] + ny * pointA[1] + nz * pointA[2]
 
       let texte =
         'Dans un repère orthonormé de l’espace, déterminer une équation cartésienne du plan passant par les trois points suivants :<br>'
       texte += `$A${coordTex(pointA)}$, $B${coordTex(pointB)}$ et $C${coordTex(pointC)}$.<br>`
-      texte += 'On déterminera un vecteur normal au plan en résolvant un système.'
+      texte +=
+        'On déterminera un vecteur normal au plan en résolvant un système.'
       if (this.interactif) {
         texte += '<br>Équation cartésienne du plan : '
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.lycee)

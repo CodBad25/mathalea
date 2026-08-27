@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Calculer une image'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '28fc0'
 export const refs = {
   'fr-fr': [],

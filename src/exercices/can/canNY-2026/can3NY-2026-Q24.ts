@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 't25p6'
 export const refs = {
   'fr-fr': [],

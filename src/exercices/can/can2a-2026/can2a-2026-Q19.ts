@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Calculer une baisse globale après deux baisses successives'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bdscv'
 export const refs = {
   'fr-fr': [],

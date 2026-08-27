@@ -4,7 +4,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre =
   "Dire si un entier donné est un diviseur ou multiple d'un autre"
@@ -42,7 +41,7 @@ export default class MultiplesOuDiviseurs extends Exercice {
     )
     let texteCorr = ''
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = 'Cocher la seule réponse exacte.<br>'
       let bonneReponse
       const nb1 = randint(2, 10)

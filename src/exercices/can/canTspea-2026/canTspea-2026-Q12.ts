@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   "Donner la valeur d'une variable après exécution d'un script"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '31vj3'
 export const refs = {
   'fr-fr': [],

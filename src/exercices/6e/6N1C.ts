@@ -12,7 +12,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 export const titre = 'Écrire correctement les grands nombres entiers'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

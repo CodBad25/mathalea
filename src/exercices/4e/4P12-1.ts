@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre des problèmes de ratio'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '22/05/2025'
 
 export const uuid = '0a637'

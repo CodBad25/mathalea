@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une lettre dans une suite répétitive'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '14/04/2024'
 export const uuid = '00f4a'
 export const refs = {

@@ -11,7 +11,7 @@ import Question9 from '../dnbAutomatismes/dnb-2026-06-centres-etrangers-Q9'
 
 export const titre = 'Brevet - Centres étrangers juin 2026 - Automatismes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8db53'
 export const refs = {
   'fr-fr': ['3AutoDNB2026-4'],

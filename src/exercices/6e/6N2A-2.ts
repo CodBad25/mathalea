@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 export const titre = 'Poser additions de plus de deux nombres décimaux'

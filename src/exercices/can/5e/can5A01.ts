@@ -18,7 +18,7 @@ import Exercice from '../../Exercice'
 export const titre = 'Travailler les répétitions (Scratch)'
 export const dateDePublication = '24/10/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -58,7 +58,6 @@ export default class RepetitionScratch extends Exercice {
     let substitut: string
     switch (randint(1, 3)) {
       case 1: // trouver l'angle de rotation
-        this.interactifType = 'mathLive'
         this.amcType = 'AMCNum'
         prog += `\\blockrepeat{répéter \\ovalnum{${nbRep}} fois}{\n`
         prog += '\\blockmove{avancer de \\ovalnum{20} pas}\n'
@@ -76,7 +75,6 @@ export default class RepetitionScratch extends Exercice {
         )
         break
       case 2: // trouver le nombre de répétition
-        this.interactifType = 'mathLive'
         this.amcType = 'AMCNum'
         prog += '\\blockrepeat{répéter \\ovalnum{...} fois}{\n'
         prog += '\\blockmove{avancer de \\ovalnum{20} pas}\n'
@@ -95,7 +93,6 @@ export default class RepetitionScratch extends Exercice {
         break
       case 3:
       default: //
-        this.interactifType = 'qcm'
         this.amcType = 'qcmMono'
         this.autoCorrection[0] = {
           enonce: this.listeQuestions[0],

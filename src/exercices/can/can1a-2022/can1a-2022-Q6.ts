@@ -1,13 +1,13 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre, texPrix } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Calculer un prix avec une proportionnalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ee6lz'
 export const refs = {
   'fr-fr': [],
@@ -21,9 +21,9 @@ export const refs = {
 export default class Can1a2022Q6 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
-       this.optionsChampTexte = { texteAvant: '<br>' , texteApres: ' €' }
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
   }
 
   enonce(nbTotal?: number, prixUnitaire?: number, diviseur?: number) {

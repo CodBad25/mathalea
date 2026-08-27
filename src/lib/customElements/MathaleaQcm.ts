@@ -132,7 +132,6 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
     exercice: IExercice,
     questionIndex: number,
   ): MathaleaQcmVerificationResult {
-    const resultat = verifQuestionQcm(exercice, questionIndex)
     const qcm = document.querySelector(
       `#${MathaleaQcmElement.elementTag}Ex${exercice.numeroExercice}Q${questionIndex}`,
     ) as MathaleaQcmElement | null
@@ -142,6 +141,7 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
       exercice.answers[qcm.id] = qcm.value
       qcm.interactivityOn = false
     }
+    const resultat = verifQuestionQcm(exercice, questionIndex)
 
     return {
       isOk: resultat === 'OK',
@@ -200,7 +200,7 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
         .join(' ')
 
       const inputId = `checkEx${numeroExercice}Q${questionIndex}R${propositionIndex}`
-      if (format !== 'lettre' && this.interactivityOn) {
+      if (format !== 'lettre') {
         const input = document.createElement('input')
         input.type = radio ? 'radio' : 'checkbox'
         input.name = `checkEx${numeroExercice}Q${questionIndex}`
@@ -215,7 +215,7 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
         propositionContainer.appendChild(input)
       }
 
-      if (format !== 'case' || !this.interactivityOn) {
+      if (format !== 'case') {
         const letterLabel = document.createElement('label')
         letterLabel.className = 'ml-2'
         letterLabel.style.cssText = propositionStyle

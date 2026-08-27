@@ -2,7 +2,7 @@ import DiviserDecimauxPar101001000 from '../6e/auto6N2D'
 
 export const dateDePublication = '01/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const titre = 'Diviser un nombre décimal par 10'

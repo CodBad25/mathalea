@@ -10,7 +10,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un prix après des évolutions successives'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'd51f8'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

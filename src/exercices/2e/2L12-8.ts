@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 export const titre = 'Factoriser avec $a^2-b^2$'
 export const uuid = '47f20'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '17/02/2026'
 export const refs = {
   'fr-fr': ['2L12-8', 'BP1AUTO086'],
@@ -74,7 +74,7 @@ export default class factorisationDifferenceCarres extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.consigne =
         this.nbQuestions > 1
           ? 'Factoriser les expressions suivantes.'

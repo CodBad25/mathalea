@@ -2,7 +2,6 @@ import OperationsSurDecimaux from '../5e/auto5N2A'
 export const titre = 'Multiplier des nombres décimaux à une ou deux décimales'
 export const dateDePublication = '20/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Éric Elter

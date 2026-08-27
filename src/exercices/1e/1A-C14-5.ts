@@ -1,7 +1,7 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../lib/outils/arrayOutils'
-import {  reduireAxPlusB } from '../../lib/outils/ecritures'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Retrouver la bonne fonction affine à partir de données'
@@ -23,7 +23,7 @@ export const titre = 'Retrouver la bonne fonction affine à partir de données'
  * @author Gilles Mora
  */
 export default class Auto1AC14e extends ExerciceQcmA {
-   private tableau(f: (x: number | FractionEtendue) => number): string {
+  private tableau(f: (x: number | FractionEtendue) => number): string {
     return tableauSignesFonction(f, -20, 20, {
       step: 1,
       tolerance: 0.1,
@@ -40,16 +40,16 @@ export default class Auto1AC14e extends ExerciceQcmA {
     // distracteur 2   : racine -r, pente a   => h(x) = a(x + r)
     // distracteur 3   : racine -r, pente -a  => k(x) = -a(x + r)
 
-    const b = -a * r      // f(x) = ax + b,  racine r
-    const bOpp = a * r    // h(x) = ax + bOpp, racine -r
+    const b = -a * r // f(x) = ax + b,  racine r
+    const bOpp = a * r // h(x) = ax + bOpp, racine -r
 
     const fBonne = (x: number | FractionEtendue) => a * Number(x) + b
 
     // a > 0 : croissante => f < 0 pour x < r,  f > 0 pour x > r
     // a < 0 : décroissante => f > 0 pour x < r,  f < 0 pour x > r
     const sensVariation = a > 0 ? 'croissante' : 'décroissante'
-    const signeFGauche = a > 0 ? '<' : '>'   // signe de f pour x < r
-    const signeFDroite = a > 0 ? '>' : '<'   // signe de f pour x > r
+    const signeFGauche = a > 0 ? '<' : '>' // signe de f pour x < r
+    const signeFDroite = a > 0 ? '>' : '<' // signe de f pour x > r
     const motGauche = a > 0 ? 'négative' : 'positive'
     const motDroite = a > 0 ? 'positive' : 'négative'
 
@@ -90,10 +90,7 @@ export default class Auto1AC14e extends ExerciceQcmA {
       const r = randint(1, 6) * choice([-1, 1])
       this.appliquerLesValeurs(a, r)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true)
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

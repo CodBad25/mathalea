@@ -6,7 +6,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Comprendre la division euclidienne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '03/07/2025'
 /**

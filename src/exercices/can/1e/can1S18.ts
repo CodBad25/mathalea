@@ -1,3 +1,4 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import {
@@ -5,15 +6,13 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { texNombre } from '../../../lib/outils/texNombre'
-import Exercice from '../../Exercice'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { arrondi } from '../../../lib/outils/nombres'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { arrondi } from '../../../lib/outils/nombres'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 export const titre = 'Trouver le sens de variation d’une suite (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '19/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -40,7 +39,7 @@ export default class SensVariationSuite extends Exercice {
     const nomSuite = ['u', 'v', 'w', 't']
     const s = choice(nomSuite)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const variables: number[] = []
       let monQcmTexte = ''
       let texte = ''

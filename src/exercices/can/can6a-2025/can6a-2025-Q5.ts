@@ -3,7 +3,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une différence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8ac2d'
 export const refs = {
   'fr-fr': [],

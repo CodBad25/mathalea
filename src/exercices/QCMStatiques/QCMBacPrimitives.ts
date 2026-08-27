@@ -1,13 +1,13 @@
-import { context } from '../../modules/context'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { courbe } from '../../lib/2d/Courbe'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { repere } from '../../lib/2d/reperes'
 import { bleuMathalea } from '../../lib/colors'
-import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { buildQcmForExercise } from '../../lib/interactif/qcmBuilder'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { shuffle } from '../../lib/outils/arrayOutils'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Exercice from '../Exercice'
 
@@ -17,10 +17,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Répondre à des QCM Bac : primitives, équations différentielles et intégration'
+export const titre =
+  'Répondre à des QCM Bac : primitives, équations différentielles et intégration'
 export const dateDePublication = '06/06/2026'
 
 type Reponse = {
@@ -125,8 +126,7 @@ const qcmPrimitives: QcmItem[] = [
       'Soit $f$ la fonction définie sur $]0~;~+\\infty[$ par $f(x) = x^2 \\ln x$.<br>Une primitive $F$ de $f$ sur $]0~;~+\\infty[$ est définie par :',
     reponses: [
       {
-        texte:
-          '$F(x) = \\dfrac13 x^3 \\left(\\ln x - \\dfrac13 \\right)$',
+        texte: '$F(x) = \\dfrac13 x^3 \\left(\\ln x - \\dfrac13 \\right)$',
         statut: true,
       },
       { texte: '$F(x) = \\dfrac13 x^3 (\\ln x - 1)$' },
@@ -142,17 +142,14 @@ const qcmPrimitives: QcmItem[] = [
     reponses: [
       { texte: '$F(x) = \\left(x^2 - 2x +3\\right)\\mathrm{e}^x$' },
       {
-        texte:
-          '$F(x) = \\left(x^2 - 2x + 3\\right)\\mathrm{e}^x - 2$',
+        texte: '$F(x) = \\left(x^2 - 2x + 3\\right)\\mathrm{e}^x - 2$',
         statut: true,
       },
       {
-        texte:
-          '$F(x) = \\left(\\dfrac13 x^3 + x\\right)\\mathrm{e}^x + 1$',
+        texte: '$F(x) = \\left(\\dfrac13 x^3 + x\\right)\\mathrm{e}^x + 1$',
       },
       {
-        texte:
-          '$F(x) = \\left(\\dfrac13 x^3 + x \\right) \\mathrm{e}^x$',
+        texte: '$F(x) = \\left(\\dfrac13 x^3 + x \\right) \\mathrm{e}^x$',
       },
     ],
     correction:
@@ -168,8 +165,7 @@ const qcmPrimitives: QcmItem[] = [
       },
       { texte: '$g(x)=\\dfrac{1+x^2}{\\left(1-x^2\\right)^2}$' },
       {
-        texte:
-          '$g(x)=\\dfrac{x^2}{2\\left(x-\\dfrac{x^3}{3}\\right)}$',
+        texte: '$g(x)=\\dfrac{x^2}{2\\left(x-\\dfrac{x^3}{3}\\right)}$',
       },
       { texte: '$g(x)=\\dfrac{x^2}{2}\\ln\\left(1-x^2\\right)$' },
     ],
@@ -223,13 +219,11 @@ const qcmPrimitives: QcmItem[] = [
       'On considère la fonction $f$ définie sur $\\R$ par $f(x)=x^3\\mathrm{e}^{-x^2}$.<br>Si $F$ est une primitive de $f$ sur $\\R$, alors $F$ peut être définie par :',
     reponses: [
       {
-        texte:
-          '$F(x)=-\\dfrac16\\left(x^3+1\\right)\\mathrm{e}^{-x^2}$',
+        texte: '$F(x)=-\\dfrac16\\left(x^3+1\\right)\\mathrm{e}^{-x^2}$',
       },
       { texte: '$F(x)=-\\dfrac14 x^4\\mathrm{e}^{-x^2}$' },
       {
-        texte:
-          '$F(x)=-\\dfrac12\\left(x^2+1\\right)\\mathrm{e}^{-x^2}$',
+        texte: '$F(x)=-\\dfrac12\\left(x^2+1\\right)\\mathrm{e}^{-x^2}$',
         statut: true,
       },
       {
@@ -244,8 +238,7 @@ const qcmPrimitives: QcmItem[] = [
       'On considère la fonction $f$ définie sur $\\R$ par $f(x)=\\mathrm{e}^{2x+1}$.<br>La seule primitive $F$ sur $\\R$ de la fonction $f$ telle que $F(0)=1$ est la fonction :',
     reponses: [
       {
-        texte:
-          '$x \\longmapsto 2\\mathrm{e}^{2x+1} - 2\\mathrm{e} + 1$',
+        texte: '$x \\longmapsto 2\\mathrm{e}^{2x+1} - 2\\mathrm{e} + 1$',
       },
       { texte: '$x \\longmapsto 2\\mathrm{e}^{2x+1} - \\mathrm{e}$' },
       {
@@ -290,8 +283,7 @@ const qcmPrimitives: QcmItem[] = [
       { texte: '$F(x)=\\left(1+x\\right)\\mathrm{e}^x$' },
       { texte: '$F(x)=\\left(2+x\\right)\\mathrm{e}^x$' },
       {
-        texte:
-          '$F(x)=\\left(\\dfrac{x^2}{2}+x\\right)\\mathrm{e}^x$',
+        texte: '$F(x)=\\left(\\dfrac{x^2}{2}+x\\right)\\mathrm{e}^x$',
       },
     ],
     correction:

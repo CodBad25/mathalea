@@ -18,7 +18,7 @@ import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Déterminer la longueur d'une ligne brisée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ehwt2'
 export const refs = {
   'fr-fr': [],

@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème de partage*'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '03/07/2025'
 /**
  * @author Gilles Mora

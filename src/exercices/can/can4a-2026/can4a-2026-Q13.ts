@@ -14,7 +14,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer l'aire d'un carré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'q8v1y'
 export const refs = {
   'fr-fr': [],

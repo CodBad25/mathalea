@@ -1,5 +1,6 @@
 import Figure from 'apigeom/src/Figure'
 import { createApigeomFigureHtml } from '../../lib/apigeom/apigeom-figure'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -15,11 +16,10 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Écrire un nombre entier sous la forme d'une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/11/2024'
 export const dateDeModifImportante = '08/05/2025'
 

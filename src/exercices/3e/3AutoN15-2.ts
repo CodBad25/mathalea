@@ -8,7 +8,6 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'demi-droite-interactive'
 
 export const titre =
   "Placer des points d'abscisses décimales relatives sur un axe gradué"

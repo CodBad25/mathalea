@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer le périmètre d'un rectangle"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cca3f'
 export const refs = {
   'fr-fr': [],

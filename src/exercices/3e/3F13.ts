@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire les antécédents d'un nombre à partir d'un graphique"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDeModifImportante = '23/09/2023'
 
 /**

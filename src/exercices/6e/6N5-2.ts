@@ -29,7 +29,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre des problèmes de prix avec des aliments mettant en jeu diverses opérations'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

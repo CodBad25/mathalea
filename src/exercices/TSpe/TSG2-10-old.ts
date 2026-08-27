@@ -27,7 +27,6 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'mathLive'
 
 /**
  * Exercice dans un cube, calculs de coordonnées,
@@ -42,7 +41,7 @@ export default class NomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20;) {
       let texte = ''
       let texteCorr = ''
 
@@ -179,7 +178,10 @@ export default class NomExercice extends Exercice {
         `On considère un cube $ABCDEFGH$.` +
         '<br>' +
         mathalea2d(
-          Object.assign({ scale: 0.6, display: 'inline' } as const, fixeBordures(objets)),
+          Object.assign(
+            { scale: 0.6, display: 'inline' } as const,
+            fixeBordures(objets),
+          ),
           objets,
         ) +
         '<br>' +

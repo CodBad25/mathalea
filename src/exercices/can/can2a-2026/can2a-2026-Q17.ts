@@ -14,7 +14,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Multiplier un entier avec un décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9rxyk'
 export const refs = {
   'fr-fr': [],

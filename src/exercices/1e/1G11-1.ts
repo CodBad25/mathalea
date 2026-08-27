@@ -1,6 +1,6 @@
+import { createList } from '../../lib/format/lists'
 import { isEqual, seq } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { createList } from '../../lib/format/lists'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -14,7 +14,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Sujet de synthèse sur le produit scalaire en géométrie repérée'
 
@@ -38,7 +38,7 @@ export default class ProduitScalaireRepere extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const xA = randint(-5, 5, 0)
       const yA = randint(-5, 5, 0)
       const xB = randint(-5, 5, [xA, 0])
@@ -68,8 +68,10 @@ export default class ProduitScalaireRepere extends Exercice {
       let adTex: string
       let cdTex: string
       if (abIsInteger) {
-        adTex = new FractionEtendue(dotProduct, abSqrt).simplifie().texFractionSimplifiee
-        cdTex = new FractionEtendue(crossAbs, abSqrt).simplifie().texFractionSimplifiee
+        adTex = new FractionEtendue(dotProduct, abSqrt).simplifie()
+          .texFractionSimplifiee
+        cdTex = new FractionEtendue(crossAbs, abSqrt).simplifie()
+          .texFractionSimplifiee
       } else {
         adTex = `\\dfrac{${dotProduct}}{\\sqrt{${ab2}}}`
         cdTex = `\\dfrac{${crossAbs}}{\\sqrt{${ab2}}}`
@@ -78,16 +80,17 @@ export default class ProduitScalaireRepere extends Exercice {
       // CD montré avec le dénominateur abTex pour la dérivation dans la correction 4
       const cdFracTex = `\\dfrac{${crossAbs}}{${abTex}}`
       // AD² = dotProduct²/ab2 (simplifié)
-      const ad2Tex = new FractionEtendue(dotProduct ** 2, ab2)
-        .simplifie()
+      const ad2Tex = new FractionEtendue(dotProduct ** 2, ab2).simplifie()
         .texFractionSimplifiee
       // Aire = crossAbs / 2
-      const reponse4 = new FractionEtendue(crossAbs, 2).simplifie().texFractionSimplifiee
+      const reponse4 = new FractionEtendue(crossAbs, 2).simplifie()
+        .texFractionSimplifiee
 
       const question1 =
         'Calculer le produit scalaire $\\overrightarrow{AB} \\cdot \\overrightarrow{AC}$.' +
         ajouteChampTexteMathLive(this, 0, KeyboardType.lyceeClassique, {
-          texteAvant: '<br>$\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = $',
+          texteAvant:
+            '<br>$\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = $',
         })
 
       const question2a =
@@ -134,7 +137,10 @@ export default class ProduitScalaireRepere extends Exercice {
         `Ainsi $AB \\times AD = ${dotProduct}$, d'où $AD = \\dfrac{${dotProduct}}{AB}$.<br>` +
         `Or $AB^2 = ${ecritureParentheseSiNegatif(abX)}^2 + ${ecritureParentheseSiNegatif(abY)}^2 = ${ab2}$, donc $AB = ${abTex}$.<br>` +
         `Ainsi $${miseEnEvidence(`AD = ${adTex}`)}$.`
-      const correction2 = createList({ items: [correction2a, correction2b], style: 'alpha' })
+      const correction2 = createList({
+        items: [correction2a, correction2b],
+        style: 'alpha',
+      })
 
       const correction3 =
         `Le point $D$ est le pied de la hauteur du triangle $ABC$ issue de $C$.<br>` +
@@ -144,8 +150,7 @@ export default class ProduitScalaireRepere extends Exercice {
         `$CD^2 = ${ac2} - ${ad2Tex} = \\dfrac{${ac2 * ab2} - ${dotProduct ** 2}}{${ab2}} = \\dfrac{${crossAbs ** 2}}{${ab2}}$.<br>` +
         `Donc $${miseEnEvidence(`CD = ${cdTex}`)}$.`
 
-      const correction4 =
-        `$\\mathcal{A}(ABC) = \\dfrac{AB \\times CD}{2} = \\dfrac{${abTex} \\times ${cdFracTex}}{2} = \\dfrac{${crossAbs}}{2} = ${miseEnEvidence(reponse4)}$.`
+      const correction4 = `$\\mathcal{A}(ABC) = \\dfrac{AB \\times CD}{2} = \\dfrac{${abTex} \\times ${cdFracTex}}{2} = \\dfrac{${crossAbs}}{2} = ${miseEnEvidence(reponse4)}$.`
 
       if (this.questionJamaisPosee(i, dotProduct)) {
         this.introduction =
@@ -166,7 +171,12 @@ export default class ProduitScalaireRepere extends Exercice {
         })
 
         this.listeQuestions = [question1, question2, question3, question4]
-        this.listeCorrections = [correction1, correction2, correction3, correction4]
+        this.listeCorrections = [
+          correction1,
+          correction2,
+          correction3,
+          correction4,
+        ]
         i++
       }
       cpt++

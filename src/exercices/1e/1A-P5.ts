@@ -8,7 +8,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre =
   "Calculer une probabilité à l'aide d'un arbre de probabilités"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '4/5/2024'
 

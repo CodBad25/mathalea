@@ -27,7 +27,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Calculer les coordonnées du 4e sommet d'un parallélogramme"
 export const dateDePublication = '06/12/2023'
@@ -78,7 +78,7 @@ export default class ParallélogrammeSommet extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       typesDeQuestions = listeTypeDeQuestions[i]
       const objets: NestedObjetMathalea2dArray = []
       let texte = ''

@@ -20,7 +20,7 @@ export const refs = {
 }
 export const titre = 'Résoudre des problèmes de billes'
 export const dateDePublication = '30/11/2024'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 /**

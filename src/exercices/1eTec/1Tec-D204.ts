@@ -3,7 +3,7 @@ import Equationdetangente from '../1e/1AN11-3'
 export const titre =
   'Déterminer une équation de tangente avec calcul de dérivée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '22/04/2026'
 export const uuid = 'f633c'
 export const refs = {

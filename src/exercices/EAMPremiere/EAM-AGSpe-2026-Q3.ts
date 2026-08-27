@@ -1,9 +1,9 @@
-import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { spline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -13,7 +13,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Déterminer un signe avec un graphique '
@@ -39,7 +39,13 @@ export default class AutoQ3AGs2026 extends ExerciceQcmA {
     // --- COURBE (spline) ---
     const noeuds = [
       { x: -5, y: 3, deriveeGauche: -1, deriveeDroit: -1, isVisible: false },
-      { x: -3, y: 0, deriveeGauche: -1.5, deriveeDroit: -1.5, isVisible: false },
+      {
+        x: -3,
+        y: 0,
+        deriveeGauche: -1.5,
+        deriveeDroit: -1.5,
+        isVisible: false,
+      },
       { x: -1, y: -2, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
       { x: 2, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: false },
       { x: 4, y: 2, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
@@ -64,7 +70,11 @@ export default class AutoQ3AGs2026 extends ExerciceQcmA {
       grilleSecondaireYDistance: 0.5,
       axesEpaisseur: 1.5,
     })
-    const courbe = theSpline.courbe({ epaisseur: 1.2, ajouteNoeuds: false, color: 'red' })
+    const courbe = theSpline.courbe({
+      epaisseur: 1.2,
+      ajouteNoeuds: false,
+      color: 'red',
+    })
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
     const figure = mathalea2d(
       {
@@ -74,7 +84,8 @@ export default class AutoQ3AGs2026 extends ExerciceQcmA {
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.55,
-        display: 'block', center: !context.isHtml,
+        display: 'block',
+        center: !context.isHtml,
       },
       r,
       courbe,
@@ -99,12 +110,20 @@ export default class AutoQ3AGs2026 extends ExerciceQcmA {
     else if (sa !== sb) correct = propNeg
     else correct = propPos
 
-    this.reponses = [correct, ...[propNul, propNeg, propPos, propIndet].filter((p) => p !== correct)]
+    this.reponses = [
+      correct,
+      ...[propNul, propNeg, propPos, propIndet].filter((p) => p !== correct),
+    ]
 
     // --- CORRECTION ---
-    const motSigne = (s: number) => (s > 0 ? 'positif' : s < 0 ? 'négatif' : 'nul')
+    const motSigne = (s: number) =>
+      s > 0 ? 'positif' : s < 0 ? 'négatif' : 'nul'
     const motPos = (s: number) =>
-      s > 0 ? "au-dessus de l'axe des abscisses" : s < 0 ? "en-dessous de l'axe des abscisses" : "sur l'axe des abscisses"
+      s > 0
+        ? "au-dessus de l'axe des abscisses"
+        : s < 0
+          ? "en-dessous de l'axe des abscisses"
+          : "sur l'axe des abscisses"
 
     this.correction = `On lit le signe de $f(${a})$ et de $f(${b})$ sur le graphique :<br>`
     this.correction += `$\\bullet$ $f(${a})$ est ${motSigne(sa)} (la courbe est ${motPos(sa)} en $x = ${a}$) ;<br>`

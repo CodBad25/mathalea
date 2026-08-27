@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Rechercher un terme dans une somme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

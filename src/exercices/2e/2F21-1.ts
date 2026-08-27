@@ -1,3 +1,4 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionSigne } from '../../lib/outils/deprecatedFractions'
 import {
@@ -5,14 +6,13 @@ import {
   ecritureAlgebriqueSauf1,
   reduireAxPlusB,
 } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { context } from '../../modules/context'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Reconnaitre une fonction affine'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -43,7 +43,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
       [1, 2, 3, 4, 5, 6, 7, 8, 9],
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       const k = choice([-1, 1])
       const a = randint(2, 9) * k

@@ -10,7 +10,7 @@ import {
 } from '../../../lib/outils/ecritures'
 export const titre = 'Factoriser avec un facteur commun'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b4205'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

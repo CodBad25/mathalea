@@ -47,7 +47,6 @@ export const titre = 'Identifier une hauteur et sa base associée'
 export const dateDePublication = '07/07/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = '90fd5'
 export const refs = {

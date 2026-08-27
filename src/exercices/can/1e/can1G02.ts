@@ -1,6 +1,6 @@
 import CosEtsin from '../../1e/1AN40'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Déterminer les valeurs remarquables du cosinus et sinus*'
 
 export const dateDePublication = '01/06/2022'

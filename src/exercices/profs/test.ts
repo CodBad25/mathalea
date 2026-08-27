@@ -7,7 +7,6 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
 export const titre = 'Eric fait ses tests interactifs.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const refs = {
   'fr-fr': [],

@@ -7,9 +7,9 @@ import {
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Vérifier si une valeur est solution d\'une inéquation'
+export const titre = "Vérifier si une valeur est solution d'une inéquation"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'homxe'
 export const refs = {
   'fr-fr': [],

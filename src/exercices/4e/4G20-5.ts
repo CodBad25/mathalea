@@ -4,7 +4,7 @@ export const dateDePublication = '13/04/2021'
 export const amcReady = true
 export const amcType = 'qcmMult'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '9c484'
 export const refs = {
   'fr-fr': ['4G20-5', 'BP2AutoS3'],

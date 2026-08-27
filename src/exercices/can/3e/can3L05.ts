@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer le produit des solutions d’une équation produit nul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/10/2021'
 export const dateDeModifImportante = '27/07/2025'
 /**
@@ -60,7 +60,7 @@ ${b === 0 ? `x(${reduireAxPlusB(1, p)})&=0` : `(${reduireAxPlusB(1, b)})(${redui
 ${reduireAxPlusB(1, b)}=0 &\\text{ ou } ${reduireAxPlusB(1, p)}=0\\\\
 x=${-b} &\\text{ ou } x=${-p}
 \\end{aligned}$<br>
-Le produit de ces soltions est donc égal à : $${ecritureParentheseSiNegatif(-b)}\\times ${ecritureParentheseSiNegatif(-p)}=${miseEnEvidence(b * p)}$.`
+Le produit de ces solutions est donc égal à : $${ecritureParentheseSiNegatif(-b)}\\times ${ecritureParentheseSiNegatif(-p)}=${miseEnEvidence(b * p)}$.`
           this.reponse = this.versionQcm ? `$${b * p}$` : b * p
           this.distracteurs = [
             `$${-b - p}$`,
@@ -98,7 +98,7 @@ ${reduireAxPlusB(a, b)}=0 &\\text{ ou } ${reduireAxPlusB(c, d)}=0\\\\
 ${a}x=${-b} &\\text{ ou } ${c}x=${-d}\\\\
 x=${sol1.texFractionSimplifiee} &\\text{ ou } x=${sol2.texFractionSimplifiee}
 \\end{aligned}$<br>
-Le produit de ces soltions est donc égal à : $${sol1.simplifie().ecritureParentheseSiNegatif}\\times ${sol2.simplifie().ecritureParentheseSiNegatif}=${miseEnEvidence(produitSolutions.texFractionSimplifiee)}$.`
+Le produit de ces solutions est donc égal à : $${sol1.simplifie().ecritureParentheseSiNegatif}\\times ${sol2.simplifie().ecritureParentheseSiNegatif}=${miseEnEvidence(produitSolutions.texFractionSimplifiee)}$.`
 
           this.reponse = this.versionQcm
             ? `$${produitSolutions.texFractionSimplifiee}$`
@@ -153,7 +153,7 @@ ${reduireAxPlusB(a, b)}=0 &\\text{ ou } ${reduireAxPlusB(c, d)}=0\\\\
 ${a}x=${-b} &\\text{ ou } ${c}x=${-d}\\\\
 x=${p} &\\text{ ou } x=${q}
 \\end{aligned}$<br>
-Le produit de ces soltions est donc égal à : $${ecritureParentheseSiNegatif(p)}\\times ${ecritureParentheseSiNegatif(q)}=${miseEnEvidence(produitSolutions)}$.`
+Le produit de ces solutions est donc égal à : $${ecritureParentheseSiNegatif(p)}\\times ${ecritureParentheseSiNegatif(q)}=${miseEnEvidence(produitSolutions)}$.`
 
           this.reponse = this.versionQcm
             ? `$${produitSolutions}$`

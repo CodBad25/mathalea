@@ -1,3 +1,4 @@
+import { orangeMathalea } from '../../../lib/colors'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -9,10 +10,9 @@ import { sp } from '../../../lib/outils/outilString'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { orangeMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une coordonnée avec un produit scalaire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '29/06/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

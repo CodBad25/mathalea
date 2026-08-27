@@ -8,7 +8,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Rechercher un prix unitaire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/10/2021'
 
 /**

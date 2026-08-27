@@ -10,7 +10,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Résoudre une équation'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 's68jh'
 export const refs = {
   'fr-fr': [],

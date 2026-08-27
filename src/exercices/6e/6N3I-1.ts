@@ -26,7 +26,7 @@ import { representationFraction } from '../../modules/representationsFractions'
 export const titre =
   'Encadrer une fraction entre deux nombres entiers consécutifs'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '21/07/2025'

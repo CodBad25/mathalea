@@ -52,7 +52,6 @@ export const dateDePublication = '3/12/2021'
 export const dateDeModifImportante = '25/11/2025'
 export const titre = 'Trouver la transformation'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 export const uuid = '8ac93'
 

@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une vitesse moyenne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'simpr'
 export const refs = {
   'fr-fr': [],

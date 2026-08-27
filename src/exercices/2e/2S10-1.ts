@@ -12,7 +12,6 @@ export const titre = 'Compléter un tableau croisé et calculer une proportion'
 export const dateDePublication = '19/08/2026'
 export const uuid = 'db763'
 export const interactifReady = true
-export const interactifType = 'tableau-mathlive'
 
 export const refs = {
   'fr-fr': ['2S10-1'],

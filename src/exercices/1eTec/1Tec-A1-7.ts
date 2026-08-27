@@ -5,7 +5,7 @@ import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Déterminer un effectif à partir d'une proportion"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 /**

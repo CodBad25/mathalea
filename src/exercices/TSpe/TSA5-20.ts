@@ -2,7 +2,6 @@ import EquationsLog from '../TT/TTE-5'
 export const titre = 'Résoudre des équations du type $a^x = b$'
 export const dateDePublication = '04/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de CanTspeE01 pour les auto 1er

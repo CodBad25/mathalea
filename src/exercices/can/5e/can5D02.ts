@@ -14,7 +14,7 @@ import Exercice from '../../Exercice'
 export const titre =
   'Convertir des heures décimales en heures/minutes et inversement*'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '08/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

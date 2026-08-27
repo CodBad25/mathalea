@@ -44,7 +44,6 @@ export const dateDePublication = '08/06/2022'
 export const dateDeModifImportante = '22/01/2025'
 export const titre = 'Comparer périmètres et/ou aires de figures'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Comparer aires et/ou périmètres de figures avec ceux d'un rectangle référence

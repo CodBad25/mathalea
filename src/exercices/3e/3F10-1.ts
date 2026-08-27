@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '01/11/2024'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMult'
 export const titre =

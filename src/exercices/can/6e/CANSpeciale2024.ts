@@ -43,7 +43,7 @@ import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'CAN Spéciale année 2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6ca15'
 
 export const refs = {

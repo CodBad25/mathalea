@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 export const dateDePublication = '22/12/2025'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Diviser par 0,1 ; 0,01 ; 0,001 (Calculs à trous)'
 

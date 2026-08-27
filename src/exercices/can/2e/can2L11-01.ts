@@ -14,7 +14,7 @@ import {
 } from '../../../lib/outils/ecritures'
 export const titre = 'Développer avec la double distributivité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '07/04/2024'
 export const dateDeModifImportante = '25/03/2026'
 export const uuid = '69fed'

@@ -17,7 +17,7 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0fb89'
 export const titre =
   'Lire des coordonnées en repère orthogonal, normé ou quelconque'

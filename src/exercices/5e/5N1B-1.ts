@@ -13,7 +13,6 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Calculer avec des nombres'
 

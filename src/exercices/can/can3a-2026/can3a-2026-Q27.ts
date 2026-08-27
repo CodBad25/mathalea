@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir des volumes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3izfu'
 export const refs = {
   'fr-fr': [],

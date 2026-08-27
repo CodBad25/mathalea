@@ -1,7 +1,7 @@
 import DistributiviteSimpleDoubleReduction from '../3e/3L11-3'
 export const titre = 'Utiliser la distributivité (simple ou double) et réduire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const uuid = '60cc5'

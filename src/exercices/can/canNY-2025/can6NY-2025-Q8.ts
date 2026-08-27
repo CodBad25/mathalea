@@ -6,11 +6,11 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { bleuMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Déterminer une abscisse'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9e71a'
 export const refs = {
   'fr-fr': [],

@@ -2,7 +2,7 @@ import ExerciceConversions from './_Exercice_conversions'
 export const titre =
   'Effectuer des conversions avec tous les préfixes de milli à kilo, voire tera'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '28/07/2025' // Rajout du paramètre this.sup3 et de la correction détaillée

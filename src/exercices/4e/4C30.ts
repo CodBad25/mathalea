@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Effectuer des calculs avec des puissances de 10 uniquement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDeModifImportante = '24/09/2023'

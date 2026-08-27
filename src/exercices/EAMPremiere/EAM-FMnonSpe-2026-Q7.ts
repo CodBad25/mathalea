@@ -1,6 +1,4 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
-import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -13,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Développer une identité remarquable'
@@ -25,7 +23,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ7FMns2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     xA: number,
     yA: number,
     xB: number,
@@ -37,7 +35,7 @@ private appliquerLesValeurs(
   ): void {
     const num = yB - yA
     const den = xB - xA
-    
+
     // Création de la fraction de base avec la fonction recommandée
     const mFraction = new FractionEtendue(num, den)
     const mStr = mFraction.simplifie().texFractionSimplifiee
@@ -56,16 +54,16 @@ private appliquerLesValeurs(
       d3 = d3Origine
     } else {
       correct = `$${mStr}$`
-      
+
       // Distracteurs générés proprement grâce aux méthodes de FractionEtendue
-      
+
       // d1 : erreur de signe (on utilise f.oppose())
       d1 = `$${mFraction.oppose().simplifie().texFractionSimplifiee}$`
-      
+
       // d2 : inversion de la formule (Δx / Δy)
       const mInverse = new FractionEtendue(den, num)
       d2 = `$${mInverse.simplifie().texFractionSimplifiee}$`
-      
+
       // d3 : inversion + erreur de signe
       d3 = `$${mInverse.oppose().simplifie().texFractionSimplifiee}$`
     }
@@ -77,13 +75,16 @@ private appliquerLesValeurs(
     this.correction += `$\\begin{aligned}`
     this.correction += `m &= \\dfrac{y_B - y_A}{x_B - x_A} \\\\[0.5em]`
     this.correction += `m &= \\dfrac{${yB} - ${ecritureParentheseSiNegatif(yA)}}{${xB} - ${ecritureParentheseSiNegatif(xA)}} \\\\[0.5em]`
-    
+
     // Affichage de la fraction brute avant simplification
     this.correction += `m &= ${mFraction.texFraction}`
 
     // On affiche l'étape de simplification uniquement si la fraction brute est différente de sa version simplifiée
-    if (mFraction.texFraction !== mStr && `\\dfrac{${mFraction.texFraction}}` !== mStr) {
-        this.correction += `\\\\[0.5em] m &= ${mStr}`
+    if (
+      mFraction.texFraction !== mStr &&
+      `\\dfrac{${mFraction.texFraction}}` !== mStr
+    ) {
+      this.correction += `\\\\[0.5em] m &= ${mStr}`
     }
 
     this.correction += `\\end{aligned}$<br><br>`
@@ -104,10 +105,10 @@ private appliquerLesValeurs(
     do {
       const xA = randint(-5, 5)
       const yA = randint(-5, 5)
-      
+
       // On s'assure de ne pas avoir de droite verticale (xB != xA)
       const xB = randint(-5, 5, [xA])
-      
+
       // On s'assure de ne pas avoir de droite horizontale (yB != yA, donc pente != 0)
       const yB = randint(-5, 5, [yA])
 

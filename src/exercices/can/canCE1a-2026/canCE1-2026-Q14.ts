@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Trouver un nombre connaissant le nombre de dizaines et les unités'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3224b'
 export const refs = {
   'fr-fr': [],

@@ -1,17 +1,15 @@
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
-import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 import { context } from '../../../modules/context'
+import { mathalea2d } from '../../../modules/mathalea2d'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer une abscisse sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f7b05'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -25,7 +23,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-this.optionsChampTexte = { texteApres: '.' }
+    this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 
@@ -105,8 +103,8 @@ this.optionsChampTexte = { texteApres: '.' }
     }
 
     this.canReponseACompleter = '$\\ldots$'
-       if (!this.interactif && context.isHtml) {
-         this.question += '$\\ldots$'
-       }
-     }
-   }
+    if (!this.interactif && context.isHtml) {
+      this.question += '$\\ldots$'
+    }
+  }
+}

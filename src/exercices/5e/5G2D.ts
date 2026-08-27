@@ -15,7 +15,6 @@ export const titre = 'Convertir des volumes'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
 
 export const dateDeModifImportante = '03/06/2024'
 
@@ -70,7 +69,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
 
     this.sup = 1 // Niveau de difficulté de l`exercice
     this.sup2 = false // Avec des nombres décimaux ou pas
-    this.sup3 = 1 // interactifType Qcm
+    this.sup3 = 1 // version QCM
     this.sup4 = false
     this.sup5 = false
     this.spacing = 2
@@ -83,7 +82,6 @@ export default class ExerciceConversionsVolumes extends Exercice {
       this.interactif && this.sup3 === 1
         ? 'Cocher la bonne réponse.'
         : 'Compléter.'
-    this.interactifType = this.sup3 === 2 ? 'mathLive' : 'qcm'
 
     Decimal.set({ toExpNeg: -20, toExpPos: 20 }) // pour éviter la conversion en notation scientifique on va jusqu'à 20 décimales (-7 est la valeur par défaut)
     const prefixeMulti = [
@@ -277,9 +275,9 @@ export default class ExerciceConversionsVolumes extends Exercice {
         },
       ]
       const props = propositionsQcm(this, i)
-      if (this.interactif && this.interactifType === 'qcm') {
+      if (this.interactif && this.sup3 !== 2) {
         texte += props.texte
-      } else if (this.interactif && this.interactifType === 'mathLive') {
+      } else if (this.interactif && this.sup3 === 2) {
         texte = texte.replace(
           '\\dotfill',
           `$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)}$`,

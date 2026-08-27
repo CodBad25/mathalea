@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': ['11FA2A-4'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Problème de vitesse (2013 Polynésie)'

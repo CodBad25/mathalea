@@ -13,7 +13,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // export const titre = 'Calculer la dérivée de $x\mapsto u(ax + b)$'
 export const titre = 'Dériver une fonction du type $u(ax + b)$'
 
@@ -25,7 +25,7 @@ export const titre = 'Dériver une fonction du type $u(ax + b)$'
 
 export const uuid = '3391d'
 export const refs = {
-  'fr-fr': ['1AN14-7','TSA3-30', 'TCA7-30'],
+  'fr-fr': ['1AN14-7', 'TSA3-30', 'TCA7-30'],
   'fr-ch': ['3mA2-9', '4mAna-3'],
 }
 
@@ -70,7 +70,7 @@ export default class DeriveeComposee extends Exercice {
       listeTypeDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let exprF = ''

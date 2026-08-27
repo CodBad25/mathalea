@@ -228,3 +228,8 @@ dessus.
 
 `src/components/setup/tex/texDiagnostics.test.ts` : lecture du journal de
 compilation et traduction des messages.
+
+`tests/e2e/tests/consistency/consistency.test.ts` parcourt la vue `v=tex`,
+sélectionne chaque habillage dans le volet de réglages et compare le source
+LaTeX produit avec les autres vues. Le service de compilation distant y est
+simulé : ce test vérifie la génération du source, pas la compilation PDF.

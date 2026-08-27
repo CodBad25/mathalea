@@ -22,7 +22,6 @@ export const titre =
   'Simplifier une fraction pour supprimer la racine carrée de son dénominateur'
 export const dateDeModifImportante = '26/04/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -67,7 +66,7 @@ export default class Rendreentier extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(2, 11)
       const b = randint(2, 11, [a, 4, 8, 9])
       const c = randint(2, 9)

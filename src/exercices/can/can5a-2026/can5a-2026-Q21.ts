@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Effectuer des conversions de volumes entre m³ et dm³'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '50n52'
 export const refs = {
   'fr-fr': [],

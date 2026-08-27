@@ -8,7 +8,7 @@ import { abs } from '../../../lib/outils/nombres'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer le coefficient d’une fonction affine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/10/2021'
 export const dateDeModifImportante = '29/03/2026'
 

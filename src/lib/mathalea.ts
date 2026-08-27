@@ -217,7 +217,6 @@ export async function mathaleaLoadExerciceFromUuid(uuid: string) {
         titre?: string
         amcReady?: boolean
         amcType?: string
-        interactifType?: string
         interactifReady?: boolean
       }
 
@@ -280,17 +279,12 @@ export async function mathaleaLoadExerciceFromUuid(uuid: string) {
 
       // Définir explicitement les propriétés à copier
       type OptionalExerciceProps =
-        | 'titre'
-        | 'amcReady'
-        | 'amcType'
-        | 'interactifType'
-        | 'interactifReady'
+        'titre' | 'amcReady' | 'amcType' | 'interactifReady'
 
       const propsToClone: OptionalExerciceProps[] = [
         'titre',
         'amcReady',
         'amcType',
-        'interactifType',
         'interactifReady',
       ]
 
@@ -716,12 +710,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let pin = ''
   let gameId = ''
   let recorder:
-    | 'capytale'
-    | 'moodle'
-    | 'labomep'
-    | 'anki'
-    | 'flowmath'
-    | undefined
+    'capytale' | 'moodle' | 'labomep' | 'anki' | 'flowmath' | undefined
   let done: '1' | undefined
   let es
   let presMode:
@@ -1074,7 +1063,10 @@ export function mathaleaHandleExerciceSimple(
     let reponse = {}
 
     if (exercice.questionJamaisPosee(i, String(exercice.correction))) {
-      if (exercice.reponse != null) {
+      if (
+        exercice.reponse != null &&
+        !(exercice.exoCustomResultat && exercice.formatChampTexte === 'none')
+      ) {
         if (compare != null) {
           /// DE LA AU PROCHAIN LA, ce sera à supprimer quand il n'y aura plus de this.compare
           if (
@@ -1186,7 +1178,7 @@ export function mathaleaHandleExerciceSimple(
       } else {
         if (
           exercice.formatInteractif !== 'qcm' &&
-          !isMathaleaCustomElementFormat(exercice.interactifType)
+          !isMathaleaCustomElementFormat(exercice.formatInteractif)
         )
           window.notify(
             "Un exercice simple doit avoir un this.reponse sauf si c'est un qcm ou un MathaleaCustomElement avec sa propre autoCorrection",
@@ -1195,7 +1187,7 @@ export function mathaleaHandleExerciceSimple(
       }
       const isFillInTheBlank =
         exercice.formatInteractif === 'fillInTheBlank' ||
-        (exercice.formatInteractif === 'custom' &&
+        (exercice.formatInteractif === 'meta-custom' &&
           String(exercice.question).includes('%{'))
       if (!isFillInTheBlank) {
         if (
@@ -1317,14 +1309,14 @@ export function mathaleaHandleExerciceSimple(
           ),
         )
         if (
-          exercice.formatInteractif !== 'custom' &&
+          exercice.formatInteractif !== 'meta-custom' &&
           typeof exercice.reponse === 'object' &&
           'callback' in exercice.reponse
         ) {
           // Cas d'un callback dans un exercice simple
           handleAnswers(exercice, i, exercice.reponse)
         } else if (
-          exercice.formatInteractif !== 'custom' &&
+          exercice.formatInteractif !== 'meta-custom' &&
           typeof exercice.reponse === 'object' &&
           'champ1' in exercice.reponse
         ) {
@@ -1503,7 +1495,9 @@ export function mathaleaFormatExercice(texte = ' ') {
   // l'échappement des `\`, rendant le JSON illisible par JSON.parse).
   return texte
     .split(/(<[^>]*>)/g)
-    .map((part) => (part.startsWith('<') ? part : applyFormatExerciceReplacements(part)))
+    .map((part) =>
+      part.startsWith('<') ? part : applyFormatExerciceReplacements(part),
+    )
     .join('')
 }
 

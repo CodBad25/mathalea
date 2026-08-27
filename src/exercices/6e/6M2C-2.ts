@@ -4,7 +4,6 @@ export const titre =
   "Calculer l'aire de carrés et de rectangles (calcul mental)"
 export const dateDePublication = '30/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer l'aire de carré, rectangle ou triangle rectangle

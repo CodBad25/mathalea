@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Manipuler les conversions'
 export const dateDePublication = '11/10/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 
 /**

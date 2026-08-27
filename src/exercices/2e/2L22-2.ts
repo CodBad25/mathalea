@@ -1,24 +1,24 @@
-import Exercice from '../Exercice'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texNombre } from '../../lib/outils/texNombre'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { texNombre } from '../../lib/outils/texNombre'
 
 import { extraireRacineCarree } from '../../lib/outils/calculs'
 import FractionEtendue from '../../modules/FractionEtendue'
 import Trinome from '../../modules/Trinome'
 export const titre = 'Résoudre une équation avec un carré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '12/10/2024'
 /**
  * Résoudre des équations de type x² = a
@@ -70,7 +70,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a, a1
@@ -165,7 +165,8 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
             texteCorr += `Ainsi, $S=${miseEnEvidence(`\\{-\\sqrt{${b}}\\,;\\,\\sqrt{${b}}\\}`)}$.`
           } else {
             texteCorr = ''
-            texteCorr+= CorrCarre +
+            texteCorr +=
+              CorrCarre +
               ` $x^2=${b}$.<br>  
         Puisque $${b}$` +
               CorrPositif

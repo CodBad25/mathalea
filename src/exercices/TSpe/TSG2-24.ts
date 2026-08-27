@@ -13,7 +13,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer un vecteur orthogonal à deux autre vecteurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '02/02/2025'
 
@@ -34,7 +33,7 @@ export default class VecteurNormalADeuxAutresVecteurs extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const u1 = randint(-5, 5, 0) // Composante x de u

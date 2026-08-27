@@ -10,7 +10,7 @@ import Question8 from '../dnbAutomatismes/dnb-2026-06-antilles-Q8'
 import Question9 from '../dnbAutomatismes/dnb-2026-06-antilles-Q9'
 export const titre = 'Brevet - Antilles juin 2026 - Automatismes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8db41'
 export const refs = {
   'fr-fr': ['3AutoDNB2026-2'],

@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Calculer la moitié d'une fracion"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '36c4e'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

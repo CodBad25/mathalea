@@ -6,7 +6,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ukg9g'
 export const refs = {
   'fr-fr': [],
@@ -32,7 +32,9 @@ export default class CalculDivers extends ExerciceSimple {
 
     let a
     let b
-    switch (this.canOfficielle ? 1 : this.quotaRandint('typeDeQuestions', 1, 2)) {
+    switch (
+      this.canOfficielle ? 1 : this.quotaRandint('typeDeQuestions', 1, 2)
+    ) {
       case 1:
         a = this.canOfficielle ? 12 : randint(8, 12, 10)
         b = 20 - a

@@ -14,7 +14,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const titre = 'Lire une abscisse fractionnaire sur un axe gradué'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 

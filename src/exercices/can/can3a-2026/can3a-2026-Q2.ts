@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer une fraction d'heures"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'az45m'
 export const refs = {
   'fr-fr': [],

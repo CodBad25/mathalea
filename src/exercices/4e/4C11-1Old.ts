@@ -19,7 +19,6 @@ export const dateDePublication = '05/10/2024' // fonctions de mise en place des 
 export const dateDeModifImportante = '13/10/2024'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'a33b9'
 export const refs = {

@@ -1,10 +1,10 @@
-import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -13,7 +13,7 @@ import { bleuMathalea } from '../../../lib/colors'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre = 'Lire graphiquement le signe de $b$ dans $ax^2+bx+c$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '09/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '23/10/2024'
@@ -43,7 +43,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
     let beta = 0
     let F: (x: number) => number = (x) => x
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
         choice([1, 2, 3, 4, 5, 6]) //
       ) {

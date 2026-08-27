@@ -17,7 +17,7 @@ export const titre = 'Trouver le complément à 10, 100 ou 1 000'
 export const dateDeModifImportante = '18/08/2026'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 /**

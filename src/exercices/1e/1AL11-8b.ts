@@ -7,7 +7,6 @@ import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Calculer la somme des termes d'une suite arithmétique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '30/11/2021'
 

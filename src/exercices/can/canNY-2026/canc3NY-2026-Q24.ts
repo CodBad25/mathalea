@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser une égalité pour compléter un calcul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4eyns'
 export const refs = {
   'fr-fr': [],

@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Supprimer les parenthèses puis réduire l'expression"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 

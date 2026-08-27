@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec des fractions '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9e8a8'
 export const refs = {
   'fr-fr': [],

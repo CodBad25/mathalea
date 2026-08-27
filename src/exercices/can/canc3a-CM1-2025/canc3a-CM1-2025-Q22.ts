@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Effetuer une multiplication avec $50$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '57201'
 export const refs = {
   'fr-fr': [],

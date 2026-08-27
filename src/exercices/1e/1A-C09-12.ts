@@ -15,12 +15,12 @@ export const dateDePublication = '24/08/2026'
 export const uuid = '70513'
 
 export const refs = {
-  'fr-fr': ['1A-C09-12', '2A-C02-8'],
+  'fr-fr': ['1A-C09-12', '2A-C2-9'],
   'fr-ch': [],
 }
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

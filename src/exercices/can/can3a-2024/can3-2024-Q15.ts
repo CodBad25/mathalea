@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Soustraire deux fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '50e11'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

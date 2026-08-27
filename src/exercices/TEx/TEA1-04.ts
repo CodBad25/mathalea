@@ -7,9 +7,9 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Déterminer l'inverse d'un entier modulo k"
-// Bug : Si on écrit $k$ dans le titre alors inverse s'écrit en mode maths 
+// Bug : Si on écrit $k$ dans le titre alors inverse s'écrit en mode maths
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/11/2025'
 export const uuid = '42f60'
 
@@ -48,7 +48,7 @@ export default class ExerciceInverseModulo extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // k entre 3 et 10
       const k = randint(3, 10)
 

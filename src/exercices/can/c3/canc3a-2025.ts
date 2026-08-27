@@ -2,8 +2,14 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/view.eleve.can.2025.CM2.test.ts ⚠️
  */
 
+import MetaExercice from '../../MetaExerciceCan'
 import Question1 from '../can6a-2025/can6a-2025-Q1'
+import Question10 from '../can6a-2025/can6a-2025-Q10'
+import Question15 from '../can6a-2025/can6a-2025-Q15'
+import Question16 from '../can6a-2025/can6a-2025-Q16'
 import Question2 from '../can6a-2025/can6a-2025-Q2'
+import Question21 from '../can6a-2025/can6a-2025-Q21'
+import Question25 from '../can6a-2025/can6a-2025-Q25'
 import Question3 from '../can6a-2025/can6a-2025-Q3'
 import Question4 from '../can6a-2025/can6a-2025-Q4'
 import Question5 from '../can6a-2025/can6a-2025-Q5'
@@ -11,32 +17,26 @@ import Question6 from '../can6a-2025/can6a-2025-Q6'
 import Question7 from '../can6a-2025/can6a-2025-Q7'
 import Question8 from '../can6a-2025/can6a-2025-Q8'
 import Question9 from '../can6a-2025/can6a-2025-Q9'
-import Question10 from '../can6a-2025/can6a-2025-Q10'
 import Question11 from '../canc3a-2025/canc3a-2025-Q11'
 import Question12 from '../canc3a-2025/canc3a-2025-Q12'
 import Question13 from '../canc3a-2025/canc3a-2025-Q13'
 import Question14 from '../canc3a-2025/canc3a-2025-Q14'
-import Question15 from '../can6a-2025/can6a-2025-Q15'
-import Question16 from '../can6a-2025/can6a-2025-Q16'
 import Question17 from '../canc3a-2025/canc3a-2025-Q17'
 import Question18 from '../canc3a-2025/canc3a-2025-Q18'
 import Question19 from '../canc3a-2025/canc3a-2025-Q19'
 import Question20 from '../canc3a-2025/canc3a-2025-Q20'
-import Question21 from '../can6a-2025/can6a-2025-Q21'
 import Question22 from '../canc3a-2025/canc3a-2025-Q22'
 import Question23 from '../canc3a-2025/canc3a-2025-Q23'
 import Question24 from '../canc3a-2025/canc3a-2025-Q24'
-import Question25 from '../can6a-2025/can6a-2025-Q25'
 import Question26 from '../canc3a-2025/canc3a-2025-Q26'
 import Question27 from '../canc3a-2025/canc3a-2025-Q27'
 import Question28 from '../canc3a-2025/canc3a-2025-Q28'
 import Question29 from '../canc3a-2025/canc3a-2025-Q29'
 import Question30 from '../canc3a-2025/canc3a-2025-Q30'
-import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN CM2 sujet 2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a7c5c'
 export const refs = {
   'fr-fr': ['canc3a-2025'],

@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Calculer les coordonnées de la somme de deux vecteurs'
 export const dateDePublication = '21/05/2023'
 

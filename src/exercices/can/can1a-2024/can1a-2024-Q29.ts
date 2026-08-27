@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { randint } from '../../../modules/outils'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Augmenter/diminuer avec des pourcentages'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '29eda'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

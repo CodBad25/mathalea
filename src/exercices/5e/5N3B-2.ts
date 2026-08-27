@@ -5,15 +5,15 @@ import { pgcd } from '../../lib/outils/primalite'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Effectuer des calculs de fractions (à dénominateurs multiples) un peu complexes'
 

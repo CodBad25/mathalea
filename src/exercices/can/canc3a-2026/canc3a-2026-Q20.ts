@@ -17,7 +17,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer une longueur à partir d'un périmètre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e67e0'
 export const refs = {
   'fr-fr': [],

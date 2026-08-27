@@ -2,6 +2,7 @@ import { Courbe, courbe } from '../../../lib/2d/Courbe'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { IntegraleComptable } from '../../../lib/2d/IntegraleComptable'
 import RepereBuilder from '../../../lib/2d/RepereBuilder'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { interpolationDeLagrange } from '../../../lib/mathFonctions/outilsMaths'
@@ -10,10 +11,8 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Encadrer une intégrale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '26/04/2025'
 

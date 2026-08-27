@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { randint } from '../../../modules/outils'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer si des vecteurs ont la même direction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1a170'
 export const refs = {
   'fr-fr': [],

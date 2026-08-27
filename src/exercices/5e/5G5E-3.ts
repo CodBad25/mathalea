@@ -31,7 +31,6 @@ export const titre = 'Tracer une hauteur dans un triangle aux instruments'
 
 export const dateDePublication = '30/07/2026'
 export const interactifReady = true
-export const interactifType = 'editeur-iep'
 
 export const uuid = 'd7d78'
 export const refs = {

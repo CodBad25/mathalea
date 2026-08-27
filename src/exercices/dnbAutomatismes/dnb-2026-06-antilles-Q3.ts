@@ -1,9 +1,9 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
-import { context } from '../../modules/context'
-import ExerciceQcmA from '../ExerciceQcmA'
 import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
+import { context } from '../../modules/context'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = 'f5a23'
 export const refs = {
@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Connaitre la formule de l'aire d'un triangle quelconque"

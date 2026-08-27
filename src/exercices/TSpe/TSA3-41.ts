@@ -14,7 +14,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const titre = 'Lire graphiquement des informations sur la convexité'
 export const dateDePublication = '10/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 

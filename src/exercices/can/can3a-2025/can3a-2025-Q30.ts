@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un produit avec des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ecb98'
 export const refs = {
   'fr-fr': [''],

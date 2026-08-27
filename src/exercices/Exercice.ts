@@ -34,15 +34,6 @@ import {
  * @author Rémi Angot
  */
 export default class Exercice implements IExercice {
-  /**
-   * Valeur de l'export de module `interactifType`, recopiée sur la classe par
-   * les chargeurs qui instancient un exercice sans passer par
-   * `mathaleaLoadExerciceFromUuid` — c'est le cas des méta-exercices, qui ont
-   * besoin de connaître le format d'interactivité avant de construire
-   * l'instance.
-   */
-  static interactifTypeModule?: string
-
   titre: string
   id?: string
   uuid!: string
@@ -135,7 +126,6 @@ export default class Exercice implements IExercice {
   interactif: boolean // l'exercice est affiché en mode interactif si `true`
   interactifObligatoire: boolean
   interactifReady: boolean // flag pour indiquer si l'exercice est dispo en interactif ou pas
-  interactifType?: string
   besoinFormulaireNumerique:
     | boolean
     | [titre: string, max: number, tooltip: string]

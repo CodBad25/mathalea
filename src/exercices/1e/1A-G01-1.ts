@@ -9,7 +9,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

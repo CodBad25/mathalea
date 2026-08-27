@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ncr2v'
 export const refs = {
   'fr-fr': [],
@@ -33,7 +33,9 @@ export default class canQ232026 extends ExerciceSimple {
     const exposantannee = this.canOfficielle
       ? 1
       : this.quotaRandint('exposantannee', 1, 2)
-    const exposantA = this.canOfficielle ? 1 : this.quotaRandint('exposantA', 1, 2)
+    const exposantA = this.canOfficielle
+      ? 1
+      : this.quotaRandint('exposantA', 1, 2)
     const aDiv = new Decimal(a).div(new Decimal(10).pow(exposantA))
     const NbanneeDiv = new Decimal(annee).div(
       new Decimal(10).pow(exposantannee),

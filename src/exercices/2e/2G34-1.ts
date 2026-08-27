@@ -18,7 +18,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 export const titre =
   "Déterminer la position relative de deux droites à l'aide de leur équation et en déduire le nombre de solution d'un système d'équations"
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const dateDePublication = '08/04/2024'
 export const uuid = '2eee3'
 export const refs = {
@@ -55,7 +55,7 @@ export default class systemeEquationsPremDegComp extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.comment =
         'Dans cet exercice, un système est donné à résoudre. Les solutions sont entières comprises entre -10 et 10.<br>Le niveau 1 correspond à des inconnues seulement dans les membres de gauche;<br>Le niveau 2 à des inconnues dans les deux membres, mais ordonnées;<br>Le niveau 3 à des inconnues dans le désordre dans les deux membres.'
       let texte = ''

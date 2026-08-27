@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Utiliser la notation puissance'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

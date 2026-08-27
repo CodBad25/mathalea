@@ -1,13 +1,13 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { orangeMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { orangeMathalea } from '../../../lib/colors'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Rendre une fraction irréductible'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '84545'
 export const refs = {
   'fr-fr': [],

@@ -4,9 +4,9 @@ import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer la raison d\'une suite arithmétique'
+export const titre = "Calculer la raison d'une suite arithmétique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'do7ez'
 export const refs = {
   'fr-fr': [],
@@ -20,8 +20,8 @@ export const refs = {
 export default class Can1a2026Q29 extends ExerciceCan {
   constructor() {
     super()
-      this.optionsDeComparaison = { nombreDecimalSeulement: true }
-   this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
   enonce(u?: number, r?: number, i?: number, n?: number, s?: string): void {
@@ -35,14 +35,14 @@ export default class Can1a2026Q29 extends ExerciceCan {
 
     const v = u + n * r
 
-    
     this.reponse = String(r)
 
     this.question = `$(${s}_n)$ est une suite arithmétique avec $${s}_{${i}}=${u}$ et $${s}_{${i + n}}=${v}$.<br>`
 
     if (this.interactif) {
       this.optionsChampTexte = {
-        texteAvant: 'La raison de cette suite est égale à ', texteApres: '.'
+        texteAvant: 'La raison de cette suite est égale à ',
+        texteApres: '.',
       }
     } else {
       this.question += 'La raison de cette suite est égale à $\\ldots$'

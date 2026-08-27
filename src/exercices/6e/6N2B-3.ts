@@ -17,7 +17,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Multiplier un décimal par 10, 100, 1000, 0,1, 0,01, 0,001...'
 

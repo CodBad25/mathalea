@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Développer une expression avec une égalité remarquable'
@@ -32,13 +32,13 @@ export default class AutoQ5CEs2026 extends ExerciceQcmA {
 
     // Résultat correct : a^2 - 2ab + b^2
     const correct = `${term1} - ${term2} + ${term3}`
-    
+
     // Distracteur 1 (Type a) : a^2 - b^2 (oubli du double produit)
     const d1 = `${term1} - ${term3}`
-    
+
     // Distracteur 2 (Type c) : erreur sur l'exposant du premier terme (2n - 1 au lieu de 2n)
     const d2 = `x^{${2 * n - 1}} - ${term2} + ${term3}`
-    
+
     // Distracteur 3 (Type d) : a^2 + 2ab - b^2 (erreurs de signes sur les 2e et 3e termes)
     const d3 = `${term1} + ${term2} - ${term3}`
 
@@ -48,12 +48,7 @@ export default class AutoQ5CEs2026 extends ExerciceQcmA {
     this.correction += `&= ${miseEnEvidence(correct)}`
     this.correction += `\\end{aligned}$`
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
   }
 
   versionOriginale: () => void = () => {
@@ -71,7 +66,7 @@ export default class AutoQ5CEs2026 extends ExerciceQcmA {
     do {
       const n = choice([3, 4, 5])
       const k = randint(1, 5)
-      
+
       this.appliquerLesValeurs(n, k)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

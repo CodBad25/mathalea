@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import {
@@ -7,10 +8,8 @@ import {
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une distance avec les coordonnées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

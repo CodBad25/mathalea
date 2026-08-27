@@ -3,7 +3,6 @@ export const titre = 'Résoudre une Rose multiplicative avec calcul littéral'
 export const dateDePublication = '12/08/2022'
 export const dateDeModifImportante = '01/10/2023'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

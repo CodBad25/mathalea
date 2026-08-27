@@ -24,9 +24,9 @@ import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
+
 export const amcReady = true
-export const amcType = 'qcmMono'
+export const amcType = 'AMCOpen'
 
 export const titre = 'Se déplacer et se repérer'
 export const uuid = 'e9dac'
@@ -252,7 +252,7 @@ export default class DeplacerReperer extends Exercice {
       .join('<br>')}`
       : ''
     const tortue = listeShapes2DInfos['tortue'].shapeDef
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const positionDepart: Position = {
         x: 0,
         y: 0,

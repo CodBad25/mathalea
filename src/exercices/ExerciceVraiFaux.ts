@@ -5,12 +5,10 @@ import { context } from '../modules/context'
 import { listeQuestionsToContenu } from '../modules/outils'
 import Exercice from './Exercice'
 export const interactifReady = true
-export const interactifType = 'mathalea-qcm'
 
 // export const titre = 'A trouver'
 // export const dateDePublication = '01/01/2000'
 // export const interactifReady = true
-// export const interactifType = 'qcm'
 
 /**
  * @author Rémi Angot
@@ -45,7 +43,7 @@ export default class VraiFaux extends Exercice {
         : this.consigne
     this.affirmations = shuffle(this.affirmations)
     this.nbQuestions = Math.min(this.affirmations.length, this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = this.affirmations[i].texte
       const propositions = [
         {

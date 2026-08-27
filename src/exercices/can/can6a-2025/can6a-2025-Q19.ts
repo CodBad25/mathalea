@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Comparer deux fractions'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '884fe'
 export const refs = {
   'fr-fr': [],

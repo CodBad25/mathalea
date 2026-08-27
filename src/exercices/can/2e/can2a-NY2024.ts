@@ -2,7 +2,7 @@ import CourseAuxNombresSpeciale2024 from '../6e/CANSpeciale2024'
 
 export const titre = 'S’entraîner avec le sujet CAN spéciale année 2024 - 2nde'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'dd9d0'
 
 export const refs = {

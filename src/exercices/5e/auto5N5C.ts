@@ -40,7 +40,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Identifier la structure d'un motif itératif"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '03/06/2026'
 

@@ -2,7 +2,7 @@ import ArrondirUnDecimal from '../6e/6N1K-1'
 export const titre =
   "Donner la partie entière ou l'arrondi à l'entier d'un nombre décimal"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/02/2026'
 export const uuid = '46mp9'
 export const refs = {

@@ -19,7 +19,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 
 export const titre = 'Lire une abscisse sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '29/08/2021'
@@ -45,7 +45,7 @@ export default class AbscisseFractionnaire extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(2, 6, this.version === '6e' ? [] : [3, 6]) // dénominateur
       let b = randint(2, a * 4 - 1)
       do {

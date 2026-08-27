@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Mulitiplier des mutiples de dix'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ccf1d'
 export const refs = {
   'fr-fr': [],

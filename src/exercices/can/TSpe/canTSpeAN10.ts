@@ -1,9 +1,9 @@
-import Exercice from '../../Exercice'
-import { choice, combinaisonListes } from '../../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import Exercice from '../../Exercice'
 
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
@@ -12,7 +12,7 @@ export const titre = 'Exprimer en fonction de log(n) ou ln(n)'
 export const dateDePublication = '22/7/2024'
 export const uuid = 'ae1a7'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['canTSpeAN10'],
   'fr-ch': [],
@@ -42,7 +42,7 @@ export default class ExpressionsLog extends Exercice {
 
     const listeTypeQuestions = combinaisonListes([1, 2, 3, 4], this.nbQuestions)
     const listeDeA = combinaisonListes([2, 3, 5], this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = listeDeA[i]
       let texte: string
       let texteCorr: string

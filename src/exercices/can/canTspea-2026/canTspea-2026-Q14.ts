@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Résoudre une équation avec quotients'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6pzzo'
 export const refs = {
   'fr-fr': [],
@@ -19,20 +19,19 @@ export const refs = {
 */ export default class Can2026TermQ14 extends ExerciceCan {
   constructor() {
     super()
-   
-     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 
   enonce(a?: number, b?: number, c?: number): void {
     if (a == null || b == null || c == null) {
       a = randint(1, 9)
       b = randint(2, 9, [a])
-      c = randint(2, 9,b)
+      c = randint(2, 9, b)
     }
 
     const resultat = new FractionEtendue(a * c, b).simplifie()
 
-    
     this.reponse = resultat.texFraction
 
     this.question = `$\\dfrac{${a}}{x}=\\dfrac{${b}}{${c}}$<br><br>`
@@ -43,7 +42,7 @@ export const refs = {
       this.question += '$x=\\ldots$'
     }
 
-    this.correction = `$\\dfrac{${a}}{x}=\\dfrac{${b}}{${c}}$ équivaut à $x=\\dfrac{${a}\\times ${c}}{${b}}=\\dfrac{${a * c}}{${b}}${pgcd(a*c,b) === 1 ? '' : `=${resultat.texFraction}`}$.<br>
+    this.correction = `$\\dfrac{${a}}{x}=\\dfrac{${b}}{${c}}$ équivaut à $x=\\dfrac{${a}\\times ${c}}{${b}}=\\dfrac{${a * c}}{${b}}${pgcd(a * c, b) === 1 ? '' : `=${resultat.texFraction}`}$.<br>
     La solution de l'équation est $${miseEnEvidence(resultat.texFraction)}$.`
 
     this.canEnonce = `$\\dfrac{${a}}{x}=\\dfrac{${b}}{${c}}$`
@@ -51,7 +50,6 @@ export const refs = {
   }
 
   nouvelleVersion(): void {
-
     this.canOfficielle ? this.enonce(2, 3, 4) : this.enonce()
   }
 }

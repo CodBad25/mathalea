@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un produit (table de multiplication)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '45105'
 export const refs = {
   'fr-fr': [],

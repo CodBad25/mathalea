@@ -15,7 +15,7 @@ import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Construire un triangle avec l'éditeur Instrumenpoche"
-export const interactifType = 'alea-iep-editeur'
+
 export const interactifReady = true
 export const dateDePublication = '23/08/2026'
 export const uuid = 'f7a61'

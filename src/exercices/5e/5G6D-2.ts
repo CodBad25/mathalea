@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDeModifImportante = '10/11/2024'
 export const titre =
   'Reconnaitre un quadrilatère particulier à partir de ses propriétés'

@@ -8,7 +8,7 @@ import Exercice from '../Exercice'
 
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 
 export const titre = 'Multiplier par 0,1 ; 0,01 ; 0,001 (placer la virgule)'

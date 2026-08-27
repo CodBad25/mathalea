@@ -1,6 +1,6 @@
-import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   Spline,
@@ -9,14 +9,14 @@ import {
 } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const dateDePublication = '27/10/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre une équation graphiquement'
 
 /**

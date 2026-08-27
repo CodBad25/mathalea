@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Donner le nombre d'antécédent(s) par la fonction carré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a9046'
 export const refs = {
   'fr-fr': [],

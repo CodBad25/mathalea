@@ -1,9 +1,9 @@
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 
 type ProbabiliteAffichee = {
@@ -147,7 +147,7 @@ x&=1-\\left(${valeurs.join('+')}\\right)\\\\
 
 export const titre = 'Calculer une probabilité dans un tableau'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '14/08/2026'
 
 /**

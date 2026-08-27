@@ -7,7 +7,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer la somme d’une fraction et d’un nombre décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'qo4f0'
 export const refs = {
   'fr-fr': [],

@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Recourir à une décomposition en facteurs premiers dans des cas simples'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '29/08/2022'

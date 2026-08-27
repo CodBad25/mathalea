@@ -15,7 +15,6 @@ export const titre = 'Saisir une formule simple sur tableur'
 export const dateDePublication = '07/02/2026'
 
 export const interactifReady = true
-export const interactifType = 'my-spreadsheet'
 
 /**
  * Programmer des calculs sur tableur : New programme de 6eme 2025

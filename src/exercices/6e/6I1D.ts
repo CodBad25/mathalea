@@ -8,7 +8,6 @@ export const titre = "Programmer le déplacement d'un bus"
 export const dateDePublication = '15/07/2025'
 
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Programmer la construction d’un chemin simple : New programme de 6eme 2025

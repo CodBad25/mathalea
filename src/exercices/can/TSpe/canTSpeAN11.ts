@@ -1,15 +1,15 @@
-import Exercice from '../../Exercice'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../../modules/outils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import Exercice from '../../Exercice'
 
 import { rienSi1 } from '../../../lib/outils/ecritures'
 
@@ -17,7 +17,7 @@ export const titre = 'Calculer avec la fonction logarithme'
 export const dateDePublication = '22/7/2024'
 export const uuid = 'b9c63'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['canTSpeAN11'],
   'fr-ch': [],
@@ -60,7 +60,7 @@ export default class CalculsLog extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map((el) => Number(el))
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte: string
       let texteCorr: string
       let answer: string

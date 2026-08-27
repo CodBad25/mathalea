@@ -4,9 +4,9 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = "Compléter une égalité avec un produit"
+export const titre = 'Compléter une égalité avec un produit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '37b31'
 export const refs = {
   'fr-fr': [],
@@ -20,7 +20,7 @@ export const refs = {
 export default class Can2026CE2Q17 extends ExerciceCan {
   enonce(facteur1?: number, produit?: number) {
     if (facteur1 == null || produit == null) {
-      facteur1 = randint(2, 8)*10
+      facteur1 = randint(2, 8) * 10
       const facteur2 = randint(2, 9)
       produit = facteur1 * facteur2
     }
@@ -32,7 +32,10 @@ export default class Can2026CE2Q17 extends ExerciceCan {
     this.canReponseACompleter = `$${facteur1}\\times \\ldots =${produit}$`
 
     if (this.interactif) {
-      this.optionsChampTexte = { texteAvant: `$${facteur1}\\times$`, texteApres: `$=${produit}$` }
+      this.optionsChampTexte = {
+        texteAvant: `$${facteur1}\\times$`,
+        texteApres: `$=${produit}$`,
+      }
     } else {
       this.question += `$${facteur1}\\times \\ldots =${produit}$`
     }

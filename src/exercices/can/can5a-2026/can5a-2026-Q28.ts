@@ -16,7 +16,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un angle complémentaire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'o06h3'
 export const refs = {
   'fr-fr': [],

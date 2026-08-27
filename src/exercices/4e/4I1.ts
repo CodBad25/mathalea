@@ -2,7 +2,6 @@ import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/Scrat
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
-import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
@@ -21,7 +20,6 @@ import Exercice from '../Exercice'
 export const titre = 'Dessiner avec scratch'
 export const dateDeModifImportante = '10/06/2025'
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
 
 /**
  * Dessiner selon un programme scratch
@@ -234,7 +232,7 @@ export default class TracerAvecScratch extends Exercice {
       texteCorr = `${enonces[listeTypeDeQuestions[i] - 1].correction}`
       if (this.interactif) {
         this.autoCorrection[i] = {}
-        setCliqueFigure(this.autoCorrection[i])
+        this.autoCorrection[i].formatInteractif = 'clique-figure'
 
         texte += `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>`
       }

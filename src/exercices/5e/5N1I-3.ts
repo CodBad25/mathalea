@@ -12,7 +12,7 @@ import {
 
 export const titre = "Écrire la liste des premiers multiples d'un entier"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/05/2026'
 
 export const uuid = 'd2d85'

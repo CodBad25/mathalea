@@ -1,7 +1,7 @@
 import EcrirePetitsNombresEntiers from '../../6e/6N0A-6'
 export const titre = 'Lire et écrire des nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '14/08/2022'

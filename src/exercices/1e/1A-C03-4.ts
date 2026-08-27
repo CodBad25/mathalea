@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': ['10NO3D-14'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Appliquer la propriété des produits avec des puissances'

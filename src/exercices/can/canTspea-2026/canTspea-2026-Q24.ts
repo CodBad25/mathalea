@@ -1,13 +1,11 @@
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
-import {
-  ecritureParentheseSiNegatif,
-} from '../../../lib/outils/ecritures'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Question 24'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'gk9zv'
 export const refs = {
   'fr-fr': [],
@@ -19,8 +17,6 @@ export const refs = {
 
 */ export default class Can2026TermQ24 extends ExerciceCan {
   enonce(x1?: number, y1?: number, x2?: number, y2?: number): void {
-   
-      
     if (x1 == null || y1 == null || x2 == null || y2 == null) {
       const donnees = [
         // 5 cas colinéaires (déterminant = 0)
@@ -66,7 +62,7 @@ export const refs = {
     const y1Str = y1 < 0 ? `(${y1})` : `${y1}`
 
     this.correction = `On calcule le déterminant : <br>
-    $\\det(\\vec{u}\\,,\\,\\vec{v})=${x1} \\times ${ ecritureParentheseSiNegatif(y2)}- ${y1Str} \\times ${ ecritureParentheseSiNegatif(x2)}= ${x1 * y2} - ${ecritureParentheseSiNegatif(y1 * x2)} = ${det}$. <br>`
+    $\\det(\\vec{u}\\,,\\,\\vec{v})=${x1} \\times ${ecritureParentheseSiNegatif(y2)}- ${y1Str} \\times ${ecritureParentheseSiNegatif(x2)}= ${x1 * y2} - ${ecritureParentheseSiNegatif(y1 * x2)} = ${det}$. <br>`
 
     if (sontColineaires) {
       this.correction += `Le déterminant est nul, donc les vecteurs sont ${texteEnCouleurEtGras('colinéaires (OUI)')}.`

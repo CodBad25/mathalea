@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': ['1mCL1-14', '9NO1G-18'],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '09/12/2024'
 export const dateDeModifImportante = '03/04/2025'
 

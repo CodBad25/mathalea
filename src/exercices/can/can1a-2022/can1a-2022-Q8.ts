@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une image'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'qixng'
 export const refs = {
   'fr-fr': [],
@@ -22,9 +22,9 @@ export const refs = {
 export default class Can1a2022Q8 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
-     this.optionsChampTexte = { texteAvant: '<br>' }
-      this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   enonce(x?: number, b?: number, c?: number) {

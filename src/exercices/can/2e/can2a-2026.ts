@@ -36,7 +36,7 @@ import Question9 from '../can2a-2026/can2a-2026-Q9'
 
 export const titre = 'S’entraîner avec le sujet CAN Seconde 2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '17f68'
 export const refs = {
   'fr-fr': ['can2a-2026'],

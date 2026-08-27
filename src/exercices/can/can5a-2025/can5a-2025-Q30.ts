@@ -12,7 +12,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une longueur de pavé'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'y3u3x'
 export const refs = {
   'fr-fr': [],

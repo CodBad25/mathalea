@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Décomposer un nombre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'qn8vm'
 export const refs = {
   'fr-fr': [],

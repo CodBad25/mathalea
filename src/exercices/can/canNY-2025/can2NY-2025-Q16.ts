@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Trouver un entier dans un intervalle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'df646'
 export const refs = {
   'fr-fr': [],

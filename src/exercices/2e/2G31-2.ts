@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 export const titre = 'Déterminer une équation réduite de droite'
 export const dateDeModifImportante = '08/12/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -69,7 +68,7 @@ export default class EquationReduiteDeDroites extends Exercice {
           ' droite $(d)$  passant par le point $A$  et ayant le vecteur $\\vec {u}$ comme vecteur directeur. $A$ et $\\vec {u}$ ont les coordonnées suivantes.'
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let xA: number
       let xB: number
       let yA: number

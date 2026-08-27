@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer des étendues'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '31/08/2022'
 

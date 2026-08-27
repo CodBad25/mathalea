@@ -5,7 +5,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème de fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '19/09/2024'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -50,7 +50,8 @@ export default class PetitsProblemeDeFraction extends ExerciceSimple {
 
     const fraction = this.quotaChoice('fraction', listeFractions)
     const frac = new FractionEtendue(fraction[0], fraction[1])
-    const nbre = frac.d * this.quotaChoice('multiplicateur', [2, 3, 4, 5, 6, 7, 8])
+    const nbre =
+      frac.d * this.quotaChoice('multiplicateur', [2, 3, 4, 5, 6, 7, 8])
     const reste = new FractionEtendue(frac.d - frac.n, frac.d)
     const reponse = (nbre * reste.n) / frac.d
 

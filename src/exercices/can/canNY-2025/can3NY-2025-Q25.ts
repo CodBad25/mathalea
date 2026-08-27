@@ -7,7 +7,7 @@ import { sp } from '../../../lib/outils/outilString'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = 'Comparer des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3dff8'
 export const refs = {
   'fr-fr': [],

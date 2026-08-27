@@ -3,7 +3,7 @@ import ExerciceConversions from '../6e/_Exercice_conversions'
 export const titre =
   'Convertir des longueurs, masses, capacités, prix ou unités informatiques'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

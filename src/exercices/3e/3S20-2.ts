@@ -19,7 +19,6 @@ export const titre =
 export const dateDePublication = '03/04/2025'
 export const dateDeModifImportante = '20/06/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * On doit calculer la probabilité qu'un événement se réalise après une expérience aléatoire à deux épreuves

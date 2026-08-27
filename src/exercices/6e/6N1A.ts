@@ -18,7 +18,7 @@ export const titre =
   'Décomposer un nombre décimal (nombre de..., chiffre des..., partie entière, partie décimale)'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '08/09/2025'
 

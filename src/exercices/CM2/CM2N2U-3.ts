@@ -7,7 +7,7 @@ export const refs = {
   'fr-ch': [''], // Primaire anciennement :['9NO2-7'],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/10/2024'
 export const dateDeModifImportante = '15/06/2025'
 /**

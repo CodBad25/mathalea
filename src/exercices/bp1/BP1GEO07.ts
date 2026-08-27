@@ -1,7 +1,7 @@
 import ReconnaitreDesSolides from '../6e/auto6G8A'
 export const titre = 'Reconnaitre des solides'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDePublication = '30/07/2026'

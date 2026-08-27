@@ -1,4 +1,4 @@
-import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
@@ -13,7 +13,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Trouver l'inéquation avec une solution"
@@ -140,7 +140,11 @@ Membre de droite : $${droitTex}$<br>`
     ]
 
     this.enonce = `Le nombre $${x0}$ est solution de l'inéquation :`
-    this.correction = this.construireCorrection(x0, propositions, bonne.inequation)
+    this.correction = this.construireCorrection(
+      x0,
+      propositions,
+      bonne.inequation,
+    )
     this.reponses = propositions.map((p) => `$${p.inequation}$`)
   }
 
@@ -155,7 +159,11 @@ Membre de droite : $${droitTex}$<br>`
     ]
 
     this.enonce = `Le nombre $${x0}$ est solution de l'inéquation :`
-    this.correction = this.construireCorrection(x0, propositions, bonne.inequation)
+    this.correction = this.construireCorrection(
+      x0,
+      propositions,
+      bonne.inequation,
+    )
     this.reponses = propositions.map((p) => `$${p.inequation}$`)
   }
 

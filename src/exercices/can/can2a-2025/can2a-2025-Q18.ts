@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Déterminer un coefficient multiplicateur ou un taux d'évolution"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2462a'
 export const refs = {
   'fr-fr': [],

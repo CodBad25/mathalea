@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Factoriser avec une identité remarquable'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2f071'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

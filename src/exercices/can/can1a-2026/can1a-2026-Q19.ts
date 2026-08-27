@@ -4,9 +4,10 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer la probabilité d\'un événement dans un cas d\'événements indépendants'
+export const titre =
+  "Calculer la probabilité d'un événement dans un cas d'événements indépendants"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'sy6zk'
 export const refs = {
   'fr-fr': [],
@@ -20,7 +21,7 @@ export const refs = {
 export default class Can1a2026Q19 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -31,7 +32,6 @@ export default class Can1a2026Q19 extends ExerciceCan {
     }
 
     const pAinterB = pA.mul(pB)
-
 
     this.reponse = texNombre(pA, 2)
     this.question = `Si $P(A\\cap B)=${texNombre(pAinterB, 2)}$ et $P(B)=${texNombre(pB, 1)}$ avec $A$ et $B$ deux événements indépendants, alors :<br>`
@@ -50,6 +50,8 @@ export default class Can1a2026Q19 extends ExerciceCan {
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(new Decimal(0.2), new Decimal(0.9)) : this.enonce()
+    this.canOfficielle
+      ? this.enonce(new Decimal(0.2), new Decimal(0.9))
+      : this.enonce()
   }
 }

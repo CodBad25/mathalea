@@ -32,7 +32,6 @@ export const dateDePublication = '20/04/2024'
 // export const dateDeModifImportante =
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /* export const amcType = 'AMCHybride'
 export const amcReady = true

@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Effetuer une multiplication avec $50$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '320c3'
 export const refs = {
   'fr-fr': [],

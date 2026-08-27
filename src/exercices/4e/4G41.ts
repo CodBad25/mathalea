@@ -1,6 +1,6 @@
 import CalculDAngle from '../3e/3G31'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre =

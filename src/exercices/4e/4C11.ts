@@ -20,7 +20,6 @@ import { bleuMathalea } from './../../lib/colors'
 
 export const titre = 'Effectuer des calculs avec des priorités opératoires'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Plusieurs type de calcul avec des entiers.

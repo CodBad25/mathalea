@@ -6,7 +6,7 @@ import Decimal from 'decimal.js'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9t36i'
 export const refs = {
   'fr-fr': [],
@@ -27,7 +27,9 @@ export default class ComparerFractions extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const oliveK = this.canOfficielle ? 100 : this.quotaChoice('oliveK', [100, 200])
+    const oliveK = this.canOfficielle
+      ? 100
+      : this.quotaChoice('oliveK', [100, 200])
     const nbreBouteilles = this.canOfficielle
       ? 20
       : this.quotaChoice('nbreBouteilles', [20, 25, 10])

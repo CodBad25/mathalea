@@ -1,17 +1,17 @@
-import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Déterminer l'abscisse d'un point dans un repère"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'pl5rm'
 export const refs = {
   'fr-fr': [],

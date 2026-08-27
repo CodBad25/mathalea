@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.intervalleStrict.test.ts ⚠️
  */
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -28,12 +29,9 @@ import {
 } from '../../modules/outils'
 import { OutilsStats } from '../../modules/outilsStat'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Calculer des caractéristiques d'une série"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'

@@ -11,7 +11,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Déteterminer une heure de départ en soustrayant une durée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'zqf0m'
 export const refs = {
   'fr-fr': [],

@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -12,7 +12,7 @@ export const titre =
   'Calculer une limite en factorisant par le terme de plus haut degré'
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '37ce7'
 export const refs = {
   'fr-fr': [],
@@ -62,15 +62,10 @@ function limiteMonome(
   return coefficient * signePuissance > 0 ? '+\\infty' : '-\\infty'
 }
 
-function limitePolynome(
-  coefficients: number[],
-  sens: SensLimite,
-): string {
+function limitePolynome(coefficients: number[], sens: SensLimite): string {
   const degre = coefficients.length - 1
   const signePuissance = limitePuissance(degre, sens) === '+\\infty' ? 1 : -1
-  return coefficients[degre] * signePuissance > 0
-    ? '+\\infty'
-    : '-\\infty'
+  return coefficients[degre] * signePuissance > 0 ? '+\\infty' : '-\\infty'
 }
 
 function generePolynomeAvecIndetermination(sens: SensLimite): number[] {
@@ -78,8 +73,7 @@ function generePolynomeAvecIndetermination(sens: SensLimite): number[] {
   const signe = randint(0, 1) === 0 ? -1 : 1
   const coefficients = Array.from({ length: degre + 1 }, () => 0)
   coefficients[degre] = signe * randint(1, 5)
-  coefficients[degre - 1] =
-    (sens === '+' ? -signe : signe) * randint(1, 6)
+  coefficients[degre - 1] = (sens === '+' ? -signe : signe) * randint(1, 6)
   for (let puissance = 0; puissance <= degre - 2; puissance++) {
     coefficients[puissance] = randint(-6, 6, 0)
   }
@@ -101,8 +95,7 @@ function genereDenominateurSansRacine(): number[] {
   const coefficientLineaire = randint(-5, 5)
   const constanteMinimale =
     Math.floor(
-      (coefficientLineaire * coefficientLineaire) /
-        (4 * coefficientDegreDeux),
+      (coefficientLineaire * coefficientLineaire) / (4 * coefficientDegreDeux),
     ) + 1
   const constante = constanteMinimale + randint(0, 4)
   return [
@@ -155,10 +148,7 @@ export default class FactoriserPourCalculerUneLimite extends Exercice {
         const puissance = puissanceDeX(degre)
         const facteur = facteurDominant(coefficients)
         const termeDominant = ecritureMonome(coefficients[degre], degre)
-        const termeSuivant = ecritureMonome(
-          coefficients[degre - 1],
-          degre - 1,
-        )
+        const termeSuivant = ecritureMonome(coefficients[degre - 1], degre - 1)
         expression = polynome
         reponse = limitePolynome(coefficients, sens)
 
@@ -206,10 +196,7 @@ export default class FactoriserPourCalculerUneLimite extends Exercice {
             limitePuissance(differenceDegres, sens) === '+\\infty' ? 1 : -1
           const signeQuotient =
             coefficientNumerateur * coefficientDenominateur > 0 ? 1 : -1
-          reponse =
-            signePuissance * signeQuotient > 0
-              ? '+\\infty'
-              : '-\\infty'
+          reponse = signePuissance * signeQuotient > 0 ? '+\\infty' : '-\\infty'
         }
 
         const facteurExterieur =

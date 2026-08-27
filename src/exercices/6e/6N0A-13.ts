@@ -21,7 +21,7 @@ if (customElements.get('glisse-nombre') === undefined) {
 export const titre =
   'Multiplier ou diviser un nombre entier par 10, 100 ou 1 000'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '01/02/2026'
 
 /**

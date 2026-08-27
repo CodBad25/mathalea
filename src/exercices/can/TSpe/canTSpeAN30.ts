@@ -1,14 +1,10 @@
-import {
-  reduireAxPlusB,
-  rienSi1,
-} from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Dérivée cosinus et sinus'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '13/5/2025'
 

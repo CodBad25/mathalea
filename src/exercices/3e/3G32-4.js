@@ -1,7 +1,7 @@
 import problemesTrigoLongueur from '../3e/3G32-0'
 export const titre = "Calculer la hauteur d'une montagne"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

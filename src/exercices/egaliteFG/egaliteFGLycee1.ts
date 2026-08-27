@@ -1,7 +1,11 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -10,10 +14,10 @@ import Exercice from '../Exercice'
 export const titre = 'Records du 100 mètres : un modèle affine'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '97035'
 export const refs = {
-  'fr-fr': [ 'EgaliteFG5-2de-1', 'EgaliteFG6-1e-1'],
+  'fr-fr': ['EgaliteFG5-2de-1', 'EgaliteFG6-1e-1'],
   'fr-ch': [],
 }
 
@@ -32,10 +36,14 @@ export default class EgaliteFGLycee1 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
-      "<br><br>On considère les records du monde du 100 mètres en athlétisme. En 1912, le premier record masculin enregistré était de $10{,}6$ secondes (Don Lippincott, USA). En 1922, le premier record féminin enregistré était de $13{,}6$ secondes (Marie Mejzlikova, Tchécoslovaquie), tandis que celui des hommes était de $10{,}4$ secondes (Charley Paddock, USA). En 2024, les records sont les suivants :<br>" +
+      '<br><br>On considère les records du monde du 100 mètres en athlétisme. En 1912, le premier record masculin enregistré était de $10{,}6$ secondes (Don Lippincott, USA). En 1922, le premier record féminin enregistré était de $13{,}6$ secondes (Marie Mejzlikova, Tchécoslovaquie), tandis que celui des hommes était de $10{,}4$ secondes (Charley Paddock, USA). En 2024, les records sont les suivants :<br>' +
       '<ul style="list-style:disc; margin:0.25rem 0 0.5rem 1.25rem;">' +
       '<li>Record masculin de Usain Bolt (Jamaïque) : $9{,}58$ secondes (atteint en 2009)</li>' +
       '<li>Record féminin de Florence Griffith-Joyner (USA) : $10{,}49$ secondes (atteint en 1988)</li>' +
@@ -48,16 +56,22 @@ export default class EgaliteFGLycee1 extends Exercice {
     this.nbQuestions = 8
     this.nbQuestionsModifiable = false
     this.commentaireApprofondir =
-      texteGras("Pour approfondir à l'oral") + ".<br>Pourquoi, selon vous, le premier record féminin date de 1922 et celui des hommes de 1912 ?"
-    this.besoinFormulaireCaseACocher = ['Afficher « Pour approfondir à l\'oral »', true]
+      texteGras("Pour approfondir à l'oral") +
+      '.<br>Pourquoi, selon vous, le premier record féminin date de 1922 et celui des hommes de 1912 ?'
+    this.besoinFormulaireCaseACocher = [
+      "Afficher « Pour approfondir à l'oral »",
+      true,
+    ]
     this.sup = true
     this.commentairePrecision =
-      texteGras('Précision') + '.<br>Cela peut permettre de faire un point historique sur la française Alice Milliat, organisatrice des premiers JO $100\\,\\%$ féminin en 1922 et grande défenseuse du sport féminin.<br>' +
+      texteGras('Précision') +
+      '.<br>Cela peut permettre de faire un point historique sur la française Alice Milliat, organisatrice des premiers JO $100\\,\\%$ féminin en 1922 et grande défenseuse du sport féminin.<br>' +
       ajouterLien('https://www.youtube.com/watch?v=SGPU8CtA0gI', 'Lien')
     this.besoinFormulaire2CaseACocher = ['Afficher « Précision »', true]
     this.sup2 = true
     this.commentaireMiseEnGarde =
-      texteGras('Mise en garde') + '.<br>Un débat type « expliquer les différences de performance entre les hommes et les femmes » est un débat qui demande une maîtrise du sujet de la place des femmes dans le sport. Nous vous recommandons l\'écoute du podcast <i>Les Couilles sur la Table</i> « Épisode 99 : Sports Olympiques - Médaille d\'or du sexisme »'
+      texteGras('Mise en garde') +
+      ".<br>Un débat type « expliquer les différences de performance entre les hommes et les femmes » est un débat qui demande une maîtrise du sujet de la place des femmes dans le sport. Nous vous recommandons l'écoute du podcast <i>Les Couilles sur la Table</i> « Épisode 99 : Sports Olympiques - Médaille d'or du sexisme »"
     this.besoinFormulaire3CaseACocher = ['Afficher « Mise en garde »', true]
     this.sup3 = true
   }
@@ -68,46 +82,58 @@ export default class EgaliteFGLycee1 extends Exercice {
 
     let texte0 =
       "Calculer le pourcentage d'évolution du record du monde du 100 m chez les femmes, entre 1922 (date du premier record recensé) et 2024 (arrondi au centième)."
-    if (this.interactif) texte0 += ajouteChampTexteMathLive(this, 0, '', { texteApres: '%' }) + '<br>'
+    if (this.interactif)
+      texte0 +=
+        ajouteChampTexteMathLive(this, 0, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: -22.87 } })
-    const correction0 =
-      `$\\dfrac{10{,}49-13{,}6}{13{,}6}\\times 100\\approx ${miseEnEvidence('-22{,}87\\,\\%')}$ : le record féminin a diminué d'environ $22{,}87\\,\\%$ (on part de 1922, date du premier record féminin recensé — aucun record féminin n'existait en 1912).`
+    const correction0 = `$\\dfrac{10{,}49-13{,}6}{13{,}6}\\times 100\\approx ${miseEnEvidence('-22{,}87\\,\\%')}$ : le record féminin a diminué d'environ $22{,}87\\,\\%$ (on part de 1922, date du premier record féminin recensé — aucun record féminin n'existait en 1912).`
 
     let texte1 =
-      "Même question chez les hommes, entre 1912 et 2024 (arrondi au centième)."
-    if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
+      'Même question chez les hommes, entre 1912 et 2024 (arrondi au centième).'
+    if (this.interactif)
+      texte1 +=
+        ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: -9.62 } })
     const correction1 = `$\\dfrac{9{,}58-10{,}6}{10{,}6}\\times 100\\approx ${miseEnEvidence('-9{,}62\\,\\%')}$.`
 
-    let texte2 = "Quelle était la performance théorique des femmes en 1980 ($t=0$), selon le modèle $f$ ?"
-    if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: 's' }) + '<br>'
+    let texte2 =
+      'Quelle était la performance théorique des femmes en 1980 ($t=0$), selon le modèle $f$ ?'
+    if (this.interactif)
+      texte2 +=
+        ajouteChampTexteMathLive(this, 2, '', { texteApres: 's' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 11 } })
     const correction2 = `$f(0)=11-0{,}015\\times 0=${miseEnEvidence('11')}$ s.`
 
     let texte3 = 'Même question pour les hommes, selon le modèle $h$.'
-    if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3, '', { texteApres: 's' }) + '<br>'
+    if (this.interactif)
+      texte3 +=
+        ajouteChampTexteMathLive(this, 3, '', { texteApres: 's' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 10 } })
     const correction3 = `$h(0)=10-0{,}02\\times 0=${miseEnEvidence('10')}$ s.`
 
     let texte4 =
-      "Selon ces modèles, dix ans plus tard ($t=10$), quelle était la performance théorique des femmes ?"
-    if (this.interactif) texte4 += ajouteChampTexteMathLive(this, 4, '', { texteApres: 's' }) + '<br>'
+      'Selon ces modèles, dix ans plus tard ($t=10$), quelle était la performance théorique des femmes ?'
+    if (this.interactif)
+      texte4 +=
+        ajouteChampTexteMathLive(this, 4, '', { texteApres: 's' }) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 10.85 } })
     const correction4 = `$f(10)=11-0{,}015\\times 10=${miseEnEvidence('10{,}85')}$ s.`
 
     let texte5 = 'Même question pour les hommes.'
-    if (this.interactif) texte5 += ajouteChampTexteMathLive(this, 5, '', { texteApres: 's' }) + '<br>'
+    if (this.interactif)
+      texte5 +=
+        ajouteChampTexteMathLive(this, 5, '', { texteApres: 's' }) + '<br>'
     handleAnswers(this, 5, { reponse: { value: 9.8 } })
     const correction5 = `$h(10)=10-0{,}02\\times 10=${miseEnEvidence('9{,}8')}$ s.`
 
     let texte6 =
-      "Selon ce modèle mathématique, déterminer en quelle année les performances féminines et masculines devraient être égales."
+      'Selon ce modèle mathématique, déterminer en quelle année les performances féminines et masculines devraient être égales.'
     if (this.interactif) texte6 += ajouteChampTexteMathLive(this, 6) + '<br>'
     handleAnswers(this, 6, { reponse: { value: 1780 } })
-    const correction6 =
-      `$f(t)=h(t) \\iff 11-0{,}015t=10-0{,}02t \\iff 0{,}005t=-1 \\iff t=-200$, ce qui correspond à l'année $${miseEnEvidence('1780')}$.`
+    const correction6 = `$f(t)=h(t) \\iff 11-0{,}015t=10-0{,}02t \\iff 0{,}005t=-1 \\iff t=-200$, ce qui correspond à l'année $${miseEnEvidence('1780')}$.`
 
-    const texteQ7 = 'Le modèle est-il réaliste ? Expliquer les limites de cette modélisation.'
+    const texteQ7 =
+      'Le modèle est-il réaliste ? Expliquer les limites de cette modélisation.'
     this.autoCorrection[7] = {
       enonce: texteQ7,
       options: { ordered: true, radio: true },
@@ -138,9 +164,15 @@ export default class EgaliteFGLycee1 extends Exercice {
     this.listeCorrections[6] = correction6
     this.listeQuestions[7] = texte7
     this.listeCorrections[7] = correction7
-    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireApprofondir
-    if (this.sup2) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentairePrecision
-    if (this.sup3) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireMiseEnGarde
+    if (this.sup)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireApprofondir
+    if (this.sup2)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentairePrecision
+    if (this.sup3)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireMiseEnGarde
 
     listeQuestionsToContenu(this)
   }

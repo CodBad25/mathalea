@@ -14,7 +14,7 @@ export const titre =
   'Étudier une situation de proportionnalité avec des échelles'
 export const dateDePublication = '15/03/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '412a7'
 export const refs = {
   'fr-ch': ['10FA2C-3'],

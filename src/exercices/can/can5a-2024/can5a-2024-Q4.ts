@@ -1,14 +1,14 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 export const titre = 'Compléter un encadrement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd8549'
 /**
  * @author Gilles Mora

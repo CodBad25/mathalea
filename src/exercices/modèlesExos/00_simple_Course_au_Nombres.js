@@ -1,9 +1,8 @@
-import ExerciceSimple from '../ExerciceSimple'
-import { randint } from '../../modules/outils'
 import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Somme de deux entiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '4/5/2024'
 

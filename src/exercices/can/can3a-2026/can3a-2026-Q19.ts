@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Décomposition en produit de facteurs premiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'oohnm'
 export const refs = {
   'fr-fr': [],

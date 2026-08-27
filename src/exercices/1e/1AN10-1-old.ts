@@ -20,7 +20,7 @@ import {
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre = 'Calculer un nombre dérivé à partir de la définition'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 export const dateDePublication = '16/12/2021'
@@ -80,7 +80,7 @@ export default class TauxVariationOld extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       let a: number, b: number, c: number, m: number, p: number
       let texte = ''

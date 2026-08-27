@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Appliquer une réduction en pourcentage'
 export const dateDePublication = '06/06/2026'
 

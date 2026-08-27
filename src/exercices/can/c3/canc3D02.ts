@@ -14,7 +14,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Lire une durée'
 export const dateDePublication = '4/11/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Jean-claude Lhote

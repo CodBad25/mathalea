@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Completer une égalité du type $a\\times ?-b=c$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'se7mc'
 export const refs = {
   'fr-fr': [],

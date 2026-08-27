@@ -15,7 +15,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { range1 } from '../../lib/outils/nombres'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Soustraire ou additionner des identités remarquables'
 export const dateDePublication = '20/11/2025'
 

@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation trigonométrique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'df264'
 export const refs = {
   'fr-fr': [],

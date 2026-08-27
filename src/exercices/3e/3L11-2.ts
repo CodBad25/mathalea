@@ -24,7 +24,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Réduire une expression'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const dateDeModifImportante = '06/02/2024'

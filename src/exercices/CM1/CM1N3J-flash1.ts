@@ -1,7 +1,7 @@
 import AbscisseFractionnaire from '../can/6e/can6N04'
 export const titre = 'Lire une abscisse décimale sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '26/09/2025'

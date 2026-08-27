@@ -4,7 +4,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '04/11/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fefa0'
 export const refs = {
   'fr-fr': ['5N5A-1'],

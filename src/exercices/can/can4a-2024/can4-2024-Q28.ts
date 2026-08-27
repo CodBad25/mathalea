@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Transformer une heure décimale en heures/minutes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '318bc'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

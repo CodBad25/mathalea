@@ -18,7 +18,7 @@ export const refs = {
 }
 export const titre = 'Résoudre le problème complexe du spectacle'
 export const dateDePublication = '21/11/2024'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 /**
  * @Author Jean-claude Lhote

@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -8,12 +7,13 @@ import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un produit scalaire dans un trapèze rectangle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'tm9ti'
 export const refs = {
   'fr-fr': [],
@@ -27,7 +27,7 @@ export const refs = {
 export default class Can1a2026Q22 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -91,10 +91,9 @@ export default class Can1a2026Q22 extends ExerciceCan {
       objets,
     )
 
-
     if (choix === 'a') {
       const vecteur2 = choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{DA}'
-      this.question =  graphique
+      this.question = graphique
       this.reponse = 0
       if (this.interactif) {
         this.optionsChampTexte = {
@@ -110,7 +109,7 @@ export default class Can1a2026Q22 extends ExerciceCan {
     }
 
     if (choix === 'b') {
-      this.question =  graphique
+      this.question = graphique
       this.reponse = -a * (a - b)
       if (this.interactif) {
         this.optionsChampTexte = {
@@ -130,7 +129,7 @@ export default class Can1a2026Q22 extends ExerciceCan {
 
     if (choix === 'c') {
       const vecteur2 = choixb ? '\\overrightarrow{DC}' : '\\overrightarrow{CD}'
-      this.question =  graphique
+      this.question = graphique
       this.reponse = choixb ? a * b : -a * b
       if (this.interactif) {
         this.optionsChampTexte = {

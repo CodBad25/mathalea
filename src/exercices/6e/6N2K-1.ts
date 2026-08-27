@@ -1,8 +1,8 @@
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -25,7 +25,6 @@ export const titre =
 export const dateDePublication = '11/12/2023'
 export const dateDeModifImportante = '09/01/2025'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 /**
  * Résolution de problèmes utilisant la division Euclidienne

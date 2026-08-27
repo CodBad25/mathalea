@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer l'image d'un nombre par une fonction de référence"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -39,11 +39,7 @@ export const refs = {
 }
 
 type FonctionReference =
-  | 'carré'
-  | 'cube'
-  | 'racine carrée'
-  | 'inverse'
-  | 'valeur absolue'
+  'carré' | 'cube' | 'racine carrée' | 'inverse' | 'valeur absolue'
 
 export default class ImageFonctionsRefs extends Exercice {
   can: boolean
@@ -58,9 +54,7 @@ export default class ImageFonctionsRefs extends Exercice {
     this.besoinFormulaire3CaseACocher = [
       'Fonction valeur absolue (programme 2026)',
     ]
-    this.besoinFormulaire4CaseACocher = [
-      'Fonction cube (année de transition)',
-    ]
+    this.besoinFormulaire4CaseACocher = ['Fonction cube (année de transition)']
     this.besoinFormulaire5CaseACocher = [
       'Fonction racine carrée (année de transition)',
     ]
@@ -109,7 +103,7 @@ export default class ImageFonctionsRefs extends Exercice {
       '.'
 
     const listePhrases = combinaisonListes([0, 1], this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const nom = ['f', 'g', 'h', 'i'][

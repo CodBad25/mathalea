@@ -1,10 +1,10 @@
-import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { spline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -14,7 +14,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
@@ -101,7 +101,8 @@ export default class AutoQ7ANt2026 extends ExerciceQcmA {
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.6,
-        display: 'block', center: !context.isHtml,
+        display: 'block',
+        center: !context.isHtml,
       },
       r,
       courbe,

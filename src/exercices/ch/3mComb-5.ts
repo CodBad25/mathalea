@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const titre = 'Dénombrer des placements et rangements'
 export const dateDePublication = '05/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b2t4e'
 export const refs = {
   'fr-fr': [],
@@ -60,12 +60,19 @@ export default class PlacementsRangements extends Exercice {
       max: 6,
       melange: 7,
       defaut: 7,
-      listeOfCase: ['voiture', 'photoGroupe', 'etagereSimple', 'etagereIdentiques', 'photoSimple', 'salle'],
+      listeOfCase: [
+        'voiture',
+        'photoGroupe',
+        'etagereSimple',
+        'etagereIdentiques',
+        'photoSimple',
+        'salle',
+      ],
       nbQuestions: this.nbQuestions,
       shuffle: true,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = 0

@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Mesurer un périmètre par comptage'
 export const dateDePublication = '25/04/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 
 /**

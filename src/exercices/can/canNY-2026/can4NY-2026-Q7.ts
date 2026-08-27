@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec des entiers relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd6e18'
 export const refs = {
   'fr-fr': [],

@@ -3,7 +3,7 @@ import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const titre =
   'Additionner ou soustraire des entiers relatifs (écriture simplifiée)'

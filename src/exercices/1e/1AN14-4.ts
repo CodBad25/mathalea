@@ -9,7 +9,7 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Dériver une fonction du type $u + v$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a83c0'
 export const refs = {
   'fr-fr': ['1AN14-4'],
@@ -53,7 +53,7 @@ class DerivationSommesSimples extends Exercice {
       melange: 5,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const lesFonctions: { fonction: string; derivee: string }[] = []
       const [a, b, c] = choice([
         [0, 0, randint(-5, 5, [-1, 0, 1])],

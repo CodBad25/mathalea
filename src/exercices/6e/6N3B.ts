@@ -24,7 +24,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const dateDePublication = '08/07/2025'
 export const titre = "Donner du sens à la définition d'un quotient"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

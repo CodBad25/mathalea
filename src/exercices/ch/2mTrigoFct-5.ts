@@ -23,7 +23,7 @@ export const titre =
 export const dateDePublication = '06/05/2026'
 export const uuid = '8f72a'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['2mTrigoFct-5'],
@@ -112,7 +112,7 @@ export default class ZerosFonctionTrigonometrique extends Exercice {
       { num: -1, den: 2 },
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const fonction = fonctions[i]
       const a = new FractionEtendue(randint(-5, 5, 0), randint(1, 4))
       const m = randomFraction(coefficientsX)

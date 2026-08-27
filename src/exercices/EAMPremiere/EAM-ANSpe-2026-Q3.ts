@@ -1,5 +1,8 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -10,10 +13,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer un taux d\'évolution '
+export const titre = "Calculer un taux d'évolution "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -22,7 +25,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ3ANs2026 extends ExerciceQcmA {
-   private appliquerLesValeurs(milliemes: number): void {
+  private appliquerLesValeurs(milliemes: number): void {
     const k = milliemes / 1000 // coefficient multiplicateur (ex. 0,845)
     const variationMilliemes = milliemes - 1000 // signé : < 0 baisse, > 0 hausse
     const hausse = variationMilliemes > 0
@@ -48,7 +51,7 @@ t&=${texNombre(k)}-1\\\\
 &=${texNombre(variationDecimale)}\\\\
 &=${texNombre(variationPercent)}\\,\\%
 \\end{aligned}$<br>
-Le prix a donc ${texteEnCouleurEtGras(sens+' de ')}  $${miseEnEvidence(`${texNombre(t)}\\,\\%`)}$.`
+Le prix a donc ${texteEnCouleurEtGras(sens + ' de ')}  $${miseEnEvidence(`${texNombre(t)}\\,\\%`)}$.`
 
     this.reponses = [
       `${sens} de $${texNombre(t)}\\,\\%$`,
@@ -68,10 +71,22 @@ Le prix a donc ${texteEnCouleurEtGras(sens+' de ')}  $${miseEnEvidence(`${texNom
       this.versionOriginale()
       return
     }
-   
+
     const milliemes = choice([
-      955, 925, 875, 845, 815, 775, 755, // baisses
-      1045, 1075, 1125, 1155, 1185, 1225, 1245, // hausses
+      955,
+      925,
+      875,
+      845,
+      815,
+      775,
+      755, // baisses
+      1045,
+      1075,
+      1125,
+      1155,
+      1185,
+      1225,
+      1245, // hausses
     ])
     this.appliquerLesValeurs(milliemes)
   }
@@ -79,6 +94,6 @@ Le prix a donc ${texteEnCouleurEtGras(sens+' de ')}  $${miseEnEvidence(`${texNom
   constructor() {
     super()
     this.versionAleatoire()
-      this.options = { vertical: true}
+    this.options = { vertical: true }
   }
 }

@@ -1,9 +1,9 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { choice } from '../../lib/outils/arrayOutils'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer une intégrale avec une intégration par parties'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '05/04/2025'
 
 /**
@@ -336,7 +336,7 @@ export default class IntegraleParParties extends Exercice {
     this.consigne =
       'Calculer chaque intégrale en utilisant une intégration par parties.'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const question = genereQuestion(listeTypes[i])
       let texte = question.texte
 

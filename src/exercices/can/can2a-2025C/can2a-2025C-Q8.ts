@@ -1,11 +1,9 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Convertir une durée en minutes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'h278j'
 export const refs = {
   'fr-fr': [],

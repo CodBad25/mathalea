@@ -7,6 +7,7 @@
   import { afficheAlerteUniteManquante } from '../../../../../lib/interactif/afficheScore'
   import {
     exerciceAUneUniteManquante,
+    exerciceContientCliqueFigure,
     exerciceInteractif,
     prepareExerciceCliqueFigure,
   } from '../../../../../lib/interactif/gestionInteractif'
@@ -249,7 +250,7 @@
         log('end loadMathLive')
         time = window.performance.now()
         log('duration loadMathLive:' + (time - starttime))
-        if (exercise.interactifType === 'cliqueFigure' && !isCorrectVisible) {
+        if (exerciceContientCliqueFigure(exercise) && !isCorrectVisible) {
           prepareExerciceCliqueFigure(exercise)
         }
         time = window.performance.now()

@@ -1,7 +1,7 @@
 import FormeExpliciteSuite from '../1e/1AL11-6'
 export const titre = "Donner la forme explicite d'une suite arithmétique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

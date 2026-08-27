@@ -7,13 +7,13 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 export const titre =
   'Écrire un nombre à partir de son nombre de dizaines, de centaines, de milliers...'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

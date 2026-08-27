@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer avec une proportion '
@@ -23,7 +23,12 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ2CEs2026 extends ExerciceQcmA {
-  private appliquerLesValeurs(partie: number, numFrac: number, denFrac: number, customDists?: number[]): void {
+  private appliquerLesValeurs(
+    partie: number,
+    numFrac: number,
+    denFrac: number,
+    customDists?: number[],
+  ): void {
     const total = (partie * denFrac) / numFrac
 
     this.enonce = `Dans un lycée, $${partie}$ élèves de première générale suivent la spécialité Mathématiques ce qui représente $\\dfrac{${numFrac}}{${denFrac}}$ de l'ensemble des élèves de première générale. <br>
@@ -36,7 +41,7 @@ export default class AutoQ2CEs2026 extends ExerciceQcmA {
     Le nombre d'élèves en première générale dans ce lycée est donc de $${miseEnEvidence(texNombre(total, 0))}$.`
 
     let distracteursUniques: number[] = []
-    
+
     if (customDists && customDists.length === 3) {
       // Force les distracteurs exacts du PDF pour la version originale
       distracteursUniques = customDists
@@ -47,12 +52,18 @@ export default class AutoQ2CEs2026 extends ExerciceQcmA {
       const d3 = total + (randint(0, 1) === 0 ? 50 : -50) // Piège : arrondi supérieur ou inférieur
 
       const candidates = [d1, d2, d3]
-      distracteursUniques = [...new Set(candidates)].filter(d => d !== total && d > 0)
+      distracteursUniques = [...new Set(candidates)].filter(
+        (d) => d !== total && d > 0,
+      )
 
       // Sécurité pour garantir d'avoir 3 distracteurs uniques
       while (distracteursUniques.length < 3) {
         const extra = total + randint(-3, 3) * 20
-        if (extra !== total && extra > 0 && !distracteursUniques.includes(extra)) {
+        if (
+          extra !== total &&
+          extra > 0 &&
+          !distracteursUniques.includes(extra)
+        ) {
           distracteursUniques.push(extra)
         }
       }
@@ -62,7 +73,7 @@ export default class AutoQ2CEs2026 extends ExerciceQcmA {
       `$${texNombre(total, 0)}$`,
       `$${texNombre(distracteursUniques[0], 0)}$`,
       `$${texNombre(distracteursUniques[1], 0)}$`,
-      `$${texNombre(distracteursUniques[2], 0)}$`
+      `$${texNombre(distracteursUniques[2], 0)}$`,
     ]
   }
 
@@ -82,7 +93,7 @@ export default class AutoQ2CEs2026 extends ExerciceQcmA {
     // Banque de 11 cas configurés avec les fractions demandées
     const cas = [
       { partie: 150, numFrac: 3, denFrac: 5 }, // Cas original
-      { partie: 80, numFrac: 2, denFrac: 5 },  // total = 200
+      { partie: 80, numFrac: 2, denFrac: 5 }, // total = 200
       { partie: 120, numFrac: 2, denFrac: 5 }, // total = 300
       { partie: 160, numFrac: 4, denFrac: 5 }, // total = 200
       { partie: 240, numFrac: 4, denFrac: 5 }, // total = 300
@@ -91,7 +102,7 @@ export default class AutoQ2CEs2026 extends ExerciceQcmA {
       { partie: 200, numFrac: 2, denFrac: 3 }, // total = 300
       { partie: 120, numFrac: 3, denFrac: 4 }, // total = 160
       { partie: 150, numFrac: 3, denFrac: 4 }, // total = 200
-      { partie: 180, numFrac: 3, denFrac: 4 }  // total = 240
+      { partie: 180, numFrac: 3, denFrac: 4 }, // total = 240
     ]
 
     do {

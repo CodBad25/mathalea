@@ -15,7 +15,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Résoudre une inéquation du type $\\sqrt{x}<k$ ou $\\sqrt{x}>k$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/05/2024'
 export const uuid = 'bdc96'
 export const refs = {

@@ -1,17 +1,17 @@
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { latex2d } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Lire une abscisse sur une droite graduée avec des décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '29/08/2022'
 export const dateDeModifImportante = '12/10/2024'
 /**

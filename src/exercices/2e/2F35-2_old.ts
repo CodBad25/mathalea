@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const titre = "Étudier la parité d'une fonction par le calcul"
 export const dateDeModifImportante = '19/06/2023'
 /**
@@ -43,7 +43,7 @@ export default class EtudierPariteFonction extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
 
       // i3 = math.max(i1, i2)

@@ -26,7 +26,6 @@ export const dateDeModifImportante = '15/02/2025'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   'Poser additions, soustractions et multiplications de nombres entiers'

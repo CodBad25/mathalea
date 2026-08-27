@@ -11,7 +11,6 @@ import MultiplierDecimauxPar101001000 from './auto6N2D-1'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   'Multiplier ou diviser un nombre décimal par 10, 100 ou 1 000'

@@ -1,6 +1,6 @@
 import BetaModeleSpline from '../../2e/2F32-3'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Dresser un tableau de signes à partir d'un graphique"
 export const dateDePublication = '07/12/2023'
 /**

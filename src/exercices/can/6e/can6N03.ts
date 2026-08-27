@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer un nombre à partir de son nombre de centaines, dizaines, unités'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '01/07/2021'

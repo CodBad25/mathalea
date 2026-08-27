@@ -13,13 +13,13 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '11/12/2020'

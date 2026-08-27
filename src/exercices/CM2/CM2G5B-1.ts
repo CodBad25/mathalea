@@ -1,7 +1,7 @@
 import Solide6e from '../6e/_Solide_6e'
 export const titre = 'Connaitre les propriétés du cube et du pavé droit'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMult'
 

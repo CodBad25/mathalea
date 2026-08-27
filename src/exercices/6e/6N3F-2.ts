@@ -21,7 +21,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Décomposer une fraction (partie entière + fraction inférieure à 1) puis donner l'écriture décimale"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDeModifImportante = '29/03/2026'
 
 /**

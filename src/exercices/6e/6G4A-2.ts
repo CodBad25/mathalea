@@ -29,7 +29,7 @@ function degSin(deg: number): number {
 }
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcType = 'qcmMono'
 export const amcReady = true
 

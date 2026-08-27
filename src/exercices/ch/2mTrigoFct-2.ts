@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Déterminer une mesure d'angle congrue dans $[0;2\\pi[$"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '04/05/2026'
 export const uuid = 'f05d2'
 export const refs = {
@@ -118,7 +117,7 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
             ordered: true,
           }
           texte += propositionsQcm(this, i).texte
-          this.autoCorrection[i].formatInteractif = 'custom'
+          this.autoCorrection[i].formatInteractif = 'meta-custom'
         }
       }
 

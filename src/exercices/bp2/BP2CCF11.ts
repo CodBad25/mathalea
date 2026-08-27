@@ -1,7 +1,7 @@
 import Exercice2I202 from '../2e/2I20-2'
 export const titre = 'Calculer des variations en pourcentage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

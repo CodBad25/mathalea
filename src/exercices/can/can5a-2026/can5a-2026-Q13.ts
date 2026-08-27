@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Effectuer des conversions entre grammes et kilogrammes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 's5og8'
 export const refs = {
   'fr-fr': [],

@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = 'Additionner deux fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'eebe6'
 export const refs = {
   'fr-fr': [],

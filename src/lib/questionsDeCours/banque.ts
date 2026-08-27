@@ -3,6 +3,7 @@ import calculLitteral from '../../json/questionsDeCours/calculLitteral.json'
 import denombrement from '../../json/questionsDeCours/denombrement.json'
 import derivees from '../../json/questionsDeCours/derivees.json'
 import droites from '../../json/questionsDeCours/droites.json'
+import evolutions from '../../json/questionsDeCours/evolutions.json'
 import exponentielle from '../../json/questionsDeCours/exponentielle.json'
 import fonctions from '../../json/questionsDeCours/fonctions.json'
 import fonctionsReferences from '../../json/questionsDeCours/fonctionsReferences.json'
@@ -112,6 +113,7 @@ const SOURCES: SourceBanque[] = [
   { fichier: 'denombrement', questions: denombrement.questions },
   { fichier: 'derivees', questions: derivees.questions },
   { fichier: 'droites', questions: droites.questions },
+  { fichier: 'evolutions', questions: evolutions.questions},
   { fichier: 'exponentielle', questions: exponentielle.questions },
   { fichier: 'fonctions', questions: fonctions.questions },
   { fichier: 'fonctionsReferences', questions: fonctionsReferences.questions },

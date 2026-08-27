@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = 'Reconnaître les opérations sur les limites de suites'
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathalea-qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const uuid = '1d15b'

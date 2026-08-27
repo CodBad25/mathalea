@@ -1,9 +1,7 @@
 import NotationPuissance from '../4e/4C33-0'
-export const titre =
-  'Utiliser la notation puissance'
+export const titre = 'Utiliser la notation puissance'
 export const dateDePublication = '01/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de can4C33-0 pour la 5e

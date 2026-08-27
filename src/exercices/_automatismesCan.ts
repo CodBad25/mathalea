@@ -15,9 +15,8 @@ import MetaExercice from './MetaExerciceCan'
  */
 
 export type ExerciceModule = {
-  default: (new () => Exercice) & { interactifTypeModule?: string }
+  default: new () => Exercice
   refs?: Record<string, string[]>
-  interactifType?: string
 }
 
 type CategoryEntry = { loader: () => Promise<ExerciceModule>; ref: string }
@@ -39,8 +38,6 @@ export type AutomatismesCanConfig = {
   categoriesForm: CategoriesForm
   /** Valeur par défaut de `sup` (ex. `'2-2-2-2-2-2'`) */
   defaultSup: string
-  /** Type d'interactivité à forcer sur l'instance (sinon celui de MetaExerciceCan) */
-  interactifType?: string
 }
 
 function pickRandom<T>(arr: T[], n: number, rng: () => number): T[] {
@@ -68,7 +65,6 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
     categories,
     categoriesForm,
     defaultSup,
-    interactifType,
   } = config
 
   // Indexation des exercices par catégorie à partir des noms de fichiers (sans chargement)
@@ -108,7 +104,6 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
   return class AutomatismesCan extends MetaExercice {
     constructor() {
       super([])
-      if (interactifType) this.interactifType = interactifType
       this.sup = clampedDefaultSup
       this.sup3 = false
       this.sup4 = false // graine figée de la sélection quand sup3 est coché
@@ -236,13 +231,6 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
           const cached = loadedClassCache.get(e.ref)
           if (cached) return Promise.resolve(cached)
           return e.loader().then((m) => {
-            // `interactifType` est un export de module : seul
-            // `mathaleaLoadExerciceFromUuid` le recopie sur l'instance. Ici les
-            // sous-exercices sont construits directement, on le porte donc sur
-            // la classe pour que `MetaExerciceCan` puisse le lire.
-            if (m.interactifType != null) {
-              m.default.interactifTypeModule = m.interactifType
-            }
             loadedClassCache.set(e.ref, m.default)
             return m.default
           })

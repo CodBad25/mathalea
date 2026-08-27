@@ -23,7 +23,7 @@ import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN CE2 sujet 2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '189f8'
 export const refs = {
   'fr-fr': ['canCE2-2026'],

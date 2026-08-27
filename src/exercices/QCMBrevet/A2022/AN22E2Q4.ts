@@ -1,15 +1,15 @@
+import { shuffle } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { listeNombresPremiersStrictJusqua } from '../../../lib/outils/primalite'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import { listeNombresPremiersStrictJusqua } from '../../../lib/outils/primalite'
-import { shuffle } from '../../../lib/outils/arrayOutils'
 export const uuid = '12ead'
 export const refs = {
   'fr-fr': ['5A1QCM-1'],
   'fr-ch': ['9QCM-5'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Nombres premiers (Juin 2022 Amérique du nord)'

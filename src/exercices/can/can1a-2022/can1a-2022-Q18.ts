@@ -4,9 +4,9 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Donner un taux d\'évolution'
+export const titre = "Donner un taux d'évolution"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'x4c94'
 export const refs = {
   'fr-fr': [],
@@ -21,7 +21,7 @@ export default class Can1a2022Q18 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteAvant: '<br>',texteApres: '$\\%$' }
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -38,7 +38,7 @@ export default class Can1a2022Q18 extends ExerciceCan {
     this.correction = `Multiplier par $${texNombre(a, 2)}$ revient à multiplier par $1-\\dfrac{${texNombre(reponse, 0)}}{100}$. <br>
 Cela revient donc à baisser de $${miseEnEvidence(texNombre(reponse, 0) + '\\,\\%')}$.`
     this.reponse = reponse
-      this.canReponseACompleter ='$\\ldots\\%$'
+    this.canReponseACompleter = '$\\ldots\\%$'
   }
 
   nouvelleVersion() {

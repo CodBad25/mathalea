@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Déterminer les coordonnées (relatives) d'un point"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '24/11/2024'

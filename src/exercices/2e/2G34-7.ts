@@ -15,7 +15,7 @@ import { ppcm } from '../../lib/outils/primalite'
 export const titre =
   "Déterminer la nature des solutions d'un système linéaire de deux équations à deux inconnues"
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const dateDePublication = '28/03/2024'
 export const uuid = 'fade2'
 export const refs = {
@@ -52,12 +52,7 @@ export default class systemeEquationsPremDeg extends Exercice {
     }
 
     let typeQuestionsDisponibles: (
-      | 'lv1Uni'
-      | 'lv1Auc'
-      | 'lv1Inf'
-      | 'lv2Uni'
-      | 'lv2Auc'
-      | 'lv2Inf'
+      'lv1Uni' | 'lv1Auc' | 'lv1Inf' | 'lv2Uni' | 'lv2Auc' | 'lv2Inf'
     )[]
     if (this.sup === 1) {
       typeQuestionsDisponibles = ['lv1Uni', 'lv1Auc', 'lv1Inf']
@@ -78,7 +73,7 @@ export default class systemeEquationsPremDeg extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.comment =
         'Dans cet exercice, un système est donné à résoudre. Les solutions sont entières comprises entre -10 et 10.<br>Le niveau 1 correspond à des inconnues seulement dans les membres de gauche;<br>Le niveau 2 à des inconnues dans les deux membres, mais ordonnées;<br>Le niveau 3 à des inconnues dans le désordre dans les deux membres.'
       let texte = ''
@@ -320,13 +315,11 @@ export default class systemeEquationsPremDeg extends Exercice {
         texteCorr =
           texteCorr +
           'On commence à résoudre ce système en utilisant la méthode de combinaison linéaire. '
-        if (
-          !(
-            coeffElim / coeffEq[0] === 1 ||
-            -coeffElim / coeffEq[1] === 1 ||
-            -coeffEq[0] === coeffEq[1]
-          )
-        ) {
+        if (!(
+          coeffElim / coeffEq[0] === 1 ||
+          -coeffElim / coeffEq[1] === 1 ||
+          -coeffEq[0] === coeffEq[1]
+        )) {
           texteCorr =
             texteCorr +
             `On multiplie la première équation par $${texNombre(coeffElim / coeffEq[0], 0)}$ et la deuxième par $${texNombre(-coeffElim / coeffEq[1], 0)}$ pour obtenir des coefficients opposé devant $${varElim}$.<br>`

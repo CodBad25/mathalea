@@ -8,7 +8,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = "Calculer la fraction d'un décimal"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/04/2024'
 export const uuid = '669aa'
 export const refs = {

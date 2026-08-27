@@ -8,9 +8,10 @@ import {
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Déterminer les intervalles de croissance ou de décroissance d\'une fonction du second degré'
+export const titre =
+  "Déterminer les intervalles de croissance ou de décroissance d'une fonction du second degré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'gletu'
 export const refs = {
   'fr-fr': [],
@@ -24,7 +25,7 @@ export const refs = {
 export default class Can1a2026Q24 extends ExerciceCan {
   constructor() {
     super()
-      this.optionsDeComparaison = { intervalle: true }
+    this.optionsDeComparaison = { intervalle: true }
     this.formatChampTexte = KeyboardType.clavierEnsemble
   }
 
@@ -46,7 +47,7 @@ export default class Can1a2026Q24 extends ExerciceCan {
     } else {
       texteF = `${rienSi1(a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
     }
- 
+
     // Déterminer la bonne réponse
     let bonneReponse: string
     if (typeMono === 'croissante') {

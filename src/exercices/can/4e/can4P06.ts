@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une valeur définie avec un pourcentage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '15/09/2024'
 export const uuid = '0b829'
 export const refs = {

@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
@@ -24,6 +23,7 @@ import {
   stringNombre,
   texNombre,
 } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { fraction } from '../../../modules/fractions'
 import Hms from '../../../modules/Hms'
@@ -41,7 +41,7 @@ import { arrondi } from '../../../lib/outils/nombres'
 
 export const titre = 'CAN 5e sujet 2020'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '04/09/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '28/11/2025' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

@@ -10,7 +10,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation en logarithme népérien.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '21/02/2025'
 

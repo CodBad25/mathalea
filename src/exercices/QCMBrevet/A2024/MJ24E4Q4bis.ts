@@ -20,7 +20,7 @@ export const refs = {
   'fr-ch': ['9ES3D-4'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Rotations (2024 Métropole sujet de secours)'

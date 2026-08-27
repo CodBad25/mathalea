@@ -3,7 +3,6 @@ export const titre =
   "Trouver le terme général d'un ratio d'évolution d'un motif géométrique itératif"
 export const dateDePublication = '30/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Éric Elter

@@ -4,7 +4,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Décomposer une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const dateDePublication = '09/09/2023'
 

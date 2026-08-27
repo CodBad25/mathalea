@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = "Donner le nombre de solutions d'une équation"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '10886'
 export const refs = {
   'fr-fr': [],

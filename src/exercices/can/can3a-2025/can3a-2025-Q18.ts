@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Donner une écriture scientifique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b7d33'
 export const refs = {
   'fr-fr': [''],

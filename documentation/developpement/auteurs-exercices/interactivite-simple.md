@@ -19,7 +19,6 @@ Ajoutez les métadonnées près du titre et de l'UUID :
 
 ```ts
 export const interactifReady = true
-export const interactifType = 'mathLive'
 ```
 
 Ajoutez les imports adaptés à la profondeur du fichier :
@@ -50,12 +49,19 @@ quand l'exercice est exporté.
 Toujours avec le même indice `i` :
 
 ```ts
-handleAnswers(this, i, {
-  reponse: {
-    value: a + b,
+handleAnswers(
+  this,
+  i,
+  {
+    reponse: {
+      value: a + b,
+    },
   },
-})
+  { formatInteractif: 'mathalea-mathfield' },
+) /
 ```
+
+`formatInteractif` est le formatInteractif de la question [voir la documentation des formats interactifs](complements/formats-interactifs.md)
 
 `value` reçoit la valeur que MathALÉA doit accepter. Le comparateur standard
 convient aux nombres et expressions courantes.

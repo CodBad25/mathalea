@@ -19,7 +19,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 
 export const titre = "Écrire la liste de tous les diviseurs d'un entier - V2"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '03/10/2023'
 
 export const amcReady = true

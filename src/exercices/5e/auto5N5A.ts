@@ -3,7 +3,7 @@ import PatternIteratif from './auto5N5C'
 export const titre =
   'Identifier des régularités et poursuivre une suite de motifs évolutive'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '26/06/2026'
 
 /**

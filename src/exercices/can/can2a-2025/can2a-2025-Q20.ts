@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import Trinome from '../../../modules/Trinome'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une image par une fonction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cfa5e'
 export const refs = {
   'fr-fr': [],

@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Compléter une suite logique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '43038'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -32,7 +32,7 @@ export default class NomExercice extends ExerciceSimple {
       $19$ ${sp(2)} ; ${sp(2)} $22$ ${sp(2)} ; ${sp(2)} $25$ ${sp(2)} ; ${sp(2)} $28$ ${sp(2)} ; ${sp(2)} ?`
       this.correction = `On obtient un terme de cette suite en ajoutant $3$ au terme précédent.<br>
       Ainsi, ? $=${miseEnEvidence(31)}$.`
-      this.canEnonce =  `Compléter la suite logique : <br>
+      this.canEnonce = `Compléter la suite logique : <br>
    $19$ ${sp(2)} ; ${sp(2)} $22$ ${sp(2)} ; ${sp(2)} $25$ ${sp(2)} ; ${sp(2)} $28$ ${sp(2)} ; ${sp(2)} ?`
     } else {
       const a = choice([18, 19, 28, 29, 38, 39, 48, 49, 58, 59])
@@ -42,7 +42,7 @@ export default class NomExercice extends ExerciceSimple {
       $${a}$ ${sp(2)} ; ${sp(2)} $${a + k}$ ${sp(2)} ; ${sp(2)} $${a + 2 * k}$ ${sp(2)} ; ${sp(2)} $${a + 3 * k}$ ${sp(2)} ; ${sp(2)} ?`
       this.correction = `On obtient un terme de cette suite en ajoutant $${k}$ au terme précédent.<br>
       Ainsi, ? $=${miseEnEvidence(a + 4 * k)}$.`
-      this.canEnonce =  `Compléter la suite logique : <br>
+      this.canEnonce = `Compléter la suite logique : <br>
      $${a}$ ${sp(2)} ; ${sp(2)} $${a + k}$ ${sp(2)} ; ${sp(2)} $${a + 2 * k}$ ${sp(2)} ; ${sp(2)} $${a + 3 * k}$ ${sp(2)} ; ${sp(2)} ?`
     }
 

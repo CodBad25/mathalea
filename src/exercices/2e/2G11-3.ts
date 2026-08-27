@@ -1,7 +1,7 @@
 import CalculDAngleFigureComplexe from '../3e/3G31-1'
 export const titre = 'Résoudre des problèmes utilisant la trigonométrie'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '21/05/2024'

@@ -9,13 +9,12 @@ import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 import { plot } from '../../lib/2d/Plot'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Lecture graphique de domaine de définition'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '11/07/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '18/02/2025'

@@ -21,7 +21,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer le volume d'un prisme droit à base triangulaire"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ytsqg'
 export const refs = {
   'fr-fr': [],

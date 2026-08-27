@@ -8,7 +8,7 @@ import { pgcd } from '../../../lib/outils/primalite'
 import { context } from '../../../modules/context'
 export const titre = 'Résoudre un problème avec des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/09/2024'
 export const uuid = '4c878'
 export const refs = {
@@ -79,11 +79,16 @@ Quelle fraction de la bouteille a-t-elle bu à midi ? `
     À midi, elle a bu $${frac2.texFraction}$ du reste.<br>
      Comme $${frac2.texFraction}\\times ${reste.texFraction}=${reponse.texFraction}$, elle a bu $${miseEnEvidence(reponse.texFraction)}$ 
      ${pgcd(reponse.num, reponse.den) === 1 ? '' : ` ou $${reponse.simplifie().texFraction}$`} de la bouteille à midi.`
-    this.distracteurs = [
+    const distracteurs = [
       `$${frac2.ajouteEntier(-1).oppose().texFractionSimplifiee}$`,
       `$${frac1.sommeFraction(frac2).texFractionSimplifiee}$`,
       `$${frac1.produitFraction(frac2).texFractionSimplifiee}$`,
       `$${reste.texFractionSimplifiee}$`,
+      `$${frac1.texFractionSimplifiee}$`,
+      `$${frac2.texFractionSimplifiee}$`,
     ]
+    this.distracteurs = [...new Set(distracteurs)]
+      .filter((distracteur) => distracteur !== this.reponse)
+      .slice(0, 4)
   }
 }

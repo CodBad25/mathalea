@@ -3,7 +3,6 @@ export const titre =
   'Déterminer un vecteur normal à un plan donné par une équation cartésienne'
 export const dateDePublication = '05/10/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de CanTspeE03 pour les auto 1er

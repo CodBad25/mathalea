@@ -19,7 +19,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Résoudre un problème mêlant équations et périmètre et aire d'un rectangle"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '11/06/2025'
 

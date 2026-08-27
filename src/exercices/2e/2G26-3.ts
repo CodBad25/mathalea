@@ -20,7 +20,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { fraction } from '../../modules/fractions'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Calculer les coordonnées du produit d'un vecteur par un réel"
 export const dateDePublication = '28/05/2023'

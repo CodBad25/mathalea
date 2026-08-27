@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer la valeur d'une suite définie par un algorithme"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5uv2z'
 export const refs = {
   'fr-fr': [],

@@ -1,6 +1,6 @@
 import SommeFractionsDecimales from '../../6e/6N1F'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Écrire sous forme d'une fraction décimale"
 
 export const dateDePublication = '20/01/2022'

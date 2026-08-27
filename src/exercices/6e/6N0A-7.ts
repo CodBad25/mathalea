@@ -12,7 +12,6 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 export const titre = 'Écrire un nombre en chiffres ou en lettres'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Lire un nombre / écrire un nombre : passer d'une écriture à une autre et inversement

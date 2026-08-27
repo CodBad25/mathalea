@@ -13,7 +13,6 @@ export const titre =
   'Connaitre la formule du cosinus dans le triangle rectangle'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '06/12/2025'
 export const dateDeModifImportante = '19/01/2026'

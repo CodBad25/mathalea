@@ -7,7 +7,6 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Effectuer des opérations simples avec des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '25/08/2024'
 

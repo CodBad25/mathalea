@@ -12,7 +12,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Effectuer des calculs complexes avec des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/06/2024'
 
 /**

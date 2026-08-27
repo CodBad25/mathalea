@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Ajouter une demi-heure'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8eb0d'
 export const refs = {
   'fr-fr': [],

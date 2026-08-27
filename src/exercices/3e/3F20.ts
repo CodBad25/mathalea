@@ -30,7 +30,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Étudier des fonctions linéaires'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

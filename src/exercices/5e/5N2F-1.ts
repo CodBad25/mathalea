@@ -15,7 +15,7 @@ export const titre = 'Ranger des nombres relatifs'
 export const dateDePublication = '22/09/2024'
 export const dateDeModifImportante = '23/04/2025'
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const uuid = 'c7c3d'
 export const refs = {
   'fr-fr': ['5N2F-1'],

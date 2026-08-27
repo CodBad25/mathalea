@@ -15,6 +15,7 @@ import { MetaInteractif2d } from '../../lib/2d/interactif2d'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { latex2d } from '../../lib/2d/textes'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -26,14 +27,13 @@ import { sp } from '../../lib/outils/outilString'
 import type { IExercice } from '../../lib/types'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre =
   "Déterminer la racine carrée d'un carré parfait (calcul mental)"
 export const dateDeModifImportante = '04/02/2026'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const interactifType = 'MetaInteractif2d'
+
 export const interactifReady = true
 
 /**

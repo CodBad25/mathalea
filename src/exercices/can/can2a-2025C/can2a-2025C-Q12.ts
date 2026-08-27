@@ -4,9 +4,9 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer une puissance d\'une puissance'
+export const titre = "Calculer une puissance d'une puissance"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'j6xub'
 export const refs = {
   'fr-fr': [],
@@ -18,7 +18,7 @@ export const refs = {
 
 */
 export default class Can2a2025CQ12 extends ExerciceCan {
-   enonce(base?: number, exp1?: number, exp2?: number, expExt?: number): void {
+  enonce(base?: number, exp1?: number, exp2?: number, expExt?: number): void {
     if (base == null || exp1 == null || exp2 == null || expExt == null) {
       base = choice([2, 3, 5, 7])
       exp1 = randint(2, 6)
@@ -36,7 +36,7 @@ export default class Can2a2025CQ12 extends ExerciceCan {
       champ2: { value: String(expFinal) },
     }
     this.formatChampTexte = KeyboardType.clavierDeBase
-    
+
     this.question = `(${base}^{${exp1}}\\times ${base}^{${exp2}})^{${expExt}}=%{champ1}^{%{champ2}}`
 
     this.correction = `$(${base}^{${exp1}}\\times ${base}^{${exp2}})^{${expExt}}=(${base}^{${exp1}${exp2 >= 0 ? '+' : ''}${exp2}})^{${expExt}}=(${base}^{${expInterne}})^{${expExt}}=${base}^{${expInterne}\\times ${expExt}}=${base}^{${miseEnEvidence(String(expFinal))}}$`

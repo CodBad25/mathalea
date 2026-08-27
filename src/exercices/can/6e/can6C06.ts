@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Diviser par 9'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

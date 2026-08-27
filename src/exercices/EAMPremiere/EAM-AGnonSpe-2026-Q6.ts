@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Factoriser ou développer une différence de deux carrés '
@@ -21,32 +21,41 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ6AGns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(a: number, b: number, distracteurs?: string[]): void {
+  private appliquerLesValeurs(
+    a: number,
+    b: number,
+    distracteurs?: string[],
+  ): void {
     this.enonce = `On développe $(${a}x - ${b})^2$. L'expression développée et réduite est :`
 
     const repCorrecteMath = `${a * a}x^2 - ${2 * a * b}x + ${b * b}`
     const repCorrecte = `$${repCorrecteMath}$`
 
     if (distracteurs && distracteurs.length >= 3) {
-      this.reponses = [repCorrecte, distracteurs[0], distracteurs[1], distracteurs[2]]
+      this.reponses = [
+        repCorrecte,
+        distracteurs[0],
+        distracteurs[1],
+        distracteurs[2],
+      ]
     } else {
       // Génération des erreurs classiques pour ce type de développement
       let mauvaisesReponses = [
         `$${a * a}x^2 - ${2 * a * b}x - ${b * b}$`, // Erreur de signe sur le dernier terme (ex: -25)
-        `$${a * a}x^2 - ${b * b}$`,                 // Oubli du double produit (différence de deux carrés)
-        `$${a}x^2 - ${a * b}x + ${b * b}$`,         // Erreur de l'énoncé original (ex: 2x^2 - 10x + 25)
-        `$${a}x^2 - ${2 * a * b}x + ${b * b}$`,     // Oubli du carré sur le coefficient "a"
-        `$${a * a}x^2 + ${2 * a * b}x + ${b * b}$`  // Erreur de signe sur le double produit
+        `$${a * a}x^2 - ${b * b}$`, // Oubli du double produit (différence de deux carrés)
+        `$${a}x^2 - ${a * b}x + ${b * b}$`, // Erreur de l'énoncé original (ex: 2x^2 - 10x + 25)
+        `$${a}x^2 - ${2 * a * b}x + ${b * b}$`, // Oubli du carré sur le coefficient "a"
+        `$${a * a}x^2 + ${2 * a * b}x + ${b * b}$`, // Erreur de signe sur le double produit
       ]
 
       // On s'assure qu'aucun distracteur ne soit accidentellement la bonne réponse
-      mauvaisesReponses = mauvaisesReponses.filter(rep => rep !== repCorrecte)
+      mauvaisesReponses = mauvaisesReponses.filter((rep) => rep !== repCorrecte)
 
       this.reponses = [
         repCorrecte,
         mauvaisesReponses[0],
         mauvaisesReponses[1],
-        mauvaisesReponses[2]
+        mauvaisesReponses[2],
       ]
     }
 
@@ -63,7 +72,7 @@ export default class AutoQ6AGns2026 extends ExerciceQcmA {
     this.appliquerLesValeurs(2, 5, [
       `$2x^2 - 10x + 25$`,
       `$4x^2 - 20x - 25$`,
-      `$4x^2 - 25$`
+      `$4x^2 - 25$`,
     ])
   }
 

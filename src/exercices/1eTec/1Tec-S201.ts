@@ -1,21 +1,21 @@
-import Exercice from '../Exercice'
+import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
+import Exercice from '../Exercice'
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fraction } from '../../modules/fractions'
 
 export const titre = 'Calculer avec des suites arithmétiques et géométriques'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const dateDePublication = '25/05/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
@@ -51,7 +51,7 @@ export default class Suites extends Exercice {
       defaut: 7,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const u = randint(-10, 10, 0)
       const r = randint(-10, 10, 0)
       const num = randint(-10, 10, 0)

@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 export const titre = 'Construire des parallélogrammes'
 export const dateDeModifImportante = '18/04/2024'
 export const dateDePublication = '26/07/2026'
-export const interactifType = 'editeur-iep'
+
 export const interactifReady = true
 
 /**

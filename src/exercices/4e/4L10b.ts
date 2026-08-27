@@ -1,6 +1,6 @@
 import SimpleDistributivite from '../3e/3L11-0'
 export const dateDePublication = '03/02/2025'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

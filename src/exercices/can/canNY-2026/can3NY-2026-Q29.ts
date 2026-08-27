@@ -2,13 +2,13 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'n67jc'
 export const refs = {
   'fr-fr': [],
@@ -33,7 +33,9 @@ export default class ComparerFractions2026 extends ExerciceSimple {
   nouvelleVersion() {
     const a = 2026
     const b = this.canOfficielle ? a - 1 : this.quotaChoice('b', [a - 1, a + 1])
-    const choix = this.canOfficielle ? true : this.quotaChoice('choix', [true, false])
+    const choix = this.canOfficielle
+      ? true
+      : this.quotaChoice('choix', [true, false])
     switch (this.canOfficielle ? 1 : this.quotaRandint('cas', 1, 2)) {
       case 1:
         this.consigne = choix

@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer une puissance d'un radical"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'kl3uc'
 export const refs = {
   'fr-fr': [],

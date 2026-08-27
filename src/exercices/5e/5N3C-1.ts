@@ -14,8 +14,8 @@ import { rotation } from '../../lib/2d/transformations'
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   combinaisonListes,
   getRandomSubarray,
@@ -34,7 +34,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDeModificationImportante = '12/04/2026'
 export const titre = 'Résoudre un problème en utilisant des fractions'
 

@@ -7,7 +7,7 @@ import FonctionsLineaires from './3F20'
 import FonctionsAffines from './3F20-1'
 
 export const titre = 'Étudier les fonctions affines et/ou linéaires'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

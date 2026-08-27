@@ -1,13 +1,12 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { choice } from '../../../lib/outils/arrayOutils'
-export const titre = 'Calculer un terme d\'une suite'
+export const titre = "Calculer un terme d'une suite"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6sywb'
 export const refs = {
   'fr-fr': [],
@@ -25,7 +24,7 @@ export default class Can1a2022Q16 extends ExerciceCan {
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
- enonce(a?: number, b?: number, k?: number) {
+  enonce(a?: number, b?: number, k?: number) {
     if (a == null || b == null || k == null) {
       a = randint(1, 7) * choice([-1, 1])
       b = randint(1, 10) * choice([-1, 1])
@@ -57,8 +56,8 @@ export default class Can1a2022Q16 extends ExerciceCan {
 
     this.correction = texteCorr
     this.reponse = reponse
-     this.canEnonce =   `Soit $(u_n)$ une suite définie pour tout  $n\\in\\mathbb{N}$ par : $u_n = ${texteUn}$.`
-     this.canReponseACompleter =`$u_{${k}}=\\ldots$`
+    this.canEnonce = `Soit $(u_n)$ une suite définie pour tout  $n\\in\\mathbb{N}$ par : $u_n = ${texteUn}$.`
+    this.canReponseACompleter = `$u_{${k}}=\\ldots$`
   }
 
   nouvelleVersion() {

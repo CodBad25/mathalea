@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = "Indiquer une égalité à partir d'une division euclidienne"
 

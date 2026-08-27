@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const dateDePublication = '08/09/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre =

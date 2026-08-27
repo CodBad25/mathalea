@@ -19,7 +19,6 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer dans un triangle équilatéral (longueur, aire)'
 export const dateDePublication = '12/12/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'b18e9'
 

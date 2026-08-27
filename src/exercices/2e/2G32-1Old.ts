@@ -3,7 +3,6 @@ export const titre =
   'Déterminer une équation cartésienne de droite à partir de deux points'
 export const dateDeModifImportante = '03/03/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *

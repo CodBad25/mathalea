@@ -19,12 +19,11 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { bleuMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 export const titre = 'Résoudre graphiquement une équation du type $f(x)=k$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '06/07/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '08/09/2024'
@@ -116,7 +115,7 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const objetsEnonce = []
@@ -207,7 +206,12 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
         '',
         '#009900',
       )
-      const horizontale2 = droiteParPointEtPente(pointAbstrait(0, y2), 0, '', '#009900')
+      const horizontale2 = droiteParPointEtPente(
+        pointAbstrait(0, y2),
+        0,
+        '',
+        '#009900',
+      )
       const nomD1 = latex2d(`y=${y1}`, bornes.xMin - 0.5, Number(y1) + 0.4, {
         color: '#009900',
         letterSize: 'small',
@@ -297,7 +301,12 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
         epaisseur: 1.2,
         color: bleuMathalea,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 1.5 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 1,
+          style: '.',
+          epaisseur: 1.5,
+        },
       })
       for (let j = 0; j < nombreAntecedentCherches1; j++) {
         for (let k = 0; k < theSpline.visibles.length; k++) {
@@ -308,7 +317,12 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
         epaisseur: 1.2,
         color: bleuMathalea,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 1.5 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 1,
+          style: '.',
+          epaisseur: 1.5,
+        },
       })
 
       objetsEnonce.push(repere1, courbeATracer)

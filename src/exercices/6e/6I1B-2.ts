@@ -39,7 +39,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const dateDeModifImportante = '14/05/2023'
 export const dateDePublication = '11/04/2021'
 export const titre = 'Noter la couleur avec Scratch'
@@ -380,7 +380,7 @@ export default class NoteLaCouleur6e extends Exercice {
       pas: 30,
       plateau: damier,
     })
-    for (let q = 0; q < this.nbQuestions; ) {
+    for (let q = 0; q < this.nbQuestions;) {
       const objetsCorrection: NestedObjetMathalea2dArray = []
       const objetsEnonce: NestedObjetMathalea2dArray = []
       const objets = lePlateau.objets ?? []

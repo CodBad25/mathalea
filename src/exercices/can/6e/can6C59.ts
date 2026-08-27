@@ -7,7 +7,7 @@ import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer le plus petit dénominateur commun'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '06/07/2025'
@@ -34,7 +34,10 @@ export default class DenominateurCommun extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const frac1 = this.quotaChoice('frac1', obtenirListeFractionsIrreductibles())
+    const frac1 = this.quotaChoice(
+      'frac1',
+      obtenirListeFractionsIrreductibles(),
+    )
 
     let frac2: FractionEtendue
     do {

@@ -21,7 +21,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { partieEntiereEnLettres } from '../../modules/nombreEnLettres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/03/2025'
 
 export const titre = 'Résoudre des problèmes contenant des fractions'

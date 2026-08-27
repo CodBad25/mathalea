@@ -4,7 +4,6 @@ export const titre =
 export const amcReady = true
 export const amcType = 'qcmMult'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '14/09/2022'
 

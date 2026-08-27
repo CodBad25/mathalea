@@ -10,7 +10,7 @@ import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Trouver la position d'un lutin grâce à des instructions conditionnelles (scratch)"
 export const dateDePublication = '24/11/2020'

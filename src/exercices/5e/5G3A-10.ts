@@ -1,7 +1,7 @@
 import PavagesEtTransformations from '../6e/_Pavages_et_transformations'
 export const titre = "Trouver le symétrique d'une figure dans un pavage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

@@ -2,7 +2,7 @@ import ExerciceConversions from '../6e/_Exercice_conversions'
 export const titre =
   'Utiliser les préfixes multiplicateurs et diviseurs (milli à kilo)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

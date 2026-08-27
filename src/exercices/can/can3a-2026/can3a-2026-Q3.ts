@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une somme de décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'admww'
 export const refs = {
   'fr-fr': [],
@@ -26,7 +26,8 @@ export default class Can32026Q3 extends ExerciceCan {
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
       a =
-        this.quotaRandint('a1', 2, 5) * 0.1 + this.quotaRandint('a2', 1, 9) * 0.01
+        this.quotaRandint('a1', 2, 5) * 0.1 +
+        this.quotaRandint('a2', 1, 9) * 0.01
       b = this.quotaRandint('b', 1, 4) * 0.1
     }
 

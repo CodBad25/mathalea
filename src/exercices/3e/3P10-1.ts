@@ -3,6 +3,7 @@
  */
 
 import Decimal from 'decimal.js'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -18,12 +19,10 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Lier un coefficient multiplicateur d'une variation à un pourcentage et réciproquement"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Déterminer le coefficient de proportionnalité associé à une évolution en pourcentage ou l'inverse

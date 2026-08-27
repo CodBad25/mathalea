@@ -1,7 +1,7 @@
 import LireAbscisseDecimaleBis2d from '../6e/6N1H-1'
 export const titre = "Lire l'abscisse décimale d'un point"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '27/10/2021'

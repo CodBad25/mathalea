@@ -4,7 +4,6 @@ export const titre =
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Clone de 5L10-2 pour les 2nde

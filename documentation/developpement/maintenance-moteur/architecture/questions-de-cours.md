@@ -20,10 +20,34 @@ puissent continuer à s'échanger des séries de questions. Exception : le champ
 `propositions` de l'app a été renommé `badPropositions` côté MathALÉA (voir
 plus bas), une resynchronisation depuis l'app devra donc le renommer.
 
-Chaque question déclare `id`, `level`, `themes`, `title`, `question`, `answer`,
-et éventuellement `correction`, `keys`, `badPropositions`, `comparison`, `type`.
 Le README du dépôt de l'app décrit le format d'origine en détail (sous le nom
-`propositions`).
+`propositions`). `src/lib/questionsDeCours/banque.ts` n'accepte que les clés
+listées ci-dessous : toute autre clé (faute de frappe comprise) fait échouer
+`banque.test.ts`.
+
+#### Clés communes (tous types)
+
+| Clé       | Obligatoire | Format                                 | Rôle                                                                       |
+| --------- | ----------- | --------------------------------------- | --------------------------------------------------------------------------- |
+| `id`      | oui         | chaîne non vide, unique                 | Identifiant utilisé dans `sup` et l'URL.                                    |
+| `level`   | oui         | `6`, `5`, `4`, `3`, `2`, `1` ou `T`      | Première classe où la notion est vue ; sert au filtre de niveau.            |
+| `themes`  | oui         | chaîne ou tableau de chaînes            | Regroupement dans le sélecteur (une question peut avoir plusieurs thèmes).  |
+| `title`   | oui         | chaîne non vide                         | Titre affiché en vue enseignante seulement, jamais à l'élève.               |
+| `question`| oui         | chaîne, LaTeX autorisé entre `$`        | Énoncé.                                                                     |
+| `answer`  | oui         | chaîne ou tableau de chaînes            | Réponse(s) acceptée(s) ; la première sert de correction par défaut.         |
+| `correction` | non      | chaîne                                  | Correction affichée à la place de la valeur par défaut.                     |
+| `type`    | non (défaut `math`) | `math`, `qcm` ou `text`          | Détermine le champ interactif et les clés spécifiques ci-dessous.           |
+| `comparison` | non (défaut `isEqual`) | `isEqual`, `isSame`, `expressionsForcementReduites` | Voir la table de traduction plus bas ; pertinent surtout pour `math`. |
+| `keys`    | non          | tableau de chaînes                      | Touches additionnelles du clavier (`math` uniquement, voir plus bas).       |
+| `badPropositions` | non  | tableau de chaînes                      | Voir par type ci-dessous ; ne doit jamais répéter une valeur de `answer`.   |
+
+#### Clés propres à chaque `type`
+
+| `type` | Élément rendu | Clés à compléter en plus des clés communes |
+| ------ | -------------- | ------------------------------------------- |
+| `math` (défaut) | `mathalea-mathfield` | `keys` pour les touches du clavier personnalisable ; `comparison` si la comparaison par défaut ne convient pas (ex. `isSame` pour accepter une factorisation, `expressionsForcementReduites` pour une expression littérale). |
+| `qcm`  | `mathalea-qcm`       | `badPropositions` obligatoire en pratique : ce sont les fausses réponses proposées (la bonne réponse ne doit pas y figurer). Il faut au moins deux propositions distinctes au total (`answer` ∪ `badPropositions`), sans quoi la question est rejetée par la validation. |
+| `text` | `mathalea-textfield` | `badPropositions` optionnel (pas encore exploité comme touches-mots). La comparaison ignore la casse et les accents automatiquement, inutile de dupliquer les réponses sans accent dans `answer`. |
 
 `src/lib/questionsDeCours/banque.ts` charge, valide et indexe la banque :
 

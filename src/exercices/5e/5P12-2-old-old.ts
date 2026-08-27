@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { listeShapes2DInfos } from '../../lib/2d/figures2d/shapes2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import {
@@ -10,6 +9,7 @@ import { polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { enleveDoublonNum, shuffle } from '../../lib/outils/arrayOutils'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
@@ -25,7 +25,6 @@ import { gestionnaireFormulaireTexte } from '../../modules/outils'
 
 export const titre = "Trouver le ratio d'évolution d'un motif numérique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '26/06/2025'

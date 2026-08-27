@@ -3,7 +3,7 @@ import PerimetreOuAireDeFiguresComposees from '../5e/5M11-5-oldOld'
 export const titre = 'Calculer périmètre de figures composées'
 export const dateDePublication = '27/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

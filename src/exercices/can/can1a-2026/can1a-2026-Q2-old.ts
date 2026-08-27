@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Faire un calcul avec une priporité de calcul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2kynk'
 export const refs = {
   'fr-fr': [],

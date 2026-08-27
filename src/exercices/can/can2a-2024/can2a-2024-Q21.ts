@@ -21,7 +21,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Déterminer la longueur d'une ligne brisée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd0a64'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

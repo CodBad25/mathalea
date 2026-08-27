@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Conversion en minutes décimales'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343m'
 export const refs = {
   'fr-fr': [],

@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Comparer des fractions de même dénominateur/numérateur'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/07/2025'
 /**
  * @author Éric Elter (sur la base du can6C41 de Gilles Mora)

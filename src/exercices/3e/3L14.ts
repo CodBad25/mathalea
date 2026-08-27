@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre une équation produit nul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 

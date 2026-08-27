@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 export const titre = 'Utiliser les propriétés des logarithmes'
 export const dateDePublication = '12/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2l10e'
 export const refs = {
   'fr-fr': [],
@@ -36,7 +36,7 @@ export default class ProprietesLogarithmes extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let cleUnique = ''

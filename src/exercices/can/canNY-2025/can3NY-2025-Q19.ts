@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { sp } from '../../../lib/outils/outilString'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '77432'
 export const refs = {
   'fr-fr': [],

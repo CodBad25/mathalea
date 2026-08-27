@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Calculer le double de la somme ou du produit de deux nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'udtsm'
 export const refs = {
   'fr-fr': [],

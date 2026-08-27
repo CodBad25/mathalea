@@ -16,7 +16,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Convertir des grandeurs composées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '23/05/2022'
 

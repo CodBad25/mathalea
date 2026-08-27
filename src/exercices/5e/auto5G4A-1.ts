@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const dateDePublication = '17/08/2024'
-export const interactifType = 'mathLive'
+
 export const titre =
   "Calculer des mesures d'angles adjacents, supplémentaires ou complémentaires"
 export const uuid = 'ed9f4'
@@ -43,7 +43,7 @@ export default class AnglesEtVocabulaire extends Exercice {
       melange: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       let a = randint(21, 79, [30, 40, 50, 60, 70])
       let b: number
       let texte: string

@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire un nombre à partir des dizaines ou des centaines'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2264e'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

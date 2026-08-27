@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Simplifier des puissances de 10'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '29066'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

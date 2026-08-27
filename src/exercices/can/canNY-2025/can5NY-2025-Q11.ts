@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 export const titre = 'Calculer un rendu de monnaie'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bee6d'
 export const refs = {
   'fr-fr': [],

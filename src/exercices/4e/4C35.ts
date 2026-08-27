@@ -14,7 +14,7 @@ export const titre =
 
 export const dateDePublication = '14/06/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

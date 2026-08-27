@@ -2,17 +2,17 @@ import Figure from 'apigeom'
 import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { pgcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
-import { arrondi } from '../../lib/outils/nombres'
 
 export const titre =
   'Calculer des longueurs et des aires dans des assemblages de polygones'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/07/2026'
 
 /**
@@ -226,8 +226,7 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
 
       this.correction += '<br>'
       this.correction += figureCorrectionHtml
-    }
-    else if (configuration === 'aireGrandCarre') {
+    } else if (configuration === 'aireGrandCarre') {
       this.optionsChampTexte = {
         texteApres: ' $\\text{cm}^2$',
         texteAvant: 'Aire du grand carré : ',
@@ -350,8 +349,7 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
 
       this.correction += '<br>'
       this.correction += figureCorrectionHtml
-    }
-    else if (configuration === 'aireTriangleQuatreCarres') {
+    } else if (configuration === 'aireTriangleQuatreCarres') {
       this.optionsChampTexte = {
         texteApres: ' $\\text{cm}^2$',
         texteAvant: 'Aire du triangle : ',

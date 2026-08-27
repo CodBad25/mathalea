@@ -6,7 +6,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Exprimer une variable en fonction des autres (formules avec sommes/produits/quotients)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '06/07/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

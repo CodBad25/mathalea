@@ -18,7 +18,6 @@ import { abs } from '../../lib/outils/nombres'
 import { prenomF } from '../../lib/outils/Personne'
 export const titre = 'Modéliser une situation avec une suite'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '14/12/2024'
 export const dateDeModifImportante = '26/09/2025'
@@ -73,7 +72,7 @@ export default class ModeliserSuites extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 

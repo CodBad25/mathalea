@@ -12,7 +12,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Encadrer un entier'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const dateDeModifImportante = '26/08/2025'
 /**

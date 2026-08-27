@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Decomposer et rechercher le plus grand diviseur commun de deux nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '13/11/2024'
 export const uuid = 'cb844'
 export const refs = {

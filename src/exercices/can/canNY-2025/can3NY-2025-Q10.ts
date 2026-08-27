@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Trouver un reste dans une division euclidienne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1cf22'
 export const refs = {
   'fr-fr': [],

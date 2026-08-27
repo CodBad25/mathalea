@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Connaître la formule de l’aire d’un carré ou d’un rectangle'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '03/08/2025'
 
 /**

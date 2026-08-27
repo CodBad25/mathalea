@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Développer une identité remarquable'
@@ -23,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ1FMs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(a: number, b: number, isPlus: boolean): void {
+  private appliquerLesValeurs(a: number, b: number, isPlus: boolean): void {
     const signe = isPlus ? '+' : '-'
     this.enonce = `La forme développée de l'expression $(${a}x ${signe} ${b})^2$ est :`
 
@@ -45,20 +44,16 @@ private appliquerLesValeurs(a: number, b: number, isPlus: boolean): void {
     const dist3 = `${2 * a}x ${signe} ${bCarre}`
 
     // Rédaction de la correction adaptative
-    const identite = isPlus ? '(a+b)^2 = a^2 + 2ab + b^2' : '(a-b)^2 = a^2 - 2ab + b^2'
+    const identite = isPlus
+      ? '(a+b)^2 = a^2 + 2ab + b^2'
+      : '(a-b)^2 = a^2 - 2ab + b^2'
     this.correction = `On utilise l'identité remarquable $${identite}$ avec $a = ${a}x$ et $b = ${b}$.<br>`
     this.correction += `$\\begin{aligned}`
     this.correction += `(${a}x ${signe} ${b})^2 &= (${a}x)^2 ${signe} 2 \\times ${a}x \\times ${b} + ${b}^2\\\\`
     this.correction += `&= ${miseEnEvidence(correct)}`
     this.correction += `\\end{aligned}$`
 
-
-    this.reponses = [
-      `$${correct}$`,
-      `$${dist1}$`,
-      `$${dist2}$`,
-      `$${dist3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${dist1}$`, `$${dist2}$`, `$${dist3}$`]
   }
 
   versionOriginale: () => void = () => {

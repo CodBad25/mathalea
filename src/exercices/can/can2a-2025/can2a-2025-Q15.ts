@@ -2,15 +2,15 @@ import { courbe } from '../../../lib/2d/Courbe'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import RepereBuilder from '../../../lib/2d/RepereBuilder'
 import { latex2d } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Résoudre graphiquement une inéquation'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'efdaf'
 export const refs = {
   'fr-fr': [],
@@ -83,7 +83,9 @@ export default class ResoudreGraphiqumentInequation extends ExerciceSimple {
       .setThickX({ xMin: -3, xMax: 3, dx: 1.5 })
       .setThickY({ yMin: -3, yMax: 3, dy: 1.5 })
       .buildStandard()
-    const courbef1 = latex2d('\\mathscr{C}_g', 2.5, 2.7, { color: bleuMathalea })
+    const courbef1 = latex2d('\\mathscr{C}_g', 2.5, 2.7, {
+      color: bleuMathalea,
+    })
     const courbef2 = latex2d('\\mathscr{C}_f', -1.7, -1.8, { color: 'red' })
     const objets1 = [
       r1,

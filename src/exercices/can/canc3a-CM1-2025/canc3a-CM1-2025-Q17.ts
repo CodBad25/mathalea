@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Calculer la longueur d'un segment par comparaison"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e22ff'
 export const refs = {
   'fr-fr': [],

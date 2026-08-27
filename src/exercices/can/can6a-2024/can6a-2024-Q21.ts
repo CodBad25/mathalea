@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer une abscisse sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e3c35'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

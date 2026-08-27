@@ -14,14 +14,14 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = false
-//export const interactifType = 'mathLive'
+//
 export const titre = 'Étudier une fonction avec une exponentielle'
 
 export const dateDePublication = '14/05/2026'
 
 export const uuid = '55eb2'
 export const refs = {
-  'fr-fr': ['1AN31-7','TSA3-28', 'TCA7-28'],
+  'fr-fr': ['1AN31-7', 'TSA3-28', 'TCA7-28'],
   'fr-ch': [],
 }
 
@@ -38,16 +38,16 @@ export default class FonctionExponentielle extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(-5, 5, 0)
       const b = randint(-5, 5)
       const k = randint(-5, 5, 0)
-    
+
       const abscisseTangente = randint(-5, 5, 0)
       const coefficientDerivee = a * k
       const constanteDerivee = a + b * k
       const coeffTangente =
-      coefficientDerivee * abscisseTangente + constanteDerivee
+        coefficientDerivee * abscisseTangente + constanteDerivee
       const racineDerivee = new FractionEtendue(
         -constanteDerivee,
         coefficientDerivee,
@@ -148,13 +148,12 @@ export default class FonctionExponentielle extends Exercice {
       On a $f(${abscisseTangente})=\\left(${a}\\times${ecritureParentheseSiNegatif(abscisseTangente)}${ecritureAlgebriqueSauf0(b)}\\right)\\mathrm{e}^{${rienSi1(k)}\\times${abscisseTangente}}=${a * abscisseTangente + b}\\mathrm{e}^{${k * abscisseTangente}}$.<br>
        $f'(${abscisseTangente})=\\left(${coefficientDerivee}\\times${ecritureParentheseSiNegatif(abscisseTangente)}${ecritureAlgebriqueSauf0(constanteDerivee)}\\right)\\mathrm{e}^{${rienSi1(k)}\\times${abscisseTangente}}=${coefficientDerivee * abscisseTangente + constanteDerivee}\\mathrm{e}^{${k * abscisseTangente}}$.<br>
       Donc, l'équation de la tangente est : $y=${coeffTangente}\\mathrm{e}^{${k * abscisseTangente}}(x${ecritureAlgebriqueSauf0(-abscisseTangente)})${ecritureAlgebriqueSauf0(a * abscisseTangente + b)}\\mathrm{e}^{${k * abscisseTangente}}$,
-      ou encore : $${miseEnEvidence(`y=${coeffTangente}\\mathrm{e}^{${k * abscisseTangente}}x${ecritureAlgebriqueSauf0(a * abscisseTangente + b-coeffTangente * abscisseTangente)}\\mathrm{e}^{${k * abscisseTangente}}`)}$`
+      ou encore : $${miseEnEvidence(`y=${coeffTangente}\\mathrm{e}^{${k * abscisseTangente}}x${ecritureAlgebriqueSauf0(a * abscisseTangente + b - coeffTangente * abscisseTangente)}\\mathrm{e}^{${k * abscisseTangente}}`)}$`
 
       const texteCorr = createList({
         items: [correction1, correction2, correction3],
         style: 'nombres',
       })
-     
 
       if (this.questionJamaisPosee(i, a, b, k)) {
         this.listeQuestions[i] = texte

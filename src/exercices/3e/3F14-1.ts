@@ -17,7 +17,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const titre = "Modéliser une situation à l'aide d'une fonction"
 export const dateDePublication = '06/07/2026'
 /**

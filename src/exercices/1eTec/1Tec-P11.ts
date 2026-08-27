@@ -15,7 +15,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 
 export const titre = "Extrapoler une grandeur à partir d'un ajustement affine"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '06/07/2026'
 

@@ -26,7 +26,6 @@ export const titre =
   'Déterminer les coordonnées des sommets d’un parallélogramme'
 export const dateDePublication = '25/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Trouver les coordonnees du 4e sommet d'un parallélogramme à partir de 3 sommets donnés.

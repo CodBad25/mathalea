@@ -12,8 +12,8 @@ import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
@@ -28,7 +28,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
-export const interactifType = 'multi-mathfield'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

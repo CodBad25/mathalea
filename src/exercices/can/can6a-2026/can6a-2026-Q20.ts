@@ -15,9 +15,9 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Calculer une longueur à partir d\'un périmètre'
+export const titre = "Calculer une longueur à partir d'un périmètre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'j71zy'
 export const refs = {
   'fr-fr': [],
@@ -38,7 +38,7 @@ export default class Can20266Q20 extends ExerciceCan {
     this.optionsDeComparaison = {
       nombreDecimalSeulement: true,
     }
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
   enonce(base?: number, cote?: number) {
@@ -101,7 +101,6 @@ export default class Can20266Q20 extends ExerciceCan {
       Donc, $2\\times \\text{?} = ${perimetre} - ${base} = ${perimetre - base}\\text{ cm}$.<br>
       Donc, la longueur manquante est $${miseEnEvidence(cote)}\\text{ cm}$.`
 
-   
     this.canEnonce = `Le périmètre de ce triangle est $${perimetre}\\text{ cm}$.<br>
       ${texteEnCouleurEtGras('Complète', 'black')}.`
   }

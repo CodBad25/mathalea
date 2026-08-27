@@ -23,7 +23,7 @@ export const dateDePublication = '05/10/2022'
 export const dateDeModifImportante = '4/10/2023'
 // Ajout de l'interactivité et suppression de (AB] par Rémi Angot
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 /**

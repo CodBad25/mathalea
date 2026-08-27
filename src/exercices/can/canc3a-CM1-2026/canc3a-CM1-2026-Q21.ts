@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un produit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '95d37'
 export const refs = {
   'fr-fr': [],
@@ -22,15 +22,15 @@ export let coeffQ21 = 4
 
 */
 export default class Can2026CM1Q21 extends ExerciceCan {
-  constructor () {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = {
-      nombreDecimalSeulement: true
+      nombreDecimalSeulement: true,
     }
   }
 
-  enonce (a?: number, b?: number, coeff?: number) {
+  enonce(a?: number, b?: number, coeff?: number) {
     if (a == null || b == null || coeff == null) {
       a = choice([2, 4])
       b = 25
@@ -53,7 +53,7 @@ export default class Can2026CM1Q21 extends ExerciceCan {
     this.canEnonce = `$${a}\\times${b}$`
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.canOfficielle || this.sup ? this.enonce(2, 25, 6) : this.enonce()
   }
 }

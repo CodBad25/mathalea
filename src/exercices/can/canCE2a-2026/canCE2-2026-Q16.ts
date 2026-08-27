@@ -10,7 +10,6 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Compter avec des pièces de monnaie'
 export const interactifReady = true
-export const interactifType = 'svg-selection'
 export const uuid = '1474f'
 export const refs = {
   'fr-fr': [],

@@ -7,7 +7,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = 'Trouver un nombre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'x9wxv'
 export const refs = {
   'fr-fr': [],

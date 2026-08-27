@@ -13,8 +13,9 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
-export const titre = "Déterminer le symétrique d'un point par une symétrie centrale"
+
+export const titre =
+  "Déterminer le symétrique d'un point par une symétrie centrale"
 export const dateDePublication = '06/06/2026'
 
 type Disposition = {
@@ -89,8 +90,18 @@ export default class AutoQ2Antillesbrevet2026 extends ExerciceCan {
       labelY: false,
     })
 
-    figure.create('Point', { x: posK[0], y: posK[1], label: labelK, shape: 'x' })
-    figure.create('Point', { x: posM[0], y: posM[1], label: labelM, shape: 'x' })
+    figure.create('Point', {
+      x: posK[0],
+      y: posK[1],
+      label: labelK,
+      shape: 'x',
+    })
+    figure.create('Point', {
+      x: posM[0],
+      y: posM[1],
+      label: labelM,
+      shape: 'x',
+    })
     figure.create('Point', { x: posO[0], y: posO[1], label: 'O', shape: 'x' })
     posDistracteurs.forEach((pos, i) => {
       figure.create('Point', {
@@ -114,8 +125,26 @@ export default class AutoQ2Antillesbrevet2026 extends ExerciceCan {
     }
     if (labels == null) {
       const pool = [
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-        'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'L',
+        'M',
+        'N',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
       ]
       labels = shuffle(pool).slice(0, 5)
     }
@@ -132,19 +161,16 @@ ${figure}`
 
   nouvelleVersion() {
     if (this.canOfficielle) {
-      this.enonce(
-        ['K', 'M', 'L', 'P', 'N'],
-        {
-          posO: [3, 3],
-          posK: [5, 5],
-          posM: [1, 1],
-          posDistracteurs: [
-            [1, 5],
-            [4, 4],
-            [5, 1],
-          ],
-        },
-      )
+      this.enonce(['K', 'M', 'L', 'P', 'N'], {
+        posO: [3, 3],
+        posK: [5, 5],
+        posM: [1, 1],
+        posDistracteurs: [
+          [1, 5],
+          [4, 4],
+          [5, 1],
+        ],
+      })
     } else {
       this.enonce()
     }

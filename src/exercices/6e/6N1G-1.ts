@@ -27,7 +27,7 @@ export const refs = {
   'fr-ch': ['PR-44'],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '26/08/2024'
 export const dateDeModifImportante = '15/06/2025'
 

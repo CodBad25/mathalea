@@ -3,7 +3,6 @@ export const titre =
   "Reconnaitre coefficient directeur et ordonnée à l'origine d'une fonction affine"
 export const dateDePublication = '19/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '80d4e'
 export const refs = {

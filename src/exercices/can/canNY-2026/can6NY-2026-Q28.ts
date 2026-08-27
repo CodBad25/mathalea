@@ -6,7 +6,7 @@ import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'm650d'
 export const refs = {
   'fr-fr': [],
@@ -30,7 +30,9 @@ export default class CalculRetrancher2026 extends ExerciceSimple {
     const a = this.canOfficielle ? 3 : this.quotaRandint('a', 1, 9)
     const d = new Decimal(a).div(10)
     const c = new Decimal(a).div(100)
-    switch (this.canOfficielle ? 1 : this.quotaRandint('typeDeQuestions', 1, 2)) {
+    switch (
+      this.canOfficielle ? 1 : this.quotaRandint('typeDeQuestions', 1, 2)
+    ) {
       case 1:
         this.question = `Quel nombre obtient-on en retranchant $${a}$ ${a === 1 ? 'dixième' : 'dixièmes'} à $${texNombre(annee, 0)}$ ?`
         this.reponse = texNombre(new Decimal(annee).sub(d), 1)

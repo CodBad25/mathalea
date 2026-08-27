@@ -29,7 +29,6 @@ export const dateDePublication = '09/04/2022'
 export const dateDeModifImportante = '27/03/2024'
 export const titre = "Résoudre des problèmes d'aires de rectangles"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '9a5fe'
 

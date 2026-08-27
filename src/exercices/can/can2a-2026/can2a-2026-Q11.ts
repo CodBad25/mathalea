@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer les coordonnées du milieu d’un segment'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'atlft'
 export const refs = {
   'fr-fr': [],

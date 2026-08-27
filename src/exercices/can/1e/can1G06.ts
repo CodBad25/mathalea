@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
@@ -11,6 +10,7 @@ import { labelPoint } from '../../../lib/2d/textes'
 import { milieu, pointAdistance } from '../../../lib/2d/utilitairesPoint'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
@@ -18,7 +18,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer un produit scalaire sur des figures géométriques classiques '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/06/2022'
 /**
  * @author Gilles Mora

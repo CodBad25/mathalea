@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer des sommes ou différences'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6e29b'
 export const refs = {
   'fr-fr': [],

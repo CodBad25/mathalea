@@ -9,7 +9,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver un produit égal à 1000'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2e480'
 export const refs = {
   'fr-fr': [],

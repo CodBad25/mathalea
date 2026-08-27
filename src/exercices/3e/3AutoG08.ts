@@ -14,7 +14,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Calculer un périmètre'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '25/12/2025'
 

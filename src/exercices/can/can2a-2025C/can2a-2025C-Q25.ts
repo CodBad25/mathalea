@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer la diagonale d'un carré connaissant son aire"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'sueni'
 export const refs = {
   'fr-fr': [],

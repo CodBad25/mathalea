@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Transformer un nombre de secondes en minutes et secondes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'p3stx'
 export const refs = {
   'fr-fr': [],

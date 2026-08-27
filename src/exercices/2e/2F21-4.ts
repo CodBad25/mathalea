@@ -29,7 +29,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer graphiquement l'expression d'une fonction affine"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '25/05/2023'
@@ -94,7 +94,7 @@ export default class Lecturefonctionaffine extends Exercice {
       [1, 7],
     ]
     // const listeTypeDeQuestions = combinaisonListes(typesDeQuestionsDisponibles, this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // on rajoute les variables dont on a besoin
       let texte = ''
       let texteCorr = ''

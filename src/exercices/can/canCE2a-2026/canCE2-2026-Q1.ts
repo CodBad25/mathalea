@@ -1,12 +1,12 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver le facteur manquant'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3c326'
 export const refs = {
   'fr-fr': [],
@@ -32,7 +32,10 @@ export default class Can2026CE2Q1 extends ExerciceCan {
     this.canReponseACompleter = `$${facteur1}\\times \\ldots =${produit}$`
 
     if (this.interactif) {
-      this.optionsChampTexte = { texteAvant: `$${facteur1}\\times$`, texteApres: `$=${produit}$` }
+      this.optionsChampTexte = {
+        texteAvant: `$${facteur1}\\times$`,
+        texteApres: `$=${produit}$`,
+      }
     } else {
       this.question += `$${facteur1}\\times \\ldots =${produit}$`
     }

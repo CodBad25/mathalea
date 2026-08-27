@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const titre = 'Factoriser une expression littérale (Niveau 1)'
 export const dateDePublication = '20/04/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

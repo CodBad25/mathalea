@@ -3,12 +3,11 @@ import { rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer un antécédent'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4vfug'
 export const refs = {
   'fr-fr': [],

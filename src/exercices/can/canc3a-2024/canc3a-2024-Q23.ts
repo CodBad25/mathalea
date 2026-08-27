@@ -6,7 +6,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 
 export const titre = "Calculer la moitié d'un entier"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '43cf8'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

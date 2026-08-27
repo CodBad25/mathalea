@@ -1,12 +1,12 @@
-
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-export const titre = 'Calculer un terme d\'une suite géométrique définie par récurrence'
+export const titre =
+  "Calculer un terme d'une suite géométrique définie par récurrence"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'lo78x'
 export const refs = {
   'fr-fr': [],
@@ -16,14 +16,14 @@ export const refs = {
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
-*/export default class Can2026TermQ16 extends ExerciceCan {
-   constructor() {
+*/ export default class Can2026TermQ16 extends ExerciceCan {
+  constructor() {
     super()
-   this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
- enonce(u0?: number, k?: number, rang?: number): void {
+  enonce(u0?: number, k?: number, rang?: number): void {
     if (u0 == null || k == null || rang == null) {
       u0 = randint(1, 5)
       k = choice([2, 3, -2, -3])

@@ -11,7 +11,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const amcReady = true
 export const titre = 'Résoudre des problèmes avec des calculs de pourcentages'

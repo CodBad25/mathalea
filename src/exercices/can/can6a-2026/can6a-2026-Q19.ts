@@ -9,7 +9,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver le plus grand nombre (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'ytght'
 export const refs = {
   'fr-fr': [],

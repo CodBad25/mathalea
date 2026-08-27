@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer avec des puissances de 10'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'vwsun'
 export const refs = {
   'fr-fr': [],

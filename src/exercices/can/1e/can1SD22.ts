@@ -14,7 +14,6 @@ import Exercice from '../../Exercice'
 export const titre =
   'Déterminer le sens de variation d’un pôlynome du second degré'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '1/11/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

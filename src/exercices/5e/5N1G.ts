@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 import choisirExpressionNumerique from './_choisirExpressionNumerique'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Calculer en respectant les priorités opératoires'

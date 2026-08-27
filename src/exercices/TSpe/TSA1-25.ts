@@ -1,9 +1,9 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { reduireAxPlusB, rienSi1 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -11,7 +11,6 @@ export const titre =
   'Déterminer une limite avec le théorème de comparaison ou des gendarmes'
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '5db0b'
 export const refs = {

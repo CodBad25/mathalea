@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 export const titre = 'Amplifier ou simplifier une fraction'
 export const dateDePublication = '14/03/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0e77e'
 export const refs = {
   'fr-ch': ['9NO3B-1'],

@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Déterminer un taux de hausse'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'em747'
 export const refs = {
   'fr-fr': [],

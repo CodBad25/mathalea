@@ -17,7 +17,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Factoriser a²-b²'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '26/02/2023'
 

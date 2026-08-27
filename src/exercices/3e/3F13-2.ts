@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Résoudre $f(x)=k$ à partir d'un graphique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '31/01/2026'
 
 /**

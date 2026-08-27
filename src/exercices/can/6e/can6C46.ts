@@ -12,7 +12,6 @@ import { orangeMathalea } from '../../../lib/colors'
 import { fractionCliquable } from '../../../modules/2dinteractif'
 export const titre = 'Résoudre un problème de reste en fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const amcReady = true
 export const amcType = 'AMCNum'

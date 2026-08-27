@@ -5,6 +5,7 @@ import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
+import { bleuMathalea } from '../../lib/colors'
 import { lampeMessage } from '../../lib/format/message'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -17,10 +18,9 @@ import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModificationImportante = '17/03/2026' // Rendu interactif par Jean-claude Lhote
 export const titre = 'Résoudre un problème en utilisant des fractions'
 

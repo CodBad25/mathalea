@@ -6,7 +6,7 @@ import Decimal from 'decimal.js'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '91304'
 export const refs = {
   'fr-fr': [],

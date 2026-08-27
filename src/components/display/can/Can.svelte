@@ -373,9 +373,7 @@
       const exercice = exercises[indiceExercice[i]]
       const type =
         exercice.autoCorrection?.[indiceQuestionInExercice[i]]
-          ?.formatInteractif ??
-        exercice.interactifType ??
-        'mathlive'
+          ?.formatInteractif ?? 'mathlive'
       const customElementType =
         interactivityTypeToCustomElementFormat(type) ?? type
 

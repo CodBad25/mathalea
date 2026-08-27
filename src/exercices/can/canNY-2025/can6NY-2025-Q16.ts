@@ -1,15 +1,15 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { sp } from '../../../lib/outils/outilString'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver le plus grand nombre'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'ea002'
 export const refs = {
   'fr-fr': [],

@@ -1,7 +1,7 @@
 import PlacerPointsSurAxe from '../6e/6N1H-2'
 export const titre = "Placer un point d'abscisse décimale"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '23/09/2025' // Réparation de l'interactivité par Éric Elter

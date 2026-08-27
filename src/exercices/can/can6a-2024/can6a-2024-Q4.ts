@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec une proportionnalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4b9d2'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

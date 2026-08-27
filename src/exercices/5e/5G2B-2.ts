@@ -24,7 +24,6 @@ import {
 } from '../../modules/PatronsPrismes'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
 
 export const titre = 'Reporter des longueurs sur un patron de pavé droit'
 

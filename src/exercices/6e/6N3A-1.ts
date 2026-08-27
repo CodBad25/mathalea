@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const titre = "Calculer la valeur décimale d'une fraction"
 export const dateDePublication = '18/11/2021'

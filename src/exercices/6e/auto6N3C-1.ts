@@ -22,7 +22,7 @@ export const titre =
 
 export const dateDePublication = '27/04/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'adfb1'
 export const refs = {
   'fr-fr': ['auto6N3C-1', '6AutoF2-2'],

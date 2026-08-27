@@ -3,7 +3,7 @@ import QuestionsPrix from './6N5-1'
 export const titre =
   'Résoudre des problèmes de prix mettant en jeu une division'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

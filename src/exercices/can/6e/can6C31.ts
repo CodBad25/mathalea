@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Soustraire un décimal d’un entier'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '09/05/2022'

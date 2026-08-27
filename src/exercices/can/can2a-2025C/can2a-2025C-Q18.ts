@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
-  ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
   reduirePolynomeDegre3,
   rienSi1,
@@ -12,7 +11,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   "Calculer l'image d'un nombre par une fonction polynôme du second degré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'qaqh1'
 export const refs = {
   'fr-fr': [],

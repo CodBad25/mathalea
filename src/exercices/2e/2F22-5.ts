@@ -10,7 +10,7 @@ export const titre =
   'Reconnaître le tableau de variations d’une fonction de référence'
 export const dateDePublication = '11/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 

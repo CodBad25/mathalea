@@ -1,14 +1,14 @@
 import Exercice from '../../Exercice'
 
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 export const titre = 'Trouver deux entiers qui se suivent'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '12/09/2024'
 export const uuid = '4f8ee'
 export const refs = {
@@ -29,7 +29,7 @@ export default class entiersSuivent extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       const n1 = randint(2, 9)
       const n2 = n1 + 1

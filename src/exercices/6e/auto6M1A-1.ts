@@ -11,7 +11,6 @@ import {
 
 export const titre = 'Connaitre les préfixes utilisés dans les unités'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 export const dateDePublication = '17/09/2022'
 

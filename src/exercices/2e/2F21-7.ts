@@ -33,7 +33,6 @@ import Exercice from '../Exercice'
 export const dateDeModifImportante = '20/05/2026'
 export const titre = "Déterminer le signe d'une fonction affine"
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
 
 /**
  * @author Stéphane Guyon+Gilles Mora
@@ -135,7 +134,7 @@ export default class Signefonctionaffine extends Exercice {
     )
     typeDeConsignes = combinaisonListes(typeDeConsignes, this.nbQuestions)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const b = valeursDeB[i]
       let texte = ''
       let texteCorr = ''

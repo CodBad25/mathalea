@@ -2,7 +2,7 @@ import PremierOuPas from '../3e/3A10-1'
 export const titre = "Justifier qu'un nombre est premier ou pas"
 export const dateDeModifImportante = '29/10/2021'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const uuid = 'c04cc'

@@ -23,7 +23,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à une épreuve'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 /**
  * Calculs de probabilités sur une expérience aléatoire à une épreuve.

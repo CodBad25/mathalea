@@ -1,18 +1,18 @@
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 
 export const titre =
   "Etudier le sens de variation d'une suite définie par récurrence"
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '03/10/2024'
 /**
  * @author Samuel Rattoray
@@ -65,7 +65,6 @@ export default class VariationDUneSuiteDefinieParRecurrence extends Exercice {
         alea1: number,
         alea2: number;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (
         listeTypeDeQuestions[i] // listeTypeDeQuestions[i]

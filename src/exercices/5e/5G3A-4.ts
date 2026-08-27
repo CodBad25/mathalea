@@ -21,7 +21,6 @@ export const titre =
   'Construire des symétriques de figures par rapport à un point'
 export const dateDePublication = '28/09/2024'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = 'd37ea'
 export const refs = {

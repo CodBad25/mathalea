@@ -1,5 +1,5 @@
-import { renderSheetMarkup } from '../../lib/customElements/MySpreadSheet'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { renderSheetMarkup } from '../../lib/customElements/MySpreadSheet'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 export const titre = 'Utiliser le vocabulaire statistique et un tableur'
 export const dateDePublication = '18/08/2026'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const uuid = '9f3c1'
 

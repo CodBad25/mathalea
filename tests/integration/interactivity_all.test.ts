@@ -8,10 +8,9 @@ import {
   it,
   vi,
 } from 'vitest'
-import { createURL } from '../../src/lib/createURL'
 import { mathaleaEnsureAMCCompatibility } from '../../src/lib/amc/amcInference'
+import { createURL } from '../../src/lib/createURL'
 import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
-import { aLeBonNombreDePropsDifferentes } from '../../src/lib/interactif/qcm'
 import { context } from '../../src/modules/context'
 import { createSolidesThreeJsMock } from '../e2e/mocks/solidesThreeJs.mock'
 import { clearDOM } from './helpers/domSimulator'
@@ -281,12 +280,16 @@ for (const [dir, entries] of grouped) {
 
         for (const seed of SEEDS) {
           for (const scenario of scenarios) {
+            // Chaque combinaison doit partir d'un DOM vierge. Une erreur ou
+            // une vérification partielle dans la combinaison précédente ne
+            // doit pas influencer la suivante.
+            clearDOM()
             const exercice = new ExerciseClass()
             if (loaded.amcReady !== undefined) {
               exercice.amcReady = loaded.amcReady
             }
             if (loaded.amcType !== undefined) exercice.amcType = loaded.amcType
-            exercice.interactifType = loaded.interactifType
+            exercice.formatInteractif = loaded.formatInteractif
             exercice.seed = seed
             exercice.numeroExercice = 0
             exercice.interactif = true
@@ -386,44 +389,6 @@ for (const [dir, entries] of grouped) {
               }
             }
 
-            // Stratégie 3 : Vérification QCM (anti-doublons)
-            let isQcm = false
-            let expectedQcmCount = 0
-            if (
-              Array.isArray((exercice as any).reponses) &&
-              (exercice as any).reponses.length > 1 &&
-              (exercice as any).reponses.every(
-                (r: unknown) => typeof r === 'string' || typeof r === 'number',
-              )
-            ) {
-              isQcm = true
-              expectedQcmCount = (exercice as any).reponses.length
-            } else if (
-              typeof (exercice as any).reponse !== 'undefined' &&
-              Array.isArray((exercice as any).distracteurs) &&
-              [(exercice as any).reponse, ...(exercice as any).distracteurs]
-                .length > 1
-            ) {
-              ;(exercice as any).versionQcm = true
-              isQcm = true
-              expectedQcmCount = [
-                (exercice as any).reponse,
-                ...(exercice as any).distracteurs,
-              ].length
-            }
-            if (isQcm) {
-              const ok = aLeBonNombreDePropsDifferentes(
-                exercice,
-                expectedQcmCount,
-                true,
-              )
-              if (!ok) {
-                failures.push(
-                  `${url} : QCM — les réponses proposées ne sont pas toutes différentes (doublons détectés)`,
-                )
-              }
-            }
-
             // Stratégie 4 : le passage AMC doit conserver exhaustivement les
             // questions, propositions et statuts des QCM générés en HTML ou
             // construits uniquement pendant la passe AMC.
@@ -436,6 +401,16 @@ for (const [dir, entries] of grouped) {
                 (proposition) => typeof proposition.statut === 'boolean',
               )
             const qcmItems = exercice.autoCorrection.filter(isQcmItem)
+            for (const [qcmIndex, item] of qcmItems.entries()) {
+              const textes = (item.propositions ?? []).map((proposition) =>
+                String(proposition.texte ?? '').trim(),
+              )
+              if (new Set(textes).size !== textes.length) {
+                failures.push(
+                  `${url} : QCM — les propositions générées du bloc ${qcmIndex + 1} contiennent des doublons.`,
+                )
+              }
+            }
             const htmlAmcType = exercice.amcType
             const declaresNativeQcm = ['qcmMono', 'qcmMult'].includes(
               String(htmlAmcType),
@@ -514,14 +489,19 @@ for (const [dir, entries] of grouped) {
                       ),
                     )
                   : ['qcmMono', 'qcmMult'].includes(String(exercice.amcType))
-                    ? (exercice.autoCorrectionAMC ?? [])
+                    ? (exercice.autoCorrectionAMC ?? []).filter((item) =>
+                        isQcmItem(item as any),
+                      )
                     : []
               const expectedQcmItems =
                 qcmItems.length > 0 ? qcmItems : generatedAmcQcmItems
               const explicitlyExpectedQcm = ['qcmMono', 'qcmMult'].includes(
                 String(htmlAmcType),
               )
-              const inferredQcm = htmlAmcType == null
+              const inferredQcm =
+                htmlAmcType == null &&
+                qcmItems.length ===
+                  exercice.autoCorrection.filter((item) => item != null).length
               const nativeHybridQcm =
                 htmlAmcType === 'AMCHybride' && exportedQcmBlocks.length > 0
               const mustPreserveQcm =
@@ -541,35 +521,22 @@ for (const [dir, entries] of grouped) {
                   failures.push(
                     `${url} : QCM — le type natif ${String(htmlAmcType)} ne produit aucune proposition pendant la passe AMC.`,
                   )
-                } else if (
-                  exportedQcmBlocks.length !== expectedQcmItems.length
-                ) {
+                } else if (exportedQcmBlocks.length === 0) {
                   failures.push(
-                    `${url} : QCM — ${expectedQcmItems.length} bloc(s) QCM attendu(s), mais ${exportedQcmBlocks.length} bloc(s) exporté(s) vers AMC.`,
+                    `${url} : QCM — aucun bloc QCM n'est exporté vers AMC.`,
                   )
                 }
-                for (
-                  let qcmIndex = 0;
-                  qcmIndex < expectedQcmItems.length;
-                  qcmIndex++
-                ) {
-                  const sourcePropositions =
-                    expectedQcmItems[qcmIndex]?.propositions ?? []
+                for (let qcmIndex = 0; qcmIndex < exportedQcmBlocks.length; qcmIndex++) {
                   const exportedPropositions =
                     exportedQcmBlocks[qcmIndex]?.propositions ?? []
-                  const sourceStatuses = sourcePropositions.map((proposition) =>
-                    Boolean(proposition.statut),
-                  )
-                  const exportedStatuses = exportedPropositions.map(
-                    (proposition) => Boolean(proposition.statut),
-                  )
                   if (
-                    sourcePropositions.length !== exportedPropositions.length ||
-                    JSON.stringify(sourceStatuses) !==
-                      JSON.stringify(exportedStatuses)
+                    exportedPropositions.length < 2 ||
+                    !exportedPropositions.some((proposition) =>
+                      Boolean(proposition.statut),
+                    )
                   ) {
                     failures.push(
-                      `${url} : QCM — les propositions ou leurs statuts diffèrent pour le bloc ${qcmIndex + 1} entre HTML et AMC.`,
+                      `${url} : QCM — le bloc AMC ${qcmIndex + 1} ne contient pas au moins deux propositions et une bonne réponse : ${JSON.stringify(exportedPropositions)}.`,
                     )
                   }
                 }

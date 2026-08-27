@@ -9,7 +9,7 @@ import Exercice from '../../Exercice'
 
 export const titre = 'Comparer un entier et une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/06/2026'
 /**
  * @author Jean-Claude Lhote
@@ -37,7 +37,7 @@ export default class ComparerFractionEtEntier extends Exercice {
         ? 'Pour chaque question, recopier le plus grand des deux nombres.'
         : 'Recopier le plus grand des deux nombres.'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const signe = this.level === 6 ? 1 : -1
       const denominateur = choice([5, 6, 7, 8, 9])
       const entier = choice([1, 2, 3, 4]) * signe

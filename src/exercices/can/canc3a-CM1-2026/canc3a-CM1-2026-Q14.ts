@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une somme astucieusment'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9f722'
 export const refs = {
   'fr-fr': [],
@@ -18,15 +18,15 @@ export const refs = {
 
 */
 export default class Can2025CM1Q14 extends ExerciceCan {
- enonce(a?: number, b?: number, d?: number) {
+  enonce(a?: number, b?: number, d?: number) {
     if (a == null || b == null || d == null) {
       d = choice([10, 100, 1000])
       a = randint(2, 8)
       b = randint(1, 9)
     }
     const result = a * d + b
-this.optionsDeComparaison = {
-      nombreDecimalSeulement: true
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
     }
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.formatInteractif = 'fillInTheBlank'

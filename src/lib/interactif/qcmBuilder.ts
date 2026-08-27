@@ -114,6 +114,7 @@ export function buildQcmForExercise(
 
   exercice.autoCorrection[questionIndex] = {
     enonce: question,
+    formatInteractif: 'mathalea-qcm',
     options: autoCorrectionOptions,
     propositions: qcmPropositions,
   }

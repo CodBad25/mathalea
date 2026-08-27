@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Développer une identité remarquable'
@@ -23,7 +22,13 @@ export const dateDePublication = '17/06/2026'
  *
  */
 export default class AutoQ1FMt2026 extends ExerciceQcmA {
-private appliquerLesValeurs(total: number, pourcentage: number, dist1: number, dist2: number, dist3: number): void {
+  private appliquerLesValeurs(
+    total: number,
+    pourcentage: number,
+    dist1: number,
+    dist2: number,
+    dist3: number,
+  ): void {
     const sol = (total * pourcentage) / 100
     const dixPourCent = total / 10 // 10 % du total
     const facteur = pourcentage / 10 // 2, 3 ou 4
@@ -39,7 +44,7 @@ private appliquerLesValeurs(total: number, pourcentage: number, dist1: number, d
       `$${texNombre(sol, 0)}$`,
       `$${texNombre(dist1, 0)}$`,
       `$${texNombre(dist2, 0)}$`,
-      `$${texNombre(dist3, 0)}$`
+      `$${texNombre(dist3, 0)}$`,
     ]
   }
 
@@ -59,8 +64,6 @@ private appliquerLesValeurs(total: number, pourcentage: number, dist1: number, d
       const pourcentage = choice([20, 30, 40])
       const total = choice([500, 600, 700, 800])
 
-      
-
       // Distracteurs alignés sur la logique de l'image (500, 20 % → 20 ; 520 ; 10)
       const dist1 = pourcentage // confond le pourcentage avec le résultat
       const dist2 = total + pourcentage // ajoute le pourcentage au total
@@ -68,7 +71,6 @@ private appliquerLesValeurs(total: number, pourcentage: number, dist1: number, d
 
       this.appliquerLesValeurs(total, pourcentage, dist1, dist2, dist3)
       compteur++
-
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 

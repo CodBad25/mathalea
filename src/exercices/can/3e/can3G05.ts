@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -10,12 +9,12 @@ import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { getLang } from '../../../lib/stores/languagesStore'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Utiliser la trigonométrie'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

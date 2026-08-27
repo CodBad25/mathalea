@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre des problèmes de type : ... de plus ou ... de moins'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

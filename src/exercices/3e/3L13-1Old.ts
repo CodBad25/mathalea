@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre une équation du premier degré (utilisant la distributivité)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '24/06/2024'
 
 /**
@@ -48,7 +48,6 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
     this.comment =
       'Les équations sont de la forme :<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$<br>avec des nombres à un chiffre.'
     this.spacing = 2
-    this.interactifType = 'mathLive'
     this.spacingCorr = context.isHtml ? 3 : 2
     this.correctionDetailleeDisponible = true
     if (!context.isHtml) {

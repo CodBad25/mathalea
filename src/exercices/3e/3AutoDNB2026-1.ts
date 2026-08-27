@@ -9,7 +9,7 @@ import Question7 from '../dnbAutomatismes/dnb-2026-06-amerique-du-nord-automatis
 import Question8 from '../dnbAutomatismes/dnb-2026-06-amerique-du-nord-automatisme-Q8'
 export const titre = 'Brevet - Amérique du Nord juin 2026 - Automatismes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9d543'
 export const refs = {
   'fr-fr': ['3AutoDNB2026-1'],
@@ -22,7 +22,16 @@ export const dateDePublication = '06/06/2026'
  * @author Rémi Angot
  */
 
-const questions = [Question1, Question2, Question3, Question4, Question5, Question6, Question7, Question8]
+const questions = [
+  Question1,
+  Question2,
+  Question3,
+  Question4,
+  Question5,
+  Question6,
+  Question7,
+  Question8,
+]
 
 export default class AutoANbrevet2026 extends MetaExercice {
   constructor() {

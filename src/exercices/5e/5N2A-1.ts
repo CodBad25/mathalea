@@ -15,7 +15,6 @@ export const dateDePublication = '26/07/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre = 'Reconnaître un nombre relatif'
 

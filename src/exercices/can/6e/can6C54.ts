@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Compléter une égalité de fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '03/07/2025'
 /**
  * @author Gilles Mora

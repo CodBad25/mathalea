@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre des équations avec la fonction exponentielle'
 export const dateDePublication = '06/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer la dérivée d'une fonction avec exp
@@ -24,7 +23,7 @@ export const interactifType = 'mathLive'
 export const uuid = '61ed0'
 
 export const refs = {
-  'fr-fr': ['1AN30-3','TSA3-21', 'TCA7-21'],
+  'fr-fr': ['1AN30-3', 'TSA3-21', 'TCA7-21'],
   'fr-ch': [''],
 }
 
@@ -50,7 +49,7 @@ export default class DeriveeExp1AN303 extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let value = ''

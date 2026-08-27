@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const dateDePublication = '23/04/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Mettre au même dénominateur des expressions littérales'
 
 /**

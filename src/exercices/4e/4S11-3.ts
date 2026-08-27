@@ -20,7 +20,7 @@ export const titre =
   "Différencier moyenne et médianes sur les salaires d'une entreprise"
 
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const dateDePublication = '15/05/2026'
 
 export const uuid = '0f388'
@@ -50,7 +50,7 @@ export default class MedianeMoyenneSalaires extends Exercice {
         ? 'Calculer la moyenne et la médiane des salaires dans chacune de ces entreprises, et cocher la bonne interprétation.'
         : 'Calculer la moyenne et la médiane des salaires dans cette entreprise, et cocher la bonne interprétation.'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const indiceSalaireBase = randint(17, 22)
       const S1 = indiceSalaireBase * 100
       const S2 = S1 + choice([0, 2]) * 50

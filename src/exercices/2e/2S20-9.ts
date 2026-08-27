@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer la moyenne d'une série regroupée en classes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/08/2026'
 export const uuid = 'eae1d'
 

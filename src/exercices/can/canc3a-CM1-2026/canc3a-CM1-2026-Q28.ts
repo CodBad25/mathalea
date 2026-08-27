@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Trouver le complément à 1 avec des dixièmes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fb8ad'
 export const refs = {
   'fr-fr': [],

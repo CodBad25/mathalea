@@ -25,7 +25,6 @@ import Exercice from '../Exercice'
 export const titre = "Calculer la dérivée d'une fonction avec exponentielle"
 export const dateDePublication = '06/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer la dérivée d'une fonction avec exp
@@ -61,7 +60,7 @@ export default class DeriveeExpOld extends Exercice {
       defaut: 7,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let value = ''

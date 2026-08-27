@@ -6,7 +6,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Ajouter des presque-doubles'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '22/12/2025'

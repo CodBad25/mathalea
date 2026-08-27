@@ -15,7 +15,6 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'custom'
 export const uuid = 'df171'
 export const titre =
   'Placer un point dans un repère orthogonal, normé ou quelconque'

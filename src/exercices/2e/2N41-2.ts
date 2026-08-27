@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
@@ -6,13 +7,12 @@ import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Trouver l'exposant manquant dans des nombres écrits avec des puissances de 10"
 export const dateDePublication = '08/09/2023'
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 
 /**

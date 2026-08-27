@@ -6,7 +6,10 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { sp } from '../../../lib/outils/outilString'
 import { pgcd } from '../../../lib/outils/primalite'
@@ -26,7 +29,7 @@ export const dateDeModifImportante = '11/09/2024'
 export const dateDePublication = '5/08/2021'
 export const titre = 'Course aux nombres fin de 6e'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -88,7 +91,9 @@ export default class CourseAuxNombres6e extends Exercice {
 
   nouvelleVersion() {
     // a, b, c sont conservés hors du switch car utilisés par questionJamaisPosee
-    let a = 0, b = 0, c = 0
+    let a = 0,
+      b = 0,
+      c = 0
 
     let listeIndex: number[]
     // Si la saisie contient des numéros spécifiques (pas 31 = toutes les questions),
@@ -167,10 +172,7 @@ export default class CourseAuxNombres6e extends Exercice {
       'q30', // Proportionnalité par linéarité
     ]
     let q = 0
-    for (
-      let i = 0, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-    ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       let texte = ''
       let texteCorr = ''
@@ -196,11 +198,22 @@ export default class CourseAuxNombres6e extends Exercice {
           texteCorr = `C'est $${frac2.texFraction}$ car $${frac2.texFraction}\\times ${b} = ${a}$`
           if (!frac2.valeurDecimale) {
             handleAnswers(this, q, {
-              reponse: { value: [frac2.texFraction, `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`] },
+              reponse: {
+                value: [
+                  frac2.texFraction,
+                  `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`,
+                ],
+              },
             })
           } else {
             handleAnswers(this, q, {
-              reponse: { value: [frac2.texFraction, String(resultat2), `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`] },
+              reponse: {
+                value: [
+                  frac2.texFraction,
+                  String(resultat2),
+                  `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`,
+                ],
+              },
             })
           }
           texte += ajouteChampTexteMathLive(
@@ -410,7 +423,8 @@ export default class CourseAuxNombres6e extends Exercice {
               break
           }
           texteCorr =
-            texte.slice(0, -1) + ` = 100 \\times ${texNombre(d17)} = ${resultat17}$`
+            texte.slice(0, -1) +
+            ` = 100 \\times ${texNombre(d17)} = ${resultat17}$`
           handleAnswers(this, q, { reponse: { value: resultat17 } })
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierDeBase)
           break
@@ -513,7 +527,12 @@ export default class CourseAuxNombres6e extends Exercice {
           texte += `${propositions25[0]} ${sp(4)} ${propositions25[1]} ${sp(4)} ${propositions25[2]}`
           texteCorr = `La hauteur d'une ${hauteurs[a][0]} est $${miseEnEvidence(b)}$ ${hauteurs[a][3]}.`
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.longueur)
-          handleAnswers(this, q, { reponse: { value: new Grandeur(b, hauteurs[a][3]), options: { unite: true } } })
+          handleAnswers(this, q, {
+            reponse: {
+              value: new Grandeur(b, hauteurs[a][3]),
+              options: { unite: true },
+            },
+          })
           break
         }
         case 'q26': {
@@ -547,10 +566,14 @@ export default class CourseAuxNombres6e extends Exercice {
           texte = `Est-il vrai qu'un carré de côté $${a}$ cm a le même périmètre qu'un rectangle de largeur $${a - b}$ cm et de longueur $${a + 1}$ cm ? (V ou F)`
           if (b === 0) {
             texteCorr = `${texteEnCouleurEtGras('Faux')} car $4\\times ${a}\\text{ cm}$ $\\neq 2\\times ${a}\\text{ cm}$ $+ 2\\times ${a + 1}\\text{ cm}$.`
-            handleAnswers(this, q, { reponse: { value: 'F', options: { texteSansCasse: true } } })
+            handleAnswers(this, q, {
+              reponse: { value: 'F', options: { texteSansCasse: true } },
+            })
           } else {
             texteCorr = `${texteEnCouleurEtGras('Vrai')} car $4\\times ${a}\\text{ cm}$ $= 2\\times ${a - 1}\\text{ cm}$ $+ 2\\times ${a + 1}\\text{ cm}$ $= ${4 * a}\\text{ cm}$.`
-            handleAnswers(this, q, { reponse: { value: 'V', options: { texteSansCasse: true } } })
+            handleAnswers(this, q, {
+              reponse: { value: 'V', options: { texteSansCasse: true } },
+            })
           }
           texte += ajouteChampTexteMathLive(
             this,
@@ -596,11 +619,22 @@ export default class CourseAuxNombres6e extends Exercice {
           texteCorr = `L'abscisse du point A est $${miseEnEvidence(`\\dfrac{${b}}{${a}}`)}$.`
           if (a === 3) {
             handleAnswers(this, q, {
-              reponse: { value: [frac29.texFraction, `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`] },
+              reponse: {
+                value: [
+                  frac29.texFraction,
+                  `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`,
+                ],
+              },
             })
           } else {
             handleAnswers(this, q, {
-              reponse: { value: [frac29.texFraction, String(resultat29), `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`] },
+              reponse: {
+                value: [
+                  frac29.texFraction,
+                  String(resultat29),
+                  `${Math.floor(a / b)}+\\dfrac{${a % b}}{${b}}`,
+                ],
+              },
             })
           }
           texte += ajouteChampTexteMathLive(

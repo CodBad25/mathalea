@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une fonction dérivée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4f56c'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

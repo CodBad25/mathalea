@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Additionner des m et des cm'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7b3df'
 export const refs = {
   'fr-fr': [],

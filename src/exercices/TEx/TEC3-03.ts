@@ -24,7 +24,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Utiliser $\\cos(\\theta+\\theta^\\prime)=\\cos(\\theta)\\cos(\\theta^\\prime)-\\sin(\\theta)\\sin(\\theta^\\prime)$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '91bbd'
 export const refs = {
   'fr-fr': ['TEC3-03'],
@@ -63,7 +63,7 @@ export default class AcosOmegaTPlusBSinOmegaT extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       const { a, b, A, aSurA, moinsBSurA, phi } = listeDeValeurs[i]
       const w = randint(1, 5) * choice([-1, 1])
       const moinsB =

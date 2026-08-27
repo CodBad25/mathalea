@@ -2,7 +2,6 @@ import TableauxEtPourcentages from './_Tableaux_et_pourcentages'
 
 export const titre = 'Utiliser un pourcentage - Pourcentage fixe'
 export const interactifReady = true
-export const interactifType = 'tableau-mathlive'
 
 /**
  * * Tableaux et pourcentages prix constant

@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre = 'Dénombrer des mains de cartes'
 export const dateDePublication = '05/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b3t2e'
 export const refs = {
   'fr-fr': [],
@@ -96,7 +96,7 @@ export default class MainsCartes extends Exercice {
     const jeu = choice(jeux)
     this.consigne = `On considère un ${jeu.nom} (${jeu.couleurs} couleurs de ${jeu.valeurs} cartes chacune).`
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = 0

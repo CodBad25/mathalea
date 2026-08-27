@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Égalité de fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a3y3b'
 export const refs = {
   'fr-fr': [],

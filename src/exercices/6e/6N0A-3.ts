@@ -2,7 +2,6 @@ import FabriqueAYohaku from './_Yohaku'
 export const titre = 'Résoudre un Yohaku additif'
 export const dateDePublication = '10/08/2022'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '16/12/2023'

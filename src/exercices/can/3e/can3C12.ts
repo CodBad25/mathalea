@@ -1,14 +1,14 @@
 import Exercice from '../../Exercice'
 
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 export const titre = 'Encadrer une racine carrée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '20/09/2024'
 /**
  * @author Gilles Mora
@@ -31,7 +31,7 @@ export default class EncadreRacine extends Exercice {
   nouvelleVersion() {
     this.spacingCorr = 1.5
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
 
       const a = randint(3, 125, [4, 9, 16, 25, 36, 49, 64, 81, 100, 121])

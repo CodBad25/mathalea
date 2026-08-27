@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire une fraction le plus simplement possible'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const dateDePublication = '14/09/2025'
 

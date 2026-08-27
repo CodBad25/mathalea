@@ -1,14 +1,13 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { arrondi } from '../../../lib/outils/nombres'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Donner un arrondi'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'dm6qq'
 export const refs = {
   'fr-fr': [],
@@ -27,7 +26,7 @@ export default class Can1a2022Q15 extends ExerciceCan {
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
- enonce(nbre?: number, typeArrondi?: string) {
+  enonce(nbre?: number, typeArrondi?: string) {
     if (nbre == null || typeArrondi == null) {
       const a = randint(1, 9)
       let b = randint(1, 9)

@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': ['10FA1B-8', '1mF1-14'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Effectuer le calcul d'images dans une fonction"

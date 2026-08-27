@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 export const titre = 'Effectuer la somme de deux nombres mariés'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 /**

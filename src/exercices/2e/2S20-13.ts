@@ -23,7 +23,6 @@ export const titre =
 export const dateDePublication = '22/08/2026'
 export const uuid = 'a4f3c'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const refs = {
   'fr-fr': ['2S20-13'],

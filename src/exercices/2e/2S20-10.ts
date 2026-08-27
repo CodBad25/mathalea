@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer à la main la moyenne et l'écart-type d'une série"
 export const interactifReady = true
-export const interactifType = 'tableau-mathlive'
+
 export const dateDePublication = '18/08/2026'
 export const uuid = '81e37'
 

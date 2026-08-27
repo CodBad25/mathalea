@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Diviser par un décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ajc3q'
 export const refs = {
   'fr-fr': [],

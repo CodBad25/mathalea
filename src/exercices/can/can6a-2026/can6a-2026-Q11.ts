@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'pb769'
 export const refs = {
   'fr-fr': [],
@@ -19,13 +19,13 @@ export const refs = {
 
 */
 export default class Can20266Q11 extends ExerciceCan {
-    enonce(a?: number, b?: number, c?: number) {
+  enonce(a?: number, b?: number, c?: number) {
     if (a == null || b == null || c == null) {
       b = choice([5, 50, 25])
       c = b === 5 ? 10 : b === 50 ? 100 : 50
       a = randint(12, 18) * (c / b)
     }
-    const result = a * b / c
+    const result = (a * b) / c
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.formatInteractif = 'fillInTheBlank'

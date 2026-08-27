@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Trouver des phrases avec les mots : divisible, diviseur et multiple'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Compléter des phrases avec les mots divisible, divieur et multiple

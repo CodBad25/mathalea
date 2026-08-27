@@ -14,7 +14,7 @@ import MetaExercice from '../MetaExerciceCan'
 
 export const titre = 'Antilles Guyane Techno'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'da7dc'
 export const refs = {
   'fr-fr': ['1A-A01-11'],

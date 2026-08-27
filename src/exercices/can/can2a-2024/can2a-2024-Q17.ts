@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Rendre une fraction irréductible'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2c801'
 /**
  * @author Gilles Mora

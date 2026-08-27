@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 export const titre = 'Trouver un nombre entre deux valeurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4l5vw'
 export const refs = {
   'fr-fr': [],
@@ -27,11 +27,13 @@ export default class nombreEntreDeuxValeurs2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee =2026
+    const annee = 2026
     const valInf = new Decimal(annee).div(
       this.canOfficielle ? 100 : this.quotaChoice('diviseur', [100, 1000]),
     )
-    const valSup = this.canOfficielle ? valInf.add(0.01) : choice([valInf.add(0.01), valInf.add(0.001)])
+    const valSup = this.canOfficielle
+      ? valInf.add(0.01)
+      : choice([valInf.add(0.01), valInf.add(0.001)])
     this.reponse = {
       reponse: {
         value: `]${valInf};${valSup}[`,

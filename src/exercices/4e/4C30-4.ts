@@ -17,7 +17,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 
 export const titre = 'Associer puissances de 10 et préfixes'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '12/04/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -47,7 +47,6 @@ export default class PuissancesEtPrefixe extends Exercice {
   }
 
   nouvelleVersion() {
-    this.interactifType = this.sup === 1 ? 'listeDeroulante' : 'mathLive'
     this.consigne =
       this.sup === 1
         ? 'Trouver le préfixe correspondant ' +

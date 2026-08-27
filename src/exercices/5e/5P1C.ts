@@ -35,7 +35,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Agrandir ou réduire des figures, d'après une situation de proportionnalité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '13/03/2022'

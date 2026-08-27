@@ -2,7 +2,7 @@ import ResoudreEquationsFonctionDeReference2 from './can2F3-04_old'
 
 export const titre = 'Résoudre une équation $b-\\dfrac{1}{x}=c$'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '18/08/2026'
 export const uuid = '6dfa9'
 export const refs = { 'fr-fr': [], 'fr-ch': [] }

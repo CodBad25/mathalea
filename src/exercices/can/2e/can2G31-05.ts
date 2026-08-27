@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer un coefficient directeur à partir des coordonnées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '08/07/2025'
 export const uuid = '0ea37'
 export const refs = {

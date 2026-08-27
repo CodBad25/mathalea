@@ -1,9 +1,9 @@
-import { context } from '../../modules/context'
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { orangeMathalea } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -21,7 +21,7 @@ export const refs = {
 }
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

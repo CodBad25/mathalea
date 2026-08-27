@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre des équations logarithmiques'
 export const dateDePublication = '18/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2l11f'
 export const refs = {
   'fr-fr': [],
@@ -94,7 +94,7 @@ export default class EquationsLogarithmiques extends Exercice {
       shuffle: true,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse: string | string[] = ''
@@ -580,7 +580,10 @@ export default class EquationsLogarithmiques extends Exercice {
             const negResultatArrondi = resultatArrondi.neg()
             texteCorr += `Les deux solutions sont non nulles, donc elles appartiennent au domaine.<br>`
             texteCorr += `$S \\approx \\left\\{ ${miseEnEvidence(texNombre(negResultatArrondi, 3, true))}\\,;\\, ${miseEnEvidence(texNombre(resultatArrondi, 3, true))} \\right\\}$`
-            reponse = [negResultatArrondi.toFixed(3), resultatArrondi.toFixed(3)]
+            reponse = [
+              negResultatArrondi.toFixed(3),
+              resultatArrondi.toFixed(3),
+            ]
           } else {
             texteCorr += `Vérifions que la solution appartient au domaine :<br>`
             texteCorr += `$x \\approx ${texNombre(resultatArrondi, 3, true)} > 0 \\quad \\implies \\quad x \\in D$<br>`
@@ -991,9 +994,14 @@ export default class EquationsLogarithmiques extends Exercice {
       if (this.interactif) {
         const isExactType =
           typeQuestion === 'produitLog' || typeQuestion === 'quotientLog'
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble, {
-          texteAvant: isExactType ? '<br>$S =$ ' : '<br>$S \\approx$ ',
-        })
+        texte += ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierEnsemble,
+          {
+            texteAvant: isExactType ? '<br>$S =$ ' : '<br>$S \\approx$ ',
+          },
+        )
         let reponseSet: string
         if (reponse === '\\emptyset') {
           reponseSet = '\\emptyset'

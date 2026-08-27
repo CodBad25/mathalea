@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Calculer une durée à partir d'une vitesse moyenne"
 export const dateDePublication = '06/06/2026'
 

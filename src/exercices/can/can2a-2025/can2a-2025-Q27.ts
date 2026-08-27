@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer un antécédent'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2820d'
 export const refs = {
   'fr-fr': [],

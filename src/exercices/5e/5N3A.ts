@@ -22,7 +22,6 @@ export const titre =
   'Comparer quatre fractions (dénominateurs multiples) et un nombre entier'
 export const dateDeModifImportante = '20/05/2025'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 /**
  * 4 fractions aux dénominateurs multiples et un nombre entier sont donnés, il faut les classer dans l'ordre croissant.

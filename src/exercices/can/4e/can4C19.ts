@@ -4,7 +4,7 @@ import {
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const titre = 'Multiplier des entiers relatifs'
 export const dateDePublication = '04/10/2023'

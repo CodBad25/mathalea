@@ -6,7 +6,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomM } from '../../../lib/outils/Personne'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'mmqav'
 export const refs = {
   'fr-fr': [],
@@ -29,7 +29,9 @@ export default class resoudreUnProbleme2026 extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     const prenoms = prenomM(2)
-    this.reponse = this.canOfficielle ? 8 : this.quotaRandint('reponse', 8, 12, [10])
+    this.reponse = this.canOfficielle
+      ? 8
+      : this.quotaRandint('reponse', 8, 12, [10])
     const a = this.reponse * 2
     const b = annee + a
     this.question = `${prenoms[0]} a $${texNombre(annee, 0)}$ € et ${prenoms[1]} a $${texNombre(b, 0)}$ €.<br>

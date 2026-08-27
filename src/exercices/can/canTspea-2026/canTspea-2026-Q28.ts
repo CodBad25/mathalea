@@ -8,9 +8,10 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer la valeur d\'un paramètre pour que le point appartienne à un plan'
+export const titre =
+  "Calculer la valeur d'un paramètre pour que le point appartienne à un plan"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '69jkh'
 export const refs = {
   'fr-fr': [],

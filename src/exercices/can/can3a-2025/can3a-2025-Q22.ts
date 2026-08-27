@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une moyenne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '93a9e'
 export const refs = {
   'fr-fr': [''],

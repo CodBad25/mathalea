@@ -1,7 +1,7 @@
 import CalculerRaisonSuite from '../1e/1AL11-5'
 export const titre = "Calculer la raison d'une suite arithmétique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

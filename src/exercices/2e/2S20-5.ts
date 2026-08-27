@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer une médiane ou un quartile à partir d'un tableau d'effectifs"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/08/2026'
 export const uuid = '640f6'
 

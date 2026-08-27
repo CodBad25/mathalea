@@ -1,24 +1,24 @@
-import Exercice from '../Exercice'
+import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
+import Exercice from '../Exercice'
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebriqueSauf0,
   ecritureParentheseSiMoins,
 } from '../../lib/outils/ecritures'
-import FractionEtendue from '../../modules/FractionEtendue'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import FractionEtendue from '../../modules/FractionEtendue'
 
 export const titre = "Utiliser l'inégalité de concentration"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const dateDePublication = '22/05/2026'
 
@@ -55,7 +55,7 @@ export default class Concentration extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const mu = randint(-10, 10, 0)
       const variance = randint(1, 8) / 10
       const n = randint(10, 100) * 10

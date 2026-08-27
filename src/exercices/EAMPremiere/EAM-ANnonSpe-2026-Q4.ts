@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Estimer un ordre de grandeur '
@@ -23,7 +23,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ4ANns2026 extends ExerciceQcmA {
-// a : puissance pour le 1er nombre (10^a - 1)
+  // a : puissance pour le 1er nombre (10^a - 1)
   // b : puissance pour le 2e nombre (10^b + 1)
   // dist : tableau contenant les puissances des 3 distracteurs
   private appliquerLesValeurs(a: number, b: number, dist: number[]): void {
@@ -40,7 +40,7 @@ export default class AutoQ4ANns2026 extends ExerciceQcmA {
       `$${texNombre(expected, 0)}$`,
       `$${texNombre(Math.pow(10, dist[0]), 0)}$`,
       `$${texNombre(Math.pow(10, dist[1]), 0)}$`,
-      `$${texNombre(Math.pow(10, dist[2]), 0)}$`
+      `$${texNombre(Math.pow(10, dist[2]), 0)}$`,
     ]
   }
 
@@ -76,7 +76,7 @@ export default class AutoQ4ANns2026 extends ExerciceQcmA {
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
-  // Si la méthode n'est pas héritée directement avec un alias global, 
+  // Si la méthode n'est pas héritée directement avec un alias global,
   // on utilise la méthode interne de ExerciceQcmA : this.aLeBonNombreDePropsDifferentes(4)
 
   constructor() {

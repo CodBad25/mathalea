@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une probabilité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8ef85'
 export const refs = {
   'fr-fr': [''],

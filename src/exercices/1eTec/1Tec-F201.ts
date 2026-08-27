@@ -23,7 +23,6 @@ export const refs = {
 }
 
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export default class ParaboleAExpression extends ExpressionAParabole {
   // Nombre de pixels par unité graphque

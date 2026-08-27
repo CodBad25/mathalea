@@ -17,7 +17,6 @@ import Exercice from '../Exercice'
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { bleuMathalea } from '../../lib/colors'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
-import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import {
   allerA,
   angleScratchTo2d,
@@ -32,7 +31,7 @@ import {
 import { scratchblock } from '../../modules/scratchblock'
 
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Programmer la tortue Scratch avec des répétitions'
@@ -651,7 +650,7 @@ export default class AlgoTortue extends Exercice {
     this.autoCorrection[0].propositions![
       ordreLutins.indexOf(bonneReponse)
     ].statut = true
-    setCliqueFigure(this.autoCorrection[0])
+    this.autoCorrection[0].formatInteractif = 'clique-figure'
     this.indiceBonneFigure = ordreLutins.indexOf(bonneReponse)
     // Ici, la figure contient la grille, le point de départ et le lutin qui s'anime sur sa trace...
     texteCorr += `La bonne figure est la figure ${this.indiceBonneFigure + 1}<br>

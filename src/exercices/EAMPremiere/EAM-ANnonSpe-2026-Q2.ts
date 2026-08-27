@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Effectuer un calcul avec des fractions '
@@ -23,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ2ANns2026 extends ExerciceQcmA {
-   // C = (a1/b1) + n × (num2/den2), avec den2 = n × b1
+  // C = (a1/b1) + n × (num2/den2), avec den2 = n × b1
   // => n se simplifie avec den2, puis addition à dénominateur b1.
   private appliquerLesValeurs(
     a1: number,
@@ -40,10 +39,7 @@ export default class AutoQ2ANns2026 extends ExerciceQcmA {
     const correct = new FractionEtendue(a1 + num2, b1)
 
     // Distracteurs (erreurs classiques)
-    const dPriorite = new FractionEtendue(
-      (a1 + n * b1) * num2,
-      n * b1 * b1,
-    ) // (frac1 + n) × frac2 : oubli de la priorité
+    const dPriorite = new FractionEtendue((a1 + n * b1) * num2, n * b1 * b1) // (frac1 + n) × frac2 : oubli de la priorité
     const dOubliDen = new FractionEtendue(a1 + n * num2 * b1, b1) // frac1 + n×num2 : oubli du dénominateur de frac2
     const dSoustraction = new FractionEtendue(num2 - a1, b1) // n×frac2 − frac1 : soustraction au lieu d'addition
 
@@ -91,7 +87,7 @@ C&=${frac1.texFraction}+${n}\\times ${frac2.texFraction}\\\\
     ]
     const [a1, b1, n, num2] = choice(donnees)
     this.appliquerLesValeurs(a1, b1, n, num2)
-     let compteur = 0
+    let compteur = 0
     do {
       const [a1, b1, n, num2] = choice(donnees)
       this.appliquerLesValeurs(a1, b1, n, num2)

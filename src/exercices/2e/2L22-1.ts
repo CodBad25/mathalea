@@ -21,7 +21,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { sp } from '../../lib/outils/outilString'
 export const titre = 'Résoudre les équations produit-nul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/02/2021'
 
 /**

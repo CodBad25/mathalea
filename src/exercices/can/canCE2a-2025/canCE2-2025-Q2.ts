@@ -2,7 +2,7 @@ import Can2025N5Q1 from '../can5a-2025/can5a-2025-Q1'
 
 export const titre = 'Tables de multiplication'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5160f'
 export const refs = {
   'fr-fr': [],

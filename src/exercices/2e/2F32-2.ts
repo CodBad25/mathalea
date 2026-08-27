@@ -25,7 +25,6 @@ export const titre = 'Résoudre graphiquement une équation ou une inéquation'
 export const dateDePublication = '29/10/2023'
 export const dateDeModifImportante = '24/04/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résoudre graphiquement une équation ou une inéquation

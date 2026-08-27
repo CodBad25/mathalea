@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
@@ -11,10 +12,8 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une image avec un quotient'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

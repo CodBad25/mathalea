@@ -5,7 +5,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Limite de $\\dfrac{a+n^m}{n^p}$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '9cdad'
 export const refs = {

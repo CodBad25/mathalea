@@ -11,7 +11,6 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Calculer  une probabilité avec un tableau'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '29/04/2025'
 
@@ -65,7 +64,6 @@ export default class CalculerProbaTableau extends Exercice {
         listeEV,
         ev;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       listeEV = [
         ['A', 'B'],

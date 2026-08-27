@@ -9,7 +9,6 @@ import Exercice from '../Exercice'
 export const dateDePublication = '02/08/2025'
 export const titre = 'Choisir les bonnes unités de mesure de durées longues'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 /**
  * Choisir les bonnes unités de mesure de durées longues
@@ -30,7 +29,7 @@ export default class AutoChoisirDureeAnnees extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const durees = [
         ['millénaire', 'années', texNombre(1000), 'mil', 'a'],
         ['siècle', 'années', '100', 's', 'a'],

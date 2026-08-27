@@ -10,7 +10,7 @@ import MetaExercice from '../MetaExerciceCan'
 
 export const titre = 'Polynésie Sans Spécialité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'psp26'
 export const refs = {
   'fr-fr': ['1A-A01-13'],

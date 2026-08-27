@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Compléter une égalité avec une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1h3ps'
 export const refs = {
   'fr-fr': [],

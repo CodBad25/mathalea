@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre des problèmes mettant en jeu des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/08/2025'
 export const uuid = '67f72'
 

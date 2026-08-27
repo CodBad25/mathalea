@@ -13,7 +13,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 // export const titre = 'Compléter des égalités contenant une fraction décimale de numérateur 1'
 export const titre =
   'Restituer, de manière automatique, des relations entre fractions décimales et nombres décimaux'

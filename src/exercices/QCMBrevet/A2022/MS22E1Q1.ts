@@ -1,7 +1,7 @@
-import ExerciceQcmA from '../../ExerciceQcmA'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
+import ExerciceQcmA from '../../ExerciceQcmA'
 
 export const uuid = '2f4e0'
 export const refs = {
@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': ['10QCM-10'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calcul avec des puissances (septembre 2022 Métropole)'

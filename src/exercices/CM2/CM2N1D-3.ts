@@ -22,7 +22,6 @@ export const refs = {
 export const dateDeModifImportante = '31/01/2026'
 export const titre = 'Décomposer des nombres entiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Decomposition d'entier version 1 : il faut compléter une décomposition écrite avec des trous pour les chiffres
@@ -74,7 +73,7 @@ class Decomp1 extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       const ordonne =
         this.sup4 < 3 || (this.sup4 === 5 && choice([true, false]))
       const nombreArray: number[] = []

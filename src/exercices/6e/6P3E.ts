@@ -3,7 +3,7 @@ import EchellesProblemes from '../5e/5P1A-2'
 export const titre = "Utiliser ou trouver l'échelle d'un plan"
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

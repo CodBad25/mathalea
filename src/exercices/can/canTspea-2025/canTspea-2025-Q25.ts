@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer un terme d'une suite récurrente"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'aa613'
 export const refs = {
   'fr-fr': [],

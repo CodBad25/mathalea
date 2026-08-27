@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un prix après une réduction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'idhrn'
 export const refs = {
   'fr-fr': [],

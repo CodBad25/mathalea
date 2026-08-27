@@ -5,7 +5,6 @@ export const titre = 'Connaître les carrés parfaits'
 export const dateDePublication = '29/10/2025'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '75b05'
 export const refs = {

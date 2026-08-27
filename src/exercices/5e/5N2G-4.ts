@@ -13,7 +13,7 @@ export const titre =
   'Additionner deux entiers relatifs dans un tableau à double entrée'
 export const dateDeModifImportante = '07/04/2026'
 export const interactifReady = true
-export const interactifType = 'tableau-mathlive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

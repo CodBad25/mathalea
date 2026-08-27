@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre une équation du second degré se ramenant au premier degré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '21/06/2023' // EE : Rajout d'un paramètre, correction de coquilles, création interactivité et meilleure conclusion des corrections
 /**
  *

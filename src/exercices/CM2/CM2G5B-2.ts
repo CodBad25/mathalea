@@ -1,6 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { point3d } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
 import { pave3d } from '../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -20,13 +21,11 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Nommer des faces dans un pavé droit'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
 
 export const dateDePublication = '06/11/2022'
 
@@ -105,7 +104,6 @@ export default class LireFacePaveDroit extends Exercice {
 
   nouvelleVersion() {
     this.sup4 = contraindreValeur(2, 6, this.sup4, 6)
-    this.interactifType = this.sup3 === 2 ? 'mathLive' : 'qcm'
 
     const typesDeQuestionsIndisponibles = gestionnaireFormulaireTexte({
       max: 6,
@@ -195,9 +193,9 @@ export default class LireFacePaveDroit extends Exercice {
           options: {
             ordered: false,
           },
+          propositions: [],
         }
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-        this.autoCorrection[i].propositions = []
       }
 
       for (let ee = 0; ee < Math.min(choixFace.length, this.sup); ee++) {
@@ -223,7 +221,7 @@ export default class LireFacePaveDroit extends Exercice {
         texteCorr += `${resultatsPossibles[resultatsPossibles.length - 2]} ou ${resultatsPossibles[resultatsPossibles.length - 1]}.<br>`
 
         if (
-          (this.interactifType && this.interactifType === 'qcm') ||
+          this.sup3 !== 2 ||
           context.isAmc
         ) {
           resultatsImpossibles = []
@@ -241,7 +239,7 @@ export default class LireFacePaveDroit extends Exercice {
           }
         }
         this.autoCorrection[indiceQuestion] = {}
-        if (this.interactifType === 'qcm') {
+        if (this.sup3 !== 2) {
           this.autoCorrection[indiceQuestion].enonce = `${texte}\n`
           this.autoCorrection[indiceQuestion].propositions = [
             {

@@ -28,7 +28,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Compléter des égalités à trou multiplicatives'
 export const dateDePublication = '07/07/2025'

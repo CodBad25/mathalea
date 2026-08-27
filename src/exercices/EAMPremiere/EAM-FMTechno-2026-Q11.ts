@@ -1,4 +1,3 @@
-
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -12,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Déterminer une probabilité conditionnelle'
@@ -24,7 +23,13 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ11FMt2026 extends ExerciceQcmA {
-private appliquerLesValeurs(n11: number, n12: number, n21: number, n22: number, typeQuestion: number): void {
+  private appliquerLesValeurs(
+    n11: number,
+    n12: number,
+    n21: number,
+    n22: number,
+    typeQuestion: number,
+  ): void {
     const totL1 = n11 + n12
     const totL2 = n21 + n22
     const totC1 = n11 + n21
@@ -86,15 +91,21 @@ private appliquerLesValeurs(n11: number, n12: number, n21: number, n22: number, 
     // =========================================================================
     // CREATION DES DEUX VERSIONS DU TABLEAU (HTML vs LaTeX)
     // =========================================================================
-    
+
     const tableauHtml = tableauColonneLigne(
       ['', '\\text{Avec sac}', '\\text{Sans sac}', '\\text{Total}'],
       ['\\text{Avec fil}', '\\text{Sans fil}', '\\text{Total}'],
       [
-        n11.toString(), n12.toString(), totL1.toString(),
-        n21.toString(), n22.toString(), totL2.toString(),
-        totC1.toString(), totC2.toString(), total.toString()
-      ]
+        n11.toString(),
+        n12.toString(),
+        totL1.toString(),
+        n21.toString(),
+        n22.toString(),
+        totL2.toString(),
+        totC1.toString(),
+        totC2.toString(),
+        total.toString(),
+      ],
     )
 
     const tableauLatex = `\\begin{center}\\begin{tblr}{colspec={|c|c|c|c|}, hlines, vlines}
@@ -107,7 +118,7 @@ private appliquerLesValeurs(n11: number, n12: number, n21: number, n22: number, 
     // =========================================================================
     // SÉPARATION DE L'ÉNONCÉ POUR ÉVITER LES ERREURS DE SAUTS DE LIGNE EN LATEX
     // =========================================================================
-    
+
     if (context.isHtml) {
       // Version Web avec les balises <br>
       this.enonce = `Le tableau ci-dessous donne la répartition des achats d'aspirateurs d'un magasin d'électroménager.<br><br>`
@@ -127,15 +138,15 @@ private appliquerLesValeurs(n11: number, n12: number, n21: number, n22: number, 
     this.correction += `Parmi ces $${den}$ clients, l'effectif de ceux ayant acheté un aspirateur ${cibleNom} est de $${num}$.<br>`
     this.correction += `La probabilité est donc : $${miseEnEvidence(`\\dfrac{${num}}{${den}}`)}$.`
 
-    const dist1 = `\\dfrac{${num}}{${dist1_den}}` 
-    const dist2 = `\\dfrac{${num}}{${total}}` 
+    const dist1 = `\\dfrac{${num}}{${dist1_den}}`
+    const dist2 = `\\dfrac{${num}}{${total}}`
     const dist3 = `\\dfrac{${num}}{${dist3_den}}`
 
     this.reponses = [
       `$\\dfrac{${num}}{${den}}$`,
       `$${dist1}$`,
       `$${dist2}$`,
-      `$${dist3}$`
+      `$${dist3}$`,
     ]
   }
 
@@ -157,12 +168,16 @@ private appliquerLesValeurs(n11: number, n12: number, n21: number, n22: number, 
       const n12 = randint(30, 90)
       const n21 = randint(15, 40)
       const n22 = randint(45, 100)
-      
+
       const typeQuestion = randint(1, 4)
-      
+
       this.appliquerLesValeurs(n11, n12, n21, n22, typeQuestion)
       compteur++
-    } while (compteur < 100 && numEssais < 500 && !aLeBonNombreDePropsDifferentes(this, 4, true))
+    } while (
+      compteur < 100 &&
+      numEssais < 500 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true)
+    )
   }
 
   constructor() {

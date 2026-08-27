@@ -26,7 +26,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const titre = "Tracer une droite à partir d'une équation cartésienne"
 export const dateDePublication = '09/03/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * @author Jean-Léon HENRY (adapté de 2G30-9)

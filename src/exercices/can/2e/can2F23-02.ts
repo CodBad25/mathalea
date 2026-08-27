@@ -2,7 +2,7 @@ import AntecedentFonctionReference from './can2F3-02_old'
 
 export const titre = 'Déterminer un antécédent avec la fonction inverse'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/08/2026'
 
 export const uuid = 'c63ea'

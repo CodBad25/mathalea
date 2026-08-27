@@ -5,13 +5,14 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Les femmes députées : proportions et taux d\'évolution (QCM)'
+export const titre =
+  "Les femmes députées : proportions et taux d'évolution (QCM)"
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'cf328'
 export const refs = {
-  'fr-fr': [ 'EgaliteFG5-2de-2', 'EgaliteFG6-1e-2'],
+  'fr-fr': ['EgaliteFG5-2de-2', 'EgaliteFG6-1e-2'],
   'fr-ch': [],
 }
 
@@ -26,7 +27,11 @@ export default class EgaliteFGLycee2 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
       '<br><br>Le tableau suivant donne pour la France le nombre de femmes députées et le nombre total de députés pour toutes les législatures de 1945 à 2007. Ces nombres sont ceux obtenus lors des élections générales et ne tiennent pas compte des modifications intervenues en cours de législatures (démissions, élections anticipées, etc.).<br>'
@@ -74,7 +79,8 @@ export default class EgaliteFGLycee2 extends Exercice {
       'Ve République & 13e législature & 10 et 17 juin 2007 & 117 & 577 \\\\\n\\hline\n' +
       '\\end{tabular}\\end{center}\n'
     this.consigne += context.isHtml ? tableauHtml : tableauLatex
-    this.consigne += "Pour chacune des questions suivantes, une seule réponse est correcte. L'indiquer en justifiant."
+    this.consigne +=
+      "Pour chacune des questions suivantes, une seule réponse est correcte. L'indiquer en justifiant."
     this.nbQuestions = 5
     this.nbQuestionsModifiable = false
   }
@@ -90,15 +96,14 @@ export default class EgaliteFGLycee2 extends Exercice {
       options: { ordered: true, radio: true },
       propositions: [
         { texte: 'la 1ère Assemblée Constituante', statut: false },
-        { texte: "la 1ère législature de la IVe République", statut: true },
-        { texte: "la 7ème législature de la Ve République", statut: false },
+        { texte: 'la 1ère législature de la IVe République', statut: true },
+        { texte: 'la 7ème législature de la Ve République', statut: false },
       ],
     }
     const monQcm0 = propositionsQcm(this, 0)
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
-    const correction0 =
-      `$\\dfrac{33}{586}\\approx 5{,}63\\,\\%$ ; $\\dfrac{42}{619}\\approx 6{,}79\\,\\%$ ; $\\dfrac{26}{491}\\approx 5{,}30\\,\\%$. $${miseEnEvidence("\\text{La plus grande proportion est donc obtenue lors de la 1ère législature de la IVe République}")}$.`
+    const correction0 = `$\\dfrac{33}{586}\\approx 5{,}63\\,\\%$ ; $\\dfrac{42}{619}\\approx 6{,}79\\,\\%$ ; $\\dfrac{26}{491}\\approx 5{,}30\\,\\%$. $${miseEnEvidence('\\text{La plus grande proportion est donc obtenue lors de la 1ère législature de la IVe République}')}$.`
 
     const texteQ1 =
       "Le taux d'évolution du nombre de femmes députées, arrondi à $0{,}01\\,\\%$ près, de la 12e à la 13e législature de la Ve République est :"
@@ -162,8 +167,7 @@ export default class EgaliteFGLycee2 extends Exercice {
     const monQcm4 = propositionsQcm(this, 4)
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 =
-      `La proportion passe de $0{,}0164$ (4e législature) à $0{,}0163$ (5e législature) : elle diminue, donc $${miseEnEvidence("\\text{le taux d'évolution est strictement négatif}")}$.`
+    const correction4 = `La proportion passe de $0{,}0164$ (4e législature) à $0{,}0163$ (5e législature) : elle diminue, donc $${miseEnEvidence("\\text{le taux d'évolution est strictement négatif}")}$.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

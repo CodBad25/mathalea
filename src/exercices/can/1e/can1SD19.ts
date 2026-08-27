@@ -8,7 +8,6 @@ import Exercice from '../../Exercice'
 export const titre =
   'Résoudre une inéquation du second degré (cas particuliers)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '12/10/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -42,7 +41,7 @@ export default class InequationCasParticuliers extends Exercice {
       solution4,
       inegalite,
       props
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
         choice([1, 2, 3]) //, 2, 3
       ) {

@@ -108,7 +108,11 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 
 Les index sans entrée dans `autoCorrection` sont ignorés : un exercice peut donc mélanger des questions interactives et des questions sans réponse attendue (démonstration, rédaction, justification), y compris au milieu de la liste. Ces questions ne sont ni vérifiées ni comptées dans le score. Sans ce filtrage, l'index sans réponse tomberait sur le format `mathlive` par défaut et déclencherait l'erreur « Vérification MathLive appelée sur une question sans réponse » de `getQuestionData()` dans `src/lib/interactif/mathLiveVerifications.ts`.
 
-Exception de compatibilité : si l'exercice porte encore `interactifType = 'custom'`, les questions sans `formatInteractif` explicite sont corrigées comme des questions `custom` historiques, via `correctionInteractive(i)`. Les questions qui déclarent leur propre `autoCorrection[i].formatInteractif` gardent en revanche leur dispatch question par question : un même exercice legacy peut donc mélanger une question `custom` et une question corrigée par le `verifQuestion()` d'un custom element.
+`interactifType` n'existe plus : il ne doit être ni exporté par un module ni
+renseigné sur une instance d'exercice. Toute question interactive doit déclarer
+`autoCorrection[i].formatInteractif`. Une `correctionInteractive(i)` résiduelle
+est enregistrée comme callback de `<meta-custom>` pour les seules questions qui
+ne possèdent pas déjà un format terminal.
 
 Avant le dispatch, les formats historiques compatibles sont normalisés vers leur custom element :
 
@@ -163,7 +167,6 @@ Les QCM n'installent plus de listener de validation depuis `propositionsQcm()` :
 | `diagram-bar-assessment`       | `DiagramBarAssessment.verifQuestion()` dans `src/lib/customElements/DiagramBarAssessmentElement.ts`                                                                          |
 | `diagram-histogram-assessment` | `DiagramHistogramAssessment.verifQuestion()` dans `src/lib/customElements/DiagramHistogramAssessmentElement.ts`                                                              |
 | `diagram-cartesian-assessment` | `DiagramCartesianAssessment.verifQuestion()` dans `src/lib/customElements/DiagramCartesianAssessmentElement.ts`                                                              |
-| `custom`                       | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice              |
 | `meta-custom`                  | `MetaCustomElement.verifQuestion()` dans `src/lib/customElements/MetaCustomElement.ts`, qui appelle la `correctionInteractive` du sous-exercice enregistrée en callback      |
 
 Les fonctions de vérification retournent un résultat exploitable par le score et affichent le retour visuel associé à la question.
@@ -314,7 +317,9 @@ Le composant expose `value` comme une liste JSON stringifiée de parts `{ id, et
 
 Son `create()` est contextuel : en HTML, il produit le custom element ; en LaTeX, `renderLatex()` génère le tableau LaTeX du modèle pur `labyrinthe` ; en Typst, `renderTypst()` produit une table Typst native afin d'éviter d'injecter du `tabular` LaTeX dans un marqueur `<mathalea-typst>`.
 
-Les exercices qui héritent de `src/exercices/_Exercice_labyrinthe.ts` gardent une compatibilité `interactifType = 'custom'`, mais leur `autoCorrection[0].formatInteractif` vaut `mathalea-labyrinthe` afin que les flux génériques appellent `MathaleaLabyrintheElement.verifQuestion()`. La classe mère appelle `MathaleaLabyrintheElement.create()` pour l'énoncé comme pour la correction, sans branchement local selon `context`.
+Les exercices qui héritent de `src/exercices/_Exercice_labyrinthe.ts` déclarent
+`autoCorrection[0].formatInteractif = 'mathalea-labyrinthe'` afin que les flux
+génériques appellent `MathaleaLabyrintheElement.verifQuestion()`.
 
 `verifQuestion()` sauvegarde `element.value` dans `exercice.answers`, désactive l'interactivité, met à jour `span#resultatCheckEx...` et `div#feedbackEx...`, puis applique le barème historique en quatre points. Par défaut, une victoire donne 4/4 ; sinon le score dépend de la proportion de bonnes cases cliquées.
 
@@ -336,7 +341,7 @@ Par défaut, `verifQuestion()` compare l'état de tous les objets à la liste at
 
 ### Nombre de points maximum
 
-`pointsMaxExercice(exercice)` donne le nombre de points que l'exercice peut rapporter, **avant** toute saisie de l'élève. Il somme les `pointsMaxQuestion()` de chaque entrée non nulle de `autoCorrection`, en déléguant au custom element qui corrige la question (hook statique `pointsMaxQuestion()` de `MathaleaCustomElement`, résolu via `mathaleaCustomElementsRegistry` comme dans `exerciceInteractif()`). Pour un exercice encore marqué `interactifType = 'custom'`, les questions sans entrée `autoCorrection` valent 1 point par compatibilité, mais les questions qui déclarent un `formatInteractif` gardent leur barème propre.
+`pointsMaxExercice(exercice)` donne le nombre de points que l'exercice peut rapporter, **avant** toute saisie de l'élève. Il somme les `pointsMaxQuestion()` de chaque entrée non nulle de `autoCorrection`, en déléguant au custom element qui corrige la question (hook statique `pointsMaxQuestion()` de `MathaleaCustomElement`, résolu via `mathaleaCustomElementsRegistry` comme dans `exerciceInteractif()`).
 
 Le calcul est possible sans réponse parce que les fonctions de barème ne dépendent que du nombre de champs : `pointsMaxDuBareme(bareme, nbChamps)` les appelle avec une liste de champs tous justes et lit le second terme du couple `[points, maximum]` retourné.
 
@@ -394,27 +399,40 @@ Deux niveaux de personnalisation existent :
 
 ## Réhébergement d'une question custom
 
-Un exercice `interactifType = 'custom'` corrige lui-même ses questions : il n'a pas de custom element pour le faire à sa place, et rien n'est affiché par le moteur à sa place (feedback, marque de résultat). Quand `MetaExerciceCan` agrège un tel exercice comme une question parmi d'autres — CAN, « Sélection d'automatismes » —, deux problèmes se posent : plusieurs sous-exercices produiraient les mêmes identifiants DOM (tous en `Q0`), et le moteur générique n'aurait aucun format à router.
+Un exercice qui implémente encore `correctionInteractive(i)` est raccordé au
+registre générique par une ancre `<meta-custom>`. Lorsqu'il est agrégé par
+`MetaExerciceCan`, cette ancre conserve aussi l'identité de la question.
 
 `src/lib/customElements/MetaCustomElement.ts` répond au second : le méta-exercice enregistre la `correctionInteractive` du sous-exercice dans un registre statique, ajoute à l'énoncé une ancre invisible `<meta-custom callback-key="…">` et pose `autoCorrection[i].formatInteractif = 'meta-custom'`. Le dispatch, le barème, la vue CAN et la vue question par page passent alors par le registre des `MathaleaCustomElement` comme pour tout autre format. La fermeture enregistrée conserve le sous-exercice, ce qui garantit un `this` correct même quand `correctionInteractive` est une méthode de prototype.
 
 Le premier problème est réglé à la génération plutôt que par réécriture de chaîne. `Exercice.indexQuestionHote` porte l'index de la question dans l'exercice affiché ; `figureApigeom()` l'ajoute à son paramètre `i` pour fabriquer `apigeomEx{n}F{i}`, `resultatCheckEx{n}Q{i}` et `feedbackEx{n}Q{i}`. Une réécriture _a posteriori_ ne conviendrait pas : l'attribut `action` du `<mathalea-dom-ready>` produit par `figureApigeom()` est la clé du registre statique de `DomReadyActionElement`, et la renommer empêcherait le montage de la figure ; l'identifiant du conteneur est par ailleurs capturé dans la fermeture de montage. La clé de `answers` étant l'identifiant de la figure, la générer directement à la bonne valeur est aussi ce qui permet à `collectAnswers()` (`Can.svelte`) et à la relecture de copie (`mathaleaWriteStudentPreviousAnswers()`) de retrouver la réponse.
 
-Un exercice custom est donc agrégeable s'il respecte deux règles, vérifiées par `src/exercices/modèlesExos/20_exercice_classique_apigeom.ts` :
+Un exercice apiGeom est donc agrégeable s'il respecte deux règles, vérifiées par `src/exercices/modèlesExos/20_exercice_classique_apigeom.ts` :
 
 - `correctionInteractive(i)` indexe **tout** par `i` — figure (`this.figuresApiGeom[i]`), `#feedbackEx{n}Q{i}`, `#resultatCheckEx{n}Q{i}` — et jamais en dur par 0 ;
 - la figure de la question `i` est rangée dans `this.figuresApiGeom[i]`.
 
 `MetaExerciceCan` déplace la figure de tête du sous-exercice vers l'index de la question affichée avant d'appeler la correction, de sorte que la seconde règle reste vraie une fois l'exercice réhébergé.
 
-Deux cas particuliers subsistent :
+Les figures évaluées produites par `figureApigeom()` empruntent désormais le
+chemin générique des custom elements. Le helper enveloppe le montage historique
+dans `<apigeom-figure legacy-mount>`, enregistre une callback qui appelle
+`exercice.correctionInteractive(i)` et pose
+`autoCorrection[i].formatInteractif = 'apigeom-figure'`. Le mode
+`legacy-mount` conserve volontairement l'instance `Figure` déjà rangée dans
+`this.figuresApiGeom[i]` : le composant ne recharge pas une copie depuis JSON.
+`ApigeomFigureElement.verifQuestion()` retrouve la callback grâce à l'attribut
+`verify-callback-name`, normalise son retour (`'OK'`, `'KO'` ou tableau) et
+remonte les réponses du sous-exercice vers l'exercice affiché. Ces questions ne
+nécessitent donc plus l'ancre de secours `<meta-custom>` lorsqu'elles sont
+réhébergées.
+
+Un cas particulier subsiste :
 
 - un sous-exercice qui déclare `nouvelleVersion(numeroExercice, numeroQuestion)` place lui-même sa question au bon index : il est relancé avec les coordonnées de l'hôte et ne reçoit pas de décalage, sinon les identifiants seraient décalés deux fois ;
-- un exercice qui garde `interactifType = 'custom'` par compatibilité tout en déléguant à un customElement enregistré (cf. `_Exercice_labyrinthe.ts`) n'est pas traité comme custom : c'est son `formatInteractif` qui prime.
-
-`interactifType` est un export de module, recopié sur l'instance par `mathaleaLoadExerciceFromUuid()` uniquement. Un sous-exercice construit directement par un méta-exercice ne le reçoit donc pas : `_automatismesCan.ts` le pose sur la classe (`Exercice.interactifTypeModule`) au chargement du module, et `MetaExerciceCan` le recopie sur l'instance.
-
-Pour les QCM, `MetaExerciceCan` ne dépend toutefois pas de cette métadonnée de module : il reconnaît structurellement une question dont `autoCorrection` contient des `propositions`. Après le rendu par l'API historique `propositionsQcm()`, il pose explicitement `autoCorrection[i].formatInteractif = 'mathalea-qcm'`. Un méta-exercice entièrement composé de QCM ne doit donc pas déclarer artificiellement `interactifType = 'mathLive'` ; chaque question agrégée porte son propre format moderne, utilisé par le dispatch interactif et par l'inférence AMC.
+  Pour les QCM, `MetaExerciceCan` reconnaît structurellement une question dont
+  `autoCorrection` contient des `propositions` et pose explicitement
+  `autoCorrection[i].formatInteractif = 'mathalea-qcm'`.
 
 ## Comparateurs
 
@@ -436,7 +454,7 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 - `src/lib/interactif/qcm.ts` : QCM.
 - `src/lib/customElements/MathaleaQcm.ts` : custom element `mathalea-qcm`, helper `addMathaleaQcm()` et vérification QCM partagée. En contexte HTML, `propositionsQcm()` injecte ce composant tout en conservant les identifiants internes historiques.
 - `src/lib/customElements/MathaleaBranchingQcm.ts` : custom element `mathalea-branching-qcm`, helper `addMathaleaBranchingQcm()` et vérification pondérée d'un choix de QCM suivi d'une question de justification propre à la branche choisie.
-- `src/lib/customElements/CliqueFigureElement.ts` : custom element `clique-figure`, helper `addCliqueFigure()` et vérification des questions `cliqueFigure`. Les exercices historiques qui renseignent `cliqueFiguresArray` et appellent `setCliqueFigure()` sont normalisés vers ce tag sans devoir réécrire leurs énoncés.
+- `src/lib/customElements/CliqueFigureElement.ts` : custom element `clique-figure`, helper `addCliqueFigure()` et vérification des questions à figures cliquables. Les exercices qui renseignent directement `cliqueFiguresArray[i]` doivent aussi poser `autoCorrection[i].formatInteractif = 'clique-figure'`. Le helper `addCliqueFigure()` le fait automatiquement ; `setCliqueFigure()` n'est conservé que pour compatibilité avec d'anciens appels.
 - `src/lib/customElements/PointsCliquablesElement.ts` : custom element `points-cliquables`, helper `addPointsCliquables()` et vérification des points injectés dans une figure MathALÉA 2D identifiée par `figureId`.
 - `src/lib/customElements/ObjetsCliquablesElement.ts` : custom element `objets-cliquables`, helper `addObjetsCliquables()` et vérification d'objets géométriques injectés dans une figure MathALÉA 2D identifiée par `figureId`.
 - `src/lib/interactif/DragAndDrop.ts` : builder historique du glisser-déposer.

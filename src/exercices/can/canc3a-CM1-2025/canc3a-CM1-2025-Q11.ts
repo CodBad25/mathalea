@@ -7,7 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Calculer avec des dizaines/centaines'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '22907'
 export const refs = {
   'fr-fr': [],

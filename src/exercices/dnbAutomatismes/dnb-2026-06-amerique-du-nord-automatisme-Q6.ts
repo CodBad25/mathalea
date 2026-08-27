@@ -10,8 +10,8 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
-export const titre = 'Déterminer la médiane d\'une série statistique'
+
+export const titre = "Déterminer la médiane d'une série statistique"
 export const dateDePublication = '06/06/2026'
 
 /**

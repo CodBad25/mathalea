@@ -14,7 +14,7 @@ export const titre = 'Comparer deux fractions (dénominateurs non multiples)'
 export const dateDePublication = '21/06/2026'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const uuid = 'd7e12'

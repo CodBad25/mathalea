@@ -1,10 +1,10 @@
 import Decimal from 'decimal.js'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceQcmA from '../ExerciceQcmA'
-import { randint } from '../../modules/outils'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '8d25a'
 export const refs = {
@@ -12,10 +12,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer $25 \\%$ d\'un nombre '
+export const titre = "Calculer $25 \\%$ d'un nombre "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -24,7 +24,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ3CEs2026 extends ExerciceQcmA {
-   // 25 % de n
+  // 25 % de n
   private appliquerLesValeurs(n: number): void {
     const valeur = new Decimal(n)
     const resultat = valeur.times(25).div(100) // 25 % de n = n/4

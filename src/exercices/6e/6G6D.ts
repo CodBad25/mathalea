@@ -33,7 +33,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer la valeur d'un angle en utilisant la somme des mesures des angles dans un triangle"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '06/04/2025'

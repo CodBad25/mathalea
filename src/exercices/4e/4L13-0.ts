@@ -23,7 +23,6 @@ export const titre =
   'Mettre en équation un problème sans objectif de résolution'
 export const dateDeModifImportante = '28/03/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Produire une forme littérale en introduisant une lettre pour désigner une valeur inconnue afin de mettre en équation un problème

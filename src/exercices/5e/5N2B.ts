@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Trouver l'opposé d'un nombre relatif"
 export const dateDeModifImportante = '29/06/2026'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 /**

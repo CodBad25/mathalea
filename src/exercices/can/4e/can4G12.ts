@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = "Calculer l'aire d'un carré connaissant son périmètre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '09/12/2025'
 /**
  * @author Gilles Mora

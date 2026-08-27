@@ -11,7 +11,7 @@ export const dateDePublication = '07/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '330cd'
 export const refs = {
   'fr-fr': ['1A-P04-4', '2A-P4-4'],

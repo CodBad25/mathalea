@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'tip7u'
 export const refs = {
   'fr-fr': [],
@@ -27,9 +27,7 @@ export default class calculsFractions extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     const a = this.canOfficielle ? 2026 : this.quotaRandint('a', 2023, 2026)
-    if (
-      this.canOfficielle ? true : this.quotaChoice('choix', [true, false])
-    ) {
+    if (this.canOfficielle ? true : this.quotaChoice('choix', [true, false])) {
       this.question = `Calculer  $\\left(\\dfrac{1}{${texNombre(annee, 0)}}\\div \\dfrac{1}{${texNombre(annee, 0)}}\\right)\\div\\dfrac{1}{${texNombre(a, 0)}}$.`
       this.reponse = a
       this.correction = `$\\left(\\dfrac{1}{${texNombre(annee, 0)}}\\div \\dfrac{1}{${texNombre(annee, 0)}}\\right)\\div\\dfrac{1}{${texNombre(a, 0)}}=1\\div \\dfrac{1}{${texNombre(a, 0)}}=${miseEnEvidence(texNombre(this.reponse, 0))}$`

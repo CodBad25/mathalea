@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Factoriser avec les identités remarquables (niveau II)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Factoriser avec a²-b² avec a ou b expression algébrique 1er degré
  * @author Stéphane Guyon

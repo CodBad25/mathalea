@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer la moyenne d’une série de nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'tfkec'
 export const refs = {
   'fr-fr': [],

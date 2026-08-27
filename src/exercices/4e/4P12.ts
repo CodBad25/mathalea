@@ -8,7 +8,6 @@ import { objet } from '../6e/6N4A-1'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   'Partager une quantité en deux ou trois parts selon un ratio donné'

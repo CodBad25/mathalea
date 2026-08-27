@@ -1,12 +1,11 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 export const titre = 'Q30'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'n3qet'
 export const refs = {
   'fr-fr': [],
@@ -18,7 +17,7 @@ export const refs = {
 
 */
 export default class Can1a2022Q30 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatInteractif = 'fillInTheBlank'
     this.formatChampTexte = KeyboardType.clavierDeBase

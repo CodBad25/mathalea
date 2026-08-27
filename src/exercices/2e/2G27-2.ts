@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Reconnaître si trois points sont alignés avec la colinéarité (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const dateDePublication = '18/04/26'
 

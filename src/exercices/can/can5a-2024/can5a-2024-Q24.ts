@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Simplifier une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '00625'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

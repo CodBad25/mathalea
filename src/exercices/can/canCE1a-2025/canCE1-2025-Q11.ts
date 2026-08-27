@@ -1,9 +1,9 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Trouver un nombre dans une suite'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e5ec7'
 export const refs = {
   'fr-fr': [],

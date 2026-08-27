@@ -7,7 +7,7 @@ import SchemaEnBoite from '../../../lib/outils/SchemaEnBoite'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème avec "fois plus", "fois moins"'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '23/07/2022'

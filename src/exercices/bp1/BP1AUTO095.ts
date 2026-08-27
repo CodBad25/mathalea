@@ -3,7 +3,7 @@ export const titre = 'Calculs de volumes'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const dateDePublication = '30/07/2026'
 
 /**

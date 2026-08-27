@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer avec des fractions (calcul littéral)'
 export const uuid = '2cb9a'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/02/2025'
 export const dateDeModificationImportante = '15/02/2026' // Ajout d'une option pour les quotients
 export const refs = {
@@ -66,7 +66,7 @@ export default class CalculFractionLitteral extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const NomVar = [
         ['a', 'b'],
         ['x', 'y'],

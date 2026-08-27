@@ -21,7 +21,7 @@ import { abs } from '../../lib/outils/nombres'
 export const titre = 'Effectuer la double distributivité'
 export const dateDePublication = '03/02/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 

@@ -8,7 +8,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Limite d'un polynôme."
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '61ef0'
 export const refs = {

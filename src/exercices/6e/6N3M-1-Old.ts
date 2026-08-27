@@ -26,7 +26,7 @@ import {
 
 export const titre = "Calculer la fraction d'une quantité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '01/04/2026'

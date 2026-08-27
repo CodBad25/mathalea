@@ -10,10 +10,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer un effectif à partir d\'un pourcentage '
+export const titre = "Calculer un effectif à partir d'un pourcentage "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -22,13 +22,13 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ7AGs2026 extends ExerciceQcmA {
- private appliquerLesValeurs(
+  private appliquerLesValeurs(
     pHommes: number,
     nbFemmes: number,
     repOrigine?: string,
     d1Origine?: string,
     d2Origine?: string,
-    d3Origine?: string
+    d3Origine?: string,
   ): void {
     const pFemmes = 100 - pHommes
     const total = Math.round(nbFemmes / (pFemmes / 100))
@@ -80,7 +80,7 @@ export default class AutoQ7AGs2026 extends ExerciceQcmA {
 
     // Rédaction de la correction (Approche algébrique avec N)
     const coeff = pFemmes / 100
-    
+
     this.correction = `Puisqu'il y a $${pHommes}\\,\\%$ d'hommes, le pourcentage de femmes dans l'association est de :<br>`
     this.correction += `$100\\,\\% - ${pHommes}\\,\\% = ${pFemmes}\\,\\%$.<br><br>`
     this.correction += `Notons $N$ la population totale cherchée.<br>`
@@ -106,7 +106,7 @@ export default class AutoQ7AGs2026 extends ExerciceQcmA {
       // On choisit d'abord un total rond puis un pourcentage "propre"
       const total = choice([40, 50, 60, 80, 100, 120, 140, 150, 200, 250])
       const pHommes = choice([10, 20, 25, 30, 40, 60, 70, 75, 80])
-      
+
       const pFemmes = 100 - pHommes
       const nbFemmes = (total * pFemmes) / 100
 

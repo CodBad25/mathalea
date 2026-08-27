@@ -10,10 +10,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Retrouver l\'égalité correcte avec des puissances '
+export const titre = "Retrouver l'égalité correcte avec des puissances "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -23,11 +23,16 @@ export const dateDePublication = '02/06/2026'
  */
 export default class AutoQ8AGs2026 extends ExerciceQcmA {
   private appliquerLesValeurs(
-    n1: number, n2: number, 
-    n3: number, n4: number, 
-    n5: number, n6: number, 
-    n7: number, n8: number, n9: number,
-    typeCorrect: number
+    n1: number,
+    n2: number,
+    n3: number,
+    n4: number,
+    n5: number,
+    n6: number,
+    n7: number,
+    n8: number,
+    n9: number,
+    typeCorrect: number,
   ): void {
     this.enonce = `On considère un réel $a$ quelconque, différent de $0$.<br>`
     this.enonce += `Une seule de ces égalités est vraie. Laquelle ?`
@@ -68,12 +73,12 @@ export default class AutoQ8AGs2026 extends ExerciceQcmA {
       `$${correctStr}$`,
       `$${dist1Str}$`,
       `$${dist2Str}$`,
-      `$${dist3Str}$`
+      `$${dist3Str}$`,
     ]
 
     // Rédaction de la correction détaillée
     this.correction = `Vérifions chaque égalité en utilisant les propriétés des puissances :<br><br>`
-    
+
     this.correction += `$\\bullet$ $\\dfrac{a^{${n1}}}{a^{-${n2}}} = a^{${n1} - (-${n2})} = a^{${n1} + ${n2}} = a^{${n1 + n2}}$.<br>`
     this.correction += `L'égalité $${dist1Str}$ est donc fausse.<br><br>`
 
@@ -105,11 +110,11 @@ export default class AutoQ8AGs2026 extends ExerciceQcmA {
       // Pour le premier distracteur
       const n1 = randint(4, 9)
       const n2 = randint(3, 8)
-      
+
       // Pour le deuxième distracteur
       const n4 = randint(2, 5)
-      const n3 = n4 * randint(4, 8) 
-      
+      const n3 = n4 * randint(4, 8)
+
       // Pour le troisième distracteur
       const n5 = randint(4, 10)
       const n6 = randint(3, 5)
@@ -118,16 +123,27 @@ export default class AutoQ8AGs2026 extends ExerciceQcmA {
       const n7 = randint(4, 12)
       const n8 = randint(2, 6)
       const n9 = randint(2, 6) // Utile spécifiquement pour le type 5
-      
+
       // On choisit aléatoirement la structure de la bonne réponse parmi 5 types
       const typeCorrect = choice([1, 2, 3, 4, 5])
 
       // Sécurité : on évite que le hasard crée une égalité accidentellement vraie pour les distracteurs
-      const isDist2False = (n3 - n4 !== n3 / n4)
-      const isDist3False = (n5 * n6 !== n5 + n6)
+      const isDist2False = n3 - n4 !== n3 / n4
+      const isDist3False = n5 * n6 !== n5 + n6
 
       if (isDist2False && isDist3False) {
-        this.appliquerLesValeurs(n1, n2, n3, n4, n5, n6, n7, n8, n9, typeCorrect)
+        this.appliquerLesValeurs(
+          n1,
+          n2,
+          n3,
+          n4,
+          n5,
+          n6,
+          n7,
+          n8,
+          n9,
+          typeCorrect,
+        )
         compteur++
       }
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

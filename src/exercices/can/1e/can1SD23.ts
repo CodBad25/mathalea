@@ -8,7 +8,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une forme canonique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '07/06/2022'
 
 /**

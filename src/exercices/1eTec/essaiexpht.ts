@@ -5,7 +5,7 @@ import ExerciceSimple from '../ExerciceSimple'
 export const uuid = '51fc1' // mettre ici l'uuid générée au pnpm dev
 export const titre = 'Calculer des évolutions successives'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],

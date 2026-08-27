@@ -27,7 +27,6 @@ export const titre = 'Construire deux triangles de même aire'
 
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'editeur-iep'
 
 export const uuid = 'e5g3a'
 export const refs = {

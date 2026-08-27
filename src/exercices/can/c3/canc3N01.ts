@@ -1,13 +1,13 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { nombreEnLettres } from '../../../modules/nombreEnLettres'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Écrire en lettres un nombre entier (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -30,7 +30,7 @@ export default class EcritureDeNombreEntier extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(1, 9)
       const b = randint(1, 9, a)
       const c = randint(1, 9, [a, b])

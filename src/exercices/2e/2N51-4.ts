@@ -18,7 +18,6 @@ export const titre =
   'Appliquer la double distributivité avec les racines carrées'
 export const dateDeModifImportante = '30/09/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Stéphane Guyon + Gilles Mora pour modification

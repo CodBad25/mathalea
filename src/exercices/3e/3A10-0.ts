@@ -1,7 +1,7 @@
 import PremierOuPas from './3A10-1'
 export const titre = 'Reconnaitre les premiers nombres premiers'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDePublication = '11/10/2023'

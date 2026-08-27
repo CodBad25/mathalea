@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '450b6'
 export const refs = {
   'fr-fr': [],

@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une dérivée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f78d0'
 export const refs = {
   'fr-fr': [],

@@ -5,7 +5,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer la probabilité d'un événement contraire"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e59ik'
 export const refs = {
   'fr-fr': [],

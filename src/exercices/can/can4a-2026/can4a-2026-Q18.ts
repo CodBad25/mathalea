@@ -14,7 +14,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   "Expression du périmètre d'un rectangle en fonction de sa largeur"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'r70zj'
 export const refs = {
   'fr-fr': [],

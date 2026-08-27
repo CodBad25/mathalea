@@ -7,7 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Calculer avec des dixèmes/centièmes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0021e'
 export const refs = {
   'fr-fr': [],

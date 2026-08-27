@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': ['NR'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Calculer une médiane à partir d'un diagramme en barres"

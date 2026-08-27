@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { sp } from '../../../lib/outils/outilString'
 import { minToHoraire } from '../../../lib/outils/dateEtHoraires'
+import { sp } from '../../../lib/outils/outilString'
 export const titre = "Compléter une suite d'heures/minutes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cd8eb'
 export const refs = {
   'fr-fr': [],

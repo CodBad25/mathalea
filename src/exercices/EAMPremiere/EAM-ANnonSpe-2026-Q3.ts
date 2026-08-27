@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Effectuer un calcul avec des puissances '
@@ -22,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ3ANns2026 extends ExerciceQcmA {
- // D = c × 2^p × 2^q = c × 2^(p+q)
+  // D = c × 2^p × 2^q = c × 2^(p+q)
   private appliquerLesValeurs(c: number, p: number, q: number): void {
     this.enonce = `On considère le nombre $D=${c}\\times 2^{${p}}\\times 2^{${q}}$.<br>On a :`
 

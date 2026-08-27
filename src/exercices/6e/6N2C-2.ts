@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const titre =
   'Par combien diviser un nombre pour que le chiffre des unités devienne le chiffre des ...'
 

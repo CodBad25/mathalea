@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': ['10NO3C-7'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une proportion de proportion (2)'

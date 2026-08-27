@@ -30,7 +30,6 @@ export const dateDeModifImportante = '31/03/2026'
 export const titre =
   'Déterminer une fonction affine par la donnée des images de deux nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Déterminer la forme algébrique à partir de la donnée de 2 nombres et de leurs images

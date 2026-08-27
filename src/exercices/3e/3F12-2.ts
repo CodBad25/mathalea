@@ -22,7 +22,7 @@ export const dateDeModifImportante = '20/08/2026'
 export const titre =
   "Déterminer l'image d'un nombre par une fonction d'après sa forme algébrique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

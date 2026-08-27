@@ -14,7 +14,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer une longueur à partir d'un périmètre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fe2dd'
 export const refs = {
   'fr-fr': [],
@@ -38,8 +38,7 @@ export default class Can2026CM1Q20 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
- 
-   enonce(base?: number, coteGauche?: number, coteDroit?: number) {
+  enonce(base?: number, coteGauche?: number, coteDroit?: number) {
     if (base == null || coteGauche == null || coteDroit == null) {
       do {
         base = randint(5, 10)
@@ -62,7 +61,9 @@ export default class Can2026CM1Q20 extends ExerciceCan {
     // Le sommet C est placé de sorte que AC ≈ coteGauche et BC ≈ coteDroit
     // On utilise la formule du cosinus pour trouver les coordonnées de C
     // cos(A) = (coteGauche² + base² - coteDroit²) / (2 * coteGauche * base)
-    const cosA = (coteGauche * coteGauche + base * base - coteDroit * coteDroit) / (2 * coteGauche * base)
+    const cosA =
+      (coteGauche * coteGauche + base * base - coteDroit * coteDroit) /
+      (2 * coteGauche * base)
     const sinA = Math.sqrt(1 - cosA * cosA)
     const cx = coteGauche * cosA * echelle
     const cy = coteGauche * sinA * echelle
@@ -106,7 +107,12 @@ export default class Can2026CM1Q20 extends ExerciceCan {
     const figure = mathalea2d(
       Object.assign(
         { pixelsParCm: 30, scale: 0.7 },
-        fixeBordures(objets, { rxmin: 0.5, rxmax: 0.5, rymin: 0.5, rymax: 0.5 }),
+        fixeBordures(objets, {
+          rxmin: 0.5,
+          rxmax: 0.5,
+          rymin: 0.5,
+          rymax: 0.5,
+        }),
       ),
       objets,
     )

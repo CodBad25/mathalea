@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer le sens de variation d'une suite arithmétique/géométrique"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '23/12/2024'
 
 /**

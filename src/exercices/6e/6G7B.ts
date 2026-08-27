@@ -1,7 +1,7 @@
 import Transformations from './_Transformations'
 export const titre = "Trouver l'image d'un point par une symétrie axiale"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

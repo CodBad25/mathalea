@@ -26,7 +26,7 @@ export const titre =
   'Déterminer une équation réduite à partir de sa représentation graphique'
 export const dateDeModifImportante = '08/12/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 /**

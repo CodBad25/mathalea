@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Déterminer l'écriture scientifique d'un nombre décimal"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2yrmx'
 export const refs = {
   'fr-fr': [],

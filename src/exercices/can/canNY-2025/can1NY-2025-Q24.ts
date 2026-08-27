@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 export const titre = 'Résoudre une inéquation'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9e17a'
 export const refs = {
   'fr-fr': [],

@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '27/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModificationImportante = '06/04/2026'

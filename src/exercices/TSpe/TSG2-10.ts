@@ -28,7 +28,6 @@ export const refs = {
   'fr-ch': ['3G90-8'],
 }
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'multi-mathfield'
 
 function bareme(listePoints: number[]): [number, number] {
   let points = 0
@@ -54,7 +53,7 @@ export default class NomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20;) {
       let texte = ''
       let texteCorr = ''
 

@@ -12,7 +12,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre = 'Trouver des probabilités simples'
 export const dateDePublication = '01/05/2021'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 /**
  *
  * @author Rémi Angot et Matthieu Devillers

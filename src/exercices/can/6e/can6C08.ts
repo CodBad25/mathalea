@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer le quart ou le tiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

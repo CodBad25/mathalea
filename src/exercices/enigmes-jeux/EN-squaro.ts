@@ -18,7 +18,6 @@ import redPoint from './svg/redPoint.svg'
 export const dateDePublication = '15/07/2024'
 export const titre = 'Résoudre une grille de SquarO'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /** Résoudre une grille de SquarO
  * @author Éric Elter

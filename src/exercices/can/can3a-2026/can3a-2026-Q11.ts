@@ -3,7 +3,6 @@ import { repere } from '../../../lib/2d/reperes'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -12,7 +11,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Lire une coordonnée d'un point"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'riest'
 export const refs = {
   'fr-fr': [],

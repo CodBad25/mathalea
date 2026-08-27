@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Passer d’un calcul de fractions décimales à une écriture décimale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '15/12/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

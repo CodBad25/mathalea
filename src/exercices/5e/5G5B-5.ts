@@ -22,7 +22,6 @@ export const titre =
 
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'editeur-iep'
 
 export const uuid = 'd8d99'
 export const refs = {

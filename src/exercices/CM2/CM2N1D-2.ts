@@ -17,7 +17,6 @@ import { context } from '../../modules/context'
 
 export const titre = 'Recomposer un entier'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '14/08/2022'

@@ -3,7 +3,7 @@ import PatternIteratif from './auto5N5C'
 export const titre =
   "Trouver le nombre d'éléments pour une étape donnée dans une suite de motifs évolutive"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '26/06/2026'
 
 /**

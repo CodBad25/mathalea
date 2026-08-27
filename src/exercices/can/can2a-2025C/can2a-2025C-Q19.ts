@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calcculer un antécédent par une fonction homographique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6ps0p'
 export const refs = {
   'fr-fr': [],

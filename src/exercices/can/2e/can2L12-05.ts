@@ -3,11 +3,10 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { reduirePolynomeDegre3 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Développer avec les égalités remarquables'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/10/2021'
 export const dateDeModifImportante = '12/07/2025'
 /**

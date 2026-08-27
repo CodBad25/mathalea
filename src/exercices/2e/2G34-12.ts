@@ -1,19 +1,19 @@
-import FractionEtendue from '../../modules/FractionEtendue'
+import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
+import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import EquationSecondDegre from '../../modules/EquationSecondDegre'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
-import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
-import EquationSecondDegre from '../../modules/EquationSecondDegre'
+import Exercice from '../Exercice'
 export const titre =
   "Déterminer l'ensemble des points d'intersection entre deux courbes"
 export const interactifReady = false
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '05/01/2025'
 /**
  * @author Nathan Scheinmann
@@ -73,7 +73,7 @@ export default class IntersectionDroitesPoints extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let droite = [new FractionEtendue(0, 1), new FractionEtendue(0, 1)]

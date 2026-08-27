@@ -1,11 +1,9 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Prendre t % d’une quantité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '18/12/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -40,7 +38,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (!this.interactif) {
           this.question += '.... '
         }
-        this.correction = `$${texNombre(a, 0)}\\,\\%=\\dfrac{${texNombre(a,2)}}{100}=${texNombre(this.reponse, 2)}$ <br>
+        this.correction = `$${texNombre(a, 0)}\\,\\%=\\dfrac{${texNombre(a, 2)}}{100}=${texNombre(this.reponse, 2)}$ <br>
     Donc prendre $${texNombre(a, 2)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 2))}$.`
 
         break
@@ -51,7 +49,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (!this.interactif) {
           this.question += '.... '
         }
-        this.correction = `$${a}\\,\\%=\\dfrac{${texNombre(a,2)}}{100}=${texNombre(this.reponse, 2)}$ <br>
+        this.correction = `$${a}\\,\\%=\\dfrac{${texNombre(a, 2)}}{100}=${texNombre(this.reponse, 2)}$ <br>
        Donc prendre $${texNombre(a, 2)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 2))}$.`
         this.reponse = a / 100
         break
@@ -77,8 +75,8 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (!this.interactif) {
           this.question += '.... '
         }
-        this.correction = `$${texNombre(a, 1)}\\,\\%=\\dfrac{${texNombre(a,2)}}{100}=${texNombre(this.reponse, 3)}$ <br>
-      Donc prendre $${texNombre(a,2)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 3))}$.`
+        this.correction = `$${texNombre(a, 1)}\\,\\%=\\dfrac{${texNombre(a, 2)}}{100}=${texNombre(this.reponse, 3)}$ <br>
+      Donc prendre $${texNombre(a, 2)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 3))}$.`
     }
     this.reponse = this.reponse.toFixed(3)
     this.canEnonce = 'Compléter.'

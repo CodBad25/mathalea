@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -8,6 +7,7 @@ import { buildQcmForExercise } from '../../lib/interactif/qcmBuilder'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
 import { shuffle } from '../../lib/outils/arrayOutils'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Exercice from '../Exercice'
 /**
@@ -20,7 +20,7 @@ export const refs = {
 }
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Répondre à des QCM Bac : Convexité'

@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lire des informations dans un tableau'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDePublication = '23/08/2026'
 export const uuid = 'a3e96'
 

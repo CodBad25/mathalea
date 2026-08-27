@@ -17,7 +17,7 @@ export const titre =
   "Passer, de façon automatique, d'une valeur décimale à une valeur fractionnaire et réciproquement avec demis et quarts"
 export const dateDePublication = '10/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '297f9'
 export const refs = {
   'fr-fr': ['auto6N3C', '6AutoF2-1'],

@@ -13,6 +13,7 @@ export const listOfCustomElements = [
   'multi-mathfield',
   'liste-deroulante',
   'my-spreadsheet',
+  'my-calculator',
   'guide-ane',
   'svg-selection',
   'demi-droite-interactive',
@@ -38,6 +39,7 @@ export const listOfCustomElements = [
   'diagram-bar-assessment',
   'diagram-histogram-assessment',
   'diagram-cartesian-assessment',
+  'apigeom-figure',
 ]
 
 /**

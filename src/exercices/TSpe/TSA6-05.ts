@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': ['4mQCM-2'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Tester une solution d'une équation différentielle"

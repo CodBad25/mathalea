@@ -1,6 +1,6 @@
 import ExerciceEquationASolutionEntiere from '../4e/4L20-0'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const titre =

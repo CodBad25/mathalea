@@ -1,15 +1,14 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre, texPrix } from '../../../lib/outils/texNombre'
-import { miseEnEvidence, texteGras } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import Decimal from 'decimal.js'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence, texteGras } from '../../../lib/outils/embellissements'
+import { texNombre, texPrix } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un coefficient multiplicateur'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '15/07/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

@@ -8,7 +8,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre =
   'Traduire un programme de calcul par une expression littérale'

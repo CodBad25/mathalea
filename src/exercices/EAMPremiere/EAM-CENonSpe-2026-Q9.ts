@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation produit nul '
@@ -23,11 +23,11 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ9CEns2026 extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     a: number,
     c: number,
     s1: number,
-    s2: number
+    s2: number,
   ): void {
     const b = -a * s1 // ax+b=0 ⟺ x=s1 donc b=-a·s1
     const d = -c * s2

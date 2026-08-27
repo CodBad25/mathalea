@@ -10,7 +10,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   "Donner le nombre de solutions d'une équation du second degré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '32mx4'
 export const refs = {
   'fr-fr': [],

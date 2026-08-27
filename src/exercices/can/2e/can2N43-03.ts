@@ -12,7 +12,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec un programme de calcul*'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '16/11/2022'
 export const dateDeModifImportante = '04/08/2025'
 /**

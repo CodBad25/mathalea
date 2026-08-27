@@ -13,7 +13,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer un seuil avec une fonction affine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '03/05/2024'
 export const uuid = '127d3'
 export const refs = {

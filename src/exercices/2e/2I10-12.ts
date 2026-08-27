@@ -1,18 +1,19 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Calculer et exprimer des proportions'
 export const dateDePublication = '08/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const uuid = 'e9a72'
@@ -117,7 +118,7 @@ export default class ProportionsEntreprise extends Exercice {
     La proportion des ${contexte.categorie3} est donc $${miseEnEvidence(formatPourcentage(pourcentageCategorie3))}$.`
     const correction = `1. ${correctionQuestion1}<br><br>2. ${correctionQuestion2}`
 
-    if (this.interactif && this.sup) {
+    if ((this.interactif && this.sup) || context.isAmc) {
       this.nbQuestions = 2
       this.consigne = introduction
       const propositionsQuestion1: { texte: string; statut: boolean }[] = []

@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const dateDePublication = '01/02/2026'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 export const titre =
   'Poser et effectuer des divisions décimales avec un dividende décimal et un diviseur à un chiffre'

@@ -11,7 +11,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 export const titre = 'Déterminer la valeur de $p$ dans une fonction affine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/11/2024'
 export const uuid = '25d1f'
 export const refs = {

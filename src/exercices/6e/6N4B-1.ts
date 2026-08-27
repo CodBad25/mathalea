@@ -19,7 +19,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Comprendre un algorithme répétitif sur des motifs'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '29/06/2025'

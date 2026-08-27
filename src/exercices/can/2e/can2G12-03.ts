@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver les coordonnées d'un point avec un milieu"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '29/11/2023'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

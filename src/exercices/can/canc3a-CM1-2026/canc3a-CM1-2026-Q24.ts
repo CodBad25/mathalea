@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir en dizaines/unités'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cfc0e'
 export const refs = {
   'fr-fr': [],
@@ -19,15 +19,18 @@ export const refs = {
 
 */
 export default class Can2026CM1Q24 extends ExerciceCan {
- constructor () {
+  constructor() {
     super()
     this.formatInteractif = 'fillInTheBlank'
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
-  enonce (n?: number) {
+  enonce(n?: number) {
     if (n == null) {
-      n = choice([randint(10, 99) * 100 + randint(1, 99), randint(10, 99) * 10 + randint(1, 9)])
+      n = choice([
+        randint(10, 99) * 100 + randint(1, 99),
+        randint(10, 99) * 10 + randint(1, 9),
+      ])
     }
 
     const dizaines = Math.floor(n / 10)
@@ -35,7 +38,7 @@ export default class Can2026CM1Q24 extends ExerciceCan {
 
     this.reponse = {
       champ1: { value: dizaines.toString() },
-      champ2: { value: unites.toString() }
+      champ2: { value: unites.toString() },
     }
     this.question = `${texNombre(n, 0)} ~= %{champ1} \\text{ dizaines } %{champ2} \\text{ unités}`
 
@@ -46,7 +49,7 @@ export default class Can2026CM1Q24 extends ExerciceCan {
     this.canReponseACompleter = '$\\ldots$ dizaines $\\ldots$ unités'
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.canOfficielle || this.sup ? this.enonce(1435) : this.enonce()
   }
 }

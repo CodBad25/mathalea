@@ -5,7 +5,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer l'image d'une fraction par une fonction polynôme"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6tfja'
 export const refs = {
   'fr-fr': [],

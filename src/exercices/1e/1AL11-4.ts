@@ -21,7 +21,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 export const titre =
   "Calculer les termes d'une suite arithmétique ou géométrique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '29/09/2024'
 
@@ -74,7 +73,7 @@ export default class TermesSASG extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse

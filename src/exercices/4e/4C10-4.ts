@@ -9,7 +9,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Quotient de deux entiers relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Effectuer une division entre 2 nombres relatifs écrite sous la forme d'une fraction.

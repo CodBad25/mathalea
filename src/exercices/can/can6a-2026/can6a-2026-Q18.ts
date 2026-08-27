@@ -4,9 +4,9 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Calculer la moitié d\'un nombre en dixièmes'
+export const titre = "Calculer la moitié d'un nombre en dixièmes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ity6q'
 export const refs = {
   'fr-fr': [],
@@ -21,7 +21,7 @@ export default class Can20266Q18 extends ExerciceCan {
   constructor() {
     super()
     this.optionsChampTexte = { texteApres: ' unité(s)' }
-     this.optionsDeComparaison = {
+    this.optionsDeComparaison = {
       nombreDecimalSeulement: true,
     }
   }

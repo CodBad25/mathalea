@@ -8,7 +8,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Utiliser la notion de valeur absolue d'une quantité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Stéphane Guyon
@@ -38,7 +37,7 @@ export default class ValeurAbsolue extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       typesDeQuestions = listeTypeDeQuestions[i]
       let a = 0
       let b = 0

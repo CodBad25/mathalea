@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -17,6 +16,7 @@ import {
   texNombre,
 } from '../../../lib/outils/texNombre'
 import Hms from '../../../modules/Hms'
+import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
@@ -29,7 +29,7 @@ import { arrondi } from '../../../lib/outils/nombres'
 
 export const titre = 'CAN 3e sujet 2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '19/04/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 // export const dateDeModifImportante = '24/10/2021' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

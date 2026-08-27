@@ -1,8 +1,8 @@
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
@@ -24,7 +24,6 @@ export const titre =
 export const dateDePublication = '19/05/2025'
 export const dateDeModification = '10/04/2026'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 /**
  * Reconnaitre coefficient directeur et ordonnée à l'origine d'une fonction affine

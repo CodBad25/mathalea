@@ -36,7 +36,6 @@ export const titre = 'Programmer des déplacements relatifs (Scratch)'
 export const dateDePublication = '05/02/2023'
 export const dateDeModifImportante = '09/06/2025'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 /**
  * * Colorier le déplacement d'un lutin

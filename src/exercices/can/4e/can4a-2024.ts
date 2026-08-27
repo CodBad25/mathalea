@@ -1,13 +1,3 @@
-import Question1 from '../can5a-2024/can5a-2024-Q1'
-import Question2 from '../can5a-2024/can5a-2024-Q2'
-import Question3 from '../can5a-2024/can5a-2024-Q3'
-import Question4 from '../can5a-2024/can5a-2024-Q4'
-import Question5 from '../can5a-2024/can5a-2024-Q5'
-import Question6 from '../can5a-2024/can5a-2024-Q6'
-import Question7 from '../can5a-2024/can5a-2024-Q7'
-import Question8 from '../can5a-2024/can5a-2024-Q8'
-import Question9 from '../can5a-2024/can5a-2024-Q9'
-import Question10 from '../can5a-2024/can5a-2024-Q10'
 import Question11 from '../can4a-2024/can4-2024-Q11'
 import Question12 from '../can4a-2024/can4-2024-Q12'
 import Question13 from '../can4a-2024/can4-2024-Q13'
@@ -28,12 +18,22 @@ import Question27 from '../can4a-2024/can4-2024-Q27'
 import Question28 from '../can4a-2024/can4-2024-Q28'
 import Question29 from '../can4a-2024/can4-2024-Q29'
 import Question30 from '../can4a-2024/can4-2024-Q30'
+import Question1 from '../can5a-2024/can5a-2024-Q1'
+import Question10 from '../can5a-2024/can5a-2024-Q10'
+import Question2 from '../can5a-2024/can5a-2024-Q2'
+import Question3 from '../can5a-2024/can5a-2024-Q3'
+import Question4 from '../can5a-2024/can5a-2024-Q4'
+import Question5 from '../can5a-2024/can5a-2024-Q5'
+import Question6 from '../can5a-2024/can5a-2024-Q6'
+import Question7 from '../can5a-2024/can5a-2024-Q7'
+import Question8 from '../can5a-2024/can5a-2024-Q8'
+import Question9 from '../can5a-2024/can5a-2024-Q9'
 
 import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN 4e sujet 2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '82764'
 export const refs = {
   'fr-fr': ['can4a-2024'],

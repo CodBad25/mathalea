@@ -3,7 +3,7 @@ import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $ax+b=0$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

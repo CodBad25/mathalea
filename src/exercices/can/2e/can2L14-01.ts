@@ -11,7 +11,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre = "Exprimer une variable en fonction d'une autre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '12/01/2023'
 export const dateDeModifImportante = '08/06/2024'
 /**

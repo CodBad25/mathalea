@@ -1,5 +1,3 @@
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf0,
@@ -10,6 +8,8 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { calculImageTrinome } from './1Tec-F22'
@@ -18,7 +18,6 @@ export const titre =
 
 export const dateDePublication = '19/3/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const uuid = '8f59a'
 export const refs = {
@@ -44,7 +43,7 @@ export default class estUneRacine extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const x1 = randint(-9, 9)

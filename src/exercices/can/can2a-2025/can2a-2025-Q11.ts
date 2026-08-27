@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer les coordonnées d'un milieu"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '50ee5'
 export const refs = {
   'fr-fr': [],

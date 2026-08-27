@@ -6,7 +6,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec des racines carrées '
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '19/09/2022'
 export const dateDeModifImportante = '19/12/2025'

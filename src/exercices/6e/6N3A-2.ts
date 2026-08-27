@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Passer d'une écriture fractionnaire à une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '15/03/2025'
 

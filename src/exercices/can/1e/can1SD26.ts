@@ -10,7 +10,6 @@ import Exercice from '../../Exercice'
 export const titre =
   'Dresser le tableau de signes d’un polynôme du second degré'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '07/10/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -35,7 +34,7 @@ export default class TableauSignesSecondDegre extends Exercice {
 
   nouvelleVersion() {
     let texte, texteCorr, tableau1, tableau2, tableau3
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(1, 9) * choice([-1, 1]) // coefficient a
       const b = randint(1, 6) * choice([-1, 1]) // racine1
       const c = randint(1, 9, [b, -b]) * choice([-1, 1]) // racine2

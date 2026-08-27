@@ -6,11 +6,11 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { bleuMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Déterminer une abscisse'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'p2237'
 export const refs = {
   'fr-fr': [],
@@ -31,7 +31,9 @@ export default class CompleterUneSuite extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const pas = this.canOfficielle ? 2 : this.quotaChoice('pas', [1, 2, 3, 4, 5]) // Graduation de 2, 3, 4 ou 5
+    const pas = this.canOfficielle
+      ? 2
+      : this.quotaChoice('pas', [1, 2, 3, 4, 5]) // Graduation de 2, 3, 4 ou 5
     const abs0 = annee - 5 * pas // 5 intervalles avant l'année
     const abs1 = annee // L'année est le repère central
     const abs2 = annee + 5 * pas // 5 intervalles après l'année

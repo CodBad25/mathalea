@@ -20,7 +20,6 @@ import { gestionnaireFormulaireTexte } from '../../modules/outils'
 
 export const titre = "Trouver le ratio d'évolution d'un motif numérique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '26/06/2025'

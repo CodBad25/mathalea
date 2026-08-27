@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Développer avec une identité remarquable '
@@ -22,15 +22,17 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5ANns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(a: number, isPlus: boolean): void {
+  private appliquerLesValeurs(a: number, isPlus: boolean): void {
     const signe = isPlus ? '+' : '-'
     const aCarr = a * a
     const deuxA = 2 * a
 
     this.enonce = `Quand on développe $(x ${signe} ${a})^2$, on obtient :`
 
-    const idRemarquable = isPlus ? '(a+b)^2 = a^2 + 2ab + b^2' : '(a-b)^2 = a^2 - 2ab + b^2'
-    
+    const idRemarquable = isPlus
+      ? '(a+b)^2 = a^2 + 2ab + b^2'
+      : '(a-b)^2 = a^2 - 2ab + b^2'
+
     this.correction = `On utilise l'identité remarquable $${idRemarquable}$ avec $a=x$ et $b=${a}$ :<br>`
     this.correction += `$\\begin{aligned}
     (x ${signe} ${a})^2 &= x^2 ${signe} 2 \\times x \\times ${a} + ${a}^2 \\\\
@@ -40,15 +42,10 @@ export default class AutoQ5ANns2026 extends ExerciceQcmA {
     // La bonne réponse en premier, suivie des distracteurs calqués sur l'image
     const repCorrecte = `$x^2 ${signe} ${deuxA}x + ${aCarr}$`
     const dist1 = `$2x ${signe} ${deuxA}$` // Erreur : on multiplie par 2 au lieu de mettre au carré -> 2(x+a)
-    const dist2 = `$x^2 + ${aCarr}$`       // Erreur : on oublie le double produit
-    const dist3 = `$x^2 - ${aCarr}$`       // Erreur : confusion avec la différence de deux carrés
+    const dist2 = `$x^2 + ${aCarr}$` // Erreur : on oublie le double produit
+    const dist3 = `$x^2 - ${aCarr}$` // Erreur : confusion avec la différence de deux carrés
 
-    this.reponses = [
-      repCorrecte,
-      dist1,
-      dist2,
-      dist3
-    ]
+    this.reponses = [repCorrecte, dist1, dist2, dist3]
   }
 
   versionOriginale: () => void = () => {
@@ -66,7 +63,7 @@ export default class AutoQ5ANns2026 extends ExerciceQcmA {
     do {
       const a = randint(1, 10)
       const isPlus = choice([true, false]) // Alterne entre (x+a)² et (x-a)²
-      
+
       this.appliquerLesValeurs(a, isPlus)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

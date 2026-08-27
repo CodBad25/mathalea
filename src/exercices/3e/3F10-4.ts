@@ -23,7 +23,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre = "Lire graphiquement l'image d'un nombre par une fonction"
 export const dateDePublication = '29/10/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Lire une image sur une Spline

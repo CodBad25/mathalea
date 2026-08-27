@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Compléter une relation de Chasles'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3195d'
 export const refs = {
   'fr-fr': [],

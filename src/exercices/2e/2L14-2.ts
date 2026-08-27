@@ -12,7 +12,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Exprimer une variable en fonction des autres à  partir de formules mathématiques'
 export const dateDePublication = '02/10/2023'
@@ -59,7 +59,7 @@ export default class ExprimerEnFonctionDesAutresFormules extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       let texteCorr = ''
       let texte = ''

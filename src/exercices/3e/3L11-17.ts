@@ -22,7 +22,7 @@ export const titre = 'Compléter une table de simple distributivité'
 export const dateDePublication = '29/12/2025'
 // export const dateDeModifImportante = '04/01/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Développer des expressions de simple distributivité à l'aide d'un tableau de  multiplication
  * @author Olivier Mimeau

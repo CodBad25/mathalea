@@ -11,7 +11,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   "Déterminer les coordonnées d'un vecteur normal à un plan à partir de son équation"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'y75un'
 export const refs = {
   'fr-fr': [],

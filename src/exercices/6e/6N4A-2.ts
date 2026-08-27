@@ -13,7 +13,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Modéliser des problèmes niveau 2'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '3/06/2025'
 
@@ -943,7 +942,7 @@ export default class ModelisationProblemes extends Exercice {
       (type, i) => problèmes[type][i % problèmes[type].length],
     )
     let indexInteractif = 0
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const { enonce, nextInteractif, correction } = genereEnonces(
         this,
         typeDeQuestions[i],

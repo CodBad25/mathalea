@@ -1,13 +1,12 @@
-
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Trouver le nombre de faces et d\'arêtes d\'un cube'
+export const titre = "Trouver le nombre de faces et d'arêtes d'un cube"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5bd1f'
 export const refs = {
   'fr-fr': [],
@@ -26,11 +25,11 @@ export default class Can2026CE2Q11 extends ExerciceCan {
 
   enonce(distracteur1?: string, distracteur2?: string) {
     if (distracteur1 == null || distracteur2 == null) {
-      // Version aléatoire : 
+      // Version aléatoire :
       // Un distracteur avec 6 faces mais mauvais nombre d'arêtes
       const aretesErreur1 = choice([8, 10, 14])
       distracteur1 = `$6$ faces et $${aretesErreur1}$ arêtes.`
-      
+
       // Un distracteur avec mauvais nombre de faces et d'arêtes
       const facesErreur = choice([4, 8])
       const aretesErreur2 = choice([6, 8, 10])
@@ -66,8 +65,8 @@ export default class Can2026CE2Q11 extends ExerciceCan {
   }
 
   nouvelleVersion() {
-    this.canOfficielle 
-      ? this.enonce('$6$ faces et $8$ arêtes.', '$8$ faces et $6$ arêtes.') 
+    this.canOfficielle
+      ? this.enonce('$6$ faces et $8$ arêtes.', '$8$ faces et $6$ arêtes.')
       : this.enonce()
   }
 }

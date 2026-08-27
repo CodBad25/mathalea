@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 export const titre = 'Résolution de triangles (cas ambigu CCA)'
 export const dateDePublication = '16/03/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b7e2d'
 export const refs = {
   'fr-fr': [],

@@ -14,7 +14,7 @@ export const titre =
   'Effectuer des calculs littéraux avec des puissances et leurs règles de calculs'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Puissances littérales avec exposants relatifs
  * * Travailler des résultats automatisés
@@ -45,7 +45,7 @@ export default class PuissancesDUnRelatif2 extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
 
       const variables = ['a']

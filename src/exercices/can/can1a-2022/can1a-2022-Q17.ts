@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une vitesse moyenne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9fygi'
 export const refs = {
   'fr-fr': [],
@@ -51,14 +51,14 @@ export default class Can1a2022Q17 extends ExerciceCan {
 
     const reponse = distance * multiplicateur
 
-    this.question = `Si l'on parcourt $${distance}\\text{ km}$ en ${minutesTexte} minutes, alors la vitesse moyenne est : ${this.interactif ? '': '$\\ldots \\text{ km/h}$.'}`
+    this.question = `Si l'on parcourt $${distance}\\text{ km}$ en ${minutesTexte} minutes, alors la vitesse moyenne est : ${this.interactif ? '' : '$\\ldots \\text{ km/h}$.'}`
     this.correction = `${minutesTexte.charAt(0).toUpperCase() + minutesTexte.slice(1)} minutes représentent $\\dfrac{1}{${multiplicateur}}$ heure.<br>
 Donc en $1$ heure, on parcourt $${distance}\\times ${multiplicateur}=${miseEnEvidence(reponse)}\\text{ km}$. <br>
 La vitesse moyenne est donc $${miseEnEvidence(reponse)}\\text{ km/h}$.`
     this.reponse = reponse
-   
+
     this.canEnonce = `Si l'on parcourt $${distance}\\text{ km}$ en ${minutesTexte} minutes, alors la vitesse moyenne est :`
-     this.canReponseACompleter ='$\\ldots$ km/h'
+    this.canReponseACompleter = '$\\ldots$ km/h'
   }
 
   nouvelleVersion() {

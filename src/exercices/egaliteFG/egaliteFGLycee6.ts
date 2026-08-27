@@ -1,14 +1,18 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Une politique de rattrapage salarial"
+export const titre = 'Une politique de rattrapage salarial'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd5005'
 export const refs = {
   'fr-fr': ['EgaliteFG5-2de-6'],
@@ -28,14 +32,19 @@ export default class EgaliteFGLycee6 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
-      "<br><br>Dans une entreprise de $1\\,000$ salariés, il y a $600$ hommes et $400$ femmes. Le salaire moyen des hommes est de $2\\,500$ € par mois, celui des femmes de $2\\,200$ € par mois."
+      '<br><br>Dans une entreprise de $1\\,000$ salariés, il y a $600$ hommes et $400$ femmes. Le salaire moyen des hommes est de $2\\,500$ € par mois, celui des femmes de $2\\,200$ € par mois.'
     this.nbQuestions = 14
     this.nbQuestionsModifiable = false
     this.commentaireDebat =
-      texteGras('Pour débattre') + '.<br>Au bout de deux ans, malgré une augmentation plus forte pour les femmes, l\'écart de salaire en euros a-t-il diminué ou augmenté ? Que cela nous enseigne-t-il sur la difficulté de résorber les inégalités quand les salaires de départ sont très différents ?'
+      texteGras('Pour débattre') +
+      ".<br>Au bout de deux ans, malgré une augmentation plus forte pour les femmes, l'écart de salaire en euros a-t-il diminué ou augmenté ? Que cela nous enseigne-t-il sur la difficulté de résorber les inégalités quand les salaires de départ sont très différents ?"
     this.besoinFormulaireCaseACocher = ['Afficher « Pour débattre »', true]
     this.sup = true
   }
@@ -44,73 +53,96 @@ export default class EgaliteFGLycee6 extends Exercice {
     this.listeQuestions = []
     this.listeCorrections = []
 
-    let texte0 = texteGras('Partie A') + "<br>Quel est l'écart salarial moyen mensuel entre les hommes et les femmes dans cette entreprise ?"
-    if (this.interactif) texte0 += ajouteChampTexteMathLive(this, 0, '', { texteApres: '€' }) + '<br>'
+    let texte0 =
+      texteGras('Partie A') +
+      "<br>Quel est l'écart salarial moyen mensuel entre les hommes et les femmes dans cette entreprise ?"
+    if (this.interactif)
+      texte0 +=
+        ajouteChampTexteMathLive(this, 0, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 300 } })
     const correction0 = `$2\\,500-2\\,200=${miseEnEvidence('300')}$ €.`
 
     let texte1 =
-      "Quelle est cette différence salariale en pourcentage (par rapport au salaire des hommes) ?"
-    if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
+      'Quelle est cette différence salariale en pourcentage (par rapport au salaire des hommes) ?'
+    if (this.interactif)
+      texte1 +=
+        ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 12 } })
     const correction1 = `$\\dfrac{300}{2\\,500}\\times 100=${miseEnEvidence('12\\,\\%')}$.`
 
     let texte2 =
       "Pour que les femmes aient un salaire moyen égal à celui des hommes, quel taux d'évolution faudrait-il appliquer à leur salaire (arrondi au dixième) ?"
-    if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
+    if (this.interactif)
+      texte2 +=
+        ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 13.6 } })
     const correction2 = `$\\dfrac{2\\,500-2\\,200}{2\\,200}\\times 100\\approx ${miseEnEvidence('13{,}6\\,\\%')}$.`
 
     let texte3 =
       "Quel budget mensuel supplémentaire l'entreprise devrait-elle prévoir pour augmenter toutes les femmes de $300$ € afin d'atteindre l'équité salariale ?"
-    if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3, '', { texteApres: '€' }) + '<br>'
+    if (this.interactif)
+      texte3 +=
+        ajouteChampTexteMathLive(this, 3, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 120000 } })
     const correction3 = `$300\\times 400=${miseEnEvidence('120\\,000')}$ €.`
 
     let texte4 =
       "L'entreprise augmente les salaires de $3\\,\\%$ pour les hommes et $4\\,\\%$ pour les femmes la première année. Calculer le nouveau salaire moyen des hommes."
-    if (this.interactif) texte4 += ajouteChampTexteMathLive(this, 4, '', { texteApres: '€' }) + '<br>'
+    if (this.interactif)
+      texte4 +=
+        ajouteChampTexteMathLive(this, 4, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 2575 } })
     const correction4 = `$2\\,500\\times 1{,}03=${miseEnEvidence('2\\,575')}$ €.`
 
     let texte5 = 'Même question pour les femmes.'
-    if (this.interactif) texte5 += ajouteChampTexteMathLive(this, 5, '', { texteApres: '€' }) + '<br>'
+    if (this.interactif)
+      texte5 +=
+        ajouteChampTexteMathLive(this, 5, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 5, { reponse: { value: 2288 } })
     const correction5 = `$2\\,200\\times 1{,}04=${miseEnEvidence('2\\,288')}$ €.`
 
     let texte6 =
       "Quel est le pourcentage d'écart salarial entre les hommes et les femmes après cette première année (arrondi au dixième) ?"
-    if (this.interactif) texte6 += ajouteChampTexteMathLive(this, 6, '', { texteApres: '%' }) + '<br>'
+    if (this.interactif)
+      texte6 +=
+        ajouteChampTexteMathLive(this, 6, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 6, { reponse: { value: 11.1 } })
     const correction6 = `$\\dfrac{2\\,575-2\\,288}{2\\,575}\\times 100\\approx ${miseEnEvidence('11{,}1\\,\\%')}$.`
 
     let texte7 =
-      "La deuxième année, les salaires des hommes augmentent encore de $3\\,\\%$ et ceux des femmes de $5\\,\\%$. Calculer le salaire moyen des hommes à la fin de la deuxième année."
-    if (this.interactif) texte7 += ajouteChampTexteMathLive(this, 7, '', { texteApres: '€' }) + '<br>'
+      'La deuxième année, les salaires des hommes augmentent encore de $3\\,\\%$ et ceux des femmes de $5\\,\\%$. Calculer le salaire moyen des hommes à la fin de la deuxième année.'
+    if (this.interactif)
+      texte7 +=
+        ajouteChampTexteMathLive(this, 7, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 7, { reponse: { value: 2652.25 } })
     const correction7 = `$2\\,575\\times 1{,}03=${miseEnEvidence('2\\,652{,}25')}$ €.`
 
     let texte8 = 'Même question pour les femmes.'
-    if (this.interactif) texte8 += ajouteChampTexteMathLive(this, 8, '', { texteApres: '€' }) + '<br>'
+    if (this.interactif)
+      texte8 +=
+        ajouteChampTexteMathLive(this, 8, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 8, { reponse: { value: 2402.4 } })
     const correction8 = `$2\\,288\\times 1{,}05=${miseEnEvidence('2\\,402{,}4')}$ €.`
 
     let texte9 =
       "Quel est le taux d'évolution global au bout des deux ans d'augmentation salariale pour les femmes, puis pour les hommes (arrondi au dixième) ?"
-    if (this.interactif) texte9 += ajouteChampTexteMathLive(this, 9, '', { texteApres: '%' }) + '<br>'
+    if (this.interactif)
+      texte9 +=
+        ajouteChampTexteMathLive(this, 9, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 9, { reponse: { value: 9.2 } })
-    const correction9 =
-      `Pour les femmes : $1{,}04\\times 1{,}05=1{,}092$, soit un taux d'évolution global de $${miseEnEvidence('+9{,}2\\,\\%')}$. Pour les hommes : $1{,}03\\times 1{,}03=1{,}0609$, soit un taux d'évolution global de $+6{,}09\\,\\%\\approx +6{,}1\\,\\%$.`
+    const correction9 = `Pour les femmes : $1{,}04\\times 1{,}05=1{,}092$, soit un taux d'évolution global de $${miseEnEvidence('+9{,}2\\,\\%')}$. Pour les hommes : $1{,}03\\times 1{,}03=1{,}0609$, soit un taux d'évolution global de $+6{,}09\\,\\%\\approx +6{,}1\\,\\%$.`
 
     let texte10 =
       "Quel est le pourcentage d'écart salarial après ces deux années, arrondi au dixième ?"
-    if (this.interactif) texte10 += ajouteChampTexteMathLive(this, 10, '', { texteApres: '%' }) + '<br>'
+    if (this.interactif)
+      texte10 +=
+        ajouteChampTexteMathLive(this, 10, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 10, { reponse: { value: 9.4 } })
-    const correction10 =
-      `$\\dfrac{2\\,652{,}25-2\\,402{,}4}{2\\,652{,}25}\\times 100\\approx ${miseEnEvidence('9{,}4\\,\\%')}$. L'écart relatif diminue lentement ($12\\,\\%\\to 11{,}1\\,\\%\\to 9{,}4\\,\\%$), mais l'écart en euros, lui, ne diminue presque pas ($2\\,652{,}25-2\\,402{,}4=249{,}85$ € contre $300$ € au départ).`
+    const correction10 = `$\\dfrac{2\\,652{,}25-2\\,402{,}4}{2\\,652{,}25}\\times 100\\approx ${miseEnEvidence('9{,}4\\,\\%')}$. L'écart relatif diminue lentement ($12\\,\\%\\to 11{,}1\\,\\%\\to 9{,}4\\,\\%$), mais l'écart en euros, lui, ne diminue presque pas ($2\\,652{,}25-2\\,402{,}4=249{,}85$ € contre $300$ € au départ).`
 
     const texte11 =
-      texteGras("Partie B : Atteindre l'égalité salariale") + '<br>' +
+      texteGras("Partie B : Atteindre l'égalité salariale") +
+      '<br>' +
       "L'entreprise décide de conserver chaque année les taux d'évolution des salaires de la deuxième année du plan d'augmentation, à savoir :<br>" +
       '<ul style="list-style:disc; margin:0.25rem 0 0.5rem 1.25rem;">' +
       "<li>Les hommes bénéficient d'une augmentation salariale de $3\\,\\%$ par an.</li>" +
@@ -129,14 +161,15 @@ export default class EgaliteFGLycee6 extends Exercice {
     const texte12 =
       "Compléter les deux premières années après l'augmentation salariale. Quelles formules mettre en B3, B4, C3 et C4 ?"
     const correction12 =
-      "En B3 : <code>=B2*1,05</code> (ou <code>=B2*1.05</code>) ; en C3 : <code>=C2*1,03</code>. On recopie ensuite ces formules vers le bas : en B4, <code>=B3*1,05</code> ; en C4, <code>=C3*1,03</code>."
+      'En B3 : <code>=B2*1,05</code> (ou <code>=B2*1.05</code>) ; en C3 : <code>=C2*1,03</code>. On recopie ensuite ces formules vers le bas : en B4, <code>=B3*1,05</code> ; en C4, <code>=C3*1,03</code>.'
 
     let texte13 =
       "Déterminer le nombre d'années nécessaires pour que le salaire moyen des femmes atteigne celui des hommes."
-    if (this.interactif) texte13 += ajouteChampTexteMathLive(this, 12, '', { texteApres: 'ans' }) + '<br>'
+    if (this.interactif)
+      texte13 +=
+        ajouteChampTexteMathLive(this, 12, '', { texteApres: 'ans' }) + '<br>'
     handleAnswers(this, 12, { reponse: { value: 6 } })
-    const correction13 =
-      `On calcule $F_n=2\\,402{,}4\\times 1{,}05^n$ et $H_n=2\\,652{,}25\\times 1{,}03^n$ à la calculatrice ou au tableur : pour $n=5$, $F_5\\approx 3\\,066{,}14$ € $< H_5\\approx 3\\,074{,}68$ € ; pour $n=6$, $F_6\\approx 3\\,219{,}45$ € $> H_6\\approx 3\\,166{,}93$ €. C'est donc au bout de $${miseEnEvidence('6')}$ années supplémentaires (soit $8$ ans après le début du plan) que le salaire moyen des femmes dépasse celui des hommes.`
+    const correction13 = `On calcule $F_n=2\\,402{,}4\\times 1{,}05^n$ et $H_n=2\\,652{,}25\\times 1{,}03^n$ à la calculatrice ou au tableur : pour $n=5$, $F_5\\approx 3\\,066{,}14$ € $< H_5\\approx 3\\,074{,}68$ € ; pour $n=6$, $F_6\\approx 3\\,219{,}45$ € $> H_6\\approx 3\\,166{,}93$ €. C'est donc au bout de $${miseEnEvidence('6')}$ années supplémentaires (soit $8$ ans après le début du plan) que le salaire moyen des femmes dépasse celui des hommes.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
@@ -166,8 +199,9 @@ export default class EgaliteFGLycee6 extends Exercice {
     this.listeCorrections[12] = correction12
     this.listeQuestions[13] = texte13
     this.listeCorrections[13] = correction13
-    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireDebat
-
+    if (this.sup)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireDebat
 
     listeQuestionsToContenu(this)
   }

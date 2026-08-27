@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer une limite avec l'infini"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'agjju'
 export const refs = {
   'fr-fr': [],

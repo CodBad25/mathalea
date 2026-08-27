@@ -18,7 +18,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Calculer une distance avec le théorème de Thalès'
 
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const dateDePublication = '25/12/2025'
 
@@ -41,7 +40,7 @@ export default class AutoTheoremeThales extends ExerciceSimple {
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.formatChampTexte = KeyboardType.alphanumeric
-    this.formatInteractif = 'custom'
+    this.formatInteractif = 'meta-custom'
   }
 
   nouvelleVersion() {

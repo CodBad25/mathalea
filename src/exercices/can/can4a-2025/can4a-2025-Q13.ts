@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Conversion de longueurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '38d97'
 export const refs = {
   'fr-fr': [],

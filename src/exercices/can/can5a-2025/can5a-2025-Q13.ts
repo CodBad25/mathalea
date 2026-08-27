@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Produit de 3 facteurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343s'
 export const refs = {
   'fr-fr': [],

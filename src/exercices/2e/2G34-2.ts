@@ -18,7 +18,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 export const titre =
   'Tester si un couple de points vérifie un système de deux équations à deux inconnues.'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDePublication = '28/03/2024'
@@ -91,7 +91,7 @@ export default class systemeEquationsPremDegSol extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.comment =
         "Dans cet exercice, l'élève doit vérifier si un couple est solution d'un système d'équations. Les solutions sont entières comprises entre -10 et 10.<br>Le niveau 1 correspond à des inconnues seulement dans les membres de gauche;<br>Le niveau 2 à des inconnues dans les deux membres, mais ordonnées."
       let texte = ''

@@ -4,7 +4,6 @@ export const dateDePublication = '27/08/2025'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de can2F31-01 pour les auto 1er

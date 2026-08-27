@@ -9,7 +9,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Déterminer les facteurs d'un carré parfait"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0c7bb'
 export const refs = {
   'fr-fr': [],

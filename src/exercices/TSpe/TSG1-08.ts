@@ -8,7 +8,6 @@ import Exercice from '../Exercice'
 export const titre = 'Connaître la relation de Pascal'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '25/4/2025'
 export const dateDeModifImportante = '10/06/2026'
@@ -29,7 +28,7 @@ export default class relationPascal extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const n = randint(5, 18)

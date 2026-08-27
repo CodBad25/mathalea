@@ -4,10 +4,10 @@ export const uuid = '86529'
 export const refs = {
   'fr-fr': ['6N0A-8', 'BP2AutoN1'],
   'fr-2016': ['6N11-1', 'BP2AutoN1'],
-  'fr-ch': ['']// Primaire anciennement :'9NO2-6'],
+  'fr-ch': [''], // Primaire anciennement :'9NO2-6'],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '26/08/2024'
 export const dateDeModifImportante = '17/04/2025'
 /**

@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Compléter une égalité '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9fa79'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -25,7 +25,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Associer un nombre décimal à sa notation scientifique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

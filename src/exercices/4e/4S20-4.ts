@@ -7,7 +7,6 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Calculer des probabilités.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '02/08/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModificationImportante = '29/12/2025' // Mise en place de l'interactivité (Jean-claude Lhote)

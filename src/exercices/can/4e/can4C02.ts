@@ -6,7 +6,7 @@ import {
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver l’opposé ou l’inverse d’une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '05/12/2021'

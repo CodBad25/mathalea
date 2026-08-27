@@ -7,9 +7,14 @@ import {
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+export const interactifReady = true
+export const interactifType = 'mathLive'
 export const titre = "Étudier la convexité d'une fonction polynôme"
 export const dateDePublication = '17/08/2026'
 export const uuid = 'b3475'
@@ -119,9 +124,21 @@ export default class ConvexitePolynomeDegreTrois extends Exercice {
       hauteurLignes: [18, 18, 18],
     })
 
-    this.listeQuestions[0] = `On considère la fonction $f$ définie sur $\\mathbb R$ par
-    $f(x)=${f.toLatex()}$.<br><br>
-    Étudier la convexité de la fonction $f$ sur $\\mathbb R$, puis déterminer les coordonnées de ses éventuels points d'inflexion.`
+    if (this.interactif) {
+      this.listeQuestions[0] = `On considère la fonction $f$ définie sur $\\mathbb R$ par
+      $f(x)=${f.toLatex()}$ et on note $\\mathcal{C}_f$ sa courbe représentative.<br><br>
+      La courbe $\\mathcal{C}_f$ admet un unique point d'inflexion, noté $I$. Déterminer ses coordonnées :<br>
+      ${remplisLesBlancs(this, 0, 'I\\left(%{champ1}\\,;\\,%{champ2}\\right)', KeyboardType.clavierNumbers)}`
+    } else {
+      this.listeQuestions[0] = `On considère la fonction $f$ définie sur $\\mathbb R$ par
+    $f(x)=${f.toLatex()}$ et on note $\\mathcal{C}_f$ sa courbe représentative.<br><br>
+    Étudier la convexité de la fonction $f$ sur $\\mathbb R$, puis déterminer les coordonnées de ses éventuels points d'inflexion de $\\mathcal{C}_f$.`
+    }
+
+    handleAnswers(this, 0, {
+      champ1: { value: texNombre(abscisseInflexion) },
+      champ2: { value: texNombre(imageInflexion) },
+    })
 
     this.listeCorrections[0] = `La fonction $f$ est un polynôme, elle est donc deux fois dérivable sur $\\mathbb R$.<br>
     $\\begin{aligned}
@@ -139,7 +156,7 @@ export default class ConvexitePolynomeDegreTrois extends Exercice {
     f(${texNombre(abscisseInflexion)})&=${calculImageInflexion}\\\\
     &=${texNombre(imageInflexion)}.
     \\end{aligned}$<br>
-    Le point d'inflexion $I$ de la courbe a donc pour coordonnées $${miseEnEvidence(`I\\left(${texNombre(abscisseInflexion)}\\,;\\,${texNombre(imageInflexion)}\\right)`)}$.`
+    Le point d'inflexion $I$ de la courbe $\\mathcal{C}_f$ a donc pour coordonnées $${miseEnEvidence(`I\\left(${texNombre(abscisseInflexion)}\\,;\\,${texNombre(imageInflexion)}\\right)`)}$.`
 
     listeQuestionsToContenu(this)
   }

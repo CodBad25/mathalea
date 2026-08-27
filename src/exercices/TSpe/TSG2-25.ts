@@ -25,7 +25,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer le projeté orthogonal d'un point sur une droite"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '26/01/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
@@ -52,7 +51,7 @@ export default class projOrthogonal extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 

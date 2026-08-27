@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire avec un seul quotient'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '08/12/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

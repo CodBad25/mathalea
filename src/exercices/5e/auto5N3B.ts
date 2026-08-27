@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Passer d'une fraction à une écriture décimale et inversement"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '16/03/2022'
 

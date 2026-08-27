@@ -9,7 +9,6 @@ import Exercice from '../../Exercice'
 export const titre = "Calculer l'espérance d'une loi binomiale"
 export const dateDePublication = '05/12/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -30,7 +29,7 @@ export default class EsperanceBinomiale extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 

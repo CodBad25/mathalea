@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 export const dateDeModifImportante = '01/06/2024'
 export const titre = 'Reconnaitre des tableaux de proportionnalité'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

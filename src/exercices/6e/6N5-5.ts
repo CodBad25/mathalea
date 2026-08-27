@@ -7,7 +7,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 export const titre = 'Résoudre des problèmes (ordre de grandeurs)'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcType = 'qcmMono'
 export const dateDeModifImportante = '23/06/2024'
 

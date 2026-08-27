@@ -12,7 +12,6 @@ export const titre =
   'Utiliser le guide-âne pour construire un segment de longueur donnée'
 export const uuid = '327f2'
 export const interactifReady = true
-export const interactifType = 'guide-ane'
 export const refs = {
   'fr-fr': ['4G30-0'],
   'fr-ch': ['11ES1C-4'],

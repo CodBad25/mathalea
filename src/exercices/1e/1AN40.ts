@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Connaître les valeurs remarquables du cosinus et sinus'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '16/04/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '12/01/2024'

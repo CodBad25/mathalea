@@ -12,7 +12,7 @@ export const titre = 'Compléter des opérations à trous'
 export const dateDePublication = '2/11/2024'
 export const uuid = 'b3704'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['6N0A-14'],
   'fr-ch': [],
@@ -46,7 +46,7 @@ export default class CompleterEgalite extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let x: number | Decimal = NaN

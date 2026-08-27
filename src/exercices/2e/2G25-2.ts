@@ -3,7 +3,6 @@ import LectureGraphiqueVecteurRepere from '../can/2e/can2G25-01'
 export const titre =
   'Lire les coordonnées d’un vecteur représenté dans un repère'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '29/03/2025'
 

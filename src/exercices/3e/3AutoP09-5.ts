@@ -15,7 +15,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Utiliser un graphique pour résoudre un problème de prix'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '4/01/2026'
 

@@ -14,7 +14,6 @@ export const titre = 'Calculer un carré'
 export const dateDePublication = '17/01/2023'
 export const dateDeModifImportante = '25/09/2025' // Éric Elter : Parenthèses + Eviter doublons
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer de carré d'un nombre

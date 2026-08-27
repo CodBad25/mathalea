@@ -43,7 +43,6 @@ export const titre = 'Tracer une médiane dans un triangle'
 
 export const dateDePublication = '17/01/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = '63d3a'
 export const refs = {

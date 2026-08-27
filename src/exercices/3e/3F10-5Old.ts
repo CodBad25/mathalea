@@ -3,7 +3,7 @@ export const titre =
   'Calculer des images (et antécédents) dans des fonctions linéaires ou affines'
 export const dateDePublication = '19/06/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const uuid = 'c9382'

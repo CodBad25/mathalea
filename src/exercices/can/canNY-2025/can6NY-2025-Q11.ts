@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = "Charger d'unités"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0ebee'
 export const refs = {
   'fr-fr': [],

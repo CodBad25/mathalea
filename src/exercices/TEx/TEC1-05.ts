@@ -1,7 +1,7 @@
 import CalculsComplexes from '../HP/HPC106'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Produits complexes'
 export const dateDePublication = '25/06/2026'
 export const uuid = '9f83f'

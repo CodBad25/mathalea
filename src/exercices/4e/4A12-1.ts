@@ -19,7 +19,6 @@ export const refs = {
 export const titre =
   'Déterminer le PPCM à partir des décompositions en produits de facteurs premiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Détermine le plus petit multiple commun à partir des décompositions en produits de facteurs premiers
@@ -134,7 +133,7 @@ export default class PPCMDecompositionFacteursPremiers extends Exercice {
       if (facteursManquants.length > 0) {
         texteCorr += `On ajoute les facteurs manquants de $${B}$ (en vert) : ${texteDecompPPCM.replace(/\$$/, '.$')}<br>`
       }
-      texteCorr += `Donc $\\text{PPCM}(${A}, ${B}) = ${texteDecompPPCM.replace(/^\$/, '').replace(/\$$/, '')} = ${miseEnEvidence(lePPCM)}.$`
+      texteCorr += `Donc $\\text{PPCM}$$(${A}, ${B}) = ${texteDecompPPCM.replace(/^\$/, '').replace(/\$$/, '')} = ${miseEnEvidence(lePPCM)}.$`
 
       handleAnswers(this, i, {
         reponse: { value: String(lePPCM) },

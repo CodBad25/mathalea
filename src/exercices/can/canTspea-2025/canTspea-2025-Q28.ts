@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une inéquation du second degré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '85bf3'
 export const refs = {
   'fr-fr': [],

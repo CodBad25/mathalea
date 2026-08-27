@@ -1,6 +1,10 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -9,10 +13,10 @@ import Exercice from '../Exercice'
 export const titre = 'Clubs de la pause méridienne : filles et garçons'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ce1f4'
 export const refs = {
-  'fr-fr': [ 'EgaliteFG2-5e-7'],
+  'fr-fr': ['EgaliteFG2-5e-7'],
   'fr-ch': [],
 }
 
@@ -29,7 +33,11 @@ export default class EgaliteFG7 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
       '<br><br>Un collège propose trois clubs pendant la pause méridienne. Voici un tableau qui représente les réponses des élèves de 5<sup>e</sup> à un sondage sur leur participation à un club :<br>'
@@ -54,7 +62,8 @@ export default class EgaliteFG7 extends Exercice {
     this.nbQuestions = 3
     this.nbQuestionsModifiable = false
     this.commentaireDebat =
-      texteGras('Pour débattre') + ".<br>Que pourrait-on conclure sur l'influence des stéréotypes de genre dans le choix des clubs ?"
+      texteGras('Pour débattre') +
+      ".<br>Que pourrait-on conclure sur l'influence des stéréotypes de genre dans le choix des clubs ?"
     this.besoinFormulaireCaseACocher = ['Afficher « Pour débattre »', true]
     this.sup = true
   }
@@ -86,8 +95,9 @@ export default class EgaliteFG7 extends Exercice {
     this.listeCorrections[1] = correction1
     this.listeQuestions[2] = texte2
     this.listeCorrections[2] = correction2
-    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireDebat
-
+    if (this.sup)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireDebat
 
     listeQuestionsToContenu(this)
   }

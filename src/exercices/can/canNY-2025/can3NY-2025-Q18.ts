@@ -11,7 +11,7 @@ import {
 import { abs, signe } from '../../../lib/outils/nombres'
 export const titre = 'Développer une expression'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cfe2d'
 export const refs = {
   'fr-fr': [],

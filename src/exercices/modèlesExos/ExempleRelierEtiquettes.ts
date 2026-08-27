@@ -4,7 +4,6 @@ import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = 'Relier des sommes à leurs résultats'
 export const interactifReady = true
-export const interactifType = 'relier-etiquettes'
 
 export const dateDePublication = '31/07/2026'
 export const uuid = 'bd726'

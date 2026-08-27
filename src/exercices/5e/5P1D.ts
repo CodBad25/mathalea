@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 export const dateDeModifImportante = '29/02/2024'
 export const titre = 'Résoudre un problème de vitesse'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Recherche de la vitesse, du temps ou de la distance en utilisant un tableau de proportionnalité et le produit en croix
@@ -66,7 +65,7 @@ export default class VitesseDistanceTemps extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
     let texteApres
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let t
       let prenom
       let destination

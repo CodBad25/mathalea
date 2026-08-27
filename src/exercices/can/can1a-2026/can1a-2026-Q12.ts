@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer la valeur affichée par un algorithme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '00ni3'
 export const refs = {
   'fr-fr': [],
@@ -21,12 +21,11 @@ export const refs = {
 export default class Can1a2026Q28 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
-   enonce(uInit?: number, coeff?: number, nbTours?: number): void {
-    
+  enonce(uInit?: number, coeff?: number, nbTours?: number): void {
     if (uInit == null || coeff == null || nbTours == null) {
       nbTours = 2
       coeff = randint(1, 7)
@@ -43,7 +42,6 @@ export default class Can1a2026Q28 extends ExerciceCan {
       detail += `$k=${k}$ : $u=${ancien}\\times ${ecritureParentheseSiNegatif(ancien)}-${coeff}=${ancien * ancien}-${coeff}=${u}$<br>`
     }
 
-  
     this.reponse = String(u)
 
     if (context.isHtml) {

@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre = 'Classer des carrés et des cubes'
 export const dateDePublication = '18/08/2026'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const uuid = '9489b'
 
 export const refs = {

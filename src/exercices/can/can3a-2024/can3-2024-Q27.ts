@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une longueur dans un triangle rectangle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3f574'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import type { ItemPondere } from '../../../../../../lib/formulaireComplexe'
-  import InputNumber from '../../../../forms/InputNumber.svelte'
 
   /** Items à afficher, dans l'ordre d'affichage. */
   export let items: ItemPondere[]
@@ -54,22 +53,42 @@
         Le poids minimal saisissable est 1 : décocher la case est le seul chemin
         vers 0, sinon les boutons se désactiveraient sous le doigt.
       -->
-      <span class="w-[4.5rem] shrink-0">
-        <InputNumber
-          id="{idItem(item)}-poids"
-          min={1}
-          max={poidsMax}
-          value={item.poids}
-          isDisabled={item.poids === 0}
-          ariaLabel="Poids d'apparition de {item.label}"
-          darkBackground={true}
-          on:change={(e) =>
-            dispatch('poids', { index, poids: Number(e.detail ?? item.poids) })}
-        />
+      <span
+        class="inline-flex items-center shrink-0 ml-auto rounded border overflow-hidden
+        border-coopmaths-action dark:border-coopmathsdark-action
+        {item.poids === 0 ? 'opacity-30' : ''}"
+      >
+        <button
+          type="button"
+          class="w-4 h-5 flex items-center justify-center text-xs leading-none
+            text-coopmaths-action dark:text-coopmathsdark-action
+            hover:bg-coopmaths-action hover:text-coopmaths-canvas
+            dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas
+            disabled:pointer-events-none disabled:opacity-40"
+          disabled={item.poids <= 1}
+          aria-label="Diminuer le poids d'apparition de {item.label}"
+          on:click={() =>
+            dispatch('poids', { index, poids: item.poids - 1 })}>−</button
+        >
+        <span class="w-4 text-center text-xs tabular-nums select-none"
+          >{item.poids}</span
+        >
+        <button
+          type="button"
+          class="w-4 h-5 flex items-center justify-center text-xs leading-none
+            text-coopmaths-action dark:text-coopmathsdark-action
+            hover:bg-coopmaths-action hover:text-coopmaths-canvas
+            dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas
+            disabled:pointer-events-none disabled:opacity-40"
+          disabled={item.poids === 0 || item.poids >= poidsMax}
+          aria-label="Augmenter le poids d'apparition de {item.label}"
+          on:click={() =>
+            dispatch('poids', { index, poids: item.poids + 1 })}>+</button
+        >
       </span>
     {/if}
     {#if avecFleches}
-      <span class="inline-flex flex-col shrink-0">
+      <span class="inline-flex flex-col shrink-0 {poidsMax > 0 ? '' : 'ml-auto'}">
         <button
           type="button"
           aria-label="Déplacer {item.label} vers le haut"

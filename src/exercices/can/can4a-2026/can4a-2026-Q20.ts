@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une expression littéralee pour une valeur donnée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ch2pn'
 export const refs = {
   'fr-fr': [],

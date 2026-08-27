@@ -1,7 +1,7 @@
 import Pythagore2D from './4G20'
 export const titre = 'Donner ou compléter une égalité de Pythagore'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '28/12/2022'
 
 export const uuid = '40c47'

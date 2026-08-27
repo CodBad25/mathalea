@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const dateDeModifImportante = '05/09/2025'
 export const titre = "Donner l'écriture décimale d'une puissance de 10"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

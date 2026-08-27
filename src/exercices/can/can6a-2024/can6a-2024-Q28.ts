@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
 
 export const titre = 'Compléter 1 litre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c1fe4'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

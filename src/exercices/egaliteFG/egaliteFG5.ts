@@ -7,13 +7,13 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Les femmes à l\'Assemblée nationale'
+export const titre = "Les femmes à l'Assemblée nationale"
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a108d'
 export const refs = {
-  'fr-fr': [ 'EgaliteFG1-6e-5'],
+  'fr-fr': ['EgaliteFG1-6e-5'],
   'fr-ch': [],
 }
 
@@ -34,15 +34,20 @@ export default class EgaliteFG5 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
       "<br><br>L'Assemblée nationale est un groupe de personnes élues qui font les lois en France. Elle est composée de $577$ députés, qui représentent les citoyens et débattent des décisions importantes pour le pays.<br>" +
-      "Voici le nombre de femmes élues députées lors de chaque législature depuis 1986."
+      'Voici le nombre de femmes élues députées lors de chaque législature depuis 1986.'
     this.nbQuestions = 2
     this.nbQuestionsModifiable = false
     this.commentaireDebat =
-      texteGras('Pour débattre') + '.<br>À ton avis, comment pourrait-on agir pour encourager l\'accès des femmes à l\'Assemblée nationale ?'
+      texteGras('Pour débattre') +
+      ".<br>À ton avis, comment pourrait-on agir pour encourager l'accès des femmes à l'Assemblée nationale ?"
     this.besoinFormulaireCaseACocher = ['Afficher « Pour débattre »', true]
     this.sup = true
   }
@@ -88,7 +93,8 @@ export default class EgaliteFG5 extends Exercice {
     const largeurBarre = 24
     const espaceBarre = 12
     const hauteurGraphique = 180
-    const largeurGraphique = annees.length * (largeurBarre + espaceBarre) + espaceBarre + 40
+    const largeurGraphique =
+      annees.length * (largeurBarre + espaceBarre) + espaceBarre + 40
     const construireGraphe = (indicesRemplis: number[], titre: string) => {
       if (!context.isHtml) return ''
       let barresSvg = ''
@@ -97,8 +103,12 @@ export default class EgaliteFG5 extends Exercice {
         const estRempli = indicesRemplis.includes(i)
         const hauteurBarre = estRempli ? pourcentages[i] * echelle : 0
         const y = hauteurGraphique - 30 - hauteurBarre
-        barresSvg += `${estRempli ? `<rect x="${x}" y="${y}" width="${largeurBarre}" height="${hauteurBarre}" fill="#4c72b0" stroke="#2f4a72" />
-      <text x="${x + largeurBarre / 2}" y="${y - 5}" text-anchor="middle" font-size="10" fill="#333">${pourcentages[i]}</text>` : `<rect x="${x}" y="${hauteurGraphique - 31}" width="${largeurBarre}" height="1" fill="#ccc" />`}
+        barresSvg += `${
+          estRempli
+            ? `<rect x="${x}" y="${y}" width="${largeurBarre}" height="${hauteurBarre}" fill="#4c72b0" stroke="#2f4a72" />
+      <text x="${x + largeurBarre / 2}" y="${y - 5}" text-anchor="middle" font-size="10" fill="#333">${pourcentages[i]}</text>`
+            : `<rect x="${x}" y="${hauteurGraphique - 31}" width="${largeurBarre}" height="1" fill="#ccc" />`
+        }
       <text x="${x + largeurBarre / 2}" y="${hauteurGraphique - 12}" text-anchor="middle" font-size="9" fill="#333">${annee}</text>`
       })
       return `<div class="not-prose" style="text-align:center; margin: 0.75rem 0;">
@@ -121,8 +131,13 @@ export default class EgaliteFG5 extends Exercice {
 
     const texte0 =
       "Complète le tableau et le diagramme en colonnes ci-dessous en calculant, pour chaque année, le pourcentage de femmes parmi les $577$ député(e)s (arrondi à l'unité) :<br>" +
-      (context.isHtml ? tableauInteractif.output : tableauInteractif.latexOutput) +
-      construireGraphe(indicesExemples, "Pourcentage de femmes élues à l'Assemblée nationale (1986-2022) — à compléter")
+      (context.isHtml
+        ? tableauInteractif.output
+        : tableauInteractif.latexOutput) +
+      construireGraphe(
+        indicesExemples,
+        "Pourcentage de femmes élues à l'Assemblée nationale (1986-2022) — à compléter",
+      )
 
     const objetReponse: Record<string, { value: number }> = {}
     pourcentages.forEach((p, i) => {
@@ -131,9 +146,12 @@ export default class EgaliteFG5 extends Exercice {
     handleAnswers(this, 0, objetReponse, { formatInteractif: 'mathlive' })
 
     const correction0 =
-      "Pour chaque année, on calcule $\\dfrac{\\text{nombre de femmes}}{577}\\times 100$ :<br>" +
+      'Pour chaque année, on calcule $\\dfrac{\\text{nombre de femmes}}{577}\\times 100$ :<br>' +
       (context.isHtml ? tableauCorrige.output : tableauCorrige.latexOutput) +
-      construireGraphe([...annees.keys()], "Pourcentage de femmes élues à l'Assemblée nationale (1986-2022) — complet")
+      construireGraphe(
+        [...annees.keys()],
+        "Pourcentage de femmes élues à l'Assemblée nationale (1986-2022) — complet",
+      )
 
     const texte1 =
       "Constates-tu une évolution dans la représentation des femmes à l'Assemblée nationale entre 1986 et 2022 ? Si oui, peux-tu la décrire et l'expliquer ?"
@@ -144,8 +162,9 @@ export default class EgaliteFG5 extends Exercice {
     this.listeCorrections[0] = correction0
     this.listeQuestions[1] = texte1
     this.listeCorrections[1] = correction1
-    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireDebat
-
+    if (this.sup)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireDebat
 
     listeQuestionsToContenu(this)
   }

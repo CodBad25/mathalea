@@ -19,11 +19,12 @@ import {
   randint,
 } from '../../modules/outils'
 
-export const titre = "Déterminer le domaine de définition d'une fonction logarithme"
+export const titre =
+  "Déterminer le domaine de définition d'une fonction logarithme"
 export const dateDePublication = '22/7/2024'
 export const uuid = '450e7'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['TTE-11'],
   'fr-ch': [],
@@ -65,7 +66,7 @@ export default class DomaineDefFnLog extends Exercice {
     const pluriel = this.nbQuestions > 1 ? 's' : ''
     this.consigne = `Donner le domaine de définition de${this.nbQuestions > 1 ? 's ' : 'la '}fonction${pluriel} suivante${pluriel}.`
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = `$\\mathcal{f}_${i}(x)=`
       let correction = ''
       let a: number

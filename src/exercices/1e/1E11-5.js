@@ -15,7 +15,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = false
-// export const interactifType = 'mathLive'
+//
 export const titre =
   'Résoudre une équation du second degré avec le discriminant'
 

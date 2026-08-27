@@ -9,7 +9,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Résoudre une équation du premier degré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9laai'
 export const refs = {
   'fr-fr': [],
@@ -24,7 +24,10 @@ export default class Can1a2022Q5 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { nombreDecimalSeulement:true, fractionEgale: true }
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+      fractionEgale: true,
+    }
     this.optionsChampTexte = { texteAvant: '<br>$S=\\{$', texteApres: '$\\}$' }
   }
 

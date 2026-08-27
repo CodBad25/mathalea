@@ -1,7 +1,8 @@
 import problemesTrigoLongueur from '../3e/3G32-0'
-export const titre = 'Étudier un triangle rectangle inscrit dans un autre triangle rectangle'
+export const titre =
+  'Étudier un triangle rectangle inscrit dans un autre triangle rectangle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '10/10/2025'

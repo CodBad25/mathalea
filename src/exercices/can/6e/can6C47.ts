@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Additionner astucieusement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '25/10/2023'

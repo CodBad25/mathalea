@@ -25,7 +25,6 @@ import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre = 'Déterminer une équation de tangente'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '16/12/2021'
 export const dateDeModifImportante = '09/12/2025'
@@ -38,7 +37,7 @@ export const dateDeModifImportante = '09/12/2025'
 export const uuid = '4c8c7'
 
 export const refs = {
-  'fr-fr': ['1AN11-3', 'BP1FDEV01','TSA3-10', 'TCA7-10'],
+  'fr-fr': ['1AN11-3', 'BP1FDEV01', 'TSA3-10', 'TCA7-10'],
   'fr-ch': [],
 }
 export default class Equationdetangente extends Exercice {
@@ -86,14 +85,14 @@ export default class Equationdetangente extends Exercice {
       listeTypeQuestions = remplaceDansTableau(listeTypeQuestions, 2, 3)
       listeTypeQuestions = remplaceDansTableau(listeTypeQuestions, 1, 2)
 
-      if (listeTypeQuestions.length === 0) listeTypeQuestions = [2,3]
+      if (listeTypeQuestions.length === 0) listeTypeQuestions = [2, 3]
       listeTypeQuestions = combinaisonListes(
         listeTypeQuestions,
         this.nbQuestions,
       )
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number, b: number, c: number, d: number, e: number

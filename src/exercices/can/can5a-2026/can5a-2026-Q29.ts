@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Rendre une fraction irréductible'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'upkts'
 export const refs = {
   'fr-fr': [],

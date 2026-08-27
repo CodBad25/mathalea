@@ -8,15 +8,16 @@ import Question7 from '../can/TSpe/canTSpeS07'
 import Question8 from '../can/TSpe/canTSpeS08'
 import Question9 from '../can/TSpe/canTSpeS09'
 
-import Exercice from '../Exercice'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import Exercice from '../Exercice'
 
-export const titre = 'Calculer des limites de suites (synthèse opérations avec les limites)'
+export const titre =
+  'Calculer des limites de suites (synthèse opérations avec les limites)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ff9d1'
 export const refs = {
   'fr-fr': [],
@@ -52,7 +53,7 @@ export default class LimitesSuites extends Exercice {
 
   nouvelleVersion() {
     const exos = combinaisonListes(questions, this.nbQuestions)
-    for (let i = 0, index = 0; i < this.nbQuestions; ) {
+    for (let i = 0, index = 0; i < this.nbQuestions;) {
       const Exo = exos[index % 9]
       const question = new Exo()
       question.nouvelleVersion()

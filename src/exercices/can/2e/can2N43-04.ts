@@ -5,7 +5,7 @@ import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer $\\dfrac{1}{a}$ à la puissance $-1$ ou $-2$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '02/02/2026'

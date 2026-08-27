@@ -4,9 +4,9 @@ import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Donner la nature d\'un triangle'
+export const titre = "Donner la nature d'un triangle"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'js3qp'
 export const refs = {
   'fr-fr': [],

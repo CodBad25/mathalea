@@ -28,7 +28,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Diviser un nombre décimal par 10, 100 ou 1 000'
 export const dateDePublication = '05/07/2025'

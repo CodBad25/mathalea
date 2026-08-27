@@ -21,7 +21,7 @@ import { context } from '../../modules/context'
 export const titre = 'Effectuer des calculs simples avec des fractions'
 export const dateDePublication = '20/11/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '07/03/2023' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

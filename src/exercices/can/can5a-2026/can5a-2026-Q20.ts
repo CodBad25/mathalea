@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Écrire une fraction décimale en écriture décimale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ehdej'
 export const refs = {
   'fr-fr': [],

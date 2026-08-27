@@ -14,7 +14,6 @@ export const titre =
   "Déterminer l'ensemble de définition d'une fonction à partir de son expression"
 export const dateDePublication = '12/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'f142a'
 export const refs = {

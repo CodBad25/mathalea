@@ -18,7 +18,7 @@ import { context } from '../../modules/context'
 
 export const titre = 'Additionner deux fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '31/08/2024'

@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Multiplier ou diviser un entier par 10, 100, 1 000... avec résultat entier'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

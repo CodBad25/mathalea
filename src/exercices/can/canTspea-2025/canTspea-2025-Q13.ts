@@ -1,15 +1,15 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
-import { abs } from '../../../lib/outils/nombres'
 import { tableauVariationsFonction } from '../../../lib/mathFonctions/etudeFonction'
-import type FractionEtendue from '../../../modules/FractionEtendue'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { abs } from '../../../lib/outils/nombres'
 import { sp } from '../../../lib/outils/outilString'
+import type FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un encadrement avec la fonction carré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd077f'
 export const refs = {
   'fr-fr': [],

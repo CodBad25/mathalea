@@ -19,7 +19,7 @@ import { rangeMinMax } from '../../lib/outils/nombres'
 import FractionEtendue from '../../modules/FractionEtendue'
 
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '11/12/2020'

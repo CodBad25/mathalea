@@ -1,14 +1,14 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -17,7 +17,6 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer une limite par composition'
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'dbe69'
 export const refs = {
@@ -100,10 +99,7 @@ function ecritureFractionInverse(
   return `\\dfrac{${coefficient}}{x^{${puissance}}}`
 }
 
-function ajouteFractionInverse(
-  coefficient: number,
-  puissance: number,
-): string {
+function ajouteFractionInverse(coefficient: number, puissance: number): string {
   return `${coefficient > 0 ? '+' : '-'}\\dfrac{${Math.abs(coefficient)}}{x^{${puissance}}}`
 }
 
@@ -180,11 +176,7 @@ function correctionLimitePolynome(
     signeLimiteMonome(1, degre, indice.includes('to+') ? '+' : '-'),
   )
   const limiteMonome = infini(
-    signeLimiteMonome(
-      coefficient,
-      degre,
-      indice.includes('to+') ? '+' : '-',
-    ),
+    signeLimiteMonome(coefficient, degre, indice.includes('to+') ? '+' : '-'),
   )
   return `On sait que $\\displaystyle \\lim_{${indice}}${puissanceDeX}=${limitePuissance}$.<br>
   Comme $${coefficient}${coefficient > 0 ? '>0' : '<0'}$, $\\displaystyle \\lim_{${indice}}${ecriturePolynome(coefficient, degre, 0)}=${limiteMonome}$.<br>
@@ -288,9 +280,7 @@ export default class LimitesParComposition extends Exercice {
         const d = randint(1, 8)
         let limiteU: string
         let limiteExterieure: string
-        let quotient: ReturnType<
-          typeof ecritureQuotientPolynomesIrreductible
-        >
+        let quotient: ReturnType<typeof ecritureQuotientPolynomesIrreductible>
         let degreNumerateur: number
         let degreDenominateur: number
 
@@ -322,8 +312,7 @@ export default class LimitesParComposition extends Exercice {
           )
           limiteU = '0^+'
           reponse = '0'
-          limiteExterieure =
-            '\\displaystyle \\lim_{X\\to0^+}\\sqrt X=0'
+          limiteExterieure = '\\displaystyle \\lim_{X\\to0^+}\\sqrt X=0'
         } else {
           const p = randint(1, 4)
           const q = randint(1, 4)
@@ -377,9 +366,7 @@ export default class LimitesParComposition extends Exercice {
           const b = randint(1, 8)
           const c = randint(1, 5)
           const d = randint(1, 8)
-          let quotient: ReturnType<
-            typeof ecritureQuotientPolynomesIrreductible
-          >
+          let quotient: ReturnType<typeof ecritureQuotientPolynomesIrreductible>
           let degreNumerateur: number
           let degreDenominateur: number
           if (type === 'exponentielleRationnelleInfini') {
@@ -474,9 +461,7 @@ export default class LimitesParComposition extends Exercice {
         const uDegre = randint(1, 3)
         const uConstante = randint(-5, 5)
         const u = ecriturePolynome(uCoefficient, uDegre, uConstante)
-        const limiteU = infini(
-          signeLimiteMonome(uCoefficient, uDegre, sens),
-        )
+        const limiteU = infini(signeLimiteMonome(uCoefficient, uDegre, sens))
 
         if (choice([true, false])) {
           const exposant = choice([3, 4, 5])

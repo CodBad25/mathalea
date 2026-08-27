@@ -5,7 +5,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer la dérivée d'une fonction logarithme népérien"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '22/02/2025'
 

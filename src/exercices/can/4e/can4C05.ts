@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer la somme de fractions à dénominateurs compatibles'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

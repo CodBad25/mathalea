@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': ['11QCM-12', '1mQCM-12'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation du premier degré'

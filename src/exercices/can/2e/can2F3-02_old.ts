@@ -17,7 +17,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer des antécédents avec une fonction de référence (ancien exercice)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '1/11/2021'
 export const dateDeModifImportante = '12/08/2026'
 

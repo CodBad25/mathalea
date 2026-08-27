@@ -1,5 +1,6 @@
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -7,10 +8,10 @@ import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
-import { bleuMathalea } from '../../../lib/colors'
-export const titre = 'Déterminer le signe de $f(a)\\times f\'(a)$ par lecture graphique'
+export const titre =
+  "Déterminer le signe de $f(a)\\times f'(a)$ par lecture graphique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'gnx1c'
 export const refs = {
   'fr-fr': [],
@@ -21,7 +22,7 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ20 extends ExerciceCan {
-    maSpline!: Spline
+  maSpline!: Spline
 
   enonce(
     noeudsChoisis?: Array<{
@@ -43,7 +44,7 @@ export const refs = {
     const noeuds2 = [
       { x: -3, y: 2, deriveeGauche: -1, deriveeDroit: -1, isVisible: false },
       { x: -1, y: -2, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
-       { x: 0, y: 1, deriveeGauche: 4, deriveeDroit: 4, isVisible: false },
+      { x: 0, y: 1, deriveeGauche: 4, deriveeDroit: 4, isVisible: false },
       { x: 0.5, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
       { x: 1, y: 2, deriveeGauche: -3, deriveeDroit: -3, isVisible: false },
       { x: 3, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },

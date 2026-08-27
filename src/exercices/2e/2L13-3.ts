@@ -30,7 +30,6 @@ export const titre =
 export const dateDePublication = '20/04/2024'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Développer puis réduire une expression littérale.

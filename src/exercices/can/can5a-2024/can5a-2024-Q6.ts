@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une durée en minutes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7eb06'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

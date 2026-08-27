@@ -6,7 +6,7 @@ import Exercice from '../../Exercice'
 
 export const titre = 'Trouver une valeur dans un Yohaku (additif)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '10/08/2022'
 export const dateDeModifImportante = '16/12/2023'
 

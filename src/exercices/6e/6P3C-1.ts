@@ -35,7 +35,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre un problème relevant de la proportionnalité avec les propriétés de linéarité'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '06/04/2024'

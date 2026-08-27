@@ -4,6 +4,7 @@ import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { latexParPoint, texteParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import type { AutoCorrectionAMC } from '../../lib/amc/amcTypes'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -29,10 +30,9 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Étudier des fonctions affines'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

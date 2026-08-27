@@ -15,7 +15,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-export const interactifType = 'alea-iep-editeur'
+
 export const interactifReady = true
 
 type ArcDansLeCarre = {

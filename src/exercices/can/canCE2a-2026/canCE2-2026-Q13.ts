@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un rendu de monnaie'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5c854'
 export const refs = {
   'fr-fr': [],

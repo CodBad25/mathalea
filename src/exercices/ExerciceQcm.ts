@@ -5,7 +5,6 @@ import { context } from '../modules/context'
 import Exercice from './Exercice'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 

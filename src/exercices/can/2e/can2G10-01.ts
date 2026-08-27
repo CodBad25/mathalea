@@ -1,15 +1,15 @@
-import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Lire les coordonnées d'un point dans un repère"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '04/01/2023'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre une équation de congruence du type $ax \\equiv b \\,[k]$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '26/11/2025'
 export const uuid = '87538'
 
@@ -47,7 +47,7 @@ export default class ExerciceEquationAxCongruence extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // k entre 3 et 8
       const k = randint(3, 8)
 

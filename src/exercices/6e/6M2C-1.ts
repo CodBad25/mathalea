@@ -4,7 +4,7 @@ export const titre =
   'Calculer périmètre et/ou aire de carrés, rectangles et triangles rectangles'
 export const dateDePublication = '30/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

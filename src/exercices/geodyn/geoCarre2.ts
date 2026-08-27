@@ -7,7 +7,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const titre = 'Tracer un carré de dimension donnée'
 export const dateDePublication = '10/11/2023'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Tracer un carré

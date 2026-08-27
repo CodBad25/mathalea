@@ -43,7 +43,6 @@ export const titre = 'Construire des symétriques de points'
 export const dateDePublication = '07/01/2024'
 export const dateDeModifImportante = '15/04/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = '26ea4'
 

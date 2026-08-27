@@ -7,7 +7,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 export const titre = 'Trouver un inverse ou un opposé'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2guhi'
 export const refs = {
   'fr-fr': [],

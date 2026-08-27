@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -13,13 +14,11 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Effectuer des calculs complexes utilisant les priorités opératoires'
 export const dateDePublication = '23/04/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Plusieurs types de calculs avec des nombres relatifs, incluant des expressions complexes avec parenthèses imbriquées.

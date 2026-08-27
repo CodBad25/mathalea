@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 export const titre = 'Donner une écriture scientifique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'gbgfa'
 export const refs = {
   'fr-fr': [],

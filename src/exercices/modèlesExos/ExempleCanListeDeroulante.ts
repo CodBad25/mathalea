@@ -10,7 +10,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Un test exo simple + liste déroulante'
 export const uuid = '12321'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 export const refs = {
   'fr-fr': [],

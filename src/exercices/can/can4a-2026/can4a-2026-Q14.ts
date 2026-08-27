@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Compléter une suite logique'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fct3t'
 export const refs = {
   'fr-fr': [],

@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Calculer la probabilité d'une intersection d'événements indépendants"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4b3b4'
 export const refs = {
   'fr-fr': [],

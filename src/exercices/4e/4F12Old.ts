@@ -30,7 +30,7 @@ import Grandeur from '../../modules/Grandeur'
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

@@ -7,7 +7,7 @@ import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Déterminer un sinus ou un cosinus associé à un réel $x$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '16/04/2025'
 /**
  *

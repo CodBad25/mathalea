@@ -1,7 +1,7 @@
-import ExerciceQcmA from '../../ExerciceQcmA'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { fraction } from '../../../modules/fractions'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { fraction } from '../../../modules/fractions'
+import ExerciceQcmA from '../../ExerciceQcmA'
 
 export const uuid = '64ccf'
 export const refs = {
@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calcul avec des fractions (12/2023 Nouvelle Calédonie)'

@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer des sommes contenant des puissances de 10'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/11/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

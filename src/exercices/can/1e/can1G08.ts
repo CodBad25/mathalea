@@ -18,7 +18,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre =
   'Déterminer un vecteur normal avec une équation cartésienne'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '08/07/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -10,7 +10,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une ordonnée à partir de l’abscisse d’un point'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/09/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 /**
  * Modèle d'exercice très simple pour la course aux nombres

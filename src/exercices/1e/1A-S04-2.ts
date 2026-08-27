@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': ['10FA3A-4'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Calculer un pourcentage à partir d'un diagramme en barres"

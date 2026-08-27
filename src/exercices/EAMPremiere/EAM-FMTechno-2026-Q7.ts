@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
@@ -11,10 +10,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Donner le nombre d\'antécédents de $0$'
+export const titre = "Donner le nombre d'antécédents de $0$"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -58,17 +57,20 @@ x = 0 \\quad &\\text{ou} \\quad x = ${r}
       dist2 = `Un seul antécédent : $${r}$`
       dist3 = `Deux antécédents : $0$ et $${-r}$`
     } else {
-      const signeTermeX = (coeff: number) => (coeff >= 0 ? `+ ${coeff}x` : `- ${Math.abs(coeff)}x`)
-      const signeConst = (val: number) => (val >= 0 ? `+ ${val}` : `- ${Math.abs(val)}`)
+      const signeTermeX = (coeff: number) =>
+        coeff >= 0 ? `+ ${coeff}x` : `- ${Math.abs(coeff)}x`
+      const signeConst = (val: number) =>
+        val >= 0 ? `+ ${val}` : `- ${Math.abs(val)}`
 
       const A = op === '-' ? a - b : a + b
       const B = op === '-' ? -c : c
       const v = -B / A // unique antécédent
       const r = -c / b // racine de la parenthèse (piège produit nul)
 
-      const expanded = op === '-'
-        ? `${a}x ${signeTermeX(-b)} ${signeConst(-c)}`
-        : `${a}x ${signeTermeX(b)} ${signeConst(c)}`
+      const expanded =
+        op === '-'
+          ? `${a}x ${signeTermeX(-b)} ${signeConst(-c)}`
+          : `${a}x ${signeTermeX(b)} ${signeConst(c)}`
       const reduit = reduireAxPlusB(A, B)
 
       this.enonce = `On considère la fonction $f$ définie sur $\\R$ par $f(x) = ${a}x ${op} (${reduireAxPlusB(b, c)})$.<br>`
@@ -76,9 +78,10 @@ x = 0 \\quad &\\text{ou} \\quad x = ${r}
 
       this.correction = `Chercher les antécédents de $0$ revient à résoudre $f(x)=0$.<br>`
       this.correction += `Il s'agit d'une équation du premier degré (attention à ne pas confondre avec une équation produit nul).<br>`
-      this.correction += op === '-'
-        ? `On supprime la parenthèse en distribuant le signe «&nbsp;$-$&nbsp;» : $f(x) = ${a}x ${op} (${reduireAxPlusB(b, c)}) = ${expanded} = ${reduit}$.<br>`
-        : `On supprime la parenthèse : $f(x) = ${a}x ${op} (${reduireAxPlusB(b, c)}) = ${expanded} = ${reduit}$.<br>`
+      this.correction +=
+        op === '-'
+          ? `On supprime la parenthèse en distribuant le signe «&nbsp;$-$&nbsp;» : $f(x) = ${a}x ${op} (${reduireAxPlusB(b, c)}) = ${expanded} = ${reduit}$.<br>`
+          : `On supprime la parenthèse : $f(x) = ${a}x ${op} (${reduireAxPlusB(b, c)}) = ${expanded} = ${reduit}$.<br>`
       this.correction += `On résout :<br>`
       this.correction += `$\\begin{aligned}
 ${reduit} &= 0\\\\
@@ -124,8 +127,16 @@ x &= ${v}
 
     // Famille produit : [a, b] avec a | b, b ≠ 0
     const donneesDeux: [number, number][] = [
-      [3, -6], [2, -6], [2, 4], [3, 6], [2, -8],
-      [4, -8], [3, -9], [2, 6], [4, 8], [2, -4],
+      [3, -6],
+      [2, -6],
+      [2, 4],
+      [3, 6],
+      [2, -8],
+      [4, -8],
+      [3, -9],
+      [2, 6],
+      [4, 8],
+      [2, -4],
     ]
 
     // Famille affine : [a, b, c, op]  ->  f(x) = ax op (bx + c)

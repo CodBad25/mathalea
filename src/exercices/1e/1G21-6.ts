@@ -38,7 +38,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Résoudre un problème de synthèse avec produit scalaire'
 
 export const dateDePublication = '14/05/2026'
@@ -67,7 +67,7 @@ export default class NomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const xA = randint(3, 6)
       const yI = randint(1, xA - 1)
       const cote = randint(xA + 1, xA + 4)

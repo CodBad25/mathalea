@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer des sommes avec annee'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'jltht'
 export const refs = {
   'fr-fr': [],
@@ -27,7 +27,9 @@ export default class calcAvecSommes2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const choix = this.canOfficielle ? 1 : this.quotaChoice('choix', [1, 2, 3, 4])
+    const choix = this.canOfficielle
+      ? 1
+      : this.quotaChoice('choix', [1, 2, 3, 4])
     if (choix === 1) {
       this.question = `$${texNombre(annee, 0)}+${texNombre(annee, 0)}$`
       this.correction = `$${texNombre(annee, 0)}+${texNombre(annee, 0)}=${miseEnEvidence(texNombre(2 * annee, 0))}$`

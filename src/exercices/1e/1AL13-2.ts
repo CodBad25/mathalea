@@ -17,7 +17,7 @@ import { context } from '../../modules/context'
 export const titre = 'Étudier une suite arithmético-géométrique'
 export const dateDePublication = '30/11/2024'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDeModificationImportante = '18/04/2026' // Passage en MultiMathfield, ce qui sous-entend la 1e question en Mathlive et plus en Qcm.
 
 /**
@@ -27,7 +27,7 @@ export const dateDeModificationImportante = '18/04/2026' // Passage en MultiMath
 export const uuid = '12afd'
 
 export const refs = {
-  'fr-fr': ['1AL13-2','TSA1-31'],
+  'fr-fr': ['1AL13-2', 'TSA1-31'],
   'fr-ch': ['autres-10'],
 }
 export default class SuitesArithmeticoG extends Exercice {
@@ -41,7 +41,7 @@ export default class SuitesArithmeticoG extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a, u0, b, k

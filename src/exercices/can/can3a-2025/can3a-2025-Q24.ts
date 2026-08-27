@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver le reste par une division euclidienne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1e3d7'
 export const refs = {
   'fr-fr': [''],

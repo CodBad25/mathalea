@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '10/04/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = 'true'
 export const amcType = 'AMCNum'
 export const titre = 'Convertir des longueurs ou des masses'

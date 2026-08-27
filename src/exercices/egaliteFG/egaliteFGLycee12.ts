@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre = 'Tabagisme au travail : un paradoxe statistique'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '49e3a'
 export const refs = {
   'fr-fr': ['EgaliteFG6-1e-12'],
@@ -28,7 +28,11 @@ export default class EgaliteFGLycee12 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
       "<br><br>Une caisse d'assurance maladie emploie $1\\,630$ personnes. Voici les effectifs par catégorie :<br>"
@@ -85,22 +89,31 @@ export default class EgaliteFGLycee12 extends Exercice {
       'Total & 340 & 160 & 94 & 594 \\\\\n\\hline\n' +
       '\\end{tabular}\\end{center}\n'
     const correction0 =
-      "Fumeurs hommes : $150\\times 0{,}6=90$ (18-30 ans), $600\\times 0{,}25=150$ (31-50 ans), $230\\times 0{,}3=69$ (plus de 50 ans), soit un total de $90+150+69=309$.<br>" +
-      "Fumeurs femmes : $500\\times 0{,}5=250$ (18-30 ans), $50\\times 0{,}2=10$ (31-50 ans), $100\\times 0{,}25=25$ (plus de 50 ans), soit un total de $250+10+25=285$.<br>" +
+      'Fumeurs hommes : $150\\times 0{,}6=90$ (18-30 ans), $600\\times 0{,}25=150$ (31-50 ans), $230\\times 0{,}3=69$ (plus de 50 ans), soit un total de $90+150+69=309$.<br>' +
+      'Fumeurs femmes : $500\\times 0{,}5=250$ (18-30 ans), $50\\times 0{,}2=10$ (31-50 ans), $100\\times 0{,}25=25$ (plus de 50 ans), soit un total de $250+10+25=285$.<br>' +
       (context.isHtml ? tableauFumeursHtml : tableauFumeursLatex)
 
-    let texte1 = "Quel est le pourcentage de fumeurs dans l'ensemble du personnel (arrondi au centième) ?"
-    if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
+    let texte1 =
+      "Quel est le pourcentage de fumeurs dans l'ensemble du personnel (arrondi au centième) ?"
+    if (this.interactif)
+      texte1 +=
+        ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 36.44 } })
     const correction1 = `$\\dfrac{594}{1\\,630}\\times 100\\approx ${miseEnEvidence('36{,}44\\,\\%')}$.`
 
-    let texte2 = "Calculer le pourcentage de fumeurs parmi les hommes (arrondi au centième)."
-    if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
+    let texte2 =
+      'Calculer le pourcentage de fumeurs parmi les hommes (arrondi au centième).'
+    if (this.interactif)
+      texte2 +=
+        ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 31.53 } })
     const correction2 = `$\\dfrac{309}{980}\\times 100\\approx ${miseEnEvidence('31{,}53\\,\\%')}$.`
 
-    let texte3 = 'Calculer le pourcentage de fumeurs parmi les femmes (arrondi au centième).'
-    if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3, '', { texteApres: '%' }) + '<br>'
+    let texte3 =
+      'Calculer le pourcentage de fumeurs parmi les femmes (arrondi au centième).'
+    if (this.interactif)
+      texte3 +=
+        ajouteChampTexteMathLive(this, 3, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 43.85 } })
     const correction3 = `$\\dfrac{285}{650}\\times 100\\approx ${miseEnEvidence('43{,}85\\,\\%')}$.`
 
@@ -117,8 +130,7 @@ export default class EgaliteFGLycee12 extends Exercice {
     const monQcm4 = propositionsQcm(this, 4)
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 =
-      `$${miseEnEvidence('\\text{Vrai}')}$ : dans chaque tranche d'âge, le pourcentage de fumeuses est inférieur à celui des fumeurs ($50\\,\\%<60\\,\\%$, $20\\,\\%<25\\,\\%$, $25\\,\\%<30\\,\\%$).`
+    const correction4 = `$${miseEnEvidence('\\text{Vrai}')}$ : dans chaque tranche d'âge, le pourcentage de fumeuses est inférieur à celui des fumeurs ($50\\,\\%<60\\,\\%$, $20\\,\\%<25\\,\\%$, $25\\,\\%<30\\,\\%$).`
 
     const texteQ5 =
       "Au vu de ces résultats, peut-on pour autant affirmer, globalement (toutes tranches d'âge confondues), que les femmes fument moins que les hommes dans cette entreprise ?"
@@ -133,8 +145,7 @@ export default class EgaliteFGLycee12 extends Exercice {
     const monQcm5 = propositionsQcm(this, 5)
     let texte5 = texteQ5
     if (!context.isAmc) texte5 += monQcm5.texte
-    const correction5 =
-      `Non : globalement, $43{,}85\\,\\%$ des femmes fument contre seulement $31{,}53\\,\\%$ des hommes, soit l'inverse de ce que suggère la comparaison par tranche d'âge ! Cela s'explique par le fait que les femmes de cette entreprise sont très majoritairement jeunes (500 sur 650 ont entre 18 et 30 ans, tranche où le tabagisme est le plus élevé), alors que les hommes sont surtout dans la tranche 31-50 ans (600 sur 980), où le tabagisme est plus faible. Ce phénomène, où une tendance vraie dans chaque sous-groupe s'inverse au global à cause d'une répartition différente des effectifs, est un exemple classique de $${miseEnEvidence('\\text{paradoxe de Simpson}')}$.`
+    const correction5 = `Non : globalement, $43{,}85\\,\\%$ des femmes fument contre seulement $31{,}53\\,\\%$ des hommes, soit l'inverse de ce que suggère la comparaison par tranche d'âge ! Cela s'explique par le fait que les femmes de cette entreprise sont très majoritairement jeunes (500 sur 650 ont entre 18 et 30 ans, tranche où le tabagisme est le plus élevé), alors que les hommes sont surtout dans la tranche 31-50 ans (600 sur 980), où le tabagisme est plus faible. Ce phénomène, où une tendance vraie dans chaque sous-groupe s'inverse au global à cause d'une répartition différente des effectifs, est un exemple classique de $${miseEnEvidence('\\text{paradoxe de Simpson}')}$.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

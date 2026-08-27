@@ -51,7 +51,7 @@ import { Triangle } from '../../modules/Triangle'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const titre =
   'Reconnaitre de droites remarquables et des points de concours dans le triangle'
 
@@ -267,7 +267,7 @@ export default class DroitesRemarquablesPointsConcours extends Exercice {
       },
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const angleDepart = randint(-17, 18) * 10 //0

@@ -1,11 +1,11 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { prenomF } from '../../../lib/outils/Personne'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Résoudre un petit problème'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7a795'
 export const refs = {
   'fr-fr': [],

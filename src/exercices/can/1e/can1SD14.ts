@@ -9,7 +9,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = 'Trouver les racines à partir d’une forme factorisée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '01/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -33,7 +32,7 @@ export default class RacinesPoly extends Exercice {
 
   nouvelleVersion() {
     let texte, texteCorr
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(-9, 9, 0)
       const x1 = randint(-9, 9)
       const x2 = randint(-9, 9, [0, x1])

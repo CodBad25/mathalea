@@ -1,18 +1,18 @@
-import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
-import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { bleuMathalea } from '../../lib/colors'
+import { propositionsQcm } from '../../lib/interactif/qcm'
+import { choice } from '../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
+import { texNombre } from '../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre =
   'Donner le résultat de nombres écrits avec des puissances de 10 en notation scientifique'
 export const dateDeModifImportante = '08/09/2023'
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 
 /**

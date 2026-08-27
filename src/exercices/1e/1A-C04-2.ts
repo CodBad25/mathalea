@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': ['10QCM-5', '9QCM-7'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une somme de fractions décimales'

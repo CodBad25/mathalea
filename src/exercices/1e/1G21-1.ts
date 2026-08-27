@@ -24,7 +24,6 @@ export const titre = 'Déterminer une équation cartésienne'
 export const dateDePublication = '04/07/2024'
 export const dateDeModifImportante = '03/03/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -75,7 +74,7 @@ class EqCartDroite extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let xA, yA, xB, yB, xn, yn, constante, xu, yu, m
       let texte = ''
       let texteCorr = ''

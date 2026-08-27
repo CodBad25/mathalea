@@ -24,7 +24,7 @@ export const interactifReady = true
 export const dateDeModifImportante = '16/05/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const interactifType = 'mathLive'
+
 export const titre = "Trouver le terme manquant d'une somme de nombres relatifs"
 
 /**

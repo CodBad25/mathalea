@@ -10,7 +10,7 @@ import Exercice from '../../Exercice'
 
 export const titre = 'Comparer une fraction avec 1'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '04/11/2022'
 /**
  * @author Gilles Mora
@@ -80,7 +80,7 @@ export default class ComparerFractionAUn extends Exercice {
       [14, 5, 11, 5],
       [7, 3, 11, 3],
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       const fraction1 = choice(listeFractions1)
       const fraction2 = choice(listeFractions2)

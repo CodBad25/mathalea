@@ -19,7 +19,7 @@ export const titre = 'Résoudre des problèmes (impliquant diverses opérations)
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '24/05/2025'
 
 /**

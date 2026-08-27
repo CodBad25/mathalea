@@ -3,7 +3,6 @@ export const titre =
   'Transformer une écriture de puissance en écriture décimale'
 export const dateDePublication = '01/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Rémi Angot

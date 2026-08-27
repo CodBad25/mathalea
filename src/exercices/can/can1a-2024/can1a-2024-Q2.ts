@@ -10,7 +10,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un point sur une courbe'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '5157a'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

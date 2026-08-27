@@ -36,7 +36,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '16/01/2021'
 export const dateDeModifImportante = '03/03/2025'
 /**

@@ -21,7 +21,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = "Trouver une grandeur en fonction d'une autre"
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '3/01/2026'
 export const dateDeModifImportante = '24/03/2026'

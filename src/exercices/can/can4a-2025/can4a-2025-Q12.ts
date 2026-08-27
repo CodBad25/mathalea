@@ -14,7 +14,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Distance sur un segment'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'byxrt'
 export const refs = {
   'fr-fr': [],

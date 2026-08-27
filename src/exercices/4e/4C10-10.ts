@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre =
   'Compléter une multiplication à trou de deux entiers relatifs'

@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
@@ -10,6 +9,7 @@ import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -20,10 +20,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Déterminer l\'équation d\'une droite à partir de son graphique '
+export const titre =
+  "Déterminer l'équation d'une droite à partir de son graphique "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -35,7 +36,7 @@ export default class AutoQ6ANs2026 extends ExerciceQcmA {
   // abscisseZero : abscisse du point où la droite coupe l'axe des x (2, 3, 4 ou 5)
   // ordonneeOrigine : ordonnée à l'origine (10, 15, 20, 25 ou 30)
   // pasY : graduation / pas de grille sur l'axe des ordonnées (5 ou 10)
-   private genererExercice(
+  private genererExercice(
     abscisseZero: number,
     ordonneeOrigine: number,
     pasY: number,
@@ -45,7 +46,7 @@ export default class AutoQ6ANs2026 extends ExerciceQcmA {
     const m = -b / a
 
     const ux = 1
-    const uy = b % 10 === 0 ? 0.1: 0.2
+    const uy = b % 10 === 0 ? 0.1 : 0.2
     const P = (x: number, y: number) => pointAbstrait(x * ux, y * uy)
 
     const A = P(0, b)
@@ -80,7 +81,7 @@ export default class AutoQ6ANs2026 extends ExerciceQcmA {
     const xMinMath = Math.min(-2, a - 1)
     const xMaxMath = Math.max(5, a + 1)
     const yMinMath = -10
-    const yMaxMath = b % 10 === 0 ? 40: 45
+    const yMaxMath = b % 10 === 0 ? 40 : 45
 
     // Fenêtre mathalea2d en unités "écran"
     const xmin = xMinMath * ux
@@ -239,7 +240,7 @@ $m=\\dfrac{y_${ptArr}-y_${ptDep}}{x_${ptArr}-x_${ptDep}}=\\dfrac{${miseEnEvidenc
 
 On en déduit $${miseEnEvidence(`f(x)=${reduireAxPlusB(m, b)}`)}$.`
 
-    this.correction = texteCorrection +'<br>'+ `${objetC}`
+    this.correction = texteCorrection + '<br>' + `${objetC}`
   }
 
   versionOriginale: () => void = () => {
@@ -269,6 +270,6 @@ On en déduit $${miseEnEvidence(`f(x)=${reduireAxPlusB(m, b)}`)}$.`
   constructor() {
     super()
     this.versionAleatoire()
-     this.options = { vertical: true}
+    this.options = { vertical: true }
   }
 }

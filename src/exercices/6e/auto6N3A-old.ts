@@ -24,7 +24,6 @@ import Exercice from '../Exercice'
 export const titre = 'Reconnaître une fraction sur des représentations variées'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '14/03/2026'
 
@@ -104,7 +103,7 @@ export default class reconnaitreDesFractions extends Exercice {
     })
     const tailleFigure = 3
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let numerateur: number = 1

@@ -8,7 +8,6 @@ import Exercice from '../../Exercice'
 
 export const titre = 'Dresser le tableau de signes d’une fonction affine'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '15/12/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

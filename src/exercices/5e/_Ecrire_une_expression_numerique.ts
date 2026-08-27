@@ -21,7 +21,7 @@ import ChoisirExpressionLitterale from './_Choisir_expression_litterale'
 import choisirExpressionNumerique from './_choisirExpressionNumerique'
 
 export const interactifReady = true
-export const interactifType = ['mathLive', 'listeDeroulante']
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '21/09/2023'
@@ -51,7 +51,6 @@ export default class EcrireUneExpressionNumerique extends Exercice {
   }
 
   nouvelleVersion() {
-    this.interactifType = this.version !== 2 ? 'mathLive' : 'listeDeroulante'
 
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup4,

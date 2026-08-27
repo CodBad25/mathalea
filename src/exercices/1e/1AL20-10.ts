@@ -16,7 +16,7 @@ import { setReponse } from '../../lib/interactif/gestionInteractif'
 
 export const titre = "Calculer le discriminant d'un polynôme du second degré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '5/11/2023'
 export const uuid = '731f0'
 

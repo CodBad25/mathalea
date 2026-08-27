@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Trouver une aire ou un périmètre par comptage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '20/04/2025'
 export const dateDeModifImportante = '26/04/2025'

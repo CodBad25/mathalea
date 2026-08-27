@@ -22,7 +22,6 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer dans une pyramide régulière à base carrée'
 export const dateDePublication = '31/12/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'c18ea'
 

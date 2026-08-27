@@ -18,7 +18,7 @@ export const titre =
   'Calculer des probabilités dans une situation concrète (union et intersection)'
 export const dateDePublication = '26/05/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  *
  * @author Gilles Mora

@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser le vocabulaire image/antécédent'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/10/2023'
 
 /**

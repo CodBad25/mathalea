@@ -25,7 +25,7 @@ export class MonElement extends MathaleaCustomElement {
 - La classe étend `MathaleaCustomElement`.
 - Le tag est déclaré via `static readonly elementTag`.
 - Le tag est en kebab-case (suite de mots en minuscules où les espaces sont remplacés par des tirets - ).
-- Le tag sert de référence pour interactifType et formatInteractif.
+- Le tag sert de valeur à `autoCorrection[questionIndex].formatInteractif`.
 - Le fichier de la classe se trouve dans `src/lib/customElements/`.
 
 2. Méthode statique create
@@ -189,7 +189,7 @@ Afin que le custom element soit correctement pris en charge par le système d'in
 - Ajouter dans `src/lib/types.ts` le tag à l'union `InteractivityType`.
 - Ajouter le tag à `listOfCustomElements` dans `src/lib/customElements/MathaleaCustomElement.ts`.
 - Enregistrer la classe avec `registerMathaleaCustomElement(MaClasse)`.
-- La méthode statique `verifQuestion(exercice,questionIndex)` doit être implémentée dans l'élément. Elle correspond à la méthode correctionInteractive(i) de la classe Exercice lorsque celui-ci a un interactifType = 'custom'. Il suffit donc d'en transposer la logique : vérification, hydratation de exercice.answers, du span#resultatCheckEx et du div#feedbackEx...
+- La méthode statique `verifQuestion(exercice,questionIndex)` doit être implémentée dans l'élément. Elle porte la vérification, l'hydratation de `exercice.answers`, du `span#resultatCheckEx` et du `div#feedbackEx`.
 - Le retour de la fonction doit être : `{
 isOk: boolean
 feedback: string
@@ -200,7 +200,10 @@ score: { nbBonnesReponses: number; nbReponses: number }
 - Les formats historiques MathLive `mathlive`, `fillInTheBlank`, `tableauMathlive` et `texte` sont normalisés vers leurs tags (`mathalea-mathfield`, `fill-in-the-blank`, `tableau-mathlive`, `mathalea-textfield`) par `mathliveCompatibleToCustomElementFormat()` dans `src/lib/types.ts`. Ne pas ajouter de nouveau cas historique sans raison de compatibilité forte : préférer le tag du custom element comme `formatInteractif`.
 - Dans les exercices utilisant ces éléments, `handleAnswers()` doit être utilisé pour renseigner `exercice.autoCorrection[questionIndex].valeur`, qui sera lu par `verifQuestion()` afin d'obtenir la réponse attendue de l'élément pour cette question. Si la réponse attendue doit être un objet, la stocker dans un format que `verifQuestion()` sait relire explicitement. De même, la `value` correspondant à la réponse de l'élève doit rester compatible avec la restauration via `mathaleaWriteStudentPreviousAnswers()`.
 
-Les exercices concernés peuvent exporter `interactifType` avec le tag du composant si tout l'exercice utilise ce format. Quand plusieurs formats cohabitent, le routage fiable est celui de `autoCorrection[questionIndex].formatInteractif`, généralement posé par `handleAnswers()`.
+`interactifType` n'existe plus et ne doit jamais être exporté ni renseigné sur
+une instance d'exercice. Le routage est exclusivement porté par
+`autoCorrection[questionIndex].formatInteractif`, généralement posé par le
+helper du composant ou par `handleAnswers()`.
 
 ## Affichage dans les corrections de la CAN
 

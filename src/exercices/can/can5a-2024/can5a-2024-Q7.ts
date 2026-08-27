@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier par $10$ ou $100$ ou ...'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '93b90'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

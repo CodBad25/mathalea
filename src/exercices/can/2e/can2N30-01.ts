@@ -8,7 +8,7 @@ import {
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Simplifier un quotient de nombre relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '1/07/2026'
 /**
  * @author  Jean-Claude Lhote

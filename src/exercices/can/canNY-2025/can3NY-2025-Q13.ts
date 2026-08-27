@@ -1,7 +1,7 @@
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -13,7 +13,7 @@ import { bleuMathalea } from '../../../lib/colors'
 import { mathalea2d } from '../../../modules/mathalea2d'
 export const titre = 'Trouver une longuer'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '90ae3'
 export const refs = {
   'fr-fr': [],

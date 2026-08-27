@@ -20,7 +20,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '15/01/2022' // Ajout de paramètres
 /**
  * Écriture décimale à partir de différentes manières de l'énoncé

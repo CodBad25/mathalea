@@ -12,7 +12,7 @@ export const dateDePublication = '28/08/2024'
 export const dateDeModifImportante = '28/08/2024'
 export const uuid = '364dd'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['TTE-9'],
   'fr-ch': [],
@@ -75,7 +75,7 @@ export default class EquationsLog extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let racinenieme = ''

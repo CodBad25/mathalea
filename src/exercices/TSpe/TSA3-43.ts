@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -9,6 +8,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const titre = "Déterminer graphiquement les signes de $f$, $f'$ et $f''$"
 export const dateDePublication = '16/08/2026'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const uuid = 'dc696'
 
 export const refs = {

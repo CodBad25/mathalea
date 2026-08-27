@@ -2,7 +2,6 @@ import N2PlusRacineDeN from '../can/TSpe/canTSpeS05'
 export const titre = 'Calculer la limite de $u_n\\times v_n$'
 export const dateDePublication = '04/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de CanTspeE01 pour les auto 1er

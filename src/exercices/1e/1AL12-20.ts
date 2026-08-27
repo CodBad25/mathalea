@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const titre =
   "Etudier le sens de variation d'une suite définie de façon explicite"
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '03/10/2024'
 /**
  * @author Samuel Rattoray

@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Ordre de grandeur'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '90671'
 export const refs = {
   'fr-fr': [],
@@ -57,7 +57,7 @@ export default class Can2025N6Q10 extends ExerciceCan {
 
     this.question += `${monQcm.texte}`
     this.correction = monQcm.texteCorr
-    this.canEnonce= c
+    this.canEnonce = c
     this.canReponseACompleter = `\\faSquare[regular] $${texNombre(a, 1)}\\text{ m}$ <br>\\faSquare[regular] $${texNombre(a, 1)}\\text{ cm}$ <br>\\faSquare[regular] $${texNombre(a, 1)}\\text{ km}$`
   }
 

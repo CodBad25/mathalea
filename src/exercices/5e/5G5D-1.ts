@@ -28,7 +28,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer l'aire de triangles"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

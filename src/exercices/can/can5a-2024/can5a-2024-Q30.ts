@@ -16,7 +16,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une aire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5dcca'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -29,7 +29,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBase
-this.optionsChampTexte = { texteApres: '.' }
+    this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 

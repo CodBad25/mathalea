@@ -7,7 +7,7 @@ import { shuffle } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3wv4j'
 export const refs = {
   'fr-fr': [],

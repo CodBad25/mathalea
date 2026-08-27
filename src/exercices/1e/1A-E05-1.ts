@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer un taux réciproque'
@@ -59,7 +59,7 @@ export default class TauxReciproque extends ExerciceQcmA {
   Le taux à appliquer pour que cet article retrouve son prix initial est donné par  :`
             this.correction = `Le coefficient multiplicateur associé à une augmentation de $${taux}\\,\\%$ est $1+${texNombre(taux / 100, 2)}=${texNombre(1 + taux / 100, 4)}$.<br>
       Le coefficient multiplicateur réciproque est donc  $\\dfrac{1}{${texNombre(1 + taux / 100, 4)}}$.<br>
-      On en déduit que le taux réciproque  est  $\\dfrac{1}{${texNombre(1 + taux / 100, 4)}}-1$ ou $\\dfrac{-${texNombre(taux / 100, 4)}}{${texNombre(1 + taux / 100, 4)}}$.<br>
+      On en déduit que le taux réciproque  est  $\\dfrac{1}{${texNombre(1 + taux / 100, 4)}}-1$ ou $-\\dfrac{${texNombre(taux / 100, 4)}}{${texNombre(1 + taux / 100, 4)}}$.<br>
       Le taux réciproque est donc $${miseEnEvidence(bonneReponseRetenue)}$.`
 
             this.reponses = [
@@ -89,7 +89,7 @@ export default class TauxReciproque extends ExerciceQcmA {
               `$${bonneReponseRetenue}$`,
               `$\\dfrac{1}{${texNombre(taux / 100, 4)}}$`,
               `$1-\\dfrac{1}{${texNombre(1 - taux / 100, 4)}}$`,
-              `$\\dfrac{${texNombre(-taux / 100, 4)}}{${texNombre(1 - taux / 100, 4)}}$`,
+              `$-\\dfrac{${texNombre(taux / 100, 4)}}{${texNombre(1 - taux / 100, 4)}}$`,
             ]
           }
           break

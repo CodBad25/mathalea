@@ -1,16 +1,15 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  texteEnCouleurEtGras,
-  texteEnCouleur,
-} from '../../../lib/outils/embellissements'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import Exercice from '../../Exercice'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { bleuMathalea } from '../../../lib/colors'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  texteEnCouleur,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 export const titre = 'Reconnaitre des vecteurs colinéaires (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '30/10/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

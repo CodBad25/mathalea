@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Déterminer une distance'
@@ -23,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ9FMt2026 extends ExerciceQcmA {
- private appliquerLesValeurs(n: number, l: number): void {
+  private appliquerLesValeurs(n: number, l: number): void {
     const totalM = n * l
     const totalKm = totalM / 1000
 

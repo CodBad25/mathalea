@@ -19,7 +19,6 @@ import Exercice from '../Exercice'
 export const titre = "Calculer la dérivée d'une fonction avec $\\mathrm{e}^u$"
 export const dateDePublication = '06/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer la dérivée d'une fonction avec exp
@@ -29,7 +28,7 @@ export const interactifType = 'mathLive'
 export const uuid = '0e5fa'
 
 export const refs = {
-  'fr-fr': ['1AN31-3','TSA3-26', 'TCA7-26'],
+  'fr-fr': ['1AN31-3', 'TSA3-26', 'TCA7-26'],
   'fr-ch': [''],
 }
 
@@ -55,7 +54,7 @@ export default class DeriveeExp1AN313 extends Exercice {
       defaut: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let value = ''

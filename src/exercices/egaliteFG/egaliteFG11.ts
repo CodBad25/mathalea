@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 export const titre = 'Hypatie d\'Alexandrie : médiatrices et hauteur du phare'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const uuid = '1ed48'
 export const refs = {
   'fr-fr': [ 'EgaliteFG3-4e-11', 'EgaliteFG4-3e-11'],

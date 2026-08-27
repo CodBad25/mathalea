@@ -19,7 +19,7 @@ export const refs = {
   'fr-ch': ['9NO3C-19'],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '14/12/2023'
 
 /**

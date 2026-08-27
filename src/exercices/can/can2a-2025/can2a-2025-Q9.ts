@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
@@ -7,11 +8,10 @@ import {
 } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Factoriser avec une identité remarquable'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5ad09'
 export const refs = {
   'fr-fr': [],

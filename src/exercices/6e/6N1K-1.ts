@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const dateDePublication = '28/09/2022'
 export const titre = "Trouver une valeur approchée ou l'arrondi d'un décimal"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * * Arrondir_un_decimal_selon_une_precision_donnée
  * @author Mickael Guironnet

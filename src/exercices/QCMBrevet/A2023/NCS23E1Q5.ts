@@ -19,7 +19,7 @@ export const refs = {
   'fr-ch': ['11ES3A-7'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Rapport d'homothétie (2023 Métropole)"

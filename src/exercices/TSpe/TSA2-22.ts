@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -7,11 +7,9 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Calculer des limites simples de fonctions en l\'infini'
+export const titre = "Calculer des limites simples de fonctions en l'infini"
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '2ace1'
 export const refs = {
@@ -95,7 +93,8 @@ function limiteTerme(
 ): string {
   if (puissance < 0) return '0'
   if (puissance === 0) return `${coefficient}`
-  const signePuissance = limitePuissance(puissance, sens) === '+\\infty' ? 1 : -1
+  const signePuissance =
+    limitePuissance(puissance, sens) === '+\\infty' ? 1 : -1
   return coefficient * signePuissance > 0 ? '+\\infty' : '-\\infty'
 }
 

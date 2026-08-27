@@ -4,7 +4,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre =
   'Différencier événéments impossibles, certains, ou possibles (lancer de dés)'

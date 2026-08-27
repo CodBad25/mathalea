@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
@@ -12,13 +11,14 @@ import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Déterminer la longueur d'un segment"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1020d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

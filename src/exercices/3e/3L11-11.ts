@@ -23,7 +23,6 @@ import Exercice from '../Exercice'
 export const titre = 'Additionner et soustraire des monômes'
 export const dateDePublication = '19/08/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Réduire une expression littérale

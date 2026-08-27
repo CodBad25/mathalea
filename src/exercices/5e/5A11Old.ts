@@ -6,7 +6,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMult'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre = 'Utiliser des critères de divisibilité dans un tableau'
 

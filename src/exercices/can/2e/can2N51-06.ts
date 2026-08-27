@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Transformer une racine carrée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '31/05/2026'
 /**
  * @author  Gilles Mora

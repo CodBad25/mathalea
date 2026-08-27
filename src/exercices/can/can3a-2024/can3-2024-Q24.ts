@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une expression pour une valeur particulière'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'eaa47'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

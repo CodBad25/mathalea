@@ -67,7 +67,6 @@ export const refs = {
   'fr-ch': ['10ES3A-4'],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 const choisir3PointsAlignesOuPas = (
   d: IDroite,

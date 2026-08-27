@@ -21,7 +21,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer le "milieu" entre 1 et une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora

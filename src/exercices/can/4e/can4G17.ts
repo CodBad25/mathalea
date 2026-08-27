@@ -1,10 +1,10 @@
-import { context } from '../../../modules/context'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -17,7 +17,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 export const titre =
   'Calculer une longueur dans un triangle à partir de son aire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '09/12/2025'
 /**
  * @author Gilles Mora

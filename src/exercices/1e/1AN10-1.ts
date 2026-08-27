@@ -1,8 +1,8 @@
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choice,
   combinaisonListes,
@@ -26,7 +26,7 @@ import {
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre = 'Calculer un nombre dérivé à partir de la définition'
-export const interactifType = 'multi-mathfield'
+
 export const interactifReady = true
 
 export const dateDePublication = '16/12/2021'
@@ -102,7 +102,7 @@ export default class Tauxvariation extends Exercice {
         this.nbQuestions,
       )
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       let a: number, b: number, c: number, m: number, p: number
       let texte = ''

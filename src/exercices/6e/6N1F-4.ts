@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Exprimer une fraction sous la forme d'une valeur approchée d'un pourcentage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/02/2021'
 export const dateDeModifImportante = '10/01/2024'
 

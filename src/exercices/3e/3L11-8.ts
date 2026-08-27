@@ -2,7 +2,7 @@ import FabriqueAYohaku from '../6e/_Yohaku'
 export const titre =
   'Résoudre un Yohaku multiplicatif avec des expressions littérales'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

@@ -1,11 +1,11 @@
-import ExerciceCan from '../../ExerciceCan'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver un nombre (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'e6d64'
 export const refs = {
   'fr-fr': [],

@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Convertir  cL <-> L'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '63eb6'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

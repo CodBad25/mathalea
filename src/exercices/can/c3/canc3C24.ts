@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Ajouter des dizaines/centaines'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '10/01/2026'
 /**
  * @author Gilles Mora

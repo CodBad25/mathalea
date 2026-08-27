@@ -25,7 +25,6 @@ export const refs = {
   'fr-ch': ['3G91-10'],
 }
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 // 8 cube vertices in base frame [x,y,z], all coords in {0,1}
 // Correspondence with TSG2-10 labels: V0=A, V1=B, V2=C, V3=D(hidden), V4=E, V5=F, V6=G, V7=H
@@ -240,7 +239,7 @@ export default class VecteursRepCube extends Exercice {
 
   nouvelleVersion() {
     const lang = getLang()
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const sommets = this.sup === true
       const fr = FRAMES[randint(0, 3)]
 

@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Reconnaitre une situation de proportionnalité'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDeModifImportante = '16/04/2024'

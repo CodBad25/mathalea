@@ -16,7 +16,7 @@ export const titre =
   "Déterminer graphiquement l'ensemble de définition d'une fonction"
 export const dateDePublication = '12/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

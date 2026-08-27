@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un angle dans un triangle rectangle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 's64w8'
 export const refs = {
   'fr-fr': [],

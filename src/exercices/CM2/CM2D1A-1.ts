@@ -33,7 +33,7 @@ export const dateDeModifImportante = '27/08/2024'
  */
 
 // source : http://www.ac-grenoble.fr/savoie/pedagogie/docs_pedas/ogd_c2_c3/ogd_c2_c3.pdf
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 export const uuid = '99d95'

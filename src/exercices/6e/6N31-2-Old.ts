@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Trouver un ordre de grandeur d'un produit de nombres entiers ou décimaux"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * * Ordre de grandeur d'une multiplication d'entiers ou de décimaux
@@ -73,7 +72,7 @@ export default class OrdreDeGrandeurMultiplicationOld extends Exercice {
       melange: 5,
       defaut: 5,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte: string = ''
       let texteCorr: string = ''
       let nb1: number = 0

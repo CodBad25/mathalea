@@ -33,7 +33,7 @@ import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN Spéciale année 2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f9221'
 export const dateDePublication = '08/12/2024'
 export const refs = {

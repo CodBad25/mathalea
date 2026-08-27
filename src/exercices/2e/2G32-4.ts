@@ -29,7 +29,6 @@ export const titre =
   "Tracer une droite à partir d'un point et d'un coefficient directeur ou d'un vecteur directeur"
 export const dateDePublication = '09/03/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * @author Gilles Mora (interactif par Éric Elter)

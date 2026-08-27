@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Multiplier un nombre décimalpar 0,2'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'hbp7h'
 export const refs = {
   'fr-fr': [],

@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer des sommes avec 2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd3e8f'
 export const refs = {
   'fr-fr': [],

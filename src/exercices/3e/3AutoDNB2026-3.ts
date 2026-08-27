@@ -10,7 +10,7 @@ import Question8 from '../dnbAutomatismes/dnb-2026-06-asie-Q8'
 import Question9 from '../dnbAutomatismes/dnb-2026-06-asie-Q9'
 export const titre = 'Brevet - Asie juin 2026 - Automatismes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8db52'
 export const refs = {
   'fr-fr': ['3AutoDNB2026-3'],

@@ -26,7 +26,7 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer le périmètre de carrés, rectangles et triangles'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 export const dateDePublication = '27/11/2022'

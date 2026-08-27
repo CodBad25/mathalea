@@ -9,7 +9,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Additionner un entier et une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e12d9'
 export const refs = {
   'fr-fr': [''],

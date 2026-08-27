@@ -27,7 +27,6 @@ import Exercice from '../Exercice'
 export const titre = 'Reconnaître une fraction sur des représentations variées'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '14/03/2026'
 export const dateDeModifImportante = '20/05/2026'

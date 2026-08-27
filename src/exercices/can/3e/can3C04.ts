@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une somme entre fraction et entier'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -31,7 +31,10 @@ export default class SommeEntierEtFractionIrred extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const maFraction = this.quotaChoice('maFraction', obtenirListeFractionsIrreductibles())
+    const maFraction = this.quotaChoice(
+      'maFraction',
+      obtenirListeFractionsIrreductibles(),
+    )
     const a = this.quotaRandint('a', 1, 4)
     const b = maFraction[0]
     const c = maFraction[1]

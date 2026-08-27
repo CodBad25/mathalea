@@ -14,7 +14,7 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/06/2026'
 export const titre = 'Calculs avec des nombres complexes'
 
@@ -36,7 +36,7 @@ type Facteur = {
 
 const inventeUneSomme = (nbTermes: number) => {
   const termes: Complexe[] = []
-  for (let i = 0; i < nbTermes; ) {
+  for (let i = 0; i < nbTermes;) {
     const re = randint(-5, 5, [-1, 1, 0])
     const im = randint(-5, 5, [-1, 1, 0])
     if (re === 0 && im === 0) continue
@@ -48,7 +48,7 @@ const inventeUneSomme = (nbTermes: number) => {
 
 const inventeUneSomme2 = (nbTermes: number) => {
   const termes: Terme[] = []
-  for (let i = 0; i < nbTermes; ) {
+  for (let i = 0; i < nbTermes;) {
     const choixType = [
       'inverse',
       'reel',
@@ -128,7 +128,7 @@ const inventeUneSomme2 = (nbTermes: number) => {
 
 const inventeUnProduit2 = (nbFacteurs: number) => {
   const facteurs: Facteur[] = []
-  for (let i = 0; i < Math.floor(nbFacteurs / 2); ) {
+  for (let i = 0; i < Math.floor(nbFacteurs / 2);) {
     const factor = randint(1, 3)
     const re = randint(-5, 5, [-1, 1, 0])
     const im = randint(-5, 5, [-1, 1, 0])
@@ -272,7 +272,7 @@ export default class CalculsComplexes extends Exercice {
       defaut: 0,
       listeOfCase: ['somme', 'produit', 'quotient', 'somme2', 'produit2'],
     }).map(String)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = `$z_{${i + 1}}=`
       let texteCorr = ''
       let termes: Complexe[] = []

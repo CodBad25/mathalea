@@ -12,7 +12,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer la fonction dérivée d’un polynôme de degré 3'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/06/2022'
 
 /**

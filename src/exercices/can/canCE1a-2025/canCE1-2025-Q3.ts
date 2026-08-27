@@ -1,11 +1,11 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une différence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '30c08'
 export const refs = {
   'fr-fr': [],

@@ -22,7 +22,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '31/05/2026'
 
 export const titre = 'Résoudre une inéquation-produit'
@@ -112,7 +112,7 @@ export default class ExerciceInequationProduit extends Exercice {
       this.nbQuestions,
     )
     // Boucle principale qui servira à créer toutes les questions // On limite le nombre d'essais à 50 pour chercher des valeurs nouvelles
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Génère 4 nombres relatifs a, b, c et d tous différents avec a et c qui ne peuvent pas être 1 car ce sont ceux qui peuvent multiplier x pour éviter à la fois d'avoir '1x' et de diviser par 1
       const a = randint(-13, 13, [0, 1, -1])
       const b = randint(-13, 13, [0, a])

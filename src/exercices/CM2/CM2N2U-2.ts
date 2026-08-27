@@ -3,7 +3,7 @@ export const titre = 'Lire une abscisse décimale avec zoom'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '13/11/2020'
 export const uuid = 'b2f66'
 export const refs = {

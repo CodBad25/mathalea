@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver l'extremum à partir d'une forme canonique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '83800'
 export const refs = {
   'fr-fr': [],

@@ -1,7 +1,7 @@
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -13,7 +13,7 @@ import { bleuMathalea } from '../../../lib/colors'
 import { mathalea2d } from '../../../modules/mathalea2d'
 export const titre = 'Trouver une longuer'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'olnpp'
 export const refs = {
   'fr-fr': [],
@@ -34,9 +34,7 @@ export default class longueurDansTriangle2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const objets = []
-    const a = this.canOfficielle
-      ? 1500
-      : this.quotaRandint('a', 11, 15) * 100
+    const a = this.canOfficielle ? 1500 : this.quotaRandint('a', 11, 15) * 100
     const b = 2026
     const A = pointAbstrait(0, 0, 'A', 'below')
     const B = pointAbstrait(5, 0, 'B', 'below')

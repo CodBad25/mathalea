@@ -1,19 +1,18 @@
-import { choice, shuffle } from '../../lib/outils/arrayOutils';
-import { fraction } from '../../modules/fractions';
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils';
-import Exercice from '../Exercice';
+import { choice, shuffle } from '../../lib/outils/arrayOutils'
+import { fraction } from '../../modules/fractions'
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
-import { tableauColonneLigne } from '../../lib/2d/tableau';
-import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive';
-import { miseEnEvidence } from '../../lib/outils/embellissements';
-import { premiereLettreEnMajuscule } from '../../lib/outils/outilString';
-import { context } from '../../modules/context';
+import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { premiereLettreEnMajuscule } from '../../lib/outils/outilString'
+import { context } from '../../modules/context'
 
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à deux épreuves'
 export const dateDePublication = '27/01/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // On lance un dé à 6 faces numérotées de 1 à 6
 // Et on tire une boule dans une urne contenant 6 boules rouges et bleues
@@ -550,7 +549,7 @@ export default class CalculProbaExperience2Epreuves extends Exercice {
       experience5,
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const question = experiences[typeExperiences[i] - 1]()
 
       if (this.questionJamaisPosee(i, JSON.stringify(question.alea))) {
@@ -559,8 +558,8 @@ export default class CalculProbaExperience2Epreuves extends Exercice {
           ajouteQuestionMathlive({
             exercice: this,
             question: i,
-          reponseParams: { formatInteractif: 'mathalea-mathfield' },
-                 objetReponse: { reponse: { value: question.reponse } },
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
+            objetReponse: { reponse: { value: question.reponse } },
             typeInteractivite: 'mathlive',
           })
         this.listeCorrections[i] = question.correction

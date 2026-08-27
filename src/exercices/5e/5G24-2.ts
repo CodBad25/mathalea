@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 export const titre = 'Justifier que deux triangles sont égaux'
 
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'qcm' // 'mathLive'
+// 'mathLive'
 export const amcReady = true // pour définir que l'exercice peut servir à AMC
 export const amcType = 'qcmMono'
 
@@ -69,7 +69,6 @@ export default class TrianglesEgaux extends Exercice {
     for (
       let i = 0, texte, texteCorr, monQcm, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const listeDeNomsDePolygones: string[] = []
       texte = ''

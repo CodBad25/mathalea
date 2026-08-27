@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Multiplier un entier avec une fraction'
@@ -23,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ3FMt2026 extends ExerciceQcmA {
- // Produit : n × (num/den). Réponse correcte : (n×num)/den.
+  // Produit : n × (num/den). Réponse correcte : (n×num)/den.
   private appliquerLesValeurs(n: number, num: number, den: number): void {
     const frac = new FractionEtendue(num, den)
     const correct = new FractionEtendue(n * num, den) // (n×num)/den

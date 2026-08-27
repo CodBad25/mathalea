@@ -15,7 +15,7 @@ import { randint } from '../../../modules/outils'
 
 export const titre = "Calculer la longueur d'un côté d'un carré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c12df'
 export const refs = {
   'fr-fr': [],

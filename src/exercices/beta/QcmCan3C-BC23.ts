@@ -11,7 +11,7 @@ export const refs = [
   },
 ]
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 const qcmData = {

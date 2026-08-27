@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer le point d'intersection de deux droites données par des points"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/04/2024'
 /**
  *

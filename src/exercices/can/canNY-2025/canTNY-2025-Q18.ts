@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer une valeur remarquable '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f0064'
 export const refs = {
   'fr-fr': [],

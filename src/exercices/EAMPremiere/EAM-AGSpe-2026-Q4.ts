@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une inéquation '
@@ -21,7 +21,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ4AGs2026 extends ExerciceQcmA {
- // Inéquation ax + b (sym) 0 avec a < 0 : la division par a impose de changer le sens.
+  // Inéquation ax + b (sym) 0 avec a < 0 : la division par a impose de changer le sens.
   // symFlip : symbole après changement de sens. borneADroite : solution de la forme [x0;+∞[.
   // ouvert : inégalité stricte (crochet ouvert sur la borne).
   private appliquerLesValeurs(
@@ -80,8 +80,18 @@ x&${symFlip} ${x0}
     }
 
     const inequations = [
-      { sym: '\\geqslant', symFlip: '\\leqslant', borneADroite: false, ouvert: false },
-      { sym: '\\leqslant', symFlip: '\\geqslant', borneADroite: true, ouvert: false },
+      {
+        sym: '\\geqslant',
+        symFlip: '\\leqslant',
+        borneADroite: false,
+        ouvert: false,
+      },
+      {
+        sym: '\\leqslant',
+        symFlip: '\\geqslant',
+        borneADroite: true,
+        ouvert: false,
+      },
       { sym: '>', symFlip: '<', borneADroite: false, ouvert: true },
       { sym: '<', symFlip: '>', borneADroite: true, ouvert: true },
     ]
@@ -92,7 +102,14 @@ x&${symFlip} ${x0}
       const x0 = choice([-4, -3, -2, -1, 1, 2, 3, 4]) // borne non nulle
       const b = -a * x0 // garantit -b/a = x0 entier
       const ineq = choice(inequations)
-      this.appliquerLesValeurs(a, b, ineq.sym, ineq.symFlip, ineq.borneADroite, ineq.ouvert)
+      this.appliquerLesValeurs(
+        a,
+        b,
+        ineq.sym,
+        ineq.symFlip,
+        ineq.borneADroite,
+        ineq.ouvert,
+      )
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }

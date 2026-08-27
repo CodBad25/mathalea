@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un produit scalaire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'elg20'
 export const refs = {
   'fr-fr': [],
@@ -19,7 +19,7 @@ export const refs = {
 export default class Can1a2026Q10 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -32,7 +32,6 @@ export default class Can1a2026Q10 extends ExerciceCan {
     }
 
     const resultat = ux * vx + uy * vy
-
 
     this.reponse = resultat
     this.question = `Dans une base orthonormée $(\\vec{\\imath},\\vec{\\jmath})$, on donne deux vecteurs : $\\vec{u}(${ux}\\,;\\,${uy})$ et  $\\vec{v}(${vx}\\,;\\,${vy})$.<br>

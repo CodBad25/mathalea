@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Tirer des boules avec remise dans une urne.'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const dateDePublication = '18/11/2024'
 export const dateDeModifImportante = '10/12/2025'
 export const uuid = 'daabf'
@@ -62,7 +62,7 @@ export default class LoiBinomialeUrne extends Exercice {
     }).map(Number)
     typesDeQuestionsDisponibles = enleveDoublonNum(typesDeQuestionsDisponibles)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let r, b, n, k, p, q, Xzero
       let texte = ''
 

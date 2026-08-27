@@ -8,7 +8,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 export const titre = 'Trouver deux entiers consécutifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '12/09/2024'
 export const uuid = '58784'
 export const refs = {

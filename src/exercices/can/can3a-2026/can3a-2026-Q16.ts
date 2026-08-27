@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Compléter un tableau de proportionnalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3fl04'
 export const refs = {
   'fr-fr': [],

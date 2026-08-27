@@ -3,7 +3,7 @@ export const titre =
   'Simuler une expérience aléatoire à deux épreuves (indépendantes ou avec remise)'
 export const dateDePublication = '26/06/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4e68a'
 export const refs = {
   'fr-fr': [],

@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Résoudre une équation avec un quotient'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ybt28'
 export const refs = {
   'fr-fr': [],

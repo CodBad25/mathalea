@@ -1,14 +1,13 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { Arbre } from '../../../modules/arbres'
+import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { mathalea2d } from '../../../modules/mathalea2d'
-import { Arbre } from '../../../modules/arbres'
-export const titre = 'Calculer la probabilité d\'une intersection'
+export const titre = "Calculer la probabilité d'une intersection"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'lnpec'
 export const refs = {
   'fr-fr': [],
@@ -38,20 +37,41 @@ export default class Can1a2022Q28 extends ExerciceCan {
     const reponse = pAbarre * pBbarresachantAbarre
 
     const omega = new Arbre({
-      racine: true, rationnel: false, nom: '', proba: 1, visible: false, alter: '',
+      racine: true,
+      rationnel: false,
+      nom: '',
+      proba: 1,
+      visible: false,
+      alter: '',
       enfants: [
         new Arbre({
-          rationnel: false, nom: 'A', proba: 1, visible: false, alter: '',
+          rationnel: false,
+          nom: 'A',
+          proba: 1,
+          visible: false,
+          alter: '',
           enfants: [
             new Arbre({ rationnel: false, nom: 'B', proba: pBsachantA }),
-            new Arbre({ rationnel: false, nom: '\\overline{B}', visible: false, alter: '' }),
+            new Arbre({
+              rationnel: false,
+              nom: '\\overline{B}',
+              visible: false,
+              alter: '',
+            }),
           ],
         }),
         new Arbre({
-          rationnel: false, nom: '\\overline{A}', proba: pAbarre,
+          rationnel: false,
+          nom: '\\overline{A}',
+          proba: pAbarre,
           enfants: [
             new Arbre({ rationnel: false, nom: 'B', proba: pBsachantAbarre }),
-            new Arbre({ rationnel: false, nom: '\\overline{B}', visible: false, alter: '' }),
+            new Arbre({
+              rationnel: false,
+              nom: '\\overline{B}',
+              visible: false,
+              alter: '',
+            }),
           ],
         }),
       ],
@@ -60,14 +80,16 @@ export default class Can1a2022Q28 extends ExerciceCan {
     omega.setTailles()
     const objets = omega.represente(0, 7, 0, 1.5, true, 1, 1)
 
-    this.question = "Soient $A$ et $B$ deux évènements tels que :<br>"
+    this.question = 'Soient $A$ et $B$ deux évènements tels que :<br>'
     this.question += mathalea2d(
       { xmin: -0.1, xmax: 14, ymin: 0, ymax: 7, display: 'inline', scale: 0.8 },
       ...objets,
     )
 
     if (this.interactif) {
-      this.optionsChampTexte = { texteAvant: '<br>$P(\\overline{A}\\cap \\overline{B})=$' }
+      this.optionsChampTexte = {
+        texteAvant: '<br>$P(\\overline{A}\\cap \\overline{B})=$',
+      }
     } else {
       this.question += '<br>$P(\\overline{A}\\cap \\overline{B})=\\ldots$'
     }

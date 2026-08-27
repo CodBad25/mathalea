@@ -1,13 +1,13 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec une puissance'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ee42f'
 export const refs = {
   'fr-fr': [],

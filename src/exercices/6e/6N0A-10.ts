@@ -26,7 +26,6 @@ import Exercice from '../Exercice'
 export const titre = 'Ranger des nombres entiers'
 export const dateDeModifImportante = '13/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * * Ranger une liste de nombres dans l'ordre croissant ou décroissant

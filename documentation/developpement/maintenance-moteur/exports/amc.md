@@ -35,9 +35,9 @@ quand la question contient plusieurs sous-réponses ou un format ambigu.
 
 ## Politique d'inférence par `formatInteractif`
 
-La décision se prend d'abord sur `autoCorrection[i].formatInteractif`, plus
-précis que `interactifType` au niveau de l'exercice. Les alias historiques et
-les custom elements modernes doivent conduire au même contrat AMC.
+La décision se prend exclusivement à partir de
+`autoCorrection[i].formatInteractif`. Les alias historiques et les custom
+elements modernes doivent conduire au même contrat AMC.
 
 | Formats observés                                                                                | Inférence automatique                                      | Condition                                                                                                                                      |
 | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -88,11 +88,9 @@ approchée. En revanche, une `fractionEgale` non entière bascule en `AMCOpen` :
 une grille AMC impose un couple numérateur-dénominateur précis et ne représente
 donc pas toutes les écritures équivalentes acceptées par le comparateur.
 
-`interactifType` n'est qu'un recours historique quand le format manque au
-niveau de la question. Une exception de migration subsiste pour quelques
-anciens exercices hybrides : un item étiqueté globalement `qcm`, sans
-propositions QCM mais avec une réponse numérique, peut être interprété comme un
-champ mathématique lorsqu'il appartient à un groupe réellement mixte.
+`interactifType` n'existe plus et ne doit pas être renseigné. Un item sans
+`autoCorrection[i].formatInteractif` ne peut pas utiliser de format global de
+repli.
 
 ### Différence entre `setReponse()` et `handleAnswers()`
 

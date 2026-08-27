@@ -9,7 +9,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une expression avec des valeurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '06/07/2025'
@@ -32,7 +32,6 @@ export default class CalculExpAvecValeurs extends ExerciceSimple {
     this.optionsDeComparaison = { fractionEgale: true }
     this.versionQcmDisponible = true
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   nouvelleVersion() {

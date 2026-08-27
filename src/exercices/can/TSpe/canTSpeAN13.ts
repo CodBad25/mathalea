@@ -10,7 +10,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer une somme élémentaire avec le logarithme népérien'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '20/02/2025'
 

@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer le résultat d'une division par 5"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '845a2'
 export const refs = {
   'fr-fr': [],

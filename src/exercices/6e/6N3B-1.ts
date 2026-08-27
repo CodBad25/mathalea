@@ -17,7 +17,6 @@ export const dateDePublication = '10/03/2021'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre = 'Donner une écriture fractionnaire'
 

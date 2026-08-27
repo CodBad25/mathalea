@@ -28,7 +28,6 @@ export const titre =
   'Résoudre des problèmes additifs et de comparaison sur les fractions'
 export const dateDeModifImportante = '05/11/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résoudre des problèmes additifs et de comparaison sur les fractions

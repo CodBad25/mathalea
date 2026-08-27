@@ -2,7 +2,6 @@ import Decimal from 'decimal.js'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { bleuMathalea } from '../../lib/colors'
-import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
@@ -33,7 +32,6 @@ export const refs = {
 }
 
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
 
 export default class ExpressionAParabole extends Exercice {
   // Type d'expressions fournie par le menu
@@ -272,7 +270,7 @@ export default class ExpressionAParabole extends Exercice {
 
       if (this.interactif) {
         this.autoCorrection[i] = {}
-        setCliqueFigure(this.autoCorrection[i])
+        this.autoCorrection[i].formatInteractif = 'clique-figure'
 
         texte += `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>`
       }

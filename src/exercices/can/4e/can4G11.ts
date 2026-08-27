@@ -1,8 +1,8 @@
 import AngleComplémentaireTriangleRectangle from '../../3e/3AutoG03'
 export const titre =
-  'Calculer l\'angle complémentaire dans un triangle rectangle'
+  "Calculer l'angle complémentaire dans un triangle rectangle"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '09/12/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

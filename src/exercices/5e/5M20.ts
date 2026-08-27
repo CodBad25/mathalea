@@ -3,7 +3,7 @@ export const titre = 'Calculer des volumes de solides'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const dateDeModifImportante = '10/06/2024'
 export const uuid = 'e26ca'
 export const refs = {

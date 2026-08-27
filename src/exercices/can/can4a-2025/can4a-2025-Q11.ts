@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir des durées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ayxru'
 export const refs = {
   'fr-fr': [],

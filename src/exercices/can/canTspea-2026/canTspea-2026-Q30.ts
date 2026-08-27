@@ -3,16 +3,16 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polyline } from '../../../lib/2d/Polyline'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Question 30'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'brlw7'
 export const refs = {
   'fr-fr': [],
@@ -23,7 +23,7 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ30 extends ExerciceCan {
-enonce(choix?: { x: number; pente: number }): void {
+  enonce(choix?: { x: number; pente: number }): void {
     if (choix == null) {
       const listeValeurs = [
         { x: -4, pente: 0 },
@@ -41,7 +41,7 @@ enonce(choix?: { x: number; pente: number }): void {
         { x: 2.5, pente: 1 },
         { x: 2.2, pente: 1 },
         { x: 3.5, pente: 0 },
-        { x: 4, pente: 0 }
+        { x: 4, pente: 0 },
       ]
       choix = choice(listeValeurs)
     }
@@ -60,7 +60,7 @@ enonce(choix?: { x: number; pente: number }): void {
       xUnite: 1,
       yUnite: 1,
       axeXStyle: '->',
-      axeYStyle: '->'
+      axeYStyle: '->',
     })
 
     // 2. Définition des points
@@ -86,7 +86,7 @@ enonce(choix?: { x: number; pente: number }): void {
     const objets = [nomCourbe, labelX, labelY, r, courbe]
     const figure = mathalea2d(
       Object.assign({ pixelsParCm: 30, scale: 0.8 }, fixeBordures(objets)),
-      ...objets
+      ...objets,
     )
 
     // 6. Affectations générales
@@ -106,7 +106,7 @@ enonce(choix?: { x: number; pente: number }): void {
     $f'(${xString})$ est donc égal au coefficient directeur de la droite contenant le segment de la courbe sur lequel se trouve le point d'abscisse $${xString}$.<br>`
     this.correction += `Par lecture graphique, ce coefficient directeur est égal à $${choix.pente}$.<br>`
     this.correction += `On en déduit que $f'(${xString}) = ${miseEnEvidence(choix.pente.toString())}$.`
- this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     // 8. Affectations CAN
     this.canEnonce = figure
     this.canReponseACompleter = `$f'(${xString}) = \\dots$`

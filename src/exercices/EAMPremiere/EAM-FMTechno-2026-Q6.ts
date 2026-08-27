@@ -1,7 +1,9 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
-import { ecritureParentheseSiNegatif, reduireAxPlusB } from '../../lib/outils/ecritures'
+import {
+  ecritureParentheseSiNegatif,
+  reduireAxPlusB,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -12,7 +14,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une image par une fonction'
@@ -24,7 +26,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ6FMt2026 extends ExerciceQcmA {
-// f(x) = x(ax + b) ; on calcule l'image de x0.
+  // f(x) = x(ax + b) ; on calcule l'image de x0.
   // Distracteurs forçables (distA/B/C) pour reproduire la version officielle.
   private appliquerLesValeurs(
     a: number,
@@ -34,7 +36,6 @@ export default class AutoQ6FMt2026 extends ExerciceQcmA {
     distB?: string,
     distC?: string,
   ): void {
-  
     const signeNombre = (n: number) => (n >= 0 ? `+ ${n}` : `- ${Math.abs(n)}`)
 
     const prod = a * x0

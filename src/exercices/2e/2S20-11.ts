@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { latex2d } from '../../lib/2d/textes'
@@ -9,6 +8,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
@@ -19,7 +19,6 @@ export const titre =
 export const dateDePublication = '19/08/2026'
 export const uuid = 'd7b82'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const refs = {
   'fr-fr': ['2S20-11'],

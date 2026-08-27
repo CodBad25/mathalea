@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre un système avec une infinité de solutions par substitution'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '04/05/2026'
 export const uuid = 'f3a91'
 export const refs = {

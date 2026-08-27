@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
@@ -10,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer un pourcentage de $150$'
@@ -22,7 +21,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ2FMns2026 extends ExerciceQcmA {
-// p : le pourcentage (10, 20, 30...)
+  // p : le pourcentage (10, 20, 30...)
   // dist : les trois distracteurs propres à ce cas.
   private appliquerLesValeurs(p: number, dist: number[]): void {
     const reponse = p * 1.5
@@ -60,7 +59,7 @@ ${methode2}`
       `$${reponse}$`,
       `$${dist[0]}$`,
       `$${dist[1]}$`,
-      `$${dist[2]}$`
+      `$${dist[2]}$`,
     ]
   }
 
@@ -75,20 +74,20 @@ ${methode2}`
       this.versionOriginale()
       return
     }
-    
-    // [pourcentage, [distracteurs]] 
+
+    // [pourcentage, [distracteurs]]
     // Les distracteurs sont choisis pour être cohérents avec des erreurs courantes.
     const donnees: [number, number[]][] = [
-      [10, [5, 10, 30]],   // Rép: 15
-      [20, [15, 20, 45]],  // Rép: 30
-      [30, [15, 30, 60]],  // Rép: 45
-      [40, [30, 40, 75]],  // Rép: 60
+      [10, [5, 10, 30]], // Rép: 15
+      [20, [15, 20, 45]], // Rép: 30
+      [30, [15, 30, 60]], // Rép: 45
+      [40, [30, 40, 75]], // Rép: 60
       [60, [60, 75, 105]], // Rép: 90
       [70, [70, 90, 120]], // Rép: 105
-      [80, [80, 105, 135]],// Rép: 120
-      [90, [90, 120, 150]] // Rép: 135
+      [80, [80, 105, 135]], // Rép: 120
+      [90, [90, 120, 150]], // Rép: 135
     ]
-    
+
     let compteur = 0
     do {
       const [p, dist] = choice(donnees)

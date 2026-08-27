@@ -3,14 +3,6 @@
  */
 
 import Question1 from '../can5a-2025/can5a-2025-Q1'
-import Question2 from '../can5a-2025/can5a-2025-Q2'
-import Question3 from '../can5a-2025/can5a-2025-Q3'
-import Question4 from '../can5a-2025/can5a-2025-Q4'
-import Question5 from '../can5a-2025/can5a-2025-Q5'
-import Question6 from '../can5a-2025/can5a-2025-Q6'
-import Question7 from '../can5a-2025/can5a-2025-Q7'
-import Question8 from '../can5a-2025/can5a-2025-Q8'
-import Question9 from '../can5a-2025/can5a-2025-Q9'
 import Question10 from '../can5a-2025/can5a-2025-Q10'
 import Question11 from '../can5a-2025/can5a-2025-Q11'
 import Question12 from '../can5a-2025/can5a-2025-Q12'
@@ -21,6 +13,7 @@ import Question16 from '../can5a-2025/can5a-2025-Q16'
 import Question17 from '../can5a-2025/can5a-2025-Q17'
 import Question18 from '../can5a-2025/can5a-2025-Q18'
 import Question19 from '../can5a-2025/can5a-2025-Q19'
+import Question2 from '../can5a-2025/can5a-2025-Q2'
 import Question20 from '../can5a-2025/can5a-2025-Q20'
 import Question21 from '../can5a-2025/can5a-2025-Q21'
 import Question22 from '../can5a-2025/can5a-2025-Q22'
@@ -31,13 +24,20 @@ import Question26 from '../can5a-2025/can5a-2025-Q26'
 import Question27 from '../can5a-2025/can5a-2025-Q27'
 import Question28 from '../can5a-2025/can5a-2025-Q28'
 import Question29 from '../can5a-2025/can5a-2025-Q29'
+import Question3 from '../can5a-2025/can5a-2025-Q3'
 import Question30 from '../can5a-2025/can5a-2025-Q30'
+import Question4 from '../can5a-2025/can5a-2025-Q4'
+import Question5 from '../can5a-2025/can5a-2025-Q5'
+import Question6 from '../can5a-2025/can5a-2025-Q6'
+import Question7 from '../can5a-2025/can5a-2025-Q7'
+import Question8 from '../can5a-2025/can5a-2025-Q8'
+import Question9 from '../can5a-2025/can5a-2025-Q9'
 
 import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'CAN 5e sujet 2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd6d89'
 export const refs = {
   'fr-fr': ['can5a-2025'],

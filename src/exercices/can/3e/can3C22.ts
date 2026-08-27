@@ -5,7 +5,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier des fractions avec une simplification évidente'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '05/01/2026'
@@ -34,9 +34,10 @@ export default class MultiplierFractionAstuce extends ExerciceSimple {
 
   nouvelleVersion() {
     // Choisir un facteur commun > 10 pour la simplification évidente
-    const facteurCommun = this.quotaChoice('facteurCommun', [
-      11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-    ])
+    const facteurCommun = this.quotaChoice(
+      'facteurCommun',
+      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
+    )
 
     // Choisir un facteur de simplification supplémentaire
     const facteurSupp = this.quotaChoice('facteurSupp', [2, 3, 4, 5, 6])

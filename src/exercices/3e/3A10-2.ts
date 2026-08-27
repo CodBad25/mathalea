@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Justifier si des nombres sont premiers ou pas - Variante avec les critères de divisibilité par 7 et par 11'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

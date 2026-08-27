@@ -16,7 +16,7 @@ export const titre =
   'Compléter le tableau d’une loi de probabilité d’une variable aléatoire'
 export const dateDePublication = '08/07/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

@@ -5,7 +5,7 @@ import { prenom } from '../../lib/outils/Personne'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Produire une forme littérale en introduisant une lettre pour désigner une valeur inconnue'
 

@@ -13,7 +13,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 export const titre = 'Tracer une figure avec une aire donnée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7522d'
 export const refs = {
   'fr-fr': [],

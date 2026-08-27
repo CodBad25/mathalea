@@ -26,7 +26,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre des problèmes de prix avec des objets mettant en jeu diverses opérations'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -63,7 +63,6 @@ export default class QuestionsPrix extends Exercice {
     this.sup3 = false
     this.sup4 = 3
 
-    this.interactifType = 'mathLive'
 
     this.besoinFormulaireTexte = [
       'Choix des questions',

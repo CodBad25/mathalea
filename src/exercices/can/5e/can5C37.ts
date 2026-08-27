@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import {
@@ -9,13 +10,12 @@ import {
   round,
 } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { bleuMathalea } from '../../../lib/colors'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier astucieusement avec des décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Développer des carrés avec la double distributivité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const dateDePublication = '12/12/2021'

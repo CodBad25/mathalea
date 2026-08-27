@@ -39,7 +39,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const uuid = 'a4b8f'
 export const refs = { 'fr-fr': ['1A-R02-6', '2A-R2-6'], 'fr-ch': ['9FA2B-24'] }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer un prix dans une situation de proportionnalité'

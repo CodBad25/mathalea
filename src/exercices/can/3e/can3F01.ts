@@ -11,7 +11,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const dateDeModifImportante = '26/10/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Lire une image graphiquement'
 /**
  * @author Gilles Mora

@@ -244,7 +244,7 @@ export default class RepresenterUneFraction extends Exercice {
             this,
             i,
             { reponse: { value: '' } },
-            { formatInteractif: 'custom' },
+            { formatInteractif: 'meta-custom' },
           )
         }
         // Si la question n'a jamais été posée, on en crée une autre

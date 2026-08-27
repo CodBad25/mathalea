@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Reconnaître des droites parallèles avec la colinéarité (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '20/04/26' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

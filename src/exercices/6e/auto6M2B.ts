@@ -21,7 +21,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Connaître la définition d'une unité d'aire"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '03/08/2025'
 
 /**

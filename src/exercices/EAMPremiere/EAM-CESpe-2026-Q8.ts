@@ -10,10 +10,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Exprimer une variable à partir d\'une formule '
+export const titre = "Exprimer une variable à partir d'une formule "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -22,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5CEs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(a: number, b: number, inverserXY: boolean): void {
+  private appliquerLesValeurs(a: number, b: number, inverserXY: boolean): void {
     // Si inverserXY est true, on part de y = ... pour isoler x. Sinon, l'inverse.
     const var1 = inverserXY ? 'y' : 'x'
     const var2 = inverserXY ? 'x' : 'y'
@@ -39,16 +39,11 @@ private appliquerLesValeurs(a: number, b: number, inverserXY: boolean): void {
 
     // Génération des distracteurs calqués sur les erreurs du sujet d'origine
     const correct = `${var2} = \\dfrac{${a}}{${var1}} - ${b}`
-    const d1 = `${var2} = \\dfrac{${a}}{${b}+${var1}}`           // Simple inversion des lettres sans calcul
-    const d2 = `${var2} = ${a} - ${b}${var1}`                    // Erreur algébrique : var1(b+var2) = a -> var2 = a - b*var1
+    const d1 = `${var2} = \\dfrac{${a}}{${b}+${var1}}` // Simple inversion des lettres sans calcul
+    const d2 = `${var2} = ${a} - ${b}${var1}` // Erreur algébrique : var1(b+var2) = a -> var2 = a - b*var1
     const d3 = `${var2} = \\dfrac{${a * b}}{${b}${var1} - ${a}}` // Erreur de fraction type (réponse 'a' du sujet original)
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
   }
 
   versionOriginale: () => void = () => {
@@ -67,11 +62,11 @@ private appliquerLesValeurs(a: number, b: number, inverserXY: boolean): void {
       // Valeurs entières positives aléatoires
       const a = randint(3, 10)
       const b = randint(2, 8)
-      
-      // On peut laisser choice([true, false]) pour encore plus de variété, 
+
+      // On peut laisser choice([true, false]) pour encore plus de variété,
       // ou forcer true si tu veux que ce soit systématiquement inversé par rapport à l'original.
-      const inverser = choice([true, false]) 
-      
+      const inverser = choice([true, false])
+
       this.appliquerLesValeurs(a, b, inverser)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

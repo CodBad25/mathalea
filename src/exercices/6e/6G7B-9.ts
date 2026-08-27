@@ -3,7 +3,6 @@ import SymetrieProprietes from '../5e/5G3B-3'
 export const titre = 'Utiliser les propriétés de conservation de la symétrie'
 export const dateDePublication = '07/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Éric Elter

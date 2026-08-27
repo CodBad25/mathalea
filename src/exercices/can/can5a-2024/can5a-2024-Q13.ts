@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une expression décrite par une phrase'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3eda9'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -20,7 +20,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBase
-this.optionsChampTexte = { texteApres: '.' }
+    this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 
@@ -41,9 +41,9 @@ this.optionsChampTexte = { texteApres: '.' }
       Le produit de $${a}$ par la somme de $${b}$ et de $${c}$ est donc égal à : $${a}\\times ${b + c}=${miseEnEvidence(this.reponse)}$`
     }
 
-     this.canReponseACompleter = '$\\ldots$'
-        if (!this.interactif && context.isHtml) {
-          this.question += '$\\ldots$'
-        }
-      }
+    this.canReponseACompleter = '$\\ldots$'
+    if (!this.interactif && context.isHtml) {
+      this.question += '$\\ldots$'
     }
+  }
+}

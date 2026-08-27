@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 export const titre = 'Déterminer la limite d’une suite géométrique'
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

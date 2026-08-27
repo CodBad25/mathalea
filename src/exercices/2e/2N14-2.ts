@@ -2,16 +2,15 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rienSi1 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Comparer deux nombres réels en étudiant leur différence'
+export const titre = 'Comparer deux nombres réels en étudiant leur différence'
 export const dateDePublication = '16/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '92e90'
 
 export const refs = {
@@ -95,7 +94,7 @@ export default class ComparerDeuxNombresAvecRacineCarree extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeQuestion = typesDeQuestions[i]
       const sensComparaison = sensDesComparaisons[i]
       const d = randint(1, 9)
@@ -175,8 +174,7 @@ export default class ComparerDeuxNombresAvecRacineCarree extends Exercice {
             : borneInferieure + 1
         a = d + differencePartiesEntieres
         donneeCaracteristique = borneInferieure
-        reponse =
-          differencePartiesEntieres === borneInferieure ? '<' : '>'
+        reponse = differencePartiesEntieres === borneInferieure ? '<' : '>'
 
         texte = `On pose $A=${a}-${rienSi1(b)}n$ et $B=${d}-${rienSi1(e)}n$, où $n$ est un nombre réel tel que $${borneInferieure} < n < ${borneInferieure + 1}$.<br>`
         texteCorr = `On calcule la différence $A-B$ :<br>

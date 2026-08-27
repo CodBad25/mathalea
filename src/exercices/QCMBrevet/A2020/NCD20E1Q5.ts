@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': ['4mProbStat-17'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Probabilité simple (12/2020 Nouvelle Calédonie)'

@@ -9,9 +9,10 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = "Déterminer une longueur d'un triangle rectangle par proportionnalité"
+export const titre =
+  "Déterminer une longueur d'un triangle rectangle par proportionnalité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 /**

@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   miseEnEvidence,
@@ -5,13 +6,11 @@ import {
 } from '../../../lib/outils/embellissements'
 import { nombreDeChiffresDansLaPartieDecimale } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { bleuMathalea } from '../../../lib/colors'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Diviser astucieusement par 5, 4, 8 ou 0,5'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

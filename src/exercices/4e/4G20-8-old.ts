@@ -11,7 +11,7 @@ export const titre =
   'Calculer mentalement une longueur avec le théorème de Pythagore'
 export const dateDePublication = '05/10/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6dc45'
 export const refs = {
   'fr-fr': [],

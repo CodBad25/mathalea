@@ -1,11 +1,11 @@
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Donner la bonne formule de probabilités totales'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'gii6i'
 export const refs = {
   'fr-fr': [],
@@ -75,7 +75,7 @@ export default class Can1a2026Q25 extends ExerciceCan {
     this.question = enonce + '<br>' + qcm.texte
     this.correction = `${explication}<br>La réponse est ${estVrai ? texteEnCouleurEtGras('Vrai') : texteEnCouleurEtGras('Faux')}.`
     this.canEnonce = enonce
-    this.canReponseACompleter =  'Entoure la bonne réponse : <br>VRAI / FAUX'
+    this.canReponseACompleter = 'Entoure la bonne réponse : <br>VRAI / FAUX'
   }
 
   nouvelleVersion(): void {

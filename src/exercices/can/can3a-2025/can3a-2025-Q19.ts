@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec une puissance'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4650c'
 export const refs = {
   'fr-fr': [''],

@@ -1,7 +1,7 @@
 import TablesDeMultiplications from '../6e/_Tables_de_multiplications'
 export const titre = 'Connaître les tables de multiplication'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '27/08/2024'

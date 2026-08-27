@@ -20,11 +20,11 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { bleuMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Calculer et utiliser les coordonnées du milieu d'un segment dans un repère"
 export const dateDeModifImportante = '04/12/2023'
@@ -68,7 +68,7 @@ export default class Milieu extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       let texte = ''
       let texteCorr = ''

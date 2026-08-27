@@ -2,9 +2,9 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer la mesure d\'un angle à partir de son sinus'
+export const titre = "Calculer la mesure d'un angle à partir de son sinus"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ge9fy'
 export const refs = {
   'fr-fr': [],

@@ -35,7 +35,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Identifier une région du plan'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '10/01/2026'
 
@@ -74,7 +73,7 @@ export default class RegionsDuPlan extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let content = ''
       let objetReponse: any
       let texte = '$M$ est un point de la partie grisée du plan.<br>'

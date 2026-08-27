@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
@@ -128,8 +128,7 @@ export default class AutoQ5AGns2026 extends ExerciceQcmA {
 
       // On varie entre augmentation et réduction, et on tire une des 3 formes de formules attendues
       const typeEvo = choice(['augmentation', 'réduction']) as
-        | 'augmentation'
-        | 'réduction'
+        'augmentation' | 'réduction'
       const forme = choice([1, 2, 3]) as 1 | 2 | 3
 
       this.appliquerLesValeurs(valeur, p, typeEvo, forme)

@@ -9,10 +9,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Exprimer une variable à partir d\'une formule '
+export const titre = "Exprimer une variable à partir d'une formule "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -21,14 +21,14 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ10ANns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(cas: number): void {
+  private appliquerLesValeurs(cas: number): void {
     switch (cas) {
       case 1: // Énergie cinétique, exprimer v
         this.enonce = `En physique, l'énergie cinétique d'un véhicule est donnée par la formule :
         ${texteCentre(`$E = \\dfrac{1}{2}mv^2$`)}
         où $m$ représente la masse du véhicule et $v$ sa vitesse.<br>
         On souhaite exprimer $v$ en fonction de $E$ et $m$. Une expression de $v$ est :`
-        
+
         this.correction = `On isole $v$ étape par étape :<br>`
         this.correction += `$\\begin{aligned} E &= \\dfrac{1}{2}mv^2 \\\\`
         this.correction += `2E &= mv^2 \\\\`
@@ -40,7 +40,7 @@ export default class AutoQ10ANns2026 extends ExerciceQcmA {
           `$v = \\sqrt{\\dfrac{2E}{m}}$`,
           `$v = \\dfrac{2E}{m}$`,
           `$v = \\sqrt{E - \\dfrac{1}{2}m}$`,
-          `$v = \\sqrt{2mE}$`
+          `$v = \\sqrt{2mE}$`,
         ]
         break
 
@@ -49,7 +49,7 @@ export default class AutoQ10ANns2026 extends ExerciceQcmA {
         ${texteCentre(`$E = \\dfrac{1}{2}mv^2$`)}
         où $m$ représente la masse du véhicule et $v$ sa vitesse.<br>
         On souhaite exprimer $m$ en fonction de $E$ et $v$. Une expression de $m$ est :`
-        
+
         this.correction = `On isole $m$ étape par étape :<br>`
         this.correction += `$\\begin{aligned} E &= \\dfrac{1}{2}mv^2 \\\\`
         this.correction += `2E &= mv^2 \\\\`
@@ -60,7 +60,7 @@ export default class AutoQ10ANns2026 extends ExerciceQcmA {
           `$m = \\dfrac{2E}{v^2}$`,
           `$m = \\dfrac{E}{2v^2}$`,
           `$m = \\sqrt{\\dfrac{2E}{v}}$`,
-          `$m = 2E - v^2$`
+          `$m = 2E - v^2$`,
         ]
         break
 
@@ -69,7 +69,7 @@ export default class AutoQ10ANns2026 extends ExerciceQcmA {
         ${texteCentre(`$A = \\pi r^2$`)}
         où $r$ représente le rayon du disque.<br>
         On souhaite exprimer $r$ en fonction de $A$. Une expression de $r$ est :`
-        
+
         this.correction = `On isole $r$ étape par étape :<br>`
         this.correction += `$\\begin{aligned} A &= \\pi r^2 \\\\`
         this.correction += `\\dfrac{A}{\\pi} &= r^2 \\\\`
@@ -80,7 +80,7 @@ export default class AutoQ10ANns2026 extends ExerciceQcmA {
           `$r = \\sqrt{\\dfrac{A}{\\pi}}$`,
           `$r = \\dfrac{A}{\\pi}$`,
           `$r = \\dfrac{\\sqrt{A}}{\\pi}$`,
-          `$r = \\sqrt{A - \\pi}$`
+          `$r = \\sqrt{A - \\pi}$`,
         ]
         break
 
@@ -89,7 +89,7 @@ export default class AutoQ10ANns2026 extends ExerciceQcmA {
         ${texteCentre(`$V = \\dfrac{1}{3}\\pi r^2 h$`)}
         où $r$ est le rayon de la base et $h$ la hauteur.<br>
         On souhaite exprimer $h$ en fonction de $V$ et $r$. Une expression de $h$ est :`
-        
+
         this.correction = `On isole $h$ étape par étape :<br>`
         this.correction += `$\\begin{aligned} V &= \\dfrac{1}{3}\\pi r^2 h \\\\`
         this.correction += `3V &= \\pi r^2 h \\\\`
@@ -100,11 +100,9 @@ export default class AutoQ10ANns2026 extends ExerciceQcmA {
           `$h = \\dfrac{3V}{\\pi r^2}$`,
           `$h = \\dfrac{V}{3\\pi r^2}$`,
           `$h = \\sqrt{\\dfrac{3V}{\\pi r}}$`,
-          `$h = 3V - \\pi r^2$`
+          `$h = 3V - \\pi r^2$`,
         ]
         break
-
-     
     }
   }
 

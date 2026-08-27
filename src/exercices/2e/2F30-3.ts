@@ -36,7 +36,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '1/08/2021'
@@ -174,7 +174,7 @@ export default class LecturesGraphiques extends Exercice {
         origine,
       )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let x0 = 0

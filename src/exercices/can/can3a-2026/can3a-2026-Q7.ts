@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer une fraction d'un entier"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'sts09'
 export const refs = {
   'fr-fr': [],

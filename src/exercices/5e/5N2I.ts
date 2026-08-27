@@ -26,7 +26,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Soustraire deux nombres relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '23/08/2024'

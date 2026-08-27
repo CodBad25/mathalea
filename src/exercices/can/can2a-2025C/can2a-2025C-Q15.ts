@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Calculer avec le vocabulaire : carré, triple, double, etc.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1zcj3'
 export const refs = {
   'fr-fr': [],

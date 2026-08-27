@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une évolution globale '
@@ -22,17 +22,17 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ8ANns2026 extends ExerciceQcmA {
-// t1 et t2 représentent ici la valeur en pourcentage des baisses (ex: 10 pour une baisse de 10%)
+  // t1 et t2 représentent ici la valeur en pourcentage des baisses (ex: 10 pour une baisse de 10%)
   private appliquerLesValeurs(t1: number, t2: number): void {
     const dec1 = t1 / 100
     const dec2 = t2 / 100
-    
+
     const cm1 = 1 - dec1
     const cm2 = 1 - dec2
     const cmGlobal = cm1 * cm2
-    
+
     // Arrondi mathématique pour contrer les bugs d'affichage flottant de JavaScript
-    const tGlobal = Math.round((cmGlobal - 1) * 100) 
+    const tGlobal = Math.round((cmGlobal - 1) * 100)
 
     this.enonce = `Le taux d'évolution équivalent à une baisse de $${t1}\\,\\%$ suivie d'une baisse de $${t2}\\,\\%$ est :`
 
@@ -44,15 +44,15 @@ export default class AutoQ8ANns2026 extends ExerciceQcmA {
     $T_G=CM_G     - 1 = ${texNombre(cmGlobal, 4)} - 1  =${texNombre(cmGlobal - 1, 2)} =${miseEnEvidence(tGlobal.toString() + '\\,\\%')}$.`
 
     // Distracteurs pertinents
-    const dist1 = -(t1 + t2)       // L'erreur classique d'addition des taux : -30%
-    const dist2 = tGlobal - 10     // Décalage de -10% : -48%
-    const dist3 = tGlobal + 10     // Décalage de +10% : -28%
+    const dist1 = -(t1 + t2) // L'erreur classique d'addition des taux : -30%
+    const dist2 = tGlobal - 10 // Décalage de -10% : -48%
+    const dist3 = tGlobal + 10 // Décalage de +10% : -28%
 
     this.reponses = [
       `$${tGlobal}\\,\\%$`,
       `$${dist1}\\,\\%$`,
       `$${dist2}\\,\\%$`,
-      `$${dist3}\\,\\%$`
+      `$${dist3}\\,\\%$`,
     ]
   }
 
@@ -74,7 +74,7 @@ export default class AutoQ8ANns2026 extends ExerciceQcmA {
     do {
       const t1 = choice(baisses)
       const t2 = choice(baisses)
-      
+
       this.appliquerLesValeurs(t1, t2)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

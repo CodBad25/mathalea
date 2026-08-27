@@ -19,7 +19,6 @@ export const titre = 'Construire des médiatrices'
 
 export const dateDePublication = '18/03/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = '0dbe7'
 export const refs = {

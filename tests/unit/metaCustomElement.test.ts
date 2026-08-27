@@ -4,6 +4,7 @@ import Exercice from '../../src/exercices/Exercice'
 import ExerciceSimple from '../../src/exercices/ExerciceSimple'
 import MetaExercice from '../../src/exercices/MetaExerciceCan'
 import figureApigeom from '../../src/lib/figureApigeom'
+import { ApigeomFigureElement } from '../../src/lib/apigeom/apigeom-figure'
 import { MetaCustomElement } from '../../src/lib/customElements/MetaCustomElement'
 import { pointsMaxExercice } from '../../src/lib/interactif/baremeExercice'
 import {
@@ -42,7 +43,6 @@ class SousExerciceApigeom extends Exercice {
     return ['OK', 'KO']
   }
 }
-SousExerciceApigeom.interactifTypeModule = 'custom'
 
 /** Exercice simple custom dont la correction est une méthode de prototype (cf. `3AutoG12-0`) */
 class SousExerciceSimpleCustom extends ExerciceSimple {
@@ -50,7 +50,7 @@ class SousExerciceSimpleCustom extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatInteractif = 'custom'
+    this.formatInteractif = 'meta-custom'
     this.reponse = ''
   }
 
@@ -80,7 +80,7 @@ class SousExerciceMathlive extends ExerciceSimple {
   }
 }
 
-/** Exercice qui délègue à un customElement tout en gardant `interactifType = 'custom'` */
+/** Exercice qui délègue déjà à un customElement enregistré. */
 class SousExerciceHybride extends Exercice {
   nouvelleVersion(): void {
     handleAnswers(this, 0, { reponse: { value: '4' } })
@@ -90,7 +90,6 @@ class SousExerciceHybride extends Exercice {
 
   correctionInteractive = () => 'OK'
 }
-SousExerciceHybride.interactifTypeModule = 'custom'
 
 function construitMeta(classes: (typeof Exercice)[], nbQuestions: number) {
   const meta = new MetaExercice(classes)
@@ -108,10 +107,7 @@ describe('questions custom réhébergées par MetaExerciceCan', () => {
   })
 
   it('génère des identifiants apiGeom distincts par question', () => {
-    const meta = construitMeta(
-      [SousExerciceApigeom, SousExerciceApigeom],
-      2,
-    )
+    const meta = construitMeta([SousExerciceApigeom, SousExerciceApigeom], 2)
 
     expect(meta.listeQuestions[0]).toContain('id="apigeomEx7F0"')
     expect(meta.listeQuestions[1]).toContain('id="apigeomEx7F1"')
@@ -120,10 +116,7 @@ describe('questions custom réhébergées par MetaExerciceCan', () => {
   })
 
   it('laisse intacte la clé du callback de montage de la figure', () => {
-    const meta = construitMeta(
-      [SousExerciceApigeom, SousExerciceApigeom],
-      2,
-    )
+    const meta = construitMeta([SousExerciceApigeom, SousExerciceApigeom], 2)
 
     // L'attribut `action` est la clé du registre statique de
     // `DomReadyActionElement` : la réécrire empêcherait le montage de la figure.
@@ -133,25 +126,20 @@ describe('questions custom réhébergées par MetaExerciceCan', () => {
     expect(meta.listeQuestions[1]).toContain('id="apigeomEx7F1-setup"')
   })
 
-  it('déclare le format meta-custom et compte les questions au barème', () => {
-    const meta = construitMeta(
-      [SousExerciceApigeom, SousExerciceApigeom],
-      2,
-    )
+  it('déclare le format apigeom-figure et compte les questions au barème', () => {
+    const meta = construitMeta([SousExerciceApigeom, SousExerciceApigeom], 2)
 
-    expect(meta.autoCorrection[0].formatInteractif).toBe('meta-custom')
-    expect(meta.autoCorrection[1].formatInteractif).toBe('meta-custom')
+    expect(meta.autoCorrection[0].formatInteractif).toBe('apigeom-figure')
+    expect(meta.autoCorrection[1].formatInteractif).toBe('apigeom-figure')
+    expect(meta.listeQuestions.join('')).not.toContain('meta-custom')
     expect(pointsMaxExercice(meta)).toBe(2)
   })
 
   it('corrige la bonne question et remonte les réponses de l’élève', () => {
-    const meta = construitMeta(
-      [SousExerciceApigeom, SousExerciceApigeom],
-      2,
-    )
+    const meta = construitMeta([SousExerciceApigeom, SousExerciceApigeom], 2)
     document.body.innerHTML = meta.listeQuestions.join('')
 
-    const resultat = MetaCustomElement.verifQuestion(meta, 1)
+    const resultat = ApigeomFigureElement.verifQuestion(meta, 1)
 
     expect(resultat.score).toEqual({ nbBonnesReponses: 1, nbReponses: 2 })
     expect(resultat.isOk).toBe(false)
@@ -200,10 +188,7 @@ describe('questions custom réhébergées par MetaExerciceCan', () => {
   })
 
   it('ne change rien aux questions non custom', () => {
-    const meta = construitMeta(
-      [SousExerciceMathlive, SousExerciceMathlive],
-      2,
-    )
+    const meta = construitMeta([SousExerciceMathlive, SousExerciceMathlive], 2)
 
     expect(meta.listeQuestions.join('')).not.toContain('meta-custom')
     expect(meta.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')

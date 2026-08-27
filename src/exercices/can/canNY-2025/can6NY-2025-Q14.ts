@@ -6,7 +6,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Déterminer un nombre plus grand ou plus petit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '47dd3'
 export const refs = {
   'fr-fr': [],

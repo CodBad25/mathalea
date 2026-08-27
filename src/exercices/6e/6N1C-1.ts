@@ -22,7 +22,7 @@ import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 
 export const titre = "Lire l'abscisse entière d'un point (grands nombres)"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '26/08/2024'

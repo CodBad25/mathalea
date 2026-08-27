@@ -15,7 +15,6 @@ export const titre = 'Effectuer des calculs sur tableur'
 export const dateDePublication = '15/06/2026'
 export const dateDeModifImportante = '23/05/2026'
 export const interactifReady = true
-export const interactifType = 'my-spreadsheet'
 export const uuid = 'e0f6b'
 
 export const refs = {

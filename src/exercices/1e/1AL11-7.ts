@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -18,7 +18,6 @@ export const titre =
   "Exprimer le terme général d'une suite définie par récurrence"
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '4d360'
 export const refs = {

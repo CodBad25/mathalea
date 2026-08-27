@@ -9,7 +9,7 @@ import Trinome from '../../../modules/Trinome'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Multiplier un entier avec un décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'jn0gl'
 export const refs = {
   'fr-fr': [],

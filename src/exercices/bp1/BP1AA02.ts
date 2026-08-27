@@ -2,7 +2,7 @@ import TermeDUneSuiteDefinieParRecurrence from '../1e/1AL10-4'
 export const titre =
   "Déterminer les termes d'une suite arithmétique définie par récurrence"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

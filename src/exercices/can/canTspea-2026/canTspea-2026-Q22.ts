@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Question 22'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fhmbj'
 export const refs = {
   'fr-fr': [],

@@ -25,7 +25,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Placer les solutions d’une équation trigonométrique sur le cercle'
 export const interactifReady = true
-export const interactifType = 'trigo-circle-selection'
 export const dateDePublication = '08/05/2026'
 export const uuid = 'd9a41'
 export const refs = {
@@ -256,7 +255,7 @@ export default class PlacerSolutionsEquationTrigoCercle extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const question = buildQuestion(Number(types[i]))
       const equation =
         question.kind === 'direct'

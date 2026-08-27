@@ -9,7 +9,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Lire un nombre sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'u9t07'
 export const refs = {
   'fr-fr': [],

@@ -13,7 +13,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Déterminer le coefficient directeur d'une droite à partir de son équation réduite"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/09/2021'
 export const dateModiImportante = '25/07/2025'
 /**

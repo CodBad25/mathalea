@@ -2,7 +2,7 @@ import Exercice3P10 from '../3e/3P10'
 export const titre =
   'Calculer une évolution en pourcentages, une valeur finale ou une valeur initiale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

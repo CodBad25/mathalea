@@ -51,7 +51,7 @@ sont décrites dans
           "path": ["6e"],           // chemin des clés menant au nœud
           "externalLinks": [        // optionnel : liens externes du niveau
             {
-              "title": "Cahier d'automatismes",
+              "title": "Cahiers d'automatismes",
               "url": "https://coopmaths.fr/www/automatismes/2nde/",
               "icon": "bx-book"     // optionnel, classe boxicons
             }

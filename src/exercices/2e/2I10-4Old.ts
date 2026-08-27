@@ -19,7 +19,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 export const titre = "Compléter et utiliser un tableau d'effectif"
 export const dateDePublication = '08/01/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '08/01/2026'
 /**
  * Compléter ou utiliser un tableau
@@ -71,7 +71,7 @@ export default class TableauProportion extends Exercice {
 
     let index = 0
     let increment = 1
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
 
       let total, totalGA, totalF, totalG, totalT, GAetG, FetG, GAetT, FetT

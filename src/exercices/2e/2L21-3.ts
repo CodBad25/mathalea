@@ -2,7 +2,7 @@ import EqResolvantesThales from '../3e/3L13-2'
 export const titre =
   'Résoudre une équation $\\dfrac{x}{a}=b$ ou $ \\dfrac{a}{x}=b$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const uuid = '7959f'

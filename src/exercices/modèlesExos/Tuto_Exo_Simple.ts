@@ -81,7 +81,6 @@ La seconde ligne indique que l'interactivité concerne un champ de réponse, l'i
 Les autres types d'interactivité seront vus dans une formation de niveau supérieur.
 */
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /*
 Les lignes suivantes concernent le référencement de l'exercice et sont obligatoires.

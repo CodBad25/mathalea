@@ -13,7 +13,6 @@ import {
 import Exercice from '../Exercice'
 export const titre = 'Connaitre le vocabulaire lié aux 4 opérations'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Exercice sur le vocabulaire : somme, différence, produit, quotient...

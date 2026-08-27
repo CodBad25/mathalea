@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 export const dateDePublication = '06/05/2025'
 export const dateDeModifImportante = '25/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Calculer le produit (en ligne) de deux décimaux connaissant le produit de deux entiers'
 

@@ -31,7 +31,7 @@ import { arrondi, range } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
 
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const titre = 'Connaitre le vocabulaire sur les angles'
 export const dateDePublication = '29/11/2024'
 export const dateDeModifImportante = '24/12/2024'
@@ -86,7 +86,7 @@ export default class VocabulaireAngles extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texteCorr = ''
       const objets = []
 

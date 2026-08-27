@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier par 0,1, 0,01 ou 0,001'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '21/10/2021'
@@ -55,7 +55,9 @@ export default class Multiplier extends ExerciceSimple {
         this.reponse = resultat
         break
       case 2: // nombre décimal
-        a = this.quotaRandint('aDecimal', 2, 999) / this.quotaChoice('diviseur', [10, 100])
+        a =
+          this.quotaRandint('aDecimal', 2, 999) /
+          this.quotaChoice('diviseur', [10, 100])
         b = this.quotaChoice('b', [0.1, 0.01, 0.001])
         resultat = texNombre(a * b, 7)
         this.question = `Calculer $${texNombre(a, 4)}\\times${texNombre(b, 3)}$.`

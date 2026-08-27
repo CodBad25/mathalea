@@ -6,7 +6,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const titre = 'Tracer un parallélogramme'
 export const dateDePublication = '9/11/2023'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Tracer un rectangle

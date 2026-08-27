@@ -1,13 +1,13 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-import FractionEtendue from '../../../modules/FractionEtendue'
-export const titre = 'Calculer une somme ou une différence de nombre entier et de fraction'
+export const titre =
+  'Calculer une somme ou une différence de nombre entier et de fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'asqfy'
 export const refs = {
   'fr-fr': [],
@@ -27,8 +27,21 @@ export default class Can1a2022Q2 extends ExerciceCan {
 
   enonce(a?: number, num?: number, den?: number, addition?: boolean) {
     const listeFractions = [
-      [1, 3], [2, 3], [3, 7], [2, 7], [4, 3], [3, 5], [4, 7],
-      [1, 5], [3, 5], [3, 4], [2, 9], [1, 9], [7, 9], [1, 8], [5, 8],
+      [1, 3],
+      [2, 3],
+      [3, 7],
+      [2, 7],
+      [4, 3],
+      [3, 5],
+      [4, 7],
+      [1, 5],
+      [3, 5],
+      [3, 4],
+      [2, 9],
+      [1, 9],
+      [7, 9],
+      [1, 8],
+      [5, 8],
     ]
 
     if (a == null || num == null || den == null || addition == null) {
@@ -52,7 +65,7 @@ export default class Can1a2022Q2 extends ExerciceCan {
       this.correction = `$${a}-${f.texFraction}= \\dfrac{${a * den}}{${den}}-${f.texFraction}=${miseEnEvidence(reponse.texFraction)}${reponse.texSimplificationAvecEtapes()}$`
       this.reponse = reponse
     }
-     if (this.interactif) {
+    if (this.interactif) {
       this.question += '$=$'
     }
   }

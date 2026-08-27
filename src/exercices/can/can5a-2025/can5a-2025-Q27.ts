@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une somme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a3x3b'
 export const refs = {
   'fr-fr': [],
@@ -48,11 +48,11 @@ export default class Can2025N5Q27 extends ExerciceCan {
 
     this.optionsChampTexte = { texteApres: ' euros.' }
     this.canReponseACompleter = '$\\ldots $ euros'
-     if (!this.interactif && context.isHtml) {
-          this.question += ' $\\ldots$ euros'
-        }
-        this.optionsChampTexte = { texteApres: '.' }
-      }
+    if (!this.interactif && context.isHtml) {
+      this.question += ' $\\ldots$ euros'
+    }
+    this.optionsChampTexte = { texteApres: '.' }
+  }
 
   nouvelleVersion() {
     this.canOfficielle ? this.enonce('Paul', 2, 3, 60) : this.enonce()

@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer une médiane'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3d45e'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -1,5 +1,5 @@
 import ExerciceDevelopper from '../3e/3L11'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'

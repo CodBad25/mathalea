@@ -7,7 +7,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Tracer un rectangle de dimensions données'
 export const dateDePublication = '4/11/2023'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Tracer un rectangle

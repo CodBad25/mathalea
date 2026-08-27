@@ -18,7 +18,7 @@ export const titre =
   "Déterminer le nombre de solutions d'une équation après un test numérique"
 export const dateDePublication = '16/08/2026'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const uuid = '1b7c9'
 export const refs = {
   'fr-fr': ['4L24'],

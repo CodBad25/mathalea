@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Compléter une phrase par la définition ou une propriété d'un parallélogramme"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDePublication = '05/04/2021'

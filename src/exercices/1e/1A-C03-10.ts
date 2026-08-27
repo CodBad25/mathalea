@@ -13,7 +13,7 @@ export const refs = {
   'fr-ch': ['10NO3F-4'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Passer de l'écriture scientifique à l'écriture décimale"

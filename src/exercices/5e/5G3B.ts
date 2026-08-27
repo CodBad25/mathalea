@@ -38,7 +38,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Utiliser les propriétés de conservation des longueurs et des angles'
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
 
 export const dateDePublication = '12/01/2026'
 

@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
@@ -10,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Effectuer un calcul avec une puissance'
@@ -22,7 +21,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ2CEns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(a: number, b: number, c: number): void {
+  private appliquerLesValeurs(a: number, b: number, c: number): void {
     const bCarre = b * b // b²
     const produit = a * bCarre // a × b²
     const resultat = produit + c // a × b² + c

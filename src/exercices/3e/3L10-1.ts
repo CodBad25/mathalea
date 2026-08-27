@@ -22,7 +22,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre =
   'Additionner ou soustraire une expression entre parenthèses'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const dateDeModifImportante = '26/12/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

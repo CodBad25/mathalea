@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer le nombre de solutions d’une équation se ramenant à $x^2=a$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

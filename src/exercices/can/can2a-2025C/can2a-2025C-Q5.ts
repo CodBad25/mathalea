@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un produit par 11'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'j3cnn'
 export const refs = {
   'fr-fr': [],

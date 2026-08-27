@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Calculer avec des puissances'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7977b'
 export const refs = {
   'fr-fr': [],

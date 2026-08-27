@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Donner le nombre de solutions d'une équation du second degré"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '1172e'
 export const refs = {
   'fr-fr': [],

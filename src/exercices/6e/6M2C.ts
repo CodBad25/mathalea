@@ -3,7 +3,7 @@ import AireCarresRectanglesTriangles from '../bp2/BP2AutoV3'
 export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle"
 export const dateDePublication = '30/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

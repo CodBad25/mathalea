@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire sous la forme d’un pourcentage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle

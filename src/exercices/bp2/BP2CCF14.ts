@@ -2,7 +2,7 @@ import AppliquerUnPourcentage6N3Q from '../6e/6N3Q-1'
 
 export const titre = 'Résoudre des problèmes avec des calculs de pourcentages'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

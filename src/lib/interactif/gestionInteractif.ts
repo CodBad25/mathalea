@@ -44,6 +44,7 @@ import '../customElements/FractionCliquableElement'
 import '../customElements/MathaleaLabyrintheElement'
 import '../customElements/MathaleaBranchingQcm'
 import '../customElements/MetaCustomElement'
+import '../apigeom/apigeom-figure'
 
 export function isClickFiguresArray(
   figures: Figure[] | ClickFigures[],
@@ -164,45 +165,18 @@ export function exerciceInteractif(
   let nbQuestionsValidees = 0
   let nbQuestionsNonValidees = 0
   const perQuestionIsOk: boolean[] = []
-  let customFeedbackReady = false
   exercice.answers = {}
 
-  const nbQuestions =
-    exercice.interactifType === 'custom'
-      ? Math.max(exercice.autoCorrection.length, exercice.nbQuestions ?? 0)
-      : exercice.autoCorrection.length
+  const nbQuestions = exercice.autoCorrection.length
 
   for (let i = 0; i < nbQuestions; i++) {
     // Une question sans réponse attendue (question de démonstration, de rédaction...)
     // au milieu de questions interactives ne doit pas être vérifiée ni comptée.
-    if (
-      exercice.autoCorrection[i] == null &&
-      exercice.interactifType !== 'custom'
-    )
-      continue
-    const format =
-      exercice.autoCorrection[i]?.formatInteractif ??
-      (exercice.interactifType === 'custom' ? 'custom' : 'mathlive')
+    if (exercice.autoCorrection[i] == null) continue
+    const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
     const customElementFormat =
       interactivityTypeToCustomElementFormat(format) ?? format
-    if (format === 'custom') {
-      if (!customFeedbackReady) {
-        ensureCustomFeedbackElement(exercice)
-        customFeedbackReady = true
-      }
-      if (isMetaExercice(exercice)) {
-        const result = exercice.correctionInteractives[i](i)
-        perQuestionIsOk[i] = result === 'OK'
-        if (result === 'OK') nbQuestionsValidees++
-        else nbQuestionsNonValidees++
-      } else {
-        const result = verifQuestionCustom(exercice, i)
-        nbQuestionsValidees += result.score.nbBonnesReponses
-        nbQuestionsNonValidees +=
-          result.score.nbReponses - result.score.nbBonnesReponses
-        perQuestionIsOk[i] = result.isOk
-      }
-    } else if (listOfCustomElements.includes(customElementFormat)) {
+    if (listOfCustomElements.includes(customElementFormat)) {
       // On traite le cas de tous les MathaleaCustomElement ici
       const liste = Array.from(mathaleaCustomElementsRegistry)
       const [tag, elementClasse] =
@@ -323,6 +297,18 @@ function verifQuestionCustom(
 
 export function prepareExerciceCliqueFigure(exercice: IExercice) {
   prepareCliqueFigure(exercice)
+}
+
+export function exerciceContientCliqueFigure(exercice: IExercice): boolean {
+  return (
+    exercice.autoCorrection?.some((autoCorrection) => {
+      const format = autoCorrection?.formatInteractif
+      return (
+        (interactivityTypeToCustomElementFormat(format) ?? format) ===
+        'clique-figure'
+      )
+    }) ?? false
+  )
 }
 
 export function normalizeLegacySetReponseValueForAMC(
@@ -939,15 +925,14 @@ export function handleAnswers(
   }
   let formatInteractif =
     params?.formatInteractif ??
+    exercice.autoCorrection[question]?.formatInteractif ??
+    exercice.formatInteractif ??
     ('champ1' in reponses
-      ? 'fillInTheBlank'
+      ? 'fill-in-the-blank'
       : typeof reponses === 'object' &&
           Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
-        ? 'tableauMathlive'
-        : (exercice.autoCorrection[question]?.formatInteractif ??
-          exercice.formatInteractif ??
-          exercice.interactifType ??
-          'mathalea-mathfield'))
+        ? 'tableau-mathlive'
+        : 'mathalea-mathfield')
   if (context.isAmc) {
     if (exercice.autoCorrectionAMC == null) exercice.autoCorrectionAMC = []
     if (exercice.autoCorrectionAMC[question] === undefined) {

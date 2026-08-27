@@ -2906,8 +2906,17 @@ export function htmlToTypst(
     bracketDepth--
     return ']'
   }
-  const tokens = text.match(/<\/?[a-zA-Z][^>]*>|[^<]+/g) ?? []
+  const tokens = text.match(/<\/?[a-zA-Z][^>]*>|<(?!\/?[a-zA-Z])|[^<]+/g) ?? []
   for (const token of tokens) {
+    // On ignore les balises html
+    const isHtmlTag = /^<\/?[a-zA-Z]/.test(token)
+    if (!isHtmlTag) {
+      output += escapeTypstText(
+        decodeEntities(token.replace(/\s+/g, ' ')),
+      )
+      continue
+    }
+    
     if (token[0] !== '<') {
       // nœud texte : les retours à la ligne du HTML ne sont pas
       // significatifs (les blancs sont normalisés avant le décodage

@@ -3,7 +3,6 @@ import SimpleDistributivite from '../3e/3L11-0'
 export const titre = 'Effectuer la simple distributivité'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '20/02/2025'

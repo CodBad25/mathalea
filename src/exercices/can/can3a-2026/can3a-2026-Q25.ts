@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Compléter un encadrement entre deux racines carrées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'n8k8p'
 export const refs = {
   'fr-fr': [],

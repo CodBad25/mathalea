@@ -1,18 +1,17 @@
-
+import { cercle } from '../../../lib/2d/cercle'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import {  pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
-import { cercle } from '../../../lib/2d/cercle'
 
-export const titre = "Trouver la la fraction un demi (QCM)"
+export const titre = 'Trouver la la fraction un demi (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'b5563'
 export const refs = {
   'fr-fr': [],
@@ -24,7 +23,7 @@ export const refs = {
 
 */
 export default class Can2026CE1Q20 extends ExerciceCan {
-constructor() {
+  constructor() {
     super()
     this.formatInteractif = 'qcm'
   }
@@ -151,7 +150,7 @@ constructor() {
     this.consigne = `Coche la représentation de la fraction un demi.` + dessin
 
     const monQcm = propositionsQcm(this, 0)
-    this.canEnonce = dessin +  'Coche la représentation de la fraction un demi.'
+    this.canEnonce = dessin + 'Coche la représentation de la fraction un demi.'
     this.question = `${monQcm.texte}`
 
     this.correction =

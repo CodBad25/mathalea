@@ -7,7 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 export const titre = 'Résoudre une équation $(x+a)^2=k$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/05/2024'
 export const uuid = '74715'
 export const refs = {

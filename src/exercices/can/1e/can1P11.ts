@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer une probabilité conditionnelle (tirage sans remise dans une urne)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '15/02/2026'
 export const uuid = '0ae4c'
 export const refs = {

@@ -24,7 +24,6 @@ export const titre =
 
 export const dateDePublication = '30/11/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -75,7 +74,7 @@ export default class SuitesExplicites extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse
@@ -101,7 +100,9 @@ export default class SuitesExplicites extends Exercice {
           reponse = this.sup2
             ? `${reduireAxPlusB(r, b, 'n')}`
             : `${reduireAxPlusB(r, a, 'n')}`
-          handleAnswers(this, i, { reponse: { value: reponse, options: { calculFormel: true }, } })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { calculFormel: true } },
+          })
           texte = `Soit $(${NomS}_n)$ une suite arithmétique de raison $r=${texNombre(r, 1)}$ telle que $${NomS}_{${indice}}=${texNombre(a, 2)}$.<br>
         Donner une expression de $${NomS}_n$ en fonction de $n$.`
 
@@ -218,7 +219,9 @@ export default class SuitesExplicites extends Exercice {
           reponse = this.sup2
             ? `${texNombre(a, 1)}\\times ${ecritureParentheseSiNegatif(q)}^{n-${indice}} `
             : `${texNombre(a, 1)}\\times ${ecritureParentheseSiNegatif(q)}^n`
-          handleAnswers(this, i, { reponse: { value: reponse, options: { calculFormel: true }, } })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { calculFormel: true } },
+          })
           texte = `Soit $(${NomS}_n)$ une suite définie par $${NomS}_{${indice}}=${texNombre(a, 1)}$ et  
         $${NomS}_{n+1}=${texNombre(q, 1)}\\times ${NomS}_n$ pour tout entier naturel $n$.<br>
       Donner une expression de $${NomS}_n$ en fonction de $n$.`

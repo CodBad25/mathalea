@@ -9,7 +9,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier deux décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9379b'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

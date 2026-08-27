@@ -5,7 +5,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer le plus petit ensemble de nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '07/02/2022'
 export const dateDeModifImportante = '13/08/2024'

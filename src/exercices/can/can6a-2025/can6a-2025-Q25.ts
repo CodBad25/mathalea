@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Déterminer le résultat d'un produit"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'b5324'
 export const refs = {
   'fr-fr': [],

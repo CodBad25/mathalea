@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre une équation trigonométrique'
 export const dateDePublication = '20/11/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '20/02/2024'
@@ -62,7 +62,7 @@ class EquationTrigo extends Exercice {
       typeFormuleTrigo,
       this.nbQuestions,
     ) as Trigo[]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Lettre entre A et X
       const indicFirstLetter = 65 + Math.floor(Math.random() * 24)
       const nomA = String.fromCharCode(indicFirstLetter)

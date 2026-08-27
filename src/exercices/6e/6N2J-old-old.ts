@@ -12,7 +12,6 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Effectuer des divisions euclidiennes'
 export const dateDeModifImportante = '01/02/2026'

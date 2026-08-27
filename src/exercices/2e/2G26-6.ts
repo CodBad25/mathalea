@@ -25,7 +25,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Calculer les coordonnées d'un point par une translation"
 export const dateDeModifImportante = '17/04/2024'
 

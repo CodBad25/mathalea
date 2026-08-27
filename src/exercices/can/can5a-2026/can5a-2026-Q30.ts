@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer la durée d'un trajet en vélo"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e89b5'
 export const refs = {
   'fr-fr': [],

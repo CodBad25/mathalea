@@ -13,7 +13,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Connaître les effets des agrandissements/réductions sur les aires et les volumes'
 

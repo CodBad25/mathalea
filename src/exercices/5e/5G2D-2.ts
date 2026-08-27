@@ -20,7 +20,7 @@ export const titre = 'Convertir des volumes ou des capacités'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const dateDeModifImportante = '05/06/2023'
 
 /**
@@ -86,7 +86,6 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
       this.interactif && this.sup4 === 1
         ? 'Cocher la bonne réponse.'
         : 'Compléter.'
-    this.interactifType = this.sup4 === 2 ? 'mathLive' : 'qcm'
     let listeTypeDeQuestions
     if (this.sup === 1) {
       listeTypeDeQuestions = combinaisonListes(
@@ -333,6 +332,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           break
       }
 
+      this.autoCorrection[i] ??= {}
       this.autoCorrection[i].enonce = `${texte}\n`
       resultatFaux = combinaisonListes(
         [
@@ -369,9 +369,9 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
       ]
 
       const props = propositionsQcm(this, i)
-      if (this.interactif && this.interactifType === 'qcm') {
+      if (this.interactif && this.sup4 !== 2) {
         texte += props.texte
-      } else if (this.interactif && this.interactifType === 'mathLive') {
+      } else if (this.interactif && this.sup4 === 2) {
         uniteFinale = listeTypeDeQuestions[i].split('to')[1]
         uniteFinale =
           uniteFinale === 'L'

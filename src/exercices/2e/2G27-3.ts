@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 export const titre =
   'Déterminer si un quadrilatère est un trapèze, avec la colinéarité (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const dateDePublication = '20/04/26'
 

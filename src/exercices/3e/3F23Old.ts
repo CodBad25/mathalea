@@ -25,7 +25,6 @@ export const dateDeModifImportante = '27/03/2026'
 export const titre =
   "Trouver l'intersection des droites représentant des fonctions affines"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Trouver les coordonnées du point d'intersection des droites représentant des fonctions affines

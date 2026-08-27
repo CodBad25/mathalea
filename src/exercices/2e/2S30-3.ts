@@ -18,7 +18,6 @@ import {
 export const titre = 'Calculer des probabilités dans des cas simples'
 export const dateDeModifImportante = '02/06/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *

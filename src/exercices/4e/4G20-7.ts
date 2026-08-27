@@ -22,7 +22,6 @@ import { RedactionPythagore } from './_pythagore'
 export const titre =
   'Calculer une longueur avec le théorème de Pythagore (blockly)'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Exercices sur le théorème de Pythagore

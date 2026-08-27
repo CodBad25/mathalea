@@ -4,13 +4,13 @@ import {
   ecritureAlgebrique,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
-import {  texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Identifier une fonction polynôme du second degré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bl1m5'
 export const refs = {
   'fr-fr': [],
@@ -78,9 +78,9 @@ export default class Can1a2026Q30 extends ExerciceCan {
     const qcm = propositionsQcm(this, 0)
 
     this.question = enonce + '<br>' + qcm.texte
-    this.correction = `${explication}<br>La réponse est ${estVrai ? texteEnCouleurEtGras('Vrai') :texteEnCouleurEtGras('Faux')}.`
+    this.correction = `${explication}<br>La réponse est ${estVrai ? texteEnCouleurEtGras('Vrai') : texteEnCouleurEtGras('Faux')}.`
     this.canEnonce = enonce
-    this.canReponseACompleter =  'Entoure la bonne réponse : <br>VRAI / FAUX'
+    this.canReponseACompleter = 'Entoure la bonne réponse : <br>VRAI / FAUX'
   }
 
   nouvelleVersion(): void {

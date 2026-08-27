@@ -1,13 +1,12 @@
-
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-export const titre = 'Completer un encadrement à partir d\'un encadrement'
+export const titre = "Completer un encadrement à partir d'un encadrement"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'gc360'
 export const refs = {
   'fr-fr': [],
@@ -17,15 +16,15 @@ export const refs = {
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
-*/export default class Can2026TermQ12 extends ExerciceCan {
-   constructor() {
+*/ export default class Can2026TermQ12 extends ExerciceCan {
+  constructor() {
     super()
-     this.formatInteractif = 'fillInTheBlank'
-   this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatInteractif = 'fillInTheBlank'
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
- enonce(a?: number, b?: number, c?: number): void {
+  enonce(a?: number, b?: number, c?: number): void {
     if (a == null || b == null || c == null) {
       b = randint(-4, 4)
       c = b + randint(2, 6)
@@ -36,14 +35,13 @@ export const refs = {
     const borneInf = a - c
     const borneSup = a - b
 
-   
     this.reponse = {
-       bareme: toutPourUnPoint,
+      bareme: toutPourUnPoint,
       champ1: { value: String(borneInf) },
       champ2: { value: String(borneSup) },
     }
-     
- this.formatChampTexte = KeyboardType.clavierDeBase
+
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.consigne = `Si $${b}\\leqslant x\\leqslant ${c}$ alors :<br>`
     this.question = `%{champ1}~\\leqslant ${a}-x\\leqslant ~%{champ2}`
 

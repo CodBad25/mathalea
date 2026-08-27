@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une somme de quatre entiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'wskav'
 export const refs = {
   'fr-fr': [],

@@ -10,7 +10,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Droite des nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '36cc7'
 export const refs = {
   'fr-fr': [],

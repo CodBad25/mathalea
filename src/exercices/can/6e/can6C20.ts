@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Trouver le complément à 1 avec un seul chiffre différent de 0'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

@@ -11,7 +11,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une image'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9727d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

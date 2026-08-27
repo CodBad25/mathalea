@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../../lib/2d/segmentsVecteurs'
@@ -7,11 +6,12 @@ import { bleuMathalea } from '../../../lib/colors'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer l’abscisse d’un milieu'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora

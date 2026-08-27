@@ -108,7 +108,6 @@ Pour un `ExerciceSimple` qui définit `this.reponse`, MathALÉA sait construire 
 
 ```ts
 export const interactifReady = true
-export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -140,7 +139,6 @@ import { context } from '../../modules/context'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -247,7 +245,6 @@ import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const interactifReady = true
-export const interactifType = 'mathalea-qcm'
 export const amcReady = true
 export const amcType = 'qcmMono'
 

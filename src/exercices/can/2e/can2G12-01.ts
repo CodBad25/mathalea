@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
@@ -10,10 +11,9 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = "Calculer les coordonnées du milieu d'un segment"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '16/03/2026'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

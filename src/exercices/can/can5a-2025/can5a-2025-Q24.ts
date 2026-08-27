@@ -18,7 +18,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Partage d'un segment"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'y343x'
 export const refs = {
   'fr-fr': [],

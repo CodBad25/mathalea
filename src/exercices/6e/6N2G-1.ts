@@ -3,7 +3,7 @@ import QuestionsMasses from './6N5-2'
 export const titre =
   'Résoudre des problèmes de prix avec des objets mettant en jeu des masses et des multiplications'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

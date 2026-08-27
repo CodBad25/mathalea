@@ -9,7 +9,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Déterminer un prix'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '81q3f'
 export const refs = {
   'fr-fr': [],

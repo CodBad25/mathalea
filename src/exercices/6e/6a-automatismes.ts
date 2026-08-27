@@ -8,7 +8,7 @@ import {
 
 export const titre = "Sélection d'automatismes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c6cd6'
 export const refs = { 'fr-fr': ['6A'], 'fr-ch': [] }
 export const dateDePublication = '21/08/2026'

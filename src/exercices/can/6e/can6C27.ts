@@ -10,7 +10,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème de rendu de monnaie'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '22/08/2022'
 export const dateDePublication = '21/10/2021'
 /**

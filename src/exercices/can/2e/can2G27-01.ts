@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer le coefficient de colinéarité entre deux vecteurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '30/10/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

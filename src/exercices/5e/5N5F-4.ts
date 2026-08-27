@@ -12,7 +12,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Simplifier l'écriture d'une expression littérale"
 export const dateDePublication = '07/04/2022'
 export const dateDeModifImportante = '04/04/2026'

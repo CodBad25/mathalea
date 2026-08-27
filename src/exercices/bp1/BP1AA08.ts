@@ -1,7 +1,7 @@
 import SensDeVariationSuiteRecurrence from '../1e/1AL12-21'
 export const titre =
   "Étudier le sens de variation d'une suite arithmétique définie par récurrence"
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

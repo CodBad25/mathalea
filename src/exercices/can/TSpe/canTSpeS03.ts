@@ -5,7 +5,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Limite de $e^{-n}\\pm kn$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '9c60f'
 export const refs = {

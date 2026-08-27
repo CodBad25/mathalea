@@ -14,7 +14,6 @@ export const titre =
   'Convertir un nombre décimal en écriture scientifique et réciproquement'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '18/10/2025'
 export const dateDeModifImportante = '25/03/2026'

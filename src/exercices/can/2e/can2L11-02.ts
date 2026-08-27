@@ -3,7 +3,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Factoriser une expression'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/10/2021'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

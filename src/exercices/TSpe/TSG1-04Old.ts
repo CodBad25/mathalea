@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Utiliser le dénombrement et les probabilités élémentaires.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/04/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 export const uuid = '5120f'

@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un coefficcient binomial'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1216d'
 export const refs = {
   'fr-fr': [],

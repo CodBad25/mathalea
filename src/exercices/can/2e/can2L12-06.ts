@@ -7,7 +7,7 @@ import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
 export const titre = 'Factoriser avec une identité remarquable'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '04/04/2024'
 export const uuid = 'a1cb3'
 export const refs = {
@@ -69,7 +69,10 @@ export default class FatorisationEgR extends ExerciceSimple {
           ? `$${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}=${miseEnEvidence(`(${reduireAxPlusB(a, b)})^2`)}$`
           : `$${reduireAxPlusB(2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2=${miseEnEvidence(`(${reduireAxPlusB(a, b)})^2`)}$`
       }`
-          if (this.versionQcm && this.distracteurs.includes(fausseFactorisation)) {
+          if (
+            this.versionQcm &&
+            this.distracteurs.includes(fausseFactorisation)
+          ) {
             this.correction += `<br><br>${texteGras('Remarque :')} la proposition ${fausseFactorisation} redonne bien $${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}$ après développement, mais ce n'est pas une expression factorisée (c'est une somme et non un produit).<br>`
           }
         }
@@ -119,7 +122,10 @@ export default class FatorisationEgR extends ExerciceSimple {
         ? `$${rienSi1(a ** 2)}x^2${reduireAxPlusB(-2 * a * b, b ** 2)}=${miseEnEvidence(`(${reduireAxPlusB(a, -b)})^2`)}$`
         : `$${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2=${miseEnEvidence(`(${reduireAxPlusB(a, -b)})^2`)}$`
     }`
-          if (this.versionQcm && this.distracteurs.includes(fausseFactorisation)) {
+          if (
+            this.versionQcm &&
+            this.distracteurs.includes(fausseFactorisation)
+          ) {
             this.correction += `<br><br>${texteGras('Remarque :')} la proposition ${fausseFactorisation} redonne bien $${rienSi1(a ** 2)}x^2${reduireAxPlusB(-2 * a * b, b ** 2)}$ après développement, mais ce n'est pas une expression factorisée (c'est une somme et non un produit).<br>`
           }
         }

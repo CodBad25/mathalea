@@ -1,12 +1,12 @@
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
+import { sp } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver les valeurs interdites d’une fonction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/10/2021'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

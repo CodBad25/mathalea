@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un produit de plusieurs facteurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7x3ep'
 export const refs = {
   'fr-fr': [],

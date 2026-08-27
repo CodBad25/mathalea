@@ -1,7 +1,7 @@
 import ExerciceConversionsLongueurs from './_ExerciceConversionsLongueurs'
 export const titre = 'Convertir des longueurs ou des masses'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = 'true'
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '10/04/2026'

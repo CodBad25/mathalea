@@ -16,7 +16,6 @@ export const titre =
   "Exprimer le terme général d'une suite définie par récurrence"
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'cf810'
 export const refs = {

@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Simplifier des fractions à l'aide des nombres premiers"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

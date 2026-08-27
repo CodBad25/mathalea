@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Écrire sous forme décimale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'zu555'
 export const refs = {
   'fr-fr': [],

@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Déterminer une fraction d'aire"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '32d25'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

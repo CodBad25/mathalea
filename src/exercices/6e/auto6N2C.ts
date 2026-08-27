@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { glisseNombreInteractif } from '../../lib/apps/glisse_nombre_interactif'
 import { bleuMathalea } from '../../lib/colors'
@@ -35,13 +36,10 @@ import {
   chiffreAPositionDecimale,
   donneNomClasse,
 } from './auto6N2D'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Multiplier un nombre décimal par 10, 100 ou 1 000'
 export const dateDePublication = '20/08/2025'

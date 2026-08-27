@@ -4,7 +4,6 @@ export const dateDePublication = '28/01/2026'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Poser multiplications de nombres entiers'
 export const uuid = 'ekf64'

@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec les chiffres (relatifs)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7a9aa'
 export const refs = {
   'fr-fr': [],

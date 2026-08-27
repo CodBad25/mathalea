@@ -2,7 +2,7 @@ import FactoriserParNombreOux from '../3e/3L11-4'
 export const titre = 'Factoriser une expression littérale (Niveau 2)'
 export const dateDeModifImportante = '20/04/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const uuid = 'dd1c9'

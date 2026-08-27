@@ -16,7 +16,7 @@ export const titre =
   'Calculer la probabilité d’une intersection à partir d’un arbre'
 export const dateDePublication = '04/07/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

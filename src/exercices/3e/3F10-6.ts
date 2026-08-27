@@ -3,7 +3,7 @@ export const titre =
   'Calculer des images dans des fonctions polynomiales ou rationnelles'
 export const dateDePublication = '19/06/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const uuid = 'ea78e'

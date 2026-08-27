@@ -23,7 +23,7 @@ export const titre = 'Connaitre les liens entre les unités de numération'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '12/05/2025'
 export const dateDeModifImportante = '05/09/2025'
 

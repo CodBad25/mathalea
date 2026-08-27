@@ -11,7 +11,7 @@ import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = "Calculer les coordonnées d'un milieu"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2bkn0'
 export const refs = {
   'fr-fr': [],

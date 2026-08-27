@@ -6,7 +6,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '31/12/2025'
 export const titre =
   'Compléter une soustraction à trou de deux nombres relatifs'

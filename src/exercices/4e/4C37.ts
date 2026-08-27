@@ -7,7 +7,7 @@ export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = "Déterminer le signe d'une puissance"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '30/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**

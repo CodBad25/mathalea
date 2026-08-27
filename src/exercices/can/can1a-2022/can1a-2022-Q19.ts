@@ -1,14 +1,17 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { choice } from '../../../lib/outils/arrayOutils'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import Hms from '../../../modules/Hms'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-import Hms from '../../../modules/Hms'
 export const titre = 'Convertir des heures décimales en heures/minutes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'emmg3'
 export const refs = {
   'fr-fr': [],
@@ -20,8 +23,6 @@ export const refs = {
 
 */
 export default class Can1a2022Q19 extends ExerciceCan {
-
-
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierHms

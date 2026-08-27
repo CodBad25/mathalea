@@ -7,7 +7,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Calculer un pourcentage'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '24/12/2025'
 

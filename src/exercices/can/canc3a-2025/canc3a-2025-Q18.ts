@@ -13,7 +13,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 export const titre = "Calculer la longueur d'un côté d'un triangle équilatéral"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9c3bb'
 export const refs = {
   'fr-fr': [],

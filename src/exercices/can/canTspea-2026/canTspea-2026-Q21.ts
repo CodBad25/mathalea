@@ -3,9 +3,10 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer une valeur pour obtenir une moyenne pondérée donnée'
+export const titre =
+  'Calculer une valeur pour obtenir une moyenne pondérée donnée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1ho0q'
 export const refs = {
   'fr-fr': [],
@@ -18,8 +19,8 @@ export const refs = {
 */ export default class Can2026TermQ21 extends ExerciceCan {
   constructor() {
     super()
-   this.optionsDeComparaison = {  nombreDecimalSeulement: true }
-   this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 
   enonce(
@@ -57,7 +58,6 @@ export const refs = {
     const totalCoeff = c1 + c2 + c3
     const x = (10 * totalCoeff - n1 * c1 - n2 * c2) / c3
 
-    
     this.reponse = texNombre(x, 2)
 
     this.question = `Donner la valeur de $x$ pour que la moyenne soit égale à $10$.<br>
@@ -94,6 +94,5 @@ export const refs = {
 
   nouvelleVersion(): void {
     this.canOfficielle ? this.enonce(5, 8, 2, 1, 3) : this.enonce()
-   
   }
 }

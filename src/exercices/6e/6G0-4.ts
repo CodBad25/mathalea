@@ -8,7 +8,6 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { vide2d } from '../../lib/2d/Vide2d'
-import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import {
   combinaisonListes,
   enleveElement,
@@ -23,7 +22,6 @@ export const titre = 'Choisir la bonne figure'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
 
 /**
  * Plusieurs éléments sont proposés, il faut choisir le bon (par clic si interactif, par case à cocher par AMC)
@@ -213,7 +211,7 @@ export default class CliqueFigure extends Exercice {
       // PROPRE A AMC
       enleveElement(figIncorrectAMC, figCorrecteAMC)
       this.autoCorrection[i] = {}
-      setCliqueFigure(this.autoCorrection[i])
+      this.autoCorrection[i].formatInteractif = 'clique-figure'
       this.autoCorrection[i].enonce = this.consigne + texte
       this.autoCorrection[i].propositions = [
         {

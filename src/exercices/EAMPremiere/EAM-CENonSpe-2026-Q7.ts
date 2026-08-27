@@ -9,10 +9,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Développer avec l\'identité remarquable  $(a-b)^2$'
+export const titre = "Développer avec l'identité remarquable  $(a-b)^2$"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -21,20 +21,20 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ7CEns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(k: number): void {
+  private appliquerLesValeurs(k: number): void {
     this.enonce = `L'expression $(x - ${k})^2$ est égale à :`
 
     const double = 2 * k
     const carre = k * k
 
     const correct = `x^2 - ${double}x + ${carre}`
-    
+
     // Distracteur 1 (Type b) : a^2 + 2ab + b^2 (erreur de signe sur le double produit)
     const d1 = `x^2 + ${double}x + ${carre}`
-    
+
     // Distracteur 2 (Type c) : a^2 - 2ab - b^2 (erreur de signe sur le carré)
     const d2 = `x^2 - ${double}x - ${carre}`
-    
+
     // Distracteur 3 (Type d) : a^2 + 2ab - b^2 (erreurs de signe sur les deux termes)
     const d3 = `x^2 + ${double}x - ${carre}`
 
@@ -44,12 +44,7 @@ export default class AutoQ7CEns2026 extends ExerciceQcmA {
     this.correction += `&= ${miseEnEvidence(correct)}`
     this.correction += `\\end{aligned}$`
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
   }
 
   versionOriginale: () => void = () => {
@@ -67,7 +62,7 @@ export default class AutoQ7CEns2026 extends ExerciceQcmA {
     do {
       // Génération aléatoire de l'entier k (par exemple entre 2 et 9)
       const k = randint(2, 9)
-      
+
       this.appliquerLesValeurs(k)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

@@ -1,10 +1,10 @@
 import ProduitScalaireCoordonnees from '../can/TSpe/canTSpeE04'
-export const titre = "Calculer le produit scalaire de deux vecteurs avec leurs coordonnées"
+export const titre =
+  'Calculer le produit scalaire de deux vecteurs avec leurs coordonnées'
 export const dateDePublication = '05/10/2024'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de CanTspeE04 pour les auto 1er

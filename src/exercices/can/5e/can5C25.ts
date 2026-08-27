@@ -3,7 +3,7 @@ import {
   ecritureNombreRelatifc,
 } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const titre = 'Additionner des entiers relatifs (avec parenthèses)'
 export const dateDePublication = '04/10/2023'

@@ -1,7 +1,7 @@
 import problemesTrigoLongueur from '../3e/3G32-0'
 export const titre = "Effectuer un calcul d'un parallèle terrestre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

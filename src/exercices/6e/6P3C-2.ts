@@ -23,7 +23,7 @@ export const titre =
   'Résoudre des problèmes de proportionnalité en utilisant la proportionnalité simple'
 export const dateDePublication = '11/08/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = 'true'
 export const amcType = 'AMCNum'
 /**

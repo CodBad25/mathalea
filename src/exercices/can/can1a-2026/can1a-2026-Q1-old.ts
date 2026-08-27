@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Multiplier deux décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e371b'
 export const refs = {
   'fr-fr': [],

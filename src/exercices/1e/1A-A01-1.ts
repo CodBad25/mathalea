@@ -1,4 +1,3 @@
-import MetaExercice from '../MetaExerciceCan'
 import Question1 from '../EAMPremiere/EAM-ANSpe-2026-Q1'
 import Question2 from '../EAMPremiere/EAM-ANSpe-2026-Q2'
 import Question3 from '../EAMPremiere/EAM-ANSpe-2026-Q3'
@@ -8,9 +7,10 @@ import Question6 from '../EAMPremiere/EAM-ANSpe-2026-Q6'
 import Question7 from '../EAMPremiere/EAM-ANSpe-2026-Q7'
 import Question8 from '../EAMPremiere/EAM-ANSpe-2026-Q8'
 import Question9 from '../EAMPremiere/EAM-ANSpe-2026-Q9'
+import MetaExercice from '../MetaExerciceCan'
 export const titre = 'Amérique du Nord Spécialité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '869a4'
 export const refs = {
   'fr-fr': ['1A-A01-1'],
@@ -23,7 +23,17 @@ export const dateDePublication = '02/06/2026'
  * @author Gilles Mora
  */
 
-const questions = [Question1, Question2, Question3, Question4, Question5, Question6, Question7, Question8, Question9]
+const questions = [
+  Question1,
+  Question2,
+  Question3,
+  Question4,
+  Question5,
+  Question6,
+  Question7,
+  Question8,
+  Question9,
+]
 
 export default class AutoANspe2026 extends MetaExercice {
   constructor() {

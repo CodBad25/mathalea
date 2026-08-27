@@ -1,3 +1,4 @@
+import Figure from 'apigeom'
 import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { isEqual, seq } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -7,14 +8,16 @@ import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import Figure from 'apigeom'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Sujet de synthèse sur la droite d'Euler : orthocentre, cercle circonscrit et centre de gravité"
 
@@ -42,7 +45,7 @@ export default class DroiteEuler extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const kx = randint(-2, 2)
       const ky = randint(-2, 2)
 
@@ -224,7 +227,12 @@ export default class DroiteEuler extends Exercice {
         `On admet que $G$, le centre de gravité du triangle $ABC$, est le point qui vérifie ` +
         `$\\overrightarrow{AG} = \\dfrac{2}{3}\\overrightarrow{AM}$ où $M$ est le milieu du segment $[BC]$. ` +
         `Déterminer les coordonnées de $G$.<br>` +
-        remplisLesBlancs(this, 0, `G(%{champ1}\\,;\\,%{champ2})`, KeyboardType.lyceeClassique)
+        remplisLesBlancs(
+          this,
+          0,
+          `G(%{champ1}\\,;\\,%{champ2})`,
+          KeyboardType.lyceeClassique,
+        )
 
       const question5 = `Montrer que les points $G$, $H$ et $K$ sont alignés.`
 

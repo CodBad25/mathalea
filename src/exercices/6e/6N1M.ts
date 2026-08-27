@@ -17,7 +17,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 export const dateDePublication = '28/09/2022'
 export const titre = 'Encadrer un décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 /**

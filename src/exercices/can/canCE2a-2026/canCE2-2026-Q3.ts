@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Donner le résultat d'une addition de dizaines"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b44a5'
 export const refs = {
   'fr-fr': [],

@@ -1,7 +1,7 @@
 import FonctionsLineaires from '../3e/3F20'
 export const titre = 'Fonctions linéaires'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '30/07/2026'

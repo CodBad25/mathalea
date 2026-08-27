@@ -22,8 +22,7 @@ Un exercice QCM moderne doit avoir :
 
 - un fichier dans `src/exercices/`, au bon niveau de dossier ;
 - `export const interactifReady = true` ;
-- `export const interactifType = 'mathalea-qcm'` ;
-- un appel à `handleAnswers()` pour chaque question acceptée ;
+- un appel à `handleAnswers()` pour chaque question acceptée avec le formatInteractif `mathalea-qcm`;
 - un appel à `addMathaleaQcm()` après `handleAnswers()` ;
 - `listeQuestionsToContenu(this)` à la fin de `nouvelleVersion()` pour un
   exercice classique.
@@ -53,7 +52,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Choisir la bonne réponse'
 export const interactifReady = true
-export const interactifType = 'mathalea-qcm'
 export const uuid = 'a-remplacer'
 export const refs = {
   'fr-fr': ['6X00-0'],
@@ -67,7 +65,7 @@ export default class ChoisirLaBonneReponse extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(2, 9)
       const b = randint(2, 9)
       let texte = `Calculer $${a}+${b}$.`
@@ -293,7 +291,6 @@ Le format moderne est déclaré par :
 
 ```ts
 export const interactifReady = true
-export const interactifType = 'mathalea-qcm'
 ```
 
 `handleAnswers()` enregistre le format et les réponses attendues. Le bouton de
@@ -378,10 +375,12 @@ Sans `qcm=1`, l'exercice peut rester en saisie libre même si
 
 ## Maintenir un QCM historique
 
-Les exercices existants qui utilisent `interactifType = 'qcm'`, remplissent
-directement `autoCorrection[i]` et appellent `propositionsQcm()` restent pris en
-charge. Il n'est pas nécessaire de les migrer pour une modification sans
-rapport avec leur interactivité.
+Les exercices existants qui remplissent directement `autoCorrection[i]` et
+appellent `propositionsQcm()` restent pris en charge. Le helper renseigne
+`autoCorrection[i].formatInteractif` avec `mathalea-qcm` : cette propriété par
+question est la source de vérité, y compris lorsque l'exercice propose à chaud
+un choix entre QCM et champ MathLive. `interactifType` n'existe plus et ne doit
+pas être exporté.
 
 Pour un nouveau QCM, préférer systématiquement :
 
@@ -418,11 +417,7 @@ this.reponses = [
   '$5$',
   '$6$',
 ]
-this.corrections = [
-  '$2+2=4$.',
-  '$5$ est trop grand.',
-  '$6$ est trop grand.',
-]
+this.corrections = ['$2+2=4$.', '$5$ est trop grand.', '$6$ est trop grand.']
 this.bonnesReponses = undefined
 this.options = { vertical: true, radio: true }
 ```
@@ -488,7 +483,6 @@ Le QCM est vide : vérifier que `handleAnswers()` est appelé avant
 éléments.
 
 Le QCM s'affiche mais ne se valide pas : vérifier
-`interactifType = 'mathalea-qcm'` et
 `{ formatInteractif: 'mathalea-qcm' }`.
 
 Des cases à cocher s'affichent au lieu de boutons radio : passer le même

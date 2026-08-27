@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire des heurs/minutes en minutes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9f648'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

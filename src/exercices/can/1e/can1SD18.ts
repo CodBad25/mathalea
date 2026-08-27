@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -9,12 +10,10 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre =
   'Résoudre une inéquation du second degré (avec une forme factorisée)'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '07/10/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -39,7 +38,9 @@ export default class TableauSignesSecondDegre extends Exercice {
 
   nouvelleVersion() {
     const coul0 = bleuMathalea
-    const coul0Cmd = context.isHtml ? `\\color{${coul0}}` : `\\color[HTML]{${coul0.replace('#', '')}}`
+    const coul0Cmd = context.isHtml
+      ? `\\color{${coul0}}`
+      : `\\color[HTML]{${coul0.replace('#', '')}}`
     let texte,
       texteCorr,
       a,
@@ -51,7 +52,7 @@ export default class TableauSignesSecondDegre extends Exercice {
       solution4,
       inegalite,
       props
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       a = randint(1, 9) * choice([-1, 1]) // coefficient a
       b = randint(1, 9) * choice([-1, 1]) // racine1
       c = randint(1, 9, [b, -b]) * choice([-1, 1]) // racine2

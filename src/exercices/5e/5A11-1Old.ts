@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 export const dateDePublication = '7/12/2020'
 export const dateDeModifImportante = '29/10/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   'Parcourir un labyrinthe de multiples basé sur les critères de divisibilité'

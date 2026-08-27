@@ -3,7 +3,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un terme dans une suite évolutive'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '14/04/2024'
 export const uuid = '8bb40'
 export const refs = {

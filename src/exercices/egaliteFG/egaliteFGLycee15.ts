@@ -6,10 +6,10 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Orientation en première : probabilités et genre"
+export const titre = 'Orientation en première : probabilités et genre'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '26347'
 export const refs = {
   'fr-fr': ['EgaliteFG6-1e-15'],
@@ -27,9 +27,14 @@ export default class EgaliteFGLycee15 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
-    this.consigne += "<br><br>Dans un lycée, on observe la répartition des élèves en première selon le tableau suivant :<br>"
+    this.consigne +=
+      '<br><br>Dans un lycée, on observe la répartition des élèves en première selon le tableau suivant :<br>'
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;">Filière</th><th style="border: 1px solid #888; padding: 4px 10px;">Filles</th><th style="border: 1px solid #888; padding: 4px 10px;">Garçons</th><th style="border: 1px solid #888; padding: 4px 10px;">Total</th></tr>
       <tr><td style="border: 1px solid #888; padding: 4px 10px;">Générale</td><td style="border: 1px solid #888; padding: 4px 10px;">180</td><td style="border: 1px solid #888; padding: 4px 10px;">200</td><td style="border: 1px solid #888; padding: 4px 10px;">380</td></tr>
@@ -54,27 +59,27 @@ export default class EgaliteFGLycee15 extends Exercice {
     this.listeQuestions = []
     this.listeCorrections = []
 
-    let texte0 = 'Un élève est choisi au hasard. Quelle est la probabilité que ce soit une fille (arrondie au millième) ?'
+    let texte0 =
+      'Un élève est choisi au hasard. Quelle est la probabilité que ce soit une fille (arrondie au millième) ?'
     if (this.interactif) texte0 += ajouteChampTexteMathLive(this, 0) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 0.474 } })
     const correction0 = `$p=\\dfrac{360}{760}\\approx ${miseEnEvidence('0{,}474')}$.`
 
     let texte1 =
-      "Un élève est choisi au hasard. Quelle est la probabilité que ce soit un garçon en filière technologique (arrondie au millième) ?"
+      'Un élève est choisi au hasard. Quelle est la probabilité que ce soit un garçon en filière technologique (arrondie au millième) ?'
     if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 0.132 } })
     const correction1 = `$p=\\dfrac{100}{760}\\approx ${miseEnEvidence('0{,}132')}$.`
 
     let texte2 =
-      "Un élève est choisi au hasard parmi les élèves en filière générale. Quelle est la probabilité que ce soit une fille (arrondie au millième) ?"
+      'Un élève est choisi au hasard parmi les élèves en filière générale. Quelle est la probabilité que ce soit une fille (arrondie au millième) ?'
     if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 0.474 } })
     const correction2 = `$p=\\dfrac{180}{380}\\approx ${miseEnEvidence('0{,}474')}$.`
 
     const texte3 =
       "Comparer les proportions des filles et des garçons dans chaque filière et expliquer ce que ces résultats révèlent sur les choix d'orientation selon le genre. On pourra s'aider d'un tableau des fréquences conditionnelles par ligne."
-    const correction3 =
-      `Tableau des fréquences conditionnelles par ligne (proportion de filles, puis de garçons, dans chaque filière) : générale $\\dfrac{180}{380}\\approx 47{,}4\\,\\%$ / $\\dfrac{200}{380}\\approx 52{,}6\\,\\%$ (proche de la répartition globale $\\dfrac{360}{760}\\approx 47{,}4\\,\\%$ / $\\dfrac{400}{760}\\approx 52{,}6\\,\\%$ : pas de déséquilibre marqué) ; technologique $\\dfrac{120}{220}\\approx 54{,}5\\,\\%$ / $\\dfrac{100}{220}\\approx 45{,}5\\,\\%$ (légère surreprésentation des filles) ; professionnelle $\\dfrac{60}{160}=37{,}5\\,\\%$ / $\\dfrac{100}{160}=62{,}5\\,\\%$ (nette sous-représentation des filles, donc surreprésentation des garçons). Le choix de la filière professionnelle apparaît donc comme $${miseEnEvidence('\\text{le plus genré des trois}')}$.`
+    const correction3 = `Tableau des fréquences conditionnelles par ligne (proportion de filles, puis de garçons, dans chaque filière) : générale $\\dfrac{180}{380}\\approx 47{,}4\\,\\%$ / $\\dfrac{200}{380}\\approx 52{,}6\\,\\%$ (proche de la répartition globale $\\dfrac{360}{760}\\approx 47{,}4\\,\\%$ / $\\dfrac{400}{760}\\approx 52{,}6\\,\\%$ : pas de déséquilibre marqué) ; technologique $\\dfrac{120}{220}\\approx 54{,}5\\,\\%$ / $\\dfrac{100}{220}\\approx 45{,}5\\,\\%$ (légère surreprésentation des filles) ; professionnelle $\\dfrac{60}{160}=37{,}5\\,\\%$ / $\\dfrac{100}{160}=62{,}5\\,\\%$ (nette sous-représentation des filles, donc surreprésentation des garçons). Le choix de la filière professionnelle apparaît donc comme $${miseEnEvidence('\\text{le plus genré des trois}')}$.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

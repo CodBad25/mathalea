@@ -37,7 +37,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Connaitre le vocabulaire du cercle'
@@ -138,7 +138,6 @@ export default class VocabulaireDuCercle extends Exercice {
       : 'Compléter.'
     if (context.isHtml) this.consigne += '<br>'
 
-    this.interactifType = this.sup2 ? 'qcm' : 'mathLive'
     const nbSousQuestionMax = 7 // Il y a 6 types de sous-questions pour l'instant... si ça venait à changer, mettre à jour ce paramètre
     let sensDesQuestionsDisponibles
     switch (this.sup) {

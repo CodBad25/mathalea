@@ -245,7 +245,8 @@ async function checkLatexVariation(
       .getByRole('dialog')
       .locator('button:has(p:text-is("PDF via LaTeX"))')
       .click()
-    await page.click(`input[type="radio"][value="${variation}"]`)
+    await page.waitForURL((url) => url.searchParams.get('v') === 'tex')
+    await page.getByLabel('Habillage').selectOption(variation)
     await waitForLatex(page, variation)
     await callback(page, description, view, variation)
     await page.locator('.bx-x').first().click()
@@ -253,45 +254,33 @@ async function checkLatexVariation(
 }
 
 async function waitForLatex(page: Page, model: LatexVariation | AMCVariation) {
-  const toggleCodeButton = page.locator('#toggleLatexCodeVisibility')
-  if ((await toggleCodeButton.count()) > 0) {
-    const label = (await toggleCodeButton.innerText()).trim()
-    if (label.includes('Afficher le code LaTeX')) {
-      await toggleCodeButton.click()
-    }
-  }
-
+  let expectedText: string | null = null
   switch (model) {
     case 'Coopmaths':
-      await page.waitForFunction(() => {
-        const preElement = document.querySelector('main > section > pre')
-        if (preElement && preElement.textContent) {
-          return preElement.textContent.includes('\\begin{EXO}{')
-        }
-        return false
-      })
-      break
     case 'Classique':
-      await page.waitForFunction(() => {
-        const preElement = document.querySelector('main > section > pre')
-        if (preElement && preElement.textContent) {
-          return preElement.textContent.includes('\\begin{EXO}{')
-        }
-        return false
-      })
+      expectedText = '\\begin{EXO}{'
       break
     case 'ProfMaquette':
-      await page.waitForFunction(() => {
-        const preElement = document.querySelector('main > section > pre')
-        if (preElement && preElement.textContent) {
-          return preElement.textContent.includes('\\begin{Maquette}[Fiche')
-        }
-        return false
-      })
+      expectedText = '\\begin{Maquette}[Fiche'
+      break
+    case 'ProfMaquetteQrcode':
+      expectedText = '\\qrcode'
+      break
+
+    case 'Can':
+      expectedText = '\\CompteurTC'
       break
 
     default:
       break
+  }
+  if (expectedText != null) {
+    await page.waitForFunction((text) => {
+      const source = document.querySelector<HTMLTextAreaElement>(
+        '[data-testid="tex-source"]',
+      )
+      return source?.value.includes(text) === true
+    }, expectedText)
   }
 }
 
@@ -334,9 +323,7 @@ async function isAmcAvailable(page: Page): Promise<boolean> {
 }
 
 export async function getLatexFromPage(page: Page) {
-  const questionSelector = 'pre.w-full'
-  const locator = page.locator(questionSelector)
-  return await locator.innerText()
+  return await page.getByTestId('tex-source').inputValue()
 }
 
 export async function checkEachCombinationOfParams(

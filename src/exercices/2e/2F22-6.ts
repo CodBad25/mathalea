@@ -8,7 +8,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 export const titre = 'Comparer deux images avec une fonction de référence'
 export const dateDePublication = '14/02/2023'

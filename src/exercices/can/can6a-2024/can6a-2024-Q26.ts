@@ -7,7 +7,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 
 export const titre = 'Additionner des décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cc48b'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

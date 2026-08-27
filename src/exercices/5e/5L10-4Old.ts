@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Produire une formule à partir d'un tableau"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '05/05/2026'
 
 /**

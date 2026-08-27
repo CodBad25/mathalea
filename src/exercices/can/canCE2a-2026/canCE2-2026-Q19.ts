@@ -4,9 +4,9 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = "Calculer une somme"
+export const titre = 'Calculer une somme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ebf31'
 export const refs = {
   'fr-fr': [],
@@ -26,7 +26,7 @@ export default class Can2026CE2Q19 extends ExerciceCan {
     }
 
     this.reponse = a + b + c
-    
+
     // Décomposition
     const unites1 = a % 10
     const unites2 = c % 10
@@ -34,16 +34,16 @@ export default class Can2026CE2Q19 extends ExerciceCan {
     const dizaines = b % 100
     const sommeCentaines = 200 + centaines1
     const sommeDizaines = dizaines + unites1 + unites2
-    
+
     this.question = `Calcule.<br>`
-    
+
     this.correction = `$\\begin{aligned}
 ${a}+${b}+${c}&=(100+${unites1})+(${centaines1 > 0 ? centaines1 + '+' + dizaines : dizaines})+(100+${unites2})\\\\
 &=100+100${centaines1 > 0 ? '+' + centaines1 : ''}+${dizaines}+${unites1}+${unites2}\\\\
 &=${sommeCentaines}+${sommeDizaines}\\\\
 &=${miseEnEvidence(texNombre(this.reponse, 0))}
 \\end{aligned}$`
-    
+
     this.canEnonce = 'Calcule.'
     this.canReponseACompleter = `$${a}+${b}+${c}=\\ldots$`
 

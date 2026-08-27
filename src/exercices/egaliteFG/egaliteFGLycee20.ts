@@ -1,7 +1,11 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -10,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = 'La féminisation du corps médical : un ajustement affine'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7a886'
 export const refs = {
   'fr-fr': ['EgaliteFG7-Tle-20'],
@@ -31,7 +35,11 @@ export default class EgaliteFGLycee20 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
       "<br><br>Voici l'évolution du taux de femmes parmi les médecins en France, pour certaines années :<br>"
@@ -50,11 +58,19 @@ export default class EgaliteFGLycee20 extends Exercice {
     this.nbQuestions = 9
     this.nbQuestionsModifiable = false
     this.commentaireDebat =
-      texteGras("Pour travailler l'oral") + ".<br>Sujet 1 - Que pensez-vous de cette phrase ? « Pour faire une femme médecin, il faut lui faire perdre la sensibilité, la timidité, la pudeur, l'endurcir par la vue des choses les plus horribles et les plus effrayantes [...] Lorsque la femme en serait arrivée là, je me le demande, que resterait-il de la femme ? » (Docteur Montanier, 1868).<br>Sujet 2 - Comment expliquez-vous la féminisation récente de la profession ?<br>Sujet 3 - Rechercher la répartition genrée des spécialités en médecine. Comment expliquez-vous vos résultats ?"
+      texteGras("Pour travailler l'oral") +
+      ".<br>Sujet 1 - Que pensez-vous de cette phrase ? « Pour faire une femme médecin, il faut lui faire perdre la sensibilité, la timidité, la pudeur, l'endurcir par la vue des choses les plus horribles et les plus effrayantes [...] Lorsque la femme en serait arrivée là, je me le demande, que resterait-il de la femme ? » (Docteur Montanier, 1868).<br>Sujet 2 - Comment expliquez-vous la féminisation récente de la profession ?<br>Sujet 3 - Rechercher la répartition genrée des spécialités en médecine. Comment expliquez-vous vos résultats ?"
     this.commentaireApprofondir =
-      texteGras('Pour approfondir') + ".<br>Découvrez qui est Madeleine Brès, docteur en médecine en 1875, non autorisée à concourir à l'externat des hôpitaux alors qu'elle avait été « faisant fonction d'interne provisoire » à l'Hôpital de la Pitié pendant la Guerre de 1870.<br>" +
-      ajouterLien('https://fr.wikipedia.org/wiki/Madeleine_Brès', 'Madeleine Brès')
-    this.besoinFormulaireCaseACocher = ["Afficher « Pour travailler l'oral »", true]
+      texteGras('Pour approfondir') +
+      ".<br>Découvrez qui est Madeleine Brès, docteur en médecine en 1875, non autorisée à concourir à l'externat des hôpitaux alors qu'elle avait été « faisant fonction d'interne provisoire » à l'Hôpital de la Pitié pendant la Guerre de 1870.<br>" +
+      ajouterLien(
+        'https://fr.wikipedia.org/wiki/Madeleine_Brès',
+        'Madeleine Brès',
+      )
+    this.besoinFormulaireCaseACocher = [
+      "Afficher « Pour travailler l'oral »",
+      true,
+    ]
     this.besoinFormulaire2CaseACocher = ['Afficher « Pour approfondir »', true]
     this.sup = true
     this.sup2 = true
@@ -74,7 +90,8 @@ export default class EgaliteFGLycee20 extends Exercice {
     handleAnswers(this, 1, { reponse: { value: 62 } })
     const correction1 = `$2023-1962+1=${miseEnEvidence('62')}$.`
 
-    const texteQ2 = "L'allure du nuage de points invite-t-elle à un ajustement affine ?"
+    const texteQ2 =
+      "L'allure du nuage de points invite-t-elle à un ajustement affine ?"
     this.autoCorrection[2] = {
       enonce: texteQ2,
       options: { ordered: true, radio: true },
@@ -86,46 +103,46 @@ export default class EgaliteFGLycee20 extends Exercice {
     const monQcm2 = propositionsQcm(this, 2)
     let texte2 = texteQ2
     if (!context.isAmc) texte2 += monQcm2.texte
-    const correction2 =
-      `$${miseEnEvidence('\\text{Oui}')}$ : les points semblent globalement alignés selon une tendance croissante, ce qui invite à un ajustement affine.`
+    const correction2 = `$${miseEnEvidence('\\text{Oui}')}$ : les points semblent globalement alignés selon une tendance croissante, ce qui invite à un ajustement affine.`
 
     let texte3 =
       'À la calculatrice, déterminer le coefficient de corrélation linéaire entre $x$ et $y$ (arrondi au millième).'
     if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 0.997 } })
-    const correction3 =
-      `La calculatrice donne $r\\approx ${miseEnEvidence('0{,}997')}$ : très proche de $1$, ce qui confirme la pertinence d'un ajustement affine.`
+    const correction3 = `La calculatrice donne $r\\approx ${miseEnEvidence('0{,}997')}$ : très proche de $1$, ce qui confirme la pertinence d'un ajustement affine.`
 
     let texte4 =
-      "Déterminer le coefficient directeur $a$ de la droite de régression de $y$ en $x$ (arrondi au centième)."
+      'Déterminer le coefficient directeur $a$ de la droite de régression de $y$ en $x$ (arrondi au centième).'
     if (this.interactif) texte4 += ajouteChampTexteMathLive(this, 4) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 0.64 } })
     const correction4 = `La calculatrice donne $a\\approx ${miseEnEvidence('0{,}64')}$.`
 
-    let texte5 = "Déterminer l'ordonnée à l'origine $b$ de cette droite (arrondie au centième)."
+    let texte5 =
+      "Déterminer l'ordonnée à l'origine $b$ de cette droite (arrondie au centième)."
     if (this.interactif) texte5 += ajouteChampTexteMathLive(this, 5) + '<br>'
     handleAnswers(this, 5, { reponse: { value: 10 } })
-    const correction5 =
-      `La calculatrice donne $b\\approx ${miseEnEvidence('10{,}00')}$ : la droite de régression a pour équation $y\\approx 0{,}64x+10$.`
+    const correction5 = `La calculatrice donne $b\\approx ${miseEnEvidence('10{,}00')}$ : la droite de régression a pour équation $y\\approx 0{,}64x+10$.`
 
-    let texte6 = 'À l\'aide de ce modèle, déterminer le taux de femmes médecins en $\\%$ en 2050 (arrondi au dixième).'
-    if (this.interactif) texte6 += ajouteChampTexteMathLive(this, 6, '', { texteApres: '%' }) + '<br>'
+    let texte6 =
+      "À l'aide de ce modèle, déterminer le taux de femmes médecins en $\\%$ en 2050 (arrondi au dixième)."
+    if (this.interactif)
+      texte6 +=
+        ajouteChampTexteMathLive(this, 6, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 6, { reponse: { value: 67.3 } })
-    const correction6 =
-      `Le rang de 2050 est $2050-1962+1=89$. $y=0{,}64\\times 89+10\\approx ${miseEnEvidence('67{,}3\\,\\%')}$.`
+    const correction6 = `Le rang de 2050 est $2050-1962+1=89$. $y=0{,}64\\times 89+10\\approx ${miseEnEvidence('67{,}3\\,\\%')}$.`
 
     let texte7 = 'Même question en 2100 (arrondi au dixième).'
-    if (this.interactif) texte7 += ajouteChampTexteMathLive(this, 7, '', { texteApres: '%' }) + '<br>'
+    if (this.interactif)
+      texte7 +=
+        ajouteChampTexteMathLive(this, 7, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 7, { reponse: { value: 99.5 } })
-    const correction7 =
-      `Le rang de 2100 est $2100-1962+1=139$. $y=0{,}64\\times 139+10\\approx ${miseEnEvidence('99{,}5\\,\\%')}$. Ce résultat, très proche de $100\\,\\%$ et qui dépasserait cette valeur peu après, n'est pas réaliste : un ajustement affine ne peut pas être extrapolé indéfiniment, car un taux ne peut pas dépasser $100\\,\\%$.`
+    const correction7 = `Le rang de 2100 est $2100-1962+1=139$. $y=0{,}64\\times 139+10\\approx ${miseEnEvidence('99{,}5\\,\\%')}$. Ce résultat, très proche de $100\\,\\%$ et qui dépasserait cette valeur peu après, n'est pas réaliste : un ajustement affine ne peut pas être extrapolé indéfiniment, car un taux ne peut pas dépasser $100\\,\\%$.`
 
     let texte8 =
       "On propose un modèle logistique $N(t)=\\dfrac{75}{1+e^{-k(t-t_0)}}$ (avec $k,t_0>0$), tenant compte d'un effet de saturation. Déterminer $\\displaystyle\\lim_{t\\to +\\infty} N(t)$."
     if (this.interactif) texte8 += ajouteChampTexteMathLive(this, 8) + '<br>'
     handleAnswers(this, 8, { reponse: { value: 75 } })
-    const correction8 =
-      `Comme $k>0$, on a $-k(t-t_0)\\to -\\infty$ quand $t\\to +\\infty$, donc $e^{-k(t-t_0)}\\to 0$, d'où $N(t)\\to \\dfrac{75}{1+0}=${miseEnEvidence('75')}$. Ce modèle logistique prévoit donc une stabilisation du pourcentage de femmes médecins autour de $75\\,\\%$ (et non une croissance illimitée vers $100\\,\\%$ ou au-delà), ce qui est nettement plus réaliste que le modèle affine.`
+    const correction8 = `Comme $k>0$, on a $-k(t-t_0)\\to -\\infty$ quand $t\\to +\\infty$, donc $e^{-k(t-t_0)}\\to 0$, d'où $N(t)\\to \\dfrac{75}{1+0}=${miseEnEvidence('75')}$. Ce modèle logistique prévoit donc une stabilisation du pourcentage de femmes médecins autour de $75\\,\\%$ (et non une croissance illimitée vers $100\\,\\%$ ou au-delà), ce qui est nettement plus réaliste que le modèle affine.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
@@ -145,12 +162,13 @@ export default class EgaliteFGLycee20 extends Exercice {
     this.listeCorrections[7] = correction7
     this.listeQuestions[8] = texte8
     this.listeCorrections[8] = correction8
-    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireDebat
+    if (this.sup)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireDebat
 
-
-    if (this.sup2) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireApprofondir
-
-
+    if (this.sup2)
+      this.listeQuestions[this.listeQuestions.length - 1] +=
+        '<br><br>' + this.commentaireApprofondir
 
     listeQuestionsToContenu(this)
   }

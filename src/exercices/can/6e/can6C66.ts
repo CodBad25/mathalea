@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const dateDePublication = '02/02/2026'
 export const titre = 'Multiplier un nombre par 4 ou 8'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

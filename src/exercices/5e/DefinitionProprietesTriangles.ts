@@ -11,7 +11,6 @@ export const titre =
   'Connaitre les définitions et propriétés du triangle et des droites remarquables'
 
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 export const dateDePublication = '18/1/2025'
 export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interactivité

@@ -13,14 +13,14 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Factoriser une expression complexe'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '22/05/2021'
 
 /**

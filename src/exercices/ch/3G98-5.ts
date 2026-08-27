@@ -17,7 +17,6 @@ export const titre =
   "Déterminer une représentation paramétrique d'une droite passant par deux points"
 export const dateDePublication = '11/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'af71c'
 export const refs = {
@@ -54,7 +53,7 @@ export default class RepresentationParametriqueDroiteDeuxPoints extends Exercice
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const pointA: Vector3 = [randint(-5, 5), randint(-5, 5), randint(-5, 5)]
       const direction: Vector3 = [
         randint(-5, 5, 0),

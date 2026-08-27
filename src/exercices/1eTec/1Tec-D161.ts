@@ -2,7 +2,7 @@ import Tauxvariation from '../1e/1AN10-1'
 
 export const titre = 'Calculer un nombre dérivé à partir de la définition'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '22/04/2026'
 export const uuid = '87382'
 export const refs = {

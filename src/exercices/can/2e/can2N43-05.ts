@@ -6,7 +6,7 @@ import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une puissance dans une égalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '22/03/2026'

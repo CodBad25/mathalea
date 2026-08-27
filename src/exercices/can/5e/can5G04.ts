@@ -13,7 +13,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un périmètre connaissant une aire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/11/2024'
 export const uuid = 'bf029'
 export const refs = {

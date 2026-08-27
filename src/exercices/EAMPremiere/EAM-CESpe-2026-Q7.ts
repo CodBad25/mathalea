@@ -12,10 +12,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer une probabilté à partir d\'une table de fréquences'
+export const titre =
+  "Calculer une probabilté à partir d'une table de fréquences"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -24,26 +25,53 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ7CEs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(a: number, b: number, c: number, d: number): void {
+  private appliquerLesValeurs(
+    a: number,
+    b: number,
+    c: number,
+    d: number,
+  ): void {
     const total = a + b + c + d
     const totalPlus16 = c + d
 
     // Tableau de l'énoncé (avec la case vide pour la spécialité Maths > 16 ans)
     const tableauTex = tableauColonneLigne(
-      ['', '\\text{\\textbf{16 ans ou moins}}', '\\text{\\textbf{Plus de 16 ans}}'],
-      ['\\text{\\textbf{Suivent la spé Mathématiques}}', '\\text{\\textbf{Ne suivent pas la spé Mathématiques}}'],
-      [a.toString(), '', b.toString(), d.toString()]
+      [
+        '',
+        '\\text{\\textbf{16 ans ou moins}}',
+        '\\text{\\textbf{Plus de 16 ans}}',
+      ],
+      [
+        '\\text{\\textbf{Suivent la spé Mathématiques}}',
+        '\\text{\\textbf{Ne suivent pas la spé Mathématiques}}',
+      ],
+      [a.toString(), '', b.toString(), d.toString()],
     )
 
     // Nouveau tableau complet pour la correction avec les lignes et colonnes Total
     const tableauCorrectionTex = tableauColonneLigne(
-      ['', '\\text{\\textbf{16 ans ou moins}}', '\\text{\\textbf{Plus de 16 ans}}', '\\text{\\textbf{Total}}'],
-      ['\\text{\\textbf{Suivent la spé Mathématiques}}', '\\text{\\textbf{Ne suivent pas la spé Mathématiques}}', '\\text{\\textbf{Total}}'],
       [
-        a.toString(), c.toString(), (a + c).toString(),
-        b.toString(), d.toString(), (b + d).toString(),
-        (a + b).toString(), (c + d).toString(), total.toString()
-      ]
+        '',
+        '\\text{\\textbf{16 ans ou moins}}',
+        '\\text{\\textbf{Plus de 16 ans}}',
+        '\\text{\\textbf{Total}}',
+      ],
+      [
+        '\\text{\\textbf{Suivent la spé Mathématiques}}',
+        '\\text{\\textbf{Ne suivent pas la spé Mathématiques}}',
+        '\\text{\\textbf{Total}}',
+      ],
+      [
+        a.toString(),
+        c.toString(),
+        (a + c).toString(),
+        b.toString(),
+        d.toString(),
+        (b + d).toString(),
+        (a + b).toString(),
+        (c + d).toString(),
+        total.toString(),
+      ],
     )
 
     this.enonce = `Ce tableau donne les résultats partiels d'un sondage dans une classe de première comptant $${total}$ élèves :<br><br>`
@@ -52,11 +80,11 @@ private appliquerLesValeurs(a: number, b: number, c: number, d: number): void {
     this.enonce += `La probabilité que ce soit un élève qui suive la spécialité Mathématiques sachant qu'il est âgé de plus de 16 ans est :`
 
     const fracCorrecte = new FractionEtendue(c, totalPlus16)
-    
+
     this.correction = `On sait que la classe compte $${total}$ élèves au total.<br>`
     this.correction += `On peut  compléter le tableau avec les lignes et colonnes « Total » :<br><br>`
     this.correction += `${tableauCorrectionTex}<br><br>`
-    
+
     this.correction += `On cherche la probabilité qu'un élève suive la spécialité Mathématiques sachant qu'il a plus de 16 ans.<br>`
     this.correction += `L'univers de cette probabilité conditionnelle est restreint aux élèves de plus de 16 ans (ils sont $${totalPlus16}$).<br>`
     this.correction += `Parmi eux, $${c}$ suivent la spécialité Mathématiques.<br>`
@@ -65,13 +93,13 @@ private appliquerLesValeurs(a: number, b: number, c: number, d: number): void {
     // Génération des distracteurs ciblés sur les erreurs classiques
     const dist1 = new FractionEtendue(c, a + c) // Erreur : proba conditionnelle inversée
     const dist2 = new FractionEtendue(c, total) // Erreur : intersection au lieu de conditionnelle
-    const dist3 = c                            // Erreur : donne juste l'effectif manquant sans faire de fraction
+    const dist3 = c // Erreur : donne juste l'effectif manquant sans faire de fraction
 
     this.reponses = [
       `$${fracCorrecte.texFractionSimplifiee}$`,
       `$${dist1.texFractionSimplifiee}$`,
       `$${dist2.texFractionSimplifiee}$`,
-      `$${dist3}$`
+      `$${dist3}$`,
     ]
   }
 
@@ -96,13 +124,17 @@ private appliquerLesValeurs(a: number, b: number, c: number, d: number): void {
       const b = randint(5, 12)
       const c = randint(4, 12)
       const d = randint(3, 10)
-      
+
       // Force de manière stricte le fait qu'il y ait une simplification de fraction sur la bonne réponse
       if (pgcd(c, c + d) > 1) {
         this.appliquerLesValeurs(a, b, c, d)
         compteur++
       }
-    } while (compteur < 100 && numEssais < 500 && !aLeBonNombreDePropsDifferentes(this, 4, true))
+    } while (
+      compteur < 100 &&
+      numEssais < 500 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true)
+    )
   }
 
   constructor() {

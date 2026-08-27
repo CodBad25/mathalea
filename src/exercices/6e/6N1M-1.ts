@@ -21,7 +21,7 @@ export const titre = 'Intercaler un nombre décimal entre deux nombres décimaux
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '29/10/2021'
 
 /**

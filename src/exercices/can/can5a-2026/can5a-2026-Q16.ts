@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import type { MathfieldElement } from 'mathlive'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { plot } from '../../../lib/2d/Plot'
@@ -10,13 +9,14 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { pgcd } from '../../../lib/outils/primalite'
 import type { IExercice } from '../../../lib/types'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer la proportion de boules blanches dans un sac'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'jjs2e'
 export const refs = {
   'fr-fr': [],

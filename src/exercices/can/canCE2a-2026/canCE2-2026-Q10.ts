@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une somme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e9a84'
 export const refs = {
   'fr-fr': [],
@@ -21,7 +21,11 @@ export const refs = {
 export default class Can2026CE2Q10 extends ExerciceCan {
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
-      a = choice([randint(2004,2009), randint(3004,2008), randint(4004,2008)]) // Nombre entre 2004 et 2009 ou entre 3004 et 3008 ou entre 4004 et 4008
+      a = choice([
+        randint(2004, 2009),
+        randint(3004, 2008),
+        randint(4004, 2008),
+      ]) // Nombre entre 2004 et 2009 ou entre 3004 et 3008 ou entre 4004 et 4008
       b = randint(7, 9) // Nombre à un chiffre
     }
 

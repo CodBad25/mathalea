@@ -3,7 +3,6 @@ import TracerDroite2nde from '../2e/2F21-3'
 export const titre = 'Représenter graphiquement une fonction affine'
 export const dateDePublication = '06/04/2024'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const uuid = '20c65'
 export const refs = {
   'fr-fr': ['3F20-3'],

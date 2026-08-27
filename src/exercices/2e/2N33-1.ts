@@ -3,7 +3,6 @@ export const titre =
   'Résoudre des problèmes additifs et de comparaison sur les fractions'
 export const dateDeModifImportante = '21/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Sébastien Lozano

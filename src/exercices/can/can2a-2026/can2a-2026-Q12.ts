@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calcul retourné par un algorithme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '697jm'
 export const refs = {
   'fr-fr': [],

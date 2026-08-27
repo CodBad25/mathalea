@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { droite } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -9,13 +8,14 @@ import {
 import { labelPoint } from '../../../lib/2d/textes'
 import { tracePointSurDroite } from '../../../lib/2d/TracePointSurDroite'
 import { bleuMathalea } from '../../../lib/colors'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème de longueurs (inverse)'
 export const dateDePublication = '2/11/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 /**

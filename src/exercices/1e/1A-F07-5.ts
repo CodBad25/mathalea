@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
@@ -9,14 +8,19 @@ import { latex2d } from '../../lib/2d/textes'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
-import { ecritureAlgebrique, ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  rienSi1,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 
+import { bleuMathalea } from '../../lib/colors'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -27,11 +31,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
-  "Déterminer une équation de droite à partir de sa représentation graphique"
+  'Déterminer une équation de droite à partir de sa représentation graphique'
 export const dateDePublication = '13/02/2026'
 
 export default class Auto1AF075 extends ExerciceQcmA {
@@ -167,7 +171,7 @@ export default class Auto1AF075 extends ExerciceQcmA {
     // ===== Énoncé =====
     this.enonce = `${deuxColonnes(
       'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br>' +
-      'Une équation de la droite $\\mathcal{D}$ est :',
+        'Une équation de la droite $\\mathcal{D}$ est :',
       `${objet}`,
     )}`
 
@@ -197,7 +201,7 @@ export default class Auto1AF075 extends ExerciceQcmA {
         // On multiplie par k (= -den ou +den selon le signe de -fracNum) pour avoir coeff x > 0
         const mOpp = new FractionEtendue(-fracNum, fracDen) // -m
         // Étape intermédiaire : (-m)x + y + (-p) = 0
-       
+
         // Facteur multiplicatif : on veut que -fracNum * k > 0, avec |k| = fracDen
         // Si -fracNum > 0 (fracNum < 0), k = fracDen
         // Si -fracNum < 0 (fracNum > 0), k = -fracDen
@@ -253,8 +257,14 @@ export default class Auto1AF075 extends ExerciceQcmA {
     traceB.taille = 3
     traceB.epaisseur = 2
 
-    const lABx = latex2d(`${fracDen}`, milieu(A, Bx).x, A.y + 0.3, { color: 'red', letterSize: 'scriptsize' })
-    const lBBx = latex2d(`${fracNum}`, B.x + 0.5, milieu(B, Bx).y, { color: bleuMathalea, letterSize: 'scriptsize' })
+    const lABx = latex2d(`${fracDen}`, milieu(A, Bx).x, A.y + 0.3, {
+      color: 'red',
+      letterSize: 'scriptsize',
+    })
+    const lBBx = latex2d(`${fracNum}`, B.x + 0.5, milieu(B, Bx).y, {
+      color: bleuMathalea,
+      letterSize: 'scriptsize',
+    })
 
     const d = droite(A, B, '', bleuMathalea)
     d.epaisseur = 2
@@ -265,29 +275,72 @@ export default class Auto1AF075 extends ExerciceQcmA {
     const ymax = 5
 
     const r1 = repere({
-      xMin: xmin, xMax: xmax, xUnite: 1, yMin: ymin, yMax: ymax, yUnite: 1,
-      thickHauteur: 0.1, xLabelMin: xmin + 1, xLabelMax: xmax - 1,
-      yLabelMax: ymax - 1, yLabelMin: ymin + 1, axeXStyle: '->', axeYStyle: '->',
-      yLabelDistance: 1, yLabelEcart: 0.3,
-      grilleSecondaire: true, grilleSecondaireYDistance: 0.1, grilleSecondaireXDistance: 0.1,
+      xMin: xmin,
+      xMax: xmax,
+      xUnite: 1,
+      yMin: ymin,
+      yMax: ymax,
+      yUnite: 1,
+      thickHauteur: 0.1,
+      xLabelMin: xmin + 1,
+      xLabelMax: xmax - 1,
+      yLabelMax: ymax - 1,
+      yLabelMin: ymin + 1,
+      axeXStyle: '->',
+      axeYStyle: '->',
+      yLabelDistance: 1,
+      yLabelEcart: 0.3,
+      grilleSecondaire: true,
+      grilleSecondaireYDistance: 0.1,
+      grilleSecondaireXDistance: 0.1,
       grilleSecondaireOpacite: 0.1,
-      grilleSecondaireYMin: ymin - 0.1, grilleSecondaireYMax: ymax + 0.1,
-      grilleSecondaireXMin: xmin - 0.1, grilleSecondaireXMax: xmax + 0.1,
+      grilleSecondaireYMin: ymin - 0.1,
+      grilleSecondaireYMax: ymax + 0.1,
+      grilleSecondaireXMin: xmin - 0.1,
+      grilleSecondaireXMax: xmax + 0.1,
     })
 
     const objet = mathalea2d(
-      { xmin, xmax, ymin: ymin - 0.1, ymax: ymax + 0.1, pixelsParCm: 30, scale: 0.75, center: !context.isHtml },
-      d, r1, o,
+      {
+        xmin,
+        xmax,
+        ymin: ymin - 0.1,
+        ymax: ymax + 0.1,
+        pixelsParCm: 30,
+        scale: 0.75,
+        center: !context.isHtml,
+      },
+      d,
+      r1,
+      o,
     )
 
     const objetC = mathalea2d(
-      { xmin, xmax, ymin, ymax: ymax + 0.1, pixelsParCm: 30, scale: 0.75, center: !context.isHtml },
-      d, r1, traceA, lA, lB, traceB, o, sABx, sBBx, lABx, lBBx,
+      {
+        xmin,
+        xmax,
+        ymin,
+        ymax: ymax + 0.1,
+        pixelsParCm: 30,
+        scale: 0.75,
+        center: !context.isHtml,
+      },
+      d,
+      r1,
+      traceA,
+      lA,
+      lB,
+      traceB,
+      o,
+      sABx,
+      sBBx,
+      lABx,
+      lBBx,
     )
 
     this.enonce = `${deuxColonnes(
       'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br>' +
-      'Une équation de la droite $\\mathcal{D}$ est :',
+        'Une équation de la droite $\\mathcal{D}$ est :',
       `${objet}`,
     )}`
 

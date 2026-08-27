@@ -2,13 +2,13 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '30f80'
 export const refs = {
   'fr-fr': [],

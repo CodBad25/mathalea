@@ -1,10 +1,10 @@
 import Decimal from 'decimal.js'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceQcmA from '../ExerciceQcmA'
 import { randint } from '../../modules/outils'
-import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '13606'
 export const refs = {
@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Trouver le calcul pour une baisse en pourcentage '
@@ -24,7 +24,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ4CEns2026 extends ExerciceQcmA {
-   private appliquerLesValeurs(prix: number, p: number): void {
+  private appliquerLesValeurs(prix: number, p: number): void {
     const decimalP = new Decimal(p).div(100) // p/100, ex. 0,15
     const coeffBaisse = new Decimal(1).minus(decimalP) // 1 - p/100, ex. 0,85
     const coeffHausse = new Decimal(1).plus(decimalP) // 1 + p/100, ex. 1,15

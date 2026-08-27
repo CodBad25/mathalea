@@ -23,7 +23,6 @@ export const titre = 'Programmer des calculs sur tableur'
 export const dateDePublication = '12/08/2025'
 
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /*
  * Programmer des calculs sur tableur : New programme de 6eme 2025

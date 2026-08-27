@@ -9,7 +9,6 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const titre = 'Calculer cos et sin associés à un réel $x$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '20/04/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -106,7 +105,7 @@ export default class MesurePrincipale extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    for (let i = 0, texte, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, texte, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       texte = listeTypeQuestions[i].texte
       handleAnswers(this, i, {

@@ -10,10 +10,10 @@ import Exercice from '../Exercice'
 export const titre = 'Katherine Johnson : poids, masse et gravité'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a0815'
 export const refs = {
-  'fr-fr': [ 'EgaliteFG4-3e-16'],
+  'fr-fr': ['EgaliteFG4-3e-16'],
   'fr-ch': [],
 }
 
@@ -28,14 +28,20 @@ export default class EgaliteFG16 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
-      (context.isHtml ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/johnson.jpg" alt="Portrait de Katherine Johnson" style="width:140px; height:auto; border-radius:9999px; border:3px solid #f15929;"><p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Katherine Johnson (1918-2020) — Source : NASA, domaine public</p></div>' : '') +
+      (context.isHtml
+        ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/johnson.jpg" alt="Portrait de Katherine Johnson" style="width:140px; height:auto; border-radius:9999px; border:3px solid #f15929;"><p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Katherine Johnson (1918-2020) — Source : NASA, domaine public</p></div>'
+        : '') +
       "<br>Katherine Johnson (1918-2020) est une physicienne, mathématicienne et ingénieure spatiale américaine, qui a contribué aux programmes aéronautique et spatial de la NASA. Son histoire est racontée dans le film « Les figures de l'ombre ».<br>" +
       "Le poids d'un corps sur un astre dépend de la masse et de l'accélération de la pesanteur. On peut montrer que la relation est : $P=mg$<br>" +
       "$\\bullet$ $P$ est le poids (en newtons) d'un corps sur un astre ; c'est-à-dire la force que l'astre exerce sur le corps.<br>" +
-      "$\\bullet$ $m$ est la masse (en kg) de ce corps.<br>" +
+      '$\\bullet$ $m$ est la masse (en kg) de ce corps.<br>' +
       "$\\bullet$ $g$ est l'accélération de la pesanteur de cet astre ($g$ varie en fonction de l'astre, sa valeur est différente sur Terre, sur la Lune ou sur le Soleil)."
     this.nbQuestions = 6
     this.nbQuestionsModifiable = false
@@ -47,7 +53,9 @@ export default class EgaliteFG16 extends Exercice {
 
     let texte0 =
       "Juste avant le décollage d'Apollo 11 (mission dont Katherine Johnson a calculé la trajectoire), Neil Armstrong pèse $72$ kg. Sachant que $g_T=9{,}8$ sur Terre, calculer son poids (en newtons)."
-    if (this.interactif) texte0 += ajouteChampTexteMathLive(this, 0, '', { texteApres: 'N' }) + '<br>'
+    if (this.interactif)
+      texte0 +=
+        ajouteChampTexteMathLive(this, 0, '', { texteApres: 'N' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 705.6 } })
     const correction0 = `$P=m\\times g_T=72\\times 9{,}8=${miseEnEvidence('705{,}6')}$ N.`
 
@@ -76,7 +84,7 @@ export default class EgaliteFG16 extends Exercice {
     let texte1 = texteQ1
     if (!context.isAmc) texte1 += monQcm1.texte
     const correction1 =
-      "Dans chaque cas, $\\dfrac{\\text{poids}}{\\text{masse}}=1{,}7$ (par exemple $\\dfrac{5{,}1}{3}=1{,}7$ et $\\dfrac{122{,}4}{72}=1{,}7$) : le tableau est bien un tableau de proportionnalité, de coefficient $1{,}7$."
+      'Dans chaque cas, $\\dfrac{\\text{poids}}{\\text{masse}}=1{,}7$ (par exemple $\\dfrac{5{,}1}{3}=1{,}7$ et $\\dfrac{122{,}4}{72}=1{,}7$) : le tableau est bien un tableau de proportionnalité, de coefficient $1{,}7$.'
 
     let texte2 =
       "On note $g_L$ l'accélération de la pesanteur sur la Lune. Déterminer $g_L$."
@@ -101,16 +109,21 @@ export default class EgaliteFG16 extends Exercice {
       "$\\dfrac{g_T}{g_L}=\\dfrac{9{,}8}{1{,}7}\\approx 5{,}76$, soit environ $6$ (arrondi à l'unité) : l'affirmation est donc vraie, au moins en ordre de grandeur."
 
     let texte4 =
-      (context.isHtml ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/cratere-lune.jpg" alt="Coupe d\'un cratère lunaire, triangle BCD rectangle en D, CD=29 km" style="max-width:320px; width:100%; height:auto;"></div>' : '') +
-      "Le triangle $BCD$ (un cratère de la Lune) est rectangle en $D$, avec $CD=29$ km et $\\widehat{BCD}=30°$. Calculer la distance $BC$, arrondie au dixième de km."
-    if (this.interactif) texte4 += ajouteChampTexteMathLive(this, 4, '', { texteApres: 'km' }) + '<br>'
+      (context.isHtml
+        ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/cratere-lune.jpg" alt="Coupe d\'un cratère lunaire, triangle BCD rectangle en D, CD=29 km" style="max-width:320px; width:100%; height:auto;"></div>'
+        : '') +
+      'Le triangle $BCD$ (un cratère de la Lune) est rectangle en $D$, avec $CD=29$ km et $\\widehat{BCD}=30°$. Calculer la distance $BC$, arrondie au dixième de km.'
+    if (this.interactif)
+      texte4 +=
+        ajouteChampTexteMathLive(this, 4, '', { texteApres: 'km' }) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 33.5 } })
-    const correction4 =
-      `Dans le triangle $BCD$ rectangle en $D$ : $\\cos(\\widehat{BCD})=\\dfrac{CD}{BC}$, donc $BC=\\dfrac{CD}{\\cos(30°)}=\\dfrac{29}{\\cos(30°)}\\approx ${miseEnEvidence('33{,}5')}$ km.`
+    const correction4 = `Dans le triangle $BCD$ rectangle en $D$ : $\\cos(\\widehat{BCD})=\\dfrac{CD}{BC}$, donc $BC=\\dfrac{CD}{\\cos(30°)}=\\dfrac{29}{\\cos(30°)}\\approx ${miseEnEvidence('33{,}5')}$ km.`
 
     let texte5 =
       "En prenant $BC=34$ km pour cette question, calculer la profondeur $BD$ du cratère, arrondie à l'unité de km."
-    if (this.interactif) texte5 += ajouteChampTexteMathLive(this, 5, '', { texteApres: 'km' }) + '<br>'
+    if (this.interactif)
+      texte5 +=
+        ajouteChampTexteMathLive(this, 5, '', { texteApres: 'km' }) + '<br>'
     handleAnswers(this, 5, { reponse: { value: 17 } })
     const correction5 = `$BD=BC\\times \\sin(30°)=34\\times 0{,}5=${miseEnEvidence('17')}$ km.`
 

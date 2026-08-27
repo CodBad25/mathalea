@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': ['9ES1E-7'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMult'
 
@@ -91,9 +91,9 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
       )
       for (let i = 0; i < this.nbQuestions; i++) {
         if (i % 2 === 0) {
-          listeTypeQuestions.push(questionsDirects[i])
+          listeTypeQuestions.push(questionsDirects[i / 2])
         } else {
-          listeTypeQuestions.push(questionsIndirects[i])
+          listeTypeQuestions.push(questionsIndirects[(i - 1) / 2])
         }
       }
     }
@@ -1190,6 +1190,14 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
           texteCorr =
             'Si un quadrilatère a ses diagonales perpendiculaires et de même longueur, alors cela peut être un quadrilatère quelconque (il faudrait en plus que les diagonales se coupent en leur milieu pour que ce soit un carré).'
           break
+      }
+      const propositions = this.autoCorrection[i].propositions
+      if (propositions?.every((proposition) => !proposition.statut)) {
+        propositions.push({
+          texte: 'Aucune de ces réponses.',
+          statut: true,
+          feedback: 'Correct !',
+        })
       }
       this.autoCorrection[i].options = {
         ordered: true,

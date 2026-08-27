@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Réduire et simplifier une expression littérale (somme et produit)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

@@ -57,11 +57,31 @@ async function test2(page: Page) {
   questions[1].isCorrect = false
   questions[2].isCorrect = true
 
-  const indexes = [0, 0, 3]
   for (let i = 0; i < 3; i++) {
-    const question = await page.locator('#exercice0Q' + i)
-    const figures = await question.locator('.svgContainer').all()
-    await figures[indexes[i]].click()
+    const cliqueFigure = page.locator(
+      `clique-figure[numero-exercice="0"][question-index="${i}"]`,
+    )
+    const serializedFigures = await cliqueFigure.getAttribute('figures')
+    if (serializedFigures == null) {
+      throw Error(
+        `La configuration cliqueFiguresArray de la question ${i + 1} est introuvable`,
+      )
+    }
+    const figures = JSON.parse(serializedFigures) as Array<{
+      id: string
+      solution: boolean
+    }>
+    const figuresToClick = questions[i].isCorrect
+      ? figures.filter((figure) => figure.solution)
+      : figures.filter((figure) => !figure.solution).slice(0, 1)
+    if (figuresToClick.length === 0) {
+      throw Error(
+        `Aucune figure ne permet de produire la réponse attendue à la question ${i + 1}`,
+      )
+    }
+    for (const figure of figuresToClick) {
+      await page.locator(`[id="${figure.id}"]`).click()
+    }
   }
   await checkFeedback(page, questions)
   return true

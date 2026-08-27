@@ -15,7 +15,6 @@ export const titre =
   'Utiliser une grille pour déterminer des égalités vectorielles ou des vecteurs colinéaires'
 export const dateDePublication = '27/06/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Déterminer graphiquement un coefficient de colinéarité sur une grille.

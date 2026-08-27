@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 export const titre = 'Compléter un bloc personnalisé avec Scratch'
 export const dateDePublication = '23/12/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Jean-claude Lhote

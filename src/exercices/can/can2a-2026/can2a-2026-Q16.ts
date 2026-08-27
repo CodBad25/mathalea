@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Trouver la solution positive d'une équation produit nul"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'no7j5'
 export const refs = {
   'fr-fr': [],

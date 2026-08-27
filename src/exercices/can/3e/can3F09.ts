@@ -17,7 +17,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = 'Reconnaitre une fonction affine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '25/10/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -42,7 +41,7 @@ export default class ReconnaitreFonctionAffine extends Exercice {
 
   nouvelleVersion() {
     let a, b, c, texte, texteCorr
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
         choice([1, 2, 3, 4]) //, 2, 3
       ) {

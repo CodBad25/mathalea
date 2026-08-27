@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer une fonction affine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '14/05/2023'
 /**
  * Déterminer une fonction affine à partir de deux images
@@ -62,7 +62,7 @@ export default class DeterminerfonctionaffineOld extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       let texte = ''
       let texteCorr = ''

@@ -30,7 +30,6 @@ export const titre =
   'Construire des symétriques de points par rapport à un point'
 export const dateDePublication = '27/09/2024'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = '67c96'
 export const refs = {

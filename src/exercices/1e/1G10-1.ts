@@ -11,6 +11,7 @@ import { projectionOrtho } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -19,11 +20,10 @@ import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer des produits scalaires par projection'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c88fa'
 export const ref = '1G10-1'
 export const refs = {
@@ -44,7 +44,7 @@ export default class SuperExoMathalea2d extends Exercice {
     const casProjection = combinaisonListes(casDisponibles, this.nbQuestions)
     const casPositionH = randint(1, 3) // de même sens, de sens opposé ou projeté nul
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let x1 = 0
       let y1 = 0
       let x2 = 0

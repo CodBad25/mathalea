@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une probabilité avec des événements indépendants'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '13/04/2024'
 export const uuid = 'f3d16'
 export const refs = {

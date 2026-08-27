@@ -14,7 +14,7 @@ import { randint } from '../../../modules/outils'
 export const titre =
   "Calculer la longueur d'un côté d'un triangle connaissant la longueur de son contour"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '66e74'
 export const refs = {
   'fr-fr': [],

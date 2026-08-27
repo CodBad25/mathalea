@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2f929'
 export const refs = {
   'fr-fr': [],

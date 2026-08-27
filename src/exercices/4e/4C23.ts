@@ -25,7 +25,7 @@ import Exercice from '../Exercice'
 
 export const titre =
   'Effectuer somme, différence, produit ou quotient de fractions'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const dateDePublication = '15/09/2021'
 export const dateDeModifImportante = '06/10/2024'

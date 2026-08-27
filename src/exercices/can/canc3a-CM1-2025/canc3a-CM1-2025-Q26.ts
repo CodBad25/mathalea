@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver un nombre sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b2be1'
 export const refs = {
   'fr-fr': [],

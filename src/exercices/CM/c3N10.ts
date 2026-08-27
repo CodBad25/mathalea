@@ -3,7 +3,7 @@ export const titre = 'Écrire un nombre en chiffres ou en lettres'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '14/11/2023'
 export const uuid = '85618'
 export const refs = {

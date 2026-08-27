@@ -11,7 +11,7 @@ import { context } from '../../../modules/context'
 export const titre =
   'Déterminer une image par une fonction affine (non définie explicitement)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/04/2024'
 export const dateDeModifImportante = '06/08/2025'
 export const uuid = 'b9c80'

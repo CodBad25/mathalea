@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Trouver un ordre de grandeur d'un produit de nombres entiers ou décimaux"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * * Ordre de grandeur d'une multiplication d'entiers ou de décimaux

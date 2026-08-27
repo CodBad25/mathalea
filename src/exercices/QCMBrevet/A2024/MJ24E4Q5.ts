@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calcul de médiane (2024 Métropole)'
@@ -61,7 +61,7 @@ export default class MetropoleJuin24Exo4Q5 extends ExerciceQcmA {
     }
     const index = randint(0, nbTailles - 2, [Math.floor(nbTailles / 2)]) // On choisit l'index de la médiane (pas au milieu)
     const newList: number[] = []
-    for (let i = 0, ii = 0; i < nbTailles; ) {
+    for (let i = 0, ii = 0; i < nbTailles;) {
       // On refait la liste en insérant la médiane à l'index choisi
       if (i === index) newList.push(mediane)
       else newList.push(liste[ii++])

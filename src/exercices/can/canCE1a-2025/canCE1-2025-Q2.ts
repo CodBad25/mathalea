@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '87e45'
 export const refs = {
   'fr-fr': [],

@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Calculer deux tiers d'une quantité"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '9e21f'
 export const refs = {
   'fr-fr': [],

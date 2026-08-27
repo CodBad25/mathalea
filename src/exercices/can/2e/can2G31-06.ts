@@ -11,7 +11,7 @@ import {
 export const titre =
   "Calculer l'ordonnée d'un point sur une droite (non définie explicitement)"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/08/2025'
 export const uuid = '2bef5'
 export const refs = {

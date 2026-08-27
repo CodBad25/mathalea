@@ -1,14 +1,14 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Compléter une multiplication'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4ec0f'
 export const refs = {
   'fr-fr': [],

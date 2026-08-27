@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const titre =
   "Interpréter les données d'un diagramme et donner la médiane de la série"
 export const dateDePublication = '11/08/2026'

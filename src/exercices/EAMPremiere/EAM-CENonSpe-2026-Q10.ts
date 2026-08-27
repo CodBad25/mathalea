@@ -1,6 +1,5 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '471c3'
@@ -9,7 +8,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Exprimer en fonction de '
@@ -21,7 +20,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ10CEns2026 extends ExerciceQcmA {
-   // Isoler une grandeur dans F = G × (m_1 × m_2) / R². 4 cas : m_1, m_2, G, R.
+  // Isoler une grandeur dans F = G × (m_1 × m_2) / R². 4 cas : m_1, m_2, G, R.
   private appliquerLesValeurs(cas: string): void {
     const formule = 'F=G\\times\\dfrac{m_1\\times m_2}{R^2}'
     this.enonce = `Soit la formule $${formule}$. On a :`
@@ -112,6 +111,6 @@ On obtient $${miseEnEvidence('R=\\sqrt{\\dfrac{G\\times m_1\\times m_2}{F}}')}$.
     super()
     this.versionAleatoire()
     this.spacing = 1.5
-     this.options = { vertical: true } 
+    this.options = { vertical: true }
   }
 }

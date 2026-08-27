@@ -1,6 +1,6 @@
 import { bleuMathalea } from '../../lib/colors'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { AddTabPropMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import {
   choice,
@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Compléter un tableau de proportionnalité avec les propriétés de linéarité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '20/05/2025'

@@ -2,17 +2,17 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { context } from '../../../modules/context'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { sp } from '../../../lib/outils/outilString'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver le résultat d'un programme Python"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'eb3e8'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

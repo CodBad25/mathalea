@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,10 +10,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer le nombre d\'élèves à partir d\'un pourcentage et d\'un effectif'
+export const titre =
+  "Calculer le nombre d'élèves à partir d'un pourcentage et d'un effectif"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -23,13 +23,13 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ3FMs2026 extends ExerciceQcmA {
- private appliquerLesValeurs(
+  private appliquerLesValeurs(
     p: number,
     n: number,
     total: number,
     d1Origine?: string,
     d2Origine?: string,
-    d3Origine?: string
+    d3Origine?: string,
   ): void {
     const pctRestant = 100 - p
 
@@ -50,24 +50,22 @@ export default class AutoQ3FMs2026 extends ExerciceQcmA {
       // Génération de distracteurs intelligents pour l'aléatoire
       correct = `${total}`
       const effectifGrec = total - n
-      
+
       // Erreur 1 : l'élève calcule le nombre d'élèves faisant du grec au lieu du total
       d1 = `${effectifGrec}`
-      
+
       // Erreur 2 : l'élève divise le nombre n par le pourcentage de l'énoncé (ex: 9 / 0.75 = 12)
       const erreurDiv = Math.round(n / (p / 100))
-      d2 = erreurDiv !== total && erreurDiv !== effectifGrec ? `${erreurDiv}` : `${total - 4}`
-      
+      d2 =
+        erreurDiv !== total && erreurDiv !== effectifGrec
+          ? `${erreurDiv}`
+          : `${total - 4}`
+
       // Erreur 3 : un effectif plausible proche
       d3 = `${total > 30 ? total - 6 : total + 6}`
     }
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
 
     // Rédaction adaptative de la correction
     this.correction = `Si $${p}\\,\\%$ des élèves étudient le grec, alors $100\\,\\% - ${p}\\,\\% = ${pctRestant}\\,\\%$ des élèves étudient le latin.<br>`
@@ -119,7 +117,7 @@ export default class AutoQ3FMs2026 extends ExerciceQcmA {
     do {
       // On choisit le pourcentage de ceux qui font du grec (le reste fait du latin)
       const p = choice([10, 20, 25, 75, 80, 90])
-      
+
       let total = 0
       // On garantit que l'effectif total est entre 20 et 40, et donne un nombre rond
       if (p === 75 || p === 25) {

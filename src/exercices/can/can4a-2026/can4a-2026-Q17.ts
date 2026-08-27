@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un arrondi au dixième ou centième près'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'zx5gn'
 export const refs = {
   'fr-fr': [],

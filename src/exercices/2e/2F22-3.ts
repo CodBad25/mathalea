@@ -12,7 +12,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const titre = 'Reconnaître la courbe d’une fonction de référence'
 export const dateDePublication = '09/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 

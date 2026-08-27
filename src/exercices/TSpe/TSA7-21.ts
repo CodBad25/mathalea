@@ -16,7 +16,6 @@ import { context } from '../../modules/context'
 export const titre =
   'Résoudre des équations différentielles avec des conditions initiales'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'debc7'
 export const refs = {
@@ -57,7 +56,7 @@ class EquaDiffs extends Exercice {
       listeOfCase: ['yprime=ay', 'yprime+ay=0', 'yprime=ay+b', 'yprime+ay=b'],
     })
     // Boucle principale pour fabriquer les question
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a: number
       let b: number
       let c: number

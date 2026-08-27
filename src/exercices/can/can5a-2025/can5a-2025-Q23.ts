@@ -4,7 +4,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Majoration de fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b343g'
 export const refs = {
   'fr-fr': [],

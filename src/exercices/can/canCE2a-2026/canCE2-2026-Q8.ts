@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Déterminer un nombre défini par une phrase (table de multiplication)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '34aa9'
 export const refs = {
   'fr-fr': [],
@@ -36,7 +36,6 @@ export default class Can2026CE2Q8 extends ExerciceCan {
     this.reponse = resultat
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
-   
   }
 
   nouvelleVersion() {

@@ -3,7 +3,7 @@ import Can2025CE2Q1 from './canCE2-2025-Q1'
 
 export const titre = 'Complément à la centaine supérieure'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5514f'
 export const refs = {
   'fr-fr': [],

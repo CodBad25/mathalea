@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 export const titre = "Placer un point d'abscisse décimale"
 export const dateDeModifImportante = '03/05/2024'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 /**

@@ -1,7 +1,7 @@
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver le nombre de nombres entiers entre deux valeurs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 /**

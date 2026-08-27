@@ -15,7 +15,7 @@ export const titre = 'Mesurer une aire de carré, rectangle, triangle rectangle'
 export const dateDePublication = '25/04/2024'
 export const dateDeModifImportante = '31/07/2025' // Rajout de différentes unités par Éric Elter
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 
 /**

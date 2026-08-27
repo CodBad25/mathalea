@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un quotient de puissances'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'lk1of'
 export const refs = {
   'fr-fr': [],

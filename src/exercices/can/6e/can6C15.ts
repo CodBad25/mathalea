@@ -4,13 +4,13 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 
+import { amcConvert } from '../../../lib/amc/amcBuilders'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
-import { amcConvert } from '../../../lib/amc/amcBuilders'
 
 export const titre = 'Trouver la fraction (définition)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

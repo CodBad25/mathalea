@@ -9,7 +9,7 @@ import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
 import { fraction } from '../../../modules/fractions'
 export const titre = 'Réduire une expression avec une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '08/12/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

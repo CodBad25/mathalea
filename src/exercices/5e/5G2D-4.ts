@@ -4,7 +4,7 @@ export const titre =
   'Convertir des longueurs, masses, capacités, prix ou unités informatiques'
 export const dateDePublication = '31/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

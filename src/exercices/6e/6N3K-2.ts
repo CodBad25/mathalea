@@ -14,7 +14,7 @@ import { representationFraction } from '../../modules/representationsFractions'
 
 export const titre = 'Mettre bout à bout des segments'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

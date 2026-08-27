@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Décomposer un nombre (QCM)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '569e1'
 export const refs = {
   'fr-fr': [],

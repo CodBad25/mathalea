@@ -4,7 +4,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Soustraire 19, 29, ...., 99 à un entier'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bc9a6'
 export const refs = {
   'fr-fr': [''],

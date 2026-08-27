@@ -5,7 +5,7 @@ import Trinome from '../../../modules/Trinome'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec une valeur particulière'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fca9d'
 export const refs = {
   'fr-fr': [''],

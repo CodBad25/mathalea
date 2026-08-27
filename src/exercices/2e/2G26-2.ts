@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Calculer les coordonnées de la différence de deux vecteurs'
 export const dateDePublication = '28/05/2023'

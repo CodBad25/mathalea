@@ -21,7 +21,7 @@ export const dateDeModifImportante = '22/09/2024'
 export const titre =
   'Décomposer un nombre entier (nombre de ..., chiffres des ...)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

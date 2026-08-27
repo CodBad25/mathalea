@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Établir une relation entre unité, dixième, centième et millième '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '03/07/2025'

@@ -24,7 +24,7 @@ import { gestionnaireFormulaireTexte } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const dateDePublication = '06/06/2025'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const uuid = 'b3aa4'
 export const refs = {
@@ -279,7 +279,7 @@ export default class ProblemesVaries extends Exercice {
           break
       }
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       const probleme = fonctionsProblemes[i](this.sup2 ?? false)
       const question = this.interactif
         ? `${probleme.enonce}<br>${ajouteChampTexteMathLive(this, i, probleme.styleChampTexteMathlive ?? KeyboardType.clavierNumbers, probleme.optionsChampTexteMathlive)}`

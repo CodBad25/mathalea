@@ -1,7 +1,7 @@
 import TrouverNombre from './5N1J-4'
 export const dateDePublication = '12/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Trouver un nombre à l'aide d'un critère de divisibilité par 2, par 5 ou par 10"
 

@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import Decimal from 'decimal.js'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -10,16 +9,17 @@ import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choisitLettresDifferentes } from '../../../lib/outils/aleatoires'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre =
   'Calculer un produit scalaire à l’aide de normes et d’un angle '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '26/06/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

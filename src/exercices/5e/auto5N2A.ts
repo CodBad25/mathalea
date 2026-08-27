@@ -14,7 +14,6 @@ import Exercice from '../Exercice'
 
 export const dateDePublication = '20/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   'Additionner, soustraire, multiplier des nombres décimaux à une ou deux décimales'

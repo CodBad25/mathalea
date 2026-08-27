@@ -2,7 +2,6 @@ import FractionVersPourcentage from '../6e/6N1F-3'
 export const titre = 'Écrire avec fraction, écriture décimale, pourcentage'
 export const dateDePublication = '19/06/2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de 5N11-3 pour les 1er

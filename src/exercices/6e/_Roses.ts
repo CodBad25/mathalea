@@ -22,7 +22,6 @@ import { Rose } from './_Rose'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 /**

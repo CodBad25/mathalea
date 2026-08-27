@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Ajouter des durées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/11/2021'
 
 /**

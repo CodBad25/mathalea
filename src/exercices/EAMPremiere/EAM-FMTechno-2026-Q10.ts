@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Développer une identité remarquable'
@@ -23,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ10FMt2026 extends ExerciceQcmA {
-// Distracteurs forçables (distA/B/C) pour reproduire la version officielle.
+  // Distracteurs forçables (distA/B/C) pour reproduire la version officielle.
   private appliquerLesValeurs(
     n1: number,
     c1: number,
@@ -82,7 +81,7 @@ export default class AutoQ10FMt2026 extends ExerciceQcmA {
       [8, 1, 14, 2], // 12
       [12, 1, 6, 2], // 8
       [4, 1, 10, 2], // 8
-      
+
       // --- Coefficients 3 et 1 ---
       [12, 3, 4, 1], // Moyenne = 10 (Distracteurs: 8, 6, 20)
       [8, 3, 16, 1], // Moyenne = 10 (Distracteurs: 12, 14, 20)

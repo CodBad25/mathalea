@@ -15,7 +15,6 @@ import { figureAnswerJson } from '../../../lib/apigeom/figureAnswer'
 
 export const titre = 'Tracer un segment de longueur fractionnaire'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const uuid = '775b7'
 export const refs = {
   'fr-fr': [],
@@ -36,7 +35,7 @@ export default class Can2026CM2Q26 extends ExerciceCan {
     super()
     this.formatChampTexte = 'none'
     this.nbQuestionsModifiable = false
-    this.formatInteractif = 'custom'
+    this.formatInteractif = 'meta-custom'
   }
 
   enonce(num?: number, den?: number) {

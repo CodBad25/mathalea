@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 export const titre = 'Différencier les algorithmes des quatre opérations'

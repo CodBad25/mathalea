@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const titre = "Résoudre des problèmes d'intérêt composé continu"
 export const dateDePublication = '03/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bfce3'
 export const refs = {
   'fr-fr': [],
@@ -65,7 +65,7 @@ export default class InteretContinu extends Exercice {
       shuffle: true,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = ''

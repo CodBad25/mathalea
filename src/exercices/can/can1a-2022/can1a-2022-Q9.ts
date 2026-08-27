@@ -1,13 +1,12 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { sp } from '../../../lib/outils/outilString'
 export const titre = 'Calculer une moyenne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'mgrqz'
 export const refs = {
   'fr-fr': [],
@@ -21,9 +20,9 @@ export const refs = {
 export default class Can1a2022Q9 extends ExerciceCan {
   constructor() {
     super()
-      this.formatChampTexte = KeyboardType.clavierDeBase
-     this.optionsChampTexte = { texteAvant: '<br>' }
-      this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   enonce(a?: number, b?: number, c?: number, d?: number) {

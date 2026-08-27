@@ -6,7 +6,6 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Compléter avec du vocabulaire sur les probabilités'
 export const uuid = '4703c'

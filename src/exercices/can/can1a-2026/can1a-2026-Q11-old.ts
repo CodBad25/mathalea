@@ -5,7 +5,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Déterminer si une égalité est vraie ou fausse'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'wfqx1'
 export const refs = {
   'fr-fr': [],

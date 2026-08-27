@@ -41,7 +41,7 @@ import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 
 export const titre = 'S’entraîner avec le sujet CAN Seconde 2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '03/04/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const uuid = '9bc44'
 
@@ -132,7 +132,7 @@ export default class SujetCAN2023Seconde extends Exercice {
     const y2 = y1 + randint(2, 7)
     const x3 = randint(5, 6)
     const y3 = y2 - randint(1, 4)
-    for (let i = 0, index = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, index = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a = 0
       let b = 0
       let c = 0

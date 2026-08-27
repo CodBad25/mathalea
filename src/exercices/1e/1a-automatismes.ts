@@ -5,8 +5,7 @@ import {
 
 export const titre = "Sélection d'automatismes"
 export const interactifReady = true
-// Les automatismes de 1e sont des qcms, MetaExerciceCan produit un interactifType = 'mathLive' !
-export const interactifType = 'qcm'
+
 export const uuid = '722e4'
 export const refs = { 'fr-fr': ['1A'], 'fr-ch': [] }
 export const dateDePublication = '30/04/2026'
@@ -40,5 +39,4 @@ export default createAutomatismesCanExercice({
   },
   // Une valeur par catégorie, alignée sur `categoriesForm.defaut`
   defaultSup: '2-2-2-2-2-1-1',
-  interactifType: 'qcm',
 })

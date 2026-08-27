@@ -2,7 +2,7 @@ import EcrireEntierSousFormeDeFraction from '../../6e/6N3F-1'
 
 export const titre = "Écrire un nombre entier sous la forme d'une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/11/2024'
 
 /**

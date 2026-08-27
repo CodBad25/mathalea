@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre = 'Factoriser une expression'
 export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

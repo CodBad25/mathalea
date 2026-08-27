@@ -3,7 +3,7 @@ export const titre = 'Encadrer puis arrondir une valeur comprenant un cosinus'
 export const amcReady = true
 export const amcType = 'qcmMult'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '09/05/2021'
 export const uuid = 'b236d'
 export const refs = {

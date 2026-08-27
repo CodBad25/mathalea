@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Compléter des égalités avec des fractions simples'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '05/07/2025'
 export const uuid = 'c0043'
 export const refs = {

@@ -1,8 +1,8 @@
 import {
   all,
   isEqual,
-  onlyIrreducibleFractions,
   isReduced,
+  onlyIrreducibleFractions,
 } from '../../lib/interactif/checks'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -23,7 +23,6 @@ export const titre =
   "Déterminer les coordonnées d'un projeté orthogonal sur une droite"
 export const dateDePublication = '30/06/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -50,7 +49,7 @@ class EqCartVectNormal extends Exercice {
   nouvelleVersion(): void {
     // Lettre entre A et W mais pas L, M, N ou O pour ne pas avoir O dans les 4 points
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const b = randint(-2, 2, 0)
@@ -139,11 +138,19 @@ class EqCartVectNormal extends Exercice {
             ],
             champ1: {
               value: String(xH),
-              compare: all([isEqual(), isReduced(), onlyIrreducibleFractions()]),
+              compare: all([
+                isEqual(),
+                isReduced(),
+                onlyIrreducibleFractions(),
+              ]),
             },
             champ2: {
               value: String(yH),
-              compare: all([isEqual(), isReduced(), onlyIrreducibleFractions()]),
+              compare: all([
+                isEqual(),
+                isReduced(),
+                onlyIrreducibleFractions(),
+              ]),
             },
           },
           { formatInteractif: 'fillInTheBlank' },

@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Déterminer l'opposé ou l'inverse d'une fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '719da'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

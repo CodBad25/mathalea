@@ -2,7 +2,7 @@ import ProportiondeProportion from '../1eTec/1Tec-A1-6'
 export const titre =
   'Travailler sur des situations mettant en jeu des pourcentages de pourcentages'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '10/05/2023'

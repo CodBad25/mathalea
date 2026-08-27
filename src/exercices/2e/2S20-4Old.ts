@@ -19,7 +19,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '05/05/2024'
 export const dateDeModificationImportante = '24/03/2026'
 export const titre = 'Lire graphiquement des quartiles et des EIQ'

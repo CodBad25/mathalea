@@ -23,6 +23,70 @@ import { readFileSync } from 'fs'
 import fs from 'fs/promises'
 import path from 'path'
 
+const typesSource = readFileSync('src/lib/types.ts', 'utf8')
+
+/**
+ * Lit les valeurs littérales d'une union TypeScript dans src/lib/types.ts.
+ * Le générateur de menu partage ainsi la même liste de formats que le moteur,
+ * sans maintenir une seconde liste à la main dans ce script JavaScript.
+ */
+function extractStringUnion(typeName) {
+  const union = typesSource.match(
+    new RegExp(`export type ${typeName}\\s*=([\\s\\S]*?)(?=\\nexport )`),
+  )?.[1]
+  if (union == null) {
+    throw new Error(`${typeName} est introuvable dans src/lib/types.ts`)
+  }
+  return [...union.matchAll(/\|\s*'([^']+)'/g)].map((match) => match[1])
+}
+
+const registeredInteractiveFormats = new Set([
+  ...extractStringUnion('InteractivityType'),
+  ...extractStringUnion('OldFormatInteractifType'),
+])
+
+/**
+ * Retourne le premier format interactif littéral reconnu dans le fichier.
+ *
+ * Les deux syntaxes utilisées par les exercices sont prises en charge :
+ * - objet/options : `formatInteractif: 'mathalea-qcm'` ;
+ * - affectation : `autoCorrection[i].formatInteractif = 'clique-figure'`.
+ */
+function extractInteractiveType(data) {
+  const formatPattern = /\bformatInteractif\s*(?::|=(?!=))\s*(['"])([^'"]+)\1/g
+  for (const match of data.matchAll(formatPattern)) {
+    if (registeredInteractiveFormats.has(match[2])) return match[2]
+  }
+
+  return inferInteractiveTypeFromHelpers(data)
+}
+
+/**
+ * Reconnaît les helpers qui créent un composant spécialisé. Ils ont priorité
+ * sur le repli mathlive, car les anciens exercices ne transmettaient pas
+ * toujours leur format à handleAnswers.
+ */
+function inferInteractiveTypeFromHelpers(data) {
+  const helperFormats = [
+    {
+      pattern: /\bremplisLesBlancs\s*\(/,
+      format: 'fill-in-the-blank',
+    },
+    {
+      pattern:
+        /\b(?:AddTabPropMathlive|AddTabDbleEntryMathlive|creeTableauMathliveElement)\s*\(/,
+      format: 'tableau-mathlive',
+    },
+  ]
+
+  const firstHelper = helperFormats
+    .map(({ pattern, format }) => ({ index: data.search(pattern), format }))
+    .filter(({ index }) => index >= 0)
+    .sort((a, b) => a.index - b.index)[0]
+
+  return firstHelper?.format ?? ''
+}
+
 async function readInfos(dirPath, contexts) {
   const files = await fs.readdir(dirPath)
   await Promise.all(
@@ -174,13 +238,11 @@ function extractInfos(
         const matchInteractif = data.match(
           /export const interactifReady = (.*)/,
         )
-        const matchInteractifType = data.match(
-          /export const interactifType = (.*)/,
-        )
+        const interactiveFormat = extractInteractiveType(data)
         if (matchInteractif && matchInteractif[1] === 'true') {
           infos.features.interactif = {
             isActive: true,
-            type: matchInteractifType?.[1] || '',
+            type: interactiveFormat || 'mathlive',
           }
         } else {
           infos.features.interactif = {
@@ -266,13 +328,11 @@ function extractInfos(
         const matchInteractif = data.match(
           /export const interactifReady = (.*)/,
         )
-        const matchInteractifType = data.match(
-          /export const interactifType = (.*)/,
-        )
+        const interactiveFormat = extractInteractiveType(data)
         if (matchInteractif && matchInteractif[1] === 'true') {
           infos.features.interactif = {
             isActive: true,
-            type: matchInteractifType?.[1] || '',
+            type: interactiveFormat || 'mathlive',
           }
         } else {
           infos.features.interactif = {

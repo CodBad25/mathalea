@@ -6,7 +6,6 @@ import Exercice from './Exercice'
 // export const refs = [{'fr-fr',['ref française à renseigner']},{'fr-ch', ['ref suisse à renseigner]}]
 
 export const interactifReady = true
-export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 
@@ -46,7 +45,7 @@ export default class ExerciceBrevet
 
   nouvelleVersion() {
     if (this.versionAleatoire != null) {
-      for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 30; ) {
+      for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 30;) {
         if (this.sup) this.versionOriginale()
         else this.versionAleatoire(i)
         if (this.questionJamaisPosee(i, String(this.correction))) {

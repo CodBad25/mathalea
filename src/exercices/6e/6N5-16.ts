@@ -10,7 +10,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Compléter l'échiquier avec des résultats intermédiaires"
 export const interactifReady = true
-export const interactifType = 'echiquier-probleme'
 export const dateDePublication = '15/08/2026'
 
 /**

@@ -8,7 +8,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Résoudre un problème avec une division'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/10/2024'
 /**
  * @author Gilles Mora

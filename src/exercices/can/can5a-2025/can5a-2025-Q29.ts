@@ -4,7 +4,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un produit astucieusement'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a3w3b'
 export const refs = {
   'fr-fr': [],

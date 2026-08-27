@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Fraction restante'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '3422i'
 export const refs = {
   'fr-fr': [],

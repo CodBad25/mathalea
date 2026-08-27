@@ -1,7 +1,7 @@
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -17,7 +17,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 export const titre =
   "Calculer les coordonnées du point moyen d'un nuage de points"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '06/07/2026'
 

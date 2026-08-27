@@ -30,7 +30,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const titre = 'Représenter graphiquement une fonction affine'
 export const dateDeModifImportante = '06/07/2026'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * @author Stéphane Guyon (mise à jour avec les cas Gilles Mora + figure interactive Rémi Angot)

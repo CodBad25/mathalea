@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une fréquence'
@@ -49,7 +49,16 @@ La fréquence d'apparition de « ${texteItalique(cote)} » est : $\\dfrac{\\text
 
   versionOriginale: () => void = () => {
     this.appliquerLesValeurs([
-      'pile', 'pile', 'face', 'pile', 'face', 'face', 'face', 'face', 'pile', 'face',
+      'pile',
+      'pile',
+      'face',
+      'pile',
+      'face',
+      'face',
+      'face',
+      'face',
+      'pile',
+      'face',
     ])
   }
 

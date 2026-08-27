@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Ordre de grandeur'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '8f99d'
 export const refs = {
   'fr-fr': [],
@@ -58,7 +58,7 @@ export default class Can2025CE1Q8 extends ExerciceCan {
     this.correction =
       monQcm.texteCorr +
       `La durée possible ${c} est de $${miseEnEvidence(texNombre(a, 1))}$ ${b}.`
-      this.canEnonce= `Coche la durée possible ${c}.`
+    this.canEnonce = `Coche la durée possible ${c}.`
     this.canReponseACompleter = monQcm.texte
   }
 

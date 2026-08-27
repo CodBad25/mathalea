@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Donner la mesure d'un angle à partir des cosinus et sinus "
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/11/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

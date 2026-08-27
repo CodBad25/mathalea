@@ -35,7 +35,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre =
   'Reconnaitre des triangles égaux dans différentes configurations'

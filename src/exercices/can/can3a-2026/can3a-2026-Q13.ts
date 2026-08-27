@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
@@ -8,6 +7,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
@@ -15,7 +15,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   "Calculer un côté de l'angle droit dans un triangle rectangle"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'pp1p2'
 export const refs = {
   'fr-fr': [],

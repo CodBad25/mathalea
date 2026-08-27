@@ -26,10 +26,10 @@ export const titre = 'Simplifier des expressions exponentielles'
 export const dateDePublication = '02/07/2024'
 export const dateDeModifImportante = '20/10/2025'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const uuid = 'cb7d9'
 export const refs = {
-  'fr-fr': ['1AN30-2','TSA3-20', 'TCA7-20'],
+  'fr-fr': ['1AN30-2', 'TSA3-20', 'TCA7-20'],
   'fr-ch': [],
 }
 
@@ -68,7 +68,6 @@ export default class SimplifierExponentielles extends Exercice {
       this.nbQuestions > 1
         ? 'Simplifier les expressions suivantes.'
         : "Simplifier l'expression suivante."
-    this.interactifType = this.sup3 ? 'qcm' : 'mathLive'
     const listeTypeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup2,
       min: 1,
@@ -94,7 +93,7 @@ export default class SimplifierExponentielles extends Exercice {
     if (this.sup >= 2) {
       this.consigne = 'Soit $x$ un réel. ' + this.consigne
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let propQCM1 = ''
       let propQCM2 = ''
       let propQCM3 = ''
@@ -162,7 +161,7 @@ export default class SimplifierExponentielles extends Exercice {
           texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${calcul.result}$`
           answer = calcul.result.toString()
 
-          if (this.interactifType === 'qcm') {
+          if (this.sup3) {
             propQCM1 = `$${new Mul(e1, edist2).result.toString()}$`
             propQCM2 = `$${new Mul(edist3, e2).result.toString()}$`
             propQCM3 = `$${new Mul(edist4, edistract0).result.toString()}$`
@@ -193,7 +192,7 @@ export default class SimplifierExponentielles extends Exercice {
           texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${calcul.result}$`
           answer = calcul.result.toString()
 
-          if (this.interactifType === 'qcm') {
+          if (this.sup3) {
             this.autoCorrection[i] = {}
             this.autoCorrection[i].enonce = `${texte}\n`
             if (this.sup === 1) {
@@ -265,7 +264,7 @@ export default class SimplifierExponentielles extends Exercice {
           texteCorr += `<br>$${lettreDepuisChiffre(i + 1)} = ${calculStep.step}$`
           texteCorr += `<br>$${lettreDepuisChiffre(i + 1)} = ${calculStep.result}$`
           answer = calculStep.result.toString()
-          if (this.interactifType === 'qcm') {
+          if (this.sup3) {
             this.autoCorrection[i] = {}
             this.autoCorrection[i].enonce = `${texte}\n`
             if (this.sup === 1) {
@@ -383,7 +382,7 @@ export default class SimplifierExponentielles extends Exercice {
           }
           answer = add3.result.toString()
 
-          if (this.interactifType === 'qcm') {
+          if (this.sup3) {
             this.autoCorrection[i] = {}
             this.autoCorrection[i].enonce = `${texte}\n`
             if (this.sup === 1) {
@@ -452,7 +451,7 @@ export default class SimplifierExponentielles extends Exercice {
           }
           answer = result.result.toString()
 
-          if (this.interactifType === 'qcm') {
+          if (this.sup3) {
             this.autoCorrection[i] = {}
             this.autoCorrection[i].enonce = `${texte}\n`
             if (this.sup === 1) {
@@ -540,7 +539,7 @@ export default class SimplifierExponentielles extends Exercice {
           texteCorr += `<br>$${lettreDepuisChiffre(i + 1)} = ${calcul2.result}$`
           answer = calcul2.result.toString()
 
-          if (this.interactifType === 'qcm') {
+          if (this.sup3) {
             this.autoCorrection[i] = {}
             this.autoCorrection[i].enonce = `${texte}\n`
             if (this.sup === 1) {
@@ -611,7 +610,7 @@ export default class SimplifierExponentielles extends Exercice {
           texteCorr += `<br>$${lettreDepuisChiffre(i + 1)} = ${calcul2.result}$`
           answer = calcul2.result.toString()
 
-          if (this.interactifType === 'qcm') {
+          if (this.sup3) {
             if (this.sup === 1) {
               distract2 = new Trinome(0, 0, alea1 * alea2 - alea3)
               distract3 = new Trinome(0, 0, alea1 + alea2 + alea3)
@@ -649,7 +648,7 @@ export default class SimplifierExponentielles extends Exercice {
           break
         }
       }
-      if (this.interactifType === 'qcm') {
+      if (this.sup3) {
         this.autoCorrection[i] = {}
         this.autoCorrection[i].enonce = `${texte}\n`
         this.autoCorrection[i].propositions = [
@@ -691,7 +690,7 @@ export default class SimplifierExponentielles extends Exercice {
         texte = "Simplifier l'expression :<br>" + texte
       }
 
-      if (this.interactif && this.interactifType === 'mathLive') {
+      if (this.interactif && !this.sup3) {
         texte += ajouteChampTexteMathLive(
           this,
           i,

@@ -16,7 +16,6 @@ import {
 
 export const titre = 'Factoriser avec les identités remarquables'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Factoriser en utilisant les 3 identités remarquables

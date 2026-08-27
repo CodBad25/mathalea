@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Effectuer une conversion d'aires"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6c739'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

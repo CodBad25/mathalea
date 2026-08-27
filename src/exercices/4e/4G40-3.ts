@@ -4,7 +4,7 @@ export const titre = 'Exprimer le cosinus en fonction des côtés du triangle'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '23/09/2025'
 export const uuid = '86cd4'
 export const refs = {

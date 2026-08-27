@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -6,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Ecriture décimale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343q'
 export const refs = {
   'fr-fr': [],

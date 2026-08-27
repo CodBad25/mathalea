@@ -18,7 +18,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Lire l'heure"
 export const dateDePublication = '4/11/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

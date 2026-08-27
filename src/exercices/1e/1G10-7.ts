@@ -7,6 +7,7 @@ import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angle, angleOriente } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -20,9 +21,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Utiliser la formule d'Al-Kashi"
 export const dateDePublication = '29/04/2025'
 
@@ -136,7 +136,17 @@ export default class ProduitScalaireAlKashi extends Exercice {
       const nommeABCcours = nommePolygone(ABC, 'ABC', 0.4)
       const codeAngleA = codageAngle(B, A, C, 1, '', 'red', 1, 1, 'red')
       const codeAngleB = codageAngle(A, B, C, 1, '', 'green', 1, 1, 'green')
-      const codeAngleC = codageAngle(B, C, A, 1, '', bleuMathalea, 1, 1, bleuMathalea)
+      const codeAngleC = codageAngle(
+        B,
+        C,
+        A,
+        1,
+        '',
+        bleuMathalea,
+        1,
+        1,
+        bleuMathalea,
+      )
       objetsC.push(
         ABC,
         nommeABCcours,

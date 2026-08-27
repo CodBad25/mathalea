@@ -16,7 +16,7 @@ export const titre = 'Calculer avec le logarithme décimal'
 export const dateDePublication = '4/5/2024'
 export const uuid = '9cd25'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
   'fr-fr': ['TTE-10'],
   'fr-ch': [],
@@ -50,7 +50,7 @@ export default class ExerciceCalculsAvecLog extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const listeFacteurs = [

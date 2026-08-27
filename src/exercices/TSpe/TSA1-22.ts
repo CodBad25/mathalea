@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -11,7 +11,6 @@ export const titre =
   'Calculer des limites simples de suites par somme ou quotient'
 export const dateDePublication = '03/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '70151'
 export const refs = {

@@ -22,7 +22,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Écrire une relation de Thalès'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 /**
  * Relation de Thalès

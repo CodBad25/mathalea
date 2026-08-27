@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un produit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'o93lm'
 export const refs = {
   'fr-fr': [],
@@ -21,7 +21,7 @@ export let bQ21 = 15
 
 */
 export default class Can20266Q21 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = {
@@ -47,7 +47,6 @@ export default class Can20266Q21 extends ExerciceCan {
 
     this.correction = `$${a}\\times${b} =${miseEnEvidence(texNombre(a * b, 0))}$`
 
-   
     this.canEnonce = ''
   }
 

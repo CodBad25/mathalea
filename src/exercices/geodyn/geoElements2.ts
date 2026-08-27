@@ -3,7 +3,6 @@ export const titre =
   'Tracer segment, droite et demi-droite (depuis description)'
 export const dateDePublication = '29/01/2024'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const refs = {
   'fr-fr': ['elements2'],

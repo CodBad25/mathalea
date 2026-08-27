@@ -1,24 +1,24 @@
-import Exercice from '../Exercice'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import Exercice from '../Exercice'
 
-import { texNombre } from '../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
+import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
+import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { sp } from '../../lib/outils/outilString'
 export const titre =
   "Calculer des probabilités avec des unions et intersections d'événements"
 export const dateDePublication = '25/05/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  *
  * @author Gilles Mora

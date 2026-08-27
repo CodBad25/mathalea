@@ -2,6 +2,7 @@ import Figure from 'apigeom/src/Figure'
 import type Decimal from 'decimal.js'
 import seedrandom from 'seedrandom'
 import type { IExercice, IExerciceSimple } from '../lib/types'
+import { attachExerciseCustomCallbacks } from '../lib/customElements/MetaCustomElement'
 import { CRC32 } from '../modules/crc32'
 import FractionEtendue from '../modules/FractionEtendue'
 import type { IFractionEtendue } from '../modules/FractionEtendue.type'
@@ -36,6 +37,7 @@ export function exportedNouvelleVersionWrapper(
   this.reinit()
   seedrandom(this.seed, { global: true })
   this.nouvelleVersion(numeroExercice, numeroQuestion)
+  attachExerciseCustomCallbacks(this)
   this.checkSum = CRC32.hexQuestions(this.listeQuestions)
 }
 

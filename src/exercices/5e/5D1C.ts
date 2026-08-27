@@ -3,7 +3,7 @@ export const titre = 'Lire un diagramme en bâtons'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '9926a'
 export const refs = {
   'fr-fr': ['5D1C', 'BP1AUTO026'],

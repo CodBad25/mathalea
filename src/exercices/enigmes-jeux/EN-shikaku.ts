@@ -20,7 +20,6 @@ export const dateDePublication = '31/07/2024'
 export const dateDeModifImportante = '03/09/2024'
 export const titre = 'Résoudre une grille de Shikaku'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /** Résoudre une grille de Shikaku
  * @author Éric Elter

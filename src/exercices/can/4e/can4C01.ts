@@ -6,7 +6,7 @@ import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser les priorités opératoires avec des relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

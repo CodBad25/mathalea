@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Compléter une multiplication'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b0a02'
 export const refs = {
   'fr-fr': [],

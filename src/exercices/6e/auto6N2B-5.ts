@@ -12,7 +12,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const titre =
   'Restituer, de manière automatique, des équivalences sur les fractions décimales'
 export const dateDePublication = '08/06/2025'

@@ -33,7 +33,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre une équation trigonométrique dans $[0;2\\pi[$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '08/05/2026'
 export const uuid = 'a7c64'
 export const refs = {
@@ -537,7 +537,7 @@ export default class ResoudreEquationTrigoDansIntervalle extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const question = buildQuestion(Number(types[i]), Number(functionTypes[i]))
       const equation = texEquation(question)
       const expectedAnswer = texSolutionSet(question.solutions)

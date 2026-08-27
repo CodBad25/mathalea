@@ -15,7 +15,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer un vecteur non nul orthogonal à deux vecteurs'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '04/05/2026'
 export const uuid = 'a7f28'
 export const refs = {

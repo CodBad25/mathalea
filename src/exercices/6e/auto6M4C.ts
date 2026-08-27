@@ -8,7 +8,6 @@ import Exercice from '../Exercice'
 export const dateDePublication = '02/08/2025'
 export const titre = 'Choisir les bonnes unités de mesure de durées courtes'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 /**
  * Choisir les bonnes unités de mesure de durées courtes

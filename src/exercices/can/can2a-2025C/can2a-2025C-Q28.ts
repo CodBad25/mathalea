@@ -4,9 +4,9 @@ import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Donner le nombre de solutions d\'une équation'
+export const titre = "Donner le nombre de solutions d'une équation"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'mmyid'
 export const refs = {
   'fr-fr': [],
@@ -18,21 +18,21 @@ export const refs = {
 
 */
 export default class Can2a2025CQ28 extends ExerciceCan {
- enonce(a?: number, b?: number, isVrai?: boolean): void {
+  enonce(a?: number, b?: number, isVrai?: boolean): void {
     if (a == null || b == null || isVrai == null) {
       a = randint(2, 9)
       b = randint(1, 9, [a])
       isVrai = choice([true, false])
     }
 
-    // Si isVrai est true, on utilise (-x + b) => la racine b est positive, 
+    // Si isVrai est true, on utilise (-x + b) => la racine b est positive,
     // la seule racine négative est -a. La proposition est donc Vraie.
-    // Si isVrai est false, on utilise (-x - b) => la racine -b est négative, 
+    // Si isVrai est false, on utilise (-x - b) => la racine -b est négative,
     // les racines négatives sont -a et -b. La proposition est donc Fausse.
     const valeurB = isVrai ? b : -b
     const facteur2 = `(-x${ecritureAlgebrique(valeurB)})`
     const racine2 = valeurB // Car -x + valeurB = 0 => x = valeurB
-    
+
     const enonce = `L'équation $(x^2-${a * a})${facteur2}=0$ admet une unique solution sur $]-\\infty\\,;\\,0[$.`
 
     this.formatInteractif = 'qcm'

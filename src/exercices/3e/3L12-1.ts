@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Développer (a-b)(a+b)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const dateDeModifImportante = '26/02/2023' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

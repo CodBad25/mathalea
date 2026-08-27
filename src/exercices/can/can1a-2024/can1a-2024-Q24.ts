@@ -1,14 +1,14 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { randint } from '../../../modules/outils'
 import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver un axe de symétrie'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '34c25'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

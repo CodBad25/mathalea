@@ -9,7 +9,7 @@ import Exercice from '../../Exercice'
 import { bleuMathalea } from '../../../lib/colors'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Comparer deux fractions (dénominateurs multiples)'
 export const dateDePublication = '04/11/2022'
 export const dateDeModifImportante = '12/10/2024'

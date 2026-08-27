@@ -2,7 +2,6 @@ import ExerciceCalculsProprietesLn from '../TT/TTE-6'
 export const titre = 'Calculer en utilisant les propriétés des logarithmes'
 export const dateDePublication = '04/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de CanTspeE01 pour les auto 1er

@@ -11,7 +11,7 @@ export const titre = 'Déterminer une probabilité dans un tableau d’effectifs
 export const dateDePublication = '06/07/2022'
 export const dateDeModifImportante = '13/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

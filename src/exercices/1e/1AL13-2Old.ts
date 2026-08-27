@@ -17,7 +17,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre = 'Étudier une suite arithmético-géométrique'
 export const dateDePublication = '30/11/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Étudier une suite arithmético-géométrique
@@ -40,7 +39,7 @@ export default class SuitesArithmeticoG extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a, u0, b, k

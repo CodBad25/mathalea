@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Division euclidienne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4ed52'
 export const refs = {
   'fr-fr': [],

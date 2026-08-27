@@ -23,7 +23,7 @@ export const dateDeModifImportante = '19/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const titre =
   'Additionner ou soustraire deux fractions positives (dénominateurs multiples)'
 /**
@@ -173,7 +173,6 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
       listeTypeDeQuestions = combinaisonListes(['+', '-'], this.nbQuestions)
     }
 
-    this.interactifType = qcm ? 'qcm' : 'mathLive'
 
     for (
       let i = 0, a, b, c, d, k, s, ordreDesFractions, texte, texteCorr, cpt = 0;
@@ -238,7 +237,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         if (
           //! context.isAmc ||
           this.interactif &&
-          this.interactifType === 'qcm'
+          qcm
         ) {
           /** ***************** Choix des réponses du QCM ***********************************/
           const propositions = buildFractionQcmPropositions(
@@ -340,7 +339,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         }
 
         if (this.interactif) {
-          if (this.interactifType === 'qcm' && qcmPropositionsValides) {
+          if (qcm && qcmPropositionsValides) {
             const props = propositionsQcm(this, i)
             texte += '<br>' + props.texte
           } else {
@@ -368,7 +367,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         if (
           //! context.isAmc ||
           this.interactif &&
-          this.interactifType === 'qcm'
+          qcm
         ) {
           const propositions = buildFractionQcmPropositions(
             b === d
@@ -460,7 +459,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         }
 
         if (this.interactif) {
-          if (this.interactifType === 'qcm' && qcmPropositionsValides) {
+          if (qcm && qcmPropositionsValides) {
             const props = propositionsQcm(this, i)
             texte += '<br>' + props.texte
           } else {

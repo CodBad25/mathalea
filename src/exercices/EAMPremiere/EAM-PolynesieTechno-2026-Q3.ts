@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Déterminer l'équation d'une droite passant par l'origine"
@@ -92,18 +92,18 @@ export default class AutoQ3PolynesieTechno2026 extends ExerciceQcmA {
     const cas: [number, number][] = [
       [2, 4],
       [2, 6],
-       [2, 8],
-        [2, 10],
-         [2, 12],
+      [2, 8],
+      [2, 10],
+      [2, 12],
       [3, 6],
-       [3, 3],
+      [3, 3],
       [3, 9],
-       [3, 12],
-       [4, 4],
+      [3, 12],
+      [4, 4],
       [4, 8],
-       [4, 12],
-       [5, 10],
-        [5, 5],
+      [4, 12],
+      [5, 10],
+      [5, 5],
     ]
     let compteur = 0
     do {

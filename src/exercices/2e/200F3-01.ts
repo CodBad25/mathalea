@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lecture graphique du signe d'une fonction affine"
 // export const interactifReady = false
-// export const interactifType = 'mathLive'
+//
 
 export const dateDePublication = '11/07/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '18/02/2025'
@@ -61,7 +61,7 @@ export default class LectureSigneAffine extends Exercice {
       melange: 4,
       shuffle: true,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (Number(listeTypeDeQuestion[i])) {
         case 1: // coefficient nul
           a = 0

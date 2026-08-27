@@ -131,7 +131,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     'conserve toutes les propositions du format QCM %s',
     (formatInteractif) => {
       const exercice = exercise({
-        interactifType: formatInteractif,
+        formatInteractif: formatInteractif,
         autoCorrection: [
           {
             enonce: 'Choisir.',
@@ -158,7 +158,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     },
   )
 
-  it('détecte un QCM moderne même sans interactifType au niveau exercice', () => {
+  it('détecte un QCM moderne même sans formatInteractif au niveau exercice', () => {
     const exercice = exercise({
       autoCorrection: [
         {
@@ -180,7 +180,7 @@ describe('inférence AMC depuis formatInteractif', () => {
   it('choisit qcmMult si une question quelconque a plusieurs bonnes réponses', () => {
     const exercice = exercise({
       nbQuestions: 2,
-      interactifType: 'qcm',
+      formatInteractif: 'qcm',
       listeQuestions: ['Q1', 'Q2'],
       listeCorrections: ['C1', 'C2'],
       autoCorrection: [
@@ -211,7 +211,7 @@ describe('inférence AMC depuis formatInteractif', () => {
   it('ne laisse pas disparaître une question QCM sans autoCorrection', () => {
     const exercice = exercise({
       nbQuestions: 2,
-      interactifType: 'qcm',
+      formatInteractif: 'qcm',
       listeQuestions: ['Q1', 'Q2'],
       listeCorrections: ['C1', 'C2'],
       autoCorrection: [
@@ -239,7 +239,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     'infère AMCNum pour une réponse numérique au format %s',
     (formatInteractif) => {
       const exercice = exercise({
-        interactifType: 'mathLive',
+        formatInteractif: 'mathLive',
         autoCorrection: [
           {
             formatInteractif,
@@ -257,7 +257,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('réduit une fraction égale entière avant de dimensionner AMCNum', () => {
     const exercice = exercise({
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathalea-mathfield',
@@ -279,7 +279,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('utilise AMCOpen pour une fractionEgale non entière', () => {
     const exercice = exercise({
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathalea-mathfield',
@@ -301,7 +301,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('utilise AMCOpen pour une option de comparaison non transposable', () => {
     const exercice = exercise({
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathalea-mathfield',
@@ -322,7 +322,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('infère AMCNum en notation scientifique avec mantisse et exposant', () => {
     const exercice = exercise({
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathalea-mathfield',
@@ -352,7 +352,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('refuse une écriture scientifique dont la mantisse est invalide', () => {
     const exercice = exercise({
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathalea-mathfield',
@@ -373,7 +373,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('utilise AMCOpen pour une comparaison spécialisée inconnue', () => {
     const exercice = exercise({
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathalea-mathfield',
@@ -400,7 +400,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     const exercice = exercise({
       amcReady: true,
       amcType: 'AMCNum',
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [source],
     })
 
@@ -415,7 +415,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     const exercice = exercise({
       amcReady: true,
       amcType: 'AMCNum',
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathlive',
@@ -434,7 +434,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     'infère AMCHybride pour plusieurs champs numériques au format %s',
     (formatInteractif) => {
       const exercice = exercise({
-        interactifType: formatInteractif,
+        formatInteractif: formatInteractif,
         autoCorrection: [
           {
             formatInteractif,
@@ -460,7 +460,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('nomme les grilles d’un tableau par ligne et colonne', () => {
     const exercice = exercise({
-      interactifType: 'tableau-mathlive',
+      formatInteractif: 'tableau-mathlive',
       autoCorrection: [
         {
           formatInteractif: 'tableau-mathlive',
@@ -483,7 +483,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('refuse une inférence numérique partielle dans un multi-mathfield', () => {
     const exercice = exercise({
-      interactifType: 'multi-mathfield',
+      formatInteractif: 'multi-mathfield',
       autoCorrection: [
         {
           formatInteractif: 'multi-mathfield',
@@ -502,7 +502,7 @@ describe('inférence AMC depuis formatInteractif', () => {
 
   it('conserve un barème multichamp équivalent au barème indépendant', () => {
     const exercice = exercise({
-      interactifType: 'multi-mathfield',
+      formatInteractif: 'multi-mathfield',
       autoCorrection: [
         {
           formatInteractif: 'multi-mathfield',
@@ -536,7 +536,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     },
   ])('utilise AMCOpen pour un $label multichamp', ({ extra }) => {
     const exercice = exercise({
-      interactifType: 'multi-mathfield',
+      formatInteractif: 'multi-mathfield',
       autoCorrection: [
         {
           formatInteractif: 'multi-mathfield',
@@ -559,7 +559,7 @@ describe('inférence AMC depuis formatInteractif', () => {
       nbQuestions: 2,
       amcReady: true,
       amcType: 'qcmMono',
-      interactifType: 'qcm',
+      formatInteractif: 'qcm',
       listeQuestions: ['Énoncé 1', 'Énoncé 2'],
       listeCorrections: ['Correction 1', 'Correction 2'],
       autoCorrection: [
@@ -613,9 +613,58 @@ describe('inférence AMC depuis formatInteractif', () => {
     )
   })
 
+  it('conserve le QCM quand les autres questions nécessitent AMCOpen', () => {
+    const exercice = exercise({
+      nbQuestions: 2,
+      listeQuestions: ['Choisir la réponse', 'Justifier la réponse'],
+      listeCorrections: ['La réponse B convient.', 'Justification attendue.'],
+      autoCorrection: [
+        {
+          enonce: 'Choisir la réponse',
+          formatInteractif: 'mathalea-qcm',
+          propositions: [
+            { texte: 'A', statut: false },
+            { texte: 'B', statut: true },
+          ],
+        },
+        {
+          enonce: 'Justifier la réponse',
+          formatInteractif: 'mathalea-textfield',
+          valeur: { reponse: { value: 'car B' } },
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCHybride')
+    expect(exercice.autoCorrectionAMC).toHaveLength(2)
+    expect(exercice.autoCorrectionAMC[0].propositions).toEqual([
+      expect.objectContaining({
+        type: 'qcmMono',
+        propositions: [
+          expect.objectContaining({ statut: false }),
+          expect.objectContaining({ statut: true }),
+        ],
+      }),
+    ])
+    expect(exercice.autoCorrectionAMC[1].propositions).toEqual([
+      expect.objectContaining({
+        type: 'AMCOpen',
+        propositions: [
+          expect.objectContaining({
+            texte: 'Justification attendue.',
+            statut: 3,
+            enonce: 'Justifier la réponse',
+          }),
+        ],
+      }),
+    ])
+  })
+
   it('ne choisit pas arbitrairement une réponse parmi plusieurs valeurs acceptées', () => {
     const exercice = exercise({
-      interactifType: 'mathLive',
+      formatInteractif: 'mathLive',
       autoCorrection: [
         {
           formatInteractif: 'mathlive',
@@ -635,7 +684,7 @@ describe('inférence AMC depuis formatInteractif', () => {
       valeur: { reponse: { value: '[1,2]' } },
     }
     const exercice = exercise({
-      interactifType: 'svg-selection',
+      formatInteractif: 'svg-selection',
       autoCorrection: [source],
     })
 
@@ -694,7 +743,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     'format-inconnu',
   ])('conserve le format non transposable %s sous forme AMCOpen', (format) => {
     const exercice = exercise({
-      interactifType: format,
+      formatInteractif: format,
       autoCorrection: [
         {
           formatInteractif: format,
@@ -739,7 +788,7 @@ describe('inférence AMC depuis formatInteractif', () => {
   it('rend le contrat fallback avec énoncé, zone de travail et cases de notation', () => {
     const exercice = exercise({
       id: 'FALLBACK',
-      interactifType: 'drag-and-drop',
+      formatInteractif: 'drag-and-drop',
       autoCorrection: [
         {
           formatInteractif: 'drag-and-drop',

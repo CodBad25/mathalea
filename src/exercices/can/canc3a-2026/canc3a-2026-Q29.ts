@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Enlever une centaine'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5aece'
 export const refs = {
   'fr-fr': [],

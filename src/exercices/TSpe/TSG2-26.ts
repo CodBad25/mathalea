@@ -13,7 +13,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer la distance d'un point à une droite"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '27/03/2025'
 
@@ -38,7 +37,7 @@ export default class DistancePointDroite extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       // On choisit la droite (d) passant par A et de vecteur directeur u
       // On choisit le point B qui n'est pas sur (d)

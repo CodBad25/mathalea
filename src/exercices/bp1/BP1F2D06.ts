@@ -2,7 +2,7 @@ import LireElementsCarac from '../1e/1AL23-50'
 export const titre =
   "Utiliser la représentation graphique d'un polynôme du second degré"
 export const interactifReady = true
-export const interactifType = ['mathLive', 'qcm']
+
 export const dateDePublication = '30/07/2026'
 
 /**

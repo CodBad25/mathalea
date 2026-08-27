@@ -1,10 +1,10 @@
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Complément à 100'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343j'
 export const refs = {
   'fr-fr': [],

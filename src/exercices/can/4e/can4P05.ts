@@ -1,16 +1,16 @@
-import { context } from '../../../modules/context'
 import { droiteParPointEtPente } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Reconnaitre sur un graphique une situation de proportionnalité ou de non proportionnalité'
 export const dateDePublication = '23/01/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

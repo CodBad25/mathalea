@@ -18,7 +18,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Connaître les multiples égalités d'une unité d'aire"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '04/08/2025'
 
 /**

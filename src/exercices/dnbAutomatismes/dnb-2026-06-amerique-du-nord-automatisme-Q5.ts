@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const titre = "Lire les coordonnées d'un point dans un repère"
 export const dateDePublication = '06/06/2026'
 

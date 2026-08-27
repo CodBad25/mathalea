@@ -1,7 +1,7 @@
 import DeriverUPlusV from '../1e/1AN14-4'
 export const titre = 'Dériver une fonction du type $u + v$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

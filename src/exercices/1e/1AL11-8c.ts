@@ -1,15 +1,14 @@
-import { choice } from '../../lib/outils/arrayOutils'
 import { texteGras } from '../../lib/format/style'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceSimple from '../ExerciceSimple'
 import { randint } from '../../modules/outils'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Calculer la somme des termes d'une suite géométrique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '28/12/2022'
 

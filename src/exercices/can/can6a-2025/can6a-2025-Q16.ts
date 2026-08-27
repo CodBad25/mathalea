@@ -12,7 +12,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Comparer deux aires'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5e041'
 export const refs = {
   'fr-fr': [],

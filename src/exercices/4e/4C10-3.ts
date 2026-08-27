@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Multiplier deux entiers relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Effectuer une multiplication entre 2 nombres relatifs.

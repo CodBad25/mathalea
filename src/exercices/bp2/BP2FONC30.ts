@@ -1,7 +1,7 @@
 import Exercice2F111 from '../2e/2F22-1'
 export const titre = "Déterminer l'image d'un nombre par la fonction carrée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { Repere } from '../../../lib/2d/reperes'
 import { latex2d, Latex2d, TexteParPoint } from '../../../lib/2d/textes'
@@ -7,12 +6,12 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureAlgebrique, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Lire graphiquement la valeur de $a$ dans $ax^2+b$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '17/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

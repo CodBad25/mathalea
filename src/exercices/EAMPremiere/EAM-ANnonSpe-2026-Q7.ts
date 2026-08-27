@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Appliquer un pourcentage '
@@ -22,7 +22,13 @@ export const dateDePublication = '05/06/2026'
  *
  */
 export default class AutoQ7ANns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(total: number, pourcentage: number, dist1: number, dist2: number, dist3: number): void {
+  private appliquerLesValeurs(
+    total: number,
+    pourcentage: number,
+    dist1: number,
+    dist2: number,
+    dist3: number,
+  ): void {
     const sol = (total * pourcentage) / 100
     const coeff = pourcentage / 100 // Ex: 0.2, 0.3 ou 0.4
 
@@ -32,13 +38,13 @@ export default class AutoQ7ANns2026 extends ExerciceQcmA {
     // Modification de la formulation de la correction selon votre demande
     this.correction = `Calculer $${pourcentage}\\,\\%$ de $${total}$ revient à multiplier par $${texNombre(coeff, 1)}$.<br>`
     this.correction += `$${texNombre(coeff, 1)} \\times ${total} = ${sol}$<br>`
-    this.correction += `Il y a donc $${miseEnEvidence(texNombre(sol,0))}$ chocolats au lait dans la boîte.`
+    this.correction += `Il y a donc $${miseEnEvidence(texNombre(sol, 0))}$ chocolats au lait dans la boîte.`
 
     this.reponses = [
       `$${texNombre(sol, 0)}$`,
       `$${texNombre(dist1, 0)}$`,
       `$${texNombre(dist2, 0)}$`,
-      `$${texNombre(dist3, 0)}$`
+      `$${texNombre(dist3, 0)}$`,
     ]
   }
 
@@ -58,7 +64,7 @@ export default class AutoQ7ANns2026 extends ExerciceQcmA {
       // Mix dynamique des pourcentages (20, 30, 40) et des totaux (30, 40, 60, 70, 80)
       const pourcentage = choice([20, 30, 40])
       const total = choice([30, 40, 60, 70, 80])
-      
+
       const sol = (total * pourcentage) / 100
 
       // Génération des distracteurs adaptés
@@ -68,7 +74,6 @@ export default class AutoQ7ANns2026 extends ExerciceQcmA {
 
       this.appliquerLesValeurs(total, pourcentage, dist1, dist2, dist3)
       compteur++
-      
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 

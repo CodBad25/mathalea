@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre = "Vérifier la cohérence d'une loi de probabilité"
 export const dateDePublication = '18/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '2e408'
 
 export const refs = {

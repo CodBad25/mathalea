@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Indentifier les côtés d’un triangle rectangle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '24/07/2026'
 
 export const uuid = '40d57'

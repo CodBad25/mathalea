@@ -1,6 +1,6 @@
 import Transformations from '../../6e/_Transformations'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Trouver l’image d’un point par une  transformation 3e'

@@ -1,6 +1,9 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -10,10 +13,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer un taux global d\'évolution '
+export const titre = "Calculer un taux global d'évolution "
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -22,8 +25,14 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ6AGs2026 extends ExerciceQcmA {
-  private appliquerLesValeurs(s1: number, p1: number, s2: number, p2: number): void {
-    const fmt = (v: number) => texNombre(v, Math.round(v * 100) % 10 === 0 ? 1 : 2)
+  private appliquerLesValeurs(
+    s1: number,
+    p1: number,
+    s2: number,
+    p2: number,
+  ): void {
+    const fmt = (v: number) =>
+      texNombre(v, Math.round(v * 100) % 10 === 0 ? 1 : 2)
     const mot = (s: number) => (s > 0 ? 'augmente' : 'baisse')
 
     const c1 = 1 + (s1 * p1) / 100
@@ -63,12 +72,12 @@ export default class AutoQ6AGs2026 extends ExerciceQcmA {
 
     // Rédaction de la correction avec la nomenclature officielle
     this.correction = `On traduit chaque variation par un coefficient multiplicateur :<br><br>`
-    this.correction += `$\\bullet$ ${mot(s1)} de $${p1}\\,\\%$ : $CM_1 = 1 ${s1 > 0 ? '+' : '-'} ${texNombre(p1/100,2)} = ${fmt(c1)}$<br>`
-    this.correction += `$\\bullet$ ${mot(s2)} de $${p2}\\,\\%$ : $CM_2 = 1 ${s2 > 0 ? '+' : '-'} ${texNombre(p2/100,2)} = ${fmt(c2)}$<br><br>`
-    
+    this.correction += `$\\bullet$ ${mot(s1)} de $${p1}\\,\\%$ : $CM_1 = 1 ${s1 > 0 ? '+' : '-'} ${texNombre(p1 / 100, 2)} = ${fmt(c1)}$<br>`
+    this.correction += `$\\bullet$ ${mot(s2)} de $${p2}\\,\\%$ : $CM_2 = 1 ${s2 > 0 ? '+' : '-'} ${texNombre(p2 / 100, 2)} = ${fmt(c2)}$<br><br>`
+
     this.correction += `Le coefficient multiplicateur global $CM_G$ des deux variations est :<br>`
     this.correction += `$CM_G = CM_1 \\times CM_2 = ${fmt(c1)} \\times ${fmt(c2)} = ${fmt(C)}$<br><br>`
-    
+
     this.correction += `Le taux d'évolution global $T_g$ est donc :<br>`
     this.correction += `$T_g = CM_G - 1 = ${fmt(C)} - 1 = ${fmt(C - 1)}$<br><br>`
 
@@ -96,7 +105,10 @@ export default class AutoQ6AGs2026 extends ExerciceQcmA {
     let compteur = 0
     do {
       const typeChoix = choice([1, 2, 3])
-      let s1 = 1, p1 = 10, s2 = 1, p2 = 10
+      let s1 = 1,
+        p1 = 10,
+        s2 = 1,
+        p2 = 10
 
       if (typeChoix === 1) {
         // Double baisse : Calculs mentaux accessibles avec des dizaines

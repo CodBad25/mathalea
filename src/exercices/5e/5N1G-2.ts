@@ -12,7 +12,6 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '21/07/2024'
 export const uuid = 'e2a95'

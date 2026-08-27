@@ -1,13 +1,12 @@
-
-import ExerciceCan from '../../ExerciceCan'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { context } from '../../../modules/context'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
-export const titre = 'Déterminer le signe d\'une puissance'
+import { context } from '../../../modules/context'
+import ExerciceCan from '../../ExerciceCan'
+export const titre = "Déterminer le signe d'une puissance"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4y4ea'
 export const refs = {
   'fr-fr': [],
@@ -19,7 +18,7 @@ export const refs = {
 
 */
 export default class Can1a2026Q7 extends ExerciceCan {
- enonce(a?: number, puiss?: number) {
+  enonce(a?: number, puiss?: number) {
     if (a == null || puiss == null) {
       const valeurs = choice([
         [-9, 2],
@@ -60,11 +59,10 @@ export default class Can1a2026Q7 extends ExerciceCan {
     this.question = question + qcm.texte
 
     this.correction = `$${ecritureParentheseSiNegatif(a)}^{-${puiss}}=\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^{${puiss}}}$<br>
-     Comme  $${ecritureParentheseSiNegatif(a)}^{${puiss}}$ est  ${!estPositif ? "négatif (puissance impaire d'un nombre négatif)" : a > 0 ? 'positif (puissance d\'un nombre positif)' : "positif (puissance paire d'un nombre négatif)"}, on en déduit que  $\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^{${puiss}}}$ est ${!estPositif ? 'négatif' : 'positif'}.<br>
+     Comme  $${ecritureParentheseSiNegatif(a)}^{${puiss}}$ est  ${!estPositif ? "négatif (puissance impaire d'un nombre négatif)" : a > 0 ? "positif (puissance d'un nombre positif)" : "positif (puissance paire d'un nombre négatif)"}, on en déduit que  $\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^{${puiss}}}$ est ${!estPositif ? 'négatif' : 'positif'}.<br>
     Ainsi, $${ecritureParentheseSiNegatif(a)}^{-${puiss}}$ est ${!estPositif ? `${texteEnCouleurEtGras('négatif')}` : `${texteEnCouleurEtGras('positif')}`}.`
     this.canEnonce = question
     this.canReponseACompleter = 'Entourer la réponse : POSITIF / NÉGATIF'
-
   }
 
   nouvelleVersion() {

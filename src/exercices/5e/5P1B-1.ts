@@ -1,7 +1,7 @@
 import Proportions from '../2e/2I10-2'
 export const titre = "Exprimer une proportion sous la forme d'un pourcentage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

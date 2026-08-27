@@ -7,7 +7,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Ajouter ou soustraire 1 ou 2'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '19/12/2025'

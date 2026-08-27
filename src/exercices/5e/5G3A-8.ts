@@ -20,8 +20,6 @@ import Exercice from '../Exercice'
 export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = true
-// remettre interactif_Ready à true qd l'exo sera refait avec apiGeom
-export const interactifType = 'points-cliquables'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

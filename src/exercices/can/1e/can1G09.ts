@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { cercleCentrePoint } from '../../../lib/2d/cercle'
 import { grille } from '../../../lib/2d/Grille'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -12,12 +11,13 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../../lib/outils/ecritures'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Associer un point à un réel sur un cercle trigonométrique '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '31/10/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

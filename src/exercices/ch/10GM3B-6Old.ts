@@ -19,7 +19,7 @@ export const titre =
 export const dateDePublication = '19/08/2025'
 export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '31e61'
 export const refs = {
   'fr-ch': ['NR'],

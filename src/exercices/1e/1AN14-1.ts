@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Dériver une fonction du type $\\lambda u$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ebd8a'
 export const refs = {
   'fr-fr': ['1AN14-1'], // remplace 1AN14-1a
@@ -59,7 +59,7 @@ class DerivationFonctionsUsuellesEtendue extends Exercice {
       nbQuestions: this.nbQuestions,
       listeOfCase: ['affine', 'monome', 'polynome3', 'inverse', 'racine'],
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let laFonction: string = ''
       let laDerivee: string = ''
       let df: string = ''

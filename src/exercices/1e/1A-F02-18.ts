@@ -20,7 +20,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
@@ -80,8 +80,8 @@ export default class Auto1AF2r extends ExerciceQcmA {
       const bx = bCoeff * xPoint
 
       detailCalcul = `$\\begin{aligned}    
-      f(${xPoint})&=${a}\\times ${ecritureParentheseSiNegatif(xPoint)}^2${bCoeff===0 ? ``:`${ecritureAlgebrique(bCoeff)}\\times ${ecritureParentheseSiNegatif(xPoint)}`}${ecritureAlgebrique(cCoeff)}\\\\
-     &=${ax2}${bCoeff===0 ? ``:`${ecritureAlgebrique(bx)}`}${cCoeff}\\\\
+      f(${xPoint})&=${a}\\times ${ecritureParentheseSiNegatif(xPoint)}^2${bCoeff === 0 ? `` : `${ecritureAlgebrique(bCoeff)}\\times ${ecritureParentheseSiNegatif(xPoint)}`}${ecritureAlgebrique(cCoeff)}\\\\
+     &=${ax2}${bCoeff === 0 ? `` : `${ecritureAlgebrique(bx)}`}${cCoeff}\\\\
      &=${texNombre(imageCalcul)}
      \\end{aligned}$`
 

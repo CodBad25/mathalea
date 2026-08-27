@@ -10,7 +10,6 @@ import Exercice from './../Exercice'
 export const titre = 'Reconnaître une situation de proportionnalité'
 export const dateDePublication = '12/08/2025'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * @author Éric Elter

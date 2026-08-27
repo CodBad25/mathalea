@@ -2,7 +2,6 @@ import NouvelleCaledonieDec20Exo1Q4 from '../QCMBrevet/A2020/NCD20E1Q4'
 
 export const titre = "Déterminer la moyenne d'une série (QCM)"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '12/4/2025'
 

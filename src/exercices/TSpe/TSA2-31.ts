@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -12,7 +12,7 @@ export const titre =
   'Calculer une limite en factorisant par le terme de plus haut degré'
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '37ce6'
 export const refs = {
   'fr-fr': ['TSA2-31', 'TCA2-31'],
@@ -45,15 +45,10 @@ function limitePuissance(puissance: number, sens: SensLimite): string {
   return sens === '+' || puissance % 2 === 0 ? '+\\infty' : '-\\infty'
 }
 
-function limitePolynome(
-  coefficients: number[],
-  sens: SensLimite,
-): string {
+function limitePolynome(coefficients: number[], sens: SensLimite): string {
   const degre = coefficients.length - 1
   const signePuissance = limitePuissance(degre, sens) === '+\\infty' ? 1 : -1
-  return coefficients[degre] * signePuissance > 0
-    ? '+\\infty'
-    : '-\\infty'
+  return coefficients[degre] * signePuissance > 0 ? '+\\infty' : '-\\infty'
 }
 
 function generePolynomeAvecIndetermination(): number[] {
@@ -173,10 +168,7 @@ export default class FactoriserPourCalculerUneLimite extends Exercice {
             limitePuissance(differenceDegres, sens) === '+\\infty' ? 1 : -1
           const signeQuotient =
             coefficientNumerateur * coefficientDenominateur > 0 ? 1 : -1
-          reponse =
-            signePuissance * signeQuotient > 0
-              ? '+\\infty'
-              : '-\\infty'
+          reponse = signePuissance * signeQuotient > 0 ? '+\\infty' : '-\\infty'
         }
 
         const facteurExterieur =

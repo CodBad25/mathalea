@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec des décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e2101'
 export const refs = {
   'fr-fr': [],

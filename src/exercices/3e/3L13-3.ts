@@ -35,7 +35,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Mettre en équation un problème et le résoudre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

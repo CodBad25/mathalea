@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer la norme d'un vecteur"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '29/01/2025'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

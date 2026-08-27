@@ -4,7 +4,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Répartition'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343p'
 export const refs = {
   'fr-fr': [],

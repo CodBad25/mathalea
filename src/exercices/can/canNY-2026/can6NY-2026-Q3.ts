@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer des sommes et des différences avec annee2 et annee1'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ff4cc'
 export const refs = {
   'fr-fr': [],

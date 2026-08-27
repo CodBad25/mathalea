@@ -1,7 +1,7 @@
 import SimplifierFractions from '../4e/4C24'
 export const titre = "Simplifier des fractions à l'aide des nombres premiers"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '28/09/2022'

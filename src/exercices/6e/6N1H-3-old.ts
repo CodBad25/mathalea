@@ -22,7 +22,6 @@ export const titre = 'Lire une abscisse décimale grâce à des zooms successifs
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '05/09/2024'
 /**

@@ -2,15 +2,8 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/view.eleve.can.2025.6e.test.ts ⚠️
  */
 
+import MetaExercice from '../../MetaExerciceCan'
 import Question1 from '../can6a-2025/can6a-2025-Q1'
-import Question2 from '../can6a-2025/can6a-2025-Q2'
-import Question3 from '../can6a-2025/can6a-2025-Q3'
-import Question4 from '../can6a-2025/can6a-2025-Q4'
-import Question5 from '../can6a-2025/can6a-2025-Q5'
-import Question6 from '../can6a-2025/can6a-2025-Q6'
-import Question7 from '../can6a-2025/can6a-2025-Q7'
-import Question8 from '../can6a-2025/can6a-2025-Q8'
-import Question9 from '../can6a-2025/can6a-2025-Q9'
 import Question10 from '../can6a-2025/can6a-2025-Q10'
 import Question11 from '../can6a-2025/can6a-2025-Q11'
 import Question12 from '../can6a-2025/can6a-2025-Q12'
@@ -21,6 +14,7 @@ import Question16 from '../can6a-2025/can6a-2025-Q16'
 import Question17 from '../can6a-2025/can6a-2025-Q17'
 import Question18 from '../can6a-2025/can6a-2025-Q18'
 import Question19 from '../can6a-2025/can6a-2025-Q19'
+import Question2 from '../can6a-2025/can6a-2025-Q2'
 import Question20 from '../can6a-2025/can6a-2025-Q20'
 import Question21 from '../can6a-2025/can6a-2025-Q21'
 import Question22 from '../can6a-2025/can6a-2025-Q22'
@@ -31,12 +25,18 @@ import Question26 from '../can6a-2025/can6a-2025-Q26'
 import Question27 from '../can6a-2025/can6a-2025-Q27'
 import Question28 from '../can6a-2025/can6a-2025-Q28'
 import Question29 from '../can6a-2025/can6a-2025-Q29'
+import Question3 from '../can6a-2025/can6a-2025-Q3'
 import Question30 from '../can6a-2025/can6a-2025-Q30'
-import MetaExercice from '../../MetaExerciceCan'
+import Question4 from '../can6a-2025/can6a-2025-Q4'
+import Question5 from '../can6a-2025/can6a-2025-Q5'
+import Question6 from '../can6a-2025/can6a-2025-Q6'
+import Question7 from '../can6a-2025/can6a-2025-Q7'
+import Question8 from '../can6a-2025/can6a-2025-Q8'
+import Question9 from '../can6a-2025/can6a-2025-Q9'
 
 export const titre = 'CAN 6e sujet 2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd6ee9'
 export const refs = {
   'fr-fr': ['can6a-2025'],

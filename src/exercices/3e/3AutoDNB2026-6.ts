@@ -11,7 +11,7 @@ import Question9 from '../dnbAutomatismes/dnb-2026-06-metropole-Q9'
 
 export const titre = 'Brevet - Métropole - Automatismes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '867be'
 export const refs = {
   'fr-fr': ['3AutoDNB2026-6'],

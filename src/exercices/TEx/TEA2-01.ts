@@ -8,7 +8,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer un PGCD avec l'algorithme d'Euclide. "
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/02/2025'
 /**
  * @author Stéphane Guyon */
@@ -41,7 +41,7 @@ export default class ExerciceEuclide extends Exercice {
     // const typeQuestionsDisponibles = ['type1']
     // const listeTypeQuestions = combinaisonListes(typeQuestionsDisponibles, this.nbQuestions)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       // Générer les nombres aléatoires pour l'algorithme d'Euclide

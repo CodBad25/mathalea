@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre des équations avec la fonction exponentielle'
 export const dateDePublication = '06/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résoudre des équations produit nul avec des exponentielles.
@@ -21,7 +20,7 @@ export const interactifType = 'mathLive'
 export const uuid = '61ed1'
 
 export const refs = {
-  'fr-fr': ['1AN30-4','TSA3-22', 'TCA7-22'],
+  'fr-fr': ['1AN30-4', 'TSA3-22', 'TCA7-22'],
   'fr-ch': [''],
 }
 
@@ -81,7 +80,7 @@ export default class EquationsProduitNulExponentielles extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(-8, 8, 0)
       const b = randint(-6, 6)
       const c = randint(-8, 8, 0)

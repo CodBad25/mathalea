@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Étudier des variations en pourcentage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Problèmes de variations en pourcentage

@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { ellipse } from '../../../lib/2d/projections3d'
@@ -7,12 +6,13 @@ import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer le volume d'un cylindre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '94db5'
 export const refs = {
   'fr-fr': [''],

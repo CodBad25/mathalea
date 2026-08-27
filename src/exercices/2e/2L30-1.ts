@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
@@ -22,6 +21,7 @@ import { sp } from '../../lib/outils/outilString'
 import { prenomF } from '../../lib/outils/Personne'
 import { pgcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import Exercice from '../Exercice'
 
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
@@ -29,7 +29,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { itemize, listeQuestionsToContenu, randint } from '../../modules/outils'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre = 'Modéliser un problème par une inéquation'
 export const dateDePublication = '14/02/2023'
@@ -87,7 +86,7 @@ export default class ModeliseInequations extends Exercice {
       typeDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = ''

@@ -2,7 +2,6 @@ import ModeliserSuites from '../1e/1AL10-1'
 export const titre = 'Modéliser une situation avec une suite'
 export const dateDePublication = '29/07/2025'
 export const amcReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Gilles Mora

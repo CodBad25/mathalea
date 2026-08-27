@@ -12,7 +12,6 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Utiliser une échelle graphique'
 export const interactifReady = true
-export const interactifType = 'mathlive'
 
 export const dateDePublication = '20/6/2025'
 

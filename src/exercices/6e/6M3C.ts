@@ -23,7 +23,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 export const titre = 'Déterminer le volume de pavés droit par dénombrement'
 export const interactifReady = true
 export const amcReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 export const uuid = '0d4be'

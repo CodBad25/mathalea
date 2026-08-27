@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer en retranchant des dizaines'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6738e'
 export const refs = {
   'fr-fr': [],

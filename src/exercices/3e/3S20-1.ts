@@ -26,7 +26,6 @@ export const titre =
 export const dateDePublication = '15/01/2022'
 export const dateDeModifImportante = '20/06/2024'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 /**
  * On doit calculer la probabilité qu'un événement se réalise après une expérience aléatoire à deux épreuves

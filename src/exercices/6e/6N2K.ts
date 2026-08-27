@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   miseEnEvidence,
@@ -7,7 +8,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Résoudre des problèmes utilisant la division euclidienne (1)'
@@ -16,7 +16,6 @@ export const titre =
 export const dateDePublication = '11/12/2023'
 export const dateDeModifImportante = '09/01/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Résolution de problèmes utilisant la division Euclidienne

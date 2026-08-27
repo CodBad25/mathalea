@@ -3,7 +3,7 @@ export const titre = 'Analyser un diagramme semi-circulaire'
 export const dateDePublication = '24/08/2026'
 export const uuid = 'ac7f3'
 export const refs = {
-  'fr-fr': ['2A-S1-8', '3AutoS03-3'],
+  'fr-fr': ['2A-S1-8', '3AutoS03-3','1A-S01-9,'],
   'fr-ch': [],
 }
 export const interactifReady = true

@@ -1,7 +1,7 @@
 import FactoriserIdentitesRemarquables2 from '../2e/2L12-9'
 export const titre = 'Factoriser une différence de deux carrés'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

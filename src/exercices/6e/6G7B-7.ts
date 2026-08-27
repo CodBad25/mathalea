@@ -41,7 +41,6 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 export const titre =
   "Trouver l'image d'une figure par une symétrie axiale dans un pavage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '14/12/2020'

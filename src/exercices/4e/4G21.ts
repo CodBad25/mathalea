@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre = 'Déterminer si un triangle est rectangle ou pas'
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const interactifType = 'qcm'
+
 export const interactifReady = true
 /**
  * À partir de la donnée des 3 longueurs d'un triangle, déterminer s'il est rectangle ou pas.

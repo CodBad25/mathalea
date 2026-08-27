@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
-import { sp } from '../../../lib/outils/outilString'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une somme de fraction (V/F)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'c5503'
 export const refs = {
   'fr-fr': [],

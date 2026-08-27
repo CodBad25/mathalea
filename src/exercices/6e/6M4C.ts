@@ -12,7 +12,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Convertir des durées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Conversions de durées.

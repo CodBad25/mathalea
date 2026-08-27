@@ -5,12 +5,12 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { latex2d } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'qe7q9'
 export const refs = {
   'fr-fr': [],

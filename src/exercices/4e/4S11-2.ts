@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer la moyenne et la médiane d'une série statistique"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '6/1/2022'
 
@@ -44,7 +43,7 @@ export default class MoyenneEtMediane extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texteCorr = ''
       let mediane = 0
       const nbTemperatures = 2 * randint(3, 5) + this.sup

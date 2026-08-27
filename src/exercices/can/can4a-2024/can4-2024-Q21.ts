@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Comprendre un programme scratch'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'fdd2f'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

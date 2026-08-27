@@ -21,7 +21,7 @@ export const titre = 'Résoudre des problèmes de courses au marché'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '07/06/2025'
 
 /**

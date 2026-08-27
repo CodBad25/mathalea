@@ -3,7 +3,6 @@ import CompareAireEtPerimetreAvecRectangle from './auto6M2A'
 export const dateDePublication = '28/07/2025'
 export const titre = 'Comparer périmètres de figures'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 /**
  * Comparer périmètres de figures avec ceux d'un rectangle référence

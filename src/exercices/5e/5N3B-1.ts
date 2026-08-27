@@ -10,7 +10,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const dateDePublication = '11/05/2025'
 export const uuid = '6074b'
 export const refs = {

@@ -1,4 +1,3 @@
-
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -11,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Compter le nombre d'axe de symétrie d'une figure"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '7102b'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -25,7 +24,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBase
-this.optionsChampTexte = { texteApres: '.' }
+    this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 

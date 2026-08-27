@@ -1,14 +1,18 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import {
+  ecritureAlgebrique,
+  reduireAxPlusB,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { ecritureAlgebrique, reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
-export const titre = 'Calculer l\'abscisse d\'un point d\'une droite  à partir de son ordonnée'
+export const titre =
+  "Calculer l'abscisse d'un point d'une droite  à partir de son ordonnée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'dfyhs'
 export const refs = {
   'fr-fr': [],
@@ -23,7 +27,10 @@ export default class Can1a2022Q25 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { nombreDecimalSeulement:true, fractionEgale: true }
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+      fractionEgale: true,
+    }
   }
 
   enonce(m?: number, p?: number, ordonnee?: number) {
@@ -38,7 +45,10 @@ export default class Can1a2022Q25 extends ExerciceCan {
     this.question = `$M$ est un point d'ordonnée $${ordonnee}$ de la droite d'équation $y=${reduireAxPlusB(m, p)}$.<br>`
 
     if (this.interactif) {
-      this.optionsChampTexte = { texteAvant: `$M($`, texteApres: `$;${ordonnee})$` }
+      this.optionsChampTexte = {
+        texteAvant: `$M($`,
+        texteApres: `$;${ordonnee})$`,
+      }
     } else {
       this.question += `${sp(5)}Compléter $M(\\ldots$ ; $${ordonnee})$`
     }
@@ -47,7 +57,7 @@ export default class Can1a2022Q25 extends ExerciceCan {
 Ainsi, $x_M=${reponse.texFraction}${reponse.texSimplificationAvecEtapes()}$.<br>
 $x_M=${miseEnEvidence(reponse.texFractionSimplifiee)}$.`
     this.reponse = reponse
-    this.canEnonce =`$M$ est un point d'ordonnée $${ordonnee}$ de la droite d'équation $y=${reduireAxPlusB(m, p)}$.`
+    this.canEnonce = `$M$ est un point d'ordonnée $${ordonnee}$ de la droite d'équation $y=${reduireAxPlusB(m, p)}$.`
     this.canReponseACompleter = ` $M(\\ldots\\,;\\,${ordonnee})$`
   }
 

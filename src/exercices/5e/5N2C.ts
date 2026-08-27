@@ -12,7 +12,6 @@ export const titre =
   'Relier un nombre positif, négatif, strictement positif ou strictement négatif à son inégalité'
 export const dateDePublication = '31/07/2026'
 export const interactifReady = true
-export const interactifType = 'relier-etiquettes'
 
 /**
  * Relier les quatre qualificatifs de signe (positif, strictement positif,

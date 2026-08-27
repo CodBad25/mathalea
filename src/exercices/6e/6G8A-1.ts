@@ -20,7 +20,6 @@ export const dateDePublication = '03/03/2021'
 export const dateDeModificationImportante = '15/07/2025'
 export const titre = 'Compter les cubes manquants ou pas'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Compter des cubes dans un empilement de cubes

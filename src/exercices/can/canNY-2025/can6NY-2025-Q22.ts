@@ -6,7 +6,7 @@ import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bcfc8'
 export const refs = {
   'fr-fr': [],

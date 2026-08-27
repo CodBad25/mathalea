@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 export const dateDePublication = '23/10/2024'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const titre =
   'Multiplier par 0,1 ; 0,01 ; 0,001 (compléter avec le nombre qui convient)'

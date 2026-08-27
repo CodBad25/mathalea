@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = "Déterminer p dans l'équation réduite d'une droite"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/11/2024'
 export const uuid = 'fddc6'
 export const refs = {

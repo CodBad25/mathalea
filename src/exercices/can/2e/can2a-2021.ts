@@ -31,7 +31,7 @@ import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 
 export const titre = 'S’entraîner avec le sujet CAN Seconde 2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '05/04/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 

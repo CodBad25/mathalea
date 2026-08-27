@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer avec un pourcentage '
@@ -21,7 +21,10 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ2ANs2026 extends ExerciceQcmA {
-   private appliquerLesValeurs(volumeVisible: number, pourcentage: number): void {
+  private appliquerLesValeurs(
+    volumeVisible: number,
+    pourcentage: number,
+  ): void {
     const coeff = 100 / pourcentage // 100/p : 20, 10 ou 5 (multiplicateur mental)
     const volumeTotal = volumeVisible * coeff // réponse correcte
 

@@ -9,7 +9,6 @@ import Exercice from '../Exercice'
 import { glossaire } from './CM2N1D-2'
 export const titre = 'Décomposer un nombre entier'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '24/09/2024'
 /**

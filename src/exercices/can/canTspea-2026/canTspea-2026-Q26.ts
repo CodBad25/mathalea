@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Compléter un encadrement de $\\dfrac{n}{\\text{e}}$ par deux entiers consécutifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c5kkh'
 export const refs = {
   'fr-fr': [],

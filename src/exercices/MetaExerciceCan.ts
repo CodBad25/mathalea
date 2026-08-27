@@ -43,7 +43,6 @@ import { gestionnaireFormulaireTexte } from '../modules/outils'
 import Exercice from './Exercice'
 import ExerciceSimple from './ExerciceSimple'
 
-export const interactifType = 'mathLive'
 export const interactifReady = true
 
 type QuestionWithOptionalTableau = ExerciceSimple & {
@@ -415,9 +414,7 @@ function estQuestionCustom(question: Exercice): boolean {
   // Sans fonction de correction il n'y a rien de custom à brancher : on laisse
   // le traitement par défaut s'appliquer.
   if (typeof question.correctionInteractive !== 'function') return false
-  // Un exercice qui délègue à un customElement enregistré n'est pas custom,
-  // même s'il garde `interactifType = 'custom'` par compatibilité historique
-  // (cf. `_Exercice_labyrinthe`).
+  // Un exercice qui délègue à un customElement enregistré n'est pas custom.
   if (isMathaleaCustomElementFormat(question.formatInteractif)) return false
   if (
     isMathaleaCustomElementFormat(question.autoCorrection[0]?.formatInteractif)
@@ -432,7 +429,6 @@ function estQuestionCustom(question: Exercice): boolean {
   }
   if (question.autoCorrection[0]?.valeur != null) return false
   return (
-    question.interactifType === 'custom' ||
     question.formatInteractif === 'custom' ||
     question.autoCorrection[0]?.formatInteractif === 'custom'
   )
@@ -637,10 +633,6 @@ export default class MetaExercice extends Exercice {
         if (item === numExo) {
           // Permet de ne choisir que certaines questions
           const Question = new UnExercice()
-          // Les exports de module ne sont recopiés sur l'instance que par
-          // `mathaleaLoadExerciceFromUuid` : un sous-exercice construit
-          // directement doit récupérer son `interactifType` ici.
-          Question.interactifType ??= UnExercice.interactifTypeModule
           Question.numeroExercice = this.numeroExercice
           Question.canOfficielle = !!this.sup
           Question.interactif = this.interactif
@@ -742,24 +734,51 @@ export default class MetaExercice extends Exercice {
                 )
             } else if (customElementFormat != null) {
               const tag = customElementFormat
-              const questionHtml = injectSimpleQuestionCustomElement({
-                meta: this,
-                question: Question,
-                questionIndex: indexQuestion,
-                tag,
-                formatChampTexte,
-                optionsChampTexte,
-              })
+              const rawQuestionHtml = String(Question.question ?? '')
+              const questionHtml =
+                tag === MetaCustomElement.elementTag &&
+                rawQuestionHtml.includes('%{')
+                  ? remplisLesBlancs(
+                      this,
+                      indexQuestion,
+                      rawQuestionHtml,
+                      `fillInTheBlank ${formatChampTexte}`,
+                      '\\ldots',
+                    )
+                  : injectSimpleQuestionCustomElement({
+                      meta: this,
+                      question: Question,
+                      questionIndex: indexQuestion,
+                      tag,
+                      formatChampTexte,
+                      optionsChampTexte,
+                    })
               this.listeQuestions[indexQuestion] = consigne + questionHtml
-              handleAnswers(
-                this,
-                indexQuestion,
-                buildSimpleQuestionAnswerValue(Question, tag),
-                {
-                  ...(tag === 'fill-in-the-blank' ? optionsChampTexte : {}),
+              if (tag === MetaCustomElement.elementTag) {
+                this.autoCorrection[indexQuestion] = {
+                  ...(Question.autoCorrection[0] ?? {}),
                   formatInteractif: tag,
-                },
-              )
+                }
+                const entry = MetaCustomElement.getEntry(
+                  MetaCustomElement.keyFor(
+                    this.numeroExercice ?? 0,
+                    indexQuestion,
+                  ),
+                )
+                if (entry != null) {
+                  this.correctionInteractives[indexQuestion] = entry.run
+                }
+              } else {
+                handleAnswers(
+                  this,
+                  indexQuestion,
+                  buildSimpleQuestionAnswerValue(Question, tag),
+                  {
+                    ...(tag === 'fill-in-the-blank' ? optionsChampTexte : {}),
+                    formatInteractif: tag,
+                  },
+                )
+              }
             } else {
               // * ***************** Question MathLive *****************//
               this.listeQuestions[indexQuestion] =
@@ -967,20 +986,34 @@ export default class MetaExercice extends Exercice {
                 Question.consigne +
                 '<br><br>' +
                 questionHtml
-              if (tag === 'clique-figure') {
+              if (
+                tag === 'clique-figure' ||
+                tag === 'apigeom-figure' ||
+                tag === MetaCustomElement.elementTag
+              ) {
+                if (tag === 'apigeom-figure') {
+                  // La callback reçoit l'index de la question affichée ; la
+                  // figure du sous-exercice doit être disponible au même index.
+                  alignFiguresSurIndexHote(
+                    Question,
+                    Question.indexQuestionHote ?? 0,
+                  )
+                }
                 this.autoCorrection[indexQuestion] = {
                   ...(Question.autoCorrection[0] ?? {}),
                   formatInteractif: tag,
                 }
-                this.cliqueFiguresArray ??= []
-                const figures = remapClickFigures(
-                  Question.cliqueFiguresArray?.[0],
-                  Question.numeroExercice ?? 0,
-                  this.numeroExercice ?? 0,
-                  indexQuestion,
-                )
-                if (figures != null)
-                  this.cliqueFiguresArray[indexQuestion] = figures
+                if (tag === 'clique-figure') {
+                  this.cliqueFiguresArray ??= []
+                  const figures = remapClickFigures(
+                    Question.cliqueFiguresArray?.[0],
+                    Question.numeroExercice ?? 0,
+                    this.numeroExercice ?? 0,
+                    indexQuestion,
+                  )
+                  if (figures != null)
+                    this.cliqueFiguresArray[indexQuestion] = figures
+                }
               } else {
                 handleAnswers(
                   this,

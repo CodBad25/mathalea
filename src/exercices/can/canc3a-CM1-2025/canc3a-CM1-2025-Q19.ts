@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver le plus grand nombre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '27c10'
 export const refs = {
   'fr-fr': [],

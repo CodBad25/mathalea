@@ -13,14 +13,15 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Résoudre des inéquations du type $a^x \\leq b$ avec logarithme'
+export const titre =
+  'Résoudre des inéquations du type $a^x \\leq b$ avec logarithme'
 export const dateDePublication = '4/5/2024'
 export const dateDeModifImportante = '18/07/2024'
 export const uuid = '00a7a'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const refs = {
-  'fr-fr': ['TTE-3'], 
+  'fr-fr': ['TTE-3'],
   'fr-ch': [],
 }
 
@@ -215,7 +216,7 @@ export default class InequationsLog extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number

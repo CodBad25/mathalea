@@ -1,7 +1,7 @@
 import ReciproqueThales from '../3e/3G21'
 export const titre = 'Contrôler si deux droites sont parallèles'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '11/06/2024'

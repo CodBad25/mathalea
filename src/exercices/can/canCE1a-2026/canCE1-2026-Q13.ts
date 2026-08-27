@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer le double d'un nombre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd46e5'
 export const refs = {
   'fr-fr': [],
@@ -27,7 +27,7 @@ export default class Can2026CE1Q13 extends ExerciceCan {
     this.question = `Le double de $${nombre}$ est :`
     this.correction = `Le double de $${nombre}$ est : $${nombre}\\times 2=${miseEnEvidence(texNombre(this.reponse, 0))}$.`
     this.canEnonce = 'Le double de $14$ est :'
- this.canReponseACompleter = '$\\ldots$'
+    this.canReponseACompleter = '$\\ldots$'
     if (this.interactif) {
       this.optionsChampTexte = { texteApres: '' }
     } else {

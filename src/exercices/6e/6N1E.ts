@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lier nombre décimal, fraction décimale et pourcentage'
 export const dateDePublication = '04/06/2025'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 /**

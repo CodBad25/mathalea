@@ -1,16 +1,16 @@
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
 import { randint } from '../../../modules/outils'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const uuid = 'd03c4'
 export const refs = {
   'fr-fr': ['3F2QCM-1'],
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Fonction linéaire  (Juin 2022 Amérique du nord)'

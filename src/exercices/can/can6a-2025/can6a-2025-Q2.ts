@@ -1,10 +1,10 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Tables à trou'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f3a3g'
 export const refs = {
   'fr-fr': [],

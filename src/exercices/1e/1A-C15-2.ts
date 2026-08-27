@@ -14,7 +14,7 @@ export const refs = {
   'fr-ch': ['10QCM-8'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre un problème avec des proportions'

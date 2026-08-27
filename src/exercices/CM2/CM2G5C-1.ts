@@ -22,7 +22,6 @@ import {
 import type { objetFace } from '../../lib/3d/utilsPatrons'
 import { cubesObj, fauxCubesObj } from '../../lib/3d/utilsPatrons'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
-import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import type { MathaleaSVG } from '../../lib/types'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -30,7 +29,6 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
 
 export const titre = 'Choisir le patron de cube'
 export const dateDePublication = '18/07/2025'
@@ -249,7 +247,7 @@ export default class choixPatron extends Exercice {
               ordered: true,
               lastChoice: 4,
             }
-            setCliqueFigure(this.autoCorrection[i])
+            this.autoCorrection[i].formatInteractif = 'clique-figure'
             this.cliqueFiguresArray[i] = [
               {
                 id: `cliquefigure0Ex${this.numeroExercice}Q${i}`,

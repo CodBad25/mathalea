@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Retrouver une fonction affine à partir de sa droite '
@@ -45,10 +45,17 @@ export default class AutoQ3AGns2026 extends ExerciceQcmA {
 
     // 2. Création du repère
     const r = repere({
-      xMin: -7, xMax: 11, yMin: -4, yMax: 6,
-      grilleX: true, grilleY: true,
+      xMin: -7,
+      xMax: 11,
+      yMin: -4,
+      yMax: 6,
+      grilleX: true,
+      grilleY: true,
       thickHauteur: 0.1,
-      xLabelMin: -6, xLabelMax: 10, yLabelMin: -3, yLabelMax: 5,
+      xLabelMin: -6,
+      xLabelMax: 10,
+      yLabelMin: -3,
+      yLabelMax: 5,
     })
 
     // 3. Les quatre droites : la bonne et ses trois réflexions (±pente, ±ordonnée à l'origine)
@@ -77,7 +84,9 @@ export default class AutoQ3AGns2026 extends ExerciceQcmA {
     const candidateXs = [10, -6, 8, -4, 6, -2, 9, -5, 7, -3, 5, 3, -7, 4, 2]
     const dejaPlacees: Array<{ x: number; y: number }> = []
 
-    const choisirAncre = (f: (x: number) => number): { x: number; y: number } => {
+    const choisirAncre = (
+      f: (x: number) => number,
+    ): { x: number; y: number } => {
       for (const cx of candidateXs) {
         if (Math.abs(cx) < 2) continue // on évite la zone de croisement
         const cy = f(cx)
@@ -174,12 +183,18 @@ export default class AutoQ3AGns2026 extends ExerciceQcmA {
 
     // Pentes abordables pour une lecture graphique
     const slopes = [
-      { n: 1, d: 2 }, { n: -1, d: 2 },
-      { n: 1, d: 3 }, { n: -1, d: 3 },
-      { n: 2, d: 3 }, { n: -2, d: 3 },
-      { n: 3, d: 2 }, { n: -3, d: 2 },
-      { n: 1, d: 1 }, { n: -1, d: 1 },
-      { n: 2, d: 1 }, { n: -2, d: 1 },
+      { n: 1, d: 2 },
+      { n: -1, d: 2 },
+      { n: 1, d: 3 },
+      { n: -1, d: 3 },
+      { n: 2, d: 3 },
+      { n: -2, d: 3 },
+      { n: 3, d: 2 },
+      { n: -3, d: 2 },
+      { n: 1, d: 1 },
+      { n: -1, d: 1 },
+      { n: 2, d: 1 },
+      { n: -2, d: 1 },
     ]
 
     let compteur = 0

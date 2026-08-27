@@ -3,7 +3,6 @@ export const titre = 'Multiplier un nombre décimal par 10, 100 ou 1 000'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDeModifImportante = '11/02/2025'
 

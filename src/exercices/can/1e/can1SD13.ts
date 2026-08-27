@@ -10,7 +10,7 @@ import type FractionEtendue from '../../../modules/FractionEtendue'
 export const titre =
   'Retrouver un polynôme du second degré à partir de son tableau de signes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '08/09/2024'
 export const uuid = 'c0f97'
 export const refs = {

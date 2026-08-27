@@ -15,6 +15,19 @@ Tous ces fichiers sont importés statiquement (ES modules JSON) par le code sous
 
 Le script doit être relancé après la création ou la modification d'un exercice. Il parcourt `src/exercices`, extrait les métadonnées de chaque fichier d'exercice (`uuid`, `refs`, `titre`, dates, `features` interactif/amc/qcm) et écrit, séparément pour la France (`FR`) et la Suisse (`CH`) :
 
+Le type d'interactivité est extrait des littéraux `formatInteractif` présents
+dans le fichier, qu'ils soient utilisés dans un objet
+(`formatInteractif: 'mathalea-qcm'`) ou dans une affectation
+(`autoCorrection[i].formatInteractif = 'clique-figure'`). Seules les valeurs
+répertoriées par les unions `InteractivityType` et `OldFormatInteractifType` de
+`src/lib/types.ts` sont acceptées. L'ancien export `interactifType` n'est
+plus accepté et ne doit pas être renseigné. Le format est déduit des appels aux
+helpers et des valeurs de `formatInteractif`.
+En l'absence de littéral, les appels à `remplisLesBlancs` et aux helpers `AddTab*Mathlive` sont
+respectivement reconnus comme `fill-in-the-blank` et `tableau-mathlive`. Un
+exercice interactif sans autre indice conserve le format historique par défaut
+`mathlive`.
+
 | Fichier                                                                              | Rôle                                                                                                                                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `src/json/referentiel2022FR.json`, `src/json/referentiel2022CH.json`                 | Arbre complet niveau > thème > exercice construit à partir du squelette `tasks/emptyRef2022.json` / `tasks/emptyRefCH.json`. C'est le référentiel affiché en tant que section « Exercices aléatoires » du menu (`referentielsStore.ts`).                                                                             |

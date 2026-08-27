@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lire une fraction'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '12/11/2024'
 export const uuid = 'f8528'
 export const refs = {

@@ -1,7 +1,7 @@
 import MultiplierDecimauxPar101001000V2 from '../6e/auto6N2C'
 export const dateDePublication = '01/02/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const titre = 'Multiplier un nombre décimal par 10'

@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir un volume'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a3f3b'
 export const refs = {
   'fr-fr': [],
@@ -29,13 +29,11 @@ export default class Can2025N5Q26 extends ExerciceCan {
     this.optionsChampTexte = { texteApres: ' $\\text{ cm}^3$' }
 
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
- if (!this.interactif && context.isHtml) {
+    if (!this.interactif && context.isHtml) {
       this.question += '$\\ldots\\text{ cm}^3$'
     }
     this.optionsChampTexte = { texteApres: '.' }
   }
-
-
 
   nouvelleVersion() {
     this.canOfficielle ? this.enonce(0.5) : this.enonce()

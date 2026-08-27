@@ -16,7 +16,7 @@ import { arrondi } from '../../lib/outils/nombres'
 
 export const titre = "Déterminer un taux d'évolution réciproque"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '16/01/2022'
 
 /**
@@ -48,7 +48,7 @@ export default class EvolutionsSuccesives extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       let taux: number
       let nom: string

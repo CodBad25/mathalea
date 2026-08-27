@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
@@ -7,11 +6,12 @@ import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { tableauSignesFonction } from '../../../lib/mathFonctions/etudeFonction'
 import { spline, type NoeudSpline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const titre =
   "Dresser le tableau de signes d'une fonction dérivée à partir d'un graphique"
 export const dateDePublication = '18/11/2023'

@@ -19,7 +19,7 @@ import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieur
 export const titre = 'Résoudre une équation irrationnelle'
 export const dateDePublication = '13/11/2024'
 export const interactifReady = false
-export const interactifType = 'mathLive'
+
 export const uuid = '5f5fa'
 export const refs = {
   'fr-fr': [],
@@ -72,7 +72,7 @@ export default class ExerciceEquationSecondDegre extends Exercice {
       this.consigne +=
         " Entrer l'ensemble des solutions en séparant chaque élément par un point-virgule. Si une équation n'a pas de solution, saisir l'ensemble vide."
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a = new FractionEtendue(1, 1)

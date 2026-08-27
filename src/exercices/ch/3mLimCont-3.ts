@@ -1,3 +1,6 @@
+import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import type { LimitValue } from '../../lib/mathFonctions/lectureLimitesGraphiques'
 import {
   answerKeyboard,
   commonRepere,
@@ -10,9 +13,6 @@ import {
   texLimit,
   verticalAsymptote,
 } from '../../lib/mathFonctions/lectureLimitesGraphiques'
-import type { LimitValue } from '../../lib/mathFonctions/lectureLimitesGraphiques'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 export const titre = "Compléter un tableau de limites à partir d'un graphique"
 export const dateDePublication = '04/06/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0c3d9'
 export const refs = {
   'fr-fr': [],
@@ -330,7 +330,7 @@ export default class LireLimiteGraphiqueTableau extends Exercice {
       "Utiliser le graphique pour compléter le tableau. Si la fonction n'est pas définie ou si la limite n'existe pas, saisir $\\not\\exists$."
     const paragraphBreak = context.isHtml ? '<br>' : '\n\n'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const rows = randomLocalRows()
       const signature = rows
         .map(

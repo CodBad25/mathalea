@@ -6,6 +6,7 @@ import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
+  ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -28,7 +29,6 @@ export const refs = {
 }
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Factoriser des expressions en mettant en évidence un facteur commun.
@@ -73,7 +73,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         melange: 9,
         defaut: 9,
         nbQuestions: this.nbQuestions,
-      }),
+      }).map(Number),
       this.nbQuestions,
     )
 
@@ -82,21 +82,23 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
       let a = randint(-6, 6, 0)
       let b = randint(-9, 9, 0)
       let c = randint(-6, 6, [0, a])
-      let d = randint(-9, 9, [0, b])
+      const d = randint(-9, 9, [0, b])
       let e = randint(-6, 6, [0, a, c])
       let f = randint(-9, 9, [0, b, d])
 
       if (type === 1) {
+        b = randint(-9, 9, [0, -1, 1])
         while (pgcd(Math.abs(a), Math.abs(b)) !== 1) {
           a = randint(-6, 6, 0)
           b = randint(-9, 9, 0)
+          c = randint(-6, 6, [0, a])
         }
       }
 
       if (type === 2) {
-        let k = randint(-9, 9, [0, -b])
+        let k = randint(-9, 9, [0, -b, 1, -1])
         while (pgcd(Math.abs(a), Math.abs(b + k)) !== 1) {
-          k = randint(-9, 9, [0, -b])
+          k = randint(-9, 9, [0, -b, 1, -1])
         }
         c = k
       }
@@ -147,7 +149,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           reponse = `x(${facteurCommun})`
           correction = `Les deux termes ont le facteur commun $x$.<br>
           $\\begin{aligned}
-          ${expression}&=x\\times(${reduireAxPlusB(a, 0)})+x\\times(${b})\\\\
+          ${expression}&=x\\times(${reduireAxPlusB(a, 0)})+x\\times ${ecritureParentheseSiNegatif(b)}\\\\
           &=${miseEnEvidence(reponse)}.
           \\end{aligned}$`
           break
@@ -240,12 +242,17 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           : `$${lettre}=${expression}$`
         this.listeQuestions.push(texte)
         this.listeCorrections.push(`$${lettre}=${expression}$<br>${correction}`)
-        handleAnswers(this, i, {
-          reponse: {
-            value: reponse,
-            options: { factorisation: true },
+        handleAnswers(
+          this,
+          i,
+          {
+            reponse: {
+              value: reponse,
+              options: { factorisation: true },
+            },
           },
-        })
+          { formatInteractif: 'mathalea-mathfield' },
+        )
         i++
       }
     }

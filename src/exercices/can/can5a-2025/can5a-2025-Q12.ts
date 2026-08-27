@@ -21,7 +21,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Symétrie axiale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343r'
 export const refs = {
   'fr-fr': [],

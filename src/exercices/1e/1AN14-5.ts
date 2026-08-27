@@ -17,7 +17,6 @@ export const titre = 'Dériver une fonction du type $u\\times v$'
 export const dateDePublication = '22/01/2022'
 export const dateDeModifImportante = '28/01/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer la dérivée d'un produit
@@ -28,7 +27,7 @@ export const interactifType = 'mathLive'
 
 export const uuid = '1a60f'
 export const refs = {
-  'fr-fr': ['1AN14-5','TSA3-11', 'TCA7-11'],
+  'fr-fr': ['1AN14-5', 'TSA3-11', 'TCA7-11'],
   'fr-ch': ['3mA2-8'],
 }
 
@@ -41,13 +40,7 @@ type TypeDeProduit =
   | 'exp/poly'
   | 'exp/poly2centre'
 type TypeDeFonction =
-  | 'monome2'
-  | 'inv'
-  | 'racine'
-  | 'poly1'
-  | 'poly2centre'
-  | 'poly'
-  | 'exp'
+  'monome2' | 'inv' | 'racine' | 'poly1' | 'poly2centre' | 'poly' | 'exp'
 
 export default class DeriveeProduit extends Exercice {
   constructor() {

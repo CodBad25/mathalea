@@ -10,7 +10,6 @@ export const titre = "Calculer le taux moyen d'évolution" // Ce titre est néce
 
 // Les éléménts ci-dessous sont nécessaires pour la prise en compte d'un champ classique pour l'interactivité
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Toujours utile cette information
 export const dateDePublication = '18/10/2025'

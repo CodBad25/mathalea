@@ -14,7 +14,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = "Trouver un nombre à l'aide d'un critère de divisibilité"
 export const dateDePublication = '07/11/2025'
 

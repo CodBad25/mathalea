@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 
 export const titre = 'Comparer des périmètres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '09/12/2025'
 /**
  * @author Gilles Mora

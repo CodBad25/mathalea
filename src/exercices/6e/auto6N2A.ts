@@ -11,7 +11,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathlive'
+
 export const titre = 'Trouver la fraction décimale égale à 1'
 export const dateDePublication = '07/06/2025'
 

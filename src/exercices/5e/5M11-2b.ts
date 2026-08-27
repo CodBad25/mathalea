@@ -3,7 +3,7 @@ import ExercicePerimetresEtAires from '../6e/_Exercice_perimetres_et_aires'
 export const titre =
   "Calculer la valeur arrondie du périmètre ou de l'aire de disques ou demi-disques"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

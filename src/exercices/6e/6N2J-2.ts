@@ -3,7 +3,7 @@ import DivisionsEuclidiennesEgaliteFondamentale from './6N2J-1'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Effectuer divisions euclidiennes - Niveau 2'
 
 /**

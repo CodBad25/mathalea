@@ -8,7 +8,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = "Trouver la médiane d'une série de notes"
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '05/12/2025'
 

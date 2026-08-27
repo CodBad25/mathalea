@@ -5,9 +5,10 @@ import type { IFractionEtendue } from '../../../modules/FractionEtendue.type'
 import { fraction } from '../../../modules/fractions'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Chercher le nombre de fois d\'une fraction pour obtenir une autre fraction'
+export const titre =
+  "Chercher le nombre de fois d'une fraction pour obtenir une autre fraction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'd9p5e'
 export const refs = {
   'fr-fr': [],
@@ -46,7 +47,7 @@ export default class Can20266Q15 extends ExerciceCan {
     if (this.interactif) {
       this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
     }
-  
+
     this.canEnonce = ''
   }
 

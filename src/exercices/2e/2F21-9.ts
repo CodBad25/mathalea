@@ -43,7 +43,6 @@ import Exercice from '../Exercice'
 
 export const uuid = '99d4e'
 export const interactifReady = true
-export const interactifType = 'mathalea-couteau-suisse'
 export const titre = 'Etudier une fonction affine à partir de son expression'
 
 export const refs = {

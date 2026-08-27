@@ -1,4 +1,5 @@
 import { shuffle } from '../../../lib/outils/arrayOutils'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -8,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer un taux global d’évolution'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '19/12/2021'
@@ -65,12 +66,10 @@ Globalement cela revient donc à multiplier par $${texNombre(1 + a / 100)}\\time
 Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
         if (coeffG > 1) {
           this.correction += ` $1+${texNombre(coeffG - 1)}$, ce qui revient à augmenter de $${texNombre((coeffG - 1) * 100)}${sp(1)}\\%$. <br>
-          Le taux d'évolution global est donc : $${miseEnEvidence('+')} ${miseEnEvidence(`${texNombre((coeffG - 1) * 100)}${sp(1)}`)} \\%$.
-`
+          Le taux d'évolution global est donc : `
         } else {
           this.correction += ` $1-${texNombre(1 - coeffG)}$. <br>
-        Le taux d'évolution global est donc : $${miseEnEvidence(`${texNombre((coeffG - 1) * 100)}${sp(1)}`)} \\%$
-`
+        Le taux d'évolution global est donc : `
         }
 
         this.distracteurs = [
@@ -99,7 +98,7 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
   Globalement cela revient donc à multiplier par $${texNombre(1 + a / 100)}\\times ${texNombre(1 + b / 100)}=${texNombre(coeffG)}$.<br>
   Multiplier par $${texNombre(coeffG)}$ revient à multiplier par
            $1+${texNombre(coeffG - 1)}$. <br>
-          Le taux d'évolution global est donc : $${miseEnEvidence('+')} ${miseEnEvidence(`${texNombre((coeffG - 1) * 100)}${sp(1)}`)} \\%$.`
+          Le taux d'évolution global est donc : `
 
         this.distracteurs = [
           `$${texNombre(100 * ((1 + a / 100) * (1 - b / 100)))}\\,\\%$`,
@@ -128,7 +127,7 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
   Globalement cela revient donc à multiplier par $${texNombre(1 - a / 100)}\\times ${texNombre(1 - b / 100)}=${texNombre(coeffG)}$.<br>
   Multiplier par $${texNombre(coeffG)}$ revient à multiplier par
            $1-${texNombre(1 - coeffG)}$. <br>
-          Le taux d'évolution global est donc : $${miseEnEvidence(`${texNombre((coeffG - 1) * 100)}${sp(1)}`)} \\%$.`
+          Le taux d'évolution global est donc : `
 
         this.distracteurs = [
           `$${texNombre(-100 * ((1 + a / 100) * (1 - b / 100)))}\\,\\%$`,
@@ -159,11 +158,12 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
   Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
         if (coeffG > 1) {
           this.correction += ` $1+${texNombre(coeffG - 1)}$, ce qui revient à augmenter de $${texNombre((coeffG - 1) * 100)}\\%$. <br>
-            Le taux d'évolution global est donc : $${miseEnEvidence('+')} ${miseEnEvidence(`${texNombre((coeffG - 1) * 100)}${sp(1)}`)} \\%$`
+            Le taux d'évolution global est donc : `
         } else {
           this.correction += ` $1-${texNombre(1 - coeffG)}$. <br>
-          Le taux d'évolution global est donc : $${miseEnEvidence(`${texNombre((coeffG - 1) * 100)}${sp(1)}`)} \\%$.`
+          Le taux d'évolution global est donc : `
         }
+
         this.distracteurs = [
           `$${texNombre(-100 * ((1 + a / 100) * (1 - b / 100)))}\\,\\%$`,
           `$${texNombre(coeffG * 100, 2)}\\,\\%$`,
@@ -172,6 +172,10 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
 
         break
     }
+    this.correction += this.versionQcm
+      ? `$${miseEnEvidence(ecritureAlgebrique((coeffG - 1) * 100) + '\\,\\%')}$.`
+      : `$${miseEnEvidence(ecritureAlgebrique((coeffG - 1) * 100))}\\,\\%$.`
+
     this.reponse = this.versionQcm
       ? `$${texNombre((coeffG - 1) * 100, 2)}\\,\\%$`
       : `${texNombre((coeffG - 1) * 100, 2)}`

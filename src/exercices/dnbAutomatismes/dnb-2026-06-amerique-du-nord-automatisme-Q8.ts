@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Déterminer un diviseur à l'aide des critères de divisibilité"
 export const dateDePublication = '06/06/2026'

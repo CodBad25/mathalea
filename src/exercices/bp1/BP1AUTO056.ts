@@ -2,7 +2,7 @@ import LireCaracteristiquesDroite from '../3e/3F21-3'
 export const titre =
   "Lire graphiquement les caractéristiques de la courbe représentative d'une fonction linéaire"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '30/07/2026'

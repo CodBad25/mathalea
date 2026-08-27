@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Appliquer 25 % sur un nombre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c9016'
 export const refs = {
   'fr-fr': [],

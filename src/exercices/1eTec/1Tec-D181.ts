@@ -3,7 +3,7 @@ import Equationdetangente from '../1e/1AN11-3'
 export const titre =
   'Déterminer une équation de tangente  avec image et nombre dérivée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '22/04/2026'
 export const uuid = 'da914'
 export const refs = {

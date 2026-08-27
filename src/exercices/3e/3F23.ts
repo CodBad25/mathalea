@@ -1,8 +1,8 @@
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import {
@@ -26,7 +26,6 @@ export const dateDeModifImportante = '11/04/2026'
 export const titre =
   "Trouver l'intersection des droites représentant des fonctions affines"
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 /**
  * Trouver les coordonnées du point d'intersection des droites représentant des fonctions affines

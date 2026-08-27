@@ -1,11 +1,10 @@
-import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
-import { bleuMathalea } from '../../lib/colors'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { spline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -15,7 +14,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre graphiquement une inéquation '
@@ -27,7 +26,11 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ8CEns2026 extends ExerciceQcmA {
-   private appliquerLesValeurs(dx: number, dy: number, isSuperieur: boolean): void {
+  private appliquerLesValeurs(
+    dx: number,
+    dy: number,
+    isSuperieur: boolean,
+  ): void {
     // Nœuds soigneusement calibrés pour reproduire la courbe du sujet officiel
     const baseNoeuds = [
       { x: -6, y: -1, deriveeGauche: 4, deriveeDroit: 4, isVisible: false },
@@ -36,7 +39,13 @@ export default class AutoQ8CEns2026 extends ExerciceQcmA {
       { x: -2, y: 3, deriveeGauche: -1, deriveeDroit: -1, isVisible: false }, // Intersection 2
       { x: 0, y: 0, deriveeGauche: -1, deriveeDroit: -1, isVisible: false }, // Origine
       { x: 3, y: -3, deriveeGauche: 0, deriveeDroit: 0, isVisible: false }, // Minimum local
-      { x: 5, y: -0.5, deriveeGauche: 1.5, deriveeDroit: 1.5, isVisible: false }
+      {
+        x: 5,
+        y: -0.5,
+        deriveeGauche: 1.5,
+        deriveeDroit: 1.5,
+        isVisible: false,
+      },
     ]
 
     // Application des translations aléatoires
@@ -53,9 +62,9 @@ export default class AutoQ8CEns2026 extends ExerciceQcmA {
     // Définition des bornes mathématiques
     const xMinD = -6 + dx
     const xMaxD = 5 + dx
-    const k = 3 + dy       // Ordonnée de la droite de coupe
-    const x1 = -5 + dx     // 1ère solution de l'équation
-    const x2 = -2 + dx     // 2ème solution de l'équation
+    const k = 3 + dy // Ordonnée de la droite de coupe
+    const x1 = -5 + dx // 1ère solution de l'équation
+    const x2 = -2 + dx // 2ème solution de l'équation
 
     // Définition de la fenêtre d'affichage MathALÉA
     const xMin = xMinD - 1
@@ -79,7 +88,7 @@ export default class AutoQ8CEns2026 extends ExerciceQcmA {
     const courbe = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: false,
-       color: 'red',
+      color: 'red',
     })
 
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
@@ -92,11 +101,12 @@ export default class AutoQ8CEns2026 extends ExerciceQcmA {
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.55,
-        display: 'block', center: !context.isHtml,
+        display: 'block',
+        center: !context.isHtml,
       },
       r,
       courbe,
-      o
+      o,
     )
 
     // Formulation de l'énoncé
@@ -122,17 +132,12 @@ export default class AutoQ8CEns2026 extends ExerciceQcmA {
     const dist2 = `\\mathcal{S} = ${ensemblePoints}`
     const dist3 = `\\mathcal{S} = ${pointFaux}`
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${dist1}$`,
-      `$${dist2}$`,
-      `$${dist3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${dist1}$`, `$${dist2}$`, `$${dist3}$`]
 
     // Rédaction de la correction
     const positionLigne = isSuperieur ? 'au-dessus de' : 'en-dessous de'
     const positionCourbe = isSuperieur ? 'au-dessus' : 'en-dessous'
-    
+
     this.correction = `Pour résoudre graphiquement l'inéquation $f(x) ${symbole} ${k}$, on cherche les abscisses des points de la courbe situés ${positionLigne} la droite horizontale d'équation $y = ${k}$ (ou sur cette droite).<br>`
     this.correction += `La courbe coupe cette droite en deux points d'abscisses $x = ${x1}$ et $x = ${x2}$.<br>`
     this.correction += `Elle est située ${positionCourbe} de cette droite pour les abscisses appartenant à l'ensemble $${miseEnEvidence(correct)}$.<br>`
@@ -153,7 +158,7 @@ export default class AutoQ8CEns2026 extends ExerciceQcmA {
       // Translations horizontales et verticales limitées pour garder un bel affichage
       const dx = choice([-2, -1, 0, 1, 2])
       const dy = choice([-2, -1, 0, 1, 2])
-      
+
       // Choix aléatoire du sens de l'inéquation
       const isSuperieur = choice([true, false])
 

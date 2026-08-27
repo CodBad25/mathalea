@@ -6,7 +6,7 @@ import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = 'Ajouter un nombre entre 1 et 9'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '17/12/2025'

@@ -25,7 +25,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Lire des abscisses décimales sous trois formes'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

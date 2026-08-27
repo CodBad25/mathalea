@@ -9,7 +9,7 @@ export const titre =
   'Déterminer des asymptotes à partir d’un tableau de variations'
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const uuid = '6de80'

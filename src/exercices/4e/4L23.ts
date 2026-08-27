@@ -12,7 +12,6 @@ export const titre =
   'Démontrer ou réfuter une égalité littérale par calcul ou contre-exemple'
 export const dateDePublication = '16/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathalea-branching-qcm'
 export const uuid = '8d4f2'
 export const refs = {
   'fr-fr': ['4L23'],

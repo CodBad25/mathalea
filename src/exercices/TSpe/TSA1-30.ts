@@ -12,7 +12,7 @@ export const titre =
   'Déterminer la limite de suites géométriques et arithmético-géométriques'
 export const dateDePublication = '04/08/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 

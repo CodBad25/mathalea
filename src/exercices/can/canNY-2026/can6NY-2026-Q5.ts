@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Trouver le nombres d'unités, de dizaines, ..."
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'k3jyp'
 export const refs = {
   'fr-fr': [],

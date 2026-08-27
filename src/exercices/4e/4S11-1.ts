@@ -20,7 +20,7 @@ import { arrondi } from '../../lib/outils/nombres'
 
 export const titre = 'Déterminer une médiane'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '01/12/2021'

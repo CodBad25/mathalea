@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Calculer le produit d’un nombre décimal par une puissance de 10'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ik5p1'
 export const refs = {
   'fr-fr': [],

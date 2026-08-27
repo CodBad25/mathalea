@@ -9,7 +9,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Développer et réduire une expression'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'x7ftc'
 export const refs = {
   'fr-fr': [],

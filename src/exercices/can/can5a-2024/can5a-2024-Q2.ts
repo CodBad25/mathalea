@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec un quart, un tiers, ...'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b34f7'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -18,7 +18,7 @@ export const refs = {
 
  */
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
@@ -84,6 +84,15 @@ export default class AugmentationsSuccessives extends ExerciceQcmA {
       // Sélection d'une bonne réponse
       const bonneReponse = choice(bonnesReponses)
 
+      const indexBonneReponse = bonnesReponses.indexOf(bonneReponse)
+
+      // Les 3 expressions "brutes" (sans les $ et sans miseEnEvidence), dans le même ordre que bonnesReponses
+      const expressions = [
+        `P \\times ${coefficientTexte}^${nombreAugmentations}`,
+        `P \\times \\left(1 + \\dfrac{${pourcentage}}{100}\\right)^${nombreAugmentations}`,
+        `P \\times \\left(1 + ${new FractionEtendue(pourcentage, 100).texFractionSimplifiee}\\right)^${nombreAugmentations}`,
+      ]
+
       // Sélection de 3 distracteurs distincts
       const distracteursFiltres = distracteurs.filter(
         (rep) => rep !== bonneReponse,
@@ -101,11 +110,15 @@ export default class AugmentationsSuccessives extends ExerciceQcmA {
       }
 
       // Construction de la correction selon le nombre d'augmentations
-      let correctionDetail = ''
+      // N'applique miseEnEvidence qu'à l'expression choisie comme bonne réponse
+      const afficher = (i: number) =>
+        i === indexBonneReponse
+          ? miseEnEvidence(expressions[i])
+          : expressions[i]
 
-      correctionDetail = `Après une augmentation de $${pourcentage}\\,\\%$, le nouveau prix est $P \\times ${coefficientTexte}$.<br>
+      const correctionDetail = `Après une augmentation de $${pourcentage}\\,\\%$, le nouveau prix est $P \\times ${coefficientTexte}$.<br>
  Après une deuxième augmentation de $${pourcentage}\\,\\%$, le prix devient : <br>
- $(P \\times ${coefficientTexte}) \\times ${coefficientTexte} = ${miseEnEvidence(`P \\times \\left(1 + \\dfrac{${pourcentage}}{100}\\right)^2`)}=${miseEnEvidence(`P \\times  \\left(1 + ${new FractionEtendue(pourcentage, 100).texFractionSimplifiee}\\right)^${nombreAugmentations}`)} = ${miseEnEvidence(`P \\times ${coefficientTexte}^${nombreAugmentations}`)}$`
+ $(P \\times ${coefficientTexte}) \\times ${coefficientTexte} = ${afficher(1)}=${afficher(2)} = ${afficher(0)}$`
 
       this.correction = correctionDetail
 

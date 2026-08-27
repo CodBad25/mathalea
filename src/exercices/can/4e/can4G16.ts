@@ -7,7 +7,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 export const titre = "Calculer avec un coefficient d'agrandissement/réduction"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '09/12/2025'
 /**
  * @author Gilles Mora

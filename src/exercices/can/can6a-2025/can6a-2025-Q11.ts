@@ -1,13 +1,13 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { texNombre } from '../../../lib/outils/texNombre'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Calculer avec des dixèmes/centièmes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '43cd9'
 export const refs = {
   'fr-fr': [],

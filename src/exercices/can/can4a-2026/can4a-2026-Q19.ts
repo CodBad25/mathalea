@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Déterminer le reste d'une division euclidienne"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '422ef'
 export const refs = {
   'fr-fr': [],

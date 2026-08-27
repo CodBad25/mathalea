@@ -1,12 +1,12 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Développer des égalités remarquables avec des racines carrées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/03/2023'
 
 /**

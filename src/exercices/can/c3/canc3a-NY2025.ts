@@ -32,7 +32,7 @@ import Question9 from '../canNY-2025/canc3NY-2025-Q9'
 
 export const titre = 'CAN Spéciale année 2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '76e48'
 export const refs = {
   'fr-fr': ['canc3a-NY2025'],

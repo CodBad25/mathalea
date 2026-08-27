@@ -10,7 +10,7 @@ import { context } from '../../../modules/context'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Déterminer la raison d'une suite géométrique"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'zfkoc'
 export const refs = {
   'fr-fr': [],

@@ -5,6 +5,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Polygone, nommePolygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../lib/2d/transformations'
+import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -16,11 +17,10 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Vocabulaire du triangle rectangle'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '08f6e'
 export const refs = {
   'fr-fr': ['4G40-0'],
@@ -59,7 +59,7 @@ export default class VocabulaireTriangleRectangle extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       const ab = randint(200, 500) / 100
       const ac = randint(300, Math.ceil(ab * 100)) / 100
       const a = pointAbstrait(0, 0)
@@ -142,7 +142,8 @@ export default class VocabulaireTriangleRectangle extends Exercice {
           ? [
               {
                 texte: `le côté adjacent à $\\widehat{${nom}}$.`,
-                statut: goodAnswer === `le côté adjacent à $\\widehat{${nom}}$.`,
+                statut:
+                  goodAnswer === `le côté adjacent à $\\widehat{${nom}}$.`,
               },
               {
                 texte: `le côté opposé à $\\widehat{${nom}}$.`,

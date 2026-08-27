@@ -1,6 +1,10 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -9,10 +13,10 @@ import Exercice from '../Exercice'
 export const titre = 'Zoé et Paul : deux méthodes de calcul littéral'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '71cc1'
 export const refs = {
-  'fr-fr': [ 'EgaliteFG4-3e-13'],
+  'fr-fr': ['EgaliteFG4-3e-13'],
   'fr-ch': [],
 }
 
@@ -29,15 +33,22 @@ export default class EgaliteFG13 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
-      (context.isHtml ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/rectangle-x4-x3.jpg" alt="Rectangle ABCD partagé en AEFD (largeur x+4) et EBCF (largeur x-3)" style="max-width:280px; width:100%; height:auto;"></div>' : '') +
+      (context.isHtml
+        ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/rectangle-x4-x3.jpg" alt="Rectangle ABCD partagé en AEFD (largeur x+4) et EBCF (largeur x-3)" style="max-width:280px; width:100%; height:auto;"></div>'
+        : '') +
       '<br>$x$ désigne un nombre supérieur ou égal à $3$. $ABCD$ est un carré et $AEFD$ est un rectangle, avec $E$ sur $[AB]$ tel que $AE=x+4$ et $EB=x-3$.'
     this.nbQuestions = 8
     this.nbQuestionsModifiable = false
     this.commentaireDebat =
-      texteGras('Pour débattre') + ".<br>Les préférences de méthode sont-elles liées au genre ou à l'expérience personnelle ?<br>Peut-on parler de styles cognitifs genrés ?"
+      texteGras('Pour débattre') +
+      ".<br>Les préférences de méthode sont-elles liées au genre ou à l'expérience personnelle ?<br>Peut-on parler de styles cognitifs genrés ?"
     this.besoinFormulaireCaseACocher = ['Afficher « Pour débattre »', true]
     this.sup = true
   }
@@ -60,8 +71,7 @@ export default class EgaliteFG13 extends Exercice {
     handleAnswers(this, 1, {
       reponse: { value: '(2x+1)^2', options: { factorisation: true } },
     })
-    const correction1 =
-      `Le carré $ABCD$ a pour côté $AB=2x+1$, donc $A=${miseEnEvidence('(2x+1)^2')}$.`
+    const correction1 = `Le carré $ABCD$ a pour côté $AB=2x+1$, donc $A=${miseEnEvidence('(2x+1)^2')}$.`
 
     let texte2 = "Exprime en fonction de $x$ l'aire $B$ du rectangle $AEFD$."
     if (this.interactif)
@@ -69,8 +79,7 @@ export default class EgaliteFG13 extends Exercice {
     handleAnswers(this, 2, {
       reponse: { value: '(x+4)(2x+1)', options: { factorisation: true } },
     })
-    const correction2 =
-      `Le rectangle $AEFD$ a pour largeur $AE=x+4$ et pour longueur $AD=AB=2x+1$, donc $B=${miseEnEvidence('(x+4)(2x+1)')}$.`
+    const correction2 = `Le rectangle $AEFD$ a pour largeur $AE=x+4$ et pour longueur $AD=AB=2x+1$, donc $B=${miseEnEvidence('(x+4)(2x+1)')}$.`
 
     let texte3 = "Exprime en fonction de $x$ l'aire $C$ du rectangle $EBCF$."
     if (this.interactif)
@@ -78,8 +87,7 @@ export default class EgaliteFG13 extends Exercice {
     handleAnswers(this, 3, {
       reponse: { value: '(x-3)(2x+1)', options: { factorisation: true } },
     })
-    const correction3 =
-      `Le rectangle $EBCF$ a pour largeur $EB=x-3$ et pour longueur $BC=AB=2x+1$, donc $C=${miseEnEvidence('(x-3)(2x+1)')}$.`
+    const correction3 = `Le rectangle $EBCF$ a pour largeur $EB=x-3$ et pour longueur $BC=AB=2x+1$, donc $C=${miseEnEvidence('(x-3)(2x+1)')}$.`
 
     let texte4 =
       "Zoé affirme que l'aire $A$ du carré est égale à $(2x+1)^2$.<br>Paul affirme : « $A=B+C$, donc $A=(x+4)(2x+1)+(x-3)(2x+1)$ ».<br>Développe et réduis l'expression de Zoé : $(2x+1)^2$."
@@ -97,8 +105,7 @@ export default class EgaliteFG13 extends Exercice {
     handleAnswers(this, 5, {
       reponse: { value: '4x^2+4x+1', options: { developpementEgal: true } },
     })
-    const correction5 =
-      `En factorisant par $(2x+1)$ : $(x+4)(2x+1)+(x-3)(2x+1)=(2x+1)\\big[(x+4)+(x-3)\\big]=(2x+1)(2x+1)=(2x+1)^2=${miseEnEvidence('4x^2+4x+1')}$.`
+    const correction5 = `En factorisant par $(2x+1)$ : $(x+4)(2x+1)+(x-3)(2x+1)=(2x+1)\\big[(x+4)+(x-3)\\big]=(2x+1)(2x+1)=(2x+1)^2=${miseEnEvidence('4x^2+4x+1')}$.`
 
     const texte6 = 'Compare les résultats obtenus.'
     const correction6 =

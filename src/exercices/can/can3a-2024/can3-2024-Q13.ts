@@ -14,7 +14,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Réduire une expression littérale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '93937'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

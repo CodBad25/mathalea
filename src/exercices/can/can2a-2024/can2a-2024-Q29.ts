@@ -4,6 +4,7 @@
 
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   Spline,
@@ -16,11 +17,10 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Lire une image graphiquement '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '325b5'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -121,7 +121,12 @@ export default class NomExercice extends ExerciceSimple {
       const courbe1 = theSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 2,
+          style: 'x',
+          epaisseur: 2,
+        },
         color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]
@@ -183,7 +188,12 @@ export default class NomExercice extends ExerciceSimple {
       const courbe2 = theSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 2,
+          style: 'x',
+          epaisseur: 2,
+        },
         color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe2]

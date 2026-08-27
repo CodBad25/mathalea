@@ -13,7 +13,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = "Trouver une grandeur en fonction d'une autre"
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '03/01/2026'
 export const dateDeModifImportante = '29/05/2026'

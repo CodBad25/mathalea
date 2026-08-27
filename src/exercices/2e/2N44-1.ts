@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 export const titre = 'Comparer deux nombres en étudiant leur quotient'
 export const dateDePublication = '16/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a39e1'
 
 export const refs = {
@@ -57,7 +57,7 @@ export default class ComparerDeuxNombresAvecPuissances extends Exercice {
     this.consigne =
       'Comparer les deux nombres suivants en justifiant la réponse.'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const [base1, base2] = choice([
         [2, 3],
         [3, 5],
@@ -123,9 +123,7 @@ export default class ComparerDeuxNombresAvecPuissances extends Exercice {
         reponse === '>' ? 'a > b' : 'a < b',
       )}$.`
 
-      if (
-        this.questionJamaisPosee(i, base1, base2, exposant, produitBases)
-      ) {
+      if (this.questionJamaisPosee(i, base1, base2, exposant, produitBases)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

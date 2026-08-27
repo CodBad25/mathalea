@@ -11,7 +11,7 @@ export const titre =
   'Calculer le temps de trajet en fonction de la vitesse et de la distance'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 

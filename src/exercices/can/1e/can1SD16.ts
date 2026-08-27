@@ -15,7 +15,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = 'Résoudre une équation du second degré*'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '04/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -40,7 +39,7 @@ export default class ResoudreEquationSecondDegre2 extends Exercice {
 
   nouvelleVersion() {
     let texte, texteCorr, a, b, c, d, x1, x2
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       x1 = randint(-3, 3, 0)
       x2 = randint(-3, 3, [0, x1, -x1])
       a = randint(1, 2) * choice([-1, 1])

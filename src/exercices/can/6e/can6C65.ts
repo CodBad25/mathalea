@@ -7,7 +7,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer le quotient ou le reste dans une division euclidienne sur des petits nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '12/11/2025'
 

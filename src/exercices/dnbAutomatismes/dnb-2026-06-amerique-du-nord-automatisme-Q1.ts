@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Additionner deux fractions'
 export const dateDePublication = '06/06/2026'
 

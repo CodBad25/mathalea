@@ -122,15 +122,17 @@ describe('MathaleaQcmElement', () => {
     expect(third.checked).toBe(false)
   })
 
-  it('respecte le contrat qcmBuilder en non interactif: lettres sans controles', () => {
+  it('rend les controles inertes sans perdre la selection', () => {
     const qcm = appendQcm(exercice, { radio: true })
     qcm.value = '[0]'
 
     qcm.interactivityOn = false
 
-    expect(qcm.querySelector('input')).toBeNull()
-    expect(qcm.textContent).toContain('A.')
-    expect(qcm.textContent).toContain('B.')
+    const selected = qcm.querySelector('#checkEx2Q0R0') as HTMLInputElement
+    expect(selected).not.toBeNull()
+    expect(selected.checked).toBe(true)
+    expect(selected.disabled).toBe(true)
+    expect(selected.style.pointerEvents).toBe('none')
     expect(qcm.querySelector('#labelEx2Q0R0')?.getAttribute('for')).toBeNull()
     expect(
       (qcm.querySelector('#labelEx2Q0R0') as HTMLLabelElement).style.cursor,
@@ -145,7 +147,9 @@ describe('MathaleaQcmElement', () => {
       interactivityOn: false,
     })
     const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
-    expect(qcm.querySelector('input')).toBeNull()
+    expect(
+      (qcm.querySelector('#checkEx2Q0R0') as HTMLInputElement).disabled,
+    ).toBe(true)
 
     qcm.interactivityOn = true
 
@@ -172,6 +176,9 @@ describe('MathaleaQcmElement', () => {
     expect(exercice.answers?.Ex2Q0R1).toBe('0')
     expect(exercice.answers?.['mathalea-qcmEx2Q0']).toBe('[0]')
     expect(qcm.interactivityOn).toBe(false)
+    expect(qcm.querySelector('#resultatCheckEx2Q0')?.textContent).toContain(
+      '😎',
+    )
   })
 
   it('hydrate la valeur restaurable pour un dispatch qcm historique', () => {
@@ -203,82 +210,6 @@ describe('MathaleaQcmElement', () => {
     expect(qcm.interactivityOn).toBe(false)
     expect(exercice.answers?.Ex2Q0R0).toBe('1')
     expect(exercice.answers?.['mathalea-qcmEx2Q0']).toBe('[0]')
-  })
-
-  it('corrige une question custom legacy puis une question custom element dans le meme exercice', () => {
-    exercice.interactifType = 'custom'
-    exercice.nbQuestions = 2
-    exercice.correctionInteractive = (i: number) => (i === 0 ? 'OK' : 'KO')
-    exercice.autoCorrection[0] = { formatInteractif: 'custom' }
-    exercice.autoCorrection[1] = {
-      formatInteractif: 'mathalea-qcm',
-      propositions: propositions.map((proposition) => ({ ...proposition })),
-      options: {},
-    }
-    document.body.innerHTML = `
-      <div id="exercice2">
-        ${MathaleaQcmElement.create({
-          numeroExercice: exercice.numeroExercice,
-          questionIndex: 1,
-          propositions,
-        })}
-      </div>
-    `
-    const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
-    qcm.value = '[0]'
-    const score = document.createElement('div')
-    const button = document.createElement('button')
-
-    const result = exerciceInteractif(exercice, score, button)
-
-    expect(result).toEqual({
-      numberOfPoints: 2,
-      numberOfQuestions: 2,
-      perQuestionIsOk: [true, true],
-    })
-    expect(exercice.answers?.['mathalea-qcmEx2Q1']).toBe('[0]')
-    expect(qcm.interactivityOn).toBe(false)
-  })
-
-  it('corrige une question declaree custom par handleAnswers sans interactifType global', () => {
-    exercice.nbQuestions = 2
-    exercice.correctionInteractive = (i: number) => (i === 0 ? 'OK' : 'KO')
-    handleAnswers(
-      exercice,
-      0,
-      { reponse: { value: '' } },
-      { formatInteractif: 'custom' },
-    )
-    exercice.autoCorrection[1] = {
-      formatInteractif: 'mathalea-qcm',
-      propositions: propositions.map((proposition) => ({ ...proposition })),
-      options: {},
-    }
-    document.body.innerHTML = `
-      <div id="exercice2">
-        ${MathaleaQcmElement.create({
-          numeroExercice: exercice.numeroExercice,
-          questionIndex: 1,
-          propositions,
-        })}
-      </div>
-    `
-    const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
-    qcm.value = '[0]'
-
-    const result = exerciceInteractif(
-      exercice,
-      document.createElement('div'),
-      document.createElement('button'),
-    )
-
-    expect(exercice.autoCorrection[0].formatInteractif).toBe('custom')
-    expect(result).toEqual({
-      numberOfPoints: 2,
-      numberOfQuestions: 2,
-      perQuestionIsOk: [true, true],
-    })
-    expect(exercice.answers?.['mathalea-qcmEx2Q1']).toBe('[0]')
   })
 
   it('expose un helper qui renseigne le format interactif', () => {
@@ -347,7 +278,7 @@ describe('MathaleaQcmElement', () => {
     expect(qcm.texte).toContain('<mathalea-qcm')
     expect(qcm.texte).not.toContain('<input')
     expect(qcm.texteCorr).toContain('<input type="radio"')
-    expect(exercice.autoCorrection[0].formatInteractif).toBe('qcm')
+    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-qcm')
     expect(exercice.autoCorrectionAMC?.[0].propositions).toEqual(
       exercice.autoCorrection[0].propositions,
     )
@@ -375,7 +306,7 @@ describe('MathaleaQcmElement', () => {
     const qcm = propositionsQcm(exercice, 0)
 
     expect(qcm.texte).toContain('<mathalea-qcm')
-    expect(exercice.autoCorrection[0].formatInteractif).toBe('qcm')
+    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-qcm')
     expect(exercice.autoCorrection[0].propositions).toEqual([
       {
         texte: 'une somme',
@@ -483,6 +414,6 @@ describe('MathaleaQcmElement', () => {
     expect(qcm.texte).toContain('\\begin{qcmprop}')
     expect(qcm.texte).not.toContain('mathalea-qcm')
     expect(qcm.texteCorr).toContain('correct={')
-    expect(exercice.autoCorrection[0].formatInteractif).not.toBe('mathalea-qcm')
+    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-qcm')
   })
 })

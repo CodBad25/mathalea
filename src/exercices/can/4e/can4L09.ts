@@ -9,7 +9,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 export const titre = 'Réduire une expression littérale avec des décimaux'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/04/2024'
 export const uuid = 'c80b3'
 export const refs = {

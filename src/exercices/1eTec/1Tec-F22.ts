@@ -1,7 +1,7 @@
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { choice } from '../../lib/outils/arrayOutils'
 import { createList } from '../../lib/format/lists'
+import { choice } from '../../lib/outils/arrayOutils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 import {
   ecritureAlgebrique,
@@ -21,7 +21,6 @@ export const titre =
   'Factoriser un polynôme du second degré avec ses deux racines'
 export const dateDePublication = '20/3/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const uuid = '61ff2'
 export const refs = {
@@ -71,7 +70,7 @@ export default class factoriseTrinomeAvecRacines extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const x1 = randint(-9, 9, 0)

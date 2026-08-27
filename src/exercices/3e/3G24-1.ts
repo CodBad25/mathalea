@@ -55,7 +55,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'liste-deroulante' // 'mathLive'
+// 'mathLive'
 export const amcReady = true // pour définir que l'exercice peut servir à AMC
 export const amcType = 'qcmMono'
 
@@ -100,7 +100,7 @@ export default class TrianglesSemblables extends Exercice {
       nbQuestions: this.nbQuestions,
     })
     let indiceChampReponse = 0 // Cet indice permet de gérer les numéros de champs interactifs car ces champs ne sont pas de nombre égal selon les listeTypeQuestions[i].
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeDeNomsDePolygonesDejaPris: string[] = []
       let nbDeChampsReponse = 0
       let texte = ''
@@ -127,16 +127,10 @@ export default class TrianglesSemblables extends Exercice {
       const angle = randint(60, 300)
       let p2 = similitude(p1, A, angle, coeff)
       let objetsAAfficher1: (
-        | Polygone
-        | MarqueAngle
-        | NommePolygone
-        | Latex2d
+        Polygone | MarqueAngle | NommePolygone | Latex2d
       )[] = []
       let objetsAAfficher2: (
-        | Polygone
-        | MarqueAngle
-        | NommePolygone
-        | Latex2d
+        Polygone | MarqueAngle | NommePolygone | Latex2d
       )[] = []
       switch (
         typeQuestionsDisponibles[i] // Suivant le type de question, le contenu sera différent

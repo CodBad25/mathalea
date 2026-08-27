@@ -31,7 +31,6 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '19/09/2021'

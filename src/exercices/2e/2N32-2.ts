@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 export const titre = 'Effectuer des calculs complexes avec des fractions'
 export const dateDePublication = '15/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1fc02'
 
 export const refs = {

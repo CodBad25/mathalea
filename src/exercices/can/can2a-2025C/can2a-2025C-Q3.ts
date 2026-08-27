@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une différence de deux entiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '8mrbg'
 export const refs = {
   'fr-fr': [],
@@ -17,7 +17,9 @@ export const refs = {
 export default class Can2a2025CQ3 extends ExerciceCan {
   enonce(a?: number, b?: number): void {
     if (a == null || b == null) {
-      a = this.quotaChoice('aBase', [100, 200]) + this.quotaRandint('aEcart', 3, 8)
+      a =
+        this.quotaChoice('aBase', [100, 200]) +
+        this.quotaRandint('aEcart', 3, 8)
       b = this.quotaRandint('b', 2, 5) * 10 + 9
     }
 

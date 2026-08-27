@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Numération'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343z'
 export const refs = {
   'fr-fr': [],
@@ -38,10 +38,10 @@ export default class Can2025N5Q19 extends ExerciceCan {
     this.correction = `Le chiffre des ${b} dans le nombre $${texNombre(a, 3)}$ est $${miseEnEvidence(`${nbStr[index]}`)}$.`
 
     if (!this.interactif && context.isHtml) {
-         this.question += ' $\\ldots$'
-       }
-       this.optionsChampTexte = { texteApres: '.' }
-     }
+      this.question += ' $\\ldots$'
+    }
+    this.optionsChampTexte = { texteApres: '.' }
+  }
 
   nouvelleVersion() {
     this.canOfficielle ? this.enonce(379.628, 'centièmes') : this.enonce()

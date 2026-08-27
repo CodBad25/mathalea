@@ -11,7 +11,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer une proportion'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'c5768'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

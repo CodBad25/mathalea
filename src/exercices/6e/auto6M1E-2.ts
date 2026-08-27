@@ -14,7 +14,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre =
   'Calculer mentalement le périmètre de carrés, rectangles et cercles'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '13/12/2024'
 export const dateDeModifImportante = '03/04/2025'
 

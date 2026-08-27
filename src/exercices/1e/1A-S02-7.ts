@@ -10,7 +10,7 @@ export const refs = {
   'fr-ch': ['4mQCM-1'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =

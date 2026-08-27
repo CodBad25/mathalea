@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Trouver l'égalité correcte avec des calculs de fractions"
@@ -89,7 +89,10 @@ export default class auto1AC025 extends ExerciceQcmA {
     const diff = f2.differenceFraction(f1)
     const resProd2 = f2.produitFraction(a)
     const resDiv2 = f1.diviseFraction(f2)
-    const resSommeSimplif = new FractionEtendue(f1.num + diviseur, f1.den + diviseur)
+    const resSommeSimplif = new FractionEtendue(
+      f1.num + diviseur,
+      f1.den + diviseur,
+    )
 
     // Bonnes réponses avec leurs corrections
     const bonnesReponses = [
@@ -172,7 +175,7 @@ export default class auto1AC025 extends ExerciceQcmA {
         texte: `$\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=${f1.texFraction}$`,
         corr: this.correctionMauvaiseReponse(
           `\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=${f1.texFraction}`,
-          `On ne peut pas simplifier  par $${diviseur}$ car $${diviseur}$ est additionné au numérateur et au dénominateur et pas multiplié.<br>On peut écrire : $\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=\\dfrac{${f1.num+diviseur}}{${f1.den+diviseur}}${resSommeSimplif.texSimplificationAvecEtapes(true)}\\neq ${f1.texFraction}$.`,
+          `On ne peut pas simplifier  par $${diviseur}$ car $${diviseur}$ est additionné au numérateur et au dénominateur et pas multiplié.<br>On peut écrire : $\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=\\dfrac{${f1.num + diviseur}}{${f1.den + diviseur}}${resSommeSimplif.texSimplificationAvecEtapes(true)}\\neq ${f1.texFraction}$.`,
         ),
       },
       {

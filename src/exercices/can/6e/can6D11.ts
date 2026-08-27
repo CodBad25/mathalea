@@ -2,7 +2,7 @@ import ConversionHeuresMinutesOuMinutesEtSecondes from '../../6e/6M4C-1'
 export const titre = 'Convertir de secondes vers min et secondes'
 export const dateDePublication = '04/12/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

@@ -16,7 +16,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une équation de droite (graphique)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '15/11/2022'
 export const dateDeModifImportante = '08/07/2025'
 /**

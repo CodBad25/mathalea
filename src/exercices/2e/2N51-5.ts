@@ -15,7 +15,6 @@ export const titre =
   'Développer les identités remarquables avec des racines carrées'
 export const dateDeModifImportante = '25/04/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Stéphane Guyon

@@ -10,7 +10,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const titre = 'Tracer un triangle à partir de longueurs des 3 côtés'
 export const dateDePublication = '29/10/2023'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * Tracer un triangle à partir de longueurs des 3 côtés

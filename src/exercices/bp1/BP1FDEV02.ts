@@ -1,7 +1,7 @@
 import DeriverLambdaU from '../1e/1AN14-1'
 export const titre = 'Dériver une fonction du type $\\lambda u$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '30/07/2026'
 
 /**

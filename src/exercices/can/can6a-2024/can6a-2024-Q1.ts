@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec les tables de multiplication'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'bb525'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -3,7 +3,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Connaître des rapports entre fraction d'heure et minutes"
 export const dateDePublication = '02/08/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

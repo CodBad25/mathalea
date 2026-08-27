@@ -1,6 +1,6 @@
 import RelationDeThales from './_RelationDeThales'
 export const titre = 'Écrire une relation de Thalès'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 export const dateDePublication = '05/01/2023'
 export const dateDeModifImportante = '08/11/2025'

@@ -12,7 +12,7 @@ export const titre =
   'Connaître, de façon automatique, les liens entre 1/4, 1/2 et 3/4'
 export const dateDePublication = '10/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e32d0'
 export const refs = {
   'fr-fr': ['auto6N3B', '6AutoF3'],

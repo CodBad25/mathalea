@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Décomposer une fraction (partie entière + fraction inférieure à 1)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '24/11/2024'
 
 /**

@@ -11,7 +11,7 @@ import { arrondi } from '../../lib/outils/nombres'
 export const titre =
   "Donner l'écriture décimale à partir d'une somme d'entiers et de fractions décimales"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '24/03/2021'

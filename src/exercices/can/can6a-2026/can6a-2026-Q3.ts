@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un prix total'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ybdfv'
 export const refs = {
   'fr-fr': [],
@@ -19,14 +19,13 @@ export const refs = {
 
 */
 export default class Can20266Q3 extends ExerciceCan {
- constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = {
       nombreDecimalSeulement: true,
     }
   }
-
 
   enonce(nbStylos?: number, prixUnitaire?: number) {
     if (nbStylos == null || prixUnitaire == null) {
@@ -48,7 +47,7 @@ export default class Can20266Q3 extends ExerciceCan {
 
     if (this.interactif) {
       this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
-    } 
+    }
 
     this.formatChampTexte = KeyboardType.clavierDeBase
   }

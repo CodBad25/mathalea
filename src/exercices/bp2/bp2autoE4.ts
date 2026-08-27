@@ -2,7 +2,6 @@ import PolynesieJuin12Exo1Q1 from '../QCMBrevet/A2013/PJ13E1Q1'
 
 export const titre = 'Effectuer des calculs avec les puissances de 10 (QCM)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '12/4/2025'
 

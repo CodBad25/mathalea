@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre des problèmes avec recherche de diviseurs communs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '17/08/2021'
@@ -43,7 +43,6 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
 
     this.nbQuestions = 3
 
-    this.interactifType = 'mathLive'
     this.sup = '4'
   }
 

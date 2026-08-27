@@ -1,16 +1,17 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rienSi1 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Déterminer des limites en l\'infini de fonctions de référence'
+export const titre =
+  "Déterminer des limites en l'infini de fonctions de référence"
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '79c37'
 export const refs = {
   'fr-fr': ['TSA2-21', 'TCA2-21'],
@@ -35,11 +36,7 @@ type DonneesQuestion = {
 
 function termePuissance(coefficient: number, exposant: number): string {
   const coefficientTexte =
-    coefficient === 1
-      ? ''
-      : coefficient === -1
-        ? '-'
-        : `${coefficient}`
+    coefficient === 1 ? '' : coefficient === -1 ? '-' : `${coefficient}`
   return `${coefficientTexte}x${exposant === 1 ? '' : `^{${exposant}}`}`
 }
 
@@ -102,8 +99,7 @@ export default class LimitesFonctionsDeReference extends Exercice {
         case 'puissanceImpaire': {
           const exposant = choice([1, 3, 5])
           const expression = termePuissance(coefficient, exposant)
-          const puissanceReference =
-            exposant === 1 ? 'x' : `x^{${exposant}}`
+          const puissanceReference = exposant === 1 ? 'x' : `x^{${exposant}}`
           const limiteReference = sensLimite === '+' ? '+\\infty' : '-\\infty'
           const reponse =
             coefficient > 0
@@ -141,9 +137,7 @@ export default class LimitesFonctionsDeReference extends Exercice {
         case 'exponentielle': {
           const coefficientExposant = choice([-1, 1]) * randint(2, 5)
           const sensArgument =
-            coefficientExposant * (sensLimite === '+' ? 1 : -1) > 0
-              ? '+'
-              : '-'
+            coefficientExposant * (sensLimite === '+' ? 1 : -1) > 0 ? '+' : '-'
           const reponse = sensArgument === '+' ? '+\\infty' : '0'
           const exposant = `${coefficientExposant < 0 ? '-' : ''}${rienSi1(Math.abs(coefficientExposant))}x`
           donnees = {
@@ -162,11 +156,7 @@ export default class LimitesFonctionsDeReference extends Exercice {
       if (this.interactif) {
         texte +=
           `<br>$\\displaystyle \\lim_{x\\to${limiteX}}f(x)=$` +
-          ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierLimitesSimple,
-          )
+          ajouteChampTexteMathLive(this, i, KeyboardType.clavierLimitesSimple)
       } else {
         texte += `<br>$\\displaystyle \\lim_{x\\to${limiteX}}f(x)$`
       }

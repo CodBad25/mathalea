@@ -25,7 +25,7 @@ import {
 
 export const titre = 'Résoudre une équation du premier degré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '02/04/2024'

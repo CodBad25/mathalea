@@ -3,7 +3,6 @@ import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Utiliser le produit cartésien.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '20/4/2025'
 

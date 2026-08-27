@@ -7,7 +7,7 @@ export const titre =
   'Connaître les relations entre unités consécutives de longueurs'
 export const dateDePublication = '28/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 
 /**
@@ -37,10 +37,10 @@ export default class ConversionUnitesMetriquesConsecutives extends ExerciceSimpl
       ['dm', 'cm'],
       ['cm', 'mm'],
     ]
-    const choixPlusGdVerPlusPetit = this.quotaChoice('choixPlusGdVerPlusPetit', [
-      true,
-      false,
-    ])
+    const choixPlusGdVerPlusPetit = this.quotaChoice(
+      'choixPlusGdVerPlusPetit',
+      [true, false],
+    )
     const choixPaires = this.quotaRandint('choixPaires', 0, 5)
     const unite1 = pairesMetriques[choixPaires][choixPlusGdVerPlusPetit ? 0 : 1]
     const unite2 = pairesMetriques[choixPaires][choixPlusGdVerPlusPetit ? 1 : 0]

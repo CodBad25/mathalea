@@ -30,7 +30,6 @@ export const titre = 'Effectuer des calculs liés aux homothéties'
 export const dateDePublication = '28/11/2021'
 export const dateDeModifImportante = '05/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculs dans une homothétie : longueurs, aires.

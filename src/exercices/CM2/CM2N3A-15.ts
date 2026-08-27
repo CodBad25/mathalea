@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 export const titre = 'Trouver le complément à une dizaine'
 export const amcReady = true
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCNum'
 
 /**

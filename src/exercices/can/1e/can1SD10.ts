@@ -6,7 +6,7 @@ import {
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un discriminant'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '26/10/2021'

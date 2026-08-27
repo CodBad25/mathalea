@@ -1,18 +1,16 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rienSi1 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Calculer une limite avec un théorème de comparaison'
+export const titre = 'Calculer une limite avec un théorème de comparaison'
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '8399f'
 export const refs = {
@@ -21,9 +19,7 @@ export const refs = {
 }
 
 type TypeQuestion =
-  | 'comparaison'
-  | 'gendarmesQuotient'
-  | 'gendarmesExponentielle'
+  'comparaison' | 'gendarmesQuotient' | 'gendarmesExponentielle'
 type SensLimite = '+' | '-'
 
 function ecriturePolynome(
@@ -127,11 +123,7 @@ export default class LimitesParComparaison extends Exercice {
         const polynome = ecriturePolynome(coefficient, degre, constante)
         expression = `${polynome}${ecritureTermeTrigonometrie(coefficientTrigo, fonctionTrigo)}`
         domaine = '\\mathbb R'
-        const signeLimite = signeLimitePolynome(
-          coefficient,
-          degre,
-          sens,
-        )
+        const signeLimite = signeLimitePolynome(coefficient, degre, sens)
         reponse = infini(signeLimite)
         const borneInferieure = ecriturePolynome(
           coefficient,
@@ -143,8 +135,7 @@ export default class LimitesParComparaison extends Exercice {
           degre,
           constante + valeurAbsolueCoefficientTrigo,
         )
-        const borneUtile =
-          signeLimite > 0 ? borneInferieure : borneSuperieure
+        const borneUtile = signeLimite > 0 ? borneInferieure : borneSuperieure
         const comparaisonUtile =
           signeLimite > 0
             ? `f(x)\\geqslant ${borneInferieure}`

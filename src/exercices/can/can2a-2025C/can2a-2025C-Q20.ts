@@ -3,9 +3,9 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { prenomF } from '../../../lib/outils/Personne'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer l\'âge d\'un élève à partir d\'un énoncé'
+export const titre = "Calculer l'âge d'un élève à partir d'un énoncé"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '13ewz'
 export const refs = {
   'fr-fr': [],
@@ -17,14 +17,19 @@ export const refs = {
 
 */
 export default class Can2a2025CQ20 extends ExerciceCan {
- enonce(ecart?: number, somme?: number, prenom1?: string, prenom2?: string): void {
-      if (ecart == null || somme == null || prenom1 == null || prenom2 == null) {
+  enonce(
+    ecart?: number,
+    somme?: number,
+    prenom1?: string,
+    prenom2?: string,
+  ): void {
+    if (ecart == null || somme == null || prenom1 == null || prenom2 == null) {
       ecart = randint(5, 20)
       // somme doit avoir même parité que ecart pour que les âges soient entiers
       do {
         somme = randint(20, 60)
       } while ((somme - ecart) % 2 !== 0)
-       prenom1 = prenomF() as string
+      prenom1 = prenomF() as string
       prenom2 = prenomF() as string
       while (prenom2 === prenom1) {
         prenom2 = prenomF() as string

@@ -13,7 +13,6 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer des durées ou déterminer un horaire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

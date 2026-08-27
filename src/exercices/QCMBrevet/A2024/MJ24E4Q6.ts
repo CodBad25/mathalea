@@ -18,7 +18,7 @@ export const refs = {
   'fr-ch': ['1mT-1'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Trigonométrie dans le triangle rectangle (2023 Métropole)'

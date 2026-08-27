@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Abscisse d'un point"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343k'
 export const refs = {
   'fr-fr': [],

@@ -12,7 +12,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre = 'Exprimer une variable en fonction des autres'
 export const dateDePublication = '25/09/2023'
 export const dateDeModifImportante = '27/09/2024'

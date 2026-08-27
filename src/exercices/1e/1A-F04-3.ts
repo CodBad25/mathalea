@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import {
@@ -8,6 +7,7 @@ import {
 } from '../../lib/mathFonctions/Spline'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
@@ -21,7 +21,7 @@ export const refs = {
   'fr-ch': ['1mF1-16'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =

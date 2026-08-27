@@ -7,7 +7,6 @@ import Exercice from '../Exercice'
 
 export const titre = "Reconnaitre une fonction d'après sa courbe"
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 export const dateDePublication = '22/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const uuid = 'addd5' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)

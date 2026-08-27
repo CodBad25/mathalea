@@ -5,8 +5,8 @@ import { polyline } from '../../lib/2d/Polyline'
 import { latex2d } from '../../lib/2d/textes'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -22,7 +22,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre des problèmes algébriques avec des balances'
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '3/06/2025'
 
@@ -113,7 +112,7 @@ export default class ResoudreDesProblemes extends Exercice {
       melange: 5,
       defaut: 5,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = 'On a effectué deux pesées :<br>'
       let texteCorr = ''
       const [fruit1, fruit2] = combinaisonListes(items, 2)

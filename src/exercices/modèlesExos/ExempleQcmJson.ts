@@ -64,7 +64,7 @@ const qcmData: QcmJsonData = {
 export const uuid = 'exemple-qcm-json'
 export const titre = 'Exemple QCM JSON'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const refs = {

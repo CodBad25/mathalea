@@ -27,7 +27,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Calculer un angle avec le produit scalaire (dans un repère)'
 export const dateDePublication = '29/04/2025'

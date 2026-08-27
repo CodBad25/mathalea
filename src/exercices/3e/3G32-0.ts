@@ -68,7 +68,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Problèmes nécessitant un calcul de longueur à l'aide de la trigonométrie"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '05/03/2022'

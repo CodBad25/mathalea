@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Utiliser la distributivité simple avec des fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '04/03/2026'
 
 export const uuid = '7f8e2'

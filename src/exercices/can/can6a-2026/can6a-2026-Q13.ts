@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Additionner des kg et des g'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'dvd8q'
 export const refs = {
   'fr-fr': [],
@@ -20,9 +20,9 @@ export const refs = {
 export default class Can20266Q13 extends ExerciceCan {
   constructor() {
     super()
-        this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = { texteApres: '$\\text{ kg}$' }
-      this.optionsDeComparaison = {
+    this.optionsDeComparaison = {
       nombreDecimalSeulement: true,
     }
   }
@@ -39,7 +39,6 @@ export default class Can20266Q13 extends ExerciceCan {
 
     this.correction = `$${texNombre(nbGrammes, 0)}\\text{ g}=${texNombre(nbGrammes / 1000, 1)}\\text{ kg}$.<br>
     Donc $${texNombre(nbKilos, 1)}+${texNombre(nbGrammes / 1000, 1)}=${miseEnEvidence(texNombre(nbKilos + nbGrammes / 1000, 1))}\\text{ kg}$`
-
 
     this.canEnonce = 'Complète.'
     this.canReponseACompleter = `$${texNombre(nbKilos, 1)}\\text{ kg}+${texNombre(nbGrammes, 0)}\\text{ g}= \\ldots \\text{ kg}$`

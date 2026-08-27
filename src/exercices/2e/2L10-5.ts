@@ -17,7 +17,7 @@ import { sp } from '../../lib/outils/outilString'
 export const titre =
   "Calculer la valeur d'une expression littérale à une variable pour une valeur donnée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '4/5/2024'
 export const uuid = '76926'
 

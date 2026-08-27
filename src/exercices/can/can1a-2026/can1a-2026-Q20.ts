@@ -5,7 +5,7 @@ import { context } from '../../../modules/context'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = ''
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e280t'
 export const refs = {
   'fr-fr': [],

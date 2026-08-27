@@ -10,7 +10,6 @@ import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Lister tous les diviseurs d'un entier"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '11/07/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '15/11/2025'

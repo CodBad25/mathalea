@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 export const dateDePublication = '02/08/2025'
 export const titre = "Choisir des rapports entre fraction d'heure et minutes"
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
 
 /**
  * Choisir des rapports entre fraction d\'heure et minutes
@@ -34,7 +33,7 @@ export default class AutoChoisirFractionHeure extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const durees = [
         ["Un quart d'heure", '\\dfrac14', '15', ' est égal', 'q'],
         ['Une demi-heure', '\\dfrac12', '30', 'est égale', 'd'],

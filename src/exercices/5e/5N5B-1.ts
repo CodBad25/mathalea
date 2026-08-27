@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Calculer la valeur d'une expression littérale avec une ou deux variables"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModificationImportante = '26/05/2025'
 
 /**

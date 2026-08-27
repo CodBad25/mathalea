@@ -8,7 +8,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Déterminer le cadran d'un angle"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '04/05/2026'
 export const uuid = 'f05d3'
 export const refs = {

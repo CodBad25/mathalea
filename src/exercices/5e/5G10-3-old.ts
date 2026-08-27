@@ -57,7 +57,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export default class SymetrieAxialeProprietes extends Exercice {
   constructor() {
     super()

@@ -15,7 +15,7 @@ import { getDigitFromNumber } from './_ExerciceConversionsLongueurs'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const titre = "Effectuer des conversions d'aires"
 
 /**
@@ -38,7 +38,7 @@ export default class ExerciceConversionsAires extends Exercice {
     super()
     this.sup = 1 // Niveau de difficulté de l'exercice
     this.sup2 = false // Avec des nombres décimaux ou pas
-    this.sup3 = 1 // interactifType Qcm
+    this.sup3 = 1 // version QCM
     this.sup4 = false // tableau
     this.spacing = 2
     this.correctionDetailleeDisponible = true
@@ -77,7 +77,6 @@ export default class ExerciceConversionsAires extends Exercice {
       this.interactif && this.sup3 === 1
         ? 'Cocher la bonne réponse.'
         : 'Compléter.'
-    this.interactifType = this.sup3 === 2 ? 'mathLive' : 'qcm'
     Decimal.set({ toExpNeg: -15 })
 
     let prefixeMulti = [
@@ -399,7 +398,7 @@ ${range(Math.abs(ecart - 1))
       ]
       const props = propositionsQcm(this, i)
 
-      if (this.interactif && this.interactifType === 'qcm') {
+      if (this.interactif && this.sup3 !== 2) {
         texte += props.texte
       }
 
@@ -408,16 +407,21 @@ ${range(Math.abs(ecart - 1))
         if (context.vue === 'diap') {
           texte = texte.replace('= \\dotfills', '\\text{ en }')
         }
-        if (this.interactif && this.interactifType !== 'qcm') {
+        if (this.interactif && this.sup3 === 2) {
           texte = texte.replace(
             '\\dotfills',
             '$' +
               ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +
               '$',
           )
-          handleAnswers(this, i, {
-            reponse: { value: parseFloat(resultat.toString()) },
-          })
+          handleAnswers(
+            this,
+            i,
+            {
+              reponse: { value: parseFloat(resultat.toString()) },
+            },
+            { formatInteractif: 'mathlive' },
+          )
         }
         if (context.isHtml) {
           texte = texte.replace(

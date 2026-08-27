@@ -2,9 +2,8 @@ import SommeSuite from './1AL11-8'
 export const titre = 'Calculer une somme de termes.'
 export const dateDePublication = '25/08/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
+export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Clone de 1AL11-8b pour les auto 1er

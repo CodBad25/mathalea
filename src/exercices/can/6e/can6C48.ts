@@ -6,7 +6,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = "Résoudre un problème d'économie"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '06/04/2024'
 export const uuid = 'b40d5'
 export const refs = {

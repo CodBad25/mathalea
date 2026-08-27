@@ -1,7 +1,7 @@
 import PuissancesDeDix from '../4e/4C30'
 export const titre = 'Utiliser les règles de calculs avec des puissances de 10'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDePublication = '05/09/2023'

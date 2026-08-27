@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème concret'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5a91c'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

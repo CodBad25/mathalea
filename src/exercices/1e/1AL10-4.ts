@@ -22,7 +22,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const titre = "Calculer un terme d'une suite définie par récurrence"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '11/10/2024'
 /**
  * 1N11

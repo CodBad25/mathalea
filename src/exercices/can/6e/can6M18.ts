@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const dateDePublication = '27/07/2025'
 export const titre = 'Convertir des unités de longueur'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

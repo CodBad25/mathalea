@@ -2,7 +2,6 @@ import DefinitionUnitesVolumes from '../5e/auto5N4B'
 
 export const titre = "Connaître la définition d'un centimètre cube"
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDePublication = '04/08/2025'
 
 /**

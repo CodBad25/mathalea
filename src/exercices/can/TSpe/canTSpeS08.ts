@@ -6,7 +6,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Limite de $\\sqrt(n)-n^p$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = '41d1b'
 export const refs = {

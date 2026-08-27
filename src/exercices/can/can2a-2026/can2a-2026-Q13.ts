@@ -1,6 +1,6 @@
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 
 import ExerciceCan from '../../ExerciceCan'
 
@@ -8,12 +8,12 @@ import { latex2d } from '../../../lib/2d/textes'
 import { mathalea2d } from '../../../modules/mathalea2d'
 
 import { repere } from '../../../lib/2d/reperes'
+import { bleuMathalea } from '../../../lib/colors'
 import { spline, type NoeudSpline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une image graphiquement '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'kavfq'
 export const refs = {
   'fr-fr': [],

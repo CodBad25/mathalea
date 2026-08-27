@@ -1,11 +1,10 @@
-import ExerciceSimple from '../ExerciceSimple'
-import { randint } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
+import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Effectuer une somme de combinaisons.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '20/4/2025'
 

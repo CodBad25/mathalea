@@ -7,7 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 export const titre = 'Résoudre une inéquation du second degré '
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'j3wun'
 export const refs = {
   'fr-fr': [],

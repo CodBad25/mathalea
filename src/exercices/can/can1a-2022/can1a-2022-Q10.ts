@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer avec un pourcentage'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'e37gg'
 export const refs = {
   'fr-fr': [],
@@ -20,11 +20,9 @@ export const refs = {
 export default class Can1a2022Q10 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
-
-  
 
   enonce(a?: number, p?: number) {
     if (a == null || p == null) {

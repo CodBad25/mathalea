@@ -18,7 +18,7 @@ export const refs = {
 export const titre =
   'Savoir résoudre un problème de proportionnalité : Le sportif'
 export const dateDePublication = '20/11/2024'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 /**

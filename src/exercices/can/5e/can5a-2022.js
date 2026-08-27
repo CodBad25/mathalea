@@ -36,7 +36,7 @@ import Exercice from '../../Exercice'
 
 export const titre = 'CAN 5e sujet 2022'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '02/05/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '30/11/2025' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

@@ -13,7 +13,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Compléter sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
+
 export const uuid = 'br9n6'
 export const refs = {
   'fr-fr': [],

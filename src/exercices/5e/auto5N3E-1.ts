@@ -19,7 +19,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = ['AMCOpen', 'AMCNum', 'qcmMult', 'qcmMono']
 export const interactifReady = true
-export const interactifType = ['mathLive', 'qcm']
 
 export const titre = 'Simplifier des fractions'
 export const dateDeModifImportante = '08/03/2024'
@@ -51,7 +50,6 @@ export default class Exercice_fractions_simplifier extends Exercice {
   }
 
   nouvelleVersion() {
-    this.interactifType = this.sup3 ? 'qcm' : 'mathLive'
     this.amcType = this.sup3
       ? !this.sup2
         ? 'qcmMult'
@@ -167,13 +165,13 @@ export default class Exercice_fractions_simplifier extends Exercice {
               ).texFraction) +
           ' $<br>'
       }
-      if (this.sup2 || this.interactifType === 'qcm') {
+      if (this.sup2 || this.sup3) {
         reponse = new FractionEtendue(a, b)
       } else {
         reponse = new FractionEtendue(k * a, k * b)
       }
       if (
-        this.interactifType === 'qcm' ||
+        this.sup3 ||
         this.amcType === 'qcmMult' ||
         this.amcType === 'qcmMono'
       ) {
@@ -289,7 +287,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
           }
         }
         const monQcm = propositionsQcm(this, i) // Les deux paramètres sont obligatoires et désignent, respectivement, l'exercice appelant, le numéro de la question dans la programmation de l'exercice.
-        if (this.interactif && this.interactifType === 'qcm')
+        if (this.interactif && this.sup3)
           texte += monQcm.texte
         if (!this.interactif && this.sup3 && !context.isAmc)
           texte += monQcm.texte
@@ -316,7 +314,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
 
-        if (this.interactifType === 'mathLive' || this.amcType === 'AMCNum') {
+        if (!this.sup3 || this.amcType === 'AMCNum') {
           handleAnswers(this, i, {
             reponse: {
               value: reponse.toLatex(),

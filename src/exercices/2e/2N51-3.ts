@@ -11,7 +11,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Simplifier une somme de racines carrées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * 2N32-4, ex 2N12-1

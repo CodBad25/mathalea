@@ -33,7 +33,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Calculer des coordonnées de points appartenant à une courbe connaissant l'abscisse ou l'ordonnée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '24/09/2022'
 export const dateDeModifImportante = '18/11/2025'
 /**

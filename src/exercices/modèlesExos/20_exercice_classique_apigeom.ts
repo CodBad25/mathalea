@@ -9,7 +9,6 @@ export const titre = 'TITRE'
 
 export const dateDePublication = '11/01/2025'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = 'babybel'
 export const refs = {

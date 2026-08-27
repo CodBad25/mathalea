@@ -18,7 +18,6 @@ export const dateDeModifImportante = '22/08/2024'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const titre = 'Multiplier par 0,1 ; 0,01 ; 0,001 (QCM)'
 

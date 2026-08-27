@@ -24,7 +24,7 @@ import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Résoudre un problème en lien avec le périmètre ou l'aire"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '16/08/2026'
 
 /**

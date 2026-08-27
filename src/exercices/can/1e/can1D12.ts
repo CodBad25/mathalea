@@ -5,11 +5,11 @@ import {
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer la fonction dérivée d’un polynôme de degré 2'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '20/06/2022'
 
 /**

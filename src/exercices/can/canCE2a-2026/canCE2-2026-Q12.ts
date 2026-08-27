@@ -1,4 +1,5 @@
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -6,11 +7,10 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Placer une fraction sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '481aa'
 export const refs = {
   'fr-fr': [],

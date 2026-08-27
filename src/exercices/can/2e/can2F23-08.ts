@@ -2,7 +2,7 @@ import ResoudreEquationsFonctionDeReference from './can2F3-03_old'
 
 export const titre = 'Résoudre une équation avec la fonction inverse'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const dateDePublication = '18/08/2026'
 
 export const uuid = '7e4b1'

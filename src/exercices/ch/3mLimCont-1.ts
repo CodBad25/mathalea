@@ -23,7 +23,7 @@ export const titre =
   "Calculer une limite d'une fonction rationnelle sans indétermination ou avec une indétermination de type 1/0 ou 0/0"
 export const dateDePublication = '17/09/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '04b1e'
 export const refs = {
   'fr-fr': [],
@@ -187,7 +187,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
 
       return result || '1'
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = ''

@@ -10,7 +10,6 @@ export const titre = 'Résoudre une équation du type $ax+b=c$'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = 'qcm'
 
 export const dateDePublication = '25/12/2025'
 

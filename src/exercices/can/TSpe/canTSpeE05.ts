@@ -6,10 +6,10 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
-export const titre = 'Déterminer un vecteur normal à un plan donné par une équation cartésienne'
+export const titre =
+  'Déterminer un vecteur normal à un plan donné par une équation cartésienne'
 export const dateDePublication = '28/01/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *
@@ -31,14 +31,13 @@ export default class VecteurNormalPlan extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const a = randint(-10, 10, 0)
       const b = randint(-10, 10, 0)
       const c = randint(-10, 10, 0)
-      const d = randint(-10, 10) 
-      
+      const d = randint(-10, 10)
 
       texte = ` Dans un repère orthonormé de l'espace $\\big(O ; \\vec \\imath,\\vec \\jmath, \\vec k\\big)$, on donne une équation cartésienne d'un plan $\\mathcal{P}$ : <br> $\\mathcal{P}~:~${rienSi1(a)}x ${ecritureAlgebriqueSauf1(b)}y${ecritureAlgebriqueSauf1(c)}z${ecritureAlgebriqueSauf1(d)}=0$.<br>`
       texte += "<br>Donner les coordonnées d'un vecteur normal à $\\mathcal{P}$"

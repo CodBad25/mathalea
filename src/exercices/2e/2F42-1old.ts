@@ -1,6 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -9,11 +10,9 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '27/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const uuid = '7761e' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
@@ -128,7 +127,12 @@ export default class BetaModeleSpline extends Exercice {
       const courbe1 = maSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 2 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 1,
+          style: '.',
+          epaisseur: 2,
+        },
         color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]

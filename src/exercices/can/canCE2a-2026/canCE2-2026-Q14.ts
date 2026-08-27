@@ -14,7 +14,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Trouver une fraction à partir d'un dessin"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a3bc7'
 export const refs = {
   'fr-fr': [],

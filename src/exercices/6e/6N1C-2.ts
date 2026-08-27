@@ -22,7 +22,6 @@ import Exercice from '../Exercice'
 export const dateDeModifImportante = '16/09/2024'
 export const titre = "Placer un point d'abscisse entière (grands nombres)"
 export const interactifReady = true
-export const interactifType = 'points-cliquables'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 /**

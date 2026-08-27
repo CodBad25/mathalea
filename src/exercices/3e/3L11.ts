@@ -28,7 +28,7 @@ import Exercice from '../Exercice'
 export const titre = 'Utiliser la simple distributivité'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const dateDeModifImportante = '10/06/2024'

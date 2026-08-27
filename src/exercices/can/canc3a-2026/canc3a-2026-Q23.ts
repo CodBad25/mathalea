@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir en secondes'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ff431'
 export const refs = {
   'fr-fr': [],
@@ -17,18 +17,18 @@ export const refs = {
  * @author Jean-claude Lhote
  */
 export default class Can2026CM2Q23 extends ExerciceCan {
- constructor () {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = {
-      texteApres: ' $\\text{s}$'
+      texteApres: ' $\\text{s}$',
     }
     this.optionsDeComparaison = {
-      nombreDecimalSeulement: true
+      nombreDecimalSeulement: true,
     }
   }
 
-  enonce (minutes?: number) {
+  enonce(minutes?: number) {
     if (minutes == null) {
       minutes = randint(2, 10)
     }
@@ -46,7 +46,7 @@ export default class Can2026CM2Q23 extends ExerciceCan {
     this.canReponseACompleter = `$${minutes}\\text{ min} = \\ldots \\text{ s}$`
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.canOfficielle || this.sup ? this.enonce(2) : this.enonce()
   }
 }

@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { courbe } from '../../../lib/2d/Courbe'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
@@ -9,13 +8,14 @@ import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer une ordonnée/abscisse avec une fonction linéaire'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/11/2022'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

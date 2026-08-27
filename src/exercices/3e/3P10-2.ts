@@ -4,8 +4,8 @@
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer des variations consécutives (pourcentages)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '28/06/2026'
 
 /**
@@ -71,7 +71,7 @@ export default class VariationsCumulees extends Exercice {
     })
     const progressivite = 4 - Number(this.sup2)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       const nbFois = randint(3, 6)
       const enonceBase = ''
       const questionType1 = ''

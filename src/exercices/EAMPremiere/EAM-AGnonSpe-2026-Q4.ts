@@ -9,10 +9,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Déterminer un nombre de km à partir d\'une vitesse moyenne'
+export const titre = "Déterminer un nombre de km à partir d'une vitesse moyenne"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -21,7 +21,12 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ4AGns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(v: number, h: number, m: number, distracteurs?: string[]): void {
+  private appliquerLesValeurs(
+    v: number,
+    h: number,
+    m: number,
+    distracteurs?: string[],
+  ): void {
     const tDec = h + m / 60
     const d = v * tDec
 
@@ -30,12 +35,17 @@ export default class AutoQ4AGns2026 extends ExerciceQcmA {
     const repCorrecte = `$${d}$ km`
 
     if (distracteurs && distracteurs.length >= 3) {
-      this.reponses = [repCorrecte, distracteurs[0], distracteurs[1], distracteurs[2]]
+      this.reponses = [
+        repCorrecte,
+        distracteurs[0],
+        distracteurs[1],
+        distracteurs[2],
+      ]
     } else {
       // Génération dynamique de mauvaises réponses
       // Erreur classique : considérer 2h30 comme 2,3h (d = v * (h + 0.3))
       const err1 = Math.round(v * (h + m / 100))
-      
+
       // Distracteurs proches (+10, -10, -20)
       const err2 = d - 10
       const err3 = d + 10
@@ -75,7 +85,7 @@ export default class AutoQ4AGns2026 extends ExerciceQcmA {
       const v = choice([50, 60, 70, 80, 90])
       const h = choice([1, 2, 3])
       const m = 30 // Pour avoir 1h30, 2h30 ou 3h30
-      
+
       this.appliquerLesValeurs(v, h, m)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre =
   'Calculer un produit de deux nombres avec une égalité remarquable'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'one9l'
 export const refs = {
   'fr-fr': [],

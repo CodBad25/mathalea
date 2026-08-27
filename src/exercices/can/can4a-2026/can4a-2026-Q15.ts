@@ -11,7 +11,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un angle dans un triangle rectangle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '4lpbc'
 export const refs = {
   'fr-fr': [],

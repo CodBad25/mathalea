@@ -17,7 +17,6 @@ import {
 import Exercice from '../Exercice'
 export const titre = 'Calculer  une probabilité avec un arbre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '29/04/2025'
 

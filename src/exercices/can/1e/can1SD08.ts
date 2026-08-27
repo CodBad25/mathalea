@@ -10,7 +10,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer l’abscisse ou l’ordonnée du sommet d’une parabole'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '21/09/2022'

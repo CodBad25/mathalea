@@ -6,7 +6,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un produit avec un décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '90963'
 export const refs = {
   'fr-fr': [],
@@ -23,38 +23,38 @@ type TypeDeNombre = {
   decimaux: number[]
 }
 export default class Can2026CM2Q28 extends ExerciceCan {
-  constructor () {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.optionsChampTexte = {
-      texteAvant: '$~=$'
+      texteAvant: '$~=$',
     }
   }
- 
+
   typesDeNombres: TypeDeNombre[] = [
     {
       entier: 4,
-      decimaux: [1.3, 1.4, 1.6]
+      decimaux: [1.3, 1.4, 1.6],
     },
     {
       entier: 2,
-      decimaux: [0.6, 0.8, 1.6, 1.8]
-    }
+      decimaux: [0.6, 0.8, 1.6, 1.8],
+    },
   ]
- 
-  enonce (entier?: number, decimal?: number) {
+
+  enonce(entier?: number, decimal?: number) {
     if (entier == null) {
       const typeDeNombre = choice(this.typesDeNombres)
       entier = typeDeNombre.entier
       decimal = choice(typeDeNombre.decimaux)
     }
- 
+
     this.reponse = arrondi(entier * decimal!)
     this.question = `$${entier}\\times ${texNombre(decimal!)}$`
     const partieEntiere = Math.floor(decimal!)
     const partieDecimale = arrondi(decimal! - partieEntiere)
- 
+
     if (partieEntiere === 0) {
       this.correction = `$${entier}\\times ${texNombre(decimal!)}=${miseEnEvidence(texNombre(this.reponse))}$`
     } else {
@@ -64,8 +64,8 @@ export default class Can2026CM2Q28 extends ExerciceCan {
       =${miseEnEvidence(texNombre(this.reponse))}$`
     }
   }
- 
-  nouvelleVersion () {
+
+  nouvelleVersion() {
     this.canOfficielle ? this.enonce(2, 0.6) : this.enonce()
   }
 }

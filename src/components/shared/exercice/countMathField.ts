@@ -17,11 +17,7 @@ export function countMathField(exercise: IExercice): number {
         }
       }
     }
-    if (
-      exercise.interactifType === 'custom' &&
-      'goodAnswers' in exercise &&
-      Array.isArray(exercise.goodAnswers)
-    ) {
+    if ('goodAnswers' in exercise && Array.isArray(exercise.goodAnswers)) {
       for (const goodAnswer of exercise.goodAnswers) {
         if (Array.isArray(goodAnswer)) {
           numbOfAnswerFields += goodAnswer.length

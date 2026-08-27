@@ -16,7 +16,6 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
 
 export const titre =
   'Utiliser tables de multiplication pour effectuer produits avec multiple de 10'
@@ -78,7 +77,6 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
     // Texte, tooltip
     else this.besoinFormulaire2Numerique = false
 
-    this.interactifType = this.sup2 === 2 ? 'mathLive' : 'qcm'
 
     const tables = gestionnaireFormulaireTexte({
       min: 2,
@@ -163,7 +161,7 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
       }
       const props = propositionsQcm(this, i)
 
-      if (this.interactif && this.interactifType === 'qcm') {
+      if (this.interactif && this.sup2 !== 2) {
         texte += props.texte
       } else {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)

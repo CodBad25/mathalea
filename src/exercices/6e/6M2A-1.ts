@@ -7,7 +7,7 @@ export const titre = 'Convertir des aires'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
-export const interactifType = ['qcm', 'mathLive']
+
 export const dateDeModifImportante = '30/04/2023'
 /**
  * @author Rémi Angot

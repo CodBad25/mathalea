@@ -1,6 +1,6 @@
-import { context } from '../../../modules/context'
 import { repere } from '../../../lib/2d/reperes'
 import { latex2d } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   Spline,
@@ -12,14 +12,14 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const dateDePublication = '28/07/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   "Déterminer le nombre de solutions d'une équation (graphique)"
 

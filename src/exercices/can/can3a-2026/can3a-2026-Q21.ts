@@ -10,7 +10,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Additionner deux fractions à dénominateurs différents'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'yizcy'
 export const refs = {
   'fr-fr': [],

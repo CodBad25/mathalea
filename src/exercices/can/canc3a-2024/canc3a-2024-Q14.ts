@@ -5,7 +5,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier par 10, ...'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f195a'
 
 /**

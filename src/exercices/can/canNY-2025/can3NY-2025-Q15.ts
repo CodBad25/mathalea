@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 export const titre = 'Réduire une expression'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '95e6d'
 export const refs = {
   'fr-fr': [],

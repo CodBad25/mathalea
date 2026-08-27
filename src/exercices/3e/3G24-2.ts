@@ -21,8 +21,8 @@ import { markTypeArray, MarqueAngle } from '../../lib/2d/MarkType'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import {
   choice,
   combinaisonListes,
@@ -40,7 +40,6 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multi-mathfield'
 
 export const titre = 'Calculer des longueurs avec des triangles semblables'
 export const dateDePublication = '30/12/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -80,7 +79,7 @@ export default class nomExercice extends Exercice {
       melange: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeDeNomsDePolygones: string[] = []
       let texte = ''
       let texteCorr = ''

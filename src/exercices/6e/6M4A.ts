@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Additionner des durées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '20/03/2026'
 
 /**

@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un discriminant'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '17868'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

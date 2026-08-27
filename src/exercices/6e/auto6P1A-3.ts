@@ -21,7 +21,6 @@ import {
 
 export const titre = 'Compléter un tableau à partir d’informations'
 export const interactifReady = true
-export const interactifType = 'tableau-hybride'
 export const dateDePublication = '23/08/2026'
 export const uuid = 'b74c8'
 

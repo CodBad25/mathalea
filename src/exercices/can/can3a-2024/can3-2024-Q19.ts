@@ -7,7 +7,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Calculer une fraction d'un entier"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '2a879'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -4,7 +4,7 @@ export const titre = 'Diviser des fractions'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cb572'
 
 export const refs = {

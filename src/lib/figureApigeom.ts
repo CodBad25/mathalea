@@ -1,6 +1,9 @@
 import Figure from 'apigeom'
 import { get } from 'svelte/store'
-import { apigeomFigureToSvg } from './apigeom/apigeom-figure'
+import {
+  ApigeomFigureElement,
+  apigeomFigureToSvg,
+} from './apigeom/apigeom-figure'
 import { canOptions } from '../../src/lib/stores/canStore'
 import { DomReadyActionElement } from './customElements/DomReadyAction'
 import type { IExercice } from '../lib/types'
@@ -71,6 +74,44 @@ export default function figureApigeom({
   const indexQuestionAffichee = i + (exercice.indexQuestionHote ?? 0)
   const idApigeom = `apigeomEx${exercice.numeroExercice}F${indexQuestionAffichee}${idAddendum}`
   figure.id = idApigeom
+
+  const isEvaluatedFigure =
+    hasFeedback &&
+    exercice.interactif === true &&
+    typeof exercice.correctionInteractive === 'function' &&
+    exercice.autoCorrection[i]?.formatInteractif !==
+      ApigeomFigureElement.elementTag
+  const verifyCallbackName = `${idApigeom}-verification`
+  const verificationCallback = (
+    displayedExercice: IExercice,
+    questionIndex: number,
+  ) => {
+    const result = exercice.correctionInteractive!(questionIndex)
+    if (exercice.answers != null) {
+      displayedExercice.answers = {
+        ...displayedExercice.answers,
+        ...exercice.answers,
+      }
+    }
+    return result
+  }
+  if (isEvaluatedFigure) {
+    const goodAnswers = (exercice as IExercice & { goodAnswers?: unknown[] })
+      .goodAnswers
+    const pointsMax =
+      Array.isArray(goodAnswers) && goodAnswers.length > 0
+        ? goodAnswers.length
+        : 1
+    ApigeomFigureElement.registerVerificationCallback(
+      verifyCallbackName,
+      verificationCallback,
+      pointsMax,
+    )
+    exercice.autoCorrection[i] = {
+      ...(exercice.autoCorrection[i] ?? {}),
+      formatInteractif: ApigeomFigureElement.elementTag,
+    }
+  }
 
   // Auto-enregistrement de la figure dans le champ dédié figuresApiGeom pour
   // qu'elle soit détruite par reinit() (cf. exportedReinit), indépendamment de
@@ -241,6 +282,12 @@ export default function figureApigeom({
       retryTimeout = null
     }
     DomReadyActionElement.unregisterCallback(setupAction, setupCallback)
+    if (isEvaluatedFigure) {
+      ApigeomFigureElement.unregisterVerificationCallback(
+        verifyCallbackName,
+        verificationCallback,
+      )
+    }
     document.removeEventListener(idApigeom, idApigeomFunct)
     document.removeEventListener('zoomChanged', updateZoom)
   }
@@ -257,12 +304,15 @@ export default function figureApigeom({
   }
 
   if (hasFeedback) {
-    return `<div class="m-6 leading-none" id="${idApigeom}"></div>${DomReadyActionElement.create(
+    const content = `<div class="m-6 leading-none" id="${idApigeom}"></div>${DomReadyActionElement.create(
       {
         id: `${idApigeom}-setup`,
         action: setupAction,
       },
     )}<span id="resultatCheckEx${exercice.numeroExercice}Q${indexQuestionAffichee}"></span><div class="ml-2 py-2 text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${indexQuestionAffichee}"></div>`
+    return isEvaluatedFigure
+      ? `<${ApigeomFigureElement.elementTag} legacy-mount numero-exercice="${exercice.numeroExercice ?? 0}" index="${indexQuestionAffichee}" verify-callback-name="${verifyCallbackName}">${content}</${ApigeomFigureElement.elementTag}>`
+      : content
   }
   return `<div class="m-6 leading-none" id="${idApigeom}"></div>${DomReadyActionElement.create(
     {

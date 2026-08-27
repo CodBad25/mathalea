@@ -2,7 +2,7 @@ import SigneProduitQuotientRelatifs from './4C10-0'
 
 export const dateDeModifImportante = '02/11/2025'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = "Donner le signe d'un quotient de nombres relatifs"

@@ -17,7 +17,6 @@ import Exercice from '../Exercice'
 
 export const titre = 'Effectuer des conversions d’aire (du cm² au m²)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '28/07/2025'
 export const dateDeModifImportante = '9/09/2025'

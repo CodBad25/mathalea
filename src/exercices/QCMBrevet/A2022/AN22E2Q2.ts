@@ -1,15 +1,15 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import { texNombre } from '../../../lib/outils/texNombre'
 export const uuid = '6a9db'
 export const refs = {
   'fr-fr': ['4C2QCM-03'],
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Ratios  (Juin 2022 Amérique du nord)'

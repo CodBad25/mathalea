@@ -15,7 +15,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '03/04/2022'
 export const dateDePublication = '17/07/2021'
 export const titre = 'Résoudre une inéquation quotient'

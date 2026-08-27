@@ -26,7 +26,7 @@ import Exercice from '../../Exercice'
 export const titre = 'Course aux nombres - 2nde - Mai 2024'
 export const dateDePublication = '7/5/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'can2a-2024-2'
 
 /**

@@ -22,7 +22,7 @@ import Exercice from '../../Exercice'
 export const titre = 'Trouver le symétrique'
 export const dateDePublication = '03/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

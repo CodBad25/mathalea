@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Connaître les tables de divisions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

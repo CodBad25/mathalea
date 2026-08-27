@@ -827,6 +827,13 @@
     ? 'dark'
     : ''} flex flex-col h-screen bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest"
 >
+  <textarea
+    data-testid="tex-source"
+    class="hidden"
+    aria-hidden="true"
+    tabindex="-1"
+    value={editorCode}
+  ></textarea>
   <div class="relative z-10 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas">
     <NavBar
       subtitle="LaTeX"

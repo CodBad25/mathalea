@@ -12,7 +12,6 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { sp } from '../../lib/outils/outilString'
 export const titre = 'Écrire ou reconnaitre une probabilité dans un énoncé'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '29/04/2025'
 
@@ -41,7 +40,7 @@ export default class EcritureProbabilite extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let val1,

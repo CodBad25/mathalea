@@ -6,7 +6,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une probabilité dans un tableau'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '155bb'
 export const refs = {
   'fr-fr': [],

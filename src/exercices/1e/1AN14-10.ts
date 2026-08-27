@@ -8,10 +8,10 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Dériver une fonction du type$\\dfrac{a}{u}$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'b6bda'
 export const refs = {
-  'fr-fr': ['1AN14-10','TSA3-13', 'TCA7-13'],
+  'fr-fr': ['1AN14-10', 'TSA3-13', 'TCA7-13'],
   'fr-ch': [''],
 }
 export const dateDePublication = '28/01/2026'
@@ -58,7 +58,7 @@ class DerivationQuotientParticulier extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let laFonction = ''
       let laDerivee = ''
       let laDeriveeIntermediaire = ''

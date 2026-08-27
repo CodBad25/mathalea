@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer le domaine de définition d'une fonction inverse ou racine"
 export const interactifReady = false
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '14/03/2025'
 /**
  * @author Nathan Scheinmann
@@ -412,7 +412,7 @@ export default class DomaineDeDefinition extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       texte =

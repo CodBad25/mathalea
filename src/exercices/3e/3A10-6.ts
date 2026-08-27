@@ -19,7 +19,6 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 export const titre =
   "Trouver un chiffre pour qu'un nombre soit divisible par un autre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '29/08/2022'
 export const dateDeModifImportante = '30/09/2024'

@@ -44,7 +44,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer périmètre et aire de figures composées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '31/03/2026'

@@ -15,7 +15,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer une équation de l’axe de symétrie d’une parabole'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '15/06/2022'
 export const dateDeModifImportante = '30/09/2025' // j'ai ajouté miseEnEvidence et ajouter le cas alpha=0 avec FC et passage à fractionEtendue
 /**

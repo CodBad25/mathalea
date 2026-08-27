@@ -6,7 +6,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 export const titre = 'Calculer une somme/différence'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '14867'
 export const refs = {
   'fr-fr': [],

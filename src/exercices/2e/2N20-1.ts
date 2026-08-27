@@ -1,7 +1,7 @@
 import ListeDesDiviseurs5e from '../5e/5A10'
 export const titre = "Écrire la liste de tous les diviseurs d'un entier"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '28/10/2021'
 export const uuid = '7cf48'
 export const refs = {

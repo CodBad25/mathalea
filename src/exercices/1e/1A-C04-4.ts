@@ -9,7 +9,7 @@ export const refs = {
   'fr-ch': ['9QCM-2'],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer avec tiers, quart, demi, ...'

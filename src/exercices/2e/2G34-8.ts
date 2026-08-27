@@ -19,9 +19,10 @@ import {
   premiersEntreBornes,
 } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-export const titre = "Résoudre des problèmes avec des systèmes d'équations du premier degré"
+export const titre =
+  "Résoudre des problèmes avec des systèmes d'équations du premier degré"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '21/03/2024'
 export const uuid = '6fbf9'
 export const refs = {
@@ -129,7 +130,7 @@ export default class systemeEquationsPremDeg extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.comment =
         "Dans cet exercice, des problèmes sont donnés à résoudre. Les solutions sont entières. Le premier problème se résout par la méthode de comparaison et le deuxième problème fait intervenir un membre du second degré qui s'annule. Le système est ensuite résolu par le méthode de combinaison linéaire."
       // Problème 1

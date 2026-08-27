@@ -33,7 +33,7 @@ export const titre =
 export const dateDePublication = '16/12/2020'
 export const dateDeModifImportante = '01/04/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

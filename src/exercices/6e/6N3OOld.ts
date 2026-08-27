@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Comprendre le sens d'un pourcentage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '22/07/2025'
 
 /** Comprendre le sens d'un pourcentage

@@ -1,7 +1,5 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
-import { randint } from '../../modules/outils'
+import { texteItalique } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -11,7 +9,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une probabilité conditionnelle '
@@ -23,7 +21,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5ANs2026 extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     eventVoyelle: boolean, // true : événement « voyelle » (V) ; false : « consonne » (C)
     conditionneParMot: boolean, // true : P_M(X) ; false : P_X(M)
   ): void {
@@ -69,11 +67,12 @@ export default class AutoQ5ANs2026 extends ExerciceQcmA {
 On note les évènements :<br>
 • ${defEvent}<br>
 • ${defMot}<br><br>
-${texteItalique('Rappel : l\'alphabet est constitué de 26 lettres dont les voyelles sont : A, E, I, O, U, Y.')} <br><br>
+${texteItalique("Rappel : l'alphabet est constitué de 26 lettres dont les voyelles sont : A, E, I, O, U, Y.")} <br><br>
 On note $${notation}$ ${phraseProba}. <br>On peut alors affirmer que $${notation}$ vaut :`
 
     // Correction
-    const pgcd = (a: number, b: number): number => (b === 0 ? a : pgcd(b, a % b))
+    const pgcd = (a: number, b: number): number =>
+      b === 0 ? a : pgcd(b, a % b)
     const simplif =
       pgcd(inter, denCorrect) > 1 ? `=${correct.texFractionSimplifiee}` : ''
 

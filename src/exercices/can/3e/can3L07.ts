@@ -13,7 +13,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Exprimer une longueur en fonction de $x$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/04/2024'
 export const uuid = 'a6bcc'
 export const refs = {

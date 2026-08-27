@@ -2,7 +2,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un multiple'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/04/2023'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

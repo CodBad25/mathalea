@@ -1,6 +1,6 @@
 import AppliquerUnPourcentage from './can6P04'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const titre = 'Appliquer un pourcentage (bis)'

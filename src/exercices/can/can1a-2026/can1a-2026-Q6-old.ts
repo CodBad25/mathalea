@@ -1,12 +1,12 @@
+import { orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'
-import { orangeMathalea } from '../../../lib/colors'
 export const titre = 'Calculer le produit de deux fractions'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 't3fv4'
 export const refs = {
   'fr-fr': [],

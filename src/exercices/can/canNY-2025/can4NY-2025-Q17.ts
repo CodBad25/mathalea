@@ -5,7 +5,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { sp } from '../../../lib/outils/outilString'
 export const titre = 'Ajouter une durée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '22787'
 export const refs = {
   'fr-fr': [],

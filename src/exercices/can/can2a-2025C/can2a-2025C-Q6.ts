@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer une fraction d'un nombre décimal"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '1ggdz'
 export const refs = {
   'fr-fr': [],
@@ -22,7 +22,8 @@ export default class Can2a2025CQ6 extends ExerciceCan {
       diviseur = this.quotaChoice('diviseur', [3, 4, 5])
       // On génère un nombre dont la division tombe juste
       const partieEntiere = this.quotaRandint('partieEntiere', 2, 15) * diviseur
-      const partieDecimale = this.quotaRandint('partieDecimale', 1, 9) * diviseur
+      const partieDecimale =
+        this.quotaRandint('partieDecimale', 1, 9) * diviseur
       nombre = new Decimal(partieEntiere).add(
         new Decimal(partieDecimale).div(100),
       )

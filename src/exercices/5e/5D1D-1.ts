@@ -25,7 +25,6 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'diagram-builder'
 export const dateDePublication = '07/08/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const titre = 'Représenter des données par un diagramme'
 

@@ -8,7 +8,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une probabilité avec un arbre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5e27b'
 export const refs = {
   'fr-fr': [],

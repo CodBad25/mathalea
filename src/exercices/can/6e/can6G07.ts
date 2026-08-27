@@ -19,7 +19,7 @@ import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 export const titre = 'Compter les points symétriques manquants'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 

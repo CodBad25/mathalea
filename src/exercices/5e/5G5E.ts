@@ -25,7 +25,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Déterminer la nature d'une droite remarquable - 1"
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interactivité
 
 /**

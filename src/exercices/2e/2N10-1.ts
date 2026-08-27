@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const titre =
   'Déterminer le plus petit ensemble de nombres auquel un nombre appartient'
 export const dateDeModifImportante = '13/08/2024'

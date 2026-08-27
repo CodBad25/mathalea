@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Prouver que 3 points de l’espace sont ou non alignés.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '27/11/2025'
 export const uuid = '748e6'
 
@@ -28,7 +28,7 @@ export default class ExerciceAlignementEspace extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // scénario : aligné ou non
       const casAligne = randint(0, 1) === 1
 

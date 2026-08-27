@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lire graphiquement images et antécédents'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

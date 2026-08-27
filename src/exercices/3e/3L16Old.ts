@@ -2,7 +2,6 @@ import PaternRatioOld from '../5e/5P12-2-old'
 export const titre = "Trouver le terme général d'un pattern géométrique"
 export const dateDePublication = '30/05/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Éric Elter

@@ -8,7 +8,7 @@ import type FractionEtendue from '../../../modules/FractionEtendue'
 import Trinome from '../../../modules/Trinome'
 export const titre = "Résoudre une inéquation à partir d'un tableau de signes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '08/09/2024'
 export const uuid = '572af'
 export const refs = {

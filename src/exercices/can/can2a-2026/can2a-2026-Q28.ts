@@ -11,7 +11,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Résoudre une équation produit-nul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'psts5'
 export const refs = {
   'fr-fr': [],

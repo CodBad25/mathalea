@@ -30,7 +30,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
 
 export const titre = 'Calculer des longueurs avec un patron de cylindre'
 

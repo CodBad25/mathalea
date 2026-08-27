@@ -8,7 +8,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une valeur connaissant la moyenne'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '18/05/2024'
 export const uuid = '8490c'
 export const refs = {

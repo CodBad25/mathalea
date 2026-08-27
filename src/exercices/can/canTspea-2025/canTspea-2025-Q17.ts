@@ -7,7 +7,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une espérance'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '01965'
 export const refs = {
   'fr-fr': [],

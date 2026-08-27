@@ -2,7 +2,7 @@ import ExerciceSimplificationSommeAlgebrique from './SimplificationSommeAlgebriq
 export const dateDePublication = '01/07/2026'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const titre =

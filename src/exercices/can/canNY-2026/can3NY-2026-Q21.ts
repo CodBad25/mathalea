@@ -1,7 +1,7 @@
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
@@ -12,7 +12,7 @@ import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { mathalea2d } from '../../../modules/mathalea2d'
 export const titre = 'Calculer une longueur dans un triangle rectangle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6n4ov'
 export const refs = {
   'fr-fr': [],
@@ -31,7 +31,9 @@ export default class calculerPythagore2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = this.canOfficielle ? true : this.quotaChoice('choix', [true, false])
+    const choix = this.canOfficielle
+      ? true
+      : this.quotaChoice('choix', [true, false])
     const annee = 2026
     const nom = creerNomDePolygone(3, ['QD'])
     const a = this.canOfficielle ? 1 : this.quotaRandint('a', 1, 6)

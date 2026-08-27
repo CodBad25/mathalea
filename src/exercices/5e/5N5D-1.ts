@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 import ChoisirExpressionLitterale from './_Choisir_expression_litterale'
 
 export const interactifReady = true
-export const interactifType = 'liste-deroulante'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDeModifImportante = '23/03/2026'

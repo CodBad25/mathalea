@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Effectuer la soustraction de deux entiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '22/08/2024'
 
 /**
@@ -52,7 +52,7 @@ class ExerciceTablesSoustractions extends Exercice {
       defaut: 1,
       melange: 5,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const total = randint(2, this.sup)
       const operande = randint(1, total)
       let texte: string

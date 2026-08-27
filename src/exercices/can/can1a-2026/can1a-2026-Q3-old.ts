@@ -12,7 +12,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Développer et réduire un produit'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'r30r1'
 export const refs = {
   'fr-fr': [],

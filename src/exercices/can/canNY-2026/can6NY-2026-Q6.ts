@@ -6,7 +6,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Soustraire un décimal'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '5bjcc'
 export const refs = {
   'fr-fr': [],

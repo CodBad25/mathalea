@@ -14,7 +14,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Utiliser un arbre pour calculer une probabilité (totale)'
@@ -244,6 +244,5 @@ export default class auto1AP3 extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-    
   }
 }

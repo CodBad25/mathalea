@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver le plus grand d'un décimal et d'une fraction"
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = 'e1faf'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -1,7 +1,7 @@
 import TrouverLeBonProgramme from '../6e/6I1B-6'
 
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
+
 export const dateDePublication = '14/02/2026'
 
 export const titre = 'Trouver le bon programme Scratch'

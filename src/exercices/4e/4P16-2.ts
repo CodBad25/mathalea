@@ -16,7 +16,7 @@ export const titre = 'Convertir des vitesses entre m/s et km/h'
 export const dateDePublication = '19/08/2025'
 export const dateModiImportante = '07/07/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cv001'
 export const refs = {
   'fr-fr': ['4P16-2'],

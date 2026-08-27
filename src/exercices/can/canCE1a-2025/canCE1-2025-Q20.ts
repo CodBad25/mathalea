@@ -6,11 +6,10 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une abscisse sur une droite graduée'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '76dc1'
 export const refs = {
   'fr-fr': [],

@@ -1,7 +1,11 @@
-import { propositionsQcm } from '../../lib/interactif/qcm'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -10,10 +14,10 @@ import Exercice from '../Exercice'
 export const titre = 'Les personnages dans les sujets du DNB'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '6c10c'
 export const refs = {
-  'fr-fr': [ 'EgaliteFG1-6e-4'],
+  'fr-fr': ['EgaliteFG1-6e-4'],
   'fr-ch': [],
 }
 
@@ -28,12 +32,18 @@ export default class EgaliteFG4 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
+      "D'après " +
+        ajouterLien(
+          'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true',
+          "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+        ),
     )
     this.consigne +=
       "<br><br>Le DNB est organisé en France métropolitaine, Outre-Mer et centres étrangers. En 2016, l'inventaire des prénoms dans les sujets du DNB a permis d'établir le tableau suivant :<br>"
-    const th = 'style="border: 1px solid #888; padding: 3px 6px; font-size:0.85rem;"'
-    const td = 'style="border: 1px solid #888; padding: 3px 6px; font-size:0.85rem; text-align:center;"'
+    const th =
+      'style="border: 1px solid #888; padding: 3px 6px; font-size:0.85rem;"'
+    const td =
+      'style="border: 1px solid #888; padding: 3px 6px; font-size:0.85rem; text-align:center;"'
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0;">
       <tr><th ${th}></th><th ${th} colspan="2">Activité purement mathématique</th><th ${th} colspan="2">Métier</th><th ${th} colspan="2">Activité sportive</th><th ${th} colspan="2">Activité courante</th></tr>
       <tr><th ${th}>Personnage</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th></tr>
@@ -66,13 +76,18 @@ export default class EgaliteFG4 extends Exercice {
       '(F = Fille/femme, G = Garçon/homme)<br>'
     this.consigne += context.isHtml ? tableauHtml : tableauLatex
     this.consigne +=
-      "<br>" + texteGras('Pour lire le tableau') + ".<br>Il y a $4$ personnages féminins intervenant lors d'activités courantes dans le sujet de mathématiques du DNB « Centres étrangers » en 2016.<br>" +
+      '<br>' +
+      texteGras('Pour lire le tableau') +
+      ".<br>Il y a $4$ personnages féminins intervenant lors d'activités courantes dans le sujet de mathématiques du DNB « Centres étrangers » en 2016.<br>" +
       "Il y a $4$ personnages masculins intervenant lors d'activités purement mathématiques et relevés dans les sujets de mathématiques des zones géographiques citées dans ce tableau."
     this.nbQuestions = 4
     this.nbQuestionsModifiable = false
     this.comment =
       'Source : femmes et maths - ' +
-      ajouterLien('https://femmes-et-maths.fr/wp-content/uploads/2023/06/inegalites-hommes-femmes.pdf', 'lien')
+      ajouterLien(
+        'https://femmes-et-maths.fr/wp-content/uploads/2023/06/inegalites-hommes-femmes.pdf',
+        'lien',
+      )
   }
 
   nouvelleVersion() {
@@ -81,17 +96,19 @@ export default class EgaliteFG4 extends Exercice {
 
     // Q0 : interprétation du 0 dans la ligne TOTAL (QCM)
     const texteQ0 =
-      "Que traduit la présence du nombre $0$ dans la colonne « Métier, Fille/femme » de la ligne TOTAL ?"
+      'Que traduit la présence du nombre $0$ dans la colonne « Métier, Fille/femme » de la ligne TOTAL ?'
     this.autoCorrection[0] = {
       enonce: texteQ0,
       options: { ordered: true, radio: true },
       propositions: [
         {
-          texte: "Aucun personnage féminin n'exerce un métier dans l'ensemble des sujets étudiés.",
+          texte:
+            "Aucun personnage féminin n'exerce un métier dans l'ensemble des sujets étudiés.",
           statut: true,
         },
         {
-          texte: "Aucun personnage masculin n'exerce un métier dans l'ensemble des sujets étudiés.",
+          texte:
+            "Aucun personnage masculin n'exerce un métier dans l'ensemble des sujets étudiés.",
           statut: false,
         },
       ],
@@ -110,8 +127,7 @@ export default class EgaliteFG4 extends Exercice {
     const correction1 = `D'après le tableau, un personnage masculin apparaît $${miseEnEvidence('2')}$ fois.`
 
     // Q2 : fille Nouvelle-Calédonie maths
-    let texte2 =
-      'Même question avec un personnage féminin.'
+    let texte2 = 'Même question avec un personnage féminin.'
     if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 1 } })
     const correction2 = `D'après le tableau, un personnage féminin apparaît $${miseEnEvidence('1')}$ fois.`

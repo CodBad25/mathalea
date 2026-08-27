@@ -13,7 +13,7 @@ import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '25/02/2026'
 
 export const titre = 'Comprendre un programme avec conditionnelle'

@@ -10,10 +10,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Effectuer une application numérique d\'une formule'
+export const titre = "Effectuer une application numérique d'une formule"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -50,7 +50,6 @@ export default class AutoQ2AGs2026 extends ExerciceQcmA {
     &= \\dfrac{${par(v1)} - ${par(v2)}}{${par(v3)} \\times ${par(v4)}}\\\\
     &=\\dfrac{${num}}{${denomProd}}\\\\
     &=${miseEnEvidence(E.texFractionSimplifiee)}\\end{aligned}$`
-    
 
     this.reponses = [
       `$E = ${E.texFractionSimplifiee}$`,

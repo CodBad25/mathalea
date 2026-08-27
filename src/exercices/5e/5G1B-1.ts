@@ -34,7 +34,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Trouver les coordonnées de l'image d'un point par une symétrie axiale (quart de plan)"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeCreation = '26/09/2025'

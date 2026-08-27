@@ -21,7 +21,7 @@ export const titre = 'Diviser des fractions'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 /**
  * Calcul du quotient de deux fractions. Paramétrages possibles :
  * * 1 : Nombres positifs exclusivement

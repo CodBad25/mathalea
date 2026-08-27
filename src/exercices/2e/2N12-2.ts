@@ -8,6 +8,7 @@ import {
 import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { Vide2d, vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -17,12 +18,10 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Utiliser et comprendre les symboles $\\cup $ et $\\cap $ avec les intervalles de $\\mathbb{R}$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * @author Stéphane Guyon
@@ -50,7 +49,7 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
     )
     const X1 = pointAbstrait(0, 0)
     const X2 = pointAbstrait(12, 0)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeDeQuestion = listeTypeDeQuestions[i]
       const test = randint(1, 6)
       let texte = 'Donner une écriture simplifiée, si possible, de '

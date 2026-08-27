@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer la fraction d'un nombre"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModificationImportante = '03/06/2026'

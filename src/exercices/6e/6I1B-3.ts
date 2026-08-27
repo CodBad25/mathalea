@@ -19,10 +19,9 @@ import {
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
-import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { grille } from '../../lib/2d/Grille'
 import { bleuMathalea } from '../../lib/colors'
-import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
@@ -39,7 +38,7 @@ import {
 import { scratchblock } from '../../modules/scratchblock'
 
 export const interactifReady = true
-export const interactifType = 'cliqueFigure'
+
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -461,7 +460,7 @@ export default class AlgoTortue extends Exercice {
     if (this.autoCorrection[0]?.propositions?.[this.indiceBonneFigure]) {
       this.autoCorrection[0].propositions[this.indiceBonneFigure].statut = true
     }
-    setCliqueFigure(this.autoCorrection[0])
+    this.autoCorrection[0].formatInteractif = 'clique-figure'
 
     this.cliqueFiguresArray[0] = [
       {

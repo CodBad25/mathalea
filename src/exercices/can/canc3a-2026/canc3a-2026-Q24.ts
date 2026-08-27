@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir en centaines/unités'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'cc404'
 export const refs = {
   'fr-fr': [],
@@ -18,13 +18,13 @@ export const refs = {
 
 */
 export default class Can2026CM2Q24 extends ExerciceCan {
-   constructor () {
+  constructor() {
     super()
     this.formatInteractif = 'fillInTheBlank'
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
-  enonce (n?: number) {
+  enonce(n?: number) {
     if (n == null) {
       n = randint(10, 99) * 100 + randint(1, 99)
     }
@@ -34,7 +34,7 @@ export default class Can2026CM2Q24 extends ExerciceCan {
 
     this.reponse = {
       champ1: { value: centaines.toString() },
-      champ2: { value: unites.toString() }
+      champ2: { value: unites.toString() },
     }
     this.question = `${texNombre(n, 0)} ~= %{champ1} \\text{ centaines } %{champ2} \\text{ unités}`
 
@@ -45,7 +45,7 @@ export default class Can2026CM2Q24 extends ExerciceCan {
     this.canReponseACompleter = '$\\ldots$ centaines $\\ldots$ unités'
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.canOfficielle || this.sup ? this.enonce(12485) : this.enonce()
   }
 }

@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Déterminer un nombre manquant dans une somme'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '6bub1'
 export const refs = {
   'fr-fr': [],

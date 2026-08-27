@@ -13,7 +13,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Lire la distance de freinage en fonction de la vitesse'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '2/01/2026'
 export const dateDeModifImportante = '15/04/2026'

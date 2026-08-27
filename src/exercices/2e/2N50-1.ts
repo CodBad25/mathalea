@@ -7,7 +7,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = "Justifier l'existence d'une racine carrée"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDeModifImportante = '15/11/2023'
 /**
  * 2N32-1, ex 2N10

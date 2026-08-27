@@ -3,7 +3,7 @@ export const titre =
   "Donner l'écriture entière ou fractionnaire d'une puissance"
 export const dateDePublication = '05/09/2023'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const uuid = 'eb865'

@@ -29,7 +29,7 @@ import Exercice from '../Exercice'
 export const titre = 'Calculer un angle, déduit de figures simples'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const interactifType = 'mathLive'
+
 export const interactifReady = true
 
 export const dateDePublication = '03/05/2022'

@@ -1,12 +1,12 @@
-import ExerciceCan from '../../ExerciceCan'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Écrire un nombre en chiffres (QCM)'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '19b3f'
 export const refs = {
   'fr-fr': [],

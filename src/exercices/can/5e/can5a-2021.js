@@ -1,4 +1,3 @@
-import { context } from '../../../modules/context'
 import { codageAngle } from '../../../lib/2d/angles'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
@@ -25,6 +24,7 @@ import {
   stringNombre,
   texNombre,
 } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import {
   fraction,
   obtenirListeFractionsIrreductibles,
@@ -36,7 +36,7 @@ import Exercice from '../../Exercice'
 
 export const titre = 'CAN 5e sujet 2021'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '30/03/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 // export const dateDeModifImportante = '24/10/2021' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

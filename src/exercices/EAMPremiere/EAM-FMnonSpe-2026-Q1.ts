@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -11,10 +10,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Donner la valeur décimale d\'une fraction'
+export const titre = "Donner la valeur décimale d'une fraction"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -23,7 +22,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ1FMns2026 extends ExerciceQcmA {
-private appliquerLesValeurs(n: number, d: number, dist: number[]): void {
+  private appliquerLesValeurs(n: number, d: number, dist: number[]): void {
     const fmt = (x: number) => `$${texNombre(x)}$`
 
     this.enonce = `Le nombre $\\dfrac{${n}}{${d}}$ est égal à :`
@@ -50,7 +49,7 @@ private appliquerLesValeurs(n: number, d: number, dist: number[]): void {
       this.versionOriginale()
       return
     }
-    
+
     const donnees: [number, number, number[]][] = [
       [2, 5, [0.2, 0.25, 0.5]], // 0,4
       [1, 5, [0.1, 0.25, 0.5]], // 0,2
@@ -59,7 +58,7 @@ private appliquerLesValeurs(n: number, d: number, dist: number[]): void {
       [1, 4, [0.2, 0.4, 0.5]], // 0,25
       [3, 4, [0.34, 0.5, 0.7]], // 0,75
     ]
-    
+
     let compteur = 0
     do {
       const [n, d, dist] = choice(donnees)

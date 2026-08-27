@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer facilement avec la distributivité'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'a343f'
 export const refs = {
   'fr-fr': [],

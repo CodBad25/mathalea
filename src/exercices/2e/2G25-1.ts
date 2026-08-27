@@ -35,7 +35,6 @@ import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 export const titre =
   'Représenter un vecteur dans un repère, à partir de ses coordonnées'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const dateDeModifImportante = '06/08/2024'
 
 // Changer couleur dans la correction

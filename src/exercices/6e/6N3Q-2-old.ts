@@ -18,7 +18,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '23/07/2021'

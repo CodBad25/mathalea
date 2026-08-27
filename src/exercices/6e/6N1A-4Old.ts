@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -7,12 +8,10 @@ import { labyrinthe } from '../../modules/Labyrinthe'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Parcourir un labyrinthe de numération décimale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '9/12/2020'
@@ -282,7 +281,9 @@ export default class ExerciceLabyrintheNumerationOld extends Exercice {
           ],
         },
       ]
-      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) =>
+        amcConvert(questionAMC),
+      )
     }
     this.listeQuestions.push(texte)
     this.listeCorrections.push(texteCorr)

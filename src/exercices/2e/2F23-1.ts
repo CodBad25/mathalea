@@ -12,13 +12,13 @@ import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import Exercice from '../Exercice'
 
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   lireFormulaireComplexe,
   serialiseFormulaireComplexe,
   valeursParDefaut,
   type FormulaireComplexe,
 } from '../../lib/formulaireComplexe'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 export const titre =
@@ -26,7 +26,6 @@ export const titre =
 export const dateDePublication = '07/01/2022'
 export const dateDeModifImportante = '16/05/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  *

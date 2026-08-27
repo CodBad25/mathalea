@@ -4,7 +4,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Compter les sommets d'un prisme"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'ayxrt'
 export const refs = {
   'fr-fr': [],

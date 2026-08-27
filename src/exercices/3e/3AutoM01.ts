@@ -7,7 +7,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Convertir une durée donnée en minutes en heures'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const dateDePublication = '05/12/2025'
 
@@ -55,7 +54,7 @@ export default class ConvertirMinutesEnHeures extends ExerciceSimple {
     this.correction = `Une heure contient 60 minutes. <br>
     ${
       nombreDeMinutesEnPlus === 0
-      ? `Dans $${nombreTotalDeMinutes}$ minutes, il y a $${Math.floor(nombreTotalDeMinutes / 60)}\\times 60$ minutes, soit ${texteEnCouleurEtGras(answer.toString())}.`
+        ? `Dans $${nombreTotalDeMinutes}$ minutes, il y a $${Math.floor(nombreTotalDeMinutes / 60)}\\times 60$ minutes, soit ${texteEnCouleurEtGras(answer.toString())}.`
         : `$${nombreTotalDeMinutes}=${nbHeuresEntieres * 60}+${nombreDeMinutesEnPlus}=${Math.floor(nombreTotalDeMinutes / 60)}\\times 60+${nombreDeMinutesEnPlus}$, donc dans $${nombreTotalDeMinutes}$ minutes il y a ${texteEnCouleurEtGras(answer.toString())}.`
     }`
   }

@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Simplifier un taux de variation'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '17/11/2022'
 
 /**

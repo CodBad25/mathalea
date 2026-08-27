@@ -21,7 +21,6 @@ import Exercice from '../Exercice'
 export const titre = 'Dériver un polynôme'
 export const dateDePublication = '06/05/2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Calculer la dérivée d'un polynome

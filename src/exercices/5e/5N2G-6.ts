@@ -1,7 +1,6 @@
 import ExoRose from '../6e/_Roses'
 export const titre = 'Résoudre une Rose additive avec des relatifs'
 export const interactifReady = true
-export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '12/08/2022'

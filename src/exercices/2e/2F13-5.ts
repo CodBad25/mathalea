@@ -25,7 +25,7 @@ import {
 import Exercice from '../Exercice'
 export const titre = 'Calculer des images ou des antécédents'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '23/11/2025'
 
 /**

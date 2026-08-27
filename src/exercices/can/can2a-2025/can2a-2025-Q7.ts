@@ -5,7 +5,7 @@ import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un prix après des évolutions successives'
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const uuid = '82a41'
 export const refs = {
   'fr-fr': [],

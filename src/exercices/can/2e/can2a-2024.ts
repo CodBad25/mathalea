@@ -3,14 +3,6 @@
  */
 
 import Question1 from '../can2a-2024/can2a-2024-Q1'
-import Question2 from '../can2a-2024/can2a-2024-Q2'
-import Question3 from '../can2a-2024/can2a-2024-Q3'
-import Question4 from '../can2a-2024/can2a-2024-Q4'
-import Question5 from '../can2a-2024/can2a-2024-Q5'
-import Question6 from '../can2a-2024/can2a-2024-Q6'
-import Question7 from '../can2a-2024/can2a-2024-Q7'
-import Question8 from '../can2a-2024/can2a-2024-Q8'
-import Question9 from '../can2a-2024/can2a-2024-Q9'
 import Question10 from '../can2a-2024/can2a-2024-Q10'
 import Question11 from '../can2a-2024/can2a-2024-Q11'
 import Question12 from '../can2a-2024/can2a-2024-Q12'
@@ -21,6 +13,7 @@ import Question16 from '../can2a-2024/can2a-2024-Q16'
 import Question17 from '../can2a-2024/can2a-2024-Q17'
 import Question18 from '../can2a-2024/can2a-2024-Q18'
 import Question19 from '../can2a-2024/can2a-2024-Q19'
+import Question2 from '../can2a-2024/can2a-2024-Q2'
 import Question20 from '../can2a-2024/can2a-2024-Q20'
 import Question21 from '../can2a-2024/can2a-2024-Q21'
 import Question22 from '../can2a-2024/can2a-2024-Q22'
@@ -31,13 +24,20 @@ import Question26 from '../can2a-2024/can2a-2024-Q26'
 import Question27 from '../can2a-2024/can2a-2024-Q27'
 import Question28 from '../can2a-2024/can2a-2024-Q28'
 import Question29 from '../can2a-2024/can2a-2024-Q29'
+import Question3 from '../can2a-2024/can2a-2024-Q3'
 import Question30 from '../can2a-2024/can2a-2024-Q30'
+import Question4 from '../can2a-2024/can2a-2024-Q4'
+import Question5 from '../can2a-2024/can2a-2024-Q5'
+import Question6 from '../can2a-2024/can2a-2024-Q6'
+import Question7 from '../can2a-2024/can2a-2024-Q7'
+import Question8 from '../can2a-2024/can2a-2024-Q8'
+import Question9 from '../can2a-2024/can2a-2024-Q9'
 
 import MetaExercice from '../../MetaExerciceCan'
 
 export const titre = 'S’entraîner avec le sujet CAN Seconde 2024'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '94d21'
 export const refs = {
   'fr-fr': ['can2a-2024'],

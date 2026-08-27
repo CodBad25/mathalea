@@ -5,7 +5,6 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Limite de $u_n\\times v_n$'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 export const uuid = 'bf67b'
 export const refs = {

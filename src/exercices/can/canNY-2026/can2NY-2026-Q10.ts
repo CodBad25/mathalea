@@ -8,7 +8,7 @@ import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { abs } from '../../../lib/outils/nombres'
 export const titre = 'Calculer avec une puissance de 10'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '0udur'
 export const refs = {
   'fr-fr': [],

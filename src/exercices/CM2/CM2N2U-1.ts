@@ -1,6 +1,6 @@
 import LireAbscisseEntiere2d from '../6e/6N1C-1'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = "Lire l'abscisse entière d'un point (grands nombres)"

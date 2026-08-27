@@ -1,9 +1,9 @@
-import ExerciceQcmA from '../../ExerciceQcmA'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { randint } from '../../../modules/outils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
+import ExerciceQcmA from '../../ExerciceQcmA'
 
 export const uuid = '80f6a'
 export const refs = {
@@ -11,7 +11,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'qcm'
+
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calcul expression 2nd degré (septembre 2023 Métropole)'

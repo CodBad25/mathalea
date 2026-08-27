@@ -9,7 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec un programme de calcul'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = 'f9727'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

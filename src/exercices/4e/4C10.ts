@@ -22,7 +22,7 @@ import { context } from '../../modules/context'
 export const titre =
   'Calculer des produits et des quotients de nombres relatifs'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '23/09/2022'

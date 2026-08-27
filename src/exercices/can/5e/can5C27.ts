@@ -2,9 +2,9 @@ import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
-export const interactifType = 'mathLive'
+import ExerciceSimple from '../../ExerciceSimple'
+
 export const interactifReady = true
 export const titre = 'Trouver un  entier relatif (addition à trou)'
 export const dateDePublication = '19/10/2023'

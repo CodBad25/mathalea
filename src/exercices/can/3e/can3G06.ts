@@ -11,7 +11,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un angle'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const dateDePublication = '02/01/2026'
 /**
  * Modèle d'exercice très simple pour la course aux nombres

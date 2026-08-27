@@ -17,7 +17,6 @@ export const titre = 'Écrire un nombre décimal en chiffres ou en lettres'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
-export const interactifType = 'mathLive'
 
 /**
  * Lire un nombre / écrire un nombre : passer d'une écriture à une autre et inversement

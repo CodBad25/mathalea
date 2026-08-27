@@ -6,7 +6,7 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Enlever des centaines à un nombre'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+
 export const uuid = '16bc5'
 export const refs = {
   'fr-fr': [],
