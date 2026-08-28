@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -95,7 +95,7 @@ export default class TablesAdditionsSoustractions extends Exercice {
             )
           }
           texteCorr = `$${a} + ${b} = ${a + b}$`
-          setReponse(this, i, a + b, { formatInteractif: 'calcul' })
+          handleAnswers(this, i, { reponse: { value: a + b } })
           break
         case 'addition_a_trou':
           texte = `$${a} + \\ldots\\ldots = ${a + b}$`
@@ -111,7 +111,7 @@ export default class TablesAdditionsSoustractions extends Exercice {
             )
           }
           texteCorr = `$${a} + ${miseEnEvidence(b)} = ${a + b}$`
-          setReponse(this, i, b, { formatInteractif: 'calcul' })
+          handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'soustraction':
           if (a === b) {
@@ -132,7 +132,7 @@ export default class TablesAdditionsSoustractions extends Exercice {
             )
           }
           texteCorr = `$${a} - ${b} = ${a - b}$`
-          setReponse(this, i, a - b, { formatInteractif: 'calcul' })
+          handleAnswers(this, i, { reponse: { value: a - b } })
           break
         case 'soustraction_a_trou':
         default:
@@ -155,7 +155,7 @@ export default class TablesAdditionsSoustractions extends Exercice {
             )
           }
           texteCorr = `$${a} - ${miseEnEvidence(b)} = ${a - b}$`
-          setReponse(this, i, b, { formatInteractif: 'calcul' })
+          handleAnswers(this, i, { reponse: { value: b } })
           break
       }
 

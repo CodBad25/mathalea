@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
@@ -103,7 +103,7 @@ export default class calculsDeCarre extends Exercice {
           texte = this.interactif ? `$${entier}^2 =$` : `$${entier}$`
           // texteCorr = signe === -1 ? `$(${entier})^2` : `$${entier}^2`
           texteCorr = `$${entier}^2=${miseEnEvidence(entier * entier)}$`
-          setReponse(this, i, entier * entier)
+          handleAnswers(this, i, { reponse: { value: entier * entier } })
           break
         case 2: // entier relatif
           texte = this.interactif
@@ -112,7 +112,7 @@ export default class calculsDeCarre extends Exercice {
           texteCorr =
             signe === -1 ? `$(${signe * entier})^2` : `$${signe * entier}^2`
           texteCorr += `=${miseEnEvidence(entier * entier)}$`
-          setReponse(this, i, entier * entier)
+          handleAnswers(this, i, { reponse: { value: entier * entier } })
           break
         case 3: // décimal positif
           texte = this.interactif
@@ -120,7 +120,9 @@ export default class calculsDeCarre extends Exercice {
             : `$${texNombre(decimal, 2)}$`
           texteCorr = `$${texNombre(decimal, 2)}^2`
           texteCorr += `=${miseEnEvidence(texNombre(decimal ** 2, 2))}$`
-          setReponse(this, i, (decimal ** 2).toFixed(2))
+          handleAnswers(this, i, {
+            reponse: { value: (decimal ** 2).toFixed(2) },
+          })
           break
         case 4: // décimal relatif
           texte = this.interactif
@@ -131,7 +133,9 @@ export default class calculsDeCarre extends Exercice {
               ? `$(${texNombre(signe * decimal, 2)})^2`
               : `$${texNombre(signe * decimal, 2)}^2`
           texteCorr += `=${miseEnEvidence(texNombre(decimal ** 2, 2))}$`
-          setReponse(this, i, (decimal ** 2).toFixed(2))
+          handleAnswers(this, i, {
+            reponse: { value: (decimal ** 2).toFixed(2) },
+          })
           break
         case 5: // fractionnaire relatif
         default:
@@ -143,15 +147,15 @@ export default class calculsDeCarre extends Exercice {
               ? `$\\left(-\\dfrac{${numerateur}}{${denominateur}}\\right)^2`
               : `$\\left(\\dfrac{${numerateur}}{${denominateur}}\\right)^2`
           texteCorr += `=${miseEnEvidence(`\\dfrac{${numerateur * numerateur}}{${denominateur * denominateur}}`)}$`
-          setReponse(
-            this,
-            i,
-            new FractionEtendue(
-              numerateur * numerateur,
-              denominateur * denominateur,
-            ),
-            { formatInteractif: 'fractionEgale' },
-          )
+          handleAnswers(this, i, {
+            reponse: {
+              value: new FractionEtendue(
+                numerateur * numerateur,
+                denominateur * denominateur,
+              ),
+              options: { fractionEgale: true },
+            },
+          })
           break
       }
 

@@ -223,9 +223,6 @@ export default class ExerciceDecomposerEnFacteursPremiers extends Exercice {
         KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
         { texteAvant: ' $=$' },
       )
-      /* if (!context.isAmc) {
-        setReponse(this, i, [reponse, produitAvecPuissances])
-      } */
       handleAnswers(this, i, {
         reponse: {
           value: [reponse, produitAvecPuissances],

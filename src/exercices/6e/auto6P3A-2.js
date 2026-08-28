@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -51,7 +51,7 @@ export default class Quart extends Exercice {
           a = randint(2, 9)
           texte = `$\\text{Le quart de }${a * 4}$`
           texteCorr = `$\\text{Le quart de }${a * 4} \\text{ est } ${miseEnEvidence(a)}$`
-          setReponse(this, i, a)
+          handleAnswers(this, i, { reponse: { value: a } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -66,7 +66,7 @@ export default class Quart extends Exercice {
           texteCorr = `$\\text{Le quart de }${
             a * 4 + b
           } \\text{ est } ${miseEnEvidence(texNombre(a + b / 4))}$`
-          setReponse(this, i, arrondi(a + b / 4))
+          handleAnswers(this, i, { reponse: { value: arrondi(a + b / 4) } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -80,7 +80,7 @@ export default class Quart extends Exercice {
           texteCorr = `$\\text{Le quart de }${texNombre(
             a * 4 * 100,
           )} \\text{ est } ${miseEnEvidence(texNombre(a * 100))}$`
-          setReponse(this, i, a * 100)
+          handleAnswers(this, i, { reponse: { value: a * 100 } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -94,7 +94,7 @@ export default class Quart extends Exercice {
           texteCorr = `$\\text{Le quart de }${texNombre(
             a * 4 * 10,
           )} \\text{ est } ${miseEnEvidence(texNombre(a * 10))}$`
-          setReponse(this, i, a * 10)
+          handleAnswers(this, i, { reponse: { value: a * 10 } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -109,7 +109,9 @@ export default class Quart extends Exercice {
           texteCorr = `$\\text{Le quart de }${texNombre(
             a * 4 + (b * 4) / 100,
           )} \\text{ est } ${miseEnEvidence(texNombre(a + b / 100))}$`
-          setReponse(this, i, arrondi(a + b / 100))
+          handleAnswers(this, i, {
+            reponse: { value: arrondi(a + b / 100) },
+          })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,

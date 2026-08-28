@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -155,8 +155,8 @@ export default class DevelopperIdentitesRemarquables3 extends Exercice {
               : `$${lettreDepuisChiffre(i + 1)} = ${etape}$ <br>`
         })
       }
+      handleAnswers(this, i, { reponse: { value: reponse } })
       if (!context.isAmc) {
-        setReponse(this, i, reponse)
         texte += this.interactif
           ? `<br>$${lettreDepuisChiffre(i + 1)} = $` +
             ajouteChampTexteMathLive(

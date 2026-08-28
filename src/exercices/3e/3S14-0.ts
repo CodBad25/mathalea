@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { listeDeNotes, unMoisDeTemperature } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -92,7 +92,7 @@ export default class CalculerEtendues extends Exercice {
           break
         }
       }
-      setReponse(this, i, max - min)
+      handleAnswers(this, i, { reponse: { value: max - min } })
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       if (this.questionJamaisPosee(i, min, max)) {
         // Si la question n'a jamais été posée, on en créé une autre

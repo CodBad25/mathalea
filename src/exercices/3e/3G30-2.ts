@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -218,7 +218,7 @@ class EquationTrigo extends Exercice {
           $\\widehat{${nomA}${nomB}${nomC}} \\approx ${miseEnEvidence(stringNombre(reponse, 0))}^\\circ$`
           break
       }
-      setReponse(this, i, reponse)
+      handleAnswers(this, i, { reponse: { value: reponse } })
       if (this.questionJamaisPosee(i, cosSinTan, angle, lAB.toFixed(1))) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

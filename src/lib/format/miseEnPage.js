@@ -87,6 +87,9 @@ export function troisColonnes(
  *          widthmincol1 : largeur de la première minimum en html en px
  *          widthmincol2 : largeur de la deuxième minimum en html en px
  *  ex : deuxColonnesResp (enonce, correction, {eleId : '1_1', largeur1:50, widthmincol1: '400px', widthmincol2: '200px'})
+ * La sortie HTML publie `largeur1` dans `data-largeur1` : l'export Typst
+ * (`protectResponsiveColumns`, `latexToTypst.ts`) y retrouve le partage des
+ * colonnes de la sortie LaTeX pour son `#grid`.
  * @return {string}
  */
 export function deuxColonnesResp(cont1, cont2, options) {
@@ -125,7 +128,7 @@ export function deuxColonnesResp(cont1, cont2, options) {
       .cols-responsive { grid-template-columns: repeat(2, 1fr); }
     }
     </style>
-    <div class='cols-responsive'>
+    <div class='cols-responsive' data-largeur1='${options.largeur1}'>
       <div id='cols-responsive1-${options.eleId}'style='min-width:${options.widthmincol1};${options.stylecol1}' >
       ${cont1}
       </div>

@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -46,7 +46,7 @@ export default class SommeDeDeuxNombresMaries extends Exercice {
 
       texte = `$${a}+${b}=$`
       texteCorr = `$${a}+${b}=${miseEnEvidence(texNombre(a + b))}$`
-      setReponse(this, i, a + b)
+      handleAnswers(this, i, { reponse: { value: a + b } })
       if (this.interactif) {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       } else {

@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -69,7 +69,12 @@ export default class ExtraireUnCarreParfaitDUneRacineCarree extends Exercice {
         `\\sqrt${c}\\times${a}`,
       ]
       // Pb MathLive 01/11/23 : ligne 48, supprimer 3 dernières réponses
-      setReponse(this, i, reponse, { formatInteractif: 'texte' })
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponse.map(String),
+          options: { texteAvecCasse: true },
+        },
+      })
       if (this.interactif) {
         texte = ajouteChampTexteMathLive(
           this,

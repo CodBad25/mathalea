@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -156,11 +156,12 @@ export default class ExerciceSubstituer extends Exercice {
         })
       } else if (context.isAmc)
         texte = 'Calculer ' + texte + ` pour $x=${x}$, $y=${y}$ et $z=${z}$.`
-      setReponse(this, i, reponse, {
-        formatInteractif: 'calcul',
-        digits: 3,
-        decimals: 0,
-      })
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: reponse } },
+        { digits: 3, decimals: 0 },
+      )
 
       if (this.questionJamaisPosee(i, texte)) {
         // Si la question n'a jamais été posée, on en créé une autre

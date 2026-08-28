@@ -37,7 +37,14 @@ export default class ExprimerVariable extends ExerciceSimple {
   nouvelleVersion() {
     {
       const a = this.quotaRandint('a', -9, 9, [0, 1, -1])
-      const b = a * choice([-1, 1]) + choice([-1, 1])
+      // On impose |b| >= 2 (comme pour a) : si b vaut ±1, isoler la variable de
+      // coefficient b ne demande aucune division et la bonne réponse s'écrit
+      // alors \dfrac{...}{1}, ce qui la rend identique au distracteur « oubli de
+      // diviser par le coefficient » dans la version QCM.
+      let b = a * choice([-1, 1]) + choice([-1, 1])
+      while (Math.abs(b) < 2) {
+        b = a * choice([-1, 1]) + choice([-1, 1])
+      }
       const c = this.quotaRandint('c', 1, 10)
       const var1 = choice(['x', 'z', 'a'])
       const var2 = choice(['b', 'c', 'y'])

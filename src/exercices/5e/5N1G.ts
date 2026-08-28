@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
@@ -141,7 +141,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
             KeyboardType.clavierDeBase,
             { texteAvant: '$=$' },
           )
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
         } else if (context.isAmc) {
           texte +=
             '<br>Détailler les calculs dans le cadre et coder le résultat.<br>'

@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -101,7 +101,7 @@ export default class MettreAuMemeDenominateurLit extends Exercice {
             const reponse = choix
               ? [`\\dfrac{${reduirePolynomeDegre3(0, b, 0, -a)}}{x}`]
               : [`\\dfrac{${reduirePolynomeDegre3(0, b, 0, a)}}{x}`]
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
             if (this.interactif) {
               texte = consigneI1
               texte +=
@@ -130,7 +130,7 @@ export default class MettreAuMemeDenominateurLit extends Exercice {
             const reponse = choix
               ? [`\\dfrac{${reduireAxPlusB(b, a)}}{x}`]
               : [`\\dfrac{${reduireAxPlusB(b, -a)}}{x}`]
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
             if (this.interactif) {
               texte = consigneI1
               texte +=
@@ -182,7 +182,7 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
                   `\\dfrac{${reduireAxPlusB(a * c, a * d - b)}}{${reduireAxPlusB(c, d)}}`,
                   `\\dfrac{${reduireAxPlusB(-a * c, -a * d + b)}}{${reduireAxPlusB(-c, -d)}}`,
                 ]
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
             if (this.interactif) {
               texte = consigneI1
               texte +=
@@ -244,7 +244,7 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
            &=\\dfrac{${choix ? `${reduireAxPlusB(a * c + b, a * d)}` : `${reduireAxPlusB(a * c - b, a * d)}`}}{x(${reduireAxPlusB(c, d)})}
            \\end{aligned}$`
 
-              setReponse(this, i, reponse)
+              handleAnswers(this, i, { reponse: { value: reponse } })
               if (this.interactif) {
                 texte = consigneI2
                 texte +=
@@ -295,7 +295,7 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
             const reponse = [
               `\\dfrac{${reduirePolynomeDegre3(0, a * c, a * d, b)}}{${reduireAxPlusB(c, d)}}`,
             ]
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
             if (this.interactif) {
               texte = consigneI2
               texte +=
@@ -344,7 +344,7 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
             const reponse = [
               `\\dfrac{${reduirePolynomeDegre3(0, a * c, a * d + e * c, e * d + b)}}{${reduireAxPlusB(c, d)}}`,
             ]
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
             if (this.interactif) {
               texte = consigneI2
               texte +=
@@ -404,7 +404,7 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
                   `\\dfrac{${reduireAxPlusB(-a * c + b * e, -a * d + b * f)}}{(${reduireAxPlusB(-e, -f)})(${reduireAxPlusB(c, d)})}`,
                   `\\dfrac{${reduireAxPlusB(-a * c + b * e, -a * d + b * f)}}{(${reduireAxPlusB(e, f)})(${reduireAxPlusB(-c, -d)})}`,
                 ]
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
             if (this.interactif) {
               texte = consigneI2
               texte +=

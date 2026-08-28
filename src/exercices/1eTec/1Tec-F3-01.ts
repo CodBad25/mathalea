@@ -3,16 +3,14 @@ import {
   tableauSignesFacteurs,
   tableauSignesFonction,
 } from '../../lib/mathFonctions/etudeFonction'
-import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
+import { reduireAxPlusB, rienSi1 } from '../../lib/outils/ecritures'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { rienSi1, reduireAxPlusB } from '../../lib/outils/ecritures'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import FractionEtendue from '../../modules/FractionEtendue'
 
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -61,8 +59,6 @@ export default class TableauSignePolyDegre3 extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     })
-<<<<<<< src/exercices/1eTec/1Tec-F3-01.ts
-=======
     const listeSignesFacteurConstant = gestionnaireFormulaireTexte({
       saisie: this.sup2,
       min: 1,
@@ -71,7 +67,6 @@ export default class TableauSignePolyDegre3 extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     })
->>>>>>> src/exercices/1eTec/1Tec-F3-01.ts
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''

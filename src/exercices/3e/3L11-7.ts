@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { reduirePolynomeDegre3, rienSi1 } from '../../lib/outils/ecritures'
@@ -148,8 +148,8 @@ export default class CarreDoubleDistributivite extends Exercice {
       )
       texteCorr += `<br>$${lettreDepuisChiffre(i + 1)}=${reponse}$`
 
+      handleAnswers(this, i, { reponse: { value: reponse } })
       if (!context.isAmc) {
-        setReponse(this, i, reponse)
         texte += this.interactif
           ? `<br>$${lettreDepuisChiffre(i + 1)} = $` +
             ajouteChampTexteMathLive(

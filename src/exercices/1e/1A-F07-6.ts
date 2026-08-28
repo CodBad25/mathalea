@@ -217,7 +217,7 @@ export default class Auto1AF076 extends ExerciceQcmA {
       }
     }
 
-    this.correction += `<br>La seule équation ayant un coefficient directeur ${signeM > 0 ? 'positif' : 'négatif'} et une ordonnée à l'origine ${typeP === 'pos' ? 'positive' : typeP === 'neg' ? 'négative' : 'nulle'} est : $${miseEnEvidence(bonne.eq)}$.`
+    this.correction += `Parmi ces 4 équations réduites, la seule équation ayant un coefficient directeur ${signeM > 0 ? 'positif' : 'négatif'} et une ordonnée à l'origine ${typeP === 'pos' ? 'positive' : typeP === 'neg' ? 'négative' : 'nulle'} est : $${miseEnEvidence(bonne.eq)}$.`
 
     // ===== Réponses =====
     this.reponses = [
@@ -294,7 +294,7 @@ export default class Auto1AF076 extends ExerciceQcmA {
     this.correction += `$\\bullet\\:$ $2x+y+1=0$ s'écrit $y=-2x-1$.<br>`
     this.correction += `$\\bullet\\:$ $y=x^2-(x+1)^2+1$ s'écrit $y=-2x$.<br>`
     this.correction += `$\\bullet\\:$ $y=2x-1$ est sous forme réduite.<br>`
-    this.correction += `<br>La seule équation ayant un coefficient directeur négatif et une ordonnée à l'origine nulle est : $${miseEnEvidence('y=x^2-(x+1)^2+1')}$.`
+    this.correction += `<br>Parmi ces $4$ équations réduites, la seule équation ayant un coefficient directeur négatif et une ordonnée à l'origine nulle est : $${miseEnEvidence('y=x^2-(x+1)^2+1')}$.`
 
     this.reponses = ['$y=x^2-(x+1)^2+1$', '$2x-y=0$', '$2x+y+1=0$', '$y=2x-1$']
   }

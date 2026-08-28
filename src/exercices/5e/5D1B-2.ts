@@ -465,9 +465,8 @@ function questionsEtCorrections(
       serie.effectifs[rangValeurChoisie],
       serie.effectifTotal,
     )
-    correction2 += `$\\text{Fréquence}_{${serie.modalites[rangValeurChoisie]}}= ${fValeur.texFraction}$<br>`
-    correction2 += `$\\text{Fréquence}_{${serie.modalites[rangValeurChoisie]}}${egalOuApprox((serie.effectifs[rangValeurChoisie] * 100) / serie.effectifTotal, 1)}$`
-    correction2 += `$${miseEnEvidence(texNombre(arrondi(fValeur.pourcentage, 1)) + sp(1) + ` \\%`)}`
+    correction2 += `$\\text{Fréquence}_{\\text{${serie.modalites[rangValeurChoisie]}}}= ${fValeur.texFraction}$<br>`
+    correction2 += `$\\text{Fréquence}_{\\text{${serie.modalites[rangValeurChoisie]}}}${egalOuApprox((serie.effectifs[rangValeurChoisie] * 100) / serie.effectifTotal, 1)}${miseEnEvidence(texNombre(arrondi(fValeur.pourcentage, 1)) + sp(1) + ` \\%`)}$`
   }
 
   if (!exercice.interactif && !context.isAmc) {

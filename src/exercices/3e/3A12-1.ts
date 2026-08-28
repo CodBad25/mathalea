@@ -2,10 +2,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
@@ -105,7 +102,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             ' Le nombre maximal de bouquets est donc : $' +
             miseEnEvidence(`${objet}`) +
             '$.<br><br>'
-          if (context.isAmc) setReponse(this, 3 * i, objet)
           texteB = context.isAmc ? numAlpha(1) : 'b) '
           texteB += `Nombre d'iris dans chaque bouquet :`
 
@@ -115,7 +111,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             "Le nombre d'iris dans chaque bouquet est : $" +
             miseEnEvidence(` ${var1}`) +
             '$.<br><br>'
-          if (context.isAmc) setReponse(this, 3 * i + 1, var1)
           texteC = context.isAmc ? numAlpha(2) : 'c) '
           texteC += 'Nombre de roses dans chaque bouquet :'
 
@@ -125,7 +120,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             'Le nombre de roses dans chaque bouquet est : $' +
             miseEnEvidence(` ${var2}`) +
             '$.'
-          if (context.isAmc) setReponse(this, 3 * i + 2, var2)
           break
         case 2:
           texte = `Un professeur organise une sortie pédagogique au Futuroscope pour ses élèves de 3ème. Il est accompagné de $${var1 * objet}$ garçons et de $${var2 * objet}$ filles.<br>`
@@ -149,7 +143,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             ' Le nombre maximal de groupes est donc : $' +
             miseEnEvidence(`${objet}`) +
             '$.<br><br>'
-          if (context.isAmc) setReponse(this, 3 * i, objet)
           texteB = context.isAmc ? numAlpha(1) : 'b) '
           texteB += `Nombre de garçons dans chaque groupe :`
 
@@ -159,7 +152,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             'Le nombre de garçons dans chaque groupe est : $' +
             miseEnEvidence(` ${var1}`) +
             '$.<br><br>'
-          if (context.isAmc) setReponse(this, 3 * i + 1, var1)
           texteC = context.isAmc ? numAlpha(2) : 'c) '
           texteC += 'Nombre de filles dans chaque groupe :'
 
@@ -169,7 +161,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             'Le nombre de filles dans chaque groupe est : $' +
             miseEnEvidence(` ${var2}`) +
             '$.'
-          if (context.isAmc) setReponse(this, 3 * i + 2, var2)
           break
         default: // si un utilisateur saisit 4 ou une valeur erronée renvoie par défaut vers le prbme 3
           texte = `Un boulanger dispose de $${var1 * objet}$ croissants et de $${var2 * objet}$ brioches.<br>`
@@ -193,7 +184,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             ' Le nombre maximal de corbeilles est donc : $' +
             miseEnEvidence(`${objet}`) +
             '$.<br><br>'
-          if (context.isAmc) setReponse(this, 3 * i, objet)
           texteB = context.isAmc ? numAlpha(1) : 'b) '
           texteB += `Nombre de croissants dans chaque corbeille :`
 
@@ -203,7 +193,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             'Le nombre de croissants dans chaque corbeille est : $' +
             miseEnEvidence(` ${var1}`) +
             '$.<br><br>'
-          if (context.isAmc) setReponse(this, 3 * i + 1, var1)
           texteC = context.isAmc ? numAlpha(2) : 'c) '
           texteC += 'Nombre de brioches dans chaque corbeille :'
 
@@ -213,7 +202,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             'Le nombre de brioches dans chaque corbeille est : $' +
             miseEnEvidence(` ${var2}`) +
             '$.'
-          if (context.isAmc) setReponse(this, 3 * i + 2, var2)
           break
       } // fin du switch
       texte += addMultiMathfield(this, i, {

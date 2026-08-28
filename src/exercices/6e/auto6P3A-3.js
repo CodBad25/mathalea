@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -51,7 +51,7 @@ export default class DoubleMoitieTiersTriple extends Exercice {
           a = randint(2, 9)
           texte = `$\\text{Le double de }${a}$`
           texteCorr = `$\\text{Le double de }${a} \\text{ est } ${miseEnEvidence(a * 2)}$`
-          setReponse(this, i, a * 2)
+          handleAnswers(this, i, { reponse: { value: a * 2 } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -63,7 +63,7 @@ export default class DoubleMoitieTiersTriple extends Exercice {
           a = randint(2, 9) * 2
           texte = `$\\text{La moitié de }${a * 2}$`
           texteCorr = `$\\text{La moitié de }${a * 2} \\text{ est } ${miseEnEvidence(a)}$`
-          setReponse(this, i, a)
+          handleAnswers(this, i, { reponse: { value: a } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -75,7 +75,7 @@ export default class DoubleMoitieTiersTriple extends Exercice {
           a = randint(2, 9)
           texte = `$\\text{Le triple de }${a}$`
           texteCorr = `$\\text{Le triple de }${a} \\text{ est } ${miseEnEvidence(a * 3)}$`
-          setReponse(this, i, a * 3)
+          handleAnswers(this, i, { reponse: { value: a * 3 } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -87,7 +87,7 @@ export default class DoubleMoitieTiersTriple extends Exercice {
           a = randint(2, 9)
           texte = `$\\text{Le tiers de }${a * 3}$`
           texteCorr = `$\\text{Le tiers de }${a * 3} \\text{ est } ${miseEnEvidence(a)}$`
-          setReponse(this, i, a)
+          handleAnswers(this, i, { reponse: { value: a } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,

@@ -271,22 +271,6 @@ export default class TesterUneEgalite extends Exercice {
 
       texte = `Tester l'égalité ${expression} pour $${sp(1)}x=${x1}${sp(1)}$ puis pour $${sp(1)}x=${x2}$.`
       if (this.interactif && !context.isAmc) {
-        /*  setReponse(this, 6 * i, rep1)
-        setReponse(this, 6 * i + 1, rep2)
-        setReponse(
-          this,
-          6 * i + 2,
-          rep1 === rep2 ? ['Oui', 'oui', 'OUI'] : ['Non', 'non', 'NON'],
-          { formatInteractif: 'texte' },
-        )
-        setReponse(this, 6 * i + 3, rep3)
-        setReponse(this, 6 * i + 4, rep4)
-        setReponse(
-          this,
-          6 * i + 5,
-          rep3 === rep4 ? ['Oui', 'oui', 'OUI'] : ['Non', 'non', 'NON'],
-          { formatInteractif: 'texte' },
-        ) */
         handleAnswers(
           this,
           i,

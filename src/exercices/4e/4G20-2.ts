@@ -1,9 +1,5 @@
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -15,7 +11,6 @@ import { MetaInteractif2d } from '../../lib/2d/interactif2d'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { latex2d } from '../../lib/2d/textes'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -185,46 +180,19 @@ export default class RacineCareeDeCarresParfaits extends Exercice {
       }
 
       texteCorr = `$\\sqrt{${c}}${this.sup3 ? '\\text{ cm}' : ''}=${miseEnEvidence(a.toString())}${this.sup3 ? '\\text{ cm}' : ''}$`
-      if (!context.isAmc) {
-        if (this.sup3) {
-          handleAnswers(
-            this,
-            i,
-            {
-              field0: { value: a, options: { noFeedback: true } },
-            },
-            { formatInteractif: 'MetaInteractif2d' },
-          )
-        } else {
-          handleAnswers(this, i, { reponse: { value: a.toString() } })
-        }
+      if (this.sup3) {
+        handleAnswers(
+          this,
+          i,
+          {
+            field0: { value: a, options: { noFeedback: true } },
+          },
+          { formatInteractif: 'MetaInteractif2d' },
+        )
+      } else {
+        handleAnswers(this, i, { reponse: { value: a.toString() } })
       }
       if (this.questionJamaisPosee(i, a)) {
-        if (context.isAmc) {
-          setReponse(this, i, a)
-          if (listeQuestions[i] === 1) {
-            this.autoCorrectionAMC[i].enonce = `$\\sqrt{${c}}=\\dots$`
-            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            this.autoCorrectionAMC[i].propositions = [
-              { texte: `$\\sqrt{${c}}=${a}$`, statut: false },
-            ]
-            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-          } else {
-            this.autoCorrectionAMC[i].enonce = `$${c} = \\dots^2$`
-            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            this.autoCorrectionAMC[i].propositions = [
-              { texte: `$${c}=${a}^2$`, statut: false },
-            ]
-            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-          }
-          this.autoCorrectionAMC[i].reponse!.param = {
-            digits: 2,
-            decimals: 0,
-            exposantNbChiffres: 0,
-            exposantSigne: false,
-            signe: false,
-          }
-        }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

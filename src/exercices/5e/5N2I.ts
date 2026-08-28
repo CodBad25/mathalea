@@ -1,9 +1,6 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -12,10 +9,7 @@ import {
   ecritureNombreRelatifc,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import {
-  arrondi,
-  nombreDeChiffresDansLaPartieEntiere,
-} from '../../lib/outils/nombres'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -169,22 +163,12 @@ export default class ExerciceSoustractionsRelatifs extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
 
-        if (context.isAmc) {
-          setReponse(this, i, [arrondi(a - b)], {
-            signe: true,
-            digits: Math.max(
-              2,
-              nombreDeChiffresDansLaPartieEntiere(arrondi(a - b)),
-            ),
-            decimals: 0,
-          })
-        } else
-          handleAnswers(this, i, {
-            reponse: {
-              value: arrondi(a - b).toString(),
-              options: { nombreDecimalSeulement: true },
-            },
-          })
+        handleAnswers(this, i, {
+          reponse: {
+            value: arrondi(a - b).toString(),
+            options: { nombreDecimalSeulement: true },
+          },
+        })
 
         i++
       }

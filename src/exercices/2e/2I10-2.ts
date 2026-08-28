@@ -1,10 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -372,8 +369,8 @@ export default class Proportions extends Exercice {
           }
           break
       }
+      handleAnswers(this, i, { reponse: { value: reponse.toString() } })
       if (context.isAmc) {
-        setReponse(this, i, reponse, paramAMC)
         const exerciseAny = this as any
         if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
           exerciseAny.autoCorrectionAMC = []
@@ -384,13 +381,12 @@ export default class Proportions extends Exercice {
           ...interactiveEntry,
           reponse: {
             ...interactiveReponse,
+            param: paramAMC,
           },
         }
         exerciseAny.questionsAMC[i] = amcConvert(
           exerciseAny.autoCorrectionAMC[i],
         )
-      } else {
-        handleAnswers(this, i, { reponse: { value: reponse.toString() } })
       }
       if (listeTypeDeQuestions[i] === 'proportion') {
         if (context.isAmc) {

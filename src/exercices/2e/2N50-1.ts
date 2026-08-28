@@ -1,6 +1,6 @@
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -167,7 +167,14 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           }
           break
       }
-      setReponse(this, i, reponse, { formatInteractif: 'texte' })
+      handleAnswers(this, i, {
+        reponse: {
+          value: Array.isArray(reponse)
+            ? reponse.map(String)
+            : [String(reponse)],
+          options: { texteAvecCasse: true },
+        },
+      })
       if (this.interactif) {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.vFON)
       }

@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -268,7 +268,7 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
         // Si la question n'a jamais été posée, on en créé une autre
         if (!context.isAmc && this.interactif) {
           // On vérifie qu'on est pas en AMC pour vérifier qu'on ne casse rien à ce qui a été fait pour AMC
-          setReponse(this, i, reponse)
+          handleAnswers(this, i, { reponse: { value: reponse } })
           texte +=
             ' =' + ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
         } else if (context.isAmc) {

@@ -7,6 +7,7 @@ import {
   setStaticImagePaths,
   svgToTypstImage,
 } from './latexToTypst'
+import { deuxColonnesResp } from '../../../lib/format/miseEnPage'
 
 describe('latexMathToTypst', () => {
   it('convertit les fractions et opérations usuelles', () => {
@@ -106,6 +107,34 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('union')
   })
 
+  it('ne casse pas une parenthèse isolée dans un groupe gras coloré (3L11-3b)', () => {
+    // 3L11-3b colore en bleu gras le signe et les grandes parenthèses d'un
+    // produit ajouté : miseEnEvidence('\\,+\\Big(') et miseEnEvidence('\\Big)').
+    // tex2typst produit alors bold(+() (délimiteur ouvrant jamais fermé) et
+    // bold()) (bold() sans corps → "missing argument: body" à la compilation).
+    const open = latexMathToTypst('{\\color{#216d9a}\\boldsymbol{\\,+\\Big(}}')
+    const close = latexMathToTypst('{\\color{#216d9a}\\boldsymbol{\\Big)}}')
+    expect(open).toContain('paren.l')
+    expect(open).not.toMatch(/bold\([^)]*\(\)/)
+    expect(close).toContain('paren.r')
+    expect(close).not.toContain('bold()')
+    // parenthésage équilibré des deux côtés
+    for (const r of [open, close]) {
+      expect((r.match(/\(/g) ?? []).length).toBe((r.match(/\)/g) ?? []).length)
+    }
+  })
+
+  it('sépare une parenthèse fermante orpheline du symbole qui la précède', () => {
+    // Régression : la parenthèse orpheline devenait `betaparen.r` (un seul
+    // identifiant pour Typst, donc « variable inconnue betaparen ») au lieu de
+    // `beta paren.r` — 2I20-1, 2I21-1... selon la graine.
+    // (les espaces en bordure de formule sont sans effet en Typst)
+    expect(latexMathToTypst('\\beta)').trim()).toBe('beta paren.r')
+    expect(latexMathToTypst('x)').trim()).toBe('x paren.r')
+    // la parenthèse ouvrante orpheline était déjà correctement détachée
+    expect(latexMathToTypst('(\\beta').trim()).toBe('paren.l beta')
+  })
+
   it('conserve les crochets d\'une notation de segment comme [YS]', () => {
     // Régression : la règle qui enlève les crochets autour de "union"/"inter"
     // (issus de \cup/\cap) matchait aussi tout contenu purement alphabétique,
@@ -159,6 +188,18 @@ describe('latexMathToTypst', () => {
     expect(
       latexMathToTypst('\\begin{aligned}2x&=4\\\\x&=2\\\\\\end{aligned}'),
     ).toBe('2 x &= 4 \\ x &= 2')
+  })
+
+  it('tolère les tabulations d\'indentation dans un environnement aligned', () => {
+    // 1AN31-7 : l'indentation du template literal laissait passer des \t dans
+    // la formule, tex2typst levait et la correction affichait `\begin{aligned}`
+    // verbatim.
+    const result = latexMathToTypst(
+      '\\begin{aligned}\n\t\\phantom{\\iff}&-4x+8>0\\\\\n\t\\iff&x<2\n\t\\end{aligned}',
+    )
+    expect(result.startsWith('"')).toBe(false)
+    expect(result).not.toContain('\\begin{aligned}')
+    expect(result).toContain('&')
   })
 
   it('normalise displaystyle dans un environnement aligned', () => {
@@ -239,6 +280,58 @@ describe('latexMathToTypst — commandes de taille', () => {
       latexMathToTypst('{\\color{#216D9A}\\boldsymbol{\\large5}}'),
     ).not.toContain('large')
     expect(latexMathToTypst('\\Large 12 + \\small3')).toBe('12 + 3')
+  })
+})
+
+describe('htmlToTypst — deux colonnes responsives (deuxColonnesResp)', () => {
+  it('convertit les deux colonnes en #grid (et retire le style CSS)', () => {
+    const html = deuxColonnesResp('Colonne gauche', 'Colonne droite', {
+      eleId: '1_1',
+      largeur1: 50,
+      widthmincol1: '400px',
+      widthmincol2: '200px',
+    })
+    const typst = htmlToTypst(html)
+    expect(typst).toContain('#grid(')
+    expect(typst).toContain('columns: (50fr, 50fr)')
+    expect(typst).toContain('[Colonne gauche]')
+    expect(typst).toContain('[Colonne droite]')
+    // le <style> de la grille CSS n'apparaît pas comme texte
+    expect(typst).not.toContain('grid-template-columns')
+  })
+
+  it('reprend le partage `largeur1` de la sortie LaTeX', () => {
+    const typst = htmlToTypst(
+      deuxColonnesResp('Énoncé', 'Figure', {
+        largeur1: 70,
+        widthmincol1: '0px',
+        widthmincol2: '0px',
+      }),
+    )
+    expect(typst).toContain('columns: (70fr, 30fr)')
+  })
+
+  it('convertit le contenu des colonnes (formules comprises)', () => {
+    const typst = htmlToTypst(
+      deuxColonnesResp('$\\dfrac{3}{4}$', 'texte', {
+        largeur1: 50,
+        widthmincol1: '0px',
+        widthmincol2: '0px',
+      }),
+    )
+    expect(typst).toContain('frac(3, 4)')
+  })
+
+  it('n’ouvre pas de grille quand une seule colonne a du contenu', () => {
+    const typst = htmlToTypst(
+      deuxColonnesResp('Seule colonne', '', {
+        largeur1: 50,
+        widthmincol1: '0px',
+        widthmincol2: '0px',
+      }),
+    )
+    expect(typst).not.toContain('#grid(')
+    expect(typst).toContain('Seule colonne')
   })
 })
 

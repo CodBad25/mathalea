@@ -1,7 +1,10 @@
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 
 import { courbe } from '../../lib/2d/Courbe'
@@ -79,7 +82,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
     this.correction = `Il y a deux points d'intersection entre la courbe et l'axe des abscisses.<br>
     Les abscisses de ces points sont les solutions de l'équation. Ces abscisses sont négatives. <br>
-    Par conséquent,   ${texteEnCouleurEtGras("l'équation $f(x)=0$ admet exactement deux solutions et ces solutions sont négatives.")}.`
+    Par conséquent,   ${texteEnCouleurEtGras("l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(' admet exactement deux solutions et ces solutions sont négatives')}.`
 
     this.reponses = [
       "L'équation $f(x)=0$ admet exactement deux solutions et ces solutions sont négatives.",
@@ -149,7 +152,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
           this.correction = `Il y a deux points d'intersection entre la courbe et l'axe des abscisses.<br>
     Les abscisses de ces points sont les solutions de l'équation. Ces abscisses sont négatives. <br>
-    Par conséquent,   ${texteEnCouleurEtGras("l'équation $f(x)=0$ admet exactement deux solutions et ces solutions sont négatives.")}.`
+    Par conséquent,   ${texteEnCouleurEtGras("l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(' admet exactement deux solutions et ces solutions sont négatives')}.`
 
           this.reponses = [
             "L'équation $f(x)=0$ admet exactement deux solutions et ces solutions sont négatives.",
@@ -216,7 +219,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
           this.correction = `Il y a deux points d'intersection entre la courbe et l'axe des abscisses.<br>
     Les abscisses de ces points sont les solutions de l'équation. Ces abscisses sont de signes contraires. <br>
-    Par conséquent,   ${texteEnCouleurEtGras("l'équation $f(x)=0$ admet exactement deux solutions et ces solutions sont de signes contraires")}.`
+    Par conséquent,   ${texteEnCouleurEtGras("l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(' admet exactement deux solutions et ces solutions sont de signes contraires')}.`
 
           this.reponses = [
             "L'équation $f(x)=0$ admet exactement deux solutions et ces solutions sont de signes contraires.",
@@ -282,7 +285,7 @@ export default class auto1AF4c extends ExerciceQcmA {
           )}`
 
           this.correction = `Il y a un point d'intersection entre la courbe et l'axe des abscisses.<br>
-    Par conséquent,   ${texteEnCouleurEtGras("l'équation $f(x)=0$ admet exactement une solution.")}.`
+    Par conséquent,   ${texteEnCouleurEtGras("l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(' admet exactement une solution')}.`
 
           this.reponses = [
             "L'équation $f(x)=0$ admet exactement  une solution.",
@@ -348,7 +351,7 @@ export default class auto1AF4c extends ExerciceQcmA {
           )}`
 
           this.correction = `Il n'y a aucun point d'intersection entre la courbe et l'axe des abscisses.<br>
-    Par conséquent,   ${texteEnCouleurEtGras("l'équation $f(x)=0$ n'admet aucune solution")}.`
+    Par conséquent,   ${texteEnCouleurEtGras("l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(" n'admet aucune solution")}.`
 
           this.reponses = [
             "L'équation $f(x)=0$ n'admet aucune solution.",

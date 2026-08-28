@@ -1,14 +1,10 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import {
-  nombreDeChiffresDansLaPartieDecimale,
-  nombreDeChiffresDe,
-} from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -113,7 +109,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
       )
     }
     let listeDeN = []
-    let bonusDecimalesAMC, resultat, resultatFaux
+    let resultat, resultatFaux
     if (this.sup2) {
       listeDeN = combinaisonListes([1, 2, 3, 4], this.nbQuestions)
     } else {
@@ -167,20 +163,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
       switch (listeTypeDeQuestions[i]) {
         case 'dam3toL':
           texte = `$${texNombre(n, 3)}${sp()}\\text{dam}^3=\\dotfill${sp()}\\text{L}$`
-          bonusDecimalesAMC = n.toNumber() < 1000 ? randint(0, 1) : 0 // Sinon, cela fait trop de digits
           resultat = n.mul(1000000)
-          setReponse(this, i, resultat, {
-            digits: Math.min(
-              nombreDeChiffresDe(resultat.toNumber()) +
-                randint(0, 1) +
-                bonusDecimalesAMC,
-              10,
-            ),
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat.toNumber()) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{dam}^3=${texNombre(n, 3)}\\times1${sp()}000\\times1${sp()}000${sp()}\\text{dm}^3=${miseEnEvidence(`${texNombre(resultat, 0)}${sp()}\\text{L}`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -198,16 +181,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           break
         case 'm3toL':
           texte = `$${texNombre(n, 3)}${sp()}\\text{m}^3=\\dotfill${sp()}\\text{L}$`
-          bonusDecimalesAMC = randint(0, 1)
           resultat = n.mul(1000)
-          setReponse(this, i, resultat, {
-            digits:
-              nombreDeChiffresDe(resultat) + randint(0, 1) + bonusDecimalesAMC,
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{m}^3=${texNombre(n, 3)}\\times1${sp()}000${sp()}\\text{dm}^3=${miseEnEvidence(`${texNombre(resultat, 0)}${sp()}\\text{L}`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -217,16 +191,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           break
         case 'dm3toL':
           texte = `$${texNombre(n, 3)}${sp()}\\text{dm}^3=\\dotfill${sp()}\\text{L}$`
-          bonusDecimalesAMC = randint(0, 1)
           resultat = n.mul(1)
-          setReponse(this, i, resultat, {
-            digits:
-              nombreDeChiffresDe(resultat) + randint(0, 1) + bonusDecimalesAMC,
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{dm}^3=${miseEnEvidence(`${texNombre(resultat, 3)}${sp()}\\text{L}`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -236,16 +201,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           break
         case 'cm3toL':
           texte = `$${texNombre(n, 3)}${sp()}\\text{cm}^3=\\dotfill${sp()}\\text{L}$`
-          bonusDecimalesAMC = randint(0, 1)
           resultat = n.div(1000)
-          setReponse(this, i, resultat, {
-            digits:
-              nombreDeChiffresDe(resultat) + randint(0, 1) + bonusDecimalesAMC,
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{cm}^3=${texNombre(n, 3)}\\div 1${sp()}000${sp()}\\text{dm}^3=${miseEnEvidence(`${texNombre(resultat, 6)}${sp()}\\text{L}`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -255,16 +211,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           break
         case 'mm3toL':
           texte = `$${texNombre(n, 3)}${sp()}\\text{mm}^3=\\dotfill${sp()}\\text{L}$`
-          bonusDecimalesAMC = randint(0, 1)
           resultat = n.div(1000000)
-          setReponse(this, i, resultat, {
-            digits:
-              nombreDeChiffresDe(resultat) + randint(0, 1) + bonusDecimalesAMC,
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{mm}^3=${texNombre(n, 3)}\\div1${sp()}000\\div 1${sp()}000${sp()}\\text{dm}^3=${miseEnEvidence(`${texNombre(resultat, 9)}${sp()}\\text{L}`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -274,16 +221,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           break
         case 'Ltodm3':
           texte = `$${texNombre(n, 3)}${sp()}\\text{L}=\\dotfill${sp()}\\text{dm}^3$`
-          bonusDecimalesAMC = randint(0, 1)
           resultat = n.mul(1)
-          setReponse(this, i, resultat, {
-            digits:
-              nombreDeChiffresDe(resultat) + randint(0, 1) + bonusDecimalesAMC,
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{L}=${miseEnEvidence(`${texNombre(resultat, 3)}${sp()}\\text{dm}^3`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -293,16 +231,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           break
         case 'Ltocm3':
           texte = `$${texNombre(n, 3)}${sp()}\\text{L}=\\dotfill${sp()}\\text{cm}^3$`
-          bonusDecimalesAMC = randint(0, 1)
           resultat = n.mul(1000)
-          setReponse(this, i, resultat, {
-            digits:
-              nombreDeChiffresDe(resultat) + randint(0, 1) + bonusDecimalesAMC,
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{L}=${texNombre(n, 0)}${sp()}\\text{dm}^3=${texNombre(n, 0)}\\times1${sp()}000${sp()}\\text{cm}^3=${miseEnEvidence(`${texNombre(n.mul(1000))}${sp()}\\text{cm}^3`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -313,16 +242,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
         case 'Ltom3':
         default:
           texte = `$${texNombre(n, 3)}${sp()}\\text{L}=\\dotfill${sp()}\\text{m}^3$`
-          bonusDecimalesAMC = randint(0, 1)
           resultat = n.div(1000)
-          setReponse(this, i, resultat, {
-            digits:
-              nombreDeChiffresDe(resultat) + randint(0, 1) + bonusDecimalesAMC,
-            decimals:
-              nombreDeChiffresDansLaPartieDecimale(resultat) +
-              bonusDecimalesAMC,
-            signe: false,
-          })
           texteCorr = `$${texNombre(n, 3)}${sp()}\\text{L}=${texNombre(n, 3)}${sp()}\\text{dm}^3=${texNombre(n, 3)}\\div1${sp()}000${sp()}\\text{m}^3=${miseEnEvidence(`${texNombre(resultat, 6)}${sp()}\\text{m}^3`)}$`
           texteCorr +=
             this.sup3 === 1 || this.sup3 === 4
@@ -382,7 +302,7 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           `$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
             texteApres: uniteFinale,
           })}`
-        setReponse(this, i, resultat)
+        handleAnswers(this, i, { reponse: { value: resultat } })
       }
 
       /* if ((this.sup3 === 1 || this.sup3 === 3) && i === this.nbQuestions - 1) {

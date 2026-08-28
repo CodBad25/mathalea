@@ -3,7 +3,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea } from '../../lib/colors'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
@@ -198,7 +198,7 @@ export default class EngrenagesAnimes extends Exercice {
           texteCorr += `Soit $n$ le nombre de dents de la roue de droite qui effectue $${nbToursB}$ tours, on a alors : $n\\times${nbToursB} = ${nbDentsRoueA}\\times ${nbToursA} = ${nbDentsRoueA * nbToursA}$.<br>`
           texteCorr += `On en déduit que $n=\\dfrac{${nbDentsRoueA * nbToursA}}{${nbToursB}}=${nbDentsRoueB}$.<br>`
           texteCorr += `La roue de droite a donc $${miseEnEvidence(nbDentsRoueB)}$ dents.<br>`
-          setReponse(this, i, nbDentsRoueB)
+          handleAnswers(this, i, { reponse: { value: nbDentsRoueB } })
           roues = engrenages(
             { dureeTourBase: 0, module: 0.4 },
             nbDentsRoueA,
@@ -237,7 +237,7 @@ export default class EngrenagesAnimes extends Exercice {
             KeyboardType.clavierNumbers,
           )
           texte += '<br>'
-          setReponse(this, i, nbDentsRoueB)
+          handleAnswers(this, i, { reponse: { value: nbDentsRoueB } })
           texteCorr +=
             'Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>'
           texteCorr += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents en $${nbToursA}$ tours.<br>`
@@ -279,7 +279,7 @@ export default class EngrenagesAnimes extends Exercice {
             KeyboardType.clavierNumbers,
           )
           texte += '<br>'
-          setReponse(this, i, nbToursB)
+          handleAnswers(this, i, { reponse: { value: nbToursB } })
           texteCorr += `Lorsque la roue de gauche effectue $n$ tours, cela fait $${nbDentsRoueA}n$ dents.<br>`
           texteCorr += `Lorsque la roue de droite effectue $m$ tours, cela fait $${nbDentsRoueB}m$ dents.<br>`
           texteCorr += `Nous cherchons donc le plus petit multiple commun à $${nbDentsRoueA}$ et à $${nbDentsRoueB}$.<br>`
@@ -324,7 +324,7 @@ export default class EngrenagesAnimes extends Exercice {
             KeyboardType.clavierNumbers,
           )
           texte += '<br>'
-          setReponse(this, i, nbToursB)
+          handleAnswers(this, i, { reponse: { value: nbToursB } })
           texteCorr +=
             'Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>'
           texteCorr += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents.<br>`
@@ -396,7 +396,7 @@ export default class EngrenagesAnimes extends Exercice {
             KeyboardType.clavierNumbers,
           )
           texte += '<br>'
-          setReponse(this, i, nbToursAbc)
+          handleAnswers(this, i, { reponse: { value: nbToursAbc } })
           texteCorr += `${numAlpha(0)}Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>`
           texteCorr += `Nous cherchons donc le plus petit multiple commun à $${nbDentsRoueA}$ et à $${nbDentsRoueB}$.<br>`
           texteCorr += listePremiersMultiples(nbDentsRoueA, nbDentsRoueB)

@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   listeDeNotes,
@@ -293,13 +293,14 @@ export default class CalculerDesFrequences extends Exercice {
           i,
           KeyboardType.clavierDeBaseAvecFraction,
         )
-        setReponse(this, i, reponse, {
-          formatInteractif: 'fractionEgale',
-          digits: 5,
-          digitsNum: 3,
-          digitsDen: 2,
-          signe: true,
-        })
+        handleAnswers(
+          this,
+          i,
+          {
+            reponse: { value: reponse, options: { fractionEgale: true } },
+          },
+          { digits: 5, digitsNum: 3, digitsDen: 2, signe: true },
+        )
       }
       if (context.isAmc) {
         reponse = reponse.simplifie()

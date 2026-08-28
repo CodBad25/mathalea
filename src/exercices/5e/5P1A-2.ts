@@ -3,10 +3,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableau } from '../../lib/2d/tableau'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -168,12 +165,9 @@ export default class EchellesProblemes extends Exercice {
             i,
             KeyboardType.clavierDeBaseAvecFraction,
           )
-          if (context.isAmc)
-            setReponse(this, i, reponse, { formatInteractif: 'fractionEgale' })
-          else
-            handleAnswers(this, i, {
-              reponse: { value: reponse, options: { fractionEgale: true } },
-            })
+          handleAnswers(this, i, {
+            reponse: { value: reponse, options: { fractionEgale: true } },
+          })
 
           if (this.sup2) {
             texteCorr =
@@ -357,15 +351,13 @@ export default class EchellesProblemes extends Exercice {
             texte += ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {
               texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
             })
-            handleAnswers(this, i, {
-              reponse: {
-                value: new Grandeur(reponse, unite2),
-                options: { unite: true },
-              },
-            })
-          } else if (context.isAmc) {
-            setReponse(this, i, reponse)
           }
+          handleAnswers(this, i, {
+            reponse: {
+              value: new Grandeur(reponse, unite2),
+              options: { unite: true },
+            },
+          })
 
           if (this.sup2) {
             texteCorr =
@@ -526,15 +518,13 @@ export default class EchellesProblemes extends Exercice {
             texte += ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {
               texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
             })
-            handleAnswers(this, i, {
-              reponse: {
-                value: new Grandeur(reponse, unite1),
-                options: { unite: true },
-              },
-            })
-          } else if (context.isAmc) {
-            setReponse(this, i, reponse)
           }
+          handleAnswers(this, i, {
+            reponse: {
+              value: new Grandeur(reponse, unite1),
+              options: { unite: true },
+            },
+          })
 
           if (this.sup2) {
             texteCorr =

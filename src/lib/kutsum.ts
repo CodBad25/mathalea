@@ -58,6 +58,22 @@ type KutsumPayload = {
   exercises: KutsumExercise[]
 }
 
+/**
+ * Kutsum éclate les exercices en questions autonomes, affichées une par une :
+ * la consigne générale et l'introduction de l'exercice doivent donc être
+ * répétées dans le texte de chaque question, sinon l'énoncé est incompréhensible
+ * (« $007621661$ » sans « Écrire les nombres en chiffres… »).
+ * C'est ce que fait déjà l'affichage « une question par page » côté élève.
+ */
+function buildKutsumQuestionText(
+  exercise: IExercice,
+  questionText: string,
+): string {
+  return [exercise.consigne, exercise.introduction, questionText]
+    .filter((part) => typeof part === 'string' && part.trim() !== '')
+    .join('<br>')
+}
+
 function buildKutsumQuestionsFromAutoCorrection(
   exercise: IExercice,
 ): KutsumQuestion[] {
@@ -66,7 +82,10 @@ function buildKutsumQuestionsFromAutoCorrection(
     const autoCorrectionAMC = exercise.autoCorrectionAMC?.[index]
     const formatInteractif =
       autoCorrection.formatInteractif ?? exercise.formatInteractif
-    const text = autoCorrection.enonce || exercise.listeQuestions[index] || ''
+    const text = buildKutsumQuestionText(
+      exercise,
+      autoCorrection.enonce || exercise.listeQuestions[index] || '',
+    )
 
     if (
       formatInteractif === 'qcm' &&

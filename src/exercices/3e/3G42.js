@@ -7,7 +7,7 @@ import {
 import { sphere3d } from '../../lib/3d/3dProjectionMathalea2d/Sphere3dPerspectiveCavaliere'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -220,12 +220,22 @@ export default class VolumeBoule extends Exercice {
           break
       }
       texteCorr += `$${miseEnEvidence(`${texNombre(reponse.toNumber())}${sp()}\\text{${choixUnites}}^3`)}$.`
-      setReponse(
-        this,
-        i,
-        new Grandeur(reponse.toNumber(), `${choixUnites}^3`),
-        { formatInteractif: 'unites' },
+      const reponseGrandeur = new Grandeur(
+        reponse.toNumber(),
+        `${choixUnites}^3`,
       )
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponseGrandeur,
+          options: {
+            unite: true,
+            precisionUnite:
+              10 **
+              (reponseGrandeur.puissanceUnite *
+                reponseGrandeur.puissancePrefixe),
+          },
+        },
+      })
       texte += ajouteChampTexteMathLive(
         this,
         i,

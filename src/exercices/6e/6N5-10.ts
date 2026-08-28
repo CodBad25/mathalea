@@ -90,7 +90,7 @@ export default class ProblemesVaries extends Exercice {
       this.nbQuestions,
     )
     const problemesMultiplicatifs = fonctionCombinaison(
-      listeDeProblemesMultiplicatifsParts,
+      listeDeProblemesMultiplicatifs,
       this.nbQuestions,
     )
     const problemesPartageSimple = fonctionCombinaison(

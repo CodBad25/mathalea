@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
@@ -233,10 +233,11 @@ export default class ConversionsPuissancesDe10 extends Exercice {
             },
           )
         : `$${texNombre(a)}\\times10^{${n}}~${uniteOrdre[0]} = ${texNombre(a)}\\times 10^{${miseEnEvidence('\\ldots', 'black')}}~${uniteOrdre[1]}$`
-      setReponse(this, i, [
-        '10^' + exposantReponse,
-        '10^{' + exposantReponse + '}',
-      ])
+      handleAnswers(this, i, {
+        reponse: {
+          value: ['10^' + exposantReponse, '10^{' + exposantReponse + '}'],
+        },
+      })
       if (this.correctionDetaillee) {
         texteCorr +=
           listeDeSens[i] === 'div' ? correctionDetail[0] : correctionDetail[1]

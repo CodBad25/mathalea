@@ -18,7 +18,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const titre = 'Utiliser le cosinus dans un triangle rectangle'
+export const titre = 'Compléter une égalité avec le cosinus, le sinus ou la tangente dans un triangle rectangle'
 export const dateDePublication = '11/08/2026'
 
 const lengthButtonsAction = 'dnb-2026-centres-etrangers-q4-length-buttons'

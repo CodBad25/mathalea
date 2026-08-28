@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -88,7 +88,7 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${a}\\times ${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}\\\\
           &=${a * x}${ecritureAlgebrique(b)}\\\\
           &=${miseEnEvidence(`${a * x + b}`)}\\end{aligned}$`
-          setReponse(this, i, a * x + b)
+          handleAnswers(this, i, { reponse: { value: a * x + b } })
           break
         case 2: // a(x+b)
           a = randint(2, 10)
@@ -106,7 +106,7 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${a}\\times (${x}${ecritureAlgebrique(b)})\\\\
           &=${a}\\times ${ecritureParentheseSiNegatif(x + b)}\\\\
           &=${miseEnEvidence(`${a * (x + b)}`)}\\end{aligned}$`
-          setReponse(this, i, a * (x + b))
+          handleAnswers(this, i, { reponse: { value: a * (x + b) } })
           break
         case 3: // x^2+y^2
           x = randint(2, 10)
@@ -122,7 +122,7 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${ecritureParentheseSiNegatif(x)}^2+${ecritureParentheseSiNegatif(y)}^2\\\\
           &=${x ** 2}+${y ** 2}\\\\
           &=${miseEnEvidence(`${x ** 2 + y ** 2}`)}\\end{aligned}$`
-          setReponse(this, i, x ** 2 + y ** 2)
+          handleAnswers(this, i, { reponse: { value: x ** 2 + y ** 2 } })
           break
         case 4: // x^2-y^2
           x = randint(2, 10)
@@ -138,7 +138,7 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${ecritureParentheseSiNegatif(x)}^2-${ecritureParentheseSiNegatif(y)}^2\\\\
           &=${x ** 2}-${y ** 2}\\\\
           &=${miseEnEvidence(`${x ** 2 - y ** 2}`)}\\end{aligned}$`
-          setReponse(this, i, x ** 2 - y ** 2)
+          handleAnswers(this, i, { reponse: { value: x ** 2 - y ** 2 } })
           break
         case 5: // ax^2+b(x-1)+cy^3
           a = randint(2, 5)
@@ -161,7 +161,9 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${a * x ** 2}${ecritureAlgebrique(b * (x - 1))}${ecritureAlgebrique(c * y ** 3)}\\\\
           &=${miseEnEvidence(`${a * x ** 2 + b * (x - 1) + c * y ** 3}`)}
           \\end{aligned}$`
-          setReponse(this, i, a * x ** 2 + b * (x - 1) + c * y ** 3)
+          handleAnswers(this, i, {
+            reponse: { value: a * x ** 2 + b * (x - 1) + c * y ** 3 },
+          })
           break
         case 6: // ax^2+bx+c
           a = randint(2, 5)
@@ -182,7 +184,9 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${a}\\times ${x ** 2}${ecritureAlgebrique(b * x)}${ecritureAlgebrique(c)}\\\\
           &=${a * x ** 2}${ecritureAlgebrique(b * x)}${ecritureAlgebrique(c)}\\\\
           &=${miseEnEvidence(`${a * x ** 2 + b * x + c}`)}\\end{aligned}$`
-          setReponse(this, i, a * x ** 2 + b * x + c)
+          handleAnswers(this, i, {
+            reponse: { value: a * x ** 2 + b * x + c },
+          })
           break
         case 7: // ax^2+bx-c
           a = randint(2, 5)
@@ -201,7 +205,9 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${a}\\times ${ecritureParentheseSiNegatif(x)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(x)}-${c}\\\\
           &=${a}\\times ${x ** 2}${ecritureAlgebrique(b * x)}-${c}\\\\
           &=${miseEnEvidence(`${a * x ** 2 + b * x - c}`)}\\end{aligned}$`
-          setReponse(this, i, a * x ** 2 + b * x - c)
+          handleAnswers(this, i, {
+            reponse: { value: a * x ** 2 + b * x - c },
+          })
           break
         case 8: // ax^2-bx+c
           a = randint(2, 5)
@@ -220,7 +226,9 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=${a}\\times ${ecritureParentheseSiNegatif(x)}^2-${b}\\times ${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(c)}\\\\
           &=${a}\\times ${x ** 2}${ecritureAlgebrique(-b * x)}${ecritureAlgebrique(c)}\\\\
           &=${miseEnEvidence(`${a * x ** 2 - b * x + c}`)}\\end{aligned}$`
-          setReponse(this, i, a * x ** 2 - b * x + c)
+          handleAnswers(this, i, {
+            reponse: { value: a * x ** 2 - b * x + c },
+          })
           break
 
         case 9: // axy+x+y
@@ -238,7 +246,7 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           texteCorr += `$\\begin{aligned}${a}xy+x+y&=${a}\\times ${ecritureParentheseSiNegatif(x)}\\times ${ecritureParentheseSiNegatif(y)}${ecritureAlgebrique(x)}${ecritureAlgebrique(y)}\\\\
           &=${a * x * y}${ecritureAlgebrique(x)}${ecritureAlgebrique(y)}\\\\
           &=${miseEnEvidence(`${a * x * y + x + y}`)}\\end{aligned}$`
-          setReponse(this, i, a * x * y + x + y)
+          handleAnswers(this, i, { reponse: { value: a * x * y + x + y } })
           break
         case 10: // (ax+b)(cy-d)
         default:
@@ -264,7 +272,9 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           &=(${a * x}${ecritureAlgebrique(b)})(${c * y}${ecritureAlgebrique(-d)})\\\\
           &=${a * x + b}\\times ${ecritureParentheseSiNegatif(c * y - d)}\\\\
           &=${miseEnEvidence(`${texNombre((a * x + b) * (c * y - d), 0)}`)}\\end{aligned}$`
-          setReponse(this, i, (a * x + b) * (c * y - d))
+          handleAnswers(this, i, {
+            reponse: { value: (a * x + b) * (c * y - d) },
+          })
           break
       }
       texte += this.interactif

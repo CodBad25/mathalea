@@ -556,7 +556,6 @@ ${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}&= ${nomV[4]}(-${nomV[1]}-${
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.alphanumeric, {
           texteAvant: sp(10),
         })
-      // setReponse(this, i, reponse)
       handleAnswers(this, i, { reponse: { value: reponse } })
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras

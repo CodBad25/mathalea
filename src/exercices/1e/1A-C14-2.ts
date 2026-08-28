@@ -9,6 +9,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+
 /**
  * @author Gilles Mora
  *
@@ -88,15 +89,16 @@ export default class Auto1AC16b extends ExerciceQcmA {
     const ligne3 = lignePMP
     this.enonce =
       'La fonction $f$ définie sur $\\mathbb{R}$ par $f(x)=(3x-15)(x+2)$ admet pour tableau de signes :   '
+    const tableauReponse = `${tableauSignesFonction(f, -10, 10, {
+      step: 1,
+      tolerance: 0.1,
+      substituts: [
+        { antVal: -10, antTex: '-\\infty' },
+        { antVal: 10, antTex: '+\\infty' },
+      ],
+    })}`
     this.reponses = [
-      `${tableauSignesFonction(f, -10, 10, {
-        step: 1,
-        tolerance: 0.1,
-        substituts: [
-          { antVal: -10, antTex: '-\\infty' },
-          { antVal: 10, antTex: '+\\infty' },
-        ],
-      })}`,
+      tableauReponse,
       `${tableauSignesFonction(f1, -10, 10, {
         step: 1,
         tolerance: 0.1,
@@ -141,7 +143,8 @@ export default class Auto1AC16b extends ExerciceQcmA {
         espcl: 4,
         deltacl: 1.5, // valeur par défaut, à ajuster si besoin
         lgt: 3,
-      })
+      }) +
+      `<br>Le tableau de signe de $f(x)$ est donc : <br>${tableauReponse}`
   }
 
   versionAleatoire: () => void = () => {
@@ -318,15 +321,16 @@ export default class Auto1AC16b extends ExerciceQcmA {
 
     this.enonce = `La fonction $f$ définie sur $\\mathbb{R}$ par $f(x)=(${reduireAxPlusB(a, b)})(${reduireAxPlusB(m, p)})$ admet pour tableau de signes :   `
 
+    const tableauReponse = `${tableauSignesFonction(f, -20, 20, {
+      step: 1,
+      tolerance: 0.1,
+      substituts: [
+        { antVal: -20, antTex: '-\\infty' },
+        { antVal: 20, antTex: '+\\infty' },
+      ],
+    })}`
     this.reponses = [
-      `${tableauSignesFonction(f, -20, 20, {
-        step: 1,
-        tolerance: 0.1,
-        substituts: [
-          { antVal: -20, antTex: '-\\infty' },
-          { antVal: 20, antTex: '+\\infty' },
-        ],
-      })}`,
+      tableauReponse,
       `${tableauSignesFonction(f1, -20, 20, {
         step: 1,
         tolerance: 0.1,
@@ -358,7 +362,7 @@ export default class Auto1AC16b extends ExerciceQcmA {
     this.correction =
       `L'équation $${reduireAxPlusB(a, b)}=0$ a pour solution $x=${texNombre(-b / a)}$.<br>
   L'équation $${reduireAxPlusB(m, p)}=0$ a pour solution $x=${texNombre(-p / m)}$.<br>
-  Le tableau de signe du produit $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(m, p)})$ est : <br>` +
+  Le tableau de signes du produit $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(m, p)})$ est : <br>` +
       tableauDeVariation({
         tabInit: [
           [
@@ -382,7 +386,8 @@ export default class Auto1AC16b extends ExerciceQcmA {
         espcl: 3,
         deltacl: 1,
         lgt: 8,
-      })
+      }) +
+      `Le tableau de signes de $f(x)$ est donc : <br>${tableauReponse}`
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)

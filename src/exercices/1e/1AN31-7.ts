@@ -135,10 +135,10 @@ export default class FonctionExponentielle extends Exercice {
         \\end{aligned}$`
       } else if (coefficientDerivee < 0) {
         correction2 += `$\\begin{aligned}
-	        \\phantom{\\iff}&${reduireAxPlusB(coefficientDerivee, constanteDerivee)}>0\\\\
-	        \\iff&${coefficientDerivee}x>${-constanteDerivee}\\\\
-	        \\iff&x<${racineDerivee.texFractionSimplifiee}
-	        \\end{aligned}$`
+        \\phantom{\\iff}&${reduireAxPlusB(coefficientDerivee, constanteDerivee)}>0\\\\
+        \\iff&${coefficientDerivee}x>${-constanteDerivee}\\\\
+        \\iff&x<${racineDerivee.texFractionSimplifiee}
+        \\end{aligned}$`
       }
       correction2 += `<br>
       On regroupe le signe de $f'$ et les variations de $f$ dans le tableau suivant :<br><br>

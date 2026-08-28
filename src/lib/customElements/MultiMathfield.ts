@@ -289,6 +289,61 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         outline: none;
         border: none;
       }
+      /* QCU : le shadowRoot ne reçoit ni Tailwind ni la surcharge de app.css.
+         On reproduit ici le style des autres QCM du site (ex. 1A-E01-1) :
+         bouton radio « coopmaths-action », espacement et alignement. */
+      [data-type='qcm'] {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      [data-type='qcm'] > span {
+        vertical-align: middle;
+      }
+      [data-type='qcm'] > span.inline-block {
+        display: inline-block;
+        margin-right: 1.5rem;
+      }
+      [data-type='qcm'] > span.block {
+        display: block;
+        margin: 0.25rem 0;
+      }
+      [data-type='qcm'] input[type='radio'] {
+        appearance: none;
+        -webkit-appearance: none;
+        box-sizing: border-box;
+        height: 1rem;
+        width: 1rem;
+        margin: 0;
+        padding: 0;
+        border: 1px solid var(--color-coopmaths-action, #f15929);
+        border-radius: 50%;
+        background-color: transparent;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      :host-context(.dark) [data-type='qcm'] input[type='radio'] {
+        border-color: var(--color-coopmathsdark-action, #ffb86c);
+      }
+      [data-type='qcm'] input[type='radio']:checked {
+        border-color: var(--color-coopmaths-action, #f15929);
+        background-color: var(--color-coopmaths-action, #f15929);
+        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      [data-type='qcm'] input[type='radio']:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+      [data-type='qcm'] label {
+        margin-left: 0.5rem;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      [data-type='qcm'] input[type='radio']:disabled + label {
+        cursor: default;
+      }
     `
     shadowRoot.appendChild(style)
 
@@ -411,6 +466,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       } else if (token.startsWith('%{')) {
         const name = token.slice(2, -1) as ValeurNames
         const fieldOptions = dataOptions[name] ?? {}
+        let hasVisibleField = true
         if (
           Array.isArray(fieldOptions.choices) &&
           fieldOptions.choices.length > 0
@@ -440,9 +496,16 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
             (choice) => choiceValue(choice) !== '',
           ).length
         } else {
-          result += freeFieldPlaceholder(fieldOptions)
+          const placeholder = freeFieldPlaceholder(fieldOptions)
+          result += placeholder
+          hasVisibleField = placeholder !== ''
         }
-        if (fieldOptions.texteApres) result += fieldOptions.texteApres
+        // Sans champ visible (ni choix, ni QCM, ni pointillés), on n'ajoute pas
+        // le texte d'unité : sinon il « pendouille » après la question en mode
+        // non interactif (ex. « Quel sera le capital au bout de 3 ans ? euros »).
+        if (hasVisibleField && fieldOptions.texteApres) {
+          result += fieldOptions.texteApres
+        }
       } else {
         result += token
       }

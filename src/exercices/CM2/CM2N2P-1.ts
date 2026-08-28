@@ -4,7 +4,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi } from '../../lib/outils/nombres'
 
@@ -108,7 +108,7 @@ export default class CM2N2P1 extends Exercice {
       }
 
       if (this.questionJamaisPosee(i, a, b, c)) {
-        setReponse(this, i, reponse)
+        handleAnswers(this, i, { reponse: { value: reponse } })
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

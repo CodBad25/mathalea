@@ -50,7 +50,10 @@ export default class EvolSuccessives extends ExerciceSimple {
 
     this.correction = `Le coefficient multiplicateur associé à une ${estAugmentation ? 'augmentation' : 'baisse'} de $${taux}\\,\\%$ est $${texNombre(CM, 2)}$.<br>
       Le coefficient multiplicateur associé à deux ${typeTexte} successives de $${taux}\\,\\%$ est le produit des coefficients multiplicateurs, soit $${texNombre(CM, 2)}\\times ${texNombre(CM, 2)}=${texNombre(CM2, 2)}$.<br>
-      L'évolution globale est donnée par $${texNombre(CM2, 2)}-1=${texNombre(variation, 2)}=${miseEnEvidence(texNombre(variationPourcent, 2))}\\,\\%$.`
+      L'évolution globale est donnée par $${texNombre(CM2, 2)}-1=${texNombre(variation, 2)}=`
+    this.correction += this.versionQcm
+      ? `${miseEnEvidence(texNombre(variationPourcent, 2) + '\\,\\%')}$.`
+      : `${miseEnEvidence(texNombre(variationPourcent, 2))}\\,\\%$.`
 
     this.reponse = this.versionQcm
       ? `$${texNombre(variationPourcent, 2)}\\,\\%$`

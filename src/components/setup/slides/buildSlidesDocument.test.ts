@@ -4,6 +4,7 @@ import {
   defaultSlidesDocumentOptions,
   harvestSlidesCarryOver,
 } from './buildSlidesDocument'
+import { typstPackageSpec } from '../typst/typstPackages'
 
 const slides = [
   { question: '$2+2$', correction: '$4$' },
@@ -67,7 +68,7 @@ describe('buildSlidesDocument', () => {
 
   it('émet le paquet breather et le pied de page selon les réglages', () => {
     const code = buildSlidesDocument(slides.slice(0, 1))
-    expect(code).toContain('#import "@preview/breather:0.1.0": breathe')
+    expect(code).toContain(`#import "${typstPackageSpec('breather')}": breathe`)
     expect(code).toContain('#show: breathe')
     expect(code).toContain('#let pied-de-page = "MathALÉA - CC BY-SA"')
     const bare = buildSlidesDocument(slides.slice(0, 1), {

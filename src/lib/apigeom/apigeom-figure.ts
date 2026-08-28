@@ -326,16 +326,19 @@ const TEXT_OVERFLOW_MARGIN_PX = 30
 
 /**
  * Nettoyage minimal des macros LaTeX pouvant apparaître dans le texte des
- * labels apigeom (ex. `1~\text{u.l}`, `$\dfrac{3}{4}~\text{u.l}$`) :
- * `addTextElementsToSvg` (paquet apigeom) retire seulement les `$` de
- * bordure, il ne connaît pas KaTeX et poserait sinon le code LaTeX brut tel
- * quel comme texte SVG. Rendu approximatif (pas un vrai typeset), suffisant
- * pour les libellés courts utilisés ici (unités, fractions simples).
+ * labels apigeom (ex. `1~\text{u.l}`, `$\dfrac{3}{4}~\text{u.l}$`,
+ * `-2{,}5` — apigeom `displayNumber` entoure la virgule décimale de `{,}`
+ * pour l'espacement KaTeX) : `addTextElementsToSvg` (paquet apigeom) retire
+ * seulement les `$` de bordure, il ne connaît pas KaTeX et poserait sinon le
+ * code LaTeX brut tel quel comme texte SVG. Rendu approximatif (pas un vrai
+ * typeset), suffisant pour les libellés courts utilisés ici (unités,
+ * fractions simples, graduations décimales).
  */
 function cleanLatexLabel(text: string): string {
   return text
     .replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '$1/$2')
     .replace(/\\text\s*\{([^{}]*)\}/g, '$1')
+    .replace(/\{,\}/g, ',')
     .replace(/~/g, ' ')
 }
 

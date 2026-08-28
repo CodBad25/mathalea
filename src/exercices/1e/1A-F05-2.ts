@@ -444,5 +444,6 @@ ${tableauVarCorrect}`
   constructor() {
     super()
     this.versionAleatoire()
+    this.options.vertical = true
   }
 }

@@ -2,7 +2,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -149,7 +149,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$${a}+${miseEnEvidence(b + '\\times' + c, bleuMathalea)}=${a}+${
             b * c
           }=${a + b * c}$`
-          setReponse(this, i, a + b * c)
+          handleAnswers(this, i, { reponse: { value: a + b * c } })
           break
         case 2:
           a = randint(2, 11)
@@ -159,7 +159,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$${a}+${miseEnEvidence(b + '\\div' + c, bleuMathalea)}=${a}+${
             b / c
           }=${a + b / c}$`
-          setReponse(this, i, a + b / c)
+          handleAnswers(this, i, { reponse: { value: a + b / c } })
           break
         case 3:
           b = randint(2, 11)
@@ -169,7 +169,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$${miseEnEvidence(a + '\\div' + b, bleuMathalea)}\\times${c}=${
             a / b
           }\\times${c}=${(a / b) * c}$`
-          setReponse(this, i, (a / b) * c)
+          handleAnswers(this, i, { reponse: { value: (a / b) * c } })
           break
         case 4:
           b = randint(2, 11)
@@ -179,7 +179,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$${a}-${miseEnEvidence(b + '\\times' + c, bleuMathalea)}=${a}-${
             b * c
           }=${a - b * c}$`
-          setReponse(this, i, a - b * c)
+          handleAnswers(this, i, { reponse: { value: a - b * c } })
           break
         case 5:
           if (choice([true, false])) {
@@ -197,7 +197,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$${miseEnEvidence(a + '\\times' + b, bleuMathalea)}\\div${c}=${
             a * b
           }\\div${c}=${(a * b) / c}$`
-          setReponse(this, i, (a * b) / c)
+          handleAnswers(this, i, { reponse: { value: (a * b) / c } })
           break
         case 6:
           a = randint(2, 11)
@@ -207,7 +207,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$${miseEnEvidence(a + '\\times' + b, bleuMathalea)}+${c}=${
             a * b
           }+${c}=${a * b + c}$`
-          setReponse(this, i, a * b + c)
+          handleAnswers(this, i, { reponse: { value: a * b + c } })
           break
         case 7:
           b = randint(20, 59)
@@ -215,7 +215,7 @@ export default class Priorites extends Exercice {
           c = randint(11, 29)
           texte = `$${a}-${b}+${c}$`
           texteCorr = `$${miseEnEvidence(a + '-' + b, bleuMathalea)}+${c}=${a - b}+${c}=${a - b + c}$`
-          setReponse(this, i, a - b + c)
+          handleAnswers(this, i, { reponse: { value: a - b + c } })
           break
         case 8:
           a = randint(2, 20)
@@ -227,7 +227,7 @@ export default class Priorites extends Exercice {
             c + '\\times' + d,
             bleuMathalea,
           )}=${a}+${b}+${c * d}=${a + b + c * d}$`
-          setReponse(this, i, a + b + c * d)
+          handleAnswers(this, i, { reponse: { value: a + b + c * d } })
           break
         case 9:
           a = randint(2, 11)
@@ -242,7 +242,7 @@ export default class Priorites extends Exercice {
             c + '\\times' + d,
             bleuMathalea,
           )}=${a * b}+${c * d}=${a * b + c * d}$`
-          setReponse(this, i, a * b + c * d)
+          handleAnswers(this, i, { reponse: { value: a * b + c * d } })
           break
         case 10:
           a = randint(2, 5)
@@ -254,7 +254,7 @@ export default class Priorites extends Exercice {
             a + '\\times' + b,
             bleuMathalea,
           )}\\times${c}-${d}=${miseEnEvidence(a * b + '\\times' + c, bleuMathalea)}-${d}=${a * b * c - d}$`
-          setReponse(this, i, a * b * c - d)
+          handleAnswers(this, i, { reponse: { value: a * b * c - d } })
           break
         case 11:
           a = randint(3, 11)
@@ -266,7 +266,7 @@ export default class Priorites extends Exercice {
             a + '\\times' + b,
             bleuMathalea,
           )}-${miseEnEvidence(c + '\\div' + d, bleuMathalea)}=${a * b}-${c / d}=${a * b - c / d}$`
-          setReponse(this, i, a * b - c / d)
+          handleAnswers(this, i, { reponse: { value: a * b - c / d } })
           break
         case 12:
           a = randint(2, 11)
@@ -278,7 +278,7 @@ export default class Priorites extends Exercice {
             a + '\\times' + b,
             bleuMathalea,
           )}+${miseEnEvidence(c + '\\div' + d, bleuMathalea)}=${a * b}+${c / d}=${a * b + c / d}$`
-          setReponse(this, i, a * b + c / d)
+          handleAnswers(this, i, { reponse: { value: a * b + c / d } })
           break
         case 13:
           a = randint(2, 11)
@@ -289,7 +289,7 @@ export default class Priorites extends Exercice {
             b + '-' + c,
             bleuMathalea,
           )})=${a}\\times${b - c}=${a * (b - c)}$`
-          setReponse(this, i, a * (b - c))
+          handleAnswers(this, i, { reponse: { value: a * (b - c) } })
           break
         case 14:
           b = randint(11, 39)
@@ -299,7 +299,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$(${miseEnEvidence(a + '-' + b, bleuMathalea)})\\times${c}=${
             a - b
           }\\times${c}=${(a - b) * c}$`
-          setReponse(this, i, (a - b) * c)
+          handleAnswers(this, i, { reponse: { value: (a - b) * c } })
           break
         case 15:
           c = randint(2, 11)
@@ -309,7 +309,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$(${miseEnEvidence(a + '-' + b, bleuMathalea)})\\div${c}=${
             a - b
           }\\div${c}=${(a - b) / c}$`
-          setReponse(this, i, (a - b) / c)
+          handleAnswers(this, i, { reponse: { value: (a - b) / c } })
           break
         case 16:
           b = randint(2, 5)
@@ -319,7 +319,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$${a}\\div(${miseEnEvidence(b + '+' + c, bleuMathalea)})=${a}\\div${
             b + c
           }=${a / (b + c)}$`
-          setReponse(this, i, a / (b + c))
+          handleAnswers(this, i, { reponse: { value: a / (b + c) } })
           break
         case 17:
           c = randint(2, 11)
@@ -329,7 +329,7 @@ export default class Priorites extends Exercice {
           texteCorr = `$(${miseEnEvidence(a + '-' + b, bleuMathalea)})\\div${c}=${
             a - b
           }\\div${c}=${(a - b) / c}$`
-          setReponse(this, i, (a - b) / c)
+          handleAnswers(this, i, { reponse: { value: (a - b) / c } })
           break
         case 18:
           c = randint(11, 39)
@@ -341,7 +341,7 @@ export default class Priorites extends Exercice {
             b + '-' + c,
             bleuMathalea,
           )})\\times${d}=${a}\\times${b - c}\\times${d}=${a * (b - c) * d}$`
-          setReponse(this, i, a * (b - c) * d)
+          handleAnswers(this, i, { reponse: { value: a * (b - c) * d } })
           break
         case 19:
           d = randint(11, 39)
@@ -353,7 +353,7 @@ export default class Priorites extends Exercice {
             c + '-' + d,
             bleuMathalea,
           )})=${a}\\times${b}\\times${c - d}=${a * b * (c - d)}$`
-          setReponse(this, i, a * b * (c - d))
+          handleAnswers(this, i, { reponse: { value: a * b * (c - d) } })
           break
         case 20:
           a = randint(2, 11)
@@ -367,7 +367,7 @@ export default class Priorites extends Exercice {
           )})=${a}\\times(${miseEnEvidence(b + '-' + c * d, bleuMathalea)})=${a}\\times${
             b - c * d
           }=${a * (b - c * d)}$`
-          setReponse(this, i, a * (b - c * d))
+          handleAnswers(this, i, { reponse: { value: a * (b - c * d) } })
           break
         case 21:
           a = randint(2, 11)
@@ -390,7 +390,7 @@ export default class Priorites extends Exercice {
           )})=${miseEnEvidence(a + '\\times' + b, bleuMathalea)}\\div${c + d}=${
             a * b
           }\\div${c + d}=${(a * b) / (c + d)}$`
-          setReponse(this, i, (a * b) / (c + d))
+          handleAnswers(this, i, { reponse: { value: (a * b) / (c + d) } })
           break
         case 22:
         default:
@@ -406,7 +406,7 @@ export default class Priorites extends Exercice {
             b / c + '+' + d,
             bleuMathalea,
           )})=${a}\\times${b / c + d}=${a * (b / c + d)}$`
-          setReponse(this, i, a * (b / c + d))
+          handleAnswers(this, i, { reponse: { value: a * (b / c + d) } })
           break
       }
       texte = `${lettreDepuisChiffre(i + 1)} = ${texte}`

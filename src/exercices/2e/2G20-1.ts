@@ -11,7 +11,7 @@ import { translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -429,7 +429,12 @@ export default class ImagePtParTranslation extends Exercice {
               },
               objetsCorr,
             ) // On trace le graphique de la solution
-            setReponse(this, i, NomSOL, { formatInteractif: 'texte' })
+            handleAnswers(this, i, {
+              reponse: {
+                value: [NomSOL],
+                options: { texteAvecCasse: true },
+              },
+            })
           }
           break
 
@@ -742,7 +747,12 @@ export default class ImagePtParTranslation extends Exercice {
               `[${nomSOLPDSeg}${nomSOLPASeg}]`,
               `[${nomSOLPASeg}${nomSOLPDSeg}]`,
             ]
-            setReponse(this, i, tousNomsSegments, { formatInteractif: 'texte' })
+            handleAnswers(this, i, {
+              reponse: {
+                value: tousNomsSegments.map(String),
+                options: { texteAvecCasse: true },
+              },
+            })
           }
           break
 
@@ -1203,12 +1213,16 @@ export default class ImagePtParTranslation extends Exercice {
               objetsCorr,
             ) // On trace le graphique de la solution
 
-            setReponse(
-              this,
-              i,
-              allTrianglesNames(nomSOLPA1Tri, nomSOLPA2Tri, nomSOLPA3Tri),
-              { formatInteractif: 'texte' },
-            )
+            handleAnswers(this, i, {
+              reponse: {
+                value: allTrianglesNames(
+                  nomSOLPA1Tri,
+                  nomSOLPA2Tri,
+                  nomSOLPA3Tri,
+                ).map(String),
+                options: { texteAvecCasse: true },
+              },
+            })
           }
           break
       }

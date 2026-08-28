@@ -5,7 +5,7 @@
 import Decimal from 'decimal.js'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -95,7 +95,7 @@ export default class CoefficientEvolution extends Exercice {
          Ainsi, augmenter de $${taux}~\\%$ revient à multiplier par $${miseEnEvidence(coeff)}$.`
           }
           reponse = new Decimal(taux).div(100).add(1)
-          setReponse(this, i, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, i, { reponse: { value: reponse } })
 
           break
         case 'coef-':
@@ -108,7 +108,7 @@ export default class CoefficientEvolution extends Exercice {
           Ainsi, diminuer de $${taux}~\\%$ revient à multiplier par $${miseEnEvidence(coeff)}$.`
           }
           reponse = new Decimal(-taux).div(100).add(1)
-          setReponse(this, i, reponse, { formatInteractif: 'calcul' })
+          handleAnswers(this, i, { reponse: { value: reponse } })
 
           break
         case 'taux+':
@@ -125,7 +125,12 @@ export default class CoefficientEvolution extends Exercice {
           `
           }
           reponse = `+${taux}\\%`
-          setReponse(this, i, reponse, { formatInteractif: 'texte' })
+          handleAnswers(this, i, {
+            reponse: {
+              value: [String(reponse)],
+              options: { texteAvecCasse: true },
+            },
+          })
 
           break
         case 'taux-':
@@ -142,7 +147,12 @@ export default class CoefficientEvolution extends Exercice {
           `
           }
           reponse = `-${taux}\\%`
-          setReponse(this, i, reponse, { formatInteractif: 'texte' })
+          handleAnswers(this, i, {
+            reponse: {
+              value: [String(reponse)],
+              options: { texteAvecCasse: true },
+            },
+          })
           break
       }
       texte += this.interactif

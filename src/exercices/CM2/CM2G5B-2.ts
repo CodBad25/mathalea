@@ -4,7 +4,7 @@ import { pave3d } from '../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPersp
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -220,10 +220,7 @@ export default class LireFacePaveDroit extends Exercice {
           texteCorr += `${resultatsPossibles[j]}, `
         texteCorr += `${resultatsPossibles[resultatsPossibles.length - 2]} ou ${resultatsPossibles[resultatsPossibles.length - 1]}.<br>`
 
-        if (
-          this.sup3 !== 2 ||
-          context.isAmc
-        ) {
+        if (this.sup3 !== 2 || context.isAmc) {
           resultatsImpossibles = []
           for (let j = 0; j < 6; j++) {
             if (j !== choixFace[ee]) {
@@ -264,8 +261,11 @@ export default class LireFacePaveDroit extends Exercice {
           this.autoCorrection[indiceQuestion].options = {}
           texte += propositionsQcm(this, indiceQuestion).texte
         } else {
-          setReponse(this, indiceQuestion, resultatsPossibles, {
-            formatInteractif: 'texte',
+          handleAnswers(this, indiceQuestion, {
+            reponse: {
+              value: resultatsPossibles.map(String),
+              options: { texteAvecCasse: true },
+            },
           })
           texte +=
             ajouteChampTexteMathLive(

@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { warnMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
@@ -198,7 +198,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
 
             texteCorr += '$.'
             nombre = nombreTodecompose
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
         case 2: // deux premiers compris entre 30 et 100 de multiplicité 1
@@ -238,7 +238,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
             texteCorr += ` D'où $${texNombre(premier1 * premier2)} = ${texNombre(premier1)}\\times${texNombre(premier2)}$.`
             reponse = `${premier1}\\times${premier2}`
             nombre = premier1 * premier2
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
         case 3: // un gros premier entre 1000 et 2000
@@ -261,7 +261,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
 
             reponse = `${premier}`
             nombre = premier
-            setReponse(this, i, reponse)
+            handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
       }

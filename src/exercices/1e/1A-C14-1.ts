@@ -170,5 +170,6 @@ export default class Auto1AC16a extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
+    this.options.vertical = true
   }
 }

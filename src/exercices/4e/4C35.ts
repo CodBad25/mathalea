@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -173,9 +173,12 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
           reponse = new FractionEtendue(-1, a ** n)
           break
       }
-      if (!context.isAmc)
-        setReponse(this, i, reponse, { formatInteractif: 'fractionEgale' })
-      else setReponse(this, i, Number(reponse), { formatInteractif: 'calcul' })
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponse,
+          options: { fractionEgale: true },
+        },
+      })
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
 

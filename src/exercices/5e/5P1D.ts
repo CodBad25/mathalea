@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { minToHour } from '../../lib/outils/dateEtHoraires'
@@ -130,7 +130,7 @@ export default class VitesseDistanceTemps extends Exercice {
           texteCorr += '<br><br>'
           texteCorr += `Sa vitesse moyenne est de $${miseEnEvidence(v)}\\text{ km/h}$.`
           texteApres = sp() + '$\\text{ km/h}$'
-          setReponse(this, i, v)
+          handleAnswers(this, i, { reponse: { value: v } })
           break
         case 'temps':
           texte = `Si ${prenom} roule à $${v}\\text{ km/h}$, combien de temps`
@@ -163,7 +163,7 @@ export default class VitesseDistanceTemps extends Exercice {
             : ` $${miseEnEvidence(minToHour(t, true))}$`
           texteCorr += ` pour aller ${destination}.`
           texteApres = sp() + ' minutes'
-          setReponse(this, i, t)
+          handleAnswers(this, i, { reponse: { value: t } })
           break
         case 'distance':
         default:
@@ -193,7 +193,7 @@ export default class VitesseDistanceTemps extends Exercice {
           texteCorr += '<br><br>'
           texteCorr += `${pronomgenre.charAt(0).toUpperCase() + pronomgenre.slice(1)} a donc parcouru $${miseEnEvidence(texNombre(d))}\\text{ km}$.`
           texteApres = sp() + '$\\text{ km}$'
-          setReponse(this, i, d)
+          handleAnswers(this, i, { reponse: { value: d } })
           break
       }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {

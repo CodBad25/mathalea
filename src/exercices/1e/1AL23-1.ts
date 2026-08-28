@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
@@ -91,23 +91,35 @@ export default class Formacanonique extends Exercice {
       texteCorr += `${miseEnEvidence(texteCorrSolution)}$`
       if (beta > 0) {
         if (alpha > 0) {
-          setReponse(this, i, [`${a}(x-${alpha})^2+${beta}`])
+          handleAnswers(this, i, {
+            reponse: { value: [`${a}(x-${alpha})^2+${beta}`] },
+          })
         } else {
-          setReponse(this, i, [`${a}(x+${-alpha})^2+${beta}`])
+          handleAnswers(this, i, {
+            reponse: { value: [`${a}(x+${-alpha})^2+${beta}`] },
+          })
         }
       }
       if (beta < 0) {
         if (alpha > 0) {
-          setReponse(this, i, [`${a}(x-${alpha})^2${beta}`])
+          handleAnswers(this, i, {
+            reponse: { value: [`${a}(x-${alpha})^2${beta}`] },
+          })
         } else {
-          setReponse(this, i, [`${a}(x+${-alpha})^2${beta}`])
+          handleAnswers(this, i, {
+            reponse: { value: [`${a}(x+${-alpha})^2${beta}`] },
+          })
         }
       }
       if (beta === 0) {
         if (alpha > 0) {
-          setReponse(this, i, [`${a}(x-${alpha})^2`])
+          handleAnswers(this, i, {
+            reponse: { value: [`${a}(x-${alpha})^2`] },
+          })
         } else {
-          setReponse(this, i, [`${a}(x+${-alpha})^2}`])
+          handleAnswers(this, i, {
+            reponse: { value: [`${a}(x+${-alpha})^2`] },
+          })
         }
       }
 

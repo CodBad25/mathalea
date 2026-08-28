@@ -31,10 +31,10 @@ export default class SolutionInequation extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
 
-    this.spacing = 3
     this.formatChampTexte = KeyboardType.clavierEnsemble
     this.optionsDeComparaison = { intervalle: true }
     this.versionQcmDisponible = true
+    this.versionQcmOptions = { radio: true, compact: true }
   }
 
   nouvelleVersion() {
@@ -89,7 +89,7 @@ x&${symbolFinal}${racine}
 \\end{aligned}
 $<br>`
 
-        this.correction += `L'ensemble de solutions est : ${texteEnCouleur(` $${makeReponse(true)}$`)}.<br>`
+        this.correction += `L'ensemble de solutions est : ${texteEnCouleur(` $${makeReponse()}$`)}.<br>`
         this.reponse = makeReponse()
 
         if (this.versionQcm) {

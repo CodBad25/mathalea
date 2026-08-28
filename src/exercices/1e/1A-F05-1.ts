@@ -229,7 +229,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
       o,
     )
 
-    this.enonce = `On donne les représentations graphiques de deux fonctions affines $g$ (en bleu) et $h$ (en rouge) définies sur $\\mathbb{R}$.<br>
+    this.enonce = `On donne les représentations graphiques de deux fonctions affines, $g$ (en bleu) et $h$ (en rouge), définies sur $\\mathbb{R}$.<br>
     ${objet}<br><br>`
     this.enonce +=
       'Le tableau de signes de la fonction $f$ définies par $f(x)=g(x)\\times h(x)$ sur $\\mathbb{R}$ est  : '
@@ -534,7 +534,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
       o,
     )
 
-    this.enonce = `On donne les représentations graphiques de deux fonctions affines $g$ (en bleu) et $h$ (en rouge) définies sur $\\mathbb{R}$.<br>
+    this.enonce = `On donne les représentations graphiques de deux fonctions affines, $g$ (en bleu) et $h$ (en rouge), définies sur $\\mathbb{R}$.<br>
     ${objet}<br><br>`
     this.enonce +=
       'Le tableau de signes de la fonction $f$ définies par $f(x)=g(x)\\times h(x)$ sur $\\mathbb{R}$ est  : '
@@ -610,6 +610,6 @@ export default class Auto1AF5 extends ExerciceQcmA {
     super()
     // Appel de la version originale par défaut, ou de la version aléatoire selon les besoins
     this.versionOriginale()
-    if (!context.isHtml) this.options.vertical = true
+    this.options.vertical = true
   }
 }

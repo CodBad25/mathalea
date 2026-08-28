@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
@@ -70,7 +70,7 @@ export default class QuatreOperations extends Exercice {
               i,
               KeyboardType.clavierNumbers,
             )
-          setReponse(this, i, a + b)
+          handleAnswers(this, i, { reponse: { value: a + b } })
           break
         case 2: // soustraction
           if (this.sup === 1) {
@@ -85,7 +85,7 @@ export default class QuatreOperations extends Exercice {
           }
           texte = `$${a}-${b}=$`
           texteCorr = `$${a}-${b}=${a - b}$`
-          setReponse(this, i, a - b)
+          handleAnswers(this, i, { reponse: { value: a - b } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -106,7 +106,7 @@ export default class QuatreOperations extends Exercice {
           }
           texte = `$${a}\\times${b}=$`
           texteCorr = `$${a}\\times${b}=${a * b}$`
-          setReponse(this, i, a * b)
+          handleAnswers(this, i, { reponse: { value: a * b } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -128,7 +128,7 @@ export default class QuatreOperations extends Exercice {
           }
           texte = `$${a * b}\\div${a}=$`
           texteCorr = `$${a * b}\\div${a}=${b}$`
-          setReponse(this, i, b)
+          handleAnswers(this, i, { reponse: { value: b } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,

@@ -226,7 +226,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           if (this.correctionDetaillee) {
             correctionDetaillee = `Chaque groupe contient au départ $${tortuesInitiales} \\div ${nbGroupes} = ${texNombre(tortuesParGroupe)}$ tortues.<br>`
             correctionDetaillee += `Après ajout des tortues supplémentaires, chaque groupe contient $${texNombre(tortuesParGroupe)} + ${tortuesSupplementaires} = ${texNombre(tortuesParGroupeApres)}$ tortues.<br>`
-            correctionDetaillee += `On relâche ${groupesRelaches} \\times ${texNombre(tortuesParGroupeApres)} = $${texNombre(tortuesRelachees)}$ tortues.<br>`
+            correctionDetaillee += `On relâche $${groupesRelaches} \\times ${texNombre(tortuesParGroupeApres)} = ${texNombre(tortuesRelachees)}$ tortues.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' tortues'

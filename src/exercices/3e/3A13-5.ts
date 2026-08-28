@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -149,7 +149,7 @@ export default class DivisionEuclidienneEtAjout extends Exercice {
       texte += texteNbAMC
 
       if (this.interactif) {
-        setReponse(this, i, reponse)
+        handleAnswers(this, i, { reponse: { value: reponse } })
         texte +=
           '<br>' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)

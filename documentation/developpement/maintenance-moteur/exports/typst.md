@@ -319,11 +319,18 @@ Deux précautions, sans lesquelles driver.js reste bloqué à attendre une cible
 | `src/components/setup/typst/latexToTypst.ts` | Convertit le HTML des exercices et les formules LaTeX en Typst |
 | `src/components/setup/typst/minimalCorrection.ts` | Réduit une correction à ses réponses mises en évidence en orange |
 | `src/components/setup/typst/mathaleaLogo.ts` | Dé de MathALÉA (SVG allégé) embarqué par la page de garde « Course aux nombres » |
+| `src/components/setup/typst/typstPackages.ts` | Versions des paquets `@preview` (source unique) et construction des lignes `#import` |
 | `src/components/setup/typst/typstCompiler.ts` | Compilation dans le navigateur via typst.ts (WASM) |
 | `src/components/setup/typst/typstDiagnostics.ts` | Lecture et traduction en français des diagnostics du compilateur |
 | `src/components/setup/typst/editor/typstEditorSetup.ts` | Extensions CodeMirror de l'éditeur (thèmes, raccourcis, marqueurs d'erreur) |
 | `src/components/setup/typst/editor/typstLanguage.ts` | Coloration syntaxique Typst (`StreamLanguage`) |
 | `src/components/setup/typst/editor/editorPhrases.ts` | Traduction française de l'interface de CodeMirror |
+
+## Versions des paquets Typst
+
+Toutes les versions des paquets `@preview` importés par les documents générés (`exercise-bank`, `taskize`, `vartable`, `cetz`, `cetz-plot`, `ctz-euclide`, `breather`) sont déclarées **au seul endroit** `src/components/setup/typst/typstPackages.ts`, dans la table `TYPST_PACKAGE_VERSIONS`. Mettre à jour un paquet consiste donc à changer un numéro dans cette table.
+
+Les constantes d'import (`EXERCISE_BANK_IMPORT`, `TASKIZE_IMPORT`, `VARTABLE_IMPORT`, `CETZ_IMPORT`, `CETZ_PLOT_CHART_IMPORT`, `CTZ_EUCLIDE_IMPORT`, `BREATHER_IMPORT`) sont construites à partir de cette table par `typstImport(nom, importés)` ; `typstPackageSpec(nom)` renvoie le spécificateur `@preview/nom:version` seul. Les tests qui vérifient le préambule utilisent `typstPackageSpec` plutôt qu'un numéro écrit en dur : aucune version n'est à retoucher ailleurs après une mise à jour.
 
 ## Pipeline de génération
 
@@ -455,15 +462,33 @@ Pour les figures mathalea2d qui contiennent des labels KaTeX (`divLatex`), seul 
 
 ### Tableaux
 
-Les tableaux LaTeX visuels (`tabular`, `tblr`, ou `array` avec bordures/`\hline`) sont convertis en tableaux Typst avec le package [`tblr`](https://typst.app/universe/package/tblr). L'import `#import "@preview/tblr:0.5.0": *` est ajouté uniquement quand un tableau de ce type est généré. Les commandes `\def\arraystretch{...}` et `\renewcommand{\arraystretch}{...}` sont interprétées comme un agrandissement vertical des cellules (`inset.y`), puis retirées du code final.
+Les tableaux LaTeX visuels (`tabular`, `tblr`, ou `array` avec bordures/`\hline`) sont convertis en `#table(...)` natif (aucun paquet nécessaire : l'ancien recours au paquet `tblr` a été abandonné). Les commandes `\def\arraystretch{...}` et `\renewcommand{\arraystretch}{...}` sont interprétées comme un agrandissement vertical des cellules (`inset.y`), puis retirées du code final.
 
 Les environnements mathématiques non visuels (`aligned`, `cases`, `array` sans bordures) restent des expressions mathématiques converties par `tex2typst`.
+
+### Deux colonnes (deuxColonnesResp)
+
+`deuxColonnesResp` (`src/lib/format/miseEnPage.js`) produit en HTML une grille CSS `<div class="cols-responsive">` (et un `<style>` retiré à la conversion) : sans traitement, ses deux colonnes s'empileraient dans le document Typst. `protectResponsiveColumns` (`latexToTypst.ts`) les convertit en `#grid(columns: (…fr, …fr), column-gutter: 1em, align: top + left, […], […])`, le contenu de chaque colonne étant reconverti récursivement par `htmlToTypst` (formules, figures, tableaux, QCM compris) ; les figures s'ajustent d'elles-mêmes à la largeur de leur colonne, `mathalea-fit` mesurant l'espace disponible.
+
+Le partage des colonnes reprend le `largeur1` passé à la fonction — le même qu'en sortie LaTeX (`minipage`) —, publié dans le HTML par `data-largeur1` ; sans cet attribut les colonnes sont égales, comme la grille CSS. Une seule colonne remplie donne le contenu seul, sans grille. Les colonnes imbriquées sont gérées par la conversion récursive : seul le conteneur extérieur ouvre une grille, et la restauration des segments protégés boucle tant qu'il reste un jeton (un segment peut en contenir un autre).
+
+Les mises en page à flottants `deuxColonnes` et `troisColonnes` (même fichier) ne sont **pas** converties : leurs `float: left` sont ignorés et les contenus s'empilent.
 
 ### Schémas en barres et figures 3D
 
 Les schémas en barres (`SchemaEnBoite`, HTML en grille CSS `SchemaContainer`) sont convertis en grilles Typst natives : boîtes avec fond et bordures (les côtés partagés, `border-left: none`, ne sont pas doublés), accolades et flèches étirées sur la largeur de leur cellule par le helper `mathalea-schema-span` (`stretch(brace.t)`/`stretch(<->)`). Les accolades latérales (`latexAccoladeRight`, rares) ne sont pas rendues.
 
 Les empilements de cubes des exercices de motifs (`<canvas-3d>`, rendu WebGL Three.js) n'ont pas d'image extractible : les cubes décrits par l'attribut `content` (JSON) sont redessinés en SVG isométrique (`canvas3dToSvg`), embarqué comme les autres figures. Un contenu 3D sans cubes est remplacé par un encart.
+
+### Figures des annales rédigées en Typst (cetz, ctz-euclide)
+
+Une ressource statique dont le référentiel déclare `typ: true` fournit une source Typst rédigée à la main (`static/<sujet>/<année>/typ/<uuid>.typ`, correction dans `<uuid>_cor.typ`), utilisée telle quelle à la place de l'image scannée. Ces fichiers dessinent leurs figures avec des paquets Typst, importés dans le préambule **uniquement quand le code s'en sert** (comme `taskize`, `vartable`, `tblr`…) :
+
+- `cetz.` → `#import "@preview/cetz:…"` (`CETZ_IMPORT`) ;
+- `chart.` → `#import "@preview/cetz-plot:…": chart` (`CETZ_PLOT_CHART_IMPORT`) ;
+- `ctz-` → `#import "@preview/ctz-euclide:…": *` (`CTZ_EUCLIDE_IMPORT`), le portage Typst de `tkz-euclide` : figures de géométrie euclidienne (`ctz-canvas`, `ctz-def-points`, `ctz-draw`, `ctz-draw-mark-right-angle`, `ctz-draw-measure-segment`, `ctz-draw-labels`…). Toute son API est préfixée `ctz-`, d'où l'import en `: *` ; `ctz-` n'est un sous-mot ni de `cetz.` ni de `cetz-plot`, la détection est donc sûre.
+
+`ctz-euclide` réexporte `cetz` (v0.5.2 embarquée), ce qui satisfait le `import cetz.draw: *` que ces figures ouvrent dans le corps de `ctz-canvas`. Quand `ctz-euclide` est importé, l'import `cetz` autonome **n'est pas** ajouté : le nom `cetz` doit résoudre vers la version du paquet. La détection et l'émission se font aux deux points de montage du préambule (`buildTypstDocument` pour la fiche, `buildStandaloneExerciseCode` pour la modale d'édition). Une source `.typ` qui appelle `ctz-…` sans cet import produit sinon l'erreur de compilation « Variable ou fonction inconnue : « ctz-canvas » ».
 
 ### Images
 

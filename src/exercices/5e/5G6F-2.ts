@@ -1,4 +1,4 @@
-import ConstructionsParallelogrammesParticuliers from './5G41'
+import ConstructionsParallelogrammesParticuliers from './ConstructionsParallelogrammesParticuliers'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -33,7 +33,7 @@ export default class ConstruireParallélogrammesCaracteristiques extends Constru
     ]
     this.sup = '4'
     this.nbQuestions = 2
-    this.exo = '5G41-5'
+    this.exo = '5G6F-2'
     this.correctionDetaillee = true
   }
 }

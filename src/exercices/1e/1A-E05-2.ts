@@ -29,7 +29,8 @@ export default class TauxReciproqueP extends ExerciceQcmA {
     Pour retrouver le prix initial, il faut une augmentation de :`
     this.correction = `Le coefficient multiplicateur associé à une diminution de $50\\,\\%$ est $1-0,5=0,5$.<br>
     Comme  $2\\times 0,5=1$, il faut donc multiplier par $2$ (coefficient multiplicateur réciproque) pour revenir au prix initial.<br>
-      Un coefficient multiplicateur de $2$ correspond à un taux d'évoltion de $100\\,\\%$.<br>
+      Un coefficient multiplicateur de $2$ correspond à un taux d'évolution de $100\\,\\%$.<br>
+      En effet, $T=2-1=1=100\\,\\%$.<br>
       On en déduit qu'il faut une augmentation de  $${miseEnEvidence('100\\,\\%')}$.`
 
     this.reponses = ['$100\\,\\%$', '$50\\,\\%$', '$150\\,\\%$', '$200\\,\\%$']
@@ -56,6 +57,7 @@ export default class TauxReciproqueP extends ExerciceQcmA {
           this.correction = `Le coefficient multiplicateur associé à une augmentation de $${a}\\,\\%$ est $1+${texNombre(a / 100, 2)}=${texNombre(1 + a / 100, 4)}$.<br>
     Comme $${b}\\times ${texNombre(c, 2)}=1$, il faut donc multiplier par $${texNombre(c, 2)}$ (coefficient multiplicateur réciproque) pour revenir au prix initial.<br>
       Un coefficient multiplicateur de $${texNombre(c, 2)}$ correspond à un taux d'évolution de $-${d}\\,\\%$.<br>
+      En effet, $T=${texNombre(c, 2)}-1=${texNombre(c - 1, 2)}=-${d}\\,\\%$.<br>
       On en déduit qu'il faut une baisse de $${miseEnEvidence(`${d}\\,\\%`)}$.`
           this.reponses =
             a === 100
@@ -93,6 +95,7 @@ export default class TauxReciproqueP extends ExerciceQcmA {
           this.correction = `Le coefficient multiplicateur associé à une baisse de $${a}\\,\\%$ est $1-${texNombre(a / 100, 2)}=${texNombre(1 - a / 100, 4)}$.<br>
     Comme $${texNombre(b, 2)}\\times ${texNombre(c, 2)}=1$, il faut donc multiplier par $${texNombre(c, 2)}$ (coefficient multiplicateur réciproque) pour revenir au prix initial.<br>
       Un coefficient multiplicateur de $${texNombre(c, 2)}$ correspond à un taux d'évolution de $${d}\\,\\%$.<br>
+      En effet, $T=${texNombre(c, 2)}-1=${texNombre(c - 1, 2)}=${d}\\,\\%$.<br>
       On en déduit qu'il faut une augmentation de $${miseEnEvidence(`${d}\\,\\%`)}$.`
           this.reponses = [
             `$${d}\\,\\%$`,

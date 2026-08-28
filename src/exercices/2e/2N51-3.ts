@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
@@ -86,7 +86,9 @@ export default class SimplifierUneSommeDeRacinesCarrees extends Exercice {
               texteAvant: `$${lettreDepuisChiffre(i + 1)}=$`,
             },
           )
-        setReponse(this, i, `${f}\\sqrt{${c}}`)
+        handleAnswers(this, i, {
+          reponse: { value: `${f}\\sqrt{${c}}` },
+        })
       }
 
       if (this.questionJamaisPosee(i, e1, e2, e3, d1, d2, d3)) {

@@ -57,7 +57,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
 
     this.comment = `Pour des exercices de placement de points d'abscisses fractionnaires, voir la série CM2N2E.<br>
     Celui-ci demande à l'élève de graduer l'axe.<br>
-    En version HTML, on peut avoir un diviseur allant de 2 à 7 (le bouton |+ permet de modifier le nombre de parts).<br>
+    En version HTML, on peut avoir un diviseur allant de 2 à 7 (les boutons +/- de « Nombre de graduations intermédiaires » permettent de modifier le nombre de parts).<br>
     En version LaTeX, les diviseurs sont limités à 2, 4 et 5 avec une unité à 4 cm pour faciliter la graduation de l'axe.`
   }
 
@@ -97,7 +97,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       let texte =
         this.sup === 1
           ? `Placer le point $A$ d'abscisse $\\dfrac{${nums[0]}}{${den}}$ sur la demi-droite graduée ci-dessous.<br><br>`
-          : `Placer les points ${nums.map((n, i) => `$${`${['A', 'B', 'C'][i]}(\\dfrac{${n}}{${den}})`}$`).join(', ')} sur la demi-droite graduée ci-dessous.<br><br>`
+          : `Placer les points ${nums.map((n, i) => `$${['A', 'B', 'C'][i]}\\left(\\dfrac{${n}}{${den}}\\right)$`).join(', ')} sur la demi-droite graduée ci-dessous.<br><br>`
       let texteCorr = `On partage le segment de $${nbUnits}$ unités en $${den * (abscisseT - x0)}$ parties égales.<br>`
       if (this.correctionDetaillee) {
         texteCorr += `En effet, $${abscisseT - x0} = ${den * (abscisseT - x0)} \\times \\dfrac{${1}}{${den}}$.<br><br>`
@@ -120,7 +120,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
           ? `Le point d'abscisse $\\dfrac{${nums[0]}}{${den}}$ est placé sur la demi-droite graduée ci-dessous.<br><br>`
           : `Les points d'abscisse ${['A', 'B', 'C']
               .slice(0, this.sup)
-              .map((p, i) => `$${p}(\\dfrac{${nums[i]}}{${den}})$`)
+              .map((p, i) => `$${p}\\left(\\dfrac{${nums[i]}}{${den}}\\right)$`)
               .join(
                 ', ',
               )} sont placés sur la demi-droite graduée ci-dessous.<br><br>`

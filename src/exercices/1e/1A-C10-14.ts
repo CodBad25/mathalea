@@ -50,18 +50,13 @@ function withStrictness(
   return strict ? '>' : '\\geqslant'
 }
 
-function makeInterval(
-  symbol: InequalitySymbol,
-  root: number,
-  big = false,
-): string {
-  const bigCommand = big ? '\\bigg' : ''
+function makeInterval(symbol: InequalitySymbol, root: number): string {
   const strict = isStrict(symbol)
 
   if (symbol === '<' || symbol === '\\leqslant') {
-    return `${bigCommand}]-\\infty~;~${root}${bigCommand}${strict ? '[' : ']'}`
+    return `]-\\infty~;~${root}${strict ? '[' : ']'}`
   }
-  return `${bigCommand}${strict ? ']' : '['}${root}~;~+\\infty${bigCommand}[`
+  return `${strict ? ']' : '['}${root}~;~+\\infty[`
 }
 
 export default class Auto1AC1014 extends ExerciceSimple {
@@ -117,7 +112,7 @@ x&${difference < 0 ? miseEnCouleur(finalSymbol) : finalSymbol}\\dfrac{${d - b}}{
 x&${finalSymbol}${root}
 \\end{aligned}
 $<br>`
-    this.correction += `L'ensemble de solutions est : ${texteEnCouleur(` $${makeInterval(finalSymbol, root, true)}$`)}.<br>`
+    this.correction += `L'ensemble de solutions est : ${texteEnCouleur(` $${makeInterval(finalSymbol, root)}$`)}.<br>`
 
     this.reponse = makeInterval(finalSymbol, root)
 

@@ -126,6 +126,36 @@ describe('MultiMathfieldElement', () => {
     expect(result).toContain('Calculer $g(2)=$')
   })
 
+  it('n ajoute pas le texteApres apres un champ vide en rendu statique', () => {
+    const rendu = MultiMathfieldElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      dataTemplate: 'Quel sera le capital au bout de 3 ans ? %{champ1}',
+      dataOptions: {
+        champ1: { texteApres: ' euros' },
+      },
+      interactivityOn: false,
+    })
+
+    expect(rendu).not.toContain('<multi-mathfield')
+    expect(rendu).not.toContain('euros')
+  })
+
+  it('ajoute le texteApres apres les pointilles en rendu statique', () => {
+    const rendu = MultiMathfieldElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      dataTemplate: 'Quel sera le capital au bout de 3 ans ? %{champ1}',
+      dataOptions: {
+        champ1: { ldots: true, texteApres: ' euros' },
+      },
+      interactivityOn: false,
+    })
+
+    expect(rendu).toContain('...')
+    expect(rendu).toContain('euros')
+  })
+
   it('rend des pointilles au lieu des champs quand l interactivite est desactivee', () => {
     const rendu = MultiMathfieldElement.create({
       numeroExercice: 0,

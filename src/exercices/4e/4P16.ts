@@ -11,7 +11,7 @@ import {
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Convertir des grandeurs composées'
@@ -299,7 +299,7 @@ export default class NomExercice extends Exercice {
       ${times}{${fraction(unite2Depart.coef, unite2Arrivee.coef).texFractionSimplifiee} \\text{ ${unite2Arrivee.unite}}}
       = ${miseEnEvidence(texNombre(valeurArrivee, precision))}\\text{ ${unite1Arrivee.unite}${operateur}${unite2Arrivee.unite}}$`
       if (this.interactif && context.isHtml) {
-        setReponse(this, i, valeurArrivee)
+        handleAnswers(this, i, { reponse: { value: valeurArrivee } })
         texte += `<br> $${valeurDepart}$ ${unite1Depart.unite}${operateur}${unite2Depart.unite} = `
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
         texte += ` ${unite1Arrivee.unite}${operateur}${unite2Arrivee.unite}`

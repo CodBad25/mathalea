@@ -14,7 +14,7 @@ import { OutilsStats } from '../../modules/outilsStat'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi } from '../../lib/outils/nombres'
 
@@ -174,16 +174,14 @@ export default class DeterminerDesMedianes extends Exercice {
         : (texte += '<br>Déterminer une médiane de cette série.')
 
       if (Array.isArray(repInteractive)) {
-        setReponse(this, i, repInteractive, {
-          decimals: 1,
-          milieuIntervalle: arrondi(
-            (repInteractive[0] + repInteractive[1]) / 2,
-          ),
-          approx: 'intervalleStrict',
-          formatInteractif: 'intervalleStrict',
+        handleAnswers(this, i, {
+          reponse: {
+            value: `]${repInteractive[0]};${repInteractive[1]}[`,
+            options: { estDansIntervalle: true },
+          },
         })
       } else {
-        setReponse(this, i, repInteractive)
+        handleAnswers(this, i, { reponse: { value: repInteractive } })
       }
       if (this.interactif && !context.isAmc) {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)

@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
@@ -51,7 +51,7 @@ export default class Tiers extends Exercice {
           a = randint(2, 9)
           texte = `$\\text{Le tiers de }${a * 3}$`
           texteCorr = `$\\text{Le tiers de }${a * 3} \\text{ est } ${a}$`
-          setReponse(this, i, a)
+          handleAnswers(this, i, { reponse: { value: a } })
           texte += ajouteChampTexteMathLive(
             this,
             i,
@@ -64,7 +64,7 @@ export default class Tiers extends Exercice {
           texteCorr = `$\\text{Le tiers de }${texNombre(
             a * 3 * 100,
           )} \\text{ est } ${texNombre(a * 100)}$`
-          setReponse(this, i, a * 100)
+          handleAnswers(this, i, { reponse: { value: a * 100 } })
           texte += ajouteChampTexteMathLive(
             this,
             i,
@@ -77,7 +77,7 @@ export default class Tiers extends Exercice {
           texteCorr = `$\\text{Le tiers de }${texNombre(
             a * 3 * 10,
           )} \\text{ est } ${texNombre(a * 10)}$`
-          setReponse(this, i, a * 10)
+          handleAnswers(this, i, { reponse: { value: a * 10 } })
           texte += ajouteChampTexteMathLive(
             this,
             i,
@@ -91,7 +91,7 @@ export default class Tiers extends Exercice {
           texteCorr = `$\\text{Le tiers de }${texNombre(
             a * 3 + (b * 3) / 100,
           )} \\text{ est } ${texNombre(a + b / 100)}$`
-          setReponse(this, i, a + b / 100)
+          handleAnswers(this, i, { reponse: { value: a + b / 100 } })
           texte += ajouteChampTexteMathLive(this, i)
           break
       }

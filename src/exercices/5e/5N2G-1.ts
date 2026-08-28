@@ -1,8 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -10,10 +7,7 @@ import {
   ecritureParentheseSiMoins,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import {
-  arrondi,
-  nombreDeChiffresDansLaPartieEntiere,
-} from '../../lib/outils/nombres'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -164,21 +158,13 @@ export default class TermeInconnuDeSomme extends Exercice {
           arrondi(b - a, 2) > 0
         )
           tableauReponse.push(String(arrondi(b - a, 2)))
-        if (this.interactif) {
-          handleAnswers(this, i, {
-            champ1: {
-              value: tableauReponse,
-              options: { texteSansCasse: true },
-            },
-            feedback,
-          })
-        } else if (context.isAmc) {
-          setReponse(this, i, arrondi(b - a, 2), {
-            signe: true,
-            digits: Math.max(2, nombreDeChiffresDansLaPartieEntiere(b - a)),
-            decimals: 0,
-          })
-        }
+        handleAnswers(this, i, {
+          champ1: {
+            value: tableauReponse,
+            options: { texteSansCasse: true },
+          },
+          feedback,
+        })
         i++
       }
       cpt++

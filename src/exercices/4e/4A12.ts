@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -440,7 +440,7 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
           break
       }
 
-      setReponse(this, i, bonneReponse)
+      handleAnswers(this, i, { reponse: { value: bonneReponse } })
 
       if (this.interactif && !context.isAmc) {
         // Si l'exercice est interactif

@@ -25,7 +25,7 @@ import { sphere3d } from '../../lib/3d/3dProjectionMathalea2d/Sphere3dPerspectiv
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -1098,8 +1098,18 @@ export default class CalculPythagoreEspace extends Exercice {
             )[0]
           break
       }
-      setReponse(this, i, new Grandeur(reponse, listeUnites[j]), {
-        formatInteractif: 'unites',
+      const reponseGrandeur = new Grandeur(reponse, listeUnites[j])
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponseGrandeur,
+          options: {
+            unite: true,
+            precisionUnite:
+              10 **
+              (reponseGrandeur.puissanceUnite *
+                reponseGrandeur.puissancePrefixe),
+          },
+        },
       })
       if (this.interactif && context.isHtml)
         texte +=

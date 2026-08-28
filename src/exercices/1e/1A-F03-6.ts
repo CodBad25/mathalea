@@ -1,6 +1,5 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import {
-  ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../lib/outils/ecritures'
@@ -62,7 +61,7 @@ export default class FonctionAffineDeuxPointsQcm extends ExerciceQcmA {
     const elimination = propositions
       .map(
         (proposition) =>
-          `$f(x)=${proposition.expression}$ donne $f(${xA})=${proposition.imageA}$ et $f(${xB})=${proposition.imageB}$ : ${proposition.convient ? 'cette expression convient' : 'cette expression ne convient pas'}.`,
+          `$${proposition.expression === expression ? miseEnEvidence(`f(x)=${proposition.expression}`) : `f(x)=${proposition.expression}`}$ donne $f(${xA})=${proposition.imageA}$ et $f(${xB})=${proposition.imageB}$ : ${proposition.convient ? 'cette expression convient' : 'cette expression ne convient pas'}.`,
       )
       .join('<br>')
 
@@ -77,7 +76,7 @@ Quelle est l'expression de $f$ ?`
 $\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${ecritureParentheseSiNegatif(yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=${a}$.<br>
 La fonction est donc de la forme $f(x)=ax+b$.<br>
 Comme $A$ appartient à la représentation graphique de $f$, on a $${yA}=${a}\\times ${ecritureParentheseSiNegatif(xA)}+b$, donc $b=${yA}-${ecritureParentheseSiNegatif(a * xA)}=${b}$.<br>
-Ainsi, $f(x)=${a}x${ecritureAlgebrique(b)}$, soit $${miseEnEvidence(`f(x)=${expression}`)}$.<br><br>
+Ainsi, $${miseEnEvidence(`f(x)=${expression}`)}$.<br><br>
 On peut aussi procéder par élimination en testant les propositions avec les coordonnées des deux points.<br>
 ${elimination}`
   }

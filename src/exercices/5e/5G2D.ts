@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -282,7 +282,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
           '\\dotfill',
           `$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)}$`,
         )
-        setReponse(this, i, resultat)
+        handleAnswers(this, i, { reponse: { value: resultat } })
       }
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n`a jamais été posée, on en crée une autre

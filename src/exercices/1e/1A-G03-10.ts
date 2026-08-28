@@ -90,7 +90,7 @@ export default class LongueurDeuxTrianglesRectanglesQcm extends ExerciceQcmA {
 
     this.enonce = `Dans la figure ci-dessous, qui n'est pas représentée à l'échelle, le triangle $ABC$ est rectangle en $B$ et le triangle $AFC$ est rectangle en $F$.<br>
 On donne $AB=${ab}\\text{ cm}$, $BC=${bc}\\text{ cm}$ et $AF=${af}\\text{ cm}$.<br>
-Quelle est la longueur du segment $[FC]$ ?${figure}`
+Quelle est la longueur exacte du segment $[FC]$ ?${figure}`
 
     this.correction = `Dans le triangle $ABC$ rectangle en $B$, le côté $[AC]$ est l'hypoténuse.<br>
 D'après le théorème de Pythagore :<br>
@@ -98,10 +98,8 @@ $\\begin{aligned}
 AC^2&=AB^2+BC^2\\\\
 &=${ab}^2+${bc}^2\\\\
 &=${ab ** 2}+${bc ** 2}\\\\
-&=${carreAC}.
+&=${carreAC}
 \\end{aligned}$<br>
-Comme une longueur est positive, $AC=${this.racineTex(carreAC)}\\text{ cm}$.<br>
-<br>
 Dans le triangle $AFC$ rectangle en $F$, le côté $[AC]$ est l'hypoténuse.<br>
 D'après le théorème de Pythagore :<br>
 $\\begin{aligned}
@@ -109,7 +107,7 @@ AC^2&=AF^2+FC^2\\\\
 FC^2&=AC^2-AF^2\\\\
 &=${carreAC}-${af}^2\\\\
 &=${carreAC}-${af ** 2}\\\\
-&=${carreFC}.
+&=${carreFC}
 \\end{aligned}$<br>
 Comme une longueur est positive, $FC=${miseEnEvidence(`${longueurCorrecteTex}\\text{ cm}`)}$.`
   }

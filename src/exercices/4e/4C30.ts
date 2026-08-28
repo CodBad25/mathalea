@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -501,8 +501,11 @@ export default class PuissancesDeDix extends Exercice {
           break
       }
       if (this.interactif && !context.isAmc) {
-        setReponse(this, i, reponseInteractive, {
-          formatInteractif: 'puissance',
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponseInteractive,
+            options: { puissance: true },
+          },
         })
         texte += ajouteChampTexteMathLive(
           this,
@@ -512,7 +515,6 @@ export default class PuissancesDeDix extends Exercice {
         )
       }
       if (context.isAmc) {
-        // setReponse(this, i, reponseInteractive, { formatInteractif: 'puissance', basePuissance: 10, exposantPuissance: exposantInteractif })
         this.autoCorrectionAMC[i] = {}
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].enonce = `${texte}\n`

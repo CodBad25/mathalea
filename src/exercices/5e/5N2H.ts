@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -192,11 +192,16 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre
-        setReponse(this, i, reponse, {
-          signe: true,
-          digits: Math.max(2, nombreDeChiffresDansLaPartieEntiere(reponse)),
-          decimals: 0,
-        })
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: reponse } },
+          {
+            signe: true,
+            digits: Math.max(2, nombreDeChiffresDansLaPartieEntiere(reponse)),
+            decimals: 0,
+          },
+        )
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

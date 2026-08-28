@@ -1,5 +1,6 @@
 import { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
+import { litTouchesPersonnalisees } from '../components/keyboard/lib/touchesPersonnalisees'
 import { keyboardState } from '../components/keyboard/stores/keyboardStore'
 import { getKeyboardShortcusts } from '../lib/interactif/claviers/keyboard'
 import { isMathfieldFocused } from '../lib/interactif/mathfieldFocus'
@@ -405,6 +406,7 @@ function handleFocusMathField(event) {
         'keyboard' in mf.dataset
           ? mf.dataset.keyboard.split(' ')
           : ['numbers', 'fullOperations', 'variables'],
+      customKeys: litTouchesPersonnalisees(mf.dataset.keys),
     }
   })
 }

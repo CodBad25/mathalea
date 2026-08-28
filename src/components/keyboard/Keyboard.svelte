@@ -62,7 +62,7 @@
     myKeyboard.empty()
     // Les touches propres à la question sont présentées en premier : ce sont
     // celles dont l'élève a besoin pour cette réponse précise.
-    if (value.customKeys.length > 0) {
+    if (value.customKeys != null && value.customKeys.length > 0) {
       const noms = enregistreTouchesPersonnalisees(value.customKeys)
       myKeyboard.add({
         keycaps: { inline: noms, block: noms },

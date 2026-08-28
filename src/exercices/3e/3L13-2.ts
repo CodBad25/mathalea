@@ -16,10 +16,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableau } from '../../lib/2d/tableau'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -281,17 +278,15 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
         Number(correctionInteractif) * 10000,
         10000,
       ).simplifie()
-      if (context.isAmc) setReponse(this, i, reponse)
-      else
-        handleAnswers(this, i, {
-          reponse: {
-            value: reponse,
-            options: {
-              fractionEgale: true,
-              nombreDecimalSeulement: !this.clavierAvecFraction,
-            },
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponse,
+          options: {
+            fractionEgale: true,
+            nombreDecimalSeulement: !this.clavierAvecFraction,
           },
-        })
+        },
+      })
 
       if (this.questionJamaisPosee(i, nbAlea.join(';'))) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)

@@ -10,7 +10,7 @@ import { milieu } from '../../lib/2d/utilitairesPoint'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -465,7 +465,7 @@ export default class CalculDAngle extends Exercice {
         }
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       } else if (this.interactif && context.isHtml) {
-        setReponse(this, i, angleABC)
+        handleAnswers(this, i, { reponse: { value: angleABC } })
       }
       texte += ' à $1 ^\\circ$ près.'
 

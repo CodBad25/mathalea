@@ -12,12 +12,8 @@ import {
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { context } from '../../modules/context'
 
 export const titre =
   'Calculer des produits et des quotients de nombres relatifs'
@@ -144,16 +140,12 @@ export default class ProduitsEtQuotientRelatifs extends Exercice {
             texte = `$${texNombre(a, 1)}\\times ${ecritureParentheseSiNegatif(b)} = $${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)}`
             texteCorr =
               texte.split('=')[0] + ' = ' + texNombre(fois(a, b), 1) + '$'
-            if (context.isAmc) {
-              setReponse(this, i, fois(a, b))
-            } else {
-              handleAnswers(this, i, {
-                reponse: {
-                  value: fois(a, b),
-                  options: { nombreDecimalSeulement: true },
-                },
-              })
-            }
+            handleAnswers(this, i, {
+              reponse: {
+                value: fois(a, b),
+                options: { nombreDecimalSeulement: true },
+              },
+            })
           } else {
             const aF = a as FractionEtendue
             const bF = b as FractionEtendue
@@ -163,19 +155,12 @@ export default class ProduitsEtQuotientRelatifs extends Exercice {
               ' = ' +
               aF.texProduitFraction(bF, true) +
               '$'
-            // setReponse(this, i, a.produitFraction(b), { formatInteractif: 'fractionEgale' })
-            if (context.isAmc) {
-              setReponse(this, i, aF.produitFraction(bF).texFraction, {
-                formatInteractif: 'fractionEgale',
-              })
-            } else {
-              handleAnswers(this, i, {
-                reponse: {
-                  value: aF.produitFraction(bF).texFraction,
-                  options: { fractionEgale: true },
-                },
-              })
-            }
+            handleAnswers(this, i, {
+              reponse: {
+                value: aF.produitFraction(bF).texFraction,
+                options: { fractionEgale: true },
+              },
+            })
           }
           break
 
@@ -185,7 +170,7 @@ export default class ProduitsEtQuotientRelatifs extends Exercice {
             c = fois(a, b)
             texte = `$\\dfrac{${texNombre(c, 1)}}{${texNombre(a, 1)}} = $${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)}`
             texteCorr = texte.split('=')[0] + ' = ' + texNombre(b, 1) + '$'
-            setReponse(this, i, b)
+            handleAnswers(this, i, { reponse: { value: b } })
           } else {
             const aF = a as FractionEtendue
             const bF = b as FractionEtendue
@@ -194,8 +179,11 @@ export default class ProduitsEtQuotientRelatifs extends Exercice {
             texteCorr = texte.split('=')[0]
             b = c.produitFraction(aF.inverse())
             texteCorr += ` = ${c.texProduitFraction(aF.inverse(), true)}$`
-            setReponse(this, i, bF.simplifie(), {
-              formatInteractif: 'fractionEgale',
+            handleAnswers(this, i, {
+              reponse: {
+                value: bF.simplifie(),
+                options: { fractionEgale: true },
+              },
             })
           }
           break

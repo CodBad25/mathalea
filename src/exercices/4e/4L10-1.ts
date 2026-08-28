@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -167,7 +167,7 @@ export default class ReductionsPiegesClassiques extends Exercice {
           reponse,
           `${lettreDepuisChiffre(i + 1, saufD)}=${reponse}`.replace('D=', 'd='),
         ]
-        setReponse(this, i, reponse)
+        handleAnswers(this, i, { reponse: { value: reponse } })
         texte += ajouteChampTexteMathLive(
           this,
           i,

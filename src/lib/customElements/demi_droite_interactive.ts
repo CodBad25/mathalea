@@ -10,6 +10,9 @@ import MathaleaCustomElement, {
  * @author Jean-Claude Lhote
  */
 
+/** Hauteur commune à tous les boutons de la barre de contrôle. */
+const CONTROL_HEIGHT = '2rem'
+
 type ValeurPoint = {
   pointValue: number
   label: string
@@ -276,7 +279,11 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.id = String(this.getAttribute('id'))
     this.minT = Number(this.getAttribute('min-t') ?? '2')
     this.maxT = Number(this.getAttribute('max-t') ?? '10')
-    const axisMin = Number(this.getAttribute('axis-min'))
+    const axisMinAttribute = this.getAttribute('axis-min')
+    const axisMin =
+      axisMinAttribute === null || axisMinAttribute === ''
+        ? Number.NaN
+        : Number(axisMinAttribute)
     this.axisMin = Number.isFinite(axisMin) ? axisMin : undefined
     this.initialTMax = Number(
       this.getAttribute('initial-t') ?? String(this.minT),
@@ -579,7 +586,12 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       button.title = description
       button.setAttribute('aria-label', description)
     }
-    button.style.padding = '0.2rem 0.55rem'
+    button.style.height = CONTROL_HEIGHT
+    button.style.boxSizing = 'border-box'
+    button.style.padding = '0 0.6rem'
+    button.style.display = 'inline-flex'
+    button.style.alignItems = 'center'
+    button.style.justifyContent = 'center'
     button.style.border = '1px solid #999'
     button.style.borderRadius = '6px'
     button.style.background = selected ? '#d9e7ff' : '#fff'
@@ -591,6 +603,85 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     button.style.fontSize = '0.92rem'
     button.addEventListener('click', onClick)
     return button
+  }
+
+  private createStepperButton(
+    text: string,
+    onClick: () => void,
+    description: string,
+  ): HTMLButtonElement {
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.textContent = text
+    button.title = description
+    button.setAttribute('aria-label', description)
+    button.style.width = '1.5rem'
+    button.style.height = '1.5rem'
+    button.style.padding = '0'
+    button.style.lineHeight = '1'
+    button.style.border = '1px solid #999'
+    button.style.borderRadius = '999px'
+    button.style.background = '#fff'
+    button.style.cursor = 'pointer'
+    button.style.fontSize = '1rem'
+    button.style.display = 'inline-flex'
+    button.style.alignItems = 'center'
+    button.style.justifyContent = 'center'
+    button.addEventListener('click', onClick)
+    return button
+  }
+
+  private createGradationsControl(): HTMLDivElement {
+    const group = document.createElement('div')
+    group.style.display = 'inline-flex'
+    group.style.alignItems = 'center'
+    group.style.height = CONTROL_HEIGHT
+    group.style.boxSizing = 'border-box'
+    group.style.gap = '0.35rem'
+    group.style.padding = '0 0.5rem'
+    group.style.border = '1px solid #999'
+    group.style.borderRadius = '6px'
+    group.style.background = '#fff'
+    group.style.fontSize = '0.92rem'
+
+    const label = document.createElement('span')
+    label.textContent = 'Nombre de graduations intermédiaires'
+
+    const valueDisplay = document.createElement('span')
+    valueDisplay.textContent = String(this.partsCount)
+    valueDisplay.style.fontWeight = '700'
+    valueDisplay.style.minWidth = '1.2em'
+    valueDisplay.style.textAlign = 'center'
+
+    const minus = this.createStepperButton(
+      '−',
+      () => {
+        this.clearPlacementMode()
+        if (this.partsCount > 1) {
+          this.partsCount--
+          this.points = this.points.filter((point) =>
+            this.valueExistsOnAxis(point.pointValue),
+          )
+          this.render()
+          this.emitChange()
+        }
+      },
+      'Diminuer le nombre de graduations intermédiaires',
+    )
+
+    const plus = this.createStepperButton(
+      '+',
+      () => {
+        this.clearPlacementMode()
+        this.partsCount++
+        this.render()
+        this.emitChange()
+      },
+      'Augmenter le nombre de graduations intermédiaires',
+    )
+
+    group.append(label, valueDisplay, minus, plus)
+    return group
   }
 
   private clearPlacementMode() {
@@ -680,54 +771,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
         'Augmenter la valeur de T',
       )
 
-      const dMinus = this.createButton(
-        '|-',
-        () => {
-          this.clearPlacementMode()
-          if (this.partsCount > 1) {
-            this.partsCount--
-            this.points = this.points.filter((point) =>
-              this.valueExistsOnAxis(point.pointValue),
-            )
-            this.render()
-            this.emitChange()
-          }
-        },
-        false,
-        'Diminuer le nombre de graduations intermédiaires',
-      )
-      const dPlus = this.createButton(
-        '|+',
-        () => {
-          this.clearPlacementMode()
-
-          this.partsCount++
-          this.render()
-          this.emitChange()
-        },
-        false,
-        'Augmenter le nombre de graduations intermédiaires',
-      )
-
-      const deletePoints = this.createButton(
-        '⌫',
-        () => {
-          this.clearPlacementMode()
-          this.isPointEraseArmed = true
-          this.render()
-        },
-        this.isPointEraseArmed,
-        'Supprimer un point placé',
-      )
-
-      const resetAxis = this.createButton(
-        '↺',
-        () => {
-          this.resetToInitialState()
-        },
-        false,
-        'Réinitialiser la demi-droite',
-      )
+      const gradationsControl = this.createGradationsControl()
 
       const addPoint = this.createButton(
         this.allowMultiplePoints
@@ -743,10 +787,31 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
           ? 'Activer le mode ajout de points'
           : 'Activer le mode placement du point',
       )
+
+      const deletePoints = this.createButton(
+        '🗑',
+        () => {
+          this.clearPlacementMode()
+          this.isPointEraseArmed = true
+          this.render()
+        },
+        this.isPointEraseArmed,
+        'Supprimer un point placé',
+      )
+
+      const resetAxis = this.createButton(
+        '↺&nbsp;Réinitialiser la figure',
+        () => {
+          this.resetToInitialState()
+        },
+        false,
+        'Réinitialiser la figure',
+      )
+
       if (this.minT < this.maxT) {
         this.controls.append(tMinus, tPlus)
       }
-      this.controls.append(dMinus, dPlus, deletePoints, resetAxis, addPoint)
+      this.controls.append(gradationsControl, addPoint, deletePoints, resetAxis)
       this.appendChild(this.controls)
     }
     const resultatCheck = document.createElement('span')
@@ -755,7 +820,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       : `demi-droite-interactive-resultat`
 
     const width = 600
-    const height = 70
+    const height = 76
     const margin = 22
     const axisY = 35
     const extensionAfterT = 24
@@ -852,6 +917,32 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     )
     arrow.setAttribute('fill', '#111')
     this.svg.appendChild(arrow)
+
+    // Les « bonds » bleus matérialisent chaque part du découpage : un arc par
+    // sous-intervalle, reliant deux graduations intermédiaires consécutives. La
+    // chaîne d'arcs passe au-dessus des graduations principales sans s'y arrêter.
+    if (parts >= 2) {
+      const hopHeight = 14
+      for (let k = 0; k < parts; k++) {
+        const xA = axisStart + (k / parts) * valuesLength
+        const xB = axisStart + ((k + 1) / parts) * valuesLength
+        const midX = (xA + xB) / 2
+        const hop = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'path',
+        )
+        hop.setAttribute(
+          'd',
+          `M ${xA} ${axisY} Q ${midX} ${axisY + hopHeight} ${xB} ${axisY}`,
+        )
+        hop.setAttribute('fill', 'none')
+        hop.setAttribute('stroke', bleuMathalea)
+        hop.setAttribute('stroke-width', '1.5')
+        hop.setAttribute('stroke-linecap', 'round')
+        hop.style.pointerEvents = 'none'
+        this.svg.appendChild(hop)
+      }
+    }
 
     for (const value of availableValues) {
       const ratio = totalAxis === 0 ? 0 : (value - minValue) / totalAxis
@@ -1030,7 +1121,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       if (!Number.isFinite(numericPointValue) || typeof label !== 'string') {
         return null
       }
-      return `${label}(${fraction(numericPointValue * partsCount, partsCount).texFraction})`
+      return `${label}\\left(${fraction(numericPointValue * partsCount, partsCount).texFraction}\\right)`
     })
     return `Un axe allant de $${axisMin}$ à $${maxT}$ a été partagé en $${partsCount}$ parties.<br>
     ${points.length > 1 ? 'Les points suivants sont placés :' : 'Le point suivant est placé :'} $${pointsDescriptions.filter((v): v is string => !!v).join(';')}$`

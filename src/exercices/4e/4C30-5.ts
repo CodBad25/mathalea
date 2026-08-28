@@ -7,10 +7,7 @@ import {
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -432,13 +429,13 @@ export default class PuissancesDUnEntier extends Exercice {
           break
       }
 
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponseInteractive,
+          options: { sansExposantUn: exposantInteractif !== 1 },
+        },
+      })
       if (this.interactif && !context.isAmc) {
-        handleAnswers(this, i, {
-          reponse: {
-            value: reponseInteractive,
-            options: { sansExposantUn: exposantInteractif !== 1 },
-          },
-        })
         texte += ajouteChampTexteMathLive(
           this,
           i,
@@ -447,13 +444,6 @@ export default class PuissancesDUnEntier extends Exercice {
             texteAvant: sp(2) + '$=$',
           },
         )
-      }
-      if (context.isAmc) {
-        setReponse(this, i, reponseInteractive, {
-          formatInteractif: 'puissance',
-          basePuissance: base,
-          exposantPuissance: exposantInteractif,
-        })
       }
 
       if (this.questionJamaisPosee(i, texte)) {

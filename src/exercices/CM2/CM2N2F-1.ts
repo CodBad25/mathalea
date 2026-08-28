@@ -48,7 +48,7 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
       'Types de questions',
       'Nombres séparés par des tirets  :\n2 : Demis\n3 : Tiers\n4 : Quarts\n5 : Cinquièmes\n6 : Sixièmes\n7 : Septièmes\n8 : Huitièmes\n9 : Neuvièmes\n10: Dixièmes\n11: Onzièmes\n12 : Douzièmes\n13 : Mélange',
     ]
-    /*  r
+    /*
     this.besoinFormulaire3CaseACocher = [
       'Avec des fractions simplifiées (le cas échéant)',
       true,

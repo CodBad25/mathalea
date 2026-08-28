@@ -1,7 +1,7 @@
 import { warnMessage } from '../../lib/format/message'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -377,7 +377,9 @@ export default class IdentitesCalculs extends Exercice {
               texteCorr += '<br>'
             }
 
-            setReponse(this, i, situations[0].resultatNumerique)
+            handleAnswers(this, i, {
+              reponse: { value: situations[0].resultatNumerique },
+            })
           } else {
             switch (this.canVersion) {
               case 'v1':
@@ -411,7 +413,9 @@ export default class IdentitesCalculs extends Exercice {
               texteCorr += '<br>'
             }
 
-            setReponse(this, i, situations[1].resultatNumerique)
+            handleAnswers(this, i, {
+              reponse: { value: situations[1].resultatNumerique },
+            })
           } else {
             switch (this.canVersion) {
               case 'v1':
@@ -446,7 +450,9 @@ export default class IdentitesCalculs extends Exercice {
               texteCorr += '<br>'
             }
 
-            setReponse(this, i, situations[2].resultatNumerique)
+            handleAnswers(this, i, {
+              reponse: { value: situations[2].resultatNumerique },
+            })
           } else {
             switch (this.canVersion) {
               case 'v1':

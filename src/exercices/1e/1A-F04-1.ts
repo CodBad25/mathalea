@@ -12,7 +12,10 @@ import { randint } from '../../modules/outils'
 
 import { bleuMathalea } from '../../lib/colors'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '30/07/2025'
 export const uuid = '3d696'
@@ -26,6 +29,14 @@ export const interactifReady = true
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation par lecture graphique'
+
+interface ReponseQcm {
+  texte: string
+  correction: string
+  estCorrecte: boolean
+  texteCorrection?: string
+}
+
 export default class AutoF4 extends ExerciceQcmA {
   compteur = 0
   spline?: Spline
@@ -110,7 +121,7 @@ export default class AutoF4 extends ExerciceQcmA {
     this.correction = `
     Analysons chaque affirmation en observant attentivement la courbe :<br>
 
-    $\\bullet$ ${texteEnCouleurEtGras(`Le produit des solutions de l'équation $f(x) = 0$ est égal à $20$.`)}<br>
+    $\\bullet$ ${texteEnCouleurEtGras("Le produit des solutions de l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(' est égal à ')}$${miseEnEvidence('20')}$${texteEnCouleurEtGras('.')}<br>
     Cette affirmation est correcte : L'équation $f(x) = 0$ correspond aux points où la courbe coupe l'axe des abscisses.<br>
     D'après le graphique, ces solutions sont : $x = -4$, $x = -1$ et $x = 5$.<br>
     Le produit est : $(-4) \\times (-1) \\times 5 = 20$.<br>
@@ -277,10 +288,10 @@ export default class AutoF4 extends ExerciceQcmA {
     this.enonce += 'Une seule affirmation est correcte :'
 
     // Définir toutes les réponses possibles avec leur correction
-    const bonnesReponses = [
+    const bonnesReponses: ReponseQcm[] = [
       {
         texte: `Le produit des solutions de l'équation $f(x)=${y2}$ est égal à $${solutions2[0] * solutions2[1]}$.`,
-        texteCorrection: `${texteEnCouleurEtGras(`Le produit des solutions de l'équation $f(x)=${y2}$ est égal à $${solutions2[0] * solutions2[1]}$.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras("Le produit des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y2}`)}$${texteEnCouleurEtGras(' est égal à ')}$${miseEnEvidence(`${solutions2[0] * solutions2[1]}.`)}$`,
         correction:
           AFC +
           `L'équation $f(x)=${y2}$ a deux solutions : $${solutions2[0]}$ et $${solutions2[1]}$.<br>
@@ -289,7 +300,7 @@ export default class AutoF4 extends ExerciceQcmA {
       },
       {
         texte: `La somme des solutions de l'équation $f(x)=${y2}$ est égal à $${solutions2[0] + solutions2[1]}$.`,
-        texteCorrection: `${texteEnCouleurEtGras(`La somme des solutions de l'équation $f(x)=${y2}$ est égal à $${solutions2[0] + solutions2[1]}$.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras("La somme des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y2}`)}$${texteEnCouleurEtGras(' est égale à ')}$${miseEnEvidence(`${solutions2[0] * solutions2[1]}.`)}$`,
         correction:
           AFC +
           `L'équation $f(x)=${y2}$ a deux solutions : $${solutions2[0]}$ et $${solutions2[1]}$.<br>
@@ -298,7 +309,7 @@ export default class AutoF4 extends ExerciceQcmA {
       },
       {
         texte: `La somme des solutions de l'équation $f(x)=${y3}$ est égal à $${solutions3[0] + solutions3[1] + solutions3[2]}$.`,
-        texteCorrection: `${texteEnCouleurEtGras(`La somme des solutions de l'équation $f(x)=${y3}$ est égal à $${solutions3[0] + solutions3[1] + solutions3[2]}$.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras("La somme des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y3}`)}$${texteEnCouleurEtGras(' est égale à ')}$${miseEnEvidence(`${solutions3[1] * solutions3[2]}.`)}$`,
         correction:
           AFC +
           `L'équation $f(x)=${y3}$ a trois solutions : $${solutions3[0]}$, $${solutions3[1]}$ et $${solutions3[2]}$.<br>
@@ -307,7 +318,7 @@ export default class AutoF4 extends ExerciceQcmA {
       },
       {
         texte: `Le produit des solutions de l'équation $f(x)=${y3}$ est égal à $${solutions3[0] * solutions3[1] * solutions3[2]}$.`,
-        texteCorrection: `${texteEnCouleurEtGras(`Le produit des solutions de l'équation $f(x)=${y3}$ est égal à $${solutions3[0] * solutions3[1] * solutions3[2]}$.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras("Le produit des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y3}`)}$${texteEnCouleurEtGras(' est égal à ')}$${miseEnEvidence(`${solutions3[1] * solutions3[2]}.`)}$`,
         correction:
           AFC +
           `L'équation $f(x)=${y3}$ a trois solutions : $${solutions3[0]}$, $${solutions3[1]}$ et $${solutions3[2]}$.<br>
@@ -317,8 +328,7 @@ export default class AutoF4 extends ExerciceQcmA {
       {
         texte: `Soit $k\\in\\mathbb{R}$. <br>
           L'équation $f(x)=k$ a au plus $3$ solutions.`,
-        texteCorrection: `${texteEnCouleurEtGras(`Soit $k\\in\\mathbb{R}$. <br>
-          L'équation $f(x)=k$ a au plus $3$ solutions.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras('Soit ')}$${miseEnEvidence('k\\in\\mathbb{R}')}$${texteEnCouleurEtGras(". <br>L'équation ")}$${miseEnEvidence('f(x)=k')}$${texteEnCouleurEtGras(' a au plus ')}$${miseEnEvidence('3')}$${texteEnCouleurEtGras(' solutions.')}`,
         correction:
           AFC +
           'Une droite horizontale coupe au plus trois fois la courbe, donc le nombre maximal de solutions est $3$.',
@@ -327,8 +337,7 @@ export default class AutoF4 extends ExerciceQcmA {
       {
         texte: `Soit $k\\in]${Math.min(theSpline.y[2], theSpline.y[3])}\\,;\\,${Math.max(theSpline.y[2], theSpline.y[3])}[$. <br>
           L'équation $f(x)=k$ admet exactement deux solutions.`,
-        texteCorrection: `${texteEnCouleurEtGras(`Soit $k\\in]${Math.min(theSpline.y[2], theSpline.y[3])}\\,;\\,${Math.max(theSpline.y[2], theSpline.y[3])}[$. <br>
-          L'équation $f(x)=k$ admet exactement deux solutions.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras('Soit ')}$${miseEnEvidence(`k\\in]${Math.min(theSpline.y[2], theSpline.y[3])}\\,;\\,${Math.max(theSpline.y[2], theSpline.y[3])}[`)}$${texteEnCouleurEtGras(". <br>L'équation ")}$${miseEnEvidence('f(x)=k')}$${texteEnCouleurEtGras(' admet exactement deux solutions.')}`,
         correction:
           AFC +
           `Si $k\\in]${Math.min(theSpline.y[2], theSpline.y[3])}\\,;\\,${Math.max(theSpline.y[2], theSpline.y[3])}[$, la droite d'équation $y=k$ coupe bien deux fois la courbe.`,
@@ -337,8 +346,7 @@ export default class AutoF4 extends ExerciceQcmA {
       {
         texte: `Soit $k\\in]${Math.min(theSpline.y[6], theSpline.y[7])}\\,;\\,${Math.max(theSpline.y[6], theSpline.y[7])}[$. <br>
           L'équation $f(x)=k$ admet exactement deux solutions.`,
-        texteCorrection: `${texteEnCouleurEtGras(`Soit $k\\in]${Math.min(theSpline.y[6], theSpline.y[7])}\\,;\\,${Math.max(theSpline.y[6], theSpline.y[7])}[$. <br>
-          L'équation $f(x)=k$ admet exactement deux solutions.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras('Soit ')}$${miseEnEvidence(`k\\in]${Math.min(theSpline.y[6], theSpline.y[7])}\\,;\\,${Math.max(theSpline.y[6], theSpline.y[7])}[`)}$${texteEnCouleurEtGras(". <br>L'équation ")}$${miseEnEvidence('f(x)=k')}$${texteEnCouleurEtGras(' admet exactement deux solutions.')}`,
         correction:
           AFC +
           `Si $k\\in]${Math.min(theSpline.y[6], theSpline.y[7])}\\,;\\,${Math.max(theSpline.y[6], theSpline.y[7])}[$,  la droite d'équation $y=k$ coupe bien deux fois la courbe.`,
@@ -347,8 +355,7 @@ export default class AutoF4 extends ExerciceQcmA {
       {
         texte: `Soit $k\\in\\mathbb{R}$. <br>
           Il existe une infinité de valeurs de $k$ pour lesquelles l'équation $f(x)=k$ admet exactement trois solutions.`,
-        texteCorrection: `${texteEnCouleurEtGras(`Soit $k\\in\\mathbb{R}$. <br>
-          Il existe une infinité de valeurs de $k$ pour lesquelles l'équation $f(x)=k$ admet exactement trois solutions.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras('Soit ')}$${miseEnEvidence('k\\in\\mathbb{R}')}$${texteEnCouleurEtGras('. <br>Il existe une infinité de valeurs de ')}$${miseEnEvidence('k')}$${texteEnCouleurEtGras(" pour lesquelles l'équation ")}$${miseEnEvidence('f(x)=k')}$${texteEnCouleurEtGras(' admet exactement trois solutions.')}`,
         correction:
           AFC +
           `Pour toutes les valeurs de $k$ comprises entre $${Math.min(theSpline.y[0], theSpline.y[9])}$ et $${Math.max(theSpline.y[0], theSpline.y[9])}$, l'équation $f(x)=k$ admet exactement trois solutions.`,
@@ -357,8 +364,7 @@ export default class AutoF4 extends ExerciceQcmA {
       {
         texte: `Soit $k\\in[${Math.min(theSpline.y[0], theSpline.y[9])}\\,;\\,${Math.max(theSpline.y[0], theSpline.y[9])}]$. <br>
           L'équation $f(x)=k$ admet exactement trois solutions.`,
-        texteCorrection: `${texteEnCouleurEtGras(`Soit $k\\in[${Math.min(theSpline.y[0], theSpline.y[9])}\\,;\\,${Math.max(theSpline.y[0], theSpline.y[9])}]$. <br>
-          L'équation $f(x)=k$ admet exactement trois solutions.`)}`,
+        texteCorrection: `${texteEnCouleurEtGras('Soit ')}$${miseEnEvidence(`k\\in[${Math.min(theSpline.y[0], theSpline.y[9])}\\,;\\,${Math.max(theSpline.y[0], theSpline.y[9])}]`)}$${texteEnCouleurEtGras(". <br>L'équation ")}$${miseEnEvidence('f(x)=k')}$${texteEnCouleurEtGras(' admet exactement trois solutions.')}`,
         correction:
           AFC +
           `Si $k\\in[${Math.min(theSpline.y[0], theSpline.y[9])}\\,;\\,${Math.max(theSpline.y[0], theSpline.y[9])}]$ la droite d'équation $y=k$ coupe bien trois fois la courbe.`,
@@ -366,7 +372,7 @@ export default class AutoF4 extends ExerciceQcmA {
       },
     ]
 
-    const mauvaisesReponses = [
+    const mauvaisesReponses: ReponseQcm[] = [
       {
         texte: `Le produit des solutions de l'équation $f(x)=${y2}$ est égal à $${solutions2[0] + solutions2[1]}$.`,
         correction:
@@ -489,8 +495,8 @@ export default class AutoF4 extends ExerciceQcmA {
     toutesLesReponses.forEach((reponse, index) => {
       // Utiliser texteCorrection pour la bonne réponse (index 0), texte pour les autres
       const texteAffiche =
-        index === 0 && 'texteCorrection' in reponse
-          ? (reponse as any).texteCorrection
+        index === 0 && reponse.texteCorrection
+          ? reponse.texteCorrection
           : reponse.texte
       this.correction += `$\\bullet$ ${texteAffiche}<br>`
       this.correction += `  ${reponse.correction}<br>`

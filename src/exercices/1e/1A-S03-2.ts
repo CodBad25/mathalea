@@ -1,5 +1,6 @@
 import Stat from '../../lib/mathFonctions/Stat'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import { creerSerieDeQuartiles } from '../../modules/outilsStat'
@@ -67,7 +68,7 @@ export default class ComprendreBoiteMoustachesQCM extends ExerciceQcmA {
 
     // Correction : explication simple, claire
     this.correction = `La valeur $${a}$ correspond au ${termes[borneInf].label} et la valeur $${b}$ au ${termes[borneSup].label}.<br>
-      Donc, la proportion de valeurs comprises entre $${a}$ et $${b}$ est de $${texNombre(pourCent, 0)}\\%$.`
+      Donc, la proportion de valeurs comprises entre $${a}$ et $${b}$ est de $${miseEnEvidence(texNombre(pourCent, 0) + '\\%')}$.`
   }
 
   versionOriginale: () => void = () => {
@@ -110,7 +111,6 @@ export default class ComprendreBoiteMoustachesQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options.vertical = true
     this.versionAleatoire()
   }
 }

@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -42,7 +42,7 @@ export default class Ajouter9 extends Exercice {
       a = randint(0, 9) * 10 + randint(1, 9)
       texte = `$${a}+9 = $`
       texteCorr = `$${a}+9=${miseEnEvidence(texNombre(a + 9))}$`
-      setReponse(this, i, a + 9)
+      handleAnswers(this, i, { reponse: { value: a + 9 } })
       if (this.interactif) {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       } else {

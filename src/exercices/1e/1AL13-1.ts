@@ -236,7 +236,7 @@ ${scriptPython(
  ${NomS} = ${u0}
  while ${NomS} < ${b}:
   n = n + 1
-  ${NomS} = ${texNombre(cm, 2)} * ${NomS}
+  ${NomS} = ${cm} * ${NomS}
  return n`,
   6,
 )}<br>
@@ -305,7 +305,7 @@ Ce modèle prévoit $${texNombre(new Decimal(cm).pow(Rannee).mul(u0), 0)}$ habit
                 `def ${NomS}(n):
  ${NomS} = ${u0}
  for i in range(1, n+1):
-  ${NomS} = ${texNombre(cm, 2)} * ${NomS} 
+  ${NomS} = ${cm} * ${NomS}
  return ${NomS}`,
                 6,
               )}<br>
@@ -568,7 +568,7 @@ On a ainsi $d_1 = ${u0}$.
  d = ${u0}
  n = 1
  while d<=k :
-  d = d*${texNombre(cm, 2)}
+  d = d*${cm}
   n = n+1
  return n`,
                 6,
@@ -797,7 +797,7 @@ $v_{${texNombre(annee - 2020, 0)}}=${texNombre(v0, 0)}\\times ${texNombre(cm, 2)
   n = 0
   while A >= B :
    A = A+${r}
-   B = B*${texNombre(cm, 2)}
+   B = B*${cm}
    n = n+1
   return n`,
                 6,

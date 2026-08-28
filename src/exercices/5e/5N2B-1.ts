@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -111,10 +111,14 @@ export default class DevinerNombreRelatif extends Exercice {
       texteCorr = `Je suis $${miseEnEvidence(texNombre(signe * (unite + dixieme / 10 + centieme / 100)))}$.`
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
 
-      setReponse(
+      handleAnswers(
         this,
         i,
-        arrondi(signe * (unite + dixieme / 10 + centieme / 100), 3),
+        {
+          reponse: {
+            value: arrondi(signe * (unite + dixieme / 10 + centieme / 100), 3),
+          },
+        },
         { signe: true },
       )
       if (this.questionJamaisPosee(i, texte)) {

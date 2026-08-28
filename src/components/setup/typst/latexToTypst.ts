@@ -4,6 +4,7 @@ import {
   mathaleaColorAliases,
 } from '../../../lib/2d/colorToLatexOrHtml'
 import { renderScratchDiv } from '../../../lib/renderScratch'
+import { typstImport } from './typstPackages'
 
 /**
  * Conversion du contenu HTML des exercices (avec formules LaTeX en `$...$`)
@@ -137,8 +138,10 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
  * propositions de QCM). `tasks` est importée sous le nom `taskize-tasks` :
  * `MATHALEA_TASKS_HELPER` redéfinit `tasks` par-dessus (voir ce helper).
  */
-export const TASKIZE_IMPORT =
-  '#import "@preview/taskize:0.2.8": tasks as taskize-tasks, tasks-setup, is-inline-content, format-label'
+export const TASKIZE_IMPORT = typstImport(
+  'taskize',
+  'tasks as taskize-tasks, tasks-setup, is-inline-content, format-label',
+)
 
 /**
  * Enrobage de `tasks` : aligne le numéro d'une question sur la première
@@ -221,7 +224,7 @@ export const MATHALEA_TASKS_HELPER = `#let mathalea-items-questions(corps) = {
  * inséré tel quel par `TableauSignesVariationsElement.create()` (voir
  * `typstExport.ts`) via le marqueur `<mathalea-typst>`.
  */
-export const VARTABLE_IMPORT = '#import "@preview/vartable:0.2.4": tabvar'
+export const VARTABLE_IMPORT = typstImport('vartable', 'tabvar')
 
 /**
  * Import du paquet cetz (dessins vectoriels), utilisé tel quel (`cetz.canvas`,
@@ -229,15 +232,26 @@ export const VARTABLE_IMPORT = '#import "@preview/vartable:0.2.4": tabvar'
  * inséré via le marqueur `<mathalea-typst>` sans passer par la conversion
  * LaTeX -> Typst.
  */
-export const CETZ_IMPORT = '#import "@preview/cetz:0.3.4"'
+export const CETZ_IMPORT = typstImport('cetz')
 
 /**
  * Import du module `chart` de cetz-plot (diagrammes en barres/bâtons),
  * référencé (`chart.columnchart`…) par le même code Typst brut que
  * `CETZ_IMPORT`, dont il dépend.
  */
-export const CETZ_PLOT_CHART_IMPORT =
-  '#import "@preview/cetz-plot:0.1.1": chart'
+export const CETZ_PLOT_CHART_IMPORT = typstImport('cetz-plot', 'chart')
+
+/**
+ * Import du paquet `ctz-euclide` (géométrie euclidienne, portage Typst de
+ * `tkz-euclide`), utilisé tel quel par le code Typst brut des annales
+ * rédigées à la main : `#ctz-canvas`, `ctz-def-points`, `ctz-draw`,
+ * `ctz-draw-mark-right-angle`, `ctz-draw-measure-segment`, `ctz-draw-labels`…
+ * L'import se fait en `: *` (toute l'API est préfixée `ctz-`) ; le paquet
+ * réexporte aussi `cetz` (v0.5.2 embarquée), ce qui satisfait le
+ * `import cetz.draw: *` que ces figures ouvrent dans le corps de
+ * `ctz-canvas`. Inséré dès que le code contient `ctz-`.
+ */
+export const CTZ_EUCLIDE_IMPORT = typstImport('ctz-euclide', '*')
 
 /**
  * Aides Typst pour les QCM : une case à cocher (vide dans l'énoncé, remplie
@@ -401,6 +415,13 @@ function preprocessTex(tex: string): string {
   let output = replaceColorGroups(
     decodeEntities(tex.replace(/\uE000\d+\uE001/g, '')),
   )
+  // tex2typst lève une exception sur une tabulation (ou un autre caractère de
+  // contrôle d'espacement) présente dans la formule : la sortie retombe alors
+  // sur le LaTeX brut affiché verbatim (`\begin{aligned}`…). Ces caractères
+  // n'ont aucune valeur en mode mathématique (ils proviennent en général de
+  // l'indentation du template literal de l'exercice) : on les ramène à une
+  // espace ordinaire.
+  output = output.replace(/[\t\f\v\r]/g, ' ')
   output = stripLatexSizeCommands(output)
   // tex2typst échoue sur \displaystyle à l'intérieur des environnements
   // d'alignement, alors que la commande y est redondante : les lignes sont
@@ -742,10 +763,21 @@ function postprocessTypst(typst: string): string {
     .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
     .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
     .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
+    // \boldsymbol{(} / \boldsymbol{)} (ou \pmb, ex. 3L11-3b qui colore en bleu le
+    // signe et les parenthèses d'un produit ajouté) isolent une parenthèse dans
+    // un groupe gras :
+    //  - bold())  → bold() ferme sans corps → "missing argument: body"
+    //  - bold(()  → "(" ouvre un délimiteur jamais fermé → "unclosed delimiter"
+    // On remplace la parenthèse isolée par le glyphe Typst paren.l / paren.r ;
+    // un éventuel contenu gras qui précède (un signe + ou -) est conservé.
+    .replace(/\bupright\(bold\(\)\)\)/g, 'upright(bold(paren.r)))')
+    .replace(/\bupright\(bold\(([^()]*?)\(\)\)/g, 'upright(bold($1paren.l))')
+    .replace(/\bbold\(\)\)/g, 'bold(paren.r)')
+    .replace(/\bbold\(([^()]*?)\(\)/g, 'bold($1paren.l)')
     // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
     // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
     .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
-    .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
+    .replace(/\bbold\(\)/g, 'bold(paren.r)')
 
   // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
   // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
@@ -844,7 +876,10 @@ function balanceTypstMathParens(s: string): string {
         depth--
         pass1 += ch
       } else {
-        pass1 += 'paren.r '
+        // espaces des deux côtés : sans celui de gauche, le glyphe se colle au
+        // symbole précédent et Typst lit un seul identifiant ($\beta)$ donnait
+        // `betaparen.r`, donc « variable inconnue betaparen »)
+        pass1 += ' paren.r '
       }
     } else {
       pass1 += ch
@@ -2542,6 +2577,83 @@ function schemaEnBoiteToTypst(container: HTMLElement): string {
 }
 
 /**
+ * Deux colonnes côte à côte (`deuxColonnesResp`, `lib/format/miseEnPage.js`)
+ * en `#grid` Typst.
+ *
+ * En HTML ces colonnes sont une grille CSS (`<div class="cols-responsive">`)
+ * dont le `<style>` est retiré plus loin : sans traitement, les deux colonnes
+ * se retrouveraient empilées l'une sous l'autre. Le contenu de chaque colonne
+ * est reconverti récursivement (formules, figures, tableaux inclus), et les
+ * figures s'adaptent d'elles-mêmes à la largeur de leur colonne
+ * (`mathalea-fit` mesure l'espace disponible).
+ *
+ * Les largeurs reprennent le `largeur1` passé à `deuxColonnesResp` (le même
+ * partage que la sortie LaTeX), publié dans le HTML par `data-largeur1` ;
+ * à défaut, les colonnes sont égales comme dans la grille CSS.
+ */
+function protectResponsiveColumns(
+  html: string,
+  protect: (typst: string) => string,
+  figures?: string[],
+): string {
+  if (!/\bcols-responsive\b/.test(html)) return html
+  if (typeof document === 'undefined') return html
+  const template = document.createElement('template')
+  template.innerHTML = html
+  const containers = [
+    ...template.content.querySelectorAll<HTMLElement>('.cols-responsive'),
+  ].filter(
+    // une colonne peut elle-même contenir deux colonnes : seul le conteneur
+    // extérieur est traité, la conversion récursive s'occupe des autres
+    (container) => container.parentElement?.closest('.cols-responsive') == null,
+  )
+  if (containers.length === 0) return html
+  for (const container of containers) {
+    const columns = [...container.children]
+      .filter((child) => child.tagName !== 'STYLE')
+      .map((child) => htmlToTypst(child.innerHTML, figures))
+    const filled = columns.filter((column) => column.length > 0)
+    if (filled.length === 0) {
+      container.replaceWith(document.createTextNode(''))
+      continue
+    }
+    // une seule colonne remplie : pas de grille, le contenu prend la largeur
+    const code =
+      filled.length === 1
+        ? filled[0]
+        : responsiveColumnsToTypst(
+            filled,
+            Number(container.dataset.largeur1 ?? Number.NaN),
+          )
+    container.replaceWith(document.createTextNode(protect('\n' + code + '\n')))
+  }
+  return template.innerHTML
+}
+
+/**
+ * `#grid` des colonnes de `deuxColonnesResp` : largeurs en `fr` (le partage
+ * se fait sur l'espace restant une fois la gouttière posée, là où des `%`
+ * déborderaient), contenus alignés sur leur haut comme en HTML.
+ */
+function responsiveColumnsToTypst(columns: string[], largeur1: number): string {
+  const widths =
+    columns.length === 2 &&
+    Number.isFinite(largeur1) &&
+    largeur1 > 0 &&
+    largeur1 < 100
+      ? [largeur1, 100 - largeur1]
+      : columns.map(() => 1)
+  return [
+    `#grid(`,
+    `  columns: (${widths.map((width) => `${width}fr`).join(', ')}),`,
+    '  column-gutter: 1em,',
+    '  align: top + left,',
+    ...columns.map((column) => `  [${column}],`),
+    ')',
+  ].join('\n')
+}
+
+/**
  * Repère les schémas en barres (`<div class="SchemaContainer">`) et les
  * convertit avant le reste du HTML (leur contenu interne serait sinon
  * aplati en texte).
@@ -2736,6 +2848,7 @@ export function htmlToTypst(
     /<mathalea-typst>([\s\S]*?)<\/mathalea-typst>/gi,
     (_, code: string) => protect(decodeEntities(code)),
   )
+  text = protectResponsiveColumns(text, protect, figures)
   text = protectQcm(renderScratchBlocksToSvg(text), protect, figures)
   text = protectSchemaContainers(text, protect)
   text = protectHtmlTables(text, protect, figures)
@@ -3016,10 +3129,16 @@ export function htmlToTypst(
     .map((line) => (/^[-+=/]/.test(line) ? '\\' + line : line))
     .join('\n')
   output = output.replace(/\n{3,}/g, '\n\n')
-  output = output.replace(
-    /\uE000(\d+)\uE001/g,
-    (_, index: string) => protectedSegments[Number(index)],
-  )
+  // Un segment protégé peut contenir le jeton d'un autre segment (colonnes
+  // de `deuxColonnesResp` : le conteneur est protégé après le contenu qu'il
+  // enveloppe) : on restaure jusqu'à ce qu'il n'en reste plus. La borne
+  // évite toute boucle infinie si un contenu portait un jeton par hasard.
+  for (let pass = 0; pass < 10 && /\uE000\d+\uE001/.test(output); pass++) {
+    output = output.replace(
+      /\uE000(\d+)\uE001/g,
+      (_, index: string) => protectedSegments[Number(index)],
+    )
+  }
   // Un \ en fin de contenu (issu d'un <br> final) formerait \] avec l'accolade
   // fermante d'un bloc [contenu] Typst → délimiteur non fermé.
   return output.trim().replace(/\\+$/, '')

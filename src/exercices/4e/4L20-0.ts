@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { equation1erDegre1Inconnue } from '../../lib/outils/equations'
@@ -98,7 +98,12 @@ export default class ExerciceEquationASolutionEntiere extends Exercice {
         (this.correctionDetaillee
           ? equation.correctionDetaillee
           : equation.correction)
-      setReponse(this, i, equation.reponse, { signe: !!this.sup })
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: equation.reponse } },
+        { signe: !!this.sup },
+      )
       if (this.questionJamaisPosee(i, equation.a, equation.b, equation.c)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
