@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -109,7 +109,12 @@ export default class ExerciceSimplificationSommeAlgebriqueOld extends Exercice {
           ' = ' +
           miseEnEvidence(texNombre(a + b, 1)) +
           ' $'
-        setReponse(this, i, arrondi(a + b), { digits: 2, signe: true })
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: arrondi(a + b) } },
+          { formatInteractif: 'mathlive', digits: 2, signe: true },
+        )
       } else {
         texte +=
           '$ ' +
@@ -128,7 +133,12 @@ export default class ExerciceSimplificationSommeAlgebriqueOld extends Exercice {
           ' = ' +
           miseEnEvidence(texNombre(a - b, 1)) +
           ' $'
-        setReponse(this, i, arrondi(a - b), { digits: 2, signe: true })
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: arrondi(a - b) } },
+          { formatInteractif: 'mathlive', digits: 2, signe: true },
+        )
       }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
         texteAvant: `$${sp()}=$`,

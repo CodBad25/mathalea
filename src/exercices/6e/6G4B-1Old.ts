@@ -11,7 +11,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -223,7 +223,12 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
           },
         )
       }
-      setReponse(this, i * nbAngles, abs(angC))
+      handleAnswers(
+        this,
+        i * nbAngles,
+        { reponse: { value: abs(angC) } },
+        { formatInteractif: 'mathlive' },
+      )
       if (context.isAmc) {
         propositionsAMC[0] = {
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -295,7 +300,12 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
             },
           )
         }
-        setReponse(this, i * nbAngles + 1, abs(angD))
+        handleAnswers(
+          this,
+          i * nbAngles + 1,
+          { reponse: { value: abs(angD) } },
+          { formatInteractif: 'mathlive' },
+        )
         if (context.isAmc) {
           propositionsAMC[1] = {
             type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -377,7 +387,12 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
               },
             )
           }
-          setReponse(this, i * nbAngles + 2, abs(angE))
+          handleAnswers(
+            this,
+            i * nbAngles + 2,
+            { reponse: { value: abs(angE) } },
+            { formatInteractif: 'mathlive' },
+          )
           if (context.isAmc) {
             propositionsAMC[2] = {
               type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -460,7 +475,12 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
                 },
               )
             }
-            setReponse(this, i * nbAngles + 3, abs(angF))
+            handleAnswers(
+              this,
+              i * nbAngles + 3,
+              { reponse: { value: abs(angF) } },
+              { formatInteractif: 'mathlive' },
+            )
             if (context.isAmc) {
               propositionsAMC[3] = {
                 type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen

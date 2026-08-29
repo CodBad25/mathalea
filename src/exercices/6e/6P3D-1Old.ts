@@ -1,8 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -112,7 +109,13 @@ export default class ProblemesDeProportionnalité extends Exercice {
           texteCorr +=
             'Donc le résultat est ' +
             `$${miseEnEvidence(texNombre(quantite))}$ ${unité}.`
-          if (context.isAmc) setReponse(this, i, quantite)
+          if (context.isAmc)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: quantite } },
+              { formatInteractif: 'mathlive' },
+            )
           else handleAnswers(this, i, { reponse: { value: quantite } })
           break
         }
@@ -135,7 +138,13 @@ export default class ProblemesDeProportionnalité extends Exercice {
           texteCorr +=
             'Donc le résultat est ' +
             `$${miseEnEvidence(texNombre(quantite * f))}$ ${unité}.`
-          if (context.isAmc) setReponse(this, i, quantite * f)
+          if (context.isAmc)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: quantite * f } },
+              { formatInteractif: 'mathlive' },
+            )
           else handleAnswers(this, i, { reponse: { value: quantite * f } })
           break
         }
@@ -158,7 +167,13 @@ export default class ProblemesDeProportionnalité extends Exercice {
           texteCorr +=
             'Donc le résultat est ' +
             `$${miseEnEvidence(texNombre(quantite))}$ ${unité}.`
-          if (context.isAmc) setReponse(this, i, quantite)
+          if (context.isAmc)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: quantite } },
+              { formatInteractif: 'mathlive' },
+            )
           else handleAnswers(this, i, { reponse: { value: quantite } })
           break
         }
@@ -181,7 +196,13 @@ export default class ProblemesDeProportionnalité extends Exercice {
           texteCorr +=
             'Donc le résultat est ' +
             `$${miseEnEvidence(cartons * f)}$ cartons.`
-          if (context.isAmc) setReponse(this, i, cartons * f)
+          if (context.isAmc)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: cartons * f } },
+              { formatInteractif: 'mathlive' },
+            )
           else handleAnswers(this, i, { reponse: { value: cartons * f } })
           break
         }
@@ -203,7 +224,13 @@ export default class ProblemesDeProportionnalité extends Exercice {
           texteCorr += `$${cartons * f}~\\text{cartons} \\div ${f} = ${cartons}~\\text{cartons}$<br>`
           texteCorr +=
             'Donc le résultat est ' + `$${miseEnEvidence(cartons)}$ cartons.`
-          if (context.isAmc) setReponse(this, i, cartons)
+          if (context.isAmc)
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: cartons } },
+              { formatInteractif: 'mathlive' },
+            )
           else handleAnswers(this, i, { reponse: { value: cartons } })
           break
         }

@@ -33,30 +33,29 @@ import {
   inferNumericValueForAMC,
 } from './amc/amcInferenceHelpers'
 import { isStatic, isSvelte } from './components/componentsUtils'
-import { listOfCustomElements } from './customElements/MathaleaCustomElement'
-import { referentielMathadata } from './components/mathadataReferentiel'
-import { retrieveResourceFromUuid } from './components/refUtils'
-import { referentielBanquesExternes } from './stores/banquesExternesStore'
-import { estUuidBanqueExterne } from './types/banquesExternes'
 import {
   showDialogForLimitedTime,
   showPopupAndWait,
 } from './components/dialogs'
+import { referentielMathadata } from './components/mathadataReferentiel'
+import { retrieveResourceFromUuid } from './components/refUtils'
 import { resizeContent } from './components/sizeTools'
 import { delay } from './components/time'
 import { decrypt, isCrypted } from './components/urls'
 import { checkForServerUpdate } from './components/version'
 import { createURL } from './createURL'
+import { listOfCustomElements } from './customElements/MathaleaCustomElement'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { isHtmlDocumentText } from './httpResponses'
 import { normaliseCoeffBareme } from './interactif/baremeExercice'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
-import { handleAnswers, setReponse } from './interactif/gestionInteractif'
+import { handleAnswers } from './interactif/gestionInteractif'
 import { buildSimpleVersionQcm } from './interactif/qcmBuilder'
 import { optionsKatex } from './latex/Katex'
 import { Complexe } from './mathFonctions/Complexe'
 import { shuffle } from './outils/arrayOutils'
 import { renderScratchDiv } from './renderScratch'
+import { referentielBanquesExternes } from './stores/banquesExternesStore'
 import { canOptions } from './stores/canStore'
 import {
   exercicesParams,
@@ -71,6 +70,7 @@ import {
   referentielLocale,
   updateURLFromReferentielLocale,
 } from './stores/languagesStore'
+import { estUuidBanqueExterne } from './types/banquesExternes'
 import {
   isIntegerInRange0to2,
   isIntegerInRange0to4,
@@ -1145,10 +1145,6 @@ export function mathaleaHandleExerciceSimple(
           typeof exercice.reponse.reponse.value === 'string'
         ) {
           handleAnswers(exercice, i, exercice.reponse)
-        } else {
-          setReponse(exercice, i, String(exercice.reponse), {
-            formatInteractif: exercice.formatInteractif ?? 'calcul',
-          })
         }
         // Handle AMC array
         if (context.isAmc) {

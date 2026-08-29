@@ -4,7 +4,7 @@ import { Tableau } from '../../lib/2d/tableau'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -417,20 +417,23 @@ export default class CalculerCoeffPropo extends Exercice {
               3 * i,
               KeyboardType.clavierDeBaseAvecFraction,
             )
-          setReponse(this, 3 * i, coefficient, {
-            formatInteractif: coefficientRationnel ? 'fractionEgale' : 'calcul',
-          })
+          handleAnswers(
+            this,
+            3 * i,
+            { reponse: { value: coefficient } },
+            { formatInteractif: 'mathlive' },
+          )
           texte += `<br>Valeur de la grandeur ${reponsesAttendue.reponse1.lettre} pour la colonne ${reponsesAttendue.reponse1.colonne} :`
           texte += ajouteChampTexteMathLive(
             this,
             3 * i + 1,
             KeyboardType.clavierNumbers,
           )
-          setReponse(
+          handleAnswers(
             this,
             3 * i + 1,
-            reponsesAttendue.reponse1.reponse.valeur,
-            { formatInteractif: 'calcul' },
+            { reponse: { value: reponsesAttendue.reponse1.reponse.valeur } },
+            { formatInteractif: 'mathlive' },
           )
           texte += `<br>Valeur de la grandeur ${reponsesAttendue.reponse2.lettre} pour la colonne ${reponsesAttendue.reponse2.colonne} :`
           texte += ajouteChampTexteMathLive(
@@ -438,11 +441,11 @@ export default class CalculerCoeffPropo extends Exercice {
             3 * i + 2,
             KeyboardType.clavierNumbers,
           )
-          setReponse(
+          handleAnswers(
             this,
             3 * i + 2,
-            reponsesAttendue.reponse2.reponse.valeur,
-            { formatInteractif: 'calcul' },
+            { reponse: { value: reponsesAttendue.reponse2.reponse.valeur } },
+            { formatInteractif: 'mathlive' },
           )
         }
       } else {

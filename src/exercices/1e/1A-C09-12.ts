@@ -60,7 +60,7 @@ export default class FactoriserXCommun extends ExerciceQcmA {
       ]).slice(0, 3)
 
       this.enonce = 'Soit $x$ un réel.<br>'
-      this.enonce += `Quelle est une forme factorisée de $${expression}$ ?`
+      this.enonce += `Parmi ces $4$ expressions, quelle expression est une forme factorisée de $${expression}$ ?`
 
       this.correction = `Les deux termes de $${expression}$ contiennent le facteur commun $x$.<br>
       $\\begin{aligned}
@@ -68,7 +68,7 @@ export default class FactoriserXCommun extends ExerciceQcmA {
       &=x\\times\\left(${reduireAxPlusB(a, 0)}\\right)+x\\times ${ecritureParentheseSiNegatif(b)}\\\\
       &=x\\left(${facteurRestant}\\right).
       \\end{aligned}$<br>
-      Une forme factorisée est donc $${miseEnEvidence(bonneReponse)}$.`
+      Une forme factorisée de $${expression}$ est donc $${miseEnEvidence(bonneReponse)}$.`
 
       this.reponses = [
         `$${bonneReponse}$`,

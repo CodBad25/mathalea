@@ -181,11 +181,7 @@ this.autoCorrectionAMC[i] = {
 ```
 
 Si l'interactivité accepte des fractions équivalentes, AMC ne sait pas corriger toutes les écritures possibles avec une seule zone. Modifiez alors la consigne AMC, par exemple "Donner la fraction irréductible", et fournissez cette fraction précise.
-
-Pour les exercices anciens utilisant `setReponse(..., {
-formatInteractif: 'fractionEgale' })`, ce format est un mode de comparaison
-legacy, et non le format de composant produit ensuite par `handleAnswers()`. La
-passe AMC réduit la fraction avant de calculer le nombre de cases ; si son
+La passe AMC réduit la fraction avant de calculer le nombre de cases ; si son
 dénominateur réduit vaut `1`, elle exporte directement l'entier correspondant.
 
 ### Intervalles et valeurs approchées

@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -115,8 +115,18 @@ export default class DivisionsEuclidiennesEgalite2Old extends Exercice {
         ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.clavierDeBase, {
           texteAvant: ' Reste : ',
         })
-      setReponse(this, 2 * i, q)
-      setReponse(this, 2 * i + 1, r)
+      handleAnswers(
+        this,
+        2 * i,
+        { reponse: { value: q } },
+        { formatInteractif: 'mathlive' },
+      )
+      handleAnswers(
+        this,
+        2 * i + 1,
+        { reponse: { value: r } },
+        { formatInteractif: 'mathlive' },
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte,

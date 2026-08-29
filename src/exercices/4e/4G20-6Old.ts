@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -100,7 +100,12 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             reponse = texNombre(Math.sqrt(a), 0)
             reponseG = texNombre(Math.floor(Math.sqrt(a)), 0)
             reponseD = texNombre(Math.ceil(Math.sqrt(a)), 0)
-            setReponse(this, indexRep, Math.round(Math.sqrt(a)))
+            handleAnswers(
+              this,
+              indexRep,
+              { reponse: { value: Math.round(Math.sqrt(a)) } },
+              { formatInteractif: 'mathlive' },
+            )
             nbDec = 0
             break
           case 'dixieme':
@@ -108,7 +113,12 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             reponse = texNombre(Math.sqrt(a), 1)
             reponseG = texNombre(Math.floor(Math.sqrt(a) * 10) / 10, 1)
             reponseD = texNombre(Math.ceil(Math.sqrt(a) * 10) / 10, 1)
-            setReponse(this, indexRep, Math.sqrt(a).toFixed(1))
+            handleAnswers(
+              this,
+              indexRep,
+              { reponse: { value: Math.sqrt(a).toFixed(1) } },
+              { formatInteractif: 'mathlive' },
+            )
             nbDec = 1
             break
           case 'centieme':
@@ -117,7 +127,12 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             reponse = texNombre(Math.sqrt(a), 2)
             reponseG = texNombre(Math.floor(Math.sqrt(a) * 100) / 100, 2)
             reponseD = texNombre(Math.ceil(Math.sqrt(a) * 100) / 100, 2)
-            setReponse(this, indexRep, Math.sqrt(a).toFixed(2))
+            handleAnswers(
+              this,
+              indexRep,
+              { reponse: { value: Math.sqrt(a).toFixed(2) } },
+              { formatInteractif: 'mathlive' },
+            )
             nbDec = 2
             break
         }
@@ -156,8 +171,18 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             indexRep + 1,
             KeyboardType.clavierNumbers,
           )
-          setReponse(this, indexRep, reponseG)
-          setReponse(this, indexRep + 1, reponseD)
+          handleAnswers(
+            this,
+            indexRep,
+            { reponse: { value: reponseG } },
+            { formatInteractif: 'mathlive' },
+          )
+          handleAnswers(
+            this,
+            indexRep + 1,
+            { reponse: { value: reponseD } },
+            { formatInteractif: 'mathlive' },
+          )
         }
         texteCorr = `$${reponseG}^2 = ${reponseG ** 2}$ et $${reponseD}^2 = ${reponseD ** 2}$.<br>`
         texteCorr += `Or $${reponseG ** 2} < ${a} < ${reponseD ** 2}$,<br>`

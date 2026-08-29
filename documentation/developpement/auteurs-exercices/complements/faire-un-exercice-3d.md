@@ -213,7 +213,7 @@ En AMC, éviter que la réponse dépende d'une manipulation du canvas. Si l'exer
 Le canvas 3D est un support visuel, pas un système de réponse. Pour demander une réponse, utiliser les mécanismes interactifs standards :
 
 - `mathLive` ou `ajouteChampTexteMathLive()` pour une valeur numérique ou algébrique ;
-- `setReponse()` ou `handleAnswers()` pour déclarer la réponse attendue ;
+  `handleAnswers()` pour déclarer la réponse attendue ;
 - `qcm` et `propositionsQcm()` quand la réponse est un choix.
 
 Ne pas exiger que l'élève clique dans la scène 3D pour que la réponse soit vérifiable, sauf si un vrai composant interactif dédié existe et que le même exercice reste compréhensible sans WebGL. Les boutons `canvas3dButton` peuvent piloter une animation ou une aide visuelle, mais ils ne remplacent pas le champ de réponse MathALÉA.

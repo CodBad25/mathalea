@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -93,7 +93,12 @@ export default class ArrondirUneValeur4e extends Exercice {
       // texteCorr = `Quand on écrit sur la calculatrice $${nb}$, elle renvoie : $${texNombre(n, 10)}.$`
       texteCorr = `Arrondi à l'unité de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 0))}$`
-      setReponse(this, 3 * i, n.round())
+      handleAnswers(
+        this,
+        3 * i,
+        { reponse: { value: n.round() } },
+        { formatInteractif: 'mathlive' },
+      )
 
       texte += '<br>Son arrondi au dixième est : '
       texte += this.interactif
@@ -101,7 +106,12 @@ export default class ArrondirUneValeur4e extends Exercice {
         : '$\\ldots\\ldots\\ldots$'
       texteCorr += `<br>Arrondi au dixième de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 1, true))}$`
-      setReponse(this, 3 * i + 1, n.toDP(1))
+      handleAnswers(
+        this,
+        3 * i + 1,
+        { reponse: { value: n.toDP(1) } },
+        { formatInteractif: 'mathlive' },
+      )
 
       texte += '<br>Son arrondi au centième est : '
       texte += this.interactif
@@ -109,7 +119,12 @@ export default class ArrondirUneValeur4e extends Exercice {
         : '$\\ldots\\ldots\\ldots$'
       texteCorr += `<br>Arrondi au centième de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 2, true))}$`
-      setReponse(this, 3 * i + 2, n.toDP(2))
+      handleAnswers(
+        this,
+        3 * i + 2,
+        { reponse: { value: n.toDP(2) } },
+        { formatInteractif: 'mathlive' },
+      )
 
       if (this.questionJamaisPosee(i, n)) {
         // Si la question n'a jamais été posée, on en créé une autre

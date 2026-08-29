@@ -1,4 +1,5 @@
-import CalculAstucieuxAvecDifferenceCarre from '../can/2e/can2N41-01'
+import CalculAstucieuxAvecDifferenceCarre from "../can/2e/can2L12-01"
+
 export const titre = 'Utiliser une égalité remarquable pour calculer'
 export const dateDePublication = '14/10/2025'
 export const amcReady = true

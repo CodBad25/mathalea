@@ -99,9 +99,6 @@ export default class EcrireUneExpressionNumerique extends Exercice {
       nbOperations = listeTypeDeQuestions[i]
       val1 = randint(2, 5)
       val2 = randint(6, 9)
-      if (this.version > 2 && nbOperations === 1 && !this.litteral) {
-        nbOperations++
-      }
       if (!this.litteral) {
         const sousCas = listeSousCasParNbOperation[nbOperations - 1][i]
         resultats = choisirExpressionNumerique(

@@ -202,7 +202,7 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
       pasAge,
       habitantsParCarreau,
     )
-    this.enonce = `le diagramme en barres ci-dessous représente la répartition des âges des habitants d'un village des Cévennes.<br>
+    this.enonce = `L'histogramme ci-dessous représente la répartition des âges des habitants d'un village des Cévennes.<br>
       ${figure}<br>
       On note $c$ le nombre de classes d'âge, $N$ le nombre total d'habitants du village et $n$ le nombre d'habitants âgés de $${seuil}$ ans ou plus.<br>
       Soit $t=c+N+n$. Alors $t$ est égal à :`
@@ -213,11 +213,11 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
       Un carreau représente ici $${habitantsParCarreau}$ habitants.<br><br>
       Il y a $${nombreClasses}$ rectangles, donc $c=${nombreClasses}$.<br><br>
       L'aire totale des rectangles est de $${calculAireTotale}=${aireTotale}$ carreaux.<br>
-      Ainsi, $N=${aireTotale}\\times ${habitantsParCarreau}=${effectifTotal}$.<br><br>
+      Ainsi, $N=${aireTotale}\\times ${habitantsParCarreau}=${texNombre(effectifTotal)}$.<br><br>
       À partir de $${seuil}$ ans, l'aire des rectangles est de $${calculAireApresSeuil}=${aireApresSeuil}$ carreaux.<br>
-      Ainsi, $n=${aireApresSeuil}\\times ${habitantsParCarreau}=${effectifApresSeuil}$.<br><br>
+      Ainsi, $n=${aireApresSeuil}\\times ${habitantsParCarreau}=${texNombre(effectifApresSeuil)}$.<br><br>
       On obtient donc :<br>
-      $t=${nombreClasses}+${effectifTotal}+${effectifApresSeuil}=${miseEnEvidence(texNombre(resultat, 0))}$.`
+      $t=${nombreClasses}+${texNombre(effectifTotal)}+${texNombre(effectifApresSeuil)}=${miseEnEvidence(texNombre(resultat, 0))}$.`
   }
 
   versionAleatoire: () => void = () => {

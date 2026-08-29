@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle2tableaux } from '../../lib/outils/arrayOutils'
 import { numAlpha } from '../../lib/outils/outilString'
@@ -84,7 +84,12 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
       texteCorr =
         numAlpha(0) +
         `L'image de $${a}$ par la fonction $f$ est $${b}$, on note $f(${a})=${b}$.<br>`
-      setReponse(this, 6 * i, b)
+      handleAnswers(
+        this,
+        6 * i,
+        { reponse: { value: b } },
+        { formatInteractif: 'mathlive' },
+      )
       texte += ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
@@ -103,7 +108,12 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
         i * 6 + 1,
         KeyboardType.clavierDeBase,
       )
-      setReponse(this, i * 6 + 1, d)
+      handleAnswers(
+        this,
+        i * 6 + 1,
+        { reponse: { value: d } },
+        { formatInteractif: 'mathlive' },
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, d),
@@ -112,7 +122,12 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
 
       let texte3 = `Déterminer ${lang === 'fr-CH' ? 'la préimage' : "l'antécédent ou les antécédents"} de $${a}$ par la fonction $f$.`
       const texteCorr3 = `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${d}$, on note $f(${d})=${a}$.`
-      setReponse(this, i * 6 + 2, d)
+      handleAnswers(
+        this,
+        i * 6 + 2,
+        { reponse: { value: d } },
+        { formatInteractif: 'mathlive' },
+      )
       texte3 += ajouteChampTexteMathLive(
         this,
         i * 6 + 2,
@@ -130,9 +145,17 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
 
       let texte4 = `Déterminer l'antécédent ou les antécédents de $${d}$ par la fonction $f$.`
       const texteCorr4 = `$${d}$ ${lang === 'fr-CH' ? 'deux éléments dans la préimage' : 'a deux antécédents'} par la fonction $f$ qui sont $${c}$ et $${e}$, on note $f(${c})=f(${e})=${d}$.`
-      setReponse(this, i * 6 + 3, [`${c};${e}`, `${e};${c}`], {
-        formatInteractif: 'texte',
-      })
+      handleAnswers(
+        this,
+        i * 6 + 3,
+        {
+          reponse: {
+            value: [`${c};${e}`, `${e};${c}`],
+            options: { texteAvecCasse: true },
+          },
+        },
+        { formatInteractif: 'mathlive' },
+      )
       texte4 += ajouteChampTexteMathLive(
         this,
         i * 6 + 3,
@@ -169,9 +192,17 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
         i * 6 + 4,
         KeyboardType.clavierDeBase,
       )
-      setReponse(this, i * 6 + 4, [`f(${c})=${d}`, `${d}`], {
-        formatInteractif: 'texte',
-      })
+      handleAnswers(
+        this,
+        i * 6 + 4,
+        {
+          reponse: {
+            value: [`f(${c})=${d}`, `${d}`],
+            options: { texteAvecCasse: true },
+          },
+        },
+        { formatInteractif: 'mathlive' },
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(4) + `Compléter : $f(${c})=\\ldots$`, d),
@@ -189,9 +220,17 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
         i * 6 + 5,
         KeyboardType.clavierDeBase,
       )
-      setReponse(this, i * 6 + 5, [`f(${f})=${c}`, `${f}`], {
-        formatInteractif: 'texte',
-      })
+      handleAnswers(
+        this,
+        i * 6 + 5,
+        {
+          reponse: {
+            value: [`f(${f})=${c}`, `${f}`],
+            options: { texteAvecCasse: true },
+          },
+        },
+        { formatInteractif: 'mathlive' },
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(5) + `Compléter : $f(\\ldots)=${c}$`, f),

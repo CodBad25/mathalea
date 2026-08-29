@@ -145,3 +145,25 @@ describe('normalizeFraction', () => {
     })
   })
 })
+
+describe('texSimplificationAvecEtapes', () => {
+  describe('Fractions entières (dénominateur 1)', () => {
+    it('ne doit pas produire de \\dfrac avec dénominateur vide pour -10/1 (factorisation)', () => {
+      const f = new FractionEtendue(10, 1).multiplieEntier(-1)
+      const tex = f.texSimplificationAvecEtapes(true, '#F15929')
+      expect(tex).not.toContain('}{}')
+      expect(tex).not.toContain('\\dfrac')
+      expect(tex).toContain('-10')
+    })
+
+    it('retourne uniquement le résultat pour 10/1 (factorisation)', () => {
+      const f = new FractionEtendue(10, 1)
+      expect(f.texSimplificationAvecEtapes(true)).toBe('=10')
+    })
+
+    it('gère le signe pour -7/1 (factorisation)', () => {
+      const f = new FractionEtendue(-7, 1)
+      expect(f.texSimplificationAvecEtapes(true)).toBe('=-7')
+    })
+  })
+})

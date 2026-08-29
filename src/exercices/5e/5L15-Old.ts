@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
@@ -269,21 +269,53 @@ export default class TesterUneEgaliteOld extends Exercice {
 
       texte = `Tester l'égalité ${expression} pour $${sp(1)}x=${x1}${sp(1)}$ puis pour $${sp(1)}x=${x2}$.`
       if (this.interactif && !context.isAmc) {
-        setReponse(this, 6 * i, rep1)
-        setReponse(this, 6 * i + 1, rep2)
-        setReponse(
+        handleAnswers(
+          this,
+          6 * i,
+          { reponse: { value: rep1 } },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
+          this,
+          6 * i + 1,
+          { reponse: { value: rep2 } },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
           this,
           6 * i + 2,
-          rep1 === rep2 ? ['Oui', 'oui', 'OUI'] : ['Non', 'non', 'NON'],
-          { formatInteractif: 'texte' },
+          {
+            reponse: {
+              value:
+                rep1 === rep2 ? ['Oui', 'oui', 'OUI'] : ['Non', 'non', 'NON'],
+              options: { texteAvecCasse: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
-        setReponse(this, 6 * i + 3, rep3)
-        setReponse(this, 6 * i + 4, rep4)
-        setReponse(
+        handleAnswers(
+          this,
+          6 * i + 3,
+          { reponse: { value: rep3 } },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
+          this,
+          6 * i + 4,
+          { reponse: { value: rep4 } },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
           this,
           6 * i + 5,
-          rep3 === rep4 ? ['Oui', 'oui', 'OUI'] : ['Non', 'non', 'NON'],
-          { formatInteractif: 'texte' },
+          {
+            reponse: {
+              value:
+                rep3 === rep4 ? ['Oui', 'oui', 'OUI'] : ['Non', 'non', 'NON'],
+              options: { texteAvecCasse: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
         texte +=
           `<br> ${sp(10)}Pour $x=${x1}$, d'une part, ${sp(5)} ${expression.split('=')[0]}$ = ` +

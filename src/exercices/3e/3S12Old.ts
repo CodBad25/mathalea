@@ -2,7 +2,7 @@ import { traceBarre } from '../../lib/2d/diagrammes'
 import { repere } from '../../lib/2d/reperes'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionSigne } from '../../lib/outils/deprecatedFractions'
@@ -238,7 +238,12 @@ export default class CalculEffectifFrequence extends Exercice {
         ' ' +
         lstAnimauxExo[0] +
         '. <br>'
-      setReponse(this, 4 * ee, lstNombresAnimaux[0])
+      handleAnswers(
+        this,
+        4 * ee,
+        { reponse: { value: lstNombresAnimaux[0] } },
+        { formatInteractif: 'mathlive' },
+      )
       // question 2
       let Ntotal = lstNombresAnimaux[0]
       texteCorr +=
@@ -283,10 +288,13 @@ export default class CalculEffectifFrequence extends Exercice {
         sp(1) +
         symbolePourCent +
         '. <br>'
-      setReponse(
+      handleAnswers(
         this,
         4 * ee + 1,
-        arrondi((100 * lstNombresAnimaux[1]) / Ntotal, 1),
+        {
+          reponse: { value: arrondi((100 * lstNombresAnimaux[1]) / Ntotal, 1) },
+        },
+        { formatInteractif: 'mathlive' },
       )
       // question 3
       texteCorr +=
@@ -303,7 +311,12 @@ export default class CalculEffectifFrequence extends Exercice {
         "L'effectif des quadrupèdes est donc : " +
         texteEnCouleurEtGras(NTotalQuadri) +
         '.<br>'
-      setReponse(this, 4 * ee + 2, NTotalQuadri)
+      handleAnswers(
+        this,
+        4 * ee + 2,
+        { reponse: { value: NTotalQuadri } },
+        { formatInteractif: 'mathlive' },
+      )
       // question 4
       let NTotalOiseaux = lstNombresAnimaux[3]
       texteCorr +=
@@ -336,7 +349,12 @@ export default class CalculEffectifFrequence extends Exercice {
         sp(1) +
         symbolePourCent +
         '. <br>'
-      setReponse(this, 4 * ee + 3, arrondi((100 * NTotalOiseaux) / Ntotal, 1))
+      handleAnswers(
+        this,
+        4 * ee + 3,
+        { reponse: { value: arrondi((100 * NTotalOiseaux) / Ntotal, 1) } },
+        { formatInteractif: 'mathlive' },
+      )
 
       if (context.isAmc) {
         this.autoCorrectionAMC[ee] = {

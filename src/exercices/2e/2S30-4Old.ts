@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import FractionEtendue from '../../modules/FractionEtendue'
 
@@ -206,9 +206,12 @@ function unePieceDeuxUrnes(
       i,
       KeyboardType.clavierDeBaseAvecFraction,
     )
-  setReponse(exercice, i, new FractionEtendue(p[choix].n, p[choix].d), {
-    formatInteractif: 'fractionEgale',
-  })
+  handleAnswers(
+    exercice,
+    i,
+    { reponse: { value: new FractionEtendue(p[choix].n, p[choix].d) } },
+    { formatInteractif: 'mathlive' },
+  )
   texteCorr =
     "La probabilité que la pièce tombe sur 'Pile' est de $\\dfrac{1}{2}$ et "
   texteCorr += `la probabilité de tirer une boule ${boules[choix]} dans la première urne est de $${texProba(urne1.getProba(B[choix]))}$.<br>`
@@ -447,7 +450,12 @@ function urneDeuxTiragesAvecRemise(
       i,
       KeyboardType.clavierDeBaseAvecFraction,
     ) + '<br>'
-  setReponse(exercice, i, probaChoix, { formatInteractif: 'fractionEgale' })
+  handleAnswers(
+    exercice,
+    i,
+    { reponse: { value: probaChoix } },
+    { formatInteractif: 'mathlive' },
+  )
   texte += `${numAlpha(1)} Déterminer la probabilité d'obtenir deux boules de la même couleur.`
   texte +=
     ajouteChampTexteMathLive(
@@ -455,7 +463,12 @@ function urneDeuxTiragesAvecRemise(
       i + 1,
       KeyboardType.clavierDeBaseAvecFraction,
     ) + '<br>'
-  setReponse(exercice, i + 1, proba1et2, { formatInteractif: 'fractionEgale' })
+  handleAnswers(
+    exercice,
+    i + 1,
+    { reponse: { value: proba1et2 } },
+    { formatInteractif: 'mathlive' },
+  )
   texte += `${numAlpha(2)} Déterminer la probabilité d'obtenir deux boules de couleurs différentes.`
   texte +=
     ajouteChampTexteMathLive(
@@ -463,7 +476,12 @@ function urneDeuxTiragesAvecRemise(
       i + 2,
       KeyboardType.clavierDeBaseAvecFraction,
     ) + '<br>'
-  setReponse(exercice, i + 2, proba4, { formatInteractif: 'fractionEgale' })
+  handleAnswers(
+    exercice,
+    i + 2,
+    { reponse: { value: proba4 } },
+    { formatInteractif: 'mathlive' },
+  )
   let texteCorr = ''
   texteCorr += "On a représenté l'expérience par le tableau ci-dessous :<br>"
   texteCorr += tableau + '<br>'

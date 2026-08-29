@@ -3,7 +3,7 @@ import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -165,10 +165,30 @@ export default class BetaModeleSpline extends Exercice {
         solsMax!.length === 1 ? solsMax![0] : 'On a un problème'
       const solutionMin =
         solsMin!.length === 1 ? solsMin![0] : 'On a un problème'
-      setReponse(this, 4 * i, Math.max(...nuage.map((el) => el.y)))
-      setReponse(this, 4 * i + 1, solutionMax)
-      setReponse(this, 4 * i + 2, Math.min(...nuage.map((el) => el.y)))
-      setReponse(this, 4 * i + 3, solutionMin)
+      handleAnswers(
+        this,
+        4 * i,
+        { reponse: { value: Math.max(...nuage.map((el) => el.y)) } },
+        { formatInteractif: 'mathlive' },
+      )
+      handleAnswers(
+        this,
+        4 * i + 1,
+        { reponse: { value: solutionMax } },
+        { formatInteractif: 'mathlive' },
+      )
+      handleAnswers(
+        this,
+        4 * i + 2,
+        { reponse: { value: Math.min(...nuage.map((el) => el.y)) } },
+        { formatInteractif: 'mathlive' },
+      )
+      handleAnswers(
+        this,
+        4 * i + 3,
+        { reponse: { value: solutionMin } },
+        { formatInteractif: 'mathlive' },
+      )
 
       const texteCorrection = `Le point le plus haut de la courbe a pour coordonnées $(${solutionMax}\\,;\\,${Math.max(...nuage.map((el) => el.y))})$.<br>
       On en déduit que le maximum de $f$ est $${Math.max(...nuage.map((el) => el.y))}$. Il est atteint en $x=${solutionMax}$.<br>

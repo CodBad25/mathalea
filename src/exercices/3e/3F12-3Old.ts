@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
@@ -397,17 +397,17 @@ export default class TableauDeValeurs extends Exercice {
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         /* EE : Qu'est-ce que ce code fait dans AMC ?
         if (listeReponses[0].type === 'Fraction') {
-          if (listeReponses[0].den === 1) setReponse(this, i * 3, listeReponses[0].num, { formatInteractif: 'calcul' })
-          else setReponse(this, i * 3, listeReponses[0], { formatInteractif: 'fractionEgale' })
-        } else setReponse(this, i * 3, listeReponses[0], { formatInteractif: 'calcul' })
+          if (listeReponses[0].den === 1) handleAnswers(this, i * 3, { reponse: { value: listeReponses[0].num } }, { formatInteractif: 'mathlive' })
+          else handleAnswers(this, i * 3, { reponse: { value: listeReponses[0] } }, { formatInteractif: 'mathlive' })
+        } else handleAnswers(this, i * 3, { reponse: { value: listeReponses[0] } }, { formatInteractif: 'mathlive' })
         if (listeReponses[1].type === 'Fraction') {
-          if (listeReponses[1].den === 1) setReponse(this, i * 3 + 1, listeReponses[1].num, { formatInteractif: 'calcul' })
-          else setReponse(this, i * 3 + 1, listeReponses[1], { formatInteractif: 'fractionEgale' })
-        } else setReponse(this, i * 3 + 1, listeReponses[1], { formatInteractif: 'calcul' })
+          if (listeReponses[1].den === 1) handleAnswers(this, i * 3 + 1, { reponse: { value: listeReponses[1].num } }, { formatInteractif: 'mathlive' })
+          else handleAnswers(this, i * 3 + 1, { reponse: { value: listeReponses[1] } }, { formatInteractif: 'mathlive' })
+        } else handleAnswers(this, i * 3 + 1, { reponse: { value: listeReponses[1] } }, { formatInteractif: 'mathlive' })
         if (listeReponses[2].type === 'Fraction') {
-          if (listeReponses[2].den === 1) setReponse(this, i * 3 + 2, listeReponses[2].num, { formatInteractif: 'calcul' })
-          else setReponse(this, i * 3 + 2, listeReponses[2], { formatInteractif: 'fractionEgale' })
-        } else setReponse(this, i * 3 + 2, listeReponses[2], { formatInteractif: 'calcul' })
+          if (listeReponses[2].den === 1) handleAnswers(this, i * 3 + 2, { reponse: { value: listeReponses[2].num } }, { formatInteractif: 'mathlive' })
+          else handleAnswers(this, i * 3 + 2, { reponse: { value: listeReponses[2] } }, { formatInteractif: 'mathlive' })
+        } else handleAnswers(this, i * 3 + 2, { reponse: { value: listeReponses[2] } }, { formatInteractif: 'mathlive' })
         */
       } else if (this.interactif) {
         texte +=
@@ -422,43 +422,70 @@ export default class TableauDeValeurs extends Exercice {
 
         if (listeReponses[0] instanceof FractionEtendue) {
           if (listeReponses[0].den === 1)
-            setReponse(this, i * 3, listeReponses[0].num, {
-              formatInteractif: 'calcul',
-            })
+            handleAnswers(
+              this,
+              i * 3,
+              { reponse: { value: listeReponses[0].num } },
+              { formatInteractif: 'mathlive' },
+            )
           else
-            setReponse(this, i * 3, listeReponses[0], {
-              formatInteractif: 'fractionEgale',
-            })
+            handleAnswers(
+              this,
+              i * 3,
+              { reponse: { value: listeReponses[0] } },
+              { formatInteractif: 'mathlive' },
+            )
         } else
-          setReponse(this, i * 3, listeReponses[0], {
-            formatInteractif: 'calcul',
-          })
+          handleAnswers(
+            this,
+            i * 3,
+            { reponse: { value: listeReponses[0] } },
+            { formatInteractif: 'mathlive' },
+          )
         if (listeReponses[1] instanceof FractionEtendue) {
           if (listeReponses[1].den === 1)
-            setReponse(this, i * 3 + 1, listeReponses[1].num, {
-              formatInteractif: 'calcul',
-            })
+            handleAnswers(
+              this,
+              i * 3 + 1,
+              { reponse: { value: listeReponses[1].num } },
+              { formatInteractif: 'mathlive' },
+            )
           else
-            setReponse(this, i * 3 + 1, listeReponses[1], {
-              formatInteractif: 'fractionEgale',
-            })
+            handleAnswers(
+              this,
+              i * 3 + 1,
+              { reponse: { value: listeReponses[1] } },
+              { formatInteractif: 'mathlive' },
+            )
         } else
-          setReponse(this, i * 3 + 1, listeReponses[1], {
-            formatInteractif: 'calcul',
-          })
+          handleAnswers(
+            this,
+            i * 3 + 1,
+            { reponse: { value: listeReponses[1] } },
+            { formatInteractif: 'mathlive' },
+          )
         if (listeReponses[2] instanceof FractionEtendue) {
           if (listeReponses[2].den === 1)
-            setReponse(this, i * 3 + 2, listeReponses[2].num, {
-              formatInteractif: 'calcul',
-            })
+            handleAnswers(
+              this,
+              i * 3 + 2,
+              { reponse: { value: listeReponses[2].num } },
+              { formatInteractif: 'mathlive' },
+            )
           else
-            setReponse(this, i * 3 + 2, listeReponses[2], {
-              formatInteractif: 'fractionEgale',
-            })
+            handleAnswers(
+              this,
+              i * 3 + 2,
+              { reponse: { value: listeReponses[2] } },
+              { formatInteractif: 'mathlive' },
+            )
         } else
-          setReponse(this, i * 3 + 2, listeReponses[2], {
-            formatInteractif: 'calcul',
-          })
+          handleAnswers(
+            this,
+            i * 3 + 2,
+            { reponse: { value: listeReponses[2] } },
+            { formatInteractif: 'mathlive' },
+          )
       }
 
       texteCorr += '\\hline\n'

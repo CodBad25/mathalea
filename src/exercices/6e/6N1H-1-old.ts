@@ -1,7 +1,7 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi } from '../../lib/outils/nombres'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
@@ -220,9 +220,24 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
       )
 
       if (this.interactif && context.isHtml) {
-        setReponse(this, 3 * i, arrondi(xA / pas1 + abs0))
-        setReponse(this, 3 * i + 1, arrondi(xB / pas1 + abs0))
-        setReponse(this, 3 * i + 2, arrondi(xC / pas1 + abs0))
+        handleAnswers(
+          this,
+          3 * i,
+          { reponse: { value: arrondi(xA / pas1 + abs0) } },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
+          this,
+          3 * i + 1,
+          { reponse: { value: arrondi(xB / pas1 + abs0) } },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
+          this,
+          3 * i + 2,
+          { reponse: { value: arrondi(xC / pas1 + abs0) } },
+          { formatInteractif: 'mathlive' },
+        )
         texte +=
           '$' +
           l1 +

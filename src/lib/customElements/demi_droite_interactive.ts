@@ -1153,6 +1153,9 @@ export function demiDroiteInteractive(
 ): string {
   return DemiDroiteInteractiveElement.create({
     ...options,
+    // Le composant ne doit être interactif que si l'exercice l'est ET que
+    // l'auteur ne l'a pas explicitement figé (ex. version correction).
+    interactivityOn: exercice.interactif && (options?.interactivityOn ?? true),
     numeroExercice: exercice.numeroExercice,
     questionIndex,
   })

@@ -51,7 +51,7 @@ Un double-clic sur un contrôle de la palette de mise en page (bouton, champ) es
 Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-dessus l'aperçu (`TypstLayoutOverlay.svelte`) :
 
 - dans la marge de page (la plus proche de la colonne concernée), à hauteur de chaque liste de questions (environnement `tasks`) : nombre de colonnes (1 à 4) et espacement vertical (pas de 0,25 em) — l'énoncé (`exN`) et sa correction (`exN-corr`) se règlent indépendamment ;
-- dans la marge droite, au début de chaque exercice : insertion/modification d'un texte ou d'un titre de section (`#section[...]`, helper émis dans le préambule) **avant** cet exercice, nombre de questions (`nbQuestions`) et suppression de l'exercice (retire aussi son entrée de `exercicesParams`). Quand le nombre de questions change, les questions déjà affichées sont figées (`frozenInputs`, vidé par « Nouvelles données ») : la régénération ne rebrasse pas leurs valeurs, seules les questions ajoutées sont nouvelles ;
+- dans la marge droite, au début de chaque exercice : insertion/modification d'un texte ou d'un titre de section (`#section[...]`, helper émis dans le préambule) **avant** cet exercice, nombre de questions (`nbQuestions`), **duplication** et suppression de l'exercice (l'une comme l'autre mettent à jour `exercicesParams` et le barème de la page de garde). La copie se place juste après l'original, avec les mêmes paramètres (graine comprise, donc le même énoncé) et les mêmes réglages de palette : `shiftCarryOverForInsert` renumérote les réglages des exercices suivants et recopie ceux de l'original sur la copie. Quand le nombre de questions change, les questions déjà affichées sont figées (`frozenInputs`, vidé par « Nouvelles données ») : la régénération ne rebrasse pas leurs valeurs, seules les questions ajoutées sont nouvelles ;
 - entre les exercices : deux boutons de saut de page et de saut de colonne (ce dernier seulement en document multicolonne) — une fois insérés, ils deviennent des badges bien visibles, retirables d'un clic (le saut de page ferme et rouvre le bloc `en-colonnes`, `#pagebreak` étant interdit dans un conteneur) ;
 - à gauche du titre de la fiche : édition du titre, du sous-titre et de la ligne d'en-tête (ces champs ne sont plus dans la fenêtre Réglages ; la valeur est reportée dans les réglages persistés) — absente si l'habillage en-tête est `Aucun`, faute de bloc à éditer ;
 - en haut de la page de garde (quand un modèle est choisi) : édition de l'intitulé, de la session, de la matière, de la durée, de la mention de bas de page et des consignes — même mécanisme que le titre de la fiche, voir [Page de garde](#page-de-garde) ;
@@ -159,8 +159,8 @@ Réglages des Réglages du document, indépendants l'un de l'autre :
 Réglage `TypstDocumentOptions.coverPage` (section « Page de garde » des
 Réglages du document), sur le modèle des modèles d'épreuve de la vue PDF
 (`ExamTemplateEngine`, [`latex/LatexConfig.ts`](../../../../src/components/setup/latex/LatexConfig.ts)).
-Cinq modèles : **Aucune** (défaut), **Évaluation**, **Brevet des collèges**,
-**BAC** et **Course aux nombres**.
+Six modèles : **Aucune** (défaut), **Évaluation**, **Évaluation (bandeau
+compact)**, **Brevet des collèges**, **BAC** et **Course aux nombres**.
 
 L'intitulé, la session, la matière, la durée, la mention en bas de page
 (« Tournez la page S.V.P. ») et les consignes se modifient **directement sur
@@ -193,10 +193,11 @@ code, sans régénération) plutôt que l'argument nommé :
 )
 ```
 
-- Deux aides seulement, déclarées uniquement quand un modèle est choisi :
-  `#mathalea-couverture` (Évaluation, Brevet, BAC) et
-  `#mathalea-couverture-can`, plus `#mathalea-champ` (« Nom : ...... »)
-  commune aux deux. Ce qui distingue les trois premiers modèles n'est pas
+- Trois aides seulement, déclarées uniquement quand un modèle est choisi :
+  `#mathalea-couverture` (Évaluation, Brevet, BAC),
+  `#mathalea-couverture-can`, `#mathalea-couverture-recitation`, plus
+  `#mathalea-champ` (« Nom : ...... ») commune aux deux premières et
+  `#mathalea-points-courts` (« 4 », « 2,5 ») aux modèles à barème. Ce qui distingue les trois premiers modèles n'est pas
   réglable — c'est ce qui *fait* le modèle — et tient en trois arguments
   (`COVER_TEMPLATE_LAYOUT`) : `identite` (champs Nom/Prénom/Classe/Date) et
   `colonne-note` (colonne vide où porter la note) pour l'évaluation,
@@ -211,8 +212,15 @@ code, sans régénération) plutôt que l'argument nommé :
 - Le barème est proposé à un point par question, comme la vue PDF
   (`buildExamExercices` de [`lib/LatexGroup.ts`](../../../../src/lib/LatexGroup.ts)) ;
   chaque ligne a sa croix de suppression (comme `TexSettingsPane`) et
-  « Reprendre les exercices de la fiche » le réaligne après un ajout ou une
-  suppression, en gardant les points déjà saisis.
+  « Reprendre les exercices de la fiche » le réaligne, en gardant les points
+  déjà saisis. Ajouter, dupliquer ou supprimer un exercice met le barème à
+  jour tout seul (`insertCoverBaremeRow`/`removeCoverBaremeRowFor`), **à
+  condition qu'il suive encore la fiche un pour un** : un barème que le
+  professeur a lui-même raccourci (exercices groupés, lignes retirées) n'est
+  pas retouché, c'est le bouton qui le réaligne. De même, changer le nombre de
+  questions d'un exercice depuis la palette (`-1 q +`) reporte la différence
+  sur ses points — mais seulement tant qu'ils valent encore le nombre de
+  questions, c'est-à-dire tant qu'ils n'ont pas été réglés à la main.
 - Changer de modèle **remplace les textes qui n'ont pas été personnalisés**
   (`isDefaultCoverText`, étendu à `noteFin`) et conserve les autres : passer
   du Brevet à la Course aux nombres ne garde pas « Durée : 2 heures » ni
@@ -230,6 +238,88 @@ code, sans régénération) plutôt que l'argument nommé :
   nombres » (tableau) » ci-dessous) sélectionne aussi le format **A5**, la
   page de garde **Course aux nombres** et l'habillage en-tête **Aucun**, sauf
   si un lien partagé fixe déjà l'un de ces réglages individuellement.
+
+### Modèle « Évaluation (bandeau compact) »
+
+Sa clef interne est restée `recitation`, son nom d'origine, que portent les
+liens déjà partagés (`typstParam`) et les fiches enregistrées.
+
+Contrairement aux autres modèles, ce bandeau n'est **pas une page** : c'est
+un bandeau compact en tête de la première page, que les exercices suivent
+aussitôt (`#mathalea-couverture-recitation` ne termine pas par `pagebreak()`),
+pour les tests courts où une page de garde pleine gâcherait une feuille. Il
+tient en trois bandes :
+
+1. matière et établissement à gauche, **intitulé au centre**, durée et date à
+   droite, soulignés d'un filet de la couleur des badges ;
+2. deux colonnes, de largeurs inégales : à gauche « Nom » puis « Prénom »
+   (une ligne chacun, trait de 6 cm au plus — jamais plus large que la
+   colonne), « Signature du/de la responsable légal.e » en dessous — sans trait et
+   suivie d'un blanc, la signature se pose dans l'espace libre ; à droite la
+   grille des points ;
+3. les consignes en **pleine largeur**, une par ligne (dans la colonne des
+   champs, elles se coupaient en fin de ligne), avec la case de la note à
+   leur droite — dans le blanc laissé sous la grille — quand leur longueur
+   naturelle (mesurée) lui laisse la place ; sinon la note reprend sa place
+   sous la grille, alignée sur son bord droit.
+
+La grille prend la largeur qu'il lui faut et la colonne des champs occupe le
+reste. Passé **60 % de la largeur utile** (mesuré dans le code Typst : au-delà
+de quatre ou cinq exercices), elle n'écraserait plus qu'un filet de place pour
+écrire : elle prend alors **sa propre ligne**, sous les champs, qui se
+réorganisent pour occuper toute la largeur — « Nom » et « Prénom » côte à côte
+sur une ligne, puis la signature à gauche et la case de la note à droite (dont
+la hauteur donne la place où signer).
+Et si elle dépasse encore cette largeur (une dizaine d'exercices ou plus), elle
+est **réduite pour y tenir** (`scale` du rapport mesuré, comme `mathalea-fit`
+le fait des figures) : sans cela Typst comprime les colonnes jusqu'à faire
+chevaucher leurs textes. La case de la note, elle, n'est jamais réduite : dans
+cette disposition elle est passée à côté de la signature, au-dessus de la
+grille.
+
+Trois cases à cocher des Réglages du document, propres à ce modèle :
+
+| Réglage | Défaut | Effet |
+| --- | --- | --- |
+| Afficher la grille des points (`showBareme`) | oui | grille `Exercice / Points / Obtenus` par exercice, total compris ; sinon seul le total est rappelé (`Total : ..... / 16`) |
+| Champ de signature (`showSignature`) | oui | intitulé « Signature du/de la responsable légal.e » sous le prénom, suivi d'un blanc où signer |
+| Case pour la note (`showNote`) | oui | case haute où porter la note à la main ; décochable, la case Total de la ligne « obtenus » en tenant déjà lieu |
+
+Le barème est toujours passé à l'aide, même grille masquée : c'est lui qui
+donne le total. Ces booléens sont émis avec un repli explicite
+(`showBareme === true`, `showSignature !== false`, `showNote !== false`) : une
+fiche partagée avant leur ajout ne les porte pas, et un `undefined` dans le
+code déclencherait « Variable ou fonction inconnue ».
+
+Deux champs de texte lui sont propres : `couverture-etablissement` (déclaré
+comme les autres textes, masqué dans la palette pour les autres modèles) et la
+**session, qui y tient la date** — réglée par un **sélecteur de date**
+([`CoverDateField.svelte`](../../../../src/components/setup/typst/CoverDateField.svelte))
+présent aux deux endroits : dans les Réglages du document avec les autres
+réglages du modèle, et dans la palette de l'aperçu sous le libellé « Date ».
+Le champ est un `<input type="text">` en `jj.mm.aa` — un `<input type="date">`
+visible afficherait la date dans le format du système (`mm/dd/yyyy` sur un
+navigateur en anglais), et le plugin `@tailwindcss/forms` lui retire son icône
+de calendrier (`appearance: none`). Le calendrier natif reste donc ouvert par
+un bouton, qui appelle `showPicker()` sur un `<input type="date">` gardé à
+côté, invisible mais rendu (condition de `showPicker`). Sélectionner le modèle date la fiche du jour
+au format `jj.mm.aa` (voir
+[`coverDate.ts`](../../../../src/components/setup/typst/coverDate.ts), qui fait
+la conversion avec la valeur ISO du sélecteur). La mention de bas de page n'a
+pas d'objet ici et reste masquée.
+
+Sélectionner ce modèle règle aussi les **lignes de réponse à 2 par exercice**
+(voir juste ci-dessous).
+
+### Lignes de réponse (réglage global)
+
+`TypstDocumentOptions.answerLines` ajoute d'office ce nombre de lignes en
+pointillés à la fin de **chaque** exercice (0 par défaut, 2 à la sélection du
+modèle « Évaluation (bandeau compact) ») : c'est le pendant global du réglage par exercice de la
+palette (`TypstCarryOver.writingLines`, voir « Palette de mise en page »), qui
+garde la priorité là où il est posé. Changer le réglage global efface les
+réglages par exercice relus dans le code (`regenerateDocument({
+dropWritingLines: true })`), sans quoi ils masqueraient la nouvelle valeur.
 
 La page de garde « Course aux nombres » reprend `\pageDeGardeCan` de la sortie
 LaTeX ([`lib/latex/preambuleTex.ts`](../../../../src/lib/latex/preambuleTex.ts))

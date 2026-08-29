@@ -63,9 +63,9 @@ export default class FactoriserFacteurCommun extends ExerciceQcmA {
         // Le mauvais facteur est mis en facteur.
         `\\left(${secondFacteur}\\right)\\left(${differenceCorrecte}\\right)`,
       ]).slice(0, 2)
-
+      const expressionInitiale = `$\\left(${facteurCommun}\\right)^2-\\left(${facteurCommun}\\right)\\left(${secondFacteur}\\right)$`
       this.enonce = 'Soit $x$ un réel.<br>'
-      this.enonce += `Quelle est une forme factorisée de $\\left(${facteurCommun}\\right)^2-\\left(${facteurCommun}\\right)\\left(${secondFacteur}\\right)$ ?`
+      this.enonce += `Parmi ces $4$ expressions, quelle expression est une forme factorisée de ${expressionInitiale} ?`
 
       this.correction = `On reconnaît le facteur commun $\\left(${facteurCommun}\\right)$.<br>
       $\\begin{aligned}
@@ -74,9 +74,9 @@ export default class FactoriserFacteurCommun extends ExerciceQcmA {
       &=\\left(${facteurCommun}\\right)\\left[\\left(${facteurCommun}\\right)-\\left(${secondFacteur}\\right)\\right]\\\\
       &=\\left(${facteurCommun}\\right)\\left[${facteurCommun}${ecritureAlgebriqueSauf1(-c)}x${ecritureAlgebrique(-d)}\\right]\\\\
       &=\\left(${facteurCommun}\\right)\\left(${differenceCorrecte}\\right).
-      \\end{aligned}$<br>
-      Le signe $-$ placé devant la parenthèse change le signe de chacun de ses termes.<br>
-      Une forme factorisée est donc $${miseEnEvidence(bonneReponse)}$.`
+      \\end{aligned}$<br>`
+      // this.correction += `Le signe $-$ placé devant la parenthèse change le signe de chacun de ses termes.<br>`
+      this.correction += `Une forme factorisée de ${expressionInitiale} est donc $${miseEnEvidence(bonneReponse)}$.`
 
       this.reponses = [
         `$${bonneReponse}$`,

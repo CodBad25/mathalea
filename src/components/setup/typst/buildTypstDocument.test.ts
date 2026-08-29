@@ -1652,6 +1652,39 @@ describe('buildStandaloneExerciseCode', () => {
   )
 })
 
+describe('lignes de réponse (réglage global)', () => {
+  it('ajoute les lignes en fin de chaque exercice', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      answerLines: 2,
+    })
+    expect(code).toContain('#mathalea-lignes(2, gutter: 2em)')
+  })
+
+  it('n’ajoute rien par défaut', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      defaultTypstDocumentOptions,
+    )
+    expect(code).not.toContain('#mathalea-lignes(')
+  })
+
+  it('laisse la palette régler un exercice à part', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$' ] }), exercise({ questions: ['$2+2$'] })],
+      { ...defaultTypstDocumentOptions, answerLines: 2 },
+      {
+        writingLines: {
+          1: { position: 'endOfExercise', count: 5, spacing: 2 },
+        },
+      },
+    )
+    // l'exercice réglé garde ses 5 lignes, l'autre suit le réglage global
+    expect(code).toContain('#mathalea-lignes(5, gutter: 2em)')
+    expect(code).toContain('#mathalea-lignes(2, gutter: 2em)')
+  })
+})
+
 describe('page de garde', () => {
   const cover = (
     overrides: Partial<TypstDocumentOptions['coverPage']> = {},
@@ -1776,6 +1809,133 @@ describe('page de garde', () => {
       cover({ template: 'brevet', showBareme: false }),
     )
     expect(code).toContain('  bareme: (),')
+  })
+
+  describe('modèle « Récitation »', () => {
+    const recitation = (
+      overrides: Partial<TypstDocumentOptions['coverPage']> = {},
+    ) =>
+      cover({
+        template: 'recitation',
+        titre: 'Récitation – S2',
+        matiere: 'Mathématiques 11ème CT',
+        etablissement: 'CO des Coudriers',
+        duree: '20 minutes',
+        session: '02.09.24',
+        consignes: ['Justifie chaque réponse.'],
+        bareme: [4, 6, 6],
+        showBareme: false,
+        ...overrides,
+      })
+
+    it('émet le bandeau, l’établissement et la date, sans page de garde pleine', () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        recitation(),
+      )
+      expect(code).toContain('#let mathalea-couverture-recitation(')
+      expect(code).toContain('#mathalea-couverture-recitation(')
+      expect(code).toContain(
+        '#let couverture-etablissement = "CO des Coudriers"',
+      )
+      // la session tient la date, à droite sous la durée
+      expect(code).toContain('  date: couverture-session,')
+      // les modèles pleine page n'ont rien à faire dans ce document
+      expect(code).not.toContain('#let mathalea-couverture(')
+      // le bandeau enchaîne sur les exercices : pas de saut de page
+      expect(code).not.toContain('pagebreak()\n}')
+    })
+
+    it('ajoute le champ de signature et sait le retirer', () => {
+      const avec = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        recitation(),
+      )
+      expect(avec).toContain('  signature: true,')
+      const sans = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        recitation({ showSignature: false }),
+      )
+      expect(sans).toContain('  signature: false,')
+    })
+
+    it('ajoute la case de la note, décochable', () => {
+      const avec = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        recitation(),
+      )
+      expect(avec).toContain('  note: true,')
+      const sans = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        recitation({ showNote: false }),
+      )
+      expect(sans).toContain('  note: false,')
+    })
+
+    it('émet des booléens même pour une fiche enregistrée avant ces réglages', () => {
+      // une fiche partagée avant l'ajout de `showSignature` n'a pas le champ :
+      // `undefined` dans le code ferait « Variable ou fonction inconnue »
+      const options = recitation()
+      const { showSignature, showNote, ...sansSignature } = options.coverPage
+      const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+        ...options,
+        coverPage: sansSignature as typeof options.coverPage,
+      })
+      expect(code).not.toContain('undefined')
+      expect(code).toContain('  signature: true,')
+      expect(code).toContain('  note: true,')
+    })
+
+    it('passe toujours le barème (total de la ligne des points) et bascule la grille', () => {
+      const sansGrille = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        recitation(),
+      )
+      expect(sansGrille).toContain('  bareme: (4, 6, 6),')
+      expect(sansGrille).toContain('  grille: false,')
+      const avecGrille = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        recitation({ showBareme: true }),
+      )
+      expect(avecGrille).toContain('  grille: true,')
+    })
+
+    it.runIf(shouldRunTypstCliTests())(
+      'compile avec typst (bandeau seul, avec la grille, et grille large)',
+      async () => {
+        const { execFileSync } = await import('node:child_process')
+        const { writeFileSync, mkdtempSync } = await import('node:fs')
+        const { tmpdir } = await import('node:os')
+        const { join } = await import('node:path')
+        for (const [showBareme, nbExercices] of [
+          [false, 1],
+          [true, 1],
+          // beaucoup d'exercices : la grille passe sous les champs plutôt que
+          // de les écraser (bascule mesurée dans le code Typst)
+          [true, 8],
+          // au-delà, elle est réduite pour tenir dans la largeur du texte
+          [true, 16],
+        ] as const) {
+          const code = buildTypstDocument(
+            Array.from({ length: nbExercices }, () =>
+              exercise({ questions: ['$1+1$'] }),
+            ),
+            recitation({
+              showBareme,
+              bareme: Array.from({ length: nbExercices }, () => 2),
+            }),
+          )
+          const dir = mkdtempSync(join(tmpdir(), 'typst-recitation-'))
+          const file = join(dir, 'doc.typ')
+          writeFileSync(file, code, 'utf-8')
+          expect(() =>
+            execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+              stdio: 'pipe',
+            }),
+          ).not.toThrow()
+        }
+      },
+    )
   })
 
   it('compte les questions et embarque le logo en « Course aux nombres »', () => {

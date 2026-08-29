@@ -1,9 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
@@ -99,7 +96,12 @@ Il existe une version CAN de cet exercice avec une seule question en « can3F16 
         (voies[0]
           ? `L'image de $${a}$ par la fonction $f$ est $${miseEnEvidence(b)}$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`
           : `Le nombre $${a}$ a pour image $${miseEnEvidence(b)}$ par la fonction $f$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`)
-      setReponse(this, 6 * i, b)
+      handleAnswers(
+        this,
+        6 * i,
+        { reponse: { value: b } },
+        { formatInteractif: 'mathlive' },
+      )
       texte += ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
@@ -123,7 +125,12 @@ Il existe une version CAN de cet exercice avec une seule question en « can3F16 
         i * 6 + 1,
         KeyboardType.clavierDeBase,
       )
-      setReponse(this, i * 6 + 1, d)
+      handleAnswers(
+        this,
+        i * 6 + 1,
+        { reponse: { value: d } },
+        { formatInteractif: 'mathlive' },
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, d),
@@ -140,7 +147,12 @@ Il existe une version CAN de cet exercice avec une seule question en « can3F16 
       const texteCorr3 = voies[2]
         ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${miseEnEvidence(d)}$, on note $f(${miseEnEvidence(d)})=${a}$.`
         : `Le nombre $${miseEnEvidence(d)}$ a pour image $${a}$ par la fonction $f$, donc $f(${miseEnEvidence(d)})=${a}$.`
-      setReponse(this, i * 6 + 2, d)
+      handleAnswers(
+        this,
+        i * 6 + 2,
+        { reponse: { value: d } },
+        { formatInteractif: 'mathlive' },
+      )
       texte3 += ajouteChampTexteMathLive(
         this,
         i * 6 + 2,

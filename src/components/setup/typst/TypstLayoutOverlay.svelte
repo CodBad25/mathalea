@@ -46,6 +46,7 @@
     type CoverTemplate,
     type WritingLinesPosition,
   } from './buildTypstDocument'
+  import CoverDateField from './CoverDateField.svelte'
 
   interface Props {
     /**
@@ -70,6 +71,7 @@
       titre: string
       session: string
       matiere: string
+      etablissement: string
       duree: string
       noteFin: string
     }
@@ -102,7 +104,13 @@
       value: string,
     ) => void
     onUpdateCover: (
-      name: 'titre' | 'session' | 'matiere' | 'duree' | 'noteFin',
+      name:
+        | 'titre'
+        | 'session'
+        | 'matiere'
+        | 'etablissement'
+        | 'duree'
+        | 'noteFin',
       value: string,
     ) => void
     onUpdateCoverConsignes: (consignes: string[]) => void
@@ -163,6 +171,8 @@
     canMode?: boolean
     onChangeQuestionCount: (num: number, delta: number) => void
     onDeleteExercise: (num: number) => void
+    /** Duplique l'exercice : la copie se place juste après lui */
+    onDuplicateExercise: (num: number) => void
     /** Ouvre la modale d'ajout d'un exercice à la fin de la fiche */
     onAddExercise: () => void
     onToggleMergeBefore: (num: number) => void
@@ -209,7 +219,14 @@
     insertions = {},
     insertionsCorrection = {},
     header = { titre: '', 'sous-titre': '', entete: '' },
-    cover = { titre: '', session: '', matiere: '', duree: '', noteFin: '' },
+    cover = {
+      titre: '',
+      session: '',
+      matiere: '',
+      etablissement: '',
+      duree: '',
+      noteFin: '',
+    },
     coverConsignes = [],
     coverTemplate = 'aucune',
     footerText = '',
@@ -240,6 +257,7 @@
     canMode = false,
     onChangeQuestionCount,
     onDeleteExercise,
+    onDuplicateExercise,
     onAddExercise,
     onToggleMergeBefore,
     onAdjustFigureZoom,
@@ -303,6 +321,7 @@
     titre: '',
     session: '',
     matiere: '',
+    etablissement: '',
     duree: '',
     noteFin: '',
     consignes: '',
@@ -311,6 +330,7 @@
     { name: 'titre', label: 'Intitulé' },
     { name: 'session', label: 'Session' },
     { name: 'matiere', label: 'Matière' },
+    { name: 'etablissement', label: 'Établissement' },
     { name: 'duree', label: "Durée de l'épreuve" },
     { name: 'noteFin', label: 'Mention en bas de page' },
   ] as const
@@ -318,9 +338,12 @@
    * Session/Matière n'existent pas sur la page de garde « Course aux
    * nombres » ; la mention de bas de page n'existe ni là ni sur
    * l'« Évaluation » (voir `COVER_TEMPLATE_LAYOUT` de `buildTypstDocument.ts`).
+   * L'établissement n'existe que sur le bandeau « Récitation », où la session
+   * tient la date (voir `MATHALEA_COVER_RECITATION_HELPER`).
    */
   const visibleCoverFields = $derived(
     COVER_FIELDS.filter((field) => {
+      if (field.name === 'etablissement') return coverTemplate === 'recitation'
       if (coverTemplate === 'can') {
         return (
           field.name !== 'session' &&
@@ -329,9 +352,23 @@
         )
       }
       if (coverTemplate === 'evaluation') return field.name !== 'noteFin'
+      if (coverTemplate === 'recitation') return field.name !== 'noteFin'
       return true
     }),
   )
+
+  /** Libellé d'un champ, adapté au modèle (la session date la récitation) */
+  function coverFieldLabel(name: string, label: string): string {
+    return name === 'session' && coverTemplate === 'recitation' ? 'Date' : label
+  }
+
+  /**
+   * La session tient la date de l'épreuve sur le bandeau « Récitation » :
+   * elle s'y règle au sélecteur de date, pas en saisie libre.
+   */
+  function isCoverDateField(name: string): boolean {
+    return name === 'session' && coverTemplate === 'recitation'
+  }
 
   function toggleCover() {
     coverOpen = !coverOpen
@@ -881,17 +918,27 @@
             {#each visibleCoverFields as field}
               <label class="block space-y-0.5">
                 <span class="text-[0.65rem] uppercase text-gray-500">
-                  {field.label}
+                  {coverFieldLabel(field.name, field.label)}
                 </span>
-                <input
-                  type="text"
-                  class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
-                  bind:value={coverDraft[field.name]}
-                  onkeydown={(e) => {
-                    if (e.key === 'Enter') submitCover()
-                    if (e.key === 'Escape') coverOpen = false
-                  }}
-                />
+                {#if isCoverDateField(field.name)}
+                  <!-- la récitation date la fiche : champ jj.mm.aa doublé du
+                       calendrier natif (voir CoverDateField) -->
+                  <CoverDateField
+                    value={coverDraft[field.name]}
+                    inputClass="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
+                    onChange={(date) => (coverDraft[field.name] = date)}
+                  />
+                {:else}
+                  <input
+                    type="text"
+                    class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
+                    bind:value={coverDraft[field.name]}
+                    onkeydown={(e) => {
+                      if (e.key === 'Enter') submitCover()
+                      if (e.key === 'Escape') coverOpen = false
+                    }}
+                  />
+                {/if}
               </label>
             {/each}
             <label class="block space-y-0.5">
@@ -1144,6 +1191,14 @@
           </button>
         {/if}
         <span class="typst-pill-sep"></span>
+        <button
+          type="button"
+          title="Dupliquer l'exercice {widget.num} (la copie se place juste après)"
+          aria-label="Dupliquer l'exercice {widget.num}"
+          onclick={() => onDuplicateExercise(widget.num)}
+        >
+          <i class="bx bx-copy"></i>
+        </button>
         <button
           type="button"
           title="Supprimer l'exercice {widget.num} de la fiche"

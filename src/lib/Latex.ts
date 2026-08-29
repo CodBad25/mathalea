@@ -276,6 +276,7 @@ class Latex {
       contentCorr += '\n\\end{enumerate}\n'
       // Supprime le \\ (ou \\*) final pour éviter "There's no line here to end"
       content = content.replace(/\\\\\*?\n$/, '\n')
+      content = convertNestedTabularsForTableauCan(content)
       content += '\\end{TableauCan}\n\\addtocounter{nbEx}{-1}'
       /** On supprime les lignes vides car elles posent problème dans l'environnement TableauCan */
       //  content = content.replace(/\n\s*\n/gm, '\n') // En quoi elle posent problème ? On perd les sauts de ligne entre les questions, c'est pas top pour la lisibilité
@@ -1430,6 +1431,33 @@ export function format(
   }
 
   return formattedText
+}
+
+/**
+ * Dans le corps d'un `TableauCan`, remplace les `array` / `tabular` imbriqués
+ * dans les cellules par des `tblr` (tabularray).
+ *
+ * Contexte : sur TeX Live 2026, `colortbl` (chargé par `\usepackage[table]{xcolor}`
+ * du préambule générique) désynchronise la passe de mesure de `tabularray` dès
+ * qu'une cellule contient un `array`/`tabular` imbriqué. La compilation s'arrête
+ * alors sur « ! Missing number, treated as zero » à `\end{TableauCan}` et aucun
+ * PDF n'est produit. Les autres habillages, qui n'utilisent pas `tabularray`,
+ * ne sont pas concernés — d'où un bug propre à la Course aux nombres.
+ * `tabularray` sait en revanche imbriquer ses propres `tblr` sans heurter
+ * `colortbl`.
+ *
+ * On ne convertit que les préambules « simples » (traits verticaux et colonnes
+ * `c` / `l` / `r`) : ce sont les seuls que produisent les exercices CAN
+ * (tableaux de proportionnalité, tableaux de valeurs, petites matrices). Un
+ * préambule plus exotique est laissé tel quel : il produisait déjà un PDF
+ * cassé, la situation n'empire pas.
+ */
+export function convertNestedTabularsForTableauCan(tableBody: string): string {
+  return tableBody.replace(
+    /\\begin\{(array|tabular)\}(\[[a-z]\])?\{([\s|clr]*)\}([\s\S]*?)\\end\{\1\}/g,
+    (_whole, _env, _pos, spec: string, inner: string) =>
+      `\\begin{tblr}{${spec.replace(/\s+/g, '')}}${inner}\\end{tblr}`,
+  )
 }
 
 function getUrlFromExercice(

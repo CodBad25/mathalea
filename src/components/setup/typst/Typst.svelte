@@ -58,6 +58,8 @@
     type TypstExerciseInput,
     type WritingLinesPosition,
   } from './buildTypstDocument'
+  import { formatCoverDate } from './coverDate'
+  import CoverDateField from './CoverDateField.svelte'
   import TypstAddExerciseModal from './addExercise/TypstAddExerciseModal.svelte'
   import TypstLayoutOverlay, {
     type OverlayWidget,
@@ -108,6 +110,7 @@
   const COVER_TEMPLATE_LABELS: Record<CoverTemplate, string> = {
     aucune: 'Aucune',
     evaluation: 'Évaluation',
+    recitation: 'Évaluation (bandeau compact)',
     brevet: 'Brevet des collèges',
     bac: 'BAC',
     can: 'Course aux nombres',
@@ -195,6 +198,14 @@
             restoredDocumentOptions.nbVersions =
               defaultTypstDocumentOptions.nbVersions
           }
+          if (
+            !Number.isInteger(restoredDocumentOptions.answerLines) ||
+            restoredDocumentOptions.answerLines < 0 ||
+            restoredDocumentOptions.answerLines > 20
+          ) {
+            restoredDocumentOptions.answerLines =
+              defaultTypstDocumentOptions.answerLines
+          }
           restoredDocumentOptions.coverPage = sanitizeCoverPage(
             restoredDocumentOptions.coverPage,
           )
@@ -274,6 +285,7 @@
       titre: texte(cover.titre),
       session: texte(cover.session),
       matiere: texte(cover.matiere),
+      etablissement: texte(cover.etablissement),
       duree: texte(cover.duree),
       consignes: Array.isArray(cover.consignes)
         ? cover.consignes.filter((ligne) => typeof ligne === 'string')
@@ -286,6 +298,12 @@
         typeof cover.showBareme === 'boolean'
           ? cover.showBareme
           : fallback.showBareme,
+      showSignature:
+        typeof cover.showSignature === 'boolean'
+          ? cover.showSignature
+          : fallback.showSignature,
+      showNote:
+        typeof cover.showNote === 'boolean' ? cover.showNote : fallback.showNote,
     }
   }
 
@@ -371,12 +389,22 @@
       bareme:
         coverPage.bareme.length > 0 ? coverPage.bareme : defaultCoverBareme(),
     }
+    // le bandeau « récitation » date la fiche du jour (le champ Session y
+    // tient la date) et ouvre d'office deux lignes de réponse par exercice
+    if (template === 'recitation') {
+      if (coverPage.session === '' || coverPage.session === currentSession()) {
+        documentOptions.coverPage.session = formatCoverDate(new Date())
+      }
+      documentOptions.answerLines = 2
+    } else {
+      documentOptions.answerLines = defaultTypstDocumentOptions.answerLines
+    }
     documentOptions.headerStyle = 'aucun'
     // le modèle « can » a son propre logo (asset fixe, pas embarqué dans le
     // code) : sans ce prefetch, il resterait absent du registre tant qu'une
     // autre action (ex. « Nouvelles données ») ne le redéclencherait pas.
     if (template === 'can') await prefetchStaticImages()
-    applyDocumentOptions()
+    regenerateDocument({ dropWritingLines: true })
   }
 
   /** Titre affiché en page de garde et repris dans le pied de page (`titre`
@@ -441,6 +469,41 @@
       (points, index) => coverPage.bareme[index] ?? points,
     )
     applyDocumentOptions()
+  }
+
+  /**
+   * Points proposés pour l'exercice d'indice `k` : une question, un point
+   * (même règle que `defaultCoverBareme`).
+   */
+  function defaultCoverPointsFor(k: number): number {
+    return exercises[k]?.listeQuestions?.length || 1
+  }
+
+  /**
+   * Suit un ajout (ou une duplication) d'exercice dans le barème de la page
+   * de garde : sans cela, l'exercice ajouté manquerait dans la grille des
+   * points et dans le total jusqu'à un clic sur « Reprendre les exercices de
+   * la fiche ». `exercises` contient déjà le nouvel exercice.
+   *
+   * Le barème n'est ajusté que s'il suivait la fiche un pour un : réaligner
+   * un barème que le professeur a lui-même raccourci (exercices groupés,
+   * lignes retirées) reviendrait à défaire son travail.
+   */
+  function insertCoverBaremeRow(index: number) {
+    const bareme = documentOptions.coverPage.bareme
+    if (bareme.length !== exercises.length - 1) return
+    documentOptions.coverPage.bareme = [
+      ...bareme.slice(0, index),
+      defaultCoverPointsFor(index),
+      ...bareme.slice(index),
+    ]
+  }
+
+  /** Pendant de `insertCoverBaremeRow` pour la suppression d'un exercice */
+  function removeCoverBaremeRowFor(index: number) {
+    const bareme = documentOptions.coverPage.bareme
+    if (bareme.length !== exercises.length + 1) return
+    documentOptions.coverPage.bareme = bareme.filter((_, k) => k !== index)
   }
 
   /**
@@ -624,6 +687,7 @@
     titre: '',
     session: '',
     matiere: '',
+    etablissement: '',
     duree: '',
     noteFin: '',
   })
@@ -848,6 +912,7 @@
       titre: '',
       session: '',
       matiere: '',
+      etablissement: '',
       duree: '',
       noteFin: '',
     }
@@ -856,6 +921,7 @@
       ['titre', 'titre'],
       ['session', 'session'],
       ['matiere', 'matiere'],
+      ['etablissement', 'etablissement'],
       ['duree', 'duree'],
       ['noteFin', 'note-fin'],
     ]
@@ -1098,11 +1164,26 @@
         canAnswers: current.canAnswers ?? [],
       })
     }
+    // le barème suit le nombre de questions tant qu'il n'a pas été réglé à la
+    // main : la valeur proposée est d'un point par question, une question de
+    // plus vaut donc un point de plus
+    const bareme = documentOptions.coverPage.bareme
+    if (bareme[num - 1] === exercise.nbQuestions) {
+      documentOptions.coverPage.bareme = bareme.map((points, k) =>
+        k === num - 1 ? next : points,
+      )
+    }
     exercise.nbQuestions = next
     const params = get(exercicesParams)
     if (params[num - 1] != null) params[num - 1].nbQuestions = next
     exercicesParams.update((list) => list)
-    exercises = exercises
+    // nouvelle référence de tableau (et pas `exercises = exercises`, sans
+    // effet en mode runes) : le compteur « - n q + » de la palette lit
+    // `questionCounts`, dérivé de `exercises`, qui ne se recalcule que si la
+    // valeur change — les exercices sont des instances de classe, dont les
+    // mutations ne sont pas suivies par le proxy de `$state`
+    exercises = [...exercises]
+    persistPreferences()
     const code = buildCode()
     setEditorContent(code)
     scheduleCompile(code, 0)
@@ -1205,6 +1286,117 @@
     }
   }
 
+  /**
+   * Décale les réglages de la palette après l'insertion d'un exercice en
+   * position `inserted` (pendant de `shiftCarryOver`) : `ex3` devient `ex4`,
+   * etc. La copie hérite des réglages de l'exercice dupliqué (`original`) :
+   * une duplication rend une copie conforme, mise en page comprise.
+   */
+  function shiftCarryOverForInsert(
+    carryOver: ReturnType<typeof harvestCarryOver>,
+    inserted: number,
+    original: number,
+  ): ReturnType<typeof harvestCarryOver> {
+    const shift = (n: number) => (n >= inserted ? n + 1 : n)
+    /** Renumérote une table indexée par numéro d'exercice, copie comprise */
+    const shiftMap = <T,>(map: Record<number, T> | undefined) => {
+      const result: Record<number, T> = {}
+      for (const [key, value] of Object.entries(map ?? {})) {
+        const n = Number(key)
+        result[shift(n)] = value
+        if (n === original) result[inserted] = value
+      }
+      return result
+    }
+    const tasksLayout: NonNullable<typeof carryOver.tasksLayout> = {}
+    for (const [prefix, layout] of Object.entries(
+      carryOver.tasksLayout ?? {},
+    )) {
+      const match = prefix.match(/^ex(\d+)(-corr)?$/)
+      if (match == null) continue
+      const n = Number(match[1])
+      const suffix = match[2] ?? ''
+      tasksLayout[`ex${shift(n)}${suffix}`] = layout
+      if (n === original) tasksLayout[`ex${inserted}${suffix}`] = layout
+    }
+    const insertions: NonNullable<typeof carryOver.insertions> = {}
+    for (const [key, lines] of Object.entries(carryOver.insertions ?? {})) {
+      // le repère de gap `g` précède l'exercice `g + 1` : celui qui précédait
+      // la copie reste où il est, les suivants décalent
+      const g = Number(key)
+      const target = g >= inserted ? g + 1 : g
+      insertions[target] = [...(insertions[target] ?? []), ...lines]
+    }
+    return {
+      tasksLayout,
+      insertions,
+      insertionsCorrection: shiftMap(carryOver.insertionsCorrection),
+      // la copie n'est pas fusionnée avec ce qui la précède : ce serait
+      // fusionner l'original avec son double
+      merges: (carryOver.merges ?? []).map(shift),
+      codeOverrides: shiftMap(carryOver.codeOverrides),
+      codeOverridesCorrection: shiftMap(carryOver.codeOverridesCorrection),
+      // surcharges « Course aux nombres » : indexées par ligne du tableau, pas
+      // par exercice — conservées telles quelles (voir `shiftCarryOver`)
+      codeOverridesCan: carryOver.codeOverridesCan ?? {},
+      codeOverridesCanReponse: carryOver.codeOverridesCanReponse ?? {},
+      writingLines: shiftMap(carryOver.writingLines),
+      exerciseZoom: shiftMap(carryOver.exerciseZoom),
+      exerciseCorrectionZoom: shiftMap(carryOver.exerciseCorrectionZoom),
+    }
+  }
+
+  /**
+   * Duplique l'exercice `num` : la copie se place juste après lui, avec les
+   * mêmes paramètres (donc le même énoncé, graine comprise) et les mêmes
+   * réglages de palette. Elle rejoint aussi le barème de la page de garde.
+   */
+  async function duplicateExercise(num: number) {
+    if (!confirmOverwrite()) return
+    const params = get(exercicesParams)[num - 1]
+    if (params == null) return
+    const carryOver =
+      editorView != null
+        ? shiftCarryOverForInsert(harvestCarryOver(currentCode()), num + 1, num)
+        : {}
+    const copie: InterfaceParams = structuredClone($state.snapshot(params))
+    let exercise: IExercice | null = null
+    try {
+      exercise = await buildExercise(copie)
+      // la vue Typst n'affiche jamais les exercices en mode interactif
+      exercise.interactif = false
+    } catch {
+      // exercice non chargeable : buildInputs signalera l'avertissement
+      exercise = null
+    }
+    exercises = [
+      ...exercises.slice(0, num),
+      exercise,
+      ...exercises.slice(num),
+    ]
+    insertCoverBaremeRow(num)
+    persistPreferences()
+    exercicesParams.update((list) => [
+      ...list.slice(0, num),
+      copie,
+      ...list.slice(num),
+    ])
+    await applyTypSourcesForStaticExercises()
+    await prefetchStaticImages()
+    const code = buildTypstDocument(
+      buildInputs(),
+      documentOptions,
+      carryOver,
+      [],
+      {
+        sourceUrl: currentUrl(),
+        extraPreamble: extraPreamble(),
+      },
+    )
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
   /** Retire l'exercice num de la fiche et régénère le code */
   function deleteExercise(num: number) {
     if (!window.confirm(`Supprimer l'exercice ${num} de la fiche ?`)) return
@@ -1216,6 +1408,8 @@
     exercise?.reinit?.()
     exercise?.destroy?.()
     exercises = exercises.filter((_, k) => k !== num - 1)
+    removeCoverBaremeRowFor(num - 1)
+    persistPreferences()
     exercicesParams.update((list) => list.filter((_, k) => k !== num - 1))
     const code = buildTypstDocument(
       buildInputs(),
@@ -1266,6 +1460,8 @@
       exercise = null
     }
     exercises = [...exercises, exercise]
+    insertCoverBaremeRow(exercises.length - 1)
+    persistPreferences()
     await applyTypSourcesForStaticExercises()
     await prefetchStaticImages()
     const code = buildCode()
@@ -1676,7 +1872,7 @@
    * même mécanisme que `updateHeaderValue`, édition ciblée sans régénération.
    */
   function updateCoverValue(
-    name: 'titre' | 'session' | 'matiere' | 'duree' | 'noteFin',
+    name: 'titre' | 'session' | 'matiere' | 'etablissement' | 'duree' | 'noteFin',
     value: string,
   ) {
     if (editorView == null) return
@@ -1991,10 +2187,38 @@
 
   /** Regénère le code à partir des réglages du document (interligne...) */
   function applyDocumentOptions() {
+    regenerateDocument()
+  }
+
+  /**
+   * Regénère le code. `dropWritingLines` oublie au passage les lignes de
+   * réponse réglées exercice par exercice dans la palette : relues dans le
+   * code, elles masqueraient le réglage global « Lignes de réponse » qui
+   * vient de changer.
+   */
+  function regenerateDocument(options: { dropWritingLines?: boolean } = {}) {
     persistPreferences()
-    const code = buildCode()
+    const code = buildCode(options)
     setEditorContent(code)
     scheduleCompile(code, 0)
+  }
+
+  /**
+   * Date de la récitation, réglée dans le volet (le champ Session porte la
+   * date sur ce modèle), au calendrier ou à la saisie.
+   */
+  function applyCoverDate(date: string) {
+    documentOptions.coverPage.session = date
+    applyDocumentOptions()
+  }
+
+  /** Applique le réglage global des lignes de réponse (valeur bornée) */
+  function applyAnswerLines() {
+    const valeur = Math.round(Number(documentOptions.answerLines))
+    documentOptions.answerLines = Number.isFinite(valeur)
+      ? Math.min(20, Math.max(0, valeur))
+      : defaultTypstDocumentOptions.answerLines
+    regenerateDocument({ dropWritingLines: true })
   }
 
   function resetDocumentOptions() {
@@ -2226,15 +2450,18 @@
     return perVersion
   }
 
-  function buildCode(): string {
+  function buildCode(options: { dropWritingLines?: boolean } = {}): string {
     // les ajustements faits via la palette de mise en page (colonnes,
     // espacement, insertions) sont repris du code courant pour survivre
     // à la régénération ; au tout premier rendu (éditeur pas encore créé),
     // on repart des réglages restaurés depuis l'URL le cas échéant
-    const carryOver =
+    const harvested =
       editorView != null
         ? harvestCarryOver(currentCode())
         : (urlCarryOver ?? {})
+    const carryOver = options.dropWritingLines
+      ? { ...harvested, writingLines: undefined }
+      : harvested
     const [primary, ...extraVersions] = buildAllVersionInputs()
     return buildTypstDocument(
       primary,
@@ -3717,6 +3944,13 @@
                 <i class="bx bx-edit"></i> en haut de la page de garde).
               </p>
 
+              {#if coverPage.template === 'recitation'}
+                <p class="text-xs opacity-75">
+                  Le bandeau tient en tête de la première page : les exercices
+                  suivent aussitôt, sans page de garde séparée.
+                </p>
+              {/if}
+
               {#if coverPage.template === 'can'}
                 <p class="text-xs opacity-75">
                   La durée, le nombre de questions et le score sur le total des
@@ -3729,8 +3963,51 @@
                     bind:checked={documentOptions.coverPage.showBareme}
                     onchange={applyDocumentOptions}
                   />
-                  Afficher le barème
+                  {coverPage.template === 'recitation'
+                    ? 'Afficher la grille des points'
+                    : 'Afficher le barème'}
                 </label>
+
+                {#if coverPage.template === 'recitation'}
+                  <div class="flex items-center justify-between gap-4 text-sm">
+                    <span>Date</span>
+                    <CoverDateField
+                      value={coverPage.session}
+                      inputClass="w-24 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                      onChange={applyCoverDate}
+                    />
+                  </div>
+
+                  <label class="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      bind:checked={documentOptions.coverPage.showSignature}
+                      onchange={applyDocumentOptions}
+                    />
+                    Champ de signature du/de la responsable légal.e
+                  </label>
+
+                  <label class="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      bind:checked={documentOptions.coverPage.showNote}
+                      onchange={applyDocumentOptions}
+                    />
+                    Case pour la note
+                  </label>
+
+                  <label class="flex items-center justify-between gap-4 text-sm">
+                    Lignes de réponse par exercice
+                    <input
+                      type="number"
+                      min="0"
+                      max="20"
+                      class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                      bind:value={documentOptions.answerLines}
+                      onchange={applyAnswerLines}
+                    />
+                  </label>
+                {/if}
 
                 {#if coverPage.showBareme}
                   <div class="space-y-1.5">
@@ -3895,6 +4172,7 @@
                     onUpdateFooterText={updateFooterText}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}
+                    onDuplicateExercise={duplicateExercise}
                     onAddExercise={openAddExercise}
                     onMoveExercise={moveExercise}
                     onNewData={newDataForExercise}

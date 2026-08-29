@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { fraction } from '../../modules/fractions'
@@ -124,7 +124,12 @@ export default class FractionDuneQuantiteOldOld extends Exercice {
           texteCorr = `Comme l'heure est partagée en ${den} parts égales, chaque part représente $${texFractionFromString(1, den)}$ d'heure, soit $${60 / den}$ minutes.<br>`
           texteCorr += `Ici, il y a $${texFractionFromString(num, den)}$ d'heure, ce qui représente $${num}$ fois plus, soit $${num}\\times${60 / den}=${(num * 60) / den}$.<br>`
           texteCorr += `$${frac.texFraction}$ d'heure correspond donc à $${miseEnEvidence((num * 60) / den)}$ minutes.`
-          setReponse(this, index, Math.round((num * 60) / den))
+          handleAnswers(
+            this,
+            index,
+            { reponse: { value: Math.round((num * 60) / den) } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 2:
           nbreponse = 1
@@ -148,7 +153,12 @@ export default class FractionDuneQuantiteOldOld extends Exercice {
           texteCorr = `Comme l'heure est partagée en ${den} parts égales, chaque part représente $${texFractionFromString(1, den)}$ d'heure, soit $${60 / den}$ minutes.<br>`
           texteCorr += `Ici, il y a $${texFractionFromString(num, den)}$ d'heure, ce qui représente $${num}$ fois plus, soit $${num}\\times${60 / den}=${(num * 60) / den}$.<br>`
           texteCorr += `$${frac.texFraction}$ d'heure correspond donc à $${miseEnEvidence((num * 60) / den)}$ minutes.`
-          setReponse(this, index, Math.round((num * 60) / den))
+          handleAnswers(
+            this,
+            index,
+            { reponse: { value: Math.round((num * 60) / den) } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 3:
           nbreponse = 1
@@ -168,7 +178,12 @@ export default class FractionDuneQuantiteOldOld extends Exercice {
             texteCorr = `Comme la tablette a une masse de $${masse}$ grammes, $${texFractionFromString(1, denIrred)}$ de la tablette représente une masse de $${texNombre(masse / denIrred, 2)}$ grammes.<br>`
             texteCorr += `Ici, il y a $${frac.texFractionSimplifiee}$ de la tablette qui a été consommé, ce qui représente $${numIrred}$ fois plus, soit $${numIrred}\\times${texNombre(masse / denIrred, 2)}=${texNombre((numIrred * masse) / denIrred, 2)}$.<br>`
             texteCorr += `La masse de chocolat consommée est $${miseEnEvidence(texNombre((numIrred * masse) / denIrred, 2))}$ grammes.`
-            setReponse(this, index, arrondi((numIrred * masse) / denIrred, 2))
+            handleAnswers(
+              this,
+              index,
+              { reponse: { value: arrondi((numIrred * masse) / denIrred, 2) } },
+              { formatInteractif: 'mathlive' },
+            )
           } else {
             texte += `Quelle masse de chocolat reste-t-il ? ${ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers, { texteApres: ' g' })}<br>`
             texteCorr = `Comme la tablette a une masse de $${masse}$ grammes, $${texFractionFromString(1, denIrred)}$ de la tablette représente une masse de $${texNombre(masse / denIrred, 2)}$ grammes.<br>`
@@ -178,10 +193,15 @@ export default class FractionDuneQuantiteOldOld extends Exercice {
             texteCorr += `une autre façon de faire est d'utiliser la fraction restante : $${texFractionFromString(denIrred, denIrred)}-${frac.texFractionSimplifiee}=${texFractionFromString(denIrred - numIrred, denIrred)}$.<br>`
             texteCorr += `$${texFractionFromString(denIrred - numIrred, denIrred)}$ de $${masse}$ grammes c'est $${denIrred - numIrred}$ fois $${masse / denIrred}$ grammes.<br>`
             texteCorr += `Il reste donc : $${denIrred - numIrred}\\times${texNombre(masse / denIrred, 2)}=${miseEnEvidence(texNombre(((denIrred - numIrred) * masse) / denIrred, 2))}$ grammes de chocolat.`
-            setReponse(
+            handleAnswers(
               this,
               index,
-              arrondi(((denIrred - numIrred) * masse) / denIrred, 2),
+              {
+                reponse: {
+                  value: arrondi(((denIrred - numIrred) * masse) / denIrred, 2),
+                },
+              },
+              { formatInteractif: 'mathlive' },
             )
           }
           indiceNbQuestions3++
@@ -233,27 +253,37 @@ export default class FractionDuneQuantiteOldOld extends Exercice {
               },
             ) + '<br>'
 
-          setReponse(
+          handleAnswers(
             this,
             index,
-            Math.max(
-              arrondi((numIrred * longueur) / 100 / denIrred, 3),
-              arrondi(
-                longueur / 100 - (numIrred * longueur) / 100 / denIrred,
-                3,
-              ),
-            ),
+            {
+              reponse: {
+                value: Math.max(
+                  arrondi((numIrred * longueur) / 100 / denIrred, 3),
+                  arrondi(
+                    longueur / 100 - (numIrred * longueur) / 100 / denIrred,
+                    3,
+                  ),
+                ),
+              },
+            },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(
+          handleAnswers(
             this,
             index + 1,
-            Math.min(
-              arrondi((numIrred * longueur) / 100 / denIrred, 3),
-              arrondi(
-                longueur / 100 - (numIrred * longueur) / 100 / denIrred,
-                3,
-              ),
-            ),
+            {
+              reponse: {
+                value: Math.min(
+                  arrondi((numIrred * longueur) / 100 / denIrred, 3),
+                  arrondi(
+                    longueur / 100 - (numIrred * longueur) / 100 / denIrred,
+                    3,
+                  ),
+                ),
+              },
+            },
+            { formatInteractif: 'mathlive' },
           )
           if (this.sup2) {
             texte += 'Ce bâton est représenté ci-dessous :<br>'

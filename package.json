@@ -46,6 +46,7 @@
     "build:deploy": "pnpm build && pnpm doc && tasks/deploy_site.sh && open https://coopmaths.fr/alea",
     "deploy:site": "tasks/deploy_site.sh && open https://coopmaths.fr/alea",
     "rollback": "node tasks/rollback_site.js",
+    "clean:releases": "node tasks/clean_releases.js",
     "makeJson": "node tasks/dictionnaireToReferentiel.js && node tasks/updateMenuInternational && node tasks/updateQuizzBackgrounds.js",
     "getNewUuid": "pnpm makeJson",
     "updateMenu": "pnpm makeJson",

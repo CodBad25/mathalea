@@ -14,7 +14,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Déterminer une équation de droite (graphique)'
+export const titre = "Lire graphiquement l'équation réduite d’une droite"
 export const interactifReady = true
 
 export const dateDePublication = '15/11/2022'

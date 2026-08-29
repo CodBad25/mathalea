@@ -229,9 +229,17 @@ export const MATHALEA_COVER_FIELD_HELPER = `#let mathalea-champ(intitule, largeu
  * - `colonne-note` ajoute au barème une colonne vide où porter la note ;
  * - `note-fin` inscrit une mention en bas de page (« Tournez la page S.V.P. »).
  */
+/**
+ * Nombre de points sans unité (« 4 », « 2,5 ») : la grille de « récitation »
+ * est trop serrée pour le mot « points », que `mathalea-points` y ajoute.
+ * Déclaré pour tous les modèles à barème, dont il est la base.
+ */
+export const MATHALEA_COVER_POINTS_HELPER = `#let mathalea-points-courts(n) = {
+  if n == calc.round(n) { str(calc.round(n)) } else { str(n).replace(".", ",") }
+}`
+
 export const MATHALEA_COVER_HELPER = `#let mathalea-points(n) = {
-  let texte = if n == calc.round(n) { str(calc.round(n)) } else { str(n).replace(".", ",") }
-  texte + if calc.abs(n) >= 2 { " points" } else { " point" }
+  mathalea-points-courts(n) + if calc.abs(n) >= 2 { " points" } else { " point" }
 }
 #let mathalea-couverture(
   titre: "",
@@ -282,6 +290,168 @@ export const MATHALEA_COVER_HELPER = `#let mathalea-points(n) = {
   }
   if note-fin != none and note-fin != "" { v(1fr); align(right, text(weight: "bold", note-fin)) }
   pagebreak()
+}`
+
+/**
+ * En-tête « Récitation » : un bandeau compact en tête de la **même** page que
+ * les exercices (pas de `pagebreak`, contrairement aux autres modèles), pour
+ * les tests courts où une page de garde pleine gâcherait une feuille.
+ *
+ * Trois bandes : l'identification (matière et établissement à gauche, intitulé
+ * au centre, durée et date à droite), puis deux colonnes — champs à remplir à
+ * gauche, grille des points à droite —, puis les consignes en pleine largeur.
+ *
+ * `grille` détaille les points exercice par exercice (ligne « points » et
+ * ligne « obtenus », dont la case Total tient lieu de note), sinon seul le
+ * total est rappelé ; `note` ajoute par-dessus une case où porter la note à la main.
+ * `signature` ajoute le champ de signature du/de la responsable légal.e, sous
+ * le prénom.
+ */
+export const MATHALEA_COVER_RECITATION_HELPER = `#let mathalea-couverture-recitation(
+  titre: "",
+  matiere: "",
+  etablissement: "",
+  duree: "",
+  date: "",
+  consignes: (),
+  bareme: (),
+  grille: false,
+  signature: true,
+  note: false,
+) = {
+  let petit(corps) = text(size: 0.85em, fill: luma(80), corps)
+  let trait = line(length: 100%, stroke: 0.5pt)
+  let case(corps) = box(stroke: 0.6pt + luma(120), inset: (x: 8pt, y: 6pt), radius: 2pt, corps)
+  let total = bareme.fold(0, (somme, points) => somme + points)
+  // bandeau : identification à gauche, intitulé au centre, durée et date à droite
+  grid(columns: (1fr, auto, 1fr), column-gutter: 0.8em,
+    align: (left + horizon, center + horizon, right + horizon),
+    stack(spacing: 0.25em, text(weight: "medium", matiere), petit(etablissement)),
+    text(size: 1.35em, weight: "bold", fill: couleur, titre),
+    stack(spacing: 0.25em, if duree != "" [Durée #duree], petit(date)))
+  v(0.3em)
+  line(length: 100%, stroke: 0.7pt + couleur)
+  v(0.6em)
+  // champs à remplir : traits du nom et du prénom de 6 cm — de quoi écrire un
+  // nom, et la place reste à la grille —, mais jamais plus larges que leur
+  // colonne (une grille à beaucoup d'exercices la rétrécit, les traits la
+  // suivent). La signature, elle, a besoin de hauteur sous son intitulé (pas
+  // de trait : on signe dans l'espace libre)
+  let trait-champ = layout(size => line(length: calc.min(6cm, size.width), stroke: 0.5pt))
+  let champs = grid(columns: (auto, 1fr), column-gutter: 6pt, row-gutter: 1.7em, align: bottom,
+    [Nom :], trait-champ,
+    [Prénom :], trait-champ)
+  // grille sur sa propre ligne : les champs ont toute la largeur, nom et
+  // prénom tiennent donc côte à côte
+  let champs-en-ligne = grid(columns: (auto, 1fr, auto, 1fr),
+    column-gutter: (6pt, 1.6em, 6pt), align: bottom,
+    [Nom :], trait-champ,
+    [Prénom :], trait-champ)
+  let intitule-signature = [Signature du/de la responsable légal.e :]
+  let identite = {
+    champs
+    if signature {
+      v(0.9em)
+      intitule-signature
+      v(1.6em)
+    }
+  }
+  // colonne de droite : grille des points (ou son seul total), et la case de
+  // la note si elle est demandée
+  let points = if grille and bareme.len() > 0 {
+    table(
+      columns: (auto,) + (1.5cm,) * bareme.len() + (1.8cm,),
+      align: center + horizon,
+      inset: (x: 5pt, y: 4.5pt),
+      stroke: (x, y) => (
+        left: if x == 0 { none } else { 0.4pt + luma(180) },
+        right: none,
+        top: if y == 0 { 0.7pt + luma(90) } else { 0.4pt + luma(180) },
+        bottom: 0.7pt + luma(90),
+      ),
+      table.header(
+        table.cell(align: left)[#petit[EXERCICE]],
+        ..range(bareme.len()).map(i => [*#(i + 1)*]),
+        [*Total*],
+      ),
+      table.cell(align: left)[#petit[POINTS]],
+      ..bareme.map(points => [#mathalea-points-courts(points)]),
+      [*#mathalea-points-courts(total)*],
+      table.cell(align: left, inset: (x: 5pt, y: 10pt))[#petit[OBTENUS]],
+      ..range(bareme.len() + 1).map(_ => table.cell(inset: (x: 5pt, y: 10pt))[]),
+    )
+  } else if bareme.len() > 0 {
+    case[Total : #box(width: 1.4cm) / #mathalea-points-courts(total)]
+  }
+  let case-note = if note {
+    // assez haute pour y écrire à la main
+    case[#block(height: 2.8em, above: 0.3em, below: 0.3em)[Note : #box(width: 3cm)]]
+  }
+  let liste-consignes = if consignes.len() > 0 {
+    set list(marker: text(fill: couleur)[•], indent: 0.4em, body-indent: 0.45em, spacing: 0.35em)
+    list(..consignes)
+  }
+  layout(size => {
+    let largeur = if points == none { 0pt } else { measure(points).width }
+    // grille trop large pour laisser de quoi écrire à côté : elle prend sa
+    // propre ligne, sous les champs
+    let pleine-ligne = largeur > size.width * 0.6
+    // sinon, la note se pose à droite des consignes — dans le blanc laissé
+    // sous la grille — quand leur longueur naturelle lui laisse la place
+    let note-avec-consignes = (
+      not pleine-ligne
+        and case-note != none
+        and liste-consignes != none
+        and measure(liste-consignes).width + measure(case-note).width + 20pt <= size.width
+    )
+    if points != none or case-note != none {
+      if pleine-ligne {
+        champs-en-ligne
+        // la note remplit le blanc à droite de la signature plutôt que de
+        // s'ajouter sous la grille ; sa hauteur donne la place où signer
+        if signature or case-note != none {
+          v(0.9em)
+          grid(columns: (1fr, auto), column-gutter: 1.2em, align: (left + top, right + top),
+            if signature { intitule-signature } else { [] },
+            if case-note != none { case-note } else { [] })
+          if case-note == none { v(1.6em) }
+        }
+        v(0.5em)
+        if points != none {
+          // réduite si elle déborde encore la largeur du texte (sinon Typst
+          // comprime les colonnes jusqu'à faire chevaucher leurs textes)
+          if largeur > size.width {
+            box(scale(size.width / largeur * 100%, origin: top + left, reflow: true, points))
+          } else {
+            points
+          }
+        }
+      } else {
+        // grille à droite des champs ; la note sous elle et alignée sur son
+        // bord droit, sauf si elle accompagne les consignes
+        grid(columns: (1fr, auto), column-gutter: 1.6em, align: (left + top, right + top),
+          identite,
+          if note-avec-consignes { points } else {
+            stack(spacing: 0.6em,
+              ..(points, if case-note != none { align(right, case-note) }).filter(bloc => bloc != none))
+          })
+      }
+    } else {
+      identite
+    }
+    // consignes en pleine largeur, sous les deux colonnes : une par ligne,
+    // sans le retour à la ligne que leur imposait la colonne des champs
+    if liste-consignes != none {
+      v(0.7em)
+      if note-avec-consignes {
+        grid(columns: (1fr, auto), column-gutter: 1.2em, align: (left + top, right + top),
+          liste-consignes, case-note)
+      } else {
+        liste-consignes
+      }
+    }
+  })
+  v(0.8em)
 }`
 
 /**
@@ -860,6 +1030,14 @@ export interface TypstDocumentOptions {
   nbVersions: number
   /** Page de garde placée en tête de chaque sujet (`aucune` par défaut) */
   coverPage: TypstCoverOptions
+  /**
+   * Lignes en pointillés ajoutées d'office à la fin de chaque exercice, pour
+   * que l'élève y réponde (0 : aucune). Réglage global, que la palette de
+   * l'aperçu affine ensuite exercice par exercice (`TypstCarryOver.
+   * writingLines`, qui a la priorité) ; le modèle « récitation » le met à 2 à
+   * sa sélection, les autres à 0.
+   */
+  answerLines: number
 }
 
 /**
@@ -870,6 +1048,10 @@ export interface TypstDocumentOptions {
 export const COVER_TEMPLATES = [
   'aucune',
   'evaluation',
+  // « Évaluation (bandeau compact) » côté interface ; la clef reste
+  // `recitation`, nom d'origine du modèle, que portent les liens déjà
+  // partagés (`typstParam`) et les fiches enregistrées
+  'recitation',
   'brevet',
   'bac',
   'can',
@@ -888,10 +1070,18 @@ export interface TypstCoverOptions {
   template: CoverTemplate
   /** Intitulé principal (« Brevet des collèges », « Évaluation »…) */
   titre: string
-  /** Session ou date de l'épreuve (« Juin 2026 »). Inutilisé par « can ». */
+  /**
+   * Session ou date de l'épreuve (« Juin 2026 »). Inutilisé par « can » ;
+   * « récitation » l'affiche comme date, sous la durée.
+   */
   session: string
   /** Matière (« MATHÉMATIQUES »). Inutilisée par « can ». */
   matiere: string
+  /**
+   * Établissement (« CO des Coudriers »), affiché sous la matière par le
+   * seul modèle « récitation » — les autres n'ont pas de ligne où le mettre.
+   */
+  etablissement: string
   /** Durée de l'épreuve (« 2 heures ») */
   duree: string
   /** Consignes affichées sous la durée, une par ligne */
@@ -910,6 +1100,17 @@ export interface TypstCoverOptions {
   bareme: number[]
   /** Affiche le tableau du barème et son total */
   showBareme: boolean
+  /**
+   * Ajoute le champ « Signature du/de la responsable légal.e » sous le prénom.
+   * Propre au modèle « récitation », le seul à proposer ce champ.
+   */
+  showSignature: boolean
+  /**
+   * Ajoute une case où porter la note à la main (active par défaut). Propre
+   * au modèle « récitation », et décochable : la case Total de la ligne
+   * « obtenus » de la grille en tient déjà lieu.
+   */
+  showNote: boolean
 }
 
 /**
@@ -919,7 +1120,7 @@ export interface TypstCoverOptions {
  * affiche une.
  */
 const COVER_TEMPLATE_LAYOUT: Record<
-  Exclude<ActiveCoverTemplate, 'can'>,
+  Exclude<ActiveCoverTemplate, 'can' | 'recitation'>,
   { identite: boolean; colonneNote: boolean; hasNoteFin: boolean }
 > = {
   // évaluation : la copie est la feuille elle-même, d'où les champs
@@ -962,6 +1163,17 @@ export const COVER_TEMPLATE_DEFAULTS: Record<
     duree: '4 heures',
     consignes: ['L’usage de la calculatrice est autorisé.'],
     noteFin: 'Tournez la page S.V.P.',
+  },
+  recitation: {
+    titre: 'Évaluation',
+    matiere: 'Mathématiques',
+    duree: '20 minutes',
+    consignes: [
+      'Justifie chaque réponse ;',
+      'Écris lisiblement au crayon ou au stylo (noir ou bleu) ;',
+      'La calculatrice n’est pas autorisée.',
+    ],
+    noteFin: '',
   },
   can: {
     titre: 'La course aux nombres',
@@ -1095,16 +1307,20 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   badgeStyle: 'underline',
   badgeColor: 'black',
   nbVersions: 1,
+  answerLines: 0,
   coverPage: {
     template: 'aucune',
     titre: '',
     session: '',
     matiere: '',
+    etablissement: '',
     duree: '',
     consignes: [],
     noteFin: '',
     bareme: [],
     showBareme: true,
+    showSignature: true,
+    showNote: true,
   },
 }
 
@@ -1400,7 +1616,17 @@ function computeGeneratedExercises(
   return exercises.map((exercise, k) => {
     // lignes en pointillés de cet exercice (palette, énoncé seulement,
     // jamais dans la correction)
-    const writingLinesSetting = carryOver.writingLines?.[k + 1]
+    // à défaut de réglage propre à cet exercice (palette), les lignes de
+    // réponse du document (`answerLines`) s'appliquent en fin d'exercice
+    const writingLinesSetting =
+      carryOver.writingLines?.[k + 1] ??
+      (options.answerLines > 0
+        ? {
+            position: 'endOfExercise' as WritingLinesPosition,
+            count: options.answerLines,
+            spacing: 2,
+          }
+        : null)
     const writingLines =
       writingLinesSetting == null
         ? undefined
@@ -2630,11 +2856,17 @@ export function buildTypstDocument(
   // ses aides sont déclarées ici, seulement quand un modèle est choisi
   if (coverTemplate !== 'aucune') {
     lines.push('// ----- Page de garde -----')
-    lines.push(MATHALEA_COVER_FIELD_HELPER)
+    // `mathalea-champ` (pointillés) sert aux modèles pleine page ; le bandeau
+    // « récitation » a ses propres champs, sur un trait plein
+    if (coverTemplate !== 'recitation') lines.push(MATHALEA_COVER_FIELD_HELPER)
     if (coverTemplate === 'can') {
       lines.push(`#let mathalea-logo = ${MATHALEA_LOGO_IMAGE}`)
       lines.push(MATHALEA_COVER_CAN_HELPER)
+    } else if (coverTemplate === 'recitation') {
+      lines.push(MATHALEA_COVER_POINTS_HELPER)
+      lines.push(MATHALEA_COVER_RECITATION_HELPER)
     } else {
+      lines.push(MATHALEA_COVER_POINTS_HELPER)
       lines.push(MATHALEA_COVER_HELPER)
     }
   }
@@ -2776,6 +3008,7 @@ function coverDeclarationLines(cover: TypstCoverOptions): string[] {
     `#let couverture-titre = ${typstString(cover.titre)}`,
     `#let couverture-session = ${typstString(cover.session)}`,
     `#let couverture-matiere = ${typstString(cover.matiere)}`,
+    `#let couverture-etablissement = ${typstString(cover.etablissement)}`,
     `#let couverture-duree = ${typstString(cover.duree)}`,
     `#let couverture-consignes = ${consignes}`,
     `#let couverture-note-fin = ${typstString(cover.noteFin)}`,
@@ -2798,6 +3031,24 @@ function coverPageLines(
       '  duree: couverture-duree,',
       `  nb-questions: ${nbQuestions},`,
       '  consignes: couverture-consignes,',
+      ')',
+    ]
+  }
+  if (cover.template === 'recitation') {
+    // le barème est toujours passé (il donne le total « /16 » de la ligne
+    // des points) ; `grille` ne décide que de son affichage détaillé
+    return [
+      '#mathalea-couverture-recitation(',
+      '  titre: couverture-titre,',
+      '  matiere: couverture-matiere,',
+      '  etablissement: couverture-etablissement,',
+      '  duree: couverture-duree,',
+      '  date: couverture-session,',
+      '  consignes: couverture-consignes,',
+      `  bareme: ${typstArray(cover.bareme.map((points) => String(points)))},`,
+      `  grille: ${cover.showBareme === true},`,
+      `  signature: ${cover.showSignature !== false},`,
+      `  note: ${cover.showNote !== false},`,
       ')',
     ]
   }

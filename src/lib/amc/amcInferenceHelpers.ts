@@ -1,4 +1,6 @@
 import FractionEtendue from '../../modules/FractionEtendue'
+import Grandeur from '../../modules/Grandeur'
+import Hms from '../../modules/Hms'
 import { generateCleaner } from '../interactif/cleaners'
 import { Complexe } from '../mathFonctions/Complexe'
 import { isValeur, type IExercice } from '../types'
@@ -15,6 +17,331 @@ const compactPowerPattern = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)\^[+-]?\d+$/
 export type AMCScientificNotation = {
   valeur: number
   param: ReponseParams
+}
+
+export type AMCPowerNotation = {
+  valeur: number
+  param: ReponseParams
+}
+
+export type AMCQuantity = {
+  valeur: number
+  latexUnit: string
+  param: ReponseParams
+}
+
+export type AMCHmsComponent = {
+  key: 'hour' | 'minute' | 'second'
+  valeur: number
+  latexUnit: string
+  param: ReponseParams
+}
+
+export type AMCInterval = {
+  correct: number
+  left: number
+  right: number
+  step: number
+  choices: Array<{ texte: string; statut: boolean }>
+}
+
+export type AMCCoordinateComponent = {
+  key: 'x' | 'y' | 'z'
+  label: 'Abscisse' | 'Ordonnée' | 'Cote'
+  valeur: number | { num: number; den: number }
+}
+
+export function inferCoordinatesForAMC(
+  source: unknown,
+): AMCCoordinateComponent[] | undefined {
+  if (Array.isArray(source)) {
+    if (source.length !== 1) return undefined
+    source = source[0]
+  }
+  if (typeof source !== 'string') return undefined
+
+  const compact = source.trim().replace(/\\(?:left|right)/g, '')
+  const coordinates = compact.split(';').map((coordinate) =>
+    inferNumericValueForAMC(
+      coordinate
+        .trim()
+        .replace(/^[([]/, '')
+        .replace(/[)\]]$/, ''),
+    ),
+  )
+  if (
+    (coordinates.length !== 2 && coordinates.length !== 3) ||
+    coordinates.some((coordinate) => coordinate === undefined)
+  ) {
+    return undefined
+  }
+
+  const metadata = [
+    { key: 'x', label: 'Abscisse' },
+    { key: 'y', label: 'Ordonnée' },
+    { key: 'z', label: 'Cote' },
+  ] as const
+  return coordinates.map((valeur, index) => ({
+    ...metadata[index],
+    valeur: valeur!,
+  }))
+}
+
+export function inferIntervalForAMC(source: unknown): AMCInterval | undefined {
+  if (typeof source !== 'string') return undefined
+  const compact = source
+    .trim()
+    .replace(/\\(?:left|right)/g, '')
+    .replace(/\{,\}|,/g, '.')
+    .replace(/\\(?:,|;|:|!|quad|qquad|thickspace)/g, '')
+    .replace(/\s+/g, '')
+  const match = compact.match(
+    /^(.)([+-]?(?:\d+(?:\.\d*)?|\.\d+));([+-]?(?:\d+(?:\.\d*)?|\.\d+))(.)$/,
+  )
+  if (
+    match == null ||
+    !['[', ']'].includes(match[1]) ||
+    !['[', ']'].includes(match[4])
+  ) {
+    return undefined
+  }
+
+  const lower = Number(match[2])
+  const upper = Number(match[3])
+  const step = upper - lower
+  if (!Number.isFinite(lower) || !Number.isFinite(upper) || step <= 0) {
+    return undefined
+  }
+
+  const left = lower - step
+  const right = upper + step
+  const correct = lower + step / 2
+  if (![left, right, correct].every(Number.isFinite)) return undefined
+
+  const format = (value: number) => String(Number(value.toPrecision(12)))
+  const bounds = [left, lower, upper, right]
+  return {
+    correct,
+    left,
+    right,
+    step,
+    choices: bounds.slice(0, -1).map((bound, index) => ({
+      texte: `$[${format(bound)}\\,;\\,${format(bounds[index + 1])}[$`,
+      statut: index === 1,
+    })),
+  }
+}
+
+export function inferHmsForAMC(source: unknown): AMCHmsComponent[] | undefined {
+  let duration: Hms
+  let isExplicitHm = false
+
+  if (source instanceof Hms) {
+    duration = source
+  } else if (typeof source === 'string' && source.trim() !== '') {
+    const compact = source.replaceAll(' ', '').replaceAll('&nbsp;', '')
+    if (!/(?:h|min|s)/.test(compact)) return undefined
+    duration = Hms.fromString(source)
+    isExplicitHm =
+      /(?:h|min)/.test(compact) && !/(?:\\text\{s\}|\d+s)/.test(compact)
+  } else {
+    return undefined
+  }
+
+  const totalSeconds = duration.toSeconds()
+  if (!Number.isSafeInteger(totalSeconds) || totalSeconds < 0) return undefined
+
+  const hour = Math.floor(totalSeconds / 3600)
+  const minute = Math.floor((totalSeconds % 3600) / 60)
+  const second = totalSeconds % 60
+  if (hour > 99) return undefined
+
+  const component = (
+    key: AMCHmsComponent['key'],
+    valeur: number,
+    latexUnit: string,
+  ): AMCHmsComponent => ({
+    key,
+    valeur,
+    latexUnit,
+    param: { digits: 2, decimals: 0, signe: false },
+  })
+
+  return [
+    component('hour', hour, '\\text{h}'),
+    component('minute', minute, '\\text{min}'),
+    ...(isExplicitHm ? [] : [component('second', second, '\\text{s}')]),
+  ]
+}
+
+export function inferQuantityForAMC(
+  source: unknown,
+  precisionUnite: unknown,
+): AMCQuantity | undefined {
+  if (!(source instanceof Grandeur) || !Number.isFinite(source.mesure)) {
+    return undefined
+  }
+
+  const precision = Number(precisionUnite)
+  return {
+    valeur: source.mesure,
+    latexUnit: source.latexUnit,
+    param: {
+      ...(Number.isFinite(precision) && precision >= 0
+        ? { approx: precision }
+        : {}),
+    },
+  }
+}
+
+export function inferExactFractionForAMC(
+  source: unknown,
+): { num: number; den: number } | undefined {
+  let numerator: number
+  let denominator: number
+
+  if (source instanceof FractionEtendue) {
+    numerator = source.num
+    denominator = source.den
+  } else if (
+    typeof source === 'object' &&
+    source !== null &&
+    'num' in source &&
+    'den' in source
+  ) {
+    numerator = Number(source.num)
+    denominator = Number(source.den)
+  } else if (typeof source === 'string') {
+    const match = source
+      .trim()
+      .match(/^([+-]?)\s*\\(?:d?frac)\s*{([+-]?\d+)}\s*{([+-]?\d+)}$/)
+    if (match == null) return undefined
+    numerator = Number(`${match[1]}${match[2]}`)
+    denominator = Number(match[3])
+  } else {
+    return undefined
+  }
+
+  if (
+    !Number.isSafeInteger(numerator) ||
+    !Number.isSafeInteger(denominator) ||
+    denominator === 0
+  ) {
+    return undefined
+  }
+
+  return denominator < 0
+    ? { num: -numerator, den: -denominator }
+    : { num: numerator, den: denominator }
+}
+
+function isPowerOfTen(value: number): boolean {
+  if (!Number.isSafeInteger(value) || value < 1) return false
+  while (value > 1 && value % 10 === 0) value /= 10
+  return value === 1
+}
+
+function decimalStringToFraction(
+  source: string,
+): { num: number; den: number } | undefined {
+  const compact = source.trim().replace(',', '.')
+  const match = compact.match(/^([+-]?)(\d+)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/)
+  if (match == null) return undefined
+
+  const sign = match[1] === '-' ? -1 : 1
+  const fractionDigits = match[3] ?? ''
+  const exponent = Number(match[4] ?? 0)
+  const scale = fractionDigits.length - exponent
+  const digits = `${match[2]}${fractionDigits}`.replace(/^0+(?=\d)/, '')
+  const baseNumerator = sign * Number(digits)
+  const numerator =
+    scale < 0 ? baseNumerator * 10 ** Math.abs(scale) : baseNumerator
+  const denominator = scale > 0 ? 10 ** scale : 1
+  return Number.isSafeInteger(numerator) && Number.isSafeInteger(denominator)
+    ? { num: numerator, den: denominator }
+    : undefined
+}
+
+export function inferDecimalFractionForAMC(
+  source: unknown,
+): { num: number; den: number } | undefined {
+  const exact = inferExactFractionForAMC(source)
+  if (exact != null) {
+    if (isPowerOfTen(exact.den)) return exact
+
+    let numerator = exact.num
+    let denominator = exact.den
+    let divisor = Math.abs(numerator)
+    let remainder = denominator
+    while (remainder !== 0) {
+      const next = divisor % remainder
+      divisor = remainder
+      remainder = next
+    }
+    const gcd = divisor || 1
+    numerator /= gcd
+    denominator /= gcd
+
+    let twos = 0
+    let fives = 0
+    while (denominator % 2 === 0) {
+      denominator /= 2
+      twos++
+    }
+    while (denominator % 5 === 0) {
+      denominator /= 5
+      fives++
+    }
+    if (denominator !== 1) return undefined
+
+    const power = Math.max(twos, fives)
+    const decimalDenominator = 10 ** power
+    const decimalNumerator =
+      numerator * 2 ** (power - twos) * 5 ** (power - fives)
+    return Number.isSafeInteger(decimalNumerator) &&
+      Number.isSafeInteger(decimalDenominator)
+      ? { num: decimalNumerator, den: decimalDenominator }
+      : undefined
+  }
+
+  if (typeof source === 'number' && Number.isFinite(source)) {
+    return decimalStringToFraction(String(source))
+  }
+  if (typeof source === 'string') {
+    return decimalStringToFraction(mathliveNumericCleaner(source))
+  }
+  return undefined
+}
+
+export function inferPowerNotationForAMC(
+  source: unknown,
+): AMCPowerNotation | undefined {
+  if (typeof source !== 'string') return undefined
+
+  const compact = source
+    .trim()
+    .replace(/\\(?:left|right)/g, '')
+    .replace(/\\(?:lparen|rparen)/g, '')
+    .replace(/\s+/g, '')
+  const match = compact.match(/^\(?([+-]?\d+)\)?\^\{?([+-]?\d+)\}?$/)
+  if (match == null) return undefined
+
+  const base = Number(match[1])
+  const exponent = Number(match[2])
+  if (!Number.isSafeInteger(base) || !Number.isSafeInteger(exponent)) {
+    return undefined
+  }
+
+  return {
+    valeur: base,
+    param: {
+      basePuissance: base,
+      exposantPuissance: exponent,
+      baseNbChiffres: countDigits(base),
+      exposantNbChiffres: countDigits(exponent),
+      signe: base < 0,
+    },
+  }
 }
 
 export function inferScientificNotationForAMC(

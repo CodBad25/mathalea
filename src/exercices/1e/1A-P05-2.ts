@@ -195,7 +195,7 @@ export default class auto1AP3b extends ExerciceQcmA {
     this.correction = `On déduit de l'énoncé : <br>$\\begin{aligned}
         P(A)&=1-P(\\overline{A})\\\\
         &=1-${pA.entierMoinsFraction(1).texFractionSimplifiee}\\\\
-        &=${pA.texFractionSimplifiee}.\\end{aligned}$<br>
+        &=${pA.texFractionSimplifiee}\\end{aligned}$<br>
         Avec la donnée de $P(A \\cap C)=${pC1.texFractionSimplifiee}$ dans l'énoncé, on peut alors calculer : <br>$\\begin{aligned}
         P_A(C)&=\\dfrac{P(A \\cap C)}{P(A)}\\\\
         &=\\dfrac{ ${pC1.texFractionSimplifiee}}{ ${pA.texFractionSimplifiee}} \\\\

@@ -4,7 +4,7 @@ import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -93,7 +93,12 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           y2 = b
           texteCorr = `On remarque que $f(${x1})=f(${x2})=${b}$ donc la droite représentant la fonction $f$ passe par deux points distincts ayant la même ordonnée.<br>`
           texteCorr += `Elle est donc parallèle à l'axe des abscisses. La fonction $f$ est une fonction constante et $${miseEnEvidence(`f(x)=${b}`)}$.`
-          setReponse(this, i, `f(x)=${b}`)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: `f(x)=${b}` } },
+            { formatInteractif: 'mathlive' },
+          )
           if (this.correctionDetaillee) {
             tA = tracePoint(pointAbstrait(x1, y1), 'red')
             tB = tracePoint(pointAbstrait(x2, y2), 'red')
@@ -131,7 +136,12 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           texteCorr = `Soit $f(x)=ax+b$. Nous savons que $f(0)=${y1}=b$.<br>`
           texteCorr += `Donc $f(x)=ax${ecritureAlgebrique(y1)}$. En utilisant la donnée $f(${x2})=${y2}$ on obtient : $a \\times ${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}=${y2}$ d'où $a \\times ${ecritureParentheseSiNegatif(x2)}=${y2}${ecritureAlgebrique(-b)}=${y2 - b}$ donc $a=\\dfrac{${y2 - b}}{${x2}}=${a}$.<br>`
           texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
-          setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: `f(x)=${a}x${ecritureAlgebrique(b)}` } },
+            { formatInteractif: 'mathlive' },
+          )
           if (this.correctionDetaillee) {
             tA = tracePoint(pointAbstrait(x1, y1), 'red')
             tB = tracePoint(pointAbstrait(x2, y2), 'red')
@@ -171,7 +181,12 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           else texteCorr += `${a}$.<br>`
           texteCorr += `Donc $f(x)=${a}x+b$.<br>En utilisant la donnée $f(${x2})=${y2}$ on obtient : $${a} \\times ${ecritureParentheseSiNegatif(x2)}+b=${y2}$ d'où $${a * x2}+b=${y2}$ donc $b=${y2}${ecritureAlgebrique(-a * x2)}=${b}$.<br>`
           texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
-          setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: `f(x)=${a}x${ecritureAlgebrique(b)}` } },
+            { formatInteractif: 'mathlive' },
+          )
           if (this.correctionDetaillee) {
             tA = tracePoint(pointAbstrait(x1, y1), 'red')
             tB = tracePoint(pointAbstrait(x2, y2), 'red')
@@ -213,7 +228,12 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           texteCorr += `Donc $a=\\dfrac{${y1 - y2}}{${x1 - x2}}=${a}$.<br>`
           texteCorr += `Donc $b=${y1}${ecritureAlgebrique(a)}\\times ${ecritureParentheseSiNegatif(-x1)}=${y1}${ecritureAlgebrique(-a * x1)}=${b}$.<br>`
           texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
-          setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: `f(x)=${a}x${ecritureAlgebrique(b)}` } },
+            { formatInteractif: 'mathlive' },
+          )
           if (this.correctionDetaillee) {
             tA = tracePoint(pointAbstrait(x1, y1), 'red')
             tB = tracePoint(pointAbstrait(x2, y2), 'red')
@@ -256,10 +276,15 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           texteCorr += `Donc $a=\\dfrac{${y1 - y2}}{${x1 - x2}}=${aFrac.texFractionSimplifiee}$.<br>`
           texteCorr += `Donc $b=${y1}+${aFrac.signe === -1 ? '\\Big(' : ''}${aFrac.texFractionSimplifiee}${aFrac.signe === -1 ? '\\Big)' : ''}\\times ${ecritureParentheseSiNegatif(-x1)}=${fraction(y1 * aFrac.denIrred, aFrac.denIrred).texFraction}+${aFrac.multiplieEntier(-x1).texFractionSimplifiee}=${bFrac.texFractionSimplifiee}$.<br>`
           texteCorr += `Donc $${miseEnEvidence(`f(x)=${aFrac.texFractionSimplifiee}x${bFrac.num === 0 ? '' : bFrac.simplifie().texFractionSignee}`)}$.`
-          setReponse(
+          handleAnswers(
             this,
             i,
-            `f(x)=${aFrac.texFractionSimplifiee}x${bFrac.simplifie().texFractionSignee}`,
+            {
+              reponse: {
+                value: `f(x)=${aFrac.texFractionSimplifiee}x${bFrac.simplifie().texFractionSignee}`,
+              },
+            },
+            { formatInteractif: 'mathlive' },
           )
           if (this.correctionDetaillee) {
             tA = tracePoint(pointAbstrait(x1, y1), 'red')

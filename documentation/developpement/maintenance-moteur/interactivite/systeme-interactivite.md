@@ -100,8 +100,6 @@ Les clés de `reponses` dépendent du format :
 
 Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, une réponse numériquement valide reçoit automatiquement l'option `nombreDecimalSeulement`.
 
-`setReponse()` existe encore dans `src/lib/interactif/gestionInteractif.ts`, mais sert d'adaptateur de compatibilité. Les nouveaux exercices doivent préférer `handleAnswers()`.
-
 ## Pipeline de vérification
 
 `exerciceInteractif()` dans `src/lib/interactif/gestionInteractif.ts` parcourt les questions et délègue selon `formatInteractif`.
@@ -444,7 +442,7 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 
 - `src/lib/customElements/` : implémentations des custom elements MathALÉA.
 - `src/lib/types.ts` : types transverses, dont `InteractivityType`.
-- `src/lib/interactif/gestionInteractif.ts` : orchestration, `handleAnswers()`, `setReponse()`, `exerciceInteractif()` et dispatch des corrections custom.
+- `src/lib/interactif/gestionInteractif.ts` : orchestration, `handleAnswers()`, `exerciceInteractif()`.
 - `src/lib/interactif/comparisonFunctions.ts` : `fonctionComparaison()`.
 - `src/lib/interactif/checks/` : checks composables et tests unitaires.
 - `src/lib/interactif/questionMathLive.ts` : helpers historiques d'insertion des champs MathLive, textes à trous, champs texte et tableaux.

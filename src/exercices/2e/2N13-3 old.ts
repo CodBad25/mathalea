@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -90,8 +90,18 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
         (on ne change pas le sens des inégalités en prenant les racines carrées. Ce résultat admis sera démontré dans le chapitre sur les variations). <br><br>
         Finalement, on obtient l'encadrement de  $\\sqrt{${a}}$ par deux entiers consécutifs   : $${Math.floor(Math.sqrt(a))}< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}$.
    `
-          setReponse(this, 2 * i, reponse)
-          setReponse(this, 2 * i + 1, reponse + 1)
+          handleAnswers(
+            this,
+            2 * i,
+            { reponse: { value: reponse } },
+            { formatInteractif: 'mathlive' },
+          )
+          handleAnswers(
+            this,
+            2 * i + 1,
+            { reponse: { value: reponse + 1 } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 'Encadrer2':
           {
@@ -130,8 +140,18 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
         ${b + c * Math.floor(Math.sqrt(a))}&< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${b + c * (Math.floor(Math.sqrt(a)) + 1)}
                        \\end{aligned}$<br>
                        L'encadrement demandé est donc : $ ${b + c * Math.floor(Math.sqrt(a))}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${b + c * (Math.floor(Math.sqrt(a)) + 1)}$.`
-              setReponse(this, 2 * i, reponse1)
-              setReponse(this, 2 * i + 1, reponse2)
+              handleAnswers(
+                this,
+                2 * i,
+                { reponse: { value: reponse1 } },
+                { formatInteractif: 'mathlive' },
+              )
+              handleAnswers(
+                this,
+                2 * i + 1,
+                { reponse: { value: reponse2 } },
+                { formatInteractif: 'mathlive' },
+              )
             } else {
               texteCorr += `$\\begin{aligned}
                        ${Math.floor(Math.sqrt(a))} &< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}\\\\
@@ -141,8 +161,18 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
                        ${b + c * Math.floor(Math.sqrt(a))}&> ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${b + c * (Math.floor(Math.sqrt(a)) + 1)}
                                       \\end{aligned}$<br>
                                       L'encadrement demandé est donc : $ ${b + c * (Math.floor(Math.sqrt(a)) + 1)}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${b + c * Math.floor(Math.sqrt(a))}$.`
-              setReponse(this, 2 * i, reponse2)
-              setReponse(this, 2 * i + 1, reponse1)
+              handleAnswers(
+                this,
+                2 * i,
+                { reponse: { value: reponse2 } },
+                { formatInteractif: 'mathlive' },
+              )
+              handleAnswers(
+                this,
+                2 * i + 1,
+                { reponse: { value: reponse1 } },
+                { formatInteractif: 'mathlive' },
+              )
             }
           }
           break
@@ -183,8 +213,18 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
         ${texNombre(r1b, 1)}&< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${texNombre(r2b, 1)}
                        \\end{aligned}$<br>
                        L'encadrement demandé est donc : $ ${texNombre(r1b, 1)}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${texNombre(r2b, 1)}$.`
-              setReponse(this, 2 * i, r1b)
-              setReponse(this, 2 * i + 1, r2b)
+              handleAnswers(
+                this,
+                2 * i,
+                { reponse: { value: r1b } },
+                { formatInteractif: 'mathlive' },
+              )
+              handleAnswers(
+                this,
+                2 * i + 1,
+                { reponse: { value: r2b } },
+                { formatInteractif: 'mathlive' },
+              )
             } else {
               texteCorr += `$\\begin{aligned}
             ${texNombre(r1, 1)} &< \\sqrt{${a}} < ${texNombre(r2, 1)}\\\\
@@ -194,8 +234,18 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
         ${texNombre(r1b, 1)}&> ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${texNombre(r2b, 1)}
                        \\end{aligned}$<br>
                        L'encadrement demandé est donc : $ ${texNombre(r2b, 1)}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${texNombre(r1b, 1)}$.`
-              setReponse(this, 2 * i, r2b)
-              setReponse(this, 2 * i + 1, r1b)
+              handleAnswers(
+                this,
+                2 * i,
+                { reponse: { value: r2b } },
+                { formatInteractif: 'mathlive' },
+              )
+              handleAnswers(
+                this,
+                2 * i + 1,
+                { reponse: { value: r1b } },
+                { formatInteractif: 'mathlive' },
+              )
             }
           }
           break

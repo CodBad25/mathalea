@@ -1,5 +1,5 @@
 import EquationDroite from '../can/2e/can2G31-03'
-export const titre = 'Déterminer une équation de droite (graphique)'
+export const titre = "Lire graphiquement l'équation réduite d’une droite"
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
 export const amcType = 'qcmMono'

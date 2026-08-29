@@ -43,7 +43,7 @@ elements modernes doivent conduire au même contrat AMC.
 | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `qcm`, `mathalea-qcm`                                                                           | `qcmMono` ou `qcmMult`                                     | au moins deux propositions ; `qcmMult` dès qu'une question possède plusieurs réponses vraies                                                   |
 | `mathalea-mathfield`, ancien `mathlive`, ancien `calcul`                                        | `AMCNum`                                                   | une seule valeur finie, comparaison standard et options dont la sémantique est représentable par les cases AMC, sans réponses alternatives     |
-| `fillInTheBlank`, `fill-in-the-blank`, `multi-mathfield`, `tableauMathlive`, `tableau-mathlive` | `AMCNum` pour un champ, `AMCHybride` pour plusieurs champs | tous les champs doivent être numériques et indépendants                                                                                        |
+| `fillInTheBlank`, `fill-in-the-blank`, `multi-mathfield`, `tableauMathlive`, `tableau-mathlive` | `AMCNum` pour un champ, `AMCHybride` pour plusieurs champs | les champs doivent être indépendants ; chaque champ non transposable devient un sous-bloc `AMCOpen`                                            |
 | `liste-deroulante`                                                                              | `AMCOpen`                                                  | la correction interactive ne contient pas toujours la liste complète des choix ; un QCM n'est sûr que si l'exercice le construit explicitement |
 | formats texte, construction, clic, glisser-déposer, tableur, éditeurs et composants graphiques  | `AMCOpen`                                                  | l'énoncé LaTeX statique et la correction restent imprimables, mais la réponse ne peut pas être transposée fidèlement                           |
 | format absent ou inconnu                                                                        | `AMCOpen`                                                  | aucun exercice ne doit disparaître silencieusement de la page d'export                                                                         |
@@ -65,8 +65,13 @@ la question. Un `callback` global conduit à `AMCOpen`. Un barème explicite res
 compatible seulement si sa table de vérité, sur toutes les combinaisons de
 champs justes ou faux, est identique au barème indépendant (somme des points sur
 le nombre de champs) ; un barème « tout juste ou zéro » ne peut pas être inféré
-en plusieurs grilles AMC. Les grilles issues d'un tableau sont libellées par
-leurs coordonnées (« Ligne 2, colonne 3 ») afin de rester associables à la
+en plusieurs grilles AMC. Lorsque les champs sont indépendants, chacun est
+traité séparément : un champ inférable devient `AMCNum` ou QCM d'intervalles,
+tandis qu'un champ non transposable devient seul `AMCOpen`. Les grilles issues
+d'un même multi-mathfield restent toutefois les sous-blocs d'une unique entrée
+`AMCHybride` dans `autoCorrectionAMC` : elles ne deviennent pas autant de
+questions AMC de premier niveau. Les grilles issues d'un tableau sont libellées
+par leurs coordonnées (« Ligne 2, colonne 3 ») afin de rester associables à la
 cellule demandée sur papier.
 
 Pour les champs mathématiques, le format ne suffit pas à autoriser `AMCNum`.
@@ -75,8 +80,11 @@ L'inférence relit aussi chaque réponse enregistrée par `handleAnswers()` :
 - `compare` doit être absent ou égal à la comparaison standard
   `fonctionComparaison` ;
 - les options actuellement reconnues sont `nombreDecimalSeulement`,
-  `fractionIrreductible` et `ecritureScientifique` ; `fractionEgale` n'est
-  transposable que lorsque la réponse se réduit à un entier ;
+  `nombreAvecEspace`,
+  `fractionIrreductible`, `fractionEgale`, `fractionIdentique`,
+  `fractionDecimale`, `fractionSimplifiee`, `fractionReduite`,
+  `ecritureScientifique`, `puissance`, `unite`, `HMS`, `coordonnees` et
+  `estDansIntervalle` ;
 - `noFeedback` est sans effet sur la réponse AMC ;
 - toute autre option active ou fonction de comparaison spécialisée conduit à
   `AMCOpen` tant qu'une équivalence AMC dédiée n'est pas implémentée et testée.
@@ -84,26 +92,72 @@ L'inférence relit aussi chaque réponse enregistrée par `handleAnswers()` :
 Une fraction numérique est réduite avant le dimensionnement des cases AMC. Une
 fraction de dénominateur `1` devient un entier : `100/25` produit ainsi une
 réponse `4`, et non une grille dimensionnée à partir d'une écriture décimale
-approchée. En revanche, une `fractionEgale` non entière bascule en `AMCOpen` :
-une grille AMC impose un couple numérateur-dénominateur précis et ne représente
-donc pas toutes les écritures équivalentes acceptées par le comparateur.
+approchée. Pour une `fractionEgale` non entière, le contrat interactif reste
+inchangé, mais le contrat AMC attend la fraction irréductible et ajoute à
+l'énoncé : « La fraction doit être simplifiée au maximum. » L'enseignant peut
+toujours commuter manuellement la question en `AMCOpen` dans l'interface.
+
+Avec `fractionIdentique`, l'inférence conserve au contraire exactement le
+numérateur et le dénominateur enregistrés, y compris lorsqu'ils sont
+réductibles. La grille fractionnaire AMC reproduit ainsi le contrat interactif
+sans normaliser la fraction.
+
+Avec `fractionDecimale`, AMC attend une fraction dont le dénominateur est une
+puissance de 10. Une écriture déjà décimale, par exemple `50/100`, est conservée.
+Sinon, une fraction possédant une écriture décimale finie est convertie vers la
+plus petite puissance de 10 adaptée : `1/2` devient ainsi `5/10`. Une fraction
+sans écriture décimale finie reste en `AMCOpen`. Le comparateur interactif garde
+sa souplesse et continue d'accepter toute fraction décimale équivalente.
+
+Les options `fractionSimplifiee` et `fractionReduite` autorisent plusieurs
+écritures valides en interactif. En AMC, elles sont ramenées à la fraction
+irréductible et l'énoncé précise : « La fraction doit être simplifiée au
+maximum. » Cette contrainte supplémentaire ne modifie pas le contrat
+interactif.
+
+L'option `nombreAvecEspace` contrôle uniquement le groupement des chiffres dans
+la saisie interactive. Elle n'altère pas la valeur mathématique : AMC la retire
+avant de construire la grille numérique, qui porte sur le nombre lui-même.
+
+L'option `estDansIntervalle` est transposée avec la commande native
+`\AMCIntervals` lorsque les deux bornes sont numériques, finies et strictement
+ordonnées. L'intervalle interactif devient le choix central d'une partition de
+trois intervalles contigus de même amplitude, avec un distracteur de chaque
+côté. L'élève choisit donc sur papier l'intervalle valide au lieu d'y écrire une
+valeur libre. Les intervalles non bornés ou symboliques restent en `AMCOpen`.
+
+L'option `coordonnees` décompose un couple numérique en grilles « Abscisse » et
+« Ordonnée ». Un triplet ajoute une grille « Cote ». Les coordonnées
+fractionnaires sont réduites et l'énoncé demande alors une simplification
+maximale. Les coordonnées symboliques, les réponses alternatives et les
+dimensions autres que deux ou trois restent en `AMCOpen`.
+
+L'option `puissance` produit les deux zones AMC « Base » et « Exposant »
+uniquement lorsque la réponse attendue est une puissance numérique explicite à
+base et exposant entiers. Par exemple, `(-4)^{-3}` est représentable. Une
+puissance littérale, une base décimale ou une expression qui ne se réduit pas à
+la forme `base^exposant` reste en `AMCOpen`. Les options voisines, notamment
+`sansExposantUn`, ne sont pas assimilées automatiquement à ce contrat.
+
+L'option `unite` est inférée lorsque la valeur attendue est une instance de
+`Grandeur`. Le contrat interactif continue d'accepter les conversions d'unités,
+mais le contrat AMC code uniquement la mesure dans l'unité de la réponse et
+affiche cette unité à droite de la grille numérique. En multichamp, chaque
+grille porte donc sa propre unité. `precisionUnite` devient alors la tolérance
+numérique AMC. Une réponse unitaire enregistrée comme simple chaîne reste en
+`AMCOpen`, car son unité ne peut pas être extraite de façon suffisamment sûre.
+
+L'option `HMS` produit un `AMCHybride` composé d'une grille numérique de deux
+chiffres pour les heures, les minutes et les secondes. Chaque unité est affichée
+à droite de sa grille. Une composante nulle reste présente : l'absence de case
+noircie vaut alors zéro dans AMC. Lorsque la réponse attendue est une chaîne
+explicitement au format `HM`, sans composante secondes, seules les grilles
+heures et minutes sont produites. Une instance `Hms`, qui ne conserve pas cette
+intention de présentation, produit par sécurité les trois grilles.
 
 `interactifType` n'existe plus et ne doit pas être renseigné. Un item sans
 `autoCorrection[i].formatInteractif` ne peut pas utiliser de format global de
 repli.
-
-### Différence entre `setReponse()` et `handleAnswers()`
-
-Le `formatInteractif` passé à l'ancien `setReponse()` décrit parfois une
-comparaison (`fractionEgale`, `Num`, `Den`, `unites`, `puissance`, etc.). Le
-wrapper transmet ensuite à `handleAnswers()` un format de composant normalisé,
-souvent `mathlive`. Il ne faut donc pas interpréter ces deux vocabulaires comme
-s'ils portaient la même information.
-
-Pendant la passe AMC, `setReponse()` normalise notamment `fractionEgale` : la
-fraction est réduite avant le dimensionnement des cases et une fraction entière
-devient un entier (`100/25` devient `4`). Cela évite de dimensionner une grille
-à partir du développement décimal flottant de `1/14`, par exemple.
 
 ## Invariants
 

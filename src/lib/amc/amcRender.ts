@@ -5,6 +5,7 @@ import { buildAMCId } from './amcHelpers'
 import { normalizeAMCNum, normalizeAMCOpen, normalizeQcm } from './amcNormalize'
 import {
   AMCHybrideContainerTemplate,
+  AMCIntervalsTemplate,
   AMCNumTemplate,
   AMCOpenTemplate,
   qcmTemplate,
@@ -23,6 +24,19 @@ export function renderQcm(
   autoCorrectionItem: AMCUneProposition,
   contexte: QuestionQcmContext,
 ) {
+  if (autoCorrectionItem.amcInterval != null) {
+    return renderTemplate(AMCIntervalsTemplate, {
+      ref: contexte.ref,
+      id: contexte.id,
+      enonce:
+        autoCorrectionItem.enonce ??
+        contexte.exercice.listeQuestions[contexte.index],
+      correction:
+        autoCorrectionItem.options?.correction ??
+        contexte.exercice.listeCorrections[contexte.index],
+      interval: autoCorrectionItem.amcInterval,
+    })
+  }
   const data = normalizeQcm(autoCorrectionItem, contexte)
   return renderTemplate(qcmTemplate, data)
 }

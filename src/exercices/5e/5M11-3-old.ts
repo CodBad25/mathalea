@@ -8,7 +8,7 @@ import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -257,15 +257,20 @@ export default class PerimetreAireDisques extends Exercice {
         if (this.sup === 1) {
           if (context.isHtml && this.interactif) {
             if (choixValeurExacte) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 2 * i : i,
-                [
-                  stringNombre(reponseL1) + '\\pi',
-                  stringNombre(reponseL1) + '\\times\\pi',
-                  '\\pi\\times' + stringNombre(reponseL1),
-                ],
-                { formatInteractif: 'texte' },
+                {
+                  reponse: {
+                    value: [
+                      stringNombre(reponseL1) + '\\pi',
+                      stringNombre(reponseL1) + '\\times\\pi',
+                      '\\pi\\times' + stringNombre(reponseL1),
+                    ],
+                    options: { texteAvecCasse: true },
+                  },
+                },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 'Valeur exacte du périmètre : ' +
@@ -277,11 +282,11 @@ export default class PerimetreAireDisques extends Exercice {
                 )
             }
             if (choixValeurApprochee) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 2 * i + 1 : i,
-                [reponseL2, reponseL2bis],
-                { formatInteractif: 'calcul' },
+                { reponse: { value: [reponseL2, reponseL2bis] } },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 (this.sup3 === 4 ? '<br>' : '') +
@@ -343,15 +348,20 @@ export default class PerimetreAireDisques extends Exercice {
         } else if (this.sup === 2) {
           if (context.isHtml && this.interactif) {
             if (choixValeurExacte) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 2 * i : i,
-                [
-                  stringNombre(reponseA1) + '\\pi',
-                  stringNombre(reponseA1) + '\\times\\pi',
-                  '\\pi\\times' + stringNombre(reponseA1),
-                ],
-                { formatInteractif: 'texte' },
+                {
+                  reponse: {
+                    value: [
+                      stringNombre(reponseA1) + '\\pi',
+                      stringNombre(reponseA1) + '\\times\\pi',
+                      '\\pi\\times' + stringNombre(reponseA1),
+                    ],
+                    options: { texteAvecCasse: true },
+                  },
+                },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 "Valeur exacte de l'aire : " +
@@ -362,11 +372,11 @@ export default class PerimetreAireDisques extends Exercice {
                   { texteApres: '$\\text{ cm}^2$' },
                 )
             } else if (choixValeurApprochee) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 2 * i + 1 : i,
-                [reponseA2, reponseA2bis],
-                { formatInteractif: 'calcul' },
+                { reponse: { value: [reponseA2, reponseA2bis] } },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 (this.sup3 === 4 ? '<br>' : '') +
@@ -429,15 +439,20 @@ export default class PerimetreAireDisques extends Exercice {
         } else {
           if (context.isHtml && this.interactif) {
             if (choixValeurExacte) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 4 * i : 2 * i,
-                [
-                  stringNombre(reponseL1) + '\\pi',
-                  stringNombre(reponseL1) + '\\times\\pi',
-                  '\\pi\\times' + stringNombre(reponseL1),
-                ],
-                { formatInteractif: 'texte' },
+                {
+                  reponse: {
+                    value: [
+                      stringNombre(reponseL1) + '\\pi',
+                      stringNombre(reponseL1) + '\\times\\pi',
+                      '\\pi\\times' + stringNombre(reponseL1),
+                    ],
+                    options: { texteAvecCasse: true },
+                  },
+                },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 'Valeur exacte du périmètre : ' +
@@ -449,11 +464,11 @@ export default class PerimetreAireDisques extends Exercice {
                 )
             }
             if (choixValeurApprochee) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 4 * i + 1 : 2 * i,
-                [reponseL2, reponseL2bis],
-                { formatInteractif: 'calcul' },
+                { reponse: { value: [reponseL2, reponseL2bis] } },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 (this.sup3 === 4 ? '<br>' : '') +
@@ -466,15 +481,20 @@ export default class PerimetreAireDisques extends Exercice {
                 )
             }
             if (choixValeurExacte) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 4 * i + 2 : 2 * i + 1,
-                [
-                  stringNombre(reponseA1) + '\\pi',
-                  stringNombre(reponseA1) + '\\times\\pi',
-                  '\\pi\\times' + stringNombre(reponseA1),
-                ],
-                { formatInteractif: 'texte' },
+                {
+                  reponse: {
+                    value: [
+                      stringNombre(reponseA1) + '\\pi',
+                      stringNombre(reponseA1) + '\\times\\pi',
+                      '\\pi\\times' + stringNombre(reponseA1),
+                    ],
+                    options: { texteAvecCasse: true },
+                  },
+                },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 "<br>Valeur exacte de l'aire : " +
@@ -486,11 +506,11 @@ export default class PerimetreAireDisques extends Exercice {
                 )
             }
             if (choixValeurApprochee) {
-              setReponse(
+              handleAnswers(
                 this,
                 this.sup3 === 4 ? 4 * i + 3 : 2 * i + 1,
-                [reponseA2, reponseA2bis],
-                { formatInteractif: 'calcul' },
+                { reponse: { value: [reponseA2, reponseA2bis] } },
+                { formatInteractif: 'mathlive' },
               )
               texte +=
                 "<br>Valeur approchée de l'aire : " +

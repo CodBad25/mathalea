@@ -103,6 +103,22 @@
 
   let zoom = $derived($tbiState.cards[paramsIndex]?.zoom ?? 1)
   let colBreakActive = $derived($tbiState.cards[paramsIndex]?.colBreak ?? false)
+  /**
+   * Nombre de colonnes de la liste de questions de cet exercice (réparties en
+   * colonnes CSS à l'intérieur de la carte). Même réglage que le bouton
+   * « colonnes » de la vue prof : sérialisé dans l'URL via `cols`.
+   */
+  let cols = $derived($exercicesParams[paramsIndex]?.cols ?? 1)
+
+  function setCols(next: number) {
+    const clamped = Math.min(4, Math.max(1, next))
+    exercicesParams.update((list) => {
+      const params = list[paramsIndex]
+      if (params) params.cols = clamped === 1 ? undefined : clamped
+      return list
+    })
+    mathaleaUpdateUrlFromExercicesParams()
+  }
 
   let settingsExist = $derived(
     exercise.nbQuestionsModifiable ||
@@ -316,10 +332,13 @@
         {showColumnBreak}
         {columnBreakDisabled}
         {colBreakActive}
+        {cols}
         onNewData={newData}
         onSettings={() => (isSettingsModalDisplayed = true)}
         onZoomIn={() => zoomBy(0.1)}
         onZoomOut={() => zoomBy(-0.1)}
+        onColsInc={() => setCols(cols + 1)}
+        onColsDec={() => setCols(cols - 1)}
         onMoveToTab={(tab) => moveCardToTab(paramsIndex, tab)}
         onMoveUp={() => onReorder(paramsIndex, -1)}
         onMoveDown={() => onReorder(paramsIndex, 1)}
@@ -354,13 +373,14 @@
             </p>
           {/if}
           <ul
+            style="columns: {cols}"
             class="{exercise.listeQuestions.length === 1 ||
             !exercise.listeAvecNumerotation
               ? 'list-none'
               : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
           >
             {#each exercise.listeQuestions as question, i (i)}
-              <div>
+              <div style="break-inside: avoid">
                 <li
                   id="exercice{paramsIndex}Q{i}"
                   class="py-1 overflow-x-auto"

@@ -20,7 +20,7 @@ import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
@@ -475,15 +475,18 @@ function questionsEtCorrections(
   } else {
     if (!context.isAmc) {
       // Questions pour interactivité html
-      setReponse(
+      handleAnswers(
         exercice,
         numero * 2,
-        serie.effectifs[serie.rangEffectifCache],
-        { formatInteractif: 'calcul' },
+        { reponse: { value: serie.effectifs[serie.rangEffectifCache] } },
+        { formatInteractif: 'mathlive' },
       )
-      setReponse(exercice, numero * 2 + 1, frequenceDemandee, {
-        formatInteractif: 'calcul',
-      })
+      handleAnswers(
+        exercice,
+        numero * 2 + 1,
+        { reponse: { value: frequenceDemandee } },
+        { formatInteractif: 'mathlive' },
+      )
       questions = [
         preambule,
         numAlpha(0) +

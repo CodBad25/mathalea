@@ -7,7 +7,7 @@ export const amcType = 'AMCHybride'
 export const dateDePublication = '30/10/2021'
 export const uuid = '80772'
 export const refs = {
-  'fr-fr': ['3A11-1'],
+  'fr-fr': ['3A12-2'],
   'fr-ch': [],
 }
 export default class ProblemesEvenementsRecurrents3e extends ProblemesEvenementsRecurrents {

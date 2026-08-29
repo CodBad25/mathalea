@@ -302,8 +302,6 @@ qui :
 - valide seulement l'ensemble exact des bonnes réponses ;
 - verrouille le composant après validation.
 
-Ne pas utiliser `setReponse()` ni un comparateur champ par champ pour un QCM.
-
 ## Rendu non interactif
 
 Deux approches sont possibles :

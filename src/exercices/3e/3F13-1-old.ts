@@ -4,7 +4,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { numAlpha } from '../../lib/outils/outilString'
@@ -238,24 +238,60 @@ export default class AntecedentEtImageGraphique extends Exercice {
       gr,
     )
     this.contenuCorrection = `${numAlpha(0)} L'image de $${x0}$ est $${a}$, on note $f(${x0})=${a}$.`
-    setReponse(this, 0, a)
+    handleAnswers(
+      this,
+      0,
+      { reponse: { value: a } },
+      { formatInteractif: 'mathlive' },
+    )
 
     this.contenuCorrection += `<br>${numAlpha(1)} L'image de $${x0 + 5}$ est $${(b + c) / 2}$, on note $f(${x0 + 5})=${(b + c) / 2}$.`
-    setReponse(this, 1, (b + c) / 2)
+    handleAnswers(
+      this,
+      1,
+      { reponse: { value: (b + c) / 2 } },
+      { formatInteractif: 'mathlive' },
+    )
     if (ordre === 1) {
       this.contenuCorrection += `<br>${numAlpha(2)} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
-      setReponse(this, 2, x0 + 4)
+      handleAnswers(
+        this,
+        2,
+        { reponse: { value: x0 + 4 } },
+        { formatInteractif: 'mathlive' },
+      )
       this.contenuCorrection += `<br>${numAlpha(3)} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
-      setReponse(this, 3, [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`], {
-        formatInteractif: 'texte',
-      })
+      handleAnswers(
+        this,
+        3,
+        {
+          reponse: {
+            value: [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
+            options: { texteAvecCasse: true },
+          },
+        },
+        { formatInteractif: 'mathlive' },
+      )
     } else {
       this.contenuCorrection += `<br>${numAlpha(2)} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
-      setReponse(this, 2, [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`], {
-        formatInteractif: 'texte',
-      })
+      handleAnswers(
+        this,
+        2,
+        {
+          reponse: {
+            value: [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
+            options: { texteAvecCasse: true },
+          },
+        },
+        { formatInteractif: 'mathlive' },
+      )
       this.contenuCorrection += `<br>${numAlpha(3)} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
-      setReponse(this, 3, x0 + 4)
+      handleAnswers(
+        this,
+        3,
+        { reponse: { value: x0 + 4 } },
+        { formatInteractif: 'mathlive' },
+      )
     }
     if (!context.isHtml) {
       this.contenu =

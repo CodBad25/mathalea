@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import { miseEnCouleur, texteEnCouleur } from '../../lib/outils/embellissements'
+import { miseEnCouleur, miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import ExerciceSimple from '../ExerciceSimple'
 
@@ -112,7 +112,7 @@ x&${difference < 0 ? miseEnCouleur(finalSymbol) : finalSymbol}\\dfrac{${d - b}}{
 x&${finalSymbol}${root}
 \\end{aligned}
 $<br>`
-    this.correction += `L'ensemble de solutions est : ${texteEnCouleur(` $${makeInterval(finalSymbol, root)}$`)}.<br>`
+    this.correction += `L'ensemble de solutions est : $${miseEnEvidence(`${makeInterval(finalSymbol, root)}`)}$.<br>`
 
     this.reponse = makeInterval(finalSymbol, root)
 

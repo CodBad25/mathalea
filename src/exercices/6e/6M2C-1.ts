@@ -1,4 +1,4 @@
-import PerimetreOuAireDeCarresRectanglesTriangles from '../5e/5M11-1'
+import PerimetreOuAireDeCarresRectanglesTriangles from '../bp2/bp2AutoV4'
 
 export const titre =
   'Calculer périmètre et/ou aire de carrés, rectangles et triangles rectangles'

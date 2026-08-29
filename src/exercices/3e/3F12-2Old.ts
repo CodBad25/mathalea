@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
@@ -138,57 +138,112 @@ export default class ImageFonctionAlgebrique extends Exercice {
         case 'ax+b':
           expression = `${a}x+${b}`
           texteCorr = `$${nomdef}(${x})=${a}\\times ${ecritureParentheseSiNegatif(x)}+${b}=${a * x}+${b}=${a * x + b}$`
-          setReponse(this, i, a * x + b)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: a * x + b } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 'ax-b':
           expression = `${a}x-${b}`
           texteCorr = `$${nomdef}(${x})=${a}\\times ${ecritureParentheseSiNegatif(x)}-${b}=${a * x}-${b}=${a * x - b}$`
-          setReponse(this, i, a * x - b)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: a * x - b } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '-ax+b':
           expression = `-${a}x+${b}`
           texteCorr = `$${nomdef}(${x})=-${a}\\times ${ecritureParentheseSiNegatif(x)}+${b}=${-1 * a * x}+${b}=${-1 * a * x + b}$`
-          setReponse(this, i, -1 * a * x + b)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: -1 * a * x + b } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '-ax-b':
           expression = `-${a}x-${b}`
           texteCorr = `$${nomdef}(${x})=-${a}\\times ${ecritureParentheseSiNegatif(x)}-${b}=${-1 * a * x}-${b}=${-1 * a * x - b}$`
-          setReponse(this, i, -1 * a * x - b)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: -1 * a * x - b } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 'ax2+bx+c':
           expression = `${a}x^2+${b}x+${c}`
           texteCorr = `$${nomdef}(${x})=${a}\\times ${ecritureParentheseSiNegatif(x)}^2+${b}\\times ${ecritureParentheseSiNegatif(x)}+${c}=${a}\\times${x * x}${ecritureAlgebrique(b * x)}+${c}=${a * x * x}${ecritureAlgebrique(b * x)}+${c}=${a * x * x + b * x + c}$`
-          setReponse(this, i, a * x * x + b * x + c)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: a * x * x + b * x + c } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 'ax2+c':
           expression = `${a}x^2+${c}`
           texteCorr = `$${nomdef}(${x})=${a}\\times ${ecritureParentheseSiNegatif(x)}^2+${c}=${a}\\times${x * x}+${c}=${a * x * x}+${c}=${a * x * x + c}$`
-          setReponse(this, i, a * x * x + c)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: a * x * x + c } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 'ax2+bx':
           expression = `${a}x^2+${b}x`
           texteCorr = `$${nomdef}(${x})=${a}\\times ${ecritureParentheseSiNegatif(x)}^2+${b}\\times ${ecritureParentheseSiNegatif(x)}=${a}\\times${x * x}${ecritureAlgebrique(b * x)}=${a * x * x}${ecritureAlgebrique(b * x)}=${a * x * x + b * x}$`
-          setReponse(this, i, a * x * x + b * x)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: a * x * x + b * x } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '-ax2+bx-c':
           expression = `-${a}x^2+${b}x-${c}`
           texteCorr = `$${nomdef}(${x})=-${a}\\times ${ecritureParentheseSiNegatif(x)}^2+${b}\\times ${ecritureParentheseSiNegatif(x)}-${c}=-${a}\\times${x * x}${ecritureAlgebrique(b * x)}-${c}=${-1 * a * x * x}${ecritureAlgebrique(b * x)}-${c}=${-1 * a * x * x + b * x - c}$`
-          setReponse(this, i, -1 * a * x * x + b * x - c)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: -1 * a * x * x + b * x - c } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '-ax2-bx-c':
           expression = `-${a}x^2-${b}x-${c}`
           texteCorr = `$${nomdef}(${x})=-${a}\\times ${ecritureParentheseSiNegatif(x)}^2-${b}\\times ${ecritureParentheseSiNegatif(x)}-${c}=-${a}\\times${x * x}${ecritureAlgebrique(-1 * b * x)}-${c}=${-1 * a * x * x}${ecritureAlgebrique(-1 * b * x)}-${c}=${-1 * a * x * x - b * x - c}$`
-          setReponse(this, i, -1 * a * x * x - b * x - c)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: -1 * a * x * x - b * x - c } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '-ax2-bx+c':
           expression = `-${a}x^2-${b}x+${c}`
           texteCorr = `$${nomdef}(${x})=-${a}\\times ${ecritureParentheseSiNegatif(x)}^2-${b}\\times ${ecritureParentheseSiNegatif(x)}+${c}=-${a}\\times${x * x}${ecritureAlgebrique(-1 * b * x)}+${c}=${-1 * a * x * x}${ecritureAlgebrique(-1 * b * x)}+${c}=${-1 * a * x * x - b * x + c}$`
-          setReponse(this, i, -1 * a * x * x - b * x + c)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: -1 * a * x * x - b * x + c } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '-ax2-bx':
           expression = `-${a}x^2-${b}x`
           texteCorr = `$${nomdef}(${x})=-${a}\\times ${ecritureParentheseSiNegatif(x)}^2-${b}\\times ${ecritureParentheseSiNegatif(x)}=-${a}\\times${x * x}${ecritureAlgebrique(-1 * b * x)}=${-1 * a * x * x}${ecritureAlgebrique(-1 * b * x)}=${-1 * a * x * x - b * x}$`
-          setReponse(this, i, -1 * a * x * x - b * x)
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: -1 * a * x * x - b * x } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 'a/cx+d':
           d = randint(1, 11)
@@ -197,9 +252,12 @@ export default class ImageFonctionAlgebrique extends Exercice {
           }
           expression = `\\dfrac{${a}}{${c}x+${d}}`
           texteCorr = `$${nomdef}(${x})=\\dfrac{${a}}{${c}\\times${ecritureParentheseSiNegatif(x)}+${d}}=\\dfrac{${a}}{${c * x}+${d}}=\\dfrac{${a}}{${c * x + d}}=${texFractionReduite(a, c * x + d)}$`
-          setReponse(this, i, fraction(a, c * x + d), {
-            formatInteractif: 'fractionEgale',
-          })
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: fraction(a, c * x + d) } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case 'ax+b/cx+d':
           d = randint(1, 11)
@@ -211,9 +269,12 @@ export default class ImageFonctionAlgebrique extends Exercice {
           }
           expression = `\\dfrac{${a}x+${b}}{${c}x+${d}}`
           texteCorr = `$${nomdef}(${x})=\\dfrac{${a}\\times${ecritureParentheseSiNegatif(x)}+${b}}{${c}\\times${ecritureParentheseSiNegatif(x)}+${d}}=\\dfrac{${a * x}+${b}}{${c * x}+${d}}=\\dfrac{${a * x + b}}{${c * x + d}}=${texFractionReduite(a * x + b, c * x + d)}$`
-          setReponse(this, i, fraction(a * x + b, c * x + d), {
-            formatInteractif: 'fractionEgale',
-          })
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: fraction(a * x + b, c * x + d) } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '(ax+b)(cx+d)':
           a = randint(-4, 4, [0, 1, -1])
@@ -224,7 +285,12 @@ export default class ImageFonctionAlgebrique extends Exercice {
 
           expression = `(${a}x${ecritureAlgebrique(b)})(${c}x${ecritureAlgebrique(d)})`
           texteCorr = `$${nomdef}(${x})=\\left(${a}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}\\right)\\left(${c}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}\\right)=(${a * x}${ecritureAlgebrique(b)})(${c * x}${ecritureAlgebrique(d)})=${a * x + b}\\times${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$`
-          setReponse(this, i, (a * x + b) * (c * x + d))
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: (a * x + b) * (c * x + d) } },
+            { formatInteractif: 'mathlive' },
+          )
           break
         case '(ax+b)2':
           a = randint(-4, 4, [0, -1, 1])
@@ -235,7 +301,12 @@ export default class ImageFonctionAlgebrique extends Exercice {
 
           expression = `(${a}x${ecritureAlgebrique(b)})^2`
           texteCorr = `$${nomdef}(${x})=\\left(${a}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}\\right)^2=(${a * x}${ecritureAlgebrique(b)})^2=${ecritureParentheseSiNegatif(a * x + b)}^2=${(a * x + b) * (a * x + b)}$`
-          setReponse(this, i, (a * x + b) * (a * x + b))
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: (a * x + b) * (a * x + b) } },
+            { formatInteractif: 'mathlive' },
+          )
           break
       }
 

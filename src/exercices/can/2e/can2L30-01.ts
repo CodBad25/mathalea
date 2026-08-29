@@ -2,7 +2,7 @@ import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 import {
   miseEnCouleur,
-  texteEnCouleur,
+  miseEnEvidence,
 } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -89,7 +89,7 @@ x&${symbolFinal}${racine}
 \\end{aligned}
 $<br>`
 
-        this.correction += `L'ensemble de solutions est : ${texteEnCouleur(` $${makeReponse()}$`)}.<br>`
+        this.correction += `L'ensemble de solutions est : $${miseEnEvidence(`${makeReponse()}`)}$.<br>`
         this.reponse = makeReponse()
 
         if (this.versionQcm) {

@@ -2,10 +2,7 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { resolutionSystemeLineaire2x2 } from '../../lib/mathFonctions/outilsMaths'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -116,10 +113,18 @@ export default class AntecedentGraphique extends Exercice {
             texteAvant: `<br>Le (ou les) antécédent(s) de $${fx2}$ (séparer les nombres avec un point-virgule) :`,
           },
         )
-        setReponse(this, indexInteractif, x1, { formatInteractif: 'calcul' })
-        setReponse(this, indexInteractif + 1, x2, {
-          formatInteractif: 'calcul',
-        })
+        handleAnswers(
+          this,
+          indexInteractif,
+          { reponse: { value: x1 } },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
+          this,
+          indexInteractif + 1,
+          { reponse: { value: x2 } },
+          { formatInteractif: 'mathlive' },
+        )
         incrementInteractif = 2
         texteCorr = `L'antécédent de $${fx1}$ est $${miseEnEvidence(x1)}$, on note $f(${miseEnEvidence(x1)})=${fx1}$.<br>`
         texteCorr += `L'antécédent de $${fx2}$ est $${miseEnEvidence(x2)}$, on note $f(${miseEnEvidence(x2)})=${fx2}$.`
@@ -141,7 +146,12 @@ export default class AntecedentGraphique extends Exercice {
               texteAvant: `Le (ou les) antécédent(s) de ${fx0} (séparer les nombres avec un point-virgule) :`,
             },
           )
-          setReponse(this, indexInteractif, x0, { formatInteractif: 'calcul' })
+          handleAnswers(
+            this,
+            indexInteractif,
+            { reponse: { value: x0 } },
+            { formatInteractif: 'mathlive' },
+          )
           incrementInteractif = 1
           texteCorr = `$${fx0}$ a un unique antécédent $${miseEnEvidence(x0)}$, on note $f(${miseEnEvidence(x0)})=${fx0}$..<br>`
           f = (x) => a * (x - x0) ** 2 + fx0

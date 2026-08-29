@@ -4,10 +4,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
@@ -270,11 +267,21 @@ export default class PuissancesDUnRelatif2 extends Exercice {
         )
       }
       if (context.isAmc) {
-        setReponse(this, i, reponseInteractive, {
-          formatInteractif: 'puissance',
-          basePuissance: base,
-          exposantPuissance: exposantInteractif,
-        })
+        handleAnswers(
+          this,
+          i,
+          {
+            reponse: {
+              value: String(reponseInteractive),
+              options: { puissance: true },
+            },
+          },
+          {
+            formatInteractif: 'mathlive',
+            basePuissance: base,
+            exposantPuissance: exposantInteractif,
+          },
+        )
       }
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras

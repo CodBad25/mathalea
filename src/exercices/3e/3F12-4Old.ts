@@ -2,7 +2,7 @@ import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { chercheMinMaxFonction } from '../../lib/mathFonctions/etudeFonction'
 import {
@@ -265,8 +265,18 @@ export default class ImageGraphiqueOld extends Exercice {
               2 * i + 1,
               KeyboardType.clavierDeBase,
             )
-          setReponse(this, 2 * i, fx1)
-          setReponse(this, 2 * i + 1, fx2)
+          handleAnswers(
+            this,
+            2 * i,
+            { reponse: { value: fx1 } },
+            { formatInteractif: 'mathlive' },
+          )
+          handleAnswers(
+            this,
+            2 * i + 1,
+            { reponse: { value: fx2 } },
+            { formatInteractif: 'mathlive' },
+          )
         } else {
           texte +=
             `$f(${x1})=$` +
@@ -285,9 +295,24 @@ export default class ImageGraphiqueOld extends Exercice {
               3 * i + 2,
               KeyboardType.clavierDeBase,
             )
-          setReponse(this, 3 * i, fx1)
-          setReponse(this, 3 * i + 1, fx2)
-          setReponse(this, 3 * i + 2, fx3)
+          handleAnswers(
+            this,
+            3 * i,
+            { reponse: { value: fx1 } },
+            { formatInteractif: 'mathlive' },
+          )
+          handleAnswers(
+            this,
+            3 * i + 1,
+            { reponse: { value: fx2 } },
+            { formatInteractif: 'mathlive' },
+          )
+          handleAnswers(
+            this,
+            3 * i + 2,
+            { reponse: { value: fx3 } },
+            { formatInteractif: 'mathlive' },
+          )
         }
       }
       if (this.questionJamaisPosee(i, a, b, c, d)) {

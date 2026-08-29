@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -116,13 +116,18 @@ export default class ExerciceEquations extends Exercice {
           texte = ax2plusbx(a, b)[0]
           texteCorr = ax2plusbx(a, b)[1]
           fracReponse = new FractionEtendue(-b, a)
-          setReponse(
+          handleAnswers(
             this,
             fracReponse.signe === -1 ? indiceQ : indiceQ + 1,
-            fracReponse,
-            { formatInteractif: 'fractionEgale' },
+            { reponse: { value: fracReponse } },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(this, fracReponse.signe === 1 ? indiceQ : indiceQ + 1, 0)
+          handleAnswers(
+            this,
+            fracReponse.signe === 1 ? indiceQ : indiceQ + 1,
+            { reponse: { value: 0 } },
+            { formatInteractif: 'mathlive' },
+          )
           texte += ajouteChampTexteMathLive(
             this,
             indiceQ,
@@ -156,13 +161,18 @@ export default class ExerciceEquations extends Exercice {
           texte = ax2plusbx(a, b)[0]
           texteCorr = ax2plusbx(a, b)[1]
           fracReponse = new FractionEtendue(-b, a)
-          setReponse(
+          handleAnswers(
             this,
             fracReponse.signe === -1 ? indiceQ : indiceQ + 1,
-            fracReponse,
-            { formatInteractif: 'fractionEgale' },
+            { reponse: { value: fracReponse } },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(this, fracReponse.signe === 1 ? indiceQ : indiceQ + 1, 0)
+          handleAnswers(
+            this,
+            fracReponse.signe === 1 ? indiceQ : indiceQ + 1,
+            { reponse: { value: 0 } },
+            { formatInteractif: 'mathlive' },
+          )
           texte += ajouteChampTexteMathLive(
             this,
             indiceQ,
@@ -211,17 +221,17 @@ export default class ExerciceEquations extends Exercice {
           }
           texteCorr += `<br>Les solutions de l'équation sont : $${miseEnEvidence(fracReponse.simplifie().oppose().texFSD)}$ et $${miseEnEvidence(fracReponse.simplifie().texFSD)}$.`
           fracReponse = fracReponse.oppose()
-          setReponse(
+          handleAnswers(
             this,
             fracReponse.signe === -1 ? indiceQ : indiceQ + 1,
-            fracReponse,
-            { formatInteractif: 'fractionEgale' },
+            { reponse: { value: fracReponse } },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(
+          handleAnswers(
             this,
             fracReponse.signe !== -1 ? indiceQ : indiceQ + 1,
-            new FractionEtendue(b, a),
-            { formatInteractif: 'fractionEgale' },
+            { reponse: { value: new FractionEtendue(b, a) } },
+            { formatInteractif: 'mathlive' },
           )
           texte += ajouteChampTexteMathLive(
             this,
@@ -273,17 +283,17 @@ export default class ExerciceEquations extends Exercice {
           }
           texteCorr += `<br>Les solutions de l'équation sont : $${miseEnEvidence(fracReponse.simplifie().texFSD)}$ et $${miseEnEvidence(fracReponse.simplifie().oppose().texFSD)}$.`
           fracReponse = new FractionEtendue(-b, a)
-          setReponse(
+          handleAnswers(
             this,
             fracReponse.signe === -1 ? indiceQ : indiceQ + 1,
-            fracReponse,
-            { formatInteractif: 'fractionEgale' },
+            { reponse: { value: fracReponse } },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(
+          handleAnswers(
             this,
             fracReponse.signe !== -1 ? indiceQ : indiceQ + 1,
-            new FractionEtendue(b, a),
-            { formatInteractif: 'fractionEgale' },
+            { reponse: { value: new FractionEtendue(b, a) } },
+            { formatInteractif: 'mathlive' },
           )
           texte += ajouteChampTexteMathLive(
             this,
@@ -336,9 +346,12 @@ export default class ExerciceEquations extends Exercice {
           }
           texteCorr += `<br>La solution de l'équation est : $${miseEnEvidence(fracReponse.simplifie().texFSD)}$.`
 
-          setReponse(this, indiceQ, fracReponse, {
-            formatInteractif: 'fractionEgale',
-          })
+          handleAnswers(
+            this,
+            indiceQ,
+            { reponse: { value: fracReponse } },
+            { formatInteractif: 'mathlive' },
+          )
           texte += ajouteChampTexteMathLive(
             this,
             indiceQ,
@@ -365,9 +378,12 @@ export default class ExerciceEquations extends Exercice {
             texteCorr += ` $ x = ${fracReponse.simplifie().texFSD} $`
           }
           texteCorr += `<br>La solution de l'équation est : $${miseEnEvidence(fracReponse.simplifie().texFSD)}$.`
-          setReponse(this, indiceQ, fracReponse, {
-            formatInteractif: 'fractionEgale',
-          })
+          handleAnswers(
+            this,
+            indiceQ,
+            { reponse: { value: fracReponse } },
+            { formatInteractif: 'mathlive' },
+          )
           texte += ajouteChampTexteMathLive(
             this,
             indiceQ,
@@ -404,9 +420,12 @@ export default class ExerciceEquations extends Exercice {
             texteCorr += `$ x = ${fracReponse.simplifie().texFSD}$`
           }
           texteCorr += `<br>La solution de l'équation est : $${miseEnEvidence(fracReponse.simplifie().texFSD)}$.`
-          setReponse(this, indiceQ, fracReponse, {
-            formatInteractif: 'fractionEgale',
-          })
+          handleAnswers(
+            this,
+            indiceQ,
+            { reponse: { value: fracReponse } },
+            { formatInteractif: 'mathlive' },
+          )
           texte += ajouteChampTexteMathLive(
             this,
             indiceQ,

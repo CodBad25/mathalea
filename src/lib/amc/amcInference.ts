@@ -3,7 +3,14 @@ import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import {
   ensureAMCOpenAutoCorrection,
   extractAMCValue,
+  inferDecimalFractionForAMC,
+  inferCoordinatesForAMC,
+  inferExactFractionForAMC,
+  inferHmsForAMC,
+  inferIntervalForAMC,
   inferNumericValueForAMC,
+  inferPowerNotationForAMC,
+  inferQuantityForAMC,
   inferScientificNotationForAMC,
   mergeNumericParamsFromOptions,
 } from './amcInferenceHelpers'
@@ -46,7 +53,12 @@ function hasIndependentFieldScoring(
   }
 }
 
-function getAMCFieldLabel(fieldKey: string, fallbackIndex: number): string {
+function getAMCFieldLabel(
+  fieldKey: string,
+  fallbackIndex: number,
+  explicitLabel?: string,
+): string {
+  if (explicitLabel != null) return explicitLabel
   const tableCell = fieldKey.match(/^L(\d+)C(\d+)$/i)
   if (tableCell != null) {
     return `Ligne ${tableCell[1]}, colonne ${tableCell[2]}`
@@ -59,6 +71,36 @@ function getAMCFieldLabel(fieldKey: string, fallbackIndex: number): string {
   }
 
   return `Réponse ${fallbackIndex + 1}`
+}
+
+function getAMCFieldDisplay(field: { displayLatexUnit?: string }) {
+  return field.displayLatexUnit == null
+    ? undefined
+    : {
+        label: `$${field.displayLatexUnit}$`,
+        labelPosition: 'right' as const,
+      }
+}
+
+const irreducibleFractionInstruction =
+  'La fraction doit être simplifiée au maximum.'
+
+function appendIrreducibleFractionInstruction(
+  statement: string | undefined,
+  fields: Array<{
+    requiresIrreducibleFractionInstruction?: boolean
+    displayLatexUnit?: string
+  }>,
+): string | undefined {
+  let result = statement
+  if (
+    fields.some((field) => field.requiresIrreducibleFractionInstruction) &&
+    !result?.includes(irreducibleFractionInstruction)
+  ) {
+    result = `${result ?? ''}<br>${irreducibleFractionInstruction}`
+  }
+
+  return result
 }
 
 /**
@@ -86,7 +128,9 @@ export function mathaleaEnsureAMCCompatibility(
   )
     ? exerciseAny.interactiveAutoCorrectionForAMC
     : []
-  const amcAutoCorrection = Array.isArray(exerciseAny.autoCorrectionAMC)
+  const amcAutoCorrection: InferenceAutoCorrectionItem[] = Array.isArray(
+    exerciseAny.autoCorrectionAMC,
+  )
     ? exerciseAny.autoCorrectionAMC
     : []
   const generatedAutoCorrection = Array.isArray(exercice.autoCorrection)
@@ -218,12 +262,19 @@ export function mathaleaEnsureAMCCompatibility(
     // On doit pour les AMCNum s'assurer que les données dans autoCorrectionAMC comme digits, decimals, signe, etc sont bien renseignées
     // On doit aussi s'assurer que pour les qcm la propriété 'correction' de options est bien renseignée pour l'afficher à l'lélève dans le détail de correction AMC.
     if (exercice.amcType === 'AMCNum') {
-      const autoCorrectionAmc = []
-      const declaredSource =
-        amcAutoCorrection.length > 0
-          ? amcAutoCorrection
-          : autoCorrectionSource.length > 0
-            ? autoCorrectionSource
+      const hasCompleteExplicitAMCNum =
+        amcAutoCorrection.length >= statementQuestionCount &&
+        amcAutoCorrection.every((item) => item?.reponse?.valeur !== undefined)
+      if (!hasCompleteExplicitAMCNum && autoCorrectionSource.length > 0) {
+        // Une déclaration AMCNum historique sans contrat AMC complet ne doit
+        // pas court-circuiter l'inférence moderne depuis handleAnswers.
+        exercice.amcReady = undefined
+        exercice.amcType = undefined
+      } else {
+        const autoCorrectionAmc = []
+        const declaredSource =
+          amcAutoCorrection.length > 0
+            ? amcAutoCorrection
             : exercice.reponse != null
               ? [
                   {
@@ -233,43 +284,44 @@ export function mathaleaEnsureAMCCompatibility(
                 ]
               : []
 
-      for (const [index, item] of declaredSource.entries()) {
-        if (item == null) continue
-        const valeur = inferNumericValueForAMC(
-          extractAMCValue(item.reponse?.valeur ?? item.valeur),
-        )
-        if (valeur === undefined) continue
-        // item est un item de autoCorrectionAMC, qui est censé être déjà au format AMC, mais on fait le travail d'inférence au cas où les données ne seraient pas parfaitement conformes. On infère les options AMC à partir de la réponse interactive (item.reponse) plutôt que de réutiliser directement les options de comparaison interactive (item.options) pour éviter de faire des hypothèses sur la structure des options interactives qui peuvent être différentes des options attendues par AMC.
-        const param = mergeNumericParamsFromOptions(
-          item.reponse?.param,
-          item.options,
-        )
+        for (const [index, item] of declaredSource.entries()) {
+          if (item == null) continue
+          const valeur = inferNumericValueForAMC(
+            extractAMCValue(item.reponse?.valeur ?? item.valeur),
+          )
+          if (valeur === undefined) continue
+          // item est un item de autoCorrectionAMC, qui est censé être déjà au format AMC, mais on fait le travail d'inférence au cas où les données ne seraient pas parfaitement conformes. On infère les options AMC à partir de la réponse interactive (item.reponse) plutôt que de réutiliser directement les options de comparaison interactive (item.options) pour éviter de faire des hypothèses sur la structure des options interactives qui peuvent être différentes des options attendues par AMC.
+          const param = mergeNumericParamsFromOptions(
+            item.reponse?.param,
+            item.options,
+          )
 
-        const blocks = normalizeAMCNumBlocks({
-          valeur,
-          param,
-        })
-
-        if (blocks.length === 0) continue
-
-        autoCorrectionAmc.push({
-          ...item,
-          enonce: item.enonce ?? exercice.listeQuestions[index],
-          reponse: {
-            ...(item.reponse ?? {}),
+          const blocks = normalizeAMCNumBlocks({
             valeur,
             param,
-          },
-        })
+          })
+
+          if (blocks.length === 0) continue
+
+          autoCorrectionAmc.push({
+            ...item,
+            enonce: item.enonce ?? exercice.listeQuestions[index],
+            reponse: {
+              ...(item.reponse ?? {}),
+              valeur,
+              param,
+            },
+          })
+        }
+        if (
+          autoCorrectionAmc.length === 0 ||
+          autoCorrectionAmc.length !== declaredSource.length ||
+          autoCorrectionAmc.length < statementQuestionCount
+        ) {
+          return applyAMCOpenFallback()
+        }
+        exerciseAny.autoCorrectionAMC = autoCorrectionAmc as any
       }
-      if (
-        autoCorrectionAmc.length === 0 ||
-        autoCorrectionAmc.length !== declaredSource.length ||
-        autoCorrectionAmc.length < statementQuestionCount
-      ) {
-        return applyAMCOpenFallback()
-      }
-      exerciseAny.autoCorrectionAMC = autoCorrectionAmc as any
     } else if (
       exercice.amcType === 'qcmMono' ||
       exercice.amcType === 'qcmMult'
@@ -417,7 +469,7 @@ export function mathaleaEnsureAMCCompatibility(
       return []
     }
 
-    return fieldEntries.map(([key, answer]) => {
+    return fieldEntries.flatMap(([key, answer]) => {
       const answerRecord =
         answer != null && typeof answer === 'object'
           ? (answer as {
@@ -434,37 +486,88 @@ export function mathaleaEnsureAMCCompatibility(
       const supportedComparisonOptions = new Set([
         'noFeedback',
         'nombreDecimalSeulement',
+        'nombreAvecEspace',
         'fractionEgale',
+        'fractionDecimale',
+        'fractionIdentique',
         'fractionIrreductible',
+        'fractionSimplifiee',
+        'fractionReduite',
         'ecritureScientifique',
+        'puissance',
+        'unite',
+        'precisionUnite',
+        'HMS',
+        'estDansIntervalle',
+        'coordonnees',
       ])
       const usesEquivalentFractionComparison =
         activeComparisonOptions.includes('fractionEgale') &&
         !activeComparisonOptions.includes('fractionIrreductible')
-      const scientificNotation = activeComparisonOptions.includes(
+      const usesReducedFractionComparison =
+        activeComparisonOptions.includes('fractionSimplifiee') ||
+        activeComparisonOptions.includes('fractionReduite')
+      const usesExactFractionComparison =
+        activeComparisonOptions.includes('fractionIdentique')
+      const usesDecimalFractionComparison =
+        activeComparisonOptions.includes('fractionDecimale') &&
+        !activeComparisonOptions.includes('nombreDecimalSeulement')
+      const usesScientificNotation = activeComparisonOptions.includes(
         'ecritureScientifique',
       )
+      const usesPowerNotation = activeComparisonOptions.includes('puissance')
+      const usesQuantity = activeComparisonOptions.includes('unite')
+      const usesHms = activeComparisonOptions.includes('HMS')
+      const usesInterval = activeComparisonOptions.includes('estDansIntervalle')
+      const usesCoordinates = activeComparisonOptions.includes('coordonnees')
+      const scientificNotation = usesScientificNotation
         ? inferScientificNotationForAMC(answerRecord?.value)
         : undefined
-      const inferredValue = activeComparisonOptions.includes(
-        'ecritureScientifique',
-      )
-        ? scientificNotation?.valeur
-        : inferNumericValueForAMC(extractAMCValue(answer))
-      // Une fraction équivalente non entière ne peut pas être reproduite par
-      // une grille AMC : celle-ci impose un numérateur et un dénominateur
-      // précis, tandis que fonctionComparaison accepte tous leurs multiples.
-      // Le cas entier reste fidèle et corrige notamment 100/25 -> 4.
-      const hasRepresentableFractionSemantics =
-        !usesEquivalentFractionComparison ||
-        (typeof inferredValue === 'number' && Number.isInteger(inferredValue))
+      const powerNotation = usesPowerNotation
+        ? inferPowerNotationForAMC(answerRecord?.value)
+        : undefined
+      const exactFraction = usesExactFractionComparison
+        ? inferExactFractionForAMC(answerRecord?.value)
+        : undefined
+      const decimalFraction = usesDecimalFractionComparison
+        ? inferDecimalFractionForAMC(answerRecord?.value)
+        : undefined
+      const quantity = usesQuantity
+        ? inferQuantityForAMC(
+            answerRecord?.value,
+            answerRecord?.options?.precisionUnite,
+          )
+        : undefined
+      const hmsComponents = usesHms
+        ? inferHmsForAMC(answerRecord?.value)
+        : undefined
+      const amcInterval = usesInterval
+        ? inferIntervalForAMC(answerRecord?.value)
+        : undefined
+      const coordinateComponents = usesCoordinates
+        ? inferCoordinatesForAMC(answerRecord?.value)
+        : undefined
+      const inferredValue =
+        usesHms || usesInterval || usesCoordinates
+          ? undefined
+          : usesQuantity
+            ? quantity?.valeur
+            : usesDecimalFractionComparison
+              ? decimalFraction
+              : usesExactFractionComparison
+                ? exactFraction
+                : usesScientificNotation
+                  ? scientificNotation?.valeur
+                  : usesPowerNotation
+                    ? powerNotation?.valeur
+                    : inferNumericValueForAMC(extractAMCValue(answer))
       const hasSupportedComparison =
         (answerRecord?.compare == null ||
           answerRecord.compare === fonctionComparaison) &&
         activeComparisonOptions.every((key) =>
           supportedComparisonOptions.has(key),
         ) &&
-        hasRepresentableFractionSemantics
+        (!activeComparisonOptions.includes('precisionUnite') || usesQuantity)
       const valeur = hasSupportedComparison ? inferredValue : undefined
       const answerOptions =
         answerRecord?.options != null
@@ -476,19 +579,102 @@ export function mathaleaEnsureAMCCompatibility(
       )
       const param = {
         ...(scientificNotation?.param ?? {}),
+        ...(powerNotation?.param ?? {}),
+        ...(quantity?.param ?? {}),
         ...explicitParam,
       }
-      return {
+      const commonField = {
         key,
-        valeur,
         param,
+        requiresIrreducibleFractionInstruction:
+          (usesEquivalentFractionComparison || usesReducedFractionComparison) &&
+          inferredValue != null &&
+          typeof inferredValue === 'object' &&
+          'num' in inferredValue &&
+          'den' in inferredValue,
+        displayLatexUnit: quantity?.latexUnit,
+        amcInterval,
+        fieldLabel: undefined as string | undefined,
       }
+      if (usesHms && hasSupportedComparison && hmsComponents != null) {
+        return hmsComponents.map((component) => ({
+          ...commonField,
+          key: `${key}-${component.key}`,
+          valeur: component.valeur,
+          param: component.param,
+          displayLatexUnit: component.latexUnit,
+        }))
+      }
+      if (usesInterval && hasSupportedComparison && amcInterval != null) {
+        return [{ ...commonField, valeur: undefined }]
+      }
+      if (
+        usesCoordinates &&
+        hasSupportedComparison &&
+        coordinateComponents != null
+      ) {
+        return coordinateComponents.map((component) => ({
+          ...commonField,
+          key: `${key}-${component.key}`,
+          fieldLabel: component.label,
+          valeur: component.valeur,
+          requiresIrreducibleFractionInstruction:
+            typeof component.valeur === 'object',
+        }))
+      }
+      return [{ ...commonField, valeur }]
     })
   }
 
-  // Plusieurs champs numériques indépendants se traduisent fidèlement en
-  // AMCHybride. Si un seul champ est non numérique, on ne devine pas : AMCOpen.
+  // Plusieurs champs indépendants se traduisent en AMCHybride. Chaque champ
+  // inférable devient un bloc corrigé automatiquement ; les autres restent des
+  // AMCOpen sans dégrader les champs voisins.
   const numericFieldGroups = autoCorrectionSource.map(extractNumericFields)
+  type InferredField = ReturnType<typeof extractNumericFields>[number]
+  const isSupportedField = (field: InferredField) =>
+    field.valeur !== undefined || field.amcInterval != null
+  const toHybridField = (
+    field: InferredField,
+    fieldIndex: number,
+    correction = '',
+    openCorrection = correction,
+  ): AMCUneProposition => {
+    if (!isSupportedField(field)) {
+      return {
+        type: 'AMCOpen',
+        enonce: getAMCFieldLabel(field.key, fieldIndex, field.fieldLabel),
+        propositions: [
+          {
+            texte: openCorrection,
+            statut: 3,
+          },
+        ],
+      }
+    }
+    if (field.amcInterval != null) {
+      return {
+        type: 'qcmMono',
+        enonce: getAMCFieldLabel(field.key, fieldIndex, field.fieldLabel),
+        amcInterval: field.amcInterval,
+        propositions: field.amcInterval.choices,
+        options: { ordered: true, correction },
+      }
+    }
+    return {
+      type: 'AMCNum',
+      propositions: [
+        {
+          texte: correction,
+          reponse: {
+            texte: getAMCFieldLabel(field.key, fieldIndex, field.fieldLabel),
+            valeur: field.valeur,
+            param: field.param,
+            display: getAMCFieldDisplay(field),
+          },
+        },
+      ],
+    }
+  }
 
   const canGroupByStatement =
     statementQuestionCount > 0 &&
@@ -525,10 +711,7 @@ export function mathaleaEnsureAMCCompatibility(
             }
 
             const numericFields = numericFieldGroups[itemIndex]
-            const hasSupportedNumericFields =
-              numericFields.length > 0 &&
-              numericFields.every((field) => field.valeur !== undefined)
-            if (!hasSupportedNumericFields) {
+            if (numericFields.length === 0) {
               return [
                 {
                   type: 'AMCOpen',
@@ -543,27 +726,27 @@ export function mathaleaEnsureAMCCompatibility(
               ]
             }
 
-            return numericFields.map((field, fieldIndex, fields) => ({
-              type: 'AMCNum',
-              propositions: [
-                {
-                  texte:
-                    offset === blocksPerStatement - 1 &&
-                    fieldIndex === fields.length - 1
-                      ? (exercice.listeCorrections[statementIndex] ?? '')
-                      : '',
-                  reponse: {
-                    texte: getAMCFieldLabel(field.key, offset + fieldIndex),
-                    valeur: field.valeur,
-                    param: field.param,
-                  },
-                },
-              ],
-            }))
+            return numericFields.map((field, fieldIndex, fields) =>
+              toHybridField(
+                field,
+                offset + fieldIndex,
+                offset === blocksPerStatement - 1 &&
+                  fieldIndex === fields.length - 1
+                  ? (exercice.listeCorrections[statementIndex] ?? '')
+                  : '',
+                exercice.listeCorrections[statementIndex] ?? '',
+              ),
+            )
           })
 
+        const statementFields = numericFieldGroups
+          .slice(firstItemIndex, firstItemIndex + blocksPerStatement)
+          .flat()
         return {
-          enonce: exercice.listeQuestions[statementIndex],
+          enonce: appendIrreducibleFractionInstruction(
+            exercice.listeQuestions[statementIndex],
+            statementFields,
+          ),
           propositions,
         }
       },
@@ -573,32 +756,51 @@ export function mathaleaEnsureAMCCompatibility(
     return exercice as IExerciceAMC
   }
 
-  if (
-    numericFieldGroups.some((fields) => fields.length > 1) &&
+  const canInferOnlyIntervals =
+    autoCorrectionSource.length >= statementQuestionCount &&
     numericFieldGroups.every(
-      (fields) =>
-        fields.length > 0 &&
-        fields.every((field) => field.valeur !== undefined),
+      (fields) => fields.length === 1 && fields[0].amcInterval != null,
     )
+  if (canInferOnlyIntervals) {
+    exerciseAny.autoCorrectionAMC = numericFieldGroups.map((fields, index) => {
+      const interval = fields[0].amcInterval!
+      return {
+        enonce: exercice.listeQuestions[index],
+        amcInterval: interval,
+        propositions: interval.choices,
+        options: {
+          ordered: true,
+          correction: exercice.listeCorrections[index] ?? '',
+        },
+      }
+    })
+    exercice.amcType = 'qcmMono'
+    exercice.amcReady = true
+    return exercice as IExerciceAMC
+  }
+
+  if (
+    numericFieldGroups.some(
+      (fields) =>
+        fields.length > 1 || fields.some((field) => field.amcInterval != null),
+    ) &&
+    numericFieldGroups.every((fields) => fields.length > 0)
   ) {
     exerciseAny.autoCorrectionAMC = numericFieldGroups.map((fields, index) => ({
-      enonce: exercice.listeQuestions[index],
-      propositions: fields.map((field, fieldIndex) => ({
-        type: 'AMCNum',
-        propositions: [
-          {
-            texte:
-              fieldIndex === fields.length - 1
-                ? (exercice.listeCorrections[index] ?? '')
-                : '',
-            reponse: {
-              texte: getAMCFieldLabel(field.key, fieldIndex),
-              valeur: field.valeur,
-              param: field.param,
-            },
-          },
-        ],
-      })),
+      enonce: appendIrreducibleFractionInstruction(
+        exercice.listeQuestions[index],
+        fields,
+      ),
+      propositions: fields.map((field, fieldIndex) =>
+        toHybridField(
+          field,
+          fieldIndex,
+          fieldIndex === fields.length - 1
+            ? (exercice.listeCorrections[index] ?? '')
+            : '',
+          exercice.listeCorrections[index] ?? '',
+        ),
+      ),
     }))
     exercice.amcType = 'AMCHybride'
     exercice.amcReady = true
@@ -620,10 +822,14 @@ export function mathaleaEnsureAMCCompatibility(
 
         return {
           ...item,
-          enonce: item?.enonce ?? exercice.listeQuestions[index],
+          enonce: appendIrreducibleFractionInstruction(
+            item?.enonce ?? exercice.listeQuestions[index],
+            [field],
+          ),
           reponse: {
             valeur,
             param: field.param,
+            display: getAMCFieldDisplay(field),
           },
         }
       })

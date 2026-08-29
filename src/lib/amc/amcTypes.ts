@@ -112,15 +112,9 @@ export type AutoCorrectionForAMCHybride = {
 }
 
 export type TypeKeys =
-  | 'AMCOpen'
-  | 'AMCNum'
-  | 'qcmMono'
-  | 'qcmMult'
-  | 'AMCHybride'
+  'AMCOpen' | 'AMCNum' | 'qcmMono' | 'qcmMult' | 'AMCHybride'
 export type AutoCorrectionBaseTypes =
-  | AutoCorrectionForAMCNum
-  | AutoCorrectionForAMCOpen
-  | AutoCorrectionForQcm
+  AutoCorrectionForAMCNum | AutoCorrectionForAMCOpen | AutoCorrectionForQcm
 
 export type OptionsForAMCHybride = {
   enonceAvant?: boolean // permet de supprimer l'énoncé commun si false
@@ -153,11 +147,7 @@ export interface ReponseParams {
   tpoint?: string
 }
 export type AMCExportType =
-  | 'qcmMono'
-  | 'qcmMult'
-  | 'AMCOpen'
-  | 'AMCNum'
-  | 'AMCHybride'
+  'qcmMono' | 'qcmMult' | 'AMCOpen' | 'AMCNum' | 'AMCHybride'
 
 export type AMCStatut = number | boolean | string
 
@@ -230,6 +220,12 @@ export type AMCUneProposition = {
   enonce?: string
   propositions?: AMCQcmChoice[]
   options?: AMCLayoutOptions
+  amcInterval?: {
+    correct: number
+    left: number
+    right: number
+    step: number
+  }
   reponse?: {
     valeur?: AMCReponseValue | AMCReponseValue[]
     param?: ReponseParams
@@ -260,6 +256,12 @@ export interface AutoCorrectionAMC {
     alignement?: string
   }
   options?: AMCLayoutOptions
+  amcInterval?: {
+    correct: number
+    left: number
+    right: number
+    step: number
+  }
 }
 
 export type QuestionAMC =

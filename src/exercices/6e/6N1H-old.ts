@@ -3,7 +3,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
@@ -201,16 +201,29 @@ export default class LireAbscisseDecimale extends Exercice {
       )
 
       if (this.interactif && context.isHtml) {
-        setReponse(this, 3 * i, arrondi(xA / pas1 + abs0, 1 + Math.log10(pas1)))
-        setReponse(
+        handleAnswers(
+          this,
+          3 * i,
+          {
+            reponse: { value: arrondi(xA / pas1 + abs0, 1 + Math.log10(pas1)) },
+          },
+          { formatInteractif: 'mathlive' },
+        )
+        handleAnswers(
           this,
           3 * i + 1,
-          arrondi(xB / pas1 + abs0, 1 + Math.log10(pas1)),
+          {
+            reponse: { value: arrondi(xB / pas1 + abs0, 1 + Math.log10(pas1)) },
+          },
+          { formatInteractif: 'mathlive' },
         )
-        setReponse(
+        handleAnswers(
           this,
           3 * i + 2,
-          arrondi(xC / pas1 + abs0, 1 + Math.log10(pas1)),
+          {
+            reponse: { value: arrondi(xC / pas1 + abs0, 1 + Math.log10(pas1)) },
+          },
+          { formatInteractif: 'mathlive' },
         )
         texte +=
           `<br><br>$${l1}$` +

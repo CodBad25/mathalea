@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const dateDePublication = '28/09/2022'
 export const titre = 'Encadrer un décimal'
@@ -109,7 +109,13 @@ export default class EncadrerUnDecimal extends Exercice {
           // encadrement au centième
           reponseMin =
             m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01)
-          if (!context.isAmc) setReponse(this, indexQ, reponseMin)
+          if (!context.isAmc)
+            handleAnswers(
+              this,
+              indexQ,
+              { reponse: { value: reponseMin } },
+              { formatInteractif: 'mathlive' },
+            )
           texte = `Encadrer $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}$ au centième.<br>`
           if (this.interactif) {
             texte +=
@@ -131,7 +137,13 @@ export default class EncadrerUnDecimal extends Exercice {
             d * 10 +
             u * 1 +
             arrondi(di * 0.1 + (ci + 1) * 0.01)
-          if (!context.isAmc) setReponse(this, indexQ, reponseMax)
+          if (!context.isAmc)
+            handleAnswers(
+              this,
+              indexQ,
+              { reponse: { value: reponseMax } },
+              { formatInteractif: 'mathlive' },
+            )
           if (this.interactif) {
             texte +=
               '$' +
@@ -159,7 +171,13 @@ export default class EncadrerUnDecimal extends Exercice {
         case 2: {
           // encadrement au dixième
           reponseMin = m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1)
-          if (!context.isAmc) setReponse(this, indexQ, reponseMin)
+          if (!context.isAmc)
+            handleAnswers(
+              this,
+              indexQ,
+              { reponse: { value: reponseMin } },
+              { formatInteractif: 'mathlive' },
+            )
           texte = `Encadrer $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}$ au dixième.<br>`
           if (this.interactif) {
             texte +=
@@ -177,7 +195,13 @@ export default class EncadrerUnDecimal extends Exercice {
           texte += ` < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < `
           reponseMax =
             m * 1000 + c * 100 + d * 10 + u * 1 + arrondi((di + 1) * 0.1)
-          if (!context.isAmc) setReponse(this, indexQ, reponseMax)
+          if (!context.isAmc)
+            handleAnswers(
+              this,
+              indexQ,
+              { reponse: { value: reponseMax } },
+              { formatInteractif: 'mathlive' },
+            )
           if (this.interactif) {
             texte +=
               '$' +
@@ -206,7 +230,13 @@ export default class EncadrerUnDecimal extends Exercice {
         default: {
           // encadrement à l'unité
           reponseMin = m * 1000 + c * 100 + d * 10 + u * 1
-          if (!context.isAmc) setReponse(this, indexQ, reponseMin)
+          if (!context.isAmc)
+            handleAnswers(
+              this,
+              indexQ,
+              { reponse: { value: reponseMin } },
+              { formatInteractif: 'mathlive' },
+            )
           texte = `Encadrer $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}$ à l'unité.<br>`
           if (this.interactif) {
             texte +=
@@ -223,7 +253,13 @@ export default class EncadrerUnDecimal extends Exercice {
           indexQ++
           texte += ` < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < `
           reponseMax = m * 1000 + c * 100 + d * 10 + (u + 1) * 1
-          if (!context.isAmc) setReponse(this, indexQ, reponseMax)
+          if (!context.isAmc)
+            handleAnswers(
+              this,
+              indexQ,
+              { reponse: { value: reponseMax } },
+              { formatInteractif: 'mathlive' },
+            )
           if (this.interactif) {
             texte +=
               '$' +

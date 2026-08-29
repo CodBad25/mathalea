@@ -17,10 +17,7 @@ import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
@@ -175,14 +172,18 @@ export default class NotationScientifique extends Exercice {
 
         if (this.sup === 1) {
           if (context.isAmc) {
-            setReponse(
+            handleAnswers(
               this,
               i,
-              String(reponse)
-                .replace(/\\thickspace /g, '')
-                .replace(/ /g, ''),
               {
-                // formatInteractif: 'ecritureScientifique',
+                reponse: {
+                  value: String(reponse)
+                    .replace(/\\thickspace /g, '')
+                    .replace(/ /g, ''),
+                },
+              },
+              {
+                formatInteractif: 'mathlive',
                 digits: listeTypeDeQuestions[i] + 1,
                 decimals: listeTypeDeQuestions[i],
                 signe: false,
@@ -201,10 +202,15 @@ export default class NotationScientifique extends Exercice {
           }
         } else {
           if (context.isAmc) {
-            setReponse(this, i, reponse, {
-              // formatInteractif: 'nombreDecimal',
-              decimals: Math.max(0, listeTypeDeQuestions[i] - exp),
-            })
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: reponse } },
+              {
+                formatInteractif: 'mathlive',
+                decimals: Math.max(0, listeTypeDeQuestions[i] - exp),
+              },
+            )
           } else {
             handleAnswers(this, i, { reponse: { value: reponse } })
           }

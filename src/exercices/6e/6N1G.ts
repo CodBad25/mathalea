@@ -130,6 +130,7 @@ class PlacerPointsSurAxe extends Exercice {
         xMax: abs0 + 7 / step + 1 / (stepBis * stepBis * stepBis),
         scale: step,
       })
+      figure.options.labelAutomaticForPoints = true
       figure.options.labelAutomaticBeginsWith = label1
       figure.options.pointDescriptionWithCoordinates = false
       figure.divFigureAndUserMessage.classList.add(

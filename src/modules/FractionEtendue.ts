@@ -1223,6 +1223,14 @@ class FractionEtendue {
         const signe = this.sign === -1 ? '-' : ''
         const num = Math.abs(this.num)
         const den = Math.abs(this.den)
+        if (den === 1) {
+          // Fraction entière : pas de dénominateur à factoriser, donc aucune
+          // étape de simplification à détailler (évite un \dfrac{...}{} invalide).
+          const valeur = `${signe}${num}`
+          return couleurFinale !== ''
+            ? `=${miseEnEvidence(valeur, couleurFinale)}`
+            : `=${valeur}`
+        }
         const listenum = obtenirListeFacteursPremiers(num)
         const listeden = obtenirListeFacteursPremiers(den)
         let result = '='

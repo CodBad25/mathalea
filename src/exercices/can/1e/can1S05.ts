@@ -92,7 +92,6 @@ export default class CalculSuitePython extends ExerciceSimple {
         this.question = `Que renvoie l'instruction $\\texttt{suite(${a})}$ ?<br>
         ${scriptPython(
           `def suite(u) :
- u=${a}
  n=0
  while u<${b}:
   u = u*${q}

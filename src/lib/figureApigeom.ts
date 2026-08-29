@@ -98,10 +98,16 @@ export default function figureApigeom({
   if (isEvaluatedFigure) {
     const goodAnswers = (exercice as IExercice & { goodAnswers?: unknown[] })
       .goodAnswers
-    const pointsMax =
-      Array.isArray(goodAnswers) && goodAnswers.length > 0
-        ? goodAnswers.length
-        : 1
+    // `goodAnswers` est indexé par question ; `goodAnswers[i]` contient les
+    // réponses attendues de CETTE question (un tableau de points à placer, ou
+    // une réponse unique). Le barème de la question est donc le nombre de
+    // points qu'elle demande, pas le nombre de questions de l'exercice.
+    const goodAnswersQuestion = Array.isArray(goodAnswers)
+      ? goodAnswers[i]
+      : undefined
+    const pointsMax = Array.isArray(goodAnswersQuestion)
+      ? Math.max(goodAnswersQuestion.length, 1)
+      : 1
     ApigeomFigureElement.registerVerificationCallback(
       verifyCallbackName,
       verificationCallback,

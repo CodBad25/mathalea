@@ -9,7 +9,7 @@ import { triangle2points2angles } from '../../lib/2d/triangles'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -1325,20 +1325,27 @@ export default class ExerciceAnglesTrianglesOld extends Exercice {
       // Le code ci-dessous permet de changer de l'ordre des angles dans les questions interactives
       // Cela ne permet pas à un petit malin de noter les réponses et de refaire la question en les remettant à la même place
       const reponsesAMC = [reponseInteractive[choixAngle[0]]]
-      setReponse(this, indiceSetReponse, reponseInteractive[choixAngle[0]])
+      handleAnswers(
+        this,
+        indiceSetReponse,
+        { reponse: { value: reponseInteractive[choixAngle[0]] } },
+        { formatInteractif: 'mathlive' },
+      )
       if (reponseInteractive.length > 1) {
         reponsesAMC.push(reponseInteractive[choixAngle[1]])
-        setReponse(
+        handleAnswers(
           this,
           indiceSetReponse + 1,
-          reponseInteractive[choixAngle[1]],
+          { reponse: { value: reponseInteractive[choixAngle[1]] } },
+          { formatInteractif: 'mathlive' },
         )
         if (reponseInteractive.length > 2) {
           reponsesAMC.push(reponseInteractive[choixAngle[2]])
-          setReponse(
+          handleAnswers(
             this,
             indiceSetReponse + 2,
-            reponseInteractive[choixAngle[2]],
+            { reponse: { value: reponseInteractive[choixAngle[2]] } },
+            { formatInteractif: 'mathlive' },
           )
         }
       }

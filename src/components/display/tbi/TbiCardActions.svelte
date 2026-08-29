@@ -14,10 +14,14 @@
     colBreakActive?: boolean
     /** Nombre maximal de sauts de colonne atteint : désactive l'ajout (pas le retrait) */
     columnBreakDisabled?: boolean
+    /** Nombre de colonnes de la liste de questions de cet exercice */
+    cols?: number
     onNewData?: () => void
     onSettings?: () => void
     onZoomIn?: () => void
     onZoomOut?: () => void
+    onColsInc?: () => void
+    onColsDec?: () => void
     onMoveToTab?: (tab: number) => void
     onMoveUp?: () => void
     onMoveDown?: () => void
@@ -37,10 +41,13 @@
     showColumnBreak = false,
     colBreakActive = false,
     columnBreakDisabled = false,
+    cols = 1,
     onNewData = () => {},
     onSettings = () => {},
     onZoomIn = () => {},
     onZoomOut = () => {},
+    onColsInc = () => {},
+    onColsDec = () => {},
     onMoveToTab = () => {},
     onMoveUp = () => {},
     onMoveDown = () => {},
@@ -102,6 +109,36 @@
     onclick={onZoomIn}
   >
     <i class="bx bx-zoom-in"></i>
+  </button>
+  <div
+    class="w-px h-5 mx-1 bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light"
+  ></div>
+  <button
+    type="button"
+    class={buttonClass}
+    disabled={cols <= 1}
+    class:opacity-40={cols <= 1}
+    title="Diminuer le nombre de colonnes de cet exercice"
+    aria-label="Diminuer le nombre de colonnes de cet exercice"
+    onclick={onColsDec}
+  >
+    <i class="bx bx-minus"></i>
+  </button>
+  <span
+    class="flex items-center gap-0.5 text-xs font-bold text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+  >
+    <i class="bx bx-columns"></i>{cols}
+  </span>
+  <button
+    type="button"
+    class={buttonClass}
+    disabled={cols >= 4}
+    class:opacity-40={cols >= 4}
+    title="Augmenter le nombre de colonnes de cet exercice"
+    aria-label="Augmenter le nombre de colonnes de cet exercice"
+    onclick={onColsInc}
+  >
+    <i class="bx bx-plus"></i>
   </button>
   {#if showReorder}
     <div

@@ -44,7 +44,7 @@ export const refs = {
   'fr-2016': [],
   'fr-ch': [],
 }
-export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice {
+export default class PerimetreOuAireDeCarresRectanglesTrianglesOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireTexte = [

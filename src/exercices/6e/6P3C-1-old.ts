@@ -5,7 +5,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -396,22 +396,42 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
         // Si la question n'a jamais été posée, on en crée une autre
         tabHash.push(checkSum(prenomliste[3], n3, n2, nMax))
         if (!context.isAmc) {
-          setReponse(
+          handleAnswers(
             this,
             4 * i,
-            arrondi(consigneQuestions[0] * situation.pu, 2),
+            {
+              reponse: {
+                value: arrondi(consigneQuestions[0] * situation.pu, 2),
+              },
+            },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(
+          handleAnswers(
             this,
             4 * i + 1,
-            arrondi(consigneQuestions[1] * situation.pu, 2),
+            {
+              reponse: {
+                value: arrondi(consigneQuestions[1] * situation.pu, 2),
+              },
+            },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(
+          handleAnswers(
             this,
             4 * i + 2,
-            arrondi(consigneQuestions[2] * situation.pu, 2),
+            {
+              reponse: {
+                value: arrondi(consigneQuestions[2] * situation.pu, 2),
+              },
+            },
+            { formatInteractif: 'mathlive' },
           )
-          setReponse(this, 4 * i + 3, nMax)
+          handleAnswers(
+            this,
+            4 * i + 3,
+            { reponse: { value: nMax } },
+            { formatInteractif: 'mathlive' },
+          )
         } else {
           this.autoCorrectionAMC[i] = {
             enonce: '',

@@ -1,8 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
@@ -155,11 +152,17 @@ export default class ProblèmesBalance extends Exercice {
           texteCorr += `$ ${texNombre(mult[0] === 1 ? masseBoule * nombreBoule : masseEtoile * nombreEtoile)} \\div ${mult[0] === 1 ? nombreBoule : nombreEtoile} = ${texNombre(mult[0] === 1 ? masseBoule : masseEtoile)}$ g.<br>`
           texteCorr += `La masse d'une ${mult[0] === 1 ? 'boule' : 'étoile'} est de $${miseEnEvidence(texNombre(mult[0] === 1 ? masseBoule : masseEtoile))}$ g.<br>`
           if (context.isAmc) {
-            setReponse(this, i * 2, mult[0] === 1 ? masseEtoile : masseBoule)
-            setReponse(
+            handleAnswers(
+              this,
+              i * 2,
+              { reponse: { value: mult[0] === 1 ? masseEtoile : masseBoule } },
+              { formatInteractif: 'mathlive' },
+            )
+            handleAnswers(
               this,
               i * 2 + 1,
-              mult[0] === 1 ? masseBoule : masseEtoile,
+              { reponse: { value: mult[0] === 1 ? masseBoule : masseEtoile } },
+              { formatInteractif: 'mathlive' },
             )
           } else {
             handleAnswers(this, i * 2, {
@@ -265,15 +268,25 @@ export default class ProblèmesBalance extends Exercice {
           texteCorr += `$ ${texNombre(gaucheMinMult === 1 ? masseBoule * nombreBoule : masseEtoile * nombreEtoile)} \\div ${gaucheMinMult === 1 ? nombreBoule : nombreEtoile} = ${gaucheMinMult === 1 ? texNombre(masseBoule) : texNombre(masseEtoile)}$ g.<br>`
           texteCorr += `La masse d'une ${gaucheMinMult === 1 ? 'boule' : 'étoile'} est de $${miseEnEvidence(texNombre(gaucheMinMult === 1 ? masseBoule : masseEtoile))}$ g.<br>`
           if (context.isAmc) {
-            setReponse(
+            handleAnswers(
               this,
               i * 2,
-              gaucheMinMult === 1 ? masseEtoile : masseBoule,
+              {
+                reponse: {
+                  value: gaucheMinMult === 1 ? masseEtoile : masseBoule,
+                },
+              },
+              { formatInteractif: 'mathlive' },
             )
-            setReponse(
+            handleAnswers(
               this,
               i * 2 + 1,
-              gaucheMinMult === 1 ? masseBoule : masseEtoile,
+              {
+                reponse: {
+                  value: gaucheMinMult === 1 ? masseBoule : masseEtoile,
+                },
+              },
+              { formatInteractif: 'mathlive' },
             )
           } else {
             handleAnswers(this, i * 2, {

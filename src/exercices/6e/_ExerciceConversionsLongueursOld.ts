@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -211,7 +211,12 @@ export default class ExerciceConversionsLongueurs extends Exercice {
 
       if (this.questionJamaisPosee(i, resultat)) {
         reponses[i] = resultat
-        setReponse(this, i, arrondi(resultat, 7))
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: arrondi(resultat, 7) } },
+          { formatInteractif: 'mathlive' },
+        )
         // Si la question n'a jamais été posée, on en crée une autre
         if (context.vue === 'diap') {
           texte = texte.replace('= \\dotfills', '~\\text{en}')

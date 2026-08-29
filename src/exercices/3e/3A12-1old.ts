@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
@@ -102,7 +102,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               ' Le nombre maximal de bouquets est donc : ' +
               texteEnCouleurEtGras(`${objet}`) +
               '.<br><br>'
-            setReponse(this, 3 * i, objet)
+            handleAnswers(
+              this,
+              3 * i,
+              { reponse: { value: objet } },
+              { formatInteractif: 'mathlive' },
+            )
 
             texteB = numAlpha(1) + `Nombre d'iris dans chaque bouquet :${sp(8)}`
             texte += texteB
@@ -118,7 +123,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               "Le nombre d'iris dans chaque bouquet est :" +
               texteEnCouleurEtGras(` ${var1}`) +
               '.<br><br>'
-            setReponse(this, 3 * i + 1, var1)
+            handleAnswers(
+              this,
+              3 * i + 1,
+              { reponse: { value: var1 } },
+              { formatInteractif: 'mathlive' },
+            )
 
             texteC = numAlpha(2) + ' Nombre de roses dans chaque bouquet :'
             texte += texteC
@@ -134,7 +144,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               'Le nombre de roses dans chaque bouquet est :' +
               texteEnCouleurEtGras(` ${var2}`) +
               '.<br><br>'
-            setReponse(this, 3 * i + 2, var2)
+            handleAnswers(
+              this,
+              3 * i + 2,
+              { reponse: { value: var2 } },
+              { formatInteractif: 'mathlive' },
+            )
           } else {
             texte = `Un fleuriste dispose de ${var1 * objet} iris et de ${var2 * objet} roses. <br>`
             texte +=
@@ -203,7 +218,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               ' Le nombre maximal de groupes est donc : ' +
               texteEnCouleurEtGras(`${objet}`) +
               '.<br><br>'
-            setReponse(this, 3 * i, objet)
+            handleAnswers(
+              this,
+              3 * i,
+              { reponse: { value: objet } },
+              { formatInteractif: 'mathlive' },
+            )
 
             texteB = numAlpha(1) + 'Nombre de garçons dans chaque groupe :'
             texte += texteB
@@ -219,7 +239,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               'Le nombre de garçons dans chaque groupe est :' +
               texteEnCouleurEtGras(` ${var1}`) +
               '.<br><br>'
-            setReponse(this, 3 * i + 1, var1)
+            handleAnswers(
+              this,
+              3 * i + 1,
+              { reponse: { value: var1 } },
+              { formatInteractif: 'mathlive' },
+            )
 
             texteC =
               numAlpha(2) + ` Nombre de filles dans chaque groupe :${sp(6)}`
@@ -236,7 +261,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               'Le nombre de filles dans chaque groupe est :' +
               texteEnCouleurEtGras(` ${var2}`) +
               '.<br><br>'
-            setReponse(this, 3 * i + 2, var2)
+            handleAnswers(
+              this,
+              3 * i + 2,
+              { reponse: { value: var2 } },
+              { formatInteractif: 'mathlive' },
+            )
           } else {
             texte = `Un professeur organise une sortie pédagogique au Futuroscope pour ses élèves de 3ème. Il est accompagné de ${var1 * objet} garçons et de ${var2 * objet} filles. <br>`
             texte +=
@@ -306,7 +336,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               ' Le nombre maximal de corbeilles est donc : ' +
               texteEnCouleurEtGras(`${objet}`) +
               '.<br><br>'
-            setReponse(this, 3 * i, objet)
+            handleAnswers(
+              this,
+              3 * i,
+              { reponse: { value: objet } },
+              { formatInteractif: 'mathlive' },
+            )
 
             texteB =
               numAlpha(1) + 'Nombre de croissants dans chaque corbeille :'
@@ -323,7 +358,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               'Le nombre de croissants dans chaque corbeille est :' +
               texteEnCouleurEtGras(` ${var1}`) +
               '.<br><br>'
-            setReponse(this, 3 * i + 1, var1)
+            handleAnswers(
+              this,
+              3 * i + 1,
+              { reponse: { value: var1 } },
+              { formatInteractif: 'mathlive' },
+            )
 
             texteC =
               numAlpha(2) +
@@ -341,7 +381,12 @@ export default class ResoudreDesProblemesDiviseursCommunsOld extends Exercice {
               'Le nombre de brioches dans chaque corbeille est :' +
               texteEnCouleurEtGras(` ${var2}`) +
               '.<br><br>'
-            setReponse(this, 3 * i + 2, var2)
+            handleAnswers(
+              this,
+              3 * i + 2,
+              { reponse: { value: var2 } },
+              { formatInteractif: 'mathlive' },
+            )
           } else {
             texte = `Un boulanger dispose de ${var1 * objet} croissants et de ${var2 * objet} brioches. <br>`
             texte +=

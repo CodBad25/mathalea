@@ -85,6 +85,16 @@ export const qcmTemplate = `\\element{ {{- ref -}} }{
 {% endif %}
 }`
 
+export const AMCIntervalsTemplate = `\\element{ {{- ref -}} }{
+  \\begin{question}{ {{- id -}} }\\AMClabel{ {{- id -}} }
+    {{ enonce }}
+    {% if correction %}\\explain{ {{- correction | safe -}} }{% endif %}
+    \\begin{reponseshoriz}[o]
+      \\AMCIntervals{ {{- interval.correct -}} }{ {{- interval.left -}} }{ {{- interval.right -}} }{ {{- interval.step -}} }
+    \\end{reponseshoriz}
+  \\end{question}
+}`
+
 export const AMCHybrideContainerTemplate = `\\element{ {{- ref -}} }{
 {%- if multicolsAll %}
   \\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}pt}\\begin{multicols}{2}

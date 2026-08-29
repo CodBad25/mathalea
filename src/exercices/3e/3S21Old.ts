@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -333,9 +333,12 @@ function unePieceDeuxUrnes(
   texteCorr += tableau + '<br>'
   texteCorr += `${numAlpha(q)} Comme on a fait «${pileOuFace}», on va tirer une boule dans la ${urne} urne où il y a ${nbBouleC} boule${nbBouleC > 1 ? 's' : ''} ${boules[choix1]}${nbBouleC > 1 ? 's' : ''} parmi ${card} boules.<br>`
   if (!context.isAmc)
-    setReponse(exercice, NoQuestion, proba1, {
-      formatInteractif: 'fractionEgale',
-    })
+    handleAnswers(
+      exercice,
+      NoQuestion,
+      { reponse: { value: proba1 } },
+      { formatInteractif: 'mathlive' },
+    )
   q++
   texteCorr += `La probabilité de cet événement est donc de $${!proba1.estIrreductible ? proba1.texFraction + '=' + miseEnEvidence(proba1.texFractionSimplifiee) : miseEnEvidence(proba1.texFraction)}$.<br>`
   texteCorr += `${numAlpha(q)} `
@@ -345,9 +348,12 @@ function unePieceDeuxUrnes(
       : ''
   texteCorr += `Il y a ${n1[choix2] + n2[choix2]} issues avec une boule ${boules[choix2]} parmi ${card1 + card2} issues en tout. La probabilité de cet événement est donc de $${!proba2.estIrreductible ? proba2.texFraction + '=' + miseEnEvidence(proba2.texFractionSimplifiee) : miseEnEvidence(proba2.texFraction)}$.<br>`
   if (!context.isAmc)
-    setReponse(exercice, NoQuestion + 1, proba2, {
-      formatInteractif: 'fractionEgale',
-    })
+    handleAnswers(
+      exercice,
+      NoQuestion + 1,
+      { reponse: { value: proba2 } },
+      { formatInteractif: 'mathlive' },
+    )
 
   return { texte, texteCorr, alea: [...n1, ...n2], NoQuestion: NoQuestion + 2 }
 }
@@ -574,17 +580,26 @@ function urneDeuxTiragesAvecRemise(
   texteCorr += `Une autre façon de faire est de considérer que c'est l'événement contraire de «obtenir deux boules de la même couleur» dont on a calculé la probabilité à la question ${numAlpha(1)}.<br>`
   texteCorr += `On peut donc calculer la probabilité de cet événement en calculant : $1 -${proba1et2.texFractionSimplifiee} = ${miseEnEvidence(proba1et2.entierMoinsFraction(1).texFractionSimplifiee)}$.`
   if (!context.isAmc)
-    setReponse(exercice, NoQuestion, probaChoix, {
-      formatInteractif: 'fractionEgale',
-    })
+    handleAnswers(
+      exercice,
+      NoQuestion,
+      { reponse: { value: probaChoix } },
+      { formatInteractif: 'mathlive' },
+    )
   if (!context.isAmc)
-    setReponse(exercice, NoQuestion + 1, proba1et2, {
-      formatInteractif: 'fractionEgale',
-    })
+    handleAnswers(
+      exercice,
+      NoQuestion + 1,
+      { reponse: { value: proba1et2 } },
+      { formatInteractif: 'mathlive' },
+    )
   if (!context.isAmc)
-    setReponse(exercice, NoQuestion + 2, proba4, {
-      formatInteractif: 'fractionEgale',
-    })
+    handleAnswers(
+      exercice,
+      NoQuestion + 2,
+      { reponse: { value: proba4 } },
+      { formatInteractif: 'mathlive' },
+    )
 
   return {
     texte,
@@ -737,8 +752,8 @@ function urneDeuxTiragesSansRemise (exercice, NoQuestion, avecArbreDansCorrectio
   texteCorr += `La probabilité de cet événement est donc de $2\\times ${proba3.texFraction}=${proba4.texFraction}${!proba4.estIrreductible ? '=' + proba4.texFractionSimplifiee : ''}$.<br>`
   texteCorr += `Une autre façon de faire est de considérer que c'est l'événement contraire de «obtenir deux boules de la même couleur» dont on a calculé la probabilité à la question ${numAlpha(1)}.<br>`
   texteCorr += `On peut donc calculer la probabilité de cet événement en calculant : $1 -${proba1et2.texFractionSimplifiee} = ${proba4.texFractionSimplifiee}$.`
-  if (!context.isAmc) setReponse(exercice, NoQuestion, probaChoix, { formatInteractif: 'fractionEgale' })
-  if (!context.isAmc) setReponse(exercice, NoQuestion + 1, proba1et2, { formatInteractif: 'fractionEgale' })
-  if (!context.isAmc) setReponse(exercice, NoQuestion + 2, proba4, { formatInteractif: 'fractionEgale' })
+  if (!context.isAmc) handleAnswers(exercice, NoQuestion, { reponse: { value: probaChoix } }, { formatInteractif: 'mathlive' })
+  if (!context.isAmc) handleAnswers(exercice, NoQuestion + 1, { reponse: { value: proba1et2 } }, { formatInteractif: 'mathlive' })
+  if (!context.isAmc) handleAnswers(exercice, NoQuestion + 2, { reponse: { value: proba4 } }, { formatInteractif: 'mathlive' })
   return { texte, texteCorr, alea: [nbBoule1, nbBoule2, b1Char, b2Char], NoQuestion: NoQuestion + 3 }
 } */

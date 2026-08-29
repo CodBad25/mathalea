@@ -17,7 +17,7 @@ export const uuid = 'd86be'
 export const dateDeModificationImportante = '12/10/2025' // ajout de versionQcmDisponible Jean-claude Lhote
 
 export const refs = {
-  'fr-fr': ['can3S03', 'BP2FLUC17', '3AutoP01', 'BP1AUTO014'],
+  'fr-fr': ['can3S03', 'BP2FLUC17', '3AutoS01-5', 'BP1AUTO014'],
   'fr-ch': [],
 }
 export default class CalculsProbabilite2 extends ExerciceSimple {

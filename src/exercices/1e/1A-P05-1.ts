@@ -82,8 +82,8 @@ export default class auto1AP3 extends ExerciceQcmA {
 
     this.enonce = `${deuxColonnes(
       `On considère l'arbre de probabilités ci-contre.<br>
-      On cherche la probabilité de l'événement $B$.<br>
-      On a :`,
+      On cherche la probabilité de l'événement $B$.
+      `,
       context.isHtml
         ? mathalea2d(
             {
@@ -114,12 +114,12 @@ export default class auto1AP3 extends ExerciceQcmA {
 
 `,
     )}`
-
+    this.enonce += 'On a :'
     this.correction = `
     On applique la formule de probabilité totale :<br> $\\begin{aligned}
     p(B)&=p(A)\\times p_A(B)+p(\\overline A)\\times p_{\\overline A}(B)\\\\
     &=${texNombre(pA, 2)}\\times ${texNombre(pBA)}+${texNombre(1 - pA)}\\times ${texNombre(1 - pBbAb)}\\\\
-    &=${miseEnEvidence(texNombre(pA * pBA + (1 - pA) * (1 - pBbAb), 2))}.
+    &=${miseEnEvidence(texNombre(pA * pBA + (1 - pA) * (1 - pBbAb), 2))}
     \\end{aligned}$`
     this.reponses = [
       `$p(B)=${texNombre(pA * pBA + (1 - pA) * (1 - pBbAb))} $`,
@@ -194,8 +194,7 @@ export default class auto1AP3 extends ExerciceQcmA {
 
     this.enonce = `${deuxColonnes(
       `On considère l'arbre de probabilités ci-contre.<br>
-      On cherche la probabilité de l'événement $B$.<br>
-      On a :`,
+      On cherche la probabilité de l'événement $B$.`,
       context.isHtml
         ? mathalea2d(
             {
@@ -227,11 +226,12 @@ export default class auto1AP3 extends ExerciceQcmA {
 `,
     )}`
 
+    this.enonce += 'On a :'
     this.correction = `
     On applique la formule de probabilité totale :<br> $\\begin{aligned}
     p(B)&=p(A)\\times p_A(B)+p(\\overline A)\\times p_{\\overline A}(B)\\\\
     &=${texNombre(pA, 2)}\\times ${texNombre(pBA)}+${texNombre(1 - pA)}\\times ${texNombre(1 - pBbAb)}\\\\
-    &=${miseEnEvidence(texNombre(pA * pBA + (1 - pA) * (1 - pBbAb), 2))}.
+    &=${miseEnEvidence(texNombre(pA * pBA + (1 - pA) * (1 - pBbAb), 2))}
     \\end{aligned}$`
     this.reponses = [
       `$p(B)=${texNombre(pA * pBA + (1 - pA) * (1 - pBbAb))}$`,

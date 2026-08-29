@@ -1,6 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -189,17 +189,27 @@ export default class PuissancesEncadrement extends Exercice {
           : consigneAMC
         exposantInf = entPos[listeTypeDeQuestions[i] - 1].exposantInf
         exposantSup = entPos[listeTypeDeQuestions[i] - 1].exposantSup
-        setReponse(
+        handleAnswers(
           this,
           2 * i,
-          entPos[listeTypeDeQuestions[i] - 1].puissance_inf,
-          { formatInteractif: 'puissance' },
+          {
+            reponse: {
+              value: String(entPos[listeTypeDeQuestions[i] - 1].puissance_inf),
+              options: { puissance: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
-        setReponse(
+        handleAnswers(
           this,
           2 * i + 1,
-          entPos[listeTypeDeQuestions[i] - 1].puissance_sup,
-          { formatInteractif: 'puissance' },
+          {
+            reponse: {
+              value: String(entPos[listeTypeDeQuestions[i] - 1].puissance_sup),
+              options: { puissance: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
         texteCorr = `$${miseEnEvidence(entPos[listeTypeDeQuestions[i] - 1].puissance_inf)} \\leqslant ${entPos[listeTypeDeQuestions[i] - 1].val} \\leqslant ${miseEnEvidence(entPos[listeTypeDeQuestions[i] - 1].puissance_sup)}$`
         texteCorr += ` car $${entPos[listeTypeDeQuestions[i] - 1].puissance_inf} = ${entPos[listeTypeDeQuestions[i] - 1].puissance_inf_num}$ et $${entPos[listeTypeDeQuestions[i] - 1].puissance_sup} = ${entPos[listeTypeDeQuestions[i] - 1].puissance_sup_num}.$`
@@ -221,17 +231,27 @@ export default class PuissancesEncadrement extends Exercice {
           : consigneAMC
         exposantInf = decPos[listeTypeDeQuestions[i] - 7].exposantInf
         exposantSup = decPos[listeTypeDeQuestions[i] - 7].exposantSup
-        setReponse(
+        handleAnswers(
           this,
           2 * i,
-          decPos[listeTypeDeQuestions[i] - 7].puissance_inf,
-          { formatInteractif: 'puissance' },
+          {
+            reponse: {
+              value: String(decPos[listeTypeDeQuestions[i] - 7].puissance_inf),
+              options: { puissance: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
-        setReponse(
+        handleAnswers(
           this,
           2 * i + 1,
-          decPos[listeTypeDeQuestions[i] - 7].puissance_sup,
-          { formatInteractif: 'puissance' },
+          {
+            reponse: {
+              value: String(decPos[listeTypeDeQuestions[i] - 7].puissance_sup),
+              options: { puissance: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
         texteCorr = `$${miseEnEvidence(decPos[listeTypeDeQuestions[i] - 7].puissance_inf)} \\leqslant ${decPos[listeTypeDeQuestions[i] - 7].val} \\leqslant ${miseEnEvidence(decPos[listeTypeDeQuestions[i] - 7].puissance_sup)}$`
         texteCorr += ` car $${decPos[listeTypeDeQuestions[i] - 7].puissance_inf} = ${decPos[listeTypeDeQuestions[i] - 7].puissance_inf_num}$ et $${decPos[listeTypeDeQuestions[i] - 7].puissance_sup} = ${decPos[listeTypeDeQuestions[i] - 7].puissance_sup_num}.$`
@@ -253,17 +273,31 @@ export default class PuissancesEncadrement extends Exercice {
           : consigneAMC
         exposantInf = decPosInfUn[listeTypeDeQuestions[i] - 11].exposantInf
         exposantSup = decPosInfUn[listeTypeDeQuestions[i] - 11].exposantSup
-        setReponse(
+        handleAnswers(
           this,
           2 * i,
-          decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf,
-          { formatInteractif: 'puissance' },
+          {
+            reponse: {
+              value: String(
+                decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf,
+              ),
+              options: { puissance: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
-        setReponse(
+        handleAnswers(
           this,
           2 * i + 1,
-          decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup,
-          { formatInteractif: 'puissance' },
+          {
+            reponse: {
+              value: String(
+                decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup,
+              ),
+              options: { puissance: true },
+            },
+          },
+          { formatInteractif: 'mathlive' },
         )
         texteCorr = `$${miseEnEvidence(decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf)} \\leqslant ${decPosInfUn[listeTypeDeQuestions[i] - 11].val} \\leqslant ${miseEnEvidence(decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup)}$`
         texteCorr += ` car $${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf} = ${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf_num}$ et $${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup} = ${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup_num}.$`

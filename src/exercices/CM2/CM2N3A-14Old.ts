@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -66,7 +66,12 @@ export default class ComplementA100Old extends Exercice {
         this.sup === 1
           ? `$ 100 - ${a}=${miseEnEvidence(texNombre(100 - a))}$`
           : `$ ${texNombre(a)} + ${miseEnEvidence(texNombre(100 - a))} = 100$`
-      setReponse(this, i, 100 - a)
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: 100 - a } },
+        { formatInteractif: 'mathlive' },
+      )
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre

@@ -64,16 +64,18 @@ export default class PoucentageE2 extends ExerciceSimple {
           `$${texNombre(1 + b / 100, 2)} \\,\\%$`,
         ]
 
-    const montant = choix
-      ? a * (1 + b / 100) - a
-      : abs(a * (1 - b / 100) - a)
+    const montant = choix ? a * (1 + b / 100) - a : abs(a * (1 - b / 100) - a)
     const explicationCalcul =
       b === 50
         ? `de $${a}$, c'est la moitié de $${a}$, soit $${texNombre(montant, 2)}$`
         : `de $${a} = ${texNombre(b / 100, 2)} \\times ${a} = ${texNombre(montant, 2)}$`
-    this.correction = `Le prix a ${choix ? 'augmenté' : 'baissé'} de  $${texNombre(montant, 2)}$ €, ce qui correspond à  $${texNombre(b, 2)}\\, \\%$ de $${a}$ €.<br>
+    this.correction = `Le prix initial de $${a}$ € a ${choix ? 'augmenté' : 'baissé'} de  $${texNombre(montant, 2)}$ €.<br>
+    Or $${texNombre(montant, 2)}\\div${a}=${texNombre(b / 100, 2)}=${texNombre(b, 2)}\\, \\%$.<br>
           En effet, $${texNombre(b, 2)}\\,\\%$ ${explicationCalcul}.<br>
-          Le prix du ${n} a donc ${choix ? 'augmenté' : 'baissé'} de $${miseEnEvidence(texNombre(b, 2))}\\, \\%$.`
+          Le prix du ${n} a donc ${choix ? 'augmenté' : 'baissé'} de `
+    this.correction += this.versionQcm
+      ? `$${miseEnEvidence(texNombre(b, 2) + '\\, \\%')}$.`
+      : `$${miseEnEvidence(texNombre(b, 2))}\\, \\%$.`
 
     this.reponse = this.versionQcm ? `$${b}\\,\\%$` : b
 

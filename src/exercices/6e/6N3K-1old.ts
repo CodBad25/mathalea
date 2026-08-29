@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { fractionCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
@@ -274,7 +274,12 @@ export default class FractionsCalculsSimples extends Exercice {
           reponseAMC = new FractionEtendue(n * a, b)
           break
       }
-      setReponse(this, i, reponseAMC, { formatInteractif: 'fractionEgale' })
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: reponseAMC } },
+        { formatInteractif: 'mathlive' },
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
