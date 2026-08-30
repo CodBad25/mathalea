@@ -1,7 +1,8 @@
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Démontrer une expression explicite par récurrence'
@@ -30,36 +31,44 @@ export default class ExpressionSuiteHomographique extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.nbQuestionsModifiable = false
+    this.nbQuestionsModifiable = true
   }
 
   nouvelleVersion(): void {
-    const a = randint(1, 5)
-    const b = randint(1, 5)
-    const u0 = new FractionEtendue(1, a).simplifie()
-    const coefficientU = coefficientDeU(b)
-    const expressionDenominateur = denominateur(a, b)
-    const expressionDenominateurAugmente = denominateur(a + b, b)
-    const expressionDenominateurSuivant = denominateur(a, b, '(n+1)')
-    const couleurCommentaire = context.isHtml ? 'forestgreen' : 'black'
-    const commentaire = (texte: string) =>
-      `\\color{${couleurCommentaire}}{\\longleftarrow\\ \\text{${texte}}}`
+    const couples = combinaisonListes(
+      Array.from({ length: 25 }, (_, index) => ({
+        a: (index % 5) + 1,
+        b: Math.floor(index / 5) + 1,
+      })),
+      this.nbQuestions,
+    )
 
-    const texte = `On considère la suite $(u_n)$ définie par $u_0=${u0.texFractionSimplifiee}$ et, pour tout entier naturel $n$, par :<br>
+    for (let i = 0; i < this.nbQuestions; i++) {
+      const { a, b } = couples[i]
+      const u0 = new FractionEtendue(1, a).simplifie()
+      const coefficientU = coefficientDeU(b)
+      const expressionDenominateur = denominateur(a, b)
+      const expressionDenominateurAugmente = denominateur(a + b, b)
+      const expressionDenominateurSuivant = denominateur(a, b, '(n+1)')
+      const couleurCommentaire = context.isHtml ? 'forestgreen' : 'black'
+      const commentaire = (texte: string) =>
+        `\\color{${couleurCommentaire}}{\\longleftarrow\\ \\text{${texte}}}`
+
+      const texte = `On considère la suite $(u_n)$ définie par $u_0=${u0.texFractionSimplifiee}$ et, pour tout entier naturel $n$, par :<br>
     $u_{n+1}=\\dfrac{u_n}{1+${coefficientU}}$.<br><br>
     Démontrer que, pour tout entier naturel $n$, $u_n=\\dfrac{1}{${expressionDenominateur}}$.`
 
-    let correction = `Nous allons procéder à un raisonnement par récurrence.<br>
+      let correction = `Nous allons procéder à un raisonnement par récurrence.<br>
     Pour tout entier naturel $n$, on note $\\mathcal P_n$ la propriété : $u_n=\\dfrac{1}{${expressionDenominateur}}$.<br><br>`
-    correction += `${texteEnCouleurEtGras('Initialisation :', 'black')}<br>`
-    correction += `Pour $n=0$, l’expression proposée donne :<br>
+      correction += `${texteEnCouleurEtGras('Initialisation :', 'black')}<br>`
+      correction += `Pour $n=0$, l’expression proposée donne :<br>
     $\\dfrac{1}{${b === 1 ? '' : `${b}\\times`}0+${a}}=${u0.texFractionSimplifiee}$.<br>
     Or, $u_0=${u0.texFractionSimplifiee}$. Donc la propriété $\\mathcal P_0$ est vraie.<br><br>`
-    correction += `${texteEnCouleurEtGras('Hérédité :', 'black')}<br>`
-    correction += `Soit $n\\in\\mathbb N$. Supposons que $\\mathcal P_n$ est vraie, c’est-à-dire $u_n=\\dfrac{1}{${expressionDenominateur}}$.<br>
+      correction += `${texteEnCouleurEtGras('Hérédité :', 'black')}<br>`
+      correction += `Soit $n\\in\\mathbb N$. Supposons que $\\mathcal P_n$ est vraie, c’est-à-dire $u_n=\\dfrac{1}{${expressionDenominateur}}$.<br>
     La propriété $\\mathcal P_{n+1}$ s’écrit : $u_{n+1}=\\dfrac{1}{${expressionDenominateurSuivant}}$.<br>
     Montrons que $\\mathcal P_{n+1}$ est vraie.<br><br>`
-    correction += `$\\begin{aligned}
+      correction += `$\\begin{aligned}
 u_{n+1}
 &=\\dfrac{u_n}{1+${coefficientU}}&&${commentaire('définition de la suite')}\\\\
 &=\\dfrac{\\dfrac{1}{${expressionDenominateur}}}{1+\\dfrac{${b}}{${expressionDenominateur}}}&&${commentaire('hypothèse de récurrence')}\\\\
@@ -69,12 +78,13 @@ u_{n+1}
 &=\\dfrac{1}{${expressionDenominateurSuivant}}&&${commentaire(`car ${expressionDenominateurAugmente}=${expressionDenominateurSuivant}`)}.
 \\end{aligned}$<br>
 La propriété $\\mathcal P_{n+1}$ est donc vraie.<br><br>`
-    correction += `${texteEnCouleurEtGras('Conclusion :', 'black')}<br>`
-    correction += `La propriété est vraie au rang $0$ et elle est héréditaire. Par récurrence, pour tout entier naturel $n$ :<br>
+      correction += `${texteEnCouleurEtGras('Conclusion :', 'black')}<br>`
+      correction += `La propriété est vraie au rang $0$ et elle est héréditaire. Par récurrence, pour tout entier naturel $n$ :<br>
     $u_n=\\dfrac{1}{${expressionDenominateur}}$.`
 
-    this.listeQuestions.push(texte)
-    this.listeCorrections.push(correction)
+      this.listeQuestions.push(texte)
+      this.listeCorrections.push(correction)
+    }
     listeQuestionsToContenu(this)
   }
 }

@@ -15,11 +15,45 @@
   export let isInLine: boolean
   export let isSpecial: boolean = false
   export let clickKeycap: (data: KeyCap, event: MouseEvent) => void
-  let button: HTMLButtonElement
+  let button: HTMLButtonElement | undefined
+  let content: HTMLDivElement | undefined
   $: keycapwidth = KEYCAP_WIDTH[getMode(innerWidth, isInLine)]
 
   $: keycapheight =
     innerWidth <= SM_BREAKPOINT ? KEYCAP_HEIGHT.sm : KEYCAP_HEIGHT.md
+
+  // La largeur d'une touche est fixe alors que son contenu ne l'est pas :
+  // certaines touches ajoutées par un exercice insèrent un LaTeX large
+  // (`\lim_{x \to a}`, `f'(x)`…) qui déborderait sur les touches voisines.
+  // On met alors le contenu à l'échelle pour qu'il tienne dans la touche.
+  let contentScale = 1
+  /** Petite marge intérieure pour ne pas coller le contenu aux bords. */
+  const MARGE_TOUCHE = 4
+  function ajusteEchelleContenu() {
+    if (button == null || content == null) return
+    // Le contenu est centré et peut déjà déborder sur le padding de la touche :
+    // la place réellement utilisable est toute la largeur visible, moins une
+    // petite marge.
+    const largeurDisponible = button.clientWidth - MARGE_TOUCHE
+    // `scrollWidth` ignore la transformation déjà appliquée : pas de boucle.
+    const largeurNaturelle = content.scrollWidth
+    contentScale =
+      largeurNaturelle > largeurDisponible && largeurNaturelle > 0
+        ? Math.max(0.4, largeurDisponible / largeurNaturelle)
+        : 1
+  }
+
+  // Le rendu KaTeX du contenu arrive après le montage : on réagit à la taille
+  // réelle une fois la formule composée. Une action garantit d'avoir l'élément.
+  function suitLaTailleDuContenu(noeud: HTMLDivElement) {
+    content = noeud
+    ajusteEchelleContenu()
+    const observer = new ResizeObserver(ajusteEchelleContenu)
+    observer.observe(noeud)
+    return { destroy: () => observer.disconnect() }
+  }
+  // Recalcule quand la touche change de gabarit (redimensionnement, mode réduit).
+  $: keycapwidth, ajusteEchelleContenu()
 </script>
 
 <button
@@ -36,7 +70,12 @@
     clickKeycap(key, e)
   }}
 >
-  <div id="key-{key.display}" class="relative">
+  <div
+    use:suitLaTailleDuContenu
+    id="key-{key.display}"
+    class="relative"
+    style="transform: scale({contentScale});"
+  >
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     <span>{@html key.display}</span>
   </div>
@@ -46,6 +85,10 @@
   .customdimensions {
     width: calc(var(--keycapwidth) * 1px);
     height: calc(var(--keycapheight) * 1px);
+    /* Filet de sécurité : le contenu est mis à l'échelle en JS pour tenir dans
+       la touche (voir `ajusteEchelleContenu`), mais on ne laisse jamais un
+       contenu large déborder sur les touches voisines le temps du calcul. */
+    overflow: hidden;
   }
   @media (min-width: 768px) {
     button.key--FCT,

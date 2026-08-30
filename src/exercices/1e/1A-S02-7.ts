@@ -1,5 +1,8 @@
 import { shuffle } from '../../lib/outils/arrayOutils'
-import { texteGras } from '../../lib/outils/embellissements'
+import {
+  texteEnCouleurEtGras,
+  texteGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { nombreElementsDifferents } from '../ExerciceQcm'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -110,12 +113,12 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
     if (moyB > moyA) {
       bonnePhrase = toutesLesReponses[0]
       explication = `La moyenne de la série B est ${texNombre(moyB, 2)}, celle de la série A est ${texNombre(moyA, 2)}.<br>
-      On peut conclure que la seule réponse acceptable est que la moyenne de la série B est strictement supérieure à celle de la série A.<br>
+      On peut conclure que la seule réponse acceptable est que ${texteEnCouleurEtGras('la moyenne de la série B est strictement supérieure à la moyenne de la série A')}.<br>
       Il n'est pas nécessaire de calculer l'écart-type pour répondre à cette question.`
     } else if (moyA > moyB) {
       bonnePhrase = toutesLesReponses[1]
       explication = `La moyenne de la série A est ${texNombre(moyA, 2)}, celle de la série B est ${texNombre(moyB, 2)}.
-      <br>On peut conclure que la seule réponse acceptable est que la moyenne de la série A est strictement supérieure à celle de la série B.<br>
+      <br>On peut conclure que la seule réponse acceptable est que ${texteEnCouleurEtGras('la moyenne de la série A est strictement supérieure à la moyenne de la série B')}.<br>
       Il n'est pas nécessaire de calculer l'écart-type pour répondre à cette question.`
     } else if (etA > etB) {
       bonnePhrase = toutesLesReponses[2]
@@ -145,7 +148,7 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
       $\\sigma_A = \\sqrt{\\dfrac{${termesA}}{${serieA.length}}} = \\sqrt{\\dfrac{${sommeCarresA}}{${serieA.length}}} = \\sqrt{${texNombre(varianceA, 2)}}$<br>
       $\\sigma_B = \\sqrt{\\dfrac{${termesB}}{${serieB.length}}} = \\sqrt{\\dfrac{${sommeCarresB}}{${serieB.length}}} = \\sqrt{${texNombre(varianceB, 2)}}$<br>
       On a donc $\\sigma_A > \\sigma_B$.<br>
-      L'écart-type de la série A est strictement supérieur à celui de la série B.`
+      ${texteEnCouleurEtGras("L'écart-type de la série A est strictement supérieur à celui de la série B")}.`
     } else {
       bonnePhrase = toutesLesReponses[3]
 
@@ -174,7 +177,7 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
       $\\sigma_A = \\sqrt{\\dfrac{${termesA}}{${serieA.length}}} = \\sqrt{\\dfrac{${sommeCarresA}}{${serieA.length}}} = \\sqrt{${texNombre(varianceA, 2)}}$<br>
       $\\sigma_B = \\sqrt{\\dfrac{${termesB}}{${serieB.length}}} = \\sqrt{\\dfrac{${sommeCarresB}}{${serieB.length}}} = \\sqrt{${texNombre(varianceB, 2)}}$<br>
       On a donc $\\sigma_B > \\sigma_A$.<br>
-      L'écart-type de la série B est strictement supérieur à celui de la série A.`
+      ${texteEnCouleurEtGras("L'écart-type de la série B est strictement supérieur à celui de la série A")}.`
     }
 
     // Réorganiser les réponses pour mettre la bonne en premier

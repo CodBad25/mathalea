@@ -49,7 +49,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         '1 : $ax^2+bx$',
         '2 : $Ax+kx$',
         '3 : $x^2-a^2$',
-        '4 : $x^2-a$ avec $a$ non carré parfait',
+        '4 : $x^2-a$',
         '5 : $AB+AC$',
         '6 : $AB-AC$',
         '7 : $A^2+AB$',

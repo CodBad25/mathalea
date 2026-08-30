@@ -28,12 +28,11 @@ import Exercice from '../Exercice'
 import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Représenter graphiquement une fonction affine'
-export const dateDeModifImportante = '06/07/2026'
+export const dateDeModifImportante = '29/08/2026'
 export const interactifReady = true
 
 /**
  * @author Stéphane Guyon (mise à jour avec les cas Gilles Mora + figure interactive Rémi Angot)
- * Mise à jour le 06/07/2026 : ajout du paramètre sup3 pour proposer des fonctions linéaires uniquement Jean-Claude Lhote
  */
 export const uuid = 'c360e'
 
@@ -59,11 +58,6 @@ export default class Representerfonctionaffine extends Exercice {
       2,
       "1 : Avec coefficient directeur et ordonnée à l'origine\n2 :Avec deux points",
     ]
-    this.besoinFormulaire3CaseACocher = [
-      'Seulement des fonctions linéaires',
-      false,
-    ]
-    this.sup3 = false
   }
 
   nouvelleVersion() {
@@ -116,18 +110,14 @@ export default class Representerfonctionaffine extends Exercice {
         case 1:
           {
             a = randint(0, 4) * choice([-1, 1]) // coefficient non nul a de la fonction affine
-            b = randint(0, 3, [0]) * choice([-1, 1]) // ordonnée à l'origine b non nulle de la fonction affine
+            const ordonneeOrigineNonNulle = randint(1, 3) * choice([-1, 1])
+            b = choice([0, ordonneeOrigineNonNulle, ordonneeOrigineNonNulle])
             this.coefficients[i] = [a, b]
-            f = (x) => a * x + (this.sup3 ? 0 : b)
+            f = (x) => a * x + b
 
             xA = 0
             yA = f(xA)
-            xB =
-              this.sup2 === 1
-                ? 1
-                : this.sup3
-                  ? 1
-                  : randint(1, 3) * choice([-1, 1]) // Abscisse de B
+            xB = this.sup2 === 1 ? 1 : randint(1, 3) * choice([-1, 1]) // Abscisse de B
             yB = f(xB) // Ordonnée de B
 
             const A = pointAbstrait(xA, yA, 'A')
@@ -156,45 +146,52 @@ export default class Representerfonctionaffine extends Exercice {
             tB.epaisseur = 2
 
             texte = `$f_{${i + 1}}(x)=${reduireAxPlusB(a, b)}$ <br>`
-            texteCorr = `On sait que la représentation graphique d'une fonction ${this.sup3 ? 'linéaire' : 'affine'} est une droite.<br>`
+            texteCorr =
+              b === 0
+                ? `On constate que $f_{${i + 1}}$ est une fonction linéaire. Sa représentation graphique est donc une droite passant par l'origine.<br>`
+                : "On sait que la représentation graphique d'une fonction affine est une droite.<br>"
             if (this.sup2 === 1) {
               if (a !== 0) {
-                texteCorr += `${this.sup3 ? '' : `La droite a pour équation $y=${reduireAxPlusB(a, b)}$. <br>`}
-                ${
-                  this.sup3
-                    ? `La droite représentant la fonction linéaire passe par l'origine et sa pente est égale à $${a}$.<br>
-                    Elle passe donc par le point $B$ de coordonnées $(1;${a})$.<br>`
-                    : `
+                texteCorr +=
+                  b === 0
+                    ? `Son coefficient directeur est $${a}$. À partir de l'origine, on se décale d'une unité vers la droite puis on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$ ${a === 1 || a === -1 ? 'unité' : 'unités'}.<br>
+             On obtient le point $B(1\,;\,${a})$, puis on trace la droite $(OB)$.<br>`
+                    : `La droite a pour équation $y=${reduireAxPlusB(a, b)}$. <br>
               L'ordonnée à l'origine est $${b}$, on place donc le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>
              Le coefficient directeur est égal à $${a}$. En se décalant d'une unité vers la droite à partir du point $A$, on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$ ${a === 1 || a === -1 ? 'unité' : 'unités'}. <br>
              On obtient alors le point $B$. <br>
              On trace la droite $(AB)$.<br>`
-                }`
               } else {
-                texteCorr += `Il s'agit d'une fonction ${this.sup3 ? 'linéaire' : 'affine'} particulière constante ($f(x)=0x${ecritureAlgebrique(b)}$).<br>
-             ${
-               this.sup3
-                 ? ``
-                 : `
+                texteCorr +=
+                  b === 0
+                    ? `Il s'agit de la fonction nulle. Sa représentation graphique est l'axe des abscisses.<br>`
+                    : `Il s'agit d'une fonction affine particulière constante ($f_{${i + 1}}(x)=0x${ecritureAlgebrique(b)}$).<br>
              L'ordonnée à l'origine est $${b}$, on place donc le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>
               Le coefficient directeur de la droite est nul, on trace la droite horizontale qui passe par $A$.<br>`
-             }`
               }
             } else {
               if (a !== 0) {
-                texteCorr += `Il suffit donc de déterminer les coordonnées de deux points pour pouvoir représenter $f$.<br>
-                Comme $f(${xA})=${yA}$, on a  $A(${xA};${yA}) \\in \\mathcal{C_f}$.<br>
+                texteCorr +=
+                  b === 0
+                    ? `Il suffit donc de déterminer les coordonnées d'un second point.<br>
+                On choisit $x=${xB}$ et on calcule : $f_{${i + 1}}(${xB})=${a} \\times ${ecritureParentheseSiNegatif(xB)}=${yB}$.<br>
+                Ainsi, $B(${xB};${yB}) \\in \\mathcal{C}_{f_{${i + 1}}}$. On trace alors la droite $(OB)$.<br>`
+                    : `Il suffit donc de déterminer les coordonnées de deux points pour pouvoir représenter $f_{${i + 1}}$.<br>
+                Comme $f_{${i + 1}}(${xA})=${yA}$, on a  $A(${xA};${yA}) \\in \\mathcal{C}_{f_{${i + 1}}}$.<br>
                 On cherche un deuxième point, et on prend ${this.sup ? 'comme antécédent 1 pour simplifier les calculs' : 'un antécédent au hasard'} :<br>
-                Soit $x=${xB}$ :<br>On calcule : $f(${xB})=${a} \\times ${ecritureParentheseSiNegatif(xB)}${ecritureAlgebrique(b)}=${yB}$.<br>
-                On en déduit que $B(${xB};${yB}) \\in \\mathcal{C_f}$.<br>`
+                Soit $x=${xB}$ :<br>On calcule : $f_{${i + 1}}(${xB})=${a} \\times ${ecritureParentheseSiNegatif(xB)}${ecritureAlgebrique(b)}=${yB}$.<br>
+                On en déduit que $B(${xB};${yB}) \\in \\mathcal{C}_{f_{${i + 1}}}$.<br>`
               } else {
-                texteCorr = 'On observe que $f$ est une fonction constante.<br>'
-                texteCorr += `Sa représentation graphique est donc une droite parallèle à l'axe des abscisses, d'équation $y=${yA}$.<br>`
+                texteCorr =
+                  b === 0
+                    ? `On constate que $f_{${i + 1}}$ est la fonction nulle. Sa représentation graphique est l'axe des abscisses.<br>`
+                    : `On observe que $f_{${i + 1}}$ est une fonction constante.<br>Sa représentation graphique est donc une droite parallèle à l'axe des abscisses, d'équation $y=${yA}$.<br>`
               }
             }
-            const objets: NestedObjetMathalea2dArray = this.sup3
-              ? [lB, monRepere, droiteAB, tB, textO]
-              : [lA, lB, monRepere, droiteAB, tA, tB, textO]
+            const objets: NestedObjetMathalea2dArray =
+              b === 0
+                ? [lB, monRepere, droiteAB, tB, textO]
+                : [lA, lB, monRepere, droiteAB, tA, tB, textO]
             texteCorr += mathalea2d(
               Object.assign({ scale: 0.6 }, fixeBordures(objets)),
               objets,
@@ -205,7 +202,8 @@ export default class Representerfonctionaffine extends Exercice {
         case 2: // cas du coefficient directeur fractionnaire
           {
             a = randint(-5, 5, [0]) // numérateur coefficient directeur non nul
-            b = this.sup3 ? 0 : randint(-4, 4, [0]) // ordonnée à l'origine non nulle
+            const ordonneeOrigineNonNulle = randint(-4, 4, [0])
+            b = choice([0, ordonneeOrigineNonNulle, ordonneeOrigineNonNulle])
             if (this.level === 3) {
               d = 2
               a = randint(-5, 5, [0, -4, -2, 2, 4]) // numérateur coefficient directeur non nul
@@ -214,7 +212,8 @@ export default class Representerfonctionaffine extends Exercice {
             }
             while (pgcd(a, d) !== 1) {
               a = randint(-5, 5, [0]) // numérateur coefficient directeur non nul
-              b = this.sup3 ? 0 : randint(-4, 4, [0]) // ordonnée à l'origine non nulle
+              const ordonneeOrigineNonNulle = randint(-4, 4, [0])
+              b = choice([0, ordonneeOrigineNonNulle, ordonneeOrigineNonNulle])
               d = randint(2, 5)
             }
             f = (x) => (a / d) * x + b
@@ -239,22 +238,31 @@ export default class Representerfonctionaffine extends Exercice {
 
             const aFrac = fraction(a, d)
             texte = `$f_{${i + 1}}(x)=${reduireAxPlusB(aFrac, b)}$ <br>`
-            texteCorr = `On sait que la représentation graphique d'une fonction ${this.sup3 ? 'linéaire' : 'affine'} est une droite ${this.sup3 ? "passant par l'origine" : ''}.<br>`
+            texteCorr =
+              b === 0
+                ? `On constate que $f_{${i + 1}}$ est une fonction linéaire. Sa représentation graphique est donc une droite passant par l'origine.<br>`
+                : "On sait que la représentation graphique d'une fonction affine est une droite.<br>"
             if (this.sup2 === 1) {
-              texteCorr += this.sup3
-                ? `On sait que la pente de la droite est égale à $${aFrac.texFSD}$. En se décalant de $${d}$ unités vers la droite à partir de l'origine, on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$  ${a === 1 || a === -1 ? 'unité' : 'unités'}. <br>On obtient alors le point $B$. <br>
-             On trace la droite $(OB)$.<br>`
-                : `La droite a pour équation $y=${reduireAxPlusB(aFrac, b)}$. <br>
+              texteCorr +=
+                b === 0
+                  ? `Son coefficient directeur est $${aFrac.texFSD}$. À partir de l'origine, on se décale de $${d}$ unités vers la droite puis on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$ ${a === 1 || a === -1 ? 'unité' : 'unités'}.<br>
+             On obtient le point $B(${d}\,;\,${a})$, puis on trace la droite $(OB)$.<br>`
+                  : `La droite a pour équation $y=${reduireAxPlusB(aFrac, b)}$. <br>
               L'ordonnée à l'origine est $${b}$, on place donc le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>
              Le coefficient directeur est égal à $${aFrac.texFSD}$. En se décalant de $${d}$ unités vers la droite à partir du point $A$, on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$  ${a === 1 || a === -1 ? 'unité' : 'unités'}. <br>
              On obtient alors le point $B$. <br>
              On trace la droite $(AB)$.<br>`
             } else {
-              texteCorr += `Il suffit donc de déterminer les coordonnées de deux points pour pouvoir représenter $f$.<br>
-            Comme $f(${xA})=${yA}$, on a : $A(${xA};${yA}) \\in \\mathcal{C_f}$.<br>
+              texteCorr +=
+                b === 0
+                  ? `Il suffit donc de déterminer les coordonnées d'un second point.<br>
+            On choisit $x=${xB}$ et on calcule : $f_{${i + 1}}(${xB})=${aFrac.texFSD}\\times ${xB}=${yB}$.<br>
+            Ainsi, $B(${xB};${yB}) \\in \\mathcal{C}_{f_{${i + 1}}}$. On trace alors la droite $(OB)$.<br>`
+                  : `Il suffit donc de déterminer les coordonnées de deux points pour pouvoir représenter $f_{${i + 1}}$.<br>
+            Comme $f_{${i + 1}}(${xA})=${yA}$, on a : $A(${xA};${yA}) \\in \\mathcal{C}_{f_{${i + 1}}}$.<br>
             On cherche un deuxième point, et on prend un antécédent qui facilite les calculs :<br>
             Par exemple $x=${xB}$ :<br>
-            On calcule : $f(${xB})=${reduireAxPlusB(aFrac, b)}$.<br>On en déduit que $B(${xB};${yB}) \\in \\mathcal{C_f}$.<br>`
+            On calcule : $f_{${i + 1}}(${xB})=${aFrac.texFSD}\\times ${xB}${ecritureAlgebrique(b)}=${yB}$.<br>On en déduit que $B(${xB};${yB}) \\in \\mathcal{C}_{f_{${i + 1}}}$.<br>`
             }
 
             tA = tracePoint(A1, 'red') // Variable qui trace les points avec une croix
@@ -263,9 +271,10 @@ export default class Representerfonctionaffine extends Exercice {
             lB = labelPoint(B1, 'red') // Variable qui trace les nom s A et B
 
             monRepere = repere(cadre) // On définit le repère
-            const objetsCorr: NestedObjetMathalea2dArray = this.sup3
-              ? [lB, monRepere, droiteAB, tB, textO]
-              : [lA, lB, monRepere, droiteAB, tA, tB, textO]
+            const objetsCorr: NestedObjetMathalea2dArray =
+              b === 0
+                ? [lB, monRepere, droiteAB, tB, textO]
+                : [lA, lB, monRepere, droiteAB, tA, tB, textO]
             texteCorr += mathalea2d(
               Object.assign({ scale: 0.6 }, fixeBordures(objetsCorr)),
               objetsCorr,

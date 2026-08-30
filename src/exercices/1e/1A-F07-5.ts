@@ -6,7 +6,6 @@ import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { milieu } from '../../lib/2d/utilitairesPoint'
-import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -169,11 +168,10 @@ export default class Auto1AF075 extends ExerciceQcmA {
     const nuCartesienneFausse = this.nuEquationCartesienne(aCart, bCart, -cCart)
 
     // ===== Énoncé =====
-    this.enonce = `${deuxColonnes(
-      'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br>' +
-        'Une équation de la droite $\\mathcal{D}$ est :',
-      `${objet}`,
-    )}`
+    this.enonce =
+      'On a représenté ci-dessous une droite $\\mathcal{D}$ dans un repère orthonormé.<br><br>' +
+      objet +
+      '<br>Une équation de la droite $\\mathcal{D}$ est :'
 
     // ===== Correction (commune) =====
     this.correction = `En prenant deux points $A$ et $B$ sur la droite, on obtient le coefficient directeur :<br>
@@ -338,11 +336,10 @@ export default class Auto1AF075 extends ExerciceQcmA {
       lBBx,
     )
 
-    this.enonce = `${deuxColonnes(
-      'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br>' +
-        'Une équation de la droite $\\mathcal{D}$ est :',
-      `${objet}`,
-    )}`
+    this.enonce =
+      'On a représenté ci-dessous une droite $\\mathcal{D}$ dans un repère orthonormé.<br><br>' +
+      objet +
+      '<br>Une équation de la droite $\\mathcal{D}$ est :'
 
     this.correction = `En prenant deux points $A$ et $B$ sur la droite, on obtient le coefficient directeur :<br>
     $m=\\dfrac{${miseEnEvidence(fracNum, bleuMathalea)}}{${miseEnEvidence(fracDen, 'red')}}=${miseEnEvidence(`${m.texFractionSimplifiee}`)}$.<br>

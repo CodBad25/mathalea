@@ -387,7 +387,7 @@ export default class Auto1AC16b extends ExerciceQcmA {
         deltacl: 1,
         lgt: 8,
       }) +
-      `Le tableau de signes de $f(x)$ est donc : <br>${tableauReponse}`
+      `Le tableau de signes de $f$ est donc : <br>${tableauReponse}`
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)

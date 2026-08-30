@@ -5,6 +5,7 @@
   import { buildMathAleaURL } from '../../../../../../../lib/components/urls'
   import { downloadFile } from '../../../../../../../lib/files'
   import { exportKutsum } from '../../../../../../../lib/kutsum'
+  import { downloadReferentielSpreadsheet } from '../../../../../../../lib/referentielExport'
   import type { VueType } from '../../../../../../../lib/VueType'
   import ButtonIconTooltip from '../../../../../../shared/forms/ButtonIconTooltip.svelte'
   import QcmCamIcon from '../../../../../../shared/icons/QcmCamIcon.svelte'
@@ -18,6 +19,25 @@
   let moreDialog: HTMLDialogElement
   let downloadContentDisplayed: 'success' | 'error' | 'none' = 'none'
 
+  let showReferentielModal = false
+  let referentielDialog: HTMLDialogElement
+  let referentielExporting = false
+
+  async function exportReferentiel(format: 'xlsx' | 'ods') {
+    if (referentielExporting) return
+    referentielExporting = true
+    try {
+      await downloadReferentielSpreadsheet(format)
+      downloadContentDisplayed = 'success'
+    } catch (error) {
+      console.error('Export du référentiel impossible', error)
+      downloadContentDisplayed = 'error'
+    } finally {
+      referentielExporting = false
+      showReferentielModal = false
+    }
+  }
+
   function downloadRedirectFile() {
     const text = `<html><head><meta http-equiv="refresh" content="0;URL=${encodeURI(buildMathAleaURL({}).toString())}"></head></html>`
     downloadFile(text, 'mathAlea.html').then((returnString) => {
@@ -27,6 +47,10 @@
 
   $: if (moreDialog && showMoreModal) moreDialog.showModal()
   $: if (moreDialog && !showMoreModal) moreDialog.close()
+
+  $: if (referentielDialog && showReferentielModal)
+    referentielDialog.showModal()
+  $: if (referentielDialog && !showReferentielModal) referentielDialog.close()
 
   function exportAndClose(vue: VueType) {
     showMoreModal = false
@@ -133,6 +157,17 @@
         'Pour animer en classe un quiz façon Kahoot à partir des exercices QCM',
       component: QuizzIcon,
       action: () => exportAndClose('quizzconf'),
+    },
+    {
+      id: 'referentiel',
+      label: 'Référentiel et liste des exercices',
+      description:
+        'Pour récupérer un classeur (ODS ou XLSX) avec le référentiel à jour (Niveaux › Thèmes › Sous-thèmes) et, dans un autre onglet, la liste de tous les exercices aléatoires avec leur titre',
+      icon: 'bx bxs-spreadsheet',
+      action: () => {
+        showMoreModal = false
+        showReferentielModal = true
+      },
     },
   ]
 </script>
@@ -257,6 +292,71 @@
         </div>
       </button>
     </div>
+  </div>
+</dialog>
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<dialog
+  bind:this={referentielDialog}
+  on:click|self={() => (showReferentielModal = false)}
+  on:close={() => (showReferentielModal = false)}
+  class="m-auto rounded-xl p-8 w-full max-w-lg
+    text-coopmaths-corpus dark:text-coopmathsdark-corpus
+    bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
+>
+  <div class="relative">
+    <button
+      class="absolute top-0 right-0 text-coopmaths-corpus dark:text-coopmathsdark-corpus hover:text-coopmaths-action dark:hover:text-coopmathsdark-action"
+      aria-label="Fermer"
+      on:click={() => (showReferentielModal = false)}
+    >
+      <i class="bx bx-x text-2xl"></i>
+    </button>
+    <h2
+      class="text-2xl font-bold mb-4 text-coopmaths-struct dark:text-coopmathsdark-struct"
+    >
+      Référentiel et liste des exercices
+    </h2>
+    <p
+      class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus opacity-75 mb-6"
+    >
+      Le classeur contient deux onglets : le référentiel à jour (Niveaux ›
+      Thèmes › Sous-thèmes) et la liste de tous les exercices aléatoires avec
+      leur niveau, leur thème, leur sous-thème, leur identifiant et leur titre.
+      Choisissez le format&nbsp;:
+    </p>
+    <div class="flex flex-row gap-4">
+      <button
+        class="flex-1 flex flex-col items-center gap-2 p-4 rounded-lg border border-coopmaths-action dark:border-coopmathsdark-action hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition-colors disabled:opacity-50"
+        disabled={referentielExporting}
+        on:click={() => exportReferentiel('ods')}
+      >
+        <i
+          class="bx bxs-spreadsheet text-3xl text-coopmaths-action dark:text-coopmathsdark-action"
+        ></i>
+        <span class="font-semibold">Classeur ODS</span>
+        <span class="text-xs opacity-75">LibreOffice Calc</span>
+      </button>
+      <button
+        class="flex-1 flex flex-col items-center gap-2 p-4 rounded-lg border border-coopmaths-action dark:border-coopmathsdark-action hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition-colors disabled:opacity-50"
+        disabled={referentielExporting}
+        on:click={() => exportReferentiel('xlsx')}
+      >
+        <i
+          class="bx bxs-spreadsheet text-3xl text-coopmaths-action dark:text-coopmathsdark-action"
+        ></i>
+        <span class="font-semibold">Classeur XLSX</span>
+        <span class="text-xs opacity-75">Microsoft Excel</span>
+      </button>
+    </div>
+    {#if referentielExporting}
+      <p
+        class="mt-4 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus opacity-75"
+      >
+        Génération du classeur…
+      </p>
+    {/if}
   </div>
 </dialog>
 

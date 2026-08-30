@@ -14,7 +14,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Développer et réduire des expressions du second degré'
-export const dateDePublication = '26/08/2026'
+export const dateDePublication = '27/08/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

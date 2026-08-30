@@ -165,7 +165,7 @@ ${diagramme}<br>`
     switch (typeQuestion) {
       case 2: {
         this.question += `L'enquête porte sur $${total}$ personnes. Combien de personnes correspondent à la catégorie « ${labelCible} » ?`
-        this.correction = `Le diagramme est semi-circulaire : il représente donc $180^\\circ$.<br>
+        this.correction = `Le diagramme est semi-circulaire : la somme des angles de ces secteurs circulaires est donc de  $180^\\circ$.<br>
 Le secteur « ${labelCible} » mesure $${angleCible}^\\circ$, donc l'effectif correspondant est :<br>
 $\\dfrac{${angleCible}}{180}\\times ${total}=${miseEnEvidence(texNombre(effectifCible))}$.`
         this.reponse = effectifCible

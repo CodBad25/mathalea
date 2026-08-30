@@ -232,7 +232,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
     this.enonce = `On donne les représentations graphiques de deux fonctions affines, $g$ (en bleu) et $h$ (en rouge), définies sur $\\mathbb{R}$.<br>
     ${objet}<br><br>`
     this.enonce +=
-      'Le tableau de signes de la fonction $f$ définies par $f(x)=g(x)\\times h(x)$ sur $\\mathbb{R}$ est  : '
+      'Le tableau de signes de la fonction $f$ définie par $f(x)=g(x)\\times h(x)$ sur $\\mathbb{R}$ est  : '
 
     this.reponses = [
       `${tableauSignesFonction(fProduit, -10, 10, {
@@ -299,6 +299,20 @@ export default class Auto1AF5 extends ExerciceQcmA {
         deltacl: 1,
         lgt: 5,
       })
+
+    this.correction += `Le tableau de signes de $f$ est donc : ${tableauSignesFonction(
+      fProduit,
+      -10,
+      10,
+      {
+        step: 1,
+        tolerance: 0.1,
+        substituts: [
+          { antVal: -10, antTex: '-\\infty' },
+          { antVal: 10, antTex: '+\\infty' },
+        ],
+      },
+    )}`
   }
 
   versionAleatoire: () => void = () => {
@@ -537,7 +551,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
     this.enonce = `On donne les représentations graphiques de deux fonctions affines, $g$ (en bleu) et $h$ (en rouge), définies sur $\\mathbb{R}$.<br>
     ${objet}<br><br>`
     this.enonce +=
-      'Le tableau de signes de la fonction $f$ définies par $f(x)=g(x)\\times h(x)$ sur $\\mathbb{R}$ est  : '
+      'Le tableau de signes de la fonction $f$ définie par $f(x)=g(x)\\times h(x)$ sur $\\mathbb{R}$ est  : '
 
     this.reponses = [
       `${tableauSignesFonction(fProduit, -10, 10, {
@@ -604,6 +618,19 @@ export default class Auto1AF5 extends ExerciceQcmA {
         deltacl: 1,
         lgt: 5,
       })
+    this.correction += `Le tableau de signes de $f$ est donc : ${tableauSignesFonction(
+      fProduit,
+      -10,
+      10,
+      {
+        step: 1,
+        tolerance: 0.1,
+        substituts: [
+          { antVal: -10, antTex: '-\\infty' },
+          { antVal: 10, antTex: '+\\infty' },
+        ],
+      },
+    )}`
   }
 
   constructor() {

@@ -7,7 +7,6 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { bleuMathalea } from '../../lib/colors'
-import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -146,11 +145,9 @@ export default class Auto1AF6c extends ExerciceQcmA {
       lBBx,
     )
 
-    this.enonce = `${deuxColonnes(
-      `Dans un repère du plan, on a représenté une droite.<br><br>
-      Le coefficient directeur de cette droite est égal  à :`,
-      `${objet}`,
-    )}<br>`
+    this.enonce = `Dans un repère du plan, on a représenté une droite.<br><br>
+      ${objet}<br>
+      Le coefficient directeur de cette droite est égal  à :`
 
     if (yB === yA) {
       this.correction = `La droite est horizontale. On en déduit que son coefficient directeur est $m=${miseEnEvidence('0')}$.<br>`

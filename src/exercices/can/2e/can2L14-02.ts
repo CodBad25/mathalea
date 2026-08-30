@@ -53,8 +53,8 @@ export default class ExprimerEnFonction extends ExerciceSimple {
             ? '$F=\\dfrac{9}{5}C+32$<br>'
             : `${texteCentre('$F=\\dfrac{9}{5}C+32$')}`
           : context.isHtml
-            ? '$F=\\dfrac{9}{5}C-32$<br>'
-            : `${texteCentre('$F=\\dfrac{9}{5}C-32$')}`
+            ? '$C=\\dfrac{5}{9}(F-32)$<br>'
+            : `${texteCentre('$C=\\dfrac{5}{9}(F-32)$')}`
         // Fin nouvelle version
         if (this.versionQcm) {
           this.question += choixQ

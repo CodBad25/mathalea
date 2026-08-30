@@ -162,19 +162,38 @@ export default class TableauSignePolyDegre3 extends Exercice {
         nomFonction: 'f(x)',
       })
 
+      const optionsTableau = (zerosExactes: FractionEtendue[]) => {
+        const zerosArrondis = zerosExactes.map((zero) =>
+          new FractionEtendue(
+            Math.round(zero.toNumber() * 1000),
+            1000,
+          ).simplifie(),
+        )
+        return {
+          step: 1,
+          tolerance: 0.1,
+          fractionTex: false,
+          zeros: zerosArrondis,
+          substituts: [
+            { antVal: xMin, antTex: '-\\infty' },
+            { antVal: xMax, antTex: '+\\infty' },
+            ...zerosExactes.map((zero, index) => ({
+              antVal: zerosArrondis[index].toNumber(),
+              antTex: zero.texFractionSimplifiee,
+            })),
+          ],
+        }
+      }
+
       // Fonction correcte
       const fCorrecte = (x: number) => produit(x)
 
-      const tabCor = tableauSignesFonction(fCorrecte, xMin, xMax, {
-        step: 1,
-        tolerance: 0.1,
-        fractionTex: true,
-        zeros,
-        substituts: [
-          { antVal: xMin, antTex: '-\\infty' },
-          { antVal: xMax, antTex: '+\\infty' },
-        ],
-      })
+      const tabCor = tableauSignesFonction(
+        fCorrecte,
+        xMin,
+        xMax,
+        optionsTableau(zeros),
+      )
 
       // Distracteurs
       const fDis1 = (x: number) => produit(x, false, true)
@@ -183,38 +202,26 @@ export default class TableauSignePolyDegre3 extends Exercice {
 
       const fDis3 = (x: number) => produit(x, true, true)
 
-      const tabDis1 = tableauSignesFonction(fDis1, xMin, xMax, {
-        step: 1,
-        tolerance: 0.1,
-        fractionTex: true,
-        zeros,
-        substituts: [
-          { antVal: xMin, antTex: '-\\infty' },
-          { antVal: xMax, antTex: '+\\infty' },
-        ],
-      })
+      const tabDis1 = tableauSignesFonction(
+        fDis1,
+        xMin,
+        xMax,
+        optionsTableau(zeros),
+      )
 
-      const tabDis2 = tableauSignesFonction(fDis2, xMin, xMax, {
-        step: 1,
-        tolerance: 0.1,
-        fractionTex: true,
-        zeros: zerosOpposes,
-        substituts: [
-          { antVal: xMin, antTex: '-\\infty' },
-          { antVal: xMax, antTex: '+\\infty' },
-        ],
-      })
+      const tabDis2 = tableauSignesFonction(
+        fDis2,
+        xMin,
+        xMax,
+        optionsTableau(zerosOpposes),
+      )
 
-      const tabDis3 = tableauSignesFonction(fDis3, xMin, xMax, {
-        step: 1,
-        tolerance: 0.1,
-        fractionTex: true,
-        zeros: zerosOpposes,
-        substituts: [
-          { antVal: xMin, antTex: '-\\infty' },
-          { antVal: xMax, antTex: '+\\infty' },
-        ],
-      })
+      const tabDis3 = tableauSignesFonction(
+        fDis3,
+        xMin,
+        xMax,
+        optionsTableau(zerosOpposes),
+      )
 
       // QCM
       this.autoCorrection[i] = {
