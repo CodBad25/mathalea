@@ -31,7 +31,7 @@ export const dateDePublication = '28/09/2022'
  */
 
 export const refs = {
-  'fr-fr': ['6N1F-1', 'BP2AutoC4', '6AutoN2'],
+  'fr-fr': ['6N1F-1', 'BP2AutoC4', '6AutoN2', 'auto5N3K-2'],
   'fr-2016': ['6N23-8', 'BP2AutoC4'],
   'fr-ch': ['9NO3C-11'],
 }

@@ -25,7 +25,7 @@ export const amcType = 'AMCOpen'
 export const uuid = 'e528e'
 
 export const refs = {
-  'fr-fr': ['6N1G'],
+  'fr-fr': ['6N1G', 'auto5G1A'],
   'fr-2016': ['6N30-2'],
   'fr-ch': ['PR-37'],
 }

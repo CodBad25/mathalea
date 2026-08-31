@@ -9,6 +9,7 @@ import {
   htmlToTypst,
 } from '../typst/latexToTypst'
 import {
+  BREATHER_IMPORT,
   MATHALEA_ANCHOR_HELPER,
   MATHALEA_INLINE_FORMULA_RULE,
 } from '../typst/buildTypstDocument'
@@ -40,6 +41,12 @@ export interface FlashcardsDocumentOptions {
   questionFontSize: number
   /** Taille du texte des réponses (verso) en points */
   answerFontSize: number
+  /**
+   * Interligne du texte des cartes, en `em` (valeur passée à
+   * `par(leading)`). Le défaut Typst est `0.65em` ; l'augmenter aère les
+   * énoncés à plusieurs lignes.
+   */
+  lineSpacing: number
   /** Nombre de cartes par ligne */
   columns: number
   /** Nombre de lignes de cartes par page */
@@ -74,6 +81,7 @@ export const defaultFlashcardsDocumentOptions: FlashcardsDocumentOptions = {
   mathFont: 'Libertinus Math',
   questionFontSize: 14,
   answerFontSize: 14,
+  lineSpacing: 0.65,
   columns: 2,
   rows: 4,
   showNumbers: true,
@@ -99,9 +107,17 @@ export interface FlashcardsCarryOver {
    * l'aperçu), par clef `<num>-recto` ou `<num>-verso` (num 1-based).
    */
   cardScales?: Record<string, number>
+  /**
+   * Zoom de chaque figure embarquée (boutons +/− de l'aperçu, comme dans la
+   * vue Typst), par numéro de figure (`fig-N`, 1-based).
+   */
+  figureZooms?: Record<number, number>
 }
 
-/** Relit dans le code les facteurs de taille réglés carte par carte */
+/**
+ * Relit dans le code les réglages de la palette de l'aperçu à réémettre lors
+ * d'une régénération : facteurs de taille carte par carte et zoom des figures.
+ */
 export function harvestFlashcardsCarryOver(code: string): FlashcardsCarryOver {
   const cardScales: Record<string, number> = {}
   for (const match of code.matchAll(
@@ -112,7 +128,17 @@ export function harvestFlashcardsCarryOver(code: string): FlashcardsCarryOver {
       cardScales[`${match[1]}-${match[2]}`] = value
     }
   }
-  return Object.keys(cardScales).length > 0 ? { cardScales } : {}
+  const figureZooms: Record<number, number> = {}
+  for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
+    const value = Number(match[2])
+    if (Number.isFinite(value) && value !== 1) {
+      figureZooms[Number(match[1])] = value
+    }
+  }
+  const carryOver: FlashcardsCarryOver = {}
+  if (Object.keys(cardScales).length > 0) carryOver.cardScales = cardScales
+  if (Object.keys(figureZooms).length > 0) carryOver.figureZooms = figureZooms
+  return carryOver
 }
 
 /** Chaîne littérale Typst (échappe backslash et guillemets) */
@@ -188,12 +214,16 @@ export function buildFlashcardsDocument(
   lines.push('// Imprimer en recto-verso (retournement sur les bords longs)')
   lines.push('// puis découper : chaque réponse est au dos de sa question.')
   lines.push('')
+  lines.push('// ----- Paquets -----')
+  // breather : écarte les lignes aux maths hautes (fractions « display »,
+  // matrices…) juste ce qu'il faut, pour qu'un numérateur ne recouvre pas
+  // le dénominateur de la ligne précédente
+  lines.push(BREATHER_IMPORT)
   if (usesTasks) {
-    lines.push('// ----- Paquets -----')
     lines.push(TASKIZE_IMPORT)
     lines.push(MATHALEA_TASKS_HELPER)
-    lines.push('')
   }
+  lines.push('')
   // chaque carte publie un repère (boutons +/− de taille sur l'aperçu) ;
   // mathalea-figure-block s'en sert aussi pour ses figures
   lines.push('// ----- Repères invisibles des contrôles de l’aperçu -----')
@@ -226,6 +256,9 @@ export function buildFlashcardsDocument(
   lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
   lines.push(`#let taille-questions = ${options.questionFontSize}pt`)
   lines.push(`#let taille-reponses = ${options.answerFontSize}pt`)
+  lines.push(
+    `#let interligne = ${options.lineSpacing}em // espacement des lignes du texte`,
+  )
   lines.push(`#let titre-recto = ${typstString(options.frontTitle)}`)
   lines.push(`#let titre-verso = ${typstString(options.backTitle)}`)
   lines.push(`#let titre-position = ${typstString(options.titlePosition)}`)
@@ -244,12 +277,17 @@ export function buildFlashcardsDocument(
   lines.push(
     '#set text(font: police-texte, size: taille-questions, lang: "fr")',
   )
+  lines.push('#set par(leading: interligne)')
   lines.push('// police des formules ; le texte inséré garde la police du texte')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
   lines.push(MATHALEA_INLINE_FORMULA_RULE)
   lines.push('// les fractions gardent leur taille normale au milieu du texte')
   lines.push('#show math.frac: it => math.display(it)')
+  lines.push('// espaces verticaux automatiques : une ligne aux maths hautes')
+  lines.push("// (fraction « display »…) s'écarte de la précédente juste ce")
+  lines.push("// qu'il faut (paquet breather)")
+  lines.push('#show: breathe')
   if (usesQcm) {
     lines.push(MATHALEA_QCM_HELPERS)
   }
@@ -259,7 +297,11 @@ export function buildFlashcardsDocument(
     for (const [index, figure] of figures.entries()) {
       const figNum = index + 1
       lines.push(`#let fig-${figNum} = ${figure}`)
-      lines.push(`#let fig-${figNum}-zoom = 1`)
+      // zoom réglable par les boutons +/− de l'aperçu (repris du code
+      // courant à la régénération, voir harvestFlashcardsCarryOver)
+      lines.push(
+        `#let fig-${figNum}-zoom = ${carryOver.figureZooms?.[figNum] ?? 1}`,
+      )
       lines.push(`#let fig-${figNum}-align = center`)
     }
     lines.push('')

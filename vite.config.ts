@@ -83,6 +83,11 @@ export default defineConfig({
           },
         },
       },
+  // Le worker OMR importe pdf.js, qui est découpé en chunks : le format `iife`
+  // par défaut de Vite interdit ce code-splitting, il faut passer en modules ES.
+  worker: {
+    format: 'es',
+  },
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
     // Injecte dans le bundle final

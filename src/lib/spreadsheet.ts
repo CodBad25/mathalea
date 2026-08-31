@@ -231,8 +231,12 @@ export function downloadBlob(blob: Blob, filename: string): void {
   const a = document.createElement('a')
   a.href = url
   a.download = filename
+  a.rel = 'noopener'
   document.body.appendChild(a)
   a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+  a.remove()
+  // Révoquer l'URL trop tôt annule le téléchargement encore en vol : un gros
+  // blob (PDF) n'a pas fini d'être lu quand un petit (JSON) passe déjà. On
+  // laisse le navigateur récupérer les octets avant de libérer l'URL.
+  setTimeout(() => URL.revokeObjectURL(url), 60_000)
 }

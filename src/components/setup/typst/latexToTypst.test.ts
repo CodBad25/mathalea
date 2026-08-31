@@ -570,10 +570,12 @@ describe('htmlToTypst', () => {
       'Figure 1 : <svg width="96" height="48"><rect/></svg> et figure 2 : <svg><circle/></svg>',
       figures,
     )
-    // #mathalea-fit adapte la figure à la largeur ; ligne vide après chaque
-    // figure : le texte suivant reprend dans un nouveau paragraphe
+    // #mathalea-figure-block adapte la figure à la largeur et lui donne les
+    // contrôles de zoom/alignement de la palette de l'aperçu ; ligne vide
+    // après chaque figure : le texte suivant reprend dans un nouveau paragraphe
     expect(result).toBe(
-      'Figure 1 : #mathalea-fit(fig-1)\n\n et figure 2 : #mathalea-fit(fig-2)',
+      'Figure 1 : #mathalea-figure-block(1, fig-1-align, fig-1-zoom, fig-1)\n\n' +
+        ' et figure 2 : #mathalea-figure-block(2, fig-2-align, fig-2-zoom, fig-2)',
     )
     expect(figures).toHaveLength(2)
     expect(figures[0]).toBe(

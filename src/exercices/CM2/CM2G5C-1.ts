@@ -35,7 +35,7 @@ export const dateDePublication = '18/07/2025'
 
 export const uuid = 'f57fe'
 export const refs = {
-  'fr-fr': ['CM2G5C-1'],
+  'fr-fr': ['CM2G5C-1', 'auto5G2D'],
   'fr-2016': ['6G45'],
   'fr-ch': ['9ES2B-1'],
 }

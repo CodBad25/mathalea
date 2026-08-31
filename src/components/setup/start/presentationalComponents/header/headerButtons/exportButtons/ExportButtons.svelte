@@ -6,6 +6,7 @@
   import { downloadFile } from '../../../../../../../lib/files'
   import { exportKutsum } from '../../../../../../../lib/kutsum'
   import { downloadReferentielSpreadsheet } from '../../../../../../../lib/referentielExport'
+  import { globalOptions } from '../../../../../../../lib/stores/globalOptions'
   import type { VueType } from '../../../../../../../lib/VueType'
   import ButtonIconTooltip from '../../../../../../shared/forms/ButtonIconTooltip.svelte'
   import QcmCamIcon from '../../../../../../shared/icons/QcmCamIcon.svelte'
@@ -66,7 +67,20 @@
     action: () => void
   }
 
-  const exportOptions: ExportOption[] = [
+  // Prototype : l'entrée n'apparaît que derrière `?beta=1`, tant que la
+  // fiabilité de la lecture optique n'a pas été mesurée sur de vraies copies
+  // scannées (voir la vue `Omr.svelte`, elle-même gardée par ce même
+  // paramètre dans App.svelte).
+  const optionOmr: ExportOption = {
+    id: 'omr',
+    label: 'Évaluation papier (beta)',
+    description:
+      'Pour générer des sujets nominatifs et corriger les copies scannées par lecture optique, sans serveur',
+    icon: 'bx bx-scan',
+    action: () => exportAndClose('omr'),
+  }
+
+  const baseExportOptions: ExportOption[] = [
     {
       id: 'latex2',
       label: 'PDF via LaTeX',
@@ -169,6 +183,11 @@
         showReferentielModal = true
       },
     },
+  ]
+
+  $: exportOptions = [
+    ...baseExportOptions,
+    ...($globalOptions.beta ? [optionOmr] : []),
   ]
 </script>
 

@@ -892,6 +892,7 @@ texte += demiDroiteInteractive(this, i, {
   minT: 0,
   maxT: 10,
   partsCount: 10,
+  subdivisionMode: 'axis',
   showEqualityMarks: false,
   points: [],
 })
@@ -917,6 +918,15 @@ handleAnswers(
 ```
 
 La réponse attendue est une configuration sérialisée, pas seulement l'abscisse du point. L'objet `points` contient les points que l'élève doit placer, avec leur `pointValue` et leur `label`. `showEqualityMarks: false` masque les marques d'égalité de longueur quand les graduations sont très serrées. `axisMin` permet de fixer la borne gauche visible quand `showNegative` ne doit pas produire une portion symétrique par rapport à 0. La clé `showwNegative` correspond au nom historique encore accepté par certains affichages de réponses. Vérifier un exercice existant proche, par exemple `6N3D-2.ts`, si plusieurs points ou des fractions sont attendus.
+
+`subdivisionMode` choisit l'interprétation de `partsCount` :
+
+- `'axis'` (valeur par défaut) partage toute la portion visible en
+  `partsCount` parts ;
+- `'unit'` partage chaque unité en `partsCount` parts. Dans ce second mode,
+  avec `partsCount: 1` au départ, les clics successifs sur le bouton `+`
+  produisent des demis, des tiers, des quarts, etc. Ce mode convient pour
+  représenter $\frac{3}{7}$ comme trois fois $\frac{1}{7}$.
 
 Hors HTML, `demiDroiteInteractive()` produit une figure statique :
 

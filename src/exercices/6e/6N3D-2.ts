@@ -131,6 +131,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
         maxT: abscisseT,
         multiplePoints: this.sup > 1,
         x0,
+        subdivisionMode: 'unit',
       })
       texteCorr += demiDroiteInteractive(this, i, {
         initialT: abscisseT,
@@ -138,7 +139,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
         minT: abscisseT,
         maxT: abscisseT,
         interactivityOn: false,
-        partsCount: den * (abscisseT - x0),
+        partsCount: den,
         points: nums.map((num, i) => ({
           pointValue: num / den,
           label: ['A', 'B', 'C'][i],
@@ -146,6 +147,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
         id: `demi-droite-gradueeEx${this.numeroExercice}Q${i}Corr`,
         pointsColor: orangeMathalea,
         multiplePoints: this.sup > 1,
+        subdivisionMode: 'unit',
       })
 
       if (this.questionJamaisPosee(i, nums.join(''), den)) {

@@ -1,4 +1,4 @@
-import TablesDeMultiplications from './_Tables_de_multiplications'
+import TablesDeMultiplications from '../6e/_Tables_de_multiplications'
 
 export const titre = 'Réviser les tables de multiplication'
 export const interactifReady = true
@@ -15,7 +15,7 @@ export const dateDePublication = '15/07/2026'
 export const uuid = '717cb'
 
 export const refs = {
-  'fr-fr': ['auto5N1C-1'],
+  'fr-fr': ['auto5N1C-1', 'auto5N3A-1', 'auto5N4A-1'],
   'fr-ch': [],
 }
 export default class TablesParametres extends TablesDeMultiplications {

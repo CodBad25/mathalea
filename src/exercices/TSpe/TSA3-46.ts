@@ -532,7 +532,7 @@ export default class CourbesFonctionEtDerivees extends Exercice {
             return `<b>Courbe ${nomCourbe} :</b> ${explicationOpposee[typeQuestion]}. On l'élimine.`
           }
           if (proposition.role === 'primitive') {
-            return `<b>Courbe ${nomCourbe} :</b> elle peut représenter une primitive de $f$. Cela revient à intégrer $f$ au lieu de rechercher $${fonctionDemandee}$. On l'élimine.`
+            return `<b>Courbe ${nomCourbe} :</b> son signe, ses variations, ses extremums ou sa convexité ne correspondent pas aux informations déduites de la courbe donnée. Elle ne satisfait donc pas le critère attendu pour $${fonctionDemandee}$ : ${critere}. On l'élimine.`
           }
           if (proposition.role === 'deriveePremiere') {
             return `<b>Courbe ${nomCourbe} :</b> elle correspond à la forme de $f'$ et traduit une confusion sur l'ordre de dérivation. Elle ne satisfait pas le critère attendu pour $${fonctionDemandee}$. On l'élimine.`

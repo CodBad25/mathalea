@@ -57,7 +57,7 @@ export default class EcrireEntierSousFormeDeFraction extends Exercice {
   }
 
   nouvelleVersion() {
-    if (this.sup3 && context.isHtml) {
+    if (this.sup3 && context.isHtml && this.interactif) {
       const figure = new Figure({
         xMin: -0.5,
         yMin: -2,
@@ -95,8 +95,7 @@ export default class EcrireEntierSousFormeDeFraction extends Exercice {
       shuffle: true,
       nbQuestions: this.nbQuestions,
     }).map((element) => Number(element))
-    let scale
-    context.isHtml ? (scale = 0.5) : (scale = 0.4)
+    const scale = context.isHtml ? 0.5 : 0.4
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const denominateur =
         listeDenominateurs[cpt % this.nbQuestions] === 1000

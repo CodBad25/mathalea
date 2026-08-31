@@ -74,8 +74,7 @@ export default class EgaliteDAngles extends Exercice {
         const objets = []
         const enonceAMC = []
         let correction
-        let gras
-        context.isHtml ? (gras = orangeMathalea) : (gras = 'black')
+        const gras = context.isHtml ? orangeMathalea : 'black'
         let a = randint(45, 85)
         const ac = randint(8, 10)
         const ce = randint(7, 10, ac)
@@ -306,156 +305,159 @@ export default class EgaliteDAngles extends Exercice {
       }
 
       if (context.isAmc) {
-        choix[i] === 1 // Cas du trapèze
-          ? (this.autoCorrectionAMC[i] = {
-              enonce: figure[3][0] + mathalea2d(figure[1], figure[0]),
-              options: { barreseparation: true, numerotationEnonce: true }, // facultatif.
-              propositions: [
-                {
-                  type: 'AMCOpen',
-                  propositions: [
-                    {
-                      texte: '',
-                      numQuestionVisible: false,
-                      statut: 3, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
-                      feedback: '',
-                      multicolsBegin: true,
-                      //    enonce: figure[3][0] + mathalea2d(figure[1], figure[0]) + '<br>' + figure[3][1] + ' Justifier la réponse.' // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
-                      enonce: figure[3][1] + ' Justifier la réponse.', // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: '',
-                      multicolsEnd: true,
-                      reponse: {
-                        texte: `Valeur de l'angle $\\widehat{${noms[3]}${noms[1]}${noms[2]}}$`,
-                        valeur: figure[4][0],
-                        param: {
-                          signe: false,
-                          digits: 3,
-                          decimals: 0,
-                        },
+        if (choix[i] === 1) {
+          // Cas du trapèze
+          this.autoCorrectionAMC[i] = {
+            enonce: figure[3][0] + mathalea2d(figure[1], figure[0]),
+            options: { barreseparation: true, numerotationEnonce: true }, // facultatif.
+            propositions: [
+              {
+                type: 'AMCOpen',
+                propositions: [
+                  {
+                    texte: '',
+                    numQuestionVisible: false,
+                    statut: 3, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
+                    feedback: '',
+                    multicolsBegin: true,
+                    //    enonce: figure[3][0] + mathalea2d(figure[1], figure[0]) + '<br>' + figure[3][1] + ' Justifier la réponse.' // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
+                    enonce: figure[3][1] + ' Justifier la réponse.', // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
+                  },
+                ],
+              },
+              {
+                type: 'AMCNum',
+                propositions: [
+                  {
+                    texte: '',
+                    multicolsEnd: true,
+                    reponse: {
+                      texte: `Valeur de l'angle $\\widehat{${noms[3]}${noms[1]}${noms[2]}}$`,
+                      valeur: figure[4][0],
+                      param: {
+                        signe: false,
+                        digits: 3,
+                        decimals: 0,
                       },
                     },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: '',
-                      reponse: {
-                        texte: figure[3][2] + '<br>',
-                        valeur: figure[4][1],
-                        param: {
-                          signe: false,
-                          digits: 3,
-                          decimals: 0,
-                        },
+                  },
+                ],
+              },
+              {
+                type: 'AMCNum',
+                propositions: [
+                  {
+                    texte: '',
+                    reponse: {
+                      texte: figure[3][2] + '<br>',
+                      valeur: figure[4][1],
+                      param: {
+                        signe: false,
+                        digits: 3,
+                        decimals: 0,
                       },
                     },
-                  ],
-                },
-                {
-                  type: 'AMCOpen',
+                  },
+                ],
+              },
+              {
+                type: 'AMCOpen',
 
-                  propositions: [
-                    {
-                      texte: '',
-                      numQuestionVisible: false,
-                      statut: 3, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
-                      feedback: '',
-                      multicolsBegin: true,
-                      enonce: figure[3][3] + ' Justifier la réponse.', // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
+                propositions: [
+                  {
+                    texte: '',
+                    numQuestionVisible: false,
+                    statut: 3, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
+                    feedback: '',
+                    multicolsBegin: true,
+                    enonce: figure[3][3] + ' Justifier la réponse.', // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
+                  },
+                ],
+              },
+              {
+                type: 'AMCNum',
 
-                  propositions: [
-                    {
-                      texte: '',
-                      multicolsEnd: true,
-                      reponse: {
-                        texte: `Valeur de l'angle $\\widehat{${noms[1]}${noms[3]}${noms[2]}}$`,
-                        valeur: figure[4][2],
-                        param: {
-                          signe: false,
-                          digits: 3,
-                          decimals: 0,
-                        },
+                propositions: [
+                  {
+                    texte: '',
+                    multicolsEnd: true,
+                    reponse: {
+                      texte: `Valeur de l'angle $\\widehat{${noms[1]}${noms[3]}${noms[2]}}$`,
+                      valeur: figure[4][2],
+                      param: {
+                        signe: false,
+                        digits: 3,
+                        decimals: 0,
                       },
                     },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
+                  },
+                ],
+              },
+              {
+                type: 'AMCNum',
 
-                  propositions: [
-                    {
-                      texte: '',
-                      reponse: {
-                        texte: figure[3][4] + '<br>',
-                        valeur: figure[4][3],
-                        param: {
-                          signe: false,
-                          digits: 3,
-                          decimals: 0,
-                        },
+                propositions: [
+                  {
+                    texte: '',
+                    reponse: {
+                      texte: figure[3][4] + '<br>',
+                      valeur: figure[4][3],
+                      param: {
+                        signe: false,
+                        digits: 3,
+                        decimals: 0,
                       },
                     },
-                  ],
-                },
-                {
-                  type: 'AMCOpen',
+                  },
+                ],
+              },
+              {
+                type: 'AMCOpen',
 
-                  propositions: [
-                    {
-                      texte: '',
-                      numQuestionVisible: false,
-                      statut: 3, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
-                      feedback: '',
-                      multicolsBegin: true,
-                      enonce: figure[3][5] + ' Justifier la réponse.', // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
+                propositions: [
+                  {
+                    texte: '',
+                    numQuestionVisible: false,
+                    statut: 3, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
+                    feedback: '',
+                    multicolsBegin: true,
+                    enonce: figure[3][5] + ' Justifier la réponse.', // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
+                  },
+                ],
+              },
+              {
+                type: 'AMCNum',
 
-                  propositions: [
-                    {
-                      texte: '',
-                      multicolsEnd: true,
-                      reponse: {
-                        texte: `Valeur de l'angle $\\widehat{${noms[3]}${noms[4]}${noms[0]}}$`,
-                        valeur: figure[4][4],
-                        param: {
-                          signe: false,
-                          digits: 3,
-                          decimals: 0,
-                        },
+                propositions: [
+                  {
+                    texte: '',
+                    multicolsEnd: true,
+                    reponse: {
+                      texte: `Valeur de l'angle $\\widehat{${noms[3]}${noms[4]}${noms[0]}}$`,
+                      valeur: figure[4][4],
+                      param: {
+                        signe: false,
+                        digits: 3,
+                        decimals: 0,
                       },
                     },
-                  ],
-                },
-              ],
-            })
-          : (this.autoCorrectionAMC[i] = {
-              // Cas du papillon
-              enonce:
-                figure[3][0] +
-                '<br>' +
-                mathalea2d(figure[1], figure[0]) +
-                '<br>Dans cette configuration, pas de version AMC développée.<br>',
-              options: { barreseparation: true, numerotationEnonce: true }, // facultatif.
-              propositions: [],
-            })
+                  },
+                ],
+              },
+            ],
+          }
+        } else {
+          // Cas du papillon
+          this.autoCorrectionAMC[i] = {
+            enonce:
+              figure[3][0] +
+              '<br>' +
+              mathalea2d(figure[1], figure[0]) +
+              '<br>Dans cette configuration, pas de version AMC développée.<br>',
+            options: { barreseparation: true, numerotationEnonce: true }, // facultatif.
+            propositions: [],
+          }
+        }
       }
 
       // if (this.questionJamaisPosee(i, u, d, c)) {

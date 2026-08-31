@@ -18,6 +18,11 @@
   import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
   import type { TypstAnchor } from '../typst/typstCompiler'
   import {
+    anchorPosition,
+    separatePages,
+    type PreviewPageGeometry,
+  } from '../shared/typstPreview'
+  import {
     buildFlashcardsDocument,
     defaultFlashcardsDocumentOptions,
     harvestFlashcardsCarryOver,
@@ -33,7 +38,7 @@
     ...defaultFlashcardsDocumentOptions,
   }
   let isSettingsOpen = true
-  /** Affiche les boutons +/− de taille du texte sur chaque carte de l'aperçu */
+  /** Affiche sur l'aperçu les contrôles de taille du texte des cartes et de zoom des images */
   let showOverlay = true
   if (isLocalStorageAvailable()) {
     try {
@@ -235,16 +240,6 @@
     compileTimer = setTimeout(() => compile(source), delay)
   }
 
-  /** Espace entre deux pages de l'aperçu, en unités SVG (pt) */
-  const PAGE_GAP = 16
-
-  /** Géométrie d'une page dans le SVG de l'aperçu (unités pt du viewBox) */
-  interface PreviewPageGeometry {
-    /** Ordonnée du haut de la page (espacement entre pages inclus) */
-    y: number
-    width: number
-    height: number
-  }
   let previewPages: PreviewPageGeometry[] = []
   let previewViewBox = { width: 0, height: 0 }
   /** Repères publiés par le document compilé (un par face de carte) */
@@ -259,86 +254,17 @@
     { label: 'Vert', value: '#4a7c59' },
   ]
 
-  /** Aperçu préparé : SVG retouché et géométrie des pages pour les contrôles */
-  interface SeparatedPreview {
-    svg: string
-    pages: PreviewPageGeometry[]
-    viewBox: { width: number; height: number }
-  }
-
-  /**
-   * Le SVG de typst.ts empile les pages sans séparation : on insère un fond
-   * blanc bordé derrière chaque page et un espace entre elles (même
-   * préparation que l'aperçu de la vue Typst). La géométrie des pages est
-   * renvoyée pour positionner les boutons +/− de taille sur les cartes.
-   */
-  function separatePages(svg: string): SeparatedPreview {
-    const degraded: SeparatedPreview = {
-      svg,
-      pages: [],
-      viewBox: { width: 0, height: 0 },
-    }
-    try {
-      const doc = new DOMParser().parseFromString(svg, 'text/html')
-      const root = doc.querySelector('svg')
-      if (root == null) return degraded
-      const pages = [...root.querySelectorAll('g.typst-page')]
-      if (pages.length === 0) return degraded
-      const viewBox = (root.getAttribute('viewBox') ?? '')
-        .trim()
-        .split(/\s+/)
-        .map(Number)
-      if (viewBox.length !== 4 || viewBox.some(Number.isNaN)) return degraded
-      const geometry: PreviewPageGeometry[] = []
-      let cumulatedY = 0
-      for (const [i, page] of pages.entries()) {
-        const width = parseFloat(page.getAttribute('data-page-width') ?? '0')
-        const height = parseFloat(page.getAttribute('data-page-height') ?? '0')
-        const translate = (page.getAttribute('transform') ?? '').match(
-          /translate\(\s*[\d.e+-]+[ ,]+([\d.e+-]+)\s*\)/i,
-        )
-        const pageY = translate != null ? parseFloat(translate[1]) : cumulatedY
-        cumulatedY += height
-        geometry.push({ y: pageY + i * PAGE_GAP, width, height })
-        const wrapper = doc.createElementNS('http://www.w3.org/2000/svg', 'g')
-        wrapper.setAttribute('transform', `translate(0, ${i * PAGE_GAP})`)
-        const sheet = doc.createElementNS(
-          'http://www.w3.org/2000/svg',
-          'rect',
-        )
-        sheet.setAttribute('x', '0')
-        sheet.setAttribute('y', String(pageY))
-        sheet.setAttribute('width', String(width))
-        sheet.setAttribute('height', String(height))
-        sheet.setAttribute('fill', '#ffffff')
-        sheet.setAttribute('stroke', '#c8c8c8')
-        sheet.setAttribute('stroke-width', '1')
-        page.replaceWith(wrapper)
-        wrapper.appendChild(sheet)
-        wrapper.appendChild(page)
-      }
-      const totalGap = (pages.length - 1) * PAGE_GAP
-      viewBox[3] += totalGap
-      root.setAttribute('viewBox', viewBox.join(' '))
-      const heightAttr = parseFloat(root.getAttribute('height') ?? '')
-      if (!Number.isNaN(heightAttr)) {
-        root.setAttribute('height', String(heightAttr + totalGap))
-      }
-      return {
-        svg: root.outerHTML,
-        pages: geometry,
-        viewBox: { width: viewBox[2], height: viewBox[3] },
-      }
-    } catch {
-      // aperçu dégradé (pages non séparées, pas de boutons) plutôt que rien
-      return degraded
-    }
-  }
-
   /** Boutons +/− d'une face de carte, positionnés en % de l'aperçu */
   interface CardWidget {
     num: number
     side: 'recto' | 'verso'
+    left: number
+    top: number
+  }
+
+  /** Boutons de zoom d'une figure embarquée, positionnés en % de l'aperçu */
+  interface FigureWidget {
+    num: number
     left: number
     top: number
   }
@@ -349,24 +275,52 @@
     pages: PreviewPageGeometry[],
     viewBox: { width: number; height: number },
   ): CardWidget[] {
-    if (viewBox.width <= 0 || viewBox.height <= 0) return []
     const widgets: CardWidget[] = []
     for (const anchor of anchorList) {
       if (anchor.kind !== 'carte-recto' && anchor.kind !== 'carte-verso') {
         continue
       }
-      const page = pages[anchor.page - 1]
-      if (page == null) continue
+      const position = anchorPosition(anchor, pages, viewBox)
+      if (position == null) continue
       widgets.push({
         num: anchor.num,
         side: anchor.kind === 'carte-verso' ? 'verso' : 'recto',
-        left: (anchor.x / viewBox.width) * 100,
-        top: ((page.y + anchor.y) / viewBox.height) * 100,
+        ...position,
       })
     }
     return widgets
   }
   $: cardWidgets = computeCardWidgets(anchors, previewPages, previewViewBox)
+
+  /**
+   * Repères des figures embarquées (`mathalea-figure-block`) : le repère est
+   * déjà au coin haut-droit du rendu final de la figure ; la pastille est
+   * décalée vers le haut pour ne pas recouvrir l'image (comme dans la vue Typst).
+   */
+  function computeFigureWidgets(
+    anchorList: TypstAnchor[],
+    pages: PreviewPageGeometry[],
+    viewBox: { width: number; height: number },
+  ): FigureWidget[] {
+    const widgets: FigureWidget[] = []
+    for (const anchor of anchorList) {
+      if (anchor.kind !== 'figure') continue
+      const position = anchorPosition(anchor, pages, viewBox)
+      if (position == null) continue
+      widgets.push({ num: anchor.num, ...position })
+    }
+    return widgets
+  }
+  $: figureWidgets = computeFigureWidgets(anchors, previewPages, previewViewBox)
+
+  /** Zoom courant d'une figure (`#let fig-N-zoom`), lu dans le code */
+  $: figureZooms = (() => {
+    const values: Record<number, number> = {}
+    for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
+      values[Number(match[1])] = Number(match[2])
+    }
+    return values
+  })()
 
   /** Modale de réglage du style du titre (ancrage, taille, couleur, opacité) */
   let isTitleStyleModalOpen = false
@@ -433,6 +387,29 @@
       pattern,
       `#let carte-${num}-${side}-taille = ${next}`,
     )
+    scheduleCompile(code, 0)
+  }
+
+  /** Pas d'ajustement du zoom d'une figure, et bornes (20 % à 300 %) */
+  const FIGURE_ZOOM_STEP = 0.1
+  /**
+   * Ajuste le zoom d'une figure embarquée : édition ciblée de la ligne
+   * `#let fig-N-zoom = ...` du code. Comme `adjustCardScale`, elle ne marque
+   * pas le code comme modifié : elle est reprise à la régénération (voir
+   * `harvestFlashcardsCarryOver`).
+   */
+  function adjustFigureZoom(num: number, delta: number) {
+    const pattern = new RegExp(`^#let fig-${num}-zoom = .*$`, 'm')
+    if (!pattern.test(code)) return
+    const current = figureZooms[num] ?? 1
+    const next = Math.min(
+      3,
+      Math.max(
+        0.2,
+        Math.round((current + delta * FIGURE_ZOOM_STEP) * 100) / 100,
+      ),
+    )
+    code = code.replace(pattern, `#let fig-${num}-zoom = ${next}`)
     scheduleCompile(code, 0)
   }
 
@@ -604,7 +581,7 @@
 
       <button
         type="button"
-        title="Afficher sur l'aperçu les boutons +/− de taille du texte de chaque carte"
+        title="Afficher sur l'aperçu les boutons de taille du texte de chaque carte et de zoom des images"
         aria-pressed={showOverlay}
         class="flex items-center gap-1 text-sm {showOverlay
           ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
@@ -760,6 +737,20 @@
             />
           </div>
 
+          <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="flashcards-line-spacing-input">Interligne (em)</label>
+            <input
+              id="flashcards-line-spacing-input"
+              type="number"
+              min="0.5"
+              max="3"
+              step="0.05"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.lineSpacing}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
           <label class="flex items-center justify-between gap-4 text-sm">
             Police du texte
             <select
@@ -904,6 +895,32 @@
                           adjustCardScale(widget.num, widget.side, 1)}
                       >
                         <i class="bx bx-plus text-sm"></i>
+                      </button>
+                    </div>
+                  {/each}
+                  {#each figureWidgets as widget (`figure-${widget.num}`)}
+                    <div
+                      class="absolute z-10 flex flex-row items-center rounded-full border border-coopmaths-action/40 bg-coopmaths-canvas/90 shadow-sm dark:border-coopmathsdark-action/40 dark:bg-coopmathsdark-canvas/90"
+                      style="left: {widget.left}%; top: {widget.top}%; transform: translate(-100%, -100%);"
+                    >
+                      <button
+                        type="button"
+                        title="Réduire l'image"
+                        class="px-1 py-0.5 text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+                        on:click={() => adjustFigureZoom(widget.num, -1)}
+                      >
+                        <i class="bx bx-zoom-out text-sm"></i>
+                      </button>
+                      <span class="px-0.5 text-[0.6rem] tabular-nums">
+                        {Math.round((figureZooms[widget.num] ?? 1) * 100)}%
+                      </span>
+                      <button
+                        type="button"
+                        title="Agrandir l'image"
+                        class="px-1 py-0.5 text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+                        on:click={() => adjustFigureZoom(widget.num, 1)}
+                      >
+                        <i class="bx bx-zoom-in text-sm"></i>
                       </button>
                     </div>
                   {/each}

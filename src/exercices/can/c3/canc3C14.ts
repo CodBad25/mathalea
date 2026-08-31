@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
-  'Connaitre les tables de multiplication (avec des divisions)'
+  'Connaître les tables de multiplication (avec des divisions)'
 export const interactifReady = true
 
 export const amcReady = true
@@ -20,7 +20,7 @@ export const dateDePublication = '24/01/2023'
 export const uuid = 'd61d9'
 
 export const refs = {
-  'fr-fr': ['canc3C14'],
+  'fr-fr': ['canc3C14', 'auto5N3A-flash3', 'auto5N4A-flash3'],
   'fr-ch': [],
 }
 export default class TableDivisions extends ExerciceSimple {

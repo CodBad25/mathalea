@@ -14,7 +14,7 @@ export const dateDePublication = '30/10/2021'
 export const uuid = '8e72e'
 
 export const refs = {
-  'fr-fr': ['TEC1-01'],
+  'fr-fr': ['TEC1-41'],
   'fr-ch': [],
 }
 export default class EquationDuPremierDegreDansC extends Exercice {

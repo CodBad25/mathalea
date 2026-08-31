@@ -81,6 +81,10 @@
     setEditorTheme,
     type EditorMarker,
   } from '../shared/editor/editorSetup'
+  import {
+    separatePages,
+    type PreviewPageGeometry,
+  } from '../shared/typstPreview'
   import { typstLanguage } from './editor/typstLanguage'
   import { hasSeenTypstTour, startTypstTour } from '../../../lib/onboarding/typstTour'
   import BugReportModal from '../../shared/exercice/shared/BugReportModal.svelte'
@@ -655,13 +659,6 @@
   let editorEl: HTMLDivElement = $state()!
   let editorView: EditorView | null = null
 
-  /** Géométrie d'une page dans le SVG de l'aperçu (unités pt du viewBox) */
-  interface PreviewPageGeometry {
-    /** Ordonnée du haut de la page (espacement entre pages inclus) */
-    y: number
-    width: number
-    height: number
-  }
   let previewPages: PreviewPageGeometry[] = $state([])
   let previewViewBox = $state({ width: 0, height: 0 })
   /** Repères publiés par le document compilé (palette de mise en page) */
@@ -2709,86 +2706,6 @@
   function scheduleCompile(code: string, delay = 500) {
     clearTimeout(compileTimer)
     compileTimer = setTimeout(() => compile(code), delay)
-  }
-
-  /** Espace entre deux pages de l'aperçu, en unités SVG (pt) */
-  const PAGE_GAP = 16
-
-  /** Aperçu préparé : SVG retouché et géométrie des pages pour la palette */
-  interface SeparatedPreview {
-    svg: string
-    pages: PreviewPageGeometry[]
-    viewBox: { width: number; height: number }
-  }
-
-  /**
-   * Le SVG de typst.ts empile les pages sans séparation : on insère un
-   * fond blanc bordé derrière chaque page (`g.typst-page`) et un espace
-   * entre les pages, sur le fond gris du panneau d'aperçu. La géométrie des
-   * pages est renvoyée pour positionner la palette de mise en page.
-   */
-  function separatePages(svg: string): SeparatedPreview {
-    const degraded: SeparatedPreview = {
-      svg,
-      pages: [],
-      viewBox: { width: 0, height: 0 },
-    }
-    try {
-      // parseur HTML (pas XML) : le SVG de typst.ts embarque un <script>
-      // et des styles qui ne sont pas du XML strict
-      const doc = new DOMParser().parseFromString(svg, 'text/html')
-      const root = doc.querySelector('svg')
-      if (root == null) return degraded
-      const pages = [...root.querySelectorAll('g.typst-page')]
-      if (pages.length === 0) return degraded
-      const viewBox = (root.getAttribute('viewBox') ?? '')
-        .trim()
-        .split(/\s+/)
-        .map(Number)
-      if (viewBox.length !== 4 || viewBox.some(Number.isNaN)) return degraded
-      const geometry: PreviewPageGeometry[] = []
-      let cumulatedY = 0
-      for (const [i, page] of pages.entries()) {
-        const width = parseFloat(page.getAttribute('data-page-width') ?? '0')
-        const height = parseFloat(page.getAttribute('data-page-height') ?? '0')
-        // la position verticale de la page est celle de son transform
-        // (les pages sont empilées) ; à défaut, la somme des hauteurs
-        const translate = (page.getAttribute('transform') ?? '').match(
-          /translate\(\s*[\d.e+-]+[ ,]+([\d.e+-]+)\s*\)/i,
-        )
-        const pageY = translate != null ? parseFloat(translate[1]) : cumulatedY
-        cumulatedY += height
-        geometry.push({ y: pageY + i * PAGE_GAP, width, height })
-        const wrapper = doc.createElementNS('http://www.w3.org/2000/svg', 'g')
-        wrapper.setAttribute('transform', `translate(0, ${i * PAGE_GAP})`)
-        const sheet = doc.createElementNS('http://www.w3.org/2000/svg', 'rect')
-        sheet.setAttribute('x', '0')
-        sheet.setAttribute('y', String(pageY))
-        sheet.setAttribute('width', String(width))
-        sheet.setAttribute('height', String(height))
-        sheet.setAttribute('fill', '#ffffff')
-        sheet.setAttribute('stroke', '#c8c8c8')
-        sheet.setAttribute('stroke-width', '1')
-        page.replaceWith(wrapper)
-        wrapper.appendChild(sheet)
-        wrapper.appendChild(page)
-      }
-      const totalGap = (pages.length - 1) * PAGE_GAP
-      viewBox[3] += totalGap
-      root.setAttribute('viewBox', viewBox.join(' '))
-      const heightAttr = parseFloat(root.getAttribute('height') ?? '')
-      if (!Number.isNaN(heightAttr)) {
-        root.setAttribute('height', String(heightAttr + totalGap))
-      }
-      return {
-        svg: root.outerHTML,
-        pages: geometry,
-        viewBox: { width: viewBox[2], height: viewBox[3] },
-      }
-    } catch {
-      // aperçu dégradé (pages non séparées, pas de palette) plutôt que rien
-      return degraded
-    }
   }
 
   /**

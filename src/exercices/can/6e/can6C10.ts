@@ -2,7 +2,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Connaitre les tables de multiplication (de 5 à 9)'
+export const titre = 'Connaître les tables de multiplication (de 5 à 9)'
 export const interactifReady = true
 
 export const amcReady = true
@@ -15,7 +15,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'eae92'
 
 export const refs = {
-  'fr-fr': ['can6C10'],
+  'fr-fr': ['can6C10', 'auto5N3A-flash1', 'auto5N4A-flash1'],
   'fr-ch': [],
 }
 export default class Tables5A9 extends ExerciceSimple {

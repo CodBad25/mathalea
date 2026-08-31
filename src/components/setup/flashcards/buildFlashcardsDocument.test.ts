@@ -50,6 +50,18 @@ describe('buildFlashcardsDocument', () => {
     )
   })
 
+  it('active breather et applique l’interligne réglé', () => {
+    const code = buildFlashcardsDocument([{ front: '$1/2$', back: '$3/4$' }], {
+      ...defaultFlashcardsDocumentOptions,
+      lineSpacing: 1.1,
+    })
+    // le paquet breather écarte les lignes aux fractions « display »
+    expect(code).toContain('@preview/breather')
+    expect(code).toContain('#show: breathe')
+    expect(code).toContain('#let interligne = 1.1em')
+    expect(code).toContain('#set par(leading: interligne)')
+  })
+
   it('sépare la taille du texte des questions et des réponses', () => {
     const code = buildFlashcardsDocument([{ front: 'Q', back: 'R' }], {
       ...defaultFlashcardsDocumentOptions,
@@ -85,6 +97,28 @@ describe('buildFlashcardsDocument', () => {
     )
     expect(regenerated).toContain('#let carte-2-verso-taille = 0.8')
     expect(regenerated).toContain('#let carte-1-recto-taille = 1')
+  })
+
+  it('réémet le zoom des figures relu dans le code (carry-over)', () => {
+    const cardWithFigure = {
+      front:
+        '<div class="svgContainer"><svg width="100" height="50"><line x1="0" y1="0" x2="10" y2="10" /></svg></div>',
+      back: 'Rien',
+    }
+    const first = buildFlashcardsDocument([cardWithFigure])
+    expect(first).toContain('#let fig-1-zoom = 1')
+    const edited = first.replace(
+      '#let fig-1-zoom = 1',
+      '#let fig-1-zoom = 1.5',
+    )
+    const carryOver = harvestFlashcardsCarryOver(edited)
+    expect(carryOver).toEqual({ figureZooms: { 1: 1.5 } })
+    const regenerated = buildFlashcardsDocument(
+      [cardWithFigure],
+      defaultFlashcardsDocumentOptions,
+      carryOver,
+    )
+    expect(regenerated).toContain('#let fig-1-zoom = 1.5')
   })
 
   it("n'émet les helpers de figures que lorsqu'une figure est présente", () => {

@@ -86,6 +86,7 @@ export type DemiDroiteInteractiveOptions = {
   minT?: number
   maxT?: number
   partsCount?: number
+  subdivisionMode?: 'axis' | 'unit'
   axisMin?: number
   showNegative?: boolean
   showEqualityMarks?: boolean

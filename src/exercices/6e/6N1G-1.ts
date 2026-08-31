@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 export const titre = 'Repérer des nombres décimaux sur une droite graduée'
 export const uuid = '50614'
 export const refs = {
-  'fr-fr': ['6N1G-1', 'BP2AutoN2'],
+  'fr-fr': ['6N1G-1', 'BP2AutoN2', 'auto5G1B'],
   'fr-2016': ['6N30-0', 'BP2AutoN2'],
   'fr-ch': ['PR-44'],
 }

@@ -2945,10 +2945,16 @@ export function htmlToTypst(
   text = text.replace(/<svg[\s\S]*?<\/svg>/gi, (svg) => {
     if (figures == null) return protect(missingBox('figure non convertie'))
     figures.push(svgToTypstImage(svg, maxFigureWidthPt))
-    // mathalea-fit réduit la figure si elle dépasse la largeur disponible ;
-    // ligne vide après la figure : le texte qui suit reprend dans un
-    // nouveau paragraphe du code généré
-    return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
+    const figureName = `fig-${figures.length}`
+    // mathalea-figure-block (plutôt que mathalea-fit) : réduit la figure à la
+    // largeur disponible, applique le zoom et l'alignement réglés dans la
+    // palette de l'aperçu et publie le repère invisible du contrôle de zoom
+    // — pour que tout SVG autonome (bloc Scratch, balance…) soit
+    // redimensionnable comme les figures mathalea2d. Ligne vide après la
+    // figure : le texte qui suit reprend dans un nouveau paragraphe.
+    return protect(
+      `#mathalea-figure-block(${figures.length}, ${figureName}-align, ${figureName}-zoom, ${figureName})\n\n`,
+    )
   })
   // images d'exercices statiques (annales scannées) : l'image est déjà
   // chargée dans le compilateur (voir `staticImagePaths`/`mapShadow`), sinon

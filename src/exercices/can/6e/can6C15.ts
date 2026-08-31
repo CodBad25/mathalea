@@ -8,7 +8,7 @@ import { amcConvert } from '../../../lib/amc/amcBuilders'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
-export const titre = 'Trouver la fraction (définition)'
+export const titre = 'Trouver la fraction, par définition'
 export const interactifReady = true
 
 export const amcReady = true
@@ -21,7 +21,7 @@ export const amcType = 'AMCHybride'
 export const uuid = '84b48'
 
 export const refs = {
-  'fr-fr': ['can6C15', '6N3C-flash1'],
+  'fr-fr': ['can6C15', '6N3C-flash1', 'auto5N3C-1', 'auto5N5D-1'],
   'fr-ch': [],
 }
 export default class FractionCommeFacteurManquant extends ExerciceSimple {
@@ -44,7 +44,7 @@ export default class FractionCommeFacteurManquant extends ExerciceSimple {
     this.question = `Quel est le nombre qui, multiplié par $${b}$, donne $${a}$ ?`
     this.correction = `Le nombre qui, multiplié par $a$, donne $b$ est le nombre $\\dfrac{b}{a}$.<br>
     Ainsi, le nombre qui,  multiplié par $${b}$ donne $${a}$ est $${miseEnEvidence(c.texFraction)}$.<br>
-    On a bien : $ ${b} \\times${c.texFraction}= ${a}$`
+    On a bien : $ ${b} \\times${c.texFraction}= ${a}$.`
 
     if (context.isAmc) {
       this.autoCorrectionAMC[0] = {

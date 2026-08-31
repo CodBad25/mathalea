@@ -6,6 +6,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import {
@@ -116,7 +117,12 @@ $${p}~\\%~\\text{de }${n}= ${p / 10} \\times ${n}\\div${10} =  ${texNombre((p * 
           }
       }
       if (context.isHtml && this.interactif)
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
+        texte += ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierNumbers,
+          { texteAvant: `${sp()}= ` },
+        )
       handleAnswers(this, i, { reponse: { value: (n * p) / 100 } })
       if (context.isAmc) {
         this.autoCorrectionAMC[i].enonce = texte + '='
@@ -147,7 +153,8 @@ $${p}~\\%~\\text{de }${n}= ${p / 10} \\times ${n}\\div${10} =  ${texNombre((p * 
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
-      } else cpt++
+      }
+      cpt++
     }
     listeQuestionsToContenu(this)
   }

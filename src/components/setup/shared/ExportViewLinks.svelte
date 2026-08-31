@@ -2,12 +2,13 @@
   import { globalOptions } from '../../../lib/stores/globalOptions'
 
   /**
-   * Passerelles entre les trois exports Typst (fiche à imprimer, flash-cards,
-   * diaporama PDF) : la vue courante est retirée de la liste. Elles reprennent
-   * les exercices en place, sans repasser par la page d'accueil.
+   * Passerelles entre les exports Typst (fiche à imprimer, flash-cards,
+   * diaporama PDF, évaluation papier) : la vue courante est retirée de la
+   * liste. Elles reprennent les exercices en place, sans repasser par la page
+   * d'accueil.
    */
 
-  type ExportView = 'typst' | 'flashcards' | 'slides'
+  type ExportView = 'typst' | 'flashcards' | 'slides' | 'omr'
 
   const { current }: { current: ExportView } = $props()
 
@@ -37,6 +38,9 @@
     },
   ]
 
+  // `omr` n'est pas dans la liste : l'évaluation papier reprend ces passerelles
+  // pour revenir aux trois autres exports, mais ne s'y propose jamais
+  // elle-même — c'est un prototype, on n'y envoie personne au détour d'un clic
   const others = VIEWS.filter((view) => view.id !== current)
 
   function goTo(view: ExportView) {

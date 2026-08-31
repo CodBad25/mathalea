@@ -28,7 +28,7 @@ export const titre =
 export const uuid = '23bc8'
 
 export const refs = {
-  'fr-fr': ['6N0A-4'],
+  'fr-fr': ['6N0A-4', 'auto5N3A-3', 'auto5N4A-3'],
   'fr-2016': ['6C10-2'],
   'fr-ch': [''], // Primaire anciennement :['9NO3-15'],
 }
@@ -76,7 +76,6 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
       ]
     // Texte, tooltip
     else this.besoinFormulaire2Numerique = false
-
 
     const tables = gestionnaireFormulaireTexte({
       min: 2,

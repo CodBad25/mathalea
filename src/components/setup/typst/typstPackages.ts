@@ -15,6 +15,7 @@ export const TYPST_PACKAGE_VERSIONS = {
   'cetz-plot': '0.1.4',
   'ctz-euclide': '0.3.0',
   breather: '0.1.0',
+  tiaoma: '0.3.0',
 } as const
 
 /** Nom d'un paquet Typst connu de MathALÉA */

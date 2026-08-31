@@ -30,7 +30,7 @@ export const titre = 'Comparer les volumes de deux empilements de cubes'
 export const uuid = '5f117'
 
 export const refs = {
-  'fr-fr': ['6M3B'],
+  'fr-fr': ['6M3B', 'auto5G2B-1'],
   'fr-2016': ['6G43-1'],
   'fr-ch': ['9GM2A-6'],
 }

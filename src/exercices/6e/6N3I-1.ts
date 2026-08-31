@@ -40,7 +40,7 @@ export const dateDeModifImportante = '21/07/2025'
 export const uuid = '1f5de'
 
 export const refs = {
-  'fr-fr': ['6N3I-1'],
+  'fr-fr': ['6N3I-1', 'auto5N3F-1'],
   'fr-2016': ['6N20-1'],
   'fr-ch': ['9NO3D-2'],
 }
@@ -84,7 +84,7 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
       nbQuestions: this.nbQuestions,
       exclus: this.lycee ? [] : [6, 7, 8, 9],
     }).map(Number)
-    if (this.sup3 && context.isHtml) {
+    if (this.sup3 && context.isHtml && this.interactif) {
       const figure = new Figure({
         xMin: -0.5,
         yMin: -2,

@@ -93,8 +93,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
           : (this.sup3 === 3 ? choice([-1, 1]) : this.sup3 === 2 ? -1 : 1) *
             randint(this.sup4 === 2 ? 1 : 0, 4)
       const vocabulaire = b === 0 ? 'linéaire' : 'affine'
-      let xMin
-      context.isHtml ? (xMin = -10) : (xMin = -8)
+      const xMin = context.isHtml ? -10 : -8
       const xMax = -xMin
       const yMin = xMin
       const yMax = -yMin

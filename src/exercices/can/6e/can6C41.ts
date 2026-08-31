@@ -19,7 +19,7 @@ export const dateDePublication = '04/11/2022'
 export const uuid = '99b96'
 
 export const refs = {
-  'fr-fr': ['can6C41', '6N3I-flash1'],
+  'fr-fr': ['can6C41', '6N3I-flash1', 'auto5N3F-flash1'],
   'fr-ch': [],
 }
 export default class ComparerFraction extends Exercice {

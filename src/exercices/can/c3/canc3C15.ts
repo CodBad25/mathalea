@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Connaitre les tables de multiplication (phrases)'
+export const titre = 'Connaître les tables de multiplication (phrases)'
 export const interactifReady = true
 
 export const amcReady = true
@@ -16,7 +16,12 @@ export const dateDePublication = '24/01/2023'
 export const uuid = 'aa8af'
 
 export const refs = {
-  'fr-fr': ['canc3C15', 'auto5N1C-flash1'],
+  'fr-fr': [
+    'canc3C15',
+    'auto5N1C-flash1',
+    'auto5N3A-flash2',
+    'auto5N4A-flash2',
+  ],
   'fr-ch': [],
 }
 export default class TablesPhrase extends ExerciceSimple {

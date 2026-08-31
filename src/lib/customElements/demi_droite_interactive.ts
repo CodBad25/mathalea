@@ -18,8 +18,11 @@ type ValeurPoint = {
   label: string
 }
 
+export type DemiDroiteInteractiveSubdivisionMode = 'axis' | 'unit'
+
 type DemiDroiteInteractiveValue = {
   partsCount: number
+  subdivisionMode: DemiDroiteInteractiveSubdivisionMode
   maxT: number
   showNegative: boolean
   points: ValeurPoint[]
@@ -88,6 +91,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
   private initialTMax = 2
   private partsCount = 1
   private initialPartsCount = 1
+  private subdivisionMode: DemiDroiteInteractiveSubdivisionMode = 'axis'
   private minT = 2
   private maxT = 10
   private axisMin: number | undefined
@@ -234,6 +238,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     const minT = options.minT ?? 2
     const maxT = options.maxT ?? 10
     const partsCount = options.partsCount ?? 1
+    const subdivisionMode = options.subdivisionMode ?? 'axis'
     const showNegative = options.showNegative ?? false
     const showEqualityMarks = options.showEqualityMarks ?? true
     const multiplePoints = options.multiplePoints ?? false
@@ -245,7 +250,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     const axisMinAttribute =
       options.axisMin === undefined ? '' : ` axis-min="${options.axisMin}"`
 
-    return `<demi-droite-interactive ${idAttribute} x0="${x0}"${axisMinAttribute} initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" show-equality-marks="${showEqualityMarks}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
+    return `<demi-droite-interactive ${idAttribute} x0="${x0}"${axisMinAttribute} initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" show-equality-marks="${showEqualityMarks}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" subdivision-mode="${subdivisionMode}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
   }
 
   private applyOptions(options: DemiDroiteInteractiveOptions = {}): void {
@@ -259,6 +264,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.x0 = this.initialX0
     this.initialPartsCount = Math.max(1, options.partsCount ?? 1)
     this.partsCount = this.initialPartsCount
+    this.subdivisionMode = options.subdivisionMode ?? 'axis'
     this.showNegative = options.showNegative ?? false
     this.initialShowNegative = this.showNegative
     this.showEqualityMarks = options.showEqualityMarks ?? true
@@ -297,6 +303,8 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       Number(this.getAttribute('parts-count') ?? '1'),
     )
     this.partsCount = this.initialPartsCount
+    this.subdivisionMode =
+      this.getAttribute('subdivision-mode') === 'unit' ? 'unit' : 'axis'
     this.showNegative = this.getAttribute('show-negative') === 'true'
     this.initialShowNegative = this.showNegative
     this.showEqualityMarks =
@@ -334,6 +342,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
   public get value(): DemiDroiteInteractiveValue {
     return {
       partsCount: this.partsCount,
+      subdivisionMode: this.subdivisionMode,
       maxT: this.tMax,
       showNegative: this.showNegative,
       points: this.points.map((point) => ({ ...point })),
@@ -423,12 +432,46 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       values.add(integerValue)
     }
 
-    const n = this.getParts()
-    for (let k = 1; k < n; k++) {
-      values.add(axisStartValue + (k * (this.tMax - axisStartValue)) / n)
+    for (const [segmentStart, segmentEnd] of this.getSubdivisionSegments()) {
+      values.add(segmentStart)
+      values.add(segmentEnd)
     }
 
     return Array.from(values).sort((a, b) => a - b)
+  }
+
+  /**
+   * Renvoie les parts égales matérialisées sur l'axe.
+   * En mode `axis`, toute la portion visible est partagée (comportement
+   * historique). En mode `unit`, chaque unité est partagée en `partsCount`.
+   */
+  private getSubdivisionSegments(): [number, number][] {
+    const axisStartValue = this.getAxisStartValue()
+    const axisEndValue = this.tMax
+    const parts = this.getParts()
+    const segments: [number, number][] = []
+
+    if (this.subdivisionMode === 'axis') {
+      for (let index = 0; index < parts; index++) {
+        segments.push([
+          axisStartValue + (index * (axisEndValue - axisStartValue)) / parts,
+          axisStartValue +
+            ((index + 1) * (axisEndValue - axisStartValue)) / parts,
+        ])
+      }
+      return segments
+    }
+
+    const firstIndex = Math.ceil(axisStartValue * parts - 1e-9)
+    const lastIndex = Math.floor(axisEndValue * parts + 1e-9)
+    for (let index = firstIndex; index < lastIndex; index++) {
+      const segmentStart = Math.max(axisStartValue, index / parts)
+      const segmentEnd = Math.min(axisEndValue, (index + 1) / parts)
+      if (segmentEnd - segmentStart > 1e-9) {
+        segments.push([segmentStart, segmentEnd])
+      }
+    }
+    return segments
   }
 
   private getStaticGeometry() {
@@ -464,13 +507,10 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     ]
     const parts = this.getParts()
     if (this.showEqualityMarks && parts >= 2) {
-      for (let partIndex = 0; partIndex < parts; partIndex++) {
-        const segmentStartValue =
-          geometry.minValue +
-          (partIndex * (geometry.maxValue - geometry.minValue)) / parts
-        const segmentEndValue =
-          geometry.minValue +
-          ((partIndex + 1) * (geometry.maxValue - geometry.minValue)) / parts
+      for (const [
+        segmentStartValue,
+        segmentEndValue,
+      ] of this.getSubdivisionSegments()) {
         const markerX = geometry.xForValue(
           (segmentStartValue + segmentEndValue) / 2,
         )
@@ -528,13 +568,10 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       `<path d="M ${xSvg(geometry.axisEnd - 0.24)} ${axisY - 5} L ${xSvg(geometry.axisEnd)} ${axisY} L ${xSvg(geometry.axisEnd - 0.24)} ${axisY + 5}" stroke="#111" stroke-width="1.6" />`,
     ]
     if (this.showEqualityMarks && parts >= 2) {
-      for (let partIndex = 0; partIndex < parts; partIndex++) {
-        const segmentStartValue =
-          geometry.minValue +
-          (partIndex * (geometry.maxValue - geometry.minValue)) / parts
-        const segmentEndValue =
-          geometry.minValue +
-          ((partIndex + 1) * (geometry.maxValue - geometry.minValue)) / parts
+      for (const [
+        segmentStartValue,
+        segmentEndValue,
+      ] of this.getSubdivisionSegments()) {
         const markerX = geometry.xForValue(
           (segmentStartValue + segmentEndValue) / 2,
         )
@@ -645,7 +682,10 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     group.style.fontSize = '0.92rem'
 
     const label = document.createElement('span')
-    label.textContent = 'Nombre de graduations intermédiaires'
+    label.textContent =
+      this.subdivisionMode === 'unit'
+        ? 'Nombre de parts par unité'
+        : 'Nombre de parts sur l’axe'
 
     const valueDisplay = document.createElement('span')
     valueDisplay.textContent = String(this.partsCount)
@@ -666,7 +706,9 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
           this.emitChange()
         }
       },
-      'Diminuer le nombre de graduations intermédiaires',
+      this.subdivisionMode === 'unit'
+        ? 'Diminuer le nombre de parts par unité'
+        : 'Diminuer le nombre de parts sur l’axe',
     )
 
     const plus = this.createStepperButton(
@@ -677,7 +719,9 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
         this.render()
         this.emitChange()
       },
-      'Augmenter le nombre de graduations intermédiaires',
+      this.subdivisionMode === 'unit'
+        ? 'Augmenter le nombre de parts par unité'
+        : 'Augmenter le nombre de parts sur l’axe',
     )
 
     group.append(label, valueDisplay, minus, plus)
@@ -854,15 +898,12 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.svg.appendChild(axis)
 
     const parts = this.getParts()
+    const subdivisionSegments = this.getSubdivisionSegments()
     if (this.showEqualityMarks && parts >= 2) {
       const markerYOffset = 0
       const markerHalfWidth = 4
       const markerHalfHeight = 5
-      for (let partIndex = 0; partIndex < parts; partIndex++) {
-        const segmentStartValue =
-          minValue + (partIndex * (maxValue - minValue)) / parts
-        const segmentEndValue =
-          minValue + ((partIndex + 1) * (maxValue - minValue)) / parts
+      for (const [segmentStartValue, segmentEndValue] of subdivisionSegments) {
         const midValue = (segmentStartValue + segmentEndValue) / 2
         const ratio = totalAxis === 0 ? 0 : (midValue - minValue) / totalAxis
         const markerX = axisStart + ratio * valuesLength
@@ -923,9 +964,12 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     // chaîne d'arcs passe au-dessus des graduations principales sans s'y arrêter.
     if (parts >= 2) {
       const hopHeight = 14
-      for (let k = 0; k < parts; k++) {
-        const xA = axisStart + (k / parts) * valuesLength
-        const xB = axisStart + ((k + 1) / parts) * valuesLength
+      for (const [segmentStartValue, segmentEndValue] of subdivisionSegments) {
+        const xA =
+          axisStart +
+          ((segmentStartValue - minValue) / totalAxis) * valuesLength
+        const xB =
+          axisStart + ((segmentEndValue - minValue) / totalAxis) * valuesLength
         const midX = (xA + xB) / 2
         const hop = document.createElementNS(
           'http://www.w3.org/2000/svg',
@@ -1094,6 +1138,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       return rawAnswer
     }
     const { partsCount, maxT, points, x0 } = parsed
+    const subdivisionMode = parsed.subdivisionMode === 'unit' ? 'unit' : 'axis'
     const axisMin = Number(parsed.axisMin ?? x0)
     const showNegative = parsed.showNegative ?? parsed.showwNegative
     if (
@@ -1123,19 +1168,24 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       }
       return `${label}\\left(${fraction(numericPointValue * partsCount, partsCount).texFraction}\\right)`
     })
-    return `Un axe allant de $${axisMin}$ à $${maxT}$ a été partagé en $${partsCount}$ parties.<br>
+    const subdivisionDescription =
+      subdivisionMode === 'unit'
+        ? `Chaque unité de l'axe allant de $${axisMin}$ à $${maxT}$ a été partagée en $${partsCount}$ parties.`
+        : `Un axe allant de $${axisMin}$ à $${maxT}$ a été partagé en $${partsCount}$ parties.`
+    return `${subdivisionDescription}<br>
     ${points.length > 1 ? 'Les points suivants sont placés :' : 'Le point suivant est placé :'} $${pointsDescriptions.filter((v): v is string => !!v).join(';')}$`
   }
 }
 
 registerMathaleaCustomElement(DemiDroiteInteractiveElement)
 
-type DemiDroiteInteractiveOptions = {
+export type DemiDroiteInteractiveOptions = {
   x0?: number
   initialT?: number
   minT?: number
   maxT?: number
   partsCount?: number
+  subdivisionMode?: DemiDroiteInteractiveSubdivisionMode
   axisMin?: number
   showNegative?: boolean
   showEqualityMarks?: boolean

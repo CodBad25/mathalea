@@ -19,11 +19,11 @@ export const dateDeModifImportante = '27/08/2024'
 export const uuid = '0e6bd'
 
 export const refs = {
-  'fr-fr': ['auto6N3D-1'],
+  'fr-fr': [],
   'fr-2016': ['6C10-1'],
   'fr-ch': [''], // Primaire anciennement :['9NO3-8'],
 }
-export default class TablesParametres extends TablesDeMultiplications {
+export default class TablesParametresOld extends TablesDeMultiplications {
   constructor() {
     super()
     this.sup = '2-3-4-5-6-7-8-9-10'

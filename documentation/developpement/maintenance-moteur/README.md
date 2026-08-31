@@ -49,6 +49,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Vue Diaporama PDF](exports/diaporama-pdf.md) | PDF 16/9 : une question par page, puis les corrections                   |
 | [Vue Quizz](exports/quizz.md)                 | Quiz façon Kahoot : paramètres URL, extraction QCM, moteur et transports |
 | [Référentiel tableur](exports/referentiel-tableur.md) | Classeur ODS/XLSX : hiérarchie du référentiel et liste des exercices     |
+| [Lecture optique](exports/lecture-optique.md) | Évaluation papier : sujets nominatifs, dépouillement des copies scannées, bilan |
 
 ## Mathématiques
 

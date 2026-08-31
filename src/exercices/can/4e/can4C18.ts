@@ -16,7 +16,7 @@ export const dateDePublication = '09/09/2023'
 export const uuid = 'f84d1'
 
 export const refs = {
-  'fr-fr': ['can4C18'],
+  'fr-fr': ['can4C18', 'auto5N3G-flash1', 'CM1N2B-flash1', 'CM2N2B-flash1'],
   'fr-ch': [],
 }
 export default class DecomposerFraction extends ExerciceSimple {

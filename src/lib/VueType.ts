@@ -29,6 +29,7 @@ const VueTypeArray = <const>[
   'tbi',
   'quizzconf',
   'quizz',
+  'omr',
   'check-test',
   '',
 ]

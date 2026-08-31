@@ -9,7 +9,10 @@ import { milieu } from '../../lib/2d/utilitairesPoint'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  KeyboardType,
+  type KeyboardCategory,
+} from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -82,7 +85,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       let dataTemplate: string = ''
-      let dataOptions: Record<string, any> = {}
+      let dataOptions: Record<string, { keyboard: KeyboardCategory }> = {}
       const signeNum =
         this.sup2 === 3 ? choice([-1, 1]) : this.sup2 === 2 ? -1 : 1
       const num =
@@ -106,8 +109,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       const b =
         this.sup4 === 1 ? 0 : signB * randint(this.sup4 === 2 ? 1 : 0, 4)
       const vocabulaire = b === 0 ? 'linéaire' : 'affine'
-      let xMin
-      context.isHtml ? (xMin = -10) : (xMin = -8)
+      const xMin = context.isHtml ? -10 : -8
       const xMax = -xMin
       const yMin = xMin
       const yMax = -yMin
@@ -216,13 +218,26 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       dataOptions =
         vocabulaire === 'affine'
           ? {
-              champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-              champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-              champ3: { keyboard: KeyboardType.clavierDeBaseAvecX },
+              champ1: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFraction as KeyboardCategory,
+              },
+              champ2: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFraction as KeyboardCategory,
+              },
+              champ3: {
+                keyboard: KeyboardType.clavierDeBaseAvecX as KeyboardCategory,
+              },
             }
           : {
-              champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-              champ2: { keyboard: KeyboardType.clavierDeBaseAvecX },
+              champ1: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFraction as KeyboardCategory,
+              },
+              champ2: {
+                keyboard: KeyboardType.clavierDeBaseAvecX as KeyboardCategory,
+              },
             }
 
       correction3 =

@@ -321,3 +321,51 @@ export async function compileTypstToPdf(
     },
   )
 }
+
+/** PDF et résultat de requête issus d'une même compilation. */
+export interface TypstPdfAndQuery {
+  /** Octets du PDF, absents si la compilation a échoué */
+  pdf?: Uint8Array
+  /** Valeurs des métadonnées correspondant au sélecteur */
+  values: unknown[]
+  /** Diagnostics au format `fichier:ligne:col: message` */
+  diagnostics: string[]
+}
+
+/**
+ * Compile la source en PDF **et** interroge ses métadonnées dans le même
+ * « monde » de compilation.
+ *
+ * C'est ce qui permet à l'export de lecture optique (`src/lib/omr/`) d'obtenir
+ * d'un seul coup la feuille à imprimer et la position exacte de chacune de ses
+ * cases à cocher : deux compilations séparées ne garantiraient pas que les
+ * positions décrivent bien le PDF remis au professeur.
+ *
+ * @param selector sélecteur Typst, par exemple `<omr-box>`
+ */
+export async function compileTypstToPdfAndQuery(
+  source: string,
+  selector: string,
+): Promise<TypstPdfAndQuery> {
+  await ensureInitialized()
+  await mapStaticImages()
+  const compiler = await $typst.getCompiler()
+  await compiler.addSource(MAIN_FILE, source)
+  return await compiler.runWithWorld(
+    { mainFilePath: MAIN_FILE },
+    async (world) => {
+      const compiled = await world.pdf({ diagnostics: 'unix' })
+      const diagnostics: string[] = (compiled?.diagnostics ?? []).map(
+        (diagnostic: unknown) => String(diagnostic),
+      )
+      let values: unknown[] = []
+      try {
+        const resultat = await world.query({ selector, field: 'value' })
+        if (Array.isArray(resultat)) values = resultat
+      } catch {
+        // document sans métadonnée : la requête échoue, ce n'est pas une erreur
+      }
+      return { pdf: compiled?.result, values, diagnostics }
+    },
+  )
+}

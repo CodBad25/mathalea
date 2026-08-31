@@ -3524,6 +3524,26 @@
     "titre": "Nombres complexes : algèbre",
     "sousThemes": {}
   },
+   "TEC1-1": {
+    "titre": "Définition, somme et produit",
+    "sousThemes": {}
+  },
+  "TEC1-2": {
+    "titre": "Conjugué",
+    "sousThemes": {}
+  },
+      "TEC1-3": {
+    "titre": "Binôme de Newton",
+    "sousThemes": {}
+  },
+    "TEC1-4": {
+    "titre": "Résolution d'équation dans $\\mathbb C$",
+    "sousThemes": {}
+  },
+    "TEC1-5": {
+    "titre": "Problèmes de synthèse",
+    "sousThemes": {}
+  },
   "TEC2": {
     "titre": "Nombres complexes : géométrie",
     "sousThemes": {}

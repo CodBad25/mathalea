@@ -27,7 +27,7 @@ export const dateDeModifImportante = '03/04/2024'
 export const uuid = '0e58f'
 
 export const refs = {
-  'fr-fr': ['6N1F-3'],
+  'fr-fr': ['6N1F-3', 'auto5N3K-3'],
   'fr-ch': ['9NO3C-13'],
 }
 export default class FractionVersPourcentage extends Exercice {

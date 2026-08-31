@@ -224,6 +224,19 @@
       {/if}
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       {@html label}
+      {#if ending.tags.length > 0}
+        <!-- Étiquettes de la ressource, comme dans le menu de sélection des
+             exercices (voir ReferentielEnding.svelte) -->
+        <div class="mt-1 flex flex-row flex-wrap">
+          {#each ending.tags as tag}
+            <span
+              class="inline-flex flex-wrap items-center justify-center rounded-full bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light text-coopmaths-canvas dark:text-coopmathsdark-canvas text-[0.6rem] px-2 py-px leading-snug font-semibold mr-1"
+            >
+              {tag}
+            </span>
+          {/each}
+        </div>
+      {/if}
     </div>
     <div class="flex shrink-0 flex-row items-center gap-1">
       {#if count > 0}

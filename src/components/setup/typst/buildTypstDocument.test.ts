@@ -173,13 +173,19 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('// ----- Figures (SVG embarqués) -----')
     expect(code).toContain('#let fig-1 = image(bytes(')
     expect(code).toContain('#let fig-2 = image(bytes(')
-    expect(code).toContain('Figure : #mathalea-fit(fig-1)')
-    expect(code).toContain('Corrigé : #mathalea-fit(fig-2)')
-    // le helper mathalea-fit est déclaré dès qu'une figure est présente
-    expect(code).toContain('#let mathalea-fit(body, zoom: 1.0)')
+    // tout SVG autonome passe par mathalea-figure-block : contrôles de
+    // zoom/alignement de la palette de l'aperçu, comme les figures mathalea2d
+    expect(code).toContain(
+      'Figure : #mathalea-figure-block(1, fig-1-align, fig-1-zoom, fig-1)',
+    )
+    expect(code).toContain(
+      'Corrigé : #mathalea-figure-block(2, fig-2-align, fig-2-zoom, fig-2)',
+    )
+    expect(code).toContain('#let fig-1-zoom = 1')
+    expect(code).toContain('#let mathalea-figure-block(')
     // les définitions doivent précéder les références
     expect(code.indexOf('#let fig-1')).toBeLessThan(
-      code.indexOf('Figure : #mathalea-fit(fig-1)'),
+      code.indexOf('Figure : #mathalea-figure-block(1'),
     )
   })
 

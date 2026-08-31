@@ -18,6 +18,11 @@
   import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
   import type { TypstAnchor } from '../typst/typstCompiler'
   import {
+    anchorPosition,
+    separatePages,
+    type PreviewPageGeometry,
+  } from '../shared/typstPreview'
+  import {
     buildSlidesDocument,
     defaultSlidesDocumentOptions,
     harvestSlidesCarryOver,
@@ -269,16 +274,6 @@
     compileTimer = setTimeout(() => compile(source), delay)
   }
 
-  /** Espace entre deux pages de l'aperçu, en unités SVG (pt) */
-  const PAGE_GAP = 16
-
-  /** Géométrie d'une page dans le SVG de l'aperçu (unités pt du viewBox) */
-  interface PreviewPageGeometry {
-    /** Ordonnée du haut de la page (espacement entre pages inclus) */
-    y: number
-    width: number
-    height: number
-  }
   let previewPages: PreviewPageGeometry[] = $state([])
   let previewViewBox = $state({ width: 0, height: 0 })
   /** Repères publiés par le document compilé (un par diapositive, un par figure) */
@@ -303,79 +298,6 @@
       { value: 'bottom-right', label: 'En bas à droite' },
     ]
 
-  /** Aperçu préparé : SVG retouché et géométrie des pages pour les contrôles */
-  interface SeparatedPreview {
-    svg: string
-    pages: PreviewPageGeometry[]
-    viewBox: { width: number; height: number }
-  }
-
-  /**
-   * Le SVG de typst.ts empile les pages sans séparation : on insère un fond
-   * blanc bordé derrière chaque page et un espace entre elles (même
-   * préparation que l'aperçu de la vue Typst). La géométrie des pages est
-   * renvoyée pour positionner les boutons de réglage sur les diapositives.
-   */
-  function separatePages(svg: string): SeparatedPreview {
-    const degraded: SeparatedPreview = {
-      svg,
-      pages: [],
-      viewBox: { width: 0, height: 0 },
-    }
-    try {
-      const doc = new DOMParser().parseFromString(svg, 'text/html')
-      const root = doc.querySelector('svg')
-      if (root == null) return degraded
-      const pages = [...root.querySelectorAll('g.typst-page')]
-      if (pages.length === 0) return degraded
-      const viewBox = (root.getAttribute('viewBox') ?? '')
-        .trim()
-        .split(/\s+/)
-        .map(Number)
-      if (viewBox.length !== 4 || viewBox.some(Number.isNaN)) return degraded
-      const geometry: PreviewPageGeometry[] = []
-      let cumulatedY = 0
-      for (const [i, page] of pages.entries()) {
-        const width = parseFloat(page.getAttribute('data-page-width') ?? '0')
-        const height = parseFloat(page.getAttribute('data-page-height') ?? '0')
-        const translate = (page.getAttribute('transform') ?? '').match(
-          /translate\(\s*[\d.e+-]+[ ,]+([\d.e+-]+)\s*\)/i,
-        )
-        const pageY = translate != null ? parseFloat(translate[1]) : cumulatedY
-        cumulatedY += height
-        geometry.push({ y: pageY + i * PAGE_GAP, width, height })
-        const wrapper = doc.createElementNS('http://www.w3.org/2000/svg', 'g')
-        wrapper.setAttribute('transform', `translate(0, ${i * PAGE_GAP})`)
-        const sheet = doc.createElementNS('http://www.w3.org/2000/svg', 'rect')
-        sheet.setAttribute('x', '0')
-        sheet.setAttribute('y', String(pageY))
-        sheet.setAttribute('width', String(width))
-        sheet.setAttribute('height', String(height))
-        sheet.setAttribute('fill', '#ffffff')
-        sheet.setAttribute('stroke', '#c8c8c8')
-        sheet.setAttribute('stroke-width', '1')
-        page.replaceWith(wrapper)
-        wrapper.appendChild(sheet)
-        wrapper.appendChild(page)
-      }
-      const totalGap = (pages.length - 1) * PAGE_GAP
-      viewBox[3] += totalGap
-      root.setAttribute('viewBox', viewBox.join(' '))
-      const heightAttr = parseFloat(root.getAttribute('height') ?? '')
-      if (!Number.isNaN(heightAttr)) {
-        root.setAttribute('height', String(heightAttr + totalGap))
-      }
-      return {
-        svg: root.outerHTML,
-        pages: geometry,
-        viewBox: { width: viewBox[2], height: viewBox[3] },
-      }
-    } catch {
-      // aperçu dégradé (pages non séparées, pas de boutons) plutôt que rien
-      return degraded
-    }
-  }
-
   /** Boutons de réglage d'une diapositive, positionnés en % de l'aperçu */
   interface SlideWidget {
     num: number
@@ -389,21 +311,6 @@
     num: number
     left: number
     top: number
-  }
-
-  /** Convertit un repère (pt, par page) en position % sur l'aperçu */
-  function anchorPosition(
-    anchor: TypstAnchor,
-    pages: PreviewPageGeometry[],
-    viewBox: { width: number; height: number },
-  ): { left: number; top: number } | null {
-    if (viewBox.width <= 0 || viewBox.height <= 0) return null
-    const page = pages[anchor.page - 1]
-    if (page == null) return null
-    return {
-      left: (anchor.x / viewBox.width) * 100,
-      top: ((page.y + anchor.y) / viewBox.height) * 100,
-    }
   }
 
   const slideWidgets: SlideWidget[] = $derived(

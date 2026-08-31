@@ -157,7 +157,7 @@ export default class EncodeurTexte extends Exercice {
       texte +=
         "<br><br>À l'aide de la table ci-dessus, décoder le message suivant :<br>"
       for (let j = 0; j < texteAEncoder[i].length; j++) {
-        texte += `${produitPourCaractere(texteAEncoder[i][j], associations)} `
+        texte += `$${produitPourCaractere(texteAEncoder[i][j], associations)}$ `
       }
       texte += '<br><br>'
 

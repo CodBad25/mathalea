@@ -405,7 +405,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
           this.autoCorrectionAMC[i] = {
             enonce: '',
             options: { multicols: true, barreseparation: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
-            // @ts-expect-error
+            // @ts-expect-error this.autoCorrection[i] est bien défini
             propositions: propositionsAMC,
           }
           this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])

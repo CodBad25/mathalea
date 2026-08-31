@@ -630,7 +630,8 @@ const CODE_OVERRIDE_CORRECTION_START =
 const CODE_OVERRIDE_CORRECTION_END =
   /^[ \t]*\/\/ mathalea:override-corr-end\s*$/
 /** Repère de début d'une surcharge d'énoncé de ligne « Course aux nombres » (voir `codeOverridesCan`) */
-const CODE_OVERRIDE_CAN_START = /^([ \t]*)\/\/ mathalea:override-can\((\d+)\)\s*$/
+const CODE_OVERRIDE_CAN_START =
+  /^([ \t]*)\/\/ mathalea:override-can\((\d+)\)\s*$/
 /**
  * Repère de fin d'une surcharge d'énoncé de ligne « Course aux nombres ».
  * Contrairement à `CODE_OVERRIDE_END` (toujours seul sur sa ligne), cette
@@ -699,7 +700,7 @@ function stripAnchorCall(helper: string): string {
  * `buildTypstDocument` (document complet) et `buildStandaloneExerciseCode`
  * (fragment autonome d'un seul exercice, pour la modale d'édition).
  */
-function detectUsedFeatures(lines: string[]): {
+export function detectUsedFeatures(lines: string[]): {
   usesMathaleaFigure: boolean
   usesTasks: boolean
   usesQcm: boolean
@@ -708,6 +709,7 @@ function detectUsedFeatures(lines: string[]): {
   usesCetz: boolean
   usesCtz: boolean
   usesCetzPlotChart: boolean
+  usesVarTable: boolean
 } {
   return {
     usesMathaleaFigure: lines.some((line) => line.includes('mathalea-figure(')),
@@ -720,6 +722,7 @@ function detectUsedFeatures(lines: string[]): {
     // CTZ_EUCLIDE_IMPORT) ; `ctz-` n'est un sous-mot ni de `cetz.` ni de `cetz-plot`
     usesCtz: lines.some((line) => line.includes('ctz-')),
     usesCetzPlotChart: lines.some((line) => line.includes('chart.')),
+    usesVarTable: lines.some((line) => line.includes('#tabvar(')),
   }
 }
 
@@ -792,9 +795,7 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     if (value !== 1) exerciseZoom[Number(match[1])] = value
   }
   const exerciseCorrectionZoom: Record<number, number> = {}
-  for (const match of code.matchAll(
-    /^#let exo-(\d+)-corr-zoom = ([\d.]+)/gm,
-  )) {
+  for (const match of code.matchAll(/^#let exo-(\d+)-corr-zoom = ([\d.]+)/gm)) {
     const value = Number(match[2])
     if (value !== 1) exerciseCorrectionZoom[Number(match[1])] = value
   }

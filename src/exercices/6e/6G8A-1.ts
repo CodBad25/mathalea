@@ -31,7 +31,7 @@ export const interactifReady = true
 export const uuid = '5f115'
 
 export const refs = {
-  'fr-fr': ['6G8A-1', '6AutoE1-3'],
+  'fr-fr': ['6G8A-1', '6AutoE1-3', 'auto5G2B'],
   'fr-2016': ['6G43'],
   'fr-ch': ['9ES2C-1'],
 }
@@ -209,10 +209,7 @@ export default class DenombrerCubes extends Exercice {
       }
     }
 
-    for (
-      let q = 0, texte, texteCorr, cpt = 0;
-      q < this.nbQuestions && cpt < 50;
-    ) {
+    for (let q = 0, texteCorr, cpt = 0; q < this.nbQuestions && cpt < 50;) {
       let figure, figureCorrection
       const L = empilementCubes(longueur, largeur, hauteur) // crée un empilement aléatoire
       let texte = ''
