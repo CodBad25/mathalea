@@ -180,6 +180,18 @@ describe('inférence AMC depuis formatInteractif', () => {
     expect(exercice.autoCorrectionAMC[0].enonce).toBe('Énoncé LaTeX')
   })
 
+  it("n'infère pas un champ numérique depuis le seul format global", () => {
+    const exercice = exercise({
+      formatInteractif: 'mathalea-mathfield',
+      autoCorrection: [{ valeur: { reponse: { value: 12 } } }],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrectionAMC[0].propositions[0].statut).toBe(3)
+  })
+
   it('choisit qcmMult si une question quelconque a plusieurs bonnes réponses', () => {
     const exercice = exercise({
       nbQuestions: 2,
@@ -1181,6 +1193,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     'svg-selection',
     'trigo-circle-selection',
     'interactive-clock',
+    'my-calculator',
     'guide-ane',
     'demi-droite-interactive',
     'blockly-editor',
@@ -1190,6 +1203,7 @@ describe('inférence AMC depuis formatInteractif', () => {
     'tableau-hybride',
     'mathalea-couteau-suisse',
     'mathalea-branching-qcm',
+    'fractionEgale',
     'alea-iep-editeur',
     'relier-etiquettes',
     'diagram-builder',

@@ -24,6 +24,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer graphiquement l'étendue d'une série représentée par un diagramme cartésien"
 export const dateDePublication = '29/08/2026'
+export const dateDeModifImportante = '31/08/2026'
 export const uuid = 'e7f8e'
 export const refs = {
   'fr-fr': ['2S20-15'],
@@ -98,15 +99,15 @@ function scenarioAltitude(): Scenario {
   ])
   return {
     introduction:
-      "Lors d'une randonnée, on a relevé l'altitude atteinte à intervalles réguliers. Le graphique ci-dessous représente les altitudes obtenues.",
-    xLegende: 'Relevé',
+      "Lors d'une randonnée, on a relevé toutes les heures l'altitude atteinte. Le graphique ci-dessous représente les altitudes obtenues.",
+    xLegende: 'Heure',
     yLegende: 'Altitude (en m)',
     caractere: "l'altitude",
-    caracteresFaux: ['le numéro du relevé', 'la randonnée'],
+    caracteresFaux: ["l'heure du relevé", 'la randonnée'],
     unite: '\\text{m}',
     minimum,
     maximum,
-    abscisses: [1, 2, 3, 4, 5, 6, 7],
+    abscisses: [0, 1, 2, 3, 4, 5, 6],
     valeursIntermediaires: valeurs,
     xThickDistance: 1,
     yThickDistance: 100,
@@ -242,6 +243,7 @@ export default class EtendueRepresentationGraphique extends Exercice {
         xUnite,
         yUnite,
         xThickDistance: scenario.xThickDistance,
+        xLabelListe: scenario.abscisses,
         yThickDistance: scenario.yThickDistance,
         xLegende: scenario.xLegende,
         xLegendePosition: [

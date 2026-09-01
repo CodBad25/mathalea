@@ -76,7 +76,7 @@ export const dictionnaireDNBPRO = {
     mois: 'Juillet',
     numeroInitial: '4',
     typeExercice: 'dnbpro',
-    tags: ['Fonctions', 'Équations', 'Lecture graphique'],
+    tags: ['Pythagore', 'Thalès', 'Aires'],
   },
   dnbpro_2024_07_metropole_5: {
     annee: '2024',

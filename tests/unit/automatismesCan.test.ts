@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import MetaExercice from '../../src/exercices/MetaExerciceCan'
 import AutomatismesPremiere from '../../src/exercices/1e/1a-automatismes'
+import AutomatismesSeconde from '../../src/exercices/2e/2a-automatismes'
 import AutomatismesTroisieme from '../../src/exercices/3e/3a-automatismes'
 import { createAutomatismesCanExercice } from '../../src/exercices/_automatismesCan'
 import type { CategoriesForm } from '../../src/exercices/_automatismesCan'
@@ -15,6 +16,7 @@ import type { CategoriesForm } from '../../src/exercices/_automatismesCan'
 
 const cases = [
   { titre: '1A', Exercice: AutomatismesPremiere },
+  { titre: '2A', Exercice: AutomatismesSeconde },
   { titre: '3A', Exercice: AutomatismesTroisieme },
 ]
 

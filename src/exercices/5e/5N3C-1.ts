@@ -450,9 +450,9 @@ export default class ProblemesAdditifsFractions5e extends Exercice {
                    c) Sachant que ${situations.last_question[0]} $${situations.nb_total}$ ${situations.last_question[1]} et que les ${situations.nom_enonce} vers ${situations.categories[2].destination} représentent $\\dfrac{${situations.categories[2].frac[0]}}{${situations.categories[2].frac[1]}}$ de ce total, calculer ${situations.last_question[2]} vers ${situations.categories[2].destination} ? %{champ3}
                   `,
         dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierNumbers },
-          champ2: { keyboard: KeyboardType.clavierNumbers },
-          champ3: { keyboard: KeyboardType.clavierNumbers },
+          champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+          champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+          champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
         },
       }).replaceAll('$\\ldots\\ldots$', '')}`
 

@@ -293,19 +293,20 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
          On reproduit ici le style des autres QCM du site (ex. 1A-E01-1) :
          bouton radio « coopmaths-action », espacement et alignement. */
       [data-type='qcm'] {
-        display: inline-block;
+        display: inline-flex;
+        gap: 1.5rem;
+        align-items: center;
         vertical-align: middle;
+      }
+      [data-type='qcm'][data-vertical='true'] {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
       }
       [data-type='qcm'] > span {
-        vertical-align: middle;
-      }
-      [data-type='qcm'] > span.inline-block {
-        display: inline-block;
-        margin-right: 1.5rem;
-      }
-      [data-type='qcm'] > span.block {
-        display: block;
-        margin: 0.25rem 0;
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
       }
       [data-type='qcm'] input[type='radio'] {
         appearance: none;
@@ -337,7 +338,6 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         cursor: default;
       }
       [data-type='qcm'] label {
-        margin-left: 0.5rem;
         vertical-align: middle;
         cursor: pointer;
       }
@@ -436,9 +436,9 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
 
     const items = filteredChoices.map(
       (choice, index) =>
-        `<div class="ex0 ${vertical ? '' : 'inline-block'} my-2 align-center"><input type="radio" disabled style="appearance:none; -webkit-appearance:none; opacity:1; height:1rem; width:1rem; border:1.5px solid currentColor; border-radius:50%; background:transparent; vertical-align:middle;" class="disabled:cursor-default"><label id="${labelPrefix}${firstLabelIndex + index}" class="ml-2">${choiceHtml(choice)}</label></div>`,
+        `<span class="ex0" style="display:inline-flex;align-items:center;gap:0.5rem"><input type="radio" disabled style="appearance:none;-webkit-appearance:none;box-sizing:border-box;opacity:1;height:1rem;width:1rem;margin:0;padding:0;border:1px solid var(--color-coopmaths-action, #f15929);border-radius:50%;background:transparent;vertical-align:middle" class="disabled:cursor-default"><label id="${labelPrefix}${firstLabelIndex + index}">${choiceHtml(choice)}</label></span>`,
     )
-    return `<span class="mx-2 inline-block">${items.join('')}</span>`
+    return `<span class="mx-2" style="display:inline-flex;${vertical ? 'flex-direction:column;align-items:flex-start;gap:0.5rem' : 'align-items:center;gap:1.5rem'}">${items.join('')}</span>`
   }
 
   static renderStaticTemplate(
@@ -590,12 +590,12 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     const choices = fieldOptions.qcm ?? []
     const inputName = `qcm-${this.id || 'multi-mathfield'}-${name}`
     const vertical = fieldOptions.vertical ?? false
+    qcm.setAttribute('data-vertical', String(vertical))
 
     choices.forEach((choice, index) => {
       const value = choiceValue(choice)
       const id = `${inputName}-${index}`
       const item = document.createElement('span')
-      item.className = vertical ? 'block my-1' : 'inline-block mr-3'
 
       const input = document.createElement('input')
       input.type = 'radio'
@@ -608,7 +608,6 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
 
       const label = document.createElement('label')
       label.htmlFor = id
-      label.className = 'ml-1'
       label.innerHTML = choiceHtml(choice)
       item.appendChild(label)
       qcm.appendChild(item)

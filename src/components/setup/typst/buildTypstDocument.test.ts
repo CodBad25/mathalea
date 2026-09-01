@@ -137,6 +137,35 @@ describe('buildTypstDocument', () => {
     expect(code).toContain("À l'aide du graphique :")
   })
 
+  it('ne découpe pas sur les repères a)/b) cités au fil d’une phrase (renvoi à d’autres questions)', () => {
+    // 3A11 : les questions c) et d) renvoient aux décompositions des questions
+    // a) et b) au milieu d'une phrase — ces repères ne doivent pas créer de
+    // sous-questions ni décaler la numérotation.
+    const marker = (letter: string, nbsp = true) =>
+      `<span style="color:#216d9a; font-weight:bold">${letter})${nbsp ? '&nbsp;' : ''}</span>`
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: [
+            `${marker('a')}Décomposer $A$.` +
+              `<br>${marker('b')}Décomposer $B$.` +
+              `<br>${marker('c')}Rendre $A/B$ irréductible à l'aide des décompositions obtenues au ${marker('a')}et au ${marker('b', false)}.` +
+              `<br>${marker('d')}Rendre $B/A$ irréductible à l'aide des décompositions obtenues au ${marker('a')}et au ${marker('b', false)}.`,
+          ],
+          numbered: false,
+        }),
+      ],
+      { ...defaultTypstDocumentOptions, boldQuestionNumbers: false },
+    )
+    expect(code).toContain(
+      '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[',
+    )
+    // exactement 4 items dans la liste
+    expect(code.match(/^\s*\+ /gm)?.length).toBe(4)
+    // le renvoi reste inline dans le texte de l'item, pas un nouvel item
+    expect(code).toContain("à l'aide des décompositions obtenues au")
+  })
+
   it('met les questions non numérotées dans un environnement tasks sans étiquette', () => {
     const code = buildTypstDocument([
       exercise({ questions: ['a) $1+1$', 'b) $2+2$'], numbered: false }),

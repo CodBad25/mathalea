@@ -31,13 +31,25 @@ function prepareLikeAmcPage(
 
   exercise.interactif = false
   context.isHtml = false
+  context.isAmc = false
+  ;(exercise as any).lastCallback = ''
+  seedrandom(exercise.seed, { global: true })
+  exercise.nouvelleVersionWrapper()
+  const printableAutoCorrection = exercise.autoCorrection.map((item) => ({
+    ...item,
+    propositions: item.propositions?.map((proposition) => ({ ...proposition })),
+  }))
+
+  exercise.interactif = false
+  context.isHtml = false
   context.isAmc = true
+  ;(exercise as any).lastCallback = ''
   seedrandom(exercise.seed, { global: true })
   exercise.nouvelleVersionWrapper()
   ;(exercise as any).interactiveAutoCorrectionForAMC = interactiveAutoCorrection
 
   mathaleaEnsureAMCCompatibility(exercise)
-  return { exercise, interactiveAutoCorrection }
+  return { exercise, interactiveAutoCorrection, printableAutoCorrection }
 }
 
 afterEach(() => {
@@ -62,10 +74,8 @@ describe('couverture QCM de la page AMC', () => {
   ])(
     '$label conserve chaque question et chaque proposition',
     ({ ExerciseClass, configure }) => {
-      const { exercise, interactiveAutoCorrection } = prepareLikeAmcPage(
-        ExerciseClass,
-        configure,
-      )
+      const { exercise, interactiveAutoCorrection, printableAutoCorrection } =
+        prepareLikeAmcPage(ExerciseClass, configure)
 
       expect(['qcmMono', 'qcmMult']).toContain(exercise.amcType)
       expect(exercise.autoCorrectionAMC).toHaveLength(
@@ -74,18 +84,30 @@ describe('couverture QCM de la page AMC', () => {
 
       for (let index = 0; index < interactiveAutoCorrection.length; index++) {
         const source = interactiveAutoCorrection[index]
+        const printable = printableAutoCorrection[index]
         const exported = exercise.autoCorrectionAMC?.[index]
         expect(exported?.propositions, `question ${index + 1}`).toHaveLength(
           source.propositions?.length ?? 0,
         )
-        expect(
-          exported?.propositions?.map((proposition) =>
-            Boolean(proposition.statut),
-          ),
-        ).toEqual(
-          source.propositions?.map((proposition) =>
-            Boolean(proposition.statut),
-          ),
+        const propositionStatuses = (
+          propositions: Array<{ texte?: string; statut?: unknown }> | undefined,
+        ) =>
+          (propositions ?? [])
+            .map((proposition) => ({
+              texte: proposition.texte ?? '',
+              statut: Boolean(proposition.statut),
+            }))
+            .sort((left, right) => left.texte.localeCompare(right.texte))
+
+        expect(propositionStatuses(printable?.propositions)).toEqual(
+          propositionStatuses(source.propositions),
+        )
+
+        // Les passes HTML et AMC peuvent mélanger les propositions dans un
+        // ordre différent. Le contrat à préserver est l'association entre le
+        // texte et son statut, pas sa position dans le tableau.
+        expect(propositionStatuses(exported?.propositions)).toEqual(
+          propositionStatuses(source.propositions),
         )
       }
 

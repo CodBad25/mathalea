@@ -280,6 +280,9 @@ en-têtes de ligne ou de colonne. Pour une liste déroulante avec une valeur
 d'attente, placer par convention `{ label: 'Choisir', value: '' }` en premier
 choix et activer `choix0: true`.
 
+En HTML, le tableau reprend la classe `tableauMathlive` et donc les styles
+partagés définis dans `app.css`, aussi bien en mode interactif que statique.
+
 Le helper suit le contrat des autres custom elements : `interactivityOn: false`
 produit un tableau statique à compléter, en laissant des `...` dans les cellules
 interactives. `correctionOn: true` produit un tableau complété statique. Dans ce

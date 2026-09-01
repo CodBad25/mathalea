@@ -112,4 +112,42 @@ describe('TableauHybrideElement', () => {
       ),
     ).toBe(true)
   })
+
+  it('utilise les styles partages des tableaux MathLive', () => {
+    document.body.innerHTML = creeTableauHybrideElement({
+      numeroExercice: 0,
+      questionIndex: 0,
+      tableau: {
+        rows: [
+          [
+            { type: 'text', texte: 'En-tête', header: true },
+            { type: 'text', texte: 'Valeur' },
+          ],
+        ],
+      },
+    })
+
+    const tableau = document.querySelector('tableau-hybride')
+    const table = tableau?.querySelector('table')
+    const header = table?.querySelector('th') as HTMLElement
+
+    expect(table?.classList.contains('tableauMathlive')).toBe(true)
+    expect(table?.querySelector(':scope > tbody > tr')).not.toBeNull()
+    expect(header.getAttribute('style')).toBeNull()
+  })
+
+  it('utilise aussi les styles MathLive pour le tableau statique', () => {
+    const rendu = creeTableauHybrideElement({
+      numeroExercice: 0,
+      questionIndex: 0,
+      interactivityOn: false,
+      tableau: {
+        rows: [[{ type: 'text', texte: 'En-tête', header: true }]],
+      },
+    })
+
+    expect(rendu).toContain('<table class="tableauMathlive">')
+    expect(rendu).not.toContain('tableauHybride')
+    expect(rendu).not.toContain('<th style=')
+  })
 })

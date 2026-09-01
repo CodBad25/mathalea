@@ -127,18 +127,19 @@ const matieresEmploiDuTemps = [
 ]
 
 function preparationSimple(table: SimpleTable) {
+  const colonnesEnonce = table.colonnesEnonce ?? table.colonnes
   const indexPrefilled = randint(0, table.valeurs.length - 1)
   const indicesACompleter = table.valeurs
     .map((_valeur, index) => index)
     .filter((index) => index !== indexPrefilled)
   const indexDirect = choice(indicesACompleter)
   const affirmations: string[] = [
-    `La valeur de ${table.colonnes[indexPrefilled]} est déjà indiquée dans le tableau.`,
+    `La valeur de ${colonnesEnonce[indexPrefilled]} est déjà indiquée dans le tableau.`,
   ]
   const corrections: string[] = []
 
   affirmations.push(
-    `Pour ${table.colonnes[indexDirect]}, la valeur est $${table.valeurs[indexDirect]}$.`,
+    `Pour ${colonnesEnonce[indexDirect]}, la valeur est $${table.valeurs[indexDirect]}$.`,
   )
 
   const indexTotal = table.colonnes.indexOf('Total')
@@ -152,27 +153,27 @@ function preparationSimple(table: SimpleTable) {
   if (indexSomme != null) {
     const somme = table.valeurs[indexPrefilled] + table.valeurs[indexSomme]
     affirmations.push(
-      `La somme des valeurs de ${table.colonnes[indexPrefilled]} et de ${table.colonnes[indexSomme]} est $${somme}$.`,
+      `La somme des valeurs de ${colonnesEnonce[indexPrefilled]} et de ${colonnesEnonce[indexSomme]} est $${somme}$.`,
     )
     corrections.push(
-      `Pour ${table.colonnes[indexSomme]}, on calcule $${somme}-${table.valeurs[indexPrefilled]}=${miseEnEvidence(table.valeurs[indexSomme])}$.`,
+      `Pour ${colonnesEnonce[indexSomme]}, on calcule $${somme}-${table.valeurs[indexPrefilled]}=${miseEnEvidence(table.valeurs[indexSomme])}$.`,
     )
   }
   for (const index of indicesRestants) {
     if (index === indexTotal) continue
     affirmations.push(
       relationEcart(
-        table.colonnes[index],
+        colonnesEnonce[index],
         table.valeurs[index],
-        table.colonnes[indexPrefilled],
+        colonnesEnonce[indexPrefilled],
         table.valeurs[indexPrefilled],
       ),
     )
     corrections.push(
       correctionRelationEcart(
-        table.colonnes[index],
+        colonnesEnonce[index],
         table.valeurs[index],
-        table.colonnes[indexPrefilled],
+        colonnesEnonce[indexPrefilled],
         table.valeurs[indexPrefilled],
       ),
     )

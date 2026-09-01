@@ -446,6 +446,34 @@ function preprocessTex(tex: string): string {
         `${before ? `\\text{${before}}` : ''}${math}${after ? `\\text{${after}}` : ''}`,
     )
   }
+  // \textbackslash (glyphe « \ » du mode texte, employé comme séparateur
+  // diagonal dans les en-têtes de tableaux à double entrée, ex.
+  // `\text{Tirage1\textbackslash Tirage2}`) : tex2typst le laisse fuir en
+  // identifiant nu `textbackslash` (voire échoue). On le remplace par
+  // `\backslash` (symbole Typst « \ ») en sortant du mode texte, et on
+  // ré-enrobe le texte adjacent d'un `\text{}` pour que tex2typst ne
+  // l'égrène pas lettre par lettre (`latexTableCell` passe ces en-têtes en
+  // mode math une fois le `\text{}` externe retiré).
+  {
+    const wrapBackslashSides = (before: string, after: string): string =>
+      `${before.trim() ? `\\text{${before}}` : ''}\\backslash ${
+        after.trim() ? `\\text{${after}}` : ''
+      }`
+    let prevBackslash = ''
+    while (prevBackslash !== output) {
+      prevBackslash = output
+      // à l'intérieur d'un \text{…}
+      output = output.replace(
+        /\\text\s*\{([^{}]*?)\\textbackslash(?:\s*\{\})?\s*([^{}]*?)\}/g,
+        (_, before: string, after: string) => wrapBackslashSides(before, after),
+      )
+    }
+    // hors d'un \text{…} : on capture le texte adjacent (hors commande LaTeX)
+    output = output.replace(
+      /([^{}$\\]*?)\\textbackslash(?:\s*\{\})?\s*([^{}$\\]*)/g,
+      (_, before: string, after: string) => wrapBackslashSides(before, after),
+    )
+  }
   // \textit{} en mode math → \text{} (tex2typst ne reconnaît pas \textit)
   output = output.replace(/\\textit\s*\{/g, '\\text{')
   // \text{\textbf{X}} ou \text{\textit{X}} : tex2typst ne supporte pas les

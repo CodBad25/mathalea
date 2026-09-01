@@ -8,7 +8,10 @@
   import { mergeLatexTextsOnPropositions } from '../../../lib/amc/amcAutoCorrectionMerge'
   import { mathaleaEnsureAMCCompatibility } from '../../../lib/amc/amcInference'
   import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
-  import { latexLineBreaksToHtmlOutsideMath } from '../../../lib/amc/amcPreviewText'
+  import {
+    getHtmlQuestionsForAMCPreview,
+    latexLineBreaksToHtmlOutsideMath,
+  } from '../../../lib/amc/amcPreviewText'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
     checkAMCGroupConsistency,
@@ -327,11 +330,15 @@
     return autoCorrection.map((item: any, i: number) => {
       const fallback = htmlQuestions[i] ?? ''
 
-      // En AMCHybride, enonceAvant=false signifie qu'il ne faut pas afficher
-      // d'enonce "chapeau" en preview, ni via substitution/fallback.
+      // En AMCHybride, enonceAvant=false masque l'enonce commun uniquement
+      // lorsqu'il n'est pas demandé comme question séparée. Dans ce dernier
+      // cas, conserver la preview permet notamment de substituer le SVG au
+      // tikzpicture de la passe AMC.
       const showOnlyOnce = Boolean(item?.enonceAvantUneFois)
       const shouldHideHeader =
-        item?.enonceAvant === false && !(showOnlyOnce && i === 0)
+        item?.enonceAvant === false &&
+        item?.enonceApresNumQuestion !== true &&
+        !(showOnlyOnce && i === 0)
       if (shouldHideHeader) return ''
 
       const propositions = Array.isArray(item?.propositions)
@@ -431,12 +438,7 @@
 
     // 2. Passe HTML non interactive hors AMC : apercu papier avec SVG.
     runHtmlGeneration(false)
-    if (exercice.typeExercice === 'simple') {
-      ex.htmlQuestions =
-        exercice.question != null ? [String(exercice.question)] : []
-    } else {
-      ex.htmlQuestions = [...exercice.listeQuestions]
-    }
+    ex.htmlQuestions = getHtmlQuestionsForAMCPreview(exercice)
 
     exercice.interactif = originalInteractif
     context.isAmc = originalIsAmc
@@ -451,6 +453,7 @@
   function buildLatexSnapshotForAmc(
     exercice: IExercice,
     seed: string,
+    isAmcPass = true,
   ): {
     autoCorrection: any[]
     listeQuestions: string[]
@@ -471,7 +474,7 @@
     ex.lastCallback = ''
     exercice.interactif = false
     context.isHtml = false
-    context.isAmc = true
+    context.isAmc = isAmcPass
     seedrandom(seed, { global: true })
 
     if (exercice.typeExercice === 'simple') {
@@ -482,7 +485,9 @@
 
     const snapshot = {
       autoCorrection: cloneDeep(
-        Array.isArray(exercice.autoCorrectionAMC)
+        isAmcPass &&
+          Array.isArray(exercice.autoCorrectionAMC) &&
+          exercice.autoCorrectionAMC.length > 0
           ? exercice.autoCorrectionAMC
           : Array.isArray(exercice.autoCorrection)
             ? exercice.autoCorrection
@@ -513,6 +518,15 @@
     const ex = exercice as any
     const targetAutoCorrection = getAmcAutoCorrection(exercice)
     const latexSnapshot = buildLatexSnapshotForAmc(exercice, seed)
+    const isQcmItem = (item: any): boolean =>
+      Array.isArray(item?.propositions) &&
+      item.propositions.length >= 2 &&
+      item.propositions.every(
+        (proposition: any) => typeof proposition?.statut === 'boolean',
+      )
+    const qcmLatexSnapshot = targetAutoCorrection.some(isQcmItem)
+      ? buildLatexSnapshotForAmc(exercice, seed, false)
+      : undefined
     const latexAutoCorrection = latexSnapshot.autoCorrection
     const latexQuestions = latexSnapshot.listeQuestions
     const latexCorrections = latexSnapshot.listeCorrections
@@ -582,11 +596,15 @@
       if (merged[i] == null) merged[i] = {}
 
       const targetItem = merged[i]
-      const sourceItem = latexAutoCorrection[i]
-      const sourceQuestion = latexQuestions[i]
+      const itemSnapshot =
+        isQcmItem(targetItem) && qcmLatexSnapshot != null
+          ? qcmLatexSnapshot
+          : latexSnapshot
+      const sourceItem = itemSnapshot.autoCorrection[i]
+      const sourceQuestion = itemSnapshot.listeQuestions[i]
       const sourceCorrection =
-        latexCorrections[i] ??
-        latexCorrections[0] ??
+        itemSnapshot.listeCorrections[i] ??
+        itemSnapshot.listeCorrections[0] ??
         (i === 0 ? (exercice.correction ?? '') : '')
 
       if (sourceItem && typeof sourceItem.enonce === 'string') {

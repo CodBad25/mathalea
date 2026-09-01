@@ -68,6 +68,21 @@
   </button>
 
   {#if isAnswersTableVisible}
+    <!-- Action principale : à l'ouverture, le tableau est vide (pas à pas à 0),
+    ce bouton bien visible permet de tout révéler d'un coup. -->
+    <button
+      type="button"
+      class="mt-2 mb-6 flex flex-col items-center px-2 py-1.5 rounded
+      text-xs font-bold leading-tight cursor-pointer
+      bg-coopmaths-action dark:bg-coopmathsdark-action
+      text-coopmaths-canvas dark:text-coopmathsdark-canvas
+      hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest"
+      aria-label="Afficher toutes les réponses"
+      on:click={showAllAnswers}
+    >
+      <i class="bx bx-show bx-sm"></i>
+      Tout
+    </button>
     <span
       class="text-xs font-bold pt-2
       text-coopmaths-struct dark:text-coopmathsdark-struct"
@@ -75,7 +90,7 @@
       Pas à pas
     </span>
     <div
-      class="flex flex-row justify-center items-center mb-2
+      class="flex flex-row justify-center items-center mb-8
       text-coopmaths-action dark:text-coopmathsdark-action
       hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
     >
@@ -94,18 +109,6 @@
         <i class="bx bxs-right-arrow cursor-pointer"></i>
       </button>
     </div>
-    <button
-      type="button"
-      class="mb-8 px-2 py-1 text-xs font-bold rounded border
-      border-coopmaths-action dark:border-coopmathsdark-action
-      text-coopmaths-action dark:text-coopmathsdark-action
-      hover:bg-coopmaths-action hover:text-coopmaths-canvas
-      dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
-      aria-label="Afficher toutes les réponses"
-      on:click={showAllAnswers}
-    >
-      Tout
-    </button>
   {/if}
 
   {#if !isAnswersTableVisible}

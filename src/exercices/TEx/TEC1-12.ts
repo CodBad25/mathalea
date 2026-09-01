@@ -12,6 +12,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer quand deux nombres complexes sont égaux'
 export const dateDePublication = '30/08/2026'
+export const dateDeModifImportante = '31/08/2026'
 export const uuid = 'c4196'
 export const refs = { 'fr-fr': ['TEC1-12'], 'fr-ch': [] }
 
@@ -131,7 +132,7 @@ export default class EgaliteDeuxComplexes extends Exercice {
       const coefficientIb = `${ecritureAlgebriqueSauf1(coefficientB)}ib`
       const texte = `Soient $a$ et $b$ deux réels et $z_1$ et $z_2$ les deux nombres complexes définis par :<br>
       $z_1=${partieReelleZ1}+i(b^2${ecritureAlgebrique(equationB.constante)})$ et $z_2=${partieReelleZ2}${coefficientIb}$.<br>
-      Déterminer les éventuelles valeurs de $a$ et $b$ telles que $z_1$ et $z_2$ soient égaux.`
+      Déterminer l'ensemble des valeurs de $a$ et $b$ telles que $z_1=z_2$.`
 
       let texteCorr = `Deux nombres complexes sont égaux si et seulement si leurs parties réelles sont égales et leurs parties imaginaires sont égales.<br>
       Ainsi, $z_1=z_2$ équivaut à :

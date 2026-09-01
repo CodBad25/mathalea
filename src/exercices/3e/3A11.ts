@@ -1,4 +1,3 @@
-import { warnMessage } from '../../lib/format/message'
 import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import { numAlpha } from '../../lib/outils/outilString'
 import {
@@ -42,14 +41,6 @@ export default class FractionsIrreductibles extends Exercice {
     const listeTypeDeQuestions = combinaisonListesSansChangerOrdre(
       typesDeQuestionsDisponibles,
       this.nbQuestions,
-    )
-
-    this.introduction = warnMessage(
-      'À la question ' +
-        numAlpha(3, true) +
-        ', une observation judicieuse et argumentée pourra faire gagner du temps !',
-      'nombres',
-      'Coup de pouce',
     )
 
     for (

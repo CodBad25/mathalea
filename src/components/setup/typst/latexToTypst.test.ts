@@ -148,6 +148,23 @@ describe('latexMathToTypst', () => {
     expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin#txt("cm")')
   })
 
+  it('convertit \\textbackslash (séparateur diagonal des tableaux à double entrée) en symbole « \\ »', () => {
+    // en-têtes du type `\text{Tirage1\textbackslash Tirage2}` (2S30-4, 3S20-1,
+    // 3S20-3, CM2D1A-1…) : tex2typst laissait fuir l'identifiant nu
+    // `textbackslash` ou échouait sur `\textbackslash{}`.
+    expect(latexMathToTypst('\\text{Tirage1\\textbackslash Tirage2}')).toBe(
+      '#txt("Tirage1")backslash#txt("Tirage2")',
+    )
+    expect(latexMathToTypst('\\text{Amis\\textbackslash{}Fruits}')).toBe(
+      '#txt("Amis")backslash#txt("Fruits")',
+    )
+    // `latexTableCell` retire le `\text{}` externe et repasse l'en-tête en
+    // mode math : le texte adjacent doit rester groupé (pas égrené).
+    expect(latexMathToTypst('Dé rouge\\textbackslash Dé bleu')).toBe(
+      '#txt("Dé rouge")backslash#txt("Dé bleu")',
+    )
+  })
+
   it('ne double pas les espaces autour du texte inclus', () => {
     // Typst rend les espaces sources qui bordent une chaîne en mode maths :
     // celles que tex2typst ajoute comme séparateurs de jetons s'ajouteraient

@@ -1359,6 +1359,19 @@ const SUB_QUESTION_MARKER =
   /<span[^>]*\bstyle="[^"]*font-weight:\s*bold[^"]*"[^>]*>\s*([a-z]|\d{1,2})\)(?:&nbsp;|\s)*<\/span>/gi
 
 /**
+ * Un repère `a)` / `b)` n'ouvre une sous-question que s'il est en début de
+ * ligne : au tout début du contenu, ou juste après un `<br>`. Les `a)` / `b)`
+ * qui apparaissent au fil d'une phrase (« Rendre la fraction irréductible à
+ * l'aide des décompositions obtenues au a) et au b). ») renvoient à d'autres
+ * questions ; les prendre pour des repères ajoute des items fantômes à la
+ * liste `tasks` et décale la numérotation.
+ */
+function isStructuralMarker(html: string, index: number): boolean {
+  const before = html.slice(0, index).replace(/(?:\s|&nbsp;)+$/gi, '')
+  return before.length === 0 || /<br\s*\/?>$/i.test(before)
+}
+
+/**
  * Découpe une question unique contenant ses propres repères (`a)`, `b)`...)
  * en une liste de sous-questions, pour la mettre dans un environnement
  * `tasks`. Renvoie `null` quand la question n'a pas cette structure.
@@ -1366,7 +1379,9 @@ const SUB_QUESTION_MARKER =
 function splitSubQuestions(
   html: string,
 ): { head: string; items: string[]; label: string } | null {
-  const matches = [...html.matchAll(SUB_QUESTION_MARKER)]
+  const matches = [...html.matchAll(SUB_QUESTION_MARKER)].filter((match) =>
+    isStructuralMarker(html, match.index!),
+  )
   if (matches.length < 2) return null
   const first = matches[0][1].toLowerCase()
   if (first !== 'a' && first !== '1') return null

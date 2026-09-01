@@ -61,14 +61,14 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
       nomvAB,
       AB
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
-      const nomVecteur = ['u', 'v', 'w', 'AB', 'HG', 'KL']
+      const nomVecteur = ['u', 'v', 'w']
       const vec = choice(nomVecteur)
       xa = randint(-2, 2)
       const O = pointAbstrait(0, 0) // On définit et on trace le point O
       const I = pointAbstrait(1, 0) // On définit sans tracer le point I
       const J = pointAbstrait(0, 1) // On définit sans tracer le point J
-      const nomi = nomVecteurParPosition('$\\vec \\imath$', 0.5, -0.7, 1.5, 0)
-      const nomj = nomVecteurParPosition('$\\vec \\jmath$', -0.7, 0.5, 1.5, 0)
+      const nomi = nomVecteurParPosition('i', 0.5, -0.7, 1.5, 0)
+      const nomj = nomVecteurParPosition('j', -0.7, 0.5, 1.5, 0)
       const vi = vecteur(O, I) // Variable qui définit vecteur OI
       const vj = vecteur(O, J) // Variable qui définit vecteur OJ
       const ti = representant(vi, O)
@@ -94,7 +94,7 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
         yMin: ymin,
         yMax: ymax,
         yUnite: 1,
-        thickHauteur: 0.2,
+        thickHauteur: 0.1,
         xLabelMin: xmin + 1,
         xLabelMax: xmax - 1,
         yLabelMax: ymax - 1,
@@ -112,7 +112,7 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
         grilleSecondaireXMax: xmax,
       })
 
-      texte = `Dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, lire les coordonnées du vecteur $\\overrightarrow{${vec}}$.<br>`
+      texte = `Dans un repère $\\big(O \\,;\\, \\vec \\imath\\,,\\,\\vec \\jmath\\big)$, lire les coordonnées du vecteur $\\overrightarrow{${vec}}$.<br>`
       texte += mathalea2d(
         {
           xmin,

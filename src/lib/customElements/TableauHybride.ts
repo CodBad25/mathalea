@@ -59,15 +59,6 @@ type TableauHybrideVerificationResult = {
   score: { nbBonnesReponses: number; nbReponses: number }
 }
 
-const tableauHybrideResponsiveStyle = `<style>
-@media (max-width: 600px) {
-  table.tableauHybride th,
-  table.tableauHybride td {
-    padding: 2px 2px !important;
-  }
-}
-</style>`
-
 function renderStaticCell(cell: TableauHybrideCell) {
   if (cell.type === 'mathfield' || cell.type === 'select') return ''
   const texte = String(cell.texte)
@@ -117,25 +108,19 @@ function staticLatexValue(cell: TableauHybrideCell, correctionOn: boolean) {
 }
 
 function tableHtml(tableau: TableauHybrideData, correctionOn = false) {
-  const style =
-    'border:1px solid #555;padding:4px 6px;text-align:center;vertical-align:middle'
-  const headerStyle =
-    ';background:#f3f4f6;color:#111827;font-weight:bold;border-color:#374151'
-  return `${tableauHybrideResponsiveStyle}<table class="tableauHybride" style="border-collapse:collapse;margin:1em auto">${tableau.rows
+  return `<table class="tableauMathlive">${tableau.rows
     .map(
       (row) =>
         `<tr>${row
           .map((cell) => {
             const tag = cell.type === 'text' && cell.header ? 'th' : 'td'
-            const extraStyle =
-              cell.type === 'text' && cell.header ? headerStyle : ''
             const value = staticHtmlValue(cell, correctionOn)
             const content =
               correctionOn &&
               (cell.type === 'mathfield' || cell.type === 'select')
                 ? value
                 : escapeHtml(value)
-            return `<${tag} style="${style}${extraStyle}">${content}</${tag}>`
+            return `<${tag}>${content}</${tag}>`
           })
           .join('')}</tr>`,
     )
@@ -312,36 +297,19 @@ export class TableauHybrideElement extends MathaleaCustomElement {
   render() {
     this.parseData()
     this.innerHTML = ''
-    const responsiveStyle = document.createElement('style')
-    responsiveStyle.textContent = `
-      @media (max-width: 600px) {
-        table.tableauHybride th,
-        table.tableauHybride td {
-          padding: 2px 2px !important;
-        }
-      }
-    `
     const table = document.createElement('table')
-    table.className = 'tableauHybride'
+    table.className = 'tableauMathlive'
+    const tbody = document.createElement('tbody')
     this._data.rows.forEach((row) => {
       const tr = document.createElement('tr')
       row.forEach((cell) => {
         const td = document.createElement(
           cell.type === 'text' && cell.header ? 'th' : 'td',
         )
-        td.style.border = '1px solid #555'
-        td.style.padding = '4px 6px'
-        td.style.textAlign = 'center'
-        td.style.verticalAlign = 'middle'
-        if (cell.type === 'text' && cell.header) {
-          td.style.background = '#f3f4f6'
-          td.style.color = '#111827'
-          td.style.fontWeight = 'bold'
-          td.style.borderColor = '#374151'
-        }
         if (cell.type === 'mathfield') {
           if (cell.texteAvant != null) td.append(cell.texteAvant)
           const field = new MathfieldElement()
+          field.classList.add('tableauMathlive')
           field.dataset.cellId = cell.id
           field.id = `champTexte${this.id}${cell.id}`
           field.setAttribute('virtual-keyboard-mode', 'manual')
@@ -390,9 +358,10 @@ export class TableauHybrideElement extends MathaleaCustomElement {
         }
         tr.append(td)
       })
-      table.append(tr)
+      tbody.append(tr)
     })
-    this.append(responsiveStyle, table)
+    table.append(tbody)
+    this.append(table)
     const feedback = document.createElement('div')
     feedback.id = `feedback${this.id}`
     this.append(feedback)
@@ -412,7 +381,9 @@ export class TableauHybrideElement extends MathaleaCustomElement {
   }
 }
 
-export function creeTableauHybrideElement(options: TableauHybrideCreateOptions) {
+export function creeTableauHybrideElement(
+  options: TableauHybrideCreateOptions,
+) {
   return TableauHybrideElement.create(options)
 }
 

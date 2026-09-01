@@ -1,3 +1,4 @@
+import { tableauColonneLigne } from '../../lib/2d/tableau'
 import type { DataOptionsMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -9,7 +10,6 @@ import {
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
-import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -34,6 +34,7 @@ export type SimpleTable = {
   entete: string
   ligne: string
   colonnes: string[]
+  colonnesEnonce?: string[]
   valeurs: number[]
   unite: string
   questions: QuestionTableau[]
@@ -62,7 +63,16 @@ export type QuestionTableau = {
 }
 
 const jours = ['Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.', 'Dim.']
-const joursLongs = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi']
+const joursLongs = [
+  'Lundi',
+  'Mardi',
+  'Mercredi',
+  'Jeudi',
+  'Vendredi',
+  'Samedi',
+  'Dimanche',
+]
+const joursOuvres = joursLongs.slice(0, 5)
 
 export function metS(unite: string, valeur: number) {
   if (unite === '') return ''
@@ -77,53 +87,21 @@ function valeursDistinctes(nombre: number, min: number, max: number) {
   return valeurs
 }
 
-function htmlTable(headers: string[], rows: CelluleTableau[][]) {
-  const style =
-    'border:1px solid #555;padding:6px 10px;text-align:center;vertical-align:middle'
-  return `<table style="border-collapse:collapse;margin:1em auto"><thead><tr>${headers
-    .map((header) => `<th style="${style};font-weight:bold">${header}</th>`)
-    .join('')}</tr></thead><tbody>${rows
-    .map(
-      (row) =>
-        `<tr>${row.map((cell) => `<td style="${style}">${cell}</td>`).join('')}</tr>`,
-    )
-    .join('')}</tbody></table>`
-}
-
-function latexTable(headers: string[], rows: CelluleTableau[][]) {
-  const columnSpec = `|${'l|'.repeat(headers.length)}`
-  const rowToLatex = (row: CelluleTableau[]) =>
-    `${row.map(latexCell).join(' & ')} \\\\ \\hline`
-  return [
-    `\\begin{tabular}{${columnSpec}}`,
-    '\\hline',
-    rowToLatex(headers),
-    ...rows.map(rowToLatex),
-    '\\end{tabular}',
-  ].join('\n')
-}
-
-function latexCell(cell: CelluleTableau) {
-  return String(cell)
-    .replaceAll('\\', '\\textbackslash{}')
-    .replaceAll('&', '\\&')
-    .replaceAll('%', '\\%')
-    .replaceAll('#', '\\#')
-    .replaceAll('_', '\\_')
-}
-
 export function tableToMarkup(table: TableData) {
   if (table.type === 'simple') {
-    const headers = [table.entete, ...table.colonnes]
-    const rows = [[table.ligne, ...table.valeurs]]
-    return context.isHtml ? htmlTable(headers, rows) : latexTable(headers, rows)
+    return tableauColonneLigne(
+      [table.entete, ...table.colonnes],
+      [table.ligne],
+      table.valeurs,
+      1.3,
+    )
   }
-  const headers = [table.enteteLigne, ...table.colonnes]
-  const rows = table.lignes.map((ligne, index) => [
-    ligne,
-    ...table.valeurs[index],
-  ])
-  return context.isHtml ? htmlTable(headers, rows) : latexTable(headers, rows)
+  return tableauColonneLigne(
+    [table.enteteLigne, ...table.colonnes],
+    table.lignes,
+    table.valeurs.flat(),
+    1.3,
+  )
 }
 
 function correctionAvecReponseEnEvidence(question: QuestionTableau) {
@@ -151,6 +129,7 @@ export function buildSimpleTable(): SimpleTable {
       entete: 'Jour',
       ligne: 'Température (°C)',
       colonnes: jours,
+      colonnesEnonce: joursLongs.map((jour) => jour.toLowerCase()),
       valeurs,
       unite: '°C',
       questions: [],
@@ -198,28 +177,29 @@ export function buildSimpleTable(): SimpleTable {
   const minValue = Math.min(...table.valeurs)
   const maxIndex = table.valeurs.indexOf(maxValue)
   const minIndex = table.valeurs.indexOf(minValue)
+  const colonnesEnonce = table.colonnesEnonce ?? table.colonnes
   table.questions = [
     {
-      texte: `Quelle valeur lit-on pour ${table.colonnes[2]} ?`,
+      texte: `Quelle valeur lit-on pour ${colonnesEnonce[2]} ?`,
       reponse: table.valeurs[2],
-      correction: `Pour ${table.colonnes[2]}, on lit $${table.valeurs[2]}$ ${metS(table.unite, table.valeurs[2])}.`,
+      correction: `Pour ${colonnesEnonce[2]}, on lit $${table.valeurs[2]}$ ${metS(table.unite, table.valeurs[2])}.`,
     },
     {
       texte: `Quelle colonne correspond à la plus grande valeur ?`,
       reponse: table.colonnes[maxIndex],
       choix: table.colonnes,
-      correction: `La plus grande valeur est $${maxValue}$ : elle correspond à ${table.colonnes[maxIndex]}.`,
+      correction: `La plus grande valeur est $${maxValue}$ : elle correspond à ${colonnesEnonce[maxIndex]}.`,
     },
     {
       texte: `Quelle colonne correspond à la plus petite valeur ?`,
       reponse: table.colonnes[minIndex],
       choix: table.colonnes,
-      correction: `La plus petite valeur est $${minValue}$ : elle correspond à ${table.colonnes[minIndex]}.`,
+      correction: `La plus petite valeur est $${minValue}$ : elle correspond à ${colonnesEnonce[minIndex]}.`,
     },
     {
-      texte: `Quelle valeur lit-on pour ${table.colonnes[0]} ?`,
+      texte: `Quelle valeur lit-on pour ${colonnesEnonce[0]} ?`,
       reponse: table.valeurs[0],
-      correction: `Pour ${table.colonnes[0]}, on lit $${table.valeurs[0]}$ ${metS(table.unite, table.valeurs[0])}.`,
+      correction: `Pour ${colonnesEnonce[0]}, on lit $${table.valeurs[0]}$ ${metS(table.unite, table.valeurs[0])}.`,
     },
   ]
   return table
@@ -246,14 +226,14 @@ export function buildDoubleEntryTable(): DoubleEntryTable {
       (matiere) => !matieresUniques.includes(matiere),
     )
     const baseMatieres = shuffle(matieresRecurrentes)
-    const valeursParJour = joursLongs.map((_jour, jourIndex) =>
+    const valeursParJour = joursOuvres.map((_jour, jourIndex) =>
       lignes.map(
         (_ligne, ligneIndex) =>
           baseMatieres[(jourIndex + ligneIndex) % baseMatieres.length],
       ),
     )
     const emplacementsUniques = shuffle(
-      joursLongs.flatMap((_jour, jourIndex) =>
+      joursOuvres.flatMap((_jour, jourIndex) =>
         lignes.map((_ligne, ligneIndex) => ({ jourIndex, ligneIndex })),
       ),
     ).slice(0, matieresUniques.length)
@@ -266,11 +246,11 @@ export function buildDoubleEntryTable(): DoubleEntryTable {
     const jourArtsIndex = emplacementArts.jourIndex
     const ligneArtsIndex = emplacementArts.ligneIndex
     const valeurs = lignes.map((_horaire, ligneIndex) =>
-      joursLongs.map(
+      joursOuvres.map(
         (_jour, jourIndex) => valeursParJour[jourIndex][ligneIndex],
       ),
     )
-    const jourIndex = randint(0, joursLongs.length - 1)
+    const jourIndex = randint(0, joursOuvres.length - 1)
     const ligneIndex = randint(0, lignes.length - 1)
     const matiere = valeurs[ligneIndex][jourIndex]
     const matiereACompter = choice(matieres)
@@ -284,26 +264,26 @@ export function buildDoubleEntryTable(): DoubleEntryTable {
       enteteLigne: 'Horaire',
       enteteColonne: 'Jour',
       lignes,
-      colonnes: joursLongs,
+      colonnes: joursOuvres,
       valeurs,
       unite: '',
       questions: [],
     }
     table.questions = [
       {
-        texte: `Quelle matière ${prenom} a-t-${prenom === 'Emma' || prenom === 'Inès' ? 'elle' : 'il'} le ${joursLongs[jourIndex].toLowerCase()} de ${lignes[ligneIndex]} ?`,
+        texte: `Quelle matière ${prenom} a-t-${prenom === 'Emma' || prenom === 'Inès' ? 'elle' : 'il'} le ${joursOuvres[jourIndex].toLowerCase()} de ${lignes[ligneIndex]} ?`,
         reponse: matiere,
         choix: shuffle([
           matiere,
           ...shuffle(matieres.filter((item) => item !== matiere)).slice(0, 3),
         ]),
-        correction: `À la ligne ${lignes[ligneIndex]} et dans la colonne ${joursLongs[jourIndex]}, on lit ${matiere}.`,
+        correction: `À la ligne ${lignes[ligneIndex]} et dans la colonne ${joursOuvres[jourIndex]}, on lit ${matiere}.`,
       },
       {
         texte: `Quel jour ${prenom} a-t-${prenom === 'Emma' || prenom === 'Inès' ? 'elle' : 'il'} Arts plastiques ?`,
-        reponse: joursLongs[jourArtsIndex],
-        choix: joursLongs,
-        correction: `Arts plastiques se trouve dans la colonne ${joursLongs[jourArtsIndex]}, à la ligne ${lignes[ligneArtsIndex]}.`,
+        reponse: joursOuvres[jourArtsIndex],
+        choix: joursOuvres,
+        correction: `Arts plastiques se trouve dans la colonne ${joursOuvres[jourArtsIndex]}, à la ligne ${lignes[ligneArtsIndex]}.`,
       },
       {
         texte: `Combien de créneaux de ${matiereACompter} voit-on dans le tableau ?`,
@@ -311,10 +291,10 @@ export function buildDoubleEntryTable(): DoubleEntryTable {
         correction: `On compte ${matiereACompter} $${nbCreneaux}$ fois dans le tableau.`,
       },
       {
-        texte: `À quelle heure ${prenom} a-t-${prenom === 'Emma' || prenom === 'Inès' ? 'elle' : 'il'} ${matiere} le ${joursLongs[jourIndex].toLowerCase()} ?`,
+        texte: `À quelle heure ${prenom} a-t-${prenom === 'Emma' || prenom === 'Inès' ? 'elle' : 'il'} ${matiere} le ${joursOuvres[jourIndex].toLowerCase()} ?`,
         reponse: lignes[ligneIndex],
         choix: lignes,
-        correction: `${matiere} se trouve dans la colonne ${joursLongs[jourIndex]}, à la ligne ${lignes[ligneIndex]}.`,
+        correction: `${matiere} se trouve dans la colonne ${joursOuvres[jourIndex]}, à la ligne ${lignes[ligneIndex]}.`,
       },
     ]
     return table
@@ -459,7 +439,6 @@ export default class LireInformationsTableau extends Exercice {
                 label: item,
                 value: item,
               })),
-              vertical: true,
             },
       ]),
     )

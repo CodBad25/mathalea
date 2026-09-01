@@ -3,11 +3,12 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence, texteCode } from '../../lib/outils/embellissements'
 import { scriptPython } from '../../lib/outils/scriptPython'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 export const titre =
-  'Compléter une boucle Python de recherche de seuil'
+  'Compléter une boucle Python de recherche de seuil (QCM Bac)'
 export const dateDePublication = '29/08/2026'
 export const uuid = '0465d'
 export const refs = {

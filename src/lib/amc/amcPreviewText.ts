@@ -86,3 +86,22 @@ export function stripEmbeddedQcmFromAMCPreview(source: string): string {
     .replace(/(<br\s*\/?>\s*){2,}$/gi, '')
     .trim()
 }
+
+/**
+ * Capture les énoncés HTML réellement produits pour la preview AMC.
+ * `mathaleaHandleExerciceSimple()` rassemble ses variantes dans
+ * `listeQuestions` ; la propriété `question` ne contient plus que le dernier
+ * tirage et ne doit donc servir que de repli.
+ */
+export function getHtmlQuestionsForAMCPreview(exercice: {
+  listeQuestions?: string[]
+  question?: unknown
+}): string[] {
+  if (
+    Array.isArray(exercice.listeQuestions) &&
+    exercice.listeQuestions.length > 0
+  ) {
+    return [...exercice.listeQuestions]
+  }
+  return exercice.question == null ? [] : [String(exercice.question)]
+}

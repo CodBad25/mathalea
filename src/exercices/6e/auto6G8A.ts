@@ -23,7 +23,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexte } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
-import { premiereLettreEnMajuscule } from '../../lib/outils/outilString'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
@@ -36,7 +36,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Reconnaitre des solides'
 export const dateDePublication = '24/09/2022'
-export const dateDeModifImportante = '08/05/2023'
+export const dateDeModifImportante = '31/08/2026'
 export const interactifReady = true
 
 export const amcReady = true
@@ -44,7 +44,6 @@ export const amcType = 'qcmMono'
 
 /**
  * @author Mickael Guironnet (Adapté par Éric Elter pour que les nouvelles fonctions 3d soient bien utilisées)
- * Créé le 24/09/2022
  */
 
 export const refs = {
@@ -71,13 +70,13 @@ export default class ReconnaitreDesSolides extends Exercice {
         '4 : Cylindre',
         '5 : Pavé',
         '6 : Cube',
-        '7 : Sphère',
+        '7 : Boule',
         '8 : Mélange',
       ].join('\n'),
     ]
     this.besoinFormulaire2CaseACocher = ['QCM']
-    this.besoinFormulaire3CaseACocher = ['correction détaillée']
-    this.sup3 = false
+    this.correctionDetailleeDisponible = true
+    this.correctionDetaillee = true
   }
 
   nouvelleVersion() {
@@ -110,7 +109,7 @@ export default class ReconnaitreDesSolides extends Exercice {
       context.anglePerspective = 30
       const objets: NestedObjetMathalea2dArray = []
       let reponseQcm
-
+      let info = ''
       let axe =
         choix === 1
           ? randint(1, 2)
@@ -204,19 +203,32 @@ export default class ReconnaitreDesSolides extends Exercice {
             if (solide === 'prisme') {
               prisme = prisme3d(base, k3)
               objets.push(...prisme.c2d)
-              texteCorrection = this.sup3
-                ? `Prisme droit avec une base ayant $${prisme.base1.listePoints.length}$ sommets`
-                : `Prisme droit`
+              texteCorrection = this.correctionDetaillee
+                ? 'Deux faces opposées de ce solide sont des polygones superposables et les autres faces sont des rectangles donc ce solide est un '
+                : 'Ce solide est un '
+              texteCorrection += texteEnCouleurEtGras('prisme droit')
+              texteCorrection += this.correctionDetaillee
+                ? ` avec une base ayant $${prisme.base1.listePoints.length}$ sommets.`
+                : `.`
+              info = 'Les faces à 4 côtés de ce solide sont des rectangles.'
             } else {
               pyra = pyramide3d(base, p3)
               const objs = pyra.c2d
               objets.push(...(objs as NestedObjetMathalea2dArray))
-              texteCorrection = this.sup3
-                ? `Pyramide avec une base ayant $${pyra.base.listePoints.length}$ sommets` // et selon l'axe=$${axe}$`
-                : `Pyramide`
-              if (pyra.base.listePoints.length === 3 && this.sup3) {
+              texteCorrection = this.correctionDetaillee
+                ? 'Ce solide a pour base un polygone et possède un sommet extérieur à ce polygone donc ce solide est une '
+                : 'Ce solide est une '
+              texteCorrection += texteEnCouleurEtGras('pyramide')
+              texteCorrection += this.correctionDetaillee
+                ? ` avec une base ayant $${pyra.base.listePoints.length}$ sommets` // et selon l'axe=$${axe}$`
+                : ``
+              if (
+                pyra.base.listePoints.length === 3 &&
+                this.correctionDetaillee
+              ) {
                 texteCorrection += ` (plus précisément, c'est un tétraèdre)`
               }
+              texteCorrection += '.'
             }
           }
           reponse =
@@ -277,7 +289,11 @@ export default class ReconnaitreDesSolides extends Exercice {
             objets.push(cone, g, t)
           }
           reponse = ['cône', 'cone', 'cône de révolution', 'cone de révolution']
-          texteCorrection = this.sup3 ? 'Cône de révolution' : 'Cône' // suivant l'axe=$${axe}$`
+          texteCorrection = this.correctionDetaillee
+            ? 'Ce solide a pour base un disque et possède un sommet extérieur à ce disque donc ce solide est un '
+            : 'Ce solide est un '
+          texteCorrection += texteEnCouleurEtGras('cône')
+          texteCorrection += this.correctionDetaillee ? ' de révolution.' : '.'
           break
         }
         case 'cylindre': // cylindre
@@ -428,10 +444,11 @@ export default class ReconnaitreDesSolides extends Exercice {
           }
           objets.push(...cylindre.c2d)
           reponse = ['cylindre', 'cylindre de révolution']
-          texteCorrection = this.sup3
-            ? premiereLettreEnMajuscule(solide) + ' de révolution'
-            : premiereLettreEnMajuscule(solide)
-
+          texteCorrection = this.correctionDetaillee
+            ? 'Ce solide a pour bases, deux disques superposables, parallèles et dont la hauteur est perpendiculaire à ces deux disques donc ce solide est un '
+            : 'Ce solide est un '
+          texteCorrection += texteEnCouleurEtGras('cylindre')
+          texteCorrection += this.correctionDetaillee ? ' de révolution.' : '.'
           break
         case 'pavé droit': // pavé droit
         case 'cube': {
@@ -539,11 +556,19 @@ export default class ReconnaitreDesSolides extends Exercice {
           objets.push(...pave.c2d)
           if (solide === 'cube') {
             reponse = ['cube', 'pavé droit']
+            info = 'Toutes les faces de ce solide sont identiques.'
           } else {
             reponse = solide
+            info =
+              'Toutes les faces de ce solide contiennent que des angles droits.'
           }
           reponseQcm = solide
-          texteCorrection = premiereLettreEnMajuscule(solide)
+          if (this.correctionDetaillee) {
+            texteCorrection = `Chaque face de ce solide est un `
+            texteCorrection += solide === 'cube' ? `carré` : `rectangle`
+            texteCorrection += ` donc ce solide est un ${texteEnCouleurEtGras(solide)}.`
+          } else
+            texteCorrection = `Ce solide est un ${texteEnCouleurEtGras(solide)}.`
 
           break
         }
@@ -553,9 +578,13 @@ export default class ReconnaitreDesSolides extends Exercice {
             rx: 2,
             color: 'black',
           })
+          info = 'Ce solide est plein.'
           objets.push(boule)
           reponse = solide
-          texteCorrection = premiereLettreEnMajuscule(solide)
+          texteCorrection += `Ce solide plein est une ${texteEnCouleurEtGras(solide)}.`
+          if (this.correctionDetaillee)
+            texteCorrection +=
+              " Si ce solide avait été vide, c'eût été une sphère."
 
           break
       }
@@ -563,13 +592,16 @@ export default class ReconnaitreDesSolides extends Exercice {
         reponseQcm = solide
         if (this.sup2) reponse = solide // on remplace les éventuelles réponses multiples par l'unique réponse du QCM
 
-        this.question = mathalea2d(
-          Object.assign({}, fixeBordures(objets), {
-            scale: 0.5,
-            center: !context.isHtml,
-          }),
-          ...objets.flat(),
-        )
+        this.question =
+          info +
+          '<br>' +
+          mathalea2d(
+            Object.assign({}, fixeBordures(objets), {
+              scale: 0.5,
+              center: !context.isHtml,
+            }),
+            ...objets.flat(),
+          )
 
         this.autoCorrection[j] = {}
         this.autoCorrection[j].options = {}

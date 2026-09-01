@@ -51,7 +51,6 @@ export default class Can2025N5Q27 extends ExerciceCan {
     if (!this.interactif && context.isHtml) {
       this.question += ' $\\ldots$ euros'
     }
-    this.optionsChampTexte = { texteApres: '.' }
   }
 
   nouvelleVersion() {

@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 import ImageAntecedentDepuisTableauOuFleche from '../../exercices/3e/3F10'
+import AutoQ1MetropoleBrevet2026 from '../../exercices/dnbAutomatismes/dnb-2026-06-metropole-Q1'
 import { context } from '../../modules/context'
-import { renderKatex } from '../mathalea'
+import { mathaleaHandleExerciceSimple, renderKatex } from '../mathalea'
 import {
+  getHtmlQuestionsForAMCPreview,
   latexLineBreaksToHtmlOutsideMath,
   stripEmbeddedQcmFromAMCPreview,
 } from './amcPreviewText'
@@ -79,5 +81,19 @@ f(x) & 4 & 8 & 12 & 16 & 20 \\
   it('préserve aussi les environnements display délimités par crochets', () => {
     const source = String.raw`\[\begin{aligned}a&=b\\c&=d\end{aligned}\]`
     expect(latexLineBreaksToHtmlOutsideMath(source)).toBe(source)
+  })
+
+  it("capture toutes les variantes d'un exercice simple", () => {
+    const exercice = new AutoQ1MetropoleBrevet2026()
+    exercice.nbQuestions = 8
+    exercice.seed = 'amc-preview-simple-8'
+
+    mathaleaHandleExerciceSimple(exercice, false, 0)
+    const htmlQuestions = getHtmlQuestionsForAMCPreview(exercice)
+
+    expect(htmlQuestions).toHaveLength(8)
+    expect(new Set(htmlQuestions).size).toBe(8)
+    expect(htmlQuestions).toEqual(exercice.listeQuestions)
+    expect(exercice.question).toBe(exercice.listeQuestions.at(-1))
   })
 })

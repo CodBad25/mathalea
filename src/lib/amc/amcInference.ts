@@ -113,6 +113,7 @@ export function mathaleaEnsureAMCCompatibility(
 ): IExerciceAMC {
   type InferenceAutoCorrectionItem = {
     enonce?: string
+    options?: ReponseParams
     propositions?: Array<{ statut?: unknown; [key: string]: unknown }>
     reponse?: {
       valeur?: unknown
@@ -142,9 +143,7 @@ export function mathaleaEnsureAMCCompatibility(
   )
 
   const getFormat = (item: InferenceAutoCorrectionItem | undefined): string =>
-    String(
-      item?.formatInteractif ?? exercice.formatInteractif ?? '',
-    ).toLowerCase()
+    String(item?.formatInteractif ?? '').toLowerCase()
 
   const isQcmItem = (
     item: InferenceAutoCorrectionItem | undefined,
@@ -162,10 +161,11 @@ export function mathaleaEnsureAMCCompatibility(
     )
   }
 
-  // La passe AMC de certains exercices historiques (notamment des listes
-  // déroulantes) fabrique un QCM qui n'existait pas dans le snapshot HTML
-  // interactif. Ce QCM explicite prime ; pour les autres formats, le snapshot
-  // interactif reste la source la plus riche en comparateurs et options.
+  // Le snapshot HTML est canonique lorsqu'il contient déjà un QCM : certaines
+  // fonctions historiques ne consomment pas les mêmes tirages aléatoires en
+  // contexte AMC et pourraient alors produire une autre variante. La passe AMC
+  // ne prime que lorsqu'elle fabrique un QCM absent du snapshot interactif
+  // (notamment certaines listes déroulantes historiques).
   const sourceLength = Math.max(
     interactiveAutoCorrection.length,
     generatedAutoCorrection.length,
@@ -176,9 +176,11 @@ export function mathaleaEnsureAMCCompatibility(
     (_, index) => {
       const generated = generatedAutoCorrection[index]
       const amcGenerated = amcAutoCorrection[index]
+      const interactive = interactiveAutoCorrection[index]
+      if (isQcmItem(interactive)) return interactive
       if (isQcmItem(generated)) return generated
       if (isQcmItem(amcGenerated)) return amcGenerated as AutoCorrection
-      return interactiveAutoCorrection[index] ?? generated ?? amcGenerated
+      return interactive ?? generated ?? amcGenerated
     },
   )
 

@@ -110,6 +110,42 @@ describe('MultiMathfieldElement', () => {
     expect(target.getValue()).toEqual({ champ1: '42', choix: 'B' })
   })
 
+  it('regroupe chaque bouton QCM avec sa proposition et utilise la couleur Mathalea', () => {
+    const multi = document.createElement(
+      'multi-mathfield',
+    ) as MultiMathfieldElement
+    multi.setAttribute('id', 'multi-mathfieldEx0Q0')
+    multi.setAttribute('interactivity-on', 'true')
+    multi.setAttribute('data-template', '%{champ1}')
+    multi.setAttribute(
+      'data-options',
+      encodeURIComponent(
+        JSON.stringify({
+          champ1: {
+            qcm: [
+              { label: 'Oui', value: 'oui' },
+              { label: 'Non', value: 'non' },
+            ],
+          },
+        }),
+      ),
+    )
+    document.body.appendChild(multi)
+
+    const qcm = multi.shadowRoot?.querySelector('[data-type="qcm"]')
+    const items = Array.from(qcm?.children ?? [])
+    const styles = multi.shadowRoot?.querySelector('style')?.textContent ?? ''
+
+    expect(qcm?.getAttribute('data-vertical')).toBe('false')
+    expect(items).toHaveLength(2)
+    expect(items[0].querySelector('input + label')?.textContent).toBe('Oui')
+    expect(items[1].querySelector('input + label')?.textContent).toBe('Non')
+    expect(styles).toContain("[data-type='qcm'] > span")
+    expect(styles).toContain('display: inline-flex')
+    expect(styles).toContain('gap: 0.5rem')
+    expect(styles).toContain('var(--color-coopmaths-action, #f15929)')
+  })
+
   it('rend un contenu statique en sortie LaTeX', () => {
     setOutputLatex()
 
@@ -139,6 +175,39 @@ describe('MultiMathfieldElement', () => {
 
     expect(rendu).not.toContain('<multi-mathfield')
     expect(rendu).not.toContain('euros')
+  })
+
+  it('espace et colore les QCM du rendu HTML statique', () => {
+    const rendu = MultiMathfieldElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      dataTemplate: 'Choisir : %{champ1}',
+      dataOptions: {
+        champ1: {
+          qcm: [
+            { label: 'Oui', value: 'oui' },
+            { label: 'Non', value: 'non' },
+          ],
+        },
+      },
+      interactivityOn: false,
+    })
+
+    const template = document.createElement('template')
+    template.innerHTML = rendu
+    const qcm = template.content.querySelector('span.mx-2') as HTMLElement
+    const items = Array.from(qcm.children) as HTMLElement[]
+    const input = items[0].querySelector('input') as HTMLInputElement
+
+    expect(qcm.style.display).toBe('inline-flex')
+    expect(qcm.style.gap).toBe('1.5rem')
+    expect(items).toHaveLength(2)
+    expect(items[0].style.display).toBe('inline-flex')
+    expect(items[0].style.gap).toBe('0.5rem')
+    expect(input.style.border).toContain(
+      'var(--color-coopmaths-action, #f15929)',
+    )
+    expect(rendu).not.toContain('currentColor')
   })
 
   it('ajoute le texteApres apres les pointilles en rendu statique', () => {

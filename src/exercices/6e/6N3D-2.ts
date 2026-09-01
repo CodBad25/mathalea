@@ -9,7 +9,7 @@ import Exercice from '../Exercice'
 
 export const dateDePublication = '05/07/2026'
 export const titre =
-  'Placer une abscisse fractionnaire sur une demi-droite graduée'
+  "Placer une abscisse fractionnaire sur une demi-droite graduée (partage de l'unité)"
 export const interactifReady = true
 
 export const amcReady = true
@@ -65,7 +65,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
     const nbClicsMax = (1 + this.sup3) * 5
     const nbUnits = 1 + (context.isHtml ? this.sup4 : Math.min(this.sup4, 2))
     this.consigne =
-      context.isHtml && !context.isTypst
+      context.isHtml && !context.isTypst && this.interactif
         ? `Utiliser les boutons pour modifier la demi-droite graduée et créer les graduations nécessaires pour placer ${
             this.sup === 1
               ? 'le point $A$'

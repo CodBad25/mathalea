@@ -555,10 +555,11 @@ export function inferNumericValueForAMC(
 
 export function mergeNumericParamsFromOptions(
   baseParam: ReponseParams | undefined,
-  options: ReponseParams | undefined,
+  options: unknown,
 ): ReponseParams {
   const merged: ReponseParams = { ...(baseParam ?? {}) }
-  if (options == null) return merged
+  if (options == null || typeof options !== 'object') return merged
+  const optionRecord = options as Record<string, unknown>
 
   const supportedOptionKeys: Array<keyof ReponseParams> = [
     'digits',
@@ -574,7 +575,7 @@ export function mergeNumericParamsFromOptions(
   ]
 
   for (const key of supportedOptionKeys) {
-    const optionValue = options[key]
+    const optionValue = optionRecord[key]
     if (optionValue !== undefined && merged[key] === undefined) {
       ;(merged as Record<string, unknown>)[key] = optionValue
     }

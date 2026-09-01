@@ -317,4 +317,10 @@ describe('amcInferenceHelpers', () => {
       strict: true,
     })
   })
+
+  it('ignore des options historiques qui ne sont pas un objet', () => {
+    expect(mergeNumericParamsFromOptions({ digits: 2 }, 'vertical')).toEqual({
+      digits: 2,
+    })
+  })
 })

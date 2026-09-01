@@ -32,7 +32,6 @@ export default class Can2025N5Q26 extends ExerciceCan {
     if (!this.interactif && context.isHtml) {
       this.question += '$\\ldots\\text{ cm}^3$'
     }
-    this.optionsChampTexte = { texteApres: '.' }
   }
 
   nouvelleVersion() {

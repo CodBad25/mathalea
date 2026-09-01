@@ -1,8 +1,12 @@
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
+import { texFactorisation } from '../../lib/outils/primalite'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -39,8 +43,22 @@ export default class EgaliteFG18 extends Exercice {
       (context.isHtml
         ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/mirzakhani-portrait.jpg" alt="Portrait de Maryam Mirzakhani" style="width:130px; height:auto; border-radius:9999px; border:3px solid #f15929;"><p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Maryam Mirzakhani (1977-2017) — Source : Florian Caullery — Wikimedia Commons — CC BY-SA 3.0</p></div>'
         : '') +
-      '<br>Maryam Mirzakhani (1977-2017), mathématicienne iranienne, est la première femme à avoir reçu la médaille Fields, en 2014.<br>' +
-      'De 1901 à 2024, $65$ femmes et $915$ hommes ont reçu un prix Nobel. De 1936 à 2024, $2$ femmes et $62$ hommes ont reçu la médaille Fields.<br>' +
+      '<br>Maryam Mirzakhani (1977-2017), mathématicienne iranienne, est la première femme à avoir reçu la médaille Fields, en 2014.<br>'
+    const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0; font-size:0.85rem;">
+      <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de prix Nobel<br>de 1901 à 2024</th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de médailles Fields<br>de 1936 à 2024</th></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px;">65</td><td style="border: 1px solid #888; padding: 4px 10px;">2</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px;">915</td><td style="border: 1px solid #888; padding: 4px 10px;">62</td></tr>
+      </table>
+      <p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Source : Wikipedia</p>`
+    const tableauLatex =
+      '\\begin{center}\\begin{tabular}{|l|c|c|}\n\\hline\n' +
+      ' & Nombre de prix Nobel de 1901 à 2024 & Nombre de médailles Fields de 1936 à 2024 \\\\\n\\hline\n' +
+      'Femmes & 65 & 2 \\\\\n\\hline\n' +
+      'Hommes & 915 & 62 \\\\\n\\hline\n' +
+      '\\end{tabular}\\end{center}\n' +
+      '\\textit{Source~: Wikipedia}<br>'
+    this.consigne +=
+      (context.isHtml ? tableauHtml : tableauLatex) +
       'On considère :<br>' +
       "$\\bullet$ $A$ : le pourcentage total de femmes ayant obtenu la médaille Fields depuis sa création jusqu'en 2024 ;<br>" +
       "$\\bullet$ $B$ : le pourcentage total de femmes ayant obtenu un prix Nobel depuis sa création jusqu'en 2024 (arrondis au centième)."
@@ -74,7 +92,7 @@ export default class EgaliteFG18 extends Exercice {
       propositions: [
         {
           texte:
-            "$A<B$ : les femmes sont encore moins représentées en mathématiques (médaille Fields) que parmi l'ensemble des prix Nobel.",
+            "$A < B$ : les femmes sont encore moins représentées en mathématiques (médaille Fields) que parmi l'ensemble des prix Nobel.",
           statut: true,
         },
         {
@@ -91,51 +109,73 @@ export default class EgaliteFG18 extends Exercice {
       "$A\\approx 3{,}13\\,\\% < B\\approx 6{,}63\\,\\%$ : la sous-représentation des femmes est donc encore plus marquée pour la médaille Fields que pour l'ensemble des prix Nobel."
 
     const texteQ3 =
-      'Quelle est la décomposition en produit de facteurs premiers de $630$ ?'
-    this.autoCorrection[3] = {
-      enonce: texteQ3,
-      options: { ordered: true, radio: true },
-      propositions: [
-        { texte: '$2\\times 3^2\\times 5\\times 7$', statut: true },
-        { texte: '$2\\times 3\\times 5\\times 7^2$', statut: false },
-        { texte: '$2^2\\times 3^2\\times 5\\times 7$', statut: false },
-      ],
-    }
-    const monQcm3 = propositionsQcm(this, 3)
-    let texte3 = texteQ3
-    if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 = `$630=${miseEnEvidence('2\\times 3^2\\times 5\\times 7')}$.`
+      "Lors de la semaine des Mathématiques en mars 2025, un collège a organisé un concours de résolution de problèmes afin d'encourager les élèves. Pour les récompenser de leur participation, le collège a acheté $630$ chocolats et $456$ caramels. Les professeurs de mathématiques ont souhaité faire des lots identiques, c'est-à-dire contenant chacun le même nombre de chocolats et le même nombre de caramels, en utilisant tous les bonbons.<br>" +
+      'Donner la décomposition en produit de facteurs premiers de $630$ et de $456$.'
+    let texte3 = texteQ3 + '<br>'
+    texte3 += addMultiMathfield(this, 3, {
+      dataTemplate: '$630=$%{champ1}\n$456=$%{champ2}',
+      dataOptions: {
+        champ1: { keyboard: KeyboardType.clavierDeBase },
+        champ2: { keyboard: KeyboardType.clavierDeBase },
+      },
+    })
+    handleAnswers(
+      this,
+      3,
+      {
+        champ1: {
+          value: texFactorisation(630, true),
+          options: { nbFacteursIdentiquesFactorisation: true },
+        },
+        champ2: {
+          value: texFactorisation(456, true),
+          options: { nbFacteursIdentiquesFactorisation: true },
+        },
+        bareme: toutAUnPoint,
+      },
+      { formatInteractif: 'multi-mathfield' },
+    )
+    const correction3 = `$630=${miseEnEvidence(texFactorisation(630, true))}$ et $456=${miseEnEvidence(texFactorisation(456, true))}$.`
 
     const texteQ4 =
-      'Quelle est la décomposition en produit de facteurs premiers de $456$ ?'
+      'Les professeurs de mathématiques ont-ils pu constituer $18$ lots ?'
     this.autoCorrection[4] = {
       enonce: texteQ4,
-      options: { ordered: true, radio: true },
-      propositions: [
-        { texte: '$2^3\\times 3\\times 19$', statut: true },
-        { texte: '$2^2\\times 3\\times 38$', statut: false },
-        { texte: '$2\\times 3\\times 76$', statut: false },
-      ],
-    }
-    const monQcm4 = propositionsQcm(this, 4)
-    let texte4 = texteQ4
-    if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 = `$456=${miseEnEvidence('2^3\\times 3\\times 19')}$.`
-
-    const texteQ5 =
-      'Le collège a acheté $630$ chocolats et $456$ caramels, pour constituer des lots identiques utilisant tous les bonbons. Les professeurs ont-ils pu constituer $18$ lots ?'
-    this.autoCorrection[5] = {
-      enonce: texteQ5,
       options: { ordered: true, radio: true },
       propositions: [
         { texte: 'Oui', statut: false },
         { texte: 'Non', statut: true },
       ],
     }
-    const monQcm5 = propositionsQcm(this, 5)
-    let texte5 = texteQ5
-    if (!context.isAmc) texte5 += monQcm5.texte
-    const correction5 = `Le nombre de lots doit diviser à la fois $630$ et $456$, donc diviser leur PGCD. D'après les décompositions précédentes, les seuls facteurs premiers communs à $630=2\\times 3^2\\times 5\\times 7$ et $456=2^3\\times 3\\times 19$ sont $2$ et $3$, donc $\\text{PGCD}(630\\,;\\,456)=2\\times 3=6$. Comme $18$ ne divise pas $6$ (et ne divise d'ailleurs pas $456$ : $456\\div 18\\approx 25{,}3$), $${miseEnEvidence('\\text{on ne peut pas constituer }18\\text{ lots}')}$.<br>Le nombre maximum de lots que l'on peut constituer est donc $${miseEnEvidence('6')}$, avec $630\\div 6=105$ chocolats et $456\\div 6=76$ caramels par lot.`
+    const monQcm4 = propositionsQcm(this, 4)
+    let texte4 = texteQ4
+    if (!context.isAmc) texte4 += monQcm4.texte
+    const correction4 = `Le nombre de lots doit diviser à la fois $630$ et $456$, donc diviser leur PGCD. D'après les décompositions précédentes, les seuls facteurs premiers communs à $630=2\\times 3^2\\times 5\\times 7$ et $456=2^3\\times 3\\times 19$ sont $2$ et $3$, donc $\\text{PGCD}(630\\,;\\,456)=2\\times 3=6$. Comme $18$ ne divise pas $6$, la réponse est $${miseEnEvidence('\\text{Non}')}$ : les professeurs n'ont pas pu constituer $18$ lots.`
+
+    const texteQ5 =
+      "Quel est le nombre maximum de lots qu'ont pu constituer les professeurs ? Combien de chocolats et de caramels y avait-il alors dans chaque lot ?"
+    let texte5 = texteQ5 + '<br>'
+    texte5 += addMultiMathfield(this, 5, {
+      dataTemplate:
+        'Nombre maximal de lots : %{champ1}\nNombre de chocolats par lot : %{champ2}\nNombre de caramels par lot : %{champ3}',
+      dataOptions: {
+        champ1: { keyboard: KeyboardType.clavierNumbers },
+        champ2: { keyboard: KeyboardType.clavierNumbers },
+        champ3: { keyboard: KeyboardType.clavierNumbers },
+      },
+    })
+    handleAnswers(
+      this,
+      5,
+      {
+        champ1: { value: '6', options: { nombreDecimalSeulement: true } },
+        champ2: { value: '105', options: { nombreDecimalSeulement: true } },
+        champ3: { value: '76', options: { nombreDecimalSeulement: true } },
+        bareme: toutAUnPoint,
+      },
+      { formatInteractif: 'multi-mathfield' },
+    )
+    const correction5 = `Le nombre maximum de lots correspond au $\\text{PGCD}(630\\,;\\,456)=6$ trouvé à la question précédente, donc le nombre maximum de lots est $${miseEnEvidence('6')}$.<br>Chaque lot contient alors $630\\div 6=${miseEnEvidence('105')}$ chocolats et $456\\div 6=${miseEnEvidence('76')}$ caramels.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

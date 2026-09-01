@@ -13,11 +13,20 @@ export function mathaleaGoToView(destinationView: '' | VueType) {
   const originView = get(globalOptions).v ?? ''
   const prevView = get(previousView)
 
-  // Si on retourne à l'accueil et qu'on venait d'une vue spécifique, on y retourne
-  if (destinationView === '' && prevView) {
-    destinationView = prevView as '' | VueType
+  if (destinationView === '') {
+    // Retour à l'accueil : si une vue « parente » a été mémorisée
+    // explicitement (ex. la vue Outils qui a lancé un export), on y
+    // retourne plutôt que d'aller à l'accueil. Dans tous les cas on purge
+    // `previousView` : sans ça, quitter une vue d'export (Typst, LaTeX…)
+    // réarmerait ce retour et le clic « accueil » suivant (croix, logo
+    // MathALÉA…) ramènerait dans la vue qu'on vient de quitter.
     previousView.set(undefined)
+    if (prevView) {
+      destinationView = prevView as '' | VueType
+    }
   } else {
+    // On mémorise la vue d'origine pour pouvoir y revenir depuis la
+    // destination.
     previousView.set(originView)
   }
 

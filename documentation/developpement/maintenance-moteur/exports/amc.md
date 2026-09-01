@@ -30,6 +30,12 @@ La preview HTML conserve les contenus mathématiques délimités par `$...$` ou
 `\\` des environnements KaTeX comme `array`, `aligned` ou les matrices ne
 doivent jamais devenir des balises `<br>`.
 
+Pour un exercice de type `simple`, `mathaleaHandleExerciceSimple()` place les
+différentes variantes dans `listeQuestions`. Après cette génération,
+`question` ne contient que le dernier tirage : la preview AMC doit donc capturer
+`listeQuestions` afin de ne pas réutiliser cette dernière variante à la place
+de la première.
+
 L'inférence est une aide, pas un remplacement pour une déclaration explicite
 quand la question contient plusieurs sous-réponses ou un format ambigu.
 
@@ -60,6 +66,14 @@ produites priment sur le snapshot interactif et sont conservées comme
 `qcmMono`/`qcmMult`. L'audit QCM couvre aussi ces QCM tardifs, absents de la
 passe HTML interactive.
 
+Lorsqu'un QCM existe déjà dans le snapshot HTML interactif, ce snapshot reste
+la source canonique des propositions et de leurs statuts. Certains générateurs
+historiques ne consomment pas les mêmes tirages aléatoires en contexte AMC ;
+leur passe AMC peut donc correspondre à une autre variante dès la deuxième
+question. Les textes imprimables du QCM sont récupérés par une passe LaTeX hors
+AMC, qui suit la même séquence de tirages que la passe HTML. La preview ne doit
+jamais associer l'énoncé d'une variante aux propositions d'une autre.
+
 Pour un format multichamp, l'indépendance est également vérifiée au niveau de
 la question. Un `callback` global conduit à `AMCOpen`. Un barème explicite reste
 compatible seulement si sa table de vérité, sur toutes les combinaisons de
@@ -88,6 +102,12 @@ L'inférence relit aussi chaque réponse enregistrée par `handleAnswers()` :
 - `noFeedback` est sans effet sur la réponse AMC ;
 - toute autre option active ou fonction de comparaison spécialisée conduit à
   `AMCOpen` tant qu'une équivalence AMC dédiée n'est pas implémentée et testée.
+
+Le nom historique `fractionEgale` rencontré directement comme
+`formatInteractif` n'est pas assimilé à cette option de comparaison : faute de
+contrat moderne porté par un mathfield, il reste en `AMCOpen`. Seule l'option
+`fractionEgale` enregistrée dans la réponse d'un format mathfield déclenche
+l'inférence fractionnaire décrite ci-dessous.
 
 Une fraction numérique est réduite avant le dimensionnement des cases AMC. Une
 fraction de dénominateur `1` devient un entier : `100/25` produit ainsi une
@@ -175,3 +195,9 @@ prévoir une migration ciblée.
 Les rapports `AMCNum` et les tests d'exercices sont décrits dans
 [Rapports d'exercices](../../../tests/rapports-exercices.md). Vérifiez également
 les sorties LaTeX pour chaque type AMC modifié.
+
+`src/lib/amc/amcQcmCorpus.audit.test.ts` parcourt les exercices référencés qui
+déclarent `qcm`, `mathalea-qcm`, `qcmMono` ou `qcmMult`, génère leur version
+interactive puis leur contrat AMC avec une graine fixe, et compare pour chaque
+proposition le texte et le statut. Les répertoires `beta` et les fichiers dont
+le nom contient `old` sont exclus de cet audit.

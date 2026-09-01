@@ -544,6 +544,12 @@ const createFiles = (
       ...referentiel['1e']['1A'],
     }
   }
+  if (codePays === 'FR' && referentiel['2e']?.['2A'] && exercices['2A']) {
+    referentiel['2e']['2A'] = {
+      '2A': exercices['2A'],
+      ...referentiel['2e']['2A'],
+    }
+  }
   if (codePays === 'FR' && referentiel['3e']?.['3Auto'] && exercices['3A']) {
     referentiel['3e']['3Auto'] = {
       '3A': exercices['3A'],

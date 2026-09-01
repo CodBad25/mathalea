@@ -304,7 +304,7 @@ export default class ReperagePointDuPlan extends Exercice {
     }
 
     if (context.isAmc) {
-      this.autoCorrection[0].enonce = texte
+      this.autoCorrectionAMC[0].enonce = texte
     }
     this.listeQuestions.push(texte)
     this.listeCorrections.push(texteCorr)

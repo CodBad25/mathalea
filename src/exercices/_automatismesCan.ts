@@ -235,12 +235,31 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
             return m.default
           })
         }),
-      ).then((classes) => {
-        buildFromClasses(classes)
-        document.dispatchEvent(
-          new window.Event('updateAsyncEx', { bubbles: true }),
-        )
-      })
+      )
+        .then((classes) => {
+          buildFromClasses(classes)
+          document.dispatchEvent(
+            new window.Event('updateAsyncEx', { bubbles: true }),
+          )
+        })
+        .catch((error) => {
+          // Le `import()` lazy d'un module peut se résoudre après la destruction
+          // de l'environnement (ex. suite de tests `all_exercises` : le harnais
+          // appelle `nouvelleVersionWrapper()` sans attendre ce chargement).
+          // Sans ce `catch`, le rejet non capturé fait échouer toute la suite
+          // (`EnvironmentTeardownError`). En usage réel, la question reste
+          // affichée en « chargement... » et on trace l'échec.
+          try {
+            if (typeof window !== 'undefined' && typeof window.notify === 'function') {
+              window.notify(
+                "AutomatismesCan : échec du chargement d'un module d'automatisme",
+                { error: String(error) },
+              )
+            }
+          } catch {
+            /* environnement déjà détruit : rien à faire */
+          }
+        })
     }
   }
 }

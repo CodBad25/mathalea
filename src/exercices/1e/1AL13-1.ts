@@ -121,7 +121,7 @@ export default class ProblemesAvecSuitesE3C extends Exercice {
           num = new Decimal(cm).pow(12).mul(-1).add(1)
           den = new Decimal(1).sub(cm)
           b = new Decimal(u0).mul(num).div(den).round()
-          texte = `Dans un pays, le nombre de créations d'entreprise augmente $${texNombre(p, 1)}\\,\\%$ par mois.<br>
+          texte = `Dans un pays, le nombre de créations d'entreprise augmente de $${texNombre(p, 1)}\\,\\%$ par mois.<br>
 En janvier $2024$ on compte $${texNombre(u0 * 1000, 0)}$ créations d'entreprise.<br>
 On modélise le nombre de créations d'entreprise au $n$-ième mois par une suite $(${NomS}_n)$ telle que : 
 $${NomS}_0 = ${u0}$ et $${NomS}_{n+1} = ${NomS}_n \\times ${texNombre(cm, 3)}$<br>
@@ -131,8 +131,8 @@ où $${NomS}_n$ est exprimé en milliers d'euros. `
               `Calculer $${NomS}_1$ puis interpréter ce résultat dans le contexte de l'exercice.`,
               createList({
                 items: [
-                  'Quelle est la nature de la suite $(u_n)$ ? Justifier.',
-                  `Exprimer $${NomSA}_n$ en fonction de $n$.`,
+                  `Quelle est la nature de la suite $(${NomS}_n)$ ? Justifier.`,
+                  `Exprimer $${NomS}_n$ en fonction de $n$.`,
                   `Un journaliste annonce qu'au total dans l'année $2024$, environ $${texNombre(new Decimal(b).mul(1000), 0)}$ entreprises se sont
 créées.<br>
 Donner un calcul permettant de justifier les propos du journaliste.`,
