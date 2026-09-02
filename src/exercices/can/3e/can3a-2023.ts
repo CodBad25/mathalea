@@ -42,7 +42,11 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import Exercice from '../../Exercice'
 
 import { context } from '../../../modules/context'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../../modules/outils'
 
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
@@ -71,7 +75,7 @@ export const refs = {
 
  */
 
-function compareNombres(a, b) {
+function compareNombres(a: number, b: number) {
   return a - b
 }
 
@@ -80,6 +84,10 @@ export default class SujetCAN2023troisieme extends Exercice {
     super()
 
     this.nbQuestions = 30
+
+    this.sup =
+      '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30'
+    this.sup2 = false
 
     this.comment = `Cet exercice fait partie des annales des Courses Aux Nombres.<br>
   Il est composé de 30 questions réparties de la façon suivante :<br>
@@ -90,27 +98,55 @@ export default class SujetCAN2023troisieme extends Exercice {
   }
 
   nouvelleVersion() {
-    const nbQ1 = Math.min(Math.round((this.nbQuestions * 10) / 30), 10) // Choisir d'un nb de questions de niveau 1 parmi les 8 possibles.
-    const nbQ2 = Math.min(this.nbQuestions - nbQ1, 20)
-    const typeQuestionsDisponiblesNiv1 = shuffle([
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-    ])
-      .slice(-nbQ1)
-      .sort(compareNombres) //
-    const typeQuestionsDisponiblesNiv2 = shuffle([
-      11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
-      29, 30,
-    ])
-      .slice(-nbQ2)
-      .sort(compareNombres) //
-    const typeQuestionsDisponibles = typeQuestionsDisponiblesNiv1.concat(
-      typeQuestionsDisponiblesNiv2,
-    )
+    // Case « Choix du nombre de questions » cochée : on reproduit le tirage
+    // proportionnel historique (« mini » CAN respectant la proportion de
+    // questions élémentaires). Décochée : l'utilisateur choisit les numéros des
+    // questions à afficher, comme pour les CAN depuis 2024.
+    this.nbQuestionsModifiable = Boolean(this.sup2)
+    // Le champ « Choix des questions » n'a de sens que si l'on ne délègue pas le
+    // choix au nombre de questions : on le masque quand la case est cochée.
+    this.besoinFormulaireTexte = this.sup2
+      ? false
+      : [
+          'Choix des questions',
+          'Numéros des questions (de 1 à 30) séparés par des tirets. Par exemple : 1-3-3-12-30',
+        ]
+    this.besoinFormulaire2CaseACocher = ['Choix du nombre de questions']
+    let typeQuestionsDisponibles: number[]
+    if (this.sup2) {
+      const nbQ1 = Math.min(Math.round((this.nbQuestions * 10) / 30), 10) // Choisir d'un nb de questions de niveau 1 parmi les 8 possibles.
+      const nbQ2 = Math.min(this.nbQuestions - nbQ1, 20)
+      const typeQuestionsDisponiblesNiv1 = shuffle([
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+      ])
+        .slice(-nbQ1)
+        .sort(compareNombres) //
+      const typeQuestionsDisponiblesNiv2 = shuffle([
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+        29, 30,
+      ])
+        .slice(-nbQ2)
+        .sort(compareNombres) //
+      typeQuestionsDisponibles = typeQuestionsDisponiblesNiv1.concat(
+        typeQuestionsDisponiblesNiv2,
+      )
+    } else {
+      typeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        saisie: String(this.sup ?? ''),
+        min: 1,
+        max: 30,
+        defaut: 31,
+        melange: 31,
+        shuffle: false,
+        nbQuestions: 0,
+      }).map(Number)
+      this.nbQuestions = typeQuestionsDisponibles.length
+    }
 
     for (
       let i = 0,
         index = 0,
-        nbChamps,
+        nbChamps = 1,
         m,
         nom,
         pol,
@@ -153,20 +189,20 @@ export default class SujetCAN2023troisieme extends Exercice {
         ang1,
         s3,
         J,
-        texte,
-        texteCorr,
-        reponse,
+        texte = '',
+        texteCorr = '',
+        reponse: any,
         prenom1,
         L,
         E,
         choix,
-        a,
-        b,
-        c,
-        d,
-        e,
-        f,
-        k,
+        a: any,
+        b: any,
+        c: any,
+        d: any,
+        e: any,
+        f: any,
+        k: any,
         s1,
         s2,
         A,
@@ -342,7 +378,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '$A$',
                 0,
                 context.isHtml ? -0.7 : -0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -350,7 +386,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '$B$',
                 6,
                 context.isHtml ? -0.7 : -0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -358,7 +394,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '$O$',
                 3,
                 context.isHtml ? -0.7 : -0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -376,7 +412,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   '?',
                   2.2,
                   0.6,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.7,
                 ),
@@ -384,7 +420,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   `${stringNombre(ang1)}°`,
                   3.8,
                   0.2,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.7,
                 ),
@@ -395,7 +431,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   '?',
                   2.2,
                   0.2,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.7,
                 ),
@@ -403,7 +439,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   `${stringNombre(ang1)}°`,
                   3.8,
                   0.5,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.7,
                 ),
@@ -460,7 +496,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '$D$',
                 0.3,
                 2,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -468,7 +504,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '$B$',
                 2,
                 context.isHtml ? -0.6 : -0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -476,7 +512,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '$O$',
                 0,
                 context.isHtml ? -0.6 : -0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -495,7 +531,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   '?',
                   0.2,
                   0.8,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.7,
                 ),
@@ -503,7 +539,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   `${stringNombre(ang1)}°`,
                   1.2,
                   0.3,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.5,
                 ),
@@ -534,7 +570,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   '?',
                   -0.15,
                   0.6,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.7,
                 ),
@@ -542,7 +578,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                   `${stringNombre(ang1)}°`,
                   1,
                   0.8,
-                  'milieu',
+                  0,
                   'black',
                   context.isHtml ? 1 : 0.7,
                 ),
@@ -804,7 +840,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '?',
                 C.x,
                 C.y - 1,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -812,7 +848,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a)}°`,
                 A.x + 1.2,
                 A.y + 0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -867,7 +903,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a)}°`,
                 C.x,
                 C.y - 1,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -875,7 +911,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '?',
                 A.x + 1.1,
                 A.y + 0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -999,7 +1035,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a[0])} cm`,
                 milieu(A, C).x,
                 milieu(A, C).y - 0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -1007,7 +1043,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a[2])} cm`,
                 milieu(B, C).x - 0.8,
                 milieu(B, C).y,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -1062,7 +1098,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a[1])} cm`,
                 milieu(A, B).x + 0.6,
                 milieu(A, B).y,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -1070,7 +1106,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a[2])} cm`,
                 milieu(B, C).x - 0.8,
                 milieu(B, C).y,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -1125,7 +1161,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a[1])} cm`,
                 milieu(A, B).x + 0.8,
                 milieu(A, B).y,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -1133,7 +1169,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a[0])} cm`,
                 milieu(A, C).x,
                 milieu(A, C).y - 0.4,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1.5 : 0.7,
               ),
@@ -1718,7 +1754,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(a)} `,
                 milieu(B, E).x + 0.4,
                 milieu(B, E).y,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -1726,7 +1762,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '?',
                 milieu(A, E).x - 0.4,
                 milieu(A, E).y + 0.7,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -1734,7 +1770,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(b)} `,
                 milieu(D, C).x + 0.5,
                 milieu(D, C).y,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -1742,7 +1778,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${stringNombre(d)} `,
                 milieu(A, D).x - 1,
                 milieu(A, D).y + 1.5,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -1810,7 +1846,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             b = k * a // BE
             c = randint(b, 22) // DC
             d = k * c // AD
-            A = pointAbstrait(6, 0, 'A', 'right', 'below')
+            A = pointAbstrait(6, 0, 'A', 'right')
             D = pointAbstrait(0.46, 2.92, 'D', 'above left')
             E = pointAbstrait(4, 1, 'E', 'below')
             B = pointAbstrait(6.22, 2, 'B', 'above right')
@@ -1825,7 +1861,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${a}`,
                 milieu(A, B).x + 0.3,
                 milieu(A, B).y - 0.2,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -1833,7 +1869,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '?',
                 milieu(C, E).x,
                 milieu(C, E).y - 0.5,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -1841,7 +1877,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${b}`,
                 milieu(B, E).x,
                 milieu(B, E).y + 0.2,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -1849,7 +1885,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 `${c}`,
                 milieu(D, C).x - 0.3,
                 milieu(C, B).y + 0.5,
-                'milieu',
+                0,
                 'black',
                 context.isHtml ? 1 : 0.7,
               ),
@@ -2097,7 +2133,6 @@ export default class SujetCAN2023troisieme extends Exercice {
                 y: 0,
                 thickSecDist: 1 / a,
                 thickSec: true,
-                thickoffset: 0,
                 axeStyle: '|->',
                 pointListe: [[b / a, '']],
                 labelPointTaille: 15,
@@ -2111,7 +2146,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 '?',
                 (3 * b) / a - 2 * 3,
                 0.8,
-                'milieu',
+                0,
                 bleuMathalea,
                 1.5,
               ),
@@ -2170,7 +2205,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             a = randint(2, 9) * 4
             texte = `Un article à $${texPrix(a)}$ € est soldé à ${context.isHtml ? `$${texPrix(a * 0.75)}$ €` : `$\\Prix[0]{${a * 0.75}}$`}.<br>
             Quel est le pourcentage de réduction ?`
-            texteCorr = `La réduction est de $${texPrix(a)}-${texPrix(a * 0.75, 2)}=${texPrix(0.25 * a)}$.<br>
+            texteCorr = `La réduction est de $${texPrix(a)}-${texPrix(a * 0.75)}=${texPrix(0.25 * a)}$.<br>
             Le prix de départ était de $${texPrix(a)}$  €. Le pourcentage de réduction est donné par : $\\dfrac{${texPrix(0.25 * a)}}{${texPrix(a)}}=0,25=${miseEnEvidence(25)}\\,\\%$. `
             reponse = 25
           }
