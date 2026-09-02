@@ -38,6 +38,14 @@ export const typstParamStore = writable<string>('')
 export const typstShortcutsOpen = writable<boolean>(false)
 
 /**
+ * Pendant de `typstShortcutsOpen` pour la vue LaTeX (`v=tex`) : demande
+ * d'ouverture de la modale des raccourcis clavier de l'éditeur depuis le
+ * bouton « Aide » de `NavBar`. La vue LaTeX est seule à la lire et à la
+ * remettre à `false` une fois consultée.
+ */
+export const texShortcutsOpen = writable<boolean>(false)
+
+/**
  * Réglages encodés (base64) de la vue LaTeX (`v=tex`), maintenus dans l'URL
  * par updateGlobalOptionsInURL. Alimenté par la vue elle-même.
  */

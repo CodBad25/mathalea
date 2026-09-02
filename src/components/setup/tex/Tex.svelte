@@ -16,6 +16,7 @@
     exercicesParams,
     freezeUrl,
     texParamStore,
+    texShortcutsOpen,
   } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
@@ -198,12 +199,14 @@
   let elapsed = $state(0)
   let elapsedTimer: ReturnType<typeof setInterval> | undefined
 
-  let isShortcutsOpen = $state(false)
-
+  /**
+   * Touche de modification affichée dans l'aide, selon l'OS : « ⌘ » sous
+   * macOS/iOS, « CTRL » partout ailleurs.
+   */
   const MOD_KEY =
     typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.userAgent)
       ? '⌘'
-      : 'Ctrl'
+      : 'CTRL'
 
   /**
    * Raccourcis de l'éditeur, par famille. Ils viennent de CodeMirror
@@ -946,15 +949,6 @@
         />
         <button
           type="button"
-          title="Raccourcis clavier de l’éditeur de code"
-          aria-label="Raccourcis clavier de l’éditeur de code"
-          class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
-          onclick={() => (isShortcutsOpen = true)}
-        >
-          <i class="bx bx-help-circle text-xl"></i>
-        </button>
-        <button
-          type="button"
           title="Signaler un problème"
           aria-label="Signaler un problème"
           class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
@@ -1186,12 +1180,12 @@
     />
   {/if}
 
-  {#if isShortcutsOpen}
+  {#if $texShortcutsOpen}
     <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
     <div
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onclick={(e) => {
-        if (e.target === e.currentTarget) isShortcutsOpen = false
+        if (e.target === e.currentTarget) $texShortcutsOpen = false
       }}
     >
       <div
@@ -1206,7 +1200,7 @@
           <button
             type="button"
             aria-label="Fermer"
-            onclick={() => (isShortcutsOpen = false)}
+            onclick={() => ($texShortcutsOpen = false)}
           >
             <i
               class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"

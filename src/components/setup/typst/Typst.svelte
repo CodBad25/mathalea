@@ -600,12 +600,15 @@
    */
   let compilerFirstVisit = $state(false)
   let isGeneratingPdf = $state(false)
-  /** Touche de modification affichée dans l'aide, selon la plateforme */
+  /**
+   * Touche de modification affichée dans l'aide, selon l'OS : « ⌘ » sous
+   * macOS/iOS, « CTRL » partout ailleurs.
+   */
   const MOD_KEY =
     typeof navigator !== 'undefined' &&
     /Mac|iPhone|iPad/.test(navigator.userAgent)
       ? '⌘'
-      : 'Ctrl'
+      : 'CTRL'
   /**
    * Raccourcis de l'éditeur, par famille. Ils viennent de CodeMirror
    * (`defaultKeymap`, `searchKeymap`) et de `codeEditorExtensions`.
@@ -3472,17 +3475,6 @@
         <i class="bx bx-bug text-xl"></i>
       </button>
 
-      {#if displayMode === 'code' || displayMode === 'split'}
-        <button
-          type="button"
-          title="Raccourcis clavier de l’éditeur de code"
-          aria-label="Raccourcis clavier de l’éditeur de code"
-          class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
-          onclick={() => ($typstShortcutsOpen = true)}
-        >
-          <i class="bx bx-help-circle text-xl"></i>
-        </button>
-      {/if}
       {#if displayMode === 'code' || displayMode === 'split'}
         <ButtonTextAction
           text={requiredImageAssets.size > 0
