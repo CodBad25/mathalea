@@ -128,7 +128,7 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
       if (
         this.questionJamaisPosee(
           i,
-          solutionMathador,
+          JSON.stringify(solutionMathador),
           this.tirage[i].join(';'),
           this.cible[i],
         )

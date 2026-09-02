@@ -765,7 +765,7 @@ export function texteParPosition(
   texte: string | number,
   x: number,
   y: number,
-  orientation: number = 0,
+  orientation: number | 'milieu' | 'gauche' | 'droite' = 0,
   color: string = 'black',
   scale: number = 1,
   ancrageDeRotation: 'milieu' | 'gauche' | 'droite' = 'milieu',
