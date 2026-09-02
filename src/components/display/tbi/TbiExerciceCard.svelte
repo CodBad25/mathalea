@@ -300,14 +300,17 @@
   onpointerdown={showControls}
   onpointerleave={hideControls}
 >
-  <header
-    class="flex flex-row items-baseline gap-2 px-3 pt-2 text-coopmaths-struct dark:text-coopmathsdark-struct"
+  <!--
+    Vue TBI : on n'affiche ni la référence ni le titre de l'exercice, seulement
+    son numéro (1-based) dans un rectangle bleuMathalea placé dans une marge à
+    gauche, vers le haut de la carte.
+  -->
+  <div
+    class="absolute left-0 top-3 z-10 min-w-9 rounded-r-md bg-coopmaths-struct px-3 py-1.5 text-center text-lg font-bold leading-none text-coopmaths-canvas shadow"
+    aria-label="Exercice numéro {paramsIndex + 1}"
   >
-    <span class="font-bold text-sm"
-      >{exercise.id?.replace('.js', '').replace('.ts', '') ?? ''}</span
-    >
-    <span class="text-xs font-light truncate">{exercise.titre}</span>
-  </header>
+    {paramsIndex + 1}
+  </div>
   {#key version}
     <!--
       Regroupé sous la même clé que l'article : exercise (listeCorrections,
@@ -356,7 +359,7 @@
     </div>
 
     <article
-      class="px-3 pb-3 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      class="pl-12 pr-3 pt-3 pb-3 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
     >
       {#if correctionMode !== 'replace'}
         <div use:renderMath={zoom}>

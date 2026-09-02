@@ -163,11 +163,17 @@
   onpointerdown={showControls}
   onpointerleave={hideControls}
 >
-  <header
-    class="flex flex-row items-baseline gap-2 px-3 pt-2 text-coopmaths-struct dark:text-coopmathsdark-struct"
+  <!--
+    Vue TBI : on n'affiche pas le titre de la ressource, seulement son numéro
+    (1-based) dans un rectangle bleuMathalea placé dans une marge à gauche,
+    vers le haut de la carte (comme pour une carte d'exercice).
+  -->
+  <div
+    class="absolute left-0 top-3 z-10 min-w-9 rounded-r-md bg-coopmaths-struct px-3 py-1.5 text-center text-lg font-bold leading-none text-coopmaths-canvas shadow"
+    aria-label="Exercice numéro {paramsIndex + 1}"
   >
-    <span class="text-xs font-light truncate">{content.title}</span>
-  </header>
+    {paramsIndex + 1}
+  </div>
 
   <div
     class="absolute top-1 right-1 z-20 flex flex-col items-end gap-1 transition-opacity duration-300 {controlsVisible
@@ -222,7 +228,7 @@
     {/if}
   </div>
 
-  <div class="px-3 pb-3 pt-2">
+  <div class="pl-12 pr-3 pb-3 pt-3">
     {#if correctionMode !== 'replace'}
       {#each content.png as url, i (i)}
         <img

@@ -136,9 +136,7 @@
           }}
         >
           <i class="bx bx-move text-lg"></i>
-          <span class="text-sm font-semibold truncate"
-            >{item.id.replace('.js', '').replace('.ts', '')}</span
-          >
+          <span class="text-sm font-semibold">Exercice {item.paramsIndex + 1}</span>
         </div>
         <TbiCardHost {item} {showMoveToTab} {tabsCount} {currentTab} />
         <div
