@@ -8,7 +8,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Déterminer le conjugué d'un quotient de complexes"
 export const interactifReady = true
-export const dateDePublication = '01/09/2026'
+export const dateDePublication = '02/09/2026'
 export const uuid = '772b9'
 
 export const refs = {
