@@ -759,6 +759,12 @@
       {@const gutter = layoutValues[target]?.gutter}
       {@const gutterLabel =
         gutter == null || gutter === 'interligne-questions' ? 'auto' : gutter}
+      <!-- les propositions de QCM ont leurs propres colonnes, déclarées
+           seulement quand l'exercice en contient un ; à l'inverse, un exercice
+           à question unique avec QCM n'a pas de liste de questions à régler -->
+      {@const qcmTarget = `${target}-qcm`}
+      {@const qcmColumns = layoutValues[qcmTarget]?.columns}
+      {@const hasQuestions = layoutValues[target] != null}
       <!-- contrôles des questions, dans la marge la plus proche -->
       <div
         class="pointer-events-auto absolute flex -translate-y-1/2 flex-col typst-pill typst-pill-box"
@@ -767,51 +773,86 @@
           : 'left: 0.3%'}"
         data-testid="typst-overlay-tasks"
       >
-        <div class="flex items-center justify-between" title="Colonnes {label}">
-          <button
-            type="button"
-            aria-label="Moins de colonnes"
-            onclick={() => onAdjustColumns(target, -1)}
+        {#if hasQuestions}
+          <div
+            class="flex items-center justify-between"
+            title="Colonnes {label}"
           >
-            <i class="bx bx-chevron-left"></i>
-          </button>
-          <span class="tabular-nums">
-            {layoutValues[target]?.columns === '"auto-fit"'
-              ? 'auto'
-              : (layoutValues[target]?.columns ?? 'auto')}<i
-              class="bx bx-columns text-[0.6rem]"
-            ></i>
-          </span>
-          <button
-            type="button"
-            aria-label="Plus de colonnes"
-            onclick={() => onAdjustColumns(target, 1)}
+            <button
+              type="button"
+              aria-label="Moins de colonnes"
+              onclick={() => onAdjustColumns(target, -1)}
+            >
+              <i class="bx bx-chevron-left"></i>
+            </button>
+            <span class="tabular-nums">
+              {layoutValues[target]?.columns === '"auto-fit"'
+                ? 'auto'
+                : (layoutValues[target]?.columns ?? 'auto')}<i
+                class="bx bx-columns text-[0.6rem]"
+              ></i>
+            </span>
+            <button
+              type="button"
+              aria-label="Plus de colonnes"
+              onclick={() => onAdjustColumns(target, 1)}
+            >
+              <i class="bx bx-chevron-right"></i>
+            </button>
+          </div>
+          <div
+            class="flex items-center justify-between typst-pill-divider-top"
+            title="Espacement vertical {label}"
           >
-            <i class="bx bx-chevron-right"></i>
-          </button>
-        </div>
-        <div
-          class="flex items-center justify-between typst-pill-divider-top"
-          title="Espacement vertical {label}"
-        >
-          <button
-            type="button"
-            aria-label="Réduire l'espacement des questions"
-            onclick={() => onAdjustGutter(target, -1)}
+            <button
+              type="button"
+              aria-label="Réduire l'espacement des questions"
+              onclick={() => onAdjustGutter(target, -1)}
+            >
+              <i class="bx bx-minus"></i>
+            </button>
+            <span class="px-0.5 text-[0.6rem] tabular-nums">
+              {gutterLabel}
+            </span>
+            <button
+              type="button"
+              aria-label="Augmenter l'espacement des questions"
+              onclick={() => onAdjustGutter(target, 1)}
+            >
+              <i class="bx bx-plus"></i>
+            </button>
+          </div>
+        {/if}
+        {#if qcmColumns != null}
+          <div
+            class="flex items-center justify-between"
+            class:typst-pill-divider-top={hasQuestions}
+            title="Colonnes des propositions du QCM {label.replace(
+              'des questions ',
+              '',
+            )}"
           >
-            <i class="bx bx-minus"></i>
-          </button>
-          <span class="px-0.5 text-[0.6rem] tabular-nums">
-            {gutterLabel}
-          </span>
-          <button
-            type="button"
-            aria-label="Augmenter l'espacement des questions"
-            onclick={() => onAdjustGutter(target, 1)}
-          >
-            <i class="bx bx-plus"></i>
-          </button>
-        </div>
+            <button
+              type="button"
+              aria-label="Moins de colonnes pour les propositions du QCM"
+              onclick={() => onAdjustColumns(qcmTarget, -1)}
+            >
+              <i class="bx bx-chevron-left"></i>
+            </button>
+            <span class="tabular-nums">
+              {qcmColumns === '"auto-fit"' ? 'auto' : qcmColumns}<i
+                class="bx bx-list-check text-[0.6rem]"
+              ></i>
+            </span>
+            <button
+              type="button"
+              aria-label="Plus de colonnes pour les propositions du QCM"
+              onclick={() => onAdjustColumns(qcmTarget, 1)}
+            >
+              <i class="bx bx-chevron-right"></i>
+            </button>
+          </div>
+        {/if}
       </div>
     {:else if widget.kind === 'can-row'}
       <!-- édition de l'énoncé/réponse de cette ligne du tableau, dans la

@@ -31,9 +31,21 @@ const TYPST_FONT_URLS = TYPST_FONT_FILES.map(
 )
 
 /**
+ * Familles embarquées par Typst lui-même, téléchargées par typst.ts depuis
+ * `typst-assets` : Libertinus Serif et New Computer Modern (les polices par
+ * défaut de la fiche) et DejaVu Sans Mono (rendu `raw`). typst.ts les ajoute
+ * de toute façon quand `preloadRemoteFonts` est appelé sans options ; les
+ * déclarer explicitement permet surtout de leur passer un `fetcher` qui
+ * traverse notre cache persistant.
+ */
+const TYPST_ASSET_PACKS = ['text'] satisfies ('text' | 'cjk' | 'emoji')[]
+
+/**
  * Compilation Typst dans le navigateur via typst.ts (WASM).
- * Le compilateur (~27 Mo) et les polices (~7 Mo) sont chargés à la première
- * compilation puis réutilisés tout au long de la session.
+ * Le compilateur (~28 Mo) et les polices (5,3 Mio servies par MathALÉA,
+ * 8,3 Mio de `typst-assets`) sont chargés à la première compilation puis
+ * réutilisés tout au long de la session. Voir « Coût de démarrage » dans
+ * `documentation/.../exports/typst.md`.
  */
 
 const MAIN_FILE = '/main.typ'
@@ -43,33 +55,55 @@ const MAIN_FILE = '/main.typ'
  * contenu d'une URL déjà en cache change (ex : polices variables remplacées
  * par des instances statiques, non détecté sinon puisque l'URL est stable).
  */
-const ASSET_CACHE = 'typst-assets-v2'
+const ASSET_CACHE = 'typst-assets-v3'
+
+/**
+ * Purge les caches des versions précédentes : le WASM du compilateur pèse
+ * 28 Mo, en laisser une copie par version consommerait le quota du navigateur
+ * pour rien. Lancé une fois par session, sans être attendu.
+ */
+function purgeOldAssetCaches(): void {
+  if (typeof caches === 'undefined') return
+  void caches
+    .keys()
+    .then((noms) =>
+      Promise.all(
+        noms
+          .filter(
+            (nom) => nom.startsWith('typst-assets-') && nom !== ASSET_CACHE,
+          )
+          .map((nom) => caches.delete(nom)),
+      ),
+    )
+    .catch(() => undefined)
+}
+
+/** Ouvre le cache persistant, ou `null` s'il est indisponible (mode privé, quota) */
+async function openAssetCache(): Promise<Cache | null> {
+  try {
+    if (typeof caches !== 'undefined') return await caches.open(ASSET_CACHE)
+  } catch {
+    // Cache API indisponible/pleine : on retombe sur un fetch normal
+  }
+  return null
+}
 
 /**
  * Récupère un fichier depuis le Cache API (téléchargé une seule fois, même
  * après un rechargement de page), avec repli sur un fetch réseau simple.
  * Les URL du WASM sont hashées par Vite : changer de version invalide
  * naturellement l'entrée de cache.
+ *
+ * La réponse est renvoyée **sans être lue** : c'est ce qui permet de la passer
+ * telle quelle à `WebAssembly.instantiateStreaming` (voir `ensureInitialized`),
+ * qui compile le module au fil du téléchargement et alimente le cache de code
+ * compilé du navigateur — un module de 28 Mo n'est alors plus recompilé de
+ * zéro à chaque chargement de page.
  */
-export async function cachedBytes(url: string): Promise<Uint8Array> {
-  let cache: Cache | null = null
-  try {
-    if (typeof caches !== 'undefined') cache = await caches.open(ASSET_CACHE)
-  } catch {
-    // Cache API indisponible/pleine : on retombe sur un fetch normal
-  }
-  if (cache != null) {
-    const hit = await cache.match(url)
-    if (hit != null) {
-      try {
-        return new Uint8Array(await hit.arrayBuffer())
-      } catch {
-        // Une réponse interrompue peut avoir été enregistrée avec un
-        // Content-Length supérieur à son corps. On l'écarte et on retélécharge.
-        await cache.delete(url).catch(() => false)
-      }
-    }
-  }
+export async function cachedResponse(url: string): Promise<Response> {
+  const cache = await openAssetCache()
+  const hit = await cache?.match(url)
+  if (hit != null) return hit
   // un statut d'erreur (404, 429 de limitation de débit, etc.) n'est jamais
   // mis en cache ni renvoyé comme si c'était le fichier : le corps de la
   // réponse d'erreur (souvent du texte/JSON) serait sinon pris pour les
@@ -88,22 +122,41 @@ export async function cachedBytes(url: string): Promise<Uint8Array> {
         )
       }
       const buffer = await response.arrayBuffer()
+      // On reconstruit la réponse à partir des octets effectivement reçus :
+      // un Content-Length erroné du serveur ne contamine ainsi pas le cache.
+      // Le type MIME est conservé (et rétabli pour le WASM, faute de quoi
+      // `instantiateStreaming` refuse la réponse et retombe sur le chemin lent).
+      const contentType =
+        response.headers.get('content-type') ??
+        (url.endsWith('.wasm') ? 'application/wasm' : null)
+      const headers =
+        contentType == null ? undefined : { 'content-type': contentType }
+      const stored = new Response(buffer.slice(0), { headers })
       if (cache != null) {
-        // On reconstruit la réponse à partir des octets effectivement reçus :
-        // un Content-Length erroné du serveur ne contamine ainsi pas le cache.
-        const contentType = response.headers.get('content-type')
-        const headers =
-          contentType == null ? undefined : { 'content-type': contentType }
-        await cache
-          .put(url, new Response(buffer.slice(0), { headers }))
-          .catch(() => undefined)
+        await cache.put(url, stored.clone()).catch(() => undefined)
       }
-      return new Uint8Array(buffer)
+      return stored
     } catch (error) {
       derniereErreur = error
     }
   }
   throw derniereErreur
+}
+
+/** Octets d'un fichier, servis par le même cache persistant que `cachedResponse` */
+export async function cachedBytes(url: string): Promise<Uint8Array> {
+  const cache = await openAssetCache()
+  const hit = await cache?.match(url)
+  if (hit != null) {
+    try {
+      return new Uint8Array(await hit.arrayBuffer())
+    } catch {
+      // Une réponse interrompue peut avoir été enregistrée avec un
+      // Content-Length supérieur à son corps. On l'écarte et on retélécharge.
+      await cache?.delete(url).catch(() => false)
+    }
+  }
+  return new Uint8Array(await (await cachedResponse(url)).arrayBuffer())
 }
 
 /**
@@ -114,18 +167,29 @@ export async function cachedBytes(url: string): Promise<Uint8Array> {
  */
 let staticImageBytes: Map<string, Uint8Array> = new Map()
 
+/**
+ * Registre déjà chargé dans le compilateur : `mapStaticImages` est appelé
+ * avant *chaque* compilation, or recopier plusieurs Mo d'images scannées dans
+ * la mémoire WASM à chaque frappe ne sert à rien tant que le registre n'a pas
+ * changé (les fichiers virtuels y restent enregistrés).
+ */
+let mappedImageBytes: Map<string, Uint8Array> | null = null
+
 /** Renseigne le registre des images d'exercices statiques (voir `staticImageBytes`) */
 export function setStaticImageBytes(bytes: Map<string, Uint8Array>): void {
   staticImageBytes = bytes
+  mappedImageBytes = null
 }
 
 /** Charge les images d'exercices statiques dans le système de fichiers virtuel du compilateur */
 async function mapStaticImages(): Promise<void> {
   if (staticImageBytes.size === 0) return
+  if (mappedImageBytes === staticImageBytes) return
   const compiler = await $typst.getCompiler()
   for (const [path, bytes] of staticImageBytes) {
     compiler.mapShadow(path, bytes)
   }
+  mappedImageBytes = staticImageBytes
 }
 
 /** Initialisation unique par session (mémorisée par la promesse) */
@@ -134,6 +198,7 @@ let initPromise: Promise<void> | null = null
 function ensureInitialized(): Promise<void> {
   if (initPromise != null) return initPromise
   initPromise = (async () => {
+    purgeOldAssetCaches()
     // polices chargées depuis le cache ; une police manquante est ignorée
     // plutôt que de casser toute la compilation
     const fonts = (
@@ -143,11 +208,22 @@ function ensureInitialized(): Promise<void> {
     ).filter((bytes): bytes is Uint8Array => bytes != null)
 
     $typst.setCompilerInitOptions({
-      getModule: () => cachedBytes(compilerWasmUrl),
-      beforeBuild: [preloadRemoteFonts(fonts)],
+      // la `Response` (et non les octets) autorise `instantiateStreaming` :
+      // voir `cachedResponse`
+      getModule: () => cachedResponse(compilerWasmUrl),
+      beforeBuild: [
+        preloadRemoteFonts(fonts, {
+          assets: TYPST_ASSET_PACKS,
+          // sans ce `fetcher`, typst.ts télécharge les 8,3 Mio de polices
+          // d'assets avec `fetch` nu : elles repartent alors du réseau à
+          // chaque session, hors de notre cache persistant
+          fetcher: ((input: RequestInfo | URL) =>
+            cachedResponse(String(input))) as typeof fetch,
+        }),
+      ],
     })
     $typst.setRendererInitOptions({
-      getModule: () => cachedBytes(rendererWasmUrl),
+      getModule: () => cachedResponse(rendererWasmUrl),
     })
     // Autorise l'import des paquets `@preview` (ex : taskize pour les QCM)
     // depuis packages.typst.org, mis en cache après le premier téléchargement.
