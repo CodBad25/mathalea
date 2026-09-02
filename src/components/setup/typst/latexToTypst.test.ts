@@ -471,6 +471,26 @@ describe('htmlToTypst', () => {
     expect(htmlToTypst('\\faCheckSquare Vrai')).toBe(`${carrePlein} Vrai`)
   })
 
+  it('convertit les macros ProfCollege \\Lg et \\Prix (énoncés CAN)', () => {
+    // canc3a-2023 Q18 : en mode mathématique, `\Lg` deviendrait la variable
+    // Typst inconnue `Lg` (erreur de compilation)
+    const enonce = htmlToTypst(
+      'Si une pile de $12$ pièces a une hauteur de $\\Lg[mm]{24}$,',
+    )
+    expect(enonce).toContain('24')
+    expect(enonce).toContain('mm')
+    expect(enonce).not.toContain('Lg')
+    // et en mode texte, derrière les pointillés à compléter : seule l'unité
+    expect(
+      htmlToTypst('alors une pile de $18$ pièces a une hauteur de $\\ldots$ \\Lg[mm]{}.'),
+    ).toBe('alors une pile de $18$ pièces a une hauteur de $...$ mm.')
+    // `\Prix` : l'argument optionnel est le nombre de décimales, l'unité est €
+    expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$...$ €.')
+    expect(htmlToTypst('coûte $\\Prix[0]{12}$')).toContain('12')
+    expect(htmlToTypst('coûte $\\Prix[0]{12}$')).not.toContain('Prix')
+    expect(htmlToTypst('coûte \\Prix{12.5}')).toBe('coûte 12,50~€')
+  })
+
   it('convertit les boîtes LaTeX en mode texte (énoncés CAN)', () => {
     // can2a-2026 Q12 : un algorithme encadré, écrit en LaTeX texte
     const code = htmlToTypst(
