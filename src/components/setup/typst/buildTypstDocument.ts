@@ -53,10 +53,10 @@ function qrCodeToTypstImage(url: string): string {
  * au `.zip` téléchargé aux côtés du `.typ`.
  *
  * Largeur en pourcentage (relative au conteneur, pas à la page) : elle suit
- * ainsi la largeur de la page de garde sans dépasser en A5, plus étroite
- * qu'en A4, sans code dédié par format.
+ * ainsi la largeur de la page de garde sans dépasser en A5 comme en A4,
+ * sans code dédié par format.
  */
-const MATHALEA_LOGO_IMAGE = `image("${LOGO_CAN_VIRTUAL_PATH}", width: 45%)`
+const MATHALEA_LOGO_IMAGE = `image("${LOGO_CAN_VIRTUAL_PATH}", width: 100%)`
 
 /**
  * Import du paquet exercise-bank (badges Exercice/Correction, banque).

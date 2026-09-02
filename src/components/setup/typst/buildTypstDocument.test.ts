@@ -2207,7 +2207,7 @@ describe('page de garde', () => {
     expect(code).toContain('  nb-questions: 3,')
     // référencé par chemin virtuel (chargé par `Typst.svelte`), pas embarqué
     expect(code).toContain(
-      '#let mathalea-logo = image("/images/logoCan.png", width: 45%)',
+      '#let mathalea-logo = image("/images/logoCan.png", width: 100%)',
     )
     // la page de garde des examens n'a rien à faire dans ce document
     expect(code).not.toContain('#let mathalea-couverture(')
