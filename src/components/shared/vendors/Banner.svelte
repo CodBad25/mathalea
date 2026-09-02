@@ -1,17 +1,10 @@
 <script lang="ts">
-  import { mathaleaGoToView } from '../../../lib/mathaleaUtils'
-  import ButtonIconTooltip from '../forms/ButtonIconTooltip.svelte'
+  import BtnRetourReglages from '../ui/BtnRetourReglages.svelte'
 
   export let brandImagePath: string | null = null
   export let productImagePath: string | null =
     'assets/images/vendors/bordas/myriade-bordas-logo.png'
   export let icon: string = 'bxs-cog'
-
-  function goToVueProf() {
-    window.history.replaceState({}, '', window.location.href)
-    mathaleaGoToView('')
-    window.history.replaceState({}, '', window.location.href)
-  }
 </script>
 
 <div
@@ -30,17 +23,15 @@
         <img class="h-6 lg:h-8" src={brandImagePath} alt="Brand" />
       {/if}
     </div>
-    <ButtonIconTooltip
+    <BtnRetourReglages
       {icon}
-      tooltip="Accéder aux réglages"
+      tooltipPosition="bottom"
       class="hidden lg:block text-3xl"
-      on:click={goToVueProf}
     />
   </div>
-  <ButtonIconTooltip
+  <BtnRetourReglages
     {icon}
-    tooltip="Accéder aux réglages"
+    tooltipPosition="bottom"
     class="block lg:hidden text-3xl"
-    on:click={goToVueProf}
   />
 </div>
