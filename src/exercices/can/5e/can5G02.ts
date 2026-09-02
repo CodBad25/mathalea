@@ -45,9 +45,39 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
     let objets
     const nom = creerNomDePolygone(3, ['QD'])
     const a = this.quotaRandint('a', 8, 14, [12]) * 5
-    const A = pointAbstrait(0, 0, nom[0])
-    const B = pointAbstrait(5, 0, nom[1])
-    const C = pointAbstrait(2.5, 2.5 * degTan(a), nom[2])
+    const hauteur = 2.5 * degTan(a)
+    // On varie l'orientation de la figure pour ne pas toujours présenter la base
+    // horizontale avec les deux angles égaux en bas.
+    let coordA: [number, number] = [0, 0]
+    let coordB: [number, number] = [5, 0]
+    let coordC: [number, number] = [2.5, hauteur]
+    switch (
+      this.quotaChoice('orientation', ['bas', 'droite', 'gauche', 'haut'])
+    ) {
+      case 'haut': // base horizontale, sommet principal au-dessus
+        coordA = [0, 0]
+        coordB = [5, 0]
+        coordC = [2.5, hauteur]
+        break
+      case 'bas': // base horizontale, sommet principal en dessous
+        coordA = [0, 0]
+        coordB = [5, 0]
+        coordC = [2.5, -hauteur]
+        break
+      case 'droite': // base verticale, sommet principal à droite
+        coordA = [0, 0]
+        coordB = [0, 5]
+        coordC = [hauteur, 2.5]
+        break
+      case 'gauche': // base verticale, sommet principal à gauche
+        coordA = [0, 0]
+        coordB = [0, 5]
+        coordC = [-hauteur, 2.5]
+        break
+    }
+    const A = pointAbstrait(coordA[0], coordA[1], nom[0])
+    const B = pointAbstrait(coordB[0], coordB[1], nom[1])
+    const C = pointAbstrait(coordC[0], coordC[1], nom[2])
     const pol = polygoneAvecNom(A, B, C)
 
     switch (this.quotaChoice('typeDeQuestions', ['a', 'b'])) {
