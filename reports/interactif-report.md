@@ -9,5 +9,4 @@ Analyse runtime des exercices modifiés qui exportent `interactifReady = true`.
 
 | Numéro | Fichier | Titre | Tags | Notifications Bugsnag |
 | --- | --- | --- | --- | --- |
-
-_Aucun exercice avec issue._
+| 1 | [src/exercices/TEx/TEC1-21.ts](../src/exercices/TEx/TEC1-21.ts) |  | [erreur-runtime-boucle] (ENOENT: no such file or directory, open '/Users/stephaneguyon/mathalea/src/exercices/TEx/TEC1-21.ts') |  |
