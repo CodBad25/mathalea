@@ -35,7 +35,9 @@
   // Nombre de questions dont la réponse est révélée dans le tableau des
   // réponses, dans l'ordre de `order` (indépendant de `correctionsSteps`,
   // qui ne concerne que le panneau Questions/Réponses).
-  let revealedAnswersCount = 0
+  // On révèle la 1re réponse par défaut : un tableau entièrement masqué
+  // ne laisse pas deviner qu'on peut le dévoiler.
+  let revealedAnswersCount = 1
 
   let nbVues: 0 | 1 | 2 | 3 | 4
   $: {
@@ -133,7 +135,7 @@
     isQuestionsVisible = true
     isCorrectionVisible = false
     correctionsSteps = []
-    revealedAnswersCount = 0
+    revealedAnswersCount = 1
   }
 
   /**
@@ -169,6 +171,18 @@
 
   function showAllAnswers() {
     revealedAnswersCount = order.length
+  }
+
+  function hideAllAnswers() {
+    revealedAnswersCount = 0
+  }
+
+  /**
+   * Révèle les réponses jusqu'à la question de rang `count` (bornes incluses).
+   * Utilisé par les cellules masquées cliquables du tableau des réponses.
+   */
+  function setRevealedAnswersCount(count: number) {
+    revealedAnswersCount = Math.max(0, Math.min(order.length, count))
   }
 
   function zoomUpdate(plusMinus: '+' | '-') {
@@ -231,6 +245,10 @@
           {order}
           {nbVues}
           {revealedAnswersCount}
+          {showAllAnswers}
+          {hideAllAnswers}
+          {setRevealedAnswersCount}
+          {handleAnswersTableStepsClick}
         />
       </div>
       <div

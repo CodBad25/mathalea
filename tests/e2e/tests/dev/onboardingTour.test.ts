@@ -107,8 +107,7 @@ async function testOnboardingTour(page: Page): Promise<boolean> {
   // le même id, d'où le >= 1 plutôt qu'une égalité stricte — cf task_0df5d500)
   await clickNext()
   await waitForStepTitle('L’exercice sélectionné')
-  const exercice0 = await page.locator('#exercice0').count()
-  if (exercice0 < 1) throw new Error("l'exercice 3L11 n'a pas été ajouté")
+  await waitForExercice(0, '3L11')
 
   // Étape 5/13 : panneau « Forme de développement »
   await clickNext()
@@ -119,10 +118,21 @@ async function testOnboardingTour(page: Page): Promise<boolean> {
   // évidence « Course aux nombres »
   await clickNext()
   await waitForStepTitle('Course aux nombres')
-  const nbQuestions = await page.inputValue('#settings-nb-questions-0')
-  const poidsForme1 = await page.inputValue(
-    '#settings-formTextListe3-0-1-poids',
+  // Le poids d'apparition n'est plus un champ numérique mais un compteur réglé
+  // par des boutons « + » / « − » : on lit la valeur affichée. Le réglage se
+  // fait par clics successifs (asynchrones) côté visite, d'où l'attente.
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('#settings-formTextListe3-0-1-poids')
+        ?.textContent?.trim() === '3',
+    undefined,
+    { timeout: 15_000 },
   )
+  const nbQuestions = await page.inputValue('#settings-nb-questions-0')
+  const poidsForme1 = (
+    await page.locator('#settings-formTextListe3-0-1-poids').textContent()
+  )?.trim()
   const forme2Cochee = await page.isChecked('#settings-formTextListe3-0-2')
   // 3L11 démarre sur « Mélange » : la démo doit avoir décoché les autres formes,
   // sinon les proportions annoncées (¾ / ¼) seraient fausses
@@ -161,8 +171,7 @@ async function testOnboardingTour(page: Page): Promise<boolean> {
   // Étape 10/13 : clic ajoute 4G20 (index 1), puis explique Ctrl+K
   await clickNext()
   await waitForStepTitle('Un raccourci pour aller plus vite')
-  const exercice1 = await page.locator('#exercice1').count()
-  if (exercice1 < 1) throw new Error("l'exercice 4G20 n'a pas été ajouté")
+  await waitForExercice(1, '4G20')
 
   // Étape 11/13 : ouvre la modale Ctrl+K, cherche « Pythagore ». On met en
   // évidence tout le conteneur de résultats plutôt qu'un aperçu de brevet

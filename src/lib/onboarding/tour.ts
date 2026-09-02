@@ -68,11 +68,33 @@ function setCheckbox(selecteur: string, coche: boolean): void {
   input.dispatchEvent(new Event('change', { bubbles: true }))
 }
 
-/** Règle un champ numérique du panneau de paramètres (poids d'apparition). */
-function setNumberInput(selecteur: string, value: string): void {
-  const input = document.querySelector<HTMLInputElement>(selecteur)
-  if (input === null) return
-  fillInput(input, value)
+/**
+ * Porte le poids d'apparition d'un cas du panneau de paramètres à
+ * `poidsCible`. Le poids ne se règle plus par un champ numérique mais avec un
+ * bouton « + » (cf `ListePondereeItems.svelte`) ; chaque clic n'est répercuté
+ * qu'au cycle de rendu Svelte suivant, donc on relit le poids réellement
+ * affiché avant chaque nouveau clic, puis on appelle `apres` une fois la
+ * cible atteinte.
+ */
+function augmentePoidsCase(
+  selecteurCase: string,
+  poidsCible: number,
+  apres: () => void,
+): void {
+  const ligne = document
+    .querySelector<HTMLInputElement>(selecteurCase)
+    ?.closest('div')
+  const poidsAffiche = Number(
+    document.querySelector(`${selecteurCase}-poids`)?.textContent ?? '0',
+  )
+  if (ligne == null || poidsAffiche >= poidsCible) {
+    apres()
+    return
+  }
+  ligne
+    .querySelector<HTMLButtonElement>('button[aria-label^="Augmenter le poids"]')
+    ?.click()
+  setTimeout(() => augmentePoidsCase(selecteurCase, poidsCible, apres), 30)
 }
 
 /**
@@ -150,9 +172,11 @@ function undoAddExerciseDemo(): void {
  * Étape 5 → 6 : règle le nombre de questions à 4, puis coche la première forme
  * de développement avec un poids de 3 et la deuxième avec un poids de 1, pour
  * illustrer concrètement le mécanisme (3 questions sous la forme 1, 1 question
- * sous la forme 2).
+ * sous la forme 2). Le réglage du poids passe par des clics successifs sur le
+ * bouton « + » (asynchrones), d'où le `apres` appelé une fois le poids 3
+ * atteint.
  */
-function playFormeDeveloppementDemo(): void {
+function playFormeDeveloppementDemo(apres: () => void): void {
   const nbQuestionsInput = document.querySelector<HTMLInputElement>(
     `#settings-nb-questions-${demoExerciseIndex}`,
   )
@@ -163,8 +187,8 @@ function playFormeDeveloppementDemo(): void {
   for (const forme of [3, 4, 5, 6]) setCheckbox(`${liste}-${forme}`, false)
   setCheckbox(`${liste}-1`, true)
   setCheckbox(`${liste}-2`, true)
-  // Le champ de poids n'est actif qu'une fois la case cochée.
-  setNumberInput(`${liste}-1-poids`, '3')
+  // Cocher la case pose le poids à 1 ; on clique « + » jusqu'à 3.
+  augmentePoidsCase(`${liste}-1`, 3, apres)
 }
 
 /**
@@ -416,9 +440,8 @@ export function startTour(): void {
           align: 'start',
           onNextClick: (_element, _step, opts) => {
             withNavGuard(() => {
-              playFormeDeveloppementDemo()
               clearSearchInput()
-              moveNextAfterRender(opts.driver)
+              playFormeDeveloppementDemo(() => moveNextAfterRender(opts.driver))
             })
           },
         },

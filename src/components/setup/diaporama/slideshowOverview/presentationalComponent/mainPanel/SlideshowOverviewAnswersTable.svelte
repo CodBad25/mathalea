@@ -17,6 +17,14 @@
   export let order: number[]
   export let nbVues: number
   export let revealedAnswersCount: number
+  export let showAllAnswers: () => void
+  export let hideAllAnswers: () => void
+  export let setRevealedAnswersCount: (count: number) => void
+  export let handleAnswersTableStepsClick: (
+    button: 'backward' | 'forward',
+  ) => void
+
+  $: toutesReponsesRevelees = revealedAnswersCount >= order.length
 
   let zoom = ZOOM_PAR_DEFAUT
   let largeurConteneur = 0
@@ -59,11 +67,62 @@
 </div>
 
 <div class="flex flex-col w-full min-w-0" style="font-size: {zoom}rem">
-  <div
-    class="p-6 pb-2 text-4xl font-black
-    text-coopmaths-struct dark:text-coopmathsdark-struct"
-  >
-    Tableau des réponses
+  <div class="p-6 pb-2 flex flex-row flex-wrap items-center gap-x-6 gap-y-3">
+    <span
+      class="text-4xl font-black
+      text-coopmaths-struct dark:text-coopmathsdark-struct"
+    >
+      Tableau des réponses
+    </span>
+    <!-- Contrôles de révélation, répétés ici (en plus du panneau latéral) :
+    projetés en classe, le regard est sur le tableau, pas sur la bande de
+    gauche. -->
+    <div class="flex flex-row items-center gap-4 text-base">
+      <button
+        type="button"
+        class="flex flex-row items-center gap-1.5 px-3 py-1.5 rounded
+        font-bold cursor-pointer
+        bg-coopmaths-action dark:bg-coopmathsdark-action
+        text-coopmaths-canvas dark:text-coopmathsdark-canvas
+        hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest"
+        on:click={() =>
+          toutesReponsesRevelees ? hideAllAnswers() : showAllAnswers()}
+      >
+        <i class="bx {toutesReponsesRevelees ? 'bx-hide' : 'bx-show'}"></i>
+        {toutesReponsesRevelees ? 'Tout masquer' : 'Tout afficher'}
+      </button>
+      <div
+        class="flex flex-row items-center gap-2
+        text-coopmaths-action dark:text-coopmathsdark-action"
+      >
+        <button
+          type="button"
+          aria-label="Masquer la dernière réponse"
+          class="cursor-pointer disabled:opacity-30 disabled:cursor-default
+          hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
+          disabled={revealedAnswersCount === 0}
+          on:click={() => handleAnswersTableStepsClick('backward')}
+        >
+          <i class="bx bxs-left-arrow"></i>
+        </button>
+        <span
+          class="tabular-nums font-bold text-sm
+          text-coopmaths-struct dark:text-coopmathsdark-struct"
+        >
+          {revealedAnswersCount} / {order.length}
+        </span>
+        <button
+          type="button"
+          aria-label="Révéler la réponse suivante"
+          class="cursor-pointer disabled:opacity-30 disabled:cursor-default
+          hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
+          disabled={toutesReponsesRevelees}
+          on:click={() => handleAnswersTableStepsClick('forward')}
+        >
+          <i class="bx bxs-right-arrow"></i>
+        </button>
+      </div>
+    </div>
   </div>
   <div
     class="mt-2 mx-2 lg:mx-6 overflow-x-auto"
@@ -111,11 +170,23 @@
                   {@const vue = slides[slideIndex].vues[vueIndex]}
                   <td class="px-4 py-3 align-top">
                     {#if numeroQuestion >= revealedAnswersCount}
-                      <span
-                        class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
+                      <button
+                        type="button"
+                        class="group flex flex-row items-center gap-1.5 cursor-pointer
+                        text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light
+                        hover:text-coopmaths-action dark:hover:text-coopmathsdark-action"
+                        aria-label="Révéler les réponses jusqu'à la question {numeroQuestion +
+                          1}"
+                        title="Cliquer pour révéler"
+                        on:click={() =>
+                          setRevealedAnswersCount(numeroQuestion + 1)}
                       >
-                        ···
-                      </span>
+                        <span>···</span>
+                        <i
+                          class="bx bx-show text-[0.7em]
+                          opacity-0 group-hover:opacity-100"
+                        ></i>
+                      </button>
                     {:else if vue === undefined || (vue.lettresQcm.length === 0 && vue.reponsesCourtes.length === 0)}
                       <span
                         class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
