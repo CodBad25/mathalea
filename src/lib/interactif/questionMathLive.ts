@@ -281,7 +281,8 @@ export function remplisLesBlancs(
   let mfeValue = ''
   let resteContent = content
   while (resteContent) {
-    const chunks = /^(.*?)%\{([^}]+)}(.*?)$/.exec(resteContent)
+    // le drapeau `s` permet de gérer un contenu multi-ligne (ex : \begin{aligned}…)
+    const chunks = /^(.*?)%\{([^}]+)}(.*?)$/s.exec(resteContent)
     if (chunks) {
       const [, start, n, end] = chunks
       const name = n
