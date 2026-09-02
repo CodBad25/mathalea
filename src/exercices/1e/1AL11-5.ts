@@ -56,7 +56,6 @@ export default class SuitesRaison extends Exercice {
   nouvelleVersion() {
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
       max: 4,
       melange: 5,
       defaut: 5,
