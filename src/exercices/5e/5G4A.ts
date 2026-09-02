@@ -3,9 +3,11 @@ import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { TexteSurArc, texteSurArc } from '../../lib/2d/TexteSurArc'
 import { homothetie, rotation, translation } from '../../lib/2d/transformations'
+import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
@@ -28,7 +30,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Effectuer des liens entre angles et parallélisme'
 export const dateDePublication = '15/01/2022'
-export const dateDeModifImportante = '24/12/2025'
+export const dateDeModifImportante = '02/09/2026'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
@@ -77,11 +79,13 @@ function anglesSecantes(
   rot: AngleParams = { O: 60, A: 0 },
 ): AnglesSecantesResult {
   const s = rotation(translation(A, vecteur(1, 0)), A, rot.A)
-  const S = rotation(translation(A, vecteur(3, 0)), A, rot.A)
+  // Les points S, T, X, OX ne servent qu'à placer les noms des directions/points :
+  // on les éloigne du sommet pour que les labels soient vraiment « au bout » des droites.
+  const S = rotation(translation(A, vecteur(4, 0)), A, rot.A)
   const t = rotation(s, A, 180)
   const T = rotation(S, A, 180)
   const x = rotation(translation(A, vecteur(1, 0)), A, rot.O)
-  const X = rotation(translation(A, vecteur(3, 0)), A, rot.O)
+  const X = rotation(translation(A, vecteur(4, 0)), A, rot.O)
   const Ox = rotation(x, A, 180)
   const OX = rotation(X, A, 180)
   return {
@@ -136,6 +140,67 @@ function anglesSecantes(
 }
 
 /**
+ * Nomme les extrémités des deux droites sécantes.
+ * - `parPoints === false` (comportement historique) : les demi-droites libres sont
+ *   repérées par des directions en minuscules (s, t, u, …), les sommets par des points.
+ * - `parPoints === true` : toutes les extrémités sont repérées par des points en
+ *   MAJUSCULES (les angles sont alors nommés uniquement avec des points).
+ */
+function nommeExtremites(
+  anglesA: AnglesSecantesResult,
+  anglesB: AnglesSecantesResult,
+  parPoints: boolean,
+) {
+  if (parPoints) {
+    const noms = aleaName(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K'], 8)
+    anglesA.A.nom = noms[0]
+    anglesB.A.nom = noms[1]
+    anglesA.S.nom = noms[2]
+    anglesA.T.nom = noms[3]
+    anglesA.X.nom = noms[4]
+    anglesB.S.nom = noms[5]
+    anglesB.T.nom = noms[6]
+    anglesB.OX.nom = noms[7]
+  } else {
+    const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
+    anglesA.A.nom = nomsPoints[0]
+    anglesB.A.nom = nomsPoints[1]
+    const nomsDirections = aleaName(['s', 't', 'u', 'v', 'x', 'y'], 6)
+    anglesA.S.nom = nomsDirections[0]
+    anglesA.T.nom = nomsDirections[1]
+    anglesA.X.nom = nomsDirections[2]
+    anglesB.S.nom = nomsDirections[3]
+    anglesB.T.nom = nomsDirections[4]
+    anglesB.OX.nom = nomsDirections[5]
+  }
+  // Ces deux extrémités sont sur la sécante : elles portent le nom du sommet opposé.
+  anglesA.OX.nom = anglesB.A.nom
+  anglesB.X.nom = anglesA.A.nom
+}
+
+/**
+ * Petits traits perpendiculaires tracés sur les droites, au niveau de chaque
+ * extrémité nommée, pour indiquer la position exacte du point (mode « points »).
+ */
+function traitsPositionExtremites(
+  anglesA: AnglesSecantesResult,
+  anglesB: AnglesSecantesResult,
+) {
+  const paires: Array<[PointAbstrait, PointAbstrait]> = [
+    [anglesA.A, anglesA.S],
+    [anglesA.A, anglesA.T],
+    [anglesA.A, anglesA.X],
+    [anglesB.A, anglesB.S],
+    [anglesB.A, anglesB.T],
+    [anglesB.A, anglesB.OX],
+  ]
+  return paires.map(([sommet, extremite]) => {
+    const M = pointSurSegment(extremite, sommet, 0.35)
+    return segment(rotation(M, extremite, 90), rotation(M, extremite, -90))
+  })
+}
+
+/**
  * Effectuer des liens entre angles et parallélisme
  * @author Frédéric PIOU
  * rendu interactif par Guillaume Valmont le 21/01/2024
@@ -167,6 +232,11 @@ export default class ExercicesAnglesAIC extends Exercice {
       'Type de questions',
       'Nombres séparés par des tirets :\n' + formulaire.join('\n'),
     ]
+    this.besoinFormulaire2CaseACocher = [
+      'Nommer les angles uniquement avec des points (au lieu des directions de droites)',
+      false,
+    ]
+    this.sup2 = false
 
     this.nbCols = 2
     this.nbColsCorr = 2
@@ -186,6 +256,7 @@ export default class ExercicesAnglesAIC extends Exercice {
       nbQuestions: this.nbQuestions,
       shuffle: true,
     })
+    const nommerParPoints = this.sup2 === true || this.sup2 === 'true'
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       // Boucle principale où i+1 correspond au numéro de la question
@@ -1190,18 +1261,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
-          const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
-          anglesA.A.nom = nomsPoints[0]
-          anglesB.A.nom = nomsPoints[1]
-          const nomsDirections = aleaName(['s', 't', 'u', 'v', 'x', 'y'], 6)
-          anglesA.S.nom = nomsDirections[0]
-          anglesA.T.nom = nomsDirections[1]
-          anglesA.X.nom = nomsDirections[2]
-          anglesA.OX.nom = anglesB.A.nom
-          anglesB.S.nom = nomsDirections[3]
-          anglesB.T.nom = nomsDirections[4]
-          anglesB.OX.nom = nomsDirections[5]
-          anglesB.X.nom = anglesA.A.nom
+          nommeExtremites(anglesA, anglesB, nommerParPoints)
           const nameAngles = [
             'S A X'.split(' '),
             'X A T'.split(' '),
@@ -1258,8 +1318,12 @@ export default class ExercicesAnglesAIC extends Exercice {
             labelPoint(anglesA.A),
             labelPoint(anglesB.A),
           )
+          if (nommerParPoints) {
+            objetsEnonce.push(...traitsPositionExtremites(anglesA, anglesB))
+          }
           const paramsEnonce = fixeBordures(
             [
+              ...objetsEnonce,
               ...Object.keys(anglesA).map((key) => {
                 return anglesA[key]
               }),
@@ -1376,18 +1440,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
-          const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
-          anglesA.A.nom = nomsPoints[0]
-          anglesB.A.nom = nomsPoints[1]
-          const nomsDirections = aleaName(['s', 't', 'u', 'v', 'x', 'y'], 6)
-          anglesA.S.nom = nomsDirections[0]
-          anglesA.T.nom = nomsDirections[1]
-          anglesA.X.nom = nomsDirections[2]
-          anglesA.OX.nom = anglesB.A.nom
-          anglesB.S.nom = nomsDirections[3]
-          anglesB.T.nom = nomsDirections[4]
-          anglesB.OX.nom = nomsDirections[5]
-          anglesB.X.nom = anglesA.A.nom
+          nommeExtremites(anglesA, anglesB, nommerParPoints)
           const nameAngles = [
             'S A X'.split(' '),
             'X A T'.split(' '),
@@ -1508,6 +1561,9 @@ export default class ExercicesAnglesAIC extends Exercice {
             labelPoint(anglesA.A),
             labelPoint(anglesB.A),
           )
+          if (nommerParPoints) {
+            objetsEnonce.push(...traitsPositionExtremites(anglesA, anglesB))
+          }
           objetsEnonce.forEach((objet) => {
             objetsCorrection.push(objet)
           })
@@ -1600,6 +1656,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           }
 
           const paramsEnonce = fixeBordures([
+            ...objetsEnonce,
             ...Object.keys(anglesA).map((key) => {
               return anglesA[key]
             }),
@@ -1705,18 +1762,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
-          const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
-          anglesA.A.nom = nomsPoints[0]
-          anglesB.A.nom = nomsPoints[1]
-          const nomsDirections = aleaName(['s', 't', 'u', 'v', 'x', 'y'], 6)
-          anglesA.S.nom = nomsDirections[0]
-          anglesA.T.nom = nomsDirections[1]
-          anglesA.X.nom = nomsDirections[2]
-          anglesA.OX.nom = anglesB.A.nom
-          anglesB.S.nom = nomsDirections[3]
-          anglesB.T.nom = nomsDirections[4]
-          anglesB.OX.nom = nomsDirections[5]
-          anglesB.X.nom = anglesA.A.nom
+          nommeExtremites(anglesA, anglesB, nommerParPoints)
           const nameAngles = [
             'S A X'.split(' '),
             'X A T'.split(' '),
@@ -1836,6 +1882,9 @@ export default class ExercicesAnglesAIC extends Exercice {
             labelPoint(anglesB.A),
             // anglesB['label' + b]
           )
+          if (nommerParPoints) {
+            objetsEnonce.push(...traitsPositionExtremites(anglesA, anglesB))
+          }
           objetsEnonce.forEach((objet) => {
             objetsCorrection.push(objet)
           })
@@ -1957,6 +2006,7 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
           }
           const paramsEnonce = fixeBordures([
+            ...objetsEnonce,
             ...Object.keys(anglesA).map((key) => {
               return anglesA[key]
             }),
