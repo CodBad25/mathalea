@@ -9,6 +9,9 @@ import {
   MATHALEA_QCM_HELPERS,
   MATHALEA_TASKS_HELPER,
   MATHALEA_SCHEMA_HELPER,
+  DEFAULT_QCM_COLUMNS,
+  QCM_COLUMNS_FROM_CONTENT,
+  QCM_FIGURES_MARKER,
   TASKIZE_IMPORT,
   VARTABLE_IMPORT,
   escapeTypstText,
@@ -404,14 +407,6 @@ export const MATHALEA_COVER_RECITATION_HELPER = `#let mathalea-couverture-recita
     // grille trop large pour laisser de quoi écrire à côté : elle prend sa
     // propre ligne, sous les champs
     let pleine-ligne = largeur > size.width * 0.6
-    // sinon, la note se pose à droite des consignes — dans le blanc laissé
-    // sous la grille — quand leur longueur naturelle lui laisse la place
-    let note-avec-consignes = (
-      case-note != none
-        and liste-consignes != none
-        and (not pleine-ligne or not signature)
-        and measure(liste-consignes).width + measure(case-note).width + 20pt <= size.width
-    )
     // sans signature, une grille sur sa propre ligne peut partager cette
     // ligne avec la note tant que leurs largeurs naturelles tiennent ensemble
     let note-avec-points = (
@@ -420,6 +415,18 @@ export const MATHALEA_COVER_RECITATION_HELPER = `#let mathalea-couverture-recita
         and points != none
         and case-note != none
         and largeur + measure(case-note).width + 20pt <= size.width
+    )
+    // sinon, la note se pose à droite des consignes — dans le blanc laissé
+    // sous la grille — quand leur longueur naturelle lui laisse la place.
+    // le test not note-avec-points est indispensable : les deux emplacements
+    // sont compatibles (grille pleine ligne, sans signature, tout tenant en
+    // largeur) et la note serait alors dessinée deux fois.
+    let note-avec-consignes = (
+      case-note != none
+        and liste-consignes != none
+        and not note-avec-points
+        and (not pleine-ligne or not signature)
+        and measure(liste-consignes).width + measure(case-note).width + 20pt <= size.width
     )
     if points != none or case-note != none {
       if pleine-ligne {
@@ -784,18 +791,43 @@ export function detectUsedFeatures(lines: string[]): {
   }
 }
 
+/**
+ * Préfixes (`ex1-qcm`, `ex2-corr-qcm`) des QCM dont au moins une proposition
+ * est une figure, repérés par le marqueur posé sur leur `#tasks(...)` par
+ * `qcmToTypst`. Leur valeur par défaut est 1 colonne, pas `"auto-fit"`.
+ */
+function qcmFigureTasksPrefixes(code: string | string[]): Set<string> {
+  const lines = Array.isArray(code) ? code : code.split('\n')
+  return new Set(
+    lines
+      .filter((line) => line.includes(QCM_FIGURES_MARKER))
+      .flatMap((line) => [
+        ...line.matchAll(/#tasks\(columns: (ex\d+(?:-corr)?-qcm)-colonnes/g),
+      ])
+      .map((match) => match[1]),
+  )
+}
+
 /** Extrait du code Typst courant les réglages de la palette à conserver */
 export function harvestCarryOver(code: string): TypstCarryOver {
   const tasksLayout: Record<string, { columns?: string; gutter?: string }> = {}
+  // un QCM à figures est déclaré à 1 colonne par défaut (voir `qcmHasFigure`) :
+  // cette valeur-là n'est pas un réglage du professeur et ne doit pas être
+  // figée dans le carry-over, sans quoi le choix par contenu ne s'appliquerait
+  // qu'à la toute première génération
+  const qcmFigurePrefixes = qcmFigureTasksPrefixes(code)
   for (const match of code.matchAll(
-    /^#let (ex\d+(?:-corr)?)-colonnes = (.+?)\s*$/gm,
+    /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
   )) {
-    if (match[2] !== DEFAULT_TASKS_COLUMNS) {
+    const defaultColumns = qcmFigurePrefixes.has(match[1])
+      ? '1'
+      : DEFAULT_TASKS_COLUMNS
+    if (match[2] !== defaultColumns) {
       tasksLayout[match[1]] = { ...tasksLayout[match[1]], columns: match[2] }
     }
   }
   for (const match of code.matchAll(
-    /^#let (ex\d+(?:-corr)?)-gutter = (.+?)\s*$/gm,
+    /^#let (ex\d+(?:-corr)?(?:-qcm)?)-gutter = (.+?)\s*$/gm,
   )) {
     if (match[2] !== 'interligne-questions') {
       tasksLayout[match[1]] = { ...tasksLayout[match[1]], gutter: match[2] }
@@ -1516,6 +1548,8 @@ function exerciseBody(
   exportMode = false,
   /** Réglages de colonnes/espacement de la palette pour cet exercice, déjà résolus par l'appelant */
   layoutOverride?: { columns?: string; gutter?: string },
+  /** Colonnes des propositions de QCM de cet exercice (palette), déjà résolues par l'appelant */
+  qcmLayoutOverride?: { columns?: string },
   /**
    * Variable Typst (`exo-N-zoom` ou `exo-N-corr-zoom`), fournie uniquement
    * pour un énoncé/correction statique sans source `.typ`/`_cor.typ` (image
@@ -1523,9 +1557,21 @@ function exerciseBody(
    */
   zoomVariable?: string,
 ): ExerciseBodyResult {
+  // Colonnes des propositions de QCM : réglables par exercice depuis la
+  // palette (`#let ex1-qcm-colonnes`), comme les colonnes des questions. En
+  // mode export la valeur est écrite littéralement dans le `#tasks(...)`,
+  // ces variables de plomberie n'ayant pas de sens hors de l'éditeur intégré.
+  const qcmColumnsExpr =
+    tasksPrefix == null
+      ? DEFAULT_QCM_COLUMNS
+      : exportMode
+        ? (qcmLayoutOverride?.columns ?? QCM_COLUMNS_FROM_CONTENT)
+        : `${tasksPrefix}-qcm-colonnes`
   const parts: string[] = []
   if (intro.trim().length > 0) {
-    parts.push(htmlToTypst(intro, figures, zoomVariable))
+    parts.push(
+      htmlToTypst(intro, figures, zoomVariable, undefined, qcmColumnsExpr),
+    )
   }
   let questionList = questions
   let label = numbered ? '"1."' : 'none'
@@ -1535,7 +1581,13 @@ function exerciseBody(
     const split = splitSubQuestions(questions[0])
     if (split != null) {
       if (split.head.trim().length > 0) {
-        const head = htmlToTypst(split.head, figures, zoomVariable)
+        const head = htmlToTypst(
+          split.head,
+          figures,
+          zoomVariable,
+          undefined,
+          qcmColumnsExpr,
+        )
         if (head.length > 0) {
           parts.push(head)
         }
@@ -1545,7 +1597,9 @@ function exerciseBody(
     }
   }
   const converted = questionList
-    .map((question) => htmlToTypst(question, figures, zoomVariable))
+    .map((question) =>
+      htmlToTypst(question, figures, zoomVariable, undefined, qcmColumnsExpr),
+    )
     .filter((question) => question.length > 0)
   // une liste d'au moins deux questions est mise dans un environnement
   // `tasks` : le nombre de colonnes et l'espacement sont réglables par
@@ -1595,8 +1649,19 @@ function exerciseBody(
     }
   }
   parts.push(...converted)
+  // Pas de liste `tasks`, donc pas de repère émis plus haut : un exercice à
+  // question unique dont l'énoncé contient un QCM en a pourtant besoin, sinon
+  // la palette n'a nulle part où afficher son réglage de colonnes.
+  const body = appendEndOfExerciseLines(parts.join('\n\n'), writingLines)
+  const anchorLine =
+    emitAnchor &&
+    !exportMode &&
+    tasksPrefix != null &&
+    body.includes(qcmColumnsExpr)
+      ? `#mathalea-anchor("${tasksPrefix.endsWith('-corr') ? 'tasks-corr' : 'tasks'}", ${parseInt(tasksPrefix.slice(2), 10)})\n`
+      : ''
   return {
-    code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
+    code: anchorLine + body,
     itemCount: 0,
   }
 }
@@ -1760,6 +1825,7 @@ function computeGeneratedExercises(
       writingLines,
       exportMode,
       carryOver.tasksLayout?.[`ex${k + 1}`],
+      carryOver.tasksLayout?.[`ex${k + 1}-qcm`],
       enonceZoomVariable,
     )
     nextStart += enonce.itemCount
@@ -1781,6 +1847,7 @@ function computeGeneratedExercises(
         undefined,
         exportMode,
         carryOver.tasksLayout?.[`ex${k + 1}-corr`],
+        carryOver.tasksLayout?.[`ex${k + 1}-corr-qcm`],
         correctionZoomVariable,
       )
       nextCorrectionStart += body.itemCount
@@ -1915,6 +1982,8 @@ export function buildStandaloneExerciseCode(
   lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
   lines.push(`#let taille-texte = ${options.fontSize}pt`)
   if (usesQcm) {
+    // Repli des chemins sans réglage par exercice (tableau « Course aux
+    // nombres ») : la fiche, elle, passe `exN-qcm-colonnes` (voir `exerciseBody`)
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
   }
   if (usesTasks) {
@@ -2697,13 +2766,18 @@ export function buildTypstDocument(
   // paquet `ctz-euclide` des figures d'annales géométriques (CTZ_EUCLIDE_IMPORT)
   const usesCtz = allLines.some((line) => line.includes('ctz-'))
   const usesCetzPlotChart = allLines.some((line) => line.includes('chart.'))
+  // QCM dont au moins une proposition est une figure : une seule colonne par
+  // défaut, la seule largeur qui les garde lisibles (voir `qcmHasFigure`)
+  const qcmFigurePrefixes = qcmFigureTasksPrefixes(allLines)
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
     ...new Set(
       allLines
         .flatMap((line) => [
-          ...line.matchAll(/#tasks\(columns: (ex\d+(?:-corr)?)-colonnes/g),
+          ...line.matchAll(
+            /#tasks\(columns: (ex\d+(?:-corr)?(?:-qcm)?)-colonnes/g,
+          ),
         ])
         .map((m) => m[1]),
     ),
@@ -2822,6 +2896,8 @@ export function buildTypstDocument(
   lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
   lines.push(`#let taille-texte = ${options.fontSize}pt`)
   if (usesQcm) {
+    // Repli des chemins sans réglage par exercice (tableau « Course aux
+    // nombres ») : la fiche, elle, passe `exN-qcm-colonnes` (voir `exerciseBody`)
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
   }
   // réglage par défaut de "auto-fit" (colonnes/espacement littéraux du mode
@@ -2850,11 +2926,22 @@ export function buildTypstDocument(
     lines.push(
       '// remplacez interligne-questions par une valeur pour en dévier.',
     )
+    if (tasksPrefixes.some((prefix) => prefix.endsWith('-qcm'))) {
+      lines.push(
+        '// Les propositions de QCM (suffixe -qcm) ont leurs propres colonnes.',
+      )
+    }
     for (const prefix of tasksPrefixes) {
       const layout = stableCarryOver.tasksLayout?.[prefix]
+      const defaultColumns = qcmFigurePrefixes.has(prefix)
+        ? '1'
+        : DEFAULT_TASKS_COLUMNS
       lines.push(
-        `#let ${prefix}-colonnes = ${layout?.columns ?? DEFAULT_TASKS_COLUMNS}`,
+        `#let ${prefix}-colonnes = ${layout?.columns ?? defaultColumns}`,
       )
+      // les propositions de QCM n'ont pas de `row-gutter` (elles gardent
+      // l'espacement du paquet taskize) : pas de variable à déclarer
+      if (prefix.endsWith('-qcm')) continue
       lines.push(
         `#let ${prefix}-gutter = ${layout?.gutter ?? 'interligne-questions'}`,
       )
@@ -3012,6 +3099,13 @@ export function buildTypstDocument(
   }
   lines.push(...bankLines)
   lines.push('')
+  // Repère de début de sujet : l'aperçu ne compile que le sujet montré (voir
+  // `previewCode` dans `Typst.svelte`). La mise en page est l'essentiel du
+  // temps d'attente et croît plus vite que le nombre de pages : sur une fiche
+  // à deux sujets, n'en compiler qu'un fait plus que diviser l'attente par
+  // deux. C'est un commentaire : le document reste identique pour l'export et
+  // la compilation CLI.
+  if (totalVersions > 1) lines.push(subjectMarker(0))
   if (coverLines.length > 0) {
     // repère du bloc de couverture : la palette de l'aperçu propose d'y
     // modifier titre, session, matière, durée et consignes (sans objet en
@@ -3037,6 +3131,7 @@ export function buildTypstDocument(
   lines.push('')
   lines.push(...primary.renderLines)
   for (const [i, version] of extra.entries()) {
+    lines.push(subjectMarker(i + 1))
     lines.push('#pagebreak(weak: true)')
     // chaque sujet recommence sa propre pagination et sa numérotation
     // d'exercices (compteur global du paquet exercise-bank)
@@ -3056,6 +3151,19 @@ export function buildTypstDocument(
 
   return lines.join('\n')
 }
+
+/**
+ * Marqueur (commentaire Typst) ouvrant le bloc d'un sujet. `previewCode`
+ * (`Typst.svelte`) s'en sert pour ne compiler qu'un sujet dans l'aperçu ; il
+ * n'apparaît que sur une fiche à plusieurs sujets et n'a aucun effet sur le
+ * rendu. Le numéro est l'indice du sujet (0 = Sujet A).
+ */
+export function subjectMarker(num: number): string {
+  return `// mathalea:sujet(${num})`
+}
+
+/** Repère un marqueur de sujet et en extrait le numéro */
+export const SUBJECT_MARKER_PATTERN = /^\/\/ mathalea:sujet\((\d+)\)\s*$/
 
 /** Chaîne littérale Typst (échappe backslash et guillemets) */
 function typstString(text: string): string {

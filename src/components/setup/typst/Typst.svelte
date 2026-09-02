@@ -43,6 +43,7 @@
     INSERTION_CORRECTION_TAG,
     INSERTION_TAG,
     MATH_FONTS,
+    SUBJECT_MARKER_PATTERN,
     TEXT_FONTS,
     buildStandaloneExerciseCode,
     buildTypstDocument,
@@ -87,7 +88,10 @@
     type PreviewPageGeometry,
   } from '../shared/typstPreview'
   import { typstLanguage } from './editor/typstLanguage'
-  import { hasSeenTypstTour, startTypstTour } from '../../../lib/onboarding/typstTour'
+  import {
+    hasSeenTypstTour,
+    startTypstTour,
+  } from '../../../lib/onboarding/typstTour'
   import BugReportModal from '../../shared/exercice/shared/BugReportModal.svelte'
 
   /** Libellés des habillages d'en-tête */
@@ -328,7 +332,9 @@
           ? cover.showSignature
           : fallback.showSignature,
       showNote:
-        typeof cover.showNote === 'boolean' ? cover.showNote : fallback.showNote,
+        typeof cover.showNote === 'boolean'
+          ? cover.showNote
+          : fallback.showNote,
     }
   }
 
@@ -877,7 +883,7 @@
       gutter: 'interligne-questions',
     })
     for (const match of code.matchAll(
-      /^#let (ex\d+(?:-corr)?)-colonnes = (.+?)\s*$/gm,
+      /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
     )) {
       const value = match[2].trim()
       ;(values[match[1]] ??= defaults()).columns = /^\d+$/.test(value)
@@ -885,7 +891,7 @@
         : value
     }
     for (const match of code.matchAll(
-      /^#let (ex\d+(?:-corr)?)-gutter = (\S+)/gm,
+      /^#let (ex\d+(?:-corr)?(?:-qcm)?)-gutter = (\S+)/gm,
     )) {
       ;(values[match[1]] ??= defaults()).gutter = match[2]
     }
@@ -1216,7 +1222,7 @@
     persistPreferences()
     const code = buildCode()
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /**
@@ -1232,7 +1238,7 @@
     for (const [prefix, layout] of Object.entries(
       carryOver.tasksLayout ?? {},
     )) {
-      const match = prefix.match(/^ex(\d+)(-corr)?$/)
+      const match = prefix.match(/^ex(\d+)((?:-corr)?(?:-qcm)?)$/)
       if (match == null) continue
       const n = Number(match[1])
       if (n === removed) continue
@@ -1342,7 +1348,7 @@
     for (const [prefix, layout] of Object.entries(
       carryOver.tasksLayout ?? {},
     )) {
-      const match = prefix.match(/^ex(\d+)(-corr)?$/)
+      const match = prefix.match(/^ex(\d+)((?:-corr)?(?:-qcm)?)$/)
       if (match == null) continue
       const n = Number(match[1])
       const suffix = match[2] ?? ''
@@ -1399,11 +1405,7 @@
       // exercice non chargeable : buildInputs signalera l'avertissement
       exercise = null
     }
-    exercises = [
-      ...exercises.slice(0, num),
-      exercise,
-      ...exercises.slice(num),
-    ]
+    exercises = [...exercises.slice(0, num), exercise, ...exercises.slice(num)]
     insertCoverBaremeRow(num)
     persistPreferences()
     exercicesParams.update((list) => [
@@ -1424,7 +1426,7 @@
       },
     )
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /** Retire l'exercice num de la fiche et régénère le code */
@@ -1452,7 +1454,7 @@
       },
     )
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /** Modale « Ajouter un exercice » (navigation dans les référentiels) */
@@ -1496,7 +1498,7 @@
     await prefetchStaticImages()
     const code = buildCode()
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /**
@@ -1514,7 +1516,7 @@
     for (const [prefix, layout] of Object.entries(
       carryOver.tasksLayout ?? {},
     )) {
-      const match = prefix.match(/^ex(\d+)(-corr)?$/)
+      const match = prefix.match(/^ex(\d+)((?:-corr)?(?:-qcm)?)$/)
       if (match == null) continue
       tasksLayout[`ex${swapNum(Number(match[1]))}${match[2] ?? ''}`] = layout
     }
@@ -1611,7 +1613,7 @@
       },
     )
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /** Nouvelle graine pour l'exercice d'indice k (sans régénérer le code) */
@@ -1639,7 +1641,7 @@
     exercicesParams.update((list) => list)
     const code = buildCode()
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   function openSettings(num: number) {
@@ -1726,7 +1728,7 @@
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
     setEditorContent(newCode)
-    scheduleCompile(newCode, 0)
+    scheduleCompile(newCode, PALETTE_COMPILE_DELAY)
     codeEditNum = null
   }
 
@@ -1789,7 +1791,7 @@
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
     setEditorContent(newCode)
-    scheduleCompile(newCode, 0)
+    scheduleCompile(newCode, PALETTE_COMPILE_DELAY)
     canRowEditNum = null
   }
 
@@ -1817,7 +1819,7 @@
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /**
@@ -1849,7 +1851,7 @@
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /** Applique les réglages émis par le panneau Settings de la vue prof */
@@ -1863,7 +1865,7 @@
     frozenInputs.delete(exercise)
     const code = buildCode()
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /**
@@ -2229,6 +2231,10 @@
 
   /** Regénère le code à partir des réglages du document (interligne...) */
   function applyDocumentOptions() {
+    // moins de sujets qu'avant : celui qu'on regardait peut ne plus exister
+    if (previewVersion >= Math.max(1, documentOptions.nbVersions)) {
+      previewVersion = 0
+    }
     regenerateDocument()
   }
 
@@ -2242,7 +2248,7 @@
     persistPreferences()
     const code = buildCode(options)
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /**
@@ -2273,7 +2279,7 @@
       extraPreamble: extraPreamble(),
     })
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   /** Regénère le contenu (listeQuestions, listeCorrections...) de l'exercice k */
@@ -2517,6 +2523,30 @@
     )
   }
 
+  /**
+   * Relecture de la palette et report dans l'URL, débouncés comme la
+   * compilation : `refreshTasksLayout` balaie tout le document à coups
+   * d'expressions régulières et `persistToUrl` en refait autant (via
+   * `harvestCarryOver`) avant d'encoder l'URL en base64. À chaque frappe,
+   * c'est deux relectures complètes du document pour un résultat dont
+   * personne n'a besoin entre deux caractères.
+   */
+  let documentSyncTimer: ReturnType<typeof setTimeout>
+  function scheduleDocumentSync(code: string, immediate = false) {
+    clearTimeout(documentSyncTimer)
+    // une édition de la palette doit relire ses valeurs tout de suite : les
+    // pas-à-pas calculent la valeur suivante à partir de celle affichée, un
+    // clic répété repartirait sinon d'une valeur périmée
+    if (immediate) refreshTasksLayout(code)
+    documentSyncTimer = setTimeout(() => {
+      if (!immediate) refreshTasksLayout(code)
+      // toute modification structurée (palette, régénération) est reportée
+      // dans l'URL ; le garde-fou sur la valeur encodée évite d'écrire à
+      // chaque frappe qui ne change pas les réglages
+      persistToUrl()
+    }, 500)
+  }
+
   function initEditor(content: string) {
     editorView?.destroy()
     editorView = new EditorView({
@@ -2535,12 +2565,8 @@
               // seule la frappe directe arme l'avertissement d'écrasement
               if (!isPaletteEdit) isEdited = true
               const code = update.state.doc.toString()
-              refreshTasksLayout(code)
               canRestoreLastGood = lastGoodCode != null && lastGoodCode !== code
-              // toute modification structurée (palette, régénération) est
-              // reportée dans l'URL ; le garde-fou sur la valeur encodée
-              // évite d'écrire à chaque frappe qui ne change pas les réglages
-              persistToUrl()
+              scheduleDocumentSync(code, isPaletteEdit)
               scheduleCompile(code)
             }
           }),
@@ -2570,7 +2596,7 @@
       selection: { anchor: 0 },
     })
     editorView.focus()
-    scheduleCompile(restored, 0)
+    scheduleCompile(restored, PALETTE_COMPILE_DELAY)
   }
 
   /** Place le curseur sur la ligne d'un diagnostic (clic dans le panneau) */
@@ -2748,6 +2774,67 @@
    */
   let compileTimer: ReturnType<typeof setTimeout>
   let compileToken = 0
+  /**
+   * Délai des recompilations déclenchées par un contrôle (palette de mise en
+   * page, réglages du document, régénération) plutôt que par la frappe. Une
+   * compilation n'est pas annulable une fois lancée : sans ce court délai,
+   * dix clics rapides sur un pas-à-pas enchaînent dix compilations complètes.
+   * Assez court pour rester imperceptible sur un clic isolé.
+   */
+  const PALETTE_COMPILE_DELAY = 120
+  /**
+   * Source de la dernière compilation lancée : de nombreuses actions de
+   * réglage régénèrent un code au final identique, qu'il est inutile de
+   * recompiler. Remis à zéro par « Nouvelles données » (`resetCompileCache`),
+   * où les mêmes réglages doivent bien reproduire un document.
+   */
+  let lastCompiledCode: string | null = null
+  function resetCompileCache() {
+    lastCompiledCode = null
+  }
+
+  /**
+   * Sujet montré dans l'aperçu (0 = Sujet A). Sans effet sur le code ni sur
+   * les exports, qui portent toujours tous les sujets.
+   */
+  let previewVersion = $state(0)
+
+  /**
+   * Source réellement compilée pour l'aperçu : sur une fiche à plusieurs
+   * sujets, seul le sujet affiché est conservé. Compiler les autres coûte
+   * leur mise en page entière (l'essentiel du temps d'attente) pour un
+   * contenu qu'on ne regarde pas ; ils restent dans l'éditeur et dans les
+   * exports (PDF, .typ), qui compilent `currentCode()` tel quel.
+   *
+   * Les lignes écartées sont remplacées par des lignes vides plutôt que
+   * supprimées : les diagnostics du compilateur gardent ainsi les numéros de
+   * ligne de l'éditeur.
+   */
+  function previewCode(code: string): string {
+    const lines = code.split('\n')
+    const starts: { num: number; line: number }[] = []
+    for (const [i, line] of lines.entries()) {
+      const match = SUBJECT_MARKER_PATTERN.exec(line)
+      if (match != null) starts.push({ num: Number(match[1]), line: i })
+    }
+    if (starts.length < 2) return code
+    const index = starts.findIndex((start) => start.num === previewVersion)
+    if (index === -1) return code
+    const from = starts[index].line
+    const to = index + 1 < starts.length ? starts[index + 1].line : lines.length
+    // tout ce qui précède le premier repère est le préambule, commun aux sujets
+    const preambleEnd = starts[0].line
+    return lines
+      .map((line, i) => (i < preambleEnd || (i >= from && i < to) ? line : ''))
+      .join('\n')
+  }
+
+  /** Change le sujet affiché et recompile */
+  function showVersion(num: number) {
+    if (num === previewVersion) return
+    previewVersion = num
+    scheduleCompile(currentCode(), PALETTE_COMPILE_DELAY)
+  }
   function scheduleCompile(code: string, delay = 500) {
     clearTimeout(compileTimer)
     compileTimer = setTimeout(() => compile(code), delay)
@@ -2780,6 +2867,9 @@
   }
 
   async function compile(code: string) {
+    const source = previewCode(code)
+    if (source === lastCompiledCode) return
+    lastCompiledCode = source
     const token = ++compileToken
     isCompiling = true
     if (svgContent === '') isCompilerLoading = true
@@ -2789,7 +2879,7 @@
       // adapte le message d'attente : « première visite » seulement si le
       // compilateur n'est pas déjà en cache (téléchargement à prévoir)
       if (isCompilerLoading) compilerFirstVisit = !(await isCompilerCached())
-      const result = await compileTypstToSvg(code)
+      const result = await compileTypstToSvg(source)
       if (token !== compileToken) return
       applyDiagnostics(result.diagnostics)
       if (result.svg != null) {
@@ -2806,6 +2896,9 @@
         canRestoreLastGood = lastGoodCode != null && lastGoodCode !== code
       }
     } catch (error) {
+      // l'échec peut venir d'une ressource momentanément indisponible : la
+      // même source doit pouvoir être recompilée
+      resetCompileCache()
       if (token !== compileToken) return
       console.error('Erreur lors de la compilation Typst', error)
       applyDiagnostics([
@@ -3058,6 +3151,9 @@
     setStaticImagePaths(paths)
     setStaticImageBytes(bytes)
     requiredImageAssets = bytes
+    // le registre d'images a changé : le même code doit être recompilé pour
+    // que les images fraîchement chargées apparaissent (voir `compile`)
+    resetCompileCache()
   }
 
   async function loadExercises() {
@@ -3193,7 +3289,7 @@
     exercicesParams.update((list) => list)
     const code = buildCode()
     setEditorContent(code)
-    scheduleCompile(code, 0)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
   }
 
   function exportFilename() {
@@ -3445,10 +3541,7 @@
         Mise en page
       </button>
 
-      <label
-        class="flex items-center gap-2 text-sm"
-        data-tour="typst-versions"
-      >
+      <label class="flex items-center gap-2 text-sm" data-tour="typst-versions">
         <i class="bx bx-copy text-xl"></i>
         Versions
         <select
@@ -3462,6 +3555,29 @@
           <option value={4}>4</option>
         </select>
       </label>
+
+      <!-- L'aperçu ne compile qu'un sujet : voir `previewCode`. Les exports
+           et le code de l'éditeur portent toujours tous les sujets. Les
+           contrôles de mise en page ne valent que pour le sujet A, seul à
+           porter les repères de la palette. -->
+      {#if documentOptions.nbVersions > 1}
+        <label
+          class="flex items-center gap-2 text-sm"
+          title="Sujet montré dans l’aperçu — les exports contiennent toujours tous les sujets"
+        >
+          <i class="bx bx-file text-xl"></i>
+          Aperçu
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            value={previewVersion}
+            onchange={(event) => showVersion(Number(event.currentTarget.value))}
+          >
+            {#each Array(documentOptions.nbVersions) as _, i (i)}
+              <option value={i}>Sujet {String.fromCharCode(65 + i)}</option>
+            {/each}
+          </select>
+        </label>
+      {/if}
 
       <div class="grow"></div>
 
@@ -3947,7 +4063,9 @@
                     Case pour la note
                   </label>
 
-                  <label class="flex items-center justify-between gap-4 text-sm">
+                  <label
+                    class="flex items-center justify-between gap-4 text-sm"
+                  >
                     Lignes de réponse par exercice
                     <input
                       type="number"

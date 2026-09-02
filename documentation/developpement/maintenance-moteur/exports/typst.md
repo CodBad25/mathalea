@@ -50,7 +50,8 @@ Un double-clic sur un contrôle de la palette de mise en page (bouton, champ) es
 
 Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-dessus l'aperçu (`TypstLayoutOverlay.svelte`) :
 
-- dans la marge de page (la plus proche de la colonne concernée), à hauteur de chaque liste de questions (environnement `tasks`) : nombre de colonnes (1 à 4) et espacement vertical (pas de 0,25 em) — l'énoncé (`exN`) et sa correction (`exN-corr`) se règlent indépendamment ;
+- dans la marge de page (la plus proche de la colonne concernée), à hauteur de chaque liste de questions (environnement `tasks`) : nombre de colonnes (1 à 4) et espacement vertical (pas de 0,25 em) — l'énoncé (`exN`) et sa correction (`exN-corr`) se règlent indépendamment. Une troisième ligne règle les colonnes des **propositions de QCM** de l'exercice (`exN-qcm`, `exN-corr-qcm`), affichée seulement s'il en contient un ; à l'inverse, un exercice à question unique avec QCM n'affiche que cette ligne, faute de liste de questions à régler — voir [Colonnes des QCM](#colonnes-des-qcm) ;
+- le sélecteur « Aperçu » de la barre d'outils (à partir de deux sujets) choisit le sujet **montré et compilé** — voir [Un seul sujet dans l'aperçu](#un-seul-sujet-dans-laperçu) ;
 - dans la marge droite, au début de chaque exercice : insertion/modification d'un texte ou d'un titre de section (`#section[...]`, helper émis dans le préambule) **avant** cet exercice, nombre de questions (`nbQuestions`), **duplication** et suppression de l'exercice (l'une comme l'autre mettent à jour `exercicesParams` et le barème de la page de garde). La copie se place juste après l'original, avec les mêmes paramètres (graine comprise, donc le même énoncé) et les mêmes réglages de palette : `shiftCarryOverForInsert` renumérote les réglages des exercices suivants et recopie ceux de l'original sur la copie. Quand le nombre de questions change, les questions déjà affichées sont figées (`frozenInputs`, vidé par « Nouvelles données ») : la régénération ne rebrasse pas leurs valeurs, seules les questions ajoutées sont nouvelles ;
 - entre les exercices : deux boutons de saut de page et de saut de colonne (ce dernier seulement en document multicolonne) — une fois insérés, ils deviennent des badges bien visibles, retirables d'un clic (le saut de page ferme et rouvre le bloc `en-colonnes`, `#pagebreak` étant interdit dans un conteneur) ;
 - à gauche du titre de la fiche : édition du titre, du sous-titre et de la ligne d'en-tête (ces champs ne sont plus dans la fenêtre Réglages ; la valeur est reportée dans les réglages persistés) — absente si l'habillage en-tête est `Aucun`, faute de bloc à éditer ;
@@ -555,6 +556,54 @@ faut retirer l'enrobage plutôt que de l'empiler sur un paquet corrigé :
 Le code généré ne change pas au passage (les listes s'écrivent toujours
 `#tasks(...)`) : le retrait ne touche que le préambule.
 
+### Colonnes des QCM
+
+Les propositions d'un QCM (`propositionsQcm`, repérées par les libellés
+`labelEx{N}Q{i}R{rep}`) sont mises en colonnes par le même paquet `taskize`
+que les questions : `qcmToTypst` (`latexToTypst.ts`) émet
+`#tasks(columns: …, label: "A)")`.
+
+Le nombre de colonnes se règle **par exercice**, comme celui des questions :
+`htmlToTypst` reçoit en dernier argument le nom de la variable à écrire, et
+`exerciseBody` lui passe `#let exN-qcm-colonnes` (ou `exN-corr-qcm-colonnes`
+pour la correction, réglable indépendamment). Le préfixe `exN-qcm` traverse
+donc toute la mécanique existante sans cas particulier : découverte par scan
+du code généré, déclaration dans le préambule à partir du carry-over,
+renumérotation par `shiftCarryOver`/`swapCarryOver`, pastille de la palette.
+Deux différences avec les listes de questions :
+
+- pas de variable `-gutter` : les propositions gardent l'espacement du paquet ;
+- le défaut dépend du **contenu des propositions** (`qcmHasFigure`) :
+  - propositions textuelles : `"auto-fit"`, comme les questions. `taskize`
+    compare la largeur naturelle de chaque item à celle d'une colonne et
+    choisit de 1 à 4 colonnes uniformes — quatre fractions courtes s'étalent
+    sur quatre, une phrase longue retombe sur une ;
+  - **au moins une proposition est une figure : 1 colonne.** `auto-fit` serait
+    ici trompeur : une figure passe par `mathalea-fit` /
+    `mathalea-figure-block`, qui la **réduisent** pour tenir dans la largeur
+    qu'on leur donne. Elle « tient » donc dans une colonne de n'importe quelle
+    largeur, `auto-fit` en choisit quatre, et quatre droites graduées
+    deviennent illisibles. Une colonne est la seule largeur qui les préserve.
+
+Ce défaut par contenu est transmis au préambule par un marqueur
+`// mathalea:qcm-figures` posé sur la ligne du `#tasks(...)`
+(`QCM_FIGURES_MARKER`), relu par `qcmFigureTasksPrefixes`. `harvestCarryOver`
+l'utilise aussi pour **ne pas** figer ce 1 dans le carry-over : ce n'est pas un
+réglage du professeur, et le figer rendrait le choix par contenu insensible aux
+régénérations.
+
+Un exercice à question unique n'a pas de liste `tasks`, donc pas de repère
+`mathalea-anchor` : `exerciseBody` en émet un quand le corps référence la
+variable de QCM, sinon la palette n'aurait nulle part où poser ses contrôles.
+
+La variable globale `#let qcm-colonnes = 2` subsiste comme **repli** des
+chemins sans réglage par exercice : le tableau « Course aux nombres » (dont les
+énoncés ne passent pas par `exerciseBody`) et les trois autres vues Typst
+(Flash-cards, Diaporama PDF, lecture optique), qui la déclarent dans leur
+propre préambule. En mode export (`.typ` téléchargé, modale d'édition), la
+valeur est écrite littéralement dans le `#tasks(...)`, comme pour les
+questions.
+
 ### Figures SVG
 
 Les figures SVG (mathalea2d) sont **embarquées dans le document** : chaque figure est déclarée en tête de fichier (`#let fig-N = image(bytes("<svg...>"), format: "svg", width: ...pt)`) et référencée dans le corps. Le document reste autonome (il compile aussi avec le CLI `typst`). La largeur reprend celle de la figure (96 px CSS = 72 pt). `sanitizeSvg` corrige au passage le SVG pour le parseur XML strict de Typst (point-virgule parasite entre attributs généré par `lib/2d/textes.ts`, entités HTML indéfinies en XML, attributs dupliqués).
@@ -599,7 +648,96 @@ Les tableaux HTML (par opposition aux tableaux LaTeX visuels, voir ci-dessus) ne
 
 ## Compilation dans le navigateur
 
-`typstCompiler.ts` s'appuie sur `@myriaddreamin/typst.ts` : le compilateur WASM (~27 Mo, polices incluses) et le moteur de rendu sont chargés à la première compilation (import dynamique, URL des `.wasm` résolues par Vite). L'aperçu est un rendu SVG du document ; le bouton « Télécharger le PDF » compile en vrai PDF côté client, sans serveur.
+`typstCompiler.ts` s'appuie sur `@myriaddreamin/typst.ts` : le compilateur WASM (~28 Mo) et le moteur de rendu sont chargés à la première compilation (import dynamique, URL des `.wasm` résolues par Vite). L'aperçu est un rendu SVG du document ; le bouton « Télécharger le PDF » compile en vrai PDF côté client, sans serveur.
+
+### Coût de démarrage
+
+Les gros fichiers passent par un cache persistant du navigateur (Cache API,
+`ASSET_CACHE`), donc téléchargés une seule fois par poste et non par session.
+Deux points demandent une attention particulière :
+
+- **le WASM est fourni sous forme de `Response`** (`cachedResponse`) et non
+  d'octets. `WebAssembly.instantiateStreaming` s'applique alors, et avec lui le
+  cache de code compilé du navigateur : sans cela, les 28 Mo du compilateur
+  sont recompilés de zéro à **chaque chargement de page**, même en cache. Le
+  type MIME `application/wasm` est rétabli au besoin en écrivant dans le cache,
+  faute de quoi `instantiateStreaming` refuse la réponse et retombe
+  silencieusement sur le chemin lent ;
+- **les polices d'assets de Typst** (8,3 Mio : Libertinus Serif, New Computer
+  Modern et DejaVu Sans Mono, `assets: ['text']` de typst.ts) sont téléchargées
+  par le paquet lui-même, avec son propre `fetch`. Elles échappent donc au
+  cache persistant, sauf à lui passer un `fetcher` — c'est ce que fait
+  `preloadRemoteFonts(fonts, { assets, fetcher })`. Attention : appeler
+  `preloadRemoteFonts` **sans options** ne supprime pas ces polices, typst.ts
+  ajoute alors le pack `text` de lui-même (voir `TypstCompilerDriver.init`),
+  avec un `fetch` nu vers jsdelivr à chaque session.
+
+Les 10 polices libres servies par MathALÉA (`public/fonts/typst/`, 5,3 Mio)
+sont chargées **toutes** à l'initialisation : le jeu de polices est figé pour
+la session (`$typst` est un singleton) alors que le professeur peut changer de
+police à tout moment depuis les réglages.
+
+Le numéro de version d'`ASSET_CACHE` sert à invalider les entrées quand le
+contenu d'une URL stable change ; `purgeOldAssetCaches` supprime au démarrage
+les caches des versions précédentes, pour ne pas laisser une copie de 28 Mo par
+version dans le quota du navigateur.
+
+### Recompilations
+
+Une compilation n'est pas annulable une fois lancée : le jeton `compileToken`
+n'écarte que les *résultats* périmés. Trois garde-fous dans `Typst.svelte` :
+
+- `compile()` sort immédiatement si la source est identique à la dernière
+  compilée (`lastCompiledCode`). `resetCompileCache()` lève la mémoïsation
+  après un échec et après `prefetchStaticImages`, où le même code doit être
+  recompilé avec un registre d'images différent ;
+- les recompilations déclenchées par un contrôle (palette, réglages,
+  régénération) passent par un court débounce `PALETTE_COMPILE_DELAY` plutôt
+  que par un délai nul : un clic répété sur un pas-à-pas ne lance qu'une
+  compilation. Seul Ctrl/Cmd + Entrée (`onCompileNow`) compile sans délai ;
+- `scheduleDocumentSync` diffère la relecture de la palette
+  (`refreshTasksLayout`) et le report dans l'URL (`persistToUrl`), qui balaient
+  chacun tout le document à coups d'expressions régulières. Une **édition de
+  la palette** relit ses valeurs tout de suite (`immediate`) : les pas-à-pas
+  calculent la valeur suivante à partir de celle affichée, un clic répété
+  repartirait sinon d'une valeur périmée.
+
+`mapStaticImages` ne recopie les images scannées dans la mémoire WASM que
+lorsque le registre a changé (`setStaticImageBytes`), et non avant chaque
+compilation.
+
+### Un seul sujet dans l'aperçu
+
+Sur une fiche à plusieurs sujets (`nbVersions`), l'aperçu ne compile que le
+sujet montré : c'est de loin le plus gros levier, la mise en page étant
+l'essentiel du temps d'attente et croissant plus vite que le nombre de pages.
+Mesuré sur une fiche de 6 exercices en 2 sujets : 10 pages et ~12 s de
+compilation contre 5 pages et ~5 s.
+
+Le découpage se fait côté `Typst.svelte` (`previewCode`), pas dans le document :
+
+- `buildTypstDocument` pose un commentaire `// mathalea:sujet(N)` en tête du
+  bloc de chaque sujet (`subjectMarker`), seulement quand la fiche en compte
+  plusieurs. Un commentaire ne change ni le rendu ni l'export ;
+- `previewCode` conserve le préambule (commun à tous les sujets, c'est là que
+  sont déclarées les figures) et le bloc du sujet choisi, et **remplace les
+  autres lignes par des lignes vides** plutôt que de les supprimer : les
+  numéros de ligne des diagnostics restent ceux de l'éditeur. Les figures des
+  sujets masqués restent déclarées mais ne sont jamais mises en page, donc
+  jamais décodées ;
+- le sélecteur « Aperçu » de la barre d'outils n'apparaît qu'à partir de deux
+  sujets. Il ne touche ni au code de l'éditeur ni aux exports : « Télécharger
+  le PDF » compile `currentCode()`, qui porte tous les sujets, et le `.typ`
+  est reconstruit par `buildExportCode`.
+
+À savoir : seul le sujet A porte les repères `mathalea-anchor`
+(`buildTypstDocument` n'émet les repères que pour la version principale). Les
+autres sujets sont donc consultables mais pas réglables depuis la palette —
+c'était déjà le cas avant ce découpage.
+
+Reste ensuite `buildCode` (~1,3 à 2,3 s sur cette fiche) : il régénère les
+exercices de **tous** les sujets, puisque le code de l'éditeur, lui, les
+contient tous.
 
 ## Tests
 
