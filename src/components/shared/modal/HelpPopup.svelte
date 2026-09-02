@@ -4,18 +4,24 @@
   import { startTypstTour } from '../../../lib/onboarding/typstTour'
   import { mathaleaGoToView } from '../../../lib/mathaleaUtils'
   import { globalOptions } from '../../../lib/stores/globalOptions'
-  import { typstShortcutsOpen } from '../../../lib/stores/generalStore'
+  import {
+    texShortcutsOpen,
+    typstShortcutsOpen,
+  } from '../../../lib/stores/generalStore'
   import BasicClassicModal from './BasicClassicModal.svelte'
 
   export let isDisplayed: boolean // à bind avec le parent
 
   /** La vue Typst a sa propre visite guidée, déjà sur place */
   $: isTypstView = $globalOptions.v === 'typst'
+  /** Les vues Typst et LaTeX ont un éditeur de code et ses raccourcis */
+  $: isEditorView = isTypstView || $globalOptions.v === 'tex'
 
-  /** Ouvre la modale des raccourcis clavier de l'éditeur Typst */
-  function openTypstShortcuts() {
+  /** Ouvre la modale des raccourcis clavier de l'éditeur de code */
+  function openEditorShortcuts() {
     isDisplayed = false
-    typstShortcutsOpen.set(true)
+    if (isTypstView) typstShortcutsOpen.set(true)
+    else texShortcutsOpen.set(true)
   }
 
   /**
@@ -49,6 +55,10 @@
         {#if isTypstView}
           Retrouvez la présentation de la vue Typst&nbsp;: modes d'affichage,
           palette de mise en page sur l'aperçu, réglages du document et export.
+        {:else if $globalOptions.v === 'tex'}
+          Retrouvez la présentation de la vue LaTeX&nbsp;: modes d'affichage,
+          réglages du document, compilation et export, ainsi que les raccourcis
+          clavier de l'éditeur de code.
         {:else}
           Retrouvez la présentation de la page d'accueil&nbsp;: recherche d'un
           exercice, ajout à la feuille et réglage des paramètres.
@@ -66,10 +76,10 @@
           <i class="bx bx-refresh text-xl"></i>
           Relancer la visite guidée
         </button>
-        {#if isTypstView}
+        {#if isEditorView}
           <button
             type="button"
-            on:click={openTypstShortcuts}
+            on:click={openEditorShortcuts}
             class="inline-flex items-center gap-2 px-4 py-2 rounded-md font-semibold
               border border-coopmaths-action dark:border-coopmathsdark-action
               text-coopmaths-action dark:text-coopmathsdark-action
