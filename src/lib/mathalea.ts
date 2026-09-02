@@ -742,6 +742,12 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     return {}
   }
   // let url = new URL(urlString)
+  // Le site est considéré « beta » dès qu'on développe en local, sans avoir
+  // à ajouter `&beta` à l'URL (le paramètre `beta` reste géré plus bas pour
+  // les autres hôtes).
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+    beta = true
+  }
   if (isCrypted(url)) {
     urlNeedToBeFreezed = true
     url = decrypt(url)

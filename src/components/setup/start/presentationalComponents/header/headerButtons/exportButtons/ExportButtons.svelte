@@ -80,6 +80,17 @@
     action: () => exportAndClose('omr'),
   }
 
+  // Prototype : l'entrée n'apparaît que derrière `?beta=1` tant que la
+  // fonctionnalité est en cours de stabilisation.
+  const optionQuizz: ExportOption = {
+    id: 'quizz',
+    label: 'Quizz (beta)',
+    description:
+      'Pour animer en classe un quiz façon Kahoot à partir des exercices QCM',
+    component: QuizzIcon,
+    action: () => exportAndClose('quizzconf'),
+  }
+
   const baseExportOptions: ExportOption[] = [
     {
       id: 'latex2',
@@ -165,14 +176,6 @@
       },
     },
     {
-      id: 'quizz',
-      label: 'Quizz (beta)',
-      description:
-        'Pour animer en classe un quiz façon Kahoot à partir des exercices QCM',
-      component: QuizzIcon,
-      action: () => exportAndClose('quizzconf'),
-    },
-    {
       id: 'referentiel',
       label: 'Référentiel et liste des exercices',
       description:
@@ -187,7 +190,7 @@
 
   $: exportOptions = [
     ...baseExportOptions,
-    ...($globalOptions.beta ? [optionOmr] : []),
+    ...($globalOptions.beta ? [optionQuizz, optionOmr] : []),
   ]
 </script>
 
