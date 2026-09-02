@@ -5,16 +5,16 @@
  */
 
 import fs from 'fs'
-import { deriveInfosExerciceStatique } from '../src/json/referentielStaticFRCodec.js'
-import { dictionnaireBAC } from '../src/json/dictionnaireBAC.js'
-import { dictionnaireCrpeCoop } from '../src/json/dictionnaireCrpeCoop.js'
-import { dictionnaireDNB } from '../src/json/dictionnaireDNB.js'
-import { dictionnaireDNBPRO } from '../src/json/dictionnaireDNBPRO.js'
-import { dictionnaireE3C } from '../src/json/dictionnaireE3C.js'
-import { dictionnaireEAM } from '../src/json/dictionnaireEAM.js'
-import { dictionnaireEVACOM } from '../src/json/dictionnaireEVACOM.js'
-import { dictionnaireSTI2D } from '../src/json/dictionnaireSTI2D.js'
-import { dictionnaireSTL } from '../src/json/dictionnaireSTL.js'
+import { deriveInfosExerciceStatique } from '../src/json/referentielStaticFRCodec.ts'
+import { dictionnaireBAC } from '../src/json/dictionnaireBAC.ts'
+import { dictionnaireCrpeCoop } from '../src/json/dictionnaireCrpeCoop.ts'
+import { dictionnaireDNB } from '../src/json/dictionnaireDNB.ts'
+import { dictionnaireDNBPRO } from '../src/json/dictionnaireDNBPRO.ts'
+import { dictionnaireE3C } from '../src/json/dictionnaireE3C.ts'
+import { dictionnaireEAM } from '../src/json/dictionnaireEAM.ts'
+import { dictionnaireEVACOM } from '../src/json/dictionnaireEVACOM.ts'
+import { dictionnaireSTI2D } from '../src/json/dictionnaireSTI2D.ts'
+import { dictionnaireSTL } from '../src/json/dictionnaireSTL.ts'
 
 const referentielFR = {}
 const referentielCH = {}
