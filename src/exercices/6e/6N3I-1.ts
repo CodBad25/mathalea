@@ -124,11 +124,13 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
             keyboard: this.lycee
               ? KeyboardType.clavierDeBase
               : KeyboardType.clavierNumbers,
+            ldots: true,
           },
           champ2: {
             keyboard: this.lycee
               ? KeyboardType.clavierDeBase
               : KeyboardType.clavierNumbers,
+            ldots: true,
           },
         },
       })
