@@ -283,7 +283,10 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
           value: reponse,
           options: {
             fractionEgale: true,
-            nombreDecimalSeulement: !this.clavierAvecFraction,
+            // La quatrième proportionnelle est toujours un décimal : on accepte
+            // aussi bien l'écriture décimale (celle du corrigé) qu'une fraction
+            // égale, même lorsque le clavier fraction est proposé (cf. 4P10-2).
+            nombreDecimalSeulement: true,
           },
         },
       })
