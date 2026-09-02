@@ -21,7 +21,7 @@ export const dateDePublication = '10/08/2025'
 export const uuid = 'b8297'
 
 export const refs = {
-  'fr-fr': ['6P2B'],
+  'fr-fr': ['6P2B', 'auto5D2B'],
   'fr-2016': ['6S12'],
   'fr-ch': ['11NO4A-3'],
 }
@@ -29,7 +29,7 @@ export default class Probabilites6e extends Exercice {
   constructor() {
     super()
     this.spacing = 2
-    this.nbQuestions = 3
+    this.nbQuestions = 1
   }
 
   nouvelleVersion() {
@@ -94,7 +94,8 @@ export default class Probabilites6e extends Exercice {
         { formatInteractif: 'multi-mathfield' },
       )
 
-      const texteCorr = `La probabilité que ${quidam.prenom} pioche une boule ${choixCouleur[choix ? 0 : 1]} est de $${miseEnEvidence(reponseFrac)}$, soit $${miseEnEvidence(texNombre(reponseDecimale))}$, soit encore $${miseEnEvidence(texNombre(frac[2]))}$ %.`
+      const texteCorr = `Dans le sac, il y a donc $${boule1}$ boule${boule1 === 1 ? '' : 's'}  ${choixCouleur[choix ? 0 : 1]}${boule1 === 1 ? '' : 's'} parmi $${boule1 + boule2}$ boules.<br>
+      La probabilité que ${quidam.prenom} pioche une boule ${choixCouleur[choix ? 0 : 1]} est de $${miseEnEvidence(reponseFrac)}$, soit $${miseEnEvidence(texNombre(reponseDecimale))}$, soit encore $${miseEnEvidence(texNombre(frac[2]))}$ %.`
 
       if (this.questionJamaisPosee(i, ...frac)) {
         this.listeQuestions[i] = texte
