@@ -31,7 +31,7 @@ export default class Can20266Q23 extends ExerciceCan {
   enonce(minutes?: number, secondes?: number) {
     if (secondes == null || minutes == null) {
       minutes = randint(1, 5)
-      secondes = randint(0, 5) * 10
+      secondes = randint(1, 5) * 10
     }
 
     this.question = `Complète.<br>
