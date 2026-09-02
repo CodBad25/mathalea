@@ -1,28 +1,28 @@
 import ExerciceSimplificationSommeAlgebrique from './SimplificationSommeAlgebrique'
-export const dateDePublication = '01/07/2026'
+export const dateDePublication = '02/09/2026'
 
 export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const titre =
-  "Écrire une addition sous la forme d'une expression algébrique sans parenthèses puis calculer"
+  "Écrire une addition sous la forme d'une expression algébrique sans parenthèses"
 
-export const uuid = '9c5e2'
+export const uuid = '6510a'
 
 export const refs = {
-  'fr-fr': ['5N2G-2'],
-  'fr-2016': ['5R22-2a'],
-  'fr-ch': ['9NO2B-5'],
+  'fr-fr': ['5N2K'],
+  'fr-ch': [],
 }
 /**
  * @author Éric Elter
  */
 
-export default class ExerciceSimplificationSommeAlgebriqueAddition extends ExerciceSimplificationSommeAlgebrique {
+export default class ExerciceSimplificationSommeAlgebriqueSeulement extends ExerciceSimplificationSommeAlgebrique {
   constructor() {
     super()
     this.sup2 = 1
     this.besoinFormulaire4CaseACocher = false
+    this.sup4 = false
   }
 }
