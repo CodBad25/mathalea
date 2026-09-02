@@ -2930,6 +2930,32 @@ export function htmlToTypst(
     () => protect('#v(0.5em)\n'),
   )
 
+  // Cases à cocher `\faSquare` / `\faCheckSquare` (police fontawesome de la
+  // sortie LaTeX, variante `[regular]` ou `[solid]` en argument optionnel) :
+  // écrites en LaTeX texte dans les `canReponseACompleter` / `canEnonce` des
+  // « Course aux nombres » (ex. can6a-2025 Q10 et Q25, can1a-2025 Q20,
+  // can2a-2025 Q16). Typst n'a pas fontawesome : on dessine un petit carré,
+  // à bord fin pour la case vide, plein pour la case cochée. `\faCheckSquare`
+  // est traité d'abord pour ne pas laisser `\faSquare` mordre dessus.
+  text = text.replace(
+    /\\faCheckSquare\b\s*(?:\[[^\]]*\])?\s*/g,
+    () =>
+      protect(
+        '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, fill: luma(60)) ',
+      ),
+  )
+  text = text.replace(
+    /\\faSquare\b\s*(?:\[[^\]]*\])?\s*/g,
+    () =>
+      protect(
+        '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, stroke: 0.6pt) ',
+      ),
+  )
+  // `\raggedright` / `\raggedleft` / `\centering` en tête de réponse (ex.
+  // can6a-2025 Q25) : sans effet utile dans une cellule du tableau, retirés
+  // pour ne pas fuir en texte littéral.
+  text = text.replace(/\\(?:raggedright|raggedleft|centering)\b\s*/g, '')
+
   // Mise en boîte LaTeX en mode texte, elle aussi propre aux énoncés des
   // « Course aux nombres » (ex. can2a-2026 Q12, qui encadre un algorithme).
   // Le contenu des boîtes est laissé dans le flux entre deux fragments

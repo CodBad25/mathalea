@@ -437,6 +437,24 @@ describe('htmlToTypst', () => {
     )
   })
 
+  it('convertit les cases à cocher \\faSquare / \\faCheckSquare (réponses CAN)', () => {
+    const carreVide =
+      '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, stroke: 0.6pt)'
+    const carrePlein =
+      '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, fill: luma(60))'
+    // can6a-2025 Q10 : cases à cocher devant des unités, écrites en LaTeX texte
+    expect(htmlToTypst('\\faSquare[regular] Vrai<br>\\faSquare[regular] Faux')).toBe(
+      `${carreVide} Vrai\\\n${carreVide} Faux`,
+    )
+    // can6a-2025 Q25 : \raggedright de tête retiré, pas de fuite littérale
+    const q25 = htmlToTypst('\\raggedright \\faSquare[regular] $120$')
+    expect(q25).toBe(`${carreVide} $120$`)
+    expect(q25).not.toContain('faSquare')
+    expect(q25).not.toContain('raggedright')
+    // variante cochée : carré plein ; l'argument optionnel est facultatif
+    expect(htmlToTypst('\\faCheckSquare Vrai')).toBe(`${carrePlein} Vrai`)
+  })
+
   it('convertit les boîtes LaTeX en mode texte (énoncés CAN)', () => {
     // can2a-2026 Q12 : un algorithme encadré, écrit en LaTeX texte
     const code = htmlToTypst(
