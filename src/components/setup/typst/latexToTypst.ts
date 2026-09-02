@@ -408,6 +408,48 @@ const TYPST_COLOR_OVERRIDES: Record<string, string> = {
   grey: '#808080',
 }
 
+/**
+ * Nombre de décimales d'un prix ProfCollege (`\Prix[0]{12}` → « 12 »,
+ * `\Prix{12.5}` → « 12,50 », deux décimales par défaut). Une valeur non
+ * numérique est renvoyée telle quelle.
+ */
+function formatePrixProfCollege(valeur: string, decimales: string): string {
+  const brut = valeur.trim()
+  if (brut === '') return ''
+  const nombre = Number(brut.replace(',', '.'))
+  const chiffres = decimales.trim() === '' ? 2 : Number(decimales.trim())
+  if (!Number.isFinite(nombre) || !Number.isInteger(chiffres) || chiffres < 0) {
+    return brut
+  }
+  return nombre.toFixed(chiffres).replace('.', ',')
+}
+
+/**
+ * Macros ProfCollege `\Lg[cm]{5}` (longueur) et `\Prix[0]{12}` (prix en
+ * euros). Elles n'existent que dans le préambule de la sortie LaTeX, mais les
+ * `canEnonce`/`canReponseACompleter` des « Course aux nombres » les écrivent
+ * sans tester `context.isHtml` : elles arrivent donc telles quelles dans la
+ * conversion Typst, où `$\Lg[mm]{24}$` devient la variable inconnue `Lg`
+ * (erreur de compilation, ex. canc3a-2023). L'argument entre accolades peut
+ * être vide (`\Lg[mm]{}` derrière des pointillés à compléter) : seule l'unité
+ * est alors rendue. `format` reçoit la valeur et l'unité déjà normalisées et
+ * les assemble selon le mode (mathématique ou texte).
+ */
+function remplaceMacrosProfCollege(
+  text: string,
+  format: (valeur: string, unite: string) => string,
+): string {
+  return text.replace(
+    /\\(Lg|Prix)\s*(?:\[([^\]]*)\])?\s*\{([^{}]*)\}/g,
+    (_match, nom: string, option: string | undefined, valeur: string) => {
+      const options = option ?? ''
+      return nom === 'Prix'
+        ? format(formatePrixProfCollege(valeur, options), '€')
+        : format(valeur.trim(), options.trim())
+    },
+  )
+}
+
 /** Prépare une formule LaTeX de MathALÉA avant sa conversion par tex2typst */
 function preprocessTex(tex: string): string {
   // les jetons de protection htmlToTypst (\uE000N\uE001) ne sont pas du LaTeX
@@ -598,6 +640,13 @@ function preprocessTex(tex: string): string {
   output = output.replace(/\\overgroup\s*\{/g, '\\overline{')
   // \iffx → \Leftrightarrow (custom macro "si et seulement si")
   output = output.replace(/\\iffx\b/g, '\\Leftrightarrow')
+  // Macros ProfCollege de la sortie LaTeX (`\Lg[mm]{24}`, `\Prix[0]{12}`) →
+  // valeur suivie de son unité, écrite comme dans les branches HTML des
+  // exercices (`5\text{ cm}`) ; seule l'unité subsiste si la valeur est vide
+  output = remplaceMacrosProfCollege(output, (valeur, unite) => {
+    if (unite === '') return valeur
+    return valeur === '' ? `\\text{${unite}}` : `${valeur}\\text{ ${unite}}`
+  })
   // \cfrac → \dfrac (tex2typst gère \dfrac ; \cfrac produit "cfrac")
   output = output.replace(/\\cfrac\b/g, '\\dfrac')
   // \empty → \emptyset (alias standard de l'ensemble vide, tex2typst → nothing)
@@ -2928,6 +2977,20 @@ export function htmlToTypst(
   text = text.replace(
     /(?:\\\\\s*)?\\medskip\b\s*/g,
     () => protect('#v(0.5em)\n'),
+  )
+
+  // Macros ProfCollege `\Lg[mm]{}` / `\Prix[0]{}` restées en mode texte : dans
+  // les « Course aux nombres », l'unité à compléter suit les pointillés hors de
+  // tout `$…$` (ex. canc3a-2023 : `$\ldots$ \Lg[mm]{}`). Sans cela, elles
+  // fuiraient en texte littéral échappé. Leurs variantes en mode mathématique
+  // sont traitées en amont par `preprocessTex`.
+  // `~` : espace insécable du balisage Typst (une espace ordinaire serait
+  // insérée telle quelle, et une U+00A0 ramenée à une espace par la
+  // normalisation du texte plus bas)
+  text = remplaceMacrosProfCollege(text, (valeur, unite) =>
+    valeur === '' || unite === ''
+      ? `${valeur}${unite}`
+      : `${valeur}${protect('~')}${unite}`,
   )
 
   // Cases à cocher `\faSquare` / `\faCheckSquare` (police fontawesome de la

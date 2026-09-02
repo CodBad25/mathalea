@@ -463,6 +463,16 @@ Les arguments sont lus à accolades équilibrées (`replaceLatexCommand`), donc
 les boîtes imbriquées le sont aussi ; `\linewidth` et ses synonymes deviennent
 un pourcentage (`0.5\linewidth` → `50%`).
 
+Les macros ProfCollege de la sortie LaTeX (`\Lg[cm]{5}`, `\Prix[0]{12}`) sont
+écrites par les `canEnonce`/`canReponseACompleter` sans tester
+`context.isHtml` : elles arrivent donc dans la conversion Typst, en mode
+mathématique comme en mode texte. `remplaceMacrosProfCollege` les rend en
+valeur suivie de son unité (`\Prix` formatant le nombre avec les décimales de
+son argument optionnel, deux par défaut) ; l'argument entre accolades est vide
+derrière des pointillés à compléter (`$\ldots$ \Lg[mm]{}`), seule l'unité est
+alors rendue. Sans cela, `$\Lg[mm]{24}$` deviendrait la variable Typst
+inconnue `Lg`, donc une erreur de compilation.
+
 #### Ligne de base des formules en ligne
 
 Une formule en ligne ne doit jamais être coupée entre deux lignes : c'est

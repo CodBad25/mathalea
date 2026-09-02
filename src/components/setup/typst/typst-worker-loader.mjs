@@ -95,6 +95,16 @@ export async function resolve(specifier, context, nextResolve) {
     return result
   } catch (originalErr) {
     const ext = extname(specifier)
+    // TypeScript sources imported with their emitted extension (`./x.js` for
+    // x.ts, as TS asks under moduleResolution NodeNext) : retry on the .ts
+    const tsEquivalents = { '.js': '.ts', '.mjs': '.mts', '.cjs': '.cts' }
+    if (tsEquivalents[ext]) {
+      try {
+        return await nextResolve(specifier.slice(0, -ext.length) + tsEquivalents[ext], context)
+      } catch {
+        throw originalErr
+      }
+    }
     // If it already has a recognised JS/TS/JSON extension, don't try further fallbacks
     if (knownExtensions.has(ext)) throw originalErr
     // Try .ts
