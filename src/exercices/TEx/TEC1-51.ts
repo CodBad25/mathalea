@@ -3,16 +3,18 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { Complexe } from '../../lib/mathFonctions/Complexe'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
+  rienSi1,
   reduireAxPlusByPlusC,
 } from '../../lib/outils/ecritures'
 import { pgcd } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Étudier la réalité d'un quotient de complexes"
 export const interactifReady = true
@@ -110,67 +112,64 @@ export default class RealiteQuotientComplexes extends Exercice {
       }`
       const quotient = `\\dfrac{z${constanteNumerateur.tex(true)}}{z${constanteDenominateur.tex(true)}}`
       const quotientConjugue = `\\dfrac{\\overline{z}${conjugueNumerateur.tex(true)}}{\\overline{z}${conjugueDenominateur.tex(true)}}`
-      let developpementNumerateur: string
+      let calculConditionReelle: string
 
       if (typeConstantes === 1) {
-        const yPlusPremiere = `y${ecritureAlgebrique(premiereConstante)}`
-        const xPlusSeconde = `x${ecritureAlgebrique(secondeConstante)}`
-        developpementNumerateur = `$\\begin{aligned}
-        &\\left(z${constanteNumerateur.tex(true)}\\right)
-        \\left(\\overline{z}${conjugueDenominateur.tex(true)}\\right)\\\\
-        ={}&\\left[x+i\\left(${yPlusPremiere}\\right)\\right]
-        \\left[${xPlusSeconde}-iy\\right]\\\\
-        ={}&x\\left(${xPlusSeconde}\\right)-ixy
-        +i\\left(${yPlusPremiere}\\right)\\left(${xPlusSeconde}\\right)
-        -i^2y\\left(${yPlusPremiere}\\right)\\\\
-        ={}&\\left[x\\left(${xPlusSeconde}\\right)+y\\left(${yPlusPremiere}\\right)\\right]\\\\
-        &+i\\left[\\left(${yPlusPremiere}\\right)\\left(${xPlusSeconde}\\right)-xy\\right].
+        calculConditionReelle = `$\\begin{aligned}
+        &\\left(z${constanteNumerateur.tex(true)}\\right)\\left(\\overline z${conjugueDenominateur.tex(true)}\\right)
+        =\\left(\\overline z${conjugueNumerateur.tex(true)}\\right)\\left(z${constanteDenominateur.tex(true)}\\right)\\\\
+        \\iff{}&z\\overline z${ecritureAlgebriqueSauf1(secondeConstante)}z${ecritureAlgebriqueSauf1(premiereConstante)}i\\overline z${ecritureAlgebrique(premiereConstante * secondeConstante)}i
+        =z\\overline z${ecritureAlgebriqueSauf1(secondeConstante)}\\overline z${ecritureAlgebriqueSauf1(-premiereConstante)}iz${ecritureAlgebrique(-premiereConstante * secondeConstante)}i\\\\
+        \\iff{}&${rienSi1(secondeConstante)}z${ecritureAlgebriqueSauf1(premiereConstante)}i\\overline z${ecritureAlgebrique(premiereConstante * secondeConstante)}i
+        =${rienSi1(secondeConstante)}\\overline z${ecritureAlgebriqueSauf1(-premiereConstante)}iz${ecritureAlgebrique(-premiereConstante * secondeConstante)}i\\\\
+        \\iff{}&${rienSi1(secondeConstante)}z${ecritureAlgebriqueSauf1(-secondeConstante)}\\overline z
+        ${ecritureAlgebriqueSauf1(premiereConstante)}i\\overline z${ecritureAlgebriqueSauf1(premiereConstante)}iz
+        ${ecritureAlgebriqueSauf1(2 * premiereConstante * secondeConstante)}i=0\\\\
+        \\iff{}&${rienSi1(secondeConstante)}(z-\\overline z)${ecritureAlgebriqueSauf1(premiereConstante)}i(z+\\overline z)${ecritureAlgebriqueSauf1(2 * premiereConstante * secondeConstante)}i=0.
         \\end{aligned}$<br>
-        On développe maintenant l’expression qui multiplie $i$ :<br>
+        Or, en écrivant $z=x+\\mathrm{i}y$, avec $x\\in \\mathbb{R}$ et $y\\in \\mathbb{R}$, on a :<br>
+        $z+\\overline z=2\\mathcal{Re}(z)=2x$ et $z-\\overline z=2i\\mathcal{Im}(z)=2iy$.<br> Ainsi,  on obtient :<br>
         $\\begin{aligned}
-        \\left(${yPlusPremiere}\\right)\\left(${xPlusSeconde}\\right)-xy
-        &=xy${ecritureAlgebriqueSauf1(secondeConstante)}y${ecritureAlgebriqueSauf1(premiereConstante)}x${ecritureAlgebrique(premiereConstante * secondeConstante)}-xy\\\\
-        &=${equationBrute}.
+        &${rienSi1(secondeConstante)}(2iy)${ecritureAlgebriqueSauf1(premiereConstante)}i(2x)${ecritureAlgebriqueSauf1(2 * premiereConstante * secondeConstante)}i=0\\\\
+        \\iff{}&2i\\left(${equationBrute}\\right)=0\\\\
+        \\iff{}&${equationBrute}=0.
         \\end{aligned}$<br>`
       } else if (typeConstantes === 2) {
-        const xPlusPremiere = `x${ecritureAlgebrique(premiereConstante)}`
-        const yPlusSeconde = `y${ecritureAlgebrique(secondeConstante)}`
-        developpementNumerateur = `$\\begin{aligned}
-        &\\left(z${constanteNumerateur.tex(true)}\\right)
-        \\left(\\overline{z}${conjugueDenominateur.tex(true)}\\right)\\\\
-        ={}&\\left[${xPlusPremiere}+iy\\right]
-        \\left[x-i\\left(${yPlusSeconde}\\right)\\right]\\\\
-        ={}&x\\left(${xPlusPremiere}\\right)
-        -i\\left(${xPlusPremiere}\\right)\\left(${yPlusSeconde}\\right)
-        +ixy-i^2y\\left(${yPlusSeconde}\\right)\\\\
-        ={}&\\left[x\\left(${xPlusPremiere}\\right)+y\\left(${yPlusSeconde}\\right)\\right]\\\\
-        &+i\\left[xy-\\left(${xPlusPremiere}\\right)\\left(${yPlusSeconde}\\right)\\right].
+        calculConditionReelle = `$\\begin{aligned}
+        &\\left(z${constanteNumerateur.tex(true)}\\right)\\left(\\overline z${conjugueDenominateur.tex(true)}\\right)
+        =\\left(\\overline z${conjugueNumerateur.tex(true)}\\right)\\left(z${constanteDenominateur.tex(true)}\\right)\\\\
+        \\iff{}&z\\overline z${ecritureAlgebriqueSauf1(-secondeConstante)}iz${ecritureAlgebriqueSauf1(premiereConstante)}\\overline z${ecritureAlgebrique(-premiereConstante * secondeConstante)}i\\\\
+        &\\qquad=z\\overline z${ecritureAlgebriqueSauf1(secondeConstante)}i\\overline z${ecritureAlgebriqueSauf1(premiereConstante)}z${ecritureAlgebrique(premiereConstante * secondeConstante)}i\\\\
+        \\iff{}&${rienSi1(-secondeConstante)}iz${ecritureAlgebriqueSauf1(premiereConstante)}\\overline z${ecritureAlgebrique(-premiereConstante * secondeConstante)}i
+        =${rienSi1(secondeConstante)}i\\overline z${ecritureAlgebriqueSauf1(premiereConstante)}z${ecritureAlgebrique(premiereConstante * secondeConstante)}i\\\\
+        \\iff{}&${rienSi1(-secondeConstante)}iz${ecritureAlgebriqueSauf1(-secondeConstante)}i\\overline z
+        ${ecritureAlgebriqueSauf1(premiereConstante)}\\overline z${ecritureAlgebriqueSauf1(-premiereConstante)}z
+        ${ecritureAlgebriqueSauf1(-2 * premiereConstante * secondeConstante)}i=0\\\\
+        \\iff{}&${rienSi1(-secondeConstante)}i(z+\\overline z)${ecritureAlgebriqueSauf1(-premiereConstante)}(z-\\overline z)${ecritureAlgebriqueSauf1(-2 * premiereConstante * secondeConstante)}i=0.
         \\end{aligned}$<br>
-        On développe maintenant l’expression qui multiplie $i$ :<br>
+        Or $z+\\overline z=2\\mathcal{Re}(z)$ et $z-\\overline z=2i\\mathcal{Im}(z)$.<br> Ainsi, en écrivant $z=x+\\mathrm{i}y$, on obtient :<br>
         $\\begin{aligned}
-        xy-\\left(${xPlusPremiere}\\right)\\left(${yPlusSeconde}\\right)
-        &=xy-xy${ecritureAlgebriqueSauf1(-secondeConstante)}x${ecritureAlgebriqueSauf1(-premiereConstante)}y${ecritureAlgebrique(-premiereConstante * secondeConstante)}\\\\
-        &=${equationBrute}.
+        &${rienSi1(-secondeConstante)}i(2x)${ecritureAlgebriqueSauf1(-premiereConstante)}(2iy)${ecritureAlgebriqueSauf1(-2 * premiereConstante * secondeConstante)}i=0\\\\
+        \\iff{}&2i\\left(${equationBrute}\\right)=0\\\\
+        \\iff{}&${equationBrute}=0.
         \\end{aligned}$<br>`
       } else {
-        const yPlusPremiere = `y${ecritureAlgebrique(premiereConstante)}`
-        const yPlusSeconde = `y${ecritureAlgebrique(secondeConstante)}`
-        developpementNumerateur = `$\\begin{aligned}
-        &\\left(z${constanteNumerateur.tex(true)}\\right)
-        \\left(\\overline{z}${conjugueDenominateur.tex(true)}\\right)\\\\
-        ={}&\\left[x+i\\left(${yPlusPremiere}\\right)\\right]
-        \\left[x-i\\left(${yPlusSeconde}\\right)\\right]\\\\
-        ={}&x^2-ix\\left(${yPlusSeconde}\\right)
-        +ix\\left(${yPlusPremiere}\\right)
-        -i^2\\left(${yPlusPremiere}\\right)\\left(${yPlusSeconde}\\right)\\\\
-        ={}&\\left[x^2+\\left(${yPlusPremiere}\\right)\\left(${yPlusSeconde}\\right)\\right]\\\\
-        &+i\\left[x\\left(${yPlusPremiere}\\right)-x\\left(${yPlusSeconde}\\right)\\right].
+        calculConditionReelle = `$\\begin{aligned}
+        &\\left(z${constanteNumerateur.tex(true)}\\right)\\left(\\overline z${conjugueDenominateur.tex(true)}\\right)
+        =\\left(\\overline z${conjugueNumerateur.tex(true)}\\right)\\left(z${constanteDenominateur.tex(true)}\\right)\\\\
+        \\iff{}&z\\overline z${ecritureAlgebriqueSauf1(-secondeConstante)}iz${ecritureAlgebriqueSauf1(premiereConstante)}i\\overline z${ecritureAlgebrique(premiereConstante * secondeConstante)}\\\\
+        &\\qquad=z\\overline z${ecritureAlgebriqueSauf1(secondeConstante)}i\\overline z${ecritureAlgebriqueSauf1(-premiereConstante)}iz${ecritureAlgebrique(premiereConstante * secondeConstante)}\\\\
+        \\iff{}&${rienSi1(-secondeConstante)}iz${ecritureAlgebriqueSauf1(premiereConstante)}i\\overline z
+        =${rienSi1(secondeConstante)}i\\overline z${ecritureAlgebriqueSauf1(-premiereConstante)}iz\\\\
+        \\iff{}&${rienSi1(-secondeConstante)}iz${ecritureAlgebriqueSauf1(-secondeConstante)}i\\overline z
+        ${ecritureAlgebriqueSauf1(premiereConstante)}i\\overline z${ecritureAlgebriqueSauf1(premiereConstante)}iz=0\\\\
+        \\iff{}&${rienSi1(premiereConstante - secondeConstante)}i(z+\\overline z)=0.
         \\end{aligned}$<br>
-        On développe maintenant l’expression qui multiplie $i$ :<br>
+        Or $z+\\overline z=2\\mathcal{Re}(z)$.<br> Ainsi, en écrivant $z=x+\\mathrm{i}y$, on obtient :<br>
         $\\begin{aligned}
-        x\\left(${yPlusPremiere}\\right)-x\\left(${yPlusSeconde}\\right)
-        &=xy${ecritureAlgebriqueSauf1(premiereConstante)}x-xy${ecritureAlgebriqueSauf1(-secondeConstante)}x\\\\
-        &=${equationBrute}.
+        &${rienSi1(premiereConstante - secondeConstante)}i(2x)=0\\\\
+        \\iff{}&2i\\left(${equationBrute}\\right)=0\\\\
+        \\iff{}&${equationBrute}=0.
         \\end{aligned}$<br>`
       }
       let formatReponsePartie2: string
@@ -221,8 +220,8 @@ export default class RealiteQuotientComplexes extends Exercice {
         ],
         style: 'nombres',
       })
-      let texte = `On considère le nombre complexe :<br>
-    $Z=${quotient}$, avec $z\\neq ${valeurInterdite.tex()}$.<br>
+      let texte = `Soit $z\\in\\mathbb{C}$ tel que $z\\neq ${valeurInterdite.tex()}$.<br>
+    On pose alors $Z=${quotient}$.<br>
     ${questions}`
 
       if (this.interactif) {
@@ -242,17 +241,24 @@ export default class RealiteQuotientComplexes extends Exercice {
     De plus, le conjugué d’une somme est la somme des conjugués. Ainsi :<br>
     $\\begin{aligned}
     \\overline{Z}
+    &=\\overline{\\left(\\dfrac{z${constanteNumerateur.tex(true)}}{z${constanteDenominateur.tex(true)}}\\right)}\\\\
     &=\\dfrac{\\overline{z${constanteNumerateur.tex(true)}}}{\\overline{z${constanteDenominateur.tex(true)}}}\\\\
+    &=\\dfrac{\\overline z+\\overline{${constanteNumerateur.tex()}}}{\\overline z+\\overline{${constanteDenominateur.tex()}}}\\\\
     &=${miseEnEvidence(quotientConjugue)}.
     \\end{aligned}$`
 
-      const correctionPartie2 = `On multiplie le numérateur et le dénominateur par la quantité conjuguée du dénominateur, pour le rendre réel :<br>
-    $Z=\\dfrac{\\left(z${constanteNumerateur.tex(true)}\\right)\\left(\\overline{z}${conjugueDenominateur.tex(true)}\\right)}{\\left(z${constanteDenominateur.tex(true)}\\right)\\left(\\overline{z}${conjugueDenominateur.tex(true)}\\right)}$.<br>
-    Le dénominateur $\\left(z${constanteDenominateur.tex(true)}\\right)\\left(\\overline{z}${conjugueDenominateur.tex(true)}\\right)$ est le produit de deux nombres complexes conjugués. Comme $z\\neq ${valeurInterdite.tex()}$, ce produit est un réel strictement positif. Ainsi, $Z$ est réel si et seulement si le numérateur est réel.<br>
-    Posons $z=x+iy$, avec $x$ et $y$ réels. Alors $\\overline{z}=x-iy$. On commence par effectuer ces substitutions dans le numérateur, puis on développe en utilisant $i^2=-1$ :<br>
-    ${developpementNumerateur}
-    ${explicationSimplification}Par conséquent, pour $z=x+iy$, on a $Z\\in\\mathbb{R}$ si et seulement si $${equationDroite}=0$, sans oublier la valeur interdite $z=${valeurInterdite.tex()}$.<br>
-    ${conclusionContrainte}`
+      const correctionPartie2 = `Un nombre complexe est réel si et seulement s’il est égal à son conjugué. Par conséquent :<br>
+    $\\begin{aligned}
+    Z\\in\\mathbb{R}
+    &\\iff Z=\\overline Z\\\\
+    &\\iff \\dfrac{z${constanteNumerateur.tex(true)}}{z${constanteDenominateur.tex(true)}}
+    =\\dfrac{\\overline z${conjugueNumerateur.tex(true)}}{\\overline z${conjugueDenominateur.tex(true)}}.
+    \\end{aligned}$<br>
+    Les deux dénominateurs étant non nuls, cette égalité équivaut à l’égalité des produits en croix :<br>
+    ${calculConditionReelle}
+    ${explicationSimplification}Par conséquent, on a $Z\\in\\mathbb{R}$ si et seulement si $${equationDroite}=0$, avec $z\\neq${valeurInterdite.tex()}$.<br>
+    ${conclusionContrainte}<br>
+    ${texteEnCouleurEtGras('Remarque :',bleuMathalea)} <br>il était possible de résoudre cette question en posant dès le départ $z=x+\\mathrm{i}y$, avec $x\\in \\mathbb{R}$ et $y\\in \\mathbb{R}$.`
 
       const texteCorr = createList({
         items: [correctionPartie1, correctionPartie2],
