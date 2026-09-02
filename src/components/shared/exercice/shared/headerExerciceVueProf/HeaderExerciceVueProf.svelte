@@ -57,9 +57,9 @@
   }
   // Éttablissement de la catégorie
   const ressourcesUuids = Object.keys({ ...uuidsRessources })
-  const profsUuids = Array.from(toMap({ ...refProfs }).values()).map((e) =>
-    e.get('uuid'),
-  )
+  const profsUuids = Array.from(toMap({ ...refProfs }).values())
+    .filter((entry) => entry instanceof Map)
+    .map((entry) => String(entry.get('uuid') ?? ''))
   let category: string
   if (ressourcesUuids.includes($exercicesParams[indiceExercice]?.uuid)) {
     category = 'Ressource'
@@ -251,54 +251,54 @@
   {/if}
 {:else}
   <div class="z-0 flex-1">
-  <h1
-    class="border-b border-coopmaths-struct dark:border-coopmathsdark-struct text-coopmaths-struct dark:text-coopmathsdark-struct pl-0 mt-4 flex flex-col lg:flex-row justify-start lg:justify-between items-start xl:items-baseline"
-  >
-    <div
-      class="flex flex-col xl:flex-row xl:justify-start xl:items-center"
-      id="exerciceHeader{indiceExercice}"
+    <h1
+      class="border-b border-coopmaths-struct dark:border-coopmathsdark-struct text-coopmaths-struct dark:text-coopmathsdark-struct pl-0 mt-4 flex flex-col lg:flex-row justify-start lg:justify-between items-start xl:items-baseline"
     >
       <div
-        class="flex flex-row items-center whitespace-pre font-bold text-sm md:text-base lg:text-xl pb-1 lg:pb-0"
+        class="flex flex-col xl:flex-row xl:justify-start xl:items-center"
+        id="exerciceHeader{indiceExercice}"
       >
         <div
-          class="{$exercicesParams.length <= 1
-            ? 'hidden'
-            : 'flex'} items-center justify-center h-4 lg:h-8 w-4 lg:w-6 bg-coopmaths-struct dark:bg-coopmathsdark-struct text-coopmaths-canvas dark:text-coopmathsdark-canvas font-light text-xs lg:text-lg mr-2 lg:mr-4"
+          class="flex flex-row items-center whitespace-pre font-bold text-sm md:text-base lg:text-xl pb-1 lg:pb-0"
         >
-          {indiceExercice + 1}
-        </div>
-        {category}&#8239
-        {#if id && id.length !== 0}
-          {id}<span class="hidden xl:inline-flex xl:mx-1 font-bold"
-            >&middot;</span
+          <div
+            class="{$exercicesParams.length <= 1
+              ? 'hidden'
+              : 'flex'} items-center justify-center h-4 lg:h-8 w-4 lg:w-6 bg-coopmaths-struct dark:bg-coopmathsdark-struct text-coopmaths-canvas dark:text-coopmathsdark-canvas font-light text-xs lg:text-lg mr-2 lg:mr-4"
           >
-        {/if}
-      </div>
-      {#key titleAddendum}
-        <div
-          id="exotitle-{indiceExercice}"
-          class="flex items-center gap-x-1 text-sm md:text-base xl:text-lg pl-0
-        {id && id.length !== 0 ? 'lg:pl-0' : 'lg:pl-4'}"
-        >
-          <div>
-            {titleBase}
+            {indiceExercice + 1}
           </div>
-          {#if titleAddendum}
-            <span
-              class="ml-2 flex justify-center items-center shrink-0 rounded-full h-5 w-5 bg-coopmaths-warn-900 text-coopmaths-canvas font-bold text-sm"
+          {category}&#8239
+          {#if id && id.length !== 0}
+            {id}<span class="hidden xl:inline-flex xl:mx-1 font-bold"
+              >&middot;</span
             >
-              {titleAddendum}
-            </span>
           {/if}
         </div>
-      {/key}
-    </div>
-    <div
-      class="print-hidden flex flex-col md:flex-row justify-start space-x-2 md:space-x-10 text-normal mt-1 text-xl lg:justify-end mr-1"
-    >
-      <div class="flex flex-row justify-start items-center">
-        <!-- <button
+        {#key titleAddendum}
+          <div
+            id="exotitle-{indiceExercice}"
+            class="flex items-center gap-x-1 text-sm md:text-base xl:text-lg pl-0
+        {id && id.length !== 0 ? 'lg:pl-0' : 'lg:pl-4'}"
+          >
+            <div>
+              {titleBase}
+            </div>
+            {#if titleAddendum}
+              <span
+                class="ml-2 flex justify-center items-center shrink-0 rounded-full h-5 w-5 bg-coopmaths-warn-900 text-coopmaths-canvas font-bold text-sm"
+              >
+                {titleAddendum}
+              </span>
+            {/if}
+          </div>
+        {/key}
+      </div>
+      <div
+        class="print-hidden flex flex-col md:flex-row justify-start space-x-2 md:space-x-10 text-normal mt-1 text-xl lg:justify-end mr-1"
+      >
+        <div class="flex flex-row justify-start items-center">
+          <!-- <button
           class="mx-2 tooltip tooltip-left"
           data-tip={isMessagesVisible ? "Masquer les messages" : "Montrer les messages"}
           type="button"
@@ -309,134 +309,134 @@
         >
           <i class="bx {isMessagesVisible ? 'bxs-bulb' : 'bx-bulb'}" />
         </button> -->
-        <button
-          class="mx-2 tooltip tooltip-left tooltip-neutral {correctionExists &&
-          correctionReady
-            ? ''
-            : 'hidden'}"
-          data-tip={isCorrectionVisible
-            ? 'Masquer la correction'
-            : 'Montrer la correction'}
-          type="button"
-          aria-label="Afficher / Masquer la correction"
-          on:click={() => {
-            isCorrectionVisible = !isCorrectionVisible
-            dispatch('clickCorrection', {
-              isCorrectionVisible,
-              isContentVisible,
-            })
-          }}
-        >
-          <i
-            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx {isCorrectionVisible
-              ? 'bxs-check-circle'
-              : 'bx-check-circle'}"
-          ></i>
-        </button>
-        {#if interactifReady && !interactifObligatoire}
+          <button
+            class="mx-2 tooltip tooltip-left tooltip-neutral {correctionExists &&
+            correctionReady
+              ? ''
+              : 'hidden'}"
+            data-tip={isCorrectionVisible
+              ? 'Masquer la correction'
+              : 'Montrer la correction'}
+            type="button"
+            aria-label="Afficher / Masquer la correction"
+            on:click={() => {
+              isCorrectionVisible = !isCorrectionVisible
+              dispatch('clickCorrection', {
+                isCorrectionVisible,
+                isContentVisible,
+              })
+            }}
+          >
+            <i
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx {isCorrectionVisible
+                ? 'bxs-check-circle'
+                : 'bx-check-circle'}"
+            ></i>
+          </button>
+          {#if interactifReady && !interactifObligatoire}
+            <button
+              class="mx-2 tooltip tooltip-left tooltip-neutral"
+              data-tip={isInteractif
+                ? "Désactiver l'interactivité"
+                : 'Rendre interactif'}
+              type="button"
+              on:click={switchInteractif}
+            >
+              <InteractivityIcon isOnStateActive={isInteractif} />
+            </button>
+          {/if}
+          <button
+            class="mx-2 tooltip tooltip-left {randomReady ? '' : 'hidden'}"
+            data-tip="Nouvel énoncé"
+            type="button"
+            aria-label="Nouvel énoncé"
+            on:click={newData}
+          >
+            <i
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-refresh"
+            ></i>
+          </button>
+          {#if isHidable}
+            <button
+              type="button"
+              on:click={() => {
+                isVisible = !isVisible
+                dispatch('clickVisible', { isVisible })
+              }}
+              class="mx-2 tooltip tooltip-left"
+              data-tip=" {isVisible ? 'Masquer' : 'Montrer'} l'exercice"
+              aria-label="Masquer / Montrer l'exercice"
+            >
+              <i
+                class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx {isVisible
+                  ? 'bx-hide'
+                  : 'bx-show'}"
+              ></i>
+            </button>
+          {/if}
           <button
             class="mx-2 tooltip tooltip-left tooltip-neutral"
-            data-tip={isInteractif
-              ? "Désactiver l'interactivité"
-              : 'Rendre interactif'}
+            data-tip="Dupliquer l'exercice"
             type="button"
-            on:click={switchInteractif}
+            aria-label="Dupliquer l'exercice"
+            on:click={duplicate}
           >
-            <InteractivityIcon isOnStateActive={isInteractif} />
+            <i
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-duplicate"
+            ></i>
           </button>
-        {/if}
-        <button
-          class="mx-2 tooltip tooltip-left {randomReady ? '' : 'hidden'}"
-          data-tip="Nouvel énoncé"
-          type="button"
-          aria-label="Nouvel énoncé"
-          on:click={newData}
-        >
-          <i
-            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-refresh"
-          ></i>
-        </button>
-        {#if isHidable}
+          {#if isDeletable}
+            <button
+              class="mx-2 tooltip tooltip-left tooltip-neutral"
+              data-tip="Supprimer l'exercice"
+              type="button"
+              aria-label="Supprimer"
+              on:click={remove}
+            >
+              <i
+                class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-trash"
+              ></i>
+            </button>
+          {/if}
           <button
+            class="mx-2 tooltip tooltip-left tooltip-neutral {settingsReady
+              ? ''
+              : 'hidden'} "
+            data-tip="Changer les paramètres de l'exercice"
+            aria-label="Paramètres de l'exercice"
             type="button"
             on:click={() => {
-              isVisible = !isVisible
-              dispatch('clickVisible', { isVisible })
+              isSettingsVisible = !isSettingsVisible
+              dispatch('clickSettings', { isSettingsVisible })
             }}
-            class="mx-2 tooltip tooltip-left"
-            data-tip=" {isVisible ? 'Masquer' : 'Montrer'} l'exercice"
-            aria-label="Masquer / Montrer l'exercice"
           >
             <i
-              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx {isVisible
-                ? 'bx-hide'
-                : 'bx-show'}"
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-slider"
             ></i>
           </button>
-        {/if}
-        <button
-          class="mx-2 tooltip tooltip-left tooltip-neutral"
-          data-tip="Dupliquer l'exercice"
-          type="button"
-          aria-label="Dupliquer l'exercice"
-          on:click={duplicate}
+        </div>
+        <div
+          class="flex flex-row justify-start items-center space-x-4 md:space-x-1"
         >
-          <i
-            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-duplicate"
-          ></i>
-        </button>
-        {#if isDeletable}
+          <!-- en dernier des actions, juste avant les boutons monter/descendre -->
           <button
-            class="mx-2 tooltip tooltip-left tooltip-neutral"
-            data-tip="Supprimer l'exercice"
+            class="mx-2 tooltip tooltip-left tooltip-neutral text-xl"
+            data-tip="Signaler un problème"
             type="button"
-            aria-label="Supprimer"
-            on:click={remove}
+            aria-label="Signaler un problème"
+            on:click={() => (isBugReportDisplayed = true)}
           >
             <i
-              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-trash"
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-bug"
             ></i>
           </button>
-        {/if}
-        <button
-          class="mx-2 tooltip tooltip-left tooltip-neutral {settingsReady
-            ? ''
-            : 'hidden'} "
-          data-tip="Changer les paramètres de l'exercice"
-          aria-label="Paramètres de l'exercice"
-          type="button"
-          on:click={() => {
-            isSettingsVisible = !isSettingsVisible
-            dispatch('clickSettings', { isSettingsVisible })
-          }}
-        >
-          <i
-            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-slider"
-          ></i>
-        </button>
+          {#if isSortable}
+            <BoutonMonter indice={indiceExercice} />
+            <BoutonDescendre indice={indiceExercice} {indiceLastExercice} />
+          {/if}
+        </div>
       </div>
-      <div
-        class="flex flex-row justify-start items-center space-x-4 md:space-x-1"
-      >
-        <!-- en dernier des actions, juste avant les boutons monter/descendre -->
-        <button
-          class="mx-2 tooltip tooltip-left tooltip-neutral text-xl"
-          data-tip="Signaler un problème"
-          type="button"
-          aria-label="Signaler un problème"
-          on:click={() => (isBugReportDisplayed = true)}
-        >
-          <i
-            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-bug"
-          ></i>
-        </button>
-        {#if isSortable}
-          <BoutonMonter indice={indiceExercice} />
-          <BoutonDescendre indice={indiceExercice} {indiceLastExercice} />
-        {/if}
-      </div>
-    </div>
-  </h1>
+    </h1>
   </div>
 {/if}
 

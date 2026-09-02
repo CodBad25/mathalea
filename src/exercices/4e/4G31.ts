@@ -14,6 +14,6 @@ export default class ReciproqueThales4eme extends ReciproqueThales {
   constructor() {
     super()
     this.quatrieme = true
-    this.besoinFormulaire3Numerique = []
+    this.besoinFormulaire3Numerique = false
   }
 }

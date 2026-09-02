@@ -94,7 +94,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
         decimal,
         this.sup3,
         !this.sup2,
-        null,
+        undefined,
       )
       expf = resultats[0]
       expn = resultats[1] as string
