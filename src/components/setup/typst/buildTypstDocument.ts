@@ -177,6 +177,12 @@ export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2e
  * Un énoncé peut être une `table.cell(rowspan: n, …)` — questions liées, qui
  * partagent un même énoncé — les lignes suivantes du groupe portant alors
  * `none` à la place de leur énoncé (équivalent du `\\SetCell[r=n]` de LaTeX).
+ *
+ * `taille` réduit la police du tableau sans toucher aux figures (plafonnées en
+ * pt absolus, voir `CAN_FIGURE_MAX_WIDTH_PT`) : en A5, le texte à sa taille
+ * pleine écrase les repères et courbes de lecture graphique, dessinés petit —
+ * `buildCanVersionContent` le rabaisse alors pour rétablir le rapport
+ * texte/figure de l'A4.
  */
 export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
   enonces,
@@ -185,7 +191,9 @@ export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
   entetes: ([\\#], [Énoncé], [Réponse], [Jury]),
   fond: luma(230),
   hauteur-ligne: 8pt,
+  taille: 1em,
 ) = {
+  set text(size: taille)
   let largeurs = if jury { (0.075fr, 0.545fr, 0.28fr, 0.1fr) } else { (0.08fr, 0.6fr, 0.32fr) }
   // aucune ligne ne se coupe entre deux pages (comportement du \`longtblr\`
   // de la version LaTeX) : une figure serait sinon séparée de son numéro
@@ -2204,6 +2212,12 @@ function buildCanVersionContent(
     ),
   )
   renderLines.push('  #can-tableau(')
+  // En A5, la fiche de passation garde la même police que l'A4 alors que les
+  // figures (repères, courbes) sont plafonnées à une largeur en pt absolus :
+  // le texte y paraît surdimensionné à côté d'elles. On le rabaisse pour
+  // retrouver le rapport texte/figure de l'A4 (0,85 ≈ A5/A4 en diagonale,
+  // arrondi vers le haut pour rester lisible).
+  if (options.pageFormat === 'a5') renderLines.push('    taille: 0.85em,')
   renderLines.push(...typstArrayArgument(enonces, '    '))
   renderLines.push(...typstContentArrayArgument(reponses, '    '))
   renderLines.push('  )')

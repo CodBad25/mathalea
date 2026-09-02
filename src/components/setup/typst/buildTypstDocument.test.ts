@@ -1348,6 +1348,22 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code).not.toContain('width: 450.0pt)')
   })
 
+  it('rabaisse la police du tableau en A5 (rapport texte/figure)', () => {
+    const a5 = buildTypstDocument(
+      [exercise({ questions: ['$7\\times 5$'] })],
+      { ...canOptions, pageFormat: 'a5' },
+    )
+    // le tableau reçoit une taille de police relative réduite ; les figures,
+    // plafonnées en pt absolus, ne suivent pas
+    expect(a5).toContain('#can-tableau(\n    taille: 0.85em,')
+    // en A4, le tableau garde la police du document (pas d'argument taille)
+    const a4 = buildTypstDocument(
+      [exercise({ questions: ['$7\\times 5$'] })],
+      canOptions,
+    )
+    expect(a4).not.toContain('taille: 0.85em')
+  })
+
   it('n’émet pas de repère hors de la première version', () => {
     const code = buildTypstDocument(
       [exercise({ questions: ['$1+1$'] })],
