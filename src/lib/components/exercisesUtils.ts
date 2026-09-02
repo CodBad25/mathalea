@@ -150,6 +150,39 @@ export const buildExercisesList = (
 }
 
 /**
+ * Résout les images (énoncé et correction) et le titre lisible d'une
+ * ressource statique (annale scannée, banque externe) à partir de son uuid.
+ * Utilisé par la vue TBI, qui affiche ces ressources comme de simples images
+ * faute d'énoncé rejouable.
+ * @param uuid uuid de la ressource statique
+ * @returns `{ png, pngCor, title }`, ou `null` si l'uuid n'est pas une
+ * ressource statique connue (référentiel non chargé, uuid inconnu)
+ */
+export const getStaticExercicePngUrls = (
+  uuid: string,
+): { png: string[]; pngCor: string[]; title: string } | null => {
+  const foundResource = retrieveResourceFromUuid(referentielsStatiques(), uuid)
+  const pngUrls = computeStaticExercicePngUrls(foundResource)
+  if (pngUrls == null) return null
+  let title = uuid
+  if (resourceHasPlace(foundResource)) {
+    title = `${foundResource.typeExercice.toUpperCase()} ${foundResource.mois || ''} ${foundResource.annee} ${foundResource.lieu} ${foundResource.jour || ''} Ex ${foundResource.numeroInitial}`
+  } else if (
+    foundResource !== null &&
+    'titre' in foundResource &&
+    typeof foundResource.titre === 'string' &&
+    foundResource.titre.length > 0
+  ) {
+    title = foundResource.titre
+  }
+  return {
+    png: pngUrls.png ?? [],
+    pngCor: pngUrls.pngCor ?? [],
+    title,
+  }
+}
+
+/**
  * Calcule l'URL locale du fichier source Typst d'une ressource statique
  * (annales DNB, BAC...), si son entrée de référentiel déclare la clé
  * `typ: true`. Utilisé par la vue Typst uniquement (voir `Typst.svelte`) :

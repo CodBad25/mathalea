@@ -1,5 +1,6 @@
 <script lang="ts">
   import TbiExerciceCard from './TbiExerciceCard.svelte'
+  import TbiStaticCard from './TbiStaticCard.svelte'
   import type { TbiItem } from './tbiTypes'
 
   interface Props {
@@ -35,6 +36,21 @@
 {#if item.exercise}
   <TbiExerciceCard
     exercise={item.exercise}
+    paramsIndex={item.paramsIndex}
+    {showMoveToTab}
+    {tabsCount}
+    {currentTab}
+    {showReorder}
+    {canMoveUp}
+    {canMoveDown}
+    {showColumnBreak}
+    {columnBreakDisabled}
+    {onReorder}
+    {onDelete}
+  />
+{:else if item.staticContent}
+  <TbiStaticCard
+    content={item.staticContent}
     paramsIndex={item.paramsIndex}
     {showMoveToTab}
     {tabsCount}
