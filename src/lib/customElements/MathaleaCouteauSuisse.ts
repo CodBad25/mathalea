@@ -8,6 +8,8 @@ import MathaleaCustomElement, {
 export type MathaleaCouteauSuisseChild = {
   formatInteractif: InteractivityType
   autoCorrection?: unknown
+  /** Index utilisé par l'identifiant DOM de l'enfant, lorsqu'il diffère de celui du parent. */
+  questionIndex?: number
 }
 
 export type MathaleaCouteauSuisseOptions = {
@@ -75,7 +77,8 @@ export class MathaleaCouteauSuisseElement extends MathaleaCustomElement {
           ?.getAttribute('elements'),
     )
 
-    const originalAutoCorrection = exercice.autoCorrection[questionIndex]
+    const originalAutoCorrectionLength = exercice.autoCorrection.length
+    const originalAutoCorrections = new Map<number, unknown>()
     const results: VerificationResult[] = []
 
     try {
@@ -88,15 +91,35 @@ export class MathaleaCouteauSuisseElement extends MathaleaCustomElement {
             `mathalea-couteau-suisse : élément inconnu '${element.formatInteractif}'`,
           )
         }
-        exercice.autoCorrection[questionIndex] = {
-          ...((originalAutoCorrection ?? {}) as Record<string, unknown>),
+        const childQuestionIndex = Number.isInteger(element.questionIndex)
+          ? Number(element.questionIndex)
+          : questionIndex
+        if (!originalAutoCorrections.has(childQuestionIndex)) {
+          originalAutoCorrections.set(
+            childQuestionIndex,
+            exercice.autoCorrection[childQuestionIndex],
+          )
+        }
+        exercice.autoCorrection[childQuestionIndex] = {
+          ...((exercice.autoCorrection[questionIndex] ?? {}) as Record<
+            string,
+            unknown
+          >),
           ...((element.autoCorrection ?? {}) as Record<string, unknown>),
           formatInteractif: element.formatInteractif,
         }
-        results.push(elementClass.verifQuestion(exercice, questionIndex))
+        results.push(elementClass.verifQuestion(exercice, childQuestionIndex))
       }
     } finally {
-      exercice.autoCorrection[questionIndex] = originalAutoCorrection
+      for (const [index, original] of originalAutoCorrections) {
+        if (original == null && index !== questionIndex) {
+          delete exercice.autoCorrection[index]
+        } else {
+          exercice.autoCorrection[index] =
+            original as IExercice['autoCorrection'][number]
+        }
+      }
+      exercice.autoCorrection.length = originalAutoCorrectionLength
     }
 
     const score = results.reduce(

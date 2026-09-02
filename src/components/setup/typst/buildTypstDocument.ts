@@ -177,6 +177,12 @@ export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2e
  * Un énoncé peut être une `table.cell(rowspan: n, …)` — questions liées, qui
  * partagent un même énoncé — les lignes suivantes du groupe portant alors
  * `none` à la place de leur énoncé (équivalent du `\\SetCell[r=n]` de LaTeX).
+ *
+ * `taille` réduit la police du tableau sans toucher aux figures (plafonnées en
+ * pt absolus, voir `CAN_FIGURE_MAX_WIDTH_PT`) : en A5, le texte à sa taille
+ * pleine écrase les repères et courbes de lecture graphique, dessinés petit —
+ * `buildCanVersionContent` le rabaisse alors pour rétablir le rapport
+ * texte/figure de l'A4.
  */
 export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
   enonces,
@@ -185,7 +191,9 @@ export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
   entetes: ([\\#], [Énoncé], [Réponse], [Jury]),
   fond: luma(230),
   hauteur-ligne: 8pt,
+  taille: 1em,
 ) = {
+  set text(size: taille)
   let largeurs = if jury { (0.075fr, 0.545fr, 0.28fr, 0.1fr) } else { (0.08fr, 0.6fr, 0.32fr) }
   // aucune ligne ne se coupe entre deux pages (comportement du \`longtblr\`
   // de la version LaTeX) : une figure serait sinon séparée de son numéro
@@ -304,8 +312,7 @@ export const MATHALEA_COVER_HELPER = `#let mathalea-points(n) = {
  * `grille` détaille les points exercice par exercice (ligne « points » et
  * ligne « obtenus », dont la case Total tient lieu de note), sinon seul le
  * total est rappelé ; `note` ajoute par-dessus une case où porter la note à la main.
- * `signature` ajoute le champ de signature du/de la responsable légal.e, sous
- * le prénom.
+ * `signature` ajoute sous le prénom un champ dont l'intitulé est réglable.
  */
 export const MATHALEA_COVER_RECITATION_HELPER = `#let mathalea-couverture-recitation(
   titre: "",
@@ -317,6 +324,7 @@ export const MATHALEA_COVER_RECITATION_HELPER = `#let mathalea-couverture-recita
   bareme: (),
   grille: false,
   signature: true,
+  signature-label: "Signature d’un responsable légal",
   note: false,
 ) = {
   let petit(corps) = text(size: 0.85em, fill: luma(80), corps)
@@ -347,7 +355,7 @@ export const MATHALEA_COVER_RECITATION_HELPER = `#let mathalea-couverture-recita
     column-gutter: (6pt, 1.6em, 6pt), align: bottom,
     [Nom :], trait-champ,
     [Prénom :], trait-champ)
-  let intitule-signature = [Signature du/de la responsable légal.e :]
+  let intitule-signature = [#signature-label :]
   let identite = {
     champs
     if signature {
@@ -399,31 +407,46 @@ export const MATHALEA_COVER_RECITATION_HELPER = `#let mathalea-couverture-recita
     // sinon, la note se pose à droite des consignes — dans le blanc laissé
     // sous la grille — quand leur longueur naturelle lui laisse la place
     let note-avec-consignes = (
-      not pleine-ligne
-        and case-note != none
+      case-note != none
         and liste-consignes != none
+        and (not pleine-ligne or not signature)
         and measure(liste-consignes).width + measure(case-note).width + 20pt <= size.width
+    )
+    // sans signature, une grille sur sa propre ligne peut partager cette
+    // ligne avec la note tant que leurs largeurs naturelles tiennent ensemble
+    let note-avec-points = (
+      pleine-ligne
+        and not signature
+        and points != none
+        and case-note != none
+        and largeur + measure(case-note).width + 20pt <= size.width
     )
     if points != none or case-note != none {
       if pleine-ligne {
         champs-en-ligne
-        // la note remplit le blanc à droite de la signature plutôt que de
-        // s'ajouter sous la grille ; sa hauteur donne la place où signer
-        if signature or case-note != none {
+        if note-avec-points {
           v(0.9em)
           grid(columns: (1fr, auto), column-gutter: 1.2em, align: (left + top, right + top),
-            if signature { intitule-signature } else { [] },
-            if case-note != none { case-note } else { [] })
-          if case-note == none { v(1.6em) }
-        }
-        v(0.5em)
-        if points != none {
-          // réduite si elle déborde encore la largeur du texte (sinon Typst
-          // comprime les colonnes jusqu'à faire chevaucher leurs textes)
-          if largeur > size.width {
-            box(scale(size.width / largeur * 100%, origin: top + left, reflow: true, points))
-          } else {
-            points
+            points, case-note)
+        } else {
+          // la note remplit le blanc à droite de la signature plutôt que de
+          // s'ajouter sous la grille ; sa hauteur donne la place où signer
+          if signature or (case-note != none and not note-avec-consignes) {
+            v(0.9em)
+            grid(columns: (1fr, auto), column-gutter: 1.2em, align: (left + top, right + top),
+              if signature { intitule-signature } else { [] },
+              if case-note != none { case-note } else { [] })
+            if case-note == none { v(1.6em) }
+          }
+          v(0.5em)
+          if points != none {
+            // réduite si elle déborde encore la largeur du texte (sinon Typst
+            // comprime les colonnes jusqu'à faire chevaucher leurs textes)
+            if largeur > size.width {
+              box(scale(size.width / largeur * 100%, origin: top + left, reflow: true, points))
+            } else {
+              points
+            }
           }
         }
       } else {
@@ -617,6 +640,41 @@ export interface TypstCarryOver {
     number,
     { position: WritingLinesPosition; count: number; spacing: number }
   >
+}
+
+/**
+ * Stabilise les sauts structurels de la palette avant de construire le
+ * document. Un saut de page/colonne est un interrupteur, pas une insertion
+ * libre : il ne doit apparaître qu'une fois par gap. Après le dernier
+ * exercice, il n'a aucun contenu suivant à déplacer et peut être écarté.
+ * Les textes et sections restent, eux, inchangés et peuvent être dupliqués
+ * volontairement.
+ */
+function stabilizeStructuralInsertions(
+  carryOver: TypstCarryOver,
+  exerciseCount: number,
+): TypstCarryOver {
+  if (carryOver.insertions == null) return carryOver
+
+  const insertions: Record<number, string[]> = {}
+  for (const [key, lines] of Object.entries(carryOver.insertions)) {
+    const gap = Number(key)
+    const structuralInsertions = new Set<string>()
+    const stabilized = lines.filter((line) => {
+      const isStructural =
+        line === PAGE_BREAK_SNIPPET || line === COLUMN_BREAK_SNIPPET
+      if (!isStructural) return true
+      if (gap >= exerciseCount || structuralInsertions.has(line)) return false
+      structuralInsertions.add(line)
+      return true
+    })
+    if (stabilized.length > 0) insertions[gap] = stabilized
+  }
+
+  return {
+    ...carryOver,
+    insertions: Object.keys(insertions).length > 0 ? insertions : undefined,
+  }
 }
 
 /** Repère de début d'une surcharge de code (voir `codeOverrides`) */
@@ -1087,6 +1145,8 @@ export interface TypstCoverOptions {
   duree: string
   /** Consignes affichées sous la durée, une par ligne */
   consignes: string[]
+  /** Intitulé du champ de signature du bandeau compact */
+  signatureLabel: string
   /**
    * Mention en bas de page (« Tournez la page S.V.P. »). Affichée seulement
    * si le modèle en prévoit une (`COVER_TEMPLATE_LAYOUT.hasNoteFin`) et si le
@@ -1102,7 +1162,7 @@ export interface TypstCoverOptions {
   /** Affiche le tableau du barème et son total */
   showBareme: boolean
   /**
-   * Ajoute le champ « Signature du/de la responsable légal.e » sous le prénom.
+   * Ajoute le champ de signature sous le prénom.
    * Propre au modèle « récitation », le seul à proposer ce champ.
    */
   showSignature: boolean
@@ -1141,7 +1201,7 @@ export const COVER_TEMPLATE_DEFAULTS: Record<
   ActiveCoverTemplate,
   Pick<
     TypstCoverOptions,
-    'titre' | 'matiere' | 'duree' | 'consignes' | 'noteFin'
+    'titre' | 'matiere' | 'duree' | 'consignes' | 'signatureLabel' | 'noteFin'
   >
 > = {
   evaluation: {
@@ -1149,6 +1209,7 @@ export const COVER_TEMPLATE_DEFAULTS: Record<
     matiere: 'Mathématiques',
     duree: '55 minutes',
     consignes: ['La calculatrice est autorisée.'],
+    signatureLabel: '',
     noteFin: '',
   },
   brevet: {
@@ -1156,6 +1217,7 @@ export const COVER_TEMPLATE_DEFAULTS: Record<
     matiere: 'MATHÉMATIQUES',
     duree: '2 heures',
     consignes: ['L’usage de la calculatrice est autorisé.'],
+    signatureLabel: '',
     noteFin: 'Tournez la page S.V.P.',
   },
   bac: {
@@ -1163,6 +1225,7 @@ export const COVER_TEMPLATE_DEFAULTS: Record<
     matiere: 'MATHÉMATIQUES',
     duree: '4 heures',
     consignes: ['L’usage de la calculatrice est autorisé.'],
+    signatureLabel: '',
     noteFin: 'Tournez la page S.V.P.',
   },
   recitation: {
@@ -1170,10 +1233,11 @@ export const COVER_TEMPLATE_DEFAULTS: Record<
     matiere: 'Mathématiques',
     duree: '20 minutes',
     consignes: [
-      'Justifie chaque réponse ;',
-      'Écris lisiblement au crayon ou au stylo (noir ou bleu) ;',
-      'La calculatrice n’est pas autorisée.',
+      'Justifier chaque réponse ;',
+      'Écrire lisiblement au crayon ou au stylo (noir ou bleu) ;',
+      'Ne pas utiliser la calculatrice.',
     ],
+    signatureLabel: 'Signature d’un responsable légal',
     noteFin: '',
   },
   can: {
@@ -1183,6 +1247,7 @@ export const COVER_TEMPLATE_DEFAULTS: Record<
     consignes: [
       'L’usage de la calculatrice et du brouillon sont interdits. Il n’est pas permis d’écrire des calculs intermédiaires.',
     ],
+    signatureLabel: '',
     noteFin: '',
   },
 }
@@ -1317,6 +1382,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
     etablissement: '',
     duree: '',
     consignes: [],
+    signatureLabel: '',
     noteFin: '',
     bareme: [],
     showBareme: true,
@@ -1375,8 +1441,12 @@ function isStructuralMarker(html: string, index: number): boolean {
  * Découpe une question unique contenant ses propres repères (`a)`, `b)`...)
  * en une liste de sous-questions, pour la mettre dans un environnement
  * `tasks`. Renvoie `null` quand la question n'a pas cette structure.
+ *
+ * La lecture optique s'en sert aussi (`omrQuestions`) : quand un énoncé porte
+ * plusieurs réponses, c'est ce découpage qui dit laquelle imprimer devant
+ * quelles cases.
  */
-function splitSubQuestions(
+export function splitSubQuestions(
   html: string,
 ): { head: string; items: string[]; label: string } | null {
   const matches = [...html.matchAll(SUB_QUESTION_MARKER)].filter((match) =>
@@ -2142,6 +2212,12 @@ function buildCanVersionContent(
     ),
   )
   renderLines.push('  #can-tableau(')
+  // En A5, la fiche de passation garde la même police que l'A4 alors que les
+  // figures (repères, courbes) sont plafonnées à une largeur en pt absolus :
+  // le texte y paraît surdimensionné à côté d'elles. On le rabaisse pour
+  // retrouver le rapport texte/figure de l'A4 (0,85 ≈ A5/A4 en diagonale,
+  // arrondi vers le haut pour rester lisible).
+  if (options.pageFormat === 'a5') renderLines.push('    taille: 0.85em,')
   renderLines.push(...typstArrayArgument(enonces, '    '))
   renderLines.push(...typstContentArrayArgument(reponses, '    '))
   renderLines.push('  )')
@@ -2235,12 +2311,14 @@ function buildVersionContent(
   /** Insertions de la palette à réémettre après l'exercice `num` */
   const insertionLines = (num: number, indent: string): string[] =>
     (carryOver.insertions?.[num] ?? []).map((line) =>
-      exportMode ? `${indent}${line}` : `${indent}${line} ${INSERTION_TAG}`,
+      exportMode || !emitAnchors
+        ? `${indent}${line}`
+        : `${indent}${line} ${INSERTION_TAG}`,
     )
   /** Insertions de la palette à réémettre juste avant la correction de l'exercice `num` */
   const insertionCorrectionLines = (num: number, indent: string): string[] =>
     (carryOver.insertionsCorrection?.[num] ?? []).map((line) =>
-      exportMode
+      exportMode || !emitAnchors
         ? `${indent}${line}`
         : `${indent}${line} ${INSERTION_CORRECTION_TAG}`,
     )
@@ -2561,6 +2639,10 @@ export function buildTypstDocument(
   extraVersions: TypstExerciseInput[][] = [],
   { exportMode = false, sourceUrl, extraPreamble }: TypstBuildOptions = {},
 ): string {
+  const stableCarryOver = stabilizeStructuralInsertions(
+    carryOver,
+    exercises.length,
+  )
   // Les corps sont convertis d'abord : les figures SVG rencontrées sont
   // collectées pour être déclarées (`#let fig-N = image(...)`) en tête
   // de document, ce qui garde le corps du code lisible. Partagée entre
@@ -2570,7 +2652,7 @@ export function buildTypstDocument(
   const primary = buildVersionContent(
     exercises,
     options,
-    carryOver,
+    stableCarryOver,
     figures,
     '',
     !exportMode,
@@ -2580,7 +2662,7 @@ export function buildTypstDocument(
     buildVersionContent(
       versionExercises,
       options,
-      carryOver,
+      stableCarryOver,
       figures,
       `v${i + 1}`,
       false,
@@ -2769,7 +2851,7 @@ export function buildTypstDocument(
       '// remplacez interligne-questions par une valeur pour en dévier.',
     )
     for (const prefix of tasksPrefixes) {
-      const layout = carryOver.tasksLayout?.[prefix]
+      const layout = stableCarryOver.tasksLayout?.[prefix]
       lines.push(
         `#let ${prefix}-colonnes = ${layout?.columns ?? DEFAULT_TASKS_COLUMNS}`,
       )
@@ -2893,10 +2975,10 @@ export function buildTypstDocument(
       const figNum = index + 1
       lines.push(`#let fig-${figNum} = ${figure}`)
       lines.push(
-        `#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`,
+        `#let fig-${figNum}-zoom = ${stableCarryOver.figureZoom?.[figNum] ?? 1}`,
       )
       lines.push(
-        `#let fig-${figNum}-align = ${carryOver.figureAlign?.[figNum] ?? 'center'}`,
+        `#let fig-${figNum}-align = ${stableCarryOver.figureAlign?.[figNum] ?? 'center'}`,
       )
     }
     lines.push('')
@@ -2917,11 +2999,13 @@ export function buildTypstDocument(
   ) {
     lines.push('// ----- Zoom des exercices statiques (image seule) -----')
     for (const num of staticImageExerciseNums) {
-      lines.push(`#let exo-${num}-zoom = ${carryOver.exerciseZoom?.[num] ?? 1}`)
+      lines.push(
+        `#let exo-${num}-zoom = ${stableCarryOver.exerciseZoom?.[num] ?? 1}`,
+      )
     }
     for (const num of staticCorrectionImageExerciseNums) {
       lines.push(
-        `#let exo-${num}-corr-zoom = ${carryOver.exerciseCorrectionZoom?.[num] ?? 1}`,
+        `#let exo-${num}-corr-zoom = ${stableCarryOver.exerciseCorrectionZoom?.[num] ?? 1}`,
       )
     }
     lines.push('')
@@ -3027,6 +3111,7 @@ function coverDeclarationLines(cover: TypstCoverOptions): string[] {
     `#let couverture-etablissement = ${typstString(cover.etablissement)}`,
     `#let couverture-duree = ${typstString(cover.duree)}`,
     `#let couverture-consignes = ${consignes}`,
+    `#let couverture-signature = ${typstString(cover.signatureLabel ?? 'Signature d’un responsable légal')}`,
     `#let couverture-note-fin = ${typstString(cover.noteFin)}`,
   ]
 }
@@ -3061,6 +3146,7 @@ function coverPageLines(
       '  duree: couverture-duree,',
       '  date: couverture-session,',
       '  consignes: couverture-consignes,',
+      '  signature-label: couverture-signature,',
       `  bareme: ${typstArray(cover.bareme.map((points) => String(points)))},`,
       `  grille: ${cover.showBareme === true},`,
       `  signature: ${cover.showSignature !== false},`,

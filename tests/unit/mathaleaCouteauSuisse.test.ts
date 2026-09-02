@@ -113,6 +113,48 @@ describe('MathaleaCouteauSuisseElement', () => {
     })
   })
 
+  it('agrège plusieurs enfants du même type avec leurs propres index DOM', () => {
+    const secondPropositions = [
+      { texte: '$6$', statut: false },
+      { texte: '$7$', statut: true },
+    ]
+    document.body.innerHTML = addMathaleaCouteauSuisse(exercice, 0, {
+      contenu: [
+        MathaleaQcmElement.create({
+          numeroExercice: exercice.numeroExercice,
+          questionIndex: 1,
+          propositions,
+        }),
+        MathaleaQcmElement.create({
+          numeroExercice: exercice.numeroExercice,
+          questionIndex: 2,
+          propositions: secondPropositions,
+        }),
+      ].join(''),
+      elements: [
+        {
+          formatInteractif: 'mathalea-qcm',
+          questionIndex: 1,
+          autoCorrection: { propositions },
+        },
+        {
+          formatInteractif: 'mathalea-qcm',
+          questionIndex: 2,
+          autoCorrection: { propositions: secondPropositions },
+        },
+      ],
+    })
+    const qcms = document.querySelectorAll<MathaleaQcmElement>('mathalea-qcm')
+    qcms[0].value = '[0]'
+    qcms[1].value = '[1]'
+
+    const result = MathaleaCouteauSuisseElement.verifQuestion(exercice, 0)
+
+    expect(result.score).toEqual({ nbBonnesReponses: 2, nbReponses: 2 })
+    expect(result.isOk).toBe(true)
+    expect(exercice.autoCorrection).toHaveLength(1)
+  })
+
   it('conserve son contenu en sortie LaTeX', () => {
     setOutputLatex()
 

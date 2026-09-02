@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import DecimalToScientifique from '../../exercices/3e/3AutoN07-1'
+import ExoCompletAffine from '../../exercices/2e/2F21-9'
+import OrganiserDonneesDepuisTexte from '../../exercices/CM2/CM2D1A-1'
 import FractionEtendue from '../../modules/FractionEtendue'
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
@@ -28,6 +30,110 @@ function exercise(overrides: Record<string, unknown>) {
 }
 
 describe('inférence AMC depuis formatInteractif', () => {
+  it('infère les enfants de 2F21-9 avec l’index du parent par défaut', () => {
+    const previousContext = { isAmc: context.isAmc, isHtml: context.isHtml }
+    const exercice = new ExoCompletAffine()
+    const seed = '2F21-9-couteau-suisse-amc'
+    exercice.seed = seed
+
+    try {
+      context.isHtml = false
+      context.isAmc = true
+      exercice.interactif = false
+      seedrandom(seed, { global: true })
+      exercice.nouvelleVersionWrapper()
+
+      const elements = (exercice.autoCorrection[0] as any).elements
+      expect(exercice.autoCorrection).toHaveLength(1)
+      expect(elements).toHaveLength(3)
+      expect(
+        elements.every((element: any) => element.questionIndex === undefined),
+      ).toBe(true)
+
+      mathaleaEnsureAMCCompatibility(exercice)
+
+      expect(exercice.amcType).toBe('AMCHybride')
+      expect(exercice.autoCorrectionAMC).toHaveLength(1)
+      expect(exercice.autoCorrectionAMC?.[0].propositions).toMatchObject([
+        { type: 'AMCNum' },
+        { type: 'AMCNum' },
+        { type: 'AMCNum' },
+        { type: 'AMCNum' },
+        { type: 'AMCOpen' },
+        { type: 'qcmMono' },
+      ])
+    } finally {
+      context.isAmc = previousContext.isAmc
+      context.isHtml = previousContext.isHtml
+    }
+  })
+
+  it('regroupe toutes les interactions de CM2D1A-1 dans une seule question hybride', () => {
+    const previousContext = { isAmc: context.isAmc, isHtml: context.isHtml }
+    const exercice = new OrganiserDonneesDepuisTexte()
+    const seed = 'CM2D1A-1-couteau-suisse-amc'
+    exercice.seed = seed
+
+    try {
+      context.isHtml = true
+      context.isAmc = false
+      exercice.interactif = true
+      seedrandom(seed, { global: true })
+      exercice.nouvelleVersionWrapper()
+      expect(exercice.nbQuestions).toBe(1)
+      expect(exercice.listeQuestions).toHaveLength(1)
+      expect(exercice.autoCorrection).toHaveLength(1)
+      expect(exercice.autoCorrection[0].formatInteractif).toBe(
+        'mathalea-couteau-suisse',
+      )
+      expect((exercice.autoCorrection[0] as any).elements).toHaveLength(4)
+      const interactiveElements = (exercice.autoCorrection[0] as any).elements
+      expect(
+        interactiveElements.map((element: any) => element.questionIndex),
+      ).toEqual([0, 1, 2, 3])
+      expect(interactiveElements[0].autoCorrection?.valeur?.L1C1).toBeDefined()
+      expect(
+        interactiveElements[1].autoCorrection?.valeur?.reponse,
+      ).toBeDefined()
+      expect(
+        interactiveElements[2].autoCorrection?.propositions,
+      ).not.toHaveLength(0)
+      ;(exercice as any).interactiveAutoCorrectionForAMC =
+        exercice.autoCorrection.map((item) => ({ ...item }))
+
+      context.isHtml = false
+      context.isAmc = true
+      exercice.interactif = false
+      ;(exercice as any).lastCallback = ''
+      seedrandom(seed, { global: true })
+      exercice.nouvelleVersionWrapper()
+      expect(
+        (exercice as any).interactiveAutoCorrectionForAMC[0].elements[0]
+          .autoCorrection?.valeur?.L1C1,
+      ).toBeDefined()
+      mathaleaEnsureAMCCompatibility(exercice)
+
+      expect(exercice.amcType).toBe('AMCHybride')
+      expect(exercice.autoCorrectionAMC).toHaveLength(1)
+      const blocks = exercice.autoCorrectionAMC?.[0].propositions ?? []
+      expect(blocks).toHaveLength(23)
+      expect(
+        blocks.slice(0, 21).every((block) => block.type === 'AMCNum'),
+      ).toBe(true)
+      expect(
+        blocks
+          .slice(21)
+          .every((block) => ['qcmMono', 'qcmMult'].includes(block.type ?? '')),
+      ).toBe(true)
+      const [latex] = exportQcmAmc(exercice, 0)
+      expect(latex.match(/\\AMCnumericChoices/g)).toHaveLength(21)
+      expect(latex).not.toContain('mathalea-couteau-suisse')
+    } finally {
+      context.isAmc = previousContext.isAmc
+      context.isHtml = previousContext.isHtml
+    }
+  })
+
   it('conserve le QCM natif construit pendant la passe AMC d’une liste déroulante', () => {
     const previousContext = { isAmc: context.isAmc, isHtml: context.isHtml }
     const exercice = new DeterminerDerniereOperationExpressionLitterale()
@@ -935,6 +1041,69 @@ describe('inférence AMC depuis formatInteractif', () => {
     ).toEqual(['Ligne 1, colonne 2', 'Ligne 3, colonne 1'])
   })
 
+  it('infère les enfants d’un mathalea-couteau-suisse', () => {
+    const exercice = exercise({
+      formatInteractif: 'mathalea-couteau-suisse',
+      autoCorrection: [
+        {
+          formatInteractif: 'mathalea-couteau-suisse',
+          elements: [
+            {
+              formatInteractif: 'tableau-mathlive',
+              autoCorrection: {
+                valeur: {
+                  L1C1: { value: 4 },
+                  L1C2: { value: 7 },
+                },
+              },
+            },
+            {
+              formatInteractif: 'mathalea-mathfield',
+              autoCorrection: {
+                valeur: { reponse: { value: 11 } },
+              },
+            },
+            {
+              formatInteractif: 'mathalea-qcm',
+              autoCorrection: {
+                propositions: [
+                  { texte: 'A', statut: true },
+                  { texte: 'B', statut: false },
+                ],
+              },
+            },
+            {
+              formatInteractif: 'mathalea-qcm',
+              autoCorrection: {
+                propositions: [
+                  { texte: 'C', statut: true },
+                  { texte: 'D', statut: true },
+                ],
+              },
+            },
+            {
+              formatInteractif: 'tableau-signes-variations',
+              autoCorrection: { enonce: 'Compléter le tableau de signes.' },
+            },
+          ],
+        },
+      ],
+    })
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcType).toBe('AMCHybride')
+    expect(exercice.autoCorrectionAMC).toHaveLength(1)
+    expect(exercice.autoCorrectionAMC[0].propositions).toMatchObject([
+      { type: 'AMCNum', propositions: [{ reponse: { valeur: 4 } }] },
+      { type: 'AMCNum', propositions: [{ reponse: { valeur: 7 } }] },
+      { type: 'AMCNum', propositions: [{ reponse: { valeur: 11 } }] },
+      { type: 'qcmMono' },
+      { type: 'qcmMult' },
+      { type: 'AMCOpen', enonce: 'Compléter le tableau de signes.' },
+    ])
+  })
+
   it('conserve les champs inférables dans un multi-mathfield partiellement ouvert', () => {
     const exercice = exercise({
       formatInteractif: 'multi-mathfield',
@@ -1201,7 +1370,6 @@ describe('inférence AMC depuis formatInteractif', () => {
     'tableau-signes-variations',
     'mathalea-textfield',
     'tableau-hybride',
-    'mathalea-couteau-suisse',
     'mathalea-branching-qcm',
     'fractionEgale',
     'alea-iep-editeur',

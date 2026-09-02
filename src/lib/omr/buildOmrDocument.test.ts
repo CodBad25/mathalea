@@ -283,6 +283,55 @@ describe('assemblerGabarit', () => {
     expect(corpsParCopie.get('c02')).toContain('#let fig-1 = image("c02.svg")')
   })
 
+  it('imprime la virgule d’un décimal entre ses colonnes de cases', () => {
+    // sans elle, « 12,5 » et « 125 » se noirciraient de la même façon
+    const source: OmrDocumentSource = {
+      ...SOURCE,
+      copies: [
+        {
+          ...SOURCE.copies[0],
+          exercices: [
+            {
+              titre: 'Décimaux',
+              questions: [
+                {
+                  qid: 'q1',
+                  type: 'AMCNum',
+                  enonce: 'Le prix ?',
+                  points: 1,
+                  colonnes: [
+                    { attendu: '1', valeurs: ['0', '1'] },
+                    { attendu: '2', valeurs: ['0', '2'] },
+                    { attendu: '5', valeurs: ['0', '5'], separateurAvant: ',' },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+    const code = buildOmrDocument(source)
+    expect(code).toContain('grid.cell(align: horizon, text(size: 11pt, ","))')
+    // le séparateur n'a pas de case : il ne compte pas dans les colonnes lues
+    expect(code).toContain('columns: (auto,) * 4')
+    expect(code).not.toContain('omr-box("c01", "q1.3_0")')
+  })
+
+  it('donne à chaque figure son zoom et son alignement', () => {
+    // `mathalea-figure-block`, posé par `htmlToTypst` à côté de la figure, les
+    // lit : sans eux la copie ne compile pas
+    const source: OmrDocumentSource = {
+      ...SOURCE,
+      copies: [{ ...SOURCE.copies[0], figures: ['image("f.svg")'] }],
+    }
+    const corps = assemblerGabarit(source).corpsParCopie.get(
+      SOURCE.copies[0].copieId,
+    )
+    expect(corps).toContain('#let fig-1-zoom = 1')
+    expect(corps).toContain('#let fig-1-align = center')
+  })
+
   it('reprend les réglages de mise en page transmis', () => {
     const { gabarit } = assemblerGabarit(SOURCE, defaultOmrDocumentOptions, {
       layout: { 1: { colonnes: '2' } },

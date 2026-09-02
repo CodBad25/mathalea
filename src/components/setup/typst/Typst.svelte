@@ -60,6 +60,7 @@
   } from './buildTypstDocument'
   import { formatCoverDate } from './coverDate'
   import CoverDateField from './CoverDateField.svelte'
+  import { defaultCoverPoints } from './coverBareme'
   import TypstAddExerciseModal from './addExercise/TypstAddExerciseModal.svelte'
   import TypstLayoutOverlay, {
     type OverlayWidget,
@@ -282,6 +283,20 @@
     }
     const texte = (value: unknown, defaut = ''): string =>
       typeof value === 'string' ? value : defaut
+    const consignes = Array.isArray(cover.consignes)
+      ? cover.consignes.filter((ligne) => typeof ligne === 'string')
+      : []
+    const anciennesConsignesRecitation = [
+      'Justifie chaque réponse ;',
+      'Écris lisiblement au crayon ou au stylo (noir ou bleu) ;',
+      'La calculatrice n’est pas autorisée.',
+    ]
+    const utiliseAnciennesConsignesRecitation =
+      cover.template === 'recitation' &&
+      consignes.length === anciennesConsignesRecitation.length &&
+      anciennesConsignesRecitation.every(
+        (ligne, index) => consignes[index] === ligne,
+      )
     return {
       template: COVER_TEMPLATES.includes(cover.template)
         ? cover.template
@@ -291,9 +306,15 @@
       matiere: texte(cover.matiere),
       etablissement: texte(cover.etablissement),
       duree: texte(cover.duree),
-      consignes: Array.isArray(cover.consignes)
-        ? cover.consignes.filter((ligne) => typeof ligne === 'string')
-        : [],
+      consignes: utiliseAnciennesConsignesRecitation
+        ? [...COVER_TEMPLATE_DEFAULTS.recitation.consignes]
+        : consignes,
+      signatureLabel: texte(
+        cover.signatureLabel,
+        cover.template === 'recitation'
+          ? COVER_TEMPLATE_DEFAULTS.recitation.signatureLabel
+          : fallback.signatureLabel,
+      ),
       noteFin: texte(cover.noteFin),
       bareme: Array.isArray(cover.bareme)
         ? cover.bareme.map(Number).filter((points) => Number.isFinite(points))
@@ -335,7 +356,7 @@
    */
   function isDefaultCoverText(
     valeur: string,
-    champ: 'titre' | 'matiere' | 'duree' | 'noteFin',
+    champ: 'titre' | 'matiere' | 'duree' | 'signatureLabel' | 'noteFin',
   ): boolean {
     return (
       valeur === '' ||
@@ -387,6 +408,12 @@
       consignes: isDefaultCoverConsignes(coverPage.consignes)
         ? defauts.consignes
         : coverPage.consignes,
+      signatureLabel: isDefaultCoverText(
+        coverPage.signatureLabel,
+        'signatureLabel',
+      )
+        ? defauts.signatureLabel
+        : coverPage.signatureLabel,
       noteFin: isDefaultCoverText(coverPage.noteFin, 'noteFin')
         ? defauts.noteFin
         : coverPage.noteFin,
@@ -460,7 +487,7 @@
    * PDF (`buildExamExercices` de `lib/LatexGroup.ts`).
    */
   function defaultCoverBareme(): number[] {
-    return exercises.map((exercise) => exercise?.listeQuestions?.length || 1)
+    return exercises.map(defaultCoverPoints)
   }
 
   /**
@@ -480,7 +507,7 @@
    * (même règle que `defaultCoverBareme`).
    */
   function defaultCoverPointsFor(k: number): number {
-    return exercises[k]?.listeQuestions?.length || 1
+    return defaultCoverPoints(exercises[k])
   }
 
   /**
@@ -686,6 +713,7 @@
     matiere: '',
     etablissement: '',
     duree: '',
+    signatureLabel: '',
     noteFin: '',
   })
   /** Consignes de la page de garde (`couverture-consignes`), lues dans le code courant */
@@ -911,6 +939,7 @@
       matiere: '',
       etablissement: '',
       duree: '',
+      signatureLabel: '',
       noteFin: '',
     }
     // `noteFin` (JS) ↔ `note-fin` (variable Typst, voir `coverDeclarationLines`)
@@ -920,6 +949,7 @@
       ['matiere', 'matiere'],
       ['etablissement', 'etablissement'],
       ['duree', 'duree'],
+      ['signatureLabel', 'signature'],
       ['noteFin', 'note-fin'],
     ]
     for (const [jsName, typstName] of coverFieldNames) {
@@ -1869,12 +1899,24 @@
    * même mécanisme que `updateHeaderValue`, édition ciblée sans régénération.
    */
   function updateCoverValue(
-    name: 'titre' | 'session' | 'matiere' | 'etablissement' | 'duree' | 'noteFin',
+    name:
+      | 'titre'
+      | 'session'
+      | 'matiere'
+      | 'etablissement'
+      | 'duree'
+      | 'signatureLabel'
+      | 'noteFin',
     value: string,
   ) {
     if (editorView == null) return
     // `noteFin` (JS) ↔ `note-fin` (variable Typst, voir `coverDeclarationLines`)
-    const typstName = name === 'noteFin' ? 'note-fin' : name
+    const typstName =
+      name === 'noteFin'
+        ? 'note-fin'
+        : name === 'signatureLabel'
+          ? 'signature'
+          : name
     const doc = editorView.state.doc.toString()
     const match = new RegExp(`^#let couverture-${typstName} = ".*"`, 'm').exec(
       doc,
@@ -3856,8 +3898,8 @@
 
             {#if coverPage.template !== 'aucune'}
               <p class="text-xs opacity-75">
-                L'intitulé, la session, la matière, la durée et les consignes se
-                modifient directement sur l'aperçu (bouton
+                Les textes du modèle et les consignes se modifient directement
+                sur l'aperçu (bouton
                 <i class="bx bx-edit"></i> en haut de la page de garde).
               </p>
 
@@ -3901,7 +3943,7 @@
                       bind:checked={documentOptions.coverPage.showSignature}
                       onchange={applyDocumentOptions}
                     />
-                    Champ de signature du/de la responsable légal.e
+                    Signature
                   </label>
 
                   <label class="flex items-center gap-2 text-sm cursor-pointer">

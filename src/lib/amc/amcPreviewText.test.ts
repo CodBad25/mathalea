@@ -7,10 +7,19 @@ import { mathaleaHandleExerciceSimple, renderKatex } from '../mathalea'
 import {
   getHtmlQuestionsForAMCPreview,
   latexLineBreaksToHtmlOutsideMath,
+  latexTextToHtmlForAMCPreview,
   stripEmbeddedQcmFromAMCPreview,
 } from './amcPreviewText'
 
 describe('preview AMC des textes LaTeX', () => {
+  it('convertit les libellés numAlpha d’un énoncé hybride en HTML', () => {
+    const source = String.raw`\textbf {a)} Première question\\\textbf{b)} Deuxième question`
+
+    expect(latexTextToHtmlForAMCPreview(source)).toBe(
+      '<strong>a)</strong> Première question<br><strong>b)</strong> Deuxième question',
+    )
+  })
+
   it('retire le mathalea-qcm déjà injecté avant de dessiner la preview AMC', () => {
     const source = [
       'Choisir la bonne réponse.<br><br>',

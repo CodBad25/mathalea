@@ -55,6 +55,64 @@ appel de fonction.
 — vit dans `src/components/setup/shared/typstPreview.ts`, avec `anchorPosition`
 qui convertit un repère (points, par page) en position sur l'aperçu.
 
+## D'où vient le type de chaque question
+
+Une case ne se dessine pas sans savoir ce qu'elle code : combien de
+propositions, combien de chiffres, ou rien du tout pour une question rédigée.
+La structure interactive d'un exercice (`autoCorrection`) ne le dit pas — un
+champ de saisie y ressemble à un autre. C'est **le moteur d'inférence d'AMC**
+qui tranche, et la lecture optique l'utilise tel quel :
+`mathaleaEnsureAMCCompatibility` (`src/lib/amc/amcInference.ts`) range son
+verdict dans `amcType` et `autoCorrectionAMC`, que `omrQuestions.ts` lit
+ensuite. Refaire cette reconnaissance ici ne couvrirait qu'une poignée
+d'exercices ; la faire tourner les couvre presque tous, comme la vue AMC.
+
+`preparerExercice` (`omrPreparation.ts`) génère donc chaque exercice **deux
+fois**, comme le fait la vue AMC :
+
+1. une passe **interactive** — seule à faire appeler `handleAnswers`, donc
+   seule à remplir `autoCorrection` ; son résultat est mis de côté dans
+   `interactiveAutoCorrectionForAMC` ;
+2. une passe **non interactive**, dont les énoncés sont ceux qu'on imprime :
+   ceux de la première portent les champs de saisie de l'élève.
+
+L'inférence tourne ensuite sur ce couple. On ne déclenche **pas** la passe AMC
+(`context.isAmc`) : elle produit des énoncés LaTeX, dont aucune passerelle ne
+mène à Typst. Les exercices qui ne construisent leur structure AMC que dans
+cette passe (`if (context.isAmc)`) sont donc imprimés en question ouverte, avec
+la rangée de cases de barème que le professeur noircit lui-même.
+
+`amcType`, `amcReady` et `autoCorrectionAMC` sont remis dans l'état déclaré par
+l'exercice avant chaque génération : sans cela, l'inférence relirait son propre
+verdict et servirait à l'élève suivant les réponses du précédent.
+
+### De la structure AMC aux cases
+
+| Type inféré           | Ce qui est imprimé                                              |
+| --------------------- | --------------------------------------------------------------- |
+| `qcmMono` / `qcmMult` | une case par proposition ; l'énoncé vient de l'item, pas de `listeQuestions`, qui contient déjà les propositions |
+| `AMCNum`              | une colonne de chiffres par `digits`, virgule ou barre de fraction comprise, calibrée par `normalizeAMCNumBlocks` — la fonction qu'utilise déjà l'export AMC |
+| `AMCOpen`             | un cadre de rédaction et la rangée de cases de barème            |
+| `AMCHybride`          | une question à cases **par bloc**, chacune avec son propre type  |
+
+Le séparateur d'une réponse numérique (`OmrColonneNumerique.separateurAvant`)
+n'a pas de case : il ne compte pas dans les colonnes relues, il évite seulement
+que `12,5` et `125` se noircissent de la même façon.
+
+### Plusieurs réponses sous un même énoncé
+
+Un exercice qui fait compléter quatre phrases sous un seul énoncé produit
+quatre réponses pour un énoncé. `splitSubQuestions` — le découpage sur les
+repères `a)`, `b)`… que fait déjà la vue « Impression » — rend alors à chaque
+réponse sa sous-question, le préambule commun restant avec la première. Faute
+de repères, l'énoncé part entier avec la première réponse et les suivantes ne
+reçoivent qu'un numéro de réponse, comme le fait AMC.
+
+Reste le cas qu'on écarte : un énoncé qui a gardé les **composants
+interactifs** de ses sous-questions (`<mathalea-qcm>`, `<tableau-mathlive>`…),
+reconnaissables au tiret de leur nom de balise. Il porte les réponses de
+l'élève et ne s'imprime pas ; l'exercice sort du document, et la vue le dit.
+
 ## Le gabarit doit fournir ce que la conversion suppose
 
 `htmlToTypst` ne produit pas du Typst autonome : son code référence le
@@ -282,9 +340,9 @@ en haut, retrouvé en bas, la feuille est retournée (`qr.ts`).
 | `buildOmrDocument.ts`      | `OmrDocumentOptions` ; `assemblerGabarit` (gabarit + corps par copie) ; QCM, grille numérique, cases de barème |
 | `omrCarryOver.ts`          | Relecture et réécriture des réglages de mise en page dans le gabarit (palette) |
 | `omrLayout.ts`             | Jointure positions ↔ corrigé *par copie*, fusion des mises en page identiques (corrigé compris dans la signature) |
-| `omrPreparation.ts`        | Génération interactive des exercices, avec graine de remplacement pour un sujet par élève |
+| `omrPreparation.ts`        | Double génération (interactive puis papier) et inférence du type AMC, avec graine de remplacement pour un sujet par élève |
 | `genererEvaluation.ts`     | Liste de classe, aperçu SVG d'une copie, compilation, téléchargement des deux fichiers |
-| `omrQuestions.ts`          | Exercices MathALÉA → exercices groupés et questions, via `htmlToTypst` |
+| `omrQuestions.ts`          | `autoCorrectionAMC` → exercices groupés et questions à cases, énoncés via `htmlToTypst` |
 | `../../components/setup/shared/typstPreview.ts` | Préparation du SVG d'aperçu et position des pastilles, partagée par les quatre vues Typst |
 | `pdfRaster.ts`             | Rastérisation des scans par pdf.js, à 150 dpi                |
 | `qr.ts`                    | `BarcodeDetector` puis repli `jsqr` ; orientation de la feuille |

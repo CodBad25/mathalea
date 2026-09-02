@@ -2,7 +2,9 @@ import { beforeAll, describe, expect, it } from 'vitest'
 
 // L'import des customElements les enregistre dans mathaleaCustomElementsRegistry
 // (comme le fait le chargement d'un exercice qui les utilise).
+import '../../src/lib/apigeom/apigeom-figure'
 import '../../src/lib/customElements/BlocklyEditor'
+import '../../src/lib/customElements/CalculatorElement'
 import '../../src/lib/customElements/CliqueFigureElement'
 import '../../src/lib/customElements/demi_droite_interactive'
 import '../../src/lib/customElements/DiagramBarAssessmentElement'
@@ -15,14 +17,18 @@ import '../../src/lib/customElements/DragAndDropElement'
 import '../../src/lib/customElements/EchiquierProblemeElement'
 import '../../src/lib/customElements/ElementIepEditeur'
 import '../../src/lib/customElements/FillInTheBlank'
+import '../../src/lib/customElements/FractionCliquableElement'
 import '../../src/lib/customElements/GuideAne'
 import handleInteractiveClock from '../../src/lib/customElements/InteractiveClock'
 import '../../src/lib/customElements/LabyrintheBlockly'
 import '../../src/lib/customElements/ListeDeroulanteElement'
 import '../../src/lib/customElements/MathaleaMathfield'
 import '../../src/lib/customElements/MathaleaCouteauSuisse'
+import '../../src/lib/customElements/MathaleaBranchingQcm'
+import '../../src/lib/customElements/MathaleaLabyrintheElement'
 import '../../src/lib/customElements/MathaleaQcm'
 import '../../src/lib/customElements/MathaleaTextfield'
+import '../../src/lib/customElements/MetaCustomElement'
 import '../../src/lib/customElements/MetaInteractif2dElement'
 import '../../src/lib/customElements/MultiMathfield'
 import '../../src/lib/customElements/MySpreadSheet'
@@ -175,7 +181,9 @@ describe('stripInteractiveWidgets', () => {
     const question =
       'Choisir <multi-mathfield id="multi-mathfieldEx0Q0" data-template="%{field0}" data-options="%7B%22field0%22%3A%7B%22choices%22%3A%5B%7B%22label%22%3A%22Choisir%E2%80%A6%22%2C%22value%22%3A%22%22%7D%2C%7B%22label%22%3A%22Oui%22%2C%22value%22%3A%22oui%22%7D%2C%7B%22label%22%3A%22Non%22%2C%22value%22%3A%22non%22%7D%5D%7D%7D"></multi-mathfield>'
     const result = stripInteractiveWidgets(question)
-    expect(result).toContain('Choisir <span class="mx-2 inline-block">')
+    expect(result).toContain(
+      'Choisir <span class="mx-2" style="display:inline-flex;flex-direction:column;',
+    )
     expect(result).toContain('<input type="radio" disabled')
     expect(result).toContain('<label id="labelEx0Q0R0"')
     expect(result).toContain('>Oui</label>')
@@ -188,7 +196,12 @@ describe('stripInteractiveWidgets', () => {
     const question =
       'Répondre <multi-mathfield id="multi-mathfieldEx0Q0" data-template="%{field0}" data-options="%7B%22field0%22%3A%7B%22qcm%22%3A%5B%7B%22label%22%3A%22Vrai%22%2C%22value%22%3A%22vrai%22%7D%2C%7B%22label%22%3A%22Faux%22%2C%22value%22%3A%22faux%22%7D%5D%2C%22vertical%22%3Atrue%7D%7D"></multi-mathfield>'
     const result = stripInteractiveWidgets(question)
-    expect(result).toContain('class="ex0  my-2 align-center"')
+    expect(result).toContain(
+      '<span class="mx-2" style="display:inline-flex;flex-direction:column;',
+    )
+    expect(result).toContain(
+      '<span class="ex0" style="display:inline-flex;align-items:center;',
+    )
     expect(result).toContain('>Vrai</label>')
     expect(result).toContain('>Faux</label>')
     expect(result).not.toContain(' ... ')

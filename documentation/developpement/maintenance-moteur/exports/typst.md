@@ -63,9 +63,9 @@ Fonctionnement :
 2. Après chaque compilation, `typstCompiler.ts` interroge le document (`world.query({ selector: '<mathalea-anchor>' })`, même monde de compilation que le rendu SVG) et renvoie les repères (`TypstAnchor`).
 3. `Typst.svelte` convertit ces positions en pourcentages du conteneur de l'aperçu (via la géométrie des pages renvoyée par `separatePages`) et place les contrôles.
 
-Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait.
+Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait. Avec plusieurs sujets, l'insertion est rendue dans chacun, mais seul le sujet principal porte son marqueur de relecture et les repères associés : une régénération ne peut donc pas recopier les insertions des sujets suivants dans le carry-over.
 
-À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. « Réinitialiser les réglages du document » les efface.
+À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. Les sauts de page ou de colonne sont normalisés à un exemplaire par gap et supprimés après le dernier exercice, où ils n'ont aucun contenu suivant à déplacer ; cela répare aussi les anciens `typstParam` qui en contiennent des copies. « Réinitialiser les réglages du document » efface tout le carry-over.
 
 ## Ajouter un exercice depuis l'aperçu
 
@@ -218,9 +218,12 @@ code, sans régénération) plutôt que l'argument nommé :
   condition qu'il suive encore la fiche un pour un** : un barème que le
   professeur a lui-même raccourci (exercices groupés, lignes retirées) n'est
   pas retouché, c'est le bouton qui le réaligne. De même, changer le nombre de
-  questions d'un exercice depuis la palette (`-1 q +`) reporte la différence
-  sur ses points — mais seulement tant qu'ils valent encore le nombre de
-  questions, c'est-à-dire tant qu'ils n'ont pas été réglés à la main.
+questions d'un exercice depuis la palette (`-1 q +`) reporte la différence
+sur ses points — mais seulement tant qu'ils valent encore le nombre de
+questions, c'est-à-dire tant qu'ils n'ont pas été réglés à la main.
+Lors d'un ajout ou d'une duplication, la liste des questions peut être encore
+vide avant sa première génération : le barème proposé utilise alors
+`nbQuestions`, au lieu de retomber prématurément sur un point.
 - Changer de modèle **remplace les textes qui n'ont pas été personnalisés**
   (`isDefaultCoverText`, étendu à `noteFin`) et conserve les autres : passer
   du Brevet à la Course aux nombres ne garde pas « Durée : 2 heures » ni
@@ -254,7 +257,7 @@ tient en trois bandes :
    droite, soulignés d'un filet de la couleur des badges ;
 2. deux colonnes, de largeurs inégales : à gauche « Nom » puis « Prénom »
    (une ligne chacun, trait de 6 cm au plus — jamais plus large que la
-   colonne), « Signature du/de la responsable légal.e » en dessous — sans trait et
+   colonne), « Signature d’un responsable légal » en dessous — sans trait et
    suivie d'un blanc, la signature se pose dans l'espace libre ; à droite la
    grille des points ;
 3. les consignes en **pleine largeur**, une par ligne (dans la colonne des
@@ -275,15 +278,21 @@ est **réduite pour y tenir** (`scale` du rapport mesuré, comme `mathalea-fit`
 le fait des figures) : sans cela Typst comprime les colonnes jusqu'à faire
 chevaucher leurs textes. La case de la note, elle, n'est jamais réduite : dans
 cette disposition elle est passée à côté de la signature, au-dessus de la
-grille.
+grille. Quand la signature est masquée, la grille et la note partagent plutôt
+la même ligne si leurs largeurs naturelles y tiennent. Sinon, la note passe à
+droite des consignes si celles-ci lui laissent la place ; elle ne reste seule
+au-dessus de la grille que si aucun de ces deux ensembles ne tient.
 
 Trois cases à cocher des Réglages du document, propres à ce modèle :
 
 | Réglage | Défaut | Effet |
 | --- | --- | --- |
 | Afficher la grille des points (`showBareme`) | oui | grille `Exercice / Points / Obtenus` par exercice, total compris ; sinon seul le total est rappelé (`Total : ..... / 16`) |
-| Champ de signature (`showSignature`) | oui | intitulé « Signature du/de la responsable légal.e » sous le prénom, suivi d'un blanc où signer |
+| Champ de signature (`showSignature`) | oui | intitulé modifiable « Signature d’un responsable légal » sous le prénom, suivi d'un blanc où signer |
 | Case pour la note (`showNote`) | oui | case haute où porter la note à la main ; décochable, la case Total de la ligne « obtenus » en tenant déjà lieu |
+
+Les trois consignes proposées par défaut emploient l'infinitif : « Justifier »,
+« Écrire » et « Ne pas utiliser ».
 
 Le barème est toujours passé à l'aide, même grille masquée : c'est lui qui
 donne le total. Ces booléens sont émis avec un repli explicite
@@ -291,9 +300,10 @@ donne le total. Ces booléens sont émis avec un repli explicite
 fiche partagée avant leur ajout ne les porte pas, et un `undefined` dans le
 code déclencherait « Variable ou fonction inconnue ».
 
-Deux champs de texte lui sont propres : `couverture-etablissement` (déclaré
-comme les autres textes, masqué dans la palette pour les autres modèles) et la
-**session, qui y tient la date** — réglée par un **sélecteur de date**
+Trois champs de texte lui sont propres : `couverture-etablissement` (déclaré
+comme les autres textes, masqué dans la palette pour les autres modèles), la
+signature (`couverture-signature`, modifiable avec le petit crayon de la page
+de garde) et la **session, qui y tient la date** — réglée par un **sélecteur de date**
 ([`CoverDateField.svelte`](../../../../src/components/setup/typst/CoverDateField.svelte))
 présent aux deux endroits : dans les Réglages du document avec les autres
 réglages du modèle, et dans la palette de l'aperçu sous le libellé « Date ».
@@ -355,7 +365,8 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.canMode`) : pend
   (`canModeSetFromUrl`/`pageFormatSetFromUrl`/`coverTemplateSetFromUrl`/
   `headerStyleSetFromUrl`) : rouvrir une fiche déjà réglée autrement ne
   l'écrase pas.
-- Le tableau est produit par le helper Typst `#can-tableau(enonces, reponses, jury: true, entetes: ..., fond: ..., hauteur-ligne: ...)` (`MATHALEA_CAN_TABLE_HELPER` dans `buildTypstDocument.ts`), déclaré dans le préambule seulement quand il sert, comme les autres aides. `enonces` et `reponses` sont deux listes de contenus de même longueur ; les proportions des colonnes et l'en-tête répété en haut de chaque page reprennent le `longtblr` de l'environnement `TableauCan` (`lib/latex/preambuleTex.ts`). Les arguments nommés restent modifiables dans l'éditeur : retirer la colonne « Jury » avec `jury: false`, ou resserrer les lignes avec `hauteur-ligne` (8 pt par défaut, l'espace ajouté au-dessus et au-dessous du contenu de chaque cellule).
+- Le tableau est produit par le helper Typst `#can-tableau(enonces, reponses, jury: true, entetes: ..., fond: ..., hauteur-ligne: ..., taille: 1em)` (`MATHALEA_CAN_TABLE_HELPER` dans `buildTypstDocument.ts`), déclaré dans le préambule seulement quand il sert, comme les autres aides. `enonces` et `reponses` sont deux listes de contenus de même longueur ; les proportions des colonnes et l'en-tête répété en haut de chaque page reprennent le `longtblr` de l'environnement `TableauCan` (`lib/latex/preambuleTex.ts`). Les arguments nommés restent modifiables dans l'éditeur : retirer la colonne « Jury » avec `jury: false`, ou resserrer les lignes avec `hauteur-ligne` (8 pt par défaut, l'espace ajouté au-dessus et au-dessous du contenu de chaque cellule).
+- `taille` (`set text(size: …)` appliqué à tout le tableau) reste à `1em` en A4 ; `buildCanVersionContent` le passe à `0.85em` en **A5**. Les figures de la colonne « Énoncé » sont plafonnées en points absolus (`CAN_FIGURE_MAX_WIDTH_PT`, voir ci-dessous) et ne suivent donc pas la police : à sa taille pleine, le texte de la feuille de passation A5 paraît surdimensionné à côté d'elles. Rabaisser la seule police rétablit le rapport texte/figure de l'A4 sans réduire les repères ni les courbes de lecture graphique, déjà petits.
 - **Questions liées** : deux questions consécutives peuvent partager un même énoncé — une courbe lue deux fois, par exemple. L'exercice le déclare avec `canNumeroLie` (le numéro que la question se donne) et `canLiee` (les numéros auxquels elle est liée), relevés par `MetaExerciceCan` dans `listeCanNumerosLies`/`listeCanLiees` et transmis par `TypstExerciseInput.canLinkNumbers`/`canLinkedTo`. `computeCanEnonceRowspans` en déduit, pour chaque question, le nombre de lignes que couvre sa cellule d'énoncé : la première du groupe porte une `table.cell(rowspan: n, …)`, les suivantes reçoivent `none` à la place de leur énoncé (le helper n'ouvre alors pas de cellule) et ne gardent que leur réponse à compléter — équivalent du `\SetCell[r=n]` de la sortie LaTeX (`lib/Latex.ts`). Le repère `can-row` d'une question liée part dans sa cellule « Réponse », et la modale d'édition de cette ligne ne propose que la réponse (`getGeneratedCanRowCode().sharesPreviousEnonce`). Seules des questions **contiguës** sont regroupées : une cellule fusionnée ne peut pas couvrir des lignes séparées.
 - Les figures de la colonne « Énoncé » sont plafonnées à `CAN_FIGURE_MAX_WIDTH_PT` (120 pt) : dessinées pour la pleine largeur du navigateur, elles rempliraient sinon toute la cellule et doubleraient le volume de la feuille de passation. Même ordre de grandeur que `TABLE_CELL_FIGURE_MAX_WIDTH_PT`, le plafond des figures des autres tableaux. Le zoom de chaque figure reste réglable depuis la palette de mise en page.
 - Aucune ligne ne se coupe entre deux pages (`table.cell(breakable: false)`, comportement du `longtblr` de la version LaTeX) : une figure serait sinon séparée de son numéro.

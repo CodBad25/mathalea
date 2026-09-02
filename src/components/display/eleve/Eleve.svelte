@@ -28,6 +28,7 @@
   import { keyboardState } from '../../keyboard/stores/keyboardStore'
   import Exercice from '../../shared/exercice/Exercice.svelte'
   import BtnFullscreen from '../../shared/ui/BtnFullscreen.svelte'
+  import BtnRetourReglages from '../../shared/ui/BtnRetourReglages.svelte'
   import BtnZoom from '../../shared/ui/btnZoom.svelte'
   import Banner from '../../shared/vendors/Banner.svelte'
   import FlipCard from './FlipCard.svelte'
@@ -339,6 +340,11 @@
         ? 'translate-y-16'
         : ''}"
     >
+      <!-- Pas de recorder (Capytale, Moodle…) : on propose à l'enseignant de
+      revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice. -->
+      {#if $globalOptions.recorder == null && $globalOptions.v === 'eleve'}
+        <BtnRetourReglages class="text-3xl" />
+      {/if}
       <BtnZoom
         size="bx-sm md:bx-md"
         isBorderTransparent={typeof $globalOptions.title === 'string' &&

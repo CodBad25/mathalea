@@ -6,7 +6,7 @@ export const dateDePublication = '10/08/2025'
 export const uuid = '41fa7'
 /** @author Stéphane Guyon */
 export const refs = {
-  'fr-fr': ['canTEC1-04'],
+  'fr-fr': ['canTEC1-04','TEC1-15'],
   'fr-ch': [],
 }
 export const interactifReady = true

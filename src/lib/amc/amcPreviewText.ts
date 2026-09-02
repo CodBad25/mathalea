@@ -65,6 +65,35 @@ export function latexLineBreaksToHtmlOutsideMath(source: string): string {
 }
 
 /**
+ * Convertit les commandes LaTeX textuelles produites pendant la passe AMC en
+ * HTML pour la prévisualisation. Les commandes situées dans les délimiteurs
+ * mathématiques restent ensuite prises en charge par KaTeX.
+ */
+export function latexTextToHtmlForAMCPreview(source: string): string {
+  let html = source
+
+  // `numAlpha()` et `numAlphaNum()` produisent notamment `\textbf {a)}`.
+  html = html.replace(/\\textbf\s*\{([^}]*)\}/g, '<strong>$1</strong>')
+  // `texteEnCouleurEtGras()` produit l'une de ces deux formes.
+  html = html.replace(
+    /\{\\bfseries\s+\\color\[HTML\]\{([0-9a-fA-F]{6})\}([^{}]*)\}/g,
+    (_, hex, text) =>
+      hex === '000000'
+        ? `<strong>${text}</strong>`
+        : `<strong style="color:#${hex}">${text}</strong>`,
+  )
+  html = html.replace(
+    /\{\\bfseries\s+\\color\{([^}]+)\}([^{}]*)\}/g,
+    (_, color, text) =>
+      color === 'black'
+        ? `<strong>${text}</strong>`
+        : `<strong style="color:${color}">${text}</strong>`,
+  )
+
+  return latexLineBreaksToHtmlOutsideMath(html)
+}
+
+/**
  * Retire de l'énoncé HTML le QCM déjà injecté par la passe de génération du
  * moteur. La preview AMC dessine elle-même les cases à partir des propositions
  * d'`autoCorrectionAMC` : conserver ce composant produirait deux QCM.

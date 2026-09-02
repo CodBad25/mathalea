@@ -3,20 +3,33 @@ import { context } from '../../modules/context'
 import { preparerExercice, preparerExercices } from './omrPreparation'
 import type { IExercice } from '../types'
 
-/** Exercice minimal, dont la génération se contente de remplir une liste. */
+/**
+ * Exercice minimal, dont la génération se contente de remplir une liste.
+ *
+ * Comme un vrai exercice, il réécrit ses listes à chaque génération plutôt que
+ * de les allonger : `preparerExercice` en déclenche deux, une par contexte.
+ */
 function exerciceFactice(overrides: Record<string, unknown> = {}) {
   const exercice = {
     id: 'X1',
     seed: 'abcd',
     interactif: false,
     listeQuestions: [] as string[],
+    listeCorrections: [] as string[],
     autoCorrection: [] as unknown[],
     lastCallback: 'déjà généré',
     nouvelleVersionWrapper: vi.fn(function (this: Record<string, unknown>) {
-      ;(this.listeQuestions as string[]).push('Q1')
-      ;(this.autoCorrection as unknown[]).push({
-        propositions: [{ texte: 'a', statut: true }],
-      })
+      this.listeQuestions = ['Q1']
+      this.listeCorrections = ['C1']
+      this.autoCorrection = [
+        {
+          formatInteractif: 'mathalea-qcm',
+          propositions: [
+            { texte: 'a', statut: true },
+            { texte: 'b', statut: false },
+          ],
+        },
+      ]
     }),
     ...overrides,
   }
@@ -45,19 +58,21 @@ describe('preparerExercice', () => {
     ).toHaveBeenCalled()
   })
 
-  it('génère en contexte interactif, seul cas où autoCorrection est rempli', () => {
-    let interactifPendant: boolean | undefined
+  it('génère une fois en interactif, une fois pour le papier', () => {
+    // la passe interactive est la seule où `autoCorrection` se remplit ; la
+    // seconde produit l'énoncé sans champ de saisie, celui qu'on imprime
+    const passes: boolean[] = []
     let isHtmlPendant: boolean | undefined
     let isAmcPendant: boolean | undefined
     const exercice = exerciceFactice({
       nouvelleVersionWrapper: vi.fn(function (this: { interactif: boolean }) {
-        interactifPendant = this.interactif
+        passes.push(this.interactif)
         isHtmlPendant = context.isHtml
         isAmcPendant = context.isAmc
       }),
     })
     preparerExercice(exercice)
-    expect(interactifPendant).toBe(true)
+    expect(passes).toEqual([true, false])
     expect(isHtmlPendant).toBe(true)
     expect(isAmcPendant).toBe(false)
   })
@@ -136,6 +151,70 @@ describe('preparerExercice', () => {
         }),
       })
     preparerExercices([faire(), faire()], 'commune')
-    expect(graines).toEqual(['commune', 'commune'])
+    // deux passes par exercice, toutes sur la graine imposée
+    expect(graines).toEqual(['commune', 'commune', 'commune', 'commune'])
+  })
+})
+
+describe('inférence de la structure AMC', () => {
+  it('range le verdict de l’inférence dans autoCorrectionAMC', () => {
+    // sans elle, la lecture optique ne reconnaîtrait que ce que le moteur
+    // interactif laisse voir : ni le type, ni le calibre des cases
+    const exercice = exerciceFactice()
+    preparerExercice(exercice)
+    expect(exercice.amcType).toBe('qcmMono')
+    expect(exercice.autoCorrectionAMC?.[0]?.propositions).toHaveLength(2)
+  })
+
+  it('déduit une réponse numérique d’un champ de saisie', () => {
+    const exercice = exerciceFactice({
+      nouvelleVersionWrapper: vi.fn(function (this: Record<string, unknown>) {
+        this.listeQuestions = ['57 + 68 = ?']
+        this.listeCorrections = ['125']
+        this.autoCorrection = [
+          {
+            formatInteractif: 'fill-in-the-blank',
+            valeur: { champ1: { value: '125' } },
+          },
+        ]
+      }),
+    })
+    preparerExercice(exercice)
+    expect(exercice.amcType).toBe('AMCNum')
+    expect(exercice.autoCorrectionAMC?.[0]?.reponse?.valeur).toBe(125)
+  })
+
+  it('repart de la déclaration de l’exercice à chaque graine', () => {
+    // le verdict précédent, laissé en place, ferait relire à l'élève suivant
+    // les réponses du précédent
+    let valeur = '125'
+    const exercice = exerciceFactice({
+      nouvelleVersionWrapper: vi.fn(function (this: Record<string, unknown>) {
+        this.listeQuestions = ['Une addition']
+        this.listeCorrections = [valeur]
+        this.autoCorrection = [
+          {
+            formatInteractif: 'fill-in-the-blank',
+            valeur: { champ1: { value: valeur } },
+          },
+        ]
+      }),
+    })
+    preparerExercice(exercice, 'eleve-01')
+    valeur = '76'
+    preparerExercice(exercice, 'eleve-02')
+    expect(exercice.autoCorrectionAMC?.[0]?.reponse?.valeur).toBe(76)
+  })
+
+  it('n’emporte pas toute l’évaluation quand l’inférence échoue', () => {
+    // un exercice mal formé doit sortir du document, pas le faire disparaître
+    const exercice = exerciceFactice({
+      nouvelleVersionWrapper: vi.fn(function (this: Record<string, unknown>) {
+        this.listeQuestions = ['Q1']
+        this.listeCorrections = undefined
+        this.autoCorrection = [{}]
+      }),
+    })
+    expect(() => preparerExercice(exercice)).not.toThrow()
   })
 })

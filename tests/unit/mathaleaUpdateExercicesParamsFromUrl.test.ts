@@ -42,7 +42,7 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
 
   it('should update exercicesParams from URL', async () => {
     const url =
-      'http://localhost?uuid=test-uuid&id=test-id&n=5&d=10&s=test-sup&s2=test-sup2&s3=test-sup3&s4=test-sup4&s5=test-sup5&alea=test-alea&cols=2&i=1&cd=1&v=eleve&z=2'
+      'https://coopmaths.fr/alea/?uuid=test-uuid&id=test-id&n=5&d=10&s=test-sup&s2=test-sup2&s3=test-sup3&s4=test-sup4&s5=test-sup5&alea=test-alea&cols=2&i=1&cd=1&v=eleve&z=2'
     const { mathaleaUpdateExercicesParamsFromUrl } =
       await import('../../src/lib/mathalea')
     const result = mathaleaUpdateExercicesParamsFromUrl(url)
@@ -314,6 +314,24 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
         'https://coopmaths.fr/alea/?v=quizzconf',
       )
       expect(result.beta).toBe(false)
+    })
+
+    it('beta est vrai en local (localhost) sans le paramètre', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      const result = mathaleaUpdateExercicesParamsFromUrl(
+        'http://localhost:5173/?v=quizzconf',
+      )
+      expect(result.beta).toBe(true)
+    })
+
+    it('beta est vrai en local (127.0.0.1) sans le paramètre', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      const result = mathaleaUpdateExercicesParamsFromUrl(
+        'http://127.0.0.1:5173/?v=quizzconf',
+      )
+      expect(result.beta).toBe(true)
     })
 
     it('persiste beta dans l’URL reconstruite (updateGlobalOptionsInURL)', async () => {

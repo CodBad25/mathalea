@@ -70,7 +70,9 @@
           on:click={() =>
             dispatch('poids', { index, poids: item.poids - 1 })}>−</button
         >
-        <span class="w-4 text-center text-xs tabular-nums select-none"
+        <span
+          id="{idItem(item)}-poids"
+          class="w-4 text-center text-xs tabular-nums select-none"
           >{item.poids}</span
         >
         <button

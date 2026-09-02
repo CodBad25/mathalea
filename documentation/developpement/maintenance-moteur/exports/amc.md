@@ -50,6 +50,7 @@ elements modernes doivent conduire au même contrat AMC.
 | `qcm`, `mathalea-qcm`                                                                           | `qcmMono` ou `qcmMult`                                     | au moins deux propositions ; `qcmMult` dès qu'une question possède plusieurs réponses vraies                                                   |
 | `mathalea-mathfield`, ancien `mathlive`, ancien `calcul`                                        | `AMCNum`                                                   | une seule valeur finie, comparaison standard et options dont la sémantique est représentable par les cases AMC, sans réponses alternatives     |
 | `fillInTheBlank`, `fill-in-the-blank`, `multi-mathfield`, `tableauMathlive`, `tableau-mathlive` | `AMCNum` pour un champ, `AMCHybride` pour plusieurs champs | les champs doivent être indépendants ; chaque champ non transposable devient un sous-bloc `AMCOpen`                                            |
+| `mathalea-couteau-suisse`                                                                       | `AMCHybride`                                               | chaque enfant est inféré selon son propre `formatInteractif` ; un enfant non transposable devient seul un sous-bloc `AMCOpen`                  |
 | `liste-deroulante`                                                                              | `AMCOpen`                                                  | la correction interactive ne contient pas toujours la liste complète des choix ; un QCM n'est sûr que si l'exercice le construit explicitement |
 | formats texte, construction, clic, glisser-déposer, tableur, éditeurs et composants graphiques  | `AMCOpen`                                                  | l'énoncé LaTeX statique et la correction restent imprimables, mais la réponse ne peut pas être transposée fidèlement                           |
 | format absent ou inconnu                                                                        | `AMCOpen`                                                  | aucun exercice ne doit disparaître silencieusement de la page d'export                                                                         |
@@ -87,6 +88,15 @@ d'un même multi-mathfield restent toutefois les sous-blocs d'une unique entrée
 questions AMC de premier niveau. Les grilles issues d'un tableau sont libellées
 par leurs coordonnées (« Ligne 2, colonne 3 ») afin de rester associables à la
 cellule demandée sur papier.
+
+`mathalea-couteau-suisse` suit la même règle de regroupement. Une entrée du
+parent représente une seule question imprimée : l'inférence parcourt son tableau
+`elements`, convertit les enfants numériques et QCM, puis rassemble
+tous les blocs dans une seule entrée `AMCHybride`. Les enfants incompatibles ne
+dégradent pas les autres réponses : chacun devient localement un `AMCOpen`.
+L'inférence ne regroupe donc jamais plusieurs entrées de premier niveau sur la
+seule base de leur nombre ; l'appartenance à la même question doit être portée
+explicitement par l'agrégateur.
 
 Pour les champs mathématiques, le format ne suffit pas à autoriser `AMCNum`.
 L'inférence relit aussi chaque réponse enregistrée par `handleAnswers()` :

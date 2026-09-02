@@ -40,7 +40,7 @@ export default class NombrePeriodiqueVersFraction extends Exercice {
     ]
     this.besoinFormulaire3Numerique = [
       'Nombre de chiffres maximum dans la partie décimale (hors période)',
-      1,
+      4,
       '0\n1\n2\n3',
     ]
     this.besoinFormulaire4CaseACocher = ['Partie entière égale à 0']
@@ -62,7 +62,8 @@ export default class NombrePeriodiqueVersFraction extends Exercice {
     }
     this.sup = contraindreValeur(1, 3, this.sup, 1)
     this.sup2 = contraindreValeur(1, 3, this.sup2, 1)
-    this.sup3 = contraindreValeur(0, 3, this.sup3, 1)
+    this.sup3 = contraindreValeur(1, 4, this.sup3, 1)
+    const nombreChiffresMaxPartieDecimale = this.sup3 - 1
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const periode = Math.ceil(
         randint(10 ** (this.sup - 1), 10 ** this.sup - 1) /
@@ -73,15 +74,14 @@ export default class NombrePeriodiqueVersFraction extends Exercice {
           10 ** randint(0, this.sup2),
         0,
       )
-      let decimal = 0
-      let decimalDivision = 0
-      if (this.sup3 === 0) {
-        decimal = 0
-        decimalDivision = 0
-      } else {
-        decimalDivision = randint(0, this.sup3)
+      let decimal = -1
+      if (nombreChiffresMaxPartieDecimale > 0) {
+        const decimalDivision = randint(0, nombreChiffresMaxPartieDecimale)
         decimal = Math.ceil(
-          randint(10 ** (this.sup3 - 1), 10 ** this.sup3 - 1) /
+          randint(
+            10 ** (nombreChiffresMaxPartieDecimale - 1),
+            10 ** nombreChiffresMaxPartieDecimale - 1,
+          ) /
             10 ** decimalDivision,
         )
       }
@@ -90,7 +90,8 @@ export default class NombrePeriodiqueVersFraction extends Exercice {
       }
       // Déterminer si le decimal contient un 0 en première position
       const contient0PremierePosition =
-        decimal > 0 && this.sup3 > decimal.toString().length
+        decimal > 0 &&
+        nombreChiffresMaxPartieDecimale > decimal.toString().length
       const nombrePerio = new NombrePeriodique(
         entier,
         decimal,

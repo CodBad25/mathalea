@@ -61,6 +61,11 @@ export interface OmrColonneNumerique {
   attendu: string
   /** Valeurs proposées, de haut en bas */
   valeurs: string[]
+  /**
+   * Signe imprimé juste avant la colonne, sans case : la virgule d'un décimal,
+   * la barre d'une fraction. Sans lui, `12,5` et `125` s'écriraient pareil.
+   */
+  separateurAvant?: string
 }
 
 /** Une question, dans une forme indépendante du moteur d'exercices. */
@@ -262,12 +267,21 @@ ${cellules.join('\n')}
 /**
  * Rend une réponse numérique : une colonne de cases par chiffre, chaque
  * colonne surmontée de son intitulé. L'élève noircit un chiffre par colonne.
+ *
+ * Un séparateur — virgule, barre de fraction — s'intercale sans case entre
+ * deux colonnes : il ne se lit pas, il se lit *sur* la copie.
  */
 function rendreNum(
   copieId: string,
   question: Extract<OmrQuestionSource, { type: 'AMCNum' }>,
 ): string {
-  const colonnes = question.colonnes.map((colonne, indexColonne) => {
+  const cellules: string[] = []
+  for (const [indexColonne, colonne] of question.colonnes.entries()) {
+    if (colonne.separateurAvant != null && indexColonne > 0) {
+      cellules.push(
+        `  grid.cell(align: horizon, text(size: 11pt, ${typstString(colonne.separateurAvant)})),`,
+      )
+    }
     const cases = colonne.valeurs.map((valeur, indexValeur) => {
       const id = idCase(question.qid, `${indexColonne}_${indexValeur}`)
       return `      stack(dir: ltr, spacing: 1mm, ${caseTypst(copieId, id)}, text(size: 8pt)[${valeur}]),`
@@ -276,17 +290,17 @@ function rendreNum(
       colonne.label != null
         ? `text(size: 7pt, ${typstString(colonne.label)})`
         : '[]'
-    return `  stack(
+    cellules.push(`  stack(
     spacing: 1.5mm,
     ${entete},
 ${cases.join('\n')}
-  ),`
-  })
+  ),`)
+  }
   return `#grid(
-  columns: (auto,) * ${question.colonnes.length},
+  columns: (auto,) * ${cellules.length},
   column-gutter: 5mm,
   align: top,
-${colonnes.join('\n')}
+${cellules.join('\n')}
 )`
 }
 
@@ -407,11 +421,17 @@ function corpsDeCopie(
 ): string {
   const blocs: string[] = []
   // les figures de la copie, déclarées en tête de son bloc de contenu : le
-  // `#let` y est local, deux copies peuvent donc avoir chacune leur `fig-1`
+  // `#let` y est local, deux copies peuvent donc avoir chacune leur `fig-1`.
+  // Chaque figure vient avec son zoom et son alignement, que le code produit
+  // par `htmlToTypst` lit à côté d'elle (`mathalea-figure-block`)
   if (copie.figures != null && copie.figures.length > 0) {
     blocs.push(
       copie.figures
-        .map((figure, index) => `#let fig-${index + 1} = ${figure}`)
+        .flatMap((figure, index) => [
+          `#let fig-${index + 1} = ${figure}`,
+          `#let fig-${index + 1}-zoom = 1`,
+          `#let fig-${index + 1}-align = center`,
+        ])
         .join('\n'),
     )
   }
@@ -543,7 +563,13 @@ function corrigeDeLaQuestion(
       : question.correction
   if (redigee != null && redigee.trim() !== '') return redigee
   if (question.type === 'AMCNum') {
-    const valeur = question.colonnes.map((colonne) => colonne.attendu).join('')
+    const valeur = question.colonnes
+      .map((colonne, index) =>
+        index > 0 && colonne.separateurAvant != null
+          ? `${colonne.separateurAvant}${colonne.attendu}`
+          : colonne.attendu,
+      )
+      .join('')
     return `#text(fill: couleur-titre, weight: "bold")[${valeur}]`
   }
   if (question.type === 'AMCOpen') return '_(question ouverte)_'

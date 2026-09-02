@@ -41,6 +41,7 @@
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import ButtonToggleDarkMode from '../../shared/forms/ButtonToggleDarkMode.svelte'
   import BtnFullscreen from '../../shared/ui/BtnFullscreen.svelte'
+  import BtnRetourReglages from '../../shared/ui/BtnRetourReglages.svelte'
   import CountDown from './presentationalComponents/CountDown.svelte'
   import End from './presentationalComponents/End.svelte'
   import KickOff from './presentationalComponents/KickOff.svelte'
@@ -695,6 +696,11 @@
     />
   {/if}
   <div class="fixed flex flex-row items-center space-x-2 bottom-2 right-2">
+    <!-- Pas de recorder (Capytale, Moodle…) : on propose à l'enseignant de
+    revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice. -->
+    {#if $globalOptions.recorder == null}
+      <BtnRetourReglages class="text-2xl" tooltipPosition="top" />
+    {/if}
     <!-- Dans Moodle, l'iframe est à l'étroit dans la page du cours -->
     {#if $globalOptions.recorder === 'moodle'}
       <BtnFullscreen size="sm" isPlain={true} />

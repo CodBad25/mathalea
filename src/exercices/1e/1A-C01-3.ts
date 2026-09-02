@@ -25,7 +25,7 @@ export const dateDePublication = '24/09/2025'
 export default class AutoC1c extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce =
-      `Voici quatre planètes et leur masse :<br><br>` +
+      `Voici quatre planètes et leur masse :<br>` +
       tableauColonneLigne(
         ['\\text{Planètes}', '\\text{Masses}'],
         ['\\text{Terre}', '\\text{Mercure}', '\\text{Vénus}', '\\text{Mars}'],
@@ -36,7 +36,7 @@ export default class AutoC1c extends ExerciceQcmA {
           `${texNombre(6.4185)}\\times 10^{23}\\text{ kg}`,
         ],
       ) +
-      `<br><br>La planète dont la masse est la plus importante est :`
+      `<br>La planète dont la masse est la plus importante est :`
 
     this.correction = `On écrit les masses en écriture scientifique pour les comparer :<br><br>
     • Terre : $${texNombre(5973)}\\times 10^{21} = ${texNombre(5.973)}\\times 10^{3}\\times 10^{21} =${texNombre(5.973)}\\times 10^{24}$ kg<br>
@@ -250,7 +250,7 @@ export default class AutoC1c extends ExerciceQcmA {
         : `La cellule dont la taille est la plus importante est :`
 
     this.enonce =
-      `${contexte} :<br><br>` +
+      `${contexte} :<br>` +
       tableauColonneLigne(
         [
           typeExercice === 1 ? '\\text{Planètes}' : '\\text{Cellules}',
@@ -262,7 +262,7 @@ export default class AutoC1c extends ExerciceQcmA {
             `${texNombre(v.coefficient, 4)}\\times 10^{${v.puissance}}${unite}`,
         ),
       ) +
-      `<br><br>${questionText}`
+      `${questionText}`
 
     // Construction de la correction
     let correctionTexte =
@@ -345,7 +345,7 @@ export default class AutoC1c extends ExerciceQcmA {
   </p>
  `
     this.versionAleatoire()
-    this.spacing = 1.5
+    this.spacing = 1
     this.spacingCorr = 1.5
   }
 }

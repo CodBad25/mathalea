@@ -73,6 +73,7 @@
       matiere: string
       etablissement: string
       duree: string
+      signatureLabel: string
       noteFin: string
     }
     /** Consignes de la page de garde (valeurs lues dans le code) */
@@ -110,6 +111,7 @@
         | 'matiere'
         | 'etablissement'
         | 'duree'
+        | 'signatureLabel'
         | 'noteFin',
       value: string,
     ) => void
@@ -225,6 +227,7 @@
       matiere: '',
       etablissement: '',
       duree: '',
+      signatureLabel: '',
       noteFin: '',
     },
     coverConsignes = [],
@@ -323,6 +326,7 @@
     matiere: '',
     etablissement: '',
     duree: '',
+    signatureLabel: '',
     noteFin: '',
     consignes: '',
   })
@@ -332,6 +336,7 @@
     { name: 'matiere', label: 'Matière' },
     { name: 'etablissement', label: 'Établissement' },
     { name: 'duree', label: "Durée de l'épreuve" },
+    { name: 'signatureLabel', label: 'Signature' },
     { name: 'noteFin', label: 'Mention en bas de page' },
   ] as const
   /**
@@ -344,6 +349,7 @@
   const visibleCoverFields = $derived(
     COVER_FIELDS.filter((field) => {
       if (field.name === 'etablissement') return coverTemplate === 'recitation'
+      if (field.name === 'signatureLabel') return coverTemplate === 'recitation'
       if (coverTemplate === 'can') {
         return (
           field.name !== 'session' &&

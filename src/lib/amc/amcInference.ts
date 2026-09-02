@@ -254,6 +254,11 @@ export function mathaleaEnsureAMCCompatibility(
   )
   const hasMixedGeneratedQuestions =
     hasGeneratedQcmQuestions && hasGeneratedNonQcmQuestions
+  const hasOnlyCouteauSuisseQuestions =
+    autoCorrectionSource.length > 0 &&
+    autoCorrectionSource.every(
+      (item) => getFormat(item) === 'mathalea-couteau-suisse',
+    )
 
   // Ici on débute l'inférence du type AMC de l'exercice.
   // Si l'exercice est déja amcReady, on suppose que le type AMC est correctement défini et on ne fait rien.
@@ -427,7 +432,11 @@ export function mathaleaEnsureAMCCompatibility(
     return applyAMCOpenFallback()
   }
 
-  if (!hasOnlyPotentiallyNumericQuestions && !hasMixedGeneratedQuestions) {
+  if (
+    !hasOnlyPotentiallyNumericQuestions &&
+    !hasMixedGeneratedQuestions &&
+    !hasOnlyCouteauSuisseQuestions
+  ) {
     // Pour ce qui ne rentre pas dans les cas précédents : fallback AMCOpen.
     return applyAMCOpenFallback()
   }
@@ -676,6 +685,108 @@ export function mathaleaEnsureAMCCompatibility(
         },
       ],
     }
+  }
+
+  if (hasOnlyCouteauSuisseQuestions) {
+    exerciseAny.autoCorrectionAMC = autoCorrectionSource.map(
+      (item, statementIndex) => {
+        const elements = Array.isArray((item as any)?.elements)
+          ? ((item as any).elements as Array<{
+              formatInteractif?: unknown
+              autoCorrection?: AutoCorrection
+            }>)
+          : []
+        const inferredPropositions = elements.flatMap<AMCUneProposition>(
+          (element, elementIndex) => {
+            const child = {
+              ...(element.autoCorrection ?? {}),
+              formatInteractif: element.formatInteractif,
+            } as AutoCorrection
+            const isLastElement = elementIndex === elements.length - 1
+            const correction = isLastElement
+              ? (exercice.listeCorrections[statementIndex] ?? '')
+              : ''
+
+            if (isQcmItem(child)) {
+              const qcmPropositions = child.propositions ?? []
+              const hasMultipleAnswers =
+                qcmPropositions.filter((proposition) =>
+                  Boolean(proposition.statut),
+                ).length > 1
+              return [
+                {
+                  type: hasMultipleAnswers ? 'qcmMult' : 'qcmMono',
+                  enonce: child.enonce ?? '',
+                  propositions: qcmPropositions.map((proposition) => ({
+                    ...proposition,
+                    statut: Boolean(proposition.statut),
+                  })) as AMCUneProposition['propositions'],
+                  options: child.options as AMCUneProposition['options'],
+                },
+              ]
+            }
+
+            const fields = extractNumericFields(child)
+            if (fields.length > 0) {
+              return fields.map((field, fieldIndex) =>
+                toHybridField(
+                  field,
+                  fieldIndex,
+                  isLastElement && fieldIndex === fields.length - 1
+                    ? correction
+                    : '',
+                  exercice.listeCorrections[statementIndex] ?? '',
+                ),
+              )
+            }
+
+            return [
+              {
+                type: 'AMCOpen',
+                enonce: child.enonce ?? `Réponse ${elementIndex + 1}`,
+                propositions: [
+                  {
+                    texte: correction,
+                    statut: 3,
+                  },
+                ],
+              },
+            ]
+          },
+        )
+        const propositions: AMCUneProposition[] =
+          inferredPropositions.length > 0
+            ? inferredPropositions
+            : [
+                {
+                  type: 'AMCOpen',
+                  propositions: [
+                    {
+                      texte: exercice.listeCorrections[statementIndex] ?? '',
+                      statut: 3,
+                    },
+                  ],
+                },
+              ]
+        const fields = elements.flatMap((element) =>
+          extractNumericFields({
+            ...(element.autoCorrection ?? {}),
+            formatInteractif: element.formatInteractif,
+          } as AutoCorrection),
+        )
+
+        return {
+          enonce: appendIrreducibleFractionInstruction(
+            exercice.listeQuestions[statementIndex],
+            fields,
+          ),
+          propositions,
+        }
+      },
+    )
+    exercice.amcType = 'AMCHybride'
+    exercice.amcReady = true
+    return exercice as IExerciceAMC
   }
 
   const canGroupByStatement =

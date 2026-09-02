@@ -11,6 +11,10 @@ import { prenom } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import {
+  MathaleaCouteauSuisseElement,
+  type MathaleaCouteauSuisseChild,
+} from '../../lib/customElements/MathaleaCouteauSuisse'
+import {
   contraindreValeur,
   listeQuestionsToContenu,
   randint,
@@ -58,7 +62,7 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
     ]
 
     this.consigne = "Répondre aux questions à l'aide du texte."
-    this.nbQuestions = 4
+    this.nbQuestions = 1
     this.nbQuestionsModifiable = false
 
     this.sup = false // false -> effectif ; true -> masse
@@ -192,11 +196,6 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
       const cellule = Object.fromEntries([[ref, valeur]])
       objetReponse = Object.assign(objetReponse, cellule)
     }
-    objetReponse = Object.assign(objetReponse, {
-      bareme: (listePoints: number[]) => {
-        return [listePoints.reduce((a, b) => a + b, 0), listePoints.length]
-      },
-    })
     texteCorr = `${numAlpha(0)} Voici le tableau complet. <br>`
     texteCorr += tableauColonneLigne(
       tabEntetesColonnes,
@@ -357,7 +356,47 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
         options: this.sup ? { unite: true } : { nombreDecimalSeulement: true },
       },
     })
-    this.listeQuestions.push(texte)
+    const elements: MathaleaCouteauSuisseChild[] = [
+      {
+        formatInteractif: 'tableau-mathlive',
+        questionIndex: 0,
+        autoCorrection: this.autoCorrection[0],
+      },
+      {
+        formatInteractif: 'mathalea-mathfield',
+        questionIndex: 1,
+        autoCorrection: this.autoCorrection[1],
+      },
+      {
+        formatInteractif: 'mathalea-qcm',
+        questionIndex: 2,
+        autoCorrection: this.autoCorrection[2],
+      },
+      {
+        formatInteractif: 'mathalea-qcm',
+        questionIndex: 3,
+        autoCorrection: this.autoCorrection[3],
+      },
+    ]
+    this.autoCorrection = [
+      {
+        formatInteractif: MathaleaCouteauSuisseElement.elementTag,
+        elements,
+      },
+    ]
+    // `propositionsQcm()` synchronise provisoirement les deux QCM comme des
+    // questions AMC de premier niveau. Ils sont désormais des enfants du
+    // couteau suisse et seront inférés depuis `elements`.
+    this.autoCorrectionAMC = []
+    this.listeQuestions.push(
+      MathaleaCouteauSuisseElement.create({
+        numeroExercice: this.numeroExercice ?? 0,
+        questionIndex: 0,
+        elements,
+        contenu: texte,
+        interactivityOn: this.interactif,
+      }),
+    )
     this.listeCorrections.push(texteCorr)
     listeQuestionsToContenu(this)
   }

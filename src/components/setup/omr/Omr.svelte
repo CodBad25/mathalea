@@ -1178,8 +1178,9 @@
             <div
               class="px-4 py-2 text-sm bg-amber-100 text-amber-900 dark:bg-amber-900 dark:text-amber-100"
             >
-              Aucune question à cases dans les exercices sélectionnés. Seuls les
-              QCM et les réponses numériques peuvent être lus optiquement.
+              Aucune question à cases dans les exercices sélectionnés : leurs
+              énoncés ont gardé les composants interactifs (tableau à compléter,
+              QCM à cliquer) dont la version papier ne sait rien faire.
             </div>
           {/if}
 

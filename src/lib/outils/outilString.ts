@@ -167,7 +167,7 @@ export function numAlpha(k: number, nospace = false) {
     )
   else
     return (
-      '\\textbf {' + String.fromCharCode(97 + k) + '.}' + (nospace ? '' : ' ')
+      '\\textbf {' + String.fromCharCode(97 + k) + ')}' + (nospace ? '' : ' ')
     )
 }
 

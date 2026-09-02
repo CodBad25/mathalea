@@ -136,6 +136,11 @@ Dans `2F21-9`, le barème obtenu est :
 - Les sous-éléments doivent conserver leurs identifiants habituels :
   `multi-mathfieldEx...`, `tableau-signes-variationsEx...`,
   `mathalea-qcmEx...`. Les vérificateurs existants les recherchent par ces IDs.
+- Lorsque plusieurs enfants utilisent le même type de custom element, leur
+  donner des `questionIndex` distincts dans le DOM et reporter chaque index dans
+  l'entrée correspondante de `elements`. Le couteau suisse installe alors
+  temporairement l'`autoCorrection` enfant à cet index pendant la vérification,
+  sans créer plusieurs questions persistantes dans l'exercice.
 - Dans un `multi-mathfield`, utiliser les champs normalisés `champ1`, `champ2`,
   etc.
 - Dans le wrapper, préférer les méthodes `Element.create()` des sous-éléments.
@@ -144,3 +149,19 @@ Dans `2F21-9`, le barème obtenu est :
 - Pour un QCM radio, mettre `radio: true` dans le rendu
   `MathaleaQcmElement.create()` et `options: { radio: true }` dans
   l'`autoCorrection` déléguée.
+
+## Inférence AMC
+
+Un couteau suisse est inféré comme une seule question `AMCHybride`. Chaque
+entrée de `elements` est convertie selon son propre `formatInteractif` : les
+champs numériques et cellules de tableau deviennent des blocs `AMCNum`, les QCM
+deviennent `qcmMono` ou `qcmMult`, et un enfant non transposable devient seul un
+bloc `AMCOpen`.
+
+L'exercice doit donc conserver une correspondance stricte : une génération de
+question produit une entrée `listeQuestions[i]` et une seule entrée
+`autoCorrection[i]`, celle du couteau suisse. Les corrections des enfants sont
+stockées dans `autoCorrection[i].elements`, et non à plusieurs index de premier
+niveau. Si un helper remplit provisoirement `autoCorrectionAMC` pour un QCM
+enfant, retirer ces entrées avant l'inférence afin qu'elles ne soient pas prises
+pour des questions AMC indépendantes.
