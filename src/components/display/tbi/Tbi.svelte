@@ -5,6 +5,7 @@
     isStatic,
     isSvelte,
   } from '../../../lib/components/componentsUtils'
+  import { getStaticExercicePngUrls } from '../../../lib/components/exercisesUtils'
   import {
     mathaleaHandleParamOfOneExercice,
     mathaleaLoadExerciceFromUuid,
@@ -56,17 +57,25 @@
       id: param.id ?? param.uuid,
       key: nextItemKey++,
     }
-    if (isStatic(param.uuid) || isSvelte(param.uuid)) {
-      return { ...base, exercise: null }
+    if (isStatic(param.uuid)) {
+      // annale scannée / banque externe : affichée telle quelle comme image
+      return {
+        ...base,
+        exercise: null,
+        staticContent: getStaticExercicePngUrls(param.uuid),
+      }
+    }
+    if (isSvelte(param.uuid)) {
+      return { ...base, exercise: null, staticContent: null }
     }
     const exercise = await mathaleaLoadExerciceFromUuid(param.uuid)
     if (!exercise) {
-      return { ...base, exercise: null }
+      return { ...base, exercise: null, staticContent: null }
     }
     mathaleaHandleParamOfOneExercice(exercise, param)
     exercise.numeroExercice = index
     exercise.interactif = false
-    return { ...base, exercise }
+    return { ...base, exercise, staticContent: null }
   }
 
   async function loadItems() {
