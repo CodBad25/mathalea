@@ -12,7 +12,7 @@ export const interactifReady = true
 export const uuid = '21518'
 
 export const refs = {
-  'fr-fr': ['1Gen-A102', '1Tec-S104'],
+  'fr-fr': ['1Gen-A102'],
   'fr-ch': [],
 }
 export default class TermeDUneSuiteDefinieExplicitement2 extends TermeDUneSuiteDefinieExplicitement {
