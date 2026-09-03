@@ -4,6 +4,7 @@ import { numAlpha } from '../../lib/outils/outilString'
 import { prenomF } from '../../lib/outils/Personne'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
+import type FractionEtendue from '../../modules/FractionEtendue'
 import { fraction, listeFractions } from '../../modules/fractions'
 import {
   gestionnaireFormulaireTexte,
@@ -11,7 +12,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import type FractionEtendue from '../../modules/FractionEtendue'
 
 type DonneesProbleme3 = [
   FractionEtendue,
@@ -71,7 +71,7 @@ export const titre =
 export const uuid = '7ba8b'
 
 export const refs = {
-  'fr-fr': ['4C25-1', 'BP2AutoH20'],
+  'fr-fr': ['4C25-1', 'BP2AutoH20', '2N33-2'],
   'fr-ch': ['10NO3C-2'],
 }
 export default class ProblemesMultiplicatifsFractions extends Exercice {
