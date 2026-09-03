@@ -44,6 +44,30 @@ pnpm prebuild-unit-tests
 
 Cette commande exécute les tests unitaires de `tests/unit` et de `src`.
 
+## Modifier un exercice déjà publié
+
+Les liens partagés par les utilisateurs contiennent l'`uuid`, la graine du tirage
+et les paramètres choisis. Déplacer un appel au générateur aléatoire, ou en
+ajouter un avant les autres, décale toutes les valeurs suivantes : les corrigés
+déjà distribués ne correspondent plus à l'énoncé. Le contrôle porte sur
+plusieurs valeurs de `sup`, `sup2` et `sup3`, pas seulement sur celles par
+défaut.
+
+```sh
+CHANGED_FILES="src/exercices/6e/6N1E.ts" pnpm stability:check
+```
+
+Corriger une coquille, reformuler ou refactoriser sans toucher à l'ordre des
+tirages passe sans problème. Si le test signale une dérive assumée, la version
+publiée doit être archivée et la version corrigée prendre un `uuid` neuf :
+
+```sh
+node tasks/archive-exercice.js src/exercices/6e/6N1E.ts
+```
+
+Le détail de la règle et des trois issues possibles est dans
+[Stabilité des tirages](../../tests/stabilite-exercices.md).
+
 ## Rapports ciblés d'exercices
 
 Si la modification touche l'interactivité, `autoCorrection` ou AMC, utilisez
@@ -60,6 +84,8 @@ fichier ciblé pendant le développement.
 - le HTML non interactif reste compréhensible ;
 - le rendu LaTeX est exploitable ;
 - `pnpm check` et `pnpm prebuild-unit-tests` passent ;
+- pour un exercice déjà publié, `pnpm stability:check` passe ou la dérive est
+  assumée et documentée ;
 - les rapports ciblés utiles ne signalent pas de régression.
 
 Pour comprendre les tests globaux ou la CI, consultez
