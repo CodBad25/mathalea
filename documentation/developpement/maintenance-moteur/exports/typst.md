@@ -388,6 +388,24 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrectio
 
 Les réponses trouvées sont remises dans leur ordre d'apparition, dédoublonnées, puis réémises telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
 
+## Impression recto-verso (démarrage sur page impaire)
+
+Case à cocher « Impression recto-verso » des Réglages du document (`TypstDocumentOptions.oddPageStarts`, **active par défaut**) : chaque partie qui commence sur une nouvelle page — le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions — commence sur une page impaire, Typst insérant au besoin une page blanche. En impression recto-verso en série, une partie ne commence ainsi jamais au dos de la précédente ; le partage énoncé/corrigé en deux PDF (`downloadPdfSeparate`) en profite de la même façon, chaque sujet y restant sur un recto.
+
+Un seul point de passage, `sectionPageBreak(options)` (`buildTypstDocument.ts`), appelé aux quatre endroits qui ouvrent une partie : les corrections des trois modes de fiche (« Course aux nombres », fusionné, banque) et le saut entre deux sujets. Il rend `#pagebreak(weak: true)` quand le réglage est décoché, et sinon :
+
+```typ
+#{ set page(header: none, footer: none); pagebreak(to: "odd", weak: true) }
+```
+
+Le `set page` est **scopé au bloc de code** : la page blanche éventuellement insérée par `to: "odd"` naît dans ce bloc et sort donc sans en-tête ni pied de page (sinon elle afficherait une pagination incongrue, « 4/3 »), tandis que la page courante et celle de la partie qui suit, hors du bloc, gardent les leurs.
+
+À savoir :
+
+- `to: "odd"` regarde le **compteur de pages**, que chaque sujet remet à 1 juste après le saut. Comme le premier sujet démarre à la page physique 1 et que chaque sujet suivant démarre sur une page impaire, la parité du compteur reste celle des pages physiques — la parité ne dérive donc pas de sujet en sujet ;
+- une variante « manuelle » (`context if calc.odd(here().page())` puis saut) a été écartée : le repère d'introspection est résolu de l'autre côté du saut de page faible, la parité lue n'est pas celle attendue ;
+- les pages de garde (`#mathalea-couverture-*`) gardent leur `pagebreak()` simple : la fiche suit volontairement au dos de sa couverture.
+
 ## Persistance dans l'URL
 
 Toutes les modifications de la fiche sont sauvegardées dans l'URL (paramètre `typstParam`, JSON encodé en base64) pour pouvoir la recharger à l'identique ou la partager :

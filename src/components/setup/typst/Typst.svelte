@@ -3729,6 +3729,19 @@
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
+                bind:checked={documentOptions.oddPageStarts}
+                onchange={applyDocumentOptions}
+              />
+              <span
+                title="Le corrigé et chaque sujet supplémentaire commencent sur une page impaire : une page blanche (sans en-tête ni pied de page) est insérée si besoin, pour qu'à l'impression recto-verso en série une partie ne commence jamais au dos de la précédente"
+              >
+                Impression recto-verso
+              </span>
+            </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
                 bind:checked={documentOptions.canMode}
                 onchange={toggleCanMode}
               />
