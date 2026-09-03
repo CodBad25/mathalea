@@ -5,6 +5,14 @@
   export let indiceExercice: number
   export let showNumber = true
   export let seed: string | undefined
+  /** Facteur de zoom appliqué à l'énoncé (option `z` de l'URL) : le titre doit
+   *  suivre la même échelle que le corps de l'exercice. */
+  export let zoom: number | string = 1
+
+  // `text-xl` = 1.25rem, `text-lg` = 1.125rem : on conserve ce rapport et on le
+  // multiplie par le zoom pour que le titre grandisse avec l'énoncé.
+  $: isBigTitle = isMenuNeededForExercises && presMode !== 'liste_exos'
+  $: titleFontSize = (isBigTitle ? 1.25 : 1.125) * (Number(zoom) || 1)
 </script>
 
 <!--
@@ -44,9 +52,8 @@
         </div>
       </div>
       <div
-        class="font-light {isMenuNeededForExercises && presMode !== 'liste_exos'
-          ? 'text-xl'
-          : 'text-lg'} ml-2"
+        class="font-light ml-2"
+        style="font-size: {titleFontSize}rem; line-height: 1.3;"
       >
         {title}
 

@@ -714,6 +714,7 @@
       isMenuNeededForExercises={$isMenuNeededForExercises}
       presMode={$globalOptions.presMode}
       seed={exercise.seed}
+      zoom={$globalOptions.z ?? 1}
     />
   {/if}
 

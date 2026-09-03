@@ -43,6 +43,7 @@
     {...headerExerciceProps}
     isMenuNeededForExercises={$isMenuNeededForExercises}
     presMode={$globalOptions.presMode ?? 'liste_exos'}
+    zoom={$globalOptions.z ?? 1}
     seed={exercise.seed}
   />
 {:else}
