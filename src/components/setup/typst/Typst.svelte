@@ -36,7 +36,9 @@
   import ExportViewLinks from '../shared/ExportViewLinks.svelte'
   import { SM_BREAKPOINT } from '../../keyboard/lib/sizes'
   import {
+    BADGE_POSITIONS,
     BADGE_STYLES,
+    FULL_WIDTH_BADGE_STYLES,
     COVER_TEMPLATES,
     COVER_TEMPLATE_DEFAULTS,
     HEADER_STYLES,
@@ -105,15 +107,32 @@
   /** Libellés des styles de badge du paquet exercise-bank */
   const BADGE_STYLE_LABELS: Record<(typeof BADGE_STYLES)[number], string> = {
     'border-accent': 'Barre latérale',
-    box: 'Encadré (marge)',
+    underline: 'Souligné',
     'rounded-box': 'Encadré arrondi',
     'header-card': 'Bandeau',
-    underline: 'Souligné',
-    pill: 'Pastille (marge)',
-    tag: 'Étiquette (marge)',
-    circled: 'Numéro cerclé (marge)',
-    'filled-circle': 'Numéro plein (marge)',
+    margin: 'Titre seul',
+    box: 'Encadré',
+    pill: 'Pastille',
+    tag: 'Étiquette',
+    circled: 'Numéro cerclé',
+    'filled-circle': 'Numéro plein',
+    rect: 'Numéro encadré',
+    'filled-rect': 'Numéro encadré plein',
   }
+
+  /**
+   * Le style place-t-il son titre à côté de l'énoncé ? Les styles pleine
+   * largeur ne sont pas concernés par « Position du titre ».
+   */
+  const badgeStyleHasSideLabel = (style: (typeof BADGE_STYLES)[number]) =>
+    !(FULL_WIDTH_BADGE_STYLES as readonly string[]).includes(style)
+
+  /** Libellés des positions de badge du paquet exercise-bank */
+  const BADGE_POSITION_LABELS: Record<(typeof BADGE_POSITIONS)[number], string> =
+    {
+      margin: 'En marge',
+      above: 'Au-dessus',
+    }
 
   /** Libellés des modèles de page de garde */
   const COVER_TEMPLATE_LABELS: Record<CoverTemplate, string> = {
@@ -203,6 +222,10 @@
           if (!has(BADGE_STYLES, restoredDocumentOptions.badgeStyle)) {
             restoredDocumentOptions.badgeStyle =
               defaultTypstDocumentOptions.badgeStyle
+          }
+          if (!has(BADGE_POSITIONS, restoredDocumentOptions.badgePosition)) {
+            restoredDocumentOptions.badgePosition =
+              defaultTypstDocumentOptions.badgePosition
           }
           if (!has(HEADER_STYLES, restoredDocumentOptions.headerStyle)) {
             restoredDocumentOptions.headerStyle =
@@ -3968,8 +3991,45 @@
                   documentOptions.canMode}
                 onchange={applyDocumentOptions}
               >
-                {#each BADGE_STYLES as style}
-                  <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
+                <optgroup label="Titre pleine largeur (position figée)">
+                  {#each BADGE_STYLES.filter((style) => !badgeStyleHasSideLabel(style)) as style}
+                    <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
+                  {/each}
+                </optgroup>
+                <optgroup label="Badge (position réglable)">
+                  {#each BADGE_STYLES.filter(badgeStyleHasSideLabel) as style}
+                    <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
+                  {/each}
+                </optgroup>
+              </select>
+            </label>
+
+            <!-- réglage propre aux styles à titre latéral : les styles pleine
+                 largeur n'ont pas de colonne de titre à déplacer -->
+            <label
+              class="flex items-center justify-between gap-4 text-sm"
+              class:opacity-50={!badgeStyleHasSideLabel(
+                documentOptions.badgeStyle,
+              ) ||
+                documentOptions.mergeExercises ||
+                documentOptions.canMode}
+              title={badgeStyleHasSideLabel(documentOptions.badgeStyle)
+                ? '« En marge » réserve une colonne à gauche pour le titre de l’exercice ; « Au-dessus » le place seul sur une ligne d’en-tête et l’énoncé prend toute la largeur (utile en colonnes et pour les énoncés numérotés)'
+                : 'Sans objet : ce style écrit déjà son titre sur toute la largeur. Choisissez un style du groupe « Badge » pour pouvoir le déplacer.'}
+            >
+              Position du titre
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.badgePosition}
+                disabled={!badgeStyleHasSideLabel(documentOptions.badgeStyle) ||
+                  documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+                onchange={applyDocumentOptions}
+              >
+                {#each BADGE_POSITIONS as position}
+                  <option value={position}>
+                    {BADGE_POSITION_LABELS[position]}
+                  </option>
                 {/each}
               </select>
             </label>

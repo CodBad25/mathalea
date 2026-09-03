@@ -577,6 +577,57 @@ describe('buildTypstDocument', () => {
     expect(boxWithCorr).toContain('#exo-setup(margin-position: 2.9cm)')
   })
 
+  it('place le badge au-dessus de l’énoncé et supprime la colonne de badge', () => {
+    const enMarge = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      badgeStyle: 'pill',
+    })
+    expect(enMarge).toContain('margin-position: 2.5cm,')
+    expect(enMarge).not.toContain('badge-position:')
+
+    const auDessus = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      badgeStyle: 'pill',
+      badgePosition: 'above',
+    })
+    expect(auDessus).toContain('badge-position: "above",')
+    // plus de colonne de badge : ni largeur imposée, ni marge de page élargie
+    expect(auDessus).not.toContain('margin-position:')
+    expect(auDessus).not.toContain('label-extra:')
+    expect(auDessus).toContain('margin: (x: 10mm, y: 15mm)')
+
+    // style pleine largeur : le réglage reste mémorisé mais n'est pas émis
+    const pleineLargeur = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      {
+        ...defaultTypstDocumentOptions,
+        badgeStyle: 'underline',
+        badgePosition: 'above',
+      },
+    )
+    expect(pleineLargeur).not.toContain('badge-position:')
+  })
+
+  it('propose les styles ajoutés par exercise-bank (rect, filled-rect, margin)', () => {
+    // badges au seul numéro : même colonne compacte que les styles cerclés
+    for (const style of ['rect', 'filled-rect'] as const) {
+      const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+        ...defaultTypstDocumentOptions,
+        badgeStyle: style,
+      })
+      expect(code).toContain(`badge-style: "${style}",`)
+      expect(code).toContain('margin-position: 1.4cm,')
+    }
+    // `margin` gère lui-même sa colonne latérale (et la replie en dessous de
+    // `margin-fold-below`) : pas de `margin-position` imposé
+    const margin = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      badgeStyle: 'margin',
+    })
+    expect(margin).toContain('badge-style: "margin",')
+    expect(margin).not.toContain('margin-position:')
+  })
+
   it('génère les trois habillages d’en-tête et le sous-titre', () => {
     const epure = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
       ...defaultTypstDocumentOptions,
