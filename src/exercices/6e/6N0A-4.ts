@@ -164,7 +164,15 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
         texte += props.texte
       } else {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
-        handleAnswers(this, i, { reponse: { value: a * b } })
+        // `propositionsQcm()` a positionné `formatInteractif` à 'mathalea-qcm' ;
+        // en mode numérique interactif il faut le forcer à 'mathlive' sinon la
+        // saisie de l'élève n'est pas vérifiée (réponses considérées manquantes).
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: a * b } },
+          this.interactif ? { formatInteractif: 'mathlive' } : {},
+        )
       }
       if (this.questionJamaisPosee(i, a, b)) {
         this.listeQuestions[i] = texte
