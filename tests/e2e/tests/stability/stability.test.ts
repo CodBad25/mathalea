@@ -18,6 +18,7 @@ import {
   NB_QUESTIONS_EMPREINTE,
   combinaisonsParametres,
   empreinteTirage,
+  installeGardeDeBoucle,
   exercicesAControler,
   grainePourUuid,
   partieNombres,
@@ -91,6 +92,10 @@ vi.mock('apigeom', async (original) => {
 const { mathaleaLoadExerciceFromUuid, mathaleaHandleExerciceSimple } =
   await import('../../../../src/lib/mathalea')
 
+// Doit être installée avant toute génération : elle intercepte les
+// réassignations de Math.random faites par seedrandom.
+const garde = installeGardeDeBoucle()
+
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const RACINE = resolve(__dirname, '../../../..')
 const FICHIER_EMPREINTES = resolve(
@@ -118,6 +123,11 @@ function chargeRegistre(): Registre {
   } catch {
     return {}
   }
+}
+
+/** Libellé lisible d'une combinaison : `paramètres par défaut` ou `s=2`. */
+function libelle(cle: string): string {
+  return cle === '' ? 'paramètres par défaut' : cle
 }
 
 /** Charge une instance neuve, prête à générer, ou lève si elle est inutilisable. */
@@ -172,7 +182,7 @@ function declarationsFormulaires(
 async function empreinteDeLExercice(
   uuid: string,
   chemin: string,
-): Promise<EmpreinteExercice> {
+): Promise<{ empreinte: EmpreinteExercice; combinaisonsEnEchec: string[] }> {
   const graine = grainePourUuid(uuid)
   const modele = await chargeExercice(uuid, chemin)
   const combinaisons = combinaisonsParametres(declarationsFormulaires(modele), [
@@ -183,6 +193,7 @@ async function empreinteDeLExercice(
   modele.destroy?.()
 
   const v: Record<string, string> = {}
+  const combinaisonsEnEchec: string[] = []
   for (const { cle, valeurs } of combinaisons) {
     // instance neuve à chaque combinaison : aucun état ne fuit d'un tirage à
     // l'autre, exactement comme quand un utilisateur ouvre un lien
@@ -191,18 +202,30 @@ async function empreinteDeLExercice(
     if (valeurs[0] !== undefined) exercice.sup = valeurs[0]
     if (valeurs[1] !== undefined) exercice.sup2 = valeurs[1]
     if (valeurs[2] !== undefined) exercice.sup3 = valeurs[2]
-    if (exercice.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercice, false)
-    } else {
-      exercice.nouvelleVersionWrapper()
+    garde.demarre()
+    try {
+      if (exercice.typeExercice === 'simple') {
+        mathaleaHandleExerciceSimple(exercice, false)
+      } else {
+        exercice.nouvelleVersionWrapper()
+      }
+      v[cle] = empreinteTirage(
+        [...(exercice.listeQuestions ?? [])].map(String),
+        [...(exercice.listeCorrections ?? [])].map(String),
+      )
+    } catch (e) {
+      // Une combinaison qui plante ne doit pas priver l'exercice de la
+      // protection acquise sur les autres : on la laisse de côté et on la
+      // signale.
+      combinaisonsEnEchec.push(
+        `${chemin} (${uuid}) : ${libelle(cle)} : ${(e as Error).message}`,
+      )
+    } finally {
+      garde.arrete()
+      exercice.destroy?.()
     }
-    v[cle] = empreinteTirage(
-      [...(exercice.listeQuestions ?? [])].map(String),
-      [...(exercice.listeCorrections ?? [])].map(String),
-    )
-    exercice.destroy?.()
   }
-  return { ex: chemin, v }
+  return { empreinte: { ex: chemin, v }, combinaisonsEnEchec }
 }
 
 const enMiseAJour = process.env.STABILITY_UPDATE === '1'
@@ -219,14 +242,10 @@ const derives: string[] = []
 const textesModifies: string[] = []
 const nonControles: string[] = []
 const combinaisonsDisparues: string[] = []
+const combinaisonsEnEchec: string[] = []
 
 /** Empreinte d'un tirage qui n'a produit aucun énoncé. */
 const VIDE = empreinteTirage([], [])
-
-/** Libellé lisible d'une combinaison : `paramètres par défaut` ou `s=2`. */
-function libelle(cle: string): string {
-  return cle === '' ? 'paramètres par défaut' : cle
-}
 
 describe(`Stabilité des tirages (${cibles.length} exercice(s))`, () => {
   if (cibles.length === 0) {
@@ -234,11 +253,25 @@ describe(`Stabilité des tirages (${cibles.length} exercice(s))`, () => {
       expect(true).toBe(true)
     })
   }
+  // Un exercice absent du registre est simplement ignoré, pour ne pas bloquer
+  // sur les nouveautés. Sans ce garde-fou, un registre entièrement absent
+  // rendrait donc la suite verte tout en ne protégeant plus rien.
+  if (!enMiseAJour && cibles.length > 0 && Object.keys(registre).length === 0) {
+    it("le fichier d'empreintes est présent", () => {
+      expect(
+        Object.keys(registre).length,
+        `${FICHIER_EMPREINTES} est vide ou absent : le test ne compare rien et ` +
+          "ne protège rien.\nLe régénérer avec `pnpm stability:update` et l'ajouter au commit.",
+      ).toBeGreaterThan(0)
+    })
+  }
   for (const [uuid, chemin] of cibles) {
     it(`${chemin} (${uuid})`, async () => {
       let empreinte: EmpreinteExercice
       try {
-        empreinte = await empreinteDeLExercice(uuid, chemin)
+        const resultat = await empreinteDeLExercice(uuid, chemin)
+        empreinte = resultat.empreinte
+        combinaisonsEnEchec.push(...resultat.combinaisonsEnEchec)
       } catch (e) {
         // Un exercice qui plante est déjà signalé par les autres suites
         // (console_errors, all_exercises) : on ne le contrôle pas ici, mais on
@@ -327,7 +360,16 @@ afterAll(() => {
       `Empreintes écrites : ${Object.keys(nouveauRegistre).length} exercice(s), ` +
         `${nbCombinaisons} combinaison(s) dans ${FICHIER_EMPREINTES}`,
     )
-    return
+    // On ne sort pas : les rapports ci-dessous valent aussi — et surtout — pour
+    // une régénération, puisqu'ils disent ce qui n'a pas pu être empreinté.
+  }
+  if (combinaisonsEnEchec.length > 0) {
+    console.log(
+      `\n⚠️  ${combinaisonsEnEchec.length} combinaison(s) de paramètres n'ont pas pu être générées :\n` +
+        `  - ${combinaisonsEnEchec.join('\n  - ')}\n` +
+        'Ces réglages sont proposés aux utilisateurs : une génération qui\n' +
+        "n'aboutit pas est un bug de l'exercice, à corriger à part.\n",
+    )
   }
   if (combinaisonsDisparues.length > 0) {
     console.log(

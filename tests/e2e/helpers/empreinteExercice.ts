@@ -33,6 +33,67 @@ export const NB_QUESTIONS_EMPREINTE = 3
 export const NB_VALEURS_PAR_PARAMETRE = [3, 2, 2]
 
 /**
+ * Nombre maximal de tirages aléatoires autorisés pour une génération.
+ *
+ * Certains exercices contiennent une boucle de rejet non gardée : ils tirent
+ * jusqu'à trouver une valeur acceptable, et pour certains réglages cette valeur
+ * n'existe pas. Le test doit signaler le problème, pas s'y bloquer.
+ * Un exercice ordinaire consomme quelques milliers de tirages.
+ */
+export const MAX_TIRAGES_PAR_GENERATION = 2_000_000
+
+export type GardeDeBoucle = {
+  /** Ouvre le compteur avant une génération. */
+  demarre: () => void
+  /** Referme le compteur et renvoie le nombre de tirages consommés. */
+  arrete: () => number
+}
+
+/**
+ * Surveille la consommation de `Math.random` pour qu'une boucle de rejet sans
+ * issue lève une exception au lieu de figer la suite de tests.
+ *
+ * `Math.random` est remplacé par un accesseur : `seedrandom(..., {global:true})`
+ * réassigne `Math.random` à chaque génération, et le setter récupère ce nouveau
+ * générateur sans que le compteur soit perdu.
+ *
+ * À n'appeler qu'une fois, au chargement du module de test.
+ */
+export function installeGardeDeBoucle(
+  max: number = MAX_TIRAGES_PAR_GENERATION,
+): GardeDeBoucle {
+  let generateur: () => number = Math.random
+  let compteur = 0
+  let actif = false
+  const compte = () => {
+    if (actif && ++compteur > max) {
+      actif = false
+      throw new Error(
+        `plus de ${max} tirages aléatoires consommés : boucle sans issue probable`,
+      )
+    }
+    return generateur()
+  }
+  Object.defineProperty(Math, 'random', {
+    configurable: true,
+    get: () => compte,
+    set: (nouveau: () => number) => {
+      generateur = nouveau
+    },
+  })
+  return {
+    demarre: () => {
+      compteur = 0
+      actif = true
+    },
+    arrete: () => {
+      actif = false
+      return compteur
+    },
+  }
+}
+
+/**
  * Graine utilisée pour un exercice donné.
  * Elle est dérivée de l'uuid : elle a l'air aléatoire mais reste reproductible
  * d'une exécution à l'autre et d'une machine à l'autre.

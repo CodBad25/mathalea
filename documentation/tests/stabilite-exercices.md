@@ -168,10 +168,32 @@ relecture doit s'y arrêter. Le fichier tient une ligne par exercice pour qu'une
 dérive apparaisse comme une seule ligne modifiée.
 
 Une entrée absente n'est pas contrôlée — exercice nouveau, ou combinaison de
-paramètres nouvelle : elle sera ajoutée à la prochaine régénération. À
+paramètres nouvelle : elle sera ajoutée à la prochaine régénération. En
+contrepartie, un fichier entièrement absent rendrait la suite verte sans rien
+comparer : le test le détecte et échoue explicitement dans ce cas. À
 l'inverse, une combinaison présente dans le fichier mais que l'exercice ne
 propose plus est signalée : les liens qui l'utilisaient n'affichent plus la même
 chose.
+
+## Exercices qui bouclent sur un réglage
+
+Certains exercices contiennent une boucle de rejet non gardée : ils tirent
+jusqu'à trouver une valeur acceptable, et pour certains réglages proposés à
+l'utilisateur cette valeur n'existe pas. La génération ne s'arrête alors jamais.
+
+Le test compte les appels à `Math.random` pendant chaque génération et
+abandonne au-delà de `MAX_TIRAGES_PAR_GENERATION`
+(`tests/e2e/helpers/empreinteExercice.ts`). La combinaison fautive est écartée
+et signalée, l'exercice reste protégé sur les autres :
+
+```
+⚠️  1 combinaison(s) de paramètres n'ont pas pu être générées :
+  - 3e/3G10-2.ts (d5f34) : s=8 : plus de 2000000 tirages aléatoires consommés
+```
+
+Ces signalements sont des **bugs d'exercices**, pas des faux positifs du test :
+le réglage en cause est atteignable depuis le formulaire, et un utilisateur qui
+le choisit fige son navigateur. Ils se corrigent à part, dans l'exercice.
 
 ## Limites
 
@@ -180,6 +202,8 @@ chose.
   (`console_errors`, `all_exercises`) couvrent ces plantages.
 - Une seule graine par exercice : une dérive qui ne se manifesterait que pour
   certaines valeurs tirées peut passer inaperçue.
+- Le garde-fou ne détecte que les boucles qui consomment de l'aléatoire. Une
+  boucle infinie qui n'en tire pas figerait toujours la suite.
 - Un paramètre à la fois : une dérive qui n'apparaît qu'avec un croisement
   précis (`s=2` **et** `s2=3`) n'est pas vue, pas plus que celles liées à
   `sup4`/`sup5`.
