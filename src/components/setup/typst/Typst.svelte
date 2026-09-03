@@ -137,6 +137,14 @@
 
   type DisplayMode = 'code' | 'split' | 'preview'
   const STORAGE_KEY = 'mathaleaTypstView'
+  /**
+   * Durée de vie des préférences de la vue Typst (mode d'affichage, palette,
+   * réglages du document&nbsp;: titre, orientation, format…). Ce ne sont que
+   * le confort d'une session de travail&nbsp;: un prof qui revient sur le site
+   * plus tard repart des valeurs par défaut plutôt que de retrouver la fiche
+   * précédente.
+   */
+  const PREFS_MAX_AGE_MS = 15 * 60 * 1000
 
   // Sur téléphone, l'éditeur de code et l'affichage côte à côte n'ont pas de
   // place : seul l'aperçu est proposé et le volet de réglages reste replié.
@@ -158,8 +166,16 @@
   if (isLocalStorageAvailable()) {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY)
-      if (saved != null) {
-        const parsed = JSON.parse(saved)
+      const parsed = saved != null ? JSON.parse(saved) : null
+      // Préférences périmées (voir PREFS_MAX_AGE_MS) ou écrites par une version
+      // antérieure sans horodatage : on les oublie et on repart des valeurs
+      // par défaut.
+      const prefsExpired =
+        parsed != null &&
+        (typeof parsed.savedAt !== 'number' ||
+          Date.now() - parsed.savedAt > PREFS_MAX_AGE_MS)
+      if (prefsExpired) window.localStorage.removeItem(STORAGE_KEY)
+      if (parsed != null && !prefsExpired) {
         // sur téléphone on reste sur l'aperçu quel que soit le mode mémorisé
         if (
           !isMobile &&
@@ -2180,7 +2196,12 @@
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ displayMode, documentOptions, showOverlay }),
+        JSON.stringify({
+          savedAt: Date.now(),
+          displayMode,
+          documentOptions,
+          showOverlay,
+        }),
       )
     } catch {
       // stockage plein ou indisponible : sans conséquence
