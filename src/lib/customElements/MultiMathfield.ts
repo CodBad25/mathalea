@@ -390,7 +390,10 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         output,
         (fieldOptions) => {
           if (!fieldOptions.ldots) return ''
-          return context.isHtml ? ' ... ' : '$\\ldots\\ldots$'
+          // En Typst comme en LaTeX, on veut un vrai espace de réponse : les
+          // pointillés texte ' ... ' de la sortie HTML sont trop courts.
+          if (!context.isHtml || context.isTypst) return '$\\ldots\\ldots$'
+          return ' ... '
         },
         `labelEx${numeroExercice ?? 0}Q${questionIndex ?? 0}R`,
       )
@@ -1271,7 +1274,8 @@ export function addMultiMathfield(
       output,
       (fieldOptions) => {
         if (!fieldOptions.ldots) return ''
-        return context.isHtml ? ' ... ' : '$\\ldots\\ldots$'
+        if (!context.isHtml || context.isTypst) return '$\\ldots\\ldots$'
+        return ' ... '
       },
       `labelEx${exercice.numeroExercice ?? 0}Q${questionIndex}R`,
     )

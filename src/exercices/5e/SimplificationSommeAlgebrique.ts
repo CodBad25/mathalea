@@ -1,5 +1,9 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import {
+  ajouteChampTexteMathLive,
+  remplisLesBlancs,
+} from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -12,7 +16,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
 
-export const dateDeModifImportante = '18/01/2024'
+export const dateDeModifImportante = '02/09/2026'
 export const titre =
   "Écrire sous la forme d'une expression algébrique sans parenthèses puis calculer"
 
@@ -39,17 +43,20 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
       '1 : Que des additions\n2 : Que des soustractions\n3 : Mélange',
     ]
     this.besoinFormulaire3CaseACocher = ['Avec des nombres décimaux']
+    this.besoinFormulaire4CaseACocher = ['Sans le dernier calcul']
     this.sup = max
     this.sup2 = 3
     this.sup3 = false
+    this.sup4 = false
     this.nbCols = 3
     this.nbColsCorr = 2
-    this.nbQuestions = 9 // pour équilibrer les colonnes
+    this.nbQuestions = 4 // pour équilibrer les colonnes
   }
 
   nouvelleVersion() {
-    this.consigne =
-      "Écrire sous la forme d'une expression algébrique sans parenthèses puis calculer."
+    this.consigne = this.sup4
+      ? "Écrire sous la forme d'une expression algébrique sans parenthèses puis calculer."
+      : "Écrire sous la forme d'une expression algébrique sans parenthèses puis calculer."
     let liste = [
       [-1, -1, -1],
       [-1, -1, 1],
@@ -86,14 +93,34 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
       }
       texte = context.isAmc ? 'Calculer : ' : ''
       b *= s
-      if (s === 1) {
+      if (this.sup4) {
+        texte = `$${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)}=`
+        texteCorr = texte
+        texte +=
+          '$' +
+          (this.interactif
+            ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+            : ' $\\ldots$')
+        const valeurDeb = s === 1 ? b : -b
+        const reponse = `${texNombre(a)}${ecritureAlgebrique(valeurDeb)}`
+        texteCorr += `${miseEnEvidence(reponse)}$`
+        handleAnswers(this, i, {
+          reponse: {
+            value: `${reponse}`,
+            options:
+              valeurDeb < 0
+                ? { soustractionSeulementEtNonResultat: true }
+                : { additionSeulementEtNonResultat: true },
+          },
+        })
+      } else if (s === 1) {
         texte += remplisLesBlancs(
           this,
           i,
           `${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)}=%{champ1}=%{champ2}`,
         )
-        texteCorr = `$${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)} = ${texNombre(a, 1)}${ecritureAlgebrique(
-          b,
+        texteCorr = `$${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)} = ${miseEnEvidence(
+          `${texNombre(a, 1)}${ecritureAlgebrique(b)}`,
         )} = ${miseEnEvidence(texNombre(a + b, 1))}$`
         handleAnswers(this, i, {
           champ1: {
@@ -111,8 +138,8 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
           i,
           `${ecritureNombreRelatif(a)} - ${ecritureNombreRelatif(b)}=%{champ1}=%{champ2}`,
         )
-        texteCorr = `$${ecritureNombreRelatif(a)} - ${ecritureNombreRelatif(b)} = ${texNombre(a, 1)}${ecritureAlgebrique(
-          -b,
+        texteCorr = `$${ecritureNombreRelatif(a)} - ${ecritureNombreRelatif(b)} = ${miseEnEvidence(
+          `${texNombre(a, 1)}${ecritureAlgebrique(-b)}`,
         )} = ${miseEnEvidence(texNombre(a - b, 1))}$`
         handleAnswers(this, i, {
           champ1: {

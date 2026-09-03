@@ -23,5 +23,6 @@ export default class ExerciceSimplificationSommeAlgebriqueAddition extends Exerc
   constructor() {
     super()
     this.sup2 = 1
+    this.besoinFormulaire4CaseACocher = false
   }
 }

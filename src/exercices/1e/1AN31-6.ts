@@ -81,25 +81,21 @@ export default class FonctionExponentielleAvecDroite extends Exercice {
         `Déterminer la position relative de la courbe $\\mathcal{C}_f$ et de la droite $\\left(\\mathcal{D}\\right)$.`,
       ]
 
-      let texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
-      \\[
-        f(x)=${expressionFonction}.
-      \\]
-      Dans le plan rapporté à un repère orthogonal, on considère :<br>`
+      const styleSousQuestions = questions.length > 1 ? 'alpha' : 'none'
       const listeObjets = createList({
         items: [
           `la courbe $\\mathcal{C}_f$ représentative de la fonction $f$,`,
           `la droite $\\left(\\mathcal{D}\\right)$ d'équation $y=${expressionDroite}$.`,
         ],
         style: 'fleches',
-      });
-       texte += `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
+      })
+      const texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
       \\[
         f(x)=${expressionFonction}.
       \\]
       Dans le plan rapporté à un repère orthogonal, on considère :<br>
       ${listeObjets}
-      ${createList({ items: questions, style: 'nombres' })}`;
+      ${createList({ items: questions, style: styleSousQuestions })}`
 
       const correction1 = `La fonction $f$ est dérivable sur $\\mathbb{R}$ comme somme de fonctions dérivables sur $\\mathbb{R}$.<br>
       Pour tout $x\\in\\mathbb{R}$, on sait que si $u$ est une fonction dérivable sur $\\mathbb{R}$, alors $\\left(e^{u}\\right)'=u'\\mathrm{e}^{u}$.<br>
@@ -150,7 +146,7 @@ export default class FonctionExponentielleAvecDroite extends Exercice {
 
       const texteCorr = createList({
         items: [correction1, correction2, correction3, correction4, correction5],
-        style: 'nombres',
+        style: styleSousQuestions,
       })
 
       if (this.questionJamaisPosee(i, b, minimum)) {

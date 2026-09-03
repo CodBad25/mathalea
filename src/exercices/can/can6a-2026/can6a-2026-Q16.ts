@@ -105,7 +105,8 @@ export default class Can20266Q16 extends ExerciceCan {
     Donc l'abscisse de la flèche est $${miseEnEvidence(texNombre(abscisse, 3))}$.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Complète.<br>' + figure
+    this.canEnonce = 'Complète.'
+    this.canReponseACompleter = figure
   }
 
   nouvelleVersion() {

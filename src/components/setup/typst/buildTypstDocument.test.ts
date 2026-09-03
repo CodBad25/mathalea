@@ -66,7 +66,9 @@ describe('buildTypstDocument', () => {
     // juste avant son badge, voir buildVersionContent
     expect(code).toContain('#exo-solution-box(')
     expect(code).toContain('exercise-id: "6e23-1",')
-    expect(code).toContain(`#import "${typstPackageSpec('taskize')}": tasks as taskize-tasks`)
+    expect(code).toContain(
+      `#import "${typstPackageSpec('taskize')}": tasks as taskize-tasks`,
+    )
     // l'enrobage qui aligne le numéro sur la première ligne de l'énoncé
     expect(code).toContain('#let mathalea-question-numerotee(')
     expect(code).toContain(
@@ -254,6 +256,27 @@ describe('buildTypstDocument', () => {
     expect(code).not.toContain(`#import "${typstPackageSpec('cetz')}"`)
   })
 
+  it('marque le début de chaque sujet quand la fiche en a plusieurs', () => {
+    // l'aperçu ne compile qu'un sujet à la fois (`previewCode`) : il lui faut
+    // un repère pour découper le document. Ce sont des commentaires, le rendu
+    // et l'export ne changent pas.
+    const exercises = [exercise({ questions: ['$1+1$'] })]
+    const code = buildTypstDocument(
+      exercises,
+      defaultTypstDocumentOptions,
+      {},
+      [exercises],
+    )
+    expect(code).toContain('// mathalea:sujet(0)')
+    expect(code).toContain('// mathalea:sujet(1)')
+    // le repère du sujet A précède son en-tête, celui du sujet B son saut de page
+    expect(code.indexOf('// mathalea:sujet(0)')).toBeLessThan(
+      code.indexOf('// mathalea:sujet(1)'),
+    )
+    // sur une fiche à un seul sujet, aucun repère : rien à découper
+    expect(buildTypstDocument(exercises)).not.toContain('// mathalea:sujet(')
+  })
+
   it('n’importe pas ctz-euclide quand aucune annale ne l’utilise', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).not.toContain('ctz-euclide')
@@ -282,12 +305,99 @@ describe('buildTypstDocument', () => {
         ],
       }),
     ])
-    expect(code).toContain(`#import "${typstPackageSpec('taskize')}": tasks as taskize-tasks`)
+    expect(code).toContain(
+      `#import "${typstPackageSpec('taskize')}": tasks as taskize-tasks`,
+    )
     // l'enrobage qui aligne le numéro sur la première ligne de l'énoncé
     expect(code).toContain('#let mathalea-question-numerotee(')
-    expect(code).toContain('#let qcm-colonnes = 2')
     expect(code).toContain('#let qcm-bonne(')
-    expect(code).toContain('#tasks(columns: qcm-colonnes')
+    // colonnes des propositions réglables par exercice depuis la palette,
+    // en `auto-fit` par défaut (taskize choisit 1 à 4 colonnes uniformes
+    // selon la largeur réelle des propositions)
+    expect(code).toContain('#let ex1-qcm-colonnes = "auto-fit"')
+    expect(code).toContain('#tasks(columns: ex1-qcm-colonnes')
+    // les propositions n'ont pas de `row-gutter` : pas de variable inutile
+    expect(code).not.toContain('#let ex1-qcm-gutter')
+    // un exercice à question unique n'a pas de liste `tasks`, mais son QCM
+    // a quand même besoin d'un repère où la palette pose ses contrôles
+    expect(code).toContain('#mathalea-anchor("tasks", 1)')
+  })
+
+  it('reprend les colonnes de QCM réglées par exercice (round-trip)', () => {
+    const qcmQuestion = (num: number) =>
+      '<div class="my-3">' +
+      `<div class="ex${num} inline-block"><input type="checkbox" disabled><label id="labelEx${num}Q0R0">$1$</label></div>` +
+      `<div class="ex${num} inline-block"><input type="checkbox" disabled><label id="labelEx${num}Q0R1">$2$</label></div>` +
+      '</div>'
+    const exercises = [
+      exercise({ questions: [qcmQuestion(1)] }),
+      exercise({
+        questions: [qcmQuestion(2)],
+        corrections: [qcmQuestion(2)],
+        ref: '',
+      }),
+    ]
+    const code = buildTypstDocument(exercises, defaultTypstDocumentOptions, {
+      tasksLayout: {
+        'ex2-qcm': { columns: '1' },
+        'ex2-corr-qcm': { columns: '4' },
+      },
+    })
+    expect(code).toContain('#let ex1-qcm-colonnes = "auto-fit"')
+    expect(code).toContain('#let ex2-qcm-colonnes = 1')
+    expect(code).toContain('#let ex2-corr-qcm-colonnes = 4')
+    // l'énoncé et la correction du même exercice se règlent indépendamment
+    expect(harvestCarryOver(code).tasksLayout).toEqual({
+      'ex2-qcm': { columns: '1' },
+      'ex2-corr-qcm': { columns: '4' },
+    })
+  })
+
+  it('donne une colonne aux QCM dont les propositions sont des figures', () => {
+    // `mathalea-fit` réduit une figure à la largeur qu'on lui donne : elle
+    // « tient » donc dans n'importe quelle colonne, et `auto-fit` en
+    // choisirait quatre, illisibles. Le contenu des propositions décide donc
+    // de la valeur par défaut.
+    const figure = '<svg width="600" height="60"><rect/></svg>'
+    const code = buildTypstDocument([
+      exercise({
+        questions: [
+          'Sur quelle droite graduée ?<div class="my-3">' +
+            `<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R0">${figure}</label></div>` +
+            `<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R1">${figure}</label></div>` +
+            '</div>',
+        ],
+      }),
+    ])
+    expect(code).toContain('#let ex1-qcm-colonnes = 1')
+    expect(code).toContain(
+      '#tasks(columns: ex1-qcm-colonnes, label: "A)", above: 0.4em, below: 0.4em)[ // mathalea:qcm-figures',
+    )
+    // ce 1 est un défaut lié au contenu, pas un réglage du professeur : le
+    // figer dans le carry-over rendrait le choix insensible aux régénérations
+    expect(harvestCarryOver(code).tasksLayout ?? {}).toEqual({})
+  })
+
+  it('écrit les colonnes de QCM en valeur littérale en mode export', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: [
+            '<div class="my-3">' +
+              '<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R0">$1$</label></div>' +
+              '<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R1">$2$</label></div>' +
+              '</div>',
+          ],
+        }),
+      ],
+      defaultTypstDocumentOptions,
+      { tasksLayout: { 'ex1-qcm': { columns: '3' } } },
+      [],
+      { exportMode: true },
+    )
+    // hors de l'éditeur intégré, les variables de la palette n'ont pas de sens
+    expect(code).toContain('#tasks(columns: 3, label: "A)"')
+    expect(code).not.toContain('ex1-qcm-colonnes')
   })
 
   describe('numérotation alignée sur la première ligne de l’énoncé', () => {
@@ -408,7 +518,7 @@ describe('buildTypstDocument', () => {
       { ...defaultTypstDocumentOptions, badgeStyle: 'border-accent' },
     )
     expect(borderAccent).toContain('badge-style: "border-accent",')
-    expect(borderAccent).toContain('margin: (x: 15mm, y: 15mm)')
+    expect(borderAccent).toContain('margin: (x: 10mm, y: 15mm)')
     // style pleine largeur : pas de réglage de colonne
     expect(borderAccent).not.toContain('margin-position:')
 
@@ -1214,9 +1324,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code).toContain(
       '#tasks(columns: "auto-fit", label: (..n) => strong(numbering("1.", ..n))',
     )
-    expect(code).toContain(
-      '      + $35$\n      + $66$\n      + $12$ boules',
-    )
+    expect(code).toContain('      + $35$\n      + $66$\n      + $12$ boules')
     // ni banque d'exercices ni badges : il n'y a plus de titre d'exercice
     expect(code).not.toContain('exercise-bank')
     expect(code).not.toContain('#let ex1 = exo.with(')
@@ -1284,9 +1392,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code).toContain(
       '[#mathalea-anchor("exo", 1)\n      #mathalea-anchor("can-row", 1)\n      $1 + 1$],',
     )
-    expect(code).toContain(
-      '[#mathalea-anchor("can-row", 2)\n      $2 + 2$],',
-    )
+    expect(code).toContain('[#mathalea-anchor("can-row", 2)\n      $2 + 2$],')
     expect(code).toContain(
       '[#mathalea-anchor("exo", 2)\n      #mathalea-anchor("can-row", 3)\n      $3 + 3$],',
     )
@@ -1337,7 +1443,8 @@ describe('mode « Course aux nombres » (canMode)', () => {
   })
 
   it('plafonne la largeur des figures du tableau', () => {
-    const svg = '<svg width="600" height="300"><circle cx="24" cy="24" r="8"/></svg>'
+    const svg =
+      '<svg width="600" height="300"><circle cx="24" cy="24" r="8"/></svg>'
     const code = buildTypstDocument(
       [exercise({ questions: [`Lire le graphique<br>${svg}`] })],
       canOptions,
@@ -1349,10 +1456,10 @@ describe('mode « Course aux nombres » (canMode)', () => {
   })
 
   it('rabaisse la police du tableau en A5 (rapport texte/figure)', () => {
-    const a5 = buildTypstDocument(
-      [exercise({ questions: ['$7\\times 5$'] })],
-      { ...canOptions, pageFormat: 'a5' },
-    )
+    const a5 = buildTypstDocument([exercise({ questions: ['$7\\times 5$'] })], {
+      ...canOptions,
+      pageFormat: 'a5',
+    })
     // le tableau reçoit une taille de police relative réduite ; les figures,
     // plafonnées en pt absolus, ne suivent pas
     expect(a5).toContain('#can-tableau(\n    taille: 0.85em,')
@@ -1790,7 +1897,7 @@ describe('lignes de réponse (réglage global)', () => {
 
   it('laisse la palette régler un exercice à part', () => {
     const code = buildTypstDocument(
-      [exercise({ questions: ['$1+1$' ] }), exercise({ questions: ['$2+2$'] })],
+      [exercise({ questions: ['$1+1$'] }), exercise({ questions: ['$2+2$'] })],
       { ...defaultTypstDocumentOptions, answerLines: 2 },
       {
         writingLines: {
@@ -2100,7 +2207,7 @@ describe('page de garde', () => {
     expect(code).toContain('  nb-questions: 3,')
     // référencé par chemin virtuel (chargé par `Typst.svelte`), pas embarqué
     expect(code).toContain(
-      '#let mathalea-logo = image("/images/logoCan.png", width: 45%)',
+      '#let mathalea-logo = image("/images/logoCan.png", width: 100%)',
     )
     // la page de garde des examens n'a rien à faire dans ce document
     expect(code).not.toContain('#let mathalea-couverture(')

@@ -210,7 +210,7 @@ export function updateReferentiel(
   filteredReferentiel['Nouveautés'] = getRecentExercises(filteredReferentiel)
   const keysToBeFirst = { Nouveautés: null }
   filteredReferentiel = Object.assign(keysToBeFirst, filteredReferentiel)
-  referentielMap = toMap(filteredReferentiel)
+  referentielMap = toMap(filteredReferentiel as JSONReferentielObject)
   return Array.from(referentielMap, ([key, obj]) => ({ key, obj }))
 }
 
@@ -235,7 +235,7 @@ export function codeToLevelTitle(code: string) {
 export function isReferentielActivated(refName: string): boolean {
   const referentielList = toMap({ ...referentielsActivation })
   if (referentielList.has(refName)) {
-    return referentielList.get(refName) === 'true'
+    return referentielList.get(refName) === true
   } else {
     console.warn(refName + ' is not a valid referentiel name !')
     return false

@@ -55,7 +55,7 @@ export default class LireUneDuree extends ExerciceSimple {
         m1 = randint(1, 5) * 5
         h2 = h1 + randint(0, 1)
         m2 = m1 + randint(2 - h2 + h1, 6) * 5
-        enonce = `${quidam.prenom} ${choice(OccupationsMatinales)} ce matin. ${quidam.pronom} a noté l'heure de début et l'heure de fin.<br>`
+        enonce = `${quidam.prenom} ${choice(OccupationsMatinales)} ce matin. ${quidam.Pronom} a noté l'heure de début et l'heure de fin.<br>`
         break
       case 'soir':
       default:
@@ -63,7 +63,7 @@ export default class LireUneDuree extends ExerciceSimple {
         m1 = randint(1, 5) * 5
         h2 = h1 + randint(0, 1)
         m2 = m1 + randint(2 - h2 + h1, 6) * 5
-        enonce = `${quidam.prenom} ${choice(occupationsNocturnes)} ce soir. ${quidam.pronom} a noté l'heure de début et l'heure de fin.<br>`
+        enonce = `${quidam.prenom} ${choice(occupationsNocturnes)} ce soir. ${quidam.Pronom} a noté l'heure de début et l'heure de fin.<br>`
         break
     }
 

@@ -108,7 +108,7 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
     this.spacingCorr = context.isHtml ? 3 : 1
     this.listeAvecNumerotation = false
     this.sup = false
-    this.sup2 = 1
+    this.sup2 = '1'
   }
 
   nouvelleVersion() {

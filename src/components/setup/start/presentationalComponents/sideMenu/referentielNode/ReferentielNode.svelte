@@ -48,7 +48,7 @@
         )
           ? ''
           : ' : ',
-        themes.get(themeCode).get('titre'),
+        themes.get(themeCode)?.get('titre'),
       ].join('')
     } else if (themesCH.has(themeCode)) {
       title = [
@@ -58,7 +58,7 @@
         )
           ? ''
           : ' : ',
-        themesCH.get(themeCode).get('titre'),
+        themesCH.get(themeCode)?.get('titre'),
       ].join('')
     } else {
       title = ''

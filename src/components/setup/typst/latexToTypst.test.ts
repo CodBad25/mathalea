@@ -25,9 +25,9 @@ describe('latexMathToTypst', () => {
     expect(latexMathToTypst('\\phantom{x}=6')).toBe(
       latexMathToTypst('\\phantom{\\sqrt{\\dfrac{36}{4}}}=6'),
     )
-    expect(latexMathToTypst('\\phantom{\\sqrt{\\dfrac{36}{4}}}=6')).not.toContain(
-      'phantom',
-    )
+    expect(
+      latexMathToTypst('\\phantom{\\sqrt{\\dfrac{36}{4}}}=6'),
+    ).not.toContain('phantom')
   })
 
   it('rend la virgule décimale française sans espace', () => {
@@ -89,7 +89,7 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bold(x = 2)')
   })
 
-  it('convertit une union d\'intervalles en notation française mise en évidence sans casser les crochets', () => {
+  it("convertit une union d'intervalles en notation française mise en évidence sans casser les crochets", () => {
     // notation française "à crochets inversés" ([-4;-2[∪]3;4]) mêlée à
     // \color{} : le "[union]" produit par tex2typst pour \cup coïncide
     // textuellement avec une paire de crochets imbriquée dans les crochets
@@ -135,7 +135,7 @@ describe('latexMathToTypst', () => {
     expect(latexMathToTypst('(\\beta').trim()).toBe('paren.l beta')
   })
 
-  it('conserve les crochets d\'une notation de segment comme [YS]', () => {
+  it("conserve les crochets d'une notation de segment comme [YS]", () => {
     // Régression : la règle qui enlève les crochets autour de "union"/"inter"
     // (issus de \cup/\cap) matchait aussi tout contenu purement alphabétique,
     // donc [YS] (segment) perdait ses crochets à tort.
@@ -146,6 +146,22 @@ describe('latexMathToTypst', () => {
 
   it('convertit le texte inclus dans les formules via #txt (police du texte)', () => {
     expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin#txt("cm")')
+  })
+
+  it('rend les espaces LaTeX du mode texte par de vrais espaces', () => {
+    // tex2typst recopie le corps d'un \\text{} tel quel dans la chaîne Typst
+    // qu'il produit : `\\ ` (espace insécable LaTeX) y devient une séquence
+    // d'échappement invalide et la barre oblique se voit dans le PDF.
+    // Séparateur employé par 6N0A-10/6N1J (« Ranger des nombres décimaux ») :
+    expect(latexMathToTypst('12\\text{  ; \\ \\  }34')).not.toContain('\\\\')
+    expect(latexMathToTypst('12\\text{  ; \\ \\  }34')).toBe('12 "  ;    " 34')
+    // les autres commandes d'espacement du mode texte
+    expect(latexMathToTypst('\\text{a\\,b}')).toBe('#txt("a b")')
+    // (l'espace qui suit la commande dans la source s'ajoute au sien)
+    expect(latexMathToTypst('\\text{a\\quad b}')).toBe('#txt("a  b")')
+    expect(latexMathToTypst('\\text{a\\qquad b}')).toBe('#txt("a   b")')
+    // la ponctuation échappée reste rendue sans barre oblique (déjà le cas)
+    expect(latexMathToTypst('\\text{50 \\% et \\_}')).toBe('#txt("50 % et _")')
   })
 
   it('convertit \\textbackslash (séparateur diagonal des tableaux à double entrée) en symbole « \\ »', () => {
@@ -207,7 +223,7 @@ describe('latexMathToTypst', () => {
     ).toBe('2 x &= 4 \\ x &= 2')
   })
 
-  it('tolère les tabulations d\'indentation dans un environnement aligned', () => {
+  it("tolère les tabulations d'indentation dans un environnement aligned", () => {
     // 1AN31-7 : l'indentation du template literal laissait passer des \t dans
     // la formule, tex2typst levait et la correction affichait `\begin{aligned}`
     // verbatim.
@@ -271,7 +287,7 @@ describe('latexMathToTypst — accents nus en mode maths', () => {
     expect(latexMathToTypst('à')).toBe('#txt("à")')
   })
 
-  it('protège un caractère accentué isolé au milieu d\'une formule', () => {
+  it("protège un caractère accentué isolé au milieu d'une formule", () => {
     expect(latexMathToTypst('x = é')).toBe('x =#txt("é")')
   })
 
@@ -410,7 +426,7 @@ describe('htmlToTypst — schémas en barres (SchemaEnBoite)', () => {
     expect(typst).not.toContain('canvas-3d')
   })
 
-  it("remplace les figures 3D sans cubes par un encart", () => {
+  it('remplace les figures 3D sans cubes par un encart', () => {
     const typst = htmlToTypst(
       '<canvas-3d id="m1" content=\'%7B%7D\' width="250"></canvas-3d>',
     )
@@ -437,6 +453,44 @@ describe('htmlToTypst', () => {
     )
   })
 
+  it('convertit les cases à cocher \\faSquare / \\faCheckSquare (réponses CAN)', () => {
+    const carreVide =
+      '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, stroke: 0.6pt)'
+    const carrePlein =
+      '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, fill: luma(60))'
+    // can6a-2025 Q10 : cases à cocher devant des unités, écrites en LaTeX texte
+    expect(
+      htmlToTypst('\\faSquare[regular] Vrai<br>\\faSquare[regular] Faux'),
+    ).toBe(`${carreVide} Vrai\\\n${carreVide} Faux`)
+    // can6a-2025 Q25 : \raggedright de tête retiré, pas de fuite littérale
+    const q25 = htmlToTypst('\\raggedright \\faSquare[regular] $120$')
+    expect(q25).toBe(`${carreVide} $120$`)
+    expect(q25).not.toContain('faSquare')
+    expect(q25).not.toContain('raggedright')
+    // variante cochée : carré plein ; l'argument optionnel est facultatif
+    expect(htmlToTypst('\\faCheckSquare Vrai')).toBe(`${carrePlein} Vrai`)
+  })
+
+  it('convertit les macros ProfCollege \\Lg et \\Prix (énoncés CAN)', () => {
+    // canc3a-2023 Q18 : en mode mathématique, `\Lg` deviendrait la variable
+    // Typst inconnue `Lg` (erreur de compilation)
+    const enonce = htmlToTypst(
+      'Si une pile de $12$ pièces a une hauteur de $\\Lg[mm]{24}$,',
+    )
+    expect(enonce).toContain('24')
+    expect(enonce).toContain('mm')
+    expect(enonce).not.toContain('Lg')
+    // et en mode texte, derrière les pointillés à compléter : seule l'unité
+    expect(
+      htmlToTypst('alors une pile de $18$ pièces a une hauteur de $\\ldots$ \\Lg[mm]{}.'),
+    ).toBe('alors une pile de $18$ pièces a une hauteur de $...$ mm.')
+    // `\Prix` : l'argument optionnel est le nombre de décimales, l'unité est €
+    expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$...$ €.')
+    expect(htmlToTypst('coûte $\\Prix[0]{12}$')).toContain('12')
+    expect(htmlToTypst('coûte $\\Prix[0]{12}$')).not.toContain('Prix')
+    expect(htmlToTypst('coûte \\Prix{12.5}')).toBe('coûte 12,50~€')
+  })
+
   it('convertit les boîtes LaTeX en mode texte (énoncés CAN)', () => {
     // can2a-2026 Q12 : un algorithme encadré, écrit en LaTeX texte
     const code = htmlToTypst(
@@ -457,9 +511,9 @@ describe('htmlToTypst', () => {
   it('garde l’italique des mathématiques dans une réponse mise en évidence', () => {
     // miseEnEvidence() produit {\color{…}\boldsymbol{…}} : \boldsymbol est du
     // gras *italique*, contrairement à \mathbf
-    expect(
-      htmlToTypst('$={\\color{#F15929}\\boldsymbol{x(3x+1)}}$'),
-    ).toBe('$= text(fill: #rgb("#F15929"), bold(x(3 x + 1)))$')
+    expect(htmlToTypst('$={\\color{#F15929}\\boldsymbol{x(3x+1)}}$')).toBe(
+      '$= text(fill: #rgb("#F15929"), bold(x(3 x + 1)))$',
+    )
   })
 
   it('convertit les array LaTeX bordés en tableaux natifs', () => {
@@ -500,7 +554,7 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('textbf')
   })
 
-  it('retire \\large d\'une cellule de tableau \\text{\\large \\textbf{X}} au lieu de le laisser fuir (P020)', () => {
+  it("retire \\large d'une cellule de tableau \\text{\\large \\textbf{X}} au lieu de le laisser fuir (P020)", () => {
     const result = htmlToTypst(
       '$\\begin{array}{|c|c|}\\hline \\text{\\large \\textbf{Sports}} & \\text{\\large \\textbf{TOTAL}} \\\\ \\hline 12 & 100 \\\\ \\hline\\end{array}$',
     )
@@ -612,9 +666,7 @@ describe('htmlToTypst', () => {
     expect(result).toContain(
       '#mathalea-figure-block(1, fig-1-align, fig-1-zoom,',
     )
-    expect(result).toContain(
-      'mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (',
-    )
+    expect(result).toContain('mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (')
     expect(result).toContain(
       'mathalea-label(15.0pt, 7.5pt, [$78^circle.small$], size: 0.7em)',
     )
@@ -626,10 +678,14 @@ describe('htmlToTypst', () => {
 
   it('convertit les spans colorés (texteEnCouleur, texteEnCouleurEtGras)', () => {
     expect(
-      htmlToTypst('Un losange est <span style="color:#f15929;">un quadrilatère</span>.'),
+      htmlToTypst(
+        'Un losange est <span style="color:#f15929;">un quadrilatère</span>.',
+      ),
     ).toBe('Un losange est #text(fill: rgb("#f15929"))[un quadrilatère].')
     expect(
-      htmlToTypst('<span style="color:#f15929;font-weight: bold;">réponse B</span>'),
+      htmlToTypst(
+        '<span style="color:#f15929;font-weight: bold;">réponse B</span>',
+      ),
     ).toBe('#text(fill: rgb("#f15929"))[#strong[réponse B]]')
     // span sans style : contenu conservé tel quel
     expect(htmlToTypst('<span class="katex-html">x</span>')).toBe('x')
@@ -664,9 +720,7 @@ describe('htmlToTypst', () => {
 
     it('affiche l’encart si aucun collecteur de figures n’est fourni', () => {
       setStaticImagePaths(new Map([['a.png', '/static-img-0.png']]))
-      expect(htmlToTypst('<img src="a.png">')).toContain(
-        'image non convertie',
-      )
+      expect(htmlToTypst('<img src="a.png">')).toContain('image non convertie')
     })
   })
 
@@ -714,7 +768,9 @@ describe('htmlToTypst', () => {
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
     expect(result).toContain('+ $1$')
     expect(result).toContain('+ $2$')
-    expect(result).toContain('#mathalea-figure-block(1, fig-1-align, fig-1-zoom,')
+    expect(result).toContain(
+      '#mathalea-figure-block(1, fig-1-align, fig-1-zoom,',
+    )
     expect(result).not.toMatch(/(^|[^-\w])0($|[^.\w])/m)
     expect(figures).toHaveLength(1)
   })

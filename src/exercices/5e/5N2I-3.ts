@@ -19,9 +19,10 @@ export const refs = {
  * @author Éric Elter
  */
 
-export default class ExerciceSimplificationSommeAlgebriqueAddition extends ExerciceSimplificationSommeAlgebrique {
+export default class ExerciceSimplificationSommeAlgebriqueSoustraction extends ExerciceSimplificationSommeAlgebrique {
   constructor() {
     super()
+    this.besoinFormulaire4CaseACocher = false
     this.sup2 = 2
   }
 }

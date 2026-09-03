@@ -58,7 +58,7 @@ export default class Can2026Q26 extends ExerciceCan {
     this.question = `Tracer un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
     this.correction = `L'unité a une longueur de $${den}~\\text{carreaux}$ donc $\\dfrac{1}{${den}}~\\text{u.l}=1~\\text{carreau}$.`
     this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${num}~\\text{carreaux}$.`
-    this.canEnonce = ''
+    this.canEnonce = this.question
 
     const figure = new Figure({
       xMin: 0,
@@ -164,23 +164,24 @@ export default class Can2026Q26 extends ExerciceCan {
       } else {
         this.question += wrapperApigeomToMathalea(figure)
       }
-    } else {
-      const g = grille(0, 0, this.den + 2, 5, 'gray', 0.5, 1)
-      const s = segment(1, 5, this.den + 1, 5, bleuMathalea)
-      s.epaisseur = 2
-      s.styleExtremites = '|-|'
-      s.tailleExtremites = 2
-      const ul = latex2d(`1~\\text{u.l}`, this.den / 2 + 1, 4.5, {
-        letterSize: 'scriptsize',
-      })
-      const objets = [g, s, ul]
-      const fig = mathalea2d(
-        Object.assign({ scale: 0.35 }, fixeBordures(objets)),
-        objets,
-      )
-
-      this.canReponseACompleter = fig
     }
+    // Figure statique (indépendante de context.isHtml) pour la colonne
+    // « Réponse » du tableau « Course aux nombres » : la figure apigeom
+    // interactive ci-dessus reste réservée à l'affichage en ligne.
+    const g = grille(0, 0, this.den + 2, 5, 'gray', 0.5, 1)
+    const s = segment(1, 5, this.den + 1, 5, bleuMathalea)
+    s.epaisseur = 2
+    s.styleExtremites = '|-|'
+    s.tailleExtremites = 2
+    const ul = latex2d(`1~\\text{u.l}`, this.den / 2 + 1, 4.5, {
+      letterSize: 'scriptsize',
+    })
+    const objets = [g, s, ul]
+    const fig = mathalea2d(
+      Object.assign({ scale: 0.35 }, fixeBordures(objets)),
+      objets,
+    )
+    this.canReponseACompleter = fig
     this.correction += '\n\n<br><br>\n'
     if (context.isHtml) {
       this.correction += wrapperApigeomToMathalea(figureCorr)

@@ -97,7 +97,7 @@ export default class EnsembleDeNombres extends Exercice {
           })
           break
         case 2:
-          a = randint(0, 150) * -1
+          a = randint(1, 150) * -1
 
           texte = `$${a} \\in $`
           texteCorr = `$${a}$ est un entier relatif. On a donc $${a}\\in ${miseEnEvidence('\\mathbb{Z}')}$.`

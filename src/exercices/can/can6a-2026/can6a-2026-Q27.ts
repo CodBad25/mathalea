@@ -54,6 +54,7 @@ export default class Can20266Q27 extends ExerciceCan {
     this.reponse = PrixBillet! - 2 * PrixUneViennoiserie
     this.question = `J'achète deux ${NomViennoiserie![0]} à $${texPrix(PrixUneViennoiserie)}$ € ${NomViennoiserie![1]}. <br>
            Je donne $${PrixBillet!}$  €.`
+    this.canEnonce = this.question
     if (!this.interactif && context.isHtml) {
       this.question += `<br>On me rend $\\ldots$  €.`
     }

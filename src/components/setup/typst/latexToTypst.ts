@@ -408,6 +408,48 @@ const TYPST_COLOR_OVERRIDES: Record<string, string> = {
   grey: '#808080',
 }
 
+/**
+ * Nombre de décimales d'un prix ProfCollege (`\Prix[0]{12}` → « 12 »,
+ * `\Prix{12.5}` → « 12,50 », deux décimales par défaut). Une valeur non
+ * numérique est renvoyée telle quelle.
+ */
+function formatePrixProfCollege(valeur: string, decimales: string): string {
+  const brut = valeur.trim()
+  if (brut === '') return ''
+  const nombre = Number(brut.replace(',', '.'))
+  const chiffres = decimales.trim() === '' ? 2 : Number(decimales.trim())
+  if (!Number.isFinite(nombre) || !Number.isInteger(chiffres) || chiffres < 0) {
+    return brut
+  }
+  return nombre.toFixed(chiffres).replace('.', ',')
+}
+
+/**
+ * Macros ProfCollege `\Lg[cm]{5}` (longueur) et `\Prix[0]{12}` (prix en
+ * euros). Elles n'existent que dans le préambule de la sortie LaTeX, mais les
+ * `canEnonce`/`canReponseACompleter` des « Course aux nombres » les écrivent
+ * sans tester `context.isHtml` : elles arrivent donc telles quelles dans la
+ * conversion Typst, où `$\Lg[mm]{24}$` devient la variable inconnue `Lg`
+ * (erreur de compilation, ex. canc3a-2023). L'argument entre accolades peut
+ * être vide (`\Lg[mm]{}` derrière des pointillés à compléter) : seule l'unité
+ * est alors rendue. `format` reçoit la valeur et l'unité déjà normalisées et
+ * les assemble selon le mode (mathématique ou texte).
+ */
+function remplaceMacrosProfCollege(
+  text: string,
+  format: (valeur: string, unite: string) => string,
+): string {
+  return text.replace(
+    /\\(Lg|Prix)\s*(?:\[([^\]]*)\])?\s*\{([^{}]*)\}/g,
+    (_match, nom: string, option: string | undefined, valeur: string) => {
+      const options = option ?? ''
+      return nom === 'Prix'
+        ? format(formatePrixProfCollege(valeur, options), '€')
+        : format(valeur.trim(), options.trim())
+    },
+  )
+}
+
 /** Prépare une formule LaTeX de MathALÉA avant sa conversion par tex2typst */
 function preprocessTex(tex: string): string {
   // les jetons de protection htmlToTypst (\uE000N\uE001) ne sont pas du LaTeX
@@ -473,6 +515,25 @@ function preprocessTex(tex: string): string {
       /([^{}$\\]*?)\\textbackslash(?:\s*\{\})?\s*([^{}$\\]*)/g,
       (_, before: string, after: string) => wrapBackslashSides(before, after),
     )
+  }
+  // Commandes d'espacement LaTeX à l'intérieur d'un `\text{…}` : tex2typst
+  // recopie le corps tel quel dans la chaîne Typst qu'il produit
+  // (`\text{  ; \ \  }` → `"  ; \ \  "`). Or `\ ` n'y est pas une séquence
+  // d'échappement valide : la barre oblique se retrouve visible dans le PDF.
+  // En mode texte ces commandes ne sont que des espaces de largeurs
+  // différentes — on les rend donc par de vrais espaces.
+  {
+    const spacingMacros =
+      /\\(?:qquad|quad|thinspace|enspace|medspace|thickspace|[,;:!]|\s)/g
+    output = output.replace(/\\text\s*\{([^{}]*)\}/g, (whole, body: string) => {
+      const cleaned = body.replace(spacingMacros, (macro) => {
+        if (macro === '\\qquad') return '  '
+        // `\!` est un espace négatif : rien à écrire en mode texte
+        if (macro === '\\!') return ''
+        return ' '
+      })
+      return cleaned === body ? whole : `\\text{${cleaned}}`
+    })
   }
   // \textit{} en mode math → \text{} (tex2typst ne reconnaît pas \textit)
   output = output.replace(/\\textit\s*\{/g, '\\text{')
@@ -598,6 +659,13 @@ function preprocessTex(tex: string): string {
   output = output.replace(/\\overgroup\s*\{/g, '\\overline{')
   // \iffx → \Leftrightarrow (custom macro "si et seulement si")
   output = output.replace(/\\iffx\b/g, '\\Leftrightarrow')
+  // Macros ProfCollege de la sortie LaTeX (`\Lg[mm]{24}`, `\Prix[0]{12}`) →
+  // valeur suivie de son unité, écrite comme dans les branches HTML des
+  // exercices (`5\text{ cm}`) ; seule l'unité subsiste si la valeur est vide
+  output = remplaceMacrosProfCollege(output, (valeur, unite) => {
+    if (unite === '') return valeur
+    return valeur === '' ? `\\text{${unite}}` : `${valeur}\\text{ ${unite}}`
+  })
   // \cfrac → \dfrac (tex2typst gère \dfrac ; \cfrac produit "cfrac")
   output = output.replace(/\\cfrac\b/g, '\\dfrac')
   // \empty → \emptyset (alias standard de l'ensemble vide, tex2typst → nothing)
@@ -1671,8 +1739,7 @@ function latexVisualTableToTypst(
   const hlineYs = new Set<number>()
   for (const item of items) {
     if (item.type === 'hline') hlineYs.add(rows.length)
-    else
-      rows.push(item.cells.map((cell) => latexTableCell(cell, figures)))
+    else rows.push(item.cells.map((cell) => latexTableCell(cell, figures)))
   }
   const maxColumns = Math.max(0, ...rows.map((row) => row.length))
   if (maxColumns === 0) return null
@@ -1712,7 +1779,11 @@ function latexVisualTableToTypst(
  * est reconvertie depuis son HTML (formules incluses) et sa couleur de fond
  * (`background-color`) est reportée.
  */
-function htmlTableToTypst(table: HTMLTableElement, figures?: string[]): string {
+function htmlTableToTypst(
+  table: HTMLTableElement,
+  figures?: string[],
+  qcmColumns: string = DEFAULT_QCM_COLUMNS,
+): string {
   const rows: TypstTableCell[][] = []
   for (const tr of [...table.querySelectorAll('tr')]) {
     const cells = [...tr.children].filter(
@@ -1722,7 +1793,13 @@ function htmlTableToTypst(table: HTMLTableElement, figures?: string[]): string {
     if (cells.length === 0) continue
     rows.push(
       cells.map((cell) => ({
-        body: htmlToTypst(cell.innerHTML, figures),
+        body: htmlToTypst(
+          cell.innerHTML,
+          figures,
+          undefined,
+          undefined,
+          qcmColumns,
+        ),
         fill: colorToTypst(cell.style.backgroundColor ?? ''),
       })),
     )
@@ -2340,18 +2417,75 @@ function protectApigeomSvgContainers(
 }
 
 /**
- * Convertit un groupe de propositions de QCM en un bloc `#tasks(...)`
- * (paquet taskize) présenté sur `qcm-colonnes` colonnes, avec des étiquettes
- * A) B) C)... Dans le corrigé, la bonne réponse est mise en évidence.
+ * Colonnes des propositions de QCM par défaut : la variable Typst globale des
+ * vues qui n'ont pas de réglage par exercice (Flash-cards, Diaporama PDF,
+ * lecture optique), déclarée dans leur préambule.
  */
-function qcmToTypst(choices: { correct: boolean; body: string }[]): string {
+export const DEFAULT_QCM_COLUMNS = 'qcm-colonnes'
+
+/**
+ * Valeur de `qcmColumns` demandant de choisir le nombre de colonnes d'après le
+ * contenu des propositions (voir `qcmHasFigure`). Ce n'est pas une
+ * expression Typst : elle est toujours remplacée avant d'atteindre le code.
+ */
+export const QCM_COLUMNS_FROM_CONTENT = '\u0000qcm-auto'
+
+/**
+ * Marqueur posé sur le `#tasks(...)` d'un QCM dont au moins une proposition
+ * est une figure, relu par `buildTypstDocument` pour choisir la valeur par
+ * défaut de la variable `exN-qcm-colonnes` déclarée dans le préambule.
+ */
+export const QCM_FIGURES_MARKER = '// mathalea:qcm-figures'
+
+/**
+ * Une proposition qui est une figure passe par `mathalea-fit` /
+ * `mathalea-figure-block`, qui la **réduisent** pour tenir dans la largeur
+ * disponible quelle qu'elle soit. `auto-fit` de taskize, qui compare la
+ * largeur naturelle de chaque item à celle d'une colonne, n'a donc rien à
+ * mesurer : il choisit le maximum de colonnes et rend les figures minuscules.
+ * On leur donne une colonne, la seule largeur qui les garde lisibles ; les
+ * propositions textuelles, elles, sont bien mesurées et gardent `auto-fit`.
+ */
+function qcmHasFigure(choices: { body: string }[]): boolean {
+  return choices.some((choice) =>
+    /#mathalea-(?:figure-block|fit)\(/.test(choice.body),
+  )
+}
+
+/**
+ * Convertit un groupe de propositions de QCM en un bloc `#tasks(...)`
+ * (paquet taskize), avec des étiquettes A) B) C)... Dans le corrigé, la bonne
+ * réponse est mise en évidence.
+ *
+ * `qcmColumns` est inséré tel quel dans `columns:` : la fiche Typst y passe la
+ * variable de l'exercice (`ex2-qcm-colonnes`), réglable depuis la palette de
+ * mise en page, ou directement une valeur littérale (`"auto-fit"`, `3`) en
+ * mode export, où ces variables de plomberie n'ont pas de sens.
+ */
+function qcmToTypst(
+  choices: { correct: boolean; body: string }[],
+  qcmColumns: string,
+): string {
   const items = choices
     .map(
       (choice) =>
         `  + ${choice.correct ? `#qcm-bonne[${choice.body}]` : choice.body}`,
     )
     .join('\n')
-  return `#tasks(columns: qcm-colonnes, label: "A)", above: 0.4em, below: 0.4em)[\n${items}\n]`
+  const withFigure = qcmHasFigure(choices)
+  const columns =
+    qcmColumns === QCM_COLUMNS_FROM_CONTENT
+      ? withFigure
+        ? '1'
+        : '"auto-fit"'
+      : qcmColumns
+  // le marqueur ne sert qu'aux variables de la palette : le mode export écrit
+  // déjà la valeur choisie ci-dessus
+  const marker =
+    withFigure && qcmColumns.endsWith('-qcm-colonnes')
+      ? ` ${QCM_FIGURES_MARKER}`
+      : ''
+  return `#tasks(columns: ${columns}, label: "A)", above: 0.4em, below: 0.4em)[${marker}\n${items}\n]`
 }
 
 /**
@@ -2623,6 +2757,7 @@ function protectResponsiveColumns(
   html: string,
   protect: (typst: string) => string,
   figures?: string[],
+  qcmColumns: string = DEFAULT_QCM_COLUMNS,
 ): string {
   if (!/\bcols-responsive\b/.test(html)) return html
   if (typeof document === 'undefined') return html
@@ -2639,7 +2774,9 @@ function protectResponsiveColumns(
   for (const container of containers) {
     const columns = [...container.children]
       .filter((child) => child.tagName !== 'STYLE')
-      .map((child) => htmlToTypst(child.innerHTML, figures))
+      .map((child) =>
+        htmlToTypst(child.innerHTML, figures, undefined, undefined, qcmColumns),
+      )
     const filled = columns.filter((column) => column.length > 0)
     if (filled.length === 0) {
       container.replaceWith(document.createTextNode(''))
@@ -2738,6 +2875,7 @@ function protectQcm(
   html: string,
   protect: (typst: string) => string,
   figures?: string[],
+  qcmColumns: string = DEFAULT_QCM_COLUMNS,
 ): string {
   if (typeof document === 'undefined') return html
   const template = document.createElement('template')
@@ -2753,7 +2891,13 @@ function protectQcm(
     const choice = label.closest('div')
     const container = choice?.parentElement
     if (choice == null || container == null) continue
-    const body = htmlToTypst(label.innerHTML, figures)
+    const body = htmlToTypst(
+      label.innerHTML,
+      figures,
+      undefined,
+      undefined,
+      qcmColumns,
+    )
     if (body.length === 0) continue
     if (!groups.has(container)) {
       groups.set(container, [])
@@ -2768,7 +2912,7 @@ function protectQcm(
     // survivre à la normalisation des blancs)
     container.replaceWith(
       document.createTextNode(
-        protect('\n' + qcmToTypst(groups.get(container)!) + '\n'),
+        protect('\n' + qcmToTypst(groups.get(container)!, qcmColumns) + '\n'),
       ),
     )
   }
@@ -2784,6 +2928,7 @@ function protectHtmlTables(
   html: string,
   protect: (typst: string) => string,
   figures?: string[],
+  qcmColumns: string = DEFAULT_QCM_COLUMNS,
 ): string {
   if (typeof document === 'undefined') {
     return html.replace(/<table[\s\S]*?<\/table>/gi, () =>
@@ -2796,7 +2941,9 @@ function protectHtmlTables(
   if (tables.length === 0) return html
   for (const table of tables) {
     table.replaceWith(
-      document.createTextNode(protect(htmlTableToTypst(table, figures))),
+      document.createTextNode(
+        protect(htmlTableToTypst(table, figures, qcmColumns)),
+      ),
     )
   }
   return template.innerHTML
@@ -2857,6 +3004,13 @@ export function htmlToTypst(
    * que d'occuper toute la cellule.
    */
   maxFigureWidthPt: number = MAX_FIGURE_WIDTH_PT,
+  /**
+   * Colonnes des propositions de QCM : nom de la variable Typst de l'exercice
+   * (`ex2-qcm-colonnes`, réglable depuis la palette de mise en page) ou valeur
+   * littérale en mode export. Par défaut la variable globale `qcm-colonnes`,
+   * celle des vues sans réglage par exercice.
+   */
+  qcmColumns: string = DEFAULT_QCM_COLUMNS,
 ): string {
   // 1. Les formules et les blocs générés sont protégés par des jetons
   //    pour traverser intacts l'échappement du texte.
@@ -2876,10 +3030,15 @@ export function htmlToTypst(
     /<mathalea-typst>([\s\S]*?)<\/mathalea-typst>/gi,
     (_, code: string) => protect(decodeEntities(code)),
   )
-  text = protectResponsiveColumns(text, protect, figures)
-  text = protectQcm(renderScratchBlocksToSvg(text), protect, figures)
+  text = protectResponsiveColumns(text, protect, figures, qcmColumns)
+  text = protectQcm(
+    renderScratchBlocksToSvg(text),
+    protect,
+    figures,
+    qcmColumns,
+  )
   text = protectSchemaContainers(text, protect)
-  text = protectHtmlTables(text, protect, figures)
+  text = protectHtmlTables(text, protect, figures, qcmColumns)
   text = protectMathalea2dContainers(text, protect, figures, maxFigureWidthPt)
   text = protectApigeomSvgContainers(text, protect, figures, maxFigureWidthPt)
   text = protectKatexSpans(text, protect)
@@ -2925,10 +3084,45 @@ export function htmlToTypst(
   text = text.replace(/\\underline\s*\{([^{}]*)\}/g, '<u>$1</u>')
   text = text.replace(/\\qquad\b\s*/g, () => protect('#h(2em)'))
   text = text.replace(/\\quad\b\s*/g, () => protect('#h(1em)'))
-  text = text.replace(
-    /(?:\\\\\s*)?\\medskip\b\s*/g,
-    () => protect('#v(0.5em)\n'),
+  text = text.replace(/(?:\\\\\s*)?\\medskip\b\s*/g, () =>
+    protect('#v(0.5em)\n'),
   )
+
+  // Macros ProfCollege `\Lg[mm]{}` / `\Prix[0]{}` restées en mode texte : dans
+  // les « Course aux nombres », l'unité à compléter suit les pointillés hors de
+  // tout `$…$` (ex. canc3a-2023 : `$\ldots$ \Lg[mm]{}`). Sans cela, elles
+  // fuiraient en texte littéral échappé. Leurs variantes en mode mathématique
+  // sont traitées en amont par `preprocessTex`.
+  // `~` : espace insécable du balisage Typst (une espace ordinaire serait
+  // insérée telle quelle, et une U+00A0 ramenée à une espace par la
+  // normalisation du texte plus bas)
+  text = remplaceMacrosProfCollege(text, (valeur, unite) =>
+    valeur === '' || unite === ''
+      ? `${valeur}${unite}`
+      : `${valeur}${protect('~')}${unite}`,
+  )
+
+  // Cases à cocher `\faSquare` / `\faCheckSquare` (police fontawesome de la
+  // sortie LaTeX, variante `[regular]` ou `[solid]` en argument optionnel) :
+  // écrites en LaTeX texte dans les `canReponseACompleter` / `canEnonce` des
+  // « Course aux nombres » (ex. can6a-2025 Q10 et Q25, can1a-2025 Q20,
+  // can2a-2025 Q16). Typst n'a pas fontawesome : on dessine un petit carré,
+  // à bord fin pour la case vide, plein pour la case cochée. `\faCheckSquare`
+  // est traité d'abord pour ne pas laisser `\faSquare` mordre dessus.
+  text = text.replace(/\\faCheckSquare\b\s*(?:\[[^\]]*\])?\s*/g, () =>
+    protect(
+      '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, fill: luma(60)) ',
+    ),
+  )
+  text = text.replace(/\\faSquare\b\s*(?:\[[^\]]*\])?\s*/g, () =>
+    protect(
+      '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, stroke: 0.6pt) ',
+    ),
+  )
+  // `\raggedright` / `\raggedleft` / `\centering` en tête de réponse (ex.
+  // can6a-2025 Q25) : sans effet utile dans une cellule du tableau, retirés
+  // pour ne pas fuir en texte littéral.
+  text = text.replace(/\\(?:raggedright|raggedleft|centering)\b\s*/g, '')
 
   // Mise en boîte LaTeX en mode texte, elle aussi propre aux énoncés des
   // « Course aux nombres » (ex. can2a-2026 Q12, qui encadre un algorithme).
@@ -3058,12 +3252,10 @@ export function htmlToTypst(
     // On ignore les balises html
     const isHtmlTag = /^<\/?[a-zA-Z]/.test(token)
     if (!isHtmlTag) {
-      output += escapeTypstText(
-        decodeEntities(token.replace(/\s+/g, ' ')),
-      )
+      output += escapeTypstText(decodeEntities(token.replace(/\s+/g, ' ')))
       continue
     }
-    
+
     if (token[0] !== '<') {
       // nœud texte : les retours à la ligne du HTML ne sont pas
       // significatifs (les blancs sont normalisés avant le décodage

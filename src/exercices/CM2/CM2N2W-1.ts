@@ -58,19 +58,19 @@ export default class EncadrerUnDecimalParDeuxEntiersConsecutifs extends Exercice
       // for (let k=0;k<3;k++) {
       enonces.push({
         enonce: `
-          $\\ldots < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < \\ldots$`,
+          $\\ldots\\ldots < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < \\ldots\\ldots$`,
         question: '',
         correction: `$${miseEnEvidence(texNombre(m * 1000 + c * 100 + d * 10 + u * 1))} < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < ${miseEnEvidence(texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + 1))}$`,
       })
       enonces.push({
         enonce: `
-          $\\ldots < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01))} < \\ldots$`,
+          $\\ldots\\ldots < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01))} < \\ldots\\ldots$`,
         question: '',
         correction: `$${miseEnEvidence(texNombre(m * 1000 + c * 100 + d * 10 + u * 1))} < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01))} < ${miseEnEvidence(texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + 1))}$`,
       })
       enonces.push({
         enonce: `
-          $\\ldots < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1))} < \\ldots$`,
+          $\\ldots\\ldots < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1))} < \\ldots\\ldots$`,
         question: '',
         correction: `$${miseEnEvidence(texNombre(m * 1000 + c * 100 + d * 10 + u * 1))} < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1))} < ${miseEnEvidence(texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + 1))}$`,
       })

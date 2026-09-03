@@ -3,16 +3,16 @@ import codeListForThemes from '../../json/codeToThemeList.json'
 import referentielsActivation from '../../json/referentielsActivation.json'
 import { isLessThan1Month } from '../types/dates'
 import {
-    type JSONReferentielEnding,
-    type JSONReferentielObject,
-    type ResourceAndItsPath,
-    hasTypSource,
-    isBanqueExterneType,
-    isCrpeType,
-    isExerciceItemInReferentiel,
-    isJSONReferentielEnding,
-    isStaticType,
-    isStaticWithoutPngUrl,
+  type JSONReferentielEnding,
+  type JSONReferentielObject,
+  type ResourceAndItsPath,
+  hasTypSource,
+  isBanqueExterneType,
+  isCrpeType,
+  isExerciceItemInReferentiel,
+  isJSONReferentielEnding,
+  isStaticType,
+  isStaticWithoutPngUrl,
 } from '../types/referentiels'
 import { toMap } from './toMap'
 
@@ -333,7 +333,10 @@ export function mergeReferentielObjects(
       const oVal = obj[key]
       if (Array.isArray(pVal) && Array.isArray(oVal)) {
         prev[key] = pVal.concat(...oVal)
-      } else if (isJSONReferentielObject(pVal) && isJSONReferentielObject(oVal)) {
+      } else if (
+        isJSONReferentielObject(pVal) &&
+        isJSONReferentielObject(oVal)
+      ) {
         prev[key] = mergeReferentielObjects(pVal, oVal)
       } else {
         prev[key] = oVal
@@ -354,7 +357,7 @@ export function mergeReferentielObjects(
 export function isReferentielActivated(refName: string): boolean {
   const referentielList = toMap({ ...referentielsActivation })
   if (referentielList.has(refName)) {
-    return referentielList.get(refName) === 'true'
+    return referentielList.get(refName) === true
   } else {
     console.warn(refName + ' is not a valid referentiel name !')
     return false

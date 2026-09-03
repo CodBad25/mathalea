@@ -64,7 +64,7 @@ export default class LeCompteEstBonV3 extends Exercice {
       for (let j = 0; j < 4; j++) {
         texteCorr += `$${solutionMathador[2][j]}$<br>`
       }
-      if (this.questionJamaisPosee(i, ...solutionMathador)) {
+      if (this.questionJamaisPosee(i, JSON.stringify(solutionMathador))) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

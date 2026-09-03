@@ -42,6 +42,8 @@ export class Matrice {
       : new Matrice(zeros(this.dim, this.dim))
   }
 
+  subset(lignes: number, colonnes: number): number
+  subset(lignes: number[] | number, colonnes: number[] | number): Matrice
   subset(
     lignes: number[] | number,
     colonnes: number[] | number,
@@ -58,6 +60,8 @@ export class Matrice {
     return matrice(transpose(this._data))
   }
 
+  multiply(v: Matrice | number[][]): Matrice
+  multiply(v: number[]): number[] | number
   multiply(v: Matrice | number[][] | number[]): Matrice | number[] | number {
     const vData = v instanceof Matrice ? v._data : v
     const produit = multiply(this._data, vData)
@@ -113,7 +117,7 @@ export class Matrice {
 
 export function matrice(table: number[][] | number | Matrice): Matrice {
   if (Array.isArray(table) || typeof table === 'number') {
-    return new Matrice(table as any)
+    return new Matrice(table)
   } else if ((table as Matrice)._data != null) {
     return new Matrice((table as Matrice)._data)
   }

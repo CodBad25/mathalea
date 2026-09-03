@@ -78,7 +78,7 @@ export default class Can20266Q12 extends ExerciceCan {
       }
 
       this.correction = `Le nombre d'élèves qui ne sont pas venus à vélo est $${nonF} + ${nonG} = ${miseEnEvidence(texNombre(result, 0))}$.`
-      this.canEnonce = `Viens-tu à vélo ? \\\\\\medskip${context.isHtml ? `${tableau}` : `${tableauLatex}`}`
+      this.canEnonce = `Viens-tu à vélo ? ${context.isHtml ? `${tableau}` : `${tableauLatex}`}`
       this.canReponseACompleter = `$\\ldots$ élèves ne sont pas venus à vélo.`
     } else {
       const result = ouiF + ouiG

@@ -21,6 +21,6 @@ export default class ExerciceBP1AUTO094 extends CalculDeVolumes3e {
   constructor() {
     super()
     this.besoinFormulaire4Texte = false
-    this.sup4 = '1-2-3'
+    this.sup4 = 2
   }
 }
