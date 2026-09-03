@@ -4,6 +4,7 @@ import {
   empreinteTirage,
   exercicesAControler,
   grainePourUuid,
+  installeGardeDeBoucle,
   nombresAffiches,
   normaliseTexte,
   partieNombres,
@@ -241,5 +242,36 @@ describe('exercicesAControler', () => {
     expect(
       exercicesAControler(catalogue, { CHANGED_FILES: 'documentation/x.md' }),
     ).toEqual([])
+  })
+})
+
+describe('installeGardeDeBoucle', () => {
+  it('interrompt une boucle de rejet qui ne trouve jamais sa valeur', () => {
+    const garde = installeGardeDeBoucle(1000)
+    garde.demarre()
+    expect(() => {
+      // reproduit une boucle d'exercice qui tire jusqu'à une valeur impossible
+      while (Math.random() < 2) {
+        /* jamais satisfait */
+      }
+    }).toThrow(/boucle sans issue probable/)
+    garde.arrete()
+  })
+
+  it('laisse passer une génération ordinaire', () => {
+    const garde = installeGardeDeBoucle(1000)
+    garde.demarre()
+    for (let i = 0; i < 500; i++) Math.random()
+    expect(garde.arrete()).toBe(500)
+  })
+
+  it('continue de compter après une réinitialisation par seedrandom', () => {
+    const garde = installeGardeDeBoucle(1000)
+    // seedrandom({ global: true }) réassigne Math.random : le compteur doit
+    // survivre à cette réassignation, sinon la garde saute à chaque génération
+    Math.random = () => 0.42
+    garde.demarre()
+    expect(Math.random()).toBe(0.42)
+    expect(garde.arrete()).toBe(1)
   })
 })
