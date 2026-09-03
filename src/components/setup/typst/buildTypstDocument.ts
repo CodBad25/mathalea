@@ -1119,6 +1119,14 @@ export interface TypstDocumentOptions {
   badgeColor: string
   /** Nombre de versions du sujet (Sujet A, B...) générées à la suite */
   nbVersions: number
+  /**
+   * Le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions
+   * commencent sur une page impaire, une page blanche (sans en-tête ni pied
+   * de page) étant insérée si besoin : l'impression recto-verso en série ne
+   * fait alors jamais commencer une partie au dos de la précédente. Décoché,
+   * ces parties enchaînent sur la page suivante.
+   */
+  oddPageStarts: boolean
   /** Page de garde placée en tête de chaque sujet (`aucune` par défaut) */
   coverPage: TypstCoverOptions
   /**
@@ -1405,6 +1413,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   badgeStyle: 'underline',
   badgeColor: 'black',
   nbVersions: 1,
+  oddPageStarts: true,
   answerLines: 0,
   coverPage: {
     template: 'aucune',
@@ -1421,6 +1430,23 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
     showSignature: true,
     showNote: true,
   },
+}
+
+/**
+ * Saut de page ouvrant une partie du document (bloc « Corrections », sujet
+ * suivant). Avec le réglage « Corrigés et sujets suivants sur une page
+ * impaire », Typst insère au besoin une page blanche pour que la partie tombe
+ * sur un recto en impression recto-verso. La parité est celle du compteur de
+ * pages, remis à 1 (impair) au début de chaque sujet : elle suit donc la
+ * parité physique.
+ */
+function sectionPageBreak(options: TypstDocumentOptions): string {
+  if (!options.oddPageStarts) return '#pagebreak(weak: true)'
+  // `set page` dans un bloc de code : la page blanche éventuellement insérée
+  // par `to: "odd"` naît dans ce bloc, elle est donc sans en-tête ni pied de
+  // page (sinon elle afficherait un numéro « 4/3 » incongru) ; la page
+  // courante et celle de la partie qui suit, hors du bloc, gardent les leurs.
+  return '#{ set page(header: none, footer: none); pagebreak(to: "odd", weak: true) }'
 }
 
 /** Applique le réglage « Correction minimale » aux corrections des exercices */
@@ -2305,7 +2331,7 @@ function buildCanVersionContent(
     renderLines.push('// ----- Corrections -----')
     renderLines.push('#if corrige [')
     renderLines.push('  // les corrections commencent sur une nouvelle page')
-    renderLines.push('  #pagebreak(weak: true)')
+    renderLines.push(`  ${sectionPageBreak(options)}`)
     renderLines.push(
       '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
     )
@@ -2460,7 +2486,7 @@ function buildVersionContent(
       renderLines.push('// ----- Corrections -----')
       renderLines.push('#if corrige [')
       renderLines.push('  // les corrections commencent sur une nouvelle page')
-      renderLines.push('  #pagebreak(weak: true)')
+      renderLines.push(`  ${sectionPageBreak(options)}`)
       renderLines.push(
         '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
       )
@@ -2614,7 +2640,7 @@ function buildVersionContent(
       renderLines.push('// ----- Corrections -----')
       renderLines.push('#if corrige [')
       renderLines.push('  // les corrections commencent sur une nouvelle page')
-      renderLines.push('  #pagebreak(weak: true)')
+      renderLines.push(`  ${sectionPageBreak(options)}`)
       renderLines.push(
         '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
       )
@@ -3132,7 +3158,7 @@ export function buildTypstDocument(
   lines.push(...primary.renderLines)
   for (const [i, version] of extra.entries()) {
     lines.push(subjectMarker(i + 1))
-    lines.push('#pagebreak(weak: true)')
+    lines.push(sectionPageBreak(options))
     // chaque sujet recommence sa propre pagination et sa numérotation
     // d'exercices (compteur global du paquet exercise-bank)
     lines.push('#counter(page).update(1)')

@@ -86,9 +86,45 @@ describe('buildTypstDocument', () => {
       '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + $2 + 2$\n      + $3 times 4$\n    ]',
     )
     expect(code).toContain('#if corrige [')
-    // les corrections démarrent sur une nouvelle page
-    expect(code).toContain('#pagebreak(weak: true)')
+    // les corrections démarrent sur une page impaire (réglage par défaut)
+    expect(code).toContain(
+      '#{ set page(header: none, footer: none); pagebreak(to: "odd", weak: true) }',
+    )
     expect(code).toContain('$3 times 4 = 12$')
+  })
+
+  it('enchaîne sans page impaire quand le réglage est décoché', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'], corrections: ['$2$'] })],
+      { ...defaultTypstDocumentOptions, oddPageStarts: false },
+    )
+    expect(code).toContain('#pagebreak(weak: true)')
+    expect(code).not.toContain('to: "odd"')
+  })
+
+  it('fait commencer chaque sujet sur une page impaire', () => {
+    const options = { ...defaultTypstDocumentOptions, nbVersions: 2 }
+    const versions = [[exercise({ questions: ['$5+5$'] })]]
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      options,
+      {},
+      versions,
+    )
+    // saut vers la page impaire, puis remise à 1 du compteur de pages : la
+    // parité du compteur reste celle des pages physiques
+    expect(code).toContain(
+      '#{ set page(header: none, footer: none); pagebreak(to: "odd", weak: true) }\n#counter(page).update(1)',
+    )
+    const sansParite = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      { ...options, oddPageStarts: false },
+      {},
+      versions,
+    )
+    expect(sansParite).toContain(
+      '#pagebreak(weak: true)\n#counter(page).update(1)',
+    )
   })
 
   it('ne déclare pas de réglages de questions pour un exercice à question unique', () => {
