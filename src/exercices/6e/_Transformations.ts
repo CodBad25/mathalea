@@ -126,6 +126,8 @@ export default class Transformations extends Exercice {
         longueurBoucle,
         objetsEnonce,
         objetsCorrection,
+        cptEvitementTranslation,
+        cptEvitementReseau,
         cpt = 0;
       indiceQuestion < this.nbQuestions && cpt < 50;
     ) {
@@ -138,8 +140,8 @@ export default class Transformations extends Exercice {
       const k = [1, 1, 1]
       const punto: number[][] = [[]]
       const n = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-      const M = []
-      const N = []
+      const M: PointAbstrait[] = []
+      const N: PointAbstrait[] = []
       const estSurAxe: boolean[] = []
       // Ci-dessous, on évite le point $O$ comme point et comme nom de point.
       const nomPointsTranslationDejaUtilises = [15]
@@ -228,13 +230,21 @@ export default class Transformations extends Exercice {
           egal(punto[j][1], Math.floor(punto[j][1]), 0.001)
         // On vérifie que l'image est bien un point du réseau sinon, on change.
         mauvaisAntecedents = combinaisonListes(pointsDejaUtilises, 1)
+        // Garde-fou : si aucun antécédent ne donne d'image sur le réseau dans
+        // la grille, on sort plutôt que de figer le navigateur. Le plafond est
+        // très au-dessus de tout tirage qui aboutissait déjà (le vivier
+        // d'antécédents ne compte que 100 valeurs), donc les valeurs tirées
+        // restent identiques quand la boucle terminait normalement.
+        cptEvitementReseau = 0
         while (
-          punto[j][0] < 0 ||
-          punto[j][0] > 9 ||
-          punto[j][1] < 0 ||
-          punto[j][1] > 9 ||
-          puntoReseau === false
+          (punto[j][0] < 0 ||
+            punto[j][0] > 9 ||
+            punto[j][1] < 0 ||
+            punto[j][1] > 9 ||
+            puntoReseau === false) &&
+          cptEvitementReseau < 1000
         ) {
+          cptEvitementReseau++
           mauvaisAntecedents.push(antecedents[j])
           antecedents[j] = randint(0, 99, mauvaisAntecedents)
           punto[j] = imagePointParTransformation(
@@ -868,8 +878,17 @@ export default class Transformations extends Exercice {
               lettreDepuisChiffre(pointMLettre),
               'above right',
             )
+            // Garde-fou : pointM ne peut occuper qu'une poignée de positions
+            // (x et y tirés dans {-1, 0, 1, 2} privés de {M[i].x, 0} et
+            // {M[i].y, 0}). Quand sup ne propose que la translation, aEviter
+            // finit par les couvrir toutes et la boucle ne peut plus sortir.
+            // Le plafond est très au-dessus de tout tirage qui aboutissait déjà,
+            // donc les valeurs tirées restent identiques quand la boucle
+            // terminait normalement.
+            cptEvitementTranslation = 0
             while (
-              compteOccurences(aEviter, 44 + pointM.x + 10 * pointM.y) !== 0
+              compteOccurences(aEviter, 44 + pointM.x + 10 * pointM.y) !== 0 &&
+              cptEvitementTranslation < 1000
             ) {
               pointM = pointAbstrait(
                 randint(-1, 2, [M[i].x, 0]),
@@ -877,6 +896,38 @@ export default class Transformations extends Exercice {
                 lettreDepuisChiffre(pointMLettre),
                 'above right',
               )
+              cptEvitementTranslation++
+            }
+            if (
+              cptEvitementTranslation >= 1000 &&
+              compteOccurences(aEviter, 44 + pointM.x + 10 * pointM.y) !== 0
+            ) {
+              // Repli sans tirage aléatoire : première position atteignable
+              // encore libre, ou à défaut on garde la dernière position tirée.
+              let positionLibreTrouvee = false
+              for (const xCandidat of [-1, 0, 1, 2].filter(
+                (v) => v !== M[i].x && v !== 0,
+              )) {
+                for (const yCandidat of [-1, 0, 1, 2].filter(
+                  (v) => v !== M[i].y && v !== 0,
+                )) {
+                  if (
+                    !positionLibreTrouvee &&
+                    compteOccurences(
+                      aEviter,
+                      44 + xCandidat + 10 * yCandidat,
+                    ) === 0
+                  ) {
+                    pointM = pointAbstrait(
+                      xCandidat,
+                      yCandidat,
+                      lettreDepuisChiffre(pointMLettre),
+                      'above right',
+                    )
+                    positionLibreTrouvee = true
+                  }
+                }
+              }
             }
             pointN = translation(
               pointM,
