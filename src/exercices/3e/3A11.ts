@@ -1,4 +1,7 @@
 import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { numAlpha } from '../../lib/outils/outilString'
 import {
   decompositionFacteursPremiersArray,
@@ -13,6 +16,7 @@ export const titre = 'Rendre irréductible une fraction'
 /**
  * Fractions irréductibles
  * @author Sébastien Lozano
+ * Rémi Angot pour l'ajout du multimathfield et l'interactivité
  */
 export const uuid = 'a6667'
 
@@ -174,6 +178,18 @@ export default class FractionsIrreductibles extends Exercice {
       for (let k = 0; k < tabNb2.length; k++) {
         nb2 = nb2 * tabPremMultNb2[k].prem ** tabPremMultNb2[k].mult
       }
+
+      // Décomposition en produit de facteurs premiers au format LaTeX (2^{2}\times3\times5)
+      const decompoEnLatex = (
+        tab: { prem: number; mult: number }[],
+      ): string =>
+        tab
+          .map(({ prem, mult }) =>
+            mult === 1 ? `${prem}` : `${prem}^{${mult}}`,
+          )
+          .join('\\times')
+      const reponseA = decompoEnLatex(tabPremMultNb1)
+      const reponseB = decompoEnLatex(tabPremMultNb2)
 
       switch (typesDeQuestions) {
         case 1: // décomposition de A
@@ -361,6 +377,47 @@ export default class FractionsIrreductibles extends Exercice {
           // texte += `<br>`+numAlpha(4)+` Remarque ?`
           // texteCorr += `<br>`+numAlpha(4)+' corr type 5';
           break
+      }
+
+      if (this.interactif) {
+        const clavier =
+          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+        const aide = ` à l'aide des décompositions obtenues au ${numAlpha(0)}et au ${numAlpha(1, true)}.`
+        // Tout l'énoncé est porté par le multi-mathfield : une seule numérotation.
+        texte = addMultiMathfield(this, i, {
+          dataTemplate:
+            `${numAlpha(0)} Décomposer $A = ${texNombre(nb1)}$ en produit de facteurs premiers.<br>` +
+            `$A =$ %{field0}<br>` +
+            `${numAlpha(1)} Décomposer $B = ${texNombre(nb2)}$ en produit de facteurs premiers.<br>` +
+            `$B =$ %{field1}<br>` +
+            `${numAlpha(2)} Rendre la fraction $\\dfrac{A}{B} = \\dfrac{${texNombre(nb1)}}{${texNombre(nb2)}}$ irréductible${aide}<br>` +
+            `$\\dfrac{A}{B} =$ %{field2}<br>` +
+            `${numAlpha(3)} Rendre la fraction $\\dfrac{B}{A} = \\dfrac{${texNombre(nb2)}}{${texNombre(nb1)}}$ irréductible${aide}<br>` +
+            `$\\dfrac{B}{A} =$ %{field3}`,
+          dataOptions: {
+            field0: { keyboard: clavier },
+            field1: { keyboard: clavier },
+            field2: { keyboard: clavier },
+            field3: { keyboard: clavier },
+          },
+        })
+        handleAnswers(
+          this,
+          i,
+          {
+            field0: { value: reponseA },
+            field1: { value: reponseB },
+            field2: {
+              value: `\\dfrac{${nb1Dist}}{${nb2Dist}}`,
+              options: { fractionIrreductible: true },
+            },
+            field3: {
+              value: `\\dfrac{${nb2Dist}}{${nb1Dist}}`,
+              options: { fractionIrreductible: true },
+            },
+          },
+          { formatInteractif: 'multi-mathfield' },
+        )
       }
 
       if (this.questionJamaisPosee(i, typesDeQuestions, nb1, nb2)) {
