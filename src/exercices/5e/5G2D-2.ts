@@ -302,7 +302,15 @@ export default class UnitesDeVolumesEtDeCapacite extends Exercice {
           `$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
             texteApres: uniteFinale,
           })}`
-        handleAnswers(this, i, { reponse: { value: resultat } })
+        // `propositionsQcm()` a positionné `formatInteractif` à 'mathalea-qcm' ;
+        // en mode numérique il faut le forcer à 'mathlive' sinon la saisie de
+        // l'élève n'est pas vérifiée (réponse considérée manquante).
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: resultat } },
+          { formatInteractif: 'mathlive' },
+        )
       }
 
       /* if ((this.sup3 === 1 || this.sup3 === 3) && i === this.nbQuestions - 1) {

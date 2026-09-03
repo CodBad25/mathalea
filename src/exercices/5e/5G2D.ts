@@ -282,7 +282,15 @@ export default class ExerciceConversionsVolumes extends Exercice {
           '\\dotfill',
           `$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)}$`,
         )
-        handleAnswers(this, i, { reponse: { value: resultat } })
+        // `propositionsQcm()` a positionné `formatInteractif` à 'mathalea-qcm' ;
+        // en mode numérique il faut le forcer à 'mathlive' sinon la saisie de
+        // l'élève n'est pas vérifiée (réponse considérée manquante).
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: resultat } },
+          { formatInteractif: 'mathlive' },
+        )
       }
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n`a jamais été posée, on en crée une autre
