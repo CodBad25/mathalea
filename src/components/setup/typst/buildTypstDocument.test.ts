@@ -518,7 +518,7 @@ describe('buildTypstDocument', () => {
       { ...defaultTypstDocumentOptions, badgeStyle: 'border-accent' },
     )
     expect(borderAccent).toContain('badge-style: "border-accent",')
-    expect(borderAccent).toContain('margin: (x: 15mm, y: 15mm)')
+    expect(borderAccent).toContain('margin: (x: 10mm, y: 15mm)')
     // style pleine largeur : pas de réglage de colonne
     expect(borderAccent).not.toContain('margin-position:')
 
