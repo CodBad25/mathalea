@@ -163,7 +163,13 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
       if (this.interactif && this.sup2 !== 2) {
         texte += props.texte
       } else {
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+        // `numbersSpace` + `espace: true` : l'élève peut séparer les classes du
+        // résultat par une espace (touche dédiée au clavier virtuel, barre
+        // d'espace au clavier physique qui insère un `\,`). L'espace fine est
+        // ignorée à la correction (voir `cleanComas`), la réponse reste juste.
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.numbersSpace, {
+          espace: true,
+        })
         // `propositionsQcm()` a positionné `formatInteractif` à 'mathalea-qcm' ;
         // en mode numérique interactif il faut le forcer à 'mathlive' sinon la
         // saisie de l'élève n'est pas vérifiée (réponses considérées manquantes).
