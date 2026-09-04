@@ -8,6 +8,7 @@
     tbiState,
     zoomAllCardsBy,
     type TbiMode,
+    type TbiSingleColumnAlign,
   } from '../../../lib/stores/tbiStore'
 
   type Props = {
@@ -48,6 +49,22 @@
       Array.from({ length: cardsCount }, (_, i) => i),
       nbColumns,
     )
+  }
+
+  /** Choix des 4 alignements de la colonne unique, dans l'ordre d'affichage */
+  const singleColumnAligns: {
+    value: TbiSingleColumnAlign
+    label: string
+    icon: string
+  }[] = [
+    { value: 'left', label: 'Colonne sur la moitié gauche', icon: 'bx-dock-left' },
+    { value: 'center', label: 'Colonne centrée', icon: 'bx-align-middle' },
+    { value: 'right', label: 'Colonne sur la moitié droite', icon: 'bx-dock-right' },
+    { value: 'full', label: 'Colonne sur toute la largeur', icon: 'bx-expand-horizontal' },
+  ]
+
+  function setSingleColumnAlign(singleColumnAlign: TbiSingleColumnAlign) {
+    tbiState.update((state) => ({ ...state, singleColumnAlign }))
   }
 
   function newDataForAll() {
@@ -162,6 +179,27 @@
         <i class="bx bx-plus"></i>
       </button>
     </div>
+
+    {#if $tbiState.nbColumns === 1}
+      <div
+        class="flex flex-row items-center gap-1 px-2 py-1 rounded-full shadow-md bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest"
+      >
+        {#each singleColumnAligns as align (align.value)}
+          <button
+            type="button"
+            class={toggleButtonClass(
+              $tbiState.singleColumnAlign === align.value,
+            )}
+            aria-pressed={$tbiState.singleColumnAlign === align.value}
+            title={align.label}
+            aria-label={align.label}
+            onclick={() => setSingleColumnAlign(align.value)}
+          >
+            <i class="bx {align.icon} text-xl"></i>
+          </button>
+        {/each}
+      </div>
+    {/if}
   {/if}
 
   <div class="flex flex-row items-center gap-2">

@@ -222,6 +222,7 @@
       <TbiColumnsLayout
         {items}
         nbColumns={$tbiState.nbColumns}
+        singleColumnAlign={$tbiState.singleColumnAlign}
         onMove={applyReorder}
         onDelete={applyDelete}
       />

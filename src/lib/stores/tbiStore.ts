@@ -19,6 +19,12 @@ import { isLocalStorageAvailable } from './storage'
 export type TbiMode = 'columns' | 'free' | 'tabs'
 /** Disposition interne d'un onglet */
 export type TbiTabLayout = 'columns' | 'free'
+/**
+ * Alignement horizontal de la colonne quand la disposition en colonnes n'en
+ * compte qu'une seule : centrée (défaut, largeur limitée), calée sur la moitié
+ * gauche ou droite de l'écran, ou étalée sur toute la largeur.
+ */
+export type TbiSingleColumnAlign = 'center' | 'left' | 'right' | 'full'
 
 export const TBI_BASE_WIDTH = 600
 export const TBI_MIN_ZOOM = 0.4
@@ -136,6 +142,8 @@ export interface TbiCalculatorState {
 export interface TbiState {
   mode: TbiMode
   nbColumns: number
+  /** Alignement de la colonne unique (utilisé quand nbColumns === 1) */
+  singleColumnAlign: TbiSingleColumnAlign
   /** Aligné par indice sur exercicesParams */
   cards: TbiCardState[]
   /** Disposition de chaque onglet, indexée par indice compact d'onglet */
@@ -166,6 +174,7 @@ export function defaultTbiState(): TbiState {
   return {
     mode: 'columns',
     nbColumns: 1,
+    singleColumnAlign: 'center',
     cards: [],
     tabConfigs: [],
     widget: { visible: false, mode: 'clock', x: 0, y: 0, zoom: 1 },
@@ -492,6 +501,7 @@ export function deleteTbiCard(paramsIndex: number) {
 export interface TbiSharedState {
   mode: TbiMode
   nbColumns: number
+  singleColumnAlign: TbiSingleColumnAlign
   tabs: number[]
   breaks: number[]
   tabConfigs: TbiTabConfig[]
@@ -515,6 +525,7 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
   return {
     mode: state.mode,
     nbColumns: state.nbColumns,
+    singleColumnAlign: state.singleColumnAlign,
     tabs: state.cards.map((card) => card.tab),
     breaks: state.cards.flatMap((card, i) => (card.colBreak ? [i] : [])),
     tabConfigs: state.tabConfigs.map((config) => ({ ...config })),
@@ -536,6 +547,12 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
 
 const TBI_MODES: TbiMode[] = ['columns', 'free', 'tabs']
 const TBI_TAB_LAYOUTS: TbiTabLayout[] = ['columns', 'free']
+const TBI_SINGLE_COLUMN_ALIGNS: TbiSingleColumnAlign[] = [
+  'center',
+  'left',
+  'right',
+  'full',
+]
 
 /**
  * Encodage lisible du tbiParam (paramètre d'URL partageable), pensé pour
@@ -574,6 +591,9 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   const fields: string[] = []
   if (shared.mode !== 'columns') fields.push(`m-${shared.mode}`)
   if (shared.nbColumns !== 1) fields.push(`c-${shared.nbColumns}`)
+  if (shared.singleColumnAlign !== 'center') {
+    fields.push(`sc-${shared.singleColumnAlign}`)
+  }
   if (!isDefaultTabs(shared.tabs)) {
     fields.push(`t-${shared.tabs.join(TBI_PARAM_LIST_SEP)}`)
   }
@@ -634,6 +654,9 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
         if (!Number.isNaN(n)) shared.nbColumns = n
         break
       }
+      case 'sc':
+        shared.singleColumnAlign = value as TbiSingleColumnAlign
+        break
       case 't':
         shared.tabs = value
           .split(TBI_PARAM_LIST_SEP)
@@ -723,6 +746,12 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
       shared.nbColumns <= 4
     ) {
       state.nbColumns = Math.round(shared.nbColumns)
+    }
+    if (
+      shared.singleColumnAlign !== undefined &&
+      TBI_SINGLE_COLUMN_ALIGNS.includes(shared.singleColumnAlign)
+    ) {
+      state.singleColumnAlign = shared.singleColumnAlign
     }
     if (Array.isArray(shared.tabs)) {
       shared.tabs.forEach((tab, i) => {

@@ -1,12 +1,18 @@
 <script lang="ts">
   import { flip } from 'svelte/animate'
-  import { tbiIsShuffling, tbiState } from '../../../../lib/stores/tbiStore'
+  import {
+    tbiIsShuffling,
+    tbiState,
+    type TbiSingleColumnAlign,
+  } from '../../../../lib/stores/tbiStore'
   import TbiCardHost from '../TbiCardHost.svelte'
   import type { TbiItem } from '../tbiTypes'
 
   interface Props {
     items: TbiItem[]
     nbColumns: number
+    /** Alignement horizontal quand nbColumns === 1 (sans effet au-delà) */
+    singleColumnAlign?: TbiSingleColumnAlign
     /** Réordonnancement : déplace l'exercice de la position from à la position to */
     onMove?: (from: number, to: number) => void
     withPadding?: boolean
@@ -20,6 +26,7 @@
   let {
     items,
     nbColumns,
+    singleColumnAlign = 'center',
     onMove = () => {},
     withPadding = true,
     showMoveToTab = false,
@@ -66,12 +73,27 @@
     })
     return result
   })
+
+  // Alignement horizontal du conteneur quand il n'y a qu'une seule colonne :
+  // centré (largeur limitée, comportement historique), moitié gauche/droite de
+  // l'écran, ou toute la largeur. Sans effet dès qu'il y a plusieurs colonnes.
+  let widthClass = $derived.by(() => {
+    if (nbColumns !== 1) return 'w-full'
+    switch (singleColumnAlign) {
+      case 'left':
+        return 'w-1/2 mr-auto'
+      case 'right':
+        return 'w-1/2 ml-auto'
+      case 'full':
+        return 'w-full'
+      default:
+        return 'w-full max-w-5xl mx-auto'
+    }
+  })
 </script>
 
 <div
-  class="w-full {withPadding ? 'p-4' : ''} {nbColumns === 1
-    ? 'max-w-5xl mx-auto'
-    : ''}"
+  class="{widthClass} {withPadding ? 'p-4' : ''}"
   style="display: grid; grid-template-columns: repeat({nbColumns}, minmax(0, 1fr)); column-gap: 1rem"
 >
   {#each groups as colItems, colIndex (colIndex)}

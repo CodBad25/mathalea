@@ -351,6 +351,7 @@ describe('tbiStore', () => {
     expect(shared).toEqual({
       mode: 'tabs',
       nbColumns: 3,
+      singleColumnAlign: 'center',
       tabs: [0, 1, 0],
       breaks: [1],
       tabConfigs: [
@@ -418,6 +419,7 @@ describe('tbiStore', () => {
     const encoded = encodeTbiParam({
       mode: 'columns',
       nbColumns: 1,
+      singleColumnAlign: 'center',
       tabs: [0, 1],
       breaks: [],
       tabConfigs: [],
@@ -446,6 +448,7 @@ describe('tbiStore', () => {
       encodeTbiParam({
         mode: 'columns',
         nbColumns: 1,
+        singleColumnAlign: 'center',
         tabs: [0, 1],
         breaks: [],
         tabConfigs: [],
@@ -466,10 +469,49 @@ describe('tbiStore', () => {
     ).toBe('')
   })
 
+  it("encodeTbiParam / decodeTbiParam gèrent l'alignement de la colonne unique", () => {
+    const base = {
+      mode: 'columns' as const,
+      nbColumns: 1,
+      tabs: [],
+      breaks: [],
+      tabConfigs: [],
+      widgetVisible: false,
+      trafficLightVisible: false,
+      collegeCalculatorVisible: false,
+      lyceeCalculatorVisible: false,
+      zooms: [],
+      widgetX: 0,
+      widgetY: 0,
+      trafficLightX: 0,
+      trafficLightY: 0,
+      collegeCalculatorX: 0,
+      collegeCalculatorY: 0,
+      lyceeCalculatorX: 0,
+      lyceeCalculatorY: 0,
+    }
+    // 'center' est la valeur par défaut : rien n'est encodé
+    expect(encodeTbiParam({ ...base, singleColumnAlign: 'center' })).toBe('')
+    const encoded = encodeTbiParam({ ...base, singleColumnAlign: 'right' })
+    expect(encoded).toBe('sc-right')
+    expect(decodeTbiParam(encoded)).toEqual({ singleColumnAlign: 'right' })
+
+    // aller-retour via applyTbiSharedState, valeur inconnue ignorée
+    reconcileTbiCards(['e1'])
+    applyTbiSharedState({ singleColumnAlign: 'left' })
+    expect(get(tbiState).singleColumnAlign).toBe('left')
+    applyTbiSharedState({
+      // @ts-expect-error valeur inconnue volontaire
+      singleColumnAlign: 'pirouette',
+    })
+    expect(get(tbiState).singleColumnAlign).toBe('left')
+  })
+
   it('encodeTbiParam / decodeTbiParam gèrent la visibilité et la position des calculatrices', () => {
     const encoded = encodeTbiParam({
       mode: 'columns',
       nbColumns: 1,
+      singleColumnAlign: 'center',
       tabs: [],
       breaks: [],
       tabConfigs: [],
@@ -502,6 +544,7 @@ describe('tbiStore', () => {
     const encoded = encodeTbiParam({
       mode: 'columns',
       nbColumns: 1,
+      singleColumnAlign: 'center',
       tabs: [],
       breaks: [],
       tabConfigs: [],
