@@ -34,6 +34,11 @@ export default class DecimalToScientifique extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.besoinFormulaireCaseACocher = [
+      'Afficher le glisse-nombre dans la correction',
+      true,
+    ]
+    this.sup = true
   }
 
   nouvelleVersion() {
@@ -49,24 +54,26 @@ export default class DecimalToScientifique extends ExerciceSimple {
       this.reponse = `${texNombre(mantisse)} \\times 10^{${exposant}}`
       this.optionsDeComparaison = { ecritureScientifique: true }
       const glisseNumber = glisseNombre(nombre, -exposant)
-      this.correction = context.isHtml
-        ? mathalea2d(
-            Object.assign({}, fixeBordures([glisseNumber])),
-            glisseNumber,
-          )
-        : ''
+      this.correction =
+        context.isHtml && this.sup
+          ? mathalea2d(
+              Object.assign({}, fixeBordures([glisseNumber])),
+              glisseNumber,
+            )
+          : ''
       this.correction += `L'écriture scientifique de $${texNombre(nombre)}$ est $${miseEnEvidence(`${texNombre(mantisse)} \\times 10^{${exposant}}`)}$.`
     } else {
       this.question = `Donner l'écriture décimale de $${texNombre(mantisse)} \\times 10^{${exposant}}$.`
       this.reponse = texNombre(nombre)
       this.optionsDeComparaison = { nombreDecimalSeulement: true }
       const glisseNumber = glisseNombre(mantisse, exposant)
-      this.correction = context.isHtml
-        ? mathalea2d(
-            Object.assign({}, fixeBordures([glisseNumber])),
-            glisseNumber,
-          )
-        : ''
+      this.correction =
+        context.isHtml && this.sup
+          ? mathalea2d(
+              Object.assign({}, fixeBordures([glisseNumber])),
+              glisseNumber,
+            )
+          : ''
       this.correction += `L'écriture décimale de $${texNombre(mantisse)} \\times 10^{${exposant}}$ est $${miseEnEvidence(texNombre(nombre))}$.`
     }
   }

@@ -364,13 +364,19 @@
       {#if correctionMode !== 'replace'}
         <div use:renderMath={zoom}>
           {#if exercise.consigne && exercise.consigne.length > 0}
-            <p class="mt-2 mb-2">
+            <!--
+              overflow-hidden : certains contenus (tableau de numération
+              « glisse-nombre ») se rendent à une largeur fixe pensée pour la
+              vue prof et débordent du cadre de la carte TBI. On rogne ce qui
+              dépasse plutôt que de laisser la figure sortir du cadre.
+            -->
+            <p class="mt-2 mb-2 overflow-hidden">
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
               {@html mathaleaFormatExercice(exercise.consigne)}
             </p>
           {/if}
           {#if exercise.introduction}
-            <p class="mt-2 mb-2">
+            <p class="mt-2 mb-2 overflow-hidden">
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
               {@html exercise.introduction}
             </p>
