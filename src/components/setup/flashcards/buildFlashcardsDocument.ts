@@ -51,6 +51,11 @@ export interface FlashcardsDocumentOptions {
   columns: number
   /** Nombre de lignes de cartes par page */
   rows: number
+  /**
+   * Épaisseur des traits de découpe entre les cartes, en points. Un trait
+   * fin (0,4 pt) disparaît à la photocopie ; l'augmenter le rend visible.
+   */
+  separatorThickness: number
   /** Numérote les cartes (coin) : pour réapparier recto et verso après découpe */
   showNumbers: boolean
   pageFormat: 'a4' | 'a5'
@@ -84,6 +89,7 @@ export const defaultFlashcardsDocumentOptions: FlashcardsDocumentOptions = {
   lineSpacing: 0.65,
   columns: 2,
   rows: 4,
+  separatorThickness: 1,
   showNumbers: true,
   pageFormat: 'a4',
   orientation: 'portrait',
@@ -259,6 +265,9 @@ export function buildFlashcardsDocument(
   lines.push(
     `#let interligne = ${options.lineSpacing}em // espacement des lignes du texte`,
   )
+  lines.push(
+    `#let epaisseur-traits = ${options.separatorThickness}pt // traits de découpe entre les cartes`,
+  )
   lines.push(`#let titre-recto = ${typstString(options.frontTitle)}`)
   lines.push(`#let titre-verso = ${typstString(options.backTitle)}`)
   lines.push(`#let titre-position = ${typstString(options.titlePosition)}`)
@@ -346,7 +355,10 @@ export function buildFlashcardsDocument(
   lines.push('#let planche(..cellules) = grid(')
   lines.push('  columns: (1fr,) * cartes-par-ligne,')
   lines.push('  rows: (1fr,) * lignes-par-page,')
-  lines.push('  stroke: (thickness: 0.4pt, paint: gray, dash: "dashed"),')
+  // gris foncé + épaisseur réglable : restent visibles après photocopie
+  lines.push(
+    '  stroke: (thickness: epaisseur-traits, paint: luma(40%), dash: "dashed"),',
+  )
   lines.push('  ..cellules,')
   lines.push(')')
   lines.push('')

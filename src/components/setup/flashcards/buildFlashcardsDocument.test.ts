@@ -75,6 +75,17 @@ describe('buildFlashcardsDocument', () => {
     )
   })
 
+  it('règle l’épaisseur des traits de découpe entre les cartes', () => {
+    const code = buildFlashcardsDocument([{ front: 'Q', back: 'R' }], {
+      ...defaultFlashcardsDocumentOptions,
+      separatorThickness: 1.5,
+    })
+    expect(code).toContain('#let epaisseur-traits = 1.5pt')
+    expect(code).toContain(
+      'stroke: (thickness: epaisseur-traits, paint: luma(40%), dash: "dashed")',
+    )
+  })
+
   it('réémet les facteurs de taille par carte relus dans le code (carry-over)', () => {
     const first = buildFlashcardsDocument([
       { front: 'Q1', back: 'R1' },
