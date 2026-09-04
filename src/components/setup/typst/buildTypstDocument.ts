@@ -158,12 +158,15 @@ export const MATHALEA_INLINE_FORMULA_RULE = `#let mathalea-formule-multiligne(co
 }`
 
 /**
- * Lignes en pointillés insérables (fin d'exercice ou après chaque question),
- * pour que l'élève y écrive. `n` lignes espacées de `gutter` ; sans effet
- * visuel (ni espace) tant que `n` vaut 0, valeur de départ dans la palette.
+ * Lignes insérables (fin d'exercice ou après chaque question), pour que
+ * l'élève y écrive. `n` lignes espacées de `gutter` ; sans effet visuel (ni
+ * espace) tant que `n` vaut 0, valeur de départ dans la palette. `style`
+ * choisit le trait, sur les trois que propose aussi le `answer-line-style` du
+ * paquet taskize : `"pointilles"` (filet pointillé, valeur d'origine),
+ * `"points"` (points de conduite) ou `"plein"` (filet continu).
  */
-export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2em) = if n > 0 { block(above: 2em, below: 0.8em,
-  stack(spacing: gutter, ..range(n).map(i => line(length: 100%, stroke: (paint: luma(120), thickness: 0.6pt, dash: "dotted"))))
+export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2em, style: "pointilles") = if n > 0 { block(above: 2em, below: 0.8em,
+  stack(spacing: gutter, ..range(n).map(i => if style == "points" { box(width: 100%, text(fill: luma(120), repeat(gap: 2pt)[.])) } else { line(length: 100%, stroke: (paint: luma(120), thickness: 0.6pt, dash: if style == "plein" { none } else { "dotted" })) }))
 ) }`
 
 /**
@@ -643,10 +646,7 @@ export interface TypstCarryOver {
    * ou après chaque question (y compris la dernière). Ne s'applique jamais
    * à la correction.
    */
-  writingLines?: Record<
-    number,
-    { position: WritingLinesPosition; count: number; spacing: number }
-  >
+  writingLines?: Record<number, WritingLinesSetting>
 }
 
 /**
@@ -808,6 +808,24 @@ function qcmFigureTasksPrefixes(code: string | string[]): Set<string> {
   )
 }
 
+/**
+ * Préfixes (`ex1`, `ex2`...) des exercices dont les lignes de réponse sont
+ * posées après chaque question, repérés au marqueur émis par
+ * `writingLinesCall`. Ces listes-là sont déclarées à une colonne par défaut :
+ * réparties sur plusieurs colonnes, les lignes se réduisent à des tronçons de
+ * un ou deux centimètres, sur lesquels l'élève ne peut rien écrire. Le
+ * professeur garde la main — un nombre de colonnes choisi dans la palette
+ * l'emporte, ici comme pour les QCM à figures.
+ */
+function perQuestionLinesTasksPrefixes(code: string | string[]): Set<string> {
+  const lines = Array.isArray(code) ? code : code.split('\n')
+  return new Set(
+    lines
+      .flatMap((line) => [...line.matchAll(/\/\/ mathalea:lignes-apres\((\d+)\)/g)])
+      .map((match) => `ex${match[1]}`),
+  )
+}
+
 /** Extrait du code Typst courant les réglages de la palette à conserver */
 export function harvestCarryOver(code: string): TypstCarryOver {
   const tasksLayout: Record<string, { columns?: string; gutter?: string }> = {}
@@ -816,12 +834,14 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   // figée dans le carry-over, sans quoi le choix par contenu ne s'appliquerait
   // qu'à la toute première génération
   const qcmFigurePrefixes = qcmFigureTasksPrefixes(code)
+  const perQuestionLinesPrefixes = perQuestionLinesTasksPrefixes(code)
   for (const match of code.matchAll(
     /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
   )) {
-    const defaultColumns = qcmFigurePrefixes.has(match[1])
-      ? '1'
-      : DEFAULT_TASKS_COLUMNS
+    const defaultColumns =
+      qcmFigurePrefixes.has(match[1]) || perQuestionLinesPrefixes.has(match[1])
+        ? '1'
+        : DEFAULT_TASKS_COLUMNS
     if (match[2] !== defaultColumns) {
       tasksLayout[match[1]] = { ...tasksLayout[match[1]], columns: match[2] }
     }
@@ -943,17 +963,17 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   // `writingLinesCall` porte un marqueur identifiant l'exercice et
   // l'emplacement ; en mode « après chaque question » plusieurs appels
   // portent le même marqueur (un par question), avec les mêmes réglages
-  const writingLines: Record<
-    number,
-    { position: WritingLinesPosition; count: number; spacing: number }
-  > = {}
+  // le style est absent des codes émis avant son introduction : il reste
+  // facultatif dans le motif, et vaut alors `trait` (le rendu d'origine)
+  const writingLines: Record<number, WritingLinesSetting> = {}
   for (const match of code.matchAll(
-    /^\s*#mathalea-lignes\((\d+), gutter: ([\d.]+)em\) \/\/ mathalea:lignes-(fin|apres)\((\d+)\)\s*$/gm,
+    /^\s*#mathalea-lignes\((\d+), gutter: ([\d.]+)em(?:, style: "(pointilles|points|plein)")?\) \/\/ mathalea:lignes-(fin|apres)\((\d+)\)\s*$/gm,
   )) {
-    writingLines[Number(match[4])] = {
-      position: match[3] === 'fin' ? 'endOfExercise' : 'afterEachQuestion',
+    writingLines[Number(match[5])] = {
+      position: match[4] === 'fin' ? 'endOfExercise' : 'afterEachQuestion',
       count: Number(match[1]),
       spacing: Number(match[2]),
+      style: (match[3] ?? 'pointilles') as WritingLinesStyle,
     }
   }
   return {
@@ -1139,13 +1159,20 @@ export interface TypstDocumentOptions {
   /** Page de garde placée en tête de chaque sujet (`aucune` par défaut) */
   coverPage: TypstCoverOptions
   /**
-   * Lignes en pointillés ajoutées d'office à la fin de chaque exercice, pour
-   * que l'élève y réponde (0 : aucune). Réglage global, que la palette de
-   * l'aperçu affine ensuite exercice par exercice (`TypstCarryOver.
-   * writingLines`, qui a la priorité) ; le modèle « récitation » le met à 2 à
-   * sa sélection, les autres à 0.
+   * Lignes ajoutées d'office à la fin de chaque exercice, pour que l'élève y
+   * réponde (0 : aucune). Réglage global, que la palette de l'aperçu affine
+   * ensuite exercice par exercice (`TypstCarryOver.writingLines`, qui a la
+   * priorité) ; le modèle « récitation » le met à 2 à sa sélection, les
+   * autres à 0.
    */
   answerLines: number
+  /** Trait de ces lignes (mêmes choix que la palette, voir `WritingLinesStyle`) */
+  answerLinesStyle: WritingLinesStyle
+  /**
+   * Emplacement de ces lignes : à la fin de chaque exercice, ou après chaque
+   * question de chaque exercice (mêmes choix que la palette).
+   */
+  answerLinesPosition: WritingLinesPosition
 }
 
 /**
@@ -1310,6 +1337,22 @@ export const WRITING_LINES_POSITIONS = [
   'afterEachQuestion',
 ] as const
 export type WritingLinesPosition = (typeof WRITING_LINES_POSITIONS)[number]
+
+/**
+ * Trait des lignes : `pointilles` (filet pointillé, valeur d'origine, donc
+ * celle des codes déjà enregistrés qui ne portent pas de style), `points`
+ * (points de conduite) ou `plein` (filet continu).
+ */
+export const WRITING_LINES_STYLES = ['pointilles', 'points', 'plein'] as const
+export type WritingLinesStyle = (typeof WRITING_LINES_STYLES)[number]
+
+/** Réglage de lignes d'un exercice (palette de mise en page) */
+export type WritingLinesSetting = {
+  position: WritingLinesPosition
+  count: number
+  spacing: number
+  style: WritingLinesStyle
+}
 
 /**
  * `aucun` masque le bloc de titre (titre, sous-titre, ligne d'en-tête) sans
@@ -1489,6 +1532,8 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   nbVersions: 1,
   oddPageStarts: true,
   answerLines: 0,
+  answerLinesStyle: 'pointilles',
+  answerLinesPosition: 'endOfExercise',
   coverPage: {
     template: 'aucune',
     titre: '',
@@ -1631,12 +1676,9 @@ function exerciseBody(
    * entier de l'exercice. N'est jamais passé pour une correction (voir
    * `computeGeneratedExercises`).
    */
-  writingLines?: {
+  writingLines?: WritingLinesSetting & {
     /** Numéro (1-based) de l'exercice, pour le marqueur relu par `harvestCarryOver` */
     num: number
-    position: WritingLinesPosition
-    count: number
-    spacing: number
   },
   /**
    * Code destiné à être exporté/copié hors de l'appli (fichier .typ,
@@ -1752,7 +1794,11 @@ function exerciseBody(
   // Pas de liste `tasks`, donc pas de repère émis plus haut : un exercice à
   // question unique dont l'énoncé contient un QCM en a pourtant besoin, sinon
   // la palette n'a nulle part où afficher son réglage de colonnes.
-  const body = appendEndOfExerciseLines(parts.join('\n\n'), writingLines)
+  // pas de liste `tasks` : « après chaque question » n'a nulle part où
+  // s'intercaler, les lignes sont donc posées à la fin du corps
+  const body = appendEndOfExerciseLines(parts.join('\n\n'), writingLines, {
+    force: true,
+  })
   const anchorLine =
     emitAnchor &&
     !exportMode &&
@@ -1771,29 +1817,30 @@ function exerciseBody(
  * `MATHALEA_WRITING_LINES_HELPER`), tagué d'un marqueur identifiant
  * l'exercice et l'emplacement, relu par `harvestCarryOver` à la régénération.
  */
-function writingLinesCall(writingLines: {
-  num: number
-  position: WritingLinesPosition
-  count: number
-  spacing: number
-}): string {
+function writingLinesCall(
+  writingLines: WritingLinesSetting & { num: number },
+): string {
   const tag = writingLines.position === 'endOfExercise' ? 'fin' : 'apres'
-  return `#mathalea-lignes(${writingLines.count}, gutter: ${writingLines.spacing}em) // mathalea:lignes-${tag}(${writingLines.num})`
+  return `#mathalea-lignes(${writingLines.count}, gutter: ${writingLines.spacing}em, style: "${writingLines.style}") // mathalea:lignes-${tag}(${writingLines.num})`
 }
 
-/** Ajoute le bloc de lignes en pointillés en fin de corps d'exercice, si demandé */
+/**
+ * Ajoute le bloc de lignes en fin de corps d'exercice, si demandé.
+ *
+ * `force` sert au mode « après chaque question » quand l'exercice n'a pas de
+ * liste `tasks` où intercaler les lignes (question unique, ou énoncé d'un
+ * seul bloc) : sans lui, un tel exercice n'aurait aucune ligne alors que le
+ * réglage — souvent celui du document, donc appliqué à toute la fiche — en
+ * demande. Le marqueur émis reste celui de l'emplacement choisi, pour que la
+ * palette le relise inchangé.
+ */
 function appendEndOfExerciseLines(
   code: string,
-  writingLines?: {
-    num: number
-    position: WritingLinesPosition
-    count: number
-    spacing: number
-  },
+  writingLines?: WritingLinesSetting & { num: number },
+  { force = false }: { force?: boolean } = {},
 ): string {
-  if (writingLines?.position !== 'endOfExercise' || code.trim().length === 0) {
-    return code
-  }
+  if (writingLines == null || code.trim().length === 0) return code
+  if (writingLines.position !== 'endOfExercise' && !force) return code
   return `${code}\n\n${writingLinesCall(writingLines)}`
 }
 
@@ -1873,9 +1920,10 @@ function computeGeneratedExercises(
       carryOver.writingLines?.[k + 1] ??
       (options.answerLines > 0
         ? {
-            position: 'endOfExercise' as WritingLinesPosition,
+            position: options.answerLinesPosition,
             count: options.answerLines,
             spacing: 2,
+            style: options.answerLinesStyle,
           }
         : null)
     const writingLines =
@@ -2869,6 +2917,9 @@ export function buildTypstDocument(
   // QCM dont au moins une proposition est une figure : une seule colonne par
   // défaut, la seule largeur qui les garde lisibles (voir `qcmHasFigure`)
   const qcmFigurePrefixes = qcmFigureTasksPrefixes(allLines)
+  // lignes de réponse après chaque question : liste à une colonne par défaut
+  // (voir `perQuestionLinesTasksPrefixes`)
+  const perQuestionLinesPrefixes = perQuestionLinesTasksPrefixes(allLines)
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -3033,9 +3084,10 @@ export function buildTypstDocument(
     }
     for (const prefix of tasksPrefixes) {
       const layout = stableCarryOver.tasksLayout?.[prefix]
-      const defaultColumns = qcmFigurePrefixes.has(prefix)
-        ? '1'
-        : DEFAULT_TASKS_COLUMNS
+      const defaultColumns =
+        qcmFigurePrefixes.has(prefix) || perQuestionLinesPrefixes.has(prefix)
+          ? '1'
+          : DEFAULT_TASKS_COLUMNS
       lines.push(
         `#let ${prefix}-colonnes = ${layout?.columns ?? defaultColumns}`,
       )
