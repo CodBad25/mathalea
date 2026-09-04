@@ -132,6 +132,7 @@
     isMenuNeededForExercises={$isMenuNeededForExercises}
     presMode={$globalOptions.presMode}
     seed={undefined}
+    zoom={zoomFactor ?? $globalOptions.z ?? 1}
   />
   {#if isSolutionAccessible}
     <div class="flex flex-row items-center ml-2 mb-2">

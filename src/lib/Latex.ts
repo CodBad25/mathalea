@@ -1482,7 +1482,7 @@ function getUrlFromExercice(
     if (ex.seed !== undefined)
       url.searchParams.append(
         'alea',
-        version > 1 ? ex.seed + version.toString : ex.seed,
+        version > 1 ? ex.seed + version.toString() : ex.seed,
       )
     if (ex.interactif) url.searchParams.append('i', '1')
     if (ex.correctionDetaillee !== undefined) {

@@ -16,6 +16,7 @@ import {
   moveCardToTab,
   reconcileTbiCards,
   reorderTbiCard,
+  shuffleTbiCards,
   tbiState,
   zoomAllCardsBy,
   zoomWidgetBy,
@@ -97,6 +98,171 @@ describe('tbiStore', () => {
     expect(get(exercicesParams).map((p) => p.uuid)).toEqual(['c', 'a', 'b'])
     expect(get(tbiState).cards[0].zoom).toBe(2)
     expect(reorderTbiCard(0, 5)).toBe(false)
+  })
+
+  it('shuffleTbiCards applique la même permutation à exercicesParams et aux cartes', () => {
+    exercicesParams.set([
+      { uuid: 'a' },
+      { uuid: 'b' },
+      { uuid: 'c' },
+      { uuid: 'd' },
+      { uuid: 'e' },
+    ])
+    reconcileTbiCards(['a', 'b', 'c', 'd', 'e'])
+    const labels = ['a', 'b', 'c', 'd', 'e']
+    tbiState.update((state) => {
+      state.cards.forEach((card, i) => {
+        card.zoom = 1 + i / 10
+      })
+      return state
+    })
+
+    const order = shuffleTbiCards()
+    expect(order).not.toBeNull()
+    const uuids = get(exercicesParams).map((p) => p.uuid)
+    const cards = get(tbiState).cards
+    // c'est bien une permutation : aucun exercice perdu ni dupliqué
+    expect([...uuids].sort()).toEqual(labels)
+    expect(order).not.toEqual([0, 1, 2, 3, 4])
+    // le zoom et l'uuid de chaque carte suivent son exercice
+    order!.forEach((oldIndex, newIndex) => {
+      expect(uuids[newIndex]).toBe(labels[oldIndex])
+      expect(cards[newIndex].uuid).toBe(labels[oldIndex])
+      expect(cards[newIndex].zoom).toBeCloseTo(1 + oldIndex / 10)
+    })
+  })
+
+  it('shuffleTbiCards réordonne les onglets et fait suivre tabConfigs', () => {
+    exercicesParams.set([{ uuid: 'a' }, { uuid: 'b' }, { uuid: 'c' }])
+    reconcileTbiCards(['a', 'b', 'c'])
+    // chaque exercice dans son propre onglet, avec une config distincte
+    tbiState.update((state) => {
+      state.cards.forEach((card, i) => (card.tab = i))
+      state.tabConfigs = [
+        { layout: 'columns', nbColumns: 1 },
+        { layout: 'free', nbColumns: 2 },
+        { layout: 'columns', nbColumns: 3 },
+      ]
+      return state
+    })
+
+    const order = shuffleTbiCards()!
+    const state = get(tbiState)
+    // onglets toujours compacts 0..k-1
+    expect([...state.cards.map((c) => c.tab)].sort()).toEqual([0, 1, 2])
+    // l'onglet suit l'exercice : la carte en position i porte l'onglet i
+    expect(state.cards.map((c) => c.tab)).toEqual([0, 1, 2])
+    // tabConfigs réordonné selon la permutation
+    const initialConfigs = [
+      { layout: 'columns', nbColumns: 1 },
+      { layout: 'free', nbColumns: 2 },
+      { layout: 'columns', nbColumns: 3 },
+    ]
+    expect(state.tabConfigs).toEqual(order.map((oldIndex) => initialConfigs[oldIndex]))
+  })
+
+  it('shuffleTbiCards conserve le regroupement des onglets partagés', () => {
+    exercicesParams.set([
+      { uuid: 'a' },
+      { uuid: 'b' },
+      { uuid: 'c' },
+      { uuid: 'd' },
+    ])
+    reconcileTbiCards(['a', 'b', 'c', 'd'])
+    // a et c dans l'onglet 0, b et d dans l'onglet 1
+    tbiState.update((state) => {
+      state.cards[0].tab = 0
+      state.cards[1].tab = 1
+      state.cards[2].tab = 0
+      state.cards[3].tab = 1
+      state.tabConfigs = [
+        { layout: 'columns', nbColumns: 2 },
+        { layout: 'free', nbColumns: 1 },
+      ]
+      return state
+    })
+
+    shuffleTbiCards()
+    const state = get(tbiState)
+    // toujours exactement deux onglets, chacun avec deux exercices
+    const byTab = new Map<number, string[]>()
+    state.cards.forEach((c) =>
+      byTab.set(c.tab, [...(byTab.get(c.tab) ?? []), c.uuid!]),
+    )
+    expect([...byTab.keys()].sort()).toEqual([0, 1])
+    expect([...byTab.values()].map((g) => g.sort())).toEqual(
+      expect.arrayContaining([
+        ['a', 'c'],
+        ['b', 'd'],
+      ]),
+    )
+    expect(state.tabConfigs).toHaveLength(2)
+  })
+
+  it('shuffleTbiCards ré-équilibre les sauts de colonne (mode colonnes)', () => {
+    exercicesParams.set([
+      { uuid: 'a' },
+      { uuid: 'b' },
+      { uuid: 'c' },
+      { uuid: 'd' },
+      { uuid: 'e' },
+    ])
+    reconcileTbiCards(['a', 'b', 'c', 'd', 'e'])
+    tbiState.update((state) => {
+      state.mode = 'columns'
+      state.nbColumns = 2
+      // sauts mal répartis : les deux premiers exercices, colonne suivante vide
+      state.cards[0].colBreak = true
+      state.cards[1].colBreak = true
+      return state
+    })
+
+    shuffleTbiCards()
+    // 5 exercices sur 2 colonnes : un seul saut, à la position 3 (3 puis 2)
+    expect(get(tbiState).cards.map((c) => c.colBreak)).toEqual([
+      false,
+      false,
+      false,
+      true,
+      false,
+    ])
+  })
+
+  it('shuffleTbiCards ré-équilibre les sauts de colonne de chaque onglet (mode onglets)', () => {
+    exercicesParams.set(
+      ['a', 'b', 'c', 'd', 'e', 'f'].map((uuid) => ({ uuid })),
+    )
+    reconcileTbiCards(['a', 'b', 'c', 'd', 'e', 'f'])
+    tbiState.update((state) => {
+      state.mode = 'tabs'
+      // deux onglets de 3 exercices, chacun affiché sur 2 colonnes
+      state.cards.forEach((card, i) => {
+        card.tab = i < 3 ? 0 : 1
+        card.colBreak = true
+      })
+      state.tabConfigs = [
+        { layout: 'columns', nbColumns: 2 },
+        { layout: 'columns', nbColumns: 2 },
+      ]
+      return state
+    })
+
+    shuffleTbiCards()
+    const state = get(tbiState)
+    // dans chaque onglet : 3 exercices sur 2 colonnes → un seul saut (2 puis 1)
+    for (const tab of [0, 1]) {
+      const breaks = state.cards
+        .filter((c) => c.tab === tab)
+        .map((c) => c.colBreak)
+      expect(breaks).toEqual([false, false, true])
+    }
+  })
+
+  it('shuffleTbiCards ne fait rien avec moins de deux exercices', () => {
+    exercicesParams.set([{ uuid: 'a' }])
+    reconcileTbiCards(['a'])
+    expect(shuffleTbiCards()).toBeNull()
+    expect(get(exercicesParams).map((p) => p.uuid)).toEqual(['a'])
   })
 
   it("deleteTbiCard retire l'exercice et renumérote les onglets", () => {

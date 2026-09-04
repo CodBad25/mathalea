@@ -12,6 +12,17 @@
 
 - Unit Tests: `pnpm prebuild-unit-tests` (runs vitest, must pass before commit)
 - TypeCheck: `pnpm check` (type checks .svelte and .ts files)
+- Exercise draw stability: `pnpm stability:check` (see `documentation/tests/stabilite-exercices.md`)
+
+## Modifying a published exercise
+
+Shared links carry the exercise uuid, the random seed and the chosen parameters
+(`s`, `s2`, `s3`), so the values drawn for a given seed must never change — for
+any parameter value, not just the defaults. Reordering or inserting calls to the
+random generator breaks corrections users have already handed out. Run
+`CHANGED_FILES="<file>" pnpm stability:check` after editing an exercise; if the
+drift is intended, archive the published version with
+`pnpm archive <code>` (e.g. `pnpm archive 6N1E`), or pass the full file path.
 
 ## Project Structure
 

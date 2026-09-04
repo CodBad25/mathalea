@@ -8,8 +8,8 @@
  * ailleurs.
  */
 export const TYPST_PACKAGE_VERSIONS = {
-  'exercise-bank': '0.6.3',
-  taskize: '0.2.9',
+  'exercise-bank': '0.6.4',
+  taskize: '0.2.10',
   vartable: '0.2.4',
   cetz: '0.5.2',
   'cetz-plot': '0.1.4',

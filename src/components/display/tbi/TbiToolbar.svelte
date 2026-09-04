@@ -13,9 +13,11 @@
   type Props = {
     /** Ouvre la modale d'ajout d'exercice (traité par `Tbi.svelte`) */
     onAddExercise: () => void
+    /** Mélange aléatoirement l'ordre des exercices (traité par `Tbi.svelte`) */
+    onShuffle: () => void
   }
 
-  const { onAddExercise }: Props = $props()
+  const { onAddExercise, onShuffle }: Props = $props()
 
   const modes: { value: TbiMode; label: string; icon: string }[] = [
     { value: 'columns', label: 'Colonnes', icon: 'bx-columns' },
@@ -181,6 +183,17 @@
     >
       <i class="bx bx-refresh text-xl"></i>
     </button>
+    {#if $tbiState.mode !== 'free'}
+      <button
+        type="button"
+        class={actionButtonClass}
+        title="Mélanger l'ordre des exercices"
+        aria-label="Mélanger l'ordre des exercices"
+        onclick={onShuffle}
+      >
+        <i class="bx bx-shuffle text-xl"></i>
+      </button>
+    {/if}
     {#each modes as mode (mode.value)}
       <button
         type="button"

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { tbiState } from '../../../../lib/stores/tbiStore'
+  import { flip } from 'svelte/animate'
+  import { tbiIsShuffling, tbiState } from '../../../../lib/stores/tbiStore'
   import TbiCardHost from '../TbiCardHost.svelte'
   import type { TbiItem } from '../tbiTypes'
 
@@ -76,22 +77,29 @@
   {#each groups as colItems, colIndex (colIndex)}
     <div class="flex flex-col gap-4 min-w-0">
       {#each colItems as { item, position } (item.key)}
-        <TbiCardHost
-          {item}
-          showReorder={true}
-          canMoveUp={position > 0}
-          canMoveDown={position < items.length - 1}
-          showColumnBreak={nbColumns > 1}
-          columnBreakDisabled={!rawColBreaks[position] && colBreakLimitReached}
-          {showMoveToTab}
-          {tabsCount}
-          {currentTab}
-          onReorder={(paramsIndex, delta) => {
-            const neighbor = items[position + delta]
-            if (neighbor) onMove(paramsIndex, neighbor.paramsIndex)
+        <div
+          class="min-w-0"
+          animate:flip={{
+            duration: $tbiIsShuffling ? (d) => 300 + Math.sqrt(d) * 6 : 0,
           }}
-          {onDelete}
-        />
+        >
+          <TbiCardHost
+            {item}
+            showReorder={true}
+            canMoveUp={position > 0}
+            canMoveDown={position < items.length - 1}
+            showColumnBreak={nbColumns > 1}
+            columnBreakDisabled={!rawColBreaks[position] && colBreakLimitReached}
+            {showMoveToTab}
+            {tabsCount}
+            {currentTab}
+            onReorder={(paramsIndex, delta) => {
+              const neighbor = items[position + delta]
+              if (neighbor) onMove(paramsIndex, neighbor.paramsIndex)
+            }}
+            {onDelete}
+          />
+        </div>
       {/each}
     </div>
   {/each}

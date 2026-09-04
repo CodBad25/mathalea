@@ -522,14 +522,14 @@
             : ''}"
         >
           {#each $exercicesParams as paramsExercice, i (paramsExercice)}
-            <!-- `inline-block` rend l'exercice monolithique : sans lui,
-                 Firefox le fragmente entre les colonnes malgré
-                 `break-inside`, ce qui décale l'énoncé et fait déborder la
-                 figure sur l'exercice suivant (au chargement comme après un
-                 redimensionnement de la fenêtre). -->
-            <div
-              class="inline-block w-full align-top break-inside-avoid-column"
-            >
+            <!-- `flow-root` isole chaque exercice dans son propre contexte de
+                 formatage de bloc : Firefox respecte alors `break-inside` et ne
+                 fragmente plus l'énoncé entre les colonnes, tandis que Chrome
+                 continue de répartir les exercices dans les deux colonnes.
+                 `inline-block` corrigeait Firefox mais empêchait Chrome de
+                 passer à la seconde colonne (tout restait empilé dans la
+                 première). -->
+            <div class="flow-root break-inside-avoid-column">
               <Exercice
                 {paramsExercice}
                 indiceExercice={i}
@@ -548,14 +548,14 @@
             : ''}"
         >
           {#each $exercicesParams as paramsExercice, i (paramsExercice)}
-            <!-- `inline-block` rend l'exercice monolithique : sans lui,
-                 Firefox le fragmente entre les colonnes malgré
-                 `break-inside`, ce qui décale l'énoncé et fait déborder la
-                 figure sur l'exercice suivant (au chargement comme après un
-                 redimensionnement de la fenêtre). -->
-            <div
-              class="inline-block w-full align-top break-inside-avoid-column"
-            >
+            <!-- `flow-root` isole chaque exercice dans son propre contexte de
+                 formatage de bloc : Firefox respecte alors `break-inside` et ne
+                 fragmente plus l'énoncé entre les colonnes, tandis que Chrome
+                 continue de répartir les exercices dans les deux colonnes.
+                 `inline-block` corrigeait Firefox mais empêchait Chrome de
+                 passer à la seconde colonne (tout restait empilé dans la
+                 première). -->
+            <div class="flow-root break-inside-avoid-column">
               <Exercice
                 {paramsExercice}
                 indiceExercice={i}

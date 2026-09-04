@@ -27,49 +27,57 @@ echo ""
 # ============================================================
 # PHASE 2: Tests unitaires et e2e
 # ============================================================
-# Test 1/6 : Console errors (Playwright)
-echo "🧪 Test 1/6: Console errors..."
+# Test 1/7 : Console errors (Playwright)
+echo "🧪 Test 1/7: Console errors..."
 if CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors; then
   STATUS_CONSOLE=ok
 else
   STATUS_CONSOLE=ko
 fi
 
-# Test 2/6 : All exercises vitest (sans Playwright)
-echo "🧪 Test 2/6: All exercises vitest..."
+# Test 2/7 : All exercises vitest (sans Playwright)
+echo "🧪 Test 2/7: All exercises vitest..."
 if CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run; then
   STATUS_VITEST=ok
 else
   STATUS_VITEST=ko
 fi
 
-# Test 3/6 : Integration interactivity
-echo "🧪 Test 3/6: Integration interactivity..."
+# Test 3/7 : Integration interactivity
+echo "🧪 Test 3/7: Integration interactivity..."
 if CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/integration/interactivity_all.test.ts --run; then
   STATUS_INTERACTIF=ok
 else
   STATUS_INTERACTIF=ko
 fi
-# Test 4/6 : AMCnum report
-echo "🧪 Test 4/6: AMCnum report..."
+# Test 4/7 : AMCnum report
+echo "🧪 Test 4/7: AMCnum report..."
 if CHANGED_FILES="$CHANGED_FILES" pnpm vitest src/lib/amc/report-amcnum.test.ts --run; then
   STATUS_AMCNUM=ok
 else
   STATUS_AMCNUM=ko
 fi
 
-echo "🧪 Test 5/6: Compilation latex..."
+echo "🧪 Test 5/7: Compilation latex..."
 if CHANGED_FILES="$CHANGED_FILES" STYLES="ProfMaquette,Can,Coopmaths" pnpm vitest tests/e2e/tests/pdfexports/pdfexports.test.ts --run; then
   STATUS_COMPILE=ok
 else
   STATUS_COMPILE=ko
 fi
 
-echo "🧪 Test 6/6: Line breaks..."
+echo "🧪 Test 6/7: Line breaks..."
 if CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/e2e/tests/latex_breaks/latex_breaks.test.ts --run; then
   STATUS_BREAKS=ok
 else
   STATUS_BREAKS=ko
+fi
+
+# cf documentation/tests/stabilite-exercices.md
+echo "🧪 Test 7/7: Stabilité des tirages..."
+if CHANGED_FILES="$CHANGED_FILES" pnpm stability:check; then
+  STATUS_STABILITE=ok
+else
+  STATUS_STABILITE=ko
 fi
 
 
@@ -86,6 +94,7 @@ echo "════════════════════════�
 [ "$STATUS_AMCNUM" = "ok" ] && echo "✅ AMCnum report" || echo "❌ AMCnum report"
 [ "$STATUS_COMPILE" = "ok" ] && echo "✅ Compilation latex" || echo "❌ Compilation latex"
 [ "$STATUS_BREAKS" = "ok" ] && echo "✅ Latex line breaks" || echo "❌ Latex line breaks"
+[ "$STATUS_STABILITE" = "ok" ] && echo "✅ Stabilité des tirages" || echo "❌ Stabilité des tirages"
 
 OK_COUNT=0
 [ "$STATUS_CONSOLE" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
@@ -94,11 +103,12 @@ OK_COUNT=0
 [ "$STATUS_AMCNUM" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
 [ "$STATUS_COMPILE" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
 [ "$STATUS_BREAKS" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
+[ "$STATUS_STABILITE" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
 
 echo ""
-echo "Résultat global: $OK_COUNT/6 sous-tests OK"
+echo "Résultat global: $OK_COUNT/7 sous-tests OK"
 echo "═══════════════════════════════════════════"
 # Fail si au moins un test a échoué
-if [ "$OK_COUNT" -lt 6 ]; then
+if [ "$OK_COUNT" -lt 7 ]; then
   exit 1
 fi

@@ -381,6 +381,85 @@ export function reorderTbiCard(from: number, to: number): boolean {
 }
 
 /**
+ * Actif brièvement pendant un mélange aléatoire de l'ordre des exercices.
+ * Les dispositions ne déclenchent l'animation de glissement des cartes
+ * (FLIP) que lorsqu'il est vrai, pour garder le glisser-déposer et les
+ * flèches de réordonnancement instantanés.
+ */
+export const tbiIsShuffling = writable(false)
+
+/**
+ * Mélange aléatoirement l'ordre des exercices (Fisher-Yates). La même
+ * permutation est appliquée à `exercicesParams` (ordre canonique, persisté
+ * dans l'URL) et aux états de carte, pour que le zoom et le saut de colonne
+ * de chaque exercice le suivent dans sa nouvelle position. Les numéros
+ * d'onglet sont ensuite renumérotés dans l'ordre de première apparition
+ * (comme `moveCardToTab`) : le regroupement des exercices par onglet est
+ * conservé, mais les onglets s'affichent dans le nouvel ordre — sans quoi un
+ * mélange serait invisible en mode onglets (l'onglet suivrait sa carte).
+ * `tabConfigs` suit la renumérotation.
+ *
+ * Les sauts de colonne se déplacent avec leur carte : après un mélange, ils
+ * peuvent se retrouver mal répartis (jusqu'à une colonne vide). On les
+ * ré-équilibre donc comme lors d'un changement du nombre de colonnes, sur
+ * la disposition en colonnes de la page (mode `columns`) comme sur celle de
+ * chaque onglet en disposition colonnes (mode `tabs`).
+ * @returns la permutation appliquée (`order[nouvelIndice] = ancienIndice`),
+ *   ou `null` s'il y a moins de deux exercices.
+ */
+export function shuffleTbiCards(): number[] | null {
+  const n = get(exercicesParams).length
+  if (n < 2) return null
+  const order = Array.from({ length: n }, (_, i) => i)
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[order[i], order[j]] = [order[j], order[i]]
+  }
+  // éviter le cas (rare) où le tirage laisse l'ordre inchangé
+  if (order.every((oldIndex, newIndex) => oldIndex === newIndex)) {
+    ;[order[0], order[1]] = [order[1], order[0]]
+  }
+  exercicesParams.update((list) => order.map((oldIndex) => list[oldIndex]))
+  tbiState.update((state) => {
+    state.cards = order.map((oldIndex) => state.cards[oldIndex])
+    // renumérotation des onglets dans l'ordre de première apparition
+    const remap = new Map<number, number>()
+    for (const card of state.cards) {
+      if (!remap.has(card.tab)) remap.set(card.tab, remap.size)
+      card.tab = remap.get(card.tab)!
+    }
+    const newConfigs: TbiTabConfig[] = []
+    remap.forEach((newTab, oldTab) => {
+      newConfigs[newTab] = state.tabConfigs[oldTab] ?? defaultTbiTabConfig()
+    })
+    state.tabConfigs = newConfigs
+    return state
+  })
+  // ré-équilibrage des sauts de colonne sur le nouvel ordre
+  const state = get(tbiState)
+  if (state.mode === 'tabs') {
+    const tabIndices = new Map<number, number[]>()
+    state.cards.forEach((card, i) => {
+      const list = tabIndices.get(card.tab) ?? []
+      list.push(i)
+      tabIndices.set(card.tab, list)
+    })
+    tabIndices.forEach((indices, tab) => {
+      const config = state.tabConfigs[tab]
+      if (config?.layout === 'columns') {
+        balanceColumnBreaks(indices, config.nbColumns)
+      }
+    })
+  } else if (state.mode === 'columns') {
+    balanceColumnBreaks(
+      state.cards.map((_, i) => i),
+      state.nbColumns,
+    )
+  }
+  return order
+}
+
+/**
  * Supprime un exercice : retire son entrée de exercicesParams (source
  * canonique, persistée dans l'URL) ainsi que l'état de carte associé.
  * Les onglets sont ensuite renumérotés (0..k-1) comme moveCardToTab.

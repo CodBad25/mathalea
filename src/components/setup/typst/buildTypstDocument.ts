@@ -1113,12 +1113,29 @@ export interface TypstDocumentOptions {
   /** Style des badges du paquet exercise-bank */
   badgeStyle: BadgeStyle
   /**
+   * Place le badge (« Exercice 1 ») dans sa propre colonne à gauche de
+   * l'énoncé (`margin`, comportement d'origine) ou seul sur une ligne
+   * d'en-tête, l'énoncé prenant toute la largeur en dessous (`above`).
+   * `above` est surtout utile en colonnes, où la colonne du badge coûte une
+   * bonne part de la largeur, et avec les énoncés numérotés, dont le retrait
+   * s'ajoute à celui du badge.
+   */
+  badgePosition: BadgePosition
+  /**
    * Couleur des badges d'exercice, de correction et des titres
    * (expression Typst, ex : `black`). La correction suit la même couleur.
    */
   badgeColor: string
   /** Nombre de versions du sujet (Sujet A, B...) générées à la suite */
   nbVersions: number
+  /**
+   * Le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions
+   * commencent sur une page impaire, une page blanche (sans en-tête ni pied
+   * de page) étant insérée si besoin : l'impression recto-verso en série ne
+   * fait alors jamais commencer une partie au dos de la précédente. Décoché,
+   * ces parties enchaînent sur la page suivante.
+   */
+  oddPageStarts: boolean
   /** Page de garde placée en tête de chaque sujet (`aucune` par défaut) */
   coverPage: TypstCoverOptions
   /**
@@ -1335,23 +1352,61 @@ export const MATH_FONTS = [
 ] as const
 
 /**
- * Styles de badge proposés par le paquet exercise-bank.
- * Le style « margin » du paquet est volontairement absent : il réserve une
- * colonne de titre figée à 3,35 cm (non réglable), ce qui décale trop le
- * contenu ; `border-accent` couvre le besoin d'un titre en marge.
+ * Styles de badge proposés par le paquet exercise-bank : les douze du paquet,
+ * dans l'ordre d'affichage de la liste des réglages (styles pleine largeur
+ * d'abord, puis les badges en marge).
+ *
+ * `margin` (titre dans une colonne latérale) était écarté tant que sa colonne
+ * était figée à 3,35 cm — sur un document en deux colonnes, l'énoncé n'était
+ * pas plus large que son titre. Depuis exercise-bank 0.6.4, cette colonne se
+ * replie d'elle-même sous `margin-fold-below` (par défaut trois fois sa
+ * largeur, soit 10 cm : franchi dès deux colonnes en A4) : le titre passe
+ * alors sur une ligne d'en-tête et l'énoncé prend toute la largeur.
  */
 export const BADGE_STYLES = [
+  // styles pleine largeur : le titre occupe une ligne à lui seul, la
+  // « Position du titre » n'a rien à y changer
   'border-accent',
-  'box',
+  'underline',
   'rounded-box',
   'header-card',
-  'underline',
+  // styles qui dessinent un badge : sa position est réglable, « En marge »
+  // (colonne à gauche de l'énoncé) ou « Au-dessus »
+  'margin',
+  'box',
   'pill',
   'tag',
   'circled',
   'filled-circle',
+  'rect',
+  'filled-rect',
 ] as const
 export type BadgeStyle = (typeof BADGE_STYLES)[number]
+
+/**
+ * Styles dont le titre occupe déjà toute la largeur : ils n'ont pas de
+ * colonne de badge, donc `badge-position` ne change rien à leur allure. Le
+ * réglage « Position du titre » est désactivé pour eux (voir `Typst.svelte`).
+ */
+export const FULL_WIDTH_BADGE_STYLES = [
+  'border-accent',
+  'underline',
+  'rounded-box',
+  'header-card',
+] as const
+
+/** Le style place-t-il son titre à côté de l'énoncé (colonne de badge) ? */
+export function hasSideLabel(style: BadgeStyle): boolean {
+  return !(FULL_WIDTH_BADGE_STYLES as readonly string[]).includes(style)
+}
+
+/**
+ * Position du badge par rapport à l'énoncé (`badge-position` du paquet
+ * exercise-bank, depuis 0.6.2) : dans une colonne à gauche, ou seul sur une
+ * ligne d'en-tête au-dessus d'un énoncé pleine largeur.
+ */
+export const BADGE_POSITIONS = ['margin', 'above'] as const
+export type BadgePosition = (typeof BADGE_POSITIONS)[number]
 
 /**
  * Styles où le badge est placé dans une colonne à gauche du contenu.
@@ -1375,6 +1430,32 @@ const MARGIN_BADGE_WIDTH: Partial<
   tag: { exo: '2.7cm', corr: '3.5cm' },
   circled: { exo: '1.4cm', corr: '1.4cm' },
   'filled-circle': { exo: '1.4cm', corr: '1.4cm' },
+  // `rect`/`filled-rect` : rectangle au seul numéro, comme les styles
+  // cerclés — même largeur de colonne
+  rect: { exo: '1.4cm', corr: '1.4cm' },
+  'filled-rect': { exo: '1.4cm', corr: '1.4cm' },
+}
+
+/**
+ * Largeur de la colonne du badge à imposer au paquet, ou `undefined` quand il
+ * n'y a pas de colonne à régler : style pleine largeur, ou badge placé
+ * au-dessus de l'énoncé (`badge-position: "above"`, qui supprime la colonne).
+ */
+function marginBadgeWidth(
+  options: TypstDocumentOptions,
+): { exo: string; corr: string } | undefined {
+  if (badgePosition(options) === 'above') return undefined
+  return MARGIN_BADGE_WIDTH[options.badgeStyle]
+}
+
+/**
+ * Position du badge effectivement appliquée : le réglage n'a de sens que
+ * pour les styles à titre latéral, les styles pleine largeur restent en
+ * `margin` (leur valeur par défaut, sans effet chez eux) quel que soit le
+ * réglage laissé par un autre style.
+ */
+function badgePosition(options: TypstDocumentOptions): BadgePosition {
+  return hasSideLabel(options.badgeStyle) ? options.badgePosition : 'margin'
 }
 
 export const defaultTypstDocumentOptions: TypstDocumentOptions = {
@@ -1403,8 +1484,10 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   minimalCorrections: false,
   showQrCode: false,
   badgeStyle: 'underline',
+  badgePosition: 'margin',
   badgeColor: 'black',
   nbVersions: 1,
+  oddPageStarts: true,
   answerLines: 0,
   coverPage: {
     template: 'aucune',
@@ -1421,6 +1504,23 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
     showSignature: true,
     showNote: true,
   },
+}
+
+/**
+ * Saut de page ouvrant une partie du document (bloc « Corrections », sujet
+ * suivant). Avec le réglage « Corrigés et sujets suivants sur une page
+ * impaire », Typst insère au besoin une page blanche pour que la partie tombe
+ * sur un recto en impression recto-verso. La parité est celle du compteur de
+ * pages, remis à 1 (impair) au début de chaque sujet : elle suit donc la
+ * parité physique.
+ */
+function sectionPageBreak(options: TypstDocumentOptions): string {
+  if (!options.oddPageStarts) return '#pagebreak(weak: true)'
+  // `set page` dans un bloc de code : la page blanche éventuellement insérée
+  // par `to: "odd"` naît dans ce bloc, elle est donc sans en-tête ni pied de
+  // page (sinon elle afficherait un numéro « 4/3 » incongru) ; la page
+  // courante et celle de la partie qui suit, hors du bloc, gardent les leurs.
+  return '#{ set page(header: none, footer: none); pagebreak(to: "odd", weak: true) }'
 }
 
 /** Applique le réglage « Correction minimale » aux corrections des exercices */
@@ -2305,7 +2405,7 @@ function buildCanVersionContent(
     renderLines.push('// ----- Corrections -----')
     renderLines.push('#if corrige [')
     renderLines.push('  // les corrections commencent sur une nouvelle page')
-    renderLines.push('  #pagebreak(weak: true)')
+    renderLines.push(`  ${sectionPageBreak(options)}`)
     renderLines.push(
       '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
     )
@@ -2460,7 +2560,7 @@ function buildVersionContent(
       renderLines.push('// ----- Corrections -----')
       renderLines.push('#if corrige [')
       renderLines.push('  // les corrections commencent sur une nouvelle page')
-      renderLines.push('  #pagebreak(weak: true)')
+      renderLines.push(`  ${sectionPageBreak(options)}`)
       renderLines.push(
         '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
       )
@@ -2582,7 +2682,7 @@ function buildVersionContent(
       bankLines.push(')')
     }
 
-    const marginWidth = MARGIN_BADGE_WIDTH[options.badgeStyle]
+    const marginWidth = marginBadgeWidth(options)
     renderLines.push('// ----- Énoncés -----')
     // à partir de la 2e version, la colonne des badges a pu être élargie par
     // la section Corrections de la version précédente (réglage global du
@@ -2614,7 +2714,7 @@ function buildVersionContent(
       renderLines.push('// ----- Corrections -----')
       renderLines.push('#if corrige [')
       renderLines.push('  // les corrections commencent sur une nouvelle page')
-      renderLines.push('  #pagebreak(weak: true)')
+      renderLines.push(`  ${sectionPageBreak(options)}`)
       renderLines.push(
         '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
       )
@@ -2948,8 +3048,14 @@ export function buildTypstDocument(
     }
   }
   lines.push('')
+  // Marge horizontale : les styles de badge à colonne latérale (`box`,
+  // `pill`, `circled`…) décalent déjà le contenu vers la droite, la marge de
+  // page reste donc à 15 mm ; les styles pleine largeur (et les modes sans
+  // badge, fusionné et « Course aux nombres ») n'ont rien de tel et gagnent
+  // une marge plus fine.
+  const badgeColumn = usesExerciseBank && marginBadgeWidth(options) != null
   lines.push(
-    `#set page(paper: "${options.pageFormat}", flipped: ${options.orientation === 'landscape'}, margin: (x: 15mm, y: 15mm),`,
+    `#set page(paper: "${options.pageFormat}", flipped: ${options.orientation === 'landscape'}, margin: (x: ${badgeColumn ? '15mm' : '10mm'}, y: 15mm),`,
   )
   lines.push(
     ...pageFooter(options.headerStyle, options.showFooter, exportMode).map(
@@ -3012,6 +3118,11 @@ export function buildTypstDocument(
     lines.push('  corr-loc: "end-chapter",')
     lines.push('  display: if corrige { "both" } else { "ex" },')
     lines.push(`  badge-style: "${options.badgeStyle}",`)
+    // `above` : le badge passe seul sur une ligne d'en-tête et l'énoncé prend
+    // toute la largeur en dessous (pas de colonne de badge à dimensionner)
+    if (badgePosition(options) !== 'margin') {
+      lines.push(`  badge-position: "${badgePosition(options)}",`)
+    }
     lines.push('  badge-color: couleur,')
     // le corrigé est placé dans le champ `solution` (étiquette « Correction ») :
     // sa couleur suit donc `solution-color`, réglée sur la couleur des badges
@@ -3026,7 +3137,7 @@ export function buildTypstDocument(
     // contenu (le paquet dimensionne sinon la colonne sur « Correction 100 »).
     // On règle ici la largeur des énoncés ; celle des corrections est
     // élargie juste avant leur affichage.
-    const marginWidth = MARGIN_BADGE_WIDTH[options.badgeStyle]
+    const marginWidth = marginBadgeWidth(options)
     if (marginWidth != null) {
       lines.push('  label-extra: 0pt,')
       lines.push(`  margin-position: ${marginWidth.exo},`)
@@ -3132,7 +3243,7 @@ export function buildTypstDocument(
   lines.push(...primary.renderLines)
   for (const [i, version] of extra.entries()) {
     lines.push(subjectMarker(i + 1))
-    lines.push('#pagebreak(weak: true)')
+    lines.push(sectionPageBreak(options))
     // chaque sujet recommence sa propre pagination et sa numérotation
     // d'exercices (compteur global du paquet exercise-bank)
     lines.push('#counter(page).update(1)')
