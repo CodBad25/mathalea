@@ -76,6 +76,13 @@
         "presentation": "Choisir des questions au hasard parmi une grande collection.",
         "imgPath": "images/apps/app_questions_de_cours.png",
         "uuid": "afd39"
+      },
+      {
+        "title": "Série aléatoire",
+        "typeExercice": "tierce",
+        "presentation": "Composer un lien vers une série d'exercices tirés au sort parmi les niveaux, thèmes ou exercices choisis.",
+        "imgPath": "images/apps/app_serie_aleatoire.svg",
+        "uuid": "6b74b"
       }
     ]
   }

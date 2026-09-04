@@ -174,6 +174,8 @@ exports.
 
 ## Voir aussi
 
+- [Série aléatoire](serie-aleatoire.md) : l'autre app native, dont le sélecteur
+  suit le même contrat (`settings`, styles partagés)
 - [Apps externes](apps-externes.md)
 - [Convention des custom elements](../interactivite/custom-elements.md)
 - [Système d'interactivité](../interactivite/systeme-interactivite.md)
