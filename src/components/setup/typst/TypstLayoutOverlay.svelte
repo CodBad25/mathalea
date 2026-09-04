@@ -43,8 +43,11 @@
     COLUMN_BREAK_SNIPPET,
     PAGE_BREAK_SNIPPET,
     WRITING_LINES_POSITIONS,
+    WRITING_LINES_STYLES,
     type CoverTemplate,
     type WritingLinesPosition,
+    type WritingLinesSetting,
+    type WritingLinesStyle,
   } from './buildTypstDocument'
   import CoverDateField from './CoverDateField.svelte'
 
@@ -200,19 +203,9 @@
     codeOverridesCanReponse?: Record<number, string>
     onEditCanRow: (row: number) => void
     /** Lignes en pointillés réglées par exercice (valeurs lues dans le code) */
-    writingLinesValues?: Record<
-      number,
-      { position: WritingLinesPosition; count: number; spacing: number }
-    >
+    writingLinesValues?: Record<number, WritingLinesSetting>
     /** Règle (`value`) ou retire (`null`) les lignes en pointillés de l'exercice num */
-    onSetWritingLines: (
-      num: number,
-      value: {
-        position: WritingLinesPosition
-        count: number
-        spacing: number
-      } | null,
-    ) => void
+    onSetWritingLines: (num: number, value: WritingLinesSetting | null) => void
   }
 
   let {
@@ -487,16 +480,24 @@
     afterEachQuestion: 'Après chaque question',
   }
 
+  /** Libellés des traits proposés pour les lignes */
+  const WRITING_LINES_STYLE_LABELS: Record<WritingLinesStyle, string> = {
+    pointilles: 'Pointillés',
+    points: 'Points',
+    plein: 'Trait',
+  }
+
   /**
    * Réglage par défaut à l'ouverture du panneau d'un exercice sans lignes :
    * 0 ligne, pour qu'aucune n'apparaisse tant que le professeur n'a pas
    * incrémenté le compteur lui-même.
    */
-  const WRITING_LINES_DEFAULT: {
-    position: WritingLinesPosition
-    count: number
-    spacing: number
-  } = { position: 'endOfExercise', count: 0, spacing: 2 }
+  const WRITING_LINES_DEFAULT: WritingLinesSetting = {
+    position: 'endOfExercise',
+    count: 0,
+    spacing: 2,
+    style: 'pointilles',
+  }
 
   /** Numéro de l'exercice dont le panneau de lignes en pointillés est ouvert */
   let openWritingLines: number | null = $state(null)
@@ -517,6 +518,11 @@
     position: WritingLinesPosition,
   ) {
     writingLinesDraft = { ...writingLinesDraft, position }
+    onSetWritingLines(num, writingLinesDraft)
+  }
+
+  function setWritingLinesStyle(num: number, style: WritingLinesStyle) {
+    writingLinesDraft = { ...writingLinesDraft, style }
     onSetWritingLines(num, writingLinesDraft)
   }
 
@@ -677,9 +683,9 @@
 {/snippet}
 
 {#snippet writingLinesPanel(num: number)}
-  <!-- panneau de réglage des lignes en pointillés (pour que l'élève y
-       écrive) de l'exercice `num` : emplacement, nombre de lignes,
-       espacement. Régénère le code à chaque changement (voir onSetWritingLines). -->
+  <!-- panneau de réglage des lignes (pour que l'élève y écrive) de
+       l'exercice `num` : emplacement, trait (pointillés ou points), nombre
+       de lignes, espacement. Régénère le code à chaque changement (voir onSetWritingLines). -->
   {#if openWritingLines === num}
     <div class="absolute top-6 right-0 z-30 w-64 space-y-2 typst-panel p-2">
       <div class="flex overflow-hidden rounded border border-gray-300">
@@ -694,6 +700,21 @@
             onclick={() => setWritingLinesPosition(num, position)}
           >
             {WRITING_LINES_POSITION_LABELS[position]}
+          </button>
+        {/each}
+      </div>
+      <div class="flex overflow-hidden rounded border border-gray-300">
+        {#each WRITING_LINES_STYLES as style}
+          <button
+            type="button"
+            class="flex-1 px-2 py-0.5 text-[0.7rem] {writingLinesDraft.style ===
+            style
+              ? 'bg-coopmaths-action text-coopmaths-canvas'
+              : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
+            aria-pressed={writingLinesDraft.style === style}
+            onclick={() => setWritingLinesStyle(num, style)}
+          >
+            {WRITING_LINES_STYLE_LABELS[style]}
           </button>
         {/each}
       </div>
