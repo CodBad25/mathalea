@@ -54,12 +54,17 @@ export default class MultiplierUnNombreParPuissanceDeDix extends Exercice {
       3,
       ' 1 : Dizaines, centaines, milliers\n 2 : Dixièmes, centièmes, millièmes\n 3 : Mélange',
     ]
+    this.besoinFormulaire4CaseACocher = [
+      'Afficher le glisse-nombre dans la correction',
+      true,
+    ]
 
     this.nbQuestions = 5 // Ici le nombre de questions
 
     this.sup = false
     this.sup2 = true
     this.sup3 = 3
+    this.sup4 = true
   }
 
   nouvelleVersion() {
@@ -185,7 +190,7 @@ export default class MultiplierUnNombreParPuissanceDeDix extends Exercice {
           texte += '<br>' + props.texte
         }
       }
-      if (context.isHtml)
+      if (context.isHtml && this.sup4)
         texteCorr += mathalea2d(
           { xmin: 2.5, xmax: 27.5, ymin: -5, ymax: 5.5 },
           glisseNombre(exemple, choixAlea - 3),

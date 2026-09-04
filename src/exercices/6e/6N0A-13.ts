@@ -48,12 +48,20 @@ export default class ExerciceMultiplierOuDiviserUnNombreEntierPar101001000 exten
       3,
       '1 : Multiplication\n2 : Division\n3 : Mélange',
     ]
+    this.besoinFormulaire2CaseACocher = [
+      'Afficher le tableau de numération (glisse-nombre)',
+      true,
+    ]
     this.sup = 3
+    this.sup2 = true
   }
 
   nouvelleVersion() {
     this.consigne =
       this.sup === 1 ? 'Donner le résultat.' : "Donner l'écriture décimale."
+    // reinit() ne remet pas this.introduction à zéro : on le vide ici pour que
+    // décocher l'option retire bien le tableau de numération à la régénération.
+    this.introduction = ''
     const listeQuestions =
       this.sup === 3
         ? combinaisonListes(rangeMinMax(1, 2), this.nbQuestions)
@@ -85,7 +93,7 @@ export default class ExerciceMultiplierOuDiviserUnNombreEntierPar101001000 exten
           ' = ' +
           miseEnEvidence(texNombre(a / b)) +
           ' $'
-        if (context.isHtml && i === 0) {
+        if (context.isHtml && i === 0 && this.sup2) {
           this.introduction = `<glisse-nombre number="${texNombre(a / b)}"/>`
         }
       } else {
@@ -98,7 +106,7 @@ export default class ExerciceMultiplierOuDiviserUnNombreEntierPar101001000 exten
           ' = ' +
           miseEnEvidence(texNombre(a * b)) +
           ' $'
-        if (context.isHtml && i === 0) {
+        if (context.isHtml && i === 0 && this.sup2) {
           this.introduction = `<glisse-nombre number="${a}"/>`
         }
       }

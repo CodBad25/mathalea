@@ -46,9 +46,14 @@ export default class DiviserUnNombreParPuissanceDeDix extends Exercice {
       'Exercice avec un raisonnement associé',
       true,
     ]
+    this.besoinFormulaire3CaseACocher = [
+      'Afficher le glisse-nombre dans la correction',
+      true,
+    ]
     this.nbQuestions = 5 // Ici le nombre de questions
     this.sup = false
     this.sup2 = true
+    this.sup3 = true
   }
 
   nouvelleVersion() {
@@ -141,7 +146,7 @@ export default class DiviserUnNombreParPuissanceDeDix extends Exercice {
       if (this.interactif) {
         texte += '<br>' + props.texte
       }
-      if (context.isHtml)
+      if (context.isHtml && this.sup3)
         texteCorr += mathalea2d(
           { xmin: 2.5, xmax: 27.5, ymin: -5, ymax: 5.5 },
           glisseNombre(exemple, choixAlea - 3),
