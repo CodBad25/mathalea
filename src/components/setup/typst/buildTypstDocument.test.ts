@@ -1404,7 +1404,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // les questions des deux exercices se suivent dans le même tableau
     expect(code).toContain('[$7 times 5$],')
     expect(code).toContain('[Combien de boules ?],')
-    expect(code).toContain('[$...$ boules],')
+    expect(code).toContain('[$... ... ...$ boules],')
     // corrections numérotées à la suite, dans l'ordre des lignes, et
     // réparties en colonnes (les réponses tiennent en quelques caractères)
     expect(code).toContain('#if corrige [')
@@ -1512,7 +1512,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code.match(/Courbe de \$f\$/g)).toHaveLength(1)
     // la deuxième question n'a plus de cellule d'énoncé, seulement sa réponse
     expect(code).toContain('none,')
-    expect(code).toContain('$S = ...$')
+    expect(code).toContain('$S = ... ... ...$')
     // la modale d'édition de cette ligne ne propose donc pas d'énoncé
     expect(
       getGeneratedCanRowCode(
