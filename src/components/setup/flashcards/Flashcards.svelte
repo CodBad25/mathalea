@@ -706,6 +706,22 @@
           </div>
 
           <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="flashcards-separator-thickness-input">
+              Épaisseur des traits de découpe (pt)
+            </label>
+            <input
+              id="flashcards-separator-thickness-input"
+              type="number"
+              min="0.2"
+              max="4"
+              step="0.1"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.separatorThickness}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
+          <div class="flex items-center justify-between gap-4 text-sm">
             <label for="flashcards-question-fontsize-input">
               Taille des questions (pt)
             </label>
