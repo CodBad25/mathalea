@@ -48,8 +48,9 @@ describe('latexMathToTypst', () => {
   it('convertit \\xrightarrow/\\xleftarrow en parenthésant les étiquettes', () => {
     // programmes de calcul (ex. 6N0B-4) : sans parenthèses, seul le premier
     // jeton irait en exposant et le reste de la formule serait absorbé à côté
+    // (le `\ldots` initial est un espace-réponse élève, élargi ×3)
     expect(latexMathToTypst('\\ldots \\xrightarrow{\\div 2} 15')).toBe(
-      '... limits(->)^(div 2) 15',
+      '... ... ... limits(->)^(div 2) 15',
     )
     // l'étiquette peut être dans l'argument optionnel (rendue sous la flèche)
     expect(latexMathToTypst('14 \\xleftarrow[\\times 2]{} 7')).toBe(
@@ -57,6 +58,18 @@ describe('latexMathToTypst', () => {
     )
     // sans étiquette : flèche nue, pas d'exposant vide qui gobe la suite
     expect(latexMathToTypst('a \\xrightarrow{} b')).toBe('a -> b')
+  })
+
+  it('élargit ×3 un espace-réponse `\\ldots` isolé mais épargne les ellipses de suites', () => {
+    // blanc à compléter seul : trop court pour écrire une réponse → triplé
+    expect(latexMathToTypst('\\ldots')).toBe('... ... ...')
+    expect(latexMathToTypst('3 \\times \\ldots = 12')).toBe(
+      '3 times ... ... ... = 12',
+    )
+    // vraie ellipse de suite (bordée de virgules) : inchangée
+    expect(latexMathToTypst('x_1, \\ldots, x_n')).not.toContain('... ...')
+    expect(latexMathToTypst('x_1, \\ldots, x_n')).toContain('...')
+    expect(latexMathToTypst('x_1 , \\ldots , x_n')).not.toContain('... ...')
   })
 
   it('parenthèse les étiquettes multi-jetons de \\overset/\\underset', () => {
@@ -481,11 +494,12 @@ describe('htmlToTypst', () => {
     expect(enonce).toContain('mm')
     expect(enonce).not.toContain('Lg')
     // et en mode texte, derrière les pointillés à compléter : seule l'unité
+    // (l'espace-réponse `\ldots` isolé est élargi ×3)
     expect(
       htmlToTypst('alors une pile de $18$ pièces a une hauteur de $\\ldots$ \\Lg[mm]{}.'),
-    ).toBe('alors une pile de $18$ pièces a une hauteur de $...$ mm.')
+    ).toBe('alors une pile de $18$ pièces a une hauteur de $... ... ...$ mm.')
     // `\Prix` : l'argument optionnel est le nombre de décimales, l'unité est €
-    expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$...$ €.')
+    expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$... ... ...$ €.')
     expect(htmlToTypst('coûte $\\Prix[0]{12}$')).toContain('12')
     expect(htmlToTypst('coûte $\\Prix[0]{12}$')).not.toContain('Prix')
     expect(htmlToTypst('coûte \\Prix{12.5}')).toBe('coûte 12,50~€')

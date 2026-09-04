@@ -464,6 +464,17 @@ function preprocessTex(tex: string): string {
   // l'indentation du template literal de l'exercice) : on les ramène à une
   // espace ordinaire.
   output = output.replace(/[\t\f\v\r]/g, ' ')
+  // Espaces-réponses des élèves : dans les énoncés MathALÉA, un blanc à
+  // compléter est rendu par un `\ldots` seul dans la formule (voir
+  // `remplisLesBlancs`, et les `canAnswers`/`canReponseACompleter` des
+  // « Course aux nombres »). Le `...` produit par tex2typst est trop court pour
+  // qu'un élève y écrive sa réponse : on le triple pour ~3× plus de place.
+  // On épargne les vraies ellipses de suites, reconnaissables à la virgule qui
+  // borde le `\ldots` (`x_1, \ldots, x_n`).
+  output = output.replace(
+    /(?<![,][ \t~]{0,4})\\ldots(?![a-zA-Z])(?![ \t~]{0,4}[,])/g,
+    '\\ldots\\ldots\\ldots',
+  )
   output = stripLatexSizeCommands(output)
   // tex2typst échoue sur \displaystyle à l'intérieur des environnements
   // d'alignement, alors que la commande y est redondante : les lignes sont
