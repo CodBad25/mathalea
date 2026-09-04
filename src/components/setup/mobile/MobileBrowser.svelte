@@ -13,7 +13,6 @@
     type JSONReferentielEnding,
     type ReferentielInMenu,
   } from '../../../lib/types/referentiels'
-  import { buildResourcesSet } from '../../../lib/stores/referentielsStore'
   import MobileCarouselCards from '../start/presentationalComponents/carousel/MobileCarouselCards.svelte'
   import MobileEndingItem from './MobileEndingItem.svelte'
   import MobileSearch from './MobileSearch.svelte'
@@ -31,9 +30,17 @@
     referentiels: ReferentielInMenu[]
     navigate: (path: string[]) => void
     addExercise: (ending: JSONReferentielEnding) => void
+    /** Ouvre la recherche plein écran avec aperçu (Ctrl/Cmd+K mobile). */
+    openSearch: () => void
   }
 
-  const { path, referentiels, navigate, addExercise }: Props = $props()
+  const {
+    path,
+    referentiels,
+    navigate,
+    addExercise,
+    openSearch,
+  }: Props = $props()
 
   const lang = getLang()
 
@@ -48,7 +55,6 @@
         ]),
   )
   const children = $derived(splitChildren(node))
-  const resourcesSet = $derived(buildResourcesSet(referentiels))
 
   /**
    * Compte le nombre de fois où une ressource est déjà dans la sélection.
@@ -71,6 +77,9 @@
   {#if lang === 'fr-FR'}
     <MobileCarouselCards />
   {/if}
+  <div class="px-4 pt-4">
+    <MobileSearch onOpen={openSearch} />
+  </div>
   <div class="flex flex-col gap-3 p-4">
     {#each mobileMenuSections as menuSection (menuSection.id)}
       <MobileTile
@@ -81,9 +90,6 @@
         onclick={() => navigate([menuSection.id])}
       />
     {/each}
-  </div>
-  <div class="px-4 pb-4">
-    <MobileSearch {resourcesSet} {addExercise} {selectedCount} />
   </div>
 {:else if path.length === 1}
   <!-- Niveaux de la rubrique choisie -->
