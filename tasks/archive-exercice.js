@@ -11,9 +11,10 @@
  * distribués deviennent faux.
  *
  * Ce script applique la règle du dépôt :
- *   - la version publiée (celle de HEAD) est recopiée dans `<exercice>-old.ts`,
- *     avec son uuid d'origine et sans référence dans les menus : les anciens
- *     liens continuent de fonctionner ;
+ *   - la version publiée (celle de HEAD) est recopiée dans `<exercice>-old.ts`
+ *     (`-old2.ts`, `-old3.ts`… si une archive existe déjà), avec son uuid
+ *     d'origine et sans référence dans les menus : les anciens liens
+ *     continuent de fonctionner ;
  *   - le fichier de travail garde ses références et reçoit un uuid tout neuf :
  *     les nouveaux utilisateurs voient la version corrigée.
  *
@@ -47,10 +48,7 @@ function chercheParCode(code) {
     for (const entree of fs.readdirSync(dossier, { withFileTypes: true })) {
       const complet = path.join(dossier, entree.name)
       if (entree.isDirectory()) parcours(complet)
-      else if (
-        entree.name === `${code}.ts` ||
-        entree.name === `${code}.js`
-      ) {
+      else if (entree.name === `${code}.ts` || entree.name === `${code}.js`) {
         trouves.push(complet.replace(/\\/g, '/'))
       }
     }
@@ -88,23 +86,23 @@ if (!/^src\/exercices\/.+\.(ts|js)$/.test(chemin)) {
   process.exit(1)
 }
 
-if (/-old\.(ts|js)$/i.test(chemin)) {
+if (/-old\d*\.(ts|js)$/i.test(chemin)) {
   console.error(`${chemin} est déjà une version archivée.`)
   process.exit(1)
 }
 
 const extension = path.extname(chemin)
-const cheminArchive = chemin.replace(
-  new RegExp(`${extension}$`),
-  `-old${extension}`,
-)
+const racineChemin = chemin.replace(new RegExp(`${extension}$`), '')
 
-if (fs.existsSync(cheminArchive)) {
-  console.error(
-    `${cheminArchive} existe déjà. Choisissez un autre suffixe à la main.`,
-  )
-  process.exit(1)
+// Première archive : `<exercice>-old.ts`. Si elle existe déjà (exercice
+// ré-archivé après une nouvelle dérive), on incrémente : `-old2`, `-old3`…
+let numeroArchive = 1
+let cheminArchive = `${racineChemin}-old${extension}`
+while (fs.existsSync(cheminArchive)) {
+  numeroArchive++
+  cheminArchive = `${racineChemin}-old${numeroArchive}${extension}`
 }
+const suffixeClasse = numeroArchive === 1 ? 'Old' : `Old${numeroArchive}`
 
 /** Contenu du fichier tel qu'il est publié, c'est-à-dire celui de HEAD. */
 let contenuPublie
@@ -153,10 +151,12 @@ function dereference(contenu) {
   return contenu.replace(bloc[0], nouveauBloc)
 }
 
-/** Suffixe `Old` sur la classe exportée, pour la distinguer dans les traces. */
-function renommeClasse(contenu) {
-  return contenu.replace(/export default class (\w+)/, (ligne, nom) =>
-    nom.endsWith('Old') ? ligne : `export default class ${nom}Old`,
+/** Suffixe `Old` (ou `Old2`, `Old3`…) sur la classe exportée, pour la
+ * distinguer dans les traces sans collision entre archives successives. */
+function renommeClasse(contenu, suffixe) {
+  return contenu.replace(
+    /export default class (\w+)/,
+    (_, nom) => `export default class ${nom.replace(/Old\d*$/, '')}${suffixe}`,
   )
 }
 
@@ -167,7 +167,7 @@ const enTete =
 
 fs.writeFileSync(
   cheminArchive,
-  enTete + renommeClasse(dereference(contenuPublie)),
+  enTete + renommeClasse(dereference(contenuPublie), suffixeClasse),
 )
 
 /** Génère un uuid de 5 caractères hexadécimaux absent du dépôt. */
@@ -223,4 +223,5 @@ console.log('')
 console.log('Étapes suivantes :')
 console.log('  1. pnpm makeJson')
 console.log('  2. pnpm stability:update')
-console.log('  3. relire le diff avant de committer')
+console.log('  3. pnpm review:archives (vérifier version courante vs archive)')
+console.log('  4. relire le diff avant de committer')

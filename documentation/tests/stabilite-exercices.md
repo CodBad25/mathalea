@@ -138,15 +138,27 @@ Le code d'exercice suffit ; on peut aussi passer le chemin complet
 
 Le script :
 
-- recopie la version de `HEAD` dans `6N1E-old.ts`, avec son `uuid` d'origine et
-  sans référence dans les menus (`'fr-fr': []`, `'fr-ch': ['NR']`) : les anciens
-  liens continuent d'afficher exactement le même énoncé, l'exercice n'apparaît
-  plus dans le référentiel ;
+- recopie la version de `HEAD` dans `6N1E-old.ts` (`-old2.ts`, `-old3.ts`… si
+  une archive existe déjà), avec son `uuid` d'origine et sans référence dans les
+  menus (`'fr-fr': []`, `'fr-ch': ['NR']`) : les anciens liens continuent
+  d'afficher exactement le même énoncé, l'exercice n'apparaît plus dans le
+  référentiel ;
 - donne un `uuid` neuf au fichier de travail, qui garde ses références et sa
   place dans les menus, et met à jour `dateDeModifImportante`.
 
 Les nouveaux utilisateurs voient la version corrigée, les anciens liens ne
 cassent pas.
+
+Pour vérifier de visu que seule la dérive assumée sépare les deux versions :
+
+```bash
+pnpm review:archives
+```
+
+La commande liste les archives de moins d'un mois (la plus récente en haut). On
+choisit au clavier (↑/↓ puis Entrée) et la vue prof s'ouvre avec la version
+courante puis l'archive à la suite. Elle a besoin d'un `pnpm dev` en cours et
+d'un `pnpm makeJson` déjà passé (sinon l'`uuid` de l'archive n'est pas résolu).
 
 ## Le fichier d'empreintes
 
