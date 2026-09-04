@@ -62,7 +62,7 @@ tirages passe sans problème. Si le test signale une dérive assumée, la versio
 publiée doit être archivée et la version corrigée prendre un `uuid` neuf :
 
 ```sh
-node tasks/archive-exercice.js src/exercices/6e/6N1E.ts
+pnpm archive 6N1E
 ```
 
 Le détail de la règle et des trois issues possibles est dans

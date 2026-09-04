@@ -2,7 +2,8 @@
  * Archive la version publiée d'un exercice avant une modification qui change
  * ses tirages aléatoires.
  *
- *   node tasks/archive-exercice.js src/exercices/6e/6N1E.ts
+ *   pnpm archive 6N1E
+ *   pnpm archive src/exercices/6e/6N1E.ts
  *
  * Les liens partagés par les utilisateurs (sujets et corrigés) contiennent
  * l'uuid de l'exercice et la graine du tirage. Si une modification décale les
@@ -24,17 +25,62 @@ import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
-const cheminRelatif = process.argv[2]
+const argument = process.argv[2]
 
-if (!cheminRelatif) {
+if (!argument) {
   console.error(
-    "Usage : node tasks/archive-exercice.js <chemin de l'exercice>\n" +
-      'Exemple : node tasks/archive-exercice.js src/exercices/6e/6N1E.ts',
+    "Usage : pnpm archive <code ou chemin de l'exercice>\n" +
+      'Exemples : pnpm archive 6N1E\n' +
+      '           pnpm archive src/exercices/6e/6N1E.ts',
   )
   process.exit(1)
 }
 
-const chemin = cheminRelatif.replace(/\\/g, '/')
+/**
+ * Retrouve le fichier d'un exercice à partir de son code (ex. `6N1E`) en
+ * parcourant `src/exercices/`. Le nom de fichier doit correspondre exactement
+ * au code : `6N1E.ts` mais pas `6N1E-2.ts` ni `6N1E-old.ts`.
+ */
+function chercheParCode(code) {
+  const trouves = []
+  const parcours = (dossier) => {
+    for (const entree of fs.readdirSync(dossier, { withFileTypes: true })) {
+      const complet = path.join(dossier, entree.name)
+      if (entree.isDirectory()) parcours(complet)
+      else if (
+        entree.name === `${code}.ts` ||
+        entree.name === `${code}.js`
+      ) {
+        trouves.push(complet.replace(/\\/g, '/'))
+      }
+    }
+  }
+  parcours('src/exercices')
+  return trouves
+}
+
+let chemin = argument.replace(/\\/g, '/')
+
+if (!chemin.includes('/')) {
+  const trouves = chercheParCode(chemin)
+  if (trouves.length === 0) {
+    console.error(
+      `Aucun exercice nommé « ${chemin} » sous src/exercices/.\n` +
+        'Passez le chemin complet du fichier si besoin.',
+    )
+    process.exit(1)
+  }
+  if (trouves.length > 1) {
+    console.error(
+      `Plusieurs fichiers correspondent à « ${chemin} » :\n` +
+        trouves.map((f) => `  ${f}`).join('\n') +
+        '\nRelancez avec le chemin complet.',
+    )
+    process.exit(1)
+  }
+  chemin = trouves[0]
+  console.log(`Exercice trouvé : ${chemin}\n`)
+}
 
 if (!/^src\/exercices\/.+\.(ts|js)$/.test(chemin)) {
   console.error(`Chemin inattendu : ${chemin}`)

@@ -22,7 +22,7 @@ any parameter value, not just the defaults. Reordering or inserting calls to the
 random generator breaks corrections users have already handed out. Run
 `CHANGED_FILES="<file>" pnpm stability:check` after editing an exercise; if the
 drift is intended, archive the published version with
-`node tasks/archive-exercice.js <file>`.
+`pnpm archive <code>` (e.g. `pnpm archive 6N1E`), or pass the full file path.
 
 ## Project Structure
 

@@ -128,10 +128,13 @@ C'est la règle du dépôt : la version publiée est archivée avec son `uuid`, 
 version corrigée prend un `uuid` neuf.
 
 ```bash
-node tasks/archive-exercice.js src/exercices/6e/6N1E.ts
+pnpm archive 6N1E
 pnpm makeJson
 pnpm stability:update
 ```
+
+Le code d'exercice suffit ; on peut aussi passer le chemin complet
+(`pnpm archive src/exercices/6e/6N1E.ts`).
 
 Le script :
 
