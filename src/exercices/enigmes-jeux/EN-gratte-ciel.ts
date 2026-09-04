@@ -57,7 +57,7 @@ export default class gratteciel extends Exercice {
     super()
 
     this.besoinFormulaireNumerique = ['Taille de la grille', 6]
-    this.sup = 4
+    this.sup = 3
     this.nbQuestions = 1
 
     const immeubles = Array.from(Array(this.sup).keys()).map(
