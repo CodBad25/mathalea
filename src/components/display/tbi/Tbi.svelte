@@ -25,6 +25,8 @@
     reconcileTbiCards,
     reorderTbiCard,
     saveTbiLocalLayout,
+    shuffleTbiCards,
+    tbiIsShuffling,
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import TbiCalculatorWidget from './TbiCalculatorWidget.svelte'
@@ -114,6 +116,29 @@
     persistLayout()
   }
 
+  /**
+   * Mélange aléatoirement l'ordre des exercices puis réaligne `items` sur la
+   * permutation obtenue. Active brièvement `tbiIsShuffling` pour que les
+   * dispositions animent le glissement des cartes vers leur nouvelle place.
+   */
+  let shuffleResetTimer: ReturnType<typeof setTimeout> | undefined
+  function applyShuffle() {
+    const order = shuffleTbiCards()
+    if (!order) return
+    tbiIsShuffling.set(true)
+    items = order.map((oldIndex, newIndex) => {
+      const item = items[oldIndex]
+      item.paramsIndex = newIndex
+      if (item.exercise) item.exercise.numeroExercice = newIndex
+      return item
+    })
+    uuids = items.map((item) => item.uuid)
+    persistLayout()
+    if (shuffleResetTimer !== undefined) clearTimeout(shuffleResetTimer)
+    // fenêtre couvrant la durée de l'animation FLIP la plus longue
+    shuffleResetTimer = setTimeout(() => tbiIsShuffling.set(false), 800)
+  }
+
   /** Déplace un exercice (sémantique splice) et réaligne items sur le nouvel ordre */
   function applyReorder(from: number, to: number) {
     if (!reorderTbiCard(from, to)) return
@@ -176,6 +201,7 @@
 
   onDestroy(() => {
     if (syncUrlTimer !== undefined) clearTimeout(syncUrlTimer)
+    if (shuffleResetTimer !== undefined) clearTimeout(shuffleResetTimer)
     tbiStateUnsubscriber?.()
   })
 </script>
@@ -183,7 +209,7 @@
 <main
   class="min-h-screen w-full bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
 >
-  <TbiToolbar onAddExercise={openAddExercise} />
+  <TbiToolbar onAddExercise={openAddExercise} onShuffle={applyShuffle} />
   {#if isReady}
     {#if items.length === 0}
       <div
