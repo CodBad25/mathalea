@@ -3,6 +3,7 @@ import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { balancedLatinSquare } from '../../lib/outils/grid'
+import { texNombre } from '../../lib/outils/texNombre'
 
 import type { Valeur } from '../../lib/types'
 import Exercice from '../Exercice'
@@ -32,7 +33,7 @@ export default class zerosGrid extends Exercice {
       'Nombre maximal de zéros pour une case',
       6,
     ]
-    this.sup = 4
+    this.sup = 3
     this.sup2 = 3
     this.nbQuestions = 1
 
@@ -47,7 +48,7 @@ export default class zerosGrid extends Exercice {
 
   computeClue(line: number[]): number {
     let res = 0
-    for (let l of line) {
+    for (const l of line) {
       res += l
     }
     return res
@@ -80,7 +81,7 @@ export default class zerosGrid extends Exercice {
 
       // compute the clues
       const line_clues = grid.map((row) => this.computeClue(row))
-      const col_clues: number[] = new Array()
+      const col_clues: number[] = []
       for (let i = 0; i < this.sup; i++) {
         const column: number[] = []
         for (let j = 0; j < this.sup; j++) {
@@ -91,8 +92,8 @@ export default class zerosGrid extends Exercice {
 
       // transform it as tab header and footer
       const corner = this.interactif ? ['~'] : ['\\phantom{rrrrr}']
-      const tabColHeaders = corner.concat(col_clues.map((x) => x.toString()))
-      const tabLineHeaders = line_clues.map((x) => x.toString())
+      const tabColHeaders = corner.concat(col_clues.map((x) => texNombre(x)))
+      const tabLineHeaders = line_clues.map((x) => texNombre(x))
 
       let texte: string
       if (this.interactif) {
@@ -126,7 +127,7 @@ export default class zerosGrid extends Exercice {
       const texteCorr = tableauColonneLigne(
         tabColHeaders,
         tabLineHeaders,
-        inline_grid,
+        inline_grid.map(x=> texNombre(x)),
         1.2,
         true,
         this.numeroExercice,
