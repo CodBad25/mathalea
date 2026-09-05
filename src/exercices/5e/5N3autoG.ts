@@ -114,16 +114,11 @@ export default class ExerciceFractionsDecomposer extends Exercice {
         `\\dfrac{${total}}{${denominateur}}~=~%{champ1} + \\dfrac{%{champ2}}{%{champ3}}`,
       )
       const texteCorr = `$${fraction} = ${partieEntiere} + ${fractionReste} $`
-      handleAnswers(
-        this,
-        i,
-        {
-          champ1: { value: String(partieEntiere) },
-          champ2: { value: String(partieFractionnaire) },
-          champ3: { value: String(denominateur) },
-        },
-        { formatInteractif: 'fillInTheBlank' },
-      )
+      this.enregistreReponses(i, {
+        partieEntiere,
+        partieFractionnaire,
+        denominateur,
+      })
       if (this.questionJamaisPosee(i, total, denominateur)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
@@ -133,5 +128,36 @@ export default class ExerciceFractionsDecomposer extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
+  }
+
+  /**
+   * Enregistre les réponses attendues pour la question `i`.
+   * Version par défaut : les trois champs (partie entière, numérateur,
+   * dénominateur) doivent correspondre exactement aux valeurs tirées.
+   * Surchargée par 2N30-1 pour accepter toute décomposition égale
+   * (fractions non simplifiées comprises).
+   */
+  enregistreReponses(
+    i: number,
+    {
+      partieEntiere,
+      partieFractionnaire,
+      denominateur,
+    }: {
+      partieEntiere: number
+      partieFractionnaire: number
+      denominateur: number
+    },
+  ): void {
+    handleAnswers(
+      this,
+      i,
+      {
+        champ1: { value: String(partieEntiere) },
+        champ2: { value: String(partieFractionnaire) },
+        champ3: { value: String(denominateur) },
+      },
+      { formatInteractif: 'fillInTheBlank' },
+    )
   }
 }
