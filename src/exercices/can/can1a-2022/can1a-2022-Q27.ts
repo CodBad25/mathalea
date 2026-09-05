@@ -7,6 +7,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import ExerciceCan from '../../ExerciceCan'
 export const titre =
   "Calculer une longueur à l'aide du théorème de Thalès (triangles emboîtés)"
@@ -47,7 +48,7 @@ export default class Can1a2022Q27 extends ExerciceCan {
     const ymin = -1.5
     const xmax = 7.5
     const ymax = 4
-    const objets: any[] = []
+    const objets: NestedObjetMathalea2dArray = []
     objets.push(
       texteParPosition(
         `${ab}`,

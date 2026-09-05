@@ -140,7 +140,7 @@ export default class SujetCAN2023Seconde extends Exercice {
       let n = 0
       let m = 0
       let k = 1
-      let reponse: any = 0
+      let reponse: number | string | FractionEtendue = 0
       let texte = ''
       let texteCorr = ''
       let nbChamps = 1

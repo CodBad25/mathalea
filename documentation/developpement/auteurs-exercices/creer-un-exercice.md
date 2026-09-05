@@ -81,6 +81,32 @@ export default class AjouterNeuf extends Exercice {
 Adaptez les chemins d'import à la profondeur du fichier. Votre éditeur peut
 souvent proposer ou corriger automatiquement ces chemins.
 
+### Typer les données sans `any`
+
+Laissez TypeScript déduire le type d'une valeur initialisée lorsque cela suffit.
+Pour un tableau rempli progressivement ou une variable utilisée dans plusieurs
+branches, choisissez un type qui couvre ses valeurs réelles : `number[]`,
+`(string | number)[]`, `FractionEtendue`, etc.
+
+Réutilisez les contrats du moteur avant de définir une nouvelle structure :
+
+- `ObjetMathalea2D` dans `src/lib/2d/ObjetMathalea2D.ts` pour les objets 2D ;
+- `NestedObjetMathalea2dArray` dans `src/types/2d.ts` pour un tableau de rendu
+  qui contient aussi des sous-tableaux ou des objets LaTeX ;
+- `RepereOptions` dans `src/lib/2d/reperes.ts` et `Mathalea2DOptions` dans
+  `src/modules/mathalea2d.ts` pour les options de repère et de rendu ;
+- `AnswerValueType`, `AnswerType` et `Valeur` dans `src/lib/types.ts` pour,
+  respectivement, une valeur de réponse, cette valeur avec ses options de
+  comparaison, et les champs d'une question interactive.
+
+Une donnée JSON à valider entre avec le type `unknown`. Vérifiez sa structure
+avec `typeof`, `in` et `Array.isArray` avant de lire ses propriétés. Remplacer
+`any` par une assertion vers le type attendu ne valide pas la donnée.
+
+Après une modification de typage, lancez `pnpm check`. Pour un exercice publié,
+vérifiez aussi la [stabilité des tirages](../../tests/stabilite-exercices.md),
+même si les valeurs tirées sont censées rester identiques.
+
 ## 4. Lire la boucle
 
 - `i` compte les questions acceptées ;

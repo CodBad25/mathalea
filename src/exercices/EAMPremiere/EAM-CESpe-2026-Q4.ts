@@ -95,8 +95,7 @@ export default class AutoQ4CEs2026 extends ExerciceQcmA {
         letterSize: 'normalsize',
       })
 
-      // Type any[] pour éviter l'erreur TypeScript (ts2345) lors du push ultérieur
-      const objets: any[] = [r, d_trace, o, vI, vJ, textI, textJ]
+      const objets = [r, d_trace, o, vI, vJ, textI, textJ]
 
       // Ajout de l'escalier explicatif si c'est la figure de correction
       if (avecCorrection) {

@@ -9,6 +9,15 @@ import { shuffle } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
+type ShikakuRectangle = {
+  x: number
+  y: number
+  largeur: number
+  hauteur: number
+  aire: number
+  placeNom: { x: number; y: number }
+}
+
 /**
  * Cette fonction permet de créer un polygone rapidement à partir d'une liste des coordonnées de ses sommets et éventuellement de leur noms
  * @param {array} flat
@@ -49,7 +58,7 @@ export default class Shikaku {
   aireTotale: number
   marqueurs: boolean[][]
   dimMax: { xMax: number; yMax: number }
-  pavage: { aireTotale: number; rectangles: any[] }
+  pavage: { aireTotale: number; rectangles: ShikakuRectangle[] }
   dimPossibles: number[][]
 
   constructor(largeur: number, hauteur: number) {
@@ -137,16 +146,7 @@ export default class Shikaku {
   // la méthode appelée par Shikaku.paver() pour ajouter un rectangle au pavage
   ajouteUnRectangle() {
     this.dimPossibles = shuffle(this.dimPossibles) // On brasse les dimensions possibles et on les teste du premier au dernier afin de ne pas toujours avoir des rectangles 1x1
-    let trouvé:
-      | boolean
-      | {
-          x: number
-          y: number
-          largeur: any
-          hauteur: any
-          aire: number
-          placeNom: { x: number; y: number }
-        } = false
+    let trouvé: ShikakuRectangle | false = false
 
     let choix = 0
     do {
@@ -168,7 +168,7 @@ export default class Shikaku {
 
   // la méthode qui essaye de trouver une place au rectangle choisi (ce n'est pas parce que la différence d'aire le permet, que ça rentre dans un trou restant !)
   // C'est sans doute la partie du code la plus compliquée !
-  trouvePlace(largeur: number, hauteur: number) {
+  trouvePlace(largeur: number, hauteur: number): ShikakuRectangle | false {
     let x = 0
     let y
     let empiete

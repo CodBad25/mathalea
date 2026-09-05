@@ -639,7 +639,7 @@ class UnPatron {
   }: {
     numeroterFaces?: boolean
     numeroDessin?: number
-  }): any[] {
+  }): NestedObjetMathalea2dArray {
     const correction = numeroterFaces ?? false
 
     const leDessin: NestedObjetMathalea2dArray = []

@@ -30,6 +30,10 @@ import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { rotationAnimee, translationAnimee } from '../../modules/2dAnimation'
+import type {
+  RotationAnimee,
+  TranslationAnimee,
+} from '../../modules/2dAnimation'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -133,7 +137,7 @@ export default class TrianglesEgaux extends Exercice {
       Gq = barycentre(q) // on construit son barycentre
 
       // let angleChoisi2 = 270;
-      const angleChoisi2 = choice([0, 90, 180, 270])
+      const angleChoisi2 = choice<0 | 90 | 180 | 270>([0, 90, 180, 270])
       r = rotation(q, Gq, angleChoisi2) // on fait tourner q encore autour de son barycentre
       X = milieu(r.listePoints[0], r.listePoints[1]) // on place le milieu des deux premiers points de la figure obtenue qui sont les images des points A et B initiaux
       s = rotation(r, X, 180) // on fait topurner r autour du milieu des deux extremites du plus grand côté
@@ -206,8 +210,8 @@ export default class TrianglesEgaux extends Exercice {
         sol2: vecteur(p.listePoints[1], D),
       }
       const transformationAnimee: {
-        sol1: any
-        sol2: any
+        sol1: RotationAnimee | TranslationAnimee | null
+        sol2: RotationAnimee | TranslationAnimee | null
       } = {
         sol1: null,
         sol2: null,

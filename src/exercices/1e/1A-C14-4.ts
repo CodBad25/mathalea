@@ -140,10 +140,10 @@ export default class Auto1AC16 extends ExerciceQcmA {
     const r2 = Math.max(b, c) // deuxième racine (la plus grande)
 
     // Construction des lignes du tableau selon le signe de a
-    let ligneA: any[],
-      ligneFacteur1: any[],
-      ligneFacteur2: any[],
-      ligneProduit: any[]
+    let ligneA: (string | number)[],
+      ligneFacteur1: (string | number)[],
+      ligneFacteur2: (string | number)[],
+      ligneProduit: (string | number)[]
 
     if (a > 0) {
       ligneA = ['Line', 30, '', 0, '+', 20, 't', 5, '+', 20, 't', 20, '+', 20]

@@ -28,7 +28,7 @@ export class Rose {
   nombreDeValeurs: number
   cellulesPreremplies: ValueType[]
   rayon: number
-  resultats: any[]
+  resultats: string[]
   valeurMax: number
   indexInconnue: number
   values: ValueType[]
@@ -479,33 +479,18 @@ export class Rose {
               ),
             )
           } else {
-            if (this.resultats[i] instanceof FractionEtendue) {
-              objets.push(
-                latexParCoordonnees(
-                  this.resultats[i].texFSD,
-                  P.x,
-                  P.y,
-                  'black',
-                  0,
-                  0,
-                  'none',
-                  8,
-                ),
-              )
-            } else {
-              objets.push(
-                latexParCoordonnees(
-                  String(this.resultats[i]),
-                  P.x,
-                  P.y,
-                  'black',
-                  0,
-                  0,
-                  'none',
-                  8,
-                ),
-              )
-            }
+            objets.push(
+              latexParCoordonnees(
+                String(this.resultats[i]),
+                P.x,
+                P.y,
+                'black',
+                0,
+                0,
+                'none',
+                8,
+              ),
+            )
           }
         }
         if (this.type === 'can2' && this.indexInconnue === i) {

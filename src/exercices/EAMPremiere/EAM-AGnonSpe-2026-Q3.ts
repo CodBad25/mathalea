@@ -1,7 +1,7 @@
-import { droite } from '../../lib/2d/droites'
+import { droite, type Droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
-import { latex2d } from '../../lib/2d/textes'
+import { latex2d, type Latex2d } from '../../lib/2d/textes'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -70,8 +70,8 @@ export default class AutoQ3AGns2026 extends ExerciceQcmA {
     const indices = forcedShuffle || shuffle([0, 1, 2, 3])
 
     const colors = ['blue', 'red', 'gray', 'black']
-    const droites2d: any[] = []
-    const labels2d: any[] = []
+    const droites2d: Droite[] = []
+    const labels2d: Latex2d[] = []
     const repOptions: string[] = []
     let correctName = ''
     let correctColor = colors[0]
@@ -144,7 +144,7 @@ export default class AutoQ3AGns2026 extends ExerciceQcmA {
       repOptions.push(`$(${name})$`)
     }
 
-    const objects2d: any[] = [r, ...droites2d, ...labels2d]
+    const objects2d = [r, ...droites2d, ...labels2d]
     const figure = mathalea2d(
       { xmin: -7.5, xmax: 11.5, ymin: -4.5, ymax: 6.5, scale: 0.55 },
       objects2d,

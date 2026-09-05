@@ -256,8 +256,8 @@ export default class ReperagePaveDroit extends Exercice {
       pointAplacer.c2d.positionLabel = 'above right'
 
       objetsAtracerCorr.push(t, labelPoint(pointAplacer.c2d), ...objetsAtracer)
-      ;[s1, s2, s3].forEach((seg: any) => {
-        if (seg.longueur && seg.longueur > 0) {
+      ;[s1, s2, s3].forEach((seg) => {
+        if ('longueur' in seg && seg.longueur && seg.longueur > 0) {
           objetsAtracerCorr.push(seg)
         }
       })

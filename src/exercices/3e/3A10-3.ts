@@ -106,7 +106,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
             // on fixe le rang max pour le choix des premiers
             const rgMax = cribleEratostheneN(maxPremier).length - 1
             // on choisit les rangs pour les nombres premiers
-            const tabRangs: string | any[] = []
+            const tabRangs: number[] = []
             const tabRangsExclus = []
             for (let k = 0; k < nbDePremiers; k++) {
               for (let m = 0; m < k; m++) {

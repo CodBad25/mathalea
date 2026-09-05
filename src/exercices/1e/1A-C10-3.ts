@@ -2,16 +2,22 @@ import { courbe } from '../../lib/2d/Courbe'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
-import { segment } from '../../lib/2d/segmentsVecteurs'
+import { segment, type Segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 
-import { crochetD, crochetG } from '../../lib/2d/intervalles'
+import {
+  crochetD,
+  crochetG,
+  type CrochetD,
+  type CrochetG,
+} from '../../lib/2d/intervalles'
 import { bleuMathalea } from '../../lib/colors'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
+import type { SquareInequalityGraphicElements } from '../../types/1A-C10'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '07/08/2025'
 export const dateDeModifImportante = '12/10/2025'
@@ -87,7 +93,7 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
-  ) {
+  ): SquareInequalityGraphicElements {
     const o = latex2d('\\text{O}', -0.2, -0.3, { letterSize: 'scriptsize' })
 
     // Position graphique fixe pour l'affichage
@@ -108,8 +114,8 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
     sBBx.pointilles = 5
 
     // Segments de solution et crochets selon le type d'inéquation
-    let segmentsSolution = []
-    let crochets = []
+    let segmentsSolution: Segment[] = []
+    let crochets: (CrochetD | CrochetG)[] = []
 
     if (typeInequation === 'inf') {
       // ]-√val, √val[ (strict) ou [-√val, √val] (large)
@@ -166,7 +172,10 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
   }
 
   // Méthode utilitaire pour créer le repère et les graphiques
-  private creerGraphiques(val: number, elements: any) {
+  private creerGraphiques(
+    val: number,
+    elements: SquareInequalityGraphicElements,
+  ) {
     const { o, sAAx, sBBx, segmentsSolution, crochets, textes, valGraphique } =
       elements
 
@@ -279,7 +288,7 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
-    graphiqueC: any,
+    graphiqueC: string,
     reponseCorrecte: string,
   ) {
     const positionText =

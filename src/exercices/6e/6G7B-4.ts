@@ -16,6 +16,7 @@ import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre = 'Compléter un nuage de points symétriques'
@@ -65,8 +66,8 @@ export default class CompleterParSymetrie6e extends Exercice {
   nouvelleVersion() {
     const couples = []
     let pointsPossibles
-    const objetsEnonce: any[][] = []
-    const objetsCorrection: any[][] = []
+    const objetsEnonce: NestedObjetMathalea2dArray[] = []
+    const objetsCorrection: NestedObjetMathalea2dArray[] = []
     const pointsChoisis = []
     const pointsAffiches = []
     const pointsEnPlusCorr = []

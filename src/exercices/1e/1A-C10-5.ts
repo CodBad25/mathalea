@@ -2,16 +2,22 @@ import { courbe } from '../../lib/2d/Courbe'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
-import { segment } from '../../lib/2d/segmentsVecteurs'
+import { segment, type Segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 
-import { crochetD, crochetG } from '../../lib/2d/intervalles'
+import {
+  crochetD,
+  crochetG,
+  type CrochetD,
+  type CrochetG,
+} from '../../lib/2d/intervalles'
 import { bleuMathalea } from '../../lib/colors'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
+import type { ReciprocalInequalityGraphicElements } from '../../types/1A-C10'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '01/10/2025'
 export const dateDeModifImportante = '12/10/2025'
@@ -84,7 +90,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
-  ) {
+  ): ReciprocalInequalityGraphicElements {
     const o = latex2d('\\text{O}', -0.2, -0.3, { letterSize: 'scriptsize' })
     const O = pointAbstrait(0, 0)
 
@@ -106,8 +112,8 @@ export default class Auto1AC10e extends ExerciceQcmA {
     const bornePoint = pointAbstrait(xIntersection, 0)
 
     // Segments de solution et crochets selon le type d'inéquation
-    let segmentsSolution = []
-    let crochets = []
+    let segmentsSolution: Segment[] = []
+    let crochets: (CrochetD | CrochetG)[] = []
 
     if (typeInequation === 'inf') {
       if (val > 0) {
@@ -208,7 +214,10 @@ export default class Auto1AC10e extends ExerciceQcmA {
     }
   }
 
-  private creerGraphiques(val: number, elements: any) {
+  private creerGraphiques(
+    val: number,
+    elements: ReciprocalInequalityGraphicElements,
+  ) {
     const { o, sAAx, segmentsSolution, crochets, textes, yDroite } = elements
 
     const r1 = repere({
@@ -350,7 +359,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
-    graphiqueC: any,
+    graphiqueC: string,
     reponseCorrecte: string,
   ) {
     const borne =

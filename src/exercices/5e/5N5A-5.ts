@@ -52,6 +52,14 @@ export const refs = {
   'fr-ch': ['10FA4A-5'],
 }
 
+type CompteursFigure = [number, number]
+type FigureTracee = {
+  draw: (x: number) => number
+  n: CompteursFigure
+  ncr: CompteursFigure
+  ncd: CompteursFigure
+}
+
 export default class perimetreVersFormule extends Exercice {
   constructor() {
     super()
@@ -626,172 +634,172 @@ export default class perimetreVersFormule extends Exercice {
 
       // on trace nombreFigures figures
       let x = 4
-      const nombreCotes = [0, 0]
-      const nombreCerclesRayon = [0, 0]
-      const nombreCerclesDiametre = [0, 0]
+      const nombreCotes: CompteursFigure = [0, 0]
+      const nombreCerclesRayon: CompteursFigure = [0, 0]
+      const nombreCerclesDiametre: CompteursFigure = [0, 0]
       let listeFigures: string[] = []
-      type DictDraw =
-        | typeof drawRectangle
-        | typeof drawTriangle
-        | typeof drawHexagone
-        | typeof drawTrapeze
-        | typeof drawCercle
-        | typeof drawQuartCercle
-        | typeof drawDemiCercle
-        | typeof drawRectangleDemiCercle
-
-      const dictDraw: Record<
-        string,
-        {
-          f: DictDraw
-          params: Record<string, any>
-        }
-      > = {
+      const dictDraw: Record<string, FigureTracee> = {
         rectangle01: {
-          f: drawRectangle,
-          params: { id0: 0, id1: 1, n: [2, 2], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawRectangle(x, { id0: 0, id1: 1 }),
+          n: [2, 2],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         rectangle10: {
-          f: drawRectangle,
-          params: { id0: 1, id1: 0, n: [2, 2], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawRectangle(x, { id0: 1, id1: 0 }),
+          n: [2, 2],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         carre0: {
-          f: drawRectangle,
-          params: { id0: 0, id1: 0, n: [4, 0], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawRectangle(x, { id0: 0, id1: 0 }),
+          n: [4, 0],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         carre1: {
-          f: drawRectangle,
-          params: { id0: 1, id1: 1, n: [0, 4], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawRectangle(x, { id0: 1, id1: 1 }),
+          n: [0, 4],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         triangle00: {
-          f: drawTriangle,
-          params: { id0: 0, id1: 0, n: [3, 0], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawTriangle(x, { id0: 0, id1: 0 }),
+          n: [3, 0],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         triangle11: {
-          f: drawTriangle,
-          params: { id0: 1, id1: 1, n: [0, 3], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawTriangle(x, { id0: 1, id1: 1 }),
+          n: [0, 3],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         triangle01: {
-          f: drawTriangle,
-          params: { id0: 0, id1: 1, n: [1, 2], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawTriangle(x, { id0: 0, id1: 1 }),
+          n: [1, 2],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         triangle10: {
-          f: drawTriangle,
-          params: { id0: 1, id1: 0, n: [2, 1], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawTriangle(x, { id0: 1, id1: 0 }),
+          n: [2, 1],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         hexagone01: {
-          f: drawHexagone,
-          params: { id0: 0, id1: 1, n: [3, 2], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawHexagone(x, { id0: 0, id1: 1 }),
+          n: [3, 2],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         hexagone10: {
-          f: drawHexagone,
-          params: { id0: 1, id1: 0, n: [2, 3], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawHexagone(x, { id0: 1, id1: 0 }),
+          n: [2, 3],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         trapeze01: {
-          f: drawTrapeze,
-          params: { id0: 0, id1: 1, n: [3, 1], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawTrapeze(x, { id0: 0, id1: 1 }),
+          n: [3, 1],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         trapeze10: {
-          f: drawTrapeze,
-          params: { id0: 1, id1: 0, n: [1, 3], ncr: [0, 0], ncd: [0, 0] },
+          draw: (x) => drawTrapeze(x, { id0: 1, id1: 0 }),
+          n: [1, 3],
+          ncr: [0, 0],
+          ncd: [0, 0],
         },
         cercle0r: {
-          f: drawCercle,
-          params: { id0: 0, rayon: true, n: [0, 0], ncr: [1, 0], ncd: [0, 0] },
+          draw: (x) => drawCercle(x, { id0: 0, rayon: true }),
+          n: [0, 0],
+          ncr: [1, 0],
+          ncd: [0, 0],
         },
         cercle1r: {
-          f: drawCercle,
-          params: { id0: 1, rayon: true, n: [0, 0], ncr: [0, 1], ncd: [0, 0] },
+          draw: (x) => drawCercle(x, { id0: 1, rayon: true }),
+          n: [0, 0],
+          ncr: [0, 1],
+          ncd: [0, 0],
         },
         cercle0d: {
-          f: drawCercle,
-          params: { id0: 0, rayon: false, n: [0, 0], ncr: [0, 0], ncd: [1, 0] },
+          draw: (x) => drawCercle(x, { id0: 0, rayon: false }),
+          n: [0, 0],
+          ncr: [0, 0],
+          ncd: [1, 0],
         },
         cercle1d: {
-          f: drawCercle,
-          params: { id0: 1, rayon: false, n: [0, 0], ncr: [0, 0], ncd: [0, 1] },
+          draw: (x) => drawCercle(x, { id0: 1, rayon: false }),
+          n: [0, 0],
+          ncr: [0, 0],
+          ncd: [0, 1],
         },
         quartCercle0: {
-          f: drawQuartCercle,
-          params: { id0: 0, n: [2, 0], ncr: [0.25, 0], ncd: [0, 0] },
+          draw: (x) => drawQuartCercle(x, { id0: 0 }),
+          n: [2, 0],
+          ncr: [0.25, 0],
+          ncd: [0, 0],
         },
         quartCercle1: {
-          f: drawQuartCercle,
-          params: { id0: 1, n: [0, 2], ncr: [0, 0.25], ncd: [0, 0] },
+          draw: (x) => drawQuartCercle(x, { id0: 1 }),
+          n: [0, 2],
+          ncr: [0, 0.25],
+          ncd: [0, 0],
         },
         demiCercle0: {
-          f: drawDemiCercle,
-          params: { id0: 0, n: [1, 0], ncr: [0, 0], ncd: [0.5, 0] },
+          draw: (x) => drawDemiCercle(x, { id0: 0 }),
+          n: [1, 0],
+          ncr: [0, 0],
+          ncd: [0.5, 0],
         },
         demiCercle1: {
-          f: drawDemiCercle,
-          params: { id0: 1, n: [0, 1], ncr: [0, 0], ncd: [0, 0.5] },
+          draw: (x) => drawDemiCercle(x, { id0: 1 }),
+          n: [0, 1],
+          ncr: [0, 0],
+          ncd: [0, 0.5],
         },
         rectangleDemiCercle000: {
-          f: drawRectangleDemiCercle,
-          params: {
-            id0: 0,
-            id1: 0,
-            idDemiCercle: 1,
-            n: [3, 0],
-            ncr: [0, 0],
-            ncd: [0.5, 0],
-          },
+          draw: (x) =>
+            drawRectangleDemiCercle(x, { id0: 0, id1: 0, idDemiCercle: 1 }),
+          n: [3, 0],
+          ncr: [0, 0],
+          ncd: [0.5, 0],
         },
         rectangleDemiCercle111: {
-          f: drawRectangleDemiCercle,
-          params: {
-            id0: 1,
-            id1: 1,
-            idDemiCercle: 0,
-            n: [0, 3],
-            ncr: [0, 0],
-            ncd: [0, 0.5],
-          },
+          draw: (x) =>
+            drawRectangleDemiCercle(x, { id0: 1, id1: 1, idDemiCercle: 0 }),
+          n: [0, 3],
+          ncr: [0, 0],
+          ncd: [0, 0.5],
         },
         rectangleDemiCercle010: {
-          f: drawRectangleDemiCercle,
-          params: {
-            id0: 0,
-            id1: 1,
-            idDemiCercle: 0,
-            n: [1, 2],
-            ncr: [0, 0],
-            ncd: [0.5, 0],
-          },
+          draw: (x) =>
+            drawRectangleDemiCercle(x, { id0: 0, id1: 1, idDemiCercle: 0 }),
+          n: [1, 2],
+          ncr: [0, 0],
+          ncd: [0.5, 0],
         },
         rectangleDemiCercle100: {
-          f: drawRectangleDemiCercle,
-          params: {
-            id0: 1,
-            id1: 0,
-            idDemiCercle: 0,
-            n: [1, 2],
-            ncr: [0, 0],
-            ncd: [0.5, 0],
-          },
+          draw: (x) =>
+            drawRectangleDemiCercle(x, { id0: 1, id1: 0, idDemiCercle: 0 }),
+          n: [1, 2],
+          ncr: [0, 0],
+          ncd: [0.5, 0],
         },
         rectangleDemiCercle011: {
-          f: drawRectangleDemiCercle,
-          params: {
-            id0: 0,
-            id1: 1,
-            idDemiCercle: 1,
-            n: [2, 1],
-            ncr: [0, 0],
-            ncd: [0, 0.5],
-          },
+          draw: (x) =>
+            drawRectangleDemiCercle(x, { id0: 0, id1: 1, idDemiCercle: 1 }),
+          n: [2, 1],
+          ncr: [0, 0],
+          ncd: [0, 0.5],
         },
         rectangleDemiCercle101: {
-          f: drawRectangleDemiCercle,
-          params: {
-            id0: 1,
-            id1: 0,
-            idDemiCercle: 1,
-            n: [2, 1],
-            ncr: [0, 0],
-            ncd: [0, 0.5],
-          },
+          draw: (x) =>
+            drawRectangleDemiCercle(x, { id0: 1, id1: 0, idDemiCercle: 1 }),
+          n: [2, 1],
+          ncr: [0, 0],
+          ncd: [0, 0.5],
         },
       }
       const figuresParDifficultes = [
@@ -841,16 +849,14 @@ export default class perimetreVersFormule extends Exercice {
 
       for (let iFigure = 0; iFigure < nombreFigures; iFigure++) {
         const selectDraw = listeFigures[iFigure]
-        const params = dictDraw[selectDraw].params
-
         const dictDrawValue = dictDraw[selectDraw]
-        x = dictDrawValue.f(x + espaceEntreFigures, params as any)
-        nombreCotes[0] += dictDrawValue.params.n[0]
-        nombreCotes[1] += dictDrawValue.params.n[1]
-        nombreCerclesRayon[0] += dictDrawValue.params.ncr[0]
-        nombreCerclesRayon[1] += dictDrawValue.params.ncr[1]
-        nombreCerclesDiametre[0] += dictDrawValue.params.ncd[0]
-        nombreCerclesDiametre[1] += dictDrawValue.params.ncd[1]
+        x = dictDrawValue.draw(x + espaceEntreFigures)
+        nombreCotes[0] += dictDrawValue.n[0]
+        nombreCotes[1] += dictDrawValue.n[1]
+        nombreCerclesRayon[0] += dictDrawValue.ncr[0]
+        nombreCerclesRayon[1] += dictDrawValue.ncr[1]
+        nombreCerclesDiametre[0] += dictDrawValue.ncd[0]
+        nombreCerclesDiametre[1] += dictDrawValue.ncd[1]
       }
 
       // on trace pour de bon

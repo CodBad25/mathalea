@@ -156,6 +156,32 @@ Pour un solide autre qu'un empilement de cubes, regarder `src/exercices/5e/5G53.
 
 Ne pas reprendre tels quels les anciens exemples de documentation qui mettaient `type: 'prism'`, `type: 'pyramid'` ou `type: 'wireframeUnion'` directement dans `objects` : ces libellés ne sont pas lus directement par `Canvas3DElement`. Il faut passer par `bufferGeometry` ou `group`.
 
+### Contrat de sérialisation et conservation du rendu
+
+`BufferGeometryDescription.geometry` contient les données de `.toJSON()`, soit
+un `THREE.BufferGeometryJSON`, soit un `Object3DWithGeometriesJSON`. Le second
+type complète `Object3DJSON` avec la liste optionnelle `geometries` émise à la
+racine par Three.js. Ne pas transmettre une instance vivante de `Group` à la
+place de ces données.
+
+Pour une union, comme dans `src/exercices/6e/6G0-9.ts`, conserver :
+
+```ts
+const objects: Elements3DDescription[] = [
+  {
+    type: 'bufferGeometry',
+    geometry: createWireframeUnion(geometries).toJSON(),
+  },
+]
+```
+
+L'appel explicite à `.toJSON()` produit les mêmes données que l'appel implicite
+effectué par `JSON.stringify()` sur l'instance. Il n'ajoute pas de tirage
+aléatoire. Le canvas filtre les ressources de type `BufferGeometry`, puis
+reconstruit les faces et les arêtes avec ses propres matériaux. Le chemin
+`group` utilise au contraire `ObjectLoader` et les matériaux sérialisés : ces
+deux chemins ne sont pas interchangeables pour maintenir un rendu publié.
+
 ## Ajouter le rendu statique de secours
 
 Le rendu statique utilise les classes de `src/lib/3d/3dProjectionMathalea2d/`. Elles construisent un solide en coordonnées 3D, puis fournissent sa projection 2D dans `.c2d`.

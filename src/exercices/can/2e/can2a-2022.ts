@@ -106,10 +106,10 @@ export default class SujetCAN2022Seconde extends Exercice {
       let c = 0
       let d = 0
       let p = 0
-      let f: any = 0
+      let f: number | FractionEtendue = 0
       let texte = ''
       let texteCorr = ''
-      let reponse: any = 0
+      let reponse: number | string | string[] | FractionEtendue = 0
       let nbChamps = 1
       let choix = 'a'
       switch (typeQuestionsDisponibles[i]) {
@@ -1376,7 +1376,11 @@ ${sp(6)} \\texttt{return a}\\\\
           a,
           b,
           c,
-          reponse instanceof FractionEtendue ? reponse.texFraction : reponse,
+          reponse instanceof FractionEtendue
+            ? reponse.texFraction
+            : Array.isArray(reponse)
+              ? reponse.toString()
+              : reponse,
         )
       ) {
         // Si la question n'a jamais été posée, on en créé une autre

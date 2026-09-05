@@ -36,6 +36,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import Hms from '../../../modules/Hms'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import Exercice from '../../Exercice'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
@@ -1197,7 +1198,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
           break
         case 30:
           {
-            const objets: any[] = []
+            const objets: NestedObjetMathalea2dArray = []
             const a = randint(11, 15) * 100
             const b = 2024
             const A = pointAbstrait(0, 0, 'A', 'below')
@@ -2516,7 +2517,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
 
         case 67:
           {
-            const objets: any[] = []
+            const objets: NestedObjetMathalea2dArray = []
             const diviseur = choice([1, 10, 100, 1000])
             const a = 506 / diviseur
             const A = pointAbstrait(0, 0, 'A', 'below')
@@ -2592,7 +2593,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             const C = pointAbstrait(5, 4, nom[2], 'above')
             const D = pointAbstrait(2.5, 2, nom[3], 'above')
             const E = pointAbstrait(3, 0, nom[4], 'below')
-            const objets: any[] = []
+            const objets: NestedObjetMathalea2dArray = []
             objets.push(
               segment(A, B),
               segment(D, E),
@@ -2659,7 +2660,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             const B = pointAbstrait(6, 0, nom[1], 'below')
             const C = pointAbstrait(6, 2, nom[2], 'above')
 
-            const objets: any[] = []
+            const objets: NestedObjetMathalea2dArray = []
 
             if (choice([true, false])) {
               objets.push(

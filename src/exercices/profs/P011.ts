@@ -18,7 +18,7 @@ export const refs = {
 }
 export const uuid = '697a7'
 
-function aLeMinDArguments(params: any[], nombre: number) {
+function aLeMinDArguments(params: number[], nombre: number) {
   return params.length >= nombre
 }
 /**

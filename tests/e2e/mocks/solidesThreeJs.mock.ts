@@ -64,10 +64,13 @@ export function createSolidesThreeJsMock() {
       makeNode('createCustomWireSphere', args),
     ),
     createSkySphere: vi.fn((...args) => makeNode('createSkySphere', args)),
-    createWireframeUnion: vi.fn((geometries) => ({
-      ...makeNode('createWireframeUnion', [geometries]),
-      geometries,
-    })),
+    createWireframeUnion: vi.fn((geometries) => {
+      const node = {
+        ...makeNode('createWireframeUnion', [geometries]),
+        geometries,
+      }
+      return { ...node, toJSON: () => node }
+    }),
     createPrismWithWireframe: vi.fn((...args) =>
       makeNode('createPrismWithWireframe', args),
     ),
