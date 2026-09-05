@@ -8,7 +8,7 @@ import { createAutomatismesCanExercice } from '../../src/exercices/_automatismes
 import type { CategoriesForm } from '../../src/exercices/_automatismesCan'
 
 /**
- * Les exercices « Sélection d'automatismes » (1A, 3A, …) déduisent leur nombre
+ * Les exercices « Sélection d'automatismes » (1A, 3Auto, …) déduisent leur nombre
  * de questions du formulaire par catégories. Le diaporama lit `nbQuestions` et
  * `besoinFormulaireNombresCategories` pour afficher le total et verrouiller le
  * champ correspondant : ces tests protègent ce contrat.
@@ -17,7 +17,7 @@ import type { CategoriesForm } from '../../src/exercices/_automatismesCan'
 const cases = [
   { titre: '1A', Exercice: AutomatismesPremiere },
   { titre: '2A', Exercice: AutomatismesSeconde },
-  { titre: '3A', Exercice: AutomatismesTroisieme },
+  { titre: '3Auto', Exercice: AutomatismesTroisieme },
 ]
 
 describe.each(cases)("$titre - Sélection d'automatismes", ({ Exercice }) => {
