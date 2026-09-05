@@ -431,6 +431,7 @@ pnpm dev
 3. Vérifier la carte d'aperçu : l'énoncé doit être lisible, les QCM doivent afficher les choix, les `AMCNum` doivent afficher les cases numériques attendues, les `AMCOpen` doivent afficher une zone de réponse.
 4. Ouvrir le panneau "LaTeX AMC généré en temps réel".
 5. Cliquer sur "Télécharger le .tex". Le navigateur télécharge un fichier nommé `amc-${seed}.tex`, par exemple `amc-ePxF1.tex`.
+6. Pour intégrer les questions à un template LaTeX personnel, cliquer sur "Copier les groupes". Le presse-papier reçoit uniquement la section « préparation des groupes », avec le mode de groupe et les blocs `\element{...}`, sans le préambule ni la mise en page MathALÉA.
 
 Un export correct contient un document LaTeX AMC complet, avec des blocs `\element{...}` et des questions AMC (`question`, `questionmult` ou `questionmultx`). Selon le type, on doit voir `\bonne` / `\mauvaise` pour un QCM, `\AMCnumericChoices` pour un `AMCNum`, ou `\notation` pour un `AMCOpen`. Il ne doit pas rester de balises ou traces HTML interactives comme `<input>`, `<button>`, des composants MathLive, `undefined` ou `[object Object]`.
 

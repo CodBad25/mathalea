@@ -59,6 +59,28 @@ export type AMCGroupConsistencyReport = {
   unusedGroupDefinitions: string[]
 }
 
+const AMC_GROUPS_SECTION_START = '%%% préparation des groupes'
+const AMC_GROUPS_SECTION_END = '%%%% -II-b. MISE EN PAGE DU QCM'
+
+/**
+ * Extrait les définitions de groupes d'un document LaTeX AMC complet.
+ * Le résultat peut être inséré dans un document AMC qui fournit son propre
+ * préambule et sa propre mise en page.
+ */
+export function extractAMCQuestionGroups(latexCode: string): string {
+  const markerIndex = latexCode.indexOf(AMC_GROUPS_SECTION_START)
+  if (markerIndex === -1) return ''
+
+  const sectionStart = latexCode.lastIndexOf('\n', markerIndex) + 1
+  const sectionEnd = latexCode.indexOf(AMC_GROUPS_SECTION_END, markerIndex)
+  if (sectionEnd === -1) return ''
+
+  const endMarkerLineStart = latexCode.lastIndexOf('\n', sectionEnd) + 1
+  const separatorLineStart =
+    latexCode.lastIndexOf('\n', endMarkerLineStart - 2) + 1
+  return `${latexCode.slice(sectionStart, separatorLineStart).trim()}\n`
+}
+
 const DEFAULT_WARNING_MESSAGE =
   'REMPLIR avec un stylo NOIR la ou les cases pour chaque question. Si vous devez modifier un choix, NE PAS chercher à redessiner la case cochée par erreur, mettez simplement un coup de "blanc" dessus.\\\\\n\nLes questions précédées de \\multiSymbole peuvent avoir plusieurs réponses.\\\\ Les questions qui commencent par \\TT ne doivent pas être faites par les élèves disposant d\'un tiers temps.\\\\\n\nIl est fortement conseillé de faire les calculs dans sa tête ou sur la partie blanche de la feuille sans regarder les solutions proposées avant de remplir la bonne case plutôt que d\'essayer de choisir entre les propositions (ce qui demande de toutes les examiner et prend donc plus de temps).'
 

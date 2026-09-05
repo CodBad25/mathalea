@@ -11,7 +11,7 @@ async function testCM2N2D1(page: Page) {
   const hostname = local
     ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
-  const urlExercice = hostname + '?uuid=3bdcd&id=6N20-3&alea=vBuv&i=1'
+  const urlExercice = hostname + '?uuid=3bdcd&alea=vBuv&i=1'
   const questions = await getQuestions(page, urlExercice)
 
   for (const question of questions) {
