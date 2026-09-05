@@ -15,7 +15,7 @@ export const interactifReady = true
 export const uuid = '2af85'
 
 export const refs = {
-  'fr-fr': ['can2N51-02'],
+  'fr-fr': ['can2N51-02', '2N51-flash2'],
   'fr-ch': ['11NO3A-7'],
 }
 export default class CalculAvecRacineCarree2 extends ExerciceSimple {

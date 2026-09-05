@@ -19,7 +19,7 @@ export const dateDeModifImportante = '19/12/2025'
 export const uuid = '27f5c'
 
 export const refs = {
-  'fr-fr': ['can2N51-04'],
+  'fr-fr': ['can2N51-04', '2N50-flash3'],
   'fr-ch': ['NR'],
 }
 export default class CalculAvecRacineDef extends ExerciceSimple {
