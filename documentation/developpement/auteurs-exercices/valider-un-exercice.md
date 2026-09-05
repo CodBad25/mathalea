@@ -80,6 +80,8 @@ fichier ciblé pendant le développement.
 - les métadonnées sont uniques et complètes ;
 - les questions sont variées et ne se répètent pas ;
 - l'énoncé et la correction sont cohérents ;
+- le titre, la consigne et la ponctuation respectent
+  [Rédiger un exercice](rediger-un-exercice.md) ;
 - le HTML interactif fonctionne ;
 - le HTML non interactif reste compréhensible ;
 - le rendu LaTeX est exploitable ;

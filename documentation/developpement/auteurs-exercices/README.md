@@ -15,9 +15,11 @@ Suivez ces pages dans l'ordre pour un premier exercice.
    MathALÉA et créer une branche.
 2. [Créer un exercice](creer-un-exercice.md) : partir d'un exemple proche,
    déclarer les métadonnées et générer les questions et corrections.
-3. [Ajouter une interactivité simple](interactivite-simple.md) : afficher un
+3. [Rédiger un exercice](rediger-un-exercice.md) : titre et consignes à
+   l'infinitif, ponctuation, couleur du résultat final.
+4. [Ajouter une interactivité simple](interactivite-simple.md) : afficher un
    champ MathLive et enregistrer la réponse attendue.
-4. [Valider un exercice](valider-un-exercice.md) : contrôler les rendus et
+5. [Valider un exercice](valider-un-exercice.md) : contrôler les rendus et
    lancer les vérifications adaptées.
 
 Ce parcours suffit pour un exercice génératif classique avec une réponse

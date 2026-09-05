@@ -2,7 +2,7 @@
 
 ## Objective
 
-- Build an exercise generator supporting HTML (with multiple interactivity modes) and LaTeX output formats.
+- Build an exercise generator supporting HTML (with multiple interactivity modes), Typst and LaTeX output formats.
 
 ## Tech Stack
 
@@ -13,6 +13,15 @@
 - Unit Tests: `pnpm prebuild-unit-tests` (runs vitest, must pass before commit)
 - TypeCheck: `pnpm check` (type checks .svelte and .ts files)
 - Exercise draw stability: `pnpm stability:check` (see `documentation/tests/stabilite-exercices.md`)
+
+## Writing an exercise
+
+Titles and instructions are in the infinitive; every sentence ends with a
+period (except before a math formula on its own line); the final answer is
+wrapped in `miseEnEvidence()` and, for an interactive exercise, matches
+exactly what the student must type (no units if the input field doesn't
+expect them). See `documentation/developpement/auteurs-exercices/rediger-un-exercice.md`
+for the full rules and examples.
 
 ## Modifying a published exercise
 
