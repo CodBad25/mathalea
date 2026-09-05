@@ -14,7 +14,7 @@ export const interactifReady = true
 export const dateDePublication = '20/05/2024'
 export const uuid = 'd6cd2'
 export const refs = {
-  'fr-fr': ['can3L10'],
+  'fr-fr': ['can3L10', '2L11-flash2'],
   'fr-ch': [],
 }
 /**

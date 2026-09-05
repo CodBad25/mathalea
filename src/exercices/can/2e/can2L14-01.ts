@@ -22,7 +22,7 @@ export const dateDeModifImportante = '08/06/2024'
 export const uuid = 'b5c9c'
 
 export const refs = {
-  'fr-fr': ['can2L14-01'],
+  'fr-fr': ['can2L14-01', '2L14-flash3'],
   'fr-ch': [],
 }
 export default class ExprimerVariable extends ExerciceSimple {

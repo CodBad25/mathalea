@@ -18,7 +18,7 @@ export const dateDeModifImportante = '14/02/2026'
 export const uuid = '14e86'
 
 export const refs = {
-  'fr-fr': ['can2L14-03'],
+  'fr-fr': ['can2L14-03', '2L14-flash5'],
   'fr-ch': [],
 }
 export default class ExprimerEnFonctionRac extends ExerciceSimple {
