@@ -45,7 +45,15 @@ export const refs = {
 export default class ExerciceOperationsRelatifs extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireCaseACocher = ['Avec des écritures simplifiées']
+    this.besoinFormulaireNumerique = [
+      'Écriture des nombres relatifs',
+      3,
+      [
+        '1 : Toutes les parenthèses',
+        '2 : Un minimum de parenthèses',
+        '3 : Un minimum de parenthèses et sommes algébriques',
+      ].join('\n'),
+    ]
     this.besoinFormulaire2Texte = [
       'Type de questions',
       [
@@ -58,7 +66,7 @@ export default class ExerciceOperationsRelatifs extends Exercice {
       ].join('\n'),
     ]
     this.besoinFormulaire3Numerique = ['Valeur maximale', 99999]
-    this.sup = false // écriture simplifiée
+    this.sup = 1 // 1 : toutes les parenthèses ; 2 : minimum de parenthèses ; 3 : minimum de parenthèses et sommes algébriques
     this.sup2 = 5 // Mélange par défaut
     this.sup3 = 10 // Valeur maximum
     this.consigne = 'Calculer.'
@@ -77,6 +85,17 @@ export default class ExerciceOperationsRelatifs extends Exercice {
       melange: 5,
       defaut: 2,
     })
+    // Mode d'écriture des relatifs :
+    //  1 : toutes les parenthèses (ex. (+4) - (+5))
+    //  2 : un minimum de parenthèses (ex. 4 - (+5))
+    //  3 : un minimum de parenthèses et sommes algébriques (ex. 4 - 5)
+    // Compatibilité : l'ancienne case à cocher « écritures simplifiées » cochée correspond au mode 2.
+    let modeEcriture = 1
+    if (this.sup === true || Number(this.sup) === 2) {
+      modeEcriture = 2
+    } else if (Number(this.sup) === 3) {
+      modeEcriture = 3
+    }
     for (
       let i = 0, a, b, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
@@ -110,12 +129,13 @@ export default class ExerciceOperationsRelatifs extends Exercice {
       }
       switch (listeTypeDeQuestions[i]) {
         case 1: // multiplications
-          if (this.sup) {
-            texte = `$ ${a}  \\times ${ecritureParentheseSiNegatif(b)}$`
-            texteCorr = `$ ${a}  \\times ${ecritureParentheseSiNegatif(b)} = ${arrondi(a * b)} $`
-          } else {
+          if (modeEcriture === 1) {
             texte = `$ ${ecritureNombreRelatif(a)}  \\times ${ecritureNombreRelatif(b)}$`
             texteCorr = `$ ${ecritureNombreRelatifc(a)} \\times ${ecritureNombreRelatifc(b)}  = ${ecritureNombreRelatifc(a * b, { color: orangeMathalea })} $`
+          } else {
+            // Modes 2 et 3 : une multiplication ne comporte pas de somme algébrique.
+            texte = `$ ${a}  \\times ${ecritureParentheseSiNegatif(b)}$`
+            texteCorr = `$ ${a}  \\times ${ecritureParentheseSiNegatif(b)} = ${arrondi(a * b)} $`
           }
           handleAnswers(
             this,
@@ -129,12 +149,13 @@ export default class ExerciceOperationsRelatifs extends Exercice {
           )
           break
         case 2: // quotients
-          if (this.sup) {
-            texte = `$ ${a} \\div ${ecritureParentheseSiNegatif(b)}$`
-            texteCorr = `$ ${a} \\div ${ecritureParentheseSiNegatif(b)} = ${arrondi(a / b)}$`
-          } else {
+          if (modeEcriture === 1) {
             texte = `$ ${ecritureNombreRelatif(a)}  \\div ${ecritureNombreRelatif(b)}$`
             texteCorr = `$ ${ecritureNombreRelatifc(a)}  \\div ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a / b, { color: orangeMathalea })}$`
+          } else {
+            // Modes 2 et 3 : une division ne comporte pas de somme algébrique.
+            texte = `$ ${a} \\div ${ecritureParentheseSiNegatif(b)}$`
+            texteCorr = `$ ${a} \\div ${ecritureParentheseSiNegatif(b)} = ${arrondi(a / b)}$`
           }
           handleAnswers(
             this,
@@ -144,12 +165,16 @@ export default class ExerciceOperationsRelatifs extends Exercice {
           )
           break
         case 3: // additions
-          if (this.sup) {
-            texte = `$ ${a} + ${ecritureParentheseSiNegatif(b)} $`
-            texteCorr = `$ ${a} + ${ecritureParentheseSiNegatif(b)}  = ${arrondi(a + b)} $`
-          } else {
+          if (modeEcriture === 1) {
             texte = `$ ${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)} $`
             texteCorr = `$  ${ecritureNombreRelatifc(a)} + ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a + b, { color: orangeMathalea })} $`
+          } else if (modeEcriture === 3) {
+            // Somme algébrique : + (+b) devient + b, + (-b) devient - b.
+            texte = `$ ${a} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} $`
+            texteCorr = `$ ${a} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${arrondi(a + b)} $`
+          } else {
+            texte = `$ ${a} + ${ecritureParentheseSiNegatif(b)} $`
+            texteCorr = `$ ${a} + ${ecritureParentheseSiNegatif(b)}  = ${arrondi(a + b)} $`
           }
           handleAnswers(
             this,
@@ -164,12 +189,16 @@ export default class ExerciceOperationsRelatifs extends Exercice {
           break
         case 4: // soustractions
         default:
-          if (this.sup) {
-            texte = `$ ${a} - ${ecritureNombreRelatif(b)}$`
-            texteCorr = `$ ${a} - ${ecritureNombreRelatif(b)} = ${a - b} $`
-          } else {
+          if (modeEcriture === 1) {
             texte = `$ ${ecritureNombreRelatif(a)} - ${ecritureNombreRelatif(b)} $`
             texteCorr = `$  ${ecritureNombreRelatifc(a)} - ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a - b, { color: orangeMathalea })} $`
+          } else if (modeEcriture === 3) {
+            // Somme algébrique : - (+b) devient - b, - (-b) devient + b.
+            texte = `$ ${a} ${b >= 0 ? '-' : '+'} ${Math.abs(b)} $`
+            texteCorr = `$ ${a} ${b >= 0 ? '-' : '+'} ${Math.abs(b)} = ${a - b} $`
+          } else {
+            texte = `$ ${a} - ${ecritureNombreRelatif(b)}$`
+            texteCorr = `$ ${a} - ${ecritureNombreRelatif(b)} = ${a - b} $`
           }
           handleAnswers(
             this,
@@ -191,7 +220,7 @@ export default class ExerciceOperationsRelatifs extends Exercice {
         texteAvant: sp() + '$=$',
       })
 
-      if (this.sup) {
+      if (modeEcriture !== 1) {
         // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
 
         const textCorrSplit = texteCorr.split('=')
