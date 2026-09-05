@@ -1,4 +1,8 @@
-import { buildCorrDetails, renderMathJsonLatex } from '../../lib/calculerCe'
+import {
+  buildCorrDetails,
+  renderMathJsonLatex,
+  toMathJsonNode,
+} from '../../lib/calculerCe'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -216,7 +220,9 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
       )
       // renderMathJsonLatex gère les parenthèses autour des négatifs dans les produits et puissances,
       // et préserve l'ordre des termes tel qu'affiché dans la question.
-      const expression = renderMathJsonLatex(parsedExpression.json as any)
+      const expression = renderMathJsonLatex(
+        toMathJsonNode(parsedExpression.json),
+      )
       const corrDetails = buildCorrDetails(parsedExpression, {
         comment: this.correctionDetaillee,
         singleOp: false,

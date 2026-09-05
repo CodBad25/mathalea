@@ -1,5 +1,8 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { ajouteCanvas3d } from '../../lib/3d/3d_dynamique/Canvas3DElement'
+import {
+  ajouteCanvas3d,
+  type Elements3DDescription,
+} from '../../lib/3d/3d_dynamique/Canvas3DElement'
 import {
   createPrismWithWireframe,
   createPyramidWithWireframe,
@@ -80,7 +83,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
       let correction = ''
       let reponse = 0
       let question = 'Voici un solide :<br>'
-      const objects = []
+      const objects: Elements3DDescription[] = []
       let n: number
       ;[choix, n] = questionsGenerees[j]
       context.anglePerspective = 20
@@ -141,7 +144,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
               ]
               objects.push({
                 type: 'bufferGeometry',
-                geometry: createWireframeUnion(geometries),
+                geometry: createWireframeUnion(geometries).toJSON(),
               })
             } else {
               for (let i = 0; i < n; i++) {
@@ -170,7 +173,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
               ]
               objects.push({
                 type: 'bufferGeometry',
-                geometry: createWireframeUnion(geometries),
+                geometry: createWireframeUnion(geometries).toJSON(),
               })
             } else {
               for (let i = 0; i < n; i++) {
@@ -196,7 +199,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
               ]
               objects.push({
                 type: 'bufferGeometry',
-                geometry: createWireframeUnion(geometries),
+                geometry: createWireframeUnion(geometries).toJSON(),
               })
             } else {
               for (let i = 0; i < n; i++) {
@@ -222,7 +225,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
               ]
               objects.push({
                 type: 'bufferGeometry',
-                geometry: createWireframeUnion(geometries),
+                geometry: createWireframeUnion(geometries).toJSON(),
               })
             } else {
               objets.push(...chapeau1.c2d, ...chapeau2.c2d)
@@ -261,7 +264,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
               ]
               objects.push({
                 type: 'bufferGeometry',
-                geometry: createWireframeUnion(geometries),
+                geometry: createWireframeUnion(geometries).toJSON(),
               })
             } else {
               for (let i = 0; i < n / 2; i++) {
@@ -291,7 +294,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
               ]
               objects.push({
                 type: 'bufferGeometry',
-                geometry: createWireframeUnion(geometries),
+                geometry: createWireframeUnion(geometries).toJSON(),
               })
             } else {
               for (let i = 0; i < n / 2; i++) {
@@ -329,7 +332,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
               ]
               objects.push({
                 type: 'bufferGeometry',
-                geometry: createWireframeUnion(geometries),
+                geometry: createWireframeUnion(geometries).toJSON(),
               })
             } else {
               for (let i = 0; i < n / 2; i++) {
@@ -355,7 +358,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
       // fin de la factorisation
 
       if (objects.length > 0) {
-        const content = { objects: objects as any, autoCenterZoomMargin: 1 }
+        const content = { objects, autoCenterZoomMargin: 1 }
         question += ajouteCanvas3d({
           id: `canvas3d-Ex${this.numeroExercice}Q${j}`,
           content,

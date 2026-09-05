@@ -1,9 +1,14 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { droiteParPointEtPente } from '../../lib/2d/droites'
-import { crochetD, crochetG } from '../../lib/2d/intervalles'
+import {
+  crochetD,
+  crochetG,
+  type CrochetD,
+  type CrochetG,
+} from '../../lib/2d/intervalles'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
-import { segment } from '../../lib/2d/segmentsVecteurs'
+import { segment, type Segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
@@ -13,6 +18,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
+import type { SquareRootInequalityGraphicElements } from '../../types/1A-C10'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '02/10/2025'
 export const dateDeModifImportante = '12/10/2025'
@@ -87,7 +93,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
-  ) {
+  ): SquareRootInequalityGraphicElements {
     const o = latex2d('\\text{O}', -0.2, -0.3, { letterSize: 'scriptsize' })
 
     // Position graphique fixe pour l'affichage
@@ -104,8 +110,8 @@ export default class Auto1AC10f extends ExerciceQcmA {
     const O = pointAbstrait(0, 0)
 
     // Segments de solution et crochets selon le type d'inéquation
-    let segmentsSolution = []
-    let crochets = []
+    let segmentsSolution: Segment[] = []
+    let crochets: (CrochetD | CrochetG)[] = []
 
     if (typeInequation === 'inf') {
       const sOAx = segment(O, Ax, 'red')
@@ -152,7 +158,10 @@ export default class Auto1AC10f extends ExerciceQcmA {
   }
 
   // Méthode utilitaire pour créer le repère et les graphiques
-  private creerGraphiques(val: number, elements: any) {
+  private creerGraphiques(
+    val: number,
+    elements: SquareRootInequalityGraphicElements,
+  ) {
     const { o, sAAx, segmentsSolution, crochets, textes } = elements
 
     const r1 = repere({

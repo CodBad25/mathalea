@@ -93,6 +93,8 @@ Réutilisez les contrats du moteur avant de définir une nouvelle structure :
 - `ObjetMathalea2D` dans `src/lib/2d/ObjetMathalea2D.ts` pour les objets 2D ;
 - `NestedObjetMathalea2dArray` dans `src/types/2d.ts` pour un tableau de rendu
   qui contient aussi des sous-tableaux ou des objets LaTeX ;
+- `RepereOptions` dans `src/lib/2d/reperes.ts` et `Mathalea2DOptions` dans
+  `src/modules/mathalea2d.ts` pour les options de repère et de rendu ;
 - `AnswerValueType`, `AnswerType` et `Valeur` dans `src/lib/types.ts` pour,
   respectivement, une valeur de réponse, cette valeur avec ses options de
   comparaison, et les champs d'une question interactive.

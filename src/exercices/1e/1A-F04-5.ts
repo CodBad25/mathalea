@@ -1,4 +1,4 @@
-import { repere } from '../../lib/2d/reperes'
+import { repere, type RepereOptions } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -6,7 +6,7 @@ import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
-import { mathalea2d } from '../../modules/mathalea2d'
+import { mathalea2d, type Mathalea2DOptions } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '04/10/2025'
@@ -28,8 +28,8 @@ export const titre =
 type CasConfig = {
   f: (x: number) => number
   g: (x: number) => number
-  repere: any
-  mathalea: any
+  repere: RepereOptions
+  mathalea: Mathalea2DOptions
   domaine: string
   curveMin: number
   curveMax: number

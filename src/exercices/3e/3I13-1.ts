@@ -114,7 +114,7 @@ export default class ExerciceTableur3T10 extends Exercice {
       isInteger: true,
     })
     // cellDatas pour la génération du tableau en latex
-    const cellDatas: any = {
+    const cellDatas: Record<number, Record<number, { v: number }>> = {
       0: {
         0: { v: serie[0] },
       },
@@ -193,7 +193,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     const nbFacesDe = choice([4, 6, 8, 10, 12, 20])
     const nbDes = randint(3, 6)
     // cellDatas pour la génération du tableau en latex
-    const cellDatas: any = {
+    const cellDatas: Record<number, Record<number, { v: number }>> = {
       0: {
         0: { v: randint(1, nbFacesDe) },
       },

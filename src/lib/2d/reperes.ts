@@ -244,6 +244,88 @@ export function papierPointe({
   })
 }
 
+export type RepereOptions = {
+  xUnite?: number
+  yUnite?: number
+  xMin?: number
+  xMax?: number
+  yMin?: number
+  yMax?: number
+  axeXisVisible?: boolean
+  axeYisVisible?: boolean
+  axesEpaisseur?: number
+  axesCouleur?: string
+  axeXStyle?: string
+  axeYStyle?: string
+  thickEpaisseur?: number
+  thickHauteur?: number
+  thickCouleur?: string
+  xThickDistance?: number
+  xThickListe?: number[] | boolean
+  xThickMin?: number
+  xThickMax?: number
+  yThickDistance?: number
+  yThickListe?: number[] | boolean
+  yThickMin?: number
+  yThickMax?: number
+  labelsXareVisible?: boolean
+  labelsYareVisible?: boolean
+  xLabelDistance?: number
+  xLabelListe?: boolean | (number | { valeur: number; texte: string })[]
+  xLabelMin?: number
+  xLabelMax?: number
+  yLabelDistance?: number
+  yLabelListe?: boolean | (number | { valeur: number; texte: string })[]
+  yLabelMin?: number
+  yLabelMax?: number
+  precisionLabelX?: number
+  precisionLabelY?: number
+  xLabelEcart?: number
+  yLabelEcart?: number
+  xLegende?: string
+  xLegendePosition?: number[]
+  yLegende?: string
+  yLegendePosition?: number[]
+  grille?: boolean | 'pointilles'
+  grilleDistance?: number
+  grilleCouleur?: string
+  grilleOpacite?: number
+  grilleEpaisseur?: number
+  grilleSecondaire?: boolean
+  grilleSecondaireDistance?: number
+  grilleSecondaireCouleur?: string
+  grilleSecondaireOpacite?: number
+  grilleSecondaireEpaisseur?: number
+  grilleX?: boolean | 'pointilles'
+  grilleXListe?: number[]
+  grilleXDistance?: number
+  grilleXMin?: number
+  grilleXMax?: number
+  grilleXCouleur?: string
+  grilleXOpacite?: number
+  grilleY?: boolean | 'pointilles'
+  grilleYListe?: number[]
+  grilleYDistance?: number
+  grilleYMin?: number
+  grilleYMax?: number
+  grilleYCouleur?: string
+  grilleYOpacite?: number
+  grilleSecondaireX?: boolean | 'pointilles'
+  grilleSecondaireXListe?: number[]
+  grilleSecondaireXDistance?: number
+  grilleSecondaireXMin?: number
+  grilleSecondaireXMax?: number
+  grilleSecondaireXCouleur?: string
+  grilleSecondaireXOpacite?: number
+  grilleSecondaireY?: boolean | 'pointilles'
+  grilleSecondaireYListe?: number[]
+  grilleSecondaireYDistance?: number
+  grilleSecondaireYMin?: number
+  grilleSecondaireYMax?: number
+  grilleSecondaireYCouleur?: string
+  grilleSecondaireYOpacite?: number
+}
+
 /**
  * repere({xUnite, yUnite, xMin, xMax, yMin, yMax, axeX, axeY, axesEpaisseur, axesCouleur, axeXStyle, axeYStyle, thickEpaisseur,
  * thickHauteur, thickCouleur, xThickDistance, xThickListe, xThickMin, xThickMax, yThickDistance, yThickListe,
@@ -436,87 +518,7 @@ export class Repere extends ObjetMathalea2D {
     grilleSecondaireYMax = yMax,
     grilleSecondaireYCouleur = grilleSecondaireCouleur,
     grilleSecondaireYOpacite = grilleSecondaireOpacite,
-  }: {
-    xUnite?: number
-    yUnite?: number
-    xMin?: number
-    xMax?: number
-    yMin?: number
-    yMax?: number
-    axeXisVisible?: boolean
-    axeYisVisible?: boolean
-    axesEpaisseur?: number
-    axesCouleur?: string
-    axeXStyle?: string
-    axeYStyle?: string
-    thickEpaisseur?: number
-    thickHauteur?: number
-    thickCouleur?: string
-    xThickDistance?: number
-    xThickListe?: number[] | boolean
-    xThickMin?: number
-    xThickMax?: number
-    yThickDistance?: number
-    yThickListe?: number[] | boolean
-    yThickMin?: number
-    yThickMax?: number
-    labelsXareVisible?: boolean
-    labelsYareVisible?: boolean
-    xLabelDistance?: number
-    xLabelListe?: boolean | (number | { valeur: number; texte: string })[]
-    xLabelMin?: number
-    xLabelMax?: number
-    yLabelDistance?: number
-    yLabelListe?: boolean | (number | { valeur: number; texte: string })[]
-    yLabelMin?: number
-    yLabelMax?: number
-    precisionLabelX?: number
-    precisionLabelY?: number
-    xLabelEcart?: number
-    yLabelEcart?: number
-    xLegende?: string
-    xLegendePosition?: number[]
-    yLegende?: string
-    yLegendePosition?: number[]
-    grille?: boolean | 'pointilles'
-    grilleDistance?: number
-    grilleCouleur?: string
-    grilleOpacite?: number
-    grilleEpaisseur?: number
-    grilleSecondaire?: boolean
-    grilleSecondaireDistance?: number
-    grilleSecondaireCouleur?: string
-    grilleSecondaireOpacite?: number
-    grilleSecondaireEpaisseur?: number
-    grilleX?: boolean | 'pointilles'
-    grilleXListe?: number[]
-    grilleXDistance?: number
-    grilleXMin?: number
-    grilleXMax?: number
-    grilleXCouleur?: string
-    grilleXOpacite?: number
-    grilleY?: boolean | 'pointilles'
-    grilleYListe?: number[]
-    grilleYDistance?: number
-    grilleYMin?: number
-    grilleYMax?: number
-    grilleYCouleur?: string
-    grilleYOpacite?: number
-    grilleSecondaireX?: boolean | 'pointilles'
-    grilleSecondaireXListe?: number[]
-    grilleSecondaireXDistance?: number
-    grilleSecondaireXMin?: number
-    grilleSecondaireXMax?: number
-    grilleSecondaireXCouleur?: string
-    grilleSecondaireXOpacite?: number
-    grilleSecondaireY?: boolean | 'pointilles'
-    grilleSecondaireYListe?: number[]
-    grilleSecondaireYDistance?: number
-    grilleSecondaireYMin?: number
-    grilleSecondaireYMax?: number
-    grilleSecondaireYCouleur?: string
-    grilleSecondaireYOpacite?: number
-  }) {
+  }: RepereOptions) {
     super()
 
     // Les propriétés exportables
@@ -1147,87 +1149,7 @@ export function repere({
   grilleSecondaireYMax = yMax,
   grilleSecondaireYCouleur = grilleSecondaireCouleur,
   grilleSecondaireYOpacite = grilleSecondaireOpacite,
-}: {
-  xUnite?: number
-  yUnite?: number
-  xMin?: number
-  xMax?: number
-  yMin?: number
-  yMax?: number
-  axeXisVisible?: boolean
-  axeYisVisible?: boolean
-  axesEpaisseur?: number
-  axesCouleur?: string
-  axeXStyle?: string
-  axeYStyle?: string
-  thickEpaisseur?: number
-  thickHauteur?: number
-  thickCouleur?: string
-  xThickDistance?: number
-  xThickListe?: number[] | boolean
-  xThickMin?: number
-  xThickMax?: number
-  yThickDistance?: number
-  yThickListe?: number[] | boolean
-  yThickMin?: number
-  yThickMax?: number
-  labelsXareVisible?: boolean
-  labelsYareVisible?: boolean
-  xLabelDistance?: number
-  xLabelListe?: boolean | (number | { valeur: number; texte: string })[]
-  xLabelMin?: number
-  xLabelMax?: number
-  yLabelDistance?: number
-  yLabelListe?: boolean | (number | { valeur: number; texte: string })[]
-  yLabelMin?: number
-  yLabelMax?: number
-  precisionLabelX?: number
-  precisionLabelY?: number
-  xLabelEcart?: number
-  yLabelEcart?: number
-  xLegende?: string
-  xLegendePosition?: number[]
-  yLegende?: string
-  yLegendePosition?: number[]
-  grille?: boolean | 'pointilles'
-  grilleDistance?: number
-  grilleCouleur?: string
-  grilleOpacite?: number
-  grilleEpaisseur?: number
-  grilleSecondaire?: boolean
-  grilleSecondaireDistance?: number
-  grilleSecondaireCouleur?: string
-  grilleSecondaireOpacite?: number
-  grilleSecondaireEpaisseur?: number
-  grilleX?: boolean | 'pointilles'
-  grilleXListe?: number[]
-  grilleXDistance?: number
-  grilleXMin?: number
-  grilleXMax?: number
-  grilleXCouleur?: string
-  grilleXOpacite?: number
-  grilleY?: boolean | 'pointilles'
-  grilleYListe?: number[]
-  grilleYDistance?: number
-  grilleYMin?: number
-  grilleYMax?: number
-  grilleYCouleur?: string
-  grilleYOpacite?: number
-  grilleSecondaireX?: boolean | 'pointilles'
-  grilleSecondaireXListe?: number[]
-  grilleSecondaireXDistance?: number
-  grilleSecondaireXMin?: number
-  grilleSecondaireXMax?: number
-  grilleSecondaireXCouleur?: string
-  grilleSecondaireXOpacite?: number
-  grilleSecondaireY?: boolean | 'pointilles'
-  grilleSecondaireYListe?: number[]
-  grilleSecondaireYDistance?: number
-  grilleSecondaireYMin?: number
-  grilleSecondaireYMax?: number
-  grilleSecondaireYCouleur?: string
-  grilleSecondaireYOpacite?: number
-}) {
+}: RepereOptions) {
   return new Repere({
     xUnite,
     yUnite,

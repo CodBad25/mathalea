@@ -9,7 +9,10 @@ import { angleModulo } from '../../lib/2d/utilitairesGeometriques'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
-import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import {
+  addMultiMathfield,
+  type DataOptionsMultiMathfield,
+} from '../../lib/customElements/MultiMathfield'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
@@ -27,6 +30,8 @@ import {
 } from '../../modules/outils'
 import type { AnswerType } from '../../lib/types'
 import Exercice from '../Exercice'
+
+type ChampName = 'champ1' | 'champ2' | 'champ3' | 'champ4'
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
 
@@ -467,13 +472,14 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
       if (this.interactif) {
         const lettres = 'abcdefghijklmnopqrstuvwxyz'
 
-        const dataOptions: Record<string, any> = {}
-        const answers: Record<string, AnswerType> = {}
+        const dataOptions: DataOptionsMultiMathfield = {}
+        const answers: Partial<Record<ChampName, AnswerType>> = {}
+        const champNames: ChampName[] = ['champ1', 'champ2', 'champ3', 'champ4']
 
         const lignes = []
 
         for (let k = 0; k < nbAngles; k++) {
-          const champName = `champ${k + 1}`
+          const champName = champNames[k]
 
           // 🔹 Préfixe a), b), c)... seulement si nbAngles > 1
           const prefix = nbAngles > 1 ? `${lettres[k]}) ` : ''
