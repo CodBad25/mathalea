@@ -18,7 +18,7 @@ export const dateDeModifImportante = '16/01/2025'
 export const uuid = '93bb5'
 
 export const refs = {
-  'fr-fr': ['can6N10', '6N2autoB-1', '6AutoN2-5'],
+  'fr-fr': ['can6N10', '6N2autoB-6', '6AutoN2-5'],
   'fr-ch': [],
 }
 export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {

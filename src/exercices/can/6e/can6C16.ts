@@ -20,7 +20,7 @@ export const amcType = 'AMCNum'
 export const uuid = '88435'
 
 export const refs = {
-  'fr-fr': ['can6C16', '6P3autoA-3'],
+  'fr-fr': ['can6C16', '6P3autoA-8'],
   'fr-ch': [],
 }
 export default class DoubleEtMoitie extends ExerciceSimple {
