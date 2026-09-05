@@ -6,6 +6,7 @@ export const listOfCustomElements = [
   'mathalea-dom-ready',
   'meta-custom',
   'mathalea-labyrinthe',
+  'juniper-green',
   'blockly-editor',
   'fraction-cliquable',
   'labyrinthe-blockly',
