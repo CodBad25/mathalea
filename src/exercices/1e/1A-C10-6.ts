@@ -271,7 +271,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
-    graphiqueC: any,
+    graphiqueC: string,
     reponseCorrecte: string,
   ) {
     const borne = val ** 2

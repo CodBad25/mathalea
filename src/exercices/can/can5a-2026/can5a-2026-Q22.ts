@@ -7,6 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
+import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Déterminer le nombre de faces d'un solide"
@@ -39,7 +40,7 @@ export default class Can52026Q22 extends ExerciceCan {
     }
 
     let reponse: number
-    let objets: any[]
+    let objets: NestedObjetMathalea2dArray
 
     if (typeSolide === 'prisme_pentagonal') {
       const A = pointAbstrait(0, 1, 'A', 'left')

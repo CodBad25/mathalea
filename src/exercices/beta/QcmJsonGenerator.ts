@@ -188,16 +188,60 @@ export default class QcmJsonGenerator extends ExerciceQcm {
    * @param data - Les données à valider
    * @returns true si les données sont valides
    */
-  static validateJsonData(data: any): data is QcmJsonData {
+  static validateJsonData(data: unknown): data is QcmJsonData {
     if (!data || typeof data !== 'object') return false
-    if (!data.titre || typeof data.titre !== 'string') return false
-    if (!Array.isArray(data.questions) || data.questions.length === 0)
+    if (!('titre' in data) || !data.titre || typeof data.titre !== 'string')
       return false
+    if (
+      !('questions' in data) ||
+      !Array.isArray(data.questions) ||
+      data.questions.length === 0
+    )
+      return false
+    if (
+      'consigne' in data &&
+      data.consigne !== undefined &&
+      typeof data.consigne !== 'string'
+    )
+      return false
+    if ('options' in data && data.options !== undefined) {
+      const options = data.options
+      if (!options || typeof options !== 'object') return false
+      if (
+        'vertical' in options &&
+        options.vertical !== undefined &&
+        typeof options.vertical !== 'boolean'
+      )
+        return false
+      if (
+        'ordered' in options &&
+        options.ordered !== undefined &&
+        typeof options.ordered !== 'boolean'
+      )
+        return false
+      if (
+        'lastChoice' in options &&
+        options.lastChoice !== undefined &&
+        typeof options.lastChoice !== 'number'
+      )
+        return false
+    }
 
     // Vérifier chaque question
-    for (const question of data.questions) {
-      if (!question.enonce || typeof question.enonce !== 'string') return false
-      if (!Array.isArray(question.reponses) || question.reponses.length < 2)
+    const questions: unknown[] = data.questions
+    for (const question of questions) {
+      if (!question || typeof question !== 'object') return false
+      if (
+        !('enonce' in question) ||
+        !question.enonce ||
+        typeof question.enonce !== 'string'
+      )
+        return false
+      if (
+        !('reponses' in question) ||
+        !Array.isArray(question.reponses) ||
+        question.reponses.length < 2
+      )
         return false
 
       // Vérifier que toutes les réponses sont des strings
@@ -206,7 +250,7 @@ export default class QcmJsonGenerator extends ExerciceQcm {
       }
 
       // Vérifier les corrections si présentes
-      if (question.corrections) {
+      if ('corrections' in question && question.corrections !== undefined) {
         if (!Array.isArray(question.corrections)) return false
         for (const correction of question.corrections) {
           if (typeof correction !== 'string') return false
@@ -214,7 +258,10 @@ export default class QcmJsonGenerator extends ExerciceQcm {
       }
 
       // Vérifier les bonnes réponses si présentes
-      if (question.bonnesReponses) {
+      if (
+        'bonnesReponses' in question &&
+        question.bonnesReponses !== undefined
+      ) {
         if (!Array.isArray(question.bonnesReponses)) return false
         if (question.bonnesReponses.length !== question.reponses.length)
           return false

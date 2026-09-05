@@ -126,7 +126,7 @@ export default class SujetCAN2021Seconde extends Exercice {
       let nbChamps = 1
       let texte = ''
       let texteCorr = ''
-      let reponse: any = 0
+      let reponse: number | string | string[] | number[] | FractionEtendue = 0
       switch (typeQuestionsDisponibles[i]) {
         case 1:
           a = randint(2, 9)
@@ -1164,8 +1164,7 @@ Donner une valeur approchée de l'antécédent de $${a}$ par $f$ ?<br>`
               texteCorr =
                 "Sur $36$ cas possibles équiprobables, il y en a $6$ qui sont des doubles. Donc la probabilité d'obtenir deux fois le même nombre est $\\dfrac{6}{36}=\\dfrac{1}{6}$."
               reponse = fraction(1, 6)
-            }
-            if (choix === 'b') {
+            } else {
               texte = `On lance deux dés cubiques équilibrés.<br>Quelle est la probabilité d’obtenir un total de $${c}$ ?<br>Donner le résultat sous la forme d'une fraction irréductible.`
               texteCorr = `Sur $36$ cas possibles équiprobables, il y en a $${p[c - 2]}$ qui donnent une somme de $${c}$. Donc la probabilité d'obtenir un total de $${c}$ est $\\dfrac{${p[c - 2]}}{36}${simplificationDeFractionAvecEtapes(p[c - 2], 36)}$.`
               reponse = fraction(p[c - 2], 36).simplifie()
@@ -1199,7 +1198,11 @@ Donner une valeur approchée de l'antécédent de $${a}$ par $f$ ?<br>`
           p,
           k,
           nbChamps,
-          reponse instanceof FractionEtendue ? reponse.texFraction : reponse,
+          reponse instanceof FractionEtendue
+            ? reponse.texFraction
+            : Array.isArray(reponse)
+              ? reponse.toString()
+              : reponse,
         )
       ) {
         // Si la question n'a jamais été posée, on en créé une autre

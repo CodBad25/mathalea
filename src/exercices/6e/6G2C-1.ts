@@ -81,7 +81,7 @@ export default class RegionsDuPlan extends Exercice {
         'Trouve la ou les conditions vérifiées par le point $M$ :<br><br>'
       let texteCorr = ''
       const objetsEnonce: NestedObjetMathalea2dArray = []
-      let donneesAleatoires: any[] = []
+      let donneesAleatoires: (number | string)[] = []
       const noms = choisitLettresDifferentes(3, 'M')
       switch (listeTypeDeQuestions[i]) {
         case 'demiplanContenantPoint':

@@ -86,7 +86,7 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
     )
     let texte /** string */, texteCorr
     /** string */
-    let a /** number */, n /** number */, reponse /** any */
+    let a: number, n: number, reponse: FractionEtendue
     const alternance2Et3 = combinaisonListes([2, 3], this.nbQuestions)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (listeTypeQuestions[i]) {

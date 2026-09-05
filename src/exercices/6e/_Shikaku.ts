@@ -142,8 +142,8 @@ export default class Shikaku {
       | {
           x: number
           y: number
-          largeur: any
-          hauteur: any
+          largeur: number
+          hauteur: number
           aire: number
           placeNom: { x: number; y: number }
         } = false

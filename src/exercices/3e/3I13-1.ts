@@ -270,7 +270,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     const largeur = randint(20, 30)
     const longueur = randint(largeur + 1, 50)
     // Question sur l'aire d'un rectangle
-    const cellDatas: any = {
+    const cellDatas = {
       0: {
         0: { v: 'Largeur' },
         1: { v: largeur },
@@ -345,7 +345,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     const prixHT = randint(10, 100)
     const tauxTVA = choice([5.5, 10, 20])
     // Question sur le prix TTC
-    const cellDatas: any = {
+    const cellDatas = {
       0: {
         0: { v: 'Prix HT' },
         1: { v: prixHT },
@@ -426,7 +426,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     texte = `On a saisi dans le tableur les nombres suivants :<br>
     A1=${a}, A2=${b}, B1=${c}.<br>
     Quelle formule doit-on saisir dans la cellule B2 pour obtenir la quatrième proportionnelle ?<br>`
-    const cellDatas: any = {
+    const cellDatas = {
       0: {
         0: { v: a },
         1: { v: c },
@@ -584,7 +584,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     ).join(', ')
     texte = `On a relevé les températures (en °C) d'une semaine : ${temperatures}.<br>
     Quelle formule doit-on saisir dans la cellule H2 pour obtenir la température moyenne de cette semaine ?<br>`
-    const cellDatas: any = {
+    const cellDatas = {
       0: {
         0: { v: nomDuJour(1) },
         1: { v: nomDuJour(2) },

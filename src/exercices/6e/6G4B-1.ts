@@ -25,6 +25,7 @@ import {
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
+import type { AnswerType } from '../../lib/types'
 import Exercice from '../Exercice'
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
@@ -467,7 +468,7 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
         const lettres = 'abcdefghijklmnopqrstuvwxyz'
 
         const dataOptions: Record<string, any> = {}
-        const answers: Record<string, any> = {}
+        const answers: Record<string, AnswerType> = {}
 
         const lignes = []
 

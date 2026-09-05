@@ -191,18 +191,18 @@ export default class SujetCAN2023troisieme extends Exercice {
         J,
         texte = '',
         texteCorr = '',
-        reponse: any,
+        reponse: number | string | Decimal | FractionEtendue,
         prenom1,
         L,
         E,
         choix,
-        a: any,
-        b: any,
-        c: any,
-        d: any,
-        e: any,
-        f: any,
-        k: any,
+        a: number | Decimal | number[],
+        b: number | Decimal,
+        c: number | Decimal,
+        d: number | Decimal | FractionEtendue,
+        e: number | Decimal | FractionEtendue,
+        f: number | FractionEtendue,
+        k: number | Decimal,
         s1,
         s2,
         A,
@@ -265,7 +265,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             case 'centièmes':
               reponse = e
               break
-            case 'millièmes':
+            default: // Le dernier choix possible est « millièmes ».
               reponse = f
               break
           }
@@ -679,13 +679,13 @@ export default class SujetCAN2023troisieme extends Exercice {
           } else {
             a = randint(1, 4) * 2
             k = choice([new Decimal('1.5'), new Decimal('2.5')])
-            b = k * a
+            b = Number(k) * a
             reponse = new Decimal(b).mul(k)
             texte = `$${a}$ classeurs identiques coûtent $${b}$ €. ${context.isHtml ? '' : '<br>'} Combien coûtent $${b}$ classeurs ? `
 
             texteCorr = `$${a}$ classeurs coûtent $${b}$ €.<br>
               $${a / 2}$ ${a / 2 === 1 ? 'classeur coûte' : 'classeurs coûtent'}  $${texPrix(b / 2)}$ €.<br>
-              Ainsi,   $${b}$ classeurs coûtent ${k > 2 ? `$2\\times ${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.` : `$${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.`}`
+              Ainsi,   $${b}$ classeurs coûtent ${Number(k) > 2 ? `$2\\times ${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.` : `$${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.`}`
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -776,23 +776,23 @@ export default class SujetCAN2023troisieme extends Exercice {
             texte = `Quel est l'arrondi au dixième de $${texNombre(d, 4)}$ ?`
             if (c > 4) {
               texteCorr = `Pour arrondir au dixième, on regarde le chiffre des centièmes : $${c}$.<br>
-             Comme $${c}\\geqslant 5$, alors l'arrondi au dixième de $${texNombre(d)}$ est $${miseEnEvidence(texNombre(arrondi(d, 1)))}$.`
-              reponse = arrondi(d, 1)
+             Comme $${c}\\geqslant 5$, alors l'arrondi au dixième de $${texNombre(d)}$ est $${miseEnEvidence(texNombre(arrondi(Number(d), 1)))}$.`
+              reponse = arrondi(Number(d), 1)
             } else {
               texteCorr = `Pour arrondir au dixième, on regarde le chiffre des centièmes : $${c}$.<br>
-                Comme $${c}< 5$, alors l'arrondi au dixième de $${texNombre(d, 4)}$  est $${miseEnEvidence(texNombre(arrondi(d, 1)))}$.`
-              reponse = arrondi(d, 1)
+                Comme $${c}< 5$, alors l'arrondi au dixième de $${texNombre(d, 4)}$  est $${miseEnEvidence(texNombre(arrondi(Number(d), 1)))}$.`
+              reponse = arrondi(Number(d), 1)
             }
           } else {
             texte = `Quel est l'arrondi au centième de $${texNombre(d, 4)}$ ?`
             if (e > 4) {
               texteCorr = `Pour arrondir au centième, on regarde le chiffre des millièmes : $${e}$.<br>
-             Comme $${e}\\geqslant 5$, alors l'arrondi au centième de $${texNombre(d, 4)}$ est $${miseEnEvidence(texNombre(arrondi(d, 2)))}$.`
-              reponse = arrondi(d, 2)
+             Comme $${e}\\geqslant 5$, alors l'arrondi au centième de $${texNombre(d, 4)}$ est $${miseEnEvidence(texNombre(arrondi(Number(d), 2)))}$.`
+              reponse = arrondi(Number(d), 2)
             } else {
               texteCorr = `Pour arrondir au centième, on regarde le chiffre des millièmes : $${e}$.<br>
-                Comme $${e}< 5$, alors l'arrondi au centième de $${texNombre(d, 4)}$ est $${miseEnEvidence(texNombre(arrondi(d, 2)))}$.`
-              reponse = arrondi(d, 2)
+                Comme $${e}< 5$, alors l'arrondi au centième de $${texNombre(d, 4)}$ est $${miseEnEvidence(texNombre(arrondi(Number(d), 2)))}$.`
+              reponse = arrondi(Number(d), 2)
             }
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -1090,8 +1090,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               ),
             )
             this.listeCanReponsesACompleter.push('$AB=\\ldots$')
-          }
-          if (choix === 'b') {
+          } else if (choix === 'b') {
             objets.push(pol[0])
             objets.push(
               texteParPosition(
@@ -1153,8 +1152,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               ),
             )
             this.listeCanReponsesACompleter.push('$AC=\\ldots$')
-          }
-          if (choix === 'c') {
+          } else {
             objets.push(pol[0])
             objets.push(
               texteParPosition(
@@ -1347,7 +1345,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             e = randint(3, 7)
 
             texte = `$${texNombre(e)} \\times ${texNombre(d, 1)}+${texNombre(10 - e, 1)}\\times ${texNombre(d, 1)}$`
-            texteCorr = `$${texNombre(e)} \\times ${texNombre(d, 1)}+${texNombre(10 - e)}\\times ${texNombre(d, 1)}=${texNombre(d, 1)}\\times (${e}+${10 - e})=${texNombre(d, 1)}\\times 10=${miseEnEvidence(texNombre(10 * d, 0))}$`
+            texteCorr = `$${texNombre(e)} \\times ${texNombre(d, 1)}+${texNombre(10 - e)}\\times ${texNombre(d, 1)}=${texNombre(d, 1)}\\times (${e}+${10 - e})=${texNombre(d, 1)}\\times 10=${miseEnEvidence(texNombre(10 * Number(d), 0))}$`
             reponse = new Decimal(d).mul(10)
           } else {
             d = new Decimal(
@@ -1356,7 +1354,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             e = randint(3, 49, [10, 20, 30, 40])
 
             texte = `$${texNombre(e)} \\times ${texNombre(d, 1)}+${texNombre(100 - e, 1)}\\times ${texNombre(d, 1)}$`
-            texteCorr = `$${texNombre(e)} \\times ${texNombre(d, 1)}+${texNombre(100 - e)}\\times ${texNombre(d, 1)}=${texNombre(d, 1)}\\times (${e}+${100 - e})=${texNombre(d, 1)}\\times 100=${miseEnEvidence(texNombre(100 * d, 0))}$`
+            texteCorr = `$${texNombre(e)} \\times ${texNombre(d, 1)}+${texNombre(100 - e)}\\times ${texNombre(d, 1)}=${texNombre(d, 1)}\\times (${e}+${100 - e})=${texNombre(d, 1)}\\times 100=${miseEnEvidence(texNombre(100 * Number(d), 0))}$`
             reponse = new Decimal(d).mul(100)
           }
 
@@ -2208,8 +2206,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `La réduction est de $${texPrix(a)}-${texPrix(a * 0.75)}=${texPrix(0.25 * a)}$.<br>
             Le prix de départ était de $${texPrix(a)}$  €. Le pourcentage de réduction est donné par : $\\dfrac{${texPrix(0.25 * a)}}{${texPrix(a)}}=0,25=${miseEnEvidence(25)}\\,\\%$. `
             reponse = 25
-          }
-          if (choix === 'b') {
+          } else if (choix === 'b') {
             a = randint(2, 7) * 10
             b = randint(1, 4) * 10
             c = arrondi(1 - b / 100, 2)
@@ -2219,8 +2216,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `La réduction est de $${texPrix(a)}-${texPrix(a * c)}=${texPrix(a - a * c)}$.<br>
               Le prix de départ était de $${texPrix(a)}$  €. Le pourcentage de réduction est donné par : $\\dfrac{${texPrix(a - a * c)}}{${texPrix(a)}}=${texNombre(b / 100, 2)}=${miseEnEvidence(b)}\\,\\%$. `
             reponse = b
-          }
-          if (choix === 'c') {
+          } else {
             a = randint(2, 5) * 100
             b = randint(1, 4) * 10
             c = arrondi(1 - b / 100, 2)
@@ -2251,7 +2247,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texte = `Zoé a parcouru $${texNombre(a)}\\text{ m}$ en $${b}$ minutes.<br>
               Quelle est sa vitesse moyenne en $\\text{km/h}$ ?`
           texteCorr = `$1$ heure $=${texNombre(new Decimal(60).div(b))}\\times ${b}$ min. <br>
-              Donc en une heure, Zoé parcourt $${texNombre(new Decimal(60).div(b))}\\times ${texNombre(a)}\\text{ m}$ $= ${miseEnEvidence(texNombre(reponse * 1000, 0))}\\text{ m}$, soit $${texNombre(reponse, 0)}\\text{ km}$.<br>
+              Donc en une heure, Zoé parcourt $${texNombre(new Decimal(60).div(b))}\\times ${texNombre(a)}\\text{ m}$ $= ${miseEnEvidence(texNombre(Number(reponse) * 1000, 0))}\\text{ m}$, soit $${texNombre(reponse, 0)}\\text{ km}$.<br>
               Sa vitesse moyenne est donc $${miseEnEvidence(texNombre(reponse))}\\text{ km/h}$.
               `
           this.listeCanEnonces.push(texte)

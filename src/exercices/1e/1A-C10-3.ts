@@ -279,7 +279,7 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
-    graphiqueC: any,
+    graphiqueC: string,
     reponseCorrecte: string,
   ) {
     const positionText =

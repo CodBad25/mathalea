@@ -2,6 +2,7 @@ import { cercle } from '../../lib/2d/cercle'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { pointSurCercle } from '../../lib/2d/utilitairesPoint'
+import type { AMCQcmChoice } from '../../lib/amc/amcTypes'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -47,7 +48,7 @@ export default class VocabulaireDeBaseDesPolygones extends Exercice {
     const propositionsAMC: {
       type: string
       enonce: string
-      propositions: any
+      propositions: AMCQcmChoice[]
     }[] = []
     const typeQuestionsDisponibles = ['nom', 'sommet', 'cote', 'diagonale']
     const listeTypeQuestions = combinaisonListes(

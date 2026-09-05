@@ -30,6 +30,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 
 export const titre = 'Résolution de triangles (cas non ambigus)'
 export const dateDePublication = '16/03/2026'
@@ -55,7 +56,7 @@ type TriangleFigureRenderMetrics = {
 }
 
 function getTriangleFigureRenderMetrics(
-  objets: any[],
+  objets: NestedObjetMathalea2dArray,
 ): TriangleFigureRenderMetrics {
   const bordures = fixeBordures(objets)
   const largeur = Math.max(bordures.xmax - bordures.xmin, 1)
@@ -70,7 +71,7 @@ function getTriangleFigureRenderMetrics(
 }
 
 function renderTriangleFigure(
-  objets: any[],
+  objets: NestedObjetMathalea2dArray,
   metrics: TriangleFigureRenderMetrics = getTriangleFigureRenderMetrics(objets),
 ) {
   const bordures = fixeBordures(objets)
@@ -657,7 +658,7 @@ function buildFigure({
   showAngleMeasures = true,
   pixelsParCmForAngles = 20,
 }: BuildFigureParams) {
-  const objets: any[] = []
+  const objets: NestedObjetMathalea2dArray = []
   // Lowercase side names: opposite vertex letter
   const sa = nom[0].toLowerCase()
   const sb = nom[1].toLowerCase()
