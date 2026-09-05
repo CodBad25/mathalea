@@ -13,7 +13,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'e75ae'
 
 export const refs = {
-  'fr-fr': ['can4L06'],
+  'fr-fr': ['can4L06', '2L10-flash1'],
   'fr-ch': [],
 }
 export default class CalculSubstitution extends ExerciceSimple {

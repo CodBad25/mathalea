@@ -19,7 +19,7 @@ export const dateDeModifImportante = '14/02/2026' // Une date de modification im
 export const uuid = 'c42f7'
 
 export const refs = {
-  'fr-fr': ['can2L14-02'],
+  'fr-fr': ['can2L14-02', '2L14-flash4'],
   'fr-ch': [],
 }
 export default class ExprimerEnFonction extends ExerciceSimple {
