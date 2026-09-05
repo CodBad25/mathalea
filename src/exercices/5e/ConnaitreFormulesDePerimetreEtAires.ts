@@ -56,7 +56,7 @@ export default class ConnaitreFormulesDePerimetreEtAires extends Exercice {
         enleveDoublons: true,
         listeOfCase: ['pi', 'pcercle'],
       })
-    else if (this.version === 'auto6M1E-4')
+    else if (this.version === '6M1autoE-4')
       typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
         max: 4,
         defaut: 5,

@@ -24,7 +24,7 @@ export const dateDePublication = '09/08/2026'
 export const uuid = '67f4a'
 
 export const refs = {
-  'fr-fr': ['6N1F-5', 'auto5N3K'],
+  'fr-fr': ['6N1F-5', '5N3autoK'],
   'fr-ch': ['9NO3C-21'],
 }
 export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice {

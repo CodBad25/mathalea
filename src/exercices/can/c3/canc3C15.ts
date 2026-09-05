@@ -18,9 +18,9 @@ export const uuid = 'aa8af'
 export const refs = {
   'fr-fr': [
     'canc3C15',
-    'auto5N1C-flash1',
-    'auto5N3A-flash2',
-    'auto5N4A-flash2',
+    '5N1autoC-flash1',
+    '5N3autoA-flash2',
+    '5N4autoA-flash2',
   ],
   'fr-ch': [],
 }

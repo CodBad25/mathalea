@@ -1,4 +1,4 @@
-import OperationsSurDecimaux from '../5e/auto5N2A'
+import OperationsSurDecimaux from '../5e/5N2autoA'
 export const titre =
   'Additionner, soustraire des nombres décimaux à une ou deux décimales'
 export const dateDePublication = '20/07/2026'

@@ -1,4 +1,4 @@
-import MultiplierDecimauxPar101001000V2 from '../6e/auto6N2C'
+import MultiplierDecimauxPar101001000V2 from '../6e/6N2autoC'
 export const dateDePublication = '01/02/2026'
 export const interactifReady = true
 

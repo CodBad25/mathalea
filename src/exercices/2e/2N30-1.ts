@@ -1,4 +1,4 @@
-import ExerciceFractionsDecomposer from '../5e/auto5N3G'
+import ExerciceFractionsDecomposer from '../5e/5N3autoG'
 export const titre =
   "Décomposer une fraction (partie entière + fraction inférieure à 1) puis donner l'écriture décimale"
 export const interactifReady = true

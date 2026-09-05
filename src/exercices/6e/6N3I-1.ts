@@ -40,7 +40,7 @@ export const dateDeModifImportante = '21/07/2025'
 export const uuid = '1f5de'
 
 export const refs = {
-  'fr-fr': ['6N3I-1', 'auto5N3F-1'],
+  'fr-fr': ['6N3I-1', '5N3autoF-1'],
   'fr-2016': ['6N20-1'],
   'fr-ch': ['9NO3D-2'],
 }

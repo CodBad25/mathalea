@@ -20,7 +20,7 @@ export const dateDePublication = '24/01/2023'
 export const uuid = 'd61d9'
 
 export const refs = {
-  'fr-fr': ['canc3C14', 'auto5N3A-flash3', 'auto5N4A-flash3'],
+  'fr-fr': ['canc3C14', '5N3autoA-flash3', '5N4autoA-flash3'],
   'fr-ch': [],
 }
 export default class TableDivisions extends ExerciceSimple {
