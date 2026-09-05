@@ -15,7 +15,7 @@ export const amcReady = true
 export const uuid = '9d3f3'
 
 export const refs = {
-  'fr-fr': ['can6M19', 'auto6M1A-flash1'],
+  'fr-fr': ['can6M19', 'auto6M1A-1'],
   'fr-ch': ['NR'],
 }
 export default class CombienDeFoisMetres extends ExerciceSimple {

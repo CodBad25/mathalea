@@ -21,7 +21,7 @@ export const dateDePublication = '03/07/2025'
 export const uuid = '0515e'
 
 export const refs = {
-  'fr-fr': ['can6C51', 'auto6N2C-flash1'],
+  'fr-fr': ['can6C51', 'auto6N2C-1'],
   'fr-ch': ['NR'],
 }
 export default class MultiplieFractionDPar10Par100Par1000 extends ExerciceSimple {

@@ -21,7 +21,7 @@ export const dateDePublication = '27/07/2022'
 export const uuid = '95dd2'
 
 export const refs = {
-  'fr-fr': ['can6C35', '6N2A-flash6', 'auto5N2A-flash8'],
+  'fr-fr': ['can6C35', '6N2A-flash6', 'auto5N2A-8'],
   'fr-ch': ['NR'],
 }
 export default class PlusOuMoins6ieme extends ExerciceSimple {

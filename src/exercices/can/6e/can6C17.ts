@@ -19,7 +19,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'daaa3'
 
 export const refs = {
-  'fr-fr': ['can6C17', 'auto6N3E-flash1', '3AutoN04-1'],
+  'fr-fr': ['can6C17', 'auto6N3E-1', '3AutoN04-1'],
   'fr-ch': [],
 }
 export default class FractionSimpleDeQuantite extends ExerciceSimple {

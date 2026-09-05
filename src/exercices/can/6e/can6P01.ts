@@ -18,7 +18,7 @@ export const amcType = 'AMCNum'
 export const uuid = '6de10'
 
 export const refs = {
-  'fr-fr': ['can6P01', 'auto6P3A-flash4'],
+  'fr-fr': ['can6P01', 'auto6P3A-4'],
   'fr-ch': [],
 }
 export default class ProportionnaliteSimple extends ExerciceSimple {
