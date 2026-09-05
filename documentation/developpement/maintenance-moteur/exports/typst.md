@@ -138,6 +138,29 @@ Deux points de mise en page vont avec l'emplacement « après chaque question »
 
 Les lignes restent dessinées par ce helper plutôt que par le `answer-lines` de taskize : outre que l'option du paquet ne couvre pas la fin d'exercice ni les exercices sans liste, la version publiée (0.2.10) n'offre ni `answer-line-style` ni `answer-line-above`/`below` — les deux rendus sont sinon identiques au pixel près (comparés à la compilation).
 
+## Styles des questions (réglage du document)
+
+Section « Styles » des Réglages du document, sous les cases à cocher de mise en page (au-dessus de « Style des exercices », qui règle le badge — voir [Styles d'exercice](#styles-dexercice-badges-exercise-bank)) : trois réglages qui portent sur les listes de questions (environnement `tasks`) de **tous** les exercices, comme « Lignes de réponse par exercice » ci-dessus — un réglage fait sur un exercice précis (depuis la palette de mise en page de l'aperçu ou la modale de réglages de l'exercice, voir plus bas) l'emporte toujours sur ce défaut.
+
+- **Colonnes des questions** (`TypstDocumentOptions.questionsColumns`, `auto` par défaut) : nombre de colonnes par défaut des listes de questions (`auto` laisse `taskize` choisir jusqu'à 4 colonnes uniformes, voir `#tasks-setup`) ;
+- **Espacement entre les questions** (`TypstDocumentOptions.questionsGutter`, 1,2 em par défaut, pas de 0,25) : espacement vertical par défaut entre les questions ;
+- **Numérotation des questions** (`TypstDocumentOptions.questionNumberingStyle`, `1)` par défaut) : motif de numérotation (`aucun`, `1.`, `1)`, `a.`, `a)`) passé en `label:` à chaque `#tasks(...)`, sauf pour un exercice dont le contenu porte ses propres repères (`a)`, `b)`...), toujours découpé et numéroté selon ce qu'il contient — voir [Numérotation des questions](#numérotation-des-questions).
+
+`buildTypstDocument` déclare ces défauts en tête de document (`#let colonnes-questions = ...`, `#let interligne-questions = ...em`, `#let numerotation-questions = ...`), et chaque `#let exN-colonnes`/`-gutter`/`-numerotation` y renvoie tant qu'aucun réglage propre à cet exercice n'existe — un changement de ces réglages met donc à jour tous les exercices non réglés individuellement en une seule régénération. `harvestCarryOver` reconnaît l'absence de réglage propre à l'exercice en comparant la valeur lue au **nom** de la variable partagée (`colonnes-questions`/`interligne-questions`/`numerotation-questions`), pas à sa valeur résolue : un changement de défaut ne fige donc jamais par erreur l'ancienne valeur dans le carry-over de chaque exercice.
+
+### Réglage par exercice
+
+Les trois styles ci-dessus sont aussi réglables **par exercice**, à deux endroits qui partagent les mêmes variables Typst (`#let exN-colonnes`/`-gutter`/`-numerotation`, `TypstCarryOver.tasksLayout[prefix].{columns,gutter,numbering}`) et restent donc synchronisés :
+
+- la palette de mise en page de l'aperçu (pastille à côté de la liste de questions, colonnes/espacement seulement — voir [Palette de mise en page](#palette-de-mise-en-page)) ;
+- la modale de réglages de l'exercice (icône ⚙, à côté du nombre de questions et de la graine) : `Settings.svelte` reçoit une prop optionnelle `typstStyle` (colonnes, espacement, options et valeur de numérotation, callbacks), fournie uniquement par `Typst.svelte` (les autres vues qui partagent ce composant — HTML, A4, OMR, AMC, TBI — ne la passent pas, la section « Mise en page des questions » ne s'y affiche donc jamais) et seulement quand l'exercice a une liste de questions à régler (`tasksLayoutValues[exN] != null`).
+
+Les callbacks de `typstStyle` (`onAdjustColumns`, `onAdjustGutter`, `onSetNumbering`) éditent directement le code Typst dans CodeMirror, exactement comme les boutons de la palette (`adjustColumns`/`adjustGutter`/`setNumberingStyle` dans `Typst.svelte`) — ils ne passent pas par `dispatchNewSettings`/`applyExerciceSettings` (mécanisme générique des vues HTML/PDF, qui écrit sur l'objet `exercice` et le store `exercicesParams`, sans rapport avec la mise en page Typst).
+
+`refreshTasksLayout` (`Typst.svelte`) résout la référence à la variable partagée vers sa valeur courante avant de l'exposer à l'UI (palette et modale) : un exercice non réglé affiche ainsi le nombre de colonnes ou l'espacement **effectif** (celui du document), pas le nom de la variable ni une valeur `auto`/`1.2em` figée qui ignorerait un défaut du document différent.
+
+Le style de numérotation par exercice utilise le même mécanisme que colonnes/espacement (`#let exN-numerotation = ...`), avec une subtilité : la mise en gras (`TypstDocumentOptions.boldQuestionNumbers`, réglage global, pas par exercice) enrobe le motif dans `(..n) => strong(numbering(motif, ..n))` (voir `boldableLabel`) ; `numbering()` échoue si son premier argument vaut `none`. Quand le motif est un littéral connu d'avance en JS (mode export, ou repères `a)`/`b)` détectés dans le contenu), ce cas est déjà écarté avant l'appel. Mais référencer `exN-numerotation` (pour que l'édition ciblée du code fonctionne, palette ou modale) délègue la valeur réelle à la compilation Typst, où elle peut valoir `none` sans que `boldableLabel` le sache : le label émis est alors une garde `if exN-numerotation == none { none } else { (..n) => strong(numbering(exN-numerotation, ..n)) }` plutôt qu'un appel direct.
+
 ## En-tête et pied de page
 
 Réglages des Réglages du document, indépendants l'un de l'autre :
@@ -580,7 +603,10 @@ d'une figure ou d'un tableau).
 redéfinissant `tasks` par-dessus celle du paquet, importée sous le nom
 `taskize-tasks` (l'import et le helper vont donc toujours ensemble, dans les
 trois vues Typst). Le code généré, lui, ne change pas : les listes de
-questions s'écrivent toujours `#tasks(columns: exN-colonnes, label: "1.", …)`.
+questions s'écrivent toujours `#tasks(columns: exN-colonnes, label: ..., …)`,
+le motif de `label` reprenant le style de numérotation choisi dans les
+Réglages du document (`1)` par défaut — voir [Styles des
+questions](#styles-des-questions-réglage-du-document)).
 
 - Une liste dont toutes les questions tiennent en ligne est passée telle
   quelle au paquet (aucun changement de rendu).

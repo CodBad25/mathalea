@@ -74,16 +74,22 @@ describe('buildTypstDocument', () => {
     expect(code).toContain(
       '#tasks-setup(columns: "auto-fit", auto-fit-mode: "uniform", max-columns: 4)',
     )
-    expect(code).toContain('#let ex1-colonnes = "auto-fit"')
+    expect(code).toContain('#let colonnes-questions = "auto-fit"')
     expect(code).toContain('#let interligne-questions = 1.2em')
+    expect(code).toContain('#let numerotation-questions = "1)"')
+    expect(code).toContain('#let ex1-colonnes = colonnes-questions')
     expect(code).toContain('#let ex1-gutter = interligne-questions')
+    expect(code).toContain('#let ex1-numerotation = numerotation-questions')
     // la correction a ses propres réglages, indépendants de l'énoncé
-    expect(code).toContain('#let ex1-corr-colonnes = "auto-fit"')
+    expect(code).toContain('#let ex1-corr-colonnes = colonnes-questions')
     expect(code).toContain('#let ex1-corr-gutter = interligne-questions')
+    expect(code).toContain(
+      '#let ex1-corr-numerotation = numerotation-questions',
+    )
     expect(code).toContain('#tasks(columns: ex1-corr-colonnes')
     expect(code).toContain('#mathalea-anchor("tasks-corr", 1)')
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + $2 + 2$\n      + $3 times 4$\n    ]',
+      '#tasks(columns: ex1-colonnes, label: ex1-numerotation, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + $2 + 2$\n      + $3 times 4$\n    ]',
     )
     expect(code).toContain('#if corrige [')
     // les corrections démarrent sur une page impaire (réglage par défaut)
@@ -152,7 +158,7 @@ describe('buildTypstDocument', () => {
       '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + Question une.\n      + Question deux.\n    ]',
     )
     expect(code).toContain('Voici la figure.')
-    expect(code).toContain('#let ex1-colonnes = "auto-fit"')
+    expect(code).toContain('#let ex1-colonnes = colonnes-questions')
   })
 
   it('découpe aussi les repères stylizeItems (multiMathfield) en sous-questions', () => {
@@ -214,7 +220,7 @@ describe('buildTypstDocument', () => {
     expect(code).toContain(
       '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + a) $1 + 1$\n      + b) $2 + 2$\n    ]',
     )
-    expect(code).toContain('#let ex1-colonnes = "auto-fit"')
+    expect(code).toContain('#let ex1-colonnes = colonnes-questions')
   })
 
   it("n'ajoute pas de section corrections quand il n'y en a pas", () => {
@@ -749,6 +755,33 @@ describe('buildTypstDocument', () => {
     expect(code.indexOf('#mathalea-anchor("gap", 1)')).toBeLessThan(
       code.indexOf('#section[Monômes]'),
     )
+  })
+
+  it('reprend le réglage de numérotation par exercice (carry-over) à la régénération', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+      defaultTypstDocumentOptions,
+      { tasksLayout: { ex1: { numbering: '"a)"' } } },
+    )
+    expect(code).toContain('#let ex1-numerotation = "a)"')
+    // le style est réglable par exercice, mais le gras (par défaut ici) reste
+    // un réglage global : la valeur de la variable n'est connue qu'à la
+    // compilation Typst (elle peut valoir `none`), d'où la garde if/else
+    // plutôt qu'une résolution en JS comme en mode export.
+    expect(code).toContain(
+      'label: if ex1-numerotation == none { none } else { (..n) => strong(numbering(ex1-numerotation, ..n)) }',
+    )
+  })
+
+  it('harvestCarryOver relit la numérotation réglée par exercice', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+      defaultTypstDocumentOptions,
+      { tasksLayout: { ex1: { numbering: 'none' } } },
+    )
+    expect(harvestCarryOver(code).tasksLayout).toEqual({
+      ex1: { numbering: 'none' },
+    })
   })
 
   it('harvestCarryOver relit colonnes, espacement et insertions du code', () => {
@@ -1532,7 +1565,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // réparties en colonnes (les réponses tiennent en quelques caractères)
     expect(code).toContain('#if corrige [')
     expect(code).toContain(
-      '#tasks(columns: "auto-fit", label: (..n) => strong(numbering("1.", ..n))',
+      '#tasks(columns: "auto-fit", label: (..n) => strong(numbering("1)", ..n))',
     )
     expect(code).toContain('      + $35$\n      + $66$\n      + $12$ boules')
     // ni banque d'exercices ni badges : il n'y a plus de titre d'exercice
@@ -1595,7 +1628,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // règlent depuis la palette, via un repère et des variables au numéro 0
     expect(code).toContain('#mathalea-anchor("tasks-corr", 0)')
     expect(code).toContain('#tasks(columns: ex0-corr-colonnes')
-    expect(code).toContain('#let ex0-corr-colonnes = "auto-fit"')
+    expect(code).toContain('#let ex0-corr-colonnes = colonnes-questions')
     expect(code).toContain('#let ex0-corr-gutter = interligne-questions')
     // un repère « exo » par exercice, dans sa première cellule, et un repère
     // « can-row » dans chaque cellule (édition d'une ligne du tableau)
