@@ -15,7 +15,7 @@ export const interactifReady = true
 export const uuid = '3a350'
 
 export const refs = {
-  'fr-fr': ['can2N51-03'],
+  'fr-fr': ['can2N51-03', '2N51-flash3'],
   'fr-ch': [],
 }
 export default class CalculAvecRacineCarree3 extends ExerciceSimple {

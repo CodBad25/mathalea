@@ -17,7 +17,7 @@ export const dateDePublication = '19/12/2025'
 export const uuid = '66201'
 
 export const refs = {
-  'fr-fr': ['can2N50-01'],
+  'fr-fr': ['can2N50-01', '2N50-flash1'],
   'fr-ch': [''],
 }
 export default class CalculAvecRacineDefphrase extends ExerciceSimple {

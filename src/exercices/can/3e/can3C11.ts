@@ -16,7 +16,7 @@ export const dateDePublication = '21/10/2024'
 export const uuid = '59365'
 
 export const refs = {
-  'fr-fr': ['can3C11'],
+  'fr-fr': ['can3C11', '2N50-flash5'],
   'fr-ch': ['10NO3E-6'],
 }
 export default class calculsRacinesCarresPafaits extends Exercice {

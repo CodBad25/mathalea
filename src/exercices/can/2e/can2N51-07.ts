@@ -14,7 +14,7 @@ export const interactifReady = true
 export const uuid = 'cc300'
 
 export const refs = {
-  'fr-fr': ['can2N51-07'],
+  'fr-fr': ['can2N51-07', '2N51-flash1'],
   'fr-ch': [],
 }
 export default class SimplificationsRacinesCarrees extends ExerciceSimple {
