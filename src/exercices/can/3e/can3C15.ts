@@ -16,7 +16,7 @@ export const dateDePublication = '20/11/2022'
 export const uuid = '864ba'
 
 export const refs = {
-  'fr-fr': ['can3C15'],
+  'fr-fr': ['can3C15', '2N41-flash1'],
   'fr-ch': [],
 }
 export default class CalculPuissance10B extends ExerciceSimple {

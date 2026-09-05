@@ -17,7 +17,7 @@ export const dateDePublication = '27/01/2026'
 export const uuid = '20fcc'
 
 export const refs = {
-  'fr-fr': ['can3C23'],
+  'fr-fr': ['can3C23', '2N40-flash3'],
   'fr-ch': ['9NO1D-3'],
 }
 export default class EcrireAvecPuissances extends ExerciceSimple {

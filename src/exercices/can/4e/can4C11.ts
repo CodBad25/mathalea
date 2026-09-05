@@ -13,7 +13,7 @@ export const dateDePublication = '04/07/2022'
 export const uuid = '4239a'
 
 export const refs = {
-  'fr-fr': ['can4C11'],
+  'fr-fr': ['can4C11', '2N40-flash1'],
   'fr-ch': [],
 }
 export default class SignePuissance extends Exercice {

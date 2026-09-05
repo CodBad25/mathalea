@@ -18,7 +18,7 @@ export const dateDePublication = '02/02/2026'
 export const uuid = '0aa94'
 
 export const refs = {
-  'fr-fr': ['can2N43-04'],
+  'fr-fr': ['can2N43-04', '2N43-flash4'],
   'fr-ch': [],
 }
 export default class calculPuissancesNegativeFraction extends ExerciceSimple {
