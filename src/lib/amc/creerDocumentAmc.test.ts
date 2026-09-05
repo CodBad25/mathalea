@@ -10,7 +10,11 @@ import {
   renderAMCPreamble,
 } from './amcDocumentTemplates'
 import { mathaleaEnsureAMCCompatibility } from './amcInference'
-import { checkAMCGroupConsistency, creerDocumentAmc } from './creerDocumentAmc'
+import {
+  checkAMCGroupConsistency,
+  creerDocumentAmc,
+  extractAMCQuestionGroups,
+} from './creerDocumentAmc'
 
 function prepareExercise(
   module: { default: new () => any; amcType?: string; amcReady?: boolean },
@@ -97,6 +101,41 @@ describe('creerDocumentAmc templates', () => {
     expect(documentStart).toContain(
       '\\element{G}{\\begin{question}{Q}\\AMClabel{Q}X\\end{question}}',
     )
+  })
+
+  it('extrait uniquement la section de preparation des groupes', () => {
+    const latex = `${renderAMCDocumentStart({
+      seed: 12345,
+      groupsContent: '\\element{G}{\\begin{question}{Q}X\\end{question}}',
+    })}${renderAMCHeader({
+      isA3: false,
+      isAssociation: false,
+      isCodeGrid: false,
+      matiere: 'Mathématiques',
+      titre: 'Evaluation',
+      nbExemplaires: 1,
+    })}`
+
+    const groups = extractAMCQuestionGroups(latex)
+
+    expect(groups).toContain('%%% préparation des groupes')
+    expect(groups).toContain('\\setdefaultgroupmode{cyclic}')
+    expect(groups).toContain('\\element{G}')
+    expect(groups).not.toContain('\\begin{document}')
+    expect(groups).not.toContain('MISE EN PAGE DU QCM')
+    expect(groups).not.toContain('\\exemplaire')
+    expect(
+      groups
+        .trimEnd()
+        .endsWith('\\element{G}{\\begin{question}{Q}X\\end{question}}'),
+    ).toBe(true)
+  })
+
+  it('renvoie une chaine vide si la section des groupes est incomplete', () => {
+    expect(extractAMCQuestionGroups('\\begin{document}')).toBe('')
+    expect(
+      extractAMCQuestionGroups('%%% préparation des groupes\n\\element{G}{}'),
+    ).toBe('')
   })
 
   it('rend un contenu de copie AMC parametrable', () => {

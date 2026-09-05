@@ -17,6 +17,7 @@
   import {
     checkAMCGroupConsistency,
     creerDocumentAmc,
+    extractAMCQuestionGroups,
     type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
@@ -143,6 +144,7 @@
   let addAmcOpenStatus = ''
   let isAddAmcOpenStatusError = false
   let latexContent = ''
+  let questionGroupsLatexContent = ''
   let latexExportStatus = ''
   let latexExportStatusTimeout: ReturnType<typeof setTimeout> | null = null
   let isLatexExportError = false
@@ -181,6 +183,7 @@
   )
   $: tikzScaleSliderValue = selectedQuestionTikzScaleFactor
   $: isLatexExportError = /impossible|erreur/i.test(latexExportStatus)
+  $: questionGroupsLatexContent = extractAMCQuestionGroups(latexContent)
   $: {
     // Dépend explicitement de la question sélectionnée pour forcer la MAJ
     // même si le facteur reste inchangé (ex: 1 -> 1).
@@ -1640,18 +1643,18 @@
     }
   }
 
-  async function copyLatexToClipboard() {
-    if (!latexContent.trim()) return
+  async function copyLatexToClipboard(content: string, successMessage: string) {
+    if (!content.trim()) return
 
     const { text: sanitizedLatexContent, hadInvalidChars } =
-      sanitizeLatexForExport(latexContent)
+      sanitizeLatexForExport(content)
 
     try {
       await navigator.clipboard.writeText(sanitizedLatexContent)
       setLatexExportStatus(
         hadInvalidChars
           ? 'LaTeX copié. Des caractères invalides ont été remplacés.'
-          : 'LaTeX copié dans le presse-papier.',
+          : successMessage,
       )
     } catch {
       // Fallback pour navigateurs sans permission clipboard.
@@ -1668,7 +1671,7 @@
         copied
           ? hadInvalidChars
             ? 'LaTeX copié. Des caractères invalides ont été remplacés.'
-            : 'LaTeX copié dans le presse-papier.'
+            : successMessage
           : 'Impossible de copier automatiquement le LaTeX.',
       )
     }
@@ -2925,10 +2928,27 @@
               <button
                 type="button"
                 class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
-                on:click={copyLatexToClipboard}
+                on:click={() =>
+                  copyLatexToClipboard(
+                    latexContent,
+                    'LaTeX complet copié dans le presse-papier.',
+                  )}
                 disabled={!latexContent.trim()}
               >
-                Copier le LaTeX
+                Copier le LaTeX complet
+              </button>
+              <button
+                type="button"
+                class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
+                on:click={() =>
+                  copyLatexToClipboard(
+                    questionGroupsLatexContent,
+                    'Groupes de questions copiés dans le presse-papier.',
+                  )}
+                disabled={!questionGroupsLatexContent.trim()}
+                title="Copier uniquement la section de préparation des groupes"
+              >
+                Copier les groupes
               </button>
               <button
                 type="button"
