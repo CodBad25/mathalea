@@ -48,9 +48,10 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
     this.sup2 = 3
     this.sup3 = false
     this.sup4 = false
-    this.nbCols = 3
+    this.nbCols = 2
     this.nbColsCorr = 2
     this.nbQuestions = 4 // pour équilibrer les colonnes
+    this.listeAvecNumerotation = false
   }
 
   nouvelleVersion() {
@@ -94,7 +95,7 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
       texte = context.isAmc ? 'Calculer : ' : ''
       b *= s
       if (this.sup4) {
-        texte = `$${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)}=`
+        texte = `$${ecritureNombreRelatif(a)}+${ecritureNombreRelatif(b)}~=~`
         texteCorr = texte
         texte +=
           '$' +
@@ -114,11 +115,13 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
           },
         })
       } else if (s === 1) {
-        texte += remplisLesBlancs(
-          this,
-          i,
-          `${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)}=%{champ1}=%{champ2}`,
-        )
+        texte += this.interactif
+          ? remplisLesBlancs(
+              this,
+              i,
+              `$${ecritureNombreRelatif(a)}+${ecritureNombreRelatif(b)}~=~%{champ1}~=~%{champ2}$`,
+            )
+          : `$${ecritureNombreRelatif(a)}+${ecritureNombreRelatif(b)}~=~..................~=~\\ldots$`
         texteCorr = `$${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)} = ${miseEnEvidence(
           `${texNombre(a, 1)}${ecritureAlgebrique(b)}`,
         )} = ${miseEnEvidence(texNombre(a + b, 1))}$`
@@ -133,11 +136,13 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
           champ2: { value: texNombre(a + b, 1) },
         })
       } else {
-        texte += remplisLesBlancs(
-          this,
-          i,
-          `${ecritureNombreRelatif(a)} - ${ecritureNombreRelatif(b)}=%{champ1}=%{champ2}`,
-        )
+        texte += this.interactif
+          ? remplisLesBlancs(
+              this,
+              i,
+              `$${ecritureNombreRelatif(a)}-${ecritureNombreRelatif(b)}~=~%{champ1}~=~%{champ2}$`,
+            )
+          : `$${ecritureNombreRelatif(a)}-${ecritureNombreRelatif(b)}~=~..................~=~\\ldots$`
         texteCorr = `$${ecritureNombreRelatif(a)} - ${ecritureNombreRelatif(b)} = ${miseEnEvidence(
           `${texNombre(a, 1)}${ecritureAlgebrique(-b)}`,
         )} = ${miseEnEvidence(texNombre(a - b, 1))}$`
