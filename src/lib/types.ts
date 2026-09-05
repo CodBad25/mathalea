@@ -343,6 +343,7 @@ export type InteractivityType =
   | 'objets-cliquables' // Non compatible AMC
   | 'fraction-cliquable' // Non compatible AMC
   | 'mathalea-labyrinthe' // Non compatible AMC
+  | 'juniper-green' // Non compatible AMC
   | 'echiquier-probleme' // Non compatible AMC
   | 'dnd' // Non compatible AMC
   | 'drag-and-drop' // Non compatible AMC
@@ -394,6 +395,7 @@ export function isInteractivityType(
     value === 'objets-cliquables' ||
     value === 'fraction-cliquable' ||
     value === 'mathalea-labyrinthe' ||
+    value === 'juniper-green' ||
     value === 'echiquier-probleme' ||
     value === 'dnd' ||
     value === 'drag-and-drop' ||
