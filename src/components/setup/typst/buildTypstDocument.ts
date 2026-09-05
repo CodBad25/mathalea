@@ -1149,6 +1149,14 @@ export interface TypstDocumentOptions {
   /** Nombre de versions du sujet (Sujet A, B...) générées à la suite */
   nbVersions: number
   /**
+   * Masque l'étiquette « Sujet A/B... » de l'en-tête (`nbVersions > 1`
+   * seulement) : l'espace qu'elle occupe reste réservé (`hide()` côté Typst),
+   * pour que l'icône de la palette qui la fait réapparaître garde la même
+   * place. Permet de distribuer des sujets mélangés sans que les élèves n'y
+   * lisent quelle version ils ont.
+   */
+  hideVersionLabel: boolean
+  /**
    * Le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions
    * commencent sur une page impaire, une page blanche (sans en-tête ni pied
    * de page) étant insérée si besoin : l'impression recto-verso en série ne
@@ -1530,6 +1538,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   badgePosition: 'margin',
   badgeColor: 'black',
   nbVersions: 1,
+  hideVersionLabel: false,
   oddPageStarts: true,
   answerLines: 0,
   answerLinesStyle: 'pointilles',
@@ -3289,6 +3298,8 @@ export function buildTypstDocument(
     ...headerBlock(
       options.headerStyle,
       totalVersions > 1 ? `Sujet ${versionLetter(0)}` : undefined,
+      !exportMode,
+      options.hideVersionLabel,
     ),
   )
   lines.push('')
@@ -3306,7 +3317,12 @@ export function buildTypstDocument(
       lines.push('')
     }
     lines.push(
-      ...headerBlock(options.headerStyle, `Sujet ${versionLetter(i + 1)}`),
+      ...headerBlock(
+        options.headerStyle,
+        `Sujet ${versionLetter(i + 1)}`,
+        !exportMode,
+        options.hideVersionLabel,
+      ),
     )
     lines.push('')
     lines.push(...version.renderLines)
@@ -3449,29 +3465,45 @@ function coverPageLines(
  * Bloc de titre de la fiche (`titre`, `sous-titre`, `entete` déclarés dans
  * les réglages), selon l'habillage choisi.
  */
-function headerBlock(style: HeaderStyle, versionLabel?: string): string[] {
+function headerBlock(
+  style: HeaderStyle,
+  versionLabel?: string,
+  emitAnchor = false,
+  hideVersionLabel = false,
+): string[] {
   // avec plusieurs versions, l'étiquette « Sujet A/B... » termine la ligne
   // d'en-tête (Nom/Prénom/Classe) plutôt que d'ajouter une ligne à part ;
   // dans ce cas la ligne s'affiche même si `entete` est vide (l'étiquette
   // doit rester visible sur chaque sujet)
-  const label =
-    versionLabel != null
-      ? `text(weight: "bold", fill: couleur)[${escapeTypstText(versionLabel)}]`
-      : null
+  const hasVersionLabel = versionLabel != null
+  const labelExpr = hasVersionLabel
+    ? `text(weight: "bold", fill: couleur)[${escapeTypstText(versionLabel)}]`
+    : null
+  // masquée (`hide()`) plutôt que retirée : l'étiquette garde sa place dans
+  // la grille, pour que l'icône de la palette qui la fait réapparaître (voir
+  // `#mathalea-anchor("version-label", 0)`) reste au même endroit
+  const versionCell =
+    labelExpr == null
+      ? null
+      : emitAnchor
+        ? `[#mathalea-anchor("version-label", 0)#${hideVersionLabel ? `hide(${labelExpr})` : labelExpr}]`
+        : hideVersionLabel
+          ? `hide(${labelExpr})`
+          : labelExpr
   /**
    * Ligne d'en-tête (`entete`), avec l'étiquette de version à sa droite
    * quand il y en a une ; sans étiquette, rendu inchangé (simple `text`,
    * centré pour l'habillage « cadre »).
    */
   const enteteLine = (centered: boolean): string => {
-    if (label != null) {
+    if (versionCell != null) {
       const align = centered ? 'center' : 'left'
-      return `grid(columns: (1fr, auto), align: (${align}, horizon), text(fill: gray.darken(20%))[#entete], ${label})`
+      return `grid(columns: (1fr, auto), align: (${align}, horizon), text(fill: gray.darken(20%))[#entete], ${versionCell})`
     }
     const plain = 'text(fill: gray.darken(20%))[#entete]'
     return centered ? `align(center, ${plain})` : plain
   }
-  const enteteCondition = label != null ? 'true' : 'entete != ""'
+  const enteteCondition = hasVersionLabel ? 'true' : 'entete != ""'
   // aucun bloc de titre : la fiche commence directement par les exercices.
   // Avec plusieurs versions, l'étiquette « Sujet A/B... » n'a alors nulle
   // part où s'afficher — c'est un compromis accepté du réglage.

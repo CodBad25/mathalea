@@ -905,6 +905,7 @@
               | 'header'
               | 'cover'
               | 'footer'
+              | 'version-label'
               | 'figure'
               | 'can-row'),
         num: anchor.num,
@@ -2034,6 +2035,17 @@
     })
     documentOptions.footerText = value
     persistPreferences()
+  }
+
+  /**
+   * Affiche ou masque l'étiquette « Sujet A/B... » de l'en-tête (icône sur
+   * l'aperçu, à côté de l'étiquette) : régénère le code, la présence de
+   * `hide()` autour de l'étiquette étant structurelle (voir `headerBlock`),
+   * à la différence des textes édités en place comme le pied de page.
+   */
+  function toggleVersionLabel() {
+    documentOptions.hideVersionLabel = !documentOptions.hideVersionLabel
+    applyDocumentOptions()
   }
 
   /** Repère de gap `num` dans le code (indentation et fin de sa ligne) */
@@ -4375,6 +4387,7 @@
                     coverConsignes={coverConsignesValue}
                     coverTemplate={documentOptions.coverPage.template}
                     footerText={footerValue}
+                    hideVersionLabel={documentOptions.hideVersionLabel}
                     {documentColumns}
                     {questionCounts}
                     {staticExercises}
@@ -4409,6 +4422,7 @@
                     onUpdateCover={updateCoverValue}
                     onUpdateCoverConsignes={updateCoverConsignes}
                     onUpdateFooterText={updateFooterText}
+                    onToggleVersionLabel={toggleVersionLabel}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}
                     onDuplicateExercise={duplicateExercise}

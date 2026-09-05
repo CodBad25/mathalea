@@ -6,9 +6,10 @@
      * `corr` : début de la correction d'un exercice ;
      * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
      * `cover` : textes de la page de garde ; `footer` : texte du pied de page
-     * (première page seulement) ; `figure` : figure mathalea2d embarquée
-     * (zoom) ; `can-row` : ligne du tableau « Course aux nombres » (édition
-     * de son énoncé/réponse)
+     * (première page seulement) ; `version-label` : étiquette « Sujet A/B... »
+     * de l'en-tête (fiche à plusieurs versions) ; `figure` : figure
+     * mathalea2d embarquée (zoom) ; `can-row` : ligne du tableau « Course aux
+     * nombres » (édition de son énoncé/réponse)
      */
     kind:
       | 'tasks'
@@ -18,6 +19,7 @@
       | 'header'
       | 'cover'
       | 'footer'
+      | 'version-label'
       | 'figure'
       | 'can-row'
     /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
@@ -89,6 +91,11 @@
     coverTemplate?: CoverTemplate
     /** Texte du pied de page (valeur lue dans le code), première page seulement */
     footerText?: string
+    /**
+     * Étiquette « Sujet A/B... » masquée : reste dans le document (`hide()`,
+     * voir `headerBlock`), pour que les élèves n'y lisent pas leur version.
+     */
+    hideVersionLabel?: boolean
     onAdjustColumns: (target: string, delta: number) => void
     onAdjustGutter: (target: string, delta: number) => void
     /** Insère un fragment de code Typst juste après l'exercice `num` */
@@ -120,6 +127,8 @@
     ) => void
     onUpdateCoverConsignes: (consignes: string[]) => void
     onUpdateFooterText: (value: string) => void
+    /** Affiche ou masque l'étiquette « Sujet A/B... » de l'en-tête */
+    onToggleVersionLabel: () => void
     /** Nombre de questions par exercice (null : non réglable) */
     questionCounts?: Record<number, number | null>
     /**
@@ -226,6 +235,7 @@
     coverConsignes = [],
     coverTemplate = 'aucune',
     footerText = '',
+    hideVersionLabel = false,
     onAdjustColumns,
     onAdjustGutter,
     onInsert,
@@ -238,6 +248,7 @@
     onUpdateCover,
     onUpdateCoverConsignes,
     onUpdateFooterText,
+    onToggleVersionLabel,
     questionCounts = {},
     staticExercises = {},
     nonEditableStaticExercises = {},
@@ -1097,6 +1108,31 @@
             </div>
           </div>
         {/if}
+      </div>
+    {:else if widget.kind === 'version-label'}
+      <!-- masque/affiche l'étiquette « Sujet A/B... » de l'en-tête (fiche à
+           plusieurs versions) : l'espace qu'elle occupe reste réservé côté
+           Typst (`hide()`, voir `headerBlock`), pour que l'icône garde la
+           même position une fois l'étiquette masquée -->
+      <div
+        class="pointer-events-auto absolute -translate-y-1/2"
+        style="left: {widget.left}%; top: {widget.top}%;"
+      >
+        <button
+          type="button"
+          title={hideVersionLabel
+            ? "Afficher l'étiquette « Sujet A/B... »"
+            : "Masquer l'étiquette « Sujet A/B... » (pour que les élèves ne sachent pas quelle version ils ont)"}
+          aria-label={hideVersionLabel
+            ? "Afficher l'étiquette de version"
+            : "Masquer l'étiquette de version"}
+          class="typst-pill typst-pill-round flex h-6 w-6 -translate-x-1/2 items-center justify-center"
+          class:typst-pill-active={hideVersionLabel}
+          data-testid="typst-overlay-version-label"
+          onclick={onToggleVersionLabel}
+        >
+          <i class="bx {hideVersionLabel ? 'bx-show' : 'bx-hide'}"></i>
+        </button>
       </div>
     {:else if widget.kind === 'exo'}
       <!-- insertion avant cet exercice : repère de gap qui précède -->

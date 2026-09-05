@@ -267,6 +267,8 @@ export interface TypstAnchor {
    * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
    * `cover` : textes de la page de garde ; `footer` : texte du pied de page
    * (émis sur la première page physique seulement, voir `pageFooter`) ;
+   * `version-label` : étiquette « Sujet A/B... » de l'en-tête, sur une fiche
+   * à plusieurs versions (masquage/affichage) ;
    * `figure` : figure mathalea2d embarquée (zoom) ;
    * `carte-recto`/`carte-verso` : carte de la vue Flash-cards (taille du texte) ;
    * `diapo-question`/`diapo-correction` : diapositive de la vue Diaporama PDF
@@ -284,6 +286,7 @@ export interface TypstAnchor {
     | 'header'
     | 'cover'
     | 'footer'
+    | 'version-label'
     | 'figure'
     | 'carte-recto'
     | 'carte-verso'
@@ -307,6 +310,7 @@ const ANCHOR_KINDS = new Set([
   'header',
   'cover',
   'footer',
+  'version-label',
   'figure',
   'carte-recto',
   'carte-verso',
