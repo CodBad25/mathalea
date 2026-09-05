@@ -16,7 +16,7 @@ export const amcType = 'AMCNum'
 export const uuid = '92186'
 
 export const refs = {
-  'fr-fr': ['can4C09'],
+  'fr-fr': ['can4C09', '2N40-flash2'],
   'fr-ch': [],
 }
 export default class PuissancesDe2345 extends ExerciceSimple {

@@ -24,7 +24,7 @@ export const amcType = 'AMCNum'
 export const uuid = '8d08f'
 
 export const refs = {
-  'fr-fr': ['can3C01'],
+  'fr-fr': ['can3C01', '2N43-flash2'],
   'fr-ch': [],
 }
 export default class CalculPuissanceSimple extends Exercice {

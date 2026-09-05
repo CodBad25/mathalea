@@ -13,7 +13,7 @@ export const interactifReady = true
 export const uuid = '3c064'
 
 export const refs = {
-  'fr-fr': ['can3C10'],
+  'fr-fr': ['can3C10', '2N44-flash1'],
   'fr-ch': [],
 }
 export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
