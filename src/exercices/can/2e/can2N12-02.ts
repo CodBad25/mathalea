@@ -16,7 +16,7 @@ export const dateDePublication = '26/10/2023'
 export const uuid = 'e356a'
 
 export const refs = {
-  'fr-fr': ['can2N12-02'],
+  'fr-fr': ['can2N12-02', '2N12-flash2'],
   'fr-ch': [],
 }
 export default class IntersectionIntervalles extends ExerciceSimple {

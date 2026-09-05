@@ -32,7 +32,7 @@ export const dateDeModifImportante = '12/10/2024'
 export const uuid = 'ca515'
 
 export const refs = {
-  'fr-fr': ['can6N04'],
+  'fr-fr': ['can6N04', '2N11-flash1'],
   'fr-ch': [],
 }
 

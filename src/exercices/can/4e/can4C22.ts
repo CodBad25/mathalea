@@ -11,7 +11,7 @@ export const dateDePublication = '21/06/2026'
 export const uuid = 'f34be'
 
 export const refs = {
-  'fr-fr': ['can4C22'],
+  'fr-fr': ['can4C22', '2N14-flash1'],
   'fr-ch': [],
 }
 export default class Retrancher1 extends ComparerFractionEtEntier {
