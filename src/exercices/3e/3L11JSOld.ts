@@ -50,6 +50,8 @@ export const refs = {
   'fr-ch': ['NR'],
 }
 export default class ExerciceDevelopperEnJS extends Exercice {
+  tailleDiaporama: number
+
   constructor() {
     super()
     this.sup = 3 // difficulté
@@ -133,17 +135,13 @@ export default class ExerciceDevelopperEnJS extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
 
-    for (
-      let i = 0,
-        texte,
-        texteCorr,
-        reponse,
-        reponse1,
-        reponse2,
-        reponse3,
-        cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-    ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      let texte: string
+      let texteCorr: string
+      let reponse: string | string[]
+      let reponse1: number
+      let reponse2: number
+      let reponse3: number
       const typesDeQuestions = listeTypeDeQuestions[i]
       const k = randint(2, 11) * (this.sup === 3 ? choice([-1, 1]) : 1)
       const a =
@@ -230,6 +228,8 @@ export default class ExerciceDevelopperEnJS extends Exercice {
           reponse2 = k * a
           reponse3 = k * b + c
           break
+        default:
+          throw new Error(`Type de question inconnu : ${typesDeQuestions}`)
       }
       if (this.sup2 === 1) {
         handleAnswers(this, i, {
@@ -332,7 +332,7 @@ export default class ExerciceDevelopperEnJS extends Exercice {
         }
       }
 
-      if (this.questionJamaisPosee(i, reponse)) {
+      if (this.questionJamaisPosee(i, reponse.toString())) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
