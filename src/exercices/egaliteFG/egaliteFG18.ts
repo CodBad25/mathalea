@@ -46,8 +46,8 @@ export default class EgaliteFG18 extends Exercice {
       '<br>Maryam Mirzakhani (1977-2017), mathématicienne iranienne, est la première femme à avoir reçu la médaille Fields, en 2014.<br>'
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0; font-size:0.85rem;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de prix Nobel<br>de 1901 à 2024</th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de médailles Fields<br>de 1936 à 2024</th></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">65</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">2</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">915</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">62</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">65</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">2</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">915</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">62</td></tr>
       </table>
       <p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Source : Wikipedia</p>`
     const tableauLatex =

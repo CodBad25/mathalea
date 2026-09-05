@@ -68,14 +68,14 @@ export default class EgaliteFGLycee4 extends Exercice {
       texte1 +=
         ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 8.9 } })
-    const correction1 = `$\\dfrac{1\\,318\\,000}{14\\,806\\,000}\\times 100\\approx ${miseEnEvidence('8{,}9\\,\\%')}$.`
+    const correction1 = `$\\dfrac{1\\,318\\,000}{14\\,806\\,000}\\approx ${miseEnEvidence('8{,}9\\,\\%')}$.`
 
     let texte2 = 'Même question pour les femmes.'
     if (this.interactif)
       texte2 +=
         ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 9.4 } })
-    const correction2 = `$\\dfrac{1\\,259\\,000}{13\\,463\\,000}\\times 100\\approx ${miseEnEvidence('9{,}4\\,\\%')}$.`
+    const correction2 = `$\\dfrac{1\\,259\\,000}{13\\,463\\,000}\\approx ${miseEnEvidence('9{,}4\\,\\%')}$.`
 
     const texteQ3 =
       "Le gouvernement annonçait qu'il y avait moins de femmes au chômage que d'hommes, ce qui indiquerait une bonne amélioration des inégalités femmes-hommes. Cette affirmation, bien que vraie en valeur absolue, est-elle trompeuse ?"

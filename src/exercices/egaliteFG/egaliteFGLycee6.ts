@@ -1,7 +1,9 @@
+import { createList } from '../../lib/format/lists'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteCode,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -68,7 +70,7 @@ export default class EgaliteFGLycee6 extends Exercice {
       texte1 +=
         ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 12 } })
-    const correction1 = `$\\dfrac{300}{2\\,500}\\times 100=${miseEnEvidence('12\\,\\%')}$.`
+    const correction1 = `$\\dfrac{300}{2\\,500}=${miseEnEvidence('12\\,\\%')}$.`
 
     let texte2 =
       "Pour que les femmes aient un salaire moyen égal à celui des hommes, quel taux d'évolution faudrait-il appliquer à leur salaire (arrondi au dixième) ?"
@@ -76,7 +78,7 @@ export default class EgaliteFGLycee6 extends Exercice {
       texte2 +=
         ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 13.6 } })
-    const correction2 = `$\\dfrac{2\\,500-2\\,200}{2\\,200}\\times 100\\approx ${miseEnEvidence('13{,}6\\,\\%')}$.`
+    const correction2 = `$\\dfrac{2\\,500-2\\,200}{2\\,200}\\approx ${miseEnEvidence('13{,}6\\,\\%')}$.`
 
     let texte3 =
       "Quel budget mensuel supplémentaire l'entreprise devrait-elle prévoir pour augmenter toutes les femmes de $300$ € afin d'atteindre l'équité salariale ?"
@@ -107,7 +109,7 @@ export default class EgaliteFGLycee6 extends Exercice {
       texte6 +=
         ajouteChampTexteMathLive(this, 6, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 6, { reponse: { value: 11.1 } })
-    const correction6 = `$\\dfrac{2\\,575-2\\,288}{2\\,575}\\times 100\\approx ${miseEnEvidence('11{,}1\\,\\%')}$.`
+    const correction6 = `$\\dfrac{2\\,575-2\\,288}{2\\,575}\\approx ${miseEnEvidence('11{,}1\\,\\%')}$.`
 
     let texte7 =
       'La deuxième année, les salaires des hommes augmentent encore de $3\\,\\%$ et ceux des femmes de $5\\,\\%$. Calculer le salaire moyen des hommes à la fin de la deuxième année.'
@@ -138,30 +140,36 @@ export default class EgaliteFGLycee6 extends Exercice {
       texte10 +=
         ajouteChampTexteMathLive(this, 10, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 10, { reponse: { value: 9.4 } })
-    const correction10 = `$\\dfrac{2\\,652{,}25-2\\,402{,}4}{2\\,652{,}25}\\times 100\\approx ${miseEnEvidence('9{,}4\\,\\%')}$. L'écart relatif diminue lentement ($12\\,\\%\\to 11{,}1\\,\\%\\to 9{,}4\\,\\%$), mais l'écart en euros, lui, ne diminue presque pas ($2\\,652{,}25-2\\,402{,}4=249{,}85$ € contre $300$ € au départ).`
+    const correction10 = `$\\dfrac{2\\,652{,}25-2\\,402{,}4}{2\\,652{,}25}\\approx ${miseEnEvidence('9{,}4\\,\\%')}$. L'écart relatif diminue lentement ($12\\,\\%\\to 11{,}1\\,\\%\\to 9{,}4\\,\\%$), mais l'écart en euros, lui, ne diminue presque pas ($2\\,652{,}25-2\\,402{,}4=249{,}85$ € contre $300$ € au départ).`
 
     const texte11 =
       texteGras("Partie B : Atteindre l'égalité salariale") +
       '<br>' +
       "L'entreprise décide de conserver chaque année les taux d'évolution des salaires de la deuxième année du plan d'augmentation, à savoir :<br>" +
-      '<ul style="list-style:disc; margin:0.25rem 0 0.5rem 1.25rem;">' +
-      "<li>Les hommes bénéficient d'une augmentation salariale de $3\\,\\%$ par an.</li>" +
-      "<li>Les femmes bénéficient d'une augmentation salariale de $5\\,\\%$ par an.</li>" +
-      '</ul>' +
+      createList({
+        items: [
+          "Les hommes bénéficient d'une augmentation salariale de $3\\,\\%$ par an.",
+          "Les femmes bénéficient d'une augmentation salariale de $5\\,\\%$ par an.",
+        ],
+        style: 'puces',
+      }) +
       "L'objectif de cette partie est de déterminer au bout de combien d'années les salaires des femmes égaleront ceux des hommes, en maintenant ces taux d'augmentation annuels.<br><br>" +
       'Créer un fichier sur le tableur où :<br>' +
-      '<ul style="list-style:disc; margin:0.25rem 0 0.5rem 1.25rem;">' +
-      "<li>la première colonne représente le nombre d'années $n$ d'application du plan d'augmentation ;</li>" +
-      '<li>la deuxième colonne le salaire moyen mensuel des femmes ;</li>' +
-      '<li>la troisième colonne le salaire moyen mensuel des hommes.</li>' +
-      '</ul>'
+      createList({
+        items: [
+          "la première colonne représente le nombre d'années $n$ d'application du plan d'augmentation ;",
+          'la deuxième colonne le salaire moyen mensuel des femmes ;',
+          'la troisième colonne le salaire moyen mensuel des hommes.',
+        ],
+        style: 'puces',
+      })
     const correction11 =
       "On crée un tableur à 3 colonnes A (années $n$), B (salaire des femmes), C (salaire des hommes), avec en ligne 2 l'état atteint à la fin de la deuxième année du plan ($n=0$ : $2\\,402{,}4$ € pour les femmes, $2\\,652{,}25$ € pour les hommes)."
 
     const texte12 =
       "Compléter les deux premières années après l'augmentation salariale. Quelles formules mettre en B3, B4, C3 et C4 ?"
     const correction12 =
-      'En B3 : <code>=B2*1,05</code> (ou <code>=B2*1.05</code>) ; en C3 : <code>=C2*1,03</code>. On recopie ensuite ces formules vers le bas : en B4, <code>=B3*1,05</code> ; en C4, <code>=C3*1,03</code>.'
+      `En B3 : ${texteCode('=B2*1,05')} (ou ${texteCode('=B2*1.05')}) ; en C3 : ${texteCode('=C2*1,03')}. On recopie ensuite ces formules vers le bas : en B4, ${texteCode('=B3*1,05')} ; en C4, ${texteCode('=C3*1,03')}.`
 
     let texte13 =
       "Déterminer le nombre d'années nécessaires pour que le salaire moyen des femmes atteigne celui des hommes."

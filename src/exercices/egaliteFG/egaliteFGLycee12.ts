@@ -38,15 +38,15 @@ export default class EgaliteFGLycee12 extends Exercice {
       "<br><br>Une caisse d'assurance maladie emploie $1\\,630$ personnes. Voici les effectifs par catégorie :<br>"
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">18-30 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">31-50 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">Plus de 50 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">Total</th></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px;">150</td><td style="border: 1px solid #888; padding: 4px 10px;">600</td><td style="border: 1px solid #888; padding: 4px 10px;">230</td><td style="border: 1px solid #888; padding: 4px 10px;">980</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px;">500</td><td style="border: 1px solid #888; padding: 4px 10px;">50</td><td style="border: 1px solid #888; padding: 4px 10px;">100</td><td style="border: 1px solid #888; padding: 4px 10px;">650</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Total</td><td style="border: 1px solid #888; padding: 4px 10px;">650</td><td style="border: 1px solid #888; padding: 4px 10px;">650</td><td style="border: 1px solid #888; padding: 4px 10px;">330</td><td style="border: 1px solid #888; padding: 4px 10px;">1 630</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">150</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">600</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">230</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">980</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">500</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">50</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">100</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">650</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Total</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">650</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">650</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">330</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1 630</td></tr>
       </table>
       <p>Les pourcentages de fumeurs du personnel sont les suivants :</p>
       <table style="border-collapse: collapse; margin: 10px 0;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">18-30 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">31-50 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">Plus de 50 ans</th></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px;">60 %</td><td style="border: 1px solid #888; padding: 4px 10px;">25 %</td><td style="border: 1px solid #888; padding: 4px 10px;">30 %</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px;">50 %</td><td style="border: 1px solid #888; padding: 4px 10px;">20 %</td><td style="border: 1px solid #888; padding: 4px 10px;">25 %</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">60 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">25 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">30 %</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">50 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">20 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">25 %</td></tr>
       </table>
       <p>La cheffe de centre affirme que les femmes, tranche d'âge par tranche d'âge, fument moins que les hommes.</p>`
     const tableauLatex =
@@ -77,9 +77,9 @@ export default class EgaliteFGLycee12 extends Exercice {
     const tableauFumeursHtml =
       '<table style="border-collapse: collapse; margin: 10px 0;">' +
       '<tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">18-30 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">31-50 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">Plus de 50 ans</th><th style="border: 1px solid #888; padding: 4px 10px;">Total</th></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px;">90</td><td style="border: 1px solid #888; padding: 4px 10px;">150</td><td style="border: 1px solid #888; padding: 4px 10px;">69</td><td style="border: 1px solid #888; padding: 4px 10px;">309</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px;">250</td><td style="border: 1px solid #888; padding: 4px 10px;">10</td><td style="border: 1px solid #888; padding: 4px 10px;">25</td><td style="border: 1px solid #888; padding: 4px 10px;">285</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">Total</td><td style="border: 1px solid #888; padding: 4px 10px;">340</td><td style="border: 1px solid #888; padding: 4px 10px;">160</td><td style="border: 1px solid #888; padding: 4px 10px;">94</td><td style="border: 1px solid #888; padding: 4px 10px;">594</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">90</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">150</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">69</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">309</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">250</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">10</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">25</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">285</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Total</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">340</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">160</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">94</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">594</td></tr>' +
       '</table>'
     const tableauFumeursLatex =
       '\\begin{center}\\begin{tabular}{|l|c|c|c|c|}\n\\hline\n' +
@@ -99,7 +99,7 @@ export default class EgaliteFGLycee12 extends Exercice {
       texte1 +=
         ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 36.44 } })
-    const correction1 = `$\\dfrac{594}{1\\,630}\\times 100\\approx ${miseEnEvidence('36{,}44\\,\\%')}$.`
+    const correction1 = `$\\dfrac{594}{1\\,630}\\approx ${miseEnEvidence('36{,}44\\,\\%')}$.`
 
     let texte2 =
       'Calculer le pourcentage de fumeurs parmi les hommes (arrondi au centième).'
@@ -107,7 +107,7 @@ export default class EgaliteFGLycee12 extends Exercice {
       texte2 +=
         ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 31.53 } })
-    const correction2 = `$\\dfrac{309}{980}\\times 100\\approx ${miseEnEvidence('31{,}53\\,\\%')}$.`
+    const correction2 = `$\\dfrac{309}{980}\\approx ${miseEnEvidence('31{,}53\\,\\%')}$.`
 
     let texte3 =
       'Calculer le pourcentage de fumeurs parmi les femmes (arrondi au centième).'
@@ -115,7 +115,7 @@ export default class EgaliteFGLycee12 extends Exercice {
       texte3 +=
         ajouteChampTexteMathLive(this, 3, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 43.85 } })
-    const correction3 = `$\\dfrac{285}{650}\\times 100\\approx ${miseEnEvidence('43{,}85\\,\\%')}$.`
+    const correction3 = `$\\dfrac{285}{650}\\approx ${miseEnEvidence('43{,}85\\,\\%')}$.`
 
     const texteQ4 =
       "L'affirmation de la cheffe de centre (tranche d'âge par tranche d'âge, les femmes fument moins que les hommes) est-elle vraie ?"

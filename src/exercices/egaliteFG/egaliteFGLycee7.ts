@@ -91,7 +91,7 @@ export default class EgaliteFGLycee7 extends Exercice {
       texte4 +=
         ajouteChampTexteMathLive(this, 4, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 16.6 } })
-    const correction4 = `$\\dfrac{2\\,500-2\\,145}{2\\,145}\\times 100\\approx ${miseEnEvidence('16{,}6\\,\\%')}$.`
+    const correction4 = `$\\dfrac{2\\,500-2\\,145}{2\\,145}\\approx ${miseEnEvidence('16{,}6\\,\\%')}$.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
