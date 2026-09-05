@@ -20,7 +20,7 @@ export const dateDePublication = '17/11/2022'
 export const uuid = 'a8597'
 
 export const refs = {
-  'fr-fr': ['canc3N06', '2N14-flash3'],
+  'fr-fr': ['canc3N06', '2N14-flash2'],
   'fr-ch': [],
 }
 export default class ComparerDroiteGrad extends Exercice {

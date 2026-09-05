@@ -16,7 +16,7 @@ export const dateDePublication = '07/09/2023'
 export const uuid = '07df0'
 
 export const refs = {
-  'fr-fr': ['can4C16'],
+  'fr-fr': ['can4C16', '2N31-flash3'],
   'fr-ch': ['NR'],
 }
 export default class MultiplierFraction extends ExerciceSimple {
