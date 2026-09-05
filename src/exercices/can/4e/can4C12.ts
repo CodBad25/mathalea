@@ -17,7 +17,7 @@ export const dateDePublication = '13/09/2022'
 export const uuid = '68ea0'
 
 export const refs = {
-  'fr-fr': ['can4C12'],
+  'fr-fr': ['can4C12', '2N30-flash4'],
   'fr-ch': [],
 }
 export default class CalculMoitieFraction extends ExerciceSimple {

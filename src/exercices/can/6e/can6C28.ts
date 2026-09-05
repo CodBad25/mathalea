@@ -16,7 +16,7 @@ export const dateDeModifImportante = '19/09/2024'
 export const uuid = '2ce71'
 
 export const refs = {
-  'fr-fr': ['can6C28', '6N3autoE-2'],
+  'fr-fr': ['can6C28', '6N3autoE-2', '2N33-flash3'],
   'fr-ch': ['NR'],
 }
 export default class PetitsProblemeDeFraction extends ExerciceSimple {

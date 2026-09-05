@@ -21,7 +21,7 @@ export const dateDeModifImportante = '26/11/2024'
 export const uuid = 'b9582'
 
 export const refs = {
-  'fr-fr': ['can6N18', '6N1A-flash6'],
+  'fr-fr': ['can6N18', '6N1A-flash6', '2N14-flash3'],
   'fr-ch': [],
 }
 export default class EncadrerDizaine extends Exercice {
