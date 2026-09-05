@@ -15,7 +15,7 @@ export const dateDePublication = '03/07/2025'
 export const uuid = '7a447'
 
 export const refs = {
-  'fr-fr': ['can6C53', '6N2J-flash3'],
+  'fr-fr': ['can6C53', '6N2J-flash3', '2N20-flash5'],
   'fr-ch': [],
 }
 export default class ComprendreDivisionEuclidienne extends ExerciceSimple {
