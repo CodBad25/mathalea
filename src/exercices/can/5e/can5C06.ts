@@ -15,7 +15,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'bc6a9'
 
 export const refs = {
-  'fr-fr': ['can5C06', '5N1autoB-1'],
+  'fr-fr': ['can5C06', '5N1autoB-1', '2N20-flash3'],
   'fr-ch': [],
 }
 export default class ResteDivision5e extends ExerciceSimple {
