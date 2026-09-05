@@ -1,25 +1,18 @@
 {
   "slides": [
     {
+      "title": "Webinaires de rentrée",
+      "message": "Retrouvons-nous mercredi 9 septembre à 18h pour une présentation des nouveautés puis le mercredi 16 septembre à 18h pour le travail des automatismes au lycée.",
+      "link": "https://coopmaths.fr/visio/",
+      "buttonTitle": "coopmaths.fr/visio",
+      "mobileVisible": false
+    },
+    {
       "title": "Cahiers d'automatismes",
       "message": "Nous proposons des cahiers libres et gratuits pour les élèves de 2nde et 1re générale et technologique afin des les aider à travailler tous les automatismes au programme.",
       "image": "automatismes1re.png",
       "link": "https://coopmaths.fr/www/automatismes/",
       "buttonTitle": "Voir le cahier",
-      "mobileVisible": true
-    },
-    {
-      "title": "Programme de 5e",
-      "message": "Un nouveau référentiel est en ligne et sera complété durant l'été.",
-      "mobileVisible": false
-    },
-    {
-      "background": "carousel05.jpg",
-      "title": "Cahiers de vacances gratuits",
-      "message": "Pour préparer l'entrée en sixième, en seconde, en première ou en terminale.",
-      "image": "cdv.png",
-      "link": "https://coopmaths.fr/www/cahiers-de-vacances/",
-      "buttonTitle": "Voir les cahiers",
       "mobileVisible": true
     },
     {
