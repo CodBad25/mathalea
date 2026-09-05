@@ -16,7 +16,7 @@ export const dateDePublication = '26/10/2023'
 export const uuid = 'bb947'
 
 export const refs = {
-  'fr-fr': ['can2N12-03'],
+  'fr-fr': ['can2N12-03', '2N12-flash3'],
   'fr-ch': [],
 }
 export default class ReunionIntervalles extends ExerciceSimple {

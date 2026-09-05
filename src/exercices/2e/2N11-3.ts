@@ -7,7 +7,7 @@ export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '27/10/2021'
 export const uuid = '507cf'
 export const refs = {
-  'fr-fr': ['2N12-5'],
+  'fr-fr': ['2N11-3'],
   'fr-ch': [],
 }
 export default class LireAbscisseDecimale2nde extends LireAbscisseDecimaleBis2d {
