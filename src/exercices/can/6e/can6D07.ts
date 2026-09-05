@@ -14,7 +14,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'ebb39'
 
 export const refs = {
-  'fr-fr': ['can6D07', 'auto6M4E-1'],
+  'fr-fr': ['can6D07', '6M4autoE-1'],
   'fr-ch': [],
 }
 export default class AutoFractionHeures extends ExerciceSimple {

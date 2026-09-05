@@ -80,7 +80,8 @@
    * Teste si le code du niveau correspond à un sous-thème :
    * sur la base de la syntaxe adoptée pour les codes des thèmes
    * (à savoir : <NB><UNE OU DEUX LETTRES><NOMBRE>, avec éventuellement un
-   * préfixe `auto` ou `can`),
+   * préfixe `can`, ou un infixe `auto` inséré juste avant la lettre finale,
+   * ex. `6N2autoA`),
    * la fonction confronte le code à tester à une expression régulière afin de savoir si
    * une lettre suit le code de trois caractères.
    * @param {string} themeCode code du niveau
@@ -91,7 +92,7 @@
     themeCode: string,
     level: string = '6',
   ): boolean {
-    const normalizedThemeCode = themeCode.replace(/^(auto|can)/, '')
+    const normalizedThemeCode = themeCode.replace(/^can/, '').replace('auto', '')
     const normalizedLevel = /^\d/.test(normalizedThemeCode)
       ? normalizedThemeCode[0]
       : level
@@ -274,7 +275,8 @@
    *      · sous une année  -> mois desc, lieu asc, typeExercice regroupé, jour asc, numeroInitial asc ;
    *      · sous un thème    -> année desc, mois desc, lieu asc, typeExercice regroupé, jour asc, numeroInitial asc ;
    *  - liste d'années (clés 4 chiffres)        -> années décroissantes ;
-   *  - liste de thèmes (sous-objets de terminaisons) -> ordre alphabétique ascendant ;
+   *  - liste de thèmes (sous-objets de terminaisons) -> ordre alphabétique ascendant,
+   *      sous-thèmes « automatismes » (code contenant l'infixe `auto`) toujours en dernier ;
    *  - filières / sections                     -> préfixe numérique ascendant (ordre préservé sinon).
    */
   function prepareSubset(s: JSONReferentielObject) {
@@ -311,9 +313,15 @@
           ([keyA], [keyB]) => parseInt(keyB, 10) - parseInt(keyA, 10),
         )
       }
-      // liste de thèmes -> ordre alphabétique ascendant
+      // liste de thèmes -> ordre alphabétique ascendant, sous-thèmes
+      // « automatismes » (code contenant l'infixe `auto`) toujours en dernier
       if (allValuesAreEndingContainers(entries)) {
-        return entries.sort(([keyA], [keyB]) => keyA.localeCompare(keyB, 'fr'))
+        return entries.sort(([keyA], [keyB]) => {
+          const isAutoA = keyA.includes('auto')
+          const isAutoB = keyB.includes('auto')
+          if (isAutoA !== isAutoB) return isAutoA ? 1 : -1
+          return keyA.localeCompare(keyB, 'fr')
+        })
       }
       // filières / sections : préfixe numérique ascendant (ordre préservé sinon)
       return entries.sort(([keyA], [keyB]) => {
@@ -404,7 +412,8 @@
         puis `numeroInitial` ascendant ;
   - **liste d'années** (clés `YYYY`) : ordre descendant ;
   - **liste de thèmes** (sous-objets dont les enfants sont des terminaisons) : ordre alphabétique
-    ascendant ;
+    ascendant, les sous-thèmes « automatismes » (code contenant l'infixe `auto`, ex. `6N2autoA`)
+    étant toujours repoussés en dernier ;
   - **filières / sections** (p. ex. `00_Général`, `10_STI2D`) : ordre du préfixe numérique ascendant,
     ordre d'insertion préservé en l'absence de préfixe.
 

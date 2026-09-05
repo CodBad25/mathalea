@@ -28,7 +28,7 @@ export const dateDePublication = '30/08/2026'
 export const uuid = 'bea8b'
 
 export const refs = {
-  'fr-fr': ['6N3Q-1', 'auto5N3J'],
+  'fr-fr': ['6N3Q-1', '5N3autoJ'],
   'fr-ch': [],
 }
 export default class PourcentageDunNombreAuto5e extends Exercice {

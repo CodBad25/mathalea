@@ -88,7 +88,7 @@ export default class TrouverNombre extends Exercice {
       : ''
 
     const typeQuestionsDisponibles =
-      this.version === 'auto5N1A4-4'
+      this.version === '5N1autoA4-4'
         ? gestionnaireFormulaireTexte({
             saisie: this.sup,
             max: 3,

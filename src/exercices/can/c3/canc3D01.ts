@@ -28,7 +28,7 @@ export const amcType = 'AMCHybride'
 export const uuid = '2ce11'
 
 export const refs = {
-  'fr-fr': ['canc3D01', 'auto6M4A-flash1', '6AutoT1'],
+  'fr-fr': ['canc3D01', '6M4autoA-flash1', '6AutoT1'],
   'fr-ch': ['NR'],
 }
 export default class LireHeure extends ExerciceSimple {

@@ -130,14 +130,14 @@ export const sortArrayOfStringsWithHyphens = (
 /**
  * Transforme les ID des exercices d'automatisme afin de préserver
  * leur positionnement en fin de liste d'une section lors de l'organisation du référentiel.
- * La chaîne auto6N2A devient 6N2zzzzzA, auto6N2A-1 devient 6N2zzzzzA-1, etc.
+ * La chaîne 6N2autoA devient 6N2zzzzzA, 6N2autoA-1 devient 6N2zzzzzA-1, etc.
  * @param input ID à transformer
- * @returns la chaîne avec le `zzzzz` insérée après les trois premiers caractères
+ * @returns la chaîne avec le `zzzzz` insérée à la place de l'infixe `auto`
  */
 function transformAutomatismId(input: string): string {
   // Expression régulière pour matcher le pattern décrit
-  // auto + chiffre + lettre majuscule + chiffre + reste
-  const regex = /^auto(\d)([A-Z])(\d)(.*)?/gm
+  // chiffre + lettre majuscule + chiffre + auto + reste
+  const regex = /^(\d)([A-Z])(\d)auto(.*)?/gm
   const match = [...input.matchAll(regex)]
 
   // Si la chaîne ne correspond pas au pattern, retourner l'input inchangé

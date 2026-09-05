@@ -656,11 +656,11 @@
       "6N2I": {},
       "6N2J": {},
       "6N2K": {},
-      "auto6N2A": {},
-      "auto6N2B": {},
-      "auto6N2C": {},
-      "auto6N2D": {},
-      "auto6N2E": {}
+      "6N2autoA": {},
+      "6N2autoB": {},
+      "6N2autoC": {},
+      "6N2autoD": {},
+      "6N2autoE": {}
     },
     "6N3": {
       "6N3A": {},
@@ -680,11 +680,11 @@
       "6N3O": {},
       "6N3P": {},
       "6N3Q": {},
-      "auto6N3A": {},
-      "auto6N3B": {},
-      "auto6N3C": {},
-      "auto6N3D": {},
-      "auto6N3E": {}
+      "6N3autoA": {},
+      "6N3autoB": {},
+      "6N3autoC": {},
+      "6N3autoD": {},
+      "6N3autoE": {}
     },
     "6N4": {
       "6N4A": {},
@@ -697,21 +697,21 @@
       "6M1C": {},
       "6M1D": {},
       "6M1E": {},
-      "auto6M1A": {},
-      "auto6M1B": {},
-      "auto6M1C": {},
-      "auto6M1D": {},
-      "auto6M1E": {}
+      "6M1autoA": {},
+      "6M1autoB": {},
+      "6M1autoC": {},
+      "6M1autoD": {},
+      "6M1autoE": {}
     },
     "6M2": {
       "6M2A": {},
       "6M2B": {},
       "6M2C": {},
-      "auto6M2A": {},
-      "auto6M2B": {},
-      "auto6M2C": {},
-      "auto6M2D": {},
-      "auto6M2E": {}
+      "6M2autoA": {},
+      "6M2autoB": {},
+      "6M2autoC": {},
+      "6M2autoD": {},
+      "6M2autoE": {}
     },
     "6M3": {
       "6M3A": {},
@@ -722,20 +722,20 @@
       "6M4A": {},
       "6M4B": {},
       "6M4C": {},
-      "auto6M4A": {},
-      "auto6M4B": {},
-      "auto6M4C": {},
-      "auto6M4D": {},
-      "auto6M4E": {}
+      "6M4autoA": {},
+      "6M4autoB": {},
+      "6M4autoC": {},
+      "6M4autoD": {},
+      "6M4autoE": {}
     },
     "6G0": {},
     "6G1": {
       "6G1A": {},
       "6G1B": {},
-      "auto6G1A": {},
-      "auto6G1B": {},
-      "auto6G1C": {},
-      "auto6G1D": {}
+      "6G1autoA": {},
+      "6G1autoB": {},
+      "6G1autoC": {},
+      "6G1autoD": {}
     },
     "6G2": {
       "6G2A": {},
@@ -770,14 +770,14 @@
     },
     "6G8": {
       "6G8A": {},
-      "auto6G8A": {}
+      "6G8autoA": {}
     },
     "6P1": {
       "6P1A": {},
       "6P1B": {},
       "6P1C": {},
       "6P1D": {},
-      "auto6P1A": {}
+      "6P1autoA": {}
     },
     "6P2": {
       "6P2A": {},
@@ -790,8 +790,8 @@
       "6P3C": {},
       "6P3D": {},
       "6P3E": {},
-      "auto6P3A": {},
-      "auto6P3B": {}
+      "6P3autoA": {},
+      "6P3autoB": {}
     },
     "6I1": {
       "6I1A": {},
@@ -802,12 +802,12 @@
   },
   "5e": {
     "5N1": {
-      "auto5N1A": {},
-      "auto5N1B": {},
-      "auto5N1C": {},
-      "auto5N1D": {},
-      "auto5N1E": {},
-      "auto5N1F": {},
+      "5N1autoA": {},
+      "5N1autoB": {},
+      "5N1autoC": {},
+      "5N1autoD": {},
+      "5N1autoE": {},
+      "5N1autoF": {},
       "5N1A": {},
       "5N1B": {},
       "5N1C": {},
@@ -822,8 +822,8 @@
       "5N1L": {}
     },
     "5N2": {
-      "auto5N2A": {},
-      "auto5N2B": {},
+      "5N2autoA": {},
+      "5N2autoB": {},
       "5N2A": {},
       "5N2B": {},
       "5N2C": {},
@@ -839,24 +839,24 @@
       "5N2M": {}
     },
     "5N3": {
-      "auto5N3A": {},
-      "auto5N3B": {},
-      "auto5N3C": {},
-      "auto5N3D": {},
-      "auto5N3E": {},
-      "auto5N3F": {},
-      "auto5N3G": {},
-      "auto5N3H": {},
-      "auto5N3I": {},
-      "auto5N3J": {},
-      "auto5N3K": {},
+      "5N3autoA": {},
+      "5N3autoB": {},
+      "5N3autoC": {},
+      "5N3autoD": {},
+      "5N3autoE": {},
+      "5N3autoF": {},
+      "5N3autoG": {},
+      "5N3autoH": {},
+      "5N3autoI": {},
+      "5N3autoJ": {},
+      "5N3autoK": {},
       "5N3A": {},
       "5N3B": {},
       "5N3C": {}
     },
     "5N4": {
-      "auto5N4A": {},
-      "auto5N4B": {},
+      "5N4autoA": {},
+      "5N4autoB": {},
       "5N4A": {},
       "5N4B": {},
       "5N4C": {},
@@ -865,10 +865,10 @@
       "5N4F": {}
     },
     "5N5": {
-      "auto5N5A": {},
-      "auto5N5B": {},
-      "auto5N5C": {},
-      "auto5N5D": {},
+      "5N5autoA": {},
+      "5N5autoB": {},
+      "5N5autoC": {},
+      "5N5autoD": {},
       "5N5A": {},
       "5N5B": {},
       "5N5C": {},
@@ -883,16 +883,16 @@
       "5N5L": {}
     },
     "5G1": {
-      "auto5G1A": {},
-      "auto5G1B": {},
+      "5G1autoA": {},
+      "5G1autoB": {},
       "5G1A": {},
       "5G1B": {}
     },
     "5G2": {
-      "auto5G2A": {},
-      "auto5G2B": {},
-      "auto5G2C": {},
-      "auto5G2D": {},
+      "5G2autoA": {},
+      "5G2autoB": {},
+      "5G2autoC": {},
+      "5G2autoD": {},
       "5G2A": {},
       "5G2B": {},
       "5G2C": {},
@@ -900,22 +900,22 @@
       "5G2E": {}
     },
     "5G3": {
-      "auto5G3A": {},
-      "auto5G3B": {},
+      "5G3autoA": {},
+      "5G3autoB": {},
       "5G3A": {},
       "5G3B": {}
     },
     "5G4": {
-      "auto5G4A": {},
-      "auto5G4B": {},
-      "auto5G4C": {},
-      "auto5G4D": {},
+      "5G4autoA": {},
+      "5G4autoB": {},
+      "5G4autoC": {},
+      "5G4autoD": {},
       "5G4A": {}
     },
     "5G5": {
-      "auto5G5A": {},
-      "auto5G5B": {},
-      "auto5G5C": {},
+      "5G5autoA": {},
+      "5G5autoB": {},
+      "5G5autoC": {},
       "5G5A": {},
       "5G5B": {},
       "5G5C": {},
@@ -927,8 +927,8 @@
       "5G5I": {}
     },
     "5G6": {
-      "auto5G6A": {},
-      "auto5G6B": {},
+      "5G6autoA": {},
+      "5G6autoB": {},
       "5G6A": {},
       "5G6B": {},
       "5G6C": {},
@@ -947,17 +947,17 @@
       "5D1F": {}
     },
     "5D2": {
-      "auto5D2A": {},
-      "auto5D2B": {},
-      "auto5D2C": {},
+      "5D2autoA": {},
+      "5D2autoB": {},
+      "5D2autoC": {},
       "5D2A": {},
       "5D2B": {},
       "5D2C": {},
       "5D2D": {}
     },
     "5P1": {
-      "auto5P1A": {},
-      "auto5P1B": {},
+      "5P1autoA": {},
+      "5P1autoB": {},
       "5P1A": {},
       "5P1B": {},
       "5P1C": {},

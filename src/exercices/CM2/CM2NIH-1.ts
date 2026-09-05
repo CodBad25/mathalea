@@ -1,4 +1,4 @@
-import ExerciceLabyrintheMultiples from '../6e/auto6N3D-2'
+import ExerciceLabyrintheMultiples from '../6e/6N3autoD-2'
 export const titre = 'Parcourir un labyrinthe de multiples'
 export const amcReady = true
 export const amcType = 'AMCOpen'

@@ -1,4 +1,4 @@
-import VocabulaireAngles from '../5e/auto5G4A'
+import VocabulaireAngles from '../5e/5G4autoA'
 export const interactifReady = true
 
 export const titre = 'Connaître le vocabulaire sur les angles'
