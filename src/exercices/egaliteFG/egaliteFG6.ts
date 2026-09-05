@@ -38,7 +38,7 @@ export default class EgaliteFG6 extends Exercice {
     this.listeQuestions[0] =
       "Partie 1 - À égalité dans notre formation ?<br>Commence par compter parmi tes enseignants le nombre de femmes et le nombre d'hommes, puis calcule le nombre total d'enseignants. Calcule la part de femmes et la part d'hommes sous forme de fractions irréductibles, puis exprime ces fractions en pourcentage (arrondi à l'unité). Complète un tableau avec ces trois informations (nombre, fraction irréductible, pourcentage) pour les femmes, les hommes et le total."
     this.listeCorrections[0] =
-      "Réponse personnelle, qui dépend de la composition réelle de ta classe.<br>Méthode : si $f$ est le nombre d'enseignantes et $h$ le nombre d'enseignants, le total est $f+h$ ; la part des femmes est la fraction $\\dfrac{f}{f+h}$ (à simplifier), soit en pourcentage $\\dfrac{f}{f+h}\\times 100$, arrondi à l'unité (et de même pour les hommes)."
+      "Réponse personnelle, qui dépend de la composition réelle de ta classe.<br>Méthode : si $f$ est le nombre d'enseignantes et $h$ le nombre d'enseignants, le total est $f+h$ ; la part des femmes est la fraction $\\dfrac{f}{f+h}$ (à simplifier), exprimée en pourcentage et arrondie à l'unité (et de même pour les hommes)."
 
     const barres: [string, number][] = [
       ['École\nmaternelle', 97],

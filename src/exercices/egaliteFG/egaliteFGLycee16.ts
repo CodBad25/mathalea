@@ -37,12 +37,12 @@ export default class EgaliteFGLycee16 extends Exercice {
       "<br><br>Voici les effectifs des classes de première technologique d'un lycée :<br>"
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Filles</th><th style="border: 1px solid #888; padding: 4px 10px;">Garçons</th><th style="border: 1px solid #888; padding: 4px 10px;">Total</th></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STMG</td><td style="border: 1px solid #888; padding: 4px 10px;">54</td><td style="border: 1px solid #888; padding: 4px 10px;">90</td><td style="border: 1px solid #888; padding: 4px 10px;">144</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> ST2S</td><td style="border: 1px solid #888; padding: 4px 10px;">59</td><td style="border: 1px solid #888; padding: 4px 10px;">18</td><td style="border: 1px solid #888; padding: 4px 10px;">77</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STI2D</td><td style="border: 1px solid #888; padding: 4px 10px;">27</td><td style="border: 1px solid #888; padding: 4px 10px;">72</td><td style="border: 1px solid #888; padding: 4px 10px;">99</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STL</td><td style="border: 1px solid #888; padding: 4px 10px;">60</td><td style="border: 1px solid #888; padding: 4px 10px;">18</td><td style="border: 1px solid #888; padding: 4px 10px;">78</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STD2A</td><td style="border: 1px solid #888; padding: 4px 10px;">34</td><td style="border: 1px solid #888; padding: 4px 10px;">18</td><td style="border: 1px solid #888; padding: 4px 10px;">52</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Total</td><td style="border: 1px solid #888; padding: 4px 10px;">234</td><td style="border: 1px solid #888; padding: 4px 10px;">216</td><td style="border: 1px solid #888; padding: 4px 10px;">450</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STMG</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">54</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">90</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">144</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> ST2S</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">59</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">18</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">77</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STI2D</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">27</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">72</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">99</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STL</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">60</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">18</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">78</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STD2A</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">34</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">18</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">52</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Total</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">234</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">216</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">450</td></tr>
       </table>`
     const tableauLatex =
       '\\begin{center}\\begin{tabular}{|l|c|c|c|}\n\\hline\n' +
@@ -68,12 +68,12 @@ export default class EgaliteFGLycee16 extends Exercice {
     const tableauFreqHtml =
       '<table style="border-collapse: collapse; margin: 10px 0;">' +
       '<tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Filles</th><th style="border: 1px solid #888; padding: 4px 10px;">Garçons</th><th style="border: 1px solid #888; padding: 4px 10px;">Total</th></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STMG</td><td style="border: 1px solid #888; padding: 4px 10px;">12,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">20,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">32,00 %</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> ST2S</td><td style="border: 1px solid #888; padding: 4px 10px;">13,11 %</td><td style="border: 1px solid #888; padding: 4px 10px;">4,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">17,11 %</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STI2D</td><td style="border: 1px solid #888; padding: 4px 10px;">6,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">16,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">22,00 %</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STL</td><td style="border: 1px solid #888; padding: 4px 10px;">13,33 %</td><td style="border: 1px solid #888; padding: 4px 10px;">4,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">17,33 %</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">1<sup>re</sup> STD2A</td><td style="border: 1px solid #888; padding: 4px 10px;">7,56 %</td><td style="border: 1px solid #888; padding: 4px 10px;">4,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">11,56 %</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">Total</td><td style="border: 1px solid #888; padding: 4px 10px;">52,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">48,00 %</td><td style="border: 1px solid #888; padding: 4px 10px;">100 %</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STMG</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">12,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">20,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">32,00 %</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> ST2S</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">13,11 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">4,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">17,11 %</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STI2D</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">6,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">16,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">22,00 %</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STL</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">13,33 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">4,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">17,33 %</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">1<sup>re</sup> STD2A</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">7,56 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">4,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">11,56 %</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Total</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">52,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">48,00 %</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">100 %</td></tr>' +
       '</table>'
     const tableauFreqLatex =
       '\\begin{center}\\begin{tabular}{|l|c|c|c|}\n\\hline\n' +
@@ -95,7 +95,7 @@ export default class EgaliteFGLycee16 extends Exercice {
       texte1 +=
         ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 17.11 } })
-    const correction1 = `$\\dfrac{77}{450}\\times 100\\approx ${miseEnEvidence('17{,}11\\,\\%')}$.`
+    const correction1 = `$\\dfrac{77}{450}\\approx ${miseEnEvidence('17{,}11\\,\\%')}$.`
 
     let texte2 =
       'Quel est le pourcentage de filles en 1re STI2D (arrondi au centième) ?'
@@ -103,7 +103,7 @@ export default class EgaliteFGLycee16 extends Exercice {
       texte2 +=
         ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 27.27 } })
-    const correction2 = `$\\dfrac{27}{99}\\times 100\\approx ${miseEnEvidence('27{,}27\\,\\%')}$.`
+    const correction2 = `$\\dfrac{27}{99}\\approx ${miseEnEvidence('27{,}27\\,\\%')}$.`
 
     let texte3 =
       'Parmi les élèves de 1re STL, quel est le pourcentage de filles (arrondi au centième) ?'
@@ -111,7 +111,7 @@ export default class EgaliteFGLycee16 extends Exercice {
       texte3 +=
         ajouteChampTexteMathLive(this, 3, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 76.92 } })
-    const correction3 = `$\\dfrac{60}{78}\\times 100\\approx ${miseEnEvidence('76{,}92\\,\\%')}$.`
+    const correction3 = `$\\dfrac{60}{78}\\approx ${miseEnEvidence('76{,}92\\,\\%')}$.`
 
     let texte4 =
       "Parmi les garçons, quel est le pourcentage d'élèves qui choisit de s'orienter en ST2S (arrondi au centième) ?"
@@ -119,7 +119,7 @@ export default class EgaliteFGLycee16 extends Exercice {
       texte4 +=
         ajouteChampTexteMathLive(this, 4, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 8.33 } })
-    const correction4 = `$\\dfrac{18}{216}\\times 100\\approx ${miseEnEvidence('8{,}33\\,\\%')}$.`
+    const correction4 = `$\\dfrac{18}{216}\\approx ${miseEnEvidence('8{,}33\\,\\%')}$.`
 
     const texte5 =
       'En construisant le tableau des fréquences conditionnelles par ligne, que peut-on déduire quant à la proportion des élèves dans chaque filière technologique au regard de leur genre ?'

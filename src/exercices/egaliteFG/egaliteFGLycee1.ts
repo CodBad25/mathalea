@@ -1,3 +1,4 @@
+import { createList } from '../../lib/format/lists'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -44,15 +45,21 @@ export default class EgaliteFGLycee1 extends Exercice {
     )
     this.consigne +=
       '<br><br>On considère les records du monde du 100 mètres en athlétisme. En 1912, le premier record masculin enregistré était de $10{,}6$ secondes (Don Lippincott, USA). En 1922, le premier record féminin enregistré était de $13{,}6$ secondes (Marie Mejzlikova, Tchécoslovaquie), tandis que celui des hommes était de $10{,}4$ secondes (Charley Paddock, USA). En 2024, les records sont les suivants :<br>' +
-      '<ul style="list-style:disc; margin:0.25rem 0 0.5rem 1.25rem;">' +
-      '<li>Record masculin de Usain Bolt (Jamaïque) : $9{,}58$ secondes (atteint en 2009)</li>' +
-      '<li>Record féminin de Florence Griffith-Joyner (USA) : $10{,}49$ secondes (atteint en 1988)</li>' +
-      '</ul>' +
+      createList({
+        items: [
+          'Record masculin de Usain Bolt (Jamaïque) : $9{,}58$ secondes (atteint en 2009)',
+          'Record féminin de Florence Griffith-Joyner (USA) : $10{,}49$ secondes (atteint en 1988)',
+        ],
+        style: 'puces',
+      }) +
       "On note $t$ le nombre d'années à partir de $1980$. On modélise les performances (en secondes) des sprinteuses et sprinteurs par les fonctions $f$ et $h$ suivantes, définies sur $\\mathbb{R}^+$ :<br>" +
-      '<ul style="list-style:disc; margin:0.25rem 0 0.5rem 1.25rem;">' +
-      '<li>Pour les femmes : $f(t)=11-0{,}015t$</li>' +
-      '<li>Pour les hommes : $h(t)=10-0{,}02t$</li>' +
-      '</ul>'
+      createList({
+        items: [
+          'Pour les femmes : $f(t)=11-0{,}015t$',
+          'Pour les hommes : $h(t)=10-0{,}02t$',
+        ],
+        style: 'puces',
+      })
     this.nbQuestions = 8
     this.nbQuestionsModifiable = false
     this.commentaireApprofondir =
@@ -71,7 +78,7 @@ export default class EgaliteFGLycee1 extends Exercice {
     this.sup2 = true
     this.commentaireMiseEnGarde =
       texteGras('Mise en garde') +
-      ".<br>Un débat type « expliquer les différences de performance entre les hommes et les femmes » est un débat qui demande une maîtrise du sujet de la place des femmes dans le sport. Nous vous recommandons l'écoute du podcast <i>Les Couilles sur la Table</i> « Épisode 99 : Sports Olympiques - Médaille d'or du sexisme »"
+      `.<br>Un débat type « expliquer les différences de performance entre les hommes et les femmes » est un débat qui demande une maîtrise du sujet de la place des femmes dans le sport. Nous vous recommandons l'écoute du podcast ${texteItalique('Les Couilles sur la Table')} « Épisode 99 : Sports Olympiques - Médaille d'or du sexisme »`
     this.besoinFormulaire3CaseACocher = ['Afficher « Mise en garde »', true]
     this.sup3 = true
   }
@@ -86,7 +93,7 @@ export default class EgaliteFGLycee1 extends Exercice {
       texte0 +=
         ajouteChampTexteMathLive(this, 0, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: -22.87 } })
-    const correction0 = `$\\dfrac{10{,}49-13{,}6}{13{,}6}\\times 100\\approx ${miseEnEvidence('-22{,}87\\,\\%')}$ : le record féminin a diminué d'environ $22{,}87\\,\\%$ (on part de 1922, date du premier record féminin recensé — aucun record féminin n'existait en 1912).`
+    const correction0 = `$\\dfrac{10{,}49-13{,}6}{13{,}6}\\approx ${miseEnEvidence('-22{,}87\\,\\%')}$ : le record féminin a diminué d'environ $22{,}87\\,\\%$ (on part de 1922, date du premier record féminin recensé — aucun record féminin n'existait en 1912).`
 
     let texte1 =
       'Même question chez les hommes, entre 1912 et 2024 (arrondi au centième).'
@@ -94,7 +101,7 @@ export default class EgaliteFGLycee1 extends Exercice {
       texte1 +=
         ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: -9.62 } })
-    const correction1 = `$\\dfrac{9{,}58-10{,}6}{10{,}6}\\times 100\\approx ${miseEnEvidence('-9{,}62\\,\\%')}$.`
+    const correction1 = `$\\dfrac{9{,}58-10{,}6}{10{,}6}\\approx ${miseEnEvidence('-9{,}62\\,\\%')}$.`
 
     let texte2 =
       'Quelle était la performance théorique des femmes en 1980 ($t=0$), selon le modèle $f$ ?'
