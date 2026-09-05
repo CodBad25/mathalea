@@ -1,4 +1,4 @@
-import ReconnaitreDesSolides from '../6e/auto6G8A'
+import ReconnaitreDesSolides from '../6e/6G8autoA'
 export const titre = 'Reconnaitre des solides'
 export const interactifReady = true
 
@@ -7,7 +7,7 @@ export const amcType = 'qcmMono'
 export const dateDePublication = '30/07/2026'
 
 /**
- * Clone de auto6G8A pour le Bac Pro Première.
+ * Clone de 6G8autoA pour le Bac Pro Première.
  * Retirer les prismes parmi les types de solides proposés.
  */
 

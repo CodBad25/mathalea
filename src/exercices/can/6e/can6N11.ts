@@ -13,7 +13,7 @@ export const dateDePublication = '20/01/2022'
 export const uuid = '79452'
 
 export const refs = {
-  'fr-fr': ['can6N11', 'auto6N2B-flash2'],
+  'fr-fr': ['can6N11', '6N2autoB-7'],
   'fr-ch': [],
 }
 export default class SommeFractionsDecimalesCAN extends SommeFractionsDecimales {

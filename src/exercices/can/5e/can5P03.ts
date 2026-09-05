@@ -20,7 +20,7 @@ export const dateDePublication = '28/10/2021'
 export const uuid = '57777'
 
 export const refs = {
-  'fr-fr': ['can5P03', 'auto5P1B-flash1'],
+  'fr-fr': ['can5P03', '5P1autoB-1'],
   'fr-ch': ['9FA2B-25'],
 }
 export default class PoucentageP2 extends ExerciceSimple {

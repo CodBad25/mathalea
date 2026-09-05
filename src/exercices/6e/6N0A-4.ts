@@ -28,7 +28,7 @@ export const titre =
 export const uuid = '23bc8'
 
 export const refs = {
-  'fr-fr': ['6N0A-4', 'auto5N3A-3', 'auto5N4A-3'],
+  'fr-fr': ['6N0A-4', '5N3autoA-3', '5N4autoA-3'],
   'fr-2016': ['6C10-2'],
   'fr-ch': [''], // Primaire anciennement :['9NO3-15'],
 }

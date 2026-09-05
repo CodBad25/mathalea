@@ -17,7 +17,7 @@ export const dateDePublication = '09/05/2022'
 export const uuid = '0f007'
 
 export const refs = {
-  'fr-fr': ['can5C20', 'auto5N2A-flash5'],
+  'fr-fr': ['can5C20', '5N2autoA-5'],
   'fr-ch': ['NR'],
 }
 export default class Soustraire2Decimaux2 extends ExerciceSimple {

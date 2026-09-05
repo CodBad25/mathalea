@@ -59,7 +59,11 @@
     type TypstCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
+    WRITING_LINES_POSITIONS,
+    WRITING_LINES_STYLES,
     type WritingLinesPosition,
+    type WritingLinesSetting,
+    type WritingLinesStyle,
   } from './buildTypstDocument'
   import { formatCoverDate } from './coverDate'
   import CoverDateField from './CoverDateField.svelte'
@@ -253,6 +257,22 @@
           ) {
             restoredDocumentOptions.answerLines =
               defaultTypstDocumentOptions.answerLines
+          }
+          if (
+            !WRITING_LINES_STYLES.includes(
+              restoredDocumentOptions.answerLinesStyle,
+            )
+          ) {
+            restoredDocumentOptions.answerLinesStyle =
+              defaultTypstDocumentOptions.answerLinesStyle
+          }
+          if (
+            !WRITING_LINES_POSITIONS.includes(
+              restoredDocumentOptions.answerLinesPosition,
+            )
+          ) {
+            restoredDocumentOptions.answerLinesPosition =
+              defaultTypstDocumentOptions.answerLinesPosition
           }
           restoredDocumentOptions.coverPage = sanitizeCoverPage(
             restoredDocumentOptions.coverPage,
@@ -798,10 +818,7 @@
   /** Surcharges de code Typst de la correction par exercice, lues dans le code */
   let codeOverrideCorrectionValues: Record<number, string> = $state({})
   /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
-  let writingLinesValues: Record<
-    number,
-    { position: WritingLinesPosition; count: number; spacing: number }
-  > = $state({})
+  let writingLinesValues: Record<number, WritingLinesSetting> = $state({})
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
   let codeEditNum: number | null = $state(null)
   /** Partie éditée par la modale : énoncé ou correction de `codeEditNum` */
@@ -888,6 +905,7 @@
               | 'header'
               | 'cover'
               | 'footer'
+              | 'version-label'
               | 'figure'
               | 'can-row'),
         num: anchor.num,
@@ -1867,14 +1885,7 @@
    * le passage à « après chaque question » change la structure du document
    * (les appels s'intercalent après chaque item de la liste `tasks`).
    */
-  function setWritingLines(
-    num: number,
-    value: {
-      position: WritingLinesPosition
-      count: number
-      spacing: number
-    } | null,
-  ) {
+  function setWritingLines(num: number, value: WritingLinesSetting | null) {
     if (!confirmOverwrite()) return
     const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
     const writingLines = { ...(carryOver.writingLines ?? {}) }
@@ -2024,6 +2035,17 @@
     })
     documentOptions.footerText = value
     persistPreferences()
+  }
+
+  /**
+   * Affiche ou masque l'étiquette « Sujet A/B... » de l'en-tête (icône sur
+   * l'aperçu, à côté de l'étiquette) : régénère le code, la présence de
+   * `hide()` autour de l'étiquette étant structurelle (voir `headerBlock`),
+   * à la différence des textes édités en place comme le pied de page.
+   */
+  function toggleVersionLabel() {
+    documentOptions.hideVersionLabel = !documentOptions.hideVersionLabel
+    applyDocumentOptions()
   }
 
   /** Repère de gap `num` dans le code (indentation et fin de sa ligne) */
@@ -2302,6 +2324,30 @@
   function applyCoverDate(date: string) {
     documentOptions.coverPage.session = date
     applyDocumentOptions()
+  }
+
+  /** Libellés des emplacements proposés pour les lignes de réponse du document */
+  const ANSWER_LINES_POSITION_LABELS: Record<WritingLinesPosition, string> = {
+    endOfExercise: "Fin d'exercice",
+    afterEachQuestion: 'Après chaque question',
+  }
+
+  /** Libellés des traits proposés pour les lignes de réponse du document */
+  const ANSWER_LINES_STYLE_LABELS: Record<WritingLinesStyle, string> = {
+    pointilles: 'Pointillés',
+    points: 'Points',
+    plein: 'Trait',
+  }
+
+  /**
+   * Applique le trait ou l'emplacement choisi pour les lignes de réponse du
+   * document. Comme `applyAnswerLines`, la régénération doit oublier les
+   * réglages par exercice : relus dans le code (les appels `#mathalea-lignes`
+   * que le réglage global vient d'y écrire), ils l'emporteraient sur lui et
+   * le changement resterait sans effet.
+   */
+  function applyAnswerLinesStyle() {
+    regenerateDocument({ dropWritingLines: true })
   }
 
   /** Applique le réglage global des lignes de réponse (valeur bornée) */
@@ -3792,6 +3838,61 @@
               Présentation « Course aux nombres »
             </label>
 
+            <div class="space-y-1.5">
+              <label
+                class="flex items-center justify-between gap-2 text-sm min-w-0"
+              >
+                <span
+                  title="Lignes pour que l'élève réponde, ajoutées à chaque exercice de la fiche. La palette de mise en page peut ensuite régler un exercice à part (nombre, emplacement, trait), auquel cas son réglage l'emporte."
+                >
+                  Lignes de réponse par exercice
+                </span>
+                <input
+                  type="number"
+                  min="0"
+                  max="20"
+                  class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                  bind:value={documentOptions.answerLines}
+                  onchange={applyAnswerLines}
+                />
+              </label>
+              {#if documentOptions.answerLines > 0}
+                <label
+                  class="flex items-center justify-between gap-2 text-sm min-w-0"
+                >
+                  Emplacement
+                  <select
+                    class="max-w-[60%] truncate rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                    bind:value={documentOptions.answerLinesPosition}
+                    onchange={applyAnswerLinesStyle}
+                  >
+                    {#each WRITING_LINES_POSITIONS as position}
+                      <option value={position}>
+                        {ANSWER_LINES_POSITION_LABELS[position]}
+                      </option>
+                    {/each}
+                  </select>
+                </label>
+                <label
+                  class="flex items-center justify-between gap-2 text-sm min-w-0"
+                >
+                  Trait des lignes
+                  <select
+                    class="max-w-[60%] truncate rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                    bind:value={documentOptions.answerLinesStyle}
+                    onchange={applyAnswerLinesStyle}
+                  >
+                    {#each WRITING_LINES_STYLES as style}
+                      <option value={style}>
+                        {ANSWER_LINES_STYLE_LABELS[style]}
+                      </option>
+                    {/each}
+                  </select>
+                </label>
+              {/if}
+            </div>
+
+
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
@@ -4157,19 +4258,6 @@
                     Case pour la note
                   </label>
 
-                  <label
-                    class="flex items-center justify-between gap-4 text-sm"
-                  >
-                    Lignes de réponse par exercice
-                    <input
-                      type="number"
-                      min="0"
-                      max="20"
-                      class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-                      bind:value={documentOptions.answerLines}
-                      onchange={applyAnswerLines}
-                    />
-                  </label>
                 {/if}
 
                 {#if coverPage.showBareme}
@@ -4299,6 +4387,7 @@
                     coverConsignes={coverConsignesValue}
                     coverTemplate={documentOptions.coverPage.template}
                     footerText={footerValue}
+                    hideVersionLabel={documentOptions.hideVersionLabel}
                     {documentColumns}
                     {questionCounts}
                     {staticExercises}
@@ -4333,6 +4422,7 @@
                     onUpdateCover={updateCoverValue}
                     onUpdateCoverConsignes={updateCoverConsignes}
                     onUpdateFooterText={updateFooterText}
+                    onToggleVersionLabel={toggleVersionLabel}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}
                     onDuplicateExercise={duplicateExercise}

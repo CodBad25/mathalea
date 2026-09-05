@@ -925,13 +925,13 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 4, spacing: 1.5 },
+            1: { position: 'endOfExercise', count: 4, spacing: 1.5, style: 'pointilles' },
           },
         },
       )
-      expect(code).toContain('#let mathalea-lignes(n, gutter: 2em)')
+      expect(code).toContain('#let mathalea-lignes(n, gutter: 2em, style: "pointilles")')
       expect(code).toContain(
-        '#mathalea-lignes(4, gutter: 1.5em) // mathalea:lignes-fin(1)',
+        '#mathalea-lignes(4, gutter: 1.5em, style: "pointilles") // mathalea:lignes-fin(1)',
       )
       // une seule occurrence : le bloc suit l'environnement tasks, pas chaque question
       expect(code.match(/#mathalea-lignes\(/g)).toHaveLength(1)
@@ -943,18 +943,18 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 0, spacing: 2 },
+            1: { position: 'endOfExercise', count: 0, spacing: 2, style: 'pointilles' },
           },
         },
       )
       // le marqueur est émis (position retenue par la palette au round-trip)
       // mais le helper n'affiche rien tant que n vaut 0
       expect(code).toContain(
-        '#mathalea-lignes(0, gutter: 2em) // mathalea:lignes-fin(1)',
+        '#mathalea-lignes(0, gutter: 2em, style: "pointilles") // mathalea:lignes-fin(1)',
       )
       expect(code).toContain('if n > 0 { block(')
       expect(harvestCarryOver(code).writingLines).toEqual({
-        1: { position: 'endOfExercise', count: 0, spacing: 2 },
+        1: { position: 'endOfExercise', count: 0, spacing: 2, style: 'pointilles' },
       })
     })
 
@@ -969,14 +969,14 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'afterEachQuestion', count: 2, spacing: 0.8 },
+            1: { position: 'afterEachQuestion', count: 2, spacing: 0.8, style: 'pointilles' },
           },
         },
       )
       // 3 questions -> 3 blocs de lignes, y compris après la 3e
       expect(
         code.match(
-          /#mathalea-lignes\(2, gutter: 0\.8em\) \/\/ mathalea:lignes-apres\(1\)/g,
+          /#mathalea-lignes\(2, gutter: 0\.8em, style: "pointilles"\) \/\/ mathalea:lignes-apres\(1\)/g,
         ),
       ).toHaveLength(3)
       const lastLinesIndex = code.lastIndexOf('#mathalea-lignes(')
@@ -996,7 +996,7 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 3, spacing: 1 },
+            1: { position: 'endOfExercise', count: 3, spacing: 1, style: 'pointilles' },
           },
         },
       )
@@ -1004,17 +1004,75 @@ describe('buildTypstDocument', () => {
       expect(correctionSection).not.toContain('mathalea-lignes(')
     })
 
-    it("n'ajoute pas de bloc après chaque question pour un exercice à question unique", () => {
+    it("pose les lignes en fin de corps quand l'exercice n'a pas de liste où les intercaler", () => {
+      // question unique : pas d'environnement `tasks`, mais le réglage (souvent
+      // celui du document, donc valable pour toute la fiche) doit tout de même
+      // donner de la place pour répondre
       const code = buildTypstDocument(
         [exercise({ questions: ['$1+1$'] })],
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'afterEachQuestion', count: 3, spacing: 1 },
+            1: {
+              position: 'afterEachQuestion',
+              count: 3,
+              spacing: 1,
+              style: 'pointilles',
+            },
           },
         },
       )
-      expect(code).not.toContain('mathalea-lignes')
+      expect(
+        code.match(/#mathalea-lignes\(3, gutter: 1em, style: "pointilles"\)/g),
+      ).toHaveLength(1)
+      // l'emplacement choisi est conservé tel quel pour la palette
+      expect(harvestCarryOver(code).writingLines?.[1]?.position).toBe(
+        'afterEachQuestion',
+      )
+    })
+
+    it('déclare la liste à une colonne quand les lignes suivent chaque question', () => {
+      // réparties sur plusieurs colonnes, les lignes deviendraient des
+      // tronçons de un ou deux centimètres
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$', '$3+3$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: {
+              position: 'afterEachQuestion',
+              count: 2,
+              spacing: 2,
+              style: 'pointilles',
+            },
+          },
+        },
+      )
+      expect(code).toContain('#let ex1-colonnes = 1')
+      // ce défaut n'est pas un choix du professeur : il ne doit pas être figé
+      // dans le carry-over, sinon la liste resterait à une colonne après le
+      // retrait des lignes
+      expect(harvestCarryOver(code).tasksLayout?.ex1?.columns).toBeUndefined()
+    })
+
+    it('respecte le nombre de colonnes choisi dans la palette malgré les lignes', () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$', '$3+3$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          tasksLayout: { ex1: { columns: '2' } },
+          writingLines: {
+            1: {
+              position: 'afterEachQuestion',
+              count: 2,
+              spacing: 2,
+              style: 'pointilles',
+            },
+          },
+        },
+      )
+      expect(code).toContain('#let ex1-colonnes = 2')
+      expect(harvestCarryOver(code).tasksLayout?.ex1?.columns).toBe('2')
     })
 
     it('règle chaque exercice indépendamment', () => {
@@ -1026,16 +1084,81 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            2: { position: 'endOfExercise', count: 5, spacing: 2 },
+            2: { position: 'endOfExercise', count: 5, spacing: 2, style: 'pointilles' },
           },
         },
       )
       expect(
         code.match(
-          /#mathalea-lignes\(5, gutter: 2em\) \/\/ mathalea:lignes-fin\(2\)/g,
+          /#mathalea-lignes\(5, gutter: 2em, style: "pointilles"\) \/\/ mathalea:lignes-fin\(2\)/g,
         ),
       ).toHaveLength(1)
       expect(code).not.toContain('mathalea:lignes-fin(1)')
+    })
+
+    it('émet le style « points » choisi dans la palette (round-trip)', () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: {
+              position: 'afterEachQuestion',
+              count: 2,
+              spacing: 1,
+              style: 'points',
+            },
+          },
+        },
+      )
+      expect(code).toContain(
+        '#mathalea-lignes(2, gutter: 1em, style: "points") // mathalea:lignes-apres(1)',
+      )
+      // le helper porte les trois traits, le choix se fait à l'appel
+      expect(code).toContain('if style == "points" { box(width: 100%, text(fill: luma(120), repeat(gap: 2pt)[.])) }')
+      expect(harvestCarryOver(code).writingLines).toEqual({
+        1: {
+          position: 'afterEachQuestion',
+          count: 2,
+          spacing: 1,
+          style: 'points',
+        },
+      })
+    })
+
+    it('émet le style « plein » (filet continu)', () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: {
+              position: 'endOfExercise',
+              count: 2,
+              spacing: 2,
+              style: 'plein',
+            },
+          },
+        },
+      )
+      expect(code).toContain(
+        '#mathalea-lignes(2, gutter: 2em, style: "plein") // mathalea:lignes-fin(1)',
+      )
+      expect(code).toContain('if style == "plein" { none } else { "dotted" }')
+    })
+
+    it('relit un appel sans style (code émis avant le réglage) comme un filet pointillé', () => {
+      const code = [
+        '#mathalea-lignes(3, gutter: 1.5em) // mathalea:lignes-fin(1)',
+      ].join('\n')
+      expect(harvestCarryOver(code).writingLines).toEqual({
+        1: {
+          position: 'endOfExercise',
+          count: 3,
+          spacing: 1.5,
+          style: 'pointilles',
+        },
+      })
     })
 
     it('harvestCarryOver relit les réglages par exercice (round-trip)', () => {
@@ -1047,15 +1170,15 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 4, spacing: 1.5 },
-            2: { position: 'afterEachQuestion', count: 2, spacing: 0.8 },
+            1: { position: 'endOfExercise', count: 4, spacing: 1.5, style: 'pointilles' },
+            2: { position: 'afterEachQuestion', count: 2, spacing: 0.8, style: 'pointilles' },
           },
         },
       )
       const harvested = harvestCarryOver(code)
       expect(harvested.writingLines).toEqual({
-        1: { position: 'endOfExercise', count: 4, spacing: 1.5 },
-        2: { position: 'afterEachQuestion', count: 2, spacing: 0.8 },
+        1: { position: 'endOfExercise', count: 4, spacing: 1.5, style: 'pointilles' },
+        2: { position: 'afterEachQuestion', count: 2, spacing: 0.8, style: 'pointilles' },
       })
     })
   })
@@ -1404,7 +1527,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // les questions des deux exercices se suivent dans le même tableau
     expect(code).toContain('[$7 times 5$],')
     expect(code).toContain('[Combien de boules ?],')
-    expect(code).toContain('[$...$ boules],')
+    expect(code).toContain('[$... ... ...$ boules],')
     // corrections numérotées à la suite, dans l'ordre des lignes, et
     // réparties en colonnes (les réponses tiennent en quelques caractères)
     expect(code).toContain('#if corrige [')
@@ -1512,7 +1635,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code.match(/Courbe de \$f\$/g)).toHaveLength(1)
     // la deuxième question n'a plus de cellule d'énoncé, seulement sa réponse
     expect(code).toContain('none,')
-    expect(code).toContain('$S = ...$')
+    expect(code).toContain('$S = ... ... ...$')
     // la modale d'édition de cette ligne ne propose donc pas d'énoncé
     expect(
       getGeneratedCanRowCode(
@@ -1971,7 +2094,7 @@ describe('lignes de réponse (réglage global)', () => {
       ...defaultTypstDocumentOptions,
       answerLines: 2,
     })
-    expect(code).toContain('#mathalea-lignes(2, gutter: 2em)')
+    expect(code).toContain('#mathalea-lignes(2, gutter: 2em, style: "pointilles")')
   })
 
   it('n’ajoute rien par défaut', () => {
@@ -1982,19 +2105,77 @@ describe('lignes de réponse (réglage global)', () => {
     expect(code).not.toContain('#mathalea-lignes(')
   })
 
+  it('applique le trait choisi pour le document (answerLinesStyle)', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      answerLines: 3,
+      answerLinesStyle: 'points',
+    })
+    expect(code).toContain(
+      '#mathalea-lignes(3, gutter: 2em, style: "points") // mathalea:lignes-fin(1)',
+    )
+  })
+
+  it('place les lignes après chaque question quand le document le demande', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({ questions: ['$1+1$', '$2+2$', '$3+3$'], numbered: true }),
+        exercise({ questions: ['$4+4$', '$5+5$'], numbered: true }),
+      ],
+      {
+        ...defaultTypstDocumentOptions,
+        answerLines: 2,
+        answerLinesPosition: 'afterEachQuestion',
+      },
+    )
+    // une occurrence par question de chaque exercice, pas une par exercice
+    expect(
+      code.match(/\/\/ mathalea:lignes-apres\(1\)/g),
+    ).toHaveLength(3)
+    expect(
+      code.match(/\/\/ mathalea:lignes-apres\(2\)/g),
+    ).toHaveLength(2)
+    expect(code).not.toContain('mathalea:lignes-fin(')
+  })
+
+  it("réémet le trait du document quand les réglages par exercice sont oubliés", () => {
+    // le réglage global écrit des appels `#mathalea-lignes` dans le code ;
+    // relus par `harvestCarryOver`, ils l'emporteraient sur lui (c'est le
+    // rôle du `dropWritingLines` de la vue) — sans eux, le nouveau trait
+    // s'applique bien à tous les exercices
+    const options = {
+      ...defaultTypstDocumentOptions,
+      answerLines: 2,
+      answerLinesStyle: 'plein' as const,
+    }
+    const premier = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      options,
+    )
+    const carryOver = harvestCarryOver(premier)
+    expect(carryOver.writingLines?.[1]?.style).toBe('plein')
+    const regenere = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      { ...options, answerLinesStyle: 'points' },
+      { ...carryOver, writingLines: undefined },
+    )
+    expect(regenere).toContain('style: "points"')
+    expect(regenere).not.toContain('style: "plein"')
+  })
+
   it('laisse la palette régler un exercice à part', () => {
     const code = buildTypstDocument(
       [exercise({ questions: ['$1+1$'] }), exercise({ questions: ['$2+2$'] })],
       { ...defaultTypstDocumentOptions, answerLines: 2 },
       {
         writingLines: {
-          1: { position: 'endOfExercise', count: 5, spacing: 2 },
+          1: { position: 'endOfExercise', count: 5, spacing: 2, style: 'pointilles' },
         },
       },
     )
     // l'exercice réglé garde ses 5 lignes, l'autre suit le réglage global
-    expect(code).toContain('#mathalea-lignes(5, gutter: 2em)')
-    expect(code).toContain('#mathalea-lignes(2, gutter: 2em)')
+    expect(code).toContain('#mathalea-lignes(5, gutter: 2em, style: "pointilles")')
+    expect(code).toContain('#mathalea-lignes(2, gutter: 2em, style: "pointilles")')
   })
 })
 

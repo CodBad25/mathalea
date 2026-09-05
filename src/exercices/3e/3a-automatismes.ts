@@ -10,7 +10,7 @@ export const titre = "Sélection d'automatismes"
 export const interactifReady = true
 
 export const uuid = 'c6be6'
-export const refs = { 'fr-fr': ['3A'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['3Auto'], 'fr-ch': [] }
 export const dateDePublication = '08/05/2026'
 
 /**

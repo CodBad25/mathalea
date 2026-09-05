@@ -550,9 +550,9 @@ const createFiles = (
       ...referentiel['2e']['2A'],
     }
   }
-  if (codePays === 'FR' && referentiel['3e']?.['3Auto'] && exercices['3A']) {
+  if (codePays === 'FR' && referentiel['3e']?.['3Auto'] && exercices['3Auto']) {
     referentiel['3e']['3Auto'] = {
-      '3A': exercices['3A'],
+      '3Auto': exercices['3Auto'],
       ...referentiel['3e']['3Auto'],
     }
   }

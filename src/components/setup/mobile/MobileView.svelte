@@ -8,7 +8,10 @@
   import { changes, exercicesParams } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
-  import { getReferentiels } from '../../../lib/stores/referentielsStore'
+  import {
+    buildResourcesSet,
+    getReferentiels,
+  } from '../../../lib/stores/referentielsStore'
   import type { InterfaceParams } from '../../../lib/types'
   import {
     isExerciceItemInReferentiel,
@@ -23,6 +26,7 @@
   import ChipsList from '../../shared/ui/ChipsList.svelte'
   import MobileBrowser from './MobileBrowser.svelte'
   import MobileGlobalMenu from './MobileGlobalMenu.svelte'
+  import MobileSearchOverlay from './MobileSearchOverlay.svelte'
 
   /**
    * Vue par défaut sur téléphone : navigation par tuiles (rubrique > niveau >
@@ -71,6 +75,26 @@
   })
   let isGlobalMenuOpen = $state(false)
   let isReorderDisplayed = $state(false)
+  /** Recherche plein écran avec aperçu (équivalent mobile du Ctrl/Cmd+K). */
+  let isSearchOpen = $state(false)
+
+  /** Ressources cherchables, aplaties (même source que la recherche bureau) */
+  const resourcesSet = $derived(buildResourcesSet(referentiels))
+
+  /**
+   * Compte le nombre de fois où une ressource est déjà dans la sélection.
+   * Les exercices MathALÉA et les outils sont distingués par leur `id` car
+   * plusieurs références peuvent partager un même `uuid`.
+   */
+  function selectedCount(ending: JSONReferentielEnding): number {
+    return $exercicesParams.filter((item) => {
+      if (item.uuid !== ending.uuid) return false
+      if (isExerciceItemInReferentiel(ending) || isTool(ending)) {
+        return item.id === ending.id
+      }
+      return true
+    }).length
+  }
 
   const isAllInteractive = $derived($globalOptions.setInteractive === '1')
   const hasExercises = $derived($exercicesParams.length !== 0)
@@ -119,6 +143,25 @@
     }
     // Sur la vue mobile, les exercices sont interactifs par défaut,
     // sauf si l'utilisateur a explicitement désactivé l'interactivité.
+    if (
+      $globalOptions.recorder === 'capytale' ||
+      $globalOptions.setInteractive !== '0'
+    ) {
+      newExercise.interactif = '1'
+    }
+    exercicesParams.update((list) => [...list, newExercise])
+    $changes++
+    areExercisesDisplayed = true
+    tick().then(scrollToLastExercise)
+  }
+
+  /**
+   * Ajout depuis la recherche plein écran : les paramètres (graine, réglages)
+   * proviennent de l'aperçu et ne sont pas régénérés. Mêmes règles
+   * d'interactivité par défaut que `addExercise`.
+   */
+  function addExerciseFromParams(params: InterfaceParams) {
+    const newExercise: InterfaceParams = { ...params }
     if (
       $globalOptions.recorder === 'capytale' ||
       $globalOptions.setInteractive !== '0'
@@ -231,12 +274,27 @@
         {/each}
       </div>
     {:else}
-      <MobileBrowser {path} {referentiels} {navigate} {addExercise} />
+      <MobileBrowser
+        {path}
+        {referentiels}
+        {navigate}
+        {addExercise}
+        openSearch={() => (isSearchOpen = true)}
+      />
     {/if}
   </main>
 
   <Footer />
 </div>
+
+{#if isSearchOpen}
+  <MobileSearchOverlay
+    {resourcesSet}
+    onAdd={addExerciseFromParams}
+    {selectedCount}
+    onClose={() => (isSearchOpen = false)}
+  />
+{/if}
 
 {#if isGlobalMenuOpen}
   <MobileGlobalMenu

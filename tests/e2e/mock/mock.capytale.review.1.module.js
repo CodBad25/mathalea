@@ -85,7 +85,7 @@ const activityParams = {
       },
       {
         uuid: '1acf7',
-        id: 'auto6N2B-1',
+        id: '6N2autoB-1',
         interactif: '1',
         nbQuestions: 2,
         duration: 10,

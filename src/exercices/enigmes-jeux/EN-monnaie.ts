@@ -50,7 +50,7 @@ export default class coinGrid extends Exercice {
     super()
 
     this.besoinFormulaireNumerique = ['Taille de la grille', 6]
-    this.sup = 4
+    this.sup = 3
     this.nbQuestions = 1
 
     this.consigne = 'Cette grille contient une pièce de monnaie dans chaque case.<br>'
@@ -74,10 +74,6 @@ export default class coinGrid extends Exercice {
         : 'Ces grilles contiennent '
     this.consigne += 'une pièce de monnaie dans chaque case.<br>'
     this.consigne += 'La somme de ces pièces est indiquée en haut pour une colonne et à gauche pour une ligne.<br>'
-    if (this.interactif) {
-      this.consigne += '<br>Pour chaque case la réponse attendue est la valeur de la pièce en €.<br>'
-      this.consigne += 'Valeurs possibles: 2 - 1 - 0,5 - 0,2 - 0,1 - 0,05 - 0,02 - 0,01<br>'
-    }
     this.comment = "Plus la taille de la grille est grande plus l'exercice sera difficile."
 
     for (
@@ -118,7 +114,7 @@ export default class coinGrid extends Exercice {
       for (let i = 0; i < this.sup; i++ ){
         const line = [celluleTexte(line_clues[i].forLatex())]
         for (let j = 0; j < this.sup; j++){
-          line.push(celluleListe(`L${i + 1}C${j + 1}`, select, grid[i][j].value));
+          line.push(celluleListe(`L${i + 1}C${j + 1}`, select, grid[i][j].toString()));
         }
         tab.rows.push(line);
       }

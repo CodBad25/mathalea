@@ -319,7 +319,7 @@ const cellule: Icell = {
 
 `elementId` est indispensable dès qu'une question contient plusieurs `fill-in-the-blank` : sans lui, tous les éléments partagent l'identifiant `fill-in-the-blankEx<n>Q<i>`.
 
-La vérification par cellule de `verifyTableauMathLive()` ne sait pas lire les trous d'un champ : il faut fournir un `callback` à `handleAnswers()`, qui lit chaque trou avec `getPromptValue(nom)`, le compare avec `fonctionComparaison()`, colore le trou avec `setPromptState(nom, 'correct' | 'incorrect', true)` et renvoie `{ isOk, feedback, score }`. Exemple complet : [`src/exercices/6e/auto6N2B-1.ts`](../../../../src/exercices/6e/auto6N2B-1.ts).
+La vérification par cellule de `verifyTableauMathLive()` ne sait pas lire les trous d'un champ : il faut fournir un `callback` à `handleAnswers()`, qui lit chaque trou avec `getPromptValue(nom)`, le compare avec `fonctionComparaison()`, colore le trou avec `setPromptState(nom, 'correct' | 'incorrect', true)` et renvoie `{ isOk, feedback, score }`. Exemple complet : [`src/exercices/6e/6N2autoB-1.ts`](../../../../src/exercices/6e/6N2autoB-1.ts).
 
 ## Éditeur Instrumenpoche
 

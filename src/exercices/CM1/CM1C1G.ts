@@ -1,4 +1,4 @@
-import DiviserDecimauxPar101001000 from '../6e/auto6N2D'
+import DiviserDecimauxPar101001000 from '../6e/6N2autoD'
 
 export const dateDePublication = '01/02/2026'
 export const interactifReady = true

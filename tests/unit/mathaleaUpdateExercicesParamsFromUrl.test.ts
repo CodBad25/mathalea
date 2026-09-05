@@ -186,18 +186,18 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
   })
 
   it('should preserve the chosen id when several ids share the same uuid', async () => {
-    // uuid 21518 est partagé par deux références : '1Gen-A102' et '1Tec-S104'
+    // uuid 11090 est partagé par deux références : '1A-F02-14' et 'BP1F2D02'
     // On choisit explicitement la seconde : elle ne doit pas être remplacée
     // par la première (comportement par défaut) lors du parsing de l'URL.
-    const url = 'https://coopmaths.fr/alea/?uuid=21518&id=1Tec-S104&alea=ABCD'
+    const url = 'https://coopmaths.fr/alea/?uuid=11090&id=BP1F2D02&alea=ABCD'
     const { mathaleaUpdateExercicesParamsFromUrl } =
       await import('../../src/lib/mathalea')
     mathaleaUpdateExercicesParamsFromUrl(url)
 
     expect(get(exercicesParams)).toEqual([
       {
-        uuid: '21518',
-        id: '1Tec-S104',
+        uuid: '11090',
+        id: 'BP1F2D02',
         interactif: '0',
         alea: 'ABCD',
       },
@@ -205,15 +205,15 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
   })
 
   it('should fall back to a default id when no id is given for a uuid with several references', async () => {
-    const url = 'https://coopmaths.fr/alea/?uuid=21518&alea=ABCD'
+    const url = 'https://coopmaths.fr/alea/?uuid=11090&alea=ABCD'
     const { mathaleaUpdateExercicesParamsFromUrl } =
       await import('../../src/lib/mathalea')
     mathaleaUpdateExercicesParamsFromUrl(url)
 
     expect(get(exercicesParams)).toEqual([
       {
-        uuid: '21518',
-        id: '1Gen-A102',
+        uuid: '11090',
+        id: '1A-F02-14',
         interactif: '0',
         alea: 'ABCD',
       },

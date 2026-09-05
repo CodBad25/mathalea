@@ -73,12 +73,6 @@ const leSuperFormulaire: FormulaireComplexe = {
         { nom: '4', label: 'Quelconque inférieur à 10' },
       ],
     },
-    {
-      type: 'case',
-      nom: 'simplifier',
-      label: 'Fraction irreductible attendue',
-      defaut: true,
-    },
   ],
 }
 const calculeSomme3Fractions = (
@@ -86,17 +80,16 @@ const calculeSomme3Fractions = (
   f2: FractionEtendue,
   f3: FractionEtendue,
   resultatFinal: FractionEtendue,
-  simplifier: boolean,
+  signe1: string,
+  signe2: string,
 ) => {
   const cm = ppcmListe([f1.den, f2.den, f3.den])
-  const calcul = `\\dfrac{${f1.num}${ecritureAlgebrique(f2.num)}${ecritureAlgebrique(f3.num)}}{${cm}}\\\\
+  const calcul = `\\dfrac{${f1.num}${signe1}${f2.num}${signe2}${f3.num}}{${cm}}\\\\
         ${
           resultatFinal.estIrreductible
             ? `&=${miseEnEvidence(resultatFinal.texFSD)}`
-            : simplifier
-              ? `&=${resultatFinal.texFSD}\\\\\n
+            : `&=${resultatFinal.texFSD}\\\\\n
               &=${miseEnEvidence(resultatFinal.simplifie().texFSD)}`
-              : `&=${miseEnEvidence(resultatFinal.texFSD)}`
         }
         \\end{aligned}`
   return calcul
@@ -105,31 +98,27 @@ const calculeSomme = (
   f1: FractionEtendue,
   f2: FractionEtendue,
   resultat: FractionEtendue,
-  simplifier: boolean,
+  signe: string,
 ) => {
   let calcul = ''
   if (f1.den === f2.den) {
-    calcul += `\\dfrac{${f1.num}${ecritureAlgebrique(f2.num)}}{${f1.den}}\\\\
+    calcul += `\\dfrac{${f1.num}${signe}${f2.num}}{${f1.den}}\\\\
         ${
           resultat.estIrreductible
             ? `&=${miseEnEvidence(resultat.texFSD)}`
-            : simplifier
-              ? `&=${resultat.texFSD}\\\\\n
+            : `&=${resultat.texFSD}\\\\\n
               &=${miseEnEvidence(resultat.simplifie().texFSD)}`
-              : `&=${miseEnEvidence(resultat.texFSD)}`
         }
         \\end{aligned}`
   } else {
     const cm = ppcm(f1.den, f2.den)
-    calcul += `${f1.reduire(cm / f1.den).texFSD}+${f2.reduire(cm / f2.den).texFraction}\\\\\n`
-    calcul += `&=\\dfrac{${f1.num * (cm / f1.den)}${ecritureAlgebrique(f2.num * (cm / f2.den))}}{${cm}}\\\\\n`
+    calcul += `${f1.reduire(cm / f1.den).texFSD} ${signe} ${f2.reduire(cm / f2.den).texFraction}\\\\\n`
+    calcul += `&=\\dfrac{${f1.num * (cm / f1.den)}${signe}${f2.num * (cm / f2.den)}}{${cm}}\\\\\n`
     calcul += `${
       resultat.estIrreductible
         ? `&=${miseEnEvidence(resultat.texFSD)}`
-        : simplifier
-          ? `&=${resultat.texFSD}\\\\
+        : `&=${resultat.texFSD}\\\\
         &=${miseEnEvidence(resultat.simplifie().texFSD)}`
-          : `&=${miseEnEvidence(resultat.texFSD)}`
     }
         \\end{aligned}`
   }
@@ -140,6 +129,8 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
     super()
     this.nbQuestions = 4
     this.listeAvecNumerotation = false
+    this.consigne =
+      'Calculer et donner le résultat sous la forme d’une fraction irréductible.'
     this.besoinFormulaireComplexe = leSuperFormulaire
     this.sup = serialiseFormulaireComplexe(
       leSuperFormulaire,
@@ -165,73 +156,65 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
     f1: FractionEtendue,
     f2: FractionEtendue,
     signe: string,
-    simplifier: boolean,
     lettre: string,
   ): { texteCorr: string; resultat: FractionEtendue } {
-    let resultat: FractionEtendue
+    const resultat =
+      signe === '+' ? f1.sommeFraction(f2) : f1.differenceFraction(f2)
     let calcul = `\\begin{aligned}${lettre}&=${f1.texFSD} ${signe} ${f2.texFraction}\\\\\n&=`
-    if (signe === '+') {
-      resultat = f1.sommeFraction(f2)
-    } else {
-      resultat = f1.differenceFraction(f2)
-    }
-    if (signe === '+') {
-      calcul += calculeSomme(f1, f2, resultat, simplifier)
-    } else {
-      calcul += `${f1.texFSD}+${f2.oppose().texFraction}\\\\
-      &=${calculeSomme(f1, f2.oppose(), resultat, simplifier)}`
-    }
+    calcul += calculeSomme(f1, f2, resultat, signe)
     return {
       texteCorr: `$${calcul}$`,
       resultat,
     }
   }
 
-  uneSommeOuDifferenceDeDeuxFractions(
-    choixDenominateurs: string,
-    simplifier: boolean,
-    lettre: string,
-  ) {
-    const denominateurs = this.choixDenominateurs(choixDenominateurs)
-    const a = randint(1, 9) * randint(-1, 1, 0)
-    const b = randint(1, 9) * randint(-1, 1, 0)
+  uneSommeOuDifferenceDeDeuxFractions(choixDenominateurs: string, lettre: string) {
+    // Les deux dénominateurs de départ doivent déjà être distincts : sinon,
+    // pour un dénominateur premier (2, 3, 5...), la seule façon de rester
+    // non entier est de garder ce même dénominateur des deux côtés, ce qui
+    // rendrait la contrainte f1.den !== f2.den ci-dessous impossible à
+    // satisfaire.
+    let denominateurs: number[]
+    do {
+      denominateurs = this.choixDenominateurs(choixDenominateurs)
+    } while (denominateurs[0] === denominateurs[1])
+    let f1: FractionEtendue
+    let f2: FractionEtendue
+    do {
+      f1 = fraction(randint(1, 9), denominateurs[0]).simplifie()
+      f2 = fraction(randint(1, 9), denominateurs[1]).simplifie()
+      // Ni même dénominateur, ni fraction devenue entière : ce dernier cas
+      // est déjà couvert par le type "entier + fraction".
+    } while (f1.den === f2.den || f1.estEntiere || f2.estEntiere)
     const signe = ['+', '-'][randint(0, 1)]
-    const f1 = fraction(a, denominateurs[0])
-    const f2 = fraction(b, denominateurs[1])
 
     const texte = `$${lettre}=${f1.texFSD} ${signe} ${f2.texFraction}$`
     const { texteCorr, resultat } = this.calculSommeOuDifferenceDeDeuxFractions(
       f1,
       f2,
       signe,
-      simplifier,
       lettre,
     )
-    const correctionAlternative =
-      f1.estEntiere && f2.estEntiere
-        ? `<br>On peut remarquer que $${f1.texFraction}=${f1.texFractionSimplifiee}$ et $${f2.texFraction}=${f2.texFractionSimplifiee}$, donc on peut aussi écrire :<br>
-$${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFractionSimplifiee)}=${resultat.texFractionSimplifiee}$`
-        : ''
-    return { texte, texteCorr: texteCorr + correctionAlternative, resultat }
+    return { texte, texteCorr, resultat }
   }
   uneSommeOuDifferenceDUnEntierEtDUneFraction(
     choixDenominateurs: string,
-    simplifier: boolean,
     lettre: string,
   ) {
     const denominateurs = this.choixDenominateurs(choixDenominateurs)
-    const a = randint(1, 9) * randint(-1, 1, 0)
-    const b = randint(1, 9) * randint(-1, 1, 0)
+    const a = randint(1, 9)
+    let f2: FractionEtendue
+    do {
+      f2 = fraction(randint(1, 9), denominateurs[0]).simplifie()
+    } while (f2.estEntiere)
     const signe = ['+', '-'][randint(0, 1)]
     const f1 = fraction(a, 1)
-    const f2 = fraction(b, denominateurs[0])
 
     const texte = `$${lettre}=${f1.texFSD} ${signe} ${f2.texFraction}$`
     const { texteCorr, resultat } = this.calculSommeOuDifferenceDeDeuxFractions(
       f1,
       f2,
       signe,
-      simplifier,
       lettre,
     )
     return { texte, texteCorr, resultat }
@@ -243,7 +226,6 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
     f3: FractionEtendue,
     signe1: string,
     signe2: string,
-    simplifier: boolean,
     lettre: string,
   ): { texteCorr: string; resultat: FractionEtendue } {
     const resultat1 =
@@ -256,28 +238,19 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
     let calcul = `\\begin{aligned}${lettre}&=${f1.texFSD} ${signe1} ${f2.texFraction} ${signe2} ${f3.texFraction}\\\\\n&=`
     const cm = ppcmListe([f1.den, f2.den, f3.den])
     if (cm === f1.den && cm === f2.den && cm === f3.den) {
-      if ([signe1, signe2].every((s) => s === '+')) {
-        calcul += calculeSomme3Fractions(f1, f2, f3, resultatFinal, simplifier)
-      } else if ([signe1, signe2].every((s) => s === '-')) {
-        calcul += `${f1.texFSD}+${f2.oppose().texFraction}+${f3.oppose().texFraction}\\\\
-        &=${calculeSomme3Fractions(f1, f2.oppose(), f3.oppose(), resultatFinal, simplifier)}`
-      }
+      calcul += calculeSomme3Fractions(f1, f2, f3, resultatFinal, signe1, signe2)
     } else {
-      calcul += `${f1.reduire(cm / f1.den).texFSD}${signe1}${
+      calcul += `${f1.reduire(cm / f1.den).texFSD} ${signe1} ${
         f2.reduire(cm / f2.den).texFraction
-      }${signe2}${f3.reduire(cm / f3.den).texFraction}\\\\\n`
-      calcul += `&=\\dfrac{${f1.num * (cm / f1.den)}${ecritureAlgebrique(
-        signe1 === '+' ? f2.num * (cm / f2.den) : -f2.num * (cm / f2.den),
-      )}${ecritureAlgebrique(
-        signe2 === '+' ? f3.num * (cm / f3.den) : -f3.num * (cm / f3.den),
-      )}}{${cm}}\\\\\n`
+      } ${signe2} ${f3.reduire(cm / f3.den).texFraction}\\\\\n`
+      calcul += `&=\\dfrac{${f1.num * (cm / f1.den)}${signe1}${
+        f2.num * (cm / f2.den)
+      }${signe2}${f3.num * (cm / f3.den)}}{${cm}}\\\\\n`
       calcul += `${
         resultatFinal.estIrreductible
           ? `&=${miseEnEvidence(resultatFinal.texFSD)}`
-          : simplifier
-            ? `&=${resultatFinal.texFSD}\\\\
+          : `&=${resultatFinal.texFSD}\\\\
         &=${miseEnEvidence(resultatFinal.simplifie().texFSD)}`
-            : `&=${miseEnEvidence(resultatFinal.texFSD)}`
       }
         \\end{aligned}`
     }
@@ -286,20 +259,18 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
       resultat: resultatFinal,
     }
   }
-  uneSommeOuDifferenceDeTroisFractions(
-    choixDenominateurs: string,
-    simplifier: boolean,
-    lettre: string,
-  ) {
+  uneSommeOuDifferenceDeTroisFractions(choixDenominateurs: string, lettre: string) {
     const denominateurs = this.choixDenominateurs(choixDenominateurs)
-    const a = randint(1, 9) * randint(-1, 1, 0)
-    const b = randint(1, 9) * randint(-1, 1, 0)
-    const c = randint(1, 9) * randint(-1, 1, 0)
+    let f1: FractionEtendue
+    let f2: FractionEtendue
+    let f3: FractionEtendue
+    do {
+      f1 = fraction(randint(1, 9), denominateurs[0]).simplifie()
+      f2 = fraction(randint(1, 9), denominateurs[1]).simplifie()
+      f3 = fraction(randint(1, 9), denominateurs[2]).simplifie()
+    } while (f1.estEntiere && f2.estEntiere && f3.estEntiere)
     const signe1 = ['+', '-'][randint(0, 1)]
     const signe2 = ['+', '-'][randint(0, 1)]
-    const f1 = fraction(a, denominateurs[0])
-    const f2 = fraction(b, denominateurs[1])
-    const f3 = fraction(c, denominateurs[2])
 
     const texte = `$${lettre}=${f1.texFSD} ${signe1} ${f2.texFraction} ${signe2} ${f3.texFraction}$`
     const { texteCorr, resultat } = this.calculSommeTroisFractions(
@@ -308,7 +279,6 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
       f3,
       signe1,
       signe2,
-      simplifier,
       lettre,
     )
     return { texte, texteCorr, resultat }
@@ -316,21 +286,22 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
 
   uneSommeOuDifferenceDeQuatreFractions(
     choixDenominateurs: string,
-    simplifier: boolean,
     lettre: string,
   ) {
     const denominateurs = this.choixDenominateurs(choixDenominateurs)
-    const a = randint(1, 9, denominateurs[0]) * randint(-1, 1, 0)
-    const b = randint(1, 9, denominateurs[1]) * randint(-1, 1, 0)
-    const c = randint(1, 9, denominateurs[2]) * randint(-1, 1, 0)
-    const d = randint(1, 9, denominateurs[3]) * randint(-1, 1, 0)
+    let f1: FractionEtendue
+    let f2: FractionEtendue
+    let f3: FractionEtendue
+    let f4: FractionEtendue
+    do {
+      f1 = fraction(randint(1, 9, denominateurs[0]), denominateurs[0]).simplifie()
+      f2 = fraction(randint(1, 9, denominateurs[1]), denominateurs[1]).simplifie()
+      f3 = fraction(randint(1, 9, denominateurs[2]), denominateurs[2]).simplifie()
+      f4 = fraction(randint(1, 9, denominateurs[3]), denominateurs[3]).simplifie()
+    } while (f1.estEntiere && f2.estEntiere && f3.estEntiere && f4.estEntiere)
     const signe1 = ['+', '-'][randint(0, 1)]
     const signe2 = ['+', '-'][randint(0, 1)]
     const signe3 = ['+', '-'][randint(0, 1)]
-    const f1 = fraction(a, denominateurs[0]).simplifie()
-    const f2 = fraction(b, denominateurs[1]).simplifie()
-    const f3 = fraction(c, denominateurs[2]).simplifie()
-    const f4 = fraction(d, denominateurs[3]).simplifie()
 
     const texte = `$${lettre}=${f1.texFSD} ${signe1} ${ecritureParentheseSiMoins(f2.texFraction)} ${signe2} ${ecritureParentheseSiMoins(f3.texFraction)} ${signe3} ${ecritureParentheseSiMoins(f4.texFraction)}$`
     const cm = ppcmListe([f1.den, f2.den, f3.den, f4.den])
@@ -359,10 +330,8 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
     calcul += `${
       resultatFinal.estIrreductible
         ? `&=${miseEnEvidence(resultatFinal.texFSD)}`
-        : simplifier
-          ? `&=${resultatFinal.texFSD}\\\\
+        : `&=${resultatFinal.texFSD}\\\\
         &=${miseEnEvidence(resultatFinal.simplifie().texFSD)}`
-          : `&=${miseEnEvidence(resultatFinal.texFSD)}`
     }
         \\end{aligned}`
     const texteCorr = `$${calcul}$`
@@ -383,7 +352,6 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
       'typeDeQuestion',
       this.nbQuestions,
     )
-    const simplifier = params.case('simplifier')
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       let texte = ''
@@ -395,7 +363,6 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
           ;({ texte, texteCorr, resultat } =
             this.uneSommeOuDifferenceDeDeuxFractions(
               choixDenominateurs[i],
-              simplifier,
               lettre,
             ))
           break
@@ -403,7 +370,6 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
           ;({ texte, texteCorr, resultat } =
             this.uneSommeOuDifferenceDUnEntierEtDUneFraction(
               choixDenominateurs[i],
-              simplifier,
               lettre,
             ))
           break
@@ -411,7 +377,6 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
           ;({ texte, texteCorr, resultat } =
             this.uneSommeOuDifferenceDeTroisFractions(
               choixDenominateurs[i],
-              simplifier,
               lettre,
             ))
           break
@@ -420,7 +385,6 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
           ;({ texte, texteCorr, resultat } =
             this.uneSommeOuDifferenceDeQuatreFractions(
               choixDenominateurs[i],
-              simplifier,
               lettre,
             ))
           break
@@ -434,12 +398,8 @@ $${f1.texFractionSimplifiee} ${signe} ${ecritureParentheseSiMoins(f2.texFraction
       if (this.questionJamaisPosee(i, texteCorr)) {
         handleAnswers(this, i, {
           reponse: {
-            value: simplifier
-              ? resultat.texFractionSimplifiee
-              : resultat.texFraction,
-            options: simplifier
-              ? { fractionReduite: true }
-              : { fractionEgale: true },
+            value: resultat.texFractionSimplifiee,
+            options: { fractionSimplifiee: true },
           },
         })
         this.listeQuestions.push(texte)

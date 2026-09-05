@@ -56,15 +56,16 @@ Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-des
 - entre les exercices : deux boutons de saut de page et de saut de colonne (ce dernier seulement en document multicolonne) — une fois insérés, ils deviennent des badges bien visibles, retirables d'un clic (le saut de page ferme et rouvre le bloc `en-colonnes`, `#pagebreak` étant interdit dans un conteneur) ;
 - à gauche du titre de la fiche : édition du titre, du sous-titre et de la ligne d'en-tête (ces champs ne sont plus dans la fenêtre Réglages ; la valeur est reportée dans les réglages persistés) — absente si l'habillage en-tête est `Aucun`, faute de bloc à éditer ;
 - en haut de la page de garde (quand un modèle est choisi) : édition de l'intitulé, de la session, de la matière, de la durée, de la mention de bas de page et des consignes — même mécanisme que le titre de la fiche, voir [Page de garde](#page-de-garde) ;
-- sur le pied de la première page (si affiché) : édition de son texte — voir [En-tête et pied de page](#en-tête-et-pied-de-page).
+- sur le pied de la première page (si affiché) : édition de son texte — voir [En-tête et pied de page](#en-tête-et-pied-de-page) ;
+- à côté de l'étiquette « Sujet A/B... » de l'en-tête (fiche à plusieurs versions) : icône masquant/affichant cette étiquette (`hideVersionLabel`) — voir [En-tête et pied de page](#en-tête-et-pied-de-page).
 
 Fonctionnement :
 
-1. `buildTypstDocument` émet des repères invisibles `#mathalea-anchor(kind, num)` (métadonnées Typst portant la position `here().position()` en pt) devant chaque `#tasks` (`kind: "tasks"`, ou `"tasks-corr"` dans une correction), devant chaque exercice (`kind: "exo"`), aux points d'insertion (`kind: "gap"`, `num: 0` avant le premier exercice), devant le bloc de titre (`kind: "header"`, absent si l'habillage est `Aucun`), devant la page de garde (`kind: "cover"`, absente sans modèle choisi) et dans le pied de page (`kind: "footer"`, seulement sur la première page physique — voir « En-tête et pied de page »). Ils n'ont aucun impact sur la mise en page (vérifié au pixel près).
+1. `buildTypstDocument` émet des repères invisibles `#mathalea-anchor(kind, num)` (métadonnées Typst portant la position `here().position()` en pt) devant chaque `#tasks` (`kind: "tasks"`, ou `"tasks-corr"` dans une correction), devant chaque exercice (`kind: "exo"`), aux points d'insertion (`kind: "gap"`, `num: 0` avant le premier exercice), devant le bloc de titre (`kind: "header"`, absent si l'habillage est `Aucun`), devant la page de garde (`kind: "cover"`, absente sans modèle choisi), dans le pied de page (`kind: "footer"`, seulement sur la première page physique — voir « En-tête et pied de page ») et, sur l'étiquette de version de la ligne d'en-tête (`kind: "version-label"`, fiche à plusieurs versions), à l'intérieur même de la cellule de la grille qui la porte — présent que l'étiquette soit visible ou masquée par l'icône. Ils n'ont aucun impact sur la mise en page (vérifié au pixel près).
 2. Après chaque compilation, `typstCompiler.ts` interroge le document (`world.query({ selector: '<mathalea-anchor>' })`, même monde de compilation que le rendu SVG) et renvoie les repères (`TypstAnchor`).
 3. `Typst.svelte` convertit ces positions en pourcentages du conteneur de l'aperçu (via la géométrie des pages renvoyée par `separatePages`) et place les contrôles.
 
-Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait. Avec plusieurs sujets, l'insertion est rendue dans chacun, mais seul le sujet principal porte son marqueur de relecture et les repères associés : une régénération ne peut donc pas recopier les insertions des sujets suivants dans le carry-over.
+Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Exception : l'icône de l'étiquette de version régénère tout le code (`toggleVersionLabel` → `applyDocumentOptions`), la présence de `hide(...)` autour de l'étiquette (voir « En-tête et pied de page ») étant structurelle plutôt qu'une simple valeur de variable. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait. Avec plusieurs sujets, l'insertion est rendue dans chacun, mais seul le sujet principal porte son marqueur de relecture et les repères associés : une régénération ne peut donc pas recopier les insertions des sujets suivants dans le carry-over.
 
 À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. Les sauts de page ou de colonne sont normalisés à un exemplaire par gap et supprimés après le dernier exercice, où ils n'ont aucun contenu suivant à déplacer ; cela répare aussi les anciens `typstParam` qui en contiennent des copies. « Réinitialiser les réglages du document » efface tout le carry-over.
 
@@ -114,16 +115,45 @@ ajouter un exercice est déjà un geste délibéré, et bloquer la modale derri�
 l'avertissement générique interdirait tout ajout tant que le code a été
 retouché à la main.
 
-## Lignes en pointillés (« Lignes pour écrire »)
+## Lignes de réponse (« Lignes pour écrire »)
 
-Bouton (icône liste, `bx-detail`) de la barre d'outils de chaque exercice (à côté de « Éditer le code Typst ») : ajoute des lignes en pointillés (pour que l'élève y écrive), réglées **par exercice** — soit après le corps entier de l'exercice, soit après chaque question de cet exercice (y compris la dernière). Le popover règle l'emplacement, le nombre de lignes (0 par défaut : rien ne s'affiche tant qu'il n'est pas incrémenté) et l'espacement (2 em par défaut, pas de 0,5) ; « Retirer » efface le réglage. Ne s'applique jamais à la correction.
+Bouton (icône liste, `bx-detail`) de la barre d'outils de chaque exercice (à côté de « Éditer le code Typst ») : ajoute des lignes pour que l'élève y écrive, réglées **par exercice** — soit après le corps entier de l'exercice, soit après chaque question de cet exercice (y compris la dernière). Le popover règle l'emplacement, le **trait** (`Pointillés`, `Points`, `Trait`), le nombre de lignes (0 par défaut : rien ne s'affiche tant qu'il n'est pas incrémenté) et l'espacement (2 em par défaut, pas de 0,5) ; « Retirer » efface le réglage. Ne s'applique jamais à la correction.
 
-Comme la fusion d'exercices (`onToggleMergeBefore`), le réglage change la structure du document (les appels s'intercalent après chaque question en mode « Après chaque question ») : il régénère donc tout le code plutôt que de l'éditer ponctuellement. Porté par `TypstCarryOver.writingLines` (`Record<number, { position, count, spacing }>`, clé = numéro d'exercice 1-based), il survit à la régénération comme les autres réglages de la palette. Chaque appel généré `#mathalea-lignes(n, gutter: ...em)` est tagué d'un marqueur `// mathalea:lignes-fin(N)` ou `// mathalea:lignes-apres(N)`, relu par `harvestCarryOver` (comme `// mathalea:insertion` pour les insertions de texte) ; `shiftCarryOver`/`swapCarryOver` décalent ces réglages à la suppression/au déplacement d'un exercice, comme `tasksLayout`/`codeOverrides`. Le helper Typst réutilisable `#mathalea-lignes(n, gutter: ...)` (`MATHALEA_WRITING_LINES_HELPER` dans `buildTypstDocument.ts`) n'est déclaré dans le préambule que s'il est effectivement utilisé, et ne produit aucun rendu (ni espace) tant que `n` vaut 0.
+Réglage **du document** (Réglages du document, sous les cases à cocher) : « Lignes de réponse par exercice » (`TypstDocumentOptions.answerLines`, 0 par défaut) en ajoute d'office à **chaque** exercice de la fiche ; l'emplacement (`answerLinesPosition`) et le trait (`answerLinesStyle`) se règlent juste en dessous, affichés seulement quand le nombre est non nul. Le réglage d'un exercice fait dans la palette l'emporte sur ce défaut (`carryOver.writingLines?.[k + 1] ?? …` dans `computeGeneratedExercises`). Le modèle de page de garde « récitation » met ce nombre à 2 à sa sélection.
+
+Ces trois champs régénèrent le code **en oubliant les réglages par exercice** (`regenerateDocument({ dropWritingLines: true })`, `applyAnswerLines`/`applyAnswerLinesStyle` dans `Typst.svelte`) : le réglage global écrit des appels `#mathalea-lignes` dans le code, que `harvestCarryOver` relit en réglages par exercice — prioritaires. Sans cet oubli, un changement du réglage global serait écrasé par le code qu'il venait lui-même de produire, et resterait sans effet visible.
+
+Comme la fusion d'exercices (`onToggleMergeBefore`), le réglage change la structure du document (les appels s'intercalent après chaque question en mode « Après chaque question ») : il régénère donc tout le code plutôt que de l'éditer ponctuellement. Porté par `TypstCarryOver.writingLines` (`Record<number, WritingLinesSetting>` — `{ position, count, spacing, style }` —, clé = numéro d'exercice 1-based), il survit à la régénération comme les autres réglages de la palette. Chaque appel généré `#mathalea-lignes(n, gutter: ...em, style: "...")` est tagué d'un marqueur `// mathalea:lignes-fin(N)` ou `// mathalea:lignes-apres(N)`, relu par `harvestCarryOver` (comme `// mathalea:insertion` pour les insertions de texte) ; `shiftCarryOver`/`swapCarryOver` décalent ces réglages à la suppression/au déplacement d'un exercice, comme `tasksLayout`/`codeOverrides`. Le helper Typst réutilisable `#mathalea-lignes(n, gutter: ..., style: ...)` (`MATHALEA_WRITING_LINES_HELPER` dans `buildTypstDocument.ts`) n'est déclaré dans le préambule que s'il est effectivement utilisé, et ne produit aucun rendu (ni espace) tant que `n` vaut 0.
+
+Les trois traits (`WRITING_LINES_STYLES`) reprennent ceux du `answer-line-style` du paquet taskize, mais sont dessinés par le helper plutôt que par le paquet : l'option `answer-lines` de taskize ne s'applique qu'aux questions d'un `#tasks`, alors que le réglage couvre aussi la fin d'exercice et les exercices à question unique, qui n'ont pas de liste.
+
+- `pointilles` : filet pointillé gris (rendu d'origine, donc valeur retenue quand un code émis avant ce réglage ne porte pas de `style:` — le groupe est facultatif dans le motif de `harvestCarryOver`) ;
+- `points` : points de conduite (`repeat(gap: 2pt)[.]`, même espacement que les champs « Nom : ..... » de la page de garde) ;
+- `plein` : filet continu.
+
+Deux points de mise en page vont avec l'emplacement « après chaque question » :
+
+- un exercice **sans liste `tasks`** (question unique, énoncé d'un seul bloc) n'a nulle part où intercaler les lignes : elles sont alors posées à la fin de son corps (paramètre `force` d'`appendEndOfExerciseLines`), sans quoi un réglage valable pour toute la fiche laisserait ces exercices-là sans place pour répondre. Le marqueur émis reste `lignes-apres(N)`, pour que la palette relise l'emplacement choisi ;
+- la liste de questions est déclarée **à une colonne** par défaut (`perQuestionLinesTasksPrefixes`) : sur quatre colonnes, les lignes se réduisent à des tronçons de un ou deux centimètres. Comme pour les QCM à figures, ce défaut n'est pas un choix du professeur — `harvestCarryOver` applique la même règle pour ne pas le figer dans le carry-over —, et un nombre de colonnes choisi dans la palette l'emporte.
+
+Les lignes restent dessinées par ce helper plutôt que par le `answer-lines` de taskize : outre que l'option du paquet ne couvre pas la fin d'exercice ni les exercices sans liste, la version publiée (0.2.10) n'offre ni `answer-line-style` ni `answer-line-above`/`below` — les deux rendus sont sinon identiques au pixel près (comparés à la compilation).
 
 ## En-tête et pied de page
 
 Réglages des Réglages du document, indépendants l'un de l'autre :
 
+- **Étiquette de version masquable** (`TypstDocumentOptions.hideVersionLabel`,
+  décochée par défaut) : sur une fiche à plusieurs versions (`nbVersions >
+  1`), l'étiquette « Sujet A/B... » de la ligne d'en-tête se masque/affiche
+  par une icône sur l'aperçu (`version-label` dans `TypstLayoutOverlay.svelte`
+  — voir « Palette de mise en page » plus bas), pour distribuer des sujets
+  mélangés sans que les élèves n'y lisent leur version. Masquée, l'étiquette
+  est enveloppée dans `#hide(...)` plutôt que retirée (`headerBlock` dans
+  `buildTypstDocument.ts`) : elle garde sa place dans la grille de la ligne
+  d'en-tête, pour que l'icône qui la fait réapparaître reste au même endroit.
+  Le réglage vaut pour tous les sujets de la fiche (un seul bouton) et
+  s'applique aussi aux exports (PDF, .typ) : ce n'est pas un simple masquage
+  visuel de l'aperçu.
 - **Habillage en-tête** (`TypstDocumentOptions.headerStyle`) : `Épuré`,
   `Cartouche`, `Cadre` ou **`Aucun`** — ce dernier n'émet aucun bloc de titre
   (`headerBlock` renvoie `[]`), la fiche commence alors directement par le
