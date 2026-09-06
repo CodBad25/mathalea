@@ -1,7 +1,7 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles (source : Insee)
@@ -83,7 +83,7 @@ export default class EgaliteFGLycee7 extends Exercice {
     const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 = `$2\\,145\\times 1{,}142=2\\,449{,}59$ € $<2\\,500$ € : cette augmentation $${miseEnEvidence('\\text{ne suffit pas}')}$. En effet, une baisse de $14{,}2\\,\\%$ et une hausse de $14{,}2\\,\\%$ ne sont pas des évolutions réciproques : le taux d'évolution nécessaire pour compenser une baisse est toujours plus grand, en valeur absolue, que le taux de la baisse elle-même.`
+    const correction3 = `$2\\,145\\times 1{,}142=2\\,449{,}59$ € $<2\\,500$ € : cette augmentation ${texteEnCouleurEtGras('ne suffit pas')}. En effet, une baisse de $14{,}2\\,\\%$ et une hausse de $14{,}2\\,\\%$ ne sont pas des évolutions réciproques : le taux d'évolution nécessaire pour compenser une baisse est toujours plus grand, en valeur absolue, que le taux de la baisse elle-même.`
 
     let texte4 =
       "Quel pourcentage d'augmentation faudrait-il réellement appliquer pour atteindre l'égalité salariale (arrondi à $0{,}1\\,\\%$) ?"

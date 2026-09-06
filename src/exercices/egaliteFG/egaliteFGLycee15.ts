@@ -1,12 +1,12 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Orientation en première : probabilités et genre'
+export const titre = 'Orientation en première'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -16,7 +16,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Probabilités']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -79,7 +79,7 @@ export default class EgaliteFGLycee15 extends Exercice {
 
     const texte3 =
       "Comparer les proportions des filles et des garçons dans chaque filière et expliquer ce que ces résultats révèlent sur les choix d'orientation selon le genre. On pourra s'aider d'un tableau des fréquences conditionnelles par ligne."
-    const correction3 = `Tableau des fréquences conditionnelles par ligne (proportion de filles, puis de garçons, dans chaque filière) : générale $\\dfrac{180}{380}\\approx 47{,}4\\,\\%$ / $\\dfrac{200}{380}\\approx 52{,}6\\,\\%$ (proche de la répartition globale $\\dfrac{360}{760}\\approx 47{,}4\\,\\%$ / $\\dfrac{400}{760}\\approx 52{,}6\\,\\%$ : pas de déséquilibre marqué) ; technologique $\\dfrac{120}{220}\\approx 54{,}5\\,\\%$ / $\\dfrac{100}{220}\\approx 45{,}5\\,\\%$ (légère surreprésentation des filles) ; professionnelle $\\dfrac{60}{160}=37{,}5\\,\\%$ / $\\dfrac{100}{160}=62{,}5\\,\\%$ (nette sous-représentation des filles, donc surreprésentation des garçons). Le choix de la filière professionnelle apparaît donc comme $${miseEnEvidence('\\text{le plus genré des trois}')}$.`
+    const correction3 = `Tableau des fréquences conditionnelles par ligne (proportion de filles, puis de garçons, dans chaque filière) : générale $\\dfrac{180}{380}\\approx 47{,}4\\,\\%$ / $\\dfrac{200}{380}\\approx 52{,}6\\,\\%$ (proche de la répartition globale $\\dfrac{360}{760}\\approx 47{,}4\\,\\%$ / $\\dfrac{400}{760}\\approx 52{,}6\\,\\%$ : pas de déséquilibre marqué) ; technologique $\\dfrac{120}{220}\\approx 54{,}5\\,\\%$ / $\\dfrac{100}{220}\\approx 45{,}5\\,\\%$ (légère surreprésentation des filles) ; professionnelle $\\dfrac{60}{160}=37{,}5\\,\\%$ / $\\dfrac{100}{160}=62{,}5\\,\\%$ (nette sous-représentation des filles, donc surreprésentation des garçons). Le choix de la filière professionnelle apparaît donc comme ${texteEnCouleurEtGras('le plus genré des trois')}.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

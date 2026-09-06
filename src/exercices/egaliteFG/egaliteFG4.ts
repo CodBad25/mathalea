@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Organisation et gestion de données']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles (source : femmes et maths)
@@ -116,8 +117,7 @@ export default class EgaliteFG4 extends Exercice {
     const monQcm0 = propositionsQcm(this, 0)
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
-    const correction0 =
-      "Le $0$ signifie qu'aucun personnage féminin n'intervient dans une activité liée à un métier, dans l'ensemble des zones géographiques citées."
+    const correction0 = `Le $0$ signifie qu'${texteEnCouleurEtGras("aucun personnage féminin n'intervient dans une activité liée à un métier")}, dans l'ensemble des zones géographiques citées.`
 
     // Q1 : garçon Nouvelle-Calédonie maths
     let texte1 =
@@ -146,8 +146,7 @@ export default class EgaliteFG4 extends Exercice {
     const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 =
-      'Les filles apparaissent $4$ fois dans les activités sportives contre $10$ fois dans les activités courantes : elles sont donc plus souvent représentées dans les activités courantes.'
+    const correction3 = `Les filles apparaissent $4$ fois dans les activités sportives contre $10$ fois dans les activités courantes : elles sont donc ${texteEnCouleurEtGras('plus souvent représentées dans les activités courantes')}.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

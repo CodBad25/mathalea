@@ -1,7 +1,7 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Statistiques', 'Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles (source : DEPP)
@@ -220,7 +220,7 @@ export default class EgaliteFGLycee9 extends Exercice {
     const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 = `Elle est passée de $14{,}6\\,\\%$ à $15{,}2\\,\\%$ : elle $${miseEnEvidence('\\text{a donc légèrement augmenté}')}$ ($+0{,}6$ point).`
+    const correction3 = `Elle est passée de $14{,}6\\,\\%$ à $15{,}2\\,\\%$ : elle ${texteEnCouleurEtGras('a donc légèrement augmenté')} ($+0{,}6$ point).`
 
     const texte4 =
       "Cet écart (près de $67$ points entre HLP et NSI) préfigure-t-il, selon toi, des choix futurs différents pour les filles et les garçons dans l'enseignement supérieur ou les métiers ?"

@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Organisation et gestion de données','Fractions']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -110,7 +111,7 @@ export default class EgaliteFG2 extends Exercice {
     const correction3 =
       'Proportion de garçons : en mathématiques $\\dfrac{12}{20}=60\\,\\%$, en sciences $\\dfrac{10}{16}=62{,}5\\,\\%$, en histoire-géographie $\\dfrac{7}{16}=43{,}75\\,\\%$.<br>' +
       "C'est donc en " +
-      texteGras('sciences') +
+      texteEnCouleurEtGras('sciences') +
       ' que la proportion de garçons est la plus élevée.'
 
     this.listeQuestions[0] = texte0

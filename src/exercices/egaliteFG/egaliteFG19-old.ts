@@ -1,6 +1,8 @@
-import { createList } from '../../lib/format/lists'
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 26077 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { miseEnEvidence, texteEnCouleurEtGras, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -10,21 +12,19 @@ export const titre = 'Sophie Germain : un QCM mystère'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
-export const dateDeModifImportante = '06/09/2026'
-
-export const uuid = 'c9362'
+export const uuid = '26077'
 export const refs = {
-  'fr-fr': ['EgaliteFG4-3e-19'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
-export const tags = ['égalité filles-garçons','QCM','Fractions','Calcul littéral','Théorème de Thalès','Théorème de Pythagore']
+export const tags = ['égalité filles-garçons']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
  * Transcription par Lydie El-Halougi
  */
-export default class EgaliteFG19 extends Exercice {
+export default class EgaliteFG19Old extends Exercice {
   constructor() {
     super()
     this.pasDeVersionAleatoire = true
@@ -40,7 +40,7 @@ export default class EgaliteFG19 extends Exercice {
         ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/germain-historique.jpg" alt="Portrait de Sophie Germain" style="width:130px; height:auto; border-radius:9999px; border:3px solid #f15929;"><p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Sophie Germain (1776-1831) — Source : gravure, Œuvres philosophiques, 1896, domaine public</p></div>'
         : '') +
       "<br>Sophie Germain (1776-1831), mathématicienne autodidacte, a dû apprendre les mathématiques seule et se faire passer pour un homme pour avoir accès aux travaux scientifiques de son époque. Ses travaux sur l'élasticité et la résistance des surfaces ont contribué, bien des années après sa mort, aux théories mathématiques utilisées pour construire un monument célèbre.<br>" +
-      "Pour chaque question du QCM suivant, trois réponses sont proposées et une seule est exacte : c'est la lettre A, B ou C de cette réponse qu'il faut retenir pour la dernière question."
+      'Pour chaque question du QCM suivant, une seule réponse est exacte.'
     this.nbQuestions = 5
     this.nbQuestionsModifiable = false
   }
@@ -59,7 +59,7 @@ export default class EgaliteFG19 extends Exercice {
         { texte: '$3{,}333$', statut: false },
       ],
     }
-    const monQcm0 = propositionsQcm(this, 0, { style: '', format: 'lettre' })
+    const monQcm0 = propositionsQcm(this, 0)
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
     const correction0 = `$2+\\dfrac{4}{3}=\\dfrac{6}{3}+\\dfrac{4}{3}=${miseEnEvidence('\\dfrac{10}{3}')}$ (réponse A).`
@@ -74,7 +74,7 @@ export default class EgaliteFG19 extends Exercice {
         { texte: '$(3x-4)(x-3)$', statut: false },
       ],
     }
-    const monQcm1 = propositionsQcm(this, 1, { style: '', format: 'lettre' })
+    const monQcm1 = propositionsQcm(this, 1)
     let texte1 = texteQ1
     if (!context.isAmc) texte1 += monQcm1.texte
     const correction1 = `$(2x-1)(3x-4)-(3x-4)^2=(3x-4)\\big[(2x-1)-(3x-4)\\big]=${miseEnEvidence('(3x-4)(-x+3)')}$ (réponse A).`
@@ -94,7 +94,7 @@ export default class EgaliteFG19 extends Exercice {
         { texte: 'On ne peut rien dire', statut: true },
       ],
     }
-    const monQcm2 = propositionsQcm(this, 2, { style: '', format: 'lettre' })
+    const monQcm2 = propositionsQcm(this, 2)
     let texte2 = texteQ2
     if (!context.isAmc) texte2 += monQcm2.texte
     const correction2 =
@@ -115,22 +115,13 @@ export default class EgaliteFG19 extends Exercice {
         { texte: "$RST$ n'est pas un triangle rectangle", statut: true },
       ],
     }
-    const monQcm3 = propositionsQcm(this, 3, { style: '', format: 'lettre' })
+    const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
     const correction3 = `Le plus grand côté est $[ST]$ : $ST^2=9{,}2^2=84{,}64$. Or $RS^2+RT^2=8^2+4{,}5^2=64+20{,}25=84{,}25$. Comme $84{,}64\\neq 84{,}25$, $${miseEnEvidence("\\text{le triangle }RST\\text{ n'est pas rectangle}")}$ (réponse C).`
 
     const texteQ4 =
-      'En comptant le nombre de réponses A obtenues aux quatre questions précédentes, découvre quelle construction célèbre a été rendue possible grâce aux travaux de Sophie Germain :<br>' +
-      createList({
-        items: [
-          '$1$ réponse A : la Sagrada Familia (Barcelone)',
-          '$2$ réponses A : la tour Eiffel (Paris)',
-          '$3$ réponses A : la tour Perret (Grenoble)',
-          '$4$ réponses A : la statue de la Liberté (New York)',
-        ],
-        style: 'puces',
-      })
+      'En comptant le nombre de réponses A obtenues aux quatre questions précédentes, quelle construction célèbre a été rendue possible grâce aux travaux de Sophie Germain ?'
     this.autoCorrection[4] = {
       enonce: texteQ4,
       options: { ordered: true, radio: true },
@@ -144,7 +135,7 @@ export default class EgaliteFG19 extends Exercice {
     const monQcm4 = propositionsQcm(this, 4)
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 = `Les réponses A sont obtenues aux questions $1$ et $2$, soit $2$ réponses A, ce qui correspond, d'après la liste ci-dessus, à ${texteEnCouleurEtGras('la tour Eiffel')} : c'est bien ce monument que les travaux de Sophie Germain sur l'élasticité et la résistance des surfaces ont contribué à rendre possible.`
+    const correction4 = `Les réponses A sont obtenues aux questions $1$ et $2$ (soit $2$ réponses A) : c'est donc $${miseEnEvidence('\\text{la tour Eiffel}')}$, comme l'indique le texte introductif sur les travaux de Sophie Germain sur l'élasticité et la résistance des surfaces.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

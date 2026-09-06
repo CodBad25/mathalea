@@ -1,13 +1,17 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texteGras, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  'Katherine Johnson et la hauteur de la fusée (théorème de Thalès)'
+  'Katherine Johnson et la hauteur de la fusée'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -17,7 +21,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Triangles semblables','Théorème de Pythagore']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -118,16 +122,29 @@ export default class EgaliteFG10 extends Exercice {
         ajouteChampTexteMathLive(this, 0, '', { texteApres: 'm' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 34.44 } })
     const correction0 =
-      'Le point où coïncident les deux ombres est à $2{,}5\\text{ m}$ de Katherine et à $50+2{,}5=52{,}5\\text{ m}$ du pied de la fusée. Les deux triangles formés (Katherine/son ombre et la fusée/son ombre) sont semblables (configuration de Thalès), donc :<br>$\\dfrac{\\text{hauteur fusée}}{52{,}5}=\\dfrac{1{,}64}{2{,}5}$, soit hauteur fusée $=\\dfrac{1{,}64\\times 52{,}5}{2{,}5}=34{,}44\\text{ m}$.'
+      "Le point où coïncident les deux ombres est à $2{,}5\\text{ m}$ de Katherine et à $50+2{,}5=52{,}5\\text{ m}$ du pied de la fusée : c'est le point $T$.<br>" +
+      '$\\widehat{TPK}=\\widehat{TF_1F}=90°$ : les triangles $TPK$ et $TF_1F$ sont rectangles en $P$ et $F_1$.<br>' +
+      '$\\widehat{PTK}=\\widehat{F_1TF}$ (angle commun, formé par le même rayon de soleil).<br>' +
+      'Les deux triangles ont deux paires d\'angles égaux deux à deux : ils sont donc semblables.<br>' +
+      'Les longueurs $TF_1$, $TF$ et $F_1F$ sont donc proportionnelles à $TP$, $TK$ et $PK$ respectivement.<br>' +
+      "Le coefficient est égal à $TF_1\\div TP=52{,}5\\div 2{,}5=21$.<br>" +
+      `donc $F_1F=21\\times PK=21\\times 1{,}64=${miseEnEvidence('34{,}44')}\\text{ m}$.`
 
     let texte1 =
-      'Sachant que la fusée mesure en réalité $43$ mètres, calculer la longueur $FT$ (la Tyrolienne de secours), en utilisant le théorème de Pythagore dans le triangle $FF_1T$, rectangle en $F_1$ (arrondie au centième).'
+      'Sachant que la fusée mesure en réalité $43$ mètres, calculer la longueur $FP$ (la Tyrolienne de secours reliant le sommet de la fusée à Katherine), en utilisant le théorème de Pythagore dans le triangle $FF_1P$, rectangle en $F_1$ (arrondie au centième).'
     if (this.interactif)
       texte1 +=
         ajouteChampTexteMathLive(this, 1, '', { texteApres: 'm' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 65.95 } })
     const correction1 =
-      "Le triangle $FF_1T$ est rectangle en $F_1$ (la fusée est verticale, le sol est horizontal), avec $FF_1=43\\text{ m}$ (hauteur réelle de la fusée) et $F_1T=50\\text{ m}$ (distance au sol entre le pied de la fusée et Katherine). D'après le théorème de Pythagore :<br>$FT^2=FF_1^2+F_1T^2=43^2+50^2=1\\,849+2\\,500=4\\,349$, donc $FT=\\sqrt{4\\,349}\\approx 65{,}95\\text{ m}$."
+      'Le triangle $FF_1P$ est rectangle en $F_1$.<br>' +
+      "D'après le théorème de Pythagore, on a :<br>" +
+      '$\\begin{aligned} FP^2&=FF_1^2+F_1P^2\\\\' +
+      'FP^2&=43^2+50^2\\\\' +
+      'FP^2&=1\\,849+2\\,500\\\\' +
+      'FP^2&=4\\,349\\\\' +
+      '\\text{Donc :}\\\\' +
+      `FP&=\\sqrt{4\\,349}\\\\ FP&\\approx ${miseEnEvidence('65{,}95')}\\text{ m}\\end{aligned}$`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -11,7 +12,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "La sorcière d'Agnesi : étude d'une fonction rationnelle"
+export const titre = "La sorcière d'Agnesi"
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Fonctions', 'Dérivation', 'Limites de fonctions']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -155,7 +156,7 @@ export default class EgaliteFGLycee18 extends Exercice {
     const texte4 =
       texteGras("Partie B : Étude de la sorcière d'Agnesi") +
       "<br>$A$ est la fonction définie pour tout $x\\in\\mathbb{R}$ par $A(x)=\\dfrac{8}{x^2+4}$. En dérivant $A$, montrer que $A'(x)=\\dfrac{-16x}{(x^2+4)^2}$, en déduire les variations de $A$, puis calculer son maximum."
-    const correction4 = `En écrivant $A(x)=8(x^2+4)^{-1}$, la dérivée d'une composée donne $A'(x)=8\\times(-1)\\times 2x\\times(x^2+4)^{-2}=\\dfrac{-16x}{(x^2+4)^2}$. Comme $(x^2+4)^2>0$ pour tout $x$, le signe de $A'(x)$ est celui de $-16x$ : $A$ est $${miseEnEvidence('\\text{croissante}')}$ sur $]-\\infty\\,;\\,0]$ et $${miseEnEvidence('\\text{décroissante}')}$ sur $[0\\,;\\,+\\infty[$.`
+    const correction4 = `En écrivant $A(x)=8(x^2+4)^{-1}$, la dérivée d'une composée donne $A'(x)=8\\times(-1)\\times 2x\\times(x^2+4)^{-2}=\\dfrac{-16x}{(x^2+4)^2}$. Comme $(x^2+4)^2>0$ pour tout $x$, le signe de $A'(x)$ est celui de $-16x$ : $A$ est ${texteEnCouleurEtGras('croissante')} sur $]-\\infty\\,;\\,0]$ et ${texteEnCouleurEtGras('décroissante')} sur $[0\\,;\\,+\\infty[$.`
 
     let texte5 = 'Quel est le maximum de la fonction $A$, atteint en $x=0$ ?'
     if (this.interactif) texte5 += ajouteChampTexteMathLive(this, 5) + '<br>'
@@ -189,7 +190,7 @@ export default class EgaliteFGLycee18 extends Exercice {
     const monQcm7 = propositionsQcm(this, 7)
     let texte7 = texteQ7
     if (!context.isAmc) texte7 += monQcm7.texte
-    const correction7 = `$${miseEnEvidence('\\text{Non}')}$ : le dénominateur $x^2+4$ ne s'annule jamais (il vaut toujours au moins $4$), donc $A$ est définie et continue sur $\\mathbb{R}$ tout entier, sans aucune asymptote verticale.`
+    const correction7 = `${texteEnCouleurEtGras('Non')} : le dénominateur $x^2+4$ ne s'annule jamais (il vaut toujours au moins $4$), donc $A$ est définie et continue sur $\\mathbb{R}$ tout entier, sans aucune asymptote verticale.`
 
     let texte8 =
       "En étudiant le signe de $A''(x)$, on trouve deux points d'inflexion, d'abscisses opposées. Donner la valeur positive de cette abscisse (arrondie au millième)."

@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Suites numériques', 'Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -189,7 +190,7 @@ export default class EgaliteFGLycee8 extends Exercice {
     const monQcm8 = propositionsQcm(this, 8)
     let texte8 = texteQ8
     if (!context.isAmc) texte8 += monQcm8.texte
-    const correction8 = `En 2030 ($n=5$), $h_5=30\\times 1{,}1^5\\approx 48{,}3\\,\\%<50\\,\\%$ : la parité $${miseEnEvidence("\\text{n'est pas encore tout à fait atteinte}")}$ en pédiatrie, même si elle en est proche.`
+    const correction8 = `En 2030 ($n=5$), $h_5=30\\times 1{,}1^5\\approx 48{,}3\\,\\%<50\\,\\%$ : la parité ${texteEnCouleurEtGras("n'est pas encore tout à fait atteinte")} en pédiatrie, même si elle en est proche.`
 
     const texte9 =
       texteGras('Partie B — Analyse') +

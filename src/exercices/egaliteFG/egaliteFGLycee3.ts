@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Arithmétique']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -267,7 +268,7 @@ export default class EgaliteFGLycee3 extends Exercice {
     const monQcm2 = propositionsQcm(this, 31)
     let texte2 = texteQ2
     if (!context.isAmc && this.interactif) texte2 += monQcm2.texte
-    const correction2 = `$2\\times 7+1=15=3\\times 5$ n'est pas premier : $7$ $${miseEnEvidence("\\text{n'est donc pas un nombre de Germain}")}$.`
+    const correction2 = `$2\\times 7+1=15=3\\times 5$ n'est pas premier : $7$ ${texteEnCouleurEtGras("n'est donc pas un nombre de Germain")}.`
 
     const texteQ3 = '$p=23$ est un nombre premier de Germain. Justifier.'
     this.autoCorrection[32] = {
@@ -281,7 +282,7 @@ export default class EgaliteFGLycee3 extends Exercice {
     const monQcm3 = propositionsQcm(this, 32)
     let texte3 = texteQ3
     if (!context.isAmc && this.interactif) texte3 += monQcm3.texte
-    const correction3 = `$2\\times 23+1=47$ est premier : $23$ $${miseEnEvidence('\\text{est donc bien un nombre de Germain}')}$.`
+    const correction3 = `$2\\times 23+1=47$ est premier : $23$ ${texteEnCouleurEtGras('est donc bien un nombre de Germain')}.`
 
     const texteQ4 =
       'Tous les nombres premiers sont-ils des nombres de Germain ? Quelle conjecture peut-on émettre ? Justifier.'
@@ -296,7 +297,7 @@ export default class EgaliteFGLycee3 extends Exercice {
     const monQcm4 = propositionsQcm(this, 33)
     let texte4 = texteQ4
     if (!context.isAmc && this.interactif) texte4 += monQcm4.texte
-    const correction4 = `Non : par exemple $7$, $13$, $17$ et $19$ sont premiers mais ne sont pas des nombres de Germain (voir tableau ci-dessus). On peut conjecturer que les nombres premiers de Germain sont $${miseEnEvidence('\\text{plus rares que les nombres premiers en général}')}$.`
+    const correction4 = `Non : par exemple $7$, $13$, $17$ et $19$ sont premiers mais ne sont pas des nombres de Germain (voir tableau ci-dessus). On peut conjecturer que les nombres premiers de Germain sont ${texteEnCouleurEtGras('plus rares que les nombres premiers en général')}.`
 
     const texteQ5 = 'Si $p$ est impair, que peut-on dire de $2p+1$ ? Justifier.'
     this.autoCorrection[34] = {
@@ -310,7 +311,7 @@ export default class EgaliteFGLycee3 extends Exercice {
     const monQcm5 = propositionsQcm(this, 34)
     let texte5 = texteQ5
     if (!context.isAmc && this.interactif) texte5 += monQcm5.texte
-    const correction5 = `$2p$ est toujours pair, donc $2p+1$ est $${miseEnEvidence('\\text{toujours impair}')}$, que $p$ soit pair ou impair.`
+    const correction5 = `$2p$ est toujours pair, donc $2p+1$ est ${texteEnCouleurEtGras('toujours impair')}, que $p$ soit pair ou impair.`
 
     const texte6 =
       'Que peut-on déduire sur les valeurs possibles de $p$ pour que $2p+1$ soit premier ?'
@@ -334,7 +335,7 @@ export default class EgaliteFGLycee3 extends Exercice {
     const monQcm8 = propositionsQcm(this, 37)
     let texte8 = texteQ8
     if (!context.isAmc && this.interactif) texte8 += monQcm8.texte
-    const correction8 = `$83$ n'est divisible ni par $2$, ni $3$, ni $5$, ni $7$ ($9^2=81<83<100=10^2$, il suffit de tester les nombres premiers jusqu'à $9$) : $83$ $${miseEnEvidence('\\text{est donc premier}')}$.`
+    const correction8 = `$83$ n'est divisible ni par $2$, ni $3$, ni $5$, ni $7$ ($9^2=81<83<100=10^2$, il suffit de tester les nombres premiers jusqu'à $9$) : $83$ ${texteEnCouleurEtGras('est donc premier')}.`
 
     const texteQ9 = '$41$ est-il un nombre de Germain ? Justifier.'
     this.autoCorrection[38] = {
@@ -348,7 +349,7 @@ export default class EgaliteFGLycee3 extends Exercice {
     const monQcm9 = propositionsQcm(this, 38)
     let texte9 = texteQ9
     if (!context.isAmc && this.interactif) texte9 += monQcm9.texte
-    const correction9 = `$83$ est premier : $41$ $${miseEnEvidence('\\text{est donc un nombre de Germain}')}$.`
+    const correction9 = `$83$ est premier : $41$ ${texteEnCouleurEtGras('est donc un nombre de Germain')}.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
