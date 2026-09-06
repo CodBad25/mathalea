@@ -15,6 +15,7 @@
  */
 import JSZip from 'jszip'
 import { get, writable } from 'svelte/store'
+import ffjmManifest from '../../json/banques/ffjm.manifest.json'
 import {
   construireReferentielBanque,
   ManifestInvalideError,
@@ -43,6 +44,20 @@ const CLE_STOCKAGE = 'mathalea-banques-externes'
 
 /** Taille maximale acceptée pour une archive déposée (50 Mo) */
 const TAILLE_MAX_ZIP = 50 * 1024 * 1024
+
+/**
+ * Banques d'exercices livrées avec le site : chargées pour tout le monde au
+ * démarrage (voir `chargerBanquesIntegrees`), sans passer par « Ressources
+ * partenaires → Ajouter une banque ». Leur `manifest.json` est versionné dans
+ * `src/json/banques/` ; leurs fichiers (png, sources, préambules) sont servis
+ * en statique sous `base` (relatif à l'URL de base de l'app, `import.meta.env.
+ * BASE_URL`), comme la « Bibliothèque ». Contrairement aux provenances `zip` et
+ * `forge`, une banque intégrée n'est ni persistée en localStorage, ni
+ * référencée par un paramètre `bq` dans les liens partagés, ni retirable.
+ */
+const BANQUES_INTEGREES: { cle: string; manifest: unknown; base: string }[] = [
+  { cle: 'builtin:ffjm', manifest: ffjmManifest, base: 'static/ffjm/' },
+]
 
 /** Banques actuellement chargées, dans l'ordre d'installation */
 export const banquesExternes = writable<BanqueExterneChargee[]>([])
@@ -500,10 +515,12 @@ export async function ajouterBanqueForge(
 
 /**
  * Désinstalle une banque : elle disparaît du menu, de la liste enregistrée et,
- * pour une banque zip, l'archive est effacée d'IndexedDB.
+ * pour une banque zip, l'archive est effacée d'IndexedDB. Sans effet sur une
+ * banque intégrée au site (voir `BANQUES_INTEGREES`), qui n'est pas retirable.
  * @param {string} cle clé de la banque à retirer
  */
 export async function supprimerBanque(cle: string): Promise<void> {
+  if (cle.startsWith('builtin:')) return
   banquesExternes.update((liste) => liste.filter((b) => b.source.cle !== cle))
   for (const url of blobsParBanque.get(cle) ?? []) URL.revokeObjectURL(url)
   blobsParBanque.delete(cle)
@@ -515,6 +532,59 @@ export async function supprimerBanque(cle: string): Promise<void> {
       // base indisponible : le descripteur a déjà été retiré
     }
   }
+}
+
+/**
+ * Charge les banques livrées avec le site (voir `BANQUES_INTEGREES`) et les
+ * publie dans le store. À appeler une seule fois au démarrage, avant le premier
+ * rendu et avant `chargerBanquesInstallees`, pour que ces banques apparaissent
+ * en tête de « Ressources partenaires » et que leurs uuid `bq-…` soient
+ * résolubles dès le montage des vues.
+ * @returns {Promise<string[]>} les messages des banques qui n'ont pas pu être chargées
+ */
+export async function chargerBanquesIntegrees(): Promise<string[]> {
+  const erreurs: string[] = []
+  for (const integree of BANQUES_INTEGREES) {
+    try {
+      const manifest = validerManifest(integree.manifest)
+      const prefixe = `${import.meta.env.BASE_URL}${integree.base}`
+      const assets = new Map<string, string>()
+      for (const exercice of manifest.exercices) {
+        for (const chemin of [
+          exercice.png,
+          exercice.pngCor,
+          exercice.typ,
+          exercice.typCor,
+          exercice.tex,
+          exercice.texCor,
+        ]) {
+          if (chemin !== undefined && !assets.has(chemin)) {
+            assets.set(chemin, `${prefixe}${chemin}`)
+          }
+        }
+      }
+      const preambuleTexte = await chargerPreambule(
+        manifest,
+        async (chemin) => {
+          try {
+            const reponse = await window.fetch(`${prefixe}${chemin}`)
+            return reponse.ok ? await reponse.text() : null
+          } catch {
+            return null
+          }
+        },
+      )
+      publierBanque({
+        source: { type: 'builtin', cle: integree.cle },
+        manifest,
+        assets,
+        preambuleTexte,
+      })
+    } catch (erreur) {
+      erreurs.push(erreur instanceof Error ? erreur.message : String(erreur))
+    }
+  }
+  return erreurs
 }
 
 /**

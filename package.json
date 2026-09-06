@@ -64,6 +64,7 @@
     "format": "pnpm exec prettier --write src && pnpm exec prettier --write tasks && pnpm exec prettier --write tests",
     "doc": "pnpm exec typedoc",
     "addDNB": "pnpm --package=git+https://forge.apps.education.fr/coopmaths/dnb -c dlx dnbindex",
+    "update:ffjm": "node tasks/update-ffjm.js",
     "test:unit": "vitest tests/unit --run --exclude .pnpm-store",
     "test:src": "vitest src --run --exclude .pnpm-store",
     "test:coverage": "vitest --run --coverage --exclude .pnpm-store",

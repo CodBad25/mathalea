@@ -145,6 +145,8 @@
                 ·
                 {#if banque.source.type === 'forge'}
                   {banque.source.projet} ({banque.source.ref})
+                {:else if banque.source.type === 'builtin'}
+                  intégrée au site
                 {:else}
                   archive locale{banque.source.nomFichier
                     ? ` (${banque.source.nomFichier})`
@@ -155,13 +157,19 @@
                 <span class="text-xs opacity-70 italic">
                   Banque locale : elle ne suivra pas les liens partagés.
                 </span>
+              {:else if banque.source.type === 'builtin'}
+                <span class="text-xs opacity-70 italic">
+                  Banque livrée avec MathALÉA : elle ne peut pas être retirée.
+                </span>
               {/if}
             </div>
-            <ButtonIcon
-              icon="bx-trash text-xl"
-              title="Retirer cette banque"
-              on:click={() => retirer(banque.source.cle)}
-            />
+            {#if banque.source.type !== 'builtin'}
+              <ButtonIcon
+                icon="bx-trash text-xl"
+                title="Retirer cette banque"
+                on:click={() => retirer(banque.source.cle)}
+              />
+            {/if}
           </li>
         {/each}
       </ul>
