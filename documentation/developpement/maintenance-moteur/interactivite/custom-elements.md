@@ -188,8 +188,16 @@ Convention recommandée pour éviter les divergences getter/setter :
 Afin que le custom element soit correctement pris en charge par le système d'interactivité, il y a plusieurs étapes à réaliser :
 
 - Ajouter dans `src/lib/types.ts` le tag à l'union `InteractivityType`.
+- Ajouter dans `src/lib/types.ts` le tag à la garde `isInteractivityType()`, qui
+  double l'union côté exécution. `handleAnswers()` s'en sert pour valider le
+  `formatInteractif` reçu : un tag absent de cette fonction est **silencieusement
+  remplacé par `'mathlive'`**, et la vérification part alors chercher un champ
+  MathLive inexistant.
 - Ajouter le tag à `listOfCustomElements` dans `src/lib/customElements/MathaleaCustomElement.ts`.
 - Enregistrer la classe avec `registerMathaleaCustomElement(MaClasse)`.
+- Ajouter l'import du module dans `tests/unit/canSolutions.test.ts` : ce test
+  vérifie que chaque tag de `listOfCustomElements` est bien dans le registre, ce
+  qui suppose que le module a été chargé.
 - La méthode statique `verifQuestion(exercice,questionIndex)` doit être implémentée dans l'élément. Elle porte la vérification, l'hydratation de `exercice.answers`, du `span#resultatCheckEx` et du `div#feedbackEx`.
 - Le retour de la fonction doit être : `{
 isOk: boolean
@@ -313,6 +321,9 @@ imposer la variable didactique attendue (angles, hauteurs, échelles, etc.).
   `create(...)`).
 - L'affichage dans les corrections CAN est correct (`formatStudentAnswer` et `stripFromQuestionHtml` surchargées si les valeurs par défaut ne conviennent pas).
 - `pointsMaxQuestion` est surchargée si une question du composant peut rapporter plus d'un point.
+- Le tag est présent aux quatre endroits attendus : `InteractivityType`,
+  `isInteractivityType()`, `listOfCustomElements` et les imports de
+  `tests/unit/canSolutions.test.ts`.
 
 ## Migration d'un composant existant
 

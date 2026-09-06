@@ -7,6 +7,7 @@ export const listOfCustomElements = [
   'meta-custom',
   'mathalea-labyrinthe',
   'juniper-green',
+  'kenken-grille',
   'blockly-editor',
   'fraction-cliquable',
   'labyrinthe-blockly',
