@@ -1,4 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -7,16 +8,23 @@ export const interactifReady = true
 
 export const amcReady = true
 export const dateDePublication = '09/09/2023'
+export const dateDeModifImportante = '06/09/2026'
 
 /**
  * @author Gilles Mora
 
  */
 
-export const uuid = 'f84d1'
+export const uuid = '97008'
 
 export const refs = {
-  'fr-fr': ['can4C18', '5N3autoG-flash1', 'CM1N2B-flash1', 'CM2N2B-flash1', '2N30-flash2'],
+  'fr-fr': [
+    'can4C18',
+    '5N3autoG-flash1',
+    'CM1N2B-flash1',
+    'CM2N2B-flash1',
+    '2N30-flash2',
+  ],
   'fr-ch': [],
 }
 export default class DecomposerFraction extends ExerciceSimple {
@@ -24,8 +32,8 @@ export default class DecomposerFraction extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatInteractif = 'fillInTheBlank'
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { expressionNumerique: true }
   }
 
   nouvelleVersion() {
@@ -65,17 +73,46 @@ export default class DecomposerFraction extends ExerciceSimple {
       [51, 10],
       [13, 11],
       [9, 4],
+      [41, 7],
+      [61, 8],
+      [15, 7],
+      [15, 4],
+      [7, 4],
+      [29, 4],
+      [79, 9],
+      [11, 3],
+      [32, 9],
+      [11, 2],
     ]
     const fraction1 = this.quotaChoice('fraction1', listeFractions)
     const n = fraction1[0]
     const d = fraction1[1]
-    const frac = new FractionEtendue(n - Math.trunc(n / d) * d, d)
-    this.reponse = `${Math.trunc(n / d)}+${frac.texFractionSimplifiee}`
-    this.question = `Écrire $\\dfrac{${n}}{${d}}$ sous la forme de la somme d'un nombre entier et d'une fraction inférieure à 1.`
-    if (this.interactif) {
-      this.question += `<br> $\\dfrac{${n}}{${d}}=$`
+    const entier = Math.trunc(n / d)
+    const reste = n - entier * d
+    const frac = new FractionEtendue(reste, d)
+    this.consigne = `Écrire $\\dfrac{${n}}{${d}}$ sous la forme de la somme d'un nombre entier et d'une fraction inférieure à 1.`
+    this.question = `\\dfrac{${n}}{${d}} = %{champ1} + %{champ2}`
+    this.correction = `Le plus grand multiple de $${d}$ inférieur à $${n}$ est $${entier * d}$. <br>
+    Ainsi, $\\dfrac{${n}}{${d}}=\\dfrac{${entier * d}}{${d}}+\\dfrac{${reste}}{${d}}=${miseEnEvidence(`${entier}+${frac.texFractionSimplifiee}`)}$.`
+    // Pour la sortie « course aux nombres » (PDF) : la consigne dans la
+    // colonne énoncé, la somme à trous (toujours en pointillés, quel que
+    // soit context.isHtml) dans la colonne réponse.
+    this.canEnonce = this.consigne
+    this.canReponseACompleter = `$\\dfrac{${n}}{${d}} = \\ldots + \\ldots$`
+
+    const bareme = (listePoints: number[]): [number, number] => [
+      Math.min(listePoints[0], listePoints[1]),
+      1,
+    ]
+    handleAnswers(this, 0, {
+      bareme,
+      champ1: { value: String(entier) },
+      champ2: { value: frac.texFraction, options: { fractionEgale: true } },
+    })
+    this.reponse = {
+      bareme,
+      champ1: { value: String(entier) },
+      champ2: { value: frac.texFraction, options: { fractionEgale: true } },
     }
-    this.correction = `Le plus grand multiple de $${d}$ inférieur à $${n}$ est $${Math.trunc(n / d) * d}$. <br>
-    Ainsi, $\\dfrac{${n}}{${d}}=\\dfrac{${Math.trunc(n / d) * d}}{${d}}+\\dfrac{${n - Math.trunc(n / d) * d}}{${d}}=${miseEnEvidence(this.reponse)}$.`
   }
 }
