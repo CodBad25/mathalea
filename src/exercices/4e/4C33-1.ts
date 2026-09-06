@@ -103,7 +103,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
       'Nombres séparés par des tirets :\n1 : Produit de deux puissances de même base\n2 : Quotient de deux puissances de même base\n3 : Puissance de puissances\n4 : Produit de puissances positives de même exposant\n5 : Quotient de puissances de même exposant\n6 : Mélange',
     ]
     this.besoinFormulaire2Numerique = [
-      'Signe de la mantisse',
+      'Signe de la base',
       3,
       '1 : Positif\n2 : Négatif\n3 : Mélange',
     ]
