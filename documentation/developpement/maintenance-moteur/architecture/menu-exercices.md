@@ -47,6 +47,19 @@ Le rattachement d'un exercice à un thème se fait **par préfixe** : le script 
 - un exercice est ajouté à **toutes** les feuilles dont le code est un préfixe de sa ref ; il apparaît donc en double si deux codes de thèmes sont l'un préfixe de l'autre (par exemple `BP1G` et `BP1GV`). Il faut choisir des codes de thèmes qui ne se préfixent pas entre eux — c'est pourquoi le thème « Géométrie » du Bac Pro Première porte le code `BP1GEO` (refs `BP1GEO01` à `BP1GEO09`) et non `BP1G`, qui aurait aussi capté les refs `BP1GV01` et suivantes ;
 - une ref peut volontairement appartenir à plusieurs thèmes (y compris de niveaux différents) : il suffit de l'ajouter au tableau `refs['fr-fr']` du fichier d'exercice. C'est ainsi qu'un même exercice de collège ou de lycée est réutilisé dans les référentiels Bac Pro.
 
+Après avoir construit le référentiel français, le script affiche aussi un audit
+non bloquant :
+
+- chaque référence `refs['fr-fr']` qui n'a été rattachée à aucune feuille de
+  `tasks/emptyRef2022.json`, avec le chemin du fichier et son uuid ;
+- chaque feuille effectivement utilisée qui n'a de titre ni dans
+  `levelsThemesList.json`, ni dans les tables de libellés génériques
+  `codeToLevelList.json` et `codeToThemeList.json`.
+
+Le script ne crée aucun rattachement et aucun titre automatiquement. Le rapport
+sert à décider des catégories à ajouter ou des références à corriger. Il est
+affiché par `pnpm makeJson`, donc également pendant `pnpm build`.
+
 L'apparence d'un noeud du menu dépend à la fois de sa profondeur dans `emptyRef2022.json` et de la fonction `themeCodeisSubthemeCode()` dans `ReferentielNode.svelte`. Cette fonction détecte certains formats de codes comme des sous-thèmes pour masquer le code et appliquer une typographie plus discrète. Le préfixe `can` et l'infixe `auto` sont retirés avant cette détection : `2F12`, `can2F12` et `2F12auto...` suivent donc la même règle d'affichage. Si un nouveau format de code est ajouté au référentiel, il peut être correctement placé dans l'arbre tout en étant affiché comme un thème principal tant que cette fonction ne reconnait pas son motif.
 
 ### Sous-thèmes « automatismes » (5e et 6e)
