@@ -16,6 +16,7 @@ export const dateDePublication = '15/08/2026'
 export const dateDeModificationImportante = '06/09/2026'
 export const titre = 'Résoudre une grille de Gratte-ciel'
 export const interactifReady = true
+export const tags = ['ffjm']
 
 /** Résoudre une grille de gratte ciel
  * @author Claire Stephan
