@@ -24,6 +24,15 @@ import fs from 'fs/promises'
 import path from 'path'
 
 const typesSource = readFileSync('src/lib/types.ts', 'utf8')
+const levelsThemesListFR = JSON.parse(
+  readFileSync('src/json/levelsThemesList.json', 'utf8'),
+)
+const codeToLevelList = JSON.parse(
+  readFileSync('src/json/codeToLevelList.json', 'utf8'),
+)
+const codeToThemeList = JSON.parse(
+  readFileSync('src/json/codeToThemeList.json', 'utf8'),
+)
 
 /**
  * Lit les valeurs littérales d'une union TypeScript dans src/lib/types.ts.
@@ -471,6 +480,73 @@ const sortKeys = (obj) =>
       return sorted
     }, {})
 
+/**
+ * Collecte les références des exercices effectivement rattachés au référentiel.
+ */
+function collectExerciseRefs(referentiel, refs = new Set()) {
+  for (const value of Object.values(referentiel)) {
+    if (value?.typeExercice === 'alea' && typeof value.id === 'string') {
+      refs.add(value.id)
+    } else if (value !== null && typeof value === 'object') {
+      collectExerciseRefs(value, refs)
+    }
+  }
+  return refs
+}
+
+/**
+ * Signale les références françaises qui ne seront pas visibles dans le menu et
+ * les feuilles utilisées dont le libellé manque. Ce contrôle reste informatif :
+ * les fichiers de structure sont corrigés manuellement après examen du rapport.
+ */
+function reportMissingFrenchMenuEntries(referentiel, exercices, themesPath) {
+  const attachedRefs = collectExerciseRefs(referentiel)
+  const missingRefs = Object.keys(exercices).filter(
+    (ref) => !attachedRefs.has(ref),
+  )
+
+  if (missingRefs.length > 0) {
+    console.warn(
+      `\nFR: ${missingRefs.length} référence(s) sans rattachement dans tasks/emptyRef2022.json :`,
+    )
+    for (const ref of missingRefs) {
+      const exercice = exercices[ref]
+      console.warn(`  - ${ref} (${exercice.url}, uuid ${exercice.uuid})`)
+    }
+  } else {
+    console.log('\nFR: toutes les références sont rattachées au menu.')
+  }
+
+  const missingTitles = themesPath
+    .map((themePath) => ({
+      path: themePath,
+      theme: themePath.split('.').pop(),
+    }))
+    .filter(({ theme }) =>
+      Object.keys(exercices).some((ref) => ref.startsWith(theme)),
+    )
+    .filter(
+      ({ theme }) =>
+        levelsThemesListFR[theme]?.titre === undefined &&
+        codeToLevelList[theme] === undefined &&
+        codeToThemeList[theme] === undefined,
+    )
+
+  if (missingTitles.length > 0) {
+    console.warn(
+      `\nFR: ${missingTitles.length} catégorie(s) utilisée(s) sans titre dans src/json/levelsThemesList.json :`,
+    )
+    for (const { path, theme } of missingTitles) {
+      const matchingRefs = Object.keys(exercices).filter((ref) =>
+        ref.startsWith(theme),
+      )
+      console.warn(`  - ${path} (refs : ${matchingRefs.join(', ')})`)
+    }
+  } else {
+    console.log('FR: toutes les catégories utilisées ont un titre.')
+  }
+}
+
 const createFiles = (
   referentiel,
   uuidMap,
@@ -561,6 +637,9 @@ const createFiles = (
       '6A': exercices['6A'],
       ...referentiel['6e']['6Auto'],
     }
+  }
+  if (codePays === 'FR') {
+    reportMissingFrenchMenuEntries(referentiel, exercices, themesPath)
   }
   if (codePays === 'FR') {
     fs.writeFile(

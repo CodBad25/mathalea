@@ -32,7 +32,7 @@ export const titre =
 export const uuid = '294zd'
 
 export const refs = {
-  'fr-fr': ['CM2N4E'],
+  'fr-fr': ['CM2N4D-1'],
   'fr-ch': [],
 }
 export default class DivisionDecimaleCM2 extends Exercice {
