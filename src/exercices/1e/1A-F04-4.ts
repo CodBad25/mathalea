@@ -1,4 +1,5 @@
 import { repere } from '../../lib/2d/reperes'
+import { lectureAntecedentAnimee } from '../../lib/2d/LectureAntecedent'
 import { latex2d } from '../../lib/2d/textes'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -32,6 +33,7 @@ export const titre =
   "Déterminer le nombre de solutions de l'équation $f(x)=0$ avec un graphique"
 export default class auto1AF4c extends ExerciceQcmA {
   versionOriginale: () => void = () => {
+    const figureId = `lectureAntecedentsEx${this.numeroExercice ?? 0}Q0`
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
 
     const fonc = (x: number) => 0.3 * (x ** 3 - 7.8 * x - 3)
@@ -59,7 +61,12 @@ export default class auto1AF4c extends ExerciceQcmA {
    On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
+          {
+            pixelsParCm: 30,
+            scale: 0.7,
+            center: !context.isHtml,
+            id: figureId,
+          },
           {
             xmin: -4,
             ymin: -4,
@@ -83,6 +90,14 @@ export default class auto1AF4c extends ExerciceQcmA {
     this.correction = `Il y a deux points d'intersection entre la courbe et l'axe des abscisses.<br>
     Les abscisses de ces points sont les solutions de l'équation. Ces abscisses sont négatives. <br>
     Par conséquent,   ${texteEnCouleurEtGras("l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(' admet exactement deux solutions et ces solutions sont négatives')}.`
+    if (context.isHtml && !context.isTypst) {
+      this.correction += `<br>${lectureAntecedentAnimee({
+        figureId,
+        x: [-2.576, -0.393],
+        y: 0,
+        pixelsParCm: 30,
+      })}`
+    }
 
     this.reponses = [
       "L'équation $f(x)=0$ admet exactement deux solutions et ces solutions sont négatives.",
@@ -93,6 +108,8 @@ export default class auto1AF4c extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
+    const figureId = `lectureAntecedentsEx${this.numeroExercice ?? 0}Q0`
+    let solutions: number[] = []
     const cas = choice([1, 2, 3, 4])
 
     switch (cas) {
@@ -104,6 +121,7 @@ export default class auto1AF4c extends ExerciceQcmA {
           const a = randint(-4, 4, [-1, 0, 1]) / 10
           const x1 = randint(-25, -19) / 10
           const x2 = randint(-9, -4) / 10
+          solutions = [x1, x2]
 
           const fonc = (x: number) => a * (x - x1) * (x - x2) * (x - 2.5)
 
@@ -129,7 +147,12 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
+                {
+                  pixelsParCm: 30,
+                  scale: 0.7,
+                  center: !context.isHtml,
+                  id: figureId,
+                },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -171,6 +194,7 @@ export default class auto1AF4c extends ExerciceQcmA {
           const a = randint(-3, 3, [-1, 0, 1]) / 10
           const x1 = randint(7, 15) / 10
           const x2 = randint(-15, -6) / 10
+          solutions = [x2, x1]
 
           const fonc = (x: number) => a * (x - x1) * (x - x2) * (x + 3.5)
 
@@ -196,7 +220,12 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
+                {
+                  pixelsParCm: 30,
+                  scale: 0.7,
+                  center: !context.isHtml,
+                  id: figureId,
+                },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -238,6 +267,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
           const a = randint(-1, 1, [0]) / 10
           const x1 = randint(7, 15) / 10
+          solutions = [x1]
 
           const fonc = (x: number) => a * (x - x1) * (x + 4.6) * (x + 3.8)
 
@@ -263,7 +293,12 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
+                {
+                  pixelsParCm: 30,
+                  scale: 0.7,
+                  center: !context.isHtml,
+                  id: figureId,
+                },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -329,7 +364,12 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, center: !context.isHtml },
+                {
+                  pixelsParCm: 30,
+                  scale: 0.7,
+                  center: !context.isHtml,
+                  id: figureId,
+                },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -361,6 +401,14 @@ export default class auto1AF4c extends ExerciceQcmA {
           ]
         }
         break
+    }
+    if (context.isHtml && !context.isTypst) {
+      this.correction += `<br>${lectureAntecedentAnimee({
+        figureId,
+        x: solutions,
+        y: 0,
+        pixelsParCm: 30,
+      })}`
     }
   }
 

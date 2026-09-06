@@ -1,4 +1,5 @@
 import { repere } from '../../../lib/2d/reperes'
+import { lectureAntecedentAnimee } from '../../../lib/2d/LectureAntecedent'
 import { latex2d } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -134,6 +135,7 @@ export default class EquationsGSplineNombre extends ExerciceSimple {
       color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
+    const figureId = `lectureAntecedentsEx${this.numeroExercice ?? 0}Q${this.indexQuestionHote ?? 0}`
     const nbAntecedentsEntiersMaximum = theSpline.nombreAntecedentsMaximum(
       bornes.yMin,
       bornes.yMax,
@@ -181,7 +183,12 @@ export default class EquationsGSplineNombre extends ExerciceSimple {
     this.question +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 25, scale: 0.9, center: !context.isHtml },
+          {
+            pixelsParCm: 25,
+            scale: 0.9,
+            center: !context.isHtml,
+            id: figureId,
+          },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,
@@ -204,5 +211,13 @@ export default class EquationsGSplineNombre extends ExerciceSimple {
 
     this.correction = `Le nombre de solutions de  l'équation $f(x)=${y1}$ est le nombre d'antécédents de  $${y1}$ par la fonction $f$.<br>
     Puisque la droite d'équation $y = ${y1}$ (droite horizontale) coupe ${solutions1.length === 0 ? 'aucune' : `$${solutions1.length}$`} fois la courbe, on en déduit que l'équation  $f(x)=${y1}$ admet $${miseEnEvidence(solutions1.length)}$ ${solutions1.length === 0 || solutions1.length === 1 ? `${texteEnCouleurEtGras('solution')}.` : `${texteEnCouleurEtGras('solutions')}`}.`
+    if (context.isHtml && !context.isTypst) {
+      this.correction += `<br>${lectureAntecedentAnimee({
+        figureId,
+        x: solutions1,
+        y: y1,
+        pixelsParCm: 25,
+      })}`
+    }
   }
 }

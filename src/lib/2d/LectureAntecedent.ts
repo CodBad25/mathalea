@@ -176,13 +176,20 @@ function registerLectureAntecedentAnimee() {
 
       const button = document.createElement('button')
       button.type = 'button'
-      button.textContent = 'Revoir'
+      const hasAntecedent = xValues.length > 0
+      button.textContent = hasAntecedent ? 'Revoir' : 'Aucun antécédent'
+      button.disabled = !hasAntecedent
       button.className =
-        'ml-3 rounded-md border border-coopmaths-action px-3 py-1 text-sm font-semibold text-coopmaths-action hover:bg-coopmaths-action hover:text-white'
-      button.setAttribute('aria-label', "Revoir l'animation de lecture")
-      button.addEventListener('click', playAnimation)
+        'ml-3 rounded-md border border-coopmaths-action px-3 py-1 text-sm font-semibold text-coopmaths-action enabled:hover:bg-coopmaths-action enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-50'
+      button.setAttribute(
+        'aria-label',
+        hasAntecedent
+          ? "Revoir l'animation de lecture"
+          : 'Aucun antécédent à afficher',
+      )
+      if (hasAntecedent) button.addEventListener('click', playAnimation)
       element.replaceChildren(button)
-      playAnimation()
+      if (hasAntecedent) playAnimation()
 
       return () => {
         button.removeEventListener('click', playAnimation)
