@@ -30,11 +30,19 @@ https://forge.apps.education.fr/mon-groupe/ma-banque/-/tree/une-autre-branche
 https://forge.apps.education.fr/mon-groupe/ma-banque/-/tree/main/un-sous-dossier
 ```
 
-MathALÉA cherche `manifest.json` à la racine du dépôt puis, s'il ne l'y trouve
-pas, dans son sous-dossier `dist/` : un dépôt de sources dont le `manifest.json`
-n'est publié que dans ce dossier (build généré par une CI, par exemple) n'a donc
-besoin d'aucune URL particulière. Les deux dernières formes ne servent que pour
-lire une autre branche que `main`, ou un sous-dossier autre que `dist/`.
+MathALÉA lit en priorité une archive `dist.zip` à la racine du dépôt : quand le
+build de la banque en produit une, toute la banque est récupérée en **un seul
+téléchargement**, ce qui évite la rafale de requêtes vers l'API GitLab (et ses
+réponses « trop de requêtes ») qu'entraîne la lecture fichier par fichier. À
+défaut de `dist.zip`, MathALÉA cherche `manifest.json` à la racine du dépôt
+puis, s'il ne l'y trouve pas, dans son sous-dossier `dist/` : un dépôt de
+sources dont le `manifest.json` n'est publié que dans ce dossier (build généré
+par une CI, par exemple) n'a donc besoin d'aucune URL particulière. La
+détection est refaite à chaque démarrage : publier un `dist.zip` sur une banque
+jusque-là lue fichier par fichier suffit à faire basculer ses lecteurs dessus.
+Les deux dernières formes d'URL ne servent que pour lire une autre branche que
+`main`, ou un sous-dossier autre que `dist/` (`dist.zip` est alors cherché dans
+ce sous-dossier).
 
 ## Partager un lien
 
@@ -167,8 +175,9 @@ titre, les étiquettes et les étoiles :
 ```
 
 Un script de construction compile les png (CLI `typst`, ou `pdflatex` +
-`pdftoppm` pour les sources LaTeX), copie les sources et écrit le
-`manifest.json`.
+`pdftoppm` pour les sources LaTeX), copie les sources, écrit le `manifest.json`
+et produit une archive `dist.zip` à la racine — c'est cette archive que
+MathALÉA récupère en priorité pour un dépôt de forge.
 
 ## Où cela se branche dans le code
 
@@ -176,7 +185,7 @@ Un script de construction compile les png (CLI `typst`, ou `pdflatex` +
 | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | `src/lib/types/banquesExternes.ts`                                                          | types du manifest et des provenances                                        |
 | `src/lib/components/banquesExternes.ts`                                                     | validation du manifest, uuid `bq-…`, construction du référentiel            |
-| `src/lib/stores/banquesExternesStore.ts`                                                    | chargement zip/forge (avec repli `dist/`), persistance, référentiel courant |
+| `src/lib/stores/banquesExternesStore.ts`                                                    | chargement zip/forge (archive `dist.zip` en priorité, repli `dist/`), persistance, référentiel courant |
 | `src/lib/stores/banquesExternesDb.ts`                                                       | archives zip en IndexedDB                                                   |
 | `src/main.ts`                                                                               | chargement des banques avant le premier rendu                               |
 | `src/components/setup/start/presentationalComponents/sideMenu/BanquesExternesDialog.svelte` | interface d'ajout et de retrait, bouton d'aide                              |

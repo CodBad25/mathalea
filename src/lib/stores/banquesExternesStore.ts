@@ -4,7 +4,10 @@
  * Une banque est soit une archive zip déposée depuis la machine, soit un dépôt
  * public de forge.apps.education.fr. Dans les deux cas elle contient un
  * `manifest.json` (voir `lib/types/banquesExternes.ts`) et des fichiers `.png`,
- * `.typ` et/ou `.tex`. Les banques installées sont rechargées à chaque démarrage :
+ * `.typ` et/ou `.tex`. Un dépôt de forge est lu en priorité par son archive
+ * `dist.zip` (un seul téléchargement) et, à défaut, fichier par fichier via
+ * l'API GitLab (racine du dépôt puis sous-dossier `dist/`).
+ * Les banques installées sont rechargées à chaque démarrage :
  * - les descripteurs sont en localStorage ;
  * - les octets des archives zip sont en IndexedDB (`banquesExternesDb.ts`).
  *
@@ -162,15 +165,20 @@ function ecrireSourcesInstallees(sources: BanqueExterneSource[]): void {
 /**
  * Décompresse une archive et en construit une banque chargée. Le descripteur
  * n'est pas connu avant d'avoir lu le manifest (la clé d'une banque zip dérive
- * de l'id déclaré) : c'est l'appelant qui l'assemble à partir du manifest rendu.
+ * de l'id déclaré) : c'est l'appelant qui l'assemble à partir du manifest rendu,
+ * sauf s'il en impose un (archive `dist.zip` d'un dépôt de forge : le
+ * descripteur reste alors celui de la forge).
  * @param {ArrayBuffer} octets contenu du zip
  * @param {string} nomFichier nom de l'archive, pour l'affichage
+ * @param {BanqueExterneSource} sourceImposee descripteur à conserver tel quel
+ * (au lieu d'en dériver une banque `zip:` de l'id du manifest)
  * @returns {Promise<BanqueExterneChargee>} banque prête à être affichée
  * @throws {ManifestInvalideError} si l'archive ne contient pas de manifest valide
  */
 async function chargerDepuisZip(
   octets: ArrayBuffer,
   nomFichier?: string,
+  sourceImposee?: BanqueExterneSource,
 ): Promise<BanqueExterneChargee> {
   let archive: JSZip
   try {
@@ -235,7 +243,7 @@ async function chargerDepuisZip(
     if (entree === undefined || entree.dir) return null
     return await entree.async('string')
   })
-  const source: BanqueExterneSource = {
+  const source: BanqueExterneSource = sourceImposee ?? {
     type: 'zip',
     cle: `zip:${manifest.id}`,
     nomFichier,
@@ -249,6 +257,42 @@ async function chargerDepuisZip(
  * publiés par un dépôt de sources (build généré par une CI, par exemple).
  */
 const RACINE_REPLI = 'dist'
+
+/**
+ * Archive complète de la banque, cherchée à la racine du dépôt avant la
+ * lecture fichier par fichier. Quand elle existe, un seul téléchargement
+ * suffit : on évite la rafale de requêtes vers l'API GitLab — et ses réponses
+ * `429 Too Many Requests` — qu'entraîne la lecture du dossier `dist/`.
+ */
+const ARCHIVE_DIST = 'dist.zip'
+
+/**
+ * Tente de télécharger l'archive `dist.zip` à la racine (éventuellement
+ * `racine/`) d'un dépôt de forge.
+ * @param {BanqueExterneSource} source descripteur de la banque
+ * @returns {Promise<ArrayBuffer|null>} les octets de l'archive, ou `null` si
+ * elle est absente (404) — la banque est alors lue fichier par fichier
+ * @throws {ManifestInvalideError} en cas d'erreur réseau ou de réponse ni 200 ni 404
+ */
+async function telechargerArchiveDist(
+  source: BanqueExterneSource,
+): Promise<ArrayBuffer | null> {
+  let reponse: Response
+  try {
+    reponse = await window.fetch(urlFichierForge(source, ARCHIVE_DIST))
+  } catch {
+    throw new ManifestInvalideError(
+      'Impossible de joindre la forge. Vérifiez votre connexion et l’adresse du dépôt.',
+    )
+  }
+  if (reponse.status === 404) return null
+  if (!reponse.ok) {
+    throw new ManifestInvalideError(
+      `La forge a répondu ${reponse.status} pour ${source.projet}.`,
+    )
+  }
+  return await reponse.arrayBuffer()
+}
 
 /**
  * Ajoute un sous-dossier à la racine (éventuellement vide) d'une source.
@@ -291,16 +335,20 @@ async function telechargerManifest(
 }
 
 /**
- * Télécharge le manifest d'un dépôt de la forge et construit la banque. Les
- * fichiers eux-mêmes ne sont pas téléchargés : leurs URLs d'API sont calculées
- * à la volée, le navigateur les récupère au moment de l'affichage.
+ * Télécharge une banque hébergée sur un dépôt de la forge.
  *
- * `manifest.json` est cherché à la racine déclarée par `source` puis, s'il y
- * est absent, dans son sous-dossier `dist/` (voir `RACINE_REPLI`) : les
- * assets de la banque sont alors résolus à partir de cette racine effective,
- * mais le descripteur persisté (`source`, donc sa `cle`) garde la racine
- * telle qu'indiquée par l'utilisateur, la détection étant refaite à chaque
- * rechargement.
+ * Si le dépôt publie une archive `dist.zip` à sa racine (voir `ARCHIVE_DIST`),
+ * toute la banque en est extraite d'un seul téléchargement. Sinon, seul
+ * `manifest.json` est téléchargé et les fichiers sont récupérés un par un au
+ * moment de l'affichage, leurs URLs d'API étant calculées à la volée :
+ * `manifest.json` est alors cherché à la racine déclarée par `source` puis,
+ * s'il y est absent, dans son sous-dossier `dist/` (voir `RACINE_REPLI`) ; les
+ * assets sont résolus à partir de cette racine effective.
+ *
+ * Dans tous les cas le descripteur persisté (`source`, donc sa `cle`) garde la
+ * racine telle qu'indiquée par l'utilisateur : la détection (archive, puis
+ * racine du manifest) est refaite à chaque rechargement, et fait remonter la
+ * publication d'un `dist.zip` sur une banque jusque-là lue fichier par fichier.
  * @param {BanqueExterneSource} source descripteur de la banque
  * @returns {Promise<BanqueExterneChargee>} banque prête à être affichée
  * @throws {ManifestInvalideError} si le dépôt est inaccessible ou son manifest invalide
@@ -308,6 +356,11 @@ async function telechargerManifest(
 async function chargerDepuisForge(
   source: BanqueExterneSource,
 ): Promise<BanqueExterneChargee> {
+  const archiveDist = await telechargerArchiveDist(source)
+  if (archiveDist !== null) {
+    return await chargerDepuisZip(archiveDist, undefined, source)
+  }
+
   let sourceEffective = source
   let texteManifest = await telechargerManifest(sourceEffective)
   if (texteManifest === null) {
