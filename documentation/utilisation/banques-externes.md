@@ -44,6 +44,44 @@ Les deux dernières formes d'URL ne servent que pour lire une autre branche que
 `main`, ou un sous-dossier autre que `dist/` (`dist.zip` est alors cherché dans
 ce sous-dossier).
 
+## Banque intégrée : FFJM
+
+La banque **« Exercices de la FFJM »** est livrée avec le site : elle apparaît
+dans « Ressources partenaires » pour tout le monde, sans rien installer, et ne
+peut pas être retirée (la fenêtre « Vos banques d'exercices » la signale
+« intégrée au site »). C'est une banque du même format que les autres, avec la
+provenance particulière `builtin` : elle n'est ni enregistrée dans le
+navigateur, ni ajoutée aux liens partagés par un paramètre `bq` (inutile,
+puisque tout le monde l'a déjà).
+
+Seul son `manifest.json` est versionné dans le dépôt
+(`src/json/banques/ffjm.manifest.json`). Ses fichiers d'exercices (images,
+sources Typst/LaTeX, préambules) sont servis par le **dossier statique du
+serveur**, partagé entre les releases (cf. `tasks/deploy_site.sh` et
+`tasks/rollback_site.js`, où `…/dist/static` est un lien symbolique vers
+`REMOTE_STATIC_PATH`), exactement comme la « Bibliothèque » et les annales. Ils
+ne sont donc ni dans le dépôt git, ni dans `public/`.
+
+Chemin attendu : `static/ffjm/<chemin déclaré dans le manifest>`, soit en
+production `https://coopmaths.fr/alea/static/ffjm/…` — par exemple
+`https://coopmaths.fr/alea/static/ffjm/png/tirelire.png`, `…/typ/tirelire.typ`,
+`…/tex/tirelire.tex`, `…/preambule.tex`. En développement, `vite` proxifie
+`/alea/static` vers `https://coopmaths.fr` (`vite.config.ts`) : les fichiers
+FFJM doivent donc être en ligne pour s'afficher en local. Leur mise à jour se
+fait depuis le projet qui gère ce dossier statique, pas ici.
+
+Pour récupérer le manifest de la dernière version publiée sur
+[forge.apps.education.fr/coopmaths/ffjm](https://forge.apps.education.fr/coopmaths/ffjm) :
+
+```
+pnpm update:ffjm
+```
+
+Le script télécharge `dist/manifest.json` du dépôt et réécrit
+`src/json/banques/ffjm.manifest.json` — rien d'autre. Ensuite : `pnpm check`
+puis commit du manifest. Si des exercices ont été ajoutés ou renommés, penser à
+mettre à jour en parallèle les fichiers sous `static/ffjm/`.
+
 ## Partager un lien
 
 Quand une sélection contient des exercices venant d'un dépôt de forge, le lien
@@ -181,11 +219,13 @@ MathALÉA récupère en priorité pour un dépôt de forge.
 
 ## Où cela se branche dans le code
 
-| Fichier                                                                                     | Rôle                                                                        |
-| ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `src/lib/types/banquesExternes.ts`                                                          | types du manifest et des provenances                                        |
-| `src/lib/components/banquesExternes.ts`                                                     | validation du manifest, uuid `bq-…`, construction du référentiel            |
-| `src/lib/stores/banquesExternesStore.ts`                                                    | chargement zip/forge (archive `dist.zip` en priorité, repli `dist/`), persistance, référentiel courant |
-| `src/lib/stores/banquesExternesDb.ts`                                                       | archives zip en IndexedDB                                                   |
-| `src/main.ts`                                                                               | chargement des banques avant le premier rendu                               |
-| `src/components/setup/start/presentationalComponents/sideMenu/BanquesExternesDialog.svelte` | interface d'ajout et de retrait, bouton d'aide                              |
+| Fichier                                                                                     | Rôle                                                                                                                                                                         |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/lib/types/banquesExternes.ts`                                                          | types du manifest et des provenances                                                                                                                                         |
+| `src/lib/components/banquesExternes.ts`                                                     | validation du manifest, uuid `bq-…`, construction du référentiel                                                                                                             |
+| `src/lib/stores/banquesExternesStore.ts`                                                    | chargement zip/forge (archive `dist.zip` en priorité, repli `dist/`), banques intégrées (`chargerBanquesIntegrees`), persistance, référentiel courant                        |
+| `src/lib/stores/banquesExternesDb.ts`                                                       | archives zip en IndexedDB                                                                                                                                                    |
+| `src/json/banques/ffjm.manifest.json`                                                       | manifest versionné de la banque FFJM intégrée (généré par `pnpm update:ffjm`)                                                                                                |
+| `tasks/update-ffjm.js`                                                                      | `pnpm update:ffjm` : télécharge `dist/manifest.json` de la forge et réécrit `src/json/banques/ffjm.manifest.json` (les fichiers d'exercices restent sur le serveur statique) |
+| `src/main.ts`                                                                               | chargement des banques (intégrées puis installées) avant le premier rendu                                                                                                    |
+| `src/components/setup/start/presentationalComponents/sideMenu/BanquesExternesDialog.svelte` | interface d'ajout et de retrait, bouton d'aide                                                                                                                               |

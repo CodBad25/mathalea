@@ -95,7 +95,9 @@ export interface BanqueExterneManifest {
 /**
  * Provenance d'une banque : c'est la partie persistée en localStorage, qui
  * permet de recharger la banque au démarrage suivant.
- * @property {'zip'|'forge'} type provenance
+ * @property {'zip'|'forge'|'builtin'} type provenance ; `builtin` désigne une
+ * banque livrée avec le site (voir `chargerBanquesIntegrees`), ni persistée ni
+ * référençable dans un lien partagé (tout le monde l'a déjà)
  * @property {string} cle identifiant unique de l'entrée installée (voir `cleSource`)
  * @property {string} projet chemin du projet sur la forge (`groupe/projet`), pour `forge`
  * @property {string} ref branche ou tag lu sur la forge, pour `forge`
@@ -103,7 +105,7 @@ export interface BanqueExterneManifest {
  * @property {string} nomFichier nom de l'archive déposée, pour `zip` (affichage seulement)
  */
 export interface BanqueExterneSource {
-  type: 'zip' | 'forge'
+  type: 'zip' | 'forge' | 'builtin'
   cle: string
   projet?: string
   ref?: string
