@@ -6,6 +6,7 @@ import {
   createGeoPoints,
   createRealisticEarthSphere,
   createSkySphere,
+  createSkyscraperGrid,
 } from './solidesThreeJs'
 import {
   BufferGeometryUtils,
@@ -114,6 +115,9 @@ class Canvas3dElement extends HTMLElement {
                 edgesOpacity: desc.edgesOpacity,
                 colors: desc.colors ?? DEFAULT_CUBE_COLORS,
               })
+            }
+            if (desc.type === 'skyscraperGrid') {
+              return createSkyscraperGrid(desc)
             }
             if (desc.type === 'bufferGeometry') {
               if (
@@ -315,12 +319,10 @@ class Canvas3dElement extends HTMLElement {
 
         this._objects = objects
         this.setObjects(objects)
-        if (
-          !(
-            Array.isArray(this._contentDescription?.cameraPosition) ||
-            Array.isArray(this._contentDescription?.cameraTarget)
-          )
-        ) {
+        if (!(
+          Array.isArray(this._contentDescription?.cameraPosition) ||
+          Array.isArray(this._contentDescription?.cameraTarget)
+        )) {
           this.autoCenterZoom(objects, margin)
         }
         const overlay = this.querySelector(
@@ -338,8 +340,20 @@ class Canvas3dElement extends HTMLElement {
       }
     }
 
+    const buttonLabel = this.getAttribute('button-label')
+    // En mode bouton seul, la scène n'est révélée qu'à l'ouverture.
+    if (buttonLabel && !this._fullscreenBtn) {
+      this.style.width = 'auto'
+      this.style.height = 'auto'
+      this._fullscreenBtn = document.createElement('button')
+      this._fullscreenBtn.textContent = buttonLabel
+      this._fullscreenBtn.title = buttonLabel
+      applyDefaultMathaleaButtonStyle(this._fullscreenBtn)
+      this._fullscreenBtn.onclick = () => this.enterFullscreen()
+      this.appendChild(this._fullscreenBtn)
+    }
     // Création unique de l'image
-    if (!this._imgElement) {
+    if (!buttonLabel && !this._imgElement) {
       this._imgElement = document.createElement('img')
       this._imgElement.style.position = 'absolute'
       this._imgElement.style.top = '0'
@@ -355,7 +369,7 @@ class Canvas3dElement extends HTMLElement {
       this.appendChild(this._imgElement)
     }
     // Création unique du bouton
-    if (!this._fullscreenBtn) {
+    if (!buttonLabel && !this._fullscreenBtn) {
       this._fullscreenBtn = document.createElement('button')
       this._fullscreenBtn.innerHTML =
         '<i class="bx bx-fullscreen text-lg text-gray-700 hover:text-blue-500 transition-colors"></i>'
@@ -411,6 +425,7 @@ class Canvas3dElement extends HTMLElement {
   }
 
   private renderStaticImage() {
+    if (!this._imgElement) return
     const width = this.width
     const height = this.height
     // Crée un renderer temporaire
@@ -457,10 +472,8 @@ class Canvas3dElement extends HTMLElement {
 
   private enterFullscreen() {
     // Masque l'image et le bouton
-    if (this._imgElement && this._fullscreenBtn) {
-      this._imgElement.style.display = 'none'
-      this._fullscreenBtn.style.display = 'none'
-    }
+    if (this._imgElement) this._imgElement.style.display = 'none'
+    if (this._fullscreenBtn) this._fullscreenBtn.style.display = 'none'
 
     // Détection mobile simple (largeur < 800px ou userAgent)
     const isMobile =
@@ -857,6 +870,15 @@ interface CubeDescription {
   color?: string | number
 }
 
+export interface SkyscraperGridDescription {
+  type: 'skyscraperGrid'
+  grid: number[][]
+  north: number[]
+  south: number[]
+  west: number[]
+  east: number[]
+}
+
 interface AmbientLightDescription {
   type: 'ambientLight'
   color?: string | number
@@ -987,6 +1009,7 @@ export interface Canvas3dButtonDescription {
 export type Elements3DDescription =
   | BufferGeometryDescription
   | CubeDescription
+  | SkyscraperGridDescription
   | SphereDescription
   | GroupDescription
   | GeoPointDescription
@@ -1012,16 +1035,21 @@ export function ajouteCanvas3d({
   width = 200,
   height = 200,
   className,
+  buttonLabel,
 }: {
   id: string
   content: Canvas3DContentDescription
   width: number
   height: number
   className?: string
+  buttonLabel?: string
 }): string {
   const contentJson = encodeURIComponent(JSON.stringify(content))
   const classAttribute = className ? ` class="${className}"` : ''
-  return `<canvas-3d id="${id}"${classAttribute} content='${contentJson}' width="${width}" height="${height}"></canvas-3d>`
+  const buttonAttribute = buttonLabel
+    ? ` button-label="${buttonLabel.replaceAll('&', '&amp;').replaceAll('"', '&quot;')}"`
+    : ''
+  return `<canvas-3d id="${id}"${classAttribute}${buttonAttribute} content='${contentJson}' width="${width}" height="${height}"></canvas-3d>`
 }
 
 function applyDefaultMathaleaButtonStyle(btn: HTMLButtonElement) {
