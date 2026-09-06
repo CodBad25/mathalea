@@ -283,6 +283,27 @@ inscrit est bien celui dont le nettoyage est en cours (ou celui passé en second
 argument, à utiliser quand la désinscription a lieu hors de ce nettoyage — voir
 `destroy()` dans `src/lib/figureApigeom.ts`).
 
+## Grilles de chiffres
+
+Les composants qui font remplir un damier de chiffres (`kenken-grille`,
+`grimuku-grille`) partagent `src/lib/customElements/grilleDeChiffres.ts` :
+
+- `verifieLesCases()` et `pointsMaxDesCases()` portent le barème « un point par
+  case juste ». Le composant n'a plus qu'à implémenter l'interface
+  `GrilleDeChiffres` (`value`, `interactivityOn`, `marqueLesCases()`,
+  `afficheLeScore()`) et à leur déléguer `verifQuestion()` et
+  `pointsMaxQuestion()`.
+- `creeChampDeSaisie()`, `filtreLaSaisie()`, `deplacementDuClavier()` et
+  `deplaceLeFocus()` donnent la saisie d'un chiffre par case : seuls les
+  chiffres autorisés sont acceptés, le focus reste sur la case saisie (une
+  grille ne se remplit pas dans l'ordre de lecture) et les flèches du clavier
+  déplacent le curseur.
+- Les clés de réponse suivent la convention des tableaux MathALÉA
+  (`cleDeLaCase()` produit `L1C1`, `L1C2`...), ce qui rend la grille corrigeable
+  par le même code que `tableau-hybride`. Attention : le type `Valeur` ne
+  déclare ces clés que jusqu'à `L3C5`, une grille plus grande doit donc les
+  ajouter une à une (voir `EN-gratte-ciel`, `EN-kenken`, `EN-grimuku`).
+
 ## Cas avancés
 
 ## Cas spécifique : diagrammes (outil prof vs évaluation)
