@@ -54,9 +54,21 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
 
   // "Égalité filles-garçons" : on la détache du référentiel scolaire
   // classique pour la ranger dans "Ressources partenaires", aux côtés de MathAdata.
-  const egaliteFGReferentiel: JSONReferentielObject =
+  // On la fait passer par le même pipeline de tri que le référentiel principal
+  // (getAllEndings -> sortArrayOfResourcesBasedOnPathThenId -> buildReferentiel)
+  // pour éviter un tri alphabétique brut sur les id ('...-10' avant '...-8').
+  const rawEgaliteFGReferentiel: JSONReferentielObject =
     (baseReferentiel['Égalité filles-garçons'] as JSONReferentielObject) || {}
   delete baseReferentiel['Égalité filles-garçons']
+  const egaliteFGReferentiel: JSONReferentielObject =
+    Object.keys(rawEgaliteFGReferentiel).length > 0
+      ? buildReferentiel(
+          sortArrayOfResourcesBasedOnPathThenId(
+            getAllEndings(rawEgaliteFGReferentiel),
+            rawEgaliteFGReferentiel,
+          ),
+        )
+      : {}
 
   // Traitement des examens
   let examens = getAllEndings(examsReferentiel)

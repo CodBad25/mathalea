@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -11,7 +12,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Étudiantes en école d'ingénieurs : une suite récurrente"
+export const titre = "Étudiantes en école d'ingénieurs"
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Suites numériques']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -76,7 +77,7 @@ export default class EgaliteFGLycee19 extends Exercice {
 
     const texte1 =
       'Justifier que, pour tout entier $n$ : $u_{n+1}=0{,}84\\,u_n+20$, puis démontrer par récurrence que la suite $(u_n)$ est décroissante.'
-    const correction1 = `Une diminution de $16\\,\\%$ correspond à un coefficient multiplicateur de $1-0{,}16=0{,}84$ ; en ajoutant les $20$ nouvelles inscriptions, on obtient $u_{n+1}=0{,}84\\,u_n+20$.<br>Pour la récurrence : au rang $0$, $u_1=146\\leqslant 150=u_0$. En supposant $u_{n+1}\\leqslant u_n$ à un rang $n$, on a $0{,}84\\,u_{n+1}\\leqslant 0{,}84\\,u_n$ (car $0{,}84>0$), donc $u_{n+2}=0{,}84\\,u_{n+1}+20\\leqslant 0{,}84\\,u_n+20=u_{n+1}$ : la propriété est donc vraie à tous les rangs, la suite $(u_n)$ est $${miseEnEvidence('\\text{décroissante}')}$.`
+    const correction1 = `Une diminution de $16\\,\\%$ correspond à un coefficient multiplicateur de $1-0{,}16=0{,}84$ ; en ajoutant les $20$ nouvelles inscriptions, on obtient $u_{n+1}=0{,}84\\,u_n+20$.<br>Pour la récurrence : au rang $0$, $u_1=146\\leqslant 150=u_0$. En supposant $u_{n+1}\\leqslant u_n$ à un rang $n$, on a $0{,}84\\,u_{n+1}\\leqslant 0{,}84\\,u_n$ (car $0{,}84>0$), donc $u_{n+2}=0{,}84\\,u_{n+1}+20\\leqslant 0{,}84\\,u_n+20=u_{n+1}$ : la propriété est donc vraie à tous les rangs, la suite $(u_n)$ est ${texteEnCouleurEtGras('décroissante')}.`
 
     const texteQ2 = 'La suite $(u_n)$ est-elle convergente ?'
     this.autoCorrection[2] = {
@@ -94,7 +95,7 @@ export default class EgaliteFGLycee19 extends Exercice {
     const monQcm2 = propositionsQcm(this, 2)
     let texte2 = texteQ2
     if (!context.isAmc) texte2 += monQcm2.texte
-    const correction2 = `La suite $(u_n)$ est décroissante (question précédente) et minorée par $0$ (un effectif ne peut pas être négatif) : elle est donc $${miseEnEvidence('\\text{convergente}')}$, d'après le théorème de la limite monotone.`
+    const correction2 = `La suite $(u_n)$ est décroissante (question précédente) et minorée par $0$ (un effectif ne peut pas être négatif) : elle est donc ${texteEnCouleurEtGras('convergente')}, d'après le théorème de la limite monotone.`
 
     let texte3 =
       'On pose $V_n=u_n-125$ pour tout entier $n$. Montrer que $(V_n)$ est géométrique et donner sa raison.'

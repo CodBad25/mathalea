@@ -1,7 +1,11 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -17,7 +21,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Grandeurs composées','Proportionnalité','Trigonométrie']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -83,8 +87,7 @@ export default class EgaliteFG16 extends Exercice {
     const monQcm1 = propositionsQcm(this, 1)
     let texte1 = texteQ1
     if (!context.isAmc) texte1 += monQcm1.texte
-    const correction1 =
-      'Dans chaque cas, $\\dfrac{\\text{poids}}{\\text{masse}}=1{,}7$ (par exemple $\\dfrac{5{,}1}{3}=1{,}7$ et $\\dfrac{122{,}4}{72}=1{,}7$) : le tableau est bien un tableau de proportionnalité, de coefficient $1{,}7$.'
+    const correction1 = `Dans chaque cas, $\\dfrac{\\text{poids}}{\\text{masse}}=1{,}7$ (par exemple $\\dfrac{5{,}1}{3}=1{,}7$ et $\\dfrac{122{,}4}{72}=1{,}7$) : ${texteEnCouleurEtGras('le tableau est bien un tableau de proportionnalité')}, de coefficient $1{,}7$.`
 
     let texte2 =
       "On note $g_L$ l'accélération de la pesanteur sur la Lune. Déterminer $g_L$."
@@ -105,8 +108,7 @@ export default class EgaliteFG16 extends Exercice {
     const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 =
-      "$\\dfrac{g_T}{g_L}=\\dfrac{9{,}8}{1{,}7}\\approx 5{,}76$, soit environ $6$ (arrondi à l'unité) : l'affirmation est donc vraie, au moins en ordre de grandeur."
+    const correction3 = `$\\dfrac{g_T}{g_L}=\\dfrac{9{,}8}{1{,}7}\\approx 5{,}76$, soit environ $6$ (arrondi à l'unité) : ${texteEnCouleurEtGras("l'affirmation est donc vraie")}, au moins en ordre de grandeur.`
 
     let texte4 =
       (context.isHtml
@@ -117,7 +119,7 @@ export default class EgaliteFG16 extends Exercice {
       texte4 +=
         ajouteChampTexteMathLive(this, 4, '', { texteApres: 'km' }) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 33.5 } })
-    const correction4 = `Dans le triangle $BCD$ rectangle en $D$ : $\\cos(\\widehat{BCD})=\\dfrac{CD}{BC}$, donc $BC=\\dfrac{CD}{\\cos(30°)}=\\dfrac{29}{\\cos(30°)}\\approx ${miseEnEvidence('33{,}5')}$ km.`
+    const correction4 = `Dans le triangle $BCD$ rectangle en $D$, le cosinus de l'angle $\\widehat{BCD}$ est défini par : $\\cos\\left(\\widehat{BCD}\\right)=\\dfrac{CD}{BC}$.<br>Avec les données numériques : $\\cos(30°)=\\dfrac{29}{BC}$, donc $BC=\\dfrac{29}{\\cos(30°)}\\approx ${miseEnEvidence('33{,}5')}$ km.`
 
     let texte5 =
       "En prenant $BC=34$ km pour cette question, calculer la profondeur $BD$ du cratère, arrondie à l'unité de km."
@@ -125,7 +127,7 @@ export default class EgaliteFG16 extends Exercice {
       texte5 +=
         ajouteChampTexteMathLive(this, 5, '', { texteApres: 'km' }) + '<br>'
     handleAnswers(this, 5, { reponse: { value: 17 } })
-    const correction5 = `$BD=BC\\times \\sin(30°)=34\\times 0{,}5=${miseEnEvidence('17')}$ km.`
+    const correction5 = `Dans le triangle $BCD$ rectangle en $D$, le sinus de l'angle $\\widehat{BCD}$ est défini par : $\\sin\\left(\\widehat{BCD}\\right)=\\dfrac{BD}{BC}$.<br>Avec les données numériques : $BD=BC\\times \\sin(30°)=34\\times 0{,}5=${miseEnEvidence('17')}$ km.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

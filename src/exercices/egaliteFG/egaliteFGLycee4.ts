@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles (source : Insee)
@@ -90,7 +91,7 @@ export default class EgaliteFGLycee4 extends Exercice {
     const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 = `Oui : bien que le nombre absolu de femmes au chômage ($1\\,259\\,000$) soit inférieur à celui des hommes ($1\\,318\\,000$), le taux de chômage des femmes ($9{,}4\\,\\%$) est en réalité $${miseEnEvidence('\\text{plus élevé}')}$ que celui des hommes ($8{,}9\\,\\%$), car la population active féminine est plus petite. Comparer des effectifs bruts sans tenir compte de la taille des populations de référence est trompeur : c'est en comparant des taux (proportions) que l'on peut réellement juger de l'égalité entre les deux populations.`
+    const correction3 = `Oui : bien que le nombre absolu de femmes au chômage ($1\\,259\\,000$) soit inférieur à celui des hommes ($1\\,318\\,000$), le taux de chômage des femmes ($9{,}4\\,\\%$) est en réalité ${texteEnCouleurEtGras('plus élevé')} que celui des hommes ($8{,}9\\,\\%$), car la population active féminine est plus petite. Comparer des effectifs bruts sans tenir compte de la taille des populations de référence est trompeur : c'est en comparant des taux (proportions) que l'on peut réellement juger de l'égalité entre les deux populations.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

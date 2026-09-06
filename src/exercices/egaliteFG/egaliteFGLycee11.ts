@@ -1,6 +1,6 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Suites numériques']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -59,7 +59,7 @@ export default class EgaliteFGLycee11 extends Exercice {
 
     const texte2 =
       'Quelle est la nature des suites $(F_n)$ et $(H_n)$ ? Justifier en donnant leurs éléments caractéristiques.'
-    const correction2 = `Les deux suites sont $${miseEnEvidence('\\text{géométriques}')}$ : $(F_n)$ de raison $1{,}02$ et de premier terme $2\\,000$ (donc $F_n=2\\,000\\times 1{,}02^n$) ; $(H_n)$ de raison $1{,}015$ et de premier terme $2\\,300$ (donc $H_n=2\\,300\\times 1{,}015^n$).`
+    const correction2 = `Les deux suites sont ${texteEnCouleurEtGras('géométriques')} : $(F_n)$ de raison $1{,}02$ et de premier terme $2\\,000$ (donc $F_n=2\\,000\\times 1{,}02^n$) ; $(H_n)$ de raison $1{,}015$ et de premier terme $2\\,300$ (donc $H_n=2\\,300\\times 1{,}015^n$).`
 
     let texte3 =
       "Au bout de combien d'années le salaire moyen des femmes dépassera-t-il celui des hommes ?"

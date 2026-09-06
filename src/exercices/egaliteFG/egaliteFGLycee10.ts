@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Suites numériques', 'Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -69,7 +70,7 @@ export default class EgaliteFGLycee10 extends Exercice {
     const monQcm0 = propositionsQcm(this, 0)
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
-    const correction0 = `$(F_n)$ et $(H_n)$ sont $${miseEnEvidence('\\text{géométriques}')}$ : $(F_n)$ de raison $1{,}08$ (donc $F_n=500\\times 1{,}08^n$) et $(H_n)$ de raison $1{,}03$ (donc $H_n=1\\,500\\times 1{,}03^n$).`
+    const correction0 = `$(F_n)$ et $(H_n)$ sont ${texteEnCouleurEtGras('géométriques')} : $(F_n)$ de raison $1{,}08$ (donc $F_n=500\\times 1{,}08^n$) et $(H_n)$ de raison $1{,}03$ (donc $H_n=1\\,500\\times 1{,}03^n$).`
 
     let texte1 =
       "Combien de femmes occuperont un poste de direction en 2030 (arrondi à l'unité) ?"

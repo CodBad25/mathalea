@@ -1,4 +1,7 @@
-import { texteItalique } from '../../lib/outils/embellissements'
+import {
+  texteEnCouleurEtGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -12,7 +15,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Organisation et gestion de données','Fractions']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -98,8 +101,7 @@ export default class EgaliteFG6 extends Exercice {
 
     this.listeQuestions[3] =
       'Selon le graphique, quel niveau est le plus paritaire (le plus égalitaire) en termes de nombre d\'enseignantes et d\'enseignants ? Justifie ta réponse.'
-    this.listeCorrections[3] =
-      "C'est le lycée général et technologique qui semble le plus paritaire : sa proportion de femmes ($54\\,\\%$) est à $4$ points de $50\\,\\%$, alors que le lycée professionnel ($45\\,\\%$) en est à $5$ points."
+    this.listeCorrections[3] = `Sa proportion de femmes ($54\\,\\%$) est à $4$ points de $50\\,\\%$, alors que le lycée professionnel ($45\\,\\%$) en est à $5$ points : c'est donc ${texteEnCouleurEtGras('le lycée général et technologique')} qui semble le plus paritaire.`
 
     this.listeQuestions[4] =
       'Entre quelles catégories consécutives l\'écart est-il le plus élevé ? Pourquoi, à ton avis ?'

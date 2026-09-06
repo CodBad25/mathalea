@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -11,7 +12,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'La féminisation du corps médical : un ajustement affine'
+export const titre = 'La féminisation du corps médical'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Statistiques', 'Fonctions']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles (source : IRDES)
@@ -103,7 +104,7 @@ export default class EgaliteFGLycee20 extends Exercice {
     const monQcm2 = propositionsQcm(this, 2)
     let texte2 = texteQ2
     if (!context.isAmc) texte2 += monQcm2.texte
-    const correction2 = `$${miseEnEvidence('\\text{Oui}')}$ : les points semblent globalement alignés selon une tendance croissante, ce qui invite à un ajustement affine.`
+    const correction2 = `${texteEnCouleurEtGras('Oui')} : les points semblent globalement alignés selon une tendance croissante, ce qui invite à un ajustement affine.`
 
     let texte3 =
       'À la calculatrice, déterminer le coefficient de corrélation linéaire entre $x$ et $y$ (arrondi au millième).'

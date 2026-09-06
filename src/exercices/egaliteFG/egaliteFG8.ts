@@ -1,5 +1,5 @@
 import {
-  miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -8,7 +8,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import ExerciceVraiFaux from '../ExerciceVraiFaux'
 
-export const titre = 'Un mur bien droit ? (théorème de Pythagore)'
+export const titre = 'Un mur bien droit ?'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -18,7 +18,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Théorème de Pythagore']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -78,13 +78,13 @@ export default class EgaliteFG8 extends ExerciceVraiFaux {
         texte:
           'Le mur du groupe 1 (Léa et Daniel) est bien perpendiculaire au sol.',
         statut: true,
-        correction: `Si le mur était perpendiculaire au sol, le triangle $HIS$ serait rectangle en $I$, et on aurait $HS^2=HI^2+IS^2=60^2+80^2=3\\,600+6\\,400=10\\,000$, soit $HS=\\sqrt{10\\,000}=100\\text{ cm}=1\\text{ m}$.<br>Or on mesure bien $HS=1\\text{ m}$ : d'après la réciproque du théorème de Pythagore, le triangle $HIS$ est rectangle en $I$, donc $${miseEnEvidence('\\text{le mur du groupe 1 est bien perpendiculaire au sol}')}$.`,
+        correction: `Dans le triangle $HIS$, le plus grand côté est $[HS]$.<br>$HS^2=100^2=10\\,000$<br>$HI^2+IS^2=60^2+80^2=3\\,600+6\\,400=10\\,000$<br>On constate que $HS^2=HI^2+IS^2$, l'égalité de Pythagore est vérifiée. D'après la réciproque du théorème de Pythagore, le triangle $HIS$ est rectangle en $I$, donc ${texteEnCouleurEtGras('le mur du groupe 1 est bien perpendiculaire au sol')}.`,
       },
       {
         texte:
           'Le mur du groupe 2 (Enzo et Anita) est bien perpendiculaire au sol.',
         statut: false,
-        correction: `Si le mur était perpendiculaire au sol, on aurait $HS=100\\text{ cm}$ (voir calcul ci-dessus). Or on mesure $HS=95\\text{ cm}\\neq 100\\text{ cm}$ : le triangle $HIS$ n'est donc pas rectangle en $I$, et $${miseEnEvidence("\\text{le mur du groupe 2 n'est pas perpendiculaire au sol}")}$.`,
+        correction: `Dans le triangle $HIS$, le plus grand côté est $[HS]$.<br>$HS^2=95^2=9\\,025$<br>$HI^2+IS^2=60^2+80^2=3\\,600+6\\,400=10\\,000$<br>On constate que $HS^2\\neq HI^2+IS^2$, l'égalité de Pythagore n'est pas vérifiée. D'après le théorème de Pythagore, le triangle $HIS$ n'est pas rectangle en $I$, donc ${texteEnCouleurEtGras("le mur du groupe 2 n'est pas perpendiculaire au sol")}.`,
       },
     ]
   }

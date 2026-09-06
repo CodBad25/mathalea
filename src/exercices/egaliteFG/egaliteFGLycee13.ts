@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Suites numériques']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -69,7 +70,7 @@ export default class EgaliteFGLycee13 extends Exercice {
     const monQcm0 = propositionsQcm(this, 0)
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
-    const correction0 = `Les deux suites sont $${miseEnEvidence('\\text{arithmétiques}')}$ : $(F_n)$ de raison $-0{,}3$ et de premier terme $12$ (donc $F_n=12-0{,}3n$) ; $(H_n)$ de raison $0{,}5$ et de premier terme $5$ (donc $H_n=5+0{,}5n$).`
+    const correction0 = `Les deux suites sont ${texteEnCouleurEtGras('arithmétiques')} : $(F_n)$ de raison $-0{,}3$ et de premier terme $12$ (donc $F_n=12-0{,}3n$) ; $(H_n)$ de raison $0{,}5$ et de premier terme $5$ (donc $H_n=5+0{,}5n$).`
 
     let texte1 =
       "Combien d'heures les femmes consacreront-elles aux tâches domestiques en 2030 ($n=6$) ?"

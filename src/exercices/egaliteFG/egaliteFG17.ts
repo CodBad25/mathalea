@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -22,7 +23,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Algorithmique et programmation','Calcul littéral']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -149,7 +150,7 @@ export default class EgaliteFG17 extends Exercice {
     const monQcm5 = propositionsQcm(this, 5)
     let texte5 = texteQ5
     if (!context.isAmc) texte5 += monQcm5.texte
-    const correction5 = `$2x(3x-7)-(7+3x^2+6x)=6x^2-14x-7-3x^2-6x=3x^2-20x-7$, qui est bien égal au développement de $(x-7)(3x+1)$ trouvé à la question précédente. $${miseEnEvidence("\\text{L'affirmation est donc vraie}")}$.`
+    const correction5 = `$2x(3x-7)-(7+3x^2+6x)=6x^2-14x-7-3x^2-6x=3x^2-20x-7$, qui est bien égal au développement de $(x-7)(3x+1)$ trouvé à la question précédente. ${texteEnCouleurEtGras("L'affirmation est donc vraie")}.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
