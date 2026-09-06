@@ -12,7 +12,9 @@ export const titre =
   'Représenter graphiquement une suite arithmético-géométrique'
 export const dateDePublication = '05/08/2026'
 
-export const uuid = '4ad1f'
+export const dateDeModifImportante = '06/09/2026'
+
+export const uuid = 'a773b'
 export const refs = {
   'fr-fr': ['TSA2-12', 'TCA1-23'],
   'fr-ch': [],
@@ -28,6 +30,19 @@ function coefficientTex(a: number): string {
       return '\\dfrac{3}{4}'
     default:
       return '\\dfrac{1}{2}'
+  }
+}
+
+function valeurPointFixe(a: number): number {
+  switch (a) {
+    case -0.5:
+      return 5
+    case -0.25:
+      return 6
+    case 0.75:
+      return 9
+    default:
+      return 8
   }
 }
 
@@ -96,7 +111,7 @@ function creeFigure({
       isSelectable: false,
     })
     figure.create('TextByPosition', {
-      text: '$y=x$',
+      text: '$(d)$',
       x: 11.5,
       y: 12.2,
       color: 'red',
@@ -133,12 +148,21 @@ function ajouteSegment(
   })
 }
 
-function completeFigureCorrection(figure: Figure, termes: number[]): void {
+function completeFigureCorrection(
+  figure: Figure,
+  termes: number[],
+  pointFixe: number,
+): void {
+  const decalagesHorizontaux = [0, -10, -14, 10, 14]
   for (let k = 0; k < termes.length; k++) {
+    const labelAuDessus = k % 2 === 1
     figure.create('Point', {
       x: termes[k],
       y: 0,
       label: `u_${k}`,
+      labelDxInPixels: decalagesHorizontaux[k],
+      labelDyInPixels: labelAuDessus ? 30 : -30,
+      labelIsManuallyPositioned: true,
       color: 'green',
       shape: 'x',
       isSelectable: false,
@@ -148,12 +172,24 @@ function completeFigureCorrection(figure: Figure, termes: number[]): void {
         x: 0,
         y: termes[k],
         label: `u_${k}`,
+        labelIsVisible: false,
         color: 'purple',
         shape: 'x',
         isSelectable: false,
       })
     }
   }
+  figure.create('Point', {
+    x: pointFixe,
+    y: 0,
+    label: '\\ell',
+    labelDxInPixels: 28,
+    labelDyInPixels: 10,
+    labelIsManuallyPositioned: true,
+    color: 'red',
+    shape: 'x',
+    isSelectable: false,
+  })
 
   for (let k = 0; k < termes.length - 1; k++) {
     const depart =
@@ -195,7 +231,7 @@ export default class RepresentationSuiteArithmeticoGeometrique extends Exercice 
 <ol style="list-style-type: decimal; padding-left: 1.5em; margin: 0 0 10px 0; line-height: 1.8;">
   <li>partir de $u_0$ sur l’axe des abscisses ;</li>
   <li>comme $u_1=f(u_0)$, rejoindre verticalement la courbe $\\mathcal C_f$ ;</li>
-  <li>utiliser la droite d’équation $y=x$ pour reporter $u_1$ comme nouvelle abscisse ;</li>
+  <li>utiliser la droite $(d)$ d’équation $y=x$ pour reporter $u_1$ comme nouvelle abscisse ;</li>
   <li>lire $u_1$ sur l’axe des abscisses, puis construire $u_2=f(u_1)$ ;</li>
   <li>recommencer de la même manière pour construire les termes suivants.</li>
 </ol>
@@ -207,7 +243,7 @@ export default class RepresentationSuiteArithmeticoGeometrique extends Exercice 
   nouvelleVersion() {
     this.figuresApiGeom = []
     const a = choice([-0.5, -0.25, 0.5, 0.75])
-    const pointFixe = 8
+    const pointFixe = valeurPointFixe(a)
     const b = (1 - a) * pointFixe
     const u0 = pointFixe + choice([-4, 4])
     const termes = [u0]
@@ -226,7 +262,7 @@ export default class RepresentationSuiteArithmeticoGeometrique extends Exercice 
       texte += `On pose la fonction $f$ définie sur $\\mathbb R$ par $f:x\\mapsto ${expressionAffineTex(a, b)}$. Sa courbe représentative $\\mathcal C_f$ est tracée dans le repère ci-dessous.<br>`
     }
     if (this.sup >= 3) {
-      texte += `On a aussi représenté la droite d’équation $y=x$.<br>`
+      texte += `On a aussi représenté la droite $(d)$ d’équation $y=x$.<br>`
     }
     texte += `Représenter graphiquement, dans ce repère et sans effectuer de calculs, les quatre termes $u_1$, $u_2$, $u_3$ et $u_4$ de la suite sur l’axe des abscisses.<br><br>`
     texte += figureApigeom({
@@ -245,10 +281,11 @@ export default class RepresentationSuiteArithmeticoGeometrique extends Exercice 
       avecAffine: true,
       avecPremiereBissectrice: true,
     })
-    completeFigureCorrection(figureCorrection, termes)
-    let texteCorr = `On utilise la courbe de la fonction $f:x\\mapsto ${expressionAffineTex(a, b)}$ et la droite d’équation $y=x$.<br><br>`
+    figureCorrection.yMin = -2.5
+    completeFigureCorrection(figureCorrection, termes, pointFixe)
+    let texteCorr = `On utilise la courbe de la fonction $f:x\\mapsto ${expressionAffineTex(a, b)}$ et la droite $(d)$ d’équation $y=x$.<br><br>`
     texteCorr += `On part de $u_0$ sur l’axe des abscisses. Comme $u_1=f(u_0)$, on trace verticalement jusqu’à la courbe $\\mathcal C_f$. L’ordonnée du point obtenu est $u_1$.<br>
-On rejoint ensuite horizontalement la droite d’équation $y=x$ : elle permet de reporter la valeur $u_1$ pour qu’elle devienne la nouvelle abscisse. On lit ainsi $u_1$ sur l’axe des abscisses.<br>
+On rejoint ensuite horizontalement la droite $(d)$ d’équation $y=x$ : elle permet de reporter la valeur $u_1$ pour qu’elle devienne la nouvelle abscisse. On lit ainsi $u_1$ sur l’axe des abscisses.<br>
 À partir de cette abscisse, on recommence : $u_2=f(u_1)$. En répétant ce procédé, on construit $u_3=f(u_2)$ puis $u_4=f(u_3)$. Les valeurs des termes se lisent sur l’axe des abscisses.<br><br>`
     texteCorr += `On lit : $u_1=${texNombre(termes[1], 3)}$, $u_2\\approx${texNombre(termes[2], 3)}$, $u_3\\approx${texNombre(termes[3], 3)}$ et $u_4\\approx${texNombre(termes[4], 3)}$.<br><br>`
     texteCorr += figureApigeom({
@@ -259,12 +296,12 @@ On rejoint ensuite horizontalement la droite d’équation $y=x$ : elle permet d
       isDynamic: false,
       hasFeedback: false,
     })
-    texteCorr += `<br><br>Graphiquement, les termes de la suite semblent se rapprocher de l’abscisse du point d’intersection de $\\mathcal C_f$ et de la droite d’équation $y=x$. On conjecture donc que $${miseEnEvidence('\\displaystyle\\lim_{n\\to+\\infty}u_n=8')}$.<br><br>
+    texteCorr += `<br><br>Graphiquement, les termes de la suite semblent se rapprocher de l’abscisse du point d’intersection de $\\mathcal C_f$ et de la droite $(d)$. On conjecture donc que $${miseEnEvidence(`\\displaystyle\\lim_{n\\to+\\infty}u_n=${texNombre(pointFixe)}`)}$.<br><br>
 <b>Complément non demandé : déterminer la seule limite possible.</b><br><br>
 La fonction affine $f$ est continue sur $\\mathbb R$ et, pour tout entier naturel $n$, $u_{n+1}=f(u_n)$. D’après le théorème du point fixe, si la suite $(u_n)$ converge vers une limite $\\ell$, alors $\\ell=f(\\ell)$. Ainsi :<br>
 $\\ell=${coefficientTex(a)}\\ell+${texNombre(b)}$,<br>
-donc $\\ell=8$.<br><br>
-Ce raisonnement ne prouve pas que la suite $(u_n)$ converge. Il prouve seulement que, si elle converge vers une limite réelle, cette limite est nécessairement $8$. La convergence reste ici une conjecture fondée sur le graphique.`
+donc $\\ell=${texNombre(pointFixe)}$.<br><br>
+Ce raisonnement ne prouve pas que la suite $(u_n)$ converge. Il prouve seulement que, si elle converge vers une limite réelle, cette limite est nécessairement $${texNombre(pointFixe)}$. La convergence reste ici une conjecture fondée sur le graphique.`
 
     this.listeQuestions[0] = texte
     this.listeCorrections[0] = texteCorr
