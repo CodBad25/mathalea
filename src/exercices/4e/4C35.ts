@@ -55,9 +55,22 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
       'negParenthesePuissancePaireNeg',
       'negParenthesePuissanceImpaireNeg',
     ] // On créé 3 types de questions
-    let typesDeQuestions =
-      this.sup2 || context.isAmc // Ici on ne prends que les exposants positifs pour ne pas influencer par le format de réponse AMC
+    let typesDeQuestions: string[]
+    if (this.sup2 || context.isAmc) {
+      // On ne prend que des exposants positifs (pour ne pas influencer par le
+      // format de réponse AMC), mais on autorise les bases négatives si this.sup
+      typesDeQuestions = this.sup
         ? [
+            'puissance0',
+            'puissance1',
+            'puissancePos',
+            'puissancePos',
+            'negPuissancePaire',
+            'negPuissanceImpaire',
+            'negParenthesePuissancePaire',
+            'negParenthesePuissanceImpaire',
+          ]
+        : [
             'puissance0',
             'puissance1',
             'puissancePos',
@@ -65,20 +78,22 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
             'puissancePos',
             'puissancePos',
           ]
-        : this.sup
-          ? typeQuestionsDisponibles
-          : [
-              'puissance0',
-              'puissance1',
-              'puissancePos',
-              'puissanceNeg',
-              'puissancePos',
-              'puissanceNeg',
-              'puissancePos',
-              'puissanceNeg',
-              'puissancePos',
-              'puissanceNeg',
-            ]
+    } else if (this.sup) {
+      typesDeQuestions = typeQuestionsDisponibles
+    } else {
+      typesDeQuestions = [
+        'puissance0',
+        'puissance1',
+        'puissancePos',
+        'puissanceNeg',
+        'puissancePos',
+        'puissanceNeg',
+        'puissancePos',
+        'puissanceNeg',
+        'puissancePos',
+        'puissanceNeg',
+      ]
+    }
     if (this.classe === 5) typesDeQuestions = ['puissancePos']
     const listeTypeQuestions = combinaisonListes(
       typesDeQuestions,
