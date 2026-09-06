@@ -17,7 +17,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'f1208'
 
 export const refs = {
-  'fr-fr': ['can3C03'],
+  'fr-fr': ['can3C03', '2N30-flash3'],
   'fr-ch': [],
 }
 export default class FractionIrreductibleCan extends ExerciceSimple {

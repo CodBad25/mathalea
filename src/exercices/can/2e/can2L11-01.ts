@@ -19,7 +19,7 @@ export const dateDePublication = '07/04/2024'
 export const dateDeModifImportante = '25/03/2026'
 export const uuid = '69fed'
 export const refs = {
-  'fr-fr': ['can2L11-01', 'BP1AUTO083'],
+  'fr-fr': ['can2L11-01', 'BP1AUTO083', '2L11-flash4'],
   'fr-ch': [],
 }
 /**

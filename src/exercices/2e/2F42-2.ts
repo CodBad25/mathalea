@@ -63,7 +63,7 @@ export default class LireUnTableauDevariations extends Exercice {
         M2: number,
         m1: number,
         choix: number
-      let ligne1: any[]
+      let ligne1: (string | number)[]
       switch (
         listeTypeQuestions[i] // Suivant le type de question, le contenu sera différent
       ) {

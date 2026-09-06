@@ -1,16 +1,18 @@
-import listerDiviseursParDecompositionFacteursPremiers from '../3e/3A10-4'
+import ResoudreDesProblemesDiviseursCommuns from '../3e/3A12-1'
 export const titre =
-  "Compter/lister les diviseurs d'un entier à partir de sa décomposition en facteurs premiers"
-export const dateDeModifImportante = '02/06/2023'
-export const interactifReady = false
-export const uuid = '74939'
+  'Résoudre des problèmes avec recherche de diviseurs communs'
+export const dateDeModifImportante = '05/09/2026'
+export const interactifReady = true
+export const amcReady = true
+export const amcType = 'AMCHybride'
+export const uuid = 'ac9ef'
 export const refs = {
   'fr-fr': ['2N20-6'],
   'fr-ch': ['NR'],
 }
-export default class ListerDiviseursParDecompositionFacteursPremiers2nde extends listerDiviseursParDecompositionFacteursPremiers {
+export default class ResoudreDesProblemesDiviseursCommuns2nde extends ResoudreDesProblemesDiviseursCommuns {
   constructor() {
     super()
-    this.sup = true
+    this.nbQuestions = 1
   }
 }

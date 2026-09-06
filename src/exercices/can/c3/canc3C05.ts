@@ -20,7 +20,7 @@ export const dateDePublication = '20/11/2021'
 export const uuid = 'd0287'
 
 export const refs = {
-  'fr-fr': ['canc3C05'],
+  'fr-fr': ['canc3C05', '2N21-flash1'],
   'fr-ch': [],
 }
 export default class PariteDunNombre extends Exercice {

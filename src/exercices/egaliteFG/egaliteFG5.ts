@@ -146,7 +146,7 @@ export default class EgaliteFG5 extends Exercice {
     handleAnswers(this, 0, objetReponse, { formatInteractif: 'mathlive' })
 
     const correction0 =
-      'Pour chaque année, on calcule $\\dfrac{\\text{nombre de femmes}}{577}\\times 100$ :<br>' +
+      "Pour chaque année, on calcule $\\dfrac{\\text{nombre de femmes}}{577}$, exprimé en pourcentage :<br>" +
       (context.isHtml ? tableauCorrige.output : tableauCorrige.latexOutput) +
       construireGraphe(
         [...annees.keys()],

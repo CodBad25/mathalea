@@ -193,10 +193,10 @@ export default class EgaliteFGLycee3 extends Exercice {
       const qcmGermain = propositionsQcm(this, idxGermain)
       if (context.isHtml) {
         texte0HtmlTable +=
-          `<tr><td style="border: 1px solid #888; padding: 4px 10px;">${ligne.p}</td>` +
-          `<td style="border: 1px solid #888; padding: 4px 10px;">${context.isAmc || !this.interactif ? '' : cellule2p1}</td>` +
-          `<td style="border: 1px solid #888; padding: 4px 10px;">${context.isAmc || !this.interactif ? '' : qcmPremier.texte}</td>` +
-          `<td style="border: 1px solid #888; padding: 4px 10px;">${context.isAmc || !this.interactif ? '' : qcmGermain.texte}</td></tr>`
+          `<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">${ligne.p}</td>` +
+          `<td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">${context.isAmc || !this.interactif ? '' : cellule2p1}</td>` +
+          `<td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">${context.isAmc || !this.interactif ? '' : qcmPremier.texte}</td>` +
+          `<td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">${context.isAmc || !this.interactif ? '' : qcmGermain.texte}</td></tr>`
       }
     }
     if (context.isHtml) texte0HtmlTable += '</table>'
@@ -220,16 +220,16 @@ export default class EgaliteFGLycee3 extends Exercice {
     const correctionGermainHtml =
       '<table style="border-collapse: collapse; margin: 10px 0;">' +
       '<tr><th style="border: 1px solid #888; padding: 4px 10px;">$p$</th><th style="border: 1px solid #888; padding: 4px 10px;">$2p+1$</th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre premier ?</th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de Germain ?</th></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">2</td><td style="border: 1px solid #888; padding: 4px 10px;">5</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">3</td><td style="border: 1px solid #888; padding: 4px 10px;">7</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">5</td><td style="border: 1px solid #888; padding: 4px 10px;">11</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">7</td><td style="border: 1px solid #888; padding: 4px 10px;">15=3×5</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">11</td><td style="border: 1px solid #888; padding: 4px 10px;">23</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">13</td><td style="border: 1px solid #888; padding: 4px 10px;">27=3³</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">17</td><td style="border: 1px solid #888; padding: 4px 10px;">35=5×7</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">19</td><td style="border: 1px solid #888; padding: 4px 10px;">39=3×13</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td><td style="border: 1px solid #888; padding: 4px 10px;">Non</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">23</td><td style="border: 1px solid #888; padding: 4px 10px;">47</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td></tr>' +
-      '<tr><td style="border: 1px solid #888; padding: 4px 10px;">29</td><td style="border: 1px solid #888; padding: 4px 10px;">59</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px;">Oui</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">2</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">5</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">3</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">7</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">5</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">11</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">7</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">15=3×5</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">11</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">23</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">13</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">27=3³</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">17</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">35=5×7</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">19</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">39=3×13</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Non</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">23</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">47</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td></tr>' +
+      '<tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">29</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">59</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Oui</td></tr>' +
       '</table>'
     const correctionGermainLatex =
       '\\begin{center}\\begin{tabular}{|c|c|c|c|}\n\\hline\n' +

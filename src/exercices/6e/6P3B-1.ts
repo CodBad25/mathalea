@@ -6,7 +6,10 @@ import {
   combinaisonListes,
   compteOccurences,
 } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { prenomF, prenomM } from '../../lib/outils/Personne'
@@ -43,7 +46,7 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
       'Type de questions',
       'Nombres séparés par des tirets :\n1 : Achat\n2 : Distance\n3 : Âge\n4 : Épidémie\n5 : Catalogue (tableau de proportionnalité)\n6 : Mélange',
     ]
-    this.besoinFormulaire2CaseACocher = ["Avec 'je ne sais pas' dans le QCM"]
+    this.besoinFormulaire2CaseACocher = ['Ajout de « je ne sais pas »']
 
     this.spacing = context.isHtml ? 2 : 1.4
     this.spacingCorr = context.isHtml ? 1.5 : 1
@@ -207,8 +210,9 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
             texteCorr = `${prenoms[0]} dépense $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
             texteCorr += `${prenoms[1]} a acheté  $${miseEnEvidence(Math.round(p / y))}$ fois la quantité des ${objet} achetée par ${prenoms[0]} pour $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
             texteCorr += `Il a payé $${texPrix(z)}$${sp()}€ $=${miseEnEvidence(Math.round(p / y))}\\times${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
-            texteCorr += `À l'aide de ces données, on constate que le prix des ${objet} et leur quantité sont tous les deux multipliés par le même nombre, donc ces deux grandeurs sont proportionnelles.<br>`
-            bonneReponse = 'oui'
+            texteCorr += `À l'aide de ces données, on constate que le prix des ${objet} et leur quantité sont tous les deux multipliés par le même nombre, donc ces deux grandeurs sont proportionnelles.<br>
+            ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Oui')}` : ''}`
+            bonneReponse = 'Oui'
           } else {
             index1 = listeIndex[i]
             prenoms = [prenomF(), prenomM()]
@@ -228,8 +232,9 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
             texteCorr = `${prenoms[0]} dépense $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}${sp()}€.<br>`
             texteCorr += `${prenoms[1]} a acheté  $${miseEnEvidence(Math.round(p / y))}$ fois la quantité des ${objet} achetée par ${prenoms[0]} pour $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
             texteCorr += `Il a payé $${texPrix(z)}$${sp()}€.<br>Mais $${miseEnEvidence(Math.round(p / y))}\\times${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€ $=${texPrix(somme.mul(p).div(y))}$${sp()}€.<br>`
-            texteCorr += `À l'aide de ces données, on constate que le prix unitaire des ${objet} n'est pas le même pour ${prenoms[0]} qui en a acheté $${y}$ que pour ${prenoms[1]} qui en a acheté ${p}, donc ces deux grandeurs ne sont pas proportionnelles.<br>`
-            bonneReponse = 'non'
+            texteCorr += `À l'aide de ces données, on constate que le prix unitaire des ${objet} n'est pas le même pour ${prenoms[0]} qui en a acheté $${y}$ que pour ${prenoms[1]} qui en a acheté ${p}, donc ces deux grandeurs ne sont pas proportionnelles.<br>
+            ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Non')}` : ''}`
+            bonneReponse = 'Non'
           }
           compteurProportionnelsOuPas += 1
           break
@@ -250,13 +255,13 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
           texteCorr = `${prenoms[0]} parcourt $${x}\\text{ m}$ en $${n}$ minutes soit environ $\\dfrac{${x}\\text{ m}}{${n}\\text{ min}} ${index1.eq(index1.toDP(1)) ? '=' : '\\approx'} ${texNombre(index1.toDP(1), 1)}\\text{ m}/_{\\text{ min}}$`
           texteCorr += ` et ${prenoms[1]} parcourt $${y}\\text{ m}$ en $${p}$ minutes soit environ $\\dfrac{${y}\\text{ m}}{${p}\\text{ min}} ${index2.eq(index2.toDP(1)) ? '=' : '\\approx'} ${texNombre(index2.toDP(1))}\\text{ m}/_{\\text{ min}}$.<br>`
           if (index1.eq(index2)) {
-            texteCorr +=
-              "Pour ces deux élèves, le temps mis et la distance parcourue sont proportionnelles (si l'on compare leur vitesse moyenne)."
-            bonneReponse = 'oui'
+            texteCorr += `Pour ces deux élèves, le temps mis et la distance parcourue sont proportionnelles (si l'on compare leur vitesse moyenne).<br>
+              ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Oui')}` : ''}`
+            bonneReponse = 'Oui'
           } else {
-            texteCorr +=
-              "La distance parcourue en une minute (vitesse moyenne) n'est pas la même dans ces deux situations, il n'y a donc pas proportionnalité.<br>"
-            bonneReponse = 'non'
+            texteCorr += `La distance parcourue en une minute (vitesse moyenne) n'est pas la même dans ces deux situations, il n'y a donc pas proportionnalité.<br>
+              ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Non')}` : ''}`
+            bonneReponse = 'Non'
           }
           break
         case 3: // Âge
@@ -272,9 +277,10 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
             2 * x
           } ans (${x} + ${x}), c'est-à-dire le double d'aujourd'hui.<br>`
           texteCorr += `Son père ${prenoms[1]} qui a actuellement ${y} ans aura ${x + y} ans cette année-là (${y}+${x}).<br>`
-          texteCorr += `Quand l'âge de ${prenoms[0]} double, l'âge de ${prenoms[1]} ne double pas, donc l'âge de ${prenoms[0]} et l'âge de son père ne sont pas propotionnels.<br>`
-          texteCorr += `Dans ${x} années, la différence d'âge restera la même : ${x + y} - ${2 * x} = ${y - x}.`
-          bonneReponse = 'non'
+          texteCorr += `Quand l'âge de ${prenoms[0]} double, l'âge de ${prenoms[1]} ne double pas, donc l'âge de ${prenoms[0]} et l'âge de son père ne sont pas proportionnels.<br>`
+          texteCorr += `Dans ${x} années, la différence d'âge restera la même : ${x + y} - ${2 * x} = ${y - x}.<br>
+          ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Non')}` : ''}`
+          bonneReponse = 'Non'
           break
         case 4: // Épidémie
           index1 = randint(0, 5)
@@ -287,9 +293,9 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
           texte += "jours passés depuis le début de l'épidémie ?<br>"
           texteCorr = `Admettons qu'il y ait 10 malades le 1er jour. Le ${1 + 2 + index2}e jour il y aura $10 \\times ${index2 + 2} = ${10 * (index2 + 2)}$ malades.<br>`
           texteCorr += `Entre le 1er jour et le ${3 + index2}e jour, le nombre de malades est multiplié par ${index2 + 2} mais le nombre de jours est multiplié par ${3 + index2}.<br>`
-          texteCorr +=
-            "Donc le nombre de malades n'est pas proportionnel au nombre de jours passés.<br>"
-          bonneReponse = 'non'
+          texteCorr += `Donc le nombre de malades n'est pas proportionnel au nombre de jours passés.<br>
+          ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Non')}` : ''}`
+          bonneReponse = 'Non'
           break
         case 5: // Achat (tableau de proportionnalité)
         default:
@@ -333,11 +339,13 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
           if (!met) {
             texteCorr += `Mais $\\dfrac{${texPrix(tirages[p][1])}\\text{ ${sp()}€}}{${tirages[p][0]}\\text{ ${objet}}}
             =${texPrix(tirages[p][1].div(tirages[p][0]).toDP(2))}\\text{ ${sp()}€}/_{\\text{${objet.substring(0, objet.length - 1)}}}$.<br>`
-            texteCorr += `Le prix des ${objet} n'est pas proportionnel à leur nombre.<br>`
-            bonneReponse = 'non'
+            texteCorr += `Le prix des ${objet} n'est pas proportionnel à leur nombre.<br>
+            ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Non')}` : ''}`
+            bonneReponse = 'Non'
           } else {
-            texteCorr += `Le prix des ${objet} est bien proportionnel à leur nombre.<br>`
-            bonneReponse = 'oui'
+            texteCorr += `Le prix des ${objet} est bien proportionnel à leur nombre.<br>
+            ${this.interactif ? `La bonne réponse est ${texteEnCouleurEtGras('Oui')}` : ''}`
+            bonneReponse = 'Oui'
           }
           break
       }
@@ -348,24 +356,26 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
             {
-              texte: 'oui',
-              statut: bonneReponse !== 'non',
+              texte: 'Oui',
+              statut: bonneReponse !== 'Non',
             },
             {
-              texte: 'non',
-              statut: bonneReponse !== 'oui',
+              texte: 'Non',
+              statut: bonneReponse !== 'Oui',
             },
           ]
           if (this.sup2) {
             this.autoCorrection[i].propositions!.push({
-              texte: 'je ne sais pas',
+              texte: 'Je ne sais pas',
               statut: false,
             })
           }
+          this.autoCorrection[i]!.options!.radio = true
           const props = propositionsQcm(this, i)
 
           if (this.interactif) {
             texte += props.texte
+            texteCorr += props.texteCorr
           }
         }
         // Si la question n'a jamais été posée, on en crée une autre

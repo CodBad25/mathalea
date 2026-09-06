@@ -45,6 +45,7 @@
     INSERTION_CORRECTION_TAG,
     INSERTION_TAG,
     MATH_FONTS,
+    QUESTION_NUMBERING_STYLES,
     SUBJECT_MARKER_PATTERN,
     TEXT_FONTS,
     buildStandaloneExerciseCode,
@@ -54,8 +55,11 @@
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
     harvestCarryOver,
+    parseNumberingLiteral,
+    questionNumberingLabel,
     type ActiveCoverTemplate,
     type CoverTemplate,
+    type QuestionNumberingStyle,
     type TypstCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
@@ -106,6 +110,18 @@
     cartouche: 'Cartouche',
     cadre: 'Cadre',
     aucun: 'Aucun',
+  }
+
+  /** Libellés des styles de numérotation des questions */
+  const QUESTION_NUMBERING_STYLE_LABELS: Record<
+    QuestionNumberingStyle,
+    string
+  > = {
+    aucun: 'Aucune',
+    '1.': '1.',
+    '1)': '1)',
+    'a.': 'a.',
+    'a)': 'a)',
   }
 
   /** Libellés des styles de badge du paquet exercise-bank */
@@ -813,6 +829,36 @@
       ? (exercises[settingsExerciseIndex] ?? null)
       : null,
   )
+  /**
+   * Contrôles de mise en page des questions (colonnes, espacement,
+   * numérotation) de l'exercice dont la modale de réglages est ouverte,
+   * passés en prop à `Settings.svelte` — `undefined` masque la section (pas
+   * de liste de questions à régler, ex. exercice à question unique, statique
+   * ou mode « Course aux nombres »). Mêmes variables Typst que la palette de
+   * mise en page de l'aperçu (`adjustColumns`/`adjustGutter`) : les deux
+   * emplacements restent synchronisés.
+   */
+  const settingsTypstStyle = $derived.by(() => {
+    if (settingsExerciseIndex === null) return undefined
+    const target = `ex${settingsExerciseIndex + 1}`
+    const layout = tasksLayoutValues[target]
+    if (layout == null) return undefined
+    return {
+      columnsLabel:
+        layout.columns === '"auto-fit"' ? 'auto' : String(layout.columns),
+      gutterLabel:
+        layout.gutter === 'interligne-questions' ? 'auto' : layout.gutter,
+      numberingOptions: QUESTION_NUMBERING_STYLES.map((style) => ({
+        value: style,
+        label: QUESTION_NUMBERING_STYLE_LABELS[style],
+      })),
+      numberingValue: resolveNumberingStyle(target),
+      onAdjustColumns: (delta: number) => adjustColumns(target, delta),
+      onAdjustGutter: (delta: number) => adjustGutter(target, delta),
+      onSetNumbering: (value: string) =>
+        setNumberingStyle(target, value as QuestionNumberingStyle),
+    }
+  })
   /** Surcharges de code Typst par exercice (modale d'édition), lues dans le code */
   let codeOverrideValues: Record<number, string> = $state({})
   /** Surcharges de code Typst de la correction par exercice, lues dans le code */
@@ -939,10 +985,20 @@
       columns: '"auto-fit"',
       gutter: 'interligne-questions',
     })
+    // « colonnes-questions »/« interligne-questions » (défauts du document,
+    // voir Réglages > Styles) sont résolus vers la valeur qu'ils désignent
+    // réellement : sans ça, un exercice non réglé depuis la palette afficherait
+    // le nom de la variable au lieu du nombre de colonnes/espacement courant.
     for (const match of code.matchAll(
       /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
     )) {
-      const value = match[2].trim()
+      const raw = match[2].trim()
+      const value =
+        raw === 'colonnes-questions'
+          ? documentOptions.questionsColumns === 'auto'
+            ? '"auto-fit"'
+            : String(documentOptions.questionsColumns)
+          : raw
       ;(values[match[1]] ??= defaults()).columns = /^\d+$/.test(value)
         ? Number(value)
         : value
@@ -950,7 +1006,17 @@
     for (const match of code.matchAll(
       /^#let (ex\d+(?:-corr)?(?:-qcm)?)-gutter = (\S+)/gm,
     )) {
-      ;(values[match[1]] ??= defaults()).gutter = match[2]
+      ;(values[match[1]] ??= defaults()).gutter =
+        match[2] === 'interligne-questions'
+          ? `${documentOptions.questionsGutter}em`
+          : match[2]
+    }
+    // pas de variante `-qcm` : la numérotation des propositions de QCM n'est
+    // pas réglable (voir buildTypstDocument.ts)
+    for (const match of code.matchAll(
+      /^#let (ex\d+(?:-corr)?)-numerotation = (\S+)/gm,
+    )) {
+      ;(values[match[1]] ??= defaults()).numbering = match[2]
     }
     tasksLayoutValues = values
     const harvested = harvestCarryOver(code)
@@ -1045,7 +1111,7 @@
   /** Modifie la ligne `#let <prefix>-<clef> = ...` (édition ciblée, annulable) */
   function setTasksVariable(
     target: string,
-    key: 'colonnes' | 'gutter',
+    key: 'colonnes' | 'gutter' | 'numerotation',
     value: string,
   ) {
     if (editorView == null) return
@@ -1088,6 +1154,26 @@
       Math.round((current + delta * GUTTER_STEP) * 100) / 100,
     )
     setTasksVariable(target, 'gutter', `${next}em`)
+  }
+
+  /**
+   * Style de numérotation actuellement appliqué à la liste `target`
+   * (`ex1`, `ex1-corr`…) : celui réglé pour cet exercice précis s'il existe,
+   * sinon celui du document (modale Réglages). Un littéral qui ne correspond
+   * à aucun style connu (retouche manuelle du code) retombe aussi sur celui
+   * du document.
+   */
+  function resolveNumberingStyle(target: string): QuestionNumberingStyle {
+    const raw = tasksLayoutValues[target]?.numbering
+    if (raw == null || raw === 'numerotation-questions') {
+      return documentOptions.questionNumberingStyle
+    }
+    return parseNumberingLiteral(raw) ?? documentOptions.questionNumberingStyle
+  }
+
+  /** Règle le style de numérotation de la liste `target`, pour cet exercice seul */
+  function setNumberingStyle(target: string, style: QuestionNumberingStyle) {
+    setTasksVariable(target, 'numerotation', questionNumberingLabel(style))
   }
 
   /** Pas d'ajustement du zoom d'une figure, et bornes (20 % à 300 %) */
@@ -4070,6 +4156,65 @@
               Gestion automatique des espaces verticaux
             </label>
 
+            <!-- ------------------------------------------------- styles -->
+            <h4
+              class="pt-2 text-xs font-semibold uppercase tracking-wide opacity-70 border-t border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark"
+            >
+              Styles
+            </h4>
+
+            <label
+              class="flex items-center justify-between gap-4 text-sm"
+              title="Nombre de colonnes des listes de questions, sauf réglage propre à un exercice fait depuis la palette de mise en page de l'aperçu"
+            >
+              Colonnes des questions
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.questionsColumns}
+                onchange={applyDocumentOptions}
+              >
+                <option value="auto">Auto</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+              </select>
+            </label>
+
+            <div
+              class="flex items-center justify-between gap-4 text-sm"
+              title="Espacement vertical entre les questions, sauf réglage propre à un exercice fait depuis la palette de mise en page de l'aperçu"
+            >
+              <label for="typst-questions-gutter-input">
+                Espacement entre les questions (em)
+              </label>
+              <input
+                id="typst-questions-gutter-input"
+                type="number"
+                min="0"
+                max="6"
+                step="0.25"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.questionsGutter}
+                onchange={applyDocumentOptions}
+              />
+            </div>
+
+            <label class="flex items-center justify-between gap-4 text-sm">
+              Numérotation des questions
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.questionNumberingStyle}
+                onchange={applyDocumentOptions}
+              >
+                {#each QUESTION_NUMBERING_STYLES as style}
+                  <option value={style}>
+                    {QUESTION_NUMBERING_STYLE_LABELS[style]}
+                  </option>
+                {/each}
+              </select>
+            </label>
+
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
@@ -4639,6 +4784,7 @@
             exercice={settingsExercise}
             exerciceIndex={settingsExerciseIndex}
             inModal={true}
+            typstStyle={settingsTypstStyle}
             on:settings={(event) => {
               if (settingsExerciseIndex !== null) {
                 applyNewSettings(settingsExerciseIndex, event.detail)

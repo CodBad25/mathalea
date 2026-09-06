@@ -1,7 +1,72 @@
+import type {
+  MathJsonExpression,
+  MathJsonNumberObject,
+} from '@cortex-js/compute-engine'
 import { assignVariablesCe } from './assignVariablesCe'
 import ce from './interactif/comparisonFunctions'
 
-export type MathJsonNode = number | string | [string, ...MathJsonNode[]]
+export type MathJsonNode =
+  | number
+  | string
+  | MathJsonNumberObject
+  | [string, ...MathJsonNode[]]
+
+/** Convertit le sous-ensemble arithmétique de MathJSON sans modifier l'arbre source. */
+export function toMathJsonNode(expression: MathJsonExpression): MathJsonNode {
+  function convert(value: unknown, path: string): MathJsonNode {
+    function unsupported(reason: string): never {
+      throw new Error(`MathJSON unsupported à ${path} : ${reason}.`)
+    }
+
+    if (typeof value === 'number') {
+      if (!Number.isFinite(value)) return unsupported('nombre non fini')
+      return value
+    }
+    if (typeof value === 'string') return value
+    if (Array.isArray(value)) {
+      const items: readonly unknown[] = value
+      const [operator, ...operands] = items
+      if (typeof operator !== 'string') {
+        return unsupported('opérateur absent ou non textuel')
+      }
+      return [
+        operator,
+        ...operands.map((operand, index) =>
+          convert(operand, `${path}[${index + 1}]`),
+        ),
+      ]
+    }
+    if (typeof value !== 'object' || value === null) {
+      return unsupported('forme JSON non arithmétique')
+    }
+    const forms = ['num', 'sym', 'fn', 'str', 'dict'].filter((key) => key in value)
+    if (forms.length !== 1) return unsupported('forme JSON absente ou ambiguë')
+    if ('sym' in value) {
+      if (typeof value.sym !== 'string') return unsupported('sym non textuel')
+      return value.sym
+    }
+    if ('fn' in value) {
+      if (!Array.isArray(value.fn)) return unsupported('fn non tabulaire')
+      return convert(value.fn, `${path}.fn`)
+    }
+    if ('num' in value) {
+      if (typeof value.num !== 'string') return unsupported('num non textuel')
+      // Conserver la chaîne exacte : Number() peut arrondir les grands nombres
+      // et ne représente pas les décimaux périodiques de MathJSON.
+      if (!/^-?\d+(?:\.\d*(?:\(\d+\))?)?(?:[eE][+-]?\d+)?$/.test(value.num)) {
+        return unsupported('num non fini ou de format non reconnu')
+      }
+      return { num: value.num }
+    }
+    return unsupported('chaîne littérale str ou dictionnaire dict')
+  }
+
+  return convert(expression, '$')
+}
+
+interface MathJsonExpressionSource {
+  readonly json: MathJsonExpression
+}
 
 interface CalculerCeResult {
   result: string
@@ -36,7 +101,7 @@ function unwrapDelimiter(node: MathJsonNode): MathJsonNode {
 
 function isNumericNode(node: MathJsonNode): boolean {
   const normalized = unwrapDelimiter(node)
-  return Boolean(ce.box(normalized as any, { form: 'raw' }).isNumber)
+  return Boolean(ce.box(normalized, { form: 'raw' }).isNumber)
 }
 
 export function renderMathJsonLatex(
@@ -46,7 +111,13 @@ export function renderMathJsonLatex(
   const implicitMultiply = options?.implicitMultiply ?? false
   if (isNumericLiteral(node)) return `${node}`
   if (typeof node === 'string') return node
-  if (!isMathJsonFunction(node)) return `${node}`
+  if (!isMathJsonFunction(node)) {
+    return ce.box(node, { form: 'raw' }).toLatex({
+      form: 'raw',
+      implicitMultiplication: false,
+      multiplicationSign: '\\times',
+    })
+  }
 
   const [operator, ...ops] = node
 
@@ -122,7 +193,7 @@ export function renderMathJsonLatex(
     return `${renderMathJsonLatex(ops[0], { implicitMultiply })}-${renderMathJsonLatex(ops[1], { implicitMultiply })}`
   }
 
-  return ce.box(node as any, { form: 'raw' }).toLatex({
+  return ce.box(node, { form: 'raw' }).toLatex({
     form: 'raw',
     implicitMultiplication: false,
     multiplicationSign: '\\times',
@@ -149,8 +220,8 @@ function isComputableNumericNode(node: MathJsonNode): boolean {
 }
 
 function evaluateNumericNode(node: MathJsonNode): MathJsonNode {
-  const evaluated = ce.box(node as any, { form: 'raw' }).simplify()
-  return evaluated.json as MathJsonNode
+  const evaluated = ce.box(node, { form: 'raw' }).simplify()
+  return toMathJsonNode(evaluated.json)
 }
 
 function evaluateDeepestOnce(node: MathJsonNode): [MathJsonNode, boolean] {
@@ -178,8 +249,8 @@ function evaluateAllComputableOperatorsOfTypeOnce(
 ): [MathJsonNode, boolean] {
   // Trouver le premier opérateur computable et son type
   function findFirstComputableOpType(n: MathJsonNode): string | null {
-    if (isComputableNumericNode(n)) {
-      const [op] = n as [string, ...any[]]
+    if (isMathJsonFunction(n) && isComputableNumericNode(n)) {
+      const [op] = n
       return op
     }
     if (!isMathJsonFunction(n)) return null
@@ -197,8 +268,8 @@ function evaluateAllComputableOperatorsOfTypeOnce(
   // Évaluer tous les opérateurs de ce type dans tout l'arbre
   let changed = false
   function evaluateAllOfType(n: MathJsonNode): MathJsonNode {
-    if (isComputableNumericNode(n)) {
-      const [op] = n as [string, ...any[]]
+    if (isMathJsonFunction(n) && isComputableNumericNode(n)) {
+      const [op] = n
       if (op === opType) {
         changed = true
         return evaluateNumericNode(n)
@@ -207,7 +278,7 @@ function evaluateAllComputableOperatorsOfTypeOnce(
     }
     if (!isMathJsonFunction(n)) return n
     const [operator, ...operands] = n
-    return [operator, ...operands.map((o) => evaluateAllOfType(o))] as any
+    return [operator, ...operands.map((o) => evaluateAllOfType(o))]
   }
 
   const result = evaluateAllOfType(node)
@@ -288,7 +359,7 @@ function getOperationComment(
 }
 
 function buildCorrDetails(
-  parsedExpression: any,
+  parsedExpression: MathJsonExpressionSource,
   options?: {
     comment?: boolean
     singleOp?: boolean
@@ -296,7 +367,7 @@ function buildCorrDetails(
   },
 ): string[] {
   const steps: string[] = []
-  let current = parsedExpression.json as MathJsonNode
+  let current = toMathJsonNode(parsedExpression.json)
   const useComments = options?.comment ?? false
   const singleOp = options?.singleOp ?? true
   const implicitMultiply = options?.implicitMultiply ?? false
@@ -336,7 +407,7 @@ export { buildCorrDetails }
 export function calculerCe(
   expression: string,
   params?: {
-    variables?: Record<string, any>
+    variables?: Record<string, unknown>
     name?: string
     comment?: boolean
     singleOp?: boolean
@@ -369,7 +440,7 @@ export function calculerCe(
   )
 
   const expr = ce.parse(substituted, { form: 'raw' })
-  const substitutedForDisplay = renderMathJsonLatex(expr.json as MathJsonNode, {
+  const substitutedForDisplay = renderMathJsonLatex(toMathJsonNode(expr.json), {
     implicitMultiply: params.implicitMultiply,
   })
   const corrDetails = buildCorrDetails(expr, {

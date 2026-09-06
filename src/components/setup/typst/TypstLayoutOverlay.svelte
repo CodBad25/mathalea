@@ -37,6 +37,13 @@
     columns: number | string
     /** Expression Typst (`1em`, `interligne-questions`…) */
     gutter: string
+    /**
+     * Littéral Typst de l'étiquette de numérotation (`"1)"`, `none`…), ou la
+     * référence à la variable partagée du document (`numerotation-questions`)
+     * quand l'exercice n'a pas son propre réglage — voir `parseNumberingLiteral`
+     * pour la convertir en style connu (modale de réglages de l'exercice).
+     */
+    numbering?: string
   }
 </script>
 

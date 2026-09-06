@@ -27,7 +27,7 @@ export default class Can2026CE2Q12 extends ExerciceCan {
       ? 'cinquiemes'
       : choice(['cinquiemes', 'quarts'])
 
-    let choix: any[]
+    let choix: [string, string, string, number][]
     let nbDivisions: number
     let distanceGrad: number
 
@@ -174,7 +174,7 @@ export default class Can2026CE2Q12 extends ExerciceCan {
         thickSecDist: distanceGrad,
         thickOffset: 0,
         axeStyle: '->',
-        pointListe: [[a[3] as number, `\\text{${a[1]}}`]] as [number, string][],
+        pointListe: [[a[3], `\\text{${a[1]}}`]],
         pointCouleur: bleuMathalea,
         pointStyle: '',
         labelsPrincipaux: true,

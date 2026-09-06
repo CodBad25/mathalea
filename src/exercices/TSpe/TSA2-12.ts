@@ -3,6 +3,7 @@ import { Coords } from 'apigeom/src/elements/calculus/Coords'
 import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -13,7 +14,7 @@ export const dateDePublication = '05/08/2026'
 
 export const uuid = '4ad1f'
 export const refs = {
-  'fr-fr': ['TSA1-33', 'TCA1-23'],
+  'fr-fr': ['TSA2-12', 'TCA1-23'],
   'fr-ch': [],
 }
 
@@ -236,6 +237,7 @@ export default class RepresentationSuiteArithmeticoGeometrique extends Exercice 
       isDynamic: false,
       hasFeedback: false,
     })
+    texte += `<br><br>À l’aide de la représentation graphique, conjecturer la limite de la suite $(u_n)$.`
 
     const figureCorrection = creeFigure({
       a,
@@ -257,6 +259,12 @@ On rejoint ensuite horizontalement la droite d’équation $y=x$ : elle permet d
       isDynamic: false,
       hasFeedback: false,
     })
+    texteCorr += `<br><br>Graphiquement, les termes de la suite semblent se rapprocher de l’abscisse du point d’intersection de $\\mathcal C_f$ et de la droite d’équation $y=x$. On conjecture donc que $${miseEnEvidence('\\displaystyle\\lim_{n\\to+\\infty}u_n=8')}$.<br><br>
+<b>Complément non demandé : déterminer la seule limite possible.</b><br><br>
+La fonction affine $f$ est continue sur $\\mathbb R$ et, pour tout entier naturel $n$, $u_{n+1}=f(u_n)$. D’après le théorème du point fixe, si la suite $(u_n)$ converge vers une limite $\\ell$, alors $\\ell=f(\\ell)$. Ainsi :<br>
+$\\ell=${coefficientTex(a)}\\ell+${texNombre(b)}$,<br>
+donc $\\ell=8$.<br><br>
+Ce raisonnement ne prouve pas que la suite $(u_n)$ converge. Il prouve seulement que, si elle converge vers une limite réelle, cette limite est nécessairement $8$. La convergence reste ici une conjecture fondée sur le graphique.`
 
     this.listeQuestions[0] = texte
     this.listeCorrections[0] = texteCorr

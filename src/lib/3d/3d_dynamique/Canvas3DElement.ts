@@ -34,7 +34,7 @@ class Canvas3dElement extends HTMLElement {
   private controls: OrbitControls | null = null
   private _objects: THREE.Object3D[] = []
   private _imgElement?: HTMLImageElement
-  private _contentDescription?: any
+  private _contentDescription?: Canvas3DContentDescription
   private _animationFrameId: number | null = null
   private _fullscreenBtn?: HTMLButtonElement
   private _cameraPosition: THREE.Vector3 = new THREE.Vector3(8, 8, 8)
@@ -79,7 +79,10 @@ class Canvas3dElement extends HTMLElement {
     const contentAttr = this.getAttribute('content')
     if (contentAttr) {
       try {
-        const contentDescription = JSON.parse(decodeURIComponent(contentAttr))
+        // Cet attribut est produit par ajouteCanvas3d avec le contrat ci-dessous.
+        const contentDescription: Canvas3DContentDescription = JSON.parse(
+          decodeURIComponent(contentAttr),
+        )
         this._contentDescription = contentDescription
         const margin = contentDescription.autoCenterZoomMargin ?? 1.2 // 1.2 par défaut
         if (Array.isArray(contentDescription.cameraPosition)) {
@@ -97,7 +100,7 @@ class Canvas3dElement extends HTMLElement {
           }
         }
         const objects = contentDescription.objects
-          .map((desc: any) => {
+          .map((desc) => {
             if (desc.type === 'geoPoint') {
               return createGeoPoint(desc)
             }
@@ -113,7 +116,10 @@ class Canvas3dElement extends HTMLElement {
               })
             }
             if (desc.type === 'bufferGeometry') {
-              if (desc.geometry.type === 'BufferGeometry') {
+              if (
+                'type' in desc.geometry &&
+                desc.geometry.type === 'BufferGeometry'
+              ) {
                 // JSON de BufferGeometry
                 const loader = new THREE.BufferGeometryLoader()
                 const geometry = loader.parse(desc.geometry)
@@ -167,12 +173,15 @@ class Canvas3dElement extends HTMLElement {
                 group.add(solidLines)
 
                 return group
-              } else if (Array.isArray(desc.geometry.geometries)) {
+              } else if (
+                'geometries' in desc.geometry &&
+                Array.isArray(desc.geometry.geometries)
+              ) {
                 const loader = new THREE.BufferGeometryLoader()
                 // On ne garde que les BufferGeometry (ignore EdgesGeometry)
                 const bufferGeometries = desc.geometry.geometries
-                  .filter((g: any) => g.type === 'BufferGeometry')
-                  .map((g: any) => loader.parse(g))
+                  .filter((g) => g.type === 'BufferGeometry')
+                  .map((g) => loader.parse(g))
                 // Fusionne si plusieurs géométries, sinon prend la seule
                 let geometry: THREE.BufferGeometry
                 if (bufferGeometries.length === 1) {
@@ -226,9 +235,6 @@ class Canvas3dElement extends HTMLElement {
 
             if (desc.type === 'customWireSphere') {
               return createCustomWireSphere(desc)
-            }
-            if (desc.type === 'geoPoint') {
-              return createGeoPoint(desc)
             }
             if (desc.type === 'ambientLight') {
               return new THREE.AmbientLight(
@@ -305,7 +311,7 @@ class Canvas3dElement extends HTMLElement {
             // ...autres types
             return null
           })
-          .filter(Boolean)
+          .filter((object) => object !== null)
 
         this._objects = objects
         this.setObjects(objects)
@@ -844,7 +850,11 @@ interface CubeDescription {
   pos: [number, number, number]
   size: number
   edges?: boolean
-  [key: string]: any
+  edgesColor?: number
+  edgesOpacity?: number
+  colors?: number[]
+  // Compatibilité des descriptions existantes ; le rendu utilise colors.
+  color?: string | number
 }
 
 interface AmbientLightDescription {
@@ -887,6 +897,27 @@ export interface GeoPointDescription {
   [key: string]: any
 }
 
+interface GeoPointsDescription {
+  type: 'geoPoints'
+  spherePosition?: [number, number, number]
+  sphereRadius?: number
+  points: GeoPointCoordinates[]
+}
+
+interface GeoPointCoordinates {
+  latitude: number
+  longitude: number
+  altitude?: number
+  pointRadius?: number
+  pointColor?: string | number
+  label?: string
+  labelColor?: string
+  labelOffset?: number
+  labelSize?: number
+  font?: string
+  transparent?: boolean
+}
+
 interface RealisticEarthSphereDescription {
   type: 'realisticEarthSphere'
   position?: [number, number, number]
@@ -923,27 +954,15 @@ interface SkySphereDescription {
   image: string
   [key: string]: any
 }
+// Three sérialise ces ressources à la racine, mais Object3DJSON ne les déclare pas.
+export interface Object3DWithGeometriesJSON extends Object3DJSON {
+  geometries?: THREE.BufferGeometryJSON[]
+}
+
 export interface BufferGeometryDescription {
   type: 'bufferGeometry'
-  geometry:
-    | {
-        type: 'BufferGeometry'
-        [key: string]: any // JSON exporté par BufferGeometry.toJSON()
-      }
-    | {
-        geometries: Array<{
-          type: 'BufferGeometry'
-          [key: string]: any
-        }>
-        [key: string]: any // Peut contenir d'autres propriétés (materials, object, etc.)
-      }
-    | {
-        type: 'Object'
-        geometries: Array<any>
-        materials?: Array<any>
-        object?: any
-        [key: string]: any
-      }
+  // Des données JSON, jamais une instance vivante de Group ou de BufferGeometry.
+  geometry: THREE.BufferGeometryJSON | Object3DWithGeometriesJSON
 }
 
 export type LineSegmentsDescription = {
@@ -971,6 +990,7 @@ export type Elements3DDescription =
   | SphereDescription
   | GroupDescription
   | GeoPointDescription
+  | GeoPointsDescription
   | RealisticEarthSphereDescription
   | CustomWireSphereDescription
   | SkySphereDescription
@@ -980,6 +1000,7 @@ export type Elements3DDescription =
 
 export interface Canvas3DContentDescription {
   objects: Elements3DDescription[]
+  backgroundColor?: number
   autoCenterZoomMargin?: number
   cameraPosition?: [number, number, number]
   cameraTarget?: [number, number, number]

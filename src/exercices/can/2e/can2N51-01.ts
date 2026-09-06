@@ -18,7 +18,7 @@ export const dateDePublication = '23/10/2024'
 export const uuid = 'bd96a'
 
 export const refs = {
-  'fr-fr': ['can2N51-01'],
+  'fr-fr': ['can2N51-01', '2N50-flash2'],
   'fr-ch': ['10NO3E-7'],
 }
 export default class calculsRacinesCarresPafaitsDecimaux extends Exercice {

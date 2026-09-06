@@ -18,7 +18,7 @@ export const dateDePublication = '06/08/2025'
 export const uuid = '88281'
 
 export const refs = {
-  'fr-fr': ['can3C19'],
+  'fr-fr': ['can3C19','2N32-flash1'],
   'fr-ch': [],
 }
 export default class CalculComplexeFraction extends ExerciceSimple {

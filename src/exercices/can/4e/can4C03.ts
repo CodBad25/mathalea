@@ -21,7 +21,7 @@ export const dateDeModifImportante = '17/05/2025'
 export const uuid = '22c4c'
 
 export const refs = {
-  'fr-fr': ['can4C03'],
+  'fr-fr': ['can4C03', '2N31-flash5'],
   'fr-ch': ['NR'],
 }
 export default class QuotientEntierQuiVaBienParFraction extends ExerciceSimple {

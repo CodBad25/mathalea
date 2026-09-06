@@ -5,7 +5,7 @@ export const titre = 'Écrire une expression littérale'
 export const dateDePublication = '23/11/2023'
 export const uuid = 'b7307'
 export const refs = {
-  'fr-fr': ['can5L02'],
+  'fr-fr': ['can5L02', '2L10-flash5'],
   'fr-ch': [],
 }
 export default class ÉcrireUneExpressionLitteraleCAN extends ÉcrireUneExpressionLitterale {

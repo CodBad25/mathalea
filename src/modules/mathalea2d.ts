@@ -26,6 +26,24 @@ export type Mathalea2dLayoutOptions = {
   center?: boolean
 }
 
+export type Mathalea2DOptions = {
+  xmin?: number
+  ymin?: number
+  xmax?: number
+  ymax?: number
+  pixelsParCm?: number
+  scale?: number
+  zoom?: number
+  optionsTikz?: string | string[]
+  mainlevee?: boolean
+  amplitude?: number
+  display?: Mathalea2dDisplay
+  center?: boolean
+  id?: string
+  usePgfplots?: boolean
+  centerLatex?: boolean
+}
+
 const innerWrapperStyle = 'position: relative; display: inline-block'
 /*
   MathALEA2D
@@ -84,23 +102,7 @@ export function mathalea2d(
     id = '', // L'id peut-être utile pour des animations, c'est celui du svg. Le div englobant aura un id en M2D + id
     usePgfplots = false,
     centerLatex = false,
-  }: {
-    xmin?: number
-    ymin?: number
-    xmax?: number
-    ymax?: number
-    pixelsParCm?: number
-    scale?: number
-    zoom?: number
-    optionsTikz?: string | string[]
-    mainlevee?: boolean
-    amplitude?: number
-    display?: Mathalea2dDisplay
-    center?: boolean
-    id?: string
-    usePgfplots?: boolean
-    centerLatex?: boolean
-  } = {},
+  }: Mathalea2DOptions = {},
   ...objets: NestedObjetMathalea2dArray
 ) {
   const ajouteCodeHtml = (

@@ -1,5 +1,23 @@
 # Nombres et calculs
 
+## Adaptation MathJSON pour les corrections détaillées
+
+Dans `src/lib/calculerCe.ts`, `toMathJsonNode()` vérifie les expressions
+`MathJsonExpression` du ComputeEngine avant leur utilisation par
+`renderMathJsonLatex()` et `buildCorrDetails()`. Il copie récursivement les
+tableaux, y compris `readonly`, sans changer l'ordre des opérandes ni supprimer
+les `Delimiter`. Les objets `fn` et `sym` sont ramenés à leur forme compacte ;
+les annotations MathJSON ne font pas partie de l'arbre de calcul.
+
+Les nombres JSON `{ num: string }` restent exacts : leur chaîne n'est pas
+convertie en `number`, afin de conserver les grands entiers, les exposants et les
+décimaux périodiques. Leur rendu LaTeX est confié au ComputeEngine avec les mêmes
+options de rendu brut que les autres opérateurs délégués.
+
+Les objets `str` et `dict`, les nombres non finis et les formes mal construites
+ou ambiguës déclenchent une erreur `MathJSON unsupported` indiquant le chemin
+dans l'arbre. Ne pas contourner cette frontière par une assertion de type.
+
 ## `FractionEtendue`
 
 `FractionEtendue` est l'export par défaut de `src/modules/FractionEtendue.ts`. Elle représente une fraction avec numérateur et dénominateur entiers et expose de nombreuses formes textuelles ou LaTeX : fraction brute, simplifiée, irréductible, signe normalisé, valeur numérique.

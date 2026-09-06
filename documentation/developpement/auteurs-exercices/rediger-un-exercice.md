@@ -104,7 +104,7 @@ import { bleuMathalea } from '../../lib/colors'
 const texteCorr = `$${a}+9=${miseEnEvidence(resultat)}$`
 
 // Résultat final mêlant texte et maths (QCM) : mélange des deux fonctions
-const texteQcm = `${texteEnCouleurEtGras('Le nombre')} $${miseEnEvidence(a)}$ ${texteEnCouleurEtGras('a pour image')} $${miseEnEvidence(image)}$ ${texteEnCouleurEtGras('par la fonction')} $f$.`
+const texteQcm = `${texteEnCouleurEtGras('Le nombre')} $${miseEnEvidence(a)}$ ${texteEnCouleurEtGras('a pour image')} $${miseEnEvidence(image)}$ ${texteEnCouleurEtGras('par la fonction')} $${miseEnEvidence('f')}$.`
 
 // Explication : bleu explicite, jamais la couleur par défaut ;
 // les nombres restent entre $ dans la chaîne

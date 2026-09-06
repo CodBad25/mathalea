@@ -21,6 +21,7 @@ import { context } from '../../modules/context'
 import type { MathfieldElement } from 'mathlive'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import type { AnswerType } from '../../lib/types'
 
 export const titre = 'Recomposer un décimal ou un entier'
 export const interactifReady = true
@@ -159,7 +160,7 @@ export default class RecomposerEntierC3 extends Exercice {
       )
       nbChiffres = randint(nombreDeChiffresMin, nombreDeChiffresMax)
       let formule = ''
-      const listeReponses: [propertyKey: string, any][] = []
+      const listeReponses: [propertyKey: string, answer: AnswerType][] = []
       const completeLesPuissances = (
         k: number,
         i: number,
@@ -202,7 +203,7 @@ export default class RecomposerEntierC3 extends Exercice {
         formule = ':~~%{champ1}+' // Le '+' c'est parce qu'il y en a dans toutes les autres formules et que le dernier caractère est supprimé
         listeReponses.push([
           'reponse',
-          texNombre(nombre.div(10 ** nombreDeChiffresDec)),
+          { value: texNombre(nombre.div(10 ** nombreDeChiffresDec)) },
         ])
       }
       const morcelleNombre = (
@@ -634,7 +635,7 @@ export default class RecomposerEntierC3 extends Exercice {
           )
           handleAnswers(this, i, {
             reponse: {
-              value: listeReponses[0][1],
+              value: listeReponses[0][1].value,
               options: { nombreAvecEspace: true },
             },
           })

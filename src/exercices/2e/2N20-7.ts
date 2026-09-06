@@ -1,17 +1,18 @@
-import ppcmEngrenages from '../3e/3A12'
-export const titre = 'Utiliser des multiples appliqués aux engrenages'
-export const interactifReady = false
-export const dateDeModifImportante = '14/11/2021'
-export const uuid = 'c3c84'
+import ProblemesEvenementsRecurrents from '../4e/4A12'
+export const titre = 'Résoudre des problèmes de conjonction de phénomènes'
+export const interactifReady = true
+export const amcReady = true
+export const amcType = 'AMCHybride'
+export const dateDeModifImportante = '05/09/2026'
+export const uuid = '6a0e9'
 
 export const refs = {
   'fr-fr': ['2N20-7'],
   'fr-ch': ['10NO1A-12'],
 }
-export default class PpcmEngrenages2nde extends ppcmEngrenages {
+export default class ProblemesEvenementsRecurrents2nde extends ProblemesEvenementsRecurrents {
   constructor() {
     super()
-    this.sup = true
-    this.besoinFormulaireCaseACocher = false
+    this.sup = 1
   }
 }

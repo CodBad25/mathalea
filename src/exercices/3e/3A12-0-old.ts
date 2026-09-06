@@ -1,5 +1,6 @@
 import { engrenages } from '../../lib/2d/engrenage'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import { bleuMathalea } from '../../lib/colors'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -57,7 +58,7 @@ export default class EngrenagesAnimes extends Exercice {
     ]
   }
 
-  nouvelleVersion(numeroExercice) {
+  nouvelleVersion(numeroExercice?: number) {
     const listeTypesDeQuestions = gestionnaireFormulaireTexte({
       min: 1,
       max: 5,
@@ -72,7 +73,10 @@ export default class EngrenagesAnimes extends Exercice {
      * @param {number} nbDentsRoueA
      * @param {number} nbDentsRoueB
      */
-    const listePremiersMultiples = function (nbDentsRoueA, nbDentsRoueB) {
+    const listePremiersMultiples = function (
+      nbDentsRoueA: number,
+      nbDentsRoueB: number,
+    ) {
       let result = `Voici la liste des premiers multiples de $${nbDentsRoueA}$ :<br>`
       // on va faire en sorte de toujours avoir un nombre de multiples multiple de 5
       const nbMarge =
@@ -96,19 +100,19 @@ export default class EngrenagesAnimes extends Exercice {
     }
 
     const remiseAZeroT = function (
-      numeroExercice,
-      nbToursPremiereRoue,
-      oneCycle,
-      intervallesId,
+      numeroExercice: string,
+      nbToursPremiereRoue: number,
+      oneCycle: boolean,
+      intervallesId: Record<string, number[]>,
     ) {
       try {
-        const animRoue = document
-          .querySelector(`#containerAnimRoues${numeroExercice}`)
-          ?.querySelectorAll('[id^=animRoue]')
-        if (!animRoue) return
-        const compteurRoue = document
-          .querySelector(`#containerAnimRoues${numeroExercice}`)
-          ?.querySelectorAll('text[id^=compteur]')
+        const container = document.querySelector(
+          `#containerAnimRoues${numeroExercice}`,
+        )
+        if (!container) return
+        const animRoue =
+          container.querySelectorAll<SVGAnimationElement>('[id^=animRoue]')
+        const compteurRoue = container.querySelectorAll('text[id^=compteur]')
 
         // on arrete toutes les roues et on remet en position initiale
         // animRoue.forEach(e => e.endElement())
@@ -125,11 +129,11 @@ export default class EngrenagesAnimes extends Exercice {
 
         // on met à jour les compteurs des roue
         compteurRoue.forEach((e, i) => {
-          const inter = setInterval(
+          const inter = window.setInterval(
             () => {
-              e.textContent = parseInt(e.textContent) + 1
+              e.textContent = String(parseInt(e.textContent) + 1)
             },
-            animRoue[i].getAttribute('dur') * 1000,
+            Number(animRoue[i].getAttribute('dur')) * 1000,
           )
           intervallesId[numeroExercice] = [
             ...intervallesId[numeroExercice],
@@ -146,7 +150,7 @@ export default class EngrenagesAnimes extends Exercice {
               intervallesId[numeroExercice] = []
             },
             nbToursPremiereRoue *
-              parseFloat(animRoue[0].getAttribute('dur')) *
+              parseFloat(animRoue[0].getAttribute('dur') ?? '') *
               1000,
           )
         }
@@ -163,12 +167,14 @@ export default class EngrenagesAnimes extends Exercice {
       const objetsEnonce = []
       const objetsCorrection = []
       let kk = k
-      let nbDentsRoueA, nbDentsRoueB, nbDentsRoueC
-      let nbToursA, nbToursB, nbToursC, nbToursAbc
+      let nbDentsRoueA: number, nbDentsRoueB: number
+      let nbDentsRoueC: number | undefined
+      let nbToursA: number, nbToursB: number, nbToursAbc: number
+      let nbToursC: number | undefined
       let texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       let texteCorr = '' // Idem pour le texte de la correction.
-      let roues = []
-      let rouesCorr
+      let roues: ObjetMathalea2D[] = []
+      let rouesCorr: ObjetMathalea2D[]
       switch (listeTypesDeQuestions[i]) {
         case 1:
           do {
@@ -473,6 +479,11 @@ export default class EngrenagesAnimes extends Exercice {
               ? `Ce nombre est un multiple du nombre de dents de la roue du milieu, donc elle a effectué exactement $\\dfrac{${nbToursC * nbDentsRoueC}}{${nbDentsRoueB}}=${(nbToursC * nbDentsRoueC) / nbDentsRoueB}$ tours.<br>`
               : "Ce nombre n'est pas un multiple du nombre de dents de la roue du milieu, donc elle ne sera pas dans sa position initiale.<br>"
           texteCorr += `Il faudra attendre que la roue de gauche tourne de $${nbToursAbc * nbDentsRoueA}$ dents soit $${miseEnEvidence(nbToursAbc)}$ tours, la roue du milieu en fera $${(nbToursAbc * nbDentsRoueA) / nbDentsRoueB}$ et la roue de droite en fera $${(nbToursAbc * nbDentsRoueA) / nbDentsRoueC}$.<br>`
+          break
+        default:
+          throw new Error(
+            `Type de question inconnu : ${listeTypesDeQuestions[i]}`,
+          )
       }
       if (context.isAmc) {
         this.autoCorrectionAMC[0] = {
@@ -554,10 +565,10 @@ export default class EngrenagesAnimes extends Exercice {
           i,
           nbToursA,
           nbToursB,
-          nbToursC,
+          nbToursC ?? '',
           nbDentsRoueA,
           nbDentsRoueB,
-          nbDentsRoueC,
+          nbDentsRoueC ?? '',
         )
       ) {
         // Si la question n'a jamais été posée, on en créé une autre
@@ -571,19 +582,40 @@ export default class EngrenagesAnimes extends Exercice {
   }
 }
 
-function registerReplayAnimation(remiseAZeroT) {
+function registerReplayAnimation(
+  remiseAZeroT: (
+    numeroExercice: string,
+    nbToursPremiereRoue: number,
+    oneCycle: boolean,
+    intervallesId: Record<string, number[]>,
+  ) => void,
+) {
   if (replayAnimationRegistered) return
   replayAnimationRegistered = true
   DomReadyActionElement.registerCallback(
     replayAnimationAction,
     ({ payload }) => {
-      const { numeroExercice, question, nbToursPremiereRoue, oneCycle } =
-        payload
+      if (
+        typeof payload !== 'object' ||
+        payload === null ||
+        ('numeroExercice' in payload &&
+          typeof payload.numeroExercice !== 'number') ||
+        !('question' in payload) ||
+        typeof payload.question !== 'number' ||
+        !('nbToursPremiereRoue' in payload) ||
+        typeof payload.nbToursPremiereRoue !== 'number' ||
+        !('oneCycle' in payload) ||
+        typeof payload.oneCycle !== 'boolean'
+      )
+        return
+      const numeroExercice =
+        'numeroExercice' in payload ? payload.numeroExercice : undefined
+      const { question, nbToursPremiereRoue, oneCycle } = payload
       const idSuffix = `${numeroExercice}_${question}`
       const btn = document.getElementById(`b_AnimRoue${idSuffix}`)
       if (!btn) return
 
-      const intervallesId = {}
+      const intervallesId: Record<string, number[]> = {}
       const handleClick = function () {
         remiseAZeroT(idSuffix, nbToursPremiereRoue, oneCycle, intervallesId)
       }
@@ -592,7 +624,7 @@ function registerReplayAnimation(remiseAZeroT) {
       setTimeout(function () {
         document
           .querySelector(`#containerAnimRoues${idSuffix}`)
-          ?.querySelectorAll('[id^=animRoue]')
+          ?.querySelectorAll<SVGAnimationElement>('[id^=animRoue]')
           .forEach((e) => e.endElement())
       })
 

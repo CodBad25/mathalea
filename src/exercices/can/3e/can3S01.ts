@@ -3,6 +3,18 @@ import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { fraction } from '../../../modules/fractions'
 import ExerciceSimple from '../../ExerciceSimple'
+
+type Situation = {
+  key: string
+  start: string
+  itemSing: string
+  itemPlur: string
+  lab1Sing: string
+  lab1Plur: string
+  lab2Sing: string
+  lab2Plur: string
+}
+
 export const titre = 'Calculer une probabilité'
 export const interactifReady = true
 
@@ -31,7 +43,7 @@ export default class CalculProbaSimple extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const situations = [
+    const situations: Situation[] = [
       {
         key: 'bonbons',
         start: 'Un sachet de bonbons contient',
@@ -123,7 +135,7 @@ export default class CalculProbaSimple extends ExerciceSimple {
 
     // construction d'une phrase naturelle pour la cible (heuristique)
     const construitPhraseCible = (
-      situ: any,
+      situ: Situation,
       inversion: boolean,
       a: number,
       b: number,

@@ -19,7 +19,7 @@ export const dateDeModifImportante = '25/03/2026'
 export const uuid = 'b31eb'
 
 export const refs = {
-  'fr-fr': ['can2N43-02'],
+  'fr-fr': ['can2N43-02', '2N43-flash1'],
   'fr-ch': [],
 }
 export default class CalculPuissancesOperation extends ExerciceSimple {

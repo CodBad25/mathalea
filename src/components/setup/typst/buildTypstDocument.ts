@@ -547,12 +547,38 @@ export const COLUMN_BREAK_SNIPPET = '#colbreak(weak: true)'
 
 /** Colonnes par défaut des blocs #tasks : taskize choisit jusqu'à 4 colonnes uniformes. */
 const DEFAULT_TASKS_COLUMNS = '"auto-fit"'
+
+/** Littéral Typst du nombre de colonnes par défaut des listes de questions (réglage du document) */
+function questionsColumnsLiteral(
+  columns: TypstDocumentOptions['questionsColumns'],
+): string {
+  return columns === 'auto' ? DEFAULT_TASKS_COLUMNS : String(columns)
+}
+
 /**
- * Espacement par défaut des questions, en mode export (voir `exportMode`) :
- * valeur littérale reprise de `#let interligne-questions = 1.2em`, inlinée
- * directement dans chaque `#tasks(...)` plutôt que déclarée en variable.
+ * Étiquette de numérotation (littéral Typst) du style choisi dans les
+ * réglages du document ou dans la palette de mise en page (réglage par
+ * exercice) — voir `boldableLabel` pour sa mise en gras.
  */
-const DEFAULT_GUTTER_LITERAL = '1.2em'
+export function questionNumberingLabel(style: QuestionNumberingStyle): string {
+  return style === 'aucun' ? 'none' : `"${style}"`
+}
+
+/**
+ * Sens inverse de `questionNumberingLabel` : reconnaît un style connu dans un
+ * littéral Typst relu dans le code (`#let exN-numerotation = ...`), pour
+ * l'affichage dans la palette de mise en page et la modale de réglages de
+ * l'exercice. `undefined` pour un littéral qui ne correspond à aucun style
+ * proposé (retouche manuelle du code) : l'appelant retombe alors sur le
+ * réglage du document.
+ */
+export function parseNumberingLiteral(
+  literal: string,
+): QuestionNumberingStyle | undefined {
+  return QUESTION_NUMBERING_STYLES.find(
+    (style) => questionNumberingLabel(style) === literal,
+  )
+}
 
 /**
  * Préfixe des variables de mise en page de la liste des corrections du mode
@@ -571,10 +597,15 @@ const CAN_CORRECTIONS_PREFIX = 'ex0-corr'
  */
 export interface TypstCarryOver {
   /**
-   * Valeurs de `#let exN-colonnes`/`#let exN-gutter` divergeant des défauts,
-   * par préfixe d'exercice (`ex1`). Expressions Typst brutes.
+   * Valeurs de `#let exN-colonnes`/`#let exN-gutter`/`#let exN-numerotation`
+   * divergeant des défauts, par préfixe d'exercice (`ex1`). Expressions
+   * Typst brutes (`numbering` n'existe pas pour un préfixe `-qcm`, dont la
+   * numérotation des propositions n'est pas réglable).
    */
-  tasksLayout?: Record<string, { columns?: string; gutter?: string }>
+  tasksLayout?: Record<
+    string,
+    { columns?: string; gutter?: string; numbering?: string }
+  >
   /**
    * Lignes de code Typst insérées entre les exercices (sans le marqueur
    * `// mathalea:insertion`), par numéro de l'exercice qui les précède.
@@ -828,7 +859,10 @@ function perQuestionLinesTasksPrefixes(code: string | string[]): Set<string> {
 
 /** Extrait du code Typst courant les réglages de la palette à conserver */
 export function harvestCarryOver(code: string): TypstCarryOver {
-  const tasksLayout: Record<string, { columns?: string; gutter?: string }> = {}
+  const tasksLayout: Record<
+    string,
+    { columns?: string; gutter?: string; numbering?: string }
+  > = {}
   // un QCM à figures est déclaré à 1 colonne par défaut (voir `qcmHasFigure`) :
   // cette valeur-là n'est pas un réglage du professeur et ne doit pas être
   // figée dans le carry-over, sans quoi le choix par contenu ne s'appliquerait
@@ -838,10 +872,15 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   for (const match of code.matchAll(
     /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
   )) {
+    // les propositions de QCM ont leur propre défaut, indépendant du réglage
+    // « Colonnes des questions » du document (voir la boucle de
+    // `buildTypstDocument` qui déclare `#let exN-qcm-colonnes`)
     const defaultColumns =
       qcmFigurePrefixes.has(match[1]) || perQuestionLinesPrefixes.has(match[1])
         ? '1'
-        : DEFAULT_TASKS_COLUMNS
+        : match[1].endsWith('-qcm')
+          ? DEFAULT_TASKS_COLUMNS
+          : 'colonnes-questions'
     if (match[2] !== defaultColumns) {
       tasksLayout[match[1]] = { ...tasksLayout[match[1]], columns: match[2] }
     }
@@ -851,6 +890,15 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   )) {
     if (match[2] !== 'interligne-questions') {
       tasksLayout[match[1]] = { ...tasksLayout[match[1]], gutter: match[2] }
+    }
+  }
+  // pas de variante `-qcm` : la numérotation des propositions de QCM
+  // (« A) », voir `qcmToTypst`) n'est pas réglable
+  for (const match of code.matchAll(
+    /^#let (ex\d+(?:-corr)?)-numerotation = (.+?)\s*$/gm,
+  )) {
+    if (match[2] !== 'numerotation-questions') {
+      tasksLayout[match[1]] = { ...tasksLayout[match[1]], numbering: match[2] }
     }
   }
   // une insertion suit le repère de gap de l'exercice qui la précède : on
@@ -1091,6 +1139,26 @@ export interface TypstDocumentOptions {
   autoVerticalSpacing: boolean
   /** Numéros des questions (et sous-questions) en gras */
   boldQuestionNumbers: boolean
+  /**
+   * Style de numérotation des listes de questions (`aucun` : questions non
+   * numérotées, seulement mises en colonnes). Un exercice dont la structure
+   * est détectée dans son contenu (repères `a)`, `b)`... voir
+   * `splitSubQuestions`) garde son propre style, indépendant de ce réglage.
+   */
+  questionNumberingStyle: QuestionNumberingStyle
+  /**
+   * Nombre de colonnes par défaut des listes de questions d'un exercice
+   * (`auto` : jusqu'à 4 colonnes uniformes, ajusté au contenu — voir
+   * `#tasks-setup`). Un exercice réglé depuis la palette de mise en page de
+   * l'aperçu (`#let exN-colonnes`) l'emporte sur ce défaut.
+   */
+  questionsColumns: 'auto' | 1 | 2 | 3 | 4
+  /**
+   * Espacement vertical par défaut entre les questions, en em (`#let
+   * interligne-questions`). Un exercice réglé depuis la palette de mise en
+   * page l'emporte sur ce défaut.
+   */
+  questionsGutter: number
   /** Affiche la référence du référentiel à côté de la numérotation */
   showExerciseRefs: boolean
   /**
@@ -1370,6 +1438,20 @@ export const HEADER_STYLES = ['epure', 'cartouche', 'cadre', 'aucun'] as const
 export type HeaderStyle = (typeof HEADER_STYLES)[number]
 
 /**
+ * Styles de numérotation proposés pour les listes de questions (`aucun` :
+ * pas de numéro). Les motifs (`"1."`, `"1)"`, `"a."`, `"a)"`) sont ceux de
+ * la fonction Typst `numbering()`.
+ */
+export const QUESTION_NUMBERING_STYLES = [
+  'aucun',
+  '1.',
+  '1)',
+  'a.',
+  'a)',
+] as const
+export type QuestionNumberingStyle = (typeof QUESTION_NUMBERING_STYLES)[number]
+
+/**
  * Polices de texte libres embarquées dans le compilateur Typst (rendu
  * identique dans l'aperçu du navigateur et dans le PDF exporté).
  */
@@ -1525,6 +1607,9 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   exerciseSpacing: 1.6,
   autoVerticalSpacing: true,
   boldQuestionNumbers: true,
+  questionNumberingStyle: '1)',
+  questionsColumns: 'auto',
+  questionsGutter: 1.2,
   showExerciseRefs: false,
   showCorrections: true,
   columns: 1,
@@ -1591,11 +1676,24 @@ function withMinimalCorrections(
 
 /**
  * Étiquette de numérotation d'un environnement `tasks` : un littéral Typst
- * (`"1."`, `"a)"`, `none`). En gras, elle devient une fonction qui délègue
- * le motif à `numbering()` puis met en forme le résultat.
+ * (`"1."`, `"a)"`, `none`), ou la référence à une variable de mise en page
+ * (`exN-numerotation`, réglable par exercice) dont la valeur (`isVariableRef`)
+ * n'est connue qu'à la compilation Typst. En gras, elle devient une fonction
+ * qui délègue le motif à `numbering()` puis met en forme le résultat — sauf
+ * quand `pattern` vaut `none`, où `numbering()` échouerait : ce cas est
+ * connu d'avance pour un littéral (retourné tel quel), mais doit être gardé
+ * à l'exécution pour une référence de variable, dont la valeur peut valoir
+ * `none` (numérotation retirée pour cet exercice) sans que ce code le sache.
  */
-function boldableLabel(pattern: string, bold: boolean): string {
+function boldableLabel(
+  pattern: string,
+  bold: boolean,
+  isVariableRef = false,
+): string {
   if (pattern === 'none' || !bold) return pattern
+  if (isVariableRef) {
+    return `if ${pattern} == none { none } else { (..n) => strong(numbering(${pattern}, ..n)) }`
+  }
   return `(..n) => strong(numbering(${pattern}, ..n))`
 }
 
@@ -1667,7 +1765,8 @@ function exerciseBody(
   figures: string[],
   /** Préfixe des variables de mise en page (ex : `ex1`) pour les questions numérotées */
   tasksPrefix?: string,
-  boldQuestionNumbers = false,
+  /** Réglages du document : gras, style de numérotation, colonnes/espacement par défaut */
+  options: TypstDocumentOptions = defaultTypstDocumentOptions,
   /** Numéro de la première question (exercices fusionnés : la numérotation continue) */
   startNumber = 1,
   /** Publie le repère `mathalea-anchor` de la liste `tasks` (palette de l'aperçu) */
@@ -1697,8 +1796,8 @@ function exerciseBody(
    * la palette de mise en page de l'éditeur intégré, sans sens hors de lui).
    */
   exportMode = false,
-  /** Réglages de colonnes/espacement de la palette pour cet exercice, déjà résolus par l'appelant */
-  layoutOverride?: { columns?: string; gutter?: string },
+  /** Réglages de colonnes/espacement/numérotation de la palette pour cet exercice, déjà résolus par l'appelant */
+  layoutOverride?: { columns?: string; gutter?: string; numbering?: string },
   /** Colonnes des propositions de QCM de cet exercice (palette), déjà résolues par l'appelant */
   qcmLayoutOverride?: { columns?: string },
   /**
@@ -1725,7 +1824,20 @@ function exerciseBody(
     )
   }
   let questionList = questions
-  let label = numbered ? '"1."' : 'none'
+  // en mode export, ou sans préfixe (pas de variable `exN-numerotation`
+  // possible), le motif est résolu ici, en JS ; sinon `label` référence
+  // cette variable de la palette de mise en page, dont la valeur (y compris
+  // `none`) n'est connue qu'à la compilation Typst — voir `boldableLabel`.
+  let label =
+    exportMode || tasksPrefix == null
+      ? (layoutOverride?.numbering ??
+        questionNumberingLabel(options.questionNumberingStyle))
+      : `${tasksPrefix}-numerotation`
+  let labelIsVariableRef = !exportMode && tasksPrefix != null
+  if (!numbered) {
+    label = 'none'
+    labelIsVariableRef = false
+  }
   // une question unique portant ses propres repères (`a)`, `b)`...) est
   // découpée : ses sous-questions deviennent la liste de premier niveau
   if (questions.length === 1) {
@@ -1744,7 +1856,10 @@ function exerciseBody(
         }
       }
       questionList = split.items
+      // les repères détectés dans le contenu l'emportent toujours sur le
+      // réglage (document ou exercice) : ce n'est pas un choix du professeur
       label = split.label
+      labelIsVariableRef = false
     }
   }
   const converted = questionList
@@ -1786,13 +1901,14 @@ function exerciseBody(
       ? `#mathalea-anchor("${anchorKind}", ${parseInt(tasksPrefix.slice(2), 10)})\n`
       : ''
     const columnsExpr = exportMode
-      ? (layoutOverride?.columns ?? DEFAULT_TASKS_COLUMNS)
+      ? (layoutOverride?.columns ??
+        questionsColumnsLiteral(options.questionsColumns))
       : `${tasksPrefix}-colonnes`
     const gutterExpr = exportMode
-      ? (layoutOverride?.gutter ?? DEFAULT_GUTTER_LITERAL)
+      ? (layoutOverride?.gutter ?? `${options.questionsGutter}em`)
       : `${tasksPrefix}-gutter`
     parts.push(
-      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
+      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, options.boldQuestionNumbers, labelIsVariableRef)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
     return {
       code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
@@ -1975,7 +2091,7 @@ function computeGeneratedExercises(
       exercise.numbered,
       figures,
       `ex${k + 1}`,
-      options.boldQuestionNumbers,
+      options,
       nextStart,
       emitAnchors,
       isGrouped[k],
@@ -1997,7 +2113,7 @@ function computeGeneratedExercises(
         exercise.numbered,
         figures,
         `ex${k + 1}-corr`,
-        options.boldQuestionNumbers,
+        options,
         nextCorrectionStart,
         emitAnchors,
         isGrouped[k],
@@ -2476,16 +2592,20 @@ function buildCanVersionContent(
     // palette de l'aperçu, comme les listes de questions des exercices.
     const layout = carryOver.tasksLayout?.[CAN_CORRECTIONS_PREFIX]
     const columnsExpr = exportMode
-      ? (layout?.columns ?? DEFAULT_TASKS_COLUMNS)
+      ? (layout?.columns ?? questionsColumnsLiteral(options.questionsColumns))
       : `${CAN_CORRECTIONS_PREFIX}-colonnes`
     const gutterExpr = exportMode
-      ? (layout?.gutter ?? DEFAULT_GUTTER_LITERAL)
+      ? (layout?.gutter ?? `${options.questionsGutter}em`)
       : `${CAN_CORRECTIONS_PREFIX}-gutter`
+    const numberingExpr = exportMode
+      ? (layout?.numbering ??
+        questionNumberingLabel(options.questionNumberingStyle))
+      : `${CAN_CORRECTIONS_PREFIX}-numerotation`
     if (emitAnchors) {
       renderLines.push('    #mathalea-anchor("tasks-corr", 0)')
     }
     renderLines.push(
-      `    #tasks(columns: ${columnsExpr}, label: ${boldableLabel('"1."', options.boldQuestionNumbers)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: 1)[`,
+      `    #tasks(columns: ${columnsExpr}, label: ${boldableLabel(numberingExpr, options.boldQuestionNumbers, !exportMode)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: 1)[`,
     )
     for (const correction of corrections) {
       renderLines.push(`      + ${correction.split('\n').join('\n        ')}`)
@@ -3074,17 +3194,26 @@ export function buildTypstDocument(
   // à être déclarées.
   if (tasksPrefixes.length > 0) {
     lines.push(
-      '// espacement vertical entre les questions (défaut de tous les exercices)',
+      '// colonnes, espacement et numérotation par défaut de tous les exercices (Réglages du document, Styles)',
     )
-    lines.push('#let interligne-questions = 1.2em')
     lines.push(
-      '// Nombre de colonnes et espacement des questions, par exercice',
+      `#let colonnes-questions = ${questionsColumnsLiteral(options.questionsColumns)}`,
+    )
+    lines.push(`#let interligne-questions = ${options.questionsGutter}em`)
+    lines.push(
+      `#let numerotation-questions = ${questionNumberingLabel(options.questionNumberingStyle)}`,
+    )
+    lines.push(
+      '// Colonnes, espacement et numérotation des questions, par exercice',
     )
     lines.push(
       '// (les corrections, préfixe exN-corr, se règlent indépendamment) :',
     )
     lines.push(
-      '// remplacez interligne-questions par une valeur pour en dévier.',
+      '// remplacez colonnes-questions/interligne-questions/numerotation-questions par une valeur pour en dévier',
+    )
+    lines.push(
+      '// (réglable aussi depuis la palette de mise en page ou la modale de réglages de l’exercice).',
     )
     if (tasksPrefixes.some((prefix) => prefix.endsWith('-qcm'))) {
       lines.push(
@@ -3093,18 +3222,26 @@ export function buildTypstDocument(
     }
     for (const prefix of tasksPrefixes) {
       const layout = stableCarryOver.tasksLayout?.[prefix]
+      // les propositions de QCM ont leur propre défaut, indépendant du
+      // réglage « Colonnes des questions » du document
       const defaultColumns =
         qcmFigurePrefixes.has(prefix) || perQuestionLinesPrefixes.has(prefix)
           ? '1'
-          : DEFAULT_TASKS_COLUMNS
+          : prefix.endsWith('-qcm')
+            ? DEFAULT_TASKS_COLUMNS
+            : 'colonnes-questions'
       lines.push(
         `#let ${prefix}-colonnes = ${layout?.columns ?? defaultColumns}`,
       )
-      // les propositions de QCM n'ont pas de `row-gutter` (elles gardent
-      // l'espacement du paquet taskize) : pas de variable à déclarer
+      // les propositions de QCM n'ont pas de `row-gutter` ni d'étiquette de
+      // numérotation réglable (elles gardent l'espacement du paquet taskize
+      // et leur numérotation « A) », voir `qcmToTypst`) : pas de variable à déclarer
       if (prefix.endsWith('-qcm')) continue
       lines.push(
         `#let ${prefix}-gutter = ${layout?.gutter ?? 'interligne-questions'}`,
+      )
+      lines.push(
+        `#let ${prefix}-numerotation = ${layout?.numbering ?? 'numerotation-questions'}`,
       )
     }
   }

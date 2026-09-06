@@ -23,7 +23,7 @@ export const dateDePublication = '04/01/2023'
 export const uuid = '0bb5f'
 
 export const refs = {
-  'fr-fr': ['can2L10-03'],
+  'fr-fr': ['can2L10-03', '2L13-flash2'],
   'fr-ch': ['NR'],
 }
 export default class SimplifierQuotient extends ExerciceSimple {

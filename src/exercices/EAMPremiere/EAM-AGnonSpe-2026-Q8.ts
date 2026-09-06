@@ -77,7 +77,7 @@ export default class AutoQ8AGns2026 extends ExerciceQcmA {
 
     // Tri des variables par ordre croissant de valeur (donc décroissant de dénominateur)
     const sorted = [...variables].sort((a, b) => a.val - b.val)
-    const getLetter = (v: any) => {
+    const getLetter = (v: object) => {
       if (v === A) return 'A'
       if (v === B) return 'B'
       if (v === C) return 'C'

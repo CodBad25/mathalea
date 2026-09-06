@@ -398,7 +398,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
  * @param {array} item
  * @returns {boolean}
  */
-function isArrayInArray(arr: any[], item: any[]): boolean {
+function isArrayInArray(arr: number[][], item: number[]): boolean {
   const itemAsString = JSON.stringify(item)
   const contains = arr.some(function (ele) {
     return JSON.stringify(ele) === itemAsString

@@ -16,7 +16,7 @@ export const dateDePublication = '08/12/2022'
 export const uuid = '05bc2'
 
 export const refs = {
-  'fr-fr': ['can2L10-02'],
+  'fr-fr': ['can2L10-02', '2L13-flash1'],
   'fr-ch': ['NR'],
 }
 export default class ÉcrireUnQuotient extends ExerciceSimple {

@@ -17,7 +17,7 @@ export const interactifReady = true
 export const uuid = 'f6f76'
 
 export const refs = {
-  'fr-fr': ['can2N12-01'],
+  'fr-fr': ['can2N12-01', '2N12-flash1'],
   'fr-ch': [],
 }
 export default class Intervalles extends ExerciceSimple {

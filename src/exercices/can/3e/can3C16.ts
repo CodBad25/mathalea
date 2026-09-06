@@ -13,7 +13,7 @@ export const dateDePublication = '20/09/2024' // La date de publication initiale
 export const uuid = '74fc9'
 
 export const refs = {
-  'fr-fr': ['can3C16'],
+  'fr-fr': ['can3C16', '2N42-flash1'],
   'fr-ch': [],
 }
 class NotSci extends NotationScientifique {

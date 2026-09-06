@@ -25,7 +25,7 @@ export const titre = 'Conjecture de Syracuse'
 class Syracuse {
   N: number
   suiteDeSyracuse: number[]
-  coordonneesSuiteDeSyracuse: any
+  coordonneesSuiteDeSyracuse: number[][]
   altitudeMaximale: number
   tempsDeVol: number
   tempsDeVolEnAltitude: number

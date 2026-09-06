@@ -19,7 +19,7 @@ export const dateDePublication = '22/03/2026'
 export const uuid = '3625c'
 
 export const refs = {
-  'fr-fr': ['can2N43-05'],
+  'fr-fr': ['can2N43-05', '2N43-flash5'],
   'fr-ch': [],
 }
 export default class calculPuissancesAvecn extends ExerciceSimple {

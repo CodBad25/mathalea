@@ -16,7 +16,7 @@ export const dateDeModifImportante = '20/09/2024'
 export const uuid = '0ad86'
 
 export const refs = {
-  'fr-fr': ['can3C12'],
+  'fr-fr': ['can3C12', '2N50-flash4'],
   'fr-ch': ['NR'],
 }
 export default class EncadreRacine extends Exercice {

@@ -371,42 +371,37 @@ export default class Proportions extends Exercice {
       }
       handleAnswers(this, i, { reponse: { value: reponse.toString() } })
       if (context.isAmc) {
-        const exerciseAny = this as any
-        if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
-          exerciseAny.autoCorrectionAMC = []
+        if (!Array.isArray(this.autoCorrectionAMC)) {
+          this.autoCorrectionAMC = []
         }
         const interactiveEntry = this.autoCorrectionAMC[i] ?? {}
         const interactiveReponse = interactiveEntry.reponse ?? {}
-        exerciseAny.autoCorrectionAMC[i] = {
+        this.autoCorrectionAMC[i] = {
           ...interactiveEntry,
           reponse: {
             ...interactiveReponse,
             param: paramAMC,
           },
         }
-        exerciseAny.questionsAMC[i] = amcConvert(
-          exerciseAny.autoCorrectionAMC[i],
-        )
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (listeTypeDeQuestions[i] === 'proportion') {
         if (context.isAmc) {
-          const exerciseAny = this as any
-          if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
-            exerciseAny.autoCorrectionAMC = []
+          if (!Array.isArray(this.autoCorrectionAMC)) {
+            this.autoCorrectionAMC = []
           }
-          if (exerciseAny.autoCorrectionAMC[i] == null) {
-            exerciseAny.autoCorrectionAMC[i] = {}
+          if (this.autoCorrectionAMC[i] == null) {
+            this.autoCorrectionAMC[i] = {}
           }
-          if (exerciseAny.autoCorrectionAMC[i].reponse == null) {
-            exerciseAny.autoCorrectionAMC[i].reponse = {}
+          const entry = this.autoCorrectionAMC[i]
+          if (entry.reponse == null) {
+            entry.reponse = {}
           }
-          exerciseAny.autoCorrectionAMC[i].reponse.display = {
+          entry.reponse.display = {
             labelPosition: 'left',
             label: '\\\\En \\% : ',
           }
-          exerciseAny.questionsAMC[i] = amcConvert(
-            exerciseAny.autoCorrectionAMC[i],
-          )
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
       }
 

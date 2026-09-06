@@ -247,7 +247,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
             },
             {
               nom: `$${denString}$`,
-              fonction: (x: number) => ((c * x) as any) + d,
+              fonction: (x: number) => c * x + d,
               zero: { valeur: xInterditFrac, interdit: true },
             },
           ],
@@ -270,7 +270,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
             },
             {
               nom: `$${denString}$`,
-              fonction: (x) => ((c * x) as any) + d,
+              fonction: (x) => c * x + d,
               zero: { valeur: xInterditFrac, interdit: true },
             },
           ],

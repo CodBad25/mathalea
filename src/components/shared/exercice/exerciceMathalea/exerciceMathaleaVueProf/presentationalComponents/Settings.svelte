@@ -13,6 +13,17 @@
   import InputText from '../../../../forms/InputText.svelte'
   import SupParameterGroup from './SupParameterGroup.svelte'
 
+  /** Contrôles de mise en page des questions passés par la vue Typst, voir `typstStyle` */
+  interface TypstStyleControls {
+    columnsLabel: string
+    gutterLabel: string
+    numberingOptions: { value: string; label: string }[]
+    numberingValue: string
+    onAdjustColumns: (delta: number) => void
+    onAdjustGutter: (delta: number) => void
+    onSetNumbering: (value: string) => void
+  }
+
   export let exercice: IExercice
   export let exerciceIndex: number
   export let isVisible: boolean = true
@@ -21,6 +32,15 @@
   export let isInteractif: boolean = false
   /** Nombre de points maximum de l'exercice, avant coefficient. */
   export let pointsMax: number = 0
+  /**
+   * Contrôles de mise en page des questions (colonnes, espacement,
+   * numérotation), fournis uniquement par la vue Typst — masque la section
+   * quand absent (autre vue, ou exercice sans liste de questions à régler).
+   * Les callbacks éditent directement le code Typst (comme la palette de
+   * mise en page de l'aperçu, dont ils partagent les variables) : ils ne
+   * passent pas par `dispatchNewSettings`.
+   */
+  export let typstStyle: TypstStyleControls | undefined = undefined
 
   const dispatch = createEventDispatcher()
 
@@ -86,6 +106,21 @@
     if (previousSup !== exercice.sup) {
       previousSup = exercice.sup
       sup = exercice.sup === 'false' ? false : exercice.sup
+    }
+  }
+
+  // Le style de numérotation vient du code Typst (via la palette de mise en
+  // page ou la modale d'un autre exercice) : il peut changer sous nos pieds,
+  // sans passer par `dispatchNewSettings` (mêmes précautions que ci-dessus).
+  let typstNumbering: string
+  let previousTypstNumbering: string | undefined
+  $: {
+    if (
+      typstStyle != null &&
+      previousTypstNumbering !== typstStyle.numberingValue
+    ) {
+      previousTypstNumbering = typstStyle.numberingValue
+      typstNumbering = typstStyle.numberingValue
     }
   }
 
@@ -331,6 +366,119 @@
       formNum={formNum5}
       on:change={dispatchNewSettings}
     />
+
+    {#if typstStyle}
+      {@const style = typstStyle}
+      <div class="flex flex-col gap-y-2">
+        <span
+          class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+        >
+          Mise en page des questions&nbsp;:
+        </span>
+
+        <div class="flex flex-row items-center justify-between gap-x-4">
+          <span
+            class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+          >
+            Nombre de colonnes
+          </span>
+          <span
+            class="inline-flex items-center shrink-0 rounded border overflow-hidden
+              border-coopmaths-action dark:border-coopmathsdark-action"
+          >
+            <button
+              type="button"
+              class="w-4 h-5 flex items-center justify-center text-xs leading-none
+                text-coopmaths-action dark:text-coopmathsdark-action
+                hover:bg-coopmaths-action hover:text-coopmaths-canvas
+                dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
+              aria-label="Moins de colonnes"
+              on:click={() => style.onAdjustColumns(-1)}
+            >
+              <i class="bx bx-chevron-left"></i>
+            </button>
+            <span
+              class="w-9 text-center text-xs tabular-nums select-none
+                text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            >
+              {style.columnsLabel}
+            </span>
+            <button
+              type="button"
+              class="w-4 h-5 flex items-center justify-center text-xs leading-none
+                text-coopmaths-action dark:text-coopmathsdark-action
+                hover:bg-coopmaths-action hover:text-coopmaths-canvas
+                dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
+              aria-label="Plus de colonnes"
+              on:click={() => style.onAdjustColumns(1)}
+            >
+              <i class="bx bx-chevron-right"></i>
+            </button>
+          </span>
+        </div>
+
+        <div class="flex flex-row items-center justify-between gap-x-4">
+          <span
+            class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+          >
+            Espacement entre les questions
+          </span>
+          <span
+            class="inline-flex items-center shrink-0 rounded border overflow-hidden
+              border-coopmaths-action dark:border-coopmathsdark-action"
+          >
+            <button
+              type="button"
+              class="w-4 h-5 flex items-center justify-center text-xs leading-none
+                text-coopmaths-action dark:text-coopmathsdark-action
+                hover:bg-coopmaths-action hover:text-coopmaths-canvas
+                dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
+              aria-label="Réduire l'espacement des questions"
+              on:click={() => style.onAdjustGutter(-1)}
+            >−</button
+            >
+            <span
+              class="w-11 text-center text-xs tabular-nums select-none
+                text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            >
+              {style.gutterLabel}
+            </span>
+            <button
+              type="button"
+              class="w-4 h-5 flex items-center justify-center text-xs leading-none
+                text-coopmaths-action dark:text-coopmathsdark-action
+                hover:bg-coopmaths-action hover:text-coopmaths-canvas
+                dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
+              aria-label="Augmenter l'espacement des questions"
+              on:click={() => style.onAdjustGutter(1)}
+            >+</button
+            >
+          </span>
+        </div>
+
+        <div class="flex flex-row items-center justify-between gap-x-4">
+          <label
+            class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+            for="settings-typst-numerotation-{exerciceIndex}"
+          >
+            Style de numérotation
+          </label>
+          <select
+            id="settings-typst-numerotation-{exerciceIndex}"
+            bind:value={typstNumbering}
+            on:change={() => style.onSetNumbering(typstNumbering)}
+            class="h-5 rounded border px-1 py-0 text-xs leading-none
+              border-coopmaths-action dark:border-coopmathsdark-action
+              bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
+              text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+          >
+            {#each style.numberingOptions as option (option.value)}
+              <option value={option.value}>{option.label}</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+    {/if}
 
     {#if exercice.tip && exercice.tip.length > 0}
       <CheckboxWithLabel

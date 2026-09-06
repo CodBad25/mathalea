@@ -86,6 +86,32 @@ describe('QcmJsonGenerator', () => {
     expect(QcmJsonGenerator.validateJsonData(sampleQcmData)).toBe(true)
   })
 
+  it.each([
+    null,
+    42,
+    {},
+    { ...sampleQcmData, questions: [null] },
+    { ...sampleQcmData, questions: [42] },
+    { ...sampleQcmData, consigne: false },
+    { ...sampleQcmData, options: null },
+    { ...sampleQcmData, options: { vertical: 'true' } },
+    { ...sampleQcmData, options: { ordered: 1 } },
+    { ...sampleQcmData, options: { lastChoice: '3' } },
+    {
+      ...sampleQcmData,
+      questions: [{ enonce: 'Q', reponses: ['A', 'B'], corrections: null }],
+    },
+    {
+      ...sampleQcmData,
+      questions: [{ enonce: 'Q', reponses: ['A', 'B'], bonnesReponses: false }],
+    },
+  ])(
+    'rejette les données JSON mal typées sans lever d’exception : %j',
+    (data) => {
+      expect(QcmJsonGenerator.validateJsonData(data)).toBe(false)
+    },
+  )
+
   it('should invalidate QcmJsonData with missing titre', () => {
     const data = { ...sampleQcmData, titre: undefined }
     expect(QcmJsonGenerator.validateJsonData(data)).toBe(false)

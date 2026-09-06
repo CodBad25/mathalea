@@ -19,7 +19,7 @@ export const dateDePublication = '08/12/2022'
 export const uuid = '3cf30'
 
 export const refs = {
-  'fr-fr': ['can3L06'],
+  'fr-fr': ['can3L06', '2L13-flash3'],
   'fr-ch': [],
 }
 export default class ReduireAvecFraction extends ExerciceSimple {

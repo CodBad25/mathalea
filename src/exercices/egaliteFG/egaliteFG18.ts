@@ -46,8 +46,8 @@ export default class EgaliteFG18 extends Exercice {
       '<br>Maryam Mirzakhani (1977-2017), mathématicienne iranienne, est la première femme à avoir reçu la médaille Fields, en 2014.<br>'
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0; font-size:0.85rem;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de prix Nobel<br>de 1901 à 2024</th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de médailles Fields<br>de 1936 à 2024</th></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px;">65</td><td style="border: 1px solid #888; padding: 4px 10px;">2</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px;">915</td><td style="border: 1px solid #888; padding: 4px 10px;">62</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">65</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">2</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">915</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">62</td></tr>
       </table>
       <p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Source : Wikipedia</p>`
     const tableauLatex =
@@ -111,14 +111,18 @@ export default class EgaliteFG18 extends Exercice {
     const texteQ3 =
       "Lors de la semaine des Mathématiques en mars 2025, un collège a organisé un concours de résolution de problèmes afin d'encourager les élèves. Pour les récompenser de leur participation, le collège a acheté $630$ chocolats et $456$ caramels. Les professeurs de mathématiques ont souhaité faire des lots identiques, c'est-à-dire contenant chacun le même nombre de chocolats et le même nombre de caramels, en utilisant tous les bonbons.<br>" +
       'Donner la décomposition en produit de facteurs premiers de $630$ et de $456$.'
-    let texte3 = texteQ3 + '<br>'
-    texte3 += addMultiMathfield(this, 3, {
-      dataTemplate: '$630=$%{champ1}\n$456=$%{champ2}',
-      dataOptions: {
-        champ1: { keyboard: KeyboardType.clavierDeBase },
-        champ2: { keyboard: KeyboardType.clavierDeBase },
-      },
-    })
+    let texte3 = texteQ3
+    if (this.interactif) {
+      texte3 +=
+        '<br>' +
+        addMultiMathfield(this, 3, {
+          dataTemplate: '$630=$%{champ1}\n$456=$%{champ2}',
+          dataOptions: {
+            champ1: { keyboard: KeyboardType.clavierDeBase },
+            champ2: { keyboard: KeyboardType.clavierDeBase },
+          },
+        })
+    }
     handleAnswers(
       this,
       3,
@@ -154,16 +158,20 @@ export default class EgaliteFG18 extends Exercice {
 
     const texteQ5 =
       "Quel est le nombre maximum de lots qu'ont pu constituer les professeurs ? Combien de chocolats et de caramels y avait-il alors dans chaque lot ?"
-    let texte5 = texteQ5 + '<br>'
-    texte5 += addMultiMathfield(this, 5, {
-      dataTemplate:
-        'Nombre maximal de lots : %{champ1}\nNombre de chocolats par lot : %{champ2}\nNombre de caramels par lot : %{champ3}',
-      dataOptions: {
-        champ1: { keyboard: KeyboardType.clavierNumbers },
-        champ2: { keyboard: KeyboardType.clavierNumbers },
-        champ3: { keyboard: KeyboardType.clavierNumbers },
-      },
-    })
+    let texte5 = texteQ5
+    if (this.interactif) {
+      texte5 +=
+        '<br>' +
+        addMultiMathfield(this, 5, {
+          dataTemplate:
+            'Nombre maximal de lots : %{champ1}\nNombre de chocolats par lot : %{champ2}\nNombre de caramels par lot : %{champ3}',
+          dataOptions: {
+            champ1: { keyboard: KeyboardType.clavierNumbers },
+            champ2: { keyboard: KeyboardType.clavierNumbers },
+            champ3: { keyboard: KeyboardType.clavierNumbers },
+          },
+        })
+    }
     handleAnswers(
       this,
       5,

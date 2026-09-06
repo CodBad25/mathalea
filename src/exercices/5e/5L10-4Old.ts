@@ -155,7 +155,10 @@ export default class TableauxEtFonctionOld extends Exercice {
           latex: true,
         },
       ].concat(
-        grandLNum.map((el) =>
+        // On affiche les longueurs brutes dans l'unité de l'énoncé (unites[0]),
+        // comme le tableau non interactif ; la conversion éventuelle est faite
+        // par l'élève et détaillée dans la correction.
+        [L1, L2, L3, L4].map((el) =>
           Object.assign(
             {},
             {
@@ -175,7 +178,7 @@ export default class TableauxEtFonctionOld extends Exercice {
       ]
       const ligne2: Icell[] = [
         {
-          texte: `\\text{Périmètre du rectangle (en $${unites[1]}$)}`,
+          texte: `\\text{Périmètre du rectangle (en $${unitegrandL}$)}`,
           gras: true,
           color: 'black',
           latex: true,
@@ -211,7 +214,7 @@ export default class TableauxEtFonctionOld extends Exercice {
               `\\phantom{000}${L3}\\phantom{000}`,
               `\\phantom{000}${L4}\\phantom{000}`,
             ],
-            [`\\text{Périmètre du rectangle (en $${unites[1]}$)}`],
+            [`\\text{Périmètre du rectangle (en $${unitegrandL}$)}`],
             ['', '', '', ''],
           ),
           calculL1: `$\\text{Pour } ${L1} \\text{ ${unites[0]} : } 2\\times {\\color{blue}{${coteConnu} \\text{ ${unites[1]}}}} +2\\times {\\color{green}{${L1}\\text{ ${unites[0]}}}} ${etapeCorrective(`=2\\times {\\color{blue}{${petitLNum} \\text{ ${unitepetitL}}}} +2\\times {\\color{green}{${texNombre(grandLNum[0])} \\text{ ${unitegrandL}}}}`, this.sup)} = ${texNombre(2 * petitLNum + 2 * grandLNum[0])} \\text{ ${unitegrandL}}$.`,

@@ -27,6 +27,7 @@ import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import type { Valeur } from '../../lib/types'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -75,13 +76,13 @@ export default class RegionsDuPlan extends Exercice {
     )
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let content = ''
-      let objetReponse: any
+      let objetReponse: Valeur
       let texte = '$M$ est un point de la partie grisée du plan.<br>'
       texte +=
         'Trouve la ou les conditions vérifiées par le point $M$ :<br><br>'
       let texteCorr = ''
       const objetsEnonce: NestedObjetMathalea2dArray = []
-      let donneesAleatoires: any[] = []
+      let donneesAleatoires: (number | string)[] = []
       const noms = choisitLettresDifferentes(3, 'M')
       switch (listeTypeDeQuestions[i]) {
         case 'demiplanContenantPoint':
@@ -409,6 +410,10 @@ export default class RegionsDuPlan extends Exercice {
             objetReponse = { champ1: { value: '<' }, champ2: { value: '>' } }
           }
           break
+        default:
+          throw new Error(
+            `Type de question inconnu : ${listeTypeDeQuestions[i]}`,
+          )
       }
       if (context.isHtml && this.interactif) {
         texte += remplisLesBlancs(this, i, content, KeyboardType.clavierCompare)

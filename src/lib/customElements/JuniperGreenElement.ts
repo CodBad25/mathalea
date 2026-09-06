@@ -1,5 +1,5 @@
 import { context } from '../../modules/context'
-import { orangeMathalea } from '../colors'
+import { bleuMathalea, orangeMathalea } from '../colors'
 import { miseEnEvidence } from '../outils/embellissements'
 import { estPremier } from '../outils/primalite'
 import type { IExercice } from '../types'
@@ -15,18 +15,35 @@ import MathaleaCustomElement, {
  * servir deux fois. La partie s'arrête quand plus aucun multiple ni diviseur
  * du dernier nombre n'est disponible.
  *
- * Le composant ne porte aucune réponse d'élève : il n'est donc pas déclaré
- * dans `listOfCustomElements` et l'exercice qui l'utilise n'est pas interactif
- * au sens de MathALÉA (ni score, ni bouton « Vérifier »).
+ * Le composant est interactif au sens de MathALÉA : cliquer sur « Vérifier
+ * les réponses » (ou atteindre la fin de partie, ou une erreur bloquante en
+ * mode `arret`) fige la partie telle qu'elle a été jouée et lui attribue un
+ * score sur 2 (voir `finalise()` et `verifQuestion()`).
  *
  * @author Rémi Angot
  */
 
+/** Règles de départ de la partie. */
+export type ModeDepart =
+  /** Le premier nombre est choisi librement par le joueur. */
+  | 'libre'
+  /** Le premier nombre est choisi librement, mais ne peut pas être premier. */
+  | 'libreSansPremier'
+  /** Le premier nombre est imposé : tiré au hasard parmi les non premiers. */
+  | 'aleatoireSansPremier'
+
+/** Ce qui se passe quand le joueur choisit un nombre interdit. */
+export type ModeErreur =
+  /** Le message d'erreur sert d'indication : la partie continue. */
+  | 'indication'
+  /** Le message d'erreur arrête la partie. */
+  | 'arret'
+
 export type ReglesJuniperGreen = {
   /** Plus grand nombre de la grille. */
   max: number
-  /** Interdit de commencer la partie par un nombre premier. */
-  debutPremierInterdit: boolean
+  /** Règle appliquée au premier nombre de la partie. */
+  modeDepart: ModeDepart
 }
 
 export type JuniperGreenOptions = {
@@ -37,9 +54,11 @@ export type JuniperGreenOptions = {
   max?: number
   /** Nombre de cases par ligne : 5 ou 10. */
   nombresParLigne?: number
-  /** Interdit de commencer la partie par un nombre premier. */
-  debutPremierInterdit?: boolean
-  /** Partie déjà jouée : sert à afficher un exemple dans la correction. */
+  /** Règle appliquée au premier nombre de la partie. */
+  modeDepart?: ModeDepart
+  /** Ce qui se passe quand le joueur choisit un nombre interdit. */
+  modeErreur?: ModeErreur
+  /** Partie déjà jouée : sert à afficher un exemple dans la correction, ou à imposer un début de partie. */
   suite?: number[]
   /** Dévoile la partie reçue un nombre à la fois, une seconde par nombre. */
   animation?: boolean
@@ -52,6 +71,10 @@ const PAR_LIGNE_PAR_DEFAUT = 10
 const DELAI_ANIMATION_MS = 1000
 /** Côté d'une case, en em pour suivre le zoom des vues (voir `construitInterface`). */
 const TAILLE_CASE = '2.25em'
+/** Score maximal attribué à la question. */
+const SCORE_MAX = 2
+/** Nombre de cases à choisir pour obtenir 1 point quand la partie n'est pas finie. */
+export const NOMBRE_DE_CASES_POUR_UN_POINT = 4
 
 /** La grille commence à 1 : en dessous de 2 nombres il n'y a pas de partie. */
 function normaliseMax(valeur: unknown): number {
@@ -65,8 +88,34 @@ function normaliseParLigne(valeur: unknown): number {
   return Math.round(Number(valeur)) === 5 ? 5 : PAR_LIGNE_PAR_DEFAUT
 }
 
+function normaliseModeDepart(valeur: unknown): ModeDepart {
+  if (valeur === 'libreSansPremier' || valeur === 'aleatoireSansPremier') {
+    return valeur
+  }
+  return 'libre'
+}
+
+function normaliseModeErreur(valeur: unknown): ModeErreur {
+  return valeur === 'arret' ? 'arret' : 'indication'
+}
+
+/** Un premier nombre premier n'est autorisé qu'en mode de départ libre. */
+function debutPremierInterdit(modeDepart: ModeDepart): boolean {
+  return modeDepart !== 'libre'
+}
+
 function nombresDeLaGrille(max: number): number[] {
   return Array.from({ length: max }, (_, index) => index + 1)
+}
+
+/** Tous les nombres non premiers de la grille : utile pour un départ imposé. */
+export function nombresNonPremiers(max: number): number[] {
+  return nombresDeLaGrille(max).filter((nombre) => !estPremier(nombre))
+}
+
+/** La couleur du nombre choisi au coup `index` (0 pour le premier coup) : elle alterne à chaque coup. */
+function couleurDuCoup(index: number): string {
+  return index % 2 === 0 ? bleuMathalea : orangeMathalea
 }
 
 /**
@@ -87,7 +136,7 @@ export function raisonDuRefus(
   if (suite.includes(nombre)) return `${nombre} a déjà été utilisé.`
   const dernier = suite.at(-1)
   if (dernier === undefined) {
-    if (regles.debutPremierInterdit && estPremier(nombre)) {
+    if (debutPremierInterdit(regles.modeDepart) && estPremier(nombre)) {
       return `Il est interdit de commencer par un nombre premier, et ${nombre} en est un.`
     }
     return null
@@ -122,11 +171,12 @@ function renderLatexGrille(
   const nombres = nombresDeLaGrille(max)
   const lignes: string[] = []
   for (let debut = 0; debut < nombres.length; debut += nombresParLigne) {
-    const ligne = nombres
-      .slice(debut, debut + nombresParLigne)
-      .map((nombre) =>
-        suite.includes(nombre) ? `$${miseEnEvidence(nombre)}$` : `$${nombre}$`,
-      )
+    const ligne = nombres.slice(debut, debut + nombresParLigne).map((nombre) => {
+      const index = suite.indexOf(nombre)
+      return index === -1
+        ? `$${nombre}$`
+        : `$${miseEnEvidence(nombre, couleurDuCoup(index))}$`
+    })
     while (ligne.length < nombresParLigne) ligne.push('')
     lignes.push(`${ligne.join(' & ')} \\\\ \\hline`)
   }
@@ -148,11 +198,12 @@ function renderTypstGrille(
   suite: readonly number[],
 ): string {
   const cellules = nombresDeLaGrille(max)
-    .map((nombre) =>
-      suite.includes(nombre)
-        ? `text(fill: rgb("${orangeMathalea}"), weight: "bold")[$${nombre}$]`
-        : `[$${nombre}$]`,
-    )
+    .map((nombre) => {
+      const index = suite.indexOf(nombre)
+      return index === -1
+        ? `[$${nombre}$]`
+        : `text(fill: rgb("${couleurDuCoup(index)}"), weight: "bold")[$${nombre}$]`
+    })
     .join(', ')
   const grille = `#align(center, table(columns: ${nombresParLigne}, align: center + horizon, stroke: 0.5pt, inset: 6pt, ${cellules}))`
   if (suite.length === 0) return grille
@@ -181,8 +232,11 @@ export class JuniperGreenElement extends MathaleaCustomElement {
   private nombresParLigne = PAR_LIGNE_PAR_DEFAUT
   private regles: ReglesJuniperGreen = {
     max: MAX_PAR_DEFAUT,
-    debutPremierInterdit: false,
+    modeDepart: 'libre',
   }
+  private modeErreur: ModeErreur = 'indication'
+  private numeroExercice = 0
+  private questionIndex = 0
 
   private suite: number[] = []
   /** Nombres de `suite` déjà dévoilés : toute la suite hors animation. */
@@ -190,6 +244,13 @@ export class JuniperGreenElement extends MathaleaCustomElement {
   private animation = false
   private minuterie: number | null = null
   private avertissement = ''
+  /** La partie a été arrêtée par une erreur (mode `arret`). */
+  private arretee = false
+  /** Coups encore possibles au moment où la partie a été arrêtée par une erreur. */
+  private possibilitesAuMomentDeLerreur: number[] = []
+  /** La partie a été figée par `finalise()` (bouton « Vérifier » ou arrêt automatique). */
+  private verifiee = false
+  private scoreFinal = 0
   private cellules = new Map<number, HTMLButtonElement>()
   private zoneSuite: HTMLElement | null = null
   private zoneMessage: HTMLElement | null = null
@@ -197,7 +258,8 @@ export class JuniperGreenElement extends MathaleaCustomElement {
   static create(options: JuniperGreenOptions = {}): string {
     const max = normaliseMax(options.max)
     const nombresParLigne = normaliseParLigne(options.nombresParLigne)
-    const debutPremierInterdit = options.debutPremierInterdit ?? false
+    const modeDepart = normaliseModeDepart(options.modeDepart)
+    const modeErreur = normaliseModeErreur(options.modeErreur)
     const suite = options.suite ?? []
     const animation = options.animation ?? false
     if (context.isTypst) {
@@ -206,17 +268,22 @@ export class JuniperGreenElement extends MathaleaCustomElement {
     if (!context.isHtml) {
       return renderLatexGrille(max, nombresParLigne, suite)
     }
+    const numeroExercice = options.numeroExercice ?? 0
+    const questionIndex = options.questionIndex ?? 0
     const id =
       options.id ??
-      `${JuniperGreenElement.elementTag}Ex${options.numeroExercice ?? 0}Q${options.questionIndex ?? 0}`
+      `${JuniperGreenElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
     return super.create({
       id,
       max,
       nombresParLigne,
-      debutPremierInterdit,
+      modeDepart,
+      modeErreur,
       suite,
       animation,
       interactivityOn: options.interactivityOn ?? true,
+      numeroExercice,
+      questionIndex,
     })
   }
 
@@ -227,9 +294,11 @@ export class JuniperGreenElement extends MathaleaCustomElement {
     )
     this.regles = {
       max: normaliseMax(this.getAttribute('max')),
-      debutPremierInterdit:
-        this.getAttribute('debut-premier-interdit') === 'true',
+      modeDepart: normaliseModeDepart(this.getAttribute('mode-depart')),
     }
+    this.modeErreur = normaliseModeErreur(this.getAttribute('mode-erreur'))
+    this.numeroExercice = Number(this.getAttribute('numero-exercice')) || 0
+    this.questionIndex = Number(this.getAttribute('question-index')) || 0
     this.animation = this.getAttribute('animation') === 'true'
     this.construitInterface()
     this.update(this.getAttribute('suite'))
@@ -260,6 +329,8 @@ export class JuniperGreenElement extends MathaleaCustomElement {
       this.suite.push(nombre)
     }
     this.avertissement = ''
+    this.arretee = false
+    this.possibilitesAuMomentDeLerreur = []
     if (this.animation && this.suite.length > 0) this.demarreAnimation()
     else this.nbAffiches = this.suite.length
     this.render()
@@ -315,6 +386,11 @@ export class JuniperGreenElement extends MathaleaCustomElement {
   private get partieTerminee(): boolean {
     if (this.suite.length === 0) return false
     return coupsPossibles(this.suite, this.regles).length === 0
+  }
+
+  /** La partie ne peut plus être jouée : soit terminée, soit arrêtée par une erreur. */
+  private get partieBloquee(): boolean {
+    return this.partieTerminee || this.arretee
   }
 
   /**
@@ -376,7 +452,7 @@ export class JuniperGreenElement extends MathaleaCustomElement {
   }
 
   private readonly clicCellule = (evenement: Event): void => {
-    if (!this.interactivityOn || this.partieTerminee) return
+    if (!this.interactivityOn || this.partieBloquee) return
     const cellule = evenement.currentTarget as HTMLButtonElement
     const nombre = Number(cellule.dataset.nombre)
     const refus = raisonDuRefus(this.suite, nombre, this.regles)
@@ -384,18 +460,64 @@ export class JuniperGreenElement extends MathaleaCustomElement {
       this.avertissement = ''
       this.suite.push(nombre)
       this.nbAffiches = this.suite.length
+    } else if (this.modeErreur === 'arret') {
+      this.possibilitesAuMomentDeLerreur = coupsPossibles(
+        this.suite,
+        this.regles,
+      )
+      this.avertissement = refus
+      this.arretee = true
     } else {
       this.avertissement = refus
     }
     this.render()
+    // Fin de partie ou erreur bloquante : la partie s'arrête d'elle-même, il
+    // n'y a donc plus besoin d'attendre que l'élève clique sur « Vérifier ».
+    if (this.partieBloquee) this.declencheVerification()
+  }
+
+  /**
+   * Déclenche le bouton « Vérifier les réponses » de l'exercice, comme un
+   * clic de l'élève. Son id dépend de la vue qui héberge l'exercice : vue
+   * élève (`buttonScoreEx…`) ou vue prof/aperçu (`verif…`).
+   */
+  private declencheVerification(): void {
+    const bouton =
+      document.querySelector<HTMLButtonElement>(
+        `#buttonScoreEx${this.numeroExercice}`,
+      ) ??
+      document.querySelector<HTMLButtonElement>(`#verif${this.numeroExercice}`)
+    bouton?.click()
+  }
+
+  /**
+   * Fige la partie telle qu'elle a été jouée et lui attribue un score sur
+   * `SCORE_MAX` : la partie terminée (plus aucun coup possible) rapporte le
+   * score maximal, sinon le score dépend du nombre de cases déjà choisies.
+   * Appelée par `verifQuestion()`, que ce soit sur un clic « Vérifier », une
+   * fin de partie naturelle ou une erreur bloquante (mode `arret`).
+   */
+  finalise(): number {
+    if (this.verifiee) return this.scoreFinal
+    this.scoreFinal = this.partieTerminee
+      ? SCORE_MAX
+      : this.suite.length >= NOMBRE_DE_CASES_POUR_UN_POINT
+        ? 1
+        : 0
+    this.verifiee = true
+    // Le setter déclenche onInteractivityChanged() -> render() : la grille se
+    // fige et le message affiche le score.
+    this.interactivityOn = false
+    return this.scoreFinal
   }
 
   private rafraichitGrille(): void {
-    const jouable = this.interactivityOn && !this.partieTerminee
+    const jouable = this.interactivityOn && !this.partieBloquee
     const affiches = this.nombresAffiches
     for (const [nombre, cellule] of this.cellules) {
-      const utilise = affiches.includes(nombre)
-      cellule.style.backgroundColor = utilise ? orangeMathalea : ''
+      const index = affiches.indexOf(nombre)
+      const utilise = index !== -1
+      cellule.style.backgroundColor = utilise ? couleurDuCoup(index) : ''
       cellule.style.color = utilise ? '#ffffff' : ''
       cellule.style.cursor = jouable ? 'pointer' : 'default'
       cellule.style.outline =
@@ -414,20 +536,58 @@ export class JuniperGreenElement extends MathaleaCustomElement {
     this.zoneSuite.textContent = texteSuite(this.nombresAffiches, ' → ')
   }
 
+  /** « La suite compte N nombre(s). », ou une formulation dédiée quand elle est vide. */
+  private texteTailleSuite(): string {
+    if (this.suite.length === 0) return 'Aucun nombre n’a encore été choisi.'
+    const pluriel = this.suite.length > 1 ? 's' : ''
+    return `La suite compte ${this.suite.length} nombre${pluriel}.`
+  }
+
+  private texteArretee(): string {
+    const possibilites = this.possibilitesAuMomentDeLerreur
+    const texteChoix =
+      possibilites.length === 0
+        ? 'Aucun autre nombre n’était encore disponible.'
+        : `Les nombres encore possibles étaient : ${possibilites.join(', ')}.`
+    return `Partie arrêtée : ${this.avertissement} ${texteChoix} ${this.texteTailleSuite()}`
+  }
+
+  private texteTerminee(prefixe = ''): string {
+    return (
+      `${prefixe}Partie terminée : aucun multiple ni diviseur de ${this.dernier} ` +
+      `n'est encore disponible. ${this.texteTailleSuite()}`
+    )
+  }
+
+  /** Message affiché une fois la partie figée par `finalise()`, score inclus. */
+  private texteVerification(): string {
+    const score = `Score : ${this.scoreFinal}/${SCORE_MAX}.`
+    if (this.partieTerminee) return `${this.texteTerminee('Bravo ! ')} ${score}`
+    if (this.arretee) return `${this.texteArretee()} ${score}`
+    return `Partie arrêtée. ${this.texteTailleSuite()} ${score}`
+  }
+
   private rafraichitMessage(): void {
     if (!this.zoneMessage) return
-    // Dans la correction, la partie est donnée toute jouée : ni consigne de
-    // coup suivant, ni annonce de fin de partie.
-    if (!this.interactivityOn) {
+    // Dans la correction (exemple de partie donné tout joué), il n'y a ni
+    // consigne de coup suivant, ni annonce de fin de partie.
+    if (!this.interactivityOn && !this.verifiee) {
       this.zoneMessage.textContent = ''
       return
     }
-    if (this.partieTerminee) {
-      const pluriel = this.suite.length > 1 ? 's' : ''
+    if (this.verifiee) {
       this.zoneMessage.style.color = orangeMathalea
-      this.zoneMessage.textContent =
-        `Partie terminée : aucun multiple ni diviseur de ${this.dernier} n'est encore disponible. ` +
-        `La suite compte ${this.suite.length} nombre${pluriel}.`
+      this.zoneMessage.textContent = this.texteVerification()
+      return
+    }
+    if (this.arretee) {
+      this.zoneMessage.style.color = orangeMathalea
+      this.zoneMessage.textContent = this.texteArretee()
+      return
+    }
+    if (this.partieTerminee) {
+      this.zoneMessage.style.color = orangeMathalea
+      this.zoneMessage.textContent = this.texteTerminee()
       return
     }
     if (this.avertissement !== '') {
@@ -438,10 +598,47 @@ export class JuniperGreenElement extends MathaleaCustomElement {
     this.zoneMessage.style.color = ''
     this.zoneMessage.textContent =
       this.dernier === undefined
-        ? this.regles.debutPremierInterdit
-          ? 'Choisissez un nombre pour commencer : il ne doit pas être un nombre premier.'
-          : 'Choisissez un premier nombre.'
-        : `Choisissez un multiple ou un diviseur de ${this.dernier}.`
+        ? debutPremierInterdit(this.regles.modeDepart)
+          ? 'Choisir un premier nombre, sans choisir un nombre premier.'
+          : 'Choisir un premier nombre.'
+        : `Choisir un multiple ou un diviseur de ${this.dernier}.`
+  }
+
+  /**
+   * Vérification interactive : appelée par le moteur MathALÉA sur un clic
+   * « Vérifier les réponses ». Fige la partie et lui attribue son score,
+   * qu'elle ait déjà été figée automatiquement (fin de partie, erreur
+   * bloquante) ou non (l'élève arrête volontairement une partie en cours).
+   */
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
+    const id = `${JuniperGreenElement.elementTag}Ex${exercice.numeroExercice ?? 0}Q${questionIndex}`
+    const element = document.getElementById(id) as JuniperGreenElement | null
+    if (element == null) {
+      return {
+        isOk: false,
+        feedback: '',
+        score: { nbBonnesReponses: 0, nbReponses: SCORE_MAX },
+      }
+    }
+    exercice.answers ??= {}
+    exercice.answers[element.id] = JSON.stringify(element.value)
+    const score = element.finalise()
+    return {
+      isOk: score === SCORE_MAX,
+      feedback: '',
+      score: { nbBonnesReponses: score, nbReponses: SCORE_MAX },
+    }
+  }
+
+  static pointsMaxQuestion(): number {
+    return SCORE_MAX
   }
 }
 

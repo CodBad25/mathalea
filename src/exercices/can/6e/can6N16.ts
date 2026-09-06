@@ -21,7 +21,7 @@ export const dateDeModifImportante = '12/10/2024'
 export const uuid = 'fb7ac'
 
 export const refs = {
-  'fr-fr': ['can6N16', '6N1C-flash2'],
+  'fr-fr': ['can6N16', '6N1C-flash2', '2N11-flash3'],
   'fr-ch': [],
 }
 export default class AbscisseDroiteEntiers extends ExerciceSimple {
