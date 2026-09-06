@@ -3,6 +3,17 @@ import { orangeMathalea, vertMathalea } from '../colors'
 import { miseEnEvidence } from '../outils/embellissements'
 import { etiquetteCage, type CageKenKen } from '../outils/kenken'
 import type { IExercice } from '../types'
+import {
+  cleDeLaCase as cleDeLaCasePartagee,
+  creeChampDeSaisie,
+  deplacementDuClavier,
+  deplaceLeFocus,
+  filtreLaSaisie,
+  pointsMaxDesCases,
+  verifieLesCases,
+  type GrilleDeChiffres,
+  type ResultatVerification,
+} from './grilleDeChiffres'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -55,7 +66,7 @@ function colonneDe(index: number, taille: number): number {
 
 /** La clé de réponse d'une case, à la convention des tableaux MathALÉA. */
 export function cleDeLaCase(index: number, taille: number): string {
-  return `L${ligneDe(index, taille) + 1}C${colonneDe(index, taille) + 1}`
+  return cleDeLaCasePartagee(ligneDe(index, taille), colonneDe(index, taille))
 }
 
 function normaliseTaille(valeur: unknown): number {
@@ -275,7 +286,10 @@ export function renderTypstGrille(
 /* Le composant                                                                */
 /* -------------------------------------------------------------------------- */
 
-export class KenKenGrilleElement extends MathaleaCustomElement {
+export class KenKenGrilleElement
+  extends MathaleaCustomElement
+  implements GrilleDeChiffres
+{
   static readonly elementTag = 'kenken-grille'
 
   private taille = 4
@@ -490,21 +504,11 @@ export class KenKenGrilleElement extends MathaleaCustomElement {
       return cellule
     }
 
-    const champ = document.createElement('input')
-    champ.type = 'text'
-    champ.inputMode = 'numeric'
-    champ.autocomplete = 'off'
-    champ.maxLength = 1
-    champ.dataset.case = String(index)
-    champ.setAttribute(
-      'aria-label',
-      `Ligne ${ligneDe(index, this.taille) + 1}, colonne ${colonneDe(index, this.taille) + 1}`,
-    )
-    champ.className = 'text-center bg-transparent focus:outline-none font-bold'
-    champ.style.width = '100%'
-    champ.style.height = '100%'
-    champ.style.fontSize = '1.2em'
-    champ.style.border = 'none'
+    const champ = creeChampDeSaisie({
+      index,
+      chiffreMax: this.taille,
+      ariaLabel: `Ligne ${ligneDe(index, this.taille) + 1}, colonne ${colonneDe(index, this.taille) + 1}`,
+    })
     cellule.appendChild(champ)
     this.champs.set(index, champ)
     return cellule
@@ -520,75 +524,31 @@ export class KenKenGrilleElement extends MathaleaCustomElement {
   }
 
   /**
-   * Seuls les chiffres de 1 à n ont un sens dans la grille.
-   *
-   * Le focus reste sur la case saisie : une grille de KenKen ne se remplit pas
-   * dans l'ordre de lecture, l'élève passe d'une cage à l'autre au gré de ses
-   * déductions. Les flèches du clavier servent à se déplacer.
+   * Seuls les chiffres de 1 à n ont un sens dans la grille, et le focus reste
+   * sur la case saisie : une grille de KenKen ne se remplit pas dans l'ordre de
+   * lecture, l'élève passe d'une cage à l'autre au gré de ses déductions.
    */
-  private readonly saisie = (evenement: Event): void => {
-    const champ = evenement.target
-    if (!(champ instanceof HTMLInputElement)) return
-    const chiffre = Number(champ.value)
-    if (
-      champ.value !== '' &&
-      (!Number.isInteger(chiffre) || chiffre < 1 || chiffre > this.taille)
-    ) {
-      champ.value = ''
-      return
-    }
-    // La case saisie reste sélectionnée : taper un autre chiffre la corrige
-    // sans avoir à effacer d'abord.
-    champ.select()
-  }
+  private readonly saisie = filtreLaSaisie
 
+  /** Les flèches du clavier déplacent le curseur d'une case à l'autre. */
   private readonly toucheEnfoncee = (evenement: KeyboardEvent): void => {
     const champ = evenement.target
     if (!(champ instanceof HTMLInputElement)) return
-    const deplacements: Record<string, [number, number]> = {
-      ArrowRight: [1, 0],
-      ArrowLeft: [-1, 0],
-      ArrowDown: [0, 1],
-      ArrowUp: [0, -1],
-    }
-    const deplacement = deplacements[evenement.key]
+    const deplacement = deplacementDuClavier(evenement.key)
     if (deplacement === undefined) return
     evenement.preventDefault()
-    this.deplaceLeFocus(champ, deplacement[0], deplacement[1])
-  }
-
-  /** Donne le focus au prochain champ de saisie, en sautant les valeurs données. */
-  private deplaceLeFocus(
-    champ: HTMLInputElement,
-    pasColonne: number,
-    pasLigne: number,
-  ): void {
-    const index = Number(champ.dataset.case)
-    let ligne = ligneDe(index, this.taille)
-    let colonne = colonneDe(index, this.taille)
-    for (let essai = 0; essai < this.taille * this.taille; essai++) {
-      colonne += pasColonne
-      ligne += pasLigne
-      if (colonne >= this.taille) {
-        colonne = 0
-        ligne++
-      }
-      if (colonne < 0) {
-        colonne = this.taille - 1
-        ligne--
-      }
-      if (ligne < 0 || ligne >= this.taille) return
-      const suivant = this.champs.get(ligne * this.taille + colonne)
-      if (suivant != null) {
-        suivant.focus()
-        suivant.select()
-        return
-      }
-    }
+    deplaceLeFocus(
+      this.champs,
+      Number(champ.dataset.case),
+      this.taille,
+      this.taille,
+      deplacement[0],
+      deplacement[1],
+    )
   }
 
   /** Colore chaque case selon que sa valeur est juste ou non. */
-  private marqueLesCases(etats: Map<string, boolean>): void {
+  marqueLesCases(etats: Map<string, boolean>): void {
     for (const [index, champ] of this.champs) {
       const etat = etats.get(cleDeLaCase(index, this.taille))
       if (etat === undefined) continue
@@ -600,7 +560,7 @@ export class KenKenGrilleElement extends MathaleaCustomElement {
     }
   }
 
-  private afficheLeScore(nbBonnesReponses: number, nbReponses: number): void {
+  afficheLeScore(nbBonnesReponses: number, nbReponses: number): void {
     if (this.zoneMessage == null) return
     this.zoneMessage.style.color = orangeMathalea
     const pluriel = nbBonnesReponses > 1 ? 's' : ''
@@ -615,53 +575,17 @@ export class KenKenGrilleElement extends MathaleaCustomElement {
   static verifQuestion(
     exercice: IExercice,
     questionIndex: number,
-  ): {
-    isOk: boolean
-    feedback: string
-    score: { nbBonnesReponses: number; nbReponses: number }
-  } {
+  ): ResultatVerification {
     const id = `${KenKenGrilleElement.elementTag}Ex${exercice.numeroExercice ?? 0}Q${questionIndex}`
-    const element = document.getElementById(id) as KenKenGrilleElement | null
-    const reponses = exercice.autoCorrection?.[questionIndex]?.valeur
-    if (element == null || reponses == null) {
-      return {
-        isOk: false,
-        feedback: '',
-        score: { nbBonnesReponses: 0, nbReponses: 1 },
-      }
-    }
-    exercice.answers ??= {}
-    exercice.answers[element.id] = JSON.stringify(element.value)
-    const saisies = element.value
-    const etats = new Map<string, boolean>()
-    let nbBonnesReponses = 0
-    const attendues = Object.entries(reponses).filter(([cle]) =>
-      /^L\d+C\d+$/.test(cle),
+    return verifieLesCases(
+      exercice,
+      questionIndex,
+      document.getElementById(id) as KenKenGrilleElement | null,
     )
-    for (const [cle, attendue] of attendues) {
-      const valeur = (attendue as { value?: string | number }).value
-      const isOk = valeur != null && (saisies[cle] ?? '') === String(valeur)
-      if (isOk) nbBonnesReponses++
-      etats.set(cle, isOk)
-    }
-    const nbReponses = Math.max(1, attendues.length)
-    element.marqueLesCases(etats)
-    element.afficheLeScore(nbBonnesReponses, nbReponses)
-    element.interactivityOn = false
-    return {
-      isOk: nbBonnesReponses === attendues.length,
-      feedback: '',
-      score: { nbBonnesReponses, nbReponses },
-    }
   }
 
   static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
-    const valeur = exercice.autoCorrection?.[questionIndex]?.valeur
-    if (valeur == null) return 1
-    const nbCases = Object.keys(valeur).filter((cle) =>
-      /^L\d+C\d+$/.test(cle),
-    ).length
-    return Math.max(1, nbCases)
+    return pointsMaxDesCases(exercice, questionIndex)
   }
 }
 
