@@ -133,8 +133,14 @@ ajouteCanvas3d({
   width: 300,
   height: 300,
   className: 'classe-optionnelle',
+  buttonLabel: 'Visualisation 3D', // optionnel : remplace la vignette par ce bouton
 })
 ```
+
+Par défaut, le composant affiche une image statique munie d'un bouton plein
+écran. Avec `buttonLabel`, il n'affiche que le bouton demandé et ouvre
+directement la scène manipulable au clic. Ce mode convient notamment à une
+visualisation complémentaire placée dans une correction.
 
 `content` est un objet sérialisable avec au minimum `objects`. Les options utiles sont :
 
@@ -145,6 +151,9 @@ ajouteCanvas3d({
 Les types directement reconnus par `Canvas3DElement` sont actuellement :
 
 - `cube` : `{ type: 'cube', pos: [x, y, z], size, edges }` ;
+- `skyscraperGrid` : grille de hauteurs et quatre listes d'indices de
+  visibilité (`north`, `south`, `west`, `east`), rendues avec un sol quadrillé,
+  des immeubles texturés et les indices autour de la grille ;
 - `bufferGeometry` : géométrie Three.js sérialisée ou union créée par les helpers de `solidesThreeJs.ts` ;
 - `group` : objet Three.js sérialisé par `.toJSON()` ;
 - `geoPoint` et `geoPoints` ;

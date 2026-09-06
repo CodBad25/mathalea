@@ -1,13 +1,19 @@
-import type { AllChoiceType } from '../../lib/customElements/ListeDeroulanteElement';
-import type { TableauHybrideCell } from '../../lib/customElements/TableauHybride';
-import { creeTableauHybrideElement } from '../../lib/customElements/TableauHybride';
-import { handleAnswers } from '../../lib/interactif/gestionInteractif';
-import { balancedLatinSquare } from '../../lib/outils/grid';
+import type { AllChoiceType } from '../../lib/customElements/ListeDeroulanteElement'
+import type { TableauHybrideCell } from '../../lib/customElements/TableauHybride'
+import { creeTableauHybrideElement } from '../../lib/customElements/TableauHybride'
+import {
+  ajouteCanvas3d,
+  type Canvas3DContentDescription,
+} from '../../lib/3d/3d_dynamique/Canvas3DElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { balancedLatinSquare } from '../../lib/outils/grid'
 
-import type { Valeur } from '../../lib/types';
-import Exercice from '../Exercice';
+import type { Valeur } from '../../lib/types'
+import { context } from '../../modules/context'
+import Exercice from '../Exercice'
 
 export const dateDePublication = '15/08/2026'
+export const dateDeModificationImportante = '06/09/2026'
 export const titre = 'Résoudre une grille de Gratte-ciel'
 export const interactifReady = true
 
@@ -23,7 +29,7 @@ export const refs = {
 
 function celluleTexte(
   texte: string | number,
-  header: boolean = true
+  header: boolean = true,
 ): TableauHybrideCell {
   return { type: 'text', texte, header: header, latex: true }
 }
@@ -38,16 +44,14 @@ function celluleListe(
     id,
     value,
     choix0: true,
-    choices
+    choices,
   }
 }
 
-export function responseSelect(
-  immeubles: number[]
-): AllChoiceType[]{
-  const select: AllChoiceType[]= [{ label: 'Choisir', value: '' }]
-  immeubles.forEach((val) => select.push({latex: `${val}`, value: `${val}`}))
-  return select;
+export function responseSelect(immeubles: number[]): AllChoiceType[] {
+  const select: AllChoiceType[] = [{ label: 'Choisir', value: '' }]
+  immeubles.forEach((val) => select.push({ latex: `${val}`, value: `${val}` }))
+  return select
 }
 
 export default class gratteciel extends Exercice {
@@ -143,7 +147,9 @@ export default class gratteciel extends Exercice {
       }
 
       // transform it as tab header and footer
-      const corner = this.interactif ? [celluleTexte('~', false)] : [celluleTexte('\\phantom{rrrrr}', false)];
+      const corner = this.interactif
+        ? [celluleTexte('~', false)]
+        : [celluleTexte('\\phantom{rrrrr}', false)]
       const tabColHeaders: TableauHybrideCell[] = corner
         .concat(north.map((x) => celluleTexte(x.toString())))
         .concat(corner)
@@ -152,17 +158,17 @@ export default class gratteciel extends Exercice {
         .concat(corner)
 
       // create the whole tab
-      const select: AllChoiceType[] = responseSelect(immeubles);
-      const tab = {rows: [tabColHeaders]}; // init with header
-      for (let i = 0; i < this.sup; i++ ){
-        const line = [celluleTexte(west[i])];
-        for (let j = 0; j < this.sup; j++){
-          line.push(celluleListe(`L${i + 1}C${j + 1}`, select, grid[i][j]));
+      const select: AllChoiceType[] = responseSelect(immeubles)
+      const tab = { rows: [tabColHeaders] } // init with header
+      for (let i = 0; i < this.sup; i++) {
+        const line = [celluleTexte(west[i])]
+        for (let j = 0; j < this.sup; j++) {
+          line.push(celluleListe(`L${i + 1}C${j + 1}`, select, grid[i][j]))
         }
-        line.push(celluleTexte(east[i]));
-        tab.rows.push(line);
+        line.push(celluleTexte(east[i]))
+        tab.rows.push(line)
       }
-      tab.rows.push(tabColFooters);
+      tab.rows.push(tabColFooters)
 
       const texte: string = creeTableauHybrideElement({
         numeroExercice: this.numeroExercice ?? 0,
@@ -171,25 +177,63 @@ export default class gratteciel extends Exercice {
         interactivityOn: this.interactif,
       })
 
-      const texteCorr = 'Voici une solution possible :<br>' + creeTableauHybrideElement({
-        numeroExercice: this.numeroExercice ?? 0,
-        questionIndex: i,
-        tableau: tab,
-        interactivityOn: false,
-        correctionOn: true,
-      })
+      let texteCorr =
+        'Voici une solution possible :<br>' +
+        creeTableauHybrideElement({
+          numeroExercice: this.numeroExercice ?? 0,
+          questionIndex: i,
+          tableau: tab,
+          interactivityOn: false,
+          correctionOn: true,
+        })
+
+      if (context.isHtml) {
+        const content: Canvas3DContentDescription = {
+          objects: [
+            { type: 'skyscraperGrid', grid, north, south, west, east },
+            { type: 'ambientLight', color: 0xffffff, intensity: 1.3 },
+            {
+              type: 'directionalLight',
+              color: 0xffffff,
+              intensity: 1.6,
+              position: [8, 12, 10],
+            },
+            {
+              type: 'directionalLight',
+              color: 0xb8d8ff,
+              intensity: 0.8,
+              position: [-8, 6, -10],
+            },
+          ],
+          backgroundColor: 0xe8f0f5,
+          autoCenterZoomMargin: 1.25,
+        }
+        texteCorr +=
+          '<br><br>' +
+          ajouteCanvas3d({
+            id: `canvas3d-gratte-ciel-${this.numeroExercice ?? 0}-${i}`,
+            content,
+            width: 500,
+            height: 500,
+            buttonLabel: 'Visualisation 3D',
+          })
+      }
 
       let objetReponse: Valeur = {}
       for (let i = 0; i < this.sup; i++) {
         for (let j = 0; j < this.sup; j++) {
           // TODO
           // objetReponse[`L${i + 1}C${j + 1}`] = {value : grid[i][j], options: { fonction: true }}
-          const cellule = Object.fromEntries([[`L${i + 1}C${j + 1}`, { value: grid[i][j] }]])
+          const cellule = Object.fromEntries([
+            [`L${i + 1}C${j + 1}`, { value: grid[i][j] }],
+          ])
           objetReponse = Object.assign(objetReponse, cellule)
         }
       }
 
-      handleAnswers(this, i, objetReponse, { formatInteractif: 'tableau-hybride' },);
+      handleAnswers(this, i, objetReponse, {
+        formatInteractif: 'tableau-hybride',
+      })
 
       if (this.questionJamaisPosee(i, ...inline_grid)) {
         // Si la question n'a jamais été posée, on en créé une autre

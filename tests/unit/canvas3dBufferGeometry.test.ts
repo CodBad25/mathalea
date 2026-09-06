@@ -82,4 +82,28 @@ describe('contrat bufferGeometry du canvas 3D', () => {
     ])
     canvas.disconnectedCallback()
   })
+
+  it('peut présenter une scène sous la forme d’un bouton seul', () => {
+    const html = ajouteCanvas3d({
+      id: 'test-button-only',
+      content: {
+        objects: [{ type: 'cube', pos: [0, 0, 0], size: 1 }],
+      },
+      width: 500,
+      height: 500,
+      buttonLabel: 'Visualisation 3D',
+    })
+    const encodedContent = html.match(/content='([^']+)'/)?.[1]
+    if (!encodedContent) throw new Error('Attribut content absent.')
+
+    const canvas = new Canvas3dElement()
+    canvas.setAttribute('content', encodedContent)
+    canvas.setAttribute('button-label', 'Visualisation 3D')
+    canvas.connectedCallback()
+
+    expect(canvas.style.width).toBe('auto')
+    expect(canvas.querySelector('img')).toBeNull()
+    expect(canvas.querySelector('button')?.textContent).toBe('Visualisation 3D')
+    canvas.disconnectedCallback()
+  })
 })
