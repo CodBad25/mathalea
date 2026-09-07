@@ -32,6 +32,10 @@ import { typstImport } from './typstPackages'
  * directement une image évite ce chemin défaillant. `QRCode.toString` est
  * synchrone en interne (le rendu SVG ne fait aucune E/S) ; son callback est
  * donc appelé avant que la fonction ne retourne.
+ *
+ * L'image est enveloppée dans un `link(url)[...]` : le QR-code du PDF devient
+ * alors un lien cliquable vers l'exercice (tiaoma, le chemin d'origine
+ * d'`exercise-bank`, ne pose pas de lien).
  */
 function qrCodeToTypstImage(url: string): string {
   let svg = ''
@@ -43,7 +47,8 @@ function qrCodeToTypstImage(url: string): string {
       svg = result
     },
   )
-  return `image(bytes(${typstString(sanitizeSvg(svg))}), format: "svg", width: 100%)`
+  const image = `image(bytes(${typstString(sanitizeSvg(svg))}), format: "svg", width: 100%)`
+  return `link(${typstString(url)})[#${image}]`
 }
 
 /**
@@ -1216,6 +1221,18 @@ export interface TypstDocumentOptions {
   badgeColor: string
   /** Nombre de versions du sujet (Sujet A, B...) générées à la suite */
   nbVersions: number
+  /**
+   * Graines explicites par sujet, renseignées quand « Nouvelles données » ne
+   * rebrasse qu'un seul sujet : les autres gardent alors leur tirage au lieu
+   * de suivre la graine du Sujet A. Indexé par numéro de sujet (`[1]` = Sujet
+   * B...), chaque entrée est une liste d'une graine par exercice, dans l'ordre
+   * courant. Une entrée absente ou `null`, ou une graine `null`, retombe sur
+   * la graine dérivée `${graineSujetA}${index}`. La liste est vidée dès que
+   * les exercices changent (ajout, suppression, réordonnancement), l'index
+   * n'y correspondant alors plus. N'est lue que par `Typst.svelte`
+   * (`buildAllVersionInputs`) ; `buildTypstDocument` ne s'en sert pas.
+   */
+  versionSeeds?: (readonly (string | null)[] | null)[]
   /**
    * Masque l'étiquette « Sujet A/B... » de l'en-tête (`nbVersions > 1`
    * seulement) : l'espace qu'elle occupe reste réservé (`hide()` côté Typst),

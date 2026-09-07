@@ -458,6 +458,14 @@ Le réglage « Position du titre » (`TypstDocumentOptions.badgePosition`, `badg
 
 `margin` (titre dans une colonne latérale) est resté hors de la liste tant que sa colonne était figée à 3,35 cm : sur une fiche en deux colonnes, l'énoncé n'était pas plus large que son titre. Depuis **exercise-bank 0.6.4**, cette colonne se replie d'elle-même sous `margin-fold-below` (par défaut trois fois sa largeur, soit 10 cm — franchi dès deux colonnes en A4) : le titre passe sur une ligne d'en-tête et l'énoncé prend toute la largeur. Rien à régler côté MathALÉA, le repli est automatique.
 
+## QR-code vers l'exercice
+
+Case « QR-code vers chaque exercice » (`TypstDocumentOptions.showQrCode`) : ajoute au coin de chaque exercice **non fusionné** un QR-code vers l'exercice seul (URL `exercise.url`). Le QR-code est passé en paramètre `qr:` de `exo.with(...)` (`buildVersionContent`) ; `exercise-bank` le place lui-même (`qr-position: "tasks"`, la liste de questions s'écoule autour).
+
+`qrCodeToTypstImage` (`buildTypstDocument.ts`) rend le QR-code **côté MathALÉA** en SVG (`qrcode` npm) plutôt que de laisser `exercise-bank` déléguer l'URL brute à `tiaoma` : ce dernier ne reçoit qu'une couleur de trait, sans option de fond, et produit un QR-code transparent (illisible sur fond coloré). L'image est enveloppée dans `link(url)[…]` pour que le QR-code du PDF soit un **lien cliquable** vers l'exercice — `tiaoma` ne pose pas de lien. `exercise-bank` accepte aussi bien une URL (`str`) que du contenu Typst déjà mis en forme, il prend donc l'image telle quelle.
+
+En mode fusionné (global ou local) il n'y a pas de bloc `exo.with(...)` par exercice où accrocher le QR-code : la case est sans effet. Le mode « Course aux nombres » n'importe pas `exercise-bank` du tout (voir plus haut).
+
 ## Impression recto-verso (démarrage sur page impaire)
 
 Case à cocher « Impression recto-verso » des Réglages du document (`TypstDocumentOptions.oddPageStarts`, **active par défaut**) : chaque partie qui commence sur une nouvelle page — le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions — commence sur une page impaire, Typst insérant au besoin une page blanche. En impression recto-verso en série, une partie ne commence ainsi jamais au dos de la précédente ; le partage énoncé/corrigé en deux PDF (`downloadPdfSeparate`) en profite de la même façon, chaque sujet y restant sur un recto.
@@ -480,7 +488,7 @@ Le `set page` est **scopé au bloc de code** : la page blanche éventuellement i
 
 Toutes les modifications de la fiche sont sauvegardées dans l'URL (paramètre `typstParam`, JSON encodé en base64) pour pouvoir la recharger à l'identique ou la partager :
 
-- `options` : les réglages du document (`TypstDocumentOptions` — format, orientation, polices, titre/sous-titre/en-tête, nombre de versions, page de garde…). Une fiche partagée avant l'arrivée d'un réglage, ou pointant un modèle de page de garde qui n'existe plus, retombe sur les valeurs par défaut (`sanitizeCoverPage`) ;
+- `options` : les réglages du document (`TypstDocumentOptions` — format, orientation, polices, titre/sous-titre/en-tête, nombre de versions, page de garde…). Une fiche partagée avant l'arrivée d'un réglage, ou pointant un modèle de page de garde qui n'existe plus, retombe sur les valeurs par défaut (`sanitizeCoverPage`) ; `options.versionSeeds` (graines épinglées par sujet, voir [Graines par sujet et « Nouvelles données »](#graines-par-sujet-et--nouvelles-données-)) est validé au chargement et remis à `undefined` s'il est mal formé ;
 - `carryOver` : les réglages de la palette de mise en page (`harvestCarryOver` — colonnes/espacement des questions par exercice, textes et sections insérés, sauts de page et de colonne, fusions, zoom/alignement des figures).
 
 La liste des exercices, leurs graines et leurs réglages restent portés par les paramètres habituels de l'URL (`exercicesParams`), mis à jour par le store du même nom : suppression, déplacement, changement de graine ou de nombre de questions y sont déjà reflétés.
@@ -839,6 +847,33 @@ c'était déjà le cas avant ce découpage.
 Reste ensuite `buildCode` (~1,3 à 2,3 s sur cette fiche) : il régénère les
 exercices de **tous** les sujets, puisque le code de l'éditeur, lui, les
 contient tous.
+
+#### Graines par sujet et « Nouvelles données »
+
+`buildAllVersionInputs` (`Typst.svelte`) calcule le contenu de chaque sujet :
+le sujet A part de la graine de base (`exercicesParams`), les suivants d'une
+graine dérivée `${graineA}${index}` — même formule que la vue A4
+(`Diaporama.svelte` `reroll`), pour que le 2ᵉ sujet corresponde à la 2ᵉ vue du
+diaporama.
+
+Le bouton **« Nouvelles données »** ne rebrasse que le **sujet affiché** dans
+le sélecteur « Aperçu » (`previewVersion`) :
+
+- Sujet A (ou fiche mono-sujet) : nouvelle graine de base, comme avant. Les
+  sujets suivants sont d'abord **épinglés** à leur tirage courant
+  (`documentOptions.versionSeeds[v] = exercices.map(ex => `${ex.seed}${v}`)`,
+  calculé avant le tirage de la nouvelle base) pour ne pas suivre la nouvelle
+  graine de A ;
+- Sujet B, C… : nouvelle graine dérivée mais distincte pour ce seul sujet
+  (`${graineA}${v}~${jeton}`), inscrite dans `versionSeeds[v]` ; base et autres
+  sujets inchangés.
+
+`versionSeeds` (`TypstDocumentOptions.versionSeeds`, `(string | null)[][]`,
+indexé `[sujet][exercice]`) est persisté dans `typstParam`. Une entrée absente
+ou `null` retombe sur la graine dérivée. La liste est **vidée**
+(`dropVersionSeeds`) dès que les exercices changent (ajout, suppression,
+déplacement) : ses index par exercice ne correspondraient plus. Réduire le
+nombre de sujets tronque la liste (`applyDocumentOptions`).
 
 ## Tests
 
