@@ -264,7 +264,7 @@ export default class CalculeDansCone extends Exercice {
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')
-                      ? `\\sqrt{${texNombre(generatrice * generatrice - rayon * rayon)})`
+                      ? `\\sqrt{${texNombre(generatrice * generatrice - rayon * rayon)}}`
                       : typeDeReponse.includes('approchée')
                         ? [
                             `${Math.sqrt(generatrice * generatrice - rayon * rayon).toFixed(1)}`,
@@ -304,7 +304,7 @@ export default class CalculeDansCone extends Exercice {
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')
-                      ? `\\sqrt{${texNombre(hauteur * hauteur + rayon * rayon)})`
+                      ? `\\sqrt{${texNombre(hauteur * hauteur + rayon * rayon)}}`
                       : typeDeReponse.includes('approchée')
                         ? [
                             `${Math.sqrt(hauteur * hauteur + rayon * rayon).toFixed(1)}`,
