@@ -86,8 +86,31 @@ export default class nomExercice extends Exercice {
                 feedback,
                 score: { nbBonnesReponses: 0, nbReponses: 0 },
               }
-            const facteur1 = Number(mfe.getPromptValue('champ1') || 0)
-            const facteur2 = Number(mfe.getPromptValue('champ2') || 0)
+            const saisie1 = (mfe.getPromptValue('champ1') || '').trim()
+            const saisie2 = (mfe.getPromptValue('champ2') || '').trim()
+            const spanReponseLigne = document.querySelector(
+              `#resultatCheckEx${exercice.numeroExercice}Q${question}`,
+            )
+            if (saisie1 === '' || saisie2 === '') {
+              // Une zone vide est une absence de réponse, pas un zéro :
+              // on ne produit pas le feedback « n'est pas égal à 0 × 0 ».
+              const sansReponse = saisie1 === '' && saisie2 === ''
+              if (spanReponseLigne != null) {
+                spanReponseLigne.innerHTML = sansReponse ? '' : '☹️'
+              }
+              return {
+                isOk: false,
+                feedback: sansReponse
+                  ? ''
+                  : 'Il faut compléter les deux zones avec des nombres entiers différents de 1.',
+                score: {
+                  nbBonnesReponses: 0,
+                  nbReponses: sansReponse ? 0 : 1,
+                },
+              }
+            }
+            const facteur1 = Number(saisie1)
+            const facteur2 = Number(saisie2)
             const isOk =
               facteur1 * facteur2 === a * b && facteur1 !== 1 && facteur2 !== 1
             if (isOk) {
@@ -106,9 +129,6 @@ export default class nomExercice extends Exercice {
               }
               feedback = `Attention, ${a * b} n'est pas égal à ${facteur1} × ${facteur2}.`
             }
-            const spanReponseLigne = document.querySelector(
-              `#resultatCheckEx${exercice.numeroExercice}Q${question}`,
-            )
             if (spanReponseLigne != null) {
               spanReponseLigne.innerHTML = isOk ? '😎' : '☹️'
             }
