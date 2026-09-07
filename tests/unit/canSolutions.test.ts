@@ -42,6 +42,7 @@ import '../../src/lib/customElements/SvgSelectionElement'
 import '../../src/lib/customElements/TableauHybride'
 import '../../src/lib/customElements/TableauMathlive'
 import '../../src/lib/customElements/TableauSignesVariationsElement'
+import '../../src/lib/customElements/TablesEffaceesGrilleElement'
 import '../../src/lib/customElements/TrigoCircleSelectionElement'
 
 import {
