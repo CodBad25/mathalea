@@ -266,6 +266,19 @@
             restoredDocumentOptions.nbVersions =
               defaultTypstDocumentOptions.nbVersions
           }
+          // graines épinglées par sujet : liste de listes de chaînes (ou null)
+          if (
+            restoredDocumentOptions.versionSeeds != null &&
+            (!Array.isArray(restoredDocumentOptions.versionSeeds) ||
+              !restoredDocumentOptions.versionSeeds.every(
+                (entry) =>
+                  entry == null ||
+                  (Array.isArray(entry) &&
+                    entry.every((s) => s == null || typeof s === 'string')),
+              ))
+          ) {
+            restoredDocumentOptions.versionSeeds = undefined
+          }
           if (
             !Number.isInteger(restoredDocumentOptions.answerLines) ||
             restoredDocumentOptions.answerLines < 0 ||
@@ -1534,6 +1547,7 @@
     if (!confirmOverwrite()) return
     const params = get(exercicesParams)[num - 1]
     if (params == null) return
+    dropVersionSeeds()
     const carryOver =
       editorView != null
         ? shiftCarryOverForInsert(harvestCarryOver(currentCode()), num + 1, num)
@@ -1575,6 +1589,7 @@
   /** Retire l'exercice num de la fiche et régénère le code */
   function deleteExercise(num: number) {
     if (!window.confirm(`Supprimer l'exercice ${num} de la fiche ?`)) return
+    dropVersionSeeds()
     const carryOver =
       editorView != null
         ? shiftCarryOver(harvestCarryOver(currentCode()), num)
@@ -1624,6 +1639,7 @@
    * @param {InterfaceParams} params paramètres de l'exercice choisi
    */
   async function addExerciseToSheet(params: InterfaceParams) {
+    dropVersionSeeds()
     exercicesParams.update((list) => [...list, params])
     let exercise: IExercice | null = null
     try {
@@ -1730,6 +1746,7 @@
     const target = k + delta
     if (target < 0 || target >= exercises.length) return
     if (!confirmOverwrite()) return
+    dropVersionSeeds()
     const carryOver =
       editorView != null
         ? swapCarryOver(harvestCarryOver(currentCode()), k + 1, target + 1)
@@ -2387,7 +2404,25 @@
     if (previewVersion >= Math.max(1, documentOptions.nbVersions)) {
       previewVersion = 0
     }
+    // sujets retirés : leurs graines épinglées n'ont plus de cible
+    if (documentOptions.versionSeeds != null) {
+      documentOptions.versionSeeds = documentOptions.versionSeeds.slice(
+        0,
+        Math.max(1, documentOptions.nbVersions),
+      )
+    }
     regenerateDocument()
+  }
+
+  /**
+   * La liste d'exercices a changé (ajout, suppression, réordonnancement) : les
+   * graines épinglées par sujet sont indexées par exercice, elles ne
+   * correspondent plus. On repart des graines dérivées pour tous les sujets.
+   */
+  function dropVersionSeeds() {
+    if (documentOptions.versionSeeds != null) {
+      documentOptions.versionSeeds = undefined
+    }
   }
 
   /**
@@ -2657,13 +2692,24 @@
   function buildAllVersionInputs(): TypstExerciseInput[][] {
     const baseSeeds = exercises.map((exercise) => exercise?.seed)
     const nbVersions = Math.max(1, documentOptions.nbVersions)
+    // graines épinglées par sujet (« Nouvelles données » sur un seul sujet) :
+    // ignorées si leur longueur ne colle plus à la liste d'exercices (un ajout
+    // ou une suppression a décalé les index — `dropVersionSeeds` les vide dans
+    // ce cas, ce test n'est qu'une sécurité)
+    const versionSeeds = documentOptions.versionSeeds
     const perVersion: TypstExerciseInput[][] = []
     for (let version = 0; version < nbVersions; version++) {
+      const pinned =
+        version > 0 && versionSeeds?.[version]?.length === exercises.length
+          ? versionSeeds[version]
+          : undefined
       for (const [k, exercise] of exercises.entries()) {
         if (exercise == null) continue
         const base = baseSeeds[k]
         exercise.seed =
-          version === 0 || base === undefined ? base : `${base}${version}`
+          version === 0 || base === undefined
+            ? base
+            : (pinned?.[k] ?? `${base}${version}`)
       }
       perVersion.push(buildInputs())
     }
@@ -3445,7 +3491,16 @@
     )
   }
 
-  /** Nouvelles données aléatoires pour tous les exercices */
+  /**
+   * « Nouvelles données ». Sur une fiche à plusieurs sujets, ne rebrasse que
+   * le sujet affiché dans l'aperçu (`previewVersion`) :
+   * - Sujet A (ou fiche mono-sujet) : nouvelle graine de base. Les sujets
+   *   suivants sont d'abord épinglés à leur tirage courant pour ne pas suivre
+   *   la nouvelle graine de A.
+   * - Sujet B, C... : nouvelle graine dérivée et distincte pour ce seul sujet,
+   *   inscrite dans `documentOptions.versionSeeds` ; base et autres sujets
+   *   inchangés.
+   */
   function newDataForAll() {
     if (!confirmOverwrite()) return
     // nouvelles graines : les questions figées par la palette sont libérées
@@ -3453,16 +3508,51 @@
     // voir applyNewSeedTo : Math.random peut être verrouillé sur la graine
     // du dernier exercice régénéré, il faut le réamorcer avant de tirer
     seedrandom(undefined, { global: true })
-    const params = get(exercicesParams)
-    for (const [k, exercise] of exercises.entries()) {
-      if (exercise == null) continue
-      exercise.seed = undefined
-      if (typeof exercise.applyNewSeed === 'function') exercise.applyNewSeed()
-      if (params[k] != null && exercise.seed !== undefined) {
-        params[k].alea = exercise.seed
+    const nbVersions = Math.max(1, documentOptions.nbVersions)
+    const previewed = Math.min(previewVersion, nbVersions - 1)
+    // copie modifiable des graines épinglées existantes
+    const pinnedSeeds = (documentOptions.versionSeeds ?? []).map((entry) =>
+      entry == null ? entry : [...entry],
+    )
+
+    if (nbVersions > 1 && previewed > 0) {
+      // un seul sujet concerné : graine dérivée mais distincte pour chacun de
+      // ses exercices
+      const token = Math.random().toString(36).slice(2, 8)
+      pinnedSeeds[previewed] = exercises.map((exercise) =>
+        exercise?.seed == null
+          ? null
+          : `${exercise.seed}${previewed}~${token}`,
+      )
+      documentOptions.versionSeeds = pinnedSeeds
+    } else {
+      // Sujet A : on épingle d'abord les sujets suivants à leur tirage courant
+      // (graine de base encore en place dans exercise.seed) pour qu'ils ne
+      // suivent pas la nouvelle graine de A ; un sujet déjà épinglé est laissé
+      // tel quel
+      if (nbVersions > 1) {
+        for (let v = 1; v < nbVersions; v++) {
+          if (pinnedSeeds[v]?.length === exercises.length) continue
+          pinnedSeeds[v] = exercises.map((exercise) =>
+            exercise?.seed == null ? null : `${exercise.seed}${v}`,
+          )
+        }
+        documentOptions.versionSeeds = pinnedSeeds
+      }
+      const params = get(exercicesParams)
+      for (const [k, exercise] of exercises.entries()) {
+        if (exercise == null) continue
+        exercise.seed = undefined
+        if (typeof exercise.applyNewSeed === 'function') exercise.applyNewSeed()
+        if (params[k] != null && exercise.seed !== undefined) {
+          params[k].alea = exercise.seed
+        }
       }
     }
     exercicesParams.update((list) => list)
+    // `versionSeeds` vit dans `typstParam`, pas dans `exercicesParams` : à
+    // persister explicitement
+    persistPreferences()
     const code = buildCode()
     setEditorContent(code)
     scheduleCompile(code, PALETTE_COMPILE_DELAY)
@@ -3691,7 +3781,13 @@
 
       <button
         type="button"
-        title="Nouvelles données aléatoires pour tous les exercices"
+        title={documentOptions.nbVersions > 1
+          ? previewVersion > 0
+            ? `Nouvelles données pour le Sujet ${String.fromCharCode(
+                65 + previewVersion,
+              )} uniquement (les autres sujets sont conservés)`
+            : 'Nouvelles données pour le Sujet A (les autres sujets sont conservés)'
+          : 'Nouvelles données aléatoires pour tous les exercices'}
         data-tour="typst-new-data"
         class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
         onclick={newDataForAll}
