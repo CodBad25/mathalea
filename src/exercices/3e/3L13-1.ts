@@ -175,7 +175,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
               texteCorr += `On ajoute $${rienSi1(-1 * c)}x$ aux deux membres.<br>`
             }
           }
-          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x+${d}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
+          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
           texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}=${d}$<br>`
           if (this.correctionDetaillee) {
             if (b > 0) {
@@ -256,7 +256,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
               texteCorr += `On ajoute $${rienSi1(-1 * c)}x$ aux deux membres.<br>`
             }
           }
-          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x+${d}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
+          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
           texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}=${d}$<br>`
           if (this.correctionDetaillee) {
             if (b > 0) {
