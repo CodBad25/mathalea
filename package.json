@@ -86,6 +86,7 @@
     "stability:update": "STABILITY_UPDATE=1 vitest --config tests/e2e/vitest.config.stability.js --run",
     "archive": "node tasks/archive-exercice.js",
     "archive:exercice": "node tasks/archive-exercice.js",
+    "archive:retro": "node tasks/archive-exercice-retro.js",
     "review:archives": "node tasks/review-archives.js",
     "screenshot": "vitest --config tests/e2e/vitest.config.screenshot.js --run",
     "typst:check": "vitest --config tests/e2e/vitest.config.typst_check.js --run",

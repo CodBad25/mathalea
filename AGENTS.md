@@ -32,6 +32,10 @@ random generator breaks corrections users have already handed out. Run
 `CHANGED_FILES="<file>" pnpm stability:check` after editing an exercise; if the
 drift is intended, archive the published version with
 `pnpm archive <code>` (e.g. `pnpm archive 6N1E`), or pass the full file path.
+If the drift is only noticed after the change is committed (often via a shared
+helper or parent exercise), use `pnpm archive:retro <code>` instead — it
+recovers the last un-drifted version from git history. See
+`documentation/tests/stabilite-exercices.md`.
 
 ## Project Structure
 

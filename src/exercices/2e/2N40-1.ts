@@ -4,7 +4,9 @@ export const titre =
 export const dateDePublication = '14/06/2022'
 export const interactifReady = true
 
-export const uuid = '53fbb'
+export const dateDeModifImportante = '06/09/2026'
+
+export const uuid = '52e8b'
 export const refs = {
   'fr-fr': ['2N40-1'],
   'fr-ch': ['NR'],
