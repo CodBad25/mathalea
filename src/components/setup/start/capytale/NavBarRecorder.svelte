@@ -168,10 +168,20 @@
               />
             </div>
           {/if}
+          {#if isCapytale}
+            <div>
+              <ButtonIconTooltip
+                icon="bx-chalkboard text-3xl"
+                tooltip="Vidéoprojection"
+                disabled={isExercisesListEmpty}
+                on:click={() => handleExport('tbi')}
+              />
+            </div>
+          {/if}
           <div>
             <ButtonIconTooltip
               icon="bx-log-out bx-rotate-180"
-              tooltip="Rejoindre MathALÉA"
+              tooltip="Rejoindre MathALÉA pour plus d'options"
               class="text-3xl"
               disabled={isExercisesListEmpty}
               on:click={() => {
