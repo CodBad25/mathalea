@@ -175,7 +175,7 @@
   >
     <div>
       Si vous cliquez sur le bouton
-      <span class="font-bold">Terminer</span>
+      <span class="font-bold">Rendre la copie</span>
       alors vous ne pourrez plus revenir en arrière.
     </div>
     {#if unansweredQuestionNumbers.length > 0}
@@ -195,7 +195,7 @@
       class="inline-block rounded bg-coopmaths-action-200 dark:bg-coopmathsdark-action-lightest px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-coopmaths-action dark:text-coopmathsdark-action-dark transition duration-150 ease-in-out hover:bg-coopmaths-action-400 focus:bg-coopmaths-action-400"
       on:click={() => (isModalOpen = false)}
     >
-      Annuler
+      Continuer
     </button>
     <button
       type="button"
@@ -205,7 +205,7 @@
         isModalOpen = false
       }}
     >
-      Terminer
+      Rendre la copie
     </button>
   </div>
 </BasicClassicModal>
