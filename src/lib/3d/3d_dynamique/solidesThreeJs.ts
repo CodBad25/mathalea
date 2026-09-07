@@ -506,6 +506,133 @@ export function createGeoPoints(desc: {
   return group
 }
 
+export type SkyscraperGridOptions = {
+  grid: number[][]
+  north: number[]
+  south: number[]
+  west: number[]
+  east: number[]
+}
+
+/**
+ * Construit une grille de gratte-ciels avec ses indices de visibilité.
+ * Les textures sont créées ici, côté navigateur, afin que la description
+ * transmise à <canvas-3d> reste légère et entièrement sérialisable.
+ */
+export function createSkyscraperGrid({
+  grid,
+  north,
+  south,
+  west,
+  east,
+}: SkyscraperGridOptions): THREE.Group {
+  const group = new THREE.Group()
+  const size = grid.length
+  const cellSize = 1.15
+  const footprint = 0.82
+  const heightPerLevel = 0.72
+  const center = ((size - 1) * cellSize) / 2
+  const baseSize = (size + 2) * cellSize
+
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(baseSize, 0.12, baseSize),
+    new THREE.MeshPhongMaterial({ color: 0x747c84 }),
+  )
+  base.position.y = -0.08
+  group.add(base)
+
+  const gridMaterial = new THREE.LineBasicMaterial({ color: 0xd9dde0 })
+  for (let i = 0; i <= size; i++) {
+    const offset = i * cellSize - center - cellSize / 2
+    const horizontal = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-center - cellSize / 2, 0, offset),
+      new THREE.Vector3(center + cellSize / 2, 0, offset),
+    ])
+    const vertical = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(offset, 0, -center - cellSize / 2),
+      new THREE.Vector3(offset, 0, center + cellSize / 2),
+    ])
+    group.add(new THREE.Line(horizontal, gridMaterial))
+    group.add(new THREE.Line(vertical, gridMaterial))
+  }
+
+  const facadeMaterials = new Map<number, THREE.MeshPhongMaterial>()
+  const getFacadeMaterial = (levelCount: number) => {
+    const cached = facadeMaterials.get(levelCount)
+    if (cached) return cached
+
+    const textureCanvas = document.createElement('canvas')
+    textureCanvas.width = 64
+    textureCanvas.height = 64
+    const context = textureCanvas.getContext('2d')
+    if (context) {
+      context.fillStyle = '#495663'
+      context.fillRect(0, 0, 64, 64)
+      context.fillStyle = '#f8cf68'
+      context.fillRect(8, 10, 18, 34)
+      context.fillRect(38, 10, 18, 34)
+      context.fillStyle = '#303b46'
+      context.fillRect(0, 52, 64, 12)
+    }
+    const texture = new THREE.CanvasTexture(textureCanvas)
+    texture.colorSpace = THREE.SRGBColorSpace
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT = THREE.RepeatWrapping
+    texture.repeat.set(1, levelCount)
+    const material = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      map: texture,
+    })
+    facadeMaterials.set(levelCount, material)
+    return material
+  }
+
+  grid.forEach((row, rowIndex) => {
+    row.forEach((height, columnIndex) => {
+      const levelCount = Math.max(1, Math.round(height / 10))
+      const buildingHeight = levelCount * heightPerLevel
+      const facade = getFacadeMaterial(levelCount)
+      const roof = new THREE.MeshPhongMaterial({ color: 0xb9c0c5 })
+      const bottom = new THREE.MeshPhongMaterial({ color: 0x3d4650 })
+      const building = new THREE.Mesh(
+        new THREE.BoxGeometry(footprint, buildingHeight, footprint),
+        [facade, facade, roof, bottom, facade, facade],
+      )
+      building.position.set(
+        columnIndex * cellSize - center,
+        buildingHeight / 2,
+        rowIndex * cellSize - center,
+      )
+      group.add(building)
+    })
+  })
+
+  const addClue = (value: number, x: number, z: number) => {
+    const label = new Text()
+    label.text = String(value)
+    label.font = 'fonts/Arial Rounded Bold.ttf'
+    label.fontSize = 0.48
+    label.color = '#17212b'
+    label.anchorX = 'center'
+    label.anchorY = 'middle'
+    label.position.set(x, 0.03, z)
+    label.rotation.x = -Math.PI / 2
+    label.sync()
+    group.add(label)
+  }
+
+  const clueOffset = center + cellSize
+  for (let i = 0; i < size; i++) {
+    const position = i * cellSize - center
+    addClue(north[i], position, -clueOffset)
+    addClue(south[i], position, clueOffset)
+    addClue(west[i], -clueOffset, position)
+    addClue(east[i], clueOffset, position)
+  }
+
+  return group
+}
+
 export function sphericalToCartesian(
   latitude: number,
   longitude: number,

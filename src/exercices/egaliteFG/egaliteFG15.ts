@@ -2,6 +2,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -11,7 +12,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
 import ExerciceVraiFaux from '../ExerciceVraiFaux'
 
-export const titre = 'Un programme de calcul (Inès et Arthur)'
+export const titre = 'Inès et Arthur'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Algorithmique et programmation','Calcul littéral','Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -95,7 +96,7 @@ export default class EgaliteFG15 extends ExerciceVraiFaux {
         texte:
           "L'affirmation d'Arthur sur l'aire, $A=x^2+10x+7$, est correcte.",
         statut: false,
-        correction: `$A=(x+2)(x+5)=x^2+7x+10\\neq x^2+10x+7$. L'affirmation d'Arthur est donc fausse : c'est l'expression d'Inès qui est correcte.<br>Chacun des deux élèves a donc une expression correcte et une expression fausse : $${miseEnEvidence("\\text{la réussite n'est donc pas la propriété d'un seul binôme ou d'une seule personne}")}$.`,
+        correction: `$A=(x+2)(x+5)=x^2+7x+10\\neq x^2+10x+7$. L'affirmation d'Arthur est donc fausse : c'est l'expression d'Inès qui est correcte.<br>Chacun des deux élèves a donc une expression correcte et une expression fausse : ${texteEnCouleurEtGras("la réussite n'est donc pas la propriété d'un seul binôme ou d'une seule personne")}.`,
       },
     ]
   }

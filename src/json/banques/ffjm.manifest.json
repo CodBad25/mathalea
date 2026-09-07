@@ -1,0 +1,504 @@
+{
+  "schema": "mathalea-banque-v1",
+  "id": "ffjm",
+  "titre": "Exercices de la FFJM",
+  "auteur": "Claire Stephan",
+  "licence": "CC BY-SA 4.0",
+  "version": "1.0.0",
+  "description": "Banque d'archive des exercices de la Fédération Française de Jeux Mathématiques.",
+  "preambule": {
+    "tex": "preambule.tex",
+    "typ": "preambule.typ"
+  },
+  "exercices": [
+    {
+      "id": "tirelire",
+      "titre": "Tirelire",
+      "categorie": "Autre",
+      "tags": [
+        "tirelire",
+        "euro",
+        "décomposition",
+        "minimum",
+        "cycle 3",
+        "2026Q3"
+      ],
+      "etoiles": 2,
+      "png": "png/tirelire.png",
+      "pngCor": "png/tirelire_cor.png",
+      "typ": "typ/tirelire.typ",
+      "typCor": "typ/tirelire_cor.typ",
+      "tex": "tex/tirelire.tex",
+      "texCor": "tex/tirelire_cor.tex"
+    },
+    {
+      "id": "2026-df-1",
+      "titre": "L'étoile dansante",
+      "categorie": "Dénombrement de figure",
+      "tags": [
+        "dénombrement",
+        "triangles",
+        "2026D1"
+      ],
+      "etoiles": 2,
+      "png": "png/2026-df-1.png",
+      "pngCor": "png/2026-df-1_cor.png",
+      "typ": "typ/2026-df-1.typ",
+      "typCor": "typ/2026-df-1_cor.typ",
+      "tex": "tex/2026-df-1.tex",
+      "texCor": "tex/2026-df-1_cor.tex"
+    },
+    {
+      "id": "autoreference-1",
+      "titre": "Autoréférence 1",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "2015Q3"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-1.png",
+      "pngCor": "png/autoreference-1_cor.png",
+      "typ": "typ/autoreference-1.typ",
+      "typCor": "typ/autoreference-1_cor.typ",
+      "tex": "tex/autoreference-1.tex",
+      "texCor": "tex/autoreference-1_cor.tex"
+    },
+    {
+      "id": "autoreference-2",
+      "titre": "Autoréférence 2",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "2014Q3"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-2.png",
+      "pngCor": "png/autoreference-2_cor.png",
+      "typ": "typ/autoreference-2.typ",
+      "typCor": "typ/autoreference-2_cor.typ",
+      "tex": "tex/autoreference-2.tex",
+      "texCor": "tex/autoreference-2_cor.tex"
+    },
+    {
+      "id": "autoreference-3",
+      "titre": "Autoréférence 3",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 2",
+        "2013D5"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-3.png",
+      "pngCor": "png/autoreference-3_cor.png",
+      "typ": "typ/autoreference-3.typ",
+      "typCor": "typ/autoreference-3_cor.typ"
+    },
+    {
+      "id": "autoreference-4",
+      "titre": "Autoréférence 4",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "2012D9"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-4.png",
+      "pngCor": "png/autoreference-4_cor.png",
+      "typ": "typ/autoreference-4.typ",
+      "typCor": "typ/autoreference-4_cor.typ"
+    },
+    {
+      "id": "autoreference-5",
+      "titre": "Autoréférence 5",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 2",
+        "2009Q2"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-5.png",
+      "pngCor": "png/autoreference-5_cor.png",
+      "typ": "typ/autoreference-5.typ",
+      "typCor": "typ/autoreference-5_cor.typ"
+    },
+    {
+      "id": "autoreference-6",
+      "titre": "Autoréférence 6",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "2008D6"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-6.png",
+      "pngCor": "png/autoreference-6_cor.png",
+      "typ": "typ/autoreference-6.typ",
+      "typCor": "typ/autoreference-6_cor.typ"
+    },
+    {
+      "id": "autoreference-7",
+      "titre": "Autoréférence 7",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "2000Q6"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-7.png",
+      "pngCor": "png/autoreference-7_cor.png",
+      "typ": "typ/autoreference-7.typ",
+      "typCor": "typ/autoreference-7_cor.typ"
+    },
+    {
+      "id": "4desserts-1",
+      "titre": "Donne à chacun son dessert ! 4a",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/4desserts-1.png",
+      "pngCor": "png/4desserts-1_cor.png",
+      "typ": "typ/4desserts-1.typ",
+      "typCor": "typ/4desserts-1_cor.typ",
+      "tex": "tex/4desserts-1.tex",
+      "texCor": "tex/4desserts-1_cor.tex"
+    },
+    {
+      "id": "4desserts-2",
+      "titre": "Donne à chacun son dessert ! 4b",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/4desserts-2.png",
+      "pngCor": "png/4desserts-2_cor.png",
+      "typ": "typ/4desserts-2.typ",
+      "typCor": "typ/4desserts-2_cor.typ",
+      "tex": "tex/4desserts-2.tex",
+      "texCor": "tex/4desserts-2_cor.tex"
+    },
+    {
+      "id": "5desserts-1",
+      "titre": "Donne à chacun son dessert ! 5a",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/5desserts-1.png",
+      "pngCor": "png/5desserts-1_cor.png",
+      "typ": "typ/5desserts-1.typ",
+      "typCor": "typ/5desserts-1_cor.typ",
+      "tex": "tex/5desserts-1.tex",
+      "texCor": "tex/5desserts-1_cor.tex"
+    },
+    {
+      "id": "6desserts-1",
+      "titre": "Donne à chacun son dessert ! 6a",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/6desserts-1.png",
+      "pngCor": "png/6desserts-1_cor.png",
+      "typ": "typ/6desserts-1.typ",
+      "typCor": "typ/6desserts-1_cor.typ",
+      "tex": "tex/6desserts-1.tex",
+      "texCor": "tex/6desserts-1_cor.tex"
+    },
+    {
+      "id": "6desserts-2",
+      "titre": "Donne à chacun son dessert ! 6b",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/6desserts-2.png",
+      "pngCor": "png/6desserts-2_cor.png",
+      "typ": "typ/6desserts-2.typ",
+      "typCor": "typ/6desserts-2_cor.typ",
+      "tex": "tex/6desserts-2.tex",
+      "texCor": "tex/6desserts-2_cor.tex"
+    },
+    {
+      "id": "6desserts-3",
+      "titre": "Donne à chacun son dessert ! 6c",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/6desserts-3.png",
+      "pngCor": "png/6desserts-3_cor.png",
+      "typ": "typ/6desserts-3.typ",
+      "typCor": "typ/6desserts-3_cor.typ",
+      "tex": "tex/6desserts-3.tex",
+      "texCor": "tex/6desserts-3_cor.tex"
+    },
+    {
+      "id": "6desserts-4",
+      "titre": "Donne à chacun son dessert ! 6d",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/6desserts-4.png",
+      "pngCor": "png/6desserts-4_cor.png",
+      "typ": "typ/6desserts-4.typ",
+      "typCor": "typ/6desserts-4_cor.typ",
+      "tex": "tex/6desserts-4.tex",
+      "texCor": "tex/6desserts-4_cor.tex"
+    },
+    {
+      "id": "6desserts-5",
+      "titre": "Donne à chacun son dessert ! 6e",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/6desserts-5.png",
+      "pngCor": "png/6desserts-5_cor.png",
+      "typ": "typ/6desserts-5.typ",
+      "typCor": "typ/6desserts-5_cor.typ",
+      "tex": "tex/6desserts-5.tex",
+      "texCor": "tex/6desserts-5_cor.tex"
+    },
+    {
+      "id": "6desserts-6",
+      "titre": "Donne à chacun son dessert ! 6f",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/6desserts-6.png",
+      "pngCor": "png/6desserts-6_cor.png",
+      "typ": "typ/6desserts-6.typ",
+      "typCor": "typ/6desserts-6_cor.typ",
+      "tex": "tex/6desserts-6.tex",
+      "texCor": "tex/6desserts-6_cor.tex"
+    },
+    {
+      "id": "6desserts-7",
+      "titre": "Donne à chacun son dessert ! 6g",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/6desserts-7.png",
+      "pngCor": "png/6desserts-7_cor.png",
+      "typ": "typ/6desserts-7.typ",
+      "typCor": "typ/6desserts-7_cor.typ",
+      "tex": "tex/6desserts-7.tex",
+      "texCor": "tex/6desserts-7_cor.tex"
+    },
+    {
+      "id": "7desserts-1",
+      "titre": "Donne à chacun son dessert ! 7a",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/7desserts-1.png",
+      "pngCor": "png/7desserts-1_cor.png",
+      "typ": "typ/7desserts-1.typ",
+      "typCor": "typ/7desserts-1_cor.typ",
+      "tex": "tex/7desserts-1.tex",
+      "texCor": "tex/7desserts-1_cor.tex"
+    },
+    {
+      "id": "8desserts-1",
+      "titre": "Donne à chacun son dessert ! 8a",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Qui mange quoi",
+      "tags": [
+        "dessert",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 3",
+        "C25J24"
+      ],
+      "etoiles": 2,
+      "png": "png/8desserts-1.png",
+      "pngCor": "png/8desserts-1_cor.png",
+      "typ": "typ/8desserts-1.typ",
+      "typCor": "typ/8desserts-1_cor.typ",
+      "tex": "tex/8desserts-1.tex",
+      "texCor": "tex/8desserts-1_cor.tex"
+    },
+    {
+      "id": "balance",
+      "titre": "Pesée de bijoux",
+      "categorie": "Système simple",
+      "tags": [
+        "Bijoux",
+        "masse",
+        "équations",
+        "balances",
+        "systèmes",
+        "raisonnement",
+        "essai erreur",
+        "cycle 2",
+        "2022Q6"
+      ],
+      "etoiles": 2,
+      "png": "png/balance.png",
+      "pngCor": "png/balance_cor.png",
+      "typ": "typ/balance.typ",
+      "typCor": "typ/balance_cor.typ",
+      "tex": "tex/balance.tex",
+      "texCor": "tex/balance_cor.tex"
+    },
+    {
+      "id": "sapin_1",
+      "titre": "Les sapins",
+      "categorie": "Système simple",
+      "tags": [
+        "Sapins",
+        "équations",
+        "balances",
+        "systèmes",
+        "cycle 2",
+        "2014QF6"
+      ],
+      "etoiles": 2,
+      "png": "png/sapin_1.png",
+      "pngCor": "png/sapin_1_cor.png",
+      "typ": "typ/sapin_1.typ",
+      "typCor": "typ/sapin_1_cor.typ",
+      "tex": "tex/sapin_1.tex",
+      "texCor": "tex/sapin_1_cor.tex"
+    },
+    {
+      "id": "sapin_2",
+      "titre": "Les sapins (niveau 2)",
+      "categorie": "Système simple",
+      "tags": [
+        "Sapins",
+        "équations",
+        "balances",
+        "systèmes",
+        "cycle 2",
+        "2014QF6"
+      ],
+      "etoiles": 2,
+      "png": "png/sapin_2.png",
+      "pngCor": "png/sapin_2_cor.png",
+      "typ": "typ/sapin_2.typ",
+      "typCor": "typ/sapin_2_cor.typ",
+      "tex": "tex/sapin_2.tex",
+      "texCor": "tex/sapin_2_cor.tex"
+    }
+  ]
+}

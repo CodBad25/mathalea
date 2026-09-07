@@ -12,7 +12,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Records du 100 mètres : un modèle affine'
+export const titre = 'Records du 100 mètres'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -22,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Fonctions', 'Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles

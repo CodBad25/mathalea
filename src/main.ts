@@ -7,6 +7,7 @@ import './modules/stats'
 import {
   chargerBanquesDepuisUrl,
   chargerBanquesInstallees,
+  chargerBanquesIntegrees,
 } from './lib/stores/banquesExternesStore'
 
 /**
@@ -20,12 +21,16 @@ const DELAI_MAX_BANQUES = 8000
  * (menu latéral, A4, Typst, LaTeX) résolvent les uuid `bq-…` à leur montage et
  * ne referaient pas ce travail à l'arrivée tardive d'un manifest. Sans banque
  * installée ni paramètre `bq` dans l'URL, l'opération est immédiate.
+ *
+ * Les banques livrées avec le site (FFJM…) sont chargées en premier : elles
+ * sont visibles par tout le monde et doivent apparaître en tête de « Ressources
+ * partenaires », avant les banques ajoutées par l'utilisateur.
  * @returns {Promise<void>} résolue quand les banques sont prêtes (ou le délai écoulé)
  */
 async function chargerBanquesExternes(): Promise<void> {
-  const chargement = chargerBanquesInstallees().then(() =>
-    chargerBanquesDepuisUrl(),
-  )
+  const chargement = chargerBanquesIntegrees()
+    .then(() => chargerBanquesInstallees())
+    .then(() => chargerBanquesDepuisUrl())
   const delai = new Promise((resolve) => setTimeout(resolve, DELAI_MAX_BANQUES))
   try {
     await Promise.race([chargement, delai])

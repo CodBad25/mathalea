@@ -1,7 +1,7 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Statistiques']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -130,7 +130,7 @@ export default class EgaliteFGLycee12 extends Exercice {
     const monQcm4 = propositionsQcm(this, 4)
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 = `$${miseEnEvidence('\\text{Vrai}')}$ : dans chaque tranche d'âge, le pourcentage de fumeuses est inférieur à celui des fumeurs ($50\\,\\%<60\\,\\%$, $20\\,\\%<25\\,\\%$, $25\\,\\%<30\\,\\%$).`
+    const correction4 = `${texteEnCouleurEtGras('Vrai')} : dans chaque tranche d'âge, le pourcentage de fumeuses est inférieur à celui des fumeurs ($50\\,\\%<60\\,\\%$, $20\\,\\%<25\\,\\%$, $25\\,\\%<30\\,\\%$).`
 
     const texteQ5 =
       "Au vu de ces résultats, peut-on pour autant affirmer, globalement (toutes tranches d'âge confondues), que les femmes fument moins que les hommes dans cette entreprise ?"
@@ -145,7 +145,7 @@ export default class EgaliteFGLycee12 extends Exercice {
     const monQcm5 = propositionsQcm(this, 5)
     let texte5 = texteQ5
     if (!context.isAmc) texte5 += monQcm5.texte
-    const correction5 = `Non : globalement, $43{,}85\\,\\%$ des femmes fument contre seulement $31{,}53\\,\\%$ des hommes, soit l'inverse de ce que suggère la comparaison par tranche d'âge ! Cela s'explique par le fait que les femmes de cette entreprise sont très majoritairement jeunes (500 sur 650 ont entre 18 et 30 ans, tranche où le tabagisme est le plus élevé), alors que les hommes sont surtout dans la tranche 31-50 ans (600 sur 980), où le tabagisme est plus faible. Ce phénomène, où une tendance vraie dans chaque sous-groupe s'inverse au global à cause d'une répartition différente des effectifs, est un exemple classique de $${miseEnEvidence('\\text{paradoxe de Simpson}')}$.`
+    const correction5 = `Non : globalement, $43{,}85\\,\\%$ des femmes fument contre seulement $31{,}53\\,\\%$ des hommes, soit l'inverse de ce que suggère la comparaison par tranche d'âge ! Cela s'explique par le fait que les femmes de cette entreprise sont très majoritairement jeunes (500 sur 650 ont entre 18 et 30 ans, tranche où le tabagisme est le plus élevé), alors que les hommes sont surtout dans la tranche 31-50 ans (600 sur 980), où le tabagisme est plus faible. Ce phénomène, où une tendance vraie dans chaque sous-groupe s'inverse au global à cause d'une répartition différente des effectifs, est un exemple classique de ${texteEnCouleurEtGras('paradoxe de Simpson')}.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

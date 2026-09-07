@@ -43,7 +43,7 @@ export default class NotationPuissance extends Exercice {
     ] // le paramètre sera numérique de valeur max 2 (le 2 en vert)
     this.sup = 1
     this.besoinFormulaire2Numerique = [
-      'Mantisse',
+      'Base',
       3,
       '1 : Positive\n2 : Négative\n3 : Mélange',
     ]
@@ -51,7 +51,7 @@ export default class NotationPuissance extends Exercice {
     this.besoinFormulaire3Numerique = false
     this.sup3 = 1
     this.besoinFormulaire4Numerique = [
-      'Signe devant la mantisse',
+      'Signe devant la base',
       3,
       '1 : Positif\n2 : Négatif\n3 : Mélange',
     ]
@@ -112,28 +112,25 @@ export default class NotationPuissance extends Exercice {
       this.sup4 === 1 ? [''] : this.sup4 === 2 ? ['-'] : ['', '-'],
       this.nbQuestions,
     )
-    let listeSignesMantisse = combinaisonListes(['', '-'], this.nbQuestions)
+    let listeSignesBase = combinaisonListes(['', '-'], this.nbQuestions)
     switch (this.sup2) {
       case 1:
-        listeSignesMantisse = ['']
+        listeSignesBase = ['']
         break
       case 2:
-        listeSignesMantisse = ['-']
+        listeSignesBase = ['-']
         break
       default:
-        listeSignesMantisse = ['', '-']
+        listeSignesBase = ['', '-']
         break
     }
     const alternance2Et3 = combinaisonListes([2, 3], this.nbQuestions)
-    listeSignesMantisse = combinaisonListes(
-      listeSignesMantisse,
-      this.nbQuestions,
-    )
+    listeSignesBase = combinaisonListes(listeSignesBase, this.nbQuestions)
     for (
       let i = 0,
         texte,
         texteCorr,
-        mantisse,
+        base,
         exposant,
         pl,
         pr,
@@ -151,8 +148,8 @@ export default class NotationPuissance extends Exercice {
     ) {
       this.autoCorrectionAMC[i] = {}
       this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-      mantisse = randint(2, 10)
-      if (listeSignesMantisse[i] === '-') mantisse = -mantisse
+      base = randint(2, 10)
+      if (listeSignesBase[i] === '-') base = -base
       if (this.sup5 === 1) {
         exposant = alternance2Et3[i]
       } else {
@@ -162,7 +159,7 @@ export default class NotationPuissance extends Exercice {
           exposant = randint(this.classe > 2 ? 2 : 0, 5)
         }
       }
-      if (mantisse < 0) {
+      if (base < 0) {
         pl = '('
         pr = ')'
         apl = ''
@@ -173,40 +170,41 @@ export default class NotationPuissance extends Exercice {
         apl = '('
         apr = ')'
       }
-      listeSignes[i] === '-' ? (signeContraire = '') : (signeContraire = '-')
+      signeContraire = listeSignes[i] === '-' ? '' : '-'
       if (listeSignesExposants[i] === 'négatif') {
         exposant = exposant * -1
       }
-      puissance = `${listeSignes[i] + pl + mantisse + pr}^{${exposant}}`
+      puissance = `${listeSignes[i] + pl + base + pr}^{${exposant}}`
       puissances = []
-      let exp
-      exposant < 0 ? (exp = `{${exposant}}`) : (exp = `${exposant}`) // distinction importante pour comparer les chaînes de caractères en interactif
-      puissances.push(`${listeSignes[i] + pl + mantisse + pr}^${exp}`) // réponse de base
-      exposant % 2 === 0
-        ? puissances.push(`${listeSignes[i] + apl + -mantisse + apr}^${exp}`)
-        : puissances.push(`${signeContraire + apl + -mantisse + apr}^${exp}`) // si l'exposant est pair, on peut changer le signe de la mantisse sans changer le signe devant et s'il est impair, on peut changer les deux signes
+      const exp = exposant < 0 ? `{${exposant}}` : `${exposant}` // distinction importante pour comparer les chaînes de caractères en interactif
+      puissances.push(`${listeSignes[i] + pl + base + pr}^${exp}`) // réponse de base
+
+      if (exposant % 2 === 0)
+        puissances.push(`${listeSignes[i] + apl + -base + apr}^${exp}`)
+      else puissances.push(`${signeContraire + apl + -base + apr}^${exp}`) // si l'exposant est pair, on peut changer le signe de la base sans changer le signe devant et s'il est impair, on peut changer les deux signes
       if (exposant < 0) {
         puissances.push(
-          `\\frac{1}{${listeSignes[i] + pl + mantisse + pr}^${-exposant}}`,
+          `\\frac{1}{${listeSignes[i] + pl + base + pr}^${-exposant}}`,
         )
-        exposant % 2 === 0
-          ? puissances.push(
-              `\\frac{1}{${listeSignes[i] + apl + -mantisse + apr}^${-exposant}}`,
-            )
-          : puissances.push(
-              `\\frac{1}{${signeContraire + apl + -mantisse + apr}^${-exposant}}`,
-            ) // si l'exposant est pair, on peut changer le signe de la mantisse sans changer le signe devant et s'il est impair, on peut changer les deux signes
+        if (exposant % 2 === 0)
+          puissances.push(
+            `\\frac{1}{${listeSignes[i] + apl + -base + apr}^${-exposant}}`,
+          )
+        else
+          puissances.push(
+            `\\frac{1}{${signeContraire + apl + -base + apr}^${-exposant}}`,
+          ) // si l'exposant est pair, on peut changer le signe de la base sans changer le signe devant et s'il est impair, on peut changer les deux signes
       }
-      produit = `${pl + mantisse + pr}`
-      produitSansParenthesesInitiales = `${mantisse}`
+      produit = `${pl + base + pr}`
+      produitSansParenthesesInitiales = `${base}`
       produitAlt = produit
       produitSansParenthesesInitialesEtSansFois =
         produitSansParenthesesInitiales
       for (let j = 0; j < Math.abs(exposant) - 1; j++) {
-        produit += `\\times${pl + mantisse + pr}`
-        produitSansParenthesesInitiales += `\\times${pl + mantisse + pr}`
-        produitAlt += `(${mantisse})`
-        produitSansParenthesesInitialesEtSansFois += `(${mantisse})`
+        produit += `\\times${pl + base + pr}`
+        produitSansParenthesesInitiales += `\\times${pl + base + pr}`
+        produitAlt += `(${base})`
+        produitSansParenthesesInitialesEtSansFois += `(${base})`
       }
       switch (listeTypeDeQuestions[i]) {
         case 'produit':
@@ -234,11 +232,11 @@ export default class NotationPuissance extends Exercice {
               pl = ''
               pr = ''
             }
-            texteCorr += `${listeSignes[i] + pl + mantisse + pr}$`
+            texteCorr += `${listeSignes[i] + pl + base + pr}$`
 
             handleAnswers(this, i, {
               reponse: {
-                value: listeSignes[i] + pl + mantisse + pr,
+                value: listeSignes[i] + pl + base + pr,
                 options: { texteSansCasse: true },
               },
             })
@@ -256,10 +254,10 @@ export default class NotationPuissance extends Exercice {
               },
             })
           } else if (exposant === -1) {
-            texteCorr += `${listeSignes[i]}\\dfrac{1}{${mantisse}}$`
+            texteCorr += `${listeSignes[i]}\\dfrac{1}{${base}}$`
             handleAnswers(this, i, {
               reponse: {
-                value: `${listeSignes[i]}\\frac{1}{${mantisse}}`,
+                value: `${listeSignes[i]}\\frac{1}{${base}}`,
                 options: { texteSansCasse: true },
               },
             })
@@ -333,18 +331,18 @@ export default class NotationPuissance extends Exercice {
 
       // Fin de cette uniformisation
 
-      // Si la question n'mantisse jamais été posée, on l'enregistre
+      // Si la question n'base jamais été posée, on l'enregistre
       if (
         this.questionJamaisPosee(
           i,
-          mantisse,
+          base,
           exposant,
           listeTypeDeQuestions[i],
           listeSignesExposants[i],
           listeSignes[i],
         )
       ) {
-        // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple mantisse, exposant, c et d)
+        // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple base, exposant, c et d)
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

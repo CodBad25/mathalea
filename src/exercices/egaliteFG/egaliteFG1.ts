@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Durées']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -57,7 +57,7 @@ export default class EgaliteFG1 extends Exercice {
       texte0 +=
         ajouteChampTexteMathLive(this, 0, '', { texteApres: 'min' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 38 } })
-    const correction0 = `Julie attend le bus de $17\\text{h}20$. Le trajet en bus dure $14$ minutes : elle arrive donc à l'arrêt le plus proche de chez elle à $17\\text{h}20+14\\text{ min}=17\\text{h}34$. Il lui faut encore marcher $4$ minutes, donc elle arrive chez elle à $17\\text{h}34+4\\text{ min}=17\\text{h}38$, soit $${miseEnEvidence('38')}$ minutes après $17\\text{h}00$.`
+    const correction0 = `$17\\text{h}20 \\xrightarrow{+14~\\text{min}} 17\\text{h}34 \\xrightarrow{+4~\\text{min}} 17\\text{h}38$<br>Julie arrive donc chez elle à $17\\text{h}38$, soit $${miseEnEvidence('38')}$ minutes après $17\\text{h}00$.`
 
     let texte1 =
       'À quelle heure Paul arrivera-t-il à la maison en prenant le métro ? Donne ta réponse en nombre de minutes après $17\\text{h}00$.'
@@ -65,7 +65,7 @@ export default class EgaliteFG1 extends Exercice {
       texte1 +=
         ajouteChampTexteMathLive(this, 1, '', { texteApres: 'min' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 38 } })
-    const correction1 = `Paul prend le métro de $17\\text{h}26$. Le trajet en métro dure $10$ minutes : il arrive donc à la station la plus proche de chez lui à $17\\text{h}26+10\\text{ min}=17\\text{h}36$. Il lui faut encore marcher $2$ minutes, donc il arrive chez lui à $17\\text{h}36+2\\text{ min}=17\\text{h}38$, soit $${miseEnEvidence('38')}$ minutes après $17\\text{h}00$.<br>Julie et Paul arrivent donc tous les deux à la même heure, $17\\text{h}38$, bien avant $17\\text{h}45$ : les deux chemins sont finalement équivalents !`
+    const correction1 = `$17\\text{h}26 \\xrightarrow{+10~\\text{min}} 17\\text{h}36 \\xrightarrow{+2~\\text{min}} 17\\text{h}38$<br>Paul arrive donc chez lui à $17\\text{h}38$, soit $${miseEnEvidence('38')}$ minutes après $17\\text{h}00$.<br>Julie et Paul arrivent donc tous les deux à la même heure, $17\\text{h}38$, bien avant $17\\text{h}45$ : les deux chemins sont finalement équivalents !`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

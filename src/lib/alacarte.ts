@@ -73,7 +73,6 @@ export function generateLatex(
   let outputCorr = '\n\n%%%%%%%%%%%%%%%%%%%%'
   outputCorr += '\n%%%  CORRECTION  %%%'
   outputCorr += '\n%%%%%%%%%%%%%%%%%%%%'
-  outputCorr += '\n\n\\fancyhead[L]{Correction}'
   for (const document of userSettings.documents) {
     const numberOfVersions = document.number || 1
     for (let i = 0; i < numberOfVersions; i++) {
@@ -86,7 +85,13 @@ export function generateLatex(
   
   `
       output += intro
-      outputCorr += intro
+      // `\fancyhead[L]{Correction}` doit être émis APRÈS le `\clearpage` :
+      // fancyhdr résout l'en-tête au shipout, sinon « Correction » apparaît
+      // dans l'en-tête gauche de la dernière page des énoncés.
+      outputCorr += intro.replace(
+        '\\clearpage',
+        '\\clearpage\n  \\fancyhead[L]{Correction}',
+      )
 
       for (const item of document.items) {
         if (itemsWithExercises[item]) {

@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -12,7 +13,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  "L'accès aux CPGE scientifiques : probabilités et loi binomiale"
+  "L'accès aux CPGE scientifiques"
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 
@@ -22,7 +23,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Probabilités conditionnelles', 'Loi binomiale']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -101,7 +102,7 @@ export default class EgaliteFGLycee17 extends Exercice {
     const monQcm4 = propositionsQcm(this, 4)
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 = `$P_{\\overline F}(A)=0{,}3=2\\times 0{,}15=2\\times P_F(A)$ : à ce stade de l'enquête, un garçon a $${miseEnEvidence('\\text{deux fois plus de chances}')}$ qu'une fille d'être admis en CPGE scientifique, révélant une nette inégalité d'accès.`
+    const correction4 = `$P_{\\overline F}(A)=0{,}3=2\\times 0{,}15=2\\times P_F(A)$ : à ce stade de l'enquête, un garçon a ${texteEnCouleurEtGras('deux fois plus de chances')} qu'une fille d'être admis en CPGE scientifique, révélant une nette inégalité d'accès.`
 
     const texteQ5 =
       "On prélève au hasard, avec remise, un échantillon de $7$ élèves parmi les $50$ interrogés. On note $X$ le nombre d'élèves admis en CPGE parmi les $7$ tirés au sort. Quelle est la loi suivie par $X$ ?"

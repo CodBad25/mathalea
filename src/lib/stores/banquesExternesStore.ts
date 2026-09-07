@@ -4,7 +4,10 @@
  * Une banque est soit une archive zip déposée depuis la machine, soit un dépôt
  * public de forge.apps.education.fr. Dans les deux cas elle contient un
  * `manifest.json` (voir `lib/types/banquesExternes.ts`) et des fichiers `.png`,
- * `.typ` et/ou `.tex`. Les banques installées sont rechargées à chaque démarrage :
+ * `.typ` et/ou `.tex`. Un dépôt de forge est lu en priorité par son archive
+ * `dist.zip` (un seul téléchargement) et, à défaut, fichier par fichier via
+ * l'API GitLab (racine du dépôt puis sous-dossier `dist/`).
+ * Les banques installées sont rechargées à chaque démarrage :
  * - les descripteurs sont en localStorage ;
  * - les octets des archives zip sont en IndexedDB (`banquesExternesDb.ts`).
  *
@@ -12,6 +15,7 @@
  */
 import JSZip from 'jszip'
 import { get, writable } from 'svelte/store'
+import ffjmManifest from '../../json/banques/ffjm.manifest.json'
 import {
   construireReferentielBanque,
   ManifestInvalideError,
@@ -40,6 +44,20 @@ const CLE_STOCKAGE = 'mathalea-banques-externes'
 
 /** Taille maximale acceptée pour une archive déposée (50 Mo) */
 const TAILLE_MAX_ZIP = 50 * 1024 * 1024
+
+/**
+ * Banques d'exercices livrées avec le site : chargées pour tout le monde au
+ * démarrage (voir `chargerBanquesIntegrees`), sans passer par « Ressources
+ * partenaires → Ajouter une banque ». Leur `manifest.json` est versionné dans
+ * `src/json/banques/` ; leurs fichiers (png, sources, préambules) sont servis
+ * en statique sous `base` (relatif à l'URL de base de l'app, `import.meta.env.
+ * BASE_URL`), comme la « Bibliothèque ». Contrairement aux provenances `zip` et
+ * `forge`, une banque intégrée n'est ni persistée en localStorage, ni
+ * référencée par un paramètre `bq` dans les liens partagés, ni retirable.
+ */
+const BANQUES_INTEGREES: { cle: string; manifest: unknown; base: string }[] = [
+  { cle: 'builtin:ffjm', manifest: ffjmManifest, base: 'static/ffjm/' },
+]
 
 /** Banques actuellement chargées, dans l'ordre d'installation */
 export const banquesExternes = writable<BanqueExterneChargee[]>([])
@@ -162,15 +180,20 @@ function ecrireSourcesInstallees(sources: BanqueExterneSource[]): void {
 /**
  * Décompresse une archive et en construit une banque chargée. Le descripteur
  * n'est pas connu avant d'avoir lu le manifest (la clé d'une banque zip dérive
- * de l'id déclaré) : c'est l'appelant qui l'assemble à partir du manifest rendu.
+ * de l'id déclaré) : c'est l'appelant qui l'assemble à partir du manifest rendu,
+ * sauf s'il en impose un (archive `dist.zip` d'un dépôt de forge : le
+ * descripteur reste alors celui de la forge).
  * @param {ArrayBuffer} octets contenu du zip
  * @param {string} nomFichier nom de l'archive, pour l'affichage
+ * @param {BanqueExterneSource} sourceImposee descripteur à conserver tel quel
+ * (au lieu d'en dériver une banque `zip:` de l'id du manifest)
  * @returns {Promise<BanqueExterneChargee>} banque prête à être affichée
  * @throws {ManifestInvalideError} si l'archive ne contient pas de manifest valide
  */
 async function chargerDepuisZip(
   octets: ArrayBuffer,
   nomFichier?: string,
+  sourceImposee?: BanqueExterneSource,
 ): Promise<BanqueExterneChargee> {
   let archive: JSZip
   try {
@@ -235,7 +258,7 @@ async function chargerDepuisZip(
     if (entree === undefined || entree.dir) return null
     return await entree.async('string')
   })
-  const source: BanqueExterneSource = {
+  const source: BanqueExterneSource = sourceImposee ?? {
     type: 'zip',
     cle: `zip:${manifest.id}`,
     nomFichier,
@@ -249,6 +272,42 @@ async function chargerDepuisZip(
  * publiés par un dépôt de sources (build généré par une CI, par exemple).
  */
 const RACINE_REPLI = 'dist'
+
+/**
+ * Archive complète de la banque, cherchée à la racine du dépôt avant la
+ * lecture fichier par fichier. Quand elle existe, un seul téléchargement
+ * suffit : on évite la rafale de requêtes vers l'API GitLab — et ses réponses
+ * `429 Too Many Requests` — qu'entraîne la lecture du dossier `dist/`.
+ */
+const ARCHIVE_DIST = 'dist.zip'
+
+/**
+ * Tente de télécharger l'archive `dist.zip` à la racine (éventuellement
+ * `racine/`) d'un dépôt de forge.
+ * @param {BanqueExterneSource} source descripteur de la banque
+ * @returns {Promise<ArrayBuffer|null>} les octets de l'archive, ou `null` si
+ * elle est absente (404) — la banque est alors lue fichier par fichier
+ * @throws {ManifestInvalideError} en cas d'erreur réseau ou de réponse ni 200 ni 404
+ */
+async function telechargerArchiveDist(
+  source: BanqueExterneSource,
+): Promise<ArrayBuffer | null> {
+  let reponse: Response
+  try {
+    reponse = await window.fetch(urlFichierForge(source, ARCHIVE_DIST))
+  } catch {
+    throw new ManifestInvalideError(
+      'Impossible de joindre la forge. Vérifiez votre connexion et l’adresse du dépôt.',
+    )
+  }
+  if (reponse.status === 404) return null
+  if (!reponse.ok) {
+    throw new ManifestInvalideError(
+      `La forge a répondu ${reponse.status} pour ${source.projet}.`,
+    )
+  }
+  return await reponse.arrayBuffer()
+}
 
 /**
  * Ajoute un sous-dossier à la racine (éventuellement vide) d'une source.
@@ -291,16 +350,20 @@ async function telechargerManifest(
 }
 
 /**
- * Télécharge le manifest d'un dépôt de la forge et construit la banque. Les
- * fichiers eux-mêmes ne sont pas téléchargés : leurs URLs d'API sont calculées
- * à la volée, le navigateur les récupère au moment de l'affichage.
+ * Télécharge une banque hébergée sur un dépôt de la forge.
  *
- * `manifest.json` est cherché à la racine déclarée par `source` puis, s'il y
- * est absent, dans son sous-dossier `dist/` (voir `RACINE_REPLI`) : les
- * assets de la banque sont alors résolus à partir de cette racine effective,
- * mais le descripteur persisté (`source`, donc sa `cle`) garde la racine
- * telle qu'indiquée par l'utilisateur, la détection étant refaite à chaque
- * rechargement.
+ * Si le dépôt publie une archive `dist.zip` à sa racine (voir `ARCHIVE_DIST`),
+ * toute la banque en est extraite d'un seul téléchargement. Sinon, seul
+ * `manifest.json` est téléchargé et les fichiers sont récupérés un par un au
+ * moment de l'affichage, leurs URLs d'API étant calculées à la volée :
+ * `manifest.json` est alors cherché à la racine déclarée par `source` puis,
+ * s'il y est absent, dans son sous-dossier `dist/` (voir `RACINE_REPLI`) ; les
+ * assets sont résolus à partir de cette racine effective.
+ *
+ * Dans tous les cas le descripteur persisté (`source`, donc sa `cle`) garde la
+ * racine telle qu'indiquée par l'utilisateur : la détection (archive, puis
+ * racine du manifest) est refaite à chaque rechargement, et fait remonter la
+ * publication d'un `dist.zip` sur une banque jusque-là lue fichier par fichier.
  * @param {BanqueExterneSource} source descripteur de la banque
  * @returns {Promise<BanqueExterneChargee>} banque prête à être affichée
  * @throws {ManifestInvalideError} si le dépôt est inaccessible ou son manifest invalide
@@ -308,6 +371,11 @@ async function telechargerManifest(
 async function chargerDepuisForge(
   source: BanqueExterneSource,
 ): Promise<BanqueExterneChargee> {
+  const archiveDist = await telechargerArchiveDist(source)
+  if (archiveDist !== null) {
+    return await chargerDepuisZip(archiveDist, undefined, source)
+  }
+
   let sourceEffective = source
   let texteManifest = await telechargerManifest(sourceEffective)
   if (texteManifest === null) {
@@ -447,10 +515,12 @@ export async function ajouterBanqueForge(
 
 /**
  * Désinstalle une banque : elle disparaît du menu, de la liste enregistrée et,
- * pour une banque zip, l'archive est effacée d'IndexedDB.
+ * pour une banque zip, l'archive est effacée d'IndexedDB. Sans effet sur une
+ * banque intégrée au site (voir `BANQUES_INTEGREES`), qui n'est pas retirable.
  * @param {string} cle clé de la banque à retirer
  */
 export async function supprimerBanque(cle: string): Promise<void> {
+  if (cle.startsWith('builtin:')) return
   banquesExternes.update((liste) => liste.filter((b) => b.source.cle !== cle))
   for (const url of blobsParBanque.get(cle) ?? []) URL.revokeObjectURL(url)
   blobsParBanque.delete(cle)
@@ -462,6 +532,59 @@ export async function supprimerBanque(cle: string): Promise<void> {
       // base indisponible : le descripteur a déjà été retiré
     }
   }
+}
+
+/**
+ * Charge les banques livrées avec le site (voir `BANQUES_INTEGREES`) et les
+ * publie dans le store. À appeler une seule fois au démarrage, avant le premier
+ * rendu et avant `chargerBanquesInstallees`, pour que ces banques apparaissent
+ * en tête de « Ressources partenaires » et que leurs uuid `bq-…` soient
+ * résolubles dès le montage des vues.
+ * @returns {Promise<string[]>} les messages des banques qui n'ont pas pu être chargées
+ */
+export async function chargerBanquesIntegrees(): Promise<string[]> {
+  const erreurs: string[] = []
+  for (const integree of BANQUES_INTEGREES) {
+    try {
+      const manifest = validerManifest(integree.manifest)
+      const prefixe = `${import.meta.env.BASE_URL}${integree.base}`
+      const assets = new Map<string, string>()
+      for (const exercice of manifest.exercices) {
+        for (const chemin of [
+          exercice.png,
+          exercice.pngCor,
+          exercice.typ,
+          exercice.typCor,
+          exercice.tex,
+          exercice.texCor,
+        ]) {
+          if (chemin !== undefined && !assets.has(chemin)) {
+            assets.set(chemin, `${prefixe}${chemin}`)
+          }
+        }
+      }
+      const preambuleTexte = await chargerPreambule(
+        manifest,
+        async (chemin) => {
+          try {
+            const reponse = await window.fetch(`${prefixe}${chemin}`)
+            return reponse.ok ? await reponse.text() : null
+          } catch {
+            return null
+          }
+        },
+      )
+      publierBanque({
+        source: { type: 'builtin', cle: integree.cle },
+        manifest,
+        assets,
+        preambuleTexte,
+      })
+    } catch (erreur) {
+      erreurs.push(erreur instanceof Error ? erreur.message : String(erreur))
+    }
+  }
+  return erreurs
 }
 
 /**

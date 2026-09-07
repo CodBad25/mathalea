@@ -11,6 +11,7 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre des systèmes simples'
 export const dateDePublication = '10/07/2026'
 export const interactifReady = true
+export const tags = ['ffjm']
 
 /**
  * Résoudre des problèmes de système simple

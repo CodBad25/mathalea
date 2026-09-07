@@ -11,6 +11,7 @@ import Exercice from '../Exercice'
 export const dateDePublication = '15/08/2026'
 export const titre = 'Résoudre une grille contenant des chiffres et des zeros'
 export const interactifReady = true
+export const tags = ['ffjm']
 
 /** Résoudre une grille contenant des chiffre unique et des zéros
  * @author Claire Stephan

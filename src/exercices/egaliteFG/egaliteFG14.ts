@@ -3,6 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -21,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Grandeurs composées','Théorème de Thalès']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -126,9 +127,12 @@ export default class EgaliteFG14 extends Exercice {
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
     const correction4 =
-      "Pour la table A : $\\dfrac{21{,}6}{52}\\approx 0{,}4154$ et $\\dfrac{25}{60}\\approx 0{,}4167$ : les rapports ne sont pas égaux, donc, d'après la réciproque du théorème de Thalès, le plateau de la table A n'est pas parallèle au sol.<br>" +
-      "Pour la table B : $\\dfrac{18}{48}=0{,}375$ et $\\dfrac{24}{64}=0{,}375$ : les rapports sont égaux, donc, d'après la réciproque du théorème de Thalès, le plateau de la table B est bien parallèle au sol (donc horizontal).<br>" +
-      `$${miseEnEvidence("\\text{C'est donc Matthieu qui a raison}")}$.`
+      "Notons $O$ le point de croisement des deux pieds d'une table, $P$ et $P'$ les deux points où les pieds touchent le plateau, et $S$ et $S'$ les deux points où ils touchent le sol. Sur chaque pied, le point de croisement est situé entre l'extrémité côté plateau et l'extrémité côté sol (les pieds se croisent en formant un « X ») : les droites $(PS)$ et $(P'S')$ [les deux pieds] sont donc sécantes en $O$, avec $P$, $O$, $S$ et $P'$, $O$, $S'$ alignés dans le même ordre.<br><br>" +
+      "Pour la table A ($OP=21{,}6\\text{ cm}$, $OP'=25\\text{ cm}$, $OS=52\\text{ cm}$, $OS'=60\\text{ cm}$) : d'une part, $\\dfrac{OP}{OS}=\\dfrac{21{,}6}{52}\\approx 0{,}4154$ ; d'autre part, $\\dfrac{OP'}{OS'}=\\dfrac{25}{60}\\approx 0{,}4167$.<br>" +
+      "D'où : $\\dfrac{OP}{OS}\\neq \\dfrac{OP'}{OS'}$ : donc, d'après le théorème de Thalès, le plateau de la table A (la droite $(PP')$) n'est pas parallèle au sol (la droite $(SS')$).<br><br>" +
+      "Pour la table B ($OP=18\\text{ cm}$, $OP'=24\\text{ cm}$, $OS=48\\text{ cm}$, $OS'=64\\text{ cm}$) : d'une part, $\\dfrac{OP}{OS}=\\dfrac{18}{48}=0{,}375$ ; d'autre part, $\\dfrac{OP'}{OS'}=\\dfrac{24}{64}=0{,}375$.<br>" +
+      "D'où : $\\dfrac{OP}{OS}=\\dfrac{OP'}{OS'}$ : donc, d'après la réciproque du théorème de Thalès, le plateau de la table B (la droite $(PP')$) est bien parallèle au sol (donc horizontal).<br><br>" +
+      `${texteEnCouleurEtGras("C'est donc Matthieu qui a raison")}.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

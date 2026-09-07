@@ -11,7 +11,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Hypatie d\'Alexandrie : médiatrices et hauteur du phare'
+export const titre = 'Hypatie d\'Alexandrie'
 export const dateDePublication = '15/07/2026'
 export const interactifReady = true
 export const uuid = '1ed48'
@@ -20,7 +20,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Théorème de Thalès','Trigonométrie']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -300,13 +300,13 @@ export default class EgaliteFG11 extends Exercice {
       "<br>À l'aide de ses connaissances en mathématiques, Hypatie d'Alexandrie a pu calculer la hauteur du phare d'Alexandrie. Retrouver sa méthode pour calculer la hauteur $PA$ du phare, en mètres."
     if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: 'm' }) + '<br>'
     const correction1 =
-      `D'après le théorème de Thalès dans les triangles $OTB$ et $OPA$ : $\\dfrac{OT}{OP}=\\dfrac{BT}{PA}$, soit $\\dfrac{60}{180}=\\dfrac{45}{PA}$, d'où $PA=\\dfrac{45\\times 180}{60}=${miseEnEvidence('135\\text{ m}')}$.`
+      `Les droites $(OP)$ et $(OA)$ sont sécantes en $O$ et $(BT)\\,\\text{//}\\,(PA)$, donc d'après le théorème de Thalès :<br>$\\dfrac{OT}{OP}=\\dfrac{OB}{OA}=\\dfrac{BT}{PA}$<br>Avec les valeurs connues : $\\dfrac{60}{180}=\\dfrac{45}{PA}$.<br>Les produits en croix sont égaux, donc $60\\times PA=45\\times 180$.<br>$PA=\\dfrac{45\\times 180}{60}=${miseEnEvidence('135\\text{ m}')}$.`
 
     let texte2 =
       "Calculer la mesure de l'angle $\\widehat{BOT}$, en degrés (arrondie au dixième)."
     if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: '°' }) + '<br>'
     const correction2 =
-      `Le triangle $OTB$ est rectangle en $T$ (car $(BT)\\perp(OP)$, la tige d'Hypatie étant verticale comme le phare). On a alors $\\tan(\\widehat{BOT})=\\dfrac{BT}{OT}=\\dfrac{45}{60}=0{,}75$, donc $\\widehat{BOT}=\\tan^{-1}(0{,}75)\\approx ${miseEnEvidence('36{,}9\\text{°}')}$.`
+      `Le triangle $OTB$ est rectangle en $T$ (car $(BT)\\perp(OP)$, la tige d'Hypatie étant verticale comme le phare).<br>La tangente de l'angle $\\widehat{BOT}$ est définie par : $\\tan\\left(\\widehat{BOT}\\right)=\\dfrac{BT}{OT}$.<br>Avec les données numériques : $\\tan\\left(\\widehat{BOT}\\right)=\\dfrac{45}{60}=0{,}75$, donc $\\widehat{BOT}=\\arctan(0{,}75)\\approx ${miseEnEvidence('36{,}9\\text{°}')}$.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

@@ -10,6 +10,7 @@ import Exercice from '../Exercice';
 export const dateDePublication = '02/09/2026'
 export const titre = 'Résoudre une grille contenant des pièces de monnaie'
 export const interactifReady = true
+export const tags = ['ffjm']
 
 /** Résoudre une grille de pièce de monnaie
  * @author Claire Stephan

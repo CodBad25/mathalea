@@ -229,7 +229,7 @@
               </span>
             {/if}
             {#if ending.tags.length > 0}
-              <div class="pl-2">
+              <span class="inline-flex flex-wrap pl-2">
                 {#each ending.tags as tag}
                   <span
                     class="inline-flex flex-wrap items-center justify-center rounded-full bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light text-coopmaths-canvas dark:text-coopmathsdark-canvas text-[0.6rem] px-2 py-px leading-snug font-semibold mr-1"
@@ -237,7 +237,7 @@
                     {tag}
                   </span>
                 {/each}
-              </div>
+              </span>
             {/if}
           </div>
         {:else if resourceHasPlace(ending)}

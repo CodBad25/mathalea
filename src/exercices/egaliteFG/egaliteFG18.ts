@@ -4,7 +4,7 @@ import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras, texteItalique } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
 import { texFactorisation } from '../../lib/outils/primalite'
 import { context } from '../../modules/context'
@@ -22,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons','Arithmétique','Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles (source : Wikipedia)
@@ -154,7 +154,7 @@ export default class EgaliteFG18 extends Exercice {
     const monQcm4 = propositionsQcm(this, 4)
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 = `Le nombre de lots doit diviser à la fois $630$ et $456$, donc diviser leur PGCD. D'après les décompositions précédentes, les seuls facteurs premiers communs à $630=2\\times 3^2\\times 5\\times 7$ et $456=2^3\\times 3\\times 19$ sont $2$ et $3$, donc $\\text{PGCD}(630\\,;\\,456)=2\\times 3=6$. Comme $18$ ne divise pas $6$, la réponse est $${miseEnEvidence('\\text{Non}')}$ : les professeurs n'ont pas pu constituer $18$ lots.`
+    const correction4 = `Le nombre de lots doit diviser à la fois $630$ et $456$, donc diviser leur PGCD. D'après les décompositions précédentes, les seuls facteurs premiers communs à $630=2\\times 3^2\\times 5\\times 7$ et $456=2^3\\times 3\\times 19$ sont $2$ et $3$, donc $\\text{PGCD}(630\\,;\\,456)=2\\times 3=6$. Comme $18$ ne divise pas $6$, la réponse est ${texteEnCouleurEtGras('Non')} : les professeurs n'ont pas pu constituer $18$ lots.`
 
     const texteQ5 =
       "Quel est le nombre maximum de lots qu'ont pu constituer les professeurs ? Combien de chocolats et de caramels y avait-il alors dans chaque lot ?"

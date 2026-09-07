@@ -2,6 +2,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   miseEnEvidence,
+  texteEnCouleurEtGras,
   texteGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
@@ -20,7 +21,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const tags = ['égalité filles-garçons']
+export const tags = ['égalité filles-garçons', 'Suites numériques', 'Pourcentages']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles
@@ -61,7 +62,7 @@ export default class EgaliteFGLycee14 extends Exercice {
 
     const texte1 =
       'Quelle est la nature de la suite $(P_n)$ ? Justifier en donnant ses caractéristiques.'
-    const correction1 = `La suite $(P_n)$ est $${miseEnEvidence('\\text{arithmétique}')}$, de raison $2$ et de premier terme $35$ (chaque année, on ajoute $2$ points de pourcentage au terme précédent) : on a donc, pour tout $n$, $P_n=35+2n$.`
+    const correction1 = `La suite $(P_n)$ est ${texteEnCouleurEtGras('arithmétique')}, de raison $2$ et de premier terme $35$ (chaque année, on ajoute $2$ points de pourcentage au terme précédent) : on a donc, pour tout $n$, $P_n=35+2n$.`
 
     let texte2 =
       "À partir de quelle année (donner $n$, avec l'année $2024+n$) les filles seront-elles majoritaires dans cette filière ?"
