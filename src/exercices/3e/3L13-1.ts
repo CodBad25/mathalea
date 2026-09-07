@@ -159,6 +159,11 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
             c = randint(1, 9)
             a = randint(c + 1, 15) // a sera plus grand que c pour que a-c>0
           }
+          // a et/ou c ont pu être retirés au sort ci-dessus : on remet la
+          // réponse en cohérence avec l'équation réellement affichée (sinon la
+          // phrase de conclusion et la correction interactive utilisent une
+          // ancienne valeur, cf. liens partagés avec s=0).
+          reponse = new FractionEtendue(d - b, a - c)
           equation = `$${rienSi1(a)}x${ecritureAlgebrique(b)}=${rienSi1(c)}x${ecritureAlgebrique(d)}$`
           texte = equation + '<br>'
           texteCorr = texte
