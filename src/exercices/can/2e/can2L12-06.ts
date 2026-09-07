@@ -28,6 +28,7 @@ export default class FatorisationEgR extends ExerciceSimple {
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
     this.versionQcmDisponible = true
     this.versionQcm = false
+    this.optionsDeComparaison = { factorisation: true }
   }
 
   nouvelleVersion() {
@@ -37,7 +38,8 @@ export default class FatorisationEgR extends ExerciceSimple {
           const a = randint(1, 2)
           const b = randint(1, 6)
           const choix = choice([true, false])
-          this.reponse = `$(${reduireAxPlusB(a, b)})^2$`
+          this.reponse = `(${reduireAxPlusB(a, b)})^2`
+          if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
           const fausseFactorisation = `$x(${reduireAxPlusB(a ** 2, 2 * a * b)})+${b ** 2}$`
           let tableau = [
             `$(${reduireAxPlusB(a, -b)})^2$`,
@@ -83,11 +85,11 @@ export default class FatorisationEgR extends ExerciceSimple {
           const b = randint(1, 6)
           const choix = choice([true, false])
           const reponses = [
-            `$(${reduireAxPlusB(a, -b)})^2$`,
-            `$(${reduireAxPlusB(-a, b)})^2$`,
+            `(${reduireAxPlusB(a, -b)})^2`,
+            `(${reduireAxPlusB(-a, b)})^2`,
           ]
           if (this.versionQcm) {
-            this.reponse = choice(reponses)
+            this.reponse = '$' + choice(reponses) + '$'
           } else {
             this.reponse = reponses
           }
@@ -136,8 +138,9 @@ export default class FatorisationEgR extends ExerciceSimple {
           const b = randint(2, 10)
           const choix = choice([true, false])
           this.reponse = choix
-            ? `$(${reduireAxPlusB(a, -b)})(${reduireAxPlusB(a, b)})$`
-            : `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(-a, b)})$`
+            ? `(${reduireAxPlusB(a, -b)})(${reduireAxPlusB(a, b)})`
+            : `(${reduireAxPlusB(a, b)})(${reduireAxPlusB(-a, b)})`
+          if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
           this.distracteurs = [
             `$(${reduireAxPlusB(a, -b)})^2$`,
             `$(${reduireAxPlusB(a ** 2, b ** 2)})(${reduireAxPlusB(a ** 2, -b * b)})$`,
