@@ -286,7 +286,8 @@ argument, à utiliser quand la désinscription a lieu hors de ce nettoyage — v
 ## Grilles de chiffres
 
 Les composants qui font remplir un damier de chiffres (`kenken-grille`,
-`grimuku-grille`) partagent `src/lib/customElements/grilleDeChiffres.ts` :
+`grimuku-grille`, `tables-effacees-grille`) partagent
+`src/lib/customElements/grilleDeChiffres.ts` :
 
 - `verifieLesCases()` et `pointsMaxDesCases()` portent le barème « un point par
   case juste ». Le composant n'a plus qu'à implémenter l'interface
