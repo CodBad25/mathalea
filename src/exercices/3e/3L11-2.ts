@@ -9,6 +9,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
+  ecritureParentheseSiMoins,
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
@@ -60,7 +61,7 @@ export default class ReductionSiPossible extends Exercice {
         '6 : ax+b+cx+d',
         '7 : b+ax+d+cx',
         '8 : ax+b+x',
-        '9 : Mélange',
+        '10 : ax*bx',
       ].join('\n'),
     ]
     this.nbQuestions = 5
@@ -89,14 +90,32 @@ export default class ReductionSiPossible extends Exercice {
       exclus.push(3)
     }
 
-    const listeTypeDeQuestions = gestionnaireFormulaireTexte({
-      nbQuestions: this.nbQuestions,
-      saisie: this.sup3,
-      max: 8,
-      melange: 9,
-      defaut: 2,
-      exclus,
-    })
+    // Le cas 9 (« Mélange » historique) n'est plus proposé dans le formulaire,
+    // mais reste géré ci-dessous par gestionnaireFormulaireTexte (melange: 9)
+    // pour les liens déjà partagés qui portent s3=9. La nouvelle forme « ax*bx »
+    // prend donc le numéro 10, sans décaler la numérotation existante.
+    // gestionnaireFormulaireTexte plafonne la saisie à la valeur de mélange (9) :
+    // on intercepte la demande du cas 10 avant l'appel. En mode AMC, ce cas
+    // (réduction en ab x², hors modèle ax+b) est écarté, comme le cas 3.
+    const casDemandes = String(this.sup3 ?? '')
+      .split('-')
+      .map((cas) => cas.trim())
+      .filter((cas) => cas !== '')
+    const seulementAxBx =
+      !context.isAmc &&
+      casDemandes.length > 0 &&
+      casDemandes.every((cas) => cas === '10')
+
+    const listeTypeDeQuestions = seulementAxBx
+      ? new Array(this.nbQuestions).fill(10)
+      : gestionnaireFormulaireTexte({
+          nbQuestions: this.nbQuestions,
+          saisie: this.sup3,
+          max: 8,
+          melange: 9,
+          defaut: 2,
+          exclus,
+        })
 
     // const listeTypeDeQuestions = combinaisonListes(typesDeQuestionsDisponibles, this.nbQuestions) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
     for (
@@ -228,6 +247,13 @@ export default class ReductionSiPossible extends Exercice {
           ]
           coeffa = a + 1
           constb = b
+          break
+        case 10: // 'ax*bx':
+          texte = `$${lettreDepuisChiffre(i + 1)}=${rienSi1(a)}x\\times ${ecritureParentheseSiMoins(`${rienSi1(b)}x`)}$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}=${rienSi1(a)}x\\times ${ecritureParentheseSiMoins(`${rienSi1(b)}x`)}=${rienSi1(a * b)}x^2$`
+          reponse = `${rienSi1(a * b)}x^2`
+          coeffa = a * b
+          constb = 0
           break
       }
       // EE : Permet en deux lignes de mettre toutes les réponses attendues en couleur
