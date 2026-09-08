@@ -268,6 +268,14 @@ describe('latexMathToTypst', () => {
     expect(latexMathToTypst('\\textbf{cm}')).toBe('upright(bold(c m))')
   })
 
+  it("sépare un #txt suivi d'une parenthèse pour éviter l'enchaînement d'appel Typst", () => {
+    // \text{…}(…) : sans séparation, Typst lit `#txt("…")(x + y)` comme un
+    // appel de la valeur retournée et échoue sur « expected comma » (3L12-3).
+    expect(
+      latexMathToTypst('\\text{le groupement }(x+y)'),
+    ).toBe('#txt("le groupement ") (x + y)')
+  })
+
   it('renvoie la formule en chaîne littérale quand la conversion échoue', () => {
     // environnement non pris en charge par tex2typst
     expect(latexMathToTypst('\\begin{tabular}{cc}a&b\\end{tabular}')).toBe(
