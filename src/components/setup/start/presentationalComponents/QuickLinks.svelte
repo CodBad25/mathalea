@@ -26,10 +26,6 @@
             {link.subtitle}
           </div>
         </div>
-        <div class="flex items-center gap-1 text-xs font-semibold text-coopmaths-action dark:text-coopmathsdark-action group-hover:gap-2 transition-all duration-150">
-          Ouvrir
-          <i class="bx bx-chevron-right text-base" aria-hidden="true"></i>
-        </div>
       </a>
     {/each}
 </div>
