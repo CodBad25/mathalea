@@ -26,17 +26,6 @@
     { value: 'tabs', label: 'Onglets', icon: 'bx-folder' },
   ]
 
-  /**
-   * Widgets calculatrices encore expérimentaux (gros fichiers statiques,
-   * rendu non éprouvé sur tous les navigateurs) : visibles uniquement en
-   * développement local ou via ?beta dans l'URL, en attendant leur
-   * généralisation.
-   */
-  const calculatorWidgetsEnabled =
-    typeof window !== 'undefined' &&
-    (window.location.hostname === 'localhost' ||
-      new URL(window.location.href).searchParams.has('beta'))
-
   function setMode(mode: TbiMode) {
     tbiState.update((state) => ({ ...state, mode }))
   }
@@ -286,28 +275,26 @@
         <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
       </span>
     </button>
-    {#if calculatorWidgetsEnabled}
-      <button
-        type="button"
-        class={toggleButtonClass($tbiState.collegeCalculator.visible)}
-        aria-pressed={$tbiState.collegeCalculator.visible}
-        title="Calculatrice collège"
-        aria-label="Calculatrice collège"
-        onclick={toggleCollegeCalculator}
-      >
-        <i class="bx bx-calculator text-xl"></i>
-      </button>
-      <button
-        type="button"
-        class={toggleButtonClass($tbiState.lyceeCalculator.visible)}
-        aria-pressed={$tbiState.lyceeCalculator.visible}
-        title="Calculatrice lycée"
-        aria-label="Calculatrice lycée"
-        onclick={toggleLyceeCalculator}
-      >
-        <i class="bx bxs-calculator text-xl"></i>
-      </button>
-    {/if}
+    <button
+      type="button"
+      class={toggleButtonClass($tbiState.collegeCalculator.visible)}
+      aria-pressed={$tbiState.collegeCalculator.visible}
+      title="Calculatrice collège"
+      aria-label="Calculatrice collège"
+      onclick={toggleCollegeCalculator}
+    >
+      <i class="bx bx-calculator text-xl"></i>
+    </button>
+    <button
+      type="button"
+      class={toggleButtonClass($tbiState.lyceeCalculator.visible)}
+      aria-pressed={$tbiState.lyceeCalculator.visible}
+      title="Calculatrice lycée"
+      aria-label="Calculatrice lycée"
+      onclick={toggleLyceeCalculator}
+    >
+      <i class="bx bxs-calculator text-xl"></i>
+    </button>
     <button
       type="button"
       class={actionButtonClass}

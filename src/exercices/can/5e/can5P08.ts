@@ -78,7 +78,7 @@ export default class Proportionnalite3 extends ExerciceSimple {
           prix2 = prix1 - randint(1, 3) // prix pour masse cherchée
           fruits = choice(listefruits1)
           frac = new FractionEtendue(3 * prix2, prix1)
-          this.question = `$3$ ${fruits[0]} coûtent $${texPrix(prix1)}$ €.<br>
+          this.question = `$3$ kg de ${fruits[0]} coûtent $${texPrix(prix1)}$ €.<br>
         Quelle masse de ${fruits[0]} faut-il acheter pour payer $${texPrix(prix2)}$ € ?<br>
         Donner la valeur exacte de cette masse.`
           if (this.interactif) {

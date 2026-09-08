@@ -9,6 +9,7 @@ export const listOfCustomElements = [
   'juniper-green',
   'kenken-grille',
   'grimuku-grille',
+  'tables-effacees-grille',
   'blockly-editor',
   'fraction-cliquable',
   'labyrinthe-blockly',

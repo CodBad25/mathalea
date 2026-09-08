@@ -159,6 +159,11 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
             c = randint(1, 9)
             a = randint(c + 1, 15) // a sera plus grand que c pour que a-c>0
           }
+          // a et/ou c ont pu être retirés au sort ci-dessus : on remet la
+          // réponse en cohérence avec l'équation réellement affichée (sinon la
+          // phrase de conclusion et la correction interactive utilisent une
+          // ancienne valeur, cf. liens partagés avec s=0).
+          reponse = new FractionEtendue(d - b, a - c)
           equation = `$${rienSi1(a)}x${ecritureAlgebrique(b)}=${rienSi1(c)}x${ecritureAlgebrique(d)}$`
           texte = equation + '<br>'
           texteCorr = texte
@@ -170,7 +175,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
               texteCorr += `On ajoute $${rienSi1(-1 * c)}x$ aux deux membres.<br>`
             }
           }
-          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x+${d}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
+          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
           texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}=${d}$<br>`
           if (this.correctionDetaillee) {
             if (b > 0) {
@@ -251,7 +256,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
               texteCorr += `On ajoute $${rienSi1(-1 * c)}x$ aux deux membres.<br>`
             }
           }
-          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x+${d}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
+          texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}=${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
           texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}=${d}$<br>`
           if (this.correctionDetaillee) {
             if (b > 0) {

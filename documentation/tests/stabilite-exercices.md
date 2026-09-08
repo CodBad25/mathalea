@@ -160,6 +160,52 @@ choisit au clavier (↑/↓ puis Entrée) et la vue prof s'ouvre avec la version
 courante puis l'archive à la suite. Elle a besoin d'un `pnpm dev` en cours et
 d'un `pnpm makeJson` déjà passé (sinon l'`uuid` de l'archive n'est pas résolu).
 
+### 4. La dérive est déjà commitée : `pnpm archive:retro`
+
+`pnpm archive` suppose que `HEAD` contient encore la version publiée et le
+working tree la version modifiée. Quand la modification est **déjà commitée**
+(voire déployée), cette hypothèse tombe : la version publiée est en arrière dans
+l'historique et il n'y a jamais eu de `-old.ts`. C'est le cas typique d'une
+dérive introduite par un **utilitaire ou un exercice parent** modifié sans
+penser aux exercices qui en héritent.
+
+```bash
+pnpm archive:retro 2N40-1
+pnpm archive:retro 2N40-1 --changed-file src/exercices/4e/4C35.ts
+pnpm archive:retro 2N40-1 --good-rev 02c15f53a --date 06/09/2026
+```
+
+Le script :
+
+- retrouve la **dernière révision sans dérive** (« bonne révision »), soit avec
+  `--good-rev <sha>`, soit en rejouant l'empreinte commit par commit sur
+  l'historique du fichier fautif (le fichier d'exercice par défaut, ou celui
+  passé à `--changed-file`) ; le commit juste après donne la date de dérive
+  (surchargeable avec `--date`) ;
+- fige à cette révision le fichier d'exercice **et**, en `-old.ts` frères, les
+  fichiers d'exercices dont il hérite qui ont dérivé depuis, imports réécrits
+  vers les `-old` correspondants. L'archive de l'exercice garde l'`uuid` publié ;
+  les dépendances figées reçoivent un `uuid` neuf (le fichier vivant garde le
+  sien). Une dépendance partagée `src/lib`/`src/modules` qui a dérivé est
+  signalée mais pas gelée automatiquement — le plus souvent la dérive n'affecte
+  que le mode interactif et la vérification finale passe quand même ;
+- donne un `uuid` neuf au fichier de travail et cale `dateDeModifImportante` sur
+  la date de dérive ;
+- déplace l'entrée d'empreinte de l'`uuid` publié vers le fichier `-old`, puis
+  relance `pnpm makeJson` et `pnpm stability:check` sur cet `uuid` pour vérifier
+  que l'archive reproduit bien l'empreinte enregistrée (`--no-verify` pour
+  sauter cette étape).
+
+**Limite irréductible** : les liens créés **entre le commit de dérive et
+l'archivage** ont été distribués avec les valeurs dérivées sous l'ancien `uuid`,
+qui pointe désormais vers l'archive (valeurs d'origine). L'archivage rétroactif
+ne peut pas les rattraper ; le script affiche cette fenêtre.
+
+Ensuite, comme pour `pnpm archive` : `pnpm stability:update` (enregistre la
+version courante), `pnpm review:archives`, `pnpm check` (une archive figée à une
+révision ancienne peut demander un ajustement d'annotation de type — c'est le
+comportement au tirage qui est gelé, pas les types), puis relecture du diff.
+
 ## Le fichier d'empreintes
 
 `tests/e2e/tests/stability/empreintes-exercices.json` tient une ligne par

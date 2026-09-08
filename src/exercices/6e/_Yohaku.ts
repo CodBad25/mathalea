@@ -94,9 +94,8 @@ export default class FabriqueAYohaku extends Exercice {
             : 'nombres'
       this.introduction =
         operateur === 'addition'
-          ? `Trouver les ${mot} à mettre dans les cases vides pour que les sommes de chaque ligne et chaque colonne soient exactes.`
-          : `Trouver les ${mot} à mettre dans les cases vides pour que les produits de chaque ligne et chaque colonne soient exacts.`
-      this.introduction += `<br>Compléter ${this.nbQuestions === 1 ? 'la' : 'chaque'} grille avec des ${mot} qui conviennent${this.sup4 ? '' : ' (plusieurs solutions possibles)'}.<br>`
+          ? `Trouver les ${mot} à mettre dans les cases vides pour que les sommes de chaque ligne et chaque colonne soient exactes  (plusieurs solutions possibles).`
+          : `Trouver les ${mot} à mettre dans les cases vides pour que les produits de chaque ligne et chaque colonne soient exacts (plusieurs solutions possibles).`
       texte = yohaku.representation({
         numeroExercice: this.numeroExercice ?? 0,
         question: i,

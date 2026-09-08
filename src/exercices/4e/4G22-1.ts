@@ -192,10 +192,10 @@ function calculeHauteurFaceLaterale(
   }$<br>
   ${
     typeDeReponse.includes('exacte')
-      ? `La hauteur $${nomHauteur}$ de la face latérale $${nomFaceLaterale}$ est donc égale à $${miseEnEvidence(
+      ? `La hauteur $${nomHypotenuse}$ de la face latérale $${nomFaceLaterale}$ est donc égale à $${miseEnEvidence(
           `\\sqrt{${texNombre((cote * cote) / 4 + hauteur * hauteur, 2)}}`,
         )}\\text{ cm}$.`
-      : `La hauteur $${nomHauteur}$ de la face latérale $${nomFaceLaterale}$ est donc ${typeDeReponse.includes('approchée') ? 'environ ' : ''}égale à $${miseEnEvidence(
+      : `La hauteur $${nomHypotenuse}$ de la face latérale $${nomFaceLaterale}$ est donc ${typeDeReponse.includes('approchée') ? 'environ ' : ''}égale à $${miseEnEvidence(
           texNombre(Math.sqrt(hauteur * hauteur + (cote * cote) / 4), 1),
         )}\\text{ cm}$.`
   }`
@@ -271,6 +271,9 @@ function calculeArete(
   nomPied: string,
 ): string {
   const nomTriangle = nomPyramide.slice(0, 3)
+  // L'arête latérale est l'hypoténuse du triangle rectangle formé par la demi-diagonale
+  // de la base (dont le carré vaut 2*cote²/4 = cote²/2) et la hauteur de la pyramide.
+  const areteCarree = (cote * cote) / 2 + hauteur * hauteur
   const correction = `${calculeDemiDiagonale(
     cote,
     nomTriangle,
@@ -280,31 +283,26 @@ function calculeArete(
   Maintenant, calculons la longueur de l'arête latérale $${nomPyramide[0]}${nomPyramide[4]}$ de la pyramide $${nomPyramide}$.<br>
   Dans le triangle $${nomPyramide[0]}${nomPied}${nomPyramide[4]}$ rectangle en $${nomPied}$, d'après le théorème de Pythagore :<br>
   $${nomPyramide[0]}${nomPyramide[4]}^2 = ${nomPyramide[0]}${nomPied}^2 + ${nomPied}${nomPyramide[4]}^2$<br>
-  $${nomPyramide[0]}${nomPyramide[4]}^2 = \\sqrt{${texNombre(2 * cote * cote, 0)}}^2 + ${texNombre(hauteur, 0)}^2$<br>
-  $${nomPyramide[0]}${nomPyramide[4]}^2 = ${texNombre(2 * cote * cote, 0)} + ${texNombre(hauteur * hauteur, 0)}$<br>
-  $${nomPyramide[0]}${nomPyramide[4]}^2 = ${texNombre(
-    2 * cote * cote + hauteur * hauteur,
-    0,
-  )}$<br>
+  $${nomPyramide[0]}${nomPyramide[4]}^2 = \\left(\\dfrac{\\sqrt{${texNombre(2 * cote * cote, 0)}}}{2}\\right)^2 + ${texNombre(hauteur, 0)}^2$<br>
+  $${nomPyramide[0]}${nomPyramide[4]}^2 = \\dfrac{${texNombre(2 * cote * cote, 0)}}{4} + ${texNombre(hauteur * hauteur, 0)}$<br>
+  $${nomPyramide[0]}${nomPyramide[4]}^2 = ${texNombre((cote * cote) / 2, 1)} + ${texNombre(hauteur * hauteur, 0)}$<br>
+  $${nomPyramide[0]}${nomPyramide[4]}^2 = ${texNombre(areteCarree, 1)}$<br>
   Donc :<br>
-  $${nomPyramide[0]}${nomPyramide[4]}=\\sqrt{${texNombre(
-    2 * cote * cote + hauteur * hauteur,
-    0,
-  )}}${
+  $${nomPyramide[0]}${nomPyramide[4]}=\\sqrt{${texNombre(areteCarree, 1)}}${
     typeDeReponse.includes('exacte')
       ? ''
-      : `${egalOuApprox(Math.sqrt(2 * cote * cote + hauteur * hauteur), 1)}${texNombre(
-          Math.sqrt(2 * cote * cote + hauteur * hauteur),
+      : `${egalOuApprox(Math.sqrt(areteCarree), 1)}${texNombre(
+          Math.sqrt(areteCarree),
           1,
         )}`
   }$<br>
   ${
     typeDeReponse.includes('exacte')
       ? `La longueur de l'arête latérale $${nomPyramide[0]}${nomPyramide[4]}$ est donc égale à $${miseEnEvidence(
-          `\\sqrt{${texNombre(2 * cote * cote + hauteur * hauteur, 0)}}`,
+          `\\sqrt{${texNombre(areteCarree, 1)}}`,
         )}\\text{ cm}$.`
       : `La longueur de l'arête latérale $${nomPyramide[0]}${nomPyramide[4]}$ est donc ${typeDeReponse.includes('approchée') ? 'environ ' : ''}égale à $${miseEnEvidence(
-          texNombre(Math.sqrt(2 * cote * cote + hauteur * hauteur), 1),
+          texNombre(Math.sqrt(areteCarree), 1),
         )}\\text{ cm}$.`
   }
   `
@@ -418,7 +416,7 @@ export default class CalculeDansPyramide extends Exercice {
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')
-                      ? `${texNombre(cote * cote + 2 * cote * Math.sqrt(hauteur * hauteur + (cote * cote) / 4), 2)}`
+                      ? `${cote * cote} + ${2 * cote}\\sqrt{${(cote * cote) / 4 + hauteur * hauteur}}`
                       : typeDeReponse.includes('approchée')
                         ? [
                             `${(cote * cote + 2 * cote * Math.sqrt(hauteur * hauteur + (cote * cote) / 4)).toFixed(1)}`,
@@ -451,18 +449,18 @@ export default class CalculeDansPyramide extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: i,
-                texteApres: ' cm$^2$',
+                texteApres: '$\\text{ cm}$',
                 reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')
-                      ? `\\sqrt{${hauteur * hauteur - (cote * cote) / 4}}`
+                      ? `\\sqrt{${hauteur * hauteur + (cote * cote) / 4}}`
                       : typeDeReponse.includes('approchée')
                         ? [
-                            `${Math.sqrt(hauteur * hauteur - (cote * cote) / 4).toFixed(1)}`,
-                            `${(Math.sqrt(hauteur * hauteur - (cote * cote) / 4) + 0.1).toFixed(1)}`,
+                            `${Math.sqrt(hauteur * hauteur + (cote * cote) / 4).toFixed(1)}`,
+                            `${(Math.sqrt(hauteur * hauteur + (cote * cote) / 4) + 0.1).toFixed(1)}`,
                           ]
-                        : `${texNombre(Math.round(Math.sqrt(hauteur * hauteur - (cote * cote) / 4) * 10) / 10, 1)}`,
+                        : `${texNombre(Math.round(Math.sqrt(hauteur * hauteur + (cote * cote) / 4) * 10) / 10, 1)}`,
                   },
                 },
                 typeInteractivite: 'mathlive',
@@ -488,18 +486,18 @@ export default class CalculeDansPyramide extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: i,
-                texteApres: ' cm$^2$',
+                texteApres: '$\\text{ cm}$',
                 reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')
-                      ? `${texNombre((cote * cote) / 4, 2)}\\sqrt{3}`
+                      ? `\\sqrt{${hauteur * hauteur - (cote * cote) / 2}}`
                       : typeDeReponse.includes('approchée')
                         ? [
-                            `${((cote * cote * Math.sqrt(3)) / 4).toFixed(1)}`,
-                            `${((cote * cote * Math.sqrt(3)) / 4 + 0.1).toFixed(1)}`,
+                            `${Math.sqrt(hauteur * hauteur - (cote * cote) / 2).toFixed(1)}`,
+                            `${(Math.sqrt(hauteur * hauteur - (cote * cote) / 2) + 0.1).toFixed(1)}`,
                           ]
-                        : `${texNombre(Math.round(((cote * cote * Math.sqrt(3)) / 4) * 10) / 10, 1)}`,
+                        : `${texNombre(Math.round(Math.sqrt(hauteur * hauteur - (cote * cote) / 2) * 10) / 10, 1)}`,
                   },
                 },
                 typeInteractivite: 'mathlive',
@@ -531,13 +529,13 @@ export default class CalculeDansPyramide extends Exercice {
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')
-                      ? `\\sqrt{${(3 * cote * cote) / 4}}`
+                      ? `\\sqrt{${(cote * cote) / 2 + hauteur * hauteur}}`
                       : typeDeReponse.includes('approchée')
                         ? [
-                            `${((cote * Math.sqrt(3)) / 2).toFixed(1)}`,
-                            `${((cote * Math.sqrt(3)) / 2 + 0.1).toFixed(1)}`,
+                            `${Math.sqrt((cote * cote) / 2 + hauteur * hauteur).toFixed(1)}`,
+                            `${(Math.sqrt((cote * cote) / 2 + hauteur * hauteur) + 0.1).toFixed(1)}`,
                           ]
-                        : `${texNombre(Math.round(((cote * Math.sqrt(3)) / 2) * 10) / 10, 1)}`,
+                        : `${texNombre(Math.round(Math.sqrt((cote * cote) / 2 + hauteur * hauteur) * 10) / 10, 1)}`,
                   },
                 },
                 typeInteractivite: 'mathlive',

@@ -1,12 +1,16 @@
 import { fraction } from '../../modules/fractions'
 import Exercice from '../Exercice'
 
-import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import {
+  addMultiMathfield,
+  type DataOptionsMultiMathfield,
+} from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes2 } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import type { Valeur } from '../../lib/types'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 
 export const titre =
@@ -14,6 +18,7 @@ export const titre =
 export const interactifReady = true
 
 export const dateDePublication = '09/08/2026'
+export const dateDeModifImportante = '07/09/2026'
 /**
  * Associer et utiliser différentes écritures d'un nombre décimal : écriture à virgule, fraction, nombre mixte, pourcentage
  * *
@@ -27,6 +32,44 @@ export const refs = {
   'fr-fr': ['6N1F-5', '5N3autoK'],
   'fr-ch': ['9NO3C-21'],
 }
+
+/** Les quatre écritures possibles, dans l'ordre d'affichage historique. */
+const FORMES = {
+  mixte: 1,
+  fraction: 2,
+  decimal: 3,
+  pourcentage: 4,
+} as const
+
+const NOM_FORME: Record<number, string> = {
+  1: 'nombre mixte',
+  2: 'fraction décimale',
+  3: 'nombre décimal',
+  4: 'pourcentage',
+}
+
+const NOMBRE_EN_LETTRES: Record<number, string> = {
+  1: 'une',
+  2: 'deux',
+  3: 'trois',
+}
+
+/** Un champ élémentaire d'une écriture demandée en interactif. */
+type SousChampDemande = {
+  keyboard: string | undefined
+  value: string | number
+  options: Record<string, boolean>
+}
+
+/** Une écriture demandée : sa ligne de correction et ses champs interactifs. */
+type FormeDemandee = {
+  id: number
+  ligneCorrection: string
+  /** Gabarit de la ligne interactive, chaque `@` reçoit un `%{champN}`. */
+  gabaritInteractif: string
+  sousChamps: SousChampDemande[]
+}
+
 export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice {
   constructor() {
     super()
@@ -51,12 +94,48 @@ export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice 
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
     })
-    if (this.nbQuestions === 1) {
-      this.consigne =
-        'Écrire le nombre suivant sous les trois formes manquantes parmi : <br>nombre décimal, fraction décimale, pourcentage, nombre mixte'
+
+    // Les écritures effectivement retenues par l'utilisateur. Le formulaire
+    // « Forme initiale donnée » ne pilotait que l'écriture de départ : les trois
+    // autres écritures étaient toujours demandées, y compris celles décochées.
+    // On restreint désormais l'ensemble des écritures en jeu à celles cochées :
+    // l'écriture donnée tourne parmi elles, les écritures demandées sont les
+    // autres écritures cochées. En dessous de deux écritures (ou en mélange),
+    // on garde le comportement historique avec les quatre écritures.
+    const idsDemandes = String(this.sup ?? '')
+      .split('-')
+      .map((valeur) => parseInt(valeur, 10))
+      .filter((n) => Number.isInteger(n))
+    const melangeDemande = idsDemandes.length === 0 || idsDemandes.includes(5)
+    const formesCochees = [1, 2, 3, 4].filter((id) => idsDemandes.includes(id))
+    const formesActives =
+      melangeDemande || formesCochees.length < 2
+        ? [1, 2, 3, 4]
+        : formesCochees
+    const toutesLesFormes = formesActives.length === 4
+
+    if (toutesLesFormes) {
+      if (this.nbQuestions === 1) {
+        this.consigne =
+          'Écrire le nombre suivant sous les trois formes manquantes parmi : <br>nombre décimal, fraction décimale, pourcentage, nombre mixte'
+      } else {
+        this.consigne =
+          'Écrire chacun des nombres suivants sous les trois formes manquantes parmi : <br>nombre décimal, fraction décimale, pourcentage, nombre mixte'
+      }
     } else {
-      this.consigne =
-        'Écrire chacun des nombres suivants sous les trois formes manquantes parmi : <br>nombre décimal, fraction décimale, pourcentage, nombre mixte'
+      const nbManquantes = formesActives.length - 1
+      const formesMot =
+        nbManquantes === 1
+          ? 'la forme manquante'
+          : `les ${NOMBRE_EN_LETTRES[nbManquantes]} formes manquantes`
+      const listeFormes = formesActives
+        .map((id) => NOM_FORME[id])
+        .join(', ')
+      const sujet =
+        this.nbQuestions === 1
+          ? 'le nombre suivant'
+          : 'chacun des nombres suivants'
+      this.consigne = `Écrire ${sujet} sous ${formesMot} parmi : <br>${listeFormes}`
     }
     if (this.sup2) {
       this.consigne +=
@@ -122,57 +201,76 @@ export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice 
       formeMixte = `$${entier} + ${fracD.texFraction}$`
       formeMixteEnEvidence = `$${miseEnEvidence(entier)}$ $${miseEnEvidence('+')}$ $${miseEnEvidence(fracD.texFraction)}$`
 
+      // Descripteurs réutilisables des écritures qui peuvent être demandées.
+      const champMixte: FormeDemandee = {
+        id: FORMES.mixte,
+        ligneCorrection: `Nombre mixte : ${formeMixteEnEvidence}`,
+        gabaritInteractif:
+          'Nombre mixte : @ (partie entière) + @ (fraction décimale)',
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBase,
+            value: entier,
+            options: { nombreDecimalSeulement: true },
+          },
+          {
+            keyboard: KeyboardType.clavierDeBaseAvecFraction,
+            value: fracD.texFraction,
+            options: { fractionDecimale: true },
+          },
+        ],
+      }
+      const champFraction = (ligne: string): FormeDemandee => ({
+        id: FORMES.fraction,
+        ligneCorrection: ligne,
+        gabaritInteractif: 'Fraction décimale : @',
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBaseAvecFraction,
+            value: fracG.texFraction,
+            options: { fractionDecimale: true },
+          },
+        ],
+      })
+      const champDecimal = (ligne: string): FormeDemandee => ({
+        id: FORMES.decimal,
+        ligneCorrection: ligne,
+        gabaritInteractif: 'Nombre décimal : @',
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBase,
+            value: formeDeci,
+            options: { nombreDecimalSeulement: true },
+          },
+        ],
+      })
+      const champPourcentage = (ligne: string): FormeDemandee => ({
+        id: FORMES.pourcentage,
+        ligneCorrection: ligne,
+        gabaritInteractif: 'Pourcentage : @ %',
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBase,
+            value: formePourc,
+            options: { nombreDecimalSeulement: true },
+          },
+        ],
+      })
+
+      let formesDemandees: FormeDemandee[]
+
       switch (listeTypeDeQuestions[i]) {
         case 1: // Nombre mixte (Somme d'un entier et d'une fraction décimale)
           {
             texte = formeMixte
             texte += '<br>'
-            texteCorr = `
-            ${texte} peut aussi s'écrire sous forme de :<br>
-           Nombre décimal : $${miseEnEvidence(formeDeci)}$ <br>
-           Fraction décimale : $${miseEnEvidence(fracG)}$ <br>
-           Pourcentage : $${miseEnEvidence(texNombre(formePourc, 1))}~\\%$
-            `
-            if (this.interactif) {
-              texte += addMultiMathfield(this, i, {
-                dataTemplate: `
-           Ce nombre peut aussi s'écrire sous forme de :<br>
-           Nombre décimal : %{champ1} <br>
-           Fraction décimale : %{champ2} <br>
-           Pourcentage : %{champ3} %
-            `,
-                dataOptions: {
-                  champ1: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                  champ2: {
-                    keyboard: KeyboardType.clavierDeBaseAvecFraction,
-                  },
-                  champ3: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                },
-              })
-            }
-            handleAnswers(
-              this,
-              i,
-              {
-                champ1: {
-                  value: formeDeci,
-                  options: { nombreDecimalSeulement: true },
-                },
-                champ2: {
-                  value: fracG.texFraction,
-                  options: { fractionDecimale: true },
-                },
-                champ3: {
-                  value: formePourc,
-                  options: { nombreDecimalSeulement: true },
-                },
-              },
-              { formatInteractif: 'multi-mathfield' },
-            )
+            formesDemandees = [
+              champDecimal(`Nombre décimal : $${miseEnEvidence(formeDeci)}$`),
+              champFraction(`Fraction décimale : $${miseEnEvidence(fracG)}$`),
+              champPourcentage(
+                `Pourcentage : $${miseEnEvidence(texNombre(formePourc, 1))}~\\%$`,
+              ),
+            ]
           }
           break
 
@@ -180,118 +278,26 @@ export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice 
           {
             texte = formeFrac
             texte += '<br>'
-            texteCorr = `
-            ${texte} peut aussi s'écrire sous forme de :<br>
-           Nombre mixte : ${formeMixteEnEvidence} <br>
-           Nombre décimal : $${miseEnEvidence(formeDeci)}$ <br>
-           Pourcentage : $${miseEnEvidence(formePourc)}~\\%$
-            `
-            if (this.interactif) {
-              texte += addMultiMathfield(this, i, {
-                dataTemplate: `
-           Ce nombre peut aussi s'écrire sous forme de :<br>
-           Nombre mixte : %{champ1} (partie entière) + %{champ2} (fraction décimale) <br>
-           Nombre décimal : %{champ3} <br>
-           Pourcentage : %{champ4} %
-            `,
-                dataOptions: {
-                  champ1: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                  champ2: {
-                    keyboard: KeyboardType.clavierDeBaseAvecFraction,
-                  },
-                  champ3: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                  champ4: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                },
-              })
-            }
-            handleAnswers(
-              this,
-              i,
-              {
-                champ1: {
-                  value: entier,
-                  options: { nombreDecimalSeulement: true },
-                },
-                champ2: {
-                  value: fracD.texFraction,
-                  options: { fractionDecimale: true },
-                },
-                champ3: {
-                  value: formeDeci,
-                  options: { nombreDecimalSeulement: true },
-                },
-                champ4: {
-                  value: formePourc,
-                  options: { nombreDecimalSeulement: true },
-                },
-              },
-              { formatInteractif: 'multi-mathfield' },
-            )
+            formesDemandees = [
+              champMixte,
+              champDecimal(`Nombre décimal : $${miseEnEvidence(formeDeci)}$`),
+              champPourcentage(
+                `Pourcentage : $${miseEnEvidence(formePourc)}~\\%$`,
+              ),
+            ]
           }
           break
 
         case 3: // Nombre décimal
           {
             texte = `$${formeDeci}$<br>`
-            texteCorr = `
-            ${texte} peut aussi s'écrire sous forme de :<br>
-           Nombre mixte : ${formeMixteEnEvidence} <br>
-           Fraction décimale : $${miseEnEvidence(fracG)}$ <br>           
-           Pourcentage : $${miseEnEvidence(texNombre(formePourc))}~\\%$
-            `
-            if (this.interactif) {
-              texte += addMultiMathfield(this, i, {
-                dataTemplate: `
-           Ce nombre peut aussi s'écrire sous forme de :<br>
-           Nombre mixte : %{champ1} (partie entière) + %{champ2} (fraction décimale) <br>
-           Fraction décimale : %{champ3} <br>
-           Pourcentage : %{champ4} %
-            `,
-                dataOptions: {
-                  champ1: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                  champ2: {
-                    keyboard: KeyboardType.clavierDeBaseAvecFraction,
-                  },
-                  champ3: {
-                    keyboard: KeyboardType.clavierDeBaseAvecFraction,
-                  },
-                  champ4: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                },
-              })
-            }
-            handleAnswers(
-              this,
-              i,
-              {
-                champ1: {
-                  value: entier,
-                  options: { nombreDecimalSeulement: true },
-                },
-                champ2: {
-                  value: fracD.texFraction,
-                  options: { fractionDecimale: true },
-                },
-                champ3: {
-                  value: fracG.texFraction,
-                  options: { fractionDecimale: true },
-                },
-                champ4: {
-                  value: formePourc,
-                  options: { nombreDecimalSeulement: true },
-                },
-              },
-              { formatInteractif: 'multi-mathfield' },
-            )
+            formesDemandees = [
+              champMixte,
+              champFraction(`Fraction décimale : $${miseEnEvidence(fracG)}$`),
+              champPourcentage(
+                `Pourcentage : $${miseEnEvidence(texNombre(formePourc))}~\\%$`,
+              ),
+            ]
           }
           break
 
@@ -301,69 +307,74 @@ export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice 
             texte = `$${texNombre(formePourc, 1)}~\\%$<br>`
             if (nbChiffres === 1) {
               fracGNS = fraction(entier * 100 + deci * 10, 100)
-              texteCorr = `
-              ${texte} peut aussi s'écrire sous forme de :<br>
-             Fraction décimale : $${miseEnEvidence(fracG)}$ (ou $${fracGNS.texFraction}$) <br>   
-             Nombre décimal : $${miseEnEvidence(formeDeci)}$ (ou $${entier},${partieDecimale * 10}$) <br>
-             Nombre mixte : ${formeMixteEnEvidence}
-              `
+              formesDemandees = [
+                champFraction(
+                  `Fraction décimale : $${miseEnEvidence(fracG)}$ (ou $${fracGNS.texFraction}$)`,
+                ),
+                champDecimal(
+                  `Nombre décimal : $${miseEnEvidence(formeDeci)}$ (ou $${entier},${partieDecimale * 10}$)`,
+                ),
+                champMixte,
+              ]
             } else {
-              texteCorr = `
-            ${texte} peut aussi s'écrire sous forme de :<br>
-           Fraction décimale : $${miseEnEvidence(fracG)}$ <br>   
-           Nombre décimal : $${miseEnEvidence(formeDeci)}$ <br>
-           Nombre mixte : ${formeMixteEnEvidence}
-            `
+              formesDemandees = [
+                champFraction(`Fraction décimale : $${miseEnEvidence(fracG)}$`),
+                champDecimal(`Nombre décimal : $${miseEnEvidence(formeDeci)}$`),
+                champMixte,
+              ]
             }
-            if (this.interactif) {
-              texte += addMultiMathfield(this, i, {
-                dataTemplate: `
-          Ce nombre peut aussi s'écrire sous forme de :<br>
-           Fraction décimale : %{champ1} <br>
-           Nombre décimal : %{champ2} <br>
-           Nombre mixte : %{champ3} (partie entière) + %{champ4} (fraction décimale) <br>
-            `,
-                dataOptions: {
-                  champ1: {
-                    keyboard: KeyboardType.clavierDeBaseAvecFraction,
-                  },
-                  champ2: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                  champ3: {
-                    keyboard: KeyboardType.clavierDeBase,
-                  },
-                  champ4: {
-                    keyboard: KeyboardType.clavierDeBaseAvecFraction,
-                  },
-                },
-              })
-            }
-            handleAnswers(
-              this,
-              i,
-              {
-                champ1: {
-                  value: fracG.texFraction,
-                  options: { fractionDecimale: true },
-                },
-                champ2: {
-                  value: formeDeci,
-                  options: { nombreDecimalSeulement: true },
-                },
-                champ3: {
-                  value: entier,
-                  options: { nombreDecimalSeulement: true },
-                },
-                champ4: {
-                  value: fracD.texFraction,
-                  options: { fractionDecimale: true },
-                },
-              },
-              { formatInteractif: 'multi-mathfield' },
-            )
           }
           break
+      }
+
+      // On ne garde que les écritures cochées par l'utilisateur.
+      const formesRetenues = formesDemandees.filter((forme) =>
+        formesActives.includes(forme.id),
+      )
+
+      texteCorr = `
+            ${texte} peut aussi s'écrire sous forme de :<br>
+           ${formesRetenues
+             .map((forme) => forme.ligneCorrection)
+             .join(' <br>\n           ')}
+            `
+
+      if (this.interactif) {
+        let compteurChamp = 0
+        const dataOptions: Record<string, { keyboard: string | undefined }> = {}
+        const lignesTemplate: string[] = []
+        for (const forme of formesRetenues) {
+          let ligne = forme.gabaritInteractif
+          for (const sousChamp of forme.sousChamps) {
+            const nom = `champ${++compteurChamp}`
+            ligne = ligne.replace('@', `%{${nom}}`)
+            dataOptions[nom] = { keyboard: sousChamp.keyboard }
+          }
+          lignesTemplate.push(ligne)
+        }
+        texte += addMultiMathfield(this, i, {
+          dataTemplate: `
+           Ce nombre peut aussi s'écrire sous forme de :<br>
+           ${lignesTemplate.join(' <br>\n           ')}
+            `,
+          dataOptions: dataOptions as DataOptionsMultiMathfield,
+        })
+      }
+
+      let compteurReponse = 0
+      const reponses: Record<string, { value: string | number; options: Record<string, boolean> }> = {}
+      for (const forme of formesRetenues) {
+        for (const sousChamp of forme.sousChamps) {
+          reponses[`champ${++compteurReponse}`] = {
+            value: sousChamp.value,
+            options: sousChamp.options,
+          }
+        }
+      }
+      if (compteurReponse > 0) {
+        handleAnswers(this, i, reponses as unknown as Valeur, {
+          formatInteractif: 'multi-mathfield',
+        })
       }
 
       // Ajouter la question et la correction si la question n'a jamais été posée

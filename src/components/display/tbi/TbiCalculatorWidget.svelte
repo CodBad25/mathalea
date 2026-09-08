@@ -21,10 +21,13 @@
   let { kind, persistLayout }: Props = $props()
 
   /**
-   * Les émulateurs NumWorks (fichiers statiques dans public/calculators/)
-   * sont des pages autonomes (WASM) dont la barre d'actions (capture
-   * d'écran, plein écran, partage) a été masquée par CSS à la source : ce
-   * widget n'expose que l'écran et le clavier de la calculatrice.
+   * Les émulateurs NumWorks (pages statiques dans public/calculators/) sont
+   * des pages autonomes : le gabarit (image, clavier, mise en page) est servi
+   * localement et le firmware WASM est chargé depuis le CDN NumWorks
+   * (scandium pour le modèle scientifique collège, epsilon pour le modèle
+   * graphique lycée). Leur barre d'actions (capture d'écran, plein écran,
+   * partage) a été masquée par CSS à la source : ce widget n'expose que
+   * l'écran et le clavier de la calculatrice.
    */
   const config: Record<TbiCalculatorKind, { title: string; src: string; defaultX: number }> = {
     college: {

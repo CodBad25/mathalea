@@ -904,8 +904,9 @@ describe('buildTypstDocument', () => {
     // image SVG pré-rendue (fond blanc explicite) plutôt qu'en URL brute, car
     // tiaoma (utilisé en interne par exercise-bank pour une URL) ignore toute
     // option de fond et produit un QR-code transparent
-    expect(withQr).toContain('  qr: image(bytes(')
-    expect(withQr).toContain('format: "svg", width: 100%),')
+    // enveloppé dans un link(...) : le QR-code du PDF est cliquable
+    expect(withQr).toContain(`  qr: link("${url}")[#image(bytes(`)
+    expect(withQr).toContain('format: "svg", width: 100%)],')
     expect(withQr).toContain('#ffffff')
     expect(withQr).not.toContain(`  qr: "${url}",`)
     expect(withQr).toContain(`  qr-size: 1.8cm,`)

@@ -54,9 +54,16 @@ ${scriptPython(programme, 6)}<br><br>
       `$${lettre}>${seuil}$`,
       `$n\\leqslant ${seuil}$`,
     ]
-    this.reponse = this.versionQcm ? reponsesQcm[0] : `\\leqslant ${seuil}`
+    this.reponse = this.versionQcm
+      ? reponsesQcm[0]
+      : `${lettre}\\leqslant ${seuil}`
     this.distracteurs = reponsesQcm.slice(1)
-    this.optionsChampTexte = {}
+    // Le clavier compare de MathALÉA ne propose aucune lettre : on ajoute, pour
+    // cette question, la variable de la suite et les symboles de comparaison
+    // dont l'élève a besoin pour compléter la condition du `while`.
+    this.optionsChampTexte = {
+      dataKeys: [lettre, '<', '\\leqslant', '=', '>', '\\geqslant'],
+    }
     this.versionQcmOptions = {
       radio: true,
       vertical: false,
@@ -92,7 +99,7 @@ La bonne réponse est donc $${miseEnEvidence(`${lettre}\\leqslant ${seuil}`)}$.`
     this.nbQuestionsModifiable = true
     this.versionQcmDisponible = true
     this.versionQcm = true
-    this.formatChampTexte = KeyboardType.clavierCompareAvecNombres
+    this.formatChampTexte = KeyboardType.clavierPersonnalisable
     this.besoinFormulaireCaseACocher = ['Sujet original QCM Bac', false]
     this.besoinFormulaire4CaseACocher = ['Ajout de « Je ne sais pas »', false]
     this.sup = false
