@@ -1,17 +1,17 @@
-import SimplifierFractions from '../4e/4C24'
+import SimplifierFractionsOld from '../4e/4C24Old'
 export const titre = "Simplifier des fractions à l'aide des nombres premiers"
 export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '28/09/2022'
-export const dateDeModifImportante = '08/09/2026'
-export const uuid = '61835'
+export const dateDeModifImportante = '03/10/2023'
+export const uuid = '1871d'
 export const refs = {
   'fr-fr': ['3A11-0'],
   'fr-ch': ['9NO3B-5'],
 }
-export default class SimplifierFractions3e extends SimplifierFractions {
+export default class SimplifierFractions3eOld extends SimplifierFractionsOld {
   constructor() {
     super()
     this.sup = 3
