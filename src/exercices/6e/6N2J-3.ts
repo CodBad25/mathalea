@@ -39,6 +39,7 @@ export default class DivisibleDiviseurMultiple extends Exercice {
     // Chaque question comporte deux listes déroulantes et rapporte donc 2 points,
     // corrigées par correctionInteractive() qui renvoie un tableau de résultats.
     this.exoCustomResultat = true
+    this.pointsParQuestions = 2 // deux listes déroulantes à compléter par question
 
     this.setReponse = function (
       i: number,
@@ -350,14 +351,25 @@ export default class DivisibleDiviseurMultiple extends Exercice {
         "C'est vrai, mais c'est sans rapport avec une des divisions posées."
     }
 
-    const spanReponseLigne = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${2 * i + 1}`,
-    )
-    if (spanReponseLigne == null)
-      window.notify('Pas trouvé le spanReponseLigne dans 6N43-4', {})
-    if (spanReponseLigne) {
-      spanReponseLigne.innerHTML = isOk ? '😎' : '☹️'
+    // Un smiley à côté de chacune des deux listes déroulantes pour indiquer
+    // précisément laquelle est juste et laquelle est fausse : une question
+    // rapporte 2 points et l'élève doit pouvoir savoir d'où vient son score.
+    const afficheResultatListe = (questionIndex: number, estJuste: boolean) => {
+      const span = document.querySelector(
+        `#resultatCheckEx${this.numeroExercice}Q${questionIndex}`,
+      )
+      if (span == null) {
+        window.notify(
+          '6N2J-3 : span de résultat de liste déroulante introuvable',
+          { questionIndex },
+        )
+        return
+      }
+      span.innerHTML = estJuste ? '😎' : '☹️'
+      ;(span as HTMLElement).style.fontSize = 'large'
     }
+    afficheResultatListe(2 * i, ok1)
+    afficheResultatListe(2 * i + 1, ok2)
 
     if (feedback !== '') {
       const divFeedback = document.querySelector(
