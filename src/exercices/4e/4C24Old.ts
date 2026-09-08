@@ -19,45 +19,19 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 export const dateDePublication = '17/03/2022'
-export const dateDeModifImportante = '08/09/2026'
+export const dateDeModifImportante = '03/10/2023'
 
 /**
  * @author Guillaume Valmont (amendée par Éric Elter pour this.sup2 et une version 3e)
 
  */
-export const uuid = '554bf'
+export const uuid = '612b9'
 
 export const refs = {
-  'fr-fr': ['4C24', '3AutoN03-1'],
-  'fr-ch': ['9NO3B-4'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
-// Calcule le PGCD de deux entiers (valeurs absolues)
-const pgcd = (a: number, b: number): number => {
-  a = Math.abs(a)
-  b = Math.abs(b)
-  while (b !== 0) {
-    ;[a, b] = [b, a % b]
-  }
-  return a
-}
-
-// Compte le nombre total de facteurs premiers d'un entier, AVEC multiplicité
-// (ex: 12 = 2 x 2 x 3 -> 3 facteurs, pas 2). C'est ce nombre qui correspond
-// au nombre de facteurs réellement barrés lors de la simplification.
-const nombreDeFacteursPremiersAvecMultiplicite = (n: number): number => {
-  let reste = Math.abs(n)
-  let compteur = 0
-  for (let p = 2; p * p <= reste; p++) {
-    while (reste % p === 0) {
-      compteur++
-      reste = reste / p
-    }
-  }
-  if (reste > 1) compteur++
-  return compteur
-}
-
-export default class SimplifierFractions extends Exercice {
+export default class SimplifierFractionsOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaire3Numerique = [
@@ -121,27 +95,17 @@ export default class SimplifierFractions extends Exercice {
       let facteurCommun1 = choice(listeFacteursPremiers)
       let facteurCommun2 = choice(listeFacteursPremiers)
       let facteurCommun3 = choice(listeFacteursPremiers)
-      let facteurCommun4 = choice(listeFacteursPremiers)
       const facteurSurprise = choice(listeFacteursPremiers)
       const facteurDenominateur = choice(listeFacteursPremiers)
       const facteurNumerateur = choice(listeFacteursPremiers)
       let numerateur, denominateur
-      if (nbFacteursCommuns[0] < 4) facteurCommun4 = 1
-      if (nbFacteursCommuns[0] < 3) facteurCommun3 = 1
-      if (nbFacteursCommuns[0] < 2) facteurCommun2 = 1
-      if (nbFacteursCommuns[0] < 1) facteurCommun1 = 1
+      if (nbFacteursCommuns[0] - 1 < 3) facteurCommun3 = 1
+      if (nbFacteursCommuns[0] - 1 < 2) facteurCommun2 = 1
+      if (nbFacteursCommuns[0] - 1 < 1) facteurCommun1 = 1
       numerateur =
-        facteurNumerateur *
-        facteurCommun1 *
-        facteurCommun2 *
-        facteurCommun3 *
-        facteurCommun4
+        facteurNumerateur * facteurCommun1 * facteurCommun2 * facteurCommun3
       denominateur =
-        facteurDenominateur *
-        facteurCommun1 *
-        facteurCommun2 *
-        facteurCommun3 *
-        facteurCommun4
+        facteurDenominateur * facteurCommun1 * facteurCommun2 * facteurCommun3
       if (numerateur === denominateur) numerateur = numerateur * facteurCommun1
       /* while (numerateur === denominateur) {
         facteurNumerateur = this.sup2 !== 1 ? choice([2, 3, 5, 11, 13, 17, 19, 23]) : choice([2, 3, 5, 7])
@@ -157,19 +121,6 @@ export default class SimplifierFractions extends Exercice {
           if (denominateur * facteurSurprise !== numerateur)
             denominateur = denominateur * facteurSurprise
           break
-      }
-      // Sécurité : facteurNumerateur, facteurDenominateur et facteurSurprise sont tirés
-      // indépendamment des facteurCommun et peuvent coïncider par hasard, ce qui crée des
-      // facteurs communs non prévus. On vérifie donc le nombre RÉEL de facteurs premiers
-      // communs entre numérateur et dénominateur, et on rejette la fraction si ça ne
-      // correspond pas exactement à ce qui a été demandé.
-      if (
-        nombreDeFacteursPremiersAvecMultiplicite(
-          pgcd(numerateur, denominateur),
-        ) !== nbFacteursCommuns[0]
-      ) {
-        cpt++
-        continue
       }
       const f = new FractionEtendue(numerateur, denominateur)
       texte = `$${f.texFraction}$${ajouteChampTexteMathLive(
