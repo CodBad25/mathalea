@@ -66,6 +66,7 @@ export default class PoucentageP2 extends ExerciceSimple {
           this.optionsChampTexte = { texteApres: '€' }
         }
 
+        this.canEnonce = this.question
         this.canReponseACompleter = '$\\ldots$ €'
         break
 
@@ -81,6 +82,7 @@ export default class PoucentageP2 extends ExerciceSimple {
           this.optionsChampTexte = { texteApres: 'min' }
         }
 
+        this.canEnonce = this.question
         this.canReponseACompleter = '$\\ldots$ min'
         break
 
@@ -97,6 +99,7 @@ export default class PoucentageP2 extends ExerciceSimple {
           this.optionsChampTexte = { texteApres: '€' }
         }
 
+        this.canEnonce = this.question
         this.canReponseACompleter = '$\\ldots$ €'
         break
 
@@ -115,7 +118,7 @@ export default class PoucentageP2 extends ExerciceSimple {
             : '\\renewcommand{\\arraystretch}{1}'
           this.question += `$\\begin{array}{|l|c|}
       \\hline
-       ? & ${a}  ${context.isHtml ? '\\\\' : '\\tabularnewline'}
+       {?} & ${a}  ${context.isHtml ? '\\\\' : '\\tabularnewline'}
           \\hline
         ${b} & ${c} ${context.isHtml ? '\\\\' : '\\tabularnewline'}
          \\hline
@@ -136,7 +139,7 @@ export default class PoucentageP2 extends ExerciceSimple {
             : '\\renewcommand{\\arraystretch}{1}'
           this.question += `$\\begin{array}{|l|c|c|}
           \\hline
-          ${texNombre(a)} & ${texNombre(b)} & ? ${context.isHtml ? '\\\\' : '\\tabularnewline'}
+          ${texNombre(a)} & ${texNombre(b)} & {?} ${context.isHtml ? '\\\\' : '\\tabularnewline'}
           \\hline
         ${texNombre(c)} &${texNombre(d)} & ${texNombre(c + d)} ${context.isHtml ? '\\\\' : '\\tabularnewline'}
          \\hline
@@ -144,6 +147,8 @@ export default class PoucentageP2 extends ExerciceSimple {
           this.correction = `La valeur cherchée est donnée par la somme $${a}+${b}=${a + b}$.`
         }
 
+        this.canEnonce = this.question
+        this.canReponseACompleter = '$\\ldots$'
         break
 
       case 5: // proportionnalité 6iemJC
