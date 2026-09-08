@@ -20,6 +20,10 @@
   } from '../../../../../lib/mathalea'
   import { mathaleaWriteStudentPreviousAnswers } from '../../../../../lib/mathaleaUtils'
   import {
+    isSeedBlockedForCorrection,
+    rememberSeedServedWithoutCorrection,
+  } from '../../../../../lib/stores/correctionGuard'
+  import {
     capytaleStudentAssignment,
     exercicesParams,
     isMenuNeededForExercises,
@@ -172,6 +176,22 @@
 
   onMount(async () => {
     log('onMount:' + exercise.id + ', v:' + $globalOptions.v)
+
+    // Lien « sans correction visible » : si l'élève a déjà reçu cet énoncé sans
+    // pouvoir consulter la correction (puis a modifié l'URL pour réactiver
+    // l'accès aux corrections), on rebat une nouvelle graine afin qu'il ne
+    // retrouve jamais la correction exacte de la copie rendue. La mémorisation
+    // des graines servies sans correction se fait dans
+    // updateInterfaceParamsAndReLoadExerciseIfNeed().
+    if (
+      $globalOptions.isSolutionAccessible &&
+      $globalOptions.presMode !== 'recto' &&
+      $globalOptions.presMode !== 'verso' &&
+      isSeedBlockedForCorrection(exercise.id, exercise.seed)
+    ) {
+      exercise.seed = generateFreshSeed()
+    }
+
     // Check boutonValidation mode after component is mounted
     if ($globalOptions.recorder === 'flowmath') {
       try {
@@ -222,7 +242,8 @@
       seed = mathaleaGenerateSeed()
       safety++
     } while (
-      window.localStorage.getItem(`${exercise.id}|${seed}`) !== null &&
+      (window.localStorage.getItem(`${exercise.id}|${seed}`) !== null ||
+        isSeedBlockedForCorrection(exercise.id, seed)) &&
       safety < 20
     )
     return seed
@@ -400,6 +421,17 @@
       seedrandom(exercise.seed, { global: true })
       exercise.nouvelleVersionWrapper(exerciseIndex)
     }
+    // Mémorise tout énoncé affiché à l'élève sans accès à la correction, pour
+    // lui en interdire la correction plus tard s'il force l'URL
+    // (cf. src/lib/stores/correctionGuard.ts).
+    if (
+      !$globalOptions.isSolutionAccessible &&
+      $globalOptions.presMode !== 'recto' &&
+      $globalOptions.presMode !== 'verso'
+    ) {
+      rememberSeedServedWithoutCorrection(exercise.id, exercise.seed)
+    }
+
     numberOfAnswerFields = countMathField(exercise)
     log('numberOfAnswerFields:' + numberOfAnswerFields)
     mathaleaUpdateUrlFromExercicesParams()
