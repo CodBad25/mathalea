@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -24,6 +25,8 @@ export default class EcrireAvecPuissances extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
+    this.formatChampTexte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
     this.optionsChampTexte = { texteAvant: '<br>' }
     this.optionsDeComparaison = { seulementCertainesPuissances: true }
     this.typeExercice = 'simple'
