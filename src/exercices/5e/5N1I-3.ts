@@ -5,10 +5,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  texteEnCouleurEtGras,
-  texteGras,
-} from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 
 export const titre = "Écrire la liste des premiers multiples d'un entier"
 export const interactifReady = true
@@ -33,7 +31,7 @@ export default class ListeMultiples extends Exercice {
   }
 
   nouvelleVersion() {
-    this.consigne = 'Donner la liste des 5 premiers multiples non nuls '
+    this.consigne = 'Donner la liste des $5$ premiers multiples non nuls '
     this.consigne +=
       this.nbQuestions > 1 ? 'des nombres suivants.' : 'du nombre suivant.'
     const typeQuestionsDisponibles = [
@@ -68,16 +66,18 @@ export default class ListeMultiples extends Exercice {
           break
       }
       // Get all multiples of n
-      const multiples = []
+      const multiplesAffichage = []
+      const multiplesReponse = []
       for (let i = 1; i <= 5; i++) {
-        multiples.push(i * n)
+        multiplesAffichage.push(texNombre(i * n))
+        multiplesReponse.push(i * n)
       }
-      let texte = `5 premiers multiples non nuls de $${n}$ :`
+      let texte = `$5$ premiers multiples non nuls de $${n}$ :`
       let texteCorr = this.correctionDetaillee
-        ? `Les 5 premiers multiples nons nuls de $${n}$ sont 
+        ? `Les $5$ premiers multiples nons nuls de $${n}$ sont 
 $${n} \\times 1,\\ ${n} \\times 2,\\ ${n} \\times 3,\\ ${n} \\times 4$ et $${n} \\times 5$.<br>`
         : ''
-      texteCorr += `${texte} ${texteEnCouleurEtGras(multiples.join(' ; '))}.`
+      texteCorr += `${texte} $${miseEnEvidence(multiplesAffichage.join(' ; '))}$.`
       if (this.questionJamaisPosee(i, texte)) {
         if (this.interactif) {
           texte += ajouteChampTexteMathLive(
@@ -92,7 +92,7 @@ $${n} \\times 1,\\ ${n} \\times 2,\\ ${n} \\times 3,\\ ${n} \\times 4$ et $${n} 
               : 'du nombre suivant.'
           handleAnswers(this, i, {
             reponse: {
-              value: multiples.join(';'),
+              value: multiplesReponse.join(';'),
               options: { suiteDeNombres: true },
             },
           })
