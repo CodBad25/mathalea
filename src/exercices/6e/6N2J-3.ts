@@ -120,7 +120,7 @@ export default class DivisibleDiviseurMultiple extends Exercice {
             })
         }
         texteCorr = `$${miseEnEvidence(texNombre(a, 0))}$ est divisible par $${miseEnEvidence(texNombre(b, 0))}$ ou $${miseEnEvidence(texNombre(a, 0))}$ est divisible par $${miseEnEvidence(texNombre(q, 0))}$
-        car le reste de la division euclidienne de ${texNombre(a, 0)} par $${texNombre(b, 0)}$ est $0$ et le quotient est $${texNombre(q, 0)}$.`
+        car le reste de la division euclidienne de $${texNombre(a, 0)}$ par $${texNombre(b, 0)}$ est $0$ et le quotient est $${texNombre(q, 0)}$.`
         this.setReponse(i, [
           [String(a), String(b)],
           [String(a), String(q)],
@@ -150,7 +150,7 @@ export default class DivisibleDiviseurMultiple extends Exercice {
             })
         }
         texteCorr = `$${miseEnEvidence(texNombre(b, 0))}$ est un diviseur de $${miseEnEvidence(texNombre(a, 0))}$ ou $${miseEnEvidence(texNombre(q, 0))}$ est un diviseur de $${miseEnEvidence(texNombre(a, 0))}$
-        car le reste de la division euclidienne de ${texNombre(a, 0)} par $${texNombre(b, 0)}$ est $0$ et le quotient est $${texNombre(q, 0)}$.`
+        car le reste de la division euclidienne de $${texNombre(a, 0)}$ par $${texNombre(b, 0)}$ est $0$ et le quotient est $${texNombre(q, 0)}$.`
         this.setReponse(i, [
           [String(b), String(a)],
           [String(q), String(a)],
@@ -180,7 +180,7 @@ export default class DivisibleDiviseurMultiple extends Exercice {
             })
         }
         texteCorr = `$${miseEnEvidence(texNombre(a, 0))}$ est un multiple de $${miseEnEvidence(texNombre(b, 0))}$ ou $${miseEnEvidence(texNombre(a, 0))}$ est un multiple de $${miseEnEvidence(texNombre(q, 0))}$
-        car le reste de la division euclidienne de ${texNombre(a, 0)} par $${texNombre(b, 0)}$ est $0$ et le quotient est $${texNombre(q, 0)}$.`
+        car le reste de la division euclidienne de $${texNombre(a, 0)}$ par $${texNombre(b, 0)}$ est $0$ et le quotient est $${texNombre(q, 0)}$.`
         this.setReponse(i, [
           [String(a), String(b)],
           [String(a), String(q)],
@@ -210,7 +210,7 @@ export default class DivisibleDiviseurMultiple extends Exercice {
             })
         }
         texteCorr = `$${miseEnEvidence(texNombre(a1, 0))}$ n'est pas divisible par $${miseEnEvidence(texNombre(b, 0))}$ ou $${miseEnEvidence(texNombre(a1, 0))}$ n'est pas divisible par $${miseEnEvidence(texNombre(q, 0))}$
-        car le reste de la division euclidienne de ${texNombre(a1, 0)} par $${texNombre(b, 0)}$ n'est pas $0$.`
+        car le reste de la division euclidienne de $${texNombre(a1, 0)}$ par $${texNombre(b, 0)}$ n'est pas $0$.`
         this.setReponse(i, [
           [String(a1), String(b)],
           [String(a1), String(q)],
@@ -244,7 +244,7 @@ export default class DivisibleDiviseurMultiple extends Exercice {
             })
         }
         texteCorr = `$${miseEnEvidence(texNombre(b, 0))}$ n'est pas un diviseur de $${miseEnEvidence(texNombre(a1, 0))}$ ou $${miseEnEvidence(texNombre(q, 0))}$ n'est pas un diviseur de $${miseEnEvidence(texNombre(a1, 0))}$
-        car le reste de la division euclidienne de ${texNombre(a1, 0)} par $${texNombre(b, 0)}$ n'est pas $0$.`
+        car le reste de la division euclidienne de $${texNombre(a1, 0)}$ par $${texNombre(b, 0)}$ n'est pas $0$.`
         this.setReponse(i, [
           [String(b), String(a1)],
           [String(q), String(a1)],
@@ -278,7 +278,7 @@ export default class DivisibleDiviseurMultiple extends Exercice {
             })
         }
         texteCorr = `$${miseEnEvidence(texNombre(a1, 0))}$ n'est pas un multiple de $${miseEnEvidence(texNombre(b, 0))}$ ou $${miseEnEvidence(texNombre(a1, 0))}$ est n'est pas un multiple de $${miseEnEvidence(texNombre(q, 0))}$
-        car le reste de la division euclidienne de ${texNombre(a1, 0)} par $${texNombre(b, 0)}$ n'est pas $0$.`
+        car le reste de la division euclidienne de $${texNombre(a1, 0)}$ par $${texNombre(b, 0)}$ n'est pas $0$.`
         this.setReponse(i, [
           [String(a1), String(b)],
           [String(a1), String(q)],
