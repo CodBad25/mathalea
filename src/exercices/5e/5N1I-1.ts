@@ -58,13 +58,13 @@ export default class MultiplesOuDiviseurs extends Exercice {
           n = produit
           m = nb1
           bonneReponse = 'nDiviseurDem'
-          texteCorr = `$${n}\\div${m}=${nb2}$ donc $${miseEnEvidence(`${n}\\text{ est un multiple de }${m}`)}$.`
+          texteCorr = `$${n}\\div${m}=${nb2}$ donc $${miseEnEvidence(`${m}\\text{ est un diviseur de }${n}`)}$.`
           break
         case 'nMulitpleDem':
           n = nb1
           m = produit
           bonneReponse = 'nMulitpleDem'
-          texteCorr = `$${m}\\div${n}=${nb2}$ donc $${miseEnEvidence(`${n}\\text{ est un diviseur de }${m}`)}$.`
+          texteCorr = `$${m}\\div${n}=${nb2}$ donc $${miseEnEvidence(`${m}\\text{ est un multiple de }${n}`)}$.`
           break
         case 'NiLUnNiLautre':
         default: {
