@@ -538,6 +538,10 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
     })
     container.append(current, trigger, list)
     this.shadowRoot!.appendChild(container)
+    // Projette les enfants light DOM (notamment le span `resultatCheck…` qui
+    // reçoit le smiley 😎/☹️ après vérification) : sans ce slot, ils ne sont
+    // jamais rendus puisque tout l'affichage se fait dans le shadow DOM.
+    this.shadowRoot!.appendChild(document.createElement('slot'))
     this.positionList()
     this._listeDeroulante = { select: (index: number) => this.select(index) }
   }
