@@ -46,7 +46,7 @@ export default class SuitesArithmeticoG extends Exercice {
       let texteCorr = ''
       let a, u0, b, k
       const ListeNomS = ['u', 'w']
-      const ListeNomSA = ['v', 't']
+      const ListeNomSA = ['v', 'c']
       const NomS = choice(ListeNomS)
       const NomSA = choice(ListeNomSA)
 
