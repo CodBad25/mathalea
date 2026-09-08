@@ -794,10 +794,21 @@ function postprocessTypst(typst: string): string {
     // contenue dans le \text{…} d'origine (`5\text{ cm}` → `5 #txt(" cm")`
     // afficherait une double espace) ou à l'espace insécable qui précède
     // (`5~\text{cm}` → `5 space.nobreak #txt("cm")`).
+    // Si le `#txt(…)` est immédiatement suivi d'un `(` ou `[` (ex. `\text{le
+    // groupement }(x+y)` des exercices de factorisation), Typst enchaîne l'appel
+    // (`#txt("…")(x + y)` = appel de la valeur retournée) et échoue sur
+    // « expected comma ». On ré-insère une espace de séparation dans ce cas.
     .replace(
-      new RegExp(` ?([_^]?)"${TXT_MARK_OPEN}([^"]*)${TXT_MARK_CLOSE}" ?`, 'g'),
-      (_m, script: string, body: string) =>
-        script ? `${script}(#txt("${body}"))` : `#txt("${body}")`,
+      new RegExp(
+        ` ?([_^]?)"${TXT_MARK_OPEN}([^"]*)${TXT_MARK_CLOSE}" ?([([])?`,
+        'g',
+      ),
+      (_m, script: string, body: string, chained: string | undefined) => {
+        const suffix = chained ? ` ${chained}` : ''
+        return script
+          ? `${script}(#txt("${body}"))${suffix}`
+          : `#txt("${body}")${suffix}`
+      },
     )
     // `\text{ }` (espace seule, non marquée car sans lettre) devient la chaîne
     // `" "` : même raison que ci-dessus, les espaces sources qui l'encadrent
