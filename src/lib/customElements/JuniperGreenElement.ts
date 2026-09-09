@@ -58,6 +58,8 @@ export type JuniperGreenOptions = {
   modeDepart?: ModeDepart
   /** Ce qui se passe quand le joueur choisit un nombre interdit. */
   modeErreur?: ModeErreur
+  /** Affiche une estimation du nombre maximal de coups encore possibles. */
+  decompteCoupsRestants?: boolean
   /** Partie déjà jouée : sert à afficher un exemple dans la correction, ou à imposer un début de partie. */
   suite?: number[]
   /** Dévoile la partie reçue un nombre à la fois, une seconde par nombre. */
@@ -157,6 +159,109 @@ export function coupsPossibles(
   )
 }
 
+export type EstimationCoupsRestants = {
+  /** Longueur du meilleur prolongement trouvé. */
+  nombre: number
+  /** `true` quand tout l'arbre restant a été exploré. */
+  exacte: boolean
+}
+
+/** Nombre maximal de sommets explorés avant de rendre une estimation. */
+const BUDGET_RECHERCHE_COUPS = 2_000
+/** Taille sous laquelle la composante accessible est explorée sans limite, une fois 1 utilisé. */
+const SEUIL_RECHERCHE_EXACTE = 14
+
+/**
+ * Estime le plus grand nombre de coups qui peuvent encore être joués.
+ *
+ * La valeur est exacte quand tout l'arbre a été parcouru. Sur un grand état,
+ * la recherche s'arrête après un nombre déterministe de nœuds : la valeur
+ * obtenue reste alors une borne inférieure (une suite réellement jouable),
+ * jamais une prétendue valeur maximale.
+ *
+ * Une fois 1 utilisé, le graphe des relations diviseur/multiple se fragmente.
+ * Si la composante encore accessible est petite, la limite est retirée et le
+ * calcul devient exact, même s'il reste beaucoup d'autres cases isolées.
+ */
+export function estimeCoupsRestants(
+  suite: readonly number[],
+  regles: ReglesJuniperGreen,
+): EstimationCoupsRestants {
+  const dernier = suite.at(-1)
+  if (dernier === undefined) return { nombre: 0, exacte: false }
+
+  const utilises = new Set(suite)
+  const disponibles = nombresDeLaGrille(regles.max).filter(
+    (nombre) => !utilises.has(nombre),
+  )
+  const voisins = new Map<number, number[]>()
+  for (const nombre of [dernier, ...disponibles]) {
+    voisins.set(
+      nombre,
+      disponibles.filter(
+        (candidat) =>
+          candidat !== nombre &&
+          (candidat % nombre === 0 || nombre % candidat === 0),
+      ),
+    )
+  }
+
+  // Les cases hors de cette composante ne pourront jamais être atteintes.
+  const accessibles = new Set<number>()
+  const aVisiter = [dernier]
+  while (aVisiter.length > 0) {
+    const nombre = aVisiter.pop()
+    if (nombre === undefined || accessibles.has(nombre)) continue
+    accessibles.add(nombre)
+    for (const voisin of voisins.get(nombre) ?? []) aVisiter.push(voisin)
+  }
+  accessibles.delete(dernier)
+
+  const sansLimite =
+    utilises.has(1) && accessibles.size <= SEUIL_RECHERCHE_EXACTE
+  let budget = sansLimite ? Number.POSITIVE_INFINITY : BUDGET_RECHERCHE_COUPS
+  let interrompue = false
+  let meilleur = 0
+
+  const visite = (
+    courant: number,
+    restants: ReadonlySet<number>,
+    profondeur: number,
+  ): void => {
+    if (budget <= 0) {
+      interrompue = true
+      return
+    }
+    budget -= 1
+    if (profondeur > meilleur) meilleur = profondeur
+
+    // Les nombres les plus contraints donnent rapidement de longues suites.
+    const suivants = (voisins.get(courant) ?? [])
+      .filter((nombre) => restants.has(nombre))
+      .sort((a, b) => {
+        const degreA = (voisins.get(a) ?? []).filter((n) =>
+          restants.has(n),
+        ).length
+        const degreB = (voisins.get(b) ?? []).filter((n) =>
+          restants.has(n),
+        ).length
+        return degreA - degreB
+      })
+    for (const suivant of suivants) {
+      if (budget <= 0) {
+        interrompue = true
+        return
+      }
+      const apres = new Set(restants)
+      apres.delete(suivant)
+      visite(suivant, apres, profondeur + 1)
+    }
+  }
+
+  visite(dernier, accessibles, 0)
+  return { nombre: meilleur, exacte: !interrompue }
+}
+
 function texteSuite(suite: readonly number[], fleche: string): string {
   return suite.length === 0
     ? 'Suite des nombres choisis : aucun pour l’instant.'
@@ -171,12 +276,14 @@ function renderLatexGrille(
   const nombres = nombresDeLaGrille(max)
   const lignes: string[] = []
   for (let debut = 0; debut < nombres.length; debut += nombresParLigne) {
-    const ligne = nombres.slice(debut, debut + nombresParLigne).map((nombre) => {
-      const index = suite.indexOf(nombre)
-      return index === -1
-        ? `$${nombre}$`
-        : `$${miseEnEvidence(nombre, couleurDuCoup(index))}$`
-    })
+    const ligne = nombres
+      .slice(debut, debut + nombresParLigne)
+      .map((nombre) => {
+        const index = suite.indexOf(nombre)
+        return index === -1
+          ? `$${nombre}$`
+          : `$${miseEnEvidence(nombre, couleurDuCoup(index))}$`
+      })
     while (ligne.length < nombresParLigne) ligne.push('')
     lignes.push(`${ligne.join(' & ')} \\\\ \\hline`)
   }
@@ -235,6 +342,7 @@ export class JuniperGreenElement extends MathaleaCustomElement {
     modeDepart: 'libre',
   }
   private modeErreur: ModeErreur = 'indication'
+  private decompteCoupsRestants = false
   private numeroExercice = 0
   private questionIndex = 0
 
@@ -260,6 +368,7 @@ export class JuniperGreenElement extends MathaleaCustomElement {
     const nombresParLigne = normaliseParLigne(options.nombresParLigne)
     const modeDepart = normaliseModeDepart(options.modeDepart)
     const modeErreur = normaliseModeErreur(options.modeErreur)
+    const decompteCoupsRestants = options.decompteCoupsRestants ?? false
     const suite = options.suite ?? []
     const animation = options.animation ?? false
     if (context.isTypst) {
@@ -279,6 +388,7 @@ export class JuniperGreenElement extends MathaleaCustomElement {
       nombresParLigne,
       modeDepart,
       modeErreur,
+      decompteCoupsRestants,
       suite,
       animation,
       interactivityOn: options.interactivityOn ?? true,
@@ -297,6 +407,8 @@ export class JuniperGreenElement extends MathaleaCustomElement {
       modeDepart: normaliseModeDepart(this.getAttribute('mode-depart')),
     }
     this.modeErreur = normaliseModeErreur(this.getAttribute('mode-erreur'))
+    this.decompteCoupsRestants =
+      this.getAttribute('decompte-coups-restants') === 'true'
     this.numeroExercice = Number(this.getAttribute('numero-exercice')) || 0
     this.questionIndex = Number(this.getAttribute('question-index')) || 0
     this.animation = this.getAttribute('animation') === 'true'
@@ -596,12 +708,23 @@ export class JuniperGreenElement extends MathaleaCustomElement {
       return
     }
     this.zoneMessage.style.color = ''
-    this.zoneMessage.textContent =
+    const consigne =
       this.dernier === undefined
         ? debutPremierInterdit(this.regles.modeDepart)
           ? 'Choisir un premier nombre, sans choisir un nombre premier.'
           : 'Choisir un premier nombre.'
         : `Choisir un multiple ou un diviseur de ${this.dernier}.`
+    if (this.dernier === undefined || !this.decompteCoupsRestants) {
+      this.zoneMessage.textContent = consigne
+      return
+    }
+    const estimation = estimeCoupsRestants(this.suite, this.regles)
+    const pluriel = estimation.nombre > 1 ? 's' : ''
+    const verbe = estimation.nombre > 1 ? 'sont' : 'est'
+    const indication = estimation.exacte
+      ? `Au maximum, ${estimation.nombre} coup${pluriel} ${verbe} encore possible${pluriel}.`
+      : `Au moins ${estimation.nombre} coup${pluriel} ${verbe} encore possible${pluriel}.`
+    this.zoneMessage.textContent = `${consigne} ${indication}`
   }
 
   /**

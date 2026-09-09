@@ -1,11 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   coupsPossibles,
+  estimeCoupsRestants,
   JuniperGreenElement,
   raisonDuRefus,
   type ReglesJuniperGreen,
 } from '../../src/lib/customElements/JuniperGreenElement'
 import { bleuMathalea, orangeMathalea } from '../../src/lib/colors'
+import JuniperGreen from '../../src/exercices/enigmes-jeux/EN-juniper-green'
 import {
   context,
   setOutputHtml,
@@ -74,9 +76,69 @@ describe('règles du Juniper Green', () => {
     expect(coupsPossibles([], reglesSansPremierAuDepart)).not.toContain(7)
     expect(coupsPossibles([], reglesSansPremierAuDepart)).toContain(8)
   })
+
+  it('calcule exactement le nombre de coups restants sur un petit état', () => {
+    expect(
+      estimeCoupsRestants([1, 3], { max: 6, modeDepart: 'libre' }),
+    ).toEqual({ nombre: 3, exacte: true })
+    expect(
+      estimeCoupsRestants([1, 11], { max: 12, modeDepart: 'libre' }),
+    ).toEqual({ nombre: 0, exacte: true })
+  })
+
+  it('rend une borne inférieure quand la recherche bornée est interrompue', () => {
+    const estimation = estimeCoupsRestants([23], reglesLibres)
+    expect(estimation.nombre).toBeGreaterThan(0)
+    expect(estimation.exacte).toBe(false)
+  })
+})
+
+describe('paramétrage de l’exercice Juniper Green', () => {
+  it('regroupe les six réglages dans un formulaire complexe', () => {
+    const exercice = new JuniperGreen()
+    expect(exercice.besoinFormulaireComplexe).not.toBe(false)
+    expect(String(exercice.sup).split('*')).toHaveLength(6)
+    expect(exercice.besoinFormulaireNumerique).toBe(false)
+    expect(exercice.besoinFormulaire5CaseACocher).toBe(false)
+  })
+
+  it('transmet au composant l’activation du décompte', () => {
+    const exercice = new JuniperGreen()
+    exercice.sup = '6*5*libre*1*0*1'
+    exercice.nouvelleVersion()
+    expect(exercice.listeQuestions[0]).toContain(
+      'decompte-coups-restants="true"',
+    )
+  })
 })
 
 describe('rendus du composant juniper-green', () => {
+  it('indique une borne sur le nombre de coups restants après un choix', () => {
+    setOutputHtml()
+    document.body.innerHTML = JuniperGreenElement.create({
+      max: 6,
+      decompteCoupsRestants: true,
+    })
+    ;(document.querySelector('[data-nombre="1"]') as HTMLButtonElement).click()
+    ;(document.querySelector('[data-nombre="3"]') as HTMLButtonElement).click()
+    const element = document.querySelector(
+      'juniper-green',
+    ) as JuniperGreenElement
+    expect(element.textContent).toContain(
+      'Au maximum, 3 coups sont encore possibles.',
+    )
+  })
+
+  it('masque par défaut le décompte des coups restants', () => {
+    setOutputHtml()
+    document.body.innerHTML = JuniperGreenElement.create({ max: 6 })
+    ;(document.querySelector('[data-nombre="1"]') as HTMLButtonElement).click()
+    const element = document.querySelector(
+      'juniper-green',
+    ) as JuniperGreenElement
+    expect(element.textContent).not.toContain('coups sont encore possibles')
+  })
+
   it('rejoue la partie reçue et colorie les nombres utilisés en HTML', () => {
     setOutputHtml()
     document.body.innerHTML = JuniperGreenElement.create({
@@ -235,9 +297,7 @@ describe('modes d’erreur du composant juniper-green', () => {
     expect(element.textContent).toContain(
       "7 n'est ni un multiple ni un diviseur de 5",
     )
-    ;(
-      document.querySelector('[data-nombre="10"]') as HTMLButtonElement
-    ).click()
+    ;(document.querySelector('[data-nombre="10"]') as HTMLButtonElement).click()
     expect(element.value).toEqual([5, 10])
   })
 
@@ -287,9 +347,7 @@ describe('interactivité et score du composant juniper-green', () => {
     ;(document.querySelector('[data-nombre="1"]') as HTMLButtonElement).click()
     expect(clic).not.toHaveBeenCalled()
     // 23 est premier : après 1 → 23, plus aucun coup n'est possible.
-    ;(
-      document.querySelector('[data-nombre="23"]') as HTMLButtonElement
-    ).click()
+    ;(document.querySelector('[data-nombre="23"]') as HTMLButtonElement).click()
     expect(clic).toHaveBeenCalledTimes(1)
   })
 
@@ -324,9 +382,7 @@ describe('interactivité et score du composant juniper-green', () => {
       'juniper-green',
     ) as JuniperGreenElement
     ;(document.querySelector('[data-nombre="1"]') as HTMLButtonElement).click()
-    ;(
-      document.querySelector('[data-nombre="23"]') as HTMLButtonElement
-    ).click()
+    ;(document.querySelector('[data-nombre="23"]') as HTMLButtonElement).click()
     expect(element.value).toEqual([1, 23])
     expect(element.finalise()).toBe(2)
     expect(element.textContent).toContain('Bravo')
@@ -378,9 +434,7 @@ describe('interactivité et score du composant juniper-green', () => {
       'juniper-greenEx3Q0',
     ) as JuniperGreenElement
     ;(document.querySelector('[data-nombre="1"]') as HTMLButtonElement).click()
-    ;(
-      document.querySelector('[data-nombre="23"]') as HTMLButtonElement
-    ).click()
+    ;(document.querySelector('[data-nombre="23"]') as HTMLButtonElement).click()
     const exercice = { numeroExercice: 3, answers: {} }
     const resultat = JuniperGreenElement.verifQuestion(
       exercice as Parameters<typeof JuniperGreenElement.verifQuestion>[0],
@@ -391,9 +445,7 @@ describe('interactivité et score du composant juniper-green', () => {
       feedback: '',
       score: { nbBonnesReponses: 2, nbReponses: 2 },
     })
-    expect(exercice.answers['juniper-greenEx3Q0']).toBe(
-      JSON.stringify([1, 23]),
-    )
+    expect(exercice.answers['juniper-greenEx3Q0']).toBe(JSON.stringify([1, 23]))
     expect(element.interactivityOn).toBe(false)
     // Une deuxième vérification ne recalcule pas le score.
     expect(
