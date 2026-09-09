@@ -1,4 +1,4 @@
-import CalculsImagesFonctions from './3F10-2'
+import CalculsImagesFonctions from './3F10-2-old'
 export const titre =
   'Calculer des images (et antécédents) dans des fonctions linéaires ou affines'
 export const dateDePublication = '19/06/2024'
@@ -6,10 +6,10 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const uuid = 'c939e'
+export const uuid = 'c938e'
 export const refs = {
-  'fr-fr': ['3F10-5', '2F13-2', 'BP2AutoO6'],
-  'fr-ch': ['10FA1B-7'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class CalculsImagesFonctionsLineairesOuAffines extends CalculsImagesFonctions {
   constructor() {
