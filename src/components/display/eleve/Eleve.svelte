@@ -341,8 +341,11 @@
         : ''}"
     >
       <!-- Pas de recorder (Capytale, Moodle…) : on propose à l'enseignant de
-      revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice. -->
-      {#if $globalOptions.recorder == null && $globalOptions.v === 'eleve'}
+      revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice.
+      Masqué sur un lien sans correction visible (isSolutionAccessible faux) :
+      ce raccourci ouvre la vue prof où la correction est toujours affichée,
+      il rendrait inopérant le masquage voulu par l'enseignant. -->
+      {#if $globalOptions.recorder == null && $globalOptions.v === 'eleve' && $globalOptions.isSolutionAccessible}
         <BtnRetourReglages class="text-3xl" />
       {/if}
       <BtnZoom

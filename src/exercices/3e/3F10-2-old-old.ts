@@ -30,11 +30,11 @@ export const titre =
  * Répondre à des questions sur les fonctions.
  * @author Jean-claude Lhote
  */
-export const uuid = 'ba522'
+export const uuid = 'ba520'
 
 export const refs = {
-  'fr-fr': ['3F10-2', '2F13-1', 'BP2AutoO3'],
-  'fr-ch': ['10FA1B-4', '1mF1-10'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class CalculsImagesFonctions extends Exercice {
   fonctions: string
@@ -409,9 +409,11 @@ export default class CalculsImagesFonctions extends Exercice {
         this.questionJamaisPosee(
           i,
           listeTypeDeQuestions[i],
-          reponses[i] instanceof FractionEtendue
-            ? (reponses[i] as FractionEtendue).texFractionSimplifiee
-            : reponses[i].toString(),
+          x,
+          y,
+          sousChoix[i],
+          m,
+          n,
         )
       ) {
         // Si la question n'a jamais été posée, on en créé une autre

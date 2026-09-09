@@ -5,6 +5,7 @@ import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { latex2d } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
 import { bleuMathalea } from '../../lib/colors'
@@ -33,6 +34,8 @@ export const refs = {
 const situations = [
   {
     label: 'des salaires en euros dans une entreprise',
+    labelAxeX: '\\text{Salaire (en euros)}',
+    titreGraphique: '\\text{Fréquences cumulées croissantes des salaires}',
     valeurs: [
       [1000, 5000],
       [1200, 4000],
@@ -51,6 +54,9 @@ const situations = [
   },
   {
     label: 'des tailles de haricots en millimètres dans une conserverie',
+    labelAxeX: '\\text{Taille (en mm)}',
+    titreGraphique:
+      '\\text{Fréquences cumulées croissantes des tailles de haricots}',
     valeurs: [
       [50, 160],
       [60, 120],
@@ -71,6 +77,9 @@ const situations = [
   },
   {
     label: "des âges des habitants d'un village",
+    labelAxeX: '\\text{Âge (en années)}',
+    titreGraphique:
+      '\\text{Fréquences cumulées croissantes des âges des habitants}',
     valeurs: [
       [0, 80],
       [30, 100],
@@ -169,6 +178,8 @@ export default class Quartiles extends Exercice {
       let valeurMax: number
       let situation: {
         label: string
+        labelAxeX: string
+        titreGraphique: string
         valeurs: number[][]
         zones: number[][]
         precisionLecture: number
@@ -252,7 +263,19 @@ export default class Quartiles extends Exercice {
           grilleY: { dy: 1 },
         })
         .buildCustom()
-      const objets2d = [line, rep]
+      const titreGraphique = latex2d(situation.titreGraphique, 10, 23, {
+        letterSize: 'normalsize',
+      })
+      const labelAxeX = latex2d(situation.labelAxeX, 10, -1.5, {
+        letterSize: 'small',
+      })
+      const labelAxeY = latex2d(
+        '\\text{Fréquence cumulée (en \\%)}',
+        3.5,
+        21.5,
+        { letterSize: 'small' },
+      )
+      const objets2d = [line, rep, titreGraphique, labelAxeX, labelAxeY]
       const fig = mathalea2d(
         Object.assign({ pixelsParCm: 25, scale: 1 }, fixeBordures(objets2d)),
         objets2d,
@@ -316,7 +339,17 @@ export default class Quartiles extends Exercice {
         })
         .buildCustom()
 
-      const objetsCorr = [line, repCorr.objets, marque1, marque3, ecartIQ, iq]
+      const objetsCorr = [
+        line,
+        repCorr.objets,
+        marque1,
+        marque3,
+        ecartIQ,
+        iq,
+        titreGraphique,
+        labelAxeX,
+        labelAxeY,
+      ]
       const figCorrection = mathalea2d(
         Object.assign(
           { pixelsParCm: 25, scale: 0.5 },

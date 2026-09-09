@@ -1,7 +1,7 @@
 {
   "schema": "mathalea-banque-v1",
   "id": "ffjm",
-  "titre": "Exercices de la FFJM",
+  "titre": "Enigmes de la Fédération Française de Jeux Mathématiques",
   "auteur": "Claire Stephan",
   "licence": "CC BY-SA 4.0",
   "version": "1.0.0",
@@ -11,26 +11,6 @@
     "typ": "preambule.typ"
   },
   "exercices": [
-    {
-      "id": "tirelire",
-      "titre": "Tirelire",
-      "categorie": "Autre",
-      "tags": [
-        "tirelire",
-        "euro",
-        "décomposition",
-        "minimum",
-        "cycle 3",
-        "2026Q3"
-      ],
-      "etoiles": 2,
-      "png": "png/tirelire.png",
-      "pngCor": "png/tirelire_cor.png",
-      "typ": "typ/tirelire.typ",
-      "typCor": "typ/tirelire_cor.typ",
-      "tex": "tex/tirelire.tex",
-      "texCor": "tex/tirelire_cor.tex"
-    },
     {
       "id": "2026-df-1",
       "titre": "L'étoile dansante",
@@ -79,6 +59,7 @@
         "logique",
         "raisonnement",
         "essai erreur",
+        "parité",
         "cycle 3",
         "2014Q3"
       ],
@@ -107,7 +88,9 @@
       "png": "png/autoreference-3.png",
       "pngCor": "png/autoreference-3_cor.png",
       "typ": "typ/autoreference-3.typ",
-      "typCor": "typ/autoreference-3_cor.typ"
+      "typCor": "typ/autoreference-3_cor.typ",
+      "tex": "tex/autoreference-3.tex",
+      "texCor": "tex/autoreference-3_cor.tex"
     },
     {
       "id": "autoreference-4",
@@ -119,6 +102,7 @@
         "logique",
         "raisonnement",
         "essai erreur",
+        "multiple",
         "cycle 3",
         "2012D9"
       ],
@@ -126,7 +110,9 @@
       "png": "png/autoreference-4.png",
       "pngCor": "png/autoreference-4_cor.png",
       "typ": "typ/autoreference-4.typ",
-      "typCor": "typ/autoreference-4_cor.typ"
+      "typCor": "typ/autoreference-4_cor.typ",
+      "tex": "tex/autoreference-4.tex",
+      "texCor": "tex/autoreference-4_cor.tex"
     },
     {
       "id": "autoreference-5",
@@ -145,7 +131,9 @@
       "png": "png/autoreference-5.png",
       "pngCor": "png/autoreference-5_cor.png",
       "typ": "typ/autoreference-5.typ",
-      "typCor": "typ/autoreference-5_cor.typ"
+      "typCor": "typ/autoreference-5_cor.typ",
+      "tex": "tex/autoreference-5.tex",
+      "texCor": "tex/autoreference-5_cor.tex"
     },
     {
       "id": "autoreference-6",
@@ -164,7 +152,9 @@
       "png": "png/autoreference-6.png",
       "pngCor": "png/autoreference-6_cor.png",
       "typ": "typ/autoreference-6.typ",
-      "typCor": "typ/autoreference-6_cor.typ"
+      "typCor": "typ/autoreference-6_cor.typ",
+      "tex": "tex/autoreference-6.tex",
+      "texCor": "tex/autoreference-6_cor.tex"
     },
     {
       "id": "autoreference-7",
@@ -183,7 +173,52 @@
       "png": "png/autoreference-7.png",
       "pngCor": "png/autoreference-7_cor.png",
       "typ": "typ/autoreference-7.typ",
-      "typCor": "typ/autoreference-7_cor.typ"
+      "typCor": "typ/autoreference-7_cor.typ",
+      "tex": "tex/autoreference-7.tex",
+      "texCor": "tex/autoreference-7_cor.tex"
+    },
+    {
+      "id": "cadres_autoreferents",
+      "titre": "Cadres autoréférents",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "cycle 4",
+        "2001Q15"
+      ],
+      "etoiles": 3,
+      "png": "png/cadres_autoreferents.png",
+      "pngCor": "png/cadres_autoreferents_cor.png",
+      "typ": "typ/cadres_autoreferents.typ",
+      "typCor": "typ/cadres_autoreferents_cor.typ",
+      "tex": "tex/cadres_autoreferents.tex",
+      "texCor": "tex/cadres_autoreferents_cor.tex"
+    },
+    {
+      "id": "pairs_et_impairs",
+      "titre": "Pairs et Impairs",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "parité",
+        "cycle 3",
+        "2025D5"
+      ],
+      "etoiles": 2,
+      "png": "png/pairs_et_impairs.png",
+      "pngCor": "png/pairs_et_impairs_cor.png",
+      "typ": "typ/pairs_et_impairs.typ",
+      "typCor": "typ/pairs_et_impairs_cor.typ",
+      "tex": "tex/pairs_et_impairs.tex",
+      "texCor": "tex/pairs_et_impairs_cor.tex"
     },
     {
       "id": "4desserts-1",
@@ -438,6 +473,26 @@
       "texCor": "tex/8desserts-1_cor.tex"
     },
     {
+      "id": "tirelire",
+      "titre": "Tirelire",
+      "categorie": "Méli-Mélo",
+      "tags": [
+        "tirelire",
+        "euro",
+        "décomposition",
+        "minimum",
+        "cycle 3",
+        "2026Q3"
+      ],
+      "etoiles": 2,
+      "png": "png/tirelire.png",
+      "pngCor": "png/tirelire_cor.png",
+      "typ": "typ/tirelire.typ",
+      "typCor": "typ/tirelire_cor.typ",
+      "tex": "tex/tirelire.tex",
+      "texCor": "tex/tirelire_cor.tex"
+    },
+    {
       "id": "balance",
       "titre": "Pesée de bijoux",
       "categorie": "Système simple",
@@ -459,6 +514,29 @@
       "typCor": "typ/balance_cor.typ",
       "tex": "tex/balance.tex",
       "texCor": "tex/balance_cor.tex"
+    },
+    {
+      "id": "balance_bw",
+      "titre": "Pesée de bijoux (noir et blanc)",
+      "categorie": "Système simple",
+      "tags": [
+        "Bijoux",
+        "masse",
+        "équations",
+        "balances",
+        "systèmes",
+        "raisonnement",
+        "essai erreur",
+        "cycle 2",
+        "2022Q6"
+      ],
+      "etoiles": 2,
+      "png": "png/balance_bw.png",
+      "pngCor": "png/balance_bw_cor.png",
+      "typ": "typ/balance_bw.typ",
+      "typCor": "typ/balance_bw_cor.typ",
+      "tex": "tex/balance_bw.tex",
+      "texCor": "tex/balance_bw_cor.tex"
     },
     {
       "id": "sapin_1",
@@ -492,7 +570,7 @@
         "cycle 2",
         "2014QF6"
       ],
-      "etoiles": 2,
+      "etoiles": 3,
       "png": "png/sapin_2.png",
       "pngCor": "png/sapin_2_cor.png",
       "typ": "typ/sapin_2.typ",

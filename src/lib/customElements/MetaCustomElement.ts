@@ -199,10 +199,19 @@ export function attachExerciseCustomCallbacks(exercice: IExercice): void {
         : []
   const goodAnswers = (exercice as IExercice & { goodAnswers?: unknown[] })
     .goodAnswers
+  // `pointsParQuestions` (1 par défaut) permet à un exercice dont
+  // `correctionInteractive()` renvoie un tableau de plusieurs résultats de
+  // déclarer combien de points chaque question rapporte, pour que le barème
+  // affiché a priori corresponde au score obtenu après vérification.
+  const pointsParQuestions =
+    typeof exercice.pointsParQuestions === 'number' &&
+    exercice.pointsParQuestions > 1
+      ? exercice.pointsParQuestions
+      : 1
   const pointsMax =
     Array.isArray(goodAnswers) && goodAnswers.length > 0
       ? goodAnswers.length
-      : 1
+      : pointsParQuestions
 
   for (const localIndex of localQuestionIndexes) {
     const questionIndex = localIndex + (exercice.indexQuestionHote ?? 0)

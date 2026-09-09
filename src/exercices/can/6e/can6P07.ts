@@ -117,7 +117,7 @@ export default class PoucentageProportion extends ExerciceSimple {
           b === c
             ? [`$${a + b}\\,\\%$`, `$${a}\\,\\%$`, `$${a - b}\\,\\%$`]
             : [`$${a}\\,\\%$`, `$${b}\\,\\%$`, `$${a - b}\\,\\%$`]
-
+        this.canEnonce = this.question
         this.canReponseACompleter = '$\\ldots$ $\\%$'
         break
     }

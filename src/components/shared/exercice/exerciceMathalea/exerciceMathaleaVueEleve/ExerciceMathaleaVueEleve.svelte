@@ -20,6 +20,10 @@
   } from '../../../../../lib/mathalea'
   import { mathaleaWriteStudentPreviousAnswers } from '../../../../../lib/mathaleaUtils'
   import {
+    isSeedBlockedForCorrection,
+    rememberSeedServedWithoutCorrection,
+  } from '../../../../../lib/stores/correctionGuard'
+  import {
     capytaleStudentAssignment,
     exercicesParams,
     isMenuNeededForExercises,
@@ -116,6 +120,25 @@
   let numberOfAnswerFields: number = 0
   let lastRenderedSignature = ''
 
+  /**
+   * Action Svelte pour la consigne et l'introduction : injecte le contenu HTML
+   * puis déclenche le rendu KaTeX. Contrairement à `{@html}`, le nœud reste sous
+   * le contrôle exclusif de l'action, donc une réécriture identique de
+   * `exercise.consigne` par `nouvelleVersion()` (qui invaliderait `{@html}` et
+   * effacerait le KaTeX déjà rendu sans repasser par `mathaleaRenderDiv`) est
+   * ré-appliquée proprement via `update`.
+   */
+  function renderHtmlContent(node: HTMLElement, html: string) {
+    const apply = (contenu: string) => {
+      node.innerHTML = contenu ?? ''
+      mathaleaRenderDiv(node, -1)
+    }
+    apply(html)
+    return {
+      update: apply,
+    }
+  }
+
   function getRenderSignature() {
     const questionsSignature = exercise.listeQuestions.join('||')
     const correctionsSignature = isCorrectVisible
@@ -172,6 +195,22 @@
 
   onMount(async () => {
     log('onMount:' + exercise.id + ', v:' + $globalOptions.v)
+
+    // Lien « sans correction visible » : si l'élève a déjà reçu cet énoncé sans
+    // pouvoir consulter la correction (puis a modifié l'URL pour réactiver
+    // l'accès aux corrections), on rebat une nouvelle graine afin qu'il ne
+    // retrouve jamais la correction exacte de la copie rendue. La mémorisation
+    // des graines servies sans correction se fait dans
+    // updateInterfaceParamsAndReLoadExerciseIfNeed().
+    if (
+      $globalOptions.isSolutionAccessible &&
+      $globalOptions.presMode !== 'recto' &&
+      $globalOptions.presMode !== 'verso' &&
+      isSeedBlockedForCorrection(exercise.id, exercise.seed)
+    ) {
+      exercise.seed = generateFreshSeed()
+    }
+
     // Check boutonValidation mode after component is mounted
     if ($globalOptions.recorder === 'flowmath') {
       try {
@@ -222,7 +261,8 @@
       seed = mathaleaGenerateSeed()
       safety++
     } while (
-      window.localStorage.getItem(`${exercise.id}|${seed}`) !== null &&
+      (window.localStorage.getItem(`${exercise.id}|${seed}`) !== null ||
+        isSeedBlockedForCorrection(exercise.id, seed)) &&
       safety < 20
     )
     return seed
@@ -400,6 +440,17 @@
       seedrandom(exercise.seed, { global: true })
       exercise.nouvelleVersionWrapper(exerciseIndex)
     }
+    // Mémorise tout énoncé affiché à l'élève sans accès à la correction, pour
+    // lui en interdire la correction plus tard s'il force l'URL
+    // (cf. src/lib/stores/correctionGuard.ts).
+    if (
+      !$globalOptions.isSolutionAccessible &&
+      $globalOptions.presMode !== 'recto' &&
+      $globalOptions.presMode !== 'verso'
+    ) {
+      rememberSeedServedWithoutCorrection(exercise.id, exercise.seed)
+    }
+
     numberOfAnswerFields = countMathField(exercise)
     log('numberOfAnswerFields:' + numberOfAnswerFields)
     mathaleaUpdateUrlFromExercicesParams()
@@ -756,20 +807,16 @@
               <div>
                 <p
                   class="mt-2 mb-2 ml-2 lg:mx-6 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-                >
-                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                  {@html exercise.consigne}
-                </p>
+                  use:renderHtmlContent={exercise.consigne}
+                ></p>
               </div>
             {/if}
             {#if exercise.introduction}
               <div>
                 <p
                   class="mt-2 mb-2 ml-2 lg:mx-6 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-                >
-                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                  {@html exercise.introduction}
-                </p>
+                  use:renderHtmlContent={exercise.introduction}
+                ></p>
               </div>
             {/if}
           {/key}

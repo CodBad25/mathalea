@@ -188,6 +188,31 @@ describe('mathaleaHandleParamOfOneExercice', () => {
     expect(exercice.interactif).toBe(false)
     expect(params.interactif).toBe('0')
   })
+
+  it("applique le `n` de l'URL quand le nombre de questions est modifiable", () => {
+    const exercice = new Exercice()
+    exercice.nbQuestionsModifiable = true
+    exercice.nbQuestions = 3
+    const params = { uuid: 'test', nbQuestions: 7 }
+
+    mathaleaHandleParamOfOneExercice(exercice, params)
+
+    expect(exercice.nbQuestions).toBe(7)
+  })
+
+  it("ignore le `n` de l'URL quand l'exercice a verrouillé son nombre de questions", () => {
+    // Régression : 3AutoG01-1 / 5G1B-3 (repère apiGeom auto-corrigé) ne sait
+    // produire qu'une question ; un `n>1` recopié d'un lien le faisait générer
+    // énoncé et correction à partir de tirages différents.
+    const exercice = new Exercice()
+    exercice.nbQuestionsModifiable = false
+    exercice.nbQuestions = 1
+    const params = { uuid: 'test', nbQuestions: 4 }
+
+    mathaleaHandleParamOfOneExercice(exercice, params)
+
+    expect(exercice.nbQuestions).toBe(1)
+  })
 })
 
 describe('mathaleaHandleExerciceSimple', () => {

@@ -57,6 +57,48 @@ Pour ajouter un nouveau réglage `es` :
 3. Ajouter une nouvelle branche `es.length === N` (N = longueur actuelle + 1) dans `mathaleaUpdateExercicesParamsFromUrl()`, sans modifier les branches existantes, et inclure le nouveau champ dans l'objet retourné par la fonction.
 4. Ajouter le toggle correspondant dans `ConfigEleve.svelte` (`src/components/setup/configEleve/ConfigEleve.svelte`), en suivant le pattern `ButtonToggleAlt` existant dans la section concernée.
 
+### Accès aux corrections et `localStorage`
+
+`isSolutionAccessible` (caractère 2 de `es`) est sérialisé en clair : un élève
+peut réactiver l'accès aux corrections en éditant l'URL d'un lien partagé sans
+correction (voire en retirant `v=eleve` pour passer en vue prof). Plusieurs
+garde-fous côté navigateur limitent l'intérêt de la manipulation.
+
+- **Corrections déjà consultées.** Quand l'élève affiche une correction,
+  `ExerciceMathaleaVueEleve.svelte` écrit `localStorage["<id>|<graine>"] =
+  "true"`. `generateFreshSeed()` évite ces graines lors d'un « Nouvel énoncé »,
+  et les bascules d'interactivité rebattent une graine si l'élève retombe
+  dessus.
+- **Énoncés servis sans correction.** `src/lib/stores/correctionGuard.ts`
+  mémorise chaque `(<id>, <graine>)` affiché à l'élève quand
+  `isSolutionAccessible` est faux (clé préfixée `mathalea-sans-correction:`,
+  pour ne pas entrer en collision avec la clé précédente). La mémorisation se
+  fait dans `updateInterfaceParamsAndReLoadExerciseIfNeed()` de la vue élève
+  (donc aussi après un « Nouvel énoncé »). Si l'élève revient ensuite sur l'un
+  de ces énoncés avec la correction potentiellement accessible, le `onMount`
+  rebat une nouvelle graine (via `pickSeedNotServedWithoutCorrection()`) : il
+  ne peut plus obtenir la correction exacte de la copie qu'il a rendue. Ce
+  garde-fou est appliqué **dans les deux vues** :
+  - `ExerciceMathaleaVueEleve.svelte` : URL `es` bricolée pour réactiver
+    `isSolutionAccessible` (`generateFreshSeed()` évite aussi ces graines) ;
+  - `ExerciceMathaleaVueProf.svelte` : URL sans `v=eleve`, qui bascule sur la
+    vue prof où la correction est toujours affichable.
+
+  Le rebattage ne touche que les `(<id>, <graine>)` réellement servis sans
+  correction dans ce navigateur : une graine fraîche d'auteur n'est jamais
+  concernée.
+
+- **Retour aux réglages.** Le bouton roue dentée (`BtnRetourReglages` dans
+  `Eleve.svelte`) ramène à la vue prof ; il est masqué quand
+  `isSolutionAccessible` est faux, sinon il offrirait un accès en un clic.
+
+Ces mécanismes sont désactivés pour `presMode` `recto`/`verso` (feuilles
+imprimables, corrigé volontaire). Les vues `une_question_par_page`
+(`QuestionParPage.svelte`) et `cartes` ne sont pas couvertes. Aucun de ces
+garde-fous n'est un verrou : un autre navigateur, un autre profil ou un
+effacement du `localStorage` les contourne. Un verrou réel demanderait une
+signature du lien côté serveur.
+
 ## Tests
 
 Les tests et rapports sont décrits dans

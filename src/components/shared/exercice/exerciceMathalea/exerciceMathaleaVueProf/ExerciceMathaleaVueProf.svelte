@@ -27,12 +27,17 @@
   } from '../../../../../lib/interactif/gestionInteractif'
   import {
     mathaleaFormatExercice,
+    mathaleaGenerateSeed,
     mathaleaHandleExerciceSimple,
     mathaleaHandleSup,
     mathaleaRenderDiv,
     mathaleaUpdateUrlFromExercicesParams,
     renderDiv,
   } from '../../../../../lib/mathalea'
+  import {
+    isSeedBlockedForCorrection,
+    pickSeedNotServedWithoutCorrection,
+  } from '../../../../../lib/stores/correctionGuard'
   import {
     changes,
     exercicesParams,
@@ -249,6 +254,23 @@
 
   onMount(async () => {
     log('onMount:' + exercise.id)
+
+    // Garde-fou « lien sans correction visible » : un élève peut atteindre la
+    // vue prof (où la correction est toujours accessible) en retirant
+    // `v=eleve` de l'URL. Si la graine courante fait partie des énoncés qu'il a
+    // déjà reçus sans correction, on la rebat pour qu'il ne retrouve pas la
+    // correction exacte de la copie rendue. cf. src/lib/stores/correctionGuard.ts
+    if (
+      $globalOptions.presMode !== 'recto' &&
+      $globalOptions.presMode !== 'verso' &&
+      isSeedBlockedForCorrection(exercise.id, exercise.seed)
+    ) {
+      exercise.seed = pickSeedNotServedWithoutCorrection(
+        exercise.id,
+        mathaleaGenerateSeed,
+      )
+    }
+
     document.addEventListener('newDataForAll', newData)
     document.addEventListener('setAllInteractif', setAllInteractif)
     document.addEventListener('removeAllInteractif', removeAllInteractif)
