@@ -9,6 +9,12 @@ import {
   type ReglesJuniperGreen,
 } from '../../lib/customElements/JuniperGreenElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import {
+  lireFormulaireComplexe,
+  serialiseFormulaireComplexe,
+  valeursParDefaut,
+  type FormulaireComplexe,
+} from '../../lib/formulaireComplexe'
 import { choice } from '../../lib/outils/arrayOutils'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -25,6 +31,62 @@ export const refs = {
 
 /** Nombre de parties tirées au hasard avant de garder la plus longue. */
 const NOMBRE_DE_TIRAGES = 20
+
+const formulaireJuniperGreen: FormulaireComplexe = {
+  champs: [
+    {
+      type: 'nombre',
+      nom: 'max',
+      label: 'Plus grand nombre de la grille',
+      min: 2,
+      max: 100,
+      defaut: 40,
+    },
+    {
+      type: 'selection',
+      nom: 'nombresParLigne',
+      label: 'Nombres par ligne',
+      options: [
+        { valeur: '5', label: '5 nombres par ligne' },
+        { valeur: '10', label: '10 nombres par ligne' },
+      ],
+      defaut: '10',
+    },
+    {
+      type: 'selection',
+      nom: 'modeDepart',
+      label: 'Mode de départ',
+      options: [
+        { valeur: 'libre', label: 'Départ libre' },
+        {
+          valeur: 'libreSansPremier',
+          label: 'Départ libre, mais pas sur un nombre premier',
+        },
+        {
+          valeur: 'aleatoireSansPremier',
+          label: 'Départ aléatoire sur un nombre non premier',
+        },
+      ],
+      defaut: 'libre',
+    },
+    {
+      type: 'case',
+      nom: 'rappelDesRegles',
+      label: 'Rappeler les règles',
+      defaut: true,
+    },
+    {
+      type: 'case',
+      nom: 'arretSurErreur',
+      label: 'Arrêter la partie en cas d’erreur',
+    },
+    {
+      type: 'case',
+      nom: 'decompteCoupsRestants',
+      label: 'Décompter les coups restants possibles',
+    },
+  ],
+}
 
 function modeDepartDepuisSup(valeur: unknown): ModeDepart {
   const nombre = Number(valeur)
@@ -50,22 +112,12 @@ export default class JuniperGreen extends Exercice {
   constructor() {
     super()
     this.interactifObligatoire = true
-    this.besoinFormulaireNumerique = ['Plus grand nombre de la grille', 100]
-    this.besoinFormulaire2Numerique = [
-      'Nombres par ligne',
-      2,
-      '1 : 5 nombres par ligne\n2 : 10 nombres par ligne',
-    ]
-    this.besoinFormulaire3Numerique = [
-      'Mode de départ',
-      3,
-      '1 : départ libre\n' +
-        '2 : départ libre, mais pas sur un nombre premier\n' +
-        '3 : départ aléatoire sur un nombre non premier',
-    ]
-    this.besoinFormulaire4CaseACocher = ['Rappeler les règles']
-    this.besoinFormulaire5CaseACocher = ['Arrêter la partie en cas d’erreur']
-    this.sup = 40
+    this.besoinFormulaireComplexe = formulaireJuniperGreen
+    this.sup = serialiseFormulaireComplexe(
+      formulaireJuniperGreen,
+      valeursParDefaut(formulaireJuniperGreen),
+    )
+    // Valeurs historiques conservées pour les liens publiés avec s2 à s5.
     this.sup2 = 2
     this.sup3 = 1
     this.sup4 = true
@@ -83,14 +135,33 @@ export default class JuniperGreen extends Exercice {
   }
 
   nouvelleVersion(): void {
-    const modeDepart = modeDepartDepuisSup(this.sup3)
-    const modeErreur: ModeErreur =
-      this.sup5 === true || this.sup5 === 'true' ? 'arret' : 'indication'
+    const ancienFormat = !String(this.sup).includes('*')
+    const params = lireFormulaireComplexe(formulaireJuniperGreen, this.sup)
+    const modeDepart = ancienFormat
+      ? modeDepartDepuisSup(this.sup3)
+      : (params.selection('modeDepart') as ModeDepart)
+    const modeErreur: ModeErreur = ancienFormat
+      ? this.sup5 === true || this.sup5 === 'true'
+        ? 'arret'
+        : 'indication'
+      : params.case('arretSurErreur')
+        ? 'arret'
+        : 'indication'
+    const decompteCoupsRestants = ancienFormat
+      ? false
+      : params.case('decompteCoupsRestants')
     const regles: ReglesJuniperGreen = {
-      max: Math.max(2, Number(this.sup) || 40),
+      max: Math.max(
+        2,
+        ancienFormat ? Number(this.sup) || 40 : params.nombre('max'),
+      ),
       modeDepart,
     }
-    const nombresParLigne = Number(this.sup2) === 1 ? 5 : 10
+    const nombresParLigne = ancienFormat
+      ? Number(this.sup2) === 1
+        ? 5
+        : 10
+      : Number(params.selection('nombresParLigne'))
 
     const suiteInitiale: number[] =
       modeDepart === 'aleatoireSansPremier'
@@ -99,16 +170,17 @@ export default class JuniperGreen extends Exercice {
 
     // Règles masquées : la grille et le texte qu'elle écrit en dessous
     // suffisent quand les élèves connaissent déjà le jeu.
-    const rappelDesRegles = this.sup4 === true || this.sup4 === 'true'
-    this.consigne = !rappelDesRegles
-      ? ''
-      : this.texteRegles(regles, modeErreur)
+    const rappelDesRegles = ancienFormat
+      ? this.sup4 === true || this.sup4 === 'true'
+      : params.case('rappelDesRegles')
+    this.consigne = !rappelDesRegles ? '' : this.texteRegles(regles, modeErreur)
 
     this.listeQuestions[0] = ajouteJuniperGreen(this, 0, {
       max: regles.max,
       nombresParLigne,
       modeDepart: regles.modeDepart,
       modeErreur,
+      decompteCoupsRestants,
       suite: suiteInitiale,
       interactivityOn: this.interactif,
     })
