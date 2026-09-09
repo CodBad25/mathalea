@@ -553,7 +553,14 @@ export function mathaleaHandleParamOfOneExercice(
   param: InterfaceParams,
 ) {
   exercice.uuid = param.uuid
-  if (param.nbQuestions) exercice.nbQuestions = param.nbQuestions
+  // Un `n` d'URL (souvent recopié d'un lien plus ancien ou généré automatiquement)
+  // ne doit pas forcer le nombre de questions d'un exercice qui l'a verrouillé
+  // (`nbQuestionsModifiable === false`) : plusieurs de ces exercices — dont les
+  // exercices apiGeom qui se corrigent eux-mêmes (5G1B-3 / 3AutoG01-1) — ne
+  // savent produire qu'une seule question et se retrouvent sinon avec un énoncé
+  // et une correction issus de tirages différents.
+  if (param.nbQuestions && exercice.nbQuestionsModifiable !== false)
+    exercice.nbQuestions = param.nbQuestions
   exercice.duration = param.duration ?? 10
   if (param.id) exercice.id = param.id
   if (param.sup) exercice.sup = mathaleaHandleStringFromUrl(param.sup)
