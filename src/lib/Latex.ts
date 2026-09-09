@@ -1042,6 +1042,7 @@ ${
     for (const cmd of latexCmds) {
       contents.preamble += '\n' + cmd.replace('cmd', '')
     }
+    contents.preamble = ordonneTkzBaseAvantEuclide(contents.preamble)
   }
 
   async getFile(latexFileInfos: LatexFileInfos): Promise<latexFileType> {
@@ -1458,6 +1459,42 @@ export function convertNestedTabularsForTableauCan(tableBody: string): string {
     (_whole, _env, _pos, spec: string, inner: string) =>
       `\\begin{tblr}{${spec.replace(/\s+/g, '')}}${inner}\\end{tblr}`,
   )
+}
+
+/**
+ * Garantit que `\usepackage{tkz-base}` précède `\usepackage{tkz-euclide}`
+ * dans le préambule, sans doublon.
+ *
+ * Sur TeX Live 2026, `tkz-base` chargé après `tkz-euclide` déclenche
+ * « ! Package tkz-base Error: tkz-base must be loaded before tkz-euclide. »
+ * (erreur fatale → aucun PDF → le serveur de compilation renvoie 500).
+ * Le préambule du style ProfMaquette peut produire le mauvais ordre :
+ * `loadPackagesFromContent()` ajoute `tkz-euclide` (contenu avec `\tkz`/`\pic[`)
+ * avant que la boucle sur les `listePackages` des exercices n'ajoute `tkz-base`.
+ * On retire les occurrences en trop et on réinsère une paire ordonnée à
+ * l'emplacement de la première des deux.
+ */
+export function ordonneTkzBaseAvantEuclide(preamble: string): string {
+  const lignes = preamble.split('\n')
+  const estBase = (l: string) => l.trim() === '\\usepackage{tkz-base}'
+  const estEuclide = (l: string) => l.trim() === '\\usepackage{tkz-euclide}'
+  const iBase = lignes.findIndex(estBase)
+  const iEuclide = lignes.findIndex(estEuclide)
+  if (iBase === -1 || iEuclide === -1) return preamble
+  const dejaBon =
+    iBase < iEuclide &&
+    lignes.filter(estBase).length === 1 &&
+    lignes.filter(estEuclide).length === 1
+  if (dejaBon) return preamble
+  const insertion = Math.min(iBase, iEuclide)
+  const nettoyees = lignes.filter((l) => !estBase(l) && !estEuclide(l))
+  nettoyees.splice(
+    insertion,
+    0,
+    '\\usepackage{tkz-base}',
+    '\\usepackage{tkz-euclide}',
+  )
+  return nettoyees.join('\n')
 }
 
 function getUrlFromExercice(
