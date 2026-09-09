@@ -49,7 +49,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         p = randint(-9, 9, [0, 1, -1])
         s = n + p
         this.question += `$${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}$`
-        this.correction = `On utilise la formule $a^n\\times a^m=a^{n+m}$ avec $a=${a}$, $n=${n}$ et $p=${p}$.<br>
+        this.correction = `On utilise la formule $a^n\\times a^m=a^{n+m}$ avec $a=${a}$, $n=${n}$ et $m=${p}$.<br>
         $${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}=${ecritureParentheseSiNegatif(a)}^{${n}+${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n + p}}`)}$`
         this.distracteurs = [
           `$${ecritureParentheseSiNegatif(a)}^{${n - p}}$`,
