@@ -232,7 +232,7 @@ ${questionsAffichees}`
         items: [
           `Un tour complet mesure $360^\\circ$ et représente $100\\,\\%$ de l'alliage.<br>
 Le pourcentage ${avecDeEtArticleDefini(constituantPourcentage)} est donc :<br>
-$\\dfrac{${texNombre(angleDonne, 1)}}{360}\\times 100=${miseEnEvidence(`${texNombre(constituantPourcentage.pourcentage, 1)}\\,\\%`)}$.`,
+$\\dfrac{${texNombre(angleDonne, 1)}}{360}\\times 100=${miseEnEvidence(`${texNombre(constituantPourcentage.pourcentage, 1)}`)}$.`,
           `Le secteur représentant ${avecArticleDefini(constituantAngle)} correspond à $${texNombre(constituantAngle.pourcentage, 1)}\\,\\%$ d'un tour complet.<br>
 La mesure de son angle est donc :<br>
 $\\dfrac{${texNombre(constituantAngle.pourcentage, 1)}}{100}\\times 360=${miseEnEvidence(`${texNombre(angleDemande, 1)}^\\circ`)}$.`,
