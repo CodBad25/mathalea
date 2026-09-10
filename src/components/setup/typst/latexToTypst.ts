@@ -575,6 +575,21 @@ function preprocessTex(tex: string): string {
   // \color{X} (sans accolades de contenu) — commande de scope LaTeX non supportée
   // par tex2typst qui la passe telle quelle → on la supprime
   output = output.replace(/\\color\s*\{[^{}]+\}/g, '')
+  // Groupes de mise en forme vides, produits par `miseEnEvidence('')` quand le
+  // signe ou l'opérateur à colorer est absent (ex. 4L15-0 :
+  // `{\color{#F15929}\boldsymbol{}}` → `\textcolor{#F15929}{\pmb{}}` ici).
+  // tex2typst en fait un `#text(fill: …)[$bold()$]` ; le `bold()` vide est
+  // ensuite pris pour une parenthèse orpheline par le rattrapage en aval, qui
+  // consomme la parenthèse fermante du `text(…)` englobant et casse la sortie.
+  // Ces groupes ne rendent rien : on les supprime (en boucle pour dénicher les
+  // `\textcolor{X}{}` révélés par la suppression d'un `\pmb{}` interne).
+  let prevEmptyGroup = ''
+  while (prevEmptyGroup !== output) {
+    prevEmptyGroup = output
+    output = output
+      .replace(/\\(?:pmb|mathbf|mathrm)\s*\{\s*\}/g, '')
+      .replace(/\\textcolor\s*\{[^{}]*\}\s*\{\s*\}/g, '')
+  }
   // \big, \Big, \bigg, \Bigg (avec suffixes l/r/m optionnels) : tex2typst
   // laisse les variantes sans suffixe comme variable nue — on les supprime
   output = output.replace(/\\[Bb]igg?[lrm]?\b/g, '')
