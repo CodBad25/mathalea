@@ -100,6 +100,11 @@ export interface TbiCardState {
   tab: number
   /** Saut de colonne avant cet exercice (dispositions en colonnes) */
   colBreak: boolean
+  /**
+   * Exercice replié : seul son bandeau bleu reste affiché (disposition libre).
+   * État de présentation propre à la session, non sérialisé dans l'URL.
+   */
+  collapsed?: boolean
   /** uuid de l'exercice actuellement affiché à cet indice, pour détecter un remplacement */
   uuid?: string
 }
@@ -259,6 +264,19 @@ export function zoomAllCardsBy(delta: number) {
     for (const card of state.cards) {
       card.zoom = clampZoom(card.zoom + delta)
     }
+    return state
+  })
+}
+
+/**
+ * Replie / déplie un exercice en disposition libre : replié, seul son bandeau
+ * bleu reste visible (le contenu et la poignée de redimensionnement sont
+ * masqués).
+ */
+export function toggleTbiCardCollapsed(paramsIndex: number) {
+  tbiState.update((state) => {
+    const card = state.cards[paramsIndex]
+    if (card) card.collapsed = !card.collapsed
     return state
   })
 }

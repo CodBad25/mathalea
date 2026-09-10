@@ -227,7 +227,7 @@
         onDelete={applyDelete}
       />
     {:else if $tbiState.mode === 'free'}
-      <TbiFreeLayout {items} {persistLayout} />
+      <TbiFreeLayout {items} {persistLayout} onDelete={applyDelete} />
     {:else if $tbiState.mode === 'tabs'}
       <TbiTabsLayout
         {items}
