@@ -527,6 +527,66 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('start: 3)')
   })
 
+  it('mode fusionné : recopie la consigne en tête de chaque question', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          intro: 'Calculer.',
+          consigne: 'Calculer.',
+          questions: ['$4+3$', '$7\\times 8$'],
+          numbered: true,
+        }),
+        exercise({
+          intro: 'Justifier.',
+          consigne: 'Justifier.',
+          questions: ['12 est-il divisible par 2 ?'],
+          numbered: true,
+          ref: '',
+        }),
+      ],
+      { ...defaultTypstDocumentOptions, mergeExercises: true },
+    )
+    const enonces = code.slice(code.indexOf('// ----- Énoncés -----'))
+    // la consigne précède chaque énoncé, sur sa propre ligne (`\`)
+    expect(enonces).toContain('+ Calculer. \\\n      $4 + 3$')
+    expect(enonces).toContain('+ Calculer. \\\n      $7 times 8$')
+    expect(enonces).toContain('+ Justifier. \\\n      12 est-il divisible par 2 ?')
+    // et n'est plus affichée une seule fois avant la liste
+    expect(enonces).not.toMatch(/\n {2}Calculer\.\n/)
+  })
+
+  it('hors mode fusionné : la consigne reste affichée une fois avant la liste', () => {
+    const code = buildTypstDocument([
+      exercise({
+        intro: 'Calculer.',
+        consigne: 'Calculer.',
+        questions: ['$4+3$', '$7\\times 8$'],
+        numbered: true,
+      }),
+    ])
+    expect(code).toContain('Calculer.')
+    expect(code).not.toContain('+ Calculer. \\')
+  })
+
+  it('mode fusionné : garde l’introduction avant la liste, la consigne dans les items', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          intro: 'Calculer.<br>On donne le tableau suivant.',
+          consigne: 'Calculer.',
+          introduction: 'On donne le tableau suivant.',
+          questions: ['$4+3$', '$7\\times 8$'],
+          numbered: true,
+        }),
+      ],
+      { ...defaultTypstDocumentOptions, mergeExercises: true },
+    )
+    const enonces = code.slice(code.indexOf('// ----- Énoncés -----'))
+    expect(enonces).toContain('On donne le tableau suivant.')
+    expect(enonces).toContain('+ Calculer. \\\n      $4 + 3$')
+    expect(enonces).not.toMatch(/\n {2}Calculer\.\n/)
+  })
+
   it('règle le nombre de colonnes du document', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
       ...defaultTypstDocumentOptions,

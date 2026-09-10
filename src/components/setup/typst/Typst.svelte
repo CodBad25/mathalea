@@ -1349,6 +1349,8 @@
     if (current.warning == null) {
       frozenInputs.set(exercise, {
         intro: current.intro,
+        consigne: current.consigne ?? '',
+        introduction: current.introduction ?? '',
         introCorrection: current.introCorrection,
         questions: current.questions,
         corrections: current.corrections,
@@ -2532,6 +2534,8 @@
     IExercice,
     {
       intro: string
+      consigne: string
+      introduction: string
       introCorrection: string
       questions: string[]
       corrections: string[]
@@ -2641,6 +2645,10 @@
           .filter((text) => text != null && text.length > 0)
           .join('<br>'),
       )
+      // consigne et introduction gardées séparées : en mode fusionné, la
+      // consigne est recopiée en tête de chaque question (voir buildTypstDocument)
+      input.consigne = mathaleaFormatExercice(exercise.consigne ?? '')
+      input.introduction = mathaleaFormatExercice(exercise.introduction ?? '')
       const format = (text: string) =>
         mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
       input.questions = (exercise.listeQuestions ?? []).map(format)
@@ -2676,6 +2684,8 @@
       const frozen = skipFrozen ? undefined : frozenInputs.get(exercise)
       if (frozen != null) {
         input.intro = frozen.intro
+        input.consigne = frozen.consigne
+        input.introduction = frozen.introduction
         input.introCorrection = frozen.introCorrection
         input.questions = input.questions.map(
           (question, i) => frozen.questions[i] ?? question,
