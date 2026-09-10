@@ -160,6 +160,7 @@
         showMoveToTab={true}
         {tabsCount}
         currentTab={activeTab}
+        {onDelete}
       />
     {:else}
       <TbiColumnsLayout
