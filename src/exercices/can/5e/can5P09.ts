@@ -1,12 +1,34 @@
 import { texPrix } from '../../../lib/format/style'
 import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+
+/**
+ * Construit la correction : on passe par le prix de 100 g (prix au kg divisé
+ * par 10, car 1 kg = 10×100 g), sauf si la question demande déjà 100 g (dans
+ * ce cas, ce prix de 100 g est directement la réponse, inutile de le
+ * multiplier par 1).
+ */
+function texteCorrectionPrix(
+  a: number,
+  b: number,
+  b2: number,
+  nomProduit: string,
+): string {
+  if (b === 100) {
+    return `Comme $1$ kg $=10\\times100$ g, le prix de $${b}$ g ${nomProduit} est donné par : <br>
+$${texPrix(a)}\\div 10=${texNombre(b2, 2)}$.<br>
+Le prix de $${b}$ g ${nomProduit} est $${miseEnEvidence(texPrix(b2))}$ €.<br>`
+  }
+  const facteur = b / 100
+  return `Comme $1$ kg $=10\\times100$ g, le prix de $100$ g ${nomProduit} est : <br>
+$${texPrix(a)}\\div 10=${texPrix(a / 10)}$ €.<br>
+Or $${b}$ g $=${facteur}\\times100$ g, donc le prix de $${b}$ g ${nomProduit} est : <br>
+$${facteur}\\times ${texPrix(a / 10)}=${texNombre(b2, 2)}$ €.<br>
+Le prix de $${b}$ g ${nomProduit} est $${miseEnEvidence(texPrix(b2))}$ €.<br>`
+}
 export const titre = "Calculer un prix à partir d'un prix au kg"
 export const interactifReady = true
 
@@ -60,21 +82,7 @@ export default class CalculPrix extends ExerciceSimple {
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
 Quel est le prix de $${b}$ g ? `
 
-        this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
-        $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
-        Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
-        if (b !== 100) {
-          if (b === 500) {
-            this.correction += texteEnCouleur(` Mentalement : <br>
-  Multiplier par $0,5$ revient à diviser par $2$. <br>
-  Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.`)
-          } else {
-            this.correction += texteEnCouleur(`Mentalement : <br>
-  $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.`)
-          }
-        } else {
-          this.correction += ''
-        }
+        this.correction = texteCorrectionPrix(a, b, b2, n)
 
         this.reponse = reponse
         break
@@ -89,21 +97,7 @@ Quel est le prix de $${b}$ g ? `
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
 Quel est le prix de $${b}$ g ? `
 
-        this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
-        $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
-        Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
-        if (b !== 100) {
-          if (b === 500) {
-            this.correction += texteEnCouleur(`Mentalement : <br>
-  Multiplier par $0,5$ revient à diviser par $2$. <br>
-  Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.`)
-          } else {
-            this.correction += texteEnCouleur(`Mentalement : <br>
-  $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.`)
-          }
-        } else {
-          this.correction += ''
-        }
+        this.correction = texteCorrectionPrix(a, b, b2, n)
 
         this.reponse = reponse
         break
@@ -129,21 +123,7 @@ Quel est le prix de $${b}$ g ? `
         this.question = `Le prix d'un kg de café ${n} est $${texPrix(a)}$ €. <br>
 Quel est le prix de $${b}$ g ? `
 
-        this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g de café ${n} est donné par : <br>
-          $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
-          Le prix de $${b}$ g de café ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
-        if (b !== 100) {
-          if (b === 500) {
-            this.correction += texteEnCouleur(` Mentalement : <br>
-    Multiplier par $0,5$ revient à diviser par $2$. <br>
-    Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.`)
-          } else {
-            this.correction += texteEnCouleur(`Mentalement : <br>
-    $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.`)
-          }
-        } else {
-          this.correction += ''
-        }
+        this.correction = texteCorrectionPrix(a, b, b2, `de café ${n}`)
 
         this.reponse = reponse
         break
