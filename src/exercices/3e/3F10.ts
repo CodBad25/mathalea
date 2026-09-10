@@ -104,15 +104,13 @@ f) Compléter $f($%{champ6}$)=${c}$`,
         dataOptions: {
           champ1: { keyboard: KeyboardType.clavierDeBase },
           champ2: { keyboard: KeyboardType.clavierDeBase },
-          champ3: {
-            keyboard: inversion
-              ? KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-              : KeyboardType.clavierDeBase,
-          },
+          // champ3 porte toujours la question sur l'antécédent de a (réponse
+          // unique), champ4 celle sur les antécédents de d (deux réponses) :
+          // `inversion` ne change que l'ordre d'affichage c)/d), pas le lien
+          // entre un champ et sa question.
+          champ3: { keyboard: KeyboardType.clavierDeBase },
           champ4: {
-            keyboard: inversion
-              ? KeyboardType.clavierDeBase
-              : KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
           },
           champ5: {
             keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
@@ -182,13 +180,16 @@ f) Compléter $f($%{champ6}$)=${c}$`,
         )
       }
 
-      if (choice([true, false])) {
-        // Une fois sur 2 on inverse les questions 3 et 4
-        texteCorr +=
-          '<br>' + numAlpha(2) + texteCorr3 + '<br>' + numAlpha(3) + texteCorr4
-      } else {
+      // Tirage historique conservé pour ne pas décaler la suite des tirages
+      // (cf. documentation/tests/stabilite-exercices.md). L'ordre du corrigé
+      // pour c) et d) suit désormais `inversion`, comme celui de l'énoncé.
+      choice([true, false])
+      if (inversion) {
         texteCorr +=
           '<br>' + numAlpha(2) + texteCorr4 + '<br>' + numAlpha(3) + texteCorr3
+      } else {
+        texteCorr +=
+          '<br>' + numAlpha(2) + texteCorr3 + '<br>' + numAlpha(3) + texteCorr4
       }
 
       texteCorr += '<br>' + numAlpha(4) + `$f(${c})=${miseEnEvidence(d)}$`
@@ -206,12 +207,8 @@ f) Compléter $f($%{champ6}$)=${c}$`,
           bareme: toutAUnPoint,
           champ1: { value: b },
           champ2: { value: d },
-          champ3: inversion
-            ? { value: `${e};${c}`, options: { suiteDeNombres: true } }
-            : { value: d },
-          champ4: inversion
-            ? { value: d }
-            : { value: `${e};${c}`, options: { suiteDeNombres: true } },
+          champ3: { value: d },
+          champ4: { value: `${e};${c}`, options: { suiteDeNombres: true } },
           champ5: { value: d },
           champ6: { value: f },
         },
