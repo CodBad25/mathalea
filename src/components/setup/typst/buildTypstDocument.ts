@@ -2508,6 +2508,12 @@ function buildCanVersionContent(
   figures: string[],
   emitAnchors: boolean,
   exportMode: boolean,
+  /**
+   * Sujet A : seul sujet sur lequel une surcharge de ligne saisie à la
+   * palette (`codeOverridesCan`/`codeOverridesCanReponse`) s'applique. Les
+   * sujets dérivés gardent leur contenu généré à partir de leur graine.
+   */
+  isPrimaryVersion: boolean,
 ): VersionContent {
   const exercises = withMinimalCorrections(allExercises, options)
   const generatedRows = computeGeneratedCanRows(allExercises, options, figures)
@@ -2523,8 +2529,12 @@ function buildCanVersionContent(
     const rowAnchor = emitAnchors
       ? `#mathalea-anchor("can-row", ${rowNum})\n`
       : ''
-    const enonceOverride = carryOver.codeOverridesCan?.[rowNum]
-    const reponseOverride = carryOver.codeOverridesCanReponse?.[rowNum]
+    const enonceOverride = isPrimaryVersion
+      ? carryOver.codeOverridesCan?.[rowNum]
+      : undefined
+    const reponseOverride = isPrimaryVersion
+      ? carryOver.codeOverridesCanReponse?.[rowNum]
+      : undefined
     // Une question liée à la précédente n'a pas de cellule « Énoncé » : la
     // cellule de la première question du groupe couvre sa ligne
     // (`table.cell(rowspan: …)`), et `none` indique au helper de ne pas en
@@ -2659,6 +2669,16 @@ function buildVersionContent(
    */
   exportMode = false,
 ): VersionContent {
+  // Une surcharge de code manuelle (modale d'édition de la palette) n'est
+  // saisie que sur le sujet affiché, c.-à-d. le Sujet A (`varPrefix` vide).
+  // Les sujets dérivés (B, C...) doivent garder le contenu généré à partir de
+  // leur graine propre : sans ce garde-fou, ils recopient la surcharge du
+  // Sujet A et tous les sujets deviennent identiques pour cet exercice.
+  const isPrimaryVersion = varPrefix === ''
+  const codeOverrideAt = (num: number): string | undefined =>
+    isPrimaryVersion ? carryOver.codeOverrides?.[num] : undefined
+  const codeOverrideCorrectionAt = (num: number): string | undefined =>
+    isPrimaryVersion ? carryOver.codeOverridesCorrection?.[num] : undefined
   // le mode « Course aux nombres » n'a ni banque d'exercices ni titres : tout
   // le contenu tient dans un seul tableau, construit à part
   if (options.canMode) {
@@ -2669,6 +2689,7 @@ function buildVersionContent(
       figures,
       emitAnchors,
       exportMode,
+      isPrimaryVersion,
     )
   }
   /** Insertions de la palette à réémettre après l'exercice `num` */
@@ -2713,8 +2734,8 @@ function buildVersionContent(
   // export, le repère de relecture (`wrapCodeOverride`) n'a pas d'utilité :
   // rien ne relit plus jamais ce code exporté.
   const built = generated.map((g, k) => {
-    const override = carryOver.codeOverrides?.[k + 1]
-    const correctionOverride = carryOver.codeOverridesCorrection?.[k + 1]
+    const override = codeOverrideAt(k + 1)
+    const correctionOverride = codeOverrideCorrectionAt(k + 1)
     return {
       enonce:
         override == null
@@ -2839,10 +2860,7 @@ function buildVersionContent(
         // une surcharge de code (modale d'édition) remplace tout le contenu
         // généré de l'exercice : le QR-code s'y désactive avec elle
         const qrUrl = generated[group.head].qrUrl
-        if (
-          qrUrl != null &&
-          carryOver.codeOverrides?.[group.head + 1] == null
-        ) {
+        if (qrUrl != null && codeOverrideAt(group.head + 1) == null) {
           bankLines.push(`  qr: ${qrCodeToTypstImage(qrUrl)},`)
         }
       }
