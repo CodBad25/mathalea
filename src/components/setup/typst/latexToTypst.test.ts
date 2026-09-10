@@ -102,6 +102,23 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bold(x = 2)')
   })
 
+  it("ignore un groupe de mise en évidence vide sans corrompre le text(…) englobant (4L15-0)", () => {
+    // miseEnEvidence('') — le signe/opérateur à colorer est absent — produit
+    // `{\color{#F15929}\boldsymbol{}}`. tex2typst en faisait `bold()`, pris
+    // ensuite pour une parenthèse orpheline : le rattrapage consommait la
+    // parenthèse fermante du `text(fill: …)` et cassait toute la formule
+    // (`text paren.l fill: …`).
+    const result = latexMathToTypst(
+      '-2u {\\color{#F15929}\\boldsymbol{}}\\,{\\color{#F15929}\\boldsymbol{-3}}',
+    )
+    expect(result).not.toContain('text paren.l')
+    expect(result).not.toContain('bold()')
+    expect(result).toContain('text(fill: #rgb("#F15929"), bold(-3))')
+    expect((result.match(/\(/g) ?? []).length).toBe(
+      (result.match(/\)/g) ?? []).length,
+    )
+  })
+
   it("convertit une union d'intervalles en notation française mise en évidence sans casser les crochets", () => {
     // notation française "à crochets inversés" ([-4;-2[∪]3;4]) mêlée à
     // \color{} : le "[union]" produit par tex2typst pour \cup coïncide
