@@ -135,7 +135,7 @@ class FormeTrinome extends Exercice {
     corr2a += `<br>$\\bullet$ Pour déterminer $f(${x1})$, les calculs à partir de la forme factorisée sont plus rapides : `
 
     corr2a += `<br>$f(${x1})= ${rienSi1(a)}(${x1}${ecritureAlgebrique(-x1)})(${x1}${ecritureAlgebrique(-x2)})
-    = ${rienSi1(a)}\\times 0\\times ${ecritureParentheseSiNegatif(x1 - x2)}=0$ `
+    = ${Math.abs(a) === 1 ? '' : `${a}\\times `}0\\times ${ecritureParentheseSiNegatif(x1 - x2)}=0$ `
 
     const q2b = "Résoudre l'équation $f(x)=0$."
     let corr2b =
