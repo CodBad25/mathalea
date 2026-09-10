@@ -2344,17 +2344,42 @@ function handleExpressionSansTimes(saisie: string, answer: string): ResultType {
   const cleanInput = clean(saisie)
 
   if (handleCalculFormel(saisie, answer).isOk) {
-    if (
-      JSON.stringify(ce.parse(cleanInput, { form: 'raw' }).json).includes(
-        'Multiply',
-      )
-    )
+    const rawJson = ce.parse(cleanInput, { form: 'raw' }).json
+    if (JSON.stringify(rawJson).includes('Multiply'))
       return fail(
         'La réponse fournie est bien égale à celle attendue mais il y a au moins un signe $\\times$ en trop.',
+      )
+    if (aUnNombreApresUneLettre(rawJson))
+      return fail(
+        'La réponse fournie est bien égale à celle attendue mais dans un produit le nombre doit être écrit avant les lettres (par exemple $3x$ et non $x3$).',
       )
     return ok()
   }
   return fail()
+}
+
+/** Repère un nombre littéral (3, {num:'3'}, '3'…) dans une expression MathJSON brute. */
+function estNombreLitteral(json: unknown): boolean {
+  if (typeof json === 'number') return true
+  if (typeof json === 'string') return /^-?\d+(?:\.\d+)?$/.test(json)
+  if (json !== null && typeof json === 'object' && 'num' in json) return true
+  return false
+}
+
+/**
+ * Détecte un coefficient numérique mal placé dans un produit implicite,
+ * par exemple « x3 » au lieu de « 3x » : dans une écriture littérale simplifiée
+ * le nombre doit précéder les lettres. Parcours récursif du MathJSON brut.
+ */
+function aUnNombreApresUneLettre(json: unknown): boolean {
+  if (!Array.isArray(json)) return false
+  const [head, ...args] = json
+  if (
+    head === 'InvisibleOperator' &&
+    args.slice(1).some((arg) => estNombreLitteral(arg))
+  )
+    return true
+  return args.some((arg) => aUnNombreApresUneLettre(arg))
 }
 
 function handleFonction(
