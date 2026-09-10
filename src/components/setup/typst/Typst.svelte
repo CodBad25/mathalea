@@ -2579,8 +2579,19 @@
     return url.href
   }
 
-  /** Contenu HTML (avec formules `$...$`) de chaque exercice */
-  function buildInputs(): TypstExerciseInput[] {
+  /**
+   * Contenu HTML (avec formules `$...$`) de chaque exercice.
+   *
+   * `skipFrozen` ignore les questions figées par la palette (voir
+   * `frozenInputs`) : ce gel ne vaut que pour le sujet affiché (Sujet A), dont
+   * on ne veut pas bousculer les questions déjà distribuées ; les sujets
+   * dérivés (B, C...) doivent au contraire être régénérés entièrement à partir
+   * de leur graine propre, sans quoi ils recopient le contenu figé du Sujet A
+   * et tous les sujets deviennent identiques.
+   */
+  function buildInputs({
+    skipFrozen = false,
+  }: { skipFrozen?: boolean } = {}): TypstExerciseInput[] {
     const params = get(exercicesParams)
     return exercises.map((exercise, k) => {
       const input: TypstExerciseInput = {
@@ -2662,7 +2673,7 @@
       // questions figées par la palette (nombre de questions modifié) : les
       // questions déjà affichées gardent leur contenu, seules les questions
       // ajoutées prennent le contenu fraîchement généré
-      const frozen = frozenInputs.get(exercise)
+      const frozen = skipFrozen ? undefined : frozenInputs.get(exercise)
       if (frozen != null) {
         input.intro = frozen.intro
         input.introCorrection = frozen.introCorrection
@@ -2711,7 +2722,9 @@
             ? base
             : (pinned?.[k] ?? `${base}${version}`)
       }
-      perVersion.push(buildInputs())
+      // le gel de la palette ne concerne que le Sujet A : les sujets dérivés
+      // sont régénérés intégralement à partir de leur graine propre
+      perVersion.push(buildInputs({ skipFrozen: version > 0 }))
     }
     // on restaure la graine de base : c'est elle que montrent les réglages
     for (const [k, exercise] of exercises.entries()) {
