@@ -22,6 +22,41 @@ export const refs = {
   'fr-fr': ['can3L06', '2L13-flash3'],
   'fr-ch': [],
 }
+
+/**
+ * Construit le texte de correction à partir de la liste des étapes du calcul
+ * (`etapes[0]` étant l'expression de départ), la dernière étant le résultat.
+ * `sup` bascule vers la présentation en colonnes (une ligne $lettre = ...$
+ * par étape) plutôt que l'environnement aligned par défaut.
+ */
+function texteCorrectionEtapes(
+  etapes: string[],
+  sup: boolean,
+  lettre: string,
+): string {
+  const derniereEtape = miseEnEvidence(etapes[etapes.length - 1])
+  if (sup) {
+    return (
+      etapes
+        .slice(0, -1)
+        .map((etape) => `$${lettre} = ${etape}$<br>`)
+        .join('') + `$${lettre} = ${derniereEtape}$`
+    )
+  }
+  const lignes =
+    etapes.length === 2
+      ? [`${etapes[0]}&=${derniereEtape}`]
+      : [
+          `${etapes[0]}&=${etapes[1]}`,
+          ...etapes.slice(2, -1).map((etape) => `&=${etape}`),
+          `&=${derniereEtape}`,
+        ]
+  return `On réduit au même dénominateur :<br>
+$\\begin{aligned}
+${lignes.join('\\\\\n')}
+\\end{aligned}$`
+}
+
 export default class ReduireAvecFraction extends ExerciceSimple {
   constructor() {
     super()
@@ -86,17 +121,29 @@ export default class ReduireAvecFraction extends ExerciceSimple {
       case 1:
         {
           const frac3 = fraction(n + a * d, d).texFSD
+          let etapes: string[]
           if (choice([true, false])) {
             this.question = this.versionQcm
               ? `Une simplification de $${frac}x+${rienSi1(a)}x$ est :`
               : `${enonceIntro} $${frac}x+${rienSi1(a)}x$`
-            this.correction = `$${frac}x+${rienSi1(a)}x=${frac}x+${decompo}x=${frac}x+${frac2}x=\\dfrac{${n}+${a * d}}{${d}}x=${frac3}x$`
+            etapes = [
+              `${frac}x+${rienSi1(a)}x`,
+              `${frac}x+${decompo}x`,
+              `${frac}x+${frac2}x`,
+              `${frac3}x`,
+            ]
           } else {
             this.question = this.versionQcm
               ? `Une simplification de $${rienSi1(a)}x+${frac}x$ est :`
               : `${enonceIntro} $${rienSi1(a)}x+${frac}x$`
-            this.correction = `$${rienSi1(a)}x+${frac}x=${decompo}x+${frac}x=${frac2}x+${frac}x=\\dfrac{${a * d}+${n}}{${d}}x=${frac3}x$`
+            etapes = [
+              `${rienSi1(a)}x+${frac}x`,
+              `${decompo}x+${frac}x`,
+              `${frac2}x+${frac}x`,
+              `${frac3}x`,
+            ]
           }
+          this.correction = texteCorrectionEtapes(etapes, !!this.sup, lettre)
           this.reponse = [
             frac3 + 'x',
             `\\frac{${n + a * d}x}{${d}}`,
@@ -110,7 +157,16 @@ export default class ReduireAvecFraction extends ExerciceSimple {
           this.question = this.versionQcm
             ? `Une simplification de $${frac}x-${rienSi1(a)}x$ est :`
             : `${enonceIntro} $${frac}x-${rienSi1(a)}x$`
-          this.correction = `$${frac}x-${rienSi1(a)}x=${frac}x-${decompo}x=${frac}x-${frac2}x=\\dfrac{${n}-${a * d}}{${d}}x=${frac4}x$`
+          this.correction = texteCorrectionEtapes(
+            [
+              `${frac}x-${rienSi1(a)}x`,
+              `${frac}x-${decompo}x`,
+              `${frac}x-${frac2}x`,
+              `${frac4}x`,
+            ],
+            !!this.sup,
+            lettre,
+          )
           this.reponse = [
             `${n - a * d < 0 ? '-' : ''}\\frac{${Math.abs(n - a * d)}}{${d}}x`,
             `\\frac{${n - a * d}}{${d}}x`,
@@ -123,7 +179,16 @@ export default class ReduireAvecFraction extends ExerciceSimple {
           this.question = this.versionQcm
             ? `Une simplification de $${rienSi1(a)}x-${frac}x$ est :`
             : `${enonceIntro} $${rienSi1(a)}x-${frac}x$`
-          this.correction = `$${rienSi1(a)}x-${frac}x=${decompo}x-${frac}x=${frac2}x-${frac}x=\\dfrac{${a * d}-${n}}{${d}}x=${frac5}x$`
+          this.correction = texteCorrectionEtapes(
+            [
+              `${rienSi1(a)}x-${frac}x`,
+              `${decompo}x-${frac}x`,
+              `${frac2}x-${frac}x`,
+              `${frac5}x`,
+            ],
+            !!this.sup,
+            lettre,
+          )
           this.reponse = [
             `${n - a * d < 0 ? '' : '-'}\\frac{${Math.abs(n - a * d)}}{${d}}x`,
             `\\frac{${a * d - n}}{${d}}x`,
@@ -141,12 +206,32 @@ export default class ReduireAvecFraction extends ExerciceSimple {
             this.question = this.versionQcm
               ? `Une simplification de $${frac10}+${rienSi1(a)}x$ est :`
               : `${enonceIntro} $${frac10}+${rienSi1(a)}x$`
-            this.correction = `$${frac10}+${rienSi1(a)}x=${frac10}+\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}=${frac10}+\\dfrac{${a * d}x}{${d}}=\\dfrac{x+${a * d}x}{${d}}=${frac7}=${frac6}x$`
+            this.correction = texteCorrectionEtapes(
+              [
+                `${frac10}+${rienSi1(a)}x`,
+                `${frac10}+\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}`,
+                `${frac10}+\\dfrac{${a * d}x}{${d}}`,
+                frac7,
+                `${frac6}x`,
+              ],
+              !!this.sup,
+              lettre,
+            )
           } else {
             this.question = this.versionQcm
               ? `Une simplification de $${rienSi1(a)}x+${frac10}$ est :`
               : `${enonceIntro} $${rienSi1(a)}x+${frac10}$`
-            this.correction = ` $${rienSi1(a)}x+${frac10}=\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}+${frac10}=\\dfrac{${a * d}x}{${d}}+${frac10}=\\dfrac{${a * d}x+x}{${d}}=${frac7}=${frac6}x$`
+            this.correction = texteCorrectionEtapes(
+              [
+                `${rienSi1(a)}x+${frac10}`,
+                `\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}+${frac10}`,
+                `\\dfrac{${a * d}x}{${d}}+${frac10}`,
+                frac7,
+                `${frac6}x`,
+              ],
+              !!this.sup,
+              lettre,
+            )
           }
           this.reponse = [frac6 + 'x', frac7, (1 + a * d) / d + 'x']
         }
@@ -159,7 +244,17 @@ export default class ReduireAvecFraction extends ExerciceSimple {
             this.question = this.versionQcm
               ? `Une simplification de $${frac10}-${rienSi1(a)}x$ est :`
               : `${enonceIntro} $${frac10}-${rienSi1(a)}x$`
-            this.correction = `$${frac10}-${rienSi1(a)}x=${frac10}-\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}=${frac10}-${frac8}=\\dfrac{x-${a * d}x}{${d}}=\\dfrac{${1 - a * d}x}{${d}}=\\dfrac{${1 - a * d}}{${d}}x$`
+            this.correction = texteCorrectionEtapes(
+              [
+                `${frac10}-${rienSi1(a)}x`,
+                `${frac10}-\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}`,
+                `${frac10}-${frac8}`,
+                `\\dfrac{${1 - a * d}x}{${d}}`,
+                `\\dfrac{${1 - a * d}}{${d}}x`,
+              ],
+              !!this.sup,
+              lettre,
+            )
             this.reponse = [
               `${1 - a * d < 0 ? '-' : ''}\\frac{${Math.abs(1 - a * d)}}{${d}}x`,
               `\\frac{${1 - a * d}}{${d}}x`,
@@ -171,7 +266,17 @@ export default class ReduireAvecFraction extends ExerciceSimple {
             this.question = this.versionQcm
               ? `Une simplification de $${rienSi1(a)}x-${frac10}$ est :`
               : `${enonceIntro} $${rienSi1(a)}x-${frac10}$`
-            this.correction = ` $${rienSi1(a)}x-${frac10}=\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}-${frac10}=${frac8}-${frac10}=\\dfrac{${a * d}x-x}{${d}}=\\dfrac{${a * d - 1}x}{${d}}=\\dfrac{${a * d - 1}}{${d}}x$`
+            this.correction = texteCorrectionEtapes(
+              [
+                `${rienSi1(a)}x-${frac10}`,
+                `\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}-${frac10}`,
+                `${frac8}-${frac10}`,
+                `\\dfrac{${a * d - 1}x}{${d}}`,
+                `\\dfrac{${a * d - 1}}{${d}}x`,
+              ],
+              !!this.sup,
+              lettre,
+            )
             this.reponse = [
               `${1 - a * d < 0 ? '' : '-'}\\frac{${Math.abs(1 - a * d)}}{${d}}x`,
               `\\frac{${a * d - 1}}{${d}}x`,
@@ -185,32 +290,6 @@ export default class ReduireAvecFraction extends ExerciceSimple {
     }
 
     this.optionsChampTexte = { texteAvant: '<br>' }
-
-    if (this.sup) {
-      // On découpe
-      const etapes = this.correction.split('=')
-      this.correction = ''
-      let nbEtapes = 0
-      for (const etape of etapes) {
-        nbEtapes++
-        const etapeModifiee = etape.replace('$', '')
-        this.correction +=
-          etapeModifiee === lettre ? '' : `$${lettre} = ${etapeModifiee}$`
-        if (nbEtapes < etapes.length) this.correction += '<br>'
-      }
-    }
-
-    // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
-    const textCorrSplit = this.correction.split('=')
-    let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
-    aRemplacer = aRemplacer.replace('$', '')
-
-    this.correction = ''
-    for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
-      this.correction += textCorrSplit[ee] + '='
-    }
-    this.correction += `$ $${miseEnEvidence(aRemplacer)}$`
-    // Fin de cette uniformisation
 
     if (this.versionQcm) {
       // Génération des distracteurs basés sur des erreurs typiques d'élèves
