@@ -33,9 +33,15 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
     this.comment = `Il existe une version CAN de cet exercice avec une seule question en « can3F16 ».`
 
     this.nbQuestions = 1
+    this.besoinFormulaireCaseACocher = [
+      'Avec seulement le mot « image »',
+      false,
+    ]
+    this.sup = false
   }
 
   nouvelleVersion() {
+    const onlyWithImage = this.sup
     const lang = getLang()
     for (
       let i = 0, texte, texteCorr, texteAMC, cpt = 0;
@@ -95,29 +101,45 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         : `Déterminer le ou les nombres qui ont $${d}$ comme image par $f$. %{champ4}`
       texte += addMultiMathfield(this, i, {
         dataTemplate: `a) ${voies[0] ? `Quelle est l'image de $${a}$ par la fonction $f$ ? %{champ1}` : `Quel nombre $${a}$ a-t-il comme image ? %{champ1}`}
-b) ${voies[1] ? `Quelle est l'image de $${c}$ par la fonction $f$ ? %{champ2}` : `Quel nombre $${c}$ a-t-il comme image ? %{champ2}`}
-c) ${inversion ? question4 : question3}
-d) ${inversion ? question3 : question4}
-e) Compléter $f(${c})=$ %{champ5}
-f) Compléter $f($%{champ6}$)=${c}$`,
+b) ${voies[1] ? `Quelle est l'image de $${c}$ par la fonction $f$ ? %{champ2}` : `Quel nombre $${c}$ a-t-il comme image ? %{champ2}`}${
+          onlyWithImage
+            ? ''
+            : `c) ${inversion ? question4 : question3}
+d) ${inversion ? question3 : question4}`
+        }
+${onlyWithImage ? 'c' : 'e'}) Compléter $f(${c})=$ %{champ${onlyWithImage ? '3' : '5'}}
+${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
 
         dataOptions: {
           champ1: { keyboard: KeyboardType.clavierDeBase },
           champ2: { keyboard: KeyboardType.clavierDeBase },
-          // champ3 porte toujours la question sur l'antécédent de a (réponse
-          // unique), champ4 celle sur les antécédents de d (deux réponses) :
-          // `inversion` ne change que l'ordre d'affichage c)/d), pas le lien
-          // entre un champ et sa question.
-          champ3: { keyboard: KeyboardType.clavierDeBase },
-          champ4: {
-            keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-          },
-          champ5: {
-            keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-          },
-          champ6: {
-            keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-          },
+          champ3: onlyWithImage
+            ? { keyboard: KeyboardType.clavierDeBase }
+            : {
+                keyboard: inversion
+                  ? KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+                  : KeyboardType.clavierDeBase,
+              },
+          champ4: onlyWithImage
+            ? undefined
+            : {
+                keyboard: inversion
+                  ? KeyboardType.clavierDeBase
+                  : KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+              },
+          champ5: onlyWithImage
+            ? undefined
+            : {
+                keyboard: inversion
+                  ? KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+                  : KeyboardType.clavierDeBase,
+              },
+          champ6: onlyWithImage
+            ? undefined
+            : {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+              },
         },
       })
       texteAMC =
@@ -152,25 +174,37 @@ f) Compléter $f($%{champ6}$)=${c}$`,
         )
       }
 
-      const texteCorr3 = voies[2]
-        ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${miseEnEvidence(d)}$, on note $f(${miseEnEvidence(d)})=${a}$.`
-        : `Le nombre $${miseEnEvidence(d)}$ a pour image $${a}$ par la fonction $f$, donc $f(${miseEnEvidence(d)})=${a}$.`
+      const texteCorr3 = onlyWithImage
+        ? '<br>' +
+          numAlpha(onlyWithImage ? 2 : 4) +
+          `$f(${c})=${miseEnEvidence(d)}$`
+        : voies[2]
+          ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${miseEnEvidence(d)}$, on note $f(${miseEnEvidence(d)})=${a}$.`
+          : `Le nombre $${miseEnEvidence(d)}$ a pour image $${a}$ par la fonction $f$, donc $f(${miseEnEvidence(d)})=${a}$.`
       if (context.isAmc) {
-        this.autoCorrectionAMC[i].propositions?.push(
-          ajouteProposition(
-            numAlpha(2) +
-              `Déterminer un antécédent de $${a}$ par la fonction $f$.`,
-            d,
-          ),
-        )
+        if (!onlyWithImage) {
+          this.autoCorrectionAMC[i].propositions?.push(
+            ajouteProposition(
+              numAlpha(2) +
+                `Déterminer un antécédent de $${a}$ par la fonction $f$.`,
+              d,
+            ),
+          )
+        } else {
+          this.autoCorrectionAMC[i].propositions?.push(
+            ajouteProposition(numAlpha(2) + `Compléter : $f(${c})=\\ldots$`, d),
+          )
+        }
       }
 
-      const texteCorr4 = voies[3]
-        ? lang === 'fr-CH'
-          ? `$${d}$ a deux éléments dans la préimage : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
-          : `$${d}$ a deux antécédents : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
-        : `$${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$ ont pour image $${d}$ par la fonction $f$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
-      if (context.isAmc) {
+      const texteCorr4 = onlyWithImage
+        ? ''
+        : voies[3]
+          ? lang === 'fr-CH'
+            ? `$${d}$ a deux éléments dans la préimage : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
+            : `$${d}$ a deux antécédents : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
+          : `$${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$ ont pour image $${d}$ par la fonction $f$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
+      if (context.isAmc && !onlyWithImage) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(
             numAlpha(3) +
@@ -184,22 +218,39 @@ f) Compléter $f($%{champ6}$)=${c}$`,
       // (cf. documentation/tests/stabilite-exercices.md). L'ordre du corrigé
       // pour c) et d) suit désormais `inversion`, comme celui de l'énoncé.
       choice([true, false])
-      if (inversion) {
-        texteCorr +=
-          '<br>' + numAlpha(2) + texteCorr4 + '<br>' + numAlpha(3) + texteCorr3
+      if (!onlyWithImage) {
+        if (inversion) {
+          texteCorr +=
+            '<br>' +
+            numAlpha(2) +
+            texteCorr4 +
+            '<br>' +
+            numAlpha(3) +
+            texteCorr3
+        } else {
+          texteCorr +=
+            '<br>' +
+            numAlpha(2) +
+            texteCorr3 +
+            '<br>' +
+            numAlpha(3) +
+            texteCorr4
+        }
       } else {
-        texteCorr +=
-          '<br>' + numAlpha(2) + texteCorr3 + '<br>' + numAlpha(3) + texteCorr4
+        texteCorr += texteCorr3
       }
-
-      texteCorr += '<br>' + numAlpha(4) + `$f(${c})=${miseEnEvidence(d)}$`
-      if (context.isAmc) {
+      texteCorr += onlyWithImage
+        ? ''
+        : '<br>' + numAlpha(4) + `$f(${c})=${miseEnEvidence(d)}$`
+      if (context.isAmc && !onlyWithImage) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(4) + `Compléter : $f(${c})=\\ldots$`, d),
         )
       }
 
-      texteCorr += '<br>' + numAlpha(5) + `$f(${miseEnEvidence(f)})=${c}$`
+      texteCorr += onlyWithImage
+        ? ''
+        : '<br>' + numAlpha(5) + `$f(${miseEnEvidence(f)})=${c}$`
       handleAnswers(
         this,
         i,
@@ -207,16 +258,26 @@ f) Compléter $f($%{champ6}$)=${c}$`,
           bareme: toutAUnPoint,
           champ1: { value: b },
           champ2: { value: d },
-          champ3: { value: d },
-          champ4: { value: `${e};${c}`, options: { suiteDeNombres: true } },
-          champ5: { value: d },
-          champ6: { value: f },
+          champ3: onlyWithImage
+            ? { value: d }
+            : inversion
+              ? { value: `${e};${c}`, options: { suiteDeNombres: true } }
+              : { value: d },
+          champ4: onlyWithImage
+            ? undefined
+            : inversion
+              ? { value: d }
+              : { value: `${e};${c}`, options: { suiteDeNombres: true } },
+          champ5: onlyWithImage
+            ? undefined
+            : { value: `${e};${c}`, options: { suiteDeNombres: true } },
+          champ6: onlyWithImage ? undefined : { value: f },
         },
         {
           formatInteractif: 'multi-mathfield',
         },
       )
-      if (context.isAmc) {
+      if (context.isAmc && !onlyWithImage) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(5) + `Compléter : $f(\\ldots)=${c}$`, f),
         )
@@ -232,7 +293,6 @@ f) Compléter $f($%{champ6}$)=${c}$`,
     listeQuestionsToContenu(this)
   }
 }
-
 function ajouteProposition(texteProposition: string, nombre: number) {
   return {
     type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
