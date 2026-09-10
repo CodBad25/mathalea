@@ -1063,6 +1063,20 @@ export interface TypstExerciseInput {
   url?: string
   /** Consigne et introduction, déjà concaténées */
   intro: string
+  /**
+   * Consigne seule, déjà formatée (sans l'introduction). En mode fusionné
+   * (`mergeExercises`), elle est recopiée en tête de chaque question, juste
+   * après son numéro, au lieu d'être affichée une fois avant la liste ;
+   * ailleurs, c'est `intro` qui est rendu. Optionnelle : un appelant qui ne
+   * la fournit pas garde l'ancien rendu (consigne avant la liste).
+   */
+  consigne?: string
+  /**
+   * Introduction seule, déjà formatée (sans la consigne) : en mode fusionné,
+   * c'est ce texte — et non `intro` — qui reste affiché une fois avant la
+   * liste des questions.
+   */
+  introduction?: string
   questions: string[]
   /** Consigne propre à la correction */
   introCorrection: string
@@ -1823,6 +1837,20 @@ function exerciseBody(
    * scannée seule) : voir `htmlToTypst`.
    */
   zoomVariable?: string,
+  /**
+   * Consigne seule de l'exercice (sans l'introduction). En mode fusionné
+   * (`options.mergeExercises`) elle est recopiée en tête de chaque question,
+   * juste après son numéro, plutôt qu'affichée une seule fois avant la liste :
+   * une question isolée au milieu du flux fusionné garde ainsi son énoncé
+   * d'action. Ignorée hors mode fusionné (c'est `intro` qui est affiché).
+   */
+  consigne = '',
+  /**
+   * Introduction seule de l'exercice (sans la consigne) : en mode fusionné,
+   * c'est elle — et non `intro`, qui contient aussi la consigne — qui reste
+   * affichée une fois avant la liste des questions.
+   */
+  introduction = '',
 ): ExerciseBodyResult {
   // Colonnes des propositions de QCM : réglables par exercice depuis la
   // palette (`#let ex1-qcm-colonnes`), comme les colonnes des questions. En
@@ -1835,11 +1863,6 @@ function exerciseBody(
         ? (qcmLayoutOverride?.columns ?? QCM_COLUMNS_FROM_CONTENT)
         : `${tasksPrefix}-qcm-colonnes`
   const parts: string[] = []
-  if (intro.trim().length > 0) {
-    parts.push(
-      htmlToTypst(intro, figures, zoomVariable, undefined, qcmColumnsExpr),
-    )
-  }
   let questionList = questions
   // en mode export, ou sans préfixe (pas de variable `exN-numerotation`
   // possible), le motif est résolu ici, en JS ; sinon `label` référence
@@ -1857,6 +1880,7 @@ function exerciseBody(
   }
   // une question unique portant ses propres repères (`a)`, `b)`...) est
   // découpée : ses sous-questions deviennent la liste de premier niveau
+  let splitHead = ''
   if (questions.length === 1) {
     const split = splitSubQuestions(questions[0])
     if (split != null) {
@@ -1869,7 +1893,7 @@ function exerciseBody(
           qcmColumnsExpr,
         )
         if (head.length > 0) {
-          parts.push(head)
+          splitHead = head
         }
       }
       questionList = split.items
@@ -1884,6 +1908,38 @@ function exerciseBody(
       htmlToTypst(question, figures, zoomVariable, undefined, qcmColumnsExpr),
     )
     .filter((question) => question.length > 0)
+  const willBuildList =
+    tasksPrefix != null &&
+    (converted.length > 1 || (forceList && converted.length === 1))
+  // Mode fusionné : la consigne de l'exercice est recopiée en tête de chaque
+  // question (juste après son numéro) plutôt qu'affichée une seule fois avant
+  // la liste — sans elle, une question isolée au milieu du flux fusionné ne
+  // dirait plus quoi faire. L'introduction éventuelle, elle, reste affichée
+  // une seule fois avant la liste.
+  const consigneInline =
+    options.mergeExercises && willBuildList && consigne.trim().length > 0
+      ? htmlToTypst(consigne, figures, zoomVariable, undefined, qcmColumnsExpr)
+      : ''
+  // une consigne qui se rend sur plusieurs lignes (bloc) ne peut pas être
+  // glissée en tête d'item derrière un simple retour à la ligne : on garde
+  // alors l'affichage classique, une fois avant la liste
+  const repeatConsigne =
+    consigneInline.length > 0 && !consigneInline.includes('\n')
+  const introToRender = repeatConsigne ? introduction : intro
+  if (introToRender.trim().length > 0) {
+    parts.push(
+      htmlToTypst(
+        introToRender,
+        figures,
+        zoomVariable,
+        undefined,
+        qcmColumnsExpr,
+      ),
+    )
+  }
+  if (splitHead.length > 0) {
+    parts.push(splitHead)
+  }
   // une liste d'au moins deux questions est mise dans un environnement
   // `tasks` : le nombre de colonnes et l'espacement sont réglables par
   // exercice (`#let ex1-colonnes = ...` en tête de document) ; les
@@ -1891,17 +1947,19 @@ function exerciseBody(
   // gardent l'environnement mais sans étiquette. Une question unique
   // rejoint aussi l'environnement quand l'exercice est fusionné : sinon
   // elle resterait sans numéro alors que la suite du groupe est numérotée.
-  if (
-    tasksPrefix != null &&
-    (converted.length > 1 || (forceList && converted.length === 1))
-  ) {
+  if (willBuildList) {
     // les items d'une même liste doivent se suivre sans ligne vide, sinon
     // la numérotation repart à 1 ; les lignes suivantes d'un item restent
     // indentées à l'intérieur de celui-ci ; en mode « après chaque question »,
     // chaque item (y compris le dernier) se termine par le bloc de lignes,
     // qui reste ainsi dans la liste (indenté avec l'item)
     const items = converted.map((question) => {
-      const item = `  + ${question.split('\n').join('\n    ')}`
+      // mode fusionné : la consigne précède l'énoncé, sur sa propre ligne
+      // (`\` = retour à la ligne Typst), pour se lire juste après le numéro
+      const body = repeatConsigne
+        ? `${consigneInline} \\\n${question}`
+        : question
+      const item = `  + ${body.split('\n').join('\n    ')}`
       if (writingLines?.position === 'afterEachQuestion') {
         return `${item}\n\n    ${writingLinesCall(writingLines)}`
       }
@@ -2117,6 +2175,8 @@ function computeGeneratedExercises(
       carryOver.tasksLayout?.[`ex${k + 1}`],
       carryOver.tasksLayout?.[`ex${k + 1}-qcm`],
       enonceZoomVariable,
+      exercise.consigne ?? '',
+      exercise.introduction ?? '',
     )
     nextStart += enonce.itemCount
     let correction: string | null = null
