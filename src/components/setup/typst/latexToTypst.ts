@@ -1348,7 +1348,15 @@ function parseLatexTableBody(body: string): ParsedTableItem[] {
   const items: ParsedTableItem[] = []
   let row = ''
   const pushRow = () => {
-    const cells = splitTopLevel(row, '&').map((cell) => cell.trim())
+    // Le `&` d'une entité HTML (`&nbsp;`, `&amp;`, `&#160;`…) n'est pas un
+    // séparateur de colonnes : `tableauColonneLigne` peut en injecter dans une
+    // cellule via `sp()` (espace insécable), et sans cette protection la
+    // cellule `10&nbsp;\%` était coupée en deux colonnes (`10` et `nbsp;\%`).
+    const entityAmp = /&(?=(?:#\d+|#x[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);)/g
+    const ampSentinel = String.fromCharCode(1)
+    const cells = splitTopLevel(row.replace(entityAmp, ampSentinel), '&').map(
+      (cell) => cell.split(ampSentinel).join('&').trim(),
+    )
     if (cells.some((cell) => cell.length > 0))
       items.push({ type: 'row', cells })
     row = ''

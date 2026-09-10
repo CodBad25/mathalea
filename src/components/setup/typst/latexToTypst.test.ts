@@ -562,6 +562,16 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('cellcolor')
   })
 
+  it("ne coupe pas une cellule sur le `&` d'une entité HTML (`10&nbsp;\\%`, BP2AutoB3)", () => {
+    const result = htmlToTypst(
+      '$\\begin{array}{|c|c|c|}\\hline \\text{Remise} & 10&nbsp;\\% & 20&nbsp;\\% \\\\ \\hline\\end{array}$',
+    )
+    expect(result).toContain('columns: 3')
+    expect(result).toContain('[$10 %$]')
+    expect(result).toContain('[$20 %$]')
+    expect(result).not.toContain('nbsp')
+  })
+
   it('neutralise \\hspace* (évite le `#h(*)` invalide en Typst)', () => {
     const result = latexMathToTypst('\\hspace*{0.4cm}')
     expect(result).not.toContain('*')
