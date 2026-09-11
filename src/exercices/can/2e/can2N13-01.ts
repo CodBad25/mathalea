@@ -16,7 +16,6 @@ export const dateDePublication = '13/08/2026'
  * fractionnaire ou en pourcentage.
  * @author Stéphane Guyon
  */
-export const dateDeModifImportante = '10/09/2026'
 
 export const uuid = '1fa97'
 
@@ -57,7 +56,7 @@ export default class ChangerEcritureNombre extends ExerciceSimple {
         this.reponse = `${stringNombre(mantisse)}\\times 10^{${exposant}}`
         this.optionsDeComparaison = { ecritureScientifique: true }
         this.correction = `On déplace la virgule pour obtenir un nombre compris entre $1$ et $10$ :<br>
-$${texNombre(nombre)}=${miseEnEvidence(this.reponse)}$.`
+$${texNombre(nombre)}=${miseEnEvidence(this.reponse)}$`
         break
       }
       case 2: {
@@ -82,7 +81,7 @@ $${texNombre(nombre)}=${miseEnEvidence(this.reponse)}$.`
         this.question = `Donner l'écriture décimale de $\\dfrac{${numerateur}}{${denominateur}}$.`
         this.reponse = decimal
         this.optionsDeComparaison = { nombreDecimalSeulement: true }
-        this.correction = `$\\dfrac{${numerateur}}{${denominateur}}=${numerateur}\\div ${denominateur}=${miseEnEvidence(texNombre(decimal))}$.`
+        this.correction = `$\\dfrac{${numerateur}}{${denominateur}}=${numerateur}\\div ${denominateur}=${miseEnEvidence(texNombre(decimal))}$`
         break
       }
       case 3: {
@@ -112,7 +111,7 @@ $${texNombre(nombre)}=${miseEnEvidence(this.reponse)}$.`
         this.reponse = pourcentage
         this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\,\\%$' }
         this.optionsDeComparaison = { nombreDecimalSeulement: true }
-        this.correction = `$\\dfrac{${numerateur}}{${denominateur}}=\\dfrac{${pourcentage}}{100}=${miseEnEvidence(`${texNombre(pourcentage)}\\,\\%`)}$.`
+        this.correction = `$\\dfrac{${numerateur}}{${denominateur}}=\\dfrac{${pourcentage}}{100}=${miseEnEvidence(`${texNombre(pourcentage)}\\,\\%`)}$`
         break
       }
       case 4: {
@@ -125,7 +124,7 @@ $${texNombre(nombre)}=${miseEnEvidence(this.reponse)}$.`
         this.question = `Donner l'écriture décimale de $${pourcentage}\\,\\%$.`
         this.reponse = decimal
         this.optionsDeComparaison = { nombreDecimalSeulement: true }
-        this.correction = `$${pourcentage}\\,\\%=\\dfrac{${pourcentage}}{100}=${miseEnEvidence(texNombre(decimal))}$.`
+        this.correction = `$${pourcentage}\\,\\%=\\dfrac{${pourcentage}}{100}=${miseEnEvidence(texNombre(decimal))}$`
         break
       }
       case 5:
@@ -149,7 +148,7 @@ $${texNombre(nombre)}=${miseEnEvidence(this.reponse)}$.`
         this.question = `Donner l'écriture fractionnaire irréductible de $${texNombre(decimal)}$.`
         this.reponse = fraction.texFraction
         this.optionsDeComparaison = { fractionIrreductible: true }
-        this.correction = `$${texNombre(decimal)}=\\dfrac{${entier}}{${puissanceDeDix}}=${miseEnEvidence(fraction.texFraction)}$.`
+        this.correction = `$${texNombre(decimal)}=\\dfrac{${entier}}{${puissanceDeDix}}=${miseEnEvidence(fraction.texFraction)}$`
         break
       }
     }
