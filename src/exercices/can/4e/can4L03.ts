@@ -6,7 +6,7 @@ export const amcType = 'AMCNum'
 export const titre = 'Résoudre une équation $ax+b=cx+d$'
 export const uuid = '91cd5'
 export const refs = {
-  'fr-fr': ['can4L03'],
+  'fr-fr': ['can4L03', '2L21-flash2'],
   'fr-ch': [],
 }
 export default class UneEquationDifficile extends ExerciceEquationASolutionEntiere {

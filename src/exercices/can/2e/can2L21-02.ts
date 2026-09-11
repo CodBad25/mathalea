@@ -17,7 +17,7 @@ export const dateDePublication = '28/01/2026'
 export const uuid = 'eed98'
 
 export const refs = {
-  'fr-fr': ['can2L21-02'],
+  'fr-fr': ['can2L21-02', '2L21-flash4'],
   'fr-ch': [],
 }
 export default class ResoudreEquationCM extends ExerciceSimple {
