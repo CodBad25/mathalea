@@ -22,6 +22,19 @@ Un exercice construit une version dans `nouvelleVersion()`. Cette méthode prép
 
 La génération doit rester déterministe pour une graine donnée et éviter les doublons avec les mécanismes existants comme `questionJamaisPosee()`.
 
+### Sélections d'automatismes asynchrones
+
+`src/exercices/_automatismesCan.ts` charge les classes sélectionnées à la
+demande. Chaque instance possède une révision de génération : seule la dernière
+révision peut appliquer ses questions, corrections et paramètres, puis émettre
+`updateAsyncEx`. Une nouvelle génération depuis le cache invalide aussi les
+chargements précédents, tout en restant synchrone et sans émettre cet événement.
+`destroy()` invalide les résultats encore en attente. Les imports obsolètes
+peuvent alimenter le cache partagé, mais ne modifient plus l'instance.
+
+Les scénarios de résolution dans le désordre, de cache, d'erreur et de destruction
+sont couverts par `tests/unit/automatismesGeneration.test.ts`.
+
 ## Sorties HTML et LaTeX
 
 Les exercices doivent tenir compte du contexte de rendu. Le HTML peut accepter des composants interactifs ou des éléments de formulaire ; le LaTeX doit rester imprimable et lisible.

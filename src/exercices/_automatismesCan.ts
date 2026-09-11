@@ -102,6 +102,9 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
   }
 
   return class AutomatismesCan extends MetaExercice {
+    private generationRevision = 0
+    private isDestroyed = false
+
     constructor() {
       super([])
       this.sup = clampedDefaultSup
@@ -119,6 +122,10 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
     }
 
     nouvelleVersion(): void {
+      if (this.isDestroyed) return
+      // Invalider aussi les chargements précédents lors d'une génération
+      // synchrone depuis le cache. Les imports restent utiles au cache partagé.
+      const revision = ++this.generationRevision
       const showRefs = !!this.sup2
       const keepSelection = !!this.sup3
       const savedSup = this.sup
@@ -237,12 +244,14 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
         }),
       )
         .then((classes) => {
+          if (this.isDestroyed || revision !== this.generationRevision) return
           buildFromClasses(classes)
           document.dispatchEvent(
             new window.Event('updateAsyncEx', { bubbles: true }),
           )
         })
         .catch((error) => {
+          if (this.isDestroyed || revision !== this.generationRevision) return
           // Le `import()` lazy d'un module peut se résoudre après la destruction
           // de l'environnement (ex. suite de tests `all_exercises` : le harnais
           // appelle `nouvelleVersionWrapper()` sans attendre ce chargement).
@@ -260,6 +269,12 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
             /* environnement déjà détruit : rien à faire */
           }
         })
+    }
+
+    override destroy(): void {
+      this.isDestroyed = true
+      this.generationRevision++
+      super.destroy()
     }
   }
 }
