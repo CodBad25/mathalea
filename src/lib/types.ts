@@ -385,6 +385,7 @@ export type InteractivityType =
   | 'diagram-bar-assessment' // Non compatible AMC
   | 'diagram-histogram-assessment' // Non compatible AMC
   | 'diagram-cartesian-assessment' // Non compatible AMC
+  | 'traceur-de-courbe' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -448,7 +449,8 @@ export function isInteractivityType(
     value === 'diagram-pie-assessment' ||
     value === 'diagram-bar-assessment' ||
     value === 'diagram-histogram-assessment' ||
-    value === 'diagram-cartesian-assessment'
+    value === 'diagram-cartesian-assessment' ||
+    value === 'traceur-de-courbe'
   )
 }
 
@@ -897,6 +899,7 @@ export interface IGrandeur {
 
 export type AnswerValueType =
   | string
+  | ((x: number) => number)
   | string[]
   | number
   | number[]
@@ -914,6 +917,7 @@ export type AnswerValueType =
 export function isAnswerValueType(value: unknown): value is AnswerValueType {
   return (
     typeof value === 'string' ||
+    typeof value === 'function' ||
     (Array.isArray(value) &&
       value.every((value) => typeof value === 'string')) ||
     typeof value === 'number' ||

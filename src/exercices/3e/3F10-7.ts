@@ -1,65 +1,213 @@
-import { choice } from '../../lib/outils/arrayOutils'
 import {
-  ecritureAlgebrique,
-  ecritureParentheseSiNegatif,
-  rienSi1,
-} from '../../lib/outils/ecritures'
+  addTraceurDeCourbe,
+  type TraceurDeCourbeOptions,
+} from '../../lib/customElements/TraceurDeCourbe'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
-import { nombreElementsDifferents } from '../ExerciceQcm'
-import ExerciceQcmA from '../ExerciceQcmA'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
+import Exercice from '../Exercice'
 
-export const uuid = 'df75e'
-export const refs = {
-  'fr-fr': ['3F1QCM-3'],
-  'fr-ch': ['10FA1B-8', '1mF1-14'],
-}
+export const titre =
+  'Représenter des fonctions en remplissant un tableau de valeurs'
 export const interactifReady = true
+export const dateDePublication = '10/09/2026'
+export const uuid = 'd4c81'
 
-export const amcReady = 'true'
-export const amcType = 'qcmMono'
-export const titre = "Effectuer le calcul d'images dans une fonction"
-export const dateDePublication = '13/11/2024'
+export const refs = {
+  'fr-fr': ['3F10-7'],
+  'fr-ch': [],
+}
+
+type Fraction = {
+  numerator: number
+  denominator: number
+}
+
+type FunctionData = {
+  expression: string
+  pgfplotsExpression: string
+  target: (x: number) => number
+  key: string
+}
+
+function pgcd(a: number, b: number): number {
+  return b === 0 ? Math.abs(a) : pgcd(b, a % b)
+}
+
+function randomFraction(): Fraction {
+  const denominator = randint(2, 5)
+  let numerator = randint(-7, 7, 0)
+  while (pgcd(numerator, denominator) !== 1) {
+    numerator = randint(-7, 7, 0)
+  }
+  return { numerator, denominator }
+}
+
+function fractionLatex(fraction: Fraction): string {
+  const sign = fraction.numerator < 0 ? '-' : ''
+  return `${sign}\\dfrac{${Math.abs(fraction.numerator)}}{${fraction.denominator}}`
+}
+
+function signedFractionLatex(fraction: Fraction): string {
+  const sign = fraction.numerator < 0 ? '-' : '+'
+  return `${sign}\\dfrac{${Math.abs(fraction.numerator)}}{${fraction.denominator}}`
+}
+
+function createFunction(type: number): FunctionData {
+  if (type === 1) {
+    const a = randint(-7, 7, 0)
+    return {
+      expression: `${rienSi1(a)}x`,
+      pgfplotsExpression: `${a}*x`,
+      target: (x) => a * x,
+      key: `${a}`,
+    }
+  }
+
+  if (type === 2) {
+    const a = randint(-6, 6, 0)
+    const b = randint(-8, 8, 0)
+    return {
+      expression: `${rienSi1(a)}x${ecritureAlgebrique(b)}`,
+      pgfplotsExpression: `${a}*x+(${b})`,
+      target: (x) => a * x + b,
+      key: `${a};${b}`,
+    }
+  }
+
+  if (type === 3) {
+    const a = randomFraction()
+    return {
+      expression: `${fractionLatex(a)}x`,
+      pgfplotsExpression: `(${a.numerator}/${a.denominator})*x`,
+      target: (x) => (a.numerator * x) / a.denominator,
+      key: `${a.numerator}/${a.denominator}`,
+    }
+  }
+
+  if (type === 4) {
+    const a = randomFraction()
+    const b = randint(-8, 8, 0)
+    return {
+      expression: `${fractionLatex(a)}x${ecritureAlgebrique(b)}`,
+      pgfplotsExpression: `(${a.numerator}/${a.denominator})*x+(${b})`,
+      target: (x) => (a.numerator * x) / a.denominator + b,
+      key: `${a.numerator}/${a.denominator};${b}`,
+    }
+  }
+
+  if (type === 5) {
+    const a = randomFraction()
+    const b = randomFraction()
+    return {
+      expression: `${fractionLatex(a)}x${signedFractionLatex(b)}`,
+      pgfplotsExpression: `(${a.numerator}/${a.denominator})*x+(${b.numerator}/${b.denominator})`,
+      target: (x) =>
+        (a.numerator * x) / a.denominator + b.numerator / b.denominator,
+      key: `${a.numerator}/${a.denominator};${b.numerator}/${b.denominator}`,
+    }
+  }
+
+  if (type === 6) {
+    const a = randint(-5, 5, 0)
+    return {
+      expression: `${rienSi1(a)}x^2`,
+      pgfplotsExpression: `${a}*x^2`,
+      target: (x) => a * x ** 2,
+      key: `${a}`,
+    }
+  }
+
+  const a = randint(-6, 6, 0)
+  const b = randint(-6, 6, [0, a])
+  return {
+    expression: `(x${ecritureAlgebrique(a)})(x${ecritureAlgebrique(b)})`,
+    pgfplotsExpression: `(x+(${a}))*(x+(${b}))`,
+    target: (x) => (x + a) * (x + b),
+    key: `${a};${b}`,
+  }
+}
+
 /**
+ * Représenter graphiquement une fonction en choisissant et calculant ses images.
  *
- * @author Jean-Claude LHOTE
+ * @author Jean-Claude Lhote
  */
-
-export default class AsieJuin21Exo1Q2 extends ExerciceQcmA {
-  private appliquerLesValeurs(a: number, b: number): void {
-    this.reponses = [
-      `$f(0)=${String(b)}$`,
-      `$0$ est un antécédent de $${String(b)}$ par $f$.`,
-      `$${String(b)}$ est l'image de $0$ par $f$.`,
-      `$f(${String(b)})=0$`,
-      `l'image de $${String(-b)}$ par $f$ est $${String(b)}$.`,
-    ]
-    this.bonnesReponses = [true, true, true, false, false]
-    this.enonce = `On considère la fonction $f$ définie par $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.`
-    this.corrections = [
-      `$${miseEnEvidence(`f(0)=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}0^2${ecritureAlgebrique(b)}=${texNombre(b, 0)}`)}$.`,
-      `$${miseEnEvidence(`0\\text{ est un antécédent de }${b}\\text{ par }f`)}$, car $f(0)=${b}$.`,
-      `$${miseEnEvidence(`${b}\\text{ est l'image de }0\\text{ par }f`)}$, car $f(0)=${b}$.`,
-      ` $f(${b})=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$.`,
-      `l'image de $${String(-b)}$ par $f$ est : $${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(-b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$.`,
-    ]
-  }
-
-  versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(1, -2)
-  }
-
-  versionAleatoire: () => void = () => {
-    const n = 5
-    do {
-      const a = choice([2, 3, 4, 5]) * choice([-1, 1])
-      const b = choice([2, 3, 4, 5]) * choice([-1, 1])
-      this.appliquerLesValeurs(a, b)
-    } while (nombreElementsDifferents(this.reponses) < n)
-  }
-
+export default class RepresenterFonctionsAvecTableau extends Exercice {
   constructor() {
     super()
-    this.versionAleatoire()
+    this.nbQuestions = 3
+    this.consigne =
+      'Choisir des valeurs adaptées, compléter chaque tableau de valeurs, puis construire la représentation graphique.'
+    this.sup = '8'
+    this.besoinFormulaireTexte = [
+      'Types de fonctions (nombres séparés par des tirets)',
+      '1 : Fonction linéaire à coefficient entier relatif\n2 : Fonction affine à coefficients entiers relatifs\n3 : Fonction linéaire à coefficient rationnel\n4 : Fonction affine avec un coefficient directeur rationnel et une ordonnée à l’origine entière relative\n5 : Fonction affine à coefficients rationnels\n6 : Fonction de la forme ax²\n7 : Fonction de la forme (x+a)(x+b)\n8 : Mélange',
+    ]
+    this.besoinFormulaire2CaseACocher = ['Tracer la ligne brisée', true]
+  }
+
+  nouvelleVersion(): void {
+    const types = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 7,
+      melange: 8,
+      defaut: 8,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
+    const letters = ['f', 'g', 'h', 'k', 'p', 'q']
+
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
+      const type = types[i]
+      const functionData = createFunction(type)
+      const letter = letters[i % letters.length]
+      const options: TraceurDeCourbeOptions = {
+        rowLabels: ['x', `${letter}(x)`],
+        columns: 6,
+        xMin: -5,
+        xMax: 5,
+        step: 0.05,
+        epsilon: 0.05,
+        maxRelativeAreaError: type >= 6 ? 0.14 : 0.08,
+        target: functionData.target,
+        pgfplotsExpression: functionData.pgfplotsExpression,
+        interactivityOn: this.interactif,
+        joinPoints: Boolean(this.sup2),
+      }
+      const definition = `${letter}(x)=${functionData.expression}`
+      const texte = `Représenter la fonction $${letter}$ définie par $${definition}$ pour des valeurs de $x$ comprises entre $-5$ et $5$.<br><br>${addTraceurDeCourbe(this, i, options)}`
+      const texteCorr = `La représentation attendue est la courbe de la fonction définie par $${definition}$.<br><br>$${miseEnEvidence(definition)}$<br><br>${addTraceurDeCourbe(
+        this,
+        i,
+        {
+          ...options,
+          id: `traceur-de-courbe-correctionEx${this.numeroExercice}Q${i}`,
+          interactivityOn: false,
+          showExpected: true,
+          animateCorrection: true,
+          functionLabel: `${letter}(x)`,
+          calculationExpression: functionData.expression,
+        },
+      )}`
+
+      if (this.questionJamaisPosee(i, type, functionData.key)) {
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: functionData.target } },
+          { formatInteractif: 'traceur-de-courbe' },
+        )
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+        i++
+      }
+    }
+    listeQuestionsToContenu(this)
   }
 }

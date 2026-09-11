@@ -42,6 +42,10 @@ export type Mathalea2DOptions = {
   id?: string
   usePgfplots?: boolean
   centerLatex?: boolean
+  pgfplotsXTickDistance?: number
+  pgfplotsYTickDistance?: number
+  pgfplotsMinorXTickNum?: number
+  pgfplotsMinorYTickNum?: number
 }
 
 const innerWrapperStyle = 'position: relative; display: inline-block'
@@ -102,6 +106,10 @@ export function mathalea2d(
     id = '', // L'id peut-être utile pour des animations, c'est celui du svg. Le div englobant aura un id en M2D + id
     usePgfplots = false,
     centerLatex = false,
+    pgfplotsXTickDistance = 2,
+    pgfplotsYTickDistance = 2,
+    pgfplotsMinorXTickNum = 1,
+    pgfplotsMinorYTickNum = 1,
   }: Mathalea2DOptions = {},
   ...objets: NestedObjetMathalea2dArray
 ) {
@@ -377,13 +385,16 @@ export function mathalea2d(
     codeTikz += `  xmin=${xmin}, xmax=${xmax},\n`
     codeTikz += `  ymin=${ymin}, ymax=${ymax},\n`
     codeTikz += '  axis lines=middle,\n'
-    codeTikz += '  axis line style={-Stealth},\n'
+    // Les accolades autour de Stealth permettent aussi au générateur de
+    // préambule de détecter que la bibliothèque TikZ arrows.meta est requise.
+    codeTikz += '  axis line style={-{Stealth}},\n'
     codeTikz += '  axis on top=false,\n'
     codeTikz += '  xlabel={},\n'
     codeTikz += '  ylabel={},\n'
-    codeTikz += '  xtick distance=2,\n'
-    codeTikz += '  ytick distance=2,\n'
-    codeTikz += '  minor tick num=1,\n'
+    codeTikz += `  xtick distance=${pgfplotsXTickDistance},\n`
+    codeTikz += `  ytick distance=${pgfplotsYTickDistance},\n`
+    codeTikz += `  minor x tick num=${pgfplotsMinorXTickNum},\n`
+    codeTikz += `  minor y tick num=${pgfplotsMinorYTickNum},\n`
     codeTikz += '  grid=both,\n'
     codeTikz += '  grid style={line width=.1pt, draw=gray!30},\n'
     codeTikz += '  major grid style={line width=.2pt,draw=gray!50},\n'
