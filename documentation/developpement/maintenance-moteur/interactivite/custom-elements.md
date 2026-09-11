@@ -305,6 +305,15 @@ Les composants qui font remplir un damier de chiffres (`kenken-grille`,
   déclare ces clés que jusqu'à `L3C5`, une grille plus grande doit donc les
   ajouter une à une (voir `EN-gratte-ciel`, `EN-kenken`, `EN-grimuku`).
 
+<<<<<<< documentation/developpement/maintenance-moteur/interactivite/custom-elements.md
+Un composant dont les cases n'attendent pas un chiffre isolé n'emprunte que le
+barème et les clés de réponse. `pyramide-nombres` (voir `EN-pyramide`) est dans
+ce cas : ses cases attendent un entier relatif, éventuellement à plusieurs
+chiffres. Il implémente `GrilleDeChiffres` et délègue `verifQuestion()` et
+`pointsMaxQuestion()` à `verifieLesCases()` et `pointsMaxDesCases()`, mais
+construit ses propres champs de saisie et son propre déplacement au clavier,
+la pyramide n'étant pas un damier rectangulaire. Ses clés `LxCy` numérotent les
+lignes depuis le sommet.
 `etoile-calculs` (exercice `EN-EtoileCalculs`) ne reprend que le barème : ses
 clés de réponse sont les mêmes `L1C1`, `L1C2`... (une par flèche), donc
 `pointsMaxQuestion()` délègue à `pointsMaxDesCases()`. Tout le reste diffère,
