@@ -20,7 +20,7 @@ export const dateDePublication = '05/10/2025'
 export const uuid = '94237'
 
 export const refs = {
-  'fr-fr': ['can2L30-02'],
+  'fr-fr': ['can2L30-02', '2L30-flash3'],
   'fr-ch': [],
 }
 export default class ResoudreInequationAvecQuotient extends ExerciceSimple {
