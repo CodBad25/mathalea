@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid d1bad continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
@@ -17,11 +20,11 @@ export const dateDePublication = '13/08/2026'
 export const uuid = 'd1bad'
 
 export const refs = {
-  'fr-fr': ['can2N30-02'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
-export default class ChangerEcritureNombre extends ExerciceSimple {
+export default class ChangerEcritureNombreOld extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1

@@ -22,9 +22,8 @@ describe('manifest FFJM versionné', () => {
   it('est un manifest de banque valide', () => {
     const manifest = validerManifest(ffjmManifest)
     expect(manifest.id).toBe('ffjm')
-    expect(manifest.titre).toBe(
-      'Enigmes de la Fédération Française de Jeux Mathématiques',
-    )
+    // le titre est éditorial : on vérifie qu'il est conservé, pas sa valeur
+    expect(manifest.titre).toBe(ffjmManifest.titre)
     expect(manifest.auteur).toBe('Claire Stephan')
     expect(manifest.exercices.length).toBeGreaterThan(0)
   })
@@ -77,7 +76,7 @@ describe('chargerBanquesIntegrees', () => {
     expect(urls.some((u) => u.endsWith('static/ffjm/preambule.typ'))).toBe(true)
   })
 
-  it('expose le titre de la banque FFJM avec des uuid bq-ffjm-… et l’attribution', async () => {
+  it('expose un nœud portant le titre du manifest avec des uuid bq-ffjm-… et l’attribution', async () => {
     await chargerBanquesIntegrees()
     const referentiel = referentielBanquesExternes()
     expect(Object.keys(referentiel)).toContain(ffjmManifest.titre)
