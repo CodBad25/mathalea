@@ -149,7 +149,25 @@ Le scénario est choisi avec `CONSOLE_ERRORS_PROFILE` :
 - **`smoke`** : charge l'exercice et lance uniquement le parcours UI complet, sans parcours des paramètres.
 - **`deep`** : ancien scénario complet ; chaque valeur de paramètre déclenche le parcours UI complet.
 
-L'action légère du profil `standard` vérifie seulement que la consigne reste visible après changement de paramètre.
+L'action légère du profil `standard` attend la consigne et la fin du rendu après changement de paramètre.
+
+Les sélections d'automatismes (`src/exercices/_automatismesCan.ts`) peuvent
+charger leurs questions de façon asynchrone. Elles affichent alors des
+placeholders, puis émettent `updateAsyncEx` une fois les questions construites.
+Lorsque les classes sont déjà en cache, la génération est synchrone et cet
+événement n'est pas émis. La présence de la consigne ou des éléments `<li>` ne
+suffit donc pas à garantir que la dernière génération et son rendu interactif
+sont terminés ; attendre systématiquement cet événement ne couvre pas non plus
+le chemin synchrone.
+
+La vue professeur publie donc `data-exercise-render-state="ready"` sur le
+conteneur `data-exercise-index` lorsque la génération courante, le rendu des
+questions et l'initialisation interactive sont terminés. Elle remet cet état à
+`loading` à chaque mise à jour et désactive « Vérifier » pendant ce travail.
+Une révision du rendu empêche un ancien callback asynchrone de déclarer prêt un
+nouvel énoncé. Le test attend ce marqueur pour l'exercice d'indice 0, après
+chaque action et à la fermeture des paramètres. Cette attente couvre aussi les
+générations synchrones, notamment celles utilisant le cache.
 
 Le parcours UI complet effectue les étapes suivantes :
 
@@ -158,14 +176,14 @@ Le parcours UI complet effectue les étapes suivantes :
 2. **Test du zoom** : lit le zoom courant `z` dans l'URL. Si `z < 1.4`, clique sur le zoom avant ; sinon clique sur le zoom arrière. Utilise `clickZoomAndWaitForExercise`, qui :
    - clique sur le bouton de zoom ;
    - attend que le paramètre `z` change dans l'URL ;
-   - attend que la consigne soit visible, puis laisse passer deux frames navigateur pour stabiliser le rendu.
+   - attend que la consigne soit visible et que le rendu soit prêt.
 
 3. **Test de l'interactivité** : si le bouton "Rendre interactif" est visible :
    - clique dessus pour activer le mode interactif ;
-   - attend les éléments de question (`li[id^="exercice0Q"]`) ;
+   - attend que le rendu interactif soit prêt ;
    - clique sur le bouton "Vérifier" (`#verif0`) pour valider des réponses vides ;
    - attend la div de résultat (`article + div`) ;
-   - clique 3 fois de plus sur "Nouvel énoncé" (sauf si le bouton est absent, cf. étape 1).
+   - clique de nouveau sur "Nouvel énoncé" (3 clics en profil `deep`, 1 dans les autres profils), puis attend le rendu final ; si le bouton est absent, cette étape est ignorée.
 
 ### Construction de l'URL et timeouts adaptatifs
 
@@ -174,7 +192,7 @@ http://localhost:{5173|80}/alea/?uuid={uuid}&id={filename_without_extension}&ale
 ```
 
 - Port `PLAYWRIGHT_SERVER_PORT` si défini, sinon 80 en CI et 5173 en local.
-- `alea=e906e` est une graine fixe pour la reproductibilité.
+- La graine initiale vaut `e906e` par défaut ; `CONSOLE_ERRORS_SEED=jYwp` permet de reproduire une autre génération. Les clics sur « Nouvel énoncé » choisissent ensuite de nouvelles graines aléatoires.
 - `testCI` est un paramètre d'URL qui indique le mode test.
 - Les attentes Playwright internes au test sont courtes sur le serveur Vite local (`localhost:5173` : 10 s) et plus tolérantes sur le serveur local de la forge (`localhost:80` : 30 s).
 - Ces timeouts concernent le chargement, l'attente `networkidle`, la recherche de la consigne et les contrôles de zoom. Le timeout Vitest global reste plus large car il couvre tout le scénario d'un exercice.

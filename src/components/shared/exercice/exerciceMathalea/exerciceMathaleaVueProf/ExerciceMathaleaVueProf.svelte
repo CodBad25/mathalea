@@ -71,6 +71,24 @@
   let divExercice: HTMLDivElement
   let divScore: HTMLDivElement
   let buttonScore: HTMLButtonElement
+  // L'état du rendu reste impératif pour ne pas relancer afterUpdate en le
+  // publiant. La révision invalide aussi les anciens callbacks afterUpdate.
+  const rendering = { revision: 0, destroyed: false }
+
+  function invalidateRendering() {
+    rendering.revision++
+    divExercice?.setAttribute('data-exercise-render-state', 'loading')
+    buttonScore?.toggleAttribute('disabled', true)
+  }
+
+  function isCurrentRendering(revision: number, renderedExercise: IExercice) {
+    return (
+      !rendering.destroyed &&
+      revision === rendering.revision &&
+      renderedExercise === exercise &&
+      divExercice?.isConnected
+    )
+  }
   /*
    * MGu Attention interfaceParams est un objet qui est une copie du store,
    * donc le mettre à jour directement met à jour le store sans le signaler au subscriber
@@ -194,8 +212,15 @@
     headerProps.title = exercise.titre + generateTitleAddendum()
   })
 
-  async function forceUpdate() {
+  async function forceUpdate(event?: Event) {
+    if (
+      event instanceof CustomEvent &&
+      event.detail?.exercise &&
+      event.detail.exercise !== exercise
+    )
+      return
     if (exercise == null) return
+    invalidateRendering()
     exercise.numeroExercice = exerciseIndex
     await adjustMathalea2dFiguresWidth()
   }
@@ -225,6 +250,7 @@
   }
 
   beforeUpdate(async () => {
+    invalidateRendering()
     log('beforeUpdate:' + exercise.id)
     if (numberOfAnswerFields !== countMathField(exercise)) {
       numberOfAnswerFields = countMathField(exercise)
@@ -283,6 +309,8 @@
   })
 
   onDestroy(() => {
+    rendering.destroyed = true
+    invalidateRendering()
     log('ondestroy' + exercise.id)
     // Détruit l'objet exercice pour libérer la mémoire
     exercise.reinit() // MGu nécessaire pour supprimer les listeners
@@ -304,11 +332,19 @@
 
   afterUpdate(async () => {
     log('afterUpdate:' + exercise.id)
+    const revision = rendering.revision
+    const renderedExercise = exercise
     if (exercise) {
       await tick()
+      if (
+        !isCurrentRendering(revision, renderedExercise) ||
+        exercise.generationStatus === 'loading'
+      )
+        return
       mathaleaRenderDiv(divExercice)
       if (isInteractif) {
         await loadMathLive()
+        if (!isCurrentRendering(revision, renderedExercise)) return
         if (exerciceContientCliqueFigure(exercise) && !isCorrectionVisible) {
           prepareExerciceCliqueFigure(exercise)
         }
@@ -323,10 +359,26 @@
           !isCorrectionVisible
         ) {
           await newData()
+          return
         }
       }
       if (exerciceHasNoSettings) {
         isSettingsVisible = false
+      }
+      await tick()
+      if (isCurrentRendering(revision, renderedExercise)) {
+        const state = exercise.generationStatus ?? 'ready'
+        divExercice.setAttribute('data-exercise-render-state', state)
+        divExercice.setAttribute(
+          'data-exercise-render-revision',
+          String(revision),
+        )
+        divExercice.setAttribute('data-exercise-seed', exercise.seed ?? '')
+        divExercice.setAttribute(
+          'data-exercise-interactive',
+          isInteractif ? '1' : '0',
+        )
+        buttonScore?.toggleAttribute('disabled', state !== 'ready')
       }
     }
   })
@@ -452,6 +504,7 @@
   }
 
   async function updateDisplay(withNewVersion = true) {
+    invalidateRendering()
     log('updateDisplay:' + exercise.id)
     if (
       exercise === null ||
@@ -526,6 +579,7 @@
   }
 
   function verifExercice() {
+    if (divExercice?.dataset.exerciseRenderState !== 'ready') return
     exercise.nbTentativesVerification =
       (exercise.nbTentativesVerification ?? 0) + 1
     if (
@@ -731,7 +785,12 @@
   }
 </script>
 
-<div class="z-0 flex-1" bind:this={divExercice}>
+<div
+  class="z-0 flex-1"
+  bind:this={divExercice}
+  data-exercise-index={exerciseIndex}
+  data-exercise-render-state="loading"
+>
   <HeaderExerciceVueProf
     {...headerProps}
     on:clickVisible={(event) => {
@@ -945,6 +1004,7 @@
           <button
             id="verif{exerciseIndex}"
             type="submit"
+            disabled
             on:click={verifExercice}
             bind:this={buttonScore}
             >Vérifier {numberOfAnswerFields > 1

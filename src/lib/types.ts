@@ -1025,6 +1025,8 @@ export function isOldFormatInteractifType(
 
 export interface IExercice {
   titre: string
+  /** Absent pour les générations synchrones ordinaires. */
+  generationStatus?: 'loading' | 'ready' | 'error'
   id?: string
   uuid: string
   sup: boolean | string | number

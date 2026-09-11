@@ -1,5 +1,5 @@
 import { context } from '../../modules/context'
-import { renderKatex } from '../mathalea'
+import { renderKatex } from '../latex/renderKatex'
 import {
   formatFiltreNiveauQuestionsDeCours,
   type ModeNiveauQuestionDeCours,

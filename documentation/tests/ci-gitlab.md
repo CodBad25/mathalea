@@ -140,16 +140,28 @@ Le job est actuellement `allow_failure: true`.
 
 Ce job remplace les anciens jobs séparés `testExosModifiedWithoutPlayWright`, `testExosModified`, `testExosModifiedInteractif` et `testExosModifiedAmcnum`.
 
-Il récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, puis lance quatre sous-tests :
+Il récupère les fichiers modifiés par le dernier commit (`MAX_COMMITS=1`), les
+place dans `CHANGED_FILES`, puis lance cinq sous-tests :
 
 ```bash
-CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
+CHANGED_FILES="$CHANGED_FILES" bash tasks/ci-with-dev-server.sh pnpm test:e2e:console_errors
 CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
 INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/integration/interactivity_all.test.ts --run
 AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest src/lib/amc/report-amcnum.test.ts --run
+CHANGED_FILES="$CHANGED_FILES" pnpm stability:check
 ```
 
 Le job échoue si au moins un sous-test échoue.
+
+Le serveur HTTP est nécessaire au premier sous-test, qui utilise Playwright.
+`tasks/ci-with-dev-server.sh` le démarre dans un groupe de processus dédié,
+attend sa disponibilité (180 secondes au maximum), puis arrête ce groupe
+avant de rendre le code de sortie du test. Les interruptions déclenchent aussi
+ce nettoyage. Le journal `artifacts/ci-vite.log` est conservé en cas d'échec.
+Les quatre sous-tests suivants s'exécutent sans navigateur ni serveur Vite.
+Le contrôle de stabilité
+porte sur tout le catalogue si `CHANGED_FILES` contient un utilitaire partagé
+de `src/lib/` ou `src/modules/` ; voir [la stabilité des tirages](stabilite-exercices.md).
 
 Pour `all_exercises`, les chemins de `CHANGED_FILES` situés dans `src/exercices/`
 sont d'abord agrégés puis résolus en exercices uniques. Le plafond
