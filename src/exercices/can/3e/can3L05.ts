@@ -22,7 +22,7 @@ export const dateDeModifImportante = '27/07/2025'
 export const uuid = 'ab332'
 
 export const refs = {
-  'fr-fr': ['can3L05'],
+  'fr-fr': ['can3L05', '2L22-flash1'],
   'fr-ch': [],
 }
 export default class SolutionsEquationProduit extends ExerciceSimple {

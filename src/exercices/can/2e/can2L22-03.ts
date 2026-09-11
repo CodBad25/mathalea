@@ -12,7 +12,7 @@ export const dateDePublication = '22/02/2025'
 export const uuid = 'f1286'
 
 export const refs = {
-  'fr-fr': ['can2L22-03'],
+  'fr-fr': ['can2L22-03', '2L22-flash4'],
   'fr-ch': [],
 }
 export default class FactoriserIdentitesRemarquables2CAN extends FactoriserIdentitesRemarquables2 {
