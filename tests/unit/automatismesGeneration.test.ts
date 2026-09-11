@@ -88,12 +88,14 @@ describe('Ordre des générations asynchrones des automatismes', () => {
   it('conserve B lorsque A termine après B, avec les métadonnées et paramètres de B', async () => {
     const { exercise, a, b } = fixture()
     exercise.nouvelleVersion()
+    expect(exercise.generationStatus).toBe('loading')
     exercise.sup = '0-1'
     exercise.sup2 = true
     exercise.nouvelleVersion()
     b.resolve({ default: QuestionB })
     await settle()
     expect(exercise.listeQuestions).toEqual(['B'])
+    expect(exercise.generationStatus).toBe('ready')
     expect(updated).toHaveBeenCalledTimes(1)
 
     a.resolve({ default: QuestionA })
@@ -103,6 +105,7 @@ describe('Ordre des générations asynchrones des automatismes', () => {
     expect(exercise.autoCorrection[0].formatInteractif).toBe('clique-figure')
     expect(exercise.sup).toBe('0-1')
     expect(exercise.sup2).toBe(true)
+    expect(exercise.generationStatus).toBe('ready')
     expect(exercise.questionRefs?.[0]).toMatch(/B01$/)
     expect(updated).toHaveBeenCalledTimes(1)
   })
@@ -123,6 +126,7 @@ describe('Ordre des générations asynchrones des automatismes', () => {
     a.resolve({ default: QuestionA })
     await settle()
     expect(exercise.listeQuestions).toEqual(['B'])
+    expect(exercise.generationStatus).toBe('ready')
     expect(updated).not.toHaveBeenCalled()
   })
 
@@ -156,6 +160,7 @@ describe('Ordre des générations asynchrones des automatismes', () => {
     a.reject(new Error('Chargement courant en échec'))
     await settle()
     expect(notify).toHaveBeenCalledOnce()
+    expect(exercise.generationStatus).toBe('error')
     expect(updated).not.toHaveBeenCalled()
   })
 
