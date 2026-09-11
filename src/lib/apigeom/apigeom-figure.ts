@@ -328,16 +328,26 @@ const TEXT_OVERFLOW_MARGIN_PX = 30
  * Nettoyage minimal des macros LaTeX pouvant apparaître dans le texte des
  * labels apigeom (ex. `1~\text{u.l}`, `$\dfrac{3}{4}~\text{u.l}$`,
  * `-2{,}5` — apigeom `displayNumber` entoure la virgule décimale de `{,}`
- * pour l'espacement KaTeX) : `addTextElementsToSvg` (paquet apigeom) retire
- * seulement les `$` de bordure, il ne connaît pas KaTeX et poserait sinon le
- * code LaTeX brut tel quel comme texte SVG. Rendu approximatif (pas un vrai
- * typeset), suffisant pour les libellés courts utilisés ici (unités,
- * fractions simples, graduations décimales).
+ * pour l'espacement KaTeX ; `$\vec \jmath$` / `$\vec{u}$` — labels des
+ * vecteurs de base du repère `repereOij` et des vecteurs nommés) :
+ * `addTextElementsToSvg` (paquet apigeom) retire seulement les `$` de
+ * bordure, il ne connaît pas KaTeX et poserait sinon le code LaTeX brut tel
+ * quel comme texte SVG. Rendu approximatif (pas un vrai typeset), suffisant
+ * pour les libellés courts utilisés ici (unités, fractions simples,
+ * graduations décimales, vecteurs).
  */
 function cleanLatexLabel(text: string): string {
   return text
     .replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '$1/$2')
     .replace(/\\text\s*\{([^{}]*)\}/g, '$1')
+    // i/j sans point de `\vec\imath` / `\vec\jmath`, réduits avant `\vec`
+    .replace(/\\imath(?![a-zA-Z])/g, 'ı')
+    .replace(/\\jmath(?![a-zA-Z])/g, 'ȷ')
+    // flèche de vecteur : U+20D7 (combining right arrow above) accolé au
+    // dernier caractère du contenu (`\vec{u}` → `u⃗`, `\overrightarrow{AB}`
+    // → `AB⃗`, `\vec \jmath` → `ȷ⃗`)
+    .replace(/\\(?:vec|overrightarrow)\s*\{([^{}]*)\}/g, '$1⃗')
+    .replace(/\\(?:vec|overrightarrow)\s+([^\s{}\\])/g, '$1⃗')
     .replace(/\{,\}/g, ',')
     .replace(/~/g, ' ')
 }

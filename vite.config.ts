@@ -7,6 +7,12 @@ import { visualizer } from 'rollup-plugin-visualizer'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/alea/',
+  // Les référentiels sont lus intégralement via leur export par défaut.
+  // JSON.parse évite de créer et d'analyser des milliers d'exports nommés.
+  json: {
+    stringify: true,
+    namedExports: false,
+  },
   optimizeDeps: {
     include: [
       '@scratch2latex/scratch-core/ScratchSimulator',
@@ -117,10 +123,11 @@ export default defineConfig({
         dev: process.env.NODE_ENV !== 'production',
       },
     }),
-    visualizer({
-      emitFile: true,
-      filename: 'stats.html',
-    }),
+    process.env.ANALYZE_BUILD === '1' &&
+      visualizer({
+        emitFile: true,
+        filename: 'stats.html',
+      }),
     generateFile([
       {
         type: 'json',

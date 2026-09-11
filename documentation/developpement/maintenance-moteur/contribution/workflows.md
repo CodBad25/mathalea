@@ -48,6 +48,61 @@ supplémentaire. Le dossier est ignoré par Git et utilisé comme cache en CI.
 - les navigateurs Playwright et les outils LaTeX sont des prérequis séparés ;
 - une modification de dépendance doit conserver `pnpm-lock.yaml` cohérent.
 
+### Diagnostiquer la durée du build
+
+Le script `build` de `package.json` enchaîne `pnpm makeJson` et `vite build`,
+avec une limite de tas Node de 6 Gio transmise par `NODE_OPTIONS` pour traiter
+le catalogue complet sans épuiser la limite par défaut. Cette limite n'est
+pas une réservation de mémoire.
+`makeJson` génère les référentiels statiques, le menu international et le
+manifeste des fonds de quizz ; voir [le menu d'exercices](../architecture/menu-exercices.md).
+Les tests, la vérification TypeScript et TypeDoc ne font pas partie de
+`pnpm build`. Attention : `pnpm buildRam` lance aussi `pnpm doc` ; sa durée
+n'est donc pas directement comparable à celle de `pnpm build`.
+
+Pour isoler les deux étapes, les exécuter successivement :
+
+```sh
+time pnpm makeJson
+time env NODE_OPTIONS=--max-old-space-size=6144 pnpm exec vite build
+```
+
+Vite indique la fin de la transformation des modules, puis le rendu des
+chunks. Les imports dynamiques d'exercices dans `src/lib/exerciseModules.ts`
+permettent un chargement à la demande dans le navigateur, mais les modules
+correspondants doivent tout de même être traités pendant le build.
+`vite.config.ts` configure notamment Svelte, Tailwind et le découpage des
+chunks. Le rapport `dist/stats.html` de Rollup Visualizer est optionnel :
+`pnpm build:analyze` le génère. Son analyse du graphe peut prendre plusieurs
+dizaines de secondes ; elle décrit la taille du bundle, pas le temps de
+compilation. Le calcul des tailles gzip est désactivé par
+`reportCompressedSize: false`.
+
+Le catalogue utilise un registre unique, chargé dynamiquement. Les sélecteurs
+d'automatismes consultent une liste de chemins via `exerciseLoader.ts` ; ils
+ne doivent pas réintroduire chacun un `import.meta.glob` de chargeurs sur tout
+le catalogue. Les fonctions de rendu KaTeX et de distracteurs QCM sont séparées
+de `mathalea.ts` pour éviter de rattacher les helpers des exercices au module
+qui orchestre l'application. Les JSON sont importés par défaut et transformés
+en `JSON.parse`, sans créer un export nommé pour chaque entrée du référentiel.
+
+Pour obtenir un profil CPU de Vite après avoir généré les JSON :
+
+```sh
+mkdir -p /tmp/mathalea-build-profile
+node --max-old-space-size=6144 --cpu-prof \
+  --cpu-prof-dir=/tmp/mathalea-build-profile \
+  ./node_modules/vite/bin/vite.js build
+```
+
+Le fichier `.cpuprofile` s'ouvre dans un visualiseur de profils CPU, par
+exemple celui de Chrome DevTools. Distinguer le temps du ramasse-miettes,
+les transformations des plugins et le travail de Rollup. Les durées des
+opérations asynchrones peuvent se chevaucher : leur somme n'est pas une
+durée totale de build. Le profil Node ne mesure pas directement le CPU des
+processus auxiliaires comme esbuild. Comparer les essais avec les mêmes
+options mémoire et sans autre build simultané.
+
 ## Diagnostic
 
 En cas d'échec :

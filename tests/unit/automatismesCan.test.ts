@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import MetaExercice from '../../src/exercices/MetaExerciceCan'
 import AutomatismesPremiere from '../../src/exercices/1e/1a-automatismes'
 import AutomatismesSeconde from '../../src/exercices/2e/2a-automatismes'
 import AutomatismesTroisieme from '../../src/exercices/3e/3a-automatismes'
+import AutomatismesSixieme from '../../src/exercices/6e/6a-automatismes'
 import { createAutomatismesCanExercice } from '../../src/exercices/_automatismesCan'
 import type { CategoriesForm } from '../../src/exercices/_automatismesCan'
 
@@ -18,6 +19,7 @@ const cases = [
   { titre: '1A', Exercice: AutomatismesPremiere },
   { titre: '2A', Exercice: AutomatismesSeconde },
   { titre: '3Auto', Exercice: AutomatismesTroisieme },
+  { titre: '6A', Exercice: AutomatismesSixieme },
 ]
 
 describe.each(cases)("$titre - Sélection d'automatismes", ({ Exercice }) => {
@@ -57,7 +59,31 @@ describe.each(cases)("$titre - Sélection d'automatismes", ({ Exercice }) => {
     exercice.nouvelleVersion()
     expect(exercice.nbQuestions).toBe(total)
     await chargementTermine
+    expect(exercice.Exercices).toHaveLength(total)
+    expect(exercice.listeQuestions).toHaveLength(total)
+    expect(exercice.listeQuestions).not.toContain('chargement...')
   }, 30000)
+})
+
+it('conserve le format clique-figure de 3Auto, graine jYwp, après chargement puis depuis le cache', async () => {
+  const exercise = new AutomatismesTroisieme()
+  exercise.seed = 'jYwp'
+  exercise.numeroExercice = 0
+  exercise.interactif = true
+  exercise.sup2 = true
+  exercise.nouvelleVersion()
+  await vi.waitFor(() => expect(exercise.generationStatus).toBe('ready'))
+  const checkQuestion = () => {
+    const index = exercise.questionRefs?.indexOf('3AutoI01-1') ?? -1
+    expect(index).toBeGreaterThanOrEqual(0)
+    expect(exercise.autoCorrection[index].formatInteractif).toBe('clique-figure')
+    expect(exercise.listeQuestions[index]).toContain(`cliquefigure0Ex0Q${index}`)
+    expect(exercise.listeQuestions[index]).not.toContain(`champTexteEx0Q${index}`)
+  }
+  checkQuestion()
+  exercise.nouvelleVersion()
+  expect(exercise.generationStatus).toBe('ready')
+  checkQuestion()
 })
 
 describe('createAutomatismesCanExercice', () => {

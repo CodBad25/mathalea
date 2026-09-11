@@ -102,6 +102,23 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bold(x = 2)')
   })
 
+  it("ignore un groupe de mise en évidence vide sans corrompre le text(…) englobant (4L15-0)", () => {
+    // miseEnEvidence('') — le signe/opérateur à colorer est absent — produit
+    // `{\color{#F15929}\boldsymbol{}}`. tex2typst en faisait `bold()`, pris
+    // ensuite pour une parenthèse orpheline : le rattrapage consommait la
+    // parenthèse fermante du `text(fill: …)` et cassait toute la formule
+    // (`text paren.l fill: …`).
+    const result = latexMathToTypst(
+      '-2u {\\color{#F15929}\\boldsymbol{}}\\,{\\color{#F15929}\\boldsymbol{-3}}',
+    )
+    expect(result).not.toContain('text paren.l')
+    expect(result).not.toContain('bold()')
+    expect(result).toContain('text(fill: #rgb("#F15929"), bold(-3))')
+    expect((result.match(/\(/g) ?? []).length).toBe(
+      (result.match(/\)/g) ?? []).length,
+    )
+  })
+
   it("convertit une union d'intervalles en notation française mise en évidence sans casser les crochets", () => {
     // notation française "à crochets inversés" ([-4;-2[∪]3;4]) mêlée à
     // \color{} : le "[union]" produit par tex2typst pour \cup coïncide
@@ -560,6 +577,16 @@ describe('htmlToTypst', () => {
     expect(result).toContain('table.cell(fill: rgb("#d3d3d3"))[$x$]')
     expect(result).not.toContain('arraystretch')
     expect(result).not.toContain('cellcolor')
+  })
+
+  it("ne coupe pas une cellule sur le `&` d'une entité HTML (`10&nbsp;\\%`, BP2AutoB3)", () => {
+    const result = htmlToTypst(
+      '$\\begin{array}{|c|c|c|}\\hline \\text{Remise} & 10&nbsp;\\% & 20&nbsp;\\% \\\\ \\hline\\end{array}$',
+    )
+    expect(result).toContain('columns: 3')
+    expect(result).toContain('[$10 %$]')
+    expect(result).toContain('[$20 %$]')
+    expect(result).not.toContain('nbsp')
   })
 
   it('neutralise \\hspace* (évite le `#h(*)` invalide en Typst)', () => {

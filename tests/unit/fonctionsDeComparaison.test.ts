@@ -2903,6 +2903,17 @@ describe('fonctionComparaison', () => {
     expect(result.isOk).toBe(true)
   })
 
+  it('sansTimes : refuse un nombre écrit après une lettre (x3 au lieu de 3x)', () => {
+    let result = fonctionComparaison('7+x3', '7+3x', { sansTimes: true })
+    expect(result.isOk).toBe(false)
+
+    result = fonctionComparaison('7+3x', '7+3x', { sansTimes: true })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('x7', '7x', { sansTimes: true })
+    expect(result.isOk).toBe(false)
+  })
+
   //     ██████  ██████  ████████ ██  ██████  ███    ██
   //    ██    ██ ██   ██    ██    ██ ██    ██ ████   ██
   //    ██    ██ ██████     ██    ██ ██    ██ ██ ██  ██

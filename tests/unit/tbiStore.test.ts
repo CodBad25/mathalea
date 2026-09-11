@@ -18,6 +18,7 @@ import {
   reorderTbiCard,
   shuffleTbiCards,
   tbiState,
+  toggleTbiCardCollapsed,
   zoomAllCardsBy,
   zoomWidgetBy,
 } from '../../src/lib/stores/tbiStore'
@@ -280,6 +281,23 @@ describe('tbiStore', () => {
     expect(state.cards).toHaveLength(2)
     expect(state.cards.map((c) => c.tab)).toEqual([0, 0])
     expect(state.tabConfigs).toHaveLength(1)
+  })
+
+  it('toggleTbiCardCollapsed bascule le repli de la carte visée', () => {
+    reconcileTbiCards(['e1', 'e2'])
+    expect(get(tbiState).cards.map((c) => c.collapsed ?? false)).toEqual([
+      false,
+      false,
+    ])
+    toggleTbiCardCollapsed(1)
+    expect(get(tbiState).cards.map((c) => c.collapsed ?? false)).toEqual([
+      false,
+      true,
+    ])
+    toggleTbiCardCollapsed(1)
+    expect(get(tbiState).cards[1].collapsed).toBe(false)
+    // indice hors bornes : sans effet, sans erreur
+    expect(() => toggleTbiCardCollapsed(9)).not.toThrow()
   })
 
   it('balanceColumnBreaks répartit les sauts par nombre d’exercices et écrase les précédents', () => {

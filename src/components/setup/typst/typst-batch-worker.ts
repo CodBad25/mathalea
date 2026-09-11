@@ -572,6 +572,10 @@ async function checkExerciseFile(
       mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
     const questions = (exercice.listeQuestions ?? []).map(fmt)
     const corrections = (exercice.listeCorrections ?? []).map(fmt)
+    const consigne = mathaleaFormatExercice(String(exercice.consigne ?? ''))
+    const introduction = mathaleaFormatExercice(
+      String(exercice.introduction ?? ''),
+    )
     const intro = mathaleaFormatExercice(
       [exercice.consigne, exercice.introduction]
         .filter((t: any) => t != null && String(t).length > 0)
@@ -586,7 +590,16 @@ async function checkExerciseFile(
     let typstSource = ''
     try {
       typstSource = buildTypstDocument([
-        { ref: r, intro, questions, corrections, introCorrection, numbered },
+        {
+          ref: r,
+          intro,
+          consigne,
+          introduction,
+          questions,
+          corrections,
+          introCorrection,
+          numbered,
+        },
       ])
     } catch (err: any) {
       if (!firstFailure)

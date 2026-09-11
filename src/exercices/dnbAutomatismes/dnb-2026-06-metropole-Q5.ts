@@ -21,7 +21,7 @@ export const dateDePublication = '12/08/2026'
  */
 export default class AutoQ4Metropole2026 extends ExerciceQcmA {
   private appliquerLesValeurs(a: number, b: number, c: number): void {
-    this.enonce = `Parmis les propositions suivantes, laquelle est la solution de l'équation $${a}x + ${b} = ${c}$ ?`
+    this.enonce = `Parmi les propositions suivantes, laquelle est la solution de l'équation $${a}x + ${b} = ${c}$ ?`
     for (const n of [(c - b) / a, (b - c) / a, (c + b) / a, c / b - a]) {
       if (Math.round(n * 100) / 100 !== n) {
         this.reponses = []

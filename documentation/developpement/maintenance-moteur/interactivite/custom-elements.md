@@ -305,6 +305,54 @@ Les composants qui font remplir un damier de chiffres (`kenken-grille`,
   déclare ces clés que jusqu'à `L3C5`, une grille plus grande doit donc les
   ajouter une à une (voir `EN-gratte-ciel`, `EN-kenken`, `EN-grimuku`).
 
+<<<<<<< documentation/developpement/maintenance-moteur/interactivite/custom-elements.md
+Un composant dont les cases n'attendent pas un chiffre isolé n'emprunte que le
+barème et les clés de réponse. `pyramide-nombres` (voir `EN-pyramide`) est dans
+ce cas : ses cases attendent un entier relatif, éventuellement à plusieurs
+chiffres. Il implémente `GrilleDeChiffres` et délègue `verifQuestion()` et
+`pointsMaxQuestion()` à `verifieLesCases()` et `pointsMaxDesCases()`, mais
+construit ses propres champs de saisie et son propre déplacement au clavier,
+la pyramide n'étant pas un damier rectangulaire. Ses clés `LxCy` numérotent les
+lignes depuis le sommet.
+`etoile-calculs` (exercice `EN-EtoileCalculs`) ne reprend que le barème : ses
+clés de réponse sont les mêmes `L1C1`, `L1C2`... (une par flèche), donc
+`pointsMaxQuestion()` délègue à `pointsMaxDesCases()`. Tout le reste diffère,
+parce qu'une flèche attend un entier et non un chiffre : la saisie se fait dans
+un champ MathLive et la comparaison est celle de `fonctionComparaison()`, pas
+l'égalité de chaînes de `verifieLesCases()`.
+
+## Dessin mesuré : `etoile-calculs`
+
+Ce composant montre comment poser un dessin dont les étiquettes sont du texte
+mathématique, donc de largeur inconnue à l'avance.
+
+- **Police uniforme.** Les nombres et les opérations sont écrits en LaTeX
+  (`$\times 9 + 1$`) dans des éléments du DOM clair, puis composés par
+  `renderMathInElement()` avec `optionsKatex` : la figure a exactement la police
+  des autres énoncés. Seules les flèches sont un SVG, sans aucun texte.
+- **Clavier.** Les champs sont des `MathfieldElement` créés à la main, avec
+  `data-keyboard` construit par `buildDataKeyboardFromStyle()` et passés à
+  `setMathfield()` : c'est ce qui ouvre le clavier MathALÉA, indispensable sur
+  téléphone où le clavier du système n'apparaît pas sur ces champs.
+- **Alignement.** `dispositionEtoile()` ne place pas les étiquettes sur un
+  cercle : sur chaque direction elle empile le demi-encombrement du nombre
+  central, un blanc, la flèche, un blanc, puis le demi-encombrement de
+  l'étiquette (`sortieBoite()` donne la distance du centre d'une boîte à son
+  bord dans une direction). Toutes les flèches ont donc la même longueur et
+  partent du bord de leur étiquette, quelle que soit la longueur de l'opération.
+  Le cadre du dessin est déduit des boîtes obtenues.
+- **Mesures réelles.** Les largeurs estimées ne servent qu'aux sorties
+  imprimées et au tout premier rendu. En HTML, un `ResizeObserver` sur les
+  étiquettes, le nombre central et le conteneur relance la mise en place dès que
+  KaTeX a composé, que les polices sont chargées, que l'enseignant change le
+  zoom ou que la largeur disponible change. Sur écran étroit, le dessin est
+  réduit (`transform: scale`) jusqu'à `ECHELLE_MINIMALE` avant de défiler.
+- **Sorties imprimées.** LaTeX produit un `tikzpicture`, Typst un dessin natif
+  (`place` + `line` + `polygon` + mode mathématique) : aucune image n'est
+  embarquée, les formules restent composées par le moteur du document.
+- Les réponses ne sont mises dans le DOM que pour la correction
+  (`montreSolution`).
+
 ## Cas avancés
 
 ## Cas spécifique : diagrammes (outil prof vs évaluation)

@@ -346,6 +346,8 @@ export type InteractivityType =
   | 'juniper-green' // Non compatible AMC
   | 'kenken-grille' // Non compatible AMC
   | 'grimuku-grille' // Non compatible AMC
+  | 'pyramide-nombres' // Non compatible AMC
+  | 'etoile-calculs' // Non compatible AMC
   | 'tables-effacees-grille' // Non compatible AMC
   | 'echiquier-probleme' // Non compatible AMC
   | 'dnd' // Non compatible AMC
@@ -401,6 +403,8 @@ export function isInteractivityType(
     value === 'juniper-green' ||
     value === 'kenken-grille' ||
     value === 'grimuku-grille' ||
+    value === 'pyramide-nombres' ||
+    value === 'etoile-calculs' ||
     value === 'tables-effacees-grille' ||
     value === 'echiquier-probleme' ||
     value === 'dnd' ||
@@ -1023,6 +1027,8 @@ export function isOldFormatInteractifType(
 
 export interface IExercice {
   titre: string
+  /** Absent pour les générations synchrones ordinaires. */
+  generationStatus?: 'loading' | 'ready' | 'error'
   id?: string
   uuid: string
   sup: boolean | string | number

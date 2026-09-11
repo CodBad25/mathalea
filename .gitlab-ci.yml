@@ -772,9 +772,6 @@ testExosModifiedConsolidated:
   script:
     - npm install -g pnpm@11.16.0
     - NODE_OPTIONS=--max-old-space-size=4096
-    - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 50
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     # Récupérer les fichiers modifiés depuis les 2 derniers commits
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
     - git checkout FETCH_HEAD
@@ -811,7 +808,7 @@ testExosModifiedConsolidated:
 
       # Test 1/5 : Console errors (Playwright)
       echo "🧪 Test 1/5: Console errors..."
-      if CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors; then
+      if CHANGED_FILES="$CHANGED_FILES" bash tasks/ci-with-dev-server.sh pnpm test:e2e:console_errors; then
         STATUS_CONSOLE=ok
       else
         STATUS_CONSOLE=ko
@@ -893,6 +890,8 @@ testExosModifiedConsolidated:
   artifacts:
     when: on_failure
     expire_in: 2 day
+    paths:
+      - artifacts/ci-vite.log
 
 # Job LaTeX séparé (nécessite une image Docker spéciale)
 # Reste séparé car image PDF/TeX spécifique (variable PDF_CI_IMAGE)

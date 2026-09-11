@@ -102,6 +102,10 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
   }
 
   return class AutomatismesCan extends MetaExercice {
+    private generationRevision = 0
+    private isDestroyed = false
+    generationStatus: 'loading' | 'ready' | 'error' = 'ready'
+
     constructor() {
       super([])
       this.sup = clampedDefaultSup
@@ -119,6 +123,11 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
     }
 
     nouvelleVersion(): void {
+      if (this.isDestroyed) return
+      this.generationStatus = 'loading'
+      // Invalider aussi les chargements précédents lors d'une génération
+      // synchrone depuis le cache. Les imports restent utiles au cache partagé.
+      const revision = ++this.generationRevision
       const showRefs = !!this.sup2
       const keepSelection = !!this.sup3
       const savedSup = this.sup
@@ -207,6 +216,7 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
         this.besoinFormulaire3CaseACocher = ["Garder la sélection d'exercices"]
         this.besoinFormulaireNombresCategories = clampedCategoriesForm
         this.nbQuestionsModifiable = false
+        this.generationStatus = 'ready'
       }
 
       // Si tous les modules sélectionnés sont déjà en cache, on reconstruit de
@@ -237,12 +247,18 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
         }),
       )
         .then((classes) => {
+          if (this.isDestroyed || revision !== this.generationRevision) return
           buildFromClasses(classes)
           document.dispatchEvent(
-            new window.Event('updateAsyncEx', { bubbles: true }),
+            new window.CustomEvent('updateAsyncEx', {
+              bubbles: true,
+              detail: { exercise: this },
+            }),
           )
         })
         .catch((error) => {
+          if (this.isDestroyed || revision !== this.generationRevision) return
+          this.generationStatus = 'error'
           // Le `import()` lazy d'un module peut se résoudre après la destruction
           // de l'environnement (ex. suite de tests `all_exercises` : le harnais
           // appelle `nouvelleVersionWrapper()` sans attendre ce chargement).
@@ -260,6 +276,12 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
             /* environnement déjà détruit : rien à faire */
           }
         })
+    }
+
+    override destroy(): void {
+      this.isDestroyed = true
+      this.generationRevision++
+      super.destroy()
     }
   }
 }

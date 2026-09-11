@@ -19,10 +19,11 @@ export const dateDePublication = '17/08/2026'
  * puis à son écriture décimale.
  * @author Stéphane Guyon
  */
-export const uuid = 'c4a8f'
+
+export const uuid = '7f11e'
 
 export const refs = {
-  'fr-fr': ['can2N30-03'],
+  'fr-fr': ['can2N13-02'],
   'fr-ch': [],
 }
 

@@ -575,6 +575,21 @@ function preprocessTex(tex: string): string {
   // \color{X} (sans accolades de contenu) — commande de scope LaTeX non supportée
   // par tex2typst qui la passe telle quelle → on la supprime
   output = output.replace(/\\color\s*\{[^{}]+\}/g, '')
+  // Groupes de mise en forme vides, produits par `miseEnEvidence('')` quand le
+  // signe ou l'opérateur à colorer est absent (ex. 4L15-0 :
+  // `{\color{#F15929}\boldsymbol{}}` → `\textcolor{#F15929}{\pmb{}}` ici).
+  // tex2typst en fait un `#text(fill: …)[$bold()$]` ; le `bold()` vide est
+  // ensuite pris pour une parenthèse orpheline par le rattrapage en aval, qui
+  // consomme la parenthèse fermante du `text(…)` englobant et casse la sortie.
+  // Ces groupes ne rendent rien : on les supprime (en boucle pour dénicher les
+  // `\textcolor{X}{}` révélés par la suppression d'un `\pmb{}` interne).
+  let prevEmptyGroup = ''
+  while (prevEmptyGroup !== output) {
+    prevEmptyGroup = output
+    output = output
+      .replace(/\\(?:pmb|mathbf|mathrm)\s*\{\s*\}/g, '')
+      .replace(/\\textcolor\s*\{[^{}]*\}\s*\{\s*\}/g, '')
+  }
   // \big, \Big, \bigg, \Bigg (avec suffixes l/r/m optionnels) : tex2typst
   // laisse les variantes sans suffixe comme variable nue — on les supprime
   output = output.replace(/\\[Bb]igg?[lrm]?\b/g, '')
@@ -1348,7 +1363,15 @@ function parseLatexTableBody(body: string): ParsedTableItem[] {
   const items: ParsedTableItem[] = []
   let row = ''
   const pushRow = () => {
-    const cells = splitTopLevel(row, '&').map((cell) => cell.trim())
+    // Le `&` d'une entité HTML (`&nbsp;`, `&amp;`, `&#160;`…) n'est pas un
+    // séparateur de colonnes : `tableauColonneLigne` peut en injecter dans une
+    // cellule via `sp()` (espace insécable), et sans cette protection la
+    // cellule `10&nbsp;\%` était coupée en deux colonnes (`10` et `nbsp;\%`).
+    const entityAmp = /&(?=(?:#\d+|#x[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);)/g
+    const ampSentinel = String.fromCharCode(1)
+    const cells = splitTopLevel(row.replace(entityAmp, ampSentinel), '&').map(
+      (cell) => cell.split(ampSentinel).join('&').trim(),
+    )
     if (cells.some((cell) => cell.length > 0))
       items.push({ type: 'row', cells })
     row = ''

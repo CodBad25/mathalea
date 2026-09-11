@@ -1,7 +1,7 @@
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../modules/context'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
-import { renderKatex } from '../mathalea'
+import { renderKatex } from '../latex/renderKatex'
 import type {
   AnswerType,
   IExercice,

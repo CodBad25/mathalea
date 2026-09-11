@@ -182,6 +182,14 @@ async function waitForExerciseVisible(page: Page) {
   await page.waitForSelector('div.mb-5>ul>div#consigne0-0', {
     timeout: timeouts.selector,
   })
+  await waitForExerciseReady(page)
+}
+
+async function waitForExerciseReady(page: Page) {
+  const timeouts = getConsoleTestTimeouts(page.url())
+  await page
+    .locator('[data-exercise-index="0"][data-exercise-render-state="ready"]')
+    .waitFor({ state: 'visible', timeout: timeouts.selector })
 }
 
 function isLocalViteDependencyLoadingMessage(
@@ -214,12 +222,7 @@ async function clickZoomAndWaitForExercise(page: Page, buttonZoom: Locator) {
     state: 'visible',
     timeout: timeouts.zoomExercise,
   })
-  await page.evaluate(
-    () =>
-      new Promise<void>((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-      }),
-  )
+  await waitForExerciseReady(page)
   logIfDebug('Exercice affiché après zoom')
 }
 
@@ -254,6 +257,7 @@ async function fullAction(
   if (hasButtonNewData) {
     logIfDebug('Actualier (nouvel énoncé)')
     await buttonNewData.click({ force: true })
+    await waitForExerciseReady(page)
     logIfDebug('fin Actualier (nouvel énoncé)')
   } else {
     logIfDebug('Pas de bouton « Nouvel énoncé » (exercice non aléatoire)')
@@ -281,6 +285,7 @@ async function fullAction(
   })
   if (await activateInteractivityButton.isVisible()) {
     await activateInteractivityButton.click()
+    await waitForExerciseReady(page)
     logIfVerbose('Active le mode interactif')
     // selectionne les questions
     const questionSelector = 'li[id^="exercice0Q"]'
@@ -297,6 +302,7 @@ async function fullAction(
     const buttonVerifier = page.locator('#verif0')
     logIfVerbose('Vérifier les réponses')
     await buttonVerifier.click()
+    await waitForExerciseReady(page)
     await page.waitForSelector('article + div')
     const buttonResult = await page.locator('article + div').innerText()
     logIfVerbose(buttonResult)
@@ -310,6 +316,7 @@ async function fullAction(
         `Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
       )
       await buttonNewData.click({ clickCount: refreshAfterInteractivityCount })
+      await waitForExerciseReady(page)
       logIfVerbose(
         `fin Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
       )
@@ -430,6 +437,7 @@ async function getConsoleTest(page: Page, urlExercice: string) {
       logIfVerbose('Ferme les paramètres ')
       if (await buttonParam.isVisible()) {
         await buttonParam.click()
+        await waitForExerciseReady(page)
       }
       if (messages.length > 0) {
         logError(messages)
@@ -539,7 +547,7 @@ async function testRunAllLots(filter: string) {
   }
 }
 
-const alea = 'e906e'
+const alea = process.env.CONSOLE_ERRORS_SEED || 'e906e'
 const local = true
 if (process.env.NIV !== null && process.env.NIV !== undefined) {
   const filter = (process.env.NIV as string).replaceAll(' ', '')

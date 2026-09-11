@@ -9,6 +9,8 @@ export const listOfCustomElements = [
   'juniper-green',
   'kenken-grille',
   'grimuku-grille',
+  'pyramide-nombres',
+  'etoile-calculs',
   'tables-effacees-grille',
   'blockly-editor',
   'fraction-cliquable',

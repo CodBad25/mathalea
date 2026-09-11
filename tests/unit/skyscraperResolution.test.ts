@@ -84,13 +84,30 @@ describe('résolution rédigée de la grille de gratte-ciels', () => {
     exercise.correctionDetaillee = true
     exercise.nouvelleVersion()
 
-    expect(exercise.listeCorrections[0]).toContain(
+    const correction = exercise.listeCorrections[0]
+    expect(correction).toContain(
       'Méthode pour construire cette solution possible.',
     )
-    expect(exercise.listeCorrections[0]).toContain(
-      'Voici une solution possible :',
+    expect(correction).toContain('<ol class="nombres">')
+    // la méthode et ses étapes sont rédigées avant le tableau solution
+    expect(correction.indexOf('<ol class="nombres">')).toBeLessThan(
+      correction.indexOf('<table'),
     )
-    expect(exercise.listeCorrections[0]).not.toContain('Compte tenu')
-    expect(exercise.listeCorrections[0]).not.toContain('indices')
+    expect(correction).not.toContain('Compte tenu')
+    expect(correction).not.toContain('indices')
+  })
+
+  it('n’affiche pas les étapes détaillées lorsque l’option est désactivée', () => {
+    const exercise = new GratteCiel()
+    exercise.sup = 6
+    exercise.correctionDetaillee = false
+    exercise.nouvelleVersion()
+
+    const correction = exercise.listeCorrections[0]
+    expect(correction).toContain(
+      'Méthode pour construire cette solution possible.',
+    )
+    expect(correction).not.toContain('<ol class="nombres">')
+    expect(correction).toContain('<table')
   })
 })

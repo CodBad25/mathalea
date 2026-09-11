@@ -665,6 +665,24 @@ faut retirer l'enrobage plutôt que de l'empiler sur un paquet corrigé :
 Le code généré ne change pas au passage (les listes s'écrivent toujours
 `#tasks(...)`) : le retrait ne touche que le préambule.
 
+### Consigne en mode fusionné
+
+Hors fusion, `exerciseBody` affiche `TypstExerciseInput.intro` (consigne
++ introduction, concaténées) une fois avant la liste `#tasks(...)`, chaque
+exercice gardant par ailleurs son titre ou son badge. Quand
+**« Fusionner tous les exercices »** (`options.mergeExercises`) est coché, il
+n'y a plus ni titre ni badge et les questions de tous les exercices sont
+numérotées à la suite dans des listes séparées : une question isolée au
+milieu du flux ne dirait plus quoi faire. `exerciseBody` recopie donc la
+**consigne seule** (`TypstExerciseInput.consigne`, tenue à part de
+`introduction` par `Typst.svelte` et `typst-batch-worker.ts`) en tête de
+**chaque** item de la liste, derrière un retour à la ligne Typst (`\`), juste
+après le numéro ; seule l'`introduction` éventuelle reste affichée une fois
+avant la liste. Le repli (`repeatConsigne`) ne s'active que si la consigne se
+rend sur une seule ligne — une consigne-bloc garde l'affichage classique
+avant la liste. La fusion **locale** (bouton « fusionner avec le précédent »
+de la palette), qui conserve un titre par groupe, n'est pas concernée.
+
 ### Colonnes des QCM
 
 Les propositions d'un QCM (`propositionsQcm`, repérées par les libellés

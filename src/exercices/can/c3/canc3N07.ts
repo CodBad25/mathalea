@@ -32,6 +32,7 @@ export default class DecompositionNombre extends Exercice {
   }
 
   nouvelleVersion() {
+    this.consigne = 'Compléter.'
     let texte, texteCorr, c, d, u, n, um
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
@@ -44,8 +45,7 @@ export default class DecompositionNombre extends Exercice {
           n = c * 100 + d * 10 + u
           if (choice([true, false])) {
             if (this.interactif) {
-              texte = 'Compléter : <br>'
-              texte += remplisLesBlancs(
+              texte = remplisLesBlancs(
                 this,
                 i,
                 `${texNombre(n)}= \\, %{champ1}  \\text{ centaine(s) }  \\, %{champ2}\\, \\text{ unité(s)}`,
@@ -60,9 +60,7 @@ export default class DecompositionNombre extends Exercice {
                 champ2: { value: d * 10 + u },
               })
             } else {
-              texte = `Compléter : <br>
-      $${n}=\\ldots$ centaine(s)  $\\ldots$ unité(s)
-      `
+              texte = `$${n}=\\ldots$ centaine(s)  $\\ldots$ unité(s)`
             }
             texteCorr = `Comme $${texNombre(n)}= ${c} \\times 100 +  ${d * 10 + u} \\times 1$, alors $${texNombre(n)}= ${miseEnEvidence(c)}$  ${c === 1 ? 'centaine' : 'centaines'} $${miseEnEvidence(d * 10 + u)}$ unités. `
             this.canEnonce = 'Compléter.'
@@ -84,9 +82,7 @@ export default class DecompositionNombre extends Exercice {
                 champ2: { value: u },
               })
             } else {
-              texte = `Compléter : <br>
-      $${n}=\\ldots$ dizaine(s)  $\\ldots$ unité(s)
-      `
+              texte = `$${n}=\\ldots$ dizaine(s)  $\\ldots$ unité(s)`
             }
             texteCorr = `Comme $${texNombre(n)}= ${c * 10 + d} \\times 10 +  ${u} \\times 1$, alors $${texNombre(n)}= ${miseEnEvidence(c * 10 + d)}$   dizaines  $${miseEnEvidence(u)}$ ${u === 1 ? 'unité.' : 'unités.'} `
             this.canEnonce = 'Compléter.'
@@ -103,8 +99,7 @@ export default class DecompositionNombre extends Exercice {
 
           if (choice([true, false])) {
             if (this.interactif) {
-              texte = 'Compléter : <br>'
-              texte += remplisLesBlancs(
+              texte = remplisLesBlancs(
                 this,
                 i,
                 `${texNombre(n)}= \\, %{champ1}  \\text{ centaine(s) }  \\, %{champ2}\\, \\text{ unité(s)}`,
@@ -119,9 +114,7 @@ export default class DecompositionNombre extends Exercice {
                 champ2: { value: d * 10 + u },
               })
             } else {
-              texte = `Compléter : <br>
-      $${texNombre(n)}=\\ldots$ centaine(s)  $\\ldots$ unité(s)
-      `
+              texte = `$${texNombre(n)}=\\ldots$ centaine(s)  $\\ldots$ unité(s)`
             }
             texteCorr = `Comme $${texNombre(n)}=  ${um * 10 + c} \\times 100 +  ${d * 10 + u} \\times 1$, alors $${texNombre(n)}= ${miseEnEvidence(um * 10 + c)}$  centaines $${miseEnEvidence(d * 10 + u)}$ unités. `
             this.canEnonce = 'Compléter.'
@@ -143,9 +136,7 @@ export default class DecompositionNombre extends Exercice {
                 champ2: { value: u },
               })
             } else {
-              texte = `Compléter : <br>
-    $${texNombre(n)}=\\ldots$ dizaine(s)  $\\ldots$ unité(s)
-    `
+              texte = `$${texNombre(n)}=\\ldots$ dizaine(s)  $\\ldots$ unité(s)`
             }
             texteCorr = `Comme $${texNombre(n)}=  ${um * 100 + c * 10 + d} \\times 10 +  ${u} \\times 1$, alors $${texNombre(n)}= ${miseEnEvidence(um * 100 + c * 10 + d)}$  dizaines $${miseEnEvidence(u)}$ ${u === 1 ? 'unité.' : 'unités.'} `
             this.canEnonce = 'Compléter.'

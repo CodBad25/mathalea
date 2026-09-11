@@ -23,7 +23,7 @@ export const dateDePublication = '12/08/2026'
 export default class AutoQ6Metropole2026 extends ExerciceQcmA {
   private appliquerLesValeurs(mantisse: number, exposant: number): void {
     const n = mantisse * 10 ** exposant
-    this.enonce = `Parmis les propositions suivantes, laquelle est la notation scientifique du nombre $${texNombre(n, 8)}$ ?`
+    this.enonce = `Parmi les propositions suivantes, laquelle est la notation scientifique du nombre $${texNombre(n, 8)}$ ?`
 
     this.reponses = [
       `$${texNombre(mantisse, 2)}\\times 10^{${exposant}}$`,

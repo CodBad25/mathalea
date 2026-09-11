@@ -1,6 +1,6 @@
 import { context } from '../../modules/context'
 import type { NestedObjetMathalea2dArray, ObjetDivLatex } from '../../types/2d'
-import { renderKatex } from '../mathalea'
+import { renderKatex } from '../latex/renderKatex'
 import { arrondi } from '../outils/nombres'
 import { stringNombre } from '../outils/texNombre'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
