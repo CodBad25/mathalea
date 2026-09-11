@@ -46,6 +46,7 @@ import '../../src/lib/customElements/TableauMathlive'
 import '../../src/lib/customElements/TableauSignesVariationsElement'
 import '../../src/lib/customElements/TablesEffaceesGrilleElement'
 import '../../src/lib/customElements/TrigoCircleSelectionElement'
+import '../../src/lib/customElements/TraceurDeCourbe'
 
 import {
   cleanFillInTheBlanks,

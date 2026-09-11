@@ -45,6 +45,7 @@ export const listOfCustomElements = [
   'diagram-bar-assessment',
   'diagram-histogram-assessment',
   'diagram-cartesian-assessment',
+  'traceur-de-courbe',
   'apigeom-figure',
 ]
 

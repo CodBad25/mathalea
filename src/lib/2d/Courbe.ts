@@ -211,9 +211,7 @@ export class Courbe extends ObjetMathalea2D {
   ) {
     if (this.usePgfplots && this.fLatex) {
       // Use pgfplots with function expression
-      let colorLatex = colorToLatexOrHTML(this.stringColor)[1] || 'black'
-      // Remove braces from color if present
-      colorLatex = colorLatex.replace(/[{}]/g, '')
+      const colorLatex = colorToLatexOrHTML(this.stringColor)[1] || 'black'
       const domainMin = (this.xmin * this.xunite).toFixed(3)
       const domainMax = (this.xmax * this.xunite).toFixed(3)
 
