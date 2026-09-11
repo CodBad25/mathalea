@@ -1,3 +1,4 @@
+import { getExerciseModuleLoader } from '../../lib/exerciseLoader'
 import exercices from '../../json/exercicesFR.json'
 import refToUuid from '../../json/refToUuidFR.json'
 import uuidToUrl from '../../json/uuidsToUrlFR.json'
@@ -25,13 +26,6 @@ export const dateDePublication = '30/08/2026'
 // ref -> uuid -> url.
 // La catégorie « A » (2A-A01-… : sujets d'annales complets) est volontairement
 // exclue : ce sont des sujets entiers, pas des automatismes isolés.
-const modulesByUrl = import.meta.glob([
-  './*.ts',
-  './*.js',
-  '../**/*.ts',
-  '../**/*.js',
-]) as Record<string, () => Promise<ExerciceModule>>
-
 const allModules: Record<string, () => Promise<ExerciceModule>> = {}
 for (const [ref, uuid] of Object.entries(refToUuid)) {
   if (!/^2A-[NCEFGPRS]/.test(ref)) continue
@@ -47,10 +41,7 @@ for (const [ref, uuid] of Object.entries(refToUuid)) {
   const url = (uuidToUrl as Record<string, string>)[uuid]
   if (!url) continue
 
-  const modulePath = url.startsWith('2e/')
-    ? `./${url.slice('2e/'.length)}`
-    : `../${url}`
-  const loader = modulesByUrl[modulePath]
+  const loader = getExerciseModuleLoader(`../exercices/${url}`)
   if (loader) allModules[ref] = loader
 }
 

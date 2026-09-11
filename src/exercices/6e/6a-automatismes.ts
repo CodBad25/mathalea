@@ -1,3 +1,4 @@
+import { getExerciseModuleLoader } from '../../lib/exerciseLoader'
 import exercices from '../../json/exercicesFR.json'
 import refToUuid from '../../json/refToUuidFR.json'
 import uuidToUrl from '../../json/uuidsToUrlFR.json'
@@ -22,13 +23,6 @@ export const dateDePublication = '21/08/2026'
 // certaines références 3Auto... pointent vers des exercices dont le fichier ne
 // s'appelle pas 3Auto*.ts. On indexe donc les modules par référence, puis on
 // résout le fichier réel via les tables générées ref -> uuid -> url.
-const modulesByUrl = import.meta.glob([
-  './*.ts',
-  './*.js',
-  '../**/*.ts',
-  '../**/*.js',
-]) as Record<string, () => Promise<ExerciceModule>>
-
 const allModules: Record<string, () => Promise<ExerciceModule>> = {}
 for (const [ref, uuid] of Object.entries(refToUuid)) {
   if (!/^6Auto[NFLATGESHP]/.test(ref)) continue
@@ -44,10 +38,7 @@ for (const [ref, uuid] of Object.entries(refToUuid)) {
   const url = (uuidToUrl as Record<string, string>)[uuid]
   if (!url) continue
 
-  const modulePath = url.startsWith('6e/')
-    ? `./${url.slice('6e/'.length)}`
-    : `../${url}`
-  const loader = modulesByUrl[modulePath]
+  const loader = getExerciseModuleLoader(`../exercices/${url}`)
   if (loader) allModules[ref] = loader
 }
 

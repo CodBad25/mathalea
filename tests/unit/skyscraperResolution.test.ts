@@ -87,9 +87,12 @@ describe('résolution rédigée de la grille de gratte-ciels', () => {
     expect(exercise.listeCorrections[0]).toContain(
       'Méthode pour construire cette solution possible.',
     )
-    expect(exercise.listeCorrections[0]).toContain(
-      'Voici une solution possible :',
-    )
+    expect(exercise.listeCorrections[0]).toContain('<table')
+    expect(
+      exercise.listeCorrections[0].indexOf(
+        'Méthode pour construire cette solution possible.',
+      ),
+    ).toBeLessThan(exercise.listeCorrections[0].indexOf('<table'))
     expect(exercise.listeCorrections[0]).not.toContain('Compte tenu')
     expect(exercise.listeCorrections[0]).not.toContain('indices')
   })

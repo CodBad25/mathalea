@@ -17,7 +17,7 @@ import type {
   Itableau,
 } from '../lib/interactif/tableaux/AjouteTableauMathlive'
 import { creeTableauMathliveElement } from '../lib/interactif/tableaux/AjouteTableauMathlive'
-import { getDistracteurs } from '../lib/mathalea'
+import { getDistracteurs } from '../lib/interactif/qcmDistractors'
 import { Complexe } from '../lib/mathFonctions/Complexe'
 import { combinaisonListes, shuffle } from '../lib/outils/arrayOutils'
 import { range1 } from '../lib/outils/nombres'

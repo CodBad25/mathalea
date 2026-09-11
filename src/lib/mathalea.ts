@@ -1,6 +1,4 @@
 import Decimal from 'decimal.js'
-import renderMathInElement from 'katex/contrib/auto-render'
-import 'katex/dist/katex.min.css'
 import seedrandom from 'seedrandom'
 import { get } from 'svelte/store'
 import Exercice from '../exercices/Exercice'
@@ -13,13 +11,11 @@ import {
   remplisLesBlancs,
 } from '../lib/interactif/questionMathLive'
 import {
-  type AnswerValueType,
   type IExercice,
   type IExerciceStatique,
   type InterfaceGlobalOptions,
   type InterfaceParams,
   type Valeur,
-  isAnswerValueType,
   isMathaleaCustomElementFormat,
   isValeur,
 } from '../lib/types'
@@ -44,6 +40,7 @@ import { delay } from './components/time'
 import { decrypt, isCrypted } from './components/urls'
 import { checkForServerUpdate } from './components/version'
 import { createURL } from './createURL'
+import type { ExerciseModule } from './exerciseModules'
 import { listOfCustomElements } from './customElements/MathaleaCustomElement'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { isHtmlDocumentText } from './httpResponses'
@@ -51,9 +48,9 @@ import { normaliseCoeffBareme } from './interactif/baremeExercice'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
 import { handleAnswers } from './interactif/gestionInteractif'
 import { buildSimpleVersionQcm } from './interactif/qcmBuilder'
-import { optionsKatex } from './latex/Katex'
+import { getDistracteurs } from './interactif/qcmDistractors'
+import { renderKatex } from './latex/renderKatex'
 import { Complexe } from './mathFonctions/Complexe'
-import { shuffle } from './outils/arrayOutils'
 import { renderScratchDiv } from './renderScratch'
 import { referentielBanquesExternes } from './stores/banquesExternesStore'
 import { canOptions } from './stores/canStore'
@@ -77,6 +74,9 @@ import {
   isIntegerInRange1to4,
 } from './types/integerInRange'
 import { type VueType, convertVueType } from './VueType'
+
+export { getDistracteurs } from './interactif/qcmDistractors'
+export { renderKatex } from './latex/renderKatex'
 
 const ERROR_MESSAGE =
   'Erreur - Veuillez actualiser la page et nous contacter si le problème persiste.'
@@ -189,12 +189,9 @@ async function checkHEAD(
  */
 export async function mathaleaLoadExerciceFromUuid(uuid: string) {
   const url = uuidToUrl[uuid as keyof typeof uuidToUrl]
-  let filename, directory, isCan
+  let filename, directory
   if (url) {
-    ;[filename, directory, isCan] = url
-      .replaceAll('\\', '/')
-      .split('/')
-      .reverse()
+    ;[filename, directory] = url.replaceAll('\\', '/').split('/').reverse()
   } else {
     console.error(`UUID introuvable dans uuidToUrl: ${uuid}`)
     window.notify(`L'exercice n'existe pas avec la référence uuid:${uuid}`, {
@@ -211,68 +208,9 @@ export async function mathaleaLoadExerciceFromUuid(uuid: string) {
   while (attempts < maxAttempts) {
     let pathToCheck: string = ''
     try {
-      // Type explicite pour le module importé
-      type ExerciceModule = {
-        default: new () => IExercice
-        titre?: string
-        amcReady?: boolean
-        amcType?: string
-        interactifReady?: boolean
-      }
-
-      let module: ExerciceModule | undefined
-      if (isCan === 'can') {
-        const modules = import.meta.glob('../exercices/can/**/*.{ts,js}')
-        if (filename != null && filename.includes('.ts')) {
-          const path = `../exercices/can/${directory}/${filename.replace('.ts', '')}.ts`
-          pathToCheck = path
-          const loader = modules[path]
-          if (!loader) throw new Error(`Module "${path}" introuvable`)
-          module = (await loader()) as ExerciceModule
-        } else if (filename != null) {
-          const path = `../exercices/can/${directory}/${filename.replace('.js', '')}.js`
-          pathToCheck = path
-          const loader = modules[path]
-          if (!loader) throw new Error(`Module "${path}" introuvable`)
-          module = (await loader()) as ExerciceModule
-        }
-      } else if (isCan === 'QCMBrevet') {
-        if (filename != null && filename.includes('.ts')) {
-          module = await import(
-            `../exercices/QCMBrevet/${directory}/${filename.replace('.ts', '')}.ts`
-          )
-        } else if (filename != null) {
-          module = await import(
-            `../exercices/QCMBrevet/${directory}/${filename.replace('.js', '')}.js`
-          )
-        }
-      } else if (isCan === 'QCMBac') {
-        if (filename != null && filename.includes('.ts')) {
-          module = await import(
-            `../exercices/QCMBac/${directory}/${filename.replace('.ts', '')}.ts`
-          )
-        } else if (filename != null) {
-          module = await import(
-            `../exercices/QCMBac/${directory}/${filename.replace('.js', '')}.js`
-          )
-        }
-      } else {
-        if (filename != null && filename.includes('.ts')) {
-          pathToCheck = `../exercices/${directory}/${filename.replace('.ts', '')}.ts`
-          module = (await import(
-            `../exercices/${directory}/${filename.replace('.ts', '')}.ts`
-          )) as ExerciceModule
-        } else if (filename != null) {
-          pathToCheck = `../exercices/${directory}/${filename.replace('.js', '')}.js`
-          module = (await import(
-            `../exercices/${directory}/${filename.replace('.js', '')}.js`
-          )) as ExerciceModule
-        }
-      }
-
-      if (module === undefined) {
-        throw new Error(`Module not loaded for uuid: ${uuid}`)
-      }
+      pathToCheck = `../exercices/${url.replaceAll('\\', '/')}`
+      const { loadExerciseModule } = await import('./exerciseModules')
+      const module = await loadExerciseModule(pathToCheck)
 
       const ClasseExercice = module.default
       const exercice = new ClasseExercice()
@@ -289,10 +227,10 @@ export async function mathaleaLoadExerciceFromUuid(uuid: string) {
       ]
 
       propsToClone.forEach((prop) => {
-        if (module[prop as keyof ExerciceModule] !== undefined) {
+        if (module[prop as keyof ExerciseModule] !== undefined) {
           // Assertion sûre après vérification
           ;(exercice as Record<string, any>)[prop] =
-            module[prop as keyof ExerciceModule]
+            module[prop as keyof ExerciseModule]
         }
       })
 
@@ -651,17 +589,6 @@ export function mathaleaRenderDiv(
 
 export function renderDiv(HtmlElement: HTMLElement, _content: string) {
   mathaleaRenderDiv(HtmlElement, -1)
-}
-
-export function renderKatex(element: HTMLElement) {
-  // Ajouter preProcess sans typage strict
-  Object.assign(optionsKatex, {
-    preProcess: (chaine: string) =>
-      '{' + chaine.replaceAll(String.fromCharCode(160), '\\,') + '}',
-  })
-
-  renderMathInElement(element, optionsKatex as any)
-  document.dispatchEvent(new window.Event('katexRendered'))
 }
 
 /**
@@ -1360,43 +1287,6 @@ export function mathaleaHandleExerciceSimple(
       cptSecours++
     }
   }
-}
-
-export function getDistracteurs(
-  exerciceSimple: ExerciceSimple,
-): (string | number)[] {
-  const distracteursUniques = [...new Set(exerciceSimple.distracteurs)]
-  const distracteursNonSolutions = distracteursUniques.filter((distracteur) => {
-    const reponse: AnswerValueType | Valeur | undefined = exerciceSimple.reponse
-    if (reponse == null) {
-      return true // Si pas de réponse, on garde tous les distracteurs
-    }
-    let value: AnswerValueType | undefined
-    if (isAnswerValueType(reponse)) {
-      value = reponse
-    } else {
-      // Si reponse n'est pas un AnswerValueType, alors c'est un Valeur dont on va récupérer le AnswerValueType
-      const reponseReponse = reponse.reponse
-      if (reponseReponse !== undefined) value = reponseReponse.value
-    }
-    if (value === undefined) {
-      // Si pas de valeur, on garde tous les distracteurs
-      return true
-    }
-    if (Array.isArray(value)) {
-      return !value.some((v) => {
-        if (v instanceof FractionEtendue) {
-          return v.texFraction !== distracteur.toString()
-        }
-        return distracteur.toString() !== v.toString()
-      })
-    }
-    if (value instanceof FractionEtendue) {
-      return value.texFraction !== distracteur.toString()
-    }
-    return distracteur.toString() !== value.toString()
-  })
-  return shuffle(distracteursNonSolutions).slice(0, 3)
 }
 
 /**

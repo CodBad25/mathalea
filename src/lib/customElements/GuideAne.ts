@@ -1,6 +1,6 @@
 // Importer renderKatex de mathalea
 import { context } from '../../modules/context'
-import { renderKatex } from '../mathalea'
+import { renderKatex } from '../latex/renderKatex'
 import { egalOuApprox } from '../outils/ecritures'
 import { texNombre } from '../outils/texNombre'
 import type { IExercice } from '../types'
