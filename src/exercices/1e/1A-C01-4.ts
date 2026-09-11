@@ -48,18 +48,14 @@ export default class OrdonnerCroissant extends ExerciceQcmA {
   }
 
   // Fonction pour formater la ligne de correction
-  private construireLigneCorrection(
-    nom: string,
-    tex: string,
-    val: number,
-  ): string {
+  private construireLigneCorrection(tex: string, val: number): string {
     const valeurDecimale = (Math.round(val * 1000) / 1000)
       .toString()
       .replace('.', ',')
 
     // Si c'est déjà un nombre décimal, pas besoin de conversion
     if (tex.includes(',')) {
-      return `$${nom} = ${tex}$<br><br>`
+      return `$${tex}$<br><br>`
     }
 
     // Si c'est une fraction, chercher une conversion intermédiaire
@@ -69,25 +65,30 @@ export default class OrdonnerCroissant extends ExerciceQcmA {
     )
 
     if (conversionIntermediaire) {
-      return `$${nom} = ${tex} = ${conversionIntermediaire}${valeurDecimale}$<br><br>`
+      return `$${tex} = ${conversionIntermediaire}${valeurDecimale}$<br><br>`
     } else {
       // Pour toutes les autres fractions (y compris /1000), afficher directement la valeur décimale
-      return `$${nom} = ${tex} = ${valeurDecimale}$<br><br>`
+      return `$${tex} = ${valeurDecimale}$<br><br>`
     }
   }
 
   versionOriginale: () => void = () => {
-    this.enonce = `Voici trois nombres.<br>$A = \\dfrac{1}{5}$ ${sp(4)} $B = \\dfrac{19}{100}$ ${sp(4)} $C = 0,21$<br>
+    this.enonce = `Voici trois nombres.<br>$\\dfrac{1}{5}$ ${sp(6)} $\\dfrac{19}{100}$ ${sp(6)} $0,21$<br>
     Le classement par ordre croissant de ces trois nombres est :`
 
     this.correction = `Pour comparer ces trois nombres, on les écrit sous forme décimale :<br>
-    $A = \\dfrac{1}{5} = 0,2$<br>
-    $B = \\dfrac{19}{100} = 0,19$<br>
-    $C = 0,21$<br><br>
+    $\\dfrac{1}{5} = 0,2$<br>
+    $\\dfrac{19}{100} = 0,19$<br>
+    $0,21$<br><br>
     On a donc : $0,19 < 0,2 < 0,21$<br>
-    Soit : $${miseEnEvidence('B < A < C')}$.`
+    Soit : $${miseEnEvidence('\\dfrac{19}{100} < \\dfrac{1}{5} < 0,21')}$.`
 
-    this.reponses = ['$B < A < C$', '$A < B < C$', '$A < C < B$', '$C < B < A$']
+    this.reponses = [
+      '$\\dfrac{19}{100} < \\dfrac{1}{5} < 0,21$',
+      '$\\dfrac{1}{5} < \\dfrac{19}{100} < 0,21$',
+      '$\\dfrac{1}{5} < 0,21 < \\dfrac{19}{100}$',
+      '$0,21 < \\dfrac{19}{100} < \\dfrac{1}{5}$',
+    ]
   }
 
   versionAleatoire: () => void = () => {
@@ -244,25 +245,19 @@ export default class OrdonnerCroissant extends ExerciceQcmA {
     const { a, b, c } = triplet
 
     // Tri par ordre croissant
-    const nombres = [
-      { nom: 'A', ...a },
-      { nom: 'B', ...b },
-      { nom: 'C', ...c },
-    ]
-
-    nombres.sort((x, y) => x.val - y.val)
+    const nombresTries = [a, b, c].sort((x, y) => x.val - y.val)
 
     // Construction des réponses
-    const ordreCorrect = nombres.map((n) => n.nom).join(' < ')
+    const ordreCorrect = nombresTries.map((n) => n.tex).join(' < ')
 
     // Générer d'autres ordres possibles
     const autresOrdres = [
-      'A < B < C',
-      'A < C < B',
-      'B < A < C',
-      'B < C < A',
-      'C < A < B',
-      'C < B < A',
+      `${a.tex} < ${b.tex} < ${c.tex}`,
+      `${a.tex} < ${c.tex} < ${b.tex}`,
+      `${b.tex} < ${a.tex} < ${c.tex}`,
+      `${b.tex} < ${c.tex} < ${a.tex}`,
+      `${c.tex} < ${a.tex} < ${b.tex}`,
+      `${c.tex} < ${b.tex} < ${a.tex}`,
     ].filter((ordre) => ordre !== ordreCorrect)
 
     // Sélectionner 3 ordres incorrects
@@ -271,18 +266,18 @@ export default class OrdonnerCroissant extends ExerciceQcmA {
       reponsesFausses.push(autresOrdres[i])
     }
 
-    this.enonce = `Voici trois nombres.<br>$A = ${a.tex}$ ${sp(4)} $B = ${b.tex}$ ${sp(4)} $C = ${c.tex}$<br>
+    this.enonce = `Voici trois nombres.<br>$${a.tex}$ ${sp(6)} $${b.tex}$ ${sp(6)} $${c.tex}$<br>
     Le classement par ordre croissant de ces trois nombres est :`
 
     // Construction de la correction avec conversion en décimaux
     let correctionTexte =
       'Pour comparer ces trois nombres, on les écrit sous forme décimale :<br>'
 
-    correctionTexte += this.construireLigneCorrection('A', a.tex, a.val)
-    correctionTexte += this.construireLigneCorrection('B', b.tex, b.val)
-    correctionTexte += this.construireLigneCorrection('C', c.tex, c.val)
+    correctionTexte += this.construireLigneCorrection(a.tex, a.val)
+    correctionTexte += this.construireLigneCorrection(b.tex, b.val)
+    correctionTexte += this.construireLigneCorrection(c.tex, c.val)
 
-    const valeursTriees = nombres
+    const valeursTriees = nombresTries
       .map((n) =>
         (Math.round(n.val * 1000) / 1000).toString().replace('.', ','),
       )
