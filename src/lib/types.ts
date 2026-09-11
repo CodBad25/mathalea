@@ -346,6 +346,7 @@ export type InteractivityType =
   | 'juniper-green' // Non compatible AMC
   | 'kenken-grille' // Non compatible AMC
   | 'grimuku-grille' // Non compatible AMC
+  | 'etoile-calculs' // Non compatible AMC
   | 'tables-effacees-grille' // Non compatible AMC
   | 'echiquier-probleme' // Non compatible AMC
   | 'dnd' // Non compatible AMC
@@ -401,6 +402,7 @@ export function isInteractivityType(
     value === 'juniper-green' ||
     value === 'kenken-grille' ||
     value === 'grimuku-grille' ||
+    value === 'etoile-calculs' ||
     value === 'tables-effacees-grille' ||
     value === 'echiquier-probleme' ||
     value === 'dnd' ||
