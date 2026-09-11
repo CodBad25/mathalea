@@ -23,7 +23,7 @@ export const dateDeModifImportante = '23/07/2025'
 export const uuid = 'cf55d'
 
 export const refs = {
-  'fr-fr': ['can3F03', 'can2F13-04'],
+  'fr-fr': ['can3F03', '2F13-flash4'],
   'fr-ch': [],
 }
 export default class CalculImageParFonctionAffine extends ExerciceSimple {
