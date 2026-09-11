@@ -40,7 +40,7 @@ export default class Conjugue extends ExerciceSimple {
     const moinsZ = new Complexe(-ReZ, -ImZ)
     const iZ = new Complexe(-ImZ, ReZ)
     const conjZ = new Complexe(ReZ, -ImZ)
-    const conjIz = new Complexe(ImZ, ReZ)
+    const conjIz = iZ.conjugue()
     const moinsIz = new Complexe(ImZ, -ReZ)
     const scenario = randint(0, 4)
     this.question = `On donne le nombre complexe $z = ${z.tex()}$.<br>`
