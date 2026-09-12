@@ -14,7 +14,11 @@ import {
   pointIntersectionDD,
   pointIntersectionLC,
 } from '../../lib/2d/utilitairesPoint'
+import type { AllChoicesType } from '../../lib/customElements/ListeDeroulanteElement'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { lampeMessage } from '../../lib/format/message'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
@@ -29,12 +33,98 @@ import {
 import { Triangle } from '../../modules/Triangle'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+
+/** Nature des triangles proposées à l'élève dans la liste déroulante. */
+type NatureTriangle =
+  | 'quelconque'
+  | 'isocèle'
+  | 'équilatéral'
+  | 'rectangle'
+  | 'isocèle et rectangle'
+
+/** Natures pour lesquelles un sommet doit être précisé avec « en ». */
+const NATURES_AVEC_SOMMET: ReadonlySet<NatureTriangle> = new Set([
+  'isocèle',
+  'rectangle',
+  'isocèle et rectangle',
+])
+
+/**
+ * Affiche ou masque la liste déroulante du sommet (`field1`) d'un
+ * `multi-mathfield` selon la valeur choisie par l'élève dans la liste
+ * déroulante de la nature (`field0`), pour ne pas révéler par la simple
+ * présence de cette liste que la nature attendue a un sommet à préciser.
+ * Réinitialise `field1` quand elle se masque, pour ne pas garder une valeur
+ * choisie avant un changement d'avis sur la nature.
+ */
+function synchroniseAffichageSommet(multiMathfield: Element): void {
+  const shadow = (multiMathfield as HTMLElement).shadowRoot
+  const champNature = shadow?.querySelector(
+    'liste-deroulante[data-name="field0"]',
+  ) as (Element & { value?: string }) | null
+  const champSommet = shadow?.querySelector(
+    'liste-deroulante[data-name="field1"]',
+  ) as (HTMLElement & { value?: string }) | null
+  if (champNature == null || champSommet == null) return
+  const visible = NATURES_AVEC_SOMMET.has(
+    (champNature.value ?? '') as NatureTriangle,
+  )
+  champSommet.style.display = visible ? '' : 'none'
+  if (!visible && champSommet.value !== '') {
+    champSommet.value = ''
+  }
+}
+
+let affichageSommetConditionnelInstalle = false
+
+/**
+ * Installe une seule fois (par page) l'écoute globale qui masque/affiche la
+ * liste déroulante du sommet selon la nature choisie. `change` étant émis en
+ * `composed: true` par `liste-deroulante`, il traverse le shadow DOM du
+ * `multi-mathfield` jusqu'à `document`.
+ */
+function installeAffichageSommetConditionnel(): void {
+  if (affichageSommetConditionnelInstalle || typeof document === 'undefined') {
+    return
+  }
+  affichageSommetConditionnelInstalle = true
+
+  document.addEventListener('change', (event) => {
+    const origine = event.composedPath()[0]
+    if (
+      !(origine instanceof Element) ||
+      origine.tagName !== 'LISTE-DEROULANTE' ||
+      origine.getAttribute('data-name') !== 'field0'
+    ) {
+      return
+    }
+    const racine = origine.getRootNode()
+    const hote = racine instanceof ShadowRoot ? racine.host : null
+    if (hote != null) synchroniseAffichageSommet(hote)
+  })
+
+  const observateur = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      mutation.addedNodes.forEach((node) => {
+        if (!(node instanceof Element)) return
+        if (node.tagName === 'MULTI-MATHFIELD') {
+          synchroniseAffichageSommet(node)
+        }
+        node
+          .querySelectorAll?.('multi-mathfield')
+          .forEach((el) => synchroniseAffichageSommet(el))
+      })
+    }
+  })
+  observateur.observe(document.body, { childList: true, subtree: true })
+}
+
 export const dateDeModifImportante = '25/07/2023'
 export const titre = 'Utiliser le vocabulaire des triangles'
 
 /**
  * Vocabulaire des triangles
- * @author Sébastien Lozano -
+ * @author Sébastien Lozano puis Rémi Angot pour l'interactivité -
  */
 export const uuid = 'c3781'
 
@@ -48,7 +138,6 @@ export default class VocabulaireDesTriangles extends Exercice {
     super()
     this.besoinFormulaireCaseACocher = ['Avec une figure à main levée', false]
     this.besoinFormulaire2CaseACocher = ['Avec des décimaux', false]
-    this.consigne = 'Donner la nature des triangles en justifiant.'
     this.sup = false
     this.sup2 = false
     this.classe = 5
@@ -77,6 +166,9 @@ export default class VocabulaireDesTriangles extends Exercice {
     texte: string
     texteCorr: string
     figureMainLevee: NestedObjetMathalea2dArray
+    nature: NatureTriangle
+    sommet?: string
+    lettres: string
   } {
     // prepare triangles used by cases
     const tQuel = new Triangle(0, 0, 0, 0, 0, 0)
@@ -228,7 +320,7 @@ export default class VocabulaireDesTriangles extends Exercice {
             nomTriangle[3],
           )
           const d = mediatrice(A, C) as Droite
-          const c = cercle(A, l1)
+          const c = cercle(A, tIso.l1)
           B = pointIntersectionLC(d, c, '', 1)
           B.nom = nomTriangle[2]
           figureMainLevee.push(
@@ -267,7 +359,7 @@ export default class VocabulaireDesTriangles extends Exercice {
             nomTriangle[3],
           )
           const dIso = mediatrice(A, C) as Droite
-          const cIso = cercle(A, l1)
+          const cIso = cercle(A, tIso.l1)
           B = pointIntersectionLC(dIso, cIso, '', 1)
           B.nom = nomTriangle[2]
           figureMainLevee.push(
@@ -579,10 +671,114 @@ export default class VocabulaireDesTriangles extends Exercice {
         break
     }
 
-    return { texte, texteCorr, figureMainLevee }
+    // Nature attendue et sommet à préciser (le cas échéant), pour la
+    // correction interactive : ne dépendent que du type de triangle tiré,
+    // via les lettres du nom déjà attribué dans le switch ci-dessus.
+    const lettres = nomTriangle.replace(/\$/g, '')
+    let nature: NatureTriangle
+    let sommet: string | undefined
+    switch (type) {
+      case 3:
+      case 4:
+        nature = 'isocèle'
+        sommet = lettres[1]
+        break
+      case 5:
+      case 6:
+        nature = 'équilatéral'
+        break
+      case 7:
+        nature = 'rectangle'
+        sommet = lettres[1]
+        break
+      case 8:
+      case 9:
+        nature = 'isocèle et rectangle'
+        sommet = lettres[1]
+        break
+      case 10:
+        nature = 'isocèle'
+        sommet = lettres[0]
+        break
+      case 1:
+      case 2:
+        nature = 'quelconque'
+        break
+      case 11:
+      default:
+        nature = 'équilatéral'
+        break
+    }
+
+    return { texte, texteCorr, figureMainLevee, nature, sommet, lettres }
+  }
+
+  /**
+   * Ajoute les listes déroulantes permettant de répondre à la question i :
+   * la nature du triangle, et le sommet à préciser avec « en » quand la
+   * nature l'exige (isocèle, rectangle ou isocèle et rectangle). La liste du
+   * sommet est toujours présente dans le DOM, pour toutes les questions, afin
+   * de ne pas révéler par sa simple présence que la nature attendue en a
+   * besoin ; elle reste masquée (via `installeAffichageSommetConditionnel`)
+   * tant que l'élève n'a pas choisi une nature qui la nécessite, et n'est
+   * notée que dans ce cas (une liste vide comptant toujours comme une
+   * mauvaise réponse, elle ne peut pas porter la valeur attendue quand aucun
+   * sommet n'est à préciser). La question rapporte 1 point, qu'un sommet
+   * soit à préciser ou non.
+   */
+  private ajouteReponseNature(
+    i: number,
+    nature: NatureTriangle,
+    sommet: string | undefined,
+    lettres: string,
+  ): string {
+    installeAffichageSommetConditionnel()
+
+    const choixNature: AllChoicesType = [
+      { label: 'Choisir…', value: '' },
+      { label: 'quelconque', value: 'quelconque' },
+      { label: 'isocèle', value: 'isocèle' },
+      { label: 'équilatéral', value: 'équilatéral' },
+      { label: 'rectangle', value: 'rectangle' },
+      { label: 'isocèle et rectangle', value: 'isocèle et rectangle' },
+    ]
+    // Le mot « en » fait partie du libellé de chaque lettre (et non du
+    // gabarit) pour que rien ne s'affiche tant que cette liste est masquée.
+    const choixLettres: AllChoicesType = [
+      { label: ' Choisir…', value: '' },
+      ...lettres
+        .split('')
+        .map((lettre) => ({ label: ` en ${lettre}`, value: lettre })),
+    ]
+
+    const texte = `<br>${addMultiMathfield(this, i, {
+      dataTemplate: 'Ce triangle est %{field0}%{field1}.',
+      dataOptions: {
+        field0: { choices: choixNature, ldots: true },
+        field1: { choices: choixLettres, ldots: true },
+      },
+    })}`
+
+    handleAnswers(
+      this,
+      i,
+      sommet == null
+        ? { field0: { value: nature }, bareme: toutPourUnPoint }
+        : {
+            field0: { value: nature },
+            field1: { value: sommet },
+            bareme: toutPourUnPoint,
+          },
+      { formatInteractif: 'multi-mathfield' },
+    )
+
+    return texte
   }
 
   nouvelleVersion() {
+    this.consigne = this.interactif
+      ? 'Donner la nature des triangles.'
+      : 'Donner la nature des triangles en justifiant.'
     let texteIntro = ''
     if (this.classe === 6) {
       this.besoinFormulaireNumerique = [
@@ -673,6 +869,9 @@ export default class VocabulaireDesTriangles extends Exercice {
         texte: t,
         texteCorr: c,
         figureMainLevee: fig,
+        nature,
+        sommet,
+        lettres,
       } = this.makeTexAndCorrForType(
         listeTypeDeQuestions[i],
         longueurMin,
@@ -683,7 +882,7 @@ export default class VocabulaireDesTriangles extends Exercice {
       )
 
       if (this.questionJamaisPosee(i, c)) {
-        this.listeQuestions[i] = this.sup
+        let texteQuestion = this.sup
           ? mathalea2d(
               Object.assign(
                 { mainlevee: true, amplitude: 1 },
@@ -693,6 +892,11 @@ export default class VocabulaireDesTriangles extends Exercice {
             )
           : t
 
+        if (this.interactif) {
+          texteQuestion += this.ajouteReponseNature(i, nature, sommet, lettres)
+        }
+
+        this.listeQuestions[i] = texteQuestion
         this.listeCorrections[i] = c
         i++
       }
