@@ -209,7 +209,11 @@ function escapeXml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function codeWheelSvg(codes: string[], title: string): string {
+function codeWheelSvg(
+  codes: string[],
+  title: string,
+  mirrored = false,
+): string {
   const center = 300
   const radius = 280
   const labelRadius = 220
@@ -220,12 +224,14 @@ function codeWheelSvg(codes: string[], title: string): string {
     `<circle cx="300" cy="300" r="${radius}" fill="white" stroke="black" stroke-width="3"/>`,
     '<path d="M 288 23 L 312 23 L 300 2 Z" fill="black"/>',
   ]
+  const direction = mirrored ? -1 : 1
   for (let index = 0; index < count; index++) {
-    const boundary = -Math.PI / 2 + ((index - 0.5) * 2 * Math.PI) / count
+    const boundary =
+      -Math.PI / 2 + (direction * (index - 0.5) * 2 * Math.PI) / count
     parts.push(
       `<line x1="${center + 170 * Math.cos(boundary)}" y1="${center + 170 * Math.sin(boundary)}" x2="${center + radius * Math.cos(boundary)}" y2="${center + radius * Math.sin(boundary)}" stroke="#777"/>`,
     )
-    const angle = -Math.PI / 2 + (index * 2 * Math.PI) / count
+    const angle = -Math.PI / 2 + (direction * index * 2 * Math.PI) / count
     parts.push(
       `<text x="${center + labelRadius * Math.cos(angle)}" y="${center + labelRadius * Math.sin(angle)}" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="${count > 40 ? 14 : 20}" font-weight="bold">${escapeXml(codes[index])}</text>`,
     )
@@ -246,7 +252,7 @@ function coverWheelSvg(title: string, codeCount: number): string {
   const verticalGap = 2 * 220 * Math.sin(Math.PI / Math.max(2, codeCount))
   const windowHeight = Math.max(20, Math.min(48, verticalGap * 0.68))
   const windowY = 300 - windowHeight / 2
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="100%" height="100%" fill="white"/><circle cx="300" cy="300" r="280" fill="#f2f2f2" stroke="black" stroke-width="3"/><path d="M 288 23 L 312 23 L 300 2 Z" fill="black"/><rect x="452" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="280" text-anchor="middle" font-family="sans-serif" font-size="31" font-weight="bold">${escapeXml(title)}</text><text x="300" y="320" text-anchor="middle" font-family="sans-serif" font-size="16">Découper la fenêtre en pointillés</text></svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="100%" height="100%" fill="white"/><circle cx="300" cy="300" r="280" fill="#f2f2f2" stroke="black" stroke-width="3"/><path d="M 288 23 L 312 23 L 300 2 Z" fill="black"/><rect x="452" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><!-- Encoche semi-elliptique pour saisir la roue intérieure --><path d="M 220 580 C 220 510 380 510 380 580 Z" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="280" text-anchor="middle" font-family="sans-serif" font-size="31" font-weight="bold">${escapeXml(title)}</text><text x="300" y="320" text-anchor="middle" font-family="sans-serif" font-size="16">Découper la fenêtre et l’encoche en pointillés</text></svg>`
 }
 
 /** Génère les cartes recto-verso, les roues de décodage et leurs caches. */
@@ -314,12 +320,12 @@ export function buildIHaveWhoHasDocument(
   lines.push(
     '',
     '#let carte(num, code, reponse, question, taille: 1) = box(width: 100%, height: 100%, inset: 5mm, clip: true)[',
-    '  #place(top + right, mathalea-anchor("carte-recto", num))',
-    '  #place(top + left, text(size: 11pt, weight: "bold", code))',
-    '  #if numeroter { place(bottom + right, text(size: 8pt, fill: gray, str(num))) }',
+    '  #place(bottom + right, mathalea-anchor("carte-recto", num))',
+    '  #place(top + right, text(size: 11pt, weight: "bold", code))',
+    '  #if numeroter { place(bottom + left, text(size: 8pt, fill: gray, str(num))) }',
     '  #grid(rows: (1fr, 1fr), gutter: 3mm,',
-    '    align(center + horizon, text(size: taille-reponses * taille)[#strong[J’ai] #reponse]),',
-    '    align(center + horizon, text(size: taille-questions * taille)[#strong[Qui a] #question]),',
+    '    align(left + horizon, text(size: taille-reponses * taille)[#strong[J’ai] #reponse]),',
+    '    align(left + horizon, text(size: taille-questions * taille)[#strong[Qui a] #question]),',
     '  )',
     ']',
     `#let dos-carte = box(width: 100%, height: 100%, inset: 3mm, clip: true, image(${typstString(I_HAVE_WHO_HAS_BACK_IMAGE)}, width: 100%, height: 100%, fit: "contain"))`,
@@ -375,20 +381,19 @@ export function buildIHaveWhoHasDocument(
   }
   const whoHasCodes = codes
   const iHaveCodes = codes.map((_, index) => codes[(index + 1) % codes.length])
-  const wheelPage = (title: string, wheelCodes: string[]) => {
-    lines.push('#pagebreak()')
-    lines.push(
-      '#grid(columns: (1fr, 1fr), gutter: 8mm, align: center + horizon,',
-    )
-    lines.push(
-      `  image(bytes(${typstString(codeWheelSvg(wheelCodes, title))}), format: "svg", width: 100%),`,
-    )
-    lines.push(
-      `  image(bytes(${typstString(coverWheelSvg(title, wheelCodes.length))}), format: "svg", width: 100%),`,
-    )
-    lines.push(')')
-  }
-  wheelPage('J’ai', iHaveCodes)
-  wheelPage('Qui a ?', whoHasCodes)
+  lines.push('#pagebreak()')
+  lines.push('// ----- Planche d’assemblage des roues et des caches -----')
+  lines.push('#set page(paper: "a4", flipped: true, margin: 8mm)')
+  lines.push(
+    '#grid(columns: (1fr, 1fr), rows: (82mm, 82mm), gutter: 5mm, align: center + horizon,',
+  )
+  const assemblyPart = (svg: string) =>
+    `  image(bytes(${typstString(svg)}), format: "svg", width: 82mm, height: 82mm, fit: "contain"),`
+  // Deux roues au-dessus, puis leurs deux caches en dessous.
+  lines.push(assemblyPart(codeWheelSvg(iHaveCodes, 'J’ai', true)))
+  lines.push(assemblyPart(codeWheelSvg(whoHasCodes, 'Qui a ?')))
+  lines.push(assemblyPart(coverWheelSvg('J’ai', iHaveCodes.length)))
+  lines.push(assemblyPart(coverWheelSvg('Qui a ?', whoHasCodes.length)))
+  lines.push(')')
   return lines.join('\n')
 }
