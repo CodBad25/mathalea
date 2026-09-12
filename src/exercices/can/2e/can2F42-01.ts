@@ -28,7 +28,7 @@ export const dateDeModifImportante = '10/03/2025' // Une date de modification im
 export const uuid = 'd5b6c'
 
 export const refs = {
-  'fr-fr': ['can2F42-01'],
+  'fr-fr': ['can2F42-01', '2F42-flash1'],
   'fr-ch': [],
 }
 export default class ExtremumsTableau extends Exercice {
