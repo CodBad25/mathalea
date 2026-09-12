@@ -442,14 +442,30 @@ aperçu, code éditable, réglages et téléchargements `.typ`/PDF. Toutes les
 questions des exercices de la fiche sont aplaties dans leur ordre d’affichage.
 Le recto de la carte `i` porte la réponse minimale à la question `i` et l’énoncé
 de la question `i + 1`. La dernière carte revient à la première question afin
-de fermer la chaîne. Le verso est uniforme (« J’ai ..... Qui a .... ? ») et ses
-colonnes sont imprimées en miroir, comme dans la vue Flash-cards, pour
-l’impression recto-verso avec retournement sur les bords longs.
+de fermer la chaîne. Le verso commun utilise l’image
+`public/assets/i-have-who-has/versoGKiA.jpg`, ajustée sans recadrage à
+l’intérieur de chaque carte. Ses colonnes sont imprimées en miroir, comme dans
+la vue Flash-cards, pour l’impression recto-verso avec retournement sur les
+bords longs. La vue charge l’image dans le système de fichiers virtuel du
+compilateur ; le téléchargement Typst est donc une archive ZIP contenant le
+`.typ` et le JPG nécessaire à sa compilation hors de MathALÉA.
+
+Le recto ajoute systématiquement un point après la réponse minimale orange et
+un point d’interrogation après la question. Une ponctuation déjà présente n’est
+pas doublée.
 
 Les lettres majuscules placées au début d’un énoncé comme index de série
 (`A = …`, `B = …`) sont retirées des cartes. Elles permettraient sinon de
 deviner le maillon suivant sans résoudre la question. Une lettre employée dans
 le corps de l’énoncé ou de l’expression reste inchangée.
+
+Un signe égal placé à la fin de la dernière formule (`…=$`) est également
+retiré avant l’ajout du point d’interrogation. Dans les exercices de calcul, ce
+signe matérialise normalement le blanc que l’élève doit compléter ; il serait
+inadapté dans la formulation orale « Qui a … ? ». Les égalités complètes, par
+exemple `$x=2$`, ne sont pas modifiées. L’espace précédant le point
+d’interrogation est insécable afin que celui-ci ne se retrouve jamais seul au
+début d’une ligne.
 
 Les réponses passent par le même `minimalCorrection` que le mode de correction
 minimale du [TBI](tbi.md). Les questions dépourvues de correction associée sont
@@ -461,13 +477,27 @@ n’est trouvée, l’export est interrompu avec un message invitant à modifier
 réglages ou les exercices. Le document est généré par
 `src/components/setup/typst/buildIHaveWhoHasDocument.ts`, avec les polices, le
 format de page et l’orientation de la fiche courante ; il place par défaut deux
-cartes par ligne et quatre lignes par page, avec des traits de découpe.
+cartes par ligne et quatre lignes par page, avec des traits de découpe. Cette
+vue utilise l’orientation paysage par défaut afin d’agrandir les roues et leurs
+disques-cache, disposés côte à côte sur chaque feuille.
 
 Chaque recto publie un repère pour une pastille `− / +` dans l’aperçu. Elle
 ajuste ensemble la taille du « J’ai » et du « Qui a » de cette seule carte. La
 valeur `#let carte-N-taille` est modifiée directement dans le code puis relue
 par `harvestIHaveWhoHasCarryOver`, de sorte que le réglage survive à une
 régénération du document, comme dans la vue Flash-cards.
+
+Chaque carte reçoit également un code aléatoire unique composé d’une lettre et
+d’un chiffre (`code-carte-N`). Après les planches de cartes, le document ajoute
+deux feuilles simples : la première contient la roue « J’ai » et son
+disque-cache, la seconde la roue « Qui a ? » et son disque-cache. Sur un même
+secteur, la roue « Qui a ? » porte le code de la carte qui pose la question et
+la roue « J’ai » celui de la carte suivante, qui possède la réponse. Les roues
+et les caches ont le même axe. La fenêtre est placée à 15 h ; sa hauteur est
+calculée d’après le nombre de secteurs pour ne découvrir qu’un code à la fois.
+Un repère triangulaire périphérique permet de coller les deux roues dos à dos
+sans décalage. Les codes sont relus par `harvestIHaveWhoHasCarryOver` afin de rester
+stables lorsque l’enseignant ajuste la mise en page ou le zoom.
 
 ## Correction minimale
 
