@@ -87,6 +87,14 @@ export default defineConfig({
             target: 'https://coopmaths.fr',
             changeOrigin: true,
           },
+          // Vitrine de l'association sur la page d'accueil : le fragment est
+          // publié par le projet www (coopmaths.fr/www). Pour travailler sur
+          // les deux projets en même temps, pointer sur le serveur de dev
+          // d'Astro : WWW_PROXY_TARGET=http://localhost:4321 pnpm dev
+          '/www': {
+            target: process.env.WWW_PROXY_TARGET ?? 'https://coopmaths.fr',
+            changeOrigin: true,
+          },
         },
       },
   // Le worker OMR importe pdf.js, qui est découpé en chunks : le format `iife`
