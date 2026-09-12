@@ -22,7 +22,7 @@ export const dateDePublication = '02/01/2026'
 export const uuid = '15803'
 
 export const refs = {
-  'fr-fr': ['can3G06'],
+  'fr-fr': ['can3G06', '2G10-flash3'],
   'fr-ch': [],
 }
 export default class CalculerAngle extends ExerciceSimple {
