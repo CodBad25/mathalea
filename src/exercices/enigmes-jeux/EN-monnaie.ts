@@ -1,6 +1,7 @@
 import type { AllChoiceType } from '../../lib/customElements/ListeDeroulanteElement';
 import type { TableauHybrideCell } from '../../lib/customElements/TableauHybride';
 import { creeTableauHybrideElement } from '../../lib/customElements/TableauHybride';
+import { troisPointsProportionnels } from '../../lib/interactif/fonctionsBaremes';
 import { handleAnswers } from '../../lib/interactif/gestionInteractif';
 import { coinSelect, Price, randCoin } from '../../lib/outils/Price';
 
@@ -76,6 +77,7 @@ export default class coinGrid extends Exercice {
     this.consigne += 'une pièce de monnaie dans chaque case.<br>'
     this.consigne += 'La somme de ces pièces est indiquée en haut pour une colonne et à gauche pour une ligne.<br>'
     this.comment = "Plus la taille de la grille est grande plus l'exercice sera difficile."
+    this.comment += ' Note : la question est notée sur 3 points, proportionnellement au nombre de cases correctement remplies, arrondi à l’entier le plus proche.'
 
     for (
       let i = 0, cpt = 0;
@@ -143,6 +145,7 @@ export default class coinGrid extends Exercice {
           objetReponse = Object.assign(objetReponse, cellule);
         }
       }
+      objetReponse.bareme = troisPointsProportionnels
       handleAnswers(this, i, objetReponse, { formatInteractif: 'tableau-hybride' },);
 
       if (this.questionJamaisPosee(i, ...inline_grid)) {

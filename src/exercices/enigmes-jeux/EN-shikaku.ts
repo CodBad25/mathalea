@@ -14,6 +14,7 @@ import { range1 } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { PALIERS_TROIS_POINTS, resultatParPaliers } from './baremeParPaliers'
 import bluePolygon from './svg/bluePolygon.svg'
 
 export const dateDePublication = '31/07/2024'
@@ -58,10 +59,13 @@ export default class shikaku extends Exercice {
   largeur: number
   /** Nombre affiché dans chaque case qui en contient un, indexé par `'x;y'` (coin inférieur gauche de la case) */
   nombresDesCases: Map<string, number>
+  /** Paliers du barème de la question (voir `baremeParPaliers.ts`) : leur nombre fixe le nombre de points de la question. */
+  goodAnswers: number[][]
 
   constructor() {
     super()
     this.nombresDesCases = new Map()
+    this.goodAnswers = []
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
 
@@ -96,6 +100,8 @@ export default class shikaku extends Exercice {
       'Grâce au choix de la longueur et de la hauteur de la grille, vous pouvez graduer la difficulté des grilles SquarO proposés.'
     this.comment +=
       '<br>Si vous précisez un nombre minimum de rectangles ou carrés, alors si ce nombre minimum est trop élevé pour créer une grille pertinente pour la taille demandée, il ne sera pas pris en compte.'
+    this.comment +=
+      ' Note : la question est notée sur 3 points, par paliers : 1 point dès que le tiers des cases est correctement recouvert, 2 points aux deux tiers, 3 points si la grille est entièrement valide.'
     this.longueur = Math.max(2, Math.min(parseInt(this.sup), 15)) || 2
     this.largeur = Math.max(2, Math.min(parseInt(this.sup2), 15)) || 2
     // Quand on duplique un exercice le numeroExercice ne semble pas se mettre à jour
@@ -187,6 +193,9 @@ export default class shikaku extends Exercice {
       tooltip: 'Effacer tous les points',
       url: remove,
     })
+    // `goodAnswers[i]` est lu par `figureApigeom()` pour déterminer le nombre
+    // de points de la question : il faut donc le renseigner avant de l'appeler.
+    this.goodAnswers[0] = Array.from(PALIERS_TROIS_POINTS)
     const emplacementPourFigure = figureApigeom({
       exercice: this,
       i: 0,
@@ -646,6 +655,57 @@ export default class shikaku extends Exercice {
     return { isValid: true, message: 'Bravo !' }
   }
 
+  /**
+   * Proportion des cases de la grille correctement couvertes, pour le crédit
+   * partiel : une case compte comme correcte si elle appartient à un
+   * rectangle de la grille, non chevauché par un autre, et contenant
+   * exactement le nombre égal à son aire. Contrairement à `verifieSolution()`,
+   * ce calcul ne s'arrête pas au premier problème rencontré : un rectangle mal
+   * formé ou un chevauchement ailleurs dans la grille n'empêche pas de
+   * créditer les cases par ailleurs correctement couvertes.
+   */
+  proportionCasesCorrectes(polygones: Polygon[]): number {
+    const totalCases = this.largeur * this.longueur
+    if (totalCases === 0) return 0
+    const rectangles = polygones
+      .map((polygone) => this.rectangleDuPolygone(polygone))
+      .filter((rectangle): rectangle is RectangleTrace => rectangle != null)
+
+    const nombreDeRecouvrements = new Map<string, number>()
+    for (const rectangle of rectangles) {
+      for (let x = rectangle.xMin; x < rectangle.xMax; x++) {
+        for (let y = rectangle.yMin; y < rectangle.yMax; y++) {
+          const cle = `${x.toString()};${y.toString()}`
+          nombreDeRecouvrements.set(cle, (nombreDeRecouvrements.get(cle) ?? 0) + 1)
+        }
+      }
+    }
+
+    let casesCorrectes = 0
+    for (const rectangle of rectangles) {
+      const cellules: string[] = []
+      const nombresContenus: number[] = []
+      let sansChevauchement = true
+      for (let x = rectangle.xMin; x < rectangle.xMax; x++) {
+        for (let y = rectangle.yMin; y < rectangle.yMax; y++) {
+          const cle = `${x.toString()};${y.toString()}`
+          cellules.push(cle)
+          if ((nombreDeRecouvrements.get(cle) ?? 0) !== 1) sansChevauchement = false
+          const nombre = this.nombresDesCases.get(cle)
+          if (nombre !== undefined) nombresContenus.push(nombre)
+        }
+      }
+      const aire =
+        (rectangle.xMax - rectangle.xMin) * (rectangle.yMax - rectangle.yMin)
+      const rectangleValide =
+        sansChevauchement &&
+        nombresContenus.length === 1 &&
+        nombresContenus[0] === aire
+      if (rectangleValide) casesCorrectes += cellules.length
+    }
+    return casesCorrectes / totalCases
+  }
+
   correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
@@ -658,12 +718,13 @@ export default class shikaku extends Exercice {
     ) as Polygon[]
 
     const { isValid, message } = this.verifieSolution(polygones)
+    const proportion = this.proportionCasesCorrectes(polygones)
 
     this.figure.isDynamic = false
     this.figure.divButtons.style.display = 'none'
     this.figure.divUserMessage.style.display = 'none'
     this.figure.buttons.get('SHAKE')?.click()
     divFeedback.innerHTML = message
-    return isValid ? ['OK'] : ['KO']
+    return resultatParPaliers(proportion, isValid)
   }
 }

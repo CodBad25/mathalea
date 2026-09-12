@@ -12,6 +12,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { PALIERS_TROIS_POINTS, resultatParPaliers } from './baremeParPaliers'
 import bluePoint from './svg/blueCirclePoint.svg'
 import redPoint from './svg/redPoint.svg'
 
@@ -34,7 +35,10 @@ class squaro extends Exercice {
   // On déclare des propriétés supplémentaires pour cet exercice afin de pouvoir les réutiliser dans la correction
   figure!: Figure
   figureCorrection!: Figure
-  goodAnswers: Array<{ x: number; y: number }>
+  /** Emplacements des points bleus attendus dans la grille. */
+  positionsPointsBleus: Array<{ x: number; y: number }>
+  /** Paliers du barème de la question (voir `baremeParPaliers.ts`) : leur nombre fixe le nombre de points de la question. */
+  goodAnswers: number[][]
   nbSommets: Array<number>
   longueur: number
   largeur: number
@@ -42,6 +46,7 @@ class squaro extends Exercice {
 
   constructor() {
     super()
+    this.positionsPointsBleus = []
     this.goodAnswers = []
     this.nbSommets = []
     this.nbQuestions = 1
@@ -81,6 +86,8 @@ class squaro extends Exercice {
       : ''
     this.comment =
       "Grâce au choix de la longueur et de la hauteur de la grille et grâce à l'aide ci-dessus sur des points initialement affichés, vous pouvez graduer la difficulté des grilles SquarO proposées."
+    this.comment +=
+      ' Note : la question est notée sur 3 points, par paliers : 1 point dès que le tiers des cases est correct, 2 points aux deux tiers, 3 points si la grille est entièrement valide.'
     this.longueur = Math.max(2, Math.min(parseInt(this.sup), 15)) || 2
     this.largeur = Math.max(2, Math.min(parseInt(this.sup2), 15)) || 2
     // Quand on duplique un exercice le numeroExercice ne semble pas se mettre à jour
@@ -181,26 +188,29 @@ class squaro extends Exercice {
       tooltip: 'Effacer tous les points',
       url: remove,
     })
+    // `goodAnswers[i]` est lu par `figureApigeom()` pour déterminer le nombre
+    // de points de la question : il faut donc le renseigner avant de l'appeler.
+    this.goodAnswers[0] = Array.from(PALIERS_TROIS_POINTS)
     const emplacementPourFigure = figureApigeom({
       exercice: this,
       i: 0,
       figure: this.figure,
     })
-    this.goodAnswers = []
+    this.positionsPointsBleus = []
     const codagePoints = []
     for (let j = 0; j <= this.largeur; j++) {
       for (let i = 0; i <= this.longueur; i++) {
         const valide = randint(0, 1)
         codagePoints.push(valide)
         if (valide === 0) {
-          this.goodAnswers.push({ x: i, y: this.largeur - j })
+          this.positionsPointsBleus.push({ x: i, y: this.largeur - j })
           this.figureCorrection.create('Point', { x: i, y: this.largeur - j })
         }
       }
     }
 
-    let enonce = `Cette grille doit contenir ${texteEnCouleurEtGras(this.goodAnswers.length.toString(), 'blue')} `
-    enonce += this.goodAnswers.length === 1 ? 'point bleu.' : 'points bleus.'
+    let enonce = `Cette grille doit contenir ${texteEnCouleurEtGras(this.positionsPointsBleus.length.toString(), 'blue')} `
+    enonce += this.positionsPointsBleus.length === 1 ? 'point bleu.' : 'points bleus.'
     this.nbSommets = []
     for (let j = 0; j < this.largeur; j++) {
       for (let i = 0; i < this.longueur; i++) {
@@ -260,16 +270,16 @@ class squaro extends Exercice {
         nbPointsAide = parseInt(this.sup4)
         break
       case '4':
-        nbPointsAide = this.goodAnswers.length / 4
+        nbPointsAide = this.positionsPointsBleus.length / 4
         break
       case '5':
-        nbPointsAide = this.goodAnswers.length / 3
+        nbPointsAide = this.positionsPointsBleus.length / 3
         break
       case '6':
-        nbPointsAide = this.goodAnswers.length / 2
+        nbPointsAide = this.positionsPointsBleus.length / 2
         break
     }
-    let bonnesReponsesEncoreDispo = this.goodAnswers.slice()
+    let bonnesReponsesEncoreDispo = this.positionsPointsBleus.slice()
     for (let i = 0; i < nbPointsAide; i++) {
       const unBonPoint = choice(bonnesReponsesEncoreDispo) as {
         x: number
@@ -367,14 +377,13 @@ class squaro extends Exercice {
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     ) as HTMLDivElement
-    let isValid = true
     let validUnPoint = true
     let compteurPointsOK = 0
 
     /* Validation correction si unicité de la réponse mais ce n'est pas le cas
-    for (let i = 0; i < this.goodAnswers.length; i++) {
+    for (let i = 0; i < this.positionsPointsBleus.length; i++) {
       validUnPoint = this.figure.checkCoords({
-        ...this.goodAnswers[i]
+        ...this.positionsPointsBleus[i]
       }).isValid
       if (validUnPoint) compteurPointsOK++
       isValid &&= validUnPoint
@@ -410,7 +419,6 @@ class squaro extends Exercice {
             : 0)
         validUnPoint = nbPointsValides === this.nbSommets[i + j * this.longueur]
         if (validUnPoint) compteurPointsOK++
-        isValid &&= validUnPoint
       }
     }
 
@@ -422,27 +430,26 @@ class squaro extends Exercice {
       // @ts-expect-error e est un point donc a de la couleur
       (e) => e.type !== 'pointer' && e.type === 'Point' && e.color === 'blue',
     ).length
-    isValid &&= nbPoints === this.goodAnswers.length
-    let message: string
+    const totalCases = this.largeur * this.longueur
+    const proportion = totalCases > 0 ? compteurPointsOK / totalCases : 0
+    const nbPointsCorrect = nbPoints === this.positionsPointsBleus.length
+    const isValid = compteurPointsOK === totalCases && nbPointsCorrect
     if (isValid) {
       divFeedback.innerHTML = 'Bravo !'
-      return ['OK']
-    }
-    if (nbPoints === this.goodAnswers.length) {
-      message =
+    } else if (nbPointsCorrect) {
+      divFeedback.innerHTML =
         'Le nombre de points placés est correct mais ' +
         (compteurPointsOK === 1
           ? 'seul 1 est bien placé.'
           : `seuls ${compteurPointsOK} sont bien placés.`)
-    } else if (nbPoints > this.goodAnswers.length) {
-      message =
+    } else if (nbPoints > this.positionsPointsBleus.length) {
+      divFeedback.innerHTML =
         'Le nombre de points placés est trop important par rapport à ce qui est attendu.'
     } else {
-      message =
+      divFeedback.innerHTML =
         "Le nombre de points placés n'est pas assez important par rapport à ce qui est attendu."
     }
-    divFeedback.innerHTML = message
-    return ['KO']
+    return resultatParPaliers(proportion, isValid)
   }
 }
 
