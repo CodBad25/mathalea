@@ -1,7 +1,11 @@
 import { context } from '../../modules/context'
 import { orangeMathalea, vertMathalea } from '../colors'
 import { miseEnEvidence } from '../outils/embellissements'
-import type { DirectionGrimuku, FlecheGrimuku } from '../outils/grimuku'
+import {
+  formatGrimuku,
+  type DirectionGrimuku,
+  type FlecheGrimuku,
+} from '../outils/grimuku'
 import type { IExercice } from '../types'
 import {
   cleDeLaCase as cleDeLaCasePartagee,
@@ -9,7 +13,6 @@ import {
   deplacementDuClavier,
   deplaceLeFocus,
   filtreLaSaisie,
-  pointsMaxDesCases,
   verifieLesCases,
   type GrilleDeChiffres,
   type ResultatVerification,
@@ -620,9 +623,10 @@ export class GrimukuGrilleElement
   }
 
   /**
-   * Vérification interactive : chaque case correctement remplie rapporte un
-   * point. Les chiffres écrits d'avance ne comptent pas : ils ne figurent pas
-   * dans les réponses attendues construites par l'exercice.
+   * Vérification interactive : la note est la proportion de cases
+   * correctement remplies, multipliée par le barème de la grille et arrondie
+   * à l'entier inférieur. Les chiffres écrits d'avance ne comptent pas : ils
+   * ne figurent pas dans les réponses attendues construites par l'exercice.
    */
   static verifQuestion(
     exercice: IExercice,
@@ -633,11 +637,12 @@ export class GrimukuGrilleElement
       exercice,
       questionIndex,
       document.getElementById(id) as GrimukuGrilleElement | null,
+      formatGrimuku(exercice.sup).points,
     )
   }
 
-  static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
-    return pointsMaxDesCases(exercice, questionIndex)
+  static pointsMaxQuestion(exercice: IExercice, _questionIndex: number): number {
+    return formatGrimuku(exercice.sup).points
   }
 }
 

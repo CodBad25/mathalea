@@ -38,6 +38,17 @@ export type GrilleKenKen = {
   cages: CageKenKen[]
 }
 
+/** Les tailles de grille proposées, dans l'ordre du formulaire ; la grille est notée sur sa taille. */
+export const TAILLES_KENKEN = [3, 4, 5, 6]
+
+/** La taille de grille correspondant au rang choisi dans le formulaire. */
+export function tailleKenKen(rang: unknown): number {
+  const index = Math.round(Number(rang))
+  return TAILLES_KENKEN[
+    Math.min(TAILLES_KENKEN.length, Math.max(1, index || 2)) - 1
+  ]
+}
+
 /** 1 : facile, 2 : moyen, 3 : difficile. */
 export type NiveauKenKen = 1 | 2 | 3
 

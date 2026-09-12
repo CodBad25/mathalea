@@ -90,8 +90,9 @@ function rangDeLEtape(etape: EtapePyramide): number {
  * pyramide de la pyramide additive classique : selon les cases données, il
  * faut la descendre autant que la remonter, donc utiliser l'opération inverse.
  *
- * L'exercice rapporte un point par case correctement remplie : le score est
- * attribué par `PyramideNombresElement.verifQuestion()`, qui compare chaque
+ * La note est la proportion de cases correctement remplies, sur 5 points (le
+ * nombre d'étages de la pyramide) et arrondie à l'entier inférieur : elle est
+ * attribuée par `PyramideNombresElement.verifQuestion()`, qui compare chaque
  * case à la solution transmise par `handleAnswers()`. Les valeurs données par
  * l'énoncé, écrites d'avance, ne comptent pas.
  *
@@ -113,7 +114,7 @@ export default class PyramideDeNombres extends Exercice {
     this.sup = 1
     this.sup2 = false
     this.sup3 = VALEUR_MAX_PAR_DEFAUT
-    this.nbQuestions = 2
+    this.nbQuestions = 1
     this.comment =
       'Tous les nombres de la pyramide sont entiers : une division n’est ' +
       'proposée entre deux cases que lorsqu’elle tombe juste. ' +
@@ -125,7 +126,7 @@ export default class PyramideDeNombres extends Exercice {
       'Le plus grand nombre possible borne toutes les cases, celles de ' +
       'l’étage du bas comprises : le baisser resserre les multiplications et ' +
       'fait davantage appel à la soustraction et à la division. ' +
-      'Score : un point par case correctement remplie.'
+      'Note : la proportion de cases correctement remplies, sur 5 points.'
   }
 
   nouvelleVersion(): void {
