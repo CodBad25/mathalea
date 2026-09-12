@@ -283,7 +283,7 @@
       aria-label="Calculatrice collège"
       onclick={toggleCollegeCalculator}
     >
-      <i class="bx bx-calculator text-xl"></i>
+      <i class="bx bxs-calculator text-xl"></i>
     </button>
     <button
       type="button"
@@ -293,7 +293,7 @@
       aria-label="Calculatrice lycée"
       onclick={toggleLyceeCalculator}
     >
-      <i class="bx bxs-calculator text-xl"></i>
+      <i class="bx bx-calculator text-xl"></i>
     </button>
     <button
       type="button"
