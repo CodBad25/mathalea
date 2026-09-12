@@ -454,6 +454,11 @@ Le recto ajoute systématiquement un point après la réponse minimale orange et
 un point d’interrogation après la question. Une ponctuation déjà présente n’est
 pas doublée.
 
+Les deux lignes « J’ai » et « Qui a » sont alignées à gauche dans leur moitié
+de carte. Leur position ne dépend donc pas de la longueur de la réponse ou de
+la question. Le code de la carte est placé dans le coin supérieur droit ; la
+pastille de zoom occupe le coin inférieur droit afin de ne pas le masquer.
+
 Les lettres majuscules placées au début d’un énoncé comme index de série
 (`A = …`, `B = …`) sont retirées des cartes. Elles permettraient sinon de
 deviner le maillon suivant sans résoudre la question. Une lettre employée dans
@@ -489,15 +494,24 @@ régénération du document, comme dans la vue Flash-cards.
 
 Chaque carte reçoit également un code aléatoire unique composé d’une lettre et
 d’un chiffre (`code-carte-N`). Après les planches de cartes, le document ajoute
-deux feuilles simples : la première contient la roue « J’ai » et son
-disque-cache, la seconde la roue « Qui a ? » et son disque-cache. Sur un même
-secteur, la roue « Qui a ? » porte le code de la carte qui pose la question et
-la roue « J’ai » celui de la carte suivante, qui possède la réponse. Les roues
-et les caches ont le même axe. La fenêtre est placée à 15 h ; sa hauteur est
-calculée d’après le nombre de secteurs pour ne découvrir qu’un code à la fois.
-Un repère triangulaire périphérique permet de coller les deux roues dos à dos
-sans décalage. Les codes sont relus par `harvestIHaveWhoHasCarryOver` afin de rester
+une planche d’assemblage A4 paysage : les roues « J’ai » et « Qui a ? » sont sur
+la rangée supérieure, leurs deux disques-cache sur la rangée inférieure. Sur un
+même secteur, la roue « Qui a ? » porte le code de la carte qui pose la question
+et la roue « J’ai » celui de la carte suivante, qui possède la réponse. Les
+roues et les caches ont le même axe. La fenêtre est placée à 15 h ; sa hauteur
+est calculée d’après le nombre de secteurs pour ne découvrir qu’un code à la
+fois. Chaque cache porte aussi, à 6 h, une encoche semi-elliptique pointillée à
+découper : elle laisse saisir le bord de la roue prise en sandwich. Un repère
+triangulaire périphérique permet de coller les deux roues dos à dos sans
+décalage. Les codes sont relus par `harvestIHaveWhoHasCarryOver` afin de rester
 stables lorsque l’enseignant ajuste la mise en page ou le zoom.
+
+Comme les deux roues sont collées dos à dos, les positions de la roue « J’ai »
+subissent une symétrie d’axe vertical par rapport à celles de la roue « Qui
+a ? ». Les secteurs correspondants se superposent ainsi après retournement du
+disque. Seules les positions sont inversées : les codes eux-mêmes restent
+écrits dans le sens normal de lecture. Le repère d’assemblage à 12 h est sur
+l’axe de symétrie et ne se déplace pas.
 
 ## Correction minimale
 
