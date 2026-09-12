@@ -23,7 +23,7 @@ export const dateDeModifImportante = '09/03/2025' // Une date de modification im
 export const uuid = 'e0405'
 
 export const refs = {
-  'fr-fr': ['can2F41-01'],
+  'fr-fr': ['can2F41-01', '2F41-flash1'],
   'fr-ch': [],
 }
 export default class EncadrerTableau extends Exercice {
