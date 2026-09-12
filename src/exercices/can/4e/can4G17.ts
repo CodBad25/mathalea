@@ -27,7 +27,7 @@ export const dateDePublication = '09/12/2025'
 export const uuid = 'e401a'
 
 export const refs = {
-  'fr-fr': ['can4G17'],
+  'fr-fr': ['can4G17', '2G11-flash4'],
   'fr-ch': [],
 }
 export default class QuestionsAiresEtPerimetres6 extends ExerciceSimple {

@@ -26,7 +26,7 @@ export const interactifReady = true
 export const uuid = '61c07'
 
 export const refs = {
-  'fr-fr': ['can4G06', 'BP2AutoR12'],
+  'fr-fr': ['can4G06', 'BP2AutoR12', '2G11-flash5'],
   'fr-ch': [],
 }
 export default class CalculLongueurThales extends ExerciceSimple {

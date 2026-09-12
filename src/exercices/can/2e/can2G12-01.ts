@@ -24,7 +24,7 @@ export const dateDeModifImportante = '16/03/2026'
 export const uuid = '8bc88'
 
 export const refs = {
-  'fr-fr': ['can2G12-01'],
+  'fr-fr': ['can2G12-01', '2G12-flash1'],
   'fr-ch': [],
 }
 export default class CalculCoordonneesMilieu extends ExerciceSimple {

@@ -20,7 +20,7 @@ export const interactifReady = true
 export const uuid = 'b0d98'
 
 export const refs = {
-  'fr-fr': ['can2G12-02'],
+  'fr-fr': ['can2G12-02', '2G12-flash2'],
   'fr-ch': [],
 }
 export default class DistanceRepere extends ExerciceSimple {
