@@ -22,7 +22,7 @@ export const interactifReady = true
 export const uuid = '05ba1'
 
 export const refs = {
-  'fr-fr': ['can2G31-08'],
+  'fr-fr': ['can2G31-08', '2G31-flash5'],
   'fr-ch': ['NR'],
 }
 export default class CoordonneesPointIntersectionAxeAbscissesDroite extends ExerciceSimple {

@@ -16,7 +16,7 @@ export const dateDePublication = '04/11/2022'
 export const uuid = 'dfe60'
 
 export const refs = {
-  'fr-fr': ['can2G31-07'],
+  'fr-fr': ['can2G31-07', '2G31-flash4'],
   'fr-ch': [],
 }
 export default class CoordonneesPointDroite extends ExerciceSimple {

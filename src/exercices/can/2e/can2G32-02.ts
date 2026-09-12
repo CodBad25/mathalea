@@ -15,7 +15,7 @@ export const interactifReady = true
 export const uuid = '898a7'
 
 export const refs = {
-  'fr-fr': ['can2G31-09'],
+  'fr-fr': ['can2G32-02', '2G32-flash2'],
   'fr-ch': [],
 }
 export default class CoordonneesPointIntersectionAxeOrdonneesDroite extends ExerciceSimple {
