@@ -1,3 +1,5 @@
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { customSortStringNumber } from '../../lib/components/sorting'
 import {
   combinaisonListes,
@@ -9,6 +11,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer l'appartenance d'un élément ou la contenance d'un ensemble à un ensemble"
 export const dateDePublication = '01/09/2024'
+export const interactifReady = true
 
 /**
  * Réduire une expression littérale
@@ -131,6 +134,13 @@ export default class nomExercice extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
+    const choixSymboles = [
+      { label: 'Choisir', value: '' },
+      { latex: '\\in', value: '\\in' },
+      { latex: '\\not\\in', value: '\\not\\in' },
+      { latex: '\\subset', value: '\\subset' },
+      { latex: '\\not\\subset', value: '\\not\\subset' },
+    ]
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texteCorr: string
@@ -215,17 +225,57 @@ export default class nomExercice extends Exercice {
         texteCorr = ''
         texte = ''
         if (listeTypeDeQuestions[i].includes('ElementTrue')) {
-          texte = `$${el}\\, \\ldots\\ldots \\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$.`
+          texte = `$${el}\\,$`
+          texte += this.interactif
+            ? choixDeroulant(this, i, { choices: choixSymboles })
+            : '$\\ldots\\ldots$'
+          texte += `$\\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$.`
           texteCorr = `$${el} ${miseEnEvidence('\\in')} \\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: '\\in' } },
+            { formatInteractif: 'liste-deroulante' },
+          )
         } else if (listeTypeDeQuestions[i].includes('ElementFalse')) {
-          texte = `$${el2}\\, \\ldots\\ldots \\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$.`
+          texte = `$${el2}\\,$`
+          texte += this.interactif
+            ? choixDeroulant(this, i, { choices: choixSymboles })
+            : '$\\ldots\\ldots$'
+          texte += `$\\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$.`
           texteCorr = `$${el2} ${miseEnEvidence('\\not\\in')}\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: '\\not\\in' } },
+            { formatInteractif: 'liste-deroulante' },
+          )
         } else if (listeTypeDeQuestions[i].includes('ContenanceTrue')) {
-          texte = `$\\{ ${subEns.sort(customSortStringNumber).join('; ')} \\}\\, \\ldots\\ldots \\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$.`
+          texte = `$\\{ ${subEns.sort(customSortStringNumber).join('; ')} \\}\\,$`
+          texte += this.interactif
+            ? choixDeroulant(this, i, { choices: choixSymboles })
+            : '$\\ldots\\ldots$'
+          texte += `$\\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$.`
           texteCorr = `$\\{ ${subEns.sort(customSortStringNumber).join('; ')} \\} ${miseEnEvidence('\\subset')} \\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\} $`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: '\\subset' } },
+            { formatInteractif: 'liste-deroulante' },
+          )
         } else if (listeTypeDeQuestions[i].includes('ContenanceFalse')) {
-          texte = `$\\{ ${subPasEns.sort(customSortStringNumber).join('; ')} \\}\\, \\ldots\\ldots \\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')} \\}$.`
+          texte = `$\\{ ${subPasEns.sort(customSortStringNumber).join('; ')} \\}\\,$`
+          texte += this.interactif
+            ? choixDeroulant(this, i, { choices: choixSymboles })
+            : '$\\ldots\\ldots$'
+          texte += `$\\,\\{ ${ensemble1.sort(customSortStringNumber).join('; ')}\\}$.`
           texteCorr = `$\\{ ${subPasEns.sort(customSortStringNumber).join('; ')} \\} ${miseEnEvidence('\\not\\subset')} \\{ ${ensemble1.sort(customSortStringNumber).join('; ')}\\}$`
+          handleAnswers(
+            this,
+            i,
+            { reponse: { value: '\\not\\subset' } },
+            { formatInteractif: 'liste-deroulante' },
+          )
         }
       }
       if (this.questionJamaisPosee(i, texte)) {

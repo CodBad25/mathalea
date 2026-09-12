@@ -1,4 +1,5 @@
 import { renderMathInElement } from 'mathlive'
+import mathliveCss from 'mathlive/static.css?inline'
 import { context } from '../../modules/context'
 import { uniformiseResults } from '../interactif/gestionInteractif'
 import type { IExercice } from '../types'
@@ -358,6 +359,10 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
   render() {
     if (this.shadowRoot) this.shadowRoot.innerHTML = ''
 
+    const mathliveStyle = document.createElement('style')
+    mathliveStyle.textContent = mathliveCss
+    this.shadowRoot!.appendChild(mathliveStyle)
+
     const style = document.createElement('style')
     style.textContent = `
 .listeDeroulante {
@@ -678,9 +683,7 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
     }
     if (choice.latex != null) {
       container.innerHTML = `$$${choice.latex}$$`
-      renderMathInElement(container)
-      const spans = container.querySelectorAll('span')
-      if (spans.length > 2) spans[2].style.display = 'none'
+      renderMathInElement(container, { renderAccessibleContent: 'speakable-text' })
       return
     }
     if (choice.image != null) {
@@ -706,7 +709,7 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
     const span = document.createElement('span')
     span.innerHTML = choice.label ?? choice.value
     container.appendChild(span)
-    renderMathInElement(container)
+    renderMathInElement(container, { renderAccessibleContent: 'speakable-text' })
   }
 
   private positionList(): void {
