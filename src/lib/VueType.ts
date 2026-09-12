@@ -25,6 +25,7 @@ const VueTypeArray = <const>[
   'typst',
   'tex',
   'flashcards',
+  'i-have-who-has',
   'slides',
   'tbi',
   'quizzconf',
