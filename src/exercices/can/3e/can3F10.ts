@@ -27,7 +27,7 @@ export const dateDePublication = '02/11/2022'
 export const uuid = 'bf9f2'
 
 export const refs = {
-  'fr-fr': ['can3F10', 'can2F12-03', '2F13-flash2'],
+  'fr-fr': ['can3F10', 'can2F12-03'],
   'fr-ch': [],
 }
 export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
