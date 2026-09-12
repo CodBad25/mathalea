@@ -1,4 +1,5 @@
 <script lang="ts">
+  import JSZip from 'jszip'
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
@@ -21,22 +22,25 @@
     type PreviewPageGeometry,
   } from '../shared/typstPreview'
   import {
-    MATH_FONTS,
-    TEXT_FONTS,
-    type TypstExerciseInput,
-  } from '../typst/buildTypstDocument'
-  import {
     buildIHaveWhoHasCards,
     buildIHaveWhoHasDocument,
     defaultIHaveWhoHasDocumentOptions,
     duplicateMinimalAnswers,
     harvestIHaveWhoHasCarryOver,
+    I_HAVE_WHO_HAS_BACK_IMAGE,
+    I_HAVE_WHO_HAS_BACK_IMAGE_VIRTUAL_PATH,
     type IHaveWhoHasDocumentOptions,
   } from '../typst/buildIHaveWhoHasDocument'
+  import {
+    MATH_FONTS,
+    TEXT_FONTS,
+    type TypstExerciseInput,
+  } from '../typst/buildTypstDocument'
   import type { TypstAnchor } from '../typst/typstCompiler'
 
   type DisplayMode = 'preview' | 'code'
   const STORAGE_KEY = 'mathaleaIHaveWhoHasView'
+  const PREFERENCES_VERSION = 2
   const MAX_UNIQUE_ATTEMPTS = 100
 
   let displayMode: DisplayMode = 'preview'
@@ -58,6 +62,7 @@
   let anchors: TypstAnchor[] = []
   let compileTimer: ReturnType<typeof setTimeout>
   let compileToken = 0
+  let backImageBytes: Uint8Array | null = null
 
   if (isLocalStorageAvailable()) {
     try {
@@ -72,6 +77,13 @@
             ...defaultIHaveWhoHasDocumentOptions,
             ...parsed.documentOptions,
           }
+          // La première version utilisait portrait par défaut. Lors de la
+          // migration, basculer une fois les préférences existantes vers le
+          // nouveau défaut paysage afin que le changement soit visible aussi
+          // pour les utilisateurs ayant déjà ouvert cette vue.
+          if (parsed.version !== PREFERENCES_VERSION) {
+            documentOptions.orientation = 'landscape'
+          }
         }
       }
     } catch {
@@ -84,7 +96,11 @@
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ displayMode, documentOptions }),
+        JSON.stringify({
+          version: PREFERENCES_VERSION,
+          displayMode,
+          documentOptions,
+        }),
       )
     } catch {
       // stockage indisponible : sans conséquence sur la vue
@@ -296,9 +312,24 @@
   }
 
   function downloadTyp() {
-    downloadBlob(
-      new Blob([code], { type: 'text/plain;charset=utf-8' }),
-      `${filename()}.typ`,
+    if (backImageBytes == null) return
+    const zip = new JSZip()
+    zip.file(`${filename()}.typ`, code)
+    zip.file(I_HAVE_WHO_HAS_BACK_IMAGE, backImageBytes)
+    zip.generateAsync({ type: 'blob' }).then((blob) => {
+      downloadBlob(blob, `${filename()}.zip`)
+    })
+  }
+
+  async function loadBackImage() {
+    const response = await window.fetch(
+      `${import.meta.env.BASE_URL}assets/i-have-who-has/versoGKiA.jpg`,
+    )
+    if (!response.ok) throw new Error('Verso des cartes introuvable.')
+    backImageBytes = new Uint8Array(await response.arrayBuffer())
+    const { setStaticImageBytes } = await import('../typst/typstCompiler')
+    setStaticImageBytes(
+      new Map([[I_HAVE_WHO_HAS_BACK_IMAGE_VIRTUAL_PATH, backImageBytes]]),
     )
   }
 
@@ -322,6 +353,11 @@
   }
 
   onMount(async () => {
+    try {
+      await loadBackImage()
+    } catch (error) {
+      warnings = [error instanceof Error ? error.message : String(error)]
+    }
     const results = await Promise.allSettled(buildExercisesList())
     exercises = results.map((result) =>
       result.status === 'fulfilled' ? result.value : null,
@@ -398,10 +434,11 @@
       >
       <div class="grow"></div>
       {#if displayMode === 'code'}<ButtonTextAction
-          text="Télécharger le .typ"
+          text="Télécharger le .typ (.zip)"
           icon="bx-file-blank"
           inverted={true}
           class="rounded-lg py-1 px-2"
+          title="Archive ZIP contenant le code Typst et l’image du verso"
           on:click={downloadTyp}
         />{/if}
       <ButtonTextAction
@@ -595,9 +632,7 @@
                     >
                       <i class="bx bx-minus text-sm"></i>
                     </button>
-                    <span class="px-0.5 text-[0.6rem] tabular-nums">
-                      {Math.round(cardScale(widget.num) * 100)}%
-                    </span>
+
                     <button
                       type="button"
                       title="Agrandir le contenu de la carte {widget.num}"
