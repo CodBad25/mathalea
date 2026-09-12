@@ -1,5 +1,6 @@
 import { randInt } from 'three/src/math/MathUtils.js'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { troisPointsProportionnels } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { balancedLatinSquare } from '../../lib/outils/grid'
@@ -45,6 +46,8 @@ export default class zerosGrid extends Exercice {
 
     this.comment =
       'Pour augmenter la difficulté on peut augmenter la taille de la grille ou diminuer le nombre de zéros.'
+    this.comment +=
+      ' Note : la question est notée sur 3 points, proportionnellement au nombre de cases correctement remplies, arrondi à l’entier le plus proche.'
   }
 
   computeClue(line: number[]): number {
@@ -151,6 +154,7 @@ export default class zerosGrid extends Exercice {
           objetReponse = Object.assign(objetReponse, cellule)
         }
       }
+      objetReponse.bareme = troisPointsProportionnels
 
       handleAnswers(this, i, objetReponse)
 

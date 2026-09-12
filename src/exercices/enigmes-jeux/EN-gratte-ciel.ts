@@ -6,6 +6,7 @@ import { bleuMathalea } from '../../lib/colors'
 import type { AllChoiceType } from '../../lib/customElements/ListeDeroulanteElement'
 import type { TableauHybrideCell } from '../../lib/customElements/TableauHybride'
 import { creeTableauHybrideElement } from '../../lib/customElements/TableauHybride'
+import { troisPointsProportionnels } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   texteEnCouleur,
@@ -441,6 +442,8 @@ export default class gratteciel extends Exercice {
     this.nbQuestions = 1
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = false
+    this.comment =
+      'Note : la question est notée sur 3 points, proportionnellement au nombre de cases correctement remplies, arrondi à l’entier le plus proche.'
   }
 
   // compute the clue displayed at the beginning of each line
@@ -575,6 +578,7 @@ export default class gratteciel extends Exercice {
           objetReponse = Object.assign(objetReponse, cellule)
         }
       }
+      objetReponse.bareme = troisPointsProportionnels
 
       handleAnswers(this, i, objetReponse, {
         formatInteractif: 'tableau-hybride',
