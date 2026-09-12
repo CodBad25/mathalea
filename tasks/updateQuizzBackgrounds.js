@@ -37,6 +37,3 @@ const files = readdirSync(backgroundsDir, { withFileTypes: true })
   .sort((a, b) => a.localeCompare(b, 'fr'))
 
 writeFileSync(outputFile, JSON.stringify(files, null, 2) + '\n')
-console.log(
-  `quizzBackgrounds.json : ${files.length} image(s) de fond de quizz répertoriée(s).`,
-)
