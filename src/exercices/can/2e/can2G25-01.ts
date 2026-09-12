@@ -33,7 +33,7 @@ export const dateDePublication = '29/06/2022' // La date de publication initiale
 export const uuid = '8a0ce'
 
 export const refs = {
-  'fr-fr': ['can2G25-01'],
+  'fr-fr': ['can2G25-01', '2G25-flash5'],
   'fr-ch': ['3G91-6'],
 }
 export default class LectureGraphiqueVecteurRepere extends Exercice {
