@@ -27,7 +27,7 @@ export const dateDePublication = '19/05/2023' // La date de publication initiale
 export const uuid = 'a3e06'
 
 export const refs = {
-  'fr-fr': ['can2F21-03'],
+  'fr-fr': ['can2F21-03', '2F21-flash5'],
   'fr-ch': [],
 }
 export default class VariationFA extends Exercice {
