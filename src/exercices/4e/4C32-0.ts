@@ -3,6 +3,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -40,6 +41,8 @@ export default class EcritureDecimaleApresPuissancesDeDix extends Exercice {
       '1 : Positifs\n2 : Négatifs\n3 : Mélange',
     ]
     this.sup = 3
+    this.besoinFormulaire2CaseACocher = ['Correction détaillée']
+    this.sup2 = false
   }
 
   nouvelleVersion() {
@@ -57,7 +60,7 @@ export default class EcritureDecimaleApresPuissancesDeDix extends Exercice {
       this.nbQuestions,
     )
     for (
-      let i = 0, n, nb, d, p, texte, texteCorr, cpt = 0;
+      let i = 0, n, nb, d, p, rg, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
       texte = ''
@@ -68,9 +71,32 @@ export default class EcritureDecimaleApresPuissancesDeDix extends Exercice {
             choice([randint(2, 9), randint(11, 99), randint(101, 999)]),
           )
           p = randint(1, 7)
+
           texte = `$${texNombre(n)} \\times 10^{${p}}$`
-          texteCorr = texte
-          texteCorr += `$=${texNombre(n.mul(Decimal.pow(10, p)))}$`
+          if (this.sup2) {
+            texteCorr = `On veut calculer $${texNombre(n)} \\times 10^{${p}}$.<br>`
+            if (p === 1) {
+              rg = 'dizaines'
+            } else if (p === 2) {
+              rg = 'centaines'
+            } else if (p === 3) {
+              rg = 'unités de mille'
+            } else if (p === 4) {
+              rg = 'dizaines de mille'
+            } else if (p === 5) {
+              rg = 'centaines de mille'
+            } else if (p === 6) {
+              rg = 'unités de millions'
+            } else if (p === 7) {
+              rg = 'dizaines de millions'
+            }
+            texteCorr += `Le chiffre des unités de ${texNombre(n)} doit donc devenir celui des ${rg}.<br> `
+          } else {
+            texteCorr = ''
+          }
+          texteCorr += texte
+
+          texteCorr += `$=${miseEnEvidence(texNombre(n.mul(Decimal.pow(10, p))))}$`
           handleAnswers(this, i, {
             reponse: { value: n.mul(Decimal.pow(10, p)) },
           })
@@ -82,8 +108,29 @@ export default class EcritureDecimaleApresPuissancesDeDix extends Exercice {
           p = randint(1, 6)
           n = new Decimal(8)
           texte = `$${texNombre(n)} \\times 10^{${-p}}$`
-          texteCorr = texte
-          texteCorr += `$=${texNombre(n.mul(Decimal.pow(10, -p)), 6)}$`
+          if (this.sup2) {
+            texteCorr = `On veut calculer $${texNombre(n)} \\times 10^{${-p}}$.<br>`
+            if (p === 1) {
+              rg = 'dixièmes'
+            } else if (p === 2) {
+              rg = 'centièmes'
+            } else if (p === 3) {
+              rg = 'millièmes'
+            } else if (p === 4) {
+              rg = 'dix-millièmes'
+            } else if (p === 5) {
+              rg = 'cent-millièmes'
+            } else if (p === 6) {
+              rg = 'millionièmes'
+            } else if (p === 7) {
+              rg = 'cent-millionièmes'
+            }
+            texteCorr += `Le chiffre des unités de ${texNombre(n)} doit donc devenir celui des ${rg}.<br> `
+          } else {
+            texteCorr = ''
+          }
+          texteCorr += texte
+          texteCorr += `$=${miseEnEvidence(texNombre(n.mul(Decimal.pow(10, -p)), 6))}$`
           handleAnswers(this, i, {
             reponse: { value: n.mul(Decimal.pow(10, -p)) },
           })
@@ -94,8 +141,29 @@ export default class EcritureDecimaleApresPuissancesDeDix extends Exercice {
           p = randint(1, 7)
           nb = new Decimal(d).div(choice([10, 100, 1000])).add(n) // nb est Decimal !
           texte = `$${texNombre(nb, 3)} \\times 10^{${p}}$`
-          texteCorr = texte
-          texteCorr += `$=${texNombre(nb.mul(Decimal.pow(10, p)), 3)}$`
+          if (this.sup2) {
+            texteCorr = `On veut calculer $${texNombre(nb)} \\times 10^{${p}}$.<br>`
+            if (p === 1) {
+              rg = 'dizaines'
+            } else if (p === 2) {
+              rg = 'centaines'
+            } else if (p === 3) {
+              rg = 'unités de mille'
+            } else if (p === 4) {
+              rg = 'dizaines de mille'
+            } else if (p === 5) {
+              rg = 'centaines de mille'
+            } else if (p === 6) {
+              rg = 'unités de millions'
+            } else if (p === 7) {
+              rg = 'dizaines de millions'
+            }
+            texteCorr += `Le chiffre des unités de ${texNombre(nb)} doit donc devenir celui des ${rg}.<br> `
+          } else {
+            texteCorr = ''
+          }
+          texteCorr += texte
+          texteCorr += `$=${miseEnEvidence(texNombre(nb.mul(Decimal.pow(10, p)), 3))}$`
           handleAnswers(this, i, {
             reponse: { value: nb.mul(Decimal.pow(10, p)) },
           })
@@ -106,8 +174,29 @@ export default class EcritureDecimaleApresPuissancesDeDix extends Exercice {
           p = randint(1, 7)
           nb = new Decimal(d).div(choice([10, 100, 1000])).add(n)
           texte = `$${texNombre(nb, 3)} \\times 10^{${-p}}$`
-          texteCorr = texte
-          texteCorr += `$=${texNombre(nb.mul(Decimal.pow(10, -p)), 10)}$`
+          if (this.sup2) {
+            texteCorr = `On veut calculer $${texNombre(nb)} \\times 10^{${-p}}$.<br>`
+            if (p === 1) {
+              rg = 'dixièmes'
+            } else if (p === 2) {
+              rg = 'centièmes'
+            } else if (p === 3) {
+              rg = 'millièmes'
+            } else if (p === 4) {
+              rg = 'dix-millièmes'
+            } else if (p === 5) {
+              rg = 'cent-millièmes'
+            } else if (p === 6) {
+              rg = 'millionièmes'
+            } else if (p === 7) {
+              rg = 'cent-millionièmes'
+            }
+            texteCorr += `Le chiffre des unités de ${texNombre(nb)} doit donc devenir celui des ${rg}.<br> `
+          } else {
+            texteCorr = ''
+          }
+          texteCorr += texte
+          texteCorr += `$=${miseEnEvidence(texNombre(nb.mul(Decimal.pow(10, -p)), 10))}$`
           handleAnswers(this, i, {
             reponse: { value: nb.mul(Decimal.pow(10, -p)) },
           })
