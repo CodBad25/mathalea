@@ -8,6 +8,7 @@ import {
   genereKenKen,
   OPERATIONS_KENKEN,
   repartitionsPossibles,
+  tailleKenKen,
   type CageKenKen,
   type GrilleKenKen,
   type NiveauKenKen,
@@ -26,9 +27,6 @@ export const refs = {
   'fr-fr': ['EN-KenKen'],
   'fr-ch': [],
 }
-
-/** Les tailles de grille proposées, dans l'ordre du formulaire. */
-const TAILLES = [3, 4, 5, 6]
 
 /** Le symbole LaTeX de chaque opération, pour écrire une étiquette de cage en mode mathématique. */
 const SYMBOLES_LATEX: Record<string, string> = {
@@ -53,8 +51,7 @@ const NOMS_DES_OPERATIONS: Record<string, string> = {
 }
 
 function tailleDepuisSup(valeur: unknown): number {
-  const rang = Math.round(Number(valeur))
-  return TAILLES[Math.min(TAILLES.length, Math.max(1, rang || 2)) - 1]
+  return tailleKenKen(valeur)
 }
 
 /** Le paramètre est une suite de numéros d'opérations séparés par des tirets. */
@@ -79,10 +76,11 @@ function niveauDepuisSup(valeur: unknown): NiveauKenKen {
  * Le KenKen : compléter un carré latin découpé en cages, chaque cage annonçant
  * le résultat obtenu en combinant ses cases avec l'opération indiquée.
  *
- * L'exercice rapporte un point par case correctement remplie : le score est
- * attribué par `KenKenGrilleElement.verifQuestion()`, qui compare chaque case à
- * la solution transmise par `handleAnswers()`. Les valeurs données par
- * l'énoncé, écrites d'avance, ne comptent pas.
+ * La note est la proportion de cases correctement remplies, multipliée par le
+ * barème de la grille (sa taille, via `tailleKenKen()`) et arrondie à
+ * l'entier inférieur : elle est attribuée par `KenKenGrilleElement.verifQuestion()`,
+ * qui compare chaque case à la solution transmise par `handleAnswers()`. Les
+ * valeurs données par l'énoncé, écrites d'avance, ne comptent pas.
  *
  * @author Rémi Angot
  */
@@ -121,7 +119,8 @@ export default class KenKen extends Exercice {
       'La soustraction et la division ne sont utilisées que dans les cages de ' +
       'deux cases, et la division seulement quand elle tombe juste : choisir ' +
       'ces seules opérations donne donc une grille faite de cages de deux cases. ' +
-      'Score : un point par case correctement remplie.'
+      'Note : la proportion de cases correctement remplies, sur autant de ' +
+      'points que la taille de la grille.'
   }
 
   nouvelleVersion(): void {

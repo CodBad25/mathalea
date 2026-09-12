@@ -220,7 +220,7 @@ export default class EtoileDesCalculs extends Exercice {
     this.besoinFormulaire2Numerique = ['Nombre de flèches par étoile', 12]
     this.sup = MELANGE_TYPES_DE_CALCUL
     this.sup2 = 8
-    this.nbQuestions = 3
+    this.nbQuestions = 1
     this.comment =
       'Chaque flèche indique une opération à appliquer à un nombre caché pour ' +
       'obtenir le nombre inscrit au centre de l’étoile : il faut donc effectuer ' +

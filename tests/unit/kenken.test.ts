@@ -443,9 +443,13 @@ describe('rendus du composant kenken-grille', () => {
 })
 
 describe('interactivité et score', () => {
-  /** Un exercice minimal portant les réponses attendues d'une grille de référence. */
+  /**
+   * Un exercice minimal portant les réponses attendues d'une grille de
+   * référence. `sup: 2` sélectionne le format 4 × 4, noté sur 4 points.
+   */
   function exerciceDeTest(): {
     numeroExercice: number
+    sup: number
     answers: Record<string, string>
     autoCorrection: { valeur: Record<string, { value: string }> }[]
   } {
@@ -456,19 +460,24 @@ describe('interactivité et score', () => {
         value: String(grille.solution[0][colonne]),
       }
     }
-    return { numeroExercice: 3, answers: {}, autoCorrection: [{ valeur }] }
+    return {
+      numeroExercice: 3,
+      sup: 2,
+      answers: {},
+      autoCorrection: [{ valeur }],
+    }
   }
 
   type Exercice = Parameters<typeof KenKenGrilleElement.verifQuestion>[0]
 
-  it('compte un point par case à remplir', () => {
+  it('note la grille sur le barème de sa taille', () => {
     const exercice = exerciceDeTest()
     expect(
       KenKenGrilleElement.pointsMaxQuestion(exercice as unknown as Exercice, 0),
     ).toBe(4)
   })
 
-  it('attribue un point par case correctement remplie et fige la grille', () => {
+  it('note la proportion de cases correctement remplies et fige la grille', () => {
     setOutputHtml()
     document.body.innerHTML = KenKenGrilleElement.create({
       taille: 4,
@@ -522,6 +531,28 @@ describe('interactivité et score', () => {
     )
     expect(resultat.isOk).toBe(true)
     expect(resultat.score).toEqual({ nbBonnesReponses: 4, nbReponses: 4 })
+  })
+
+  it('arrondit la note à l’entier inférieur quand la taille diffère du nombre de cases', () => {
+    setOutputHtml()
+    document.body.innerHTML = KenKenGrilleElement.create({
+      taille: 4,
+      cages: grilleDeReference().cages,
+      numeroExercice: 3,
+      questionIndex: 0,
+    })
+    const element = document.getElementById(
+      'kenken-grilleEx3Q0',
+    ) as KenKenGrilleElement
+    element.value = { L1C1: '1', L1C2: '2', L1C3: '4', L1C4: '' }
+    // sup: 3 sélectionne le format 5 × 5, noté sur 5 points.
+    const exercice = { ...exerciceDeTest(), sup: 3 }
+    const resultat = KenKenGrilleElement.verifQuestion(
+      exercice as unknown as Exercice,
+      0,
+    )
+    // 2 cases justes sur 4, avec un barème sur 5 : floor(2 / 4 * 5) = 2.
+    expect(resultat.score).toEqual({ nbBonnesReponses: 2, nbReponses: 5 })
   })
 
   it('étiquette les cages comme le veut le jeu', () => {

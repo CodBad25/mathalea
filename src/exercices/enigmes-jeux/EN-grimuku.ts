@@ -7,6 +7,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   casesAChercher,
   colonneDe,
+  formatGrimuku,
   genereGrimuku,
   ligneDe,
   repartitionsPossibles,
@@ -28,14 +29,6 @@ export const refs = {
   'fr-ch': [],
 }
 
-/** Les formats de grille proposés, dans l'ordre du formulaire. */
-const FORMATS: [number, number][] = [
-  [5, 5],
-  [6, 6],
-  [7, 7],
-  [6, 9],
-]
-
 /** Le symbole LaTeX de chaque flèche, pour écrire son étiquette en mode mathématique. */
 const SYMBOLES_LATEX: Record<string, string> = {
   droite: '\\rightarrow',
@@ -45,8 +38,8 @@ const SYMBOLES_LATEX: Record<string, string> = {
 }
 
 function formatDepuisSup(valeur: unknown): [number, number] {
-  const rang = Math.round(Number(valeur))
-  return FORMATS[Math.min(FORMATS.length, Math.max(1, rang || 2)) - 1]
+  const format = formatGrimuku(valeur)
+  return [format.lignes, format.colonnes]
 }
 
 function niveauDepuisSup(valeur: unknown): NiveauGrimuku {
@@ -71,10 +64,11 @@ function etiquetteMath(fleche: FlecheGrimuku): string {
  * Contrairement au kakuro, un même chiffre peut se répéter dans une flèche : le
  * produit 27 sur quatre cases impose par exemple 1, 1, 3 et 9.
  *
- * L'exercice rapporte un point par case correctement remplie : le score est
- * attribué par `GrimukuGrilleElement.verifQuestion()`, qui compare chaque case
- * à la solution transmise par `handleAnswers()`. Les chiffres écrits d'avance
- * dans l'énoncé ne comptent pas.
+ * La note est la proportion de cases correctement remplies, multipliée par le
+ * barème de la grille (`formatGrimuku()`) et arrondie à l'entier inférieur :
+ * elle est attribuée par `GrimukuGrilleElement.verifQuestion()`, qui compare
+ * chaque case à la solution transmise par `handleAnswers()`. Les chiffres
+ * écrits d'avance dans l'énoncé ne comptent pas.
  *
  * @author Rémi Angot
  */
@@ -106,7 +100,9 @@ export default class Grimuku extends Exercice {
       'possibles. Au niveau « difficile », elles en couvrent quatre. ' +
       'Un même chiffre peut se répéter dans une flèche : c’est ce qui distingue ' +
       'le grimuku du kakuro. ' +
-      'Score : un point par case correctement remplie.'
+      'Note : la proportion de cases correctement remplies, sur le barème de ' +
+      'la grille (5 points pour une grille 5 × 5, 6 pour une grille 6 × 6, ' +
+      '7 pour une grille 7 × 7, 8 pour une grille 6 × 9).'
   }
 
   nouvelleVersion(): void {
