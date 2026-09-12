@@ -14,7 +14,7 @@ import { range1 } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { PALIERS_TROIS_POINTS, resultatParPaliers } from './baremeParPaliers'
+import { PALIERS_TROIS_POINTS, resultatParPaliers } from '../../lib/interactif/_baremeParPaliers'
 import bluePolygon from './svg/bluePolygon.svg'
 
 export const dateDePublication = '31/07/2024'

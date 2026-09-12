@@ -12,7 +12,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { PALIERS_TROIS_POINTS, resultatParPaliers } from './baremeParPaliers'
+import { PALIERS_TROIS_POINTS, resultatParPaliers } from '../../lib/interactif/_baremeParPaliers'
 import bluePoint from './svg/blueCirclePoint.svg'
 import redPoint from './svg/redPoint.svg'
 
