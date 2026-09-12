@@ -10,7 +10,7 @@ en particulier — mais sous forme d'un document à projeter (ou à conserver).
 Elle est accessible depuis « Plus d'exports » sur la page d'accueil, depuis les
 réglages de la vue Diaporama (icône diaporama à côté de « PDF sujets +
 corrigés ») et depuis les liens en tête du panneau de réglages des vues Typst
-et Flash-cards (`shared/ExportViewLinks.svelte`, qui équipe les trois vues :
+et Flash-cards (`shared/ExportViewLinks.svelte`, qui équipe les quatre vues :
 chacune renvoie vers les deux autres).
 
 ## Principe
@@ -166,7 +166,7 @@ Exports : PDF (compilation typst.ts dans le navigateur) et fichier `.typ`.
 | --- | --- |
 | `src/components/setup/slides/Slides.svelte` | La vue : barre d'outils, réglages, aperçu, palette, exports |
 | `src/components/setup/slides/buildSlidesDocument.ts` | Génère le code Typst des diapositives |
-| `src/components/setup/shared/ExportViewLinks.svelte` | Liens entre les trois exports Typst, en tête de leur panneau de réglages |
+| `src/components/setup/shared/ExportViewLinks.svelte` | Liens entre les quatre exports Typst, en tête de leur panneau de réglages |
 
 La conversion HTML/LaTeX → Typst et la compilation sont partagées avec la vue
 Typst (`src/components/setup/typst/latexToTypst.ts`, `typstCompiler.ts`).

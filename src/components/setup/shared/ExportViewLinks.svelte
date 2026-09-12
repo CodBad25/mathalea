@@ -8,7 +8,7 @@
    * d'accueil.
    */
 
-  type ExportView = 'typst' | 'flashcards' | 'slides' | 'omr'
+  type ExportView = 'typst' | 'flashcards' | 'i-have-who-has' | 'slides' | 'omr'
 
   const { current }: { current: ExportView } = $props()
 
@@ -29,6 +29,12 @@
       label: 'Flash-cards',
       icon: 'bx-credit-card-front',
       title: 'Cartes recto (question) / verso (réponse) à découper',
+    },
+    {
+      id: 'i-have-who-has',
+      label: 'J’ai… qui a… ?',
+      icon: 'bx-group',
+      title: 'Cartes en chaîne pour jouer en classe',
     },
     {
       id: 'slides',

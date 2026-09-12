@@ -148,11 +148,13 @@
     !(FULL_WIDTH_BADGE_STYLES as readonly string[]).includes(style)
 
   /** Libellés des positions de badge du paquet exercise-bank */
-  const BADGE_POSITION_LABELS: Record<(typeof BADGE_POSITIONS)[number], string> =
-    {
-      margin: 'En marge',
-      above: 'Au-dessus',
-    }
+  const BADGE_POSITION_LABELS: Record<
+    (typeof BADGE_POSITIONS)[number],
+    string
+  > = {
+    margin: 'En marge',
+    above: 'Au-dessus',
+  }
 
   /** Libellés des modèles de page de garde */
   const COVER_TEMPLATE_LABELS: Record<CoverTemplate, string> = {
@@ -3543,9 +3545,7 @@
       // ses exercices
       const token = Math.random().toString(36).slice(2, 8)
       pinnedSeeds[previewed] = exercises.map((exercise) =>
-        exercise?.seed == null
-          ? null
-          : `${exercise.seed}${previewed}~${token}`,
+        exercise?.seed == null ? null : `${exercise.seed}${previewed}~${token}`,
       )
       documentOptions.versionSeeds = pinnedSeeds
     } else {
@@ -4097,7 +4097,6 @@
               {/if}
             </div>
 
-
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
@@ -4521,7 +4520,6 @@
                     />
                     Case pour la note
                   </label>
-
                 {/if}
 
                 {#if coverPage.showBareme}

@@ -12,7 +12,12 @@ Trois modes d'affichage, mémorisés dans `localStorage` (`mathaleaTypstView`) :
 
 Le code est éditable : chaque modification recompile le document (débounce de 500 ms) et met à jour l'aperçu, en conservant le dernier rendu valide en cas d'échec.
 
-En tête du panneau « Réglages du document », `shared/ExportViewLinks.svelte` affiche des liens vers les deux autres exports Typst — [Flash-cards](flashcards.md) et [Diaporama PDF](diaporama-pdf.md) — qui reprennent les exercices en place (`$globalOptions.v`), sans repasser par la page d'accueil. Le même composant équipe les trois vues, chacune montrant les deux autres.
+En tête du panneau « Réglages du document », `shared/ExportViewLinks.svelte`
+affiche des liens vers les trois autres exports Typst —
+[Flash-cards](flashcards.md), **J’ai… qui a… ?** et
+[Diaporama PDF](diaporama-pdf.md) — qui reprennent les exercices en place
+(`$globalOptions.v`), sans repasser par la page d'accueil. Le même composant
+équipe les quatre vues, chacune montrant les trois autres.
 
 ## Éditeur de code
 
@@ -167,7 +172,7 @@ Réglages des Réglages du document, indépendants l'un de l'autre :
 
 - **Étiquette de version masquable** (`TypstDocumentOptions.hideVersionLabel`,
   décochée par défaut) : sur une fiche à plusieurs versions (`nbVersions >
-  1`), l'étiquette « Sujet A/B... » de la ligne d'en-tête se masque/affiche
+1`), l'étiquette « Sujet A/B... » de la ligne d'en-tête se masque/affiche
   par une icône sur l'aperçu (`version-label` dans `TypstLayoutOverlay.svelte`
   — voir « Palette de mise en page » plus bas), pour distribuer des sujets
   mélangés sans que les élèves n'y lisent leur version. Masquée, l'étiquette
@@ -198,7 +203,7 @@ Réglages des Réglages du document, indépendants l'un de l'autre :
   en dur (« MathALÉA — coopmaths.fr », « MathALÉA · coopmaths.fr », « CC
   BY-SA · MathALÉA »).
   - Le pied de page se répète sur **chaque** page (`#set page(footer:
-    context [...])`), à la différence du titre ou de la page de garde qui
+context [...])`), à la différence du titre ou de la page de garde qui
     n'apparaissent qu'une fois : un seul point d'édition suffit, donc le
     repère `#mathalea-anchor("footer", 0)` n'est émis que sur la première
     page **physique**, via `#if here().page() == 1 [...]`. `here().page()`
@@ -252,7 +257,7 @@ code, sans régénération) plutôt que l'argument nommé :
   `#mathalea-couverture-can`, `#mathalea-couverture-recitation`, plus
   `#mathalea-champ` (« Nom : ...... ») commune aux deux premières et
   `#mathalea-points-courts` (« 4 », « 2,5 ») aux modèles à barème. Ce qui distingue les trois premiers modèles n'est pas
-  réglable — c'est ce qui *fait* le modèle — et tient en trois arguments
+  réglable — c'est ce qui _fait_ le modèle — et tient en trois arguments
   (`COVER_TEMPLATE_LAYOUT`) : `identite` (champs Nom/Prénom/Classe/Date) et
   `colonne-note` (colonne vide où porter la note) pour l'évaluation,
   `hasNoteFin` (affiche la mention de bas de page — son texte, lui, reste
@@ -272,12 +277,12 @@ code, sans régénération) plutôt que l'argument nommé :
   condition qu'il suive encore la fiche un pour un** : un barème que le
   professeur a lui-même raccourci (exercices groupés, lignes retirées) n'est
   pas retouché, c'est le bouton qui le réaligne. De même, changer le nombre de
-questions d'un exercice depuis la palette (`-1 q +`) reporte la différence
-sur ses points — mais seulement tant qu'ils valent encore le nombre de
-questions, c'est-à-dire tant qu'ils n'ont pas été réglés à la main.
-Lors d'un ajout ou d'une duplication, la liste des questions peut être encore
-vide avant sa première génération : le barème proposé utilise alors
-`nbQuestions`, au lieu de retomber prématurément sur un point.
+  questions d'un exercice depuis la palette (`-1 q +`) reporte la différence
+  sur ses points — mais seulement tant qu'ils valent encore le nombre de
+  questions, c'est-à-dire tant qu'ils n'ont pas été réglés à la main.
+  Lors d'un ajout ou d'une duplication, la liste des questions peut être encore
+  vide avant sa première génération : le barème proposé utilise alors
+  `nbQuestions`, au lieu de retomber prématurément sur un point.
 - Changer de modèle **remplace les textes qui n'ont pas été personnalisés**
   (`isDefaultCoverText`, étendu à `noteFin`) et conserve les autres : passer
   du Brevet à la Course aux nombres ne garde pas « Durée : 2 heures » ni
@@ -339,11 +344,11 @@ au-dessus de la grille que si aucun de ces deux ensembles ne tient.
 
 Trois cases à cocher des Réglages du document, propres à ce modèle :
 
-| Réglage | Défaut | Effet |
-| --- | --- | --- |
-| Afficher la grille des points (`showBareme`) | oui | grille `Exercice / Points / Obtenus` par exercice, total compris ; sinon seul le total est rappelé (`Total : ..... / 16`) |
-| Champ de signature (`showSignature`) | oui | intitulé modifiable « Signature d’un responsable légal » sous le prénom, suivi d'un blanc où signer |
-| Case pour la note (`showNote`) | oui | case haute où porter la note à la main ; décochable, la case Total de la ligne « obtenus » en tenant déjà lieu |
+| Réglage                                      | Défaut | Effet                                                                                                                     |
+| -------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Afficher la grille des points (`showBareme`) | oui    | grille `Exercice / Points / Obtenus` par exercice, total compris ; sinon seul le total est rappelé (`Total : ..... / 16`) |
+| Champ de signature (`showSignature`)         | oui    | intitulé modifiable « Signature d’un responsable légal » sous le prénom, suivi d'un blanc où signer                       |
+| Case pour la note (`showNote`)               | oui    | case haute où porter la note à la main ; décochable, la case Total de la ligne « obtenus » en tenant déjà lieu            |
 
 Les trois consignes proposées par défaut emploient l'infinitif : « Justifier »,
 « Écrire » et « Ne pas utiliser ».
@@ -430,6 +435,40 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.canMode`) : pend
 - Les corrections sont dans un environnement `tasks` unique pour toute la fiche (une seule liste, numérotée comme les lignes du tableau) : elles se répartissent donc sur plusieurs colonnes, indispensable avec la [correction minimale](#correction-minimale) où chaque réponse tient en quelques caractères. Ses variables de mise en page portent le préfixe `ex0-corr` — le numéro 0, qu'aucun exercice ne porte, la distingue des listes de questions tout en restant reconnu par la palette, par `harvestCarryOver` et par `shiftCarryOver`/`swapCarryOver` (qui ne renumérotent que les exercices, à partir de 1).
 - Palette de mise en page : le repère `exo` de chaque exercice est émis **dans sa première cellule** (une métadonnée n'occupe aucune place, le contenu n'est pas décalé), la barre de l'exercice reste donc disponible ; seuls les repères `gap` qui encadrent le tableau existent (0 et le dernier), car entre deux lignes d'un même tableau une insertion ou un saut de page n'aurait pas de sens. `TypstLayoutOverlay` reçoit `canMode` et masque en conséquence les boutons sans effet (insertion avant l'exercice, édition du code de l'exercice, lignes pour écrire). Les insertions héritées de gaps intermédiaires (passage par le mode fiche) sont réémises après le tableau plutôt que perdues.
 
+## Export « J’ai… qui a… ? »
+
+La passerelle **J’ai… qui a… ?** ouvre une quatrième vue Typst complète, avec
+aperçu, code éditable, réglages et téléchargements `.typ`/PDF. Toutes les
+questions des exercices de la fiche sont aplaties dans leur ordre d’affichage.
+Le recto de la carte `i` porte la réponse minimale à la question `i` et l’énoncé
+de la question `i + 1`. La dernière carte revient à la première question afin
+de fermer la chaîne. Le verso est uniforme (« J’ai ..... Qui a .... ? ») et ses
+colonnes sont imprimées en miroir, comme dans la vue Flash-cards, pour
+l’impression recto-verso avec retournement sur les bords longs.
+
+Les lettres majuscules placées au début d’un énoncé comme index de série
+(`A = …`, `B = …`) sont retirées des cartes. Elles permettraient sinon de
+deviner le maillon suivant sans résoudre la question. Une lettre employée dans
+le corps de l’énoncé ou de l’expression reste inchangée.
+
+Les réponses passent par le même `minimalCorrection` que le mode de correction
+minimale du [TBI](tbi.md). Les questions dépourvues de correction associée sont
+ignorées. Avant l’export, leurs valeurs minimales normalisées sont comparées :
+si deux réponses sont identiques, la fiche est retirée automatiquement (au
+maximum 100 essais), car ce doublon créerait un court-circuit dans la chaîne.
+Le tirage retenu remplace celui de l’aperçu et de l’URL. Si aucune série valide
+n’est trouvée, l’export est interrompu avec un message invitant à modifier les
+réglages ou les exercices. Le document est généré par
+`src/components/setup/typst/buildIHaveWhoHasDocument.ts`, avec les polices, le
+format de page et l’orientation de la fiche courante ; il place par défaut deux
+cartes par ligne et quatre lignes par page, avec des traits de découpe.
+
+Chaque recto publie un repère pour une pastille `− / +` dans l’aperçu. Elle
+ajuste ensemble la taille du « J’ai » et du « Qui a » de cette seule carte. La
+valeur `#let carte-N-taille` est modifiée directement dans le code puis relue
+par `harvestIHaveWhoHasCarryOver`, de sorte que le réglage survive à une
+régénération du document, comme dans la vue Flash-cards.
+
 ## Correction minimale
 
 Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrections`, désactivée quand la correction n'est pas affichée) : quand une correction met sa réponse en évidence en orange, seule cette réponse est imprimée — le raisonnement disparaît. Une correction sans mise en évidence, ou dont la mise en évidence utilise une autre couleur (choisie justement pour ne pas désigner la réponse, voir `lib/outils/ecritures.ts`), est conservée telle quelle.
@@ -497,7 +536,7 @@ La liste des exercices, leurs graines et leurs réglages restent portés par les
 
 ## Visite guidée
 
-`src/lib/onboarding/typstTour.ts` (driver.js) présente la vue : modes d'affichage, aperçu, palette de mise en page, ajout d'un exercice (démontré par de vrais clics dans la modale), réglages du document — dont les liens vers les deux autres exports —, versions et export. Elle se déclenche au premier passage (hors mobile, hors `localhost`, hors lien partagé) et se relance depuis le bouton « Aide ».
+`src/lib/onboarding/typstTour.ts` (driver.js) présente la vue : modes d'affichage, aperçu, palette de mise en page, ajout d'un exercice (démontré par de vrais clics dans la modale), réglages du document — dont les liens vers les trois autres exports —, versions et export. Elle se déclenche au premier passage (hors mobile, hors `localhost`, hors lien partagé) et se relance depuis le bouton « Aide ».
 
 Deux précautions, sans lesquelles driver.js reste bloqué à attendre une cible introuvable (`waitForElement`) :
 
@@ -506,23 +545,23 @@ Deux précautions, sans lesquelles driver.js reste bloqué à attendre une cible
 
 ## Fichiers
 
-| Fichier | Rôle |
-| --- | --- |
-| `src/components/setup/typst/Typst.svelte` | La vue : barre d'outils, éditeur, aperçu, exports |
-| `src/lib/onboarding/typstTour.ts` | Visite guidée de la vue (driver.js) |
-| `src/components/setup/typst/TypstLayoutOverlay.svelte` | Palette de mise en page dessinée par-dessus l'aperçu |
-| `src/components/setup/typst/addExercise/TypstAddExerciseModal.svelte` | Modale « Ajouter un exercice » (navigation dans les référentiels) |
-| `src/components/setup/typst/addExercise/TypstExercisePreview.svelte` | Aperçu d'un exercice dans cette modale (réglages et ajout) |
-| `src/components/setup/typst/buildTypstDocument.ts` | Génère le code Typst complet (en-tête, exercices, corrections) |
-| `src/components/setup/typst/latexToTypst.ts` | Convertit le HTML des exercices et les formules LaTeX en Typst |
-| `src/components/setup/typst/minimalCorrection.ts` | Réduit une correction à ses réponses mises en évidence en orange |
-| `src/components/setup/typst/mathaleaLogo.ts` | Dé de MathALÉA (SVG allégé) embarqué par la page de garde « Course aux nombres » |
-| `src/components/setup/typst/typstPackages.ts` | Versions des paquets `@preview` (source unique) et construction des lignes `#import` |
-| `src/components/setup/typst/typstCompiler.ts` | Compilation dans le navigateur via typst.ts (WASM) |
-| `src/components/setup/typst/typstDiagnostics.ts` | Lecture et traduction en français des diagnostics du compilateur |
-| `src/components/setup/typst/editor/typstEditorSetup.ts` | Extensions CodeMirror de l'éditeur (thèmes, raccourcis, marqueurs d'erreur) |
-| `src/components/setup/typst/editor/typstLanguage.ts` | Coloration syntaxique Typst (`StreamLanguage`) |
-| `src/components/setup/typst/editor/editorPhrases.ts` | Traduction française de l'interface de CodeMirror |
+| Fichier                                                               | Rôle                                                                                 |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `src/components/setup/typst/Typst.svelte`                             | La vue : barre d'outils, éditeur, aperçu, exports                                    |
+| `src/lib/onboarding/typstTour.ts`                                     | Visite guidée de la vue (driver.js)                                                  |
+| `src/components/setup/typst/TypstLayoutOverlay.svelte`                | Palette de mise en page dessinée par-dessus l'aperçu                                 |
+| `src/components/setup/typst/addExercise/TypstAddExerciseModal.svelte` | Modale « Ajouter un exercice » (navigation dans les référentiels)                    |
+| `src/components/setup/typst/addExercise/TypstExercisePreview.svelte`  | Aperçu d'un exercice dans cette modale (réglages et ajout)                           |
+| `src/components/setup/typst/buildTypstDocument.ts`                    | Génère le code Typst complet (en-tête, exercices, corrections)                       |
+| `src/components/setup/typst/latexToTypst.ts`                          | Convertit le HTML des exercices et les formules LaTeX en Typst                       |
+| `src/components/setup/typst/minimalCorrection.ts`                     | Réduit une correction à ses réponses mises en évidence en orange                     |
+| `src/components/setup/typst/mathaleaLogo.ts`                          | Dé de MathALÉA (SVG allégé) embarqué par la page de garde « Course aux nombres »     |
+| `src/components/setup/typst/typstPackages.ts`                         | Versions des paquets `@preview` (source unique) et construction des lignes `#import` |
+| `src/components/setup/typst/typstCompiler.ts`                         | Compilation dans le navigateur via typst.ts (WASM)                                   |
+| `src/components/setup/typst/typstDiagnostics.ts`                      | Lecture et traduction en français des diagnostics du compilateur                     |
+| `src/components/setup/typst/editor/typstEditorSetup.ts`               | Extensions CodeMirror de l'éditeur (thèmes, raccourcis, marqueurs d'erreur)          |
+| `src/components/setup/typst/editor/typstLanguage.ts`                  | Coloration syntaxique Typst (`StreamLanguage`)                                       |
+| `src/components/setup/typst/editor/editorPhrases.ts`                  | Traduction française de l'interface de CodeMirror                                    |
 
 ## Versions des paquets Typst
 
@@ -610,7 +649,7 @@ d'une figure ou d'un tableau).
 `MATHALEA_TASKS_HELPER` (`latexToTypst.ts`) corrige ce décalage en
 redéfinissant `tasks` par-dessus celle du paquet, importée sous le nom
 `taskize-tasks` (l'import et le helper vont donc toujours ensemble, dans les
-trois vues Typst). Le code généré, lui, ne change pas : les listes de
+quatre vues Typst). Le code généré, lui, ne change pas : les listes de
 questions s'écrivent toujours `#tasks(columns: exN-colonnes, label: ..., …)`,
 le motif de `label` reprenant le style de numérotation choisi dans les
 Réglages du document (`1)` par défaut — voir [Styles des
@@ -668,20 +707,21 @@ Le code généré ne change pas au passage (les listes s'écrivent toujours
 ### Consigne en mode fusionné
 
 Hors fusion, `exerciseBody` affiche `TypstExerciseInput.intro` (consigne
-+ introduction, concaténées) une fois avant la liste `#tasks(...)`, chaque
-exercice gardant par ailleurs son titre ou son badge. Quand
-**« Fusionner tous les exercices »** (`options.mergeExercises`) est coché, il
-n'y a plus ni titre ni badge et les questions de tous les exercices sont
-numérotées à la suite dans des listes séparées : une question isolée au
-milieu du flux ne dirait plus quoi faire. `exerciseBody` recopie donc la
-**consigne seule** (`TypstExerciseInput.consigne`, tenue à part de
-`introduction` par `Typst.svelte` et `typst-batch-worker.ts`) en tête de
-**chaque** item de la liste, derrière un retour à la ligne Typst (`\`), juste
-après le numéro ; seule l'`introduction` éventuelle reste affichée une fois
-avant la liste. Le repli (`repeatConsigne`) ne s'active que si la consigne se
-rend sur une seule ligne — une consigne-bloc garde l'affichage classique
-avant la liste. La fusion **locale** (bouton « fusionner avec le précédent »
-de la palette), qui conserve un titre par groupe, n'est pas concernée.
+
+- introduction, concaténées) une fois avant la liste `#tasks(...)`, chaque
+  exercice gardant par ailleurs son titre ou son badge. Quand
+  **« Fusionner tous les exercices »** (`options.mergeExercises`) est coché, il
+  n'y a plus ni titre ni badge et les questions de tous les exercices sont
+  numérotées à la suite dans des listes séparées : une question isolée au
+  milieu du flux ne dirait plus quoi faire. `exerciseBody` recopie donc la
+  **consigne seule** (`TypstExerciseInput.consigne`, tenue à part de
+  `introduction` par `Typst.svelte` et `typst-batch-worker.ts`) en tête de
+  **chaque** item de la liste, derrière un retour à la ligne Typst (`\`), juste
+  après le numéro ; seule l'`introduction` éventuelle reste affichée une fois
+  avant la liste. Le repli (`repeatConsigne`) ne s'active que si la consigne se
+  rend sur une seule ligne — une consigne-bloc garde l'affichage classique
+  avant la liste. La fusion **locale** (bouton « fusionner avec le précédent »
+  de la palette), qui conserve un titre par groupe, n'est pas concernée.
 
 ### Colonnes des QCM
 
@@ -812,7 +852,7 @@ version dans le quota du navigateur.
 ### Recompilations
 
 Une compilation n'est pas annulable une fois lancée : le jeton `compileToken`
-n'écarte que les *résultats* périmés. Trois garde-fous dans `Typst.svelte` :
+n'écarte que les _résultats_ périmés. Trois garde-fous dans `Typst.svelte` :
 
 - `compile()` sort immédiatement si la source est identique à la dernière
   compilée (`lastCompiledCode`). `resetCompileCache()` lève la mémoïsation
