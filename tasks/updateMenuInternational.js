@@ -507,14 +507,17 @@ function reportMissingFrenchMenuEntries(referentiel, exercices, themesPath) {
 
   if (missingRefs.length > 0) {
     console.warn(
-      `\nFR: ${missingRefs.length} référence(s) sans rattachement dans tasks/emptyRef2022.json :`,
+      `\nFR: ${missingRefs.length} référence(s) sans rattachement dans tasks/emptyRef2022.json. Pour la liste : LIST_MISSING_REFS=1 node tasks/updateMenuInternational.js`,
     )
+  } else {
+    console.log('\nFR: toutes les références sont rattachées au menu.')
+  }
+
+  if (process.env.LIST_MISSING_REFS && missingRefs.length > 0) {
     for (const ref of missingRefs) {
       const exercice = exercices[ref]
       console.warn(`  - ${ref} (${exercice.url}, uuid ${exercice.uuid})`)
     }
-  } else {
-    console.log('\nFR: toutes les références sont rattachées au menu.')
   }
 
   const missingTitles = themesPath

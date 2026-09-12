@@ -2078,6 +2078,18 @@
   "4C33": {
     "titre": "Utiliser les puissances d'exposants strictement positifs d'un nombre pour simplifier l'écriture des produits"
   },
+  "4C34": {
+    "titre": "Calculer en utilisant les priorités opératoires et les puissances"
+  },
+  "4C35": {
+    "titre": "Transformer une écriture de puissance en écriture décimale ou fractionnaire"
+  },
+  "4C36": {
+    "titre": "Utiliser les ordres de grandeur pour vérifier ses résultats"
+  },
+  "4C37": {
+    "titre": "Déterminer le signe d'une puissance"
+  },
   "4L1": {
     "titre": "Calcul littéral"
   },
@@ -2098,6 +2110,9 @@
   },
   "4L15": {
     "titre": "Résoudre algébriquement une équation du premier degré"
+  },
+  "4L16": {
+    "titre": "Déterminer si une expression littérale est une somme, une différence, un produit ou un quotient"
   },
   "4L2": {
     "titre": "Calcul littéral (partie 2)"
@@ -2150,6 +2165,9 @@
   "4P15": {
     "titre": "Utiliser un rapport d'agrandissement ou de réduction pour calculer, des longueurs, des aires, des volumes"
   },
+  "4P16": {
+    "titre": "Convertir des grandeurs composées, notamment des vitesses"
+  },
   "4F1": {
     "titre": "Notion de fonction"
   },
@@ -2176,6 +2194,9 @@
   },
   "4G13": {
     "titre": "Mener des raisonnements en utilisant des propriétés des figures, des configurations et de la translation"
+  },
+  "4G15": {
+    "titre": "Effectuer des transformations de triangles"
   },
   "4G1Q": {
     "titre": "QCM"
@@ -2453,6 +2474,12 @@
   "3A12": {
     "titre": "Modéliser et résoudre des problèmes mettant en jeu la divisibilité (engrenages, conjonction de phénomènes...)"
   },
+  "3A13": {
+    "titre": "Poser une division euclidienne, en connaître le vocabulaire et faire le lien avec les multiples d'un nombre"
+  },
+  "3A14": {
+    "titre": "Se préparer au DNB : arithmétique et volumes"
+  },
   "3A1Q": {
     "titre": "QCM"
   },
@@ -2521,6 +2548,9 @@
   },
   "3F23": {
     "titre": "Déterminer de manière algébrique l'antécédent par une fonction, dans des cas se ramenant à la résolution d'une équation du premier degré"
+  },
+  "3F24": {
+    "titre": "Se préparer au DNB : fonctions, fonction affine, tableur et équation produit-nul"
   },
   "3F2Q": {
     "titre": "QCM"
@@ -2609,6 +2639,12 @@
   "3G22": {
     "titre": "Connaître et utiliser une définition et une propriété caractéristique des triangles semblables"
   },
+  "3G23": {
+    "titre": "Reconnaitre des triangles égaux dans différentes configurations"
+  },
+  "3G24": {
+    "titre": "Utiliser les propriétés des triangles semblables pour calculer des longueurs"
+  },
   "3G2Q": {
     "titre": "QCM"
   },
@@ -2641,6 +2677,9 @@
   },
   "3G43": {
     "titre": "Calculer les volumes d'assemblages de solides étudiés au cours du cycle"
+  },
+  "3G44": {
+    "titre": "Déterminer des longueurs dans la géométrie dans l'espace"
   },
   "3G4Q": {
     "titre": "QCM"
