@@ -32,6 +32,7 @@ mathématique simple.
 | Proposer des réglages à l'enseignant                  | [Formulaires de paramétrage](complements/formulaires-parametres.md)   |
 | Utiliser un format interactif spécialisé              | [Formats interactifs spécialisés](complements/formats-interactifs.md) |
 | Enchaîner plusieurs custom elements dans une question | [Mathalea Couteau Suisse](complements/couteau-suisse.md)              |
+| Faire construire une courbe depuis un tableau         | [Traceur de courbe](complements/traceur-de-courbe.md)                 |
 | Créer un QCM                                          | [Coder un QCM](complements/coder-un-qcm.md)                           |
 | Préparer un export AMC                                | [Export AMC](complements/export-amc.md)                               |
 | Créer une figure ou une scène 3D                      | [Faire un exercice 3D](complements/faire-un-exercice-3d.md)           |

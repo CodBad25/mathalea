@@ -12,7 +12,9 @@ La vue Flash-cards (`v=flashcards` dans l'URL) génère des cartes à découper 
 
 ## Réglages
 
-En tête du panneau, `shared/ExportViewLinks.svelte` renvoie vers les deux autres exports Typst ([Impression](typst.md) et [Diaporama PDF](diaporama-pdf.md)) en gardant les exercices en place.
+En tête du panneau, `shared/ExportViewLinks.svelte` renvoie vers les trois autres
+exports Typst ([Impression](typst.md), **J’ai… qui a… ?** et
+[Diaporama PDF](diaporama-pdf.md)) en gardant les exercices en place.
 
 Panneau latéral, persisté dans `localStorage` (`mathaleaFlashcardsView`) : format (A4/A5), orientation, cartes par ligne (1 à 4), lignes par page (1 à 6), taille du texte, polices (texte et maths, mêmes listes que la vue Typst), numérotation des cartes, titre recto/verso.
 
@@ -22,10 +24,10 @@ Le code Typst généré est éditable (mode « Code », recompilation débouncé
 
 ## Fichiers
 
-| Fichier | Rôle |
-| --- | --- |
-| `src/components/setup/flashcards/Flashcards.svelte` | La vue : barre d'outils, réglages, aperçu, exports |
-| `src/components/setup/flashcards/buildFlashcardsDocument.ts` | Génère le code Typst des planches de cartes |
+| Fichier                                                      | Rôle                                               |
+| ------------------------------------------------------------ | -------------------------------------------------- |
+| `src/components/setup/flashcards/Flashcards.svelte`          | La vue : barre d'outils, réglages, aperçu, exports |
+| `src/components/setup/flashcards/buildFlashcardsDocument.ts` | Génère le code Typst des planches de cartes        |
 
 La conversion HTML/LaTeX → Typst et la compilation sont partagées avec la vue Typst (`src/components/setup/typst/latexToTypst.ts`, `typstCompiler.ts`).
 

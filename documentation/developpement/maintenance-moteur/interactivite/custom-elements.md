@@ -8,7 +8,7 @@ Objectif : avoir une API homogène pour l'injection HTML, la mise à jour d'affi
 
 Toute nouvelle classe doit étendre `MathaleaCustomElement` dans `src/lib/customElements/MathaleaCustomElement.ts`.
 
-L'implémentation du custom element doit être placée dans `src/lib/customElements/`. Les helpers métier qui appellent `create(...)` ou encapsulent le composant doivent prendre place dans le même fichier que le composant.
+L'implémentation du custom element doit être placée dans `src/lib/customElements/`. Les helpers métier qui appellent `create(...)` ou encapsulent le composant doivent prendre place dans le même fichier que le composant. Les fonctions utilitaires qui ne servent qu'à ce custom element sont également intégrées à ce fichier ; un fichier séparé est réservé à une logique réellement partagée avec d'autres modules.
 
 Exemple de signature minimale :
 

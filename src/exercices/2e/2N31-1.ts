@@ -47,7 +47,7 @@ const leSuperFormulaire: FormulaireComplexe = {
         },
         {
           nom: '2',
-          label: "Somme u différence d'un entier et d'une fraction",
+          label: "Somme ou différence d'un entier et d'une fraction",
           poids: 1,
         },
         {

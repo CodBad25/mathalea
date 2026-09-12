@@ -8,7 +8,6 @@ import {
 import type { IExercice } from '../types'
 import {
   cleDeLaCase as cleDeLaCasePartagee,
-  pointsMaxDesCases,
   verifieLesCases,
   type GrilleDeChiffres,
   type ResultatVerification,
@@ -16,6 +15,12 @@ import {
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
+
+/**
+ * Le barème d'une pyramide : toujours 5 points, comme le nombre d'étages
+ * fixé par `EN-pyramide.ts` (`NB_ETAGES`).
+ */
+const POINTS_MAX_PYRAMIDE = 5
 
 /**
  * Une pyramide de nombres : des cases rondes empilées en triangle, reliées deux
@@ -933,9 +938,11 @@ export class PyramideNombresElement
   }
 
   /**
-   * Vérification interactive : chaque case correctement remplie rapporte un
-   * point. Les valeurs données ne comptent pas : elles ne figurent pas dans
-   * les réponses attendues construites par l'exercice.
+   * Vérification interactive : la note est la proportion de cases
+   * correctement remplies, multipliée par le barème de la pyramide et
+   * arrondie à l'entier inférieur. Les valeurs données ne comptent pas :
+   * elles ne figurent pas dans les réponses attendues construites par
+   * l'exercice.
    */
   static verifQuestion(
     exercice: IExercice,
@@ -946,11 +953,15 @@ export class PyramideNombresElement
       exercice,
       questionIndex,
       document.getElementById(id) as PyramideNombresElement | null,
+      POINTS_MAX_PYRAMIDE,
     )
   }
 
-  static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
-    return pointsMaxDesCases(exercice, questionIndex)
+  static pointsMaxQuestion(
+    _exercice: IExercice,
+    _questionIndex: number,
+  ): number {
+    return POINTS_MAX_PYRAMIDE
   }
 }
 

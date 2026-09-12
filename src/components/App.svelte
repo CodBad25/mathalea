@@ -37,6 +37,7 @@
   import Tools from './setup/tools/Tools.svelte'
   import Typst from './setup/typst/Typst.svelte'
   import Flashcards from './setup/flashcards/Flashcards.svelte'
+  import IHaveWhoHas from './setup/iHaveWhoHas/IHaveWhoHas.svelte'
   import Slides from './setup/slides/Slides.svelte'
   import Tbi from './display/tbi/Tbi.svelte'
   import Omr from './setup/omr/Omr.svelte'
@@ -261,6 +262,8 @@
     <Tex />
   {:else if $globalOptions.v === 'flashcards'}
     <Flashcards />
+  {:else if $globalOptions.v === 'i-have-who-has'}
+    <IHaveWhoHas />
   {:else if $globalOptions.v === 'slides'}
     <Slides />
   {:else if $globalOptions.v === 'tbi'}

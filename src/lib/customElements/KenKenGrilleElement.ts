@@ -1,7 +1,7 @@
 import { context } from '../../modules/context'
 import { orangeMathalea, vertMathalea } from '../colors'
 import { miseEnEvidence } from '../outils/embellissements'
-import { etiquetteCage, type CageKenKen } from '../outils/kenken'
+import { etiquetteCage, tailleKenKen, type CageKenKen } from '../outils/kenken'
 import type { IExercice } from '../types'
 import {
   cleDeLaCase as cleDeLaCasePartagee,
@@ -9,7 +9,6 @@ import {
   deplacementDuClavier,
   deplaceLeFocus,
   filtreLaSaisie,
-  pointsMaxDesCases,
   verifieLesCases,
   type GrilleDeChiffres,
   type ResultatVerification,
@@ -568,9 +567,11 @@ export class KenKenGrilleElement
   }
 
   /**
-   * Vérification interactive : chaque case correctement remplie rapporte un
-   * point. Les valeurs données ne comptent pas : elles ne figurent pas dans
-   * les réponses attendues construites par l'exercice.
+   * Vérification interactive : la note est la proportion de cases
+   * correctement remplies, multipliée par le barème de la grille (sa taille)
+   * et arrondie à l'entier inférieur. Les valeurs données ne comptent pas :
+   * elles ne figurent pas dans les réponses attendues construites par
+   * l'exercice.
    */
   static verifQuestion(
     exercice: IExercice,
@@ -581,11 +582,12 @@ export class KenKenGrilleElement
       exercice,
       questionIndex,
       document.getElementById(id) as KenKenGrilleElement | null,
+      tailleKenKen(exercice.sup),
     )
   }
 
-  static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
-    return pointsMaxDesCases(exercice, questionIndex)
+  static pointsMaxQuestion(exercice: IExercice, _questionIndex: number): number {
+    return tailleKenKen(exercice.sup)
   }
 }
 

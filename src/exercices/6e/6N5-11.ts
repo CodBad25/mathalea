@@ -190,7 +190,9 @@ export default class ExerciceProblemesComplexes extends Exercice {
             enonceQuestion = 'Si oui, de combien ? Si non, combien reste-t-il ?'
             dataTemplate.push(enonceQuestion)
             reponses.push(
-              total > 700 ? (total - 700).toFixed(2) : (700 - total).toFixed(),
+              total > 700
+                ? (total - 700).toFixed(2)
+                : (700 - total).toFixed(2),
             )
             texteApres.push(' kg')
             claviers.push(KeyboardType.clavierNumbers)

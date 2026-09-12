@@ -109,8 +109,8 @@ export default class ReductionsPiegesClassiques extends Exercice {
           break
         case 'ax+bx':
           texte = `$${lettreDepuisChiffre(i + 1, saufD)}=${a}x${ecritureAlgebrique(b)}x$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1, saufD)}=${a}x${ecritureAlgebrique(b)}x=${rienSi1(a + b)}x$`
-          reponse = `${rienSi1(a + b)}x`
+          reponse = a + b === 0 ? '0' : `${rienSi1(a + b)}x`
+          texteCorr = `$${lettreDepuisChiffre(i + 1, saufD)}=${a}x${ecritureAlgebrique(b)}x=${reponse}$`
           break
         case 'ax+x':
           texte = `$${lettreDepuisChiffre(i + 1, saufD)}=${a}x+x$`

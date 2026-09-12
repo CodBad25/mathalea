@@ -98,7 +98,7 @@ export default class EcrituresFractionnaireEtDecimale extends Exercice {
               numerateurDecimalDixieme,
               10 * denominateur,
             ),
-            calcul: `\\dfrac{${texNombre(numerateurDecimalDixieme / 10)}}{${denominateur}}=\\dfrac{${numerateurDecimalDixieme}}{${10 * denominateur}}`,
+            calcul: `\\dfrac{${texNombre(numerateurDecimalDixieme / 10)}}{${denominateur}}=\\dfrac{${numerateurDecimalDixieme}}{${texNombre(10 * denominateur, 2)}}`,
           }
           break
         }
@@ -108,7 +108,7 @@ export default class EcrituresFractionnaireEtDecimale extends Exercice {
           donnee = {
             expression: `${entier}\\times 10^{-${exposant}}`,
             fraction: new FractionEtendue(entier, 10 ** exposant),
-            calcul: `${entier}\\times 10^{-${exposant}}=\\dfrac{${entier}}{${10 ** exposant}}`,
+            calcul: `${entier}\\times 10^{-${exposant}}=\\dfrac{${entier}}{${texNombre(10 ** exposant, 2)}}`,
           }
           break
         }
@@ -163,8 +163,8 @@ export default class EcrituresFractionnaireEtDecimale extends Exercice {
 
       this.listeQuestions[i] = texte
       this.listeCorrections[i] = fractionDemandee
-        ? `$A=${donnee.calcul}=${miseEnEvidence(fractionIrreductible.texFraction)}$.`
-        : `$A=${donnee.calcul}=${fractionIrreductible.texFraction}=${miseEnEvidence(texNombre(decimal))}$.`
+        ? `$A=${donnee.calcul}=${miseEnEvidence(fractionIrreductible.texFraction)}$`
+        : `$A=${donnee.calcul}=${fractionIrreductible.texFraction}=${miseEnEvidence(texNombre(decimal))}$`
       this.canEnonce = `Écrire $A=${donnee.expression}$ ${fractionDemandee ? "sous la forme d'une fraction irréductible" : 'sous forme décimale'}.`
       this.canReponseACompleter = '$A=\\ldots$'
       this.listeCanEnonces.push(this.canEnonce)

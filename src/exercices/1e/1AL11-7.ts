@@ -105,7 +105,7 @@ export default class TermeGeneralSuiteParRecurrence extends Exercice {
         ])
         const raisonTex = texNombre(raison, 1)
         const puissance = exposant(indicePremierTerme)
-        reponse = `${premierTerme}*(${raison.toString()})^(${puissance})`
+        reponse = `${premierTerme}*(${raison.toString()})^{${puissance}}`
         relation = `u_{n+1}=${raisonTex}u_n`
         texteCorr = `$u_{n+1}=${raisonTex}u_n$ est la relation de récurrence d’une suite géométrique de raison $q=${raisonTex}$.<br>`
         texteCorr +=
@@ -119,7 +119,7 @@ export default class TermeGeneralSuiteParRecurrence extends Exercice {
 
       let texte = `La suite $(u_n)$ est définie par $u_{${indicePremierTerme}}=${premierTerme}$ et par la relation $${relation}$, pour tout entier naturel $n$.`
       if (this.interactif) {
-        texte += `<br>$u_n=$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecVariable)}`
+        texte += `<br>$u_n=$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierSuite)}`
       }
 
       if (

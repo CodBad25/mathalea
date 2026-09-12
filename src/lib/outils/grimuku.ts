@@ -44,6 +44,29 @@ export type GrilleGrimuku = {
   donnees: number[]
 }
 
+/** Un format de grille proposé au professeur, avec le barème qui lui correspond. */
+export type FormatGrimuku = { lignes: number; colonnes: number; points: number }
+
+/**
+ * Les formats de grille proposés, dans l'ordre du formulaire, avec le nombre
+ * de points sur lequel la grille est notée : autant que son côté pour une
+ * grille carrée, 8 pour la grille 6 × 9.
+ */
+export const FORMATS_GRIMUKU: FormatGrimuku[] = [
+  { lignes: 5, colonnes: 5, points: 5 },
+  { lignes: 6, colonnes: 6, points: 6 },
+  { lignes: 7, colonnes: 7, points: 7 },
+  { lignes: 6, colonnes: 9, points: 8 },
+]
+
+/** Le format de grille correspondant au rang choisi dans le formulaire. */
+export function formatGrimuku(rang: unknown): FormatGrimuku {
+  const index = Math.round(Number(rang))
+  return FORMATS_GRIMUKU[
+    Math.min(FORMATS_GRIMUKU.length, Math.max(1, index || 2)) - 1
+  ]
+}
+
 /** 1 : facile, 2 : moyen, 3 : difficile. */
 export type NiveauGrimuku = 1 | 2 | 3
 

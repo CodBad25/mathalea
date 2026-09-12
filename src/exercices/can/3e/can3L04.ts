@@ -21,7 +21,7 @@ export const interactifReady = true
 export const uuid = 'e7754'
 
 export const refs = {
-  'fr-fr': ['can3L04'],
+  'fr-fr': ['can3L04', '2L30-flash1'],
   'fr-ch': [],
 }
 export default class SolutionInequation extends Exercice {

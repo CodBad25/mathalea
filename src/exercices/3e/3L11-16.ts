@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import IdentiteRemarquable from '../../lib/mathFonctions/IdentiteRemarquable'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
 import { choice, getRandomSubarray } from '../../lib/outils/arrayOutils'
@@ -11,6 +14,7 @@ import {
 import Exercice from '../Exercice'
 export const titre = 'Compléter une identité remarquable à trou'
 export const dateDePublication = '11/09/2024'
+export const interactifReady = true
 
 /**
  * Réduire une expression littérale
@@ -40,8 +44,10 @@ export default class nomExercice extends Exercice {
     ]
     // this.besoinFormulaireCaseACocher = ['Type de coefficients', 3, 'Entiers\nFractionnaires\nMélange']
     // this.besoinFormulaire5Numerique = ['Nombre de termes', 5, '1\n2\n3\n4\n5']
+    this.besoinFormulaire3CaseACocher = ["N'utiliser que $x$ comme variable"]
     this.sup = 5
     this.sup2 = 1
+    this.sup3 = false
     this.listeAvecNumerotation = false
     this.correctionDetailleeDisponible = true
   }
@@ -62,7 +68,7 @@ export default class nomExercice extends Exercice {
       let texte = ''
       let texteCorr = ''
       const coeffMax = 12
-      const variables = ['x', 'y', 'z', 'r', 's', 't']
+      const variables = this.sup3 ? ['x'] : ['x', 'y', 'z', 'r', 's', 't']
       const variablesSelect = getRandomSubarray(variables, 1)
       const typeCoeffListe = ['entier', 'fractionnaire']
       let typeofCoeff = []
@@ -105,25 +111,44 @@ export default class nomExercice extends Exercice {
       if (p2.coefficient.signe < 0) {
         p2 = p2.oppose()
       }
+      const termeCentral = p1
+        .produit(p2)
+        .produit(
+          new MonomePlusieursVariables(new FractionEtendue(2, 1), {
+            variables: ['x'],
+            exposants: [0],
+          }),
+        )
       if (this.correctionDetaillee) {
-        texteCorr = `Les deux termes présents dans l'expression sont des carrés parfaits. On détermine les monômes qui au carré donnent ces termes.<br> On obtient un premier terme qui vaut $${p1.toString()}$ et un second terme qui vaut $${p2.toString()}$.<br>Le terme manquant est donc $2\\times ${p1.toString()}\\times ${p2.toString()}=${p1
-          .produit(p2)
-          .produit(
-            new MonomePlusieursVariables(new FractionEtendue(2, 1), {
-              variables: ['x'],
-              exposants: [0],
-            }),
-          )
-          .toString()}$. Le signe nous permet de savoir s'il s'agit de la première ou de la deuxième identité remarquable.<br>`
+        texteCorr = `Les deux termes présents dans l'expression sont des carrés parfaits. On détermine les monômes qui au carré donnent ces termes.<br> On obtient un premier terme qui vaut $${p1.toString()}$ et un second terme qui vaut $${p2.toString()}$.<br>Le terme manquant est donc $2\\times ${p1.toString()}\\times ${p2.toString()}=${termeCentral.toString()}$. Le signe nous permet de savoir s'il s'agit de la première ou de la deuxième identité remarquable.<br>`
       }
       switch (listeDeQuestions[i]) {
         case 1:
         case 3: {
           const expr = IdentiteRemarquable.carreDuneSomme(p1, p2).ordonner()
-          texte = `$${lettreDepuisChiffre(i + 1)}=${expr.toStringSansLeTerme(1)}\\,=\\,\\ldots\\ldots$`
+          const identite = `\\left(${p1.toString()}+${p2.toString()}\\right)^2`
+          const exprAvecTrou = expr
+            .toStringSansLeTerme(1)
+            .replace('\\ldots\\ldots', '%{champ1}')
+          texte = remplisLesBlancs(
+            this,
+            i,
+            `${lettreDepuisChiffre(i + 1)}=${exprAvecTrou}\\,=\\,%{champ2}`,
+            KeyboardType.clavierDeBaseAvecVariable,
+            '\\ldots\\ldots',
+          )
           // si deux carrés facile
           // si un seul carré, alors on calcule la racine et on s'il divise le terme restant, si oui, alors première identité autrement, la quatrième
-          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${expr.toStringAvecTermeEnEvidence(1)}=${miseEnEvidence(`\\left(${p1.toString()}+${p2.toString()}\\right)^2`)}$`
+          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${expr.toStringAvecTermeEnEvidence(1)}=${miseEnEvidence(identite)}$`
+          handleAnswers(
+            this,
+            i,
+            {
+              champ1: { value: termeCentral.toString() },
+              champ2: { value: identite, options: { factorisation: true } },
+            },
+            { formatInteractif: 'fill-in-the-blank' },
+          )
           break
         }
         case 2:
@@ -132,9 +157,28 @@ export default class nomExercice extends Exercice {
             p1,
             p2,
           ).ordonner()
-          texte = `$${lettreDepuisChiffre(i + 1)}=${expr.toStringSansLeTerme(1)}\\,=\\,\\ldots\\ldots$`
+          const identite = `\\left(${p1.toString()}-${p2.toString()}\\right)^2`
+          const exprAvecTrou = expr
+            .toStringSansLeTerme(1)
+            .replace('\\ldots\\ldots', '%{champ1}')
+          texte = remplisLesBlancs(
+            this,
+            i,
+            `${lettreDepuisChiffre(i + 1)}=${exprAvecTrou}\\,=\\,%{champ2}`,
+            KeyboardType.clavierDeBaseAvecVariable,
+            '\\ldots\\ldots',
+          )
           // idem que pour la 1re
-          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${expr.toStringAvecTermeEnEvidence(1)}=${miseEnEvidence(`\\left(${p1.toString()}-${p2.toString()}\\right)^2`)}$`
+          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${expr.toStringAvecTermeEnEvidence(1)}=${miseEnEvidence(identite)}$`
+          handleAnswers(
+            this,
+            i,
+            {
+              champ1: { value: termeCentral.toString() },
+              champ2: { value: identite, options: { factorisation: true } },
+            },
+            { formatInteractif: 'fill-in-the-blank' },
+          )
           break
         }
         /* Cas suisse pas pris en compte pour l'instant 

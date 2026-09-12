@@ -52,42 +52,54 @@ function casesAttendues(
 }
 
 /**
- * Compare les cases saisies aux réponses attendues : un point par case juste.
+ * Compare les cases saisies aux réponses attendues.
  *
  * Les cases dont le chiffre est écrit d'avance dans l'énoncé ne comptent pas :
  * l'exercice ne les met pas dans les réponses attendues.
+ *
+ * Par défaut, chaque case juste rapporte un point. Quand `pointsMax` est
+ * fourni, la note tient compte de la proportion de cases justes plutôt que de
+ * leur nombre : elle vaut la proportion de cases justes multipliée par
+ * `pointsMax`, arrondie à l'entier inférieur. Le message affiché sous la
+ * grille compte toujours les cases, quel que soit le barème.
  */
 export function verifieLesCases(
   exercice: IExercice,
   questionIndex: number,
   element: GrilleDeChiffres | null,
+  pointsMax?: number,
 ): ResultatVerification {
   const attendues = casesAttendues(exercice, questionIndex)
   if (element == null || attendues.length === 0) {
     return {
       isOk: false,
       feedback: '',
-      score: { nbBonnesReponses: 0, nbReponses: 1 },
+      score: { nbBonnesReponses: 0, nbReponses: pointsMax ?? 1 },
     }
   }
   exercice.answers ??= {}
   exercice.answers[element.id] = JSON.stringify(element.value)
   const saisies = element.value
   const etats = new Map<string, boolean>()
-  let nbBonnesReponses = 0
+  let nbCasesJustes = 0
   for (const [cle, attendue] of attendues) {
     const chiffre = attendue.value
     const isOk = chiffre != null && (saisies[cle] ?? '') === String(chiffre)
-    if (isOk) nbBonnesReponses++
+    if (isOk) nbCasesJustes++
     etats.set(cle, isOk)
   }
   element.marqueLesCases(etats)
-  element.afficheLeScore(nbBonnesReponses, attendues.length)
+  element.afficheLeScore(nbCasesJustes, attendues.length)
   element.interactivityOn = false
+  const nbReponses = pointsMax ?? attendues.length
+  const nbBonnesReponses =
+    pointsMax == null
+      ? nbCasesJustes
+      : Math.floor((nbCasesJustes / attendues.length) * pointsMax)
   return {
-    isOk: nbBonnesReponses === attendues.length,
+    isOk: nbCasesJustes === attendues.length,
     feedback: '',
-    score: { nbBonnesReponses, nbReponses: attendues.length },
+    score: { nbBonnesReponses, nbReponses },
   }
 }
 

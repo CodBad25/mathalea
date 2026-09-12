@@ -1,8 +1,12 @@
 import Decimal from 'decimal.js'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, creerCouples } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -23,7 +27,9 @@ export const titre =
  * @author Rémi Angot
  */
 
-export const uuid = 'a5c5a'
+export const dateDeModifImportante = '12/09/2026'
+
+export const uuid = '5d146'
 
 export const refs = {
   'fr-fr': ['6N2B-5, 5N1autoD', '5N2autoA-2'],
@@ -35,15 +41,32 @@ export default class ExerciceTablesMultiplicationsEtDecimaux extends Exercice {
     super()
     // Multiplier deux nombres
     this.sup = tablesParDefaut
+    this.sup2 = 2
     this.besoinFormulaireTexte = [
       'Choix des tables (entre 2 et 9)',
       'Nombres séparés par des tirets  :',
     ] // Texte, tooltip
+    if (context.isHtml) {
+      this.besoinFormulaire2Numerique = [
+        'Exercice interactif',
+        2,
+        '1 : QCM\n2 : Numérique',
+      ]
+    }
     this.consigne = 'Calculer.'
     this.spacing = 2
   }
 
   nouvelleVersion() {
+    if (context.isHtml)
+      this.besoinFormulaire2Numerique = [
+        'Exercice interactif',
+        2,
+        '1 : QCM\n2 : Numérique',
+      ]
+    // Texte, tooltip
+    else this.besoinFormulaire2Numerique = false
+
     const tables = gestionnaireFormulaireTexte({
       min: 2,
       max: 9,
@@ -85,7 +108,7 @@ export default class ExerciceTablesMultiplicationsEtDecimaux extends Exercice {
       if (b.equals(1)) {
         b = new Decimal(1).div(10)
       }
-      texte = '$ ' + texNombre(a) + ' \\times ' + texNombre(b) + '$'
+      texte = '$ ' + texNombre(a) + ' \\times ' + texNombre(b) + ' =  $'
       texteCorr =
         '$ ' +
         texNombre(a) +
@@ -129,8 +152,19 @@ export default class ExerciceTablesMultiplicationsEtDecimaux extends Exercice {
         ordered: false,
       }
       const props = propositionsQcm(this, i)
-      if (this.interactif) {
+      if (this.interactif && this.sup2 !== 2) {
         texte += props.texte
+      } else {
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
+        // `propositionsQcm()` a positionné `formatInteractif` à 'mathalea-qcm' ;
+        // en mode numérique interactif il faut le forcer à 'mathlive' sinon la
+        // saisie de l'élève n'est pas vérifiée (réponse considérée manquante).
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: a.times(b) } },
+          this.interactif ? { formatInteractif: 'mathlive' } : {},
+        )
       }
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)

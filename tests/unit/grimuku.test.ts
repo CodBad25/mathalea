@@ -404,14 +404,19 @@ describe('rendus du composant grimuku-grille', () => {
 })
 
 describe('interactivité et score', () => {
-  /** Un exercice minimal portant les réponses attendues de la grille de référence. */
+  /**
+   * Un exercice minimal portant les réponses attendues de la grille de
+   * référence. `sup: 1` sélectionne le format 5 × 5, noté sur 5 points.
+   */
   function exerciceDeTest(): {
     numeroExercice: number
+    sup: number
     answers: Record<string, string>
     autoCorrection: { valeur: Record<string, { value: string }> }[]
   } {
     return {
       numeroExercice: 3,
+      sup: 1,
       answers: {},
       autoCorrection: [
         {
@@ -443,16 +448,16 @@ describe('interactivité et score', () => {
     ) as GrimukuGrilleElement
   }
 
-  it('compte un point par case à remplir', () => {
+  it('note la grille sur le barème de son format', () => {
     expect(
       GrimukuGrilleElement.pointsMaxQuestion(
         exerciceDeTest() as unknown as Exercice,
         0,
       ),
-    ).toBe(3)
+    ).toBe(5)
   })
 
-  it('attribue un point par case correctement remplie et fige la grille', () => {
+  it('note la proportion de cases correctement remplies et fige la grille', () => {
     const element = monteLaGrille()
     element.value = { L2C2: '2', L2C3: '9', L3C2: '' }
     const exercice = exerciceDeTest()
@@ -460,10 +465,11 @@ describe('interactivité et score', () => {
       exercice as unknown as Exercice,
       0,
     )
+    // 1 case juste sur 3, avec un barème sur 5 : floor(1 / 3 * 5) = 1.
     expect(resultat).toEqual({
       isOk: false,
       feedback: '',
-      score: { nbBonnesReponses: 1, nbReponses: 3 },
+      score: { nbBonnesReponses: 1, nbReponses: 5 },
     })
     expect(exercice.answers['grimuku-grilleEx3Q0']).toBe(
       JSON.stringify({ L2C2: '2', L2C3: '9', L3C2: '' }),
@@ -483,7 +489,7 @@ describe('interactivité et score', () => {
       0,
     )
     expect(resultat.isOk).toBe(true)
-    expect(resultat.score).toEqual({ nbBonnesReponses: 3, nbReponses: 3 })
+    expect(resultat.score).toEqual({ nbBonnesReponses: 5, nbReponses: 5 })
   })
 
   it('garde le focus sur la case saisie et se déplace aux flèches', () => {
@@ -515,12 +521,13 @@ describe('interactivité et score', () => {
     const resultat = GrimukuGrilleElement.verifQuestion(
       {
         numeroExercice: 3,
+        sup: 1,
         answers: {},
         autoCorrection: [],
       } as unknown as Exercice,
       0,
     )
-    expect(resultat.score).toEqual({ nbBonnesReponses: 0, nbReponses: 1 })
+    expect(resultat.score).toEqual({ nbBonnesReponses: 0, nbReponses: 5 })
   })
 
   it('compte les cases à chercher sans les chiffres donnés', () => {

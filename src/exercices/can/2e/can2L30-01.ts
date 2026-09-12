@@ -21,7 +21,7 @@ export const dateDeModifImportante = '21/05/2023'
 export const uuid = '96a78'
 
 export const refs = {
-  'fr-fr': ['can2L30-01', 'BP1AUTO051'],
+  'fr-fr': ['can2L30-01', 'BP1AUTO051', '2L30-flash2'],
   'fr-ch': [],
 }
 export default class SolutionInequation extends ExerciceSimple {

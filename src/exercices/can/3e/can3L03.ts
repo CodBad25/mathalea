@@ -15,7 +15,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'cb6b3'
 
 export const refs = {
-  'fr-fr': ['can3L03'],
+  'fr-fr': ['can3L03', '2L21-flash1'],
   'fr-ch': [],
 }
 export default class EquationAXPlusBEgalC extends ExerciceSimple {

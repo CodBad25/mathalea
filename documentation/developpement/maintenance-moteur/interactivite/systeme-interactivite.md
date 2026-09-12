@@ -166,6 +166,7 @@ Les QCM n'installent plus de listener de validation depuis `propositionsQcm()` :
 | `diagram-bar-assessment`       | `DiagramBarAssessment.verifQuestion()` dans `src/lib/customElements/DiagramBarAssessmentElement.ts`                                                                          |
 | `diagram-histogram-assessment` | `DiagramHistogramAssessment.verifQuestion()` dans `src/lib/customElements/DiagramHistogramAssessmentElement.ts`                                                              |
 | `diagram-cartesian-assessment` | `DiagramCartesianAssessment.verifQuestion()` dans `src/lib/customElements/DiagramCartesianAssessmentElement.ts`                                                              |
+| `traceur-de-courbe`            | `TraceurDeCourbeElement.verifQuestion()` dans `src/lib/customElements/TraceurDeCourbe.ts`, vérification des couples puis de la qualité de la ligne brisée                    |
 | `meta-custom`                  | `MetaCustomElement.verifQuestion()` dans `src/lib/customElements/MetaCustomElement.ts`, qui appelle la `correctionInteractive` du sous-exercice enregistrée en callback      |
 
 Les fonctions de vérification retournent un résultat exploitable par le score et affichent le retour visuel associé à la question.
