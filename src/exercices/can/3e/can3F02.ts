@@ -17,7 +17,7 @@ export const dateDeModifImportante = '13/10/2022'
 export const uuid = 'c3468'
 
 export const refs = {
-  'fr-fr': ['can3F02', '2F12-flash3'],
+  'fr-fr': ['can3F02'],
   'fr-ch': [],
 }
 export default class CalculImageParFonctionLineaire extends ExerciceSimple {
