@@ -29,7 +29,7 @@ export const dateDeModifImportante = '06/02/2025'
 export const uuid = 'b60f4'
 
 export const refs = {
-  'fr-fr': ['can3F09'],
+  'fr-fr': ['can3F09', '2F21-flash1'],
   'fr-ch': [],
 }
 export default class ReconnaitreFonctionAffine extends Exercice {
