@@ -1,4 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -8,7 +11,17 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer un angle dans un triangle et sa nature'
 export const dateDePublication = '11/01/2023'
-export const dateDeModifImportante = '01/05/2026' // Rémi Angot passage en TS + correction plus explicite
+export const dateDeModifImportante = '13/09/2026' // Rémi Angot ajout de l'interactivité (liste déroulante + champ numérique)
+export const interactifReady = true
+
+const choixNatureTriangle = [
+  { label: 'Choisir…', value: '' },
+  { label: 'Quelconque', value: 'quelconque' },
+  { label: 'Rectangle', value: 'rectangle' },
+  { label: 'Isocèle', value: 'isocèle' },
+  { label: 'Isocèle rectangle', value: 'isocèle rectangle' },
+  { label: 'Équilatéral', value: 'équilatéral' },
+]
 
 /**
  * Déterminer la valeur d'un angle dans un triangle et sa nature.
@@ -198,7 +211,7 @@ export default class AnglesTrianglesTableau extends Exercice {
   }
 
   // Une fonction pour le controle de tous les cas
-  typeTriangle(type: string): SortieTypeTriangle {
+  typeTriangle(type: string, questionIndex: number): SortieTypeTriangle {
     const sortie: SortieTypeTriangle = {
       texte: '',
       texteCorr: '',
@@ -263,7 +276,51 @@ export default class AnglesTrianglesTableau extends Exercice {
       type,
       choix,
     ).correction
-    sortie.texte = anglesEnonce.tableau
+    if (this.interactif) {
+      // Tableau interactif : l'angle manquant devient un champ numérique et
+      // la nature du triangle une liste déroulante, directement dans les
+      // cellules du tableau.
+      const tableauInteractif =
+        AddTabDbleEntryMathlive.convertTclToTableauMathlive(
+          [
+            `\\text{${anglesEnonce.noms[0]}}`,
+            `\\text{${anglesEnonce.noms[1]}}`,
+            `\\text{${anglesEnonce.noms[2]}}`,
+            `\\text{Nature du triangle $${triangle.nom}$}`,
+          ],
+          [choix === 0 ? '' : `${anglesCorrection.valeurs[0]}^\\circ`],
+          [
+            choix === 1 ? '' : `${anglesCorrection.valeurs[1]}^\\circ`,
+            choix === 2 ? '' : `${anglesCorrection.valeurs[2]}^\\circ`,
+            '',
+          ],
+        )
+      const celluleAngle =
+        choix === 0
+          ? tableauInteractif.headingLines[0]
+          : tableauInteractif.raws[0][choix - 1]
+      celluleAngle.options = { texteApres: '$^\\circ$' }
+      tableauInteractif.raws[0][2].options = { choices: choixNatureTriangle }
+      sortie.texte = AddTabDbleEntryMathlive.create(
+        this.numeroExercice ?? 0,
+        questionIndex,
+        tableauInteractif,
+        KeyboardType.nombresEtDegre ?? '',
+        true,
+        {},
+      ).output
+      handleAnswers(
+        this,
+        questionIndex,
+        {
+          [`L1C${choix}`]: { value: anglesCorrection.valeurs[choix] },
+          L1C3: { value: type },
+        },
+        { formatInteractif: 'tableau-mathlive' },
+      )
+    } else {
+      sortie.texte = anglesEnonce.tableau
+    }
     if (this.correctionDetaillee) {
       sortie.texteCorr = `Dans le triangle ${triangle.getNom()}, `
       sortie.texteCorr += `${anglesEnonce.noms[0]} + ${anglesEnonce.noms[1]} + ${anglesEnonce.noms[2]} $=180^\\circ$.<br>`
@@ -319,7 +376,7 @@ export default class AnglesTrianglesTableau extends Exercice {
         case 1:
           {
             // triangle quelconque
-            const currentTriangle = this.typeTriangle('quelconque')
+            const currentTriangle = this.typeTriangle('quelconque', i)
             texte = currentTriangle.texte
             texteCorr = currentTriangle.texteCorr
           }
@@ -327,7 +384,7 @@ export default class AnglesTrianglesTableau extends Exercice {
         case 2:
           {
             // triangle rectangle
-            const currentTriangle = this.typeTriangle('rectangle')
+            const currentTriangle = this.typeTriangle('rectangle', i)
             texte = currentTriangle.texte
             texteCorr = currentTriangle.texteCorr
           }
@@ -335,7 +392,7 @@ export default class AnglesTrianglesTableau extends Exercice {
         case 3:
           {
             // triangle isocèle
-            const currentTriangle = this.typeTriangle('isocèle')
+            const currentTriangle = this.typeTriangle('isocèle', i)
             texte = currentTriangle.texte
             texteCorr = currentTriangle.texteCorr
           }
@@ -343,7 +400,7 @@ export default class AnglesTrianglesTableau extends Exercice {
         case 4:
           {
             // triangle isocèle rectangle
-            const currentTriangle = this.typeTriangle('isocèle rectangle')
+            const currentTriangle = this.typeTriangle('isocèle rectangle', i)
             texte = currentTriangle.texte
             texteCorr = currentTriangle.texteCorr
           }
@@ -352,7 +409,7 @@ export default class AnglesTrianglesTableau extends Exercice {
         default:
           {
             // triangle équilatéral
-            const currentTriangle = this.typeTriangle('équilatéral')
+            const currentTriangle = this.typeTriangle('équilatéral', i)
             texte = currentTriangle.texte
             texteCorr = currentTriangle.texteCorr
           }

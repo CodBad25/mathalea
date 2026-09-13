@@ -1,4 +1,5 @@
 import type { MathfieldElement } from 'mathlive'
+import type ListeDeroulanteElement from '../customElements/ListeDeroulanteElement'
 import type { IExercice } from '../../lib/types'
 import type { CompareResult } from './checks/types'
 import { fonctionComparaison } from './comparisonFunctions'
@@ -393,10 +394,10 @@ export function verifyTableauMathLive(
       const noFeedback = Boolean(options?.noFeedback)
       const compareFunction = reponse.compare ?? fonctionComparaison
       const input = Array.from(
-        tableElement.querySelectorAll('math-field'),
+        tableElement.querySelectorAll('math-field, liste-deroulante'),
       ).find(
         (el) => el.id === `champTexteEx${exercice.numeroExercice}Q${i}${key}`,
-      ) as MathfieldElement | undefined
+      ) as (MathfieldElement | ListeDeroulanteElement) | undefined
       if (input == null) {
         throw Error(
           `Vérification tableau-mathlive: cellule introuvable ${JSON.stringify({
@@ -404,6 +405,7 @@ export function verifyTableauMathLive(
           })}`,
         )
       }
+      const isListe = input.tagName === 'LISTE-DEROULANTE'
       const resultatCheckCellId = `resultatCheckEx${exercice.numeroExercice}Q${i}${key}`
       const resultatCheckCell =
         document.getElementById(resultatCheckCellId) ??
@@ -425,9 +427,18 @@ export function verifyTableauMathLive(
         const expectedValues = Array.isArray(reponse.value)
           ? reponse.value
           : [reponse.value]
-        for (const expected of expectedValues) {
-          result = compareFunction(input.value, expected, options)
-          if (result.isOk) break
+        if (isListe) {
+          // Une liste déroulante compare une simple égalité de texte plutôt
+          // que la comparaison mathématique utilisée pour les math-fields.
+          const isOk = expectedValues.some(
+            (valeur: unknown) => String(valeur) === input.value,
+          )
+          result = { isOk, feedback: '' }
+        } else {
+          for (const expected of expectedValues) {
+            result = compareFunction(input.value, expected, options)
+            if (result.isOk) break
+          }
         }
       }
       points.push(scoreFromResult(result))
@@ -441,7 +452,11 @@ export function verifyTableauMathLive(
         exercice.answers[`Ex${exercice.numeroExercice}Q${i}${key}`] =
           input.value
       }
-      input.readOnly = true
+      if (isListe) {
+        ;(input as ListeDeroulanteElement).interactivityOn = false
+      } else {
+        ;(input as MathfieldElement).readOnly = true
+      }
     }
     const [nbBonnesReponses, nbReponses] = bareme(points)
     return {
