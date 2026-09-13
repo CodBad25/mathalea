@@ -42,6 +42,7 @@ import { checkForServerUpdate } from './components/version'
 import { createURL } from './createURL'
 import type { ExerciseModule } from './exerciseModules'
 import { listOfCustomElements } from './customElements/MathaleaCustomElement'
+import { attachExerciseCustomCallbacks } from './customElements/MetaCustomElement'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { isHtmlDocumentText } from './httpResponses'
 import { normaliseCoeffBareme } from './interactif/baremeExercice'
@@ -1287,6 +1288,7 @@ export function mathaleaHandleExerciceSimple(
       cptSecours++
     }
   }
+  attachExerciseCustomCallbacks(exercice)
 }
 
 /**
