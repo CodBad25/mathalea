@@ -1,16 +1,15 @@
 import { shuffle2tableaux } from '../../lib/outils/arrayOutils'
+import { ecritureAlgebrique } from '../../lib/outils/ecritures'
 import { numAlpha } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
-import { ecritureAlgebrique } from '../../lib/outils/ecritures'
+import Exercice from '../Exercice'
 export const titre =
   "Utiliser les différentes formes d'un polynôme du second degré"
 export const interactifReady = false
 
 export const dateDePublication = '27/10/2022'
 export const dateDeModifImportante = '5/11/2023'
-
 /**
  * Forme développée, factorisée ou canonique pour résoudre équations et inéquations
  * @author Rémi Angot
@@ -70,19 +69,23 @@ export default class EtudeTrinome extends Exercice {
     corr3b += `<br><br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff ${p.a.simplifie().texFractionSaufUn}x^2 ${p.b.simplifie().texFractionSaufUnSignee}x = 0 $`
     corr3b += `<br><br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x \\left(${p.a.simplifie().texFractionSaufUn}x ${p.b.simplifie().texFractionSaufUnSignee}\\right) = 0 $`
     corr3b += `<br><br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x = 0 \\text{\\quad ou \\quad} ${p.a.simplifie().texFractionSaufUn}x ${p.b.simplifie().texFractionSaufUnSignee} = 0 $`
-    corr3b += `<br><br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x = 0 \\text{\\quad ou \\quad} x = ${p.b.oppose().diviseFraction(p.a).simplifie().texFraction} $`
-    corr3b += `<br><br>$S=\\{0\\, ;\\, ${p.b.oppose().diviseFraction(p.a).simplifie().texFraction}\\}$`
+    const solution2 = p.b.oppose().diviseFraction(p.a).simplifie().texFraction
+    corr3b += `<br><br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x = 0 \\text{\\quad ou \\quad} x = ${solution2} $`
+    corr3b +=
+      p.alpha.valeurDecimale === 0
+        ? '<br><br>$S=\\{0\\}$'
+        : `<br><br>$S=\\{0\\, ;\\, ${solution2}\\}$`
 
     const q3c = `Résoudre l'inéquation $f(x) < ${p.beta.simplifie().texFraction}$.`
     let corr3c = 'Ici, on va utiliser la forme canonique.'
     corr3c += `<br><br>$f(x) < ${p.beta.simplifie().texFraction} \\iff ${p.texFormeCanonique}  < ${p.beta.simplifie().texFraction}$`
     corr3c += `<br><br>$\\phantom{f(x) < ${p.beta.simplifie().texFraction}} \\iff ${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2  < 0$`
     if (p.a.s === 1) {
-      corr3c += ` donc $${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2 >0$.`
+      corr3c += `<br> <br> Or, pour tout $x \\in \\mathbb{R}$, $${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2 \\geqslant 0$.`
       corr3c += '<br><br>$S=\\emptyset$'
     } else {
-      const nonSolution = p.alpha.simplifie().texFractionSignee
-      corr3c += ` or $${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2$ est toujours négatif et ne s'annule que pour $x=${nonSolution}$.`
+      const nonSolution = p.alpha.simplifie().texFraction
+      corr3c += `<br><br> Or, $${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2$ est toujours négatif et ne s'annule que pour $x=${nonSolution}$.`
       corr3c += `<br><br>$S=\\R \\smallsetminus \\{${nonSolution}\\}$`
     }
     const [sousQuestions, sousCorrections] = [
