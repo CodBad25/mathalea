@@ -30,6 +30,7 @@
   import type { IExercice, InterfaceParams } from '../../../lib/types'
   import { decodeBase64, encodeBase64 } from '../latex/LatexConfig'
   import { context } from '../../../modules/context'
+  import { statsPdfCreatedTracker } from '../../../modules/statsUtils'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
@@ -3623,6 +3624,11 @@
         window.alert(
           'La compilation du PDF a échoué : corrigez les erreurs signalées sous l’aperçu.',
         )
+      } else {
+        statsPdfCreatedTracker(
+          'typst',
+          get(exercicesParams).map((p) => p.uuid),
+        )
       }
     } catch (error) {
       console.error("Erreur lors de l'export PDF", error)
@@ -3683,6 +3689,11 @@
       if (!okEnonce || !okCorrige) {
         window.alert(
           'La compilation du PDF a échoué : corrigez les erreurs signalées sous l’aperçu.',
+        )
+      } else {
+        statsPdfCreatedTracker(
+          'typst',
+          get(exercicesParams).map((p) => p.uuid),
         )
       }
     } catch (error) {
