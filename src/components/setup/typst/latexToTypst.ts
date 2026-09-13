@@ -813,16 +813,31 @@ function postprocessTypst(typst: string): string {
     // groupement }(x+y)` des exercices de factorisation), Typst enchaîne l'appel
     // (`#txt("…")(x + y)` = appel de la valeur retournée) et échoue sur
     // « expected comma ». On ré-insère une espace de séparation dans ce cas.
+    //
+    // Un `\` isolé (saut de ligne d'un `aligned`, ex. `\text{Donc :}` en
+    // début de ligne) précède parfois directement la chaîne marquée : la
+    // capture ci-dessous consomme aussi l'espace qui le sépare de la
+    // chaîne, ce qui recollerait `\` et `#txt(` en `\#txt(`. Or `\#` est en
+    // Typst l'échappement du caractère `#` : le saut de ligne disparaît et
+    // un `#` littéral s'affiche à sa place. On restitue donc l'espace dans
+    // ce cas précis pour garder `\` et `#txt(` séparés.
     .replace(
       new RegExp(
-        ` ?([_^]?)"${TXT_MARK_OPEN}([^"]*)${TXT_MARK_CLOSE}" ?([([])?`,
+        `(\\\\)? ?([_^]?)"${TXT_MARK_OPEN}([^"]*)${TXT_MARK_CLOSE}" ?([([])?`,
         'g',
       ),
-      (_m, script: string, body: string, chained: string | undefined) => {
+      (
+        _m,
+        lineBreak: string | undefined,
+        script: string,
+        body: string,
+        chained: string | undefined,
+      ) => {
+        const prefix = lineBreak ? '\\ ' : ''
         const suffix = chained ? ` ${chained}` : ''
         return script
-          ? `${script}(#txt("${body}"))${suffix}`
-          : `#txt("${body}")${suffix}`
+          ? `${prefix}${script}(#txt("${body}"))${suffix}`
+          : `${prefix}#txt("${body}")${suffix}`
       },
     )
     // `\text{ }` (espace seule, non marquée car sans lettre) devient la chaîne
