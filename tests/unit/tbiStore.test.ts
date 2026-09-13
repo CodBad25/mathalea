@@ -140,9 +140,9 @@ describe('tbiStore', () => {
     tbiState.update((state) => {
       state.cards.forEach((card, i) => (card.tab = i))
       state.tabConfigs = [
-        { layout: 'columns', nbColumns: 1 },
-        { layout: 'free', nbColumns: 2 },
-        { layout: 'columns', nbColumns: 3 },
+        { layout: 'columns', nbColumns: 1, singleColumnAlign: 'center' },
+        { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
+        { layout: 'columns', nbColumns: 3, singleColumnAlign: 'center' },
       ]
       return state
     })
@@ -155,9 +155,9 @@ describe('tbiStore', () => {
     expect(state.cards.map((c) => c.tab)).toEqual([0, 1, 2])
     // tabConfigs réordonné selon la permutation
     const initialConfigs = [
-      { layout: 'columns', nbColumns: 1 },
-      { layout: 'free', nbColumns: 2 },
-      { layout: 'columns', nbColumns: 3 },
+      { layout: 'columns', nbColumns: 1, singleColumnAlign: 'center' },
+      { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
+      { layout: 'columns', nbColumns: 3, singleColumnAlign: 'center' },
     ]
     expect(state.tabConfigs).toEqual(order.map((oldIndex) => initialConfigs[oldIndex]))
   })
@@ -177,8 +177,8 @@ describe('tbiStore', () => {
       state.cards[2].tab = 0
       state.cards[3].tab = 1
       state.tabConfigs = [
-        { layout: 'columns', nbColumns: 2 },
-        { layout: 'free', nbColumns: 1 },
+        { layout: 'columns', nbColumns: 2, singleColumnAlign: 'center' },
+        { layout: 'free', nbColumns: 1, singleColumnAlign: 'center' },
       ]
       return state
     })
@@ -242,8 +242,8 @@ describe('tbiStore', () => {
         card.colBreak = true
       })
       state.tabConfigs = [
-        { layout: 'columns', nbColumns: 2 },
-        { layout: 'columns', nbColumns: 2 },
+        { layout: 'columns', nbColumns: 2, singleColumnAlign: 'center' },
+        { layout: 'columns', nbColumns: 2, singleColumnAlign: 'center' },
       ]
       return state
     })
@@ -348,9 +348,10 @@ describe('tbiStore', () => {
       state.cards[1].colBreak = true
       state.cards[0].zoom = 1.5
       state.tabConfigs = [
-        { layout: 'columns', nbColumns: 3 },
-        { layout: 'free', nbColumns: 2 },
+        { layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' },
+        { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
       ]
+      state.activeTab = 1
       state.widget.visible = true
       state.trafficLight.visible = true
       state.widget.x = 120
@@ -373,9 +374,10 @@ describe('tbiStore', () => {
       tabs: [0, 1, 0],
       breaks: [1],
       tabConfigs: [
-        { layout: 'columns', nbColumns: 3 },
-        { layout: 'free', nbColumns: 2 },
+        { layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' },
+        { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
       ],
+      activeTab: 1,
       widgetVisible: true,
       trafficLightVisible: true,
       collegeCalculatorVisible: true,
@@ -399,8 +401,9 @@ describe('tbiStore', () => {
     expect(state.nbColumns).toBe(3)
     expect(state.cards.map((c) => c.tab)).toEqual([0, 1, 0])
     expect(state.cards.map((c) => c.colBreak)).toEqual([false, true, false])
-    expect(state.tabConfigs[0]).toEqual({ layout: 'columns', nbColumns: 3 })
-    expect(state.tabConfigs[1]).toEqual({ layout: 'free', nbColumns: 2 })
+    expect(state.tabConfigs[0]).toEqual({ layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' })
+    expect(state.tabConfigs[1]).toEqual({ layout: 'free', nbColumns: 2, singleColumnAlign: 'center' })
+    expect(state.activeTab).toBe(1)
     expect(state.widget.visible).toBe(true)
     expect(state.trafficLight.visible).toBe(true)
     expect(state.cards.map((c) => c.zoom)).toEqual([1.5, 1, 1])
@@ -441,6 +444,7 @@ describe('tbiStore', () => {
       tabs: [0, 1],
       breaks: [],
       tabConfigs: [],
+      activeTab: 0,
       widgetVisible: true,
       trafficLightVisible: true,
       collegeCalculatorVisible: false,
@@ -470,6 +474,7 @@ describe('tbiStore', () => {
         tabs: [0, 1],
         breaks: [],
         tabConfigs: [],
+        activeTab: 0,
         widgetVisible: false,
         trafficLightVisible: false,
         collegeCalculatorVisible: false,
@@ -494,6 +499,7 @@ describe('tbiStore', () => {
       tabs: [],
       breaks: [],
       tabConfigs: [],
+      activeTab: 0,
       widgetVisible: false,
       trafficLightVisible: false,
       collegeCalculatorVisible: false,
@@ -533,6 +539,7 @@ describe('tbiStore', () => {
       tabs: [],
       breaks: [],
       tabConfigs: [],
+      activeTab: 0,
       widgetVisible: false,
       trafficLightVisible: false,
       collegeCalculatorVisible: true,
@@ -566,6 +573,7 @@ describe('tbiStore', () => {
       tabs: [],
       breaks: [],
       tabConfigs: [],
+      activeTab: 0,
       widgetVisible: false,
       trafficLightVisible: false,
       collegeCalculatorVisible: false,
@@ -603,6 +611,6 @@ describe('tbiStore', () => {
     expect(state.mode).toBe('columns')
     expect(state.nbColumns).toBe(1)
     expect(state.cards.map((c) => c.tab)).toEqual([1, 1])
-    expect(state.tabConfigs[0]).toEqual({ layout: 'columns', nbColumns: 1 })
+    expect(state.tabConfigs[0]).toEqual({ layout: 'columns', nbColumns: 1, singleColumnAlign: 'center' })
   })
 })

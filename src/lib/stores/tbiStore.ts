@@ -112,6 +112,8 @@ export interface TbiCardState {
 export interface TbiTabConfig {
   layout: TbiTabLayout
   nbColumns: number
+  /** Alignement de la colonne unique de cet onglet (utilisé quand nbColumns === 1) */
+  singleColumnAlign: TbiSingleColumnAlign
 }
 
 export interface TbiWidgetState {
@@ -153,6 +155,8 @@ export interface TbiState {
   cards: TbiCardState[]
   /** Disposition de chaque onglet, indexée par indice compact d'onglet */
   tabConfigs: TbiTabConfig[]
+  /** Indice compact de l'onglet actuellement affiché (mode onglets) */
+  activeTab: number
   widget: TbiWidgetState
   trafficLight: TbiTrafficLightState
   collegeCalculator: TbiCalculatorState
@@ -172,7 +176,7 @@ export function defaultTbiCardState(index: number): TbiCardState {
 }
 
 export function defaultTbiTabConfig(): TbiTabConfig {
-  return { layout: 'columns', nbColumns: 1 }
+  return { layout: 'columns', nbColumns: 1, singleColumnAlign: 'center' }
 }
 
 export function defaultTbiState(): TbiState {
@@ -182,6 +186,7 @@ export function defaultTbiState(): TbiState {
     singleColumnAlign: 'center',
     cards: [],
     tabConfigs: [],
+    activeTab: 0,
     widget: { visible: false, mode: 'clock', x: 0, y: 0, zoom: 1 },
     trafficLight: {
       visible: false,
@@ -281,6 +286,14 @@ export function toggleTbiCardCollapsed(paramsIndex: number) {
   })
 }
 
+/** Change l'onglet actuellement affiché (mode onglets), partagé dans l'URL */
+export function setTbiActiveTab(activeTab: number) {
+  tbiState.update((state) => {
+    state.activeTab = activeTab
+    return state
+  })
+}
+
 /** Change la couleur éclairée du widget feu tricolore */
 export function setTrafficLightActive(color: TbiTrafficLightColor) {
   tbiState.update((state) => {
@@ -328,6 +341,78 @@ export function reconcileTbiCards(uuids: string[]) {
     ensureTabConfigs(state)
     return state
   })
+}
+
+/** Complète tabConfigs jusqu'à l'onglet `tab` (inclus) avec la configuration par défaut */
+function ensureTabConfigAt(state: TbiState, tab: number) {
+  while (state.tabConfigs.length <= tab) {
+    state.tabConfigs.push(defaultTbiTabConfig())
+  }
+}
+
+/** Change la disposition (colonnes / libre) de l'onglet `tab` */
+export function setTbiTabLayout(tab: number, layout: TbiTabLayout) {
+  tbiState.update((state) => {
+    ensureTabConfigAt(state, tab)
+    state.tabConfigs[tab].layout = layout
+    return state
+  })
+}
+
+/** Change le nombre de colonnes de l'onglet `tab` (borné à [1, 4]) */
+export function setTbiTabNbColumns(tab: number, nbColumns: number) {
+  nbColumns = Math.min(4, Math.max(1, nbColumns))
+  tbiState.update((state) => {
+    ensureTabConfigAt(state, tab)
+    state.tabConfigs[tab].nbColumns = nbColumns
+    return state
+  })
+}
+
+/** Change l'alignement de la colonne unique de l'onglet `tab` (sans effet au-delà d'une colonne) */
+export function setTbiTabSingleColumnAlign(
+  tab: number,
+  singleColumnAlign: TbiSingleColumnAlign,
+) {
+  tbiState.update((state) => {
+    ensureTabConfigAt(state, tab)
+    state.tabConfigs[tab].singleColumnAlign = singleColumnAlign
+    return state
+  })
+}
+
+/**
+ * Dérive la répartition des exercices en onglets à partir de `cards` :
+ * indices d'onglets compacts (0..k-1, tolérants aux trous de numérotation
+ * d'une URL partagée), position de chaque exercice dans cette liste
+ * compacte, nombre d'onglets, et libellé de chaque onglet (nom de
+ * l'exercice s'il est seul dans l'onglet, sinon « Onglet N (nb) »).
+ * Prend un tableau structurellement compatible avec `TbiItem[]` (paramsIndex
+ * + id) plutôt que le type lui-même, pour ne pas faire dépendre le store de
+ * la couche composants.
+ */
+export function computeTbiTabsInfo(
+  items: { paramsIndex: number; id: string }[],
+  cards: TbiCardState[],
+): {
+  compactTabs: number[]
+  tabsCount: number
+  tabLabels: string[]
+} {
+  const rawTabs = items.map(
+    (item) => cards[item.paramsIndex]?.tab ?? item.paramsIndex,
+  )
+  const usedTabs = [...new Set(rawTabs)].sort((a, b) => a - b)
+  const compactTabs = rawTabs.map((tab) => usedTabs.indexOf(tab))
+  const tabsCount = usedTabs.length
+  const tabLabels = usedTabs.map((_, compact) => {
+    const tabItems = items.filter((_, i) => compactTabs[i] === compact)
+    if (tabItems.length === 1) {
+      return tabItems[0].id.replace('.js', '').replace('.ts', '')
+    }
+    return `Onglet ${compact + 1} (${tabItems.length})`
+  })
+  return { compactTabs, tabsCount, tabLabels }
 }
 
 /**
@@ -523,6 +608,8 @@ export interface TbiSharedState {
   tabs: number[]
   breaks: number[]
   tabConfigs: TbiTabConfig[]
+  /** Indice compact de l'onglet affiché (mode onglets) */
+  activeTab: number
   widgetVisible: boolean
   trafficLightVisible: boolean
   collegeCalculatorVisible: boolean
@@ -547,6 +634,7 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     tabs: state.cards.map((card) => card.tab),
     breaks: state.cards.flatMap((card, i) => (card.colBreak ? [i] : [])),
     tabConfigs: state.tabConfigs.map((config) => ({ ...config })),
+    activeTab: state.activeTab,
     widgetVisible: state.widget.visible,
     trafficLightVisible: state.trafficLight.visible,
     collegeCalculatorVisible: state.collegeCalculator.visible,
@@ -588,7 +676,12 @@ function isDefaultTabs(tabs: number[]): boolean {
 }
 
 function isDefaultTabConfigs(tabConfigs: TbiTabConfig[]): boolean {
-  return tabConfigs.every((c) => c.layout === 'columns' && c.nbColumns === 1)
+  return tabConfigs.every(
+    (c) =>
+      c.layout === 'columns' &&
+      c.nbColumns === 1 &&
+      c.singleColumnAlign === 'center',
+  )
 }
 
 function isDefaultZooms(zooms: number[]): boolean {
@@ -621,10 +714,11 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   if (!isDefaultTabConfigs(shared.tabConfigs)) {
     fields.push(
       `g-${shared.tabConfigs
-        .map((c) => `${c.layout}-${c.nbColumns}`)
+        .map((c) => `${c.layout}-${c.nbColumns}-${c.singleColumnAlign}`)
         .join(TBI_PARAM_LIST_SEP)}`,
     )
   }
+  if (shared.activeTab) fields.push(`at-${shared.activeTab}`)
   if (shared.widgetVisible) fields.push('w-1')
   if (shared.trafficLightVisible) fields.push('f-1')
   if (shared.collegeCalculatorVisible) fields.push('cc-1')
@@ -688,16 +782,24 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
           .filter((n) => !Number.isNaN(n))
         break
       case 'g':
+        // format : layout-nbColumns[-singleColumnAlign] ; le 3e segment est
+        // absent des liens partagés avant son introduction, d'où le
+        // fallback (sur 'center') appliqué par applyTbiSharedState.
         shared.tabConfigs = value.split(TBI_PARAM_LIST_SEP).map((entry) => {
-          const i = entry.indexOf('-')
-          const layout = i === -1 ? entry : entry.slice(0, i)
-          const nbColumns = i === -1 ? NaN : Number(entry.slice(i + 1))
+          const [layout, nbColumnsStr, singleColumnAlign] = entry.split('-')
+          const nbColumns = Number(nbColumnsStr)
           return {
             layout: layout as TbiTabLayout,
             nbColumns: Number.isNaN(nbColumns) ? 1 : nbColumns,
+            singleColumnAlign: singleColumnAlign as TbiSingleColumnAlign,
           }
         })
         break
+      case 'at': {
+        const n = Number(value)
+        if (!Number.isNaN(n)) shared.activeTab = n
+        break
+      }
       case 'w':
         shared.widgetVisible = value === '1'
         break
@@ -794,7 +896,15 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
           config.nbColumns <= 4
             ? Math.round(config.nbColumns)
             : 1,
+        singleColumnAlign: TBI_SINGLE_COLUMN_ALIGNS.includes(
+          config?.singleColumnAlign,
+        )
+          ? config.singleColumnAlign
+          : 'center',
       }))
+    }
+    if (typeof shared.activeTab === 'number' && shared.activeTab >= 0) {
+      state.activeTab = Math.round(shared.activeTab)
     }
     if (typeof shared.widgetVisible === 'boolean') {
       state.widget.visible = shared.widgetVisible

@@ -209,7 +209,11 @@
 <main
   class="min-h-screen w-full bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
 >
-  <TbiToolbar onAddExercise={openAddExercise} onShuffle={applyShuffle} />
+  <TbiToolbar
+    {items}
+    onAddExercise={openAddExercise}
+    onShuffle={applyShuffle}
+  />
   {#if isReady}
     {#if items.length === 0}
       <div
