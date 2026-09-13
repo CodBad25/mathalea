@@ -13,7 +13,7 @@
   // sur coopmaths.fr/www) remplace les liens rapides et le carrousel. Pour
   // l'ouvrir à tous, retirer la condition sur `beta` (et l'ancien bloc).
   let isVitrineUnavailable = false
-  $: isVitrineDisplayed = $globalOptions.beta === true && !isVitrineUnavailable
+  $: isVitrineDisplayed = !isVitrineUnavailable
 </script>
 
 <!-- La vitrine peut dépasser la hauteur de l'écran : on laisse alors la zone
