@@ -93,6 +93,9 @@ globalOptions.subscribe((options) => {
     log('vue', vue[0])
     if (window._paq) window._paq.push(['trackEvent', 'Vue', vue[0]])
     // if (window._paq) window._paq.push(['setCustomDimension', 1, vue[0]])
+    if (vue[0] === 'tbi' && get(exercicesParams).length > 0) {
+      if (window._paq) window._paq.push(['trackEvent', 'DiffusionTbi', 'Serie'])
+    }
     if (options.recorder) recorder[0] = options.recorder
     log('recorder', recorder[0])
     // if (window._paq) window._paq.push(['setCustomDimension', 2, recorder[0]])

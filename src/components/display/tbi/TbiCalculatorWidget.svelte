@@ -11,6 +11,7 @@
     TBI_CALCULATOR_MIN_W,
     type TbiCalculatorKind,
   } from '../../../lib/stores/tbiStore'
+  import { statsTbiCalculatorTracker } from '../../../modules/statsUtils'
 
   interface Props {
     kind: TbiCalculatorKind
@@ -55,6 +56,7 @@
   let fileAvailable: boolean | null = $state(null)
 
   onMount(async () => {
+    statsTbiCalculatorTracker(kind)
     try {
       const response = await fetch(config[kind].src)
       const text = response.ok ? await response.text() : ''

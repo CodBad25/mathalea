@@ -41,6 +41,49 @@ export function statsTracker(
   )
 }
 
+/**
+ * Séries (listes d'exercices) déjà comptées comme export PDF Typst, pour ne
+ * pas recompter un export répété de la même série (même liste d'exercices,
+ * indépendamment de l'ordre). Réinitialisé à chaque rechargement de page.
+ */
+const trackedTypstPdfSeries = new Set<string>()
+
+/**
+ * Signale un export PDF réussi, vue Typst ou Tex. Pour Typst, `uuids` est la
+ * liste des uuid des exercices de la série exportée : un export répété de la
+ * même série (mêmes exercices, ordre indifférent) n'est compté qu'une fois.
+ * Pour Tex, chaque export compte (pas de déduplication demandée).
+ */
+export function statsPdfCreatedTracker(vue: 'typst' | 'tex', uuids: string[] = []) {
+  if (vue === 'typst') {
+    const key = [...new Set(uuids)].sort().join(',')
+    if (trackedTypstPdfSeries.has(key)) return
+    trackedTypstPdfSeries.add(key)
+  }
+  if (window._paq) window._paq.push(['trackEvent', 'PdfCree', vue === 'typst' ? 'Typst' : 'Tex'])
+  log('PdfCree', vue)
+}
+
+/**
+ * Calculatrices déjà comptées comme ouvertes en vue TBI, pour ne pas
+ * recompter une réouverture sur la même session (réinitialisé au
+ * rechargement de la page).
+ */
+const openedTbiCalculators = new Set<'college' | 'lycee'>()
+
+/** Signale l'ouverture d'une calculatrice en vue TBI (une fois par session). */
+export function statsTbiCalculatorTracker(kind: 'college' | 'lycee') {
+  if (openedTbiCalculators.has(kind)) return
+  openedTbiCalculators.add(kind)
+  if (window._paq)
+    window._paq.push([
+      'trackEvent',
+      'CalculatriceTbi',
+      kind === 'college' ? 'College' : 'Lycee',
+    ])
+  log('CalculatriceTbi', kind)
+}
+
 let oldUrl = ''
 
 export function statsPageTracker() {
