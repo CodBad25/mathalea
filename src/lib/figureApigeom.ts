@@ -259,10 +259,15 @@ export default function figureApigeom({
       })
     }
   }
-  // `setupAction` est identique d'une génération à l'autre (il ne dépend que
-  // des numéros d'exercice et de question) : on garde une référence sur le
-  // callback pour ne jamais désinscrire l'inscription d'une figure plus récente
-  // (cf. DomReadyActionElement.unregisterCallback).
+  // Le conteneur peut se déconnecter du DOM sans que la figure ne soit
+  // détruite pour autant (onglet TBI masqué, exercice replié en disposition
+  // libre...) : Svelte détruit puis recrée le sous-arbre, donc l'élément
+  // <mathalea-dom-ready> se déconnecte puis s'en reconnecte un nouveau, avec
+  // la même action. Désinscrire le callback à la déconnexion l'empêcherait
+  // d'être retrouvé à la reconnexion (la figure resterait vide jusqu'au
+  // rechargement de la page). La désinscription réelle est déjà assurée par
+  // destroy() ci-dessous, appelé explicitement quand la figure est vraiment
+  // détruite (cf. exportedReinit).
   const setupCallback = () => {
     updateAffichage()
     return () => {
@@ -270,7 +275,6 @@ export default function figureApigeom({
         window.clearTimeout(retryTimeout)
         retryTimeout = null
       }
-      DomReadyActionElement.unregisterCallback(setupAction, setupCallback)
     }
   }
   DomReadyActionElement.registerCallback(setupAction, setupCallback)
