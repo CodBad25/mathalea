@@ -4,21 +4,29 @@
   import { mathaleaGoToView } from '../../../lib/mathaleaUtils'
   import {
     balanceColumnBreaks,
+    computeTbiTabsInfo,
+    defaultTbiTabConfig,
+    setTbiTabLayout,
+    setTbiTabNbColumns,
+    setTbiTabSingleColumnAlign,
     TBI_CONTROLS_HIDE_DELAY,
     tbiState,
     zoomAllCardsBy,
     type TbiMode,
     type TbiSingleColumnAlign,
+    type TbiTabLayout,
   } from '../../../lib/stores/tbiStore'
+  import type { TbiItem } from './tbiTypes'
 
   type Props = {
+    items: TbiItem[]
     /** Ouvre la modale d'ajout d'exercice (traité par `Tbi.svelte`) */
     onAddExercise: () => void
     /** Mélange aléatoirement l'ordre des exercices (traité par `Tbi.svelte`) */
     onShuffle: () => void
   }
 
-  const { onAddExercise, onShuffle }: Props = $props()
+  const { items, onAddExercise, onShuffle }: Props = $props()
 
   const modes: { value: TbiMode; label: string; icon: string }[] = [
     { value: 'columns', label: 'Colonnes', icon: 'bx-columns' },
@@ -54,6 +62,53 @@
 
   function setSingleColumnAlign(singleColumnAlign: TbiSingleColumnAlign) {
     tbiState.update((state) => ({ ...state, singleColumnAlign }))
+  }
+
+  const tabLayouts: { value: TbiTabLayout; label: string; icon: string }[] = [
+    { value: 'columns', label: 'Colonnes', icon: 'bx-columns' },
+    { value: 'free', label: 'Placement libre', icon: 'bx-move' },
+  ]
+
+  // Répartition des exercices en onglets et libellé de chacun, dérivés de
+  // `items` (fourni par Tbi.svelte) plutôt que gérés ici : ce panneau ne
+  // fait qu'exposer les réglages de l'onglet actif ($tbiState.activeTab).
+  let tabsInfo = $derived(computeTbiTabsInfo(items, $tbiState.cards))
+  let activeTab = $derived($tbiState.activeTab)
+  // Dérivés séparés (plutôt qu'un objet activeTabConfig) : tabConfigs[i] est
+  // muté en place par setTbiTabLayout/setTbiTabNbColumns/
+  // setTbiTabSingleColumnAlign, donc un $derived qui renverrait cet objet ne
+  // se recalculerait pas pour ses consommateurs (sa référence resterait
+  // inchangée) — voir le même commentaire dans TbiTabsLayout.
+  let activeTabLayout = $derived(
+    $tbiState.tabConfigs[activeTab]?.layout ?? defaultTbiTabConfig().layout,
+  )
+  let activeTabNbColumns = $derived(
+    $tbiState.tabConfigs[activeTab]?.nbColumns ??
+      defaultTbiTabConfig().nbColumns,
+  )
+  let activeTabSingleColumnAlign = $derived(
+    $tbiState.tabConfigs[activeTab]?.singleColumnAlign ??
+      defaultTbiTabConfig().singleColumnAlign,
+  )
+  let activeTabItems = $derived(
+    items.filter((_, i) => tabsInfo.compactTabs[i] === activeTab),
+  )
+
+  function setActiveTabLayout(layout: TbiTabLayout) {
+    setTbiTabLayout(activeTab, layout)
+  }
+
+  function setActiveTabNbColumns(nbColumns: number) {
+    nbColumns = Math.min(4, Math.max(1, nbColumns))
+    setTbiTabNbColumns(activeTab, nbColumns)
+    balanceColumnBreaks(
+      activeTabItems.map((item) => item.paramsIndex),
+      nbColumns,
+    )
+  }
+
+  function setActiveTabSingleColumnAlign(singleColumnAlign: TbiSingleColumnAlign) {
+    setTbiTabSingleColumnAlign(activeTab, singleColumnAlign)
   }
 
   function newDataForAll() {
@@ -183,6 +238,67 @@
             title={align.label}
             aria-label={align.label}
             onclick={() => setSingleColumnAlign(align.value)}
+          >
+            <i class="bx {align.icon} text-xl"></i>
+          </button>
+        {/each}
+      </div>
+    {/if}
+  {/if}
+
+  {#if $tbiState.mode === 'tabs' && tabsInfo.tabsCount > 0}
+    <div
+      class="flex flex-row items-center gap-2 px-3 py-1.5 rounded-full shadow-md bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest text-coopmaths-corpus dark:text-coopmathsdark-corpus text-sm"
+      title="Disposition de l'onglet"
+    >
+      {#each tabLayouts as layout (layout.value)}
+        <button
+          type="button"
+          class={toggleButtonClass(activeTabLayout === layout.value)}
+          title="Disposition de l'onglet : {layout.label}"
+          aria-label="Disposition de l'onglet : {layout.label}"
+          aria-pressed={activeTabLayout === layout.value}
+          onclick={() => setActiveTabLayout(layout.value)}
+        >
+          <i class="bx {layout.icon}"></i>
+        </button>
+      {/each}
+      {#if activeTabLayout === 'columns'}
+        <div class="w-px h-5 bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light"></div>
+        <button
+          type="button"
+          aria-label="Diminuer le nombre de colonnes de l'onglet"
+          class="text-coopmaths-action dark:text-coopmathsdark-action"
+          onclick={() => setActiveTabNbColumns(activeTabNbColumns - 1)}
+        >
+          <i class="bx bx-minus"></i>
+        </button>
+        <span class="font-bold">{activeTabNbColumns}</span>
+        <button
+          type="button"
+          aria-label="Augmenter le nombre de colonnes de l'onglet"
+          class="text-coopmaths-action dark:text-coopmathsdark-action"
+          onclick={() => setActiveTabNbColumns(activeTabNbColumns + 1)}
+        >
+          <i class="bx bx-plus"></i>
+        </button>
+      {/if}
+    </div>
+
+    {#if activeTabLayout === 'columns' && activeTabNbColumns === 1}
+      <div
+        class="flex flex-row items-center gap-1 px-2 py-1 rounded-full shadow-md bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest"
+      >
+        {#each singleColumnAligns as align (align.value)}
+          <button
+            type="button"
+            class={toggleButtonClass(
+              activeTabSingleColumnAlign === align.value,
+            )}
+            aria-pressed={activeTabSingleColumnAlign === align.value}
+            title={align.label}
+            aria-label={align.label}
+            onclick={() => setActiveTabSingleColumnAlign(align.value)}
           >
             <i class="bx {align.icon} text-xl"></i>
           </button>
