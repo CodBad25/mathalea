@@ -48,7 +48,7 @@ export default class ExerciceTablesMultiplicationsEtDecimaux extends Exercice {
     ] // Texte, tooltip
     if (context.isHtml) {
       this.besoinFormulaire2Numerique = [
-        'Exercice interactif',
+        'Type de question',
         2,
         '1 : QCM\n2 : Numérique',
       ]
@@ -152,7 +152,7 @@ export default class ExerciceTablesMultiplicationsEtDecimaux extends Exercice {
         ordered: false,
       }
       const props = propositionsQcm(this, i)
-      if (this.interactif && this.sup2 !== 2) {
+      if (this.sup2 !== 2) {
         texte += props.texte
       } else {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
