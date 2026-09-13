@@ -4152,6 +4152,15 @@
               </span>
             </label>
 
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.showQrCodeFiche}
+                onchange={applyDocumentOptions}
+              />
+              <span> QR-code global </span>
+            </label>
+
             <label
               class="flex items-center justify-between gap-4 text-sm"
               data-tour="typst-settings-typography"
