@@ -1,5 +1,7 @@
 import { notify } from '../../../bugsnag'
 import { TableauMathliveElement } from '../../customElements/TableauMathlive'
+import type { AllChoicesType } from '../../customElements/ListeDeroulanteElement'
+import '../../customElements/ListeDeroulanteElement'
 import type { TableauMathliveType } from '../../types'
 import { buildDataKeyboardFromStyle } from '../claviers/keyboard'
 import './tableauMathlive.scss'
@@ -14,6 +16,13 @@ export interface Icell {
     texteAvant?: string
     blocCenter?: boolean
     espace?: boolean
+    /**
+     * Si ce tableau est fourni, la cellule (quand `texte` est vide) n'est pas
+     * un math-field mais une liste déroulante proposant ces choix.
+     */
+    choices?: AllChoicesType
+    /** Le premier choix de la liste est-il sélectionnable ? */
+    choix0?: boolean
   }
 }
 
@@ -143,32 +152,27 @@ function appendCell({
         spanAvant.textContent = options.texteAvant
         cell.appendChild(spanAvant)
       }
-      element = document.createElement('math-field')
-      if (options.espace) {
-        element.setAttribute('data-space', 'true')
-      }
-      element.classList.add('tableauMathlive')
+      if (options.choices != null && options.choices.length > 0) {
+        element = document.createElement('liste-deroulante')
+        element.classList.add('tableauMathlive')
+        element.setAttribute(
+          'choices',
+          encodeURIComponent(JSON.stringify(options.choices)),
+        )
+        element.setAttribute('choix0', options.choix0 ? 'true' : 'false')
+        element.id = `champTexteEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}`
+      } else {
+        element = document.createElement('math-field')
+        if (options.espace) {
+          element.setAttribute('data-space', 'true')
+        }
+        element.classList.add('tableauMathlive')
 
-      const classeString = buildDataKeyboardFromStyle(classes).join(' ')
-      /*  for (const classe of classes.split(' ')) {
-        // if (classe === 'clavierDeBase') element.setAttribute('data-keyboard', 'numbersOperations')
-        // else if (classe === 'clavierDeBaseAvecFraction') element.setAttribute('data-keyboard', 'numbers basicOperations')
-        if (classe === 'angles') element.setAttribute('data-keyboard', 'angles')
-        else if (classe === 'clavierDeBaseAvecFraction')
-          element.setAttribute('data-keyboard', 'numbers basicOperations')
-        else if (classe === 'clavierDeBaseAvecVariable')
-          element.setAttribute(
-            'data-keyboard',
-            'numbers basicOperations variables',
-          )
-        else if (classe === 'clavierDeBaseAvecEgal')
-          element.setAttribute('data-keyboard', 'numbers2 basicOperations')
-        else element.setAttribute('data-keyboard', 'numbersOperations')
+        const classeString = buildDataKeyboardFromStyle(classes).join(' ')
+        element.setAttribute('data-keyboard', classeString)
+        element.id = `champTexteEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}`
+        element.setAttribute('virtual-keyboard-mode', 'manual')
       }
-        */
-      element.setAttribute('data-keyboard', classeString)
-      element.id = `champTexteEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}`
-      element.setAttribute('virtual-keyboard-mode', 'manual')
       cell.appendChild(element)
       if (options.texteApres != null && options.texteApres !== '') {
         const spanApres = document.createElement('span')

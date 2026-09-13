@@ -128,7 +128,9 @@ export class TableauMathliveElement extends MathaleaCustomElement {
 
   get value(): Record<string, string> {
     const values: Record<string, string> = {}
-    const fields = this.querySelectorAll('math-field[id^="champTexteEx"]')
+    const fields = this.querySelectorAll(
+      'math-field[id^="champTexteEx"], liste-deroulante[id^="champTexteEx"]',
+    )
     fields.forEach((field) => {
       const mathfield = field as { id?: string; value?: string }
       if (mathfield.id != null) values[mathfield.id] = mathfield.value ?? ''
@@ -150,6 +152,11 @@ export class TableauMathliveElement extends MathaleaCustomElement {
     fields.forEach((field) => {
       const mathfield = field as { readOnly?: boolean }
       mathfield.readOnly = !isOn
+    })
+    const listes = this.querySelectorAll('liste-deroulante')
+    listes.forEach((liste) => {
+      ;(liste as unknown as { interactivityOn: boolean }).interactivityOn =
+        isOn
     })
   }
 }
