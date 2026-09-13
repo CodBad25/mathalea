@@ -320,15 +320,15 @@ export default class leCompteEstBon extends Exercice {
 
       let text: string
       if (context.isHtml && !context.isTypst) {
-        text = 'Valeur cible:<br>'
+        text = 'Valeur cible :<br>'
         text +=
-          '<span style="display:inline-flex; justify-content:center; width:100%; gap:0.1rem; font-size:3rem;">'
+          '<span style="display:inline-flex; justify-content:center; width:100%; gap:0.1rem; font-size:3rem; margin-top:5px;">'
         texNombre(cible)
           .split('')
           .forEach((x) => {
             text += `${texteEnCarte(x, true)}`
           })
-        text += '</span><br><br>Nombres à utiliser:<br>'
+        text += '</span><br><br>Nombres à utiliser :<br>'
         if (this.interactif) {
           text += addCompteEstBon(this, i, {
             cible,
@@ -338,7 +338,7 @@ export default class leCompteEstBon extends Exercice {
           })
         } else {
           text +=
-            '<span style="display:inline-flex; justify-content:center; width:100%; gap:0.5rem; font-size:2rem;">'
+            '<span style="display:inline-flex; justify-content:center; width:100%; gap:0.5rem; font-size:2rem; margin-top:5px;">'
           tirage.forEach((x) => {
             text += `${texteEnCarte(texNombre(x))}`
           })
