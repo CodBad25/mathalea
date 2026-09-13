@@ -12,7 +12,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 import { bleuMathalea } from '../../../lib/colors'
 import { figureAnswerJson } from '../../../lib/apigeom/figureAnswer'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = 'Tracer un segment de longueur fractionnaire'
 export const interactifReady = true
