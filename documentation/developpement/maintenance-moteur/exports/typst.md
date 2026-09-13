@@ -619,6 +619,11 @@ Les constantes d'import (`EXERCISE_BANK_IMPORT`, `TASKIZE_IMPORT`, `VARTABLE_IMP
 2. `buildTypstDocument` assemble le document : réglages éditables en tête de fichier (`#let colonnes`, `#let corrige`, `#let couleur`), en-tête de fiche, un bloc par exercice, section corrections dans un `#if corrige [...]`.
 3. `htmlToTypst` convertit chaque contenu : balises simples (`<br>`, `<b>`, `<i>`, `<sup>`, listes...) vers le balisage Typst, échappement des caractères spéciaux, et formules LaTeX converties par [tex2typst](https://github.com/qwinsi/tex2typst).
 
+`texteEnCarte()` traite `context.isTypst` avant sa branche HTML et émet un
+marqueur `<mathalea-typst>` contenant une boîte Typst native. Les cartes
+conservent ainsi leur fond bleu ou orange, leur bordure et leurs dimensions au
+lieu d'être aplaties comme un `<span>` HTML ordinaire.
+
 Particularités de la conversion des formules (`latexMathToTypst`) :
 
 - virgule décimale française rendue sans espace (`3,5` → `3","5`) ;
