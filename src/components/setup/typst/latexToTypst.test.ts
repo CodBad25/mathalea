@@ -253,6 +253,19 @@ describe('latexMathToTypst', () => {
     ).toBe('2 x &= 4 \\ x &= 2')
   })
 
+  it('sépare le saut de ligne et le #txt qui le suit (évite l’échappement `\\#`)', () => {
+    // 4G20 (Pythagore) : `\\text{Donc :}` en tout début de ligne d'un
+    // `aligned` collait le `\` de saut de ligne au `#txt(` généré pour le
+    // texte, formant `\#txt(...)`. En Typst, `\#` est l'échappement du
+    // caractère `#` : le saut de ligne disparaissait et un `#` littéral
+    // s'affichait dans le PDF juste avant « Donc ».
+    const result = latexMathToTypst(
+      '\\begin{aligned}NO^2&=16\\\\\\text{Donc :}\\\\NO&=4\\end{aligned}',
+    )
+    expect(result).not.toContain('\\#')
+    expect(result).toContain('\\ #txt("Donc :")')
+  })
+
   it("tolère les tabulations d'indentation dans un environnement aligned", () => {
     // 1AN31-7 : l'indentation du template literal laissait passer des \t dans
     // la formule, tex2typst levait et la correction affichait `\begin{aligned}`
