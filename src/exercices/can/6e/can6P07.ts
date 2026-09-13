@@ -29,7 +29,7 @@ export const dateDeModifImportante = '06/07/2025'
 export const uuid = '1a706'
 
 export const refs = {
-  'fr-fr': ['can6P07', '6N3P-flash1'],
+  'fr-fr': ['can6P07', '6N3P-flash1', '2I11-flash2'],
   'fr-ch': ['10FA2B-4'],
 }
 export default class PoucentageProportion extends ExerciceSimple {
