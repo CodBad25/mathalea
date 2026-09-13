@@ -992,6 +992,46 @@ describe('buildTypstDocument', () => {
     expect(merged).not.toContain('qr:')
   })
 
+  it('ajoute un QR-code vers la fiche entière en vue élève quand demandé', () => {
+    const url1 = 'https://coopmaths.fr/alea?uuid=abc&alea=xyz&v=eleve&es=0211'
+    const url2 = 'https://coopmaths.fr/alea?uuid=def&alea=uvw&v=eleve&es=0211'
+    const withQr = buildTypstDocument(
+      [
+        exercise({ url: url1, questions: ['$1+1$'] }),
+        exercise({ url: url2, questions: ['$2+2$'] }),
+      ],
+      { ...defaultTypstDocumentOptions, showQrCodeFiche: true },
+    )
+    expect(withQr).toContain('#place(top + right, context [')
+    expect(withQr).toContain('#if here().page() == 1 [')
+    // fond blanc explicite : le QR-code reste lisible quoi qu'il recouvre
+    // (titre, ligne d'en-tête…), `#place` le sortant du flux normal
+    expect(withQr).toContain('fill: white')
+    // les deux exercices sont regroupés dans une seule URL, avec les mêmes
+    // graines que celles imprimées, un exercice par page (1), non interactif
+    // (0) mais modifiable par l'élève (1)
+    const qrUrlMatch = withQr.match(/link\("([^"]+)"\)/)
+    expect(qrUrlMatch).not.toBeNull()
+    const qrUrl = new URL(qrUrlMatch![1])
+    expect(qrUrl.searchParams.getAll('uuid')).toEqual(['abc', 'def'])
+    expect(qrUrl.searchParams.getAll('alea')).toEqual(['xyz', 'uvw'])
+    expect(qrUrl.searchParams.get('v')).toBe('eleve')
+    expect(qrUrl.searchParams.get('es')).toBe('1011')
+
+    // absent par défaut
+    const withoutQr = buildTypstDocument([
+      exercise({ url: url1, questions: ['$1+1$'] }),
+    ])
+    expect(withoutQr).not.toContain('#place(')
+
+    // aucun exercice imprimable n'a d'URL : pas de QR-code de fiche
+    const noUrl = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      { ...defaultTypstDocumentOptions, showQrCodeFiche: true },
+    )
+    expect(noUrl).not.toContain('#place(')
+  })
+
   it('active breather (espaces verticaux automatiques) par défaut', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).toContain(`#import "${typstPackageSpec('breather')}": breathe`)

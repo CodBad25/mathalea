@@ -549,6 +549,14 @@ Case « QR-code vers chaque exercice » (`TypstDocumentOptions.showQrCode`) : aj
 
 En mode fusionné (global ou local) il n'y a pas de bloc `exo.with(...)` par exercice où accrocher le QR-code : la case est sans effet. Le mode « Course aux nombres » n'importe pas `exercise-bank` du tout (voir plus haut).
 
+## QR-code vers la fiche
+
+Case « QR-code vers la fiche (vue élève, 1 exercice par page) » (`TypstDocumentOptions.showQrCodeFiche`) : ajoute en haut à droite de la **première page physique** du document un QR-code vers toute la sélection d'exercices en vue élève, avec les mêmes graines que celles imprimées — un élève qui scanne le QR-code retrouve exactement les exercices de sa photocopie. Réglages encodés dans `es` : un exercice par page, non interactif par défaut mais l'élève peut activer l'interactivité (`isInteractiveFree`). Indépendant de « QR-code vers chaque exercice », qui cible un exercice à la fois et reste désactivé en mode fusionné/Course aux nombres.
+
+`ficheUrl` (`buildTypstDocument.ts`) construit ce lien en réutilisant les paramètres déjà calculés dans l'URL individuelle de chaque exercice (`exercise.url`, la même URL que celle du QR-code par exercice — voir `exerciceUrl` dans `Typst.svelte`) : elle y puise uuid, graine et réglages par exercice sans les recalculer, ne retire que `v`/`es` (propres à un exercice seul) pour les remplacer par les réglages de fiche. Les exercices non imprimables (avertissement, ou sans URL) en sont exclus ; si aucun exercice n'a d'URL, aucun QR-code n'est ajouté.
+
+`ficheQrCodeLines` place le QR-code avec `#place(top + right, context [#if here().page() == 1 [...]])` : `#place` sort le contenu du flux normal (aucune place réservée dans la mise en page du titre ou de la page de garde), et `here().page()` — le numéro de page **physique**, comme dans `pageFooter` — limite l'affichage à la toute première page, même sur une fiche à plusieurs sujets (Sujet A, B...) où chaque sujet redémarre sa propre pagination logique.
+
 ## Impression recto-verso (démarrage sur page impaire)
 
 Case à cocher « Impression recto-verso » des Réglages du document (`TypstDocumentOptions.oddPageStarts`, **active par défaut**) : chaque partie qui commence sur une nouvelle page — le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions — commence sur une page impaire, Typst insérant au besoin une page blanche. En impression recto-verso en série, une partie ne commence ainsi jamais au dos de la précédente ; le partage énoncé/corrigé en deux PDF (`downloadPdfSeparate`) en profite de la même façon, chaque sujet y restant sur un recto.
