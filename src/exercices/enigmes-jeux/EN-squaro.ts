@@ -191,11 +191,6 @@ class squaro extends Exercice {
     // `goodAnswers[i]` est lu par `figureApigeom()` pour déterminer le nombre
     // de points de la question : il faut donc le renseigner avant de l'appeler.
     this.goodAnswers[0] = Array.from(PALIERS_TROIS_POINTS)
-    const emplacementPourFigure = figureApigeom({
-      exercice: this,
-      i: 0,
-      figure: this.figure,
-    })
     this.positionsPointsBleus = []
     const codagePoints = []
     for (let j = 0; j <= this.largeur; j++) {
@@ -294,6 +289,16 @@ class squaro extends Exercice {
         (obj) => !(obj.x === unBonPoint.x && obj.y === unBonPoint.y),
       )
     }
+
+    // Appelé seulement maintenant : en Typst, `figureApigeom()` fige la
+    // figure en SVG statique immédiatement (voir `apigeomFigureToSvg`), donc
+    // les chiffres et points d'aide créés ci-dessus doivent déjà être dans
+    // `this.figure` pour apparaître sur cette sortie.
+    const emplacementPourFigure = figureApigeom({
+      exercice: this,
+      i: 0,
+      figure: this.figure,
+    })
 
     let domReadyMarkup = ''
     // Besoin de l'aide sur l'affichage du nombre de points
