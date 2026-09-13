@@ -40,7 +40,7 @@ describe('loadVitrineHtml', () => {
     vi.unstubAllGlobals()
   })
 
-  it('récupère le fragment sur l’origine courante et mémorise le résultat', async () => {
+  it('récupère le fragment sur l’origine courante en développement et mémorise le résultat', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       text: () => Promise.resolve(fragment),
@@ -53,6 +53,20 @@ describe('loadVitrineHtml', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(fetchMock.mock.calls[0][0]).toBe(
       `${window.location.origin}/www/vitrine/fragment/`,
+    )
+  })
+
+  it('récupère le fragment sur coopmaths.fr en production, quelle que soit l’origine courante', async () => {
+    vi.stubEnv('DEV', false)
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(fragment),
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    const html = await loadVitrineHtml()
+    expect(html).toContain('vitrine-alea')
+    expect(fetchMock.mock.calls[0][0]).toBe(
+      'https://coopmaths.fr/www/vitrine/fragment/',
     )
   })
 

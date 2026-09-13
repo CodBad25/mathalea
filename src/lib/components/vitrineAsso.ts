@@ -4,12 +4,17 @@
  *
  * Le contenu n'est pas dans le bundle : il est rédigé et construit dans le
  * projet `www` (coopmaths.fr/www), qui publie un fragment HTML autonome
- * (styles embarqués, sans script) sur `/www/vitrine/fragment/`. On le
- * récupère sur l'origine courante : en production `alea` et `www` sont sur
- * coopmaths.fr, en développement Vite proxifie `/www` (voir vite.config.ts).
+ * (styles embarqués, sans script) sur `/www/vitrine/fragment/`. MathALÉA est
+ * servi depuis plusieurs domaines (coopmaths.fr, mathalea.fr…) alors que ce
+ * fragment n'existe que sous coopmaths.fr : on le récupère donc en
+ * cross-origin explicite vers coopmaths.fr en production (qui envoie les
+ * en-têtes CORS nécessaires pour ce chemin), et sur l'origine courante en
+ * développement, où Vite proxifie `/www` (voir vite.config.ts).
  */
 
 export const VITRINE_FRAGMENT_PATH = '/www/vitrine/fragment/'
+
+const VITRINE_ORIGIN = 'https://coopmaths.fr'
 
 /** Classe du conteneur racine du fragment, telle que produite par `www`. */
 const ROOT_CLASS = 'vitrine-alea'
@@ -52,7 +57,8 @@ export function loadVitrineHtml(): Promise<string | null> {
 }
 
 async function fetchVitrineHtml(): Promise<string | null> {
-  const url = new URL(VITRINE_FRAGMENT_PATH, window.location.origin)
+  const origin = import.meta.env.DEV ? window.location.origin : VITRINE_ORIGIN
+  const url = new URL(VITRINE_FRAGMENT_PATH, origin)
   const response = await fetch(url.toString(), {
     headers: { Accept: 'text/html' },
   })
