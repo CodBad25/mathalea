@@ -12,6 +12,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 import { bleuMathalea } from '../../../lib/colors'
 import { figureAnswerJson } from '../../../lib/apigeom/figureAnswer'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 
 export const titre = 'Tracer un segment de longueur fractionnaire'
 export const interactifReady = true
@@ -53,7 +54,7 @@ export default class Can2026CM2Q26 extends ExerciceCan {
     this.nbCarreaux = (num / den) * unite
     this.reponse = this.nbCarreaux
     this.question = `Trace un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
-    this.correction = `L'unité a une longueur de $${unite}~\\text{carreaux}$ donc $\\dfrac{${num}}{${den}}~\\text{u.l}=${this.nbCarreaux}~\\text{carreaux}$.`
+    this.correction = `L'unité a une longueur de $${unite}~\\text{carreaux}$ donc $\\dfrac{${num}}{${den}}~\\text{u.l}=${miseEnEvidence(`${this.nbCarreaux}~\\text{carreaux}`)}$.`
     this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${this.nbCarreaux}~\\text{carreaux}$.`
     this.canEnonce = ''
 
