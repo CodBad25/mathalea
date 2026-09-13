@@ -371,7 +371,7 @@ export function texteEnBoite(texte: string) {
 export function texteEnCarte(texte: string, isTarget: boolean = false) {
   const bgcolor = isTarget ? orangeMathalea : bleuMathalea
   if (context.isTypst) {
-    const width = isTarget ? '24pt' : '28pt'
+    const width = isTarget ? '24pt' : '32pt'
     const height = isTarget ? '28pt' : '30pt'
     const radius = isTarget ? '4pt' : '6pt'
     return `<mathalea-typst>#box(width: ${width}, height: ${height}, fill: rgb("${bgcolor}"), stroke: 0.6pt + luma(75%), radius: ${radius}, inset: 0pt)[#align(center + horizon)[#text(fill: white, weight: "bold")[#raw(${JSON.stringify(texte)})]]]</mathalea-typst>`
