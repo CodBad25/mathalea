@@ -19,8 +19,8 @@ export default class OperationsPosees extends Exercice {
     super()
     this.besoinFormulaireNumerique = [
       'Opération',
-      5,
-      '1 : Addition\n2 : Soustraction\n3 : Multiplication\n4 : Division euclidienne\n5 : Division décimale',
+      6,
+      '1 : Addition\n2 : Soustraction par compensation\n3 : Multiplication\n4 : Division euclidienne\n5 : Division décimale\n6 : Soustraction par emprunt',
     ]
     this.besoinFormulaire2Texte = [
       'Deux nombres séparés par un tiret(séparateur décimal = le point)',
@@ -71,7 +71,7 @@ export default class OperationsPosees extends Exercice {
           options: { solution: true, colore: orangeMathalea },
         })
         break
-      case 2: // soustraction
+      case 2: // soustraction par compensation
         this.contenu = operation({
           operande1: a,
           operande2: b,
@@ -93,6 +93,15 @@ export default class OperationsPosees extends Exercice {
           operande2: b,
           type: 'divisionE',
           precision: 0,
+          options: { solution: true, colore: orangeMathalea },
+        })
+        break
+      case 6: // soustraction par emprunt
+        this.contenu = operation({
+          operande1: a,
+          operande2: b,
+          type: 'soustraction',
+          methodeParCompensation: false,
           options: { solution: true, colore: orangeMathalea },
         })
         break
