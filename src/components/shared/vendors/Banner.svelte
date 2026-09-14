@@ -4,7 +4,7 @@
   export let brandImagePath: string | null = null
   export let productImagePath: string | null =
     'assets/images/vendors/bordas/myriade-bordas-logo.png'
-  export let icon: string = 'bxs-cog'
+  export let icon: string = 'bxs-home'
 </script>
 
 <div

@@ -2,7 +2,7 @@
   import { mathaleaGoToView } from '../../../lib/mathaleaUtils'
   import ButtonIconTooltip from '../forms/ButtonIconTooltip.svelte'
 
-  export let icon: string = 'bxs-cog'
+  export let icon: string = 'bxs-home'
   export let tooltipPosition: 'auto' | 'top' | 'bottom' | 'left' | 'right' =
     'left'
   let klass: string = ''
@@ -20,7 +20,7 @@
 <ButtonIconTooltip
   {icon}
   {tooltipPosition}
-  tooltip="Accéder aux réglages"
+  tooltip="Page d'accueil du site"
   class={klass}
   on:click={goToVueProf}
 />
