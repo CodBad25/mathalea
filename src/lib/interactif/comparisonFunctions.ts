@@ -2449,15 +2449,26 @@ function handleFonction(
     const points = [valAlea(), valAlea(), valAlea()].map((v) => ({
       [varName]: v,
     }))
-    // Skip test points where the expected answer produces NaN
-    if (points.some((p) => Number.isNaN(goodAnswerFn.run!(p)))) continue
+    // Skip test points where the expected answer produces NaN or an infinite value
     if (
-      !points.every(
-        (p) =>
-          Math.abs(
-            (inputFn.run!(p) as number) - (goodAnswerFn.run!(p) as number),
-          ) < 1e-10,
-      )
+      points.some((p) => {
+        const y = Number(goodAnswerFn.run!(p))
+        return Number.isNaN(y) || !Number.isFinite(y)
+      })
+    )
+      continue
+    if (
+      !points.every((p) => {
+        const y1 = Number(inputFn.run!(p))
+        const y2 = Number(goodAnswerFn.run!(p))
+        // Tolérance relative en plus de l'absolue : près d'une asymptote
+        // verticale (ex. un dénominateur qui s'annule presque), deux écritures
+        // mathématiquement égales (ex. (2x+5)^2 vs sa forme développée)
+        // peuvent différer de bien plus que 1e-10 à cause du bruit de calcul
+        // flottant, alors que l'écart reste négligeable devant la valeur elle-même.
+        const tolerance = 1e-9 * Math.max(1, Math.abs(y1), Math.abs(y2))
+        return Math.abs(y1 - y2) < tolerance
+      })
     ) {
       isEqual = false
       break
