@@ -57,7 +57,7 @@ Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-des
 
 - dans la marge de page (la plus proche de la colonne concernée), à hauteur de chaque liste de questions (environnement `tasks`) : nombre de colonnes (1 à 4) et espacement vertical (pas de 0,25 em) — l'énoncé (`exN`) et sa correction (`exN-corr`) se règlent indépendamment. Une troisième ligne règle les colonnes des **propositions de QCM** de l'exercice (`exN-qcm`, `exN-corr-qcm`), affichée seulement s'il en contient un ; à l'inverse, un exercice à question unique avec QCM n'affiche que cette ligne, faute de liste de questions à régler — voir [Colonnes des QCM](#colonnes-des-qcm) ;
 - le sélecteur « Aperçu » de la barre d'outils (à partir de deux sujets) choisit le sujet **montré et compilé** — voir [Un seul sujet dans l'aperçu](#un-seul-sujet-dans-laperçu) ;
-- dans la marge droite, au début de chaque exercice : insertion/modification d'un texte ou d'un titre de section (`#section[...]`, helper émis dans le préambule) **avant** cet exercice, nombre de questions (`nbQuestions`), **duplication** et suppression de l'exercice (l'une comme l'autre mettent à jour `exercicesParams` et le barème de la page de garde). La copie se place juste après l'original, avec les mêmes paramètres (graine comprise, donc le même énoncé) et les mêmes réglages de palette : `shiftCarryOverForInsert` renumérote les réglages des exercices suivants et recopie ceux de l'original sur la copie. Quand le nombre de questions change, les questions déjà affichées sont figées (`frozenInputs`, vidé par « Nouvelles données ») : la régénération ne rebrasse pas leurs valeurs, seules les questions ajoutées sont nouvelles ;
+- dans la marge droite, au début de chaque exercice : insertion/modification d'un texte, d'un titre de section (`#section[...]`, helper émis dans le préambule) ou d'un **exercice à énoncé libre** (voir [Exercice à énoncé libre](#exercice-à-énoncé-libre) plus bas) **avant** cet exercice, nombre de questions (`nbQuestions`), **duplication** et suppression de l'exercice (l'une comme l'autre mettent à jour `exercicesParams` et le barème de la page de garde). La copie se place juste après l'original, avec les mêmes paramètres (graine comprise, donc le même énoncé) et les mêmes réglages de palette : `shiftCarryOverForInsert` renumérote les réglages des exercices suivants et recopie ceux de l'original sur la copie. Quand le nombre de questions change, les questions déjà affichées sont figées (`frozenInputs`, vidé par « Nouvelles données ») : la régénération ne rebrasse pas leurs valeurs, seules les questions ajoutées sont nouvelles ;
 - entre les exercices : deux boutons de saut de page et de saut de colonne (ce dernier seulement en document multicolonne) — une fois insérés, ils deviennent des badges bien visibles, retirables d'un clic (le saut de page ferme et rouvre le bloc `en-colonnes`, `#pagebreak` étant interdit dans un conteneur) ;
 - à gauche du titre de la fiche : édition du titre, du sous-titre et de la ligne d'en-tête (ces champs ne sont plus dans la fenêtre Réglages ; la valeur est reportée dans les réglages persistés) — absente si l'habillage en-tête est `Aucun`, faute de bloc à éditer ;
 - en haut de la page de garde (quand un modèle est choisi) : édition de l'intitulé, de la session, de la matière, de la durée, de la mention de bas de page et des consignes — même mécanisme que le titre de la fiche, voir [Page de garde](#page-de-garde) ;
@@ -119,6 +119,45 @@ même si le code a été modifié à la main (`isEdited`) : comme `deleteExercis
 ajouter un exercice est déjà un geste délibéré, et bloquer la modale derrière
 l'avertissement générique interdirait tout ajout tant que le code a été
 retouché à la main.
+
+## Exercice à énoncé libre
+
+Le choix « Exercice » du panneau d'insertion (voir « Palette de mise en
+page » plus haut) insère, à un point quelconque de la fiche (pas seulement à
+la fin, contrairement à la modale ci-dessus), un exercice numéroté normalement
+dont l'énoncé est entièrement écrit par le professeur dans le panneau — utile
+pour une question qui n'existe dans aucun référentiel (rédaction libre,
+retranscription d'un énoncé papier...).
+
+- « vaisseau » : `src/exercices/apps/EnonceLibre.ts` est un exercice
+  générique minimal (un texte de départ « Énoncé à écrire. », correction
+  vide), sans `refs` (donc absent de la recherche et des référentiels) —
+  seul son `uuid` compte, recopié dans `FREE_EXERCISE_UUID`
+  (`Typst.svelte`). Il n'a rien de spécifique au professeur : n'importe quel
+  exercice aurait pu servir de vaisseau, celui-ci est choisi pour son
+  contenu neutre (pas de `ref` affichée, pas de QR-code) ;
+- `insertFreeExercise(gapNum, texte)` (`Typst.svelte`) ajoute ses paramètres
+  (`{ uuid: FREE_EXERCISE_UUID }`) à `exercicesParams` à la position
+  `gapNum + 1`, comme `duplicateExercise` (même `shiftCarryOverForInsert`,
+  avec `original: -1` : aucun exercice existant dont copier les réglages,
+  contrairement à une duplication) ;
+- `texte` est aussitôt posé comme surcharge de code
+  (`carryOver.codeOverrides[gapNum + 1]`) avant la régénération : l'énoncé
+  affiché est donc directement celui écrit dans le panneau, jamais le texte
+  de départ du vaisseau. Le professeur peut le modifier ensuite comme
+  n'importe quel exercice (icône crayon, « Éditer le code Typst de cet
+  exercice ») ;
+- cette modale d'édition masque son bouton « Restaurer le code d'origine »
+  quand l'exercice édité est un vaisseau (`exercises[num - 1]?.uuid ===
+FREE_EXERCISE_UUID`) : l'énoncé « généré » auquel il reviendrait n'est que
+  le texte de départ du vaisseau, jamais utile à retrouver ;
+- l'exercice reste un exercice génératif normal (pas `typeExercice:
+'statique'`) : « Nouvelles données » et « Réglages de l'exercice » restent
+  visibles (ils ne regénèrent que le contenu invisible sous la surcharge,
+  sans effet sur l'énoncé affiché) plutôt que masqués comme pour un exercice
+  statique, ce qui aurait aussi masqué le crayon d'édition indispensable ici
+  (`nonEditableStaticExercises` se fonde sur l'absence de fichier `.typ` du
+  référentiel, que ce vaisseau n'a pas).
 
 ## Lignes de réponse (« Lignes pour écrire »)
 
