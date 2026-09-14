@@ -60,4 +60,28 @@ describe('apigeomFigureToSvg', () => {
     expect(svg).not.toContain('\\mathcal')
     expect(labels).toContain('C_f')
   })
+
+  it('rend un label mis en évidence (\\color/\\boldsymbol) et \\ell sans code LaTeX brut', () => {
+    // Reproduit le « ? » coloré/gras de miseEnEvidence() posé sur une droite
+    // graduée (cf. 6e/6N3D) et le nom de limite `$\ell$` (cf. TSA2-12) :
+    // sans nettoyage, le code KaTeX est posé tel quel en nœud SVG <text>.
+    const figure = new Figure({ xMin: -1, yMin: -1, width: 300, height: 300 })
+    figure.create('TextByPosition', {
+      text: '{\\color{black}\\boldsymbol{?}}',
+      x: 1,
+      y: 1,
+    })
+    figure.create('TextByPosition', { text: '\\ell', x: 1, y: -0.5 })
+
+    const svg = apigeomFigureToSvg(figure as never)
+    const labels = [...svg.matchAll(/<text[^>]*>([\s\S]*?)<\/text>/g)].map(
+      (match) => match[1],
+    )
+
+    expect(svg).not.toContain('\\color')
+    expect(svg).not.toContain('\\boldsymbol')
+    expect(svg).not.toContain('\\ell')
+    expect(labels).toContain('?')
+    expect(labels).toContain('ℓ')
+  })
 })
