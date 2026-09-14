@@ -116,6 +116,12 @@ export default class TablesMultiplicationsDivisions extends Exercice {
                     KeyboardType.clavierNumbers,
                   ) +
                   `$ = ${a * b} $`
+              handleAnswers(
+                this,
+                i,
+                { reponse: { value: b.toString() } },
+                { formatInteractif: 'mathalea-mathfield' },
+              )
             } else {
               texte =
                 '$ \\ldots\\ldots' + ' \\times ' + b + ' = ' + a * b + ' $'
@@ -126,13 +132,13 @@ export default class TablesMultiplicationsDivisions extends Exercice {
                     i,
                     KeyboardType.clavierNumbers,
                   ) + `$ \\times ${b}  = ${a * b} $`
+              handleAnswers(
+                this,
+                i,
+                { reponse: { value: a.toString() } },
+                { formatInteractif: 'mathalea-mathfield' },
+              )
             }
-            handleAnswers(
-              this,
-              i,
-              { reponse: { value: a.toString() } },
-              { formatInteractif: 'mathalea-mathfield' },
-            )
           } else {
             // Sinon on demande forcément le 2e facteur
             texte = '$ ' + a + ' \\times \\ldots\\ldots = ' + a * b + ' $'
