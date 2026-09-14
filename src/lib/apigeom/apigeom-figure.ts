@@ -329,12 +329,14 @@ const TEXT_OVERFLOW_MARGIN_PX = 30
  * labels apigeom (ex. `1~\text{u.l}`, `$\dfrac{3}{4}~\text{u.l}$`,
  * `-2{,}5` — apigeom `displayNumber` entoure la virgule décimale de `{,}`
  * pour l'espacement KaTeX ; `$\vec \jmath$` / `$\vec{u}$` — labels des
- * vecteurs de base du repère `repereOij` et des vecteurs nommés) :
+ * vecteurs de base du repère `repereOij` et des vecteurs nommés ; `$\mathcal
+ * C_f$` — nom d'une courbe représentative, cf. TSA2-12/TCA1-23) :
  * `addTextElementsToSvg` (paquet apigeom) retire seulement les `$` de
  * bordure, il ne connaît pas KaTeX et poserait sinon le code LaTeX brut tel
- * quel comme texte SVG. Rendu approximatif (pas un vrai typeset), suffisant
- * pour les libellés courts utilisés ici (unités, fractions simples,
- * graduations décimales, vecteurs).
+ * quel comme texte SVG. Rendu approximatif (pas un vrai typeset, donc pas de
+ * véritable police calligraphique pour `\mathcal`), suffisant pour les
+ * libellés courts utilisés ici (unités, fractions simples, graduations
+ * décimales, vecteurs, noms de courbes).
  */
 function cleanLatexLabel(text: string): string {
   return text
@@ -348,6 +350,11 @@ function cleanLatexLabel(text: string): string {
     // → `AB⃗`, `\vec \jmath` → `ȷ⃗`)
     .replace(/\\(?:vec|overrightarrow)\s*\{([^{}]*)\}/g, '$1⃗')
     .replace(/\\(?:vec|overrightarrow)\s+([^\s{}\\])/g, '$1⃗')
+    // \mathcal{C} / \mathcal C (nom de courbe, ex. $\mathcal C_f$) : pas de
+    // police calligraphique disponible en texte SVG brut, la commande est
+    // simplement retirée pour ne garder que la lettre
+    .replace(/\\mathcal\s*\{([^{}]*)\}/g, '$1')
+    .replace(/\\mathcal\s+([^\s{}\\])/g, '$1')
     .replace(/\{,\}/g, ',')
     .replace(/~/g, ' ')
 }

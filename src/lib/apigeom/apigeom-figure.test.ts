@@ -44,4 +44,20 @@ describe('apigeomFigureToSvg', () => {
     expect(labels).toContain('ȷ⃗')
     expect(labels).toContain('u⃗')
   })
+
+  it('rend le label d’une courbe (\\mathcal) sans code LaTeX brut', () => {
+    // Reproduit le label de la courbe représentative de TSA2-12/TCA1-23
+    // (`$\mathcal C_f$`) : sans nettoyage, le code KaTeX est posé tel quel
+    // en nœud SVG <text>.
+    const figure = new Figure({ xMin: -1, yMin: -1, width: 300, height: 300 })
+    figure.create('TextByPosition', { text: '$\\mathcal C_f$', x: 1, y: 1 })
+
+    const svg = apigeomFigureToSvg(figure as never)
+    const labels = [...svg.matchAll(/<text[^>]*>([\s\S]*?)<\/text>/g)].map(
+      (match) => match[1],
+    )
+
+    expect(svg).not.toContain('\\mathcal')
+    expect(labels).toContain('C_f')
+  })
 })
