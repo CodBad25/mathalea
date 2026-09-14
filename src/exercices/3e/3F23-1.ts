@@ -24,7 +24,7 @@ export const interactifReady = true
 export const uuid = 'd341f'
 
 export const refs = {
-  'fr-fr': ['3F23-1', '1A-F02-22', '2A-F2-5'],
+  'fr-fr': ['3F23-1'],
   'fr-ch': ['10FA1B-16', '1mF2-17'],
 }
 export const dateDePublication = '08/10/2024'
@@ -202,7 +202,7 @@ export default class AntecedentParCalcul extends Exercice {
         default:
           // f(x) = ax + b avec a et b petits relatifs
           a = randint(-20, 20, [-1, 0, 1])
-          b = randint(-20, 20)
+          b = randint(-20, 20, [0])
           m = randint(-20, 20)
           expr = `$f(x)=${a}x ${ecritureAlgebrique(b)}$`
           texte += consigneQuestion(m, expr, versionQcm)
