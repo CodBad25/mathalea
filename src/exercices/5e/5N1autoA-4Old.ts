@@ -1,6 +1,5 @@
-import TrouverNombre from './5N1J-4Old'
+import TrouverNombreOld from './5N1J-4Old'
 export const dateDePublication = '12/07/2026'
-export const dateDeModifImportante = '14/09/2026'
 export const interactifReady = true
 
 export const titre =
@@ -10,13 +9,13 @@ export const titre =
  * @author Éric Elter
  */
 
-export const uuid = '5414e'
+export const uuid = '54140'
 
 export const refs = {
-  'fr-fr': ['5N1autoA-4'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-export default class TrouverNombre2ou5ou10 extends TrouverNombre {
+export default class TrouverNombre2ou5ou10Old extends TrouverNombreOld {
   constructor() {
     super()
     this.besoinFormulaireTexte = [
