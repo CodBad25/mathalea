@@ -16,6 +16,7 @@
   import NavBar from '../../shared/header/NavBar.svelte'
   import ExportViewLinks from '../shared/ExportViewLinks.svelte'
   import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
+  import { minimalCorrection } from '../typst/minimalCorrection'
   import type { TypstAnchor } from '../typst/typstCompiler'
   import {
     anchorPosition,
@@ -40,6 +41,11 @@
   let isSettingsOpen = true
   /** Affiche sur l'aperçu les contrôles de taille du texte des cartes et de zoom des images */
   let showOverlay = true
+  /**
+   * Réduit chaque correction à ses réponses mises en évidence en orange
+   * (voir `minimalCorrection`, déjà utilisée par la vue Typst).
+   */
+  let minimalCorrections = false
   if (isLocalStorageAvailable()) {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY)
@@ -50,6 +56,9 @@
         }
         if (typeof parsed.showOverlay === 'boolean') {
           showOverlay = parsed.showOverlay
+        }
+        if (typeof parsed.minimalCorrections === 'boolean') {
+          minimalCorrections = parsed.minimalCorrections
         }
         if (parsed.documentOptions != null) {
           documentOptions = {
@@ -80,7 +89,12 @@
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ displayMode, documentOptions, showOverlay }),
+        JSON.stringify({
+          displayMode,
+          documentOptions,
+          showOverlay,
+          minimalCorrections,
+        }),
       )
     } catch {
       // stockage plein ou indisponible : sans conséquence
@@ -153,11 +167,14 @@
       const questions = exercise.listeQuestions ?? []
       const corrections = exercise.listeCorrections ?? []
       for (const [i, question] of questions.entries()) {
+        const correction = format(corrections[i] ?? '')
         cards.push({
           front: format(
             intro.length > 0 ? `${intro}<br>${question}` : question,
           ),
-          back: format(corrections[i] ?? ''),
+          back: minimalCorrections
+            ? minimalCorrection(correction)
+            : correction,
         })
       }
     }
@@ -800,6 +817,19 @@
               on:change={applyDocumentOptions}
             />
             Numéroter les cartes (pour réapparier recto et verso)
+          </label>
+
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              bind:checked={minimalCorrections}
+              on:change={applyDocumentOptions}
+            />
+            <span
+              title="Quand une correction met sa réponse en évidence (en orange), n'afficher que cette réponse"
+            >
+              Correction minimale
+            </span>
           </label>
 
           <div class="flex items-center justify-between">
