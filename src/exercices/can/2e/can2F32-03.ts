@@ -34,6 +34,33 @@ type Noeud = {
   deriveeDroit: number
   isVisible: boolean
 }
+
+// Déclarés au niveau du module (et non dans nouvelleVersion()) : quotaChoice()
+// mémorise la valeur choisie par identité de référence pour la réutiliser sur
+// les questions suivantes. Des constantes recréées à chaque appel de
+// nouvelleVersion() casseraient cette comparaison (maFonction === noeuds3
+// serait toujours faux dès la 2e question).
+const noeuds1: Noeud[] = [
+  { x: -4, y: -3, deriveeGauche: 2, deriveeDroit: 2.5, isVisible: true },
+  { x: -2, y: -1, deriveeGauche: 1, deriveeDroit: 0.5, isVisible: true },
+  { x: 0, y: 0, deriveeGauche: 1, deriveeDroit: 2, isVisible: true },
+  { x: 1, y: 2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
+  { x: 2, y: 3, deriveeGauche: 1.5, deriveeDroit: 1, isVisible: true },
+  { x: 3, y: 4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+]
+
+const noeuds3: Noeud[] = [
+  { x: -4, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+  { x: -2, y: 0, deriveeGauche: 0.8, deriveeDroit: 1, isVisible: true },
+  { x: 0, y: 2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
+  { x: 1, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+  { x: 2, y: 2, deriveeGauche: -1, deriveeDroit: -1.5, isVisible: true },
+  { x: 3, y: 0, deriveeGauche: -1.5, deriveeDroit: -1, isVisible: true },
+  { x: 4, y: -1, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
+  { x: 5, y: -3, deriveeGauche: -1.5, deriveeDroit: -1, isVisible: true },
+  { x: 6, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+]
+
 export default class InequationsGSpline extends ExerciceSimple {
   spline!: Spline
   constructor() {
@@ -47,27 +74,6 @@ export default class InequationsGSpline extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const noeuds1: Noeud[] = [
-      { x: -4, y: -3, deriveeGauche: 2, deriveeDroit: 2.5, isVisible: true },
-      { x: -2, y: -1, deriveeGauche: 1, deriveeDroit: 0.5, isVisible: true },
-      { x: 0, y: 0, deriveeGauche: 1, deriveeDroit: 2, isVisible: true },
-      { x: 1, y: 2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-      { x: 2, y: 3, deriveeGauche: 1.5, deriveeDroit: 1, isVisible: true },
-      { x: 3, y: 4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-    ]
-
-    const noeuds3: Noeud[] = [
-      { x: -4, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: -2, y: 0, deriveeGauche: 0.8, deriveeDroit: 1, isVisible: true },
-      { x: 0, y: 2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-      { x: 1, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: 2, y: 2, deriveeGauche: -1, deriveeDroit: -1.5, isVisible: true },
-      { x: 3, y: 0, deriveeGauche: -1.5, deriveeDroit: -1, isVisible: true },
-      { x: 4, y: -1, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-      { x: 5, y: -3, deriveeGauche: -1.5, deriveeDroit: -1, isVisible: true },
-      { x: 6, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-    ]
-
     const maFonction: Noeud[] = this.quotaChoice('maFonction', [
       noeuds1,
       noeuds3,
