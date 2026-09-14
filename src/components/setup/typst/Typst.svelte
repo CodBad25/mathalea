@@ -1159,7 +1159,7 @@
   }
 
   /** Pas d'ajustement de l'espacement vertical des questions, en em */
-  const GUTTER_STEP = 0.25
+  const GUTTER_STEP = 0.1
   function adjustGutter(target: string, delta: number) {
     const raw = tasksLayoutValues[target]?.gutter ?? 'interligne-questions'
     // « interligne-questions » (le défaut global) vaut 1,2 em : le premier
