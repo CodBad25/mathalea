@@ -196,11 +196,6 @@ export default class shikaku extends Exercice {
     // `goodAnswers[i]` est lu par `figureApigeom()` pour déterminer le nombre
     // de points de la question : il faut donc le renseigner avant de l'appeler.
     this.goodAnswers[0] = Array.from(PALIERS_TROIS_POINTS)
-    const emplacementPourFigure = figureApigeom({
-      exercice: this,
-      i: 0,
-      figure: this.figure,
-    })
     const rows = this.largeur
     const cols = this.longueur
     let regionIdCounter = 1
@@ -485,6 +480,16 @@ export default class shikaku extends Exercice {
     DomReadyActionElement.registerCallback(domReadyAction, () => {
       drawBluePolygon()
       return () => DomReadyActionElement.unregisterCallback(domReadyAction)
+    })
+
+    // Appelé seulement maintenant : en Typst, `figureApigeom()` fige la
+    // figure en SVG statique immédiatement (voir `apigeomFigureToSvg`), donc
+    // les nombres créés ci-dessus doivent déjà être dans `this.figure` pour
+    // apparaître sur cette sortie.
+    const emplacementPourFigure = figureApigeom({
+      exercice: this,
+      i: 0,
+      figure: this.figure,
     })
 
     let texteCorr =
