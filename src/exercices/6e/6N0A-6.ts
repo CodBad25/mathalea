@@ -139,9 +139,9 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
     this.sup3 = 1 // Valeur du paramètre par défaut
     this.besoinFormulaire4CaseACocher = [
       "Activer le drag and drop pour l'écriture en lettres (paramètre d'interactivité)",
-      false,
+      true,
     ]
-    this.sup4 = false
+    this.sup4 = true
 
     this.dragAndDrops = []
   }

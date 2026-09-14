@@ -45,6 +45,8 @@ export class MathaleaTextfieldElement extends MathaleaCustomElement {
   private input: HTMLInputElement | null = null
   private attributesObserver: MutationObserver | null = null
   private forwardFocusHandler: (() => void) | null = null
+  private inputHandler: (() => void) | null = null
+  private minimumInputSize: number | null = null
 
   static create({
     id,
@@ -153,7 +155,10 @@ export class MathaleaTextfieldElement extends MathaleaCustomElement {
   }
 
   set value(nextValue: string) {
-    if (this.input != null) this.input.value = nextValue
+    if (this.input != null) {
+      this.input.value = nextValue
+      this.adjustInputWidth()
+    }
   }
 
   get readOnly(): boolean {
@@ -205,6 +210,24 @@ export class MathaleaTextfieldElement extends MathaleaCustomElement {
     this.addEventListener('focus', this.forwardFocusHandler)
     this.removeEventListener('click', this.forwardFocusHandler)
     this.addEventListener('click', this.forwardFocusHandler)
+    this.inputHandler ??= () => this.adjustInputWidth()
+    this.input.removeEventListener('input', this.inputHandler)
+    this.input.addEventListener('input', this.inputHandler)
+    this.adjustInputWidth()
+  }
+
+  /**
+   * Garde la largeur initiale du champ comme minimum, puis l'adapte à la
+   * saisie. Une réponse longue reste ainsi entièrement visible une fois le
+   * champ verrouillé par la correction interactive.
+   */
+  private adjustInputWidth(): void {
+    if (this.input == null) return
+    this.minimumInputSize ??= this.input.size
+    this.input.size = Math.max(
+      this.minimumInputSize,
+      Array.from(this.input.value).length + 1,
+    )
   }
 
   private observeLegacyAttributes(): void {
@@ -228,6 +251,9 @@ export class MathaleaTextfieldElement extends MathaleaCustomElement {
   disconnectedCallback() {
     this.attributesObserver?.disconnect()
     this.attributesObserver = null
+    if (this.input != null && this.inputHandler != null) {
+      this.input.removeEventListener('input', this.inputHandler)
+    }
     if (this.forwardFocusHandler != null) {
       this.removeEventListener('focus', this.forwardFocusHandler)
       this.removeEventListener('click', this.forwardFocusHandler)
