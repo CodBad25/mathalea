@@ -2636,6 +2636,8 @@ function buildCanVersionContent(
    * sujets dérivés gardent leur contenu généré à partir de leur graine.
    */
   isPrimaryVersion: boolean,
+  /** Nom du sujet (« Sujet A »...), affiché sur la section Corrections quand la fiche a plusieurs versions */
+  versionLabel?: string,
 ): VersionContent {
   const exercises = withMinimalCorrections(allExercises, options)
   const generatedRows = computeGeneratedCanRows(allExercises, options, figures)
@@ -2729,7 +2731,7 @@ function buildCanVersionContent(
     renderLines.push('  // les corrections commencent sur une nouvelle page')
     renderLines.push(`  ${sectionPageBreak(options)}`)
     renderLines.push(
-      '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
+      ...correctionsHeadingLines(versionLabel, options.hideVersionLabel),
     )
     renderLines.push('  #en-colonnes[')
     // Une seule liste numérotée pour toutes les questions : ses numéros
@@ -2790,6 +2792,8 @@ function buildVersionContent(
    * (repères de relecture par `harvestCarryOver`, inutiles hors de l'éditeur).
    */
   exportMode = false,
+  /** Nom du sujet (« Sujet A »...), affiché sur la section Corrections quand la fiche a plusieurs versions */
+  versionLabel?: string,
 ): VersionContent {
   // Une surcharge de code manuelle (modale d'édition de la palette) n'est
   // saisie que sur le sujet affiché, c.-à-d. le Sujet A (`varPrefix` vide).
@@ -2812,6 +2816,7 @@ function buildVersionContent(
       emitAnchors,
       exportMode,
       isPrimaryVersion,
+      versionLabel,
     )
   }
   /** Insertions de la palette à réémettre après l'exercice `num` */
@@ -2899,7 +2904,7 @@ function buildVersionContent(
       renderLines.push('  // les corrections commencent sur une nouvelle page')
       renderLines.push(`  ${sectionPageBreak(options)}`)
       renderLines.push(
-        '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
+        ...correctionsHeadingLines(versionLabel, options.hideVersionLabel),
       )
       renderLines.push('  #en-colonnes[')
       for (const [k, { correction }] of built.entries()) {
@@ -3050,7 +3055,7 @@ function buildVersionContent(
       renderLines.push('  // les corrections commencent sur une nouvelle page')
       renderLines.push(`  ${sectionPageBreak(options)}`)
       renderLines.push(
-        '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
+        ...correctionsHeadingLines(versionLabel, options.hideVersionLabel),
       )
       // les libellés « Correction N » sont plus larges : on élargit la
       // colonne des badges juste pour cette section
@@ -3152,6 +3157,7 @@ export function buildTypstDocument(
   // toutes les versions : chaque occurrence de figure y ajoute une entrée,
   // avec son propre réglage de zoom/alignement.
   const figures: string[] = []
+  const totalVersions = 1 + extraVersions.length
   const primary = buildVersionContent(
     exercises,
     options,
@@ -3160,6 +3166,7 @@ export function buildTypstDocument(
     '',
     !exportMode,
     exportMode,
+    totalVersions > 1 ? `Sujet ${versionLetter(0)}` : undefined,
   )
   const extra = extraVersions.map((versionExercises, i) =>
     buildVersionContent(
@@ -3170,9 +3177,9 @@ export function buildTypstDocument(
       `v${i + 1}`,
       false,
       exportMode,
+      totalVersions > 1 ? `Sujet ${versionLetter(i + 1)}` : undefined,
     ),
   )
-  const totalVersions = 1 + extraVersions.length
   const bankLines = [...primary.bankLines, ...extra.flatMap((v) => v.bankLines)]
   const allLines = [
     ...bankLines,
@@ -3763,6 +3770,25 @@ function coverPageLines(
   if (layout.hasNoteFin) lines.push('  note-fin: couverture-note-fin,')
   lines.push(')')
   return lines
+}
+
+/**
+ * Titre de la section Corrections d'un sujet, avec le nom du sujet (« Sujet
+ * A »...) en dessous quand la fiche a plusieurs versions : en feuilletant
+ * directement les pages de corrigé, loin de l'en-tête du sujet qui l'affiche
+ * déjà (voir `headerBlock`), rien d'autre n'indique quel sujet on corrige.
+ */
+function correctionsHeadingLines(
+  versionLabel?: string,
+  hideVersionLabel = false,
+): string[] {
+  const title =
+    '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])'
+  if (versionLabel == null || hideVersionLabel) return [title]
+  return [
+    title,
+    `  #align(center, text(weight: "bold", fill: couleur)[${escapeTypstText(versionLabel)}])`,
+  ]
 }
 
 /**

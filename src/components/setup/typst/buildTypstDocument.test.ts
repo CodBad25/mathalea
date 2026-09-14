@@ -319,6 +319,33 @@ describe('buildTypstDocument', () => {
     expect(buildTypstDocument(exercises)).not.toContain('// mathalea:sujet(')
   })
 
+  it('nomme le sujet sur la première page de sa section Corrections quand la fiche en a plusieurs', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'], corrections: ['$2$'] })],
+      defaultTypstDocumentOptions,
+      {},
+      [[exercise({ questions: ['$5+5$'], corrections: ['$10$'] })]],
+    )
+    // une étiquette « Sujet A »/« Sujet B » par section Corrections, en plus
+    // de celle déjà affichée dans l'en-tête de chaque sujet
+    expect(
+      code.match(/#align\(center, text\(weight: "bold".*\)\[Sujet [AB]\]\)/g)
+        ?.length,
+    ).toBe(2)
+    const corrIndex = code.indexOf('// ----- Corrections -----')
+    expect(code.slice(corrIndex, corrIndex + 400)).toContain('Sujet A')
+    const corrIndex2 = code.indexOf(
+      '// ----- Corrections -----',
+      corrIndex + 1,
+    )
+    expect(code.slice(corrIndex2, corrIndex2 + 400)).toContain('Sujet B')
+    // sur une fiche à un seul sujet, pas d'étiquette (rien à distinguer)
+    const single = buildTypstDocument([
+      exercise({ questions: ['$1+1$'], corrections: ['$2$'] }),
+    ])
+    expect(single).not.toContain('Sujet A')
+  })
+
   it('n’importe pas ctz-euclide quand aucune annale ne l’utilise', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).not.toContain('ctz-euclide')
