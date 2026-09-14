@@ -27,7 +27,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle"
-export const dateDeModifImportante = '14/09/2026'
+export const dateDeModifImportante = '24/04/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -41,14 +41,14 @@ export const interactifReady = true
  * @author Rémi Angot
 
  */
-export const uuid = 'eb45e'
+export const uuid = 'eb45a'
 
 export const refs = {
-  'fr-fr': ['BP2AutoV3', 'BP1AUTO100'],
-  'fr-2016': ['6M11', 'BP2AutoV3'],
-  'fr-ch': ['9GM1B-10'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
-export default class AireCarresRectanglesTriangles extends Exercice {
+export default class AireCarresRectanglesTrianglesOld extends Exercice {
   constructor() {
     super()
 
@@ -72,8 +72,6 @@ export default class AireCarresRectanglesTriangles extends Exercice {
       ].join('\n'),
     ]
     this.sup = '4'
-    // this.besoinFormulaire2CaseACocher = ['Seulement des nombres entiers']
-    // this.sup2 = true
   }
 
   nouvelleVersion() {
@@ -96,22 +94,8 @@ export default class AireCarresRectanglesTriangles extends Exercice {
     const c = randint(2, 6)
     const L = randint(2, 5)
     const l = randint(2, 5, L)
-    // Triplets pythagoriciens (côtés de l'angle droit) utilisés pour le
-    // triangle rectangle, afin que la longueur de l'hypoténuse affichée
-    // sur la figure soit toujours une valeur exacte (entière).
-    const triplesPythagoriciens: [number, number][] = [
-      [3, 4],
-      [6, 8],
-      [5, 12],
-      [9, 12],
-      [8, 15],
-    ]
-    const tripleChoisi =
-      triplesPythagoriciens[randint(0, triplesPythagoriciens.length - 1)]
-    // On mélange aléatoirement l'ordre des deux côtés de l'angle droit
-    // pour varier l'aspect du triangle (côté a horizontal ou vertical).
-    const [a, b]: [number, number] =
-      randint(0, 1) === 0 ? tripleChoisi : [tripleChoisi[1], tripleChoisi[0]]
+    const a = randint(2, 5)
+    const b = randint(2, 5)
     const A = pointAbstrait(0, 0, nom[0])
     const B = rotation(pointAbstrait(c, 0), A, randint(-15, 15), nom[1])
     const C = rotation(A, B, -90, nom[2])
