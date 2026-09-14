@@ -170,7 +170,12 @@ export default class AireCarresRectanglesTriangles extends Exercice {
           handleAnswers(
             this,
             i,
-            { reponse: { value: new Grandeur(c * c, 'cm^2') } },
+            {
+              reponse: {
+                value: new Grandeur(c * c, 'cm^2'),
+                options: { unite: true },
+              },
+            },
             {
               formatInteractif: 'mathlive',
             },
@@ -204,7 +209,12 @@ export default class AireCarresRectanglesTriangles extends Exercice {
           handleAnswers(
             this,
             i,
-            { reponse: { value: new Grandeur(L * l, 'cm^2') } },
+            {
+              reponse: {
+                value: new Grandeur(L * l, 'cm^2'),
+                options: { unite: true },
+              },
+            },
             {
               formatInteractif: 'mathlive',
             },
@@ -239,7 +249,10 @@ export default class AireCarresRectanglesTriangles extends Exercice {
             this,
             i,
             {
-              reponse: { value: new Grandeur(arrondi((a * b) / 2), 'cm^2') },
+              reponse: {
+                value: new Grandeur(arrondi((a * b) / 2), 'cm^2'),
+                options: { unite: true },
+              },
             },
             {
               formatInteractif: 'mathlive',
