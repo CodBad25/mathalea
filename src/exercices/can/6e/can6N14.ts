@@ -1,16 +1,19 @@
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre =
-  'Déterminer un nombre à partir de son nombre de dixièmes, centièmes, millièmes (QCM)'
+  'Déterminer un nombre à partir de son nombre de dixièmes, centièmes, millièmes'
 export const interactifReady = true
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '05/03/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-
+export const dateDeModifImportante = '14/09/2026'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
@@ -26,12 +29,13 @@ export default class DeterminerLeNombre extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
-
     this.spacing = 2
+    this.besoinFormulaireCaseACocher = ['Version QCM', true]
+    this.sup = true
   }
 
   nouvelleVersion() {
-    let texte, texteCorr, a, monQcm
+    let texte, texteCorr, a, monQcm, reponse
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
@@ -47,32 +51,41 @@ export default class DeterminerLeNombre extends Exercice {
           texte = `Quel est le nombre égal à $${a}$ dixièmes ?
           `
           this.canEnonce = texte
-          this.autoCorrection[i] = {
-            enonce: texte,
-            propositions: [
-              {
-                texte: `$${texNombre(a / 10)}$`,
-                statut: true,
-              },
-              {
-                texte: `$${texNombre(a * 10)}$`,
-                statut: false,
-              },
-              {
-                texte: `$${texNombre(a / 100)}$`,
-                statut: false,
-              },
-              {
-                texte: `$${texNombre(a / 1000)}$`,
-                statut: false,
-              },
-            ],
-          }
-          monQcm = propositionsQcm(this, i)
-          texte += monQcm.texte
+          reponse = a / 10
           texteCorr = ` $1$ dixième est égal à $0,1$. <br>
-          Ainsi, $${a}$ dixièmes $=${a}\\times 0,1=${miseEnEvidence(texNombre(a / 10))}$. `
-
+          Ainsi, $${a}$ dixièmes $=${a}\\times 0,1=${miseEnEvidence(texNombre(reponse))}$. `
+          if (this.sup) {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              propositions: [
+                {
+                  texte: `$${texNombre(a / 10)}$`,
+                  statut: true,
+                },
+                {
+                  texte: `$${texNombre(a * 10)}$`,
+                  statut: false,
+                },
+                {
+                  texte: `$${texNombre(a / 100)}$`,
+                  statut: false,
+                },
+                {
+                  texte: `$${texNombre(a / 1000)}$`,
+                  statut: false,
+                },
+              ],
+            }
+            monQcm = propositionsQcm(this, i)
+            texte += monQcm.texte
+            this.canReponseACompleter = monQcm.texte
+          } else {
+            texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
+              texteAvant: '<br>',
+            })
+            handleAnswers(this, i, { reponse: { value: reponse } })
+            this.canReponseACompleter = ''
+          }
           break
         case 2:
           a = choice([
@@ -84,31 +97,41 @@ export default class DeterminerLeNombre extends Exercice {
           texte = `Quel est le nombre égal à $${a}$ centièmes ?
           `
           this.canEnonce = texte
-          this.autoCorrection[i] = {
-            enonce: texte,
-            propositions: [
-              {
-                texte: `$${texNombre(a / 100)}$`,
-                statut: true,
-              },
-              {
-                texte: `$${texNombre(a * 100)}$`,
-                statut: false,
-              },
-              {
-                texte: `$${texNombre(a / 1000)}$`,
-                statut: false,
-              },
-              {
-                texte: `$${texNombre(a / 10000)}$`,
-                statut: false,
-              },
-            ],
-          }
-          monQcm = propositionsQcm(this, i)
-          texte += monQcm.texte
+          reponse = a / 100
           texteCorr = ` $1$ centième est égal à $0,01$. <br>
-          Ainsi, $${a}$ centièmes $=${a}\\times 0,01=${miseEnEvidence(texNombre(a / 100))}$. `
+          Ainsi, $${a}$ centièmes $=${a}\\times 0,01=${miseEnEvidence(texNombre(reponse))}$. `
+          if (this.sup) {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              propositions: [
+                {
+                  texte: `$${texNombre(a / 100)}$`,
+                  statut: true,
+                },
+                {
+                  texte: `$${texNombre(a * 100)}$`,
+                  statut: false,
+                },
+                {
+                  texte: `$${texNombre(a / 1000)}$`,
+                  statut: false,
+                },
+                {
+                  texte: `$${texNombre(a / 10000)}$`,
+                  statut: false,
+                },
+              ],
+            }
+            monQcm = propositionsQcm(this, i)
+            texte += monQcm.texte
+            this.canReponseACompleter = monQcm.texte
+          } else {
+            texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
+              texteAvant: '<br>',
+            })
+            handleAnswers(this, i, { reponse: { value: reponse } })
+            this.canReponseACompleter = ''
+          }
           break
 
         case 3:
@@ -122,32 +145,41 @@ export default class DeterminerLeNombre extends Exercice {
           texte = `Quel est le nombre égal à $${a}$ millièmes ?
           `
           this.canEnonce = texte
-
-          this.autoCorrection[i] = {
-            enonce: texte,
-            propositions: [
-              {
-                texte: `$${texNombre(a / 1000)}$`,
-                statut: true,
-              },
-              {
-                texte: `$${texNombre(a / 10000)}$`,
-                statut: false,
-              },
-              {
-                texte: `$${texNombre(a / 100)}$`,
-                statut: false,
-              },
-              {
-                texte: `$${texNombre(a / 10)}$`,
-                statut: false,
-              },
-            ],
-          }
-          monQcm = propositionsQcm(this, i)
-          texte += monQcm.texte
+          reponse = a / 1000
           texteCorr = ` $1$ millième est égal à $0,001$. <br>
-          Ainsi, $${a}$ millièmes $=${a}\\times 0,001=${miseEnEvidence(texNombre(a / 1000))}$. `
+          Ainsi, $${a}$ millièmes $=${a}\\times 0,001=${miseEnEvidence(texNombre(reponse))}$. `
+          if (this.sup) {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              propositions: [
+                {
+                  texte: `$${texNombre(a / 1000)}$`,
+                  statut: true,
+                },
+                {
+                  texte: `$${texNombre(a / 10000)}$`,
+                  statut: false,
+                },
+                {
+                  texte: `$${texNombre(a / 100)}$`,
+                  statut: false,
+                },
+                {
+                  texte: `$${texNombre(a / 10)}$`,
+                  statut: false,
+                },
+              ],
+            }
+            monQcm = propositionsQcm(this, i)
+            texte += monQcm.texte
+            this.canReponseACompleter = monQcm.texte
+          } else {
+            texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
+              texteAvant: '<br>',
+            })
+            handleAnswers(this, i, { reponse: { value: reponse } })
+            this.canReponseACompleter = ''
+          }
           break
       }
 
@@ -156,7 +188,6 @@ export default class DeterminerLeNombre extends Exercice {
         this.listeCorrections[i] = texteCorr
         i++
       }
-      this.canReponseACompleter = monQcm.texte
       this.listeCanEnonces.push(this.canEnonce)
       this.listeCanReponsesACompleter.push(this.canReponseACompleter)
       cpt++
