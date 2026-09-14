@@ -25,6 +25,7 @@ export default class TableMultiplicationTrous extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
 
+    this.formatInteractif = 'fillInTheBlank'
     this.formatChampTexte = KeyboardType.clavierNumbers
   }
 
@@ -32,15 +33,15 @@ export default class TableMultiplicationTrous extends ExerciceSimple {
     const a = this.quotaRandint('a', 2, 9)
     const b = this.quotaRandint('b', 4, 10)
     const c = a * b
+    this.consigne = 'Compléter.'
+    this.canEnonce = this.consigne
     if (this.quotaChoice('ordre', [true, false])) {
-      this.question = `Compléter : <br>$${a}\\times .... =${c}$`
+      this.question = `${a}\\times %{champ1} =${c}`
       this.correction = `$${a}\\times ${miseEnEvidence(b)} =${c}$`
-      this.canEnonce = 'Compléter.'
       this.canReponseACompleter = `$${a}\\times .... =${c}$`
     } else {
-      this.question = `Compléter :<br> $ .... \\times ${a}=${c}$`
+      this.question = ` %{champ1} \\times ${a}=${c}`
       this.correction = `$ ${miseEnEvidence(b)} \\times ${a}=${c}$`
-      this.canEnonce = 'Compléter.'
       this.canReponseACompleter = `$ .... \\times ${a}=${c}$`
     }
     this.reponse = b
