@@ -118,7 +118,7 @@ export default class ProportionsEntreprise extends Exercice {
     La proportion des ${contexte.categorie3} est donc $${miseEnEvidence(formatPourcentage(pourcentageCategorie3))}$.`
     const correction = `1. ${correctionQuestion1}<br><br>2. ${correctionQuestion2}`
 
-    if ((this.interactif && this.sup) || context.isAmc) {
+    if (this.sup || context.isAmc) {
       this.nbQuestions = 2
       this.consigne = introduction
       const propositionsQuestion1: { texte: string; statut: boolean }[] = []
