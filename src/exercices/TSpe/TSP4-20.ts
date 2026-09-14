@@ -169,7 +169,7 @@ export default class Concentration extends Exercice {
 
             texte += `On pose $M_n = \\dfrac{X_1 + X_2 + \\cdots + X_n}{n}$, la moyenne d'un échantillon de taille $n$ de cette variable aléatoire.<br>`
 
-            texte += `Trouver le plus petit entier $n$ tel que $\\mathrm{P}\\left(\\lvert M_n ${ecritureAlgebriqueSauf0(-mu)} \\rvert \\geqslant ${texNombre(a)}\\right) \\leqslant ${texNombre(p)}$.<br>`
+            texte += `Trouver le plus petit entier $n$ tel que $\\mathrm{P}\\left(\\lvert M_n ${ecritureAlgebriqueSauf0(-mu)} \\rvert \\geqslant ${texNombre(a)}\\right) \\leqslant ${texNombre(p)}$, quelle que soit la loi de probabilité de $X$.<br>`
 
             if (this.interactif) {
               texte += `$n = $ `
@@ -196,7 +196,7 @@ export default class Concentration extends Exercice {
               texteCorr += `Or $\\dfrac{${texNombre(variance)}}{{${texNombre(acarre)} \\times ${texNombre(p)}}} \\approx ${texNombre(valueApprox)}$.<br>`
             }
 
-            texteCorr += `Le plus petit entier $n$ tel que $\\mathrm{P}\\left(\\lvert M_n ${ecritureAlgebriqueSauf0(-mu)} \\rvert \\geqslant ${texNombre(a)}\\right) \\leqslant ${texNombre(p)}$ est donc $${miseEnEvidence(reponse3)}$.`
+            texteCorr += `Le plus petit entier $n$ tel que $\\mathrm{P}\\left(\\lvert M_n ${ecritureAlgebriqueSauf0(-mu)} \\rvert \\geqslant ${texNombre(a)}\\right) \\leqslant ${texNombre(p)}$, quelle que soit la loi de probabilité de $X$, est donc $${miseEnEvidence(reponse3)}$.`
           }
 
           break
