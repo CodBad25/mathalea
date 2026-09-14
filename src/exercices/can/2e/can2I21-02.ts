@@ -18,7 +18,7 @@ export const dateDePublication = '16/07/2025' // La date de publication initiale
 export const uuid = '7d3d1'
 
 export const refs = {
-  'fr-fr': ['can2I21-02'],
+  'fr-fr': ['can2I21-02', '2I21-flash2'],
   'fr-ch': [],
 }
 export default class EvolSuccessives extends ExerciceSimple {

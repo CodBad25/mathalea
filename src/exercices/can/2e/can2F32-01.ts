@@ -25,7 +25,7 @@ export const titre = 'Résoudre une équation graphiquement'
 export const uuid = '9d293'
 
 export const refs = {
-  'fr-fr': ['can2F32-01', 'BP1RGEI08'],
+  'fr-fr': ['can2F32-01', 'BP1RGEI08', '2F32-flash1'],
   'fr-ch': [],
 }
 export default class EquationsGSpline extends ExerciceSimple {

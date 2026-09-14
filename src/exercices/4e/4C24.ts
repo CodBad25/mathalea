@@ -4,8 +4,10 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
+import { pgcd } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
+
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -31,15 +33,6 @@ export const refs = {
   'fr-fr': ['4C24', '3AutoN03-1'],
   'fr-ch': ['9NO3B-4'],
 }
-// Calcule le PGCD de deux entiers (valeurs absolues)
-const pgcd = (a: number, b: number): number => {
-  a = Math.abs(a)
-  b = Math.abs(b)
-  while (b !== 0) {
-    ;[a, b] = [b, a % b]
-  }
-  return a
-}
 
 // Compte le nombre total de facteurs premiers d'un entier, AVEC multiplicité
 // (ex: 12 = 2 x 2 x 3 -> 3 facteurs, pas 2). C'est ce nombre qui correspond
@@ -60,31 +53,30 @@ const nombreDeFacteursPremiersAvecMultiplicite = (n: number): number => {
 export default class SimplifierFractions extends Exercice {
   constructor() {
     super()
+
+    this.consigne = 'Simplifier le plus possible les fractions suivantes.'
+    this.nbQuestions = 5
+
+    this.besoinFormulaireTexte = [
+      'Nombre maximum de facteurs communs',
+      'Nombres séparés par des tirets.\n1 : 1 facteur\n2 : 2 facteurs\n3 : 3 facteurs\n4 : 4 facteurs\n 5 : Mélange',
+    ]
+    this.sup = '1-2'
+
+    this.besoinFormulaire2Texte = [
+      'Choix des facteurs premiers utilisés',
+      'Nombres séparés par des tirets.\nChoisir valeur(s) entre 2 et 23.',
+    ]
+    this.sup2 = '2-3-5-7'
+
     this.besoinFormulaire3Numerique = [
       'Type de réponses AMC',
       2,
       '1 : Question ouverte\n2 : Réponse numérique',
     ]
-
-    this.consigne = 'Simplifier le plus possible les fractions suivantes.'
-    this.nbQuestions = 5
-
-    // this.besoinFormulaireNumerique = ['Nombre de facteurs communs', 3, '1, 2 ou 3']
-    this.besoinFormulaireTexte = [
-      'Nombre maximum de facteurs communs',
-      'Nombres séparés par des tirets.\n1 : 1 facteur\n2 : 2 facteurs\n3 : 3 facteurs\n4 : 4 facteurs\n 5 : Mélange',
-    ]
-
-    // this.besoinFormulaire2Numerique = ['Facteurs premiers utilisés', 2, '1 : De 2 à 7\n2 : De 2 à 23']
-    this.besoinFormulaire2Texte = [
-      'Choix des facteurs premiers utilisés',
-      'Nombres séparés par des tirets.\nChoisir valeur(s) entre 2 et 23.',
-    ]
-    this.sup = 2
-    this.sup2 = '2-3-5-7'
     this.sup3 = 2
-    this.nbCols = 2
-    this.nbColsCorr = 2
+    // this.nbCols = 2
+    // this.nbColsCorr = 2
   }
 
   nouvelleVersion() {
@@ -97,7 +89,7 @@ export default class SimplifierFractions extends Exercice {
       max: 23,
       defaut: 11,
       melange: 24,
-      nbQuestions: this.nbQuestions,
+      nbQuestions: Math.max(this.nbQuestions, 10),
       exclus: [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22],
     }).map(Number)
     const nbFacteursCommuns = gestionnaireFormulaireTexte({
@@ -105,19 +97,13 @@ export default class SimplifierFractions extends Exercice {
       saisie: this.sup,
       max: 4,
       defaut: 4,
-      nbQuestions: 1,
+      nbQuestions: Math.max(this.nbQuestions, 10),
     }).map(Number)
 
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      /* let facteurCommun1 = this.sup2 !== 1 ? choice([2, 3, 5, 11, 13, 17, 19]) : choice([2, 3, 5])
-      let facteurCommun2 = this.sup2 !== 1 ? choice([2, 3, 5, 11, 13, 17, 19]) : choice([2, 3, 5])
-      let facteurCommun3 = this.sup2 !== 1 ? choice([2, 3, 5, 11, 13, 17, 19]) : choice([2, 3, 5])
-      let facteurSurprise = this.sup2 !== 1 ? choice([2, 3, 5, 11, 13, 17, 19, 23]) : choice([2, 3, 5, 7])
-      let facteurNumerateur = this.sup2 !== 1 ? choice([2, 3, 5, 11, 13, 17, 19, 23]) : choice([2, 3, 5, 7])
-      let facteurDenominateur = this.sup2 !== 1 ? choice([2, 3, 5, 11, 13, 17, 19, 23]) : choice([2, 3, 5, 7]) */
       let facteurCommun1 = choice(listeFacteursPremiers)
       let facteurCommun2 = choice(listeFacteursPremiers)
       let facteurCommun3 = choice(listeFacteursPremiers)
@@ -126,10 +112,10 @@ export default class SimplifierFractions extends Exercice {
       const facteurDenominateur = choice(listeFacteursPremiers)
       const facteurNumerateur = choice(listeFacteursPremiers)
       let numerateur, denominateur
-      if (nbFacteursCommuns[0] < 4) facteurCommun4 = 1
-      if (nbFacteursCommuns[0] < 3) facteurCommun3 = 1
-      if (nbFacteursCommuns[0] < 2) facteurCommun2 = 1
-      if (nbFacteursCommuns[0] < 1) facteurCommun1 = 1
+      if (nbFacteursCommuns[i] < 4) facteurCommun4 = 1
+      if (nbFacteursCommuns[i] < 3) facteurCommun3 = 1
+      if (nbFacteursCommuns[i] < 2) facteurCommun2 = 1
+      if (nbFacteursCommuns[i] < 1) facteurCommun1 = 1
       numerateur =
         facteurNumerateur *
         facteurCommun1 *
@@ -166,7 +152,7 @@ export default class SimplifierFractions extends Exercice {
       if (
         nombreDeFacteursPremiersAvecMultiplicite(
           pgcd(numerateur, denominateur),
-        ) !== nbFacteursCommuns[0]
+        ) !== nbFacteursCommuns[i]
       ) {
         cpt++
         continue
@@ -246,7 +232,6 @@ export default class SimplifierFractions extends Exercice {
       }
       cpt++
     }
-
     listeQuestionsToContenu(this)
   }
 }

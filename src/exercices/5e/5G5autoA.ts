@@ -1,6 +1,6 @@
 import VocabulaireDesTriangles from './VocabulaireDesTriangles'
 export const titre = 'Reconnaître des triangles'
-export const interactifReady = false
+export const interactifReady = true
 
 /**
  * @author Éric Elter (pour le clone)

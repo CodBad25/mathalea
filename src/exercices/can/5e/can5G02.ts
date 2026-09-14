@@ -30,7 +30,7 @@ export const interactifReady = true
 export const uuid = '7b386'
 
 export const refs = {
-  'fr-fr': ['can5G02', '5G5autoB-1'],
+  'fr-fr': ['can5G02', '5G5autoB-1', '2G10-flash1'],
   'fr-ch': [],
 }
 export default class AngleTriangleIsocele extends ExerciceSimple {

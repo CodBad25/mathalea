@@ -29,7 +29,7 @@ export const dateDeModifImportante = '08/07/2025'
 export const uuid = '1f967'
 
 export const refs = {
-  'fr-fr': ['can2G31-03'],
+  'fr-fr': ['can2G31-03', '2G31-flash1'],
   'fr-ch': ['11QCM-8', '1mQCM-11'],
 }
 export default class EquationDroite extends ExerciceSimple {

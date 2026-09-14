@@ -7,7 +7,6 @@ import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -177,8 +176,17 @@ export default class ImageFonctionsRefs extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
-    if (!context.isHtml) {
-      this.canEnonce = this.listeQuestions[0]
+    if (this.can) {
+      // Course aux nombres : une seule question, dont l'énoncé doit reprendre
+      // la consigne (« Soit f la fonction carré. »), sinon le sens de f/g/h
+      // disparaît de la colonne « Énoncé ». Cette classe étend Exercice (pas
+      // ExerciceSimple) : listeCanEnonces/listeCanReponsesACompleter, lues
+      // par le pipeline « course aux nombres », doivent être remplies à la
+      // main (ExerciceSimple le ferait automatiquement, pas Exercice).
+      this.canEnonce = `${this.consigne}<br>${this.listeQuestions[0]}`
+      this.canReponseACompleter = '$\\ldots$'
+      this.listeCanEnonces[0] = this.canEnonce
+      this.listeCanReponsesACompleter[0] = this.canReponseACompleter
       this.correction = this.listeCorrections[0]
     }
   }

@@ -20,7 +20,7 @@ export const dateDePublication = '30/12/2021' // La date de publication initiale
 export const uuid = '991c2'
 
 export const refs = {
-  'fr-fr': ['can2F22-06'],
+  'fr-fr': ['can2F22-06', '2F22-flash3'],
   'fr-ch': [],
 }
 export default class ComparerAvecFctCarre extends Exercice {

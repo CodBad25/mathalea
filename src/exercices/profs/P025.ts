@@ -2,7 +2,6 @@ import {
   ElementIepEditeur,
   ensureElementIepEditeurRegistered,
 } from '../../lib/customElements/ElementIepEditeur'
-import { all } from '../../lib/interactif/checks'
 import Exercice from '../Exercice'
 
 export const titre =
@@ -37,6 +36,7 @@ export default class CreateurAnimationInstruments extends Exercice {
     ensureElementIepEditeurRegistered()
     const contenuGenere = ElementIepEditeur.create({
       id: this.editorId,
+      loadSaveButtons: true,
     })
     this.contenu = contenuGenere
     this.listeQuestions[0] = contenuGenere

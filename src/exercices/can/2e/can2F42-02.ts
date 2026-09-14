@@ -20,7 +20,7 @@ export const titre = 'Déterminer un extremum graphiquement'
 export const uuid = '5a908'
 
 export const refs = {
-  'fr-fr': ['can2F42-02', 'BP1AUTO058'],
+  'fr-fr': ['can2F42-02', 'BP1AUTO058', '2F42-flash2'],
   'fr-ch': [],
 }
 type Noeud = {

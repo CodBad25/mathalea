@@ -52,6 +52,59 @@ function qrCodeToTypstImage(url: string): string {
 }
 
 /**
+ * Lien vers toute la sélection d'exercices en vue élève (un exercice par
+ * page, non interactif mais modifiable par l'élève, mêmes graines que le
+ * document imprimé), encodé dans le QR-code de fiche quand `showQrCodeFiche`
+ * est actif. Réutilise les paramètres déjà calculés dans l'URL individuelle
+ * de chaque exercice (`exercise.url`, voir `exerciceUrl` dans Typst.svelte —
+ * mêmes uuid/graine/réglages que le QR-code par exercice) plutôt que de les
+ * reconstruire : seuls `v` et `es` en sont exclus, réglés une seule fois pour
+ * toute la fiche plutôt que par exercice. `undefined` si aucun exercice
+ * imprimé n'a d'URL (fiche entièrement composée d'exercices non chargés).
+ */
+function ficheUrl(exercises: TypstExerciseInput[]): string | undefined {
+  const url = new URL('https://coopmaths.fr/alea')
+  let hasExercise = false
+  for (const exercise of exercises) {
+    if (exercise.warning != null || exercise.url == null || exercise.url === '')
+      continue
+    hasExercise = true
+    for (const [key, value] of new URL(exercise.url).searchParams) {
+      if (key === 'v' || key === 'es') continue
+      url.searchParams.append(key, value)
+    }
+  }
+  if (!hasExercise) return undefined
+  url.searchParams.append('v', 'eleve')
+  // un exercice par page (1), non interactif (0), interactif modifiable (1)
+  url.searchParams.append('es', '1011')
+  return url.href
+}
+
+/** Largeur (et hauteur) du QR-code de fiche, en haut à droite de la première page */
+const FICHE_QRCODE_SIZE = '2cm'
+
+/**
+ * QR-code en haut à droite de la première page (repère `here().page() == 1`,
+ * comme `pageFooter`), pointant vers toute la sélection d'exercices en vue
+ * élève. `#place` sort le contenu du flux normal : il ne prend donc aucune
+ * place dans la mise en page du titre, de la page de garde ou du premier
+ * exercice, quel que soit l'endroit où ces lignes sont insérées dans le
+ * document — mais il peut donc atterrir par-dessus (titre, ligne d'en-tête…) :
+ * le `fill: white` du `box` englobant lui garde un fond opaque quel que soit
+ * ce qu'il recouvre.
+ */
+function ficheQrCodeLines(url: string): string[] {
+  return [
+    '#place(top + right, context [',
+    '  #if here().page() == 1 [',
+    `    #box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#${qrCodeToTypstImage(url)}]`,
+    '  ]',
+    '])',
+  ]
+}
+
+/**
  * Logo de la page de garde « Course aux nombres », référencé par chemin
  * virtuel (voir `mathaleaLogo.ts`) plutôt qu'embarqué : `prefetchStaticImages`
  * (`Typst.svelte`) le charge dans le compilateur pour l'aperçu, et l'ajoute
@@ -1186,6 +1239,14 @@ export interface TypstDocumentOptions {
    */
   showQrCode: boolean
   /**
+   * Ajoute en haut à droite de la première page un QR-code pointant vers
+   * toute la sélection d'exercices en vue élève (un exercice par page, non
+   * interactif mais modifiable, mêmes graines que le document imprimé) :
+   * voir `ficheUrl`. Indépendant de `showQrCode`, qui vise chaque exercice
+   * individuellement.
+   */
+  showQrCodeFiche: boolean
+  /**
    * Affiche la correction dans le document généré (`#let corrige`). Décochée,
    * seuls les énoncés sont rendus, sans bloc « Corrections » ni titre associé.
    */
@@ -1650,6 +1711,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   canMode: false,
   minimalCorrections: false,
   showQrCode: false,
+  showQrCodeFiche: false,
   badgeStyle: 'underline',
   badgePosition: 'margin',
   badgeColor: 'black',
@@ -3534,6 +3596,16 @@ export function buildTypstDocument(
       options.hideVersionLabel,
     ),
   )
+  if (options.showQrCodeFiche) {
+    const url = ficheUrl(exercises)
+    if (url != null) {
+      // après le bloc de titre (et sa ligne d'en-tête) plutôt qu'avant : ces
+      // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
+      // plus tardif se peint donc par-dessus le contenu qui précède plutôt
+      // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
+      lines.push(...ficheQrCodeLines(url))
+    }
+  }
   lines.push('')
   lines.push(...primary.renderLines)
   for (const [i, version] of extra.entries()) {

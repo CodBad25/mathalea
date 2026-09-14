@@ -3,6 +3,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { creerCouples, shuffle } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre, texNombre2 } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -117,14 +118,7 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
         b = c
       }
       texte = '$ ' + texNombre(a) + ' \\times ' + texNombre(b) + ' =  $'
-      texteCorr =
-        '$ ' +
-        texNombre(a) +
-        ' \\times ' +
-        texNombre(b) +
-        ' = ' +
-        texNombre(a * b) +
-        ' $'
+      texteCorr = `$${texNombre(a)} \\times ${texNombre(b)} = ${miseEnEvidence(texNombre(a * b, 0))}$`
 
       this.autoCorrection[i].enonce = `${texte}\n`
       this.autoCorrection[i].propositions = [

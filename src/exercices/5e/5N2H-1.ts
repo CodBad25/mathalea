@@ -18,7 +18,7 @@ export const titre =
   'Résoudre un problème en utilisant une somme algébrique de relatifs'
 export const interactifReady = true
 
-export const dateDeModifImportante = '15/04/2026'
+export const dateDeModifImportante = '12/09/2026'
 
 /**
  * * résoudre un problème additif avec des relatifs
@@ -217,8 +217,8 @@ Globalement, ${situations.prenom} ${situations.bilan[3]} $${miseEnEvidence(situa
         {
           champ1: {
             value: situations.bilan[3].includes('perdu')
-              ? ['F', 'Faux', 'N']
-              : ['V', 'Vrai', '0'],
+              ? ['F', 'Faux', 'N', 'Non']
+              : ['V', 'Vrai', 'O', 'Oui'],
             options: { texteSansCasse: true },
           },
           champ2: {

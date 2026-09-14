@@ -29,6 +29,7 @@ import '../../src/lib/customElements/ListeDeroulanteElement'
 import '../../src/lib/customElements/MathaleaMathfield'
 import '../../src/lib/customElements/MathaleaCouteauSuisse'
 import '../../src/lib/customElements/MathaleaBranchingQcm'
+import '../../src/lib/customElements/MathaleaCompteEstBonElement'
 import '../../src/lib/customElements/MathaleaLabyrintheElement'
 import '../../src/lib/customElements/MathaleaQcm'
 import '../../src/lib/customElements/MathaleaTextfield'
@@ -118,6 +119,24 @@ describe('formatStudentAnswer', () => {
       '<multi-mathfield id="multi-mathfieldEx0Q0"></multi-mathfield>'
     expect(formatStudentAnswer(question, '{"rep1":"3","rep2":"x+1"}')).toBe(
       '$3$ ; $x+1$',
+    )
+  })
+
+  it("formate l'historique d'un compte est bon", () => {
+    const question =
+      '<mathalea-compte-est-bon tirage="[25,3,10,7,50,100]" avec-division="true"></mathalea-compte-est-bon>'
+    const answer = JSON.stringify({
+      version: 1,
+      operations: [
+        { resultId: 'r0', leftId: 'p0', rightId: 'p1', operator: '*' },
+        { resultId: 'r1', leftId: 'r0', rightId: 'p2', operator: '+' },
+      ],
+      finalId: 'r1',
+      selectedIds: ['r1'],
+    })
+
+    expect(formatStudentAnswer(question, answer)).toBe(
+      '$25 \\times 3 = 75$<br>$75 + 10 = 85$<br>Résultat proposé : $85$.',
     )
   })
 

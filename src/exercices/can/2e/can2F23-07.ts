@@ -1,11 +1,11 @@
 import ResoudreEquationsFonctionDeReference2 from './can2F3-04_old'
 
-export const titre = 'Résoudre une équation avec la fonction carré'
+export const titre = 'Résoudre une équation avec la fonction carré$^*$'
 export const interactifReady = true
 
 export const dateDePublication = '18/08/2026'
 export const uuid = '18ab4'
-export const refs = { 'fr-fr': ['can2F23-07'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['can2F23-07', '2F23-flash4'], 'fr-ch': [] }
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

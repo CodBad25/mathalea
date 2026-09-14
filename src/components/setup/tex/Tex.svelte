@@ -50,6 +50,7 @@
     isAbortError,
     type TexAuxiliaryFile,
   } from './texCompiler'
+  import { statsPdfCreatedTracker } from '../../../modules/statsUtils'
 
   /**
    * Vue « LaTeX » (`v=tex`) : l'interface de la vue Typst (éditeur de code,
@@ -774,10 +775,14 @@
       if (hiddenFormEl == null) return
       await fillTexliveForm(hiddenFormEl, '_blank')
       hiddenFormEl.submit()
+      statsPdfCreatedTracker('tex')
       return
     }
     if (isPreviewStale || pdfBlob == null) await compile()
-    if (pdfBlob != null) downloadBlob(pdfBlob, exportFilename('pdf'))
+    if (pdfBlob != null) {
+      downloadBlob(pdfBlob, exportFilename('pdf'))
+      statsPdfCreatedTracker('tex')
+    }
   }
 
   // ------------------------------------------------------------ chargement

@@ -30,7 +30,7 @@ export const titre =
 export const uuid = 'e59bc'
 
 export const refs = {
-  'fr-fr': ['can2F32-02'],
+  'fr-fr': ['can2F32-02', '2F32-flash2'],
   'fr-ch': [],
 }
 export default class EquationsGSplineNombre extends ExerciceSimple {

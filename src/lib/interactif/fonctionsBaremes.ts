@@ -29,3 +29,10 @@ export function pointSiToutJuste(listePoints: number[]) {
 export function minDesPoints(listePoints: number[]) {
   return [Math.min(...listePoints), 1] as [number, number]
 }
+// La proportion de cases justes, ramenée sur 3 points et arrondie à l'entier le plus proche
+export function troisPointsProportionnels(
+  listePoints: number[],
+): [number, number] {
+  const nbCasesJustes = listePoints.reduce((total, point) => total + point, 0)
+  return [Math.round((nbCasesJustes / listePoints.length) * 3), 3]
+}

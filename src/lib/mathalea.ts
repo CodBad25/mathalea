@@ -42,6 +42,7 @@ import { checkForServerUpdate } from './components/version'
 import { createURL } from './createURL'
 import type { ExerciseModule } from './exerciseModules'
 import { listOfCustomElements } from './customElements/MathaleaCustomElement'
+import { attachExerciseCustomCallbacks } from './customElements/MetaCustomElement'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { isHtmlDocumentText } from './httpResponses'
 import { normaliseCoeffBareme } from './interactif/baremeExercice'
@@ -1111,10 +1112,19 @@ export function mathaleaHandleExerciceSimple(
             }
           }
         }
-      } else {
+      } else if (exercice.interactif === true) {
+        // Un MathaleaCustomElement (apigeom, tableau-signes-variations...) ne
+        // renseigne son formatInteractif (sur l'exercice ou par question, via
+        // autoCorrection[i]) que lorsqu'il construit réellement ses éléments
+        // interactifs : hors mode interactif, ni l'un ni l'autre n'est peuplé,
+        // sans que ce soit une erreur (la correction reste affichée en texte).
+        const hasCustomElementQuestion = isMathaleaCustomElementFormat(
+          exercice.autoCorrection[i]?.formatInteractif,
+        )
         if (
           exercice.formatInteractif !== 'qcm' &&
-          !isMathaleaCustomElementFormat(exercice.formatInteractif)
+          !isMathaleaCustomElementFormat(exercice.formatInteractif) &&
+          !hasCustomElementQuestion
         )
           window.notify(
             "Un exercice simple doit avoir un this.reponse sauf si c'est un qcm ou un MathaleaCustomElement avec sa propre autoCorrection",
@@ -1287,6 +1297,7 @@ export function mathaleaHandleExerciceSimple(
       cptSecours++
     }
   }
+  attachExerciseCustomCallbacks(exercice)
 }
 
 /**

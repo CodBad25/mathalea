@@ -33,6 +33,7 @@ export const listOfCustomElements = [
   'mathalea-qcm',
   'mathalea-couteau-suisse',
   'mathalea-branching-qcm',
+  'mathalea-compte-est-bon',
   'clique-figure',
   'points-cliquables',
   'objets-cliquables',

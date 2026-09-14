@@ -19,7 +19,7 @@ export const amcType = 'qcmMono'
 export const uuid = 'e9a72'
 // @Author Stéphane Guyon
 export const refs = {
-  'fr-fr': ['2I10-12'],
+  'fr-fr': ['2I11-8'],
   'fr-ch': [],
 }
 

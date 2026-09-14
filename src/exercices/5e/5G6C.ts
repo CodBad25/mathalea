@@ -24,7 +24,7 @@ export const dateDeModifImportante = '28/04/2025'
 export const uuid = 'af2c2'
 
 export const refs = {
-  'fr-fr': ['5G6C'],
+  'fr-fr': ['5G6C', '2G10-4'],
   'fr-2016': ['5G40-1'],
   'fr-ch': ['9ES1E-3'],
 }

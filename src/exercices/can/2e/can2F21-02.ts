@@ -20,7 +20,7 @@ export const dateDePublication = '15/12/2021' // La date de publication initiale
 export const uuid = '73ab4'
 
 export const refs = {
-  'fr-fr': ['can2F21-02'],
+  'fr-fr': ['can2F21-02', '2F33-flash1'],
   'fr-ch': [],
 }
 export default class TableauSignes extends Exercice {

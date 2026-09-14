@@ -21,7 +21,7 @@ export const dateDePublication = '15/07/2025' // La date de publication initiale
 export const uuid = 'e4a1f'
 
 export const refs = {
-  'fr-fr': ['can2I20-03'],
+  'fr-fr': ['can2I20-03', '2I20-flash3'],
   'fr-ch': [],
 }
 export default class CoeffMul extends ExerciceSimple {

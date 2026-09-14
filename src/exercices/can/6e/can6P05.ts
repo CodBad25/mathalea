@@ -12,7 +12,7 @@ export const dateDePublication = '13/11/2021'
 export const uuid = 'a2bbc'
 
 export const refs = {
-  'fr-fr': ['can6P05', '6N3Q-flash2'],
+  'fr-fr': ['can6P05', '6N3Q-flash2', '2I11-flash1'],
   'fr-ch': ['NR'],
 }
 export default class AppliquerUnPourcentageBis extends AppliquerUnPourcentage {

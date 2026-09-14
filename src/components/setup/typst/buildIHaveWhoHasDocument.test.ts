@@ -6,6 +6,7 @@ import {
   duplicateMinimalAnswers,
   harvestIHaveWhoHasCarryOver,
   removeQuestionIndex,
+  removeTrailingCompletionEquals,
 } from './buildIHaveWhoHasDocument'
 
 const exercise: TypstExerciseInput = {
@@ -25,12 +26,27 @@ describe('buildIHaveWhoHasDocument', () => {
   it('forme une chaîne fermée réponse courante / question suivante', () => {
     const cards = buildIHaveWhoHasCards([exercise])
     expect(cards.map(({ question }) => question)).toEqual([
-      '$17-5$',
-      '$13\\times2$',
-      '$12+8$',
+      '$17-5$&nbsp;?',
+      '$13\\times2$&nbsp;?',
+      '$12+8$&nbsp;?',
     ])
     expect(cards[0].answer).toContain('20')
     expect(cards[0].answer).not.toContain('Donc')
+    expect(cards[0].answer.endsWith('.')).toBe(true)
+  })
+
+  it('ne double pas une ponctuation déjà présente', () => {
+    const punctuated = {
+      ...exercise,
+      questions: ['Question déjà ponctuée ?'],
+      corrections: ['Réponse déjà ponctuée.'],
+    }
+    expect(buildIHaveWhoHasCards([punctuated])).toEqual([
+      {
+        answer: 'Réponse déjà ponctuée.',
+        question: 'Question déjà ponctuée&nbsp;?',
+      },
+    ])
   })
 
   it('imprime réponse et question sur le même côté de chaque carte', () => {
@@ -38,9 +54,21 @@ describe('buildIHaveWhoHasDocument', () => {
     expect(code).toContain('#strong[J’ai] #reponse')
     expect(code).toContain('#strong[Qui a] #question')
     expect(code).toContain(
-      'carte(1, carte-1-reponse, carte-1-question, taille: carte-1-taille)',
+      'align(left + horizon, text(size: taille-reponses * taille)',
     )
-    expect(code).toContain('J’ai ..... \\ Qui a .... ?')
+    expect(code).toContain(
+      'align(left + horizon, text(size: taille-questions * taille)',
+    )
+    expect(code).toContain(
+      'place(top + right, text(size: 11pt, weight: "bold", code))',
+    )
+    expect(code).toContain(
+      'place(bottom + right, mathalea-anchor("carte-recto", num))',
+    )
+    expect(code).toContain(
+      'carte(1, code-carte-1, carte-1-reponse, carte-1-question, taille: carte-1-taille)',
+    )
+    expect(code).toContain('image("versoGKiA.jpg"')
     expect(code).toContain('versos (colonnes en miroir)')
   })
 
@@ -65,6 +93,16 @@ describe('buildIHaveWhoHasDocument', () => {
     expect(removeQuestionIndex('Calculer $A+3$.')).toBe('Calculer $A+3$.')
   })
 
+  it('retire le signe égal final servant de blanc de réponse', () => {
+    expect(removeTrailingCompletionEquals('$20\\times 70=$')).toBe(
+      '$20\\times 70$',
+    )
+    expect(removeTrailingCompletionEquals('$x=2$')).toBe('$x=2$')
+    expect(buildIHaveWhoHasCards([exercise])[0].question.endsWith('?')).toBe(
+      true,
+    )
+  })
+
   it('conserve le zoom réglé séparément sur chaque carte', () => {
     const first = buildIHaveWhoHasDocument([exercise])
     const edited = first.replace(
@@ -72,9 +110,42 @@ describe('buildIHaveWhoHasDocument', () => {
       '#let carte-2-taille = 1.3',
     )
     const carryOver = harvestIHaveWhoHasCarryOver(edited)
-    expect(carryOver).toEqual({ cardScales: { 2: 1.3 } })
+    expect(carryOver.cardScales).toEqual({ 2: 1.3 })
     expect(
       buildIHaveWhoHasDocument([exercise], undefined, carryOver),
     ).toContain('#let carte-2-taille = 1.3')
+  })
+
+  it('attribue des codes uniques et ajoute les deux roues avec leurs caches', () => {
+    const first = buildIHaveWhoHasDocument([exercise])
+    const codes = [
+      ...first.matchAll(/^#let code-carte-\d+ = "([A-Z]\d)"$/gm),
+    ].map((match) => match[1])
+    expect(codes).toHaveLength(3)
+    expect(new Set(codes).size).toBe(3)
+    expect(first).toContain('Découper la fenêtre et l’encoche en pointillés')
+    expect(first).toContain('Assembler les repères noirs')
+    expect(first).toContain('Encoche semi-elliptique')
+    expect(first).toContain('M 220 580 C 220 510 380 510 380 580 Z')
+    expect(first).toContain('Planche d’assemblage des roues et des caches')
+    expect(first).toContain('rows: (82mm, 82mm)')
+    expect(first).not.toContain('#grid(width:')
+    expect(first).toContain('#set page(paper: "a4", flipped: true')
+    // fenêtre du cache à 15 h (à droite), et non plus à 12 h
+    expect(first).toContain('x=\\"452\\"')
+    expect(first).not.toContain('x=\\"253\\" y=\\"86\\"')
+    expect(first).toContain('r=\\"280\\"')
+    expect(first).toContain('flipped: true')
+
+    const regenerated = buildIHaveWhoHasDocument(
+      [exercise],
+      undefined,
+      harvestIHaveWhoHasCarryOver(first),
+    )
+    expect(
+      [...regenerated.matchAll(/^#let code-carte-\d+ = "([A-Z]\d)"$/gm)].map(
+        (match) => match[1],
+      ),
+    ).toEqual(codes)
   })
 })

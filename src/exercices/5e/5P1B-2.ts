@@ -1,4 +1,4 @@
-import Proportions from '../2e/2I10-2'
+import Proportions from '../2e/2I11-1'
 export const titre = 'Appliquer un pourcentage'
 export const interactifReady = true
 

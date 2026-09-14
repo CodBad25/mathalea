@@ -19,7 +19,7 @@ export const dateDePublication = '09/12/2021' // La date de publication initiale
 export const uuid = '031f0'
 
 export const refs = {
-  'fr-fr': ['can2I20-02', 'BP1CF10'],
+  'fr-fr': ['can2I20-02', 'BP1CF10', '2I20-flash2'],
   'fr-ch': ['NR'],
 }
 export default class CoeffTaux extends ExerciceSimple {

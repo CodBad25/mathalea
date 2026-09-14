@@ -378,6 +378,7 @@ export type InteractivityType =
   | 'mathalea-qcm'
   | 'mathalea-couteau-suisse'
   | 'mathalea-branching-qcm'
+  | 'mathalea-compte-est-bon'
   | 'alea-iep-editeur'
   | 'relier-etiquettes' // Non compatible AMC
   | 'diagram-builder' // Non compatible AMC
@@ -436,6 +437,7 @@ export function isInteractivityType(
     value === 'mathalea-qcm' ||
     value === 'mathalea-couteau-suisse' ||
     value === 'mathalea-branching-qcm' ||
+    value === 'mathalea-compte-est-bon' ||
     value === 'alea-iep-editeur' ||
     value === 'clique-figure' ||
     value === 'points-cliquables' ||

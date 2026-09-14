@@ -1,7 +1,7 @@
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
-import { bleuMathalea, orangeMathalea } from '../colors'
 import { mathaleaColorAliases } from '../2d/colorToLatexOrHtml'
+import { bleuMathalea, orangeMathalea } from '../colors'
 import { Complexe } from '../mathFonctions/Complexe'
 import { choice } from './arrayOutils'
 
@@ -366,4 +366,22 @@ export function texteEnBoite(texte: string) {
     return `<div style="display: inline-block; max-width: fit-content; border: 2px solid #444; border-radius: 4px; padding: 10px;">${texte}</div>`
   }
   return `\\fbox{\\parbox{0.5\\linewidth}{\\setlength{\\parskip}{.5cm}${texte}}}\\newline`
+}
+
+export function texteEnCarte(texte: string, isTarget: boolean = false) {
+  const bgcolor = isTarget ? orangeMathalea : bleuMathalea
+  if (context.isTypst) {
+    const width = isTarget ? '24pt' : '32pt'
+    const height = isTarget ? '28pt' : '30pt'
+    const radius = isTarget ? '4pt' : '6pt'
+    return `<mathalea-typst>#box(width: ${width}, height: ${height}, fill: rgb("${bgcolor}"), stroke: 0.6pt + luma(75%), radius: ${radius}, inset: 0pt)[#align(center + horizon)[#text(fill: white, weight: "bold")[#raw(${JSON.stringify(texte)})]]]</mathalea-typst>`
+  }
+  const color = context.isTypst ? '' : 'white'
+  const width = isTarget ? '' : '50px'
+  const padding = isTarget ? '2px' : '20px'
+  const radius = isTarget ? '5px' : '10px'
+  if (context.isHtml) {
+    return `<span style="display:flex; justify-content:center; background-color: ${bgcolor}; border: 1px solid #ccc; border-radius: ${radius}; color: ${color}; width:${width}; padding:${padding}";>${texte}</span>`
+  }
+  return `\\colorbox{lightgray}{\\texttt{${texte}}}`
 }

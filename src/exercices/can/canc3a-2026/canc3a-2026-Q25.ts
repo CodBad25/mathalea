@@ -77,7 +77,7 @@ export default class Can20266Q25 extends ExerciceCan {
     const monQcm = propositionsQcm(this, 0)
     this.question += monQcm.texte
 
-    this.correction = `Vrai. Ce quadrilatère a $4$ côtés de même longueur et $4$ angles droits : c'est bien un carré.`
+    this.correction = `${texteEnCouleurEtGras('Vrai')}. Ce quadrilatère a $4$ côtés de même longueur et $4$ angles droits : c'est bien un carré.`
 
     this.canEnonce =
       `\\underline{Vrai - Faux}<br>

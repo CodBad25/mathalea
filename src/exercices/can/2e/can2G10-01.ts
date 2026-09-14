@@ -20,7 +20,7 @@ export const dateDePublication = '04/01/2023'
 export const uuid = '21bc0'
 
 export const refs = {
-  'fr-fr': ['can2G10-01'],
+  'fr-fr': ['can2G10-01', '2G10-flash2'],
   'fr-ch': ['NR'],
 }
 export default class LectureCoordonnees extends ExerciceSimple {

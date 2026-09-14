@@ -208,7 +208,19 @@ export default class DevelopperExpressionsSecondDegre extends Exercice {
         second = ancienPremier
       }
 
-      const expression = `${premier.expression}${signe === 1 ? '+' : '-'}${second.expression}`
+      const secondEstNegatif = second.expression.startsWith('-')
+      const secondExpressionAffichee = secondEstNegatif
+        ? second.expression.slice(1)
+        : second.expression
+      const operateur =
+        signe === 1
+          ? secondEstNegatif
+            ? '-'
+            : '+'
+          : secondEstNegatif
+            ? '+'
+            : '-'
+      const expression = `${premier.expression}${operateur}${secondExpressionAffichee}`
       const coefficientsResultat = additionne(
         premier.coefficients,
         second.coefficients,

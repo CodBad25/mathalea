@@ -14,6 +14,15 @@
 - TypeCheck: `pnpm check` (type checks .svelte and .ts files)
 - Exercise draw stability: `pnpm stability:check` (see `documentation/tests/stabilite-exercices.md`)
 
+## Testing
+
+- The project uses Vitest for tests and Playwright for browser tests. Do not
+  install other testing or browser automation libraries (for example,
+  Puppeteer).
+- Before running end-to-end browser tests, use the Vite server already running
+  at `http://localhost:5173` when it is available. Otherwise, start it with
+  `pnpm dev`; this command also updates the dictionaries before starting Vite.
+
 ## Writing an exercise
 
 Titles and instructions are in the infinitive; every sentence ends with a

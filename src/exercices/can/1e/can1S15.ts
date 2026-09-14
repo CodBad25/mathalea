@@ -33,7 +33,7 @@ export default class TermeGeneralSuiteParRecurrence extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.formatChampTexte = KeyboardType.clavierSuite
   }
 
   nouvelleVersion() {
@@ -70,7 +70,7 @@ export default class TermeGeneralSuiteParRecurrence extends ExerciceSimple {
         ])
         const raisonTex = texNombre(raison, 1)
         const puissance = indicePremierTerme === 0 ? 'n' : 'n-1'
-        const reponse = `${premierTerme}*(${raison.toString()})^(${puissance})`
+        const reponse = `${premierTerme}*(${raison.toString()})^{${puissance}}`
         const relation = `u_{n+1}=${raisonTex}u_n`
         const formeExplicite = `${premierTerme}\\times ${raisonTex}^{${puissance}}`
 

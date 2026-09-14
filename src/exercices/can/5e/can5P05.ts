@@ -16,7 +16,7 @@ export const dateDeModifImportante = '12/02/2024'
 export const uuid = '6946a'
 
 export const refs = {
-  'fr-fr': ['can5P05', '5P1B-flash1'],
+  'fr-fr': ['can5P05', '5P1B-flash1', '2I11-flash3'],
   'fr-ch': [],
 }
 export default class PoucentageP2 extends ExerciceSimple {

@@ -442,14 +442,35 @@ aperçu, code éditable, réglages et téléchargements `.typ`/PDF. Toutes les
 questions des exercices de la fiche sont aplaties dans leur ordre d’affichage.
 Le recto de la carte `i` porte la réponse minimale à la question `i` et l’énoncé
 de la question `i + 1`. La dernière carte revient à la première question afin
-de fermer la chaîne. Le verso est uniforme (« J’ai ..... Qui a .... ? ») et ses
-colonnes sont imprimées en miroir, comme dans la vue Flash-cards, pour
-l’impression recto-verso avec retournement sur les bords longs.
+de fermer la chaîne. Le verso commun utilise l’image
+`public/assets/i-have-who-has/versoGKiA.jpg`, ajustée sans recadrage à
+l’intérieur de chaque carte. Ses colonnes sont imprimées en miroir, comme dans
+la vue Flash-cards, pour l’impression recto-verso avec retournement sur les
+bords longs. La vue charge l’image dans le système de fichiers virtuel du
+compilateur ; le téléchargement Typst est donc une archive ZIP contenant le
+`.typ` et le JPG nécessaire à sa compilation hors de MathALÉA.
+
+Le recto ajoute systématiquement un point après la réponse minimale orange et
+un point d’interrogation après la question. Une ponctuation déjà présente n’est
+pas doublée.
+
+Les deux lignes « J’ai » et « Qui a » sont alignées à gauche dans leur moitié
+de carte. Leur position ne dépend donc pas de la longueur de la réponse ou de
+la question. Le code de la carte est placé dans le coin supérieur droit ; la
+pastille de zoom occupe le coin inférieur droit afin de ne pas le masquer.
 
 Les lettres majuscules placées au début d’un énoncé comme index de série
 (`A = …`, `B = …`) sont retirées des cartes. Elles permettraient sinon de
 deviner le maillon suivant sans résoudre la question. Une lettre employée dans
 le corps de l’énoncé ou de l’expression reste inchangée.
+
+Un signe égal placé à la fin de la dernière formule (`…=$`) est également
+retiré avant l’ajout du point d’interrogation. Dans les exercices de calcul, ce
+signe matérialise normalement le blanc que l’élève doit compléter ; il serait
+inadapté dans la formulation orale « Qui a … ? ». Les égalités complètes, par
+exemple `$x=2$`, ne sont pas modifiées. L’espace précédant le point
+d’interrogation est insécable afin que celui-ci ne se retrouve jamais seul au
+début d’une ligne.
 
 Les réponses passent par le même `minimalCorrection` que le mode de correction
 minimale du [TBI](tbi.md). Les questions dépourvues de correction associée sont
@@ -461,13 +482,36 @@ n’est trouvée, l’export est interrompu avec un message invitant à modifier
 réglages ou les exercices. Le document est généré par
 `src/components/setup/typst/buildIHaveWhoHasDocument.ts`, avec les polices, le
 format de page et l’orientation de la fiche courante ; il place par défaut deux
-cartes par ligne et quatre lignes par page, avec des traits de découpe.
+cartes par ligne et quatre lignes par page, avec des traits de découpe. Cette
+vue utilise l’orientation paysage par défaut afin d’agrandir les roues et leurs
+disques-cache, disposés côte à côte sur chaque feuille.
 
 Chaque recto publie un repère pour une pastille `− / +` dans l’aperçu. Elle
 ajuste ensemble la taille du « J’ai » et du « Qui a » de cette seule carte. La
 valeur `#let carte-N-taille` est modifiée directement dans le code puis relue
 par `harvestIHaveWhoHasCarryOver`, de sorte que le réglage survive à une
 régénération du document, comme dans la vue Flash-cards.
+
+Chaque carte reçoit également un code aléatoire unique composé d’une lettre et
+d’un chiffre (`code-carte-N`). Après les planches de cartes, le document ajoute
+une planche d’assemblage A4 paysage : les roues « J’ai » et « Qui a ? » sont sur
+la rangée supérieure, leurs deux disques-cache sur la rangée inférieure. Sur un
+même secteur, la roue « Qui a ? » porte le code de la carte qui pose la question
+et la roue « J’ai » celui de la carte suivante, qui possède la réponse. Les
+roues et les caches ont le même axe. La fenêtre est placée à 15 h ; sa hauteur
+est calculée d’après le nombre de secteurs pour ne découvrir qu’un code à la
+fois. Chaque cache porte aussi, à 6 h, une encoche semi-elliptique pointillée à
+découper : elle laisse saisir le bord de la roue prise en sandwich. Un repère
+triangulaire périphérique permet de coller les deux roues dos à dos sans
+décalage. Les codes sont relus par `harvestIHaveWhoHasCarryOver` afin de rester
+stables lorsque l’enseignant ajuste la mise en page ou le zoom.
+
+Comme les deux roues sont collées dos à dos, les positions de la roue « J’ai »
+subissent une symétrie d’axe vertical par rapport à celles de la roue « Qui
+a ? ». Les secteurs correspondants se superposent ainsi après retournement du
+disque. Seules les positions sont inversées : les codes eux-mêmes restent
+écrits dans le sens normal de lecture. Le repère d’assemblage à 12 h est sur
+l’axe de symétrie et ne se déplace pas.
 
 ## Correction minimale
 
@@ -504,6 +548,14 @@ Case « QR-code vers chaque exercice » (`TypstDocumentOptions.showQrCode`) : aj
 `qrCodeToTypstImage` (`buildTypstDocument.ts`) rend le QR-code **côté MathALÉA** en SVG (`qrcode` npm) plutôt que de laisser `exercise-bank` déléguer l'URL brute à `tiaoma` : ce dernier ne reçoit qu'une couleur de trait, sans option de fond, et produit un QR-code transparent (illisible sur fond coloré). L'image est enveloppée dans `link(url)[…]` pour que le QR-code du PDF soit un **lien cliquable** vers l'exercice — `tiaoma` ne pose pas de lien. `exercise-bank` accepte aussi bien une URL (`str`) que du contenu Typst déjà mis en forme, il prend donc l'image telle quelle.
 
 En mode fusionné (global ou local) il n'y a pas de bloc `exo.with(...)` par exercice où accrocher le QR-code : la case est sans effet. Le mode « Course aux nombres » n'importe pas `exercise-bank` du tout (voir plus haut).
+
+## QR-code vers la fiche
+
+Case « QR-code vers la fiche (vue élève, 1 exercice par page) » (`TypstDocumentOptions.showQrCodeFiche`) : ajoute en haut à droite de la **première page physique** du document un QR-code vers toute la sélection d'exercices en vue élève, avec les mêmes graines que celles imprimées — un élève qui scanne le QR-code retrouve exactement les exercices de sa photocopie. Réglages encodés dans `es` : un exercice par page, non interactif par défaut mais l'élève peut activer l'interactivité (`isInteractiveFree`). Indépendant de « QR-code vers chaque exercice », qui cible un exercice à la fois et reste désactivé en mode fusionné/Course aux nombres.
+
+`ficheUrl` (`buildTypstDocument.ts`) construit ce lien en réutilisant les paramètres déjà calculés dans l'URL individuelle de chaque exercice (`exercise.url`, la même URL que celle du QR-code par exercice — voir `exerciceUrl` dans `Typst.svelte`) : elle y puise uuid, graine et réglages par exercice sans les recalculer, ne retire que `v`/`es` (propres à un exercice seul) pour les remplacer par les réglages de fiche. Les exercices non imprimables (avertissement, ou sans URL) en sont exclus ; si aucun exercice n'a d'URL, aucun QR-code n'est ajouté.
+
+`ficheQrCodeLines` place le QR-code avec `#place(top + right, context [#if here().page() == 1 [...]])` : `#place` sort le contenu du flux normal (aucune place réservée dans la mise en page du titre ou de la page de garde), et `here().page()` — le numéro de page **physique**, comme dans `pageFooter` — limite l'affichage à la toute première page, même sur une fiche à plusieurs sujets (Sujet A, B...) où chaque sujet redémarre sa propre pagination logique.
 
 ## Impression recto-verso (démarrage sur page impaire)
 
@@ -574,6 +626,11 @@ Les constantes d'import (`EXERCISE_BANK_IMPORT`, `TASKIZE_IMPORT`, `VARTABLE_IMP
 1. Les exercices sont chargés comme dans la vue A4 (`buildExercisesList`, graines `alea`, contenu HTML avec formules KaTeX en `$...$`), en régénérant chaque exercice avec `context.isHtml = true` et `context.isTypst = true` (le rendu HTML est réutilisé, pas le rendu LaTeX). Voir [Variantes d'exercices — branches de rendu](../../auteurs-exercices/complements/variantes-exercices.md#branches-de-rendu) pour ce que cela implique côté code d'exercice (branches `context.isHtml` qui posent un composant interactif non convertible).
 2. `buildTypstDocument` assemble le document : réglages éditables en tête de fichier (`#let colonnes`, `#let corrige`, `#let couleur`), en-tête de fiche, un bloc par exercice, section corrections dans un `#if corrige [...]`.
 3. `htmlToTypst` convertit chaque contenu : balises simples (`<br>`, `<b>`, `<i>`, `<sup>`, listes...) vers le balisage Typst, échappement des caractères spéciaux, et formules LaTeX converties par [tex2typst](https://github.com/qwinsi/tex2typst).
+
+`texteEnCarte()` traite `context.isTypst` avant sa branche HTML et émet un
+marqueur `<mathalea-typst>` contenant une boîte Typst native. Les cartes
+conservent ainsi leur fond bleu ou orange, leur bordure et leurs dimensions au
+lieu d'être aplaties comme un `<span>` HTML ordinaire.
 
 Particularités de la conversion des formules (`latexMathToTypst`) :
 

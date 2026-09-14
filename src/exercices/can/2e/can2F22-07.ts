@@ -5,7 +5,7 @@ export const interactifReady = true
 
 export const dateDePublication = '18/08/2026'
 export const uuid = 'a25f6'
-export const refs = { 'fr-fr': ['can2F22-07'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['can2F22-07', '2F22-flash4'], 'fr-ch': [] }
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

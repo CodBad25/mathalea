@@ -21,7 +21,7 @@ export const interactifReady = true
 export const uuid = '31f61'
 
 export const refs = {
-  'fr-fr': ['can2G11-02'],
+  'fr-fr': ['can2G11-02', '2G11-flash2'],
   'fr-ch': ['NR'],
 }
 export default class CalculCotePythagore extends ExerciceSimple {

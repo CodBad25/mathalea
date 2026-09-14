@@ -21,7 +21,7 @@ export const dateDePublication = '08/07/2022'
 export const uuid = 'dacc1'
 
 export const refs = {
-  'fr-fr': ['can2G32-01'],
+  'fr-fr': ['can2G32-01', '2G32-flash1'],
   'fr-ch': ['3G97-4'],
 }
 export default class VecteurDirEqCart extends ExerciceSimple {

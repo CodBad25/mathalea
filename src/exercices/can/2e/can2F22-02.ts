@@ -7,7 +7,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '19/08/2026'
 export const uuid = '52811'
-export const refs = { 'fr-fr': ['can2F22-02'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['can2F22-02', '2F22-flash2'], 'fr-ch': [] }
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres

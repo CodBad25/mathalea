@@ -8,7 +8,7 @@ export const dateDePublication = '18/08/2026'
 export const uuid = 'c63ea'
 
 export const refs = {
-  'fr-fr': ['can2F23-02'],
+  'fr-fr': ['can2F23-02', '2F23-flash2'],
   'fr-ch': [],
 }
 
