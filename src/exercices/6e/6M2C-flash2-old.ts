@@ -3,10 +3,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-} from '../../modules/outils'
+import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Déterminer l'aire ou le côté d'un carré"
@@ -14,56 +11,29 @@ export const interactifReady = true
 
 export const dateDePublication = '21/04/2023'
 
-export const uuid = '90e7a'
+export const uuid = '90e79'
 export const refs = {
-  'fr-fr': ['6M2C-flash2'],
-  'fr-ch': ['NR'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 /**
  *
  * @author
  */
-export default class RelationAireCoteCarre extends Exercice {
-  constructor() {
-    super()
-    this.nbQuestions = 1
-    this.sup = '3'
-    this.besoinFormulaireTexte = [
-      'Types de question',
-      "Nombre séparés par des tirets\n1: Calculer l'aire\n2: Déterminer le côté\n3: Mélange",
-    ]
-  }
+export default class RelationAireCoteTriangle extends Exercice {
+  nbQuestions = 8
 
   nouvelleVersion() {
-    this.nbQuestions = Math.min(18, this.nbQuestions)
-    const listeTypeQuestions = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      nbQuestions: this.nbQuestions,
-      min: 1,
-      max: 2,
-      melange: 3,
-      defaut: 3,
-      listeOfCase: ['calculerAire', 'determinerCote'],
-    }).map(String)
-
-    const cotes = combinaisonListes(
-      [2, 3, 4, 5, 6, 7, 8, 9, 10],
+    const typeQuestionsDisponibles = ['calculerAire', 'determinerCote']
+    const listeTypeQuestions = combinaisonListes(
+      typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    const cotesDisponiblesForAire = [2, 3, 4, 5, 6, 7, 8, 9, 10]
-    const cotesDisponiblesForCote = [2, 3, 4, 5, 6, 7, 8, 9, 10]
-    for (let i = 0; i < this.nbQuestions; i++) {
-      if (listeTypeQuestions[i] === 'calculerAire') {
-        const index = Math.floor(Math.random() * cotesDisponiblesForAire.length)
-        cotes[i] = cotesDisponiblesForAire[index]
-        cotesDisponiblesForAire.splice(index, 1)
-      } else if (listeTypeQuestions[i] === 'determinerCote') {
-        const index = Math.floor(Math.random() * cotesDisponiblesForCote.length)
-        cotes[i] = cotesDisponiblesForCote[index]
-        cotesDisponiblesForCote.splice(index, 1)
-      }
-    }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
+    const cotes = combinaisonListes(
+      [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      this.nbQuestions,
+    )
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       switch (listeTypeQuestions[i]) {
@@ -94,7 +64,7 @@ export default class RelationAireCoteCarre extends Exercice {
           texteCorr += `Donc la longueur du côté du carré est de $${miseEnEvidence(cotes[i])}\\text{ cm}$.`
           break
       }
-      if (this.questionJamaisPosee(i, listeTypeQuestions[i], cotes[i])) {
+      if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
