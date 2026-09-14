@@ -107,6 +107,13 @@
     onAdjustGutter: (target: string, delta: number) => void
     /** Insère un fragment de code Typst juste après l'exercice `num` */
     onInsert: (num: number, snippet: string) => void
+    /**
+     * Insère un nouvel exercice numéroté juste après l'exercice `num` (0 :
+     * avant le premier), avec `texte` comme énoncé. Choix « Exercice » du
+     * panneau d'insertion, espace `exo` seulement (pas de sens avant une
+     * correction).
+     */
+    onInsertExercise: (num: number, texte: string) => void
     onUpdateInsertion: (num: number, index: number, snippet: string) => void
     onDeleteInsertion: (num: number, index: number) => void
     /** Insère un fragment de code Typst juste avant la correction de l'exercice `num` */
@@ -246,6 +253,7 @@
     onAdjustColumns,
     onAdjustGutter,
     onInsert,
+    onInsertExercise,
     onUpdateInsertion,
     onDeleteInsertion,
     onInsertCorrection,
@@ -298,7 +306,7 @@
   /** Repère (espace + numéro) dont le panneau d'insertion est ouvert */
   let openInsertion: { space: InsertionSpace; num: number } | null =
     $state(null)
-  let insertionKind: 'section' | 'texte' = $state('section')
+  let insertionKind: 'section' | 'texte' | 'exercice' = $state('section')
   let insertionText = $state('')
 
   /** Liste des insertions existantes au repère `num` de l'espace `space` */
@@ -476,6 +484,10 @@
         ? null
         : { space, num }
     insertionText = ''
+    // « Exercice » n'a pas de sens avant une correction (voir onInsertExercise)
+    if (space === 'corr' && insertionKind === 'exercice') {
+      insertionKind = 'section'
+    }
     openWritingLines = null
   }
 
@@ -483,6 +495,12 @@
     if (openInsertion == null) return
     const text = insertionText.trim()
     if (text.length === 0) return
+    if (insertionKind === 'exercice' && openInsertion.space === 'exo') {
+      onInsertExercise(openInsertion.num, text)
+      insertionText = ''
+      openInsertion = null
+      return
+    }
     const snippet = insertionKind === 'section' ? `#section[${text}]` : text
     if (openInsertion.space === 'corr') {
       onInsertCorrection(openInsertion.num, snippet)
@@ -652,33 +670,61 @@
         <hr class="border-gray-200" />
       {/if}
       <div class="flex overflow-hidden rounded border border-gray-300">
-        {#each [{ kind: 'section', label: 'Section' }, { kind: 'texte', label: 'Texte' }] as choice}
+        {#each space === 'exo'
+          ? [
+              { kind: 'section', label: 'Section' },
+              { kind: 'texte', label: 'Texte' },
+              { kind: 'exercice', label: 'Exercice' },
+            ]
+          : [
+              { kind: 'section', label: 'Section' },
+              { kind: 'texte', label: 'Texte' },
+            ] as choice}
           <button
             type="button"
             class="flex-1 px-2 py-0.5 {insertionKind === choice.kind
               ? 'bg-coopmaths-action text-coopmaths-canvas'
               : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
             aria-pressed={insertionKind === choice.kind}
-            onclick={() => (insertionKind = choice.kind as 'section' | 'texte')}
+            onclick={() =>
+              (insertionKind = choice.kind as 'section' | 'texte' | 'exercice')}
           >
             {choice.label}
           </button>
         {/each}
       </div>
-      <!-- svelte-ignore a11y_autofocus : le formulaire vient d'être ouvert au clic -->
-      <input
-        type="text"
-        autofocus={drafts.length === 0}
-        class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
-        placeholder={insertionKind === 'section'
-          ? 'Titre de la section (ex : Monômes)'
-          : 'Texte (code Typst accepté)'}
-        bind:value={insertionText}
-        onkeydown={(e) => {
-          if (e.key === 'Enter') submitInsertion()
-          if (e.key === 'Escape') openInsertion = null
-        }}
-      />
+      {#if insertionKind === 'section'}
+        <!-- svelte-ignore a11y_autofocus : le formulaire vient d'être ouvert au clic -->
+        <input
+          type="text"
+          autofocus={drafts.length === 0}
+          class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
+          placeholder="Titre de la section (ex : Monômes)"
+          bind:value={insertionText}
+          onkeydown={(e) => {
+            if (e.key === 'Enter') submitInsertion()
+            if (e.key === 'Escape') openInsertion = null
+          }}
+        />
+      {:else}
+        <!-- texte/exercice : plusieurs lignes de code Typst attendues, la
+             touche Entrée doit donc rester un retour à la ligne normal
+             (Ctrl/Cmd+Entrée valide, comme dans l'éditeur de code) -->
+        <!-- svelte-ignore a11y_autofocus : le formulaire vient d'être ouvert au clic -->
+        <textarea
+          autofocus={drafts.length === 0}
+          rows="10"
+          class="w-full resize-y rounded border border-gray-300 px-1.5 py-0.5 font-mono text-xs"
+          placeholder={insertionKind === 'exercice'
+            ? 'Énoncé de l’exercice (code Typst accepté)'
+            : 'Texte (code Typst accepté)'}
+          bind:value={insertionText}
+          onkeydown={(e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) submitInsertion()
+            if (e.key === 'Escape') openInsertion = null
+          }}
+        ></textarea>
+      {/if}
       <div class="flex justify-end gap-2">
         <button
           type="button"
@@ -1195,8 +1241,8 @@
         {#if showInsert}
           <button
             type="button"
-            title="Insérer ou modifier un texte ou un titre de section avant l'exercice"
-            aria-label="Insérer ou modifier un texte ou un titre de section avant l'exercice {widget.num}"
+            title="Insérer ou modifier un texte, un titre de section ou un exercice avant l'exercice"
+            aria-label="Insérer ou modifier un texte, un titre de section ou un exercice avant l'exercice {widget.num}"
             aria-expanded={openInsertion?.space === 'exo' &&
               openInsertion.num === insertGapNum}
             data-testid="typst-overlay-insert"
@@ -1505,8 +1551,8 @@
           {#if !hasFollowingExo}
             <button
               type="button"
-              title="Insérer ou modifier un texte ou un titre de section ici"
-              aria-label="Insérer ou modifier un texte ou un titre de section ici"
+              title="Insérer ou modifier un texte, un titre de section ou un exercice ici"
+              aria-label="Insérer ou modifier un texte, un titre de section ou un exercice ici"
               aria-expanded={openInsertion?.space === 'exo' &&
                 openInsertion.num === widget.num}
               data-testid="typst-overlay-insert"
