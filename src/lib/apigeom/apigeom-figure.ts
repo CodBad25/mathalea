@@ -330,33 +330,50 @@ const TEXT_OVERFLOW_MARGIN_PX = 30
  * `-2{,}5` — apigeom `displayNumber` entoure la virgule décimale de `{,}`
  * pour l'espacement KaTeX ; `$\vec \jmath$` / `$\vec{u}$` — labels des
  * vecteurs de base du repère `repereOij` et des vecteurs nommés ; `$\mathcal
- * C_f$` — nom d'une courbe représentative, cf. TSA2-12/TCA1-23) :
- * `addTextElementsToSvg` (paquet apigeom) retire seulement les `$` de
- * bordure, il ne connaît pas KaTeX et poserait sinon le code LaTeX brut tel
- * quel comme texte SVG. Rendu approximatif (pas un vrai typeset, donc pas de
- * véritable police calligraphique pour `\mathcal`), suffisant pour les
- * libellés courts utilisés ici (unités, fractions simples, graduations
- * décimales, vecteurs, noms de courbes).
+ * C_f$` — nom d'une courbe représentative, cf. TSA2-12/TCA1-23 ; `$\ell$` —
+ * nom d'une limite ; `{\color{X}\boldsymbol{?}}` — labels mis en évidence
+ * via `miseEnEvidence()`, ex. le « ? » d'un point à retrouver sur une droite
+ * graduée) : `addTextElementsToSvg` (paquet apigeom) retire seulement les
+ * `$` de bordure, il ne connaît pas KaTeX et poserait sinon le code LaTeX
+ * brut tel quel comme texte SVG. Rendu approximatif (pas un vrai typeset,
+ * donc pas de véritable police calligraphique pour `\mathcal`, ni de gras
+ * pour `\boldsymbol`/`\textbf` — la couleur de `\color` est de toute façon
+ * redondante avec celle déjà posée par l'option `color` du label), suffisant
+ * pour les libellés courts utilisés ici (unités, fractions simples,
+ * graduations décimales, vecteurs, noms de courbes, mise en évidence).
  */
 function cleanLatexLabel(text: string): string {
-  return text
-    .replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '$1/$2')
-    .replace(/\\text\s*\{([^{}]*)\}/g, '$1')
-    // i/j sans point de `\vec\imath` / `\vec\jmath`, réduits avant `\vec`
-    .replace(/\\imath(?![a-zA-Z])/g, 'ı')
-    .replace(/\\jmath(?![a-zA-Z])/g, 'ȷ')
-    // flèche de vecteur : U+20D7 (combining right arrow above) accolé au
-    // dernier caractère du contenu (`\vec{u}` → `u⃗`, `\overrightarrow{AB}`
-    // → `AB⃗`, `\vec \jmath` → `ȷ⃗`)
-    .replace(/\\(?:vec|overrightarrow)\s*\{([^{}]*)\}/g, '$1⃗')
-    .replace(/\\(?:vec|overrightarrow)\s+([^\s{}\\])/g, '$1⃗')
-    // \mathcal{C} / \mathcal C (nom de courbe, ex. $\mathcal C_f$) : pas de
-    // police calligraphique disponible en texte SVG brut, la commande est
-    // simplement retirée pour ne garder que la lettre
-    .replace(/\\mathcal\s*\{([^{}]*)\}/g, '$1')
-    .replace(/\\mathcal\s+([^\s{}\\])/g, '$1')
-    .replace(/\{,\}/g, ',')
-    .replace(/~/g, ' ')
+  return (
+    text
+      .replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '$1/$2')
+      .replace(/\\text\s*\{([^{}]*)\}/g, '$1')
+      // i/j sans point de `\vec\imath` / `\vec\jmath`, réduits avant `\vec`
+      .replace(/\\imath(?![a-zA-Z])/g, 'ı')
+      .replace(/\\jmath(?![a-zA-Z])/g, 'ȷ')
+      // flèche de vecteur : U+20D7 (combining right arrow above) accolé au
+      // dernier caractère du contenu (`\vec{u}` → `u⃗`, `\overrightarrow{AB}`
+      // → `AB⃗`, `\vec \jmath` → `ȷ⃗`)
+      .replace(/\\(?:vec|overrightarrow)\s*\{([^{}]*)\}/g, '$1⃗')
+      .replace(/\\(?:vec|overrightarrow)\s+([^\s{}\\])/g, '$1⃗')
+      // \mathcal{C} / \mathcal C (nom de courbe, ex. $\mathcal C_f$) : pas de
+      // police calligraphique disponible en texte SVG brut, la commande est
+      // simplement retirée pour ne garder que la lettre
+      .replace(/\\mathcal\s*\{([^{}]*)\}/g, '$1')
+      .replace(/\\mathcal\s+([^\s{}\\])/g, '$1')
+      // \boldsymbol{X} / \textbf{X} (mise en évidence, cf. miseEnEvidence()) :
+      // exécuté après \frac et \text ci-dessus, qui ont déjà aplati les
+      // accolades imbriquées que ce contenu pouvait porter
+      .replace(/\\(?:boldsymbol|textbf)\s*\{([^{}]*)\}/g, '$1')
+      // {\color{X}CONTENU} (couleur LaTeX déclarative, produite par
+      // miseEnEvidence()) : le contenu est déjà sans accolades une fois
+      // \boldsymbol dépouillé ci-dessus
+      .replace(/\{\\color(?:\[HTML\])?\{[^{}]*\}([^{}]*)\}/g, '$1')
+      // \ell (nom usuel d'une limite, ex. TSA2-12) : lettre calligraphique
+      // dédiée en Unicode
+      .replace(/\\ell\b/g, 'ℓ')
+      .replace(/\{,\}/g, ',')
+      .replace(/~/g, ' ')
+  )
 }
 
 /**
