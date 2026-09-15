@@ -2,11 +2,26 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+
+/** Fraction (numérateur/dénominateur déjà entiers) affichée telle quelle,
+ * suivie de sa forme simplifiée quand elle n'est pas déjà irréductible. */
+function texFractionAvecSimplification(
+  numerateur: number,
+  denominateur: number,
+): string {
+  const brut = `$\\dfrac{${numerateur}}{${denominateur}}$`
+  const fraction = new FractionEtendue(numerateur, denominateur)
+  if (fraction.estIrreductible) return brut
+  return `${brut}, soit $${fraction.texFractionSimplifiee}$`
+}
 export const titre = "Lire les coordonnées d'un point dans un repère"
 export const interactifReady = true
 
@@ -29,6 +44,8 @@ export default class LectureCoordonnees extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.spacing = 1.5
   }
 
   nouvelleVersion() {
@@ -66,7 +83,7 @@ export default class LectureCoordonnees extends ExerciceSimple {
     const traceA = tracePoint(A, 'red') // Variable qui trace les points avec une croix
     traceA.taille = 3
     traceA.epaisseur = 2
-    this.question = 'Donner les coordonnées du point.<br><br>'
+    this.question = 'Donner les coordonnées du point.<br>'
     this.question += mathalea2d(
       {
         xmin: -3,
@@ -81,21 +98,23 @@ export default class LectureCoordonnees extends ExerciceSimple {
       o,
       traceA,
     )
-    this.optionsChampTexte = { texteAvant: '<br>Respecter les notations :' }
+    this.optionsChampTexte = {
+      texteAvant: '<br>Écrire les coordonnées en respectant les notations :',
+    }
     this.correction = "L'abscisse du point se lit sur l'axe horizontal.<br>"
     if (k1 === 3) {
       if (arrondi(a, 1) === arrondi(a, 0)) {
         this.correction += ` On lit $${texNombre(a, 2)}$.<br>`
       } else {
         this.correction += ` L'unité (sur l'axe des abscisses) est divisée en $${k1}$. <br>
-      Le point a pour abscisse $\\dfrac{${arrondi(a * k1, 0)}}{${k1}}$.<br>`
+      Le point a pour abscisse ${texFractionAvecSimplification(arrondi(a * k1, 0), k1)}.<br>`
       }
     } else {
       if (arrondi(a, 1) === arrondi(a, 0)) {
         this.correction += ` On lit $${texNombre(a, 2)}$.<br>`
       } else {
         this.correction += ` L'unité (sur l'axe des abscisses) est divisée en $${k1}$. <br>
-      Le point a pour abscisse $\\dfrac{${arrondi(a * k1, 0)}}{${k1}}$.<br>`
+      Le point a pour abscisse ${texFractionAvecSimplification(arrondi(a * k1, 0), k1)}.<br>`
       }
     }
 
@@ -105,16 +124,26 @@ export default class LectureCoordonnees extends ExerciceSimple {
         this.correction += ` On lit $${texNombre(b, 2)}$.<br>`
       } else {
         this.correction += ` L'unité (sur l'axe des ordonnées) est divisée en $${k2}$. <br>
-      Le point a pour ordonnée $\\dfrac{${arrondi(b * k2, 0)}}{${k2}}$.<br>`
+      Le point a pour ordonnée ${texFractionAvecSimplification(arrondi(b * k2, 0), k2)}.<br>`
       }
     } else {
       if (arrondi(b, 1) === arrondi(b, 0)) {
         this.correction += ` On lit $${texNombre(b, 2)}$.<br>`
       } else {
         this.correction += ` L'unité (sur l'axe des ordonnées) est divisée en $${k2}$. <br>
-      Le point a pour ordonnée $\\dfrac{${arrondi(b * k2, 0)}}{${k2}}$.<br>`
+      Le point a pour ordonnée ${texFractionAvecSimplification(arrondi(b * k2, 0), k2)}.<br>`
       }
     }
+
+    const abscisseFinale =
+      arrondi(a, 1) === arrondi(a, 0)
+        ? texNombre(a, 2)
+        : new FractionEtendue(arrondi(a * k1, 0), k1).texFractionSimplifiee
+    const ordonneeFinale =
+      arrondi(b, 1) === arrondi(b, 0)
+        ? texNombre(b, 2)
+        : new FractionEtendue(arrondi(b * k2, 0), k2).texFractionSimplifiee
+    this.correction += `Les coordonnées du point sont donc $${miseEnEvidence(`\\left(${abscisseFinale}\\,;\\,${ordonneeFinale}\\right)`)}$.`
 
     this.reponse = [
       `(\\dfrac{${arrondi(a * k1, 0)}}{${k1}};\\dfrac{${arrondi(b * k2, 0)}}{${k2}})`,

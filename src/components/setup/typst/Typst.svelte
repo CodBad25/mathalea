@@ -1159,7 +1159,7 @@
   }
 
   /** Pas d'ajustement de l'espacement vertical des questions, en em */
-  const GUTTER_STEP = 0.25
+  const GUTTER_STEP = 0.1
   function adjustGutter(target: string, delta: number) {
     const raw = tasksLayoutValues[target]?.gutter ?? 'interligne-questions'
     // « interligne-questions » (le défaut global) vaut 1,2 em : le premier
@@ -1574,6 +1574,72 @@
       ...list.slice(0, num),
       copie,
       ...list.slice(num),
+    ])
+    await applyTypSourcesForStaticExercises()
+    await prefetchStaticImages()
+    const code = buildTypstDocument(
+      buildInputs(),
+      documentOptions,
+      carryOver,
+      [],
+      {
+        sourceUrl: currentUrl(),
+        extraPreamble: extraPreamble(),
+      },
+    )
+    setEditorContent(code)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
+  }
+
+  /**
+   * Uuid du « vaisseau » générique support de l'insertion « Exercice » de la
+   * palette de mise en page (voir `insertFreeExercise` et
+   * `src/exercices/apps/EnonceLibre.ts`) : un exercice numéroté normalement
+   * dont l'énoncé généré n'est qu'un texte de départ, aussitôt remplacé par
+   * une surcharge de code portant ce que le professeur a écrit dans le
+   * panneau d'insertion.
+   */
+  const FREE_EXERCISE_UUID = '58d39'
+
+  /**
+   * Insère un nouvel exercice au repère de gap `gapNum` (donc en position
+   * `gapNum + 1`, juste avant celui qui suivait ce repère), dont l'énoncé est
+   * entièrement écrit par le professeur dans le panneau d'insertion. Comme
+   * `duplicateExercise`, décale les réglages de la palette des exercices
+   * suivants (`shiftCarryOverForInsert`) ; contrairement à elle, il n'y a pas
+   * d'exercice « original » dont copier les réglages (`original: -1`, qui ne
+   * correspond à aucun numéro d'exercice réel).
+   */
+  async function insertFreeExercise(gapNum: number, texte: string) {
+    if (!confirmOverwrite()) return
+    dropVersionSeeds()
+    const inserted = gapNum + 1
+    const carryOver =
+      editorView != null
+        ? shiftCarryOverForInsert(harvestCarryOver(currentCode()), inserted, -1)
+        : {}
+    carryOver.codeOverrides = { ...carryOver.codeOverrides, [inserted]: texte }
+    const params: InterfaceParams = { uuid: FREE_EXERCISE_UUID }
+    let exercise: IExercice | null = null
+    try {
+      exercise = await buildExercise(params)
+      // la vue Typst n'affiche jamais les exercices en mode interactif
+      exercise.interactif = false
+    } catch {
+      // exercice non chargeable : buildInputs signalera l'avertissement
+      exercise = null
+    }
+    exercises = [
+      ...exercises.slice(0, gapNum),
+      exercise,
+      ...exercises.slice(gapNum),
+    ]
+    insertCoverBaremeRow(gapNum)
+    persistPreferences()
+    exercicesParams.update((list) => [
+      ...list.slice(0, gapNum),
+      params,
+      ...list.slice(gapNum),
     ])
     await applyTypSourcesForStaticExercises()
     await prefetchStaticImages()
@@ -4695,6 +4761,7 @@
                     onAdjustExerciseCorrectionZoom={adjustExerciseCorrectionZoom}
                     onSetFigureAlign={setFigureAlign}
                     onInsert={insertAfterExercise}
+                    onInsertExercise={insertFreeExercise}
                     onUpdateInsertion={updateInsertion}
                     onDeleteInsertion={deleteInsertion}
                     onInsertCorrection={insertBeforeCorrection}
@@ -4993,13 +5060,17 @@
           {/if}
         </div>
         <div class="flex justify-between gap-2">
-          <button
-            type="button"
-            class="px-3 py-1 hover:text-coopmaths-action"
-            onclick={() => restoreGeneratedCode(num)}
-          >
-            Restaurer le code d'origine
-          </button>
+          {#if exercises[num - 1]?.uuid !== FREE_EXERCISE_UUID}
+            <button
+              type="button"
+              class="px-3 py-1 hover:text-coopmaths-action"
+              onclick={() => restoreGeneratedCode(num)}
+            >
+              Restaurer le code d'origine
+            </button>
+          {:else}
+            <span></span>
+          {/if}
           <div class="flex gap-2">
             <button
               type="button"

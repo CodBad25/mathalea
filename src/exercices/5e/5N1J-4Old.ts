@@ -17,13 +17,12 @@ export const interactifReady = true
 
 export const titre = "Trouver un nombre à l'aide d'un critère de divisibilité"
 export const dateDePublication = '07/11/2025'
-export const dateDeModifImportante = '14/09/2026'
 
-export const uuid = 'bc57e'
+export const uuid = 'bc570'
 export const refs = {
-  'fr-fr': ['5N1J-4'],
-  'fr-2016': ['5A11-5'],
-  'fr-ch': ['9NO1A-6'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 
 /**
@@ -55,30 +54,7 @@ function formaterReponse(reponse: (number | string)[]): string {
   return `${corps} et ${dernier}`
 }
 
-// Fréquence maximale (approximative) à laquelle la réponse $\emptyset$
-// doit apparaître parmi les questions générées.
-const FREQUENCE_VIDE_MAX = 0.2
-
-// Pour chaque diviseur possible, on précise quels chiffres des unités
-// mènent à une réponse non vide ("valides") et lesquels mènent à
-// $\emptyset$ ("invalides"). Cela permet de tirer volontairement un
-// chiffre des unités "invalide" seulement avec la probabilité
-// FREQUENCE_VIDE_MAX, au lieu de le laisser au hasard uniforme sur 0-9.
-const unitesParDiviseur: Record<
-  number,
-  { valides: number[]; invalides: number[] }
-> = {
-  2: { valides: [0, 2, 4, 6, 8], invalides: [1, 3, 5, 7, 9] },
-  3: { valides: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], invalides: [] },
-  4: { valides: [0, 2, 4, 6, 8], invalides: [1, 3, 5, 7, 9] },
-  5: { valides: [0, 5], invalides: [1, 2, 3, 4, 6, 7, 8, 9] },
-  6: { valides: [0, 2, 4, 6, 8], invalides: [1, 3, 5, 7, 9] },
-  9: { valides: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], invalides: [] },
-  10: { valides: [0], invalides: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
-  15: { valides: [0, 5], invalides: [1, 2, 3, 4, 6, 7, 8, 9] },
-}
-
-export default class TrouverNombre extends Exercice {
+export default class TrouverNombreOld extends Exercice {
   version: string
   constructor() {
     super()
@@ -139,13 +115,8 @@ export default class TrouverNombre extends Exercice {
       let texteCorr = ''
       let reponse: number[] | string[] = []
       let unite = 0
-      const { valides, invalides } = unitesParDiviseur[listeTypeQuestions[i]]
-      if (invalides.length > 0 && randint(0, 100) < FREQUENCE_VIDE_MAX * 100) {
-        unite = invalides[randint(0, invalides.length - 1)]
-      } else {
-        unite = valides[randint(0, valides.length - 1)]
-      }
-      texte = `Trouver un nombre inférieur à $100$ et supérieur à $10$, divisible par $${listeTypeQuestions[i]}$ et dont le chiffre des unités est $${unite}$.`
+      unite = randint(0, 9)
+      texte = `Trouver un nombre inférieur à 100 et supérieur à 10, divisible par $${listeTypeQuestions[i]}$ et dont le chiffre des unités est $${unite}$.`
       switch (listeTypeQuestions[i]) {
         case 2:
           texteCorr = `Pour qu'un nombre soit divisible par $2$, il doit être pair.<br>`
