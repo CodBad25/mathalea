@@ -547,7 +547,8 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
             zero =
               tmin < 0
                 ? texteParPosition('0', -0.5, 0, 0, 'black', 1, 'milieu', true)
-                : vide2d()
+                : vide2d(0, tmin)
+
             r = repere({
               xMin: 0,
               yMin: tmin - 1,
