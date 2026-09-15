@@ -71,9 +71,12 @@ describe('4F11', () => {
     expect(
       correction?.querySelector('tableau-mathlive')?.textContent,
     ).toContain('36')
-    expect(correction?.innerHTML).toContain('$1,2$')
-    expect(correction?.innerHTML).not.toContain('$1{,}2$')
-    expect(correction?.innerHTML).not.toContain('$1.2$')
+    expect(correction?.querySelector('.katex')).not.toBeNull()
+    expect(correction?.innerHTML).not.toContain('$1,2$')
+    expect(
+      correction?.querySelector('annotation[encoding="application/x-tex"]')
+        ?.textContent,
+    ).not.toContain('1.2')
     correction?.setAttribute('join-points', 'false')
     expect(correction?.querySelector('.curve-tracer-student')).toBeNull()
   })
@@ -91,8 +94,12 @@ describe('4F11', () => {
     const table = document.querySelector(
       'traceur-de-courbe[show-expected="true"] tableau-mathlive',
     )
-    expect(table?.innerHTML).toContain('$9,42$')
-    expect(table?.innerHTML).not.toContain('9,424')
+    const latexSources = Array.from(
+      table?.querySelectorAll('annotation[encoding="application/x-tex"]') ?? [],
+      (annotation) => annotation.textContent,
+    )
+    expect(latexSources).toContain('{9,42}')
+    expect(latexSources).not.toContain('{9,424}')
   })
 
   it('laisse au professeur le choix de tracer la ligne brisée', () => {
