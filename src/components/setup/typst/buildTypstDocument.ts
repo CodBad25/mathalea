@@ -593,10 +593,11 @@ export const MATHALEA_COVER_CAN_HELPER = `#let mathalea-couverture-can(
 }`
 
 /**
- * Saut de page insérable entre deux exercices : `#pagebreak` est interdit
- * dans un conteneur (`columns`), la ligne ferme donc le bloc `en-colonnes`
- * courant, saute la page au niveau du document, puis rouvre le bloc.
- * Fonctionne aussi en une colonne (`en-colonnes` rend alors son corps tel quel).
+ * Saut de page insérable entre deux exercices, ou avant une correction :
+ * `#pagebreak` est interdit dans un conteneur (`columns`), la ligne ferme
+ * donc le bloc `en-colonnes` courant, saute la page au niveau du document,
+ * puis rouvre le bloc. Fonctionne aussi en une colonne (`en-colonnes` rend
+ * alors son corps tel quel).
  */
 export const PAGE_BREAK_SNIPPET = '] #pagebreak(weak: true) #en-colonnes['
 
@@ -739,37 +740,44 @@ export interface TypstCarryOver {
 }
 
 /**
- * Stabilise les sauts structurels de la palette avant de construire le
- * document. Un saut de page/colonne est un interrupteur, pas une insertion
- * libre : il ne doit apparaître qu'une fois par gap. Après le dernier
- * exercice, il n'a aucun contenu suivant à déplacer et peut être écarté.
- * Les textes et sections restent, eux, inchangés et peuvent être dupliqués
- * volontairement.
+ * Stabilise les sauts structurels de la palette (espaces `exo` et `corr`)
+ * avant de construire le document. Un saut de page/colonne est un
+ * interrupteur, pas une insertion libre : il ne doit apparaître qu'une fois
+ * par repère. Après le dernier exercice, le repère `exo` n'a aucun contenu
+ * suivant à déplacer et peut être écarté (sans équivalent côté `corr`, qui
+ * n'a pas de repère de fin). Les textes et sections restent, eux, inchangés
+ * et peuvent être dupliqués volontairement.
  */
 function stabilizeStructuralInsertions(
   carryOver: TypstCarryOver,
   exerciseCount: number,
 ): TypstCarryOver {
-  if (carryOver.insertions == null) return carryOver
-
-  const insertions: Record<number, string[]> = {}
-  for (const [key, lines] of Object.entries(carryOver.insertions)) {
-    const gap = Number(key)
-    const structuralInsertions = new Set<string>()
-    const stabilized = lines.filter((line) => {
-      const isStructural =
-        line === PAGE_BREAK_SNIPPET || line === COLUMN_BREAK_SNIPPET
-      if (!isStructural) return true
-      if (gap >= exerciseCount || structuralInsertions.has(line)) return false
-      structuralInsertions.add(line)
-      return true
-    })
-    if (stabilized.length > 0) insertions[gap] = stabilized
+  const dedupe = (
+    record: Record<number, string[]> | undefined,
+    isDiscarded: (num: number) => boolean,
+  ): Record<number, string[]> | undefined => {
+    if (record == null) return undefined
+    const result: Record<number, string[]> = {}
+    for (const [key, lines] of Object.entries(record)) {
+      const num = Number(key)
+      const structuralInsertions = new Set<string>()
+      const stabilized = lines.filter((line) => {
+        const isStructural =
+          line === PAGE_BREAK_SNIPPET || line === COLUMN_BREAK_SNIPPET
+        if (!isStructural) return true
+        if (isDiscarded(num) || structuralInsertions.has(line)) return false
+        structuralInsertions.add(line)
+        return true
+      })
+      if (stabilized.length > 0) result[num] = stabilized
+    }
+    return Object.keys(result).length > 0 ? result : undefined
   }
 
   return {
     ...carryOver,
-    insertions: Object.keys(insertions).length > 0 ? insertions : undefined,
+    insertions: dedupe(carryOver.insertions, (gap) => gap >= exerciseCount),
+    insertionsCorrection: dedupe(carryOver.insertionsCorrection, () => false),
   }
 }
 
