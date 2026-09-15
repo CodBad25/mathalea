@@ -61,70 +61,76 @@ function petitsDiviseurs(centre: number): number[] {
 }
 
 /**
- * Tire une flèche de la famille demandée dont le nombre caché est un entier
- * positif. Les familles multiplicatives se rabattent l'une sur l'autre quand le
- * centre ne s'y prête pas.
+ * Toutes les flèches distinctes que peut porter une famille pour ce centre,
+ * nombre caché entier positif. Bornée : au plus 18 pour `ajout`/`soustraction`,
+ * 8 pour `multiplication`, 16 pour `multiplicationCombinee` (« $\times a + b$ »
+ * ou « $\times a - b$ »), ce qui permet à `choixBranche()` d'en écarter sans
+ * jamais retomber à court d'options pour `ajout`/`soustraction`, seules
+ * familles utilisées en repli.
  */
-function tireBranche(centre: number, categorie: OperationEtoile): BrancheEtoile {
+function branchesPossibles(
+  centre: number,
+  categorie: OperationEtoile,
+): BrancheEtoile[] {
   if (categorie === 'ajout') {
-    const terme = randint(2, Math.min(19, centre - 1))
-    return {
-      operation: 'ajout',
-      facteur: 1,
-      terme,
-      signe: 1,
-      reponse: centre - terme,
+    const max = Math.min(19, centre - 1)
+    const branches: BrancheEtoile[] = []
+    for (let terme = 2; terme <= max; terme++) {
+      branches.push({
+        operation: 'ajout',
+        facteur: 1,
+        terme,
+        signe: 1,
+        reponse: centre - terme,
+      })
     }
+    return branches
   }
   if (categorie === 'soustraction') {
-    const terme = randint(2, 19)
-    return {
-      operation: 'soustraction',
-      facteur: 1,
-      terme,
-      signe: -1,
-      reponse: centre + terme,
+    const branches: BrancheEtoile[] = []
+    for (let terme = 2; terme <= 19; terme++) {
+      branches.push({
+        operation: 'soustraction',
+        facteur: 1,
+        terme,
+        signe: -1,
+        reponse: centre + terme,
+      })
     }
+    return branches
   }
   if (categorie === 'multiplication') {
-    const diviseurs = petitsDiviseurs(centre)
-    if (diviseurs.length === 0) return tireBranche(centre, 'ajout')
-    const facteur = choice(diviseurs)
-    return {
+    return petitsDiviseurs(centre).map((facteur) => ({
       operation: 'multiplication',
       facteur,
       terme: 0,
       signe: 1,
       reponse: centre / facteur,
-    }
+    }))
   }
-  // multiplicationCombinee : « $\times a + b$ » ou « $\times a - b$ ».
   const facteursPossibles = [2, 3, 4, 5, 6, 7, 8, 9].filter(
     (facteur) => centre % facteur !== 0 && centre >= facteur * 2,
   )
-  if (facteursPossibles.length === 0) {
-    return tireBranche(centre, 'multiplication')
-  }
-  const facteur = choice(facteursPossibles)
-  const reste = centre % facteur
-  const signe: 1 | -1 = choice([1, -1])
-  if (signe === 1) {
-    return {
+  const branches: BrancheEtoile[] = []
+  for (const facteur of facteursPossibles) {
+    const reste = centre % facteur
+    branches.push({
       operation: 'multiplicationCombinee',
       facteur,
       terme: reste,
       signe: 1,
       reponse: (centre - reste) / facteur,
-    }
+    })
+    const terme = facteur - reste
+    branches.push({
+      operation: 'multiplicationCombinee',
+      facteur,
+      terme,
+      signe: -1,
+      reponse: (centre + terme) / facteur,
+    })
   }
-  const terme = facteur - reste
-  return {
-    operation: 'multiplicationCombinee',
-    facteur,
-    terme,
-    signe: -1,
-    reponse: (centre + terme) / facteur,
-  }
+  return branches
 }
 
 /** Ce qui distingue deux flèches à l'affichage : évite les doublons évidents. */
@@ -133,12 +139,31 @@ function signature(branche: BrancheEtoile): string {
 }
 
 /**
- * Un centre et ses flèches, sans doublon d'étiquette tant que c'est possible.
- *
- * `operations` donne la famille de chaque flèche, déjà tirée au poids voulu par
- * `gestionnaireFormulaireTexte()` : une retentative ne change donc que les nombres
- * de la flèche, jamais sa famille.
+ * Tire une flèche inédite de la famille demandée. Quand cette famille est
+ * épuisée pour ce centre (par exemple un `multiplication` réclamé plus de fois
+ * qu'il n'y a de diviseurs disponibles entre 2 et 9), se rabat sur une autre
+ * famille plutôt que de répéter une flèche déjà posée dans l'étoile : deux
+ * flèches identiques donneraient deux fois la même question à l'élève.
  */
+function choixBranche(
+  centre: number,
+  categorie: OperationEtoile,
+  vues: Set<string>,
+): BrancheEtoile {
+  const ordre = [categorie, ...TYPES_DE_CALCUL.filter((c) => c !== categorie)]
+  for (const famille of ordre) {
+    const disponibles = branchesPossibles(centre, famille).filter(
+      (branche) => !vues.has(signature(branche)),
+    )
+    if (disponibles.length > 0) return choice(disponibles)
+  }
+  // Toutes les familles sont épuisées pour ce centre : n'arrive jamais en
+  // pratique (ajout et soustraction offrent chacune jusqu'à 18 flèches, pour
+  // au plus 12 flèches par étoile), mais évite de renvoyer `undefined`.
+  return choice(branchesPossibles(centre, categorie))
+}
+
+/** Un centre et ses flèches, jamais deux fois la même question. */
 function genereEtoile(operations: OperationEtoile[]): {
   centre: number
   branches: BrancheEtoile[]
@@ -147,10 +172,7 @@ function genereEtoile(operations: OperationEtoile[]): {
   const branches: BrancheEtoile[] = []
   const vues = new Set<string>()
   for (const categorie of operations) {
-    let branche = tireBranche(centre, categorie)
-    for (let essai = 0; essai < 8 && vues.has(signature(branche)); essai++) {
-      branche = tireBranche(centre, categorie)
-    }
+    const branche = choixBranche(centre, categorie, vues)
     vues.add(signature(branche))
     branches.push(branche)
   }
