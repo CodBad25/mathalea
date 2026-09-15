@@ -112,6 +112,28 @@ export function extraireRacineCarree(n: number): [number, number] {
 }
 
 /**
+ * Généralise extraireRacineCarree à une racine d'indice quelconque.
+ * @param {number} n entier strictement positif
+ * @param {number} indice indice de la racine (2 pour la racine carrée, 3 pour la racine cubique…)
+ * @returns {[number, number]} - [a, n/a^indice] où a^indice est la plus grande puissance indice-ième divisant n
+ */
+export function extraireRacineNieme(
+  n: number,
+  indice: number,
+): [number, number] {
+  if (n <= 0) return [0, n]
+  let a = 1
+  let reste = n
+  for (let i = 2; i ** indice <= reste; i++) {
+    while (reste % i ** indice === 0) {
+      a *= i
+      reste = Math.floor(reste / i ** indice)
+    }
+  }
+  return [a, reste]
+}
+
+/**
  * Renvoie un tableau (somme des termes positifs, somme des termes négatifs)
  * @author Rémi Angot
  */

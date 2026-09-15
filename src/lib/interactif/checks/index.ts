@@ -20,6 +20,11 @@ export {
   noTrigonometry,
 } from './formAtoms'
 export { onlyIrreducibleFractions } from './onlyIrreducibleFractions'
+export {
+  integrationConstantPresence,
+  samePrimitiveUpToConstant,
+  sameFunctionWithConstantFeedback,
+} from './primitiveChecks'
 export { isReduced } from './isReduced'
 export {
   sameWithUnit,
