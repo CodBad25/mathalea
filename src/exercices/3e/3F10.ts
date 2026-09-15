@@ -269,7 +269,8 @@ ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
               champ4: inversion
                 ? { value: d }
                 : { value: `${e};${c}`, options: { suiteDeNombres: true } },
-              champ5: { value: `${e};${c}`, options: { suiteDeNombres: true } },
+              champ5: { value: d },
+              champ6: { value: f },
             },
         {
           formatInteractif: 'multi-mathfield',
