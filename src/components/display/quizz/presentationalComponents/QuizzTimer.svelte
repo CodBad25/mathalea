@@ -8,7 +8,7 @@
 </script>
 
 <div
-  class="w-11/12 max-w-7xl h-3 rounded-full overflow-hidden
+  class="w-11/12 max-w-7xl h-3 overflow-hidden
   bg-coopmaths-corpus/10 dark:bg-coopmathsdark-corpus/10"
   role="progressbar"
   aria-valuemin={0}
@@ -16,7 +16,7 @@
   aria-valuenow={seconds}
 >
   <div
-    class="h-full rounded-full {colorClass} quizz-timer-bar"
+    class="h-full {colorClass} quizz-timer-bar"
     style="animation-duration: {seconds}s"
   ></div>
 </div>

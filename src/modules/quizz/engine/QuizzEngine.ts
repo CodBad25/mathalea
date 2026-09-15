@@ -190,7 +190,11 @@ export class QuizzEngine {
 
     const multiMode = this.opts.multiScoringMode ?? 'balanced'
     const scoring = this.opts.scoring
-    const localAnswer = this.playersAnswers[0] ?? null
+    // Hors multi-joueurs, l'écran de révélation rappelle le choix du joueur
+    // local (la classe en projection). En multi, il n'y a pas de joueur
+    // local : diffuser la réponse d'un élève précis n'aurait pas de sens.
+    const localAnswer =
+      this.opts.mode === 'multi' ? null : (this.playersAnswers[0] ?? null)
 
     const sortedPlayers = currentPlayers
       .map((player) => {

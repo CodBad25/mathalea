@@ -48,6 +48,9 @@
 
   const session = new QuizzMultiManagerSession({
     scoring,
+    // Réglage sonore transmis à la room : il s'applique aux appareils des
+    // joueurs à leur jointure (le bouton son local reste un override).
+    sound: params.sound,
     reconnectGameId,
     onGameId: (gameId) => {
       globalOptions.update((current) => {
@@ -99,7 +102,7 @@
         buildState = 'error'
         return
       }
-      session.setQuizz(result.quizz, scoring)
+      session.setQuizz(result.quizz, scoring, params.usernameMode)
       buildState = 'ok'
     }
     await session.init()
@@ -277,7 +280,7 @@
 
   {#if $quizzProgress.total > 0 && $step === 'game' && $quizzStatus?.name !== 'FINISHED'}
     <div
-      class="fixed top-4 left-4 z-20 px-3 py-1 rounded-full text-sm font-bold shadow
+      class="fixed top-4 left-4 z-20 px-3 py-1 text-sm font-bold shadow
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
       text-coopmaths-struct dark:text-coopmathsdark-struct"
     >
@@ -287,7 +290,7 @@
 
   {#if $connectionLost}
     <div
-      class="fixed top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-full text-sm font-bold shadow
+      class="fixed top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-2 text-sm font-bold shadow
       bg-amber-600 text-white"
     >
       Connexion perdue, reconnexion en cours…
@@ -297,7 +300,7 @@
   {#if $lastError != null && $step !== 'error'}
     <button
       type="button"
-      class="fixed top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-xl text-sm font-bold shadow
+      class="fixed top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-2 text-sm font-bold shadow
       bg-coopmaths-action text-coopmaths-canvas
       dark:bg-coopmathsdark-action dark:text-coopmathsdark-canvas"
       title="Fermer"
@@ -309,7 +312,7 @@
   {#if $notice != null}
     <button
       type="button"
-      class="fixed top-16 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-xl text-sm font-semibold shadow
+      class="fixed top-16 left-1/2 -translate-x-1/2 z-30 px-4 py-2 text-sm font-semibold shadow
       bg-coopmaths-struct text-coopmaths-canvas
       dark:bg-coopmathsdark-struct dark:text-coopmathsdark-canvas"
       title="Fermer"
@@ -336,7 +339,7 @@
       </p>
       <button
         type="button"
-        class="px-4 py-2 rounded-xl font-bold shadow
+        class="px-4 py-2 font-bold shadow
         text-coopmaths-canvas bg-coopmaths-action
         hover:bg-coopmaths-action-lightest
         dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"
@@ -363,7 +366,7 @@
       <div class="flex flex-row gap-3">
         <button
           type="button"
-          class="px-4 py-2 rounded-xl font-bold shadow
+          class="px-4 py-2 font-bold shadow
           text-coopmaths-canvas bg-coopmaths-struct
           hover:bg-coopmaths-struct-light
           dark:bg-coopmathsdark-struct dark:hover:bg-coopmathsdark-struct-light"
@@ -373,7 +376,7 @@
         </button>
         <button
           type="button"
-          class="px-4 py-2 rounded-xl font-bold shadow
+          class="px-4 py-2 font-bold shadow
           text-coopmaths-canvas bg-coopmaths-action
           hover:bg-coopmaths-action-lightest
           dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"
@@ -385,7 +388,7 @@
     </div>
   {:else if $step === 'email' || $step === 'code' || $step === 'creating'}
     <div
-      class="flex flex-col items-center gap-6 rounded-2xl shadow-xl px-10 py-8 mx-6
+      class="flex flex-col items-center gap-6 shadow-xl px-10 py-8 mx-6
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas max-w-xl"
     >
       <h1
@@ -411,14 +414,14 @@
             bind:value={emailInput}
             placeholder="prenom.nom@ac-…fr"
             autocomplete="on"
-            class="w-full px-4 py-3 rounded-xl border-2 text-lg text-center
+            class="w-full px-4 py-3 border-2 text-lg text-center
             border-coopmaths-struct/30 focus:border-coopmaths-action
             bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark
             text-coopmaths-corpus dark:text-coopmathsdark-corpus"
           />
           <button
             type="submit"
-            class="px-6 py-3 rounded-xl text-lg font-bold shadow
+            class="px-6 py-3 text-lg font-bold shadow
             text-coopmaths-canvas bg-coopmaths-action
             hover:bg-coopmaths-action-lightest
             dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest
@@ -449,14 +452,14 @@
             inputmode="numeric"
             maxlength="6"
             autocomplete="one-time-code"
-            class="w-48 px-4 py-3 rounded-xl border-2 text-2xl text-center tracking-widest
+            class="w-48 px-4 py-3 border-2 text-2xl text-center tracking-widest
             border-coopmaths-struct/30 focus:border-coopmaths-action
             bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark
             text-coopmaths-corpus dark:text-coopmathsdark-corpus"
           />
           <button
             type="submit"
-            class="px-6 py-3 rounded-xl text-lg font-bold shadow
+            class="px-6 py-3 text-lg font-bold shadow
             text-coopmaths-canvas bg-coopmaths-action
             hover:bg-coopmaths-action-lightest
             dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest
@@ -523,7 +526,7 @@
       </p>
       <button
         type="button"
-        class="px-4 py-2 rounded-xl font-bold shadow
+        class="px-4 py-2 font-bold shadow
         text-coopmaths-canvas bg-coopmaths-action
         hover:bg-coopmaths-action-lightest
         dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"

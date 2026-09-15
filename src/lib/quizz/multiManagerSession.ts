@@ -13,6 +13,7 @@ import type {
   QuizzScoring,
   QuizzStatusDataMap,
   QuizzUpdateQuestion,
+  QuizzUsernameMode,
 } from '../../modules/quizz/types'
 import { QUIZZ_WS_PATH, QUIZZ_WS_URL } from './config'
 import { getQuizzClientId } from './quizzClientId'
@@ -60,6 +61,13 @@ export interface ManagerSessionOptions {
   /** Quizz complet à envoyer à createGame (absent en cas de reconnexion). */
   quizz?: Quizz
   scoring?: QuizzScoring
+  /** Mode d'attribution des pseudos (vérifié côté serveur à player:login). */
+  usernameMode?: QuizzUsernameMode
+  /**
+   * Habillage sonore choisi par le créateur : devient un réglage de la room
+   * (transmis aux joueurs à la jointure) — défaut true.
+   */
+  sound?: boolean
   /** gameId présent dans l'URL : reconnexion à une room existante. */
   reconnectGameId?: string
   /** Persiste le gameId dans l'URL (null pour l'effacer). */
@@ -152,9 +160,14 @@ export class QuizzMultiManagerSession {
   }
 
   /** Fournit le quizz à créer (construit de façon asynchrone par le composant). */
-  setQuizz(quizz: Quizz, scoring: QuizzScoring): void {
+  setQuizz(
+    quizz: Quizz,
+    scoring: QuizzScoring,
+    usernameMode: QuizzUsernameMode = 'free',
+  ): void {
     this.options.quizz = quizz
     this.options.scoring = scoring
+    this.options.usernameMode = usernameMode
   }
 
   /** Abonne un écouteur aux événements annexes bruts (habillage sonore). */
@@ -238,6 +251,12 @@ export class QuizzMultiManagerSession {
             ticket,
             quizz,
             scoring: this.options.scoring ?? 'full',
+            // Le serveur fait autorité sur la vérification des pseudos :
+            // 'safe' exige un prénom de la liste autorisée (player:login).
+            usernameMode: this.options.usernameMode ?? 'free',
+            // Réglage sonore de la room : initialisé sur l'appareil de chaque
+            // joueur à la jointure (game:successRoom), réglable ensuite localement.
+            sound: this.options.sound ?? true,
           })
         },
       ),

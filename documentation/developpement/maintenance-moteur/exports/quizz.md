@@ -7,12 +7,12 @@ plateforme Razzia (licence MIT, voir `NOTICE` à la racine du dépôt).
 
 ## Routage et paramètres d'URL
 
-| Paramètre | Rôle |
-| --- | --- |
+| Paramètre     | Rôle                                                                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `v=quizzconf` | Vue de configuration (`src/components/setup/quizz/QuizzConf.svelte`), entrée « Quizz » du menu « Autres exports ». |
-| `v=quizz` | Vue d'exécution plein écran (`src/components/display/quizz/Quizz.svelte`). |
-| `subject` | Titre du quizz (champ de `InterfaceGlobalOptions`). |
-| `quizzParam` | Réglages du quizz en base64 (JSON). |
+| `v=quizz`     | Vue d'exécution plein écran (`src/components/display/quizz/Quizz.svelte`).                                         |
+| `subject`     | Titre du quizz (champ de `InterfaceGlobalOptions`).                                                                |
+| `quizzParam`  | Réglages du quizz en base64 (JSON).                                                                                |
 
 `subject` et `quizzParam` sont déclarés dans `InterfaceGlobalOptions`
 (`src/lib/types.ts`), parsés par `mathaleaUpdateExercicesParamsFromUrl` et
@@ -32,7 +32,8 @@ endroits pour survivre.
   "background": { "mode": "none | fixed | random", "image": "fichier.jpg" },
   "sound": true,
   "cooldown": 5,
-  "times": [20, 30]
+  "times": [20, 30],
+  "usernameMode": "free | safe"
 }
 ```
 
@@ -50,6 +51,19 @@ endroits pour survivre.
   `tasks/updateQuizzBackgrounds.js`, chaîné à `pnpm makeJson`).
 - `cooldown` : durée d'affichage de l'énoncé seul (3-15 s).
 - `times` : temps de réponse par exercice de la sélection (5-120 s, défaut 20).
+- `usernameMode` (multi-joueurs) : `free` (défaut — l'élève choisit son
+  pseudo, unique dans la room) ou `safe` — le pseudo doit être un prénom de
+  la liste autorisée du serveur de jeu (`src/data/safe_usernames.json` côté
+  ws) : transmis à `manager:createGame`, annoncé au joueur par
+  `game:successRoom`, vérifié à `player:login` (comparaison insensible à la
+  casse et aux accents, forme canonique de la liste enregistrée, homonymes
+  suffixés d'un numéro par le serveur ; erreur `username-not-allowed`).
+- `sound` : habillage sonore activé (défaut) ou coupé. En solo/projection,
+  règle locale de l'appareil. En multi-joueurs, le réglage devient une
+  propriété de la room, comme `usernameMode` : transmis à
+  `manager:createGame`, annoncé au joueur par `game:successRoom`, il
+  initialise le bouton son de chaque appareil (qui reste libre d'être
+  changé localement ensuite).
 
 Le codec (`src/lib/quizz/quizzParams.ts`) est défensif : toute valeur absente
 ou invalide est remplacée par sa valeur par défaut.
@@ -142,11 +156,11 @@ déploiement o2switch) fait foi côté serveur ; ici on ne décrit que le client
 
 ### Routage et paramètres d'URL supplémentaires
 
-| Paramètre | Rôle |
-| --- | --- |
+| Paramètre   | Rôle                                                                                                                                         |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | `quizzRole` | `manager` (création/pilotage) ou `player` (jointure). Absent avec `quizzParam.mode = 'multi'` : parcours manager (lien de réglages partagé). |
-| `pin` | PIN à 6 chiffres de la room (lien joueur : `?v=quizz&quizzRole=player&pin=XXXXXX`). |
-| `gameId` | Identifiant serveur de la room, écrit dans l'URL après création/jointure : permet la reconnexion au rechargement. |
+| `pin`       | PIN à 6 chiffres de la room (lien joueur : `?v=quizz&quizzRole=player&pin=XXXXXX`).                                                          |
+| `gameId`    | Identifiant serveur de la room, écrit dans l'URL après création/jointure : permet la reconnexion au rechargement.                            |
 
 Comme `subject`/`quizzParam`, ces paramètres sont déclarés dans
 `InterfaceGlobalOptions`, parsés par `mathaleaUpdateExercicesParamsFromUrl`
@@ -177,7 +191,10 @@ sinon vers la V1 (`Quizz.svelte`), inchangée.
   joueurs avec exclusion) → pilotage (`startGame`/`nextQuestion`/
   `showLeaderboard`/`abortQuiz`, mêmes commandes qu'en projection, clavier
   inclus) → podium + export CSV des résultats (`quizzResults.ts`, construit
-  depuis `game:results`, reçu au seul manager à `FINISHED`).
+  depuis `game:results`, reçu au seul manager à `FINISHED`). À la
+  révélation, seule la bonne réponse ressort sur l'écran manager :
+  `SHOW_RESPONSES.selected` est toujours `null` en multi (pas de joueur
+  local ; en projection, ce champ rappelle le choix de la classe).
 - Parcours joueur (`QuizzMultiPlayer.svelte`) : PIN (jointure automatique si
   présent dans l'URL) → pseudo → attente → jeu ; `SELECT_ANSWER` est
   interactif côté joueur, spectateur (avec compteur de réponses) côté

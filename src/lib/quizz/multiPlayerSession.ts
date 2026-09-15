@@ -10,6 +10,7 @@ import {
 import type {
   QuizzPlayer,
   QuizzUpdateQuestion,
+  QuizzUsernameMode,
 } from '../../modules/quizz/types'
 import { QUIZZ_WS_PATH, QUIZZ_WS_URL } from './config'
 import { getQuizzClientId } from './quizzClientId'
@@ -79,6 +80,18 @@ export class QuizzMultiPlayerSession {
   readonly endMessage = writable<string | null>(null)
   /** Identité et points du joueur (restitués à la reconnexion). */
   readonly myPlayer = writable<QuizzPlayer | null>(null)
+  /**
+   * Mode d'attribution des pseudos de la room (transmis par
+   * game:successRoom) : 'safe' → l'écran de saisie demande un prénom de
+   * la liste autorisée, vérifié par le serveur à player:login.
+   */
+  readonly usernameMode = writable<QuizzUsernameMode>('free')
+  /**
+   * Habillage sonore choisi par le créateur de la room (transmis par
+   * game:successRoom) : état initial du bouton son de l'appareil, qui
+   * reste ensuite libre d'être changé localement.
+   */
+  readonly sound = writable<boolean>(true)
   /** Perte de connexion transport (reconnexion automatique en cours). */
   readonly connectionLost = writable(false)
 
@@ -207,20 +220,23 @@ export class QuizzMultiPlayerSession {
     this.unsubscribers.push(
       transport.onStatus((message) => this.handleStatus(message)),
       transport.onEvent((event, payload) => this.handleEvent(event, payload)),
-      transport.onServerEvent<{ gameId: string }>(
-        'game:successRoom',
-        ({ gameId }) => {
-          this.gameId = gameId
-          this.options.onPin?.(this.pin)
-          this.options.onGameId?.(gameId)
-          if (this.reconnectAfterJoin) {
-            // Rechargement de page : le siège est retrouvé via le clientId.
-            this.transport?.send('player:reconnect', { gameId })
-          } else {
-            this.step.set('pseudo')
-          }
-        },
-      ),
+      transport.onServerEvent<{
+        gameId: string
+        usernameMode?: QuizzUsernameMode
+        sound?: boolean
+      }>('game:successRoom', ({ gameId, usernameMode, sound }) => {
+        this.gameId = gameId
+        if (usernameMode != null) this.usernameMode.set(usernameMode)
+        if (typeof sound === 'boolean') this.sound.set(sound)
+        this.options.onPin?.(this.pin)
+        this.options.onGameId?.(gameId)
+        if (this.reconnectAfterJoin) {
+          // Rechargement de page : le siège est retrouvé via le clientId.
+          this.transport?.send('player:reconnect', { gameId })
+        } else {
+          this.step.set('pseudo')
+        }
+      }),
       transport.onServerEvent('game:successJoin', () => {
         this.hasUsername = true
         this.step.set('game')

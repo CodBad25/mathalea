@@ -49,7 +49,15 @@
       })
     },
   })
-  const { step, lastError, endMessage, myPlayer, connectionLost } = session
+  const {
+    step,
+    lastError,
+    endMessage,
+    myPlayer,
+    usernameMode,
+    sound: roomSound,
+    connectionLost,
+  } = session
 
   let sounds: QuizzSounds | null = null
   let soundOn = true
@@ -100,6 +108,14 @@
   function toggleSound() {
     soundOn = !soundOn
     sounds?.setEnabled(soundOn)
+  }
+
+  // Réglage sonore de la room, reçu à la jointure (game:successRoom) :
+  // état initial du bouton son, qui reste ensuite propre à l'appareil.
+  $: applyRoomSound($roomSound)
+  function applyRoomSound(value: boolean) {
+    soundOn = value
+    sounds?.setEnabled(value)
   }
 
   function goHome() {
@@ -171,7 +187,7 @@
 
   {#if $myPlayer != null && $step === 'game' && $quizzStatus?.name !== 'FINISHED'}
     <div
-      class="fixed top-4 right-4 z-20 px-3 py-1 rounded-full text-sm font-bold shadow
+      class="fixed top-4 right-4 z-20 px-3 py-1 text-sm font-bold shadow
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
       text-coopmaths-struct dark:text-coopmathsdark-struct"
     >
@@ -183,7 +199,7 @@
 
   {#if $quizzProgress.total > 0 && $step === 'game' && $quizzStatus?.name !== 'FINISHED'}
     <div
-      class="fixed top-4 left-4 z-20 px-3 py-1 rounded-full text-sm font-bold shadow
+      class="fixed top-4 left-4 z-20 px-3 py-1 text-sm font-bold shadow
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
       text-coopmaths-struct dark:text-coopmathsdark-struct"
     >
@@ -193,7 +209,7 @@
 
   {#if $connectionLost}
     <div
-      class="fixed top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-full text-sm font-bold shadow
+      class="fixed top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-2 text-sm font-bold shadow
       bg-amber-600 text-white"
     >
       Connexion perdue, reconnexion en cours…
@@ -219,7 +235,7 @@
       </p>
       <button
         type="button"
-        class="px-4 py-2 rounded-xl font-bold shadow
+        class="px-4 py-2 font-bold shadow
         text-coopmaths-canvas bg-coopmaths-action
         hover:bg-coopmaths-action-lightest
         dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"
@@ -230,7 +246,7 @@
     </div>
   {:else if $step === 'pin'}
     <div
-      class="flex flex-col items-center gap-6 rounded-2xl shadow-xl px-10 py-8 mx-6
+      class="flex flex-col items-center gap-6 shadow-xl px-10 py-8 mx-6
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas max-w-xl"
     >
       <h1
@@ -250,7 +266,7 @@
           inputmode="numeric"
           maxlength="6"
           autocomplete="off"
-          class="w-56 px-4 py-3 rounded-xl border-2 text-3xl text-center tracking-widest
+          class="w-56 px-4 py-3 border-2 text-3xl text-center tracking-widest
           border-coopmaths-struct/30 focus:border-coopmaths-action
           bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark
           text-coopmaths-corpus dark:text-coopmathsdark-corpus"
@@ -264,7 +280,7 @@
         {/if}
         <button
           type="submit"
-          class="px-6 py-3 rounded-xl text-lg font-bold shadow
+          class="px-6 py-3 text-lg font-bold shadow
           text-coopmaths-canvas bg-coopmaths-action
           hover:bg-coopmaths-action-lightest
           dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest
@@ -278,14 +294,14 @@
     </div>
   {:else if $step === 'pseudo'}
     <div
-      class="flex flex-col items-center gap-6 rounded-2xl shadow-xl px-10 py-8 mx-6
+      class="flex flex-col items-center gap-6 shadow-xl px-10 py-8 mx-6
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas max-w-xl"
     >
       <h1
         class="text-2xl font-extrabold text-center
         text-coopmaths-struct dark:text-coopmathsdark-struct"
       >
-        Choisis ton pseudo
+        {$usernameMode === 'safe' ? 'Choisis ton prénom' : 'Choisis ton pseudo'}
       </h1>
       <form
         class="flex flex-col items-center gap-4 w-full"
@@ -294,11 +310,11 @@
         <input
           type="text"
           bind:value={usernameInput}
-          placeholder="Ton pseudo"
+          placeholder={$usernameMode === 'safe' ? 'Ton prénom' : 'Ton pseudo'}
           maxlength="20"
           autocomplete="off"
           autocapitalize="sentences"
-          class="w-64 px-4 py-3 rounded-xl border-2 text-2xl text-center
+          class="w-64 px-4 py-3 border-2 text-2xl text-center
           border-coopmaths-struct/30 focus:border-coopmaths-action
           bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark
           text-coopmaths-corpus dark:text-coopmathsdark-corpus"
@@ -312,7 +328,7 @@
         {/if}
         <button
           type="submit"
-          class="px-6 py-3 rounded-xl text-lg font-bold shadow
+          class="px-6 py-3 text-lg font-bold shadow
           text-coopmaths-canvas bg-coopmaths-action
           hover:bg-coopmaths-action-lightest
           dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest
@@ -323,6 +339,15 @@
           C'est parti !
         </button>
       </form>
+      {#if $usernameMode === 'safe'}
+        <p
+          class="text-sm font-light text-center text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+        >
+          Ton prénom est vérifié : il doit figurer dans la liste autorisée par
+          ton enseignant. S’il est déjà pris, un numéro te sera attribué (ex. «
+          Ada 2 »).
+        </p>
+      {/if}
     </div>
   {:else if $step === 'game'}
     {#if $quizzStatus != null}
@@ -351,7 +376,7 @@
       <div class="flex flex-row gap-3">
         <button
           type="button"
-          class="px-4 py-2 rounded-xl font-bold shadow
+          class="px-4 py-2 font-bold shadow
           text-coopmaths-canvas bg-coopmaths-action
           hover:bg-coopmaths-action-lightest
           dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"
@@ -361,7 +386,7 @@
         </button>
         <button
           type="button"
-          class="px-4 py-2 rounded-xl font-bold shadow
+          class="px-4 py-2 font-bold shadow
           text-coopmaths-canvas bg-coopmaths-struct
           hover:bg-coopmaths-struct-light
           dark:bg-coopmathsdark-struct dark:hover:bg-coopmathsdark-struct-light"

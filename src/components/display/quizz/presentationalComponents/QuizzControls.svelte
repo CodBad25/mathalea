@@ -34,13 +34,13 @@
   export let onCloseRoom: (() => void) | undefined = undefined
 
   const buttonClass =
-    'px-4 py-2 rounded-xl font-bold shadow text-sm md:text-base ' +
+    'px-4 py-2 font-bold shadow text-sm md:text-base ' +
     'text-coopmaths-canvas bg-coopmaths-action ' +
     'hover:bg-coopmaths-action-lightest ' +
     'dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest ' +
     'dark:text-coopmathsdark-canvas'
   const secondaryClass =
-    'px-4 py-2 rounded-xl font-bold shadow text-sm md:text-base ' +
+    'px-4 py-2 font-bold shadow text-sm md:text-base ' +
     'text-coopmaths-canvas bg-coopmaths-struct ' +
     'hover:bg-coopmaths-struct-light ' +
     'dark:bg-coopmathsdark-struct dark:hover:bg-coopmathsdark-struct-light'
@@ -106,7 +106,7 @@
   {/if}
   <button
     type="button"
-    class="flex items-center justify-center h-10 w-10 rounded-xl shadow
+    class="flex items-center justify-center h-10 w-10 shadow
     bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
     text-coopmaths-struct dark:text-coopmathsdark-struct"
     title={sound ? 'Couper les sons' : 'Activer les sons'}
@@ -117,7 +117,7 @@
   </button>
   <button
     type="button"
-    class="flex items-center justify-center h-10 w-10 rounded-xl shadow
+    class="flex items-center justify-center h-10 w-10 shadow
     bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
     text-coopmaths-struct dark:text-coopmathsdark-struct"
     title="Quitter le quizz"

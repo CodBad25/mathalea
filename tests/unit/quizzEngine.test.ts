@@ -243,6 +243,60 @@ describe('QuizzEngine', () => {
     expect(leaderboard).toBeDefined()
     expect(leaderboard?.target).toBe('mgr')
   })
+
+  it('SHOW_RESPONSES ne diffuse aucune réponse sélectionnée en multi-joueurs', async () => {
+    const transport = new LocalTransport()
+    const messages: QuizzStatusMessage[] = []
+    transport.onStatus((m) => messages.push(m))
+    transport.onEvent(() => {})
+    const players = new QuizzPlayerManager()
+    players.add({ id: 'p1', username: 'Alicia', points: 0, streak: 0 })
+    players.add({ id: 'p2', username: 'Bilal', points: 0, streak: 0 })
+    const engine = new QuizzEngine({
+      quizz: makeQuizz(),
+      players,
+      transport,
+      mode: 'multi',
+      scoring: 'full',
+      managerId: 'mgr',
+    })
+    void engine.start()
+    await avancerJusquaSelect()
+    engine.selectAnswer('p1', [1])
+    engine.selectAnswer('p2', [0])
+    await vi.advanceTimersByTimeAsync(1000)
+
+    const responses = messages.find(
+      (m) => m.name === QUIZZ_STATUS.SHOW_RESPONSES,
+    )
+    const responsesData = responses?.data as QuizzStatusDataMap['SHOW_RESPONSES']
+    // La réponse du premier joueur ayant répondu ne doit pas ressortir :
+    // seule la bonne réponse est mise en évidence sur l'écran de révélation.
+    expect(responsesData.selected).toBeNull()
+    expect(responsesData.responses).toEqual({ 0: 1, 1: 1 })
+
+    // Le verdict personnel conserve, lui, la réponse de chaque joueur
+    // (verdicts envoyés dans l'ordre du classement : p1 correcte d'abord).
+    const verdicts = messages.filter((m) => m.name === QUIZZ_STATUS.SHOW_RESULT)
+    expect(verdicts).toHaveLength(2)
+    const verdictP1 = verdicts[0].data as QuizzStatusDataMap['SHOW_RESULT']
+    const verdictP2 = verdicts[1].data as QuizzStatusDataMap['SHOW_RESULT']
+    expect(verdictP1.selected).toEqual([1])
+    expect(verdictP2.selected).toEqual([0])
+  })
+
+  it('SHOW_RESPONSES rappelle le choix de la classe en projection', async () => {
+    const { engine, messages } = setup('projection')
+    void engine.start()
+    await avancerJusquaSelect()
+    engine.selectAnswer('p1', [1])
+    await vi.advanceTimersByTimeAsync(1000)
+    const responses = messages.find(
+      (m) => m.name === QUIZZ_STATUS.SHOW_RESPONSES,
+    )
+    const responsesData = responses?.data as QuizzStatusDataMap['SHOW_RESPONSES']
+    expect(responsesData.selected).toEqual([1])
+  })
 })
 
 describe('analyseExerciceQuizz', () => {

@@ -42,6 +42,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   'game-started': 'La partie a déjà commencé.',
   'seat-not-found': 'Session introuvable : rejoignez la partie à nouveau.',
   'username-taken': 'Ce pseudo est déjà pris, choisissez-en un autre.',
+  'username-not-allowed':
+    'Ce prénom n’est pas autorisé pour cette partie : saisis ton prénom (il est vérifié par ton enseignant).',
 }
 
 /**

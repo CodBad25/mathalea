@@ -17,7 +17,7 @@
     {data.subject}
   </h1>
   <div
-    class="flex items-center justify-center h-28 w-28 rounded-3xl
+    class="flex items-center justify-center h-28 w-28
     bg-coopmaths-action dark:bg-coopmathsdark-action
     text-white text-5xl font-extrabold shadow-xl
     {($quizzCooldownTick ?? 0) > 0 ? 'quizz-pulse' : ''}"
