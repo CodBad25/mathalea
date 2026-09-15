@@ -1,4 +1,5 @@
 import { context } from '../../modules/context'
+import { renderKatexIncludingShadowRoots } from '../latex/renderKatex'
 import type { IExercice } from '../types'
 export const listOfCustomElements = [
   'interactive-clock',
@@ -251,6 +252,7 @@ export default class MathaleaCustomElement extends HTMLElement {
   connectedCallback() {
     this.hydrateCommonAttributes()
     this.render()
+    if (!this.interactivityOn) this.renderReadOnlyMath()
   }
 
   disconnectedCallback() {
@@ -288,10 +290,16 @@ export default class MathaleaCustomElement extends HTMLElement {
     this._interactivityOn = isOn
     this.setAttribute('interactivity-on', isOn ? 'true' : 'false')
     this.onInteractivityChanged(isOn)
+    if (!isOn) this.renderReadOnlyMath()
   }
 
   protected onInteractivityChanged(_isOn: boolean): void {
     // Hook pour les classes filles.
+  }
+
+  /** Rend le LaTeX affiché par la version figée, y compris dans le shadow DOM. */
+  protected renderReadOnlyMath(): void {
+    renderKatexIncludingShadowRoots(this)
   }
 
   protected hydrateCommonAttributes(): void {
