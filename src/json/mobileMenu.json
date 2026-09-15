@@ -5,6 +5,7 @@
       "title": "Collège",
       "subtitle": "6e · 5e · 4e · 3e · Brevet",
       "icon": "bx-backpack",
+      "locales": ["fr-FR"],
       "entries": [
         {
           "id": "6e",
@@ -43,6 +44,7 @@
       "title": "Lycée Général",
       "subtitle": "2de · 1re · Tle · Bac",
       "icon": "bx-graduation",
+      "locales": ["fr-FR"],
       "entries": [
         {
           "id": "2e",
@@ -95,6 +97,7 @@
       "title": "Lycée Professionnel",
       "subtitle": "2de · 1re",
       "icon": "bx-graduation",
+      "locales": ["fr-FR"],
       "entries": [
         {
           "id": "bp2",
@@ -111,11 +114,87 @@
       ]
     },
     {
+      "id": "primaire",
+      "title": "Primaire",
+      "subtitle": "Automatismes",
+      "icon": "bx-child",
+      "locales": ["fr-CH"],
+      "entries": [
+        {
+          "id": "primaire",
+          "title": "Primaire",
+          "referentiel": "aleatoires",
+          "path": ["Primaire"]
+        }
+      ]
+    },
+    {
+      "id": "ecoleObligatoire",
+      "title": "École obligatoire",
+      "subtitle": "9e · 10e · 11e",
+      "icon": "bx-backpack",
+      "locales": ["fr-CH"],
+      "entries": [
+        {
+          "id": "9e",
+          "title": "9e",
+          "referentiel": "aleatoires",
+          "path": ["9e"]
+        },
+        {
+          "id": "10e",
+          "title": "10e",
+          "referentiel": "aleatoires",
+          "path": ["10e"]
+        },
+        {
+          "id": "11e",
+          "title": "11e",
+          "referentiel": "aleatoires",
+          "path": ["11e"]
+        }
+      ]
+    },
+    {
+      "id": "secondaireII",
+      "title": "Collège",
+      "subtitle": "1re · 2e · 3e · 4e",
+      "icon": "bx-graduation",
+      "locales": ["fr-CH"],
+      "entries": [
+        {
+          "id": "1e-college",
+          "title": "1re",
+          "referentiel": "aleatoires",
+          "path": ["1re Collège"]
+        },
+        {
+          "id": "2e-college",
+          "title": "2e",
+          "referentiel": "aleatoires",
+          "path": ["2e Collège"]
+        },
+        {
+          "id": "3e-college",
+          "title": "3e",
+          "referentiel": "aleatoires",
+          "path": ["3e Collège"]
+        },
+        {
+          "id": "4e-college",
+          "title": "4e",
+          "referentiel": "aleatoires",
+          "path": ["4e Collège"]
+        }
+      ]
+    },
+    {
       "id": "can",
       "title": "Course aux nombres",
       "subtitle": "CE · CM · 6e … Terminale",
       "icon": "bx-timer",
       "views": ["typst", "mobile"],
+      "locales": ["fr-FR"],
       "entries": [
         {
           "id": "can-ce",
@@ -179,6 +258,7 @@
       "subtitle": "Annales d'examens · Ressources partenaires",
       "icon": "bx-library",
       "views": ["typst"],
+      "locales": ["fr-FR"],
       "entries": [
         {
           "id": "annales",

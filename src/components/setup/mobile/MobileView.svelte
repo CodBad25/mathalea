@@ -1,7 +1,10 @@
 <script lang="ts">
   import { onMount, setContext, tick } from 'svelte'
   import { get } from 'svelte/store'
-  import { mobileMenuSections, nodeLabel } from '../../../lib/components/mobileMenu'
+  import {
+    mobileMenuSectionsForLocale,
+    nodeLabel,
+  } from '../../../lib/components/mobileMenu'
   import { mathaleaGenerateSeed } from '../../../lib/mathalea'
   import { scrollToLastExercise } from '../../../lib/scrollToLastExercise'
   import { banquesExternes } from '../../../lib/stores/banquesExternesStore'
@@ -59,6 +62,7 @@
     void $banquesExternes
     return getReferentiels(get(referentielLocale))
   })
+  const mobileMenuSections = mobileMenuSectionsForLocale(get(referentielLocale))
 
   /** Chemin courant : [rubrique, niveau, ...clés du référentiel]. */
   let path = $state<string[]>([])

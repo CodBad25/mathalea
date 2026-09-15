@@ -70,7 +70,18 @@ sont décrites dans
   `ressources`, `statiques`.
 - `path` est le chemin des clés brutes du référentiel (`["BrevetTags"]`,
   `["40_Épreuves de Première - Par thème"]`, …). Une entrée dont le chemin ne se
-  résout pas (par exemple en locale `fr-CH`) n'affiche simplement aucun contenu.
+  résout pas n'affiche simplement aucun contenu : c'est pour cette raison que
+  les rubriques françaises (`college`, `lycee`, `lyceePro`, `can`) et suisses
+  (`primaire`, `ecoleObligatoire`, `secondaireII`) sont déclarées séparément
+  avec des chemins propres à chaque référentiel, plutôt que partagées.
+- `locales` (optionnel) restreint une rubrique ou une entrée aux locales
+  listées (mêmes valeurs que `Language`, ex. `["fr-CH"]`) ; sans ce champ, la
+  rubrique/entrée est proposée quelle que soit la locale du référentiel
+  affiché (`referentielLocale`). `mobileMenuSectionsForLocale(lang)` et
+  `typstMenuSectionsForLocale(lang)`
+  ([`lib/components/mobileMenu.ts`](../../../../src/lib/components/mobileMenu.ts))
+  filtrent à la fois les rubriques et leurs entrées, puis retirent les
+  rubriques devenues vides.
 - `externalLinks` (optionnel) liste des liens ouverts dans un nouvel onglet,
   affichés en tuiles au-dessus des thèmes lorsqu'on est directement sur l'écran
   du niveau (`path` de longueur 2, ex. `["lycee", "2e"]`). Utilisé par exemple
@@ -84,10 +95,11 @@ sont décrites dans
   aussi à la modale « Ajouter un exercice » de la
   [vue Typst](../exports/typst.md#ajouter-un-exercice-depuis-laperçu) : les
   rubriques sans `views` sont proposées partout, `"views": ["typst"]` réserve
-  une rubrique à cette modale (c'est le cas de « Course aux nombres » et de
-  « Ressources complémentaires », absentes du téléphone).
+  une rubrique à cette modale (c'est le cas de « Ressources complémentaires »,
+  absente du téléphone ; « Course aux nombres » a `"views": ["typst",
+  "mobile"]` et est donc proposée aux deux).
   [`lib/components/mobileMenu.ts`](../../../../src/lib/components/mobileMenu.ts)
-  en tire `mobileMenuSections` et `typstMenuSections`.
+  en tire `mobileMenuSectionsForLocale()` et `typstMenuSectionsForLocale()`.
 
 Ajouter un niveau au menu mobile ne demande donc **que** l'ajout d'une entrée
 dans ce fichier.
