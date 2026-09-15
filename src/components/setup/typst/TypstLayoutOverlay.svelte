@@ -457,8 +457,8 @@
 
   // resynchronise les brouillons quand le code change (après enregistrement
   // ou suppression) ; la frappe dans un brouillon ne repasse pas ici.
-  // Les sauts de page/colonne sont pilotés par leurs boutons dédiés (espace
-  // `exo` uniquement, une correction n'en a pas).
+  // Les sauts de page/colonne sont pilotés par leurs boutons dédiés (dans
+  // les deux espaces), donc exclus du panneau de texte/section.
   $effect(() => {
     if (openInsertion != null) {
       drafts = insertionsAt(openInsertion.space, openInsertion.num)
@@ -471,11 +471,19 @@
     }
   })
 
-  /** Ajoute ou retire un saut de page/colonne au repère de gap `num` (espace `exo` uniquement) */
-  function toggleBreak(num: number, snippet: string) {
-    const index = (insertions[num] ?? []).indexOf(snippet)
-    if (index >= 0) onDeleteInsertion(num, index)
-    else onInsert(num, snippet)
+  /**
+   * Ajoute ou retire un saut de page/colonne au repère `num` de l'espace
+   * `space` (`exo` : après un exercice ; `corr` : avant une correction).
+   */
+  function toggleBreak(space: InsertionSpace, num: number, snippet: string) {
+    const index = insertionsAt(space, num).indexOf(snippet)
+    if (space === 'corr') {
+      if (index >= 0) onDeleteInsertionCorrection(num, index)
+      else onInsertCorrection(num, snippet)
+    } else {
+      if (index >= 0) onDeleteInsertion(num, index)
+      else onInsert(num, snippet)
+    }
   }
 
   function toggleInsertion(space: InsertionSpace, num: number) {
@@ -1369,12 +1377,14 @@
       </div>
     {:else if widget.kind === 'corr'}
       <!-- barre de la correction (pendant de la barre 'exo' de l'énoncé) :
-           insertion d'un texte ou d'un titre de section avant elle, et
-           édition de son code Typst. Même position (bord droit de la colonne
-           qui la contient) que la barre 'exo'. -->
+           insertion d'un texte ou d'un titre de section avant elle, saut de
+           page avant elle, et édition de son code Typst. Même position
+           (bord droit de la colonne qui la contient) que la barre 'exo'. -->
       {@const columnWidth = 100 / Math.max(documentColumns, 1)}
       {@const columnRight =
         (Math.floor(widget.left / columnWidth) + 1) * columnWidth}
+      {@const corrInsertions = insertionsCorrection[widget.num] ?? []}
+      {@const hasPageBreak = corrInsertions.includes(PAGE_BREAK_SNIPPET)}
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
         class:typst-pill-force-visible={openInsertion?.space === 'corr' &&
@@ -1394,6 +1404,23 @@
           onclick={() => toggleInsertion('corr', widget.num)}
         >
           <i class="bx bx-plus-circle"></i>
+        </button>
+        <span class="typst-pill-sep"></span>
+        <button
+          type="button"
+          title={hasPageBreak
+            ? 'Retirer le saut de page'
+            : 'Insérer un saut de page avant cette correction'}
+          aria-label={hasPageBreak
+            ? 'Retirer le saut de page avant cette correction'
+            : 'Insérer un saut de page avant cette correction'}
+          class:typst-pill-active={hasPageBreak}
+          data-testid={hasPageBreak
+            ? 'typst-overlay-corr-pagebreak-active'
+            : 'typst-overlay-corr-pagebreak'}
+          onclick={() => toggleBreak('corr', widget.num, PAGE_BREAK_SNIPPET)}
+        >
+          <i class="bx bx-arrow-to-bottom"></i>
         </button>
         {#if nonEditableCorrections[widget.num] && !canMode}
           {@const corrZoom = exerciseCorrectionZoomValues[widget.num] ?? 1}
@@ -1574,7 +1601,7 @@
             data-testid={hasPageBreak
               ? 'typst-overlay-pagebreak-active'
               : 'typst-overlay-pagebreak'}
-            onclick={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
+            onclick={() => toggleBreak('exo', widget.num, PAGE_BREAK_SNIPPET)}
           >
             <i class="bx bx-arrow-to-bottom"></i>
           </button>
@@ -1593,7 +1620,8 @@
               data-testid={hasColumnBreak
                 ? 'typst-overlay-colbreak-active'
                 : 'typst-overlay-colbreak'}
-              onclick={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
+              onclick={() =>
+                toggleBreak('exo', widget.num, COLUMN_BREAK_SNIPPET)}
             >
               <i class="bx bx-arrow-to-right"></i>
             </button>
