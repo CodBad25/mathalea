@@ -27,7 +27,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle"
-export const dateDeModifImportante = '14/09/2026'
+export const dateDeModifImportante = '24/04/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -41,13 +41,63 @@ export const interactifReady = true
  * @author Rémi Angot
 
  */
-export const uuid = 'eb45e'
+export const uuid = 'eb45a'
 
 export const refs = {
   'fr-fr': ['BP2AutoV3', 'BP1AUTO100'],
   'fr-2016': ['6M11', 'BP2AutoV3'],
   'fr-ch': ['9GM1B-10'],
 }
+// Génère une longueur décimale (un seul chiffre après la virgule, jamais
+// un ",0" qui ressemblerait à un entier) comprise entre min et max inclus.
+function genereLongueurDecimale(min: number, max: number): number {
+  let valeurX10 = 0
+  do {
+    valeurX10 = randint(min * 10, max * 10)
+  } while (valeurX10 % 10 === 0)
+  return arrondi(valeurX10 / 10, 1)
+}
+
+// Génère une longueur, entière si `entier` vaut true, décimale (un chiffre
+// après la virgule) sinon.
+function genereLongueur(min: number, max: number, entier: boolean): number {
+  return entier ? randint(min, max) : genereLongueurDecimale(min, max)
+}
+
+// Triplets pythagoriciens (côtés de l'angle droit) à valeurs entières,
+// utilisés pour que la longueur de l'hypoténuse affichée sur la figure
+// soit toujours une valeur exacte.
+const triplesPythagoriciensEntiers: [number, number][] = [
+  [3, 4],
+  [6, 8],
+  [5, 12],
+  [9, 12],
+  [8, 15],
+]
+
+// Triplets pythagoriciens (côtés de l'angle droit) à valeurs décimales
+// (un chiffre après la virgule), obtenus en multipliant des triplets
+// entiers par un facteur décimal, ce qui garantit que l'hypoténuse reste
+// elle aussi une valeur exacte (avec au plus un chiffre après la virgule).
+const triplesPythagoriciensDecimaux: [number, number][] = [
+  [1.8, 2.4],
+  [2.4, 1.8],
+  [2.1, 2.8],
+  [2.8, 2.1],
+  [2.4, 3.2],
+  [3.2, 2.4],
+  [2.7, 3.6],
+  [3.6, 2.7],
+  [3.6, 4.8],
+  [4.8, 3.6],
+  [4.2, 5.6],
+  [5.6, 4.2],
+  [3.5, 8.4],
+  [8.4, 3.5],
+  [2.4, 4.5],
+  [4.5, 2.4],
+]
+
 export default class AireCarresRectanglesTriangles extends Exercice {
   constructor() {
     super()
@@ -72,8 +122,8 @@ export default class AireCarresRectanglesTriangles extends Exercice {
       ].join('\n'),
     ]
     this.sup = '4'
-    // this.besoinFormulaire2CaseACocher = ['Seulement des nombres entiers']
-    // this.sup2 = true
+    this.besoinFormulaire2CaseACocher = ['Seulement des nombres entiers']
+    this.sup2 = true
   }
 
   nouvelleVersion() {
@@ -93,25 +143,38 @@ export default class AireCarresRectanglesTriangles extends Exercice {
     let texteCorr = ''
     const nom = creerNomDePolygone(11, 'QD')
 
-    const c = randint(2, 6)
-    const L = randint(2, 5)
-    const l = randint(2, 5, L)
+    // this.sup2 === true : seulement des nombres entiers (comportement par
+    // défaut). this.sup2 === false : des longueurs décimales (un chiffre
+    // après la virgule) sont autorisées pour les 3 figures.
+    const entier = this.sup2
+
+    const c = genereLongueur(2, 6, entier)
+    const L = genereLongueur(2, 5, entier)
+    let l = genereLongueur(2, 5, entier)
+    while (l === L) {
+      l = genereLongueur(2, 5, entier)
+    }
+
     // Triplets pythagoriciens (côtés de l'angle droit) utilisés pour le
     // triangle rectangle, afin que la longueur de l'hypoténuse affichée
-    // sur la figure soit toujours une valeur exacte (entière).
-    const triplesPythagoriciens: [number, number][] = [
-      [3, 4],
-      [6, 8],
-      [5, 12],
-      [9, 12],
-      [8, 15],
-    ]
-    const tripleChoisi =
-      triplesPythagoriciens[randint(0, triplesPythagoriciens.length - 1)]
-    // On mélange aléatoirement l'ordre des deux côtés de l'angle droit
-    // pour varier l'aspect du triangle (côté a horizontal ou vertical).
-    const [a, b]: [number, number] =
-      randint(0, 1) === 0 ? tripleChoisi : [tripleChoisi[1], tripleChoisi[0]]
+    // sur la figure soit toujours une valeur exacte, que les côtés soient
+    // entiers ou décimaux.
+    const [a, b]: [number, number] = entier
+      ? (() => {
+          const tripleChoisi =
+            triplesPythagoriciensEntiers[
+              randint(0, triplesPythagoriciensEntiers.length - 1)
+            ]
+          // On mélange aléatoirement l'ordre des deux côtés de l'angle
+          // droit pour varier l'aspect du triangle (côté a horizontal ou
+          // vertical).
+          return randint(0, 1) === 0
+            ? tripleChoisi
+            : [tripleChoisi[1], tripleChoisi[0]]
+        })()
+      : triplesPythagoriciensDecimaux[
+          randint(0, triplesPythagoriciensDecimaux.length - 1)
+        ]
     const A = pointAbstrait(0, 0, nom[0])
     const B = rotation(pointAbstrait(c, 0), A, randint(-15, 15), nom[1])
     const C = rotation(A, B, -90, nom[2])
@@ -166,30 +229,25 @@ export default class AireCarresRectanglesTriangles extends Exercice {
           )
           texte = figure + "Calculer l'aire du carré."
 
-          texteCorr += `$\\mathcal{A}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${c}\\text{ cm}\\times${c}\\text{ cm}=${miseEnEvidence(c * c)}\\text{ cm}^2$`
+          texteCorr += `$\\mathcal{A}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${texNombre(c)}\\text{ cm}\\times${texNombre(c)}\\text{ cm}=${miseEnEvidence(texNombre(arrondi(c * c, 2)))}\\text{ cm}^2$`
           handleAnswers(
             this,
             i,
-            {
-              reponse: {
-                value: new Grandeur(c * c, 'cm^2'),
-                options: { unite: true },
-              },
-            },
+            { reponse: { value: new Grandeur(arrondi(c * c, 2), 'cm^2') } },
             {
               formatInteractif: 'mathlive',
             },
           )
           if (context.isAmc) {
             this.autoCorrectionAMC[i] = {
-              enonce: `Calculer l'aire du carré de côté $${c}\\text{ cm}$ en $\\text{cm}^2$`,
+              enonce: `Calculer l'aire du carré de côté $${texNombre(c)}\\text{ cm}$ en $\\text{cm}^2$`,
               propositions: [{ texte: texteCorr, statut: 0 }],
               reponse: {
                 texte: 'Aire en cm\\up{2}',
-                valeur: c * c,
+                valeur: arrondi(c * c, 2),
                 param: {
                   digits: 2,
-                  decimals: 0,
+                  decimals: entier ? 0 : 2,
                   signe: false,
                   exposantNbChiffres: 0,
                   exposantSigne: false,
@@ -205,30 +263,25 @@ export default class AireCarresRectanglesTriangles extends Exercice {
             objetsRectangle,
           )
           texte = figure + "Calculer l'aire du rectangle."
-          texteCorr += `$\\mathcal{A}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}\\text{ cm}\\times${l}\\text{ cm}=${miseEnEvidence(L * l)}\\text{ cm}^2$`
+          texteCorr += `$\\mathcal{A}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${texNombre(L)}\\text{ cm}\\times${texNombre(l)}\\text{ cm}=${miseEnEvidence(texNombre(arrondi(L * l, 2)))}\\text{ cm}^2$`
           handleAnswers(
             this,
             i,
-            {
-              reponse: {
-                value: new Grandeur(L * l, 'cm^2'),
-                options: { unite: true },
-              },
-            },
+            { reponse: { value: new Grandeur(arrondi(L * l, 2), 'cm^2') } },
             {
               formatInteractif: 'mathlive',
             },
           )
           if (context.isAmc) {
             this.autoCorrectionAMC[i] = {
-              enonce: `Calculer l'aire du rectangle de longueur $${L}\\text{ cm}$ et de largeur $${l}\\text{ cm}$ en $\\text{cm}^2$`,
+              enonce: `Calculer l'aire du rectangle de longueur $${texNombre(L)}\\text{ cm}$ et de largeur $${texNombre(l)}\\text{ cm}$ en $\\text{cm}^2$`,
               propositions: [{ texte: texteCorr, statut: 0 }],
               reponse: {
                 texte: 'Aire en cm\\up{2}',
-                valeur: L * l,
+                valeur: arrondi(L * l, 2),
                 param: {
                   digits: 2,
-                  decimals: 0,
+                  decimals: entier ? 0 : 2,
                   signe: false,
                   exposantNbChiffres: 0,
                   exposantSigne: false,
@@ -244,15 +297,12 @@ export default class AireCarresRectanglesTriangles extends Exercice {
             objetsTriangle,
           )
           texte = figure + "Calculer l'aire du triangle rectangle."
-          texteCorr += `$\\mathcal{A}_{${nom[8] + nom[9] + nom[10]}}=${a}\\text{ cm}\\times${b}\\text{ cm}\\div2=${miseEnEvidence(texNombre((a * b) / 2))}\\text{ cm}^2$`
+          texteCorr += `$\\mathcal{A}_{${nom[8] + nom[9] + nom[10]}}=${texNombre(a)}\\text{ cm}\\times${texNombre(b)}\\text{ cm}\\div2=${miseEnEvidence(texNombre(arrondi((a * b) / 2, 2)))}\\text{ cm}^2$`
           handleAnswers(
             this,
             i,
             {
-              reponse: {
-                value: new Grandeur(arrondi((a * b) / 2), 'cm^2'),
-                options: { unite: true },
-              },
+              reponse: { value: new Grandeur(arrondi((a * b) / 2, 2), 'cm^2') },
             },
             {
               formatInteractif: 'mathlive',
@@ -260,14 +310,14 @@ export default class AireCarresRectanglesTriangles extends Exercice {
           )
           if (context.isAmc) {
             this.autoCorrectionAMC[i] = {
-              enonce: `Calculer l'aire du triangle rectangle dont les côtés de l'angle droit mesurent $${a}\\text{ cm}$ et $${b}\\text{ cm}$ en $\\text{cm}^2$`,
+              enonce: `Calculer l'aire du triangle rectangle dont les côtés de l'angle droit mesurent $${texNombre(a)}\\text{ cm}$ et $${texNombre(b)}\\text{ cm}$ en $\\text{cm}^2$`,
               propositions: [{ texte: texteCorr, statut: 0 }],
               reponse: {
                 texte: 'Aire en cm\\up{2}',
-                valeur: arrondi((a * b) / 2),
+                valeur: arrondi((a * b) / 2, 2),
                 param: {
                   digits: 2,
-                  decimals: 0,
+                  decimals: entier ? 0 : 2,
                   signe: false,
                   exposantNbChiffres: 0,
                   exposantSigne: false,
