@@ -7,6 +7,8 @@ import {
   pointAdistance,
   pointIntersectionDD,
 } from '../../lib/2d/utilitairesPoint'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
@@ -16,6 +18,9 @@ import Exercice from '../Exercice'
 export const titre = 'Utiliser les symboles ∈ et ∉'
 
 export const dateDePublication = '27/02/2023'
+export const dateDeModifImportante = '15/09/2026'
+// Ajout de l'interactivité par Rémi Angot
+export const interactifReady = true
 
 /**
  * Aléatoirisation de https://www.youtube.com/watch?v=s-KelQ875a8
@@ -198,8 +203,21 @@ export default class UtilerAppartientA extends Exercice {
       if (possibilites[i] === undefined) break
       texte = ''
       texteCorr = ''
-      texte += `$${possibilites[i].point.nom}$ $\\ldots{}$ ${possibilites[i].borne1}$${possibilites[i].extremite1.nom + possibilites[i].extremite2.nom}$${possibilites[i].borne2}`
-      texteCorr += `$${possibilites[i].point.nom}$ ${possibilites[i].reponse} ${possibilites[i].borne1}$${possibilites[i].extremite1.nom + possibilites[i].extremite2.nom}$${possibilites[i].borne2}`
+      const pointNom = possibilites[i].point.nom
+      const intervalle = `${possibilites[i].borne1}$${possibilites[i].extremite1.nom + possibilites[i].extremite2.nom}$${possibilites[i].borne2}`
+      const reponse = possibilites[i].reponse === '$\\in$' ? 'in' : 'notin'
+      if (this.interactif) {
+        texte += `$${pointNom}$ ${choixDeroulant(this, i, {
+          choices: [
+            { label: '?', value: '' },
+            { latex: '\\in', value: 'in' },
+            { latex: '\\notin', value: 'notin' },
+          ],
+        })} ${intervalle}`
+      } else {
+        texte += `$${pointNom}$ $\\ldots{}$ ${intervalle}`
+      }
+      texteCorr += `$${pointNom}$ ${possibilites[i].reponse} ${intervalle}`
       if (
         this.questionJamaisPosee(
           i,
@@ -210,6 +228,12 @@ export default class UtilerAppartientA extends Exercice {
           possibilites[i].borne2,
         )
       ) {
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: reponse } },
+          { formatInteractif: 'liste-deroulante' },
+        )
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
