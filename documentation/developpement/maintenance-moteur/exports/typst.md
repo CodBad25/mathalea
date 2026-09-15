@@ -825,7 +825,20 @@ Hors fusion, `exerciseBody` affiche `TypstExerciseInput.intro` (consigne
 Les propositions d'un QCM (`propositionsQcm`, repérées par les libellés
 `labelEx{N}Q{i}R{rep}`) sont mises en colonnes par le même paquet `taskize`
 que les questions : `qcmToTypst` (`latexToTypst.ts`) émet
-`#tasks(columns: …, label: "A)")`.
+`#tasks(columns: …, label: none)`. L'étiquetage automatique de `tasks`
+(identique pour chaque item) n'est pas utilisé : `qcmToTypst` préfixe
+lui-même chaque item de son propre marqueur, calculé selon le format détecté
+par `qcmChoiceFormat` (présence ou non d'un `<input>` dans le choix, voir
+`propositionsQcm` côté `qcm.ts`) — une case à cocher `qcm-case` (format
+`case`, le défaut) ou une lettre en boîte `qcm-lettre` (format `lettre`),
+définies dans `MATHALEA_QCM_HELPERS`. Dans le corrigé, la bonne réponse
+(détectée par `qcmChoiceIsCorrect`, valable pour une case à cocher ou un
+bouton radio de QCU) reçoit en plus le marqueur « correct » (case cochée,
+lettre en boîte blanche à bordure noire) et son texte est mis en évidence
+par `qcm-bonne` — ce double repère reproduit l'apparence des cases/lettres
+du PDF (`\faSquare`/`\faCheckSquare`, `\colorbox`/`\fcolorbox` dans
+`preambuleTex.ts`), là où le texte de consigne dit « Cocher » ou « Entourer
+la lettre ».
 
 Le nombre de colonnes se règle **par exercice**, comme celui des questions :
 `htmlToTypst` reçoit en dernier argument le nom de la variable à écrire, et
