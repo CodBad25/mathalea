@@ -113,7 +113,7 @@ export default class ExerciceLabyrintheDivisibilite extends Exercice {
       monChemin = laby.choisitChemin(laby.niveau) // On choisit un chemin
       laby.murs2d = laby.construitMurs(monChemin) // On construit le labyrinthe
       laby.chemin2d = laby.traceChemin(monChemin) // On trace le chemin solution
-      texte = `Trouver la sortie en ne passant que par les cases contenant un nombre divisible par ${tables[i]}.<br>`
+      texte = `Trouver la sortie en ne passant que par les cases contenant un nombre multiple de ${tables[i]}.<br>`
       // Zone de construction du tableau de nombres : S'ils sont sur monChemin et seulement si, ils doivent vérifier la consigne
       let listeMultiples = []
       const listeNonMultiples = []
