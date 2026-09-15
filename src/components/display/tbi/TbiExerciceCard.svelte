@@ -196,6 +196,24 @@
     await updateDisplay()
   }
 
+  /**
+   * Certains exercices (ex. « Sélection d'automatismes ») chargent leurs
+   * modules de façon asynchrone : `nouvelleVersionWrapper` remplit d'abord
+   * `listeQuestions` avec des placeholders « chargement... » puis, une fois
+   * les modules téléchargés, régénère l'exercice et notifie via l'événement
+   * `updateAsyncEx`. Sans ce listener, la carte reste bloquée sur
+   * « chargement... » car `version` n'est jamais réincrémenté.
+   */
+  function forceUpdate(event?: Event) {
+    if (
+      event instanceof CustomEvent &&
+      event.detail?.exercise &&
+      event.detail.exercise !== exercise
+    )
+      return
+    version += 1
+  }
+
   function handleNewSettings(event: CustomEvent) {
     const detail = event.detail
     exercicesParams.update((list) => {
@@ -283,12 +301,14 @@
 
   onMount(() => {
     document.addEventListener('newDataForAll', newData)
+    document.addEventListener('updateAsyncEx', forceUpdate)
     updateDisplay()
     showControls()
   })
 
   onDestroy(() => {
     document.removeEventListener('newDataForAll', newData)
+    document.removeEventListener('updateAsyncEx', forceUpdate)
     if (hideControlsTimer !== undefined) clearTimeout(hideControlsTimer)
   })
 </script>
