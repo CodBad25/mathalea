@@ -119,7 +119,7 @@ export default class MultiplierOuDiviserDecimauxPar101001000 extends Exercice {
     // pas besoin d'utiliser un WRAPPER, l'objet est neuf, donc pas besoin de REINIT
     multiplication.nouvelleVersion()
 
-    if (context.isHtml && this.sup4) {
+    if (context.isHtml && !context.isTypst && this.sup4) {
       this.consigne = 'Compléter.'
       this.consigne += '<br>Un glisse-nombre est à disposition pour répondre '
       this.consigne +=
