@@ -1663,12 +1663,14 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
     return [
       '#block[',
       '#set text(size: 10pt)',
+      '#align(center)[',
       '#table(',
       `  columns: ${snapshot.cols},`,
       '  stroke: 0.6pt + black,',
       '  inset: (x: 5pt, y: 8pt),',
       `  ${cells.join(',\n  ')}`,
       ')',
+      ']',
       ']',
     ].join('\n')
   }
