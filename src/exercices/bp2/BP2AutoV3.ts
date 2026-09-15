@@ -27,7 +27,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle"
-export const dateDeModifImportante = '24/04/2025'
+export const dateDeModifImportante = '14/09/2026'
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -41,7 +41,7 @@ export const interactifReady = true
  * @author Rémi Angot
 
  */
-export const uuid = 'eb45a'
+export const uuid = 'eb45e'
 
 export const refs = {
   'fr-fr': ['BP2AutoV3', 'BP1AUTO100'],
@@ -233,7 +233,12 @@ export default class AireCarresRectanglesTriangles extends Exercice {
           handleAnswers(
             this,
             i,
-            { reponse: { value: new Grandeur(arrondi(c * c, 2), 'cm^2') } },
+            {
+              reponse: {
+                value: new Grandeur(arrondi(c * c, 2), 'cm^2'),
+                options: { unite: true },
+              },
+            },
             {
               formatInteractif: 'mathlive',
             },
@@ -267,7 +272,12 @@ export default class AireCarresRectanglesTriangles extends Exercice {
           handleAnswers(
             this,
             i,
-            { reponse: { value: new Grandeur(arrondi(L * l, 2), 'cm^2') } },
+            {
+              reponse: {
+                value: new Grandeur(arrondi(L * l, 2), 'cm^2'),
+                options: { unite: true },
+              },
+            },
             {
               formatInteractif: 'mathlive',
             },
@@ -302,7 +312,10 @@ export default class AireCarresRectanglesTriangles extends Exercice {
             this,
             i,
             {
-              reponse: { value: new Grandeur(arrondi((a * b) / 2, 2), 'cm^2') },
+              reponse: {
+                value: new Grandeur(arrondi((a * b) / 2, 2), 'cm^2'),
+                options: { unite: true },
+              },
             },
             {
               formatInteractif: 'mathlive',
