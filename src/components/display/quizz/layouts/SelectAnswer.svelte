@@ -69,7 +69,7 @@
 <div class="flex flex-col items-center justify-center gap-6 px-6 w-full">
   <div
     bind:this={container}
-    class="w-11/12 max-w-7xl rounded-xl shadow-lg px-8 py-4 text-center
+    class="w-11/12 max-w-7xl shadow-lg px-8 py-4 text-center
     quizz-text-question font-semibold
     bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
     text-coopmaths-corpus dark:text-coopmathsdark-corpus"
@@ -90,7 +90,7 @@
   </div>
   {#if spectator}
     <div
-      class="px-6 py-2 rounded-xl text-lg font-bold shadow
+      class="px-6 py-2 text-lg font-bold shadow
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
       text-coopmaths-struct dark:text-coopmathsdark-struct"
     >
@@ -99,7 +99,7 @@
   {:else if data.questionType === 'multi'}
     <button
       type="button"
-      class="px-6 py-2 rounded-xl text-lg font-bold shadow
+      class="px-6 py-2 text-lg font-bold shadow
       text-coopmaths-canvas bg-coopmaths-action
       hover:bg-coopmaths-action-lightest
       dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest

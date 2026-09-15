@@ -260,7 +260,7 @@
 
   {#if $quizzProgress.total > 0 && isStarted && currentStatus !== 'FINISHED'}
     <div
-      class="fixed top-4 left-4 z-20 px-3 py-1 rounded-full text-sm font-bold shadow
+      class="fixed top-4 left-4 z-20 px-3 py-1 text-sm font-bold shadow
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
       text-coopmaths-struct dark:text-coopmathsdark-struct"
     >
@@ -285,7 +285,7 @@
       </p>
       <button
         type="button"
-        class="px-4 py-2 rounded-xl font-bold shadow
+        class="px-4 py-2 font-bold shadow
         text-coopmaths-canvas bg-coopmaths-action
         hover:bg-coopmaths-action-lightest
         dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"
@@ -318,7 +318,7 @@
       </div>
       <button
         type="button"
-        class="px-8 py-4 rounded-2xl text-2xl font-extrabold shadow-xl
+        class="px-8 py-4 text-2xl font-extrabold shadow-xl
         text-coopmaths-canvas bg-coopmaths-action
         hover:bg-coopmaths-action-lightest
         dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest

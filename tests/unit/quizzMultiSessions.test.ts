@@ -93,6 +93,8 @@ describe('session manager multi-joueurs', () => {
       ticket: 'ticket-1',
       scoring: 'full',
       quizz: QUIZZ,
+      usernameMode: 'free',
+      sound: true,
     })
 
     socket.fire('manager:gameCreated', {
@@ -112,6 +114,35 @@ describe('session manager multi-joueurs', () => {
     })
     expect(get(session.step)).toBe('lobby')
     expect(get(session.players)).toEqual([])
+  })
+
+  it('transmet le mode pseudo contrôlé à createGame', async () => {
+    await connect(session, socket)
+    session.setQuizz(QUIZZ, 'full', 'safe')
+    socket.fire('manager:emailCodeSent', { expiresIn: 600 })
+    session.verifyEmailCode('123456')
+    socket.fire('manager:emailVerified', { ticket: 'ticket-2', expires: 0 })
+    expect(socket.lastSent('manager:createGame')?.payload).toMatchObject({
+      usernameMode: 'safe',
+    })
+  })
+
+  it('transmet le réglage sonore choisi à createGame', async () => {
+    const localSocket = new FakeSocket()
+    const localSession = new QuizzMultiManagerSession({
+      quizz: QUIZZ,
+      scoring: 'full',
+      sound: false,
+      clientId: 'client-manager',
+      socketFactory: () => localSocket,
+    })
+    await connect(localSession, localSocket)
+    localSocket.fire('manager:emailCodeSent', { expiresIn: 600 })
+    localSession.verifyEmailCode('123456')
+    localSocket.fire('manager:emailVerified', { ticket: 'ticket-3', expires: 0 })
+    expect(localSocket.lastSent('manager:createGame')?.payload).toMatchObject({
+      sound: false,
+    })
   })
 
   it('met à jour la liste des joueurs du lobby et pilote la partie', async () => {
@@ -262,6 +293,25 @@ describe('session joueur multi-joueurs', () => {
     expect(socket.lastSent('player:join')).toBeUndefined()
   })
 
+  it('capture le mode pseudo contrôlé annoncé par la room', async () => {
+    const session = makeSession()
+    await connect(session, socket)
+    session.submitPin('123456')
+    socket.fire('game:successRoom', { gameId: 'game-1', usernameMode: 'safe' })
+    expect(get(session.usernameMode)).toBe('safe')
+    expect(get(session.step)).toBe('pseudo')
+  })
+
+  it('capture le réglage sonore annoncé par la room', async () => {
+    const session = makeSession()
+    await connect(session, socket)
+    expect(get(session.sound)).toBe(true)
+    session.submitPin('123456')
+    socket.fire('game:successRoom', { gameId: 'game-1', sound: false })
+    expect(get(session.sound)).toBe(false)
+    expect(get(session.step)).toBe('pseudo')
+  })
+
   it('enchaîne jointure → pseudo → entrée en jeu', async () => {
     const session = makeSession()
     await connect(session, socket)
@@ -271,6 +321,7 @@ describe('session joueur multi-joueurs', () => {
 
     socket.fire('game:successRoom', { gameId: 'game-1' })
     expect(get(session.step)).toBe('pseudo')
+    expect(get(session.usernameMode)).toBe('free')
 
     session.submitUsername('Ada')
     expect(socket.lastSent('player:login')?.payload).toEqual({

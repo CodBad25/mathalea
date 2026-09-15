@@ -45,7 +45,7 @@
     </div>
   {:else if data.top.length <= 1}
     <div
-      class="flex flex-col items-center gap-3 rounded-2xl shadow-xl px-10 py-8
+      class="flex flex-col items-center gap-3 shadow-xl px-10 py-8
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
     >
       <span class="text-6xl">🏆</span>
@@ -79,7 +79,7 @@
             {player.points}
           </span>
           <div
-            class="w-24 rounded-t-xl bg-coopmaths-struct-light
+            class="w-24 bg-coopmaths-struct-light
             dark:bg-coopmathsdark-struct-light {heights[rank]}"
           ></div>
         </div>
@@ -88,7 +88,7 @@
   {/if}
   {#if showPersonal && data.rank != null}
     <div
-      class="rounded-2xl shadow-xl px-8 py-3 text-xl font-bold
+      class="shadow-xl px-8 py-3 text-xl font-bold
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
       text-coopmaths-corpus dark:text-coopmathsdark-corpus"
     >

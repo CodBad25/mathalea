@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class="w-11/12 max-w-7xl rounded-xl shadow-lg px-6 py-4
+  class="w-11/12 max-w-7xl shadow-lg px-6 py-4
   bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
   text-coopmaths-corpus dark:text-coopmathsdark-corpus"
 >

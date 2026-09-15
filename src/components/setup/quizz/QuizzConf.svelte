@@ -62,6 +62,7 @@
   let scoring: string | number = params.scoring
   let seedMode: string | number = params.seedMode
   let backgroundMode: string | number = params.background.mode
+  let usernameMode: string | number = params.usernameMode
 
   const hasBackgrounds = backgroundsManifest.length > 0
 
@@ -422,6 +423,41 @@
               </div>
             </div>
 
+            {#if params.mode === 'multi'}
+              <div class="pb-2">
+                <div
+                  class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+                >
+                  Pseudo
+                </div>
+                <FormRadio
+                  title="Mode pseudo"
+                  bind:valueSelected={usernameMode}
+                  on:newvalue={() => {
+                    params.usernameMode =
+                      usernameMode as QuizzParams['usernameMode']
+                    params = params
+                  }}
+                  labelsValues={[
+                    {
+                      label: 'Pseudos libres (choisis par les élèves)',
+                      value: 'free',
+                    },
+                    {
+                      label: 'Prénoms d’une liste contrôlée',
+                      value: 'safe',
+                    },
+                  ]}
+                />
+                <div
+                  class="pl-4 pt-1 font-light italic text-xs text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+                >
+                  {params.usernameMode === 'safe'
+                    ? 'Les élèves saisissent leur prénom : il est vérifié par le serveur de jeu, qui enregistre la forme de la liste et ajoute un numéro en cas d’homonymes.'
+                    : 'Les élèves saisissent le pseudo de leur choix (unique dans la partie).'}
+                </div>
+              </div>
+            {/if}
             <div class="pb-2">
               <div
                 class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"

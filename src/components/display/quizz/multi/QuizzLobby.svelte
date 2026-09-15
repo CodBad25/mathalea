@@ -34,7 +34,7 @@
   </h1>
 
   <div
-    class="flex flex-col items-center gap-4 rounded-2xl shadow-xl px-10 py-6
+    class="flex flex-col items-center gap-4 shadow-xl px-10 py-6
     bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
   >
     <div
@@ -96,7 +96,7 @@
       <div class="flex flex-row flex-wrap justify-center gap-2 max-w-3xl">
         {#each players as player (player.id)}
           <span
-            class="flex items-center gap-2 rounded-full shadow px-4 py-1.5
+            class="flex items-center gap-2 shadow px-4 py-1.5
             text-lg font-semibold
             bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
             text-coopmaths-corpus dark:text-coopmathsdark-corpus"
@@ -121,7 +121,7 @@
 
   <button
     type="button"
-    class="px-8 py-4 rounded-2xl text-2xl font-extrabold shadow-xl
+    class="px-8 py-4 text-2xl font-extrabold shadow-xl
     text-coopmaths-canvas bg-coopmaths-action
     hover:bg-coopmaths-action-lightest
     dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest
