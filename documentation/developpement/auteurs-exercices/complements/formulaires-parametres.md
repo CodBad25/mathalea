@@ -234,6 +234,14 @@ disparue reprennent la valeur par défaut du champ. Ajouter un champ **à la fin
 liste, ou un item **à la fin** d'une liste pondérée, préserve donc les URL déjà
 partagées ; insérer ou supprimer un champ existant les invalide.
 
+Pour convertir une `liste` en `listePonderee` en conservant les mêmes items dans le
+même ordre, ajouter `acceptLegacyBinary: true` au champ. Le lecteur accepte alors
+une ancienne chaîne binaire complète (`101` devient `1-0-1`), aussi bien dans le
+panneau de réglages que lors de la génération. Les nouvelles URL utilisent les
+poids séparés par des tirets. Cette compatibilité est explicite pour ne pas
+réinterpréter les poids d'autres exercices. Elle ne dispense pas du contrôle de
+stabilité des tirages.
+
 ## Exemple complet
 
 [src/exercices/6e/\_Exercice_conversions_parametrable.ts](../../../../src/exercices/6e/_Exercice_conversions_parametrable.ts)
