@@ -2,6 +2,9 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { droite } from '../../lib/2d/droites'
 import { labelPoint } from '../../lib/2d/textes'
 import { pointAdistance, pointSurDroite } from '../../lib/2d/utilitairesPoint'
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
@@ -11,6 +14,9 @@ import Exercice from '../Exercice'
 export const titre = 'Reconnaitre des points alignés'
 
 export const dateDePublication = '22/02/2023'
+export const dateDeModifImportante = '15/09/2026'
+// Ajout de l'interactivité par Rémi Angot
+export const interactifReady = true
 
 /**
  * Reconnaitre si trois points sont alignés en traçant une droite qui passe par les deux premiers et en vérifiant qu'elle passe bien par le troisième.
@@ -109,6 +115,35 @@ export default class ReconnaitreDesPointsAlignes extends Exercice {
       ) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         // Dans cet exercice, on n'utilise pas a, b, c et d mais A, B, C et D alors remplace-les !
+        const estAligne = listeTypeDeQuestions[i] === 'oui'
+        const propositions = [
+          { texte: 'Oui', statut: estAligne },
+          { texte: 'Non', statut: !estAligne },
+        ]
+        const qcmOptions = { radio: true, vertical: false }
+        handleAnswers(
+          this,
+          i,
+          {
+            qcm: {
+              enonce: texte,
+              propositions,
+              correction: texteCorr,
+              options: qcmOptions,
+            },
+          },
+          { formatInteractif: 'mathalea-qcm' },
+        )
+        if (context.isHtml) {
+          texte += addMathaleaQcm(this, i, {
+            ...qcmOptions,
+            interactivityOn: this.interactif,
+          })
+        } else if (!context.isAmc) {
+          const qcmLatex = propositionsQcm(this, i)
+          texte += qcmLatex.texte
+          texteCorr += qcmLatex.texteCorr
+        }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
