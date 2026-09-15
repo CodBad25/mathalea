@@ -17,7 +17,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Indentifier les côtés d’un triangle rectangle'
+export const titre = 'Identifier les côtés d’un triangle rectangle'
 export const interactifReady = true
 
 export const dateDeModifImportante = '24/07/2026'
@@ -81,7 +81,7 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
             const triangle = rotation(polygone([A, B, C]), A, turnTriangle)
             question =
               context.isHtml && this.interactif
-                ? `Dans le triangle rectangle $${nom[0]}${nom[1]}${nom[2]}$, sélectionner ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${nom[2 - indexSommet]}${nom[indexSommet]}${nom[1]}}$`}.`
+                ? `Dans le triangle rectangle $${nom[0]}${nom[1]}${nom[2]}$, cliquer sur ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${nom[2 - indexSommet]}${nom[indexSommet]}${nom[1]}}$`}.`
                 : `Dans le triangle rectangle $${nom[0]}${nom[1]}${nom[2]}$, ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${nom[2 - indexSommet]}${nom[indexSommet]}${nom[1]}}$`} est :`
             const objetsFigure = [
               triangle,
@@ -172,7 +172,7 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
             const choixTriangle = listeTriangles[indexTriangle]
             question =
               context.isHtml && this.interactif
-                ? `Dans le triangle rectangle $${choixTriangle}$, sélectionner ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${choixTriangle[2 - indexSommet]}${choixTriangle[indexSommet]}${choixTriangle[1]}}$`}.`
+                ? `Dans le triangle rectangle $${choixTriangle}$, cliquer sur ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${choixTriangle[2 - indexSommet]}${choixTriangle[indexSommet]}${choixTriangle[1]}}$`}.`
                 : `Dans le triangle rectangle $${choixTriangle}$, ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${choixTriangle[2 - indexSommet]}${choixTriangle[indexSommet]}${choixTriangle[1]}}$`} est :`
             const objetsFigure = [
               triangles,
