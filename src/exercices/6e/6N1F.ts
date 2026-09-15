@@ -170,7 +170,7 @@ export default class SommeFractionsDecimales extends Exercice {
             const fracBPlusC = fraction(b + c, denAMC)
             texte = `$${fracB.texFraction}+${fracC.texFraction}$`
             numAMC = b + c
-            if (!context.isHtml) {
+            if (this.can) {
               this.canEnonce = `Calculer $${fracB.texFraction}+${fracC.texFraction}$ sous forme d'une fraction décimale.`
               this.correction = this.listeCorrections[0]
             }
@@ -187,7 +187,7 @@ export default class SommeFractionsDecimales extends Exercice {
             const fracC = fraction(c, denAMC)
             const fracBMoinsC = fraction(b - c, denAMC)
             texte = `$${fracB.texFraction}-${fracC.texFraction}$`
-            if (!context.isHtml) {
+            if (this.can) {
               this.canEnonce = `Calculer $${fracB.texFraction}-${fracC.texFraction}$ sous forme d'une fraction décimale.`
               this.correction = this.listeCorrections[0]
             }
@@ -210,7 +210,7 @@ export default class SommeFractionsDecimales extends Exercice {
             texte = `$${a}+${fracB.texFraction}+${fracC.texFraction}$`
             numAMC = a * denAMC + b + c
             const fracNumAMC = fraction(numAMC, denAMC)
-            if (!context.isHtml) {
+            if (this.can) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}+${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
             }
@@ -233,7 +233,7 @@ export default class SommeFractionsDecimales extends Exercice {
             const fracC = fraction(c, denAMC)
             const fracBMoinsC = fraction(b - c, denAMC)
             texte = `$${a}+${fracB.texFraction}-${fracC.texFraction}$`
-            if (!context.isHtml) {
+            if (this.can) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}-${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
             }
@@ -256,7 +256,7 @@ export default class SommeFractionsDecimales extends Exercice {
             texte = `$${a}+${fracB.texFraction}+${fracC.texFraction}$`
             numAMC = a * denAMC + b + c
             const fracNumAMC = fraction(numAMC, denAMC)
-            if (!context.isHtml) {
+            if (this.can) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}+${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
             }
@@ -277,7 +277,7 @@ export default class SommeFractionsDecimales extends Exercice {
             texte = `$${a}+${fracB.texFraction}-${fracC.texFraction}$`
             numAMC = a * denAMC + b - c
             const fracNumAMC = fraction(numAMC, denAMC)
-            if (!context.isHtml) {
+            if (this.can) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}-${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
             }
