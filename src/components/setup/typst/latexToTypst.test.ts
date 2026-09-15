@@ -738,6 +738,17 @@ describe('htmlToTypst', () => {
     expect(figures[0]).toContain('image(bytes("<svg')
   })
 
+  it('reprend le fond blanc des labels mathalea2d (arbres pondérés) en Typst', () => {
+    const figures: string[] = []
+    const result = htmlToTypst(
+      '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"><line x1="0" y1="0" x2="10" y2="10"/></svg><div class="divLatex" style="background-color: white; position: absolute; top: 10px; left: 20px; transform: translate(-50%,-50%) rotate(0deg); opacity: 0.7;" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">{\\color{black} \\scriptsize{0.7}}</annotation></semantics></math></span><span class="katex-html">0.7</span></span></div></div></div>',
+      figures,
+    )
+    expect(result).toContain(
+      'mathalea-label(15.0pt, 7.5pt, [$0.7$], size: 0.7em, background: white)',
+    )
+  })
+
   it('convertit les spans colorés (texteEnCouleur, texteEnCouleurEtGras)', () => {
     expect(
       htmlToTypst(

@@ -102,8 +102,8 @@ export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, ali
   pad(left: left)[#scaled]
 })`
 
-export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0deg, size: auto, fill: auto) = {
-  let content = if size == auto and fill == auto {
+export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0deg, size: auto, fill: auto, background: none) = {
+  let styled = if size == auto and fill == auto {
     body
   } else if fill == auto {
     text(size: size, body)
@@ -111,6 +111,11 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
     text(fill: fill, body)
   } else {
     text(size: size, fill: fill, body)
+  }
+  let content = if background == none {
+    styled
+  } else {
+    box(fill: background, outset: 1pt, radius: 1pt, styled)
   }
   (x: x, y: y, angle: angle, body: content)
 }
@@ -1798,7 +1803,8 @@ function renderTypstTable(
     }).join(', '),
   )
 
-  return `#table(\n  ${[...header, ...strokes, ...cells].join(',\n  ')},\n)`
+  const table = `#table(\n  ${[...header, ...strokes, ...cells].join(',\n  ')},\n)`
+  return `#align(center)[\n${table}\n]`
 }
 
 function latexVisualTableToTypst(
@@ -2344,6 +2350,15 @@ function divLatexToTypstLabel(
   }
   if (Number.isFinite(angle) && angle !== 0) {
     options.push(`angle: ${angle}deg`)
+  }
+  // fond du label (ex. les probabilités des arbres pondérés, posées par
+  // `latex2d({ backgroundColor: 'white' })` pour rester lisibles par-dessus
+  // les branches de l'arbre) : repris depuis le style du div KaTeX, sinon le
+  // label serait transparent en Typst alors qu'il a un fond en HTML/SVG.
+  const backgroundMatch = divHtml.match(/\bbackground-color:\s*([^;"']+)/i)
+  if (backgroundMatch != null) {
+    const background = typstColorExpression(backgroundMatch[1])
+    if (background != null) options.push(`background: ${background}`)
   }
   const args = [
     `${(leftPx * 0.75 * scaleFactor).toFixed(1)}pt`,
