@@ -1,5 +1,5 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { randint } from '../../modules/outils'
+import { contraindreValeur, randint } from '../../modules/outils'
 import ExerciceLabyrinthe from '../_Exercice_labyrinthe'
 export const titre = 'Parcourir un labyrinthe de nombres premiers'
 
@@ -28,11 +28,28 @@ export default class ExerciceLabyrintheNombrePremiers extends ExerciceLabyrinthe
     73, 79, 83, 89, 97,
   ]
 
+  max = 100
+  primesDisponibles: number[] = this.primesBelow100
+
+  constructor() {
+    super()
+    this.sup = 100
+    this.besoinFormulaireNumerique = ['Nombre maximum', 100]
+    this.comment =
+      "Nombre maximum : il s'agit du plus grand nombre premier pouvant apparaitre dans la grille."
+  }
+
+  nouvelleVersion() {
+    this.max = contraindreValeur(10, 100, this.sup, 100)
+    this.primesDisponibles = this.primesBelow100.filter((p) => p <= this.max)
+    super.nouvelleVersion()
+  }
+
   generateGoodAnswers() {
-    return choice(this.primesBelow100)
+    return choice(this.primesDisponibles)
   }
 
   generateBadAnswers() {
-    return randint(1, 100, this.primesBelow100)
+    return randint(1, this.max, this.primesDisponibles)
   }
 }
