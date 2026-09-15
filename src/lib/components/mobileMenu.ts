@@ -19,6 +19,7 @@ import {
   type JSONReferentielObject,
   type ReferentielInMenu,
 } from '../types/referentiels'
+import { ALLOWED_LANGUAGES, type Language } from '../types/languages'
 import { monthes } from './handleDate'
 import { codeToLevelTitle } from './refUtils'
 
@@ -36,6 +37,7 @@ export type MobileMenuExternalLink = {
  * @property {string} referentiel nom du référentiel du menu contenant le nœud (`aleatoires`, `examens`, …)
  * @property {string[]} path chemin des clés menant au nœud dans ce référentiel
  * @property {MobileMenuExternalLink[]} externalLinks liens externes affichés au-dessus des thèmes de ce niveau (optionnel)
+ * @property {Language[]} locales locales affichant cette entrée (optionnel, toutes par défaut)
  */
 export type MobileMenuEntry = {
   id: string
@@ -43,6 +45,7 @@ export type MobileMenuEntry = {
   referentiel: string
   path: string[]
   externalLinks?: MobileMenuExternalLink[]
+  locales?: Language[]
 }
 
 /**
@@ -61,6 +64,7 @@ const ALL_MENU_VIEWS: MobileMenuView[] = ['mobile', 'typst']
  * @property {string} subtitle texte secondaire de la tuile (optionnel)
  * @property {string} icon classe d'icône boxicons de la tuile (optionnel)
  * @property {MobileMenuView[]} views vues qui affichent la rubrique (optionnel, toutes par défaut)
+ * @property {Language[]} locales locales affichant la rubrique (optionnel, toutes par défaut)
  * @property {MobileMenuEntry[]} entries niveaux proposés dans la rubrique
  */
 export type MobileMenuSection = {
@@ -69,6 +73,7 @@ export type MobileMenuSection = {
   subtitle?: string
   icon?: string
   views?: MobileMenuView[]
+  locales?: Language[]
   entries: MobileMenuEntry[]
 }
 
@@ -76,25 +81,57 @@ const allMenuSections: MobileMenuSection[] = (
   mobileMenuContent as { sections: MobileMenuSection[] }
 ).sections
 
+/** Toutes les locales, valeur par défaut d'une rubrique ou d'une entrée sans `locales`. */
+const ALL_LOCALES: Language[] = [...ALLOWED_LANGUAGES]
+
 /**
- * Rubriques proposées dans une vue donnée.
+ * Rubriques proposées dans une vue et une locale données : les rubriques et
+ * entrées dont le référentiel ne couvre pas cette locale sont retirées (par
+ * exemple les niveaux français pour la locale `fr-CH`, ou l'inverse).
  * @param {MobileMenuView} view vue concernée
- * @returns {MobileMenuSection[]} les rubriques que cette vue affiche
+ * @param {Language} lang locale du référentiel affiché
+ * @returns {MobileMenuSection[]} les rubriques (et leurs entrées) que cette vue affiche
  */
-function sectionsForView(view: MobileMenuView): MobileMenuSection[] {
-  return allMenuSections.filter((section) =>
-    (section.views ?? ALL_MENU_VIEWS).includes(view),
-  )
+function sectionsForView(
+  view: MobileMenuView,
+  lang: Language,
+): MobileMenuSection[] {
+  return allMenuSections
+    .filter((section) => (section.views ?? ALL_MENU_VIEWS).includes(view))
+    .filter((section) => (section.locales ?? ALL_LOCALES).includes(lang))
+    .map((section) => ({
+      ...section,
+      entries: section.entries.filter((entry) =>
+        (entry.locales ?? ALL_LOCALES).includes(lang),
+      ),
+    }))
+    .filter((section) => section.entries.length > 0)
 }
 
-/** Rubriques de la vue mobile, telles que décrites dans `mobileMenu.json`. */
-export const mobileMenuSections: MobileMenuSection[] = sectionsForView('mobile')
+/**
+ * Rubriques de la vue mobile pour une locale donnée, telles que décrites
+ * dans `mobileMenu.json`.
+ * @param {Language} lang locale du référentiel affiché
+ * @returns {MobileMenuSection[]} les rubriques de la vue mobile
+ */
+export function mobileMenuSectionsForLocale(
+  lang: Language,
+): MobileMenuSection[] {
+  return sectionsForView('mobile', lang)
+}
 
 /**
- * Rubriques de la modale « Ajouter un exercice » de la vue Typst : celles de
- * la vue mobile, plus la Course aux nombres et les ressources complémentaires.
+ * Rubriques de la modale « Ajouter un exercice » de la vue Typst pour une
+ * locale donnée : celles de la vue mobile, plus la Course aux nombres et les
+ * ressources complémentaires.
+ * @param {Language} lang locale du référentiel affiché
+ * @returns {MobileMenuSection[]} les rubriques de la modale
  */
-export const typstMenuSections: MobileMenuSection[] = sectionsForView('typst')
+export function typstMenuSectionsForLocale(
+  lang: Language,
+): MobileMenuSection[] {
+  return sectionsForView('typst', lang)
+}
 
 const themesTitles = levelsThemesList as Record<string, { titre?: string }>
 
