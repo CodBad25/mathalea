@@ -421,7 +421,9 @@ f'(x)&=\\dfrac{u'(x)v(x)-u(x)v'(x)}{(v(x))^2}\\\\
 
       // Ordonnée à l'origine de la tangente : p = f(x0) - f'(x0)·x0
       // p = fDeX0 - coeffDir * x0
-      const ordOrigine = fDeX0.differenceFraction(coeffDir.multiplieEntier(x0))
+      const ordOrigine = fDeX0
+        .differenceFraction(coeffDir.multiplieEntier(x0))
+        .simplifie()
       const ordOrigineTex = ordOrigine.estEntiere
         ? `${ordOrigine.num}`
         : ordOrigine.texFractionSimplifiee
