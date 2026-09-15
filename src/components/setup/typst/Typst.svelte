@@ -1349,7 +1349,14 @@
     // fige le contenu courant : les questions déjà affichées gardent leurs
     // valeurs (la régénération avec un autre nbQuestions rebrasse les tirages)
     const current = buildInputs()[num - 1]
-    if (current.warning == null) {
+    // ne s'applique qu'aux exercices dont `listeQuestions` compte une entrée
+    // par question : certains (ex. 5N1J-3) assemblent tout le tableau en une
+    // seule chaîne quel que soit `nbQuestions` — geler cette unique entrée
+    // écraserait alors intégralement le contenu fraîchement régénéré (plus de
+    // nouvelle ligne, valeurs de l'ancien tableau). Pour ceux-là on régénère
+    // entièrement, comme documenté ci-dessus pour les sujets dérivés.
+    const isParQuestion = exercise.listeQuestions?.length === exercise.nbQuestions
+    if (current.warning == null && isParQuestion) {
       frozenInputs.set(exercise, {
         intro: current.intro,
         consigne: current.consigne ?? '',
@@ -1360,6 +1367,8 @@
         canQuestions: current.canQuestions ?? [],
         canAnswers: current.canAnswers ?? [],
       })
+    } else {
+      frozenInputs.delete(exercise)
     }
     // le barème suit le nombre de questions tant qu'il n'a pas été réglé à la
     // main : la valeur proposée est d'un point par question, une question de
