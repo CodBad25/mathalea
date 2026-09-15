@@ -7,7 +7,7 @@ import Question6 from '../EAMPremiere/EAM-FMTechno-2026-Q6'
 import Question7 from '../EAMPremiere/EAM-FMTechno-2026-Q9'
 import Question2 from '../EAMPremiere/EAM-PolynesieTechno-2026-Q6'
 import MetaExercice from '../MetaExerciceCan'
-export const titre = 'Traiter le sujet n°8'
+export const titre = 'Sujet n°8'
 export const interactifReady = true
 
 export const uuid = 'aa93a'
