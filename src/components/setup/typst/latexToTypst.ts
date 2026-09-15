@@ -3,6 +3,7 @@ import {
   colours,
   mathaleaColorAliases,
 } from '../../../lib/2d/colorToLatexOrHtml'
+import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
 import { renderScratchDiv } from '../../../lib/renderScratch'
 import { typstImport } from './typstPackages'
 
@@ -254,11 +255,24 @@ export const CETZ_PLOT_CHART_IMPORT = typstImport('cetz-plot', 'chart')
 export const CTZ_EUCLIDE_IMPORT = typstImport('ctz-euclide', '*')
 
 /**
- * Aides Typst pour les QCM : une case à cocher (vide dans l'énoncé, remplie
- * pour la bonne réponse dans le corrigé) et le nombre de colonnes réglable.
+ * Aides Typst pour les QCM :
+ * - `qcm-bonne` met en évidence le texte de la bonne réponse dans le corrigé ;
+ * - `qcm-case` dessine une case à cocher (format `case`) — vide, ou avec une
+ *   coche pour la bonne réponse du corrigé — équivalent Typst de
+ *   `\faSquare`/`\faCheckSquare` utilisés côté LaTeX (`preambuleTex.ts`) ;
+ * - `qcm-lettre` dessine une lettre en boîte (format `lettre`) — fond noir/
+ *   texte blanc, ou fond blanc à bordure noire pour la bonne réponse du
+ *   corrigé — équivalent Typst des `\colorbox`/`\fcolorbox` LaTeX.
  */
-export const MATHALEA_QCM_HELPERS =
-  '#let qcm-bonne(corps) = text(fill: couleur, weight: "bold", corps)'
+export const MATHALEA_QCM_HELPERS = `#let qcm-bonne(corps) = text(fill: couleur, weight: "bold", corps)
+#let qcm-case(correct) = box(width: 0.85em, height: 0.85em, stroke: 0.6pt, radius: 1pt, baseline: 0.15em,
+  align(center + horizon, if correct { text(weight: "bold", size: 0.75em)[✓] } else { [] }))
+#let qcm-lettre(lettre, correct) = box(
+  fill: if correct { white } else { black },
+  stroke: if correct { 0.6pt } else { none },
+  inset: (x: 0.3em, y: 0.15em), radius: 1pt, baseline: 0.15em,
+  text(fill: if correct { black } else { white }, weight: "bold", lettre),
+)`
 
 /**
  * Aide Typst pour les schémas en barres (SchemaEnBoite) : une accolade ou une
@@ -2514,8 +2528,12 @@ function qcmHasFigure(choices: { body: string }[]): boolean {
 
 /**
  * Convertit un groupe de propositions de QCM en un bloc `#tasks(...)`
- * (paquet taskize), avec des étiquettes A) B) C)... Dans le corrigé, la bonne
- * réponse est mise en évidence.
+ * (paquet taskize). Chaque item porte son propre marqueur — une case à
+ * cocher (`qcm-case`) ou une lettre en boîte (`qcm-lettre`), voir
+ * `MATHALEA_QCM_HELPERS` — plutôt que l'étiquetage automatique de `tasks`
+ * (`label:`), identique pour tous les items et donc incapable de distinguer
+ * la bonne réponse dans le corrigé. Le texte de la bonne réponse reste en
+ * plus mis en évidence par `qcm-bonne`.
  *
  * `qcmColumns` est inséré tel quel dans `columns:` : la fiche Typst y passe la
  * variable de l'exercice (`ex2-qcm-colonnes`), réglable depuis la palette de
@@ -2525,12 +2543,17 @@ function qcmHasFigure(choices: { body: string }[]): boolean {
 function qcmToTypst(
   choices: { correct: boolean; body: string }[],
   qcmColumns: string,
+  format: 'case' | 'lettre',
 ): string {
   const items = choices
-    .map(
-      (choice) =>
-        `  + ${choice.correct ? `#qcm-bonne[${choice.body}]` : choice.body}`,
-    )
+    .map((choice, index) => {
+      const marker =
+        format === 'case'
+          ? `#qcm-case(${choice.correct})`
+          : `#qcm-lettre("${lettreDepuisChiffre(index + 1)}", ${choice.correct})`
+      const body = choice.correct ? `#qcm-bonne[${choice.body}]` : choice.body
+      return `  + ${marker} ${body}`
+    })
     .join('\n')
   const withFigure = qcmHasFigure(choices)
   const columns =
@@ -2541,11 +2564,11 @@ function qcmToTypst(
       : qcmColumns
   // le marqueur ne sert qu'aux variables de la palette : le mode export écrit
   // déjà la valeur choisie ci-dessus
-  const marker =
+  const figuresMarker =
     withFigure && qcmColumns.endsWith('-qcm-colonnes')
       ? ` ${QCM_FIGURES_MARKER}`
       : ''
-  return `#tasks(columns: ${columns}, label: "A)", above: 0.4em, below: 0.4em)[${marker}\n${items}\n]`
+  return `#tasks(columns: ${columns}, label: none, above: 0.4em, below: 0.4em)[${figuresMarker}\n${items}\n]`
 }
 
 /**
@@ -2917,11 +2940,25 @@ function protectSchemaContainers(
  * réponse étant barrée).
  */
 function qcmChoiceIsCorrect(choice: Element): boolean {
+  // `input[type="radio"]` : QCU (`propositionsQcm(..., { radio: true })`),
+  // sans quoi la bonne réponse d'un QCU en format `case` n'était jamais
+  // détectée (seules les cases à cocher, jamais les boutons radio, l'étaient).
   const checkbox = choice.querySelector<HTMLInputElement>(
-    'input[type="checkbox"]',
+    'input[type="checkbox"], input[type="radio"]',
   )
   if (checkbox != null) return checkbox.checked
   return choice.querySelector('label:not([id]) span[style*="color"]') != null
+}
+
+/**
+ * Format des propositions d'un groupe de QCM : `case` (une case à cocher,
+ * éventuellement un bouton radio pour un QCU) ou `lettre` (une lettre en
+ * boîte, sans case). Devine le format depuis le HTML produit par
+ * `propositionsQcm()` (`qcm.ts:196-235`) : seul le format `case` insère un
+ * `<input>` dans chaque choix.
+ */
+function qcmChoiceFormat(choice: Element): 'case' | 'lettre' {
+  return choice.querySelector('input') != null ? 'case' : 'lettre'
 }
 
 /**
@@ -2946,6 +2983,7 @@ function protectQcm(
   if (labels.length === 0) return html
 
   const groups = new Map<Element, { correct: boolean; body: string }[]>()
+  const formats = new Map<Element, 'case' | 'lettre'>()
   const order: Element[] = []
   for (const label of labels) {
     const choice = label.closest('div')
@@ -2961,6 +2999,7 @@ function protectQcm(
     if (body.length === 0) continue
     if (!groups.has(container)) {
       groups.set(container, [])
+      formats.set(container, qcmChoiceFormat(choice))
       order.push(container)
     }
     groups.get(container)!.push({ correct: qcmChoiceIsCorrect(choice), body })
@@ -2972,7 +3011,15 @@ function protectQcm(
     // survivre à la normalisation des blancs)
     container.replaceWith(
       document.createTextNode(
-        protect('\n' + qcmToTypst(groups.get(container)!, qcmColumns) + '\n'),
+        protect(
+          '\n' +
+            qcmToTypst(
+              groups.get(container)!,
+              qcmColumns,
+              formats.get(container)!,
+            ) +
+            '\n',
+        ),
       ),
     )
   }

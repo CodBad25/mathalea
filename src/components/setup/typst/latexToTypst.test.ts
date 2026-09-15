@@ -793,10 +793,25 @@ describe('htmlToTypst', () => {
         '<div class="ex1 inline-block my-2 align-center"><input type="checkbox" disabled><label id="labelEx1Q0R1" class="ml-2">$2$&emsp;</label></div>' +
         '</div><div class="m-2" id="resultatCheckEx1Q0"></div>',
     )
-    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ $1$')
-    expect(result).toContain('+ $2$')
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
+    expect(result).toContain('+ #qcm-case(false) $1$')
+    expect(result).toContain('+ #qcm-case(false) $2$')
     expect(result).not.toContain('#qcm-bonne')
+  })
+
+  it('coche la bonne réponse (format case) d’un QCU (bouton radio) dans le corrigé', () => {
+    // régression : `qcmChoiceIsCorrect` ne détectait que les
+    // `input[type="checkbox"]`, jamais les boutons radio des QCU
+    // (`propositionsQcm(..., { radio: true })`) — la bonne réponse n'était
+    // donc jamais mise en évidence dans le corrigé Typst d'un QCU.
+    const result = htmlToTypst(
+      '<div class="my-3">' +
+        '<div class="inline-block"><input type="radio" checked><label id="labelEx1Q0R0" class="ml-2">$1$&emsp;</label></div>' +
+        '<div class="inline-block"><input type="radio"><label id="labelEx1Q0R1" class="ml-2">$2$&emsp;</label></div>' +
+        '</div>',
+    )
+    expect(result).toContain('+ #qcm-case(true) #qcm-bonne[$1$]')
+    expect(result).toContain('+ #qcm-case(false) $2$')
   })
 
   it('détecte le format lettre et met en évidence la bonne réponse du corrigé', () => {
@@ -806,9 +821,9 @@ describe('htmlToTypst', () => {
         '<div class="inline-block"><label class="ml-2"><b><span class="oblique-strike">B</span></b>.</label><label id="labelEx1Q0R1" class="ml-2">$4$</label></div>' +
         '</div>',
     )
-    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ #qcm-bonne[$8$]')
-    expect(result).toContain('+ $4$')
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
+    expect(result).toContain('+ #qcm-lettre("A", true) #qcm-bonne[$8$]')
+    expect(result).toContain('+ #qcm-lettre("B", false) $4$')
   })
 
   it('conserve le QCM quand une figure mathalea2d suit dans le même contenu', () => {
@@ -827,9 +842,9 @@ describe('htmlToTypst', () => {
         '</div><div class="m-2" id="resultatCheckEx0Q0"></div>',
       figures,
     )
-    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ $1$')
-    expect(result).toContain('+ $2$')
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
+    expect(result).toContain('+ #qcm-lettre("A", false) $1$')
+    expect(result).toContain('+ #qcm-lettre("B", false) $2$')
     expect(result).toContain(
       '#mathalea-figure-block(1, fig-1-align, fig-1-zoom,',
     )
@@ -871,7 +886,7 @@ describe('htmlToTypst', () => {
           '</div><div class="m-2" id="resultatCheckEx1Q0"></div>' +
           rawTable,
       )
-      expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
+      expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
       expect(result).toContain('#table(')
       expect(result).not.toContain('&amp;')
       expect(result).not.toContain('amp;')
