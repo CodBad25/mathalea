@@ -157,7 +157,7 @@ export default class DeriveeQuotient extends Exercice {
           'e',
         ][i % 16]
         texte = ''
-        texte += `$${nameF}(x)=${ce.parse(expression).simplify().latex}$`
+        texte += `$${nameF}(x)=${ce.parse(expression).latex}$`
         // Correction
         const derNum = ce.expr(['D', termeNum, 'x']).evaluate()
         const derDen = ce.expr(['D', termeDen, 'x']).evaluate()
