@@ -136,7 +136,7 @@
     "title": "Fonction racine carrée",
     "question": "Quelle est l'expression algébrique de la fonction racine carrée ?",
     "answer": ["f(x)=\\sqrt{x}", "\\sqrt{x}"],
-    "keys": ["f(x)="]
+    "keys": ["f(x)=", "x"]
     },
     {
     "themes": "Fonctions de référence",
@@ -145,7 +145,7 @@
     "title": "Fonction cube",
     "question": "Quelle est l'expression algébrique de la fonction cube ?",
     "answer": ["f(x)=x^3", "x^3"],
-    "keys": ["f(x)="]
+    "keys": ["f(x)=", "x"]
     },
     {
     "themes": "Fonctions de référence",
@@ -154,7 +154,7 @@
     "title": "Fonction cube",
     "question": "Quelle est l'expression algébrique de la fonction cube ?",
     "answer": ["f(x)=x^3", "x^3"],
-    "keys": ["f(x)="]
+    "keys": ["f(x)=", "x"]
     },
      {
     "themes": "Fonctions de référence",
@@ -262,7 +262,7 @@
       "title": "Fonction racine carrée",
       "question": "Quelle est l'expression algébrique de la fonction racine carrée ?",
       "answer": ["f(x)=\\sqrt{x}", "\\sqrt{x}"],
-      "keys": ["f(x)="]
+      "keys": ["f(x)=", "x"]
     },
     {
       "themes": "Fonctions de référence",
@@ -271,7 +271,7 @@
       "title": "Fonction cube",
       "question": "Quelle est l'expression algébrique de la fonction cube ?",
       "answer": ["f(x)=x^3", "x^3"],
-      "keys": ["f(x)="]
+      "keys": ["f(x)=", "x"]
     },
     {
       "themes": "Fonctions de référence",
@@ -280,7 +280,7 @@
       "title": "Fonction cube",
       "question": "Quelle est l'expression algébrique de la fonction cube ?",
       "answer": ["f(x)=x^3", "x^3"],
-      "keys": ["f(x)="]
+      "keys": ["f(x)=", "x"]
     }
   ]
 }

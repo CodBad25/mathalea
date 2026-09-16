@@ -242,8 +242,8 @@ export default class LireUnePuissance extends Exercice {
               ? `<br> $${texNombre(nb1, 0)} =$ ${ajouteChampTexteMathLive(
                   this,
                   indiceI + indiceII,
-                  KeyboardType.clavierDeBase,
-                )}<br>$${texNombre(nb2, 0)} =$ ${ajouteChampTexteMathLive(this, indiceI + indiceII + 1, KeyboardType.clavierDeBase)}`
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+                )}<br>$${texNombre(nb2, 0)} =$ ${ajouteChampTexteMathLive(this, indiceI + indiceII + 1, KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets)}`
               : ''
           }`,
         )

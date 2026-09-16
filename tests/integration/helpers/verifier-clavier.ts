@@ -1,6 +1,7 @@
 import { alphanumericLayouts } from '../../../src/components/keyboard/layouts/alphanumericRows'
 import { keyboardBlocks } from '../../../src/components/keyboard/layouts/keysBlocks'
 import { keys as touchesConnues } from '../../../src/components/keyboard/lib/keycaps'
+import { litTouchesPersonnalisees } from '../../../src/components/keyboard/lib/touchesPersonnalisees'
 import { isAnswerType, type IExercice } from '../../../src/lib/types'
 
 export type ResultatClavier = {
@@ -134,9 +135,63 @@ function insertionDe(nomCle: string): string {
   return touche?.insert ?? touche?.display ?? ''
 }
 
-function extraireClaviers(html: string): string[] {
-  const re = /<mathalea-mathfield\b[^>]*\bdata-keyboard="([^"]*)"[^>]*>/g
-  return [...html.matchAll(re)].map((m) => m[1])
+/**
+ * Associe à chaque indice de champ MathLive (celui passé à
+ * `ajouteChampTexteMathLive`/`handleAnswers`, retrouvable dans l'attribut
+ * `mathfield-id="champTexteEx{numeroExercice}Q{i}"`) le clavier qui lui a
+ * réellement été assigné.
+ *
+ * On ne peut pas supposer que `exercice.listeQuestions[i]` contient le champ
+ * de `exercice.autoCorrection[i]` : une question composée de plusieurs
+ * sous-parties (plusieurs champs MathLive) n'occupe qu'une seule case de
+ * `listeQuestions` alors que chacun de ses champs a sa propre case dans
+ * `autoCorrection`. Les deux tableaux ont alors des longueurs et des index
+ * différents ; seul le `mathfield-id` fait foi.
+ */
+type ChampMathLive = {
+  clavier: string
+  /** Touches ajoutées via `dataKeys` (voir `touchesPersonnalisees.ts`), en
+   * plus des blocs habituels de `data-keyboard` (ex : `KeyboardType.clavierPersonnalisable`). */
+  touchesPersonnalisees: string[]
+}
+
+/** Inverse `escapeHtmlAttribute` (`MathaleaCustomElement.ts`) sur un attribut HTML. */
+function nettoieEntitesHtml(value: string): string {
+  return value
+    .replaceAll('&quot;', '"')
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&amp;', '&')
+}
+
+function indexerClaviersParChamp(
+  exercice: IExercice,
+): Map<number, ChampMathLive> {
+  const index = new Map<number, ChampMathLive>()
+  const reBaliseMathfield = /<mathalea-mathfield\b[^>]*>/g
+  for (const html of exercice.listeQuestions ?? []) {
+    if (!html) continue
+    // `multi-mathfield` compose son propre clavier par champ (JSON encodé
+    // dans `data-options`) : un `<mathalea-mathfield>` isolé peut traîner
+    // ailleurs dans le même HTML sans rapport avec ces champs. On ne sait pas
+    // encore l'analyser correctement, donc on ne se prononce pas sur les
+    // champs de ce bloc.
+    if (/<multi-mathfield\b/.test(html)) continue
+    for (const balise of html.match(reBaliseMathfield) ?? []) {
+      const idMatch = balise.match(/\bmathfield-id="champTexteEx\d+Q(\d+)"/)
+      if (!idMatch) continue
+      const clavierMatch = balise.match(/\bdata-keyboard="([^"]*)"/)
+      const dataKeysMatch = balise.match(/\bdata-keys="([^"]*)"/)
+      const touchesPersonnalisees = litTouchesPersonnalisees(
+        dataKeysMatch ? nettoieEntitesHtml(dataKeysMatch[1]) : undefined,
+      )
+      index.set(Number(idMatch[1]), {
+        clavier: clavierMatch?.[1] ?? '',
+        touchesPersonnalisees,
+      })
+    }
+  }
+  return index
 }
 
 /**
@@ -149,6 +204,7 @@ function extraireClaviers(html: string): string[] {
  */
 export function verifyKeyboardCoverage(exercice: IExercice): ResultatClavier[] {
   const results: ResultatClavier[] = []
+  const claviersParChamp = indexerClaviersParChamp(exercice)
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
     const ac = exercice.autoCorrection[i]
     const format = ac?.formatInteractif ?? 'mathlive'
@@ -162,19 +218,19 @@ export function verifyKeyboardCoverage(exercice: IExercice): ResultatClavier[] {
       continue
     }
 
-    const html = exercice.listeQuestions?.[i] ?? ''
-    // `multi-mathfield` compose son propre clavier par champ (JSON encodé
-    // dans `data-options`) : un `<mathalea-mathfield>` isolé peut traîner
-    // ailleurs dans le même HTML sans rapport avec ces champs. On ne sait pas
-    // encore l'analyser correctement, donc on ne se prononce pas dessus.
-    if (/<multi-mathfield\b/.test(html)) continue
-    const claviers = extraireClaviers(html)
-    if (claviers.length === 0) continue
+    const champ = claviersParChamp.get(i)
+    if (champ === undefined) continue
+    const claviers = [champ.clavier]
 
     const clesDisponibles = new Set<string>()
     for (const clavier of claviers) {
       for (const cle of clesDuClavier(clavier)) clesDisponibles.add(cle)
     }
+    // Les touches ajoutées question par question (`dataKeys`) désignent soit
+    // un raccourci connu (`POW`...), soit sont insérées telles quelles : dans
+    // les deux cas leur propre nom suffit à satisfaire les règles ci-dessous
+    // (ex : une touche `"a"` satisfait la règle « variable a »).
+    for (const cle of champ.touchesPersonnalisees) clesDisponibles.add(cle)
 
     for (const [key, answer] of Object.entries(valeur)) {
       if (key === 'bareme' || key === 'feedback') continue
@@ -197,32 +253,52 @@ export function verifyKeyboardCoverage(exercice: IExercice): ResultatClavier[] {
       ) {
         continue
       }
-      const reponseBrute = Array.isArray(answer.value)
-        ? String(answer.value[0])
-        : String(answer.value)
-      const nettoyee = nettoie(reponseBrute)
-      const manquants: string[] = []
-      for (const regle of REGLES) {
-        if (!regle.requiert(nettoyee, reponseBrute)) continue
-        // `handleFraction` accepte l'écriture décimale avant de juger la
-        // fraction : la touche FRAC n'est alors pas indispensable.
-        if (regle.nom === 'fraction' && options.nombreDecimalSeulement) {
-          continue
+      // Quand plusieurs formulations sont acceptées (ex : `f(3)=5` et `5`),
+      // il suffit qu'une seule soit intégralement saisissable avec le clavier
+      // assigné : l'élève n'a pas besoin de taper précisément la première du
+      // tableau.
+      const alternatives = Array.isArray(answer.value)
+        ? answer.value.map(String)
+        : [String(answer.value)]
+      let meilleurReponse = alternatives[0]
+      let meilleursManquants: string[] | null = null
+      for (const alternative of alternatives) {
+        const nettoyee = nettoie(alternative)
+        const manquants: string[] = []
+        for (const regle of REGLES) {
+          if (!regle.requiert(nettoyee, alternative)) continue
+          // `handleFraction` accepte l'écriture décimale avant de juger la
+          // fraction : la touche FRAC n'est alors pas indispensable.
+          if (regle.nom === 'fraction' && options.nombreDecimalSeulement) {
+            continue
+          }
+          const satisfait =
+            regle.satisfaitPar.some((cle) => clesDisponibles.has(cle)) ||
+            (regle.satisfaitSiInsertionContient != null &&
+              [...clesDisponibles].some((cle) =>
+                regle.satisfaitSiInsertionContient!.test(insertionDe(cle)),
+              ))
+          if (!satisfait) manquants.push(regle.nom)
         }
-        const satisfait =
-          regle.satisfaitPar.some((cle) => clesDisponibles.has(cle)) ||
-          (regle.satisfaitSiInsertionContient != null &&
-            [...clesDisponibles].some((cle) =>
-              regle.satisfaitSiInsertionContient!.test(insertionDe(cle)),
-            ))
-        if (!satisfait) manquants.push(regle.nom)
+        if (manquants.length === 0) {
+          meilleurReponse = alternative
+          meilleursManquants = manquants
+          break
+        }
+        if (
+          meilleursManquants === null ||
+          manquants.length < meilleursManquants.length
+        ) {
+          meilleurReponse = alternative
+          meilleursManquants = manquants
+        }
       }
       results.push({
         questionIndex: i,
-        reponse: reponseBrute,
+        reponse: meilleurReponse,
         clavier: claviers.join(' '),
-        symbolesManquants: manquants,
-        isOk: manquants.length === 0,
+        symbolesManquants: meilleursManquants ?? [],
+        isOk: (meilleursManquants ?? []).length === 0,
       })
     }
   }
