@@ -1,4 +1,7 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec triple et moitié'
@@ -32,7 +35,7 @@ export default class TripleEtMoitie extends ExerciceSimple {
     this.correction = `Le nombre est $${a}$, sa moitié est $${texNombre(a / 2)}$.<br><br>`
     this.correction += texteEnCouleur(`
     Mentalement : <br>
-    Si le triple du nombre est $${3 * a}$, ce nombre est : $${3 * a}\\div 3=${a}$.<br>
+    Si le triple du nombre est $${3 * a}$, ce nombre est : $${3 * a}\\div 3=${miseEnEvidence(a)}$.<br>
     Puisqu'on cherche sa moitié, on le divise par $2$, soit  $${a}\\div 2=${texNombre(a / 2)}$.`)
     this.reponse = a / 2
   }
