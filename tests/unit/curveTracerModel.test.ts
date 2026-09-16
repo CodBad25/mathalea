@@ -10,11 +10,46 @@ import {
   formatFrenchLatexNumber,
   parseCurveTracerNumber,
   removeCurveTracerColumn,
+  restoreCurveTracerFocus,
   sampleFunction,
   sortCurveTracerPoints,
 } from '../../src/lib/customElements/TraceurDeCourbe'
 
 describe('curveTracerModel', () => {
+  it('restaure le focus vers la cellule visée après une reconstruction', async () => {
+    const table = document.createElement('div')
+    table.innerHTML =
+      '<input id="champTexteEx0Q0L0C1" data-row="0" data-index="0"><input id="champTexteEx0Q0L1C1" data-row="1" data-index="0">'
+    document.body.append(table)
+
+    restoreCurveTracerFocus(table, {
+      id: 'champTexteEx0Q0L1C1',
+      row: 1,
+      index: 0,
+    })
+    await Promise.resolve()
+
+    expect(document.activeElement?.id).toBe('champTexteEx0Q0L1C1')
+    table.remove()
+  })
+
+  it('restaure le focus sous la valeur de x après son déplacement', async () => {
+    const table = document.createElement('div')
+    table.innerHTML =
+      '<input id="champTexteEx0Q0L1C1" data-row="1" data-index="0"><input id="champTexteEx0Q0L1C2" data-row="1" data-index="1">'
+    document.body.append(table)
+
+    restoreCurveTracerFocus(table, {
+      id: 'champTexteEx0Q0L1C2',
+      row: 1,
+      index: 0,
+    })
+    await Promise.resolve()
+
+    expect(document.activeElement?.id).toBe('champTexteEx0Q0L1C1')
+    table.remove()
+  })
+
   it('calcule des graduations régulières et lisibles', () => {
     expect(curveTracerTicks(-0.5, 6.5)).toEqual([0, 1, 2, 3, 4, 5, 6])
     expect(curveTracerTicks(-0.1, 1.1)).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1])
