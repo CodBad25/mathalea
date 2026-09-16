@@ -1179,7 +1179,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             texte += ajouteChampTexteMathLive(
               this,
               index,
-              KeyboardType.clavierNumbers,
+              KeyboardType.clavierDeBase,
             )
           }
           this.canEnonce = texte

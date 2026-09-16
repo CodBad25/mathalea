@@ -584,7 +584,7 @@ export default class SujetCAN20213ieme extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 index,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
               )
             } else {
               texte += ' $\\ldots$'

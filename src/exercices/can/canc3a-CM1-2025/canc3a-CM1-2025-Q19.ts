@@ -25,7 +25,7 @@ export default class Can2025CM1Q19 extends ExerciceSimple {
 
   nouvelleVersion() {
     const num1 = this.canOfficielle ? 4 : randint(2, 5)
-    const num2 = this.canOfficielle ? 8 : randint(8, 59)
+    const num2 = this.canOfficielle ? 8 : randint(8, 59, num1 * 10)
 
     this.autoCorrection[0] = {
       options: { ordered: true },
