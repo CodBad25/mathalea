@@ -156,9 +156,14 @@ export default class ResoudreEquationDegre2 extends Exercice {
       }
       texte +=
         '<br>' +
-        ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecX, {
-          texteAvant: '$P(x)=$',
-        })
+        ajouteChampTexteMathLive(
+          this,
+          i,
+          `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
+          {
+            texteAvant: '$P(x)=$',
+          },
+        )
       if (this.interactif) {
         texte += boutonReponsePredefinie({
           numeroExercice: this.numeroExercice,

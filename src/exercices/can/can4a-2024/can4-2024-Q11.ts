@@ -20,7 +20,7 @@ export default class NomExercice extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.canOfficielle = false
   }
 

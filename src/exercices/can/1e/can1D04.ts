@@ -4,6 +4,7 @@ import RepereBuilder from '../../../lib/2d/RepereBuilder'
 import { latexParCoordonnees, texteParPosition } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
 import { deuxColonnesResp } from '../../../lib/format/miseEnPage'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -39,6 +40,7 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = `${KeyboardType.clavierDeBase} ${KeyboardType.clavierDeBaseAvecVariable}`
   }
 
   nouvelleVersion() {

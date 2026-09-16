@@ -65,7 +65,7 @@ export default class Can20266Q19 extends ExerciceCan {
     La fraction $${b.texFraction}$ a un numérateur plus petit que son dénominateur, elle est donc plus petite que $1$.<br>
     Ainsi, le plus grand nombre est $${miseEnEvidence(a.texFraction)}$.`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.canEnonce = 'Entoure le plus grand nombre.'
     this.canReponseACompleter = `$${liste.join('~~;~~')}$`
   }

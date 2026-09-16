@@ -79,7 +79,7 @@ export default class Can2026CM1Q19 extends ExerciceCan {
     Le plus petit nombre est $${miseEnEvidence(fracGagnante.texFraction)}$.`
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.canEnonce = `Entoure ${consigne} nombre.`
     this.canReponseACompleter = `$${frac1.texFraction}~~~~~${frac2.texFraction}$`
   }

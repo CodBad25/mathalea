@@ -91,7 +91,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
         texte += ajouteChampTexteMathLive(
           this,
           i,
-          KeyboardType.clavierNumbers,
+          KeyboardType.clavierDeBase,
           { texteAvant: '$b=$' },
         )
 

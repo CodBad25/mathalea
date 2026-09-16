@@ -6,6 +6,7 @@ import {
 } from '../../../lib/outils/ecritures'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer l’abscisse ou l’ordonnée du sommet d’une parabole'
@@ -30,6 +31,7 @@ export default class EcondDegreAbscisseOrdonneeSommet extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.nbQuestions = 1
   }
 

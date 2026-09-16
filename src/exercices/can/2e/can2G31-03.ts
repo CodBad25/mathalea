@@ -38,7 +38,7 @@ export default class EquationDroite extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.versionQcmDisponible = true
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
   }
 
   nouvelleVersion() {

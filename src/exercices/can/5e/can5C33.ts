@@ -26,7 +26,7 @@ export default class Pyramide3Etages extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.typeExercice = 'simple'
   }
 

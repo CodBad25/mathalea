@@ -9,6 +9,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une coordonnée avec un produit scalaire'
 export const interactifReady = true
@@ -31,6 +32,7 @@ export default class RechercheCoordonneesProdScal extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
 
     this.nbQuestions = 1
   }

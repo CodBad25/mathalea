@@ -125,7 +125,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
                 texte += ajouteChampTexteMathLive(
                   this,
                   i,
-                  KeyboardType.clavierNumbers,
+                  KeyboardType.clavierDeBase,
                   {
                     texteAvant: '<br>',
                     texteApres: '€',
@@ -141,7 +141,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
                 texte += ajouteChampTexteMathLive(
                   this,
                   i,
-                  KeyboardType.clavierNumbers,
+                  KeyboardType.clavierDeBase,
                   {
                     texteAvant: '<br>',
                     texteApres: '€',
@@ -160,7 +160,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
                 texte += ajouteChampTexteMathLive(
                   this,
                   i,
-                  KeyboardType.clavierNumbers,
+                  KeyboardType.clavierDeBase,
                   {
                     texteAvant: '<br>',
                     texteApres: '€',
@@ -176,7 +176,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
                 texte += ajouteChampTexteMathLive(
                   this,
                   i,
-                  KeyboardType.clavierNumbers,
+                  KeyboardType.clavierDeBase,
                   {
                     texteAvant: '<br>',
                     texteApres: '€',
@@ -214,7 +214,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '%',
@@ -270,7 +270,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: 'élèves',
@@ -296,7 +296,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: 'élèves',
@@ -331,7 +331,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '%',
@@ -375,7 +375,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '€',
@@ -401,7 +401,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '€',
@@ -437,7 +437,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '%',
@@ -473,7 +473,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: 'habitants',
@@ -498,7 +498,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: 'habitants',
@@ -533,7 +533,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '%',
@@ -592,7 +592,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '€',
@@ -618,7 +618,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '€',
@@ -642,7 +642,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '%',
@@ -701,7 +701,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '€',
@@ -727,7 +727,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '€',
@@ -751,7 +751,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 i,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
                 {
                   texteAvant: '<br>',
                   texteApres: '%',

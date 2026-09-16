@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
 import { randint } from '../../../modules/outils'
@@ -24,6 +25,7 @@ export default class NomExercice extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.grecTrigo
   }
 
   nouvelleVersion() {
