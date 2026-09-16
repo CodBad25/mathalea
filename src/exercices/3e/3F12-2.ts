@@ -277,7 +277,7 @@ export default class ImageFonctionAlgebrique extends Exercice {
       } else {
         texte += `Calculer l'image de $${x}$ par la fonction $${nomdef}$.`
       }
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction)
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
       const textCorrSplit = texteCorr.split('=')

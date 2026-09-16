@@ -226,7 +226,11 @@ export default class ReciproqueThales extends Exercice {
         texte += `Les droites $(${s2 + s3})$ et $(${s4 + s5})$ sont-elles parallèles ?<br>`
         if (this.interactif) {
           texte += '<div class="italic">Répondre « oui » ou « non ».</div>'
-          texte += ajouteChampTexteMathLive(this, i, KeyboardType.vFON)
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            `${KeyboardType.vFON} ${KeyboardType.variableN}`,
+          )
         }
 
         texteCorr += `D'une part, on a : $\\dfrac{${s1 + s2}}{${s1 + s4}}=\\dfrac{${s12}}{${s14}}=\\dfrac{${s12}\\times${miseEnEvidence(

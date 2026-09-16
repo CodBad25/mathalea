@@ -25,6 +25,7 @@ import {
   writeSkippedQuestionsLogs,
 } from './helpers/skippedQuestionsLogger'
 import { verifyComparisonOnly } from './helpers/verifier-comparison'
+import { verifyKeyboardCoverage } from './helpers/verifier-clavier'
 import { verifyDom } from './helpers/verifier-dom'
 
 vi.mock('../../src/lib/renderScratch', () => ({
@@ -385,6 +386,18 @@ for (const [dir, entries] of grouped) {
               if (!result.isOk) {
                 failures.push(
                   `${url} : la fonction ${result.verificationFunctionName} (${result.format}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
+                )
+              }
+            }
+
+            // Stratégie 3 : le clavier assigné à chaque champ MathLive doit
+            // permettre de saisir tous les symboles de la réponse attendue
+            // (variable, parenthèses, opérateurs...).
+            const clavierResults = verifyKeyboardCoverage(exercice)
+            for (const result of clavierResults) {
+              if (!result.isOk) {
+                failures.push(
+                  `${url} : le clavier "${result.clavier}" assigné à la question ${result.questionIndex + 1} ne permet pas de saisir : ${result.symbolesManquants.join(', ')} (réponse attendue : ${result.reponse}).`,
                 )
               }
             }

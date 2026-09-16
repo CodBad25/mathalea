@@ -11,6 +11,7 @@ import {
 import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une image avec un quotient'
 export const interactifReady = true
@@ -32,6 +33,7 @@ export default class CalculImageQuotient extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
 
     this.nbQuestions = 1
   }

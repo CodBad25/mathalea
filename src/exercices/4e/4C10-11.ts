@@ -149,7 +149,7 @@ export default class ValeurApprocheeQuotientRelatif extends Exercice {
                 ? ajouteChampTexteMathLive(
                     this,
                     i * typesDeQuestions.length * precisions.length + numQuest,
-                    KeyboardType.clavierNumbers,
+                    KeyboardType.clavierDeBase,
                   ) + '.'
                 : ':') +
               '<br>',

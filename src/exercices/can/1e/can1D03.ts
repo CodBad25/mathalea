@@ -8,6 +8,7 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Lire graphiquement un nombre dérivé'
 export const interactifReady = true
@@ -32,6 +33,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.nbQuestions = 1
   }
 

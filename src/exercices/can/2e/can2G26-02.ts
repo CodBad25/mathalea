@@ -1,5 +1,6 @@
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer les coordonnées d’un vecteur (bis)'
@@ -24,6 +25,7 @@ export default class CoordonneesVecteur2 extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierFullOperations
     this.nbQuestions = 1
   }
 

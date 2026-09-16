@@ -2,6 +2,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver les coordonnées d'un point avec un milieu"
 export const interactifReady = true
@@ -24,6 +25,7 @@ export default class CoordonneesMilieuExtremite extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierFullOperations
     this.nbQuestions = 1
   }
 

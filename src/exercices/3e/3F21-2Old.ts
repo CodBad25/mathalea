@@ -321,7 +321,7 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         i,
-        KeyboardType.clavierDeBaseAvecX,
+        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
       )
       if (
         this.questionJamaisPosee(

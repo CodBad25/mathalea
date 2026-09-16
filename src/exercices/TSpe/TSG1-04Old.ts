@@ -68,13 +68,13 @@ export default class nomExercice extends Exercice {
     const reponse2 = proba.texFractionSimplifiee
 
     handleAnswers(this, 0, { reponse: { value: resultat } })
-    question1 += ajouteChampTexteMathLive(this, 0, KeyboardType.clavierDeBase, {
+    question1 += ajouteChampTexteMathLive(this, 0, KeyboardType.clavierDeBaseAvecFraction, {
       texteAvant: '<br>$n=$ ',
     })
     this.listeQuestions.push(question1)
     this.listeCorrections.push(correction1)
     handleAnswers(this, 1, { reponse: { value: reponse2 } })
-    question2 += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase, {
+    question2 += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBaseAvecFraction, {
       texteAvant: '<br>$p=$ ',
     })
     this.listeQuestions.push(question2)

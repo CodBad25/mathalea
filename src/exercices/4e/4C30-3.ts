@@ -123,7 +123,7 @@ export default class EcritureDecimalePuissance extends Exercice {
           break
       }
 
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction, {
         texteAvant: sp(2) + '$=$' + sp(2),
       })
 

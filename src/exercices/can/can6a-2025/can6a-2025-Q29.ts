@@ -23,7 +23,7 @@ export default class Can2025N6Q29 extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 
   nouvelleVersion() {

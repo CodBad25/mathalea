@@ -78,7 +78,7 @@ export default class Can2026CM2Q19 extends ExerciceCan {
     Ainsi, le plus grand nombre est $${miseEnEvidence(frac.texFraction)}$.`
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.canEnonce = 'Entoure le plus grand nombre.'
     this.canReponseACompleter = `$${texNombre(decimal, 1)}~~~~~${frac.texFraction}$`
   }

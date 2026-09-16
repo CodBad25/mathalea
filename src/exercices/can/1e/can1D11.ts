@@ -8,6 +8,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer la fonction dérivée d’une fonction affine'
 export const interactifReady = true
@@ -32,6 +33,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.nbQuestions = 1
     this.optionsDeComparaison = { calculFormel: true }
   }

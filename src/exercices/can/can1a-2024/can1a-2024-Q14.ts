@@ -5,6 +5,7 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
@@ -27,6 +28,7 @@ export default class EquationReduite extends ExerciceSimple {
     super()
     this.typeExercice = 'simple' // Cette ligne est très importante pour faire un exercice simple !
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
 
     this.canOfficielle = false
   }

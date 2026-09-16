@@ -158,7 +158,7 @@ export default class TableDoubleDistributivite extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         3 * i + 1,
-        KeyboardType.clavierDeBaseAvecX,
+        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
       )
       texte += context.isHtml
         ? '<br> Développement réduit : '
@@ -166,7 +166,7 @@ export default class TableDoubleDistributivite extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         3 * i + 2,
-        KeyboardType.clavierDeBaseAvecX,
+        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
       )
       // aucune gestion de la largeur de colonne ici
       texteCorr += tableauColonneLigne(

@@ -3,6 +3,7 @@ import {
   fraction,
   obtenirListeFractionsIrreductibles,
 } from '../../../modules/fractions'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer la somme de fractions à dénominateurs compatibles'
@@ -26,6 +27,7 @@ export default class SommeFractionsCompatibles extends ExerciceSimple {
   constructor() {
     super()
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.nbQuestions = 1
   }
 
