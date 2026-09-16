@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 29b40 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -14,18 +17,18 @@ import Exercice from '../Exercice'
 export const titre = 'Encadrer un entier'
 
 export const interactifReady = true
-export const dateDeModifImportante = '16/09/2026'
+export const dateDeModifImportante = '26/08/2025'
 /**
  * * Encadrer un nombre entier
  * @author Sébastien Lozano
  */
 
-export const uuid = '6193b'
+export const uuid = '29b40'
 
 export const refs = {
-  'fr-fr': ['6N0A-9'],
-  'fr-2016': ['6N11-3'],
-  'fr-ch': [''], // Primaire anciennement :['9NO2-3'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': ['NR'], // Primaire anciennement :['9NO2-3'],
 }
 
 // selon la precision on veut certains chiffres plus souvant que d'autres ...
@@ -143,7 +146,7 @@ function encadrementCorr(nb: number, precision: number) {
     }
   }
 }
-export default class EncadrerUnEntierParDeuxEntiersConsecutifs extends Exercice {
+export default class EncadrerUnEntierParDeuxEntiersConsecutifsOld extends Exercice {
   constructor() {
     super()
     this.sup = 1
@@ -208,14 +211,6 @@ export default class EncadrerUnEntierParDeuxEntiersConsecutifs extends Exercice 
       }
       const nombre = myNombres(nbChiffres[i] + 3)
       // if (listeTypeDeQuestions[i] > 3) nombre = myNombres(nbChiffres[i] + 2) * 10 + randint(1, 9)
-      // Un nombre déjà multiple de pDix rend l'encadrement "forcément consécutifs" trivial (bornes à ±pDix sans troncature à faire).
-      if (
-        (listeTypeDeQuestions[i] === 4 || listeTypeDeQuestions[i] === 5) &&
-        nombre % pDix === 0
-      ) {
-        cpt++
-        continue
-      }
       // autant de case que d'elements dans le tableau des situations
       const [inf, sup] = encadrementCorr(nombre, pDix)
       switch (pDix) {
