@@ -26,7 +26,7 @@ export default class PlusPetitEnsemble extends ExerciceSimple {
     this.nbQuestions = 1
 
     this.optionsDeComparaison = { texteSansCasse: true }
-    this.formatChampTexte = KeyboardType.clavierEnsemblePredefini
+    this.formatChampTexte = `${KeyboardType.clavierEnsemblePredefini} ${KeyboardType.alphanumeric}`
   }
 
   nouvelleVersion() {
