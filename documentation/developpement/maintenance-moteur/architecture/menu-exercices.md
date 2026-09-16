@@ -13,6 +13,35 @@ Tous ces fichiers sont importés statiquement (ES modules JSON) par le code sous
 
 ## Génération par `tasks/updateMenuInternational.js`
 
+### Détection des fonctions QCM et QCM Cam
+
+Les indicateurs `features.qcm` et `features.qcmcam` sont produits par la même
+détection statique dans `tasks/lib/detect-qcm-capability.js`. Ils ont donc
+toujours la même valeur : tout exercice reconnu comme QCM porte le pictogramme
+QCM Cam.
+
+La détection parcourt l'AST TypeScript ou JavaScript, sans exécuter l'exercice.
+Elle reconnaît :
+
+- les classes qui étendent directement `ExerciceQcm` ou `ExerciceQcmA` ;
+- ces mêmes héritages à travers une chaîne de classes parentes importées depuis
+  des modules locaux ;
+- les appels aux helpers QCM connus, notamment `propositionsQcm()`,
+  `buildQcmForExercise()` et `buildSimpleVersionQcm()` ;
+- les formats `qcm` et `mathalea-qcm` affectés à `formatInteractif` ;
+- les marqueurs `versionQcm` et `versionQcmDisponible` positionnés à `true`.
+
+Les fichiers analysés et le résultat de leur résolution transitive sont mis en
+cache pendant la génération. Aucun exercice n'est instancié et aucune
+proposition n'est comptée. L'ancien export `interactifType` n'entre pas dans la
+détection.
+
+Le bouton d'export de `Start.svelte` contrôle ensuite les questions réellement
+générées à partir de `autoCorrection[].formatInteractif`. L'exporteur
+`src/lib/qcmCam.ts` ne limite ni le nombre de propositions ni le nombre de
+bonnes réponses ; les lettres de toutes les bonnes réponses sont concaténées
+dans le champ `reponse`.
+
 Le script doit être relancé après la création ou la modification d'un exercice. Il parcourt `src/exercices`, extrait les métadonnées de chaque fichier d'exercice (`uuid`, `refs`, `titre`, dates, `features` interactif/amc/qcm) et écrit, séparément pour la France (`FR`) et la Suisse (`CH`) :
 
 Le type d'interactivité est extrait des littéraux `formatInteractif` présents

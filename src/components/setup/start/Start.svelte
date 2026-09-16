@@ -44,6 +44,7 @@
     InterfaceGlobalOptions,
     InterfaceParams,
   } from '../../../lib/types'
+  import { interactivityTypeToCustomElementFormat } from '../../../lib/types'
   import type { CanOptions } from '../../../lib/types/can'
   import type { Language } from '../../../lib/types/languages'
   import { ALLOWED_LANGUAGES, isLanguage } from '../../../lib/types/languages'
@@ -437,9 +438,8 @@
       exercise.nouvelleVersion()
       const questionsQcm = exercise.autoCorrection.filter(
         (el) =>
-          el.formatInteractif === 'qcm' &&
-          el.propositions != null &&
-          el.propositions?.length > 1,
+          interactivityTypeToCustomElementFormat(el.formatInteractif) ===
+          'mathalea-qcm',
       ).length
       return questionsQcm !== 0
     })

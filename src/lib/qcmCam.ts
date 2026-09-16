@@ -1,4 +1,8 @@
-import type { IExercice, UneProposition } from '../lib/types'
+import {
+  interactivityTypeToCustomElementFormat,
+  type IExercice,
+  type UneProposition,
+} from '../lib/types'
 import { lettreDepuisChiffre } from './outils/outilString'
 
 export function shuffleJusquaWithIndexes(array: unknown[], lastChoice: number) {
@@ -24,9 +28,15 @@ export function qcmCamExport(
   if (exercice.autoCorrection.length !== exercice.listeQuestions.length)
     return []
   for (let j = 0; j < exercice.autoCorrection.length; j++) {
+    if (
+      interactivityTypeToCustomElementFormat(
+        exercice.autoCorrection[j].formatInteractif,
+      ) !== 'mathalea-qcm'
+    ) {
+      continue
+    }
     const propositions = exercice.autoCorrection[j].propositions
     if (propositions == null) continue
-    if (propositions.length > 4) continue
     const laConsigne =
       exercice.consigne.replaceAll(
         /\$([^$]*)\$/g,
@@ -83,7 +93,7 @@ export function qcmCamExport(
       )
       const bonneReponse = statuts[i]
       question += `<li${bonneReponse ? ' class="rondvert"' : ''}>${prop}</li>`
-      if (bonneReponse) reponse = lettreDepuisChiffre(i + 1)
+      if (bonneReponse) reponse += lettreDepuisChiffre(i + 1)
     }
     question += '</ol>'
     questions.push({ question, reponse })
