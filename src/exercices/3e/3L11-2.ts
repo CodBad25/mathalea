@@ -6,6 +6,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -14,9 +15,11 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { rangeMinMax } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import {
+  contraindreValeur,
   gestionnaireFormulaireTexte,
   listeQuestionsToContenuSansNumero,
   randint,
@@ -81,7 +84,7 @@ export default class ReductionSiPossible extends Exercice {
         ? 'Réduire les expressions suivantes, si cela est possible.'
         : "Réduire l'expression suivante, si cela est possible."
 
-    const exclus = []
+    const exclus: number[] = []
     if (this.sup) {
       exclus.push(1)
       exclus.push(3)
@@ -105,17 +108,42 @@ export default class ReductionSiPossible extends Exercice {
       !context.isAmc &&
       casDemandes.length > 0 &&
       casDemandes.every((cas) => cas === '10')
+    // La saisie mélange le cas 10 (ax*bx) avec d'autres cas (par exemple « 4-5-10 »).
+    // gestionnaireFormulaireTexte plafonnerait la valeur 10 à la valeur de mélange (9),
+    // ce qui remplacerait silencieusement la sélection de l'utilisateur par un mélange
+    // de tous les cas 1 à 8 : c'est ce qui produisait des questions ne correspondant pas
+    // aux cases cochées. On construit donc nous-mêmes la liste des cas demandés, en
+    // reprenant les mêmes règles (cas exclus, cas mélange 9) que gestionnaireFormulaireTexte.
+    const contientCas10 =
+      !context.isAmc && !seulementAxBx && casDemandes.includes('10')
 
-    const listeTypeDeQuestions = seulementAxBx
-      ? new Array(this.nbQuestions).fill(10)
-      : gestionnaireFormulaireTexte({
-          nbQuestions: this.nbQuestions,
-          saisie: this.sup3,
-          max: 8,
-          melange: 9,
-          defaut: 2,
-          exclus,
-        })
+    let listeTypeDeQuestions: (string | number)[]
+    if (seulementAxBx) {
+      listeTypeDeQuestions = new Array(this.nbQuestions).fill(10)
+    } else if (contientCas10) {
+      let autresCas = casDemandes
+        .filter((cas) => cas !== '10')
+        .map((cas) => contraindreValeur(1, 9, parseInt(cas), 2))
+      if (autresCas.length === 0) autresCas = [2]
+      autresCas = autresCas.filter((cas) => !exclus.includes(cas))
+      if (autresCas.length === 0) autresCas = [2]
+      if (autresCas.includes(9)) {
+        autresCas = rangeMinMax(1, 8, exclus)
+      }
+      listeTypeDeQuestions = combinaisonListes(
+        [...autresCas, 10],
+        this.nbQuestions,
+      )
+    } else {
+      listeTypeDeQuestions = gestionnaireFormulaireTexte({
+        nbQuestions: this.nbQuestions,
+        saisie: this.sup3,
+        max: 8,
+        melange: 9,
+        defaut: 2,
+        exclus,
+      })
+    }
 
     // const listeTypeDeQuestions = combinaisonListes(typesDeQuestionsDisponibles, this.nbQuestions) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
     for (
