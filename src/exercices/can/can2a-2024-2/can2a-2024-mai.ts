@@ -141,7 +141,7 @@ export default class nomExercice extends Exercice {
     }
     this.listeQuestions[i] +=
       '<br><br>Que renvoie $\\texttt{mystere(-5)}$ ?' +
-      ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
+      ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
     this.listeCorrections[i] =
       `$-5 < 0 $ donc le script renvoie $-5 \\times 3 = ${miseEnEvidence('-15')}$.`
     handleAnswers(this, i, { reponse: { value: '-15' } })
