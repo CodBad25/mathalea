@@ -316,7 +316,7 @@ export default class ImageFonctionAlgebrique extends Exercice {
       } else {
         texte += `Calculer l'image de ${x} par la fonction $${nomdef}$.`
       }
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction)
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre

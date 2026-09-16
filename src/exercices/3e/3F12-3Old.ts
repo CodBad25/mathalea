@@ -412,13 +412,13 @@ export default class TableauDeValeurs extends Exercice {
       } else if (this.interactif) {
         texte +=
           `<br><br>$f(${listeDeX[i][0]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3, KeyboardType.clavierDeBase)
+          ajouteChampTexteMathLive(this, i * 3, KeyboardType.clavierDeBaseAvecFraction)
         texte +=
           `<br><br>$f(${listeDeX[i][1]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3 + 1, KeyboardType.clavierDeBase)
+          ajouteChampTexteMathLive(this, i * 3 + 1, KeyboardType.clavierDeBaseAvecFraction)
         texte +=
           `<br><br>$f(${listeDeX[i][2]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3 + 2, KeyboardType.clavierDeBase)
+          ajouteChampTexteMathLive(this, i * 3 + 2, KeyboardType.clavierDeBaseAvecFraction)
 
         if (listeReponses[0] instanceof FractionEtendue) {
           if (listeReponses[0].den === 1)

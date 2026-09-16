@@ -167,7 +167,7 @@ export default class ExerciceEquationSecondDegre extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: `${rienSi1(nPente.simplifie())}x${nOdonnee.num === 0 ? '' : ecritureAlgebrique(nOdonnee.simplifie())}`,
-            options: { egaliteExpression: true },
+            options: { expressionsForcementReduites: true },
           },
         })
         this.listeCorrections[i] = texteCorr

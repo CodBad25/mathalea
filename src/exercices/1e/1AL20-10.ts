@@ -77,9 +77,14 @@ export default class CalculerDiscriminant extends Exercice {
       if (this.interactif) {
         texte +=
           '<br><br>' +
-          ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
-            texteAvant: '$\\Delta = $',
-          })
+          ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: '$\\Delta = $',
+            },
+          )
       }
       handleAnswers(this, i, { reponse: { value: p.discriminant } })
 

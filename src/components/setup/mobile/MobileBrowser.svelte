@@ -1,6 +1,6 @@
 <script lang="ts">
   import {
-    mobileMenuSections,
+    mobileMenuSectionsForLocale,
     nodeLabel,
     resolveNode,
     splitChildren,
@@ -43,6 +43,7 @@
   }: Props = $props()
 
   const lang = getLang()
+  const mobileMenuSections = mobileMenuSectionsForLocale(lang)
 
   const section = $derived(mobileMenuSections.find((s) => s.id === path[0]))
   const entry = $derived(section?.entries.find((e) => e.id === path[1]))

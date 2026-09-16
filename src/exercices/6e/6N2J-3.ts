@@ -97,7 +97,8 @@ export default class DivisibleDiviseurMultiple extends Exercice {
     for (let i = 0, texte, texteCorr; i < this.nbQuestions; i++) {
       // Boucle principale où i+1 correspond au numéro de la question
       if (listeTypeDeQuestions[i] === 1) {
-        texte = '... est divisible par ...'
+        texte =
+          '$\\ldots\\ldots\\ldots$ est divisible par $\\ldots\\ldots\\ldots$'
         if (this.interactif) {
           texte =
             choixDeroulant(this, 2 * i, {
@@ -127,7 +128,8 @@ export default class DivisibleDiviseurMultiple extends Exercice {
           [String(a), String(q)],
         ])
       } else if (listeTypeDeQuestions[i] === 2) {
-        texte = '... est un diviseur de ...'
+        texte =
+          '$\\ldots\\ldots\\ldots$ est un diviseur de $\\ldots\\ldots\\ldots$'
         if (this.interactif) {
           texte =
             choixDeroulant(this, 2 * i, {
@@ -157,7 +159,8 @@ export default class DivisibleDiviseurMultiple extends Exercice {
           [String(q), String(a)],
         ])
       } else if (listeTypeDeQuestions[i] === 3) {
-        texte = '... est un multiple de ...'
+        texte =
+          '$\\ldots\\ldots\\ldots$ est un multiple de $\\ldots\\ldots\\ldots$'
         if (this.interactif) {
           texte =
             choixDeroulant(this, 2 * i, {
@@ -187,7 +190,8 @@ export default class DivisibleDiviseurMultiple extends Exercice {
           [String(a), String(q)],
         ])
       } else if (listeTypeDeQuestions[i] === 4) {
-        texte = "... n'est pas divisible par ..."
+        texte =
+          "$\\ldots\\ldots\\ldots$ n'est pas divisible par $\\ldots\\ldots\\ldots$"
         if (this.interactif) {
           texte =
             choixDeroulant(this, 2 * i, {
@@ -221,7 +225,8 @@ export default class DivisibleDiviseurMultiple extends Exercice {
           [String(q), String(a)],
         ])
       } else if (listeTypeDeQuestions[i] === 5) {
-        texte = "... n'est pas un diviseur de ..."
+        texte =
+          "$\\ldots\\ldots\\ldots$ n'est pas un diviseur de $\\ldots\\ldots\\ldots$"
         if (this.interactif) {
           texte =
             choixDeroulant(this, 2 * i, {
@@ -255,7 +260,8 @@ export default class DivisibleDiviseurMultiple extends Exercice {
           [String(a), String(q)], // réponses absurdes mais vraies
         ])
       } else {
-        texte = "... n'est pas un multiple de ..."
+        texte =
+          "$\\ldots\\ldots\\ldots$ n'est pas un multiple de $\\ldots\\ldots\\ldots$"
         if (this.interactif) {
           texte =
             choixDeroulant(this, 2 * i, {

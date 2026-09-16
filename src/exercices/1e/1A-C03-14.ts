@@ -13,7 +13,7 @@ export const interactifReady = true
 export const uuid = '7233e'
 
 export const refs = {
-  'fr-fr': ['1A-C03-14', '2A-N3-14'],
+  'fr-fr': ['1A-C03-14', '2A-N3-9'],
   'fr-ch': [],
 }
 export default class Auto1AC03n extends calculPuissancesNegativeFraction {

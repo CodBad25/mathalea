@@ -61,6 +61,14 @@ export type QuizzBackgroundMode = 'none' | 'fixed' | 'random'
 /** Modes de notation des questions multi-réponses (repris de Razzia). */
 export type QuizzMultiScoringMode = 'strict' | 'balanced' | 'lenient'
 
+/**
+ * Mode d'attribution des pseudos (multi-joueurs) : 'free' — l'élève saisit
+ * le pseudo de son choix ; 'safe' — le pseudo doit être un prénom de la
+ * liste autorisée, vérifié par le serveur de jeu (qui enregistre la forme
+ * canonique de la liste et suffixe les homonymes d'un numéro).
+ */
+export type QuizzUsernameMode = 'free' | 'safe'
+
 export interface QuizzBackgroundParam {
   mode: QuizzBackgroundMode
   /** Nom du fichier dans public/images/quizz/backgrounds/ (mode 'fixed'). */
@@ -82,6 +90,8 @@ export interface QuizzParams {
   cooldown: number
   /** Temps de réponse par exercice de la sélection, en secondes (défaut 20). */
   times: number[]
+  /** Mode d'attribution des pseudos en multi-joueurs (défaut 'free'). */
+  usernameMode: QuizzUsernameMode
 }
 
 export interface QuizzQuestion {
@@ -127,10 +137,10 @@ export interface QuizzAnswer {
  * correction MathALÉA et du mode de score pour l'affichage.
  */
 export interface QuizzStatusDataMap {
-  SHOW_ROOM: { text: string, inviteCode?: string, players: QuizzPlayer[] }
-  SHOW_START: { time: number, subject: string }
-  SHOW_PREPARED: { totalAnswers: number, questionNumber: number }
-  SHOW_QUESTION: { question: string, cooldown: number }
+  SHOW_ROOM: { text: string; inviteCode?: string; players: QuizzPlayer[] }
+  SHOW_START: { time: number; subject: string }
+  SHOW_PREPARED: { totalAnswers: number; questionNumber: number }
+  SHOW_QUESTION: { question: string; cooldown: number }
   SELECT_ANSWER: {
     question: string
     answers: string[]
@@ -160,6 +170,11 @@ export interface QuizzStatusDataMap {
     solutions: number[]
     answers: string[]
     correction: string
+    /**
+     * Indices choisis par le joueur local (la classe en projection) —
+     * toujours null en multi-joueurs : il n'y a pas de joueur local et la
+     * réponse d'un élève précis ne doit pas ressortir à la révélation.
+     */
     selected: number[] | null
     scoring: QuizzScoring
   }

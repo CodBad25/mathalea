@@ -129,7 +129,7 @@ export default class ReduireDinstinctionSommeProduitOld extends Exercice {
         texte += ajouteChampTexteMathLive(
           this,
           2 * i,
-          KeyboardType.clavierDeBaseAvecX,
+          `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
           {
             texteAvant:
               listeTypeDeQuestions[i] > 1 ? '<br>Somme : ' : '<br>Produit : ',
@@ -143,7 +143,7 @@ export default class ReduireDinstinctionSommeProduitOld extends Exercice {
         texte += ajouteChampTexteMathLive(
           this,
           2 * i + 1,
-          KeyboardType.clavierDeBaseAvecX,
+          `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
           {
             texteAvant:
               listeTypeDeQuestions[i] > 1 ? '<br>Produit : ' : '<br>Somme : ',

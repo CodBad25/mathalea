@@ -172,6 +172,15 @@ Convention recommandée pour éviter les divergences getter/setter :
 - `interactivityOn` permet de rendre le composant inerte sans perdre son affichage.
 - Le composant doit appliquer cet état à ses contrôles (inputs, boutons, drag, listeners actifs).
 - Exemples d'utilisation : dans la fonction de vérification pour ne plus permettre de modifications ultérieures ; dans `mathaleaWriteStudentPreviousAnswers()` pour figer la copie de l'élève dans Capytale.
+- Quand `interactivityOn` passe à `false`, la classe de base applique
+  `renderMathInElement()` après le hook `onInteractivityChanged()`. Le LaTeX entre
+  dollars créé par le rendu figé est donc converti en KaTeX après la réinjection
+  de la réponse élève. Cette opération couvre le DOM léger et chaque shadow root
+  ouvert : l'auto-render KaTeX ne franchit pas seul une frontière de shadow DOM.
+- Une classe fille qui surcharge le setter `interactivityOn` doit conserver cette
+  garantie, de préférence en déléguant au setter de la classe de base. Un shadow
+  root fermé ne peut pas être parcouru par la base ; le composant qui en crée un
+  doit y déclencher lui-même le rendu KaTeX.
 
 7. Lifecycle DOM
 

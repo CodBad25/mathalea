@@ -163,7 +163,7 @@ export default class ProgrammesDeCalculsEquivalent extends Exercice {
         ${ajouteChampTexteMathLive(
           this,
           6 * i + 4,
-          KeyboardType.clavierDeBaseAvecX,
+          KeyboardType.clavierDeBaseAvecVariable,
           {
             texteAvant: `Pour le ${texteGras('Programme A')}, <br> donner l'expression littérale sans la développer :`,
             texteApres: '<br>',
@@ -172,7 +172,7 @@ export default class ProgrammesDeCalculsEquivalent extends Exercice {
         ${ajouteChampTexteMathLive(
           this,
           6 * i + 5,
-          KeyboardType.clavierDeBaseAvecX,
+          KeyboardType.clavierDeBaseAvecVariable,
           {
             texteAvant: `Pour le ${texteGras('Programme B')}, <br> donner l'expression littérale sans la développer :`,
             texteApres: '<br>',

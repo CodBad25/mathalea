@@ -97,7 +97,7 @@ export default class TrouverNombre extends Exercice {
         '9 : Mélange',
       ].join('\n'),
     ]
-    this.sup = '1-2-4'
+    this.sup = '2-6'
     this.nbQuestions = 4
     this.version = '5N1J-4'
   }

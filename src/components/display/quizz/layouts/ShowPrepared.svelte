@@ -21,7 +21,7 @@
   <div class="flex flex-row justify-center gap-3">
     {#each labels.slice(0, data.totalAnswers) as label, i}
       <span
-        class="flex items-center justify-center h-16 w-16 md:h-20 md:w-20 rounded-2xl
+        class="flex items-center justify-center h-16 w-16 md:h-20 md:w-20
         text-white text-2xl md:text-3xl font-bold shadow-lg quizz-pop
         {colorClasses[i]}"
         style="animation-delay: {i * 100}ms"

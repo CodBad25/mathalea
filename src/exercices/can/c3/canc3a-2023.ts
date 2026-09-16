@@ -589,7 +589,7 @@ export default class SujetCAN2023CM2 extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   index,
-                  KeyboardType.clavierNumbers,
+                  KeyboardType.clavierDeBaseAvecFraction,
                 ) +
                 'ul'
             }

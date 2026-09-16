@@ -1,4 +1,5 @@
 import { choice } from '../../lib/outils/arrayOutils'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceLabyrinthe from '../_Exercice_labyrinthe'
 export const titre =
@@ -50,6 +51,9 @@ export default class ExerciceLabyrintheMultiplesDe2a9 extends ExerciceLabyrinthe
 
     super.nouvelleVersion()
     this.consigne = `Trouver le chemin qui passe par des multiples de ${this.k}.`
+    if (context.isTypst) {
+      this.consigne = `Trouver le chemin qui relie les deux cases grisées en ne passant que par des multiples de ${this.k}.`
+    }
     this.consigne += this.consigneDeplacement
   }
 

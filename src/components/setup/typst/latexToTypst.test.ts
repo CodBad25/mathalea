@@ -738,6 +738,17 @@ describe('htmlToTypst', () => {
     expect(figures[0]).toContain('image(bytes("<svg')
   })
 
+  it('reprend le fond blanc des labels mathalea2d (arbres pondérés) en Typst', () => {
+    const figures: string[] = []
+    const result = htmlToTypst(
+      '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"><line x1="0" y1="0" x2="10" y2="10"/></svg><div class="divLatex" style="background-color: white; position: absolute; top: 10px; left: 20px; transform: translate(-50%,-50%) rotate(0deg); opacity: 0.7;" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">{\\color{black} \\scriptsize{0.7}}</annotation></semantics></math></span><span class="katex-html">0.7</span></span></div></div></div>',
+      figures,
+    )
+    expect(result).toContain(
+      'mathalea-label(15.0pt, 7.5pt, [$0.7$], size: 0.7em, background: white)',
+    )
+  })
+
   it('convertit les spans colorés (texteEnCouleur, texteEnCouleurEtGras)', () => {
     expect(
       htmlToTypst(
@@ -793,10 +804,25 @@ describe('htmlToTypst', () => {
         '<div class="ex1 inline-block my-2 align-center"><input type="checkbox" disabled><label id="labelEx1Q0R1" class="ml-2">$2$&emsp;</label></div>' +
         '</div><div class="m-2" id="resultatCheckEx1Q0"></div>',
     )
-    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ $1$')
-    expect(result).toContain('+ $2$')
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
+    expect(result).toContain('+ #qcm-case(false) $1$')
+    expect(result).toContain('+ #qcm-case(false) $2$')
     expect(result).not.toContain('#qcm-bonne')
+  })
+
+  it('coche la bonne réponse (format case) d’un QCU (bouton radio) dans le corrigé', () => {
+    // régression : `qcmChoiceIsCorrect` ne détectait que les
+    // `input[type="checkbox"]`, jamais les boutons radio des QCU
+    // (`propositionsQcm(..., { radio: true })`) — la bonne réponse n'était
+    // donc jamais mise en évidence dans le corrigé Typst d'un QCU.
+    const result = htmlToTypst(
+      '<div class="my-3">' +
+        '<div class="inline-block"><input type="radio" checked><label id="labelEx1Q0R0" class="ml-2">$1$&emsp;</label></div>' +
+        '<div class="inline-block"><input type="radio"><label id="labelEx1Q0R1" class="ml-2">$2$&emsp;</label></div>' +
+        '</div>',
+    )
+    expect(result).toContain('+ #qcm-case(true) #qcm-bonne[$1$]')
+    expect(result).toContain('+ #qcm-case(false) $2$')
   })
 
   it('détecte le format lettre et met en évidence la bonne réponse du corrigé', () => {
@@ -806,9 +832,9 @@ describe('htmlToTypst', () => {
         '<div class="inline-block"><label class="ml-2"><b><span class="oblique-strike">B</span></b>.</label><label id="labelEx1Q0R1" class="ml-2">$4$</label></div>' +
         '</div>',
     )
-    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ #qcm-bonne[$8$]')
-    expect(result).toContain('+ $4$')
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
+    expect(result).toContain('+ #qcm-lettre("A", true) #qcm-bonne[$8$]')
+    expect(result).toContain('+ #qcm-lettre("B", false) $4$')
   })
 
   it('conserve le QCM quand une figure mathalea2d suit dans le même contenu', () => {
@@ -827,9 +853,9 @@ describe('htmlToTypst', () => {
         '</div><div class="m-2" id="resultatCheckEx0Q0"></div>',
       figures,
     )
-    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ $1$')
-    expect(result).toContain('+ $2$')
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
+    expect(result).toContain('+ #qcm-lettre("A", false) $1$')
+    expect(result).toContain('+ #qcm-lettre("B", false) $2$')
     expect(result).toContain(
       '#mathalea-figure-block(1, fig-1-align, fig-1-zoom,',
     )
@@ -871,7 +897,7 @@ describe('htmlToTypst', () => {
           '</div><div class="m-2" id="resultatCheckEx1Q0"></div>' +
           rawTable,
       )
-      expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
+      expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
       expect(result).toContain('#table(')
       expect(result).not.toContain('&amp;')
       expect(result).not.toContain('amp;')

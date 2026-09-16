@@ -14,15 +14,27 @@ describe('codec quizzParam', () => {
   it('encode puis décode à l’identique (aller-retour)', () => {
     const params: QuizzParams = {
       v: 1,
-      mode: 'projection',
+      mode: 'multi',
       scoring: 'simple',
       seedMode: 'random',
       background: { mode: 'fixed', image: 'plage.jpg' },
       sound: false,
       cooldown: 8,
       times: [30, 15],
+      usernameMode: 'safe',
     }
     expect(decodeQuizzParams(encodeQuizzParams(params))).toEqual(params)
+  })
+
+  it('usernameMode vaut free par défaut et résiste aux valeurs invalides', () => {
+    expect(defaultQuizzParams().usernameMode).toBe('free')
+    const lienSansChamp = encodeQuizzParams({
+      ...defaultQuizzParams(),
+      usernameMode: 'free',
+    })
+    delete (JSON.parse(atob(lienSansChamp)) as Record<string, unknown>)
+      .usernameMode
+    expect(decodeQuizzParams(lienSansChamp).usernameMode).toBe('free')
   })
 
   it('renvoie les valeurs par défaut sans paramètre', () => {
@@ -34,9 +46,7 @@ describe('codec quizzParam', () => {
     expect(decodeQuizzParams('ceci-n-est-pas-du-base64!!!')).toEqual(
       defaultQuizzParams(),
     )
-    expect(decodeQuizzParams(btoa('{"mode":42}'))).toEqual(
-      defaultQuizzParams(),
-    )
+    expect(decodeQuizzParams(btoa('{"mode":42}'))).toEqual(defaultQuizzParams())
   })
 
   it('conserve les champs valides et borne les valeurs aberrantes', () => {

@@ -440,7 +440,7 @@ describe('buildTypstDocument', () => {
     ])
     expect(code).toContain('#let ex1-qcm-colonnes = 1')
     expect(code).toContain(
-      '#tasks(columns: ex1-qcm-colonnes, label: "A)", above: 0.4em, below: 0.4em)[ // mathalea:qcm-figures',
+      '#tasks(columns: ex1-qcm-colonnes, label: none, above: 0.4em, below: 0.4em)[ // mathalea:qcm-figures',
     )
     // ce 1 est un défaut lié au contenu, pas un réglage du professeur : le
     // figer dans le carry-over rendrait le choix insensible aux régénérations
@@ -465,7 +465,7 @@ describe('buildTypstDocument', () => {
       { exportMode: true },
     )
     // hors de l'éditeur intégré, les variables de la palette n'ont pas de sens
-    expect(code).toContain('#tasks(columns: 3, label: "A)"')
+    expect(code).toContain('#tasks(columns: 3, label: none')
     expect(code).not.toContain('ex1-qcm-colonnes')
   })
 

@@ -158,6 +158,41 @@ describe('sérialisation', () => {
 })
 
 describe('parseFormulaireComplexe', () => {
+  it('relit les anciennes sélections binaires uniquement sur demande explicite', () => {
+    const migrated: FormulaireComplexe = {
+      champs: [
+        {
+          type: 'listePonderee',
+          nom: 'familles',
+          label: 'Familles',
+          acceptLegacyBinary: true,
+          items: ['a', 'b', 'c', 'd', 'e'].map((nom) => ({ nom, label: nom })),
+        },
+        { type: 'case', nom: 'donnee', label: 'Intégrale donnée' },
+      ],
+    }
+    for (const binary of ['11111', '10100', '00000']) {
+      const legacy = parseFormulaireComplexe(migrated, `${binary}*1`)
+      expect(legacy).toEqual(
+        parseFormulaireComplexe(migrated, `${[...binary].join('-')}*1`),
+      )
+      expect(serialiseFormulaireComplexe(migrated, legacy)).toBe(
+        `${[...binary].join('-')}*1`,
+      )
+    }
+    expect(
+      lireFormulaireComplexe(migrated, '3-0-2-1-0*0')
+        .liste('familles')
+        .map((item) => item.poids),
+    ).toEqual([3, 0, 2, 1, 0])
+    const field = migrated.champs[0]
+    if (field.type !== 'listePonderee') throw new Error('Type inattendu')
+    field.acceptLegacyBinary = false
+    expect(
+      lireFormulaireComplexe(migrated, '11111*0').liste('familles')[0].poids,
+    ).toBe(11111)
+  })
+
   it('retombe sur les valeurs par défaut si sup est absent', () => {
     expect(parseFormulaireComplexe(formulaire, undefined)).toEqual(
       valeursParDefaut(formulaire),

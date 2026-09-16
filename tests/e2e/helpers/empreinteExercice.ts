@@ -132,6 +132,9 @@ export function nombresAffiches(html: string): string[] {
     // « 12 - 4 » et « 12-4 » donnent la même suite de nombres : un espacement
     // retouché ne doit pas passer pour un changement de valeur
     .replace(/-\s+(?=\d)/g, '-')
+    // texNombre() sépare les milliers par un « \, » (ex: 818\,639) : sans ce
+    // pont, l'extraction lirait deux nombres (818 et 639) au lieu d'un seul
+    .replace(/(?<=\d)\\,(?=\d)/g, '')
   const trouves = texte.match(/-?\d+(?:[.,]\d+)?/g) ?? []
   return trouves.map(normaliseNombre)
 }

@@ -6,7 +6,7 @@
     nodeLabel,
     resolveNode,
     splitChildren,
-    typstMenuSections,
+    typstMenuSectionsForLocale,
   } from '../../../../lib/components/mobileMenu'
   import { debounce } from '../../../../lib/components/time'
   import { banquesExternes } from '../../../../lib/stores/banquesExternesStore'
@@ -50,6 +50,7 @@
     void $banquesExternes
     return getReferentiels(get(referentielLocale))
   })
+  const typstMenuSections = typstMenuSectionsForLocale(get(referentielLocale))
 
   /** Chemin courant : [rubrique, niveau, ...clés du référentiel]. */
   let path = $state<string[]>([])

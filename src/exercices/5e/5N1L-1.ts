@@ -1,6 +1,7 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { egalOuApprox, lister } from '../../lib/outils/ecritures'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   listeNombresPremiersStrictJusqua,
   obtenirListeNombresPremiers,
@@ -108,15 +109,11 @@ export default class ReconnaitreNombrePremier extends Exercice {
         ordered: true,
         radio: true,
       }
-      texte += this.interactif
-        ? `Le nombre $${texNombre(a)}$ est-il un nombre premier ?`
-        : `Vérifier si $${texNombre(a)}$ est un nombre premier.`
+      texte += `Le nombre $${texNombre(a)}$ est-il un nombre premier ?`
       texteCorr = rediger(a, this.sup2)
       const monQcm = propositionsQcm(this, i)
-      if (this.interactif) {
-        texte += monQcm.texte
-        texteCorr += monQcm.texteCorr
-      }
+      texte += monQcm.texte
+      texteCorr += monQcm.texteCorr
 
       if (this.questionJamaisPosee(i, a)) {
         this.listeQuestions[i] = texte
@@ -131,10 +128,10 @@ export default class ReconnaitreNombrePremier extends Exercice {
 
 function rediger(a: number, avecCalculDeRacine: boolean): string {
   if (a === 1) {
-    return "1 n'est pas un nombre premier (il n'a qu'un seul diviseur)."
+    return `1 n'est pas un nombre premier (il n'a qu'un seul diviseur). La réponse est ${texteEnCouleurEtGras('Non')}.`
   }
   if (premiersEntreBornes(2, 30).includes(a)) {
-    return `$${texNombre(a)}$ est un nombre premier. Il fait partie des nombres premiers à connaitre : ${lister(premiersEntreBornes(2, 30).map((t) => `$${t}$`))}.`
+    return `$${texNombre(a)}$ est un nombre premier. Il fait partie des nombres premiers à connaitre : ${lister(premiersEntreBornes(2, 30).map((t) => `$${t}$`))}. La réponse est ${texteEnCouleurEtGras('Oui')}.`
   }
   const premiersATester = premiersEntreBornes(2, Math.floor(Math.sqrt(a)))
   let redaction = ''
@@ -151,17 +148,17 @@ function rediger(a: number, avecCalculDeRacine: boolean): string {
   }
   if (a % premiersATester[i] === 0) {
     redaction += `$${a} \\div ${premiersATester[i]} = ${texNombre(a / premiersATester[i], 2)}$<br>`
-    redaction += `$${texNombre(a)}$ est divisible par $${premiersATester[i]}$, donc $${texNombre(a)}$ n'est pas un nombre premier.`
+    redaction += `$${texNombre(a)}$ est divisible par $${premiersATester[i]}$, donc $${texNombre(a)}$ n'est pas un nombre premier. La réponse est ${texteEnCouleurEtGras('Non')}.`
   } else {
     if (avecCalculDeRacine) {
-      redaction += `$${texNombre(a)}$ n'est divisible par aucun des nombres premiers inférieurs ou égaux à $${Math.floor(Math.sqrt(a))}$, donc $${texNombre(a)}$ est un nombre premier.`
+      redaction += `$${texNombre(a)}$ n'est divisible par aucun des nombres premiers inférieurs ou égaux à $${Math.floor(Math.sqrt(a))}$, donc $${texNombre(a)}$ est un nombre premier. La réponse est ${texteEnCouleurEtGras('Oui')}.`
     } else {
       const premierSuivant = premiersEntreBornes(2, a * 2).slice(
         premiersATester.length,
       )[0]
       redaction += `$${a} \\div ${premierSuivant} ${egalOuApprox(a / premierSuivant, 2)} ${texNombre(a / premierSuivant, 2)}$<br>`
       redaction += `$${texNombre(a / premierSuivant, 2)} < ${premierSuivant}$, donc peut s'arrêter.<br>`
-      redaction += `$${texNombre(a)}$ est un nombre premier.`
+      redaction += `$${texNombre(a)}$ est un nombre premier. La réponse est ${texteEnCouleurEtGras('Oui')}.`
     }
   }
   return redaction

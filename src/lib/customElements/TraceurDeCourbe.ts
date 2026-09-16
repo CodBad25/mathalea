@@ -9,6 +9,7 @@ import {
   AddTabPropMathlive,
   type Icell,
 } from '../interactif/tableaux/AjouteTableauMathlive'
+import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import { texNombre } from '../outils/texNombre'
 import { optionsKatex } from '../latex/Katex'
 import MathaleaCustomElement, {
@@ -437,6 +438,12 @@ type CreateOptions = TraceurDeCourbeOptions & {
   numeroExercice: number
   questionIndex: number
 }
+
+export type CurveTracerFocusTarget = {
+  id: string
+  row: number
+  index: number
+}
 type State = { version: 1; points: CurveTracerPoint[] }
 
 const targets = new Map<string, (x: number) => number>()
@@ -507,9 +514,38 @@ export class TraceurDeCourbeElement extends MathaleaCustomElement {
   private showExpected = false
   private joinPoints = true
   private renderGeneration = 0
+  private pendingPointerFocus: CurveTracerFocusTarget | null = null
 
   constructor() {
     super()
+    this.addEventListener('pointerdown', (event) => {
+      // Sur tablette, le `change` du champ quitté reconstruit le tableau avant
+      // que le navigateur ne puisse donner le focus au champ qui vient d'être touché.
+      const field = event
+        .composedPath()
+        .find(
+          (target): target is MathfieldElement =>
+            target instanceof HTMLElement && target.tagName === 'MATH-FIELD',
+        )
+      const focusTarget =
+        field == null
+          ? null
+          : {
+              id: field.id,
+              row: Number(field.dataset.row),
+              index: Number(field.dataset.index),
+            }
+      this.pendingPointerFocus = focusTarget
+      if (field != null) {
+        // Ne pas conserver une cible obsolète si ce pointerdown n'a provoqué
+        // aucune reconstruction immédiate.
+        setTimeout(() => {
+          if (this.pendingPointerFocus === focusTarget) {
+            this.pendingPointerFocus = null
+          }
+        }, 0)
+      }
+    })
   }
 
   static create(options: CreateOptions): string {
@@ -785,6 +821,15 @@ ${graph}
         field.dataset.index = String(column)
         const value = this.points[column]?.[row === 0 ? 'x' : 'y']
         field.value = value == null ? '' : formatFrenchLatexNumber(value)
+        if (field.dataset.listenerAdded !== 'true') {
+          if (field.isConnected) {
+            setMathfield(field)
+          } else {
+            field.addEventListener('mount', setMathfieldListener, {
+              once: true,
+            })
+          }
+        }
       },
     )
     this.querySelectorAll<MathfieldElement>('math-field').forEach((field) =>
@@ -800,11 +845,18 @@ ${graph}
         }
         const index = Number(field.dataset.index),
           key = field.dataset.row === '0' ? 'x' : 'y'
+        const editedPoint = this.points[index]
         this.points[index][key] = parseCurveTracerNumber(field.value)
+        const focusTarget = this.pendingPointerFocus
+        this.pendingPointerFocus = null
         if (key === 'x') {
           this.points = sortCurveTracerPoints(this.points)
+          if (focusTarget?.row === 1 && focusTarget.index === index) {
+            focusTarget.index = this.points.indexOf(editedPoint)
+          }
         }
         this.render()
+        restoreCurveTracerFocus(this, focusTarget)
         this.dispatchEvent(new Event('change', { bubbles: true }))
       }),
     )
@@ -940,6 +992,22 @@ ${graph}
       return raw
     }
   }
+}
+
+export function restoreCurveTracerFocus(
+  root: ParentNode,
+  focusTarget: CurveTracerFocusTarget | null,
+): void {
+  if (focusTarget == null) return
+  queueMicrotask(() => {
+    Array.from(root.querySelectorAll<HTMLElement>('[data-row][data-index]'))
+      .find(
+        (candidate) =>
+          Number(candidate.dataset.row) === focusTarget.row &&
+          Number(candidate.dataset.index) === focusTarget.index,
+      )
+      ?.focus()
+  })
 }
 
 export function addTraceurDeCourbe(

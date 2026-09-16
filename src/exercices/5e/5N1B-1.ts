@@ -143,7 +143,7 @@ export default class nomExercice extends Exercice {
         num: 7,
         nom: "l'entier précédent de number1",
         enchainement: `$number1 - 1 = $`,
-        fct: (x: number, y: number) => Math.floor(x) - 1,
+        fct: (x: number, y: number) => Math.ceil(x) - 1,
       },
       {
         num: 8,

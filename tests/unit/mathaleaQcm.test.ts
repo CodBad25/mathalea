@@ -403,7 +403,8 @@ describe('MathaleaQcmElement', () => {
     expect(element).not.toBeNull()
     expect(element?.querySelectorAll('input')).toHaveLength(0)
     expect(element?.textContent).toContain('A.')
-    expect(element?.textContent).toContain('$4$')
+    expect(element?.querySelector('.katex')).not.toBeNull()
+    expect(element?.textContent).not.toContain('$4$')
   })
 
   it('conserve le rendu LaTeX historique', () => {

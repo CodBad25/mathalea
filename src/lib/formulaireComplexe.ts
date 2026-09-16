@@ -107,6 +107,8 @@ export type ChampListePonderee = {
   items: ItemListePonderee[]
   /** Poids maximal saisissable (défaut : `POIDS_MAX_DEFAUT`). */
   poidsMax?: number
+  /** Accepter les anciennes sélections binaires après migration depuis `liste`. */
+  acceptLegacyBinary?: boolean
 }
 
 /**
@@ -364,7 +366,15 @@ function parseChamp(
     case 'liste':
       return parseListePositionnelle(champ, [...partie])
     case 'listePonderee':
-      return parseListePositionnelle(champ, partie.split(SEPARATEUR_ITEMS))
+      return parseListePositionnelle(
+        champ,
+        champ.acceptLegacyBinary &&
+          champ.items.length > 1 &&
+          partie.length === champ.items.length &&
+          /^[01]+$/.test(partie)
+          ? [...partie]
+          : partie.split(SEPARATEUR_ITEMS),
+      )
     case 'listePondereeOrdonnee': {
       const [drapeau, liste] = partie.split(SEPARATEUR_ORDRE)
       const items: ItemPondere[] = []

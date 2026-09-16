@@ -6,7 +6,7 @@ import Question3 from '../EAMPremiere/EAM-CESpe-2026-Q3'
 import Question5 from '../EAMPremiere/EAM-CESpe-2026-Q5'
 import Question7 from '../EAMPremiere/EAM-CESpe-2026-Q8'
 import MetaExercice from '../MetaExerciceCan'
-export const titre = 'Traiter le sujet n°3'
+export const titre = 'Sujet n°3'
 export const interactifReady = true
 
 export const uuid = 'd545c'

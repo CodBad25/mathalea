@@ -20,7 +20,7 @@
   <div class="flex flex-col items-stretch gap-2 w-full max-w-xl">
     {#each data.leaderboard as player, i}
       <div
-        class="flex items-center justify-between rounded-xl shadow px-6 py-3
+        class="flex items-center justify-between shadow px-6 py-3
         bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
         text-coopmaths-corpus dark:text-coopmathsdark-corpus"
       >
@@ -35,7 +35,7 @@
           {player.username}
           {#if player.streak >= 2}
             <span
-              class="flex items-center gap-1 px-2 py-0.5 rounded-full text-sm font-bold
+              class="flex items-center gap-1 px-2 py-0.5 text-sm font-bold
               bg-amber-700 text-white"
               title="Série de bonnes réponses"
             >

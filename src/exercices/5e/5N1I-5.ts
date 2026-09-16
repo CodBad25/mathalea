@@ -922,7 +922,7 @@ Pour ce spectacle, `
           options: { nombreDecimalSeulement: true },
         },
       })
-
+      if (!this.interactif) texte += ' Justifier la réponse.'
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)
       i++

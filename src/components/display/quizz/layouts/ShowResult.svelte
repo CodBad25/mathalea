@@ -29,7 +29,7 @@
 
 <div class="flex flex-col items-center justify-center gap-5 px-6 w-full">
   <div
-    class="flex flex-row items-center gap-4 rounded-2xl shadow-xl px-8 py-4
+    class="flex flex-row items-center gap-4 shadow-xl px-8 py-4
     bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
   >
     {#if data.correct}

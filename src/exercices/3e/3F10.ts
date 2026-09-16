@@ -110,37 +110,35 @@ d) ${inversion ? question3 : question4}`
 ${onlyWithImage ? 'c' : 'e'}) Compléter $f(${c})=$ %{champ${onlyWithImage ? '3' : '5'}}
 ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
 
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierDeBase },
-          champ2: { keyboard: KeyboardType.clavierDeBase },
-          champ3: onlyWithImage
-            ? { keyboard: KeyboardType.clavierDeBase }
-            : {
+        dataOptions: onlyWithImage
+          ? {
+              champ1: { keyboard: KeyboardType.clavierDeBase },
+              champ2: { keyboard: KeyboardType.clavierDeBase },
+              champ3: { keyboard: KeyboardType.clavierDeBase },
+            }
+          : {
+              champ1: { keyboard: KeyboardType.clavierDeBase },
+              champ2: { keyboard: KeyboardType.clavierDeBase },
+              champ3: {
                 keyboard: inversion
                   ? KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
                   : KeyboardType.clavierDeBase,
               },
-          champ4: onlyWithImage
-            ? undefined
-            : {
+              champ4: {
                 keyboard: inversion
                   ? KeyboardType.clavierDeBase
                   : KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
               },
-          champ5: onlyWithImage
-            ? undefined
-            : {
+              champ5: {
                 keyboard: inversion
                   ? KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
                   : KeyboardType.clavierDeBase,
               },
-          champ6: onlyWithImage
-            ? undefined
-            : {
+              champ6: {
                 keyboard:
                   KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
               },
-        },
+            },
       })
       texteAMC =
         numAlpha(0) +
@@ -254,25 +252,26 @@ ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
       handleAnswers(
         this,
         i,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: b },
-          champ2: { value: d },
-          champ3: onlyWithImage
-            ? { value: d }
-            : inversion
-              ? { value: `${e};${c}`, options: { suiteDeNombres: true } }
-              : { value: d },
-          champ4: onlyWithImage
-            ? undefined
-            : inversion
-              ? { value: d }
-              : { value: `${e};${c}`, options: { suiteDeNombres: true } },
-          champ5: onlyWithImage
-            ? undefined
-            : { value: `${e};${c}`, options: { suiteDeNombres: true } },
-          champ6: onlyWithImage ? undefined : { value: f },
-        },
+        onlyWithImage
+          ? {
+              bareme: toutAUnPoint,
+              champ1: { value: b },
+              champ2: { value: d },
+              champ3: { value: d },
+            }
+          : {
+              bareme: toutAUnPoint,
+              champ1: { value: b },
+              champ2: { value: d },
+              champ3: inversion
+                ? { value: `${e};${c}`, options: { suiteDeNombres: true } }
+                : { value: d },
+              champ4: inversion
+                ? { value: d }
+                : { value: `${e};${c}`, options: { suiteDeNombres: true } },
+              champ5: { value: d },
+              champ6: { value: f },
+            },
         {
           formatInteractif: 'multi-mathfield',
         },

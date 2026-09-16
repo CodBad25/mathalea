@@ -4,6 +4,7 @@ import type {
   QuizzParams,
   QuizzScoring,
   QuizzSeedMode,
+  QuizzUsernameMode,
 } from '../../modules/quizz/types'
 import {
   decodeBase64,
@@ -31,10 +32,16 @@ export function defaultQuizzParams(): QuizzParams {
     sound: true,
     cooldown: QUIZZ_DEFAULT_COOLDOWN,
     times: [],
+    usernameMode: 'free',
   }
 }
 
-function contraindreEntier(valeur: unknown, min: number, max: number, defaut: number): number {
+function contraindreEntier(
+  valeur: unknown,
+  min: number,
+  max: number,
+  defaut: number,
+): number {
   const n = typeof valeur === 'number' ? Math.round(valeur) : NaN
   if (Number.isNaN(n)) return defaut
   return Math.min(max, Math.max(min, n))
@@ -54,6 +61,10 @@ function estSeedMode(valeur: unknown): valeur is QuizzSeedMode {
 
 function estBackgroundMode(valeur: unknown): valeur is QuizzBackgroundMode {
   return valeur === 'none' || valeur === 'fixed' || valeur === 'random'
+}
+
+function estUsernameMode(valeur: unknown): valeur is QuizzUsernameMode {
+  return valeur === 'free' || valeur === 'safe'
 }
 
 /**
@@ -78,6 +89,9 @@ export function decodeQuizzParams(raw: string | undefined | null): QuizzParams {
   if (estScoring(source.scoring)) params.scoring = source.scoring
   if (estSeedMode(source.seedMode)) params.seedMode = source.seedMode
   if (typeof source.sound === 'boolean') params.sound = source.sound
+  if (estUsernameMode(source.usernameMode)) {
+    params.usernameMode = source.usernameMode
+  }
   params.cooldown = contraindreEntier(
     source.cooldown,
     QUIZZ_MIN_COOLDOWN,

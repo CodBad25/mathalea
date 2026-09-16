@@ -971,7 +971,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               : ajouteChampTexteMathLive(
                   this,
                   index,
-                  KeyboardType.clavierNumbers,
+                  KeyboardType.clavierFullOperations,
                   { texteAvant: ' :' },
                 )
             this.listeCanEnonces.push(texte)
@@ -1568,7 +1568,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte += ajouteChampTexteMathLive(
               this,
               index,
-              KeyboardType.clavierDeBase,
+              KeyboardType.clavierDeBaseAvecFraction,
             )
             this.listeCanEnonces.push(texte)
           }
@@ -3255,7 +3255,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             index,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecVariable,
           )
           this.listeCanEnonces.push(texte)
           break

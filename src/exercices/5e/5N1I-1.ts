@@ -1,6 +1,9 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
@@ -44,6 +47,7 @@ export default class MultiplesOuDiviseurs extends Exercice {
     let texteCorr = ''
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      // let texte = 'Entourer la seule réponse exacte.<br>'
       let texte = 'Cocher la seule réponse exacte.<br>'
       let bonneReponse
       const nb1 = randint(2, 10)
@@ -58,13 +62,13 @@ export default class MultiplesOuDiviseurs extends Exercice {
           n = produit
           m = nb1
           bonneReponse = 'nDiviseurDem'
-          texteCorr = `$${n}\\div${m}=${nb2}$ donc $${miseEnEvidence(`${m}\\text{ est un diviseur de }${n}`)}$.`
+          texteCorr = `$${n}\\div${m}=${nb2}$ donc $${miseEnEvidence(`${m}`)}$ ${texteEnCouleurEtGras(`est un diviseur de`)} $${miseEnEvidence(`${n}`)}$.`
           break
         case 'nMulitpleDem':
           n = nb1
           m = produit
           bonneReponse = 'nMulitpleDem'
-          texteCorr = `$${m}\\div${n}=${nb2}$ donc $${miseEnEvidence(`${m}\\text{ est un multiple de }${n}`)}$.`
+          texteCorr = `$${m}\\div${n}=${nb2}$ donc $${miseEnEvidence(`${m}`)}$ ${texteEnCouleurEtGras(`est un multiple de`)} $${miseEnEvidence(`${n}`)}$.`
           break
         case 'NiLUnNiLautre':
         default: {
@@ -81,7 +85,8 @@ export default class MultiplesOuDiviseurs extends Exercice {
           n = choice([mauvaiseReponse, nb1])
           m = choice([mauvaiseReponse, nb1], n)
 
-          texteCorr = `$${Math.max(m, n)}\\div${Math.min(m, n)}$ n'est pas égal à un entier puisque $${Math.max(m, n)}$ n'est pas dans la table de multiplication de $${Math.min(m, n)}$ donc $${miseEnEvidence(`${m}\\text{ n'est ni un diviseur, ni un multiple de }${n}`)}$.`
+          texteCorr = `$${Math.max(m, n)}\\div${Math.min(m, n)}$ n'est pas égal à un entier puisque $${Math.max(m, n)}$ n'est pas dans la table de multiplication de $${Math.min(m, n)}$ donc `
+          texteCorr += `$${miseEnEvidence(`${m}`)}$ ${texteEnCouleurEtGras(`n'est ni un diviseur, ni un multiple de`)} $${miseEnEvidence(`${n}`)}$.`
           bonneReponse = 'NiLUnNiLautre'
           break
         }

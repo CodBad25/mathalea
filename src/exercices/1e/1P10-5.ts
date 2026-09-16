@@ -467,9 +467,9 @@ On note :<br>`
           })
           texteCorr = createList({
             items: [
-              mathalea2d(
+              '<br>' + mathalea2d(
                 Object.assign(
-                  { scale: 0.7, display: 'inline' } as const,
+                  { scale: 0.7, display: 'block' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -509,7 +509,7 @@ On considère les événements suivants :`
               "Sans justifier, recopier puis compléter l'arbre pondéré suivant :<br>" +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, display: 'inline' } as const,
+                    { scale: 0.7, display: 'block' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -523,9 +523,9 @@ On considère les événements suivants :`
           })
           texteCorr = createList({
             items: [
-              mathalea2d(
+              '<br>' + mathalea2d(
                 Object.assign(
-                  { scale: 0.7, display: 'inline' } as const,
+                  { scale: 0.7, display: 'block' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -568,7 +568,7 @@ On note les évènements suivants :<br>`
               `Recopier et compléter l'arbre pondéré suivant en justifiant la valeur $${texNombre(pBsachantA, 2)}$ :<br>` +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, display: 'inline' } as const,
+                    { scale: 0.7, display: 'block' } as const,
                     fixeBordures(objets3),
                   ),
                   objets3,
@@ -581,9 +581,9 @@ On note les évènements suivants :<br>`
           })
           texteCorr = createList({
             items: [
-              mathalea2d(
+              '<br>' + mathalea2d(
                 Object.assign(
-                  { scale: 0.7, display: 'inline' } as const,
+                  { scale: 0.7, display: 'block' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -626,7 +626,7 @@ On note les évènements suivants :<br>`
               "Recopier et compléter l'arbre pondéré suivant. <br>" +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, display: 'inline' } as const,
+                    { scale: 0.7, display: 'block' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -640,9 +640,9 @@ On note les évènements suivants :<br>`
           })
           texteCorr = createList({
             items: [
-              mathalea2d(
+              '<br>' + mathalea2d(
                 Object.assign(
-                  { scale: 0.7, display: 'inline' } as const,
+                  { scale: 0.7, display: 'block' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -700,9 +700,9 @@ On note les évènements suivants :<br>`
               `D'après l'énoncé, on a : <br>
                 $P(${ev[0]})=${texNombre(pA, 2)}$,  $P_{\\overline{${ev[0]}}}(${ev[1]})=${texNombre(pBsachantAb, 2)}$ et $P(${ev[0]}\\cap ${ev[1]})=${texNombre(pAinterB, 3)}$.
                 `,
-              mathalea2d(
+              '<br>' + mathalea2d(
                 Object.assign(
-                  { scale: 0.7, display: 'inline' } as const,
+                  { scale: 0.7, display: 'block' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -772,9 +772,9 @@ On note les évènements suivants :<br>`
                   $P(${ev[0]})=${miseEnEvidence(`${texNombre(pA, 2)}`)}$,  $P(${ev[0]}\\cap ${ev[1]})=${miseEnEvidence(`${texNombre(pAinterB, 3)}`)}$ et $P_{\\overline{${ev[0]}}}(${ev[1]})=${miseEnEvidence(`${texNombre(pBsachantAb, 2)}`)}$.
                   `,
               'On peut réaliser un arbre pondéré qui sera complété au fur et à mesure des questions : ' +
-                mathalea2d(
+                '<br>' + mathalea2d(
                   Object.assign(
-                    { scale: 0.7, display: 'inline' } as const,
+                    { scale: 0.7, display: 'block' } as const,
                     fixeBordures(objetsC),
                   ),
                   objetsC,
@@ -826,7 +826,7 @@ On note :`
               "Recopier et compléter l'arbre pondéré ci-dessous, modélisant cette situation : <br>" +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, display: 'inline' } as const,
+                    { scale: 0.7, display: 'block' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -846,9 +846,9 @@ sonner le portique en passant. On arrondira le résultat à $10^{-3}$.
                   $P(${ev[0]})=\\dfrac{${a}}{500}=${miseEnEvidence(`${texNombre(pA, 4)}`)}$,  $P_{${ev[0]}}(${ev[1]})=${miseEnEvidence(`${texNombre(pBsachantA, 4)}`)}$ et $P_{\\overline{${ev[0]}}}(\\overline{${ev[1]}})=${miseEnEvidence(`${texNombre(pBbsachantAb, 4)}`)}$.
                   `,
 
-              mathalea2d(
+              '<br>' + mathalea2d(
                 Object.assign(
-                  { scale: 0.7, display: 'inline' } as const,
+                  { scale: 0.7, display: 'block' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,

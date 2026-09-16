@@ -186,7 +186,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
         question1 += ajouteChampTexteMathLive(
           this,
           questionInteractif,
-          KeyboardType.clavierDeBase,
+          KeyboardType.clavierDeBaseAvecFraction,
         )
         correction1 = consigneCorrection
         correction1 +=
@@ -200,7 +200,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       question2 += ajouteChampTexteMathLive(
         this,
         (vocabulaire === 'affine' ? 1 : 0) + questionInteractif,
-        KeyboardType.clavierDeBase,
+        KeyboardType.clavierDeBaseAvecFraction,
       )
       correction2 =
         numAlpha(indice) +
@@ -213,7 +213,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       question3 += ajouteChampTexteMathLive(
         this,
         (vocabulaire === 'affine' ? 2 : 1) + questionInteractif,
-        KeyboardType.clavierDeBaseAvecX,
+        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
         { texteAvant: `$${sp(10)}${nomFonction} : x \\mapsto $` },
       )
       correction3 =
