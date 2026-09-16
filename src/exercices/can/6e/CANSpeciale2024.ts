@@ -1568,9 +1568,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             texte += ajouteChampTexteMathLive(
               this,
               index,
-              choix === 2
-                ? KeyboardType.clavierDeBaseAvecFraction
-                : KeyboardType.clavierDeBase,
+              KeyboardType.clavierDeBaseAvecFraction,
             )
             this.listeCanEnonces.push(texte)
           }

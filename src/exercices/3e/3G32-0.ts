@@ -620,6 +620,7 @@ export default class ProblemesTrigoLongueur extends Exercice {
                 options: { unite: true, precisionUnite: 1000 },
               },
             })
+            ii++
           } else if (context.isAmc) {
             propositionsAMC[iiAMC] = {
               type: 'AMCOpen',
