@@ -1331,7 +1331,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             texte += ajouteChampTexteMathLive(
               this,
               index,
-              KeyboardType.clavierDeBaseAvecX,
+              KeyboardType.clavierDeBaseAvecVariable,
             )
           }
           this.listeCanEnonces.push(texte)

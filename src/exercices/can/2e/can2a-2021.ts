@@ -1145,7 +1145,7 @@ Donner une valeur approchée de l'antécédent de $${a}$ par $f$ ?<br>`
               texte += ajouteChampTexteMathLive(
                 this,
                 index,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
               )
             }
             nbChamps = 1

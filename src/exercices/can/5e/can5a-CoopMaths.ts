@@ -567,6 +567,12 @@ export default class CourseAuxNombres5e extends Exercice {
         )
       } else if (listeTypeQuestions[i] === 'q27') {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.longueur)
+      } else if (listeTypeQuestions[i] === 'q29') {
+        texte += ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierDeBaseAvecFraction,
+        )
       } else {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       }

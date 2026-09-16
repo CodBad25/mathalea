@@ -1963,16 +1963,24 @@ function normalizeRaw(json: MathJsonExpression): MathJsonExpression {
     }
 
     // 🔹 7️⃣ Injecter le coefficient numérique dans le numérateur
-    if (numericCoef !== 1) {
+    //
+    // Cas particulier : un coefficient de -1 avec au moins un autre
+    // facteur est représenté par Negate(...) plutôt que Multiply(-1, ...),
+    // pour rejoindre la forme canonique déjà produite par le cas
+    // Negate(Divide(...)) ci-dessus (sinon "-x" issu d'un InvisibleOperator
+    // normalise différemment de "-x" parsé directement en Negate).
+    const negateResult = numericCoef === -1 && numeratorParts.length > 0
+    if (!negateResult && numericCoef !== 1) {
       numeratorParts.unshift(numericCoef)
     }
 
     // 🔥 8️⃣ Si fraction détectée → créer UNE fraction globale
     if (denominatorParts.length > 0) {
-      const numerator: MathJsonExpression =
+      let numerator: MathJsonExpression =
         numeratorParts.length === 1
           ? numeratorParts[0]
           : ['Multiply', ...numeratorParts]
+      if (negateResult) numerator = ['Negate', numerator]
 
       const denominator: MathJsonExpression =
         denominatorParts.length === 1
@@ -1989,14 +1997,16 @@ function normalizeRaw(json: MathJsonExpression): MathJsonExpression {
       (f) => !(typeof f === 'number' && f === 1),
     )
 
-    if (numeratorParts.length === 0) return 1
-    if (numeratorParts.length === 1) return numeratorParts[0]
+    if (numeratorParts.length === 0) return negateResult ? -1 : 1
+    if (numeratorParts.length === 1)
+      return negateResult ? ['Negate', numeratorParts[0]] : numeratorParts[0]
 
     numeratorParts.sort((a, b) =>
       JSON.stringify(a).localeCompare(JSON.stringify(b)),
     )
 
-    return ['Multiply', ...numeratorParts]
+    const result: MathJsonExpression = ['Multiply', ...numeratorParts]
+    return negateResult ? ['Negate', result] : result
   }
   // 🔹 6️⃣ Aplatir les Add (associativité)
   //
@@ -3282,8 +3292,16 @@ export function fonctionComparaison(
   // decimal approximations of fractions (e.g. 0.33333333333333 ≈ 1/3).
   // Expansion and structural matching still work; only the numeric evaluation
   // fallback requires an exact floating-point match.
-  return parse(saisie).is(parse(answer), 0) || // C'est le ,O qui change tout.
-    (!parse(saisie).isNumber && parse(saisie).isEqual(parse(answer)))
+  //
+  // isSame() is checked first: for a bare symbol (e.g. `x`, from `1\times x`
+  // simplifying to `x`), compute-engine's .is() with an explicit tolerance
+  // forces a numeric evaluation that fails on unbound variables, returning
+  // false even though the two expressions are structurally identical.
+  const parsedSaisie = parse(saisie)
+  const parsedAnswer = parse(answer)
+  return parsedSaisie.isSame(parsedAnswer) ||
+    parsedSaisie.is(parsedAnswer, 0) || // C'est le ,O qui change tout.
+    (!parsedSaisie.isNumber && parsedSaisie.isEqual(parsedAnswer))
     ? ok()
     : fail()
 }
