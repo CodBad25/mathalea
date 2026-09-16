@@ -133,7 +133,11 @@ export default class ImageAntecedentDepuisTableau extends Exercice {
       handleAnswers(this, i, {
         reponse: { value: reponse, options: { suiteDeNombres: choix === 3 } },
       })
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(question, b),
