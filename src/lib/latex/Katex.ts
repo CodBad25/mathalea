@@ -13,4 +13,18 @@ export const optionsKatex = {
   errorColor: '#CC0000',
   strict: 'warn',
   trust: false,
+  // `math-field` garde son contenu initial (LaTeX brut, avec ses éventuels `$`)
+  // dans son DOM léger même une fois la saisie de l'élève en cours : si l'auto-render
+  // KaTeX vient y toucher (ex : au second rendu déclenché par la vérification), MathLive
+  // resynchronise le champ depuis ce contenu resté figé et efface la réponse déjà saisie.
+  ignoredTags: [
+    'script',
+    'noscript',
+    'style',
+    'textarea',
+    'pre',
+    'code',
+    'option',
+    'math-field',
+  ],
 }
