@@ -285,6 +285,7 @@ export default class nomExercice extends Exercice {
           resultatObtenu,
         )
       ) {
+        if (!this.interactif) texte += ' Justifier la réponse.'
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
