@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import DragAndDrop, { type Etiquette } from '../../lib/interactif/DragAndDrop'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { shuffle2tableaux } from '../../lib/outils/arrayOutils'
+import { shuffle, shuffle2tableaux } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
@@ -10,7 +10,7 @@ import { glossaire } from './CM2N1D-2'
 export const titre = 'Décomposer un nombre entier'
 export const interactifReady = true
 
-export const dateDeModifImportante = '24/09/2024'
+export const dateDeModifImportante = '17/09/2026'
 /**
  * Exercice modèle pour la nouvelle fonctionnalité de Drag&Drop
  * @author Jean-claude Lhote
@@ -115,7 +115,7 @@ class DragAndDropNumerationEntiere extends Exercice {
       let enonceATrous = `$${texNombre(nombre, 0)}=$ `
       const etiquettes: Etiquette[] = []
       const reponses = []
-      for (let e = 0; e < 7; e++) {
+      for (let e = 0; e < Math.max(7, nbChiffres); e++) {
         if (enLettre) {
           etiquettes.push({
             id: String(2 * e + 1),
@@ -163,16 +163,25 @@ class DragAndDropNumerationEntiere extends Exercice {
         }
         const objetReponse = Object.fromEntries(reponses)
         enonceATrous = `${enonceATrous.substring(0, enonceATrous.length - 3)}` // En fin de boucle on a ajouté un '+$' inutile, il faut le supprimer
+        // On conserve le mélange historique des étiquettes allant jusqu'aux
+        // millions afin de ne pas décaler les tirages des questions suivantes.
+        // Les nouvelles étiquettes nécessaires aux nombres de 8 et 9 chiffres
+        // sont ajoutées ensuite.
+        const nombreEtiquettesHistoriques = enLettre ? 13 : 7
+        const etiquettesMelangees = [
+          ...shuffle(etiquettes.slice(0, nombreEtiquettesHistoriques)),
+          ...etiquettes.slice(nombreEtiquettesHistoriques),
+        ]
         const leDragAndDrop = new DragAndDrop({
           exercice: this,
           question: i,
-          etiquettes: [etiquettes],
+          etiquettes: [etiquettesMelangees],
           consigne: `Remettre les étiquettes au bon endroit pour reconstituer le nombre $${texNombre(nombre, 0)}$`,
           enonceATrous,
         })
         handleAnswers(this, i, objetReponse, { formatInteractif: 'dnd' })
         texte += leDragAndDrop.ajouteDragAndDrop({
-          melange: true,
+          melange: false,
           duplicable: false,
         })
         this.dragAndDrops[i] = leDragAndDrop // on stocke les instances de dragAndDrop dans l'exercice pour pouvoir accéder aux listeners à supprimer lors de la vérification.
