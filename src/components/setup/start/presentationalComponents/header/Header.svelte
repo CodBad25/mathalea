@@ -28,6 +28,9 @@
   export let exportQcmCam: () => Promise<void>
   export let isMd: boolean
   export let isFlowmath: boolean
+  export let openCapytaleViewInNewTab: (
+    view: 'typst' | 'diaporama' | 'tbi',
+  ) => void
 
   let reorderModalDisplayed: boolean
 </script>
@@ -55,7 +58,7 @@
         {locale}
         {handleLanguage}
         {isFlowmath}
-        {handleExport}
+        {openCapytaleViewInNewTab}
       />
     </div>
   {:else}

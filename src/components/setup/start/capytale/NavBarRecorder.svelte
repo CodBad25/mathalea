@@ -10,7 +10,6 @@
   import ButtonsDeck from '../../../shared/ui/ButtonsDeck.svelte'
   import { pointsMaxTotal } from '../../../../lib/stores/generalStore'
   import type { Language } from '../../../../lib/types/languages'
-  import type { VueType } from '../../../../lib/VueType'
 
   export let zoomUpdate: (plusMinus: '+' | '-') => void
   export let newDataForAll: () => void
@@ -24,7 +23,9 @@
   export let locale: Language
   export let handleLanguage: (lang: string) => void
   export let isFlowmath: boolean
-  export let handleExport: (vue: VueType) => void
+  export let openCapytaleViewInNewTab: (
+    view: 'typst' | 'diaporama' | 'tbi',
+  ) => void
 
   let urlFeuilleEleve: string = ''
   let showLanguageChoiceModal: boolean = false
@@ -161,10 +162,10 @@
           {#if isCapytale}
             <div>
               <ButtonIconTooltip
-                icon="bx-printer text-3xl"
-                tooltip="Imprimer"
+                icon="bx-slideshow text-3xl"
+                tooltip="Diaporama"
                 disabled={isExercisesListEmpty}
-                on:click={() => handleExport('typst')}
+                on:click={() => openCapytaleViewInNewTab('diaporama')}
               />
             </div>
           {/if}
@@ -174,7 +175,17 @@
                 icon="bx-chalkboard text-3xl"
                 tooltip="Vidéoprojection"
                 disabled={isExercisesListEmpty}
-                on:click={() => handleExport('tbi')}
+                on:click={() => openCapytaleViewInNewTab('tbi')}
+              />
+            </div>
+          {/if}
+          {#if isCapytale}
+            <div>
+              <ButtonIconTooltip
+                icon="bx-printer text-3xl"
+                tooltip="Imprimer"
+                disabled={isExercisesListEmpty}
+                on:click={() => openCapytaleViewInNewTab('typst')}
               />
             </div>
           {/if}
