@@ -26,6 +26,7 @@
   import { hasSeenTour, startTour } from '../../../lib/onboarding/tour'
   import {
     getExercisesFromExercicesParams,
+    mathaleaHandleExerciceSimple,
     mathaleaUpdateExercicesParamsFromUrl,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
@@ -434,8 +435,12 @@
 
   async function exportQcmCam(): Promise<void> {
     const exercises = await getExercisesFromExercicesParams()
-    const exercisesQcms = exercises.filter((exercise) => {
-      exercise.nouvelleVersion()
+    const exercisesQcms = exercises.filter((exercise, index) => {
+      if (exercise.typeExercice === 'simple') {
+        mathaleaHandleExerciceSimple(exercise, exercise.interactif, index)
+      } else {
+        exercise.nouvelleVersion()
+      }
       const questionsQcm = exercise.autoCorrection.filter(
         (el) =>
           interactivityTypeToCustomElementFormat(el.formatInteractif) ===
