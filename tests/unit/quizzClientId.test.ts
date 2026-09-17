@@ -6,7 +6,21 @@ const UUID_V4_REGEX =
 
 describe('getQuizzClientId', () => {
   beforeEach(() => {
-    localStorage.clear()
+    // Node ≥ 23 expose son propre localStorage (Web Storage), que vitest
+    // n'écrase pas avec celui de jsdom — et l'y accéder jette sans
+    // --localstorage-file. On stubbe un stockage en mémoire (contrat
+    // getItem/setItem) pour rendre le test indépendant de sa provenance.
+    const store = new Map<string, string>()
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        store.set(key, String(value))
+      },
+      removeItem: (key: string) => {
+        store.delete(key)
+      },
+      clear: () => store.clear(),
+    })
   })
 
   afterEach(() => {
