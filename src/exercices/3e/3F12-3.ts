@@ -1,6 +1,8 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { Tableau } from '../../lib/2d/tableau'
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -263,7 +265,11 @@ export default class TableauDeValeurs extends Exercice {
           listeReponses = [f(x1), f(x2), f(x3)]
           break
       }
-      const yGrecs = listeReponses.map((el) => texNombre(el, 1))
+      const yGrecs = listeReponses.map((el) =>
+        el instanceof FractionEtendue
+          ? el.simplifie().texFSD
+          : texNombre(el, 1),
+      )
       texte = `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$. ${this.interactif ? '<br>Calculer les images par $f$ suivantes.' : '<br>Compléter le tableau de valeurs suivant.<br><br>'}`
       const ligne1: Icell[] = [
         { texte: 'x', gras: true, color: 'black', latex: true },
@@ -283,11 +289,11 @@ export default class TableauDeValeurs extends Exercice {
       const ligne2: Icell[] = [
         { texte: `${nomdef}(x)`, gras: true, color: 'black', latex: true },
       ].concat(
-        listeReponses.map((el) =>
+        yGrecs.map((el) =>
           Object.assign(
             {},
             {
-              texte: miseEnEvidence(texNombre(el, 1)),
+              texte: miseEnEvidence(el),
               gras: false,
               color: 'black',
               latex: true,
@@ -311,7 +317,7 @@ export default class TableauDeValeurs extends Exercice {
           this.numeroExercice ?? 0,
           0,
           { ligne1, ligne2: ligne2bis, nbColonnes: 4 },
-          'clavierDeBase',
+          String(KeyboardType.clavierDeBaseAvecFraction),
           this.interactif,
           {},
         )
@@ -341,7 +347,7 @@ export default class TableauDeValeurs extends Exercice {
         this.numeroExercice ?? 0,
         0,
         { ligne1, ligne2, nbColonnes: 4 },
-        'clavierDeBase',
+        String(KeyboardType.clavierDeBaseAvecFraction),
         false,
         {},
       )
@@ -472,8 +478,8 @@ export default class TableauDeValeurs extends Exercice {
           reponses.push([
             `L1C${i + 1}`,
             {
-              value: yGrecs[i],
-              options: { approximatelyCompare: true, tolerance: 0.11 },
+              value: listeReponses[i],
+              compare: fonctionComparaison,
             },
           ])
         }
@@ -505,7 +511,7 @@ export default class TableauDeValeurs extends Exercice {
         for (let ee = 0; ee < 3; ee++) calculs += tabDesCalculs[ee]
         // Fin de le mise en couleur
 
-        texteCorr += '<br><br>'
+        texteCorr += '<br>'
         texteCorr += calculs
       }
 
