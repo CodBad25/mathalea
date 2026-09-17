@@ -27,16 +27,18 @@ function estDiviseur(value: number): value is Diviseur {
 }
 
 function grilleLatex(): string {
+  const nombres = ['', ...Array.from({ length: 99 }, (_, index) => index + 2)]
   const lignes = Array.from({ length: 10 }, (_, ligne) =>
-    Array.from({ length: 10 }, (_, colonne) => ligne * 10 + colonne + 1).join(
-      ' & ',
-    ),
+    nombres.slice(ligne * 10, ligne * 10 + 10).join(' & '),
   )
   return `\\begin{center}\n\\renewcommand{\\arraystretch}{1.35}\n\\begin{tabular}{|*{10}{c|}}\n\\hline\n${lignes.join(' \\\\\n\\hline\n')} \\\\\n\\hline\n\\end{tabular}\n\\end{center}`
 }
 
 function grilleTypst(): string {
-  const cases = Array.from({ length: 100 }, (_, index) => `[${index + 1}]`)
+  const cases = [
+    '[]',
+    ...Array.from({ length: 99 }, (_, index) => `[${index + 2}]`),
+  ]
   return `#table(columns: 10, inset: 6pt, stroke: 0.5pt, ${cases.join(', ')})`
 }
 
@@ -60,7 +62,7 @@ export class CribleEratostheneElement extends MathaleaCustomElement {
     if (!context.isHtml) return grilleLatex()
     const diviseur = estDiviseur(Number(options.diviseur))
       ? (Number(options.diviseur) as Diviseur)
-      : 2
+      : null
     return super.create({
       ...options,
       diviseur,
@@ -111,7 +113,7 @@ export class CribleEratostheneElement extends MathaleaCustomElement {
     DIVISEURS.forEach((diviseur) => {
       const option = document.createElement('option')
       option.value = String(diviseur)
-      option.textContent = `Colorier les multiples de ${diviseur}`
+      option.textContent = `Colorier les multiples de ${diviseur} supérieurs à ${diviseur}`
       option.selected = diviseur === this.diviseur
       this.selecteur?.appendChild(option)
     })
@@ -151,8 +153,12 @@ export class CribleEratostheneElement extends MathaleaCustomElement {
       const cellule = document.createElement('button')
       cellule.type = 'button'
       cellule.className = 'crible-eratosthene__case'
-      cellule.textContent = String(index + 1)
-      cellule.setAttribute('aria-label', String(index + 1))
+      if (index > 0) {
+        cellule.textContent = String(index + 1)
+        cellule.setAttribute('aria-label', String(index + 1))
+      } else {
+        cellule.setAttribute('aria-hidden', 'true')
+      }
       grille.appendChild(cellule)
       return cellule
     })
@@ -195,8 +201,8 @@ export class CribleEratostheneElement extends MathaleaCustomElement {
 
   private animerProchainMultiple(diviseur: Diviseur) {
     const multiples = Array.from(
-      { length: Math.floor(100 / diviseur) },
-      (_, index) => (index + 1) * diviseur,
+      { length: Math.floor(100 / diviseur) - 1 },
+      (_, index) => (index + 2) * diviseur,
     )
     if (this.numeroAnime >= multiples.length) {
       this.afficherBoutons(true, true)
