@@ -112,27 +112,39 @@ ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
 
         dataOptions: onlyWithImage
           ? {
-              champ1: { keyboard: KeyboardType.clavierDeBase },
-              champ2: { keyboard: KeyboardType.clavierDeBase },
-              champ3: { keyboard: KeyboardType.clavierDeBase },
+              champ1: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+              },
+              champ2: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+              },
+              champ3: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+              },
             }
           : {
-              champ1: { keyboard: KeyboardType.clavierDeBase },
-              champ2: { keyboard: KeyboardType.clavierDeBase },
+              champ1: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+              },
+              champ2: {
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+              },
               champ3: {
-                keyboard: inversion
-                  ? KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-                  : KeyboardType.clavierDeBase,
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
               },
               champ4: {
-                keyboard: inversion
-                  ? KeyboardType.clavierDeBase
-                  : KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
               },
               champ5: {
-                keyboard: inversion
-                  ? KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-                  : KeyboardType.clavierDeBase,
+                keyboard:
+                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
               },
               champ6: {
                 keyboard:

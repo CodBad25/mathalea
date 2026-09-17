@@ -16,10 +16,10 @@ export const titre =
   'Représenter des fonctions en remplissant un tableau de valeurs'
 export const interactifReady = true
 export const dateDePublication = '10/09/2026'
-export const uuid = 'd4a81'
+export const uuid = 'd4c81'
 
 export const refs = {
-  'fr-fr': ['3F10-7'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 
@@ -123,16 +123,6 @@ function createFunction(type: number): FunctionData {
     }
   }
 
-  if (type === 7) {
-    const a = randint(1, 5)
-    return {
-      expression: `${rienSi1(a)}x^2`,
-      pgfplotsExpression: `${a}*x^2`,
-      target: (x) => a * x ** 2,
-      key: `${a}`,
-    }
-  }
-
   const a = randint(-6, 6, 0)
   const b = randint(-6, 6, [0, a])
   return {
@@ -157,7 +147,7 @@ export default class RepresenterFonctionsAvecTableau extends Exercice {
     this.sup = '8'
     this.besoinFormulaireTexte = [
       'Types de fonctions (nombres séparés par des tirets)',
-      '1 : Fonction linéaire à coefficient entier relatif\n2 : Fonction affine à coefficients entiers relatifs\n3 : Fonction linéaire à coefficient rationnel\n4 : Fonction affine avec un coefficient directeur rationnel et une ordonnée à l’origine entière relative\n5 : Fonction affine à coefficients rationnels\n6 : Fonction de la forme ax² (a relatif)\n7 : Fonction de la forme ax² (a positif)\n8 : Fonction de la forme (x+a)(x+b)\n0 : Mélange',
+      '1 : Fonction linéaire à coefficient entier relatif\n2 : Fonction affine à coefficients entiers relatifs\n3 : Fonction linéaire à coefficient rationnel\n4 : Fonction affine avec un coefficient directeur rationnel et une ordonnée à l’origine entière relative\n5 : Fonction affine à coefficients rationnels\n6 : Fonction de la forme ax²\n7 : Fonction de la forme (x+a)(x+b)\n8 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = ['Tracer la ligne brisée', true]
   }
@@ -166,9 +156,9 @@ export default class RepresenterFonctionsAvecTableau extends Exercice {
     const types = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
-      max: 8,
-      melange: 0,
-      defaut: 0,
+      max: 7,
+      melange: 8,
+      defaut: 8,
       nbQuestions: this.nbQuestions,
     }).map(Number)
     const letters = ['f', 'g', 'h', 'k', 'p', 'q']
