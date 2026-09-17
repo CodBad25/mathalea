@@ -102,7 +102,7 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bold(x = 2)')
   })
 
-  it("ignore un groupe de mise en évidence vide sans corrompre le text(…) englobant (4L15-0)", () => {
+  it('ignore un groupe de mise en évidence vide sans corrompre le text(…) englobant (4L15-0)', () => {
     // miseEnEvidence('') — le signe/opérateur à colorer est absent — produit
     // `{\color{#F15929}\boldsymbol{}}`. tex2typst en faisait `bold()`, pris
     // ensuite pour une parenthèse orpheline : le rattrapage consommait la
@@ -135,6 +135,20 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bracket.l')
     expect(result).toContain('bracket.r')
     expect(result).toContain('union')
+    expect(result.match(/bracket\.l/g)?.length).toBe(2)
+    expect(result.match(/bracket\.r/g)?.length).toBe(2)
+  })
+
+  it('conserve les bornes des deux intervalles quelle que soit leur orientation', () => {
+    for (const expression of [
+      '[1\\,;\\,2[\\cup]3\\,;\\,4]',
+      ']1\\,;\\,2]\\cup[3\\,;\\,4[',
+      ']1\\,;\\,2[\\cup]3\\,;\\,4]',
+    ]) {
+      const result = latexMathToTypst(expression)
+      expect((result.match(/bracket\.[lr]/g) ?? []).length, expression).toBe(4)
+      expect(result).toContain('union')
+    }
   })
 
   it('ne casse pas une parenthèse isolée dans un groupe gras coloré (3L11-3b)', () => {
@@ -301,9 +315,9 @@ describe('latexMathToTypst', () => {
   it("sépare un #txt suivi d'une parenthèse pour éviter l'enchaînement d'appel Typst", () => {
     // \text{…}(…) : sans séparation, Typst lit `#txt("…")(x + y)` comme un
     // appel de la valeur retournée et échoue sur « expected comma » (3L12-3).
-    expect(
-      latexMathToTypst('\\text{le groupement }(x+y)'),
-    ).toBe('#txt("le groupement ") (x + y)')
+    expect(latexMathToTypst('\\text{le groupement }(x+y)')).toBe(
+      '#txt("le groupement ") (x + y)',
+    )
   })
 
   it('renvoie la formule en chaîne littérale quand la conversion échoue', () => {
@@ -534,7 +548,9 @@ describe('htmlToTypst', () => {
     // et en mode texte, derrière les pointillés à compléter : seule l'unité
     // (l'espace-réponse `\ldots` isolé est élargi ×3)
     expect(
-      htmlToTypst('alors une pile de $18$ pièces a une hauteur de $\\ldots$ \\Lg[mm]{}.'),
+      htmlToTypst(
+        'alors une pile de $18$ pièces a une hauteur de $\\ldots$ \\Lg[mm]{}.',
+      ),
     ).toBe('alors une pile de $18$ pièces a une hauteur de $... ... ...$ mm.')
     // `\Prix` : l'argument optionnel est le nombre de décimales, l'unité est €
     expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$... ... ...$ €.')

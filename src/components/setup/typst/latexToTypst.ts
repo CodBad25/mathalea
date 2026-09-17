@@ -962,6 +962,48 @@ function postprocessTypst(typst: string): string {
     while (prevBrackets !== result) {
       prevBrackets = result
       result = result
+        // Pour une réunion d'intervalles français, tex2typst transforme les
+        // deux bornes qui encadrent `\cup` en `[union]` :
+        // `[a;b[\cup]c;d]` devient `[a ; b [union] c ; d]`.
+        // Cette paire n'est donc pas un décor autour de l'opérateur : elle
+        // contient la borne droite du premier intervalle et la borne gauche
+        // du second. La convertir d'abord évite de les perdre dans la règle
+        // qui nettoie les crochets de `[union]`.
+        .replace(
+          /([\[\]])([^\[\]]*?)\[\s*(union|inter|without)\s*\]([^\[\]]*?)([\[\]])/g,
+          (
+            _match,
+            leftOuter: string,
+            firstBody: string,
+            operator: string,
+            secondBody: string,
+            rightOuter: string,
+          ) => {
+            const glyph = (bracket: string): string =>
+              bracket === '[' ? 'bracket.l' : 'bracket.r'
+            return `lr(${glyph(leftOuter)} ${firstBody} bracket.l) ${operator} lr(bracket.r ${secondBody} ${glyph(rightOuter)})`
+          },
+        )
+        // Dans les autres cas, tex2typst conserve l'opérateur sous la forme
+        // `] union [` entre les deux intervalles. Ces deux crochets sont eux
+        // aussi des bornes, et non des séparateurs parasites.
+        .replace(
+          /([\[\]])([^\[\]]*?)([\[\]])\s*(union|inter|without)\s*([\[\]])([^\[\]]*?)([\[\]])/g,
+          (
+            _match,
+            leftOuter: string,
+            firstBody: string,
+            firstRight: string,
+            operator: string,
+            secondLeft: string,
+            secondBody: string,
+            rightOuter: string,
+          ) => {
+            const glyph = (bracket: string): string =>
+              bracket === '[' ? 'bracket.l' : 'bracket.r'
+            return `lr(${glyph(leftOuter)} ${firstBody} ${glyph(firstRight)}) ${operator} lr(${glyph(secondLeft)} ${secondBody} ${glyph(rightOuter)})`
+          },
+        )
         // Le contenu purement en minuscules (union, inter, without…) est laissé de
         // côté ici : ce sont les mots-symboles produits par tex2typst pour \cup/\cap,
         // traités juste après (ils doivent être dépouillés, pas encadrés). Toute
