@@ -148,7 +148,7 @@ export default class CalculDiscriminant extends Exercice {
           dataTemplate:
             '<br>Discriminant : $\\Delta=$ %{field0}<br>Nombre de solutions dans $\\mathbb{R}$ : %{field1}',
           dataOptions: {
-            field0: { keyboard: KeyboardType.clavierNumbers },
+            field0: { keyboard: KeyboardType.clavierDeBase },
             field1: { choices: choixNombreSolutions },
           },
         })

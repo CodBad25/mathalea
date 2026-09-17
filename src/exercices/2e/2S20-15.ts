@@ -280,7 +280,7 @@ c) L'étendue de cette série statistique est %{champ3}.`,
           dataOptions: {
             champ1: { choices: choixCaractere },
             champ2: {
-              keyboard: KeyboardType.clavierNumbers,
+              keyboard: KeyboardType.clavierDeBase,
               texteApres: ` $${scenario.unite}$`,
             },
             champ3: {
