@@ -8,6 +8,7 @@ import {
 } from '../outils/grimuku'
 import type { IExercice } from '../types'
 import {
+  ajouteResultatCheck,
   cleDeLaCase as cleDeLaCasePartagee,
   creeChampDeSaisie,
   deplacementDuClavier,
@@ -355,7 +356,7 @@ export class GrimukuGrilleElement
     const id =
       options.id ??
       `${GrimukuGrilleElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
-    return super.create({
+    const elementHtml = super.create({
       id,
       lignes: options.lignes,
       colonnes: options.colonnes,
@@ -367,6 +368,12 @@ export class GrimukuGrilleElement
       numeroExercice,
       questionIndex,
     })
+    return ajouteResultatCheck(
+      elementHtml,
+      interactivityOn,
+      numeroExercice,
+      questionIndex,
+    )
   }
 
   connectedCallback(): void {

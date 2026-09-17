@@ -91,16 +91,49 @@ export function verifieLesCases(
   element.marqueLesCases(etats)
   element.afficheLeScore(nbCasesJustes, attendues.length)
   element.interactivityOn = false
+  const isOk = nbCasesJustes === attendues.length
+  ecritLeSmiley(exercice, questionIndex, isOk)
   const nbReponses = pointsMax ?? attendues.length
   const nbBonnesReponses =
     pointsMax == null
       ? nbCasesJustes
       : Math.floor((nbCasesJustes / attendues.length) * pointsMax)
   return {
-    isOk: nbCasesJustes === attendues.length,
+    isOk,
     feedback: '',
     score: { nbBonnesReponses, nbReponses },
   }
+}
+
+/**
+ * Écrit le smiley 😎/☹️ dans le span que `ajouteResultatCheck()` a ajouté à la
+ * suite de la grille, comme le font les autres éléments interactifs de
+ * MathALÉA (voir par exemple `PointsCliquablesElement`).
+ */
+function ecritLeSmiley(
+  exercice: IExercice,
+  questionIndex: number,
+  isOk: boolean,
+): void {
+  const resultatCheck = document.getElementById(
+    `resultatCheckEx${exercice.numeroExercice ?? 0}Q${questionIndex}`,
+  )
+  if (resultatCheck != null) resultatCheck.innerHTML = isOk ? '😎' : '☹️'
+}
+
+/**
+ * Ajoute, à la suite du HTML d'une grille, le span où `verifieLesCases()`
+ * écrira le smiley. Absent de la correction (`interactivityOn` à `false`) pour
+ * ne pas dupliquer l'id du span de l'énoncé.
+ */
+export function ajouteResultatCheck(
+  elementHtml: string,
+  interactivityOn: boolean,
+  numeroExercice: number,
+  questionIndex: number,
+): string {
+  if (elementHtml === '' || !interactivityOn) return elementHtml
+  return `${elementHtml}<span id="resultatCheckEx${numeroExercice}Q${questionIndex}"></span>`
 }
 
 /** Le barème d'une question : autant de points que de cases à remplir. */

@@ -4,6 +4,7 @@ import { miseEnEvidence } from '../outils/embellissements'
 import { etiquetteCage, tailleKenKen, type CageKenKen } from '../outils/kenken'
 import type { IExercice } from '../types'
 import {
+  ajouteResultatCheck,
   cleDeLaCase as cleDeLaCasePartagee,
   creeChampDeSaisie,
   deplacementDuClavier,
@@ -319,7 +320,7 @@ export class KenKenGrilleElement
     const id =
       options.id ??
       `${KenKenGrilleElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
-    return super.create({
+    const elementHtml = super.create({
       id,
       taille,
       cages,
@@ -328,6 +329,12 @@ export class KenKenGrilleElement
       numeroExercice,
       questionIndex,
     })
+    return ajouteResultatCheck(
+      elementHtml,
+      interactivityOn,
+      numeroExercice,
+      questionIndex,
+    )
   }
 
   connectedCallback(): void {
