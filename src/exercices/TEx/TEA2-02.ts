@@ -179,8 +179,8 @@ function ajouteChampsUV(exercice: Exercice, i: number): string {
     addMultiMathfield(exercice, i, {
       dataTemplate: `$u=$ %{champ1} $\\quad$ et $\\quad v=$ %{champ2}`,
       dataOptions: {
-        champ1: { keyboard: KeyboardType.clavierNumbers },
-        champ2: { keyboard: KeyboardType.clavierNumbers },
+        champ1: { keyboard: KeyboardType.clavierDeBase },
+        champ2: { keyboard: KeyboardType.clavierDeBase },
       },
     })
   )

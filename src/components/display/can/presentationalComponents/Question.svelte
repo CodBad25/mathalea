@@ -140,8 +140,8 @@
             if (!mf.dataset.canListenerAdded) {
               mf.dataset.canListenerAdded = 'true' // Marquer comme ajouté
               mf.addEventListener('input', handleMultiMathfieldElement)
+              mf.addEventListener('focusin', handleMathfieldFocus)
             }
-            $keyboardState.idMathField = mf.id
           }
           window.setTimeout(() => {
             // Ne focus le premier mathfield que si aucun n'a le focus dans le shadowRoot

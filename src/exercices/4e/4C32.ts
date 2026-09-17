@@ -153,18 +153,21 @@ export default class NotationScientifique extends Exercice {
         texteCorr = `$${scientifiquestring} = ${miseEnEvidence(decimalstring)}$`
         texteAMC = `$${scientifiquestring}$`
       }
-      texte = texteAMC + `$${sp()}=$`
-      if (this.interactif) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          '  ' +
-            (this.sup === 2
-              ? KeyboardType.clavierDeBase
-              : KeyboardType.clavierFullOperations),
-        )
+      if (context.isAmc) {
+        texte = texteAMC
       } else {
-        texte += `$${sp()}\\dots$`
+        const expression = this.sup === 1 ? decimalstring : scientifiquestring
+        texte = `$${expression}${sp()}=${this.interactif ? '' : `${sp()}\\dots`}$`
+        if (this.interactif) {
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            '  ' +
+              (this.sup === 2
+                ? KeyboardType.clavierDeBase
+                : KeyboardType.clavierFullOperations),
+          )
+        }
       }
 
       if (this.questionJamaisPosee(i, mantisse, exp)) {

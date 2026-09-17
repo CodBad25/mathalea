@@ -98,6 +98,14 @@
       "titre": "Créateur de diagramme",
       "typeExercice": "outil",
       "tags": {}
+    },
+    "P029": {
+      "id": "P029",
+      "uuid": "a9f82",
+      "url": "profs/P029.js",
+      "titre": "Illustrer le crible d'Ératosthène",
+      "typeExercice": "outil",
+      "tags": {}
     }
   },
   "Géométrie animée": {

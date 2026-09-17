@@ -22,6 +22,7 @@
 import { readFileSync } from 'fs'
 import fs from 'fs/promises'
 import path from 'path'
+import { isQcmExercise } from './lib/detect-qcm-capability.js'
 
 const typesSource = readFileSync('src/lib/types.ts', 'utf8')
 const levelsThemesListFR = JSON.parse(
@@ -53,6 +54,16 @@ const registeredInteractiveFormats = new Set([
   ...extractStringUnion('InteractivityType'),
   ...extractStringUnion('OldFormatInteractifType'),
 ])
+
+// Une anomalie bloquante (uuid/ref en doublon ou manquant, titre manquant...)
+// ne doit pas seulement s'afficher en rouge : elle doit faire échouer le
+// script (pnpm dev le lance avant vite, la CI le lance avant ses tests).
+let hasBlockingError = false
+
+function logError(message) {
+  console.error('\x1b[31m%s\x1b[0m', message)
+  hasBlockingError = true
+}
 
 /**
  * Retourne le premier format interactif littéral reconnu dans le fichier.
@@ -150,6 +161,7 @@ function extractInfos(
   },
 ) {
   const infos = {}
+  const qcmAvailable = isQcmExercise(filePath, data)
   // const matchUuid = data.match(/export const uuid = '(.*)'/) // EE : Cet ancien code ne gérait pas si un commentaire avec apostrophe suivant uuid.
   const matchUuid = data.match(/export const uuid\s*=\s*'([^']*)'/)
   infos.url = filePath.replace('src/exercices/', '')
@@ -163,8 +175,7 @@ function extractInfos(
   }
   if (matchUuid) {
     if (uuidMap.has(matchUuid[1])) {
-      console.error(
-        '\x1b[31m%s\x1b[0m',
+      logError(
         `${codePays}: uuid ${matchUuid[1]} en doublon  dans ${filePath} et ${uuidMap.get(matchUuid[1])}`,
       )
     }
@@ -173,10 +184,7 @@ function extractInfos(
   } else {
     // Pas d'erreur pour les fichiers beta
     if (!filePath.includes('/beta/')) {
-      console.error(
-        '\x1b[31m%s\x1b[0m',
-        `${codePays}: uuid non trouvé dans ${filePath}`,
-      )
+      logError(`${codePays}: uuid non trouvé dans ${filePath}`)
     }
   }
   // const matchRefFR = data.match(/export const ref = '(.*)'/)
@@ -279,6 +287,10 @@ function extractInfos(
             type: '',
           }
         }
+        if (qcmAvailable) {
+          infos.features.qcm = { isActive: true, type: '' }
+          infos.features.qcmcam = { isActive: true, type: '' }
+        }
         infos.typeExercice = 'alea'
         infos.id = infos.uuid
         // Add to the non-classified exercises
@@ -316,10 +328,7 @@ function extractInfos(
             .replaceAll("\\'", "'")
             .replaceAll('\\\\', '\\')
         } else {
-          console.error(
-            '\x1b[31m%s\x1b[0m',
-            `${codePays}: titre non trouvé dans ${filePath}`,
-          )
+          logError(`${codePays}: titre non trouvé dans ${filePath}`)
         }
         const matchDate = data.match(
           /export const dateDePublication = '([^']*)'/,
@@ -369,73 +378,14 @@ function extractInfos(
             type: '',
           }
         }
-        const matchQcm = data.match(
-          /(= propositionsQcm\()|(extends ExerciceQcm)/,
-        )
-        if (matchQcm) {
-          if (matchQcm[0] === 'extends ExerciceQcm') {
-            infos.features.qcm = {
-              isActive: true,
-              type: '',
-            }
-            // Regex pour capturer le contenu de this.reponses
-            const arrayRegex =
-              /this\.reponses\s*=\s*\[\s*((["'`][^"'`]*["'`]|[^,\s]+)(\s*,\s*(["'`][^"'`]*["'`]|[^,\s]+))*(\s*\/\/[^\n]*)?\s*)\]/s
-            const arrayMatch = arrayRegex.exec(data)
-
-            if (arrayMatch) {
-              const arrayContent = arrayMatch[1]
-              // Regex pour compter les éléments dans l'array
-              const elementRegex =
-                /(["'`][^"'`]*["'`]|[^,\s]+)(\s*\/\/[^\n]*)?/g
-              const elements = arrayContent.match(elementRegex)
-              const count = elements ? elements.length : 0
-              if (count < 5 && count > 1) {
-                infos.features.qcmcam = {
-                  isActive: true,
-                  type: '',
-                }
-              }
-            }
-          } else {
-            const objectRegex =
-              /this\.autoCorrection\[\w+\]\s*=\s*\{[^}]*propositions\s*:\s*\[([^\]]*)\][^}]*\}/g
-            const objectMatch = objectRegex.exec(data)
-
-            if (objectMatch) {
-              infos.features.qcm = {
-                isActive: true,
-                type: '',
-              }
-              const propositionsContent = objectMatch[1]
-              // Regex pour compter les éléments de propositions à l'intérieur de l'objet capturé
-              const propositionRegex =
-                /\{\s*texte:\s*.*?,\s*statut:\s*.*?\s*\}/g
-              const matchPropositions =
-                propositionsContent.match(propositionRegex)
-              const count = matchPropositions ? matchPropositions.length : 0
-              if (count < 5 && count > 1) {
-                infos.features.qcmcam = {
-                  isActive: true,
-                  type: '',
-                }
-              }
-            }
-          }
-        }
-        const versionQcmRegex = /versionQcm(Disponible)*\s*=\s*true/
-        const versionQcmMatch = versionQcmRegex.exec(data)
-        if (versionQcmMatch) {
-          infos.features.qcm = {
-            isActive: true,
-            type: '',
-          }
+        if (qcmAvailable) {
+          infos.features.qcm = { isActive: true, type: '' }
+          infos.features.qcmcam = { isActive: true, type: '' }
         }
         infos.typeExercice = 'alea'
         if (infos.id !== undefined) {
           if (refMap.has(infos.id)) {
-            console.error(
-              '\x1b[31m%s\x1b[0m',
+            logError(
               `${codePays}: ref ${infos.id} en doublon dans ${filePath} et ${refMap.get(infos.id)}`,
             )
           }
@@ -452,10 +402,7 @@ function extractInfos(
       !filePath.includes('a-2024') &&
       !filePath.includes('/ressources/')
     ) {
-      console.error(
-        '\x1b[31m%s\x1b[0m',
-        `${codePays}: ref non trouvé dans ${filePath}`,
-      )
+      logError(`${codePays}: ref non trouvé dans ${filePath}`)
     }
   }
 }
@@ -792,9 +739,17 @@ readInfos(exercicesDir, [contextCH, contextFR])
       'Vous pouvez maintenant ajouter la ligne suivante au nouvel exercice :',
     )
     console.log(`export const uuid = '${uuid}'`)
+
+    if (hasBlockingError) {
+      console.error(
+        '\nERREUR — des anomalies bloquantes ont été détectées ci-dessus (uuid ou référence en doublon/manquant, titre manquant...).',
+      )
+      process.exitCode = 1
+    }
   })
   .catch((err) => {
     console.error(err)
+    process.exitCode = 1
   })
 
 /**

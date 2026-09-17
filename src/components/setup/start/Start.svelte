@@ -26,6 +26,7 @@
   import { hasSeenTour, startTour } from '../../../lib/onboarding/tour'
   import {
     getExercisesFromExercicesParams,
+    mathaleaHandleExerciceSimple,
     mathaleaUpdateExercicesParamsFromUrl,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
@@ -44,6 +45,7 @@
     InterfaceGlobalOptions,
     InterfaceParams,
   } from '../../../lib/types'
+  import { interactivityTypeToCustomElementFormat } from '../../../lib/types'
   import type { CanOptions } from '../../../lib/types/can'
   import type { Language } from '../../../lib/types/languages'
   import { ALLOWED_LANGUAGES, isLanguage } from '../../../lib/types/languages'
@@ -433,13 +435,16 @@
 
   async function exportQcmCam(): Promise<void> {
     const exercises = await getExercisesFromExercicesParams()
-    const exercisesQcms = exercises.filter((exercise) => {
-      exercise.nouvelleVersion()
+    const exercisesQcms = exercises.filter((exercise, index) => {
+      if (exercise.typeExercice === 'simple') {
+        mathaleaHandleExerciceSimple(exercise, exercise.interactif, index)
+      } else {
+        exercise.nouvelleVersion()
+      }
       const questionsQcm = exercise.autoCorrection.filter(
         (el) =>
-          el.formatInteractif === 'qcm' &&
-          el.propositions != null &&
-          el.propositions?.length > 1,
+          interactivityTypeToCustomElementFormat(el.formatInteractif) ===
+          'mathalea-qcm',
       ).length
       return questionsQcm !== 0
     })

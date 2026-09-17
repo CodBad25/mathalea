@@ -2740,12 +2740,16 @@
       // groupe fusionné (voir `forceList` dans buildTypstDocument)
       input.numbered = exercise.listeAvecNumerotation !== false
       // mode « Course aux nombres » : énoncés propres au tableau (à défaut,
-      // les questions ordinaires) et réponses à compléter, comme le style
-      // « Can » de la sortie LaTeX (voir `lib/Latex.ts`)
+      // les questions ordinaires précédées de la consigne — le tableau
+      // n'affiche jamais `intro`/`consigne` à part, un exercice qui n'a pas
+      // été écrit pour ce mode perdrait donc silencieusement sa consigne)
+      // et réponses à compléter, comme le style « Can » de la sortie LaTeX
+      // (voir `lib/Latex.ts`)
       input.canQuestions = input.questions.map((question, i) => {
         const canEnonce = exercise.listeCanEnonces?.[i]
-        return canEnonce != null && canEnonce.length > 0
-          ? format(canEnonce)
+        if (canEnonce != null && canEnonce.length > 0) return format(canEnonce)
+        return input.consigne.length > 0
+          ? `${input.consigne}<br>${question}`
           : question
       })
       input.canAnswers = input.questions.map((_, i) =>

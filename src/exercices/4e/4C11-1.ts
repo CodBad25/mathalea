@@ -4,6 +4,7 @@ import { numAlpha } from '../../lib/outils/outilString'
 import Exercice from '../Exercice'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -95,7 +96,13 @@ export default class resoudreProblemeRelatifs extends Exercice {
               ? "il n'a pas répondu"
               : "elle n'a pas répondu"
           } aux autres questions.\nQuel est son score ? %{champ5}\n`,
-        dataOptions: {},
+        dataOptions: {
+          champ1: { keyboard: KeyboardType.clavierDeBase },
+          champ2: { keyboard: KeyboardType.clavierDeBase },
+          champ3: { keyboard: KeyboardType.clavierDeBase },
+          champ4: { keyboard: KeyboardType.clavierDeBase },
+          champ5: { keyboard: KeyboardType.clavierDeBase },
+        },
       })
       handleAnswers(
         this,

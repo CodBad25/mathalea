@@ -3292,16 +3292,24 @@ export function fonctionComparaison(
   // decimal approximations of fractions (e.g. 0.33333333333333 ≈ 1/3).
   // Expansion and structural matching still work; only the numeric evaluation
   // fallback requires an exact floating-point match.
-  //
-  // isSame() is checked first: for a bare symbol (e.g. `x`, from `1\times x`
-  // simplifying to `x`), compute-engine's .is() with an explicit tolerance
-  // forces a numeric evaluation that fails on unbound variables, returning
-  // false even though the two expressions are structurally identical.
+  // Cette tolérance nulle ne doit s'appliquer qu'aux expressions purement
+  // numériques : sur une expression avec variable libre (ex. "1\times x"),
+  // .is() peut à tort évaluer numériquement et échouer même quand isSame()
+  // aurait réussi (bug observé avec compute-engine). On utilise donc
+  // freeVariables plutôt que isNumber (peu fiable pour une expression
+  // réduite à un simple symbole comme "x").
   const parsedSaisie = parse(saisie)
   const parsedAnswer = parse(answer)
-  return parsedSaisie.isSame(parsedAnswer) ||
-    parsedSaisie.is(parsedAnswer, 0) || // C'est le ,O qui change tout.
-    (!parsedSaisie.isNumber && parsedSaisie.isEqual(parsedAnswer))
+  const estSymbolique =
+    parsedSaisie.freeVariables.length > 0 ||
+    parsedAnswer.freeVariables.length > 0
+
+  return (
+    (estSymbolique
+      ? parsedSaisie.is(parsedAnswer)
+      : parsedSaisie.is(parsedAnswer, 0)) ||
+    (estSymbolique && parsedSaisie.isEqual(parsedAnswer))
+  )
     ? ok()
     : fail()
 }

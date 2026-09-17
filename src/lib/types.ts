@@ -541,7 +541,9 @@ export function interactivityTypeToCustomElementFormat(
   if (value.toLowerCase() === 'cliquefigure') return 'clique-figure'
   if (value.toLowerCase() === 'dnd') return 'drag-and-drop'
   if (value.toLowerCase() === 'metainteractif2d') return 'meta-interactif-2d'
-  return mathliveCompatibleToCustomElementFormat(value)
+  const customElementFormat = mathliveCompatibleToCustomElementFormat(value)
+  if (customElementFormat != null) return customElementFormat
+  return isInteractivityType(value) ? value : null
 }
 
 export type SharedQcmProposition = {
