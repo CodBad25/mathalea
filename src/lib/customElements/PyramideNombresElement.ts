@@ -7,6 +7,7 @@ import {
 } from '../outils/pyramideNombres'
 import type { IExercice } from '../types'
 import {
+  ajouteResultatCheck,
   cleDeLaCase as cleDeLaCasePartagee,
   verifieLesCases,
   type GrilleDeChiffres,
@@ -459,7 +460,7 @@ export class PyramideNombresElement
     const id =
       options.id ??
       `${PyramideNombresElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
-    return super.create({
+    const elementHtml = super.create({
       id,
       nbEtages,
       operations,
@@ -470,6 +471,12 @@ export class PyramideNombresElement
       numeroExercice,
       questionIndex,
     })
+    return ajouteResultatCheck(
+      elementHtml,
+      interactivityOn,
+      numeroExercice,
+      questionIndex,
+    )
   }
 
   connectedCallback(): void {

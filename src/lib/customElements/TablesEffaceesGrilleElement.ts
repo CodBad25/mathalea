@@ -3,6 +3,7 @@ import { orangeMathalea, vertMathalea } from '../colors'
 import { miseEnEvidence } from '../outils/embellissements'
 import type { IExercice } from '../types'
 import {
+  ajouteResultatCheck,
   cleDeLaCase as cleDeLaCasePartagee,
   deplacementDuClavier,
   deplaceLeFocus,
@@ -238,7 +239,7 @@ export class TablesEffaceesGrilleElement
     const id =
       options.id ??
       `${TablesEffaceesGrilleElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
-    return super.create({
+    const elementHtml = super.create({
       id,
       taille: options.taille,
       donnees: options.donnees ?? [],
@@ -247,6 +248,12 @@ export class TablesEffaceesGrilleElement
       numeroExercice,
       questionIndex,
     })
+    return ajouteResultatCheck(
+      elementHtml,
+      interactivityOn,
+      numeroExercice,
+      questionIndex,
+    )
   }
 
   connectedCallback(): void {
