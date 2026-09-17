@@ -82,10 +82,26 @@ function dropHandler(e: DragEvent) {
     const etiquette = document.getElementById(etiquetteId)
     if (etiquette && dropTarget) {
       if (
-        (!dropTarget.id || !dropTarget.id.includes('rectangle')) &&
+        !dropTarget.closest('.rectangleDND') &&
         etiquette.id.includes('clone')
       ) {
         etiquette.parentElement?.removeChild(etiquette)
+        return
+      }
+      const etiquetteSource = etiquette.closest('.rectangleDND')
+      const etiquetteCible = dropTarget.closest('.etiquette')
+      const rectangleCible = dropTarget.closest('.rectangleDND')
+      if (
+        etiquetteSource &&
+        rectangleCible === etiquetteSource &&
+        etiquetteCible &&
+        etiquetteCible !== etiquette
+      ) {
+        const milieu =
+          etiquetteCible.getBoundingClientRect().left +
+          etiquetteCible.getBoundingClientRect().width / 2
+        if (e.clientX < milieu) etiquetteCible.before(etiquette)
+        else etiquetteCible.after(etiquette)
         return
       }
       // Expression régulière pour capturer les 3 groupes de chiffres
@@ -285,7 +301,24 @@ function touchEndHandler(e: TouchEvent) {
       dropTarget?.classList.contains('rectangleDND') ||
       dropTarget?.parentElement?.classList.contains('rectangleDND')
     ) {
+      const etiquetteSource = etiquette.closest('.rectangleDND')
+      const etiquetteCible = dropTarget.classList.contains('etiquette')
+        ? dropTarget
+        : dropTarget.closest('.etiquette')
+      const rectangleCible = dropTarget.closest('.rectangleDND')
       if (
+        etiquetteSource &&
+        rectangleCible === etiquetteSource &&
+        etiquetteCible &&
+        etiquetteCible !== etiquette
+      ) {
+        const cibleBounds = etiquetteCible.getBoundingClientRect()
+        if (centerX < cibleBounds.left + cibleBounds.width / 2) {
+          etiquetteCible.before(etiquette)
+        } else {
+          etiquetteCible.after(etiquette)
+        }
+      } else if (
         etiquette.classList.contains('duplicable') &&
         dropTarget.classList.contains('rectangleDND')
       ) {
@@ -327,8 +360,15 @@ function touchEndHandler(e: TouchEvent) {
     ;(etiquette as HTMLDivElement).style.position = 'relative'
     ;(etiquette as HTMLDivElement).style.top = '0px'
     ;(etiquette as HTMLDivElement).style.left = '0px'
-    if (etiquette.classList.contains('duplicable'))
-      etiquette.previousElementSibling?.remove()
+    if (etiquette.classList.contains('duplicable')) {
+      const emplacementOriginal = Array.from(
+        etiquette.parentElement?.querySelectorAll<HTMLElement>('.etiquette') ??
+          [],
+      ).find(
+        (element) => element !== etiquette && element.style.display === 'none',
+      )
+      emplacementOriginal?.remove()
+    }
   }
 }
 // met le rectangle en effet 'green glowing'
@@ -414,6 +454,11 @@ export function attachDragAndDropListeners({
     `#rectanglesEx${numeroExercice}Q${question}`,
   )
   if (rectangles) {
+    // Ces écouteurs sont délégués au conteneur afin de fonctionner aussi pour
+    // les étiquettes clonées après leur dépôt dans la zone.
+    addListener(rectangles, 'dragstart', dragStartHandler as EventListener)
+    addListener(rectangles, 'dragend', dragEndHandler as EventListener)
+    addListener(rectangles, 'touchstart', touchStartHandler as EventListener)
     for (const rectangle of rectangles.querySelectorAll('.rectangleDND')) {
       addListener(rectangle, 'dragover', dragOverHandler as EventListener)
       addListener(rectangle, 'drop', dropHandler as EventListener)
@@ -644,11 +689,37 @@ export function verifDragAndDrop(
                     const id = listeOfIds[j]
                     if (id === etiquette.id.split('I').pop()?.split('-')[0]) {
                       etiquette.classList.add('bg-coopmaths-warn-100')
+                      if (goodAnswer[1].options?.feedbackOnLabels) {
+                        etiquette.classList.remove('bg-red-100', 'text-red-900')
+                        etiquette.classList.add(
+                          'bg-green-100',
+                          'text-green-900',
+                        )
+                      }
                       etiquettesBienPlacees++
                     } else {
                       etiquette.classList.add('bg-coopmaths-action-200')
+                      if (goodAnswer[1].options?.feedbackOnLabels) {
+                        etiquette.classList.remove(
+                          'bg-green-100',
+                          'text-green-900',
+                        )
+                        etiquette.classList.add('bg-red-100', 'text-red-900')
+                      }
                       etiquettesMalPlacees++
                       isOk = false
+                    }
+                  }
+                  if (goodAnswer[1].options?.feedbackOnLabels) {
+                    for (
+                      let j = listeOfIds.length;
+                      j < etiquettesDedans.length;
+                      j++
+                    ) {
+                      etiquettesDedans[j].classList.add(
+                        'bg-red-100',
+                        'text-red-900',
+                      )
                     }
                   }
                   etiquettesAbsentes =
@@ -720,7 +791,10 @@ export function verifDragAndDrop(
     if (eltFeedback) {
       eltFeedback.innerHTML = ''
     }
-    if (resultat === 'KO') {
+    const feedbackOnLabels = Object.values(objetReponses).some(
+      (reponse) => reponse?.options?.feedbackOnLabels,
+    )
+    if (resultat === 'KO' && !feedbackOnLabels) {
       // Juste mais incomplet
       if (nbBonnesReponses > 0) {
         message = `${nbBonnesReponses} bonne${nbBonnesReponses > 1 ? 's' : ''} réponse${nbBonnesReponses > 1 ? 's' : ''}`
