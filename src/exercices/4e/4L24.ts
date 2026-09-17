@@ -223,12 +223,12 @@ c) Combien cette équation admet-elle de solutions ? %{field3}`
 
       const dataOptions: DataOptionsMultiMathfield = {
         field0: {
-          keyboard: KeyboardType.clavierNumbers,
+          keyboard: KeyboardType.clavierDeBase,
           ldots: true,
           minWidth: 40,
         },
         field1: {
-          keyboard: KeyboardType.clavierNumbers,
+          keyboard: KeyboardType.clavierDeBase,
           ldots: true,
           minWidth: 40,
         },
