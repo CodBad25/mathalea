@@ -17,6 +17,22 @@ corrigés déjà distribués deviennent faux.
 Corriger une coquille, reformuler une consigne ou refactoriser sans toucher aux
 tirages ne pose en revanche aucun problème.
 
+### Sélections dans un catalogue évolutif
+
+Un exercice qui tire d'abord des sous-exercices dans un catalogue (par exemple
+une sélection d'automatismes) a une deuxième source de dérive : ajouter un
+élément à ce catalogue peut changer celui choisi pour une même graine. La
+graine seule ne suffit donc pas à rejouer durablement une sélection.
+
+Pour une URL ou une activité qui doit rester reproductible, enregistrer, lors
+du premier tirage, les références exactes des sous-exercices retenus dans un
+paramètre sérialisé et les réutiliser au rechargement. La graine sert alors
+uniquement aux données internes de ces sous-exercices. Un ancien lien qui ne
+contient pas cette liste reste soumis au catalogue disponible au moment de son
+rechargement ; si l'on ne peut pas lui ajouter les références, la seule solution
+de compatibilité est de conserver une version historique du sélecteur ou du
+catalogue.
+
 ## La règle
 
 > Pour un `uuid` et une graine donnés, les valeurs numériques de l'énoncé ne
