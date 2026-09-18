@@ -56,6 +56,7 @@
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
     harvestCarryOver,
+    normalizeTypstLineSpacing,
     parseNumberingLiteral,
     questionNumberingLabel,
     type ActiveCoverTemplate,
@@ -356,6 +357,9 @@
       titleSetFromUrl = parsed.options.title !== undefined
       restoredDocumentOptions.coverPage = sanitizeCoverPage(
         restoredDocumentOptions.coverPage,
+      )
+      restoredDocumentOptions.lineSpacing = normalizeTypstLineSpacing(
+        restoredDocumentOptions.lineSpacing,
       )
     }
     if (parsed.carryOver != null) {
@@ -2480,6 +2484,9 @@
 
   /** Regénère le code à partir des réglages du document (interligne...) */
   function applyDocumentOptions() {
+    documentOptions.lineSpacing = normalizeTypstLineSpacing(
+      documentOptions.lineSpacing,
+    )
     // moins de sujets qu'avant : celui qu'on regardait peut ne plus exister
     if (previewVersion >= Math.max(1, documentOptions.nbVersions)) {
       previewVersion = 0
