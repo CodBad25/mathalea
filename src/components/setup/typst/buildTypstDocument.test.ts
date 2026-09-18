@@ -1404,7 +1404,7 @@ describe('buildTypstDocument', () => {
       expect(code).not.toContain('#let ex1-colonnes')
     })
 
-    it("numérote une question unique fusionnée avec l'option globale mergeExercises", () => {
+  it("numérote une question unique fusionnée avec l'option globale mergeExercises", () => {
       const code = buildTypstDocument(
         [
           exercise({ questions: ['$1+1$'], numbered: true }),
@@ -1413,10 +1413,29 @@ describe('buildTypstDocument', () => {
         { ...defaultTypstDocumentOptions, mergeExercises: true },
       )
       expect(code).toContain('start: 1)')
-      expect(code).toContain('start: 2)')
-    })
+    expect(code).toContain('start: 2)')
+  })
 
-    it('reprend la fusion locale au round-trip (harvestCarryOver)', () => {
+  it('numérote aussi les questions habituellement non numérotées en mode fusionné', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({ questions: ['$1+1$'], numbered: true }),
+        // Certains exercices utilisent des repères dans leur propre énoncé
+        // et demandent normalement `label: none`. En fusion, leur position
+        // est néanmoins comptée : ils doivent donc afficher le numéro suivant.
+        exercise({ questions: ['$A=2+2$'], numbered: false }),
+        exercise({ questions: ['$3+3$'], numbered: true }),
+      ],
+      { ...defaultTypstDocumentOptions, mergeExercises: true },
+    )
+    const enonces = code.slice(code.indexOf('// ----- Énoncés -----'))
+    expect(enonces).toContain('start: 1)')
+    expect(enonces).toContain('start: 2)')
+    expect(enonces).toContain('start: 3)')
+    expect(enonces).not.toContain('label: none')
+  })
+
+  it('reprend la fusion locale au round-trip (harvestCarryOver)', () => {
       const code = buildTypstDocument(
         [
           exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
