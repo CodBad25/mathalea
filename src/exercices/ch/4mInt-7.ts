@@ -9,8 +9,8 @@ import {
   valeursParDefaut,
   type FormulaireComplexe,
 } from '../../lib/formulaireComplexe'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { noDecimal } from '../../lib/interactif/checks'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ce, {
   fonctionComparaison,
 } from '../../lib/interactif/comparisonFunctions'
@@ -348,9 +348,7 @@ export default class ValeurMoyenneIntegrale extends Exercice {
         difference = `${valeurF(b)}-${entreParentheses(valeurF(a))}`
         const intervalle = `[${bornesTex[0]};${bornesTex[1]}]`
         if (famille === 'sin') {
-          solutions = [a, a + 1, b].map((n) =>
-            piTex(new FractionEtendue(n, 1)),
-          )
+          solutions = [a, a + 1, b].map((n) => piTex(new FractionEtendue(n, 1)))
           resolution =
             `$${fDe('c')}=${moyenne}\\iff \\sin\\left(c\\right)=0$. ` +
             `Sur $${intervalle}$, les solutions sont $${solutions.join('$, $')}$.`
@@ -444,29 +442,29 @@ export default class ValeurMoyenneIntegrale extends Exercice {
           ? []
           : [
               {
-                consigne: `Calculer la valeur exacte de $${integraleTex}$.`,
+                consigne: `Calculer la valeur de $${integraleTex}$.`,
                 nom: 'I',
                 valeur: integrale,
                 ensembleDeNombres: false,
               },
             ]),
         {
-          consigne: `Déterminer la valeur moyenne exacte $m$ de $f$ sur $[${aTex};${bTex}]$.`,
+          consigne: `Déterminer la valeur moyenne $m$ de $f$ sur $[${aTex};${bTex}]$.`,
           nom: 'm',
           valeur: moyenne,
           ensembleDeNombres: false,
         },
         {
-          consigne: `Déterminer l'ensemble $C$ des nombres $c\\in[${aTex};${bTex}]$ tels que $f(c)=m$. Donner les valeurs exactes.`,
+          consigne: `Déterminer l'ensemble $C$ des nombres $c\\in[${aTex};${bTex}]$ tels que $f(c)=m$.`,
           nom: 'C',
           valeur: ensemble,
           ensembleDeNombres: true,
         },
       ]
       const enonce =
-        `Soit $f$ la fonction définie sur $[${aTex};${bTex}]$ par $f(x)=${f}$.` +
+        `Soit $f\\colon[${aTex};${bTex}]\\to\\mathbb{R}$ la fonction définie par $f(x)=${f}$.` +
         (donnee ? `<br>On donne $${integraleTex}=${integrale}$.` : '')
-      let texte = `${enonce}<br><br>`
+      let texte = `${enonce} On attend pour chaque réponse une valeur exacte.<br><br>`
       const reponses: Valeur = {}
       if (this.interactif) {
         const dataOptions: DataOptionsMultiMathfield = {}
