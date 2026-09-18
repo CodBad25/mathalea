@@ -69,10 +69,15 @@ export function normalizeQcm(
       feedback: p.feedback,
     })),
   )
+  const hasMultipleCorrectAnswers =
+    propositions.filter((proposition) => proposition.correct).length > 1
 
   return validateQCM({
     type: 'qcm',
-    mode: contexte.type === 'qcmMult' ? 'mult' : 'mono',
+    mode:
+      contexte.type === 'qcmMult' || hasMultipleCorrectAnswers
+        ? 'mult'
+        : 'mono',
     id,
     ref,
     enonce: autoCorrectionItem.enonce ?? exercice.listeQuestions[index],
