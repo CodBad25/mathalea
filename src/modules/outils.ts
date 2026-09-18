@@ -23,7 +23,10 @@ export const epsilon = 0.000001
  * Affecte les propriétés contenues et contenuCorrection (d'après les autres propriétés de l'exercice)
  * @param {Exercice} exercice
  */
-export function listeQuestionsToContenu(exercice: IExercice) {
+export function listeQuestionsToContenu(
+  exercice: IExercice,
+  forceEnumerate = false,
+) {
   let vspace = ''
   if (exercice.vspace) {
     vspace = `\\vspace{${exercice.vspace} cm}\n`
@@ -34,7 +37,7 @@ export function listeQuestionsToContenu(exercice: IExercice) {
       vspace +
       texIntroduction(exercice.introduction) +
       texMulticols(
-        texEnumerate(exercice.listeQuestions, exercice.spacing),
+        texEnumerate(exercice.listeQuestions, exercice.spacing, forceEnumerate),
         exercice.nbCols,
       )
   }
@@ -42,7 +45,11 @@ export function listeQuestionsToContenu(exercice: IExercice) {
     texConsigne('') +
     texIntroduction(exercice.consigneCorrection) +
     texMulticols(
-      texEnumerate(exercice.listeCorrections, exercice.spacingCorr),
+      texEnumerate(
+        exercice.listeCorrections,
+        exercice.spacingCorr,
+        forceEnumerate,
+      ),
       exercice.nbColsCorr,
     )
   exercice.contenuCorrection = exercice.contenuCorrection.replace(
@@ -540,9 +547,13 @@ const sansPrecision = (arrondir === undefined)
  * * L'espacement est généré avec spacing
  * @author Rémi Angot
  */
-export function texEnumerate(liste: string[], spacing: number) {
+export function texEnumerate(
+  liste: string[],
+  spacing: number,
+  forceEnumerate = false,
+) {
   let result = ''
-  if (liste.length > 1) {
+  if (liste.length > 1 || forceEnumerate) {
     result = '\\begin{enumerate}\n'
     if (spacing > 1) {
       result += `\\begin{spacing}{${spacing}}\n`

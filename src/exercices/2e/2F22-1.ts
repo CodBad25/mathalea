@@ -175,7 +175,9 @@ export default class ImageFonctionsRefs extends Exercice {
       }
       cpt++
     }
-    listeQuestionsToContenu(this)
+    // Conserver une numérotation LaTeX, même lorsqu'une version ne contient
+    // qu'une question.
+    listeQuestionsToContenu(this, true)
     if (this.can) {
       // Course aux nombres : une seule question, dont l'énoncé doit reprendre
       // la consigne (« Soit f la fonction carré. »), sinon le sens de f/g/h
