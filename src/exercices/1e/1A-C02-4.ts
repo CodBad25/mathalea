@@ -14,7 +14,7 @@ export const uuid = 'efc17'
 
 export const refs = {
   'fr-fr': ['1A-C02-4', '2A-N2-4'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-14'],
 }
 export default class Auto1AC2a extends NombreInverse {
   constructor() {
