@@ -2755,8 +2755,9 @@
       input.canQuestions = input.questions.map((question, i) => {
         const canEnonce = exercise.listeCanEnonces?.[i]
         if (canEnonce != null && canEnonce.length > 0) return format(canEnonce)
-        return input.consigne.length > 0
-          ? `${input.consigne}<br>${question}`
+        const consigne = input.consigne ?? ''
+        return consigne.length > 0
+          ? `${consigne}<br>${question}`
           : question
       })
       input.canAnswers = input.questions.map((_, i) =>

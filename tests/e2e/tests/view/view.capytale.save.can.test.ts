@@ -249,11 +249,11 @@ async function testV(page: Page) {
     .contentFrame()
     .getByRole('button', { name: 'Rendre la copie' })
     .click()
-  await page.waitForTimeout(500)
   await page
     .locator('#iframe')
     .contentFrame()
-    .getByRole('button', { name: 'Terminer' })
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Rendre la copie' })
     .click()
   await page
     .locator('#iframe')
