@@ -105,7 +105,7 @@ export default class nomExercice extends Exercice {
                   : 'Il faut compléter les deux zones avec des nombres entiers différents de 1.',
                 score: {
                   nbBonnesReponses: 0,
-                  nbReponses: sansReponse ? 0 : 1,
+                  nbReponses: 1,
                 },
               }
             }
