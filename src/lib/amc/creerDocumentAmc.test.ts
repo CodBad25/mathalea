@@ -49,6 +49,7 @@ describe('creerDocumentAmc templates', () => {
       documentClassOptions: '10pt,a4paper,french,svgnames',
     })
 
+    expect(preambule.startsWith('% !TEX encoding = UTF-8 Unicode')).toBe(true)
     expect(preambule).toContain(
       '\\documentclass[10pt,a4paper,french,svgnames]{article}',
     )
@@ -335,6 +336,83 @@ describe('creerDocumentAmc templates', () => {
 
     expect(latex).not.toContain('\\element{EMPTY_READY}')
     expect(latex).not.toContain('\\restituegroupe{EMPTY_READY}')
+
+    vi.unstubAllGlobals()
+  })
+
+  it('génère un élément indépendant pour chaque question AMCOpen', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCOpen',
+          autoCorrectionAMC: Array.from({ length: 4 }, (_, index) => ({
+            enonce: `Version ${index + 1}`,
+            propositions: [{ texte: `Correction ${index + 1}`, statut: 3 }],
+          })),
+          consigne: 'Traiter la question.',
+          id: '6G01',
+          nbQuestions: 4,
+          titre: 'Quatre versions',
+          listeQuestions: Array.from(
+            { length: 4 },
+            (_, index) => `Version ${index + 1}`,
+          ),
+          listeCorrections: Array.from(
+            { length: 4 },
+            (_, index) => `Correction ${index + 1}`,
+          ),
+        } as any,
+      ],
+    })
+
+    expect(latex.match(/\\element\{6G01\}\{/g)).toHaveLength(4)
+    expect(latex.match(/\\begin\{question\}\{6G01A1[0-3]\}/g)).toHaveLength(4)
+    for (let index = 1; index <= 4; index++) {
+      expect(latex).toContain(`Version ${index}`)
+    }
+
+    vi.unstubAllGlobals()
+  })
+
+  it('utilise questionmult dès qu’un QCM contient plusieurs bonnes réponses', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          // Le rendu doit rester sûr même si une ancienne métadonnée est
+          // incohérente avec les propositions réellement générées.
+          amcType: 'qcmMono',
+          autoCorrection: [
+            {
+              enonce: 'Sélectionner les réponses exactes.',
+              propositions: [
+                { texte: 'Réponse A', statut: true },
+                { texte: 'Réponse B', statut: true },
+                { texte: 'Réponse C', statut: false },
+              ],
+            },
+          ],
+          id: 'QCM_MULTIPLE',
+          nbQuestions: 1,
+          titre: 'QCM multiple',
+          listeQuestions: ['Sélectionner les réponses exactes.'],
+          listeCorrections: ['A et B.'],
+        } as any,
+      ],
+    })
+
+    expect(latex).toContain('\\begin{questionmult}{QCMMULTIPLEA10}')
+    expect(latex).toContain('\\end{questionmult}')
+    expect(latex).not.toContain('\\begin{question}{QCMMULTIPLEA10}')
 
     vi.unstubAllGlobals()
   })
