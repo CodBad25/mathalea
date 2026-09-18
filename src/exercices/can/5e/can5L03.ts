@@ -6,34 +6,33 @@ import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+
 export const titre = 'Trouver deux entiers consécutifs'
 export const interactifReady = true
 
-export const dateDePublication = '12/09/2024'
-export const uuid = '58784'
+export const dateDePublication = '18/09/2026'
+export const uuid = 'f4a18'
 export const refs = {
-  'fr-fr': ['can2L20-01'],
-  'fr-ch': ['10FA5D-7'],
+  'fr-fr': ['can5L03'],
+  'fr-ch': [],
 }
-/**
- * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora
 
-*/
-export default class entiersConsecutifs extends Exercice {
+/**
+ * Modèle d'exercice très simple pour la course aux nombres.
+ * @author Gilles Mora
+ */
+export default class EntiersConsecutifs extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
     this.spacing = 1.5
-    // this.optionsDeComparaison = { ensembleDeNombres: true }
   }
 
   nouvelleVersion() {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
-      let texte = ''
-      const n1 = randint(-20, 20, [0, 1, 2, 3, 4, 5, 6, 7])
+      const n1 = randint(8, 20)
       const n2 = n1 + 1
-      texte = `La somme de deux entiers consécutifs est $${n1 + n2}$.<br>
+      let texte = `La somme de deux entiers consécutifs est $${n1 + n2}$.<br>
     Quels sont ces deux entiers ? `
       if (this.interactif) {
         texte +=
