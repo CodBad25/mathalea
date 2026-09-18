@@ -4,6 +4,7 @@ import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLi
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { orangeMathalea } from '../../../lib/colors'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { listeQuestionsToContenu } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -163,8 +164,8 @@ export default class EcrituresFractionnaireEtDecimale extends Exercice {
 
       this.listeQuestions[i] = texte
       this.listeCorrections[i] = fractionDemandee
-        ? `$A=${donnee.calcul}=${miseEnEvidence(fractionIrreductible.texFraction)}$`
-        : `$A=${donnee.calcul}=${fractionIrreductible.texFraction}=${miseEnEvidence(texNombre(decimal))}$`
+        ? `$A=${donnee.calcul}${donnee.fraction.texSimplificationAvecEtapes(true, orangeMathalea)}$`
+        : `$A=${donnee.calcul}${donnee.fraction.texSimplificationAvecEtapes(true)}=${miseEnEvidence(texNombre(decimal))}$`
       this.canEnonce = `Écrire $A=${donnee.expression}$ ${fractionDemandee ? "sous la forme d'une fraction irréductible" : 'sous forme décimale'}.`
       this.canReponseACompleter = '$A=\\ldots$'
       this.listeCanEnonces.push(this.canEnonce)
