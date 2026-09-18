@@ -263,6 +263,8 @@ export interface TypstAnchor {
   /**
    * `tasks`/`tasks-corr` : liste de questions réglable (énoncé/correction) ;
    * `exo` : début d'un exercice (nombre de questions, suppression) ;
+   * `version-exo` : début d'un exercice d'un sujet B, C... (régénération
+   * des seules données aléatoires) ;
    * `corr` : début de la correction d'un exercice (édition du code, insertion) ;
    * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
    * `cover` : textes de la page de garde ; `footer` : texte du pied de page
@@ -281,6 +283,7 @@ export interface TypstAnchor {
     | 'tasks'
     | 'tasks-corr'
     | 'exo'
+    | 'version-exo'
     | 'corr'
     | 'gap'
     | 'header'
@@ -305,6 +308,7 @@ const ANCHOR_KINDS = new Set([
   'tasks',
   'tasks-corr',
   'exo',
+  'version-exo',
   'corr',
   'gap',
   'header',

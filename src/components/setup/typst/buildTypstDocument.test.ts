@@ -329,6 +329,18 @@ describe('buildTypstDocument', () => {
     expect(buildTypstDocument(exercises)).not.toContain('// mathalea:sujet(')
   })
 
+  it('ajoute les repères de régénération individuels aux sujets dérivés', () => {
+    const exercises = [exercise({ questions: ['$1+1$'] })]
+    const code = buildTypstDocument(
+      exercises,
+      defaultTypstDocumentOptions,
+      {},
+      [exercises],
+    )
+    expect(code).toContain('#mathalea-anchor("exo", 1)')
+    expect(code).toContain('#mathalea-anchor("version-exo", 1)')
+  })
+
   it('nomme le sujet sur la première page de sa section Corrections quand la fiche en a plusieurs', () => {
     const code = buildTypstDocument(
       [exercise({ questions: ['$1+1$'], corrections: ['$2$'] })],
@@ -972,6 +984,21 @@ describe('buildTypstDocument', () => {
         'Même texte.',
         'Même texte.',
       ],
+    })
+  })
+
+  it('conserve un saut de colonne avant une correction', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'], corrections: ['$2$'] })],
+      { ...defaultTypstDocumentOptions, columns: 2 },
+      {
+        insertionsCorrection: {
+          1: [COLUMN_BREAK_SNIPPET, COLUMN_BREAK_SNIPPET],
+        },
+      },
+    )
+    expect(harvestCarryOver(code).insertionsCorrection).toEqual({
+      1: [COLUMN_BREAK_SNIPPET],
     })
   })
 
