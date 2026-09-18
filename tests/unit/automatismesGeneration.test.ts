@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import seedrandom from 'seedrandom'
 import Exercice from '../../src/exercices/Exercice'
 import MetaExercice from '../../src/exercices/MetaExerciceCan'
 import {
@@ -21,6 +22,9 @@ class QuestionA extends Exercice {
 }
 class QuestionB extends Exercice {
   titre = 'B'
+}
+class QuestionAleatoire extends Exercice {
+  titre = `Question ${Math.random()}`
 }
 
 // Laisser finir les chaînes de promesses, y compris celles qui doivent être
@@ -176,5 +180,70 @@ describe('Ordre des générations asynchrones des automatismes', () => {
     expect(exercise.listeQuestions).toEqual(['A'])
     expect(other.listeQuestions).toEqual(['B'])
     expect(updated).toHaveBeenCalledTimes(2)
+  })
+
+  it('réamorce la graine après le chargement asynchrone des sous-exercices', async () => {
+    const prefix = `seed${++fixtureIndex}`
+    const question = deferredModule()
+    const Selection = createAutomatismesCanExercice({
+      modules: { [`${prefix}A01`]: () => question.promise },
+      refRegex: new RegExp(`^${prefix}(A)`),
+      categories: ['A'],
+      categoriesForm: {
+        titre: 'Questions par catégorie',
+        categories: [{ label: 'A', max: 1 }],
+        defaut: [1],
+      },
+      defaultSup: '1',
+    })
+    const exercise = new Selection()
+    exercise.seed = 'meme-graine'
+    exercise.nouvelleVersion()
+
+    // Simule une autre génération pendant que l'import est en attente.
+    seedrandom('autre-generation', { global: true })
+    question.resolve({ default: QuestionAleatoire })
+    await settle()
+
+    const expected = seedrandom('meme-graine')()
+    expect(exercise.listeQuestions).toEqual([`Question ${expected}`])
+  })
+
+  it('réutilise les références sauvegardées lorsque le catalogue est enrichi', async () => {
+    const prefix = `catalogue${++fixtureIndex}`
+    const config = (modules: Record<string, () => Promise<ExerciceModule>>) =>
+      createAutomatismesCanExercice({
+        modules,
+        refRegex: new RegExp(`^${prefix}(A)`),
+        categories: ['A'],
+        categoriesForm: {
+          titre: 'Questions par catégorie',
+          categories: [{ label: 'A', max: 2 }],
+          defaut: [1],
+        },
+        defaultSup: '1',
+      })
+    const Original = config({
+      [`${prefix}A01`]: async () => ({ default: QuestionA }),
+    })
+    const original = new Original()
+    original.seed = 'meme-graine'
+    original.nouvelleVersion()
+    await settle()
+    const selection = String(original.sup5)
+    expect(selection).toBe(`${prefix}A01`)
+
+    const Enrichi = config({
+      [`${prefix}A01`]: async () => ({ default: QuestionA }),
+      [`${prefix}A02`]: async () => ({ default: QuestionB }),
+    })
+    const reloaded = new Enrichi()
+    reloaded.seed = 'meme-graine'
+    reloaded.sup5 = selection
+    reloaded.nouvelleVersion()
+    await settle()
+
+    expect(reloaded.listeQuestions).toEqual(['A'])
+    expect(reloaded.sup5).toBe(selection)
   })
 })

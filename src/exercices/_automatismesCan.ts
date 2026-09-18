@@ -19,7 +19,11 @@ export type ExerciceModule = {
   refs?: Record<string, string[]>
 }
 
-type CategoryEntry = { loader: () => Promise<ExerciceModule>; ref: string }
+type CategoryEntry = {
+  loader: () => Promise<ExerciceModule>
+  ref: string
+  category: string
+}
 
 export type CategoriesForm = {
   titre: string
@@ -59,13 +63,7 @@ const loadedClassCache = new Map<string, new () => Exercice>()
  * configuration de niveau.
  */
 export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
-  const {
-    modules,
-    refRegex,
-    categories,
-    categoriesForm,
-    defaultSup,
-  } = config
+  const { modules, refRegex, categories, categoriesForm, defaultSup } = config
 
   // Indexation des exercices par catégorie à partir des noms de fichiers (sans chargement)
   const categoryEntries: Record<string, CategoryEntry[]> = {}
@@ -75,9 +73,23 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
     const filename = path.replace(/^.*\//, '').replace(/\.ts$/, '')
     const match = filename.match(refRegex)
     if (match && match[1] in categoryEntries) {
-      categoryEntries[match[1]].push({ loader, ref: filename })
+      categoryEntries[match[1]].push({
+        loader,
+        ref: filename,
+        category: match[1],
+      })
     }
   }
+
+  // Ne pas dépendre de l'ordre d'énumération de `import.meta.glob`.
+  for (const entries of Object.values(categoryEntries)) {
+    entries.sort((a, b) => a.ref.localeCompare(b.ref))
+  }
+  const entryByRef = new Map(
+    Object.values(categoryEntries)
+      .flat()
+      .map((entry) => [entry.ref, entry]),
+  )
 
   // Une catégorie ne peut pas fournir plus de questions qu'elle n'a
   // d'exercices : on borne le formulaire et les valeurs par défaut sur ce qui
@@ -141,6 +153,37 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
         return Math.min(wanted, availableByCategory[i])
       })
 
+      // La graine ne suffit pas à figer le tirage si le catalogue est enrichi.
+      // On mémorise donc les références effectivement retenues dans `sup5`
+      // (sérialisé en `s5` dans les URL et les activités Capytale). Une liste
+      // reçue est prioritaire : une ancienne URL retrouve les mêmes questions,
+      // même après l'ajout de nouveaux automatismes.
+      const requestedRefs =
+        typeof this.sup5 === 'string' && this.sup5.length > 0
+          ? this.sup5.split('|')
+          : []
+      const savedSelection = requestedRefs.map((ref) => entryByRef.get(ref))
+      const expectedCounts = new Map(
+        categories.map((category, i) => [category, parts[i]]),
+      )
+      const actualCounts = new Map<string, number>()
+      for (const entry of savedSelection) {
+        if (entry != null) {
+          actualCounts.set(
+            entry.category,
+            (actualCounts.get(entry.category) ?? 0) + 1,
+          )
+        }
+      }
+      const hasSavedSelection =
+        savedSelection.length === requestedRefs.length &&
+        savedSelection.every((entry) => entry != null) &&
+        new Set(requestedRefs).size === requestedRefs.length &&
+        categories.every(
+          (category) =>
+            actualCounts.get(category) === expectedCounts.get(category),
+        )
+
       // « Garder la sélection d'exercices » : on fige dans sup4 (paramètre
       // persisté et inutilisé par MetaExerciceCan) la graine de la sélection.
       // Au moment où la case est cochée, this.seed vaut encore la graine de la
@@ -164,15 +207,22 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       }
       const rng = seedrandom(selectionSeed)
 
-      const selected: CategoryEntry[] = []
-      for (let i = 0; i < categories.length; i++) {
-        const cat = categories[i]
-        const picked = pickRandom(categoryEntries[cat], parts[i], rng)
-        selected.push(...picked)
-      }
+      const selected: CategoryEntry[] = hasSavedSelection
+        ? (savedSelection as CategoryEntry[])
+        : []
+      if (!hasSavedSelection) {
+        for (let i = 0; i < categories.length; i++) {
+          const cat = categories[i]
+          const picked = pickRandom(categoryEntries[cat], parts[i], rng)
+          selected.push(...picked)
+        }
 
-      // Mélanger toutes les questions sélectionnées
-      selected.sort(() => rng() - 0.5)
+        // Mélanger toutes les questions sélectionnées uniquement lors du
+        // premier tirage : l'ordre mémorisé fait ensuite partie du sujet.
+        selected.sort(() => rng() - 0.5)
+        this.sup5 =
+          selected.length > 0 ? selected.map((e) => e.ref).join('|') : false
+      }
 
       const totalQuestions = selected.length
       this.nbQuestions = totalQuestions
@@ -192,6 +242,13 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       // Construit les questions à partir des classes chargées puis restaure nos
       // paramètres de formulaire (MetaExerciceCan les écrase pendant le rendu).
       const buildFromClasses = (classes: (new () => Exercice)[]) => {
+        // Les imports des sous-exercices sont asynchrones. Entre l'appel à
+        // `nouvelleVersion()` et leur résolution, un autre exercice peut avoir
+        // changé le générateur global. MetaExerciceCan et ses sous-exercices
+        // l'utilisent pour tirer les données : le réamorcer ici garantit donc
+        // qu'une même graine produit le même énoncé, y compris à la reprise
+        // d'une copie Capytale.
+        if (this.seed !== undefined) seedrandom(this.seed, { global: true })
         this.Exercices = classes
         this.sup2 = selected.map((_, i) => i + 1).join('-')
         this.sup = false
@@ -266,7 +323,10 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
           // (`EnvironmentTeardownError`). En usage réel, la question reste
           // affichée en « chargement... » et on trace l'échec.
           try {
-            if (typeof window !== 'undefined' && typeof window.notify === 'function') {
+            if (
+              typeof window !== 'undefined' &&
+              typeof window.notify === 'function'
+            ) {
               window.notify(
                 "AutomatismesCan : échec du chargement d'un module d'automatisme",
                 { error: String(error) },
