@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 69bb5 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import {
   ajouteGrimuku,
   GrimukuGrilleElement,
@@ -23,12 +26,10 @@ export const dateDePublication = '06/09/2026'
 export const titre = 'Résoudre une grille de grimuku'
 export const interactifReady = true
 
-export const dateDeModifImportante = '18/09/2026'
-
-export const uuid = '01def'
+export const uuid = '69bb5'
 export const refs = {
-  'fr-fr': ['EN-Grimuku'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
 /** Le symbole LaTeX de chaque flèche, pour écrire son étiquette en mode mathématique. */
@@ -74,7 +75,7 @@ function etiquetteMath(fleche: FlecheGrimuku): string {
  *
  * @author Rémi Angot
  */
-export default class Grimuku extends Exercice {
+export default class GrimukuOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -92,6 +93,7 @@ export default class Grimuku extends Exercice {
     this.sup2 = 1
     this.sup3 = true
     this.nbQuestions = 1
+    this.nbQuestionsModifiable = false
     this.comment =
       'Le niveau de difficulté joue sur la longueur des flèches, sur le nombre ' +
       'de chiffres déjà écrits dans la grille et sur la longueur du ' +
@@ -109,62 +111,56 @@ export default class Grimuku extends Exercice {
   nouvelleVersion(): void {
     const [lignes, colonnes] = formatDepuisSup(this.sup)
     const niveau = niveauDepuisSup(this.sup2)
-    const premiereGrille = genereGrimuku({ lignes, colonnes, niveau })
+    const grille = genereGrimuku({ lignes, colonnes, niveau })
 
     const rappelDesRegles = this.sup3 === true || this.sup3 === 'true'
     this.consigne = rappelDesRegles
-      ? this.texteRegles(premiereGrille, this.nbQuestions > 1)
-      : this.nbQuestions === 1
-        ? 'Compléter la grille en plaçant un chiffre par case blanche.'
-        : 'Compléter les grilles en plaçant un chiffre par case blanche.'
+      ? this.texteRegles(grille)
+      : 'Compléter la grille en plaçant un chiffre par case blanche.'
 
-    for (let i = 0; i < this.nbQuestions; i++) {
-      const grille =
-        i === 0 ? premiereGrille : genereGrimuku({ lignes, colonnes, niveau })
-      const donnees: [number, number][] = grille.donnees.map((index) => [
-        index,
-        grille.solution[index],
-      ])
+    const donnees: [number, number][] = grille.donnees.map((index) => [
+      index,
+      grille.solution[index],
+    ])
 
-      this.listeQuestions[i] = ajouteGrimuku(this, i, {
+    this.listeQuestions[0] = ajouteGrimuku(this, 0, {
+      lignes: grille.lignes,
+      colonnes: grille.colonnes,
+      grises: grille.grises,
+      fleches: grille.fleches,
+      donnees,
+      interactivityOn: this.interactif,
+    })
+
+    handleAnswers(this, 0, this.reponsesAttendues(grille), {
+      formatInteractif: GrimukuGrilleElement.elementTag,
+    })
+
+    this.listeCorrections[0] =
+      this.texteDepart(grille) +
+      ajouteGrimuku(this, 0, {
+        id: `${GrimukuGrilleElement.elementTag}Ex${this.numeroExercice ?? 0}Q0Correction`,
         lignes: grille.lignes,
         colonnes: grille.colonnes,
         grises: grille.grises,
         fleches: grille.fleches,
         donnees,
-        interactivityOn: this.interactif,
+        solution: grille.solution,
+        interactivityOn: false,
       })
-
-      handleAnswers(this, i, this.reponsesAttendues(grille), {
-        formatInteractif: GrimukuGrilleElement.elementTag,
-      })
-
-      this.listeCorrections[i] =
-        this.texteDepart(grille) +
-        ajouteGrimuku(this, i, {
-          id: `${GrimukuGrilleElement.elementTag}Ex${this.numeroExercice ?? 0}Q${i}Correction`,
-          lignes: grille.lignes,
-          colonnes: grille.colonnes,
-          grises: grille.grises,
-          fleches: grille.fleches,
-          donnees,
-          solution: grille.solution,
-          interactivityOn: false,
-        })
-    }
 
     listeQuestionsToContenu(this)
   }
 
   /** Rappel des règles du jeu, affiché en consigne. */
-  private texteRegles(grille: GrilleGrimuku, plusieursGrilles = false): string {
+  private texteRegles(grille: GrilleGrimuku): string {
     const rappelDesDonnees =
       grille.donnees.length === 0
         ? ''
         : 'Les chiffres déjà écrits sont donnés : ils ne sont pas à trouver.<br>'
     return (
-      `Compléter ${plusieursGrilles ? 'les grilles' : 'la grille'} en plaçant un chiffre de 1 à 9 par case blanche.<br>` +
-      `Le nombre écrit avant ${plusieursGrilles ? 'chaque' : 'une'} flèche est le produit des chiffres des cases ` +
+      'Compléter la grille en plaçant un chiffre de 1 à 9 par case blanche.<br>' +
+      'Le nombre écrit avant une flèche est le produit des chiffres des cases ' +
       'que cette flèche désigne.<br>' +
       'Un même chiffre peut se répéter à l’intérieur d’une flèche.<br>' +
       rappelDesDonnees

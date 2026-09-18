@@ -19,6 +19,7 @@ import {
   type GrilleGrimuku,
   type NiveauGrimuku,
 } from '../../src/lib/outils/grimuku'
+import Grimuku from '../../src/exercices/enigmes-jeux/EN-grimuku'
 import {
   context,
   setOutputHtml,
@@ -61,6 +62,23 @@ afterEach(() => {
   context.isTypst = false
   document.body.innerHTML = ''
   seedrandom(undefined, { global: true })
+})
+
+describe('Exercice Grimuku', () => {
+  it('génère une grille et une correction pour chaque question demandée', () => {
+    const exercice = new Grimuku()
+    exercice.numeroExercice = 0
+    exercice.nbQuestions = 2
+
+    exercice.nouvelleVersion()
+
+    expect(exercice.nbQuestionsModifiable).toBe(true)
+    expect(exercice.listeQuestions).toHaveLength(2)
+    expect(exercice.listeCorrections).toHaveLength(2)
+    expect(exercice.listeQuestions[0]).toContain('Q0')
+    expect(exercice.listeQuestions[1]).toContain('Q1')
+    expect(exercice.autoCorrection).toHaveLength(2)
+  })
 })
 
 describe('génération des grilles de grimuku', () => {
