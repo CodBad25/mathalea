@@ -9,10 +9,10 @@ import Exercice from '../Exercice'
 export const titre = 'Décoder un message avec les tables de multiplication'
 
 export const refs = {
-  'fr-fr': ['P020'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-export const uuid = 'de363'
+export const uuid = 'de353'
 const tableauDesCaracteres = Array.from(
   "-xçwjè,k~:aq«rlgdmftbéocsà.êeipzhu'ynvî»â!",
 )
@@ -55,7 +55,6 @@ export default class EncodeurTexte extends Exercice {
       'Grille différente pour chaque morceau',
       false,
     ]
-
     this.sup = 'mathématiques'
     this.sup2 = false
     this.nbQuestions = 1
@@ -86,12 +85,6 @@ export default class EncodeurTexte extends Exercice {
       'égalité',
       'propriété',
       'contre-exemple',
-      'symétrie',
-      'hauteur',
-      'périmètre',
-      'volume',
-      'digramme',
-      'effectif',
     ]
     const listeDePhrases = [
       "Les mathématiques/c'est fantastique",
@@ -100,35 +93,6 @@ export default class EncodeurTexte extends Exercice {
       'Il faut toujours/vérifier la cohérence/de ses résultats',
       'Pour tracer des/droites ou des segments/on utilise une règle',
       'Pour tracer des/droites perpendiculaires/utilise ton équerre',
-      'Pour tracer des/droites parallèles/utilise ta règle et ton équerre',
-      'Pour tracer des/cercles/utilise un compas',
-      "L'aire est la mesure de la surface/d'une figure géométrique",
-      "Le périmètre est la mesure du contour/d'une figure géométrique",
-      "Un produit est le résultat d'une multiplication",
-      "Un quotient est le résultat d'une division",
-      'Une somme est le résultat d’une addition',
-      'Une différence est le résultat d’une soustraction',
-      'Un nombre premier est un nombre qui n’a que deux diviseurs : un et lui-même',
-      'Un nombre pair est un nombre divisible par deux',
-      'Un nombre impair est un nombre qui n’est pas divisible par deux',
-      'Un nombre entier est un nombre dont la partie décimale est nulle',
-      'Le diamêtre d’un cercle est le double de son rayon',
-      'Le rayon d’un cercle est la moitié de son diamètre',
-      'Un angle droit mesure quatre-vingt-dix degrés',
-      'Un angle aigu mesure moins de quatre-vingt-dix degrés',
-      'Un angle obtus mesure plus de quatre-vingt-dix degrés',
-      'Un triangle est une figure géométrique à trois côtés',
-      'Un quadrilatère est une figure géométrique à quatre côtés',
-      'Un pentagone est une figure géométrique à cinq côtés',
-      'Un hexagone est une figure géométrique à six côtés',
-      'Un heptagone est une figure géométrique à sept côtés',
-      'Un octogone est une figure géométrique à huit côtés',
-      'Un nonagone est une figure géométrique à neuf côtés',
-      'Un décagone est une figure géométrique à dix côtés',
-      'Un triangle équilatéral est un triangle dont les trois côtés sont égaux',
-      'Un triangle isocèle est un triangle dont deux côtés sont égaux',
-      'Un pavé droit est un solide dont les faces sont des rectangles',
-      'Un cube est un solide dont les faces sont des carrés',
     ]
     this.sup3 = contraindreValeur(1, 3, this.sup3, 1)
 
