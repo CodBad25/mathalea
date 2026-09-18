@@ -636,7 +636,16 @@ export default class MetaExercice extends Exercice {
           Question.numeroExercice = this.numeroExercice
           Question.canOfficielle = !!this.sup
           Question.interactif = this.interactif
-          Question.seed = this.seed
+          // Dans un sujet officiel, les sous-exercices sont figés : ils ne
+          // consomment donc généralement aucun aléa avant de mélanger leur
+          // QCM. Leur donner tous la graine du méta-exercice les faisait alors
+          // produire la même permutation des propositions (et la même lettre
+          // de bonne réponse). Une graine stable, distincte par rang, conserve
+          // le sujet reproductible sans toucher aux tirages des sujets non
+          // officiels déjà partagés.
+          Question.seed = this.sup
+            ? `${this.seed}-question-${indexQuestion}`
+            : this.seed
           // Le méta-exercice ne réhéberge que la première question de chaque
           // sous-exercice sélectionné. La limiter avant sa génération évite de
           // tirer et construire des questions qui seront aussitôt ignorées et
