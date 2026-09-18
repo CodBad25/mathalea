@@ -118,6 +118,24 @@ describe('createAutomatismesCanExercice', () => {
 })
 
 describe('MetaExerciceCan', () => {
+  class QuestionMultiple extends Exercice {
+    constructor() {
+      super()
+      this.nbQuestions = 3
+    }
+
+    nouvelleVersion() {
+      const consigne =
+        this.nbQuestions === 1
+          ? 'Consigne au singulier.'
+          : 'Consigne au pluriel.'
+      for (let i = 0; i < this.nbQuestions; i++) {
+        this.listeQuestions[i] = consigne
+        this.listeCorrections[i] = ''
+      }
+    }
+  }
+
   class QuestionMathlive extends Exercice {
     nouvelleVersion() {
       this.listeQuestions[0] = 'Question simple'
@@ -168,6 +186,14 @@ describe('MetaExerciceCan', () => {
       ]
     }
   }
+
+  it('demande une seule question au sous-exercice sélectionné', () => {
+    const exercice = new MetaExercice([QuestionMultiple])
+    exercice.sup2 = '1'
+    exercice.nouvelleVersion()
+
+    expect(exercice.listeQuestions).toEqual(['Consigne au singulier.'])
+  })
 
   it('réindexe aussi l’identifiant du tableau tableau-mathlive', () => {
     const exercice = new MetaExercice([

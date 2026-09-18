@@ -637,6 +637,12 @@ export default class MetaExercice extends Exercice {
           Question.canOfficielle = !!this.sup
           Question.interactif = this.interactif
           Question.seed = this.seed
+          // Le méta-exercice ne réhéberge que la première question de chaque
+          // sous-exercice sélectionné. La limiter avant sa génération évite de
+          // tirer et construire des questions qui seront aussitôt ignorées et
+          // permet aux consignes dépendant du nombre de questions d'employer
+          // le singulier.
+          Question.nbQuestions = 1
           // Le sous-exercice fabrique ses identifiants DOM à partir de cet
           // index : il produit ainsi directement ceux de la question affichée,
           // sans réécriture de chaîne après coup.
