@@ -30,6 +30,7 @@ import ce from '../../lib/interactif/comparisonFunctions'
 import { ordreAlphabetique } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { texNombre } from '../../lib/outils/texNombre'
 
 export const titre = 'Calculer une longueur avec le théorème de Pythagore'
 export const amcType = 'AMCHybride'
@@ -357,11 +358,11 @@ export default class Pythagore2D extends Exercice {
       let texteEnonce = ''
       if (this.typeDeQuestion === 'Calculer :') {
         if (listeTypeDeQuestions[i] === 'AB') {
-          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${C.nom} = ${longueurAC}\\text{ cm}$ et $${B.nom}${C.nom} = ${longueurBC}\\text{ cm}$. <br>Calculer $${A.nom}${B.nom}$.<br>`
+          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${C.nom} = ${texNombre(longueurAC)}\\text{ cm}$ et $${B.nom}${C.nom} = ${texNombre(longueurBC)}\\text{ cm}$. <br>Calculer $${A.nom}${B.nom}$.<br>`
         } else if (listeTypeDeQuestions[i] === 'BC') {
-          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${B.nom} = ${longueurAB}\\text{ cm}$ et $${A.nom}${C.nom} = ${longueurAC}\\text{ cm}$. <br>Calculer $${B.nom}${C.nom}$.<br>`
+          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${B.nom} = ${texNombre(longueurAB)}\\text{ cm}$ et $${A.nom}${C.nom} = ${texNombre(longueurAC)}\\text{ cm}$. <br>Calculer $${B.nom}${C.nom}$.<br>`
         } else {
-          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${B.nom} = ${longueurAB}\\text{ cm}$ et $${B.nom}${C.nom} = ${longueurBC}\\text{ cm}$. <br>Calculer $${A.nom}${C.nom}$.<br>`
+          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${B.nom} = ${texNombre(longueurAB)}\\text{ cm}$ et $${B.nom}${C.nom} = ${texNombre(longueurBC)}\\text{ cm}$. <br>Calculer $${A.nom}${C.nom}$.<br>`
         }
       } else {
         // Pour les autres types de questions (égalité de Pythagore, etc.)
