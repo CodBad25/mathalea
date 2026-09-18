@@ -1944,7 +1944,12 @@ function exerciseBody(
         questionNumberingLabel(options.questionNumberingStyle))
       : `${tasksPrefix}-numerotation`
   let labelIsVariableRef = !exportMode && tasksPrefix != null
-  if (!numbered) {
+  // Hors fusion, certains exercices portent déjà leurs propres repères
+  // (A =, a), b)...), et ne doivent donc pas recevoir d'étiquette taskize.
+  // Dans un groupe fusionné, en revanche, chaque question doit afficher le
+  // numéro continu : `startNumber` les compte déjà toutes, y compris celles
+  // qui n'étaient pas numérotées isolément.
+  if (!numbered && !forceList) {
     label = 'none'
     labelIsVariableRef = false
   }
