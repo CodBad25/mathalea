@@ -601,7 +601,7 @@ export const MATHALEA_COVER_CAN_HELPER = `#let mathalea-couverture-can(
  */
 export const PAGE_BREAK_SNIPPET = '] #pagebreak(weak: true) #en-colonnes['
 
-/** Saut de colonne insérable entre deux exercices (page suivante en 1 colonne) */
+/** Saut de colonne insérable entre deux exercices ou corrections (page suivante en 1 colonne) */
 export const COLUMN_BREAK_SNIPPET = '#colbreak(weak: true)'
 
 /** Colonnes par défaut des blocs #tasks : taskize choisit jusqu'à 4 colonnes uniformes. */
@@ -2818,6 +2818,8 @@ function buildVersionContent(
   exportMode = false,
   /** Nom du sujet (« Sujet A »...), affiché sur la section Corrections quand la fiche a plusieurs versions */
   versionLabel?: string,
+  /** Repères de régénération individuels pour les sujets B, C... */
+  emitVersionExerciseAnchors = false,
 ): VersionContent {
   // Une surcharge de code manuelle (modale d'édition de la palette) n'est
   // saisie que sur le sujet affiché, c.-à-d. le Sujet A (`varPrefix` vide).
@@ -2914,7 +2916,10 @@ function buildVersionContent(
     if (emitAnchors) renderLines.push('  #mathalea-anchor("gap", 0)')
     renderLines.push(...insertionLines(0, '  '))
     for (const [k, { enonce }] of built.entries()) {
-      if (emitAnchors) renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
+      if (emitAnchors || emitVersionExerciseAnchors)
+        renderLines.push(
+          `  #mathalea-anchor("${emitAnchors ? 'exo' : 'version-exo'}", ${k + 1})`,
+        )
       renderLines.push(indentContentBlock(enonce))
       if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
       renderLines.push(...insertionLines(k + 1, '  '))
@@ -2985,8 +2990,10 @@ function buildVersionContent(
       isLast: boolean,
     ): string => {
       const parts: string[] = []
-      if (!isHead && emitAnchors) {
-        parts.push(`#mathalea-anchor("exo", ${k + 1})`)
+      if (!isHead && (emitAnchors || emitVersionExerciseAnchors)) {
+        parts.push(
+          `#mathalea-anchor("${emitAnchors ? 'exo' : 'version-exo'}", ${k + 1})`,
+        )
       }
       parts.push(built[k].enonce)
       if (!isLast && emitAnchors) {
@@ -3061,8 +3068,10 @@ function buildVersionContent(
       const last = group.members[group.members.length - 1]
       // repère "exo" : contrôles de l'exercice (nombre de questions,
       // suppression) dans la palette de l'aperçu
-      if (emitAnchors) {
-        renderLines.push(`  #mathalea-anchor("exo", ${group.head + 1})`)
+      if (emitAnchors || emitVersionExerciseAnchors) {
+        renderLines.push(
+          `  #mathalea-anchor("${emitAnchors ? 'exo' : 'version-exo'}", ${group.head + 1})`,
+        )
       }
       renderLines.push(`  #${varPrefix}ex${group.head + 1}()`)
       // repère "gap" du dernier membre du groupe : seule limite, entre deux
@@ -3191,6 +3200,7 @@ export function buildTypstDocument(
     !exportMode,
     exportMode,
     totalVersions > 1 ? `Sujet ${versionLetter(0)}` : undefined,
+    false,
   )
   const extra = extraVersions.map((versionExercises, i) =>
     buildVersionContent(
@@ -3202,6 +3212,7 @@ export function buildTypstDocument(
       false,
       exportMode,
       totalVersions > 1 ? `Sujet ${versionLetter(i + 1)}` : undefined,
+      !exportMode,
     ),
   )
   const bankLines = [...primary.bankLines, ...extra.flatMap((v) => v.bankLines)]

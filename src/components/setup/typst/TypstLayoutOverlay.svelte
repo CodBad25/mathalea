@@ -3,6 +3,7 @@
   export interface OverlayWidget {
     /**
      * `tasks` : liste de questions réglable ; `exo` : début d'un exercice ;
+     * `version-exo` : exercice d'un sujet B, C... (régénération seule) ;
      * `corr` : début de la correction d'un exercice ;
      * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
      * `cover` : textes de la page de garde ; `footer` : texte du pied de page
@@ -14,6 +15,7 @@
     kind:
       | 'tasks'
       | 'exo'
+      | 'version-exo'
       | 'corr'
       | 'gap'
       | 'header'
@@ -1375,6 +1377,25 @@
         </button>
         {@render insertionPanel('exo', insertGapNum, 'right-0')}
       </div>
+    {:else if widget.kind === 'version-exo'}
+      <!-- Les réglages de structure sont communs à tous les sujets. Dans les
+           sujets B, C..., seule la nouvelle graine est locale à la version. -->
+      <div
+        class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        style="top: {widget.top}%; left: {widget.left - 0.3}%;"
+        data-testid="typst-overlay-version-exo"
+      >
+        {#if !staticExercises[widget.num]}
+          <button
+            type="button"
+            title="Nouvelles données pour l'exercice {widget.num}"
+            aria-label="Nouvelles données pour l'exercice {widget.num}"
+            onclick={() => onNewData(widget.num)}
+          >
+            <i class="bx bx-refresh"></i>
+          </button>
+        {/if}
+      </div>
     {:else if widget.kind === 'corr'}
       <!-- barre de la correction (pendant de la barre 'exo' de l'énoncé) :
            insertion d'un texte ou d'un titre de section avant elle, saut de
@@ -1385,6 +1406,7 @@
         (Math.floor(widget.left / columnWidth) + 1) * columnWidth}
       {@const corrInsertions = insertionsCorrection[widget.num] ?? []}
       {@const hasPageBreak = corrInsertions.includes(PAGE_BREAK_SNIPPET)}
+      {@const hasColumnBreak = corrInsertions.includes(COLUMN_BREAK_SNIPPET)}
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
         class:typst-pill-force-visible={openInsertion?.space === 'corr' &&
@@ -1422,6 +1444,24 @@
         >
           <i class="bx bx-arrow-to-bottom"></i>
         </button>
+        {#if hasColumnBreak || documentColumns > 1}
+          <button
+            type="button"
+            title={hasColumnBreak
+              ? 'Retirer le saut de colonne'
+              : 'Insérer un saut de colonne avant cette correction'}
+            aria-label={hasColumnBreak
+              ? 'Retirer le saut de colonne avant cette correction'
+              : 'Insérer un saut de colonne avant cette correction'}
+            class:typst-pill-active={hasColumnBreak}
+            data-testid={hasColumnBreak
+              ? 'typst-overlay-corr-colbreak-active'
+              : 'typst-overlay-corr-colbreak'}
+            onclick={() => toggleBreak('corr', widget.num, COLUMN_BREAK_SNIPPET)}
+          >
+            <i class="bx bx-arrow-to-right"></i>
+          </button>
+        {/if}
         {#if nonEditableCorrections[widget.num] && !canMode}
           {@const corrZoom = exerciseCorrectionZoomValues[widget.num] ?? 1}
           <span class="typst-pill-sep"></span>

@@ -59,7 +59,7 @@ Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-des
 - le sélecteur « Aperçu » de la barre d'outils (à partir de deux sujets) choisit le sujet **montré et compilé** — voir [Un seul sujet dans l'aperçu](#un-seul-sujet-dans-laperçu) ;
 - dans la marge droite, au début de chaque exercice : insertion/modification d'un texte, d'un titre de section (`#section[...]`, helper émis dans le préambule) ou d'un **exercice à énoncé libre** (voir [Exercice à énoncé libre](#exercice-à-énoncé-libre) plus bas) **avant** cet exercice, nombre de questions (`nbQuestions`), **duplication** et suppression de l'exercice (l'une comme l'autre mettent à jour `exercicesParams` et le barème de la page de garde). La copie se place juste après l'original, avec les mêmes paramètres (graine comprise, donc le même énoncé) et les mêmes réglages de palette : `shiftCarryOverForInsert` renumérote les réglages des exercices suivants et recopie ceux de l'original sur la copie. Quand le nombre de questions change, les questions déjà affichées sont figées (`frozenInputs`, vidé par « Nouvelles données ») : la régénération ne rebrasse pas leurs valeurs, seules les questions ajoutées sont nouvelles ;
 - entre les exercices : insertion/modification d'un texte ou d'un titre de section, et deux boutons de saut de page et de saut de colonne (ce dernier seulement en document multicolonne) — une fois insérés, ils deviennent des badges bien visibles, retirables d'un clic (le saut de page ferme et rouvre le bloc `en-colonnes`, `#pagebreak` étant interdit dans un conteneur) ;
-- au début de chaque correction (repère `corr`) : même bouton d'insertion/modification de texte ou de titre de section qu'entre les exercices, et le même bouton de saut de page (pas de saut de colonne : les corrections d'un groupe fusionné ne sont pas séparables) — ces insertions vivent dans leur propre espace (`insertionsCorrection`, marqueur `// mathalea:insertion-corr`), indépendant de celui entre les exercices ;
+- au début de chaque correction (repère `corr`) : même bouton d'insertion/modification de texte ou de titre de section qu'entre les exercices, ainsi que les boutons de saut de page et de saut de colonne (ce dernier seulement en document multicolonne) — ces insertions vivent dans leur propre espace (`insertionsCorrection`, marqueur `// mathalea:insertion-corr`), indépendant de celui entre les exercices ;
 - à gauche du titre de la fiche : édition du titre, du sous-titre et de la ligne d'en-tête (ces champs ne sont plus dans la fenêtre Réglages ; la valeur est reportée dans les réglages persistés) — absente si l'habillage en-tête est `Aucun`, faute de bloc à éditer ;
 - en haut de la page de garde (quand un modèle est choisi) : édition de l'intitulé, de la session, de la matière, de la durée, de la mention de bas de page et des consignes — même mécanisme que le titre de la fiche, voir [Page de garde](#page-de-garde) ;
 - sur le pied de la première page (si affiché) : édition de son texte — voir [En-tête et pied de page](#en-tête-et-pied-de-page) ;
@@ -1007,10 +1007,10 @@ Le découpage se fait côté `Typst.svelte` (`previewCode`), pas dans le documen
   le PDF » compile `currentCode()`, qui porte tous les sujets, et le `.typ`
   est reconstruit par `buildExportCode`.
 
-À savoir : seul le sujet A porte les repères `mathalea-anchor`
-(`buildTypstDocument` n'émet les repères que pour la version principale). Les
-autres sujets sont donc consultables mais pas réglables depuis la palette —
-c'était déjà le cas avant ce découpage.
+À savoir : le sujet A porte tous les repères `mathalea-anchor`. Les sujets B,
+C… portent seulement des repères `version-exo`, qui affichent le bouton de
+**nouvelles données** pour chaque exercice : la graine modifiée reste limitée
+au sujet affiché. Les réglages de structure restent ceux, partagés, du sujet A.
 
 Reste ensuite `buildCode` (~1,3 à 2,3 s sur cette fiche) : il régénère les
 exercices de **tous** les sujets, puisque le code de l'éditeur, lui, les
