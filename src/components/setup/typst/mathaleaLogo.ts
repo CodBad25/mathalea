@@ -14,8 +14,9 @@
  * zip, lui, reste autonome.
  */
 
-/** Chemin (relatif à `BASE_URL`) du PNG source, pour le récupérer par fetch */
-export const LOGO_CAN_URL = 'images/logoCan.png'
+/** Chemin (relatif à `BASE_URL`) du PNG source, pour le récupérer par fetch. */
+// Incrémenter la version quand le fichier change pour invalider le cache persistant.
+export const LOGO_CAN_URL = 'images/logoCan.png?v=2'
 
 /**
  * Chemin virtuel sous lequel le PNG est mappé dans le compilateur Typst
