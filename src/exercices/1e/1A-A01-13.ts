@@ -14,7 +14,7 @@ export const interactifReady = true
 export const uuid = 'psp26'
 export const refs = {
   'fr-fr': ['1A-A01-13'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export const dateDePublication = '02/07/2026'
 

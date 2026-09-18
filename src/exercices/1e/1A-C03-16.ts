@@ -14,7 +14,7 @@ export const uuid = 'e0d49'
 
 export const refs = {
   'fr-fr': ['1A-C03-16', '2A-N3-11'],
-  'fr-ch': [],
+  'fr-ch': ['11QCM-19'],
 }
 export default class Auto1AC3p extends calculPuissancesAvecn {
   constructor() {

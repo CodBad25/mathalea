@@ -7,7 +7,7 @@ export const uuid = '7168a'
 // @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-C05-5', '2A-N5-5'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-21'],
 }
 export const interactifReady = true
 

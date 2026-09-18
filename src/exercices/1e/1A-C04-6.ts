@@ -16,7 +16,7 @@ export const uuid = '6bdc0'
 
 export const refs = {
   'fr-fr': ['1A-C04-6', '2A-N4-6'],
-  'fr-ch': [''],
+  'fr-ch': ['9QCM-14'],
 }
 export default class Auto1AC4f extends ÉcrirePourcentage {
   constructor() {

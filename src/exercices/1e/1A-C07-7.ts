@@ -14,7 +14,7 @@ export const uuid = '816f5'
 
 export const refs = {
   'fr-fr': ['1A-C07-7', '2A-N7-7'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-25'],
 }
 export default class Auto1AC077 extends ConversionEnTousSens {
   constructor() {

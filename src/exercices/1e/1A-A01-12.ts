@@ -14,7 +14,7 @@ export const interactifReady = true
 export const uuid = 'ea612'
 export const refs = {
   'fr-fr': ['1A-A01-12'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export const dateDePublication = '01/07/2026'
 
