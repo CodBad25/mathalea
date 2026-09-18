@@ -19,7 +19,7 @@
   import { get } from 'svelte/store'
   import { qcmCamExportAll } from '../../../../src/lib/qcmCam'
   import appsTierce from '../../../json/referentielAppsTierce.json'
-  import { buildEsParams } from '../../../lib/components/urls'
+  import { buildEsParams, buildMathAleaURL } from '../../../lib/components/urls'
   import { downloadFile } from '../../../lib/files'
   import handleCapytale from '../../../lib/handleCapytale'
   import { sendActivityParams } from '../../../lib/handleRecorder'
@@ -146,6 +146,19 @@
 
   // Spécifique à Capytale
   let isSettingsDialogDisplayed = false
+  type ExternalCapytaleView = 'typst' | 'diaporama' | 'tbi'
+
+  /**
+   * Les exports de Capytale doivent rester hors de son iframe : changer `v`
+   * ici ferait enregistrer cette vue comme celle de l'activité Capytale.
+   */
+  function openCapytaleViewInNewTab(view: ExternalCapytaleView) {
+    window.open(
+      buildMathAleaURL({ view, recorder: true }).toString(),
+      '_blank',
+    )?.focus()
+  }
+
   // Gestion de la graine
   function buildUrlAndOpenItInNewTab(status: 'eleve' | 'usual') {
     const url = new URL('https://coopmaths.fr/alea/')
@@ -497,6 +510,7 @@
           {newDataForAll}
           {trash}
           {handleExport}
+          {openCapytaleViewInNewTab}
           handleRecorder={sendActivityParams}
           locale={localeValue}
           {handleLanguage}

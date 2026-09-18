@@ -1747,6 +1747,17 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
 }
 
 /**
+ * Une valeur vide d'un `<input type="number">` est liée à `null` par Svelte.
+ * Les réglages partagés peuvent donc contenir une ancienne valeur `null` : ne
+ * jamais l'interpoler dans une longueur Typst (`nullem`).
+ */
+export function normalizeTypstLineSpacing(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value)
+    ? value
+    : defaultTypstDocumentOptions.lineSpacing
+}
+
+/**
  * Saut de page ouvrant une partie du document (bloc « Corrections », sujet
  * suivant). Avec le réglage « Corrigés et sujets suivants sur une page
  * impaire », Typst insère au besoin une page blanche pour que la partie tombe
@@ -1944,7 +1955,12 @@ function exerciseBody(
         questionNumberingLabel(options.questionNumberingStyle))
       : `${tasksPrefix}-numerotation`
   let labelIsVariableRef = !exportMode && tasksPrefix != null
-  if (!numbered) {
+  // Hors fusion, certains exercices portent déjà leurs propres repères
+  // (A =, a), b)...), et ne doivent donc pas recevoir d'étiquette taskize.
+  // Dans un groupe fusionné, en revanche, chaque question doit afficher le
+  // numéro continu : `startNumber` les compte déjà toutes, y compris celles
+  // qui n'étaient pas numérotées isolément.
+  if (!numbered && !forceList) {
     label = 'none'
     labelIsVariableRef = false
   }
@@ -2414,7 +2430,7 @@ export function buildStandaloneExerciseCode(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(`#set par(leading: ${options.lineSpacing}em)`)
+  lines.push(`#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`)
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
@@ -3436,7 +3452,7 @@ export function buildTypstDocument(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(`#set par(leading: ${options.lineSpacing}em)`)
+  lines.push(`#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`)
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   // police des formules ; les nombres et symboles restent en police maths
   lines.push('#show math.equation: set text(font: police-maths)')

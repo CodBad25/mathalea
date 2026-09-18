@@ -15,6 +15,7 @@
   import {
     mathaleaGenerateSeed,
     mathaleaHandleExerciceSimple,
+    mathaleaHandleSup,
     mathaleaRenderDiv,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../../../lib/mathalea'
@@ -391,6 +392,14 @@
 
       if (interfaceParams.alea !== exercise.seed) {
         interfaceParams.alea = exercise.seed
+        changed = true
+      }
+
+      if (
+        typeof exercise.sup5 === 'string' &&
+        interfaceParams.sup5 !== mathaleaHandleSup(exercise.sup5)
+      ) {
+        interfaceParams.sup5 = mathaleaHandleSup(exercise.sup5)
         changed = true
       }
 

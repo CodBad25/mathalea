@@ -1,13 +1,13 @@
-import EncodeurTexte from '../profs/P020'
+import EncodeurTexte from '../profs/P020-old'
 export const titre =
   'Message secret à décoder avec les tables de multiplication'
 export const interactifReady = false
 
-export const uuid = 'fe6e1'
+export const uuid = 'fe6e0'
 
 export const refs = {
-  'fr-fr': ['6N3autoD-5', '5N3autoA-4', '5N4autoA-4'],
-  'fr-2016': ['6C10-8'],
+  'fr-fr': [],
+  'fr-2016': [],
   'fr-ch': [''], // Primaire anciennement :['9NO3-14'],
 }
 export default class MessageCodeAvecTables extends EncodeurTexte {

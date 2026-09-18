@@ -30,6 +30,7 @@ import ce from '../../lib/interactif/comparisonFunctions'
 import { ordreAlphabetique } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { texNombre } from '../../lib/outils/texNombre'
 
 export const titre = 'Calculer une longueur avec le théorème de Pythagore'
 export const amcType = 'AMCHybride'
@@ -258,6 +259,9 @@ export default class Pythagore2D extends Exercice {
       'Écrire les unités dans les calculs de la correction',
       false,
     ]
+
+    this.besoinFormulaire4CaseACocher = ["Figure dans l'énoncé", false]
+    this.sup4 = true
   }
 
   nouvelleVersion() {
@@ -270,22 +274,26 @@ export default class Pythagore2D extends Exercice {
       listeTypeDeQuestions = ['AB', 'BC', 'AC']
     }
     let listeDeNomsDePolygones: string[] = []
-    if (this.sup === 1) {
-      this.consigne =
-        (context.vue !== 'diap' && this.nbQuestions > 1
-          ? 'Dans chaque cas, donner'
-          : 'Donner') + " l'égalité de Pythagore."
-    } else if (this.sup === 2) {
-      this.consigne =
-        (context.vue !== 'diap' && this.nbQuestions > 1
-          ? 'Dans chaque cas, compléter'
-          : 'Compléter') + " l'égalité en utilisant le théorème de Pythagore."
+    if (this.sup4) {
+      if (this.sup === 1) {
+        this.consigne =
+          (context.vue !== 'diap' && this.nbQuestions > 1
+            ? 'Dans chaque cas, donner'
+            : 'Donner') + " l'égalité de Pythagore."
+      } else if (this.sup === 2) {
+        this.consigne =
+          (context.vue !== 'diap' && this.nbQuestions > 1
+            ? 'Dans chaque cas, compléter'
+            : 'Compléter') + " l'égalité en utilisant le théorème de Pythagore."
+      } else {
+        this.consigne =
+          (context.vue !== 'diap' && this.nbQuestions > 1
+            ? 'Dans chaque cas, calculer'
+            : 'Calculer') +
+          " la longueur manquante (si nécessaire, l'arrondir au millimètre près)."
+      }
     } else {
-      this.consigne =
-        (context.vue !== 'diap' && this.nbQuestions > 1
-          ? 'Dans chaque cas, calculer'
-          : 'Calculer') +
-        " la longueur manquante (si nécessaire, l'arrondir au millimètre près)."
+      this.consigne = ''
     }
     listeTypeDeQuestions = combinaisonListes(
       listeTypeDeQuestions,
@@ -346,10 +354,31 @@ export default class Pythagore2D extends Exercice {
       if (!context.isHtml) {
         texte = '~\\\\'
       }
-      texte += mathalea2d(
-        { xmin, xmax, ymin, ymax, scale: 0.6, display: 'block' },
-        mesObjetsATracer,
-      )
+      // Génération du texte de l'énoncé SANS la figure
+      let texteEnonce = ''
+      if (this.typeDeQuestion === 'Calculer :') {
+        if (listeTypeDeQuestions[i] === 'AB') {
+          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${C.nom} = ${texNombre(longueurAC)}\\text{ cm}$ et $${B.nom}${C.nom} = ${texNombre(longueurBC)}\\text{ cm}$. <br>Calculer $${A.nom}${B.nom}$.<br>`
+        } else if (listeTypeDeQuestions[i] === 'BC') {
+          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${B.nom} = ${texNombre(longueurAB)}\\text{ cm}$ et $${A.nom}${C.nom} = ${texNombre(longueurAC)}\\text{ cm}$. <br>Calculer $${B.nom}${C.nom}$.<br>`
+        } else {
+          texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$ tel que $${A.nom}${B.nom} = ${texNombre(longueurAB)}\\text{ cm}$ et $${B.nom}${C.nom} = ${texNombre(longueurBC)}\\text{ cm}$. <br>Calculer $${A.nom}${C.nom}$.<br>`
+        }
+      } else {
+        // Pour les autres types de questions (égalité de Pythagore, etc.)
+        texteEnonce = `On considère le triangle $${A.nom}${B.nom}${C.nom}$ rectangle en $${A.nom}$.<br>`
+      }
+
+      // Génération de la figure
+      const figure = () => {
+        return mathalea2d(
+          { xmin, xmax, ymin, ymax, scale: 0.6, display: 'block' },
+          mesObjetsATracer,
+        )
+      }
+
+      // Affichage conditionnel : figure + texte OU texte seul
+      texte += this.sup4 ? `${figure()}` : texteEnonce
 
       let redaction
       let nomCote = ''
@@ -409,6 +438,7 @@ export default class Pythagore2D extends Exercice {
               texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
             })
           : ''
+
         handleAnswers(this, i, {
           reponse: {
             value: new Grandeur(reponse, 'cm'),

@@ -25,6 +25,12 @@ Les types sont définis dans `src/lib/amc/amcTypes.ts`.
 4. Les anciens exercices peuvent encore utiliser `amcConvert()` pour alimenter
    `questionsAMC`.
 
+Le document LaTeX généré commence par la directive
+`% !TEX encoding = UTF-8 Unicode`. Le téléchargement encode également le
+contenu avec `TextEncoder` et déclare le type MIME en UTF-8. Cette directive
+évite que les éditeurs, notamment TeXShop, interprètent comme ISO Latin 9 un
+source composé uniquement de caractères ASCII.
+
 La preview HTML conserve les contenus mathématiques délimités par `$...$` ou
 `\[...\]` avant d'y convertir les sauts de ligne textuels. Les séparateurs
 `\\` des environnements KaTeX comme `array`, `aligned` ou les matrices ne
@@ -44,6 +50,16 @@ quand la question contient plusieurs sous-réponses ou un format ambigu.
 La décision se prend exclusivement à partir de
 `autoCorrection[i].formatInteractif`. Les alias historiques et les custom
 elements modernes doivent conduire au même contrat AMC.
+
+Au moment du rendu LaTeX, le nombre de propositions vraies est vérifié une
+dernière fois : dès qu'un QCM en contient plusieurs, l'environnement AMC
+`questionmult` est utilisé, même si une ancienne métadonnée le déclare encore
+comme `qcmMono`.
+
+Chaque entrée de premier niveau de `autoCorrectionAMC` produit son propre
+`\element{groupe}{...}`. Une consigne ou une introduction commune est répétée
+dans ces éléments et ne doit pas fusionner plusieurs variantes dans un élément
+unique : AMC peut ainsi tirer séparément chaque variante du groupe.
 
 | Formats observés                                                                                | Inférence automatique                                      | Condition                                                                                                                                      |
 | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |

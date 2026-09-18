@@ -72,7 +72,7 @@ export default class EcrireAvecPuissances extends ExerciceSimple {
       // Passer toutes les réponses possibles
       this.reponse = valeur.reponses
 
-      this.canEnonce = 'Compléter.'
+      this.canEnonce = 'Écrire sous la forme $a^n$ avec $n\\neq 1$.'
       this.canReponseACompleter = `$${valeur.nombre}=\\ldots$`
     } else {
       // Cas avec des décimaux

@@ -427,45 +427,14 @@ export function exportQcmAmc(
   let texQr = ''
   let isShuffled = true
 
-  // Si l'exercice est de type AMCOpen (inféré par fallback) et qu'il possède une consigne
-  // et/ou une introduction, on les regroupe dans un AMCHybrideContainer comme énoncé commun,
-  // avec chaque question comme enfant AMCOpen.
-  if (
-    type === 'AMCOpen' &&
-    (exercise.consigne?.trim() || exercise.introduction?.trim())
-  ) {
-    const parts: string[] = []
-    if (exercise.consigne?.trim())
-      parts.push(texConsigne(exercise.consigne).trim())
-    if (exercise.introduction?.trim())
-      parts.push(texIntroduction(exercise.introduction).trim())
-    const combinedEnonce = parts.join('\n\n')
-
-    const syntheticItem = {
-      enonce: combinedEnonce,
-      propositions: autoCorrection.map((item: any) => ({
-        type: 'AMCOpen',
-        ...item,
-      })),
-    }
-
-    const hybrid = renderAMCHybride({
-      type: 'AMCHybride',
-      autoCorrectionItem: syntheticItem,
-      exercice: exercise,
-      ref,
-      idExo: exerciseIndex,
-      questionIndex: 0,
-      currentId: 0,
-      melange: isShuffled,
-    })
-
-    texQr = hybrid.texQr
-      .replaceAll('<br><br>', '\n\n\\medskip\n')
-      .replaceAll('<br>', '\n\n')
-
-    return [texQr, ref, exercise.nbQuestions, title, hybrid.melange]
+  const sharedOpenStatementParts: string[] = []
+  if (type === 'AMCOpen' && exercise.consigne?.trim()) {
+    sharedOpenStatementParts.push(texConsigne(exercise.consigne).trim())
   }
+  if (type === 'AMCOpen' && exercise.introduction?.trim()) {
+    sharedOpenStatementParts.push(texIntroduction(exercise.introduction).trim())
+  }
+  const sharedOpenStatement = sharedOpenStatementParts.join('\n\n')
 
   let id = 0
   for (let j = 0; j < autoCorrection.length; j++) {
@@ -483,13 +452,23 @@ export function exportQcmAmc(
             id: `${ref}${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,
             exercice: exercise,
             index: j,
+            type: type === 'qcmMult' ? 'qcmMult' : 'qcm',
           },
         )
         id++
         break
       case 'AMCOpen': // question ouverte AMCOpen corrigée par l'enseignant
+        const openItem =
+          sharedOpenStatement === ''
+            ? autoCorrection[j]
+            : {
+                ...autoCorrection[j],
+                enonce: [sharedOpenStatement, autoCorrection[j].enonce ?? '']
+                  .filter((part) => part.trim() !== '')
+                  .join('\n\n'),
+              }
         texQr += renderElement(
-          { type: 'open', data: autoCorrection[j] },
+          { type: 'open', data: openItem },
           {
             ref,
             id: `${ref}${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,

@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 59365 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
@@ -13,15 +16,13 @@ export const dateDePublication = '21/10/2024'
 /**
  * @author Gilles Mora
  */
-export const dateDeModifImportante = '17/09/2026'
-
-export const uuid = 'bd54e'
+export const uuid = '59365'
 
 export const refs = {
-  'fr-fr': ['can3C11', '2N50-flash5'],
-  'fr-ch': ['10NO3E-6'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
-export default class calculsRacinesCarresPafaits extends Exercice {
+export default class calculsRacinesCarresPafaitsOld extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -34,8 +35,8 @@ export default class calculsRacinesCarresPafaits extends Exercice {
       let texteCorr = ''
       let a, b
       let reponse
-      const cas = randint(1, 2)
-      switch (cas) {
+      const exp = randint(-4, 4, 0)
+      switch (randint(1, 2)) {
         case 1:
           a = randint(1, 12)
           b = a ** 2
@@ -88,7 +89,7 @@ export default class calculsRacinesCarresPafaits extends Exercice {
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           break
       }
-      if (this.questionJamaisPosee(i, cas, String(a))) {
+      if (this.questionJamaisPosee(i, exp, String(a), String(b))) {
         this.listeCorrections[i] = texteCorr
         this.listeQuestions[i] = texte
 
