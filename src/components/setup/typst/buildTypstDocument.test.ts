@@ -37,6 +37,16 @@ const shouldRunTypstCliTests = () =>
   (process.env.CI == null && hasTypstCli())
 
 describe('buildTypstDocument', () => {
+  it('remplace un interligne absent par la valeur par défaut', () => {
+    const code = buildTypstDocument([exercise()], {
+      ...defaultTypstDocumentOptions,
+      lineSpacing: null as unknown as number,
+    })
+
+    expect(code).toContain('#set par(leading: 0.65em)')
+    expect(code).not.toContain('nullem')
+  })
+
   it('génère un document avec en-tête, exercice et correction', () => {
     const code = buildTypstDocument(
       [
