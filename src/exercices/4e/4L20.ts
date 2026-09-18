@@ -47,6 +47,8 @@ function gestionEspaceMiseEnEvidence(texte: string) {
 }
 
 export default class ExerciceEquation1 extends Exercice {
+  protected xPlusBEgalCAvecRelatifsNonNuls = false
+
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = ['Avec des nombres relatifs']
@@ -160,9 +162,18 @@ export default class ExerciceEquation1 extends Exercice {
           break
         case 'x+b=c':
           a = 1 // c'est pour éviter un warning
-          b = randint(1, 13)
-          c = randint(1, 13)
-          if (!this.sup && c < b) {
+          if (this.xPlusBEgalCAvecRelatifsNonNuls) {
+            b = randint(-13, 13, [0])
+            c = randint(-13, 13, [0])
+          } else {
+            b = randint(1, 13)
+            c = randint(1, 13)
+          }
+          if (
+            !this.xPlusBEgalCAvecRelatifsNonNuls &&
+            !this.sup &&
+            c < b
+          ) {
             b = randint(-9, 9, [0]) // b peut être négatif, ça sera une équation du type ${inconnue}-b=c
             c = Math.abs(randint(b, 15)) // c sera plus grand que b pour que c-b>0
           }
