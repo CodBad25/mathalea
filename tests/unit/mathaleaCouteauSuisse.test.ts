@@ -155,6 +155,25 @@ describe('MathaleaCouteauSuisseElement', () => {
     expect(exercice.autoCorrection).toHaveLength(1)
   })
 
+  it('restaure les valeurs sérialisées de ses enfants', () => {
+    document.body.innerHTML = addMathaleaCouteauSuisse(exercice, 0, {
+      contenu: MathaleaQcmElement.create({
+        numeroExercice: exercice.numeroExercice,
+        questionIndex: 0,
+        propositions,
+      }),
+      elements: [{ formatInteractif: 'mathalea-qcm' }],
+    })
+    const wrapper = document.querySelector(
+      'mathalea-couteau-suisse',
+    ) as MathaleaCouteauSuisseElement
+    const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
+
+    wrapper.value = JSON.stringify({ [qcm.id]: '[1]' })
+
+    expect(qcm.value).toBe('[1]')
+  })
+
   it('conserve son contenu en sortie LaTeX', () => {
     setOutputLatex()
 

@@ -1,18 +1,13 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 66095 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { cubeDef, Shape3D, shapeCubeIso } from '../../lib/2d/figures2d/Shape3d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { listePattern3d } from '../../lib/2d/patterns/patternsPreDef'
 import { VisualPattern3D } from '../../lib/2d/patterns/VisualPattern3D'
 import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
-import {
-  CubeStackEditorElement,
-  type CubeStackState,
-} from '../../lib/customElements/CubeStackEditorElement'
-import {
-  MathaleaCouteauSuisseElement,
-  type MathaleaCouteauSuisseChild,
-} from '../../lib/customElements/MathaleaCouteauSuisse'
-import { MathaleaMathfieldElement } from '../../lib/customElements/MathaleaMathfield'
+import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { enleveDoublonNum, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { range, range1 } from '../../lib/outils/nombres'
@@ -31,33 +26,10 @@ export const interactifReady = true
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '10/06/2025'
-export const dateDeModifImportante = '19/09/2026'
+export const dateDeModifImportante = '03/06/2026'
 export const patternsFor6N4B_2 = listePattern3d.filter(
   (p) => p.type === 'affine' || p.type === 'linéaire',
 ) // On enlève les patterns quadratiques pour cet exercice
-
-function cubeStackStateFromPattern(
-  pattern: VisualPattern3D,
-  step: number,
-): CubeStackState {
-  const cubes = Array.from(pattern.iterate3d(step), (cell) => {
-    const [x, y, z] = VisualPattern3D.keyToCoord(cell)
-    return { x, y: z, z: -y, color: '#ffffff' }
-  })
-  const horizontalCoordinates = cubes.flatMap((cube) => [cube.x, cube.z])
-  const span =
-    horizontalCoordinates.length === 0
-      ? 0
-      : Math.max(...horizontalCoordinates) -
-        Math.min(...horizontalCoordinates) +
-        1
-
-  return {
-    version: 1,
-    grid: Math.max(12, span + 4),
-    cubes,
-  }
-}
 
 /**
  * Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes ${['e','a','é','i','o','u','y','è','ê'].includes(pattern.shapes[0][0]) ? 'd\'':'de'}${pattern.shapes[0]} du motif suivant.
@@ -65,14 +37,14 @@ function cubeStackStateFromPattern(
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
  * @author Jean-claude Lhote
  */
-export const uuid = '46923'
+export const uuid = '66095'
 
 export const refs = {
-  'fr-fr': ['6N4B-2'],
-  'fr-ch': ['10FA1A-8'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
-export default class PaternNum06eme extends Exercice {
+export default class PaternNum06emeOld extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -158,6 +130,7 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
         }).map(Number),
       ),
     )
+    let indexInteractif = 0
     for (
       let i = 0, cpt = 0;
       i < Math.min(this.nbQuestions, nbDePattern) && cpt < 50;
@@ -216,143 +189,121 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
       let texteCorr = ''
       const listeQuestions: string[] = []
       const listeCorrections: string[] = []
-      const elements: MathaleaCouteauSuisseChild[] = []
-      let childQuestionIndex = i * 5
       const deMotif = 'de cubes'
+      for (const q of typesQuestions) {
+        switch (q) {
+          case 1:
+            listeQuestions.push(`\nDessiner le motif $${nbFigures + 1}$.<br>`)
+            canvas3d[nbFigures + 1] = pattern.render3d(nbFigures + 1)
+            listeCorrections.push(`Voici le motif $${nbFigures + 1}$ :<br>
+              ${
+                context.isHtml
+                  ? `<div style="display: inline-block; width: 250px; height: 250px; margin-right: 10px;">${canvas3d[nbFigures + 1]}</div>`
+                  : mathalea2d(
+                      Object.assign(
+                        { display: 'inline-block' } as const,
+                        fixeBordures(figsLatex[nbFigures]),
+                      ),
+                      cubeDef(`cubeIsoQ${i}F0`),
+                      ...figsLatex[nbFigures],
+                    )
+              }`)
+            break
+          case 2:
+            {
+              const nbFormes = pat.fonctionNb(nbFigures + 1)
+              const nbTex = texNombre(nbFormes, 0)
 
-      const addMathfieldQuestion = (question: string, answer: string) => {
-        const questionIndex = childQuestionIndex++
-        elements.push({
-          formatInteractif: MathaleaMathfieldElement.elementTag,
-          questionIndex,
-          autoCorrection: { valeur: { reponse: { value: answer } } },
-        })
-        return `${question}<br>${
-          this.interactif
-            ? MathaleaMathfieldElement.create({
-                numeroExercice: this.numeroExercice ?? 0,
-                questionIndex,
-                interactivityOn: true,
-              })
-            : ''
-        }`
-      }
+              listeQuestions.push(
+                `\nQuel sera le nombre ${deMotif} dans le motif $${nbFigures + 1}$ ?<br>${ajouteQuestionMathlive(
+                  {
+                    exercice: this,
+                    question: indexInteractif++,
+                    reponseParams: { formatInteractif: 'mathalea-mathfield' },
+                    objetReponse: { reponse: { value: nbTex } },
+                    typeInteractivite: 'mathlive',
+                  },
+                )}`,
+              )
+              listeCorrections.push(
+                `Le motif $${nbFigures + 1}$ contient $${miseEnEvidence(texNombre(nbFormes, 0))}$ formes ${deMotif}.<br>`,
+              )
+            }
+            break
+          case 3:
+            {
+              const nbFormes = pat.fonctionNb(10)
+              const nbTex = texNombre(nbFormes, 0)
+              listeQuestions.push(`\nQuel sera le nombre ${deMotif} pour le motif $10$ ?<br>${ajouteQuestionMathlive(
+                {
+                  exercice: this,
+                  question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
+                  objetReponse: { reponse: { value: nbTex } },
+                  typeInteractivite: 'mathlive',
+                },
+              )}
+            `)
+              listeCorrections.push(`Le motif $10$ contient $${miseEnEvidence(nbTex)}$ formes ${deMotif}.<br>
+            En effet, la formule pour trouver le nombre ${deMotif} est : $${miseEnEvidence(pat.formule.replaceAll('n', '10'), bleuMathalea)}$.<br>
+            ${explain}`)
+            }
+            break
+          case 5:
+            {
+              const etape = randint(20, 80)
+              const nbFormes = pat.fonctionNb(etape)
+              const nbTex = texNombre(nbFormes, 0)
+              listeQuestions.push(`\nUn motif de cette série contient $${nbTex}$ ${deMotif.replace('de ', '')}. À quel numéro de motif cela correspond-il ?<br>${ajouteQuestionMathlive(
+                {
+                  exercice: this,
+                  question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
+                  objetReponse: { reponse: { value: etape.toString() } },
+                  typeInteractivite: 'mathlive',
+                },
+              )}
+            `)
 
-      if (typesQuestions.includes(1)) {
-        const step = nbFigures + 1
-        const expectedState = cubeStackStateFromPattern(pattern, step)
-        const questionIndex = childQuestionIndex++
-        elements.push({
-          formatInteractif: CubeStackEditorElement.elementTag,
-          questionIndex,
-          autoCorrection: {
-            valeur: { reponse: { value: JSON.stringify(expectedState) } },
-          },
-        })
-        listeQuestions.push(
-          `\nDessiner le motif $${step}$.<br>${
-            this.interactif
-              ? CubeStackEditorElement.create({
-                  numeroExercice: this.numeroExercice ?? 0,
-                  questionIndex,
-                  grid: expectedState.grid,
-                  interactivityOn: true,
-                })
-              : ''
-          }`,
-        )
-        canvas3d[nbFigures + 1] = pattern.render3d(nbFigures + 1)
-        listeCorrections.push(`Voici le motif $${nbFigures + 1}$ :<br>
-          ${
-            context.isHtml
-              ? `<div style="display: inline-block; width: 250px; height: 250px; margin-right: 10px;">${canvas3d[nbFigures + 1]}</div>`
-              : mathalea2d(
-                  Object.assign(
-                    { display: 'inline-block' } as const,
-                    fixeBordures(figsLatex[nbFigures]),
-                  ),
-                  cubeDef(`cubeIsoQ${i}F0`),
-                  ...figsLatex[nbFigures],
-                )
-          }`)
-      }
-
-      if (typesQuestions.includes(2)) {
-        const nbFormes = pat.fonctionNb(nbFigures + 1)
-        const nbTex = texNombre(nbFormes, 0)
-        listeQuestions.push(
-          addMathfieldQuestion(
-            `\nQuel sera le nombre ${deMotif} dans le motif $${nbFigures + 1}$ ?`,
-            nbTex,
-          ),
-        )
-        listeCorrections.push(
-          `Le motif $${nbFigures + 1}$ contient $${miseEnEvidence(nbTex)}$ formes ${deMotif}.<br>`,
-        )
-      }
-
-      if (typesQuestions.includes(3)) {
-        const nbTex = texNombre(pat.fonctionNb(10), 0)
-        listeQuestions.push(
-          addMathfieldQuestion(
-            `\nQuel sera le nombre ${deMotif} pour le motif $10$ ?`,
-            nbTex,
-          ),
-        )
-        listeCorrections.push(`Le motif $10$ contient $${miseEnEvidence(nbTex)}$ formes ${deMotif}.<br>
-          En effet, la formule pour trouver le nombre ${deMotif} est : $${miseEnEvidence(pat.formule.replaceAll('n', '10'), bleuMathalea)}$.<br>
-          ${explain}`)
-      }
-
-      if (typesQuestions.includes(4)) {
-        const nbTex = texNombre(pat.fonctionNb(100), 0)
-        listeQuestions.push(
-          addMathfieldQuestion(
-            `\nQuel sera le nombre ${deMotif} pour le motif $100$ ?`,
-            nbTex,
-          ),
-        )
-        listeCorrections.push(`Le motif $100$ contient $${miseEnEvidence(nbTex)}$ formes ${deMotif}.<br>
-          En effet, la formule pour trouver le nombre ${deMotif} est : $${miseEnEvidence(pat.formule.replaceAll('n', '100'), bleuMathalea)}$.<br>
-          ${explain}`)
-      }
-
-      if (typesQuestions.includes(5)) {
-        const etape = randint(20, 80)
-        const nbFormes = pat.fonctionNb(etape)
-        const nbTex = texNombre(nbFormes, 0)
-        listeQuestions.push(
-          addMathfieldQuestion(
-            `\nUn motif de cette série contient $${nbTex}$ ${deMotif.replace('de ', '')}. À quel numéro de motif cela correspond-il ?`,
-            etape.toString(),
-          ),
-        )
-        const explain2 =
-          pat.type === 'linéaire'
-            ? `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
+              const explain2 =
+                pat.type === 'linéaire'
+                  ? `On constate que le nombre de formes  augmente de $${delta}$ à chaque étape.<br>
         Et que c'est aussi le nombre de formes à l'étape 1. Par conséquent, pour trouver le numéro d'un motif dont on connait le nombre de formes, il faut simplement diviser ce nombre par ${delta} pour trouver le numéro.`
-            : `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
+                  : `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
         Cependant, il n'y a pas ${delta} formes sur le motif 1, mais ${pat.fonctionNb(1)}. Par conséquent, il faut ${b < 0 ? `ajouter ${-b}` : `retirer ${b}`} au nombre de formes puis diviser le résultat par ${delta} : <br>
         $\\dfrac{${nbTex} ${b < 0 ? '+' : '-'} ${Math.abs(b)}}{${delta}}=${miseEnEvidence(etape)}$.`
-        listeCorrections.push(`C'est le motif numéro $${miseEnEvidence(etape.toString())}$ qui contient $${miseEnEvidence(nbTex, bleuMathalea)}$ ${pattern.shapes[0]}s.<br>
-          ${explain2}`)
+              listeCorrections.push(`C'est le motif numéro $${miseEnEvidence(etape.toString())}$ qui contient $${miseEnEvidence(texNombre(nbFormes, 0), bleuMathalea)}$ ${pattern.shapes[0]}s.<br>
+            ${explain2}`)
+            }
+            break
+          case 4:
+            {
+              const nbFormes = pat.fonctionNb(100)
+              const nbTex = texNombre(nbFormes, 0)
+              listeQuestions.push(`\nQuel sera le nombre ${deMotif} pour le motif $100$ ?<br>${ajouteQuestionMathlive(
+                {
+                  exercice: this,
+                  question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
+                  objetReponse: { reponse: { value: nbTex } },
+                  typeInteractivite: 'mathlive',
+                },
+              )}
+            `)
+              listeCorrections.push(`Le motif $100$ contient $${miseEnEvidence(nbTex)}$ formes ${deMotif}.<br>
+            En effet, la formule pour trouver le nombre ${deMotif} est : $${miseEnEvidence(pat.formule.replaceAll('n', '100'), bleuMathalea)}$.<br>
+            ${explain}`)
+            }
+            break
+        }
       }
-
-      const contenuInteractif =
+      texte +=
         listeQuestions.length === 1
           ? '<br><br>' + listeQuestions[0]
-          : createList({ items: listeQuestions, style: 'alpha' })
-      this.autoCorrection[i] = {
-        formatInteractif: MathaleaCouteauSuisseElement.elementTag,
-        elements,
-      }
-      texte += MathaleaCouteauSuisseElement.create({
-        numeroExercice: this.numeroExercice ?? 0,
-        questionIndex: i,
-        elements,
-        contenu: contenuInteractif,
-        interactivityOn: this.interactif,
-      })
+          : createList({
+              items: listeQuestions,
+              style: 'alpha',
+            })
       texteCorr +=
         listeCorrections.length === 1
           ? listeCorrections[0]
