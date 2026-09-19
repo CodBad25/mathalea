@@ -2,7 +2,6 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { Tableau } from '../../lib/2d/tableau'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -266,9 +265,7 @@ export default class TableauDeValeurs extends Exercice {
           break
       }
       const yGrecs = listeReponses.map((el) =>
-        el instanceof FractionEtendue
-          ? el.simplifie().texFSD
-          : texNombre(el, 1),
+        el instanceof FractionEtendue ? el.texFractionSimplifiee : texNombre(el, 1),
       )
       texte = `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$. ${this.interactif ? '<br>Calculer les images par $f$ suivantes.' : '<br>Compléter le tableau de valeurs suivant.<br><br>'}`
       const ligne1: Icell[] = [
@@ -317,7 +314,7 @@ export default class TableauDeValeurs extends Exercice {
           this.numeroExercice ?? 0,
           0,
           { ligne1, ligne2: ligne2bis, nbColonnes: 4 },
-          String(KeyboardType.clavierDeBaseAvecFraction),
+          KeyboardType.clavierDeBaseAvecFraction ?? 'clavierDeBaseAvecFraction',
           this.interactif,
           {},
         )
@@ -479,7 +476,7 @@ export default class TableauDeValeurs extends Exercice {
             `L1C${i + 1}`,
             {
               value: listeReponses[i],
-              compare: fonctionComparaison,
+              options: { fractionEgale: true },
             },
           ])
         }
