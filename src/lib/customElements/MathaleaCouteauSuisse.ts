@@ -168,6 +168,39 @@ export class MathaleaCouteauSuisseElement extends MathaleaCustomElement {
     return JSON.stringify(values)
   }
 
+  set value(serializedValues: string) {
+    this.update(serializedValues)
+  }
+
+  update(serializedValues: string | Record<string, unknown>): void {
+    let values: Record<string, unknown>
+    if (typeof serializedValues === 'string') {
+      try {
+        const parsed = JSON.parse(serializedValues)
+        if (
+          parsed == null ||
+          typeof parsed !== 'object' ||
+          Array.isArray(parsed)
+        )
+          return
+        values = parsed as Record<string, unknown>
+      } catch {
+        return
+      }
+    } else {
+      values = serializedValues
+    }
+
+    for (const [id, value] of Object.entries(values)) {
+      const element = Array.from(
+        this.querySelectorAll<HTMLElement>('[id]'),
+      ).find((candidate) => candidate.id === id)
+      if (element != null && 'value' in element) {
+        ;(element as HTMLElement & { value: unknown }).value = value
+      }
+    }
+  }
+
   protected onInteractivityChanged(isOn: boolean): void {
     this.querySelectorAll<HTMLElement>('*').forEach((element) => {
       const tag = element.tagName.toLowerCase()

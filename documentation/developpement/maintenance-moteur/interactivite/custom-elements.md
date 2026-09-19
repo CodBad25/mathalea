@@ -234,6 +234,19 @@ Un customElement enregistré via `registerMathaleaCustomElement` est donc pris e
 
 ## Cas spécial : élément technique non visible
 
+### Empilements de cubes 3D
+
+`cube-stack-editor` (`CubeStackEditorElement.ts`) permet à l'élève d'ajouter,
+supprimer et sélectionner des cubes. Sa `value` reprend le JSON version 1 de
+vision-espace (`grid` et tableau `cubes` avec `x`, `y`, `z`, `color`). Le helper
+`addCubeStackEditor(exercice, questionIndex, options)` accepte notamment
+`initialState` et `expectedState`.
+
+La vérification compare la géométrie seule : les couleurs et la taille de la
+grille sont ignorées, et les coordonnées sont comparées modulo une translation
+et l'une des 24 rotations propres du cube. Une symétrie seule n'est donc pas
+acceptée.
+
 Si un composant doit être créé comme objet DOM technique (tests, vérifications hors affichage), ne pas détourner `create(...)`.
 
 Utiliser une méthode dédiée, par exemple :
