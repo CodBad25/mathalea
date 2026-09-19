@@ -610,7 +610,7 @@ export default class EtudeFctRatio extends Exercice {
                     10,
                   ]
                 }
-                texte = `eeeeOn considère la fonction $f$ définie sur $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$ par : $f(x)=\\dfrac{${p}}{${reduireAxPlusB(d, e)}}$.<br>
+                texte = `On considère la fonction $f$ définie sur $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$ par : $f(x)=\\dfrac{${p}}{${reduireAxPlusB(d, e)}}$.<br>
        Étudier le sens de variation de la fonction $f$ sur son ensemble de définition.<br>`
                 texteCorr += `$f$ est le quotient de deux fonctions dérivables sur  $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$ dont le dénominateur ne s'annule pas $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$.<br>
             On en déduit que $f$ est dérivable sur  $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$.<br>
