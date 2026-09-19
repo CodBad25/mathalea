@@ -882,6 +882,31 @@ propre préambule. En mode export (`.typ` téléchargé, modale d'édition), la
 valeur est écrite littéralement dans le `#tasks(...)`, comme pour les
 questions.
 
+#### Alignement vertical des cases d'un QCM sous une formule courte
+
+Un QCM posé juste sous une expression inline courte (`$(-5)^8$`, puis les
+cases `Positif`/`Négatif`) peut voir ses cases décalées verticalement d'une
+colonne à l'autre d'une même ligne de questions, alors que `#tasks` aligne
+ses cellules par le haut : la cause n'est pas la mise en colonnes des
+questions elle-même, mais le paquet `breather` (`BREATHER_CALL`,
+`buildTypstDocument.ts`), qui bascule une équation inline sur des marges de
+texte « ink réel » (`bounds`) plutôt que la métrique de police par défaut dès
+que sa hauteur mesurée dépasse un seuil (`threshold`, 1.1em par défaut dans le
+paquet). Une expression avec parenthèses (`(-5)^8`) peut franchir ce seuil de
+justesse quand une expression voisine sans parenthèses (`3^{-2}`) reste
+dessous : les deux utilisent alors une métrique de ligne différente, donc une
+hauteur de première ligne différente dans leur cellule respective, ce qui
+décale le bloc `#tasks` du QCM placé juste après (visible sur l'exercice
+4C37). `BREATHER_CALL` relève ce seuil à 1.25em pour laisser ce cas de bord
+en métrique par défaut (uniforme entre les colonnes), tout en restant
+nettement sous la hauteur d'une fraction « display » (~1.5em, forcée par
+`#show math.frac: it => math.display(it)`), qui continue de déclencher
+l'espacement adapté. Vérifié en conditions réelles sur l'aperçu Typst de
+l'application (le moteur `typst.ts` embarqué) : la mesure équivalente au CLI
+`typst` local ne reproduit pas l'écart, probablement par différence de
+version/métriques avec ce moteur — ne pas se fier au CLI seul pour retoucher
+ce réglage.
+
 ### Figures SVG
 
 Les figures SVG (mathalea2d) sont **embarquées dans le document** : chaque figure est déclarée en tête de fichier (`#let fig-N = image(bytes("<svg...>"), format: "svg", width: ...pt)`) et référencée dans le corps. Le document reste autonome (il compile aussi avec le CLI `typst`). La largeur reprend celle de la figure (96 px CSS = 72 pt). `sanitizeSvg` corrige au passage le SVG pour le parseur XML strict de Typst (point-virgule parasite entre attributs généré par `lib/2d/textes.ts`, entités HTML indéfinies en XML, attributs dupliqués).

@@ -9,6 +9,7 @@ import {
   htmlToTypst,
 } from '../typst/latexToTypst'
 import {
+  BREATHER_CALL,
   BREATHER_IMPORT,
   MATHALEA_ANCHOR_HELPER,
   MATHALEA_INLINE_FORMULA_RULE,
@@ -561,7 +562,7 @@ export function buildSlidesDocument(
     lines.push(
       '// gestion automatique des espaces verticaux : les lignes aux maths',
       "// hautes s'écartent juste ce qu'il faut (paquet breather)",
-      '#show: breathe',
+      BREATHER_CALL,
     )
   }
   if (usesQcm) {

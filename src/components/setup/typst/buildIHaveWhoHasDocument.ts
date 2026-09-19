@@ -1,4 +1,5 @@
 import {
+  BREATHER_CALL,
   BREATHER_IMPORT,
   MATHALEA_ANCHOR_HELPER,
   MATHALEA_INLINE_FORMULA_RULE,
@@ -300,7 +301,7 @@ export function buildIHaveWhoHasDocument(
     '#show math.equation: set text(font: police-maths)',
     MATHALEA_INLINE_FORMULA_RULE,
     '#show math.frac: it => math.display(it)',
-    '#show: breathe',
+    BREATHER_CALL,
   )
   if (bodies.includes('qcm-')) {
     lines.push(
