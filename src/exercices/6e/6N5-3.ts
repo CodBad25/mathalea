@@ -1606,8 +1606,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                   ' sont utiles pour la résolution du problème.'
               } else {
                 texteCorr +=
-                  `$${miseEnEvidence(nb1 + '\\text{ m}')}$` +
-                  `$${miseEnEvidence(nb4)}$` +
+                  `$${miseEnEvidence(nb1 + '\\text{ m}')}${miseEnEvidence(nb4)}$` +
                   texteEnCouleurEtGras(' conteneurs')
                 texteCorr +=
                   ' et ' +

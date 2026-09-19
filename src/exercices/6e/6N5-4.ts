@@ -486,8 +486,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texteCorr +=
                 `$${miseEnEvidence(nb3, bleuMathalea)}$` +
                 texteEnCouleurEtGras(' cases', bleuMathalea) +
-                `$${sp()}\\times${sp()} ${miseEnEvidence(nb5, bleuMathalea)}$` +
-                `$${sp()}=${miseEnEvidence(texNombre(reponse1), bleuMathalea)}$` +
+                `$${sp()}\\times${sp()} ${miseEnEvidence(nb5, bleuMathalea)}${sp()}=${miseEnEvidence(texNombre(reponse1), bleuMathalea)}$` +
                 texteEnCouleurEtGras(' cases', bleuMathalea) +
                 '<br>'
               texteCorr += `Il y a $${miseEnEvidence(texNombre(reponse1))}$ cases dans le manga de ${quidam2}.`
@@ -1322,12 +1321,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += "Quelle distance sépare l'entrepôt du premier arrêt ?"
               reponse = nb5 - nb3
               texteCorr +=
-                `$${miseEnEvidence(nb5, bleuMathalea)}$` +
-                `$${miseEnEvidence('\\text{ km}', bleuMathalea)}$` +
-                `$${sp()}-${sp()} ${miseEnEvidence(nb3, bleuMathalea)}$` +
-                `$${miseEnEvidence('\\text{ km}', bleuMathalea)}$` +
-                `$${sp()}=${miseEnEvidence(reponse, bleuMathalea)}$` +
-                `$${miseEnEvidence('\\text{ km}', bleuMathalea)}$` +
+                `$${miseEnEvidence(nb5, bleuMathalea)}${miseEnEvidence('\\text{ km}', bleuMathalea)}${sp()}-${sp()} ${miseEnEvidence(nb3, bleuMathalea)}${miseEnEvidence('\\text{ km}', bleuMathalea)}${sp()}=${miseEnEvidence(reponse, bleuMathalea)}${miseEnEvidence('\\text{ km}', bleuMathalea)}$` +
                 '<br>'
               texteCorr += `La distance séparant l'entrepôt du premier arrêt est de $${miseEnEvidence(reponse)}\\text{ km}$.`
               if (this.interactif) {

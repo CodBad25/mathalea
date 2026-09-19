@@ -830,9 +830,7 @@ class AgrandirReduireFigure extends Exercice {
                     : ''
               }
               texteCorr += '.<br>'
-              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}$`
-              texteCorr += `$${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}${sp(10)}$`
-              texteCorr += `$${absD} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse2)}$`
+              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}${sp(10)}${absD} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse2)}$`
               if (choixAgrandissementOuReduction === 6) {
                 texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${texNombre(reponse)}$`
                 texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${texNombre(reponse1)}$`
@@ -1460,8 +1458,7 @@ class AgrandirReduireFigure extends Exercice {
                     : ''
               }
               texteCorr += '.<br>'
-              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}$`
-              texteCorr += `$${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}$`
+              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}$`
               if (choixAgrandissementOuReduction === 6) {
                 texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${texNombre(reponse)}$`
                 texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${texNombre(reponse1)}$`

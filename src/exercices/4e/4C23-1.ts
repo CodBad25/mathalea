@@ -155,19 +155,19 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
 
           texte += `$${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c, d)} ${texteOperation2} ${texFractionFromString(e, f)}$`
 
-          texteCorr = `$${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c, d)} ${texteOperation2} ${texFractionFromString(e, f)}$`
+          texteCorr = `$${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c, d)} ${texteOperation2} ${texFractionFromString(e, f)}`
           if (!operation2) {
             // Si il y a division, multiplier par l'inverse du diviseur
             ;[e, f] = [f, e]
-            texteCorr += `$=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c, d)} \\times ${texFractionFromString(e, f)}$`
+            texteCorr += `=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c, d)} \\times ${texFractionFromString(e, f)}`
           }
           produit = produitDeDeuxFractions(c, d, e, f)
           if (this.correctionDetaillee) {
-            texteCorr += `$=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c + '\\times' + ecritureParentheseSiNegatif(e), d + '\\times' + ecritureParentheseSiNegatif(f))}$`
-            texteCorr += `$=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c * e, d * f)}$`
+            texteCorr += `=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c + '\\times' + ecritureParentheseSiNegatif(e), d + '\\times' + ecritureParentheseSiNegatif(f))}`
+            texteCorr += `=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(c * e, d * f)}`
           } else {
-            texteCorr += `$=${texFractionFromString(a, b)} ${texteOperation1} ${produit[1]}$`
-            texteCorr += `$=${texFractionFromString(a, b)} ${texteOperation1} ${produit[0]}$`
+            texteCorr += `=${texFractionFromString(a, b)} ${texteOperation1} ${produit[1]}`
+            texteCorr += `=${texFractionFromString(a, b)} ${texteOperation1} ${produit[0]}`
           }
 
           // faut-il simplifier c×e⁄d×f ?
@@ -176,7 +176,7 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
           }
           p = pgcd(c * e, d * f)
           if (p !== 1 && ppcm(b, d * f) > ppcm(b, (d * f) / p)) {
-            texteCorr += `$=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(
+            texteCorr += `=${texFractionFromString(a, b)} ${texteOperation1} ${texFractionFromString(
               (e * c) / p +
                 '\\times\\cancel{' +
                 ecritureParentheseSiNegatif(p) +
@@ -185,7 +185,7 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
                 '\\times\\cancel{' +
                 ecritureParentheseSiNegatif(p) +
                 '}',
-            )}$`
+            )}`
             c = (e * c) / p
             d = (f * d) / p
           } else {
@@ -196,24 +196,24 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
           k1 = p / b
           k2 = p / d
           if (k1 !== 1) {
-            texteCorr += `$=${texFractionFromString(a + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k1)), b + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k1)))}$`
+            texteCorr += `=${texFractionFromString(a + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k1)), b + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k1)))}`
           } else {
             if (k2 !== 1) {
-              texteCorr += `$=${texFractionFromString(a, b)}$`
+              texteCorr += `=${texFractionFromString(a, b)}`
             }
           }
           if (k2 !== 1) {
-            texteCorr += `$ ${texteOperation1} ${texFractionFromString(c + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k2)), d + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k2)))}$`
+            texteCorr += ` ${texteOperation1} ${texFractionFromString(c + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k2)), d + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k2)))}`
           } else {
             if (k1 !== 1) {
-              texteCorr += `$ ${texteOperation1} ${texFractionFromString(c, d)}$`
+              texteCorr += ` ${texteOperation1} ${texFractionFromString(c, d)}`
             }
           }
 
-          texteCorr += `$=${texFractionFromString(a * k1, p)} ${texteOperation1} ${texFractionFromString(c * k2, p)}$`
+          texteCorr += `=${texFractionFromString(a * k1, p)} ${texteOperation1} ${texFractionFromString(c * k2, p)}`
           e = operation1 ? a * k1 + c * k2 : a * k1 - c * k2
           f = p
-          texteCorr += `$=${texFractionFromString(e, f)}${simplificationDeFractionAvecEtapes(e, f)}$`
+          texteCorr += `=${texFractionFromString(e, f)}${simplificationDeFractionAvecEtapes(e, f)}$`
           reponse = fraction(e, f).simplifie()
           break
 
@@ -224,21 +224,21 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
           }
           texte += `$${texFractionFromString(c, d)} ${texteOperation2} ${texFractionFromString(e, f)} ${texteOperation1} ${texFractionFromString(a, b)}$`
 
-          texteCorr = `$${texFractionFromString(c, d)} ${texteOperation2} ${texFractionFromString(e, f)} ${texteOperation1} ${texFractionFromString(a, b)}$`
+          texteCorr = `$${texFractionFromString(c, d)} ${texteOperation2} ${texFractionFromString(e, f)} ${texteOperation1} ${texFractionFromString(a, b)}`
           if (!operation2) {
             // S'il y a division, multiplier par l'inverse du diviseur
             ;[e, f] = [f, e]
-            texteCorr += `$=${texFractionFromString(c, d)} \\times ${texFractionFromString(e, f)} ${texteOperation1} ${texFractionFromString(a, b)}$`
+            texteCorr += `=${texFractionFromString(c, d)} \\times ${texFractionFromString(e, f)} ${texteOperation1} ${texFractionFromString(a, b)}`
           }
 
           produit = produitDeDeuxFractions(c, d, e, f)
           // texteCorr += `$=${texFractionFromString(c, d)}\\times ${texFractionFromString(e, f)} ${texteOperation1} ${texFractionFromString(a, b)}$`
           if (this.correctionDetaillee) {
-            texteCorr += `$=${texFractionFromString(c + '\\times' + ecritureParentheseSiNegatif(e), d + '\\times' + ecritureParentheseSiNegatif(f))} ${texteOperation1} ${texFractionFromString(a, b)}$`
-            texteCorr += `$=${texFractionFromString(c * e, d * f)} ${texteOperation1} ${texFractionFromString(a, b)}$`
+            texteCorr += `=${texFractionFromString(c + '\\times' + ecritureParentheseSiNegatif(e), d + '\\times' + ecritureParentheseSiNegatif(f))} ${texteOperation1} ${texFractionFromString(a, b)}`
+            texteCorr += `=${texFractionFromString(c * e, d * f)} ${texteOperation1} ${texFractionFromString(a, b)}`
           } else {
-            texteCorr += `$=${produit[1]} ${texteOperation1} ${texFractionFromString(a, b)}$`
-            texteCorr += `$=${produit[0]} ${texteOperation1} ${texFractionFromString(a, b)}$`
+            texteCorr += `=${produit[1]} ${texteOperation1} ${texFractionFromString(a, b)}`
+            texteCorr += `=${produit[0]} ${texteOperation1} ${texFractionFromString(a, b)}`
           }
 
           // faut-il simplifier c×e⁄d×f ?
@@ -247,7 +247,7 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
           }
           p = pgcd(c * e, d * f)
           if (p !== 1 && ppcm(b, d * f) > ppcm(b, (d * f) / p)) {
-            texteCorr += `$=${texFractionFromString((e * c) / p + '\\times\\cancel{' + ecritureParentheseSiNegatif(p) + '}', (f * d) / p + '\\times\\cancel{' + ecritureParentheseSiNegatif(p) + '}')} ${texteOperation1} ${texFractionFromString(a, b)}$`
+            texteCorr += `=${texFractionFromString((e * c) / p + '\\times\\cancel{' + ecritureParentheseSiNegatif(p) + '}', (f * d) / p + '\\times\\cancel{' + ecritureParentheseSiNegatif(p) + '}')} ${texteOperation1} ${texFractionFromString(a, b)}`
             c = (e * c) / p
             d = (f * d) / p
           } else {
@@ -258,34 +258,34 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
           k1 = p / b
           k2 = p / d
           if (k2 !== 1) {
-            texteCorr += `$=${texFractionFromString(
+            texteCorr += `=${texFractionFromString(
               c + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k2)),
               d + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k2)),
-            )}$`
+            )}`
           } else {
             if (k1 !== 1) {
-              texteCorr += `$=${texFractionFromString(c, d)}$`
+              texteCorr += `=${texFractionFromString(c, d)}`
             }
           }
 
           if (k1 !== 1) {
-            texteCorr += `$ ${texteOperation1} ${texFractionFromString(
+            texteCorr += ` ${texteOperation1} ${texFractionFromString(
               a + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k1)),
               b + miseEnEvidence('\\times' + ecritureParentheseSiNegatif(k1)),
-            )}$`
+            )}`
           } else {
             if (k2 !== 1) {
-              texteCorr += `$ ${texteOperation1} ${texFractionFromString(a, b)}$`
+              texteCorr += ` ${texteOperation1} ${texFractionFromString(a, b)}`
             }
           }
 
           if (this.correctionDetaillee) {
-            texteCorr += `$=${texFractionFromString(c * k2, p)} ${texteOperation1} ${texFractionFromString(a * k1, p)}$`
+            texteCorr += `=${texFractionFromString(c * k2, p)} ${texteOperation1} ${texFractionFromString(a * k1, p)}`
           }
           e = operation1 ? c * k2 + a * k1 : c * k2 - a * k1
           f = p
 
-          texteCorr += `$=${texFractionFromString(e, f)}${simplificationDeFractionAvecEtapes(e, f)}$`
+          texteCorr += `=${texFractionFromString(e, f)}${simplificationDeFractionAvecEtapes(e, f)}$`
           reponse = fraction(e, f).simplifie()
           break
       }

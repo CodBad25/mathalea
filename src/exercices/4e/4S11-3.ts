@@ -88,8 +88,7 @@ export default class MedianeMoyenneSalaires extends Exercice {
           texte += `${salairesPdgTexte} €.<br>`
 
           texteCorr += `Le salaire moyen dans ${entreprisePdg} est : <br>`
-          texteCorr += `$(${texNombre(S1)}\\text{€} + ${texNombre(S2)}\\text{€} + ${texNombre(S3)}\\text{€} + ${texNombre(S4)}\\text{€} + ${texNombre(S5pdg)}\\text{€}) \\div 5 = $`
-          texteCorr += `$${miseEnEvidence(moyenne)}~\\text{€}.$<br>`
+          texteCorr += `$(${texNombre(S1)}\\text{€} + ${texNombre(S2)}\\text{€} + ${texNombre(S3)}\\text{€} + ${texNombre(S4)}\\text{€} + ${texNombre(S5pdg)}\\text{€}) \\div 5 = ${miseEnEvidence(moyenne)}~\\text{€}.$<br>`
           texteCorr += `Les salaires ordonnés du plus petit au plus grand sont : `
           texteCorr += `$ ${texNombre(S1)}\\text{€} , ${texNombre(S2)}\\text{€} , ${texNombre(S3)}\\text{€} , ${texNombre(S4)}\\text{€} , ${texNombre(S5pdg)}\\text{€}. $<br>`
           texteCorr += `La médiane des salaires est donc égale au troisième salaire par ordre croissant : `
@@ -143,8 +142,7 @@ export default class MedianeMoyenneSalaires extends Exercice {
           texte += `Dans ${entrepriseCoop}, les salaires sont les suivants : <br>`
           texte += `${salairesCoopTexte} €.<br>`
           texteCorr += `Le salaire moyen dans ${entrepriseCoop} est : <br>`
-          texteCorr += `$(${texNombre(S1)}\\text{€} + ${texNombre(S2)}\\text{€} + ${texNombre(S3)}\\text{€} + ${texNombre(S4)}\\text{€} + ${texNombre(S5coop)}\\text{€}) \\div 5 = $`
-          texteCorr += `$${miseEnEvidence(moyenne)}~\\text{€}.$<br><br>`
+          texteCorr += `$(${texNombre(S1)}\\text{€} + ${texNombre(S2)}\\text{€} + ${texNombre(S3)}\\text{€} + ${texNombre(S4)}\\text{€} + ${texNombre(S5coop)}\\text{€}) \\div 5 = ${miseEnEvidence(moyenne)}~\\text{€}.$<br><br>`
           texteCorr += `Les salaires ordonnés du plus petit au plus grand sont : `
           texteCorr += `$ ${texNombre(S1)}\\text{€} , ${texNombre(S2)}\\text{€} , ${texNombre(S3)}\\text{€} , ${texNombre(S4)}\\text{€} , ${texNombre(S5coop)}\\text{€}. $<br>`
           texteCorr += `La médiane des salaires est donc égale au troisième salaire par ordre croissant : `

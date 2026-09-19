@@ -571,6 +571,21 @@ describe('htmlToTypst', () => {
     )
   })
 
+  it('ne fusionne pas des formules `$…$` juxtaposées sans espace en un faux bloc affiché `$$…$$`', () => {
+    // ex. 4C32 avant sa réécriture (d0dd21a08) : `texteAMC + `$${sp()}=$`` puis
+    // `+ `$${sp()}\dots$`` produisait `$500$$ = $$\dots$`. Les deux `$$`
+    // accidentels (jonction de `$500$`+`$ = $`, puis `$ = $`+`$\dots$`) ne
+    // doivent pas être pris pour les délimiteurs d'un unique bloc affiché de
+    // contenu ` = ` : chaque formule doit rester convertie séparément.
+    expect(htmlToTypst('$500$$ = $$\\dots$')).toBe('$500$$=$$...$')
+  })
+
+  it('reconnaît toujours un vrai bloc affiché `$$…$$` isolé', () => {
+    expect(htmlToTypst('Formule : $$x^2+y^2=z^2$$')).toBe(
+      'Formule : $ x^2 + y^2 = z^2 $',
+    )
+  })
+
   it('convertit \\medskip en texte brut (exercices CAN écrits en LaTeX texte)', () => {
     expect(htmlToTypst('Viens-tu à vélo ?\\medskip')).toBe(
       'Viens-tu à vélo ?#v(0.5em)',

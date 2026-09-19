@@ -359,14 +359,39 @@ function replaceColorGroups(tex: string): string {
 }
 
 /**
- * Remplace les blocs `$…$` en tenant compte des accolades : un `$` situé
- * dans un `{…}` (mode texte d'un `\text{…}`) ne referme pas le bloc. Sans
- * cela, `$387\text{ m$^2$/h}…$` serait coupé au premier `$` intérieur.
+ * Remplace les blocs `$…$` et `$$…$$` en un seul passage gauche-à-droite, en
+ * tenant compte des accolades : un `$` situé dans un `{…}` (mode texte d'un
+ * `\text{…}`) ne referme pas le bloc. Sans cela, `$387\text{ m$^2$/h}…$`
+ * serait coupé au premier `$` intérieur.
+ *
+ * Un `$` n'est reconnu comme ouverture d'un bloc affiché `$$…$$` que quand il
+ * n'est pas déjà à l'intérieur d'un bloc `$…$` en cours (exactement comme
+ * TeX distingue `$` et `$$`) : sinon deux formules juxtaposées sans espace
+ * (ex. 4C32 avant sa réécriture : `` $500$ + $=$ + $\dots$ `` concaténées en
+ * `$500$$=$$\dots$`) seraient prises pour un unique bloc affiché dont le
+ * contenu serait `=`, les deux formules externes étant absorbées. Une
+ * formule affichée « genuine » n'apparaît jamais alors qu'on est déjà dans
+ * un bloc `$…$` ouvert : elle est donc toujours correctement reconnue.
  */
 function replaceBalancedInlineMath(
   text: string,
-  convert: (tex: string) => string,
+  convertInline: (tex: string) => string,
+  convertDisplay: (tex: string) => string = convertInline,
 ): string {
+  // trouve le `$` (ou `$$`) fermant au niveau d'accolade 0, à partir de `from`
+  function findClosing(from: number, display: boolean): number {
+    let depth = 0
+    for (let j = from; j < text.length; j++) {
+      const ch = text[j]
+      if (ch === '{') depth++
+      else if (ch === '}') {
+        if (depth > 0) depth--
+      } else if (ch === '$' && depth === 0) {
+        if (!display || text[j + 1] === '$') return j
+      }
+    }
+    return -1
+  }
   let out = ''
   let i = 0
   while (i < text.length) {
@@ -375,27 +400,19 @@ function replaceBalancedInlineMath(
       i++
       continue
     }
-    // début d'un bloc : cherche le `$` fermant au niveau d'accolade 0
-    let depth = 0
-    let close = -1
-    for (let j = i + 1; j < text.length; j++) {
-      const ch = text[j]
-      if (ch === '{') depth++
-      else if (ch === '}') {
-        if (depth > 0) depth--
-      } else if (ch === '$' && depth === 0) {
-        close = j
-        break
-      }
-    }
+    const display = text[i + 1] === '$'
+    const start = display ? i + 2 : i + 1
+    const close = findClosing(start, display)
     if (close === -1) {
-      // `$` non apparié : laissé tel quel
+      // `$` (ou `$$`) non apparié : laissé tel quel
       out += text[i]
       i++
       continue
     }
-    out += convert(text.slice(i + 1, close))
-    i = close + 1
+    out += display
+      ? convertDisplay(text.slice(start, close))
+      : convertInline(text.slice(start, close))
+    i = display ? close + 2 : close + 1
   }
   return out
 }
@@ -3295,20 +3312,23 @@ export function htmlToTypst(
   text = text.replace(/\\\(([\s\S]+?)\\\)/g, (_, tex: string) =>
     protect(latexSegmentToTypst(tex, false, figures)),
   )
-  text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex: string) =>
-    protect(latexSegmentToTypst(tex, true, figures)),
+  // Traite $...$ et $$...$$ avant de supprimer les $ adjacents : cela évite
+  // que `$\bullet$ $f(x)$` soit fusionné en `$\bulletf(x)$` (bulletf =
+  // variable inconnue). Quand deux blocs `$A$ $B$` sont adjacents, chacun
+  // est converti séparément ; le bloc espace `$ $` produit une chaîne vide,
+  // ce qui est correct. Le repérage tient compte des accolades : un `$`
+  // situé dans un `{…}` (ex. `\text{ m$^2$/h}`, unité avec exposant) fait
+  // partie du bloc et ne le referme pas. Un `$$` n'est traité comme bloc
+  // affiché que s'il n'est pas déjà à l'intérieur d'un `$…$` ouvert (voir
+  // la documentation de `replaceBalancedInlineMath`).
+  text = replaceBalancedInlineMath(
+    text,
+    (tex) => {
+      const converted = latexSegmentToTypst(tex, false, figures)
+      return converted.length > 0 ? protect(converted) : ''
+    },
+    (tex) => protect(latexSegmentToTypst(tex, true, figures)),
   )
-  // Traite $...$ avant de supprimer les $ adjacents : cela évite que
-  // `$\bullet$ $f(x)$` soit fusionné en `$\bulletf(x)$` (bulletf = variable inconnue).
-  // Quand deux blocs `$A$ $B$` sont adjacents, chacun est converti séparément ;
-  // le bloc espace `$ $` produit une chaîne vide, ce qui est correct.
-  // Le repérage tient compte des accolades : un `$` situé dans un `{…}`
-  // (ex. `\text{ m$^2$/h}`, unité avec exposant) fait partie du bloc et ne
-  // le referme pas.
-  text = replaceBalancedInlineMath(text, (tex) => {
-    const converted = latexSegmentToTypst(tex, false, figures)
-    return converted.length > 0 ? protect(converted) : ''
-  })
   // Supprime les $ orphelins restants (ne contenant que des espaces)
   text = text.replace(/\$\s*\$/g, '')
 
