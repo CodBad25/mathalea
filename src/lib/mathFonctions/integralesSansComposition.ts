@@ -26,7 +26,7 @@ export const formulaireSansComposition: FormulaireComplexe = {
   ],
 }
 
-/** Écrit nπ/2 sous la forme 0, \pi, -\dfrac{\pi}{2}, \dfrac{3\pi}{2}… */
+/** Écrit nπ/2 sous la forme 0, \pi, -\frac{\pi}{2}, \frac{3\pi}{2}… */
 function texMultipleDePiSurDeux(n: number) {
   if (n === 0) return '0'
   const q = new FractionEtendue(n, 2).simplifie()
@@ -36,7 +36,7 @@ function texMultipleDePiSurDeux(n: number) {
   const numerateur = `${num === 1 ? '' : num}\\pi`
   return den === 1
     ? `${signe}${numerateur}`
-    : `${signe}\\dfrac{${numerateur}}{${den}}`
+    : `${signe}\\frac{${numerateur}}{${den}}`
 }
 
 /**
@@ -110,7 +110,7 @@ export function tirerFonctionSansComposition(famille: string, sur?: string) {
     echantillonnage = [-2 * Math.PI, 2 * Math.PI]
     explication =
       `On commence par rappeler la formule :<br>` +
-      `$${famille === 'sin' ? "(-\\cos(x))'=\\sin(x)" : "(\\sin(x))'=\\cos(x)"}$.<br>` +
+      `$${famille === 'sin' ? "\\cos'(x)=-\\sin(x)" : "\\sin'(x)=\\cos(x)"}$.<br>` +
       `Une primitive de $\\${famille}(x)$ est donc $${famille === 'sin' ? '-\\cos(x)' : '\\sin(x)'}$. Pour obtenir une primitive de $${integrande}$, on multiplie $${famille === 'sin' ? '-\\cos(x)' : '\\sin(x)'}$ par $${k}$.<br>`
   } else {
     const den = famille === 'negatifs' ? 1 : choice([2, 3])

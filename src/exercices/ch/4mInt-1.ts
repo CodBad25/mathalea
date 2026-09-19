@@ -108,7 +108,7 @@ export default class PrimitivesSansComposition extends Exercice {
         reponse += constante === 0 ? '' : ecritureAlgebrique(constante)
         condition =
           forme === 'point'
-            ? ` dont la courbe représentative passe par le point $A\\left(${x0};${y0}\\right)$`
+            ? ` telle que la courbe représentative de $F$ passe par le point $A\\left(${x0};${y0}\\right)$`
             : ` telle que $F\\left(${x0}\\right)=${y0}$`
         resolution =
           (forme === 'point'
@@ -120,7 +120,10 @@ export default class PrimitivesSansComposition extends Exercice {
           `$C=${y0}-${valeur.signe < 0 ? `\\left(${valeur.texFractionSimplifiee}\\right)` : valeur.texFractionSimplifiee}=${constante}$.<br>`
       }
       if (!this.questionJamaisPosee(i, integrande, a, b, condition)) continue
-      let texte = `Déterminer ${this.avecCondition ? 'la' : 'une'} primitive $F$ de la fonction $f$ définie sur $I=${domaineTex}$ par $f(x)=${integrande}$${condition}.`
+      // Sur ℝ, on écrit f : ℝ → ℝ sans nommer l'intervalle.
+      const surR = domaineTex === '\\mathbb{R}'
+      const nomDomaine = surR ? '\\mathbb{R}' : 'I'
+      let texte = `Soit $f\\colon ${nomDomaine}\\to\\mathbb{R}$ ${surR ? '' : `avec $I=${domaineTex}$ `}la fonction définie par $f(x)=${integrande}$. Déterminer une primitive $F$ de $f$${condition}.`
       if (this.interactif)
         texte +=
           '<br>' +
@@ -146,7 +149,7 @@ export default class PrimitivesSansComposition extends Exercice {
       this.listeQuestions[i] = texte
       this.listeCorrections[i] =
         explication +
-        `On obtient donc toutes les primitives de $f$ sur $I$ en ajoutant une constante réelle $C$ :<br>` +
+        `On obtient donc toutes les primitives de $f$ sur $${nomDomaine}$ en ajoutant une constante réelle $C$ :<br>` +
         `$F(x)=${primitive}+C$.<br>` +
         resolution +
         (this.avecCondition

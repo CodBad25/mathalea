@@ -365,10 +365,10 @@ export function tirerFonctionComposee(
     famille === 'somme'
       ? w === 1
         ? '\\pi'
-        : '\\frac{\\pi}{2}'
+        : '\\dfrac{\\pi}{2}'
       : w === 1
-        ? '\\frac{\\pi}{2}'
-        : '\\frac{\\pi}{4}'
+        ? '\\dfrac{\\pi}{2}'
+        : '\\dfrac{\\pi}{4}'
   const sin = `\\sin\\left(${argument}\\right)`
   const cos = `\\cos\\left(${argument}\\right)`
   const facteurDerivee = new FractionEtendue(
