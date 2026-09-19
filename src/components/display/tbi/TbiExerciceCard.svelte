@@ -14,6 +14,7 @@
     activeTbiModalCard,
     TBI_CONTROLS_HIDE_DELAY,
     TBI_MAX_ZOOM,
+    TBI_MIN_QUESTION_SPACING,
     TBI_MIN_ZOOM,
     moveCardToTab,
     tbiState,
@@ -90,7 +91,10 @@
   }
 
   function zoomModalBy(delta: number) {
-    modalZoom = Math.min(TBI_MAX_ZOOM, Math.max(TBI_MIN_ZOOM, modalZoom + delta))
+    modalZoom = Math.min(
+      TBI_MAX_ZOOM,
+      Math.max(TBI_MIN_ZOOM, modalZoom + delta),
+    )
   }
 
   $effect(() => {
@@ -109,6 +113,9 @@
    * « colonnes » de la vue prof : sérialisé dans l'URL via `cols`.
    */
   let cols = $derived($exercicesParams[paramsIndex]?.cols ?? 1)
+  let questionSpacing = $derived(
+    $tbiState.cards[paramsIndex]?.questionSpacing ?? 1,
+  )
 
   function setCols(next: number) {
     const clamped = Math.min(4, Math.max(1, next))
@@ -118,6 +125,16 @@
       return list
     })
     mathaleaUpdateUrlFromExercicesParams()
+  }
+
+  function setQuestionSpacing(next: number) {
+    tbiState.update((state) => {
+      const cardState = state.cards[paramsIndex]
+      if (cardState) {
+        cardState.questionSpacing = Math.max(TBI_MIN_QUESTION_SPACING, next)
+      }
+      return state
+    })
   }
 
   let settingsExist = $derived(
@@ -356,12 +373,15 @@
         {columnBreakDisabled}
         {colBreakActive}
         {cols}
+        {questionSpacing}
         onNewData={newData}
         onSettings={() => (isSettingsModalDisplayed = true)}
         onZoomIn={() => zoomBy(0.1)}
         onZoomOut={() => zoomBy(-0.1)}
         onColsInc={() => setCols(cols + 1)}
         onColsDec={() => setCols(cols - 1)}
+        onQuestionSpacingInc={() => setQuestionSpacing(questionSpacing + 1)}
+        onQuestionSpacingDec={() => setQuestionSpacing(questionSpacing - 1)}
         onMoveToTab={(tab) => moveCardToTab(paramsIndex, tab)}
         onMoveUp={() => onReorder(paramsIndex, -1)}
         onMoveDown={() => onReorder(paramsIndex, 1)}
@@ -409,10 +429,17 @@
               : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
           >
             {#each exercise.listeQuestions as question, i (i)}
-              <div style="break-inside: avoid">
+              <div
+                style="break-inside: avoid; padding-top: {i === 0
+                  ? 0.25
+                  : questionSpacing * 0.5}rem; padding-bottom: {i ===
+                exercise.listeQuestions.length - 1
+                  ? 0.25
+                  : 0}rem"
+              >
                 <li
                   id="exercice{paramsIndex}Q{i}"
-                  class="py-1 overflow-x-auto"
+                  class="overflow-x-auto overflow-y-hidden py-2 -my-2"
                   style="line-height: {exercise.spacing || 1}"
                 >
                   <!-- eslint-disable-next-line svelte/no-at-html-tags -->
