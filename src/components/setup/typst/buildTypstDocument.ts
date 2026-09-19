@@ -94,11 +94,11 @@ const FICHE_QRCODE_SIZE = '2cm'
  * le `fill: white` du `box` englobant lui garde un fond opaque quel que soit
  * ce qu'il recouvre.
  */
-function ficheQrCodeLines(url: string): string[] {
+function ficheQrCodeLines(): string[] {
   return [
     '#place(top + right, context [',
     '  #if here().page() == 1 [',
-    `    #box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#${qrCodeToTypstImage(url)}]`,
+    `    #mathalea-anchor("qr-code", 0)#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(qr-code-global-url, width: 100%)]`,
     '  ]',
     '])',
   ]
@@ -131,6 +131,9 @@ export const EXERCISE_BANK_IMPORT = typstImport(
   'exercise-bank',
   'exo, exo-setup, exo-solution-box, exo-counter',
 )
+
+/** QR-code Typst natif utilisé par le QR-code global de la fiche. */
+export const TIAOMA_IMPORT = typstImport('tiaoma', 'qrcode')
 
 /** Hauteur (et largeur) des QR-codes placés au coin des exercices (`qr-size`) */
 const QRCODE_SIZE = '1.8cm'
@@ -580,6 +583,7 @@ export const MATHALEA_COVER_CAN_HELPER = `#let mathalea-couverture-can(
   duree: "",
   nb-questions: 0,
   consignes: (),
+  qr-code: none,
 ) = {
   let coche(corps) = {
     grid(columns: (auto, 1fr), column-gutter: 6pt,
@@ -610,6 +614,7 @@ export const MATHALEA_COVER_CAN_HELPER = `#let mathalea-couverture-can(
   v(1fr)
   align(center, mathalea-logo)
   v(1fr)
+  place(top + right, qr-code)
   pagebreak()
 }`
 
@@ -3301,9 +3306,12 @@ export function buildTypstDocument(
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
   const usesVarTable = allLines.some((line) => line.includes('#tabvar('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
-  const usesAnchors = allLines.some((line) =>
-    line.includes('#mathalea-anchor('),
-  )
+  const globalQrCodeUrl = options.showQrCodeFiche
+    ? ficheUrl(exercises)
+    : undefined
+  const usesAnchors =
+    globalQrCodeUrl != null ||
+    allLines.some((line) => line.includes('#mathalea-anchor('))
   const usesQrCode = allLines.some((line) => /^\s*qr: /.test(line))
   const usesSchema = allLines.some((line) =>
     line.includes('mathalea-schema-span'),
@@ -3346,12 +3354,18 @@ export function buildTypstDocument(
   // page de garde : le même appel ouvre chaque sujet (le barème et le nombre
   // de questions sont ceux de la fiche, identiques d'une version à l'autre)
   const coverTemplate = options.coverPage?.template ?? 'aucune'
+  const globalQrCodeOnCanCover =
+    globalQrCodeUrl != null && options.canMode && coverTemplate === 'can'
   const coverDeclarations =
     options.coverPage != null ? coverDeclarationLines(options.coverPage) : []
   const coverLines =
     options.coverPage != null
       ? coverPageLines(options.coverPage, countQuestions(exercises))
       : []
+  const primaryCoverLines =
+    options.coverPage != null && globalQrCodeOnCanCover
+      ? coverPageLines(options.coverPage, countQuestions(exercises), true)
+      : coverLines
 
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
@@ -3365,6 +3379,7 @@ export function buildTypstDocument(
   if (
     usesTasks ||
     usesExerciseBank ||
+    globalQrCodeUrl != null ||
     options.autoVerticalSpacing ||
     usesVarTable ||
     usesCetz ||
@@ -3373,6 +3388,7 @@ export function buildTypstDocument(
   ) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
+    if (globalQrCodeUrl != null) lines.push(TIAOMA_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     if (usesVarTable) lines.push(VARTABLE_IMPORT)
@@ -3384,6 +3400,10 @@ export function buildTypstDocument(
     else if (usesCetz) lines.push(CETZ_IMPORT)
     if (usesCetzPlotChart) lines.push(CETZ_PLOT_CHART_IMPORT)
     lines.push('')
+  }
+  if (globalQrCodeUrl != null) {
+    // URL lisible et modifiable directement dans le source Typst exporté.
+    lines.push(`#let qr-code-global-url = ${typstString(globalQrCodeUrl)}`, '')
   }
   if (extraPreamble != null && extraPreamble.length > 0) {
     lines.push('// ----- Préambule d’une banque externe -----')
@@ -3695,13 +3715,13 @@ export function buildTypstDocument(
   // deux. C'est un commentaire : le document reste identique pour l'export et
   // la compilation CLI.
   if (totalVersions > 1) lines.push(subjectMarker(0))
-  if (coverLines.length > 0) {
+  if (primaryCoverLines.length > 0) {
     // repère du bloc de couverture : la palette de l'aperçu propose d'y
     // modifier titre, session, matière, durée et consignes (sans objet en
     // mode export) ; un seul repère suffit, les sujets suivants affichent la
     // même page de garde (voir la boucle des versions plus bas)
     if (!exportMode) lines.push('#mathalea-anchor("cover", 0)')
-    lines.push(...coverLines)
+    lines.push(...primaryCoverLines)
     lines.push('')
   }
   lines.push('// ----- En-tête -----')
@@ -3719,15 +3739,12 @@ export function buildTypstDocument(
       options.hideVersionLabel,
     ),
   )
-  if (options.showQrCodeFiche) {
-    const url = ficheUrl(exercises)
-    if (url != null) {
-      // après le bloc de titre (et sa ligne d'en-tête) plutôt qu'avant : ces
-      // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
-      // plus tardif se peint donc par-dessus le contenu qui précède plutôt
-      // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
-      lines.push(...ficheQrCodeLines(url))
-    }
+  if (globalQrCodeUrl != null && !globalQrCodeOnCanCover) {
+    // après le bloc de titre (et sa ligne d'en-tête) plutôt qu'avant : ces
+    // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
+    // plus tardif se peint donc par-dessus le contenu qui précède plutôt
+    // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
+    lines.push(...ficheQrCodeLines())
   }
   lines.push('')
   lines.push(...primary.renderLines)
@@ -3838,6 +3855,7 @@ function coverDeclarationLines(cover: TypstCoverOptions): string[] {
 function coverPageLines(
   cover: TypstCoverOptions,
   nbQuestions: number,
+  showQrCode = false,
 ): string[] {
   if (cover.template === 'aucune') return []
   if (cover.template === 'can') {
@@ -3846,6 +3864,11 @@ function coverPageLines(
       '  duree: couverture-duree,',
       `  nb-questions: ${nbQuestions},`,
       '  consignes: couverture-consignes,',
+      ...(showQrCode
+        ? [
+            `  qr-code: [#mathalea-anchor("qr-code", 0)#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(qr-code-global-url, width: 100%)]],`,
+          ]
+        : []),
       ')',
     ]
   }

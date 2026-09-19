@@ -1126,13 +1126,19 @@ describe('buildTypstDocument', () => {
     )
     expect(withQr).toContain('#place(top + right, context [')
     expect(withQr).toContain('#if here().page() == 1 [')
+    expect(withQr).toContain('#import "@preview/tiaoma:0.3.0": qrcode')
+    // L'URL reste une variable Typst lisible et modifiable dans le source,
+    // puis tiaoma génère le QR-code pendant la compilation.
+    expect(withQr).toContain('#let qr-code-global-url = "')
+    expect(withQr).toContain('#qrcode(qr-code-global-url, width: 100%)')
+    expect(withQr).toContain('#mathalea-anchor("qr-code", 0)')
     // fond blanc explicite : le QR-code reste lisible quoi qu'il recouvre
     // (titre, ligne d'en-tête…), `#place` le sortant du flux normal
     expect(withQr).toContain('fill: white')
     // les deux exercices sont regroupés dans une seule URL, avec les mêmes
     // graines que celles imprimées, un exercice par page (1), non interactif
     // (0) mais modifiable par l'élève (1)
-    const qrUrlMatch = withQr.match(/link\("([^"]+)"\)/)
+    const qrUrlMatch = withQr.match(/#let qr-code-global-url = "([^"]+)"/)
     expect(qrUrlMatch).not.toBeNull()
     const qrUrl = new URL(qrUrlMatch![1])
     expect(qrUrl.searchParams.getAll('uuid')).toEqual(['abc', 'def'])
@@ -1813,6 +1819,23 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // ni banque d'exercices ni badges : il n'y a plus de titre d'exercice
     expect(code).not.toContain('exercise-bank')
     expect(code).not.toContain('#let ex1 = exo.with(')
+  })
+
+  it('place le QR-code global dans la page de garde', () => {
+    const code = buildTypstDocument(
+      [exercise({ url: 'https://coopmaths.fr/alea?uuid=can&alea=seed' })],
+      {
+        ...canOptions,
+        showQrCodeFiche: true,
+        coverPage: { ...defaultTypstDocumentOptions.coverPage, template: 'can' },
+      },
+    )
+    expect(code).toContain('#let qr-code-global-url = "')
+    expect(code).toContain('#import "@preview/tiaoma:0.3.0": qrcode')
+    expect(code).toContain('qr-code: [#mathalea-anchor("qr-code", 0)#box(width: 2cm')
+    // La couverture provoque un saut de page : le QR doit être émis avant,
+    // et non dans le bloc d'en-tête qui suit.
+    expect(code).not.toContain('#place(top + right, context [')
   })
 
   it('préfère les énoncés CAN (canQuestions) aux questions ordinaires', () => {
