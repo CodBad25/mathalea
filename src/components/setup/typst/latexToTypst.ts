@@ -815,6 +815,47 @@ function preprocessTex(tex: string): string {
 const TXT_MARK_OPEN = '\uE010'
 const TXT_MARK_CLOSE = '\uE011'
 
+/**
+ * Applique une transformation uniquement au code Typst situé hors des
+ * chaînes `"..."`. Les corrections de syntaxe mathématique ne doivent jamais
+ * réinterpréter les crochets ou parenthèses qui appartiennent au texte affiché.
+ */
+function transformOutsideTypstStrings(
+  source: string,
+  transform: (code: string) => string,
+): string {
+  const strings: string[] = []
+  let masked = ''
+  let index = 0
+
+  while (index < source.length) {
+    if (source[index] !== '"') {
+      masked += source[index]
+      index++
+      continue
+    }
+
+    const stringStart = index++
+    while (index < source.length) {
+      if (source[index] === '\\') {
+        index += 2
+      } else if (source[index] === '"') {
+        index++
+        break
+      } else {
+        index++
+      }
+    }
+    strings.push(source.slice(stringStart, index))
+    masked += `\uE020${strings.length - 1}\uE021`
+  }
+
+  return transform(masked).replace(
+    /\uE020(\d+)\uE021/g,
+    (_, stringIndex: string) => strings[Number(stringIndex)],
+  )
+}
+
 /** Corrige la sortie de tex2typst pour qu'elle compile avec Typst */
 function postprocessTypst(typst: string): string {
   let result = typst
@@ -926,10 +967,10 @@ function postprocessTypst(typst: string): string {
     // On remplace par bracket.l / bracket.r (glyphes Typst).
     .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
     .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
-    .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
-    .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
-    .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
-    .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
+    .replace(/\bbold\(\[+\)/g, 'bold(bracket.l)')
+    .replace(/\bbold\(\]+\)/g, 'bold(bracket.r)')
+    .replace(/\bupright\(\[+\)/g, 'upright(bracket.l)')
+    .replace(/\bupright\(\]+\)/g, 'upright(bracket.r)')
     // \boldsymbol{(} / \boldsymbol{)} (ou \pmb, ex. 3L11-3b qui colore en bleu le
     // signe et les parenthèses d'un produit ajouté) isolent une parenthèse dans
     // un groupe gras :
@@ -949,84 +990,62 @@ function postprocessTypst(typst: string): string {
   // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
   // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
   // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
-  // Cas 1 (contenu non-alphabétique, ex. [(-6)×(-6)]) et Cas 2 (contenu purement
-  // alphabétique, ex. [union]) doivent s'enchaîner : Cas 2 peut réduire une paire
-  // imbriquée (ex. [-4;-2[union]3;4], produit par un intervalle-union où le "[union]"
-  // interne coïncide textuellement avec une paire de crochets) à une paire simple que
-  // Cas 1 doit ensuite traiter — d'où la boucle jusqu'à stabilité. Le Cas 1 exclut
-  // explicitement [ et ] de son caractère « spécial » central pour ne jamais franchir
-  // une paire imbriquée non encore réduite par le Cas 2 (sinon la paire imbriquée est
-  // engloutie dans une capture bancale qui laisse un crochet orphelin).
+  // Les réunions/intersections d'intervalles sont d'abord reconnues dans leur
+  // contexte complet : tex2typst peut faire coïncider les deux bornes intérieures
+  // avec une paire qui ressemble à `[union]`. Une fois ces cas levés, toute paire
+  // [...] restante est un vrai couple de délimiteurs, y compris quand son contenu
+  // n'est fait que de minuscules (`[x]`, `K[x]`). On traite les paires de l'intérieur
+  // vers l'extérieur en bouclant jusqu'à stabilité.
   {
     let prevBrackets = ''
     while (prevBrackets !== result) {
       prevBrackets = result
-      result = result
-        // Pour une réunion d'intervalles français, tex2typst transforme les
-        // deux bornes qui encadrent `\cup` en `[union]` :
-        // `[a;b[\cup]c;d]` devient `[a ; b [union] c ; d]`.
-        // Cette paire n'est donc pas un décor autour de l'opérateur : elle
-        // contient la borne droite du premier intervalle et la borne gauche
-        // du second. La convertir d'abord évite de les perdre dans la règle
-        // qui nettoie les crochets de `[union]`.
-        .replace(
-          /([\[\]])([^\[\]]*?)\[\s*(union|inter|without)\s*\]([^\[\]]*?)([\[\]])/g,
-          (
-            _match,
-            leftOuter: string,
-            firstBody: string,
-            operator: string,
-            secondBody: string,
-            rightOuter: string,
-          ) => {
-            const glyph = (bracket: string): string =>
-              bracket === '[' ? 'bracket.l' : 'bracket.r'
-            return `lr(${glyph(leftOuter)} ${firstBody} bracket.l) ${operator} lr(bracket.r ${secondBody} ${glyph(rightOuter)})`
-          },
-        )
-        // Dans les autres cas, tex2typst conserve l'opérateur sous la forme
-        // `] union [` entre les deux intervalles. Ces deux crochets sont eux
-        // aussi des bornes, et non des séparateurs parasites.
-        .replace(
-          /([\[\]])([^\[\]]*?)([\[\]])\s*(union|inter|without)\s*([\[\]])([^\[\]]*?)([\[\]])/g,
-          (
-            _match,
-            leftOuter: string,
-            firstBody: string,
-            firstRight: string,
-            operator: string,
-            secondLeft: string,
-            secondBody: string,
-            rightOuter: string,
-          ) => {
-            const glyph = (bracket: string): string =>
-              bracket === '[' ? 'bracket.l' : 'bracket.r'
-            return `lr(${glyph(leftOuter)} ${firstBody} ${glyph(firstRight)}) ${operator} lr(${glyph(secondLeft)} ${secondBody} ${glyph(rightOuter)})`
-          },
-        )
-        // Le contenu purement en minuscules (union, inter, without…) est laissé de
-        // côté ici : ce sont les mots-symboles produits par tex2typst pour \cup/\cap,
-        // traités juste après (ils doivent être dépouillés, pas encadrés). Toute
-        // autre paire [contenu] (chiffres, notation géométrique en majuscules comme
-        // [YS]…) est encadrée avec de vrais délimiteurs Typst.
-        .replace(
-          /\[([^\[\]]*[^a-z \t\[\]][^\[\]]*)\]/g,
-          'lr(bracket.l $1 bracket.r)',
-        )
-        // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
-        //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
-        // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
-        //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
-        // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
-        // Le contenu est restreint aux minuscules : les identifiants Typst produits par
-        // tex2typst pour ces opérateurs (union, inter, without…) sont toujours en
-        // minuscules, alors qu'une notation géométrique comme [YS] (segment) utilise des
-        // noms de points en majuscules qui ne doivent jamais perdre leurs crochets.
-        .replace(/\[([a-z ]+)\]/g, ' $1 ')
-        // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
-        // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
-        // soit correctement reconnu par la règle ]...[  ci-après.
-        .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
+      result = transformOutsideTypstStrings(result, (code) =>
+        code
+          // Pour une réunion d'intervalles français, tex2typst transforme les
+          // deux bornes qui encadrent `\cup` en `[union]` :
+          // `[a;b[\cup]c;d]` devient `[a ; b [union] c ; d]`.
+          // Cette paire n'est donc pas un décor autour de l'opérateur : elle
+          // contient la borne droite du premier intervalle et la borne gauche
+          // du second. La convertir d'abord évite de les perdre dans la règle
+          // qui nettoie les crochets de `[union]`.
+          .replace(
+            /([\[\]])([^\[\]]*?)\[\s*(union|inter|without)\s*\]([^\[\]]*?)([\[\]])/g,
+            (
+              _match,
+              leftOuter: string,
+              firstBody: string,
+              operator: string,
+              secondBody: string,
+              rightOuter: string,
+            ) => {
+              const glyph = (bracket: string): string =>
+                bracket === '[' ? 'bracket.l' : 'bracket.r'
+              return `lr(${glyph(leftOuter)} ${firstBody} bracket.l) ${operator} lr(bracket.r ${secondBody} ${glyph(rightOuter)})`
+            },
+          )
+          // Dans les autres cas, tex2typst conserve l'opérateur sous la forme
+          // `] union [` entre les deux intervalles. Ces deux crochets sont eux
+          // aussi des bornes, et non des séparateurs parasites.
+          .replace(
+            /([\[\]])([^\[\]]*?)([\[\]])\s*(union|inter|without)\s*([\[\]])([^\[\]]*?)([\[\]])/g,
+            (
+              _match,
+              leftOuter: string,
+              firstBody: string,
+              firstRight: string,
+              operator: string,
+              secondLeft: string,
+              secondBody: string,
+              rightOuter: string,
+            ) => {
+              const glyph = (bracket: string): string =>
+                bracket === '[' ? 'bracket.l' : 'bracket.r'
+              return `lr(${glyph(leftOuter)} ${firstBody} ${glyph(firstRight)}) ${operator} lr(${glyph(secondLeft)} ${secondBody} ${glyph(rightOuter)})`
+            },
+          )
+          .replace(/\[([^\[\]]*)\]/g, 'lr(bracket.l $1 bracket.r)'),
+      )
     }
   }
 
@@ -1072,48 +1091,45 @@ function postprocessTypst(typst: string): string {
  * « unclosed delimiter ». On remplace les ( et ) orphelins par paren.l / paren.r.
  */
 function balanceTypstMathParens(s: string): string {
-  // Passe 1 : aller de gauche à droite, remplacer les ) sans ( précédent
-  let depth = 0
-  let pass1 = ''
+  const chars = s.split('')
+  const openingParens: number[] = []
+  let inString = false
+  let escaped = false
+
   for (let i = 0; i < s.length; i++) {
     const ch = s[i]
+    if (inString) {
+      if (escaped) {
+        escaped = false
+      } else if (ch === '\\') {
+        escaped = true
+      } else if (ch === '"') {
+        inString = false
+      }
+      continue
+    }
+
+    if (ch === '"') {
+      inString = true
+      continue
+    }
+
     if (ch === '(') {
-      depth++
-      pass1 += ch
+      openingParens.push(i)
     } else if (ch === ')') {
-      if (depth > 0) {
-        depth--
-        pass1 += ch
+      if (openingParens.length > 0) {
+        openingParens.pop()
       } else {
         // espaces des deux côtés : sans celui de gauche, le glyphe se colle au
         // symbole précédent et Typst lit un seul identifiant ($\beta)$ donnait
         // `betaparen.r`, donc « variable inconnue betaparen »)
-        pass1 += ' paren.r '
+        chars[i] = ' paren.r '
       }
-    } else {
-      pass1 += ch
     }
   }
-  // Passe 2 : aller de droite à gauche, remplacer les ( sans ) suivant
-  depth = 0
-  let pass2 = ''
-  for (let i = pass1.length - 1; i >= 0; i--) {
-    const ch = pass1[i]
-    if (ch === ')') {
-      depth++
-      pass2 = ch + pass2
-    } else if (ch === '(') {
-      if (depth > 0) {
-        depth--
-        pass2 = ch + pass2
-      } else {
-        pass2 = ' paren.l ' + pass2
-      }
-    } else {
-      pass2 = ch + pass2
-    }
-  }
-  return pass2
+
+  for (const index of openingParens) chars[index] = ' paren.l '
+  return chars.join('')
 }
 
 function readBraced(
