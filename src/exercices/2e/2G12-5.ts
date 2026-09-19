@@ -246,9 +246,7 @@ export default class ParallélogrammeSommet extends Exercice {
             texteCorr += `  <br><br>Donc $ M\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)$ ou $ M\\left(${texNombre(xM, 1)}\\,;\\,${texNombre(yM, 1)}\\right)$.`
             texteCorr += `<br><br> $M$ est aussi  le milieu de $[${B.nom}${D.nom}]$ : <br>  ${context.isHtml ? '<br>' : ''}`
             texteCorr += `$\\begin{cases}x_M=\\dfrac{x_${B.nom}+x_${D.nom}}{2}\\\\[0.5em]y_M=\\dfrac{y_${B.nom}+y_${D.nom}}{2}\\end{cases}$ `
-            texteCorr += `$\\iff\\begin{cases}${texNombre(xM, 1)}=\\dfrac{${xB}+x_${D.nom}}{2}\\\\[0.5em]${texNombre(yM, 1)}=\\dfrac{${yB}+y_${D.nom}}{2}\\end{cases}$`
-            texteCorr += `$\\iff \\begin{cases}${xB}+x_${D.nom}=2\\times ${ecritureParentheseSiNegatif(xMd)}  \\\\[0.5em] ${yB}+y_${D.nom}=2\\times ${ecritureParentheseSiNegatif(yMd)}\\end{cases}$`
-            texteCorr += `$\\iff \\begin{cases}x_${D.nom}=${texNombre(xM.multiplieEntier(2), 0)} ${ecritureAlgebrique(-xB)} \\\\[0.5em] y_${D.nom}=${texNombre(yM.multiplieEntier(2).valeurDecimale, 0)}${ecritureAlgebrique(-yB)}\\end{cases}$`
+            texteCorr += `$\\iff\\begin{cases}${texNombre(xM, 1)}=\\dfrac{${xB}+x_${D.nom}}{2}\\\\[0.5em]${texNombre(yM, 1)}=\\dfrac{${yB}+y_${D.nom}}{2}\\end{cases}\\iff \\begin{cases}${xB}+x_${D.nom}=2\\times ${ecritureParentheseSiNegatif(xMd)}  \\\\[0.5em] ${yB}+y_${D.nom}=2\\times ${ecritureParentheseSiNegatif(yMd)}\\end{cases}\\iff \\begin{cases}x_${D.nom}=${texNombre(xM.multiplieEntier(2), 0)} ${ecritureAlgebrique(-xB)} \\\\[0.5em] y_${D.nom}=${texNombre(yM.multiplieEntier(2).valeurDecimale, 0)}${ecritureAlgebrique(-yB)}\\end{cases}$`
             texteCorr += `<br> ${context.isHtml ? '<br>' : ''}On en déduit :  $\\begin{cases}x_${D.nom}={${texNombre(xM.multiplieEntier(2).valeurDecimale - xB)}}\\\\[0.5em]y_${D.nom}=${texNombre(yM.multiplieEntier(2).valeurDecimale - yB)}\\end{cases}$`
             texteCorr += `<br> ${context.isHtml ? '<br>' : ''}Donc  $${D.nom}\\left( ${texNombre(xM.multiplieEntier(2).valeurDecimale - xB)}\\,;\\,${texNombre(yM.multiplieEntier(2).valeurDecimale - yB)}\\right)$.<br>
           ${context.isHtml ? '<br>' : ''}${texteGras('Remarque :')} On retrouve bien le résultat conjecturé graphiquement.`
@@ -425,9 +423,7 @@ export default class ParallélogrammeSommet extends Exercice {
             texteCorr += `<br><br>Donc   $M(${texNombre(xM, 2)}\\,;\\,${texNombre(yM, 2)})$.<br> `
             texteCorr += `<br><br> $M$ est aussi  le milieu de $[${B.nom}${D.nom}]$ : <br> ${context.isHtml ? '<br>' : ''} `
             texteCorr += `$\\begin{cases}x_M=\\dfrac{x_${B.nom}+x_${D.nom}}{2}\\\\[0.5em]y_M=\\dfrac{y_${B.nom}+y_${D.nom}}{2}\\end{cases}$ `
-            texteCorr += `$\\iff\\begin{cases}${texNombre(xM, 3)}=\\dfrac{${texNombre(xB)}+x_${D.nom}}{2}\\\\[0.5em]${texNombre(yM, 3)}=\\dfrac{${texNombre(yB, 2)}+y_${D.nom}}{2}\\end{cases}$`
-            texteCorr += `$\\iff \\begin{cases}${texNombre(xB)}+x_${D.nom}=2\\times ${ecritureParentheseSiNegatif(xM)}  \\\\[0.5em] ${texNombre(yB)}+y_${D.nom}=2\\times ${ecritureParentheseSiNegatif(yM)}\\end{cases}$`
-            texteCorr += `$\\iff \\begin{cases}x_${D.nom}=${texNombre(xM * 2, 2)} ${ecritureAlgebrique(-xB)} \\\\[0.5em] y_${D.nom}=${texNombre(yM * 2, 2)}${ecritureAlgebrique(-yB)}\\end{cases}$`
+            texteCorr += `$\\iff\\begin{cases}${texNombre(xM, 3)}=\\dfrac{${texNombre(xB)}+x_${D.nom}}{2}\\\\[0.5em]${texNombre(yM, 3)}=\\dfrac{${texNombre(yB, 2)}+y_${D.nom}}{2}\\end{cases}\\iff \\begin{cases}${texNombre(xB)}+x_${D.nom}=2\\times ${ecritureParentheseSiNegatif(xM)}  \\\\[0.5em] ${texNombre(yB)}+y_${D.nom}=2\\times ${ecritureParentheseSiNegatif(yM)}\\end{cases}\\iff \\begin{cases}x_${D.nom}=${texNombre(xM * 2, 2)} ${ecritureAlgebrique(-xB)} \\\\[0.5em] y_${D.nom}=${texNombre(yM * 2, 2)}${ecritureAlgebrique(-yB)}\\end{cases}$`
             texteCorr += `<br>On en déduit :  $\\begin{cases}x_${D.nom}={${texNombre(xM * 2 - xB, 2)}}\\\\[0.5em]y_${D.nom}=${texNombre(yM * 2 - yB, 2)}\\end{cases}$`
             texteCorr += `<br>Donc  $${D.nom}\\left( ${texNombre(xM * 2 - xB, 2)}\\,;\\,${texNombre(yM * 2 - yB, 2)}\\right)$.<br>
           ${context.isHtml ? '<br>' : ''}${texteGras('Remarque :')} Ce résultat est en cohérence avec le graphique.`
@@ -634,9 +630,7 @@ export default class ParallélogrammeSommet extends Exercice {
             texteCorr += `<br><br> $K$ est aussi  le milieu de $[GT]$ : <br> ${context.isHtml ? '<br>' : ''} `
             texteCorr +=
               '$\\begin{cases}x_M=\\dfrac{x_G+x_T}{2}\\\\[0.5em]y_M=\\dfrac{y_G+y_T}{2}\\end{cases}$ '
-            texteCorr += `$\\iff\\begin{cases}${texNombre(xM, 3)}=\\dfrac{${texNombre(xB)}+x_T}{2}\\\\[0.5em]${texNombre(yM, 3)}=\\dfrac{${texNombre(yB, 2)}+y_T}{2}\\end{cases}$`
-            texteCorr += `$\\iff \\begin{cases}${texNombre(xB)}+x_T=2\\times ${ecritureParentheseSiNegatif(xM)}  \\\\[0.5em] ${texNombre(yB)}+y_T=2\\times ${ecritureParentheseSiNegatif(yM)}\\end{cases}$`
-            texteCorr += `$\\iff \\begin{cases}x_T=${texNombre(xM * 2, 2)} ${ecritureAlgebrique(-xB)} \\\\[0.5em] y_T=${texNombre(yM * 2, 2)}${ecritureAlgebrique(-yB)}\\end{cases}$`
+            texteCorr += `$\\iff\\begin{cases}${texNombre(xM, 3)}=\\dfrac{${texNombre(xB)}+x_T}{2}\\\\[0.5em]${texNombre(yM, 3)}=\\dfrac{${texNombre(yB, 2)}+y_T}{2}\\end{cases}\\iff \\begin{cases}${texNombre(xB)}+x_T=2\\times ${ecritureParentheseSiNegatif(xM)}  \\\\[0.5em] ${texNombre(yB)}+y_T=2\\times ${ecritureParentheseSiNegatif(yM)}\\end{cases}\\iff \\begin{cases}x_T=${texNombre(xM * 2, 2)} ${ecritureAlgebrique(-xB)} \\\\[0.5em] y_T=${texNombre(yM * 2, 2)}${ecritureAlgebrique(-yB)}\\end{cases}$`
             texteCorr += `<br>${context.isHtml ? '<br>' : ''}On en déduit :  $\\begin{cases}x_T={${texNombre(xM * 2 - xB, 2)}}\\\\[0.5em]y_T=${texNombre(yM * 2 - yB, 2)}\\end{cases}$`
             texteCorr += `<br>${context.isHtml ? '<br>' : ''}Donc  $T\\left( ${texNombre(xM * 2 - xB, 2)}\\,;\\,${texNombre(yM * 2 - yB, 2)}\\right)$.<br>
         `

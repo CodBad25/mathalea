@@ -127,36 +127,31 @@ export default class ExerciceDiviserFractions extends Exercice {
             signe = '-'
           }
           texte = `$${texFractionFromString(a, b)}\\div${texFractionFromString(c, d)}$`
-          texteCorr = `$${texFractionFromString(a, b)}\\div${texFractionFromString(c, d)}$`
-          a = Math.abs(a)
-          b = Math.abs(b)
-          c = Math.abs(c)
-          d = Math.abs(d)
-          p = pgcd(a * d, b * c)
-          texteCorr += `$=${signe}${texFractionFromString(a, b)}\\times${texFractionFromString(
-            d,
-            c,
-          )}$`
-          texteCorr += `$=${signe}${texFractionFromString(
-            a + '\\times' + ecritureParentheseSiNegatif(d),
-            b + '\\times' + ecritureParentheseSiNegatif(c),
-          )}$`
-          if (p === 1) {
-            texteCorr += `$=${signe}${texFractionSigne(a * d, b * c)}$`
-          } else {
-            texteCorr += `$=${signe}${texFractionFromString(a * d, b * c)}$`
-            if (a * d !== b * c) {
-              texteCorr += `$=${signe}${texFractionFromString(
-                (a * d) / p + '\\times\\cancel{' + p + '}',
-                (b * c) / p + '\\times\\cancel{' + p + '}',
-              )}$`
-              texteCorr += `$=${signe}${texFractionFromString(
-                (a * d) / p,
-                (b * c) / p,
-              )}$`
-            } else {
-              texteCorr += `$=${signe}1$`
-            }
+          {
+            const texQuotientInitial = `${texFractionFromString(a, b)}\\div${texFractionFromString(c, d)}`
+            a = Math.abs(a)
+            b = Math.abs(b)
+            c = Math.abs(c)
+            d = Math.abs(d)
+            p = pgcd(a * d, b * c)
+            texteCorr = `$${texQuotientInitial}=${signe}${texFractionFromString(
+              a,
+              b,
+            )}\\times${texFractionFromString(d, c)}=${signe}${texFractionFromString(
+              a + '\\times' + ecritureParentheseSiNegatif(d),
+              b + '\\times' + ecritureParentheseSiNegatif(c),
+            )}${
+              p === 1
+                ? `=${signe}${texFractionSigne(a * d, b * c)}`
+                : `=${signe}${texFractionFromString(a * d, b * c)}${
+                    a * d !== b * c
+                      ? `=${signe}${texFractionFromString(
+                          (a * d) / p + '\\times\\cancel{' + p + '}',
+                          (b * c) / p + '\\times\\cancel{' + p + '}',
+                        )}=${signe}${texFractionFromString((a * d) / p, (b * c) / p)}`
+                      : `=${signe}1`
+                  }`
+            }$`
           }
 
           break

@@ -34,9 +34,7 @@ export const refs = {
 export default class NomExercice extends Exercice {
   constructor() {
     super()
-    this.consigne = `${texteItalique(
-      "Préciser si l'affirmation suivante est vraie ou fausse, puis justifier la réponse donnée.<br> Une réponse non argumentée ne sera pas prise en compte.",
-    )}<br>Dans un repère orthonormé de l'espace, on considère les représentations paramétriques des droites $(d)$ et $(d~')$.`
+    this.consigne = `${texteItalique("Préciser si l'affirmation suivante est vraie ou fausse, puis justifier la réponse donnée.")}<br>${texteItalique('Une réponse non argumentée ne sera pas prise en compte.')}<br>Dans un repère orthonormé de l'espace, on considère les représentations paramétriques des droites $(d)$ et $(d~')$.`
     this.nbQuestions = 1 // Nombre de questions à générer
     this.correctionDetaillee = false
     this.correctionDetailleeDisponible = true
@@ -231,8 +229,7 @@ export default class NomExercice extends Exercice {
         case 'nonCoplanaires': // Droites non-coplanaires
           quotient1 = new FractionEtendue(ux * uy, vx * uy - vy * ux)
           quotient2 = new FractionEtendue(ux * uz, vx * uz - vz * ux)
-          texte += ` $(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}$`
-          texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$`
+          texte += ` $(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$`
           // On écrit les représentations paramétriques des droites (d) et (d')
           texte += `<br><br>${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
 
@@ -266,21 +263,17 @@ export default class NomExercice extends Exercice {
           texteCorr += `$\\begin{cases}
             ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique}=${u2.texFractionSimplifiee}s ${u5.simplifie().ecritureAlgebrique} \\\\
             ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique} = ${u3.texFractionSimplifiee}s ${u6.simplifie().ecritureAlgebrique}
-            \\end{cases}$`
-          texteCorr += `$\\quad\\quad\\begin{cases}
+            \\end{cases}\\quad\\quad\\begin{cases}
             \\left(${u1.texFractionSimplifiee}+${u2.oppose().texFractionSimplifiee}\\right)s =${u5.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique} \\\\
             \\left(${u1.texFractionSimplifiee}+${u3.oppose().texFractionSimplifiee}\\right)s = ${u6.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique}
-            \\end{cases}$`
-
-          texteCorr += `$\\quad\\quad\\begin{cases}
+            \\end{cases}\\quad\\quad\\begin{cases}
             ${u1.differenceFraction(u2).simplifie().texFraction}s =${u5.differenceFraction(u4).simplifie().texFraction} \\\\
             ${u1.differenceFraction(u3).simplifie().texFraction}s = ${u6.differenceFraction(u4).simplifie().texFraction}
             \\end{cases}$`
           texteCorr += `<br><br>$\\begin{cases}
            s =${u5.differenceFraction(u4).simplifie().texFraction} \\times ${quotient1.simplifie().texFraction} \\\\
           s = ${u6.differenceFraction(u4).simplifie().texFraction} \\times ${quotient2.simplifie().texFraction} \\\\
-            \\end{cases}$`
-          texteCorr += `$\\quad\\quad\\begin{cases}
+            \\end{cases}\\quad\\quad\\begin{cases}
           s =${resultat1.simplifie().texFraction} \\\\
           s = ${resultat2.simplifie().texFraction}
             \\end{cases}$<br>`
@@ -304,8 +297,7 @@ export default class NomExercice extends Exercice {
         case 'secantes': // Droites sécantes
           quotient1 = new FractionEtendue(ux * uy, vx * uy - vy * ux)
           quotient2 = new FractionEtendue(ux * uz, vx * uz - vz * ux)
-          texte += `$(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}$`
-          texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$<br><br>`
+          texte += `$(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$<br><br>`
           // On écrit les représentations paramétriques des droites (d) et (d')
           texte += `${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
 
@@ -339,22 +331,17 @@ export default class NomExercice extends Exercice {
           texteCorr += `$\\begin{cases}
            ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique}=${rienSi1(u2.simplifie())}s ${u5.simplifie().ecritureAlgebrique} \\\\
            ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique} = ${rienSi1(u3.simplifie())}s ${u6.simplifie().ecritureAlgebrique}
-            \\end{cases}$`
-          texteCorr += `$\\quad\\quad\\begin{cases}
+            \\end{cases}\\quad\\quad\\begin{cases}
             \\left(${u1.texFractionSimplifiee}+${u2.oppose().ecritureParentheseSiNegatif}\\right)s =${u5.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique} \\\\
             \\left(${u1.texFractionSimplifiee}+${u3.oppose().ecritureParentheseSiNegatif}\\right)s = ${u6.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique}
-            \\end{cases}$`
-
-          texteCorr += `$\\quad\\quad\\begin{cases}
+            \\end{cases}\\quad\\quad\\begin{cases}
             ${u1.differenceFraction(u2).simplifie().texFraction}s =${u5.differenceFraction(u4).simplifie().texFraction} \\\\
             ${u1.differenceFraction(u3).simplifie().texFraction}s = ${u6.differenceFraction(u4).simplifie().texFraction}
             \\end{cases}$`
           texteCorr += `<br><br>$\\begin{cases}
            s =${u5.differenceFraction(u4).simplifie().texFraction} \\times ${quotient1.simplifie().ecritureParentheseSiNegatif} \\\\
           s = ${u6.differenceFraction(u4).simplifie().texFraction} \\times ${quotient2.simplifie().ecritureParentheseSiNegatif} \\\\
-            \\end{cases}$`
-
-          texteCorr += `$\\quad\\quad\\begin{cases}
+            \\end{cases}\\quad\\quad\\begin{cases}
           s =${resultat1.simplifie().texFraction} \\\\
           s = ${resultat2.simplifie().texFraction}
             \\end{cases}$<br>`
@@ -364,10 +351,8 @@ export default class NomExercice extends Exercice {
           texteCorr += `d'où $~~t =${texNombre(t)}$.<br>`
 
           texteCorr += `${texteGras('Réciproquement')}, on vérifie que pour $t=${texNombre(t)}~~$ et $~~s=${resultat2.simplifie().texFraction}$, les deux représentations donnent les coordonnées de leur point commun.<br>`
-          texteCorr += `$(d):\\begin{cases}x=${ux}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(xA)}\\\\[7pt] y=${uy}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(yA)}\\\\[7pt] z=${uz}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(zA)}\\end{cases}$`
-          texteCorr += `$\\quad\\quad(d):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$<br>`
-          texteCorr += `$(d'):\\begin{cases}x=${vx}\\times ${ecritureParentheseSiNegatif(resultat2.simplifie())}${ecritureAlgebrique(xB)}\\\\[7pt] y=${vy}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(yB)}\\\\[7pt] z=${vz}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(zB)}\\end{cases}$`
-          texteCorr += `$\\quad\\quad(d'):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$<br>`
+          texteCorr += `$(d):\\begin{cases}x=${ux}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(xA)}\\\\[7pt] y=${uy}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(yA)}\\\\[7pt] z=${uz}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(zA)}\\end{cases}\\quad\\quad(d):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$<br>`
+          texteCorr += `$(d'):\\begin{cases}x=${vx}\\times ${ecritureParentheseSiNegatif(resultat2.simplifie())}${ecritureAlgebrique(xB)}\\\\[7pt] y=${vy}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(yB)}\\\\[7pt] z=${vz}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(zB)}\\end{cases}\\quad\\quad(d'):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$<br>`
           texteCorr += `On a montré que les droites $(d)$ et $(d')$ étaient sécantes au point de coordonnées $(${texNombre(ux * t + xA)}; ${texNombre(uy * t + yA)};${texNombre(uz * t + zA)})$.<br>`
 
           texteCorr += texteEnCouleurEtGras('Conclusion :') + '<br>'
@@ -385,8 +370,7 @@ export default class NomExercice extends Exercice {
         // */
 
         case 'paralleles': // Droites parallèles
-          texte += `$(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}$`
-          texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$<br><br>`
+          texte += `$(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$<br><br>`
           // On écrit les représentations paramétriques des droites (d) et (d')
           texte += `${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
 

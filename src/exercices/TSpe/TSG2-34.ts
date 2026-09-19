@@ -128,8 +128,7 @@ export default class nomExercice extends Exercice {
       texteCorr += `On en déduit que dans notre situation, un vecteur directeur de la droite $(\\Delta)$ est $\\overrightarrow{u}\\begin{pmatrix} ${a}\\\\${b}\\\\${c}\\end{pmatrix}$<br>`
       texteCorr +=
         'On calcule les coordonnées du vecteur $\\overrightarrow{AB}$ vecteur directeur de la droite $(AB)$ :<br>'
-      texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix} ${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$`
-      texteCorr += `$\\iff\\overrightarrow{AB}\\begin{pmatrix} ${xB-xA}\\\\${yB - yA}\\\\${zB - zA}\\end{pmatrix}$<br>`
+      texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix} ${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}\\iff\\overrightarrow{AB}\\begin{pmatrix} ${xB-xA}\\\\${yB - yA}\\\\${zB - zA}\\end{pmatrix}$<br>`
       texteCorr += 'On calcule le produit scalaire de ces deux vecteurs : <br>'
       texteCorr += `$\\overrightarrow{u}\\cdot\\overrightarrow{AB} = ${a}\\times ${ecritureParentheseSiNegatif(xB - xA)}+${ecritureParentheseSiNegatif(b)}\\times ${ecritureParentheseSiNegatif(yB - yA)}+${ecritureParentheseSiNegatif(c)}\\times ${ecritureParentheseSiNegatif(zB - zA)}=${a * (xB - xA) + b * (yB - yA) + c * (zB - zA)}$<br>`
       texteCorr += 'Le produit scalaire des deux vecteurs directeurs étant'
