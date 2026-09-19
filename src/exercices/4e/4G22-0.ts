@@ -198,7 +198,7 @@ export default class TriangleEquilateral extends Exercice {
     this.besoinFormulaire2Numerique = [
       'Type de réponse attendue',
       3,
-      '1 : Valeur exacte\n2 : Valeur approchée par excès ou par défaut à 0,1 cm près\n3 : Valeur arrondie à 0,1 cm près',
+      '1 : Valeur exacte\n2 : Valeur approchée par excès ou par défaut à 0,1 près\n3 : Valeur arrondie à 0,1 près',
     ]
     this.sup2 = 1
     this.besoinFormulaire3CaseACocher = ['Avec figure', true]
@@ -216,19 +216,19 @@ export default class TriangleEquilateral extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
-      const typeDeReponse =
-        this.sup2 === 1
-          ? 'Donner la valeur exacte'
-          : this.sup2 === 2
-            ? 'Donner une valeur approchée à 0,1 cm près'
-            : 'Donner la valeur arrondie à 0,1 cm près'
-
       const nomTriangle = choisitLettresDifferentes(3).join('')
       const nomPied = choisitLettresDifferentes(1, nomTriangle, true)[0]
 
       let cote: number = 0
       let hauteur: number = 0
       const typeDeQuestion = listeTypeDeQuestions[i]
+      const uniteReponse = typeDeQuestion === 2 ? 'cm²' : 'cm'
+      const typeDeReponse =
+        this.sup2 === 1
+          ? 'Donner la valeur exacte'
+          : this.sup2 === 2
+            ? `Donner une valeur approchée à 0,1 ${uniteReponse} près`
+            : `Donner la valeur arrondie à 0,1 ${uniteReponse} près`
       let question = ''
       let correction = ''
       switch (typeDeQuestion) {
