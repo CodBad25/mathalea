@@ -99,15 +99,18 @@ STABILITY_UUIDS='2359a e528e' pnpm stability:check
 ```
 
 En CI et en local sur une modification en cours, `CHANGED_FILES` restreint le
-contrôle aux exercices concernés. Si un fichier de `src/lib/` ou `src/modules/`
-a bougé, tout le catalogue est contrôlé : un utilitaire partagé qui change ses
-tirages les décale tous.
+contrôle aux exercices concernés. Si un fichier de `src/lib/`, `src/modules/` ou
+un fichier partagé de `src/exercices/` a bougé, tout le catalogue est contrôlé :
+un utilitaire ou un parent partagé qui change ses tirages peut décaler tous ses
+descendants.
 
-Le fichier `src/json/uuidsToUrlFR.json` doit être à jour (`pnpm makeJson`).
+La commande commence par `pnpm makeJson` afin de construire et mettre à jour
+les catalogues JSON dont le test a besoin. Elle est donc exécutable directement
+sur un nouveau checkout après l'installation des dépendances.
 
-Le catalogue complet représente environ 4 400 exercices, quelque 18 000 tirages
-et quatre minutes d'exécution ; en mode `CHANGED_FILES` sur quelques fichiers,
-quelques secondes.
+Le catalogue complet représente environ 4 400 exercices et 12 000 combinaisons,
+pour deux à trois minutes d'exécution ; en mode `CHANGED_FILES` sur quelques
+fichiers, quelques secondes.
 
 ## Où le test tourne
 
@@ -244,13 +247,11 @@ est le signal visible qu'un exercice ne rendra plus les mêmes valeurs. Une
 relecture doit s'y arrêter. Le fichier tient une ligne par exercice pour qu'une
 dérive apparaisse comme une seule ligne modifiée.
 
-Une entrée absente n'est pas contrôlée — exercice nouveau, ou combinaison de
-paramètres nouvelle : elle sera ajoutée à la prochaine régénération. En
-contrepartie, un fichier entièrement absent rendrait la suite verte sans rien
-comparer : le test le détecte et échoue explicitement dans ce cas. À
-l'inverse, une combinaison présente dans le fichier mais que l'exercice ne
-propose plus est signalée : les liens qui l'utilisaient n'affichent plus la même
-chose.
+Une entrée absente fait échouer le contrôle : après l'ajout d'un exercice ou
+d'une combinaison de paramètres, lancer `pnpm stability:update` et ajouter le
+registre au commit. Une combinaison présente dans le registre mais que
+l'exercice ne propose plus est également bloquante : les liens qui l'utilisaient
+n'affichent plus la même chose.
 
 ## Exercices qui bouclent sur un réglage
 
@@ -260,11 +261,11 @@ l'utilisateur cette valeur n'existe pas. La génération ne s'arrête alors jama
 
 Le test compte les appels à `Math.random` pendant chaque génération et
 abandonne au-delà de `MAX_TIRAGES_PAR_GENERATION`
-(`tests/e2e/helpers/empreinteExercice.ts`). La combinaison fautive est écartée
-et signalée, l'exercice reste protégé sur les autres :
+(`tests/e2e/helpers/empreinteExercice.ts`). La combinaison fautive fait échouer
+le contrôle afin qu'un réglage qui fige le navigateur ne puisse pas être ignoré :
 
 ```
-⚠️  1 combinaison(s) de paramètres n'ont pas pu être générées :
+❌ Impossible de contrôler la combinaison de paramètres :
   - 3e/3G10-2.ts (d5f34) : s=8 : plus de 2000000 tirages aléatoires consommés
 ```
 
@@ -274,9 +275,9 @@ le choisit fige son navigateur. Ils se corrigent à part, dans l'exercice.
 
 ## Limites
 
-- Les exercices qui ne se chargent pas dans l'environnement de test (jsdom) sont
-  listés en fin d'exécution et laissés de côté. Les autres suites
-  (`console_errors`, `all_exercises`) couvrent ces plantages.
+- Les entrées techniques du catalogue (`apps/`, `ressources/` et outils Svelte)
+  sont explicitement exclues. Un exercice ordinaire qui ne se charge pas dans
+  l'environnement de test fait échouer le contrôle.
 - Une seule graine par exercice : une dérive qui ne se manifesterait que pour
   certaines valeurs tirées peut passer inaperçue.
 - Le garde-fou ne détecte que les boucles qui consomment de l'aléatoire. Une

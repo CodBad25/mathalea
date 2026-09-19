@@ -76,9 +76,15 @@ it('conserve le format clique-figure de 3Auto, graine jYwp, après chargement pu
   const checkQuestion = () => {
     const index = exercise.questionRefs?.indexOf('3AutoI01-1') ?? -1
     expect(index).toBeGreaterThanOrEqual(0)
-    expect(exercise.autoCorrection[index].formatInteractif).toBe('clique-figure')
-    expect(exercise.listeQuestions[index]).toContain(`cliquefigure0Ex0Q${index}`)
-    expect(exercise.listeQuestions[index]).not.toContain(`champTexteEx0Q${index}`)
+    expect(exercise.autoCorrection[index].formatInteractif).toBe(
+      'clique-figure',
+    )
+    expect(exercise.listeQuestions[index]).toContain(
+      `cliquefigure0Ex0Q${index}`,
+    )
+    expect(exercise.listeQuestions[index]).not.toContain(
+      `champTexteEx0Q${index}`,
+    )
   }
   checkQuestion()
   exercise.nouvelleVersion()
@@ -111,6 +117,7 @@ describe('createAutomatismesCanExercice', () => {
     })
     const exercice = new Exercice()
     const form = exercice.besoinFormulaireNombresCategories as CategoriesForm
+    expect(exercice.besoinFormulaireCaseACocher).toBe(false)
     // La catégorie B n'a qu'un seul exercice disponible
     expect(form.categories.map((c) => c.max)).toEqual([2, 1])
     expect(exercice.sup).toBe('2-1')
