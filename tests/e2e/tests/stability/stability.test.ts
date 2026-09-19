@@ -105,6 +105,12 @@ const FICHIER_EMPREINTES = resolve(
 
 type Registre = Record<string, EmpreinteExercice>
 
+type ExerciceAvecGenerationAsynchrone = IExercice & {
+  generationStatus?: 'loading' | 'ready' | 'error'
+}
+
+const TIMEOUT_GENERATION_ASYNCHRONE_MS = 30_000
+
 /** Catalogue uuid -> chemin, généré par `pnpm makeJson`. */
 const uuidVersFichier: Record<string, string> = (() => {
   const fichier = resolve(RACINE, 'src/json/uuidsToUrlFR.json')
@@ -128,6 +134,34 @@ function chargeRegistre(): Registre {
 /** Libellé lisible d'une combinaison : `paramètres par défaut` ou `s=2`. */
 function libelle(cle: string): string {
   return cle === '' ? 'paramètres par défaut' : cle
+}
+
+/** Les entrées techniques du catalogue ne sont pas des exercices à empreinter. */
+function estExerciceControlable(chemin: string): boolean {
+  return (
+    !chemin.endsWith('.svelte') &&
+    !chemin.startsWith('apps/') &&
+    !chemin.startsWith('ressources/')
+  )
+}
+
+/** Attend les exercices qui chargent leurs sous-exercices dynamiquement. */
+async function attendGenerationAsynchrone(exercice: IExercice): Promise<void> {
+  const exerciceAsynchrone = exercice as ExerciceAvecGenerationAsynchrone
+  if (exerciceAsynchrone.generationStatus !== 'loading') return
+
+  const debut = Date.now()
+  while (exerciceAsynchrone.generationStatus === 'loading') {
+    if (Date.now() - debut > TIMEOUT_GENERATION_ASYNCHRONE_MS) {
+      throw new Error(
+        `génération asynchrone inachevée après ${TIMEOUT_GENERATION_ASYNCHRONE_MS} ms`,
+      )
+    }
+    await new Promise((resolve) => setTimeout(resolve, 10))
+  }
+  if (exerciceAsynchrone.generationStatus === 'error') {
+    throw new Error('la génération asynchrone a échoué')
+  }
 }
 
 /** Charge une instance neuve, prête à générer, ou lève si elle est inutilisable. */
@@ -182,7 +216,7 @@ function declarationsFormulaires(
 async function empreinteDeLExercice(
   uuid: string,
   chemin: string,
-): Promise<{ empreinte: EmpreinteExercice; combinaisonsEnEchec: string[] }> {
+): Promise<EmpreinteExercice> {
   const graine = grainePourUuid(uuid)
   const modele = await chargeExercice(uuid, chemin)
   const combinaisons = combinaisonsParametres(declarationsFormulaires(modele), [
@@ -193,7 +227,6 @@ async function empreinteDeLExercice(
   modele.destroy?.()
 
   const v: Record<string, string> = {}
-  const combinaisonsEnEchec: string[] = []
   for (const { cle, valeurs } of combinaisons) {
     // instance neuve à chaque combinaison : aucun état ne fuit d'un tirage à
     // l'autre, exactement comme quand un utilisateur ouvre un lien
@@ -209,15 +242,13 @@ async function empreinteDeLExercice(
       } else {
         exercice.nouvelleVersionWrapper()
       }
+      await attendGenerationAsynchrone(exercice)
       v[cle] = empreinteTirage(
         [...(exercice.listeQuestions ?? [])].map(String),
         [...(exercice.listeCorrections ?? [])].map(String),
       )
     } catch (e) {
-      // Une combinaison qui plante ne doit pas priver l'exercice de la
-      // protection acquise sur les autres : on la laisse de côté et on la
-      // signale.
-      combinaisonsEnEchec.push(
+      throw new Error(
         `${chemin} (${uuid}) : ${libelle(cle)} : ${(e as Error).message}`,
       )
     } finally {
@@ -225,13 +256,15 @@ async function empreinteDeLExercice(
       exercice.destroy?.()
     }
   }
-  return { empreinte: { ex: chemin, v }, combinaisonsEnEchec }
+  return { ex: chemin, v }
 }
 
 const enMiseAJour = process.env.STABILITY_UPDATE === '1'
 const registre = chargeRegistre()
 const cibles = exercicesAControler(
-  Object.entries(uuidVersFichier) as [string, string][],
+  (Object.entries(uuidVersFichier) as [string, string][]).filter(([, chemin]) =>
+    estExerciceControlable(chemin),
+  ),
   process.env,
 )
 // Une mise à jour complète repart de zéro (les exercices supprimés
@@ -240,9 +273,8 @@ const nouveauRegistre: Registre =
   enMiseAJour && !selectionComplete(process.env) ? { ...registre } : {}
 const derives: string[] = []
 const textesModifies: string[] = []
-const nonControles: string[] = []
 const combinaisonsDisparues: string[] = []
-const combinaisonsEnEchec: string[] = []
+let miseAJourInvalide = false
 
 /** Empreinte d'un tirage qui n'a produit aucun énoncé. */
 const VIDE = empreinteTirage([], [])
@@ -269,38 +301,41 @@ describe(`Stabilité des tirages (${cibles.length} exercice(s))`, () => {
     it(`${chemin} (${uuid})`, async () => {
       let empreinte: EmpreinteExercice
       try {
-        const resultat = await empreinteDeLExercice(uuid, chemin)
-        empreinte = resultat.empreinte
-        combinaisonsEnEchec.push(...resultat.combinaisonsEnEchec)
+        empreinte = await empreinteDeLExercice(uuid, chemin)
       } catch (e) {
-        // Un exercice qui plante est déjà signalé par les autres suites
-        // (console_errors, all_exercises) : on ne le contrôle pas ici, mais on
-        // le liste pour ne pas croire à tort qu'il est protégé.
-        nonControles.push(`${chemin} (${uuid}) : ${(e as Error).message}`)
-        return
+        miseAJourInvalide = true
+        throw new Error(
+          `Impossible de contrôler ${chemin} (${uuid}) : ${(e as Error).message}`,
+        )
       }
       const attendue = registre[uuid]
       const aProduitUnEnonce = Object.values(empreinte.v).some(
         (e) => e !== VIDE,
       )
-      if (!aProduitUnEnonce && attendue === undefined) {
-        // Ni énoncé produit, ni empreinte de référence : rien à contrôler.
-        // Ce sont les « exercices » qui n'en sont pas (apps, ressources).
-        nonControles.push(`${chemin} (${uuid}) : aucun énoncé produit`)
-        return
+      if (!aProduitUnEnonce) {
+        miseAJourInvalide = true
+        throw new Error(`${chemin} (${uuid}) n'a produit aucun énoncé.`)
       }
       if (enMiseAJour) {
-        if (!aProduitUnEnonce) {
-          nonControles.push(`${chemin} (${uuid}) : aucun énoncé produit`)
-        } else {
-          nouveauRegistre[uuid] = empreinte
-        }
+        nouveauRegistre[uuid] = empreinte
         return
       }
       if (attendue === undefined) {
-        // Nouvel exercice : rien à comparer, il sera ajouté au registre à la
-        // prochaine régénération.
-        return
+        throw new Error(
+          `${chemin} (${uuid}) n'a pas d'empreinte de référence. ` +
+            'Lancer `pnpm stability:update` et ajouter le registre au commit.',
+        )
+      }
+
+      const nouvellesCombinaisons = Object.keys(empreinte.v).filter(
+        (cle) => attendue.v[cle] === undefined,
+      )
+      if (nouvellesCombinaisons.length > 0) {
+        throw new Error(
+          `${chemin} (${uuid}) a de nouvelles combinaisons sans référence : ` +
+            nouvellesCombinaisons.map(libelle).join(', ') +
+            '. Lancer `pnpm stability:update`.',
+        )
       }
 
       const nombresAttendus: Record<string, string> = {}
@@ -311,7 +346,9 @@ describe(`Stabilité des tirages (${cibles.length} exercice(s))`, () => {
           // Le paramètre n'existe plus : les liens qui l'utilisaient ne
           // pointent plus sur la même chose, mais il n'y a rien à comparer.
           combinaisonsDisparues.push(`${chemin} (${uuid}) : ${libelle(cle)}`)
-          continue
+          throw new Error(
+            `La combinaison ${libelle(cle)} de ${chemin} (${uuid}) a disparu.`,
+          )
         }
         if (
           partieTexte(obtenue) !== partieTexte(reference) &&
@@ -351,6 +388,12 @@ function serialiseRegistre(registreASerialiser: Registre): string {
 
 afterAll(() => {
   if (enMiseAJour) {
+    if (miseAJourInvalide) {
+      console.error(
+        "Le registre n'a pas été modifié car au moins un exercice n'a pas pu être empreinté.",
+      )
+      return
+    }
     writeFileSync(FICHIER_EMPREINTES, serialiseRegistre(nouveauRegistre))
     const nbCombinaisons = Object.values(nouveauRegistre).reduce(
       (total, e) => total + Object.keys(e.v).length,
@@ -362,14 +405,6 @@ afterAll(() => {
     )
     // On ne sort pas : les rapports ci-dessous valent aussi — et surtout — pour
     // une régénération, puisqu'ils disent ce qui n'a pas pu être empreinté.
-  }
-  if (combinaisonsEnEchec.length > 0) {
-    console.log(
-      `\n⚠️  ${combinaisonsEnEchec.length} combinaison(s) de paramètres n'ont pas pu être générées :\n` +
-        `  - ${combinaisonsEnEchec.join('\n  - ')}\n` +
-        'Ces réglages sont proposés aux utilisateurs : une génération qui\n' +
-        "n'aboutit pas est un bug de l'exercice, à corriger à part.\n",
-    )
   }
   if (combinaisonsDisparues.length > 0) {
     console.log(
@@ -391,11 +426,6 @@ afterAll(() => {
   if (textesModifies.length > 0) {
     console.log(
       `\n⚠️  Texte modifié à valeurs numériques constantes (autorisé) :\n  - ${textesModifies.join('\n  - ')}\n`,
-    )
-  }
-  if (nonControles.length > 0) {
-    console.log(
-      `\nℹ️  ${nonControles.length} exercice(s) non contrôlé(s) :\n  - ${nonControles.join('\n  - ')}\n`,
     )
   }
 })

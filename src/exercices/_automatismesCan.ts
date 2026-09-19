@@ -123,6 +123,7 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       this.sup = clampedDefaultSup
       this.sup3 = false
       this.sup4 = false // graine figée de la sélection quand sup3 est coché
+      this.besoinFormulaireCaseACocher = false
       // Le nombre de questions découle des catégories : il ne se règle pas
       // depuis les vues qui proposent un champ « nombre de questions ».
       this.nbQuestionsModifiable = false
