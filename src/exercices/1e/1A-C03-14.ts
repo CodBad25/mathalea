@@ -14,7 +14,7 @@ export const uuid = '7233e'
 
 export const refs = {
   'fr-fr': ['1A-C03-14', '2A-N3-9'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-13'],
 }
 export default class Auto1AC03n extends calculPuissancesNegativeFraction {
   constructor() {

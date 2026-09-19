@@ -7,7 +7,7 @@ export const uuid = 'edf86'
 // @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-C05-2', '2A-N5-2'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-18'],
 }
 export const interactifReady = true
 

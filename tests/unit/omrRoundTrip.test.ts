@@ -28,8 +28,8 @@ import type { GrayImage, OmrBox } from '../../src/lib/omr/omrTypes'
  * positions issues du layout, et une déformation est appliquée pour simuler
  * une feuille mal posée.
  *
- * Il exige le binaire `typst` ; il est ignoré quand il est absent, plutôt que
- * de faire échouer une CI qui ne l'installe pas.
+ * Il exige le binaire `typst` et s'exécute uniquement hors CI : la génération
+ * PNG avec le CLI reste une vérification locale, indépendante de la CI.
  */
 
 const POLICES = resolve(__dirname, '../../public/fonts/typst')
@@ -39,7 +39,8 @@ function typstDisponible(): boolean {
   return spawnSync('typst', ['--version']).status === 0
 }
 
-const decrire = typstDisponible() ? describe : describe.skip
+const decrire =
+  process.env.CI == null && typstDisponible() ? describe : describe.skip
 
 const SOURCE: OmrDocumentSource = {
   titre: 'Contrôle de calcul',

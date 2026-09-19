@@ -966,6 +966,7 @@
           ? 'tasks'
           : (anchor.kind as
               | 'exo'
+              | 'version-exo'
               | 'corr'
               | 'gap'
               | 'header'
@@ -1881,7 +1882,33 @@
   /** Nouvelles données aléatoires pour l'exercice num */
   function newDataForExercise(num: number) {
     if (!confirmOverwrite()) return
-    applyNewSeedTo(num - 1)
+    const exerciseIndex = num - 1
+    if (previewVersion > 0) {
+      // Les sujets dérivés n'ont pas leur propre instance d'exercice : leur
+      // graine est conservée dans `versionSeeds`. On ne touche donc pas à la
+      // graine du Sujet A lorsque la pastille d'un Sujet B, C... est cliquée.
+      seedrandom(undefined, { global: true })
+      const token = Math.random().toString(36).slice(2, 8)
+      const pinnedSeeds = (documentOptions.versionSeeds ?? []).map((entry) =>
+        entry == null ? entry : [...entry],
+      )
+      pinnedSeeds[previewVersion] = exercises.map((exercise, index) => {
+        const current = pinnedSeeds[previewVersion]?.[index]
+        if (index !== exerciseIndex) {
+          return (
+            current ??
+            (exercise?.seed == null ? null : `${exercise.seed}${previewVersion}`)
+          )
+        }
+        return exercise?.seed == null
+          ? null
+          : `${exercise.seed}${previewVersion}~${token}`
+      })
+      documentOptions.versionSeeds = pinnedSeeds
+      persistPreferences()
+    } else {
+      applyNewSeedTo(exerciseIndex)
+    }
     exercicesParams.update((list) => list)
     const code = buildCode()
     setEditorContent(code)
@@ -2755,8 +2782,9 @@
       input.canQuestions = input.questions.map((question, i) => {
         const canEnonce = exercise.listeCanEnonces?.[i]
         if (canEnonce != null && canEnonce.length > 0) return format(canEnonce)
-        return input.consigne.length > 0
-          ? `${input.consigne}<br>${question}`
+        const consigne = input.consigne ?? ''
+        return consigne.length > 0
+          ? `${consigne}<br>${question}`
           : question
       })
       input.canAnswers = input.questions.map((_, i) =>

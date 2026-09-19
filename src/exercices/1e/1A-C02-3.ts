@@ -9,7 +9,7 @@ export const uuid = '90725'
 // @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C02-3', '2A-N2-3'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-13'],
 }
 export const interactifReady = true
 

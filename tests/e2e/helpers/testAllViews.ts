@@ -86,7 +86,7 @@ export async function testAllViews(
     ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/?`
     : 'https://coopmaths.fr/alea/?'
   await page.goto(hostname + options.params)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
   await checkEachCombinationOfParams(
     page,
     async (page, description, isFullViews) => {
@@ -187,7 +187,7 @@ async function checkStudentVariation(
   await page.click(`text=${variation}`)
   page.click('text=Visualiser') // Si on await ici, on risque de manquer le context.waitForEvent('page') qui suit
   const newPage = await browserContext.waitForEvent('page')
-  await newPage.waitForLoadState('networkidle')
+  await newPage.waitForLoadState('domcontentloaded')
 
   if (variation === 'Course aux nombres') {
     await newPage.click('text=Démarrer')

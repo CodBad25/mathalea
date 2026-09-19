@@ -1,8 +1,12 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 74438 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 18/09/2026 (commit cb9e1d9e3).
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import type { OptionsComparaisonType } from '../../lib/types'
 import Exercice from '../Exercice'
-import Equation3L13 from './3L13'
+import Equation3L13 from './3L13-old2'
 import Equation3L14 from './3L14'
 import Equation3L15 from './3L15'
 
@@ -11,19 +15,17 @@ export const interactifReady = true
 export const dateDePublication = '13/06/2026'
 export const titre = 'Exercice de synthèse sur les équations'
 
-export const dateDeModifImportante = '18/09/2026'
-
-export const uuid = 'de90b'
+export const uuid = '74438'
 export const refs = {
-  'fr-fr': ['3L15-3'],
-  'fr-ch': ['11FA5B-8'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
 /**
  * Mélange d'équations du premier degré ou assimilées, de niveau facile à difficile. Les types d'équations sont ceux des exercices 3L13, 3L14 et 3L15.
  * @author Jean-Claude Lhote
  */
-export default class EquationMelees extends Exercice {
+export default class EquationMeleesOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [

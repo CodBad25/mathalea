@@ -371,6 +371,8 @@ protocole interne vers la page. L'analyse échoue alors sans message exploitable
   mélangées, feuille à l'envers, copie manquante, scanner mal réglé.
 
 Ces deux derniers exigent le binaire `typst` et sont ignorés s'il est absent.
+`omrRoundTrip` est en outre ignoré en CI : sa génération PNG par le CLI est une
+vérification locale, indépendante de la suite CI.
 `tests/unit/omrPngDecode.ts` fournit un décodeur PNG minimal : les tests
 tournent sous Node et jsdom, où il n'y a ni canevas ni `ImageData`.
 

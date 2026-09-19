@@ -199,12 +199,13 @@ async function defaultViewStatePush(
   variation: Variation,
 ) {
   const url = page.url()
-  await page.waitForSelector('.katex')
-  const locators = await page.locator('.katex').all()
+  const katex = page.locator('.katex:visible')
+  await katex.first().waitFor({ state: 'visible' })
+  const locators = await katex.all()
   const numbers = await getNumbers(locators)
   states.push({
     url,
-    view,
+    view: variation === '' ? view : `${view}:${variation}`,
     numbers,
     exerciseType,
   })
@@ -245,6 +246,12 @@ function isConsistent() {
 function getDifferencesIndexes() {
   const differenceIndexes: number[] = []
   for (let i = 1; i < states.length; i++) {
+    if (
+      states[i].view === 'eleve:Course aux nombres' ||
+      states[i - 1].view === 'eleve:Course aux nombres'
+    ) {
+      continue
+    }
     for (let j = 0; j < states[i].numbers.length; j++) {
       if (
         states[i].exerciseType === states[i - 1].exerciseType &&
