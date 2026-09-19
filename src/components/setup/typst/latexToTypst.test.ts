@@ -188,6 +188,70 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bracket.r')
   })
 
+  it('conserve les crochets dont le contenu est uniquement en minuscules', () => {
+    // Régression : pour nettoyer le `[union]` ambigu produit par tex2typst
+    // entre deux intervalles, une ancienne règle supprimait toute paire de
+    // crochets autour de minuscules, notamment [x], [abc] et K[x].
+    for (const expression of ['[x]', '[abc]', 'K[x]', '[a][b]']) {
+      const result = latexMathToTypst(expression)
+      const expectedPairs = expression.split('[').length - 1
+      expect(result.match(/bracket\.l/g)?.length, expression).toBe(
+        expectedPairs,
+      )
+      expect(result.match(/bracket\.r/g)?.length, expression).toBe(
+        expectedPairs,
+      )
+    }
+  })
+
+  it("conserve les crochets littéraux autour d'un opérateur d'ensemble", () => {
+    const result = latexMathToTypst('[\\cup]')
+    expect(result).toContain('lr(bracket.l union bracket.r)')
+  })
+
+  it('ne réinterprète pas les crochets du texte inclus', () => {
+    expect(latexMathToTypst('\\text{[x]}')).toBe('#txt("[x]")')
+    expect(latexMathToTypst('\\text{[12]}')).toBe('"[12]"')
+    expect(latexMathToTypst('\\text{mot [AB] mot}')).toBe(
+      '#txt("mot [AB] mot")',
+    )
+    expect(
+      latexMathToTypst(
+        '{\\color{#f15929}\\boldsymbol{\\text{la médiatrice du segment [AB]}}}',
+      ),
+    ).toContain('#txt("la médiatrice du segment [AB]")')
+  })
+
+  it('convertit les crochets isolés en gras ou mis en évidence', () => {
+    expect(latexMathToTypst('\\boldsymbol{[}')).toBe('bold(bracket.l)')
+    expect(latexMathToTypst('\\boldsymbol{]}')).toBe('bold(bracket.r)')
+
+    const highlightedOpen = latexMathToTypst(
+      '{\\color{#f15929}\\boldsymbol{[}}',
+    )
+    const highlightedClose = latexMathToTypst(
+      '{\\color{#f15929}\\boldsymbol{]}}',
+    )
+    expect(highlightedOpen).toBe(
+      'text(fill: #rgb("#f15929"), bold(bracket.l))',
+    )
+    expect(highlightedClose).toBe(
+      'text(fill: #rgb("#f15929"), bold(bracket.r))',
+    )
+    for (const result of [highlightedOpen, highlightedClose]) {
+      expect(result).not.toContain('text paren.l')
+      expect((result.match(/\(/g) ?? []).length).toBe(
+        (result.match(/\)/g) ?? []).length,
+      )
+    }
+  })
+
+  it('ignore les parenthèses qui appartiennent au texte inclus', () => {
+    expect(latexMathToTypst('\\text{(x}')).toBe('#txt("(x")')
+    expect(latexMathToTypst('\\text{x)}')).toBe('#txt("x)")')
+    expect(latexMathToTypst('\\text{(x)}')).toBe('#txt("(x)")')
+  })
+
   it('convertit le texte inclus dans les formules via #txt (police du texte)', () => {
     expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin#txt("cm")')
   })
