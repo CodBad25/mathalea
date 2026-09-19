@@ -34,6 +34,7 @@ export type Mathalea2DOptions = {
   pixelsParCm?: number
   scale?: number
   zoom?: number
+  vraieGrandeur?: boolean
   optionsTikz?: string | string[]
   mainlevee?: boolean
   amplitude?: number
@@ -81,6 +82,7 @@ const innerWrapperStyle = 'position: relative; display: inline-block'
  *  @param {number?} [options.pixelsParCm]
  *  @param {number?} [options.scale = 1]
  *  @param {number?} [options.zoom = 1]
+ *  @param {boolean?} [options.vraieGrandeur = false] En sortie Typst, empêche la figure de se réduire pour tenir dans une colonne étroite (à réserver aux figures de construction/mesure, où la taille imprimée doit rester fidèle aux longueurs indiquées ; une figure purement illustrative peut au contraire se réduire pour tenir dans la mise en page).
  *  @param {string|string[]?} [options.optionsTikz = []]
  *  @param {boolean?} [options.mainlevee]
  *  @param {number?} [options.amplitude]
@@ -98,6 +100,7 @@ export function mathalea2d(
     pixelsParCm = 20,
     scale = 1,
     zoom = 1,
+    vraieGrandeur = false,
     optionsTikz = [],
     mainlevee = false,
     amplitude = 1,
@@ -323,7 +326,16 @@ export function mathalea2d(
   // On prépare le code HTML
   const divsLatex: string[] = []
   const reflectionAnimationIds: string[] = []
-  let codeSvg = `<svg class="mathalea2d"  ${id !== '' ? `id="${id}"` : ''} width="${(xmax - xmin) * pixelsParCm * zoom}" height="${
+  // `data-width-cm`/`data-height-cm` : taille physique réelle de la figure
+  // (indépendante de `pixelsParCm`/`zoom`, qui ne pilotent que la taille de
+  // rendu à l'écran ; alignée sur `scale`, seul facteur qui redimensionne
+  // aussi la figure tikz en LaTeX), reprise par la conversion Typst
+  // (`svgToTypstImage`, `latexToTypst.ts`) pour afficher la figure en vraie
+  // grandeur dans le PDF, comme le fait déjà tikz en LaTeX à partir de ces
+  // mêmes coordonnées. `data-vraie-grandeur` (posé si `vraieGrandeur`) va plus
+  // loin : il empêche aussi la réduction automatique qui, sinon, adapte la
+  // figure à la largeur de la colonne courante (`mathalea-figure-block`).
+  let codeSvg = `<svg class="mathalea2d"  ${id !== '' ? `id="${id}"` : ''} data-width-cm="${(xmax - xmin) * scale}" data-height-cm="${(ymax - ymin) * scale}"${vraieGrandeur ? ' data-vraie-grandeur="1"' : ''} width="${(xmax - xmin) * pixelsParCm * zoom}" height="${
     (ymax - ymin) * pixelsParCm * zoom
   }" viewBox="${xmin * pixelsParCm} ${-ymax * pixelsParCm} ${
     (xmax - xmin) * pixelsParCm

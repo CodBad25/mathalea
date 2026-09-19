@@ -927,6 +927,36 @@ function qcmFigureTasksPrefixes(code: string | string[]): Set<string> {
 }
 
 /**
+ * Marqueur émis en tête d'un `#tasks(...)[...]` (mode aperçu uniquement)
+ * dont au moins une question contient une figure `vraieGrandeur` (voir
+ * `mathalea2d.ts`) — posé par `exerciseBody`, repéré par
+ * `trueSizeFigureTasksPrefixes`.
+ */
+const TRUE_SIZE_FIGURE_MARKER = '// mathalea:vraie-grandeur'
+
+/**
+ * Préfixes (`ex1`, `ex2-corr`...) des exercices dont au moins une question
+ * contient une figure `vraieGrandeur`, repérés au marqueur
+ * `TRUE_SIZE_FIGURE_MARKER`. Une telle figure ne se réduit jamais pour tenir
+ * dans une colonne plus étroite (`force-true-size`, voir
+ * `mathalea-figure-block`) : sans une seule colonne par défaut, elle
+ * empiéterait sur la question voisine dès que l'exercice en a plusieurs — le
+ * professeur garde la main s'il en choisit davantage depuis la palette,
+ * comme pour les QCM à figures ci-dessous.
+ */
+function trueSizeFigureTasksPrefixes(code: string | string[]): Set<string> {
+  const lines = Array.isArray(code) ? code : code.split('\n')
+  return new Set(
+    lines
+      .filter((line) => line.includes(TRUE_SIZE_FIGURE_MARKER))
+      .flatMap((line) => [
+        ...line.matchAll(/#tasks\(columns: (ex\d+(?:-corr)?)-colonnes/g),
+      ])
+      .map((match) => match[1]),
+  )
+}
+
+/**
  * Préfixes (`ex1`, `ex2`...) des exercices dont les lignes de réponse sont
  * posées après chaque question, repérés au marqueur émis par
  * `writingLinesCall`. Ces listes-là sont déclarées à une colonne par défaut :
@@ -939,7 +969,9 @@ function perQuestionLinesTasksPrefixes(code: string | string[]): Set<string> {
   const lines = Array.isArray(code) ? code : code.split('\n')
   return new Set(
     lines
-      .flatMap((line) => [...line.matchAll(/\/\/ mathalea:lignes-apres\((\d+)\)/g)])
+      .flatMap((line) => [
+        ...line.matchAll(/\/\/ mathalea:lignes-apres\((\d+)\)/g),
+      ])
       .map((match) => `ex${match[1]}`),
   )
 }
@@ -956,6 +988,7 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   // qu'à la toute première génération
   const qcmFigurePrefixes = qcmFigureTasksPrefixes(code)
   const perQuestionLinesPrefixes = perQuestionLinesTasksPrefixes(code)
+  const trueSizeFigurePrefixes = trueSizeFigureTasksPrefixes(code)
   for (const match of code.matchAll(
     /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
   )) {
@@ -963,7 +996,9 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     // « Colonnes des questions » du document (voir la boucle de
     // `buildTypstDocument` qui déclare `#let exN-qcm-colonnes`)
     const defaultColumns =
-      qcmFigurePrefixes.has(match[1]) || perQuestionLinesPrefixes.has(match[1])
+      qcmFigurePrefixes.has(match[1]) ||
+      perQuestionLinesPrefixes.has(match[1]) ||
+      trueSizeFigurePrefixes.has(match[1])
         ? '1'
         : match[1].endsWith('-qcm')
           ? DEFAULT_TASKS_COLUMNS
@@ -2015,6 +2050,15 @@ function exerciseBody(
       htmlToTypst(question, figures, zoomVariable, undefined, qcmColumnsExpr),
     )
     .filter((question) => question.length > 0)
+  // une figure `vraieGrandeur` (voir mathalea2d.ts) ne se réduit jamais pour
+  // tenir dans une colonne plus étroite (`force-true-size: true`, posé par
+  // `mathalea2dContainerToTypst`) : sans ce repérage, elle empiéterait sur la
+  // question voisine dès que l'exercice a plus d'une colonne — voir
+  // `trueSizeFigureTasksPrefixes`, même logique que les QCM à figures
+  // (`qcmHasFigure`).
+  const hasTrueSizeFigure = converted.some((question) =>
+    question.includes('force-true-size: true'),
+  )
   const willBuildList =
     tasksPrefix != null &&
     (converted.length > 1 || (forceList && converted.length === 1))
@@ -2084,13 +2128,20 @@ function exerciseBody(
       : ''
     const columnsExpr = exportMode
       ? (layoutOverride?.columns ??
-        questionsColumnsLiteral(options.questionsColumns))
+        (hasTrueSizeFigure
+          ? '1'
+          : questionsColumnsLiteral(options.questionsColumns)))
       : `${tasksPrefix}-colonnes`
     const gutterExpr = exportMode
       ? (layoutOverride?.gutter ?? `${options.questionsGutter}em`)
       : `${tasksPrefix}-gutter`
+    // repéré par `trueSizeFigureTasksPrefixes` pour donner par défaut une
+    // seule colonne à cet exercice en mode aperçu (le mode export a déjà
+    // résolu `columnsExpr` ci-dessus, ce marqueur ne lui sert à rien)
+    const trueSizeMarker =
+      !exportMode && hasTrueSizeFigure ? ` ${TRUE_SIZE_FIGURE_MARKER}` : ''
     parts.push(
-      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, options.boldQuestionNumbers, labelIsVariableRef)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
+      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, options.boldQuestionNumbers, labelIsVariableRef)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[${trueSizeMarker}\n${items.join('\n')}\n]`,
     )
     return {
       code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
@@ -2451,7 +2502,9 @@ export function buildStandaloneExerciseCode(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(`#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`)
+  lines.push(
+    `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
+  )
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
@@ -3269,6 +3322,9 @@ export function buildTypstDocument(
   // lignes de réponse après chaque question : liste à une colonne par défaut
   // (voir `perQuestionLinesTasksPrefixes`)
   const perQuestionLinesPrefixes = perQuestionLinesTasksPrefixes(allLines)
+  // exercice dont au moins une question contient une figure `vraieGrandeur` :
+  // une seule colonne par défaut (voir `trueSizeFigureTasksPrefixes`)
+  const trueSizeFigurePrefixes = trueSizeFigureTasksPrefixes(allLines)
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -3445,7 +3501,9 @@ export function buildTypstDocument(
       // les propositions de QCM ont leur propre défaut, indépendant du
       // réglage « Colonnes des questions » du document
       const defaultColumns =
-        qcmFigurePrefixes.has(prefix) || perQuestionLinesPrefixes.has(prefix)
+        qcmFigurePrefixes.has(prefix) ||
+        perQuestionLinesPrefixes.has(prefix) ||
+        trueSizeFigurePrefixes.has(prefix)
           ? '1'
           : prefix.endsWith('-qcm')
             ? DEFAULT_TASKS_COLUMNS
@@ -3484,7 +3542,9 @@ export function buildTypstDocument(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(`#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`)
+  lines.push(
+    `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
+  )
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   // police des formules ; les nombres et symboles restent en police maths
   lines.push('#show math.equation: set text(font: police-maths)')

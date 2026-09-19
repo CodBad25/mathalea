@@ -690,6 +690,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
         Object.assign({}, fixeBordures(objetsEnonceml), {
           pixelsParCm: 30,
           scale: 1,
+          vraieGrandeur: true,
           mainlevee: true,
           amplitude: context.isHtml ? 0.3 : 1,
         }),
@@ -703,6 +704,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             {
               pixelsParCm: 30,
               scale: 1,
+              vraieGrandeur: true,
               mainlevee: false,
             },
           ),
@@ -716,6 +718,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           {
             pixelsParCm: 30,
             scale: 1,
+            vraieGrandeur: true,
             mainlevee: false,
             display: 'block' as const,
           },
