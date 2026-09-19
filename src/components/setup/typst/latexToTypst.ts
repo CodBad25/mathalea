@@ -83,10 +83,19 @@ export const MATHALEA_FIT_HELPER = `#let mathalea-fit(body, zoom: 1.0) = layout(
  * d'un contenu encore différé par un layout() imbriqué ne donnerait pas sa
  * taille finale) puis appliqués manuellement (scale + pad), plutôt que via
  * mathalea-fit/align, pour rester cohérents entre eux.
+ *
+ * `force-true-size` (posé par `mathalea2dContainerToTypst` pour une figure
+ * `vraieGrandeur`, voir `mathalea2d.ts`) désactive la réduction automatique à
+ * la largeur disponible : une figure de construction/mesure doit garder sa
+ * taille physique réelle quel que soit le nombre de colonnes choisi pour la
+ * liste de questions, comme le fait déjà tikz en LaTeX (qui ne réduit jamais
+ * une figure, quitte à déborder de la colonne). Seul le zoom du professeur
+ * reste appliqué. Par défaut à `false`, il ne change rien aux appels
+ * existants.
  */
-export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, alignment, zoom, body) = layout(size => {
+export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, alignment, zoom, body, force-true-size: false) = layout(size => {
   let natural = measure(body).width
-  let f = if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
+  let f = if force-true-size { zoom } else if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
   let scaled = if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
   let content-width = natural * f
   // size.width peut être infini (conteneur sans largeur déterminée à ce
@@ -2252,15 +2261,59 @@ const MAX_FIGURE_WIDTH_PT = 380
  */
 const TABLE_CELL_FIGURE_MAX_WIDTH_PT = 130
 
-/** Dimensions (pt) d'une figure, mises à l'échelle pour ne pas dépasser `maxWidthPt` */
+/** 1 pouce = 2,54 cm = 72 pt (conversion physique cm → pt, indépendante de tout DPI écran) */
+const PT_PER_CM = 72 / 2.54
+
+/**
+ * Taille physique réelle (cm) d'une figure mathalea2d, posée par
+ * `mathalea2d.ts` en attributs `data-width-cm`/`data-height-cm` sur le SVG
+ * (indépendants de `pixelsParCm`/`zoom`, qui ne pilotent que la taille de
+ * rendu à l'écran). Absente pour un SVG qui n'est pas une figure mathalea2d
+ * (bloc Scratch, image statique...).
+ */
+function svgPhysicalDimensionsCm(
+  svg: string,
+): { widthCm: number; heightCm: number } | null {
+  const width = svg.match(/<svg[^>]*?\sdata-width-cm="([\d.]+)"/i)
+  if (width == null) return null
+  const height = svg.match(/<svg[^>]*?\sdata-height-cm="([\d.]+)"/i)
+  return {
+    widthCm: parseFloat(width[1]),
+    heightCm: height != null ? parseFloat(height[1]) : parseFloat(width[1]),
+  }
+}
+
+/**
+ * Une figure `vraieGrandeur` (voir `mathalea2d.ts`) porte `data-vraie-grandeur`
+ * sur son SVG : sa taille physique ne doit être réduite par aucun plafond
+ * automatique (ni `maxWidthPt` ici, ni la réduction à la largeur de colonne
+ * de `mathalea-figure-block`), pour une exercice de construction/mesure où la
+ * taille imprimée doit rester fidèle aux longueurs indiquées.
+ */
+function svgRequiresTrueSize(svg: string): boolean {
+  return /<svg[^>]*?\sdata-vraie-grandeur="1"/i.test(svg)
+}
+
+/**
+ * Dimensions (pt) d'une figure, mises à l'échelle pour ne pas dépasser
+ * `maxWidthPt`. Pour une figure mathalea2d, part de sa taille physique
+ * réelle (`data-width-cm`/`data-height-cm`) pour un rendu en vraie grandeur,
+ * comme le fait déjà tikz en LaTeX à partir des mêmes coordonnées cm ; sinon
+ * (SVG sans cette annotation), retombe sur la conversion CSS 96dpi
+ * (`widthPx * 0.75`) faute de taille physique connue. `maxWidthPt` lui-même
+ * ne s'applique pas à une figure `vraieGrandeur` (voir `svgRequiresTrueSize`).
+ */
 function scaledFigureDimensions(
+  svg: string,
   widthPx: number,
   heightPx: number,
   maxWidthPt: number = MAX_FIGURE_WIDTH_PT,
 ): { widthPt: number; heightPt: number } {
-  let widthPt = widthPx * 0.75
-  let heightPt = heightPx * 0.75
-  if (widthPt > maxWidthPt) {
+  const physical = svgPhysicalDimensionsCm(svg)
+  let widthPt = physical != null ? physical.widthCm * PT_PER_CM : widthPx * 0.75
+  let heightPt =
+    physical != null ? physical.heightCm * PT_PER_CM : heightPx * 0.75
+  if (widthPt > maxWidthPt && !(physical != null && svgRequiresTrueSize(svg))) {
     const factor = maxWidthPt / widthPt
     widthPt *= factor
     heightPt *= factor
@@ -2271,8 +2324,9 @@ function scaledFigureDimensions(
 /**
  * Expression Typst affichant un SVG mathalea2d embarqué dans le code
  * (le document reste autonome : il compile aussi avec le CLI typst).
- * La largeur reprend celle de la figure (96 px CSS = 72 pt), plafonnée à
- * `maxWidthPt` (`MAX_FIGURE_WIDTH_PT`, largeur pleine page, par défaut).
+ * La largeur reprend la taille physique réelle de la figure (vraie grandeur,
+ * voir `scaledFigureDimensions`), plafonnée à `maxWidthPt`
+ * (`MAX_FIGURE_WIDTH_PT`, largeur pleine page, par défaut).
  * Un plafond plus étroit est nécessaire pour une image embarquée dans une
  * cellule de tableau (`#table` dimensionne chaque colonne `auto` sur sa
  * largeur intrinsèque, mesurée avant tout redimensionnement à l'exécution
@@ -2295,6 +2349,7 @@ export function svgToTypstImage(
   if (width != null) {
     const heightPx = h != null ? parseFloat(h[1]) : parseFloat(width[1])
     const scaled = scaledFigureDimensions(
+      cleaned,
       parseFloat(width[1]),
       heightPx,
       maxWidthPt,
@@ -2445,7 +2500,13 @@ function mathalea2dContainerToTypst(
   const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
   const widthPx = width != null ? parseFloat(width[1]) : 213.3
   const heightPx = height != null ? parseFloat(height[1]) : 120
-  const scaled = scaledFigureDimensions(widthPx, heightPx, maxWidthPt)
+  const scaled = scaledFigureDimensions(
+    svgMatch[0],
+    widthPx,
+    heightPx,
+    maxWidthPt,
+  )
+  const forceTrueSize = svgRequiresTrueSize(svgMatch[0])
   // les positions des labels sont en pixels de la figure d'origine : le
   // même facteur d'échelle que l'image doit leur être appliqué, sinon ils
   // se retrouvent mal placés une fois la figure plafonnée à MAX_FIGURE_WIDTH_PT
@@ -2470,11 +2531,12 @@ function mathalea2dContainerToTypst(
   // mathalea-figure-block réduit la figure si elle dépasse la largeur
   // disponible, applique le zoom choisi par le professeur, l'aligne et place
   // le repère invisible de la palette de mise en page au coin haut-droit de
-  // son rendu final
+  // son rendu final — sauf si `vraieGrandeur` (voir mathalea2d.ts) impose la
+  // taille physique réelle quel que soit le nombre de colonnes
   return [
     `#mathalea-figure-block(${figureIndex}, ${alignVar}, ${zoomVar},`,
     body,
-    ')',
+    forceTrueSize ? ', force-true-size: true)' : ')',
   ].join('\n')
 }
 

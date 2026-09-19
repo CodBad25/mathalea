@@ -491,6 +491,64 @@ describe('buildTypstDocument', () => {
     expect(code).not.toContain('ex1-qcm-colonnes')
   })
 
+  describe('figures `vraieGrandeur` (construction/mesure)', () => {
+    // figure mathalea2d posée avec `vraieGrandeur: true` (voir mathalea2d.ts) :
+    // elle ne se réduit jamais pour tenir dans une colonne, contrairement à
+    // une figure illustrative ordinaire (`mathalea-figure-block` reçoit
+    // `force-true-size: true`) — voir `latexToTypst.test.ts` pour ce niveau-là
+    const vraieGrandeurFigure = (widthCm: number) =>
+      '<div class="svgContainer"><div>' +
+      `<svg class="mathalea2d" data-width-cm="${widthCm}" data-height-cm="5" data-vraie-grandeur="1" width="${widthCm * 30}" height="150">` +
+      '<line x1="0" y1="0" x2="10" y2="10"/></svg></div></div>'
+
+    it('déclare la liste à une seule colonne quand une question contient une figure vraieGrandeur', () => {
+      const code = buildTypstDocument([
+        exercise({
+          questions: [vraieGrandeurFigure(10), vraieGrandeurFigure(12)],
+          numbered: true,
+        }),
+      ])
+      expect(code).toContain('#let ex1-colonnes = 1')
+      expect(code).toContain('#tasks(columns: ex1-colonnes, label:')
+      expect(code).toContain('[ // mathalea:vraie-grandeur')
+      // ce 1 est un défaut lié au contenu, pas un réglage du professeur : le
+      // figer dans le carry-over l'empêcherait de redevenir "colonnes-questions"
+      // si la figure vraieGrandeur est retirée à une régénération suivante
+      expect(harvestCarryOver(code).tasksLayout?.ex1?.columns).toBeUndefined()
+    })
+
+    it('respecte le nombre de colonnes choisi dans la palette malgré une figure vraieGrandeur', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: [vraieGrandeurFigure(10), vraieGrandeurFigure(12)],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        { tasksLayout: { ex1: { columns: '4' } } },
+      )
+      expect(code).toContain('#let ex1-colonnes = 4')
+    })
+
+    it('écrit une seule colonne en mode export pour une figure vraieGrandeur, sauf réglage explicite', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: [vraieGrandeurFigure(10), vraieGrandeurFigure(12)],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        {},
+        [],
+        { exportMode: true },
+      )
+      expect(code).toContain('#tasks(columns: 1, label:')
+      expect(code).not.toContain('mathalea:vraie-grandeur')
+    })
+  })
+
   describe('numérotation alignée sur la première ligne de l’énoncé', () => {
     // un QCM fait de l'énoncé un contenu mixte (texte puis bloc de
     // propositions) : taskize alignerait alors le numéro sur le haut de la
