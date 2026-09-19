@@ -1,4 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisiDelta } from '../../lib/mathFonctions/outilsMaths'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -72,6 +73,7 @@ export default class Resolutionavecformecanonique extends Exercice {
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      let answer = ''
       ;[a, b, c] = choisiDelta(listeTypeDeQuestions[i])
       c1 = fraction(c, a)
       b1 = fraction(b, a)
@@ -115,6 +117,7 @@ export default class Resolutionavecformecanonique extends Exercice {
         texteCorr +=
           "<br>L'équation revient à ajouter deux nombres positifs, dont un non nul. Cette somme ne peut pas être égale à zéro."
         texteCorr += '<br>On en déduit que $S=\\emptyset$'
+        answer = '\\emptyset'
       } else if (delta > 0) {
         // Cas des deux solutions :
         texteCorr += "<br>On reconnaît l'identité remarquable $a^2-b^2$ :"
@@ -222,12 +225,21 @@ export default class Resolutionavecformecanonique extends Exercice {
         texteCorr += `<br> Soit $x ${x1String}=0$, soit $x ${x2String}=0$` // on isole les facteurs nuls
         texteCorr += `<br> Soit $x = ${stringX1}$, soit $x = ${stringX2}$` // on écrit les solutions
         texteCorr += `<br> $S =\\left\\{${stringX2};${stringX1}\\right\\}$` // Solution
+        answer = `\\{${stringX2};${stringX1}\\}`
       } else {
         // cas de delta  = 0
         // pour l'instant pas de delta nul avec choisiDelta
       }
 
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble)
+      if (this.interactif) {
+        handleAnswers(this, i, {
+          reponse: { value: answer, options: { ensembleDeNombres: true } },
+        })
+      }
+      texte += '<br>'
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble, {
+        texteAvant: '$S=$',
+      })
       if (this.questionJamaisPosee(i, a, b, c)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
