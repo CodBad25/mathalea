@@ -94,11 +94,18 @@ const FICHE_QRCODE_SIZE = '2cm'
  * le `fill: white` du `box` englobant lui garde un fond opaque quel que soit
  * ce qu'il recouvre.
  */
-function ficheQrCodeLines(): string[] {
+function qrCodeGlobalVariableName(version: number): string {
+  // Conserve le nom historique pour le sujet A : les fiches déjà éditées et
+  // leurs modifications ciblées restent ainsi compatibles.
+  return version === 0 ? 'qr-code-global-url' : `qr-code-global-url-${version}`
+}
+
+function ficheQrCodeLines(version: number): string[] {
+  const urlVariable = qrCodeGlobalVariableName(version)
   return [
     '#place(top + right, context [',
     '  #if here().page() == 1 [',
-    `    #mathalea-anchor("qr-code", 0)#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(qr-code-global-url, width: 100%)]`,
+    `    #mathalea-anchor("qr-code", ${version})#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${urlVariable}, width: 100%)]`,
     '  ]',
     '])',
   ]
@@ -3306,11 +3313,14 @@ export function buildTypstDocument(
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
   const usesVarTable = allLines.some((line) => line.includes('#tabvar('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
-  const globalQrCodeUrl = options.showQrCodeFiche
-    ? ficheUrl(exercises)
-    : undefined
+  // Chaque sujet possède ses propres graines : il faut donc aussi construire
+  // un lien de fiche (et un QR-code) pour chaque version imprimée.
+  const globalQrCodeUrls = options.showQrCodeFiche
+    ? [exercises, ...extraVersions].map(ficheUrl)
+    : []
+  const hasGlobalQrCode = globalQrCodeUrls.some((url) => url != null)
   const usesAnchors =
-    globalQrCodeUrl != null ||
+    hasGlobalQrCode ||
     allLines.some((line) => line.includes('#mathalea-anchor('))
   const usesQrCode = allLines.some((line) => /^\s*qr: /.test(line))
   const usesSchema = allLines.some((line) =>
@@ -3355,7 +3365,7 @@ export function buildTypstDocument(
   // de questions sont ceux de la fiche, identiques d'une version à l'autre)
   const coverTemplate = options.coverPage?.template ?? 'aucune'
   const globalQrCodeOnCanCover =
-    globalQrCodeUrl != null && options.canMode && coverTemplate === 'can'
+    globalQrCodeUrls[0] != null && options.canMode && coverTemplate === 'can'
   const coverDeclarations =
     options.coverPage != null ? coverDeclarationLines(options.coverPage) : []
   const coverLines =
@@ -3379,7 +3389,7 @@ export function buildTypstDocument(
   if (
     usesTasks ||
     usesExerciseBank ||
-    globalQrCodeUrl != null ||
+    hasGlobalQrCode ||
     options.autoVerticalSpacing ||
     usesVarTable ||
     usesCetz ||
@@ -3388,7 +3398,7 @@ export function buildTypstDocument(
   ) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
-    if (globalQrCodeUrl != null) lines.push(TIAOMA_IMPORT)
+    if (hasGlobalQrCode) lines.push(TIAOMA_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     if (usesVarTable) lines.push(VARTABLE_IMPORT)
@@ -3401,9 +3411,16 @@ export function buildTypstDocument(
     if (usesCetzPlotChart) lines.push(CETZ_PLOT_CHART_IMPORT)
     lines.push('')
   }
-  if (globalQrCodeUrl != null) {
-    // URL lisible et modifiable directement dans le source Typst exporté.
-    lines.push(`#let qr-code-global-url = ${typstString(globalQrCodeUrl)}`, '')
+  if (hasGlobalQrCode) {
+    // Une URL par sujet, lisible et modifiable directement dans le source
+    // Typst exporté. Le sujet A conserve son nom historique.
+    for (const [version, url] of globalQrCodeUrls.entries()) {
+      if (url != null)
+        lines.push(
+          `#let ${qrCodeGlobalVariableName(version)} = ${typstString(url)}`,
+        )
+    }
+    lines.push('')
   }
   if (extraPreamble != null && extraPreamble.length > 0) {
     lines.push('// ----- Préambule d’une banque externe -----')
@@ -3739,12 +3756,12 @@ export function buildTypstDocument(
       options.hideVersionLabel,
     ),
   )
-  if (globalQrCodeUrl != null && !globalQrCodeOnCanCover) {
+  if (globalQrCodeUrls[0] != null && !globalQrCodeOnCanCover) {
     // après le bloc de titre (et sa ligne d'en-tête) plutôt qu'avant : ces
     // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
     // plus tardif se peint donc par-dessus le contenu qui précède plutôt
     // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
-    lines.push(...ficheQrCodeLines())
+    lines.push(...ficheQrCodeLines(0))
   }
   lines.push('')
   lines.push(...primary.renderLines)
@@ -3757,7 +3774,16 @@ export function buildTypstDocument(
     if (usesExerciseBank) lines.push('#exo-counter.update(0)')
     lines.push('')
     if (coverLines.length > 0) {
-      lines.push(...coverLines)
+      lines.push(
+        ...coverPageLines(
+          options.coverPage as TypstCoverOptions,
+          countQuestions(exercises),
+          globalQrCodeUrls[i + 1] != null &&
+            options.canMode &&
+            coverTemplate === 'can',
+          i + 1,
+        ),
+      )
       lines.push('')
     }
     lines.push(
@@ -3768,6 +3794,12 @@ export function buildTypstDocument(
         options.hideVersionLabel,
       ),
     )
+    if (
+      globalQrCodeUrls[i + 1] != null &&
+      !(options.canMode && coverTemplate === 'can')
+    ) {
+      lines.push(...ficheQrCodeLines(i + 1))
+    }
     lines.push('')
     lines.push(...version.renderLines)
   }
@@ -3856,6 +3888,7 @@ function coverPageLines(
   cover: TypstCoverOptions,
   nbQuestions: number,
   showQrCode = false,
+  version = 0,
 ): string[] {
   if (cover.template === 'aucune') return []
   if (cover.template === 'can') {
@@ -3866,7 +3899,7 @@ function coverPageLines(
       '  consignes: couverture-consignes,',
       ...(showQrCode
         ? [
-            `  qr-code: [#mathalea-anchor("qr-code", 0)#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(qr-code-global-url, width: 100%)]],`,
+            `  qr-code: [#mathalea-anchor("qr-code", ${version})#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${qrCodeGlobalVariableName(version)}, width: 100%)]],`,
           ]
         : []),
       ')',

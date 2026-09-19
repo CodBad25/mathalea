@@ -102,8 +102,8 @@
     coverTemplate?: CoverTemplate
     /** Texte du pied de page (valeur lue dans le code), première page seulement */
     footerText?: string
-    /** URL du QR-code global, lue dans le code Typst */
-    qrCodeUrl?: string
+    /** URL des QR-codes globaux, par sujet, lues dans le code Typst */
+    qrCodeUrls?: Record<number, string>
     /**
      * Étiquette « Sujet A/B... » masquée : reste dans le document (`hide()`,
      * voir `headerBlock`), pour que les élèves n'y lisent pas leur version.
@@ -147,7 +147,7 @@
     ) => void
     onUpdateCoverConsignes: (consignes: string[]) => void
     onUpdateFooterText: (value: string) => void
-    onUpdateQrCodeUrl: (value: string) => void
+    onUpdateQrCodeUrl: (version: number, value: string) => void
     /** Affiche ou masque l'étiquette « Sujet A/B... » de l'en-tête */
     onToggleVersionLabel: () => void
     /** Nombre de questions par exercice (null : non réglable) */
@@ -256,7 +256,7 @@
     coverConsignes = [],
     coverTemplate = 'aucune',
     footerText = '',
-    qrCodeUrl = '',
+    qrCodeUrls = {},
     hideVersionLabel = false,
     onAdjustColumns,
     onAdjustGutter,
@@ -445,14 +445,19 @@
   /** Panneau d'édition de l'URL du QR-code global */
   let qrCodeOpen = $state(false)
   let qrCodeDraft = $state('')
+  let qrCodeVersion = $state(0)
 
-  function toggleQrCode() {
+  function toggleQrCode(version: number) {
     qrCodeOpen = !qrCodeOpen
-    if (qrCodeOpen) qrCodeDraft = qrCodeUrl
+    if (qrCodeOpen) {
+      qrCodeVersion = version
+      qrCodeDraft = qrCodeUrls[version] ?? ''
+    }
   }
 
   function submitQrCode() {
-    if (qrCodeDraft !== qrCodeUrl) onUpdateQrCodeUrl(qrCodeDraft)
+    if (qrCodeDraft !== (qrCodeUrls[qrCodeVersion] ?? ''))
+      onUpdateQrCodeUrl(qrCodeVersion, qrCodeDraft)
     qrCodeOpen = false
   }
 
@@ -1009,7 +1014,7 @@
           class="typst-pill typst-pill-round flex h-6 w-6 items-center justify-center"
           class:typst-pill-force-visible={qrCodeOpen}
           data-testid="typst-overlay-qr-code"
-          onclick={toggleQrCode}
+          onclick={() => toggleQrCode(widget.num)}
         >
           <i class="bx bx-pencil"></i>
         </button>
