@@ -1,5 +1,8 @@
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { numAlpha } from '../../lib/outils/outilString'
 import { prenomF } from '../../lib/outils/Personne'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
@@ -62,6 +65,7 @@ type ProblemeFractions<TFractions extends DonneesProbleme3 | DonneesProbleme4> =
 
 export const titre =
   'Résoudre des problèmes additifs et multiplicatifs utilisant des fractions'
+export const interactifReady = true
 
 /**
  * Résoudre des problèmes additifs et multiplicatifs utilisant des fractions
@@ -405,8 +409,9 @@ export default class ProblemesMultiplicatifsFractions extends Exercice {
             pb3f[i].correction += '$'
           }
 
-          pb3f[i].correction +=
-            `<br>Conclusion :  ${texteEnCouleurEtGras(`$${pb3f[i].fractions[4].texFraction}$  ${pb3f[i].fractions[5]}.`)} `
+          pb3f[i].correction += `<br>Conclusion : $${miseEnEvidence(
+            pb3f[i].fractions[4].texFraction,
+          )}$ ${pb3f[i].fractions[5]}.`
 
           pb3f[i].correction +=
             `<br>Sachant qu'il y avait  $${texNombre(pb3f[i].fractions[10])}$ ${pb3f[i].fractions[11]}, on peut calculer :`
@@ -414,8 +419,10 @@ export default class ProblemesMultiplicatifsFractions extends Exercice {
           pb3f[i].correction +=
             `<br>$${F3.texFraction}\\times ${texNombre(pb3f[i].fractions[10])} = ${F3.produitFraction(fraction(pb3f[i].fractions[10], 1)).simplifie().texFraction} $   ${pb3f[i].fractions[11]}  ${pb3f[i].fractions[13]}.`
 
-          pb3f[i].correction +=
-            `<br>Conclusion :  ${texteEnCouleurEtGras(`$${F3.produitFraction(fraction(pb3f[i].fractions[10], 1)).simplifie().texFraction} $   ${pb3f[i].fractions[11]}  ${pb3f[i].fractions[13]}.`)}`
+          pb3f[i].correction += `<br>Conclusion : $${miseEnEvidence(
+            F3.produitFraction(fraction(pb3f[i].fractions[10], 1)).simplifie()
+              .texFraction,
+          )}$ ${pb3f[i].fractions[11]} ${pb3f[i].fractions[13]}.`
         }
       } else {
         //= =====================================================
@@ -695,47 +702,113 @@ export default class ProblemesMultiplicatifsFractions extends Exercice {
             pb4f[i].correction += '$'
           }
 
-          pb4f[i].correction +=
-            `<br>Conclusion :  ${texteEnCouleurEtGras(`$${pb4f[i].fractions[6].texFraction}$  ${pb4f[i].fractions[18]}  ${pb4f[i].fractions[19]}.`)} `
+          pb4f[i].correction += `<br>Conclusion : $${miseEnEvidence(
+            pb4f[i].fractions[6].texFraction,
+          )}$ ${pb4f[i].fractions[18]} ${pb4f[i].fractions[19]}.`
           pb4f[i].correction +=
             `<br>Sachant qu'il y avait  $${texNombre(pb4f[i].fractions[16])}$ ${pb4f[i].fractions[17]}, on peut calculer :`
           pb4f[i].correction +=
             `<br>$${F4.texFraction}\\times ${texNombre(pb4f[i].fractions[16])} = ${F4.produitFraction(fraction(pb4f[i].fractions[16], 1)).simplifie().texFraction} $   ${pb4f[i].fractions[17]}  ${pb4f[i].fractions[19]}.`
-          pb4f[i].correction +=
-            `<br>Conclusion :  ${texteEnCouleurEtGras(`$${F4.produitFraction(fraction(pb4f[i].fractions[16], 1)).simplifie().texFraction} $   ${pb4f[i].fractions[17]}  ${pb4f[i].fractions[19]}.`)}`
+          pb4f[i].correction += `<br>Conclusion : $${miseEnEvidence(
+            F4.produitFraction(fraction(pb4f[i].fractions[16], 1)).simplifie()
+              .texFraction,
+          )}$ ${pb4f[i].fractions[17]} ${pb4f[i].fractions[19]}.`
         }
       }
 
+      let reponseFraction = F1
+      let reponseNombre = ''
+      let unite = ''
       switch (listeTypeDeQuestions[i]) {
         case 1: // bouteille d'eau
           texte = `${pb3f[0].enonce} <br> ${numAlpha(0)} ${pb3f[0].question[0]} <br> ${numAlpha(1)} ${pb3f[0].question[1]}`
           texteCorr = `${pb3f[0].correction}`
+          reponseFraction = F3
+          reponseNombre = F3.produitFraction(
+            fraction(pb3f[0].fractions[10], 1),
+          ).simplifie().texFraction
+          unite = 'cL'
           break
         case 2: // examen
           texte = `${pb3f[1].enonce} <br> ${numAlpha(0)} ${pb3f[1].question[0]} <br> ${numAlpha(1)} ${pb3f[1].question[1]}`
           texteCorr = `${pb3f[1].correction}`
+          reponseFraction = F3
+          reponseNombre = F3.produitFraction(
+            fraction(pb3f[1].fractions[10], 1),
+          ).simplifie().texFraction
+          unite = 'candidats'
           break
         case 3: // élection
           texte = `${pb3f[2].enonce} <br> ${numAlpha(0)} ${pb3f[2].question[0]} <br> ${numAlpha(1)} ${pb3f[2].question[1]}`
           texteCorr = `${pb3f[2].correction}`
+          reponseFraction = F3
+          reponseNombre = F3.produitFraction(
+            fraction(pb3f[2].fractions[10], 1),
+          ).simplifie().texFraction
+          unite = 'électeurs'
           break
         case 4: // argent de poche
           texte = `${pb3f[3].enonce} <br> ${numAlpha(0)} ${pb3f[3].question[0]} <br> ${numAlpha(1)} ${pb3f[3].question[1]}`
           texteCorr = `${pb3f[3].correction}`
+          reponseFraction = F3
+          reponseNombre = F3.produitFraction(
+            fraction(pb3f[3].fractions[10], 1),
+          ).simplifie().texFraction
+          unite = '€'
           break
         case 5: // jeu tv
           texte = `${pb4f[0].enonce} <br> ${numAlpha(0)} ${pb4f[0].question[0]} <br> ${numAlpha(1)} ${pb4f[0].question[1]}`
           texteCorr = `${pb4f[0].correction}`
+          reponseFraction = F4
+          reponseNombre = F4.produitFraction(
+            fraction(pb4f[0].fractions[16], 1),
+          ).simplifie().texFraction
+          unite = 'candidats'
           break
         case 6: // les timbres
           texte = `${pb4f[1].enonce} <br> ${numAlpha(0)} ${pb4f[1].question[0]} <br> ${numAlpha(1)} ${pb4f[1].question[1]}`
           texteCorr = `${pb4f[1].correction}`
+          reponseFraction = F4
+          reponseNombre = F4.produitFraction(
+            fraction(pb4f[1].fractions[16], 1),
+          ).simplifie().texFraction
+          unite = 'timbres'
           break
         case 7: // les bouquets
           texte = `${pb4f[2].enonce} <br> ${numAlpha(0)} ${pb4f[2].question[0]} <br> ${numAlpha(1)} ${pb4f[2].question[1]}`
           texteCorr = `${pb4f[2].correction}`
+          reponseFraction = F4
+          reponseNombre = F4.produitFraction(
+            fraction(pb4f[2].fractions[16], 1),
+          ).simplifie().texFraction
+          unite = 'bouquets'
           break
       }
+      const champFraction = ajouteChampTexteMathLive(
+        this,
+        2 * i,
+        KeyboardType.clavierDeBaseAvecFraction,
+      )
+      const champNombre = ajouteChampTexteMathLive(
+        this,
+        2 * i + 1,
+        KeyboardType.clavierDeBase,
+        { texteApres: ` ${unite}` },
+      )
+      texte = texte.replace(
+        ` <br> ${numAlpha(1)}`,
+        ` ${champFraction}<br> ${numAlpha(1)}`,
+      )
+      texte += ` ${champNombre}`
+      handleAnswers(this, 2 * i, {
+        reponse: {
+          value: reponseFraction.texFraction,
+          options: { fractionEgale: true },
+        },
+      })
+      handleAnswers(this, 2 * i + 1, {
+        reponse: { value: reponseNombre },
+      })
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
