@@ -824,6 +824,8 @@
   let coverConsignesValue: string[] = $state([])
   /** Texte du pied de page (`#let pied-page = "..."`), lu dans le code courant */
   let footerValue = $state('')
+  /** URL du QR-code global, lue dans le code courant */
+  let qrCodeUrlValue = $state('')
   /** Nombre de colonnes du document (`#let colonnes`), lu dans le code */
   let documentColumns = $state(1)
   /** Zoom de chaque figure (`#let fig-N-zoom`), lu dans le code courant */
@@ -972,6 +974,7 @@
               | 'header'
               | 'cover'
               | 'footer'
+              | 'qr-code'
               | 'version-label'
               | 'figure'
               | 'can-row'),
@@ -1127,6 +1130,11 @@
     const footerMatch = /^#let pied-page = "((?:[^"\\]|\\.)*)"/m.exec(code)
     footerValue =
       footerMatch != null ? footerMatch[1].replace(/\\(.)/g, '$1') : ''
+    const qrCodeMatch = /^#let qr-code-global-url = "((?:[^"\\]|\\.)*)"/m.exec(
+      code,
+    )
+    qrCodeUrlValue =
+      qrCodeMatch != null ? qrCodeMatch[1].replace(/\\(.)/g, '$1') : ''
   }
 
   /** Modifie la ligne `#let <prefix>-<clef> = ...` (édition ciblée, annulable) */
@@ -2249,6 +2257,19 @@
     })
     documentOptions.footerText = value
     persistPreferences()
+  }
+
+  /** Modifie l'URL du QR-code global dans le source Typst. */
+  function updateQrCodeUrl(value: string) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const match = /^#let qr-code-global-url = ".*"/m.exec(doc)
+    if (match == null) return
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let qr-code-global-url = "${escapeTypstStringLiteral(value)}"`,
+    })
   }
 
   /**
@@ -4783,6 +4804,7 @@
                     coverConsignes={coverConsignesValue}
                     coverTemplate={documentOptions.coverPage.template}
                     footerText={footerValue}
+                    qrCodeUrl={qrCodeUrlValue}
                     hideVersionLabel={documentOptions.hideVersionLabel}
                     {documentColumns}
                     {questionCounts}
@@ -4819,6 +4841,7 @@
                     onUpdateCover={updateCoverValue}
                     onUpdateCoverConsignes={updateCoverConsignes}
                     onUpdateFooterText={updateFooterText}
+                    onUpdateQrCodeUrl={updateQrCodeUrl}
                     onToggleVersionLabel={toggleVersionLabel}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}

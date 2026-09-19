@@ -597,6 +597,12 @@ Case « QR-code vers la fiche (vue élève, 1 exercice par page) » (`TypstDocum
 
 `ficheQrCodeLines` place le QR-code avec `#place(top + right, context [#if here().page() == 1 [...]])` : `#place` sort le contenu du flux normal (aucune place réservée dans la mise en page du titre ou de la page de garde), et `here().page()` — le numéro de page **physique**, comme dans `pageFooter` — limite l'affichage à la toute première page, même sur une fiche à plusieurs sujets (Sujet A, B...) où chaque sujet redémarre sa propre pagination logique.
 
+Le source généré importe `tiaoma` et déclare l'adresse dans `#let qr-code-global-url = "..."` : le QR-code est généré à la compilation par Typst. Une personne qui édite la fiche peut donc remplacer directement cette URL sans avoir à modifier une image SVG encodée.
+
+Un repère `qr-code` est émis au centre du code : la palette de l'aperçu y affiche un crayon qui édite cette même variable, par une modification ciblée et annulable du source Typst.
+
+La page de garde « Course aux nombres » termine par un saut de page. Lorsque cette présentation est active, elle reçoit donc le QR-code comme paramètre et le place avant ce saut : l'ajouter dans le bloc d'en-tête commun l'aurait placé sur la deuxième page, où le garde de première page l'aurait masqué.
+
 ## Impression recto-verso (démarrage sur page impaire)
 
 Case à cocher « Impression recto-verso » des Réglages du document (`TypstDocumentOptions.oddPageStarts`, **active par défaut**) : chaque partie qui commence sur une nouvelle page — le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions — commence sur une page impaire, Typst insérant au besoin une page blanche. En impression recto-verso en série, une partie ne commence ainsi jamais au dos de la précédente ; le partage énoncé/corrigé en deux PDF (`downloadPdfSeparate`) en profite de la même façon, chaque sujet y restant sur un recto.
