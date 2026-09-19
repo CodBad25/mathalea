@@ -9,6 +9,7 @@ import {
   htmlToTypst,
 } from '../typst/latexToTypst'
 import {
+  BREATHER_CALL,
   BREATHER_IMPORT,
   MATHALEA_ANCHOR_HELPER,
   MATHALEA_INLINE_FORMULA_RULE,
@@ -296,7 +297,7 @@ export function buildFlashcardsDocument(
   lines.push('// espaces verticaux automatiques : une ligne aux maths hautes')
   lines.push("// (fraction « display »…) s'écarte de la précédente juste ce")
   lines.push("// qu'il faut (paquet breather)")
-  lines.push('#show: breathe')
+  lines.push(BREATHER_CALL)
   if (usesQcm) {
     lines.push(MATHALEA_QCM_HELPERS)
   }

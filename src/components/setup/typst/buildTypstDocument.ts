@@ -144,6 +144,27 @@ const QRCODE_POSITION = '"tasks"'
 export const BREATHER_IMPORT = typstImport('breather', 'breathe')
 
 /**
+ * Appel de `breathe` avec un seuil relevé (1.25em, le défaut du paquet est
+ * 1.1em) : sous 1.1em, une formule inline courte mais dont le bord (une
+ * parenthèse, souvent) dépasse légèrement le seuil bascule sur des marges de
+ * texte « bounds » (ink réel) alors que ses voisines de la même ligne
+ * restent en métrique par défaut — deux hauteurs de ligne différentes pour
+ * des formules à l'ink pourtant comparable. Conséquence visible : dans un
+ * QCM (`propositionsQcm`, `qcm-case`) posé juste sous une expression comme
+ * `$(-5)^8$` ou `$-(-8)^{-4}$`, les cases à cocher d'une même ligne de
+ * questions (`#tasks`, colonnes alignées par le haut) se retrouvent à des
+ * hauteurs différentes selon que l'expression franchit ce seuil ou non — cf.
+ * l'exercice 4C37. 1.25em passe au-dessus de ce cas frontière (vérifié en
+ * conditions réelles sur l'aperçu Typst de l'application, la mesure locale
+ * au CLI `typst` ne reproduisant pas l'écart, sans doute par différence de
+ * version/métriques avec le moteur `typst.ts` embarqué) tout en restant
+ * confortablement sous la hauteur d'une fraction « display » (~1.5em), qui
+ * continue de déclencher l'espacement adapté — plus de détails dans
+ * `documentation/developpement/maintenance-moteur/exports/typst.md`.
+ */
+export const BREATHER_CALL = '#show: breathe.with(threshold: 1.25em)'
+
+/**
  * Repère invisible pour la palette de mise en page de l'aperçu : publie la
  * position du point d'insertion (page, x et y en pt) dans une métadonnée,
  * interrogée après compilation (`query(<mathalea-anchor>)`) pour placer les
@@ -2436,7 +2457,7 @@ export function buildStandaloneExerciseCode(
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
   lines.push(MATHALEA_INLINE_FORMULA_RULE)
   lines.push('#show math.frac: it => math.display(it)')
-  if (options.autoVerticalSpacing) lines.push('#show: breathe')
+  if (options.autoVerticalSpacing) lines.push(BREATHER_CALL)
   if (usesQcm) lines.push(MATHALEA_QCM_HELPERS)
   lines.push('')
   if (usesFigures) {
@@ -3478,7 +3499,7 @@ export function buildTypstDocument(
     lines.push(
       '// gestion automatique des espaces verticaux : les lignes aux maths',
       "// hautes s'écartent juste ce qu'il faut (paquet breather)",
-      '#show: breathe',
+      BREATHER_CALL,
     )
   }
   lines.push('')
