@@ -123,16 +123,34 @@ function generateNumbers(
       }
     }
 
+    // Cette branche n'est utilisée que par les exercices enfants qui
+    // demandent un mélange d'entiers et de nombres décimaux.
+    if (niveaux.includes(0) || niveaux.length !== new Set(niveaux).size) {
+      decimales.length = 0
+      const precisions = shuffle(niveaux)
+      for (let indiceTableau = 0; indiceTableau < 6; indiceTableau++) {
+        const precision = precisions[indiceTableau % precisions.length]
+        const decimale: number[] = []
+        for (let rang = 0; rang < precision; rang++) {
+          decimale.push(randint(rang === precision - 1 ? 1 : 0, 9))
+        }
+        decimales.push(decimale)
+      }
+    }
+
     // Mélange des decimales
     const melangeDecimales = shuffle(decimales)
 
     for (let indiceTableau = 0; indiceTableau < 6; indiceTableau++) {
       const decimal = melangeDecimales[indiceTableau]
-      const entier = proximite
-        ? baseEntier
-        : numbers.length % 2 === 0
-          ? baseEntier
-          : alternateEntier
+      const entier =
+        decimal.length === 0
+          ? baseEntier + indiceTableau
+          : proximite
+            ? baseEntier
+            : numbers.length % 2 === 0
+              ? baseEntier
+              : alternateEntier
 
       // On construit le nombre
       const value = Number(`${entier}.${decimal.join('')}`)
@@ -188,6 +206,8 @@ function getMaxDecimals(nombres: number[]): number {
 }
 
 export default class RangerOrdreCroissantDecroissant extends Exercice {
+  protected typesDeNombres?: number[]
+
   constructor() {
     super()
     this.sup = 1
@@ -223,10 +243,12 @@ export default class RangerOrdreCroissantDecroissant extends Exercice {
       saisie: this.sup2,
     })
 
-    let typesDeNombresEntiers = typesDeNombres.map((value) =>
-      parseInt(value.toString(), 10),
-    )
-    typesDeNombresEntiers = enleveDoublonNum(typesDeNombresEntiers)
+    let typesDeNombresEntiers =
+      this.typesDeNombres ??
+      typesDeNombres.map((value) => parseInt(value.toString(), 10))
+    if (this.typesDeNombres === undefined) {
+      typesDeNombresEntiers = enleveDoublonNum(typesDeNombresEntiers)
+    }
 
     for (let i = 0, texte, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // les chiffres
