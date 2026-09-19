@@ -225,12 +225,13 @@
     // Les sélecteurs d'automatismes figent leurs références dans `sup5` une
     // fois leurs imports asynchrones terminés. Les recopier immédiatement dans
     // les paramètres rend la liste disponible pour l'URL ou Capytale.
-    if (
-      typeof exercise.sup5 === 'string' &&
-      interfaceParams?.sup5 !== mathaleaHandleSup(exercise.sup5)
-    ) {
-      interfaceParams.sup5 = mathaleaHandleSup(exercise.sup5)
-      exercicesParams.update((params) => params)
+    const params = interfaceParams
+    if (typeof exercise.sup5 === 'string' && params) {
+      const sup5 = mathaleaHandleSup(exercise.sup5)
+      if (params.sup5 !== sup5) {
+        params.sup5 = sup5
+        exercicesParams.update((params) => params)
+      }
     }
     await adjustMathalea2dFiguresWidth()
   }

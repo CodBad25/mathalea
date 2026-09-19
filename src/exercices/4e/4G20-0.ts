@@ -40,6 +40,11 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
       'Niveau de difficulté',
       '0: Mélange\n1 : Un seul triangle\n2 : Plusieurs triangles',
     ]
+    this.besoinFormulaire2Texte = [
+      'Choix des côtés',
+      'Nombres séparés par des tirets\n1 : côté adjacent\n2 : côté opposé\n3 : hypoténuse\n0 : Mélange',
+    ]
+    this.sup2 = '0'
   }
   nouvelleVersion() {
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
@@ -50,15 +55,17 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
       defaut: 1,
       nbQuestions: this.nbQuestions,
     }).map(Number)
+    const listeTermes = gestionnaireFormulaireTexte({
+      saisie: this.sup2,
+      nbQuestions: this.nbQuestions,
+      defaut: 0,
+      min: 1,
+      max: 3,
+      melange: 0,
+    }).map((n) => ['adjacent', 'opposé', 'hypoténuse'][Number(n) - 1])
 
     for (let i = 0; i < this.nbQuestions;) {
-      const terme = choice([
-        'opposé',
-        'adjacent',
-        'opposé',
-        'adjacent',
-        'hypoténuse',
-      ])
+      const terme = listeTermes[i]
       const indexSommet = choice([0, 2])
       let question = ''
       const nom = creerNomDePolygone(6)
