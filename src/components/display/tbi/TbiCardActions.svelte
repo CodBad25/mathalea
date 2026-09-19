@@ -18,12 +18,16 @@
     showCols?: boolean
     /** Nombre de colonnes de la liste de questions de cet exercice */
     cols?: number
+    /** Niveau d'espacement vertical de la liste de questions */
+    questionSpacing?: number
     onNewData?: () => void
     onSettings?: () => void
     onZoomIn?: () => void
     onZoomOut?: () => void
     onColsInc?: () => void
     onColsDec?: () => void
+    onQuestionSpacingInc?: () => void
+    onQuestionSpacingDec?: () => void
     onMoveToTab?: (tab: number) => void
     onMoveUp?: () => void
     onMoveDown?: () => void
@@ -45,12 +49,15 @@
     columnBreakDisabled = false,
     showCols = true,
     cols = 1,
+    questionSpacing = 1,
     onNewData = () => {},
     onSettings = () => {},
     onZoomIn = () => {},
     onZoomOut = () => {},
     onColsInc = () => {},
     onColsDec = () => {},
+    onQuestionSpacingInc = () => {},
+    onQuestionSpacingDec = () => {},
     onMoveToTab = () => {},
     onMoveUp = () => {},
     onMoveDown = () => {},
@@ -144,6 +151,35 @@
     >
       <i class="bx bx-plus"></i>
     </button>
+    <div
+      class="w-px h-5 mx-1 bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light"
+    ></div>
+    <button
+      type="button"
+      class={buttonClass}
+      disabled={questionSpacing <= 0}
+      class:opacity-40={questionSpacing <= 0}
+      title="Réduire l'espace vertical entre les questions"
+      aria-label="Réduire l'espace vertical entre les questions"
+      onclick={onQuestionSpacingDec}
+    >
+      <i class="bx bx-minus"></i>
+    </button>
+    <span
+      class="flex items-center gap-0.5 text-xs font-bold text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      title="Espacement vertical entre les questions"
+    >
+      <i class="bx bx-expand-vertical"></i>{questionSpacing}
+    </span>
+    <button
+      type="button"
+      class={buttonClass}
+      title="Augmenter l'espace vertical entre les questions"
+      aria-label="Augmenter l'espace vertical entre les questions"
+      onclick={onQuestionSpacingInc}
+    >
+      <i class="bx bx-plus"></i>
+    </button>
   {/if}
   {#if showReorder}
     <div
@@ -214,8 +250,7 @@
         class="rounded border border-coopmaths-action dark:border-coopmathsdark-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-xs"
         title="Déplacer vers un onglet"
         value={currentTab}
-        onchange={(event) =>
-          onMoveToTab(Number(event.currentTarget.value))}
+        onchange={(event) => onMoveToTab(Number(event.currentTarget.value))}
       >
         {#each Array(tabsCount) as _, i (i)}
           <option value={i}>Onglet {i + 1}</option>
