@@ -47,7 +47,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
     const poly3 = polygone([I, J, K, L, M], 'black')
     const poly4 = polygone([N, O, P, Q], 'black')
     const xmin = -0.5
-    const ymin = -2
+    const ymin = -1.3
     const xmax = 7
     const ymax = 3.5
     const objets = []
@@ -75,7 +75,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
           statut: a === 0,
         },
       ],
-      options: { vertical: true },
+      options: { vertical: false },
     }
     this.formatInteractif = 'qcm'
     this.consigne =
@@ -94,8 +94,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
           center: !context.isHtml,
         },
         objets,
-      ) +
-      '<br>'
+      ) 
     const monQcm = propositionsQcm(this, 0)
     this.canEnonce =
       mathalea2d(
@@ -111,7 +110,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
           center: !context.isHtml,
         },
         objets,
-      ) + '<br>'
+      ) 
     this.canEnonce += `Quelle est la figure ayant ${a === 1 ? 'un seul axe de symétrie' : a === 0 ? 'aucun axe de symétrie' : `$${a}$ axes de symétrie`} ?`
     this.question = `${monQcm.texte}`
     this.correction =

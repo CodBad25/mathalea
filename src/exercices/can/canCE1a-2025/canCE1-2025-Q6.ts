@@ -41,7 +41,7 @@ export default class Can2025CE2Q6 extends ExerciceCan {
           statut: false,
         },
       ],
-      options: { vertical: true },
+      options: { vertical: false },
     }
     this.formatInteractif = 'qcm'
     const monQcm = propositionsQcm(this, 0)
