@@ -1531,6 +1531,69 @@ describe('buildTypstDocument', () => {
         },
       })
     })
+
+    it("reste posé après une surcharge de code de l'exercice (régression : la surcharge remplace tout l'énoncé, dont l'appel de lignes)", () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: {
+              position: 'endOfExercise',
+              count: 4,
+              spacing: 1.5,
+              style: 'pointilles',
+            },
+          },
+          codeOverrides: { 1: '#text[Contenu personnalisé]' },
+        },
+      )
+      expect(code).toContain('#text[Contenu personnalisé]')
+      expect(code).toContain(
+        '#mathalea-lignes(4, gutter: 1.5em, style: "pointilles") // mathalea:lignes-fin(1)',
+      )
+      // le marqueur suit la surcharge (hors de ses repères mathalea:override) :
+      // un nouveau round-trip retrouve le réglage sans le confondre avec le
+      // texte de la surcharge
+      expect(harvestCarryOver(code).writingLines).toEqual({
+        1: {
+          position: 'endOfExercise',
+          count: 4,
+          spacing: 1.5,
+          style: 'pointilles',
+        },
+      })
+      expect(harvestCarryOver(code).codeOverrides).toEqual({
+        1: '#text[Contenu personnalisé]',
+      })
+    })
+
+    it("« après chaque question » retombe en fin d'exercice sur une surcharge de code (pas de questions où l'intercaler)", () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: ['$1+1$', '$2+2$', '$3+3$'],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: {
+              position: 'afterEachQuestion',
+              count: 2,
+              spacing: 0.8,
+              style: 'pointilles',
+            },
+          },
+          codeOverrides: { 1: '#text[Contenu personnalisé]' },
+        },
+      )
+      expect(code.match(/#mathalea-lignes\(/g)).toHaveLength(1)
+      expect(code).toContain(
+        '#mathalea-lignes(2, gutter: 0.8em, style: "pointilles") // mathalea:lignes-apres(1)',
+      )
+    })
   })
 
   describe('fusion locale (bouton de la palette)', () => {

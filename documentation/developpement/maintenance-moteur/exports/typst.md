@@ -176,6 +176,19 @@ Les trois traits (`WRITING_LINES_STYLES`) reprennent ceux du `answer-line-style`
 - `points` : points de conduite (`repeat(gap: 2pt)[.]`, même espacement que les champs « Nom : ..... » de la page de garde) ;
 - `plein` : filet continu.
 
+Une surcharge de code (icône crayon, voir plus haut) remplace tout l'énoncé
+généré par `exerciseBody`, y compris l'appel `#mathalea-lignes` qu'il y avait
+posé : sans précaution, régler des lignes sur un exercice déjà surchargé (ou
+l'inverse) les ferait disparaître dès la régénération suivante, sans retour
+visible pour le professeur. `buildVersionContent` réémet donc l'appel après
+la surcharge (`appendEndOfExerciseLines(…, { force: true })` sur
+`GeneratedExercise.writingLines`, calculé par `computeGeneratedExercises`
+avant que la surcharge ne remplace l'énoncé) — hors des repères
+`mathalea:override(...)`/`-end`, pour que `harvestCarryOver` continue à lire
+l'un sans le confondre avec l'autre. Faute de liste de questions sous une
+surcharge, « après chaque question » y retombe toujours en fin d'exercice
+(comme pour un exercice à question unique, voir plus bas).
+
 Deux points de mise en page vont avec l'emplacement « après chaque question » :
 
 - un exercice **sans liste `tasks`** (question unique, énoncé d'un seul bloc) n'a nulle part où intercaler les lignes : elles sont alors posées à la fin de son corps (paramètre `force` d'`appendEndOfExerciseLines`), sans quoi un réglage valable pour toute la fiche laisserait ces exercices-là sans place pour répondre. Le marqueur émis reste `lignes-apres(N)`, pour que la palette relise l'emplacement choisi ;

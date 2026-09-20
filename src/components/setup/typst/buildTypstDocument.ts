@@ -2235,6 +2235,14 @@ interface GeneratedExercise {
    * le paquet exercise-bank génère et place lui-même le QR-code.
    */
   qrUrl?: string
+  /**
+   * Réglage de lignes en pointillés appliqué à cet exercice (palette), pour
+   * le réémettre après une surcharge de code (voir `buildVersionContent`) :
+   * une surcharge remplace tout l'énoncé généré, y compris l'appel posé par
+   * `exerciseBody`/`appendEndOfExerciseLines`, sans quoi les lignes du
+   * professeur disparaîtraient dès que l'exercice porte une surcharge.
+   */
+  writingLines?: WritingLinesSetting & { num: number }
 }
 
 /**
@@ -2373,7 +2381,7 @@ function computeGeneratedExercises(
       nextCorrectionStart += body.itemCount
       correction = body.code
     }
-    return { enonce: enonce.code, correction, qrUrl }
+    return { enonce: enonce.code, correction, qrUrl, writingLines }
   })
 }
 
@@ -2975,13 +2983,21 @@ function buildVersionContent(
   const built = generated.map((g, k) => {
     const override = codeOverrideAt(k + 1)
     const correctionOverride = codeOverrideCorrectionAt(k + 1)
+    // une surcharge remplace l'énoncé entier généré par `exerciseBody`, donc
+    // aussi l'appel de lignes en pointillés qu'il y avait posé : on le
+    // réémet après coup (`force: true` — la surcharge n'a pas de questions
+    // où l'intercaler, la position « après chaque question » retombe donc
+    // en fin d'exercice) pour que le réglage de la palette reste visible.
+    const overriddenEnonce =
+      override == null
+        ? g.enonce
+        : appendEndOfExerciseLines(
+            exportMode ? override : wrapCodeOverride(k + 1, override),
+            g.writingLines,
+            { force: true },
+          )
     return {
-      enonce:
-        override == null
-          ? g.enonce
-          : exportMode
-            ? override
-            : wrapCodeOverride(k + 1, override),
+      enonce: overriddenEnonce,
       correction:
         g.correction == null
           ? null
