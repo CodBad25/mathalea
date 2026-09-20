@@ -21,7 +21,7 @@ export const interactifReady = true
 export const uuid = 'c9d15'
 
 export const refs = {
-  'fr-fr': ['can3S05', 'BP1AUTO048'],
+  'fr-fr': ['can3S05', 'BP1AUTO048', '2S20-flash2'],
   'fr-ch': [],
 }
 export default class MoyenneStat extends ExerciceSimple {

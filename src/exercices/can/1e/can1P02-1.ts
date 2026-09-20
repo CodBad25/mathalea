@@ -29,7 +29,7 @@ export const amcType = 'AMCNum'
 export const uuid = '32395'
 
 export const refs = {
-  'fr-fr': ['can1P02-1'],
+  'fr-fr': ['can1P02-1', '2P20-flash3'],
   'fr-ch': [],
 }
 export default class LectureProbabilite2 extends Exercice {

@@ -17,7 +17,7 @@ export const amcType = 'AMCNum'
 export const uuid = '763d3'
 
 export const refs = {
-  'fr-fr': ['can2S30-01'],
+  'fr-fr': ['can2S30-01', '2P10-flash1'],
   'fr-ch': [],
 }
 export default class CalculsDeProbabilites extends ExerciceSimple {

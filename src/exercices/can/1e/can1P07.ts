@@ -23,7 +23,7 @@ export const amcType = 'AMCNum'
 export const uuid = '1b057'
 
 export const refs = {
-  'fr-fr': ['can1P07'],
+  'fr-fr': ['can1P07', '2P20-flash5'],
   'fr-ch': ['4mProbStat-12'],
 }
 export default class CalculProbaTableauEff extends ExerciceSimple {

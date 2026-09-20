@@ -15,7 +15,7 @@ export const interactifReady = true
 export const uuid = 'f0983'
 
 export const refs = {
-  'fr-fr': ['can3S04', 'BP1AUTO036'],
+  'fr-fr': ['can3S04', 'BP1AUTO036', '2S20-flash1'],
   'fr-ch': [],
 }
 export default class Etendue extends ExerciceSimple {
