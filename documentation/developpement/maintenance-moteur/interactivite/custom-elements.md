@@ -242,10 +242,35 @@ vision-espace (`grid` et tableau `cubes` avec `x`, `y`, `z`, `color`). Le helper
 `addCubeStackEditor(exercice, questionIndex, options)` accepte notamment
 `initialState` et `expectedState`.
 
+Les coordonnées des cubes acceptent les demi-entiers. En mode « Sélectionner »,
+quatre boutons déplacent les cubes sélectionnés horizontalement, selon `x` ou
+`z`, par pas de `0,5`. Cela permet de reproduire les empilements dont certains
+cubes sont à cheval entre deux positions entières.
+
 La vérification compare la géométrie seule : les couleurs et la taille de la
 grille sont ignorées, et les coordonnées sont comparées modulo une translation
 et l'une des 24 rotations propres du cube. Une symétrie seule n'est donc pas
 acceptée.
+
+### Motifs 2D sur une grille carrée
+
+`shape-2d-grid-editor` (`Shape2DGridEditorElement.ts`) permet de tamponner des
+formes `Shape2D` dans les cases d'une grille carrée. Le helper
+`addShape2DGridEditor(exercice, questionIndex, options)` reçoit obligatoirement
+`shapes`, la liste ordonnée des formes proposées dans la palette. Il accepte
+aussi `grid`, `initialState` et `expectedState`.
+
+L'état JSON de version 1 contient `grid` et un tableau `cells` dont chaque
+entrée porte `x`, `y` et le nom du tampon `shape`. La vérification tient compte
+des formes, de leur rotation, de leur échelle et de leurs positions relatives,
+mais ignore la taille de la grille et une translation globale du motif.
+Plusieurs tampons peuvent occuper la même case, notamment pour représenter des
+allumettes qui se croisent. Les coordonnées acceptent les demi-entiers. En mode
+« Sélectionner », quatre boutons déplacent les formes sélectionnées selon `x`
+ou `y`, par pas de `0,5`, afin d'aligner précisément les formes tournées autour
+de leur centre. Comme tout `MathaleaCustomElement`, il peut être déclaré comme
+enfant d'un `mathalea-couteau-suisse` avec son `questionIndex` et son
+`autoCorrection` propres.
 
 Si un composant doit être créé comme objet DOM technique (tests, vérifications hors affichage), ne pas détourner `create(...)`.
 

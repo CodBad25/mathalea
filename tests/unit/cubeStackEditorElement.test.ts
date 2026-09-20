@@ -68,6 +68,21 @@ describe('areCubeStacksCongruent', () => {
       ),
     ).toBe(false)
   })
+
+  it('compare correctement les positions par demi-pas', () => {
+    expect(
+      areCubeStacksCongruent(
+        state([
+          [0, 0, 0],
+          [0.5, 0, 0],
+        ]),
+        state([
+          [4, 2, 3],
+          [4, 2.5, 3],
+        ]),
+      ),
+    ).toBe(true)
+  })
 })
 
 describe('parseCubeStackState', () => {
@@ -81,5 +96,29 @@ describe('parseCubeStackState', () => {
       grid: 10,
       cubes: [{ x: 1, y: 0, z: 2, color: '#3b82f6' }],
     })
+  })
+
+  it('accepte les coordonnées par demi-pas', () => {
+    expect(
+      parseCubeStackState({
+        version: 1,
+        grid: 10,
+        cubes: [{ x: 1.5, y: 0, z: 2.5 }],
+      }),
+    ).toEqual({
+      version: 1,
+      grid: 10,
+      cubes: [{ x: 1.5, y: 0, z: 2.5, color: '#3b82f6' }],
+    })
+  })
+
+  it('refuse les coordonnées plus précises que le demi-pas', () => {
+    expect(
+      parseCubeStackState({
+        version: 1,
+        grid: 10,
+        cubes: [{ x: 1.25, y: 0, z: 2 }],
+      }),
+    ).toBeNull()
   })
 })

@@ -30,6 +30,8 @@ const DEFAULT_COLOR = '#3b82f6'
 const DEFAULT_GRID = 12
 const isInteger = (value: unknown): value is number =>
   typeof value === 'number' && Number.isInteger(value)
+const isHalfInteger = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isInteger(value * 2)
 
 export function parseCubeStackState(value: unknown): CubeStackState | null {
   if (typeof value === 'string') {
@@ -51,7 +53,11 @@ export function parseCubeStackState(value: unknown): CubeStackState | null {
   for (const raw of candidate.cubes) {
     if (raw == null || typeof raw !== 'object') return null
     const cube = raw as Partial<CubeStackCube>
-    if (!isInteger(cube.x) || !isInteger(cube.y) || !isInteger(cube.z))
+    if (
+      !isHalfInteger(cube.x) ||
+      !isHalfInteger(cube.y) ||
+      !isHalfInteger(cube.z)
+    )
       return null
     const key = `${cube.x},${cube.y},${cube.z}`
     if (seen.has(key)) continue
@@ -238,15 +244,25 @@ export class CubeStackEditorElement extends MathaleaCustomElement {
     const disabled = this.interactivityOn ? '' : 'disabled'
     this.shadowRoot.innerHTML = `
       <style>
-        :host{display:block;max-width:760px;margin:.5rem 0;color:#1f2937;font-family:system-ui,sans-serif}.editor{overflow:hidden;border:1px solid #cbd5e1;border-radius:.6rem;background:#f8fafc}.toolbar{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;padding:.55rem;background:white;border-bottom:1px solid #e2e8f0}button{padding:.38rem .65rem;border:1px solid #94a3b8;border-radius:.35rem;background:white;cursor:pointer}button.active{color:white;background:#2563eb;border-color:#2563eb}button:disabled{cursor:default;opacity:.55}.count{margin-left:auto;font-size:.9rem}.viewport{height:420px;touch-action:none;position:relative}canvas{display:block;width:100%;height:100%}.hint{padding:.4rem .6rem;font-size:.8rem;background:white;border-top:1px solid #e2e8f0}
+        :host{display:block;max-width:760px;margin:.5rem 0;color:#1f2937;font-family:system-ui,sans-serif}.editor{overflow:hidden;border:1px solid #cbd5e1;border-radius:.6rem;background:#f8fafc}.toolbar{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;padding:.55rem;background:white;border-bottom:1px solid #e2e8f0}.moves{display:flex;gap:.2rem;padding-left:.2rem;border-left:1px solid #cbd5e1}button{padding:.38rem .65rem;border:1px solid #94a3b8;border-radius:.35rem;background:white;cursor:pointer}button.active{color:white;background:#2563eb;border-color:#2563eb}button:disabled{cursor:default;opacity:.55}.count{margin-left:auto;font-size:.9rem}.viewport{height:420px;touch-action:none;position:relative}canvas{display:block;width:100%;height:100%}.hint{padding:.4rem .6rem;font-size:.8rem;background:white;border-top:1px solid #e2e8f0}
       </style><div class="editor"><div class="toolbar" role="toolbar" aria-label="Outils pour les cubes">
-      <button data-mode="add" class="${this.mode === 'add' ? 'active' : ''}" ${disabled}>Ajouter</button><button data-mode="remove" class="${this.mode === 'remove' ? 'active' : ''}" ${disabled}>Supprimer</button><button data-mode="select" class="${this.mode === 'select' ? 'active' : ''}" ${disabled}>Sélectionner</button><span class="count">${this.state.cubes.length} cube${this.state.cubes.length > 1 ? 's' : ''}</span></div><div class="viewport" aria-label="Éditeur 3D d'empilement de cubes"></div><div class="hint">Cliquer sur la grille ou une face pour ajouter. Faire glisser pour tourner la vue.</div></div>`
+      <button data-mode="add" class="${this.mode === 'add' ? 'active' : ''}" ${disabled}>Ajouter</button><button data-mode="remove" class="${this.mode === 'remove' ? 'active' : ''}" ${disabled}>Supprimer</button><button data-mode="select" class="${this.mode === 'select' ? 'active' : ''}" ${disabled}>Sélectionner</button>${this.mode === 'select' ? `<span class="moves" aria-label="Déplacer la sélection par demi-pas"><button data-move-x="-0.5" data-move-z="0" title="Déplacer vers la gauche" ${disabled || this.selected.size === 0 ? 'disabled' : ''}>←</button><button data-move-x="0.5" data-move-z="0" title="Déplacer vers la droite" ${disabled || this.selected.size === 0 ? 'disabled' : ''}>→</button><button data-move-x="0" data-move-z="-0.5" title="Déplacer vers l'arrière" ${disabled || this.selected.size === 0 ? 'disabled' : ''}>↑</button><button data-move-x="0" data-move-z="0.5" title="Déplacer vers l'avant" ${disabled || this.selected.size === 0 ? 'disabled' : ''}>↓</button></span>` : ''}<span class="count">${this.state.cubes.length} cube${this.state.cubes.length > 1 ? 's' : ''}</span></div><div class="viewport" aria-label="Éditeur 3D d'empilement de cubes"></div><div class="hint">Cliquer sur la grille ou une face pour ajouter. En mode « Sélectionner », déplacer les cubes choisis par demi-pas avec les flèches. Faire glisser pour tourner la vue.</div></div>`
     this.shadowRoot
       .querySelectorAll<HTMLButtonElement>('[data-mode]')
       .forEach((button) =>
         button.addEventListener('click', () => {
           this.mode = button.dataset.mode as typeof this.mode
           this.render()
+        }),
+      )
+    this.shadowRoot
+      .querySelectorAll<HTMLButtonElement>('[data-move-x]')
+      .forEach((button) =>
+        button.addEventListener('click', () => {
+          this.moveSelection(
+            Number(button.dataset.moveX),
+            Number(button.dataset.moveZ),
+          )
         }),
       )
     this.setupThree(this.shadowRoot.querySelector('.viewport') as HTMLElement)
@@ -450,6 +466,52 @@ export class CubeStackEditorElement extends MathaleaCustomElement {
     if (this.selected.has(key)) this.selected.delete(key)
     else this.selected.add(key)
     this.rebuildCubes()
+    this.updateMoveButtons()
+  }
+  private moveSelection(dx: number, dz: number): void {
+    if (this.selected.size === 0) return
+    const selectedCubes = this.state.cubes.filter((cube) =>
+      this.selected.has(keyOf(cube.x, cube.y, cube.z)),
+    )
+    const unselectedKeys = new Set(
+      this.state.cubes
+        .filter((cube) => !this.selected.has(keyOf(cube.x, cube.y, cube.z)))
+        .map((cube) => keyOf(cube.x, cube.y, cube.z)),
+    )
+    const moved = selectedCubes.map((cube) => ({
+      ...cube,
+      x: cube.x + dx,
+      z: cube.z + dz,
+    }))
+    if (
+      moved.some(
+        (cube) =>
+          cube.x < 0 ||
+          cube.z < 0 ||
+          cube.x > this.state.grid - 1 ||
+          cube.z > this.state.grid - 1 ||
+          unselectedKeys.has(keyOf(cube.x, cube.y, cube.z)),
+      )
+    )
+      return
+    const movedByOldKey = new Map(
+      selectedCubes.map((cube, index) => [
+        keyOf(cube.x, cube.y, cube.z),
+        moved[index],
+      ]),
+    )
+    this.state.cubes = this.state.cubes.map(
+      (cube) => movedByOldKey.get(keyOf(cube.x, cube.y, cube.z)) ?? cube,
+    )
+    this.selected = new Set(moved.map((cube) => keyOf(cube.x, cube.y, cube.z)))
+    this.stateChanged()
+  }
+  private updateMoveButtons(): void {
+    this.shadowRoot
+      ?.querySelectorAll<HTMLButtonElement>('[data-move-x]')
+      .forEach((button) => {
+        button.disabled = !this.interactivityOn || this.selected.size === 0
+      })
   }
   private stateChanged(): void {
     this.rebuildCubes()

@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 71ff5 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import Decimal from 'decimal.js'
 import {
   cubeDef,
@@ -44,19 +47,17 @@ export const titre =
 export const dateDePublication = '26/11/2025'
 
 export const refs = {
-  'fr-fr': ['P023'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
-export const dateDeModifImportante = '19/09/2026'
-
-export const uuid = 'a1e38'
+export const uuid = '71ff5'
 
 /**
  * Affiche les patterns propres à un exercice
  * @author Éric Elter
  *  (sur la base de listePatterns de Jean-claude Lhote)
  */
-export default class ListePatternsTousLesExos extends Exercice {
+export default class ListePatternsTousLesExosOld extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1

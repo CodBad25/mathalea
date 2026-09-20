@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 8e5d3 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import {
   cubeDef,
   project3dIso,
@@ -20,25 +23,7 @@ import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { texteParPosition } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
-import {
-  lireFormulaireComplexe,
-  serialiseFormulaireComplexe,
-  valeursParDefaut,
-  type FormulaireComplexe,
-} from '../../lib/formulaireComplexe'
-import {
-  CubeStackEditorElement,
-  type CubeStackState,
-} from '../../lib/customElements/CubeStackEditorElement'
-import {
-  MathaleaCouteauSuisseElement,
-  type MathaleaCouteauSuisseChild,
-} from '../../lib/customElements/MathaleaCouteauSuisse'
-import { MathaleaMathfieldElement } from '../../lib/customElements/MathaleaMathfield'
-import {
-  Shape2DGridEditorElement,
-  type Shape2DGridState,
-} from '../../lib/customElements/Shape2DGridEditorElement'
+import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import {
   areSameArray,
   compteOccurences,
@@ -63,186 +48,41 @@ export const titre = "Identifier la structure d'un motif itératif"
 export const interactifReady = true
 
 export const dateDePublication = '23/07/2025'
-export const dateDeModifImportante = '19/09/2026'
+export const dateDeModifImportante = '03/06/2026'
 
 /**
  * Identifier la structure d'un motif (itératif)
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
  * @author Éric Elter (sur les bases du 6I13 de Jean-claude Lhote)
  */
-export const uuid = '9d4d0'
+export const uuid = '8e5d3'
 
 export const refs = {
-  'fr-fr': ['6N4B'],
-  'fr-2016': ['6I13-1'],
-  'fr-ch': ['10FA1A-6'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': ['NR'],
 }
 
-const isHalfInteger = (value: number) => Number.isInteger(value * 2)
-
-function isPattern2DCompatibleWithGrid(pattern: PatternRiche): boolean {
-  try {
-    const visualPattern = new VisualPattern([], pattern.shapes)
-    visualPattern.iterate = pattern.iterate.bind(visualPattern)
-    for (let step = 1; step <= 5; step++) {
-      for (const key of visualPattern.iterate(step)) {
-        const [x, y, , options] = VisualPattern.keyToCoord(key)
-        if (
-          !isHalfInteger(x + (options?.translate?.[0] ?? 0)) ||
-          !isHalfInteger(y + (options?.translate?.[1] ?? 0))
-        )
-          return false
-      }
-    }
-    return true
-  } catch {
-    return false
-  }
-}
-
-/** Motifs 2D représentables sans déformation sur la grille au demi-pas. */
-export const patternsFor6N4B = listePatternsSansRatioNiFraction.filter(
-  (pattern): pattern is PatternRiche =>
-    'iterate' in pattern && isPattern2DCompatibleWithGrid(pattern),
-)
-
-export type Pattern2DDifficulty = 1 | 2 | 3
-
-export const PATTERN_2D_EASY_MAX_SHAPES = 12
-export const PATTERN_2D_HARD_MIN_SHAPES = 21
-
-export function pattern2DDifficulty(
-  pattern: (typeof patternsFor6N4B)[number],
-): Pattern2DDifficulty {
-  const visualPattern = new VisualPattern([], pattern.shapes)
-  visualPattern.iterate = pattern.iterate.bind(visualPattern)
-  const cells = Array.from(visualPattern.iterate(4))
-  const hasHalfStep = cells.some((key) => {
-    const [x, y, , options] = VisualPattern.keyToCoord(key)
-    return [
-      x + (options?.translate?.[0] ?? 0),
-      y + (options?.translate?.[1] ?? 0),
-    ].some((value) => !Number.isInteger(value))
-  })
-  if (hasHalfStep || cells.length >= PATTERN_2D_HARD_MIN_SHAPES) return 3
-  if (cells.length <= PATTERN_2D_EASY_MAX_SHAPES) return 1
-  return 2
-}
-
-export const patternsFor6N4BByDifficulty = {
-  1: patternsFor6N4B.filter((pattern) => pattern2DDifficulty(pattern) === 1),
-  2: patternsFor6N4B.filter((pattern) => pattern2DDifficulty(pattern) === 2),
-  3: patternsFor6N4B.filter((pattern) => pattern2DDifficulty(pattern) === 3),
-} satisfies Record<Pattern2DDifficulty, typeof patternsFor6N4B>
-
-const formulaire6N4B: FormulaireComplexe = {
-  champs: [
-    {
-      type: 'selection',
-      nom: 'nbFigures',
-      label: 'Nombre de figures par question',
-      options: [
-        { valeur: '2', label: 'Deux figures' },
-        { valeur: '3', label: 'Trois figures' },
-        { valeur: '4', label: 'Quatre figures' },
-      ],
-      defaut: '3',
-    },
-    {
-      type: 'selection',
-      nom: 'difficulte',
-      label: 'Niveau de difficulté',
-      options: [
-        { valeur: '1', label: 'Facile' },
-        { valeur: '2', label: 'Moyen' },
-        { valeur: '3', label: 'Difficile' },
-      ],
-      defaut: '1',
-    },
-  ],
-}
-
-export function shape2DGridStateFromPattern(
-  pattern: VisualPattern,
-  step: number,
-): Shape2DGridState {
-  const rawCells = Array.from(pattern.iterate(step), (cell) => {
-    const [x, y, shape, options] = VisualPattern.keyToCoord(cell)
-    return {
-      x: x + (options?.translate?.[0] ?? 0),
-      // MathALEA dessine les ordonnées vers le haut, contrairement à la grille SVG.
-      y: -(y + (options?.translate?.[1] ?? 0)),
-      shape: shape ?? 'carré',
-      rotate: options?.rotate ?? 0,
-      scale: options?.scale ?? 1,
-    }
-  })
-  const needsCoordinateCompaction = rawCells.some(
-    ({ x, y }) => !Number.isInteger(x * 2) || !Number.isInteger(y * 2),
-  )
-  const coordinateRanks = (values: number[]) =>
-    new Map(
-      [...new Set(values.map((value) => Number(value.toFixed(4))))]
-        .sort((a, b) => a - b)
-        .map((value, index) => [value, index]),
-    )
-  const xRanks = coordinateRanks(rawCells.map(({ x }) => x))
-  const yRanks = coordinateRanks(rawCells.map(({ y }) => y))
-  const scaled = rawCells.map(({ x, y, shape, rotate, scale }) => ({
-    x: needsCoordinateCompaction ? (xRanks.get(Number(x.toFixed(4))) ?? 0) : x,
-    y: needsCoordinateCompaction ? (yRanks.get(Number(y.toFixed(4))) ?? 0) : y,
-    shape,
-    rotate,
-    scale,
-  }))
-  const minX = Math.min(0, ...scaled.map(({ x }) => x))
-  const minY = Math.min(0, ...scaled.map(({ y }) => y))
-  const cells = scaled.map(({ x, y, shape, rotate, scale }) => ({
-    x: x - minX + 2,
-    y: y - minY + 2,
-    shape,
-    ...(rotate === 0 ? {} : { rotate }),
-    ...(scale === 1 ? {} : { scale }),
-  }))
-  const maxCoordinate = Math.max(0, ...cells.flatMap(({ x, y }) => [x, y]))
-  return { version: 1, grid: Math.max(12, maxCoordinate + 3), cells }
-}
-
-function cubeStackStateFromPattern(
-  pattern: VisualPattern3D,
-  step: number,
-): CubeStackState {
-  const cubes = Array.from(pattern.iterate3d(step), (cell) => {
-    const [x, y, z] = VisualPattern3D.keyToCoord(cell)
-    return { x, y: z, z: -y, color: '#ffffff' }
-  })
-  const coordinates = cubes.flatMap(({ x, z }) => [x, z])
-  const span =
-    coordinates.length === 0
-      ? 0
-      : Math.max(...coordinates) - Math.min(...coordinates) + 1
-  return { version: 1, grid: Math.max(12, span + 4), cubes }
-}
-
-export default class PatternIteratif6e extends Exercice {
+export default class PatternIteratif6eOld extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
     this.comment = ` Les motifs sont des motifs figuratifs qui évoluent selon des règles définies.<br>
  Cet exercice contient des motifs issus de l'excellent site : <a href="https://www.visualpatterns.org/" target="_blank" style="color: blue">https://www.visualpatterns.org/</a>.<br>
  Cet exercice propose d'étudier les premiers termes d'une série de motifs afin de répondre à différentes questions possibles.<br>
-Grâce au premier groupe de paramètres, on peut choisir le nombre de motifs visibles et le niveau de difficulté.<br><br>
+Grâce au premier paramètre, on peut choisir le nombre de motifs visibles.<br><br>
 Grâce au deuxième paramètre, on peut choisir les questions à poser.<br><br>
 Grâce au troisième paramètre, on peut choisir le numéro du motif de la question 4.<br><br>
-Grâce au quatrième paramètre, on peut imposer des motifs choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=a1e38&s=1" target="_blank" style="color: blue">liste de motifs</a>.<br>
+Grâce au quatrième paramètre, on peut imposer des motifs choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=1" target="_blank" style="color: blue">liste de motifs</a>.<br>
 Si le nombre de motifs, dans l'exercice, est supérieur au nombre de motifs choisis, alors l'exercice sera complété par des motifs choisis au hasard. Le choix 0 sera toujours mis en dernier si d'autres choix ont été effectués.<br><br>
 Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au quatrième paramètre (sauf pour le choix 0 qui sera toujours du hasard).
     `
-    this.besoinFormulaireComplexe = formulaire6N4B
-    this.sup = serialiseFormulaireComplexe(
-      formulaire6N4B,
-      valeursParDefaut(formulaire6N4B),
-    )
+    this.besoinFormulaireNumerique = [
+      'Nombre de figures par question',
+      3,
+      'Deux figures\nTrois Figures\nQuatre Figures',
+    ]
+    this.sup = 2
 
     this.besoinFormulaire2Texte = [
       'Type de questions',
@@ -261,22 +101,18 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
     this.sup2 = '7'
 
     this.besoinFormulaire3Numerique = [
-      `Numéro du motif de la question 4 (entre 11 et ${patternsFor6N4B.length}, ou bien ${patternsFor6N4B.length + 1} pour laisser le hasard choisir)`,
-      patternsFor6N4B.length + 1,
+      `Numéro du motif de la question 4 (entre 11 et ${listePatternsSansRatioNiFraction.length}, ou bien ${listePatternsSansRatioNiFraction.length + 1} pour laisser le hasard choisir)`,
+      listePatternsSansRatioNiFraction.length + 1,
     ]
     this.sup3 = 0
 
-    const maxNumPattern = Math.max(
-      ...Object.values(patternsFor6N4BByDifficulty).map(
-        (patterns) => patterns.length,
-      ),
-    )
+    const maxNumPattern = listePatternsSansRatioNiFraction.length
 
     this.besoinFormulaire4Texte = [
       'Numéros des motifs désirés',
       [
         'Nombres séparés par des tirets  :',
-        `Entre 1 et ${maxNumPattern} : pour choisir un motif particulier dans le niveau sélectionné`,
+        `Entre 1 et ${maxNumPattern} : pour choisir un motif particulier`,
         `0 : pour laisser le hasard faire`,
       ].join('\n'),
     ]
@@ -289,16 +125,9 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
   }
 
   nouvelleVersion(): void {
-    const parametres = lireFormulaireComplexe(formulaire6N4B, this.sup)
-    const difficulty = contraindreValeur(
-      1,
-      3,
-      Number(parametres.selection('difficulte')),
-      1,
-    ) as Pattern2DDifficulty
     const ordreAleatoireDesQuestions = this.sup5
     // on ne conserve que les linéaires et les affines sans ratio, ni fraction, ni multiple shape
-    const listePatternReference = patternsFor6N4BByDifficulty[difficulty]
+    const listePatternReference = listePatternsSansRatioNiFraction
     const angle = Math.PI / 6
 
     let listePattern = gestionnaireFormulaireTexte({
@@ -319,12 +148,7 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
 
     const listePreDef = listePattern.map((i) => listePatternReference[i - 1])
 
-    const nbFigures = contraindreValeur(
-      2,
-      4,
-      Number(parametres.selection('nbFigures')),
-      3,
-    )
+    const nbFigures = contraindreValeur(2, 4, this.sup + 1, 4)
 
     let typesQuestionsInitiales = gestionnaireFormulaireTexte({
       saisie: this.sup2,
@@ -339,6 +163,7 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
     if (typesQuestionsInitiales.length === 6)
       typesQuestionsInitiales = range1(5)
     let typesQuestions
+    let indexInteractif = 0
     for (
       let i = 0;
       i < Math.min(listePatternReference.length, this.nbQuestions);
@@ -526,8 +351,6 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
       let texteCorr = ''
       const listeQuestions: string[] = []
       const listeCorrections: string[] = []
-      const elements: MathaleaCouteauSuisseChild[] = []
-      let childQuestionIndex = i * 6
       const infosShape =
         pattern.shapes[0] in listeShapes2DInfos
           ? listeShapes2DInfos[pattern.shapes[0]]
@@ -558,75 +381,7 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
         let numeroMotif = 0
         switch (q) {
           case 1:
-            {
-              const step = nbFigures + 1
-              const questionIndex = childQuestionIndex++
-              if (pattern instanceof VisualPattern3D) {
-                const expectedState = cubeStackStateFromPattern(pattern, step)
-                elements.push({
-                  formatInteractif: CubeStackEditorElement.elementTag,
-                  questionIndex,
-                  autoCorrection: {
-                    valeur: {
-                      reponse: { value: JSON.stringify(expectedState) },
-                    },
-                  },
-                })
-                listeQuestions.push(
-                  `\nDessiner le motif $${step}$.<br>${
-                    this.interactif
-                      ? CubeStackEditorElement.create({
-                          numeroExercice: this.numeroExercice ?? 0,
-                          questionIndex,
-                          grid: expectedState.grid,
-                          interactivityOn: true,
-                        })
-                      : ''
-                  }`,
-                )
-              } else {
-                const expectedState = shape2DGridStateFromPattern(pattern, step)
-                const shapes = [
-                  ...new Map(
-                    expectedState.cells.map((cell) => {
-                      const shape =
-                        listeShapes2DInfos[cell.shape].shape2D.clone()
-                      shape.angle = cell.rotate ?? 0
-                      shape.scale = {
-                        x: cell.scale ?? 1,
-                        y: cell.scale ?? 1,
-                      }
-                      return [
-                        `${cell.shape}|${shape.angle}|${shape.scale.x}`,
-                        shape,
-                      ] as const
-                    }),
-                  ).values(),
-                ]
-                elements.push({
-                  formatInteractif: Shape2DGridEditorElement.elementTag,
-                  questionIndex,
-                  autoCorrection: {
-                    valeur: {
-                      reponse: { value: JSON.stringify(expectedState) },
-                    },
-                  },
-                })
-                listeQuestions.push(
-                  `\nDessiner le motif $${step}$.<br>${
-                    this.interactif
-                      ? Shape2DGridEditorElement.create({
-                          numeroExercice: this.numeroExercice ?? 0,
-                          questionIndex,
-                          shapes,
-                          grid: expectedState.grid,
-                          interactivityOn: true,
-                        })
-                      : ''
-                  }`,
-                )
-              }
-            }
+            listeQuestions.push(`\nDessiner le motif $${nbFigures + 1}$.`)
             listeCorrections.push(`Voici le motif $${nbFigures + 1}$ :<br>
               ${mathalea2d(Object.assign(fixeBordures(objetsCorr, { rxmin: 0, rymin: -1, rxmax: 0, rymax: 1 }), { scale: 0.4, optionsTikz: 'transform shape' }), objetsCorr)}`)
             break
@@ -639,13 +394,14 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
           case 4:
             this.sup3 = contraindreValeur(
               1,
-              patternsFor6N4B.length + 1,
+              listePatternsSansRatioNiFraction.length + 1,
               this.sup3,
               randint(11, 99),
             )
             numeroMotif =
-              this.sup3 === patternsFor6N4B.length + 1 || this.sup3 < 11
-                ? randint(11, patternsFor6N4B.length + 1)
+              this.sup3 === listePatternsSansRatioNiFraction.length + 1 ||
+              this.sup3 < 11
+                ? randint(11, listePatternsSansRatioNiFraction.length + 1)
                 : this.sup3
             break
           case 5:
@@ -656,23 +412,17 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
         if (q !== 1) {
           const nbFormes = pat.fonctionNb(numeroMotif)
           const nbTex = texNombre(nbFormes, 0)
-          const questionIndex = childQuestionIndex++
-          elements.push({
-            formatInteractif: MathaleaMathfieldElement.elementTag,
-            questionIndex,
-            autoCorrection: { valeur: { reponse: { value: nbTex } } },
-          })
 
           listeQuestions.push(
-            `\nQuel sera le nombre ${infosShape.articleCourt} ${infosShape.nomPluriel} dans le motif $${numeroMotif}$ ?${
-              this.interactif
-                ? MathaleaMathfieldElement.create({
-                    numeroExercice: this.numeroExercice ?? 0,
-                    questionIndex,
-                    interactivityOn: true,
-                  })
-                : ''
-            }`,
+            `\nQuel sera le nombre ${infosShape.articleCourt} ${infosShape.nomPluriel} dans le motif $${numeroMotif}$ ?${ajouteQuestionMathlive(
+              {
+                exercice: this,
+                question: indexInteractif++,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
+                objetReponse: { reponse: { value: nbTex } },
+                typeInteractivite: 'mathlive',
+              },
+            )}`,
           )
           listeCorrections.push(
             (complementCorrection ? explain : '') +
@@ -698,20 +448,13 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
           )
         }
       }
-      const contenuInteractif =
+      texte +=
         listeQuestions.length === 1
           ? '<br>' + listeQuestions[0]
           : createList({
               items: listeQuestions,
               style: 'alpha',
             })
-      texte += MathaleaCouteauSuisseElement.create({
-        numeroExercice: this.numeroExercice ?? 0,
-        questionIndex: i,
-        elements,
-        contenu: contenuInteractif,
-        interactivityOn: this.interactif,
-      })
       texteCorr +=
         listeCorrections.length === 1
           ? listeCorrections[0]
@@ -733,10 +476,6 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
           )
       }
 
-      this.autoCorrection[i] = {
-        formatInteractif: MathaleaCouteauSuisseElement.elementTag,
-        elements,
-      }
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)
       i++
