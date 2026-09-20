@@ -134,7 +134,7 @@ Montrer que  $(${NomSA}_n)$ est une suite géométrique.<br>
            Ainsi l'expression de $${NomS}_n$ en fonction de $n$ est donnée pour tout entier naturel $n$ par  : 
            $${NomS}_n=${miseEnEvidence(`${texNombre(u0 - k, 1)}\\times ${ecritureParentheseSiNegatif(a)}^n ${ecritureAlgebrique(k)}`)}$.`,
         ],
-        style: 'nombres',
+        style: 'alpha',
       })
       if (this.questionJamaisPosee(i, texte)) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)

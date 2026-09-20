@@ -765,6 +765,15 @@ describe('htmlToTypst', () => {
     expect(htmlToTypst('<ol><li>un</li><li>deux</li></ol>')).toBe(
       '+ un\n+ deux',
     )
+    expect(
+      htmlToTypst("<ol class='alpha'><li>un</li><li>deux</li></ol>"),
+    ).toBe('#enum(numbering: "a)")[\n+ un\n+ deux]')
+  })
+
+  it('conserve l’espace avant une formule mise en évidence', () => {
+    expect(
+      htmlToTypst('Ainsi, ${\\color{#f15929}\\boldsymbol{x=2}}$'),
+    ).toBe('Ainsi, $text(fill: #rgb("#f15929"), bold(x = 2))$')
   })
 
   it('décode les entités HTML', () => {
