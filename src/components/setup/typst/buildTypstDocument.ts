@@ -688,6 +688,8 @@ const CAN_CORRECTIONS_PREFIX = 'ex0-corr'
  * aux changements de réglages et aux « Nouvelles données ».
  */
 export interface TypstCarryOver {
+  /** Ajustements propres aux sujets supplémentaires, indexés à partir de 1. */
+  versions?: Record<number, TypstCarryOver>
   /**
    * Valeurs de `#let exN-colonnes`/`#let exN-gutter`/`#let exN-numerotation`
    * divergeant des défauts, par préfixe d'exercice (`ex1`). Expressions
@@ -988,8 +990,68 @@ function perQuestionLinesTasksPrefixes(code: string | string[]): Set<string> {
   )
 }
 
+/** Les brouillons utilisent les numéros locaux des figures du sujet. */
+function offsetOverrideFigures(
+  carry: TypstCarryOver,
+  offset: number,
+): TypstCarryOver {
+  const result = { ...carry }
+  for (const key of [
+    'codeOverrides',
+    'codeOverridesCorrection',
+    'codeOverridesCan',
+    'codeOverridesCanReponse',
+  ] as const) {
+    if (carry[key] != null)
+      result[key] = Object.fromEntries(
+        Object.entries(carry[key]).map(([num, code]) => [
+          num,
+          code.replace(/\bfig-(\d+)\b/g, (_, n) => `fig-${Number(n) + offset}`),
+        ]),
+      )
+  }
+  return result
+}
+
 /** Extrait du code Typst courant les réglages de la palette à conserver */
+/** Masque les autres sujets sans déplacer les positions dans CodeMirror. */
+export function subjectEditorCode(code: string, version: number): string {
+  let active: number | null = null
+  return code
+    .split('\n')
+    .map((line) => {
+      const marker = /^\/\/ mathalea:(?:sujet|banque)\((\d+)\)\s*$/.exec(line)
+      if (marker != null) active = Number(marker[1])
+      if (line === '// mathalea:banque-fin') active = null
+      return active == null || active === version
+        ? line
+        : line.replace(/[^\r]/g, ' ')
+    })
+    .join('\n')
+}
+
 export function harvestCarryOver(code: string): TypstCarryOver {
+  const versions = [...code.matchAll(/^\/\/ mathalea:sujet\((\d+)\)/gm)]
+    .map((match) => Number(match[1]))
+    .filter((version) => version > 0)
+  const primary = harvestSubjectCarryOver(subjectEditorCode(code, 0))
+  if (versions.length > 0)
+    primary.versions = Object.fromEntries(
+      versions.map((version) => {
+        const selected = subjectEditorCode(code, version)
+        const offset = Number(
+          /^\/\/ mathalea:figures-offset\((\d+)\)/m.exec(selected)?.[1] ?? 0,
+        )
+        return [
+          version,
+          offsetOverrideFigures(harvestSubjectCarryOver(selected), -offset),
+        ]
+      }),
+    )
+  return primary
+}
+
+function harvestSubjectCarryOver(code: string): TypstCarryOver {
   const tasksLayout: Record<
     string,
     { columns?: string; gutter?: string; numbering?: string }
@@ -2748,12 +2810,6 @@ function buildCanVersionContent(
   figures: string[],
   emitAnchors: boolean,
   exportMode: boolean,
-  /**
-   * Sujet A : seul sujet sur lequel une surcharge de ligne saisie à la
-   * palette (`codeOverridesCan`/`codeOverridesCanReponse`) s'applique. Les
-   * sujets dérivés gardent leur contenu généré à partir de leur graine.
-   */
-  isPrimaryVersion: boolean,
   /** Nom du sujet (« Sujet A »...), affiché sur la section Corrections quand la fiche a plusieurs versions */
   versionLabel?: string,
 ): VersionContent {
@@ -2771,12 +2827,8 @@ function buildCanVersionContent(
     const rowAnchor = emitAnchors
       ? `#mathalea-anchor("can-row", ${rowNum})\n`
       : ''
-    const enonceOverride = isPrimaryVersion
-      ? carryOver.codeOverridesCan?.[rowNum]
-      : undefined
-    const reponseOverride = isPrimaryVersion
-      ? carryOver.codeOverridesCanReponse?.[rowNum]
-      : undefined
+    const enonceOverride = carryOver.codeOverridesCan?.[rowNum]
+    const reponseOverride = carryOver.codeOverridesCanReponse?.[rowNum]
     // Une question liée à la précédente n'a pas de cellule « Énoncé » : la
     // cellule de la première question du groupe couvre sa ligne
     // (`table.cell(rowspan: …)`), et `none` indique au helper de ne pas en
@@ -2892,10 +2944,8 @@ function buildCanVersionContent(
  * version du sujet. `varPrefix` distingue les variables de banque
  * (`#let <prefix>exN = ...`) d'une version à l'autre ; les variables de mise
  * en page des questions (`exN-colonnes`...) restent, elles, partagées entre
- * toutes les versions d'un même exercice. `emitAnchors` n'est activé que
- * pour la première version : les autres sont des copies (graine différente)
- * du même sujet, la palette de mise en page n'a donc besoin d'y contrôler
- * qu'une seule instance.
+ * toutes les versions d'un même exercice. Chaque sujet émet les mêmes
+ * repères pour permettre son édition depuis la palette.
  */
 function buildVersionContent(
   exercises: TypstExerciseInput[],
@@ -2915,16 +2965,11 @@ function buildVersionContent(
   /** Repères de régénération individuels pour les sujets B, C... */
   emitVersionExerciseAnchors = false,
 ): VersionContent {
-  // Une surcharge de code manuelle (modale d'édition de la palette) n'est
-  // saisie que sur le sujet affiché, c.-à-d. le Sujet A (`varPrefix` vide).
-  // Les sujets dérivés (B, C...) doivent garder le contenu généré à partir de
-  // leur graine propre : sans ce garde-fou, ils recopient la surcharge du
-  // Sujet A et tous les sujets deviennent identiques pour cet exercice.
-  const isPrimaryVersion = varPrefix === ''
+  // Le carry-over a déjà été sélectionné pour ce sujet par l'appelant.
   const codeOverrideAt = (num: number): string | undefined =>
-    isPrimaryVersion ? carryOver.codeOverrides?.[num] : undefined
+    carryOver.codeOverrides?.[num]
   const codeOverrideCorrectionAt = (num: number): string | undefined =>
-    isPrimaryVersion ? carryOver.codeOverridesCorrection?.[num] : undefined
+    carryOver.codeOverridesCorrection?.[num]
   // le mode « Course aux nombres » n'a ni banque d'exercices ni titres : tout
   // le contenu tient dans un seul tableau, construit à part
   if (options.canMode) {
@@ -2935,7 +2980,6 @@ function buildVersionContent(
       figures,
       emitAnchors,
       exportMode,
-      isPrimaryVersion,
       versionLabel,
     )
   }
@@ -3304,19 +3348,41 @@ export function buildTypstDocument(
     totalVersions > 1 ? `Sujet ${versionLetter(0)}` : undefined,
     false,
   )
-  const extra = extraVersions.map((versionExercises, i) =>
-    buildVersionContent(
+  const figureOffsets: number[] = []
+  const extra = extraVersions.map((versionExercises, i) => {
+    const offset = figures.length
+    figureOffsets.push(offset)
+    return buildVersionContent(
       versionExercises,
       options,
-      stableCarryOver,
+      offsetOverrideFigures(
+        stabilizeStructuralInsertions(
+          {
+            ...stableCarryOver,
+            codeOverrides: undefined,
+            codeOverridesCorrection: undefined,
+            codeOverridesCan: undefined,
+            codeOverridesCanReponse: undefined,
+            ...stableCarryOver.versions?.[i + 1],
+            // Ces variables sont communes aux sujets dans le préambule.
+            tasksLayout: stableCarryOver.tasksLayout,
+            figureZoom: stableCarryOver.figureZoom,
+            figureAlign: stableCarryOver.figureAlign,
+            exerciseZoom: stableCarryOver.exerciseZoom,
+            exerciseCorrectionZoom: stableCarryOver.exerciseCorrectionZoom,
+          },
+          versionExercises.length,
+        ),
+        offset,
+      ),
       figures,
       `v${i + 1}`,
-      false,
+      !exportMode,
       exportMode,
       totalVersions > 1 ? `Sujet ${versionLetter(i + 1)}` : undefined,
       !exportMode,
-    ),
-  )
+    )
+  })
   const bankLines = [...primary.bankLines, ...extra.flatMap((v) => v.bankLines)]
   const allLines = [
     ...bankLines,
@@ -3739,7 +3805,14 @@ export function buildTypstDocument(
     }
     lines.push('')
   }
-  lines.push(...bankLines)
+  if (totalVersions > 1) lines.push('// mathalea:banque(0)')
+  lines.push(...primary.bankLines)
+  for (const [i, version] of extra.entries()) {
+    lines.push(`// mathalea:banque(${i + 1})`)
+    lines.push(`// mathalea:figures-offset(${figureOffsets[i]})`)
+    lines.push(...version.bankLines)
+  }
+  if (totalVersions > 1) lines.push('// mathalea:banque-fin')
   lines.push('')
   // Repère de début de sujet : l'aperçu ne compile que le sujet montré (voir
   // `previewCode` dans `Typst.svelte`). La mise en page est l'essentiel du
@@ -3790,6 +3863,7 @@ export function buildTypstDocument(
     if (usesExerciseBank) lines.push('#exo-counter.update(0)')
     lines.push('')
     if (coverLines.length > 0) {
+      if (!exportMode) lines.push('#mathalea-anchor("cover", 0)')
       lines.push(
         ...coverPageLines(
           options.coverPage as TypstCoverOptions,
@@ -3801,6 +3875,9 @@ export function buildTypstDocument(
         ),
       )
       lines.push('')
+    }
+    if (!exportMode && options.headerStyle !== 'aucun') {
+      lines.push('#mathalea-anchor("header", 0)')
     }
     lines.push(
       ...headerBlock(
@@ -4104,7 +4181,7 @@ function pageFooter(
       '  #grid(columns: (1fr, auto, 1fr),',
       '    align(left)[#pied-page],',
       `    align(center)[${pagination}],`,
-      '    align(right)[#if sous-titre != "" { sous-titre } else { titre }],',
+      '    [],',
       '  )',
       '],',
     ]
@@ -4119,7 +4196,7 @@ function pageFooter(
       '  #grid(columns: (1fr, auto, 1fr),',
       '    align(left)[#pied-page],',
       `    align(center)[${pagination}],`,
-      '    align(right)[#emph(titre)],',
+      '    [],',
       '  )',
       '],',
     ]
@@ -4133,7 +4210,7 @@ function pageFooter(
     '  #grid(columns: (1fr, auto, 1fr),',
     '    align(left)[#pied-page],',
     `    align(center)[${pagination}],`,
-    '    align(right)[#emph(titre)],',
+    '    [],',
     '  )',
     '],',
   ]

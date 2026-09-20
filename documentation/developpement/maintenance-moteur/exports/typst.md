@@ -71,7 +71,7 @@ Fonctionnement :
 2. Après chaque compilation, `typstCompiler.ts` interroge le document (`world.query({ selector: '<mathalea-anchor>' })`, même monde de compilation que le rendu SVG) et renvoie les repères (`TypstAnchor`).
 3. `Typst.svelte` convertit ces positions en pourcentages du conteneur de l'aperçu (via la géométrie des pages renvoyée par `separatePages`) et place les contrôles.
 
-Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Exception : l'icône de l'étiquette de version régénère tout le code (`toggleVersionLabel` → `applyDocumentOptions`), la présence de `hide(...)` autour de l'étiquette (voir « En-tête et pied de page ») étant structurelle plutôt qu'une simple valeur de variable. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait. Avec plusieurs sujets, l'insertion est rendue dans chacun, mais seul le sujet principal porte son marqueur de relecture et les repères associés : une régénération ne peut donc pas recopier les insertions des sujets suivants dans le carry-over.
+Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Exception : l'icône de l'étiquette de version régénère tout le code (`toggleVersionLabel` → `applyDocumentOptions`), la présence de `hide(...)` autour de l'étiquette (voir « En-tête et pied de page ») étant structurelle plutôt qu'une simple valeur de variable. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait. Avec plusieurs sujets, chacun porte ses repères et ses marqueurs de relecture. `subjectEditorCode` masque les autres sujets (banques et rendus) sans déplacer les positions dans CodeMirror ; `harvestCarryOver` relit séparément leurs ajustements dans `versions`, afin de préserver les insertions et les surcharges de chaque sujet.
 
 À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. Les sauts de page ou de colonne sont normalisés à un exemplaire par repère (`stabilizeStructuralInsertions`, espaces `exo` et `corr`) et, entre les exercices, supprimés après le dernier, où ils n'ont aucun contenu suivant à déplacer ; cela répare aussi les anciens `typstParam` qui en contiennent des copies. « Réinitialiser les réglages du document » efface tout le carry-over.
 
@@ -221,6 +221,8 @@ Le style de numérotation par exercice utilise le même mécanisme que colonnes/
 
 ## En-tête et pied de page
 
+Le pied de page conserve le texte de gauche et la pagination centrale ; le rappel du titre en bas à droite est supprimé pour tous les habillages.
+
 Réglages des Réglages du document, indépendants l'un de l'autre :
 
 - **Étiquette de version masquable** (`TypstDocumentOptions.hideVersionLabel`,
@@ -344,10 +346,9 @@ code, sans régénération) plutôt que l'argument nommé :
   `Aucun`** (voir « En-tête et pied de page » plus haut) : la page de garde
   porte déjà le titre, un second bloc en page 2 ferait doublon.
 - Avec plusieurs versions (Sujet A, B…), la page de garde ouvre **chaque**
-  sujet (mêmes variables partagées) ; l'aide et le repère d'édition
-  (`#mathalea-anchor("cover", 0)`), eux, ne sont émis qu'une fois — seul le
-  premier sujet est éditable depuis l'aperçu, comme l'en-tête et le pied de
-  page.
+  sujet (mêmes variables partagées). Le repère d'édition
+  (`#mathalea-anchor("cover", 0)`) est émis sur chaque sujet, comme celui
+  de l'en-tête : ces réglages communs sont accessibles depuis tous les sujets.
 - Fiche entièrement composée d'exercices « can » (identifiant contenant
   `can`) : la détection automatique de `canMode` (voir « Mode « Course aux
   nombres » (tableau) » ci-dessous) sélectionne aussi le format **A5**, la
@@ -1068,10 +1069,16 @@ Le découpage se fait côté `Typst.svelte` (`previewCode`), pas dans le documen
   le PDF » compile `currentCode()`, qui porte tous les sujets, et le `.typ`
   est reconstruit par `buildExportCode`.
 
-À savoir : le sujet A porte tous les repères `mathalea-anchor`. Les sujets B,
-C… portent seulement des repères `version-exo`, qui affichent le bouton de
-**nouvelles données** pour chaque exercice : la graine modifiée reste limitée
-au sujet affiché. Les réglages de structure restent ceux, partagés, du sujet A.
+Chaque sujet porte les mêmes repères `mathalea-anchor` et propose la palette
+complète : édition des énoncés et corrections, insertions, fusions, lignes de
+réponse, réglages et nouvelles données. Les surcharges de contenu et les
+insertions sont propres au sujet affiché et persistent dans `carryOver.versions`
+pour B, C… (A conserve les champs historiques). Les variables du préambule
+(colonnes, espacements, en-tête, page de garde) et la liste des exercices restent
+communes. Les marqueurs `mathalea:banque(N)` identifient également les définitions
+pour que le double-clic et les éditions ciblent le bon sujet. Les surcharges
+conservent une numérotation locale des figures ; `mathalea:figures-offset(N)`
+permet de convertir les références lors de la génération et de la relecture.
 
 Reste ensuite `buildCode` (~1,3 à 2,3 s sur cette fiche) : il régénère les
 exercices de **tous** les sujets, puisque le code de l'éditeur, lui, les
