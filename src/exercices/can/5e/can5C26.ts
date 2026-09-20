@@ -1,5 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -44,7 +45,7 @@ export default class AdditionRelatifBisCAN extends ExerciceSimple {
       this.question = `Calculer $${texNombre(a)}${ecritureAlgebrique(b)}$.`
     }
 
-    this.correction = `$ ${a}${ecritureAlgebrique(b)} = ${a + b} $`
+    this.correction = `$ ${a}${ecritureAlgebrique(b)} = ${miseEnEvidence(a + b)} $`
     this.reponse = a + b
   }
 }
