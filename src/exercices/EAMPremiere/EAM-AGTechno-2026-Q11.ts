@@ -151,18 +151,13 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
     const effectifs = this.besoinFormulaireCaseACocher
       ? [85, 125, 189, 186, 248, 167]
       : Array.from({ length: 6 }, () => randint(100, 200))
-    const total = effectifs.reduce((a, b) => a + b, 0)
-    if (total < 1000) {
-      do {
-        const index = randint(0, 5)
-        effectifs[index] += 1
-      } while (effectifs.reduce((a, b) => a + b, 0) < 1000)
-    } else {
-      do {
-        const index = randint(0, 5)
-        if (effectifs[index] > 100) effectifs[index] -= 1
-        else continue
-      } while (effectifs.reduce((a, b) => a + b, 0) > 1000)
+    while (effectifs.reduce((a, b) => a + b, 0) < 1000) {
+      const index = randint(0, 5)
+      effectifs[index] += 1
+    }
+    while (effectifs.reduce((a, b) => a + b, 0) > 1000) {
+      const index = randint(0, 5)
+      if (effectifs[index] > 100) effectifs[index] -= 1
     }
     const choix = choice(['min', 'max'])
     const age =

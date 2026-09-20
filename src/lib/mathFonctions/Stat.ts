@@ -623,7 +623,7 @@ export default class Stat {
         if (percentVsEffectifs) {
           objets.push(
             latex2d(
-              `${texNombre((pairs[i][1] / total) * 100, 2)}\\,\\%`,
+              `${texNombre((pairs[i][1] / total) * 100, 1)}\\,\\%`,
               C.x,
               C.y,
               { letterSize: 'small' },
