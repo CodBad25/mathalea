@@ -27,6 +27,7 @@
     defaultIHaveWhoHasDocumentOptions,
     duplicateMinimalAnswers,
     harvestIHaveWhoHasCarryOver,
+    iHaveWhoHasSeriesId,
     I_HAVE_WHO_HAS_BACK_IMAGE,
     I_HAVE_WHO_HAS_BACK_IMAGE_VIRTUAL_PATH,
     type IHaveWhoHasDocumentOptions,
@@ -200,13 +201,22 @@
 
   function generatedCode(forceNewData = false): string | null {
     const inputs = buildUniqueInputs(forceNewData)
-    return inputs == null
-      ? null
-      : buildIHaveWhoHasDocument(
-          inputs,
-          documentOptions,
-          harvestIHaveWhoHasCarryOver(code),
-        )
+    if (inputs == null) return null
+    const carryOver = harvestIHaveWhoHasCarryOver(code)
+    // Un réglage de mise en page conserve les repères. « Nouvelles données »
+    // crée une nouvelle série et doit donc les rebrasser entièrement.
+    if (forceNewData) delete carryOver.cardCodes
+    const seriesId = iHaveWhoHasSeriesId(
+      exercises
+        .map((exercise) => exercise?.seed ?? '')
+        .concat(JSON.stringify(inputs)),
+    )
+    return buildIHaveWhoHasDocument(
+      inputs,
+      documentOptions,
+      carryOver,
+      seriesId,
+    )
   }
 
   interface CardWidget {
