@@ -246,4 +246,16 @@ describe('Ordre des générations asynchrones des automatismes', () => {
     expect(reloaded.listeQuestions).toEqual(['A'])
     expect(reloaded.sup5).toBe(selection)
   })
+
+  it('invalide la sélection sauvegardée lors de nouvelles données', async () => {
+    const { exercise, a } = fixture()
+    exercise.nouvelleVersion()
+    a.resolve({ default: QuestionA })
+    await settle()
+    expect(exercise.sup5).toMatch(/A01$/)
+
+    exercise.applyNewSeed()
+
+    expect(exercise.sup5).toBe(false)
+  })
 })

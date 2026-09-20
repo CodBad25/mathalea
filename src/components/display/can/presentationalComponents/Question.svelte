@@ -3,6 +3,7 @@
   import { afterUpdate, onDestroy, onMount } from 'svelte'
   import { setSizeWithinSvgContainer } from '../../../../lib/components/sizeTools'
   import type ListeDeroulanteElement from '../../../../lib/customElements/ListeDeroulanteElement'
+  import type { MathaleaTextfieldElement } from '../../../../lib/customElements/MathaleaTextfield'
   import {
     questionCliqueFigure,
     type FigureClicable,
@@ -98,6 +99,22 @@
         $canOptions.questionGetAnswer[index] = false
       }
     }
+  }
+
+  function syncTextfieldsState() {
+    const textfields = questionContainer?.querySelectorAll(
+      'mathalea-textfield',
+    ) as NodeListOf<MathaleaTextfieldElement>
+    const hasAnswer = Array.from(textfields ?? []).some(
+      (textfield) => textfield.value !== '',
+    )
+    if ($canOptions.questionGetAnswer[index] !== hasAnswer) {
+      $canOptions.questionGetAnswer[index] = hasAnswer
+    }
+  }
+
+  function handleTextfieldElement(_ev: Event) {
+    syncTextfieldsState()
   }
 
   function syncListeDeroulantesState() {
@@ -221,6 +238,21 @@
             ensureKeyboardVisibleForMathfield(mf)
           }
         }, 0)
+        return
+      }
+
+      const textfields = questionContainer?.querySelectorAll(
+        'mathalea-textfield',
+      ) as NodeListOf<MathaleaTextfieldElement>
+      if (textfields.length > 0) {
+        $keyboardState.isVisible = false
+        for (const textfield of textfields) {
+          if (!textfield.dataset.listenerAdded) {
+            textfield.dataset.listenerAdded = 'true' // Marquer comme ajouté
+            textfield.addEventListener('input', handleTextfieldElement)
+          }
+        }
+        syncTextfieldsState()
         return
       }
 

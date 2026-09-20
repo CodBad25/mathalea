@@ -14,7 +14,7 @@ export const interactifReady = true
 export const uuid = '38207'
 
 export const refs = {
-  'fr-fr': ['can2S30-02'],
+  'fr-fr': ['can2S30-02', '2P10-flash2'],
   'fr-ch': ['3mP-4'],
 }
 export default class Denombrement extends ExerciceSimple {

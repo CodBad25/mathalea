@@ -388,6 +388,8 @@ export type InteractivityType =
   | 'diagram-histogram-assessment' // Non compatible AMC
   | 'diagram-cartesian-assessment' // Non compatible AMC
   | 'traceur-de-courbe' // Non compatible AMC
+  | 'cube-stack-editor' // Non compatible AMC
+  | 'shape-2d-grid-editor' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -453,7 +455,9 @@ export function isInteractivityType(
     value === 'diagram-bar-assessment' ||
     value === 'diagram-histogram-assessment' ||
     value === 'diagram-cartesian-assessment' ||
-    value === 'traceur-de-courbe'
+    value === 'traceur-de-courbe' ||
+    value === 'cube-stack-editor' ||
+    value === 'shape-2d-grid-editor'
   )
 }
 
@@ -501,7 +505,9 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'diagram-pie-assessment' ||
     value === 'diagram-bar-assessment' ||
     value === 'diagram-histogram-assessment' ||
-    value === 'diagram-cartesian-assessment'
+    value === 'diagram-cartesian-assessment' ||
+    value === 'cube-stack-editor' ||
+    value === 'shape-2d-grid-editor'
   )
 }
 

@@ -6,7 +6,8 @@
      * `version-exo` : exercice d'un sujet B, C... (régénération seule) ;
      * `corr` : début de la correction d'un exercice ;
      * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
-     * `cover` : textes de la page de garde ; `footer` : texte du pied de page
+     * `cover` : textes de la page de garde ; `footer` : texte du pied de page ;
+     * `qr-code` : URL du QR-code global
      * (première page seulement) ; `version-label` : étiquette « Sujet A/B... »
      * de l'en-tête (fiche à plusieurs versions) ; `figure` : figure
      * mathalea2d embarquée (zoom) ; `can-row` : ligne du tableau « Course aux
@@ -21,6 +22,7 @@
       | 'header'
       | 'cover'
       | 'footer'
+      | 'qr-code'
       | 'version-label'
       | 'figure'
       | 'can-row'
@@ -100,6 +102,8 @@
     coverTemplate?: CoverTemplate
     /** Texte du pied de page (valeur lue dans le code), première page seulement */
     footerText?: string
+    /** URL des QR-codes globaux, par sujet, lues dans le code Typst */
+    qrCodeUrls?: Record<number, string>
     /**
      * Étiquette « Sujet A/B... » masquée : reste dans le document (`hide()`,
      * voir `headerBlock`), pour que les élèves n'y lisent pas leur version.
@@ -143,6 +147,7 @@
     ) => void
     onUpdateCoverConsignes: (consignes: string[]) => void
     onUpdateFooterText: (value: string) => void
+    onUpdateQrCodeUrl: (version: number, value: string) => void
     /** Affiche ou masque l'étiquette « Sujet A/B... » de l'en-tête */
     onToggleVersionLabel: () => void
     /** Nombre de questions par exercice (null : non réglable) */
@@ -251,6 +256,7 @@
     coverConsignes = [],
     coverTemplate = 'aucune',
     footerText = '',
+    qrCodeUrls = {},
     hideVersionLabel = false,
     onAdjustColumns,
     onAdjustGutter,
@@ -265,6 +271,7 @@
     onUpdateCover,
     onUpdateCoverConsignes,
     onUpdateFooterText,
+    onUpdateQrCodeUrl,
     onToggleVersionLabel,
     questionCounts = {},
     staticExercises = {},
@@ -433,6 +440,25 @@
   function submitFooter() {
     if (footerDraft !== footerText) onUpdateFooterText(footerDraft)
     footerOpen = false
+  }
+
+  /** Panneau d'édition de l'URL du QR-code global */
+  let qrCodeOpen = $state(false)
+  let qrCodeDraft = $state('')
+  let qrCodeVersion = $state(0)
+
+  function toggleQrCode(version: number) {
+    qrCodeOpen = !qrCodeOpen
+    if (qrCodeOpen) {
+      qrCodeVersion = version
+      qrCodeDraft = qrCodeUrls[version] ?? ''
+    }
+  }
+
+  function submitQrCode() {
+    if (qrCodeDraft !== (qrCodeUrls[qrCodeVersion] ?? ''))
+      onUpdateQrCodeUrl(qrCodeVersion, qrCodeDraft)
+    qrCodeOpen = false
   }
 
   /** Brouillons d'édition des insertions existantes du panneau ouvert */
@@ -974,6 +1000,56 @@
         >
           <i class="bx bx-pencil text-xs"></i>
         </button>
+      </div>
+    {:else if widget.kind === 'qr-code'}
+      <div
+        class="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2"
+        style="left: {widget.left}%; top: {widget.top}%;"
+      >
+        <button
+          type="button"
+          title="Modifier l’URL du QR-code global"
+          aria-label="Modifier l’URL du QR-code global"
+          aria-expanded={qrCodeOpen}
+          class="typst-pill typst-pill-round flex h-6 w-6 items-center justify-center"
+          class:typst-pill-force-visible={qrCodeOpen}
+          data-testid="typst-overlay-qr-code"
+          onclick={() => toggleQrCode(widget.num)}
+        >
+          <i class="bx bx-pencil"></i>
+        </button>
+        {#if qrCodeOpen}
+          <div class="absolute right-4 top-0 z-20 w-80 space-y-2 typst-panel p-2">
+            <label class="block space-y-0.5">
+              <span class="text-[0.65rem] uppercase text-gray-500">URL du QR-code</span>
+              <input
+                type="url"
+                class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
+                bind:value={qrCodeDraft}
+                onkeydown={(e) => {
+                  if (e.key === 'Enter') submitQrCode()
+                  if (e.key === 'Escape') qrCodeOpen = false
+                }}
+              />
+            </label>
+            <div class="flex justify-end gap-2">
+              <button
+                type="button"
+                class="px-2 py-0.5 hover:text-coopmaths-action"
+                onclick={() => (qrCodeOpen = false)}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                class="rounded bg-coopmaths-action px-2 py-0.5 text-white"
+                onclick={submitQrCode}
+              >
+                Enregistrer
+              </button>
+            </div>
+          </div>
+        {/if}
       </div>
     {:else if widget.kind === 'header'}
       <!-- édition du titre, du sous-titre et de la ligne d'en-tête -->

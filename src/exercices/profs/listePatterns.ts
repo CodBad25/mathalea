@@ -47,7 +47,9 @@ export const refs = {
   'fr-fr': ['P023'],
   'fr-ch': [],
 }
-export const uuid = '71ff5'
+export const dateDeModifImportante = '19/09/2026'
+
+export const uuid = 'a1e38'
 
 /**
  * Affiche les patterns propres à un exercice

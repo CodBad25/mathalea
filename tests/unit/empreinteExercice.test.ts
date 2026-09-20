@@ -230,6 +230,14 @@ describe('exercicesAControler', () => {
     ).toEqual(catalogue)
   })
 
+  it('contrôle tout quand un parent partagé de src/exercices est modifié', () => {
+    expect(
+      exercicesAControler(catalogue, {
+        CHANGED_FILES: 'src/exercices/MetaExerciceCan.ts',
+      }),
+    ).toEqual(catalogue)
+  })
+
   it('ignore les tests et les composants Svelte des utilitaires', () => {
     expect(
       exercicesAControler(catalogue, {

@@ -12,21 +12,393 @@
   },
   "exercices": [
     {
+      "id": "appartenance-triple",
+      "titre": "Appartenance triple",
+      "categorie": "Coloriage",
+      "sousCategorie": "Conditionnel",
+      "tags": [
+        "dénombrement",
+        "rectangle",
+        "superposition",
+        "2003Q5"
+      ],
+      "etoiles": 2,
+      "png": "png/appartenance-triple.png",
+      "typ": "typ/appartenance-triple.typ",
+      "tex": "tex/appartenance-triple.tex"
+    },
+    {
+      "id": "mur-de-couleur",
+      "titre": "Mur de couleur",
+      "categorie": "Coloriage",
+      "sousCategorie": "Conditionnel",
+      "tags": [
+        "coloriage",
+        "rectangle",
+        "minimum",
+        "2001F6"
+      ],
+      "etoiles": 2,
+      "png": "png/mur-de-couleur.png",
+      "pngCor": "png/mur-de-couleur_cor.png",
+      "typ": "typ/mur-de-couleur.typ",
+      "typCor": "typ/mur-de-couleur_cor.typ",
+      "tex": "tex/mur-de-couleur.tex",
+      "texCor": "tex/mur-de-couleur_cor.tex"
+    },
+    {
+      "id": "trois-ronds",
+      "titre": "Les trois ronds",
+      "categorie": "Coloriage",
+      "sousCategorie": "Conditionnel",
+      "tags": [
+        "coloriage",
+        "rond",
+        "2006D1"
+      ],
+      "etoiles": 1,
+      "png": "png/trois-ronds.png",
+      "pngCor": "png/trois-ronds_cor.png",
+      "typ": "typ/trois-ronds.typ",
+      "typCor": "typ/trois-ronds_cor.typ",
+      "tex": "tex/trois-ronds.tex",
+      "texCor": "tex/trois-ronds_cor.tex"
+    },
+    {
+      "id": "les-cubes",
+      "titre": "Les cubes",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans l'espace",
+      "tags": [
+        "dénombrement",
+        "espace",
+        "cubes",
+        "2021Q3"
+      ],
+      "etoiles": 2,
+      "png": "png/les-cubes.png",
+      "pngCor": "png/les-cubes_cor.png",
+      "typ": "typ/les-cubes.typ",
+      "typCor": "typ/les-cubes_cor.typ",
+      "tex": "tex/les-cubes.tex",
+      "texCor": "tex/les-cubes_cor.tex"
+    },
+    {
+      "id": "cinq-points-plans",
+      "titre": "Cinq points et des plans",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans l'espace",
+      "tags": [
+        "dénombrement",
+        "plans",
+        "intersections",
+        "2021Q17"
+      ],
+      "etoiles": 5,
+      "png": "png/cinq-points-plans.png",
+      "pngCor": "png/cinq-points-plans_cor.png",
+      "typ": "typ/cinq-points-plans.typ",
+      "typCor": "typ/cinq-points-plans_cor.typ",
+      "tex": "tex/cinq-points-plans.tex",
+      "texCor": "tex/cinq-points-plans_cor.tex"
+    },
+    {
       "id": "2026-df-1",
       "titre": "L'étoile dansante",
-      "categorie": "Dénombrement de figure",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
         "triangles",
         "2026D1"
       ],
-      "etoiles": 2,
+      "etoiles": 1,
       "png": "png/2026-df-1.png",
       "pngCor": "png/2026-df-1_cor.png",
       "typ": "typ/2026-df-1.typ",
       "typCor": "typ/2026-df-1_cor.typ",
       "tex": "tex/2026-df-1.tex",
       "texCor": "tex/2026-df-1_cor.tex"
+    },
+    {
+      "id": "les-angles-droits",
+      "titre": "Les angles droits",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "angles droits",
+        "2006D3"
+      ],
+      "etoiles": 1,
+      "png": "png/les-angles-droits.png",
+      "pngCor": "png/les-angles-droits_cor.png",
+      "typ": "typ/les-angles-droits.typ",
+      "typCor": "typ/les-angles-droits_cor.typ",
+      "tex": "tex/les-angles-droits.tex",
+      "texCor": "tex/les-angles-droits_cor.tex"
+    },
+    {
+      "id": "les-carres",
+      "titre": "Les carrés",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "carrés",
+        "2004Q3"
+      ],
+      "etoiles": 2,
+      "png": "png/les-carres.png",
+      "pngCor": "png/les-carres_cor.png",
+      "typ": "typ/les-carres.typ",
+      "typCor": "typ/les-carres_cor.typ",
+      "tex": "tex/les-carres.tex",
+      "texCor": "tex/les-carres_cor.tex"
+    },
+    {
+      "id": "les-losanges",
+      "titre": "Les losanges",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "losanges",
+        "2009D3"
+      ],
+      "etoiles": 2,
+      "png": "png/les-losanges.png",
+      "pngCor": "png/les-losanges_cor.png",
+      "typ": "typ/les-losanges.typ",
+      "typCor": "typ/les-losanges_cor.typ",
+      "tex": "tex/les-losanges.tex",
+      "texCor": "tex/les-losanges_cor.tex"
+    },
+    {
+      "id": "les-rectangles",
+      "titre": "Les rectangles",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "rectangles",
+        "2006Q7"
+      ],
+      "etoiles": 2,
+      "png": "png/les-rectangles.png",
+      "pngCor": "png/les-rectangles_cor.png",
+      "typ": "typ/les-rectangles.typ",
+      "typCor": "typ/les-rectangles_cor.typ",
+      "tex": "tex/les-rectangles.tex",
+      "texCor": "tex/les-rectangles_cor.tex"
+    },
+    {
+      "id": "les-triangles",
+      "titre": "Les triangles",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "triangles",
+        "2006Q2"
+      ],
+      "etoiles": 1,
+      "png": "png/les-triangles.png",
+      "pngCor": "png/les-triangles_cor.png",
+      "typ": "typ/les-triangles.typ",
+      "typCor": "typ/les-triangles_cor.typ",
+      "tex": "tex/les-triangles.tex",
+      "texCor": "tex/les-triangles_cor.tex"
+    },
+    {
+      "id": "diagonales",
+      "titre": "Diagonales",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "pattern",
+        "heptagone",
+        "intersections",
+        "2021D12"
+      ],
+      "etoiles": 4,
+      "png": "png/diagonales.png",
+      "pngCor": "png/diagonales_cor.png",
+      "typ": "typ/diagonales.typ",
+      "typCor": "typ/diagonales_cor.typ",
+      "tex": "tex/diagonales.tex",
+      "texCor": "tex/diagonales_cor.tex"
+    },
+    {
+      "id": "partage-brice",
+      "titre": "Le partage de Brice",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "partage",
+        "maximum",
+        "2006D10"
+      ],
+      "etoiles": 3,
+      "png": "png/partage-brice.png",
+      "pngCor": "png/partage-brice_cor.png",
+      "typ": "typ/partage-brice.typ",
+      "typCor": "typ/partage-brice_cor.typ",
+      "tex": "tex/partage-brice.tex",
+      "texCor": "tex/partage-brice_cor.tex"
+    },
+    {
+      "id": "partage-pays-plan",
+      "titre": "Le partage du pays plan",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "parallèle",
+        "2001Q1"
+      ],
+      "etoiles": 2,
+      "png": "png/partage-pays-plan.png",
+      "pngCor": "png/partage-pays-plan_cor.png",
+      "typ": "typ/partage-pays-plan.typ",
+      "typCor": "typ/partage-pays-plan_cor.typ",
+      "tex": "tex/partage-pays-plan.tex",
+      "texCor": "tex/partage-pays-plan_cor.tex"
+    },
+    {
+      "id": "quatre-figures",
+      "titre": "Quatre figures et c'est tout",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "triangle",
+        "cerlce",
+        "maximum",
+        "2006Q17"
+      ],
+      "etoiles": 5,
+      "png": "png/quatre-figures.png",
+      "pngCor": "png/quatre-figures_cor.png",
+      "typ": "typ/quatre-figures.typ",
+      "typCor": "typ/quatre-figures_cor.typ",
+      "tex": "tex/quatre-figures.tex",
+      "texCor": "tex/quatre-figures_cor.tex"
+    },
+    {
+      "id": "rectangles",
+      "titre": "Les rectangles (bis)",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "rectangles",
+        "2021Q11"
+      ],
+      "etoiles": 4,
+      "png": "png/rectangles.png",
+      "pngCor": "png/rectangles_cor.png",
+      "typ": "typ/rectangles.typ",
+      "typCor": "typ/rectangles_cor.typ",
+      "tex": "tex/rectangles.tex",
+      "texCor": "tex/rectangles_cor.tex"
+    },
+    {
+      "id": "les-couleurs",
+      "titre": "Les couleurs",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Scénarios",
+      "tags": [
+        "dénombrement",
+        "comptage",
+        "couleur",
+        "2003D5"
+      ],
+      "etoiles": 2,
+      "png": "png/les-couleurs.png",
+      "pngCor": "png/les-couleurs_cor.png",
+      "typ": "typ/les-couleurs.typ",
+      "typCor": "typ/les-couleurs_cor.typ",
+      "tex": "tex/les-couleurs.tex",
+      "texCor": "tex/les-couleurs_cor.tex"
+    },
+    {
+      "id": "baguette-decouper",
+      "titre": "Une baguette à découper",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Scénarios",
+      "tags": [
+        "dénombrement",
+        "triangles",
+        "inégalité triangulaire",
+        "2020D13"
+      ],
+      "etoiles": 4,
+      "png": "png/baguette-decouper.png",
+      "pngCor": "png/baguette-decouper_cor.png",
+      "typ": "typ/baguette-decouper.typ",
+      "typCor": "typ/baguette-decouper_cor.typ",
+      "tex": "tex/baguette-decouper.tex",
+      "texCor": "tex/baguette-decouper_cor.tex"
+    },
+    {
+      "id": "bon-anniversaire",
+      "titre": "Bon anniversaire",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Scénarios",
+      "tags": [
+        "dénombrement",
+        "triangles",
+        "inegalite triangulaire",
+        "2000D5"
+      ],
+      "etoiles": 3,
+      "png": "png/bon-anniversaire.png",
+      "pngCor": "png/bon-anniversaire_cor.png",
+      "typ": "typ/bon-anniversaire.typ",
+      "typCor": "typ/bon-anniversaire_cor.typ",
+      "tex": "tex/bon-anniversaire.tex",
+      "texCor": "tex/bon-anniversaire_cor.tex"
+    },
+    {
+      "id": "somme-annee",
+      "titre": "La somme de l'année",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Scénarios",
+      "tags": [
+        "dénombrement",
+        "comptage",
+        "somme",
+        "2013D8"
+      ],
+      "etoiles": 2,
+      "png": "png/somme-annee.png",
+      "pngCor": "png/somme-annee_cor.png",
+      "typ": "typ/somme-annee.typ",
+      "typCor": "typ/somme-annee_cor.typ",
+      "tex": "tex/somme-annee.tex",
+      "texCor": "tex/somme-annee_cor.tex"
+    },
+    {
+      "id": "chaque-figure-son-nombre",
+      "titre": "À chaque figure son nombre",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Association logique",
+      "tags": [
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "2003D2"
+      ],
+      "etoiles": 1,
+      "png": "png/chaque-figure-son-nombre.png",
+      "pngCor": "png/chaque-figure-son-nombre_cor.png",
+      "typ": "typ/chaque-figure-son-nombre.typ",
+      "typCor": "typ/chaque-figure-son-nombre_cor.typ",
+      "tex": "tex/chaque-figure-son-nombre.tex",
+      "texCor": "tex/chaque-figure-son-nombre_cor.tex"
     },
     {
       "id": "autoreference-1",
@@ -38,7 +410,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "2015Q3"
       ],
       "etoiles": 2,
@@ -60,7 +431,6 @@
         "raisonnement",
         "essai erreur",
         "parité",
-        "cycle 3",
         "2014Q3"
       ],
       "etoiles": 2,
@@ -81,7 +451,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 2",
         "2013D5"
       ],
       "etoiles": 2,
@@ -103,7 +472,6 @@
         "raisonnement",
         "essai erreur",
         "multiple",
-        "cycle 3",
         "2012D9"
       ],
       "etoiles": 2,
@@ -124,7 +492,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 2",
         "2009Q2"
       ],
       "etoiles": 2,
@@ -145,7 +512,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "2008D6"
       ],
       "etoiles": 2,
@@ -166,8 +532,7 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
-        "2000Q6"
+        "2000Q7"
       ],
       "etoiles": 2,
       "png": "png/autoreference-7.png",
@@ -178,7 +543,27 @@
       "texCor": "tex/autoreference-7_cor.tex"
     },
     {
-      "id": "cadres_autoreferents",
+      "id": "autoreference-8",
+      "titre": "Autoréférence 8",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Autoréférence",
+      "tags": [
+        "autoréférence",
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "2016D5"
+      ],
+      "etoiles": 2,
+      "png": "png/autoreference-8.png",
+      "pngCor": "png/autoreference-8_cor.png",
+      "typ": "typ/autoreference-8.typ",
+      "typCor": "typ/autoreference-8_cor.typ",
+      "tex": "tex/autoreference-8.tex",
+      "texCor": "tex/autoreference-8_cor.tex"
+    },
+    {
+      "id": "cadres-autoreferents",
       "titre": "Cadres autoréférents",
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
@@ -187,19 +572,18 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 4",
         "2001Q15"
       ],
       "etoiles": 3,
-      "png": "png/cadres_autoreferents.png",
-      "pngCor": "png/cadres_autoreferents_cor.png",
-      "typ": "typ/cadres_autoreferents.typ",
-      "typCor": "typ/cadres_autoreferents_cor.typ",
-      "tex": "tex/cadres_autoreferents.tex",
-      "texCor": "tex/cadres_autoreferents_cor.tex"
+      "png": "png/cadres-autoreferents.png",
+      "pngCor": "png/cadres-autoreferents_cor.png",
+      "typ": "typ/cadres-autoreferents.typ",
+      "typCor": "typ/cadres-autoreferents_cor.typ",
+      "tex": "tex/cadres-autoreferents.tex",
+      "texCor": "tex/cadres-autoreferents_cor.tex"
     },
     {
-      "id": "pairs_et_impairs",
+      "id": "pairs-et-impairs",
       "titre": "Pairs et Impairs",
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
@@ -209,16 +593,55 @@
         "raisonnement",
         "essai erreur",
         "parité",
-        "cycle 3",
         "2025D5"
       ],
       "etoiles": 2,
-      "png": "png/pairs_et_impairs.png",
-      "pngCor": "png/pairs_et_impairs_cor.png",
-      "typ": "typ/pairs_et_impairs.typ",
-      "typCor": "typ/pairs_et_impairs_cor.typ",
-      "tex": "tex/pairs_et_impairs.tex",
-      "texCor": "tex/pairs_et_impairs_cor.tex"
+      "png": "png/pairs-et-impairs.png",
+      "pngCor": "png/pairs-et-impairs_cor.png",
+      "typ": "typ/pairs-et-impairs.typ",
+      "typCor": "typ/pairs-et-impairs_cor.typ",
+      "tex": "tex/pairs-et-impairs.tex",
+      "texCor": "tex/pairs-et-impairs_cor.tex"
+    },
+    {
+      "id": "bonbon",
+      "titre": "Les bonbons",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "logique",
+        "raisonnement",
+        "menteur",
+        "essai erreur",
+        "2003Q8"
+      ],
+      "etoiles": 3,
+      "png": "png/bonbon.png",
+      "pngCor": "png/bonbon_cor.png",
+      "typ": "typ/bonbon.typ",
+      "typCor": "typ/bonbon_cor.typ",
+      "tex": "tex/bonbon.tex",
+      "texCor": "tex/bonbon_cor.tex"
+    },
+    {
+      "id": "grenouille-prince-charmant",
+      "titre": "Les grenouilles et le prince charmant",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "logique",
+        "raisonnement",
+        "menteur",
+        "essai erreur",
+        "2001D5"
+      ],
+      "etoiles": 2,
+      "png": "png/grenouille-prince-charmant.png",
+      "pngCor": "png/grenouille-prince-charmant_cor.png",
+      "typ": "typ/grenouille-prince-charmant.typ",
+      "typCor": "typ/grenouille-prince-charmant_cor.typ",
+      "tex": "tex/grenouille-prince-charmant.tex",
+      "texCor": "tex/grenouille-prince-charmant_cor.tex"
     },
     {
       "id": "4desserts-1",
@@ -230,7 +653,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -251,7 +673,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -272,7 +693,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -293,7 +713,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -314,7 +733,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -335,7 +753,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -356,7 +773,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -377,7 +793,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -398,7 +813,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -419,7 +833,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -440,7 +853,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -461,7 +873,6 @@
         "logique",
         "raisonnement",
         "essai erreur",
-        "cycle 3",
         "C25J24"
       ],
       "etoiles": 2,
@@ -481,7 +892,6 @@
         "euro",
         "décomposition",
         "minimum",
-        "cycle 3",
         "2026Q3"
       ],
       "etoiles": 2,
@@ -504,7 +914,6 @@
         "systèmes",
         "raisonnement",
         "essai erreur",
-        "cycle 2",
         "2022Q6"
       ],
       "etoiles": 2,
@@ -527,7 +936,6 @@
         "systèmes",
         "raisonnement",
         "essai erreur",
-        "cycle 2",
         "2022Q6"
       ],
       "etoiles": 2,
@@ -539,6 +947,59 @@
       "texCor": "tex/balance_bw_cor.tex"
     },
     {
+      "id": "histoire-de-billes",
+      "titre": "Histoire de billes",
+      "categorie": "Système simple",
+      "tags": [
+        "billes",
+        "équations",
+        "systèmes",
+        "2000Q5"
+      ],
+      "etoiles": 2,
+      "png": "png/histoire-de-billes.png",
+      "pngCor": "png/histoire-de-billes_cor.png",
+      "typ": "typ/histoire-de-billes.typ",
+      "typCor": "typ/histoire-de-billes_cor.typ",
+      "tex": "tex/histoire-de-billes.tex",
+      "texCor": "tex/histoire-de-billes_cor.tex"
+    },
+    {
+      "id": "histoire-de-famille",
+      "titre": "Histoire de famille",
+      "categorie": "Système simple",
+      "tags": [
+        "Famille",
+        "équations",
+        "âge",
+        "systèmes",
+        "2011D10"
+      ],
+      "etoiles": 3,
+      "png": "png/histoire-de-famille.png",
+      "pngCor": "png/histoire-de-famille_cor.png",
+      "typ": "typ/histoire-de-famille.typ",
+      "typCor": "typ/histoire-de-famille_cor.typ"
+    },
+    {
+      "id": "poste-et-vous",
+      "titre": "La poste et vous",
+      "categorie": "Système simple",
+      "tags": [
+        "code",
+        "équations",
+        "systèmes",
+        "2000D3"
+      ],
+      "etoiles": 2,
+      "png": "png/poste-et-vous.png",
+      "pngCor": "png/poste-et-vous_cor.png",
+      "typ": "typ/poste-et-vous.typ",
+      "typCor": "typ/poste-et-vous_cor.typ",
+      "tex": "tex/poste-et-vous.tex",
+      "texCor": "tex/poste-et-vous_cor.tex"
+    },
+    {
       "id": "sapin_1",
       "titre": "Les sapins",
       "categorie": "Système simple",
@@ -547,7 +1008,6 @@
         "équations",
         "balances",
         "systèmes",
-        "cycle 2",
         "2014QF6"
       ],
       "etoiles": 2,
@@ -567,7 +1027,6 @@
         "équations",
         "balances",
         "systèmes",
-        "cycle 2",
         "2014QF6"
       ],
       "etoiles": 3,

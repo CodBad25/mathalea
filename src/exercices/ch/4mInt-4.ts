@@ -80,8 +80,11 @@ export default class PrimitivesComposeesCondition extends Exercice {
     const typeCondition = params.selection('condition')
     for (let i = 0, essais = 0; i < this.nbQuestions && essais < 50; essais++) {
       const fonction = tirerFonctionComposee(familles[i], exposants[i])
+      // Sur ℝ, on écrit f : ℝ → ℝ sans nommer l'intervalle.
+      const surR = fonction.domaineTex === '\\mathbb{R}'
+      const nomDomaine = surR ? '\\mathbb{R}' : 'I'
       const analyse = analysePuissance(fonction, {
-        sur: 'I',
+        sur: nomDomaine,
         positivite: fonction.positiviteDomaine,
         nom: 'f',
       })
@@ -103,9 +106,9 @@ export default class PrimitivesComposeesCondition extends Exercice {
       const reponse = `${analyse.primitive}${constante === 0 ? '' : ecritureAlgebrique(constante)}`
       if (!this.questionJamaisPosee(i, fonction.integrande, cTex, y0)) continue
       let texte =
-        `Déterminer la primitive $F$ de la fonction $f$ définie sur $I=${fonction.domaineTex}$ par $f(x)=${fonction.integrande}$ ` +
+        `Soit $f\\colon ${nomDomaine}\\to\\mathbb{R}$ ${surR ? '' : `avec $I=${fonction.domaineTex}$ `}la fonction définie par $f(x)=${fonction.integrande}$. Déterminer une primitive $F$ de $f$ ` +
         (forme === 'point'
-          ? `dont la courbe représentative passe par le point $A\\left(${cTex};${y0}\\right)$.`
+          ? `telle que la courbe représentative de $F$ passe par le point $A\\left(${cTex};${y0}\\right)$.`
           : `telle que $F\\left(${cTex}\\right)=${y0}$.`)
       if (this.interactif)
         texte +=
@@ -142,7 +145,7 @@ export default class PrimitivesComposeesCondition extends Exercice {
       this.listeQuestions[i] = texte
       this.listeCorrections[i] =
         `${analyse.texte}<br>` +
-        `Les primitives de $f$ sur $I$ sont donc les fonctions $F(x)=${analyse.primitive}+C$, où $C$ est une constante réelle.<br>` +
+        `Les primitives de $f$ sur $${nomDomaine}$ sont donc les fonctions $F(x)=${analyse.primitive}+C$, où $C$ est une constante réelle.<br>` +
         (forme === 'point'
           ? `La courbe de $F$ passe par $A\\left(${cTex};${y0}\\right)$ si et seulement si $F\\left(${cTex}\\right)=${y0}$.<br>`
           : '') +

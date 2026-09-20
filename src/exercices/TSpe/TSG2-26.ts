@@ -1,4 +1,5 @@
 import { createList } from '../../lib/format/lists'
+import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { tableauVariationsFonction } from '../../lib/mathFonctions/etudeFonction'
 import {
   ecritureAlgebrique,
@@ -98,7 +99,17 @@ export default class DistancePointDroite extends Exercice {
       texte += 'Soit $M$ un point de (d).<br>'
 
       const question1 =
-        'Exprimer $AM$ en fonction de $t$ en détaillant les calculs.' // + ajouteQuestionMathlive({ exercice: this, question: 0, objetReponse: { reponse: { value: `\\sqrt{${exprF}}`.replaceAll('x', 't') } }, typeInteractivite: 'mathlive', texteAvant: ' $AM(t)=$' })
+        'Exprimer $AM$ en fonction de $t$ en détaillant les calculs.' +
+        ajouteQuestionMathlive({
+          exercice: this,
+          question: 0,
+          objetReponse: {
+            reponse: { value: `\\sqrt{${exprF}}`.replaceAll('x', 't') },
+          },
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
+          typeInteractivite: 'mathlive',
+          texteAvant: ' $AM(t)=$',
+        })
       const correction1 =
         `On a :<br>$\\begin{aligned}AM^2 &=\\left(x_A-x_M\\right)^2+\\left(y_A-y_M\\right)^2+\\left(z_A-z_M\\right)^2\\\\
       &= \\left(${xA}${ecritureAlgebrique(-x0)}${ecritureAlgebriqueSauf1(-u1)}t\\right)^2+\\left(${yA}${ecritureAlgebrique(-y0)}${ecritureAlgebriqueSauf1(-u2)}t\\right)^2+\\left(${zA}${ecritureAlgebrique(-z0)}${ecritureAlgebriqueSauf1(-u3)}t\\right)^2\\\\
@@ -113,7 +124,19 @@ export default class DistancePointDroite extends Exercice {
 
       let question2 = `On considère la fonction $f$ définie par $f(x) = \\sqrt{${exprF}}$.<br>`
       const question2a =
-        "Justifier que $f$ est définie et dérivable sur $\\mathbb{R}$ puis calculer $f'(x)$ pour tout x." // + ajouteQuestionMathlive({ exercice: this, question: 1, objetReponse: { reponse: { value: `\\frac{${2 * a}x${ecritureAlgebrique(b)}}{2\\sqrt{${exprF}}}` } }, typeInteractivite: 'mathlive', texteAvant: ' $f^\\prime(x)=$' })
+        "Justifier que $f$ est définie et dérivable sur $\\mathbb{R}$ puis calculer $f'(x)$ pour tout x." +
+        ajouteQuestionMathlive({
+          exercice: this,
+          question: 1,
+          objetReponse: {
+            reponse: {
+              value: `\\frac{${2 * a}x${ecritureAlgebrique(b)}}{2\\sqrt{${exprF}}}`,
+            },
+          },
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
+          typeInteractivite: 'mathlive',
+          texteAvant: ' $f^\\prime(x)=$',
+        })
       const correction2a = `Calculons le discriminant de $u(x)=${exprF}$ :<br>$\\Delta=${ecritureParentheseSiNegatif(b)}^2-4\\times${a}\\times${c}=${delta}$.<br>
       Comme $\\Delta<0$, $${exprF}$ est du signe du coefficient du monome de degré $2$ (soit $${a}$).<br>
       $u(x)$ est donc strictement positif pour tout $x\\in\\mathbb{R}$ et $f$ est définie pour tout $x\\in\\mathbb{R}$.<br>
@@ -146,14 +169,31 @@ export default class DistancePointDroite extends Exercice {
       })
 
       const question2b =
-        "Montrer que $f$ admet un minimum en une valeur $\\mu$ que l'on déterminera." // + ajouteQuestionMathlive({ exercice: this, question: 2, objetReponse: { reponse: { value: `\\frac{-${AB1 * u1 + AB2 * u2 + AB3 * u3}}{${u1 ** 2 + u2 ** 2 + u3 ** 2}}` } }, typeInteractivite: 'mathlive', texteAvant: ' $x_0=$' })
+        "Montrer que $f$ admet un minimum en une valeur $\\mu$ que l'on déterminera." +
+        ajouteQuestionMathlive({
+          exercice: this,
+          question: 2,
+          objetReponse: { reponse: { value: xMinimum.texFSD } },
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
+          typeInteractivite: 'mathlive',
+          texteAvant: ' $\\mu=$',
+        })
       const correction2b = `Son dénominateur étant strictement positif, la dérivée de $f$ est du signe de $${a}x${ecritureAlgebrique(b / 2)}$.<br>
     $f'(x)$ est nulle pour $x=${xMinimum.texFSD}$, négative pour $x<${xMinimum.texFSD}$ et positive pour $x>${xMinimum.texFSD}$.<br>
     $f$ est donc décroissante sur $\\left]-\\infty;${xMinimum.texFSD}\\right]$, croissante sur $\\left[${xMinimum.texFSD};+\\infty\\right[$.<br>
      Elle atteint donc un minimum en $\\mu=${xMinimum.texFSD}$<br>
      ${tableau}`
 
-      const question2c = 'Que vaut ce minimum ?' // + ajouteQuestionMathlive({ exercice: this, question: 3, objetReponse: { reponse: { value: `\\sqrt{${(u1 ** 2 + u2 ** 2 + u3 ** 2) * x0 ** 2}+${2 * (AB1 * u1 + AB2 * u2 + AB3 * u3)}x+${AB1 ** 2 + AB2 ** 2 + AB3 ** 2}}` } }, typeInteractivite: 'mathlive', texteAvant: ' $f(x_0)=$' })
+      const question2c =
+        'Que vaut ce minimum ?' +
+        ajouteQuestionMathlive({
+          exercice: this,
+          question: 3,
+          objetReponse: { reponse: { value: minimum } },
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
+          typeInteractivite: 'mathlive',
+          texteAvant: ' $f(\\mu)=$',
+        })
       const correctionDetaillee2c = `On a :<br>$\\begin{aligned}
     f\\left(${xMinimum.texFSD}\\right)&=\\sqrt{${a}\\times\\left(${xMinimum.texFSD}\\right)^2${ecritureAlgebrique(b)}\\times${xMinimum.ecritureParentheseSiNegatif}+${c}}\\\\
     &=\\sqrt{${xMinimum.multiplieEntier(a).produitFraction(xMinimum).simplifie().texFSD}${xMinimum.multiplieEntier(b).simplifie().ecritureAlgebrique}${frac1.multiplieEntier(c).ecritureAlgebrique}}\\\\

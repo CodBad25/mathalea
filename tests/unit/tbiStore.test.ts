@@ -85,11 +85,7 @@ describe('tbiStore', () => {
   })
 
   it("reorderTbiCard déplace l'exercice et son état de carte", () => {
-    exercicesParams.set([
-      { uuid: 'a' },
-      { uuid: 'b' },
-      { uuid: 'c' },
-    ])
+    exercicesParams.set([{ uuid: 'a' }, { uuid: 'b' }, { uuid: 'c' }])
     reconcileTbiCards(['a', 'b', 'c'])
     tbiState.update((state) => {
       state.cards[2].zoom = 2
@@ -159,7 +155,9 @@ describe('tbiStore', () => {
       { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
       { layout: 'columns', nbColumns: 3, singleColumnAlign: 'center' },
     ]
-    expect(state.tabConfigs).toEqual(order.map((oldIndex) => initialConfigs[oldIndex]))
+    expect(state.tabConfigs).toEqual(
+      order.map((oldIndex) => initialConfigs[oldIndex]),
+    )
   })
 
   it('shuffleTbiCards conserve le regroupement des onglets partagés', () => {
@@ -347,6 +345,7 @@ describe('tbiStore', () => {
       state.cards[2].tab = 0
       state.cards[1].colBreak = true
       state.cards[0].zoom = 1.5
+      state.cards[1].questionSpacing = 12
       state.tabConfigs = [
         { layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' },
         { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
@@ -383,6 +382,7 @@ describe('tbiStore', () => {
       collegeCalculatorVisible: true,
       lyceeCalculatorVisible: true,
       zooms: [1.5, 1, 1],
+      questionSpacings: [1, 12, 1],
       widgetX: 120,
       widgetY: 80,
       trafficLightX: 200,
@@ -401,12 +401,21 @@ describe('tbiStore', () => {
     expect(state.nbColumns).toBe(3)
     expect(state.cards.map((c) => c.tab)).toEqual([0, 1, 0])
     expect(state.cards.map((c) => c.colBreak)).toEqual([false, true, false])
-    expect(state.tabConfigs[0]).toEqual({ layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' })
-    expect(state.tabConfigs[1]).toEqual({ layout: 'free', nbColumns: 2, singleColumnAlign: 'center' })
+    expect(state.tabConfigs[0]).toEqual({
+      layout: 'columns',
+      nbColumns: 3,
+      singleColumnAlign: 'right',
+    })
+    expect(state.tabConfigs[1]).toEqual({
+      layout: 'free',
+      nbColumns: 2,
+      singleColumnAlign: 'center',
+    })
     expect(state.activeTab).toBe(1)
     expect(state.widget.visible).toBe(true)
     expect(state.trafficLight.visible).toBe(true)
     expect(state.cards.map((c) => c.zoom)).toEqual([1.5, 1, 1])
+    expect(state.cards.map((c) => c.questionSpacing)).toEqual([1, 12, 1])
     expect(state.widget.x).toBe(120)
     expect(state.widget.y).toBe(80)
     expect(state.trafficLight.x).toBe(200)
@@ -450,6 +459,7 @@ describe('tbiStore', () => {
       collegeCalculatorVisible: false,
       lyceeCalculatorVisible: false,
       zooms: [1.5, 0.8],
+      questionSpacings: [1, 3],
       widgetX: 0,
       widgetY: 0,
       trafficLightX: 0,
@@ -459,11 +469,12 @@ describe('tbiStore', () => {
       lyceeCalculatorX: 0,
       lyceeCalculatorY: 0,
     })
-    expect(encoded).toBe('w-1_f-1_z-15.8')
+    expect(encoded).toBe('w-1_f-1_z-15.8_qs-1.3')
     expect(decodeTbiParam(encoded)).toEqual({
       widgetVisible: true,
       trafficLightVisible: true,
       zooms: [1.5, 0.8],
+      questionSpacings: [1, 3],
     })
     // valeurs par défaut : rien n'est encodé
     expect(
@@ -480,6 +491,7 @@ describe('tbiStore', () => {
         collegeCalculatorVisible: false,
         lyceeCalculatorVisible: false,
         zooms: [1, 1],
+        questionSpacings: [1, 1],
         widgetX: 0,
         widgetY: 0,
         trafficLightX: 0,
@@ -505,6 +517,7 @@ describe('tbiStore', () => {
       collegeCalculatorVisible: false,
       lyceeCalculatorVisible: false,
       zooms: [],
+      questionSpacings: [],
       widgetX: 0,
       widgetY: 0,
       trafficLightX: 0,
@@ -545,6 +558,7 @@ describe('tbiStore', () => {
       collegeCalculatorVisible: true,
       lyceeCalculatorVisible: true,
       zooms: [],
+      questionSpacings: [],
       widgetX: 0,
       widgetY: 0,
       trafficLightX: 0,
@@ -579,6 +593,7 @@ describe('tbiStore', () => {
       collegeCalculatorVisible: false,
       lyceeCalculatorVisible: false,
       zooms: [],
+      questionSpacings: [],
       widgetX: 120,
       widgetY: -40,
       trafficLightX: -15,
@@ -611,6 +626,10 @@ describe('tbiStore', () => {
     expect(state.mode).toBe('columns')
     expect(state.nbColumns).toBe(1)
     expect(state.cards.map((c) => c.tab)).toEqual([1, 1])
-    expect(state.tabConfigs[0]).toEqual({ layout: 'columns', nbColumns: 1, singleColumnAlign: 'center' })
+    expect(state.tabConfigs[0]).toEqual({
+      layout: 'columns',
+      nbColumns: 1,
+      singleColumnAlign: 'center',
+    })
   })
 })

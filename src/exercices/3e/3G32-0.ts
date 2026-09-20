@@ -1673,8 +1673,7 @@ export default class ProblemesTrigoLongueur extends Exercice {
           $h=${lC}${lA}\\times \\sin(${baita})=\\dfrac{${lC}${lH}}{\\sin(${baita}-${alfa})}\\times \\sin(${baita})=${miseEnEvidence(`\\dfrac{${lB}${lC}\\times \\sin(${alfa})}{\\sin(${baita}-${alfa})}\\times \\sin(${baita})`)}$<br>`
 
           j++
-          texteCorr += `${numAlpha(j)}Application numérique : $h=\\dfrac{${distance}${sp()}\\text{m}\\times \\sin(${alpha}^\\circ)}{\\sin(${beta}^\\circ-${alpha}^\\circ)}\\times \\sin(${beta}^\\circ)$`
-          texteCorr += `$=\\dfrac{${distance}${sp()}\\text{m}\\times \\sin(${alpha}^\\circ)\\times \\sin(${beta}^\\circ)}{\\sin(${beta - alpha}^\\circ)}\\approx ${miseEnEvidence(`${texNombre(Math.round(taille))}${sp()}\\text{m}`)}$.<br>`
+          texteCorr += `${numAlpha(j)}Application numérique : $h=\\dfrac{${distance}${sp()}\\text{m}\\times \\sin(${alpha}^\\circ)}{\\sin(${beta}^\\circ-${alpha}^\\circ)}\\times \\sin(${beta}^\\circ)=\\dfrac{${distance}${sp()}\\text{m}\\times \\sin(${alpha}^\\circ)\\times \\sin(${beta}^\\circ)}{\\sin(${beta - alpha}^\\circ)}\\approx ${miseEnEvidence(`${texNombre(Math.round(taille))}${sp()}\\text{m}`)}$.<br>`
           break
         case 6:
           {

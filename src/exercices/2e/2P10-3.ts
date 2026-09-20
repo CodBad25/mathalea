@@ -26,7 +26,7 @@ export const interactifReady = true
 export const uuid = '0cf54'
 
 export const refs = {
-  'fr-fr': ['2S30-3', 'BP2FLUC2', 'BP1AUTO002'],
+  'fr-fr': ['2P10-3', 'BP2FLUC2', 'BP1AUTO002'],
   'fr-ch': ['4mProbStat-5'],
 }
 export default class ProbaUnionInter extends Exercice {

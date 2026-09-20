@@ -324,13 +324,20 @@ export function exercicesAControler(
   }
   if (env.CHANGED_FILES !== undefined) {
     const fichiers = env.CHANGED_FILES.split(/[\s\n]+/).filter(Boolean)
+    const cheminsCatalogue = new Set(tous.map(([, chemin]) => chemin))
     const utilitairePartageModifie = fichiers.some(
       (f) =>
         (f.startsWith('src/lib/') || f.startsWith('src/modules/')) &&
         !f.endsWith('.test.ts') &&
         !f.endsWith('.svelte'),
     )
-    if (utilitairePartageModifie) return tous
+    const exercicePartageModifie = fichiers.some((f) => {
+      if (!f.startsWith('src/exercices/') || f.endsWith('.test.ts'))
+        return false
+      const chemin = f.replace(/^src\/exercices\//, '')
+      return !cheminsCatalogue.has(chemin)
+    })
+    if (utilitairePartageModifie || exercicePartageModifie) return tous
     const modifies = new Set(
       fichiers
         .filter((f) => f.startsWith('src/exercices/'))

@@ -58,6 +58,10 @@ export default class IntegralesComposees extends Exercice {
     for (let i = 0, essais = 0; i < this.nbQuestions && essais < 50; essais++) {
       const fonction = tirerFonctionComposee(familles[i], exposants[i])
       const { integrande, a, b, ua, ub } = fonction
+      // Bornes en \frac : un \dfrac en indice d'intégrale est illisible.
+      const [aBorne, bBorne] = [a, b].map((borne) =>
+        String(borne).replace('\\dfrac', '\\frac'),
+      )
       const analyse = analysePuissance(fonction, {
         sur: `\\left[${a};${b}\\right]`,
         positivite: fonction.positiviteBornes,
@@ -66,7 +70,7 @@ export default class IntegralesComposees extends Exercice {
         .produitFraction(analyse.valeur(ub).differenceFraction(analyse.valeur(ua)))
         .simplifie().texFractionSimplifiee
       if (!this.questionJamaisPosee(i, integrande, a, b)) continue
-      let texte = `Calculer la valeur exacte de $I=\\displaystyle\\int_{${a}}^{${b}} ${integrande}\\,\\mathrm{d}x$.`
+      let texte = `Calculer la valeur exacte de $I=\\displaystyle\\int_{${aBorne}}^{${bBorne}} ${integrande}\\,\\mathrm{d}x$.`
       if (this.interactif)
         texte +=
           '<br>' +
@@ -80,7 +84,7 @@ export default class IntegralesComposees extends Exercice {
       this.listeQuestions[i] = texte
       this.listeCorrections[i] =
         `${analyse.texte}<br>` +
-        `Ainsi, $I=\\left[${analyse.primitive}\\right]_{${a}}^{${b}}=F\\left(${b}\\right)-F\\left(${a}\\right)=${analyse.avecAlpha(`${analyse.valeurTex(ub)}-${analyse.valeurTex(ua)}`)}=${analyse.avecAlpha(`${analyse.valeur(ub).texFractionSimplifiee}-${analyse.valeur(ua).texFractionSimplifiee}`)}$.<br>` +
+        `Ainsi, $I=\\left[${analyse.primitive}\\right]_{${aBorne}}^{${bBorne}}=F\\left(${b}\\right)-F\\left(${a}\\right)=${analyse.avecAlpha(`${analyse.valeurTex(ub)}-${analyse.valeurTex(ua)}`)}=${analyse.avecAlpha(`${analyse.valeur(ub).texFractionSimplifiee}-${analyse.valeur(ua).texFractionSimplifiee}`)}$.<br>` +
         `Finalement, $I=\\displaystyle ${miseEnEvidence(resultat)}$.`
       i++
     }

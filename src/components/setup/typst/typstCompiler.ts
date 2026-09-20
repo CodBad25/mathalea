@@ -269,6 +269,7 @@ export interface TypstAnchor {
    * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
    * `cover` : textes de la page de garde ; `footer` : texte du pied de page
    * (émis sur la première page physique seulement, voir `pageFooter`) ;
+   * `qr-code` : QR-code global de la fiche (édition de son URL) ;
    * `version-label` : étiquette « Sujet A/B... » de l'en-tête, sur une fiche
    * à plusieurs versions (masquage/affichage) ;
    * `figure` : figure mathalea2d embarquée (zoom) ;
@@ -289,6 +290,7 @@ export interface TypstAnchor {
     | 'header'
     | 'cover'
     | 'footer'
+    | 'qr-code'
     | 'version-label'
     | 'figure'
     | 'carte-recto'
@@ -314,6 +316,7 @@ const ANCHOR_KINDS = new Set([
   'header',
   'cover',
   'footer',
+  'qr-code',
   'version-label',
   'figure',
   'carte-recto',

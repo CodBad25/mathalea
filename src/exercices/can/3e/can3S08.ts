@@ -17,7 +17,7 @@ export const interactifReady = true
 export const uuid = 'd86bf'
 
 export const refs = {
-  'fr-fr': ['can3S08', '3AutoS01-1'],
+  'fr-fr': ['can3S08', '3AutoS01-1', '2P10-flash5'],
   'fr-ch': [],
 }
 export default class CalculsProbabilite3 extends ExerciceSimple {

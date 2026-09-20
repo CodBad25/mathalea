@@ -188,6 +188,70 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bracket.r')
   })
 
+  it('conserve les crochets dont le contenu est uniquement en minuscules', () => {
+    // Régression : pour nettoyer le `[union]` ambigu produit par tex2typst
+    // entre deux intervalles, une ancienne règle supprimait toute paire de
+    // crochets autour de minuscules, notamment [x], [abc] et K[x].
+    for (const expression of ['[x]', '[abc]', 'K[x]', '[a][b]']) {
+      const result = latexMathToTypst(expression)
+      const expectedPairs = expression.split('[').length - 1
+      expect(result.match(/bracket\.l/g)?.length, expression).toBe(
+        expectedPairs,
+      )
+      expect(result.match(/bracket\.r/g)?.length, expression).toBe(
+        expectedPairs,
+      )
+    }
+  })
+
+  it("conserve les crochets littéraux autour d'un opérateur d'ensemble", () => {
+    const result = latexMathToTypst('[\\cup]')
+    expect(result).toContain('lr(bracket.l union bracket.r)')
+  })
+
+  it('ne réinterprète pas les crochets du texte inclus', () => {
+    expect(latexMathToTypst('\\text{[x]}')).toBe('#txt("[x]")')
+    expect(latexMathToTypst('\\text{[12]}')).toBe('"[12]"')
+    expect(latexMathToTypst('\\text{mot [AB] mot}')).toBe(
+      '#txt("mot [AB] mot")',
+    )
+    expect(
+      latexMathToTypst(
+        '{\\color{#f15929}\\boldsymbol{\\text{la médiatrice du segment [AB]}}}',
+      ),
+    ).toContain('#txt("la médiatrice du segment [AB]")')
+  })
+
+  it('convertit les crochets isolés en gras ou mis en évidence', () => {
+    expect(latexMathToTypst('\\boldsymbol{[}')).toBe('bold(bracket.l)')
+    expect(latexMathToTypst('\\boldsymbol{]}')).toBe('bold(bracket.r)')
+
+    const highlightedOpen = latexMathToTypst(
+      '{\\color{#f15929}\\boldsymbol{[}}',
+    )
+    const highlightedClose = latexMathToTypst(
+      '{\\color{#f15929}\\boldsymbol{]}}',
+    )
+    expect(highlightedOpen).toBe(
+      'text(fill: #rgb("#f15929"), bold(bracket.l))',
+    )
+    expect(highlightedClose).toBe(
+      'text(fill: #rgb("#f15929"), bold(bracket.r))',
+    )
+    for (const result of [highlightedOpen, highlightedClose]) {
+      expect(result).not.toContain('text paren.l')
+      expect((result.match(/\(/g) ?? []).length).toBe(
+        (result.match(/\)/g) ?? []).length,
+      )
+    }
+  })
+
+  it('ignore les parenthèses qui appartiennent au texte inclus', () => {
+    expect(latexMathToTypst('\\text{(x}')).toBe('#txt("(x")')
+    expect(latexMathToTypst('\\text{x)}')).toBe('#txt("x)")')
+    expect(latexMathToTypst('\\text{(x)}')).toBe('#txt("(x)")')
+  })
+
   it('convertit le texte inclus dans les formules via #txt (police du texte)', () => {
     expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin#txt("cm")')
   })
@@ -507,6 +571,21 @@ describe('htmlToTypst', () => {
     )
   })
 
+  it('ne fusionne pas des formules `$…$` juxtaposées sans espace en un faux bloc affiché `$$…$$`', () => {
+    // ex. 4C32 avant sa réécriture (d0dd21a08) : `texteAMC + `$${sp()}=$`` puis
+    // `+ `$${sp()}\dots$`` produisait `$500$$ = $$\dots$`. Les deux `$$`
+    // accidentels (jonction de `$500$`+`$ = $`, puis `$ = $`+`$\dots$`) ne
+    // doivent pas être pris pour les délimiteurs d'un unique bloc affiché de
+    // contenu ` = ` : chaque formule doit rester convertie séparément.
+    expect(htmlToTypst('$500$$ = $$\\dots$')).toBe('$500$$=$$...$')
+  })
+
+  it('reconnaît toujours un vrai bloc affiché `$$…$$` isolé', () => {
+    expect(htmlToTypst('Formule : $$x^2+y^2=z^2$$')).toBe(
+      'Formule : $ x^2 + y^2 = z^2 $',
+    )
+  })
+
   it('convertit \\medskip en texte brut (exercices CAN écrits en LaTeX texte)', () => {
     expect(htmlToTypst('Viens-tu à vélo ?\\medskip')).toBe(
       'Viens-tu à vélo ?#v(0.5em)',
@@ -752,6 +831,31 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('78∘')
     expect(figures).toHaveLength(1)
     expect(figures[0]).toContain('image(bytes("<svg')
+  })
+
+  it("passe force-true-size: true à mathalea-figure-block pour une figure `vraieGrandeur` (construction/mesure), sans plafonner sa taille", () => {
+    const figures: string[] = []
+    const result = htmlToTypst(
+      '<div class="svgContainer"><div><svg class="mathalea2d" data-width-cm="20" data-height-cm="10" data-vraie-grandeur="1" width="600" height="300"><line x1="0" y1="0" x2="10" y2="10"/></svg></div></div>',
+      figures,
+    )
+    expect(result).toContain(
+      '#mathalea-figure-block(1, fig-1-align, fig-1-zoom,\nfig-1\n, force-true-size: true)',
+    )
+    expect(figures[0]).toContain('width: 566.9pt')
+  })
+
+  it("n'ajoute pas force-true-size à mathalea-figure-block pour une figure illustrative ordinaire", () => {
+    const figures: string[] = []
+    const result = htmlToTypst(
+      '<div class="svgContainer"><div><svg class="mathalea2d" data-width-cm="20" data-height-cm="10" width="600" height="300"><line x1="0" y1="0" x2="10" y2="10"/></svg></div></div>',
+      figures,
+    )
+    expect(result).toContain(
+      '#mathalea-figure-block(1, fig-1-align, fig-1-zoom,\nfig-1\n)',
+    )
+    expect(result).not.toContain('force-true-size')
+    expect(figures[0]).toContain('width: 380.0pt')
   })
 
   it('reprend le fond blanc des labels mathalea2d (arbres pondérés) en Typst', () => {
@@ -1015,6 +1119,36 @@ describe('svgToTypstImage', () => {
   it('omet la largeur quand la figure ne la précise pas', () => {
     expect(svgToTypstImage('<svg viewBox="0 0 10 10"></svg>')).toBe(
       'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 10 10\\"></svg>"), format: "svg")',
+    )
+  })
+
+  it("reprend la taille physique réelle (data-width-cm/data-height-cm) d'une figure mathalea2d, plutôt que la conversion 96 px = 72 pt, pour un rendu en vraie grandeur", () => {
+    expect(
+      svgToTypstImage(
+        '<svg width="300" height="120" data-width-cm="10" data-height-cm="4"></svg>',
+      ),
+    ).toBe(
+      'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"300\\" height=\\"120\\" data-width-cm=\\"10\\" data-height-cm=\\"4\\"></svg>"), format: "svg", width: 283.5pt)',
+    )
+  })
+
+  it('réduit malgré tout une figure mathalea2d en vraie grandeur si elle dépasse la largeur maximale, en conservant ses proportions', () => {
+    expect(
+      svgToTypstImage(
+        '<svg width="600" height="300" data-width-cm="20" data-height-cm="10"></svg>',
+      ),
+    ).toBe(
+      'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"600\\" height=\\"300\\" data-width-cm=\\"20\\" data-height-cm=\\"10\\"></svg>"), format: "svg", width: 380.0pt)',
+    )
+  })
+
+  it("ne plafonne pas une figure `vraieGrandeur` (data-vraie-grandeur) même au-delà de la largeur maximale habituelle", () => {
+    expect(
+      svgToTypstImage(
+        '<svg width="600" height="300" data-width-cm="20" data-height-cm="10" data-vraie-grandeur="1"></svg>',
+      ),
+    ).toBe(
+      'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"600\\" height=\\"300\\" data-width-cm=\\"20\\" data-height-cm=\\"10\\" data-vraie-grandeur=\\"1\\"></svg>"), format: "svg", width: 566.9pt)',
     )
   })
 })

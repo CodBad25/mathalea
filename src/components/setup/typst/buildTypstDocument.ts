@@ -94,11 +94,18 @@ const FICHE_QRCODE_SIZE = '2cm'
  * le `fill: white` du `box` englobant lui garde un fond opaque quel que soit
  * ce qu'il recouvre.
  */
-function ficheQrCodeLines(url: string): string[] {
+function qrCodeGlobalVariableName(version: number): string {
+  // Conserve le nom historique pour le sujet A : les fiches déjà éditées et
+  // leurs modifications ciblées restent ainsi compatibles.
+  return version === 0 ? 'qr-code-global-url' : `qr-code-global-url-${version}`
+}
+
+function ficheQrCodeLines(version: number): string[] {
+  const urlVariable = qrCodeGlobalVariableName(version)
   return [
     '#place(top + right, context [',
     '  #if here().page() == 1 [',
-    `    #box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#${qrCodeToTypstImage(url)}]`,
+    `    #mathalea-anchor("qr-code", ${version})#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${urlVariable}, width: 100%)]`,
     '  ]',
     '])',
   ]
@@ -132,6 +139,9 @@ export const EXERCISE_BANK_IMPORT = typstImport(
   'exo, exo-setup, exo-solution-box, exo-counter',
 )
 
+/** QR-code Typst natif utilisé par le QR-code global de la fiche. */
+export const TIAOMA_IMPORT = typstImport('tiaoma', 'qrcode')
+
 /** Hauteur (et largeur) des QR-codes placés au coin des exercices (`qr-size`) */
 const QRCODE_SIZE = '1.8cm'
 const QRCODE_POSITION = '"tasks"'
@@ -142,6 +152,27 @@ const QRCODE_POSITION = '"tasks"'
  * « display », matrices…) juste ce qu'il faut, sans toucher aux autres.
  */
 export const BREATHER_IMPORT = typstImport('breather', 'breathe')
+
+/**
+ * Appel de `breathe` avec un seuil relevé (1.25em, le défaut du paquet est
+ * 1.1em) : sous 1.1em, une formule inline courte mais dont le bord (une
+ * parenthèse, souvent) dépasse légèrement le seuil bascule sur des marges de
+ * texte « bounds » (ink réel) alors que ses voisines de la même ligne
+ * restent en métrique par défaut — deux hauteurs de ligne différentes pour
+ * des formules à l'ink pourtant comparable. Conséquence visible : dans un
+ * QCM (`propositionsQcm`, `qcm-case`) posé juste sous une expression comme
+ * `$(-5)^8$` ou `$-(-8)^{-4}$`, les cases à cocher d'une même ligne de
+ * questions (`#tasks`, colonnes alignées par le haut) se retrouvent à des
+ * hauteurs différentes selon que l'expression franchit ce seuil ou non — cf.
+ * l'exercice 4C37. 1.25em passe au-dessus de ce cas frontière (vérifié en
+ * conditions réelles sur l'aperçu Typst de l'application, la mesure locale
+ * au CLI `typst` ne reproduisant pas l'écart, sans doute par différence de
+ * version/métriques avec le moteur `typst.ts` embarqué) tout en restant
+ * confortablement sous la hauteur d'une fraction « display » (~1.5em), qui
+ * continue de déclencher l'espacement adapté — plus de détails dans
+ * `documentation/developpement/maintenance-moteur/exports/typst.md`.
+ */
+export const BREATHER_CALL = '#show: breathe.with(threshold: 1.25em)'
 
 /**
  * Repère invisible pour la palette de mise en page de l'aperçu : publie la
@@ -559,6 +590,7 @@ export const MATHALEA_COVER_CAN_HELPER = `#let mathalea-couverture-can(
   duree: "",
   nb-questions: 0,
   consignes: (),
+  qr-code: none,
 ) = {
   let coche(corps) = {
     grid(columns: (auto, 1fr), column-gutter: 6pt,
@@ -589,6 +621,7 @@ export const MATHALEA_COVER_CAN_HELPER = `#let mathalea-couverture-can(
   v(1fr)
   align(center, mathalea-logo)
   v(1fr)
+  place(top + right, qr-code)
   pagebreak()
 }`
 
@@ -906,6 +939,36 @@ function qcmFigureTasksPrefixes(code: string | string[]): Set<string> {
 }
 
 /**
+ * Marqueur émis en tête d'un `#tasks(...)[...]` (mode aperçu uniquement)
+ * dont au moins une question contient une figure `vraieGrandeur` (voir
+ * `mathalea2d.ts`) — posé par `exerciseBody`, repéré par
+ * `trueSizeFigureTasksPrefixes`.
+ */
+const TRUE_SIZE_FIGURE_MARKER = '// mathalea:vraie-grandeur'
+
+/**
+ * Préfixes (`ex1`, `ex2-corr`...) des exercices dont au moins une question
+ * contient une figure `vraieGrandeur`, repérés au marqueur
+ * `TRUE_SIZE_FIGURE_MARKER`. Une telle figure ne se réduit jamais pour tenir
+ * dans une colonne plus étroite (`force-true-size`, voir
+ * `mathalea-figure-block`) : sans une seule colonne par défaut, elle
+ * empiéterait sur la question voisine dès que l'exercice en a plusieurs — le
+ * professeur garde la main s'il en choisit davantage depuis la palette,
+ * comme pour les QCM à figures ci-dessous.
+ */
+function trueSizeFigureTasksPrefixes(code: string | string[]): Set<string> {
+  const lines = Array.isArray(code) ? code : code.split('\n')
+  return new Set(
+    lines
+      .filter((line) => line.includes(TRUE_SIZE_FIGURE_MARKER))
+      .flatMap((line) => [
+        ...line.matchAll(/#tasks\(columns: (ex\d+(?:-corr)?)-colonnes/g),
+      ])
+      .map((match) => match[1]),
+  )
+}
+
+/**
  * Préfixes (`ex1`, `ex2`...) des exercices dont les lignes de réponse sont
  * posées après chaque question, repérés au marqueur émis par
  * `writingLinesCall`. Ces listes-là sont déclarées à une colonne par défaut :
@@ -918,7 +981,9 @@ function perQuestionLinesTasksPrefixes(code: string | string[]): Set<string> {
   const lines = Array.isArray(code) ? code : code.split('\n')
   return new Set(
     lines
-      .flatMap((line) => [...line.matchAll(/\/\/ mathalea:lignes-apres\((\d+)\)/g)])
+      .flatMap((line) => [
+        ...line.matchAll(/\/\/ mathalea:lignes-apres\((\d+)\)/g),
+      ])
       .map((match) => `ex${match[1]}`),
   )
 }
@@ -935,6 +1000,7 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   // qu'à la toute première génération
   const qcmFigurePrefixes = qcmFigureTasksPrefixes(code)
   const perQuestionLinesPrefixes = perQuestionLinesTasksPrefixes(code)
+  const trueSizeFigurePrefixes = trueSizeFigureTasksPrefixes(code)
   for (const match of code.matchAll(
     /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
   )) {
@@ -942,7 +1008,9 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     // « Colonnes des questions » du document (voir la boucle de
     // `buildTypstDocument` qui déclare `#let exN-qcm-colonnes`)
     const defaultColumns =
-      qcmFigurePrefixes.has(match[1]) || perQuestionLinesPrefixes.has(match[1])
+      qcmFigurePrefixes.has(match[1]) ||
+      perQuestionLinesPrefixes.has(match[1]) ||
+      trueSizeFigurePrefixes.has(match[1])
         ? '1'
         : match[1].endsWith('-qcm')
           ? DEFAULT_TASKS_COLUMNS
@@ -1994,6 +2062,15 @@ function exerciseBody(
       htmlToTypst(question, figures, zoomVariable, undefined, qcmColumnsExpr),
     )
     .filter((question) => question.length > 0)
+  // une figure `vraieGrandeur` (voir mathalea2d.ts) ne se réduit jamais pour
+  // tenir dans une colonne plus étroite (`force-true-size: true`, posé par
+  // `mathalea2dContainerToTypst`) : sans ce repérage, elle empiéterait sur la
+  // question voisine dès que l'exercice a plus d'une colonne — voir
+  // `trueSizeFigureTasksPrefixes`, même logique que les QCM à figures
+  // (`qcmHasFigure`).
+  const hasTrueSizeFigure = converted.some((question) =>
+    question.includes('force-true-size: true'),
+  )
   const willBuildList =
     tasksPrefix != null &&
     (converted.length > 1 || (forceList && converted.length === 1))
@@ -2063,13 +2140,20 @@ function exerciseBody(
       : ''
     const columnsExpr = exportMode
       ? (layoutOverride?.columns ??
-        questionsColumnsLiteral(options.questionsColumns))
+        (hasTrueSizeFigure
+          ? '1'
+          : questionsColumnsLiteral(options.questionsColumns)))
       : `${tasksPrefix}-colonnes`
     const gutterExpr = exportMode
       ? (layoutOverride?.gutter ?? `${options.questionsGutter}em`)
       : `${tasksPrefix}-gutter`
+    // repéré par `trueSizeFigureTasksPrefixes` pour donner par défaut une
+    // seule colonne à cet exercice en mode aperçu (le mode export a déjà
+    // résolu `columnsExpr` ci-dessus, ce marqueur ne lui sert à rien)
+    const trueSizeMarker =
+      !exportMode && hasTrueSizeFigure ? ` ${TRUE_SIZE_FIGURE_MARKER}` : ''
     parts.push(
-      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, options.boldQuestionNumbers, labelIsVariableRef)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
+      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, options.boldQuestionNumbers, labelIsVariableRef)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[${trueSizeMarker}\n${items.join('\n')}\n]`,
     )
     return {
       code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
@@ -2151,6 +2235,14 @@ interface GeneratedExercise {
    * le paquet exercise-bank génère et place lui-même le QR-code.
    */
   qrUrl?: string
+  /**
+   * Réglage de lignes en pointillés appliqué à cet exercice (palette), pour
+   * le réémettre après une surcharge de code (voir `buildVersionContent`) :
+   * une surcharge remplace tout l'énoncé généré, y compris l'appel posé par
+   * `exerciseBody`/`appendEndOfExerciseLines`, sans quoi les lignes du
+   * professeur disparaîtraient dès que l'exercice porte une surcharge.
+   */
+  writingLines?: WritingLinesSetting & { num: number }
 }
 
 /**
@@ -2289,7 +2381,7 @@ function computeGeneratedExercises(
       nextCorrectionStart += body.itemCount
       correction = body.code
     }
-    return { enonce: enonce.code, correction, qrUrl }
+    return { enonce: enonce.code, correction, qrUrl, writingLines }
   })
 }
 
@@ -2430,13 +2522,15 @@ export function buildStandaloneExerciseCode(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(`#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`)
+  lines.push(
+    `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
+  )
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
   lines.push(MATHALEA_INLINE_FORMULA_RULE)
   lines.push('#show math.frac: it => math.display(it)')
-  if (options.autoVerticalSpacing) lines.push('#show: breathe')
+  if (options.autoVerticalSpacing) lines.push(BREATHER_CALL)
   if (usesQcm) lines.push(MATHALEA_QCM_HELPERS)
   lines.push('')
   if (usesFigures) {
@@ -2889,13 +2983,21 @@ function buildVersionContent(
   const built = generated.map((g, k) => {
     const override = codeOverrideAt(k + 1)
     const correctionOverride = codeOverrideCorrectionAt(k + 1)
+    // une surcharge remplace l'énoncé entier généré par `exerciseBody`, donc
+    // aussi l'appel de lignes en pointillés qu'il y avait posé : on le
+    // réémet après coup (`force: true` — la surcharge n'a pas de questions
+    // où l'intercaler, la position « après chaque question » retombe donc
+    // en fin d'exercice) pour que le réglage de la palette reste visible.
+    const overriddenEnonce =
+      override == null
+        ? g.enonce
+        : appendEndOfExerciseLines(
+            exportMode ? override : wrapCodeOverride(k + 1, override),
+            g.writingLines,
+            { force: true },
+          )
     return {
-      enonce:
-        override == null
-          ? g.enonce
-          : exportMode
-            ? override
-            : wrapCodeOverride(k + 1, override),
+      enonce: overriddenEnonce,
       correction:
         g.correction == null
           ? null
@@ -3227,9 +3329,15 @@ export function buildTypstDocument(
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
   const usesVarTable = allLines.some((line) => line.includes('#tabvar('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
-  const usesAnchors = allLines.some((line) =>
-    line.includes('#mathalea-anchor('),
-  )
+  // Chaque sujet possède ses propres graines : il faut donc aussi construire
+  // un lien de fiche (et un QR-code) pour chaque version imprimée.
+  const globalQrCodeUrls = options.showQrCodeFiche
+    ? [exercises, ...extraVersions].map(ficheUrl)
+    : []
+  const hasGlobalQrCode = globalQrCodeUrls.some((url) => url != null)
+  const usesAnchors =
+    hasGlobalQrCode ||
+    allLines.some((line) => line.includes('#mathalea-anchor('))
   const usesQrCode = allLines.some((line) => /^\s*qr: /.test(line))
   const usesSchema = allLines.some((line) =>
     line.includes('mathalea-schema-span'),
@@ -3248,6 +3356,9 @@ export function buildTypstDocument(
   // lignes de réponse après chaque question : liste à une colonne par défaut
   // (voir `perQuestionLinesTasksPrefixes`)
   const perQuestionLinesPrefixes = perQuestionLinesTasksPrefixes(allLines)
+  // exercice dont au moins une question contient une figure `vraieGrandeur` :
+  // une seule colonne par défaut (voir `trueSizeFigureTasksPrefixes`)
+  const trueSizeFigurePrefixes = trueSizeFigureTasksPrefixes(allLines)
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -3269,12 +3380,18 @@ export function buildTypstDocument(
   // page de garde : le même appel ouvre chaque sujet (le barème et le nombre
   // de questions sont ceux de la fiche, identiques d'une version à l'autre)
   const coverTemplate = options.coverPage?.template ?? 'aucune'
+  const globalQrCodeOnCanCover =
+    globalQrCodeUrls[0] != null && options.canMode && coverTemplate === 'can'
   const coverDeclarations =
     options.coverPage != null ? coverDeclarationLines(options.coverPage) : []
   const coverLines =
     options.coverPage != null
       ? coverPageLines(options.coverPage, countQuestions(exercises))
       : []
+  const primaryCoverLines =
+    options.coverPage != null && globalQrCodeOnCanCover
+      ? coverPageLines(options.coverPage, countQuestions(exercises), true)
+      : coverLines
 
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
@@ -3288,6 +3405,7 @@ export function buildTypstDocument(
   if (
     usesTasks ||
     usesExerciseBank ||
+    hasGlobalQrCode ||
     options.autoVerticalSpacing ||
     usesVarTable ||
     usesCetz ||
@@ -3296,6 +3414,7 @@ export function buildTypstDocument(
   ) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
+    if (hasGlobalQrCode) lines.push(TIAOMA_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     if (usesVarTable) lines.push(VARTABLE_IMPORT)
@@ -3306,6 +3425,17 @@ export function buildTypstDocument(
     if (usesCtz) lines.push(CTZ_EUCLIDE_IMPORT)
     else if (usesCetz) lines.push(CETZ_IMPORT)
     if (usesCetzPlotChart) lines.push(CETZ_PLOT_CHART_IMPORT)
+    lines.push('')
+  }
+  if (hasGlobalQrCode) {
+    // Une URL par sujet, lisible et modifiable directement dans le source
+    // Typst exporté. Le sujet A conserve son nom historique.
+    for (const [version, url] of globalQrCodeUrls.entries()) {
+      if (url != null)
+        lines.push(
+          `#let ${qrCodeGlobalVariableName(version)} = ${typstString(url)}`,
+        )
+    }
     lines.push('')
   }
   if (extraPreamble != null && extraPreamble.length > 0) {
@@ -3424,7 +3554,9 @@ export function buildTypstDocument(
       // les propositions de QCM ont leur propre défaut, indépendant du
       // réglage « Colonnes des questions » du document
       const defaultColumns =
-        qcmFigurePrefixes.has(prefix) || perQuestionLinesPrefixes.has(prefix)
+        qcmFigurePrefixes.has(prefix) ||
+        perQuestionLinesPrefixes.has(prefix) ||
+        trueSizeFigurePrefixes.has(prefix)
           ? '1'
           : prefix.endsWith('-qcm')
             ? DEFAULT_TASKS_COLUMNS
@@ -3463,7 +3595,9 @@ export function buildTypstDocument(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(`#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`)
+  lines.push(
+    `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
+  )
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   // police des formules ; les nombres et symboles restent en police maths
   lines.push('#show math.equation: set text(font: police-maths)')
@@ -3478,7 +3612,7 @@ export function buildTypstDocument(
     lines.push(
       '// gestion automatique des espaces verticaux : les lignes aux maths',
       "// hautes s'écartent juste ce qu'il faut (paquet breather)",
-      '#show: breathe',
+      BREATHER_CALL,
     )
   }
   lines.push('')
@@ -3614,13 +3748,13 @@ export function buildTypstDocument(
   // deux. C'est un commentaire : le document reste identique pour l'export et
   // la compilation CLI.
   if (totalVersions > 1) lines.push(subjectMarker(0))
-  if (coverLines.length > 0) {
+  if (primaryCoverLines.length > 0) {
     // repère du bloc de couverture : la palette de l'aperçu propose d'y
     // modifier titre, session, matière, durée et consignes (sans objet en
     // mode export) ; un seul repère suffit, les sujets suivants affichent la
     // même page de garde (voir la boucle des versions plus bas)
     if (!exportMode) lines.push('#mathalea-anchor("cover", 0)')
-    lines.push(...coverLines)
+    lines.push(...primaryCoverLines)
     lines.push('')
   }
   lines.push('// ----- En-tête -----')
@@ -3638,15 +3772,12 @@ export function buildTypstDocument(
       options.hideVersionLabel,
     ),
   )
-  if (options.showQrCodeFiche) {
-    const url = ficheUrl(exercises)
-    if (url != null) {
-      // après le bloc de titre (et sa ligne d'en-tête) plutôt qu'avant : ces
-      // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
-      // plus tardif se peint donc par-dessus le contenu qui précède plutôt
-      // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
-      lines.push(...ficheQrCodeLines(url))
-    }
+  if (globalQrCodeUrls[0] != null && !globalQrCodeOnCanCover) {
+    // après le bloc de titre (et sa ligne d'en-tête) plutôt qu'avant : ces
+    // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
+    // plus tardif se peint donc par-dessus le contenu qui précède plutôt
+    // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
+    lines.push(...ficheQrCodeLines(0))
   }
   lines.push('')
   lines.push(...primary.renderLines)
@@ -3659,7 +3790,16 @@ export function buildTypstDocument(
     if (usesExerciseBank) lines.push('#exo-counter.update(0)')
     lines.push('')
     if (coverLines.length > 0) {
-      lines.push(...coverLines)
+      lines.push(
+        ...coverPageLines(
+          options.coverPage as TypstCoverOptions,
+          countQuestions(exercises),
+          globalQrCodeUrls[i + 1] != null &&
+            options.canMode &&
+            coverTemplate === 'can',
+          i + 1,
+        ),
+      )
       lines.push('')
     }
     lines.push(
@@ -3670,6 +3810,12 @@ export function buildTypstDocument(
         options.hideVersionLabel,
       ),
     )
+    if (
+      globalQrCodeUrls[i + 1] != null &&
+      !(options.canMode && coverTemplate === 'can')
+    ) {
+      lines.push(...ficheQrCodeLines(i + 1))
+    }
     lines.push('')
     lines.push(...version.renderLines)
   }
@@ -3757,6 +3903,8 @@ function coverDeclarationLines(cover: TypstCoverOptions): string[] {
 function coverPageLines(
   cover: TypstCoverOptions,
   nbQuestions: number,
+  showQrCode = false,
+  version = 0,
 ): string[] {
   if (cover.template === 'aucune') return []
   if (cover.template === 'can') {
@@ -3765,6 +3913,11 @@ function coverPageLines(
       '  duree: couverture-duree,',
       `  nb-questions: ${nbQuestions},`,
       '  consignes: couverture-consignes,',
+      ...(showQrCode
+        ? [
+            `  qr-code: [#mathalea-anchor("qr-code", ${version})#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${qrCodeGlobalVariableName(version)}, width: 100%)]],`,
+          ]
+        : []),
       ')',
     ]
   }

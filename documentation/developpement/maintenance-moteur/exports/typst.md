@@ -176,6 +176,19 @@ Les trois traits (`WRITING_LINES_STYLES`) reprennent ceux du `answer-line-style`
 - `points` : points de conduite (`repeat(gap: 2pt)[.]`, même espacement que les champs « Nom : ..... » de la page de garde) ;
 - `plein` : filet continu.
 
+Une surcharge de code (icône crayon, voir plus haut) remplace tout l'énoncé
+généré par `exerciseBody`, y compris l'appel `#mathalea-lignes` qu'il y avait
+posé : sans précaution, régler des lignes sur un exercice déjà surchargé (ou
+l'inverse) les ferait disparaître dès la régénération suivante, sans retour
+visible pour le professeur. `buildVersionContent` réémet donc l'appel après
+la surcharge (`appendEndOfExerciseLines(…, { force: true })` sur
+`GeneratedExercise.writingLines`, calculé par `computeGeneratedExercises`
+avant que la surcharge ne remplace l'énoncé) — hors des repères
+`mathalea:override(...)`/`-end`, pour que `harvestCarryOver` continue à lire
+l'un sans le confondre avec l'autre. Faute de liste de questions sous une
+surcharge, « après chaque question » y retombe toujours en fin d'exercice
+(comme pour un exercice à question unique, voir plus bas).
+
 Deux points de mise en page vont avec l'emplacement « après chaque question » :
 
 - un exercice **sans liste `tasks`** (question unique, énoncé d'un seul bloc) n'a nulle part où intercaler les lignes : elles sont alors posées à la fin de son corps (paramètre `force` d'`appendEndOfExerciseLines`), sans quoi un réglage valable pour toute la fiche laisserait ces exercices-là sans place pour répondre. Le marqueur émis reste `lignes-apres(N)`, pour que la palette relise l'emplacement choisi ;
@@ -591,11 +604,17 @@ En mode fusionné (global ou local) il n'y a pas de bloc `exo.with(...)` par exe
 
 ## QR-code vers la fiche
 
-Case « QR-code vers la fiche (vue élève, 1 exercice par page) » (`TypstDocumentOptions.showQrCodeFiche`) : ajoute en haut à droite de la **première page physique** du document un QR-code vers toute la sélection d'exercices en vue élève, avec les mêmes graines que celles imprimées — un élève qui scanne le QR-code retrouve exactement les exercices de sa photocopie. Réglages encodés dans `es` : un exercice par page, non interactif par défaut mais l'élève peut activer l'interactivité (`isInteractiveFree`). Indépendant de « QR-code vers chaque exercice », qui cible un exercice à la fois et reste désactivé en mode fusionné/Course aux nombres.
+Case « QR-code vers la fiche (vue élève, 1 exercice par page) » (`TypstDocumentOptions.showQrCodeFiche`) : ajoute en haut à droite de la première page de chaque sujet un QR-code vers cette version de la sélection d'exercices en vue élève, avec les mêmes graines que celles imprimées — un élève qui scanne le QR-code retrouve exactement les exercices de sa photocopie. Réglages encodés dans `es` : un exercice par page, non interactif par défaut mais l'élève peut activer l'interactivité (`isInteractiveFree`). Indépendant de « QR-code vers chaque exercice », qui cible un exercice à la fois et reste désactivé en mode fusionné/Course aux nombres.
 
 `ficheUrl` (`buildTypstDocument.ts`) construit ce lien en réutilisant les paramètres déjà calculés dans l'URL individuelle de chaque exercice (`exercise.url`, la même URL que celle du QR-code par exercice — voir `exerciceUrl` dans `Typst.svelte`) : elle y puise uuid, graine et réglages par exercice sans les recalculer, ne retire que `v`/`es` (propres à un exercice seul) pour les remplacer par les réglages de fiche. Les exercices non imprimables (avertissement, ou sans URL) en sont exclus ; si aucun exercice n'a d'URL, aucun QR-code n'est ajouté.
 
-`ficheQrCodeLines` place le QR-code avec `#place(top + right, context [#if here().page() == 1 [...]])` : `#place` sort le contenu du flux normal (aucune place réservée dans la mise en page du titre ou de la page de garde), et `here().page()` — le numéro de page **physique**, comme dans `pageFooter` — limite l'affichage à la toute première page, même sur une fiche à plusieurs sujets (Sujet A, B...) où chaque sujet redémarre sa propre pagination logique.
+`ficheQrCodeLines` place le QR-code avec `#place(top + right, context [#if here().page() == 1 [...]])` : `#place` sort le contenu du flux normal (aucune place réservée dans la mise en page du titre ou de la page de garde). La pagination est remise à 1 au début de chaque sujet, le garde affiche donc le QR-code sur la première page de Sujet A, B, C…
+
+Le source généré importe `tiaoma` et déclare une adresse par sujet : `#let qr-code-global-url = "..."` pour Sujet A, puis `#let qr-code-global-url-1 = "..."`, etc. Le QR-code est généré à la compilation par Typst. Une personne qui édite la fiche peut donc remplacer directement l’URL de chaque version sans modifier une image SVG encodée.
+
+Un repère `qr-code`, indexé par sujet, est émis au centre de chaque code : la palette de l'aperçu y affiche un crayon qui édite la variable de la version affichée, par une modification ciblée et annulable du source Typst.
+
+La page de garde « Course aux nombres » termine par un saut de page. Lorsque cette présentation est active, elle reçoit donc le QR-code comme paramètre et le place avant ce saut : l'ajouter dans le bloc d'en-tête commun l'aurait placé sur la deuxième page, où le garde de première page l'aurait masqué.
 
 ## Impression recto-verso (démarrage sur page impaire)
 
@@ -679,6 +698,7 @@ Particularités de la conversion des formules (`latexMathToTypst`) :
 - espaces LaTeX explicites (`\thinspace`, `\medspace`, `\thickspace`) normalisées vers les espaces mathématiques Typst ;
 - les espaces sources qui bordent une chaîne de texte (`#txt("…")`, `" "`) sont supprimées : contrairement à LaTeX, Typst rend en mode maths l'espace qui précède ou suit une chaîne, elle s'ajouterait donc à celle contenue dans le `\text{…}` (`5\text{ cm}`) ou à l'espace insécable qui précède (`5~\text{cm}`) et afficherait une double espace ;
 - la mise en évidence `{\color{...}\boldsymbol{...}}` de `miseEnEvidence` est convertie en `#text(fill: rgb("..."))` ; `\boldsymbol` devient `bold(...)` (gras **italique**, comme en LaTeX) et non `upright(bold(...))`, qui redresserait les variables des réponses en orange ;
+- les crochets mathématiques sont convertis en glyphes `bracket.l`/`bracket.r`, y compris autour d'un contenu uniquement en minuscules (`[x]`, `K[x]`) et lorsqu'un crochet isolé est mis en évidence ; les bornes intérieures des réunions, intersections et différences d'intervalles en notation française sont reconnues avant cette conversion afin de ne pas être confondues avec la paire ambiguë `[union]`, `[inter]` ou `[without]` produite par `tex2typst` ; ces transformations de structure, ainsi que l'équilibrage des parenthèses, ignorent les chaînes Typst afin de conserver littéralement les délimiteurs de `\text{…}` ;
 - en cas d'échec de conversion, la formule est insérée verbatim entre guillemets.
 
 Certains énoncés « Course aux nombres » sont écrits en LaTeX **mode texte**
@@ -880,6 +900,31 @@ chemins sans réglage par exercice : le tableau « Course aux nombres » (dont l
 propre préambule. En mode export (`.typ` téléchargé, modale d'édition), la
 valeur est écrite littéralement dans le `#tasks(...)`, comme pour les
 questions.
+
+#### Alignement vertical des cases d'un QCM sous une formule courte
+
+Un QCM posé juste sous une expression inline courte (`$(-5)^8$`, puis les
+cases `Positif`/`Négatif`) peut voir ses cases décalées verticalement d'une
+colonne à l'autre d'une même ligne de questions, alors que `#tasks` aligne
+ses cellules par le haut : la cause n'est pas la mise en colonnes des
+questions elle-même, mais le paquet `breather` (`BREATHER_CALL`,
+`buildTypstDocument.ts`), qui bascule une équation inline sur des marges de
+texte « ink réel » (`bounds`) plutôt que la métrique de police par défaut dès
+que sa hauteur mesurée dépasse un seuil (`threshold`, 1.1em par défaut dans le
+paquet). Une expression avec parenthèses (`(-5)^8`) peut franchir ce seuil de
+justesse quand une expression voisine sans parenthèses (`3^{-2}`) reste
+dessous : les deux utilisent alors une métrique de ligne différente, donc une
+hauteur de première ligne différente dans leur cellule respective, ce qui
+décale le bloc `#tasks` du QCM placé juste après (visible sur l'exercice
+4C37). `BREATHER_CALL` relève ce seuil à 1.25em pour laisser ce cas de bord
+en métrique par défaut (uniforme entre les colonnes), tout en restant
+nettement sous la hauteur d'une fraction « display » (~1.5em, forcée par
+`#show math.frac: it => math.display(it)`), qui continue de déclencher
+l'espacement adapté. Vérifié en conditions réelles sur l'aperçu Typst de
+l'application (le moteur `typst.ts` embarqué) : la mesure équivalente au CLI
+`typst` local ne reproduit pas l'écart, probablement par différence de
+version/métriques avec ce moteur — ne pas se fier au CLI seul pour retoucher
+ce réglage.
 
 ### Figures SVG
 

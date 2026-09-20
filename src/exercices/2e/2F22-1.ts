@@ -61,8 +61,8 @@ export default class ImageFonctionsRefs extends Exercice {
     this.sup5 = false
     this.can = false // course aux nombres, si true les calculs pourront être fait de tête
 
-    this.nbCols = 2
-    this.nbColsCorr = 2
+    this.nbCols = 1
+    this.nbColsCorr = 1
   }
 
   nouvelleVersion() {

@@ -356,10 +356,7 @@ describe('buildTypstDocument', () => {
     ).toBe(2)
     const corrIndex = code.indexOf('// ----- Corrections -----')
     expect(code.slice(corrIndex, corrIndex + 400)).toContain('Sujet A')
-    const corrIndex2 = code.indexOf(
-      '// ----- Corrections -----',
-      corrIndex + 1,
-    )
+    const corrIndex2 = code.indexOf('// ----- Corrections -----', corrIndex + 1)
     expect(code.slice(corrIndex2, corrIndex2 + 400)).toContain('Sujet B')
     // sur une fiche à un seul sujet, pas d'étiquette (rien à distinguer)
     const single = buildTypstDocument([
@@ -491,6 +488,64 @@ describe('buildTypstDocument', () => {
     expect(code).not.toContain('ex1-qcm-colonnes')
   })
 
+  describe('figures `vraieGrandeur` (construction/mesure)', () => {
+    // figure mathalea2d posée avec `vraieGrandeur: true` (voir mathalea2d.ts) :
+    // elle ne se réduit jamais pour tenir dans une colonne, contrairement à
+    // une figure illustrative ordinaire (`mathalea-figure-block` reçoit
+    // `force-true-size: true`) — voir `latexToTypst.test.ts` pour ce niveau-là
+    const vraieGrandeurFigure = (widthCm: number) =>
+      '<div class="svgContainer"><div>' +
+      `<svg class="mathalea2d" data-width-cm="${widthCm}" data-height-cm="5" data-vraie-grandeur="1" width="${widthCm * 30}" height="150">` +
+      '<line x1="0" y1="0" x2="10" y2="10"/></svg></div></div>'
+
+    it('déclare la liste à une seule colonne quand une question contient une figure vraieGrandeur', () => {
+      const code = buildTypstDocument([
+        exercise({
+          questions: [vraieGrandeurFigure(10), vraieGrandeurFigure(12)],
+          numbered: true,
+        }),
+      ])
+      expect(code).toContain('#let ex1-colonnes = 1')
+      expect(code).toContain('#tasks(columns: ex1-colonnes, label:')
+      expect(code).toContain('[ // mathalea:vraie-grandeur')
+      // ce 1 est un défaut lié au contenu, pas un réglage du professeur : le
+      // figer dans le carry-over l'empêcherait de redevenir "colonnes-questions"
+      // si la figure vraieGrandeur est retirée à une régénération suivante
+      expect(harvestCarryOver(code).tasksLayout?.ex1?.columns).toBeUndefined()
+    })
+
+    it('respecte le nombre de colonnes choisi dans la palette malgré une figure vraieGrandeur', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: [vraieGrandeurFigure(10), vraieGrandeurFigure(12)],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        { tasksLayout: { ex1: { columns: '4' } } },
+      )
+      expect(code).toContain('#let ex1-colonnes = 4')
+    })
+
+    it('écrit une seule colonne en mode export pour une figure vraieGrandeur, sauf réglage explicite', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: [vraieGrandeurFigure(10), vraieGrandeurFigure(12)],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        {},
+        [],
+        { exportMode: true },
+      )
+      expect(code).toContain('#tasks(columns: 1, label:')
+      expect(code).not.toContain('mathalea:vraie-grandeur')
+    })
+  })
+
   describe('numérotation alignée sur la première ligne de l’énoncé', () => {
     // un QCM fait de l'énoncé un contenu mixte (texte puis bloc de
     // propositions) : taskize alignerait alors le numéro sur le haut de la
@@ -599,7 +654,9 @@ describe('buildTypstDocument', () => {
     // la consigne précède chaque énoncé, sur sa propre ligne (`\`)
     expect(enonces).toContain('+ Calculer. \\\n      $4 + 3$')
     expect(enonces).toContain('+ Calculer. \\\n      $7 times 8$')
-    expect(enonces).toContain('+ Justifier. \\\n      12 est-il divisible par 2 ?')
+    expect(enonces).toContain(
+      '+ Justifier. \\\n      12 est-il divisible par 2 ?',
+    )
     // et n'est plus affichée une seule fois avant la liste
     expect(enonces).not.toMatch(/\n {2}Calculer\.\n/)
   })
@@ -1068,13 +1125,19 @@ describe('buildTypstDocument', () => {
     )
     expect(withQr).toContain('#place(top + right, context [')
     expect(withQr).toContain('#if here().page() == 1 [')
+    expect(withQr).toContain('#import "@preview/tiaoma:0.3.0": qrcode')
+    // L'URL reste une variable Typst lisible et modifiable dans le source,
+    // puis tiaoma génère le QR-code pendant la compilation.
+    expect(withQr).toContain('#let qr-code-global-url = "')
+    expect(withQr).toContain('#qrcode(qr-code-global-url, width: 100%)')
+    expect(withQr).toContain('#mathalea-anchor("qr-code", 0)')
     // fond blanc explicite : le QR-code reste lisible quoi qu'il recouvre
     // (titre, ligne d'en-tête…), `#place` le sortant du flux normal
     expect(withQr).toContain('fill: white')
     // les deux exercices sont regroupés dans une seule URL, avec les mêmes
     // graines que celles imprimées, un exercice par page (1), non interactif
     // (0) mais modifiable par l'élève (1)
-    const qrUrlMatch = withQr.match(/link\("([^"]+)"\)/)
+    const qrUrlMatch = withQr.match(/#let qr-code-global-url = "([^"]+)"/)
     expect(qrUrlMatch).not.toBeNull()
     const qrUrl = new URL(qrUrlMatch![1])
     expect(qrUrl.searchParams.getAll('uuid')).toEqual(['abc', 'def'])
@@ -1089,11 +1152,46 @@ describe('buildTypstDocument', () => {
     expect(withoutQr).not.toContain('#place(')
 
     // aucun exercice imprimable n'a d'URL : pas de QR-code de fiche
-    const noUrl = buildTypstDocument(
-      [exercise({ questions: ['$1+1$'] })],
-      { ...defaultTypstDocumentOptions, showQrCodeFiche: true },
-    )
+    const noUrl = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      showQrCodeFiche: true,
+    })
     expect(noUrl).not.toContain('#place(')
+  })
+
+  it('ajoute et repère un QR-code propre à chaque sujet', () => {
+    const sujetA = [
+      exercise({
+        url: 'https://coopmaths.fr/alea?uuid=a&alea=graines-a&v=eleve&es=0211',
+        questions: ['$1+1$'],
+      }),
+    ]
+    const sujetB = [
+      exercise({
+        url: 'https://coopmaths.fr/alea?uuid=b&alea=graines-b&v=eleve&es=0211',
+        questions: ['$2+2$'],
+      }),
+    ]
+    const code = buildTypstDocument(
+      sujetA,
+      { ...defaultTypstDocumentOptions, showQrCodeFiche: true },
+      {},
+      [sujetB],
+    )
+
+    expect(code).toContain('#let qr-code-global-url = "')
+    expect(code).toContain('#let qr-code-global-url-1 = "')
+    expect(code).toContain('#mathalea-anchor("qr-code", 0)')
+    expect(code).toContain('#mathalea-anchor("qr-code", 1)')
+    expect(code).toContain('#qrcode(qr-code-global-url, width: 100%)')
+    expect(code).toContain('#qrcode(qr-code-global-url-1, width: 100%)')
+
+    const urls = [
+      ...code.matchAll(/#let qr-code-global-url(?:-(\d+))? = "([^"]+)"/g),
+    ].map((match) => new URL(match[2]))
+    expect(urls).toHaveLength(2)
+    expect(urls[0].searchParams.get('uuid')).toBe('a')
+    expect(urls[1].searchParams.get('uuid')).toBe('b')
   })
 
   it('active breather (espaces verticaux automatiques) par défaut', () => {
@@ -1123,11 +1221,18 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 4, spacing: 1.5, style: 'pointilles' },
+            1: {
+              position: 'endOfExercise',
+              count: 4,
+              spacing: 1.5,
+              style: 'pointilles',
+            },
           },
         },
       )
-      expect(code).toContain('#let mathalea-lignes(n, gutter: 2em, style: "pointilles")')
+      expect(code).toContain(
+        '#let mathalea-lignes(n, gutter: 2em, style: "pointilles")',
+      )
       expect(code).toContain(
         '#mathalea-lignes(4, gutter: 1.5em, style: "pointilles") // mathalea:lignes-fin(1)',
       )
@@ -1141,7 +1246,12 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 0, spacing: 2, style: 'pointilles' },
+            1: {
+              position: 'endOfExercise',
+              count: 0,
+              spacing: 2,
+              style: 'pointilles',
+            },
           },
         },
       )
@@ -1152,7 +1262,12 @@ describe('buildTypstDocument', () => {
       )
       expect(code).toContain('if n > 0 { block(')
       expect(harvestCarryOver(code).writingLines).toEqual({
-        1: { position: 'endOfExercise', count: 0, spacing: 2, style: 'pointilles' },
+        1: {
+          position: 'endOfExercise',
+          count: 0,
+          spacing: 2,
+          style: 'pointilles',
+        },
       })
     })
 
@@ -1167,7 +1282,12 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'afterEachQuestion', count: 2, spacing: 0.8, style: 'pointilles' },
+            1: {
+              position: 'afterEachQuestion',
+              count: 2,
+              spacing: 0.8,
+              style: 'pointilles',
+            },
           },
         },
       )
@@ -1194,7 +1314,12 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 3, spacing: 1, style: 'pointilles' },
+            1: {
+              position: 'endOfExercise',
+              count: 3,
+              spacing: 1,
+              style: 'pointilles',
+            },
           },
         },
       )
@@ -1282,7 +1407,12 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            2: { position: 'endOfExercise', count: 5, spacing: 2, style: 'pointilles' },
+            2: {
+              position: 'endOfExercise',
+              count: 5,
+              spacing: 2,
+              style: 'pointilles',
+            },
           },
         },
       )
@@ -1313,7 +1443,9 @@ describe('buildTypstDocument', () => {
         '#mathalea-lignes(2, gutter: 1em, style: "points") // mathalea:lignes-apres(1)',
       )
       // le helper porte les trois traits, le choix se fait à l'appel
-      expect(code).toContain('if style == "points" { box(width: 100%, text(fill: luma(120), repeat(gap: 2pt)[.])) }')
+      expect(code).toContain(
+        'if style == "points" { box(width: 100%, text(fill: luma(120), repeat(gap: 2pt)[.])) }',
+      )
       expect(harvestCarryOver(code).writingLines).toEqual({
         1: {
           position: 'afterEachQuestion',
@@ -1368,16 +1500,99 @@ describe('buildTypstDocument', () => {
         defaultTypstDocumentOptions,
         {
           writingLines: {
-            1: { position: 'endOfExercise', count: 4, spacing: 1.5, style: 'pointilles' },
-            2: { position: 'afterEachQuestion', count: 2, spacing: 0.8, style: 'pointilles' },
+            1: {
+              position: 'endOfExercise',
+              count: 4,
+              spacing: 1.5,
+              style: 'pointilles',
+            },
+            2: {
+              position: 'afterEachQuestion',
+              count: 2,
+              spacing: 0.8,
+              style: 'pointilles',
+            },
           },
         },
       )
       const harvested = harvestCarryOver(code)
       expect(harvested.writingLines).toEqual({
-        1: { position: 'endOfExercise', count: 4, spacing: 1.5, style: 'pointilles' },
-        2: { position: 'afterEachQuestion', count: 2, spacing: 0.8, style: 'pointilles' },
+        1: {
+          position: 'endOfExercise',
+          count: 4,
+          spacing: 1.5,
+          style: 'pointilles',
+        },
+        2: {
+          position: 'afterEachQuestion',
+          count: 2,
+          spacing: 0.8,
+          style: 'pointilles',
+        },
       })
+    })
+
+    it("reste posé après une surcharge de code de l'exercice (régression : la surcharge remplace tout l'énoncé, dont l'appel de lignes)", () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: {
+              position: 'endOfExercise',
+              count: 4,
+              spacing: 1.5,
+              style: 'pointilles',
+            },
+          },
+          codeOverrides: { 1: '#text[Contenu personnalisé]' },
+        },
+      )
+      expect(code).toContain('#text[Contenu personnalisé]')
+      expect(code).toContain(
+        '#mathalea-lignes(4, gutter: 1.5em, style: "pointilles") // mathalea:lignes-fin(1)',
+      )
+      // le marqueur suit la surcharge (hors de ses repères mathalea:override) :
+      // un nouveau round-trip retrouve le réglage sans le confondre avec le
+      // texte de la surcharge
+      expect(harvestCarryOver(code).writingLines).toEqual({
+        1: {
+          position: 'endOfExercise',
+          count: 4,
+          spacing: 1.5,
+          style: 'pointilles',
+        },
+      })
+      expect(harvestCarryOver(code).codeOverrides).toEqual({
+        1: '#text[Contenu personnalisé]',
+      })
+    })
+
+    it("« après chaque question » retombe en fin d'exercice sur une surcharge de code (pas de questions où l'intercaler)", () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: ['$1+1$', '$2+2$', '$3+3$'],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: {
+              position: 'afterEachQuestion',
+              count: 2,
+              spacing: 0.8,
+              style: 'pointilles',
+            },
+          },
+          codeOverrides: { 1: '#text[Contenu personnalisé]' },
+        },
+      )
+      expect(code.match(/#mathalea-lignes\(/g)).toHaveLength(1)
+      expect(code).toContain(
+        '#mathalea-lignes(2, gutter: 0.8em, style: "pointilles") // mathalea:lignes-apres(1)',
+      )
     })
   })
 
@@ -1441,7 +1656,7 @@ describe('buildTypstDocument', () => {
       expect(code).not.toContain('#let ex1-colonnes')
     })
 
-  it("numérote une question unique fusionnée avec l'option globale mergeExercises", () => {
+    it("numérote une question unique fusionnée avec l'option globale mergeExercises", () => {
       const code = buildTypstDocument(
         [
           exercise({ questions: ['$1+1$'], numbered: true }),
@@ -1450,29 +1665,29 @@ describe('buildTypstDocument', () => {
         { ...defaultTypstDocumentOptions, mergeExercises: true },
       )
       expect(code).toContain('start: 1)')
-    expect(code).toContain('start: 2)')
-  })
+      expect(code).toContain('start: 2)')
+    })
 
-  it('numérote aussi les questions habituellement non numérotées en mode fusionné', () => {
-    const code = buildTypstDocument(
-      [
-        exercise({ questions: ['$1+1$'], numbered: true }),
-        // Certains exercices utilisent des repères dans leur propre énoncé
-        // et demandent normalement `label: none`. En fusion, leur position
-        // est néanmoins comptée : ils doivent donc afficher le numéro suivant.
-        exercise({ questions: ['$A=2+2$'], numbered: false }),
-        exercise({ questions: ['$3+3$'], numbered: true }),
-      ],
-      { ...defaultTypstDocumentOptions, mergeExercises: true },
-    )
-    const enonces = code.slice(code.indexOf('// ----- Énoncés -----'))
-    expect(enonces).toContain('start: 1)')
-    expect(enonces).toContain('start: 2)')
-    expect(enonces).toContain('start: 3)')
-    expect(enonces).not.toContain('label: none')
-  })
+    it('numérote aussi les questions habituellement non numérotées en mode fusionné', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$'], numbered: true }),
+          // Certains exercices utilisent des repères dans leur propre énoncé
+          // et demandent normalement `label: none`. En fusion, leur position
+          // est néanmoins comptée : ils doivent donc afficher le numéro suivant.
+          exercise({ questions: ['$A=2+2$'], numbered: false }),
+          exercise({ questions: ['$3+3$'], numbered: true }),
+        ],
+        { ...defaultTypstDocumentOptions, mergeExercises: true },
+      )
+      const enonces = code.slice(code.indexOf('// ----- Énoncés -----'))
+      expect(enonces).toContain('start: 1)')
+      expect(enonces).toContain('start: 2)')
+      expect(enonces).toContain('start: 3)')
+      expect(enonces).not.toContain('label: none')
+    })
 
-  it('reprend la fusion locale au round-trip (harvestCarryOver)', () => {
+    it('reprend la fusion locale au round-trip (harvestCarryOver)', () => {
       const code = buildTypstDocument(
         [
           exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
@@ -1755,6 +1970,28 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // ni banque d'exercices ni badges : il n'y a plus de titre d'exercice
     expect(code).not.toContain('exercise-bank')
     expect(code).not.toContain('#let ex1 = exo.with(')
+  })
+
+  it('place le QR-code global dans la page de garde', () => {
+    const code = buildTypstDocument(
+      [exercise({ url: 'https://coopmaths.fr/alea?uuid=can&alea=seed' })],
+      {
+        ...canOptions,
+        showQrCodeFiche: true,
+        coverPage: {
+          ...defaultTypstDocumentOptions.coverPage,
+          template: 'can',
+        },
+      },
+    )
+    expect(code).toContain('#let qr-code-global-url = "')
+    expect(code).toContain('#import "@preview/tiaoma:0.3.0": qrcode')
+    expect(code).toContain(
+      'qr-code: [#mathalea-anchor("qr-code", 0)#box(width: 2cm',
+    )
+    // La couverture provoque un saut de page : le QR doit être émis avant,
+    // et non dans le bloc d'en-tête qui suit.
+    expect(code).not.toContain('#place(top + right, context [')
   })
 
   it('préfère les énoncés CAN (canQuestions) aux questions ordinaires', () => {
@@ -2311,7 +2548,9 @@ describe('lignes de réponse (réglage global)', () => {
       ...defaultTypstDocumentOptions,
       answerLines: 2,
     })
-    expect(code).toContain('#mathalea-lignes(2, gutter: 2em, style: "pointilles")')
+    expect(code).toContain(
+      '#mathalea-lignes(2, gutter: 2em, style: "pointilles")',
+    )
   })
 
   it('n’ajoute rien par défaut', () => {
@@ -2346,16 +2585,12 @@ describe('lignes de réponse (réglage global)', () => {
       },
     )
     // une occurrence par question de chaque exercice, pas une par exercice
-    expect(
-      code.match(/\/\/ mathalea:lignes-apres\(1\)/g),
-    ).toHaveLength(3)
-    expect(
-      code.match(/\/\/ mathalea:lignes-apres\(2\)/g),
-    ).toHaveLength(2)
+    expect(code.match(/\/\/ mathalea:lignes-apres\(1\)/g)).toHaveLength(3)
+    expect(code.match(/\/\/ mathalea:lignes-apres\(2\)/g)).toHaveLength(2)
     expect(code).not.toContain('mathalea:lignes-fin(')
   })
 
-  it("réémet le trait du document quand les réglages par exercice sont oubliés", () => {
+  it('réémet le trait du document quand les réglages par exercice sont oubliés', () => {
     // le réglage global écrit des appels `#mathalea-lignes` dans le code ;
     // relus par `harvestCarryOver`, ils l'emporteraient sur lui (c'est le
     // rôle du `dropWritingLines` de la vue) — sans eux, le nouveau trait
@@ -2386,13 +2621,22 @@ describe('lignes de réponse (réglage global)', () => {
       { ...defaultTypstDocumentOptions, answerLines: 2 },
       {
         writingLines: {
-          1: { position: 'endOfExercise', count: 5, spacing: 2, style: 'pointilles' },
+          1: {
+            position: 'endOfExercise',
+            count: 5,
+            spacing: 2,
+            style: 'pointilles',
+          },
         },
       },
     )
     // l'exercice réglé garde ses 5 lignes, l'autre suit le réglage global
-    expect(code).toContain('#mathalea-lignes(5, gutter: 2em, style: "pointilles")')
-    expect(code).toContain('#mathalea-lignes(2, gutter: 2em, style: "pointilles")')
+    expect(code).toContain(
+      '#mathalea-lignes(5, gutter: 2em, style: "pointilles")',
+    )
+    expect(code).toContain(
+      '#mathalea-lignes(2, gutter: 2em, style: "pointilles")',
+    )
   })
 })
 

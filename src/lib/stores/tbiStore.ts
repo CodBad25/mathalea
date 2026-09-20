@@ -29,6 +29,9 @@ export type TbiSingleColumnAlign = 'center' | 'left' | 'right' | 'full'
 export const TBI_BASE_WIDTH = 600
 export const TBI_MIN_ZOOM = 0.4
 export const TBI_MAX_ZOOM = 3
+/** Niveaux d'espacement vertical des questions (un niveau vaut 0,5 rem). */
+export const TBI_DEFAULT_QUESTION_SPACING = 1
+export const TBI_MIN_QUESTION_SPACING = 0
 
 /**
  * Délai d'inactivité (ms) avant de masquer les barres d'outils de la vue TBI
@@ -100,6 +103,8 @@ export interface TbiCardState {
   tab: number
   /** Saut de colonne avant cet exercice (dispositions en colonnes) */
   colBreak: boolean
+  /** Espacement vertical entre deux questions, par pas de 0,5 rem */
+  questionSpacing: number
   /**
    * Exercice replié : seul son bandeau bleu reste affiché (disposition libre).
    * État de présentation propre à la session, non sérialisé dans l'URL.
@@ -172,6 +177,7 @@ export function defaultTbiCardState(index: number): TbiCardState {
     w: TBI_BASE_WIDTH,
     tab: index,
     colBreak: false,
+    questionSpacing: TBI_DEFAULT_QUESTION_SPACING,
   }
 }
 
@@ -331,6 +337,10 @@ export function reconcileTbiCards(uuids: string[]) {
         cards[i] = defaultTbiCardState(i)
       }
       cards[i].uuid = uuids[i]
+      // Rétrocompatibilité avec les états créés avant l'ajout du réglage.
+      if (typeof cards[i].questionSpacing !== 'number') {
+        cards[i].questionSpacing = TBI_DEFAULT_QUESTION_SPACING
+      }
     })
     for (const card of cards) {
       if (card.tab < 0 || card.tab >= count) {
@@ -457,7 +467,10 @@ export function moveCardToTab(paramsIndex: number, targetCompactTab: number) {
  * professeur peut ensuite désactiver individuellement un saut (bouton sur la
  * carte).
  */
-export function balanceColumnBreaks(paramsIndices: number[], nbColumns: number) {
+export function balanceColumnBreaks(
+  paramsIndices: number[],
+  nbColumns: number,
+) {
   const n = paramsIndices.length
   const breakPositions = new Set<number>()
   for (let k = 1; k < nbColumns; k++) {
@@ -616,6 +629,8 @@ export interface TbiSharedState {
   lyceeCalculatorVisible: boolean
   /** Zoom de chaque exercice, aligné par indice sur exercicesParams */
   zooms: number[]
+  /** Espacement des questions de chaque exercice, aligné sur exercicesParams */
+  questionSpacings: number[]
   widgetX: number
   widgetY: number
   trafficLightX: number
@@ -640,6 +655,7 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     collegeCalculatorVisible: state.collegeCalculator.visible,
     lyceeCalculatorVisible: state.lyceeCalculator.visible,
     zooms: state.cards.map((card) => card.zoom),
+    questionSpacings: state.cards.map((card) => card.questionSpacing),
     widgetX: state.widget.x,
     widgetY: state.widget.y,
     trafficLightX: state.trafficLight.x,
@@ -688,6 +704,10 @@ function isDefaultZooms(zooms: number[]): boolean {
   return zooms.every((zoom) => zoom === 1)
 }
 
+function isDefaultQuestionSpacings(spacings: number[]): boolean {
+  return spacings.every((spacing) => spacing === TBI_DEFAULT_QUESTION_SPACING)
+}
+
 function encodePosition(x: number, y: number): string {
   return `${Math.round(x)}${TBI_PARAM_LIST_SEP}${Math.round(y)}`
 }
@@ -730,11 +750,16 @@ export function encodeTbiParam(shared: TbiSharedState): string {
         .join(TBI_PARAM_LIST_SEP)}`,
     )
   }
+  if (!isDefaultQuestionSpacings(shared.questionSpacings)) {
+    fields.push(`qs-${shared.questionSpacings.join(TBI_PARAM_LIST_SEP)}`)
+  }
   if (shared.widgetX !== 0 || shared.widgetY !== 0) {
     fields.push(`wp-${encodePosition(shared.widgetX, shared.widgetY)}`)
   }
   if (shared.trafficLightX !== 0 || shared.trafficLightY !== 0) {
-    fields.push(`fp-${encodePosition(shared.trafficLightX, shared.trafficLightY)}`)
+    fields.push(
+      `fp-${encodePosition(shared.trafficLightX, shared.trafficLightY)}`,
+    )
   }
   if (shared.collegeCalculatorX !== 0 || shared.collegeCalculatorY !== 0) {
     fields.push(
@@ -816,6 +841,12 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
         shared.zooms = value
           .split(TBI_PARAM_LIST_SEP)
           .map((n) => Number(n) / 10)
+          .filter((n) => !Number.isNaN(n))
+        break
+      case 'qs':
+        shared.questionSpacings = value
+          .split(TBI_PARAM_LIST_SEP)
+          .map(Number)
           .filter((n) => !Number.isNaN(n))
         break
       case 'wp': {
@@ -922,6 +953,16 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
       shared.zooms.forEach((zoom, i) => {
         if (state.cards[i] && typeof zoom === 'number') {
           state.cards[i].zoom = clampZoom(zoom)
+        }
+      })
+    }
+    if (Array.isArray(shared.questionSpacings)) {
+      shared.questionSpacings.forEach((spacing, i) => {
+        if (state.cards[i] && typeof spacing === 'number') {
+          state.cards[i].questionSpacing = Math.max(
+            TBI_MIN_QUESTION_SPACING,
+            Math.round(spacing),
+          )
         }
       })
     }
@@ -1077,10 +1118,7 @@ export function loadTbiLocalLayout(uuids: string[]) {
     } as const
     for (const key of ['collegeCalculator', 'lyceeCalculator'] as const) {
       const saved = layout[key]
-      if (
-        typeof saved?.x === 'number' &&
-        typeof saved?.y === 'number'
-      ) {
+      if (typeof saved?.x === 'number' && typeof saved?.y === 'number') {
         state[key].x = saved.x
         state[key].y = saved.y
       }

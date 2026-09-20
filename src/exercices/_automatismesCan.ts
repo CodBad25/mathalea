@@ -1,6 +1,7 @@
 import seedrandom from 'seedrandom'
 import Exercice from './Exercice'
 import MetaExercice from './MetaExerciceCan'
+import { exportedApplyNewSeed } from './exerciseMethods'
 
 /**
  * Code commun aux exercices « Sélection d'automatismes » (1A, 3A, …).
@@ -123,6 +124,7 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       this.sup = clampedDefaultSup
       this.sup3 = false
       this.sup4 = false // graine figée de la sélection quand sup3 est coché
+      this.besoinFormulaireCaseACocher = false
       // Le nombre de questions découle des catégories : il ne se règle pas
       // depuis les vues qui proposent un champ « nombre de questions ».
       this.nbQuestionsModifiable = false
@@ -132,6 +134,16 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       this.besoinFormulaire3CaseACocher = ["Garder la sélection d'exercices"]
       this.besoinFormulaireNombresCategories = clampedCategoriesForm
       this.comment = ''
+    }
+
+    /**
+     * Une nouvelle graine doit aussi provoquer un nouveau tirage des
+     * automatismes. `sup5` reste en revanche intact pour une sélection reçue
+     * depuis une URL : elle garantit que ce lien retrouve le même sujet.
+     */
+    override applyNewSeed = (): void => {
+      this.sup5 = false
+      exportedApplyNewSeed.call(this)
     }
 
     nouvelleVersion(): void {

@@ -26,7 +26,7 @@ export const interactifReady = true
 export const uuid = '32394'
 
 export const refs = {
-  'fr-fr': ['can1P02'],
+  'fr-fr': ['can1P02', '2P20-flash2'],
   'fr-ch': ['3mP-3'],
 }
 export default class LectureProbabilite extends Exercice {
@@ -48,6 +48,8 @@ export default class LectureProbabilite extends Exercice {
         pB,
         pAC,
         pBC,
+        pACcompl,
+        pBCcompl,
         omega,
         texte,
         texteCorr,
@@ -73,14 +75,13 @@ export default class LectureProbabilite extends Exercice {
         pAC = new Decimal(randint(1, 9) * 10 + randint(1, 9)).div(100)
         pBC = new Decimal(randint(1, 9) * 10 + randint(1, 9)).div(100)
       }
-      choix = choice([
-        pA,
-        pB,
-        pAC,
-        new Decimal(1).minus(pAC),
-        pBC,
-        new Decimal(1).minus(pBC),
-      ])
+      // pACcompl et pBCcompl sont calculés une seule fois puis réutilisés
+      // (y compris dans les comparaisons choix === ... plus bas) : Decimal.js
+      // n'a pas d'égalité structurelle, donc recalculer new Decimal(1).minus(pAC)
+      // à chaque comparaison produirait un objet différent et ne matcherait jamais.
+      pACcompl = new Decimal(1).minus(pAC)
+      pBCcompl = new Decimal(1).minus(pBC)
+      choix = choice([pA, pB, pAC, pACcompl, pBC, pBCcompl])
       // On définit l'arbre complet
       omega = new Arbre({
         racine: true,
@@ -178,9 +179,9 @@ export default class LectureProbabilite extends Exercice {
           reponse: { value: [`p_${nom1}({${nom2}})`, `P_${nom1}({${nom2}})`] },
         }) // Testé et Correct
       }
-      if (choix === new Decimal(1).minus(pAC)) {
-        texteCorr += `$${texNombre(new Decimal(1).minus(pAC), 2)}$ est une probabilité conditionnelle, 
-        $${miseEnEvidence(`P_{${nom1}}(\\overline{${nom2}})=${texNombre(new Decimal(1).minus(pAC), 2)}`)}$.`
+      if (choix === pACcompl) {
+        texteCorr += `$${texNombre(pACcompl, 2)}$ est une probabilité conditionnelle,
+        $${miseEnEvidence(`P_{${nom1}}(\\overline{${nom2}})=${texNombre(pACcompl, 2)}`)}$.`
         handleAnswers(this, i, {
           reponse: {
             value: [
@@ -206,9 +207,9 @@ export default class LectureProbabilite extends Exercice {
           },
         }) // Testé et Correct
       }
-      if (choix === new Decimal(1).minus(pBC)) {
-        texteCorr += `$${texNombre(new Decimal(1).minus(pBC), 2)}$ est une probabilité conditionnelle, 
-        $${miseEnEvidence(`P_{\\overline{${nom1}}}(\\overline{${nom2}})=${texNombre(new Decimal(1).minus(pBC), 2)}`)}$.`
+      if (choix === pBCcompl) {
+        texteCorr += `$${texNombre(pBCcompl, 2)}$ est une probabilité conditionnelle,
+        $${miseEnEvidence(`P_{\\overline{${nom1}}}(\\overline{${nom2}})=${texNombre(pBCcompl, 2)}`)}$.`
         handleAnswers(this, i, {
           reponse: {
             value: [
