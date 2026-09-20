@@ -106,6 +106,12 @@ export const patternsFor6N4B = listePatternsSansRatioNiFraction.filter(
     'iterate' in pattern && isPattern2DCompatibleWithGrid(pattern),
 )
 
+function isPatternRiche3D(
+  pattern: PatternRiche | PatternRiche3D,
+): pattern is PatternRiche3D {
+  return 'iterate3d' in pattern && typeof pattern.iterate3d === 'function'
+}
+
 export type Pattern2DDifficulty = 1 | 2 | 3
 
 export const PATTERN_2D_EASY_MAX_SHAPES = 12
@@ -363,7 +369,7 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
       const objetsCorr: NestedObjetMathalea2dArray = []
       const pat = listePreDef[i]
       const pattern =
-        'iterate3d' in pat
+        isPatternRiche3D(pat)
           ? new VisualPattern3D({
               initialCells: [],
               type: 'iso',
@@ -371,13 +377,13 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
               shapes: ['cube'],
             })
           : new VisualPattern([])
-      if ('iterate3d' in pattern) {
+      if (isPatternRiche3D(pat) && pattern instanceof VisualPattern3D) {
         let xminCorr = Infinity
         let yminCorr = Infinity
         let xmaxCorr = -Infinity
         let ymaxCorr = -Infinity
         pattern.shape = shapeCubeIso(`cubeIsoQ${i}F0`) as Shape3D
-        pattern.iterate3d = (pat as PatternRiche3D).iterate3d
+        pattern.iterate3d = pat.iterate3d
 
         const figureCorr: NestedObjetMathalea2dArray = []
         if (context.isHtml) {
@@ -412,7 +418,7 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
           )
           objetsCorr.push(cadre)
         }
-      } else {
+      } else if (pattern instanceof VisualPattern) {
         const pat2D = pat as PatternRiche
         pattern.iterate = (pat as PatternRiche).iterate
         pattern.shapes = pat2D.shapes || ['carré', 'carré']

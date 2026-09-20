@@ -90,16 +90,20 @@ function valeursDistinctes(nombre: number, min: number, max: number) {
 export function tableToMarkup(table: TableData) {
   if (table.type === 'simple') {
     return tableauColonneLigne(
-      [table.entete, ...table.colonnes],
-      [table.ligne],
+      [table.entete, ...table.colonnes].map((cellule) => `\\text{${cellule}}`),
+      [`\\text{${table.ligne}}`],
       table.valeurs,
       1.3,
     )
   }
   return tableauColonneLigne(
-    [table.enteteLigne, ...table.colonnes],
-    table.lignes,
-    table.valeurs.flat(),
+    [table.enteteLigne, ...table.colonnes].map(
+      (cellule) => `\\text{${cellule}}`,
+    ),
+    table.lignes.map((cellule) => `\\text{${cellule}}`),
+    table.valeurs.flat().map((cellule) =>
+      typeof cellule === 'string' ? `\\text{${cellule}}` : cellule,
+    ),
     1.3,
   )
 }
