@@ -27,7 +27,7 @@ export const interactifReady = true
 export const uuid = '76231'
 
 export const refs = {
-  'fr-fr': ['3S20-2', '1Tec-P20', 'BP1AUTO049'],
+  'fr-fr': ['3S20-2', '1Tec-P20', 'BP1AUTO049', '2P10-8'],
   'fr-ch': ['3mP-7'],
 }
 export default class CalculProbaTab2Entrées extends Exercice {

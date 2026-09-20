@@ -28,7 +28,7 @@ export const amcType = 'AMCNum'
 export const uuid = '7c8b7'
 
 export const refs = {
-  'fr-fr': ['can1P03'],
+  'fr-fr': ['can1P03', '2P20-flash4'],
   'fr-ch': [],
 }
 export default class CalculerProbabiliteIntersection extends Exercice {

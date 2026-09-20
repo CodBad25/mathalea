@@ -20,7 +20,7 @@ export const interactifReady = true
 export const uuid = '15f6d'
 
 export const refs = {
-  'fr-fr': ['can1P01'],
+  'fr-fr': ['can1P01', '2P20-flash1'],
   'fr-ch': ['4mProbStat-10'],
 }
 export default class ProbabilitesNotation extends Exercice {

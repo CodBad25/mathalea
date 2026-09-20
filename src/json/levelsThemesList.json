@@ -3102,7 +3102,7 @@
     "titre": "Calculer le taux d'évolution global à partir des taux d'évolution successifs. Calculer un taux d'évolution réciproque"
   },
   "2S": {
-    "titre": "Statistiques et Probabilités"
+    "titre": "Statistiques et tableaux"
   },
   "2S1": {
     "titre": "Croisement de deux variables qualitatives"
@@ -3125,17 +3125,26 @@
   "2S22": {
     "titre": "Lire et comprendre une fonction écrite en Python renvoyant la moyenne $m$, l'écart type $s$ et la proportion d'éléments dans $[m-2s;m+2s]$"
   },
-  "2S3": {
-    "titre": "Calculer des probabilités"
-  },
-  "2S30": {
-    "titre": "Calculer des probabilités dans des cas simples"
-  },
-  "2S31": {
-    "titre": "Utiliser des modèles théoriques de référence"
-  },
   "2S4": {
     "titre": "Echantillonnage"
+  },
+  "2P": {
+    "titre": "Probabilités"
+  },
+  "2P1": {
+    "titre": "Généralités sur les probabilités"
+  },
+  "2P10": {
+    "titre": "Calculer des probabilités dans des cas simples"
+  },
+  "2P11": {
+    "titre": "Utiliser des modèles théoriques de référence"
+  },
+  "2P2": {
+    "titre": "Probabilités conditionnelles"
+  },
+  "2P20": {
+    "titre": "Calculer avec une probabilité conditionnelle"
   },
   "2ZA": {
     "titre": "Automatismes - arithmétique",

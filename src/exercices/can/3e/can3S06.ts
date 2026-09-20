@@ -13,7 +13,7 @@ export const interactifReady = true
 export const uuid = '87ceb'
 
 export const refs = {
-  'fr-fr': ['can3S06'],
+  'fr-fr': ['can3S06', '2S20-flash3'],
   'fr-ch': [],
 }
 export default class Mediane extends ExerciceSimple {

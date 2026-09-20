@@ -26,7 +26,7 @@ export const interactifReady = true
 export const uuid = '32394'
 
 export const refs = {
-  'fr-fr': ['can1P02'],
+  'fr-fr': ['can1P02', '2P20-flash2'],
   'fr-ch': ['3mP-3'],
 }
 export default class LectureProbabilite extends Exercice {
