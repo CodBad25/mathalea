@@ -5,6 +5,7 @@ import {
   buildIHaveWhoHasDocument,
   duplicateMinimalAnswers,
   harvestIHaveWhoHasCarryOver,
+  iHaveWhoHasSeriesId,
   removeQuestionIndex,
   removeTrailingCompletionEquals,
 } from './buildIHaveWhoHasDocument'
@@ -117,7 +118,12 @@ describe('buildIHaveWhoHasDocument', () => {
   })
 
   it('attribue des codes uniques et ajoute les deux roues avec leurs caches', () => {
-    const first = buildIHaveWhoHasDocument([exercise])
+    const first = buildIHaveWhoHasDocument(
+      [exercise],
+      undefined,
+      undefined,
+      'Ab',
+    )
     const codes = [
       ...first.matchAll(/^#let code-carte-\d+ = "([A-Z]\d)"$/gm),
     ].map((match) => match[1])
@@ -128,6 +134,10 @@ describe('buildIHaveWhoHasDocument', () => {
     expect(first).toContain('Encoche semi-elliptique')
     expect(first).toContain('M 220 580 C 220 510 380 510 380 580 Z')
     expect(first).toContain('Planche d’assemblage des roues et des caches')
+    expect(first).toContain('#let titre-serie = "J’ai qui a — Série Ab"')
+    expect(first).toContain('text(size: 11pt, weight: "bold", "J’ai qui a")')
+    expect(first).toContain('text(size: 11pt, weight: "bold", "Série Ab")')
+    expect(first.match(/J’ai qui a — Série Ab/g)).toHaveLength(3)
     expect(first).toContain('rows: (82mm, 82mm)')
     expect(first).not.toContain('#grid(width:')
     expect(first).toContain('#set page(paper: "a4", flipped: true')
@@ -147,5 +157,14 @@ describe('buildIHaveWhoHasDocument', () => {
         (match) => match[1],
       ),
     ).toEqual(codes)
+  })
+
+  it('calcule un identifiant de série stable à partir des graines', () => {
+    const seriesId = iHaveWhoHasSeriesId(['graine-1', 'graine-2'])
+    expect(seriesId).toBe(iHaveWhoHasSeriesId(['graine-1', 'graine-2']))
+    expect(seriesId).toMatch(/^[A-Z][a-z]$/)
+    expect(iHaveWhoHasSeriesId(['graine-1', 'graine-2'])).not.toBe(
+      iHaveWhoHasSeriesId(['graine-1', 'graine-3']),
+    )
   })
 })

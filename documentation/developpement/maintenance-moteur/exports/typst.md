@@ -507,6 +507,19 @@ Le recto ajoute systématiquement un point après la réponse minimale orange et
 un point d’interrogation après la question. Une ponctuation déjà présente n’est
 pas doublée.
 
+Chaque tirage reçoit un identifiant de série déterministe de deux lettres (une
+majuscule puis une minuscule), calculé à partir des graines et du contenu des
+exercices. Au verso, le titre est aligné à gauche et la série à droite sur une
+même ligne, dans l’espace entre « Qui a… ? » et le logo Coopmaths. Sa position
+est calculée d’après le ratio réel des cartes et celui de l’image : elle suit
+donc cette zone blanche lorsque le nombre de lignes ou de colonnes change, sans
+être recouverte par le logo. Le libellé complet « titre — Série Aa » figure
+aussi sur chacun des deux disques-cache,
+sous la consigne de découpe et au-dessus de l’encoche semi-elliptique, afin que
+le trou central ne le masque pas. Le libellé « J’ai » ou « Qui a ? », en grand,
+occupe le milieu du rayon supérieur. L’identifiant reste stable lors d’un
+changement de mise en page ou de titre, mais change avec « Nouvelles données ».
+
 Les deux lignes « J’ai » et « Qui a » sont alignées à gauche dans leur moitié
 de carte. Leur position ne dépend donc pas de la longueur de la réponse ou de
 la question. Le code de la carte est placé dans le coin supérieur droit ; la
@@ -557,7 +570,10 @@ fois. Chaque cache porte aussi, à 6 h, une encoche semi-elliptique pointillée 
 découper : elle laisse saisir le bord de la roue prise en sandwich. Un repère
 triangulaire périphérique permet de coller les deux roues dos à dos sans
 décalage. Les codes sont relus par `harvestIHaveWhoHasCarryOver` afin de rester
-stables lorsque l’enseignant ajuste la mise en page ou le zoom.
+stables lorsque l’enseignant ajuste la mise en page ou le zoom. L’action
+« Nouvelles données » les exclut volontairement de ce report et rebrasse tous
+les repères : une nouvelle série ne conserve donc pas l’ordre des codes de la
+précédente.
 
 Comme les deux roues sont collées dos à dos, les positions de la roue « J’ai »
 subissent une symétrie d’axe vertical par rapport à celles de la roue « Qui
