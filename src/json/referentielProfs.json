@@ -91,6 +91,14 @@
       "typeExercice": "outil",
       "tags": {}
     },
+    "P023": {
+      "id": "P023",
+      "uuid": "a1e38",
+      "url": "profs/listePatterns.ts",
+      "titre": "Catalogue de Patterns",
+      "typeExercice": "outil",
+      "tags": {}
+    },
     "P026": {
       "id": "P026",
       "uuid": "a9f71",

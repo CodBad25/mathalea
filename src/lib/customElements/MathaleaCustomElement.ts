@@ -49,6 +49,7 @@ export const listOfCustomElements = [
   'diagram-cartesian-assessment',
   'traceur-de-courbe',
   'cube-stack-editor',
+  'shape-2d-grid-editor',
   'apigeom-figure',
 ]
 

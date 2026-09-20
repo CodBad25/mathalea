@@ -203,6 +203,11 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
 
   protected onInteractivityChanged(isOn: boolean): void {
     this.readOnly = !isOn
+    if (this.mathfield != null) {
+      this.mathfield.tabIndex = isOn ? 0 : -1
+      this.mathfield.style.pointerEvents = isOn ? '' : 'none'
+      if (!isOn) this.mathfield.blur()
+    }
   }
 
   private syncMathfieldAttributes(): void {
@@ -238,7 +243,7 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
     if (this.mathfield == null) return
     if (!this.hasAttribute('tabindex')) this.tabIndex = -1
     this.forwardFocusHandler ??= () => {
-      this.mathfield?.focus()
+      if (this.interactivityOn) this.mathfield?.focus()
     }
     this.removeEventListener('focus', this.forwardFocusHandler)
     this.addEventListener('focus', this.forwardFocusHandler)

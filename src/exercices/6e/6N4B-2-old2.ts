@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 46923 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { cubeDef, Shape3D, shapeCubeIso } from '../../lib/2d/figures2d/Shape3d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { listePattern3d } from '../../lib/2d/patterns/patternsPreDef'
@@ -32,76 +35,9 @@ export const interactifReady = true
 // Gestion de la date de publication initiale
 export const dateDePublication = '10/06/2025'
 export const dateDeModifImportante = '19/09/2026'
-
-const isHalfInteger = (value: number) => Number.isInteger(value * 2)
-
-function hasGridCompatibleCubeCoordinates(
-  pattern: (typeof listePattern3d)[number],
-): boolean {
-  try {
-    const visualPattern = new VisualPattern3D({
-      initialCells: [],
-      prefixId: '',
-      shapes: pattern.shapes,
-      type: 'full3D',
-    })
-    visualPattern.iterate3d = pattern.iterate3d.bind(visualPattern)
-    for (let step = 1; step <= 5; step++) {
-      for (const key of visualPattern.iterate3d(step)) {
-        const [x, y, z] = VisualPattern3D.keyToCoord(key)
-        if (!isHalfInteger(x) || !isHalfInteger(y) || !isHalfInteger(z))
-          return false
-      }
-    }
-    return true
-  } catch {
-    return false
-  }
-}
-
-/** Motifs 3D représentables sur la grille de cubes au demi-pas. */
 export const patternsFor6N4B_2 = listePattern3d.filter(
-  (pattern) =>
-    (pattern.type === 'affine' || pattern.type === 'linéaire') &&
-    hasGridCompatibleCubeCoordinates(pattern),
-)
-
-export type Pattern3DDifficulty = 1 | 2 | 3
-
-export function pattern3DDifficulty(
-  pattern: (typeof patternsFor6N4B_2)[number],
-): Pattern3DDifficulty {
-  const visualPattern = new VisualPattern3D({
-    initialCells: [],
-    prefixId: '',
-    shapes: pattern.shapes,
-    type: 'full3D',
-  })
-  visualPattern.iterate3d = pattern.iterate3d.bind(visualPattern)
-  const coordinates = Array.from(visualPattern.iterate3d(4), (key) =>
-    VisualPattern3D.keyToCoord(key),
-  )
-  if (
-    coordinates.some(([x, y, z]) =>
-      [x, y, z].some((value) => !Number.isInteger(value)),
-    )
-  )
-    return 3
-  const minLevels = Math.min(
-    ...[0, 1, 2].map(
-      (axis) => new Set(coordinates.map((point) => point[axis])).size,
-    ),
-  )
-  if (minLevels === 1) return 1
-  if (minLevels <= 3) return 2
-  return 3
-}
-
-export const patternsFor6N4B_2ByDifficulty = {
-  1: patternsFor6N4B_2.filter((pattern) => pattern3DDifficulty(pattern) === 1),
-  2: patternsFor6N4B_2.filter((pattern) => pattern3DDifficulty(pattern) === 2),
-  3: patternsFor6N4B_2.filter((pattern) => pattern3DDifficulty(pattern) === 3),
-} satisfies Record<Pattern3DDifficulty, typeof patternsFor6N4B_2>
+  (p) => p.type === 'affine' || p.type === 'linéaire',
+) // On enlève les patterns quadratiques pour cet exercice
 
 function cubeStackStateFromPattern(
   pattern: VisualPattern3D,
@@ -132,14 +68,14 @@ function cubeStackStateFromPattern(
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
  * @author Jean-claude Lhote
  */
-export const uuid = '17d47'
+export const uuid = '46923'
 
 export const refs = {
-  'fr-fr': ['6N4B-2'],
-  'fr-ch': ['10FA1A-8'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
-export default class PaternNum06eme extends Exercice {
+export default class PaternNum06emeOld2 extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -147,11 +83,10 @@ export default class PaternNum06eme extends Exercice {
  Cet exercice contient des motifs issus de l'excellent site : <a href="https://www.visualpatterns.org/" target="_blank" style="color: blue">https://www.visualpatterns.org/</a>.<br>
  Cet exercice propose d'étudier les premiers termes d'une série de motifs afin de répondre à différentes questions possibles.<br><br>
 Grâce au premier paramètre, on peut choisir le nombre de motifs visibles.<br><br>
-Grâce au deuxième paramètre, on peut choisir le niveau de difficulté des empilements.<br><br>
-Grâce au troisième paramètre, on peut choisir les questions à poser.<br><br>
-Grâce au quatrième paramètre, on peut imposer des motifs choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=a1e38&s=1" target="_blank" style="color: blue">liste de motifs</a>.<br>
+Grâce au deuxième paramètre, on peut choisir les questions à poser.<br><br>
+Grâce au troisième paramètre, on peut imposer des motifs choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=1" target="_blank" style="color: blue">liste de motifs</a>.<br>
 Si le nombre de motifs, dans l'exercice, est supérieur au nombre de motifs choisis, alors l'exercice sera complété par des motifs choisis au hasard. Le choix 0 sera toujours mis en dernier si d'autres choix ont été effectués.<br><br>
-Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au quatrième paramètre (sauf pour le choix 0 qui sera toujours du hasard).
+Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au quatrième paramètre (sauf pour le choix 0 qui sera toujours du hasard).
 `
     this.besoinFormulaireNumerique = [
       'Nombre de figures par question',
@@ -160,13 +95,6 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
     ]
 
     this.sup = 3
-
-    this.besoinFormulaire2Numerique = [
-      'Niveau de difficulté',
-      3,
-      'Facile\nMoyen\nDifficile',
-    ]
-    this.sup2 = 1
 
     this.besoinFormulaire3Texte = [
       'Type de questions',
@@ -182,17 +110,13 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
     ]
     this.sup3 = '6'
 
-    const maxPatternsByDifficulty = Math.max(
-      ...Object.values(patternsFor6N4B_2ByDifficulty).map(
-        (patterns) => patterns.length,
-      ),
-    )
+    const nbDePattern = patternsFor6N4B_2.length
 
     this.besoinFormulaire4Texte = [
       'Numéros des motifs désirés',
       [
         'Nombres séparés par des tirets  :',
-        `Entre 1 et ${maxPatternsByDifficulty} : pour choisir un motif particulier dans le niveau sélectionné`,
+        `Entre 1 et ${nbDePattern} : pour choisir un motif particulier`,
         `0 : pour laisser le hasard faire`,
       ].join('\n'),
     ]
@@ -204,15 +128,8 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
 
   nouvelleVersion(): void {
     const ordreAleatoireDesQuestions = this.sup5
-    const difficulty = contraindreValeur(
-      1,
-      3,
-      this.sup2,
-      1,
-    ) as Pattern3DDifficulty
-    const patternReference = patternsFor6N4B_2ByDifficulty[difficulty]
 
-    const nbDePattern = patternReference.length
+    const nbDePattern = patternsFor6N4B_2.length
     let typesPattern = gestionnaireFormulaireTexte({
       saisie: this.sup4,
       min: 0,
@@ -229,7 +146,7 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
     // typesPattern = typesPattern.slice(0, 25)
     // typesPattern = typesPattern.reverse()
 
-    const listePreDef = typesPattern.map((i) => patternReference[i - 1])
+    const listePreDef = typesPattern.map((i) => patternsFor6N4B_2[i - 1])
     const nbFigures = contraindreValeur(2, 4, this.sup + 1, 4)
     const typesQuestions = Array.from(
       new Set(
