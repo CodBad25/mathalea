@@ -1,4 +1,10 @@
+import {
+  ComputeEngine,
+  isFunction,
+  type Expression,
+} from '@cortex-js/compute-engine'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -27,6 +33,64 @@ export const refs = {
   'fr-fr': ['1AL23-1'],
   'fr-ch': ['1mF3-2'],
 }
+
+const ce = new ComputeEngine()
+
+/**
+ * Vérifie que la réponse est égale au polynôme attendu et qu'elle conserve
+ * la structure a(x-α)²+β demandée par l'énoncé.
+ */
+export function compareFormeCanonique(saisie: string, answer: string) {
+  const egalite = fonctionComparaison(saisie, answer)
+  if (!egalite.isOk) return egalite
+
+  const expression = ce.parse(saisie, { form: 'raw' })
+  const puissances: Expression[] = []
+  const collecterPuissances = (terme: Expression) => {
+    if (!isFunction(terme)) return
+    if (terme.operator === 'Power') puissances.push(terme)
+    terme.ops.forEach(collecterPuissances)
+  }
+  collecterPuissances(expression)
+
+  const carre = puissances[0]
+  if (
+    puissances.length !== 1 ||
+    !isFunction(carre, 'Power') ||
+    !carre.ops[1]?.is(2)
+  ) {
+    return {
+      isOk: false,
+      feedback: 'La réponse doit être écrite sous la forme $a(x-\\alpha)^2+\\beta$.',
+    }
+  }
+
+  let base = carre.ops[0]
+  if (base === undefined) {
+    return {
+      isOk: false,
+      feedback: 'La réponse doit être écrite sous la forme $a(x-\\alpha)^2+\\beta$.',
+    }
+  }
+  while (isFunction(base, 'Delimiter')) base = base.ops[0]
+  const coefficients = ce.parse(base.latex).polynomialCoefficients()
+  if (
+    !(
+      (base.operator === 'Add' || base.operator === 'Subtract') &&
+      coefficients?.length === 2 &&
+      coefficients[0].is(1) &&
+      !coefficients[1].is(0)
+    )
+  ) {
+    return {
+      isOk: false,
+      feedback: 'La réponse doit être écrite sous la forme $a(x-\\alpha)^2+\\beta$.',
+    }
+  }
+
+  return egalite
+}
+
 export default class Formacanonique extends Exercice {
   constructor() {
     super()
@@ -92,33 +156,51 @@ export default class Formacanonique extends Exercice {
       if (beta > 0) {
         if (alpha > 0) {
           handleAnswers(this, i, {
-            reponse: { value: [`${a}(x-${alpha})^2+${beta}`] },
+            reponse: {
+              value: [`${a}(x-${alpha})^2+${beta}`],
+              compare: compareFormeCanonique,
+            },
           })
         } else {
           handleAnswers(this, i, {
-            reponse: { value: [`${a}(x+${-alpha})^2+${beta}`] },
+            reponse: {
+              value: [`${a}(x+${-alpha})^2+${beta}`],
+              compare: compareFormeCanonique,
+            },
           })
         }
       }
       if (beta < 0) {
         if (alpha > 0) {
           handleAnswers(this, i, {
-            reponse: { value: [`${a}(x-${alpha})^2${beta}`] },
+            reponse: {
+              value: [`${a}(x-${alpha})^2${beta}`],
+              compare: compareFormeCanonique,
+            },
           })
         } else {
           handleAnswers(this, i, {
-            reponse: { value: [`${a}(x+${-alpha})^2${beta}`] },
+            reponse: {
+              value: [`${a}(x+${-alpha})^2${beta}`],
+              compare: compareFormeCanonique,
+            },
           })
         }
       }
       if (beta === 0) {
         if (alpha > 0) {
           handleAnswers(this, i, {
-            reponse: { value: [`${a}(x-${alpha})^2`] },
+            reponse: {
+              value: [`${a}(x-${alpha})^2`],
+              compare: compareFormeCanonique,
+            },
           })
         } else {
           handleAnswers(this, i, {
-            reponse: { value: [`${a}(x+${-alpha})^2`] },
+            reponse: {
+              value: [`${a}(x+${-alpha})^2`],
+              compare: compareFormeCanonique,
+            },
           })
         }
       }

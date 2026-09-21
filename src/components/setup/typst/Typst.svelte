@@ -56,6 +56,7 @@
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
     harvestCarryOver,
+    subjectEditorCode,
     normalizeTypstLineSpacing,
     parseNumberingLiteral,
     questionNumberingLabel,
@@ -939,9 +940,10 @@
    * l'exercice dans un autre fichier Typst.
    */
   function copyExerciseCodeWithPreamble(num: number) {
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver =
+      editorView != null ? activeCarryOver(harvestCarryOver(currentCode())) : {}
     const standalone = buildStandaloneExerciseCode(
-      buildInputs(),
+      buildAllVersionInputs()[previewVersion],
       num,
       documentOptions,
       carryOver,
@@ -1004,6 +1006,8 @@
    * d'en-tête et insertions marquées.
    */
   function refreshTasksLayout(code: string) {
+    const harvested = activeCarryOver(harvestCarryOver(code))
+    code = subjectEditorCode(code, previewVersion)
     const values: Record<string, TasksLayoutValue> = {}
     const defaults = (): TasksLayoutValue => ({
       columns: '"auto-fit"',
@@ -1043,7 +1047,6 @@
       ;(values[match[1]] ??= defaults()).numbering = match[2]
     }
     tasksLayoutValues = values
-    const harvested = harvestCarryOver(code)
     insertionValues = harvested.insertions ?? {}
     insertionCorrectionValues = harvested.insertionsCorrection ?? {}
     mergedExercises = harvested.merges ?? []
@@ -1149,7 +1152,7 @@
     value: string,
   ) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = new RegExp(`^#let ${target}-${key} = .*$`, 'm').exec(doc)
     if (match == null) return
     dispatchPaletteEdit({
@@ -1214,7 +1217,7 @@
   const FIGURE_ZOOM_STEP = 0.1
   function adjustFigureZoom(figNum: number, delta: number) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = new RegExp(`^#let fig-${figNum}-zoom = .*$`, 'm').exec(doc)
     if (match == null) return
     const current = figureZoomValues[figNum] ?? 1
@@ -1238,7 +1241,7 @@
    */
   function adjustExerciseZoom(num: number, delta: number) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = new RegExp(`^#let exo-${num}-zoom = .*$`, 'm').exec(doc)
     if (match == null) return
     const current = exerciseZoomValues[num] ?? 1
@@ -1263,7 +1266,7 @@
    */
   function adjustExerciseCorrectionZoom(num: number, delta: number) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = new RegExp(`^#let exo-${num}-corr-zoom = .*$`, 'm').exec(doc)
     if (match == null) return
     const current = exerciseCorrectionZoomValues[num] ?? 1
@@ -1284,7 +1287,7 @@
   /** Alignement d'une figure : gauche, centré ou à droite */
   function setFigureAlign(figNum: number, align: 'left' | 'center' | 'right') {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = new RegExp(`^#let fig-${figNum}-align = .*$`, 'm').exec(doc)
     if (match == null) return
     dispatchPaletteEdit({
@@ -1373,7 +1376,8 @@
     // écraserait alors intégralement le contenu fraîchement régénéré (plus de
     // nouvelle ligne, valeurs de l'ancien tableau). Pour ceux-là on régénère
     // entièrement, comme documenté ci-dessus pour les sujets dérivés.
-    const isParQuestion = exercise.listeQuestions?.length === exercise.nbQuestions
+    const isParQuestion =
+      exercise.listeQuestions?.length === exercise.nbQuestions
     if (current.warning == null && isParQuestion) {
       frozenInputs.set(exercise, {
         intro: current.intro,
@@ -1491,6 +1495,15 @@
       exerciseCorrectionZoom[n > removed ? n - 1 : n] = value
     }
     return {
+      versions:
+        carryOver.versions == null
+          ? undefined
+          : Object.fromEntries(
+              Object.entries(carryOver.versions).map(([version, carry]) => [
+                version,
+                shiftCarryOver(carry, removed),
+              ]),
+            ),
       tasksLayout,
       insertions,
       insertionsCorrection,
@@ -1552,6 +1565,15 @@
       insertions[target] = [...(insertions[target] ?? []), ...lines]
     }
     return {
+      versions:
+        carryOver.versions == null
+          ? undefined
+          : Object.fromEntries(
+              Object.entries(carryOver.versions).map(([version, carry]) => [
+                version,
+                shiftCarryOverForInsert(carry, inserted, original),
+              ]),
+            ),
       tasksLayout,
       insertions,
       insertionsCorrection: shiftMap(carryOver.insertionsCorrection),
@@ -1604,11 +1626,12 @@
     ])
     await applyTypSourcesForStaticExercises()
     await prefetchStaticImages()
+    const [primary, ...extraVersions] = buildAllVersionInputs()
     const code = buildTypstDocument(
-      buildInputs(),
+      primary,
       documentOptions,
       carryOver,
-      [],
+      extraVersions,
       {
         sourceUrl: currentUrl(),
         extraPreamble: extraPreamble(),
@@ -1645,7 +1668,11 @@
       editorView != null
         ? shiftCarryOverForInsert(harvestCarryOver(currentCode()), inserted, -1)
         : {}
-    carryOver.codeOverrides = { ...carryOver.codeOverrides, [inserted]: texte }
+    const subjectCarry = activeCarryOver(carryOver)
+    subjectCarry.codeOverrides = {
+      ...subjectCarry.codeOverrides,
+      [inserted]: texte,
+    }
     const params: InterfaceParams = { uuid: FREE_EXERCISE_UUID }
     let exercise: IExercice | null = null
     try {
@@ -1670,11 +1697,12 @@
     ])
     await applyTypSourcesForStaticExercises()
     await prefetchStaticImages()
+    const [primary, ...extraVersions] = buildAllVersionInputs()
     const code = buildTypstDocument(
-      buildInputs(),
+      primary,
       documentOptions,
       carryOver,
-      [],
+      extraVersions,
       {
         sourceUrl: currentUrl(),
         extraPreamble: extraPreamble(),
@@ -1699,11 +1727,12 @@
     removeCoverBaremeRowFor(num - 1)
     persistPreferences()
     exercicesParams.update((list) => list.filter((_, k) => k !== num - 1))
+    const [primary, ...extraVersions] = buildAllVersionInputs()
     const code = buildTypstDocument(
-      buildInputs(),
+      primary,
       documentOptions,
       carryOver,
-      [],
+      extraVersions,
       {
         sourceUrl: currentUrl(),
         extraPreamble: extraPreamble(),
@@ -1821,6 +1850,15 @@
       exerciseCorrectionZoom[swapNum(Number(key))] = value
     }
     return {
+      versions:
+        carryOver.versions == null
+          ? undefined
+          : Object.fromEntries(
+              Object.entries(carryOver.versions).map(([version, carry]) => [
+                version,
+                swapCarryOver(carry, numA, numB),
+              ]),
+            ),
       tasksLayout,
       insertions,
       insertionsCorrection,
@@ -1860,11 +1898,12 @@
       ;[copy[k], copy[target]] = [copy[target], copy[k]]
       return copy
     })
+    const [primary, ...extraVersions] = buildAllVersionInputs()
     const code = buildTypstDocument(
-      buildInputs(),
+      primary,
       documentOptions,
       carryOver,
-      [],
+      extraVersions,
       {
         sourceUrl: currentUrl(),
         extraPreamble: extraPreamble(),
@@ -1910,7 +1949,9 @@
         if (index !== exerciseIndex) {
           return (
             current ??
-            (exercise?.seed == null ? null : `${exercise.seed}${previewVersion}`)
+            (exercise?.seed == null
+              ? null
+              : `${exercise.seed}${previewVersion}`)
           )
         }
         return exercise?.seed == null
@@ -1938,10 +1979,16 @@
    * pour cet exercice (voir `getGeneratedExerciseCode`).
    */
   function openCodeEdit(num: number) {
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver =
+      editorView != null ? activeCarryOver(harvestCarryOver(currentCode())) : {}
     codeEditDraft =
       carryOver.codeOverrides?.[num] ??
-      getGeneratedExerciseCode(buildInputs(), num, documentOptions, carryOver)
+      getGeneratedExerciseCode(
+        buildAllVersionInputs()[previewVersion],
+        num,
+        documentOptions,
+        carryOver,
+      )
     codeEditPart = 'enonce'
     codeEditNum = num
   }
@@ -1953,10 +2000,16 @@
    * Pendant de `openCodeEdit` pour la correction plutôt que l'énoncé.
    */
   function openCorrectionCodeEdit(num: number) {
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver =
+      editorView != null ? activeCarryOver(harvestCarryOver(currentCode())) : {}
     codeEditDraft =
       carryOver.codeOverridesCorrection?.[num] ??
-      getGeneratedCorrectionCode(buildInputs(), num, documentOptions, carryOver)
+      getGeneratedCorrectionCode(
+        buildAllVersionInputs()[previewVersion],
+        num,
+        documentOptions,
+        carryOver,
+      )
     codeEditPart = 'correction'
     codeEditNum = num
   }
@@ -1988,7 +2041,9 @@
     part: 'enonce' | 'correction' = 'enonce',
   ) {
     if (!confirmOverwrite()) return
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const allCarryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = activeCarryOver(allCarryOver)
     const trimmed = code.trim()
     if (part === 'correction') {
       const codeOverridesCorrection = {
@@ -2007,7 +2062,7 @@
     const newCode = buildTypstDocument(
       primary,
       documentOptions,
-      carryOver,
+      allCarryOver,
       extraVersions,
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
@@ -2024,11 +2079,16 @@
    * ligne plutôt que d'un exercice entier.
    */
   function openCanRowCodeEdit(row: number) {
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver =
+      editorView != null ? activeCarryOver(harvestCarryOver(currentCode())) : {}
     const generated =
       carryOver.codeOverridesCan?.[row] == null ||
       carryOver.codeOverridesCanReponse?.[row] == null
-        ? getGeneratedCanRowCode(buildInputs(), row, documentOptions)
+        ? getGeneratedCanRowCode(
+            buildAllVersionInputs()[previewVersion],
+            row,
+            documentOptions,
+          )
         : null
     canRowEditEnonceDraft =
       carryOver.codeOverridesCan?.[row] ?? generated?.enonce ?? ''
@@ -2055,7 +2115,9 @@
    */
   function updateCanRowCode(row: number, enonce: string, reponse: string) {
     if (!confirmOverwrite()) return
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const allCarryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = activeCarryOver(allCarryOver)
     const codeOverridesCan = { ...(carryOver.codeOverridesCan ?? {}) }
     if (enonce.trim().length === 0) delete codeOverridesCan[row]
     else codeOverridesCan[row] = enonce
@@ -2070,7 +2132,7 @@
     const newCode = buildTypstDocument(
       primary,
       documentOptions,
-      carryOver,
+      allCarryOver,
       extraVersions,
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
@@ -2089,7 +2151,9 @@
    */
   function toggleMergeBefore(num: number) {
     if (!confirmOverwrite()) return
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const allCarryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = activeCarryOver(allCarryOver)
     const merges = carryOver.merges ?? []
     carryOver.merges = merges.includes(num)
       ? merges.filter((n) => n !== num)
@@ -2098,7 +2162,7 @@
     const code = buildTypstDocument(
       primary,
       documentOptions,
-      carryOver,
+      allCarryOver,
       extraVersions,
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
@@ -2114,7 +2178,9 @@
    */
   function setWritingLines(num: number, value: WritingLinesSetting | null) {
     if (!confirmOverwrite()) return
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const allCarryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = activeCarryOver(allCarryOver)
     const writingLines = { ...(carryOver.writingLines ?? {}) }
     if (value == null) delete writingLines[num]
     else writingLines[num] = value
@@ -2123,7 +2189,7 @@
     const code = buildTypstDocument(
       primary,
       documentOptions,
-      carryOver,
+      allCarryOver,
       extraVersions,
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
@@ -2155,7 +2221,7 @@
     value: string,
   ) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = new RegExp(`^#let ${name} = ".*"`, 'm').exec(doc)
     if (match == null) return
     const escaped = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
@@ -2199,7 +2265,7 @@
         : name === 'signatureLabel'
           ? 'signature'
           : name
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = new RegExp(`^#let couverture-${typstName} = ".*"`, 'm').exec(
       doc,
     )
@@ -2221,7 +2287,7 @@
    */
   function updateCoverConsignes(consignes: string[]) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = /^#let couverture-consignes = \(.*\)$/m.exec(doc)
     if (match == null) return
     const items = consignes.map(
@@ -2252,7 +2318,7 @@
    */
   function updateFooterText(value: string) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const match = /^#let pied-page = ".*"/m.exec(doc)
     if (match == null) return
     dispatchPaletteEdit({
@@ -2267,7 +2333,7 @@
   /** Modifie l'URL du QR-code global du sujet indiqué dans le source Typst. */
   function updateQrCodeUrl(version: number, value: string) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const variable =
       version === 0 ? 'qr-code-global-url' : `qr-code-global-url-${version}`
     const match = new RegExp(`^#let ${variable} = ".*"`, 'm').exec(doc)
@@ -2335,7 +2401,7 @@
   /** Insère un fragment (texte, #section[...]) juste après l'exercice num */
   function insertAfterExercise(num: number, snippet: string) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const anchor = findGapAnchor(doc, num)
     if (anchor == null) return
     // la nouvelle ligne s'ajoute après les insertions déjà présentes
@@ -2361,7 +2427,7 @@
   /** Remplace la `index`-ième insertion qui suit l'exercice num */
   function updateInsertion(num: number, index: number, snippet: string) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const line = findInsertionLine(doc, num, index)
     if (line == null) return
     const indent = doc.slice(line.from, line.to).match(/^[ \t]*/)?.[0] ?? ''
@@ -2375,7 +2441,7 @@
   /** Supprime la `index`-ième insertion qui suit l'exercice num */
   function deleteInsertion(num: number, index: number) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const line = findInsertionLine(doc, num, index)
     if (line == null) return
     // la ligne entière disparaît, saut de ligne précédent compris
@@ -2427,7 +2493,7 @@
   /** Insère un fragment (texte, #section[...]) juste avant la correction de l'exercice num */
   function insertBeforeCorrection(num: number, snippet: string) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const anchor = findCorrAnchor(doc, num)
     if (anchor == null) return
     // la nouvelle ligne s'ajoute après les insertions déjà présentes
@@ -2457,7 +2523,7 @@
     snippet: string,
   ) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const line = findInsertionCorrectionLine(doc, num, index)
     if (line == null) return
     const indent = doc.slice(line.from, line.to).match(/^[ \t]*/)?.[0] ?? ''
@@ -2471,7 +2537,7 @@
   /** Supprime la `index`-ième insertion qui précède la correction de l'exercice num */
   function deleteInsertionCorrection(num: number, index: number) {
     if (editorView == null) return
-    const doc = editorView.state.doc.toString()
+    const doc = subjectEditorCode(currentCode(), previewVersion)
     const line = findInsertionCorrectionLine(doc, num, index)
     if (line == null) return
     dispatchPaletteEdit({ from: line.from - 1, to: line.to, insert: '' })
@@ -2811,9 +2877,7 @@
         const canEnonce = exercise.listeCanEnonces?.[i]
         if (canEnonce != null && canEnonce.length > 0) return format(canEnonce)
         const consigne = input.consigne ?? ''
-        return consigne.length > 0
-          ? `${consigne}<br>${question}`
-          : question
+        return consigne.length > 0 ? `${consigne}<br>${question}` : question
       })
       input.canAnswers = input.questions.map((_, i) =>
         format(exercise.listeCanReponsesACompleter?.[i] ?? ''),
@@ -2898,7 +2962,19 @@
         ? harvestCarryOver(currentCode())
         : (urlCarryOver ?? {})
     const carryOver = options.dropWritingLines
-      ? { ...harvested, writingLines: undefined }
+      ? {
+          ...harvested,
+          writingLines: undefined,
+          versions:
+            harvested.versions == null
+              ? undefined
+              : Object.fromEntries(
+                  Object.entries(harvested.versions).map(([version, carry]) => [
+                    version,
+                    { ...carry, writingLines: undefined },
+                  ]),
+                ),
+        }
       : harvested
     const [primary, ...extraVersions] = buildAllVersionInputs()
     return buildTypstDocument(
@@ -3110,7 +3186,7 @@
     if (candidate == null) return
 
     const line = findExerciseSourceLine(
-      currentCode(),
+      subjectEditorCode(currentCode(), previewVersion),
       candidate.kind === 'corr' ? 'corr' : 'exo',
       candidate.num,
     )
@@ -3129,6 +3205,13 @@
       },
     })
     isEdited = false
+  }
+
+  /** Renvoie les réglages du sujet affiché, en conservant ceux des autres. */
+  function activeCarryOver(carry: TypstCarryOver): TypstCarryOver {
+    if (previewVersion === 0) return carry
+    carry.versions ??= {}
+    return (carry.versions[previewVersion] ??= {})
   }
 
   function currentCode(): string {
@@ -3223,6 +3306,7 @@
   function showVersion(num: number) {
     if (num === previewVersion) return
     previewVersion = num
+    refreshTasksLayout(currentCode())
     scheduleCompile(currentCode(), PALETTE_COMPILE_DELAY)
   }
   function scheduleCompile(code: string, delay = 500) {
@@ -4006,7 +4090,7 @@
 
       <!-- L'aperçu ne compile qu'un sujet : voir `previewCode`. Les exports
            et le code de l'éditeur portent toujours tous les sujets. Les
-           contrôles de mise en page ne valent que pour le sujet A, seul à
+           contrôles de mise en page sont disponibles pour chaque sujet, qui peut
            porter les repères de la palette. -->
       {#if documentOptions.nbVersions > 1}
         <label

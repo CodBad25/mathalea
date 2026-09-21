@@ -52,7 +52,7 @@ export default class RangerOrdreCroissantDecroissantDecimaux extends RangerOrdre
       melange: 5,
       nbQuestions: 6,
       saisie: this.sup2,
-    })
+    }).map(Number)
     const memePartieEntiere = this.sup3
     const ancienneSup4 = this.sup4
     const anciensTypesDeNombres = this.typesDeNombres

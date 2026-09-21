@@ -114,6 +114,14 @@
       "titre": "Illustrer le crible d'Ératosthène",
       "typeExercice": "outil",
       "tags": {}
+    },
+    "P030": {
+      "id": "P030",
+      "uuid": "a9f83",
+      "url": "profs/P030.js",
+      "titre": "Créer un schéma en barre",
+      "typeExercice": "outil",
+      "tags": {}
     }
   },
   "Géométrie animée": {

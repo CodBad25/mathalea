@@ -3497,7 +3497,7 @@ export function htmlToTypst(
   let output = ''
   /** Profondeur des blocs de contenu Typst ouverts (#strong[, #emph[...]) */
   let bracketDepth = 0
-  const listStack: ('ul' | 'ol')[] = []
+  const listStack: { type: 'ul' | 'ol'; numbering?: string }[] = []
   /** Nombre de blocs Typst ouverts par chaque <span> imbriqué */
   const spanStack: number[] = []
   const openBlock = (markup: string) => {
@@ -3551,10 +3551,19 @@ export function htmlToTypst(
       case 'ul':
       case 'ol':
         if (isClosing) {
-          listStack.pop()
+          const list = listStack.pop()
+          if (list?.numbering != null) output += ']'
           output += '\n'
         } else {
-          listStack.push(name)
+          const className = token.match(/\bclass\s*=\s*["']([^"']*)["']/i)?.[1]
+          const numbering =
+            name === 'ol' && /\balpha\b/i.test(className ?? '')
+              ? '"a)"'
+              : undefined
+          listStack.push({ type: name, numbering })
+          if (numbering != null) {
+            output += '#enum(numbering: ' + numbering + ')['
+          }
         }
         break
       case 'li':
@@ -3563,7 +3572,7 @@ export function htmlToTypst(
           // s'agissait d'un début de ligne saisi dans le texte
           output +=
             '\n' +
-            protect(listStack[listStack.length - 1] === 'ol' ? '+ ' : '- ')
+            protect(listStack[listStack.length - 1]?.type === 'ol' ? '+ ' : '- ')
         }
         break
       case 'p':

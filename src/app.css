@@ -1652,3 +1652,359 @@ relier-etiquettes {
   font-size: clamp(1.05rem, 2.2cqw, 1.9rem);
   line-height: 1.4;
 }
+
+/* Custom element « Schéma en barre » (schema-en-barre) */
+schema-en-barre {
+  display: block;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.schema-en-barre {
+  --sb-a: var(--color-coopmaths-struct);
+  --sb-b: var(--color-coopmaths-struct-lightest);
+  --sb-texte: var(--color-coopmaths-corpus);
+  --sb-fond: var(--color-coopmaths-canvas);
+  --sb-bordure: var(--color-coopmaths-canvas-moredark);
+  --sb-faux: var(--color-coopmaths-action);
+  color: var(--sb-texte);
+  max-width: 100%;
+}
+
+.dark .schema-en-barre {
+  --sb-a: var(--color-coopmathsdark-struct);
+  --sb-b: var(--color-coopmathsdark-struct-lightest);
+  --sb-texte: var(--color-coopmathsdark-corpus);
+  --sb-fond: var(--color-coopmathsdark-canvas);
+  --sb-bordure: var(--color-coopmathsdark-canvas-moredark);
+  --sb-faux: var(--color-coopmathsdark-action);
+}
+
+/* Choix entre les quatre types de schéma, sur deux lignes de deux vignettes
+   réduites par le font-size. */
+.schema-en-barre__choix {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 0.6em;
+  margin-bottom: 0.75em;
+}
+
+@media (max-width: 30rem) {
+  .schema-en-barre__choix {
+    grid-template-columns: 1fr;
+  }
+}
+
+.schema-en-barre__vignette {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em;
+  padding: 0.6em 0.8em;
+  border: 2px solid var(--sb-bordure);
+  border-radius: 0.5em;
+  background: var(--sb-fond);
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.schema-en-barre__vignette:hover,
+.schema-en-barre__vignette:focus-visible {
+  border-color: var(--sb-b);
+  outline: none;
+}
+
+.schema-en-barre__vignette.is-choisi {
+  border-color: var(--sb-a);
+  background-color: color-mix(in srgb, var(--sb-a) 10%, var(--sb-fond));
+}
+
+.schema-en-barre__vignette.is-faux {
+  border-color: var(--sb-faux);
+}
+
+/* En em : les vignettes suivent le zoom de l'énoncé (font-size de l'article). */
+.schema-en-barre__vignette-schema {
+  font-size: 0.6em;
+  pointer-events: none;
+}
+
+.schema-en-barre__vignette-titre {
+  font-size: 0.9em;
+  color: var(--sb-a);
+}
+
+.schema-en-barre__zone {
+  overflow-x: auto;
+  padding: 0.25rem 0;
+}
+
+.schema-en-barre__changer,
+.schema-en-barre__tout {
+  margin-top: 0.5em;
+  margin-right: 0.5em;
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--sb-bordure);
+  border-radius: 0.35em;
+  background: var(--sb-fond);
+  color: var(--sb-texte);
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.schema-en-barre__changer:hover,
+.schema-en-barre__tout:hover {
+  border-color: var(--sb-a);
+}
+
+/* Le schéma lui-même : toutes les dimensions sont en em. */
+.schema-en-barre__schema {
+  display: inline-block;
+  padding: 0.5em 0.25em;
+  color: var(--sb-a);
+  line-height: 1.2;
+}
+
+.schema-en-barre__colonne {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15em;
+}
+
+/* Pas d'espace entre colonnes : dans la comparaison additive, la grande
+   partie couvre exactement la petite partie et la colonne de la différence. */
+.schema-en-barre__grille {
+  display: grid;
+  align-items: center;
+  column-gap: 0;
+  row-gap: 0.4em;
+}
+
+.schema-en-barre__ligne {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.schema-en-barre__ligne--parts {
+  gap: 0.25em;
+}
+
+.schema-en-barre__rect {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-sizing: border-box;
+  /* min-height : un texte sur deux lignes (« Roses », « 6 fleurs ») agrandit le rectangle. */
+  min-height: 2.2em;
+  padding: 0.15em 0.3em;
+  border: 0.1em solid var(--sb-fond);
+  color: white;
+  font-weight: 700;
+  text-align: center;
+}
+
+.schema-en-barre__rect--a {
+  background-color: var(--sb-a);
+}
+
+.schema-en-barre__rect--b {
+  background-color: var(--sb-b);
+}
+
+.schema-en-barre__pointilles {
+  display: inline-block;
+  flex: none;
+  text-align: center;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.schema-en-barre__champ,
+.schema-en-barre__texte {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 0.1em 0.2em;
+  border: 0;
+  border-radius: 0.2em;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.schema-en-barre__champ {
+  border-bottom: 0.1em dashed color-mix(in srgb, currentColor 50%, transparent);
+  line-height: 1.2;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
+.schema-en-barre__champ::placeholder {
+  color: inherit;
+  opacity: 0.55;
+}
+
+.schema-en-barre__champ:focus {
+  outline: 0.15em solid var(--sb-b);
+  outline-offset: 0.05em;
+  background-color: color-mix(in srgb, white 12%, transparent);
+}
+
+.schema-en-barre__champ.is-faux,
+.schema-en-barre__texte.is-faux {
+  outline: 0.2em solid var(--sb-faux);
+  outline-offset: 0.1em;
+}
+
+/* Étiquettes hors des rectangles (au-dessus d'une accolade, sous une flèche...). */
+.schema-en-barre__etiquette {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6em;
+  color: var(--sb-a);
+}
+
+.schema-en-barre__etiquette--rangee {
+  min-width: 1.5em;
+  margin-right: 0.4em;
+  justify-content: flex-end;
+  font-weight: 700;
+}
+
+.schema-en-barre__etiquette--rangee .schema-en-barre__champ,
+.schema-en-barre__etiquette--rangee .schema-en-barre__texte {
+  width: 5em;
+  text-align: right;
+}
+
+.schema-en-barre__etiquette--cote {
+  min-width: 3em;
+  margin-left: 0.3em;
+  justify-content: flex-start;
+}
+
+.schema-en-barre__etiquette--sous {
+  margin-top: -0.2em;
+}
+
+/* Accolades : SVG étiré sur la largeur (ou la hauteur) disponible. */
+.schema-en-barre__accolade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+}
+
+.schema-en-barre__accolade--haut .schema-en-barre__etiquette {
+  margin-bottom: 0.3em;
+}
+
+.schema-en-barre__accolade--haut .schema-en-barre__svg {
+  width: 100%;
+  height: 0.75em;
+}
+
+.schema-en-barre__accolade--droite {
+  align-self: stretch;
+  width: 0.75em;
+  margin-left: 0.4em;
+}
+
+.schema-en-barre__accolade--droite .schema-en-barre__svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Flèche double horizontale, dessinée en CSS pour garder des pointes nettes. */
+/* Le trait s'arrête sous les pointes (1 em de moins que la largeur) pour ne
+   pas dépasser de leur extrémité. */
+.schema-en-barre__fleche {
+  position: relative;
+  flex: none;
+  height: 0.7em;
+  margin: 0.2em 0;
+  background: linear-gradient(currentColor, currentColor) center /
+    calc(100% - 1em) 0.15em no-repeat;
+}
+
+.schema-en-barre__fleche::before,
+.schema-en-barre__fleche::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 0.35em solid transparent;
+  border-bottom: 0.35em solid transparent;
+}
+
+.schema-en-barre__fleche::before {
+  left: 0;
+  border-right: 0.6em solid currentColor;
+}
+
+.schema-en-barre__fleche::after {
+  right: 0;
+  border-left: 0.6em solid currentColor;
+}
+
+/* Comparaison additive : flèche de la différence, avec le pointillé qui
+   prolonge le bord droit de la grande partie. */
+/* Le pointillé prolonge le bord visible (sous la bordure blanche de 0,1 em)
+   de la grande partie ; la flèche s'arrête juste avant. */
+.schema-en-barre__difference {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding: 0 0.3em 0 0.15em;
+}
+
+.schema-en-barre__difference::before {
+  content: '';
+  position: absolute;
+  top: -0.5em;
+  bottom: 0;
+  right: 0.1em;
+  border-right: 0.12em dashed currentColor;
+}
+
+.schema-en-barre__difference .schema-en-barre__fleche {
+  width: 100%;
+  margin: 0;
+}
+
+/* Choix du nombre de rectangles d'un schéma multiplicatif. */
+.schema-en-barre__nb-rectangles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: 0.5em;
+  font-size: 0.9em;
+}
+
+.schema-en-barre__nb-rectangles button {
+  min-width: 2em;
+  padding: 0.2em 0.5em;
+  border: 1px solid var(--sb-bordure);
+  border-radius: 0.35rem;
+  background: var(--sb-fond);
+  color: var(--sb-texte);
+  cursor: pointer;
+}
+
+.schema-en-barre__nb-rectangles button.is-actif {
+  border-color: var(--sb-a);
+  background-color: var(--sb-a);
+  color: white;
+}

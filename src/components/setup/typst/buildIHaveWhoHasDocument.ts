@@ -53,6 +53,21 @@ export interface IHaveWhoHasCard {
 }
 
 /**
+ * Identifiant court et reproductible d'un tirage. Les graines sont préférées
+ * au contenu généré afin qu'un même tirage garde son identifiant lorsque la
+ * mise en page ou le titre change.
+ */
+export function iHaveWhoHasSeriesId(parts: readonly string[]): string {
+  let hash = 0x811c9dc5
+  for (const character of parts.join('\u001f')) {
+    hash ^= character.codePointAt(0) ?? 0
+    hash = Math.imul(hash, 0x01000193)
+  }
+  const value = (hash >>> 0) % (26 * 26)
+  return `${String.fromCharCode(65 + Math.floor(value / 26))}${String.fromCharCode(97 + (value % 26))}`
+}
+
+/**
  * Retire une lettre majuscule servant uniquement à repérer les questions
  * d'une série (`$A=…$`, `$B = …$` ou `A = $…$`). Ces repères révèlent sinon
  * immédiatement l'ordre de la chaîne aux élèves.
@@ -210,6 +225,37 @@ function escapeXml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
+/**
+ * Position verticale du titre dans le verso. L'image est affichée avec
+ * `fit: "contain"` : sa hauteur relative varie donc avec le ratio des cartes.
+ * Ce calcul suit la zone blanche située entre « Qui a… ? » et le logo dans le
+ * JPG, au lieu de placer le titre à une hauteur fixe dans la carte.
+ */
+function backTitleOffsetPercent(options: IHaveWhoHasDocumentOptions): number {
+  const pageDimensions =
+    options.pageFormat === 'a4'
+      ? { width: 210, height: 297 }
+      : { width: 148, height: 210 }
+  const pageWidth =
+    options.orientation === 'landscape'
+      ? pageDimensions.height
+      : pageDimensions.width
+  const pageHeight =
+    options.orientation === 'landscape'
+      ? pageDimensions.width
+      : pageDimensions.height
+  // Le verso possède un inset de 3 mm sur chacun de ses quatre côtés.
+  const cardWidth =
+    (pageWidth - 20) / Math.max(1, options.columns) - 6
+  const cardHeight =
+    (pageHeight - 20) / Math.max(1, options.rows) - 6
+  const imageRatio = 1200 / 628
+  const renderedImageHeight = Math.min(cardHeight, cardWidth / imageRatio)
+  const imageTop = (cardHeight - renderedImageHeight) / 2
+  const titleY = imageTop + renderedImageHeight * 0.69
+  return Math.round((1 - titleY / cardHeight) * 1000) / 10
+}
+
 function codeWheelSvg(
   codes: string[],
   title: string,
@@ -246,14 +292,20 @@ function codeWheelSvg(
   return parts.join('')
 }
 
-function coverWheelSvg(title: string, codeCount: number): string {
+function coverWheelSvg(
+  title: string,
+  seriesLabel: string,
+  codeCount: number,
+): string {
   // À 15 h, les codes voisins se séparent verticalement. La fenêtre reste
   // plus basse que la corde séparant deux positions, même avec une grande
   // série, afin de ne jamais dévoiler deux codes à la fois.
   const verticalGap = 2 * 220 * Math.sin(Math.PI / Math.max(2, codeCount))
   const windowHeight = Math.max(20, Math.min(48, verticalGap * 0.68))
   const windowY = 300 - windowHeight / 2
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="100%" height="100%" fill="white"/><circle cx="300" cy="300" r="280" fill="#f2f2f2" stroke="black" stroke-width="3"/><path d="M 288 23 L 312 23 L 300 2 Z" fill="black"/><rect x="452" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><!-- Encoche semi-elliptique pour saisir la roue intérieure --><path d="M 220 580 C 220 510 380 510 380 580 Z" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="280" text-anchor="middle" font-family="sans-serif" font-size="31" font-weight="bold">${escapeXml(title)}</text><text x="300" y="320" text-anchor="middle" font-family="sans-serif" font-size="16">Découper la fenêtre et l’encoche en pointillés</text></svg>`
+  const labelSize =
+    seriesLabel.length > 45 ? 18 : seriesLabel.length > 30 ? 22 : 26
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="100%" height="100%" fill="white"/><circle cx="300" cy="300" r="280" fill="#f2f2f2" stroke="black" stroke-width="3"/><path d="M 288 23 L 312 23 L 300 2 Z" fill="black"/><rect x="452" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><!-- Encoche semi-elliptique pour saisir la roue intérieure --><path d="M 220 580 C 220 510 380 510 380 580 Z" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="160" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="62" font-weight="bold">${escapeXml(title)}</text><text x="300" y="340" text-anchor="middle" font-family="sans-serif" font-size="16">Découper la fenêtre et l’encoche en pointillés</text><text x="300" y="425" text-anchor="middle" font-family="sans-serif" font-size="${labelSize}" font-weight="bold">${escapeXml(seriesLabel)}</text></svg>`
 }
 
 /** Génère les cartes recto-verso, les roues de décodage et leurs caches. */
@@ -261,6 +313,12 @@ export function buildIHaveWhoHasDocument(
   exercises: TypstExerciseInput[],
   options: IHaveWhoHasDocumentOptions = defaultIHaveWhoHasDocumentOptions,
   carryOver: IHaveWhoHasCarryOver = {},
+  seriesId = iHaveWhoHasSeriesId(
+    exercises.flatMap(({ questions, corrections }) => [
+      ...questions,
+      ...corrections,
+    ]),
+  ),
 ): string {
   const figures: string[] = []
   const cards = buildIHaveWhoHasCards(exercises).map((card) => ({
@@ -268,6 +326,8 @@ export function buildIHaveWhoHasDocument(
     question: htmlToTypst(card.question, figures),
   }))
   const codes = makeCardCodes(cards.length, carryOver.cardCodes)
+  const seriesLabel = `${options.title} — Série ${seriesId}`
+  const backTitleOffset = backTitleOffsetPercent(options)
   const bodies = cards
     .flatMap((card) => [card.answer, card.question])
     .join('\n')
@@ -295,6 +355,7 @@ export function buildIHaveWhoHasDocument(
     `#let taille-questions = ${options.questionFontSize}pt`,
     `#let taille-reponses = ${options.answerFontSize}pt`,
     `#let epaisseur-traits = ${options.separatorThickness}pt`,
+    `#let titre-serie = ${typstString(seriesLabel)}`,
     `#set page(paper: "${options.pageFormat}", flipped: ${options.orientation === 'landscape'}, margin: (x: 10mm, y: 10mm))`,
     '#set text(font: police-texte, lang: "fr")',
     `#set par(leading: ${options.lineSpacing}em)`,
@@ -329,7 +390,11 @@ export function buildIHaveWhoHasDocument(
     '    align(left + horizon, text(size: taille-questions * taille)[#strong[Qui a] #question]),',
     '  )',
     ']',
-    `#let dos-carte = box(width: 100%, height: 100%, inset: 3mm, clip: true, image(${typstString(I_HAVE_WHO_HAS_BACK_IMAGE)}, width: 100%, height: 100%, fit: "contain"))`,
+    `#let dos-carte = box(width: 100%, height: 100%, inset: 3mm, clip: true)[`,
+    `  #image(${typstString(I_HAVE_WHO_HAS_BACK_IMAGE)}, width: 100%, height: 100%, fit: "contain")`,
+    `  #place(left + bottom, dx: 4%, dy: -${backTitleOffset}%, text(size: 11pt, weight: "bold", ${typstString(options.title)}))`,
+    `  #place(right + bottom, dx: -4%, dy: -${backTitleOffset}%, text(size: 11pt, weight: "bold", ${typstString(`Série ${seriesId}`)}))`,
+    ']',
     '#let planche(..cartes) = grid(',
     '  columns: (1fr,) * cartes-par-ligne,',
     '  rows: (1fr,) * lignes-par-page,',
@@ -393,8 +458,12 @@ export function buildIHaveWhoHasDocument(
   // Deux roues au-dessus, puis leurs deux caches en dessous.
   lines.push(assemblyPart(codeWheelSvg(iHaveCodes, 'J’ai', true)))
   lines.push(assemblyPart(codeWheelSvg(whoHasCodes, 'Qui a ?')))
-  lines.push(assemblyPart(coverWheelSvg('J’ai', iHaveCodes.length)))
-  lines.push(assemblyPart(coverWheelSvg('Qui a ?', whoHasCodes.length)))
+  lines.push(
+    assemblyPart(coverWheelSvg('J’ai', seriesLabel, iHaveCodes.length)),
+  )
+  lines.push(
+    assemblyPart(coverWheelSvg('Qui a ?', seriesLabel, whoHasCodes.length)),
+  )
   lines.push(')')
   return lines.join('\n')
 }

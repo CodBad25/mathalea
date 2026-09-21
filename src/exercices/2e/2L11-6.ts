@@ -237,7 +237,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
             ajouteChampTexteMathLive(
               this,
               i,
-              KeyboardType.clavierDeBaseAvecVariable,
+              KeyboardType.lyceeClassique,
             )
           : `$${lettre}=${expression}$`
         this.listeQuestions.push(texte)

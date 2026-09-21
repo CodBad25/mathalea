@@ -389,6 +389,7 @@ export type InteractivityType =
   | 'diagram-cartesian-assessment' // Non compatible AMC
   | 'traceur-de-courbe' // Non compatible AMC
   | 'cube-stack-editor' // Non compatible AMC
+  | 'schema-en-barre' // Non compatible AMC
   | 'shape-2d-grid-editor' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
@@ -457,6 +458,7 @@ export function isInteractivityType(
     value === 'diagram-cartesian-assessment' ||
     value === 'traceur-de-courbe' ||
     value === 'cube-stack-editor' ||
+    value === 'schema-en-barre' ||
     value === 'shape-2d-grid-editor'
   )
 }
@@ -507,6 +509,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'diagram-histogram-assessment' ||
     value === 'diagram-cartesian-assessment' ||
     value === 'cube-stack-editor' ||
+    value === 'schema-en-barre' ||
     value === 'shape-2d-grid-editor'
   )
 }

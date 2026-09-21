@@ -10,6 +10,7 @@ import {
   getGeneratedCanRowCode,
   getGeneratedExerciseCode,
   harvestCarryOver,
+  subjectEditorCode,
   type TypstDocumentOptions,
   type TypstExerciseInput,
 } from './buildTypstDocument'
@@ -338,7 +339,69 @@ describe('buildTypstDocument', () => {
       [exercises],
     )
     expect(code).toContain('#mathalea-anchor("exo", 1)')
-    expect(code).toContain('#mathalea-anchor("version-exo", 1)')
+    expect(code.match(/#mathalea-anchor\("exo", 1\)/g)).toHaveLength(2)
+    expect(subjectEditorCode(code, 1)).toContain('#mathalea-anchor("gap", 0)')
+  })
+
+  it('conserve les éditions propres à chacun des quatre sujets après régénération', () => {
+    const inputs = [exercise({ questions: ['$1+1$'], corrections: ['$2$'] })]
+    const carry = {
+      codeOverrides: { 1: 'Énoncé A.' },
+      versions: Object.fromEntries(
+        [1, 2, 3].map((v) => [
+          v,
+          {
+            codeOverrides: { 1: `Énoncé ${v}.` },
+            codeOverridesCorrection: { 1: `Correction ${v}.` },
+            insertions: { 0: [`Texte ${v}.`] },
+          },
+        ]),
+      ),
+    }
+    const build = (
+      settings: typeof carry | ReturnType<typeof harvestCarryOver>,
+    ) =>
+      buildTypstDocument(inputs, defaultTypstDocumentOptions, settings, [
+        inputs,
+        inputs,
+        inputs,
+      ])
+    const first = build(carry)
+    const harvested = harvestCarryOver(first)
+    const second = build(harvested)
+    for (const v of [1, 2, 3]) {
+      const selected = subjectEditorCode(second, v)
+      expect(selected.length).toBe(second.length)
+      expect(selected.split('\n')).toHaveLength(second.split('\n').length)
+      expect(selected).toContain(`Énoncé ${v}.`)
+      expect(selected).toContain(`Correction ${v}.`)
+      expect(selected).toContain(`Texte ${v}.`)
+      expect(selected).not.toContain('Énoncé A.')
+      expect(harvested.versions?.[v].codeOverrides).toEqual(
+        carry.versions[v].codeOverrides,
+      )
+    }
+    expect(harvested.codeOverrides).toEqual(carry.codeOverrides)
+  })
+
+  it('garde les figures du sujet édité après plusieurs régénérations', () => {
+    const inputs = [
+      exercise({
+        questions: [
+          '<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5" /></svg>',
+        ],
+      }),
+    ]
+    const carry = { versions: { 1: { codeOverrides: { 1: '#fig-1' } } } }
+    const build = (settings: ReturnType<typeof harvestCarryOver>) =>
+      buildTypstDocument(inputs, defaultTypstDocumentOptions, settings, [
+        inputs,
+      ])
+    const first = build(carry)
+    expect(subjectEditorCode(first, 1)).toContain('#fig-2')
+    const restored = harvestCarryOver(first)
+    expect(restored.versions?.[1].codeOverrides?.[1]).toBe('#fig-1')
+    expect(subjectEditorCode(build(restored), 1)).toContain('#fig-2')
   })
 
   it('nomme le sujet sur la première page de sa section Corrections quand la fiche en a plusieurs', () => {
@@ -830,6 +893,23 @@ describe('buildTypstDocument', () => {
     expect(cadre).toContain('align(left)[#pied-page]')
   })
 
+  it.each(['epure', 'cartouche', 'cadre'] as const)(
+    'supprime le rappel du titre en bas à droite (%s)',
+    (headerStyle) => {
+      const code = buildTypstDocument([exercise()], {
+        ...defaultTypstDocumentOptions,
+        headerStyle,
+      })
+      const footer = code.slice(
+        code.indexOf('footer: context ['),
+        code.indexOf('#set text(font:'),
+      )
+      expect(footer).toContain('align(left)[#pied-page]')
+      expect(footer).toContain('align(center)[#counter(page).display')
+      expect(footer).not.toContain('align(right)')
+    },
+  )
+
   it('règle la police, la police des maths et la taille du texte', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
       ...defaultTypstDocumentOptions,
@@ -996,13 +1076,12 @@ describe('buildTypstDocument', () => {
     const firstCode = build(carryOver)
     const firstHarvest = harvestCarryOver(firstCode)
 
-    // Le contenu est rendu dans les deux sujets, mais seul le sujet principal
-    // porte les marqueurs relus lors de la régénération.
+    // Chaque sujet porte ses marqueurs, relus séparément à la régénération.
     expect(firstCode.split(PAGE_BREAK_SNIPPET)).toHaveLength(3)
-    expect(firstCode.match(/\/\/ mathalea:insertion$/gm) ?? []).toHaveLength(1)
+    expect(firstCode.match(/\/\/ mathalea:insertion$/gm) ?? []).toHaveLength(2)
     expect(
       firstCode.match(/\/\/ mathalea:insertion-corr$/gm) ?? [],
-    ).toHaveLength(1)
+    ).toHaveLength(2)
     expect(firstHarvest.insertions).toEqual(carryOver.insertions)
     expect(firstHarvest.insertionsCorrection).toEqual(
       carryOver.insertionsCorrection,
@@ -2135,7 +2214,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(a4).not.toContain('taille: 0.85em')
   })
 
-  it('n’émet pas de repère hors de la première version', () => {
+  it('émet les repères de lignes sur chaque version', () => {
     const code = buildTypstDocument(
       [exercise({ questions: ['$1+1$'] })],
       { ...canOptions, nbVersions: 2 },
@@ -2143,7 +2222,10 @@ describe('mode « Course aux nombres » (canMode)', () => {
       [[exercise({ questions: ['$5+5$'] })]],
     )
     expect(code).toContain('Sujet A')
-    expect(code).toContain('[$5 + 5$],')
+    expect(code).toContain('$5 + 5$')
+    expect(subjectEditorCode(code, 1)).toContain(
+      '#mathalea-anchor("can-row", 1)',
+    )
     // le compteur du paquet exercise-bank n'existe pas dans ce mode
     expect(code).not.toContain('#exo-counter.update(0)')
   })
@@ -2987,9 +3069,8 @@ describe('page de garde', () => {
     expect(appels).toHaveLength(2)
     // ... mais l'aide n'est déclarée qu'une fois
     expect(code.match(/#let mathalea-couverture\(/g) ?? []).toHaveLength(1)
-    // le repère d'édition aussi (seul le premier sujet est éditable sur
-    // l'aperçu, comme l'en-tête — les variables sont de toute façon partagées)
-    expect(code.match(/#mathalea-anchor\("cover", 0\)/g) ?? []).toHaveLength(1)
+    // La page de garde est éditable depuis chaque sujet.
+    expect(code.match(/#mathalea-anchor\("cover", 0\)/g) ?? []).toHaveLength(2)
   })
 
   it.runIf(shouldRunTypstCliTests())(
