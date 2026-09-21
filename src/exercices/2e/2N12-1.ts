@@ -615,7 +615,7 @@ export default class IntervallesDeR extends Exercice {
             this,
             i,
             ` ${KeyboardType.clavierEnsemble} ${KeyboardType.clavierCompare}`,
-            { texteAvant: '<br>' },
+            { texteAvant: typeDeQuestion < 9 ? '<br>$I=$' : '<br>' },
           )
         }
         this.listeQuestions[i] = texte
