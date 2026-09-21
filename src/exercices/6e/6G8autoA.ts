@@ -641,7 +641,9 @@ export default class ReconnaitreDesSolides extends Exercice {
         } else {
           handleAnswers(this, j, {
             reponse: {
-              value: String(reponse).toLowerCase(),
+              value: Array.isArray(reponse)
+                ? reponse.map((answer) => answer.toLowerCase())
+                : reponse.toLowerCase(),
               options: { texteSansCasse: true },
             },
           })
