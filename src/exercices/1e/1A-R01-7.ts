@@ -10,7 +10,9 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '8fed0'
+export const dateDeModifImportante = '21/09/2026'
+
+export const uuid = '9878e'
 
 export const refs = {
   'fr-fr': ['1A-R01-7', '2A-R1-7'],

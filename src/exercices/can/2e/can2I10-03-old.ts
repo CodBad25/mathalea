@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 5e3ff continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -17,15 +20,13 @@ export const dateDePublication = '22/03/2026'
  *
  */
 
-export const dateDeModifImportante = '21/09/2026'
-
-export const uuid = '91b80'
+export const uuid = '5e3ff'
 
 export const refs = {
-  'fr-fr': ['can2I10-03'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
-export default class calculAvecPourcentage extends ExerciceSimple {
+export default class calculAvecPourcentageOld extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -52,7 +53,7 @@ export default class calculAvecPourcentage extends ExerciceSimple {
         [75, 25, [200]],
         [80, 16, [25, 50, 75, 125, 150, 175, 200]],
         [80, 20, [25, 50, 75, 125, 150, 175, 200]],
-        [50, 25, [25, 50, 75, 100, 125, 150, 175, 200]],
+        [80, 40, [25, 50, 75, 100, 125, 150, 175, 200]],
         [30, 6, [50, 100, 150, 200]],
         [30, 10, [200]],
         [30, 15, [200]],
