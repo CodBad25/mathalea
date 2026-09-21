@@ -117,7 +117,7 @@ describe('buildIHaveWhoHasDocument', () => {
     ).toContain('#let carte-2-taille = 1.3')
   })
 
-  it('attribue des codes uniques et ajoute les deux roues avec leurs caches', () => {
+  it('attribue des codes uniques et ajoute les deux polygones de correction', () => {
     const first = buildIHaveWhoHasDocument(
       [exercise],
       undefined,
@@ -130,21 +130,26 @@ describe('buildIHaveWhoHasDocument', () => {
     expect(codes).toHaveLength(3)
     expect(new Set(codes).size).toBe(3)
     expect(first).toContain('Découper la fenêtre et l’encoche en pointillés')
-    expect(first).toContain('Assembler les repères noirs')
+    expect(first).toContain('Sens de rotation')
+    expect(first).not.toContain('Assembler les repères noirs')
     expect(first).toContain('Encoche semi-elliptique')
     expect(first).toContain('M 220 580 C 220 510 380 510 380 580 Z')
-    expect(first).toContain('Planche d’assemblage des roues et des caches')
+    expect(first).toContain('Polygones de correction et d’assemblage')
+    expect(first).toContain('J’ai… Qui a… ?')
+    expect(first).not.toContain('sens des aiguilles d’une montre')
+    expect(first).toContain('Polygone solution')
     expect(first).toContain('#let titre-serie = "J’ai qui a — Série Ab"')
     expect(first).toContain('text(size: 11pt, weight: "bold", "J’ai qui a")')
     expect(first).toContain('text(size: 11pt, weight: "bold", "Série Ab")')
-    expect(first.match(/J’ai qui a — Série Ab/g)).toHaveLength(3)
-    expect(first).toContain('rows: (82mm, 82mm)')
+    expect(first.match(/J’ai qui a — Série Ab/g)).toHaveLength(2)
+    expect(first).toContain('rows: (130mm,)')
     expect(first).not.toContain('#grid(width:')
     expect(first).toContain('#set page(paper: "a4", flipped: true')
-    // fenêtre du cache à 15 h (à droite), et non plus à 12 h
+    // La fenêtre de lecture est à droite et les deux pièces sont polygonales.
     expect(first).toContain('x=\\"452\\"')
     expect(first).not.toContain('x=\\"253\\" y=\\"86\\"')
-    expect(first).toContain('r=\\"280\\"')
+    expect(first).toContain('<polygon points=\\"')
+    expect(first).not.toContain('r=\\"280\\"')
     expect(first).toContain('flipped: true')
 
     const regenerated = buildIHaveWhoHasDocument(
