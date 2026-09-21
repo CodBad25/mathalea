@@ -46,6 +46,16 @@
         "5205"
       ],
       "port": 5205
+    },
+    {
+      "name": "dev-auto",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "pnpm makeJson && vite --port \"$PORT\""
+      ],
+      "port": 5199,
+      "autoPort": true
     }
   ]
 }

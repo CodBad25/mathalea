@@ -31,6 +31,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Scratch et Blockly](interactivite/scratch-blockly.md)             | Architecture des éditeurs visuels                    |
 | [Tableur](interactivite/tableur.md)                                | Rendu HTML, sérialisation et sortie imprimable       |
 | [Relier les étiquettes](interactivite/relier-etiquettes.md)        | Appariement interactif et ses sorties LaTeX et Typst |
+| [Schéma en barre](interactivite/schema-en-barre.md)                | Modélisation d'un problème, choix et complétion      |
 
 ## Scratch
 
@@ -40,18 +41,18 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 
 ## Exports
 
-| Sujet                                         | Rôle                                                                     |
-| --------------------------------------------- | ------------------------------------------------------------------------ |
-| [Moteur AMC](exports/amc.md)                  | Structures, inférence, normalisation et rendu                            |
-| [Vue Typst](exports/typst.md)                 | Conversion et compilation dans le navigateur                             |
-| [Vue LaTeX](exports/tex.md)                   | Éditeur et aperçu PDF, réglages globaux et par exercice                  |
-| [Vue Flash-cards](exports/flashcards.md)      | Cartes question/réponse en Typst                                         |
-| [Vue TBI](exports/tbi.md)                     | Vidéoprojection : dispositions, actions au survol, horloge               |
-| [Vue Diaporama](exports/diaporama.md)         | Diapositives, décompte, alternance question/correction                   |
-| [Vue Diaporama PDF](exports/diaporama-pdf.md) | PDF 16/9 : une question par page, puis les corrections                   |
-| [Vue Quizz](exports/quizz.md)                 | Quiz façon Kahoot : paramètres URL, extraction QCM, moteur et transports |
-| [Référentiel tableur](exports/referentiel-tableur.md) | Classeur ODS/XLSX : hiérarchie du référentiel et liste des exercices     |
-| [Lecture optique](exports/lecture-optique.md) | Évaluation papier : sujets nominatifs, dépouillement des copies scannées, bilan |
+| Sujet                                                 | Rôle                                                                            |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------- |
+| [Moteur AMC](exports/amc.md)                          | Structures, inférence, normalisation et rendu                                   |
+| [Vue Typst](exports/typst.md)                         | Conversion et compilation dans le navigateur                                    |
+| [Vue LaTeX](exports/tex.md)                           | Éditeur et aperçu PDF, réglages globaux et par exercice                         |
+| [Vue Flash-cards](exports/flashcards.md)              | Cartes question/réponse en Typst                                                |
+| [Vue TBI](exports/tbi.md)                             | Vidéoprojection : dispositions, actions au survol, horloge                      |
+| [Vue Diaporama](exports/diaporama.md)                 | Diapositives, décompte, alternance question/correction                          |
+| [Vue Diaporama PDF](exports/diaporama-pdf.md)         | PDF 16/9 : une question par page, puis les corrections                          |
+| [Vue Quizz](exports/quizz.md)                         | Quiz façon Kahoot : paramètres URL, extraction QCM, moteur et transports        |
+| [Référentiel tableur](exports/referentiel-tableur.md) | Classeur ODS/XLSX : hiérarchie du référentiel et liste des exercices            |
+| [Lecture optique](exports/lecture-optique.md)         | Évaluation papier : sujets nominatifs, dépouillement des copies scannées, bilan |
 
 ## Mathématiques
 
