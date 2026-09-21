@@ -3,6 +3,7 @@ import SommeFractionsDecimales from './6N1F'
 export const titre =
   "Donner l'écriture (décimale, en fraction décimale) d'une somme (ou différence) de nombres avec fractions décimales"
 export const amcReady = true
+export const interactifReady = true
 
 export const dateDePublication = '11/05/2025'
 /**
