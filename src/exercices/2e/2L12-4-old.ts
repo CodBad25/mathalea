@@ -1,22 +1,24 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid be864 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import developperIdentiteRemarquable from '../3e/3L11-15'
 
 export const titre = 'Développer une identité remarquable'
-export const interactifReady = true
 export const dateDePublication = '09/10/2025'
-export const dateDeModifImportante = '21/09/2026'
+export const dateDeModifImportante = '05/11/2025'
 
 /**
  * Clone de 3L11-15 pour la France
  * @author Éric Elter
  */
 
-export const uuid = '12880'
+export const uuid = 'be864'
 
 export const refs = {
-  'fr-fr': ['2L12-4', 'BP2AutoI8', 'BP1AUTO078'],
+  'fr-fr': [],
   'fr-ch': ['NR'],
 }
-export default class developperIdentiteRemarquableFrance extends developperIdentiteRemarquable {
+export default class developperIdentiteRemarquableFranceOld extends developperIdentiteRemarquable {
   constructor() {
     super()
     this.pays = 'France'
@@ -26,6 +28,5 @@ export default class developperIdentiteRemarquableFrance extends developperIdent
     ]
     this.besoinFormulaire3Numerique = false
     this.sup3 = 1
-    this.lettresVariablesImposees = ['x']
   }
 }
