@@ -38,7 +38,7 @@ export default class ExerciceConversionsAires extends Exercice {
     super()
     this.sup = 1 // Niveau de difficulté de l'exercice
     this.sup2 = false // Avec des nombres décimaux ou pas
-    this.sup3 = 1 // version QCM
+    this.sup3 = 2 // version numérique
     this.sup4 = false // tableau
     this.spacing = 2
     this.correctionDetailleeDisponible = true
@@ -54,12 +54,11 @@ export default class ExerciceConversionsAires extends Exercice {
       "1 : Conversions en m² avec des multiplications\n2 : Conversions en m² avec des divisions\n3 : Conversions en m² avec des multiplications ou divisions\n4 : Conversions avec des multiplications ou divisions\n5 : Conversions d'hectares et ares en m² \n6 : Mélange",
     ]
     this.besoinFormulaire2CaseACocher = ['Avec des nombres décimaux']
-    if (context.isHtml && !(context.vue === 'diap'))
-      this.besoinFormulaire3Numerique = [
-        'Exercice interactif',
-        2,
-        '1 : QCM\n2 : Numérique',
-      ] // Texte, tooltip
+    this.besoinFormulaire3Numerique = [
+      'Type de réponse',
+      2,
+      '1 : QCM\n2 : Numérique',
+    ]
     this.besoinFormulaire4CaseACocher = ["Avec tableau dans l'énoncé"]
     this.besoinFormulaire5Texte = [
       'Type de correction',
@@ -73,10 +72,7 @@ export default class ExerciceConversionsAires extends Exercice {
     const withDecompositionCorr = String(this.sup5).includes('2')
     const withMultiplicationCorr = String(this.sup5).includes('3')
 
-    this.consigne =
-      this.interactif && this.sup3 === 1
-        ? 'Cocher la bonne réponse.'
-        : 'Compléter.'
+    this.consigne = this.sup3 === 1 ? 'Cocher la bonne réponse.' : 'Compléter.'
     Decimal.set({ toExpNeg: -15 })
 
     let prefixeMulti = [
@@ -398,7 +394,7 @@ ${range(Math.abs(ecart - 1))
       ]
       const props = propositionsQcm(this, i)
 
-      if (this.interactif && this.sup3 !== 2) {
+      if (this.sup3 !== 2) {
         texte += props.texte
       }
 
