@@ -7,6 +7,7 @@ import { milieu, pointAdistance } from '../../../lib/2d/utilitairesPoint'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
@@ -33,6 +34,7 @@ export default class CalculHypotenusePythagore extends ExerciceSimple {
     this.typeExercice = 'simple'
 
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierFullOperations
   }
 
   nouvelleVersion() {
