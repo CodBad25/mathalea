@@ -150,6 +150,58 @@ export class MathaleaCouteauSuisseElement extends MathaleaCustomElement {
     }
   }
 
+  /**
+   * Barème : la somme des points maximum des enfants, chacun lu avec son
+   * `autoCorrection` installée temporairement comme dans `verifQuestion()`.
+   */
+  static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
+    const ac = exercice.autoCorrection?.[questionIndex]
+    const elements = parseElements(
+      (ac as { elements?: unknown } | undefined)?.elements,
+    )
+    if (elements.length === 0) return 1
+    const originalAutoCorrectionLength = exercice.autoCorrection.length
+    const originalAutoCorrections = new Map<number, unknown>()
+    let total = 0
+    try {
+      for (const element of elements) {
+        const elementClass = mathaleaCustomElementsRegistry.get(
+          element.formatInteractif,
+        )
+        if (elementClass == null) continue
+        const childQuestionIndex = Number.isInteger(element.questionIndex)
+          ? Number(element.questionIndex)
+          : questionIndex
+        if (!originalAutoCorrections.has(childQuestionIndex)) {
+          originalAutoCorrections.set(
+            childQuestionIndex,
+            exercice.autoCorrection[childQuestionIndex],
+          )
+        }
+        exercice.autoCorrection[childQuestionIndex] = {
+          ...((exercice.autoCorrection[questionIndex] ?? {}) as Record<
+            string,
+            unknown
+          >),
+          ...((element.autoCorrection ?? {}) as Record<string, unknown>),
+          formatInteractif: element.formatInteractif,
+        }
+        total += elementClass.pointsMaxQuestion(exercice, childQuestionIndex)
+      }
+    } finally {
+      for (const [index, original] of originalAutoCorrections) {
+        if (original == null && index !== questionIndex) {
+          delete exercice.autoCorrection[index]
+        } else {
+          exercice.autoCorrection[index] =
+            original as IExercice['autoCorrection'][number]
+        }
+      }
+      exercice.autoCorrection.length = originalAutoCorrectionLength
+    }
+    return Math.max(total, 1)
+  }
+
   render(): string | void {
     this.hydrateCommonAttributes()
     this.onInteractivityChanged(this.interactivityOn)

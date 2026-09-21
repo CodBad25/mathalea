@@ -95,7 +95,10 @@ this.listeQuestions[i] = MathaleaCouteauSuisseElement.create({
 
 ## Barème
 
-Le score final est la somme des scores retournés par chaque sous-élément.
+Le score final est la somme des scores retournés par chaque sous-élément, et
+`MathaleaCouteauSuisseElement.pointsMaxQuestion()` additionne de même les
+`pointsMaxQuestion()` des enfants : le barème affiché dans les paramètres de
+l'exercice correspond au score maximal.
 
 Pour un `multi-mathfield`, chaque champ attendu vaut par défaut un point. Un
 `multi-mathfield` avec `champ1`, `champ2`, `champ3`, `champ4` rapporte donc
@@ -136,9 +139,12 @@ Dans `2F21-9`, le barème obtenu est :
 - Les sous-éléments doivent conserver leurs identifiants habituels :
   `multi-mathfieldEx...`, `tableau-signes-variationsEx...`,
   `mathalea-qcmEx...`. Les vérificateurs existants les recherchent par ces IDs.
-- Lorsque plusieurs enfants utilisent le même type de custom element, leur
-  donner des `questionIndex` distincts dans le DOM et reporter chaque index dans
-  l'entrée correspondante de `elements`. Le couteau suisse installe alors
+- Lorsque plusieurs enfants utilisent le même type de custom element, ou
+  partagent les mêmes identifiants de retour (`resultatCheckEx…Q…`,
+  `feedbackEx…Q…`, créés par la plupart des composants), leur donner des
+  `questionIndex` distincts dans le DOM et reporter chaque index dans l'entrée
+  correspondante de `elements` (voir `6N4A-5` : schéma à l'index de la
+  question, champ MathLive à l'index décalé de 100). Le couteau suisse installe alors
   temporairement l'`autoCorrection` enfant à cet index pendant la vérification,
   sans créer plusieurs questions persistantes dans l'exercice.
 - Dans un `multi-mathfield`, utiliser les champs normalisés `champ1`, `champ2`,

@@ -420,6 +420,7 @@ imposer la variable didactique attendue (angles, hauteurs, échelles, etc.).
 - MySpreadsheetElement (tableur) : [architecture du tableur](tableur.md)
 - BlocklyEditor : [architecture de Scratch et Blockly](scratch-blockly.md)
 - RelierEtiquettesElement (composant à trois rendus : HTML interactif, LaTeX et Typst) : [relier les étiquettes](relier-etiquettes.md)
+- SchemaEnBarreElement (choix parmi quatre schémas, textes éditables, trois rendus) : [schéma en barre](schema-en-barre.md)
 
 ## Checklist avant merge
 

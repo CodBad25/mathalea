@@ -839,6 +839,68 @@ Points à connaître :
 
 Le composant produit aussi les sorties imprimées : une figure TikZ en LaTeX et une figure Typst native (sans paquet externe), avec les mêmes couleurs de traits. Voir [le custom element](../../maintenance-moteur/interactivite/relier-etiquettes.md).
 
+## Schéma en barre
+
+À utiliser pour faire modéliser un problème arithmétique : l'élève choisit
+parmi les quatre schémas en barre (additif ou multiplicatif, parties-tout ou
+comparaison), puis en complète les textes avec les données de l'énoncé et un
+« ? » pour la valeur cherchée.
+
+```ts
+import {
+  addSchemaEnBarre,
+  type SchemaEnBarreAttendu,
+} from '../../lib/customElements/SchemaEnBarreElement'
+
+const attendu: SchemaEnBarreAttendu = {
+  type: 'multiplicatif-parties-tout',
+  textes: { part: '6', nombreDeParts: '4', tout: '?' },
+  nbRectangles: 4,
+}
+
+texte += addSchemaEnBarre(this, i, { attendu })
+```
+
+Points à connaître :
+
+- `attendu` pose `formatInteractif` et la réponse attendue : pas de
+  `handleAnswers()` à appeler ;
+- seule la place des nombres est vérifiée : pour chaque texte de
+  `attendu.textes` qui contient un nombre, le texte saisi à la même place
+  doit contenir ce nombre, quel que soit son habillage (`12`, `12 km`,
+  `Matin\n12 pages`) ; les textes sans nombre (`?`, une étiquette) ne sont
+  pas jugés ;
+- `attendu.textesIndicatifs` s'affiche dans la correction sans être vérifié
+  (les étiquettes A et B, que l'élève nomme librement) ;
+- un texte de rectangle peut tenir sur deux lignes avec `\n` (« Roses », puis
+  « 6 fleurs ») dans le schéma figé de la correction ;
+- dans un schéma additif parties-tout, les deux parties peuvent être
+  échangées ;
+- `nbRectangles` (2 à 5, ou `'plus'` pour trois rectangles suivis de
+  pointillés) n'est vérifié que s'il est fourni ; l'omettre quand le nombre de
+  parts est l'inconnue ;
+- `typeImpose` supprime le choix entre les quatre schémas : l'élève ne fait
+  que compléter ;
+- dans la comparaison additive, l'accolade « Tout » est masquée par défaut ;
+  l'élève l'affiche avec le bouton « Afficher le tout » quand le problème
+  donne le total (elle apparaît d'elle-même dans la correction si `tout` est
+  renseigné) ;
+- pour afficher le schéma attendu dans `texteCorr`, appeler
+  `addSchemaEnBarre(this, i, { initialState, interactivityOn: false, id })`
+  avec un **id distinct** de celui de l'énoncé (ni `attendu`, ni
+  `handleAnswers()` : la correction ne doit pas écraser la réponse attendue) ;
+- sans interactivité, `create()` imprime le gabarit vide du schéma quand le
+  type est imposé, et rien sinon (l'élève dessine le schéma lui-même).
+
+Une banque de problèmes prêts à l'emploi, avec leur schéma attendu, leurs
+calculs et leur phrase de conclusion, est dans
+`src/lib/problems/problemesSchemasEnBarre.ts` ; `6N4A-5` la combine avec un
+champ MathLive dans un `mathalea-couteau-suisse` (voir
+[Couteau suisse](couteau-suisse.md)). L'outil du
+professeur `P030` affiche le composant seul, pour modéliser un problème au
+tableau. Voir
+[le custom element](../../maintenance-moteur/interactivite/schema-en-barre.md).
+
 ## Multiples champs dans une figure 2D
 
 À utiliser quand un champ doit être posé dans une figure produite par `mathalea2d()`.
