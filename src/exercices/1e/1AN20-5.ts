@@ -312,7 +312,7 @@ export default class EtudeFctRatio extends Exercice {
             const lignePPz = ['Line', 30, '', 0, '+', 20, 'z', 5, '+', 20]
             const ligneMM = ['Line', 30, '', 0, '-', 20, 't', 5, '-', 20]
             const ligneMMd = ['Line', 30, '', 0, '-', 20, 'd', 5, '-', 20]
-            const lignePPd = ['Line', 30, '', 0, '-', 20, 'd', 5, '-', 20]
+            const lignePPd = ['Line', 30, '', 0, '+', 20, 'd', 5, '+', 20]
             if (-a * c > 0) {
               ligne1 = lignePP
               ligne2 = lignePPz
