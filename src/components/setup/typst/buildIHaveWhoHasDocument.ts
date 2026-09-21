@@ -256,56 +256,53 @@ function backTitleOffsetPercent(options: IHaveWhoHasDocumentOptions): number {
   return Math.round((1 - titleY / cardHeight) * 1000) / 10
 }
 
-function codeWheelSvg(
-  codes: string[],
-  title: string,
-  mirrored = false,
-): string {
+function polygonPoints(sides: number, radius: number): string {
+  const center = 300
+  const count = Math.max(3, sides)
+  return Array.from({ length: count }, (_, index) => {
+    const angle = (index * 2 * Math.PI) / count
+    return `${center + radius * Math.cos(angle)},${center + radius * Math.sin(angle)}`
+  }).join(' ')
+}
+
+/** Polygone arrière : les codes suivent le cycle des cartes. */
+function solutionPolygonSvg(codes: string[]): string {
   const center = 300
   const radius = 280
-  const labelRadius = 220
+  const labelRadius = 205
   const count = Math.max(1, codes.length)
   const parts = [
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">',
     '<rect width="100%" height="100%" fill="white"/>',
-    `<circle cx="300" cy="300" r="${radius}" fill="white" stroke="black" stroke-width="3"/>`,
-    '<path d="M 288 23 L 312 23 L 300 2 Z" fill="black"/>',
+    `<polygon points="${polygonPoints(count, radius)}" fill="white" stroke="black" stroke-width="3"/>`,
   ]
-  const direction = mirrored ? -1 : 1
   for (let index = 0; index < count; index++) {
-    const boundary =
-      -Math.PI / 2 + (direction * (index - 0.5) * 2 * Math.PI) / count
+    // Les codes progressent dans le sens trigonométrique : une rotation
+    // physique horaire d'un cran amène donc le code suivant à droite.
+    const angle = (-index * 2 * Math.PI) / count
+    const x = center + labelRadius * Math.cos(angle)
+    const y = center + labelRadius * Math.sin(angle)
+    const rotation = (angle * 180) / Math.PI
     parts.push(
-      `<line x1="${center + 170 * Math.cos(boundary)}" y1="${center + 170 * Math.sin(boundary)}" x2="${center + radius * Math.cos(boundary)}" y2="${center + radius * Math.sin(boundary)}" stroke="#777"/>`,
-    )
-    const angle = -Math.PI / 2 + (direction * index * 2 * Math.PI) / count
-    parts.push(
-      `<text x="${center + labelRadius * Math.cos(angle)}" y="${center + labelRadius * Math.sin(angle)}" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="${count > 40 ? 14 : 20}" font-weight="bold">${escapeXml(codes[index])}</text>`,
+      `<text x="${x}" y="${y}" transform="rotate(${rotation} ${x} ${y})" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="${count > 40 ? 14 : 20}" font-weight="bold">${escapeXml(codes[index])}</text>`,
     )
   }
   parts.push(
     '<circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/>',
-    `<text x="300" y="282" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="bold">${escapeXml(title)}</text>`,
-    '<text x="300" y="322" text-anchor="middle" font-family="sans-serif" font-size="15">Assembler les repères noirs</text>',
+    '<text x="300" y="300" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="24" font-weight="bold">Polygone solution</text>',
     '</svg>',
   )
   return parts.join('')
 }
 
-function coverWheelSvg(
-  title: string,
-  seriesLabel: string,
-  codeCount: number,
-): string {
-  // À 15 h, les codes voisins se séparent verticalement. La fenêtre reste
-  // plus basse que la corde séparant deux positions, même avec une grande
-  // série, afin de ne jamais dévoiler deux codes à la fois.
+/** Polygone supérieur à évider, avec fenêtre de lecture à droite. */
+function coverPolygonSvg(seriesLabel: string, codeCount: number): string {
   const verticalGap = 2 * 220 * Math.sin(Math.PI / Math.max(2, codeCount))
-  const windowHeight = Math.max(20, Math.min(48, verticalGap * 0.68))
+  const windowHeight = Math.max(18, Math.min(42, verticalGap * 0.6))
   const windowY = 300 - windowHeight / 2
   const labelSize =
-    seriesLabel.length > 45 ? 18 : seriesLabel.length > 30 ? 22 : 26
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="100%" height="100%" fill="white"/><circle cx="300" cy="300" r="280" fill="#f2f2f2" stroke="black" stroke-width="3"/><path d="M 288 23 L 312 23 L 300 2 Z" fill="black"/><rect x="452" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><!-- Encoche semi-elliptique pour saisir la roue intérieure --><path d="M 220 580 C 220 510 380 510 380 580 Z" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="160" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="62" font-weight="bold">${escapeXml(title)}</text><text x="300" y="340" text-anchor="middle" font-family="sans-serif" font-size="16">Découper la fenêtre et l’encoche en pointillés</text><text x="300" y="425" text-anchor="middle" font-family="sans-serif" font-size="${labelSize}" font-weight="bold">${escapeXml(seriesLabel)}</text></svg>`
+    seriesLabel.length > 45 ? 20 : seriesLabel.length > 30 ? 24 : 29
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><defs><marker id="fleche" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L0,5 L7,2.5 Z" fill="black"/></marker></defs><rect width="100%" height="100%" fill="white"/><polygon points="${polygonPoints(codeCount, 280)}" fill="#f2f2f2" stroke="black" stroke-width="3"/><rect x="452" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><path d="M 171 147 A 200 200 0 0 1 429 147" fill="none" stroke="black" stroke-width="3" marker-end="url(#fleche)"/><text x="300" y="175" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">Sens de rotation</text><!-- Encoche semi-elliptique pour saisir le polygone arrière --><path d="M 220 580 C 220 510 380 510 380 580 Z" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="230" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="42" font-weight="bold">J’ai… Qui a… ?</text><text x="300" y="365" text-anchor="middle" font-family="sans-serif" font-size="15">Découper la fenêtre et l’encoche en pointillés</text><text x="300" y="430" text-anchor="middle" font-family="sans-serif" font-size="${labelSize}" font-weight="bold">${escapeXml(seriesLabel)}</text></svg>`
 }
 
 /** Génère les cartes recto-verso, les roues de décodage et leurs caches. */
@@ -445,25 +442,16 @@ export function buildIHaveWhoHasDocument(
     }
     lines.push(')')
   }
-  const whoHasCodes = codes
-  const iHaveCodes = codes.map((_, index) => codes[(index + 1) % codes.length])
   lines.push('#pagebreak()')
-  lines.push('// ----- Planche d’assemblage des roues et des caches -----')
+  lines.push('// ----- Polygones de correction et d’assemblage -----')
   lines.push('#set page(paper: "a4", flipped: true, margin: 8mm)')
   lines.push(
-    '#grid(columns: (1fr, 1fr), rows: (82mm, 82mm), gutter: 5mm, align: center + horizon,',
+    '#grid(columns: (1fr, 1fr), rows: (130mm,), gutter: 8mm, align: center + horizon,',
   )
   const assemblyPart = (svg: string) =>
-    `  image(bytes(${typstString(svg)}), format: "svg", width: 82mm, height: 82mm, fit: "contain"),`
-  // Deux roues au-dessus, puis leurs deux caches en dessous.
-  lines.push(assemblyPart(codeWheelSvg(iHaveCodes, 'J’ai', true)))
-  lines.push(assemblyPart(codeWheelSvg(whoHasCodes, 'Qui a ?')))
-  lines.push(
-    assemblyPart(coverWheelSvg('J’ai', seriesLabel, iHaveCodes.length)),
-  )
-  lines.push(
-    assemblyPart(coverWheelSvg('Qui a ?', seriesLabel, whoHasCodes.length)),
-  )
+    `  image(bytes(${typstString(svg)}), format: "svg", width: 130mm, height: 130mm, fit: "contain"),`
+  lines.push(assemblyPart(coverPolygonSvg(seriesLabel, codes.length)))
+  lines.push(assemblyPart(solutionPolygonSvg(codes)))
   lines.push(')')
   return lines.join('\n')
 }

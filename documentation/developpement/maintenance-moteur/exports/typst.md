@@ -561,27 +561,26 @@ régénération du document, comme dans la vue Flash-cards.
 
 Chaque carte reçoit également un code aléatoire unique composé d’une lettre et
 d’un chiffre (`code-carte-N`). Après les planches de cartes, le document ajoute
-une planche d’assemblage A4 paysage : les roues « J’ai » et « Qui a ? » sont sur
-la rangée supérieure, leurs deux disques-cache sur la rangée inférieure. Sur un
-même secteur, la roue « Qui a ? » porte le code de la carte qui pose la question
-et la roue « J’ai » celui de la carte suivante, qui possède la réponse. Les
-roues et les caches ont le même axe. La fenêtre est placée à 15 h ; sa hauteur
-est calculée d’après le nombre de secteurs pour ne découvrir qu’un code à la
-fois. Chaque cache porte aussi, à 6 h, une encoche semi-elliptique pointillée à
-découper : elle laisse saisir le bord de la roue prise en sandwich. Un repère
-triangulaire périphérique permet de coller les deux roues dos à dos sans
-décalage. Les codes sont relus par `harvestIHaveWhoHasCarryOver` afin de rester
+une planche d’assemblage A4 paysage contenant deux grands polygones à autant de
+côtés qu’il y a de cartes. Le premier est le cache supérieur : il porte « J’ai…
+Qui a… ? », le titre, la série, une flèche indiquant une rotation dans le sens
+des aiguilles d’une montre et une fenêtre étroite à découper. Le second est le
+polygone solution placé derrière. Les deux pièces ont le même axe et un repère
+commun au centre ; une encoche semi-elliptique dans le cache permet de saisir et
+de tourner le polygone arrière. La flèche, courte et à rayon constant, est
+accompagnée de la seule mention « Sens de rotation ». La hauteur de la fenêtre
+est calculée d’après le nombre de côtés pour ne découvrir qu’un code à la fois.
+
+Sur le polygone solution, les codes suivent l’ordre du cycle des cartes. Ils
+sont disposés dans le sens trigonométrique : en tournant physiquement la pièce
+dans le sens horaire indiqué, chaque cran amène dans la fenêtre le code de la
+carte suivante. Chaque code suit son rayon et apparaît horizontalement dans la
+fenêtre située à droite. Les codes sont relus par
+`harvestIHaveWhoHasCarryOver` afin de rester
 stables lorsque l’enseignant ajuste la mise en page ou le zoom. L’action
 « Nouvelles données » les exclut volontairement de ce report et rebrasse tous
 les repères : une nouvelle série ne conserve donc pas l’ordre des codes de la
 précédente.
-
-Comme les deux roues sont collées dos à dos, les positions de la roue « J’ai »
-subissent une symétrie d’axe vertical par rapport à celles de la roue « Qui
-a ? ». Les secteurs correspondants se superposent ainsi après retournement du
-disque. Seules les positions sont inversées : les codes eux-mêmes restent
-écrits dans le sens normal de lecture. Le repère d’assemblage à 12 h est sur
-l’axe de symétrie et ne se déplace pas.
 
 ## Correction minimale
 
