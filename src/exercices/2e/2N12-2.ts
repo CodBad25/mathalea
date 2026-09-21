@@ -781,7 +781,7 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
               "<br>On regarde donc la partie de l'intervalle qui est coloriée, soit en bleu, soit en rouge, soit en bleu et rouge<br>"
             texteCorr +=
               'On observe que les deux intervalles sont disjoints donc <br>'
-            texteCorr += `$I=]-\\infty;${b}] \\cup [${c};${d}]$`
+            texteCorr += `$I=]-\\infty;${b}] \\cup ]${c};${d}]$`
           } else if (test === 2) {
             texte += `$I=]-\\infty;${b}] \\cup [${c};${d}]$`
             texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans $]-\\infty;${b}]$ ou bien dans $[${c};${d}]$, ou dans les deux.`
