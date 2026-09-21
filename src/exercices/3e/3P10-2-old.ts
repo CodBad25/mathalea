@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 4ce2e continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.texte.test.ts ⚠️
  */
@@ -26,13 +29,11 @@ export const dateDePublication = '28/06/2026'
 /**
  * @author Jean-Claude Lhote
  */
-export const dateDeModifImportante = '21/09/2026'
-
-export const uuid = '666f9'
+export const uuid = '4ce2e'
 
 export const refs = {
-  'fr-fr': ['3P10-2'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
 function troisPointsSiJuste(listePoints: number[]): [number, number] {
@@ -42,7 +43,7 @@ function troisPointsPour2Questions(listePoints: number[]): [number, number] {
   const totalPoints = listePoints[0] + 2 * listePoints[1]
   return [totalPoints, 3]
 }
-export default class VariationsCumulees extends Exercice {
+export default class VariationsCumuleesOld extends Exercice {
   version = 1
   constructor() {
     super()
@@ -376,8 +377,7 @@ $${texPrix(salaireInitial)}\\times (\\dfrac{100+${PourcentageAugmentation}}{100}
     },
     champ3: {
       value: texNombre(
-        salaireInitial *
-          Math.pow((100 + PourcentageAugmentation) / 100, nbAns / 2),
+        salaireInitial * Math.pow((100 + PourcentageAugmentation) / 100, nbAns),
         2,
       ),
     },
