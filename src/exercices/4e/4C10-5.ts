@@ -1,9 +1,14 @@
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
+import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
   'Multiplications de deux entiers relatifs dans un tableau à double entrée'
+
+export const interactifReady = true
 
 /**
  * Effectuer des multiplications de relatifs dans un tableau à double entrée
@@ -48,7 +53,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
     b3 *= listeSignes1[2]
     b4 *= listeSignes1[3]
 
-    const texte = `$\\def\\arraystretch{1.5}\\begin{array}{|c|c|c|c|c|}
+    let texte = `$\\def\\arraystretch{1.5}\\begin{array}{|c|c|c|c|c|}
     \\hline
     \\times & ${ecritureAlgebrique(a1)} & ${ecritureAlgebrique(a2)} & ${ecritureAlgebrique(a3)} & ${ecritureAlgebrique(a4)} \\\\
     \\hline
@@ -61,6 +66,45 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
     ${ecritureAlgebrique(b4)} & & & & \\\\
     \\hline
     \\end{array}$`
+
+    const facteursA = [a1, a2, a3, a4]
+    const facteursB = [b1, b2, b3, b4]
+
+    if (this.interactif) {
+      const reponses = {
+        bareme: (listePoints: number[]) =>
+          [
+            Math.round(
+              listePoints.reduce((somme, point) => somme + point, 0) / 4,
+            ),
+            4,
+          ] as [number, number],
+        ...Object.fromEntries(
+          facteursB.flatMap((b, ligne) =>
+            facteursA.map((a, colonne) => [
+              `L${ligne + 1}C${colonne + 1}`,
+              { value: a * b },
+            ]),
+          ),
+        ),
+      }
+      texte = ajouteQuestionMathlive({
+        exercice: this,
+        question: 0,
+        objetReponse: reponses,
+        reponseParams: { formatInteractif: 'tableau-mathlive' },
+        typeInteractivite: 'tableauMathlive',
+        tableau: AddTabDbleEntryMathlive.convertTclToTableauMathlive(
+          ['\\times', ...facteursA.map(ecritureAlgebrique)],
+          facteursB.map(ecritureAlgebrique),
+          Array(16).fill(''),
+          [],
+          [],
+          false,
+        ),
+        classe: KeyboardType.clavierDeBase,
+      })
+    }
 
     const texteCorr = `$\\def\\arraystretch{1.5}\\begin{array}{|c|c|c|c|c|}
     \\hline
