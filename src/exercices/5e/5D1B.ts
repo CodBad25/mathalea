@@ -297,7 +297,10 @@ export default class CalculerDesFrequences extends Exercice {
           this,
           i,
           {
-            reponse: { value: reponse, options: { fractionEgale: true } },
+            reponse: {
+              value: reponse,
+              options: { fractionEgale: true, nombreDecimalSeulement: true },
+            },
           },
           { digits: 5, digitsNum: 3, digitsDen: 2, signe: true },
         )
