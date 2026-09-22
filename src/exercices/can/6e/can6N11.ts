@@ -1,4 +1,4 @@
-import SommeFractionsDecimales from '../../6e/6N1F'
+import SommeFractionsDecimales from '../../6e/6N1F-5'
 export const interactifReady = true
 
 export const titre = "Écrire sous forme d'une fraction décimale"
@@ -10,7 +10,7 @@ export const dateDePublication = '20/01/2022'
  * Créé le 20/01/2022
 
  */
-export const uuid = '79452'
+export const uuid = '7945e'
 
 export const refs = {
   'fr-fr': ['can6N11', '6N2autoB-7'],

@@ -1,4 +1,4 @@
-import SommeFractionsDecimales from '../../6e/6N1F'
+import SommeFractionsDecimales from '../../6e/6N1F-5'
 export const interactifReady = true
 
 export const titre =
@@ -11,7 +11,7 @@ export const dateDePublication = '20/01/2022'
  * Créé le 20/01/2022
 
  */
-export const uuid = 'ce3da'
+export const uuid = 'ce3de'
 
 export const refs = {
   'fr-fr': ['can6N13', '6N2autoB-9'],
