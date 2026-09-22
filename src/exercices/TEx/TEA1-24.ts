@@ -14,7 +14,7 @@ export const dateDePublication = '27/11/2025'
 export const uuid = '42f60'
 
 export const refs = {
-  'fr-fr': ['TEA1-04'],
+  'fr-fr': ['TEA1-24'],
   'fr-ch': [],
 }
 /**
