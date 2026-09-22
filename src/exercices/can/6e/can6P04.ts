@@ -1,6 +1,9 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -43,7 +46,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         a = randint(2, 99)
         this.reponse = a / 10
         this.question = `Calculer $10${sp(1)}\\%$ de $${a}$.`
-        this.correction = `$10${sp(1)}\\%$ de $${a} = 0,1 \\times ${a}=${texNombre(this.reponse)}$`
+        this.correction = `$10${sp(1)}\\%$ de $${a} = 0,1 \\times ${a}=${miseEnEvidence(texNombre(this.reponse))}$`
         this.correction += texteEnCouleur(
           `<br> Mentalement : <br>
         Prendre $10${sp(1)}\\%$  d'une quantité revient à la diviser par $10$.<br>
@@ -57,7 +60,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         p = randint(2, 9, 5) * 10
         this.reponse = (a * p) / 100
         this.question = `Calculer $${p}${sp(1)}\\%$ de $${a}$.`
-        this.correction = `$${p}${sp(1)}\\%$ de $${a} = ${texNombre(this.reponse)}$`
+        this.correction = `$${p}${sp(1)}\\%$ de $${a} = ${miseEnEvidence(texNombre(this.reponse))}$`
         this.correction += texteEnCouleur(
           `<br> Mentalement : <br>
         Prendre $${p}${sp(1)}\\%$  de $${a}$ revient à prendre $${p / 10}\\times 10${sp(1)}\\%$  de $${a}$.<br>
@@ -73,7 +76,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         this.reponse = (p * a) / 100
         this.question = `Calculer $${p}${sp(1)}\\%$ de $${a}$.`
         if (p === 50) {
-          this.correction = `$50${sp(1)}\\%$  de $${a} = ${this.reponse}$.`
+          this.correction = `$50${sp(1)}\\%$  de $${a} = ${miseEnEvidence(this.reponse)}$.`
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
             Prendre $50${sp(1)}\\%$  d'une quantité revient à la diviser par $2$.<br>
@@ -81,7 +84,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
             bleuMathalea,
           )
         } else {
-          this.correction = `$${p}${sp(1)}\\%$ de $${a} = ${this.reponse}$`
+          this.correction = `$${p}${sp(1)}\\%$ de $${a} = ${miseEnEvidence(this.reponse)}$`
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
           Prendre $${p}${sp(1)}\\%$  de $${a}$ revient à prendre $${p / 10}\\times 10${sp(1)}\\%$  de $${a}$.<br>
@@ -96,7 +99,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         a = randint(100, 999)
         this.reponse = a / 100
         this.question = `Calculer $1${sp(1)}\\%$ de $${a}$.`
-        this.correction = `$1${sp(1)}\\%$ de $${a} = 0,01 \\times ${a}=${texNombre(this.reponse)}$`
+        this.correction = `$1${sp(1)}\\%$ de $${a} = 0,01 \\times ${a}=${miseEnEvidence(texNombre(this.reponse))}$`
         this.correction += texteEnCouleur(
           `<br> Mentalement : <br>
         Prendre $1${sp(1)}\\%$  d'une quantité revient à la diviser par $100$.<br>
@@ -110,7 +113,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         p = choice([25, 50, 75])
         this.reponse = (a * p) / 100
         this.question = `Calculer $${p}${sp(1)}\\%$ de $${a}$.`
-        this.correction = `$${p}${sp(1)}\\%$ de $${a} = ${texNombre(this.reponse)}$`
+        this.correction = `$${p}${sp(1)}\\%$ de $${a} = ${miseEnEvidence(texNombre(this.reponse))}$`
         if (p === 25) {
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
@@ -143,7 +146,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         this.reponse = (a * p) / 100
         this.question = `Calculer $${p}${sp(1)}\\%$ de $${a}$.`
         if (p === 5) {
-          this.correction = `$5${sp(1)}\\%$  de $${a} = ${this.reponse}$.`
+          this.correction = `$5${sp(1)}\\%$  de $${a} = ${miseEnEvidence(this.reponse)}$.`
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
             Prendre $5${sp(1)}\\%$  d'une quantité revient à la diviser par $20$ soit la diviser par $10$ puis par $2$.<br>
@@ -151,7 +154,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
             bleuMathalea,
           )
         } else if (p === 10) {
-          this.correction = `$10${sp(1)}\\%$ de $${a} = ${this.reponse}$`
+          this.correction = `$10${sp(1)}\\%$ de $${a} = ${miseEnEvidence(this.reponse)}$`
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
           Prendre $10${sp(1)}\\%$  de $${a}$ revient à diviser $${a}$ par $10$, alors
@@ -160,7 +163,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
             bleuMathalea,
           )
         } else {
-          this.correction = `$20${sp(1)}\\%$ de $${a} = ${this.reponse}$`
+          this.correction = `$20${sp(1)}\\%$ de $${a} = ${miseEnEvidence(this.reponse)}$`
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
           Prendre $20${sp(1)}\\%$  de $${a}$ revient à diviser $${a}$ par $5$ soit diviser par $10$ puis multiplier le résultat par $2$.<br>
