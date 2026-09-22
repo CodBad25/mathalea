@@ -20,7 +20,7 @@ export const dateDePublication = '11/08/2026'
 export default class AutoQ5CentresEtrangersBrevet2026 extends ExerciceCan {
   constructor() {
     super()
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierFullOperations
   }
 
   enonce(n?: number, entreQuoi?: string) {
