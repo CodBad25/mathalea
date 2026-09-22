@@ -1760,8 +1760,8 @@
             type="button"
             title={hasPageBreak || hasColumnBreak || hasText
               ? "Retirez d'abord le saut ou l'insertion pour fusionner"
-              : "Fusionner avec l'exercice précédent"}
-            aria-label="Fusionner avec l'exercice précédent"
+              : "Fusionner avec l'exercice suivant"}
+            aria-label="Fusionner avec l'exercice suivant"
             disabled={hasPageBreak || hasColumnBreak || hasText}
             data-testid="typst-overlay-merge"
             onclick={() => onToggleMergeBefore(widget.num + 1)}

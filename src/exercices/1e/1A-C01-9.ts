@@ -47,8 +47,8 @@ export default class ComparerAvecLeSigneDUneDifference extends ExerciceQcmA {
       ? `0+${second} ${signeInverse} ${premier}-${second}+${second}`
       : `${premier}-${second}+${second} ${signe} 0+${second}`
 
-    this.enonce = `$${premier}$ et $${second}$ sont des réels.<br>
-      On sait que $${inegalite}$. On peut en déduire que :`
+    this.enonce = `Soient $${premier}$ et $${second}$ deux réels tels que $${inegalite}$.<br>
+      Choisir la comparaison entre $${premier}$ et $${second}$ qui en découle.`
 
     this.reponses = [
       `$${comparaison}$`,
@@ -57,7 +57,7 @@ export default class ComparerAvecLeSigneDUneDifference extends ExerciceQcmA {
       `$${premier} ${signeLargeInverse} ${second}$`,
     ]
 
-    this.correction = `On ajoute $${second}$ aux deux membres de l'inégalité, ce qui ne change pas son sens :<br>
+    this.correction = `Ajouter $${second}$ aux deux membres de l'inégalité ne change pas son sens :<br>
       $${calcul}$,<br>
       donc $${miseEnEvidence(comparaison)}$.`
   }

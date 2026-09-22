@@ -43,14 +43,14 @@ export const dateDeModifImportante = '14/01/2026'
 
  */
 
-export const uuid = 'c543e'
+export const uuid = 'c5438'
 
 export const refs = {
-  'fr-fr': ['6N1F-5', '6AutoN3-5', '5N3autoK-1'],
-  'fr-2016': ['6N10-6'],
-  'fr-ch': ['9NO3C-8'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
-export default class SommeFractionsDecimales extends Exercice {
+export default class SommeFractionsDecimalesOld extends Exercice {
   can: boolean
 
   constructor() {
@@ -63,7 +63,7 @@ export default class SommeFractionsDecimales extends Exercice {
     ]
     this.besoinFormulaire2Texte = [
       'Forme de la solution',
-      'Nombres séparés par des tirets :\n1 : Un nombre décimal\n2 : Une fraction décimale\n3 : Un pourcentage\n4 : Mélange',
+      'Nombres séparés par des tirets :\n1 : Un nombre décimal\n2 : Une fraction décimale\n3 : Un pourcentage\n4 : Les trois',
     ]
     this.sup = '7'
     this.sup2 = 4

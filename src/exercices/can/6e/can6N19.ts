@@ -67,13 +67,14 @@ export default class decomposerDecimal extends Exercice {
             texteCorr = `Comme $1$ dixième $=0,1$ et $1$ centième $=0,01$ :<br>
          $\\begin{aligned}
          ${texNombre(nbre, 2)}&=${texNombre(u, 0)} ${d === 0 ? '' : `+ ${texNombre(dd, 1)}`} +${texNombre(cc, 2)}\\\\
-         &=(${texNombre(u, 0)}\\times 1) + (${texNombre(d, 1)}\\times 0,1) +(${texNombre(c, 2)}\\times 0,01)\\\\
-         &=${miseEnEvidence(texNombre(u, 0))} \\text{${u === 1 ? ' unité' : ' unités'} } + ${miseEnEvidence(texNombre(d, 0))}\\text{${d === 1 || d === 0 ? ' dixième' : ' dixièmes'} }+ ${miseEnEvidence(texNombre(c, 0))}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }
-\\end{aligned}$`
+         &=(${texNombre(u, 0)}\\times 1) + (${texNombre(d, 1)}\\times 0,1) +(${texNombre(c, 2)}\\times 0,01)
+              \\end{aligned}$<br>
+         Et donc $${texNombre(nbre, 2)}=${miseEnEvidence(texNombre(u, 0))}$ ${u === 1 || u === 0 ? ' unité' : ' unités'} $+~${miseEnEvidence(texNombre(d, 0))}$ ${d === 1 || d === 0 ? ' dixième' : ' dixièmes'} $+~${miseEnEvidence(texNombre(c, 0))}$ ${c === 1 || c === 0 ? ' centième' : ' centièmes'}`
             this.canEnonce = 'Compléter.'
             this.canReponseACompleter = `$${texNombre(nbre, 2)}=\\ldots$ unité(s)  $\\ldots$ dixième(s) $\\ldots$ centième(s)`
           } else {
             texte = 'Compléter avec un nombre décimal : <br>'
+            let nombreDecrit = ''
             if (this.interactif) {
               if (d === 0) {
                 texte += remplisLesBlancs(
@@ -94,20 +95,19 @@ export default class decomposerDecimal extends Exercice {
                 champ1: { value: texNombre(nbre, 2) },
               })
             } else {
-              if (d === 0) {
-                texte += `$${texNombre(u, 0)} \\text{${u === 1 ? ' unité ' : ' unités '} } + ${texNombre(c, 0)}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }=\\ldots$ `
-              } else {
-                texte += `$${texNombre(u, 0)} \\text{${u === 1 ? ' unité ' : ' unités '} } + ${texNombre(d, 0)}\\text{${d === 1 ? ' dixième ' : ' dixièmes '} }+ ${texNombre(c, 0)}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }=\\ldots$ `
+              // Mise en place de nombreDecrit
+              nombreDecrit = `$${texNombre(u, 0)}$ ${u === 1 ? ' unité ' : ' unités '} $+~`
+              if (d !== 0) {
+                nombreDecrit += `${texNombre(d, 0)}$ ${d === 1 ? ' dixième ' : ' dixièmes '} $+~`
               }
+              nombreDecrit += `${texNombre(c, 0)}$ ${c === 1 || c === 0 ? ' centième' : ' centièmes'} `
             }
+            texte += nombreDecrit + '$=\\ldots$'
             texteCorr = `Comme $1$ dixième $=0,1$ et $1$ centième $=0,01$ :<br>
-           $\\begin{aligned}
-           ${texNombre(u, 0)} \\text{${u === 1 ? ' unité ' : ' unités '} }  ${d === 0 ? '' : `+ ${texNombre(d, 0)} \\text{${d === 1 ? ' dixième ' : ' dixièmes '} }`}
-          + ${texNombre(c, 0)}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }&=(${texNombre(u, 0)}\\times 1) + (${texNombre(d, 1)}\\times 0,1)+(${texNombre(c, 2)}\\times 0,01)\\\\
-           &=${miseEnEvidence(texNombre(nbre, 2))} 
-  \\end{aligned}$`
+            ${nombreDecrit}=$~(${texNombre(u, 0)}\\times 1) + (${texNombre(d, 1)}\\times 0,1)+(${texNombre(c, 2)}\\times 0,01)\\\\
+           =${miseEnEvidence(texNombre(nbre, 2))}$`
             this.canEnonce = 'Compléter avec un nombre décimal.'
-            this.canReponseACompleter = `$${texNombre(u, 0)} \\text{${u === 1 ? ' unité ' : ' unités '} } + ${texNombre(d, 0)}\\text{${d === 1 || d === 0 ? ' dixième ' : ' dixièmes '} }+ ${texNombre(c, 0)}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }=\\ldots$`
+            this.canReponseACompleter = nombreDecrit + '$=\\ldots$'
           }
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
@@ -137,13 +137,14 @@ export default class decomposerDecimal extends Exercice {
             texteCorr = `Comme $1$ dixième $=0,1$ et $1$ centième $=0,01$ :<br>
          $\\begin{aligned}
          ${texNombre(nbre, 2)}&=${texNombre(u, 0)}${d === 0 ? '' : `+ ${texNombre(dd, 1)}`}+${texNombre(cc, 2)}\\\\
-         &=(${texNombre(u * 10, 0)} \\times 0,1) ${d === 0 ? '' : `+ (${texNombre(d, 1)}\\times 0,1)`}+(${texNombre(c, 2)}\\times 0,01)\\\\
-         &=${miseEnEvidence(texNombre(u * 10 + d, 0))} \\text{ dixièmes } + ${miseEnEvidence(texNombre(c, 0))}\\text{${c === 1 ? ' centième' : ' centièmes'} }
-\\end{aligned}$`
+         &=(${texNombre(u * 10, 0)} \\times 0,1) ${d === 0 ? '' : `+ (${texNombre(d, 1)}\\times 0,1)`}+(${texNombre(c, 2)}\\times 0,01)
+         \\end{aligned}$<br>
+         Et donc $${texNombre(nbre, 2)}=${miseEnEvidence(texNombre(u * 10 + d, 0))}$ dixièmes $~+ ${miseEnEvidence(texNombre(c, 0))}$ ${c === 1 ? ' centième' : ' centièmes'}`
             this.canEnonce = 'Compléter.'
             this.canReponseACompleter = `$${texNombre(nbre, 2)}=\\ldots$ dixième(s) $\\ldots$ centième(s)`
           } else {
-            texte = 'Compléter avec un nombre décimal : <br>'
+            texte = 'Compléter avec un nombre décimal :  <br>'
+            let nombreDecrit = ''
             if (this.interactif) {
               texte += remplisLesBlancs(
                 this,
@@ -155,16 +156,16 @@ export default class decomposerDecimal extends Exercice {
                 champ1: { value: texNombre(nbre, 2) },
               })
             } else {
-              texte += `$${texNombre(u * 10 + d, 0)} \\text{ dixièmes } + ${texNombre(c, 0)}\\text{${c === 1 ? ' centième' : ' centièmes'} }=\\ldots$ `
+              // Mise en place de nombreDecrit
+              nombreDecrit = `$${texNombre(u * 10 + d, 0)}$ dixièmes $+~${texNombre(c, 0)}$ ${c === 1 ? ' centième' : ' centièmes'} `
+              texte += nombreDecrit + '$=\\ldots$'
             }
 
             texteCorr = `Comme $1$ dixième $=0,1$ et $1$ centième $=0,01$ :<br>
-           $\\begin{aligned}
-           ${texNombre(u * 10 + d, 0)} \\text{ dixièmes } + ${texNombre(c, 0)}\\text{${c === 1 ? ' centième' : ' centièmes'} }&=(${texNombre(10 * u + d, 0)}\\times 0,1)+ (${texNombre(c, 0)}\\times 0,01)\\\\
-           &=${miseEnEvidence(texNombre(nbre, 2))} 
-  \\end{aligned}$`
+            ${nombreDecrit}=$~(${texNombre(10 * u + d, 0)}\\times 0,1)+ (${texNombre(c, 0)}\\times 0,01)\\\\
+           =${miseEnEvidence(texNombre(nbre, 2))}$`
             this.canEnonce = 'Compléter avec un nombre décimal.'
-            this.canReponseACompleter = `$${texNombre(u * 10 + d, 0)}\\text{ dixièmes } + ${texNombre(c, 0)}\\text{${c === 1 ? ' centième' : ' centièmes'} }=\\ldots$`
+            this.canReponseACompleter = nombreDecrit + '$=\\ldots$'
           }
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
@@ -177,25 +178,26 @@ export default class decomposerDecimal extends Exercice {
               texte += remplisLesBlancs(
                 this,
                 i,
-                `${texNombre(nbre, 2)}=   \\, %{champ1}\\, \\text{ centième(s)}`,
+                `${texNombre(nbre, 2)}=   \\, %{champ1}\\, \\text{ centièmes}`,
                 KeyboardType.clavierDeBase,
               )
               handleAnswers(this, i, {
                 champ1: { value: texNombre(u * 100 + d * 10 + c, 0) },
               })
             } else {
-              texte += `$${texNombre(nbre, 2)}= \\ldots$ centièmes(s) `
+              texte += `$${texNombre(nbre, 2)}= \\ldots$ centièmes   `
             }
             texteCorr = `Comme $1$ centième $=0,01$ :<br>
          $\\begin{aligned}
          ${texNombre(nbre, 2)}&=${texNombre(u, 0)}${d === 0 ? '' : `+ ${texNombre(dd, 1)}`}+${texNombre(cc, 2)}\\\\
-         &=(${texNombre(u * 100, 0)} \\times 0,01) ${d === 0 ? '' : `+ (${texNombre(d * 10, 0)}\\times 0,01)`}+(${texNombre(c, 0)}\\times 0,01)\\\\
-         &=${miseEnEvidence(texNombre(u * 100 + d * 10 + c, 0))} \\text{ centièmes }
-\\end{aligned}$`
+         &=(${texNombre(u * 100, 0)} \\times 0,01) ${d === 0 ? '' : `+ (${texNombre(d * 10, 0)}\\times 0,01)`}+(${texNombre(c, 0)}\\times 0,01)
+         \\end{aligned}$<br>
+         Et donc $${texNombre(nbre, 2)}=${miseEnEvidence(texNombre(u * 100 + d * 10 + c, 0))}$ centièmes`
             this.canEnonce = 'Compléter.'
             this.canReponseACompleter = `$${texNombre(nbre, 2)}=\\ldots$ centième(s)`
           } else {
             texte = 'Compléter avec un nombre décimal : <br>'
+            let nombreDecrit = ''
             if (this.interactif) {
               texte += remplisLesBlancs(
                 this,
@@ -207,16 +209,15 @@ export default class decomposerDecimal extends Exercice {
                 champ1: { value: texNombre(nbre, 2) },
               })
             } else {
-              texte += `$${texNombre(u * 100 + d * 10 + c, 0)} \\text{ centièmes } =\\ldots$ `
+              nombreDecrit = `$${texNombre(u * 100 + d * 10 + c, 0)}$ centièmes `
+              texte += nombreDecrit + '$=\\ldots$'
             }
 
             texteCorr = `Comme  $1$ centième $=0,01$ :<br>
-           $\\begin{aligned}
-           ${texNombre(u * 100 + d * 10 + c, 0)} \\text{ centièmes } &=${texNombre(100 * u + d * 10 + c, 0)}\\times 0,01\\\\
-           &=${miseEnEvidence(texNombre(nbre, 2))} 
-  \\end{aligned}$`
+           ${nombreDecrit}=$~${texNombre(100 * u + d * 10 + c, 0)}\\times 0,01\\\\
+           =${miseEnEvidence(texNombre(nbre, 2))}$`
             this.canEnonce = 'Compléter avec un nombre décimal.'
-            this.canReponseACompleter = `$${texNombre(u * 100 + d * 10 + c, 0)} \\text{ centièmes }=\\ldots$`
+            this.canReponseACompleter = nombreDecrit + '$=\\ldots$'
           }
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)

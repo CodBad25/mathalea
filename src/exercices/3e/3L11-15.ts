@@ -1,5 +1,8 @@
 import IdentiteRemarquable from '../../lib/mathFonctions/IdentiteRemarquable'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -32,6 +35,7 @@ export const refs = {
 
 export default class developperIdentiteRemarquable extends Exercice {
   pays: string
+  lettresVariablesImposees?: string[]
   constructor() {
     super()
     this.pays = 'Suisse'
@@ -87,9 +91,13 @@ export default class developperIdentiteRemarquable extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
+      let reponse = ''
       const degMax = Math.max(this.sup3, 0)
       const variables = ['x', 'y', 'z', 'r', 's', 't']
-      const variablesSelect = getRandomSubarray(variables, this.sup4)
+      // Le tirage reste effectué, même avec une variable imposée, pour ne pas
+      // modifier la suite des tirages des exercices déjà publiés.
+      const variablesTirees = getRandomSubarray(variables, this.sup4)
+      const variablesSelect = this.lettresVariablesImposees ?? variablesTirees
       const typeCoeffListe = ['entier', 'fractionnaire']
       let typeofCoeff = []
       let p1: MonomePlusieursVariables
@@ -196,6 +204,7 @@ export default class developperIdentiteRemarquable extends Exercice {
       switch (listeDeQuestions[i]) {
         case 1:
         case 5: {
+          reponse = IdentiteRemarquable.carreDuneSomme(p1, p2).toString()
           texte = `$${lettreDepuisChiffre(i + 1)}=\\left(${p1.toString()}+${p2.toString()}\\right)^2$`
           if (listeDeQuestions[i] === 1) {
             texteCorr =
@@ -204,11 +213,12 @@ export default class developperIdentiteRemarquable extends Exercice {
             texteCorr =
               "L'expression à développer correspond à la première identité remarquable $\\left(ax+b\\right)^2=a^2x^2+2abx+b^2$.<br>"
           }
-          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(IdentiteRemarquable.carreDuneSomme(p1, p2).toString())}$`
+          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
           break
         }
         case 2:
         case 6: {
+          reponse = IdentiteRemarquable.carreDuneDifference(p1, p2).toString()
           texte = `$${lettreDepuisChiffre(i + 1)}=\\left(${p1.toString()}-${p2.toString()}\\right)^2$`
           if (listeDeQuestions[i] === 2) {
             texteCorr =
@@ -217,11 +227,12 @@ export default class developperIdentiteRemarquable extends Exercice {
             texteCorr =
               "L'expression à développer correspond à la deuxième identité remarquable $\\left(ax-b\\right)^2=a^2x^2-2abx+b^2$.<br>"
           }
-          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(IdentiteRemarquable.carreDuneDifference(p1, p2).toString())}$`
+          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
           break
         }
         case 3:
         case 7: {
+          reponse = IdentiteRemarquable.differenceDeDeuxCarres(p1, p2).toString()
           const signe = ['+', '-']
           const choixSigne = randint(0, 1)
           texte = `$${lettreDepuisChiffre(i + 1)}=\\left(${p1.toString()}${signe[choixSigne]} ${p2.toString()}\\right)\\left(${p1.toString()}${signe[(choixSigne + 1) % 2]}${p2.toString()}\\right)$`
@@ -232,11 +243,12 @@ export default class developperIdentiteRemarquable extends Exercice {
             texteCorr =
               "L'expression à développer correspond à la troisième identité remarquable $\\left(ax-b\\right)(ax+b)=a^2x^2-b^2$.<br>"
           }
-          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(IdentiteRemarquable.differenceDeDeuxCarres(p1, p2).toString())}$`
+          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
           break
         }
         case 4:
         case 8: {
+          reponse = IdentiteRemarquable.sommeProduit(p1, pSP1, pSP2).toString()
           const signeT1 = pSP1.coefficient.signe < 0 ? '' : '+'
           const signeT2 = pSP2.coefficient.signe < 0 ? '' : '+'
           texte = `$${lettreDepuisChiffre(i + 1)}=\\left(${p1.toString()}${signeT1}${pSP1.toString()}\\right)\\left(${p1.toString()}${signeT2}${pSP2.toString()}\\right)$`
@@ -247,9 +259,23 @@ export default class developperIdentiteRemarquable extends Exercice {
             texteCorr =
               "L'expression à développer correspond à la quatrième identité remarquable $\\left(ax+b\\right)(ax+c)=a^2x^2+(b+c)ax+cb$.<br>"
           }
-          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(IdentiteRemarquable.sommeProduit(p1, pSP1, pSP2).toString())}$`
+          texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(reponse)}$`
           break
         }
+      }
+      if (this.interactif) {
+        texte += ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierDeBaseAvecVariable,
+          { texteAvant: ' $=$ ' },
+        )
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse,
+            options: { expressionsForcementReduites: true },
+          },
+        })
       }
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte

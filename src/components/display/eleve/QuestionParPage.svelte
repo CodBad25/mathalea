@@ -157,7 +157,10 @@
           `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'est pas une fonction`,
         )
       }
-      const result = elementClasse.verifQuestion(exercice, i)
+      const result = elementClasse.verifQuestion(
+        exercice,
+        indiceQuestionInExercice[i],
+      )
       if (
         result == null ||
         typeof result !== 'object' ||
@@ -168,12 +171,7 @@
           `L'élément '${tag}' a une fonction verifQuestion qui n'a pas retourné une valeur conforme.`,
         )
       }
-      resultsByQuestion[i] = uniformiseResults(
-        elementClasse.verifQuestion(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ),
-      )
+      resultsByQuestion[i] = uniformiseResults(result)
     } else {
       window.notify(
         "Problème dans QuestionParPage.svelte : type d'interactif non géré",

@@ -11,13 +11,13 @@ export const dateDePublication = '20/01/2022'
  * Créé le 20/01/2022
 
  */
-export const uuid = '8f06e'
+export const uuid = '8f060'
 
 export const refs = {
-  'fr-fr': ['can6N12', '6N2autoB-8'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-export default class SommeFractionsDecimalesCAN extends SommeFractionsDecimales {
+export default class SommeFractionsDecimalesCAN2Old extends SommeFractionsDecimales {
   constructor() {
     super()
     this.nbQuestions = 1

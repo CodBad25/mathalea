@@ -77,6 +77,11 @@ describe('calculeNombreDeColonnes', () => {
     expect(calculeNombreDeColonnes(800, 20)).toBe(2)
   })
 
+  it('répartit quatre questions sur deux colonnes, quelle que soit la largeur', () => {
+    expect(calculeNombreDeColonnes(1100, 4)).toBe(2)
+    expect(calculeNombreDeColonnes(1600, 4)).toBe(2)
+  })
+
   it('renvoie 3 colonnes entre les deux seuils', () => {
     expect(calculeNombreDeColonnes(1200, 20)).toBe(3)
   })

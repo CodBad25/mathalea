@@ -57,7 +57,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
     ]
     this.besoinFormulaire2CaseACocher = ['Avec des nombres décimaux']
     this.besoinFormulaire3Numerique = [
-      'Exercice interactif',
+      'Type de réponse',
       2,
       '1 : QCM\n2 : Numérique',
     ]
@@ -69,7 +69,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
 
     this.sup = 1 // Niveau de difficulté de l`exercice
     this.sup2 = false // Avec des nombres décimaux ou pas
-    this.sup3 = 1 // version QCM
+    this.sup3 = 2 // version numérique
     this.sup4 = false
     this.sup5 = false
     this.spacing = 2
@@ -78,10 +78,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
   nouvelleVersion() {
     const withTableauCorr = this.sup5
     // if (context.vue === 'diap') this.sup3 = 1 // EE : Pourquoi forcer ce choix ? Je l'enlève.
-    this.consigne =
-      this.interactif && this.sup3 === 1
-        ? 'Cocher la bonne réponse.'
-        : 'Compléter.'
+    this.consigne = this.sup3 === 1 ? 'Cocher la bonne réponse.' : 'Compléter.'
 
     Decimal.set({ toExpNeg: -20, toExpPos: 20 }) // pour éviter la conversion en notation scientifique on va jusqu'à 20 décimales (-7 est la valeur par défaut)
     const prefixeMulti = [
@@ -275,7 +272,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
         },
       ]
       const props = propositionsQcm(this, i)
-      if (this.interactif && this.sup3 !== 2) {
+      if (this.sup3 !== 2) {
         texte += props.texte
       } else if (this.interactif && this.sup3 === 2) {
         texte = texte.replace(

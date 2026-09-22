@@ -1630,8 +1630,8 @@
                                             {mergesBefore.includes(
                                               unit.exerciseIndex,
                                             )
-                                              ? "Séparer de l'exercice précédent"
-                                              : "Fusionner avec l'exercice précédent"}
+                                              ? "Séparer de l'exercice suivant"
+                                              : "Fusionner avec l'exercice suivant"}
                                           </button>
                                         {/if}
                                       {/if}
@@ -1713,8 +1713,8 @@
                                             {mergesBefore.includes(
                                               unit.exerciseIndex,
                                             )
-                                              ? "Séparer de l'exercice précédent"
-                                              : "Fusionner avec l'exercice précédent"}
+                                              ? "Séparer de l'exercice suivant"
+                                              : "Fusionner avec l'exercice suivant"}
                                           </button>
                                         {/if}
                                       {/if}

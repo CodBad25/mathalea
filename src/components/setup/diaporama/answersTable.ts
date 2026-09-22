@@ -132,7 +132,12 @@ export function calculeNombreDeColonnes(
       : largeurDisponible < LARGEUR_SEUIL_3_COLONNES
         ? 3
         : 4
-  return Math.max(1, Math.min(colonnesSouhaitees, nombreDeQuestions))
+  // Avec quatre questions, trois ou quatre mini-tableaux compressent trop la
+  // dernière colonne dans le panneau d'aperçu. Deux colonnes de deux lignes
+  // conservent toutes les réponses visibles sans défilement horizontal.
+  const colonnesAffichees =
+    nombreDeQuestions === 4 ? 2 : colonnesSouhaitees
+  return Math.max(1, Math.min(colonnesAffichees, nombreDeQuestions))
 }
 
 export type ColonneDeReponses = {
