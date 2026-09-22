@@ -123,7 +123,8 @@ export default class FatorisationEgR extends ExerciceSimple {
       choix
         ? `$${rienSi1(a ** 2)}x^2${reduireAxPlusB(-2 * a * b, b ** 2)}=${miseEnEvidence(`(${reduireAxPlusB(a, -b)})^2`)}$`
         : `$${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2=${miseEnEvidence(`(${reduireAxPlusB(a, -b)})^2`)}$`
-    }`
+    }<br>
+    On peut aussi écrire $(${reduireAxPlusB(a, -b)})^2=(${reduireAxPlusB(-a, b)})^2$, car $${reduireAxPlusB(-a, b)}=-(${reduireAxPlusB(a, -b)}).$`
           if (
             this.versionQcm &&
             this.distracteurs.includes(fausseFactorisation)
