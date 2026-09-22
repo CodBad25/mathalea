@@ -1,4 +1,4 @@
-import SommeFractionsDecimales from './6N1F'
+import SommeFractionsDecimales from './6N1F-5'
 
 export const titre =
   "Donner l'écriture (décimale, en fraction décimale) d'une somme (ou différence) de nombres avec fractions décimales"

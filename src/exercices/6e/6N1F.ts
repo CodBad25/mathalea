@@ -1,728 +1,401 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import {
-  choice,
-  combinaisonListes2,
-  enleveDoublonNum,
-} from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import {
-  arrondi,
-  nombreDeChiffresDansLaPartieDecimale,
-  nombreDeChiffresDe,
-} from '../../lib/outils/nombres'
-import { stringNombre, texNombre } from '../../lib/outils/texNombre'
-import { context } from '../../modules/context'
-import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { amcConvert } from '../../lib/amc/amcBuilders'
+import {
+  addMultiMathfield,
+  type DataOptionsMultiMathfield,
+} from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
-import { sp } from '../../lib/outils/outilString'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { choice, combinaisonListes2 } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import type { Valeur } from '../../lib/types'
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 
 export const titre =
-  "Donner l'écriture (décimale, en fraction décimale ou en pourcentage) d'une somme (ou différence) de nombres avec fractions décimales"
+  "Associer et utiliser différentes écritures d'un nombre décimal : écriture à virgule, fraction, nombre mixte, pourcentage"
 export const interactifReady = true
 
-export const dateDePublication = '20/01/2022'
-export const dateDeModifImportante = '14/01/2026'
+export const dateDePublication = '09/08/2026'
+export const dateDeModifImportante = '21/09/2026'
 /**
- * Donner l\'écriture (décimale ou en fraction décimale) d\'une somme (ou différence) de nombres avec fractions décimales et pourcentages
- *
- * * La somme avec entiers peut être avec retenue (genre 2+23/10) ou sans retenue (3+7/10)
- * * Tous les choix sont paramétrables
+ * Associer et utiliser différentes écritures d'un nombre décimal : écriture à virgule, fraction, nombre mixte, pourcentage
  * *
- * @author Éric Elter
+ * @author Mireille Gain, à partir de 6N1F
 
  */
 
-export const uuid = 'c5438'
+export const uuid = '67f4a'
 
 export const refs = {
-  'fr-fr': ['6N1F', '6AutoN3-5', '5N3autoK-1'],
-  'fr-2016': ['6N10-6'],
-  'fr-ch': ['9NO3C-8'],
+  'fr-fr': ['6N1F', '5N3autoK'],
+  'fr-ch': ['9NO3C-21'],
 }
-export default class SommeFractionsDecimales extends Exercice {
-  can: boolean
 
+/** Les quatre écritures possibles, dans l'ordre d'affichage historique. */
+const FORMES = {
+  mixte: 1,
+  fraction: 2,
+  decimal: 3,
+  pourcentage: 4,
+} as const
+
+const NOM_FORME: Record<number, string> = {
+  1: 'nombre mixte',
+  2: 'fraction décimale',
+  3: 'nombre décimal',
+  4: 'pourcentage',
+}
+
+const NOMBRE_EN_LETTRES: Record<number, string> = {
+  1: 'une',
+  2: 'deux',
+  3: 'trois',
+}
+
+/** Un champ élémentaire d'une écriture demandée en interactif. */
+type SousChampDemande = {
+  keyboard: string | undefined
+  value: string | number
+  options: Record<string, boolean>
+}
+
+/** Une écriture demandée : sa ligne de correction et ses champs interactifs. */
+type FormeDemandee = {
+  id: number
+  ligneCorrection: string
+  /** Gabarit de la ligne interactive, chaque `@` reçoit un `%{champN}`. */
+  gabaritInteractif: string
+  sousChamps: SousChampDemande[]
+}
+
+export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice {
   constructor() {
     super()
-
-    this.nbQuestions = 6
+    this.nbQuestions = 4
     this.besoinFormulaireTexte = [
-      'Type des calculs',
-      "Nombres séparés par des tirets :\n(Les fractions sont décimales et de même dénominateur)\n1 : Somme de 2 fractions\n2 : Différence de 2 fractions\n3 : Somme (sans retenue) d'un entier et d'une somme de 2 fractions\n4 : Somme (sans retenue) d'un entier et d'une différence de 2 fractions\n5 : Somme d'un entier et d'une somme de 2 fractions\n6 : Somme d'un entier et d'une différence de 2 fractions\n7 : Mélange",
+      'Forme initiale donnée',
+      'Nombres séparés par des tirets :\n1 : Nombre mixte\n2 : Fraction décimale\n3 : Nombre décimal\n4 : Pourcentage\n5 : Mélange',
     ]
-    this.besoinFormulaire2Texte = [
-      'Forme de la solution',
-      'Nombres séparés par des tirets :\n1 : Un nombre décimal\n2 : Une fraction décimale\n3 : Un pourcentage\n4 : Les trois',
+    this.sup = 5
+    this.besoinFormulaire2CaseACocher = [
+      "Avec rappel de la définition d'un nombre mixte",
     ]
-    this.sup = '7'
-    this.sup2 = 4
-
-    this.can = false
+    this.sup2 = false
+    this.besoinFormulaire3CaseACocher = [
+      'Avec des millièmes dans la partie décimale',
+    ]
+    this.sup3 = true
+    this.spacingCorr = 3
   }
 
   nouvelleVersion() {
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      max: 6,
-      defaut: 7,
-      melange: 7,
+      max: 4,
+      defaut: 5, // Mélange par défaut
+      melange: 5,
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
     })
 
+    // Les écritures effectivement retenues par l'utilisateur. Le formulaire
+    // « Forme initiale donnée » ne pilotait que l'écriture de départ : les trois
+    // autres écritures étaient toujours demandées, y compris celles décochées.
+    // On restreint désormais l'ensemble des écritures en jeu à celles cochées :
+    // l'écriture donnée tourne parmi elles, les écritures demandées sont les
+    // autres écritures cochées. En dessous de deux écritures (ou en mélange),
+    // on garde le comportement historique avec les quatre écritures.
+    const idsDemandes = String(this.sup ?? '')
+      .split('-')
+      .map((valeur) => parseInt(valeur, 10))
+      .filter((n) => Number.isInteger(n))
+    const melangeDemande = idsDemandes.length === 0 || idsDemandes.includes(5)
+    const formesCochees = [1, 2, 3, 4].filter((id) => idsDemandes.includes(id))
+    const formesActives =
+      melangeDemande || formesCochees.length < 2 ? [1, 2, 3, 4] : formesCochees
+    const toutesLesFormes = formesActives.length === 4
+
+    if (toutesLesFormes) {
+      if (this.nbQuestions === 1) {
+        this.consigne =
+          'Écrire le nombre suivant sous les trois formes manquantes parmi : <br>nombre décimal, fraction décimale, pourcentage, nombre mixte'
+      } else {
+        this.consigne =
+          'Écrire chacun des nombres suivants sous les trois formes manquantes parmi : <br>nombre décimal, fraction décimale, pourcentage, nombre mixte'
+      }
+    } else {
+      const nbManquantes = formesActives.length - 1
+      const formesMot =
+        nbManquantes === 1
+          ? 'la forme manquante'
+          : `les ${NOMBRE_EN_LETTRES[nbManquantes]} formes manquantes`
+      const listeFormes = formesActives.map((id) => NOM_FORME[id]).join(', ')
+      const sujet =
+        this.nbQuestions === 1
+          ? 'le nombre suivant'
+          : 'chacun des nombres suivants'
+      this.consigne = `Écrire ${sujet} sous ${formesMot} parmi : <br>${listeFormes}`
+    }
+    if (this.sup2) {
+      this.consigne +=
+        " (somme d'un entier et d'une fraction décimale strictement inférieure à 1)."
+    } else {
+      this.consigne += '.'
+    }
     const listeTypeDeQuestions = combinaisonListes2(
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
 
-    const typesDeSolutionsDisponibles = gestionnaireFormulaireTexte({
-      max: 3,
-      defaut: 4,
-      melange: 4,
-      nbQuestions: 50, // EE : ici, mettre this.nbQuestions empêchait d'avoir 2 ou 3 champs si une seule question. C'était donc une mauvaise idée.
-      saisie: this.sup2,
-    })
-
-    let typesDeSolutionsDisponiblesEntiers = typesDeSolutionsDisponibles.map(
-      (value) => parseInt(value.toString(), 10),
-    )
-
-    typesDeSolutionsDisponiblesEntiers = enleveDoublonNum(
-      typesDeSolutionsDisponiblesEntiers,
-    )
-
-    this.consigne = 'Donner le résultat de '
-    this.consigne += this.nbQuestions === 1 ? 'ce' : 'chaque'
-    this.consigne += ' calcul sous forme '
-    let casSolutionsAttendues
-    if (typesDeSolutionsDisponiblesEntiers.length === 1) {
-      casSolutionsAttendues = typesDeSolutionsDisponiblesEntiers[0]
-      switch (casSolutionsAttendues) {
-        case 1:
-          this.consigne += "d'une écriture décimale."
-          break
-        case 2:
-          this.consigne += "d'une fraction décimale."
-          break
-        case 3:
-          this.consigne += "d'un pourcentage."
-          break
-      }
-    } else if (typesDeSolutionsDisponiblesEntiers.length === 3) {
-      casSolutionsAttendues = 7
-      this.consigne +=
-        "d'une fraction décimale puis d'une écriture décimale puis d'un pourcentage."
-    } else if (typesDeSolutionsDisponiblesEntiers.includes(1)) {
-      if (typesDeSolutionsDisponiblesEntiers.includes(2)) {
-        casSolutionsAttendues = 4
-        this.consigne += "d'une fraction décimale puis d'une écriture décimale."
-      } else {
-        casSolutionsAttendues = 5
-        this.consigne += "d'une écriture décimale puis d'un pourcentage."
-      }
-    } else {
-      casSolutionsAttendues = 6
-      this.consigne += "d'une fraction décimale puis d'un pourcentage."
-    }
-
     for (
       let i = 0,
         texte,
-        texteCorrFrac,
-        texteCorrFracSur100,
         texteCorr,
-        cpt = 0,
-        a,
-        b,
-        c,
-        reponseAMC,
-        denAMC,
-        numAMC,
-        choix;
+        formeDeci,
+        formeMixte,
+        formeMixteEnEvidence,
+        formeFrac,
+        formePourc,
+        entier,
+        deci,
+        centi,
+        milli,
+        nbChiffres,
+        partieDecimale,
+        fracG,
+        fracGNS,
+        fracD,
+        cpt = 0;
       i < this.nbQuestions && cpt < 50;
+      cpt++
     ) {
-      a = randint(2, 19)
-      b = randint(2, 19, a)
-      c = randint(2, 19, [a, b])
-      choix = randint(1, 3)
-      denAMC = Math.pow(10, choix)
+      entier = randint(1, 20)
+      deci = randint(1, 9)
+      centi = randint(1, 9) * 10 + randint(1, 9)
+      milli = randint(1, 9) * 100 + randint(1, 9) * 10 + randint(1, 9)
+      nbChiffres = this.sup3 ? choice([1, 2, 3]) : choice([1, 2])
+      if (nbChiffres === 1) {
+        partieDecimale = deci
+        fracG = fraction(entier * 10 + deci, 10)
+        fracD = fraction(deci, 10)
+        formePourc = entier * 100 + deci * 10
+      } else if (nbChiffres === 2) {
+        partieDecimale = centi
+        fracG = fraction(entier * 100 + centi, 100)
+        fracD = fraction(centi, 100)
+        formePourc = entier * 100 + centi
+      } else {
+        partieDecimale = milli
+        fracG = fraction(entier * 1000 + milli, 1000)
+        fracD = fraction(milli, 1000)
+        formePourc = entier * 100 + milli / 10
+      }
+
+      formeDeci = texNombre(
+        entier + partieDecimale / 10 ** nbChiffres,
+        nbChiffres,
+      )
+      formeFrac = `$${fracG.texFraction}$`
+      formeMixte = `$${entier} + ${fracD.texFraction}$`
+      formeMixteEnEvidence = `$${miseEnEvidence(entier)}$ $${miseEnEvidence('+')}$ $${miseEnEvidence(fracD.texFraction)}$`
+
+      // Descripteurs réutilisables des écritures qui peuvent être demandées.
+      const champMixte: FormeDemandee = {
+        id: FORMES.mixte,
+        ligneCorrection: `d'un nombre mixte : ${formeMixteEnEvidence}`,
+        gabaritInteractif:
+          "d'un nombre mixte : @ (partie entière) + @ (fraction décimale)",
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBase,
+            value: entier,
+            options: { nombreDecimalSeulement: true },
+          },
+          {
+            keyboard: KeyboardType.clavierDeBaseAvecFraction,
+            value: fracD.texFraction,
+            options: { fractionDecimale: true },
+          },
+        ],
+      }
+      const champFraction = (ligne: string): FormeDemandee => ({
+        id: FORMES.fraction,
+        ligneCorrection: ligne,
+        gabaritInteractif: "d'une fraction décimale : @",
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBaseAvecFraction,
+            value: fracG.texFraction,
+            options: { fractionDecimale: true },
+          },
+        ],
+      })
+      const champDecimal = (ligne: string): FormeDemandee => ({
+        id: FORMES.decimal,
+        ligneCorrection: ligne,
+        gabaritInteractif: "d'un nombre décimal : @",
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBase,
+            value: formeDeci,
+            options: { nombreDecimalSeulement: true },
+          },
+        ],
+      })
+      const champPourcentage = (ligne: string): FormeDemandee => ({
+        id: FORMES.pourcentage,
+        ligneCorrection: ligne,
+        gabaritInteractif: "d'un pourcentage : @ %",
+        sousChamps: [
+          {
+            keyboard: KeyboardType.clavierDeBase,
+            value: formePourc,
+            options: { nombreDecimalSeulement: true },
+          },
+        ],
+      })
+
+      let formesDemandees: FormeDemandee[]
+
       switch (listeTypeDeQuestions[i]) {
-        case 1:
+        case 1: // Nombre mixte (Somme d'un entier et d'une fraction décimale)
           {
-            // Somme de deux fractions décimales de même dénominateur
-            b = randint(2, 50)
-            c = randint(2, 50, [b])
-            while ((b + c) % 10 === 0) {
-              c = randint(2, 50, [b])
-            } // Pour éviter d'avoir une somme multiple de 10
-            const fracB = fraction(b, denAMC)
-            const fracC = fraction(c, denAMC)
-            const fracBPlusC = fraction(b + c, denAMC)
-            texte = `$${fracB.texFraction}+${fracC.texFraction}$`
-            numAMC = b + c
-            if (this.can) {
-              this.canEnonce = `Calculer $${fracB.texFraction}+${fracC.texFraction}$ sous forme d'une fraction décimale.`
-              this.correction = this.listeCorrections[0]
-            }
-            texteCorrFrac = `${fracBPlusC.texFraction}`
+            texte = formeMixte
+            formesDemandees = [
+              champDecimal(
+                `d'un nombre décimal : $${miseEnEvidence(formeDeci)}$`,
+              ),
+              champFraction(
+                `d'une fraction décimale : $${miseEnEvidence(fracG)}$`,
+              ),
+              champPourcentage(
+                `d'un pourcentage : $${miseEnEvidence(texNombre(formePourc, 1))}~\\%$`,
+              ),
+            ]
           }
           break
-        case 2:
+
+        case 2: // Fraction décimale
           {
-            // Différence de deux fractions décimales de même dénominateur
-            b = randint(3, 50)
-            c = randint(2, b - 1)
-            numAMC = b - c
-            const fracB = fraction(b, denAMC)
-            const fracC = fraction(c, denAMC)
-            const fracBMoinsC = fraction(b - c, denAMC)
-            texte = `$${fracB.texFraction}-${fracC.texFraction}$`
-            if (this.can) {
-              this.canEnonce = `Calculer $${fracB.texFraction}-${fracC.texFraction}$ sous forme d'une fraction décimale.`
-              this.correction = this.listeCorrections[0]
-            }
-            texteCorrFrac = `${fracBMoinsC.texFraction}`
+            texte = formeFrac
+            formesDemandees = [
+              champMixte,
+              champDecimal(
+                `d'un nombre décimal : $${miseEnEvidence(formeDeci)}$`,
+              ),
+              champPourcentage(
+                `d'un pourcentage : $${miseEnEvidence(formePourc)}~\\%$`,
+              ),
+            ]
           }
           break
-        case 3:
+
+        case 3: // Nombre décimal
           {
-            // Somme d'un entier avec une somme de deux fractions décimales de même dénominateur, sans retenue
-            b = choix === 1 ? randint(2, 7) : randint(2, 50)
-            c = choix === 1 ? randint(2, 7, [b, 10 - b]) : randint(2, 50, [b])
-            a = randint(2, 20, [b, c])
-            while ((b + c) % 10 === 0) {
-              c = randint(2, 50, [a, b])
-            } // Pour éviter d'avoir une somme multiple de 10
-            const fracA = fraction(a * denAMC, denAMC)
-            const fracB = fraction(b, denAMC)
-            const fracC = fraction(c, denAMC)
-            const fracBPlusC = fraction(b + c, denAMC)
-            texte = `$${a}+${fracB.texFraction}+${fracC.texFraction}$`
-            numAMC = a * denAMC + b + c
-            const fracNumAMC = fraction(numAMC, denAMC)
-            if (this.can) {
-              this.canEnonce = `Calculer $${a}+${fracB.texFraction}+${fracC.texFraction}$ sous forme décimale.`
-              this.correction = this.listeCorrections[0]
-            }
-            texteCorrFrac = `${a}+${fracBPlusC.texFraction}=${fracA.texFraction}+${fracBPlusC.texFraction}=${fracNumAMC.texFraction}`
+            texte = `$${formeDeci}$`
+            formesDemandees = [
+              champMixte,
+              champFraction(
+                `d'une fraction décimale : $${miseEnEvidence(fracG)}$`,
+              ),
+              champPourcentage(
+                `d'un pourcentage : $${miseEnEvidence(texNombre(formePourc))}~\\%$`,
+              ),
+            ]
           }
           break
-        case 4:
-          {
-            // Somme d'un entier avec une différence de deux fractions décimales de même dénominateur, sans retenue
-            b = randint(3, 50)
-            c =
-              choix === 1
-                ? randint(Math.max(b - 9, 2), b - 1)
-                : randint(2, b - 1)
-            a = randint(2, 20, [b, c])
-            numAMC = a * denAMC + b - c
-            const fracNumAMC = fraction(numAMC, denAMC)
-            const fracA = fraction(a * denAMC, denAMC)
-            const fracB = fraction(b, denAMC)
-            const fracC = fraction(c, denAMC)
-            const fracBMoinsC = fraction(b - c, denAMC)
-            texte = `$${a}+${fracB.texFraction}-${fracC.texFraction}$`
-            if (this.can) {
-              this.canEnonce = `Calculer $${a}+${fracB.texFraction}-${fracC.texFraction}$ sous forme décimale.`
-              this.correction = this.listeCorrections[0]
-            }
-            texteCorrFrac = `${a}+${fracBMoinsC.texFraction}=${fracA.texFraction}+${fracBMoinsC.texFraction}=${fracNumAMC.texFraction}`
-          }
-          break
-        case 5:
-          {
-            // Somme d'un entier avec une somme de deux fractions décimales de même dénominateur, avec éventuelle retenue
-            b = randint(2, 50)
-            c = randint(2, 50, [b])
-            a = randint(2, 20, [b, c])
-            while ((b + c) % 10 === 0) {
-              c = randint(2, 50, [a, b])
-            } // Pour éviter d'avoir une somme multiple de 10
-            const fracA = fraction(a * denAMC, denAMC)
-            const fracB = fraction(b, denAMC)
-            const fracC = fraction(c, denAMC)
-            const fracBPlusC = fraction(b + c, denAMC)
-            texte = `$${a}+${fracB.texFraction}+${fracC.texFraction}$`
-            numAMC = a * denAMC + b + c
-            const fracNumAMC = fraction(numAMC, denAMC)
-            if (this.can) {
-              this.canEnonce = `Calculer $${a}+${fracB.texFraction}+${fracC.texFraction}$ sous forme décimale.`
-              this.correction = this.listeCorrections[0]
-            }
-            texteCorrFrac = `${a}+${fracBPlusC.texFraction}=${fracA.texFraction}+${fracBPlusC.texFraction}=${fracNumAMC.texFraction}`
-          }
-          break
-        case 6:
+
+        case 4: // Pourcentage
         default:
           {
-            // Somme d'un entier avec une différence de deux fractions décimales de même dénominateur, avec éventuelle retenue
-            b = randint(3, 50)
-            c = randint(2, b - 1)
-            a = randint(2, 20, [b, c])
-            const fracA = fraction(a * denAMC, denAMC)
-            const fracB = fraction(b, denAMC)
-            const fracC = fraction(c, denAMC)
-            const fracBMoinsC = fraction(b - c, denAMC)
-            texte = `$${a}+${fracB.texFraction}-${fracC.texFraction}$`
-            numAMC = a * denAMC + b - c
-            const fracNumAMC = fraction(numAMC, denAMC)
-            if (this.can) {
-              this.canEnonce = `Calculer $${a}+${fracB.texFraction}-${fracC.texFraction}$ sous forme décimale.`
-              this.correction = this.listeCorrections[0]
+            texte = `$${texNombre(formePourc, 1)}~\\%$`
+            if (nbChiffres === 1) {
+              fracGNS = fraction(entier * 100 + deci * 10, 100)
+              formesDemandees = [
+                champFraction(
+                  `d'une fraction décimale : $${miseEnEvidence(fracG)}$ (ou $${fracGNS.texFraction}$)`,
+                ),
+                champDecimal(
+                  `d'un nombre décimal : $${miseEnEvidence(formeDeci)}$ (ou $${entier},${partieDecimale * 10}$)`,
+                ),
+                champMixte,
+              ]
+            } else {
+              formesDemandees = [
+                champFraction(
+                  `d'une fraction décimale : $${miseEnEvidence(fracG)}$`,
+                ),
+                champDecimal(
+                  `d'un nombre décimal : $${miseEnEvidence(formeDeci)}$`,
+                ),
+                champMixte,
+              ]
             }
-            texteCorrFrac = `${a}+${fracBMoinsC.texFraction}=${fracA.texFraction}+${fracBMoinsC.texFraction}=${fracNumAMC.texFraction}`
           }
           break
       }
-      // commun à tous les cas : on termine avec '$' ou on ajoute la valeur décimale suivie de '$'
-      reponseAMC = numAMC / denAMC
-      const pourcentage = arrondi(reponseAMC * 100, 2)
-      texteCorrFracSur100 = texFractionFromString(pourcentage, 100)
-      texteCorr = texte + '$=' + texteCorrFrac + '$'
-      if (typesDeSolutionsDisponiblesEntiers.includes(2)) {
-        // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
 
-        const textCorrSplit = texteCorr.split('=')
-        let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
-        aRemplacer = aRemplacer.replace('$', '').replace('<br>', '')
+      // On ne garde que les écritures cochées par l'utilisateur.
+      const formesRetenues = formesDemandees.filter((forme) =>
+        formesActives.includes(forme.id),
+      )
 
-        texteCorr = ''
-        for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
-          texteCorr += textCorrSplit[ee] + '='
-        }
-        texteCorr += `$ $${miseEnEvidence(aRemplacer)}`
+      texteCorr = `
+            ${texte} peut aussi s'écrire sous forme :<br>
+           ${formesRetenues
+             .map((forme) => forme.ligneCorrection)
+             .join(' <br>\n           ')}
+            `
 
-        // Fin de cette uniformisation
-      } else texteCorr += '$'
-      if (typesDeSolutionsDisponiblesEntiers.includes(1)) {
-        texteCorr += `=${miseEnEvidence(texNombre(reponseAMC))}`
-      }
-      if (typesDeSolutionsDisponiblesEntiers.includes(3)) {
-        if (denAMC !== 100) texteCorr += `=${texteCorrFracSur100}`
-        texteCorr += `=${miseEnEvidence(texNombre(pourcentage))}${sp()} \\%`
-      }
-      texteCorr += '$'
-      const choixDigit = randint(0, 1)
-      const fractionResultat = fraction(numAMC, denAMC).texFraction
-      switch (casSolutionsAttendues) {
-        case 1: // Nombre décimal
-          if (context.isAmc) {
-            this.autoCorrectionAMC[i] = {
-              enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-              propositions: [
-                {
-                  texte: '', // Si vide, le texte est la correction de l'exercice.
-
-                  reponse: {
-                    valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                    param: {
-                      digits:
-                        nombreDeChiffresDe(reponseAMC) +
-                        randint(choixDigit, choixDigit + 1),
-                      decimals:
-                        nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                        choixDigit,
-                      signe: false,
-                    },
-                  },
-                },
-              ],
-            }
-            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-          } else {
-            handleAnswers(this, i, {
-              bareme: (listePoints: number[]) => [listePoints[0], 1],
-              champ1: {
-                value: stringNombre(reponseAMC, 3),
-                options: { nombreDecimalSeulement: true },
-              },
-            })
-          }
-
-          break
-        case 2: // Fraction décimale
-          if (context.isAmc) {
-            this.autoCorrectionAMC[i] = {
-              enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-              propositions: [
-                {
-                  texte: '', // Si vide, le texte est la correction de l'exercice.
-                  reponse: {
-                    valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                    param: {
-                      digitsNum: nombreDeChiffresDe(numAMC),
-                      digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                      signe: false,
-                    },
-                  },
-                },
-              ],
-            }
-            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-          } else {
-            handleAnswers(this, i, {
-              bareme: (listePoints: number[]) => [listePoints[0], 1],
-              champ1: {
-                value: fractionResultat,
-                options: { fractionDecimale: true },
-              },
-            })
-          }
-          break
-        case 3: // Pourcentage
-          if (context.isAmc) {
-            this.autoCorrectionAMC[i] = {
-              enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-              propositions: [
-                {
-                  texte: '', // Si vide, le texte est la correction de l'exercice.
-                  reponse: {
-                    valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                    param: {
-                      digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                      decimals:
-                        nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                        randint(0, 1),
-                      signe: false,
-                    },
-                  },
-                },
-              ],
-            }
-            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-          } else {
-            handleAnswers(this, i, {
-              bareme: (listePoints: number[]) => [listePoints[0], 1],
-              champ1: {
-                value: stringNombre(pourcentage, 3),
-                options: { nombreDecimalSeulement: true },
-              },
-            })
-          }
-
-          break
-        case 4: // Nombre décimal ET fraction décimale
-          if (context.isAmc) {
-            if (choice([0, 1]) === 0) {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digitsNum: nombreDeChiffresDe(numAMC),
-                        digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            } else {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digits:
-                          nombreDeChiffresDe(reponseAMC) +
-                          randint(choixDigit, choixDigit + 1),
-                        decimals:
-                          nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                          choixDigit,
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            }
-          } else {
-            handleAnswers(this, i, {
-              bareme: (listePoints: number[]) => [
-                listePoints[0] + listePoints[1],
-                2,
-              ],
-              champ1: {
-                value: fractionResultat,
-                options: { fractionDecimale: true },
-              },
-              champ2: {
-                value: stringNombre(reponseAMC, 3),
-                options: { nombreDecimalSeulement: true },
-              },
-            })
-          }
-          break
-        case 5: // nombre décimal ET pourcentage
-          if (context.isAmc) {
-            if (choice([0, 1]) === 0) {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digits:
-                          nombreDeChiffresDe(reponseAMC) +
-                          randint(choixDigit, choixDigit + 1),
-                        decimals:
-                          nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                          choixDigit,
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            } else {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                        decimals:
-                          nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                          randint(0, 1),
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            }
-          } else {
-            handleAnswers(this, i, {
-              bareme: (listePoints: number[]) => [
-                listePoints[0] + listePoints[1],
-                2,
-              ],
-              champ1: {
-                value: stringNombre(reponseAMC, 3),
-                options: { nombreDecimalSeulement: true },
-              },
-              champ2: {
-                value: stringNombre(pourcentage, 2),
-                options: { nombreDecimalSeulement: true },
-              },
-            })
-          }
-          break
-        case 6: // fraction décimale ET pourcentage
-          if (context.isAmc) {
-            if (choice([0, 1]) === 0) {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digitsNum: nombreDeChiffresDe(numAMC),
-                        digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            } else {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                        decimals:
-                          nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                          randint(0, 1),
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            }
-          } else {
-            handleAnswers(this, i, {
-              bareme: (listePoints: number[]) => [
-                listePoints[0] + listePoints[1],
-                2,
-              ],
-              champ1: {
-                value: fractionResultat,
-                options: { fractionDecimale: true },
-              },
-              champ2: {
-                value: stringNombre(pourcentage, 2),
-                options: { nombreDecimalSeulement: true },
-              },
-            })
-          }
-          break
-        case 7: // Les trois
-          if (context.isAmc) {
-            const choix = randint(0, 2)
-            if (choix === 0) {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digitsNum: nombreDeChiffresDe(numAMC),
-                        digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            } else if (choix === 1) {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                        decimals:
-                          nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                          randint(0, 1),
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            } else {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
-                propositions: [
-                  {
-                    texte: '', // Si vide, le texte est la correction de l'exercice.
-                    reponse: {
-                      valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                      param: {
-                        digits:
-                          nombreDeChiffresDe(reponseAMC) +
-                          randint(choixDigit, choixDigit + 1),
-                        decimals:
-                          nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                          choixDigit,
-                        signe: false,
-                      },
-                    },
-                  },
-                ],
-              }
-              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-            }
-          } else {
-            handleAnswers(this, i, {
-              bareme: (listePoints: number[]) => [
-                listePoints[0] + listePoints[1] + listePoints[2],
-                3,
-              ],
-              champ1: {
-                value: fractionResultat,
-                options: { fractionDecimale: true },
-              },
-              champ2: {
-                value: stringNombre(reponseAMC, 3),
-                options: { nombreDecimalSeulement: true },
-              },
-              champ3: {
-                value: stringNombre(pourcentage, 2),
-                options: { nombreDecimalSeulement: true },
-              },
-            })
-          }
-          break
-      }
       if (this.interactif) {
-        if (casSolutionsAttendues < 4) {
-          texte += remplisLesBlancs(
-            this,
-            i,
-            '= ~ %{champ1}' + (casSolutionsAttendues === 3 ? ' \\%' : ''),
-            '  ' +
-              (this.sup2 === 1
-                ? KeyboardType.clavierNumbers
-                : KeyboardType.clavierDeBaseAvecFraction),
-            '\\ldots\\ldots',
-          )
-        } else if (casSolutionsAttendues < 7) {
-          texte += remplisLesBlancs(
-            this,
-            i,
-            '= ~  %{champ1} ~ = ~ %{champ2}' +
-              (casSolutionsAttendues !== 4 ? ' \\%' : ''),
-            KeyboardType.clavierDeBaseAvecFraction,
-            '\\ldots\\ldots',
-          )
-        } else {
-          texte += remplisLesBlancs(
-            this,
-            i,
-            '= ~  %{champ1} ~ = ~ %{champ2} ~ = ~ %{champ3} \\%',
-            KeyboardType.clavierDeBaseAvecFraction,
-            '\\ldots\\ldots',
-          )
+        let compteurChamp = 0
+        const dataOptions: Record<string, { keyboard: string | undefined }> = {}
+        const lignesTemplate: string[] = []
+        for (const forme of formesRetenues) {
+          let ligne = forme.gabaritInteractif
+          for (const sousChamp of forme.sousChamps) {
+            const nom = `champ${++compteurChamp}`
+            ligne = ligne.replace('@', `%{${nom}}`)
+            dataOptions[nom] = { keyboard: sousChamp.keyboard }
+          }
+          lignesTemplate.push(ligne)
         }
+        texte = addMultiMathfield(this, i, {
+          dataTemplate: `
+           ${texte} peut aussi s'écrire sous forme de :<br>
+           ${lignesTemplate.join(' <br>\n           ')}
+            `,
+          dataOptions: dataOptions as DataOptionsMultiMathfield,
+        })
       }
 
-      if (this.questionJamaisPosee(i, a, b, c, choix)) {
-        // Si la question n'a jamais été posée, on en crée une autre
+      let compteurReponse = 0
+      const reponses: Record<
+        string,
+        { value: string | number; options: Record<string, boolean> }
+      > = {}
+      for (const forme of formesRetenues) {
+        for (const sousChamp of forme.sousChamps) {
+          reponses[`champ${++compteurReponse}`] = {
+            value: sousChamp.value,
+            options: sousChamp.options,
+          }
+        }
+      }
+      if (compteurReponse > 0) {
+        handleAnswers(this, i, reponses as unknown as Valeur, {
+          formatInteractif: 'multi-mathfield',
+        })
+      }
+
+      // Ajouter la question et la correction si la question n'a jamais été posée
+      if (this.questionJamaisPosee(i, entier, deci, centi, milli, nbChiffres)) {
         this.listeQuestions[i] = texte
-        if (!context.isHtml && i === 0) {
-          texteCorr = '\\setlength\\itemsep{2em}' + texteCorr
-        } // espacement entre les questions
         this.listeCorrections[i] = texteCorr
-        this.listeCanEnonces.push(this.canEnonce ?? '')
-        this.listeCanReponsesACompleter.push(this.canReponseACompleter ?? '')
         i++
       }
       cpt++
     }
-    listeQuestionsToContenu(this)
   }
 }

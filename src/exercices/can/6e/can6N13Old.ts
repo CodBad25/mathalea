@@ -2,7 +2,7 @@ import SommeFractionsDecimales from '../../6e/6N1F-5'
 export const interactifReady = true
 
 export const titre =
-  'Passer d’un calcul de fractions décimales à une écriture décimale*'
+  'Passer d’un calcul de fractions décimales à une écriture décimale**'
 
 export const dateDePublication = '20/01/2022'
 
@@ -11,18 +11,18 @@ export const dateDePublication = '20/01/2022'
  * Créé le 20/01/2022
 
  */
-export const uuid = '8f06e'
+export const uuid = 'ce3da'
 
 export const refs = {
-  'fr-fr': ['can6N12', '6N2autoB-8'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-export default class SommeFractionsDecimalesCAN extends SommeFractionsDecimales {
+export default class SommeFractionsDecimalesCAN3Old extends SommeFractionsDecimales {
   constructor() {
     super()
     this.nbQuestions = 1
     this.can = true
-    this.sup = '3-4'
+    this.sup = '5-6'
     this.sup2 = 1
   }
 }
