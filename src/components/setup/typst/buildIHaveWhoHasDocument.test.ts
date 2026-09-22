@@ -145,9 +145,8 @@ describe('buildIHaveWhoHasDocument', () => {
     expect(first).toContain('rows: (130mm,)')
     expect(first).not.toContain('#grid(width:')
     expect(first).toContain('#set page(paper: "a4", flipped: true')
-    // La fenêtre de lecture est à droite et les deux pièces sont polygonales.
-    expect(first).toContain('x=\\"452\\"')
-    expect(first).not.toContain('x=\\"253\\" y=\\"86\\"')
+    // La fenêtre est calculée face à un côté et les deux pièces sont polygonales.
+    expect(first).toContain('width=\\"90\\"')
     expect(first).toContain('<polygon points=\\"')
     expect(first).not.toContain('r=\\"280\\"')
     expect(first).toContain('flipped: true')

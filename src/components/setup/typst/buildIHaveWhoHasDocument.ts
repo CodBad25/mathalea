@@ -256,21 +256,70 @@ function backTitleOffsetPercent(options: IHaveWhoHasDocumentOptions): number {
   return Math.round((1 - titleY / cardHeight) * 1000) / 10
 }
 
-function polygonPoints(sides: number, radius: number): string {
+interface PolygonPoint {
+  x: number
+  y: number
+}
+
+function polygonVertices(sides: number, radius: number): PolygonPoint[] {
   const center = 300
   const count = Math.max(3, sides)
+  // Le décalage d'un demi-secteur place la médiatrice d'un côté à droite,
+  // exactement dans l'axe de la fenêtre de lecture.
   return Array.from({ length: count }, (_, index) => {
-    const angle = (index * 2 * Math.PI) / count
-    return `${center + radius * Math.cos(angle)},${center + radius * Math.sin(angle)}`
-  }).join(' ')
+    const angle = ((index + 0.5) * 2 * Math.PI) / count
+    return {
+      x: center + radius * Math.cos(angle),
+      y: center + radius * Math.sin(angle),
+    }
+  })
+}
+
+function polygonPoints(sides: number, radius: number): string {
+  return polygonVertices(sides, radius)
+    .map(({ x, y }) => `${x},${y}`)
+    .join(' ')
+}
+
+function polygonCodeRadius(sides: number, radius: number): number {
+  const count = Math.max(3, sides)
+  const apothem = radius * Math.cos(Math.PI / count)
+  // Garde la fenêtre entière à l'intérieur du côté qui lui fait face.
+  return Math.min(205, apothem - 50)
+}
+
+/** Encoche tournée et dimensionnée d'après le côté le plus bas du polygone. */
+function polygonNotch(sides: number, radius: number): string {
+  const vertices = polygonVertices(sides, radius)
+  const edges = vertices.map((start, index) => {
+    const end = vertices[(index + 1) % vertices.length]
+    return {
+      start,
+      end,
+      middle: { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 },
+    }
+  })
+  const edge = edges.reduce((lowest, candidate) =>
+    candidate.middle.y > lowest.middle.y ? candidate : lowest,
+  )
+  const edgeLength = Math.hypot(
+    edge.end.x - edge.start.x,
+    edge.end.y - edge.start.y,
+  )
+  const width = Math.min(150, edgeLength * 0.72)
+  const height = Math.min(65, width * 0.42)
+  const rotation =
+    (Math.atan2(edge.end.y - edge.start.y, edge.end.x - edge.start.x) * 180) /
+    Math.PI
+  return `<path d="M ${-width / 2} 0 C ${-width / 2} ${height} ${width / 2} ${height} ${width / 2} 0 Z" transform="translate(${edge.middle.x} ${edge.middle.y}) rotate(${rotation})" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/>`
 }
 
 /** Polygone arrière : les codes suivent le cycle des cartes. */
 function solutionPolygonSvg(codes: string[]): string {
   const center = 300
   const radius = 280
-  const labelRadius = 205
   const count = Math.max(1, codes.length)
+  const labelRadius = polygonCodeRadius(count, radius)
   const parts = [
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">',
     '<rect width="100%" height="100%" fill="white"/>',
@@ -297,12 +346,15 @@ function solutionPolygonSvg(codes: string[]): string {
 
 /** Polygone supérieur à évider, avec fenêtre de lecture à droite. */
 function coverPolygonSvg(seriesLabel: string, codeCount: number): string {
-  const verticalGap = 2 * 220 * Math.sin(Math.PI / Math.max(2, codeCount))
+  const labelRadius = polygonCodeRadius(codeCount, 280)
+  const verticalGap =
+    2 * labelRadius * Math.sin(Math.PI / Math.max(2, codeCount))
   const windowHeight = Math.max(18, Math.min(42, verticalGap * 0.6))
   const windowY = 300 - windowHeight / 2
+  const windowX = 300 + labelRadius - 45
   const labelSize =
     seriesLabel.length > 45 ? 20 : seriesLabel.length > 30 ? 24 : 29
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><defs><marker id="fleche" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L0,5 L7,2.5 Z" fill="black"/></marker></defs><rect width="100%" height="100%" fill="white"/><polygon points="${polygonPoints(codeCount, 280)}" fill="#f2f2f2" stroke="black" stroke-width="3"/><rect x="452" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><path d="M 171 147 A 200 200 0 0 1 429 147" fill="none" stroke="black" stroke-width="3" marker-end="url(#fleche)"/><text x="300" y="175" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">Sens de rotation</text><!-- Encoche semi-elliptique pour saisir le polygone arrière --><path d="M 220 580 C 220 510 380 510 380 580 Z" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="230" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="42" font-weight="bold">J’ai… Qui a… ?</text><text x="300" y="365" text-anchor="middle" font-family="sans-serif" font-size="15">Découper la fenêtre et l’encoche en pointillés</text><text x="300" y="430" text-anchor="middle" font-family="sans-serif" font-size="${labelSize}" font-weight="bold">${escapeXml(seriesLabel)}</text></svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><defs><marker id="fleche" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L0,5 L7,2.5 Z" fill="black"/></marker></defs><rect width="100%" height="100%" fill="white"/><polygon points="${polygonPoints(codeCount, 280)}" fill="#f2f2f2" stroke="black" stroke-width="3"/><rect x="${windowX}" y="${windowY}" width="90" height="${windowHeight}" rx="7" fill="white" stroke="black" stroke-width="3" stroke-dasharray="8 5"/><path d="M 171 147 A 200 200 0 0 1 429 147" fill="none" stroke="black" stroke-width="3" marker-end="url(#fleche)"/><text x="300" y="175" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">Sens de rotation</text>${polygonNotch(codeCount, 280)}<circle cx="300" cy="300" r="9" fill="white" stroke="black" stroke-width="2"/><text x="300" y="230" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="42" font-weight="bold">J’ai… Qui a… ?</text><text x="300" y="430" text-anchor="middle" font-family="sans-serif" font-size="${labelSize}" font-weight="bold">${escapeXml(seriesLabel)}</text></svg>`
 }
 
 /** Génère les cartes recto-verso, les roues de décodage et leurs caches. */
@@ -446,11 +498,13 @@ export function buildIHaveWhoHasDocument(
   lines.push('// ----- Polygones de correction et d’assemblage -----')
   lines.push('#set page(paper: "a4", flipped: true, margin: 8mm)')
   lines.push(
-    '#grid(columns: (1fr, 1fr), rows: (130mm,), gutter: 8mm, align: center + horizon,',
+    '#grid(columns: (1fr, 1fr), rows: (140mm,), gutter: 8mm, align: center + top,',
   )
   const assemblyPart = (svg: string) =>
-    `  image(bytes(${typstString(svg)}), format: "svg", width: 130mm, height: 130mm, fit: "contain"),`
-  lines.push(assemblyPart(coverPolygonSvg(seriesLabel, codes.length)))
+    `  image(bytes(${typstString(svg)}), format: "svg", width: 125mm, height: 125mm, fit: "contain"),`
+  lines.push(
+    `  stack(dir: ttb, spacing: 2mm, ${assemblyPart(coverPolygonSvg(seriesLabel, codes.length)).trim().replace(/,$/, '')}, align(center, text(size: 9pt)[Découper la fenêtre et l’encoche en pointillés.])),`,
+  )
   lines.push(assemblyPart(solutionPolygonSvg(codes)))
   lines.push(')')
   return lines.join('\n')
