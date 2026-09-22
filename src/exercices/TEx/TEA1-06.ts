@@ -45,7 +45,7 @@ function genererDivisibiliteBezout() {
   const NICE_N = [12, 18, 24, 30, 36, 48, -12, -18, -24, -30]
 
   let a: number, c: number, N: number, g: number, u: number, v: number
-  let b: number, d: number
+  let b: number, d: number, k: number
   do {
     do {
       a = randint(2, 6)
@@ -54,7 +54,7 @@ function genererDivisibiliteBezout() {
       ;[g, u, v] = pgcdEtendu(a, c)
     } while (N % g !== 0 || a === c)
 
-    const k = N / g
+    k = N / g
     const d0 = u * k
     const b0 = -v * k
 
@@ -88,16 +88,17 @@ function genererDivisibiliteBezout() {
     // on impose a et b premiers entre eux
   } while (pgcdEtendu(a, b)[0] !== 1)
 
-  // recherche des candidats n (X divise N) puis des solutions réelles (X divise Y)
-  const diviseurs = listeDesDiviseurs(Math.abs(N))
+  // recherche des candidats n (X divise k = N/pgcd(a,c), condition nécessaire optimisée)
+  // puis des solutions réelles (X divise Y)
+  const diviseurs = listeDesDiviseurs(Math.abs(k))
   const candidats = diviseurs
     .filter((delta) => delta >= b && (delta - b) % a === 0)
     .map((delta) => (delta - b) / a)
     .sort((n1, n2) => n1 - n2)
-  // X divise N est nécessaire mais pas suffisant : on vérifie que X divise bien Y
+  // X divise k est nécessaire mais pas suffisant : on vérifie que X divise bien Y
   const solutions = candidats.filter((n) => (c * n + d) % (a * n + b) === 0)
 
-  return { a, b, c, d, N, candidats, solutions }
+  return { a, b, c, d, N, g, k, candidats, solutions }
 }
 
 export default class ExerciceDivisibiliteBezout extends Exercice {
@@ -109,10 +110,13 @@ export default class ExerciceDivisibiliteBezout extends Exercice {
 
   nouvelleVersion() {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
-      const { a, b, c, d, N, candidats, solutions } =
+      const { a, b, c, d, g, k, candidats, solutions } =
         genererDivisibiliteBezout()
       const expX = reduireAxPlusB(a, b, 'n')
       const expY = reduireAxPlusB(c, d, 'n')
+      const ag = a / g
+      const cg = c / g
+      const nCoef = ag * c // = cg * a, coefficient de n qui s'annule dans la combinaison
 
       const texte = `Déterminer l'ensemble des entiers naturels $n$ tels que $${expX}$ divise $${expY}$.`
 
@@ -120,30 +124,30 @@ export default class ExerciceDivisibiliteBezout extends Exercice {
       texteCorr += `${texteEnCouleur('Analyse.', bleuMathalea)}<br>`
       texteCorr += `Soit $n\\in \\mathbb{N}$. Supposons que $${expX}$ divise $${expY}$.<br>`
       texteCorr += `Comme $${expX}$ divise aussi $${expX}$, $${expX}$ divise toute combinaison linéaire de $${expX}$ et $${expY}$.<br>`
-      texteCorr += `En particulier, $${expX}$ divise $${c}(${expX})-${a}(${expY})$.<br>`
+      texteCorr += `En particulier, $${expX}$ divise $${cg}(${expX})-${ag}(${expY})$.<br>`
       const lignesCalcul = [
-        `${c}(${expX})-${a}(${expY})&=${a * c}n${ecritureAlgebrique(c * b)}${ecritureAlgebrique(-a * c)}n${ecritureAlgebriqueSauf0(-a * d)}`,
+        `${cg}(${expX})-${ag}(${expY})&=${nCoef}n${ecritureAlgebrique(cg * b)}${ecritureAlgebrique(-nCoef)}n${ecritureAlgebriqueSauf0(-ag * d)}`,
       ]
       if (d !== 0) {
-        lignesCalcul.push(`&=${c * b}${ecritureAlgebriqueSauf0(-a * d)}`)
+        lignesCalcul.push(`&=${cg * b}${ecritureAlgebriqueSauf0(-ag * d)}`)
       }
-      lignesCalcul.push(`&=${-N}`)
+      lignesCalcul.push(`&=${-k}`)
       texteCorr += `$\\begin{aligned}
 ${lignesCalcul.join('\\\\\n')}
 \\end{aligned}$<br>`
 
-      texteCorr += `Donc $${expX}$ divise $${-N}$.<br>`
-      if (-N < 0) {
-        texteCorr += ` Ainsi $${expX}$ divise $${Math.abs(N)}$.<br>`
+      texteCorr += `Donc $${expX}$ divise $${-k}$.<br>`
+      if (-k < 0) {
+        texteCorr += ` Ainsi $${expX}$ divise $${Math.abs(k)}$.<br>`
       }
 
-      const absN = Math.abs(N)
-      texteCorr += `Il nous faut trouver les diviseurs de $${absN}$ de la forme $${expX}$ avec $n\\geqslant 0$.<br>`
+      const absK = Math.abs(k)
+      texteCorr += `Il nous faut trouver les diviseurs de $${absK}$ de la forme $${expX}$ avec $n\\geqslant 0$.<br>`
       if (candidats.length === 0) {
         texteCorr += `Aucun diviseur ne convient. Il n'y a donc aucune solution.<br>`
       } else {
         const lignesAxPlusB: string[] = []
-        for (let n = 0; a * n + b <= absN; n++) {
+        for (let n = 0; a * n + b <= absK; n++) {
           lignesAxPlusB.push(
             `\\text{pour } n=${n},\\quad ${expX}&=${a * n + b}`,
           )
@@ -153,11 +157,11 @@ ${lignesAxPlusB.join('\\\\\n')}
 \\end{aligned}$<br>`
         const valeursDiv = candidats.map((n) => a * n + b)
         if (valeursDiv.length === 0) {
-          texteCorr += `Aucune de ces valeurs ne divise $${absN}$.<br>`
+          texteCorr += `Aucune de ces valeurs ne divise $${absK}$.<br>`
         } else if (valeursDiv.length === 1) {
-          texteCorr += `La seule de ces valeurs qui divise $${absN}$ est $${valeursDiv[0]}$.<br>`
+          texteCorr += `La seule de ces valeurs qui divise $${absK}$ est $${valeursDiv[0]}$.<br>`
         } else {
-          texteCorr += `Parmi ces valeurs, celles qui divisent $${absN}$ sont : $${valeursDiv.join('\\,;\\,')}$.<br>`
+          texteCorr += `Parmi ces valeurs, celles qui divisent $${absK}$ sont : $${valeursDiv.join('\\,;\\,')}$.<br>`
         }
         if (candidats.length === 1) {
           texteCorr += `La valeur de $n$ possible est donc $${candidats[0]}$.<br>`
