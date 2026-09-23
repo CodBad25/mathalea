@@ -132,8 +132,7 @@ describe('buildIHaveWhoHasDocument', () => {
     expect(first).toContain('Découper la fenêtre et l’encoche en pointillés')
     expect(first).toContain('Sens de rotation')
     expect(first).not.toContain('Assembler les repères noirs')
-    expect(first).toContain('Encoche semi-elliptique')
-    expect(first).toContain('M 220 580 C 220 510 380 510 380 580 Z')
+    expect(first).toContain('M -75 0 C -75 63 75 63 75 0 Z')
     expect(first).toContain('Polygones de correction et d’assemblage')
     expect(first).toContain('J’ai… Qui a… ?')
     expect(first).not.toContain('sens des aiguilles d’une montre')
@@ -142,7 +141,7 @@ describe('buildIHaveWhoHasDocument', () => {
     expect(first).toContain('text(size: 11pt, weight: "bold", "J’ai qui a")')
     expect(first).toContain('text(size: 11pt, weight: "bold", "Série Ab")')
     expect(first.match(/J’ai qui a — Série Ab/g)).toHaveLength(2)
-    expect(first).toContain('rows: (130mm,)')
+    expect(first).toContain('rows: (140mm,)')
     expect(first).not.toContain('#grid(width:')
     expect(first).toContain('#set page(paper: "a4", flipped: true')
     // La fenêtre est calculée face à un côté et les deux pièces sont polygonales.

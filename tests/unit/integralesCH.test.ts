@@ -93,7 +93,7 @@ describe('construction à partir de réponses rationnelles', () => {
     exo.seed = `rational-mean-${seed}`
     exo.nouvelleVersionWrapper()
     const match =
-      /Soit \$f\$ la fonction définie sur \$\[([^;]+);([^\]]+)\]\$ par \$f\(x\)=(.*?)\$\./.exec(
+      /Soit \$f\\colon\[([^;]+);([^\]]+)\]\\to\\mathbb\{R\}\$ la fonction définie par \$f\(x\)=(.*?)\$\./.exec(
         exo.listeQuestions[0],
       )
     expect(match).not.toBeNull()
@@ -200,7 +200,7 @@ describe('présentation des intégrales CH', () => {
         expect(question).toContain('a)&nbsp;')
         expect(question).toContain('b)&nbsp;')
         expect(question.includes('c)&nbsp;')).toBe(!donnee)
-        expect(question.includes('Calculer la valeur exacte de')).toBe(!donnee)
+        expect(question.includes('Calculer la valeur de')).toBe(!donnee)
       }
     },
   )
