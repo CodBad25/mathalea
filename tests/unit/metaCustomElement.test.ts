@@ -66,6 +66,28 @@ class SousExerciceSimpleCustom extends ExerciceSimple {
   }
 }
 
+/** Exercice simple apiGeom sans format explicite, comme 5G1B-3. */
+class SousExerciceSimpleApigeom extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.formatChampTexte = 'none'
+    this.exoCustomResultat = true
+    this.reponse = ''
+  }
+
+  nouvelleVersion(): void {
+    const figure = new Figure({ xMin: 0, yMin: 0, width: 100, height: 100 })
+    this.figuresApiGeom = [figure]
+    this.question = figureApigeom({ exercice: this, i: 0, figure })
+    this.correction = 'correction'
+  }
+
+  correctionInteractive = (i: number) =>
+    this.figuresApiGeom?.[i] == null ? ['KO'] : ['OK']
+}
+
 class SousExerciceMathlive extends ExerciceSimple {
   constructor() {
     super()
@@ -149,6 +171,19 @@ describe('questions custom réhébergées par MetaExerciceCan', () => {
     expect(meta.answers).toEqual({
       apigeomEx7F1: 'figure de la question 1',
     })
+  })
+
+  it('conserve le format apiGeom découvert dans un exercice simple', () => {
+    const meta = construitMeta(
+      [SousExerciceMathlive, SousExerciceSimpleApigeom],
+      2,
+    )
+    document.body.innerHTML = meta.listeQuestions[1]
+
+    expect(meta.autoCorrection[1].formatInteractif).toBe('apigeom-figure')
+    expect(meta.listeQuestions[1]).toContain('id="apigeomEx7F1"')
+    expect(meta.listeQuestions[1]).not.toContain('champTexteEx7Q1')
+    expect(ApigeomFigureElement.verifQuestion(meta, 1).isOk).toBe(true)
   })
 
   it('appelle la correction avec le sous-exercice pour `this`', () => {

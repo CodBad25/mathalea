@@ -39,7 +39,7 @@ for (const [ref, uuid] of Object.entries(refToUuid)) {
   if (metadata.features.interactif.type === "'custom'") continue
 
   const url = (uuidToUrl as Record<string, string>)[uuid]
-  if (!url) continue
+  if (!url || /[^/]*old[^/]*\.ts$/i.test(url)) continue
 
   const loader = getExerciseModuleLoader(`../exercices/${url}`)
   if (loader) allModules[ref] = loader

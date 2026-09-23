@@ -172,8 +172,13 @@ export class InteractiveClock extends MathaleaCustomElement {
       String(exercice.autoCorrection?.[i]?.valeur?.reponse?.value),
     )
 
+    // Une horloge à aiguilles représente les heures sur un cycle de 12 heures :
+    // 13 h et 1 h y ont donc la même position. Les exercices peuvent toutefois
+    // attendre une heure au format 24 heures.
+    const expectedHourOnClock = goodAnswer.hour % 12
+    const answerHourOnClock = answer.hour % 12
     if (
-      goodAnswer.hour === answer.hour &&
+      expectedHourOnClock === answerHourOnClock &&
       goodAnswer.minute === answer.minute
     ) {
       if (spanResultatCheck) {

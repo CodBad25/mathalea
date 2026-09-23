@@ -86,7 +86,12 @@ function getRegisteredCustomElementTag(format: string | undefined) {
 }
 
 function getSimpleQuestionCustomElementFormat(question: Exercice) {
-  const formatInteractif = question.formatInteractif ?? 'mathlive'
+  // figureApigeom et d'autres champs enregistrent leur format pendant la
+  // génération, sur la réponse de la question plutôt que sur l'exercice.
+  const formatInteractif =
+    question.autoCorrection[0]?.formatInteractif ??
+    question.formatInteractif ??
+    'mathlive'
   const format =
     formatInteractif === 'mathlive' &&
     typeof question.reponse === 'object' &&
@@ -749,6 +754,12 @@ export default class MetaExercice extends Exercice {
                 )
             } else if (customElementFormat != null) {
               const tag = customElementFormat
+              if (tag === 'apigeom-figure') {
+                alignFiguresSurIndexHote(
+                  Question,
+                  Question.indexQuestionHote ?? 0,
+                )
+              }
               const rawQuestionHtml = String(Question.question ?? '')
               const questionHtml =
                 tag === MetaCustomElement.elementTag &&

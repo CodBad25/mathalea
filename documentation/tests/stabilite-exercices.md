@@ -33,6 +33,12 @@ rechargement ; si l'on ne peut pas lui ajouter les références, la seule soluti
 de compatibilité est de conserver une version historique du sélecteur ou du
 catalogue.
 
+Lorsqu'un sous-exercice est archivé, son fichier contenant `old` peut encore
+correspondre au motif d'import d'un sélecteur. Exclure les fichiers archivés du
+catalogue des sous-exercices, y compris quand celui-ci est construit à partir
+du référentiel. Si cette exclusion change les tirages déjà enregistrés, traiter
+la dérive selon les règles ci-dessous avant de mettre à jour les empreintes.
+
 ## La règle
 
 > Pour un `uuid` et une graine donnés, les valeurs numériques de l'énoncé ne

@@ -14,8 +14,11 @@ export const dateDePublication = '30/04/2026'
  * @author Rémi Angot
  */
 
-// Chargement lazy : seuls les modules sélectionnés sont téléchargés
-const allModules = import.meta.glob('./1A-*.ts') as Record<
+// Chargement lazy : les versions archivées ne participent pas au tirage.
+const allModules = import.meta.glob([
+  './1A-*.ts',
+  '!./1A-*[oO][lL][dD]*.ts',
+]) as Record<
   string,
   () => Promise<ExerciceModule>
 >
