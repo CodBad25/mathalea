@@ -460,7 +460,7 @@ Par conséquent, $${miseEnEvidence(`f\\left(${Math.floor(p.alpha.ajouteEntier(-1
         D'après le tableau de signes de la fonction $f$, ${
           a > 0
             ? `on a $f(x)>0$ sur $\\mathbb{R}$.<br>
-        Donc l'ensemble de définition de $h$ est $${miseEnEvidence(`\\mathbb{R}`)}`
+        Donc l'ensemble de définition de $h$ est $${miseEnEvidence(`\\mathbb{R}`)}$`
             : `on a $f(x)<0$ sur $\\mathbb{R}$ (car $f$ n'a pas de racine et $a<0$).<br>
         Donc ${texteEnCouleurEtGras(`l'ensemble de définition de $h$ est  : $\\varnothing$`)}`
         }.`

@@ -1107,6 +1107,25 @@ describe('htmlToTypst', () => {
   it('referme les blocs de mise en forme non refermés', () => {
     expect(htmlToTypst('<b>gras')).toBe('#strong[gras]')
   })
+
+  it('convertit un `miseEnEvidence` autour de \\mathbb{R} dans un bloc `$…$` correctement refermé', () => {
+    // 1AL23-72 (uuid 57692) : un `$` ouvert avant `{\color{#HEX}\boldsymbol{…}}`
+    // (sortie HTML de `miseEnEvidence`) sans son `$` fermant correspondant
+    // (déséquilibre introduit par du texte qui l'entoure, pas par la
+    // conversion elle-même) n'est jamais reconnu comme un bloc math par
+    // `replaceBalancedInlineMath` : il fuit tel quel, `$` et accolades
+    // compris, dans le texte affiché. Une fois le `$` fermant restitué, la
+    // formule (texte coloré et en gras) se convertit normalement.
+    const html =
+      "Donc l'ensemble de définition de $h$ est " +
+      '${\\color{#F15929}\\boldsymbol{\\mathbb{R}}}$.'
+    const result = htmlToTypst(html)
+    expect(result).not.toContain('\\color')
+    expect(result).not.toContain('boldsymbol')
+    expect(result).toBe(
+      "Donc l'ensemble de définition de $h$ est $text(fill: #rgb(\"#F15929\"), bold(RR))$.",
+    )
+  })
 })
 
 describe('sanitizeSvg', () => {
