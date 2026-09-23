@@ -1,10 +1,12 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
+import operation from '../../modules/operations'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -13,6 +15,7 @@ import {
 import Exercice from '../Exercice'
 
 export const dateDePublication = '20/07/2026'
+export const dateDeModifImportante = '22/09/2026'
 export const interactifReady = true
 
 export const titre =
@@ -22,7 +25,7 @@ export const titre =
  * @author Éric Elter
  */
 
-export const uuid = '9af48'
+export const uuid = '9af4e'
 
 export const refs = {
   'fr-fr': ['5N2autoA'],
@@ -38,29 +41,56 @@ export default class OperationsSurDecimaux extends Exercice {
       'Nombres séparés par des tirets  :\n1 : Addition\n2 : Soustraction\n3 : Multiplication\n4 : Mélange',
     ]
     this.sup = '4'
-    this.besoinFormulaire2Numerique = [
-      'Nombre maximum de décimales',
-      2,
-      '1 décimale\n2 décimales',
+
+    this.besoinFormulaire2Texte = [
+      'Nombre de décimales sur le premier nombre',
+      '0 : Aucune décimale\n1 : Une seule décimale\n2 : Deux décimales',
     ]
-    this.sup2 = 2
-    this.besoinFormulaire3CaseACocher = [
+    this.sup2 = '1-2'
+
+    this.besoinFormulaire3Texte = [
+      'Nombre de décimales sur le deucième nombre',
+      '0 : Aucune décimale\n1 : Une seule décimale\n2 : Deux décimales',
+    ]
+    this.sup3 = '1-2'
+
+    this.besoinFormulaire4CaseACocher = [
       "Sans retenue pour l'addition et la soustraction",
     ]
-    this.sup3 = false
-    this.besoinFormulaire4CaseACocher = [
-      "Nombre différent de décimales dans les deux nombres de l'opération",
-    ]
-    this.sup4 = true
+    this.sup4 = false
+
     this.consigne = 'Calculer.'
     this.spacing = 2
-    this.comment =
-      "Le paramètre 4 (sur le nombre différent de décimales dans les deux nombres de l'opération) ne fonctionne que si le paramètre 2 indique 2 décimales maximum.<br><br>"
-    this.comment +=
-      "Pour la multiplication, si le paramètre 2 indique 2 décimales maximum, ce ne sera appliqué qu'à seul des deux facteurs pour permettre un calcul de tête."
     this.version = '5e'
+    this.comment =
+      "Le dernier paramètre (sur la retenue) n'est pas toujours réalisable selon le choix du nombre de décimales choisi pour chaque nombre."
   }
   nouvelleVersion() {
+    let decimalesPremierNombre = gestionnaireFormulaireTexte({
+      saisie: this.sup2,
+      min: 0,
+      max: 2,
+      defaut: 3,
+      melange: 3,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
+    decimalesPremierNombre = combinaisonListes(
+      decimalesPremierNombre,
+      this.nbQuestions,
+    )
+    let decimalesDeuxièmeNombre = gestionnaireFormulaireTexte({
+      saisie: this.sup3,
+      min: 0,
+      max: 2,
+      defaut: 3,
+      melange: 3,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
+    decimalesDeuxièmeNombre = combinaisonListes(
+      decimalesDeuxièmeNombre,
+      this.nbQuestions,
+    )
+
     let operations =
       this.version === '6eAdditionSoustraction'
         ? gestionnaireFormulaireTexte({
@@ -88,32 +118,30 @@ export default class OperationsSurDecimaux extends Exercice {
     let reponse = 0
     let unitea, uniteb, dixiemea, dixiemeb, centiemea, centiemeb
     for (
-      let i = 0, a = 0, b = 0, texte, texteCorr, cpt = 0;
+      let i = 0, a = 0, b = 0, texte, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      const uneDecimaleaOub = this.sup4 ? choice(['a', 'b']) : ''
+      let texteCorr = ''
+      const nbDecimalesPremierNombre = decimalesPremierNombre[i]
+      const nbDecimalesDeuxiemeNombre = decimalesDeuxièmeNombre[i]
+
       switch (operations[i]) {
         case 1:
           do {
             unitea = randint(0, 9)
-            dixiemea = randint(this.sup2 === 1 ? 1 : 0, 9)
-            centiemea =
-              this.sup2 === 1 || uneDecimaleaOub === 'a'
-                ? 0
-                : randint(this.sup4 ? 1 : 0, 9)
-            a = arrondi(unitea + dixiemea / 10 + centiemea / 100, this.sup2)
+            dixiemea = nbDecimalesPremierNombre >= 1 ? randint(1, 9) : 0
+            centiemea = nbDecimalesPremierNombre === 2 ? randint(1, 9) : 0
+            a = arrondi(unitea + dixiemea / 10 + centiemea / 100, 2)
             uniteb = randint(0, 9, [unitea])
-            dixiemeb = randint(this.sup2 === 1 ? 1 : 0, 9)
-            centiemeb =
-              this.sup2 === 1 || uneDecimaleaOub === 'b'
-                ? 0
-                : randint(this.sup4 ? 1 : 0, 9)
-            b = arrondi(uniteb + dixiemeb / 10 + centiemeb / 100, this.sup2)
+            dixiemeb = nbDecimalesDeuxiemeNombre >= 1 ? randint(1, 9) : 0
+            centiemeb = nbDecimalesDeuxiemeNombre === 2 ? randint(1, 9) : 0
+            b = arrondi(uniteb + dixiemeb / 10 + centiemeb / 100, 2)
           } while (
-            Number.isInteger(arrondi(a + b)) ||
-            Number.isInteger(a) ||
-            Number.isInteger(b) ||
-            (this.sup3 &&
+            ((nbDecimalesPremierNombre > 0 || nbDecimalesDeuxiemeNombre > 0) &&
+              Number.isInteger(arrondi(a + b))) ||
+            (nbDecimalesPremierNombre > 0 && Number.isInteger(a)) ||
+            (nbDecimalesDeuxiemeNombre > 0 && Number.isInteger(b)) ||
+            (this.sup4 &&
               (unitea + uniteb > 9 ||
                 dixiemea + dixiemeb > 9 ||
                 centiemea + centiemeb > 9))
@@ -122,55 +150,69 @@ export default class OperationsSurDecimaux extends Exercice {
           reponse = arrondi(a + b)
           break
         case 2:
-          do {
-            unitea = randint(0, 9)
-            dixiemea = randint(this.sup2 === 1 ? 1 : 0, 9)
-            centiemea =
-              this.sup2 === 1 || uneDecimaleaOub === 'a'
-                ? 0
-                : randint(this.sup4 ? 1 : 0, 9)
-            a = arrondi(unitea + dixiemea / 10 + centiemea / 100, this.sup2)
-            uniteb = randint(0, 9, [unitea])
-            dixiemeb = randint(this.sup2 === 1 ? 1 : 0, 9, [dixiemea])
-            centiemeb =
-              this.sup2 === 1 || uneDecimaleaOub === 'b'
-                ? 0
-                : randint(this.sup4 ? 1 : 0, 9, [centiemea])
-            b = arrondi(uniteb + dixiemeb / 10 + centiemeb / 100, this.sup2)
-          } while (
-            a < b ||
-            Number.isInteger(arrondi(a - b)) ||
-            Number.isInteger(a) ||
-            Number.isInteger(b) ||
-            (this.sup3 &&
-              (unitea < uniteb ||
-                dixiemea < dixiemeb ||
-                (this.sup2 === 2 &&
-                  uneDecimaleaOub === '' &&
-                  centiemea < centiemeb)))
-          )
+          unitea = randint(1, 9)
+          dixiemea =
+            nbDecimalesPremierNombre >= 1 ? randint(this.sup4 ? 2 : 1, 9) : 0
+          centiemea =
+            nbDecimalesPremierNombre === 2 ? randint(this.sup4 ? 2 : 1, 9) : 0
+          a = arrondi(unitea + dixiemea / 10 + centiemea / 100, 2)
+          if (nbDecimalesDeuxiemeNombre > nbDecimalesPremierNombre)
+            this.sup4 = false
+          uniteb = randint(0, unitea - 1)
+          dixiemeb =
+            nbDecimalesDeuxiemeNombre >= 1
+              ? randint(1, this.sup4 ? dixiemea - 1 : 9)
+              : 0
+          centiemeb =
+            nbDecimalesDeuxiemeNombre === 2
+              ? randint(1, this.sup4 ? Math.max(1, centiemea - 1) : 9)
+              : 0
+          b = arrondi(uniteb + dixiemeb / 10 + centiemeb / 100, 2)
+
           signe = '-'
           reponse = arrondi(a - b)
           break
         case 3:
-          unitea = randint(0, 3)
-          dixiemea = randint(this.sup2 === 1 ? 1 : 0, 9)
-          centiemea = randint(1, 9)
-          a = arrondi(unitea + dixiemea / 10 + centiemea / 100, this.sup2)
+          do {
+            unitea = randint(nbDecimalesPremierNombre === 0 ? 2 : 0, 9)
+            dixiemea = nbDecimalesPremierNombre >= 1 ? randint(1, 9) : 0
+            centiemea = nbDecimalesPremierNombre === 2 ? randint(1, 9) : 0
+            a = arrondi(unitea + dixiemea / 10 + centiemea / 100, 2)
 
-          b = arrondi(randint(2, 9) / 10)
-          if (choice([true, false])) {
-            const tampon = a
-            a = b
-            b = tampon
-          }
+            uniteb = randint(nbDecimalesDeuxiemeNombre === 0 ? 2 : 0, 9)
+            dixiemeb = nbDecimalesDeuxiemeNombre >= 1 ? randint(1, 9) : 0
+            centiemeb = nbDecimalesDeuxiemeNombre === 2 ? randint(1, 9) : 0
+            b = arrondi(uniteb + dixiemeb / 10 + centiemeb / 100, 2)
+          } while (a === 0 || b === 0)
           signe = '\\times'
           reponse = arrondi(a * b)
+          if (
+            nbDecimalesPremierNombre !== 0 ||
+            nbDecimalesDeuxiemeNombre !== 0
+          ) {
+            texteCorr = operation({
+              operande1: a,
+              operande2: b,
+              type: 'multiplication',
+              display: 'inline',
+              options: { solution: true, colore: orangeMathalea },
+            })
+            texteCorr +=
+              '$\\phantom{espace}$' +
+              operation({
+                operande1: b,
+                operande2: a,
+                type: 'multiplication',
+                display: 'inline',
+                options: { solution: true, colore: orangeMathalea },
+              })
+            texteCorr += '<br>'
+          }
           break
       }
       if (this.questionJamaisPosee(i, a, b)) {
         texte = '$ ' + texNombre(a) + signe + texNombre(b) + '$'
-        texteCorr =
+        texteCorr +=
           texte.slice(0, -1) + '=' + miseEnEvidence(texNombre(reponse)) + ' $'
         texte += ajouteChampTexteMathLive(
           this,

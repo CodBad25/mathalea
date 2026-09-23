@@ -570,6 +570,11 @@ commun au centre ; une encoche semi-elliptique dans le cache permet de saisir et
 de tourner le polygone arrière. La flèche, courte et à rayon constant, est
 accompagnée de la seule mention « Sens de rotation ». La hauteur de la fenêtre
 est calculée d’après le nombre de côtés pour ne découvrir qu’un code à la fois.
+Les polygones sont orientés de sorte que la fenêtre soit centrée sur la
+médiatrice d’un côté. L’encoche est, elle aussi, calculée sur un côté — le plus
+bas — et suit son inclinaison. La consigne « Découper la fenêtre et l’encoche en
+pointillés. » est imprimée sous le cache, hors de la pièce : elle disparaît donc
+une fois le montage découpé.
 
 Sur le polygone solution, les codes suivent l’ordre du cycle des cartes. Ils
 sont disposés dans le sens trigonométrique : en tournant physiquement la pièce

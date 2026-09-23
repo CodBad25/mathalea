@@ -3637,6 +3637,14 @@
     "titre": "Divisibilité dans $\\mathbb Z$",
     "sousThemes": {}
   },
+  "TEA1-1": {
+    "titre": "Divisibilité",
+    "sousThemes": {}
+  },
+  "TEA1-2": {
+    "titre": "Congruence",
+    "sousThemes": {}
+  },
   "TEA2": {
     "titre": "PGCD, théorèmes de Bézout et de Gauss",
     "sousThemes": {}

@@ -54,11 +54,13 @@ export default class ExerciceInteractiveClock extends Exercice {
         hour = 13
         minute = 30
       }
-      let enonce = `Placer correctement les aiguilles pour indiquer ${hour}${sp(1)}h${sp(1)}${formatMinute(minute)}.<br>`
-      enonce += `<br><br>${addInteractiveClock(this, i, {
+      const consigneHoraire = `Placer correctement les aiguilles pour indiquer ${hour}${sp(1)}h${sp(1)}${formatMinute(minute)}.`
+      const horlogeACompleter = addInteractiveClock(this, i, {
         interactivityOn: this.interactif,
         showHands: this.interactif,
-      })}`
+      })
+      let enonce = `${consigneHoraire}<br>`
+      enonce += `<br><br>${horlogeACompleter}`
       let correction = addInteractiveClock(this, i, {
         id: `interactive-clock-correctionEx${this.numeroExercice}Q${i}`,
         hour,
@@ -72,6 +74,14 @@ export default class ExerciceInteractiveClock extends Exercice {
       if (this.questionJamaisPosee(i, hour, minute)) {
         this.listeQuestions[i] = enonce
         this.listeCorrections[i] = correction
+        // repris tels quels par MetaExerciceCan (qui ne génère jamais qu'une
+        // seule question par sous-exercice) pour le tableau « Course aux
+        // nombres » : l'énoncé y reste du texte, l'horloge à compléter part
+        // dans la colonne Réponse plutôt que dans celle de l'Énoncé
+        this.canEnonce = consigneHoraire
+        this.canReponseACompleter = horlogeACompleter
+        this.listeCanEnonces[i] = consigneHoraire
+        this.listeCanReponsesACompleter[i] = horlogeACompleter
         this.goodAnswers[i] = { hour, minute }
         handleAnswers(
           this,

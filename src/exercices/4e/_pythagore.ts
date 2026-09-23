@@ -15,6 +15,7 @@ import { texNombre } from '../../lib/outils/texNombre'
  * @param {string}  [unite = 'cm'] Unité de la longueur recherchée
  * @param {string} [couleurReponse = orangeMathalea] Couleur de la réponse : du type 'red', du type '#010101' ou du type orangeMathalea
  * @param {boolean} [avecUnites = false] Si true, les unités sont écrites dans les calculs (par exemple $4\text{ cm}\times 4\text{ cm}=16\text{ cm}^2$)
+ * @param {number} [precisionArrondi = 2] Nombre de décimales auquel la longueur cherchée est arrondie : détermine si le signe affiché est = ou \approx.
  * @example RedactionPythagore()
  * // Crée la rédaction du théorème de Pythagore dans un triangle ABC rectangle en A de dimensions 3-4-5 cm dont on recherche la longueur de l'hypoténuse.
  * @example RedactionPythagore('M','N','P',2,reponse,5,13,'dm')
@@ -34,6 +35,7 @@ export function RedactionPythagore(
   unite = 'cm',
   couleurReponse = orangeMathalea,
   avecUnites = false,
+  precisionArrondi = 2,
 ) {
   const uniteTex = unite === '' ? '' : `\\text{ ${unite}}`
   const uniteCarreeTex = avecUnites && unite !== '' ? `\\text{ ${unite}}^2` : ''
@@ -63,7 +65,7 @@ export function RedactionPythagore(
     texte += avecUnites
       ? `${B + C}&=\\sqrt{${aire(AB ** 2 + AC ** 2, 2)}}\\\\`
       : `${B + C}&=\\sqrt{${texNombre(AB ** 2 + AC ** 2, 2)}}${uniteTex}\\\\`
-    signeEgal = egalOuApprox(Math.sqrt(AB ** 2 + AC ** 2), 2)
+    signeEgal = egalOuApprox(Math.sqrt(AB ** 2 + AC ** 2), precisionArrondi)
     texte += `${B + C} &${signeEgal} ${miseEnEvidence(
       texNombre(BC, 2),
       couleurReponse,
@@ -78,7 +80,7 @@ export function RedactionPythagore(
     texte += avecUnites
       ? `${A + B}&=\\sqrt{${aire(BC ** 2 - AC ** 2, 2)}}\\\\`
       : `${A + B}&=\\sqrt{${texNombre(BC ** 2 - AC ** 2, 2)}}${uniteTex}\\\\`
-    signeEgal = egalOuApprox(Math.sqrt(BC ** 2 - AC ** 2), 2)
+    signeEgal = egalOuApprox(Math.sqrt(BC ** 2 - AC ** 2), precisionArrondi)
     texte += `${A + B} &${signeEgal} ${miseEnEvidence(
       texNombre(AB, 2),
       couleurReponse,

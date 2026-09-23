@@ -12,6 +12,92 @@
   },
   "exercices": [
     {
+      "id": "balai-furieux",
+      "titre": "Au balai furieux",
+      "categorie": "Chronologie",
+      "tags": [
+        "durée",
+        "2005Q4"
+      ],
+      "etoiles": 2,
+      "png": "png/balai-furieux.png",
+      "pngCor": "png/balai-furieux_cor.png",
+      "typ": "typ/balai-furieux.typ",
+      "typCor": "typ/balai-furieux_cor.typ",
+      "tex": "tex/balai-furieux.tex",
+      "texCor": "tex/balai-furieux_cor.tex"
+    },
+    {
+      "id": "bonne-cuisson",
+      "titre": "Bonne cuisson",
+      "categorie": "Chronologie",
+      "tags": [
+        "durée",
+        "minimum",
+        "2005D8"
+      ],
+      "etoiles": 2,
+      "png": "png/bonne-cuisson.png",
+      "pngCor": "png/bonne-cuisson_cor.png",
+      "typ": "typ/bonne-cuisson.typ",
+      "typCor": "typ/bonne-cuisson_cor.typ",
+      "tex": "tex/bonne-cuisson.tex",
+      "texCor": "tex/bonne-cuisson_cor.tex"
+    },
+    {
+      "id": "decalage-horaire",
+      "titre": "Décalage horaire",
+      "categorie": "Chronologie",
+      "tags": [
+        "durée",
+        "fuseau horaire",
+        "chronologie",
+        "2004Q10"
+      ],
+      "etoiles": 3,
+      "png": "png/decalage-horaire.png",
+      "pngCor": "png/decalage-horaire_cor.png",
+      "typ": "typ/decalage-horaire.typ",
+      "typCor": "typ/decalage-horaire_cor.typ",
+      "tex": "tex/decalage-horaire.tex",
+      "texCor": "tex/decalage-horaire_cor.tex"
+    },
+    {
+      "id": "demain",
+      "titre": "Demain",
+      "categorie": "Chronologie",
+      "tags": [
+        "énigme",
+        "demain",
+        "date",
+        "2004Q4"
+      ],
+      "etoiles": 2,
+      "png": "png/demain.png",
+      "pngCor": "png/demain_cor.png",
+      "typ": "typ/demain.typ",
+      "typCor": "typ/demain_cor.typ",
+      "tex": "tex/demain.tex",
+      "texCor": "tex/demain_cor.tex"
+    },
+    {
+      "id": "mon-anniversaire",
+      "titre": "Mon anniversaire",
+      "categorie": "Chronologie",
+      "tags": [
+        "équation",
+        "âge",
+        "2023D1"
+      ],
+      "etoiles": 1,
+      "png": "png/mon-anniversaire.png",
+      "pngCor": "png/mon-anniversaire_cor.png",
+      "typ": "typ/mon-anniversaire.typ",
+      "typCor": "typ/mon-anniversaire_cor.typ",
+      "tex": "tex/mon-anniversaire.tex",
+      "texCor": "tex/mon-anniversaire_cor.tex"
+    },
+    {
       "id": "appartenance-triple",
       "titre": "Appartenance triple",
       "categorie": "Coloriage",
@@ -103,6 +189,25 @@
       "texCor": "tex/cinq-points-plans_cor.tex"
     },
     {
+      "id": "de-coupe",
+      "titre": "Le dé coupé",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans l'espace",
+      "tags": [
+        "dénombrement",
+        "espace",
+        "cube",
+        "2003Q1"
+      ],
+      "etoiles": 1,
+      "png": "png/de-coupe.png",
+      "pngCor": "png/de-coupe_cor.png",
+      "typ": "typ/de-coupe.typ",
+      "typCor": "typ/de-coupe_cor.typ",
+      "tex": "tex/de-coupe.tex",
+      "texCor": "tex/de-coupe_cor.tex"
+    },
+    {
       "id": "2026-df-1",
       "titre": "L'étoile dansante",
       "categorie": "Dénombrement",
@@ -137,6 +242,24 @@
       "typCor": "typ/les-angles-droits_cor.typ",
       "tex": "tex/les-angles-droits.tex",
       "texCor": "tex/les-angles-droits_cor.tex"
+    },
+    {
+      "id": "les-carres-1",
+      "titre": "Les carrés 1",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Dans le plan",
+      "tags": [
+        "dénombrement",
+        "carrés",
+        "2002Q1"
+      ],
+      "etoiles": 1,
+      "png": "png/les-carres-1.png",
+      "pngCor": "png/les-carres-1_cor.png",
+      "typ": "typ/les-carres-1.typ",
+      "typCor": "typ/les-carres-1_cor.typ",
+      "tex": "tex/les-carres-1.tex",
+      "texCor": "tex/les-carres-1_cor.tex"
     },
     {
       "id": "les-carres",
@@ -363,6 +486,24 @@
       "texCor": "tex/bon-anniversaire_cor.tex"
     },
     {
+      "id": "emplette-de-maleficine",
+      "titre": "Les emplettes de Maléficine",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Scénarios",
+      "tags": [
+        "dénombrement",
+        "tenue",
+        "2005Q8"
+      ],
+      "etoiles": 3,
+      "png": "png/emplette-de-maleficine.png",
+      "pngCor": "png/emplette-de-maleficine_cor.png",
+      "typ": "typ/emplette-de-maleficine.typ",
+      "typCor": "typ/emplette-de-maleficine_cor.typ",
+      "tex": "tex/emplette-de-maleficine.tex",
+      "texCor": "tex/emplette-de-maleficine_cor.tex"
+    },
+    {
       "id": "somme-annee",
       "titre": "La somme de l'année",
       "categorie": "Dénombrement",
@@ -380,6 +521,25 @@
       "typCor": "typ/somme-annee_cor.typ",
       "tex": "tex/somme-annee.tex",
       "texCor": "tex/somme-annee_cor.tex"
+    },
+    {
+      "id": "bougies",
+      "titre": "Les bougies",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Association logique",
+      "tags": [
+        "logique",
+        "raisonnement",
+        "essai erreur",
+        "2002Q6"
+      ],
+      "etoiles": 3,
+      "png": "png/bougies.png",
+      "pngCor": "png/bougies_cor.png",
+      "typ": "typ/bougies.typ",
+      "typCor": "typ/bougies_cor.typ",
+      "tex": "tex/bougies.tex",
+      "texCor": "tex/bougies_cor.tex"
     },
     {
       "id": "chaque-figure-son-nombre",
@@ -602,6 +762,25 @@
       "typCor": "typ/pairs-et-impairs_cor.typ",
       "tex": "tex/pairs-et-impairs.tex",
       "texCor": "tex/pairs-et-impairs_cor.tex"
+    },
+    {
+      "id": "immeuble-3-amis",
+      "titre": "L'immeuble des trois amis",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Classement",
+      "tags": [
+        "ordre",
+        "droite graduée",
+        "énigme",
+        "2004Q7"
+      ],
+      "etoiles": 2,
+      "png": "png/immeuble-3-amis.png",
+      "pngCor": "png/immeuble-3-amis_cor.png",
+      "typ": "typ/immeuble-3-amis.typ",
+      "typCor": "typ/immeuble-3-amis_cor.typ",
+      "tex": "tex/immeuble-3-amis.tex",
+      "texCor": "tex/immeuble-3-amis_cor.tex"
     },
     {
       "id": "bonbon",
@@ -884,6 +1063,42 @@
       "texCor": "tex/8desserts-1_cor.tex"
     },
     {
+      "id": "courses",
+      "titre": "Les courses",
+      "categorie": "Méli-Mélo",
+      "tags": [
+        "courses",
+        "argent",
+        "partage",
+        "2004D7"
+      ],
+      "etoiles": 2,
+      "png": "png/courses.png",
+      "pngCor": "png/courses_cor.png",
+      "typ": "typ/courses.typ",
+      "typCor": "typ/courses_cor.typ",
+      "tex": "tex/courses.tex",
+      "texCor": "tex/courses_cor.tex"
+    },
+    {
+      "id": "petite-grenouille",
+      "titre": "La petite grenouille",
+      "categorie": "Méli-Mélo",
+      "tags": [
+        "escalier",
+        "bonds",
+        "comptage",
+        "2000F2"
+      ],
+      "etoiles": 1,
+      "png": "png/petite-grenouille.png",
+      "pngCor": "png/petite-grenouille_cor.png",
+      "typ": "typ/petite-grenouille.typ",
+      "typCor": "typ/petite-grenouille_cor.typ",
+      "tex": "tex/petite-grenouille.tex",
+      "texCor": "tex/petite-grenouille_cor.tex"
+    },
+    {
       "id": "tirelire",
       "titre": "Tirelire",
       "categorie": "Méli-Mélo",
@@ -980,6 +1195,25 @@
       "pngCor": "png/histoire-de-famille_cor.png",
       "typ": "typ/histoire-de-famille.typ",
       "typCor": "typ/histoire-de-famille_cor.typ"
+    },
+    {
+      "id": "images-de-mathilde",
+      "titre": "Les images de Mathilde",
+      "categorie": "Système simple",
+      "tags": [
+        "images",
+        "comptage",
+        "essai-erreur",
+        "systèmes",
+        "2026F6"
+      ],
+      "etoiles": 2,
+      "png": "png/images-de-mathilde.png",
+      "pngCor": "png/images-de-mathilde_cor.png",
+      "typ": "typ/images-de-mathilde.typ",
+      "typCor": "typ/images-de-mathilde_cor.typ",
+      "tex": "tex/images-de-mathilde.tex",
+      "texCor": "tex/images-de-mathilde_cor.tex"
     },
     {
       "id": "poste-et-vous",

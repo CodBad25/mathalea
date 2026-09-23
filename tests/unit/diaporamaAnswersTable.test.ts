@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   calculeNombreDeColonnes,
+  doitAfficherFormuleComplete,
   extraitLettresQcm,
   extraitReponsesCourtes,
   formuleReponseCourte,
@@ -44,6 +45,24 @@ describe('extraitReponsesCourtes', () => {
 describe('formuleReponseCourte', () => {
   it('réécrit une formule grasse sans couleur', () => {
     expect(formuleReponseCourte('6')).toBe('$\\boldsymbol{6}$')
+  })
+})
+
+describe('doitAfficherFormuleComplete', () => {
+  it('affiche la formule complète pour plusieurs réponses courtes (remplisLesBlancs)', () => {
+    expect(doitAfficherFormuleComplete([], ['83', '100', '83'])).toBe(true)
+  })
+
+  it("n'affiche pas la formule complète pour une seule réponse courte", () => {
+    expect(doitAfficherFormuleComplete([], ['6'])).toBe(false)
+  })
+
+  it("n'affiche pas la formule complète sans réponse courte", () => {
+    expect(doitAfficherFormuleComplete([], [])).toBe(false)
+  })
+
+  it('ne concerne pas les QCM même avec plusieurs réponses courtes', () => {
+    expect(doitAfficherFormuleComplete(['A'], ['83', '100'])).toBe(false)
   })
 })
 

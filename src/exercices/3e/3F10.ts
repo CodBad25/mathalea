@@ -1,5 +1,6 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -99,16 +100,22 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
           ? `Déterminer la préimage de $${d}$ par la fonction $f$. %{champ4}`
           : `Déterminer l'antécédent ou les antécédents de $${d}$ par la fonction $f$. %{champ4}`
         : `Déterminer le ou les nombres qui ont $${d}$ comme image par $f$. %{champ4}`
+      const questionItems = [
+        `${voies[0] ? `Quelle est l'image de $${a}$ par la fonction $f$ ?` : `Quel nombre $${a}$ a-t-il comme image ?`} %{champ1}`,
+        `${voies[1] ? `Quelle est l'image de $${c}$ par la fonction $f$ ?` : `Quel nombre $${c}$ a-t-il comme image ?`} %{champ2}`,
+      ]
+      if (!onlyWithImage) {
+        questionItems.push(
+          inversion ? question4 : question3,
+          inversion ? question3 : question4,
+        )
+      }
+      questionItems.push(
+        `Compléter $f(${c})=$ %{champ${onlyWithImage ? '3' : '5'}}`,
+      )
+      if (!onlyWithImage) questionItems.push(`Compléter $f($%{champ6}$)=${c}$`)
       texte += addMultiMathfield(this, i, {
-        dataTemplate: `a) ${voies[0] ? `Quelle est l'image de $${a}$ par la fonction $f$ ? %{champ1}` : `Quel nombre $${a}$ a-t-il comme image ? %{champ1}`}
-b) ${voies[1] ? `Quelle est l'image de $${c}$ par la fonction $f$ ? %{champ2}` : `Quel nombre $${c}$ a-t-il comme image ? %{champ2}`}${
-          onlyWithImage
-            ? ''
-            : `c) ${inversion ? question4 : question3}
-d) ${inversion ? question3 : question4}`
-        }
-${onlyWithImage ? 'c' : 'e'}) Compléter $f(${c})=$ %{champ${onlyWithImage ? '3' : '5'}}
-${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
+        dataTemplate: createList({ items: questionItems, style: 'alpha' }),
 
         dataOptions: onlyWithImage
           ? {
@@ -157,11 +164,11 @@ ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
         (voies[0]
           ? `Quelle est l'image de $${a}$ par la fonction $f$ ?`
           : `Quel nombre $${a}$ a-t-il comme image ?`)
-      texteCorr =
-        numAlpha(0) +
-        (voies[0]
-          ? `L'image de $${a}$ par la fonction $f$ est $${miseEnEvidence(b)}$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`
-          : `Le nombre $${a}$ a pour image $${miseEnEvidence(b)}$ par la fonction $f$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`)
+      const correctionItems = [
+        voies[0]
+          ? `L'image de $${a}$ par la fonction $f$ est $${miseEnEvidence(b)}$, on note $f(${a})=${miseEnEvidence(b)}$.`
+          : `Le nombre $${a}$ a pour image $${miseEnEvidence(b)}$ par la fonction $f$, on note $f(${a})=${miseEnEvidence(b)}$.`,
+      ]
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, b),
@@ -173,11 +180,11 @@ ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
         (voies[1]
           ? `Quelle est l'image de $${c}$ par la fonction $f$ ?`
           : `Quel nombre $${c}$ a-t-il comme image ?`)
-      texteCorr +=
-        numAlpha(1) +
-        (voies[1]
+      correctionItems.push(
+        voies[1]
           ? `L'image de $${c}$ par la fonction $f$ est $${miseEnEvidence(d)}$, on note $f(${c})=${miseEnEvidence(d)}$.`
-          : `Le nombre $${c}$ a pour image $${miseEnEvidence(d)}$ par la fonction $f$, on note $f(${c})=${miseEnEvidence(d)}$.`)
+          : `Le nombre $${c}$ a pour image $${miseEnEvidence(d)}$ par la fonction $f$, on note $f(${c})=${miseEnEvidence(d)}$.`,
+      )
       if (context.isAmc) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, d),
@@ -185,9 +192,7 @@ ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
       }
 
       const texteCorr3 = onlyWithImage
-        ? '<br>' +
-          numAlpha(onlyWithImage ? 2 : 4) +
-          `$f(${c})=${miseEnEvidence(d)}$`
+        ? `$f(${c})=${miseEnEvidence(d)}$`
         : voies[2]
           ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${miseEnEvidence(d)}$, on note $f(${miseEnEvidence(d)})=${a}$.`
           : `Le nombre $${miseEnEvidence(d)}$ a pour image $${a}$ par la fonction $f$, donc $f(${miseEnEvidence(d)})=${a}$.`
@@ -230,37 +235,22 @@ ${onlyWithImage ? '' : `f) Compléter $f($%{champ6}$)=${c}$`}`,
       choice([true, false])
       if (!onlyWithImage) {
         if (inversion) {
-          texteCorr +=
-            '<br>' +
-            numAlpha(2) +
-            texteCorr4 +
-            '<br>' +
-            numAlpha(3) +
-            texteCorr3
+          correctionItems.push(texteCorr4, texteCorr3)
         } else {
-          texteCorr +=
-            '<br>' +
-            numAlpha(2) +
-            texteCorr3 +
-            '<br>' +
-            numAlpha(3) +
-            texteCorr4
+          correctionItems.push(texteCorr3, texteCorr4)
         }
       } else {
-        texteCorr += texteCorr3
+        correctionItems.push(texteCorr3)
       }
-      texteCorr += onlyWithImage
-        ? ''
-        : '<br>' + numAlpha(4) + `$f(${c})=${miseEnEvidence(d)}$`
+      if (!onlyWithImage) correctionItems.push(`$f(${c})=${miseEnEvidence(d)}$`)
       if (context.isAmc && !onlyWithImage) {
         this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(4) + `Compléter : $f(${c})=\\ldots$`, d),
         )
       }
 
-      texteCorr += onlyWithImage
-        ? ''
-        : '<br>' + numAlpha(5) + `$f(${miseEnEvidence(f)})=${c}$`
+      if (!onlyWithImage) correctionItems.push(`$f(${miseEnEvidence(f)})=${c}$`)
+      texteCorr = createList({ items: correctionItems, style: 'alpha' })
       handleAnswers(
         this,
         i,

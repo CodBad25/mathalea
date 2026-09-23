@@ -398,6 +398,7 @@ export default class Pythagore2D extends Exercice {
             'cm',
             undefined,
             this.sup3,
+            1,
           )
         } else if (listeTypeDeQuestions[i] === 'BC') {
           nomCote = B.nom + C.nom
@@ -413,6 +414,7 @@ export default class Pythagore2D extends Exercice {
             'cm',
             undefined,
             this.sup3,
+            1,
           )
         } else {
           // listeTypeDeQuestions[i] === 'AC'
@@ -429,6 +431,7 @@ export default class Pythagore2D extends Exercice {
             'cm',
             undefined,
             this.sup3,
+            1,
           )
         }
         texteCorr = redaction[0] ?? ''

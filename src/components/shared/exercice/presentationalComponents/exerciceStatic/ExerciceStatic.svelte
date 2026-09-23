@@ -77,12 +77,11 @@
       title = resourceToDisplay.uuid
     }
   }
-  // Attribution discrète de la banque externe d'origine (titre de la banque,
-  // et son auteur si le manifest le déclare) : les autres provenances
-  // statiques (annales, MathAdata) n'affichent pas cette ligne.
+  // Attribution discrète de la banque externe d'origine. Pour FFJM, seul le
+  // titre de la banque est affiché au-dessus de l'exercice.
   const sourceBanqueExterne =
     resourceToDisplay !== null && isBanqueExterneType(resourceToDisplay)
-      ? resourceToDisplay.banqueAuteur
+      ? resourceToDisplay.banque !== 'ffjm' && resourceToDisplay.banqueAuteur
         ? `${resourceToDisplay.banqueTitre} — ${resourceToDisplay.banqueAuteur}`
         : resourceToDisplay.banqueTitre
       : null

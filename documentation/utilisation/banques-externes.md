@@ -149,7 +149,7 @@ Champs de la banque :
 | `schema`                                      | oui         | doit valoir `mathalea-banque-v1`                                                                                                                                     |
 | `id`                                          | oui         | identifiant court (lettres, chiffres, `.`, `_`, `-`) ; il entre dans les uuid des exercices, donc dans les liens partagés                                            |
 | `titre`                                       | oui         | nom du nœud affiché dans « Ressources partenaires »                                                                                                                  |
-| `auteur`, `licence`, `version`, `description` | non         | `auteur` figure aussi en attribution discrète sous chaque exercice de la banque (vues prof et élève) ; les quatre sont affichés dans la liste des banques installées |
+| `auteur`, `licence`, `version`, `description` | non         | `auteur` figure aussi en attribution discrète au-dessus de chaque exercice de la banque (vues prof et élève), sauf pour la banque FFJM où seul le titre de la banque apparaît ; les quatre sont affichés dans la liste des banques installées |
 | `preambule`                                   | non         | personnalisation du document généré, voir ci-dessous                                                                                                                 |
 | `exercices`                                   | oui         | liste des exercices, non vide                                                                                                                                        |
 
