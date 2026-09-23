@@ -987,6 +987,11 @@ export default class MetaExercice extends Exercice {
             //* ***************** Question Exo classique *****************//
             this.listeQuestions[indexQuestion] = Question.listeQuestions[0]
             this.listeCorrections[indexQuestion] = Question.listeCorrections[0]
+            if (Question.canEnonce != null)
+              this.listeCanEnonces[indexQuestion] = Question.canEnonce
+            if (Question.canReponseACompleter != null)
+              this.listeCanReponsesACompleter[indexQuestion] =
+                Question.canReponseACompleter
             const qcmAutoCorrection = getQcmAutoCorrection(
               Question,
               indexQuestion,
