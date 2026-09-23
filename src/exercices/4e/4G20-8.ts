@@ -161,7 +161,7 @@ export default class CalculMentalPythagore extends Exercice {
           // Sont connus le côté [AC] de l'angle droit et l'hypoténuse [BC].
           nomCherche = sommetA + sommetB
           carreCherche = BC ** 2 - AC ** 2
-          texteEnonce = `On considère le triangle $${sommetA}${sommetB}${sommetC}$ rectangle en $${sommetA}$ tel que $${sommetA}${sommetC} = ${AC}\\text{ cm}$ et $${sommetB}${sommetC} = ${BC}\\text{ cm}$. Calculer $${nomCherche}$.<br>`
+          texteEnonce = `On considère le triangle $${sommetA}${sommetB}${sommetC}$ rectangle en $${sommetA}$ tel que $${sommetA}${sommetC} = ${AC}\\text{ cm}$ et $${sommetB}${sommetC} = ${BC}\\text{ cm}$. <br>Calculer $${nomCherche}$.<br>`
           figure = () =>
             figureTriangleRectangle(
               [sommetA, sommetB, sommetC],
@@ -187,7 +187,7 @@ export default class CalculMentalPythagore extends Exercice {
           // Sont connus le côté [AB] de l'angle droit et l'hypoténuse [BC].
           nomCherche = sommetA + sommetC
           carreCherche = BC ** 2 - AB ** 2
-          texteEnonce = `On considère le triangle $${sommetA}${sommetB}${sommetC}$ rectangle en $${sommetA}$ tel que $${sommetA}${sommetB} = ${AB}\\text{ cm}$ et $${sommetB}${sommetC} = ${BC}\\text{ cm}$. Calculer $${nomCherche}$.<br>`
+          texteEnonce = `On considère le triangle $${sommetA}${sommetB}${sommetC}$ rectangle en $${sommetA}$ tel que $${sommetA}${sommetB} = ${AB}\\text{ cm}$ et $${sommetB}${sommetC} = ${BC}\\text{ cm}$.<br> Calculer $${nomCherche}$.<br>`
           figure = () =>
             figureTriangleRectangle(
               [sommetA, sommetB, sommetC],
@@ -214,7 +214,7 @@ export default class CalculMentalPythagore extends Exercice {
           // Sont connus les deux côtés [AB] et [AC] de l'angle droit.
           nomCherche = sommetB + sommetC
           carreCherche = AB ** 2 + AC ** 2
-          texteEnonce = `On considère le triangle $${sommetA}${sommetB}${sommetC}$ rectangle en $${sommetA}$ tel que $${sommetA}${sommetB} = ${AB}\\text{ cm}$ et $${sommetA}${sommetC} = ${AC}\\text{ cm}$. Calculer $${nomCherche}$.<br>`
+          texteEnonce = `On considère le triangle $${sommetA}${sommetB}${sommetC}$ rectangle en $${sommetA}$ tel que $${sommetA}${sommetB} = ${AB}\\text{ cm}$ et $${sommetA}${sommetC} = ${AC}\\text{ cm}$.<br> Calculer $${nomCherche}$.<br>`
           figure = () =>
             figureTriangleRectangle([sommetA, sommetB, sommetC], AB, AC, [
               `${AB}\\text{ cm}`,
@@ -239,16 +239,22 @@ export default class CalculMentalPythagore extends Exercice {
       let texte = this.sup3
         ? `${figure()}Calculer $${nomCherche}$.<br>`
         : texteEnonce
-      texte += addMultiMathfield(this, i, {
-        dataTemplate: `$${nomCherche}=$ %{champ1} $\\text{cm}$ (Racine carrée)
-$${nomCherche} \\approx$ %{champ2} $\\text{cm}$ (Partie entière)`,
-        dataOptions: {
-          // `ldots` place des pointillés là où la réponse est attendue quand
-          // l'exercice n'est pas interactif.
-          champ1: { keyboard: KeyboardType.clavierFullOperations, ldots: true },
-          champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-        },
-      })
+      if (this.interactif) {
+        texte += addMultiMathfield(this, i, {
+          dataTemplate: `$${nomCherche}=$ %{champ1} $\\text{cm}$ (Racine carrée)
+    $${nomCherche} \\approx$ %{champ2} $\\text{cm}$ (Partie entière)`,
+          dataOptions: {
+            // `ldots` place des pointillés là où la réponse est attendue quand
+            // l'exercice n'est pas interactif.
+            champ1: {
+              keyboard: KeyboardType.clavierFullOperations,
+              ldots: true,
+            },
+            champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+          },
+        })
+      }
+
       handleAnswers(
         this,
         i,
