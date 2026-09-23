@@ -1,5 +1,7 @@
+import renderMathInElement from 'katex/contrib/auto-render'
 import { context } from '../../modules/context'
 import { orangeMathalea } from '../colors'
+import { optionsKatex } from '../latex/Katex'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -274,8 +276,18 @@ export class CribleEratostheneElement extends MathaleaCustomElement {
     const coloriageEffectue = nombresColories.size > 0
     this.nombresRestants.hidden = !coloriageEffectue
     this.nombresRestants.innerHTML = coloriageEffectue
-      ? `<span style="color: ${orangeMathalea}; font-weight: bold;">Nombres restants</span> : ${nombresRestants.join('\u00a0; ')}.`
+      ? `<span style="color: ${orangeMathalea}; font-weight: bold;">Nombres restants</span> : ${nombresRestants.map((nombre) => `$${nombre}$`).join('\u00a0; ')}.`
       : ''
+    if (coloriageEffectue) {
+      try {
+        renderMathInElement(this.nombresRestants, optionsKatex as never)
+      } catch (error) {
+        window.notify(
+          'Erreur lors du rendu KaTeX des nombres restants du crible.',
+          { error },
+        )
+      }
+    }
   }
 
   private annulerAnimation(effacer = false) {
