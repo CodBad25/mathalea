@@ -58,7 +58,7 @@ export class BlocklyEditor extends MathaleaCustomElement {
   private editorHeight: string | null = null
   private editorWidth: string | null = null
   private workspace: Blockly.WorkspaceSvg | null = null
-  private resizeHandler: (() => void) | null = null
+  private resizeObserver: ResizeObserver | null = null
 
   static create({
     id,
@@ -299,9 +299,9 @@ export class BlocklyEditor extends MathaleaCustomElement {
   }
 
   disconnectedCallback() {
-    if (this.resizeHandler) {
-      window.removeEventListener('resize', this.resizeHandler)
-      this.resizeHandler = null
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
+      this.resizeObserver = null
     }
     if (this.workspace) {
       this.workspace.dispose()
@@ -359,6 +359,10 @@ export class BlocklyEditor extends MathaleaCustomElement {
     ) as HTMLDivElement | null
     if (!area) return
 
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
+      this.resizeObserver = null
+    }
     if (this.workspace) {
       this.workspace.dispose()
       this.workspace = null
@@ -398,11 +402,19 @@ export class BlocklyEditor extends MathaleaCustomElement {
       Blockly.serialization.workspaces.load(initialBlocks, this.workspace)
     }
 
-    this.resizeHandler = () => {
-      if (this.workspace) Blockly.svgResize(this.workspace)
+    // Un ResizeObserver (plutôt qu'un simple écouteur sur `window`) est
+    // nécessaire car en mode « une page par exercice » les exercices non
+    // affichés sont montés dans le DOM masqués via `display: none` (taille
+    // 0x0) : le workspace Blockly y est injecté avec une taille nulle et
+    // seul un changement de taille de la zone (déclenché quand l'exercice
+    // redevient visible) permet de le redimensionner correctement.
+    // (ResizeObserver n'existe pas dans l'environnement de test jsdom.)
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.workspace) Blockly.svgResize(this.workspace)
+      })
+      this.resizeObserver.observe(area)
     }
-    window.addEventListener('resize', this.resizeHandler)
-    this.resizeHandler()
   }
 
   getWorkspaceSerialization(): BlocklyWorkspaceJson {
