@@ -89,6 +89,24 @@ export function formuleReponseCourte(reponse: string): string {
 }
 
 /**
+ * Indique s'il faut afficher la formule complète de la correction plutôt que
+ * les réponses courtes séparées.
+ *
+ * C'est le cas des questions à plusieurs blancs (ex : `remplisLesBlancs()`
+ * avec plusieurs `%{champ}`) : lister chaque réponse isolément (ex : « 83 »,
+ * « 100 », « 83 ») est moins compréhensible que de réafficher l'expression
+ * complète dans laquelle elles s'insèrent (ex : « 0,83 = 83/100 = 83 % »).
+ * Les QCM, qui affichent déjà leur(s) lettre(s) dans `lettresQcm`, ne sont
+ * pas concernés.
+ */
+export function doitAfficherFormuleComplete(
+  lettresQcm: string[],
+  reponsesCourtes: string[],
+): boolean {
+  return lettresQcm.length === 0 && reponsesCourtes.length > 1
+}
+
+/**
  * Renvoie les lettres des bonnes réponses du QCM de la question `questionIndex`
  * (tableau vide si la question n'est pas un QCM).
  *
