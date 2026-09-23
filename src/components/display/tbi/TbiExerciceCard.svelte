@@ -432,10 +432,10 @@
               <div
                 style="break-inside: avoid; padding-top: {i === 0
                   ? 0.25
-                  : questionSpacing * 0.5}rem; padding-bottom: {i ===
+                  : 0}rem; padding-bottom: {i ===
                 exercise.listeQuestions.length - 1
                   ? 0.25
-                  : 0}rem"
+                  : questionSpacing * 0.5}rem"
               >
                 <li
                   id="exercice{paramsIndex}Q{i}"
