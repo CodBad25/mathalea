@@ -605,7 +605,7 @@ describe('htmlToTypst', () => {
     // can6a-2025 Q10 : cases à cocher devant des unités, écrites en LaTeX texte
     expect(
       htmlToTypst('\\faSquare[regular] Vrai<br>\\faSquare[regular] Faux'),
-    ).toBe(`${carreVide} Vrai\\\n${carreVide} Faux`)
+    ).toBe(`${carreVide} Vrai\\ ${carreVide} Faux`)
     // can6a-2025 Q25 : \raggedright de tête retiré, pas de fuite littérale
     const q25 = htmlToTypst('\\raggedright \\faSquare[regular] $120$')
     expect(q25).toBe(`${carreVide} $120$`)
@@ -649,7 +649,7 @@ describe('htmlToTypst', () => {
     // cellule étroite du tableau « Course aux nombres »
     expect(code).toBe(
       '#h(10mm)#box(stroke: 0.6pt + luma(60), inset: (x: 6pt, y: 5pt))' +
-        '[#box[#raw("def mystere(a) :")\\\n#h(7mm)#raw("return 2*b")]]',
+        '[#box[#raw("def mystere(a) :")\\ #h(7mm)#raw("return 2*b")]]',
     )
     // un réglage de longueur n'a pas d'équivalent : il disparaît
     expect(code).not.toContain('parskip')
@@ -755,7 +755,7 @@ describe('htmlToTypst', () => {
   })
 
   it('convertit les sauts de ligne', () => {
-    expect(htmlToTypst('ligne 1<br>ligne 2')).toBe('ligne 1\\\nligne 2')
+    expect(htmlToTypst('ligne 1<br>ligne 2')).toBe('ligne 1\\ ligne 2')
   })
 
   it('convertit les listes', () => {
@@ -767,7 +767,20 @@ describe('htmlToTypst', () => {
     )
     expect(
       htmlToTypst("<ol class='alpha'><li>un</li><li>deux</li></ol>"),
-    ).toBe('#enum(numbering: "a)")[\n+ un\n+ deux]')
+    ).toBe('#[\n#set enum(numbering: "a)")\n+ un\n+ deux]')
+  })
+
+  it('numérote chaque sous-question en continu à travers un saut de ligne', () => {
+    // reproduit 1AL23-72 : un <br> au milieu d'une sous-question ne doit ni
+    // faire perdre le motif "a)" ni redémarrer le compteur pour les
+    // sous-questions suivantes (voir le commentaire du cas 'br' pour le
+    // mécanisme Typst en cause)
+    const result = htmlToTypst(
+      "<ol class='alpha'><li>un</li><li>deux<br>suite</li><li>trois</li></ol>",
+    )
+    expect(result).toBe(
+      '#[\n#set enum(numbering: "a)")\n+ un\n+ deux\\ suite\n+ trois]',
+    )
   })
 
   it('conserve l’espace avant une formule mise en évidence', () => {
@@ -1081,7 +1094,14 @@ describe('htmlToTypst', () => {
   })
 
   it('protège les lignes commençant par un caractère de bloc Typst', () => {
-    expect(htmlToTypst('4 + 4<br>- 2')).toBe('4 + 4\\\n\\- 2')
+    expect(htmlToTypst('4 + 4<p>- 2</p>')).toBe('4 + 4\n\n\\- 2')
+  })
+
+  it("ne coupe pas la ligne pour un <br>, même suivi d'un caractère de bloc Typst", () => {
+    // un <br> ne doit pas produire de ligne de continuation non indentée
+    // (voir le commentaire du cas 'br') : ici, sans le saut de ligne réel,
+    // le "-" n'est plus en tête de ligne et n'a pas besoin d'échappement
+    expect(htmlToTypst('4 + 4<br>- 2')).toBe('4 + 4\\ - 2')
   })
 
   it('referme les blocs de mise en forme non refermés', () => {

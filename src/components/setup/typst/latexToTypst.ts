@@ -3529,7 +3529,14 @@ export function htmlToTypst(
     const name = (token.match(/^<\/?([a-zA-Z0-9]+)/) ?? [])[1]?.toLowerCase()
     switch (name) {
       case 'br':
-        output += '\\\n'
+        // `\ ` (espace, sans retour à la ligne source) plutôt que `\` +
+        // `\n` : un `<br>` à l'intérieur d'un `<li>` produirait sinon une
+        // ligne de continuation non indentée, que l'étape de nettoyage (4.)
+        // prive ensuite de son indentation — Typst la lirait alors comme un
+        // nouveau paragraphe, ce qui interromprait la liste `+`/`-` en
+        // cours (et sa numérotation). `\ ` produit le même saut de ligne
+        // visuel sans jamais introduire ce `\n`.
+        output += '\\ '
         break
       case 'b':
       case 'strong':
@@ -3562,7 +3569,15 @@ export function htmlToTypst(
               : undefined
           listStack.push({ type: name, numbering })
           if (numbering != null) {
-            output += '#enum(numbering: ' + numbering + ')['
+            // `#set enum(...)` dans un bloc de contenu `#[...]`, plutôt que
+            // `#enum(numbering: ...)[+ item\n+ item]` : ce dernier passe
+            // tout le contenu du bloc comme corps d'un unique item (les `+`
+            // qu'il contient forment leur propre `enum` imbriqué, numéroté
+            // par défaut « 1. 2. … » au lieu du motif demandé). Un `#set`
+            // scoped au bloc s'applique en revanche à chaque `+` de premier
+            // niveau qui suit, comme le motif document par défaut
+            // (`buildTypstDocument.ts`) que ce bloc referme à sa sortie.
+            output += '#[\n#set enum(numbering: ' + numbering + ')'
           }
         }
         break
