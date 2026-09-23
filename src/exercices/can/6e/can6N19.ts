@@ -5,8 +5,8 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import Decimal from 'decimal.js'
+import { addMultiMathfield } from '../../../lib/customElements/MultiMathfield'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Décomposer un nombre décimal'
 export const interactifReady = true
@@ -46,21 +46,28 @@ export default class decomposerDecimal extends Exercice {
           if (choice([true, false])) {
             texte = 'Compléter : <br>'
             if (this.interactif) {
-              texte += remplisLesBlancs(
+              texte += addMultiMathfield(this, i, {
+                dataTemplate: `$${texNombre(nbre, 2)}=$ %{champ1} unité(s) %{champ2} dixième(s) %{champ3} centième(s)`,
+                dataOptions: {
+                  champ1: { keyboard: KeyboardType.clavierDeBase },
+                  champ2: { keyboard: KeyboardType.clavierDeBase },
+                  champ3: { keyboard: KeyboardType.clavierDeBase },
+                },
+              })
+              handleAnswers(
                 this,
                 i,
-                `${texNombre(nbre, 2)}= \\, %{champ1}  \\text{ unité(s) }  \\, %{champ2}\\, \\text{ dixième(s)}\\, %{champ3}\\, \\text{ centième(s)}`,
-                KeyboardType.clavierDeBase,
+                {
+                  bareme: (listePoints) => [
+                    Math.min(listePoints[0], listePoints[1], listePoints[2]),
+                    1,
+                  ],
+                  champ1: { value: texNombre(u, 0) },
+                  champ2: { value: texNombre(d, 0) },
+                  champ3: { value: texNombre(c, 0) },
+                },
+                { formatInteractif: 'multi-mathfield' },
               )
-              handleAnswers(this, i, {
-                bareme: (listePoints) => [
-                  Math.min(listePoints[0], listePoints[1], listePoints[2]),
-                  1,
-                ],
-                champ1: { value: texNombre(u, 0) },
-                champ2: { value: texNombre(d, 0) },
-                champ3: { value: texNombre(c, 0) },
-              })
             } else {
               texte += `$${texNombre(nbre, 2)}=\\ldots$ unité(s)  $\\ldots$ dixième(s) $\\ldots$ centième(s)`
             }
@@ -77,23 +84,28 @@ export default class decomposerDecimal extends Exercice {
             let nombreDecrit = ''
             if (this.interactif) {
               if (d === 0) {
-                texte += remplisLesBlancs(
-                  this,
-                  i,
-                  `${texNombre(u, 0)} \\text{${u === 1 ? ' unité ' : ' unités '} }+ ${texNombre(c, 0)}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }= \\, %{champ1} `,
-                  KeyboardType.clavierDeBase,
-                )
+                texte += addMultiMathfield(this, i, {
+                  dataTemplate: `$${texNombre(u, 0)}$ ${u === 1 ? 'unité' : 'unités'} $+~${texNombre(c, 0)}$ ${c === 1 || c === 0 ? 'centième' : 'centièmes'} $=$ %{champ1}`,
+                  dataOptions: {
+                    champ1: { keyboard: KeyboardType.clavierDeBase },
+                  },
+                })
               } else {
-                texte += remplisLesBlancs(
-                  this,
-                  i,
-                  `${texNombre(u, 0)} \\text{${u === 1 ? ' unité ' : ' unités '} } + ${texNombre(d, 0)}\\text{${d === 1 ? ' dixième ' : ' dixièmes '} }+ ${texNombre(c, 0)}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }= \\, %{champ1} `,
-                  KeyboardType.clavierDeBase,
-                )
+                texte += addMultiMathfield(this, i, {
+                  dataTemplate: `$${texNombre(u, 0)}$ ${u === 1 ? 'unité' : 'unités'} $+~${texNombre(d, 0)}$ ${d === 1 ? 'dixième' : 'dixièmes'} $+~${texNombre(c, 0)}$ ${c === 1 || c === 0 ? 'centième' : 'centièmes'} $=$ %{champ1}`,
+                  dataOptions: {
+                    champ1: { keyboard: KeyboardType.clavierDeBase },
+                  },
+                })
               }
-              handleAnswers(this, i, {
-                champ1: { value: texNombre(nbre, 2) },
-              })
+              handleAnswers(
+                this,
+                i,
+                {
+                  champ1: { value: texNombre(nbre, 2) },
+                },
+                { formatInteractif: 'multi-mathfield' },
+              )
             } else {
               // Mise en place de nombreDecrit
               nombreDecrit = `$${texNombre(u, 0)}$ ${u === 1 ? ' unité ' : ' unités '} $+~`
@@ -117,20 +129,26 @@ export default class decomposerDecimal extends Exercice {
           if (choice([true, false])) {
             texte = 'Compléter : <br>'
             if (this.interactif) {
-              texte += remplisLesBlancs(
+              texte += addMultiMathfield(this, i, {
+                dataTemplate: `$${texNombre(nbre, 2)}=$ %{champ1} dixième(s) %{champ2} centième(s)`,
+                dataOptions: {
+                  champ1: { keyboard: KeyboardType.clavierDeBase },
+                  champ2: { keyboard: KeyboardType.clavierDeBase },
+                },
+              })
+              handleAnswers(
                 this,
                 i,
-                `${texNombre(nbre, 2)}=   \\, %{champ1}\\, \\text{ dixième(s)}\\, %{champ2}\\, \\text{ centième(s)}`,
-                KeyboardType.clavierDeBase,
+                {
+                  bareme: (listePoints) => [
+                    Math.min(listePoints[0], listePoints[1]),
+                    1,
+                  ],
+                  champ1: { value: texNombre(u * 10 + d, 0) },
+                  champ2: { value: texNombre(c, 0) },
+                },
+                { formatInteractif: 'multi-mathfield' },
               )
-              handleAnswers(this, i, {
-                bareme: (listePoints) => [
-                  Math.min(listePoints[0], listePoints[1]),
-                  1,
-                ],
-                champ1: { value: texNombre(u * 10 + d, 0) },
-                champ2: { value: texNombre(c, 0) },
-              })
             } else {
               texte += `$${texNombre(nbre, 2)}= \\ldots$ dixième(s) $\\ldots$ centième(s)`
             }
@@ -146,15 +164,20 @@ export default class decomposerDecimal extends Exercice {
             texte = 'Compléter avec un nombre décimal :  <br>'
             let nombreDecrit = ''
             if (this.interactif) {
-              texte += remplisLesBlancs(
+              texte += addMultiMathfield(this, i, {
+                dataTemplate: `$${texNombre(u * 10 + d, 0)}$ dixièmes $+~${texNombre(c, 0)}$ ${c === 1 || c === 0 ? 'centième' : 'centièmes'} $=$ %{champ1}`,
+                dataOptions: {
+                  champ1: { keyboard: KeyboardType.clavierDeBase },
+                },
+              })
+              handleAnswers(
                 this,
                 i,
-                `${texNombre(u * 10 + d, 0)} \\text{ dixièmes } + ${texNombre(c, 0)}\\text{${c === 1 || c === 0 ? ' centième' : ' centièmes'} }= \\, %{champ1} `,
-                KeyboardType.clavierDeBase,
+                {
+                  champ1: { value: texNombre(nbre, 2) },
+                },
+                { formatInteractif: 'multi-mathfield' },
               )
-              handleAnswers(this, i, {
-                champ1: { value: texNombre(nbre, 2) },
-              })
             } else {
               // Mise en place de nombreDecrit
               nombreDecrit = `$${texNombre(u * 10 + d, 0)}$ dixièmes $+~${texNombre(c, 0)}$ ${c === 1 ? ' centième' : ' centièmes'} `
@@ -175,15 +198,20 @@ export default class decomposerDecimal extends Exercice {
           if (choice([true, false])) {
             texte = 'Compléter : <br>'
             if (this.interactif) {
-              texte += remplisLesBlancs(
+              texte += addMultiMathfield(this, i, {
+                dataTemplate: `$${texNombre(nbre, 2)}=$ %{champ1} centièmes`,
+                dataOptions: {
+                  champ1: { keyboard: KeyboardType.clavierDeBase },
+                },
+              })
+              handleAnswers(
                 this,
                 i,
-                `${texNombre(nbre, 2)}=   \\, %{champ1}\\, \\text{ centièmes}`,
-                KeyboardType.clavierDeBase,
+                {
+                  champ1: { value: texNombre(u * 100 + d * 10 + c, 0) },
+                },
+                { formatInteractif: 'multi-mathfield' },
               )
-              handleAnswers(this, i, {
-                champ1: { value: texNombre(u * 100 + d * 10 + c, 0) },
-              })
             } else {
               texte += `$${texNombre(nbre, 2)}= \\ldots$ centièmes   `
             }
@@ -199,15 +227,20 @@ export default class decomposerDecimal extends Exercice {
             texte = 'Compléter avec un nombre décimal : <br>'
             let nombreDecrit = ''
             if (this.interactif) {
-              texte += remplisLesBlancs(
+              texte += addMultiMathfield(this, i, {
+                dataTemplate: `$${texNombre(u * 100 + d * 10 + c, 0)}$ centièmes $=$ %{champ1}`,
+                dataOptions: {
+                  champ1: { keyboard: KeyboardType.clavierDeBase },
+                },
+              })
+              handleAnswers(
                 this,
                 i,
-                `${texNombre(u * 100 + d * 10 + c, 0)} \\text{ centièmes } = \\, %{champ1} `,
-                KeyboardType.clavierDeBase,
+                {
+                  champ1: { value: texNombre(nbre, 2) },
+                },
+                { formatInteractif: 'multi-mathfield' },
               )
-              handleAnswers(this, i, {
-                champ1: { value: texNombre(nbre, 2) },
-              })
             } else {
               nombreDecrit = `$${texNombre(u * 100 + d * 10 + c, 0)}$ centièmes `
               texte += nombreDecrit + '$=\\ldots$'
