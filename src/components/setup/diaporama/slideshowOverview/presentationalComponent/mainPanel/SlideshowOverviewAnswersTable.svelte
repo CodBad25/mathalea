@@ -4,6 +4,7 @@
   import ZoomButtons from '../../../../start/presentationalComponents/header/headerButtons/setupButtons/ZoomButtons.svelte'
   import {
     calculeNombreDeColonnes,
+    doitAfficherFormuleComplete,
     formuleReponseCourte,
     repartisEnColonnes,
   } from '../../../answersTable'
@@ -193,6 +194,12 @@
                       >
                         –
                       </span>
+                    {:else if doitAfficherFormuleComplete(vue.lettresQcm, vue.reponsesCourtes)}
+                      <!-- Plusieurs blancs (ex : remplisLesBlancs) : afficher
+                      la correction complète est plus compréhensible que les
+                      réponses isolées les unes des autres. -->
+                      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                      {@html vue.correctionText}
                     {:else}
                       <div
                         class="flex flex-row flex-wrap items-baseline gap-x-3"
