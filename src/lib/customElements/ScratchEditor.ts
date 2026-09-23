@@ -363,7 +363,7 @@ export class ScratchEditorElement extends MathaleaCustomElement {
   private editorHeight: string | null = null
   private editorWidth: string | null = null
   private workspaceAdapter: ScratchWorkspaceAdapter | null = null
-  private resizeHandler: (() => void) | null = null
+  private resizeObserver: ResizeObserver | null = null
   private runStatus: HTMLSpanElement | null = null
 
   static create(options: ScratchEditorOptions): string {
@@ -514,9 +514,9 @@ export class ScratchEditorElement extends MathaleaCustomElement {
   }
 
   disconnectedCallback(): void {
-    if (this.resizeHandler) {
-      window.removeEventListener('resize', this.resizeHandler)
-      this.resizeHandler = null
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
+      this.resizeObserver = null
     }
     this.workspaceAdapter?.dispose()
     this.workspaceAdapter = null
@@ -599,6 +599,10 @@ export class ScratchEditorElement extends MathaleaCustomElement {
     ) as HTMLDivElement | null
     if (!area) return
 
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
+      this.resizeObserver = null
+    }
     this.workspaceAdapter?.dispose()
     try {
       this.workspaceAdapter = new ScratchWorkspaceAdapter({
@@ -637,9 +641,19 @@ export class ScratchEditorElement extends MathaleaCustomElement {
       }
     }
 
-    this.resizeHandler = () => this.workspaceAdapter?.resize()
-    window.addEventListener('resize', this.resizeHandler)
-    this.resizeHandler()
+    // Un ResizeObserver (plutôt qu'un simple écouteur sur `window`) est
+    // nécessaire car en mode « une page par exercice » les exercices non
+    // affichés sont montés dans le DOM masqués via `display: none` (taille
+    // 0x0) : le workspace Scratch y est injecté avec une taille nulle et
+    // seul un changement de taille de la zone (déclenché quand l'exercice
+    // redevient visible) permet de le redimensionner correctement.
+    // (ResizeObserver n'existe pas dans l'environnement de test jsdom.)
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.workspaceAdapter?.resize()
+      })
+      this.resizeObserver.observe(area)
+    }
   }
 
   update(value: ScratchEditorValue): void {
