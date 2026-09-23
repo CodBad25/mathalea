@@ -4,6 +4,7 @@ import { litTouchesPersonnalisees } from '../components/keyboard/lib/touchesPers
 import { keyboardState } from '../components/keyboard/stores/keyboardStore'
 import type { BlockForKeyboard } from '../components/keyboard/types/keyboardContent'
 import { getKeyboardShortcusts } from '../lib/interactif/claviers/keyboard'
+import { handleMathfieldPowerKeydown } from '../lib/interactif/mathfieldPowerKey'
 import { isMathfieldFocused } from '../lib/interactif/mathfieldFocus'
 import { globalOptions } from '../lib/stores/globalOptions'
 import { context } from './context'
@@ -311,6 +312,11 @@ export async function loadMathLive(divExercice?: HTMLElement) {
         //   mf.classList.add('ml-1')
         mf.addEventListener('focus', handleFocusMathField)
         mf.addEventListener('focusout', handleFocusOutMathField)
+        mf.addEventListener(
+          'keydown',
+          (event) => handleMathfieldPowerKeydown(event, mf),
+          true,
+        )
         if (mf.classList.contains('fillInTheBlanks')) {
           mf.addEventListener(
             'pointerdown',
