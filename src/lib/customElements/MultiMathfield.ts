@@ -45,6 +45,29 @@ function stylizeItems(text: string, output: 'html' | 'latex' = 'html'): string {
   })
 }
 
+/**
+ * Un `\n` du `dataTemplate` est-il un simple artefact de mise en forme du
+ * générateur (ex. `createList`, qui indente son HTML avec de vrais retours à
+ * la ligne entre ses balises) plutôt qu'un saut de ligne voulu par l'auteur
+ * de l'exercice ?
+ *
+ * Un `\n` compris entre deux balises (rien d'autre que du blanc avant lui
+ * jusqu'à un `>`, et après lui jusqu'à un `<`) ne sépare aucun texte visible :
+ * un navigateur l'ignorerait. Le convertir quand même en `<br>` ajoute un
+ * saut de ligne parasite à chaque frontière de balise (ex. juste après
+ * `<ol>` ou avant `</li>`), ce qui perturbe la conversion Typst de ces
+ * listes (voir `latexToTypst.ts`, cas `ol`/`ul`/`li`).
+ */
+function isTemplateNewlineBetweenTags(
+  template: string,
+  start: number,
+  end: number,
+): boolean {
+  const before = template.slice(0, start).replace(/\s+$/, '')
+  const after = template.slice(end).replace(/^\s+/, '')
+  return (before === '' || before.endsWith('>')) && (after === '' || after.startsWith('<'))
+}
+
 function buildLatexEnumitemBlock(lines: string[]): string | null {
   const itemLineRegex = /^\s*([a-z])\)\s*(.*)$/
   const nonEmptyLines = lines.filter((line) => line.trim() !== '')
@@ -465,7 +488,13 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       }
       const token = match[0]
       if (token === '\n') {
-        result += output === 'html' ? '<br>' : '\n'
+        if (output !== 'html') {
+          result += '\n'
+        } else if (
+          !isTemplateNewlineBetweenTags(template, match.index, regex.lastIndex)
+        ) {
+          result += '<br>'
+        }
       } else if (token.startsWith('%{')) {
         const name = token.slice(2, -1) as ValeurNames
         const fieldOptions = dataOptions[name] ?? {}

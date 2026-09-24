@@ -1,7 +1,9 @@
 import type { MathfieldElement } from 'mathlive'
 import { beforeEach, describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
+import { htmlToTypst } from '../../src/components/setup/typst/latexToTypst'
 import { MultiMathfieldElement } from '../../src/lib/customElements/MultiMathfield'
+import { createList } from '../../src/lib/format/lists'
 import { handleAnswers } from '../../src/lib/interactif/gestionInteractif'
 import { setOutputHtml, setOutputLatex } from '../../src/modules/context'
 
@@ -255,5 +257,31 @@ describe('MultiMathfieldElement', () => {
 
     expect(multi.shadowRoot?.querySelector('math-field')).toBeNull()
     expect(multi.shadowRoot?.textContent).toContain('...')
+  })
+
+  it("ne convertit pas en <br> les retours à la ligne purement decoratifs d'une liste createList (3F10, deux exercices Typst en erreur)", () => {
+    // `createList` indente son HTML avec de vrais \n entre ses balises,
+    // uniquement pour la lisibilité de la source générée : un navigateur les
+    // ignore. `renderStaticTemplate` ne doit donc pas les changer en <br>,
+    // sous peine d'en glisser un juste après `<ol class='alpha'>`, ce qui
+    // casse le `#set enum(...)` généré par htmlToTypst pour cette liste.
+    const dataTemplate = createList({
+      items: ['Quel nombre $-19$ a-t-il comme image ?', 'Quelle est l’image de $8$ ?'],
+      style: 'alpha',
+    })
+
+    const rendered = MultiMathfieldElement.renderStaticTemplate(
+      dataTemplate,
+      {},
+    )
+
+    expect(rendered).not.toContain('<br>')
+
+    const typst = htmlToTypst(rendered)
+    expect(typst).toBe(
+      '#[\n#set enum(numbering: "a)")\n' +
+        '+ Quel nombre $-19$ a-t-il comme image ?\n' +
+        '+ Quelle est l’image de $8$ ?]',
+    )
   })
 })
