@@ -1,12 +1,8 @@
-import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -49,12 +45,10 @@ export default class QuotientEgalAuReste extends Exercice {
         texteAvant: ' $S=$',
       })
 
-    this.listeCorrections[0] = `${texteEnCouleur('Analyse.', bleuMathalea)}<br>
-    Soit $n\\in\\mathbb N$. La division euclidienne de $n$ par $${diviseur}$ s’écrit $n=${diviseur}q+r$, avec $q\\in\\mathbb N$ et $r\\in\\{${restes.join(';')}\\}$.<br>
+    this.listeCorrections[0] = `Soit $n\\in\\mathbb N$. La division euclidienne de $n$ par $${diviseur}$ s’écrit $n=${diviseur}q+r$, avec $q\\in\\mathbb N$ et $r\\in\\{${restes.join(';')}\\}$.<br>
     Le quotient étant égal au reste, on a $q=r$. Il suffit donc d’examiner toutes les valeurs possibles de $r$ :<br>
     ${createList({ items: cas, style: 'fleches' })}<br>
-    ${texteEnCouleur('Synthèse.', bleuMathalea)}<br>
-    Réciproquement, pour chacune de ces valeurs, le reste est strictement inférieur à $${diviseur}$ et le quotient est égal au reste. Ces valeurs conviennent donc toutes.<br>
+    Dans chacune de ces égalités, on a $0\\leqslant r<${diviseur}$. Il s’agit donc bien de la division euclidienne de $n$ par $${diviseur}$. Son unicité garantit que la liste obtenue est exhaustive.<br>
     Ainsi, l’ensemble des solutions est $S=${miseEnEvidence(reponse)}$.`
 
     handleAnswers(this, 0, {
