@@ -35,7 +35,7 @@ export default class ResteDivisionPar3 extends ExerciceSimple {
     const d = randint(0, 9, [b, c])
     const a = b * 100 + c * 10 + d
     this.reponse = a % 3
-    this.question = `Quel est le reste de la division de $${a}$ par $3$ ?`
+    this.question = `Quel est le reste de la division euclidienne de $${a}$ par $3$ ?`
     if (a % 3 === 0) {
       this.correction = `Le reste de la division de $${a}$ par $3$ est $${a % 3}$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
