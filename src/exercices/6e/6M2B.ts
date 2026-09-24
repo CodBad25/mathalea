@@ -2,6 +2,7 @@ import {
   choixDeroulant,
   type AllChoicesType,
 } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -33,7 +34,6 @@ export const refs = {
 
 export default class FormulesAireCarreRectangle extends Exercice {
   listeReponses: string[][]
-  typeDeQuestions: ('mots' | 'operation')[]
   constructor() {
     super()
 
@@ -54,7 +54,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
     this.sup = 7
 
     this.listeReponses = []
-    this.typeDeQuestions = []
   }
 
   nouvelleVersion() {
@@ -124,7 +123,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
               { label: 'Choisir une proposition', value: '' },
               ...shuffle(choixListeDeroulante[1]),
             ])
-            this.typeDeQuestions[i] = 'mots'
             texteCorr = `L'aire d'un carré est égale au ${texteEnCouleurEtGras('produit')} de ${texteEnCouleurEtGras('son côté')} par ${texteEnCouleurEtGras('son côté')}.`
             break
           case 2:
@@ -144,7 +142,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
               { label: 'Choisir une proposition', value: '' },
               ...shuffle(choixListeDeroulante[1]),
             ])
-            this.typeDeQuestions[i] = 'operation'
             texteCorr = `Aire d'un carré =  ${texteEnCouleurEtGras('son côté')} $${miseEnEvidence('\\times')}$ ${texteEnCouleurEtGras('son côté')}`
             break
           case 3:
@@ -165,7 +162,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
               { label: 'Choisir une proposition', value: '' },
               ...shuffle(choixListeDeroulante[3]),
             ])
-            this.typeDeQuestions[i] = 'operation'
             texteCorr = `Aire d'un carré =  ${texteEnCouleurEtGras('c')} $${miseEnEvidence('\\times')}$ ${texteEnCouleurEtGras('c')}`
             break
           case 4:
@@ -185,7 +181,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
               { label: 'Choisir une proposition', value: '' },
               ...shuffle(choixListeDeroulante[1]),
             ])
-            this.typeDeQuestions[i] = 'mots'
             texteCorr = `L'aire d'un rectangle est égale au ${texteEnCouleurEtGras('produit')} de ${texteEnCouleurEtGras('sa longueur')} par ${texteEnCouleurEtGras('sa largeur')}.`
             break
           case 5:
@@ -205,7 +200,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
               { label: 'Choisir une proposition', value: '' },
               ...shuffle(choixListeDeroulante[1]),
             ])
-            this.typeDeQuestions[i] = 'operation'
             texteCorr = `Aire d'un rectangle =  ${texteEnCouleurEtGras('sa longueur')} $${miseEnEvidence('\\times')}$ ${texteEnCouleurEtGras('sa largeur')}`
             break
           case 6:
@@ -226,7 +220,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
               { label: 'Choisir une proposition', value: '' },
               ...shuffle(choixListeDeroulante[3]),
             ])
-            this.typeDeQuestions[i] = 'operation'
             texteCorr = `Aire d'un rectangle =  ${texteEnCouleurEtGras('L')} $${miseEnEvidence('\\times')}$ ${texteEnCouleurEtGras('l')}`
             break
         }
@@ -249,6 +242,26 @@ export default class FormulesAireCarreRectangle extends Exercice {
               choices: choixListeDeroulantePourCeCas[2],
             }) + '.'
           : '$\\ldots\\ldots\\ldots$'
+        if (this.interactif) {
+          handleAnswers(
+            this,
+            3 * i,
+            { reponse: { value: this.listeReponses[i][0] } },
+            { formatInteractif: 'liste-deroulante' },
+          )
+          handleAnswers(
+            this,
+            3 * i + 1,
+            { reponse: { value: this.listeReponses[i][1] } },
+            { formatInteractif: 'liste-deroulante' },
+          )
+          handleAnswers(
+            this,
+            3 * i + 2,
+            { reponse: { value: this.listeReponses[i][2] } },
+            { formatInteractif: 'liste-deroulante' },
+          )
+        }
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         if (i < 5) i++
@@ -256,106 +269,5 @@ export default class FormulesAireCarreRectangle extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
-  }
-
-  correctionInteractive = (i: number) => {
-    const select1 = document.querySelector(
-      `#liste-deroulanteEx${this.numeroExercice}Q${3 * i}`,
-    ) as HTMLSelectElement
-    const select2 = document.querySelector(
-      `#liste-deroulanteEx${this.numeroExercice}Q${3 * i + 1}`,
-    ) as HTMLSelectElement
-    const select3 = document.querySelector(
-      `#liste-deroulanteEx${this.numeroExercice}Q${3 * i + 2}`,
-    ) as HTMLSelectElement
-
-    if (this.answers === undefined) this.answers = {}
-    if (select1?.value)
-      this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i}`] =
-        select1.value
-    if (select2?.value)
-      this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 1}`] =
-        select2.value
-    if (select3?.value)
-      this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 2}`] =
-        select3.value
-    let isOk = false
-    let isOk1 = false
-    let isOk23 = false
-    let feedback = ''
-    if (
-      select1?.value != null &&
-      select2?.value != null &&
-      select3?.value != null
-    ) {
-      const choix1 = select1.value
-      const choix2 = select2.value
-      const choix3 = select3.value
-      if (this.typeDeQuestions[i] === 'mots') {
-        isOk1 = choix1 === this.listeReponses[i][0]
-        isOk23 =
-          (choix2 === this.listeReponses[i][1] &&
-            choix3 === this.listeReponses[i][2]) ||
-          (choix2 === this.listeReponses[i][2] &&
-            choix3 === this.listeReponses[i][1])
-        isOk = isOk1 && isOk23
-
-        if (!isOk1) {
-          const pronom = choix1[choix1.length - 1] === 't' ? 'au' : 'à la'
-          feedback = `Non, par définition, cette aire n'est pas égale ${pronom} ${choix1} de deux éléments.`
-        } else if (!isOk) {
-          feedback =
-            'Cette aire est bien un produit mais pas des éléments choisis.'
-        }
-      } else {
-        // operation
-        isOk1 = choix2 === this.listeReponses[i][1]
-        isOk23 =
-          (choix1 === this.listeReponses[i][0] &&
-            choix3 === this.listeReponses[i][2]) ||
-          (choix1 === this.listeReponses[i][2] &&
-            choix3 === this.listeReponses[i][0])
-        isOk = isOk1 && isOk23
-
-        if (!isOk1) {
-          const pronom = choix2[choix2.length - 1] === 't' ? 'au' : 'à la'
-          feedback = `Non, par définition, cette aire n'est pas égale ${pronom} ${choix2} de deux éléments.`
-        } else if (!isOk) {
-          feedback =
-            'Cette aire est bien un produit mais pas des éléments choisis.'
-        }
-      }
-    } else {
-      isOk = false
-    }
-    if (i < 6) {
-      // Pour éviter la création d'un champ impossible nb de questions > 6
-      const spanReponseLigne = document.querySelector(
-        `#resultatCheckEx${this.numeroExercice}Q${3 * i + 2}`,
-      )
-      if (spanReponseLigne == null)
-        window.notify(
-          `Pas trouvé le spanReponseLigne dans 6M25-3 pour i=${i}`,
-          {},
-        )
-      if (spanReponseLigne) {
-        if (isOk) {
-          spanReponseLigne.innerHTML = '😎'
-        } else {
-          spanReponseLigne.innerHTML = '☹️'
-        }
-      }
-
-      if (feedback !== '') {
-        const divFeedback = document.querySelector(
-          `div#feedbackEx${this.numeroExercice}Q${i}`,
-        )
-        if (divFeedback instanceof HTMLElement) {
-          divFeedback.innerHTML = feedback
-          divFeedback.style.display = 'block'
-        }
-      }
-    }
-    return isOk ? 'OK' : 'KO'
   }
 }
