@@ -142,7 +142,7 @@ function createAnimationConstructionRectangle(): Figure {
   const description = figure.create('TextByPosition', {
     anchor: 'bottomLeft',
     backgroundColor: 'white',
-    text: "Si un quarilatère non croisé a ses côtés opoosés deux à deux de même longueur alors c'est un parallélogramme.",
+    text: "Si un quarilatère non croisé a ses côtés opposés deux à deux de même longueur alors c'est un parallélogramme.",
     x: 10,
     y: 15,
   })
