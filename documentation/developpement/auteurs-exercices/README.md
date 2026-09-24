@@ -12,7 +12,8 @@ dans la [documentation de maintenance du moteur](../maintenance-moteur/README.md
 Suivez ces pages dans l'ordre pour un premier exercice.
 
 1. [Démarrer dans le dépôt](demarrage.md) : installer les outils, lancer
-   MathALÉA et créer une branche.
+   MathALÉA et créer une branche. Puis
+   [configurer son éditeur](configurer-son-editeur.md) (VSCode, débogage).
 2. [Créer un exercice](creer-un-exercice.md) : partir d'un exemple proche,
    déclarer les métadonnées et générer les questions et corrections.
 3. [Rédiger un exercice](rediger-un-exercice.md) : titre et consignes à
@@ -21,6 +22,8 @@ Suivez ces pages dans l'ordre pour un premier exercice.
    champ MathLive et enregistrer la réponse attendue.
 5. [Valider un exercice](valider-un-exercice.md) : contrôler les rendus et
    lancer les vérifications adaptées.
+6. [Partager son travail](partager-son-travail.md) : commit, push, merge
+   request, mise à jour de sa branche et conflits.
 
 Ce parcours suffit pour un exercice génératif classique avec une réponse
 mathématique simple.
@@ -31,6 +34,8 @@ mathématique simple.
 | ----------------------------------------------------- | --------------------------------------------------------------------- |
 | Proposer des réglages à l'enseignant                  | [Formulaires de paramétrage](complements/formulaires-parametres.md)   |
 | Utiliser un format interactif spécialisé              | [Formats interactifs spécialisés](complements/formats-interactifs.md) |
+| Choisir comment la réponse de l'élève est comparée    | [Options de comparaison](complements/options-de-comparaison.md)       |
+| Combiner des critères ou donner un score partiel      | [Checks composables](complements/checks-composables.md)               |
 | Enchaîner plusieurs custom elements dans une question | [Mathalea Couteau Suisse](complements/couteau-suisse.md)              |
 | Faire construire une courbe depuis un tableau         | [Traceur de courbe](complements/traceur-de-courbe.md)                 |
 | Créer un QCM                                          | [Coder un QCM](complements/coder-un-qcm.md)                           |
@@ -40,6 +45,9 @@ mathématique simple.
 | Utiliser Scratch                                      | [ScratchEditor](complements/scratch-editor.md)                        |
 | Utiliser le tableur                                   | [Tableur](complements/tableur.md)                                     |
 | Choisir une autre classe ou une génération avancée    | [Variantes d'exercices](complements/variantes-exercices.md)           |
+| Coder une question simple ou de Course aux nombres    | [Exercice simple](complements/exercice-simple.md)                     |
+| Faire construire une figure dynamique                 | [Géométrie dynamique apiGeom](complements/geometrie-dynamique-apigeom.md) |
+| Mettre en forme texte, couleurs et listes             | [Mise en forme](complements/mise-en-forme.md)                         |
 | Afficher ou calculer des objets mathématiques         | [Recettes mathématiques](mathematiques/README.md)                     |
 
 ## Quand passer au niveau moteur

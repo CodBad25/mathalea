@@ -123,7 +123,7 @@ Le bouton remplit le champ MathLive de la question avec `valeur` (par défaut
 
 Si une seule question de l'exercice appelle cette réponse, ajouter le bouton à
 **toutes** les questions : sinon il désigne la bonne réponse. Voir
-[2N41-7](../../../../src/exercices/2e/2N41-7.ts), [1AL21-41](../../../../src/exercices/1e/1AL21-41.ts)
+[2N41-2](../../../../src/exercices/2e/2N41-2.ts), [1AL21-41](../../../../src/exercices/1e/1AL21-41.ts)
 et [1AL21-42](../../../../src/exercices/1e/1AL21-42.ts).
 
 ## Champ texte simple
@@ -546,7 +546,58 @@ handleAnswers(
 )
 ```
 
-Le helper injecte un custom element `liste-deroulante`.
+Le helper injecte un custom element `liste-deroulante`. Il ne produit rien
+hors HTML ou sans interactivité : prévoir une alternative (voir plus bas).
+
+Chaque choix a une `value`, la chaîne renvoyée quand il est sélectionné et
+comparée à la réponse attendue. Préférer des valeurs courtes (`'Uni'`, `'Auc'`)
+aux libellés complets. L'affichage du choix est donné par l'une de ces clés :
+
+| Clé     | Affichage                                                         |
+| ------- | ----------------------------------------------------------------- |
+| `label` | texte, balises HTML acceptées (`'<strong>Important</strong>'`)    |
+| `latex` | formule rendue par MathLive (`'\\dfrac{1+\\sqrt{5}}{2}'`)         |
+| `svg`   | élément SVG, affiché en 20 × 20 px                                |
+| `image` | URL d'une image, affichée en 30 × 30 px (prévoir une image carrée) |
+
+Un choix peut aussi être une simple chaîne, qui sert alors d'affichage et de
+valeur.
+
+Par défaut (`choix0: false`), le premier choix n'est pas sélectionnable : c'est
+le texte affiché tant que l'élève n'a rien choisi, avec `value: ''`. Avec
+`choix0: true`, il devient un choix comme les autres et est sélectionné au
+départ : un élève qui ne répond pas donnerait alors une réponse, peut-être
+juste. Garder un premier choix inerte.
+
+### Alternative hors interactivité
+
+`listeDeroulanteToQcm()` transforme les choix en propositions de QCM, pour la
+sortie papier ou sans interactivité :
+
+```ts
+import {
+  choixDeroulant,
+  listeDeroulanteToQcm,
+} from '../../lib/customElements/ListeDeroulanteElement'
+import { propositionsQcm } from '../../lib/interactif/qcm'
+
+if (this.interactif && context.isHtml) {
+  texte += choixDeroulant(this, i, { choices })
+  handleAnswers(
+    this,
+    i,
+    { reponse: { value: bonneReponse } },
+    { formatInteractif: 'liste-deroulante' },
+  )
+} else {
+  listeDeroulanteToQcm(this, i, choices, bonneReponse, { vertical: true })
+  texte += propositionsQcm(this, i).texte
+}
+```
+
+`bonneReponse` doit être la `value` d'un des choix. Les choix de `value` vide
+sont ignorés. Options : `vertical` et `ordered` (vrais par défaut, pour garder
+l'ordre de la liste).
 
 ## Multi Mathfield
 
@@ -1213,6 +1264,35 @@ texteCorr += creerTableauSignesVariations(configCorrigee, {
 ```
 
 Ce helper déclare lui-même les données nécessaires à la vérification. Lire aussi `src/lib/interactif/tableauSignesVariations/DOCUMENTATION.md` avant de créer un nouveau tableau.
+
+## Calculatrice à touches cassées
+
+`addCalculator()` affiche une calculatrice dont certaines touches sont
+inutilisables ou utilisables un nombre limité de fois. L'élève doit obtenir la
+réponse attendue à l'écran ; c'est le dernier résultat affiché qui est
+comparé à `value`.
+
+```ts
+import { addCalculator } from '../../../lib/customElements/CalculatorElement'
+
+texte += addCalculator(this, i, {
+  brokenKeys: ['5', '*'],
+  limitedKeys: [{ key: '2', limit: 1 }],
+})
+handleAnswers(
+  this,
+  i,
+  { reponse: { value: reponse } },
+  { formatInteractif: 'my-calculator' },
+)
+```
+
+Les touches sont désignées par la valeur de leur bouton (tableau `buttons` de
+`CalculatorElement.ts`) : chiffres, `+`, `-`, `*`, `/`, `(`, `)`, `.`, `^2`…
+Hors HTML, une calculatrice statique est dessinée en LaTeX et en Typst, avec
+les touches cassées grisées. Des défis prêts à l'emploi sont dans
+`src/lib/calculatrice/defisCalculatriceCassee.ts`. Exemple :
+`src/exercices/can/6e/can6C67.ts`.
 
 ## Couteau suisse
 

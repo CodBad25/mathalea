@@ -130,7 +130,7 @@ $    Le this indique que ces paramétrages sont liés à l'objet Exercice.
     Conseil : Donc, ne pas décommenter tout de suite.
     this.formatChampTexte = KeyboardType.clavierDeBase // Format du champ de réponse + type de clavier virtuel de l'exercice.
     this.optionsChampTexte = { texteAvant: 'Pour écrire quelque chose avant le champ de réponse', texteApres: "ben, là, c'est après" }
-    // Type de fonction de comparaison utilisée. Voir wiki : https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Choisir-sa-fonction-de-comparaison-dans-handleAnwsers()#2-pour-comparer-des-nombres-entiers-d%C3%A9cimaux-et-pas-forc%C3%A9ment-fractionnaires-exclusivement-sous-leur-forme-num%C3%A9rique
+    // Type de fonction de comparaison utilisée. Voir documentation/developpement/auteurs-exercices/complements/options-de-comparaison.md
     this.optionsDeComparaison = { fractionEgale: true } // Option possible de la fonction de comparaison utilisée
   */
   }
@@ -195,7 +195,7 @@ $    Le this indique que ces paramétrages sont liés à l'objet Exercice.
     a = new Decimal(0.1).add(0.2)
     this.question += '<br>a vaut ' + a + ` et son affichage correspond bien au $${texNombre(a)}$`
 
-    Tous les "mots" à utiiser avec la class Decimal sont dans ce wiki : https://forge.aeif.fr/coopmaths/mathalea/-/wikis/Comment-g%C3%A9rer-des-nombres-d%C3%A9cimaux-%3F
+    Tous les "mots" à utiliser avec la classe Decimal sont dans documentation/developpement/auteurs-exercices/mathematiques/gerer-les-decimaux.md
     */
 
     /*

@@ -64,12 +64,15 @@ handleAnswers(
 `formatInteractif` est le formatInteractif de la question [voir la documentation des formats interactifs](complements/formats-interactifs.md)
 
 `value` reçoit la valeur que MathALÉA doit accepter. Le comparateur standard
-convient aux nombres et expressions courantes.
+convient aux nombres et expressions courantes. Attention au type : `value: 7`
+(nombre) n'accepte que le résultat `7`, alors que `value: '7'` (chaîne)
+accepte aussi `3+4`.
 
 Pour une fraction, une unité, une expression sous une forme précise ou une
-tolérance, consultez les
-[recettes mathématiques](mathematiques/README.md) puis la section de comparaison
-des [formats interactifs spécialisés](complements/formats-interactifs.md).
+tolérance, consultez
+[Choisir les options de comparaison](complements/options-de-comparaison.md).
+Pour combiner plusieurs critères ou donner un score partiel, consultez
+[Checks composables](complements/checks-composables.md).
 
 ## Exemple dans la boucle
 

@@ -42,7 +42,8 @@ pnpm dev
 
 La communauté de développeur autour de MathALEA est ouverte et prête à accompagner toutes les bonnes volontés intéressées pour améliorer l'outil.
 
-La documentation est disponible sur <https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/home>.
+La documentation développeur est disponible dans le dépôt : [documentation/README.md](documentation/README.md).
+La documentation destinée aux utilisateurs reste sur le [wiki](https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/home).
 Vous pouvez nous contacter à <contact@coopmaths.fr>.
 
 ## Reproduire les tests CI en local
@@ -55,4 +56,4 @@ Exemple en une ligne :
 CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:views
 ```
 
-Voir la documentation détaillée : [documentation/tests/ci-gitlab.md](documentation/tests/ci-gitlab.md#port-du-serveur-en-local-mode-ci)
+Voir la documentation détaillée : [documentation/tests/ci-gitlab.md](documentation/tests/ci-gitlab.md)

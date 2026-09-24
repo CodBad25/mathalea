@@ -1061,6 +1061,17 @@ export function estUniteManquante(saisie: string): boolean {
   return inputToGrandeur(cleaner(localInput)) === false
 }
 
+/**
+ * Lit une grandeur saisie dans MathLive (`3,5\operatorname{\mathrm{cm}}`, `20°C`…)
+ * avec le même nettoyage que l'option de comparaison `unite`.
+ * @return la grandeur, ou false si la saisie ne contient pas d'unité reconnaissable
+ */
+export function grandeurDepuisSaisie(saisie: string): Grandeur | false {
+  const localInput = saisie.replace('^\\circ', '°').replace('\\degree', '°')
+  const cleaner = generateCleaner(CLEANER_STEPS_UNITE)
+  return inputToGrandeur(cleaner(localInput))
+}
+
 function inputToGrandeur(input: string): Grandeur | false {
   if (input.indexOf('°C') > 0) {
     const split = input.split('°C')

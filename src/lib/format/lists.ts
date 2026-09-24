@@ -83,7 +83,7 @@ export function isDescriptionItem(
  * @param {number} startWith Numéro de départ pour les listes numérotées
  * @returns {string} chaîne représentant le code HTML ou LaTeX à afficher suivant la variable `context.isHtml`
  * @author sylvain, Jean-Léon Henry
- * @link https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Numérotation-et-listes
+ * @see documentation/developpement/auteurs-exercices/complements/mise-en-forme.md
  */
 export function createList(
   list: NestedList,
