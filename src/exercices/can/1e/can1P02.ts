@@ -68,7 +68,7 @@ export default class LectureProbabilite extends Exercice {
       pB = new Decimal(1).minus(pA)
       pAC = new Decimal(randint(1, 9) * 10 + randint(1, 9)).div(100)
       pBC = new Decimal(randint(1, 9) * 10 + randint(1, 9)).div(100)
-      while (pAC === pBC || pAC === new Decimal(1).minus(pBC)) {
+      while (pAC.equals(pBC) || pAC.equals(new Decimal(1).minus(pBC))) {
         pA = new Decimal(randint(1, 9, 5)).div(10)
 
         pB = new Decimal(1).minus(pA)
