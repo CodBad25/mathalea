@@ -1098,7 +1098,7 @@ class FractionEtendue {
           return `\\dfrac{${space + this.texFraction + space}}{${(f2.estEntiere ? space2 : space) + f2.texFraction + (f2.estEntiere ? space2 : space)}}=${this.texFraction}\\times ${f2.inverse().texFraction}=\\dfrac{${this.num + '\\times ' + ecritureParentheseSiNegatif(f2.den)}}{${this.den + '\\times ' + ecritureParentheseSiNegatif(f2.num)}}${
             simplification === 'none' || this.diviseFraction(f2).estIrreductible
               ? `=${new FractionEtendue(this.num * f2.den, this.den * f2.num).texFSD}`
-              : `=\\dfrac{${decompositionFacteursPremiers(this.num)}}{${decompositionFacteursPremiers(this.den)}\\times ${decompositionFacteursPremiers(f2.num)}}${this.diviseFraction(f2).texSimplificationAvecEtapes(simplification)}`
+              : `=\\dfrac{${decompositionFacteursPremiers(this.num)}\\times ${decompositionFacteursPremiers(f2.den)}}{${decompositionFacteursPremiers(this.den)}\\times ${decompositionFacteursPremiers(f2.num)}}${this.diviseFraction(f2).texSimplificationAvecEtapes(simplification)}`
           }`
         } else {
           return `${this.texFraction}\\div${f2.texFraction}=${this.texFraction}\\times ${f2.inverse().texFraction}=\\dfrac{${this.num + '\\times ' + f2.den}}{${this.den + '\\times ' + f2.num}}${
@@ -1243,8 +1243,8 @@ class FractionEtendue {
           listeDenvf.push([element, true])
         })
 
-        for (let index = 0; index < listeden.length; ) {
-          for (let j = 0; j <= listenum.length; ) {
+        for (let index = 0; index < listeden.length;) {
+          for (let j = 0; j <= listenum.length;) {
             if (listeden[index] === listenum[j]) {
               listeDenvf[index] = [listeden[index], false]
               listeNumvf[j] = [listenum[j], false]
