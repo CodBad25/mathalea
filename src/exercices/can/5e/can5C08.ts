@@ -1,4 +1,5 @@
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -23,7 +24,7 @@ export default class ProchainMultipleDeTroisOuDeNeuf extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-
+this.optionsChampTexte = { texteAvant: '<br>' }
     this.typeExercice = 'simple'
   }
 
@@ -49,7 +50,7 @@ export default class ProchainMultipleDeTroisOuDeNeuf extends ExerciceSimple {
         sommeA % 3 === 0
           ? `C'est un multiple de $3$ donc $${texNombre(a)}$ en est un et le prochain multiple de $3$ est $${texNombre(a + 3)}$<br>`
           : `C'est $${texNombre(a % 3)}$ de trop pour qu'il soit divisible par $3$, donc $${texNombre(a)}$ n'est pas un multiple de $3$ mais $${texNombre(a - (a % 3))}$ en est un et $${texNombre(this.reponse)}$ aussi.<br>`
-      this.correction += `Le prochain multiple de $3$ est donc : $${texNombre(this.reponse)}$.`
+      this.correction += `Le prochain multiple de $3$ est donc : $${miseEnEvidence(texNombre(this.reponse))}$.`
     } else {
       this.reponse = b + 9 - (b % 9)
       this.question = `Quel est le plus petit entier supérieur strictement à $${texNombre(b)}$ qui soit divisible par $9$ ?`
@@ -58,7 +59,7 @@ export default class ProchainMultipleDeTroisOuDeNeuf extends ExerciceSimple {
         sommeB % 9 === 0
           ? `C'est un multiple de $9$ donc $${texNombre(b)}$ en est un et le prochain multiple de $9$ est $${texNombre(b + 9)}$<br>`
           : `C'est $${texNombre(b % 9)}$ de trop pour qu'il soit divisible par $9$, donc $${texNombre(b)}$ n'est pas un multiple de $9$ mais $${texNombre(b - (b % 9))}$ en est un et $${texNombre(this.reponse)}$ aussi.<br>`
-      this.correction += `Le prochain multiple de $9$ est donc : $${texNombre(this.reponse)}$.`
+      this.correction += `Le prochain multiple de $9$ est donc : $${miseEnEvidence(texNombre(this.reponse))}$.`
     }
   }
 }
