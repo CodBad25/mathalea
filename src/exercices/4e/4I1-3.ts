@@ -38,6 +38,6 @@ export default class ExerciceTableurVocabulaire4e extends ExerciceTableurVocabul
     ]
 
     this.niveau = 4
-    this.sup2 = 5
+    this.sup2 = 1
   }
 }
