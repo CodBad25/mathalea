@@ -2,6 +2,7 @@ import {
   choixDeroulant,
   type AllChoicesType,
 } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -9,7 +10,6 @@ import {
   shuffle,
 } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -195,7 +195,7 @@ export default class EgalitesUnitesAires extends Exercice {
         texte += ' 10 $\\times$ '
         texte += this.interactif
           ? choixDeroulant(this, 4 * i + 2, {
-              choices: choixListeDeroulantePourUnite,
+              choices: choixListeDeroulantePourCoefficient,
             })
           : '$\\ldots\\ldots\\ldots$'
         texteCorr += `10 $\\times$ ${texteEnCouleurEtGras('10')}`
@@ -220,6 +220,22 @@ export default class EgalitesUnitesAires extends Exercice {
 
       if (this.questionJamaisPosee(i, unite)) {
         texte += ajouteFeedback(this, i)
+        if (this.interactif) {
+          for (let j = 0; j < 4; j++) {
+            handleAnswers(
+              this,
+              4 * i + j,
+              {
+                reponse: {
+                  value: this.listeReponses[i][j]
+                    .replace('$\\text{', '')
+                    .replace('}$', ''),
+                },
+              },
+              { formatInteractif: 'liste-deroulante' },
+            )
+          }
+        }
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         i++
@@ -230,58 +246,6 @@ export default class EgalitesUnitesAires extends Exercice {
     listeQuestionsToContenu(this)
     // MGU : parfois pas assez de questions par rapport à la demande donc on corrige
     this.nbQuestions = this.listeQuestions.length
-    // Même si ca sert à rien ici car custom
     this.autoCorrection.length = this.nbQuestions * 4
-  }
-
-  correctionInteractive = (i: number) => {
-    const select = []
-    for (let j = 0; j < 4; j++) {
-      const questionIndex = 4 * i + j
-      if (this.answers === undefined) this.answers = {}
-      const liste = document.querySelector(
-        `#liste-deroulanteEx${this.numeroExercice}Q${questionIndex}`,
-      ) as (HTMLElement & { value?: string }) | null
-
-      const value = liste?.value
-      this.answers[
-        `liste-deroulanteEx${this.numeroExercice}Q${questionIndex}`
-      ] = value ?? ''
-      if (value == null) {
-        window.notify(
-          `Liste déroulante introuvable pour la question ${questionIndex} de l'exercice ${this.id}`,
-          { exercice: this.id, questionIndex },
-        )
-        return 'KO'
-      }
-      select.push(value)
-    }
-
-    let isOk = true
-    for (let j = 0; j < 4; j++) {
-      isOk &&=
-        select[j] ===
-        this.listeReponses[i][j].replace('$\\text{', '').replace('}$', '')
-    }
-
-    // const spanReponseLigne = document.querySelector(`#resultatCheckEx${this.numeroExercice}Q${4 * i + 3}`)
-    const spanReponseLigne = document.querySelector(
-      `li#exercice${this.numeroExercice}Q${i}`,
-    )
-
-    if (spanReponseLigne == null)
-      window.notify(
-        `Pas trouvé le spanReponseLigne li#exercice${this.numeroExercice}Q${i}`,
-        {},
-      )
-    if (spanReponseLigne) {
-      if (isOk) {
-        spanReponseLigne.innerHTML += sp(2) + '😎'
-      } else {
-        spanReponseLigne.innerHTML += sp(2) + '☹️'
-      }
-    }
-
-    return isOk ? 'OK' : 'KO'
   }
 }
