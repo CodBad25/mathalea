@@ -1,9 +1,10 @@
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { numAlphaNum } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
@@ -53,6 +54,7 @@ export default class ProportionsEntreprise extends Exercice {
     this.spacingCorr = 2
     this.sup = false
     this.besoinFormulaireCaseACocher = ['Version QCM', false]
+    this.nbQuestionsModifiable = false
   }
 
   nouvelleVersion() {
@@ -197,20 +199,29 @@ export default class ProportionsEntreprise extends Exercice {
       this.listeCorrections[1] = correctionQuestion2
     } else if (this.interactif) {
       this.nbQuestions = 1
-      texte += `<br><br>Proportion des ${contexte.categorie1} : `
-      texte += ajouteChampTexteMathLive(this, 0, KeyboardType.clavierDeBase, {
-        texteApres: '$\\,\\%$',
-      })
-      texte += `<br>Proportion des ${contexte.categorie3} en pourcentage : `
-      texte += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase, {
-        texteApres: '$\\,\\%$',
-      })
-      handleAnswers(this, 0, {
-        reponse: { value: pourcentageCategorie1 },
-      })
-      handleAnswers(this, 1, {
-        reponse: { value: pourcentageCategorie3 },
-      })
+      texte = `${introduction}<br><br>${addMultiMathfield(this, 0, {
+        dataTemplate: `${numAlphaNum(0)} On compte $${effectifCategorie1}$ ${contexte.categorie1}. Calculer la proportion des ${contexte.categorie1} parmi les ${contexte.totalLabel}. On donnera le résultat sous forme de pourcentage. %{champ1}<br>
+        ${numAlphaNum(1)} La proportion de ${contexte.categorie2} est égale à $${proportionCategorie2.texFraction}$. Déterminer la proportion des ${contexte.categorie3}. On donnera le résultat sous forme d'un pourcentage. %{champ2}`,
+        dataOptions: {
+          champ1: {
+            keyboard: KeyboardType.clavierDeBase,
+            texteApres: '$\\,\\%$',
+          },
+          champ2: {
+            keyboard: KeyboardType.clavierDeBase,
+            texteApres: '$\\,\\%$',
+          },
+        },
+      })}`
+      handleAnswers(
+        this,
+        0,
+        {
+          champ1: { value: pourcentageCategorie1 },
+          champ2: { value: pourcentageCategorie3 },
+        },
+        { formatInteractif: 'multi-mathfield' },
+      )
       this.listeQuestions[0] = texte
       this.listeCorrections[0] = correction
     } else {
