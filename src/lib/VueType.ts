@@ -32,6 +32,7 @@ const VueTypeArray = <const>[
   'quizz',
   'omr',
   'check-test',
+  'relecture',
   '',
 ]
 type VueTypeArrayType = typeof VueTypeArray

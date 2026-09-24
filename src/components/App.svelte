@@ -48,6 +48,7 @@
   import { decodeQuizzParams } from '../lib/quizz/quizzParams'
   import type { InterfaceGlobalOptions } from '../lib/types'
   import CheckTest from './devtools/CheckTest.svelte'
+  import Relecture from './setup/relecture/Relecture.svelte'
   import CapytaleConnectionLostModal from './shared/modal/CapytaleConnectionLostModal.svelte'
   import Popup from './shared/modal/Popup.svelte'
 
@@ -292,6 +293,8 @@
     {/if}
   {:else if $globalOptions.v === 'check-test'}
     <CheckTest />
+  {:else if $globalOptions.v === 'relecture'}
+    <Relecture />
   {:else if $globalOptions.v !== undefined}
     <Start />
   {/if}
