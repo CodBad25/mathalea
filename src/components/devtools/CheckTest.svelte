@@ -390,64 +390,10 @@
   }
 
   const DOC_BASE =
-    'https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Systeme-de-comparaison-interactif'
+    'https://forge.apps.education.fr/coopmaths/mathalea/-/blob/main/documentation/developpement/auteurs-exercices/complements/checks-composables.md'
 
-  const CHECK_DOC_ANCHOR: Partial<Record<CheckKind, string>> = {
-    // Egalite
-    isEqual: '#equals--égalité-mathématique',
-    // Meme objet
-    sameWithUnit: '#samewithunit-même-grandeur-avec-unité',
-    sameCoordinates: '#samecoordinates-mêmes-coordonnées',
-    sameInterval: '#sameinterval-même-intervalle',
-    sameDuration: '#sameduration-même-durée',
-    sameNumberTuple: '#samenumbertuple-même-tuple-de-nombres',
-    sameNumberList: '#samenumberlist-même-liste-de-nombres-non-ordonnée',
-    sameOrderedNumberList:
-      '#sameorderednumberlist-même-liste-de-nombres-ordonnée',
-    sameSet: '#setequality--égalité-d’ensembles-en-extension',
-    sameIntegerProgressionSet:
-      '#sameintegerprogressionset--même-ensemble-décrit-par-une-progression',
-    sameParametricLine:
-      '#sameparametricline--même-droite-en-représentation-paramétrique',
-    // Reduction / forme imposee
-    isReduced: '#isreduced--expression-réduite',
-    noTrivialFactor: '#notrivialfactor--pas-de-facteur-trivial',
-    noNumericComputation: '#nonumericcomputation--pas-de-calcul-non-effectué',
-    termsGrouped: '#termsgrouped--termes-semblables-regroupés',
-    isDistributed: '#distributed--produit-développé',
-    onlyIrreducibleFractions: '#irreduciblefractions--fractions-irréductibles',
-    fractionReducedFromExpected:
-      '#fractionreducedfromexpected--fraction-réduite-par-rapport-à-la-réponse-attendue',
-    noSquareRootInDenominator:
-      '#nosquarerootindenominator--pas-de-racine-carrée-au-dénominateur',
-    noDecimal: '#nodecimal--pas-d’écriture-décimale',
-    extractedRadicands: '#extractedradicands--racines-simplifiées',
-    coordinatesReduced: '#coordinatesreduced-coordonnées-réduites',
-    intervalBoundsReduced: '#intervalboundsreduced-bornes-dintervalle-réduites',
-    // Texte / motif
-    stringEquals: '#stringequals--comparaison-textuelle-exacte',
-    contains: '#containspattern--la-saisie-contient-un-motif',
-    doesNotContain:
-      '#doesnotcontainpattern--la-saisie-ne-contient-pas-un-motif',
-    // Type d’ecriture
-    isFraction: '#isfraction-la-saisie-est-une-fraction',
-    isDecimalFraction: '#isdecimalfraction-la-saisie-est-une-fraction-décimale',
-    onlyDecimalNumbers: '#isdecimalnumber-la-saisie-est-un-nombre-décimal',
-    isScientificNotation:
-      '#isscientificnotation-la-saisie-est-en-notation-scientifique',
-    isPowerForm: '#ispowerform-la-saisie-est-une-puissance',
-    hasGroupedNumberSpacing:
-      '#hasgroupednumberspacing-espacement-des-chiffres-par-groupes-de-3',
-    noTrigonometry: '#notrigonometry-refuse-les-fonctions-trigonométriques',
-    // Equations
-    isEquation: '#isequation-la-saisie-est-une-équation',
-    isEquivalentEquation: '#isequivalentequation-équations-équivalentes',
-    hasZeroMember: '#haszeromember-membre-nul-dans-léquation',
-    // Appartenance / parametrage
-    valueInInterval: '#valueininterval-valeur-dans-un-intervalle',
-    singleParameterVariable:
-      '#singleparametervariable--variable-de-paramétrage-unique',
-  }
+  // Chaque check est documenté sous un titre portant son nom exact.
+  const checkDocAnchor = (kind: CheckKind) => `#${kind.toLowerCase()}`
 
   type CheckGroup = {
     title: string
@@ -1645,7 +1591,7 @@
                   </p>
                   <div class="flex flex-wrap gap-2">
                     {#each group.checks as kind}
-                      {@const anchor = CHECK_DOC_ANCHOR[kind]}
+                      {@const anchor = checkDocAnchor(kind)}
                       <div
                         role="group"
                         class="flex items-stretch rounded-lg border border-coopmaths-action dark:border-coopmathsdark-action overflow-hidden"

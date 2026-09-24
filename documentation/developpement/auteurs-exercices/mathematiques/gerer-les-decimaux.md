@@ -159,7 +159,7 @@ handleAnswers(this, i, {
 })
 ```
 
-`handleAnswers()` sait convertir des valeurs métier comme `Decimal`, `FractionEtendue`, `Grandeur`, `Hms`, `Complexe` et `number` avant comparaison. Sans option explicite, une valeur numériquement valide reçoit déjà `nombreDecimalSeulement`, mais l'option explicite rend l'intention visible dans le code.
+`handleAnswers()` sait convertir des valeurs métier comme `Decimal`, `FractionEtendue`, `Grandeur`, `Hms`, `Complexe` et `number` avant comparaison. Sans option explicite, une valeur `number` ou `Decimal` dont l'écriture est un nombre reçoit déjà `nombreDecimalSeulement` ; une chaîne comme `'0.8'` n'en reçoit pas et accepte alors tout calcul égal. L'option explicite rend l'intention visible dans le code (voir [Choisir les options de comparaison](../complements/options-de-comparaison.md#sans-option--attention-au-type-de-value)).
 
 Si l'élève doit saisir un calcul équivalent, ne pas utiliser seulement `nombreDecimalSeulement` :
 

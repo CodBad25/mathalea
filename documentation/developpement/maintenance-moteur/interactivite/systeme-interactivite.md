@@ -100,7 +100,7 @@ Les clés de `reponses` dépendent du format :
 | `feedback`                      | Fonction de feedback global                                                                                                                                                  |
 | `callback`                      | Vérification personnalisée avec score détaillé, utilisée par certains formats historiques ou par des helpers spécialisés quand le comportement champ par champ ne suffit pas |
 
-Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, une réponse numériquement valide reçoit automatiquement l'option `nombreDecimalSeulement`.
+Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, `handleDefaultValeur()` ajoute l'option `nombreDecimalSeulement` quand la valeur convertie est un nombre écrit en chiffres ; une `value` fournie directement en chaîne est laissée sans option et accepte donc tout calcul égal.
 
 ## Pipeline de vérification
 
@@ -438,9 +438,9 @@ Un cas particulier subsiste :
 
 ## Comparateurs
 
-`fonctionComparaison()` centralise la comparaison des réponses MathLive. Elle applique des nettoyages de saisie, puis active des comportements via `options` : fractions, unités, intervalles, textes avec ou sans casse, coordonnées, suites, ensembles, écriture scientifique, factorisation, puissances, calcul formel, etc.
+`fonctionComparaison()` centralise la comparaison des réponses MathLive. Elle applique des nettoyages de saisie (`generateCleaner()` dans `src/lib/interactif/cleaners.ts`), puis active des comportements via `options` : fractions, unités, intervalles, textes avec ou sans casse, coordonnées, suites, ensembles, écriture scientifique, factorisation, puissances, calcul formel, etc. Les options sont testées dans un ordre fixe et la première reconnue détermine la comparaison. Le guide [Choisir les options de comparaison](../../auteurs-exercices/complements/options-de-comparaison.md) décrit chaque option avec des exemples vérifiés.
 
-Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, `src/lib/interactif/checks/` fournit un système de checks composables. Les checks ne remplacent pas `fonctionComparaison()` ; ils la réutilisent notamment via les adaptateurs.
+Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, `src/lib/interactif/checks/` fournit un système de checks composables, documenté dans [Checks composables](../../auteurs-exercices/complements/checks-composables.md). Les checks ne remplacent pas `fonctionComparaison()` ; ils la réutilisent notamment via l'adaptateur `fromOptions()`. Un comparateur `all()` ou `seq()` renvoie un `score` entre 0 et 1, que `verifySingleMathLiveField()` utilise comme nombre de points du champ.
 
 ## Fichiers clefs
 

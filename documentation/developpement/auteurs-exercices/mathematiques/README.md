@@ -15,6 +15,7 @@ pour les contrats des classes, modules et points d'entrée.
 | Manipuler une durée, un horaire, une mesure avec unité ou accepter plusieurs unités équivalentes en interactivité | [Gérer des durées et des grandeurs](durees-et-grandeurs.md) | Oriente vers `Hms`, `Grandeur` et l'option interactive `unite`. |
 | Dessiner une figure, régler une fenêtre `mathalea2d()`, styliser des objets 2D, aligner le rendu TikZ ou construire un repère | [Géométrie 2D](geometrie-2d.md) | Rappelle les choix pratiques pour des figures lisibles en HTML et en export LaTeX. |
 | Étudier une fonction, tracer une courbe par noeuds, construire un tableau de signes ou de variations | [Fonctions, splines et tableaux](fonctions-et-tableaux.md) | Oriente vers `Spline` et les helpers de `src/lib/mathFonctions/etudeFonction.ts`. |
+| Calculer des indicateurs statistiques, tracer une boîte à moustaches ou un diagramme | [Statistiques](statistiques.md) | Présente la classe `Stat` et sa définition des quartiles. |
 
 ## Ordre recommandé
 

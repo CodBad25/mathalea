@@ -335,7 +335,7 @@ export function normalizeLegacySetReponseValueForAMC(
  * @param {any} valeurs Attention à ce que vous mettez ici : ça doit être en accord avec le formatInteractif ! pas de texNombre ou de stringNombre !
  * @param {ReponseParams} params
  * @deprecated Dans la mesure du possible, utiliser handleAnswers après avoir consulter la doc
- * @see https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Rendre-un-exercice-interactif
+ * @see documentation/developpement/auteurs-exercices/interactivite-simple.md
  */
 export function setReponse(
   exercice: IExercice,
