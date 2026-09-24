@@ -34,7 +34,7 @@ this.optionsChampTexte = { texteAvant: '<br>' }
     const d = c * a + b
     this.question = `Quel est le reste de la division de $${d}$ par $${a}$ ?`
     this.correction = `$${d}=${a} \\times ${c} + ${b}$ avec $${b}<${a}$ donc le reste de la division de $${d}$ 
-    par $${a}$ est $${miseEnEvidence(b)}$.<br>this.optionsChampTexte = { texteAvant: '<br>' }`
+    par $${a}$ est $${miseEnEvidence(b)}$.<br>`
     this.correction += texteEnCouleur(`Mentalement : <br>
     On cherche le plus grand multiple de $${a}$ inférieur à $${d}$. C'est $${a} \\times ${c}=${a * c}$.<br>
     Comme $${d}=${a * c}+${b}$, on en déduit que le reste de la division euclidienne de $${d}$ par $${a}$ est  $${b}$.`,

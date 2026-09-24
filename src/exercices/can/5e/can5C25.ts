@@ -2,6 +2,8 @@ import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const interactifReady = true
@@ -58,7 +60,7 @@ export default class AdditionRelatifCAN extends ExerciceSimple {
       ' + ' +
       ecritureNombreRelatifc(b) +
       ' = ' +
-      ecritureNombreRelatifc(a + b) +
+      miseEnEvidence(texNombre(a + b, 0)) +
       ' $'
     this.reponse = a + b
   }
