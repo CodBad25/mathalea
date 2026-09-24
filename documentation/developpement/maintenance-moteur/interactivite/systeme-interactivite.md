@@ -362,6 +362,32 @@ Les paramètres d'un exercice affiché en interactif proposent un réglage « Ba
 - il est appliqué au moment de l'affichage du score par `afficheScore()`, qui multiplie la note obtenue **et** la note maximale : un 3/5 avec un coefficient 2 devient 6/10, dans la vue prof comme dans la vue élève et dans ce qui est transmis au LMS (`numberOfPoints` / `numberOfQuestions`) ;
 - la vue Course aux nombres a son propre calcul de score (`gestionCan.ts`) et n'est pas concernée.
 
+### Stabilité du barème face au tirage aléatoire
+
+Le barème maximum d'un exercice interactif ne doit **jamais** dépendre du
+tirage aléatoire (seed, ou paramètres tirés au sort qui changent le nombre de
+champs de réponse). `pointsMaxExercice()` (voir ci-dessus) est recalculé
+*a posteriori*, une fois l'énoncé généré : rien n'empêche ce total de varier
+d'un élève à l'autre si l'énoncé lui-même varie en nombre de champs. Un
+dénominateur instable casse les remontées de score vers les recorders
+externes (Capytale, Moodle), qui affichent/enregistrent un barème maximum
+figé pour un exercice donné.
+
+Piège typique : un exercice qui tire au sort, parmi une liste, un ou
+plusieurs sous-problèmes dont le nombre de champs de réponse interactifs
+diffère de l'un à l'autre (par exemple un sous-problème corrigé en
+`toutAUnPoint` avec 5 champs, un autre avec 1 seul). Le total de points
+maximum de l'exercice change alors selon le tirage.
+
+Solution : ramener chaque question tirée sur un nombre de points fixe,
+indépendant de son nombre de champs, avec `troisPointsProportionnels`
+(`fonctionsBaremes.ts`) — ou une fonction de barème équivalente qui arrondit
+la proportion de bonnes réponses sur un total fixe — plutôt que
+`toutAUnPoint`, dont le maximum est égal au nombre de champs. Voir
+`src/exercices/enigmes-jeux/EN-monnaie.ts`, `EN-zeros.ts` et
+`EN-gratte-ciel.ts`, qui affectent cette fonction à `objetReponse.bareme`
+avant d'appeler `handleAnswers()`.
+
 Tests : `tests/unit/baremeExercice.test.ts`.
 
 ## Affichage des réponses élèves dans les corrections CAN

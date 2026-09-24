@@ -121,7 +121,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
   }
 
   nouvelleVersion(): void {
-    let choixThisSup = this.sup
+    let choixThisSup = String(this.sup)
     if (this.niveau === 6) {
       const map: Record<string, string> = {
         '6': '10',
