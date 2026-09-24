@@ -20,7 +20,9 @@ export class ElementButtonInstrumenpoche extends HTMLElement {
     const id = this.getAttribute('id') ?? ''
     const xml = StoreIep.getXml(id)
     const divIep = document.createElement('div')
-    divIep.classList.add('max-w-xl')
+    // En `em` et non en `rem` : le zoom de la page agrandit la police du
+    // conteneur de l'exercice, donc aussi le lecteur et son animation.
+    divIep.style.maxWidth = '36em'
     const button = document.createElement('button')
     divIep.style.display = 'none'
     button.innerText = "Montrer l'animation"

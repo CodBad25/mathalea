@@ -309,9 +309,47 @@ this.dispatchEvent(
 
 `ExerciceMathaleaVueProf` écoute cet événement sur l'`<article>` de l'énoncé et
 le traite avec `handleNewSettings()`. Ne pas écrire directement dans
-`exercicesParams` : l'exercice ne serait pas régénéré. Exemple :
-`questions-de-cours-selecteur`, voir
+`exercicesParams` : l'exercice ne serait pas régénéré. La vue TBI
+(`TbiExerciceCard`) écoute aussi cet événement sur l'`<article>` de chaque
+carte. Exemple : `questions-de-cours-selecteur`, voir
 [Questions de cours](../architecture/questions-de-cours.md).
+
+Un tel composant est détruit puis recréé à chaque régénération. Pour qu'un champ
+de saisie garde le focus :
+
+- mémoriser le champ actif dans une `Map` de module, indexée par numéro
+  d'exercice (`focusin`), et le vider quand le focus sort du composant
+  (`focusout`) pour ne pas le reprendre après un clic ailleurs ;
+- émettre `settings` dans un `setTimeout` : le `change` d'un champ part avant
+  que Tab ne déplace le focus, et la régénération, lancée en microtâche,
+  remplacerait l'élément avant que le champ suivant ne soit noté ;
+- valider aussi la saisie sur Entrée (`keydown`), le `change` n'y étant pas
+  toujours émis dans l'énoncé.
+
+Exemple : `construction-triangle-selecteur`
+(`ConstructionTriangleSelecteur.ts`, exercice P011). L'enseignant choisit une
+construction de triangle, puis complète une figure à main levée avec les noms
+des sommets et les mesures. La figure est tracée avec roughjs, comme l'option
+`mainlevee` de `mathalea2d`, mais avec une graine fixe (le rendu ne consomme
+pas la graine de l'exercice) ; chaque côté passe par des points légèrement
+décalés pour l'effet de main qui tremble, et s'arrête exactement aux sommets.
+Les champs, sans cadre (`STYLE_CHAMP_DISCRET`), sont posés en position absolue
+par-dessus le SVG, à quelques unités du dessin : leur taille réelle, convertie
+dans le repère du SVG, donne la distance minimale au trait le plus proche
+(côté, arc d'angle, traits d'égalité). Un `ResizeObserver` sur la figure et sur
+chaque champ refait ce calcul quand le zoom, les polices ou la saisie changent
+leur taille ; les champs de mesure prennent la largeur de leur valeur ; le select reprend `SelectUnique.svelte`
+(`STYLE_SELECT_SANS_FOND`). Il est proposé en vue prof et en vue TBI.
+
+Toutes ses tailles sont en `em`, y compris la police des champs (`text-[1em]`,
+sinon un champ de formulaire garde sa taille en `rem`) : le zoom de la page
+agrandit la police du conteneur de l'exercice (`resizeContent()`), le composant
+suit donc le zoom. Le lecteur Instrumenpoche du bouton « Montrer l'animation »
+(`ElementButtonInstrumenpoche`) a de même une largeur maximale de `36em` : son
+SVG occupe toute cette largeur, l'animation grossit avec le zoom. Les réglages restent stockés dans `sup` (construction), `sup2` (nom)
+et `sup3` (mesures séparées par des espaces), ce qui garde valides les liens
+déjà partagés. Hors vue enseignante (vue élève notamment), l'exercice affiche
+la figure `mathalea2d` et le bouton de l'animation.
 
 Pour remplacer un écouteur global `exercicesAffiches` qui ne sert qu'à attendre
 que le HTML d'un exercice soit dans le DOM, utiliser `mathalea-dom-ready`. Le
@@ -352,7 +390,6 @@ Les composants qui font remplir un damier de chiffres (`kenken-grille`,
   déclare ces clés que jusqu'à `L3C5`, une grille plus grande doit donc les
   ajouter une à une (voir `EN-gratte-ciel`, `EN-kenken`, `EN-grimuku`).
 
-<<<<<<< documentation/developpement/maintenance-moteur/interactivite/custom-elements.md
 Un composant dont les cases n'attendent pas un chiffre isolé n'emprunte que le
 barème et les clés de réponse. `pyramide-nombres` (voir `EN-pyramide`) est dans
 ce cas : ses cases attendent un entier relatif, éventuellement à plusieurs
