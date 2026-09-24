@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -40,7 +41,7 @@ En factorisant par ce nombre, on obtient : <br>
 $\\begin{aligned}
 ${texNombre(b)}\\times${texNombre(a)} + ${texNombre(a)}\\times${c}&=${texNombre(a)}\\underbrace{(${texNombre(b)}+${texNombre(c)})}_{=100}\\\\
 &=${texNombre(a)}\\times 100\\\\
-&=${texNombre(100 * a)}
+&=${miseEnEvidence(texNombre(100 * a))}
 \\end{aligned}$`
         this.reponse = arrondi(100 * a)
         break
@@ -56,7 +57,7 @@ ${texNombre(b)}\\times${texNombre(a)} + ${texNombre(a)}\\times${c}&=${texNombre(
         $\\begin{aligned}
         ${texNombre(b)}\\times${texNombre(a)} + ${texNombre(c)}\\times${texNombre(a)}&=${texNombre(a)}\\underbrace{(${texNombre(b)}+${texNombre(c)})}_{=10}\\\\
         &=${texNombre(a)}\\times 10\\\\
-        &=${texNombre(10 * a)}
+        &=${miseEnEvidence(texNombre(10 * a))}
         \\end{aligned}$`
         this.reponse = arrondi(10 * a)
         break
@@ -73,7 +74,7 @@ ${texNombre(b)}\\times${texNombre(a)} + ${texNombre(a)}\\times${c}&=${texNombre(
 $\\begin{aligned}
 ${texNombre(a)}\\times ${texNombre(b)}+${texNombre(a)}\\times ${texNombre(c)}&=${texNombre(a)}\\underbrace{(${texNombre(b)}+${texNombre(c)})}_{=${d}}\\\\
 &=${texNombre(a)}\\times ${d}\\\\
-&=${texNombre(d * a)}
+&=${miseEnEvidence(texNombre(d * a))}
 \\end{aligned}$`
         this.reponse = arrondi(d * a)
         break
@@ -88,7 +89,7 @@ ${texNombre(a)}\\times ${texNombre(b)}+${texNombre(a)}\\times ${texNombre(c)}&=$
             $\\begin{aligned}
             ${texNombre(b)}\\times${texNombre(a)} + ${texNombre(c)}\\times${texNombre(a)}&=${texNombre(a)}\\underbrace{(${texNombre(b)}+${texNombre(c)})}_{=10}\\\\
             &=${texNombre(a)}\\times 10\\\\
-            &=${texNombre(10 * a)}
+            &=${miseEnEvidence(texNombre(10 * a))}
             \\end{aligned}$`
         this.reponse = arrondi(10 * a)
         break
@@ -103,7 +104,7 @@ ${texNombre(a)}\\times ${texNombre(b)}+${texNombre(a)}\\times ${texNombre(c)}&=$
             $\\begin{aligned}
             ${texNombre(a)}\\times${texNombre(b)}+ ${texNombre(c)}\\times${texNombre(a)}&=${texNombre(a)}\\underbrace{(${texNombre(b)}+${texNombre(c)})}_{=5}\\\\
             &=${texNombre(a)}\\times 5\\\\
-            &=${texNombre(5 * a)}
+            &=${miseEnEvidence(texNombre(5 * a))}
             \\end{aligned}$`
         this.reponse = arrondi(5 * a)
         break

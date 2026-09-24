@@ -1,5 +1,6 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleur } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Rechercher un nombre à ajouter'
@@ -32,12 +33,13 @@ export default class NombreATrouver extends ExerciceSimple {
     this.question = `Quel nombre doit-on ajouter à $${a}$ pour obtenir $${c}$ ?
     `
     this.correction = `Le nombre $n$ à ajouter vérifie $${a}+n=${c}$, soit
-    $n=${c}-${ecritureParentheseSiNegatif(a)}=${c - a}$. <br>
+    $n=${c}-${ecritureParentheseSiNegatif(a)}=${miseEnEvidence(c - a)}$. <br>
     `
     this.correction += texteEnCouleur(` Mentalement : <br>
     Le nombre cherché est négatif car le résultat est plus petit que le nombre de départ. <br>
 L'"écart" entre les deux nombres est $${abs(c - a)}$. Il faut donc ajouter $${c - a}$.
-`)
+`,
+          bleuMathalea,)
     this.reponse = c - a
   }
 }

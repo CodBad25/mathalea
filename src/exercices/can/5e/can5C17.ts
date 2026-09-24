@@ -1,4 +1,5 @@
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { fraction } from '../../../modules/fractions'
 import { randint } from '../../../modules/outils'
@@ -37,7 +38,7 @@ export default class EntierPlusFractionVersDecimal extends ExerciceSimple {
         a = randint(1, 4)
         resultat = a + b / c
         this.question = `Quelle est la valeur décimale de  $${a}+${maFraction.texFraction}$ ?`
-        this.correction = `$${a}+${maFraction.texFraction} = ${a} + ${texNombre(maFraction.valeurDecimale)}= ${texNombre(resultat)}$`
+        this.correction = `$${a}+${maFraction.texFraction} = ${a} + ${texNombre(maFraction.valeurDecimale)}= ${miseEnEvidence(texNombre(resultat))}$`
         this.reponse = resultat
         break
 
@@ -50,7 +51,7 @@ export default class EntierPlusFractionVersDecimal extends ExerciceSimple {
 
         this.question = `Quelle est la valeur décimale de $${a}+${maFraction.texFraction}$ ?
         `
-        this.correction = `$${a}+${maFraction.texFraction} = ${texNombre(resultat)}$`
+        this.correction = `$${a}+${maFraction.texFraction} = ${miseEnEvidence(texNombre(resultat))}$`
         this.reponse = resultat
         break
       case 3: // addition entier et fraction avec den =100 et 1000
@@ -62,7 +63,7 @@ export default class EntierPlusFractionVersDecimal extends ExerciceSimple {
         resultat = a + b / 100 + c / 1000
         this.question = `Quelle est la valeur décimale de $${a}+${maFraction.texFraction}+${maFraction2.texFraction}$ ?
        `
-        this.correction = `$${a}+${maFraction.texFraction}+${maFraction2.texFraction}=${a}+${texNombre(b / 100)}+${texNombre(c / 1000)}=${texNombre(resultat)}$.`
+        this.correction = `$${a}+${maFraction.texFraction}+${maFraction2.texFraction}=${a}+${texNombre(b / 100)}+${texNombre(c / 1000)}=${miseEnEvidence(texNombre(resultat))}$`
         this.reponse = resultat
         break
       case 4: // addition entier et fraction avec den =1000 et 100
@@ -74,7 +75,7 @@ export default class EntierPlusFractionVersDecimal extends ExerciceSimple {
         resultat = a + b / 1000 + c / 100
         this.question = `Quelle est la valeur décimale de $${a}+${maFraction.texFraction}+${maFraction2.texFraction}$ ?
         `
-        this.correction = `$${a}+${maFraction.texFraction}+${maFraction2.texFraction}=${a}+${texNombre(b / 1000)}+${texNombre(c / 100)}=${texNombre(resultat)}$.`
+        this.correction = `$${a}+${maFraction.texFraction}+${maFraction2.texFraction}=${a}+${texNombre(b / 1000)}+${texNombre(c / 100)}=${miseEnEvidence(texNombre(resultat))}$`
         this.reponse = resultat
         break
     }

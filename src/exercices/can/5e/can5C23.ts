@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -40,6 +41,7 @@ export default class MultiplierPar extends ExerciceSimple {
     this.reponse = arrondi(a * b, 1)
     this.correction += texteEnCouleur(`Mentalement : <br>
     $${a}\\times ${texNombre(b, 1)}=${a}\\times ${Math.floor(b)}+\\underbrace{${a}\\times 0,5}_{\\text{La moitié de }${a}}
-    =${a * Math.floor(b)}+${texNombre(a / 2, 1)}=${texNombre(this.reponse, 1)}$  `)
+    =${a * Math.floor(b)}+${texNombre(a / 2, 1)}=${texNombre(this.reponse, 1)}$  `,
+              bleuMathalea,)
   }
 }
