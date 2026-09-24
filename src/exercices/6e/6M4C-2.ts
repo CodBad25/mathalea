@@ -10,10 +10,12 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { minToHoraire } from '../../lib/outils/dateEtHoraires'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
+import { texNombre } from '../../lib/outils/texNombre'
 import Exercice from '../Exercice'
 
 export const titre = 'Utiliser les heures décimales'
 export const interactifReady = true
+export const dateDeModifImportante = '24/09/2026'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -75,8 +77,13 @@ export default class HeuresDecimales extends Exercice {
         texteCorr += `${sp()}$${miseEnEvidence(minToHoraire(partieEntiere * 60 + 30, true))}$`
         minutes = 30
       } else {
-        texteCorr = `$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+\\dfrac{${partieDecimale}}{10}~\\text{h}`
+        texteCorr = `Deux propositions de correction :<br>$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+\\dfrac{${partieDecimale}}{10}~\\text{h}`
+        texteCorr += `=${partieEntiere}~\\text{h}+(${partieDecimale}\\times \\dfrac{1}{10}~\\text{h})`
         texteCorr += `=${partieEntiere}~\\text{h}+(${partieDecimale}\\times6~\\text{min})=$`
+        texteCorr += `${sp()}$${miseEnEvidence(minToHoraire(partieEntiere * 60 + partieDecimale * 6, true))}$`
+        texteCorr += `<br>$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+${texNombre(partieDecimale / 10)}~\\text{h}`
+        texteCorr += `=${partieEntiere}~\\text{h}+(${texNombre(partieDecimale / 10)}\\times 1~\\text{h})`
+        texteCorr += `=${partieEntiere}~\\text{h}+(${texNombre(partieDecimale / 10)}\\times 60~\\text{min})=$`
         texteCorr += `${sp()}$${miseEnEvidence(minToHoraire(partieEntiere * 60 + partieDecimale * 6, true))}$`
         minutes = partieDecimale * 6
       }
