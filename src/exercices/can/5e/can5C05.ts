@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -24,7 +25,8 @@ export default class Division5e extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-
+this.optionsChampTexte = { texteAvant: '<br>' }
+ this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.typeExercice = 'simple'
   }
 
@@ -39,6 +41,7 @@ export default class Division5e extends ExerciceSimple {
       texteEnCouleur(`Mentalement : <br>
     On décompose $${c}$ en $${b * 10}+${c - 10 * b}=${b}\\times 10+${b}\\times ${(c - 10 * b) / b}=${b}(10+${(c - 10 * b) / b})$.<br>
         Ainsi :
-     $${c} \\div ${b}=10+${(c - 10 * b) / b}=${a}$.<br>`)
+     $${c} \\div ${b}=10+${(c - 10 * b) / b}=${a}$.`,
+               bleuMathalea,)
   }
 }

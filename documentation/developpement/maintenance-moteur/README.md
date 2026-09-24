@@ -32,6 +32,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Tableur](interactivite/tableur.md)                                | Rendu HTML, sérialisation et sortie imprimable       |
 | [Relier les étiquettes](interactivite/relier-etiquettes.md)        | Appariement interactif et ses sorties LaTeX et Typst |
 | [Schéma en barre](interactivite/schema-en-barre.md)                | Modélisation d'un problème, choix et complétion      |
+| [Claviers virtuels](interactivite/claviers.md)                      | Types de claviers, blocs et touches                  |
 
 ## Scratch
 
@@ -65,6 +66,8 @@ classes, objets 2D et représentations partagés.
 | ----------------------------------------------------------- | -------------------------------------------- |
 | [Workflows de contribution](contribution/workflows.md)      | Git, build, tests globaux et diagnostic      |
 | [Maintenir la documentation](contribution/documentation.md) | Source canonique et protocole de mise à jour |
+| [Dépannage](contribution/depannage.md)                      | Erreurs Git, dépendances, dépendances locales |
+| [Annales](contribution/annales.md)                          | Découpage des annales et dictionnaires        |
 
 La CI et les rapports restent indexés dans
 [Tests et CI](../../tests/README.md).

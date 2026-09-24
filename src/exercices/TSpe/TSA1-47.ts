@@ -86,7 +86,7 @@ export default class EvolutionPopulationSuite extends Exercice {
       style: 'alpha',
       items: [
         `Démontrer par récurrence que, pour tout entier naturel $n$, $u_n>${texNombre(borne, 0)}$.`,
-        `On admet que la suite $(u_n)$ est décroissante. Justifier qu’elle converge.`,
+        `Étudier les variations de la suite $(u_n)$, puis justifier qu’elle converge.`,
       ],
     })
     const sousQuestionsTrois = createList({
@@ -105,7 +105,7 @@ export default class EvolutionPopulationSuite extends Exercice {
         `Calculer $u_1$ et vérifier que $u_2=${texNombre(u2, 0)}$.`,
         sousQuestionsDeux,
         `Pour tout entier naturel $n$, on définit la suite $(v_n)$ par $v_n=u_n-${texNombre(borne, 0)}$.<br><br>${sousQuestionsTrois}`,
-        `En ${anneeInitiale}, une population de ${espece} comptait $${texNombre(u0, 0)}$ individus. À partir de l’année $${anneeInitiale + 1}$, cette population baisse de $${tauxBaisse}\\,\\%$ au début de chaque année. Afin de ralentir cette baisse, $${texNombre(apport, 0)}$ individus sont réintroduits à la fin de chaque année.<br><br>
+        `En $${anneeInitiale}$, une population de ${espece} comptait $${texNombre(u0, 0)}$ individus. À partir de l’année $${anneeInitiale + 1}$, cette population baisse de $${tauxBaisse}\\,\\%$ au début de chaque année. Afin de ralentir cette baisse, $${texNombre(apport, 0)}$ individus sont réintroduits à la fin de chaque année.<br><br>
         Une responsable d’une association soutenant cette stratégie affirme : « L’espèce ne devrait pas s’éteindre, mais nous n’empêcherons malheureusement pas la disparition de plus de la moitié de la population initiale. »<br><br>
         Déterminer si cette affirmation est cohérente avec le modèle. Justifier la réponse.`,
       ],
@@ -129,7 +129,15 @@ export default class EvolutionPopulationSuite extends Exercice {
         Ainsi, la propriété $\\mathcal P_{n+1}$ est vraie.<br><br>
         ${texteEnCouleurEtGras('Conclusion :', 'black')}<br><br>
         La propriété est vraie au rang $0$ et elle est héréditaire. Par récurrence, pour tout entier naturel $n$, $${miseEnEvidence(`u_n>${texNombre(borne, 0)}`)}$.`,
-        `La suite $(u_n)$ est décroissante et minorée par $${texNombre(borne, 0)}$. D’après le théorème de convergence monotone, elle est donc ${texteEnCouleurEtGras('convergente', 'red')}.`,
+        `Soit $n\\in\\mathbb N$. On calcule $u_{n+1}-u_n$ :<br><br>
+        $\\begin{aligned}
+        u_{n+1}-u_n
+        &=${qTex}u_n+${texNombre(apport, 0)}-u_n\\\\
+        &=-${texNombre(1 - q, 2)}u_n+${texNombre(apport, 0)}\\\\
+        &=${texNombre(1 - q, 2)}\\left(${texNombre(borne, 0)}-u_n\\right)
+        \\end{aligned}$<br><br>
+        Or, pour tout entier naturel $n$, $u_n>${texNombre(borne, 0)}$, donc $${texNombre(borne, 0)}-u_n\\leqslant 0$. De plus, $${texNombre(1 - q, 2)}>0$. Ainsi, $u_{n+1}-u_n\\leqslant 0$.<br><br>
+        La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante', 'red')}. Comme elle est minorée par $${texNombre(borne, 0)}$, le théorème de convergence monotone permet d’affirmer qu’elle est ${texteEnCouleurEtGras('convergente', 'red')}.`,
       ],
     })
 
@@ -142,6 +150,7 @@ export default class EvolutionPopulationSuite extends Exercice {
         v_{n+1}&=u_{n+1}-${texNombre(borne, 0)}\\\\
         &=${qTex}u_n+${texNombre(apport, 0)}-${texNombre(borne, 0)}\\\\
         &=${qTex}u_n-${texNombre(q * borne, 0)}\\\\
+        &=${qTex}u_n-${qTex}\\times ${texNombre(borne, 0)}\\\\
         &=${qTex}\\left(u_n-${texNombre(borne, 0)}\\right)\\\\
         &=${qTex}v_n
         \\end{aligned}$<br><br>

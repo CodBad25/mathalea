@@ -20,8 +20,8 @@ export default defineConfig({
       'blockly/core',
       'blockly/javascript',
       'blockly/msg/en',
+      'scratch-blocks/dist/vertical',
     ],
-    exclude: ['scratch-blocks'],
   },
   build: {
     target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],

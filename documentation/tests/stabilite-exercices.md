@@ -123,7 +123,26 @@ fichiers, quelques secondes.
 - en CI, dans le job `testExosModifiedConsolidated`, sur les fichiers modifiés
   de la merge request ;
 - en local, dans `tasks/exoModified.sh`, avec les autres tests d'exercices ;
-- à la demande, sur tout le catalogue, avec `pnpm stability:check`.
+- à la demande, sur tout le catalogue, avec `pnpm stability:check` ;
+- au pre-commit (`.husky/pre-commit` → `tasks/stability-precommit.js`), en
+  mise à jour seulement : voir ci-dessous.
+
+### Enregistrement automatique des nouveaux exercices
+
+Au moment du commit, le hook lit l'`uuid` de chaque fichier indexé de
+`src/exercices/` et cherche ceux qui sont **absents** du registre : nouvel
+exercice, ou version de travail qui a reçu un `uuid` neuf avec `pnpm archive`.
+Il lance alors `pnpm stability:update` restreint à ces seuls `uuid`
+(`STABILITY_UUIDS`), soit une dizaine de secondes, et ajoute le registre au
+commit. Sans nouvel `uuid`, il ne fait rien et ne coûte rien.
+
+Une empreinte déjà enregistrée n'est jamais réécrite par le hook : une dérive
+sur un exercice existant reste détectée par `pnpm stability:check` et la CI.
+
+Le hook bloque le commit si l'empreinte ne peut pas être calculée (exercice qui
+plante, référence en doublon signalée par `pnpm makeJson`…), ou si le registre
+avait déjà des modifications non indexées (il ne les ajoute pas à la place du
+développeur). Contournement ponctuel : `SKIP_STABILITY=1 git commit …`.
 
 ## Que faire quand le test échoue
 
@@ -157,6 +176,9 @@ pnpm archive 6N1E
 pnpm makeJson
 pnpm stability:update
 ```
+
+(Le hook de pre-commit fait le `pnpm stability:update` si on l'oublie : le
+fichier de travail a un `uuid` neuf, absent du registre.)
 
 Le code d'exercice suffit ; on peut aussi passer le chemin complet
 (`pnpm archive src/exercices/6e/6N1E.ts`).

@@ -58,6 +58,38 @@ L'interactivité moderne passe par `handleAnswers()` dans
 `src/lib/interactif/gestionInteractif.ts`. Les formats et le pipeline sont
 décrits dans [système d'interactivité](../interactivite/systeme-interactivite.md).
 
+## Paramètres d'URL
+
+`mathaleaUpdateExercicesParamsFromUrl()` (`src/lib/mathalea.ts`) lit l'URL.
+Chaque `uuid=` (ou `id=` sans `uuid` qui précède) ouvre un nouvel exercice ;
+les paramètres qui suivent s'y rapportent jusqu'au suivant.
+
+| Paramètre | Portée | Rôle |
+| --- | --- | --- |
+| `uuid` | exercice | identifiant permanent de l'exercice |
+| `id` | exercice | référence dans le référentiel, utilisée seulement sans `uuid` |
+| `n` | exercice | nombre de questions |
+| `s`, `s2` … `s5` | exercice | valeurs des formulaires de paramètres (`sup` … `sup5`) |
+| `alea` | exercice | graine du tirage aléatoire |
+| `i` | exercice | interactivité (`0` ou `1`) |
+| `cd` | exercice | correction détaillée (`0` ou `1`) |
+| `qcm` | exercice | version QCM (`0` ou `1`) |
+| `coef` | exercice | coefficient du barème |
+| `cols` | exercice | nombre de colonnes |
+| `d` | exercice | durée par question en diaporama |
+| `v` | global | vue (`eleve`, `diaporama`, `latex`, `typst`, `can`…) |
+| `es` | global | réglages de la vue élève (voir ci-dessous) |
+| `title` | global | titre de la vue élève |
+| `z` | global | zoom |
+| `dGlobal`, `shuffle`, `select`, `order` | global | réglages du diaporama |
+| `recorder` | global | plateforme hôte (`capytale`, `moodle`, `anki`…) |
+| `iframe` | global | identifiant d'intégration, conservé dans les URL régénérées |
+| `beta` | global | ouvre les vues encore en test (`quizzconf`, `omr`…) |
+| `triche` | global, `localhost` | affiche les réponses attendues dans la console |
+
+La valeur de `alea` et des `s…` fait partie des liens partagés : voir
+[Stabilité des tirages](../../../tests/stabilite-exercices.md).
+
 ## Synchronisation de l'URL
 
 Les composants qui modifient le store `exercicesParams` doivent appeler `exercicesParams.update()`, sans réécrire eux-mêmes l'URL. `App.svelte` centralise cette synchronisation via son abonnement au store. Les appels explicites à `mathaleaUpdateUrlFromExercicesParams()` restent réservés aux tableaux de paramètres qui ne sont pas le store global.

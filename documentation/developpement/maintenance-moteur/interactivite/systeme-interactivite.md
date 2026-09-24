@@ -100,7 +100,7 @@ Les clés de `reponses` dépendent du format :
 | `feedback`                      | Fonction de feedback global                                                                                                                                                  |
 | `callback`                      | Vérification personnalisée avec score détaillé, utilisée par certains formats historiques ou par des helpers spécialisés quand le comportement champ par champ ne suffit pas |
 
-Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, une réponse numériquement valide reçoit automatiquement l'option `nombreDecimalSeulement`.
+Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, `handleDefaultValeur()` ajoute l'option `nombreDecimalSeulement` quand la valeur convertie est un nombre écrit en chiffres ; une `value` fournie directement en chaîne est laissée sans option et accepte donc tout calcul égal.
 
 ## Pipeline de vérification
 
@@ -362,6 +362,32 @@ Les paramètres d'un exercice affiché en interactif proposent un réglage « Ba
 - il est appliqué au moment de l'affichage du score par `afficheScore()`, qui multiplie la note obtenue **et** la note maximale : un 3/5 avec un coefficient 2 devient 6/10, dans la vue prof comme dans la vue élève et dans ce qui est transmis au LMS (`numberOfPoints` / `numberOfQuestions`) ;
 - la vue Course aux nombres a son propre calcul de score (`gestionCan.ts`) et n'est pas concernée.
 
+### Stabilité du barème face au tirage aléatoire
+
+Le barème maximum d'un exercice interactif ne doit **jamais** dépendre du
+tirage aléatoire (seed, ou paramètres tirés au sort qui changent le nombre de
+champs de réponse). `pointsMaxExercice()` (voir ci-dessus) est recalculé
+*a posteriori*, une fois l'énoncé généré : rien n'empêche ce total de varier
+d'un élève à l'autre si l'énoncé lui-même varie en nombre de champs. Un
+dénominateur instable casse les remontées de score vers les recorders
+externes (Capytale, Moodle), qui affichent/enregistrent un barème maximum
+figé pour un exercice donné.
+
+Piège typique : un exercice qui tire au sort, parmi une liste, un ou
+plusieurs sous-problèmes dont le nombre de champs de réponse interactifs
+diffère de l'un à l'autre (par exemple un sous-problème corrigé en
+`toutAUnPoint` avec 5 champs, un autre avec 1 seul). Le total de points
+maximum de l'exercice change alors selon le tirage.
+
+Solution : ramener chaque question tirée sur un nombre de points fixe,
+indépendant de son nombre de champs, avec `troisPointsProportionnels`
+(`fonctionsBaremes.ts`) — ou une fonction de barème équivalente qui arrondit
+la proportion de bonnes réponses sur un total fixe — plutôt que
+`toutAUnPoint`, dont le maximum est égal au nombre de champs. Voir
+`src/exercices/enigmes-jeux/EN-monnaie.ts`, `EN-zeros.ts` et
+`EN-gratte-ciel.ts`, qui affectent cette fonction à `objetReponse.bareme`
+avant d'appeler `handleAnswers()`.
+
 Tests : `tests/unit/baremeExercice.test.ts`.
 
 ## Affichage des réponses élèves dans les corrections CAN
@@ -438,9 +464,9 @@ Un cas particulier subsiste :
 
 ## Comparateurs
 
-`fonctionComparaison()` centralise la comparaison des réponses MathLive. Elle applique des nettoyages de saisie, puis active des comportements via `options` : fractions, unités, intervalles, textes avec ou sans casse, coordonnées, suites, ensembles, écriture scientifique, factorisation, puissances, calcul formel, etc.
+`fonctionComparaison()` centralise la comparaison des réponses MathLive. Elle applique des nettoyages de saisie (`generateCleaner()` dans `src/lib/interactif/cleaners.ts`), puis active des comportements via `options` : fractions, unités, intervalles, textes avec ou sans casse, coordonnées, suites, ensembles, écriture scientifique, factorisation, puissances, calcul formel, etc. Les options sont testées dans un ordre fixe et la première reconnue détermine la comparaison. Le guide [Choisir les options de comparaison](../../auteurs-exercices/complements/options-de-comparaison.md) décrit chaque option avec des exemples vérifiés.
 
-Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, `src/lib/interactif/checks/` fournit un système de checks composables. Les checks ne remplacent pas `fonctionComparaison()` ; ils la réutilisent notamment via les adaptateurs.
+Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, `src/lib/interactif/checks/` fournit un système de checks composables, documenté dans [Checks composables](../../auteurs-exercices/complements/checks-composables.md). Les checks ne remplacent pas `fonctionComparaison()` ; ils la réutilisent notamment via l'adaptateur `fromOptions()`. Un comparateur `all()` ou `seq()` renvoie un `score` entre 0 et 1, que `verifySingleMathLiveField()` utilise comme nombre de points du champ.
 
 ## Fichiers clefs
 

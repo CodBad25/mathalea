@@ -40,6 +40,20 @@ export const refs = {
 Remplacez les exemples par les valeurs réelles. Un UUID et une référence ne
 doivent pas être copiés depuis un autre exercice.
 
+Si la référence existe déjà, ajouter un suffixe : `5A11-1`, puis `5A11-2`…
+
+Pour le référentiel suisse (`'fr-ch'`) :
+
+| Valeur | Effet dans le menu suisse |
+| --- | --- |
+| `['9NO1-1']` | exercice rangé dans la catégorie indiquée |
+| `[]` | exercice rangé dans « Non classés » |
+| `['NR']` | exercice exclu du référentiel suisse (non pertinent) |
+
+Une nouvelle catégorie se déclare dans `tasks/emptyRefCH.json` et son titre
+dans `src/json/levelsThemesListCH.json` (voir
+[JSON du menu des exercices](../maintenance-moteur/architecture/menu-exercices.md)).
+
 ## 3. Construire la classe
 
 Depuis un fichier placé directement dans `src/exercices/6e/` :
@@ -141,3 +155,21 @@ saisie. Ajoutez ensuite le champ et la réponse attendue en suivant
 
 Pour `ExerciceSimple`, les répartitions contrôlées ou les branches de rendu plus
 complexes, consultez [Variantes d'exercices](complements/variantes-exercices.md).
+
+## Écrire un code lisible
+
+Un exercice est relu et modifié par d'autres pendant des années :
+
+- nommer les variables d'après ce qu'elles représentent, en camelCase
+  (`prixUnitaire`, pas `a2`) ;
+- déclarer chaque variable au plus près de son usage, avec `const` si elle ne
+  change pas ;
+- nommer les constantes plutôt que d'écrire des nombres ou des chaînes
+  « magiques » (`const majorite = 18`) ;
+- factoriser un bloc répété au lieu de le copier-coller ;
+- commenter le *pourquoi* d'un passage non évident, pas ce que fait chaque
+  ligne ; documenter les fonctions réutilisables avec un bloc `/** … */`
+  (repris par TypeDoc, `pnpm doc`).
+
+La présentation des énoncés (texte, couleurs, listes) est décrite dans
+[Mise en forme](complements/mise-en-forme.md).

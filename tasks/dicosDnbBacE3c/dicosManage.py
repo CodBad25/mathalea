@@ -10,6 +10,8 @@ pass
 
 # On importe la librairie os pour gérer les fichiers
 import os
+# Pour lancer Prettier sur le dictionnaire modifié
+import subprocess
 
 # Pour mesurer le temps de traitement du script
 from datetime import datetime 
@@ -239,7 +241,7 @@ def currentRef(dicoPath:str)->list:
     """
     pass     
     # On ouvre le dico et on récupère les lignes
-    content = open(dicoPath,'r')
+    content = open(dicoPath,'r',encoding='utf8')
     lines = content.readlines()
     content.close()
     # Un tableau pour récupérer les noms des fichiers déjà dans le dico
@@ -261,14 +263,19 @@ def insertNewEntries(pathName:str,dicoPath:str,dicoType:str):
     """
     pass
     # On lit les lignes du dico
-    content = open(dicoPath,'r')
+    content = open(dicoPath,'r',encoding='utf8')
     lines = content.readlines()
     content.close()
-    # On supprime l'avant dernière ligne qui contient }
-    del lines[len(lines)-1]
+    # On supprime les lignes vides finales puis la dernière ligne, qui doit être
+    # l'accolade fermante de l'objet exporté
+    while lines and lines[-1].strip() == '':
+        del lines[-1]
+    if not lines or lines[-1].strip() != '}':
+        raise SystemExit(f"{dicoPath} doit se terminer par une ligne '}}' : fichier non modifié.")
+    del lines[-1]
     # On ouvre le fichier en écriture
-    # On le réécrit complètement sans l'avant dernière ligne
-    content = open(dicoPath,'w')
+    # On le réécrit complètement sans l'accolade fermante
+    content = open(dicoPath,'w',encoding='utf8')
     content.writelines(lines)
     content.close()
 
@@ -276,7 +283,7 @@ def insertNewEntries(pathName:str,dicoPath:str,dicoType:str):
     currentEntries = currentRef(dicoPath)
 
     # On ouvre le dico en ajout
-    content = open(dicoPath, 'a')
+    content = open(dicoPath, 'a', encoding='utf8')
     
     # On ajoute les nouvelles entrées
     for (dirpath, dirnames, filenames) in os.walk(pathName):
@@ -306,7 +313,7 @@ def manageDico(dicoPath:str,dicoType:str):
     """
     pass
     # On crée le dico s'il n'existe pas
-    fichier = open(dicoPath, "a+")
+    fichier = open(dicoPath, "a+", encoding="utf8")
     fichier.close()
     
     # Si le dico est vide on ajoute les première lignes
@@ -333,6 +340,14 @@ def manageDico(dicoPath:str,dicoType:str):
     # On traite toutes les années
     for year in getAllYears:
         insertNewEntries(f'./{dicoType}/{year}/tex/',dicoPath,dicoType)
+
+    # Les entrées ajoutées ne sont pas indentées comme le reste du fichier :
+    # on reformate le dictionnaire avec le Prettier du dépôt s'il est installé
+    prettier = '../../node_modules/.bin/prettier'
+    if os.path.exists(prettier):
+        subprocess.run([prettier, '--write', dicoPath], check=False)
+    else:
+        print(f'Penser à formater {dicoPath} avec "pnpm exec prettier --write".')
 
 # Script principal
 def main():
@@ -373,31 +388,31 @@ Taper 1, 2, 3, 4, 5, 6, 7, 8 ou 9 pour lancer le script --> """)
     dicoType = ''
 
     if (choiceDico == '1'):
-        dicoPath = '../../src/json/dictionnaireDNB.js'
+        dicoPath = '../../src/json/dictionnaireDNB.ts'
         dicoType = 'dnb'
     elif (choiceDico == '2'):
-        dicoPath = '../../src/json/dictionnaireDNBPRO.js'
+        dicoPath = '../../src/json/dictionnaireDNBPRO.ts'
         dicoType = 'dnbpro'
     elif (choiceDico == '3'):
-        dicoPath = '../../src/json/dictionnaireBAC.js'
+        dicoPath = '../../src/json/dictionnaireBAC.ts'
         dicoType = 'bac'
     elif (choiceDico == '4'):
-        dicoPath = '../../src/json/dictionnaireE3C.js'
+        dicoPath = '../../src/json/dictionnaireE3C.ts'
         dicoType = 'e3c'
     elif (choiceDico == '5'):
-        dicoPath = '../../src/json/dictionnaireEAM.js'
+        dicoPath = '../../src/json/dictionnaireEAM.ts'
         dicoType = 'eam'
     elif (choiceDico == '6'):
-        dicoPath = '../../src/json/dictionnaireCrpeCoop.js'
+        dicoPath = '../../src/json/dictionnaireCrpeCoop.ts'
         dicoType = 'crpe'
     elif (choiceDico == '7'):
-        dicoPath = '../../src/json/dictionnaireFlashBac.js'
+        dicoPath = '../../src/json/dictionnaireFlashBac.ts'
         dicoType = 'flashbac'
     elif (choiceDico == '8'):
-        dicoPath = '../../src/json/dictionnaireSTI2D.js'
+        dicoPath = '../../src/json/dictionnaireSTI2D.ts'
         dicoType = 'sti2d'
     elif (choiceDico == '9'):
-        dicoPath = '../../src/json/dictionnaireSTL.js'
+        dicoPath = '../../src/json/dictionnaireSTL.ts'
         dicoType = 'stl'
 
     manageDico(dicoPath,dicoType)

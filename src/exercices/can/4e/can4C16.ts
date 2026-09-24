@@ -1,4 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { pgcd } from '../../../lib/outils/primalite'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier des fractions'
@@ -98,6 +100,18 @@ export default class MultiplierFraction extends ExerciceSimple {
     const f2 = new FractionEtendue(n2, d2)
     this.reponse = f1.produitFraction(f2).simplifie()
     this.question = `Calculer et écrire sous la forme d'une fraction simplifiée : $${f1.texFraction}\\times ${f2.texFraction}$.<br>`
-    this.correction = `$${f1.texProduitFraction(f2, false)}$`
+    const etapeProduit = `\\dfrac{${n1}\\times ${n2}}{${d1}\\times ${d2}}`
+    // Simplification « en croisé » avant de multiplier : n1 avec d2, n2 avec d1.
+    const g1 = pgcd(n1, d2)
+    const g2 = pgcd(n2, d1)
+    const facteurAvecCancel = (valeur: number, commun: number) => {
+      if (commun <= 1) return String(valeur)
+      const reste = valeur / commun
+      return reste === 1 ? `\\cancel{${commun}}` : `${reste}\\times\\cancel{${commun}}`
+    }
+    this.correction =
+      g1 > 1 || g2 > 1
+        ? `$${f1.texFraction}\\times ${f2.texFraction}=${etapeProduit}=\\dfrac{${facteurAvecCancel(n1, g1)}\\times ${facteurAvecCancel(n2, g2)}}{${facteurAvecCancel(d1, g2)}\\times ${facteurAvecCancel(d2, g1)}}=${miseEnEvidence(this.reponse.texFraction)}$`
+        : `$${f1.texFraction}\\times ${f2.texFraction}=${etapeProduit}=${miseEnEvidence(this.reponse.texFraction)}$`
   }
 }

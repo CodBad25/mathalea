@@ -50,6 +50,52 @@ connu. Le meilleur score persisté entre deux sessions arrive par Capytale dans
 - `handleScore()` n'installe son écouteur `message` qu'une fois, alors que le
   getter `html` est appelé à chaque rendu.
 
+## Ajouter une app
+
+Une app est une page web autonome, avec sa propre URL, que MathALÉA affiche
+dans une `iframe`. Côté MathALÉA, il suffit d'un fichier dans
+`src/exercices/apps/` :
+
+```ts
+import ExternalApp from './_ExternalApp'
+
+export const uuid = 'challengeRelatif'
+export const titre = 'Relever le challenge des nombres relatifs'
+
+class challengeRelatif extends ExternalApp {
+  constructor() {
+    super('https://coopmaths.fr/challenge/?mathalea')
+  }
+}
+
+export default challengeRelatif
+```
+
+Côté app, lire les paramètres ajoutés à l'URL et répondre par `postMessage` :
+
+```js
+const urlParams = new URLSearchParams(window.location.search)
+const numeroExercice = Number(urlParams.get('numeroExercice'))
+const vue = urlParams.get('v')
+
+// en fin de partie
+window.parent.postMessage(
+  { type: 'mathaleaSendScore', score, numberOfQuestions, numeroExercice, finalState },
+  '*',
+)
+
+// quand le professeur change un réglage
+window.parent.postMessage(
+  { type: 'mathaleaSettings', urlParams: window.location.search, numeroExercice },
+  '*',
+)
+```
+
+`finalState` (facultatif) est du HTML qui résume la partie (réponses,
+conseils) ; il est rendu à l'app par `mathaleaHasScore` quand le professeur
+consulte la copie. Le paramètre `v=eleve` permet à une app paramétrable de
+distinguer la vue élève (par exemple pour masquer ses réglages).
+
 ## Voir aussi
 
 - [Questions de cours](questions-de-cours.md) : l'app `questionsDeCours` a

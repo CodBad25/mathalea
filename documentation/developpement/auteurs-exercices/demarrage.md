@@ -5,16 +5,60 @@ uniquement les commandes de terminal et de Git nécessaires pour commencer.
 
 ## Prérequis
 
-Installez :
+Installez Node.js, Git et un éditeur, dans cet ordre.
 
-- Git ;
-- Node.js `>=22.13` ;
-- Corepack, fourni avec les versions récentes de Node.js ;
-- un éditeur prenant en charge TypeScript, par exemple Visual Studio Code.
+### Node.js
 
-Le dépôt déclare sa version de pnpm dans `package.json`. Le store de dépendances
-est configuré dans `pnpm-workspace.yaml` et ne demande aucune option de commande
-supplémentaire.
+Version `>=22.13`, qui fournit Corepack (nécessaire à `pnpm`, voir plus bas).
+
+- **Windows et macOS** : téléchargez la version LTS sur
+  [nodejs.org](https://nodejs.org/en) et lancez l'installeur.
+- **Linux** (distributions basées sur Debian comme Ubuntu) :
+
+  ```sh
+  sudo apt update
+  sudo apt install -y curl
+  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+  sudo apt install -y nodejs
+  ```
+
+### Git
+
+- **Windows** : téléchargez l'installeur sur
+  [git-scm.com](https://git-scm.com/downloads).
+- **macOS** : ouvrez un terminal (LaunchPad puis rechercher « Terminal »),
+  installez [Homebrew](https://brew.sh/) si besoin, puis :
+
+  ```sh
+  brew install git
+  ```
+
+- **Linux** :
+
+  ```sh
+  sudo apt-get install git
+  ```
+
+Puis, sur toutes les plateformes, configurez votre nom et votre email :
+
+```sh
+git config --global user.name "Mon Prénom"
+git config --global user.email "mon.email@example.com"
+```
+
+### Éditeur
+
+Un éditeur prenant en charge TypeScript, par exemple
+[Visual Studio Code](https://code.visualstudio.com/Download) (ou
+[VSCodium](https://vscodium.com), une version sans télémétrie Microsoft). La
+suite de cette page utilise des commandes de terminal ; la configuration de
+l'éditeur lui-même est décrite dans
+[Configurer son éditeur](configurer-son-editeur.md).
+
+Le dépôt déclare sa version de pnpm dans `package.json` : inutile de
+l'installer séparément, `corepack enable` (voir plus bas) suffit. Le store de
+dépendances est configuré dans `pnpm-workspace.yaml` et ne demande aucune
+option de commande supplémentaire.
 
 ## Se repérer dans un terminal
 
