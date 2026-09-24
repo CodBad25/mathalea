@@ -3,6 +3,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -123,13 +124,13 @@ export default class MultiplierEntierPar101001000 extends Exercice {
           handleAnswers(this, i, {
             reponse: { value: texNombre(a * b) },
           })
-          texteCorr = `$${texNombre(a)}\\times${texNombre(b)}=${texNombre(a * b)}$`
+          texteCorr = `$${texNombre(a)}\\times${texNombre(b)}=${miseEnEvidence(texNombre(a * b))}$`
           break
         case 'division':
         default:
           texte = `$${texNombre(a * b)}\\div${texNombre(b)}$`
           handleAnswers(this, i, { reponse: { value: a } })
-          texteCorr = `$${texNombre(a * b)}\\div${texNombre(b)}=${texNombre(a)}$`
+          texteCorr = `$${texNombre(a * b)}\\div${texNombre(b)}=${miseEnEvidence(texNombre(a))}$`
           break
       }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
