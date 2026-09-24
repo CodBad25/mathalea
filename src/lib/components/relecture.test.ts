@@ -5,7 +5,11 @@ import {
   collectExercicesARelire,
   filterExercices,
   frenchDateToNumber,
+  loadEtatsDeRelecture,
+  RELECTURE_STORAGE_KEY,
+  saveEtatsDeRelecture,
   sortByDate,
+  toggleEtatDeRelecture,
   VUES_DE_RELECTURE,
 } from './relecture'
 
@@ -103,5 +107,33 @@ describe('vue relecture', () => {
     ])
     const typstParam = new URL(urls[6]).searchParams.get('typstParam') ?? ''
     expect(decodeBase64(typstParam).options.minimalCorrections).toBe(true)
+  })
+
+  it('pose, change et efface un verdict de relecture', () => {
+    let etats = toggleEtatDeRelecture({}, 'aaaaa', 'valide')
+    expect(etats).toEqual({ aaaaa: 'valide' })
+    etats = toggleEtatDeRelecture(etats, 'aaaaa', 'refuse')
+    expect(etats).toEqual({ aaaaa: 'refuse' })
+    etats = toggleEtatDeRelecture(etats, 'aaaaa', 'refuse')
+    expect(etats).toEqual({})
+  })
+
+  it('enregistre et relit le suivi de relecture', () => {
+    const data = new Map<string, string>()
+    const storage = {
+      getItem: (key: string) => data.get(key) ?? null,
+      setItem: (key: string, value: string) => void data.set(key, value),
+    }
+    expect(loadEtatsDeRelecture(storage)).toEqual({})
+    saveEtatsDeRelecture(storage, { aaaaa: 'valide', bbbbb: 'refuse' })
+    expect(loadEtatsDeRelecture(storage)).toEqual({
+      aaaaa: 'valide',
+      bbbbb: 'refuse',
+    })
+    data.set(RELECTURE_STORAGE_KEY, '{"aaaaa":"valide","ccccc":"autre"}')
+    expect(loadEtatsDeRelecture(storage)).toEqual({ aaaaa: 'valide' })
+    data.set(RELECTURE_STORAGE_KEY, 'pas du json')
+    expect(loadEtatsDeRelecture(storage)).toEqual({})
+    expect(loadEtatsDeRelecture(undefined)).toEqual({})
   })
 })
