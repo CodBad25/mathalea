@@ -56,9 +56,7 @@ le catalogue complet sans épuiser la limite par défaut. Cette limite n'est
 pas une réservation de mémoire.
 `makeJson` génère les référentiels statiques, le menu international et le
 manifeste des fonds de quizz ; voir [le menu d'exercices](../architecture/menu-exercices.md).
-Les tests, la vérification TypeScript et TypeDoc ne font pas partie de
-`pnpm build`. Attention : `pnpm buildRam` lance aussi `pnpm doc` ; sa durée
-n'est donc pas directement comparable à celle de `pnpm build`.
+Les tests et la vérification TypeScript ne font pas partie de `pnpm build`.
 
 Pour isoler les deux étapes, les exécuter successivement :
 
