@@ -4,11 +4,15 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleur } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Déterminer les entiers relatifs vérifiant une divisibilité'
+export const titre =
+  'Déterminer les entiers relatifs vérifiant une divisibilité'
 export const dateDePublication = '22/09/2026'
 export const uuid = 'bd40f'
 export const interactifReady = true
@@ -33,8 +37,13 @@ export default class DivisibiliteExpressionAffine extends Exercice {
     const coefficient = randint(3, 8)
     const nombre = choice([5, 7, 11, 13, 17, 19])
     const valeursK = [1, -1, nombre, -nombre]
-    const restes = [...new Set(valeursK.map((k) => ((nombre / k) % coefficient + coefficient) % coefficient))]
-      .filter((reste) => reste > 0)
+    const restes = [
+      ...new Set(
+        valeursK.map(
+          (k) => (((nombre / k) % coefficient) + coefficient) % coefficient,
+        ),
+      ),
+    ].filter((reste) => reste > 0)
     const constante = choice(restes)
     const expression = `${coefficient}n+${constante}`
 
@@ -49,27 +58,30 @@ export default class DivisibiliteExpressionAffine extends Exercice {
       .map((k) => (nombre / k - constante) / coefficient)
       .filter(Number.isInteger)
       .sort((a, b) => a - b)
-    const conclusionAnalyse = solutions.length === 1
-      ? `La seule solution possible est $n=${solutions[0]}$.`
-      : `Les seules solutions possibles sont $n=${solutions[0]}$ et $n=${solutions[1]}$.`
+    const reponse = `\\{${solutions.join(';')}\\}`
+    const conclusionAnalyse = `${texteEnCouleur('Conclusion', bleuMathalea)} : si $n$ est tel que $${expression}$ divise $${nombre}$, alors nécessairement $n\\in${reponse}$.`
     const verifications = solutions.map((n) => {
       const diviseur = coefficient * n + constante
-      return `Pour $n=${n}$ : $${coefficient}\\times(${n})+${constante}=${diviseur}$. Le nombre $${diviseur}$ divise $${nombre}$.`
+      return `Si $n=${n}$, alors $${expression}=${diviseur}$, qui divise $${nombre}$.`
     })
-    const reponse = `\\{${solutions.join(';')}\\}`
+    const synthese =
+      solutions.length === 1
+        ? `Réciproquement, supposons que $n=${solutions[0]}$. Alors $${expression}=${coefficient * solutions[0] + constante}$, qui divise $${nombre}$.`
+        : `Réciproquement, supposons que $n\\in${reponse}$.<br>${createList({ items: verifications, style: 'fleches' })}`
 
-    this.listeQuestions[0] = `Déterminer l'ensemble des entiers relatifs $n$ tels que $${expression}$ divise $${nombre}$.<br>` +
+    this.listeQuestions[0] =
+      `Déterminer l'ensemble des entiers relatifs $n$ tels que $${expression}$ divise $${nombre}$.<br>` +
       ajouteChampTexteMathLive(this, 0, KeyboardType.clavierEnsemble, {
         texteAvant: ' $S=$',
       })
 
-    this.listeCorrections[0] = `${texteEnCouleur('Analyse.', bleuMathalea)}<br>
+    this.listeCorrections[0] = `${texteEnCouleur('Analyse', bleuMathalea)}<br>
     Soit $n\\in\\mathbb Z$ tel que $${expression}$ divise $${nombre}$. Il existe alors un entier $k\\in\\mathbb Z$ tel que $${nombre}=(${expression})\\times k$.<br>
     L'entier $k$ est donc un diviseur de $${nombre}$. Comme $${nombre}$ est premier, ses diviseurs relatifs sont $D_{${nombre}}=\\{-${nombre};-1;1;${nombre}\\}$. On procède à une disjonction des cas selon les quatre valeurs possibles de $k$ :<br>
     ${createList({ items: cas, style: 'fleches' })}<br>
     ${conclusionAnalyse}<br><br>
-    ${texteEnCouleur('Synthèse.', bleuMathalea)}<br>
-    ${createList({ items: verifications, style: 'fleches' })}<br>
+    ${texteEnCouleur('Synthèse', bleuMathalea)}<br>
+    ${synthese}<br>
     Ainsi, l'ensemble des solutions est $S=${miseEnEvidence(reponse)}$.`
 
     handleAnswers(this, 0, {
