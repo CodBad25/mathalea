@@ -2,6 +2,7 @@ import type { Check, CheckOverrides } from './types'
 import { fromOptions } from './adapter'
 import Hms from '../../../modules/Hms'
 import Grandeur from '../../../modules/Grandeur'
+import { grandeurDepuisSaisie } from '../comparisonFunctions'
 
 type UnitOptions = CheckOverrides & {
   precision?: number
@@ -94,6 +95,14 @@ export function valueInInterval(options: CheckOverrides = {}): Check {
   )
 }
 
+// La saisie MathLive écrit l'unité `\operatorname{\mathrm{cm}}`, que
+// Grandeur.fromString() ne sait pas lire : on passe d'abord par la lecture de
+// l'option `unite`, puis par fromString() pour une réponse attendue comme `1m`.
+function uniteDe(valeur: string): string {
+  const grandeur = grandeurDepuisSaisie(valeur)
+  return grandeur === false ? Grandeur.fromString(valeur).unite : grandeur.unite
+}
+
 export function sameWithUnit(options: UnitOptions = {}): Check {
   const compare = fromOptions({ unite: true, precisionUnite: options.precision })
   return {
@@ -106,7 +115,7 @@ export function sameWithUnit(options: UnitOptions = {}): Check {
       let passed = result.passed
       if (passed && options.strictSameUnit) {
         try {
-          passed = Grandeur.fromString(saisie).unite === Grandeur.fromString(answer).unite
+          passed = uniteDe(saisie) === uniteDe(answer)
         } catch {
           passed = false
         }

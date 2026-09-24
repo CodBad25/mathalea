@@ -119,6 +119,22 @@ describe('checks heavy atoms', () => {
       })
     })
 
+    it('reads MathLive units when the same unit is required', () => {
+      const strict = all([sameWithUnit({ strictSameUnit: true })])
+      expect(strict('1\\operatorname{\\mathrm{m}}', '1m')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(strict('3,5\\operatorname{\\mathrm{cm}}', '3.5cm')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(strict('100\\operatorname{\\mathrm{cm}}', '1m')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
     it('compares number tuples and lists', () => {
       expect(all([sameNumberTuple()])('(1;2;3)', '(1;2;3)')).toMatchObject({
         isOk: true,
