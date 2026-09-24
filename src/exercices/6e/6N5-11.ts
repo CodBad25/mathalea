@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { troisPointsProportionnels } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   miseEnEvidence,
@@ -65,9 +65,6 @@ export default class ExerciceProblemesComplexes extends Exercice {
         '11 : Mélange',
       ].join('\n'),
     ]
-
-    this.comment =
-      "Selon le type de problèmes, le nombre de questions n'est pas forcément le même. De ce fait, pour un fonctionnement correct sur Capytale, vous ne devrez pas choisir des problèmes avec un nombre différent de questions. Si besoin, dupliquer l'exercice."
   }
 
   nouvelleVersion() {
@@ -629,7 +626,7 @@ export default class ExerciceProblemesComplexes extends Exercice {
           this,
           i,
           {
-            bareme: toutAUnPoint,
+            bareme: troisPointsProportionnels,
             ...answers,
           },
           { formatInteractif: 'multi-mathfield' },
