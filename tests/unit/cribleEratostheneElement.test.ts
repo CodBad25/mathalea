@@ -70,9 +70,11 @@ describe('CribleEratostheneElement', () => {
     selecteur.value = '3'
     selecteur.dispatchEvent(new Event('change'))
     const restants = element.querySelector('.crible-eratosthene__restants')
-    expect(restants?.textContent).toContain(
-      'Nombres restants : 2\u00a0; 3\u00a0; 4\u00a0; 5\u00a0; 7',
-    )
-    expect(restants?.textContent).toContain('11\u00a0; 12.')
+    expect(restants?.textContent).toContain('Nombres restants')
+    const nombresAffiches = [
+      ...(restants?.querySelectorAll('annotation') ?? []),
+    ].map((annotation) => annotation.textContent)
+    expect(nombresAffiches.slice(0, 5)).toEqual(['2', '3', '4', '5', '7'])
+    expect(nombresAffiches.slice(-2)).toEqual(['11', '12'])
   })
 })
