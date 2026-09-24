@@ -4,8 +4,13 @@
     buildRelectureUrls,
     collectExercicesARelire,
     filterExercices,
+    loadEtatsDeRelecture,
+    saveEtatsDeRelecture,
     sortByDate,
+    toggleEtatDeRelecture,
     VUES_DE_RELECTURE,
+    type EtatDeRelecture,
+    type EtatsDeRelecture,
     type ExerciceARelire,
     type LienDeRelecture,
   } from '../../../lib/components/relecture'
@@ -50,34 +55,63 @@
     return Math.max(1, Math.ceil(liste.length / PAR_PAGE))
   }
 
+  /** Exercices dont la liste des vues est dépliée, par uuid */
+  let vuesDepliees: Record<string, boolean> = {}
   /**
-   * Liens que le navigateur a refusé d'ouvrir, par uuid d'exercice.
+   * Exercices pour lesquels le navigateur a bloqué une partie des onglets.
    * Safari n'ouvre qu'une fenêtre par clic (sauf si les fenêtres surgissantes
-   * sont autorisées pour le site) : on propose alors les liens restants.
+   * sont autorisées pour le site).
    */
-  let liensBloques: Record<string, LienDeRelecture[]> = {}
+  let ongletsBloques: Record<string, boolean> = {}
 
-  function ouvrirVues(exercice: ExerciceARelire) {
-    const baseUrl = window.location.origin + window.location.pathname
-    const bloques: LienDeRelecture[] = []
-    for (const lien of buildRelectureUrls(exercice, baseUrl)) {
+  function basculerVues(exercice: ExerciceARelire) {
+    vuesDepliees = {
+      ...vuesDepliees,
+      [exercice.uuid]: !vuesDepliees[exercice.uuid],
+    }
+  }
+
+  function liensDe(exercice: ExerciceARelire): LienDeRelecture[] {
+    return buildRelectureUrls(
+      exercice,
+      window.location.origin + window.location.pathname,
+    )
+  }
+
+  function ouvrirToutesLesVues(exercice: ExerciceARelire) {
+    let bloque = false
+    for (const lien of liensDe(exercice)) {
       // pas de `noopener` : window.open renverrait toujours null et on ne
       // pourrait pas savoir si l'onglet a été bloqué
       const onglet = window.open(lien.url, '_blank')
-      if (onglet == null) bloques.push(lien)
+      if (onglet == null) bloque = true
       else onglet.opener = null
     }
-    liensBloques = { ...liensBloques, [exercice.uuid]: bloques }
+    ongletsBloques = { ...ongletsBloques, [exercice.uuid]: bloque }
   }
 
-  function lienOuvert(exercice: ExerciceARelire, lien: LienDeRelecture) {
-    liensBloques = {
-      ...liensBloques,
-      [exercice.uuid]: (liensBloques[exercice.uuid] ?? []).filter(
-        (l) => l !== lien,
-      ),
+  function getStorage(): Storage | undefined {
+    try {
+      return window.localStorage
+    } catch {
+      return undefined
     }
   }
+
+  /** Suivi local de ce que le relecteur a déjà relu */
+  let etats: EtatsDeRelecture = loadEtatsDeRelecture(getStorage())
+
+  function choisirEtat(exercice: ExerciceARelire, etat: EtatDeRelecture) {
+    etats = toggleEtatDeRelecture(etats, exercice.uuid, etat)
+    saveEtatsDeRelecture(getStorage(), etats)
+  }
+
+  const FOND_PAR_ETAT: Record<EtatDeRelecture, string> = {
+    valide: 'bg-green-100 dark:bg-green-900',
+    refuse: 'bg-red-100 dark:bg-red-900',
+  }
+  const FOND_PAR_DEFAUT =
+    'bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark'
 </script>
 
 <main
@@ -111,9 +145,11 @@
       <p
         class="text-sm text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
       >
-        Le bouton <i class="bx bx-window-open" aria-hidden="true"></i> ouvre
-        l'exercice dans {VUES_DE_RELECTURE.length} onglets. Il faut autoriser les
-        fenêtres surgissantes (pop-up) pour ce site.
+        Le bouton <i class="bx bx-window-open" aria-hidden="true"></i> affiche
+        les {VUES_DE_RELECTURE.length} vues de relecture de l'exercice. Les boutons
+        <i class="bx bx-check" aria-hidden="true"></i> et
+        <i class="bx bx-x" aria-hidden="true"></i> gardent la trace de la relecture
+        dans ce navigateur.
       </p>
     </div>
 
@@ -133,56 +169,98 @@
           {:else}
             <ul class="flex flex-col gap-1">
               {#each colonne.liste.slice(debut, debut + PAR_PAGE) as exercice (exercice.uuid)}
+                {@const etat = etats[exercice.uuid]}
+                {@const deplie = vuesDepliees[exercice.uuid] === true}
                 <li
-                  class="flex flex-row items-center gap-2 rounded-md px-2 py-1
-                         bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
+                  class="flex flex-col rounded-md px-2 py-1 {etat
+                    ? FOND_PAR_ETAT[etat]
+                    : FOND_PAR_DEFAUT}"
                 >
-                  <span class="text-xs font-mono shrink-0 w-20">
-                    {exercice[colonne.dateKey]}
-                  </span>
-                  <span class="text-sm">
-                    <span class="font-bold">{exercice.id}</span> - {exercice.titre}
-                  </span>
-                  <button
-                    type="button"
-                    class="ml-auto shrink-0 tooltip tooltip-left tooltip-neutral
-                           text-coopmaths-action hover:text-coopmaths-action-lightest
-                           dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-                    data-tip="Ouvrir les vues de relecture"
-                    aria-label="Ouvrir les vues de relecture de {exercice.id}"
-                    on:click={() => ouvrirVues(exercice)}
-                  >
-                    <i class="bx bx-window-open text-2xl"></i>
-                  </button>
-                </li>
-                {#if (liensBloques[exercice.uuid] ?? []).length > 0}
-                  <li
-                    class="rounded-md px-2 py-2 text-sm
-                           bg-coopmaths-warn-100 dark:bg-coopmathsdark-warn-dark"
-                  >
-                    <p class="mb-1">
-                      Le navigateur a bloqué l'ouverture de certains onglets.
-                      Cliquer sur chaque vue ou autoriser les fenêtres
-                      surgissantes pour ce site (sous Safari : Réglages &gt;
-                      Sites web &gt; Fenêtres surgissantes).
-                    </p>
-                    <ul class="flex flex-row flex-wrap gap-x-4 gap-y-1">
-                      {#each liensBloques[exercice.uuid] as lien (lien.url)}
-                        <li>
-                          <a
-                            href={lien.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="underline text-coopmaths-action hover:text-coopmaths-action-lightest
-                                   dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-                            on:click={() => lienOuvert(exercice, lien)}
-                            >{lien.label}</a
-                          >
-                        </li>
+                  <div class="flex flex-row items-center gap-2">
+                    <span class="text-xs font-mono shrink-0 w-20">
+                      {exercice[colonne.dateKey]}
+                    </span>
+                    <span class="text-sm">
+                      <span class="font-bold">{exercice.id}</span> - {exercice.titre}
+                    </span>
+                    <button
+                      type="button"
+                      class="ml-auto shrink-0 tooltip tooltip-left tooltip-neutral
+                             text-coopmaths-action hover:text-coopmaths-action-lightest
+                             dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+                      data-tip={deplie
+                        ? 'Masquer les vues de relecture'
+                        : 'Afficher les vues de relecture'}
+                      aria-label="Vues de relecture de {exercice.id}"
+                      aria-expanded={deplie}
+                      on:click={() => basculerVues(exercice)}
+                    >
+                      <i class="bx bx-window-open text-2xl"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="shrink-0 rounded-full w-7 h-7 flex items-center justify-center
+                             {etat === 'valide'
+                        ? 'bg-green-600 text-white'
+                        : 'text-green-600 hover:bg-green-200 dark:text-green-400 dark:hover:bg-green-800'}"
+                      title="Relu, rien à signaler"
+                      aria-label="Marquer {exercice.id} comme relu sans problème"
+                      aria-pressed={etat === 'valide'}
+                      on:click={() => choisirEtat(exercice, 'valide')}
+                    >
+                      <i class="bx bx-check text-2xl"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="shrink-0 rounded-full w-7 h-7 flex items-center justify-center
+                             {etat === 'refuse'
+                        ? 'bg-red-600 text-white'
+                        : 'text-red-600 hover:bg-red-200 dark:text-red-400 dark:hover:bg-red-800'}"
+                      title="Relu, problème repéré"
+                      aria-label="Marquer {exercice.id} comme relu avec un problème"
+                      aria-pressed={etat === 'refuse'}
+                      on:click={() => choisirEtat(exercice, 'refuse')}
+                    >
+                      <i class="bx bx-x text-2xl"></i>
+                    </button>
+                  </div>
+                  {#if deplie}
+                    <div
+                      class="flex flex-row flex-wrap items-center gap-x-4 gap-y-1 py-2 text-sm"
+                    >
+                      <button
+                        type="button"
+                        class="rounded-md px-2 py-0.5 font-bold text-coopmaths-canvas bg-coopmaths-action
+                               hover:bg-coopmaths-action-lightest
+                               dark:text-coopmathsdark-canvas dark:bg-coopmathsdark-action
+                               dark:hover:bg-coopmathsdark-action-lightest"
+                        on:click={() => ouvrirToutesLesVues(exercice)}
+                      >
+                        Toutes
+                      </button>
+                      {#each liensDe(exercice) as lien (lien.url)}
+                        <a
+                          href={lien.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="underline text-coopmaths-action hover:text-coopmaths-action-lightest
+                                 dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+                          >{lien.label}</a
+                        >
                       {/each}
-                    </ul>
-                  </li>
-                {/if}
+                    </div>
+                    {#if ongletsBloques[exercice.uuid]}
+                      <p
+                        class="mb-2 rounded-md px-2 py-1 text-sm bg-coopmaths-warn-100 dark:bg-coopmathsdark-warn-dark"
+                      >
+                        Le navigateur a bloqué l'ouverture de certains onglets.
+                        Cliquer sur chaque vue ou autoriser les fenêtres
+                        surgissantes pour ce site (sous Safari : Réglages &gt;
+                        Sites web &gt; Fenêtres surgissantes).
+                      </p>
+                    {/if}
+                  {/if}
+                </li>
               {/each}
             </ul>
             {#if pages > 1}

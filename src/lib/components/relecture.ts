@@ -181,3 +181,61 @@ export function filterExercices(
     return words.every((word) => haystack.includes(word))
   })
 }
+
+/** Verdict du relecteur sur un exercice */
+export type EtatDeRelecture = 'valide' | 'refuse'
+
+/** Verdicts du relecteur, par uuid d'exercice */
+export type EtatsDeRelecture = Record<string, EtatDeRelecture>
+
+/** Clé localStorage du suivi de relecture */
+export const RELECTURE_STORAGE_KEY = 'relectureEtats'
+
+function isEtatDeRelecture(value: unknown): value is EtatDeRelecture {
+  return value === 'valide' || value === 'refuse'
+}
+
+/**
+ * Lit le suivi de relecture enregistré dans le navigateur
+ * @returns un objet vide si rien n'est enregistré ou si le stockage est illisible
+ */
+export function loadEtatsDeRelecture(
+  storage: Pick<Storage, 'getItem'> | undefined,
+): EtatsDeRelecture {
+  try {
+    const parsed: unknown = JSON.parse(
+      storage?.getItem(RELECTURE_STORAGE_KEY) ?? '{}',
+    )
+    if (!isObject(parsed)) return {}
+    return Object.fromEntries(
+      Object.entries(parsed).filter(([, etat]) => isEtatDeRelecture(etat)),
+    ) as EtatsDeRelecture
+  } catch {
+    return {}
+  }
+}
+
+/** Enregistre le suivi de relecture dans le navigateur (sans erreur si le stockage est indisponible) */
+export function saveEtatsDeRelecture(
+  storage: Pick<Storage, 'setItem'> | undefined,
+  etats: EtatsDeRelecture,
+): void {
+  try {
+    storage?.setItem(RELECTURE_STORAGE_KEY, JSON.stringify(etats))
+  } catch {
+    // stockage plein ou désactivé : le suivi reste valable pour la session
+  }
+}
+
+/**
+ * Applique le verdict choisi : cliquer à nouveau sur le verdict déjà posé
+ * l'efface
+ */
+export function toggleEtatDeRelecture(
+  etats: EtatsDeRelecture,
+  uuid: string,
+  etat: EtatDeRelecture,
+): EtatsDeRelecture {
+  const { [uuid]: actuel, ...autres } = etats
+  return actuel === etat ? autres : { ...autres, [uuid]: etat }
+}
