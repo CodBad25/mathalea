@@ -1,7 +1,3 @@
 #!/bin/sh
 
-if git diff --cached --name-only --diff-filter=A | grep -Eq '^src/exercices/.*\.ts$'; then
-  echo 'ℹ️  Nouvel exercice détecté : lancez « pnpm stability:update » et ajoutez les empreintes générées avant le commit.'
-fi
-
-exit 0
+node tasks/stability-precommit.js
