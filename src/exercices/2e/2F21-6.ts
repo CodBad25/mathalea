@@ -1,5 +1,16 @@
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
+import { addTableauSignesVariations } from '../../lib/customElements/TableauSignesVariationsElement'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import {
+  celluleFleche,
+  celluleValeur,
+  colonne,
+  ligneVariation,
+} from '../../lib/interactif/tableauSignesVariations/helpers'
+import type { TableauSVConfig } from '../../lib/interactif/tableauSignesVariations/types'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { choice } from '../../lib/outils/arrayOutils'
 import {
   simplificationDeFractionAvecEtapes,
   texFractionReduite,
@@ -12,11 +23,16 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { abs } from '../../lib/outils/nombres'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Déterminer le sens de variation d'une fonction affine"
 export const dateDeModifImportante = '18/05/2023'
+export const interactifReady = true
 /**
  * @author Stéphane Guyon mise à jour et ajout de cas Gilles Mora
  * typage typescript incomplet à cause de tableauDeVariation Jean-claude Lhote
@@ -30,32 +46,53 @@ export const refs = {
 export default class Variationsfonctionaffine extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Types de question ',
-      4,
-      '1 : Avec des  entiers\n2 : Avec des fractions\n3 : Sur un intervalle borné\n4 : Mélange des cas précédents',
+    this.besoinFormulaireTexte = [
+      'Types de question',
+      [
+        'Nombres séparés par des tirets :',
+        '1 : Déterminer le sens de variation (avec des entiers)',
+        '2 : Déterminer le sens de variation (avec des fractions)',
+        '3 : Dresser un tableau de variations (sur un intervalle borné)',
+      ].join('\n'),
     ]
 
     this.nbQuestions = 2 // On complète le nb de questions
 
-    this.sup = 4
+    // Par défaut, les trois cas sont cochés à poids égal.
+    this.sup = '1-2-3'
+  }
+
+  propositionsSensDeVariation(nomF: string[], a: number) {
+    return a > 0
+      ? [
+          { texte: `$${nomF}$ est croissante sur $\\mathbb R$.`, statut: true },
+          {
+            texte: `$${nomF}$ est décroissante sur $\\mathbb R$.`,
+            statut: false,
+          },
+        ]
+      : [
+          {
+            texte: `$${nomF}$ est décroissante sur $\\mathbb R$.`,
+            statut: true,
+          },
+          { texte: `$${nomF}$ est croissante sur $\\mathbb R$.`, statut: false },
+        ]
   }
 
   nouvelleVersion() {
-    let typesDeQuestionsDisponibles: number[] = []
-    if (this.sup === 1) {
-      typesDeQuestionsDisponibles = [1]
-    } else if (this.sup === 2) {
-      typesDeQuestionsDisponibles = [2]
-    } else if (this.sup === 3) {
-      typesDeQuestionsDisponibles = [3]
-    } else {
-      typesDeQuestionsDisponibles = [1, 2, 3]
-    }
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
+    // melange/defaut = 4 : compatibilité des anciens liens partagés utilisant
+    // l'ancien réglage numérique 4 = « Mélange des cas précédents ». Ce cas
+    // n'est plus proposé dans le formulaire, qui coche désormais les cas 1 à
+    // 3 individuellement.
+    const listeTypeDeQuestions = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 3,
+      melange: 4,
+      defaut: 4,
+      nbQuestions: this.nbQuestions,
+    }) as number[]
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       // on rajoute les variables dont on a besoin
@@ -108,6 +145,22 @@ export default class Variationsfonctionaffine extends Exercice {
               lgt: 3, // taille de la première colonne en cm
               hauteurLignes: [15, 20],
             })
+            if (this.interactif) {
+              handleAnswers(
+                this,
+                i,
+                {
+                  qcm: {
+                    enonce: texte,
+                    propositions: this.propositionsSensDeVariation(nomF, a),
+                    correction: texteCorr,
+                    options: { radio: true },
+                  },
+                },
+                { formatInteractif: 'mathalea-qcm' },
+              )
+              texte += addMathaleaQcm(this, i, { radio: true })
+            }
             variables.push(a, b)
           }
           break
@@ -160,6 +213,22 @@ export default class Variationsfonctionaffine extends Exercice {
               lgt: 3, // taille de la première colonne en cm
               hauteurLignes: [15, 20],
             })
+            if (this.interactif) {
+              handleAnswers(
+                this,
+                i,
+                {
+                  qcm: {
+                    enonce: texte,
+                    propositions: this.propositionsSensDeVariation(nomF, a),
+                    correction: texteCorr,
+                    options: { radio: true },
+                  },
+                },
+                { formatInteractif: 'mathalea-qcm' },
+              )
+              texte += addMathaleaQcm(this, i, { radio: true })
+            }
             variables.push(a, b)
           }
           break
@@ -211,6 +280,39 @@ export default class Variationsfonctionaffine extends Exercice {
               lgt: 3, // taille de la première colonne en cm
               hauteurLignes: [15, 20],
             })
+            if (this.interactif) {
+              const configTableauVariations: TableauSVConfig = {
+                variableName: 'x',
+                colonnes: [colonne(String(c)), colonne(String(d))],
+                lignes: [
+                  ligneVariation(
+                    `${nomF}(x)`,
+                    [
+                      celluleValeur('', {
+                        editable: true,
+                        expected: String(fc),
+                        clavier: KeyboardType.clavierDeBase,
+                      }),
+                      celluleValeur('', {
+                        editable: true,
+                        expected: String(fd),
+                        clavier: KeyboardType.clavierDeBase,
+                      }),
+                    ],
+                    [
+                      celluleFleche('', {
+                        editable: true,
+                        expected: a > 0 ? 'haut' : 'bas',
+                      }),
+                    ],
+                  ),
+                ],
+              }
+              texte += `<br>${addTableauSignesVariations(this, i, {
+                config: configTableauVariations,
+                bareme: 1,
+              })}`
+            }
             variables.push(a, b)
           }
           break
