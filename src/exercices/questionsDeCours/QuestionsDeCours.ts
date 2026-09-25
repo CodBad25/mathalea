@@ -1,3 +1,7 @@
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
 import { ajouteSelecteurQuestionsDeCours } from '../../lib/customElements/QuestionsDeCoursSelecteur'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -264,8 +268,9 @@ function optionsDeComparaison(
 
 /** La correction affichée quand le JSON n'en fournit pas. */
 function correctionParDefaut(question: QuestionDeCours): string {
-  if (question.type === 'math') return `$${question.answers[0]}$`
-  return question.answers[0]
+  if (question.type === 'math')
+    return `$${miseEnEvidence(question.answers[0])}$`
+  return texteEnCouleurEtGras(question.answers[0])
 }
 
 function sansAccents(texte: string): string {

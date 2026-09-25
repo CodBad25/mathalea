@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
@@ -94,7 +95,7 @@ export default class AutoQ4CentresEtrangersBrevet2026 extends ExerciceCan {
     )
 
     this.correction = `L'aire d'un triangle rectangle est égale à la moitié du produit des longueurs de ses côtés de l'angle droit. Ici, les côtés de l'angle droit sont $${longueurs.slice(0, 2).join('\\text{ cm }$ et $')}\\text{ cm }$. Donc l'aire du triangle est égale à :<br>
-    $\\dfrac{${longueurs[0]}\\times ${longueurs[1]}}{2} = ${this.reponse}\\text{ cm}^2$.`
+    $\\dfrac{${longueurs[0]}\\times ${longueurs[1]}}{2} = ${miseEnEvidence(String(this.reponse))}\\text{ cm}^2$.`
   }
   nouvelleVersion() {
     if (this.canOfficielle || this.sup) {

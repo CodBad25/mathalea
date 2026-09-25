@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
@@ -180,9 +181,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{P}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}=${
-                  4 * c
-                }${sp()}\\text{cm}$<br>`
+                `$\\mathcal{P}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}=${miseEnEvidence(
+                  4 * c,
+                )}${sp()}\\text{cm}$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC
@@ -232,7 +233,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{A}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${c}${sp()}\\text{cm}\\times${c}${sp()}\\text{cm}=${c * c}${sp()}\\text{cm}^2$<br>`
+                `$\\mathcal{A}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${c}${sp()}\\text{cm}\\times${c}${sp()}\\text{cm}=${miseEnEvidence(c * c)}${sp()}\\text{cm}^2$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC
@@ -277,9 +278,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{P}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}+${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}=${
-                  2 * L + 2 * l
-                }${sp()}\\text{cm}$<br>`
+                `$\\mathcal{P}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}+${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}=${miseEnEvidence(
+                  2 * L + 2 * l,
+                )}${sp()}\\text{cm}$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC
@@ -322,9 +323,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{A}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}\\times${l}${sp()}\\text{cm}=${
-                  L * l
-                }${sp()}\\text{cm}^2$<br>`
+                `$\\mathcal{A}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}\\times${l}${sp()}\\text{cm}=${miseEnEvidence(
+                  L * l,
+                )}${sp()}\\text{cm}^2$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC
@@ -369,7 +370,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{P}_{${nom[8] + nom[9] + nom[10]}}=${a}${sp()}\\text{cm}+${b}${sp()}\\text{cm}+${texNombre(c2, 1)}${sp()}\\text{cm}=${texNombre(pIJK)}${sp()}\\text{cm}$<br>`
+                `$\\mathcal{P}_{${nom[8] + nom[9] + nom[10]}}=${a}${sp()}\\text{cm}+${b}${sp()}\\text{cm}+${texNombre(c2, 1)}${sp()}\\text{cm}=${miseEnEvidence(texNombre(pIJK))}${sp()}\\text{cm}$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC
@@ -412,7 +413,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{A}_{${nom[8] + nom[9] + nom[10]}}=${a}${sp()}\\text{cm}\\times${b}${sp()}\\text{cm}\\div2=${texNombre((a * b) / 2)}${sp()}\\text{cm}^2$<br>`
+                `$\\mathcal{A}_{${nom[8] + nom[9] + nom[10]}}=${a}${sp()}\\text{cm}\\times${b}${sp()}\\text{cm}\\div2=${miseEnEvidence(texNombre((a * b) / 2))}${sp()}\\text{cm}^2$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC

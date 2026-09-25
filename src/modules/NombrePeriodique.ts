@@ -187,12 +187,15 @@ class NombrePeriodique {
     } else {
       procedure += '<br>On a donc les deux membres de droite qui sont égaux.'
       procedure += `<br><br>$${miseEnEvidence(`${10 ** this.periode.toString().length - 1}\\times${this.toString()}`, bleuMathalea)}=${miseEnEvidence(texNombre(nbDecimal, 6), bleuMathalea)}$`
-      procedure += `<br><br>$${this.toString()}=${nbSansPeriode.entierDivise(10 ** this.periode.toString().length - 1).texFraction}\\\\`
+      const fractionFinale = nbSansPeriode.entierDivise(
+        10 ** this.periode.toString().length - 1,
+      )
+      procedure += `<br><br>$${this.toString()}=${fractionFinale.estIrreductible ? miseEnEvidence(fractionFinale.texFraction) : fractionFinale.texFraction}\\\\`
       if (
         !nbSansPeriode.entierDivise(10 ** this.periode.toString().length - 1)
           .estIrreductible
       ) {
-        procedure += `=${nbSansPeriode.entierDivise(10 ** this.periode.toString().length - 1).texFractionSimplifiee}$<br><br>`
+        procedure += `=${miseEnEvidence(nbSansPeriode.entierDivise(10 ** this.periode.toString().length - 1).texFractionSimplifiee)}$<br><br>`
       } else {
         procedure += '$'
       }

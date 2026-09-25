@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { orangeMathalea } from '../../lib/colors'
 import { base10VersBaseN } from '../../lib/mathFonctions/baseConversions'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -118,6 +119,7 @@ export default class AdditionSoustractionBaseN extends Exercice {
             texteCorr += '$'
           }
         }
+        texteCorr += `<br>Finalement, $(${mb})_{${base}} + (${nb})_{${base}} = (${miseEnEvidence(base10VersBaseN(m + n, base))})_{${base}}$.`
       } else {
         m = randint(base ** 3, base ** 4)
         n = randint(base ** 2, m)
@@ -170,6 +172,7 @@ export default class AdditionSoustractionBaseN extends Exercice {
           }
           texteCorr += `= ${difference}$`
         }
+        texteCorr += `<br>Finalement, $(${mb})_{${base}} - (${nb})_{${base}} = (${miseEnEvidence(base10VersBaseN(m - n, base))})_{${base}}$.`
       }
 
       if (this.listeQuestions.indexOf(texte) === -1) {
