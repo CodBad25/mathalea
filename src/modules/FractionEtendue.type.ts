@@ -73,6 +73,10 @@ export interface IFractionEtendue {
     factorisation?: boolean | 'none',
     couleurFinale?: string,
   ): string
+  texSimplificationParFacteursCommuns(
+    facteursNumerateur: number[],
+    facteursDenominateur: number[],
+  ): string
 
   puissanceFraction(n: number): IFractionEtendue
   inverse(): IFractionEtendue
