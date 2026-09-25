@@ -231,7 +231,7 @@ export default class EngrenagesAnimes extends Exercice {
           roues = engrenages(
             { dureeTourBase: 0, module: 0.4 },
             nbDentsRoueA,
-            nbDentsRoueB,
+            nbDentsLeurre(nbDentsRoueA, nbDentsRoueB),
           )
           rouesCorr = engrenages(
             {
@@ -276,7 +276,7 @@ export default class EngrenagesAnimes extends Exercice {
           roues = engrenages(
             { dureeTourBase: 0, module: 0.4 },
             nbDentsRoueA,
-            nbDentsRoueB,
+            nbDentsLeurre(nbDentsRoueA, nbDentsRoueB),
           )
           rouesCorr = engrenages(
             {
@@ -343,9 +343,7 @@ export default class EngrenagesAnimes extends Exercice {
             nbToursB === 1
           ) // au moins une des deux roues fait moins de 5 tours
           texte +=
-            `La roue dentée de gauche possède $${nbDentsRoueA}$ dents et la roue de droite en possède $${nbDentsRoueB}$ ` +
-            (context.isHtml ? "(le dessin n'est pas représentatif)" : '') +
-            '.<br>'
+            `La roue dentée de gauche possède $${nbDentsRoueA}$ dents et la roue de droite en possède $${nbDentsRoueB}$.<br>`
           texte += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents.<br>Pendant ce temps, combien la roue de droite effectue-t-elle de tours ?`
           texte += ajouteChampTexteMathLive(
             this,
@@ -542,6 +540,16 @@ export default class EngrenagesAnimes extends Exercice {
     }
     listeQuestionsToContenu(this)
   }
+}
+
+/**
+ * Nombre de dents dessiné pour la roue de droite dans l'énoncé lorsque c'est l'inconnue :
+ * il diffère de la réponse pour que l'élève ne puisse pas compter les dents sur le dessin.
+ */
+function nbDentsLeurre(nbDentsRoueA: number, nbDentsRoueB: number) {
+  let nbDents = nbDentsRoueB > 16 ? nbDentsRoueB - 5 : nbDentsRoueB + 5
+  if (nbDents === nbDentsRoueA) nbDents++
+  return nbDents
 }
 
 function registerReplayAnimation(remiseAZeroT: RemiseAZero) {
