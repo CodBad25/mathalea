@@ -1,4 +1,4 @@
-import Exercice4L200 from '../4e/4L20-0'
+import Exercice4L200 from '../4e/4L20-0-old'
 
 export const titre =
   'Résoudre une équation du premier degré à solutions entières'
