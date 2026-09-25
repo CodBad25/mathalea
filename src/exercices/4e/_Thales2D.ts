@@ -286,7 +286,7 @@ export default class Thales2D extends Exercice {
       }
       texteCorr += `$${nomC + nomB}=\\dfrac{${texNombre(Math.abs(k) * bc)}\\times${texNombre(ac)}}{${texNombre(Math.abs(k) * ac)}}=${texNombre(bc)}\\text{ cm}$`
       reponse2 = bc
-      if (context.isHtml) {
+      if (context.isHtml && !context.isTypst) {
         texte += `<br><div style="display: inline-block;margin-top:20px;">${boutonAideMathalea2d}</div>`
       }
 
