@@ -54,7 +54,7 @@ export default class PpcmEngrenages extends Exercice {
       const idDivIntro = `divIntro${idUnique}`
       // On ajoute un customElement au registre via la fonction svgEngrenages()
       svgEngrenages()
-      txtIntro += warnMessage(`Attention, les roues ci-dessous ne comportent pas le nombre de dents de l'énoncé ! <br> <svg-engrenage id="${idDivIntro}"></svg-engrenage>`, 'nombres', 'Coup de pouce')
+      txtIntro += `<svg-engrenage id="${idDivIntro}"></svg-engrenage>`
     } else {
       txtIntro += '\\\\ \\textit{Attention, les roues ci-dessous ne comportent pas le nombre de dents de l\'énoncé !} \\\\ \\Engrenages[Couleur=white,Unite=1mm]{1/24,1/9}'
     }

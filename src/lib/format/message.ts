@@ -1,51 +1,6 @@
 import { context } from '../../modules/context'
 
 /**
- * Renvoie un encart sur fond d'alert semantic ui en HTML ou dans un cadre bclogo en LaTeX avec le texte
- * @param {string} texte
- * @param {string} couleur
- * @param {string} titre
- * @author Sébastien Lozano
- */
-export function warnMessage(
-  texte: string,
-  couleur: string = 'black',
-  titre: string = '',
-) {
-  const timeStamp = Date.now()
-  if (typeof titre === 'undefined') {
-    titre = ''
-  }
-  if (context.isHtml) {
-    return `
-      <div id="warnMessage-${timeStamp}">
-        <div id="title-warnMessage-${timeStamp}">
-        ${titre}
-        </div>
-        ${texte}
-      </div>
-      `
-  } else {
-    // return texCadreParOrange(texte);
-    return (
-      `
-    \\begin{bclogo}[couleurBarre=` +
-      couleur +
-      ',couleurBord=' +
-      couleur +
-      ',epBord=2,couleur=gray!10,logo=\\bclampe,arrondi=0.1]{\\bf ' +
-      titre +
-      `}
-      ` +
-      texte +
-      `
-    \\end{bclogo}
-    `
-    )
-  }
-}
-
-/**
  * @returns un encart sur fond d'alert semantic ui en HTML ou dans un cadre bclogo en LaTeX avec le texte + icone info
  * @param {object}
  * @author Sébastien Lozano

@@ -337,7 +337,6 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
 
         const idUnique = `${numeroExercice}_${Date.now()}`
         const idDivIntro = `divIntro${idUnique}`
-        txtIntro += warnMessage('Attention, les roues ci-dessous ne comportent pas le nombre de dents de l\'énoncé!', 'nombres', 'Coup de pouce')
         txtIntro += `<div id="${idDivIntro}" style="width: ${pourcentage}; height: 50px; display : table "></div>`
         svgEngrenages(idDivIntro, 200, 200)
       } else {

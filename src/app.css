@@ -783,18 +783,6 @@ input[type='radio']:focus {
                                                        888                   
                                                   Y8b d88P                   
                                                    "Y88P"                     */
-/*warnMessage*/
-div[id^='warnMessage'] {
-  @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark px-4 py-2 my-2 border-l-4 border-l-coopmaths-warn-dark dark:border-l-coopmathsdark-warn-dark  font-light relative w-2/3;
-}
-div[id^='warnMessage']:before {
-  content: '🌬';
-  float: left;
-  @apply mr-3 text-lg text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-warn-dark dark:bg-coopmathsdark-warn-dark rounded-full h-6 w-6 inline-flex items-center justify-center;
-}
-div[id^='title-warnMessage'] {
-  @apply font-bold pb-2 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark;
-}
 /* info message */
 div[id^='infoMessage'] {
   @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas px-4 py-2 my-2 border-l-4 border-l-coopmaths-warn-dark dark:border-l-coopmathsdark-warn-dark  font-light relative w-2/3;
