@@ -575,11 +575,13 @@ class Latex {
   }
 
   /**
-   * Clé `Ajout` de ProfMaquette affichant l'identifiant de l'exercice en haut
-   * à droite de son cadre, comme le fait l'habillage Coopmaths.
+   * Clé `Ajout` de ProfMaquette affichant l'identifiant de l'exercice sur le
+   * filet inférieur de son cadre, à droite. En haut à droite, il chevauchait
+   * les titres longs (posés sur le filet supérieur) ou la première ligne de
+   * l'énoncé.
    *
    * Renvoie une liste vide quand l'identifiant est masqué, ou quand le
-   * QR-code occupe déjà ce coin (il mène de toute façon à l'exercice).
+   * QR-code est affiché (il mène de toute façon à l'exercice).
    */
   private referenceKeyFor(
     latexFileInfos: LatexFileInfos,
@@ -589,7 +591,7 @@ class Latex {
     if (latexFileInfos.qrcodeOption === 'AvecQrcode') return []
     if (reference === '') return []
     return [
-      `Ajout={\\node[anchor=north east, inner sep=2pt] at (frame.north east) {\\scriptsize ${sanitizeLatexInput(reference)}};}`,
+      `Ajout={\\node[anchor=east, xshift=-10pt, fill=tcbcolback, inner sep=2pt] at (frame.south east) {\\scriptsize ${sanitizeLatexInput(reference)}};}`,
     ]
   }
 
