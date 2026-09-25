@@ -270,6 +270,21 @@
     updateDisplay()
   }
 
+  /**
+   * Un custom element de l'énoncé (le paramétrage de P011 par exemple) peut
+   * demander de nouveaux réglages en émettant l'événement DOM `settings`,
+   * avec le même `detail` que la fenêtre de réglages.
+   */
+  function ecouteReglagesDeLEnonce(node: HTMLElement) {
+    const ecouteur = (event: Event) => handleNewSettings(event as CustomEvent)
+    node.addEventListener('settings', ecouteur)
+    return {
+      destroy() {
+        node.removeEventListener('settings', ecouteur)
+      },
+    }
+  }
+
   function toggleColBreak() {
     // garde-fou défensif : l'ajout est déjà désactivé côté bouton
     // (columnBreakDisabled) une fois le nombre maximal de sauts atteint
@@ -400,6 +415,7 @@
 
     <article
       class="pl-12 pr-3 pt-3 pb-3 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      use:ecouteReglagesDeLEnonce
     >
       {#if correctionMode !== 'replace'}
         <div use:renderMath={zoom}>

@@ -373,7 +373,7 @@ export default class CourseAuxNombres6e extends Exercice {
           const d14 = randint(0, 9, [b, c])
           a = b * 100 + c * 10 + d14
           const resultat14 = a % 3
-          texte = `Quel est le reste de la division de $${a}$ par $3$ ?`
+          texte = `Quel est le reste de la division euclidienne de $${a}$ par $3$ ?`
           texteCorr = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(resultat14)}$`
           handleAnswers(this, q, { reponse: { value: resultat14 } })
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierDeBase)

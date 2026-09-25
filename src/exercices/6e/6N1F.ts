@@ -168,7 +168,6 @@ export default class AssocierDifferentesEcrituresNombreDecimal extends Exercice 
         fracD,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-      cpt++
     ) {
       entier = randint(1, 20)
       deci = randint(1, 9)

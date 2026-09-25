@@ -24,6 +24,24 @@ Dans l'application :
 Vérifiez particulièrement les doublons, les divisions par zéro, les valeurs
 limites et les corrections qui ne correspondent pas à l'énoncé.
 
+### Vue relecture
+
+La vue `?v=relecture` liste, du plus récent au plus ancien, les nouveaux
+exercices (`datePublication`) et les exercices mis à jour (`dateModification`)
+du référentiel, avec un champ de recherche (référence, titre ou UUID). Le bouton
+placé après chaque titre affiche, sous l'exercice, un lien par vue : prof non
+interactive, élève interactive, diaporama, Course aux nombres, TBI, Typst,
+Typst avec correction minimale et LaTeX, ainsi qu'un bouton « Toutes » qui les
+ouvre toutes dans des onglets. Safari n'ouvre qu'un onglet par clic tant que
+les fenêtres surgissantes ne sont pas autorisées pour le site : un message le
+signale alors et le relecteur peut cliquer sur chaque vue.
+
+Les boutons ✓ et ✗ placés après le bouton d'ouverture enregistrent le verdict
+du relecteur (fond vert ou rouge ; un second clic l'efface). Ce suivi est
+propre au navigateur : il est stocké dans le `localStorage` sous la clé
+`relectureEtats`, par UUID d'exercice. La
+liste des vues est définie dans `src/lib/components/relecture.ts`.
+
 ## Format et types
 
 ```sh

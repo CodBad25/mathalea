@@ -168,8 +168,7 @@ Un exercice est relu et modifié par d'autres pendant des années :
   « magiques » (`const majorite = 18`) ;
 - factoriser un bloc répété au lieu de le copier-coller ;
 - commenter le *pourquoi* d'un passage non évident, pas ce que fait chaque
-  ligne ; documenter les fonctions réutilisables avec un bloc `/** … */`
-  (repris par TypeDoc, `pnpm doc`).
+  ligne ; documenter les fonctions réutilisables avec un bloc `/** … */`.
 
 La présentation des énoncés (texte, couleurs, listes) est décrite dans
 [Mise en forme](complements/mise-en-forme.md).

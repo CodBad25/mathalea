@@ -155,10 +155,10 @@ export default class nomExercice extends Exercice {
       let objetsDessinCorrection: NestedObjetMathalea2dArray = []
       const nbDroite = this.sup2 ? 3 : 1
       let Sbis = [...S]
-      const nbtour = randint(1, 6)
-      for (let j = 0; j < nbtour; j++) {
-        Sbis = decale(Sbis)
-      }
+      // Tirage conservé pour ne pas modifier les valeurs aléatoires suivantes.
+      // Sbis ne doit pas être décalé : la première médiane tracée doit être
+      // celle issue de S[2] (relative à [S[0]S[1]]) demandée dans l'énoncé.
+      randint(1, 6)
       for (let j = 0; j < nbDroite; j++) {
         droiteRem[j] = medianeTriangle(
           Sbis[2],
@@ -336,16 +336,16 @@ export default class nomExercice extends Exercice {
       if (context.isHtml && !this.interactif)
         texte += 'Reproduire la figure ci-dessous.<br>'
       if (this.sup2) {
-        texte += `Dans le triangle ${nomDuTriangleEnonce}, tracer les trois médianes ${listeTypeVocabulaire[i] === 'sommet' ? `issues de chacun des sommets` : `relatives aux trois côtés`}.<br>Que peut-on remarquer ?<br>`
+        texte += `Dans le triangle $${nomDuTriangleEnonce}$, tracer les trois médianes ${listeTypeVocabulaire[i] === 'sommet' ? `issues de chacun des sommets` : `relatives aux trois côtés`}.<br>Que peut-on remarquer ?<br>`
       } else {
-        texte += `Dans le triangle ${nomDuTriangleEnonce}, tracer la médiane ${listeTypeVocabulaire[i] === 'sommet' ? `issue de ${S[2].nom}` : `relative au côté [${S[0].nom}${S[1].nom}]`}.<br>`
+        texte += `Dans le triangle $${nomDuTriangleEnonce}$, tracer la médiane ${listeTypeVocabulaire[i] === 'sommet' ? `issue de $${S[2].nom}$` : `relative au côté $[${S[0].nom}${S[1].nom}]$`}.<br>`
       }
       texte += enonce
       if (this.sup2) {
-        texteCorr += `Dans le triangle ${nomDuTriangleEnonce}, on place les milieux de chaque côté, puis on trace les trois droites passant par les sommets et les milieux des côtés opposés.<br>`
-        texteCorr += `On remarque que les trois droites se coupent au même point ${G.nom}. On dit que les droites sont concourrantes et le point ${G.nom} est appelé le centre de gravité du triangle.<br>`
+        texteCorr += `Dans le triangle $${nomDuTriangleEnonce}$, on place les milieux de chaque côté, puis on trace les trois droites passant par les sommets et les milieux des côtés opposés.<br>`
+        texteCorr += `On remarque que les trois droites se coupent au même point $${G.nom}$. On dit que les droites sont concourantes et le point $${G.nom}$ est appelé le centre de gravité du triangle.<br>`
       } else {
-        texteCorr += `Dans le triangle ${nomDuTriangleEnonce}, on remarque que le côté [${S[0].nom}${S[1].nom}] est oopsé au sommet ${S[2].nom}. Donc la médiane ${listeTypeVocabulaire[i] === 'sommet' ? `issue de ${S[2].nom}` : `relative au côté [${S[0].nom}${S[1].nom}]`} est la droite qui passe par le milieu du côté [${S[0].nom}${S[1].nom}] et le sommet ${S[2].nom}.<br>`
+        texteCorr += `Dans le triangle $${nomDuTriangleEnonce}$, on remarque que le côté $[${S[0].nom}${S[1].nom}]$ est opposé au sommet $${S[2].nom}$. Donc la médiane ${listeTypeVocabulaire[i] === 'sommet' ? `issue de $${S[2].nom}$` : `relative au côté $[${S[0].nom}${S[1].nom}]$`} est la droite qui passe par le milieu du côté $[${S[0].nom}${S[1].nom}]$ et le sommet $${S[2].nom}$.<br>`
       }
       texteCorr += mathalea2d(
         Object.assign(

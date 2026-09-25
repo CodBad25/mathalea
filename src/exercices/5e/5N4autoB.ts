@@ -2,6 +2,7 @@ import {
   choixDeroulant,
   type AllChoicesType,
 } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
   combinaisonListes,
@@ -38,7 +39,6 @@ export const refs = {
 
 export default class DefinitionUnitesVolumes extends Exercice {
   listeReponses: string[][]
-  tabIndiceInteractif: number[]
   constructor() {
     super()
 
@@ -68,7 +68,6 @@ export default class DefinitionUnitesVolumes extends Exercice {
     this.sup2 = '4'
 
     this.listeReponses = []
-    this.tabIndiceInteractif = []
   }
 
   nouvelleVersion() {
@@ -138,7 +137,6 @@ export default class DefinitionUnitesVolumes extends Exercice {
       ],
     ]
     let indiceInteractif = 0
-    this.tabIndiceInteractif = [0]
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const unite = unitesChoisies[cpt] // cpt choisi ici et dans tous les tableaux comme indice par pas assez de questions sinon.
       const match = unite.match(/\{ *([^}]*) *\}/)
@@ -377,108 +375,23 @@ export default class DefinitionUnitesVolumes extends Exercice {
       ) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         texte += ajouteFeedback(this, i)
+        if (this.interactif) {
+          for (let j = 0; j < this.listeReponses[i].length; j++) {
+            handleAnswers(
+              this,
+              indiceInteractif + j,
+              { reponse: { value: this.listeReponses[i][j] } },
+              { formatInteractif: 'liste-deroulante' },
+            )
+          }
+        }
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         indiceInteractif += this.listeReponses[i].length
-        this.tabIndiceInteractif.push(indiceInteractif)
         i++
       }
       cpt++
     }
     listeQuestionsToContenu(this)
-  }
-
-  correctionInteractive = (i: number) => {
-    let spanReponseLigne = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q0`,
-    )
-    let isOk = false
-    if (this.listeReponses[i].length === 3) {
-      const select1 = document.querySelector(
-        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
-      ) as HTMLSelectElement
-      const select2 = document.querySelector(
-        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 1}`,
-      ) as HTMLSelectElement
-      const select3 = document.querySelector(
-        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 2}`,
-      ) as HTMLSelectElement
-      if (this.answers === undefined) this.answers = {}
-      if (select1?.value)
-        this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i}`] =
-          select1.value
-      if (select2?.value)
-        this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 1}`] =
-          select2.value
-      if (select3?.value)
-        this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 2}`] =
-          select3.value
-      let isOk1 = false
-      let isOk23 = false
-      if (
-        select1?.value != null &&
-        select2.value != null &&
-        select3.value != null
-      ) {
-        const choix1 = select1.value
-        const choix2 = select2.value
-        const choix3 = select3.value
-        isOk1 = choix1 === this.listeReponses[i][0]
-        isOk23 =
-          choix2 === this.listeReponses[i][1] &&
-          choix3 === this.listeReponses[i][2]
-        isOk = isOk1 && isOk23
-      } else {
-        isOk = false
-      }
-      spanReponseLigne = document.querySelector(
-        `#resultatCheckEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 2}`,
-      )
-    } else if (this.listeReponses[i].length === 2) {
-      const select1 = document.querySelector(
-        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
-      ) as HTMLSelectElement
-      const select2 = document.querySelector(
-        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 1}`,
-      ) as HTMLSelectElement
-      let isOk1 = false
-      let isOk2 = false
-      if (select1?.value != null && select2.value != null) {
-        const choix1 = select1.value
-        const choix2 = select2.value
-        isOk1 = choix1 === this.listeReponses[i][0]
-        isOk2 = choix2 === this.listeReponses[i][1]
-        isOk = isOk1 && isOk2
-      } else {
-        isOk = false
-      }
-      spanReponseLigne = document.querySelector(
-        `#resultatCheckEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 1}`,
-      )
-    } else {
-      // if (this.listeReponses[i].length === 1) {
-      const select1 = document.querySelector(
-        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
-      ) as HTMLSelectElement
-      if (select1?.value != null) {
-        const choix1 = select1.value
-        isOk = choix1 === this.listeReponses[i][0]
-      }
-      spanReponseLigne = document.querySelector(
-        `#resultatCheckEx${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
-      )
-    }
-
-    if (spanReponseLigne == null)
-      window.notify(`Pas trouvé le spanReponseLigne dans 5M21 pour i=${i}`, {})
-    if (spanReponseLigne) {
-      if (isOk) {
-        spanReponseLigne.innerHTML = '😎'
-      } else {
-        spanReponseLigne.innerHTML = '☹️'
-      }
-    }
-
-    return isOk ? 'OK' : 'KO'
   }
 }

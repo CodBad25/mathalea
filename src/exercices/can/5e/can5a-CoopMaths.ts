@@ -263,7 +263,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(5, a - 1)
           c = randint(3, 9)
           d = c * a + b
-          texte = `Quel est le reste de la division de ${d} par ${a} ?`
+          texte = `Quel est le reste de la division euclidienne de ${d} par ${a} ?`
           texteCorr = `$${d}=${a} \\times ${c} + ${b}$ avec $${b}<${a}$ donc le reste de la division de ${d} par ${a} est ${b}.`
           handleAnswers(this, i, { reponse: { value: b } })
           break

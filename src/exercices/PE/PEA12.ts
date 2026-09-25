@@ -1,185 +1,179 @@
-import { orangeMathalea } from '../../lib/colors'
-import { base10VersBaseN } from '../../lib/mathFonctions/baseConversions'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { context } from '../../modules/context'
-import operation from '../../modules/operations'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import {
+  ajouteChampTexteMathLive,
+  remplisLesBlancs,
+} from '../../lib/interactif/questionMathLive'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  estPremier,
+  factorisation,
+  listeDesDiviseurs,
+  pgcd,
+  ppcm,
+} from '../../lib/outils/primalite'
+import { texNombre } from '../../lib/outils/texNombre'
+import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
+import {
+  compareDecomposition,
+  couleursFacteurs,
+  texEchelleDeDivisions,
+  texFacto,
+  texListeDiviseurs,
+  texRechercheDesDiviseurs,
+  tirerNombre,
+} from './PEA11'
+
 export const titre =
-  "Effectuer des additions et soustractions dans d'autres bases"
-export const dateDePublication = '31/10/2021'
-
-/**
-* Passer d'une écriture en base 10 à l'écriture dans une autre base ou inversement
-
-* * soustraction en base n
-* *
-* *
-*
-* @author Jean-claude Lhote pour les opérations posées et Rémi Angot pour la correction détaillée
-*/
-export const uuid = '3441e'
-
+  'Déterminer un PGCD et un PPCM à partir des décompositions en produit de facteurs premiers'
+export const interactifReady = true
+export const dateDePublication = '25/09/2026'
+export const uuid = 'a92bf'
 export const refs = {
   'fr-fr': ['PEA12'],
   'fr-ch': [],
 }
-export default class AdditionSoustractionBaseN extends Exercice {
+
+/**
+ * Décomposer deux nombres en produit de facteurs premiers puis en déduire leur PGCD, leur PPCM et leurs diviseurs communs
+ * @author Rémi Angot
+ */
+export default class PgcdPpcmDecomposition extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Opérations',
-      3,
-      '1 : Uniquement des additions\n2 : Uniquement des soustractions\n3 Additions et soustractions',
-    ]
-    this.besoinFormulaire2Numerique = [
-      'Choix des bases',
-      3,
-      '1 : Bases 2 à 5\n2 : Bases 12 et 16\n3 Bases 2 à base 16',
-    ]
-    this.consigne = 'Poser et effectuer les calculs suivants :'
-    this.video = '-bIvS95dmYw'
     this.nbQuestions = 4
-
-    this.pasDeVersionLatex = true
-    this.spacingCorr = context.isHtml ? 2 : 1
-    this.sup = 3
-    this.sup2 = 3
+    this.nbQuestionsModifiable = false
   }
 
   nouvelleVersion() {
-    let listeOperations = []
-    let listeBases: number[] = []
-    if (this.sup === 1) {
-      listeOperations = Array(this.nbQuestions).fill('+')
+    let n = 1
+    let m = 1
+    let factoN: [number, number][] = []
+    let factoM: [number, number][] = []
+    for (let cpt = 0; cpt < 200; cpt++) {
+      n = tirerNombre()
+      m = tirerNombre()
+      if (n < m) [n, m] = [m, n]
+      factoN = factorisation(n)
+      factoM = factorisation(m)
+      if (conditionsRespectees(n, m, factoN, factoM)) break
     }
-    if (this.sup === 2) {
-      listeOperations = Array(this.nbQuestions).fill('-')
-    }
-    if (this.sup === 3) {
-      for (let i = 0; i < this.nbQuestions; i++) {
-        listeOperations[i] = i < this.nbQuestions / 2 ? '+' : '-'
-      }
-    }
-    if (this.sup2 === 1) {
-      listeBases = combinaisonListes([2, 3, 4, 5], this.nbQuestions)
-    }
-    if (this.sup2 === 2) {
-      listeBases = combinaisonListes([12, 16], this.nbQuestions)
-    }
-    if (this.sup2 === 3) {
-      if (this.nbQuestions < 5) {
-        listeBases = combinaisonListes([3, 4, 12, 16], this.nbQuestions)
-      } else {
-        listeBases = combinaisonListes([3, 4, 5, 6, 12, 16], this.nbQuestions)
-      }
-    }
-    for (
-      let i = 0, texte, texteCorr, m, n, mb, nb, base, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-    ) {
-      base = listeBases[i]
-      if (listeOperations[i] === '+') {
-        m = randint(base ** 2, base ** 4)
-        n = randint(base ** 2, base ** 4)
-        mb = base10VersBaseN(m, base)
-        nb = base10VersBaseN(n, base)
-        texte = `$(${mb})_{${base}} + (${nb})_{${base}}$`
-        texteCorr =
-          `En base ${base} :<br>` +
-          operation({
-            operande1: m,
-            operande2: n,
-            type: 'addition',
-            base,
-            options: { solution: true, colore: orangeMathalea },
-          })
-        const retenue = []
-        for (let rang = 0; rang < Math.max(mb.length, nb.length); rang++) {
-          const somme: number =
-            parseInt(mb[mb.length - 1 - rang] || '0', base) +
-            parseInt(nb[nb.length - 1 - rang] || '0', base) +
-            parseInt(retenue[rang - 1] || '0', base)
-          texteCorr += `<br> Au rang des $${base}^${rang}$ :  $${mb[mb.length - 1 - rang] || '0'} + ${nb[nb.length - 1 - rang] || '0'} ${retenue[rang - 1] ? '+' + retenue[rang - 1] : ''}`
-          if (
-            parseInt(mb[mb.length - 1 - rang] || '0', base) > 9 ||
-            parseInt(nb[nb.length - 1 - rang] || '0', base) > 9
-          ) {
-            // Si un chiffre est un lettre
-            texteCorr += ` = ${parseInt(mb[mb.length - 1 - rang] || '0', base)} + ${parseInt(nb[nb.length - 1 - rang] || '0', base)}`
-          }
-          texteCorr += `= ${somme}`
-          if (somme >= base) {
-            texteCorr += `= (${base10VersBaseN(somme, base)})_{${base}}$ donc on écrit ${base10VersBaseN(somme, base)[1]} et on retient ${base10VersBaseN(somme, base)[0]}. `
-            retenue[rang] = base10VersBaseN(somme, base)[0]
-          } else if (somme >= 10) {
-            texteCorr += `= (${base10VersBaseN(somme, base)})_{${base}}$`
-          } else {
-            texteCorr += '$'
-          }
-        }
-      } else {
-        m = randint(base ** 3, base ** 4)
-        n = randint(base ** 2, m)
-        mb = base10VersBaseN(m, base)
-        nb = base10VersBaseN(n, base)
-        texte = `$(${mb})_{${base}} - (${nb})_{${base}}$`
-        texteCorr =
-          `En base ${base} :<br>` +
-          operation({
-            operande1: m,
-            operande2: n,
-            type: 'soustraction',
-            base,
-            options: { solution: true, colore: orangeMathalea },
-          })
-        const retenue = []
-        for (let rang = 0; rang < Math.max(mb.length, nb.length); rang++) {
-          let difference =
-            parseInt(mb[mb.length - 1 - rang] || '0', base) -
-            (parseInt(nb[nb.length - 1 - rang] || '0', base) +
-              parseInt(String(retenue[rang - 1] || '0'), base))
-          if (difference < 0) difference += base
-          if (retenue[rang - 1]) {
-            texteCorr += `<br> Au rang des $${base}^${rang}$ :  $${mb[mb.length - 1 - rang] || '0'} - (${nb[nb.length - 1 - rang] || '0'} + 1)`
-          } else {
-            texteCorr += `<br> Au rang des $${base}^${rang}$ :  $${mb[mb.length - 1 - rang] || '0'} - ${nb[nb.length - 1 - rang] || '0'}`
-          }
-          if (
-            parseInt(mb[mb.length - 1 - rang] || '0', base) > 9 ||
-            parseInt(nb[nb.length - 1 - rang] || '0', base) > 9
-          ) {
-            // Si un chiffre est un lettre
-            if (retenue[rang - 1]) {
-              texteCorr += ` = ${parseInt(mb[mb.length - 1 - rang] || '0', base)} - (${parseInt(nb[nb.length - 1 - rang] || '0', base)} + 1)`
-            } else {
-              texteCorr += ` = ${parseInt(mb[mb.length - 1 - rang] || '0', base)} - ${parseInt(nb[nb.length - 1 - rang] || '0', base)}`
-            }
-          }
-          if (
-            parseInt(mb[mb.length - 1 - rang] || '0', base) <
-            parseInt(nb[nb.length - 1 - rang] || '0', base)
-          ) {
-            texteCorr += `$ la soustraction est impossible donc on récupère un paquet de ${base} au rang supérieur.`
-            if (retenue[rang - 1]) {
-              texteCorr += `<br> $${base} + ${parseInt(mb[mb.length - 1 - rang] || '0', base)} - (${parseInt(nb[nb.length - 1 - rang] || '0', base)} + 1)`
-            } else {
-              texteCorr += `<br> $${base} + ${parseInt(mb[mb.length - 1 - rang] || '0', base)} - ${parseInt(nb[nb.length - 1 - rang] || '0', base)}`
-            }
-            retenue[rang] = 1
-          }
-          texteCorr += `= ${difference}$`
-        }
-      }
+    const texN = texNombre(n, 0)
+    const texM = texNombre(m, 0)
+    const texCouple = `(${texN}\\text{ ; }${texM})`
+    const exposantDans = (facto: [number, number][], p: number) =>
+      facto.find(([q]) => q === p)?.[1] ?? 0
+    const premiersN = factoN.map(([p]) => p)
+    const premiersM = factoM.map(([p]) => p)
+    const premiersCommuns = premiersN.filter((p) => premiersM.includes(p))
+    const tousLesPremiers = [...new Set([...premiersN, ...premiersM])].sort(
+      (a, b) => a - b,
+    )
+    const couleursCommuns: Record<number, string> = {}
+    for (const p of premiersCommuns) couleursCommuns[p] = couleursFacteurs[p]
+    const valeurPgcd = pgcd(n, m)
+    const valeurPpcm = ppcm(n, m)
+    const texPgcd = texNombre(valeurPgcd, 0)
 
-      if (this.listeQuestions.indexOf(texte) === -1) {
-        // Si la question n'a jamais été posée, on en créé une autre
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
-        i++
-      }
-      cpt++
+    let question1 = `Décomposer $${texN}$ et $${texM}$ en produit de facteurs premiers.`
+    if (this.interactif) {
+      question1 += `<br>${remplisLesBlancs(this, 0, `${texN} = %{champ1} \\qquad ${texM} = %{champ2}`, KeyboardType.clavierFullOperations)}`
     }
+    handleAnswers(
+      this,
+      0,
+      {
+        champ1: { value: texFacto(factoN), compare: compareDecomposition },
+        champ2: { value: texFacto(factoM), compare: compareDecomposition },
+      },
+      { formatInteractif: 'fill-in-the-blank' },
+    )
+    let correction1 =
+      'On divise successivement par les nombres premiers dans l’ordre croissant :'
+    correction1 += `<br><br>$${texEchelleDeDivisions(n)} \\qquad\\qquad ${texEchelleDeDivisions(m)}$`
+    correction1 += `<br><br>$${texN} = ${miseEnEvidence(texFacto(factoN))}$<br>$${texM} = ${miseEnEvidence(texFacto(factoM))}$`
+
+    let question2 = `Déterminer le PGCD de $${texN}$ et $${texM}$.`
+    if (this.interactif) {
+      question2 += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase)
+    }
+    handleAnswers(this, 1, { reponse: { value: valeurPgcd } })
+    let correction2 = `Les facteurs premiers communs aux deux décompositions sont mis en couleur :<br><br>$${texN} = ${texFacto(factoN, couleursCommuns)}$<br>$${texM} = ${texFacto(factoM, couleursCommuns)}$`
+    correction2 +=
+      '<br><br>Le PGCD est le produit des facteurs premiers communs aux deux décompositions, chacun étant affecté du plus petit des deux exposants.'
+    const factoPgcd: [number, number][] = premiersCommuns.map((p) => [
+      p,
+      Math.min(exposantDans(factoN, p), exposantDans(factoM, p)),
+    ])
+    correction2 += `<br><br>$\\text{PGCD}${texCouple} = ${texFacto(factoPgcd, couleursCommuns)} = ${miseEnEvidence(texPgcd)}$`
+
+    let question3 = `Déterminer le PPCM de $${texN}$ et $${texM}$.`
+    if (this.interactif) {
+      question3 += ajouteChampTexteMathLive(this, 2, KeyboardType.clavierDeBase)
+    }
+    handleAnswers(this, 2, { reponse: { value: valeurPpcm } })
+    let correction3 = `Tous les facteurs premiers des deux décompositions sont mis en couleur :<br><br>$${texN} = ${texFacto(factoN, couleursFacteurs)}$<br>$${texM} = ${texFacto(factoM, couleursFacteurs)}$`
+    correction3 +=
+      '<br><br>Le PPCM est le produit de tous les facteurs premiers qui apparaissent dans l’une ou l’autre des décompositions, chacun étant affecté du plus grand des exposants.'
+    const factoPpcm: [number, number][] = tousLesPremiers.map((p) => [
+      p,
+      Math.max(exposantDans(factoN, p), exposantDans(factoM, p)),
+    ])
+    correction3 += `<br><br>$\\text{PPCM}${texCouple} = ${texFacto(factoPpcm, couleursFacteurs)} = ${miseEnEvidence(texNombre(valeurPpcm, 0))}$`
+
+    const diviseursCommuns = listeDesDiviseurs(valeurPgcd)
+    let question4 = `En déduire tous les diviseurs communs de $${texN}$ et $${texM}$.`
+    if (this.interactif) {
+      question4 += `<br>${ajouteChampTexteMathLive(this, 3, KeyboardType.clavierEnsemble, { texteAvant: 'Diviseurs séparés par des points-virgules :' })}`
+    }
+    handleAnswers(this, 3, {
+      reponse: {
+        value: diviseursCommuns.join(';'),
+        options: { suiteDeNombres: true },
+      },
+    })
+    let correction4 = `Les diviseurs communs de $${texN}$ et $${texM}$ sont les diviseurs de leur PGCD, $${texPgcd}$.`
+    correction4 += `<br>On cherche toutes les façons d’écrire $${texPgcd}$ comme produit de deux entiers, en testant les entiers dans l’ordre croissant à partir de $1$.`
+    correction4 += `<br><br>${texRechercheDesDiviseurs(valeurPgcd, factoPgcd)}`
+    correction4 += `<br><br>Les diviseurs communs de $${texN}$ et $${texM}$ sont : ${texListeDiviseurs(diviseursCommuns)}.`
+
+    this.listeQuestions.push(question1, question2, question3, question4)
+    this.listeCorrections.push(
+      correction1,
+      correction2,
+      correction3,
+      correction4,
+    )
+
     listeQuestionsToContenu(this)
   }
+}
+
+/**
+ * Pour que le PGCD et le PPCM soient intéressants : m ne divise pas n, leur PGCD a au moins 4 diviseurs,
+ * chacun a au moins deux facteurs premiers distincts, un facteur commun a des exposants
+ * différents et au moins un facteur premier n'apparaît que dans une des décompositions.
+ */
+function conditionsRespectees(
+  n: number,
+  m: number,
+  factoN: [number, number][],
+  factoM: [number, number][],
+) {
+  if (n > 2000 || m < 60) return false
+  if (n % m === 0) return false
+  const d = pgcd(n, m)
+  if (d < 6 || estPremier(d)) return false
+  if (factoN.length < 2 || factoM.length < 2) return false
+  const communAvecExposantsDifferents = factoN.some(([p, e]) =>
+    factoM.some(([q, f]) => q === p && f !== e),
+  )
+  if (!communAvecExposantsDifferents) return false
+  const premiersN = factoN.map(([p]) => p)
+  const premiersM = factoM.map(([p]) => p)
+  const nonCommuns =
+    premiersN.filter((p) => !premiersM.includes(p)).length +
+    premiersM.filter((p) => !premiersN.includes(p)).length
+  return nonCommuns > 0
 }

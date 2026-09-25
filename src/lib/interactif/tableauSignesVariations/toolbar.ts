@@ -1,6 +1,6 @@
 import type { MathfieldElement } from 'mathlive'
 import { buildDataKeyboardFromStyle } from '../claviers/keyboard'
-import { setMathfield, setMathfieldListener } from '../setMathfield'
+import { setMathfield } from '../setMathfield'
 import type { ActiveCellInfo, SensFleche, SigneSymbol } from './types'
 
 export type ToolbarSubmit = (info: ActiveCellInfo, value: string) => void
@@ -81,10 +81,26 @@ export function createToolbarController(
     if (!currentAnchor) return
     const rect = currentAnchor.getBoundingClientRect()
     const host = (shadowRoot.host as HTMLElement).getBoundingClientRect()
+    const margin = 8
+    // La toolbar est déjà affichée (display: flex) et son contenu construit :
+    // sa taille réelle est mesurable, ce qui permet de la garder dans le viewport.
+    const toolbarWidth = toolbar.offsetWidth
+    const toolbarHeight = toolbar.offsetHeight
+    const viewportWidth = document.documentElement.clientWidth
+
+    // Centrée sur la cellule par défaut, en coordonnées de viewport…
+    let left = rect.left + rect.width / 2 - toolbarWidth / 2
+    // … puis ramenée dans le viewport si la cellule est proche d'un bord
+    // (première/dernière colonne d'un tableau collé au bord de l'écran).
+    left = Math.min(
+      Math.max(left, margin),
+      Math.max(margin, viewportWidth - toolbarWidth - margin),
+    )
+
     // Position relative au host, au-dessus de la cellule
-    toolbar.style.left = `${rect.left - host.left + rect.width / 2}px`
-    toolbar.style.top = `${rect.top - host.top - 8}px`
-    toolbar.style.transform = 'translate(-50%, -100%)'
+    toolbar.style.left = `${left - host.left}px`
+    toolbar.style.top = `${rect.top - host.top - 8 - toolbarHeight}px`
+    toolbar.style.transform = 'none'
   }
 
   function clearToolbar() {
@@ -127,10 +143,29 @@ export function createToolbarController(
     )
     mf.value = current ?? ''
     wrapper.appendChild(mf)
+
+    const focusMathField = () => {
+      try {
+        mf.focus?.()
+      } catch {
+        /* noop */
+      }
+    }
+
+    // MathLive n'est prêt à recevoir le focus qu'une fois monté dans le DOM
+    // (évènement 'mount') : un requestAnimationFrame seul peut le devancer.
     if (mf.isConnected) {
       setMathfield(mf)
+      focusMathField()
     } else {
-      mf.addEventListener('mount', setMathfieldListener, { once: true })
+      mf.addEventListener(
+        'mount',
+        () => {
+          setMathfield(mf)
+          focusMathField()
+        },
+        { once: true },
+      )
     }
 
     const handleKeydown = (e: KeyboardEvent) => {
@@ -169,14 +204,9 @@ export function createToolbarController(
     wrapper.appendChild(clearBtn)
     toolbar.appendChild(wrapper)
 
-    // Focus auto sur le math-field après affichage
-    requestAnimationFrame(() => {
-      try {
-        mf.focus?.()
-      } catch {
-        /* noop */
-      }
-    })
+    // Filet de sécurité si l'évènement 'mount' était déjà passé ou n'est pas
+    // déclenché par l'environnement de test.
+    requestAnimationFrame(focusMathField)
   }
 
   function show(

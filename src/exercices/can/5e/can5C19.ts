@@ -1,4 +1,5 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import { miseEnEvidence, texteEnCouleur } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -35,10 +36,11 @@ export default class Soustraire2Decimaux extends ExerciceSimple {
     const d2 = randint(d1, 9)
 
     this.question = `Calculer $${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10, 1)}$.`
-    this.correction = `$${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10, 1)}=${texNombre(a + d1 / 10 - b - d2 / 10, 1)}$<br>`
+    this.correction = `$${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10, 1)}=${miseEnEvidence(texNombre(a + d1 / 10 - b - d2 / 10, 1))}$<br>`
     this.reponse = arrondi(a + d1 / 10 - b - d2 / 10, 1)
     this.correction += texteEnCouleur(` Mentalement : <br>
    On commence par soustraire les unités : $${texNombre(a + d1 / 10, 1)}-${b}=${texNombre(a - b + d1 / 10, 1)}$.<br>
-    Puis les dixièmes : $${texNombre(a - b + d1 / 10, 1)}-${texNombre(d2 / 10)}=${texNombre(a + d1 / 10 - b - d2 / 10, 1)}$`)
+    Puis les dixièmes : $${texNombre(a - b + d1 / 10, 1)}-${texNombre(d2 / 10)}=${texNombre(a + d1 / 10 - b - d2 / 10, 1)}$`,
+              bleuMathalea,)
   }
 }

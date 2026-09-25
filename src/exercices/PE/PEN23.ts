@@ -21,7 +21,7 @@ export const dateDePublication = '2/11/2021'
 export const uuid = 'a7016'
 
 export const refs = {
-  'fr-fr': ['PEA13'],
+  'fr-fr': ['PEN23'],
   'fr-ch': [],
 }
 

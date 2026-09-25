@@ -1,4 +1,5 @@
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -43,12 +44,12 @@ export default class SommeDecimaux extends ExerciceSimple {
       if (choice([true, false])) {
         this.question = `Calculer $${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(e + f / 10 + g / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}$.`
         this.correction = `$${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(e + f / 10 + g / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}=
-            \\underbrace{${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}}_{=${k}}+${texNombre(e + f / 10 + g / 100, 2)}=${texNombre(this.reponse, 2)}$`
+            \\underbrace{${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}}_{=${k}}+${texNombre(e + f / 10 + g / 100, 2)}=${miseEnEvidence(texNombre(this.reponse, 2))}$`
       } else {
         this.question = `Calculer $${texNombre(e + f / 10 + g / 100, 2)}+${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}$.`
 
         this.correction = `$${texNombre(e + f / 10 + g / 100, 2)}+${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}=
-          \\underbrace{${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}}_{=${k}}+${texNombre(e + f / 10 + g / 100, 2)}=${texNombre(this.reponse, 2)}$`
+          \\underbrace{${texNombre(a + b / 10 + c / 100, 2)}+${texNombre(k - a - b / 10 - c / 100, 2)}}_{=${k}}+${texNombre(e + f / 10 + g / 100, 2)}=${miseEnEvidence(texNombre(this.reponse, 2))}$`
       }
     }
     if (choix === 2) {
@@ -62,13 +63,13 @@ export default class SommeDecimaux extends ExerciceSimple {
       if (choice([true, false])) {
         this.question = `Calculer $${texNombre(f / 10 + g / 100, 2)}+${texNombre(b / 10 + c / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}$.`
         this.correction = `$${texNombre(f / 10 + g / 100, 2)}+${texNombre(b / 10 + c / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}=
-        ${texNombre(f / 10 + g / 100, 2)}+\\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}}_{=1}=${texNombre(this.reponse, 2)}
+        ${texNombre(f / 10 + g / 100, 2)}+\\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}}_{=1}=${miseEnEvidence(texNombre(this.reponse, 2))}
             $`
       } else {
         this.question = `Calculer $${texNombre(b / 10 + c / 100, 2)}+${texNombre(f / 10 + g / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}$.`
 
         this.correction = `$${texNombre(b / 10 + c / 100, 2)}+${texNombre(f / 10 + g / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}=
-        \\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}}_{=1}+${texNombre(f / 10 + g / 100, 2)}=${texNombre(this.reponse, 2)}$`
+        \\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}}_{=1}+${texNombre(f / 10 + g / 100, 2)}=${miseEnEvidence(texNombre(this.reponse, 2))}$`
       }
     }
     if (choix === 3) {
@@ -83,13 +84,13 @@ export default class SommeDecimaux extends ExerciceSimple {
       if (choice([true, false])) {
         this.question = `Calculer $${texNombre(f / 10 + g / 100, 2)}+${texNombre(b / 10 + c / 100, 2)}+${texNombre(k - b / 10 - c / 100, 2)}$.`
         this.correction = `$${texNombre(f / 10 + g / 100, 2)}+${texNombre(b / 10 + c / 100, 2)}+${texNombre(1 - b / 10 - c / 100, 2)}=
-        ${texNombre(f / 10 + g / 100, 2)}+\\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(k - b / 10 - c / 100, 2)}}_{=${k}}=${texNombre(this.reponse, 2)}
+        ${texNombre(f / 10 + g / 100, 2)}+\\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(k - b / 10 - c / 100, 2)}}_{=${k}}=${miseEnEvidence(texNombre(this.reponse, 2))}
             $`
       } else {
         this.question = `Calculer $${texNombre(b / 10 + c / 100, 2)}+${texNombre(f / 10 + g / 100, 2)}+${texNombre(k - b / 10 - c / 100, 2)}$.`
 
         this.correction = `$${texNombre(b / 10 + c / 100, 2)}+${texNombre(f / 10 + g / 100, 2)}+${texNombre(k - b / 10 - c / 100, 2)}=
-        \\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(k - b / 10 - c / 100, 2)}}_{=${k}}+${texNombre(f / 10 + g / 100, 2)}=${texNombre(this.reponse, 2)}$`
+        \\underbrace{${texNombre(b / 10 + c / 100, 2)}+${texNombre(k - b / 10 - c / 100, 2)}}_{=${k}}+${texNombre(f / 10 + g / 100, 2)}=${miseEnEvidence(texNombre(this.reponse, 2))}$`
       }
     }
   }
