@@ -16,7 +16,7 @@ export const titre =
 export const interactifReady = true
 
 export const dateDePublication = '13/12/2024'
-export const dateDeModifImportante = '03/04/2025'
+export const dateDeModifImportante = '25/09/2026'
 
 export const uuid = '9e8f9'
 export const refs = {
@@ -45,7 +45,12 @@ export default class AiresCalculMental extends Exercice {
         '6 : Mélange',
       ].join('\n'),
     ]
+    this.besoinFormulaire2CaseACocher = [
+      'Uniquement des petits nombres entiers',
+      false,
+    ]
     this.sup = 6
+    this.sup2 = false
 
     // this.besoinFormulaireCaseACocher = ['Tracer les figures', false]
   }
@@ -98,8 +103,15 @@ export default class AiresCalculMental extends Exercice {
           break
         case 'rectangle':
           {
-            const l = randint(1, 3) + randint(2, 9) / 10
-            const L = randint(5, 9)
+            let l: number
+            let L: number
+            if (this.sup2) {
+              l = randint(2, 6)
+              L = randint(l + 1, 10)
+            } else {
+              l = randint(1, 3) + randint(2, 9) / 10
+              L = randint(5, 9)
+            }
             texte = `Rectangle de longueur $${texNombre(L)}\\text{ cm}$ et de largeur $${texNombre(l)}\\text{ cm}$`
             texteCorr = '$\\mathcal{A}_\\text{rectangle} = L \\times l$'
             texteCorr += `<br>$\\mathcal{A}_\\text{rectangle} = ${texNombre(L)}\\text{ cm} \\times ${texNombre(l)}\\text{ cm}$`
@@ -119,7 +131,9 @@ export default class AiresCalculMental extends Exercice {
         case 'triangle':
           {
             const b = randint(2, 9)
-            const h = randint(2, 9)
+            // Avec l'option nombres entiers, le produit b × h doit être pair
+            const h =
+              this.sup2 && b % 2 === 1 ? 2 * randint(1, 4) : randint(2, 9)
             texte = `Triangle de base $${texNombre(b)}\\text{ cm}$ et de hauteur $${texNombre(h)}\\text{ cm}$`
             texteCorr =
               '$\\mathcal{A}_\\text{triangle} = (b \\times h) \\div 2$'
