@@ -168,7 +168,7 @@ Chaque ${v2.singulier} a 2 roues et chaque ${v4.singulier} a 4 roues.<br><br>
 On obtient comme nombre total de roues :<br>
 $2x + 4(${totalVehicules} - x) = ${roues}$<br><br>
 
-On résoud l'équation $2x + 4(${totalVehicules} - x) = ${roues}$.<br>
+On résout l'équation $2x + 4(${totalVehicules} - x) = ${roues}$.<br>
 
 $2x + ${4 * totalVehicules} - 4x = ${roues}$<br>
 $${4 * totalVehicules} - 2x = ${roues}$<br>
@@ -188,7 +188,7 @@ Chaque ${v2.singulier} a 2 roues et chaque ${v4.singulier} a 4 roues.<br><br>
 On obtient comme nombre total de roues :<br>
 $4x + 2(${totalVehicules} - x) = ${roues}$<br><br>
 
-On résoud l'équation $4x + 2(${totalVehicules} - x) = ${roues}$.<br>
+On résout l'équation $4x + 2(${totalVehicules} - x) = ${roues}$.<br>
 
 $4x + ${2 * totalVehicules} - 2x = ${roues}$<br>
 $2x + ${2 * totalVehicules} = ${roues}$<br>
@@ -239,7 +239,7 @@ Le prix du tarif adulte est donc $x + ${prixAdulte - prixEnfant}$.<br><br>
 On obtient comme recette totale :<br>
 $${enfants}x + ${adultes}(x + ${prixAdulte - prixEnfant}) = ${total}$<br>
 $${enfants}x + ${adultes}x + ${adultes * (prixAdulte - prixEnfant)} = ${total}$<br>
-$${adultes + enfants}x = ${totalNumerique - adultes * (prixAdulte - prixEnfant)}$<br>
+$${adultes + enfants}x = ${texNombre(totalNumerique - adultes * (prixAdulte - prixEnfant))}$<br>
 $x = ${prixEnfant}$<br>
 `
 
@@ -252,9 +252,9 @@ Le prix du tarif adulte est donc $x + ${prixAdulte - prixEnfant}$.<br><br>
 On obtient comme recette totale :<br>
 $${enfants}x + ${adultes}(x + ${prixAdulte - prixEnfant}) = ${total}$<br><br>
 
-On résoud l'équation $${enfants}x + ${adultes}(x + ${prixAdulte - prixEnfant}) = ${total}$.<br>
+On résout l'équation $${enfants}x + ${adultes}(x + ${prixAdulte - prixEnfant}) = ${total}$.<br>
 $${enfants}x + ${adultes}x + ${adultes * (prixAdulte - prixEnfant)} = ${total}$<br>
-$${adultes + enfants}x = ${totalNumerique - adultes * (prixAdulte - prixEnfant)}$<br>
+$${adultes + enfants}x = ${texNombre(totalNumerique - adultes * (prixAdulte - prixEnfant))}$<br>
 $x = ${prixEnfant}$<br>
 
 Le prix du tarif enfant est $${miseEnEvidence(prixEnfant)}$ €.<br>
@@ -268,9 +268,9 @@ Le prix du tarif enfant est donc $x - ${prixAdulte - prixEnfant}$.<br><br>
 On obtient comme recette totale :<br>
 $${adultes}x + ${enfants}(x - ${prixAdulte - prixEnfant}) = ${total}$<br><br>
 
-On résoud l'équation $${adultes}x + ${enfants}(x - ${prixAdulte - prixEnfant}) = ${total}$.<br>
+On résout l'équation $${adultes}x + ${enfants}(x - ${prixAdulte - prixEnfant}) = ${total}$.<br>
 $${adultes}x + ${enfants}x - ${enfants * (prixAdulte - prixEnfant)} = ${total}$<br>
-$${adultes + enfants}x = ${total + enfants * (prixAdulte - prixEnfant)}$<br>
+$${adultes + enfants}x = ${texNombre(totalNumerique + enfants * (prixAdulte - prixEnfant))}$<br>
 $x = ${prixAdulte}$<br>
 
 Le prix du tarif adulte est $${miseEnEvidence(prixAdulte)}$ €.<br>
@@ -316,10 +316,14 @@ export function genererFleurs(): Probleme {
   // On impose : B = A + diff
   const b = a + diff
   const c = coef * b
-  const total = texNombre(a + b + c)
 
   // 🔹 Choix du type de question
   const questionSurA = choice([true, false])
+
+  // Si la question porte sur B, il y a diff B de moins que de A : A = B + diff
+  const nbA = questionSurA ? a : b + diff
+  const sommeTotale = nbA + b + c
+  const total = texNombre(sommeTotale)
 
   // 🔹 ÉNONCÉ
   const enonce = questionSurA
@@ -350,10 +354,10 @@ Il y a donc $x + ${diff}$ ${B} et $${coef}(x + ${diff})$ ${C}.<br><br>
 On obtient comme nombre total de fleurs :<br>
 $x + (x + ${diff}) + ${coef}(x + ${diff}) = ${total}$<br><br>
 
-On résoud l'équation $x + (x + ${diff}) + ${coef}(x + ${diff}) = ${total}$.<br>
+On résout l'équation $x + (x + ${diff}) + ${coef}(x + ${diff}) = ${total}$.<br>
 
 $${2 + coef}x + ${diff + coef * diff} = ${total}$<br>
-$${2 + coef}x = ${a + b + c - (diff + coef * diff)}$<br>
+$${2 + coef}x = ${sommeTotale - (diff + coef * diff)}$<br>
 $x = ${a}$<br>
 
 Il y a $${miseEnEvidence(a)}$ ${A}.
@@ -370,9 +374,9 @@ Il y a donc $x + ${diff}$ ${A} et $${coef}x$ ${C}.<br><br>
 On obtient comme nombre total de fleurs :<br>
 $(x + ${diff}) + x + ${coef}x = ${total}$<br><br>
 
-On résoud l'équation $(x + ${diff}) + x + ${coef}x = ${total}$.<br>
+On résout l'équation $(x + ${diff}) + x + ${coef}x = ${total}$.<br>
 $${2 + coef}x + ${diff} = ${total}$<br>
-$${2 + coef}x = ${a + b + c - diff}$<br>
+$${2 + coef}x = ${sommeTotale - diff}$<br>
 $x = ${b}$<br>
 
 Il y a $${miseEnEvidence(b)}$ ${B}.
