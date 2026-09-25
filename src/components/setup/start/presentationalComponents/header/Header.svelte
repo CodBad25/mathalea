@@ -76,8 +76,10 @@
         />
       </div>
     {/if}
+    <!-- invisible (et non hidden) quand la liste est vide : la barre garde sa
+         hauteur pour éviter un décalage du menu latéral et de la zone des exercices -->
     <div
-      class={`relative w-full flex flex-col justify-center items-center pl-100 h-25 lg:h-12.5 ${!isExerciseDisplayed ? 'hidden' : ''}`}
+      class={`relative w-full flex flex-col justify-center items-center pl-100 h-25 lg:h-12.5 ${!isExerciseDisplayed ? 'invisible' : ''}`}
       id="barre-boutons"
     >
       <SideMenuWrapper {isRecorder} {isSidenavOpened} {toggleSidenav} {isMd} />
