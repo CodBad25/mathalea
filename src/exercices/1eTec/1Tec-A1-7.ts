@@ -53,7 +53,7 @@ export default class Effectif extends ExerciceSimple {
         b = randint(25, 35) /* Pourcentage */
         a = randint(20, 50) /* Valeur */
         c = randint(25, 200) /* Dénominateur fraction */
-        this.question = `Dans une lycée,  $${b}\\%$ des lycéens sont en classe de 1ère. <br>
+        this.question = `Dans un lycée,  $${b}\\%$ des lycéens sont en classe de 1ère. <br>
             Sachant qu'il y a  $${c}$ élèves en classe de 1ère,
             déterminer le nombre total d'élèves de ce lycée ?`
         this.correction = `La population de référence est celle des élèves du lycée.<br>
