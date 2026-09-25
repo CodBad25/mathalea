@@ -62,6 +62,24 @@
     (currentSlide && currentSlide.exercise.duration) ||
     10
 
+  // Durée du décompte en cours : la correction peut avoir sa propre durée.
+  let currentDisplayDuration: number
+  $: currentDisplayDuration = getDisplayDuration(
+    isCorrectionVisible,
+    currentSlideDuration,
+    $globalOptions.durationCorrection,
+  )
+
+  function getDisplayDuration(
+    isCorrection: boolean,
+    questionDuration: number,
+    correctionDuration: number | undefined,
+  ) {
+    return isCorrection && correctionDuration
+      ? correctionDuration
+      : questionDuration
+  }
+
   $: if (slideshow.currentQuestion > -1) {
     playCurrentQuestion()
   }
@@ -343,7 +361,11 @@
           nextQuestion()
         }
       }
-    }, currentSlideDuration * 10)
+    }, getDisplayDuration(
+      isCorrectionVisible,
+      currentSlideDuration,
+      $globalOptions.durationCorrection,
+    ) * 10)
   }
 
   function pause(isUserAction: boolean = false) {
@@ -403,7 +425,7 @@
         isManualModeActive={$globalOptions.manualMode}
         totalQuestionsNumber={slideshow.selectedQuestionsNumber}
         {ratioTime}
-        {currentSlideDuration}
+        currentSlideDuration={currentDisplayDuration}
         {goToQuestion}
       />
     </header>

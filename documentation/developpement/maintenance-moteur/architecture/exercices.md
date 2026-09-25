@@ -81,7 +81,7 @@ les paramètres qui suivent s'y rapportent jusqu'au suivant.
 | `es` | global | réglages de la vue élève (voir ci-dessous) |
 | `title` | global | titre de la vue élève |
 | `z` | global | zoom |
-| `dGlobal`, `shuffle`, `select`, `order` | global | réglages du diaporama |
+| `dGlobal`, `dCorr`, `shuffle`, `select`, `order` | global | réglages du diaporama |
 | `recorder` | global | plateforme hôte (`capytale`, `moodle`, `anki`…) |
 | `iframe` | global | identifiant d'intégration, conservé dans les URL régénérées |
 | `beta` | global | ouvre les vues encore en test (`quizzconf`, `omr`…) |

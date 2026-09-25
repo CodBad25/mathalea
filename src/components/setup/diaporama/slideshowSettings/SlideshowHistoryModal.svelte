@@ -129,6 +129,7 @@
       select: $globalOptions.select ? [...$globalOptions.select] : undefined,
       order: $globalOptions.order ? [...$globalOptions.order] : undefined,
       durationGlobal: $globalOptions.durationGlobal ?? undefined,
+      durationCorrection: $globalOptions.durationCorrection ?? undefined,
     }
   }
 
@@ -186,6 +187,7 @@
         select: options.select ?? [],
         order: options.order ?? [],
         durationGlobal: options.durationGlobal ?? null,
+        durationCorrection: options.durationCorrection ?? null,
       },
       params: params.map((param) => ({
         uuid: param.uuid,
@@ -243,6 +245,13 @@
     if (options.manualMode) parts.push('mode manuel')
     if (!options.manualMode && options.durationGlobal) {
       parts.push(`durée globale ${options.durationGlobal}s`)
+    }
+    if (
+      !options.manualMode &&
+      options.flow !== 0 &&
+      options.durationCorrection
+    ) {
+      parts.push(`correction ${options.durationCorrection}s`)
     }
     if (options.isImagesOnSides) parts.push('images sur les côtés')
     return parts.join(' · ')

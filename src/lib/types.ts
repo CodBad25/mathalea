@@ -21,6 +21,8 @@ export interface InterfaceGlobalOptions {
   v?: VueType
   z?: string
   durationGlobal?: number
+  /** Durée d'affichage de la correction dans le diaporama automatique (en s). Non définie : même durée que la question. */
+  durationCorrection?: number
   ds?: string
   nbVues?: 1 | 2 | 3 | 4
   flow?: 0 | 1 | 2 // 0: Q->Q, 1: Q->R->Q, 2: Q->(Q+R)->Q

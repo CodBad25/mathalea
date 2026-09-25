@@ -167,6 +167,11 @@ export function updateGlobalOptionsInURL(url: URL) {
   } else {
     url.searchParams.delete('dGlobal')
   }
+  if (options.durationCorrection) {
+    url.searchParams.append('dCorr', options.durationCorrection.toString())
+  } else {
+    url.searchParams.delete('dCorr')
+  }
   if (
     options.v === 'eleve' ||
     options.v === 'myriade' ||
