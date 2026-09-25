@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -69,7 +70,7 @@ export default class Can2025CE2Q4 extends ExerciceCan {
           'du',
           'Un',
         )} est un rectangle dont les côtés mesurent en moyenne environ $${texNombre(a / 4, 2)}\\text{ ${b}}$.<br>
-    Donc son périmètre est proche de $${texNombre(a, 1)}\\text{ ${b}}$.`
+    Donc son périmètre est proche de $${miseEnEvidence(`${texNombre(a, 1)}\\text{ ${b}}`)}$.`
     this.canReponseACompleter = monQcm.texte
   }
 

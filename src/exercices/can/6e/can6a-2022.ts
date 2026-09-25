@@ -913,7 +913,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                   step2: 1,
                 }),
               )
-            texteCorr = `L'unité est divisée en $5$. Ainsi, l'abscisse du point A est $\\dfrac{${a}}{5}=${texNombre(reponse)}$`
+            texteCorr = `L'unité est divisée en $5$. Ainsi, l'abscisse du point A est $\\dfrac{${a}}{5}=${miseEnEvidence(texNombre(reponse))}$.`
           } else {
             a = choice([1, 3, 5, 7, 9]) // numérateur
             reponse = arrondi(a / 4, 2)
@@ -946,7 +946,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                   step2: 1,
                 }),
               )
-            texteCorr = `L'unité est divisée en $4$. Ainsi, l'abscisse du point A est $\\dfrac{${a}}{4}=${texNombre(reponse)}$`
+            texteCorr = `L'unité est divisée en $4$. Ainsi, l'abscisse du point A est $\\dfrac{${a}}{4}=${miseEnEvidence(texNombre(reponse))}$.`
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -991,7 +991,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
 
           texte = `Choisis parmi les propositions suivantes la taille d'une ${taille1[a][0]} (nombre et unité à recopier).<br>`
           texte += `${propositions[0]} ${sp(4)} ${propositions[1]} ${sp(4)} ${propositions[2]}${sp(4)} ${propositions[3]}`
-          texteCorr = `La taille d'une ${taille1[a][0]} est ${b} ${taille1[a][3]}`
+          texteCorr = `La taille d'une ${taille1[a][0]} est $${miseEnEvidence(`${b}\\text{ ${taille1[a][3]}}`)}$.`
           {
             const grandeur = new Grandeur(b, taille1[a][3])
             handleAnswers(this, index, {
@@ -1079,7 +1079,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
             b = randint(5, 9)
             texte = `Un bus met $${a}$ heures pour emmener $${b}$ passagers.<br>
           Combien d'heures, ce même bus mettra-t-il pour emmener $${2 * b}$ passagers ?`
-            texteCorr = 'Il mettra autant de temps :-). '
+            texteCorr = `Il mettra autant de temps : $${miseEnEvidence(a)}$ heures.`
             reponse = a
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -1094,7 +1094,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
             c = randint(2, 3)
             texte = `Pour faire sécher $${a}$ tee-shirts sur une corde à linge dehors, il faut $${b}$ minutes.<br>
             Dans les mêmes conditions d'ensoleillement, combien de temps faudra-t-il pour faire sécher $${b * c}$ tee-shirts ?`
-            texteCorr = 'Il faudra autant de temps :-). '
+            texteCorr = `Il faudra autant de temps : $${miseEnEvidence(b)}$ minutes.`
             reponse = b
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {

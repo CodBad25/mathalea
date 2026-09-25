@@ -1,7 +1,8 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -52,7 +53,7 @@ export default class PariteDunNombre extends Exercice {
           texteCorr += texteEnCouleur(
             `Mentalement on peut ajouter seulement les chiffres des unités des deux nombres : $${b}+${d}=${b + d}$`,
           )
-          texteCorr += `<br>Donc le nombre $${e}+${f}$ est ${g % 2 === 0 ? 'pair' : 'impair'}.`
+          texteCorr += `<br>Donc le nombre $${e}+${f}$ est ${texteEnCouleurEtGras(g % 2 === 0 ? 'pair' : 'impair')}.`
           break
         case 2:
           a = randint(10, 20) * 10
@@ -69,7 +70,7 @@ export default class PariteDunNombre extends Exercice {
           g = e * f
           texte = `Sans déterminer le résultat, le nombre $${e}\\times ${f}$ est-il pair ?`
           this.canEnonce = texte
-          texteCorr = `$${e}\\times ${f}$ est un nombre ${g % 2 === 0 ? 'pair' : 'impair'}.<br>En effet, son chiffre des unités s'obtient en multipliant le chiffre des unités de ${e} et celui de ${f}.<br>`
+          texteCorr = `$${e}\\times ${f}$ est un nombre ${texteEnCouleurEtGras(g % 2 === 0 ? 'pair' : 'impair')}.<br>En effet, son chiffre des unités s'obtient en multipliant le chiffre des unités de ${e} et celui de ${f}.<br>`
           texteCorr += `Donc le chiffre des unités de $${e} \\times ${f}$ est celui de $${e % 10}\\times ${f % 10}=${b * d}$ soit $${g % 10}$.<br>`
           break
         case 3:
@@ -83,10 +84,14 @@ export default class PariteDunNombre extends Exercice {
           g = e >> 1
           texte = `Sans déterminer le résultat, le nombre $${e}\\div 2$ est-il pair ?`
           this.canEnonce = texte
-          texteCorr = `Si le quotient $${e}\\div 2$ est pair, il s'écrit $2\\times k$ et alors $${e}=4\\times k$ : le nombre $${e}$ est un multiple de $4$. Réciproquement, si $${e}$ est un multiple de $4$, sa moitié est paire.<br>`
+          texteCorr = `On va retirer le plus grand multiple de 20 possible de $${e}$ :<br>`
+          texteCorr += `Dans ${e} il va $${Math.floor(e / 20)}\\times 20=${e - (e % 20)}$ et il reste ${e % 20}.<br>`
+          texteCorr += `Si on divise $${e % 20}$ par $2$ on trouve $${texNombre((e % 20) / 2)}$ qui est un nombre ${g % 2 === 0 ? 'pair' : 'impair'}.<br>`
+          texteCorr += `Or, $${e}\\div 2= (${e - (e % 20)} + ${e % 20})\\div 2 =${(e - (e % 20)) >> 1} + ${(e % 20) >> 1}=${e >> 1}$.<br>`
+          texteCorr += `On peut aussi utiliser le critère de divisibilité par $4$ : la moitié de $${e}$ est paire exactement quand $${e}$ est un multiple de $4$.<br>`
           texteCorr += `Un nombre est divisible par $4$ lorsque le nombre formé par ses deux derniers chiffres est divisible par $4$.<br>`
           texteCorr += `Ici, $${e % 100}${g % 2 === 0 ? `=4\\times ${(e % 100) / 4}` : `=4\\times ${((e % 100) - 2) / 4}+2`}$ donc $${e}$ ${g % 2 === 0 ? 'est' : "n'est pas"} un multiple de $4$.<br>`
-          texteCorr += `Donc le nombre $${e}\\div 2$ est ${g % 2 === 0 ? 'pair' : 'impair'}.`
+          texteCorr += `Donc le nombre $${e}\\div 2$ est ${texteEnCouleurEtGras(g % 2 === 0 ? 'pair' : 'impair')}.`
           break
         case 4:
           a = randint(10, 20) * 10
@@ -104,7 +109,7 @@ export default class PariteDunNombre extends Exercice {
           texteCorr += texteEnCouleur(
             `Mentalement on peut soustraire les chiffres des unités des deux nombres ${d < b ? '(en empruntant une dizaine à $' + f + '$) ' : ''} : $${d < b ? d + 10 : d} - ${b}=${g % 10}$`,
           )
-          texteCorr += `<br>Donc le nombre $${f}-${e}$ est ${g % 2 === 0 ? 'pair' : 'impair'}.`
+          texteCorr += `<br>Donc le nombre $${f}-${e}$ est ${texteEnCouleurEtGras(g % 2 === 0 ? 'pair' : 'impair')}.`
           break
         case 5:
         default: {
@@ -121,12 +126,12 @@ export default class PariteDunNombre extends Exercice {
             texteCorr = `$${b}$ est un nombre pair. Le produit de deux nombres pairs est un nombre pair.<br>`
             texteCorr +=
               'Ainsi, les multiplications successives donnent toujours un résultat pair.<br>'
-            texteCorr += `Donc le nombre $${produit}$ est pair.`
+            texteCorr += `Donc le nombre $${produit}$ est ${texteEnCouleurEtGras('pair')}.`
           } else {
             texteCorr = `$${b}$ est un nombre impair. Le produit de deux nombres impairs est un nombre impair.<br>`
             texteCorr +=
               'Ainsi, les multiplications successives donnent toujours un résultat impair.<br>'
-            texteCorr += `Donc le nombre $${produit}$ est impair.`
+            texteCorr += `Donc le nombre $${produit}$ est ${texteEnCouleurEtGras('impair')}.`
           }
           break
         }

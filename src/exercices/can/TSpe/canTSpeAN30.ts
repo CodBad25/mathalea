@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
@@ -39,7 +40,7 @@ export default class NomExercice extends ExerciceSimple {
     this.correction = `On sait que $\\left(${fonction}(u)\\right)'=${rienSi1(c)}u'${derivee}\\left(u\\right)$.<br>`
     this.correction += `On a ici $u(x)=${reduireAxPlusB(a, b)}$.<br>`
     this.correction += `Donc $u'(x)=${a}$.<br>`
-    this.correction += `Il vient alors $f'(x)=${rienSi1(a * c)}${derivee}\\left(${reduireAxPlusB(a, b)}\\right)$`
+    this.correction += `Il vient alors $f'(x)=${miseEnEvidence(`${rienSi1(a * c)}${derivee}\\left(${reduireAxPlusB(a, b)}\\right)`)}$`
     this.reponse = `${rienSi1(a * c)}${derivee}\\left(${reduireAxPlusB(a, b)}\\right)`
     this.optionsChampTexte = { texteAvant: "<br>$f'(x)=~$" }
   }

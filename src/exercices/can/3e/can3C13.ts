@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import type FractionEtendue from '../../../modules/FractionEtendue'
@@ -47,7 +48,7 @@ export default class Pyramide3EtagesAdditionFractions extends ExerciceSimple {
     ${mathalea2d({ xmin: 0, ymin: 0, xmax: 12, ymax: 7, scale: 0.7 }, pyr.representeMoi(0, 0), texteParPosition('*', 6, 5))}`
     this.reponse = (pyr.valeurs[0][0] as FractionEtendue).texFractionSimplifiee
     pyr.isVisible = [[true], [true, true], [true, true, true]]
-    this.correction = `Le nombre qui se trouve au sommet de la pyramide est : $${this.reponse}$<br>
+    this.correction = `Le nombre qui se trouve au sommet de la pyramide est : $${miseEnEvidence(this.reponse)}$<br>
     
     ${mathalea2d({ xmin: 0, ymin: 0, xmax: 12, ymax: 7, scale: 0.7 }, pyr.representeMoi(0, 0))}`
   }

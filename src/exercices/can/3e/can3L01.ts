@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $ax=b$'
@@ -32,6 +33,6 @@ export default class EquationAXEgalB extends ExerciceSimple {
     const b = a * this.reponse
     this.question = `Donner la solution de l'équation :<br> $${a}x=${b}$`
     this.correction = `On cherche le nombre qui multiplié par $${a}$ donne $${b}$.<br>
-    Il s'agit de  $x=${texFractionFromString(b, a)}=${this.reponse}$`
+    Il s'agit de  $x=${texFractionFromString(b, a)}=${miseEnEvidence(this.reponse)}$`
   }
 }

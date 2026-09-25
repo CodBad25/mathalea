@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -66,7 +67,7 @@ export default class ChiffreDes extends ExerciceSimple {
         this.reponse = f
         break
     }
-    this.correction = `Le chiffre des ${m} est $${this.reponse}$.<br><br>$\\begin{array}{|c|c|c|c|c|c|c|}\n`
+    this.correction = `Le chiffre des ${m} est $${miseEnEvidence(String(this.reponse))}$.<br><br>$\\begin{array}{|c|c|c|c|c|c|c|}\n`
     this.correction += '\\hline\n'
     this.correction +=
       '\\text{Centaine} &  \\text{Dizaine} & \\text{Unité} &  \\Large{\\textbf,}& \\text{Dixième} & \\text{Centième} & \\text{Millième} \\\\ \n'

@@ -362,7 +362,7 @@ export default class PointSurCercleTrigo extends ExerciceSimple {
           this.correction = `Le réel $${miseEnEvidence('-\\pi')}$ est associé au point $K$ dans $${choix}$.   `
           this.reponse = '-\\pi'
         } else {
-          this.correction = `Le réel $\\pi$ est associé au point $K$ dans $${choix}$.   `
+          this.correction = `Le réel $${miseEnEvidence('\\pi')}$ est associé au point $K$ dans $${choix}$.   `
           this.reponse = '\\pi'
         }
 

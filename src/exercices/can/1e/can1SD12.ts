@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -140,12 +141,12 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
           if (k > 0) {
             texteCorr += `En isolant le carré, on obtient l'équation $x^2=${k}$ qui est de la forme $x^2=k$ avec $k=${k} >0$. <br>
             L'équation admet donc deux solutions : $-\\sqrt{${k}}=-${Math.sqrt(k)}$ et $\\sqrt{${k}}=${Math.sqrt(k)}$.
-             <br>Ainsi,  $S=\\{-${Math.sqrt(k)}${sp(1)};${sp(1)}${Math.sqrt(k)}\\}$.
+             <br>Ainsi,  $S=${miseEnEvidence(`\\{-${Math.sqrt(k)}${sp(1)};${sp(1)}${Math.sqrt(k)}\\}`)}$.
           `
           } else {
             texteCorr += `En isolant le carré, on obtient l'équation  $x^2=${k}$ qui est de la forme $x^2=k$ avec $k<0$.<br>
             L'équation n'admet donc aucune solution.<br>
-            Ainsi, $S=\\emptyset$.`
+            Ainsi, $S=${miseEnEvidence(`\\emptyset`)}$.`
           }
 
           break
@@ -220,12 +221,12 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
           if (k > 0) {
             texteCorr += `En isolant le carré, on obtient l'équation $x^2=${k}$ qui est de la forme $x^2=k$ avec $k>0$. <br>
            L'équation admet donc deux solutions : $-\\sqrt{${k}}$ et $\\sqrt{${k}}$.
-             <br>Ainsi,  $S=\\{-\\sqrt{${k}}${sp(1)};${sp(1)}\\sqrt{${k}}\\}$.
+             <br>Ainsi,  $S=${miseEnEvidence(`\\{-\\sqrt{${k}}${sp(1)};${sp(1)}\\sqrt{${k}}\\}`)}$.
           `
           } else {
             texteCorr += `En isolant le carré, on obtient l'équation  $x^2=${k}$ qui est de la forme $x^2=k$ avec $k<0>$. <br>
            L'équation n'admet donc aucune solution.<br>
-            Ainsi, $S=\\emptyset$.`
+            Ainsi, $S=${miseEnEvidence(`\\emptyset`)}$.`
           }
 
           break
@@ -303,14 +304,14 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
             L'équation s'écrit alors : $x(${rienSi1(a)}x${ecritureAlgebrique(b)})=0$.<br>
             On reconnaît une équation produit nul. Un poduit de deux facteurs est nul si et seulement si l'un au moins des deux facteurs est nul.<br>
             $x=0$ ou $ ${rienSi1(a)}x${ecritureAlgebrique(b)}=0$ soit $x=${k.texFraction}${k.texSimplificationAvecEtapes()}$.<br>
-            Ainsi, $S=\\left\\{0${sp(1)};${sp(1)}${k.texFractionSimplifiee}\\right\\}$.`
+            Ainsi, $S=${miseEnEvidence(`\\left\\{0${sp(1)};${sp(1)}${k.texFractionSimplifiee}\\right\\}`)}$.`
           } else {
             texteCorr = `En factorisant le premier membre de l'équation on obtient :
             $x(${rienSi1(a)}x${ecritureAlgebrique(b)})$.<br>
             L'équation s'écrit alors : $x(${rienSi1(a)}x${ecritureAlgebrique(b)})=0$.<br>
             On reconnaît une équation produit nul. Un poduit de deux facteurs est nul si et seulement si l'un au moins des deux facteurs est nul.<br>
             $x=0$ ou $ ${rienSi1(a)}x${ecritureAlgebrique(b)}=0$ soit $x=${k.texFraction}${k.texSimplificationAvecEtapes()}$.<br>
-            Ainsi, $S=\\left\\{${k.texFractionSimplifiee}${sp(1)};${sp(1)}0\\right\\}$.`
+            Ainsi, $S=${miseEnEvidence(`\\left\\{${k.texFractionSimplifiee}${sp(1)};${sp(1)}0\\right\\}`)}$.`
           }
 
           break
@@ -388,7 +389,7 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
             L'équation s'écrit alors : $(${rienSi1(a)}x${ecritureAlgebrique(b)})^2=0$.<br>
            Elle a pour unique solution $x=${k.texFractionSimplifiee}$.<br>
            
-            Ainsi, $S=\\left\\{${k.texFractionSimplifiee}\\right\\}$.`
+            Ainsi, $S=${miseEnEvidence(`\\left\\{${k.texFractionSimplifiee}\\right\\}`)}$.`
 
           break
       }

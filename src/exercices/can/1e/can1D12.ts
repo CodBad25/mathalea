@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf1,
@@ -51,7 +52,7 @@ export default class DeriveePoly2 extends ExerciceSimple {
 
         this.correction = `$f$ est une fonction polynôme du second degré de la forme $f(x)=ax^2+bx+c$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$ définies par $u(x)=${rienSi1(a)}x^2$ et $v(x)=${reduireAxPlusB(b, c)}$.<br>
-     Comme $u'(x)=${2 * a}x$ et $v'(x)=${b}$, on obtient  $f'(x)=${reduireAxPlusB(2 * a, b)}$. `
+     Comme $u'(x)=${2 * a}x$ et $v'(x)=${b}$, on obtient  $f'(x)=${miseEnEvidence(reduireAxPlusB(2 * a, b))}$. `
         this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
      $f(x)= ${reduirePolynomeDegre3(0, a, b, c)}$.`
         this.canReponseACompleter = "$f'(x)=\\ldots$"
@@ -89,7 +90,7 @@ export default class DeriveePoly2 extends ExerciceSimple {
         }
         this.correction = `$f$ est une fonction polynôme du second degré de la forme $f(x)=ax^2+bx+c$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$ définies par $u(x)=${rienSi1(a)}x^2$ et $v(x)=${reduireAxPlusB(b, c)}$.<br>
-     Comme $u'(x)=${2 * a}x$ et $v'(x)=${b}$, on obtient  $f'(x)=${reduireAxPlusB(2 * a, b)}$. `
+     Comme $u'(x)=${2 * a}x$ et $v'(x)=${b}$, on obtient  $f'(x)=${miseEnEvidence(reduireAxPlusB(2 * a, b))}$. `
         this.reponse = [`${2 * a}x+${b}`]
         break
       case 3: // second degre ax^2+c ou c+ax^2
@@ -122,7 +123,7 @@ export default class DeriveePoly2 extends ExerciceSimple {
         }
         this.correction = `$f$ est une fonction polynôme du second degré de la forme $f(x)=ax^2+b$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$ définies par $u(x)=${rienSi1(a)}x^2$ et $v(x)=${c}$.<br>
-     Comme $u'(x)=${2 * a}x$ et $v'(x)=0$, on obtient  $f'(x)=${reduireAxPlusB(2 * a, 0)}$. `
+     Comme $u'(x)=${2 * a}x$ et $v'(x)=0$, on obtient  $f'(x)=${miseEnEvidence(reduireAxPlusB(2 * a, 0))}$. `
 
         this.reponse = [`${2 * a}x`]
         break

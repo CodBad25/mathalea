@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -103,7 +104,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
           this.reponse = choix ? 4 * a : a * a
           this.correction = `Il s'agit d'un carré. <br>
         Son ${choix ? 'périmètre' : 'aire'} est donc
-        ${choix ? `$4$ fois la longueur de son côté, soit $4\\times ${a}=${4 * a}\\text{ cm}$.` : `le carré de la longueur de son côté, soit $${a}\\times ${a}=${a * a}\\text{ cm}^2$.`}`
+        ${choix ? `$4$ fois la longueur de son côté, soit $4\\times ${a}=${miseEnEvidence(4 * a)}\\text{ cm}$.` : `le carré de la longueur de son côté, soit $${a}\\times ${a}=${miseEnEvidence(a * a)}\\text{ cm}^2$.`}`
         } else {
           objets.push(
             codageSegments('||', bleuMathalea, A, B),
@@ -140,7 +141,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
 
           this.reponse = a
           this.correction = `Il s'agit d'un carré. <br>
-            Son côté est  donc le quart de son périmètre, soit $${4 * a}\\div 4=${a}\\text{ cm}$.`
+            Son côté est  donc le quart de son périmètre, soit $${4 * a}\\div 4=${miseEnEvidence(a)}\\text{ cm}$.`
         }
         break
 
@@ -197,7 +198,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         this.reponse = choix ? 2 * a + 2 * b : a * b
         this.correction = `Il s'agit d'un rectangle. <br>
         Son ${choix ? 'périmètre' : 'aire'} est donc
-        ${choix ? `$2$ fois la longueur de son demi-périmètre, soit $2\\times (${a}+${b})=${2 * a + 2 * b}\\text{ cm}$.` : `le produit de sa longueur par sa largeur, soit $${a}\\times ${b}=${a * b}\\text{ cm}^2$.`}`
+        ${choix ? `$2$ fois la longueur de son demi-périmètre, soit $2\\times (${a}+${b})=${miseEnEvidence(2 * a + 2 * b)}\\text{ cm}$.` : `le produit de sa longueur par sa largeur, soit $${a}\\times ${b}=${miseEnEvidence(a * b)}\\text{ cm}^2$.`}`
         break
 
       case 3: // périmètre/longueur triangle équi
@@ -239,7 +240,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
 
           this.reponse = 3 * a
           this.correction = `Le triangle est équilatéral.<br>
-        Son périmètre est $3$ fois la longueur de son côté, soit $3\\times ${a}=${3 * a}\\text{ cm}$.`
+        Son périmètre est $3$ fois la longueur de son côté, soit $3\\times ${a}=${miseEnEvidence(3 * a)}\\text{ cm}$.`
         } else {
           objets.push(
             codageSegments('||', bleuMathalea, A, B),
@@ -268,7 +269,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
           this.optionsChampTexte = { texteApres: ' $\\text{cm}$' }
 
           this.reponse = a
-          this.correction = `Puisque le triangle est équilatéral, la longueur de son côté est le tiers de son périmètre, soit $${3 * a}\\div ${3}=${a}\\text{ cm}$. `
+          this.correction = `Puisque le triangle est équilatéral, la longueur de son côté est le tiers de son périmètre, soit $${3 * a}\\div ${3}=${miseEnEvidence(a)}\\text{ cm}$. `
         }
         break
 
@@ -322,7 +323,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
           this.reponse = 2 * a + b
           this.correction = `Le triangle est isocèle.<br>
 
-        Son périmètre est : $2\\times ${a}+${b}=${2 * a + b}\\text{ cm}$.`
+        Son périmètre est : $2\\times ${a}+${b}=${miseEnEvidence(2 * a + b)}\\text{ cm}$.`
         }
         if (choix === 'b') {
           objets.push(
@@ -356,7 +357,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
           this.reponse = a
           this.correction = `Le triangle est isocèle, il possède donc deux longueurs égales.<br>
             Puisque le périmètre est  $${2 * a + b}\\text{ cm}$, on obtient la somme des deux longueurs égales  du triangle en effectuant la différence $${2 * a + b}-${b}=${2 * a}\\text{ cm}$.<br>
-            On obtient  la longueur cherchée en divisant par $2$, soit $${2 * a}\\div 2=${a}\\text{ cm}$.`
+            On obtient  la longueur cherchée en divisant par $2$, soit $${2 * a}\\div 2=${miseEnEvidence(a)}\\text{ cm}$.`
         }
         if (choix === 'c') {
           objets.push(
@@ -393,7 +394,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
 
           this.reponse = b
           this.correction = `Le triangle est isocèle, il possède donc deux longueurs égales.<br>
-                Puisque le périmètre est  $${2 * a + b}\\text{ cm}$, on obtient la longueur manquante par : $${2 * a + b}-2\\times ${a}=${b}\\text{ cm}$.`
+                Puisque le périmètre est  $${2 * a + b}\\text{ cm}$, on obtient la longueur manquante par : $${2 * a + b}-2\\times ${a}=${miseEnEvidence(b)}\\text{ cm}$.`
         }
         break
     }

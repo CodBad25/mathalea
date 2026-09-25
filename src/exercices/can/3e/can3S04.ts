@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { listeDeNotes } from '../../../lib/outils/aleatoires'
 import { sp } from '../../../lib/outils/outilString'
 import { prenom } from '../../../lib/outils/Personne'
@@ -54,7 +55,7 @@ export default class Etendue extends ExerciceSimple {
     this.correction = `La note la plus basse est : $${min}$.<br>La note la plus haute est : $${max}$<br>`
     this.correction +=
       "Donc l'étendue de cette série est : " +
-      `$${texNombre(max)}-${texNombre(min)}=${texNombre(max - min)}$`
+      `$${texNombre(max)}-${texNombre(min)}=${miseEnEvidence(texNombre(max - min))}$`
     this.reponse = max - min
   }
 }

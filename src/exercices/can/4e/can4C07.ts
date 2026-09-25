@@ -1,3 +1,6 @@
+import { pgcd } from '../../../lib/outils/primalite'
+import { orangeMathalea } from '../../../lib/colors'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
 import {
@@ -44,7 +47,7 @@ export default class DifferenceFractionsCompatibles extends ExerciceSimple {
     Ainsi,
     $${a.texFraction} - ${b.texFraction}=
    \\dfrac{${a.n}\\times ${c}}{${a.d}\\times ${c}}- ${b.texFraction}
-    =${a.reduire(c).texFraction} - ${b.texFraction}=\\dfrac{${a.n * c}-${b.n}}{${b.d}}=\\dfrac{${a.n * c - b.n}}{${b.d}}${simplificationDeFractionAvecEtapes(a.n * c - b.n, b.d)}$`
+    =${a.reduire(c).texFraction} - ${b.texFraction}=\\dfrac{${a.n * c}-${b.n}}{${b.d}}${pgcd(a.n * c - b.n, b.d) === 1 && (a.n * c - b.n) * (b.d) > 0 ? `=${miseEnEvidence(`\\dfrac{${a.n * c - b.n}}{${b.d}}`)}` : `=\\dfrac{${a.n * c - b.n}}{${b.d}}${simplificationDeFractionAvecEtapes(a.n * c - b.n, b.d, { couleur2: orangeMathalea })}`}$`
     this.reponse = a.differenceFraction(b).simplifie()
   }
 }

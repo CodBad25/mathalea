@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -39,17 +40,17 @@ export default class CompositionDeNombreDecimalC3 extends ExerciceSimple {
       case 1:
         this.reponse = arrondi(a + b / 10 + c / 100, 2)
         this.question = `Calculer $${a} + ${texNombre(b / 10 + c / 100, 2)}$.`
-        this.correction = `$${a} + ${texNombre(b / 10 + c / 100, 2)}=${texNombre(this.reponse, 2)}$`
+        this.correction = `$${a} + ${texNombre(b / 10 + c / 100, 2)}=${miseEnEvidence(texNombre(this.reponse, 2))}$`
         break
       case 2:
         this.reponse = arrondi(a + b / 100 + c / 1000, 3)
         this.question = `Calculer $${a} + ${texNombre(b / 100 + c / 1000, 3)}$.`
-        this.correction = `$${a}+ ${texNombre(b / 100 + c / 1000, 3)}=${texNombre(this.reponse, 3)}$`
+        this.correction = `$${a}+ ${texNombre(b / 100 + c / 1000, 3)}=${miseEnEvidence(texNombre(this.reponse, 3))}$`
         break
       case 3:
         this.reponse = arrondi(a + b / 10 + c / 1000, 3)
         this.question = `Calculer $${a} + ${texNombre(b / 10 + c / 1000, 3)}$.`
-        this.correction = `$${a} + ${texNombre(b / 10 + c / 1000, 3)}=${texNombre(this.reponse, 3)}$`
+        this.correction = `$${a} + ${texNombre(b / 10 + c / 1000, 3)}=${miseEnEvidence(texNombre(this.reponse, 3))}$`
         break
     }
   }

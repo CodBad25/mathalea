@@ -1,7 +1,7 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Soustraire $10n + 9$'
 export const interactifReady = true
@@ -34,7 +34,7 @@ export default class SoustraireX9 extends ExerciceSimple {
     const c = this.quotaRandint('c', 1, 4)
     this.reponse = a * 10 + b - c * 10 - 9
     this.question = `Calculer $${a * 10 + b} - ${c * 10 + 9}$.`
-    this.correction = `$${a * 10 + b} - ${c * 10 + 9}= ${this.reponse}$<br>`
+    this.correction = `$${a * 10 + b} - ${c * 10 + 9}= ${miseEnEvidence(this.reponse)}$<br>`
     this.correction += texteEnCouleur(
       `<br> Mentalement : <br>
     Soustraire $${c * 10 + 9}$ revient à soustraire $${c * 10 + 10}$, puis à ajouter $1$.<br>

@@ -5,7 +5,7 @@ import { droite } from '../../../lib/2d/droites'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
-import { bleuMathalea } from '../../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -220,7 +220,7 @@ export default class Can2a2026Q23 extends ExerciceCan {
     this.optionsChampTexte = { texteAvant: '' }
 
     this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par :<br><br>
-    $m=\\dfrac{\\text{déplacement vertical}}{\\text{déplacement horizontal}}=\\dfrac{${miseEnEvidence(deltaY, bleuMathalea)}}{${miseEnEvidence(deltaX, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
+    $m=\\dfrac{\\text{déplacement vertical}}{\\text{déplacement horizontal}}=\\dfrac{${miseEnEvidence(deltaY, bleuMathalea)}}{${miseEnEvidence(deltaX, 'red')}}${m.estIrreductible && m.num * m.den > 0 ? `=${miseEnEvidence(m.texFraction)}` : m.texSimplificationAvecEtapes(false, orangeMathalea)}$.<br><br>`
     this.correction += `${objetC}`
 
     this.canEnonce = `Coefficient directeur de la droite $(AB)$.<br>${objet}`

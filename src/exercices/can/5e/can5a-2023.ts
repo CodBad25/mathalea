@@ -634,7 +634,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
               )
             : `\\Fraction[Reponse,Couleur=LightGray,Rayon=1.2cm]{${num}/${den}}`
           texte += context.isHtml ? '' : '\\end{center}'
-          texteCorr = `L'aire grisée représente $${f.texFraction}$ de l'aire du disque.`
+          texteCorr = `L'aire grisée représente $${miseEnEvidence(f.texFraction)}$ de l'aire du disque.`
 
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { fractionEgale: true } },
@@ -1636,7 +1636,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             texte = `Quel est le volume du pavé droit ci-dessous ?<br>
         ${mathalea2d({ xmin: -2, ymin: -2, xmax: 10, ymax: 0.5 * h + l, scale: 0.6 }, pav)}`
             reponse = L * l * h
-            texteCorr = `Le volume de ce pavé droit est : $${L}\\text{ cm}\\times ${l} \\text{ cm}\\times ${h}\\text{ cm}=${reponse}\\text{ cm}^3$.`
+            texteCorr = `Le volume de ce pavé droit est : $${L}\\text{ cm}\\times ${l} \\text{ cm}\\times ${h}\\text{ cm}=${miseEnEvidence(reponse)}\\text{ cm}^3$.`
           } else {
             l = randint(2, 5)
             L = l
@@ -1645,7 +1645,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             texte = `Quel est le volume de ce cube ?<br>
           ${mathalea2d({ xmin: -2, ymin: -2, xmax: 10, ymax: 0.5 * h + l, scale: 0.6 }, pav)}`
             reponse = L * l * h
-            texteCorr = `Le volume de ce cube est : $${L}\\text{ cm}\\times ${l} \\text{ cm}\\times ${h}\\text{ cm}=${reponse}\\text{ cm}^3$.`
+            texteCorr = `Le volume de ce cube est : $${L}\\text{ cm}\\times ${l} \\text{ cm}\\times ${h}\\text{ cm}=${miseEnEvidence(reponse)}\\text{ cm}^3$.`
           }
 
           texte += ajouteChampTexteMathLive(this, index, '', {
@@ -1665,7 +1665,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
           if (choix === 'a') {
             reponse = a
             texte = `$${a}\\text{ dm}^3=$`
-            texteCorr = `$1\\text{ dm}^3= 1$ L, donc $${a}\\text{ dm}^3=${a}$ L.`
+            texteCorr = `$1\\text{ dm}^3= 1$ L, donc $${a}\\text{ dm}^3=${miseEnEvidence(a)}$ L.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             this.listeCanEnonces.push(`$${a}\\text{ dm}^3=$`)
             this.listeCanReponsesACompleter[this.listeCanEnonces.length - 1] =
@@ -1679,7 +1679,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
           if (choix === 'b') {
             reponse = a
             texte = `$${a}$ L $=$`
-            texteCorr = `$1\\text{ dm}^3= 1$ L, donc $${a}$ L $=${a}\\text{ dm}^3$.`
+            texteCorr = `$1\\text{ dm}^3= 1$ L, donc $${a}$ L $=${miseEnEvidence(a)}\\text{ dm}^3$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             this.listeCanEnonces.push(`$${a}$ L $=$`)
             this.listeCanReponsesACompleter[this.listeCanEnonces.length - 1] =

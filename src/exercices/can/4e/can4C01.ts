@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
@@ -41,14 +42,14 @@ export default class PrioriteOperatoireEtRelatifs extends ExerciceSimple {
         this.question = `$${a}${ecritureAlgebrique(b)}\\times ${c}$`
       }
       this.correction = `La multiplication étant prioritaire sur l'addition, on commence par effectuer  le produit $${b}\\times ${ecritureParentheseSiNegatif(c)}=${b * c}$.<br>
-      Ainsi, $${a}${ecritureAlgebrique(b)}\\times ${c}=${a}${ecritureAlgebrique(b * c)}=${a + b * c}$`
+      Ainsi, $${a}${ecritureAlgebrique(b)}\\times ${c}=${a}${ecritureAlgebrique(b * c)}=${miseEnEvidence(a + b * c)}$.`
     } else {
       this.question = `Calculer $${a}${ecritureAlgebrique(c)}\\times ${ecritureParentheseSiNegatif(b)}$.`
       if (context.isDiaporama) {
         this.question = `$${a}${ecritureAlgebrique(c)}\\times ${ecritureParentheseSiNegatif(b)}$`
       }
       this.correction = `La multiplication étant prioritaire sur l'addition, on commence par effectuer  le produit $${c}\\times ${ecritureParentheseSiNegatif(b)}=${b * c}$.<br>
-      Ainsi, $${a}${ecritureAlgebrique(c)}\\times ${ecritureParentheseSiNegatif(b)}=${a}${ecritureAlgebrique(b * c)}=${a + b * c}$`
+      Ainsi, $${a}${ecritureAlgebrique(c)}\\times ${ecritureParentheseSiNegatif(b)}=${a}${ecritureAlgebrique(b * c)}=${miseEnEvidence(a + b * c)}$.`
     }
     this.reponse = a + b * c
   }

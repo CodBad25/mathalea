@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
@@ -52,7 +53,7 @@ export default class Can2025N5Q20 extends ExerciceSimple {
     this.correction =
       qcm.texteCorr +
       `Les vecteurs ont la même direction lorsqu'ils sont colinéaires.<br>
-    ${coeffy === -coeffx ? `On a $x_{\\vec{v}}=${coeffx}\\times x_{\\vec{u}}$ mais $y_{\\vec{v}}\\neq ${coeffx}\\times y_{\\vec{u}}$, donc les vecteurs n'ont pas la même direction.` : `On a $\\vec{v}=${coeffx}\\times \\vec{u}$, donc les vecteurs ont la même direction. `}`
+    ${coeffy === -coeffx ? `On a $x_{\\vec{v}}=${coeffx}\\times x_{\\vec{u}}$ mais $y_{\\vec{v}}\\neq ${coeffx}\\times y_{\\vec{u}}$, donc les vecteurs ${texteEnCouleurEtGras("n'ont pas la même direction")}.` : `On a $\\vec{v}=${coeffx}\\times \\vec{u}$, donc les vecteurs ${texteEnCouleurEtGras('ont la même direction')}. `}`
 
     this.canEnonce = `$\\vec{u}\\begin{pmatrix}${xu} \\\\${yu}\\end{pmatrix}$ et $\\vec{u}\\begin{pmatrix}${xu * coeffx} \\\\ ${yu * coeffy}\\end{pmatrix}$ ont la même direction.`
     this.canReponseACompleter = `Coche la bonne réponse : <br>\\faSquare[regular] Vrai ${sp(2)}\\faSquare[regular] Faux`

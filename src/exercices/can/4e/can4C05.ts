@@ -1,3 +1,6 @@
+import { pgcd } from '../../../lib/outils/primalite'
+import { orangeMathalea } from '../../../lib/colors'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
 import {
   fraction,
@@ -45,7 +48,7 @@ export default class SommeFractionsCompatibles extends ExerciceSimple {
      =\\dfrac{${a.n}\\times ${c}}{${a.d}\\times ${c}}+ ${b.texFraction}
     =${a.reduire(c).texFraction} + ${b.texFraction}
     =\\dfrac{${a.n * c}+${b.n}}{${b.d}}
-    =\\dfrac{${a.n * c + b.n}}{${b.d}}${simplificationDeFractionAvecEtapes(a.n * c + b.n, b.d)}$`
+    ${pgcd(a.n * c + b.n, b.d) === 1 && (a.n * c + b.n) * (b.d) > 0 ? `=${miseEnEvidence(`\\dfrac{${a.n * c + b.n}}{${b.d}}`)}` : `=\\dfrac{${a.n * c + b.n}}{${b.d}}${simplificationDeFractionAvecEtapes(a.n * c + b.n, b.d, { couleur2: orangeMathalea })}`}$`
     } else {
       this.question = `Calculer $ ${b.texFraction}+${a.texFraction}$.`
       this.correction = `Pour additionner des fractions, on les met au même dénominateur.<br>
@@ -56,7 +59,7 @@ export default class SommeFractionsCompatibles extends ExerciceSimple {
      = ${b.texFraction}+\\dfrac{${a.n}\\times ${c}}{${a.d}\\times ${c}}
     =${b.texFraction}+${a.reduire(c).texFraction}
     =\\dfrac{${b.n}+${a.n * c}}{${b.d}}
-    =\\dfrac{${b.n + a.n * c}}{${b.d}}${simplificationDeFractionAvecEtapes(a.n * c + b.n, b.d)}$`
+    ${pgcd(a.n * c + b.n, b.d) === 1 && (a.n * c + b.n) * (b.d) > 0 ? `=${miseEnEvidence(`\\dfrac{${b.n + a.n * c}}{${b.d}}`)}` : `=\\dfrac{${b.n + a.n * c}}{${b.d}}${simplificationDeFractionAvecEtapes(a.n * c + b.n, b.d, { couleur2: orangeMathalea })}`}$`
     }
 
     this.reponse = a.sommeFraction(b).simplifie()

@@ -60,7 +60,7 @@ export default class Can2025N4Q20 extends ExerciceCan {
     this.question = `Donner le nombre de sommets d'un ${solide}.`
     this.correction =
       solide === 'tétraèdre'
-        ? 'Un tétraèdre a 4 sommets.'
+        ? `Un tétraèdre a $${miseEnEvidence(4)}$ sommets.`
         : `Un ${solide} a $${miseEnEvidence(nbSommets)}$ sommets car il possède deux bases opposées à $${nbSommets / 2}$ sommets chacune.`
 
     this.question += this.interactif ? '<br>' : ''

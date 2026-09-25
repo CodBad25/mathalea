@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
@@ -9,7 +10,7 @@ import { texteSurSegment } from '../../../lib/2d/texteSurSegment'
 import { rotation } from '../../../lib/2d/transformations'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
@@ -143,13 +144,13 @@ export default class TripletsPythagoriciensOuPas extends Exercice {
       let texteCorr = `Le plus grand côté du triangle est $[${nom[0]}${nom[2]}]$ et $${nom[0]}${nom[2]}^2=${triplet[2]}^2=${triplet[2] ** 2}$.<br>`
       texteCorr += `D'autre part, $${nom[0]}${nom[1]}^2+${nom[2]}${nom[1]}^2=${triplet[0]}^2+${triplet[1]}^2=${triplet[0] ** 2}+${triplet[1] ** 2}=${triplet[0] ** 2 + triplet[1] ** 2}$.<br>`
       texteCorr += choix
-        ? `On constate que $${nom[0]}${nom[2]}^2=${nom[0]}${nom[1]}^2+${nom[2]}${nom[1]}^2$ donc, d'après la réciproque de la propriété de Pythagore, le triangle $${nom}$ est rectangle en $${nom[1]}$.`
-        : `On constate que $${nom[0]}${nom[2]}^2\\neq ${nom[0]}${nom[1]}^2+${nom[2]}${nom[1]}^2$ donc le triangle $${nom}$ n'est pas rectangle en $${nom[1]}$.`
+        ? `On constate que $${nom[0]}${nom[2]}^2=${nom[0]}${nom[1]}^2+${nom[2]}${nom[1]}^2$ donc, d'après la réciproque de la propriété de Pythagore, le triangle $${nom}$ ${texteEnCouleurEtGras('est rectangle')} en $${nom[1]}$.`
+        : `On constate que $${nom[0]}${nom[2]}^2\\neq ${nom[0]}${nom[1]}^2+${nom[2]}${nom[1]}^2$ donc le triangle $${nom}$ ${texteEnCouleurEtGras("n'est pas rectangle")} en $${nom[1]}$.`
       texteCorr += choix
         ? ''
         : '<br>' +
           texteEnCouleur(
-            `On aurait pu regarder uniquement la somme des chiffres des unités : $${triplet[0] ** 2 % 10}+${triplet[1] ** 2 % 10}$ finit par  $${((triplet[0] ** 2 % 10) + (triplet[1] ** 2 % 10)) % 10}$ qui n'est pas compatible avec $${triplet[2] ** 2}$`,
+            `On aurait pu regarder uniquement la somme des chiffres des unités : $${triplet[0] ** 2 % 10}+${triplet[1] ** 2 % 10}$ finit par  $${((triplet[0] ** 2 % 10) + (triplet[1] ** 2 % 10)) % 10}$ qui n'est pas compatible avec $${triplet[2] ** 2}$`, bleuMathalea,
           )
 
       if (this.questionJamaisPosee(i, triplet.join(''))) {

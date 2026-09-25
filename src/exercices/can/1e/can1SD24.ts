@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import {
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
@@ -53,12 +54,12 @@ export default class DeveloppementCoeff extends ExerciceSimple {
      $${rienSi1(a)}x\\times ${ecritureParentheseSiNegatif(d)}$ et $${b} \\times (${c}x)$,
      soit  $${rienSi1(a)}x\\times ${ecritureParentheseSiNegatif(d)}+${ecritureParentheseSiNegatif(b)} \\times (${rienSi1(c)}x)=
      ${rienSi1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x=${rienSi1(a * d + b * c)}x$.<br>
-     Le coefficient devant $x$ est donc $${a * d + b * c}$.`
+     Le coefficient devant $x$ est donc $${miseEnEvidence(miseEnEvidence(a * d + b * c))}$.`
     } else {
       this.correction += `
      $${rienSi1(a)}x\\times ${ecritureParentheseSiNegatif(d)}$ et $${b} \\times ${rienSi1(c)}x$,
      soit  $${rienSi1(a)}x\\times ${ecritureParentheseSiNegatif(d)}+${ecritureParentheseSiNegatif(b)} \\times ${rienSi1(c)}x=${a * d}x${ecritureAlgebriqueSauf1(b * c)}x=${a * d + b * c}x$.<br>
-     Le coefficient devant $x$ est donc $${a * d + b * c}$. `
+     Le coefficient devant $x$ est donc $${miseEnEvidence(miseEnEvidence(a * d + b * c))}$. `
     }
 
     this.reponse = a * d + b * c

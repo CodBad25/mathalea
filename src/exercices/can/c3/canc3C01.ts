@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -34,23 +35,23 @@ export default class CalculsAutomatiques extends ExerciceSimple {
         case 1:
           this.reponse = a << 1
           this.question = `Calculer le double de $${a}$. `
-          this.correction = `$${a}\\times 2 = ${a << 1}$`
+          this.correction = `$${a}\\times 2 = ${miseEnEvidence(a << 1)}$`
           break
         case 2:
           this.reponse = a * 3
           this.question = `Calculer le triple de $${a}$.`
-          this.correction = `$${a}\\times 3 = ${a * 3}$`
+          this.correction = `$${a}\\times 3 = ${miseEnEvidence(a * 3)}$`
           break
         case 3:
           this.reponse = a * 10
           this.question = `Quel est le nombre dix fois plus grand que $${a}$ ? `
-          this.correction = `$${a}\\times 10 = ${a * 10}$`
+          this.correction = `$${a}\\times 10 = ${miseEnEvidence(a * 10)}$`
           break
       }
     } else {
       this.question = `Calculer la moitié de $${a}$.`
       this.reponse = a >> 1
-      this.correction = `$${a}\\div 2 = ${a >> 1}$`
+      this.correction = `$${a}\\div 2 = ${miseEnEvidence(a >> 1)}$`
     }
   }
 }

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { prenomM } from '../../../lib/outils/Personne'
 import { randint } from '../../../modules/outils'
@@ -35,7 +36,7 @@ export default class Denombrement extends ExerciceSimple {
         this.question = `À la cantine, il y a toujours $${a}$ entrées différentes, $${b}$ plats différents et $${c}$ desserts différents.<br>
         Combien de menus (composés d'une entrée, d'un plat et d'un dessert) différents peut-on avoir dans cette cantine ?`
 
-        this.correction = `On peut avoir : $${a}\\times ${b}\\times ${c} =${a * b * c}$ menus différents.`
+        this.correction = `On peut avoir : $${a}\\times ${b}\\times ${c} =${miseEnEvidence(a * b * c)}$ menus différents.`
         this.reponse = arrondi(a * b * c)
         break
       case 'b':
@@ -45,7 +46,7 @@ export default class Denombrement extends ExerciceSimple {
         this.question = `Pour composer son costume, ${prenom1} a le choix  entre $${a}$ chemises et $${b}$ cravates.<br>
         De combien de manières différentes peut-il composer son costume ?`
 
-        this.correction = `Il a : $${a}\\times ${b} =${a * b}$ manières de composer son costume.`
+        this.correction = `Il a : $${a}\\times ${b} =${miseEnEvidence(a * b)}$ manières de composer son costume.`
         this.reponse = arrondi(a * b)
         break
     }

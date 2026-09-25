@@ -1,3 +1,6 @@
+import { orangeMathalea } from '../../../lib/colors'
+import { pgcd } from '../../../lib/outils/primalite'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { courbe } from '../../../lib/2d/Courbe'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -132,7 +135,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           a = randint(2, 9)
 
           texte = `$${a} \\times 99=$ `
-          texteCorr = `$${a} \\times 99=${a}\\times 100-${a}=${a * 99}$`
+          texteCorr = `$${a} \\times 99=${a}\\times 100-${a}=${miseEnEvidence(a * 99)}$`
           reponse = a * 99
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -156,7 +159,7 @@ export default class SujetCAN2021Seconde extends Exercice {
 
           texteCorr = `          Prendre $${p}\\,\\%$  de $${a}$ revient à prendre $${p / 10}\\times 10\\,\\%$  de $${a}$.<br>
             Comme $10\\,\\%$  de $${a}$ vaut $${a / 10}$ (pour prendre $10\\,\\%$  d'une quantité, on la divise par $10$), alors
-            $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${reponse}$.
+            $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${miseEnEvidence(reponse)}$.
            `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -184,7 +187,7 @@ export default class SujetCAN2021Seconde extends Exercice {
   
              Ainsi, $${b.texFraction} + ${c.texFraction}
              =\\dfrac{${b.n}\\times${c.d}}{${b.d}\\times${c.d}}+ \\dfrac{${c.n}\\times${b.d}}{${b.d}\\times${c.d}}
-             =\\dfrac{${b.n * c.d}+${c.n * b.d}}{${c.d * b.d}}=\\dfrac{${b.n * c.d + c.n * b.d}}{${b.d * c.d}}$.`
+             =\\dfrac{${b.n * c.d}+${c.n * b.d}}{${c.d * b.d}}=${miseEnEvidence(`\\dfrac{${b.n * c.d + c.n * b.d}}{${b.d * c.d}}`)}$.`
 
             reponse = fraction(b.n * c.d + c.n * b.d, b.d * c.d)
             handleAnswers(this, i, {
@@ -212,7 +215,7 @@ export default class SujetCAN2021Seconde extends Exercice {
 
           texte = `$\\sqrt{${b}}=$
                `
-          texteCorr = `$\\sqrt{${b}}$ est le nombre positif dont le carré vaut $${b}$. Comme  $${a}^2=${b}$, alors $\\sqrt{${b}}=${a}$.`
+          texteCorr = `$\\sqrt{${b}}$ est le nombre positif dont le carré vaut $${b}$. Comme  $${a}^2=${b}$, alors $\\sqrt{${b}}=${miseEnEvidence(a)}$.`
 
           reponse = a
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -234,11 +237,11 @@ export default class SujetCAN2021Seconde extends Exercice {
           texte = `Si l'on parcourt $${a}\\text{ km}$ en $${b}$ min, la vitesse moyenne est de
              `
           if (b === 15) {
-            texteCorr = `$15$ min est le quart d'une heure. Donc la vitesse moyenne est $${a}\\times 4=${4 * a}\\text{ km/h}$.`
+            texteCorr = `$15$ min est le quart d'une heure. Donc la vitesse moyenne est $${a}\\times 4=${miseEnEvidence(4 * a)}\\text{ km/h}$.`
 
             reponse = a * 4
           } else {
-            texteCorr = `$30$ min est la moitié d'une heure. Donc la vitesse moyenne est $${a}\\times 2=${2 * a}\\text{ km/h}$.`
+            texteCorr = `$30$ min est la moitié d'une heure. Donc la vitesse moyenne est $${a}\\times 2=${miseEnEvidence(2 * a)}\\text{ km/h}$.`
 
             reponse = a * 2
           }
@@ -263,7 +266,7 @@ export default class SujetCAN2021Seconde extends Exercice {
 
           texte = `Calculer $x^2+${b}$ pour $x=${a}$.
                `
-          texteCorr = `Pour $x=${a}$, $x^2+${b}=(${a})^2+${b}=${a ** 2}+${b}=${reponse}$.`
+          texteCorr = `Pour $x=${a}$, $x^2+${b}=(${a})^2+${b}=${a ** 2}+${b}=${miseEnEvidence(reponse)}$.`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -287,7 +290,7 @@ export default class SujetCAN2021Seconde extends Exercice {
              `
             reponse = fraction(b.n * c.n, b.d * c.d)
             texteCorr = `$\\dfrac{${b.n * k2}}{${b.d * k1}}\\times \\dfrac{${c.n * k1}}{${c.d * k2}}=
-          \\dfrac{${b.n}\\times ${k2}}{${b.d}\\times${k1}}\\times \\dfrac{${c.n}\\times ${k1}}{${c.d}\\times ${k2}}=\\dfrac{${b.n}\\times ${k2}\\times ${c.n}\\times ${k1}}{${b.d}\\times${k1}\\times ${c.d}\\times ${k2}}=${texFractionReduite(b.n * c.n, b.d * c.d)}$`
+          \\dfrac{${b.n}\\times ${k2}}{${b.d}\\times${k1}}\\times \\dfrac{${c.n}\\times ${k1}}{${c.d}\\times ${k2}}=\\dfrac{${b.n}\\times ${k2}\\times ${c.n}\\times ${k1}}{${b.d}\\times${k1}\\times ${c.d}\\times ${k2}}=${miseEnEvidence(texFractionReduite(b.n * c.n, b.d * c.d))}$`
 
             reponse = fraction(b.n * c.n, b.d * c.d)
             handleAnswers(this, i, {
@@ -320,7 +323,7 @@ export default class SujetCAN2021Seconde extends Exercice {
              $\\begin{aligned}
              ${a}x${ecritureAlgebrique(b)}&=${c}\\\\
             ${a}x&=${c}${ecritureAlgebrique(-b)}\\\\
-                                 x&=${reponse}
+                                 x&=${miseEnEvidence(reponse)}
             \\end{aligned}$<br>
                       `
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -340,14 +343,14 @@ export default class SujetCAN2021Seconde extends Exercice {
             b = choice([-1, -2])
             texte = `Écriture décimale de : <br>
                         $10^3+${a}\\times 10^2+10^{${b}}$`
-            texteCorr = `$10^3+${a}\\times 10^2+10^{${b}}=1000+${a * 100}+${texNombre(10 ** b, 2)}=${texNombre(1000 + a * 100 + 10 ** b, 2)}$`
+            texteCorr = `$10^3+${a}\\times 10^2+10^{${b}}=1000+${a * 100}+${texNombre(10 ** b, 2)}=${miseEnEvidence(texNombre(1000 + a * 100 + 10 ** b, 2))}$`
             reponse = 1000 + a * 100 + 10 ** b
           } else {
             a = randint(2, 9)
             b = choice([-1, -2])
             texte = `Écriture décimale de : <br>
                          $${a}\\times 10^3+ 10^2+10^{${b}}$`
-            texteCorr = `$${a}\\times10^3+ 10^2+10^{${b}}=${a * 1000}+100+${texNombre(10 ** b, 2)}=${texNombre(a * 1000 + 100 + 10 ** b, 2)}$`
+            texteCorr = `$${a}\\times10^3+ 10^2+10^{${b}}=${a * 1000}+100+${texNombre(10 ** b, 2)}=${miseEnEvidence(texNombre(a * 1000 + 100 + 10 ** b, 2))}$`
             reponse = a * 1000 + 100 + 10 ** b
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -369,7 +372,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texte = `La moyenne de $${a}$ ; $${b}$ et $n$ vaut $10$.<br>
          $n=$`
           texteCorr = `
-        Pour avoir une moyenne de $10$, la somme des $3$ nombres doit être égale à $30$. <br>Par conséquent $n=30-${a}-${b}=${30 - a - b}$.
+        Pour avoir une moyenne de $10$, la somme des $3$ nombres doit être égale à $30$. <br>Par conséquent $n=30-${a}-${b}=${miseEnEvidence(30 - a - b)}$.
                    `
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -394,7 +397,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Écriture  scientifique de $${texNombre(a, 3)}$`
 
               texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-            Ici : $${texNombre(a, 3)}=\\underbrace{${texNombre(truc, 3)}}_{1\\leqslant ${texNombre(truc, 3)} <10}\\times 10^{-2}$. `
+            Ici : $${texNombre(a, 3)}=\\underbrace{${texNombre(truc, 3)}}_{1\\leqslant ${texNombre(truc, 3)} <10}\\times 10^{-2}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 3)}\\times 10^{-2}`)}$. `
             } else if (choix === 'b') {
               a = randint(111, 399, [200, 300]) / 100000
               const truc = a * 1000
@@ -402,7 +405,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Écriture  scientifique de $${texNombre(a, 5)}$`
 
               texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-              Ici : $${texNombre(a, 5)}=\\underbrace{${texNombre(truc, 5)}}_{1\\leqslant ${texNombre(truc, 5)} <10}\\times 10^{-3}$. `
+              Ici : $${texNombre(a, 5)}=\\underbrace{${texNombre(truc, 5)}}_{1\\leqslant ${texNombre(truc, 5)} <10}\\times 10^{-3}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 5)}\\times 10^{-3}`)}$. `
             } else {
               a = randint(111, 399, [200, 300]) / 1000000
               const truc = a * 10000
@@ -410,7 +413,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Écriture  scientifique de $${texNombre(a, 6)}$`
 
               texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-                Ici : $${texNombre(a, 6)}=\\underbrace{${texNombre(truc, 6)}}_{1\\leqslant ${texNombre(truc, 6)} <10}\\times 10^{-4}$. `
+                Ici : $${texNombre(a, 6)}=\\underbrace{${texNombre(truc, 6)}}_{1\\leqslant ${texNombre(truc, 6)} <10}\\times 10^{-4}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 6)}\\times 10^{-4}`)}$. `
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -434,7 +437,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texte += `$\\ldots < \\sqrt{${a}} < \\ldots$`
           texteCorr = ` On cherche le carré parfait le plus proche de $${a}$ inférieur à $${a}$.<br>
        Comme $${Math.floor(Math.sqrt(a)) ** 2}=${Math.floor(Math.sqrt(a))}^2$, alors :
-     $${Math.floor(Math.sqrt(a))}< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}$.`
+     $${miseEnEvidence(Math.floor(Math.sqrt(a)))}< \\sqrt{${a}} < ${miseEnEvidence(Math.floor(Math.sqrt(a)) + 1)}$.`
 
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { suiteDeNombres: true } },
@@ -457,12 +460,12 @@ export default class SujetCAN2021Seconde extends Exercice {
           if (choice([true, false])) {
             texte = `Développer $(${b}x+${a})^2$`
             texteCorr = `On utilise l'égalité remarquable $(a+b)^2=a^2+2ab+b^2$ avec $a=${b}x$ et $b=${a}$.<br>
-              $(${b}x+${a})^2=(${b}x)^2+2 \\times ${b}x \\times ${a} + ${a}^2=${b * b}x^2+${2 * b * a}x+${a * a}$`
+              $(${b}x+${a})^2=(${b}x)^2+2 \\times ${b}x \\times ${a} + ${a}^2=${miseEnEvidence(`${b * b}x^2+${2 * b * a}x+${a * a}`)}$`
             reponse = [`${b * b}x^2+${2 * b * a}x+${a * a}`]
           } else {
             texte = `Développer $(${b}x-${a})^2$`
             texteCorr = `On utilise l'égalité remarquable $(a+b)^2=a^2-2ab+b^2$ avec $a=${b}x$ et $b=${a}$.<br>
-              $(${b}x-${a})^2=(${b}x)^2-2 \\times ${b}x \\times ${a} + ${a}^2=${b * b}x^2-${2 * b * a}x+${a * a}$`
+              $(${b}x-${a})^2=(${b}x)^2-2 \\times ${b}x \\times ${a} + ${a}^2=${miseEnEvidence(`${b * b}x^2-${2 * b * a}x+${a * a}`)}$`
             reponse = [`${b * b}x^2-${2 * b * a}x+${a * a}`]
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -486,7 +489,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               reponse = a * 1000
               texte = `$${texNombre(a, 1)}\\text{ m}^3=$`
 
-              texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 1)}\\text{ m}^3=${texNombre(a, 1)}\\times 1000$ L$=${texNombre(a * 1000, 1)}$ L`
+              texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 1)}\\text{ m}^3=${texNombre(a, 1)}\\times 1000$ L$=${miseEnEvidence(texNombre(a * 1000, 1))}$ L`
             } else {
               a =
                 randint(11, 39, [10, 20, 30]) +
@@ -495,7 +498,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               reponse = a * 1000
               texte = `$${texNombre(a, 2)}\\text{ m}^3=$`
 
-              texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 2)}\\text{ m}^3=${texNombre(a, 2)}\\times 1000$ L$=${texNombre(a * 1000, 2)}$ L`
+              texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 2)}\\text{ m}^3=${texNombre(a, 2)}\\times 1000$ L$=${miseEnEvidence(texNombre(a * 1000, 2))}$ L`
             }
 
             handleAnswers(this, index, { reponse: { value: reponse } })
@@ -523,7 +526,7 @@ export default class SujetCAN2021Seconde extends Exercice {
             texte = `Écrire $\\dfrac{${b.n * k1}}{${b.d * k1}}$ sous forme d'une fraction irréductible.
              `
 
-            texteCorr = `$\\dfrac{${b.n * k1}}{${b.d * k1}}=\\dfrac{${b.n}\\times ${k1}}{${b.d}\\times ${k1}}=\\dfrac{${b.n}}{${b.d}}$.`
+            texteCorr = `$\\dfrac{${b.n * k1}}{${b.d * k1}}=\\dfrac{${b.n}\\times ${k1}}{${b.d}\\times ${k1}}=${miseEnEvidence(`\\dfrac{${b.n}}{${b.d}}`)}$.`
 
             reponse = fraction(b.n, b.d).simplifie()
             handleAnswers(this, i, {
@@ -557,7 +560,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               ]
               texte = `Décomposer $${listeFacteurs16[0] * listeFacteurs16[1] * listeFacteurs16[2]}$ en produits de facteurs premiers.`
 
-              texteCorr = `$${listeFacteurs16[0] * listeFacteurs16[1] * listeFacteurs16[2]}=${listeFacteurs16[0]}\\times ${listeFacteurs16[1]}\\times ${listeFacteurs16[2]}$`
+              texteCorr = `$${listeFacteurs16[0] * listeFacteurs16[1] * listeFacteurs16[2]}=${miseEnEvidence(`${listeFacteurs16[0]}\\times ${listeFacteurs16[1]}\\times ${listeFacteurs16[2]}`)}$`
             } else {
               let listeFacteurs16 = [2, 3, 5]
               listeFacteurs16 = shuffle(listeFacteurs16)
@@ -568,7 +571,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               ]
               texte = `Décomposer $${listeFacteurs16[0] * listeFacteurs16[0] * listeFacteurs16[1]}$ en produits de facteurs premiers.`
 
-              texteCorr = `$${listeFacteurs16[0] * listeFacteurs16[0] * listeFacteurs16[1]}=${listeFacteurs16[0]}\\times ${listeFacteurs16[0]}\\times ${listeFacteurs16[1]}=${listeFacteurs16[0]}^2\\times ${listeFacteurs16[1]}$`
+              texteCorr = `$${listeFacteurs16[0] * listeFacteurs16[0] * listeFacteurs16[1]}=${listeFacteurs16[0]}\\times ${listeFacteurs16[0]}\\times ${listeFacteurs16[1]}=${miseEnEvidence(`${listeFacteurs16[0]}^2\\times ${listeFacteurs16[1]}`)}$`
             }
 
             handleAnswers(this, index, {
@@ -598,7 +601,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texteCorr = ` On factorise : <br>     $\\begin{aligned}
       ${b}\\times${texNombre(a, 1)} + ${texNombre(a, 1)}\\times${c}&=${texNombre(a, 1)}\\times \\underbrace{(${b}+${c})}_{=100}\\\\
       &=${texNombre(a, 1)}\\times 100\\\\
-      &=${100 * a}
+      &=${miseEnEvidence(100 * a)}
       \\end{aligned}$`
           reponse = 100 * a
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -625,7 +628,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texteCorr = `Les coordonnées du milieu sont  données par :
         $\\left(\\dfrac{${a}+${b}}{2};\\dfrac{${c}+${d}}{2}\\right)=
         \\left(\\dfrac{${a + b}}{2};\\dfrac{${c + d}}{2}\\right)=
-        (${texNombre((a + b) / 2, 1)};${texNombre((c + d) / 2, 1)})$.`
+        ${miseEnEvidence(`(${texNombre((a + b) / 2, 1)};${texNombre((c + d) / 2, 1)})`)}$.`
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { texteAvecCasse: true } },
           })
@@ -704,7 +707,7 @@ export default class SujetCAN2021Seconde extends Exercice {
             )
             texteCorr = `Le triangle $ACD$ est un agrandissement du triangle $EBC$. Le coefficient d'agrandissement est donné par : $\\dfrac{${b}}{${a}}=${k}$.<br>
           On obtient donc la longueur $EB$ en divisant par $${k}$ la longueur $AD$.<br>
-          $EB=\\dfrac{${d}}{${k}}=${c}\\text{ cm}$.<br>`
+          $EB=\\dfrac{${d}}{${k}}=${miseEnEvidence(c)}\\text{ cm}$.<br>`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$EB=$'
@@ -733,7 +736,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `$${b}\\,\\%$ des élèves d'un lycée sont externes. <br>
           Il y a $${a}$ externes. Combien y a-t-il d'élèves dans ce lycée ?
       `
-              texteCorr = ` Comme $100\\,\\%$ est égal à $${100 / b}$ fois $${b}\\,\\%$, alors le nombre d'élèves dans ce lycée est : $${a}\\times ${100 / b}=${reponse}$.`
+              texteCorr = ` Comme $100\\,\\%$ est égal à $${100 / b}$ fois $${b}\\,\\%$, alors le nombre d'élèves dans ce lycée est : $${a}\\times ${100 / b}=${miseEnEvidence(reponse)}$.`
             } else {
               a = randint(8, 15) * 10
               b = 10
@@ -741,7 +744,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `$${b}\\,\\%$ des élèves d'un lycée sont externes. <br>
             Il y a $${a}$ externes. Combien y a-t-il d'élèves dans ce lycée ?
         `
-              texteCorr = ` Comme $100\\,\\%$ est égal à $${100 / b}$ fois $${b}\\,\\%$, alors le nombre d'élèves dans ce lycée est : $${a}\\times ${100 / b}=${reponse}$.`
+              texteCorr = ` Comme $100\\,\\%$ est égal à $${100 / b}$ fois $${b}\\,\\%$, alors le nombre d'élèves dans ce lycée est : $${a}\\times ${100 / b}=${miseEnEvidence(reponse)}$.`
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -770,7 +773,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Factoriser $${a ** 2}x^2-${b ** 2}$.
       `
               texteCorr = ` On reconnaît une différence de deux carrés : $a^2-b^2$ avec $a=${a}x$ et $b=${b}$.<br>
-            Comme $a^2-b^2=(a-b)(a+b)$, alors $${a ** 2}x^2-${b ** 2}=(${a}x-${b})(${a}x+${b})$.`
+            Comme $a^2-b^2=(a-b)(a+b)$, alors $${a ** 2}x^2-${b ** 2}=${miseEnEvidence(`(${a}x-${b})(${a}x+${b})`)}$.`
             } else {
               a = randint(2, 10)
               b = randint(2, 10)
@@ -782,7 +785,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Factoriser $${b ** 2}-${a ** 2}x^2$.
       `
               texteCorr = ` On reconnaît une différence de deux carrés : $a^2-b^2$ avec $a=${b}$ et $b=${a}x$.<br>
-            Comme $a^2-b^2=(a-b)(a+b)$, alors  $${b ** 2}-${a ** 2}x^2=(${b}-${a}x)(${b}+${a}x)$.`
+            Comme $a^2-b^2=(a-b)(a+b)$, alors  $${b ** 2}-${a ** 2}x^2=${miseEnEvidence(`(${b}-${a}x)(${b}+${a}x)`)}$.`
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -831,11 +834,11 @@ export default class SujetCAN2021Seconde extends Exercice {
             texte += `<br> Que renvoie l'instruction $\\texttt{calcul(${a},${b})}$ ?`
             if (a !== 6 || b > 8) {
               texteCorr = `Si $a$ est différent de $6$ ou $b>8$, le script renvoie la somme de $a$ et de $b$, sinon il renvoie la différence.<br>
-          Dans ce cas, il renvoie la somme : $${a}+${b}=${a + b}$.`
+          Dans ce cas, il renvoie la somme : $${a}+${b}=${miseEnEvidence(a + b)}$.`
               reponse = a + b
             } else {
               texteCorr = `Si $a$ est différent de $6$ ou $b>8$, le script renvoie la somme de $a$ et de $b$, sinon il renvoie la différence.<br>
-              Dans ce cas, il renvoie la différence : $${a}-${b}=${a - b}$.`
+              Dans ce cas, il renvoie la différence : $${a}-${b}=${miseEnEvidence(a - b)}$.`
               reponse = a - b
             }
           } else {
@@ -869,11 +872,11 @@ export default class SujetCAN2021Seconde extends Exercice {
             texte += `<br> Que renvoie l'instruction $\\texttt{calcul(${a},${b})}$ ?`
             if (a !== 6 || b < 8) {
               texteCorr = `Si $a$ est différent de $6$ ou $b<8$, le script renvoie la somme de $a$ et de $b$, sinon il renvoie la différence.<br>
-              Dans ce cas, il renvoie la somme : $${a}+${b}=${a + b}$.`
+              Dans ce cas, il renvoie la somme : $${a}+${b}=${miseEnEvidence(a + b)}$.`
               reponse = a + b
             } else {
               texteCorr = `Si $a$ est différent de $6$ ou $b<8$, le script renvoie la somme de $a$ et de $b$, sinon il renvoie la différence.<br>
-                  Dans ce cas, il renvoie la différence : $${a}-${b}=${a - b}$.`
+                  Dans ce cas, il renvoie la différence : $${a}-${b}=${miseEnEvidence(a - b)}$.`
               reponse = a - b
             }
           }
@@ -898,7 +901,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           Calculer le coefficient directeur de $(AB)$.
       `
           texteCorr = ` Le coefficient directeur de la droite $(AB)$ est donné par :<br>
-           $\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${d}-${b}}{${c}-${a}}=${(d - b) / (c - a)}$.
+           $\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${d}-${b}}{${c}-${a}}=${miseEnEvidence((d - b) / (c - a))}$.
           `
           reponse = fraction(d - b, c - a)
           handleAnswers(this, i, {
@@ -924,7 +927,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           texte = `Déterminer le périmètre d'un carré d'aire $${a ** 2}\\text{ cm}^2$.
       `
           texteCorr = `Si l'aire du carré est $${a ** 2}\\text{ cm}^2$, la longueur de son côté est $\\sqrt{${a ** 2}}=${a}\\text{ cm}$. <br>
-          On en déduit que le périmètre du carré est $4\\times ${a}=${4 * a}\\text{ cm}$. `
+          On en déduit que le périmètre du carré est $4\\times ${a}=${miseEnEvidence(4 * a)}\\text{ cm}$. `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -946,7 +949,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           Quelle est la probabilité de tirer une boule rouge ?
       `
           texteCorr = `Il y a $${b}$ boules rouges sur un total de $${a + b}$ boules. <br>
-          La probabilité de tirer une boule rouge est donc : $\\dfrac{${a}}{${a + b}}${simplificationDeFractionAvecEtapes(a, a + b)}$`
+          La probabilité de tirer une boule rouge est donc : $${pgcd(a, a + b) === 1 ? miseEnEvidence(`\\dfrac{${a}}{${a + b}}`) : `\\dfrac{${a}}{${a + b}}${simplificationDeFractionAvecEtapes(a, a + b, { couleur2: orangeMathalea })}`}$`
 
           handleAnswers(this, i, {
             reponse: {
@@ -973,7 +976,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Une voiture roule à la vitesse moyenne de $${a}\\text{ km/h}$.<br>
             Combien de kilomètres a-t-elle parcourus en $15$ minutes ?
         `
-              texteCorr = `Dans une heure, il y a $4\\times 15$ minutes. <br>Ainsi en $15$ minutes, la voiture aura parcouru $${a}\\div 4=${a / 4}\\text{ km}$.<br>
+              texteCorr = `Dans une heure, il y a $4\\times 15$ minutes. <br>Ainsi en $15$ minutes, la voiture aura parcouru $${a}\\div 4=${miseEnEvidence(a / 4)}\\text{ km}$.<br>
             `
             } else if (choix === 'b') {
               a = choice([60, 90, 120])
@@ -981,7 +984,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Une voiture roule à la vitesse moyenne de $${a}\\text{ km/h}$.<br>
                           Combien de kilomètres a-t-elle parcourus en $10$ minutes ?
                       `
-              texteCorr = `Dans une heure, il y a $6\\times 10$ minutes. <br>Ainsi en $10$ minutes, la voiture aura parcouru $${a}\\div 6=${a / 6}\\text{ km}$.
+              texteCorr = `Dans une heure, il y a $6\\times 10$ minutes. <br>Ainsi en $10$ minutes, la voiture aura parcouru $${a}\\div 6=${miseEnEvidence(a / 6)}\\text{ km}$.
                           `
             } else {
               a = choice([30, 60, 90, 120])
@@ -989,7 +992,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte = `Une voiture roule à la vitesse moyenne de $${a}\\text{ km/h}$.<br>
                                         Combien de kilomètres a-t-elle parcourus en $20$ minutes ?
                                     `
-              texteCorr = `Dans une heure, il y a $3\\times 20$ minutes. <br>Ainsi en $20$ minutes, la voiture aura parcouru $${a}\\div 3=${a / 3}\\text{ km}$.
+              texteCorr = `Dans une heure, il y a $3\\times 20$ minutes. <br>Ainsi en $20$ minutes, la voiture aura parcouru $${a}\\div 3=${miseEnEvidence(a / 3)}\\text{ km}$.
                                         `
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
@@ -1063,7 +1066,7 @@ export default class SujetCAN2021Seconde extends Exercice {
             )
             texteCorr = `Le théorème de Pythagore dans le triangle rectangle $ADB$ donne : <br>
             $DB^2=AD^2+AB^2$ soit $DB^2=${a}^2+${a}^2=2\\times ${a}^2=${2 * a ** 2}$.<br>
-            Ainsi, $DB=\\sqrt{${2 * a ** 2}}$ ou encore $DB=${a}\\sqrt{2}$.`
+            Ainsi, $DB=\\sqrt{${2 * a ** 2}}$ ou encore $DB=${miseEnEvidence(`${a}\\sqrt{2}`)}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$DB=$'
@@ -1089,7 +1092,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           Combien pèse (en $\\text{kg}$) ce solide qui a la forme d'un cube  d'arête $${a}\\text{ cm}$  ?
       `
           texteCorr = `Le volume du cube est $${a}^3=${a ** 3}\\text{ cm}^3$.<br>
-          Sa masse est donc donnée par $${a ** 3}\\times 10=${10 * a ** 3}$ g soit $${texNombre(a ** 3 / 100, 2)}\\text{ kg}$.
+          Sa masse est donc donnée par $${a ** 3}\\times 10=${10 * a ** 3}$ g soit $${miseEnEvidence(texNombre(a ** 3 / 100, 2))}\\text{ kg}$.
 
           `
 
@@ -1133,7 +1136,7 @@ Donner une valeur approchée de l'antécédent de $${a}$ par $f$ ?<br>`
               r,
               C,
             )
-            texteCorr = `L'antécédent de $${a}$ par $f$ est l'abscisse du point de la courbe d'ordonnée $${a}$ : $${texNombre(Math.cbrt(2 * (a - b)), 1)}$ en est une valeur approchée. `
+            texteCorr = `L'antécédent de $${a}$ par $f$ est l'abscisse du point de la courbe d'ordonnée $${a}$ : $${miseEnEvidence(texNombre(Math.cbrt(2 * (a - b)), 1))}$ en est une valeur approchée. `
 
             handleAnswers(this, index, {
               reponse: {
@@ -1161,12 +1164,11 @@ Donner une valeur approchée de l'antécédent de $${a}$ par $f$ ?<br>`
             if (choix === 'a') {
               texte =
                 "On lance deux fois de suite un dé cubique équilibré.<br>Quelle est la probabilité d’obtenir deux fois le même nombre ?<br>Donner le résultat sous la forme d'une fraction irréductible."
-              texteCorr =
-                "Sur $36$ cas possibles équiprobables, il y en a $6$ qui sont des doubles. Donc la probabilité d'obtenir deux fois le même nombre est $\\dfrac{6}{36}=\\dfrac{1}{6}$."
+              texteCorr = `Sur $36$ cas possibles équiprobables, il y en a $6$ qui sont des doubles. Donc la probabilité d'obtenir deux fois le même nombre est $\\dfrac{6}{36}=${miseEnEvidence('\\dfrac{1}{6}')}$.`
               reponse = fraction(1, 6)
             } else {
               texte = `On lance deux dés cubiques équilibrés.<br>Quelle est la probabilité d’obtenir un total de $${c}$ ?<br>Donner le résultat sous la forme d'une fraction irréductible.`
-              texteCorr = `Sur $36$ cas possibles équiprobables, il y en a $${p[c - 2]}$ qui donnent une somme de $${c}$. Donc la probabilité d'obtenir un total de $${c}$ est $\\dfrac{${p[c - 2]}}{36}${simplificationDeFractionAvecEtapes(p[c - 2], 36)}$.`
+              texteCorr = `Sur $36$ cas possibles équiprobables, il y en a $${p[c - 2]}$ qui donnent une somme de $${c}$. Donc la probabilité d'obtenir un total de $${c}$ est $${pgcd(p[c - 2], 36) === 1 ? miseEnEvidence(`\\dfrac{${p[c - 2]}}{36}`) : `\\dfrac{${p[c - 2]}}{36}${simplificationDeFractionAvecEtapes(p[c - 2], 36, { couleur2: orangeMathalea })}`}$.`
               reponse = fraction(p[c - 2], 36).simplifie()
             }
             handleAnswers(this, i, {

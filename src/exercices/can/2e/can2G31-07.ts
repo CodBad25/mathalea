@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
@@ -45,12 +46,12 @@ export default class CoordonneesPointDroite extends ExerciceSimple {
     if (a === 1) {
       this.correction = `Puisque $${c}$ est l'abscisse de ce point, son ordonnée est donnée par :<br>
         $y= ${c}+${ecritureParentheseSiNegatif(b)}=${a * c + b}$.<br>
-  Les coordonnées du  point sont donc : $(${c};${texNombre(a * c + b)})$.`
+  Les coordonnées du  point sont donc : $${miseEnEvidence(`(${c};${texNombre(a * c + b)})`)}$.`
     } else {
       this.correction = `Puisque $${c}$ est l'abscisse de ce point, son ordonnée est donnée par :<br>
 
   $y=${a}\\times ${ecritureParentheseSiNegatif(c)}+${ecritureParentheseSiNegatif(b)}=${a * c} + ${ecritureParentheseSiNegatif(b)}=${a * c + b}$.<br>
-  Les coordonnées du  point sont donc : $(${c};${texNombre(a * c + b)})$.`
+  Les coordonnées du  point sont donc : $${miseEnEvidence(`(${c};${texNombre(a * c + b)})`)}$.`
     }
 
     this.canEnonce = ` Déterminer les coordonnées du point de la droite

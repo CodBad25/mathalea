@@ -1,4 +1,5 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une différence'
 export const interactifReady = true
@@ -29,11 +30,11 @@ export default class DifferenceNegative extends ExerciceSimple {
     const a = this.quotaRandint('a', 8, 15)
     const b = this.quotaRandint('b', 18, 30)
     this.question = `Calculer $${a}-${b}$.`
-    this.correction = `$${a}-${b}=${a - b}$`
+    this.correction = `$${a}-${b}=${miseEnEvidence(a - b)}$`
     this.reponse = a - b
     this.correction += texteEnCouleur(`<br> Mentalement : <br>
     On décompose $${b}$ en $${a}+${b - a}$, ce qui donne :<br>
      $${a}-${b}=${a}-${a}-${b - a}=${a - b}$.
-       `)
+       `, bleuMathalea)
   }
 }

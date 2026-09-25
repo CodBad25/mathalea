@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { droite } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -103,6 +104,6 @@ export default class ProblemesDeLongueursInverse extends ExerciceSimple {
         objets,
       )
     this.reponse = c
-    this.correction = `Comme $CB=\\dfrac{AB}{${b}}$, alors $CB=\\dfrac{${abc}\\text{ cm}}{${b}}=${ac}\\text{ cm}$.<br><br>Comme $DE=CB=${ac}\\text{ cm}$ et $FE=\\dfrac{DE}{${a}}$, alors $FE=\\dfrac{${ac}\\text{ cm}}{${a}}=${c}\\text{ cm}$.`
+    this.correction = `Comme $CB=\\dfrac{AB}{${b}}$, alors $CB=\\dfrac{${abc}\\text{ cm}}{${b}}=${ac}\\text{ cm}$.<br><br>Comme $DE=CB=${ac}\\text{ cm}$ et $FE=\\dfrac{DE}{${a}}$, alors $FE=\\dfrac{${ac}\\text{ cm}}{${a}}=${miseEnEvidence(c)}\\text{ cm}$.`
   }
 }

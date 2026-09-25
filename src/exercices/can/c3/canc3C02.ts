@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -36,17 +37,17 @@ export default class CompositionDeNombreEntier extends ExerciceSimple {
       case 1:
         this.reponse = a * 1000 + b * 100 + c
         this.question = `Calculer $(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 1)$.`
-        this.correction = `$(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 1)=${texNombre(a * 1000)}+${b * 100}+${c}=${texNombre(a * 1000 + b * 100 + c)}$`
+        this.correction = `$(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 1)=${texNombre(a * 1000)}+${b * 100}+${c}=${miseEnEvidence(texNombre(a * 1000 + b * 100 + c))}$`
         break
       case 2:
         this.reponse = a * 1000 + b * 10 + c
         this.question = `Calculer $(${a}\\times ${texNombre(1000)}) + (${b}\\times 10) + (${c}\\times 1)$.`
-        this.correction = `$(${a}\\times ${texNombre(1000)}) + (${b}\\times 10) + (${c}\\times 1)=${texNombre(a * 1000)}+${b * 10}+${c}=${texNombre(a * 1000 + b * 10 + c)}$`
+        this.correction = `$(${a}\\times ${texNombre(1000)}) + (${b}\\times 10) + (${c}\\times 1)=${texNombre(a * 1000)}+${b * 10}+${c}=${miseEnEvidence(texNombre(a * 1000 + b * 10 + c))}$`
         break
       case 3:
         this.reponse = a * 1000 + b * 100 + c * 10
         this.question = `Calculer $(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 10)$.`
-        this.correction = `$(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 10)=${texNombre(a * 1000)}+${b * 100}+${c * 10}=${texNombre(a * 1000 + b * 100 + c * 10)}$`
+        this.correction = `$(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 10)=${texNombre(a * 1000)}+${b * 100}+${c * 10}=${miseEnEvidence(texNombre(a * 1000 + b * 100 + c * 10))}$`
         break
     }
   }

@@ -1,5 +1,6 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { tableau2x2 } from '../../../lib/2d/tableau'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une quatrième proportionnelle'
@@ -52,11 +53,11 @@ export default class QuatriemeProportionnelle extends ExerciceSimple {
         this.question += `<br>
         
         `
-        this.correction = `La quatrième proportionnelle est donnée par  : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${b * c}$`
+        this.correction = `La quatrième proportionnelle est donnée par  : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${miseEnEvidence(b * c)}$`
         this.correction += texteEnCouleur(`<br> Mentalement : <br>
     Pour passer de la première ligne du tableau à la deuxième, on multiplie par
      $${c}$ car $${a}\\times ${c}=${a * c}$.<br>
-     Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`)
+     Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`, bleuMathalea)
         break
       case 1:
         this.question = `Compléter le tableau de proportionnalité.<br>
@@ -77,11 +78,11 @@ export default class QuatriemeProportionnelle extends ExerciceSimple {
         this.question += `<br>
         
         `
-        this.correction = `La quatrième proportionnelle est donnée par : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${b * c}$`
+        this.correction = `La quatrième proportionnelle est donnée par : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${miseEnEvidence(b * c)}$`
         this.correction += texteEnCouleur(`<br> Mentalement : <br>
         Pour passer de la première colonne du tableau à la deuxième, on multiplie par
          $${c}$ car $${a}\\times ${c}=${a * c}$.<br>
-         Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`)
+         Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`, bleuMathalea)
         break
       case 2:
         this.question = `Compléter le tableau de proportionnalité.<br>
@@ -102,11 +103,11 @@ export default class QuatriemeProportionnelle extends ExerciceSimple {
         this.question += `<br>
         
         `
-        this.correction = `La quatrième proportionnelle est donnée par : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${b * c}$`
+        this.correction = `La quatrième proportionnelle est donnée par : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${miseEnEvidence(b * c)}$`
         this.correction += texteEnCouleur(`<br> Mentalement : <br>
         Pour passer de la deuxième ligne du tableau à la première, on multiplie par
          $${c}$ car $${a}\\times ${c}=${a * c}$.<br>
-         Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`)
+         Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`, bleuMathalea)
         break
       case 3:
         this.question = `Compléter le tableau de proportionnalité.<br>
@@ -127,11 +128,11 @@ export default class QuatriemeProportionnelle extends ExerciceSimple {
         this.question += `<br>
         
         `
-        this.correction = `La quatrième proportionnelle est donnée par : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${b * c}$`
+        this.correction = `La quatrième proportionnelle est donnée par : $\\dfrac{${a * c}\\times ${b}}{${a}}=\\dfrac{${a * b * c}}{${a}}=${miseEnEvidence(b * c)}$`
         this.correction += texteEnCouleur(`<br> Mentalement : <br>
         Pour passer de la première colonne du tableau à la deuxième, on multiplie par
          $${c}$ car $${a}\\times ${c}=${a * c}$.<br>
-         Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`)
+         Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`, bleuMathalea)
         break
     }
   }

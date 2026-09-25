@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -30,7 +31,7 @@ export default class SommePuissancesDeDix extends ExerciceSimple {
     this.question = `Calculer $10^${a[0]}+10^${a[1]}+10^${a[2]}$.`
     this.correction = `$10^${a[0]}+10^${a[1]}+10^${a[2]}=
     ${texNombre(10 ** a[0])}+${texNombre(10 ** a[1])}+${texNombre(10 ** a[2])}
-    =${texNombre(10 ** a[0] + 10 ** a[1] + 10 ** a[2])}$`
+    =${miseEnEvidence(texNombre(10 ** a[0] + 10 ** a[1] + 10 ** a[2]))}$`
     this.reponse = 10 ** a[0] + 10 ** a[1] + 10 ** a[2]
   }
 }

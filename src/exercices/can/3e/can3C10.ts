@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -41,11 +42,11 @@ export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
   `
         if (choix === '$b$') {
           this.correction = `Comme $10000<${texNombre(a)}<100000$, alors :<br>
-       $10^4<${texNombre(a)}<10^5$. On en déduit que $b=5$.`
+       $10^4<${texNombre(a)}<10^5$. On en déduit que $b=${miseEnEvidence(5)}$.`
           this.reponse = ['5']
         } else {
           this.correction = `Comme $10000<${texNombre(a)}<100000$, alors :<br>
-           $10^4<${texNombre(a)}<10^5$. On en déduit que $a=4$.`
+           $10^4<${texNombre(a)}<10^5$. On en déduit que $a=${miseEnEvidence(4)}$.`
           this.reponse = ['4']
         }
         break
@@ -64,11 +65,11 @@ export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
       `
         if (choix === '$b$') {
           this.correction = `Comme $100000<${texNombre(a)}<1000000$, alors :<br>
-       $10^5<${texNombre(a)}<10^6$. On en déduit $b=6$.`
+       $10^5<${texNombre(a)}<10^6$. On en déduit $b=${miseEnEvidence(6)}$.`
           this.reponse = ['6']
         } else {
           this.correction = `Comme $100000<${texNombre(a)}<1000000$, alors :<br>
-           $10^5<${texNombre(a)}<10^6$. On en déduit $a=5$.`
+           $10^5<${texNombre(a)}<10^6$. On en déduit $a=${miseEnEvidence(5)}$.`
           this.reponse = ['5']
         }
         break
@@ -81,11 +82,11 @@ export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
             `
         if (choix === '$b$') {
           this.correction = `Comme $0,01<${texNombre(a)}<0,1$, alors :<br>
-       $10^{-2}<${texNombre(a)}<10^{-1}$. On en déduit : $b=-1$.`
+       $10^{-2}<${texNombre(a)}<10^{-1}$. On en déduit : $b=${miseEnEvidence(-1)}$.`
           this.reponse = ['-1']
         } else {
           this.correction = `Comme $0,01<${texNombre(a)}<0,1$, alors :<br>
-        $10^{-2}<${texNombre(a)}<10^{-1}$. On en déduit : $a=-2$.`
+        $10^{-2}<${texNombre(a)}<10^{-1}$. On en déduit : $a=${miseEnEvidence(-2)}$.`
           this.reponse = ['-2']
         }
         break
@@ -97,11 +98,11 @@ export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
               `
         if (choix === '$a$') {
           this.correction = `Comme $0,001<${texNombre(a)}<0,01$, alors :<br>
-       $10^{-3}<${texNombre(a)}<10^{-2}$, donc $a=-3$.`
+       $10^{-3}<${texNombre(a)}<10^{-2}$, donc $a=${miseEnEvidence(-3)}$.`
           this.reponse = ['-3']
         } else {
           this.correction = `Comme $0,001<${texNombre(a)}<0,01$, alors :<br>
-        $10^{-3}<${texNombre(a)}<10^{-2}$, donc $b=-2$.`
+        $10^{-3}<${texNombre(a)}<10^{-2}$, donc $b=${miseEnEvidence(-2)}$.`
           this.reponse = ['-2']
         }
         break
@@ -114,11 +115,11 @@ export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
                 `
         if (choix === '$a$') {
           this.correction = `Comme $0,1<${texNombre(a)}<1$, alors :<br>
-         $10^{-1}<${texNombre(a)}<10^{0}$, donc $a=-1$.`
+         $10^{-1}<${texNombre(a)}<10^{0}$, donc $a=${miseEnEvidence(-1)}$.`
           this.reponse = ['-1']
         } else {
           this.correction = `Comme $0,1<${texNombre(a)}<1$, alors :<br>
-           $10^{-1}<${texNombre(a)}<10^{0}$, donc $b=0$.`
+           $10^{-1}<${texNombre(a)}<10^{0}$, donc $b=${miseEnEvidence(0)}$.`
           this.reponse = ['0']
         }
         break

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -48,7 +49,7 @@ export default class NombreDerivee extends ExerciceSimple {
         this.correction = `$f$ est une fonction polynôme du second degré de la forme $f(x)=ax^2+bx+c$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$ définies par $u(x)=${rienSi1(a)}x^2$ et $v(x)=${reduireAxPlusB(b, c)}$.<br>
      Comme $u'(x)=${2 * a}x$ et $v'(x)=${b}$, on obtient  $f'(x)=${reduireAxPlusB(2 * a, b)}$. <br>
-     Ainsi, $f'(${nbre})=${2 * a}\\times ${ecritureParentheseSiNegatif(nbre)}${ecritureAlgebrique(b)}=${2 * a * nbre + b}$.`
+     Ainsi, $f'(${nbre})=${2 * a}\\times ${ecritureParentheseSiNegatif(nbre)}${ecritureAlgebrique(b)}=${miseEnEvidence(2 * a * nbre + b)}$.`
         this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)= ${reduirePolynomeDegre3(0, a, b, c)}$.`
         this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
         this.reponse = 2 * a * nbre + b
@@ -75,7 +76,7 @@ export default class NombreDerivee extends ExerciceSimple {
         this.correction = `$f$ est une fonction polynôme du second degré de la forme $f(x)=ax^2+bx+c$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$ définies par $u(x)=${rienSi1(a)}x^2$ et $v(x)=${reduireAxPlusB(b, c)}$.<br>
      Comme $u'(x)=${2 * a}x$ et $v'(x)=${b}$, on obtient  $f'(x)=${reduireAxPlusB(2 * a, b)}$. <br>
-     Ainsi, $f'(${nbre})=${2 * a}\\times ${ecritureParentheseSiNegatif(nbre)}${ecritureAlgebrique(b)}=${2 * a * nbre + b}$.`
+     Ainsi, $f'(${nbre})=${2 * a}\\times ${ecritureParentheseSiNegatif(nbre)}${ecritureAlgebrique(b)}=${miseEnEvidence(2 * a * nbre + b)}$.`
         this.reponse = 2 * a * nbre + b
 
         break
@@ -101,7 +102,7 @@ export default class NombreDerivee extends ExerciceSimple {
         this.correction = `$f$ est une fonction polynôme du second degré de la forme $f(x)=ax^2+b$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$ définies par $u(x)=${rienSi1(a)}x^2$ et $v(x)=${c}$.<br>
      Comme $u'(x)=${2 * a}x$ et $v'(x)=0$, on obtient  $f'(x)=${reduireAxPlusB(2 * a, 0)}$. <br>
-     Ainsi, $f'(${nbre})=${2 * a}\\times ${ecritureParentheseSiNegatif(nbre)}=${2 * a * nbre}$.`
+     Ainsi, $f'(${nbre})=${2 * a}\\times ${ecritureParentheseSiNegatif(nbre)}=${miseEnEvidence(2 * a * nbre)}$.`
         this.reponse = 2 * a * nbre
         break
     }

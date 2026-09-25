@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { courbe } from '../../../lib/2d/Courbe'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
@@ -88,19 +89,16 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
       )
 
       if (this.interactif) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          KeyboardType.clavierDeBase,
-          { texteAvant: '$b=$' },
-        )
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
+          texteAvant: '$b=$',
+        })
 
         handleAnswers(this, i, { reponse: { value: -2 * a * alpha } })
       }
 
       texteCorr = `L'abscisse du sommet de la parabole est $${alpha}$.<br>
           Comme l'abscisse du sommet est  donné par $-\\dfrac{b}{2a}$, alors $-\\dfrac{b}{2a}=${alpha}$.<br>
-          L'énoncé indique que $a=${a}$, on en déduit $-\\dfrac{b}{${2 * a}}=${alpha}$, soit $b=${a * alpha * -2}$.`
+          L'énoncé indique que $a=${a}$, on en déduit $-\\dfrac{b}{${2 * a}}=${alpha}$, soit $b=${miseEnEvidence(a * alpha * -2)}$.`
 
       if (this.questionJamaisPosee(i, alpha, beta)) {
         this.listeQuestions[i] = texte

@@ -1,3 +1,4 @@
+import { orangeMathalea } from '../../../lib/colors'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { droite } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -25,7 +26,10 @@ import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 
@@ -122,7 +126,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           } else {
             texte = `$${texNombre(b, 1)} \\times ${a}=$ `
           }
-          texteCorr = `$${a} \\times ${texNombre(b, 1)}=${a}\\times ${texNombre(b * 10, 0)}\\times 0,1=${texNombre(a * b, 1)}$`
+          texteCorr = `$${a} \\times ${texNombre(b, 1)}=${a}\\times ${texNombre(b * 10, 0)}\\times 0,1=${miseEnEvidence(texNombre(a * b, 1))}$`
           reponse = arrondi(a * b)
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -155,7 +159,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               } else {
                 texte += ' $\\ldots$'
               }
-              texteCorr = `$${a}+${f.texFraction}= \\dfrac{${a * b[1]}}{${b[1]}}+${f.texFraction}=${reponse.texFraction}${reponse.texSimplificationAvecEtapes()}$`
+              texteCorr = `$${a}+${f.texFraction}= \\dfrac{${a * b[1]}}{${b[1]}}+${f.texFraction}=${reponse.estIrreductible ? miseEnEvidence(reponse.texFraction) : reponse.texFraction + reponse.texSimplificationAvecEtapes(false, orangeMathalea)}$`
             } else {
               reponse = new FractionEtendue(a * b[1] - b[0], b[1])
               texte = `$${a}-${f.texFraction}= $`
@@ -168,7 +172,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               } else {
                 texte += ' $\\ldots$'
               }
-              texteCorr = `$${a}-${f.texFraction}= \\dfrac{${a * b[1]}}{${b[1]}}-${f.texFraction}=${reponse.texFraction}${reponse.texSimplificationAvecEtapes()}$`
+              texteCorr = `$${a}-${f.texFraction}= \\dfrac{${a * b[1]}}{${b[1]}}-${f.texFraction}=${reponse.estIrreductible ? miseEnEvidence(reponse.texFraction) : reponse.texFraction + reponse.texSimplificationAvecEtapes(false, orangeMathalea)}$`
             }
             handleAnswers(this, index, {
               reponse: { value: reponse, options: { fractionEgale: true } },
@@ -186,7 +190,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           d = randint(-5, 5, [0, b])
 
           texte = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.`
-          texteCorr = `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)}=${reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d)}$`
+          texteCorr = `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)}=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}$`
           reponse = [`${a * c}x^2+${b * c + a * d}x+${b * d}`]
 
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -207,14 +211,14 @@ export default class SujetCAN2022Seconde extends Exercice {
             c = choice([-1, -2, -3])
             reponse = arrondi((a * 10 ** -c + b) / 10 ** -c)
             texte = `Donner l'écriture décimale de :  $${b}\\times10^{${c}}+${a}$.`
-            texteCorr = `$${b}\\times10^{${c}}+${a}=${a}+${texNombre(b * 10 ** c, 3)}=${texNombre(reponse, 3)}$`
+            texteCorr = `$${b}\\times10^{${c}}+${a}=${a}+${texNombre(b * 10 ** c, 3)}=${miseEnEvidence(texNombre(reponse, 3))}$`
           } else {
             a = randint(2, 9)
             b = randint(2, 9)
             c = choice([-1, -2, -3])
             reponse = arrondi((a * 10 ** -c + b) / 10 ** -c)
             texte = `Donner l'écriture décimale de :  $${a}+${b}\\times10^{${c}}$`
-            texteCorr = `$${a}+${b}\\times10^{${c}}=${a}+${texNombre(b * 10 ** c, 3)}=${texNombre(reponse, 3)}$`
+            texteCorr = `$${a}+${b}\\times10^{${c}}=${a}+${texNombre(b * 10 ** c, 3)}=${miseEnEvidence(texNombre(reponse, 3))}$`
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
 
@@ -238,12 +242,12 @@ export default class SujetCAN2022Seconde extends Exercice {
             $\\begin{aligned}
             ${a}x${ecritureAlgebrique(b)}&=0\\\\
            ${a}x&=${-b}\\\\
-                                x&=${f.texFraction}${f.texSimplificationAvecEtapes()}
+                                x&=${f.estIrreductible ? miseEnEvidence(f.texFraction) : f.texFraction + f.texSimplificationAvecEtapes(false, orangeMathalea)}
            \\end{aligned}$<br>
 
 
 
-            L'équation $${reduireAxPlusB(a, b)}=0$ a pour solution $x=${f.texFractionSimplifiee}$.`
+            L'équation $${reduireAxPlusB(a, b)}=0$ a pour solution $x=${miseEnEvidence(f.texFractionSimplifiee)}$.`
           reponse = f
 
           handleAnswers(this, index, {
@@ -271,13 +275,13 @@ export default class SujetCAN2022Seconde extends Exercice {
                 `
               texteCorr = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €, donc
                          $${texNombre(a / 2, 0)}$ croissant coûte $2$ fois moins, soit : <br>
-                         $${texPrix(prix * a)}\\div 2=${texPrix(reponse)}$ €.`
+                         $${texPrix(prix * a)}\\div 2=${miseEnEvidence(texPrix(reponse))}$ €.`
             } else {
               texte = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €.  Combien coûtent $${texNombre(a / 2, 0)}$ croissants ?
                           `
               texteCorr = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €, donc
                          $${texNombre(a / 2, 0)}$ croissants coûtent $2$ fois moins, soit : <br>
-                         $${texPrix(prix * a)}\\div 2=${texPrix(reponse)}$ €.`
+                         $${texPrix(prix * a)}\\div 2=${miseEnEvidence(texPrix(reponse))}$ €.`
             }
           } else if (choix === 'b') {
             a = randint(1, 3) * 3
@@ -289,13 +293,13 @@ export default class SujetCAN2022Seconde extends Exercice {
                               `
               texteCorr = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €, donc
                                        $${texNombre(a / 3, 0)}$ croissant coûte $3$ fois moins, soit : <br>
-                                       $${texPrix(prix * a)}\\div 3=${texPrix(reponse)}$ €.`
+                                       $${texPrix(prix * a)}\\div 3=${miseEnEvidence(texPrix(reponse))}$ €.`
             } else {
               texte = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €. Combien coûtent $${texNombre(a / 3, 0)}$ croissants ?
                                         `
               texteCorr = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €, donc
                                        $${texNombre(a / 3, 0)}$ croissants coûtent $3$ fois moins, soit : <br>
-                                       $${texPrix(prix * a)}\\div 3=${texPrix(reponse)}$ €.`
+                                       $${texPrix(prix * a)}\\div 3=${miseEnEvidence(texPrix(reponse))}$ €.`
             }
           } else {
             a = randint(1, 3) * 4
@@ -307,13 +311,13 @@ export default class SujetCAN2022Seconde extends Exercice {
                                             `
               texteCorr = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €, donc
                                                      $${texNombre(a / 4, 0)}$ croissant coûte $4$ fois moins, soit : <br>
-                                                     $${texPrix(prix * a)}\\div 4=${texPrix(reponse)}$ €.`
+                                                     $${texPrix(prix * a)}\\div 4=${miseEnEvidence(texPrix(reponse))}$ €.`
             } else {
               texte = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €. Combien coûtent $${texNombre(a / 4, 0)}$ croissants ?
                                                       `
               texteCorr = `$${a}$ croissants coûtent  $${texPrix(prix * a)}$ €, donc
                                                                                              $${texNombre(a / 4, 0)}$ croissants coûtent $4$ fois moins, soit : <br>
-                                                                                             $${texPrix(prix * a)}\\div 4=${texPrix(reponse)}$ €.`
+                                                                                             $${texPrix(prix * a)}\\div 4=${miseEnEvidence(texPrix(reponse))}$ €.`
             }
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -337,7 +341,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           On tire une boule au hasard.<br>
           Quelle est la probabilité de tirer une boule noire ?`
           reponse = f
-          texteCorr = `Puisqu'il s'agit d'une situation d'équiprobabilité, la probabilité  est donnée par le quotient : $\\dfrac{\\text{Nombre de boules noires}}{\\text{Nombre total de boules}}=${f.texFraction}${f.texSimplificationAvecEtapes()}$.`
+          texteCorr = `Puisqu'il s'agit d'une situation d'équiprobabilité, la probabilité  est donnée par le quotient : $\\dfrac{\\text{Nombre de boules noires}}{\\text{Nombre total de boules}}=${f.estIrreductible ? miseEnEvidence(f.texFraction) : f.texFraction + f.texSimplificationAvecEtapes(false, orangeMathalea)}$.`
 
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { fractionEgale: true } },
@@ -358,7 +362,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           reponse = a ** 2 + c
           texte = `Calculer l'expression  $${reduirePolynomeDegre3(0, 1, 0, c)}$ pour $x=${a}$.`
           texteCorr = `
-            Pour $x=${a}$, on obtient : $${reduirePolynomeDegre3(0, 1, 0, c)}=(${a})^2${ecritureAlgebrique(c)}=${reponse}$.
+            Pour $x=${a}$, on obtient : $${reduirePolynomeDegre3(0, 1, 0, c)}=(${a})^2${ecritureAlgebrique(c)}=${miseEnEvidence(reponse)}$.
                       `
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -390,7 +394,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
           texte = `Calculer la moyenne de :
             $${a}${sp(3)}; ${sp(3)}${b}${sp(3)}; ${sp(3)}${c}${sp(3)}; ${sp(3)}${d}$.`
-          texteCorr = `La moyenne est donnée par : $\\dfrac{${a}+${b}+${c}+${d}}{4}=\\dfrac{${reponse * 4}}{4}=${reponse}$.`
+          texteCorr = `La moyenne est donnée par : $\\dfrac{${a}+${b}+${c}+${d}}{4}=\\dfrac{${reponse * 4}}{4}=${miseEnEvidence(reponse)}$.`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -411,7 +415,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
           texteCorr = `          Prendre $${p}$ $\\%$  de $${a}$ revient à prendre $${texNombre(p / 10, 0)}\\times 10\\%$  de $${a}$.<br>
             Comme $10$ $\\%$  de $${a}$ vaut $${a / 10}$ (pour prendre $10$ $\\%$  d'une quantité, on la divise par $10$), alors
-            $${p}$ $\\%$ de $${a}=${texNombre(p / 10, 0)}\\times ${texNombre(a / 10, 0)}=${texNombre(reponse, 0)}$.
+            $${p}$ $\\%$ de $${a}=${texNombre(p / 10, 0)}\\times ${texNombre(a / 10, 0)}=${miseEnEvidence(texNombre(reponse, 0))}$.
            `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -438,7 +442,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Donner l'écriture  scientifique de $${a}\\times 10^{${exp}}$.`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-              Ici : $${a}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^2\\times 10^{${exp}}=${texNombre(b, 2)}\\times 10^{${exp + 2}}$.
+              Ici : $${a}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^2\\times 10^{${exp}}=${miseEnEvidence(`${texNombre(b, 2)}\\times 10^{${exp + 2}}`)}$.
  `
           } else if (choix === 'b') {
             a = randint(11, 99)
@@ -449,7 +453,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Donner l'écriture  scientifique de $${a}\\times 10^{${exp}}$.`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-              Ici : $${a}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^1\\times 10^{${exp}}=${texNombre(b, 2)}\\times 10^{${exp + 1}}$.
+              Ici : $${a}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^1\\times 10^{${exp}}=${miseEnEvidence(`${texNombre(b, 2)}\\times 10^{${exp + 1}}`)}$.
 
  `
           } else if (choix === 'c') {
@@ -461,7 +465,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Donner l'écriture  scientifique de $${texNombre(a, 2)}\\times 10^{${exp}}$.`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-              Ici : $${texNombre(a, 2)}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^{-1}\\times 10^{${exp}}=${texNombre(b, 2)}\\times 10^{${exp - 1}}$.
+              Ici : $${texNombre(a, 2)}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^{-1}\\times 10^{${exp}}=${miseEnEvidence(`${texNombre(b, 2)}\\times 10^{${exp - 1}}`)}$.
  `
           } else {
             a = (randint(1, 9) * 10 + randint(1, 9)) / 1000
@@ -472,7 +476,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Donner l'écriture  scientifique de $${texNombre(a, 3)}\\times 10^{${exp}}$.`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-  Ici : $${texNombre(a, 3)}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^{-2}\\times 10^{${exp}}=${texNombre(b, 2)}\\times 10^{${exp - 2}}$.
+  Ici : $${texNombre(a, 3)}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^{-2}\\times 10^{${exp}}=${miseEnEvidence(`${texNombre(b, 2)}\\times 10^{${exp - 2}}`)}$.
 `
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -493,50 +497,50 @@ export default class SujetCAN2022Seconde extends Exercice {
             b = reponse / 10
             if (choice([true, false])) {
               texte = ` $0,25\\times ${texNombre(b, 1)}\\times 4\\times 10=$`
-              texteCorr = `$0,25\\times ${texNombre(b, 1)}\\times 4\\times 10=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$0,25\\times ${texNombre(b, 1)}\\times 4\\times 10=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             } else {
               texte = ` $${texNombre(b, 1)}\\times 4\\times 10\\times 0,25= $`
-              texteCorr = `$${texNombre(b, 1)}\\times 4\\times 10\\times 0,25=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$${texNombre(b, 1)}\\times 4\\times 10\\times 0,25=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             }
           } else if (choix === 'b') {
             reponse = randint(1, 9) * 10 + randint(1, 9)
             b = reponse / 10
             if (choice([true, false])) {
               texte = ` $0,5\\times ${texNombre(b, 1)}\\times 2\\times 10=$`
-              texteCorr = `$0,5\\times ${texNombre(b, 1)}\\times 2\\times 10=\\underbrace{0,5\\times 2}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$0,5\\times ${texNombre(b, 1)}\\times 2\\times 10=\\underbrace{0,5\\times 2}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             } else {
               texte = ` $${texNombre(b, 1)}\\times 2\\times 10\\times 0,5= $`
-              texteCorr = `$${texNombre(b, 1)}\\times 2\\times 10\\times 0,5=\\underbrace{0,5\\times 2}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$${texNombre(b, 1)}\\times 2\\times 10\\times 0,5=\\underbrace{0,5\\times 2}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             }
           } else if (choix === 'c') {
             reponse = (randint(1, 9) * 10 + randint(1, 9)) * 2
             b = reponse / 20
             if (choice([true, false])) {
               texte = ` $0,5\\times ${texNombre(b, 1)}\\times 4\\times 10=$`
-              texteCorr = `$0,5\\times ${texNombre(b, 1)}\\times 4\\times 10=\\underbrace{0,5\\times 4}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$0,5\\times ${texNombre(b, 1)}\\times 4\\times 10=\\underbrace{0,5\\times 4}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             } else {
               texte = ` $${texNombre(b, 1)}\\times 4\\times 10\\times 0,5= $`
-              texteCorr = `$${texNombre(b, 1)}\\times 4\\times 10\\times 0,5=\\underbrace{0,5\\times 4}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$${texNombre(b, 1)}\\times 4\\times 10\\times 0,5=\\underbrace{0,5\\times 4}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             }
           } else if (choix === 'd') {
             reponse = (randint(1, 9) * 10 + randint(1, 9)) * 2
             b = reponse / 20
             if (choice([true, false])) {
               texte = ` $0,25\\times ${texNombre(b, 1)}\\times 8\\times 10=$`
-              texteCorr = `$0,25\\times ${texNombre(b, 1)}\\times 8\\times 10=\\underbrace{0,25\\times 8}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$0,25\\times ${texNombre(b, 1)}\\times 8\\times 10=\\underbrace{0,25\\times 8}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             } else {
               texte = ` $${texNombre(b, 1)}\\times 8\\times 10\\times 0,25= $`
-              texteCorr = `$${texNombre(b, 1)}\\times 8\\times 10\\times 0,25=\\underbrace{0,25\\times 8}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$${texNombre(b, 1)}\\times 8\\times 10\\times 0,25=\\underbrace{0,25\\times 8}_{=2}\\times \\underbrace{${texNombre(b, 1)}\\times 10}_{=${texNombre(b * 10, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             }
           } else {
             reponse = (randint(1, 9) * 10 + randint(1, 9)) * 10
             b = reponse / 100
             if (choice([true, false])) {
               texte = ` $0,25\\times ${texNombre(b, 1)}\\times 4\\times 100=$`
-              texteCorr = `$0,25\\times ${texNombre(b, 1)}\\times 4\\times 100=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 100}_{=${texNombre(b * 100, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$0,25\\times ${texNombre(b, 1)}\\times 4\\times 100=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 100}_{=${texNombre(b * 100, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             } else {
               texte = ` $${texNombre(b, 1)}\\times 4\\times 100\\times 0,25= $`
-              texteCorr = `$${texNombre(b, 1)}\\times 4\\times 100\\times 0,25=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 100}_{=${texNombre(b * 100, 0)}}=${texNombre(reponse, 0)}$`
+              texteCorr = `$${texNombre(b, 1)}\\times 4\\times 100\\times 0,25=\\underbrace{0,25\\times 4}_{=1}\\times \\underbrace{${texNombre(b, 1)}\\times 100}_{=${texNombre(b * 100, 0)}}=${miseEnEvidence(texNombre(reponse, 0))}$`
             }
           }
           if (this.interactif) {
@@ -558,7 +562,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           reponse = a ** 2 - b ** 2
           texte = `$${a}^2-${b}^2=$`
           texteCorr = `On utilise l'égalité remarquable $a^2-b^2=(a-b)(a+b)$ avec $a=${a}$ et $b=${b}$.<br>
-            $${a}^2-${b}^2=(${a}-${b})(${a}+${b})=${a - b}\\times ${a + b}=${reponse}$ `
+            $${a}^2-${b}^2=(${a}-${b})(${a}+${b})=${a - b}\\times ${a + b}=${miseEnEvidence(reponse)}$ `
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -588,7 +592,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             }
             texteCorr = `Le volume d'un cube d'arête $c$ est donné par $c^3$. <br>
               Si on double la longueur de l'arête, le volume du cube n'est pas multiplié par $2$. Il est multiplié par $2^3$, soit $8$. <br>
-              Ces deux grandeurs ne sont pas proportionnelles. `
+              Ces deux grandeurs ${texteEnCouleurEtGras('ne sont pas proportionnelles')}. `
           } else if (choix === 'b') {
             texte = `Vrai ou faux<br>
          L'aire d'un disque est proportionnelle à son rayon.`
@@ -601,7 +605,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             }
             texteCorr = `L'aire d'un disque de rayon $r$ est donnée par : $\\pi\\times r^2$. <br>
               Si on double la longueur du rayon, l'aire du disque n'est pas multiplée par $2$. Elle est multiplié par $2^2$, soit $4$. <br>
-              Ces deux grandeurs ne sont pas proportionnelles. `
+              Ces deux grandeurs ${texteEnCouleurEtGras('ne sont pas proportionnelles')}. `
           } else if (choix === 'c') {
             texte = `Vrai ou faux<br>
          L'aire d'un rectangle de largeur constante est proportionnelle à sa longueur.`
@@ -614,7 +618,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             }
             texteCorr = `L'aire d'un rectangle de largeur constante $l$ et de longueur $L$ est donnée par : $L\\times l$. <br>
               Si on multiplie la longueur par $k$, l'aire du nouveau rectangle est alors : $l\\times k\\times L$. Elle est donc aussi multipliée par $k$. <br>
-                        Ces deux grandeurs  sont donc proportionnelles. `
+                        Ces deux grandeurs ${texteEnCouleurEtGras('sont donc proportionnelles')}. `
           } else if (choix === 'd') {
             const n = randint(13, 35)
             a = randint(4, 6)
@@ -630,7 +634,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               texte += ajouteChampTexteMathLive(this, index, KeyboardType.vFON)
             }
             texteCorr = `Si on va $k$ fois plus de fois à la piscine, le prix payé est $k$ fois plus immportant (il est égal à $${n}\\times ${a}\\times k$).<br>
-                        Ces deux grandeurs  sont donc proportionnelles. `
+                        Ces deux grandeurs ${texteEnCouleurEtGras('sont donc proportionnelles')}. `
           } else if (choix === 'e') {
             const n = randint(13, 35)
             a = randint(4, 6)
@@ -647,7 +651,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               texte += ajouteChampTexteMathLive(this, index, KeyboardType.vFON)
             }
             texteCorr = `Si on va $k$ fois plus de fois à la piscine, le prix payé n'est  pas $k$ fois plus immportant (il est égal à $${n}\\times ${a}\\times k +${b}$).<br>
-                        Ces deux grandeurs sont donc proportionnelles. `
+                        Ces deux grandeurs ${texteEnCouleurEtGras('sont donc proportionnelles')}. `
           } else if (choix === 'f') {
             texte = `Vrai ou faux<br>
          Le périmètre d'un rectangle est proportionnel à la longueur de de ce rectangle.`
@@ -660,7 +664,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             }
             texteCorr = `Le périmètre d'un rectangle de largeur $l$ et de longueur $L$ est donnée par : $2\\times (L+ l)$. <br>
               Si on multiplie la longueur par $k$, l'aire du nouveau rectangle est alors : $2\\times (L\\times k+ l)$. Elle n'est donc pas  multipliée par $k$. <br>
-                        Ces deux grandeurs ne sont donc pas proportionnelles. `
+                        Ces deux grandeurs ${texteEnCouleurEtGras('ne sont donc pas proportionnelles')}. `
           } else {
             texte = `Vrai ou faux<br>
          Le périmètre d'un carré  est proportionnel à la longueur de son côté.`
@@ -673,7 +677,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             }
             texteCorr = `Le périmètre d'un carré de côté $c$ est donné par : $4\\times c$.<br>
               Si on multiplie la longueur de son côté par $k$, le périmètre du nouveau carré est alors : $4\\times\\times k$. Le périmètre est donc aussi  multiplié par $k$. <br>
-              Ces deux grandeurs sont donc proportionnelles. `
+              Ces deux grandeurs ${texteEnCouleurEtGras('sont donc proportionnelles')}. `
           }
           nbChamps = 1
           break
@@ -685,7 +689,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
           texte = `Donner l'écriture décimale de $1-${f.texFraction}$.
              `
-          texteCorr = `$1-${f.texFraction}=1-${texNombre(a / 100, 2)}=${texNombre(reponse, 2)}$`
+          texteCorr = `$1-${f.texFraction}=1-${texNombre(a / 100, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -706,7 +710,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             reponse = arrondi(a * 1000)
             texte = `$${texNombre(a, 1)}\\text{ m}^3=$`
 
-            texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 1)}\\text{ m}^3=${texNombre(a, 1)}\\times 1000$ L $ =$ $${texNombre(a * 1000, 1)}$ L`
+            texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 1)}\\text{ m}^3=${texNombre(a, 1)}\\times 1000$ L $ =$ $${miseEnEvidence(texNombre(a * 1000, 1))}$ L`
           } else {
             a =
               randint(11, 39, [10, 20, 30]) +
@@ -715,7 +719,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             reponse = a * 1000
             texte = `$${texNombre(a, 2)}\\text{ m}^3=$`
 
-            texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 2)}\\text{ m}^3=${texNombre(a, 2)}\\times 1000$ L $ =$ $${texNombre(a * 1000, 2)}$ L`
+            texteCorr = `$1\\text{ m}^3 = 1000$ L, donc  $${texNombre(a, 2)}\\text{ m}^3=${texNombre(a, 2)}\\times 1000$ L $ =$ $${miseEnEvidence(texNombre(a * 1000, 2))}$ L`
           }
 
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -747,7 +751,7 @@ export default class SujetCAN2022Seconde extends Exercice {
          ${m}x&=${m * x}\\\\
                               x&=${x}
          \\end{aligned}$<br>
-          $${reduireAxPlusB(m, p)}=${m * x + p}$ a pour solution $${x}$ donc l'antécédent de $${m * x + p}$ par $f$ est $${x}$.`
+          $${reduireAxPlusB(m, p)}=${m * x + p}$ a pour solution $${x}$ donc l'antécédent de $${m * x + p}$ par $f$ est $${miseEnEvidence(x)}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -770,7 +774,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Quelle est la distance parcourue en $${h}$ h $15$ min  à $${a}\\text{ km/h}$ ?
         `
             texteCorr = `Dans une heure, il y a $4\\times 15$ minutes. <br>Ainsi en $15$ minutes, la distance parcourue est  $${a}\\div 4=${a / 4}\\text{ km}$.<br>
-            Donc en $${h}$ h $15$ min, la distance parcourue est $(${a * h}+${a / 4})\\text{ km}$, soit $${a * h + a / 4}\\text{ km}$.
+            Donc en $${h}$ h $15$ min, la distance parcourue est $(${a * h}+${a / 4})\\text{ km}$, soit $${miseEnEvidence(a * h + a / 4)}\\text{ km}$.
             `
           } else if (choix === 'b') {
             a = choice([60, 90, 120])
@@ -779,7 +783,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Quelle est la distance parcourue en $${h}$ h $10$ min  à $${a}\\text{ km/h}$ ?
                       `
             texteCorr = `Dans une heure, il y a $6\\times 10$ minutes. <br>Ainsi en $10$ minutes, la distance parcourue est $${a}\\div 6=${a / 6}\\text{ km}$. <br>
-            Donc en $${h}$ h $10$ min, la distance parcourue est $(${a * h}+${a / 6})\\text{ km}$, soit $${a * h + a / 6}\\text{ km}$.      `
+            Donc en $${h}$ h $10$ min, la distance parcourue est $(${a * h}+${a / 6})\\text{ km}$, soit $${miseEnEvidence(a * h + a / 6)}\\text{ km}$.      `
           } else {
             a = choice([30, 60, 90, 120])
             const h = randint(1, 3)
@@ -787,7 +791,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Quelle est la distance parcourue en $${h}$ h $20$ min  à $${a}\\text{ km/h}$ ?
             `
             texteCorr = `Dans une heure, il y a $3\\times 20$ minutes. <br>Ainsi en $20$ minutes, la distance parcourue est $${a}\\div 3=${a / 3}\\text{ km}$.<br>
-            Donc en $${h}$ h $20$ min, la distance parcourue est $(${a * h}+${a / 3})\\text{ km}$, soit $${a * h + a / 3}\\text{ km}$.       `
+            Donc en $${h}$ h $20$ min, la distance parcourue est $(${a * h}+${a / 3})\\text{ km}$, soit $${miseEnEvidence(a * h + a / 3)}\\text{ km}$.       `
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -811,7 +815,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           Quel est son nouveau prix ?
           `
           texteCorr = ` $${b}$ $\\%$ de $${a}=${texNombre(d, 1)}\\times ${a}= ${texNombre(a * d, 0)}$.<br>
-          Le prix du manteau après la réduction est donc : $${a}-${texNombre(a * d, 0)}=${texNombre(reponse, 0)}$ €. `
+          Le prix du manteau après la réduction est donc : $${a}-${texNombre(a * d, 0)}=${miseEnEvidence(texNombre(reponse, 0))}$ €. `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -836,7 +840,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             Calculer le coefficient directeur de la droite $(CD)$.
         `
             texteCorr = ` Le coefficient directeur de la droite $(CD)$ est donné par :<br>
-             $\\dfrac{y_D-y_C}{x_D-x_C}=\\dfrac{${d}-${b}}{${c}-${a}}=${(d - b) / (c - a)}$.
+             $\\dfrac{y_D-y_C}{x_D-x_C}=\\dfrac{${d}-${b}}{${c}-${a}}=${miseEnEvidence((d - b) / (c - a))}$.
             `
             reponse = new FractionEtendue(d - b, c - a)
             handleAnswers(this, index, {
@@ -889,7 +893,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
               On a $AB^2=BC^2-AC^2$, soit $AB^2=${a[2]}^2-${a[0]}^2=${a[2] ** 2 - a[0] ** 2}$.<br>
-              Par conséquent, $AB=${a[1]}$.`
+              Par conséquent, $AB=${miseEnEvidence(a[1])}$.`
               longueurATrouver = 'AB'
             } else if (choix === 'b') {
               objets.push(pol[0])
@@ -912,7 +916,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                 On a $AC^2=BC^2-AB^2$, soit $AC^2=${a[2]}^2-${a[1]}^2=${a[2] ** 2 - a[1] ** 2}$.<br>
-                Par conséquent, $AC=${a[0]}$.`
+                Par conséquent, $AC=${miseEnEvidence(a[0])}$.`
               longueurATrouver = 'AC'
             } else {
               objets.push(pol[0])
@@ -935,7 +939,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                   On a $BC^2=AB^2+AC^2$, soit $BC^2=${a[0]}^2+${a[1]}^2=${a[0] ** 2 + a[1] ** 2}$.<br>
-                  Par conséquent, $BC=${a[2]}$.`
+                  Par conséquent, $BC=${miseEnEvidence(a[2])}$.`
               longueurATrouver = 'BC'
             }
             texte += mathalea2d(
@@ -975,22 +979,22 @@ export default class SujetCAN2022Seconde extends Exercice {
             if (choix === 'a') {
               texte = `On lance deux fois de suite une pièce de monnaie parfaitement équilibrée.<br>Quelle est la probabilité  de l’évènement : " On obtient au moins une fois ${c ? 'pile' : 'face'}" ?`
               texteCorr = `Il y a $4$ issues équiprobables : $(P,P)$, $(P,F)$, $(F,P)$ et $(F,F)$.<br>
-            Il y a $3$ issues qui comportent au moins une fois ${c ? 'pile' : 'face'}. Ainsi, la probabilité cherchée est : $\\dfrac{3}{4}$.`
+            Il y a $3$ issues qui comportent au moins une fois ${c ? 'pile' : 'face'}. Ainsi, la probabilité cherchée est : $${miseEnEvidence(`\\dfrac{3}{4}`)}$.`
               reponse = new FractionEtendue(3, 4)
             } else if (choix === 'b') {
               texte = `On lance deux fois de suite une pièce de monnaie parfaitement équilibrée.<br>Quelle est la probabilité  de l’évènement : " On obtient au plus une fois ${c ? 'pile' : 'face'}" ?`
               texteCorr = `Il y a $4$ issues équiprobables : $(P,P)$, $(P,F)$, $(F,P)$ et $(F,F)$.<br>
-            Il y a $3$ issues qui comportent au plus une fois ${c ? 'pile' : 'face'}. Ainsi, la probabilité cherchée est : $\\dfrac{3}{4}$.`
+            Il y a $3$ issues qui comportent au plus une fois ${c ? 'pile' : 'face'}. Ainsi, la probabilité cherchée est : $${miseEnEvidence(`\\dfrac{3}{4}`)}$.`
               reponse = new FractionEtendue(3, 4)
             } else if (choix === 'c') {
               texte = `On lance deux fois de suite une pièce de monnaie parfaitement équilibrée.<br>Quelle est la probabilité  de l’évènement : " On obtient une seule fois ${c ? 'pile' : 'face'}" ?`
               texteCorr = `Il y a $4$ issues équiprobables : $(P,P)$, $(P,F)$, $(F,P)$ et $(F,F)$.<br>
-            Il y a $2$ issues qui comportent une seule fois ${c ? 'pile' : 'face'}. Ainsi, la probabilité cherchée est : $\\dfrac{1}{2}$.`
+            Il y a $2$ issues qui comportent une seule fois ${c ? 'pile' : 'face'}. Ainsi, la probabilité cherchée est : $${miseEnEvidence(`\\dfrac{1}{2}`)}$.`
               reponse = new FractionEtendue(1, 2)
             } else {
               texte = `On lance deux fois de suite une pièce de monnaie parfaitement équilibrée.<br>Quelle est la probabilité  de l’évènement : " On obtient deux fois ${c ? 'piles' : 'faces'} " ?`
               texteCorr = `Il y a $4$ issues équiprobables : $(P,P)$, $(P,F)$, $(F,P)$ et $(F,F)$.<br>
-            Il y a $1$ issue qui comporte deux fois ${c ? 'piles' : 'faces'}. Ainsi, la probabilité cherchée est : $\\dfrac{1}{4}$.`
+            Il y a $1$ issue qui comporte deux fois ${c ? 'piles' : 'faces'}. Ainsi, la probabilité cherchée est : $${miseEnEvidence(`\\dfrac{1}{4}`)}$.`
               reponse = new FractionEtendue(1, 4)
             }
             handleAnswers(this, index, {
@@ -1018,7 +1022,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Dans une classe de troisième, le ratio filles : garçons est de $4$ : $${g}$. <br>
             Il y a dans cette classe ${c ? `$${4 * k}$ filles` : `$${g * k}$ garçons`}. Calculer le nombre de ${c ? 'garçons ' : 'filles'}.`
             texteCorr = `Le ratio $4$ : $${g}$ signifie qu'il y a dans cette classe $4$ filles pour $${g}$ garçons.<br>
-            Comme il y a ${c ? `$4\\times ${k}$ filles` : `$${g}\\times ${k}$ garçons`}, le nombre de ${c ? 'garçons ' : 'filles'} est  $${c ? `${g}\\times ${k} ` : `4\\times ${k} `} =${reponse}$.`
+            Comme il y a ${c ? `$4\\times ${k}$ filles` : `$${g}\\times ${k}$ garçons`}, le nombre de ${c ? 'garçons ' : 'filles'} est  $${c ? `${g}\\times ${k} ` : `4\\times ${k} `} =${miseEnEvidence(reponse)}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -1035,7 +1039,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Dans une classe de troisième, le ratio filles : garçons est de $2$ : $${g}$. <br>
             Il y a dans cette classe ${c ? `$${2 * k}$ filles` : `$${g * k}$ garçons`}. Calculer le nombre de ${c ? 'garçons ' : 'filles'}.`
             texteCorr = `Le ratio $2$ : $${g}$ signifie qu'il y a dans cette classe $2$ filles pour $${g}$ garçons.<br>
-            Comme il y a ${c ? `$2\times ${k}$ filles` : `$${g}\\times ${k}$ garçons`}, le nombre de ${c ? 'garçons ' : 'filles'} est  $${c ? `${g}\\times ${k} ` : `2\\times ${k} `} =${reponse}$.`
+            Comme il y a ${c ? `$2\\times ${k}$ filles` : `$${g}\\times ${k}$ garçons`}, le nombre de ${c ? 'garçons ' : 'filles'} est  $${c ? `${g}\\times ${k} ` : `2\\times ${k} `} =${miseEnEvidence(reponse)}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -1054,7 +1058,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             Il y a dans cette classe ${c ? `$${2 * k}$ filles` : `$${g * k}$ garçons`}. Calculer le nombre total d'élèves dans cette classe.`
             texteCorr = `Le ratio $2$ : $${g}$ signifie qu'il y a dans cette classe $2$ filles pour $${g}$ garçons.<br>
             Comme il y a ${c ? `$2\\times ${k}$ filles` : `$${g}\\times ${k}$ garçons`}, le nombre de ${c ? 'garçons ' : 'filles'} est  $${c ? `${g}\\times ${k} ` : `2\\times ${k} `} =${reponse1}$.<br>
-            Il y a donc dans cette classe $${reponse}$ élèves au total.`
+            Il y a donc dans cette classe $${miseEnEvidence(reponse)}$ élèves au total.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -1073,7 +1077,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             Il y a dans cette classe ${c ? `$${4 * k}$ filles` : `$${g * k}$ garçons`}. Calculer le nombre total d'élèves dans cette classe.`
             texteCorr = `Le ratio $4$ : $${g}$ signifie qu'il y a dans cette classe $4$ filles pour $${g}$ garçons.<br>
             Comme il y a ${c ? `$4\\times ${k}$ filles` : `$${g}\\times ${k}$ garçons`}, le nombre de ${c ? 'garçons ' : 'filles'} est  $${c ? `${g}\\times ${k} ` : `4\\times ${k} `} =${reponse1}$.<br>
-            Il y a donc dans cette classe $${reponse}$ élèves au total.`
+            Il y a donc dans cette classe $${miseEnEvidence(reponse)}$ élèves au total.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -1137,7 +1141,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           La somme du carré de $${a}x$ et de $${b}$.
       `
 
-            texteCorr = `Le carré de $${a}x$ est $(${a}x)^2=${a ** 2}x^2$. On en déduit que la somme du carré de $${a}x$ et de $${b}$ s'écrit $${a ** 2}x^2+${b}$. `
+            texteCorr = `Le carré de $${a}x$ est $(${a}x)^2=${a ** 2}x^2$. On en déduit que la somme du carré de $${a}x$ et de $${b}$ s'écrit $${miseEnEvidence(`${a ** 2}x^2+${b}`)}$. `
           } else {
             a = randint(2, 5)
             b = randint(2, 4)
@@ -1146,7 +1150,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             Le produit du carré de $${a}x$ et de $${b}$.
         `
 
-            texteCorr = `Le carré de $${a}x$ est $(${a}x)^2=${a ** 2}x^2$. On en déduit que le produit du carré de $${a}x$ et de $${b}$ s'écrit $${a ** 2}x^2\\times ${b}=${a ** 2 * b}x^2$. `
+            texteCorr = `Le carré de $${a}x$ est $(${a}x)^2=${a ** 2}x^2$. On en déduit que le produit du carré de $${a}x$ et de $${b}$ s'écrit $${a ** 2}x^2\\times ${b}=${miseEnEvidence(`${a ** 2 * b}x^2`)}$. `
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -1165,7 +1169,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           reponse = arrondi(a * b)
           texte = `$${texNombre(a, 2)}\\times ${b}=$`
           texteCorr = `
-          $${texNombre(a, 2)}\\times ${b}=(${texNombre(a - 0.25, 0)}+0,25)\\times 4\\times ${texNombre(b / 4, 0)}=(${texNombre(4 * a - 1, 0)}+1)\\times ${texNombre(b / 4, 0)}=${reponse}$ `
+          $${texNombre(a, 2)}\\times ${b}=(${texNombre(a - 0.25, 0)}+0,25)\\times 4\\times ${texNombre(b / 4, 0)}=(${texNombre(4 * a - 1, 0)}+1)\\times ${texNombre(b / 4, 0)}=${miseEnEvidence(reponse)}$ `
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1190,7 +1194,7 @@ export default class SujetCAN2022Seconde extends Exercice {
           reponse = -c
           texte = `Quelle est la solution négative de $x^2-${a}=${c ** 2 - a}$ ?`
           texteCorr = `L'équation $x^2-${a}=${c ** 2 - a}$ est équivalente à $x^2=${c ** 2}$.<br>
-          Cette équation a deux solutions $${-c}$ et $${c}$. La solution négative est donc $${-c}$.
+          Cette équation a deux solutions $${-c}$ et $${c}$. La solution négative est donc $${miseEnEvidence(-c)}$.
           `
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -1263,7 +1267,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             )
             texteCorr = `Le triangle $ECD$ est un agrandissement du triangle $EAB$. La longueur $EC$ est $${texNombre(k, 1)}$ fois plus grande que la longueur $EB$.
           On en déduit que la longueur $DE$ est $${texNombre(k, 1)}$ fois plus grande que la longueur $AE$.<br>
-          Ainsi, $DE=${texNombre(k, 1)}\\times ${a}=${texNombre(reponse, 1)}$.`
+          Ainsi, $DE=${texNombre(k, 1)}\\times ${a}=${miseEnEvidence(texNombre(reponse, 1))}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$DE=$'
@@ -1293,7 +1297,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
             texteCorr = `Dans un agrandissement/réduction, quand les longueurs sont multipliées par $k$, les aires sont multipliées par $k^2$.<br>
             Ici, l'aire a été divisée par $4$, soit multipliée par $\\dfrac{1}{4}$. <br>
-            On en déduit que le coefficient de réduction est $\\dfrac{1}{2}$. `
+            On en déduit que le coefficient de réduction est $${miseEnEvidence(`\\dfrac{1}{2}`)}$. `
           } else if (choix === 'b') {
             a = randint(2, 10)
             b = a * 9
@@ -1304,7 +1308,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
             texteCorr = `Dans un agrandissement/réduction, quand les longueurs sont multipliées par $k$, les aires sont multipliées par $k^2$.<br>
             Ici, l'aire a été divisée par $9$, soit multipliée par $\\dfrac{1}{9}$. <br>
-            On en déduit que le coefficient de réduction est $\\dfrac{1}{3}$. `
+            On en déduit que le coefficient de réduction est $${miseEnEvidence(`\\dfrac{1}{3}`)}$. `
           } else {
             a = randint(1, 5)
             b = a * 16
@@ -1315,7 +1319,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
             texteCorr = `Dans un/une agrandissement/réduction, quand les longueurs sont multipliées par $k$, les aires sont multipliées par $k^2$.<br>
             Ici, l'aire a été divisée par $16$, soit multipliée par $\\dfrac{1}{16}$. <br>
-            On en déduit que le coefficient de réduction est $\\dfrac{1}{4}$. `
+            On en déduit que le coefficient de réduction est $${miseEnEvidence(`\\dfrac{1}{4}`)}$. `
           }
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { fractionEgale: true } },
@@ -1354,7 +1358,7 @@ ${sp(6)} \\texttt{return a}\\\\
             while (a < b) {
               a = q + a
             }
-            texteCorr += ` Donc l'algorithme retourne $${a}$ `
+            texteCorr += ` Donc l'algorithme retourne $${miseEnEvidence(a)}$. `
             reponse = a
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
