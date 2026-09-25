@@ -3410,13 +3410,16 @@
     "titre": "Point de vue global"
   },
   "PEA1": {
-    "titre": "Numération et bases"
+    "titre": "Arithmétique"
   },
   "PEG2": {
     "titre": "À la règle et au compas"
   },
   "PEN1": {
     "titre": "Ensemble de nombres"
+  },
+  "PEN2": {
+    "titre": "Numération et bases"
   },
   "TSA1": {
     "titre": "Les suites numériques"
