@@ -878,6 +878,16 @@
         >
           Vérifier {numberOfAnswerFields > 1 ? 'les réponses' : 'la réponse'}
         </button>
+      {:else if !exercise.interactifReady && !isCorrectVisible && $globalOptions.isSolutionAccessible && $globalOptions.recorder === undefined && $globalOptions.presMode !== 'recto' && $globalOptions.presMode !== 'verso' && exercise.listeQuestions.length > 0}
+        <p
+          class="flex items-start gap-2 ml-6 my-5 text-sm text-coopmaths-struct dark:text-coopmathsdark-struct"
+        >
+          <i class="bx bx-pencil mt-0.5" aria-hidden="true"></i>
+          <span>
+            Cet exercice n'est pas interactif. Faites-le au brouillon, puis
+            comparez votre travail avec la correction.
+          </span>
+        </p>
       {/if}
     </div>
   </div>
