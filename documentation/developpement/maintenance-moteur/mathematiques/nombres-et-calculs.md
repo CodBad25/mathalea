@@ -30,6 +30,13 @@ Usages typiques :
 
 Pour les réponses interactives, `handleAnswers()` sait normaliser une `FractionEtendue`. Dans les nouveaux exercices, préférer une réponse explicite en LaTeX ou une `FractionEtendue` accompagnée des options de comparaison adaptées.
 
+Pour rédiger une simplification de produit sans décomposition en facteurs premiers,
+`texSimplificationParFacteursCommuns(facteursNumerateur, facteursDenominateur)`
+affiche les produits de départ, dégage des diviseurs communs strictement inférieurs
+à 12 ou des multiples de 10, les barre, puis donne la fraction irréductible. Les tableaux fournis doivent
+représenter la fraction sur laquelle la méthode est appelée. Elle complète
+`texSimplificationAvecEtapes()` sans modifier ses deux méthodes historiques.
+
 ## `Complexe`
 
 `Complexe` est définie dans `src/lib/mathFonctions/Complexe.ts`. La classe encapsule les opérations usuelles sur les nombres complexes et leur affichage : formes algébriques, modules, arguments, opérations, textes symboliques.

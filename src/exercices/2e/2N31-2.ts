@@ -13,5 +13,8 @@ export default class ExerciceMultiplierFractions2nde extends ExerciceMultiplierF
   constructor() {
     super()
     this.sup = '3'
+    this.simplificationParDiviseurCommun = true
+    this.besoinFormulaire2CaseACocher = ['Avec des nombres plus grands']
+    this.spacingCorr = 4
   }
 }
