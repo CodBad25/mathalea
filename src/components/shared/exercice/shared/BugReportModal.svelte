@@ -7,7 +7,11 @@
     buildMailtoUrl,
     BUG_REPORT_EMAIL,
   } from '../../../../lib/components/bugReport'
-  import { buildMathAleaURL } from '../../../../lib/components/urls'
+  import {
+    buildMathAleaURL,
+    buildSingleExerciseURL,
+  } from '../../../../lib/components/urls'
+  import { exercicesParams } from '../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../lib/stores/globalOptions'
 
   type Props = {
@@ -55,6 +59,9 @@
    * Quand un recorder (Capytale, Moodle...) héberge MathALÉA dans une iframe,
    * `window.location.href` ne contient pas les paramètres de la série : on
    * reconstruit alors l'URL complète à partir du store `exercicesParams`.
+   *
+   * Quand la série contient plusieurs exercices, on ajoute l'URL de l'exercice
+   * concerné seul (même graine, mêmes options) pour faciliter la reproduction.
    */
   function refreshContext() {
     const options = get(globalOptions)
@@ -65,11 +72,20 @@
           recorder: true,
         }).toString()
       : window.location.href
+    const params = get(exercicesParams)
+    const exerciseParams =
+      exerciceIndex != null && params.length > 1
+        ? params[exerciceIndex]
+        : undefined
+    const exerciseUrl = exerciseParams
+      ? buildSingleExerciseURL(new URL(url), exerciseParams).toString()
+      : undefined
     const context = {
       exerciceId,
       exerciceTitle,
       exerciceIndex,
       url,
+      exerciseUrl,
       userAgent: navigator.userAgent,
     }
     title = titleOverride ?? buildBugReportTitle(context)

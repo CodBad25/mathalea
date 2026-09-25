@@ -23,6 +23,11 @@ export type BugReportContext = {
   exerciceIndex?: number
   /** URL complète de la page au moment du signalement */
   url?: string
+  /**
+   * URL de l'exercice seul (même graine, mêmes options), utile quand la
+   * série en contient plusieurs
+   */
+  exerciseUrl?: string
   /** `navigator.userAgent` */
   userAgent?: string
   /** Date du signalement */
@@ -114,6 +119,7 @@ export function buildBugReportTitle({
 export function buildBugReportDescription({
   exerciceId,
   url,
+  exerciseUrl,
   userAgent = '',
   date = new Date(),
 }: BugReportContext): string {
@@ -125,6 +131,7 @@ export function buildBugReportDescription({
     '## Contexte',
     '',
     `- URL : ${url || 'inconnue'}`,
+    ...(exerciseUrl ? [`- URL de l'exercice seul : ${exerciseUrl}`] : []),
     `- Exercice : ${exerciceId || 'inconnu'}`,
     `- Navigateur : ${detectBrowser(userAgent)}`,
     `- Système : ${detectOs(userAgent)}`,
