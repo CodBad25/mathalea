@@ -605,6 +605,8 @@ Le réglage « Style des exercices » expose les **douze** styles de badge du pa
 - **Titre pleine largeur (position figée)** — `border-accent`, `underline`, `rounded-box`, `header-card` (`FULL_WIDTH_BADGE_STYLES`) : le titre occupe déjà une ligne entière, rien à déplacer ;
 - **Badge (position réglable)** — `margin`, `box`, `pill`, `tag`, `circled`, `filled-circle`, `rect`, `filled-rect` : le titre est un badge, que « Position du titre » place en marge ou au-dessus de l'énoncé. Le groupe ne dit donc pas où le badge se trouve — c'est le réglage qui en décide.
 
+Les styles pleine largeur écrivent le titre, son filet et l'énoncé à la suite dans un même bloc sécable : contrairement aux badges (`sticky-block`), rien n'empêche le titre de rester seul en bas de page. `buildVersionContent` pose donc `#mathalea-needspace()` (`MATHALEA_NEEDSPACE_HELPER`) avant chaque `#exN()` et chaque `#exo-solution-box(` : s'il reste moins de 5 em sous la position courante, un `colbreak(weak: true)` renvoie l'exercice à la colonne ou à la page suivante ; sinon rien n'est produit. Le calcul lit `page.margin` et prend en compte `flipped` (en paysage, `page.height` reste la hauteur du format non retourné). Un bloc insécable vide suivi d'un `v` négatif ferait le même travail, mais il empêche la fusion de l'espace au-dessus de l'exercice avec celui qui le précède, et l'écart entre exercices augmente.
+
 `hasSideLabel(style)` porte cette distinction côté document, `badgeStyleHasSideLabel` côté interface. Les libellés français sont dans `BADGE_STYLE_LABELS` (`Typst.svelte`) et ne mentionnent plus « (marge) » : la position est désormais un réglage à part.
 
 Pour les styles à colonne de badge, `MARGIN_BADGE_WIDTH` fixe une largeur compacte par style (`margin-position`) et annule le débordement dans la marge de la page (`label-extra: 0pt`) : sans cela le paquet dimensionne la colonne sur « Correction 100 » et étrangle le contenu. La colonne est étroite pour les énoncés et élargie juste avant les corrections, dont le libellé est plus long. Les badges au seul numéro (`circled`, `filled-circle`, `rect`, `filled-rect`) partagent la même largeur de 1,4 cm.
@@ -866,7 +868,10 @@ Hors fusion, `exerciseBody` affiche `TypstExerciseInput.intro` (consigne
 Les propositions d'un QCM (`propositionsQcm`, repérées par les libellés
 `labelEx{N}Q{i}R{rep}`) sont mises en colonnes par le même paquet `taskize`
 que les questions : `qcmToTypst` (`latexToTypst.ts`) émet
-`#tasks(columns: …, label: none)`. L'étiquetage automatique de `tasks`
+`#tasks(columns: …, label: none, equilibre: true)`. Les `<br>` qui séparent
+l'énoncé des propositions (deux, posés par `buildQcmForExercise` pour aérer la
+page web) sont retirés par `protectQcm` : le bloc a déjà son propre espacement
+et ils laissaient des lignes vides au-dessus. L'étiquetage automatique de `tasks`
 (identique pour chaque item) n'est pas utilisé : `qcmToTypst` préfixe
 lui-même chaque item de son propre marqueur, calculé selon le format détecté
 par `qcmChoiceFormat` (présence ou non d'un `<input>` dans le choix, voir
@@ -892,10 +897,16 @@ Deux différences avec les listes de questions :
 
 - pas de variable `-gutter` : les propositions gardent l'espacement du paquet ;
 - le défaut dépend du **contenu des propositions** (`qcmHasFigure`) :
-  - propositions textuelles : `"auto-fit"`, comme les questions. `taskize`
-    compare la largeur naturelle de chaque item à celle d'une colonne et
-    choisit de 1 à 4 colonnes uniformes — quatre fractions courtes s'étalent
-    sur quatre, une phrase longue retombe sur une ;
+  - propositions textuelles : `"auto-fit"`, comme les questions, mais résolu
+    par l'enrobage `tasks` de `MATHALEA_TASKS_HELPER` et non par `taskize` :
+    `qcmToTypst` passe `equilibre: true`, et `mathalea-colonnes-equilibrees`
+    retient le plus grand nombre de colonnes **équilibré** (toutes les lignes
+    pleines sauf la dernière : 4, 2 ou 1 pour quatre propositions) où la
+    proposition la plus large tient sur une ligne. Quatre fractions courtes
+    s'étalent sur quatre, des phrases moyennes passent sur deux lignes de deux,
+    une phrase longue retombe sur une colonne. L'`auto-fit` de `taskize`
+    pouvait choisir trois colonnes (la quatrième proposition seule sur sa
+    ligne) ou, en mode `fill`, étaler une proposition sur plusieurs colonnes ;
   - **au moins une proposition est une figure : 1 colonne.** `auto-fit` serait
     ici trompeur : une figure passe par `mathalea-fit` /
     `mathalea-figure-block`, qui la **réduisent** pour tenir dans la largeur

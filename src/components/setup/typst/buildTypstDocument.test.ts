@@ -522,7 +522,7 @@ describe('buildTypstDocument', () => {
     ])
     expect(code).toContain('#let ex1-qcm-colonnes = 1')
     expect(code).toContain(
-      '#tasks(columns: ex1-qcm-colonnes, label: none, above: 0.4em, below: 0.4em)[ // mathalea:qcm-figures',
+      '#tasks(columns: ex1-qcm-colonnes, label: none, above: 0.4em, below: 0.4em, equilibre: true)[ // mathalea:qcm-figures',
     )
     // ce 1 est un défaut lié au contenu, pas un réglage du professeur : le
     // figer dans le carry-over rendrait le choix insensible aux régénérations
@@ -954,7 +954,7 @@ describe('buildTypstDocument', () => {
     // un repère de gap avant le premier exercice et après chacun, et un
     // repère "exo" (contrôles de l'exercice) devant chaque exercice
     expect(code).toContain(
-      '#mathalea-anchor("gap", 0)\n  #mathalea-anchor("exo", 1)\n  #ex1()',
+      '#mathalea-anchor("gap", 0)\n  #mathalea-needspace()\n  #mathalea-anchor("exo", 1)\n  #ex1()',
     )
     expect(code).toContain('#ex1()\n  #mathalea-anchor("gap", 1)')
     expect(code).toContain('#ex2()\n  #mathalea-anchor("gap", 2)')

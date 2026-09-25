@@ -134,10 +134,10 @@ export default class EquationsProduitsNuls2 extends Exercice {
         case 3:
           f3 = f1.inverse().multiplieEntier(-b)
           f4 = f2.inverse().multiplieEntier(-d)
-          texte = `$(${f1.texFraction}x${ecritureAlgebrique(b)})(${f2.texFraction}x${ecritureAlgebrique(d)})=0$`
+          texte = `$\\left(${f1.texFraction}x${ecritureAlgebrique(b)}\\right)\\left(${f2.texFraction}x${ecritureAlgebrique(d)}\\right)=0$`
           texteCorr = `On reconnaît une équation produit-nul, donc on applique la propriété :<br>
                     ${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.')}<br>
-                    $(${f1.texFraction}x${ecritureAlgebrique(b)})(${f2.texFraction}x${ecritureAlgebrique(d)})=0$<br>`
+                    $\\left(${f1.texFraction}x${ecritureAlgebrique(b)}\\right)\\left(${f2.texFraction}x${ecritureAlgebrique(d)}\\right)=0$<br>`
           texteCorr += `$\\iff ${f1.texFraction}x${ecritureAlgebrique(b)}=0$ ou $${f2.texFraction}x${ecritureAlgebrique(d)}=0$<br>`
           if (this.correctionDetaillee) {
             texteCorr += `$\\iff ${f1.texFraction}x=${-b}$ ou $${f2.texFraction}x=${-d}$<br>`
@@ -162,10 +162,10 @@ export default class EquationsProduitsNuls2 extends Exercice {
         default:
           f3 = f1.entierDivise(-a)
           f4 = f2.entierDivise(-b)
-          texte = `$(${reduireAxPlusB(a, 0)}${f1.texFractionSignee})(${reduireAxPlusB(b, 0)}${f2.texFractionSignee})=0$`
+          texte = `$\\left(${reduireAxPlusB(a, 0)}${f1.texFractionSignee}\\right)\\left(${reduireAxPlusB(b, 0)}${f2.texFractionSignee}\\right)=0$`
           texteCorr = `On reconnaît une équation produit-nul, donc on applique la propriété :<br>
                         ${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.')}<br>
-                        $(${reduireAxPlusB(a, 0)}${f1.texFractionSignee})(${reduireAxPlusB(b, 0)}${f2.texFractionSignee})=0$<br>`
+                        $\\left(${reduireAxPlusB(a, 0)}${f1.texFractionSignee}\\right)\\left(${reduireAxPlusB(b, 0)}${f2.texFractionSignee}\\right)=0$<br>`
           texteCorr += `$\\iff ${reduireAxPlusB(a, 0)}${f1.texFractionSignee}=0$ ou $${reduireAxPlusB(b, 0)}${f2.texFractionSignee}=0$<br>`
           if (this.correctionDetaillee) {
             texteCorr += `$\\iff ${reduireAxPlusB(a, 0)}=${f1.multiplieEntier(-1).texFraction}$ ou $${reduireAxPlusB(b, 0)}=${f2.multiplieEntier(-1).texFraction}$<br>`

@@ -952,6 +952,19 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('#qcm-bonne')
   })
 
+  it('retire les sauts de ligne entre l’énoncé et les propositions de QCM', () => {
+    // `buildQcmForExercise` sépare l'énoncé des propositions par `<br><br>` :
+    // convertis, ils laissaient deux lignes vides au-dessus du bloc `#tasks`
+    const result = htmlToTypst(
+      'Le nouveau prix est :<br><br>\n<div class="my-3">' +
+        '<div class="inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R0" class="ml-2">$1$</label></div>' +
+        '<div class="inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R1" class="ml-2">$2$</label></div>' +
+        '</div>',
+    )
+    expect(result).toMatch(/^Le nouveau prix est :\s*#tasks\(/)
+    expect(result).toContain('equilibre: true')
+  })
+
   it('coche la bonne réponse (format case) d’un QCU (bouton radio) dans le corrigé', () => {
     // régression : `qcmChoiceIsCorrect` ne détectait que les
     // `input[type="checkbox"]`, jamais les boutons radio des QCU
