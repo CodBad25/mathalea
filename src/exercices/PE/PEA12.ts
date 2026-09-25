@@ -1,6 +1,9 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import {
+  ajouteChampTexteMathLive,
+  remplisLesBlancs,
+} from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   estPremier,
@@ -75,15 +78,17 @@ export default class PgcdPpcmDecomposition extends Exercice {
 
     let question1 = `Décomposer $${texN}$ et $${texM}$ en produit de facteurs premiers.`
     if (this.interactif) {
-      question1 += `<br>${ajouteChampTexteMathLive(this, 0, KeyboardType.clavierFullOperations, { texteAvant: `$${texN} = $` })}`
-      question1 += `<br>${ajouteChampTexteMathLive(this, 1, KeyboardType.clavierFullOperations, { texteAvant: `$${texM} = $` })}`
+      question1 += `<br>${remplisLesBlancs(this, 0, `${texN} = %{champ1} \\qquad ${texM} = %{champ2}`, KeyboardType.clavierFullOperations)}`
     }
-    handleAnswers(this, 0, {
-      reponse: { value: texFacto(factoN), compare: compareDecomposition },
-    })
-    handleAnswers(this, 1, {
-      reponse: { value: texFacto(factoM), compare: compareDecomposition },
-    })
+    handleAnswers(
+      this,
+      0,
+      {
+        champ1: { value: texFacto(factoN), compare: compareDecomposition },
+        champ2: { value: texFacto(factoM), compare: compareDecomposition },
+      },
+      { formatInteractif: 'fill-in-the-blank' },
+    )
     let correction1 =
       'On divise successivement par les nombres premiers dans l’ordre croissant :'
     correction1 += `<br><br>$${texEchelleDeDivisions(n)} \\qquad\\qquad ${texEchelleDeDivisions(m)}$`
@@ -91,9 +96,9 @@ export default class PgcdPpcmDecomposition extends Exercice {
 
     let question2 = `Déterminer le PGCD de $${texN}$ et $${texM}$.`
     if (this.interactif) {
-      question2 += ajouteChampTexteMathLive(this, 2, KeyboardType.clavierDeBase)
+      question2 += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase)
     }
-    handleAnswers(this, 2, { reponse: { value: valeurPgcd } })
+    handleAnswers(this, 1, { reponse: { value: valeurPgcd } })
     let correction2 = `Les facteurs premiers communs aux deux décompositions sont mis en couleur :<br><br>$${texN} = ${texFacto(factoN, couleursCommuns)}$<br>$${texM} = ${texFacto(factoM, couleursCommuns)}$`
     correction2 +=
       '<br><br>Le PGCD est le produit des facteurs premiers communs aux deux décompositions, chacun étant affecté du plus petit des deux exposants.'
@@ -105,9 +110,9 @@ export default class PgcdPpcmDecomposition extends Exercice {
 
     let question3 = `Déterminer le PPCM de $${texN}$ et $${texM}$.`
     if (this.interactif) {
-      question3 += ajouteChampTexteMathLive(this, 3, KeyboardType.clavierDeBase)
+      question3 += ajouteChampTexteMathLive(this, 2, KeyboardType.clavierDeBase)
     }
-    handleAnswers(this, 3, { reponse: { value: valeurPpcm } })
+    handleAnswers(this, 2, { reponse: { value: valeurPpcm } })
     let correction3 = `Tous les facteurs premiers des deux décompositions sont mis en couleur :<br><br>$${texN} = ${texFacto(factoN, couleursFacteurs)}$<br>$${texM} = ${texFacto(factoM, couleursFacteurs)}$`
     correction3 +=
       '<br><br>Le PPCM est le produit de tous les facteurs premiers qui apparaissent dans l’une ou l’autre des décompositions, chacun étant affecté du plus grand des exposants.'
@@ -120,9 +125,9 @@ export default class PgcdPpcmDecomposition extends Exercice {
     const diviseursCommuns = listeDesDiviseurs(valeurPgcd)
     let question4 = `En déduire tous les diviseurs communs de $${texN}$ et $${texM}$.`
     if (this.interactif) {
-      question4 += `<br>${ajouteChampTexteMathLive(this, 4, KeyboardType.clavierEnsemble, { texteAvant: 'Diviseurs séparés par des points-virgules :' })}`
+      question4 += `<br>${ajouteChampTexteMathLive(this, 3, KeyboardType.clavierEnsemble, { texteAvant: 'Diviseurs séparés par des points-virgules :' })}`
     }
-    handleAnswers(this, 4, {
+    handleAnswers(this, 3, {
       reponse: {
         value: diviseursCommuns.join(';'),
         options: { suiteDeNombres: true },
