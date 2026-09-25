@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   canvasEnonceCorrection,
   empilementCubes,
@@ -167,6 +168,7 @@ export default class DenombrerCubes extends Exercice {
       }
       texteCorr += `<br>Le premier solide est un empilement de ${volume1} cubes.<br>`
       texteCorr += `Le deuxième solide est un pavé droit de dimensions $${larg} \\times ${long} \\times ${haut}$, son volume est de $${larg * long * haut}$.<br>`
+      texteCorr += `Celui qui a le plus petit volume est donc ${texteEnCouleurEtGras(volume1 < larg * long * haut ? "l'empilement de cubes" : volume1 > larg * long * haut ? 'le pavé droit' : 'aucun des deux : ils ont le même volume')}.<br>`
 
       this.autoCorrection[q] = {
         enonce: '',

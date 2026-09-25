@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -217,7 +218,7 @@ export default class UtilerAppartientA extends Exercice {
       } else {
         texte += `$${pointNom}$ $\\ldots{}$ ${intervalle}`
       }
-      texteCorr += `$${pointNom}$ ${possibilites[i].reponse} ${intervalle}`
+      texteCorr += `$${pointNom}$ ${texteEnCouleurEtGras(possibilites[i].reponse)} ${intervalle}`
       if (
         this.questionJamaisPosee(
           i,

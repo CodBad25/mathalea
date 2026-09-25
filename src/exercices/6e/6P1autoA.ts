@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras, miseEnEvidence } from '../../lib/outils/embellissements'
 import { traceBarre } from '../../lib/2d/diagrammes'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { repere } from '../../lib/2d/reperes'
@@ -338,19 +339,19 @@ export default class LectureDiagrammeBaton extends Exercice {
         case 0:
           listeCorrections[i] =
             'Les animaux les plus nombreux sont les ' +
-            lstAnimauxExo[lstNombresAnimaux.indexOf(nMax)] +
+            texteEnCouleurEtGras(lstAnimauxExo[lstNombresAnimaux.indexOf(nMax)]) +
             '.<br>'
           break
         case 1:
           listeCorrections[i] =
             'Les animaux les moins nombreux sont les ' +
-            lstAnimauxExo[lstNombresAnimaux.indexOf(nMin)] +
+            texteEnCouleurEtGras(lstAnimauxExo[lstNombresAnimaux.indexOf(nMin)]) +
             '.<br>'
           break
         case 2:
           {
             listeCorrections[i] =
-              `Il y a entre ${reponseinf} et ${reponsesup} ${lstAnimauxExo[numAnimal]}.<br>`
+              `Il y a entre $${miseEnEvidence(reponseinf)}$ et $${miseEnEvidence(reponsesup)}$ ${lstAnimauxExo[numAnimal]}.<br>`
           }
           break
       }

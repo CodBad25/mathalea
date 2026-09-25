@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { codageMediatrice } from '../../lib/2d/CodageMediatrice'
 import { distancePointDroite, droite } from '../../lib/2d/droites'
@@ -146,7 +147,7 @@ export default class ConstruireSymetriquePoint6e extends Exercice {
         codageMediatrice(M[i], N[i], arcenciel(i + 5), marks[i]),
       )
       objetsCorrection.push(traceCompas(A, N[i], 20), traceCompas(B, N[i], 20))
-      texteCorr += `$${noms[i]}'$, le symétrique du point $${noms[i]}$ est dans la case ${cellules[i]} de la grille ${i + 1}.<br>`
+      texteCorr += `$${noms[i]}'$, le symétrique du point $${noms[i]}$ est dans la case ${texteEnCouleurEtGras(cellules[i])} de la grille ${i + 1}.<br>`
     }
 
     for (let i = 0; i < nbpoints; i++) {

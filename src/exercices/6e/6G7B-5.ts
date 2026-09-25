@@ -14,7 +14,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
 import { stringNombre } from '../../lib/outils/texNombre'
 import { symetrieAnimee } from '../../modules/2dAnimation'
@@ -525,7 +525,7 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
     this.introduction = mathalea2d(paramsEnonce, objetsEnonce)
     for (let i = 0; i < this.nbQuestions; i++) {
       texte = `${texteEnCouleur("Quelle est l'image de la figure " + question[i].antecedent + " par la symétrie axiale d'axe " + `$${dLatex[i][1].latex}$` + ' ?', couleurs[i])}`
-      texteCorr = `${texteEnCouleur("L'image de la figure " + question[i].antecedent + " par la symétrie axiale d'axe " + `$${dLatex[i][1].latex}$` + ' est la figure ' + question[i].image + '.', couleurs[i])}`
+      texteCorr = `${texteEnCouleur("L'image de la figure " + question[i].antecedent + " par la symétrie axiale d'axe " + `$${dLatex[i][1].latex}$` + ' est la figure', couleurs[i])} ${texteEnCouleurEtGras(String(question[i].image))}.`
       if (context.isAmc) {
         if (i === 0) {
           this.autoCorrectionAMC[0] = {

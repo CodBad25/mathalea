@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import type { ReponseParams } from '../../lib/amc/amcTypes'
@@ -102,7 +103,7 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
             '$ ' +
             texFraction(String(a), String(b)) +
             ' = ' +
-            texNombre(n, 3) +
+            miseEnEvidence(texNombre(n, 3)) +
             ' $'
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 5
@@ -160,7 +161,7 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
             '$ ' +
             texNombre(n) +
             ' = ' +
-            texFraction(texNombre(a), texNombre(b)) +
+            miseEnEvidence(texFraction(texNombre(a), texNombre(b))) +
             ' $'
           amcParam = ensureAmcParam(this, i)
           amcParam.digits = 6

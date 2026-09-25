@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ce from '../../lib/interactif/comparisonFunctions'
@@ -87,9 +88,9 @@ export default class FractionVersPourcentage extends Exercice {
           texte = `$\\dfrac{${num}}{${texNombre(den)}}=~\\dfrac{\\ldots\\ldots\\ldots\\ldots\\ldots}{\\ldots\\ldots\\ldots\\ldots\\ldots}=\\dfrac{\\ldots\\ldots}{100}~=~{\\ldots\\ldots}~\\%$`
         }
         if (den < 100) {
-          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\times${100 / den}}}{${texNombre(den)}{\\color{blue}\\times${100 / den}}}=\\dfrac{${percenti}}{100}=${percenti}~\\%$`
+          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\times${100 / den}}}{${texNombre(den)}{\\color{blue}\\times${100 / den}}}=\\dfrac{${percenti}}{100}=${miseEnEvidence(`${percenti}~\\%`)}$`
         } else {
-          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\div${den / 100}}}{${texNombre(den)}{\\color{blue}\\div${den / 100}}}=\\dfrac{${percenti}}{100}=${percenti}~\\%$`
+          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\div${den / 100}}}{${texNombre(den)}{\\color{blue}\\div${den / 100}}}=\\dfrac{${percenti}}{100}=${miseEnEvidence(`${percenti}~\\%`)}$`
         }
         handleAnswers(
           this,
@@ -104,7 +105,7 @@ export default class FractionVersPourcentage extends Exercice {
         )
       } else {
         texte = `$\\dfrac{${percenti}}{100}= $${context.isHtml && this.interactif ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' %' }) : '$\\ldots\\ldots\\%$'}`
-        texteCorr = `$\\dfrac{${texNombre(percenti, 0)}}{100}=${texNombre(percenti, 0)}~\\%$`
+        texteCorr = `$\\dfrac{${texNombre(percenti, 0)}}{100}=${miseEnEvidence(`${texNombre(percenti, 0)}~\\%`)}$`
         handleAnswers(
           this,
           i,

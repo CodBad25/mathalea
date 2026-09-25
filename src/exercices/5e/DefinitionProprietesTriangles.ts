@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
@@ -123,38 +124,31 @@ export default class DefinitionProprietesTriangles extends Exercice {
       switch (listeTypeQuestions[i]) {
         case 1: // 'Définition hauteur'
           texte = 'Dans un triangle, une hauteur est '
-          texteCorr =
-            'Dans un triangle, une hauteur est une droite passant par un sommet et perpendiculaire au côté opposé.'
+          texteCorr = `Dans un triangle, une hauteur est ${texteEnCouleurEtGras("une droite passant par un sommet et perpendiculaire au côté opposé")}.`
           break
         case 2: // 'Définition médiatrice'
           texte = "La médiatrice d'un segment est "
-          texteCorr =
-            "La médiatrice d'un segment est la droite perpendiculaire à ce segment et passant par son milieu."
+          texteCorr = `La médiatrice d'un segment est ${texteEnCouleurEtGras("la droite perpendiculaire à ce segment et passant par son milieu")}.`
           break
         case 3: // 'Propriété point de la médiatrice'
           texte = "Si un point est sur la médiatrice d'un segment, alors "
-          texteCorr =
-            "Si un point est sur la médiatrice d'un segment, alors il est à égale distance des extrémités du segment."
+          texteCorr = `Si un point est sur la médiatrice d'un segment, alors ${texteEnCouleurEtGras("il est à égale distance des extrémités du segment")}.`
           break
         case 4: // 'Propriété point à égale distance des extrémités'
-          texte =
-            "Si un point est à égale distance des extrémités d'un segment, alors "
-          texteCorr =
-            "Si un point est à égale distance des extrémités d'un segment, alors il est sur la médiatrice de ce segment."
+          texte = "Si un point est à égale distance des extrémités d'un segment, alors "
+          texteCorr = `Si un point est à égale distance des extrémités d'un segment, alors ${texteEnCouleurEtGras("il est sur la médiatrice de ce segment")}.`
           break
         case 5: // 'Somme des angles d\'un triangle'
           texte = "La somme des angles d'un triangle est "
-          texteCorr = "La somme des angles d'un triangle est égale à 180°."
+          texteCorr = `La somme des angles d'un triangle est ${texteEnCouleurEtGras("égale à 180°")}.`
           break
         case 6: // 'Somme des angles aigus d\'un triangle rectangle':
           texte = "La somme des angles aigus d'un triangle rectangle est "
-          texteCorr =
-            "La somme des angles aigus d'un triangle rectangle est égale à 90°."
+          texteCorr = `La somme des angles aigus d'un triangle rectangle est ${texteEnCouleurEtGras("égale à 90°")}.`
           break
         case 7: // 'Inégalité triangulaire'
           texte = "Dans un triangle, la longueur d'un côté est "
-          texteCorr =
-            "Dans un triangle, la longueur d'un côté est inférieure à la somme des longueurs des deux autres côtés."
+          texteCorr = `Dans un triangle, la longueur d'un côté est ${texteEnCouleurEtGras("inférieure à la somme des longueurs des deux autres côtés")}.`
           break
       }
       if (this.interactif) {

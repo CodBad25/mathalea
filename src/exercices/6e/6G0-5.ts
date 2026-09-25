@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { droite } from '../../lib/2d/droites'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -257,7 +258,7 @@ export default class constructionElementaire extends Exercice {
         }
         correction2 +=
           numAlpha(questind++) +
-          `$${points[ind].nom} ${sol} ${lettre[0]}${points[ind1].nom}${points[ind2].nom}${lettre[1]}$<br>`
+          `$${points[ind].nom} ${miseEnEvidence(sol)} ${lettre[0]}${points[ind1].nom}${points[ind2].nom}${lettre[1]}$<br>`
       }
 
       const options = {

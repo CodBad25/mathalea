@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.intervalleStrict.test.ts ⚠️
  */
@@ -182,7 +183,7 @@ export default class IntercalerDecimalEntre2Decimaux extends Exercice {
       } else {
         texte = `$${texNombre(a)}<${sp(3)}\\ldots\\ldots\\ldots\\ldots\\ldots${sp(3)}<${texNombre(b)}$`
       }
-      texteCorr = `$${texNombre(a)}<${texNombre(r)}<${texNombre(b)}$`
+      texteCorr = `$${texNombre(a)}<${miseEnEvidence(texNombre(r))}<${texNombre(b)}$`
 
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {

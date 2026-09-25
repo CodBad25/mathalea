@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -96,7 +97,7 @@ export default class TracerTriangle2Angles extends Exercice {
       if (this.sup) {
         texteCorr = ''
       } else {
-        texteCorr = `$${p[0] + p[2]}\\approx${texNombre(longueur(A2, C, 1))}\\text{ cm}$ et $${p[1] + p[2]}\\approx${texNombre(longueur(B2, C, 1))}\\text{ cm}$.`
+        texteCorr = `$${p[0] + p[2]}\\approx${miseEnEvidence(texNombre(longueur(A2, C, 1)))}\\text{ cm}$ et $${p[1] + p[2]}\\approx${miseEnEvidence(texNombre(longueur(B2, C, 1)))}\\text{ cm}$.`
       }
       const anim = new Alea2iep()
       anim.triangle1longueur2angles(p, c, angle1, angle2, {

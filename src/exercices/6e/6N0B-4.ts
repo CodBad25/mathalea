@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -132,7 +133,7 @@ class OperationsReciproques extends Exercice {
           texteCorr += `<br>$${depart} \\xleftarrow[+${operande1}]{} ${etape} \\xleftarrow[\\times${operande2}]{} ${arrivee}$.`
           break
       }
-      texteCorr += `<br>Le nombre de départ est donc $${depart}$.`
+      texteCorr += `<br>Le nombre de départ est donc $${miseEnEvidence(depart)}$.`
       if (this.interactif) {
         texte +=
           '<br>' + ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)

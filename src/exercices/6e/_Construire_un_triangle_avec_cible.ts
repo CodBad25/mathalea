@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { codageAngle } from '../../lib/2d/angles'
@@ -188,7 +189,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             'Pour cette construction, nous avons utilisé le compas et la règle graduée.<br>'
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3
@@ -242,7 +243,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             "Pour cette construction, nous avons utilisé la règle graduée, l'équerre et le compas.<br>"
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
 
           xMin = Math.min(0, B.x, C.x, A.x) - 1
@@ -298,7 +299,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             'Pour cette construction, nous avons utilisé le compas et la règle graduée.<br>'
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3
@@ -355,7 +356,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             "Pour cette construction, nous avons utilisé l'équerre et la règle graduée.<br>"
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3
@@ -411,7 +412,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             'Pour cette construction, nous avons utilisé le compas et la règle graduée.<br>'
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3
@@ -469,7 +470,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             'Pour cette construction, nous avons utilisé le rapporteur et la règle graduée.<br>'
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3
@@ -537,7 +538,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             'Pour cette construction, nous avons utilisé le rapporteur.<br>'
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3
@@ -595,7 +596,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           texteCorr +=
             "Pour cette construction, nous avons utilisé la règle graduée, l'équerre et le compas.<br>"
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3
@@ -660,7 +661,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           )
           texteCorr += `Pour cette construction, il a fallu calculer l'angle $\\widehat{${sommets[0] + sommets[1] + sommets[2]}}$.<br>$\\widehat{${sommets[0] + sommets[1] + sommets[2]}}=180-\\widehat{${sommets[1] + sommets[0] + sommets[2]}}-\\widehat{${sommets[0] + sommets[2] + sommets[1]}}=180-${Math.round(angle(B, A, C))}-${Math.round(angle(B, C, A))}=${Math.round(angle(A, B, C))}$.<br>Nous avons utilisé le rapporteur pour effectuer cette construction.<br>`
           if (this.sup) {
-            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${cellule}.<br>`
+            texteCorr += `Le point ${sommets[2]} se trouve dans le secteur ${texteEnCouleurEtGras(cellule)}.<br>`
           }
           xMin = Math.min(0, B.x, C.x, A.x) - 1
           yMax = Math.max(0, B.y, C.y, A.y) + 3

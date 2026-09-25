@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { MathfieldElement } from 'mathlive'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -217,7 +218,7 @@ export default class EgalitesEntreFractions extends Exercice {
         const fac1 = pp / denom1
         const fac2 = pp / denom2
         texte = `${remplisLesBlancs(this, i, `\\dfrac{${num1}}{${denom1}} = \\dfrac{%{champ1}}{%{champ2}}\\text{ et }\\dfrac{${num2}}{${denom2}} = \\dfrac{%{champ3}}{%{champ4}}`, 'fillInTheBlank', '\\ldots')}`
-        texteCorr = `$\\dfrac{${num1}}{${denom1}} = \\dfrac{${num1} \\times ${fac1}}{${denom1} \\times ${fac1}} = \\dfrac{${num1 * fac1}}{${pp}}$ et $\\dfrac{${num2}}{${denom2}} = \\dfrac{${num2} \\times ${fac2}}{${denom2} \\times ${fac2}} = \\dfrac{${num2 * fac2}}{${pp}}$`
+        texteCorr = `$\\dfrac{${num1}}{${denom1}} = \\dfrac{${num1} \\times ${fac1}}{${denom1} \\times ${fac1}} = ${miseEnEvidence(`\\dfrac{${num1 * fac1}}{${pp}}`)}$ et $\\dfrac{${num2}}{${denom2}} = \\dfrac{${num2} \\times ${fac2}}{${denom2} \\times ${fac2}} = ${miseEnEvidence(`\\dfrac{${num2 * fac2}}{${pp}}`)}$`
         handleAnswers(
           this,
           i,
@@ -241,7 +242,7 @@ export default class EgalitesEntreFractions extends Exercice {
           if (!reduction) {
             // On procède par multiplication
             texte = `${remplisLesBlancs(this, i, `\\dfrac{${num1}}{${denom1}} = \\dfrac{%{champ1}}{%{champ2}}\\text{ et }\\dfrac{${num2}}{${denom2}} = \\dfrac{%{champ3}}{%{champ4}}`, 'fillInTheBlank', '\\ldots')}`
-            texteCorr = `$\\dfrac{${num1}}{${denom1}} = \\dfrac{${num1} \\times ${k}}{${denom1} \\times ${k}} = \\dfrac{${num1 * k}}{${denom1 * k}}$ et $\\dfrac{${num2}}{${denom2}}$`
+            texteCorr = `$\\dfrac{${num1}}{${denom1}} = \\dfrac{${num1} \\times ${k}}{${denom1} \\times ${k}} = ${miseEnEvidence(`\\dfrac{${num1 * k}}{${denom1 * k}}`)}$ et $${miseEnEvidence(`\\dfrac{${num2}}{${denom2}}`)}$`
             handleAnswers(this, i, {
               champ1: { value: String(num1 * k) },
               champ2: { value: String(denom1 * k) },
@@ -253,7 +254,7 @@ export default class EgalitesEntreFractions extends Exercice {
             // On procède par division
             num2 = randint(1, 9, denom2) * k
             texte = `${remplisLesBlancs(this, i, `\\dfrac{${num1}}{${denom1}} = \\dfrac{%{champ1}}{%{champ2}}\\text{ et }\\dfrac{${num2}}{${denom2}} = \\dfrac{%{champ3}}{%{champ4}}`, 'fillInTheBlank', '\\ldots')}`
-            texteCorr = `$\\dfrac{${num1}}{${denom1}}$ et $\\dfrac{${num2}}{${denom2}} = \\dfrac{${num2} \\div ${k}}{${denom2} \\div ${k}} = \\dfrac{${num2 / k}}{${denom2 / k}}$`
+            texteCorr = `$${miseEnEvidence(`\\dfrac{${num1}}{${denom1}}`)}$ et $\\dfrac{${num2}}{${denom2}} = \\dfrac{${num2} \\div ${k}}{${denom2} \\div ${k}} = ${miseEnEvidence(`\\dfrac{${num2 / k}}{${denom2 / k}}`)}$`
             handleAnswers(this, i, {
               champ1: { value: String(num1) },
               champ2: { value: String(denom1) },
@@ -273,7 +274,7 @@ export default class EgalitesEntreFractions extends Exercice {
           if (!reduction) {
             // On procède par multiplication
             texte = `${remplisLesBlancs(this, i, `\\dfrac{${num1}}{${denom1}} = \\dfrac{%{champ1}}{%{champ2}}\\text{ et }\\dfrac{${num2}}{${denom2}} = \\dfrac{%{champ3}}{%{champ4}}`, 'fillInTheBlank', '\\ldots')}`
-            texteCorr = `$${fraction1.texFraction}$ et $${fraction2.texFraction} = \\dfrac{${num2} \\times ${k}}{${denom2} \\times ${k}} = \\dfrac{${num2 * k}}{${denom2 * k}}$`
+            texteCorr = `$${miseEnEvidence(fraction1.texFraction)}$ et $${fraction2.texFraction} = \\dfrac{${num2} \\times ${k}}{${denom2} \\times ${k}} = ${miseEnEvidence(`\\dfrac{${num2 * k}}{${denom2 * k}}`)}$`
             handleAnswers(this, i, {
               champ1: { value: String(num1) },
               champ2: { value: String(denom1) },
@@ -288,7 +289,7 @@ export default class EgalitesEntreFractions extends Exercice {
             const fraction2bis = fraction(num2 * k, denom2 * k)
             const fraction1bis = fraction(num1, denom1)
             texte = `${remplisLesBlancs(this, i, `\\dfrac{${num1}}{${denom1}} = \\dfrac{%{champ1}}{%{champ2}}\\text{ et }\\dfrac{${num2 * k}}{${denom2 * k}} = \\dfrac{%{champ3}}{%{champ4}}`, 'fillInTheBlank', '\\ldots')}`
-            texteCorr = `$${fraction1bis.texFraction}$ et $${fraction2bis.texFraction} = \\dfrac{${num2 * k} \\div ${k}}{${denom2 * k} \\div ${k}} = ${fraction2.texFraction}$`
+            texteCorr = `$${miseEnEvidence(fraction1bis.texFraction)}$ et $${fraction2bis.texFraction} = \\dfrac{${num2 * k} \\div ${k}}{${denom2 * k} \\div ${k}} = ${miseEnEvidence(fraction2.texFraction)}$`
             handleAnswers(this, i, {
               champ1: { value: String(num1) },
               champ2: { value: String(denom1) },

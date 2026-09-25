@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -113,7 +114,7 @@ export default class VocabulaireEtOperations extends Exercice {
           expf = 'l' + String(expf).substring(1)
           texte += `${expf}.`
           expf = 'L' + String(expf).substring(1)
-          texteCorr += numAlpha(i) + `${expf} s'écrit ${expn}.`
+          texteCorr += numAlpha(i) + `${expf} s'écrit ${texteEnCouleurEtGras(expn)}.`
           propsQcm = {
             enonce: texte,
             propositions: [
@@ -153,7 +154,7 @@ export default class VocabulaireEtOperations extends Exercice {
               : 'Traduire le calcul par une phrase en français : ')
           texte += `${expn}.`
           expf = 'l' + String(expf).substring(1)
-          texteCorr += numAlpha(i) + `${expn} est ${expf}.`
+          texteCorr += numAlpha(i) + `${expn} est ${texteEnCouleurEtGras(expf)}.`
           propsQcm = {
             enonce: texte,
             propositions: [
@@ -199,7 +200,7 @@ export default class VocabulaireEtOperations extends Exercice {
             handleAnswers(this, i, { reponse: { value: resultat } })
           }
           expf = 'L' + String(expf).substring(1)
-          texteCorr += numAlpha(i) + `${expf} s'écrit ${expn}.<br>`
+          texteCorr += numAlpha(i) + `${expf} s'écrit ${texteEnCouleurEtGras(expn)}.<br>`
           texteCorr += `${expc}`
           break
       }

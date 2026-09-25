@@ -592,7 +592,7 @@ export default class SymetrieProprietes extends Exercice {
           texteCorr += `Les angles $\\widehat{${A.nom}${C.nom}${B.nom}}$ et $\\widehat{${D.nom}${F.nom}${E.nom}}$ sont symétriques par rapport à $${typesDeTransformations[i] === 2 ? '(d)' : 'O'}$.<br>`
           texteCorr +=
             "Or, le symétrique d'un angle est un angle de même mesure.<br>"
-          texteCorr += `Donc les angles $\\widehat{${A.nom}${C.nom}${B.nom}}$ et $\\widehat{${D.nom}${F.nom}${E.nom}}$ ont la même mesure et $\\widehat{${D.nom}${F.nom}${E.nom}} = ${angle(D, F, E, 0)}^\\circ$.<br>`
+          texteCorr += `Donc les angles $\\widehat{${A.nom}${C.nom}${B.nom}}$ et $\\widehat{${D.nom}${F.nom}${E.nom}}$ ont la même mesure et $\\widehat{${D.nom}${F.nom}${E.nom}} = ${miseEnEvidence(angle(D, F, E, 0))}^\\circ$.<br>`
           reponse = new Grandeur(angle(D, F, E, 0), '°').toString()
           objetReponse = {
             reponse: {

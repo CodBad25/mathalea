@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
@@ -319,7 +320,7 @@ export default class ExerciceTableur extends Exercice {
       texteCorr = 'Voici les formules à saisir dans le tableur :<br>'
       for (let i = 0; i < steps.length; i++) {
         const step = steps[i]
-        texteCorr += `$${step.oldn} ${operStr[i]} = ${step.result}$ devient en cellule ${alphabet[i + 1]}1 la formule suivante : "=${alphabet[i]}1${operStr[i].replace('\\times', '*').replace('\\div', '/')}"<br>`
+        texteCorr += `$${step.oldn} ${operStr[i]} = ${step.result}$ devient en cellule ${alphabet[i + 1]}1 la formule suivante : "${texteEnCouleurEtGras(`=${alphabet[i]}1${operStr[i].replace('\\times', '*').replace('\\div', '/')}`)}"<br>`
       }
 
       /****************************************************/

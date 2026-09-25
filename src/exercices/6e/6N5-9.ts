@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -152,7 +153,7 @@ function probleme4(calculFacile: boolean): {
   let texteCorr = `Prix des ${aliment1} : $${texNombre(masseEnKgDeAliment1)}\\text{ kg} \\times ${texPrix(prixAliment1)}$ €/kg $ = ${texPrix(prixTotalAliment1)}$ €<br>`
   texteCorr += `Prix du ${aliment2} : $${texNombre(masseEnKgDeAliment2)}\\text{ kg} \\times ${texPrix(prixAliment2)}$ €/kg $${egalOuApprox(prixTotalAliment2, 2)} ${texPrix(prixTotalAliment2)}$ €<br>`
   texteCorr += `Prix total à payer : $${texPrix(prixTotalAliment1)}\\text{ €} +${texPrix(prixTotalAliment2)}$ € `
-  texteCorr += `$${egalOuApprox(prixTotal, 2)} ${texNombre(prixTotal, 2, true)}$ €<br>`
+  texteCorr += `$${egalOuApprox(prixTotal, 2)} ${miseEnEvidence(texNombre(prixTotal, 2, true))}$ €<br>`
   texteCorr += `<br>${context.isHtml ? '<i>' : ''}Le prix total aurait aussi pu être trouvé en un seul calcul${context.isHtml ? '<i>' : ''} :<br> $${texNombre(masseEnKgDeAliment1, 2)} \\text{ kg} \\times ${texPrix(prixAliment1)} \\text{ €/kg} + ${texNombre(masseEnKgDeAliment2)} \\text{ kg} \\times ${texPrix(prixAliment2)} \\text{ €/kg}$ `
   texteCorr += `$${egalOuApprox(prixTotal, 2)} ${texNombre(prixTotal, 2, true)}$ €<br>`
 
@@ -184,7 +185,7 @@ function probleme3(calculFacile: boolean): {
   const prixTotalAliment2 = masseEnKgDeAliment2 * prixAliment2
   const texte = `${quidam} achète ${aliment1} à $${texPrix(prixAliment1)}$ € et $${texNombre(masseEnKgDeAliment2)}$ kg de ${aliment2} à $${texPrix(prixAliment2)}$ € le kg. Quel est le prix total à payer ?`
   let texteCorr = `Prix des $${texNombre(masseEnKgDeAliment2)}$ kg de ${aliment2} : $${texNombre(masseEnKgDeAliment2)}\\text{ kg}\\times ${texNombre(prixAliment2, 2, true)}\\text{ €/kg} ${egalOuApprox(prixTotalAliment2, 2)} ${texPrix(prixTotalAliment2)}$ €<br>`
-  texteCorr += `Prix total à payer : $${texPrix(prixTotalAliment2)}\\text{ €}+ ${texPrix(prixAliment1)}\\text{ €}=${texPrix(prixTotalAliment2 + prixAliment1)}$ €<br>`
+  texteCorr += `Prix total à payer : $${texPrix(prixTotalAliment2)}\\text{ €}+ ${texPrix(prixAliment1)}\\text{ €}=${miseEnEvidence(texPrix(prixTotalAliment2 + prixAliment1))}$ €<br>`
   if (calculFacile) {
     const schema = new SchemaEnBoite({
       topBraces: [
@@ -254,7 +255,7 @@ function probleme2(calculFacile: boolean): {
   const prixTotal = nombreDeAliment1 * prixAliment1
   const texte = `${quidam} achète ${nombreDeAliment1} ${aliment1} à $${texPrix(prixAliment1)}$ € l'unité. Quel est le prix total à payer ?`
   let texteCorr = `Prix des ${nombreDeAliment1} ${aliment1} : $${nombreDeAliment1}\\times ${texNombre(prixAliment1, 2, true)}$ € $${egalOuApprox(prixTotal, 2)} ${texPrix(prixTotal)}$ €<br>`
-  texteCorr += `Prix total à payer : $${nombreDeAliment1}\\times ${texPrix(prixAliment1)}\\text{ €}=${texPrix(prixTotal)}$ €<br>`
+  texteCorr += `Prix total à payer : $${nombreDeAliment1}\\times ${texPrix(prixAliment1)}\\text{ €}=${miseEnEvidence(texPrix(prixTotal))}$ €<br>`
   const longueur =
     nombreDeAliment1 === 2
       ? 6
@@ -306,7 +307,7 @@ function probleme1(calculFacile: boolean): {
     'une cagette de ' + choice(['tomates', 'carottes', 'courgettes'])
   const prixTotal = prixAliment1 + prixAliment2
   const texte = `${quidam} achète ${aliment1} à $${texPrix(prixAliment1)}$ € et ${aliment2} à $${texNombre(prixAliment2, 2)}$ €. Quel est le prix total à payer ?`
-  let texteCorr = `Prix total à payer : $${texPrix(prixAliment1)}\\text{ €}+ ${texPrix(prixAliment2)}\\text{ €}=${texPrix(prixAliment2 + prixAliment1)}\\text{ €}$<br>`
+  let texteCorr = `Prix total à payer : $${texPrix(prixAliment1)}\\text{ €}+ ${texPrix(prixAliment2)}\\text{ €}=${miseEnEvidence(texPrix(prixAliment2 + prixAliment1))}\\text{ €}$<br>`
   if (calculFacile) {
     const schema = new SchemaEnBoite({
       topBraces: [

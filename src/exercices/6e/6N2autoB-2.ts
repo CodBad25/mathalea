@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -135,13 +136,13 @@ export default class RecompositionDecimale extends Exercice {
           else
             texteCorr += `Il y a ${m} cubes représentant chacun $\\dfrac{1}{1000}$, soit $\\dfrac{${m}}{1000}$.<br>`
         }
-        texteCorr += `Le nombre représenté ci-dessus est donc : $${texNombre(e + d / 10 + c / 100 + m / 1000)}$.`
+        texteCorr += `Le nombre représenté ci-dessus est donc : $${miseEnEvidence(texNombre(e + d / 10 + c / 100 + m / 1000))}$.`
       } else {
         texteCorr += 'On compte '
         if (e === 1) texteCorr += '1 unité, '
         texteCorr += `$\\dfrac{${d}}{10}$, `
         texteCorr += `$\\dfrac{${c}}{100}$ et `
-        texteCorr += `$\\dfrac{${m}}{1000}$.<br>Le nombre décimal représenté ci-dessus est le nombre $${texNombre(e + d / 10 + c / 100 + m / 1000)}$.`
+        texteCorr += `$\\dfrac{${m}}{1000}$.<br>Le nombre décimal représenté ci-dessus est le nombre $${miseEnEvidence(texNombre(e + d / 10 + c / 100 + m / 1000))}$.`
       }
       // if (reponses.indexOf(e + d / 10 + c / 100 + m / 1000) === -1) {
       if (this.questionJamaisPosee(q, e, d, c, m)) {

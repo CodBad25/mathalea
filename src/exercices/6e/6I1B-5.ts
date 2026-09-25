@@ -1,7 +1,7 @@
 import { renderSheetMarkup } from '../../lib/customElements/MySpreadSheet'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import type { GoodAnswersFormulas } from '../../lib/types'
 
 import {
@@ -575,7 +575,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
           if (!context.isHtml && formule.includes('^')) {
             formule = formule.replace(/\^/g, `\\^{}`)
           }
-        texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${lesBonnesFormules[i].ref} est : ${formule}.<br>`
+        texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule à saisir dans la cellule ${lesBonnesFormules[i].ref} est : ${texteEnCouleurEtGras(formule)}.<br>`
       }
         */
       texteCorr +=
