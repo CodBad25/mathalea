@@ -2,7 +2,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -45,7 +44,7 @@ export default class PariteDunNombre extends Exercice {
           e = a + b
           f = c + d
           g = e + f
-          texte = `Le nombre $${e}+${f}$ est-il pair ?`
+          texte = `Sans déterminer le résultat, le nombre $${e}+${f}$ est-il pair ?`
           this.canEnonce = texte
           texteCorr = `$${e}$ est un nombre ${e % 2 === 0 ? 'pair' : 'impair'} car il a $${b}$ comme chiffre des unités.<br>`
           texteCorr += `$${f}$ est un nombre ${f % 2 === 0 ? 'pair' : 'impair'} car il a $${d}$ comme chiffre des unités.<br>`
@@ -68,7 +67,7 @@ export default class PariteDunNombre extends Exercice {
             e = c + d
           }
           g = e * f
-          texte = `Le nombre $${e}\\times ${f}$ est-il pair ?`
+          texte = `Sans déterminer le résultat, le nombre $${e}\\times ${f}$ est-il pair ?`
           this.canEnonce = texte
           texteCorr = `$${e}\\times ${f}$ est un nombre ${g % 2 === 0 ? 'pair' : 'impair'}.<br>En effet, son chiffre des unités s'obtient en multipliant le chiffre des unités de ${e} et celui de ${f}.<br>`
           texteCorr += `Donc le chiffre des unités de $${e} \\times ${f}$ est celui de $${e % 10}\\times ${f % 10}=${b * d}$ soit $${g % 10}$.<br>`
@@ -82,12 +81,11 @@ export default class PariteDunNombre extends Exercice {
           b = choice([0, 2])
           e = a + b
           g = e >> 1
-          texte = `Le nombre $${e}\\div 2$ est-il pair ?`
+          texte = `Sans déterminer le résultat, le nombre $${e}\\div 2$ est-il pair ?`
           this.canEnonce = texte
-          texteCorr = `On va retirer le plus grand multiple de 20 possible de $${e}$ :<br>`
-          texteCorr += `Dans ${e} il va $${Math.floor(e / 20)}\\times 20=${e - (e % 20)}$ et il reste ${e % 20}.<br>`
-          texteCorr += `Si on divise $${e % 20}$ par $2$ on trouve $${texNombre((e % 20) / 2)}$ qui est un nombre ${g % 2 === 0 ? 'pair' : 'impair'}.<br>`
-          texteCorr += `Or, $${e}\\div 2= (${e - (e % 20)} + ${e % 20})\\div 2 =${(e - (e % 20)) >> 1} + ${(e % 20) >> 1}=${e >> 1}$.<br>`
+          texteCorr = `Si le quotient $${e}\\div 2$ est pair, il s'écrit $2\\times k$ et alors $${e}=4\\times k$ : le nombre $${e}$ est un multiple de $4$. Réciproquement, si $${e}$ est un multiple de $4$, sa moitié est paire.<br>`
+          texteCorr += `Un nombre est divisible par $4$ lorsque le nombre formé par ses deux derniers chiffres est divisible par $4$.<br>`
+          texteCorr += `Ici, $${e % 100}${g % 2 === 0 ? `=4\\times ${(e % 100) / 4}` : `=4\\times ${((e % 100) - 2) / 4}+2`}$ donc $${e}$ ${g % 2 === 0 ? 'est' : "n'est pas"} un multiple de $4$.<br>`
           texteCorr += `Donc le nombre $${e}\\div 2$ est ${g % 2 === 0 ? 'pair' : 'impair'}.`
           break
         case 4:
@@ -98,7 +96,7 @@ export default class PariteDunNombre extends Exercice {
           e = a + b
           f = c + d
           g = f - e
-          texte = `Le nombre $${f}-${e}$ est-il pair ?`
+          texte = `Sans déterminer le résultat, le nombre $${f}-${e}$ est-il pair ?`
           this.canEnonce = texte
           texteCorr = `$${f}$ est un nombre ${f % 2 === 0 ? 'pair' : 'impair'} car il a $${d}$ comme chiffre des unités.<br>`
           texteCorr += `$${e}$ est un nombre ${e % 2 === 0 ? 'pair' : 'impair'} car il a $${b}$ comme chiffre des unités.<br>`
@@ -109,28 +107,29 @@ export default class PariteDunNombre extends Exercice {
           texteCorr += `<br>Donc le nombre $${f}-${e}$ est ${g % 2 === 0 ? 'pair' : 'impair'}.`
           break
         case 5:
-        default:
+        default: {
           a = randint(3, 7)
           b = a % 2 === 0 ? randint(1, 4) * 2 + 1 : randint(2, 9)
           g = b
-          texte = `Le nombre $${b}`
+          let produit = `${b}`
           for (let i = 1; i < a; i++) {
-            texte += `\\times ${b}`
+            produit += `\\times ${b}`
           }
-          texte += '$ est-il pair ?'
+          texte = `Sans déterminer le résultat, le nombre $${produit}$ est-il pair ?`
           this.canEnonce = texte
           if (b % 2 === 0) {
             texteCorr = `$${b}$ est un nombre pair. Le produit de deux nombres pairs est un nombre pair.<br>`
             texteCorr +=
               'Ainsi, les multiplications successives donnent toujours un résultat pair.<br>'
-            texteCorr += `Donc ${texte.replace('L', 'l').replace('est-il', 'est').replace('?', '')}.`
+            texteCorr += `Donc le nombre $${produit}$ est pair.`
           } else {
             texteCorr = `$${b}$ est un nombre impair. Le produit de deux nombres impairs est un nombre impair.<br>`
             texteCorr +=
               'Ainsi, les multiplications successives donnent toujours un résultat impair.<br>'
-            texteCorr += `Donc ${texte.replace('L', 'l').replace('est-il', 'est').replace('?', '').replace('pair', 'impair')}.`
+            texteCorr += `Donc le nombre $${produit}$ est impair.`
           }
           break
+        }
       }
       this.autoCorrection[i] = {
         enonce: texte,
