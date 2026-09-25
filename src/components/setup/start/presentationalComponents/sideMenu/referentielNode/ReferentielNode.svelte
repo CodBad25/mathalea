@@ -1,6 +1,7 @@
 <script lang="ts">
   import katex from 'katex'
   import { onMount } from 'svelte'
+  import { get } from 'svelte/store'
   import { slide } from 'svelte/transition'
   import codeToLevelList from '../../../../../../json/codeToLevelList.json'
   import themesList from '../../../../../../json/levelsThemesList.json'
@@ -17,6 +18,7 @@
     isJSONReferentielEnding,
     type JSONReferentielObject,
   } from '../../../../../../lib/types/referentiels'
+  import { unfoldedNodes } from '../unfoldedNodesStore'
   import ReferentielEnding from './ReferentielEnding.svelte'
 
   const themes = toMap(themesList)
@@ -28,6 +30,10 @@
   export let indexBase: number
   export let levelTitle: string
   export let pathToThisNode: string[]
+  export let parentId: string = ''
+  const nodeId = `${parentId}/${levelTitle}`
+  const savedUnfold: boolean | undefined = get(unfoldedNodes)[nodeId]
+  if (savedUnfold !== undefined) unfold = savedUnfold
   $: items = prepareSubset(subset)
   const levels = Object.keys(codeToLevelList)
 
@@ -368,6 +374,7 @@
     //   console.log('******** subset ********')
     //   console.log(Object.entries(subset))
     // console.log('levelTitle: ', levelTitle)
+    if (savedUnfold !== undefined) return
     if (
       (nestedLevelCount === 1 && levelTitle === 'Exercices aléatoires') ||
       themeCodeisSubthemeCode(
@@ -428,6 +435,8 @@
   - **nestedLevelCount** (_number_) : compteur pour connaître le nombre d'imbrication (utilisé pour la mise en page).
   - **indexBase** (_number_) : nombre utilisé pour identifier les éléments HTML.
   - **levelTitle** (_string_) : titre du niveau courant (clé du nœud retraduite sur la base des fichiers `levelsThemesList.json` et `codeToLevelList.json`).
+  - **parentId** (_string_) : identifiant du nœud parent ; l'identifiant du nœud (`parentId/levelTitle`) sert de clé
+    dans le store `unfoldedNodes` pour conserver l'état déplié lorsque le menu est démonté puis remonté.
 
  -->
 <div class={`${$$props.class || ''}`}>
@@ -453,6 +462,7 @@
     style="padding-left: {(nestedLevelCount * 2) / 5}rem"
     on:click={() => {
       unfold = !unfold
+      unfoldedNodes.update((nodes) => ({ ...nodes, [nodeId]: unfold }))
     }}
   >
     <div
@@ -512,6 +522,7 @@
               />
             {:else}
               <svelte:self
+                parentId={nodeId}
                 indexBase={`${indexBase}-${i.toString()}`}
                 levelTitle={key}
                 nestedLevelCount={nestedLevelCount + 1}
