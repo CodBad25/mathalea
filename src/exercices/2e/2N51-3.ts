@@ -31,10 +31,13 @@ export default class SimplifierUneSommeDeRacinesCarrees extends Exercice {
       '1 : En donnant la racine carrée unité\n2 : Sans indication',
     ]
 
+    this.besoinFormulaire2CaseACocher = ['Valeurs adaptées au calcul mental']
+
     this.nbQuestions = 4
     this.nbCols = 2
     this.nbColsCorr = 2
     this.sup = 1
+    this.sup2 = false
     this.spacingCorr = context.isHtml ? 2 : 1
   }
 
@@ -43,16 +46,16 @@ export default class SimplifierUneSommeDeRacinesCarrees extends Exercice {
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      const e1 = randint(2, 8) * choice([-1, 1])
-      const e2 = randint(2, 8) * choice([-1, 1])
-      const e3 = randint(2, 8) * choice([-1, 1])
-      const a1 = randint(2, 11)
-      const a2 = randint(2, 11, [a1])
-      const a3 = randint(2, 11, [a1, a2])
+      const e1 = randint(this.sup2 ? 1 : 2, this.sup2 ? 3 : 8) * choice([-1, 1])
+      const e2 = randint(this.sup2 ? 1 : 2, this.sup2 ? 3 : 8) * choice([-1, 1])
+      const e3 = randint(this.sup2 ? 1 : 2, this.sup2 ? 3 : 8) * choice([-1, 1])
+      const a1 = randint(2, this.sup2 ? 4 : 11)
+      const a2 = randint(2, this.sup2 ? 4 : 11, [a1])
+      const a3 = randint(2, this.sup2 ? 4 : 11, [a1, a2])
       const b1 = a1 * a1
       const b2 = a2 * a2
       const b3 = a3 * a3
-      const c = randint(2, 11, [4, 8, 9])
+      const c = this.sup2 ? choice([2, 3, 5]) : randint(2, 11, [4, 8, 9])
       const d1 = c * b1
       const d2 = c * b2
       const d3 = c * b3
