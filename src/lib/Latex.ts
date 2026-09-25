@@ -1156,7 +1156,11 @@ function correctionConf(confExo: ExerciceLayoutConfig): ExerciceLayoutConfig {
  */
 function wrapInColumns(content: string, columns?: number): string {
   if (columns == null || columns < 2 || content.trim() === '') return content
-  return `\n\\begin{multicols}{${columns}}${content}\n\\end{multicols}`
+  // `\raggedcolumns` : sans lui, multicol étire chaque colonne jusqu'en bas
+  // de page en ouvrant de grands blancs entre les exercices.
+  // `\mathaleaFitPictures` (voir `loadLayoutOverrides`) : les figures sont
+  // conçues pour la pleine largeur et déborderaient d'une colonne.
+  return `\n\\begin{multicols}{${columns}}\\raggedcolumns\\mathaleaFitPictures${content}\n\\end{multicols}`
 }
 
 /** Faut-il inscrire le numéro de version dans l'en-tête ? */
