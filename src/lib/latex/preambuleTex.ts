@@ -72,10 +72,11 @@ export function loadFonts(latexFileInfos: LatexFileInfos) {
 }
 
 /**
- * Réglages qui doivent surcharger ceux de l'habillage : marges et impression
- * en noir et blanc. Ils sont émis en fin de préambule, après `\\Theme` (ou
- * après le préambule ProfMaquette), pour passer devant les valeurs codées en
- * dur dans chaque habillage.
+ * Réglages qui doivent surcharger ceux de l'habillage : marges (et cadre des
+ * corrections qui en dépend), impression en noir et blanc, ajustement des
+ * figures aux colonnes de la fiche. Ils sont émis en fin de préambule, après
+ * `\\Theme` (ou après le préambule ProfMaquette), pour passer devant les
+ * valeurs codées en dur dans chaque habillage.
  */
 export function loadLayoutOverrides(latexFileInfos: LatexFileInfos): string {
   let overrides = ''
@@ -84,6 +85,42 @@ export function loadLayoutOverrides(latexFileInfos: LatexFileInfos): string {
     // `\geometry` (et non `\usepackage[...]{geometry}`) : le paquet est déjà
     // chargé par l'habillage, le recharger provoquerait un conflit d'options
     overrides += `\n% Marges choisies dans les réglages du document\n\\geometry{left=${margins.left}cm,right=${margins.right}cm,top=${margins.top}cm,bottom=${margins.bottom}cm}`
+    // Le cadre des corrections est placé en dur pour les marges de
+    // l'habillage : avec des marges plus étroites, il traverserait le texte.
+    // On le trace à mi-chemin entre le bord de la page et le texte.
+    overrides += `
+\\ifdefined\\tikzfootMA
+\\renewcommand*\\tikzfootMA{%
+  \\begin{tikzpicture}[remember picture,overlay]
+    \\draw[correction,line width=4pt,dashed,dash pattern=on 10pt off 10pt] ($(current page.south west)+(${margins.left / 2}cm,${margins.bottom / 2}cm)$) rectangle ($(current page.north east)+(-${margins.right / 2}cm,-${margins.top / 2}cm)$);
+  \\end{tikzpicture}%
+}
+\\fi`
+  }
+  if ((latexFileInfos.globalColumns ?? 1) > 1) {
+    // Appelé au début de chaque `multicols` de la fiche : une figure plus
+    // large que la colonne (ou que la case d'un QCM) est réduite pour y tenir,
+    // et les titres des graphiques pgfplots passent à la ligne au lieu
+    // d'élargir la figure (ce qui la ferait réduire d'autant).
+    overrides += `
+% Figures ajustées à la largeur des colonnes de la fiche
+\\newsavebox{\\mathaleaPictureBox}
+\\newcommand{\\mathaleaFitPictures}{%
+  \\ifdefined\\tikzpicture
+    \\let\\mathaleaTikzpicture\\tikzpicture
+    \\let\\mathaleaEndTikzpicture\\endtikzpicture
+    \\def\\tikzpicture{\\setbox\\mathaleaPictureBox\\hbox\\bgroup\\mathaleaTikzpicture}%
+    \\def\\endtikzpicture{\\mathaleaEndTikzpicture\\egroup
+      \\ifdim\\wd\\mathaleaPictureBox>\\linewidth
+        \\resizebox{\\linewidth}{!}{\\usebox{\\mathaleaPictureBox}}%
+      \\else
+        \\usebox{\\mathaleaPictureBox}%
+      \\fi}%
+  \\fi
+  \\ifdefined\\pgfplotsset
+    \\pgfplotsset{every axis title/.append style={text width=0.8\\linewidth,align=center}}%
+  \\fi
+}`
   }
   if (latexFileInfos.blackAndWhite === true) {
     // xcolor convertit alors toute couleur employée ensuite en niveaux de
