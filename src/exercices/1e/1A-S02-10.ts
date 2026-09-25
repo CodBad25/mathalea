@@ -1,3 +1,4 @@
+import { createList } from '../../lib/format/lists'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
@@ -105,13 +106,16 @@ export default class RemplacerValeurSerieQCM extends ExerciceQcmA {
 
     this.correction = `On commence par ranger les deux séries dans l'ordre croissant.<br>
     Série initiale : $${serieTriee.join('\\,;\\,')}$.<br>
-    Nouvelle série : $${serieModifieeTriee.join('\\,;\\,')}$.<br>
-    <ul>
-      <li>Effectif : il y a $${effectifInitial}$ valeurs dans la série initiale et $${effectifModifie}$ valeurs dans la nouvelle série. L'effectif n'augmente donc pas.</li>
-      <li>Médiane : la série contient $5$ valeurs, donc la médiane est la $3^e$ valeur. Elle vaut $${medianeInitiale}$ dans la série initiale et $${medianeModifiee}$ dans la nouvelle série. Donc ${mettreEnEvidenceSiVrai(`la médiane ${variationMediane}`, 'La médiane augmente.')}.</li>
-      <li>Étendue : l'étendue initiale vaut $${serieTriee[4]}-${serieTriee[0]}=${etendueInitiale}$. La nouvelle étendue vaut $${serieModifieeTriee[4]}-${serieModifieeTriee[0]}=${etendueModifiee}$. Donc ${mettreEnEvidenceSiVrai(`l'étendue ${variationEtendue}`, "L'étendue augmente.")}.</li>
-      <li>Moyenne : la somme des valeurs passe de $${sommeInitiale}$ à $${sommeModifiee}$, avec le même effectif. Donc ${mettreEnEvidenceSiVrai(`la moyenne ${variationMoyenne}`, 'La moyenne augmente.')}.</li>
-    </ul>`
+    Nouvelle série : $${serieModifieeTriee.join('\\,;\\,')}$.
+    ${createList({
+      items: [
+        `Effectif : il y a $${effectifInitial}$ valeurs dans la série initiale et $${effectifModifie}$ valeurs dans la nouvelle série. L'effectif n'augmente donc pas.`,
+        `Médiane : la série contient $5$ valeurs, donc la médiane est la $3^e$ valeur. Elle vaut $${medianeInitiale}$ dans la série initiale et $${medianeModifiee}$ dans la nouvelle série. Donc ${mettreEnEvidenceSiVrai(`la médiane ${variationMediane}`, 'La médiane augmente.')}.`,
+        `Étendue : l'étendue initiale vaut $${serieTriee[4]}-${serieTriee[0]}=${etendueInitiale}$. La nouvelle étendue vaut $${serieModifieeTriee[4]}-${serieModifieeTriee[0]}=${etendueModifiee}$. Donc ${mettreEnEvidenceSiVrai(`l'étendue ${variationEtendue}`, "L'étendue augmente.")}.`,
+        `Moyenne : la somme des valeurs passe de $${sommeInitiale}$ à $${sommeModifiee}$, avec le même effectif. Donc ${mettreEnEvidenceSiVrai(`la moyenne ${variationMoyenne}`, 'La moyenne augmente.')}.`,
+      ],
+      style: 'puces',
+    })}`
   }
 
   versionOriginale: () => void = () => {
