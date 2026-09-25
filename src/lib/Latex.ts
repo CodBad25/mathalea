@@ -19,7 +19,10 @@ import { isMathadataUuid } from './components/mathadataReferentiel'
 import genericPreamble from './latex/preambule.tex?raw'
 import mathadataCompatTex from './latex/mathadata-compat.tex?raw'
 import { decodeExosGrouping, findExoPosition } from './LatexGroup'
-import { preambuleBanque, referentielBanquesExternes } from './stores/banquesExternesStore'
+import {
+  preambuleBanque,
+  referentielBanquesExternes,
+} from './stores/banquesExternesStore'
 import { estUuidBanqueExterne } from './types/banquesExternes'
 import { isBanqueExterneType } from './types/referentiels'
 import type {
@@ -45,6 +48,13 @@ export function sanitizeLatexInput(str: string): string {
     .replace(/\$/g, '\\$')
     .replace(/\^/g, '\\^{}')
     .replace(/~/g, '\\textasciitilde{}')
+}
+
+/** Référence d'une annale : examen, mois, année et lieu. */
+function staticReferenceOf(exercice: IExerciceStatique): string {
+  return `${exercice.examen || ''} ${exercice.mois || ''} ${exercice.annee || ''} ${exercice.lieu || ''}`
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function testIfLoaded(
@@ -595,6 +605,24 @@ class Latex {
     ]
   }
 
+  /**
+   * Titre ProfMaquette d'un exercice statique : le titre propre de la
+   * ressource (MathAdata, banques externes) ou, pour une annale, sa
+   * référence (examen, mois, année, lieu) quand les références sont
+   * affichées. Chaîne vide s'il n'y a rien de pertinent à afficher.
+   */
+  private staticTitleFor(
+    exercice: IExerciceStatique,
+    latexFileInfos: LatexFileInfos,
+  ): string {
+    if (latexFileInfos.titleOption !== 'AvecTitre') return ''
+    if (typeof exercice.titre === 'string' && exercice.titre.trim() !== '') {
+      return exercice.titre.trim()
+    }
+    if (latexFileInfos.withReferences !== true) return ''
+    return staticReferenceOf(exercice)
+  }
+
   private generateStaticExerciseContent(
     exercice: IExerciceStatique,
     latexFileInfos: LatexFileInfos,
@@ -607,23 +635,23 @@ class Latex {
     } else {
       content += breaksBefore(confExo)
       content += '\n\\needspace{10\\baselineskip}'
+      const title = this.staticTitleFor(exercice, latexFileInfos)
+      const titleKey =
+        title !== '' ? `Titre={${sanitizeLatexInput(title)}}` : ''
       if (latexFileInfos.qrcodeOption === 'AvecQrcode') {
         content += `\n\\begin{exercice}[${
-          latexFileInfos.titleOption === 'AvecTitre'
-            ? `Titre=${latexFileInfos.titleOption}, `
-            : ''
+          titleKey !== '' ? `${titleKey}, ` : ''
         }Ajout={\\node[anchor=north east, inner sep=2pt, fill=white]
         at (frame.north east) {\\hypersetup{urlcolor=black, pdfnewwindow=true}\\qrcode[height=2cm]{${getUrlFromExercice(exercice, indiceVersion)}&v=eleve&es=0211}};
 }]%[Lignes=5,Interieur]`
       } else {
+        const reference = staticReferenceOf(exercice)
         const keys = [
-          ...(latexFileInfos.titleOption === 'AvecTitre'
-            ? [`Titre=${latexFileInfos.titleOption}`]
-            : []),
-          ...this.referenceKeyFor(
-            latexFileInfos,
-            `${exercice.examen || ''} ${exercice.mois || ''} ${exercice.annee || ''} ${exercice.lieu || ''}`.trim(),
-          ),
+          ...(titleKey !== '' ? [titleKey] : []),
+          // la référence déjà affichée en titre n'est pas répétée en haut à droite
+          ...(title === reference
+            ? []
+            : this.referenceKeyFor(latexFileInfos, reference)),
         ]
         content += `\n\\begin{exercice}${
           keys.length > 0 ? `[${keys.join(', ')}]` : ''
@@ -1131,10 +1159,7 @@ function writingLinesAtEnd(confExo: ExerciceLayoutConfig): string {
 }
 
 /** Enveloppe un contenu dans l'interligne demandé pour l'exercice */
-function wrapInSpacing(
-  content: string,
-  confExo: ExerciceLayoutConfig,
-): string {
+function wrapInSpacing(content: string, confExo: ExerciceLayoutConfig): string {
   const stretch = confExo.baselinestretch
   if (stretch == null || stretch === 1) return content
   return `\n\\begin{spacing}{${stretch}}${content}\n\\end{spacing}`

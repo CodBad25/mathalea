@@ -350,6 +350,7 @@ export async function mathaleaGetExercicesFromParams(
           (await recupererSourceLatexDeBanque(texCorUrl)) ??
           '\n\n\t%Pas de correction LaTeX disponible\n\n',
         examen: '',
+        titre: titre !== param.uuid ? titre : undefined,
       } as IExerciceStatique)
       continue
     }
@@ -473,6 +474,11 @@ export async function mathaleaGetExercicesFromParams(
         mois,
         numeroInitial,
         examen,
+        titre:
+          'titre' in infosExerciceStatique &&
+          typeof infosExerciceStatique.titre === 'string'
+            ? infosExerciceStatique.titre
+            : undefined,
       } as IExerciceStatique)
     } else {
       const exercice = await mathaleaLoadExerciceFromUuid(param.uuid)
