@@ -182,7 +182,7 @@ export default class LireElementsCarac extends Exercice {
                 this,
                 i,
                 `$(%{champ1}~;~ %{champ2})`,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierDeBase,
               ) +
               '.'
             handleAnswers(this, i, {
