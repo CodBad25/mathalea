@@ -54,7 +54,7 @@ function remarquesPuissances(
     sortie += '<br>'
     sortie += `${texteGras('Remarque : ')} Dans ce cas, comme les puissances d'exposant pair de deux nombres opposés sont égales, on peut écrire $${simpNotPuissance(base, exposant)}$ à la place de $${baseUtile}^{${exposant}}$.`
   }
-  if (base < 0 && exposant % 2 === 1) {
+  if (base < 0 && exposant % 2 !== 0) {
     sortie += '<br>'
     sortie += `${texteGras('Remarque : ')} Dans ce cas, comme les puissances d'exposant impair de deux nombres négatifs sont opposées, on pourrait écrire $${simpNotPuissance(base, exposant)}$  à la place de $${baseUtile}^{${exposant}}$.`
   }
@@ -136,6 +136,17 @@ export default class PuissancesDunRelatif1 extends Exercice {
     const coul0 = 'green'
 
     const coul1 = bleuMathalea
+    // option proposée uniquement en 3e (3C10-2)
+    const avecExposantsNegatifs = this.sup3 === true
+    // au moins un exposant négatif par question lorsque l'option est cochée
+    const signesExposants = () =>
+      choice([
+        [-1, 1],
+        [1, -1],
+        [-1, -1],
+      ])
+    const phraseRegle = (regle: string) =>
+      `On utilise la propriété $${regle}$.<br>`
 
     for (
       let i = 0,
@@ -173,10 +184,18 @@ export default class PuissancesDunRelatif1 extends Exercice {
 
       switch (listeTypeDeQuestions[i]) {
         case 1: // produit de puissances de même base
+          if (avecExposantsNegatifs) {
+            const signes = signesExposants()
+            exp = [exp0 * signes[0], exp1 * signes[1]]
+            exp0 = exp[0]
+            exp1 = exp[1]
+          }
           texte = `$${lettre}=${baseUtile}^{${exp[0]}}\\times ${baseUtile}^{${exp[1]}}$`
 
           // texteCorr += `$${lettre}=${baseUtile}^${exp[0]}\\times ${baseUtile}^${exp[1]}$`
-          if (this.correctionDetaillee) {
+          if (avecExposantsNegatifs) {
+            texteCorr += phraseRegle('a^m\\times a^n=a^{m+n}')
+          } else if (this.correctionDetaillee) {
             texteCorr += `$${lettre}=${eclatePuissance(
               baseUtile,
               exp[0],
@@ -187,9 +206,9 @@ export default class PuissancesDunRelatif1 extends Exercice {
             texteCorr += '<br>'
           }
           if (base < 0 && (exp[1] + exp[0]) % 2 === 0) {
-            texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}+${exp[1]}} = ${baseUtile}^{${exp[0] + exp[1]}}=${miseEnEvidence(simpNotPuissance(base, exp[1] + exp[0]))}$`
+            texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}+${ecritureParentheseSiNegatif(exp[1])}} = ${baseUtile}^{${exp[0] + exp[1]}}=${miseEnEvidence(simpNotPuissance(base, exp[1] + exp[0]))}$`
           } else {
-            texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}+${exp[1]}} = ${miseEnEvidence(`${baseUtile}^{${exp[0] + exp[1]}}`)}$`
+            texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}+${ecritureParentheseSiNegatif(exp[1])}} = ${miseEnEvidence(`${baseUtile}^{${exp[0] + exp[1]}}`)}$`
           }
           texteCorr += remarquesPuissances(base, baseUtile, exp[1] + exp[0])
           if (base < 0 && (exp[0] + exp[1]) % 2 === 0) {
@@ -210,16 +229,24 @@ export default class PuissancesDunRelatif1 extends Exercice {
           }
 
           couleurExp1 = coul0
+          if (avecExposantsNegatifs) {
+            const signes = signesExposants()
+            exp = [exp0 * signes[0], exp1 * signes[1]]
+            exp0 = exp[0]
+            exp1 = exp[1]
+          }
           texte = `$${lettre}=\\dfrac{${baseUtile}^{${exp[0]}}}{${baseUtile}^{${exp[1]}}}$`
 
-          if (this.correctionDetaillee) {
+          if (avecExposantsNegatifs) {
+            texteCorr += phraseRegle('\\dfrac{a^m}{a^n}=a^{m-n}')
+          } else if (this.correctionDetaillee) {
             texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(baseUtile, exp[0], couleurExp0)}}{${eclatePuissance(baseUtile, exp[1], couleurExp1)}}$`
             texteCorr += '<br>'
             texteCorr += `$${miseEnEvidence(Math.min(exp[0], exp[1]), coul1)}$ simplification${Math.min(exp[0], exp[1]) === 1 ? '' : 's'} par $${baseUtile}$ possibles.`
             texteCorr += '<br>'
           }
           if (exp[0] - exp[1] === 0) {
-            if (this.correctionDetaillee) {
+            if (this.correctionDetaillee && !avecExposantsNegatifs) {
               texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(
                 `\\cancel{${baseUtile}}`,
                 exp[0],
@@ -232,7 +259,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
               texteCorr += '<br>'
             }
             texteCorr += `$${lettre}=1$`
-          } else if (exp[0] - exp[1] < 0) {
+          } else if (exp[0] - exp[1] < 0 && !avecExposantsNegatifs) {
             if (this.correctionDetaillee) {
               texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(
                 `\\cancel{${baseUtile}}`,
@@ -259,7 +286,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
               texteCorr += `=${miseEnEvidence(`${baseUtile}^{${exp[0] - exp[1]}}`)}$`
             }
           } else {
-            if (this.correctionDetaillee) {
+            if (this.correctionDetaillee && !avecExposantsNegatifs) {
               texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(
                 `\\cancel{${baseUtile}}`,
                 exp[1],
@@ -275,7 +302,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
               )}}$`
               texteCorr += '<br>'
             }
-            texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}-${exp[1]}}`
+            texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}-${ecritureParentheseSiNegatif(exp[1])}}`
             if (base < 0 && (exp[0] - exp[1]) % 2 === 0) {
               texteCorr += `=${baseUtile}^{${exp[0] - exp[1]}}=${miseEnEvidence(simpNotPuissance(base, exp[0] - exp[1]))}$`
             } else {
@@ -294,9 +321,15 @@ export default class PuissancesDunRelatif1 extends Exercice {
           break
         case 3: // exponentiation
           exp = [randint(2, 3), randint(2, 3)] // on redéfinit les deux exposants pour ne pas avoir d'écritures trop longues et pour éviter 1
+          if (avecExposantsNegatifs) {
+            const signes = signesExposants()
+            exp = [exp[0] * signes[0], exp[1] * signes[1]]
+          }
           texte = `$${lettre}=(${baseUtile}^{${exp[0]}})^{${exp[1]}}$`
 
-          if (this.correctionDetaillee) {
+          if (avecExposantsNegatifs) {
+            texteCorr += phraseRegle('(a^m)^n=a^{m\\times n}')
+          } else if (this.correctionDetaillee) {
             texteCorr += `$${lettre}=${miseEnEvidence(
               `\\underbrace{${eclatePuissance(
                 `(${baseUtile}^{${exp[0]}})`,
@@ -320,9 +353,11 @@ export default class PuissancesDunRelatif1 extends Exercice {
             )}$`
             texteCorr += '<br>'
           }
-          texteCorr += `Il y a donc $${miseEnEvidence(exp[1], coul0)}~\\times~${miseEnEvidence(exp[0], coul0)}$ facteurs tous égaux à $${baseUtile}$.`
-          texteCorr += '<br>'
-          texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}\\times${exp[1]}} `
+          if (!avecExposantsNegatifs) {
+            texteCorr += `Il y a donc $${miseEnEvidence(exp[1], coul0)}~\\times~${miseEnEvidence(exp[0], coul0)}$ facteurs tous égaux à $${baseUtile}$.`
+            texteCorr += '<br>'
+          }
+          texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}\\times${ecritureParentheseSiNegatif(exp[1])}} `
           if (base < 0 && (exp[1] * exp[0]) % 2 === 0) {
             texteCorr += `= ${baseUtile}^{${exp[0] * exp[1]}} = ${miseEnEvidence(simpNotPuissance(base, exp[0] * exp[1]))}$`
           } else {
@@ -350,10 +385,14 @@ export default class PuissancesDunRelatif1 extends Exercice {
 
           base = [base0, base1] // on choisit 2 bases différentes c'est mieux
           exp = randint(2, 4) // on choisit un exposant
+          if (avecExposantsNegatifs) exp = -exp
           texte = `$${lettre}=${ecritureParentheseSiNegatif(base0)}^{${exp}}\\times ${ecritureParentheseSiNegatif(base1)}^{${exp}}$`
+          if (avecExposantsNegatifs) {
+            texteCorr += phraseRegle('a^n\\times b^n=(a\\times b)^n')
+          }
           texteCorr += texte
 
-          if (this.correctionDetaillee) {
+          if (this.correctionDetaillee && !avecExposantsNegatifs) {
             texteCorr += '<br>'
             texteCorr += `$${lettre}=${eclatePuissance(
               ecritureParentheseSiNegatif(base0),
@@ -401,10 +440,16 @@ export default class PuissancesDunRelatif1 extends Exercice {
             base1 *
             (this.sup2 === 1 ? 1 : this.sup2 === 2 ? -1 : choice([-1, 1])) // on choisit une base sauf 1 ... penser à gérer le cas des bases qui sont des puissances
 
+          if (avecExposantsNegatifs) exp = -exp
           texte = `$${lettre}=\\dfrac{${ecritureParentheseSiNegatif(base0)}^{${exp}}}{${ecritureParentheseSiNegatif(base1)}^{${exp}}}$`
+          if (avecExposantsNegatifs) {
+            texteCorr += phraseRegle(
+              '\\dfrac{a^n}{b^n}=\\left(\\dfrac{a}{b}\\right)^n',
+            )
+          }
           texteCorr += texte
 
-          if (this.correctionDetaillee) {
+          if (this.correctionDetaillee && !avecExposantsNegatifs) {
             texteCorr += '<br>'
             texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(ecritureParentheseSiNegatif(base0), exp, coul0)}}{${eclatePuissance(ecritureParentheseSiNegatif(base1), exp, coul1)}}$`
             texteCorr += '<br>'

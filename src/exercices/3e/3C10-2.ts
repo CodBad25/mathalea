@@ -14,5 +14,7 @@ export default class PuissancesDunRelatif13e extends PuissancesDunRelatif1 {
   constructor() {
     super()
     this.classe = 3
+    this.besoinFormulaire3CaseACocher = ['Avec des exposants négatifs', false]
+    this.sup3 = false
   }
 }
