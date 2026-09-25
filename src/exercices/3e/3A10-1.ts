@@ -1,4 +1,3 @@
-import { warnMessage } from '../../lib/format/message'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   combinaisonListesSansChangerOrdre,
@@ -40,9 +39,6 @@ export default class PremierOuPas extends Exercice {
       2,
       '1 : Sans calculatrice\n2 : Avec calculatrice',
     ]
-    this.besoinFormulaire2CaseACocher = [
-      'Afficher la liste des premiers nombres premiers',
-    ]
     this.besoinFormulaire3CaseACocher = [
       'Que des nombres premiers inférieurs à 100',
     ]
@@ -55,7 +51,6 @@ export default class PremierOuPas extends Exercice {
 
     this.nbQuestions = 5
     this.sup = 1
-    this.sup2 = false // Par défaut on n'affiche pas la liste des nombres premiers
     this.sup3 = false
     // this.nbQuestionsModifiable = false (EE : bloquant pour AMC sinon)
   }
@@ -75,7 +70,7 @@ export default class PremierOuPas extends Exercice {
     let typesDeQuestionsDisponibles // = [1, 2, 3, 6, 7];
     /* 1: // nombre pair, 2: // Multiple de 3, 3: // Multiple de 5, 4: // Multiple de 7, 5: // multiple de 11
      6: // produit de deux nombres premiers inférieurs à 100,
-     7: // nombre premier inférieur à 529, si le nombre premier dépasse 100 on affiche le coup de pouce
+     7: // nombre premier inférieur à 529
      8: // nombre premier inférieur à 100 pour permettre les tests de divisibilité sans calculatrice
     */
     if (this.sup === 1) {
@@ -89,14 +84,6 @@ export default class PremierOuPas extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-
-    let stringRappel =
-      'Cette liste des nombres premiers inférieurs à 100 pourra être utile : <br>' +
-      prems[0]
-    for (let k = 1; k < 25; k++) {
-      stringRappel += ', ' + prems[k]
-    }
-    stringRappel += '.'
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       typesDeQuestions = listeTypeDeQuestions[i]
@@ -115,20 +102,6 @@ export default class PremierOuPas extends Exercice {
       let evenSum // pour la somme des chiffres de rang impair
       let oddSum // pour la somme des chiffres de rang pair
       let bonneReponse
-      this.introduction = !this.sup3
-        ? warnMessage(
-            'Penser aux critères de divisibilité.',
-            'nombres',
-            'Coup de pouce',
-          )
-        : ''
-      if (this.sup2) {
-        this.introduction += warnMessage(
-          stringRappel,
-          'nombres',
-          'Coup de pouce',
-        )
-      } else this.introduction += ''
       switch (typesDeQuestions) {
         case 1: // nombre pair
           N = !this.sup3 ? 2 * randint(51, 499) : 2 * randint(12, 49)
@@ -307,12 +280,7 @@ export default class PremierOuPas extends Exercice {
           // rang du nombre premier choisi
           r = !this.sup3 ? randint(25, prems.length - 1) : randint(6, 24)
           N = prems[r] // on choisit un nombre premier inférieur à 529
-
-          if (N > 100) {
-            this.sup2 = true
-          } else {
-            this.sup2 = false
-          }
+          
           texte = nombreAvecEspace(N) + ''
           r = 0
           tabPremiersATester = []

@@ -1,4 +1,3 @@
-import { warnMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -61,11 +60,7 @@ export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
         } else {
           this.question = ` Donner la solution de l'équation $${equation()}$.`
         }
-        this.correction = warnMessage(
-          `Pour tout réels $a$, $b$, $c$, $d$ tels que $b$ et $d$ soient non nuls : $\\dfrac{a}{b}=\\dfrac{c}{d}$ si et seulement si $ad=bc$.`,
-          'nombres',
-          'Rappel',
-        )
+        this.correction = `Pour tous réels $a$, $b$, $c$, $d$ tels que $b$ et $d$ soient non nuls, $\\dfrac{a}{b}=\\dfrac{c}{d}$ si et seulement si $ad=bc$.`
         this.correction += `\\[
 \\begin{aligned}
 ${equation(true)}\\\\

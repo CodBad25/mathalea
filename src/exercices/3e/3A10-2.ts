@@ -1,4 +1,3 @@
-import { warnMessage } from '../../lib/format/message'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   combinaisonListesSansChangerOrdre,
@@ -8,7 +7,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { cribleEratostheneN } from '../../lib/outils/primalite'
 import { nombreAvecEspace } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
-import { itemize, listeQuestionsToContenu, randint } from '../../modules/outils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
   'Justifier si des nombres sont premiers ou pas - Variante avec les critères de divisibilité par 7 et par 11'
@@ -46,9 +45,6 @@ export default class PremierOuPasCriterePar7Par11 extends Exercice {
     this.nbQuestions = 7
 
     this.nbCols = 2
-
-    this.besoinFormulaireCaseACocher = ['Afficher un coup de pouce']
-    this.sup = true
   }
 
   nouvelleVersion() {
@@ -66,40 +62,6 @@ export default class PremierOuPasCriterePar7Par11 extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-
-    let stringRappelB = 'Ces critères de divisibilité pourront être utiles :'
-    if (context.isHtml) {
-      stringRappelB += '<br>'
-      stringRappelB +=
-        "- Un nombre est divisible par 7 si la somme de son nombre de dizaines et de cinq fois son chiffre des unités l'est.<br>"
-      stringRappelB +=
-        '- Un nombre est divisible par 11 si la différence entre la somme de ses chiffres de rangs pairs et la somme de ses chiffres de rangs impairs est nulle ou égale à un multiple de 11.'
-      stringRappelB += '<br> <br>'
-    } else {
-      stringRappelB += itemize([
-        "Un nombre est divisible par 7 si la somme de son nombre de dizaines et de cinq fois son chiffre des unités l'st.",
-        'Un nombre est divisible par 11 si la différence entre la somme de ses chiffres de rangs pairs et la somme de ses chiffres de rangs impairs est nulle ou égale à un multiple de 11.',
-      ])
-      stringRappelB += '\\par\\vspace{0.5cm}'
-    }
-    stringRappelB +=
-      'Ainsi que cette liste des nombres premiers inférieurs à 100 : '
-    if (context.isHtml) {
-      stringRappelB += '<br>'
-    } else {
-      stringRappelB += '\\par\\vspace{0.25cm}'
-    }
-    stringRappelB += prems[0]
-    for (let k = 1; k < 25; k++) {
-      stringRappelB += ', ' + prems[k]
-    }
-    stringRappelB += '.'
-
-    if (this.sup) {
-      this.introduction = warnMessage(stringRappelB, 'nombres', 'Coup de pouce')
-    } else {
-      this.introduction = ''
-    }
 
     for (
       let i = 0,

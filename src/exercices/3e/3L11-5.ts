@@ -1,4 +1,3 @@
-import { warnMessage } from '../../lib/format/message'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -71,44 +70,18 @@ export default class IdentitesCalculs extends Exercice {
       : 'sans calculatrice. Utiliser la double distributivité ou les identités remarquables.'
     let typesDeQuestionsDisponibles: number[] = []
 
-    // une fonction pour gérer un \hfill dans la sortie LaTeX
-    const myhfill = function () {
-      if (context.isHtml) {
-        return '<br><br>'
-      } else {
-        return '\\hfill'
-      }
-    }
     switch (Number(this.sup)) {
       case 1:
         typesDeQuestionsDisponibles = [0, 0, 0] // shuffle([choice([1,3]),choice([2,3]),0]);
-        this.introduction = this.can
-          ? ''
-          : warnMessage('$(a+b)^2=a^2+2ab+b^2$', 'nombres', 'Coup de pouce')
         break
       case 2:
         typesDeQuestionsDisponibles = [1, 1, 1] // shuffle([choice([1,3]),choice([2,3]),0]);
-        this.introduction = warnMessage(
-          '$(a-b)^2 = a^2-2ab+b^2$',
-          'nombres',
-          'Coup de pouce',
-        )
         break
       case 3:
         typesDeQuestionsDisponibles = [2, 2, 2] // shuffle([choice([1,3]),choice([2,3]),0]);
-        this.introduction = warnMessage(
-          '$(a+b)(a-b)=a^2-b^2$',
-          'nombres',
-          'Coup de pouce',
-        )
         break
       case 4:
         typesDeQuestionsDisponibles = shuffle([0, 1, 2]) // shuffle([choice([1,3]),choice([2,3]),0]);
-        this.introduction = warnMessage(
-          `$(a+b)^2 = a^2 +2ab + b^2$ ${myhfill()} $(a-b)^2 = a^2-2ab+b^2$ ${myhfill()} $(a+b)(a-b)=a^2-b^2$`,
-          'nombres',
-          'Coup de pouce',
-        )
         break
     }
 
