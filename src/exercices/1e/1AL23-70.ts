@@ -69,7 +69,7 @@ export default class TrouverEquationParabole extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number, b: number, c: number
@@ -164,7 +164,7 @@ ${f(x1) - f(-x1)}=${2 * x1}b
             texteCorr += `$${f(x3)}=a(${x3}${ecritureAlgebrique(-x1)})(${x3}${ecritureAlgebrique(-x2)})$ `
             texteCorr += `d'où $a=${f(x3)}\\div ${ecritureParentheseSiNegatif((x3 - x1) * (x3 - x2))}=${a}$.<br>`
           } else texteCorr += `$a=${a}$.<br>`
-          texteCorr += `On obtient ainsi $${fName[i]}(x)=${rienSi1(a)}(x${ecritureAlgebrique(-x1)})(x${ecritureAlgebrique(-x2)})$ ou en développant $${fName[i]}(x)=${rienSi1(a)}x^2 ${ecritureAlgebriqueSauf1(b)}x  ${ecritureAlgebrique(c)}$`
+          texteCorr += `On obtient ainsi $${fName[i]}(x)=${miseEnEvidence(`${rienSi1(a)}(x${ecritureAlgebrique(-x1)})(x${ecritureAlgebrique(-x2)})`)}$ ou en développant $${fName[i]}(x)=${miseEnEvidence(`${rienSi1(a)}x^2 ${ecritureAlgebriqueSauf1(b)}x  ${ecritureAlgebrique(c)}`)}$.`
           break
       }
       if (a < 0) {

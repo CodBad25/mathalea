@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -116,7 +117,7 @@ export default class Resolutionavecformecanonique extends Exercice {
       if (delta < 0) {
         texteCorr +=
           "<br>L'équation revient à ajouter deux nombres positifs, dont un non nul. Cette somme ne peut pas être égale à zéro."
-        texteCorr += '<br>On en déduit que $S=\\emptyset$'
+        texteCorr += `<br>On en déduit que $S=${miseEnEvidence(`\\emptyset`)}$`
         answer = '\\emptyset'
       } else if (delta > 0) {
         // Cas des deux solutions :
@@ -224,7 +225,7 @@ export default class Resolutionavecformecanonique extends Exercice {
         texteCorr += '<br> On applique la propriété du produit nul :' // fin de la rédaction
         texteCorr += `<br> Soit $x ${x1String}=0$, soit $x ${x2String}=0$` // on isole les facteurs nuls
         texteCorr += `<br> Soit $x = ${stringX1}$, soit $x = ${stringX2}$` // on écrit les solutions
-        texteCorr += `<br> $S =\\left\\{${stringX2};${stringX1}\\right\\}$` // Solution
+        texteCorr += `<br> $S =${miseEnEvidence(`\\left\\{${stringX2};${stringX1}\\right\\}`)}$` // Solution
         answer = `\\{${stringX2};${stringX1}\\}`
       } else {
         // cas de delta  = 0

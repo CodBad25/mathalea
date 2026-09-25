@@ -1,3 +1,7 @@
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -177,14 +181,14 @@ export default class ConvexitePolynomeExponentielle extends Exercice {
     Ce polynôme est du signe de son coefficient dominant $${texNombre(coefficientDominant)}$ à l'extérieur de ses racines.<br>
     On obtient le tableau récapitulatif suivant :<br><br>
     ${tableau}<br>
-    Ainsi, $f$ est ${coefficientDominant > 0 ? 'convexe' : 'concave'} sur $${intervallesExterieurs}$ et ${coefficientDominant > 0 ? 'concave' : 'convexe'} sur $${intervalleCentral}$.<br>
+    Ainsi, $f$ est ${texteEnCouleurEtGras(coefficientDominant > 0 ? 'convexe' : 'concave')} sur $${miseEnEvidence(intervallesExterieurs)}$ et ${texteEnCouleurEtGras(coefficientDominant > 0 ? 'concave' : 'convexe')} sur $${miseEnEvidence(intervalleCentral)}$.<br>
     La dérivée seconde s'annule et change de signe en $${texNombre(racine1)}$ et en $${texNombre(racine2)}$. La courbe $\\mathcal C_f$ admet donc deux points d'inflexion.<br>
     $\\begin{aligned}
     f(${texNombre(racine1)})&=${calculImage1}=${ordonnee1},\\\\
     f(${texNombre(racine2)})&=${calculImage2}=${ordonnee2}.
     \\end{aligned}$<br>
     Les points d'inflexion de la courbe $\\mathcal C_f$ ont donc pour coordonnées
-    $I_1\\left(${texNombre(racine1)}\\,;\\,${ordonnee1}\\right)$ et $I_2\\left(${texNombre(racine2)}\\,;\\,${ordonnee2}\\right)$.`
+    $I_1\\left(${miseEnEvidence(texNombre(racine1))}\\,;\\,${miseEnEvidence(ordonnee1)}\\right)$ et $I_2\\left(${miseEnEvidence(texNombre(racine2))}\\,;\\,${miseEnEvidence(ordonnee2)}\\right)$.`
 
     listeQuestionsToContenu(this)
   }

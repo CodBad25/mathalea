@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -93,7 +94,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
       correction1 += '<br>'
       correction1 += `$\\iff$ $x = ${alpha}$`
       correction1 += '<br>'
-      correction1 += `$S =\\left\\{${alpha}\\right\\}$`
+      correction1 += `$S =\\left\\{${miseEnEvidence(alpha)}\\right\\}$`
 
       const question2 = '$f(x) = 0$'
 
@@ -107,7 +108,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
       correction2 += '<br>'
       correction2 += `$\\iff$ $x = ${x2}$ ou $x = ${x1}$`
       correction2 += '<br>'
-      correction2 += `$S =\\left\\{${x2};${x1}\\right\\}$`
+      correction2 += `$S =\\left\\{${miseEnEvidence(x2)} ; ${miseEnEvidence(x1)}\\right\\}$`
 
       const question3 = `$f(x) = ${c}$`
 
@@ -129,7 +130,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
         correction3 += `$\\iff$ $x = 0$ ou $x = ${texNombre(-b / a, 0)}$`
         correction3 += '<br>'
       }
-      correction3 += `$S =\\left\\{0;${texNombre(-b / a)}\\right\\}$`
+      correction3 += `$S =\\left\\{${miseEnEvidence(0)} ; ${miseEnEvidence(texNombre(-b / a))}\\right\\}$`
 
       const question4 = `$f(x) = ${R}$`
 
@@ -149,7 +150,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
       correction4 += '<br>'
       correction4 += `$\\iff$ $x = ${alpha - Math.sqrt((R - beta) / a)}$ ou $x = ${alpha + Math.sqrt((R - beta) / a)}$`
       correction4 += '<br>'
-      correction4 += `$S =\\left\\{${alpha - Math.sqrt((R - beta) / a)};${alpha + Math.sqrt((R - beta) / a)}\\right\\}$`
+      correction4 += `$S =\\left\\{${miseEnEvidence(alpha - Math.sqrt((R - beta) / a))} ; ${miseEnEvidence(alpha + Math.sqrt((R - beta) / a))}\\right\\}$`
 
       this.listeQuestions.push(question1, question2, question3, question4)
       this.listeCorrections.push(
@@ -213,7 +214,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
       correction1 += '<br>'
       correction1 += `$\\iff$ $x = ${alpha}$`
       correction1 += '<br>'
-      correction1 += `$S =\\left\\{${alpha}\\right\\}$`
+      correction1 += `$S =\\left\\{${miseEnEvidence(alpha)}\\right\\}$`
 
       const question2 = '$f(x) = 0$'
 
@@ -229,7 +230,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
         correction2 += `$\\iff$ $(x ${ecritureAlgebrique(-alpha)})^2 = ${texFractionReduite(-beta, a)}$`
         correction2 += '<br>'
       }
-      correction2 += "Il n'y a pas de solution réelles. : $S=\\emptyset$"
+      correction2 += `Il n'y a pas de solution réelle : $S=${miseEnEvidence('\\emptyset')}$`
 
       const question3 = `$f(x) = ${c}$`
 
@@ -251,7 +252,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
         correction3 += `$\\iff$ $x = 0$ ou $x = ${texNombre(-b / a, 0)}$`
         correction3 += '<br>'
       }
-      correction3 += `$S =\\left\\{0;${texNombre(-b / a)}\\right\\}$`
+      correction3 += `$S =\\left\\{${miseEnEvidence(0)} ; ${miseEnEvidence(texNombre(-b / a))}\\right\\}$`
 
       const question4 = `$f(x) = ${R}$`
 
@@ -271,7 +272,7 @@ export default class ResolutionEquationDifferentesFormes extends Exercice {
       correction4 += '<br>'
       correction4 += `$\\iff$ $x = ${alpha - Math.sqrt((R - beta) / a)}$ ou $x = ${alpha + Math.sqrt((R - beta) / a)}$`
       correction4 += '<br>'
-      correction4 += `$S =\\left\\{${alpha - Math.sqrt((R - beta) / a)};${alpha + Math.sqrt((R - beta) / a)}\\right\\}$`
+      correction4 += `$S =\\left\\{${miseEnEvidence(alpha - Math.sqrt((R - beta) / a))} ; ${miseEnEvidence(alpha + Math.sqrt((R - beta) / a))}\\right\\}$`
 
       this.listeQuestions.push(question1, question2, question3, question4)
       this.listeCorrections.push(

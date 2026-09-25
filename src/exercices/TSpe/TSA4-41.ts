@@ -8,7 +8,10 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  texteEnCouleurEtGras,
+  miseEnEvidence,
+} from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
@@ -114,7 +117,7 @@ export default class ProblemePointFixe extends ExerciceSimple {
        &= \\dfrac{${determinant}}{(${reduireAxPlusB(c, d)})^2} \\\\
       \\end{aligned}  $ <br>
       Le dénominateur étant strictement positif sur l'intervalle ${I}, on a $f'(x)${determinant > 0 ? '>' : '<'}0$.<br>
-     La fonction $f$ est donc strictement ${variation} sur l'intervalle ${I}.<br>`
+     La fonction $f$ est donc strictement ${texteEnCouleurEtGras(variation)} sur l'intervalle ${I}.<br>`
 
     let reponse1b = `On résout sur ${I} :<br>
      $\\begin{aligned}
@@ -152,7 +155,7 @@ export default class ProblemePointFixe extends ExerciceSimple {
     } else {
       reponse1b += `et que $${l2.texFractionSimplifiee} \\notin [${alpha}~;~${beta}]$.<br>`
     }
-    reponse1b += `L'équation $f(x)=x$ admet donc $${nb}$ solution${nb > 1 ? 's' : ''} dans l'intervalle ${I}.<br>`
+    reponse1b += `L'équation $f(x)=x$ admet donc $${miseEnEvidence(nb)}$ solution${nb > 1 ? 's' : ''} dans l'intervalle ${I}.<br>`
 
     // *************.   Réponse question 2
     //
@@ -209,8 +212,8 @@ $f(${alpha}) \\leqslant f(u_{k+1})\\leqslant f(u_k) \\leqslant f(${beta}) $<br>
       Pour tout entier naturel $n$,  $u_{n+1} = f\\left(u_n\\right).$<br>
       $f$ étant dérivable sur l'intervalle ${I}, elle est continue sur ${I}.<br>
       D'après le théorème du point fixe, la limite $\\ell$ vérifie l'égalité $f(\\ell)=\\ell$.<br>
-     La seule solution de cette équation dans ${I} est $l=${l}$, d'aprèsla question 1.b.<br>
-     La suite $(u_n)$ converge donc vers $${l}$.<br>`
+     La seule solution de cette équation dans ${I} est $l=${l}$, d'après la question 1.b.<br>
+     La suite $(u_n)$ converge donc vers $${miseEnEvidence(l)}$.<br>`
 
     // *************.   CreateList réponses
     //

@@ -1,3 +1,7 @@
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisiDelta } from '../../lib/mathFonctions/outilsMaths'
@@ -90,8 +94,7 @@ export default class Resolutionavecformecanonique extends Exercice {
       if (delta < 0) {
         texteCorr +=
           "<br>Le discriminant étant négatif, d'après le cours, le polynôme n'admet aucune racine réelle."
-        texteCorr +=
-          "<br>On en déduit que le polynôme n'est pas factorisable sur $\\mathbb{R}$."
+        texteCorr += `<br>On en déduit que le polynôme ${texteEnCouleurEtGras("n'est pas factorisable")} sur $\\mathbb{R}$.`
       } else if (delta > 0) {
         // Cas des deux solutions :
         texteCorr +=
@@ -201,7 +204,7 @@ export default class Resolutionavecformecanonique extends Exercice {
           "<br> D'après le cours, on sait que le polynôme se factorise alors sous la forme : $a(x-x_1)(x-x_2)$"
         // x1String et x2String contiennent ce qui suit le x dans chaque facteur,
         // que les racines soient rationnelles ou irrationnelles, avec ou sans dénominateur.
-        texteCorr += `<br> Finalement, $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=${rienSi1(a)}\\left(x ${x1String}\\right)\\left(x ${x2String}\\right)$`
+        texteCorr += `<br> Finalement, $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=${miseEnEvidence(`${rienSi1(a)}\\left(x ${x1String}\\right)\\left(x ${x2String}\\right)`)}$.`
       }
       texte += ajouteChampTexteMathLive(
         this,

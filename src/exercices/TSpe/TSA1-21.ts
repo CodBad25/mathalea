@@ -6,7 +6,10 @@ import {
   combinaisonListes,
   shuffle,
 } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -275,8 +278,7 @@ export default class OperationsSurLesLimites extends Exercice {
         '\\right)$ ?'
       let texteCorr = donnees.justification
       if (donnees.conclusion === 'indeterminee') {
-        texteCorr +=
-          '<br>Les limites de $(u_n)$ et $(v_n)$ ne suffisent pas pour déterminer celle de l’expression.'
+        texteCorr += `<br>C'est une ${texteEnCouleurEtGras('forme indéterminée')} : les limites de $(u_n)$ et $(v_n)$ ne suffisent pas pour déterminer celle de l’expression.`
       } else {
         texteCorr +=
           '<br>Donc $\\displaystyle\\lim_{n\\to+\\infty}\\left(' +

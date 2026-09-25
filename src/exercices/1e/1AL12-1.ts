@@ -7,7 +7,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
@@ -93,7 +93,7 @@ export default class SensVariationsSuitesAG extends Exercice {
                   '<br>Déterminer, en justifiant, le sens de variation de cette suite.'
               }
               texteCorr = `On reconnaît la forme explicite d'une suite $(${NomS}_n)$ arithmétique de raison $r=${r}$ et de premier terme $${NomS}_0=${u0}$.<br>
-              Or $r${r > 0 ? '>' : '<'}0$, donc $(${NomS}_n)$ est une suite ${r > 0 ? `${texteEnCouleur('croissante.')}` : `${texteEnCouleur('décroissante.')}`}`
+              Or $r${r > 0 ? '>' : '<'}0$, donc $(${NomS}_n)$ est une suite ${r > 0 ? `${texteEnCouleurEtGras('croissante.')}` : `${texteEnCouleurEtGras('décroissante.')}`}`
               break
 
             default: // SA récurrente
@@ -107,7 +107,7 @@ export default class SensVariationsSuitesAG extends Exercice {
                   '<br>Déterminer, en justifiant, le sens de variation de cette suite.'
               }
               texteCorr = `On reconnaît la définition par récurrence d'une suite $(${NomS}_n)$ arithmétique de raison $${r}$ et de premier terme $${NomS}_0$.<br>
-              Or $r${r > 0 ? '>' : '<'}0$, donc $(${NomS}_n)$ est une suite ${r > 0 ? `${texteEnCouleur('croissante.')}` : `${texteEnCouleur('décroissante.')}`}`
+              Or $r${r > 0 ? '>' : '<'}0$, donc $(${NomS}_n)$ est une suite ${r > 0 ? `${texteEnCouleurEtGras('croissante.')}` : `${texteEnCouleurEtGras('décroissante.')}`}`
               break
           }
           this.autoCorrection[i] = {
@@ -154,13 +154,13 @@ export default class SensVariationsSuitesAG extends Exercice {
           texteCorr = `On reconnaît la forme explicite d'une suite $(${NomS}_n)$ géométrique de raison $q=${texNombre(q, 1)}$ et de premier terme $${NomS}_0=1$.<br>
            `
           if (q.comparedTo(1) === 1) {
-            texteCorr += `Or $q > 1$, donc $(${NomS})_n$ est une suite ${texteEnCouleur('croissante.')}`
+            texteCorr += `Or $q > 1$, donc $(${NomS})_n$ est une suite ${texteEnCouleurEtGras('croissante.')}`
           }
           if (q.lessThan(1) && q.greaterThan(0)) {
-            texteCorr += `Or $0 < q < 1$, donc $(${NomS}_n)$ est une suite ${texteEnCouleur('décroissante.')}`
+            texteCorr += `Or $0 < q < 1$, donc $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('décroissante.')}`
           }
           if (q.lessThan(0)) {
-            texteCorr += `Or $q < 0$, donc $(${NomS}_n)$ est une suite ${texteEnCouleur('ni croissante ni décroissante.')}`
+            texteCorr += `Or $q < 0$, donc $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('ni croissante ni décroissante.')}`
           }
 
           this.autoCorrection[i] = {
@@ -210,29 +210,29 @@ export default class SensVariationsSuitesAG extends Exercice {
               if (q.lessThan(1) && q.greaterThan(0) && u0 > 0) {
                 texteCorr += `La suite $(${texNombre(q, 1)}^n)$ est une suite décroissante.<br>
               En multipliant par un nombre positif (ici on multiplie par $${u0}$), le sens de variation ne change pas. <br>
-              On en déduit que $(${NomS})_n$ est une suite ${texteEnCouleur('décroissante.')}`
+              On en déduit que $(${NomS})_n$ est une suite ${texteEnCouleurEtGras('décroissante.')}`
               }
               if (q.lessThan(1) && q.greaterThan(0) && u0 < 0) {
                 texteCorr += `La suite $(${texNombre(q, 1)}^n)$ est une suite décroissante.<br>
               En multipliant par un nombre négatif (ici on multiplie par $${u0}$), le sens de variation  change. <br>
-              On en déduit que $(${NomS})_n$ est une suite ${texteEnCouleur('croissante.')}`
+              On en déduit que $(${NomS})_n$ est une suite ${texteEnCouleurEtGras('croissante.')}`
               }
 
               if (q.lessThan(0)) {
                 texteCorr += `La suite $(${texNombre(q, 1)}^n)$ est une suite ni croissante ni décroissante.<br>
                Le sens de variation ne change pas si on multiplie par $${u0}$. <br>
-              On en déduit que $(${NomS}_n)$ est une suite ${texteEnCouleur('ni croissante ni décroissante.')}`
+              On en déduit que $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('ni croissante ni décroissante.')}`
               }
 
               if (q.greaterThan(1) && u0 > 0) {
                 texteCorr += `La suite $(${texNombre(q, 1)}^n)$ est une suite croissante.<br>
               En multipliant par un nombre positif (ici on multiplie par $${u0}$), le sens de variation ne change pas. <br>
-              On en déduit que $(${NomS}_n)$ est une suite ${texteEnCouleur('croissante.')}`
+              On en déduit que $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('croissante.')}`
               }
               if (q.greaterThan(1) && u0 < 0) {
                 texteCorr += `La suite $(${texNombre(q, 1)}^n)$ est une suite croissante.<br>
               En multipliant par un nombre négatif (ici on multiplie par $${u0}$), le sens de variation  change. <br>
-              On en déduit que $(${NomS}_n)$ est une suite ${texteEnCouleur('décroissante.')}`
+              On en déduit que $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('décroissante.')}`
               }
 
               break
@@ -259,21 +259,21 @@ export default class SensVariationsSuitesAG extends Exercice {
               texteCorr = `On reconnaît la définition par récurrence d'une suite $(${NomS}_n)$ géométrique de raison $q=${texNombre(q, 1)}$ et de premier terme $${NomS}_0=${u0}$.<br>`
 
               if (q.lessThan(1) && q.greaterThan(0) && u0 > 0) {
-                texteCorr += `Puisque $0 < q < 1$ et $${NomS}_0 >0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleur('décroissante.')}`
+                texteCorr += `Puisque $0 < q < 1$ et $${NomS}_0 >0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('décroissante.')}`
               }
               if (q.lessThan(1) && q.greaterThan(0) && u0 < 0) {
-                texteCorr += `Puisque $0 < q < 1$ et $${NomS}_0 <0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleur('croissante.')}`
+                texteCorr += `Puisque $0 < q < 1$ et $${NomS}_0 <0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('croissante.')}`
               }
 
               if (q.lessThan(0)) {
-                texteCorr += `Puisque $q < 0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleur('ni croissante ni décroissante.')}`
+                texteCorr += `Puisque $q < 0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('ni croissante ni décroissante.')}`
               }
 
               if (q.greaterThan(1) && u0 > 0) {
-                texteCorr += `Puisque $q > 1$ et $${NomS}_0 > 0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleur('croissante.')}`
+                texteCorr += `Puisque $q > 1$ et $${NomS}_0 > 0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('croissante.')}`
               }
               if (q.greaterThan(1) && u0 < 0) {
-                texteCorr += `Puisque $q > 1$ et $${NomS}_0 < 0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleur('décroissante.')}`
+                texteCorr += `Puisque $q > 1$ et $${NomS}_0 < 0$,  la suite $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('décroissante.')}`
               }
 
               break

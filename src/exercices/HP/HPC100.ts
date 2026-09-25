@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -63,7 +64,7 @@ export default class DivisionDePolynomes extends Exercice {
       texteCorr += `\\phantom{-(${dividende.monomes[3]}x^3-(${prod2.monomes[2]}^2)}${dividende3.toLatex()} & \\\\`
       texteCorr += `\\phantom{-(${dividende.monomes[3]}x^3-(${prod2.monomes[2]}^2}\\underline{-(${prod4.toLatex()})} & \\\\`
       texteCorr += `\\phantom{-(${dividende.monomes[3]}x^3-(${prod2.monomes[2]}^2)-(${prod3.monomes[1]}x}0 & \\end{array}$`
-      texteCorr += `<br>D'où $Q(x)=${quotient.toLatex()}$`
+      texteCorr += `<br>D'où $Q(x)=${miseEnEvidence(quotient.toLatex())}$.`
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre
