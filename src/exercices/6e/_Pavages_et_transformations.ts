@@ -1017,7 +1017,7 @@ export default class PavagesEtTransformations extends Exercice {
         texteCorr =
           numAlpha(0) +
           texteEnCouleurEtGras(
-            ` La figure symétrique de la figure ${numA} dans la symétrie de centre ${s0} porte le numéro ${num1}.<br>`,
+            ` La figure symétrique de la figure ${numA} dans la symétrie de centre ${s0} porte le numéro ${texteEnCouleurEtGras(String(num1))}.<br>`,
             context.isAmc ? 'black' : 'green',
           )
         // Deuxième question : une figure dans tabfigD, une symétrie par rapport au milieu d'un [C'D'], le résultat est une figure dans tabfigA et C' est l'image de D !
@@ -1078,7 +1078,7 @@ export default class PavagesEtTransformations extends Exercice {
         texteCorr +=
           numAlpha(1) +
           texteEnCouleurEtGras(
-            ` La figure symétrique de la figure ${numD} dans la symétrie de centre ${s1} porte le numéro ${num2}.<br>`,
+            ` La figure symétrique de la figure ${numD} dans la symétrie de centre ${s1} porte le numéro ${texteEnCouleurEtGras(String(num2))}.<br>`,
             context.isAmc ? 'black' : 'red',
           )
         // troisième question : une figure dans tabfigC, une symétrie par rapport au symétrique du milieu de [A'D'] par rapport au milieu de [C'D']... pas très clair
@@ -1151,7 +1151,7 @@ export default class PavagesEtTransformations extends Exercice {
         texteCorr +=
           numAlpha(2) +
           texteEnCouleurEtGras(
-            ` La figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} porte le numéro ${num3}.<br>`,
+            ` La figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} porte le numéro ${texteEnCouleurEtGras(String(num3))}.<br>`,
             context.isAmc ? 'black' : bleuMathalea,
           )
         labelCentre1 = tracePoint(centre1, 'red')
@@ -1376,7 +1376,7 @@ export default class PavagesEtTransformations extends Exercice {
         texteCorr =
           numAlpha(0) +
           texteEnCouleurEtGras(
-            ` La figure image de la figure ${numA}  dans la translation qui transforme la figure ${tabfigB[iB1][2]} en la figure ${tabfigB[iB2][2]} porte le numéro ${num1}.<br>`,
+            ` La figure image de la figure ${numA}  dans la translation qui transforme la figure ${tabfigB[iB1][2]} en la figure ${tabfigB[iB2][2]} porte le numéro ${texteEnCouleurEtGras(String(num1))}.<br>`,
             context.isAmc ? 'black' : 'green',
           )
         // Deuxième question : une figure dans tabfigD, l'image dans tabfigB...
@@ -1451,7 +1451,7 @@ export default class PavagesEtTransformations extends Exercice {
         texteCorr +=
           numAlpha(1) +
           texteEnCouleurEtGras(
-            ` La figure image de la figure ${numD}  dans la translation qui transforme la figure ${tabfigC[iC1][2]} en la figure ${tabfigA[iA1][2]} porte le numéro ${num2}.<br>`,
+            ` La figure image de la figure ${numD}  dans la translation qui transforme la figure ${tabfigC[iC1][2]} en la figure ${tabfigA[iA1][2]} porte le numéro ${texteEnCouleurEtGras(String(num2))}.<br>`,
             context.isAmc ? 'black' : 'red',
           )
 
@@ -1537,7 +1537,7 @@ export default class PavagesEtTransformations extends Exercice {
         texteCorr +=
           numAlpha(2) +
           texteEnCouleurEtGras(
-            ` La figure image de la figure ${numC}  dans la translation qui transforme la figure ${tabfigC[iD1][2]} en la figure ${tabfigA[iB3][2]} porte le numéro ${num3}.<br>`,
+            ` La figure image de la figure ${numC}  dans la translation qui transforme la figure ${tabfigC[iD1][2]} en la figure ${tabfigA[iB3][2]} porte le numéro ${texteEnCouleurEtGras(String(num3))}.<br>`,
             context.isAmc ? 'black' : bleuMathalea,
           )
 

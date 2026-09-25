@@ -3,7 +3,7 @@ import {
   listeDeroulanteToQcm,
 } from '../../lib/customElements/ListeDeroulanteElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import {
@@ -98,9 +98,7 @@ export default class DeterminerDerniereOperationExpressionLitterale extends Exer
       texteCorr += `<br>Le calcul serait le suivant : ${expc}.`
       texteCorr +=
         "<br>Pour n'importe quelles valeurs de $x$ et de $y$ choisies, les étapes sont les mêmes, elles respectent les priorités opératoires."
-      texteCorr += texteEnCouleur(
-        `<br>La dernière opération dans ${expn} est une ${lastOp}.`,
-      )
+      texteCorr += `<br>La dernière opération dans ${expn} est une ${texteEnCouleurEtGras(String(lastOp))}.`
       let choix: {
         label: string
         value: string

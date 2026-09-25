@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { cercle, cercleCentrePoint } from '../../lib/2d/cercle'
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { codageSegments } from '../../lib/2d/CodageSegment'
@@ -211,7 +212,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
           )
           animIEP.parallelogramme3sommetsConsecutifs(D, A, B, C.nom)
           if (this.sup3) {
-            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${cellule} de la cible.<br>`
+            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${texteEnCouleurEtGras(cellule)} de la cible.<br>`
             objetsEnonce.push(cible)
             objetsCorrection.push(cible)
           }
@@ -251,7 +252,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
             codageSegments('///', bleuMathalea, A, D, B, C),
           )
           if (this.sup3) {
-            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${cellule} de la cible.<br>`
+            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${texteEnCouleurEtGras(cellule)} de la cible.<br>`
             objetsEnonce.push(cible)
             objetsCorrection.push(cible)
           }
@@ -281,8 +282,8 @@ export default class ConstructionsParallelogrammes extends Exercice {
             codageSegments('|||', bleuMathalea, B, O, O, D),
           )
           if (this.sup3) {
-            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${cellule} de la cible 1.<br>`
-            texteCorr += `Le point $${noms[3]}$ se trouve dans la case ${cellule2} de la cible 2.<br>`
+            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${texteEnCouleurEtGras(cellule)} de la cible 1.<br>`
+            texteCorr += `Le point $${noms[3]}$ se trouve dans la case ${texteEnCouleurEtGras(cellule2)} de la cible 2.<br>`
             objetsEnonce.push(cible, cible2)
             objetsCorrection.push(cible, cible2)
           }
@@ -334,9 +335,9 @@ export default class ConstructionsParallelogrammes extends Exercice {
             codageSegments('||', 'red', A, O, O, C),
           )
           if (this.sup3) {
-            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${cellule} de la cible 1.<br>`
-            texteCorr += `Le point $${noms[3]}$ se trouve dans la case ${cellule2} de la cible 2.<br>`
-            texteCorr += `Le point $${noms[1]}$ se trouve dans la case ${cellule3} de la cible 3.<br>`
+            texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${texteEnCouleurEtGras(cellule)} de la cible 1.<br>`
+            texteCorr += `Le point $${noms[3]}$ se trouve dans la case ${texteEnCouleurEtGras(cellule2)} de la cible 2.<br>`
+            texteCorr += `Le point $${noms[1]}$ se trouve dans la case ${texteEnCouleurEtGras(cellule3)} de la cible 3.<br>`
             objetsEnonce.push(cible, cible2, cible3)
             objetsCorrection.push(cible, cible2, cible3)
           }

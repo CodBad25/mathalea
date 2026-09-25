@@ -277,11 +277,11 @@ class AgrandirReduireFigure extends Exercice {
                     : ''
               }
               texteCorr += '.<br>'
-              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}$`
+              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${miseEnEvidence(texNombre(reponse))}$`
               if (choixAgrandissementOuReduction === 6) {
-                texteCorr += ` ou bien $(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${texNombre(reponse)}$`
+                texteCorr += ` ou bien $(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse))}$`
               } else if (choixAgrandissementOuReduction >= 4) {
-                texteCorr += ` ou bien $${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse)}$`
+                texteCorr += ` ou bien $${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse))}$`
               }
               texteCorr += `<br>Le triangle équilatéral issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du triangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur $${miseEnEvidence(texNombre(reponse))}$.`
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
@@ -491,11 +491,11 @@ class AgrandirReduireFigure extends Exercice {
                     : ''
               }
               texteCorr += '.<br>'
-              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}$`
+              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${miseEnEvidence(texNombre(reponse))}$`
               if (choixAgrandissementOuReduction === 6) {
-                texteCorr += ` ou bien $(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${texNombre(reponse)}$`
+                texteCorr += ` ou bien $(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse))}$`
               } else if (choixAgrandissementOuReduction >= 4) {
-                texteCorr += ` ou bien $${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse)}$`
+                texteCorr += ` ou bien $${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse))}$`
               }
               texteCorr += `<br>Le carré issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du carré ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur $${miseEnEvidence(texNombre(reponse))}$.`
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
@@ -837,17 +837,17 @@ class AgrandirReduireFigure extends Exercice {
                     : ''
               }
               texteCorr += '.<br>'
-              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}${sp(10)}${absD} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse2)}$`
+              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}${sp(10)}${absD} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${miseEnEvidence(texNombre(reponse2))}$`
               if (choixAgrandissementOuReduction === 6) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${texNombre(reponse)}$`
-                texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${texNombre(reponse1)}$`
-                texteCorr += `${sp(10)}$(${absD} \\div 4) \\times 3=${texNombre(arrondi(absD / 4, 1))} \\times 3=${texNombre(reponse2)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse))}$`
+                texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse1))}$`
+                texteCorr += `${sp(10)}$(${absD} \\div 4) \\times 3=${texNombre(arrondi(absD / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse2))}$`
               } else if (choixAgrandissementOuReduction >= 4) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse)}$`
-                texteCorr += `${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse1)}$`
-                texteCorr += `${sp(10)}$${absD} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse2)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse))}$`
+                texteCorr += `${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse1))}$`
+                texteCorr += `${sp(10)}$${absD} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse2))}$`
               }
-              texteCorr += `<br>Le triangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du triangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${texNombre(reponse)}$ ; $${texNombre(reponse1)}$ et $${texNombre(reponse2)}$.`
+              texteCorr += `<br>Le triangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du triangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${texNombre(reponse)}$ ; $${texNombre(reponse1)}$ et $${miseEnEvidence(texNombre(reponse2))}$.`
               texteCorr += '<br>' + correctionParticularite
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(polygoneCorr)
@@ -1119,15 +1119,15 @@ class AgrandirReduireFigure extends Exercice {
                     ? ' puis multiplier chacun de ces résultats par 3'
                     : ''
               }
-              texteCorr += `.<br>$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}$`
+              texteCorr += `.<br>$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${miseEnEvidence(texNombre(reponse1))}$`
               if (choixAgrandissementOuReduction === 6) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${texNombre(reponse)}$`
-                texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${texNombre(reponse1)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse))}$`
+                texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse1))}$`
               } else if (choixAgrandissementOuReduction >= 4) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse)}$`
-                texteCorr += `${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse1)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse))}$`
+                texteCorr += `${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse1))}$`
               }
-              texteCorr += `<br>Le triangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du triangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${texNombre(reponse2)}$ ; $${texNombre(reponse1)}$ et $${texNombre(reponse)}$.`
+              texteCorr += `<br>Le triangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du triangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${texNombre(reponse2)}$ ; $${texNombre(reponse1)}$ et $${miseEnEvidence(texNombre(reponse))}$.`
               texteCorr += '<br>' + correctionParticularite
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(polygoneCorr)
@@ -1402,15 +1402,15 @@ class AgrandirReduireFigure extends Exercice {
                     : ''
               }
               texteCorr += '.<br>'
-              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}$`
+              texteCorr += `$${absB} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse)}${sp(10)}${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${miseEnEvidence(texNombre(reponse1))}$`
               if (choixAgrandissementOuReduction === 6) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${texNombre(reponse)}$`
-                texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${texNombre(reponse1)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absB} \\div 4) \\times 3=${texNombre(arrondi(absB / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse))}$`
+                texteCorr += `${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse1))}$`
               } else if (choixAgrandissementOuReduction >= 4) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse)}$`
-                texteCorr += `${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse1)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absB} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse))}$`
+                texteCorr += `${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse1))}$`
               }
-              texteCorr += `<br>Le rectangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${texNombre(reponse)}$ et $${texNombre(reponse1)}$.`
+              texteCorr += `<br>Le rectangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${texNombre(reponse)}$ et $${miseEnEvidence(texNombre(reponse1))}$.`
               texteCorr += '<br>' + correctionParticularite
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(polygoneCorr)
@@ -1684,11 +1684,11 @@ class AgrandirReduireFigure extends Exercice {
                     : ''
               }
               texteCorr += '.<br>'
-              texteCorr += `$${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${texNombre(reponse1)}$`
+              texteCorr += `$${absC} \\times ${coefAgrandissement[choixAgrandissementOuReduction]}=${miseEnEvidence(texNombre(reponse1))}$`
               if (choixAgrandissementOuReduction === 6) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${texNombre(reponse1)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$(${absC} \\div 4) \\times 3=${texNombre(arrondi(absC / 4, 1))} \\times 3=${miseEnEvidence(texNombre(reponse1))}$`
               } else if (choixAgrandissementOuReduction >= 4) {
-                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${texNombre(reponse1)}$`
+                texteCorr += `${sp(10)} ou bien ${sp(10)}$${absC} \\div ${coefReduction[choixAgrandissementOuReduction - 4].den}=${miseEnEvidence(texNombre(reponse1))}$`
               }
               texteCorr += `<br>Le rectangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${miseEnEvidence(texNombre(reponse))}$ et $${miseEnEvidence(texNombre(reponse1))}$.`
               texteCorr += '<br>En voici, une réalisation ci-dessous.'

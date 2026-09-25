@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -134,7 +135,7 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
           e,
         )}$`
         texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)} = ${texNombre(sommeDesTermesParSigne([a, b, c, d, e])[0], 2)}${ecritureAlgebrique(sommeDesTermesParSigne([a, b, c, d, e])[1])} $`
-        texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)} = ${texNombre(a + b + c + d + e, 2)}$`
+        texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(texNombre(a + b + c + d + e, 2))}$`
       } else if (this.sup2 === 2) {
         texte = `$ ${lettreDepuisChiffre(i + 1)} = ${texNombre(a, 2)} + ${ecritureParentheseSiNegatif(b)} + ${ecritureParentheseSiNegatif(c)} + ${ecritureParentheseSiNegatif(d)} + ${ecritureParentheseSiNegatif(
           e,
@@ -144,7 +145,7 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
           e,
         )}$`
         texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)} = ${texNombre(sommeDesTermesParSigne([a, b, c, d, e])[0], 2)} + ${ecritureParentheseSiNegatif(sommeDesTermesParSigne([a, b, c, d, e])[1])}$`
-        texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)} = ${texNombre(a + b + c + d + e, 2)} $`
+        texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(texNombre(a + b + c + d + e, 2))} $`
       } else if (this.sup2 === 1) {
         texte = `$ ${lettreDepuisChiffre(i + 1)} =  ${ecritureNombreRelatif(a)}${signe(s1)}${ecritureNombreRelatif(b)}${signe(s2)}${ecritureNombreRelatif(
           c,
@@ -171,11 +172,11 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
           sommesSignees[0] = arrondi(sommesSignees[0], 2)
           sommesSignees[1] = arrondi(sommesSignees[1], 2)
           texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)}= ${ecritureNombreRelatifc(sommesSignees[0])}+${ecritureNombreRelatifc(sommesSignees[1])} $`
-          texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)}= ${ecritureAlgebriquec(arrondi(a + s1 * b + s2 * c + s3 * d + s4 * e, 2))}$<br>`
+          texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)}= ${miseEnEvidence(ecritureAlgebrique(arrondi(a + s1 * b + s2 * c + s3 * d + s4 * e, 2)))}$<br>`
         } else if (sommesSignees[0] !== 0) {
-          texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)}=${ecritureAlgebriquec(sommesSignees[0])}$`
+          texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(ecritureAlgebrique(sommesSignees[0]))}$`
         } else {
-          texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)}=${ecritureAlgebriquec(sommesSignees[1])}$<br>`
+          texteCorr += `<br>$ ${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(ecritureAlgebrique(sommesSignees[1]))}$<br>`
         }
       }
 

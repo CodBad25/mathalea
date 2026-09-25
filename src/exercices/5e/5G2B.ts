@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   gestionnaireFormulaireTexte,
@@ -671,17 +672,17 @@ export default class longueursPatronsCylindre extends Exercice {
           })
           if (listeTypeBaseCylindre[i] === 'rayon') {
             texteCorr += `Le rayon du cercle de base est $${texNombre(rEx, 1)}${sp()}\\text{cm}$<br>`
-            texteCorr += `Le diamètre du cercle de base est $2 \\times ${texNombre(rEx, 1)} = ${texNombre(2 * rEx, 1)}${sp()}\\text{cm}$.<br>`
+            texteCorr += `Le diamètre du cercle de base est $2 \\times ${texNombre(rEx, 1)} = ${miseEnEvidence(texNombre(2 * rEx, 1))}${sp()}\\text{cm}$.<br>`
           } else {
             // 'diametre'
             texteCorr += `Le diamètre du cercle de base est $${texNombre(2 * rEx, 1)}${sp()}\\text{cm}$.<br>`
-            texteCorr += `Le rayon du cercle de base est $${texNombre(2 * rEx, 1)} \\div 2 = ${texNombre(rEx, 1)}${sp()}\\text{cm}$.<br>`
+            texteCorr += `Le rayon du cercle de base est $${texNombre(2 * rEx, 1)} \\div 2 = ${miseEnEvidence(texNombre(rEx, 1))}${sp()}\\text{cm}$.<br>`
           }
-          texteCorr += `La largeur du rectangle est égale à la hauteur du cylindre soit $${texNombre(hEx, 1)}${sp()}\\text{cm}$.<br>`
+          texteCorr += `La largeur du rectangle est égale à la hauteur du cylindre soit $${miseEnEvidence(texNombre(hEx, 1))}${sp()}\\text{cm}$.<br>`
           texteCorr += `La longueur du rectangle est égale à la longueur du cercle de base soit $2 \\times ${texNombre(rEx, 1)}\\times \\pi=${texNombre(
             2 * rEx,
             1,
-          )}\\pi\\approx${texNombre(perimetre, 1)}${sp()}\\text{cm}$.<br>`
+          )}\\pi\\approx${miseEnEvidence(texNombre(perimetre, 1))}${sp()}\\text{cm}$.<br>`
           texteCorr += '<br><br>'
           texteCorr += deuxColonnesResp(rColonne1, rColonne2, {
             largeur1: largeurCol,
@@ -713,11 +714,11 @@ export default class longueursPatronsCylindre extends Exercice {
             widthmincol2: '0px',
           })
           const approxDiametre = arrondi(perimetre / Math.PI, 1)
-          texteCorr += `La hauteur du cylindre est égale à la largeur du rectangle soit $${texNombre(hEx, 1)}${sp()}\\text{cm}$.<br>`
+          texteCorr += `La hauteur du cylindre est égale à la largeur du rectangle soit $${miseEnEvidence(texNombre(hEx, 1))}${sp()}\\text{cm}$.<br>`
           texteCorr += `La longueur du rectangle est égale à la longueur du cercle de base, on a donc l'égalité $diametre \\times \\pi=${texNombre(perimetre, 1)}${sp()}\\text{cm}$.<br>`
-          texteCorr += `Donc la longueur du diamètre est égale à  $${texNombre(perimetre, 1)} \\div  \\pi \\approx${texNombre(approxDiametre)}${sp()}\\text{cm}$.<br>`
+          texteCorr += `Donc la longueur du diamètre est égale à  $${texNombre(perimetre, 1)} \\div  \\pi \\approx${miseEnEvidence(texNombre(approxDiametre))}${sp()}\\text{cm}$.<br>`
           if (listeTypeBaseCylindre[i] === 'rayon') {
-            texteCorr += `Donc la longueur du rayon est donc approximativement égale à $${texNombre(approxDiametre)} \\div 2 = ${texNombre(approxDiametre / 2, 1)}${sp()}\\text{cm}$.<br>`
+            texteCorr += `Donc la longueur du rayon est donc approximativement égale à $${texNombre(approxDiametre)} \\div 2 = ${miseEnEvidence(texNombre(approxDiametre / 2, 1))}${sp()}\\text{cm}$.<br>`
           }
           texteCorr += '<br><br>'
           texteCorr += deuxColonnesResp(rColonne1, rColonne2, {

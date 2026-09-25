@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -158,7 +159,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
         resultat = a.mul(prefixeMulti[k][2])
         texte = `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = \\dotfill ${texTexte(unite)}^3$`
         texteCorr = withTableauCorr
-          ? `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = ${texNombre(a, 3)}${prefixeMulti[k][1]}${texTexte(unite)}^3 = ${texNombre(resultat, 20)}${texTexte(unite)}^3$<br>`
+          ? `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = ${texNombre(a, 3)}${prefixeMulti[k][1]}${texTexte(unite)}^3 = ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(unite)}^3$<br>`
           : ''
 
         texteCorr += withTableauCorr
@@ -170,7 +171,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
               2,
               true,
             )
-          : `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = ${texNombre(a, 3)}\\times1 ${texTexte(prefixeMulti[k][0] + unite)} \\times1${texTexte(prefixeMulti[k][0] + unite)} \\times1 ${texTexte(prefixeMulti[k][0] + unite)}= ${texNombre(a, 3)}${prefixeMulti[k][3]}${texTexte(unite)} ${prefixeMulti[k][3]}${texTexte(unite)} ${prefixeMulti[k][3]}${texTexte(unite)} = ${texNombre(a, 3)}\\times${texNombre(Number(prefixeMulti[k][2]), 9)} ${texTexte(unite)}^3= ${texNombre(resultat, 20)}${texTexte(unite)}^3$`
+          : `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = ${texNombre(a, 3)}\\times1 ${texTexte(prefixeMulti[k][0] + unite)} \\times1${texTexte(prefixeMulti[k][0] + unite)} \\times1 ${texTexte(prefixeMulti[k][0] + unite)}= ${texNombre(a, 3)}${prefixeMulti[k][3]}${texTexte(unite)} ${prefixeMulti[k][3]}${texTexte(unite)} ${prefixeMulti[k][3]}${texTexte(unite)} = ${texNombre(a, 3)}\\times${texNombre(Number(prefixeMulti[k][2]), 9)} ${texTexte(unite)}^3= ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(unite)}^3$`
       } else if (div && typesDeQuestions < 4) {
         k = randint(0, 1) // Pas de conversions de mm^3 en m^3 avec des nombres décimaux car résultat inférieur à 10e-8
         // Le commentaire précédent est sans objet avec Decimal, on peut afficher ici 20 chiffres après la virgule sans passer en notation scientifique !
@@ -178,7 +179,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
         texte = `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 = \\dotfill ${texTexte(unite)}^3$`
 
         texteCorr = withTableauCorr
-          ? `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 = ${texNombre(a, 3)}${prefixeDiv[k][1]}${texTexte(unite)}^3 = ${texNombre(resultat, 20)}${texTexte(unite)}^3$<br>`
+          ? `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 = ${texNombre(a, 3)}${prefixeDiv[k][1]}${texTexte(unite)}^3 = ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(unite)}^3$<br>`
           : ''
         texteCorr += withTableauCorr
           ? buildTab(
@@ -189,7 +190,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
               2,
               true,
             )
-          : `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 =${texNombre(a, 3)}\\times1${texTexte(prefixeDiv[k][0] + unite)}\\times1${texTexte(prefixeDiv[k][0] + unite)}\\times1${texTexte(prefixeDiv[k][0] + unite)}= ${texNombre(a, 3)}${prefixeDiv[k][3]}${texTexte(unite)} ${prefixeDiv[k][3]}${texTexte(unite)} ${prefixeDiv[k][3]}${texTexte(unite)} = ${texNombre(a, 3)}\\times${texNombre(1 / Number(prefixeDiv[k][2]), 9)} ${texTexte(unite)}^3= ${texNombre(resultat, 20)}${texTexte(unite)}^3$`
+          : `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 =${texNombre(a, 3)}\\times1${texTexte(prefixeDiv[k][0] + unite)}\\times1${texTexte(prefixeDiv[k][0] + unite)}\\times1${texTexte(prefixeDiv[k][0] + unite)}= ${texNombre(a, 3)}${prefixeDiv[k][3]}${texTexte(unite)} ${prefixeDiv[k][3]}${texTexte(unite)} ${prefixeDiv[k][3]}${texTexte(unite)} = ${texNombre(a, 3)}\\times${texNombre(1 / Number(prefixeDiv[k][2]), 9)} ${texTexte(unite)}^3= ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(unite)}^3$`
       } else {
         const unite1 = randint(0, 3)
         let ecart = randint(1, 2) // nombre de multiplication par 10 pour passer de l`un à l`autre
@@ -205,7 +206,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
           resultat = a.mul(10 ** (3 * ecart))
           texte = `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 = \\dotfill ${texTexte(listeUnite[unite1])}^3$`
           texteCorr = withTableauCorr
-            ? `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 = ${texNombre(a, 3)}${new Array(ecart).fill(multiplicationsPar1000).join(' ')}${texTexte(listeUnite[unite1])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite1])}^3$<br>`
+            ? `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 = ${texNombre(a, 3)}${new Array(ecart).fill(multiplicationsPar1000).join(' ')}${texTexte(listeUnite[unite1])}^3 = ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(listeUnite[unite1])}^3$<br>`
             : ''
           texteCorr += withTableauCorr
             ? buildTab(
@@ -216,13 +217,13 @@ export default class ExerciceConversionsVolumes extends Exercice {
                 2,
                 true,
               )
-            : `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 =  ${texNombre(a, 3)}\\times1${texTexte(listeUnite[unite2])}\\times1${texTexte(listeUnite[unite2])}\\times1${texTexte(listeUnite[unite2])}= ${texNombre(a, 3)}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])} = ${texNombre(a, 3)}\\times${texNombre(10 ** (3 * ecart), 0)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite1])}^3$`
+            : `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 =  ${texNombre(a, 3)}\\times1${texTexte(listeUnite[unite2])}\\times1${texTexte(listeUnite[unite2])}\\times1${texTexte(listeUnite[unite2])}= ${texNombre(a, 3)}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])} = ${texNombre(a, 3)}\\times${texNombre(10 ** (3 * ecart), 0)}${texTexte(listeUnite[unite1])}^3 = ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(listeUnite[unite1])}^3$`
         } else {
           multiplicationsPar1000 = `\\div 1{\\,}000`
           resultat = a.div(10 ** (3 * ecart))
           texte = `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = \\dotfill ${texTexte(listeUnite[unite2])}^3$`
           texteCorr = withTableauCorr
-            ? `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(a, 3)}${new Array(ecart).fill(multiplicationsPar1000).join(' ')}${texTexte(listeUnite[unite2])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite2])}^3$<br>`
+            ? `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(a, 3)}${new Array(ecart).fill(multiplicationsPar1000).join(' ')}${texTexte(listeUnite[unite2])}^3 = ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(listeUnite[unite2])}^3$<br>`
             : ''
           texteCorr += withTableauCorr
             ? buildTab(
@@ -233,7 +234,7 @@ export default class ExerciceConversionsVolumes extends Exercice {
                 2,
                 true,
               )
-            : `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(a, 3)}\\times1${texTexte(listeUnite[unite1])}\\times1${texTexte(listeUnite[unite1])}\\times1${texTexte(listeUnite[unite1])} = ${texNombre(a, 3)}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])} = ${texNombre(a, 3)}\\times${texNombre(10 ** (-3 * ecart), 9)}${texTexte(listeUnite[unite2])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite2])}^3$`
+            : `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(a, 3)}\\times1${texTexte(listeUnite[unite1])}\\times1${texTexte(listeUnite[unite1])}\\times1${texTexte(listeUnite[unite1])} = ${texNombre(a, 3)}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])} = ${texNombre(a, 3)}\\times${texNombre(10 ** (-3 * ecart), 9)}${texTexte(listeUnite[unite2])}^3 = ${miseEnEvidence(texNombre(resultat, 20))}${texTexte(listeUnite[unite2])}^3$`
         }
       }
 
