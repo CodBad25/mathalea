@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
@@ -142,7 +143,7 @@ export default class SignefonctionaffineVariation extends Exercice {
           est donc soit strictement croissante, soit strictement décroissante.<br>
          On observe que $${sol}<${x}$ implique ${a > 0 ? `$${nom}(${sol}) < ${nom}(${x})$` : `$${nom}(${sol}) > ${nom}(${x})$`}.<br>
           Les images et les antécédents sont donc rangés ${a > 0 ? 'dans le même ordre' : "dans l'ordre inverse"}.<br>
-          On en déduit que la fonction $${nom}$ est${a > 0 ? 'croissante' : 'décroissante'} sur $\\mathbb R$.<br>
+          On en déduit que la fonction $${nom}$ est ${texteEnCouleurEtGras(a > 0 ? 'croissante' : 'décroissante')} sur $\\mathbb R$.<br>
           Les images sont donc ${a > 0 ? "d'abord négatives, puis positives" : "d'abord positives, puis négatives"}.<br>
           Sachant que $${nom}$ s'annule en $${texNombre(sol, 1)}$, le changement de signe intervient donc en $x=${texNombre(sol, 1)}$. <br>
           On obtient ainsi le tableau de signes suivant : <br>
@@ -152,7 +153,7 @@ export default class SignefonctionaffineVariation extends Exercice {
            est donc soit strictement croissante, soit strictement décroissante.<br>
            On observe que $${x}<${sol}$ implique ${a > 0 ? `$${nom}(${x}) < ${nom}(${sol})$` : `$${nom}(${x}) > ${nom}(${sol})$`}.<br>
           Les images et les antécédents sont donc rangés ${a > 0 ? 'dans le même ordre' : "dans l'ordre inverse"}.<br>
-          On en déduit que la fonction $${nom}$ est${a > 0 ? 'croissante' : 'décroissante'} sur $\\mathbb R$.<br>
+          On en déduit que la fonction $${nom}$ est ${texteEnCouleurEtGras(a > 0 ? 'croissante' : 'décroissante')} sur $\\mathbb R$.<br>
 
            Les images sont ${a > 0 ? "d'abord négatives, puis positives" : "d'abord positives, puis négatives"}.<br>
            Sachant que $${nom}$ s'annule en $${texNombre(sol, 1)}$, le changement de signe intervient donc en $x=${texNombre(sol, 1)}$. <br>
@@ -245,7 +246,7 @@ export default class SignefonctionaffineVariation extends Exercice {
             texte += `<br> ${numAlpha(0)} Donner le sens de varitions de $${nom}$ sur $\\mathbb R$.<br>
         ${numAlpha(1)} Comparer $${nom}(${x1})$ et $${nom}(${x2})$.`
             texteCorr = `${numAlpha(0)} D'après le tableau de signes, les images sont  ${a > 0 ? "d'abord négatives, puis positives" : "d'abord positives, puis négatives"}.<br>
-        On en déduit que la fonction $${nom}$ est ${a > 0 ? 'strictement croissante' : 'strictement décroissante'} sur $\\mathbb R$.<br>`
+        On en déduit que la fonction $${nom}$ est ${texteEnCouleurEtGras(a > 0 ? 'strictement croissante' : 'strictement décroissante')} sur $\\mathbb R$.<br>`
             texteCorr += `${numAlpha(1)} Comme $${nom}$ est une fonction affine ${a > 0 ? 'strictement croissante' : 'strictement décroissante'},
           les antécédents et les images sont rangées ${a > 0 ? 'dans le même ordre' : "dans l'ordre inverse"}. <br>
          `

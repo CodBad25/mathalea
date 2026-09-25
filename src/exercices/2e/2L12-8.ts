@@ -570,6 +570,8 @@ export default class factorisationDifferenceCarres extends Exercice {
         if (avecAligned && sansAccolades)
           texteCorr += `${miseEnEvidence(aRemplacer)}\\end{aligned}$`
         else if (sansAccolades) texteCorr += `$ $${miseEnEvidence(aRemplacer)}$`
+        else if (aRemplacer.includes('\\end{aligned}$'))
+          texteCorr += `${miseEnEvidence(aRemplacer.replace('\\end{aligned}$', ''))}\\end{aligned}$`
         else texteCorr += aRemplacer
         // Fin de cette uniformisation
 

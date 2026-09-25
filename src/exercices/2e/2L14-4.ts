@@ -92,7 +92,7 @@ class FormeTrinome extends Exercice {
          &=f(x)
          \\end{aligned}$`
         }
-        correction1 += `<br> On retrouve la forme développée, donc on en déduit que $f(x)$ peut s'écrire sous forme factorisée : $f(x)=${p.texFormeFactorisee}$.`
+        correction1 += `<br> On retrouve la forme développée, donc on en déduit que $f(x)$ peut s'écrire sous forme factorisée : $f(x)=${miseEnEvidence(p.texFormeFactorisee)}$.`
 
         break
       default:

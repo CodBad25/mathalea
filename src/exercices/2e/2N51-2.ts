@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -53,13 +54,13 @@ export default class ExtraireUnCarreParfaitDUneRacineCarree extends Exercice {
       }
       texteCorr = `On cherche le plus grand carré parfait diviseur de ${d}, c'est ${b}.<br>`
       texteCorr += `On a donc la décomposition : $${d}=${c}\\times${b}=${c}\\times${a}^{2}$,<br>`
-      texteCorr += `qui permet d'écrire que : $\\sqrt{${d}}=\\sqrt{${a}^{2}\\times${c}}=\\color{red} {${a}\\times\\sqrt{${c}}}$`
+      texteCorr += `qui permet d'écrire que : $\\sqrt{${d}}=\\sqrt{${a}^{2}\\times${c}}=${miseEnEvidence(`${a}\\times\\sqrt{${c}}`)}$`
       if (this.sup === 2) {
         enonce = `$\\sqrt{${d}}$`
       }
       texteCorr = `On cherche le plus grand carré parfait diviseur de ${d}, c'est ${b}.<br>`
       texteCorr += `On a donc la décomposition : $${d}=${c}\\times${b}=${c}\\times${a}^{2}$,<br>`
-      texteCorr += `qui permet d'écrire que : $\\sqrt{${d}}=\\sqrt{${a}^{2}\\times${c}}=\\color{red} {${a}\\times\\sqrt{${c}}}$`
+      texteCorr += `qui permet d'écrire que : $\\sqrt{${d}}=\\sqrt{${a}^{2}\\times${c}}=${miseEnEvidence(`${a}\\times\\sqrt{${c}}`)}$`
       reponse = [
         `${a}\\times\\sqrt{${c}}`,
         `${a}\\sqrt{${c}}`,

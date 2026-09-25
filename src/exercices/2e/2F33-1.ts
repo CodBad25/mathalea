@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { numAlpha } from '../../lib/outils/outilString'
 import Exercice from '../Exercice'
@@ -59,7 +60,7 @@ export default class EtudeTrinome extends Exercice {
     let correction1 = `On développe l'expression donnée : <br>$\\begin{aligned}f(x)&=${p.texFormeCanonique}\\\\
     ${a !== 1 ? `&=${etapesDeveloppement[0]}\\\\` : `&=${etapesDeveloppement[0]}\\\\`}
    ${a !== 1 ? `&=${etapesDeveloppement[1]}\\\\&=${etapesDeveloppement[2]}` : `&=${etapesDeveloppement[2]}`}\\end{aligned}$<br>`
-    correction1 += `On en déduit que $f(x)$ peut s'écrire $f(x)=${rienSi1(p.a)}x^2${ecritureAlgebrique(p.b)}x${x1 === 0 || x2 === 0 ? '' : `${p.c.texFractionSignee}`}$.`
+    correction1 += `On en déduit que $f(x)$ peut s'écrire $f(x)=${miseEnEvidence(`${rienSi1(p.a)}x^2${ecritureAlgebrique(p.b)}x${x1 === 0 || x2 === 0 ? '' : `${p.c.texFractionSignee}`}`)}$.`
     let question2, correction2
     if (this.sup === 3) {
       question2 = 'Factoriser $f(x)$.'
@@ -67,7 +68,7 @@ export default class EtudeTrinome extends Exercice {
       correction2 += `$f(x) = \\underbrace{\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2}_{a^2}-\\underbrace{${Math.sqrt(p.beta.simplifie().oppose().valeurDecimale)}^2}_{b^2}$<br>`
       correction2 += `$\\phantom{f(x)} =\\underbrace{\\left( (x ${p.alpha.oppose().simplifie().texFractionSignee} )+${Math.sqrt(p.beta.simplifie().oppose().valeurDecimale)}\\right)}_{(a+b)}\\underbrace{\\left( (x ${p.alpha.oppose().simplifie().texFractionSignee})-${Math.sqrt(p.beta.simplifie().oppose().valeurDecimale)}\\right)}_{(a-b)}$<br>`
       correction2 += `$\\phantom{f(x)} =${p.texFormeFactorisee}$<br>`
-      correction2 += `Une forme factorisée de $f(x)$ est donc :  $f(x)=${p.texFormeFactorisee}$.`
+      correction2 += `Une forme factorisée de $f(x)$ est donc :  $f(x)=${miseEnEvidence(p.texFormeFactorisee)}$.`
     } else {
       question2 = `Montrer que $f(x)$ se factorise sous la forme $f(x)=${p.texFormeFactorisee}$.`
       correction2 = "On développe l'expression :<br> "
@@ -82,7 +83,7 @@ export default class EtudeTrinome extends Exercice {
         correction2 += `$\\phantom{${p.texFormeFactorisee}} = ${etapesDeveloppement2[2]}$<br>`
         correction2 += `$\\phantom{${p.texFormeFactorisee}} = f(x)$<br>`
       }
-      correction2 += `On retrouve la même forme développée que celle de la question précédente donc on a bien $f(x)=${p.texFormeFactorisee}$.`
+      correction2 += `On retrouve la même forme développée que celle de la question précédente donc on a bien $f(x)=${miseEnEvidence(p.texFormeFactorisee)}$.`
     }
     let question3 =
       "Répondre aux questions suivantes en utilisant l'écriture de $f(x)$ la mieux adaptée :<br><br>"
@@ -95,7 +96,7 @@ export default class EtudeTrinome extends Exercice {
     corr3a += `$f(0)= ${p.texCalculImage(0)}$<br> `
 
     corr3a += `On en déduit que les coordonnées du point d'intersection entre l'axe des ordonnées et la courbe $\\mathscr{C}_f$ sont
-    $(0\\, ;\\,${p.c.texFraction})$.`
+    $${miseEnEvidence(`(0\\, ;\\,${p.c.texFraction})`)}$.`
 
     const q3b =
       "Quelles sont les coordonnées des points d'intersection  entre $\\mathscr{C}_f$ et l'axe des abscisses ?"
@@ -107,7 +108,7 @@ export default class EtudeTrinome extends Exercice {
     corr3b += `$\\phantom{f(x)=0} \\iff x=${(p.x1 as FractionEtendue).simplifie().texFraction} \\text{\\quad ou \\quad} x=${(p.x2 as FractionEtendue).simplifie().texFraction}$<br>`
     corr3b += `L'équation a deux solutions : $${(p.x1 as FractionEtendue).simplifie().texFraction}$ et $${(p.x2 as FractionEtendue).simplifie().texFraction}$.<br>`
     corr3b += `On en déduit que les coordonnées des points d'intersection entre l'axe des abscisses et la courbe $\\mathscr{C}_f$ sont
-    $(${(p.x1 as FractionEtendue).simplifie().texFraction}\\, ;\\,0)$ et $(${(p.x2 as FractionEtendue).simplifie().texFraction}\\,;\\,0)$<br>`
+    $${miseEnEvidence(`(${(p.x1 as FractionEtendue).simplifie().texFraction}\\, ;\\,0)`)}$ et $${miseEnEvidence(`(${(p.x2 as FractionEtendue).simplifie().texFraction}\\,;\\,0)`)}$<br>`
 
     let q3c
     if (p.a.s > 0) {
@@ -130,7 +131,7 @@ ${a !== 1 ? `\\iff &${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppo
 \\end{aligned}$<br>
    Comme $f(${p.alpha.simplifie().texFraction})=${p.a.simplifie().texFractionSaufUn}\\left( ${p.alpha.simplifie().texFraction} ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2${p.beta.simplifie().texFractionSignee}=
     ${p.beta.simplifie().texFraction}$ alors $f(x)${a > 0 ? '\\geqslant' : '\\leqslant'} f(${p.alpha.simplifie().texFraction})$.<br>
-    On en déduit que le ${a > 0 ? 'minimum' : 'maximum'} de $f$ est $${p.beta.simplifie().texFraction}$ et qu'il est atteint en $x= ${p.alpha.simplifie().texFraction}$.`
+    On en déduit que le ${a > 0 ? 'minimum' : 'maximum'} de $f$ est $${miseEnEvidence(p.beta.simplifie().texFraction)}$ et qu'il est atteint en $x= ${miseEnEvidence(p.alpha.simplifie().texFraction)}$.`
 
     const q3d = `Déterminer les coordonnées des points d'intersection entre $\\mathscr{C}_f$ et la droite d'équation $y=${p.c.simplifie().texFraction}$.`
     // `Résoudre l'équation $f(x) = ${p.c.simplifie().texFraction}$. <br>
@@ -148,8 +149,8 @@ ${a !== 1 ? `\\iff &${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppo
     corr3d += `L'équation a deux solutions : $0$ et $${p.b.oppose().diviseFraction(p.a).simplifie().texFraction}$.<br>
     On en déduit que $\\mathscr{C}_f$ et la droite d'équation  $y=${p.c.simplifie().texFraction}$ ont deux points d'intersection : <br>
     $A(0\\,;\\,f(0))$ et
-    $B(${p.b.oppose().diviseFraction(p.a).simplifie().texFraction}\\,;\\,f\\left(${p.b.oppose().diviseFraction(p.a).simplifie().texFraction})\\right)$, soit $A(0\\,;\\,${p.c.simplifie().texFraction})$ et
-    $B(${p.b.oppose().diviseFraction(p.a).simplifie().texFraction}\\,;\\,${p.c.simplifie().texFraction})$.
+    $B(${p.b.oppose().diviseFraction(p.a).simplifie().texFraction}\\,;\\,f\\left(${p.b.oppose().diviseFraction(p.a).simplifie().texFraction})\\right)$, soit $${miseEnEvidence(`A(0\\,;\\,${p.c.simplifie().texFraction})`)}$ et
+    $${miseEnEvidence(`B(${p.b.oppose().diviseFraction(p.a).simplifie().texFraction}\\,;\\,${p.c.simplifie().texFraction})`)}$.
     `
 
     const [sousQuestions, sousCorrections] = [

@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import Decimal from 'decimal.js'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -85,7 +86,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
           $${Math.floor(Math.sqrt(a)) ** 2} < ${a} < ${(Math.floor(Math.sqrt(a)) + 1) ** 2}$, soit $${Math.floor(Math.sqrt(a))}^2 < ${a} < ${Math.floor(Math.sqrt(a)) + 1}^2$.<br><br>
           En prenant la racine carrée de chacun de ces nombres, on obtient : <br>$\\sqrt{${Math.floor(Math.sqrt(a))}^2} < \\sqrt{${a}} < \\sqrt{${Math.floor(Math.sqrt(a)) + 1}^2}$
         (on ne change pas le sens des inégalités en prenant les racines carrées. Ce résultat admis sera démontré dans le chapitre sur les variations). <br><br>
-        Finalement, on obtient l'encadrement de  $\\sqrt{${a}}$ par deux entiers consécutifs   : $${Math.floor(Math.sqrt(a))}< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}$.
+        Finalement, on obtient l'encadrement de  $\\sqrt{${a}}$ par deux entiers consécutifs   : $${miseEnEvidence(Math.floor(Math.sqrt(a)))}< \\sqrt{${a}} < ${miseEnEvidence(Math.floor(Math.sqrt(a)) + 1)}$.
    `
           handleAnswers(
             this,
@@ -119,14 +120,14 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
           $${Math.floor(Math.sqrt(a)) ** 2} < ${a} < ${(Math.floor(Math.sqrt(a)) + 1) ** 2}$, soit $${Math.floor(Math.sqrt(a))}^2 < ${a} < ${Math.floor(Math.sqrt(a)) + 1}^2$.<br><br>
           En prenant la racine carrée de chacun de ces nombres, on obtient : <br>$\\sqrt{${Math.floor(Math.sqrt(a))}^2} < \\sqrt{${a}} < \\sqrt{${Math.floor(Math.sqrt(a)) + 1}^2}$
         (on ne change pas le sens des inégalités en prenant les racines carrées. Ce résultat admis sera démontré dans le chapitre sur les variations). <br><br>
-        Finalement, on obtient l'encadrement de  $\\sqrt{${a}}$ par deux entiers consécutifs   : $${Math.floor(Math.sqrt(a))}< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}$. <br><br>
+        Finalement, on obtient l'encadrement de  $\\sqrt{${a}}$ par deux entiers consécutifs   : $${miseEnEvidence(Math.floor(Math.sqrt(a)))}< \\sqrt{${a}} < ${miseEnEvidence(Math.floor(Math.sqrt(a)) + 1)}$. <br><br>
         En partant de cet encadrement, on obbtient successivement :<br>`
             if (c > 0) {
               texteCorr += `$\\begin{aligned}
         ${Math.floor(Math.sqrt(a))} &< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}\\\\
-        ${miseEnEvidence(c)}\\times ${Math.floor(Math.sqrt(a))}&< ${miseEnEvidence(c)}\\times \\sqrt{${a}} < ${miseEnEvidence(c)}\\times ${Math.floor(Math.sqrt(a)) + 1}{\\text{ (On multiplie par un nombre strictement positif)}}\\\\
+        ${miseEnEvidence(c, bleuMathalea)}\\times ${Math.floor(Math.sqrt(a))}&< ${miseEnEvidence(c, bleuMathalea)}\\times \\sqrt{${a}} < ${miseEnEvidence(c, bleuMathalea)}\\times ${Math.floor(Math.sqrt(a)) + 1}{\\text{ (On multiplie par un nombre strictement positif)}}\\\\
         ${c * Math.floor(Math.sqrt(a))}&< ${c}\\sqrt{${a}} < ${c * (Math.floor(Math.sqrt(a)) + 1)}\\\\
-        ${miseEnEvidence(b)}${ecritureAlgebrique(c * Math.floor(Math.sqrt(a)))}&< ${miseEnEvidence(b)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${miseEnEvidence(b)}${ecritureAlgebrique(c * (Math.floor(Math.sqrt(a)) + 1))}\\\\
+        ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebrique(c * Math.floor(Math.sqrt(a)))}&< ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebrique(c * (Math.floor(Math.sqrt(a)) + 1))}\\\\
         ${b + c * Math.floor(Math.sqrt(a))}&< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${b + c * (Math.floor(Math.sqrt(a)) + 1)}
                        \\end{aligned}$<br>
                        L'encadrement demandé est donc : $ ${b + c * Math.floor(Math.sqrt(a))}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${b + c * (Math.floor(Math.sqrt(a)) + 1)}$.`
@@ -143,9 +144,9 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
             } else {
               texteCorr += `$\\begin{aligned}
                        ${Math.floor(Math.sqrt(a))} &< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}\\\\
-                       ${miseEnEvidence(c)}\\times ${Math.floor(Math.sqrt(a))}&> ${miseEnEvidence(c)}\\times \\sqrt{${a}} > ${miseEnEvidence(c)}\\times ${Math.floor(Math.sqrt(a)) + 1}{\\text{ (On multiplie par un nombre strictement négatif)}}\\\\
+                       ${miseEnEvidence(c, bleuMathalea)}\\times ${Math.floor(Math.sqrt(a))}&> ${miseEnEvidence(c, bleuMathalea)}\\times \\sqrt{${a}} > ${miseEnEvidence(c, bleuMathalea)}\\times ${Math.floor(Math.sqrt(a)) + 1}{\\text{ (On multiplie par un nombre strictement négatif)}}\\\\
                        ${c * Math.floor(Math.sqrt(a))}&> ${c}\\sqrt{${a}} > ${c * (Math.floor(Math.sqrt(a)) + 1)}\\\\
-                       ${miseEnEvidence(b)}${ecritureAlgebrique(c * Math.floor(Math.sqrt(a)))}&> ${miseEnEvidence(b)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${miseEnEvidence(b)}${ecritureAlgebrique(c * (Math.floor(Math.sqrt(a)) + 1))}\\\\
+                       ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebrique(c * Math.floor(Math.sqrt(a)))}&> ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebrique(c * (Math.floor(Math.sqrt(a)) + 1))}\\\\
                        ${b + c * Math.floor(Math.sqrt(a))}&> ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${b + c * (Math.floor(Math.sqrt(a)) + 1)}
                                       \\end{aligned}$<br>
                                       L'encadrement demandé est donc : $ ${b + c * (Math.floor(Math.sqrt(a)) + 1)}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${b + c * Math.floor(Math.sqrt(a))}$.`
@@ -189,12 +190,12 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
             if (c > 0) {
               texteCorr += `$\\begin{aligned}
             ${texNombre(r1, 1)} &< \\sqrt{${a}} < ${texNombre(r2, 1)}\\\\
-        ${miseEnEvidence(c)}\\times ${texNombre(r1, 1)}&< ${miseEnEvidence(c)}\\times \\sqrt{${a}} < ${miseEnEvidence(c)}\\times ${texNombre(r2, 1)}{\\text{ (On multiplie par un nombre strictement positif)}}\\\\
+        ${miseEnEvidence(c, bleuMathalea)}\\times ${texNombre(r1, 1)}&< ${miseEnEvidence(c, bleuMathalea)}\\times \\sqrt{${a}} < ${miseEnEvidence(c, bleuMathalea)}\\times ${texNombre(r2, 1)}{\\text{ (On multiplie par un nombre strictement positif)}}\\\\
      ${texNombre(r1c, 1)}&< ${c}\\sqrt{${a}} <${texNombre(r2c, 1)}\\\\
-        ${miseEnEvidence(b)}+${texNombre(r1c, 1)}&< ${miseEnEvidence(b)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${miseEnEvidence(b)}+${texNombre(r2c, 1)}\\\\
+        ${miseEnEvidence(b, bleuMathalea)}+${texNombre(r1c, 1)}&< ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${miseEnEvidence(b, bleuMathalea)}+${texNombre(r2c, 1)}\\\\
         ${texNombre(r1b, 1)}&< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${texNombre(r2b, 1)}
                        \\end{aligned}$<br>
-                       L'encadrement demandé est donc : $ ${texNombre(r1b, 1)}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${texNombre(r2b, 1)}$.`
+                       L'encadrement demandé est donc : $${miseEnEvidence(texNombre(r1b, 1))}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${miseEnEvidence(texNombre(r2b, 1))}$.`
               handleAnswers(
                 this,
                 i,
@@ -208,12 +209,12 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
             } else {
               texteCorr += `$\\begin{aligned}
             ${texNombre(r1, 1)} &< \\sqrt{${a}} < ${texNombre(r2, 1)}\\\\
-        ${miseEnEvidence(c)}\\times ${texNombre(r1, 1)}&> ${miseEnEvidence(c)}\\times \\sqrt{${a}} > ${miseEnEvidence(c)}\\times ${texNombre(r2, 1)}{\\text{ (On multiplie par un nombre strictement négatif)}}\\\\
+        ${miseEnEvidence(c, bleuMathalea)}\\times ${texNombre(r1, 1)}&> ${miseEnEvidence(c, bleuMathalea)}\\times \\sqrt{${a}} > ${miseEnEvidence(c, bleuMathalea)}\\times ${texNombre(r2, 1)}{\\text{ (On multiplie par un nombre strictement négatif)}}\\\\
         ${texNombre(r1c, 2)}&> ${c}\\sqrt{${a}} >${texNombre(r2c, 1)}\\\\
-        ${miseEnEvidence(b)}${texNombre(r1c, 1)}&> ${miseEnEvidence(b)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${miseEnEvidence(b)}${texNombre(r2c, 1)}\\\\
+        ${miseEnEvidence(b, bleuMathalea)}${texNombre(r1c, 1)}&> ${miseEnEvidence(b, bleuMathalea)}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${miseEnEvidence(b, bleuMathalea)}${texNombre(r2c, 1)}\\\\
         ${texNombre(r1b, 1)}&> ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} > ${texNombre(r2b, 1)}
                        \\end{aligned}$<br>
-                       L'encadrement demandé est donc : $ ${texNombre(r2b, 1)}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${texNombre(r1b, 1)}$.`
+                       L'encadrement demandé est donc : $${miseEnEvidence(texNombre(r2b, 1))}< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} < ${miseEnEvidence(texNombre(r1b, 1))}$.`
               handleAnswers(
                 this,
                 i,

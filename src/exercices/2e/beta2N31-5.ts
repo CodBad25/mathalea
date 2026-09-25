@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -102,7 +103,7 @@ export default class CalculerAvecEcritureScientifique extends Exercice {
             texteCorr +=
               egalOuApprox(prod[0][0], 2) === '='
                 ? '\\\\\n\\end{aligned}$<br>'
-                : `&\\approx ${texNombre(arrondi(prod[0][0], 2))} \\times 10^{${prod[0][1] + somme}}\\\\\n\\end{aligned}$<br>(avec la mantisse arrondie au centième) <br>`
+                : `&\\approx ${miseEnEvidence(`${texNombre(arrondi(prod[0][0], 2))} \\times 10^{${prod[0][1] + somme}}`)}\\\\\n\\end{aligned}$<br>(avec la mantisse arrondie au centième) <br>`
           } else {
             texteCorr = `$ ${texNombre(a[0])} \\times 10^{${texNombre(c[0])}} \\times ${texNombre(b[0])} \\times 10^{${texNombre(c[1])}} ${egalOuApprox(prod[0][0], 2)} ${texNombre(arrondi(decimalToScientifique(prod[0][0])[0], 2))} \\times 10^{${decimalToScientifique(prod[0][1])[1] + somme}} $  (avec la mantisse arrondie au centième) <br>`
           }

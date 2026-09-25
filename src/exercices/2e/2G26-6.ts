@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { nomVecteurParPosition } from '../../lib/2d/NomVecteurParPosition'
@@ -212,10 +213,10 @@ export default class TranslationEtCoordonnes extends Exercice {
           texteCorr += `x=${xB} \\\\`
           texteCorr += `y=${yB}`
           texteCorr += '\\end{array}'
-          texteCorr += `\\right.$ soit $A'(${xB}\\,;\\,${yB})$.<br>`
+          texteCorr += `\\right.$ soit $${miseEnEvidence(`A'(${xB}\\,;\\,${yB})`)}$.<br>`
           // texteCorr += `$\\begin{cases}x${ecritureAlgebrique(-xA)}=${ux}\\\\y${ecritureAlgebrique(-yA)}=${uy}\\end{cases}$`
           // texteCorr += `$\\Leftrightarrow\\begin{cases}x=${ux}${ecritureAlgebrique(xA)}\\\\y=${uy}${ecritureAlgebrique(yA)}\\end{cases}$`
-          // texteCorr += `$\\Leftrightarrow\\begin{cases}x=${xB}\\\\y=${yB}\\end{cases}$ soit $A'(${xB}\\,;\\,${yB})$.<br>`
+          // texteCorr += `$\\Leftrightarrow\\begin{cases}x=${xB}\\\\y=${yB}\\end{cases}$ soit $${miseEnEvidence(`A'(${xB}\\,;\\,${yB})`)}$.<br>`
           break
         case 'coorPre':
           texteCorr += `Soit $(x\\,;\\,y)$ les coordonnées du point $A$, on a donc : $\\overrightarrow{AA'}\\begin{pmatrix}${xB}-x\\\\${yB}-y\\end{pmatrix}$.<br>`
@@ -235,10 +236,10 @@ export default class TranslationEtCoordonnes extends Exercice {
           texteCorr += `x=${xA} \\\\`
           texteCorr += `y=${yA}`
           texteCorr += '\\end{array}'
-          texteCorr += `\\right.$ soit $A(${xA}\\,;\\,${yA})$.<br>`
+          texteCorr += `\\right.$ soit $${miseEnEvidence(`A(${xA}\\,;\\,${yA})`)}$.<br>`
           // texteCorr += `$\\begin{cases}${xB}-x=${ux}\\\\${yB}-y=${uy}\\end{cases}$`
           // texteCorr += `$\\Leftrightarrow\\begin{cases}x=${xB}${ecritureAlgebrique(-ux)}\\\\y=${yB}${ecritureAlgebrique(-uy)}\\end{cases}$`
-          // texteCorr += `$\\Leftrightarrow\\begin{cases}x=${xA}\\\\y=${yA}\\end{cases}$ soit $A(${xA}\\,;\\,${yA})$.<br>`
+          // texteCorr += `$\\Leftrightarrow\\begin{cases}x=${xA}\\\\y=${yA}\\end{cases}$ soit $${miseEnEvidence(`A(${xA}\\,;\\,${yA})`)}$.<br>`
           break
       }
 
