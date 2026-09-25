@@ -98,6 +98,38 @@ if (this.questionJamaisPosee(i, a, b)) {
 
 Déclarez la réponse avant d'incrémenter `i`.
 
+## Règle impérative : un nombre de points fixe par question
+
+Une question d'un exercice doit **toujours** rapporter le même nombre de
+points maximum, quels que soient la graine et ce qui est tiré au sort. C'est
+indispensable à la remontée des scores vers les recorders (Capytale, Moodle…),
+qui enregistrent un barème maximum figé pour un exercice donné.
+
+Par défaut, une question vaut 1 point, sauf les formats à plusieurs champs
+(`fill-in-the-blank`, `tableau-mathlive`, `multi-mathfield`) corrigés avec
+`toutAUnPoint`, qui rapportent **un point par champ**. Dès que le nombre de
+champs d'une question dépend du tirage (nombre de solutions, de lignes, de
+diviseurs, sous-problème tiré au sort…), fixez le total avec la clé `bareme`
+de `handleAnswers()` :
+
+```ts
+import { troisPointsProportionnels } from '../../lib/interactif/fonctionsBaremes'
+
+handleAnswers(
+  this,
+  i,
+  { bareme: troisPointsProportionnels, ...reponses },
+  { formatInteractif: 'multi-mathfield' },
+)
+```
+
+`troisPointsProportionnels` ramène la proportion de champs justes sur 3 points,
+`toutPourUnPoint` donne 1 point si tout est juste. Une fonction de barème
+personnalisée doit, elle aussi, renvoyer un maximum constant.
+
+Le détail technique (calcul de `pointsMaxExercice()`) est dans
+[Système d'interactivité](../maintenance-moteur/interactivite/systeme-interactivite.md#stabilité-du-barème-face-au-tirage-aléatoire).
+
 ## Formats plus complexes
 
 Le livre de recettes [Formats interactifs spécialisés](complements/formats-interactifs.md)
