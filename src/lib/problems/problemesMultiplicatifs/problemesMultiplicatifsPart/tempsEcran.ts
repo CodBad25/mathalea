@@ -59,5 +59,6 @@ export function tempsEcran(decimal = false): Probleme {
       type: 'accolade',
     },
   ]
+  probleme.optionsChampTexteMathlive = { texteApres: ` ${unité}` }
   return probleme
 }

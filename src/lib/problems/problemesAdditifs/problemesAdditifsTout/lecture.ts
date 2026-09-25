@@ -29,5 +29,6 @@ Donc, en tout, ${personnage.pronom} a lu $${texNombre(nb1, 0)}+${texNombre(nb2, 
   probleme.schema.topBraces[0].text = 'pages lues en tout'
   probleme.styleChampTexteMathlive = KeyboardType.clavierDeBase
   probleme.reponse = `${texNombre(nb1 + nb2, 1)}`
+  probleme.optionsChampTexteMathlive = { texteApres: ' pages' }
   return probleme
 }
