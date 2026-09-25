@@ -109,6 +109,10 @@
     $globalOptions.durationGlobal = durationGlobal
   }
 
+  function updateDurationCorrection(durationCorrection: number | undefined) {
+    $globalOptions.durationCorrection = durationCorrection
+  }
+
   function updateIsImagesOnSides(isImagesOnSides: boolean) {
     $globalOptions.isImagesOnSides = isImagesOnSides
   }
@@ -166,6 +170,9 @@
           $globalOptions.flow === 2}
         questionWithCorrectionToggle={$globalOptions.flow === 2}
         pauseAfterEachQuestion={!!$globalOptions.pauseAfterEachQuestion}
+        isManualModeActive={!!$globalOptions.manualMode}
+        durationCorrection={$globalOptions.durationCorrection}
+        {updateDurationCorrection}
       />
       <OrderSettings
         isQuestionsOrdered={!$globalOptions.shuffle}

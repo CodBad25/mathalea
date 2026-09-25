@@ -48,6 +48,7 @@ export type SlideshowHistoryOptions = {
   select?: number[]
   order?: number[]
   durationGlobal?: number
+  durationCorrection?: number
 }
 
 export type SlideshowHistoryItem = {
