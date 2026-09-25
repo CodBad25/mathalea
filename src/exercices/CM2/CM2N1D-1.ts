@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import DragAndDrop, { type Etiquette } from '../../lib/interactif/DragAndDrop'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -202,7 +203,9 @@ class DragAndDropNumerationEntiere extends Exercice {
         }
       }
       // texte = `${texte.substring(0, texte.length - 1)}$`
-      texteCorr = `${texteCorr.substring(0, texteCorr.length - 1)}$`
+      texteCorr = texteCorr.substring(0, texteCorr.length - 1)
+      const finMembreGauche = texteCorr.indexOf('=') + 1
+      texteCorr = `${texteCorr.slice(0, finMembreGauche)}${miseEnEvidence(texteCorr.slice(finMembreGauche))}$`
       if (this.questionJamaisPosee(i, nombreStr)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

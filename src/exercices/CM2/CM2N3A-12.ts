@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -39,7 +40,7 @@ export default class Ajouter11 extends Exercice {
     ) {
       a = randint(0, 9) * 10 + randint(1, 9)
       texte = `$${a}+11 = $`
-      texteCorr = `$${a}+11=${a + 11}$`
+      texteCorr = `$${a}+11=${miseEnEvidence(a + 11)}$`
       handleAnswers(this, i, { reponse: { value: a + 11 } })
       if (this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)

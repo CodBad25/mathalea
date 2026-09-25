@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -35,7 +36,7 @@ export default class LireUneFraction extends Exercice {
         `Comment se lit la fraction $\\dfrac{${numerateur}}{${denominateur}}$ ? ` +
         ajouteChampTexte(this, i, KeyboardType.alphanumericAvecEspace)
       const value = `${nombreEnLettres(numerateur)} ${denominateurEnLettre(denominateur, numerateur > 1)}`
-      const texteCorr = `La fraction $\\dfrac{${numerateur}}{${denominateur}}$ se lit ${value}.`
+      const texteCorr = `La fraction $\\dfrac{${numerateur}}{${denominateur}}$ se lit ${texteEnCouleurEtGras(value)}.`
       if (this.questionJamaisPosee(i, numerateur, denominateur)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

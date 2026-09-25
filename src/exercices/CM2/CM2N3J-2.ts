@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -39,7 +40,7 @@ export default class Soustraire9 extends Exercice {
     ) {
       a = randint(1, 9) * 10 + randint(0, 8)
       texte = `$${a}-9$`
-      texteCorr = `$${a}-9=${a - 9}$`
+      texteCorr = `$${a}-9=${miseEnEvidence(a - 9)}$`
       handleAnswers(this, i, { reponse: { value: a - 9 } })
       if (this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
