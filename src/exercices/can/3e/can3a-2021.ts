@@ -1,3 +1,5 @@
+import { orangeMathalea } from '../../../lib/colors'
+import { pgcd } from '../../../lib/outils/primalite'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { demiDroite } from '../../../lib/2d/DemiDroite'
@@ -154,7 +156,7 @@ export default class SujetCAN20213ieme extends Exercice {
           a = randint(4, 9)
           b = randint(4, 9)
           texte = `$${a} \\times ${b}=$ `
-          texteCorr = `$${a} \\times ${b}=${a * b}$`
+          texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           handleAnswers(this, index, { reponse: { value: a * b } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -177,12 +179,12 @@ export default class SujetCAN20213ieme extends Exercice {
               reponse = Math.round(a / 4)
               texte = `Le quart de $${a}$ est :  `
               texteCorr = `Prendre le quart d'un nombre revient à le diviser par $4$.<br>
-                Ainsi le quart de $${a}$ est : $${a}\\div 4 =${reponse}$.`
+                Ainsi le quart de $${a}$ est : $${a}\\div 4 =${miseEnEvidence(reponse)}$.`
             } else {
               reponse = Math.round(b / 3)
               texte = `Le tiers de $${b}$ est :  `
               texteCorr = `Prendre le tiers d'un nombre revient à le diviser par $3$.<br>
-                Ainsi le tiers de $${b}$ est : $${b}\\div 3 =${reponse}$.`
+                Ainsi le tiers de $${b}$ est : $${b}\\div 3 =${miseEnEvidence(reponse)}$.`
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -204,7 +206,7 @@ export default class SujetCAN20213ieme extends Exercice {
 
             const reponse = a - b
             texte = `$${a} - ${b}=$ `
-            texteCorr = `$${a}-${b}=${reponse}$`
+            texteCorr = `$${a}-${b}=${miseEnEvidence(reponse)}$`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -225,7 +227,7 @@ export default class SujetCAN20213ieme extends Exercice {
             const reponse = arrondi(a + b, 2)
 
             texte = `$${texNombre(a, 1)}+${texNombre(b, 2)}=$ `
-            texteCorr = `$${texNombre(a, 1)}+${texNombre(b, 2)}=${texNombre(reponse, 2)}$ `
+            texteCorr = `$${texNombre(a, 1)}+${texNombre(b, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$ `
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -281,11 +283,11 @@ export default class SujetCAN20213ieme extends Exercice {
 
             if (choice([true, false])) {
               texte = `Quel nombre obtient-on si on ajoute un dixième à $${texNombre(a)}$ ?`
-              texteCorr = `$1$ dixième $=0,1$, d'où $${texNombre(a)}+0,1 =${texNombre(a + 0.1)}$`
+              texteCorr = `$1$ dixième $=0,1$, d'où $${texNombre(a)}+0,1 =${miseEnEvidence(texNombre(a + 0.1))}$`
               reponse = arrondi(a + 0.1, 2)
             } else {
               texte = `Quel nombre obtient-on si on ajoute un centième à $${texNombre(b)}$ ?`
-              texteCorr = `$1$ centième $=0,01$, d'où $${texNombre(b)}+0,01 =${texNombre(b + 0.01)}$`
+              texteCorr = `$1$ centième $=0,01$, d'où $${texNombre(b)}+0,01 =${miseEnEvidence(texNombre(b + 0.01))}$`
               reponse = arrondi(b + 0.01, 3)
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
@@ -310,20 +312,20 @@ export default class SujetCAN20213ieme extends Exercice {
 
             if (d === 0.1) {
               texte = `$${k}\\times ${texNombre(d)}=$`
-              texteCorr = `$${k}\\times ${texNombre(d)}=${reponse}$`
+              texteCorr = `$${k}\\times ${texNombre(d)}=${miseEnEvidence(reponse)}$`
               texteCorr += `<br>
         Multiplier par $0,1$ revient à diviser par $10$. <br>
                $${k}\\times ${texNombre(d)}=${k}\\div 10=${a}${b},\\underline{0}$.<br>
                   `
             } else if (d === 0.01) {
               texte = `$${k}\\times ${texNombre(d)}=$`
-              texteCorr = `$${k}\\times ${texNombre(d)}=${texNombre(reponse, 1)}$`
+              texteCorr = `$${k}\\times ${texNombre(d)}=${miseEnEvidence(texNombre(reponse, 1))}$`
               texteCorr += `    <br>    Multiplier par $0,01$ revient à diviser par $100$. <br>
                 $${k}\\times ${texNombre(d)}=${k}\\div 100=${a},${b}\\underline{0}$.<br>
                   `
             } else {
               texte = `$${k}\\times ${texNombre(d, 3)}=$`
-              texteCorr = `$${k}\\times ${texNombre(d)}=${texNombre(reponse, 2)}$`
+              texteCorr = `$${k}\\times ${texNombre(d)}=${miseEnEvidence(texNombre(reponse, 2))}$`
               texteCorr += `<br>
         Multiplier par $0,001$ revient à diviser par $1000$. <br>
                 $${k}\\times ${texNombre(d)}=${k}\\div 1000=0,${a}${b}\\underline{0}$.<br>
@@ -353,12 +355,12 @@ export default class SujetCAN20213ieme extends Exercice {
               reponse = a * 10000 + b * 100 + c * 10
               texte = `$${texNombre(a)}\\times ${texNombre(10000)} + ${texNombre(b)}\\times 100 + ${texNombre(c)}\\times 10=$`
               texteCorr = `$${texNombre(a)}\\times ${texNombre(10000)} + ${texNombre(b)}\\times 100 + ${texNombre(c)}\\times 10 =
-     ${texNombre(a * 10000)} + ${texNombre(b * 100)} + ${texNombre(c * 10)}=${texNombre(reponse)}$`
+     ${texNombre(a * 10000)} + ${texNombre(b * 100)} + ${texNombre(c * 10)}=${miseEnEvidence(texNombre(reponse))}$`
             } else {
               reponse = c * 10000 + b * 1000 + a * 10
               texte = `$ ${texNombre(c)}\\times ${texNombre(10000)}+ ${texNombre(b)}\\times ${texNombre(1000)} + ${texNombre(a)}\\times 10 =$`
               texteCorr = `$ ${texNombre(c)}\\times ${texNombre(10000)}+ ${texNombre(b)}\\times ${texNombre(1000)} + ${texNombre(a)}\\times 10  =
-      ${texNombre(c * 10000)}+ ${texNombre(b * 1000)} + ${texNombre(a * 10)} =${texNombre(reponse)}$`
+      ${texNombre(c * 10000)}+ ${texNombre(b * 1000)} + ${texNombre(a * 10)} =${miseEnEvidence(texNombre(reponse))}$`
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -384,7 +386,7 @@ export default class SujetCAN20213ieme extends Exercice {
              `
 
             texteCorr = `$${a}$ stylos identiques coûtent  $${texNombre(prix, 2, true)}$ €, donc $${k * a}$
-           de ces mêmes stylos coûtent  $${k}$ fois plus, soit $${k}\\times ${texNombre(prix, 2, true)}=${texNombre(k * prix, 2, true)}$ €.`
+           de ces mêmes stylos coûtent  $${k}$ fois plus, soit $${k}\\times ${texNombre(prix, 2, true)}=${miseEnEvidence(texNombre(k * prix, 2, true))}$ €.`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -403,7 +405,7 @@ export default class SujetCAN20213ieme extends Exercice {
             a = randint(11, 24, 20)
             const reponse = 101 * a
             texte = `$${a}\\times 101=$`
-            texteCorr = `$${a}\\times 101 = ${101 * a}$<br>`
+            texteCorr = `$${a}\\times 101 = ${miseEnEvidence(101 * a)}$<br>`
 
             texteCorr += `$${a}\\times 101 = ${a}\\times (100+1)=${a}\\times 100+${a}\\times 1=${texNombre(a * 100, 0)}+${a}=${texNombre(101 * a, 0)}$`
 
@@ -426,40 +428,40 @@ export default class SujetCAN20213ieme extends Exercice {
             a = choice([15, 35, 42, 10, 14, 21, 22, 26, 29, 33, 20, 27])
             texte = `Donne la liste des diviseurs de $${a}$.<br>`
             if (a === 27) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $3$, $9$ et $27$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(3)}$, $${miseEnEvidence(9)}$ et $${miseEnEvidence(27)}$. `
               reponse = '1;3;9;27'
             } else if (a === 20) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $2$, $4$ $5$, $10$ et $20$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(2)}$, $${miseEnEvidence(4)}$ $${miseEnEvidence(5)}$, $${miseEnEvidence(10)}$ et $${miseEnEvidence(20)}$. `
               reponse = '1;2;4;5;10;20'
             } else if (a === 15) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $3$, $5$ et $15$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(3)}$, $${miseEnEvidence(5)}$ et $${miseEnEvidence(15)}$. `
               reponse = '1;3;5;15'
             } else if (a === 35) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $5$, $7$ et $35$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(5)}$, $${miseEnEvidence(7)}$ et $${miseEnEvidence(35)}$. `
               reponse = '1;5;7;35'
             } else if (a === 42) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $2$, $3$, $6$, $7$, $14$, $21$ et $42$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(2)}$, $${miseEnEvidence(3)}$, $${miseEnEvidence(6)}$, $${miseEnEvidence(7)}$, $${miseEnEvidence(14)}$, $${miseEnEvidence(21)}$ et $${miseEnEvidence(42)}$. `
               reponse = '1;2;3;6;7;14;21;42'
             } else if (a === 10) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $2$, $5$ et $10$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(2)}$, $${miseEnEvidence(5)}$ et $${miseEnEvidence(10)}$. `
               reponse = '1;2;5;10'
             } else if (a === 14) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $2$, $7$,  et $14$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(2)}$, $${miseEnEvidence(7)}$,  et $${miseEnEvidence(14)}$. `
               reponse = '1;2;7;14'
             } else if (a === 21) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $2$, $3$, $7$ et $21$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(2)}$, $${miseEnEvidence(3)}$, $${miseEnEvidence(7)}$ et $${miseEnEvidence(21)}$. `
               reponse = '1;3;7;21'
             } else if (a === 22) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $2$, $11$ et $22$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(2)}$, $${miseEnEvidence(11)}$ et $${miseEnEvidence(22)}$. `
               reponse = '1;2;11;22'
             } else if (a === 26) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $2$, $13$ et $26$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(2)}$, $${miseEnEvidence(13)}$ et $${miseEnEvidence(26)}$. `
               reponse = '1;2;13;26'
             } else if (a === 29) {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$ et $29$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$ et $${miseEnEvidence(29)}$. `
               reponse = '1;29'
             } else {
-              texteCorr = `Les diviseurs de $${a}$ sont : $1$, $3$, $11$ et $33$. `
+              texteCorr = `Les diviseurs de $${a}$ sont : $${miseEnEvidence(1)}$, $${miseEnEvidence(3)}$, $${miseEnEvidence(11)}$ et $${miseEnEvidence(33)}$. `
               reponse = '1;3;11;33'
             }
             handleAnswers(this, index, {
@@ -556,7 +558,7 @@ export default class SujetCAN20213ieme extends Exercice {
             )
             texteCorr = `Le triangle $ADC$ est un agrandissement du triangle $ABE$. Le coefficient d'agrandissement est donné par : $\\dfrac{${b}}{${a}}=${texNombre(b / a)}$.<br>
           On obtient donc la longueur $AE$ en divisant par $${k}$ la longueur $AD$.<br>
-          $AE=\\dfrac{${d}}{${k}}=${c}$.<br>`
+          $AE=\\dfrac{${d}}{${k}}=${miseEnEvidence(c)}$.<br>`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += '<br>$AE=$'
@@ -577,7 +579,7 @@ export default class SujetCAN20213ieme extends Exercice {
             texte = `$f(x)=${a}x+${b}$<br>
           $f(${c})= $ `
             const reponse = a * c + b
-            texteCorr = `$f(${c})=${a}\\times ${c}+${b}=${a * c}+${b}=${reponse}$. `
+            texteCorr = `$f(${c})=${a}\\times ${c}+${b}=${a * c}+${b}=${miseEnEvidence(reponse)}$. `
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -598,7 +600,7 @@ export default class SujetCAN20213ieme extends Exercice {
           d = Math.round(b * 60)
           if (!this.interactif) {
             texte = `$${texNombre(a + b)}$ h $=$ .....  h ..... min`
-            texteCorr = `$${texNombre(a + b)}$h$ = ${a}$ h $ + ${texNombre(b)} \\times 60  = ${a}$ h $${d}$ min`
+            texteCorr = `$${texNombre(a + b)}$h$ = ${a}$ h $ + ${texNombre(b)} \\times 60  = ${miseEnEvidence(a)}$ h $${miseEnEvidence(d)}$ min`
           } else {
             texte = `$${texNombre(a + b, 2)}$ h $=$`
 
@@ -615,7 +617,7 @@ export default class SujetCAN20213ieme extends Exercice {
               },
             })
 
-            texteCorr = `$${texNombre(a + b)}$h$ = ${a}$ h $ + ${texNombre(b)} \\times 60$ min $  = ${a}$ h $${d}$ min`
+            texteCorr = `$${texNombre(a + b)}$h$ = ${a}$ h $ + ${texNombre(b)} \\times 60$ min $  = ${miseEnEvidence(a)}$ h $${miseEnEvidence(d)}$ min`
           }
           break
 
@@ -627,7 +629,7 @@ export default class SujetCAN20213ieme extends Exercice {
             texte = `$${p}\\,\\%$ de $${a}= $`
             texteCorr = ` Prendre $${p}\\%$  de $${a}$ revient à prendre $${p / 10}\\times 10\\,\\%$  de $${a}$.<br>
           Comme $10\\,\\%$  de $${a}$ vaut $${a / 10}$ (pour prendre $10\\%$  d'une quantité, on la divise par $10$), alors
-          $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${reponse}$.
+          $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${miseEnEvidence(reponse)}$.
          `
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -695,7 +697,7 @@ export default class SujetCAN20213ieme extends Exercice {
               objets,
             )
             texteCorr = `Le volume du cône est  : $\\dfrac{1}{3}\\times \\text{(Aire de la base)}\\times \\text{Hauteur}$.<br>
-          Soit : $\\dfrac{1}{3}\\times \\pi \\times 3^2\\times ${b}=${reponse}\\pi\\text{ cm}^3$.  `
+          Soit : $\\dfrac{1}{3}\\times \\pi \\times 3^2\\times ${b}=${miseEnEvidence(reponse)}\\pi\\text{ cm}^3$.  `
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
@@ -722,7 +724,7 @@ export default class SujetCAN20213ieme extends Exercice {
             const reponse = a * e[0] + a * e[1]
             texte = `$${a}\\times ${e[0]}+${a}\\times ${e[1]}= $ `
 
-            texteCorr = `$${a}\\times ${e[0]}+${a}\\times ${e[1]}=${a}\\times( ${e[0]}+ ${e[1]})=${a}\\times ${e[0] + e[1]}=${texNombre(reponse, 0)}$.`
+            texteCorr = `$${a}\\times ${e[0]}+${a}\\times ${e[1]}=${a}\\times( ${e[0]}+ ${e[1]})=${a}\\times ${e[0] + e[1]}=${miseEnEvidence(texNombre(reponse, 0))}$.`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -744,7 +746,7 @@ export default class SujetCAN20213ieme extends Exercice {
             k = randint(3, 9)
             const reponse = arrondi(fraction18[0] / fraction18[1], 2)
             texte = `Écriture décimale de $\\dfrac{${fraction18[0] * k}}{${fraction18[1] * k}}$.`
-            texteCorr = `En simplifiant, on obtient : $\\dfrac{${fraction18[0] * k}}{${fraction18[1] * k}}=\\dfrac{${fraction18[0]}}{${fraction18[1]}}=${texNombre(reponse, 2)}$`
+            texteCorr = `En simplifiant, on obtient : $\\dfrac{${fraction18[0] * k}}{${fraction18[1] * k}}=\\dfrac{${fraction18[0]}}{${fraction18[1]}}=${miseEnEvidence(texNombre(reponse, 2))}$`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -815,7 +817,7 @@ export default class SujetCAN20213ieme extends Exercice {
 
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
               On a $AB^2=BC^2-AC^2$, soit $AB^2=${a[2]}^2-${a[0]}^2=${a[2] ** 2 - a[0] ** 2}$.<br>
-              Par conséquent, $AB=${a[1]}$.`
+              Par conséquent, $AB=${miseEnEvidence(a[1])}$.`
             } else if (choix === 'b') {
               objets.push(pol[0])
               objets.push(
@@ -853,7 +855,7 @@ export default class SujetCAN20213ieme extends Exercice {
 
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                 On a $AC^2=BC^2-AB^2$, soit $AC^2=${a[2]}^2-${a[1]}^2=${a[2] ** 2 - a[1] ** 2}$.<br>
-                Par conséquent, $AC=${a[0]}$.`
+                Par conséquent, $AC=${miseEnEvidence(a[0])}$.`
             } else {
               objets.push(pol[0])
               objets.push(
@@ -891,7 +893,7 @@ export default class SujetCAN20213ieme extends Exercice {
 
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                   On a $BC^2=AB^2+AC^2$, soit $BC^2=${a[0]}^2+${a[1]}^2=${a[0] ** 2 + a[1] ** 2}$.<br>
-                  Par conséquent, $BC=${a[2]}$.`
+                  Par conséquent, $BC=${miseEnEvidence(a[2])}$.`
             }
 
             handleAnswers(this, index, { reponse: { value: reponse } })
@@ -916,7 +918,7 @@ export default class SujetCAN20213ieme extends Exercice {
             texte = `Un véhicule se déplace à une vitesse de $${a}\\text{ m/s}$.<br>
           Quelle distance parcourt-il en  $${b}$ min $30$ s ? `
             texteCorr = `En $1$ minute, il parcourt $60\\times ${a}=${60 * a}\\text{ m}$ et en $30$ s, $${60 * a}\\div 2=${30 * a}$.<br>
-          En $${b}$ min $30$ s, il aura parcouru : $${b}\\times ${60 * a}+${30 * a}=${texNombre(a * (60 * b + 30), 0)}\\text{ m}$.`
+          En $${b}$ min $30$ s, il aura parcouru : $${b}\\times ${60 * a}+${30 * a}=${miseEnEvidence(texNombre(a * (60 * b + 30), 0))}\\text{ m}$.`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -942,7 +944,7 @@ export default class SujetCAN20213ieme extends Exercice {
             texte = `Complète.<br>
          $${a}\\text{ cm}^3 = $ `
             texteCorr = `$1\\text{ cm}^3 = 0,001 \\text{ dm}^3$ et $1\\text{ dm}^3 = 1$ L.<br>
-          $${a}\\text{ cm}^3 = ${a}\\times 0,001=${texNombre(reponse, 3)}$ L.`
+          $${a}\\text{ cm}^3 = ${a}\\times 0,001=${miseEnEvidence(texNombre(reponse, 3))}$ L.`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -967,7 +969,7 @@ export default class SujetCAN20213ieme extends Exercice {
             b = fraction(fraction22[0], fraction22[1])
             texte = `Donne la fraction irréductible égale à : $${a.texFraction}$.<br>
           `
-            texteCorr = ` $${a.texFraction}=\\dfrac{${fraction22[0]}\\times 10\\times ${k / 10}}{${fraction22[1]}\\times 10\\times ${k / 10}}=${b.texFraction}$.
+            texteCorr = ` $${a.texFraction}=\\dfrac{${fraction22[0]}\\times 10\\times ${k / 10}}{${fraction22[1]}\\times 10\\times ${k / 10}}=${miseEnEvidence(b.texFraction)}$.
            <br>
           `
 
@@ -1074,7 +1076,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 objets,
               )
               texteCorr = `La figure est composée de $4$ segments de longueur $x$, de $2$ segments de longueur $${a}$ et d'un segment de longueur $${b}$.<br>
-          Le périmètre de cette figure est donc : $4\\times x+2\\times ${a}+${b}=4x+${2 * a + b}$.   `
+          Le périmètre de cette figure est donc : $4\\times x+2\\times ${a}+${b}=${miseEnEvidence(`4x+${2 * a + b}`)}$.   `
             } else if (choix === 'b') {
               b = randint(7, 12)
               a = randint(2, 5)
@@ -1155,7 +1157,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 objets,
               )
               texteCorr = `La figure est composée de $2$ segments de longueur $x$, de $4$ segments de longueur $${a}$ et d'un segment de longueur $${b}$.<br>
-            Le périmètre de cette figure est donc : $2\\times x+4\\times ${a}+${b}=2x+${4 * a + b}$.   `
+            Le périmètre de cette figure est donc : $2\\times x+4\\times ${a}+${b}=${miseEnEvidence(`2x+${4 * a + b}`)}$.   `
             } else if (choix === 'c') {
               b = randint(7, 12)
               a = randint(2, 5)
@@ -1231,7 +1233,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 objets,
               )
               texteCorr = `La figure est composée de $2$ segments de longueur $x$, de $3$ segments de longueur $${a}$ et d'un segment de longueur $${b}$.<br>
-              Le périmètre de cette figure est donc : $2\\times x+3\\times ${a}+${b}=2x+${3 * a + b}$.   `
+              Le périmètre de cette figure est donc : $2\\times x+3\\times ${a}+${b}=${miseEnEvidence(`2x+${3 * a + b}`)}$.   `
             } else {
               b = randint(7, 12)
               a = randint(2, 5)
@@ -1307,7 +1309,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 objets,
               )
               texteCorr = `La figure est composée de $3$ segments de longueur $x$, de $2$ segments de longueur $${a}$ et d'un segment de longueur $${b}$.<br>
-                Le périmètre de cette figure est donc : $3\\times x+2\\times ${a}+${b}=3x+${2 * a + b}$.   `
+                Le périmètre de cette figure est donc : $3\\times x+2\\times ${a}+${b}=${miseEnEvidence(`3x+${2 * a + b}`)}$.   `
             }
 
             handleAnswers(this, index, { reponse: { value: reponse } })
@@ -1331,7 +1333,7 @@ export default class SujetCAN20213ieme extends Exercice {
             texte = `Donne la solution de l'équation :<br>
           $${a}-x=${b}$`
 
-            texteCorr = `En ajoutant $${-a}$ dans chacun des deux membres, on obtient, $-x=${b - a}$, d'où $x=${a - b}$. `
+            texteCorr = `En ajoutant $${-a}$ dans chacun des deux membres, on obtient, $-x=${b - a}$, d'où $x=${miseEnEvidence(a - b)}$. `
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -1352,7 +1354,7 @@ export default class SujetCAN20213ieme extends Exercice {
             texte = `           Un capital de $${texNombre(a)}$ € rapporte $${texNombre(b)} \\%$ par an.<br>
            Quelle est la valeur du capital au bout d'un an ?`
             texteCorr = `Le capital est augmenté de $${b}\\%$ de $${texNombre(a)}$, soit de $${texNombre(b / 100)}\\times ${texNombre(a)}=${texNombre((a * b) / 100)}$.<br>
-          Le capital au bout d'un an sera donc de : $${texNombre(a, 0)}+ ${texNombre((a * b) / 100, 0)}=${texNombre(a + (a * b) / 100, 0)}$.`
+          Le capital au bout d'un an sera donc de : $${texNombre(a, 0)}+ ${texNombre((a * b) / 100, 0)}=${miseEnEvidence(texNombre(a + (a * b) / 100, 0))}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
@@ -1375,27 +1377,27 @@ export default class SujetCAN20213ieme extends Exercice {
             if (a < 11) {
               texteCorr = `Les nombres premiers inférieurs à $${a}$ sont : $2$, $3$, $5$, $7$.<br>
           Il y a donc $4$ nombres premiers inférieurs à $${a}$. <br>
-          On en déduit que la probabilité d'obtenir un nombre premier est : $${texFractionFromString(b, a)}${simplificationDeFractionAvecEtapes(b, a)}$.`
+          On en déduit que la probabilité d'obtenir un nombre premier est : $${pgcd(b, a) === 1 ? miseEnEvidence(texFractionFromString(b, a)) : texFractionFromString(b, a) + simplificationDeFractionAvecEtapes(b, a, { couleur2: orangeMathalea })}$.`
               reponse = [fraction(b, a), fraction(b, a).simplifie()]
             } else if (a > 10 && a < 13) {
               texteCorr = `Les nombres premiers inférieurs à $${a}$ sont : $2$, $3$, $5$, $7$, $11$.<br>
   Il y a donc $5$ nombres premiers inférieurs à $${a}$. <br>
-  On en déduit que la probabilité d'obtenir un nombre premier est : $${texFractionFromString(b + 1, a)}${simplificationDeFractionAvecEtapes(b + 1, a)}$.`
+  On en déduit que la probabilité d'obtenir un nombre premier est : $${pgcd(b + 1, a) === 1 ? miseEnEvidence(texFractionFromString(b + 1, a)) : texFractionFromString(b + 1, a) + simplificationDeFractionAvecEtapes(b + 1, a, { couleur2: orangeMathalea })}$.`
               reponse = [fraction(b + 1, a), fraction(b + 1, a).simplifie()]
             } else if (a > 12 && a < 17) {
               texteCorr = `Les nombres premiers inférieurs à $${a}$ sont : $2$, $3$, $5$, $7$, $11$, $13$.<br>
   Il y a donc $6$ nombres premiers inférieurs à $${a}$. <br>
-  On en déduit que la probabilité d'obtenir un nombre premier est : $${texFractionFromString(b + 2, a)}${simplificationDeFractionAvecEtapes(b + 2, a)}$.`
+  On en déduit que la probabilité d'obtenir un nombre premier est : $${pgcd(b + 2, a) === 1 ? miseEnEvidence(texFractionFromString(b + 2, a)) : texFractionFromString(b + 2, a) + simplificationDeFractionAvecEtapes(b + 2, a, { couleur2: orangeMathalea })}$.`
               reponse = [fraction(b + 2, a), fraction(b + 2, a).simplifie()]
             } else if (a > 16 && a < 19) {
               texteCorr = `Les nombres premiers inférieurs à $${a}$ sont : $2$, $3$, $5$, $7$, $11$, $13$, $17$.<br>
   Il y a donc $7$ nombres premiers inférieurs à $${a}$. <br>
-  On en déduit que la probabilité d'obtenir un nombre premier est : $${texFractionFromString(b + 3, a)}${simplificationDeFractionAvecEtapes(b + 3, a)}$.`
+  On en déduit que la probabilité d'obtenir un nombre premier est : $${pgcd(b + 3, a) === 1 ? miseEnEvidence(texFractionFromString(b + 3, a)) : texFractionFromString(b + 3, a) + simplificationDeFractionAvecEtapes(b + 3, a, { couleur2: orangeMathalea })}$.`
               reponse = [fraction(b + 3, a), fraction(b + 3, a).simplifie()]
             } else {
               texteCorr = `Les nombres premiers inférieurs à $${a}$ sont : $2$, $3$, $5$, $7$, $11$, $13$, $17$, $19$.<br>
   Il y a donc $8$ nombres premiers inférieurs à $${a}$. <br>
-  On en déduit que la probabilité d'obtenir un nombre premier est : $${texFractionFromString(b + 4, a)}${simplificationDeFractionAvecEtapes(b + 4, a)}$.`
+  On en déduit que la probabilité d'obtenir un nombre premier est : $${pgcd(b + 4, a) === 1 ? miseEnEvidence(texFractionFromString(b + 4, a)) : texFractionFromString(b + 4, a) + simplificationDeFractionAvecEtapes(b + 4, a, { couleur2: orangeMathalea })}$.`
               reponse = [fraction(b + 4, a), fraction(b + 4, a).simplifie()]
             }
             handleAnswers(this, i, {
@@ -1421,7 +1423,7 @@ export default class SujetCAN20213ieme extends Exercice {
             c = arrondi(a + b / 100, 2)
             const reponse = arrondi(c / 3, 2)
             texte = `$${texNombre(c, 2)}\\div 3= $`
-            texteCorr = `$${texNombre(c, 2)}\\div 3=(${texNombre(a)}+${texNombre(b / 100, 2)})\\div 3=${texNombre(a)}\\div 3+${texNombre(b / 100, 2)}\\div 3=${texNombre(a / 3, 0)}+${texNombre(b / 300, 2)}=${texNombre(reponse, 2)}$
+            texteCorr = `$${texNombre(c, 2)}\\div 3=(${texNombre(a)}+${texNombre(b / 100, 2)})\\div 3=${texNombre(a)}\\div 3+${texNombre(b / 100, 2)}\\div 3=${texNombre(a / 3, 0)}+${texNombre(b / 300, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$
           `
 
             handleAnswers(this, index, { reponse: { value: reponse } })
@@ -1448,7 +1450,7 @@ export default class SujetCAN20213ieme extends Exercice {
               texte = `Écriture  scientifique de $${texNombre(a, 3)}$.`
 
               texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-          Ici : $${texNombre(a, 3)}=\\underbrace{${texNombre(truc, 1)}}_{1\\leqslant ${texNombre(truc, 1)} <10}\\times 10^{-2}$. `
+          Ici : $${texNombre(a, 3)}=\\underbrace{${texNombre(truc, 1)}}_{1\\leqslant ${texNombre(truc, 1)} <10}\\times 10^{-2}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 1)}\\times 10^{-2}`)}$. `
             } else if (choix === 'b') {
               a = arrondi(randint(111, 399, [200, 300]) / 100000, 5)
               truc = arrondi(a * 1000, 2)
@@ -1456,7 +1458,7 @@ export default class SujetCAN20213ieme extends Exercice {
               texte = `Écriture  scientifique de $${texNombre(a, 5)}$.`
 
               texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-            Ici : $${texNombre(a, 5)}=\\underbrace{${texNombre(truc, 2)}}_{1\\leqslant ${texNombre(truc, 2)} <10}\\times 10^{-3}$. `
+            Ici : $${texNombre(a, 5)}=\\underbrace{${texNombre(truc, 2)}}_{1\\leqslant ${texNombre(truc, 2)} <10}\\times 10^{-3}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 2)}\\times 10^{-3}`)}$. `
             } else {
               a = arrondi(randint(111, 399, [200, 300]) / 1000000, 6)
               truc = arrondi(a * 10000, 2)
@@ -1464,7 +1466,7 @@ export default class SujetCAN20213ieme extends Exercice {
               texte = `Écriture  scientifique de $${texNombre(a, 6)}$.`
 
               texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-              Ici : $${texNombre(a, 6)}=\\underbrace{${texNombre(truc, 2)}}_{1\\leqslant ${texNombre(truc, 2)} <10}\\times 10^{-4}$. `
+              Ici : $${texNombre(a, 6)}=\\underbrace{${texNombre(truc, 2)}}_{1\\leqslant ${texNombre(truc, 2)} <10}\\times 10^{-4}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 2)}\\times 10^{-4}`)}$. `
             }
             handleAnswers(this, index, {
               reponse: {
@@ -1494,7 +1496,7 @@ export default class SujetCAN20213ieme extends Exercice {
             texteCorr = `On remonte le programme de calcul en commençant par diviser le nombre obtenu par $${b}$.<br>
           On obtient $${resultat}\\div ${b}=${resultat / b}$<br>
           On retranche ensuite $${a}$.<br>
-          On obtient $${resultat / b} -${a}=${truc}$.`
+          On obtient $${resultat / b} -${a}=${miseEnEvidence(truc)}$.`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -1516,7 +1518,7 @@ export default class SujetCAN20213ieme extends Exercice {
               texte = `Un article à $${a}$ € est soldé à $${texNombre(a * 0.75, 2, true)}$ €.<br>
           Quel est le pourcentage de réduction ?`
               texteCorr = `La réduction est de $${a}-${texNombre(a * 0.75, 2, true)}=${texNombre(0.25 * a, 2, true)}$.<br>
-          Le prix de départ était de $${a}$  €. Le pourcentage de réduction est donné par : $\\dfrac{${texNombre(0.25 * a, 2, true)}}{${a}}=0,25=25\\%$. `
+          Le prix de départ était de $${a}$  €. Le pourcentage de réduction est donné par : $\\dfrac{${texNombre(0.25 * a, 2, true)}}{${a}}=0,25=${miseEnEvidence(25)}\\,\\%$. `
               reponse = 25
             } else {
               a = randint(2, 7) * 10
@@ -1525,7 +1527,7 @@ export default class SujetCAN20213ieme extends Exercice {
               texte = `Un article à $${a}$ € est soldé à $${texNombre(a * c, 2, true)}$ €.<br>
             Quel est le pourcentage de réduction ?`
               texteCorr = `La réduction est de $${a}-${texNombre(a * c, 2, true)}=${texNombre(a - a * c, 2, true)}$.<br>
-            Le prix de départ était de $${a}$  €. Le pourcentage de réduction est donné par : $\\dfrac{${texNombre(a - a * c, 2, true)}}{${a}}=${texNombre(b / 100, 2)}=${b}\\%$. `
+            Le prix de départ était de $${a}$  €. Le pourcentage de réduction est donné par : $\\dfrac{${texNombre(a - a * c, 2, true)}}{${a}}=${texNombre(b / 100, 2)}=${miseEnEvidence(b)}\\,\\%$. `
               reponse = b
             }
             handleAnswers(this, index, { reponse: { value: reponse } })

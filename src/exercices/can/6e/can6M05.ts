@@ -1,4 +1,5 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -38,10 +39,10 @@ export default class ConversionM3EtLitres extends ExerciceSimple {
         }
 
         this.optionsChampTexte = { texteApres: ' L' }
-        this.correction = ` $${texNombre(a)}\\text{ m}^3 = ${texNombre(a * 1000)}\\text{ L}$`
+        this.correction = ` $${texNombre(a)}\\text{ m}^3 = ${miseEnEvidence(texNombre(a * 1000))}\\text{ L}$`
         this.correction += texteEnCouleur(`<br> Mentalement : <br>
         Comme $1\\text{ m}^3 = ${texNombre(1000)}\\text{ L}$,  alors pour passer des $\\text{ m}^3$ au $\\text{L}$, on multiplie par $${texNombre(1000)}$.<br>
-          Comme $${texNombre(a)}\\times ${texNombre(1000)} =${texNombre(a * 1000)}$, alors $${texNombre(a)}\\text{ m}^3${sp()}=${resultat}\\text{ L}$.  `)
+          Comme $${texNombre(a)}\\times ${texNombre(1000)} =${texNombre(a * 1000)}$, alors $${texNombre(a)}\\text{ m}^3${sp()}=${resultat}\\text{ L}$.  `, bleuMathalea)
         this.canEnonce = 'Compléter.'
         this.canReponseACompleter = `$${texNombre(a)}\\text{ m}^3 = \\dots\\text{ L}$`
         break
@@ -56,10 +57,10 @@ export default class ConversionM3EtLitres extends ExerciceSimple {
         this.optionsChampTexte = { texteApres: '$\\text{ m}^3$' }
         this.canEnonce = 'Compléter.'
         this.canReponseACompleter = `$${texNombre(a)}\\text{ L} = \\dots\\text{ m}^3$`
-        this.correction = ` $${texNombre(a)}\\text{ L}=${texNombre(a / 1000)}\\text{ m}^3$`
+        this.correction = ` $${texNombre(a)}\\text{ L}=${miseEnEvidence(texNombre(a / 1000))}\\text{ m}^3$`
         this.correction += texteEnCouleur(`<br> Mentalement : <br>
            Comme $1\\text{ m}^3 = ${texNombre(1000)}\\text{ L}$, alors $1\\text{ L} = ${texNombre(0.001)}\\text{ m}^3$. Donc, pour passer des $\\text{L}$ au $\\text{ m}^3$, on divise par $${texNombre(1000)}$.<br>
-          Comme $${texNombre(a)}\\div ${texNombre(1000)} =${texNombre(a / 1000)}$, alors $${texNombre(a)}\\text{ L}$$${sp()}=${texNombre(a / 1000)}\\text{ m}^3$.  `)
+          Comme $${texNombre(a)}\\div ${texNombre(1000)} =${texNombre(a / 1000)}$, alors $${texNombre(a)}\\text{ L}$$${sp()}=${texNombre(a / 1000)}\\text{ m}^3$.  `, bleuMathalea)
 
         break
     }

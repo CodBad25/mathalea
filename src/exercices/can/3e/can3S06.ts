@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { sp } from '../../../lib/outils/outilString'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -38,7 +39,7 @@ $\\underbrace{x_1 ${sp(2)} ; ${sp(2)} x_2 ${sp(2)} ; ${sp(2)} ..... ; ${sp(2)}
 
     
     
-    Puisque la série comporte un nombre impair de valeurs, la médiane se situe au rang $\\dfrac{${c}+1}{2}=${texFractionReduite(c + 1, 2)}$.`
+    Puisque la série comporte un nombre impair de valeurs, la médiane se situe au rang $\\dfrac{${c}+1}{2}=${miseEnEvidence(texFractionReduite(c + 1, 2))}$.`
     this.reponse = (c + 1) / 2
   }
 }

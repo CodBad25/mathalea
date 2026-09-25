@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
@@ -42,63 +43,63 @@ export default class MesurePrincipale extends Exercice {
       {
         texte: '$\\cos\\big(x+\\pi\\big)=$',
         reponse: '-\\cos(x)',
-        texteCorr: '$\\cos(x+\\pi)=-\\cos(x)$',
+        texteCorr: `$\\cos(x+\\pi)=${miseEnEvidence('-\\cos(x)')}$`,
       },
 
       {
         texte: '$\\cos\\big(x-\\pi\\big)=$',
         reponse: '-\\cos(x)',
-        texteCorr: '$\\cos(x-\\pi)=-\\cos(x)$',
+        texteCorr: `$\\cos(x-\\pi)=${miseEnEvidence('-\\cos(x)')}$`,
       },
       {
         texte: '$\\cos\\left(x+\\dfrac{\\pi}{2}\\right)=$',
         reponse: '-\\sin(x)',
-        texteCorr: '$\\cos\\left(x+\\dfrac{\\pi}{2}\\right)=-\\sin(x)$',
+        texteCorr: `$\\cos\\left(x+\\dfrac{\\pi}{2}\\right)=${miseEnEvidence('-\\sin(x)')}$`,
       },
       {
         texte: '$\\cos\\left(\\dfrac{\\pi}{2}-x\\right)=$',
         reponse: '\\sin(x)',
-        texteCorr: '$\\cos\\left(\\dfrac{\\pi}{2}-x\\right)=\\sin(x)$',
+        texteCorr: `$\\cos\\left(\\dfrac{\\pi}{2}-x\\right)=${miseEnEvidence('\\sin(x)')}$`,
       },
       {
         texte: '$\\sin\\big(x+\\pi\\big)=$',
         reponse: '-\\sin(x)',
-        texteCorr: '$\\sin(x+\\pi)=-\\sin(x)$',
+        texteCorr: `$\\sin(x+\\pi)=${miseEnEvidence('-\\sin(x)')}$`,
       },
       {
         texte: '$\\sin\\big(x-\\pi\\big)=$',
         reponse: '-\\sin(x)',
-        texteCorr: '$\\sin(x-\\pi)=-\\sin(x)$',
+        texteCorr: `$\\sin(x-\\pi)=${miseEnEvidence('-\\sin(x)')}$`,
       },
       {
         texte: '$\\sin\\left(x+\\dfrac{\\pi}{2}\\right)=$',
         reponse: '\\cos(x)',
-        texteCorr: '$\\sin\\left(x+\\dfrac{\\pi}{2}\\right)=\\cos(x)$',
+        texteCorr: `$\\sin\\left(x+\\dfrac{\\pi}{2}\\right)=${miseEnEvidence('\\cos(x)')}$`,
       },
       {
         texte: '$\\sin\\left(\\dfrac{\\pi}{2}-x\\right)=$',
         reponse: '\\cos(x)',
-        texteCorr: '$\\sin\\left(\\dfrac{\\pi}{2}-x\\right)=\\cos(x)$',
+        texteCorr: `$\\sin\\left(\\dfrac{\\pi}{2}-x\\right)=${miseEnEvidence('\\cos(x)')}$`,
       },
       {
         texte: '$\\cos\\big(-x\\big)=$',
         reponse: '\\cos(x)',
-        texteCorr: '$\\cos(-x)=\\cos(x)$',
+        texteCorr: `$\\cos(-x)=${miseEnEvidence('\\cos(x)')}$`,
       },
       {
         texte: '$\\sin\\big(-x\\big)=$',
         reponse: '-\\sin(x)',
-        texteCorr: '$\\sin(-x)=-\\sin(x)$',
+        texteCorr: `$\\sin(-x)=${miseEnEvidence('-\\sin(x)')}$`,
       },
       {
         texte: '$\\cos\\big(\\pi-x\\big)=$',
         reponse: '-\\cos(x)',
-        texteCorr: '$\\cos\\big(\\pi-x\\big)=-\\cos(x)$',
+        texteCorr: `$\\cos\\big(\\pi-x\\big)=${miseEnEvidence('-\\cos(x)')}$`,
       },
       {
         texte: '$\\sin\\big(\\pi-x\\big)=$',
         reponse: '\\sin(x)',
-        texteCorr: '$\\sin\\big(\\pi-x\\big)=\\sin(x)$',
+        texteCorr: `$\\sin\\big(\\pi-x\\big)=${miseEnEvidence('\\sin(x)')}$`,
       },
     ]
     const listeTypeQuestions = combinaisonListes(

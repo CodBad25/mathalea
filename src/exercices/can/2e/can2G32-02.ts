@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { rienSi1 } from '../../../lib/outils/ecritures'
 import { context } from '../../../modules/context'
@@ -40,7 +41,7 @@ export default class CoordonneesPointIntersectionAxeOrdonneesDroite extends Exer
       this.correction = `Puisque le point d'intersection se situe sur l'axe des ordonnées, son abscisse est nulle ($x=0$).
     <br>
   Son ordonnée est donc la solution de l'équation :  $${rienSi1(b)}y+${c}=0$, c'est-à-dire $y=${texFractionReduite(-c, b)}$.
-  <br>Les coordonnées de ce   point sont donc : $(0; ${texFractionReduite(-c, b)})$.`
+  <br>Les coordonnées de ce   point sont donc : $${miseEnEvidence(`(0; ${texFractionReduite(-c, b)})`)}$.`
 
       this.canEnonce = `Déterminer les coordonnées du point d'intersection entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y+${c}=0$ et l'axe des ordonnées.`
     } else {
@@ -49,7 +50,7 @@ export default class CoordonneesPointIntersectionAxeOrdonneesDroite extends Exer
       this.correction = `Puisque le point d'intersection se situe sur l'axe des ordonnées, son abscisse est nulle ($x=0$).
 <br>
 Son ordonnée est donc la solution de l'équation : $${rienSi1(b)}y${c}=0$, c'est-à-dire $y=${texFractionReduite(-c, b)}$.
-<br>Les coordonnées de ce   point sont donc : $(0;${texFractionReduite(-c, b)})$.`
+<br>Les coordonnées de ce   point sont donc : $${miseEnEvidence(`(0;${texFractionReduite(-c, b)})`)}$.`
 
       this.canEnonce = `Déterminer les coordonnées du point d'intersection entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y${c}=0$ et l'axe des ordonnées.`
     }

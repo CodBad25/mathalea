@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -44,11 +45,11 @@ export default class SimplifierQuotient extends ExerciceSimple {
           const maFraction1 = new FractionEtendue(a, k * a)
           if (choice([true, false])) {
             this.question = ` Simplifier l'écriture fractionnaire : $\\dfrac{${a}x}{${k * a}}$.`
-            this.correction = `$\\dfrac{${a}x}{${k * a}}=\\dfrac{${a}x}{${k}\\times ${a}}=\\dfrac{x}{${k}}=${maFraction1.texFractionSimplifiee}x$`
+            this.correction = `$\\dfrac{${a}x}{${k * a}}=\\dfrac{${a}x}{${k}\\times ${a}}=\\dfrac{x}{${k}}=${miseEnEvidence(`${maFraction1.texFractionSimplifiee}x`)}$`
             this.reponse = [`\\dfrac{x}{${k}}`, `${arrondi(1 / k, 2)}x`]
           } else {
             this.question = ` Simplifier l'écriture fractionnaire : $\\dfrac{${k * a}x}{${a}}$.`
-            this.correction = `$\\dfrac{${k * a}x}{${a}}=\\dfrac{${a}\\times ${ecritureParentheseSiNegatif(k)}x}{${a}}=${rienSi1(k)}x$`
+            this.correction = `$\\dfrac{${k * a}x}{${a}}=\\dfrac{${a}\\times ${ecritureParentheseSiNegatif(k)}x}{${a}}=${miseEnEvidence(`${rienSi1(k)}x`)}$`
             this.reponse = [`${k}x`]
           }
         }
@@ -60,11 +61,11 @@ export default class SimplifierQuotient extends ExerciceSimple {
           const b = randint(-9, 9, 0)
           if (choice([true, false])) {
             this.question = ` Simplifier l'écriture fractionnaire : $\\dfrac{${k * a}x${ecritureAlgebrique(k * b)}}{${k}}$.`
-            this.correction = `$\\dfrac{${k * a}x${ecritureAlgebrique(k * b)}}{${k}}=\\dfrac{${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})}{${k}}=${rienSi1(a)}x${ecritureAlgebrique(b)}$.`
+            this.correction = `$\\dfrac{${k * a}x${ecritureAlgebrique(k * b)}}{${k}}=\\dfrac{${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})}{${k}}=${miseEnEvidence(`${rienSi1(a)}x${ecritureAlgebrique(b)}`)}$.`
             this.reponse = [`${a}x+${b}`]
           } else {
             this.question = ` Simplifier l'écriture fractionnaire : $\\dfrac{${k}x${ecritureAlgebrique(k * b)}}{${k}}$.`
-            this.correction = `$\\dfrac{${k}x${ecritureAlgebrique(k * b)}}{${k}}=\\dfrac{${k}(x${ecritureAlgebrique(b)})}{${k}}=x${ecritureAlgebrique(b)}$.`
+            this.correction = `$\\dfrac{${k}x${ecritureAlgebrique(k * b)}}{${k}}=\\dfrac{${k}(x${ecritureAlgebrique(b)})}{${k}}=${miseEnEvidence(`x${ecritureAlgebrique(b)}`)}$.`
             this.reponse = [`x+${b}`]
           }
         }

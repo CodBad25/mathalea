@@ -77,7 +77,7 @@ export default class NomExercice extends ExerciceSimple {
       }
       this.correction =
         this.correction.substring(0, this.correction.length - 1) +
-        `=${this.reponse}$`
+        `=${miseEnEvidence(this.reponse)}$`
     }
 
     if (!this.interactif) {

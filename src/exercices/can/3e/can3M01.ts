@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer l’aire ou un périmètre d’un carré'
@@ -33,7 +34,7 @@ export default class CarreAire extends ExerciceSimple {
 
         this.question = `Quelle est l'aire d'un carré  dont le périmètre est $${4 * a}\\text{ cm}$ ?`
         this.reponse = a * a
-        this.correction = `Le côté du carré est $${4 * a}\\div 4=${a}$, donc son aire est : $${a}\\times ${a}=${a ** 2}\\text{ cm}^2$.`
+        this.correction = `Le côté du carré est $${4 * a}\\div 4=${a}$, donc son aire est : $${a}\\times ${a}=${miseEnEvidence(a ** 2)}\\text{ cm}^2$.`
         this.optionsChampTexte = { texteApres: '$\\text{ cm}^2$' }
 
         this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
@@ -43,7 +44,7 @@ export default class CarreAire extends ExerciceSimple {
         c = a * a
         this.question = `Déterminer le périmètre  d'un carré d'aire $${c}\\text{ cm}^2$. `
         this.reponse = 4 * a
-        this.correction = `Le côté du carré est $\\sqrt{${c}}=${a}$. Son périmètre est donc $4\\times ${a}=${4 * a}\\text{ cm}$.`
+        this.correction = `Le côté du carré est $\\sqrt{${c}}=${a}$. Son périmètre est donc $4\\times ${a}=${miseEnEvidence(4 * a)}\\text{ cm}$.`
         this.optionsChampTexte = { texteApres: ' $\\text{cm}$' }
 
         this.canReponseACompleter = '$\\ldots\\text{ cm}$'

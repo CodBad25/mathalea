@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { cercle } from '../../../lib/2d/cercle'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -155,7 +156,7 @@ export default class Can2026CE1Q20 extends ExerciceCan {
 
     this.correction =
       monQcm.texteCorr +
-      `La barre ${positionCorrecte} représente la fraction un demi.`
+      `La ${texteEnCouleurEtGras(`barre ${positionCorrecte}`)} représente la fraction un demi.`
     this.canReponseACompleter = monQcm.texte
   }
 

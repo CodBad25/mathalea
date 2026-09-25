@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/view.capytale.save.can.test.ts ⚠️
  */
@@ -37,14 +38,14 @@ export default class DoubleOuBienMoitie extends ExerciceSimple {
     if (this.quotaChoice('doubleOuMoitie', [true, false])) {
       this.reponse = a << 1
       this.question = `Calculer le double de $ ${a} $.`
-      this.correction = `$${a}\\times 2 = ${a << 1}$`
+      this.correction = `$${a}\\times 2 = ${miseEnEvidence(a << 1)}$`
     } else {
       if (a % 2 === 1) {
         a++
       }
       this.question = `Calculer la moitié de $ ${a} $.`
       this.reponse = a >> 1
-      this.correction = `$${a}\\div 2 = ${a >> 1}$`
+      this.correction = `$${a}\\div 2 = ${miseEnEvidence(a >> 1)}$`
     }
   }
 }

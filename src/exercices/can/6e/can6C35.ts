@@ -103,7 +103,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
               Elle l'a donc payé  (${choix1 ? `$${texPrix(a)}-${texPrix(b)}$` : `$${texPrix(a)}+${texPrix(b)}$`}) €,
               soit ${choix1 ? `$${texPrix(prix2)}$` : `$${texPrix(prix1)}$`} €.<br>
               Ensemble, elles ont donc payé : (${choix1 ? `$${texPrix(a)}+${texPrix(prix2)}$` : `$${texPrix(a)}+${texPrix(prix1)}$`}) €,
-              soit ${choix1 ? `$${texPrix(reponse1)}$` : `$${miseEnEvidence(texPrix(reponse2))}$`} €. `
+              soit ${choix1 ? `$${miseEnEvidence(texPrix(reponse1))}$` : `$${miseEnEvidence(texPrix(reponse2))}$`} €. `
 
           this.canReponseACompleter = '$\\dots$ €'
         } else {
@@ -119,7 +119,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
           this.correction = `${prenom2} a payé son déjeuner $${texPrix(b)}$ € ${choix1 ? 'de plus' : ' de moins '} que celui de ${prenom1}.<br>
           Elle l'a donc payé  (${choix1 ? `$${texPrix(a)}+${texPrix(b)}$` : `$${texPrix(a)}-${texPrix(b)}$`}) €, soit ${choix1 ? `$${texPrix(prix1)}$` : `$${texPrix(prix2)}$`} €. <br>
               Ensemble, elles ont donc payé : (${choix1 ? `$${texPrix(a)}+${texPrix(prix1)}$` : `$${texPrix(a)}+${texPrix(prix2)}$`}) €,
-              soit ${choix1 ? `$${texPrix(reponse2)}$` : `$${texPrix(reponse1)}$`} €. `
+              soit ${choix1 ? `$${miseEnEvidence(texPrix(reponse2))}$` : `$${miseEnEvidence(texPrix(reponse1))}$`} €. `
 
           this.canReponseACompleter = '$\\dots$ €'
         }
@@ -149,7 +149,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
 
               Quelle est la taille de ${prenom2} ?`
           this.correction = `${prenom1} mesure $${b}\\text{ cm}$ ${choix1 ? 'de plus' : ' de moins '} que ${prenom2} donc ${prenom2} mesure $${b}\\text{ cm}$ ${choix1 ? 'de moins' : ' de plus '} que ${prenom1}.<br>
-              Il mesure donc  (${choix1 ? `$${texNombre(a, 2, true)}-${texNombre(c, 2, true)}$` : `$${texNombre(a, 2, true)}+${texNombre(c, 2, true)}$`}) $\\text{m}$, soit  ${choix1 ? `$${texNombre(reponse2, 2, true)}$` : `$${miseEnEvidence(texNombre(reponse1, 2, true))}$`} $\\text{m}$. `
+              Il mesure donc  (${choix1 ? `$${texNombre(a, 2, true)}-${texNombre(c, 2, true)}$` : `$${texNombre(a, 2, true)}+${texNombre(c, 2, true)}$`}) $\\text{m}$, soit  ${choix1 ? `$${miseEnEvidence(texNombre(reponse2, 2, true))}$` : `$${miseEnEvidence(texNombre(reponse1, 2, true))}$`} $\\text{m}$. `
 
           this.canReponseACompleter = '$\\dots\\text{ m}$'
         } else {
@@ -159,7 +159,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
           this.question = `${prenom1} mesure $${texNombre(a, 2, true)}\\text{ m}$. ${prenom2} mesure $${b}\\text{ cm}$ ${choix1 ? 'de plus' : ' de moins '}
                     que ${prenom1}. <br>
                     Quelle est la taille de ${prenom2} ?`
-          this.correction = `${prenom2} mesure $${b}\\text{ cm}$ ${choix1 ? 'de plus' : ' de moins '} que ${prenom1} donc ${prenom2} mesure (${choix1 ? `$${texNombre(a, 2, true)}+${texNombre(c, 2, true)}$` : `$${texNombre(a, 2, true)}-${texNombre(c, 2, true)}$`}) $\\text{m}$, soit  ${choix1 ? `$${texNombre(reponse1, 2, true)}$` : `$${miseEnEvidence(texNombre(reponse2, 2, true))}$`} $\\text{m}$. `
+          this.correction = `${prenom2} mesure $${b}\\text{ cm}$ ${choix1 ? 'de plus' : ' de moins '} que ${prenom1} donc ${prenom2} mesure (${choix1 ? `$${texNombre(a, 2, true)}+${texNombre(c, 2, true)}$` : `$${texNombre(a, 2, true)}-${texNombre(c, 2, true)}$`}) $\\text{m}$, soit  ${choix1 ? `$${miseEnEvidence(texNombre(reponse1, 2, true))}$` : `$${miseEnEvidence(texNombre(reponse2, 2, true))}$`} $\\text{m}$. `
 
           this.canReponseACompleter = '$\\dots\\text{ m}$'
         }

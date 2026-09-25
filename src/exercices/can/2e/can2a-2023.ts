@@ -33,7 +33,7 @@ import Exercice from '../../Exercice'
 import { grille } from '../../../lib/2d/Grille'
 import { polyline } from '../../../lib/2d/Polyline'
 import { tracePoint } from '../../../lib/2d/TracePoint'
-import { bleuMathalea } from '../../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
@@ -783,7 +783,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             texte = `Écriture  scientifique de $${texNombre(a, 3)}$`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-            Ici : $${texNombre(a, 3)}=\\underbrace{${texNombre(truc, 3)}}_{1\\leqslant ${texNombre(truc, 3)} <10}\\times 10^{-2}$. `
+            Ici : $${texNombre(a, 3)}=\\underbrace{${texNombre(truc, 3)}}_{1\\leqslant ${texNombre(truc, 3)} <10}\\times 10^{-2}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 3)}\\times 10^{-2}`)}$. `
           } else if (choix === 'b') {
             a = randint(111, 399, [200, 300]) / 100000
             const truc = a * 1000
@@ -791,7 +791,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             texte = `Écriture  scientifique de $${texNombre(a, 5)}$`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-              Ici : $${texNombre(a, 5)}=\\underbrace{${miseEnEvidence(texNombre(truc, 5))}}_{1\\leqslant ${texNombre(truc, 5)} <10}\\times 10^{-3}$. `
+              Ici : $${texNombre(a, 5)}=\\underbrace{${miseEnEvidence(texNombre(truc, 5))}}_{1\\leqslant ${texNombre(truc, 5)} <10}\\times 10^{-3}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 5)}\\times 10^{-3}`)}$. `
           } else {
             a = randint(111, 399, [200, 300]) / 1000000
             const truc = a * 10000
@@ -799,7 +799,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             texte = `Écriture  scientifique de $${texNombre(a, 6)}$`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-                Ici : $${texNombre(a, 6)}=\\underbrace{${texNombre(truc, 6)}}_{1\\leqslant ${texNombre(truc, 6)} <10}\\times 10^{-4}$. `
+                Ici : $${texNombre(a, 6)}=\\underbrace{${texNombre(truc, 6)}}_{1\\leqslant ${texNombre(truc, 6)} <10}\\times 10^{-4}$.<br>L'écriture scientifique est donc $${miseEnEvidence(`${texNombre(truc, 6)}\\times 10^{-4}`)}$. `
           }
           handleAnswers(this, index, {
             reponse: {
@@ -826,12 +826,12 @@ export default class SujetCAN2023Seconde extends Exercice {
           if (choice([true, false])) {
             texte = `Développer  $(x+${a})^2$`
             texteCorr = `On utilise l'égalité remarquable $(a+b)^2=a^2+2ab+b^2$ avec $a=x$ et $b=${a}$.<br>
-            $(x+${a})^2=x^2+2 \\times x \\times ${a} + ${a}^2=x^2+${2 * a}x+${a * a}$`
+            $(x+${a})^2=x^2+2 \\times x \\times ${a} + ${a}^2=${miseEnEvidence(`x^2+${2 * a}x+${a * a}`)}$`
             reponse = `x^2+${2 * a}x+${a * a}`
           } else {
             texte = `Développer et réduire $(x-${a})(x+${a})$`
             texteCorr = `On utilise l'égalité remarquable $(a+b)(a-b)=a^2-b^2$ avec $a=x$ et $b=${a}$.<br>
-          $(x-${a})(x+${a})=x^2- ${a}^2=x^2-${a * a}$`
+          $(x-${a})(x+${a})=x^2- ${a}^2=${miseEnEvidence(`x^2-${a * a}`)}$`
             reponse = `x^2-${a * a}`
           }
           handleAnswers(this, index, {
@@ -1451,7 +1451,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             texte = 'Donner le coefficient directeur $m$ de la droite.<br>'
             texte += `${fig}`
             texteCorr = `En partant de l'ordonnée à l'origine de la droite pour aller jusqu'au point $A$, on se décale de $${xA26}$ unités vers la droite et on monte de $${yA26 - yB26}$ unités vers le haut. <br>
-            Ainsi, le coefficient directeur de la droite est $\\dfrac{${yA26 - yB26}}{${xA26}}${m.texSimplificationAvecEtapes()}$.`
+            Ainsi, le coefficient directeur de la droite est ${m.estIrreductible && m.num * m.den > 0 ? `$${miseEnEvidence(`\\dfrac{${yA26 - yB26}}{${xA26}}`)}$` : `$\\dfrac{${yA26 - yB26}}{${xA26}}${m.texSimplificationAvecEtapes(false, orangeMathalea)}$`}.`
 
             reponse = m.texFraction
             handleAnswers(this, index, {

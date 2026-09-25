@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { scriptPython } from '../../../lib/outils/scriptPython'
@@ -58,6 +59,7 @@ export default class CalculSuitePython extends ExerciceSimple {
           u = u + r
         }
         this.reponse = u
+        this.correction += `L'algorithme retourne $${miseEnEvidence(u)}$.`
         break
 
       case 'b': // suite u=u+i
@@ -82,6 +84,7 @@ export default class CalculSuitePython extends ExerciceSimple {
           u = u + indice
         }
         this.reponse = u
+        this.correction += `L'algorithme retourne $${miseEnEvidence(u)}$.`
         break
 
       case 'c': // suite u=u+i
@@ -108,7 +111,7 @@ On calcule les valeurs successives des  variables u et n. On s'arrête dès que 
           n = n + 1
           a = q * a
         }
-        this.correction += `$> ${b}$. Donc l'algorithme retourne $${n}$.`
+        this.correction += `$> ${b}$. Donc l'algorithme retourne $${miseEnEvidence(n)}$.`
         this.reponse = n
         break
     }

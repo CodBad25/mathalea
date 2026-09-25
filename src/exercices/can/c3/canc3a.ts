@@ -154,28 +154,28 @@ export default class CourseAuxNombresCM extends Exercice {
           a = randint(1, 3) * 10 + randint(1, 5)
           b = randint(1, 5) * 10 + randint(1, 4)
           texte = `$${a}+${b}$`
-          texteCorr = `$${a}+${b}=${a + b}$`
+          texteCorr = `$${a}+${b}=${miseEnEvidence(a + b)}$`
           handleAnswers(this, i, { reponse: { value: a + b } })
           break
         case 'q2': // différence d'entiers sans retenue
           a = randint(1, 3) * 10 + randint(1, 5)
           b = randint(1, 5) * 10 + randint(1, 4)
           texte = `$${a + b}-${a}$`
-          texteCorr = `$${a + b}-${a}=${b}$`
+          texteCorr = `$${a + b}-${a}=${miseEnEvidence(b)}$`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q3': // somme d'entiers à deux chiffres avec retenue
           a = randint(1, 3) * 10 + randint(5, 9)
           b = randint(1, 5) * 10 + randint(11 - (a % 10), 9)
           texte = `$${a}+${b}$`
-          texteCorr = `$${a}+${b}=${a + b}$`
+          texteCorr = `$${a}+${b}=${miseEnEvidence(a + b)}$`
           handleAnswers(this, i, { reponse: { value: a + b } })
           break
         case 'q4': // difference avec retenue
           a = randint(1, 3) * 10 + randint(5, 9)
           b = randint(1, 5) * 10 + randint(11 - (a % 10), 9)
           texte = `$${a + b}-${a}$`
-          texteCorr = `$${a + b}-${a}=${b}$`
+          texteCorr = `$${a + b}-${a}=${miseEnEvidence(b)}$`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q5': // Décomposition
@@ -184,42 +184,42 @@ export default class CourseAuxNombresCM extends Exercice {
           c = randint(1, 9, [a, b])
           resultat = arrondi(a * 1000 + b * 10 + c * 100)
           texte = `$${texNombre(a)}\\times ${texNombre(1000)} + ${texNombre(b)}\\times 10 + ${texNombre(c)}\\times 100$`
-          texteCorr = `$${texNombre(a)}\\times ${texNombre(1000)} + ${texNombre(b)}\\times 10 + ${texNombre(c)}\\times 100 =${texNombre(resultat)}$`
+          texteCorr = `$${texNombre(a)}\\times ${texNombre(1000)} + ${texNombre(b)}\\times 10 + ${texNombre(c)}\\times 100 =${miseEnEvidence(texNombre(resultat))}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q6': // Division d'entiers
           a = randint(2, 9)
           b = randint(3, 9)
           texte = `$${a * b}\\div${a}$`
-          texteCorr = `$${a * b}\\div${a}=${b}$`
+          texteCorr = `$${a * b}\\div${a}=${miseEnEvidence(b)}$`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q7': // Somme entier et décimal
           a = arrondi(randint(1, 5) + randint(1, 5) / 10)
           b = randint(1, 4)
           texte = `$${texNombre(a)}+${b}$`
-          texteCorr = `$${texNombre(a)}+${b}=${texNombre(a + b)}$`
+          texteCorr = `$${texNombre(a)}+${b}=${miseEnEvidence(texNombre(a + b))}$`
           handleAnswers(this, i, { reponse: { value: arrondi(a + b) } })
           break
         case 'q8': // Somme décimaux
           a = arrondi(randint(1, 5) + randint(1, 5) / 10)
           b = arrondi(randint(1, 4) + randint(1, 4) / 10 + randint(1, 9) / 100)
           texte = `$${texNombre(a)}+${texNombre(b)}$`
-          texteCorr = `$${texNombre(a)}+${texNombre(b)}=${texNombre(a + b)}$`
+          texteCorr = `$${texNombre(a)}+${texNombre(b)}=${miseEnEvidence(texNombre(a + b))}$`
           handleAnswers(this, i, { reponse: { value: arrondi(a + b) } })
           break
         case 'q9': // Différence décimaux
           a = arrondi(randint(1, 5) + randint(1, 5) / 10)
           b = arrondi(randint(1, 4) + randint(1, 4) / 10 + randint(1, 9) / 100)
           texte = `$${texNombre(a + b)}-${texNombre(a)}$`
-          texteCorr = `$${texNombre(a + b)}-${texNombre(a)}=${texNombre(b)}$`
+          texteCorr = `$${texNombre(a + b)}-${texNombre(a)}=${miseEnEvidence(texNombre(b))}$`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q10': // Différence décimaux avec retenue
           a = arrondi(randint(1, 5) + randint(5, 9) / 10)
           b = arrondi(randint(1, 4) + randint(5, 9) / 10)
           texte = `$${texNombre(a + b)}-${texNombre(a)}$`
-          texteCorr = `$${texNombre(a + b)}-${texNombre(a)}=${texNombre(b)}$`
+          texteCorr = `$${texNombre(a + b)}-${texNombre(a)}=${miseEnEvidence(texNombre(b))}$`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q11': // Divisions d'entiers
@@ -227,7 +227,7 @@ export default class CourseAuxNombresCM extends Exercice {
           b = randint(3, 9)
           c = prenom()
           texte = `J'ai $${arrondi(a * b)}$ ans. Je suis $${a}$ fois plus âgé que ${c}.<br>Quel âge a ${c} ?`
-          texteCorr = `L'âge de ${c} est : $${arrondi(a * b)} \\div ${a}=${b}$ ans.`
+          texteCorr = `L'âge de ${c} est : $${arrondi(a * b)} \\div ${a}=${miseEnEvidence(b)}$ ans.`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q12': // Addition d'entiers
@@ -236,7 +236,7 @@ export default class CourseAuxNombresCM extends Exercice {
           c = randint(1, 2) * 10 + randint(1, 9)
           d = personne()
           texte = `${d.prenom} participe à une course par étapes. La première étape fait $${a}\\text{ km}$, la deuxième fait $${b}\\text{ km}$ et la dernière fait $${c}\\text{ km}$.<br>Combien de kilomètres ${d.prenom} a-t-${d.pronom} parcourus ?`
-          texteCorr = `${d.prenom} a parcouru : $${a} + ${b} + ${c} = ${a + b + c}\\text{ km}$.`
+          texteCorr = `${d.prenom} a parcouru : $${a} + ${b} + ${c} = ${miseEnEvidence(a + b + c)}\\text{ km}$.`
           handleAnswers(this, i, { reponse: { value: arrondi(a + b + c) } })
           break
         case 'q13': // Différence d'entiers
@@ -247,11 +247,11 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 2)) {
             case 1:
               texte = `${d.prenom} a $${a}$ ans. ${d.pronom} a $${b}$ ans de plus que son frère.<br>Quel âge a son frère ?`
-              texteCorr = `Le frère de ${d.prenom} a : $${a} - ${b} = ${a - b}$ ans.`
+              texteCorr = `Le frère de ${d.prenom} a : $${a} - ${b} = ${miseEnEvidence(a - b)}$ ans.`
               break
             case 2:
               texte = `${d.prenom} a $${a}$ ans. Sa sœur a $${b}$ ans.<br>Quelle est leur différence d'âge ?`
-              texteCorr = `La différence d'âge entre ${d.prenom} et sa sœur est : $${a}-${b}=${a - b}$ ans.`
+              texteCorr = `La différence d'âge entre ${d.prenom} et sa sœur est : $${a}-${b}=${miseEnEvidence(a - b)}$ ans.`
               break
           }
           handleAnswers(this, i, { reponse: { value: arrondi(a - b) } })
@@ -263,11 +263,11 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 2)) {
             case 1:
               texte = `${d.prenom} possède $${a}$ lots de $${b}$ ${choice(['crayons', 'cartes', 'stylos', 'livres'])}. Combien en a-t-${d.pronom} ?`
-              texteCorr = `${d.prenom} en possède : $${a} \\times ${b}=${arrondi(a * b)}$.`
+              texteCorr = `${d.prenom} en possède : $${a} \\times ${b}=${miseEnEvidence(arrondi(a * b))}$.`
               break
             case 2:
               texte = `${d.prenom} a couru $${a}$ séquences de $${b}$ minutes. Combien de minutes a-t-${d.pronom} couru en tout ?`
-              texteCorr = `${d.prenom} a couru : $${a} \\times ${b}=${arrondi(a * b)}$ minutes.`
+              texteCorr = `${d.prenom} a couru : $${a} \\times ${b}=${miseEnEvidence(arrondi(a * b))}$ minutes.`
               break
           }
           handleAnswers(this, i, { reponse: { value: arrondi(a * b) } })
@@ -279,7 +279,7 @@ export default class CourseAuxNombresCM extends Exercice {
           const fruit = choice(fruits2)
           d = personne()
           texte = `Les ${fruit[0]} sont vendus $${texPrix(fruit[1])}$ € par kilogramme. ${d.prenom} en achète $${b}$ kg. Combien va-t-${d.pronom} payer ?`
-          texteCorr = `${d.prenom} devra payer $${b}\\times${texPrix(fruit[1])}=${texPrix(fruit[1] * b)}$ €.`
+          texteCorr = `${d.prenom} devra payer $${b}\\times${texPrix(fruit[1])}=${miseEnEvidence(texPrix(fruit[1] * b))}$ €.`
           handleAnswers(this, i, { reponse: { value: arrondi(b * fruit[1]) } })
           break
         }
@@ -289,7 +289,7 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 3)) {
             case 1:
               texte = `Combien font $${b}$ de plus que $${texNombre(a)}$ ?`
-              texteCorr = `$${texNombre(a)}+${b}=${texNombre(a + b)}$`
+              texteCorr = `$${texNombre(a)}+${b}=${miseEnEvidence(texNombre(a + b))}$`
               break
             case 2:
               texte = `$\\ldots - ${texNombre(a)}=${b}$`
@@ -308,7 +308,7 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 3)) {
             case 1:
               texte = `$${a} \\times ${b}$`
-              texteCorr = `$${a} \\times ${b}=${arrondi(a * b)}$`
+              texteCorr = `$${a} \\times ${b}=${miseEnEvidence(arrondi(a * b))}$`
               handleAnswers(this, i, { reponse: { value: arrondi(a * b) } })
               break
             case 2:
@@ -331,13 +331,13 @@ export default class CourseAuxNombresCM extends Exercice {
               break
             case 2:
               texte = `Quel est le périmètre d'un carré de côté ${a} ?`
-              texteCorr = `$${a} \\times 4=${arrondi(a * 4)}$`
+              texteCorr = `$${a} \\times 4=${miseEnEvidence(arrondi(a * 4))}$`
               break
             case 3:
               texte = `Le double du double de $${a}$`
               break
           }
-          texteCorr = `$${a} \\times 4=${arrondi(a * 4)}$`
+          texteCorr = `$${a} \\times 4=${miseEnEvidence(arrondi(a * 4))}$`
           handleAnswers(this, i, { reponse: { value: arrondi(a * 4) } })
           break
         case 'q19': // différences de décimaux
@@ -347,7 +347,7 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 3)) {
             case 1:
               texte = `On a coupé $${texNombre(a)}\\text{ cm}$ d'une ficelle qui en faisait $${texNombre(c)}$.<br>Combien de centimètres en reste-t-il ?`
-              texteCorr = `$${texNombre(c)}-${texNombre(a)}=${texNombre(b)}$`
+              texteCorr = `$${texNombre(c)}-${texNombre(a)}=${miseEnEvidence(texNombre(b))}$`
               break
             case 2:
               texte = `$\\ldots + ${texNombre(a)}=${texNombre(c)}$`
@@ -387,7 +387,7 @@ export default class CourseAuxNombresCM extends Exercice {
                 },
                 objets,
               )
-              texteCorr = `$${texNombre(c)} - ${texNombre(a)}=${texNombre(b)}$`
+              texteCorr = `$${texNombre(c)} - ${texNombre(a)}=${miseEnEvidence(texNombre(b))}$`
               break
           }
           handleAnswers(this, i, { reponse: { value: b } })
@@ -399,7 +399,7 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 3)) {
             case 1:
               texte = `On a soudé ensemble une barre de $${texNombre(a)}\\text{ m}$ et une autre de $${texNombre(b)}\\text{ m}$.<br>Combien de mètres fait l'assemblage ?`
-              texteCorr = `$${texNombre(a)}+${texNombre(b)}=${texNombre(c)}$`
+              texteCorr = `$${texNombre(a)}+${texNombre(b)}=${miseEnEvidence(texNombre(c))}$`
               break
             case 2:
               texte = `$\\ldots - ${texNombre(a)}=${texNombre(b)}$`
@@ -448,7 +448,7 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 3)) {
             case 1:
               texte = choice([`$${a} \\times 8$`, `$8 \\times ${a}$`])
-              texteCorr = `$${a} \\times 8=${arrondi(a * 8)}$`
+              texteCorr = `$${a} \\times 8=${miseEnEvidence(arrondi(a * 8))}$`
 
               handleAnswers(this, i, { reponse: { value: arrondi(a * 8) } })
               break
@@ -459,7 +459,7 @@ export default class CourseAuxNombresCM extends Exercice {
               break
             case 3:
               texte = `Le quadruple du double de $${a}$`
-              texteCorr = `$${a} \\times 4=${arrondi(a * 4)}$`
+              texteCorr = `$${a} \\times 4=${miseEnEvidence(arrondi(a * 4))}$`
               handleAnswers(this, i, { reponse: { value: arrondi(a * 4) } })
               break
           }
@@ -492,21 +492,21 @@ export default class CourseAuxNombresCM extends Exercice {
                 },
                 objets,
               )
-              texteCorr = `Le périmètre mesure : $${b} \\times ${texNombre(a)}\\text{ cm}$ $=${texNombre(a * b)}\\text{ cm}$.`
+              texteCorr = `Le périmètre mesure : $${b} \\times ${texNombre(a)}\\text{ cm}$ $=${miseEnEvidence(texNombre(a * b))}\\text{ cm}$.`
               break
             case 2:
               a = arrondi(randint(4, 5) + choice([0.1, 0.25, 0.5]))
               b = choice([2, 4, 8])
               d = personne()
               texte = `${d.prenom} a acheté $${b}$ ${choice(['livres', 'gâteaux', 'jouets'])} à $${texPrix(a)}$ € pièce.<br>Combien a-t-${d.pronom} dépensé ?`
-              texteCorr = `${d.prenom} a dépensé : $${b} \\times ${texNombre(a)} = ${texPrix(arrondi(a * b))} $ €.`
+              texteCorr = `${d.prenom} a dépensé : $${b} \\times ${texNombre(a)} = ${miseEnEvidence(texPrix(arrondi(a * b)))} $ €.`
               break
             case 3:
               a = arrondi(randint(1, 9) + randint(1, 5) / 10)
               b = randint(2, 9)
               d = personne()
               texte = `${d.prenom} a vendu $${b}$ ${choice(['tableaux', 'photos', 'poteries'])} à $${texPrix(a)}$ € pièce.<br>Quelle somme d'argent a-t-${d.pronom} obtenu ?`
-              texteCorr = `${d.prenom} a obtenu : $${b} \\times ${texNombre(a)} = ${texPrix(arrondi(a * b))} $ €.`
+              texteCorr = `${d.prenom} a obtenu : $${b} \\times ${texNombre(a)} = ${miseEnEvidence(texPrix(arrondi(a * b)))} $ €.`
               break
           }
           handleAnswers(this, i, { reponse: { value: arrondi(a * b) } })
@@ -519,7 +519,7 @@ export default class CourseAuxNombresCM extends Exercice {
                 `$${texNombre(a)} \\times 20$`,
                 `$20 \\times ${texNombre(a)}$`,
               ])
-              texteCorr = `$${texNombre(a)} \\times 20=${texNombre(a * 20)}$`
+              texteCorr = `$${texNombre(a)} \\times 20=${miseEnEvidence(texNombre(a * 20))}$`
               handleAnswers(this, i, { reponse: { value: arrondi(a * 20) } })
               break
             case 2:
@@ -536,7 +536,7 @@ export default class CourseAuxNombresCM extends Exercice {
           const quantite = randint(2, 5)
           d = randint(2, 5)
           texte = `$${quantite}$ kg de ${fruits2[a][0]} coûtent $${texNombre(quantite * b)}$ €, combien coûtent $${quantite * d}$ kg de ${fruits2[a][0]} ?`
-          texteCorr = `$${quantite * d}$ kg de ${fruits2[a][0]} coûtent : $${texNombre(quantite * b)} \\times ${d} = ${texPrix(quantite * b * d)}$ €.`
+          texteCorr = `$${quantite * d}$ kg de ${fruits2[a][0]} coûtent : $${texNombre(quantite * b)} \\times ${d} = ${miseEnEvidence(texPrix(quantite * b * d))}$ €.`
           handleAnswers(this, i, {
             reponse: { value: arrondi(quantite * d * b) },
           })
@@ -547,7 +547,7 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 3)) {
             case 1:
               texte = `$${4 * a} \\div 4$`
-              texteCorr = `$${4 * a} \\div 4=${a}$`
+              texteCorr = `$${4 * a} \\div 4=${miseEnEvidence(a)}$`
               break
             case 2:
               texte = `$\\ldots \\times 4=${4 * a}$`
@@ -555,7 +555,7 @@ export default class CourseAuxNombresCM extends Exercice {
               break
             case 3:
               texte = `La moitié de la moitié de ${4 * a}`
-              texteCorr = `$${4 * a} \\div 4=${a}$`
+              texteCorr = `$${4 * a} \\div 4=${miseEnEvidence(a)}$`
               break
           }
           handleAnswers(this, i, { reponse: { value: a } })
@@ -565,15 +565,15 @@ export default class CourseAuxNombresCM extends Exercice {
           switch (randint(1, 3)) {
             case 1:
               texte = `Le double de $${a}$`
-              texteCorr = `$2 \\times ${a} = ${2 * a}$`
+              texteCorr = `$2 \\times ${a} = ${miseEnEvidence(2 * a)}$`
               break
             case 2:
               texte = `Le diamètre d'un cercle de $${a}$ unités de rayon.`
-              texteCorr = `Le diamètre est le double du rayon : $2 \\times ${a} = ${2 * a}$`
+              texteCorr = `Le diamètre est le double du rayon : $2 \\times ${a} = ${miseEnEvidence(2 * a)}$`
               break
             case 3:
               texte = choice([`$2 \\times ${a}$`, `$${a} \\times 2$`])
-              texteCorr = `$2 \\times ${a} = ${2 * a}$`
+              texteCorr = `$2 \\times ${a} = ${miseEnEvidence(2 * a)}$`
               break
           }
           handleAnswers(this, i, { reponse: { value: 2 * a } })
@@ -632,7 +632,7 @@ export default class CourseAuxNombresCM extends Exercice {
           } else {
             texte = `Le film a commencé à $${a}$ h $${b}$. Il s'est terminé à $${d}$ h.<br> Combien de minutes a-t-il duré ?`
           }
-          texteCorr = `Le film a duré $${arrondi((c / 60) >> 0)}$ h $${c % 60}$ min soit $${c}$ minutes.`
+          texteCorr = `Le film a duré $${arrondi((c / 60) >> 0)}$ h $${c % 60}$ min soit $${miseEnEvidence(c)}$ minutes.`
           handleAnswers(this, i, { reponse: { value: c } })
           break
         case 'q29': // proportionnalité
@@ -645,7 +645,7 @@ export default class CourseAuxNombresCM extends Exercice {
             ['un manège', 'il', 'ce manège'],
           ])
           texte = `En $${a * b}$ minutes, ${d[0]} fait $${a * c}$ tours.<br>En $${b}$ minutes ${d[1]} fait \\ldots tours.`
-          texteCorr = `En $${a}$ fois moins de temps, ${d[2]} fait $${a}$ fois moins de tours, soit : $${a * c}$ tours $\\div ${a}=${c}$ tours.`
+          texteCorr = `En $${a}$ fois moins de temps, ${d[2]} fait $${a}$ fois moins de tours, soit : $${a * c}$ tours $\\div ${a}=${miseEnEvidence(c)}$ tours.`
           handleAnswers(this, i, { reponse: { value: c } })
           break
         case 'q30': // additions d'entiers mesure
@@ -684,7 +684,7 @@ export default class CourseAuxNombresCM extends Exercice {
             },
             objets,
           )
-          texteCorr = `$${a} + ${b}=${c}$`
+          texteCorr = `$${a} + ${b}=${miseEnEvidence(c)}$`
           handleAnswers(this, i, { reponse: { value: c } })
           break
       }

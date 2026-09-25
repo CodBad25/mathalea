@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   fraction,
@@ -42,7 +43,7 @@ export default class OpposeDeFraction extends ExerciceSimple {
         d = fraction(b, c)
         this.question = `Quel est l'opposé de $\\dfrac{${b}}{${c}}$ ? `
         this.correction = `Deux nombres sont opposés lorsque leur somme est nulle.<br>
-        Ainsi, l'opposé de $\\dfrac{${b}}{${c}}$ est $-${d.texFraction}$ car $\\dfrac{${b}}{${c}}+\\left(-${d.texFraction}\\right)=0$.`
+        Ainsi, l'opposé de $\\dfrac{${b}}{${c}}$ est $${miseEnEvidence(`-${d.texFraction}`)}$ car $\\dfrac{${b}}{${c}}+\\left(-${d.texFraction}\\right)=0$.`
         this.reponse = d.oppose()
         break
       case 'b':
@@ -50,7 +51,7 @@ export default class OpposeDeFraction extends ExerciceSimple {
         d = fraction(b, c)
         this.question = `Quel est l'opposé de $\\dfrac{${b}}{${c}}$ ? `
         this.correction = `Deux nombres sont opposés lorsque leur somme est nulle.<br>
-        Ainsi, l'opposé de $\\dfrac{${b}}{${c}}$ est $\\dfrac{${-b}}{${c}}$ car $\\dfrac{${b}}{${c}}+\\dfrac{${-b}}{${c}}=0$.`
+        Ainsi, l'opposé de $\\dfrac{${b}}{${c}}$ est $${miseEnEvidence(`\\dfrac{${-b}}{${c}}`)}$ car $\\dfrac{${b}}{${c}}+\\dfrac{${-b}}{${c}}=0$.`
         this.reponse = d.oppose()
         break
 
@@ -59,7 +60,7 @@ export default class OpposeDeFraction extends ExerciceSimple {
         d = fraction(b, c)
         this.question = `Quel est l'opposé de $-\\dfrac{${b}}{${c}}$ ?`
         this.correction = `Deux nombres sont opposés lorsque leur somme est nulle.<br>
-        Ainsi, l'opposé de $-\\dfrac{${b}}{${c}}$ est $${d.texFraction}$ car $-\\dfrac{${b}}{${c}}+${d.texFraction}=0$.`
+        Ainsi, l'opposé de $-\\dfrac{${b}}{${c}}$ est $${miseEnEvidence(d.texFraction)}$ car $-\\dfrac{${b}}{${c}}+${d.texFraction}=0$.`
         this.reponse = d
         break
       case 'd':
@@ -68,7 +69,7 @@ export default class OpposeDeFraction extends ExerciceSimple {
         e = fraction(c, b)
         this.question = `Quel est l'inverse de $${d.texFraction}$ ?`
         this.correction = `Deux nombres sont inverses l'un de l'autre lorsque leur produit vaut $1$.<br>
-        Ainsi, l'inverse de $\\dfrac{${b}}{${c}}$ est $${e.texFraction}$ car $${d.texFraction}\\times ${e.texFraction}=1$.`
+        Ainsi, l'inverse de $\\dfrac{${b}}{${c}}$ est $${miseEnEvidence(e.texFraction)}$ car $${d.texFraction}\\times ${e.texFraction}=1$.`
         this.reponse = e
         break
       case 'e':
@@ -77,7 +78,7 @@ export default class OpposeDeFraction extends ExerciceSimple {
         e = fraction(c, b)
         this.question = `Quel est l'inverse de $-\\dfrac{${b}}{${c}}$ ?`
         this.correction = `Deux nombres sont inverses l'un de l'autre lorsque leur produit vaut $1$.<br>
-        Ainsi, l'inverse de $-\\dfrac{${b}}{${c}}$ est $-${e.texFraction}$ car $-${d.texFraction}\\times \\left(-${e.texFraction}\\right)=1$ .`
+        Ainsi, l'inverse de $-\\dfrac{${b}}{${c}}$ est $${miseEnEvidence(`-${e.texFraction}`)}$ car $-${d.texFraction}\\times \\left(-${e.texFraction}\\right)=1$ .`
         this.reponse = e.oppose()
         break
     }

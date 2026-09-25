@@ -1,5 +1,5 @@
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -45,7 +45,7 @@ export default class ProgrammeCalcul extends ExerciceSimple {
     <br>
     $\\bullet$ On soustrait $${e}$, on obtient : $${texNombre(a / 5)}-${texNombre(e)}=${texNombre(a / 5 - e)}$.
     <br>
-    $\\bullet$ On élève au carré :  $${ecritureParentheseSiNegatif(a / 5 - e)}^2= ${texNombre((a / 5 - e) * (a / 5 - e))}$.
+    $\\bullet$ On élève au carré :  $${ecritureParentheseSiNegatif(a / 5 - e)}^2= ${miseEnEvidence(texNombre((a / 5 - e) * (a / 5 - e)))}$.
       `
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Prendre le cinquième d'un nombre revient à le diviser par 5.<br>
@@ -61,7 +61,7 @@ export default class ProgrammeCalcul extends ExerciceSimple {
       <br>
       $\\bullet$ On soustrait $${e}$, on obtient : $${texNombre(b / 4)}-${texNombre(e)}=${texNombre(b / 4 - e)}$.
       <br>
-      $\\bullet$ On élève au carré : $${ecritureParentheseSiNegatif(b / 4 - e)}^2= ${texNombre((b / 4 - e) * (b / 4 - e))}$. `
+      $\\bullet$ On élève au carré : $${ecritureParentheseSiNegatif(b / 4 - e)}^2= ${miseEnEvidence(texNombre((b / 4 - e) * (b / 4 - e)))}$. `
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
     Prendre le quart d'un nombre revient à le diviser par 4.<br>
      Ainsi, le ${N} de $${b}$ est égal à $${b}\\div 4=${b / 4}$.
@@ -76,7 +76,7 @@ export default class ProgrammeCalcul extends ExerciceSimple {
       <br>
       $\\bullet$ On soustrait $${e}$, on obtient : $${texNombre(c / 3)}-${texNombre(e)}=${texNombre(c / 3 - e)}$.
       <br>
-      $\\bullet$ On élève au carré : $${ecritureParentheseSiNegatif(c / 3 - e)}^2= ${texNombre((c / 3 - e) * (c / 3 - e))}$. `
+      $\\bullet$ On élève au carré : $${ecritureParentheseSiNegatif(c / 3 - e)}^2= ${miseEnEvidence(texNombre((c / 3 - e) * (c / 3 - e)))}$. `
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Prendre le tiers d'un nombre revient à le diviser par 3.<br>
        Ainsi, le ${N} de $${c}$ est égal à $${c}\\div 3=${c / 3}$.
@@ -90,7 +90,7 @@ export default class ProgrammeCalcul extends ExerciceSimple {
       <br>
       $\\bullet$ On soustrait $${e}$, on obtient : $${texNombre(d / 6)}-${texNombre(e)}=${texNombre(d / 6 - e)}$.
       <br>
-      $\\bullet$ On élève au carré : $${ecritureParentheseSiNegatif(d / 6 - e)}^2= ${texNombre((d / 6 - e) * (d / 6 - e))}$. `
+      $\\bullet$ On élève au carré : $${ecritureParentheseSiNegatif(d / 6 - e)}^2= ${miseEnEvidence(texNombre((d / 6 - e) * (d / 6 - e)))}$. `
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
     Prendre le sixième d'un nombre revient à le diviser par 6.<br>
      Ainsi, le ${N} de $${d}$ est égal à $${d}\\div 6=${d / 6}$.

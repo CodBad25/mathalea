@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -56,7 +57,9 @@ export default class Can2025N6Q10 extends ExerciceCan {
     const monQcm = propositionsQcm(this, 0)
 
     this.question += `${monQcm.texte}`
-    this.correction = monQcm.texteCorr
+    this.correction =
+      monQcm.texteCorr +
+      `${c} $${miseEnEvidence(`${texNombre(a, 1)}\\text{ ${b}}`)}$.`
     this.canEnonce = c
     this.canReponseACompleter = `\\faSquare[regular] $${texNombre(a, 1)}\\text{ m}$ <br>\\faSquare[regular] $${texNombre(a, 1)}\\text{ cm}$ <br>\\faSquare[regular] $${texNombre(a, 1)}\\text{ km}$`
   }

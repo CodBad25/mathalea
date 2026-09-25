@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { randint } from '../../../modules/outils'
@@ -76,10 +77,10 @@ export default class PuissancesDe2345 extends ExerciceSimple {
       for (let i = 1; i < b; i++) {
         this.correction += `\\times${ecritureParentheseSiNegatif(a)}`
       }
-      this.correction += `=${a ** b}$`
+      this.correction += `=${miseEnEvidence(a ** b)}$`
     } else {
       if (b === 1 || b === 0) {
-        this.correction += ` ${a ** b}$`
+        this.correction += ` ${miseEnEvidence(a ** b)}$`
       }
     }
     this.reponse = a ** b

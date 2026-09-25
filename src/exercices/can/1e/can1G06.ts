@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
@@ -121,7 +122,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
      \\overrightarrow{AB}\\cdot \\overrightarrow{AD}&=AB\\times AD\\times \\cos(\\widehat{BAD})\\\\
       &=${a}\\times ${b}\\times \\cos\\left(${angle}°\\right)\\\\
                &=${a * b}\\times\\dfrac{\\sqrt{3}}{2}\\\\
-               &=${texNombre(d, 1)}\\sqrt{3}
+               &=${miseEnEvidence(`${texNombre(d, 1)}\\sqrt{3}`)}
                \\end{aligned}$`
             this.reponse = [
               `${d}\\sqrt{3}`,
@@ -134,7 +135,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
      \\overrightarrow{AB}\\cdot \\overrightarrow{AD}&=AB\\times AD\\times \\cos(\\widehat{BAD})\\\\
       &=${a}\\times ${b}\\times \\cos\\left(${angle}°\\right)\\\\
                &=${a * b}\\times \\dfrac{\\sqrt{2}}{2}\\\\
-               &=${texNombre(d, 1)}\\sqrt{2}
+               &=${miseEnEvidence(`${texNombre(d, 1)}\\sqrt{2}`)}
                \\end{aligned}$`
             this.reponse = [
               `${d}\\sqrt{2}`,
@@ -147,7 +148,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
      \\overrightarrow{AB}\\cdot \\overrightarrow{AD}&=AB\\times AD\\times \\cos(\\widehat{BAD})\\\\
       &=${a}\\times ${b}\\times \\cos\\left(${angle}°\\right)\\\\
                &=${a * b}\\times \\dfrac{1}{2}\\\\
-               &=${texNombre(d, 1)}
+               &=${miseEnEvidence(texNombre(d, 1))}
                \\end{aligned}$`
             this.reponse = [`${d}`, `${f1.texFraction}`]
           }
@@ -174,7 +175,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
 
             this.correction = `
     Les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{DC}$ sont colinéaires et de même sens.<br>
-    On en déduit : $\\overrightarrow{AB}\\cdot \\overrightarrow{DC}=AB\\times DC=${b}\\times ${b}=${b * b}$.`
+    On en déduit : $\\overrightarrow{AB}\\cdot \\overrightarrow{DC}=AB\\times DC=${b}\\times ${b}=${miseEnEvidence(b * b)}$.`
             this.reponse = b * b
           } else {
             this.question = `Calculer $\\overrightarrow{AB}\\cdot \\overrightarrow{CD}$.<br>
@@ -197,7 +198,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
 
             this.correction = `
       Les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont colinéaires et de sens contraires.<br>
-      On en déduit : $\\overrightarrow{AB}\\cdot \\overrightarrow{CD}=-AB\\times DC=-${b}\\times ${b}=${-b * b}$.`
+      On en déduit : $\\overrightarrow{AB}\\cdot \\overrightarrow{CD}=-AB\\times DC=-${b}\\times ${b}=${miseEnEvidence(-b * b)}$.`
             this.reponse = -b * b
           }
         }
@@ -254,7 +255,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
             objets,
           )
 
-          this.correction = `Les vecteurs $\\overrightarrow{AB}$ et $${choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{CB}'}$ sont orthogonaux, on en déduit : $\\overrightarrow{AB}\\cdot ${choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{CB}'}=0$.
+          this.correction = `Les vecteurs $\\overrightarrow{AB}$ et $${choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{CB}'}$ sont orthogonaux, on en déduit : $\\overrightarrow{AB}\\cdot ${choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{CB}'}=${miseEnEvidence(`0`)}$.
      `
           this.reponse = 0
         }
@@ -281,7 +282,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
           )
 
           this.correction = `Le projeté orthogonal de $I$ sur $(DA)$ est $A$. Ainsi : <br>
-          $\\overrightarrow{DA}\\cdot \\overrightarrow{DI}=\\overrightarrow{DA}\\cdot \\overrightarrow{DA}=${a}^2=${a ** 2}$.
+          $\\overrightarrow{DA}\\cdot \\overrightarrow{DI}=\\overrightarrow{DA}\\cdot \\overrightarrow{DA}=${a}^2=${miseEnEvidence(a ** 2)}$.
      `
           this.reponse = a * a
         }
@@ -310,7 +311,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
           this.correction = `Le projeté orthogonal de $D$ sur $(AB)$ est $A$. Ainsi : <br>
           $\\overrightarrow{AB}\\cdot \\overrightarrow{ID}=\\overrightarrow{AB}\\cdot \\overrightarrow{IA}$.<br>
           Les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{IA}$ sont colinéaires de sens contraire. On a donc
-          $\\overrightarrow{AB}\\cdot \\overrightarrow{ID}=-${a}\\times ${texNombre(a / 2, 0)}=${texNombre((-a * a) / 2, 0)}$.
+          $\\overrightarrow{AB}\\cdot \\overrightarrow{ID}=-${a}\\times ${texNombre(a / 2, 0)}=${miseEnEvidence(texNombre((-a * a) / 2, 0))}$.
      `
           this.reponse = (-a * a) / 2
         }
@@ -339,7 +340,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
           this.correction = `Le projeté orthogonal de $D$ sur $(AB)$ est $A$. Ainsi : <br>
           $\\overrightarrow{BI}\\cdot \\overrightarrow{ID}=\\overrightarrow{BI}\\cdot \\overrightarrow{IA}$.<br>
           Les vecteurs $\\overrightarrow{BI}$ et $\\overrightarrow{IA}$ sont colinéaires de même sens. On a donc
-          $\\overrightarrow{BI}\\cdot \\overrightarrow{ID}=${texNombre(a / 2, 0)}\\times ${texNombre(a / 2, 0)}=${texNombre(sol, 0)}$.
+          $\\overrightarrow{BI}\\cdot \\overrightarrow{ID}=${texNombre(a / 2, 0)}\\times ${texNombre(a / 2, 0)}=${miseEnEvidence(texNombre(sol, 0))}$.
      `
           this.reponse = sol
         }
@@ -368,7 +369,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
           this.correction = `Le projeté orthogonal de $I$ sur $(BC)$ est $B$. Celui de $D$ sur $(BC)$ est $C$.  Ainsi : <br>
           $\\overrightarrow{BC}\\cdot ${choixb ? '\\overrightarrow{ID}' : '\\overrightarrow{DI}'}=\\overrightarrow{BC}\\cdot ${choixb ? '\\overrightarrow{BC}' : '\\overrightarrow{CB}'}$.<br>
            On a donc
-          $\\overrightarrow{BC}\\cdot ${choixb ? '\\overrightarrow{ID}' : '\\overrightarrow{DI}'}=${a}\\times ${choixb ? `${a}` : `(-${a})`}=${choixb ? `${a * a}` : `${-a * a}`}$.
+          $\\overrightarrow{BC}\\cdot ${choixb ? '\\overrightarrow{ID}' : '\\overrightarrow{DI}'}=${a}\\times ${choixb ? `${a}` : `(-${a})`}=${miseEnEvidence(choixb ? `${a * a}` : `${-a * a}`)}$.
      `
 
           this.reponse = choixb ? a * a : -a * a
@@ -425,7 +426,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
           )
 
           this.correction = `Les vecteurs $\\overrightarrow{AB}$ et $${choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{DA}'}$ sont orthogonaux. <br>
-          Donc $\\overrightarrow{AB}\\cdot ${choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{DA}'}=0$.
+          Donc $\\overrightarrow{AB}\\cdot ${choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{DA}'}=${miseEnEvidence(`0`)}$.
      `
           this.reponse = 0
         }
@@ -453,7 +454,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
 
           this.correction = `Le projeté orthogonal du point $C$ sur $(AB)$ est le point $H$ tel que $BH=${a - b}$.<br>
          On a :  $\\overrightarrow{AB}\\cdot \\overrightarrow{BC}=\\overrightarrow{AB}\\cdot \\overrightarrow{BH}$ avec $\\overrightarrow{AB}$ et  $\\overrightarrow{BH}$ colinéaires de sens contraire.<br>
-         On en déduit  $\\overrightarrow{AB}\\cdot \\overrightarrow{BC}=-AB\\times BH=-${a}\\times ${a - b}=${-a * (a - b)}$.
+         On en déduit  $\\overrightarrow{AB}\\cdot \\overrightarrow{BC}=-AB\\times BH=-${a}\\times ${a - b}=${miseEnEvidence(-a * (a - b))}$.
      `
           this.reponse = -a * (a - b)
         }
@@ -479,7 +480,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
           )
 
           this.correction = `Les vecteurs $\\overrightarrow{AB}$ et  $${choixb ? '\\overrightarrow{DC}' : '\\overrightarrow{CD}'}$ sont colinéaires ${choixb ? 'même sens' : 'sens contraire'}.<br>
-         On a :  $\\overrightarrow{AB}\\cdot ${choixb ? '\\overrightarrow{DC}' : '\\overrightarrow{CD}'}=${a}\\times ${choixb ? `${b}` : `(-${b})`}=${choixb ? `${a * b}` : `${-a * b}`}$
+         On a :  $\\overrightarrow{AB}\\cdot ${choixb ? '\\overrightarrow{DC}' : '\\overrightarrow{CD}'}=${a}\\times ${choixb ? `${b}` : `(-${b})`}=${miseEnEvidence(choixb ? `${a * b}` : `${-a * b}`)}$
        
          
          
@@ -558,7 +559,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
           \\overrightarrow{OA}\\cdot ${choixb ? '\\overrightarrow{OB}' : '\\overrightarrow{OF}'}&=OA\\times  ${choixb ? 'OB' : 'OF'}\\times \\cos(\\widehat{ ${choixb ? 'AOB' : 'AOF'}})\\\\
            &=${a}\\times ${a}\\times \\cos\\left(60°\\right)\\\\
                     &=${a * a}\\times\\dfrac{1}{2}\\\\
-                    &=${texNombre(sol, 1)}
+                    &=${miseEnEvidence(texNombre(sol, 1))}
                     \\end{aligned}$`
 
           this.reponse = sol
@@ -586,7 +587,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
 
           this.correction = ` $ABCDEF$ est un hexagone régulier, donc les six triangles sont équilatéraux.<br>
           Les vecteurs $\\overrightarrow{ED}$ et $${choixb ? '\\overrightarrow{OC}' : '\\overrightarrow{OF}'}$ sont colinéaires ${choixb ? 'de même sens' : 'de sens contraire'}.<br>
-Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overrightarrow{OF}'}=${a}\\times ${choixb ? `${a}` : `(-${a})`}=${choixb ? `${a * a}` : `${-a * a}`}$.
+Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overrightarrow{OF}'}=${a}\\times ${choixb ? `${a}` : `(-${a})`}=${miseEnEvidence(choixb ? `${a * a}` : `${-a * a}`)}$.
          `
 
           this.reponse = choixb ? a * a : -a * a
@@ -618,7 +619,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
             \\overrightarrow{OC}\\cdot ${choixb ? '\\overrightarrow{OA}' : '\\overrightarrow{OE}'}&=OC\\times  ${choixb ? 'OA' : 'OE'}\\times \\cos(\\widehat{ ${choixb ? 'AOE' : 'COE'}})\\\\
              &=${a}\\times ${a}\\times \\cos\\left(120°\\right)\\\\
                       &=${a * a}\\times\\left(-\\dfrac{1}{2}\\right)\\\\
-                      &=${texNombre(-sol, 1)}
+                      &=${miseEnEvidence(texNombre(-sol, 1))}
                       \\end{aligned}$`
 
           this.reponse = -sol
@@ -646,7 +647,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
 
           this.correction = ` $ABCDEF$ est un hexagone régulier, donc les six triangles sont équilatéraux.<br>
            $OBCD$ est un losange (4 côtés de même longueur). Ses diagonales sont donc perpendiculaires. On en déduit : <br>
-           $\\overrightarrow{OC}\\cdot ${choixb ? '\\overrightarrow{BD}' : '\\overrightarrow{DB}'}=0$.
+           $\\overrightarrow{OC}\\cdot ${choixb ? '\\overrightarrow{BD}' : '\\overrightarrow{DB}'}=${miseEnEvidence(`0`)}$.
   `
           this.reponse = 0
         }
@@ -676,7 +677,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
             \\overrightarrow{DE}\\cdot \\overrightarrow{DA}&=DE\\times DA\\times \\cos(\\widehat{ ADE})\\\\
              &=${a}\\times 2\\times ${a}\\times \\cos\\left(60°\\right)\\\\
                       &=${2 * a * a}\\times\\dfrac{1}{2}\\\\
-                      &=${a * a}
+                      &=${miseEnEvidence(a * a)}
                       \\end{aligned}$`
 
           this.reponse = a * a
@@ -704,7 +705,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
 
           this.correction = ` $ABCDEF$ est un hexagone régulier, donc les six triangles sont équilatéraux.<br>
             Les vecteurs $\\overrightarrow{OB}$ et $${choixb ? '\\overrightarrow{EB}' : '\\overrightarrow{BE}'}$ sont colinéaires ${choixb ? 'de même sens' : 'de sens contraire'}.<br>
-  Ainsi, $\\overrightarrow{OB}\\cdot ${choixb ? '\\overrightarrow{EB}' : '\\overrightarrow{BE}'}=${a}\\times ${choixb ? `2\\times${a}` : `(-2\\times${a})`}=${choixb ? `${2 * a * a}` : `${-2 * a * a}`}$.
+  Ainsi, $\\overrightarrow{OB}\\cdot ${choixb ? '\\overrightarrow{EB}' : '\\overrightarrow{BE}'}=${a}\\times ${choixb ? `2\\times${a}` : `(-2\\times${a})`}=${miseEnEvidence(choixb ? `${2 * a * a}` : `${-2 * a * a}`)}$.
            `
 
           this.reponse = choixb ? 2 * a * a : -2 * a * a

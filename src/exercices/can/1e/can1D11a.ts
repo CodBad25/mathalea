@@ -1,3 +1,5 @@
+import { orangeMathalea } from '../../../lib/colors'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -109,7 +111,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=\\dfrac{1}{${a}}$ et $p=${texNombre(p, 1)}$.<br>
-            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=\\dfrac{1}{${a}}$. `
+            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(`\\dfrac{1}{${a}}`)}$. `
 
           this.reponse = new FractionEtendue(1, a)
         } else {
@@ -122,7 +124,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=-\\dfrac{1}{${a}}$ et $p=${texNombre(p, 1)}$.<br>
-            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=-\\dfrac{1}{${a}}$. `
+            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(`-\\dfrac{1}{${a}}`)}$. `
 
           this.reponse = new FractionEtendue(-1, a)
         }
@@ -146,7 +148,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=\\dfrac{${m}}{${a}}$ et $p=\\dfrac{${texNombre(p, 1)}}{${a}}$.<br>
-            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=\\dfrac{${m}}{${a}}${f.texSimplificationAvecEtapes()}$. `
+            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${f.estIrreductible && f.num * f.den > 0 ? miseEnEvidence(`\\dfrac{${m}}{${a}}`) : `\\dfrac{${m}}{${a}}${f.texSimplificationAvecEtapes(false, orangeMathalea)}`}$. `
 
           this.reponse = f
         } else {
@@ -159,7 +161,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=\\dfrac{${m}}{${a}}$ et $p=\\dfrac{${texNombre(p, 1)}}{${a}}$.<br>
-            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=\\dfrac{${m}}{${a}}${f.texSimplificationAvecEtapes()}$. `
+            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${f.estIrreductible && f.num * f.den > 0 ? miseEnEvidence(`\\dfrac{${m}}{${a}}`) : `\\dfrac{${m}}{${a}}${f.texSimplificationAvecEtapes(false, orangeMathalea)}`}$. `
 
           this.reponse = f
         }
@@ -185,7 +187,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=\\dfrac{${fraction[0]}}{${fraction[1]}}$  et $p=${texNombre(p, 1)}$.<br>
-            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=\\dfrac{${fraction[0]}}{${fraction[1]}}$. `
+            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(`\\dfrac{${fraction[0]}}{${fraction[1]}}`)}$. `
 
           this.reponse = f
         } else {
@@ -198,7 +200,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction linéaire de la forme $f(x)=mx$ avec $m=\\dfrac{${fraction[0]}}{${fraction[1]}}$.<br>
-              La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=\\dfrac{${fraction[0]}}{${fraction[1]}}$. `
+              La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(`\\dfrac{${fraction[0]}}{${fraction[1]}}`)}$. `
 
           this.reponse = f
         }
@@ -225,7 +227,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=\\dfrac{${fraction2[0]}}{${fraction2[1]}}$  et $p=${texNombre(p, 1)}$.<br>
-            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=\\dfrac{${fraction2[0]}}{${fraction2[1]}}$. `
+            La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(`\\dfrac{${fraction2[0]}}{${fraction2[1]}}`)}$. `
 
           this.reponse = f
         } else {
@@ -239,7 +241,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
             this.question += "$f'(x)=$"
           }
           this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=-\\dfrac{${fraction2[0]}}{${fraction2[1]}}$  et $p=${texNombre(p, 1)}$.<br>
-              La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=-\\dfrac{${fraction2[0]}}{${fraction2[1]}}$. `
+              La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(`-\\dfrac{${fraction2[0]}}{${fraction2[1]}}`)}$. `
 
           this.reponse = f
         }

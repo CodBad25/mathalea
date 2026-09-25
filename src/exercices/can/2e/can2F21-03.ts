@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -110,9 +111,9 @@ export default class VariationFA extends Exercice {
     On sait qu'une fonction affine est monotone sur $\\mathbb{R}$.<br>
       Son sens de variation dépend du signe de $a$.<br>`
           if (a > 0) {
-            texteCorr += `Comme $a=${a}>0$, la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${a}>0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement croissante')} sur $\\mathbb{R}$.<br>`
           } else {
-            texteCorr += `Comme $a=${a}<0$, la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${a}<0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement décroissante')} sur $\\mathbb{R}$.<br>`
           }
           break
 
@@ -170,9 +171,9 @@ export default class VariationFA extends Exercice {
         On sait qu'une fonction affine est monotone sur $\\mathbb{R}$.<br>
           Son sens de variation dépend du signe de $a$.<br>`
           if (a > 0) {
-            texteCorr += `Comme $a=${texFractionReduite(a, d)}>0$, la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${texFractionReduite(a, d)}>0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement croissante')} sur $\\mathbb{R}$.<br>`
           } else {
-            texteCorr += `Comme $a=${texFractionReduite(a, d)}<0$, la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${texFractionReduite(a, d)}<0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement décroissante')} sur $\\mathbb{R}$.<br>`
           }
           break
         case 3:
@@ -203,7 +204,7 @@ export default class VariationFA extends Exercice {
 
           texteCorr = `On reconnaît que $${nomF}$ est une fonction affine, de la forme $${nomF}(x)=ax+b$, `
           texteCorr += `avec $a=0$ et $b=${b}$. <br>
-      Il s'agit d'une fonction constante (fonction affine particulière).`
+      Il s'agit d'une fonction ${texteEnCouleurEtGras('constante')} (fonction affine particulière).`
 
           break
       }

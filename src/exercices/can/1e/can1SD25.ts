@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import {
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
@@ -70,7 +71,7 @@ export default class DeveloppementCoeff2 extends ExerciceSimple {
     }
     this.correction += `
      Le terme en $x$ est donc donné par la somme :  $${2 * e * f}x +${a * d + b * c === 1 ? '' : `${ecritureParentheseSiNegatif(a * d + b * c)}`}x=${2 * e * f + a * d + b * c}x$.<br>
-     Le coefficient devant $x$ est donc $${2 * e * f + a * d + b * c}$.`
+     Le coefficient devant $x$ est donc $${miseEnEvidence(miseEnEvidence(2 * e * f + a * d + b * c))}$.`
 
     this.reponse = 2 * e * f + a * d + b * c
   }

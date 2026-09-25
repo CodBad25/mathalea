@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -106,7 +107,7 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
         )
         this.optionsChampTexte = { texteApres: ' °' }
         this.correction = ` Le triangle est isocèle. Ses deux angles à la base sont égaux.<br>
-        Ainsi $\\widehat{${nom[2]}}=180°-2\\times ${a}°=${texNombre(180 - 2 * a)}°$
+        Ainsi $\\widehat{${nom[2]}}=180°-2\\times ${a}°=${miseEnEvidence(texNombre(180 - 2 * a))}°$
     <br>`
         this.reponse = 180 - 2 * a
         break
@@ -136,7 +137,7 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
         )
         this.optionsChampTexte = { texteApres: ' °' }
         this.correction = ` Le triangle est isocèle. Ses deux angles à la base sont égaux.<br>
-          Ainsi $\\widehat{${nom[1]}}=(180-${180 - 2 * a})\\div 2=${texNombre(a)}$.
+          Ainsi $\\widehat{${nom[1]}}=(180-${180 - 2 * a})\\div 2=${miseEnEvidence(texNombre(a))}$.
       <br>`
         this.reponse = a
 

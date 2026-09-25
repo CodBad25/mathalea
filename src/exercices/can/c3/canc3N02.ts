@@ -1,7 +1,7 @@
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -72,6 +72,6 @@ export default class SuiteSurDroiteGraduee extends ExerciceSimple {
       },
       d,
     )
-    this.correction = `${texteEnCouleur('Comme les graduations vont de ' + a)} ${texteEnCouleur('en ' + a)} ${texteEnCouleur(', le nombre repéré par la croix correspond à ')} ${texteEnCouleur(String(c + 2 * a))} ${texteEnCouleur(' + ' + a)} ${texteEnCouleur("donc c'est " + texNombre(c + 3 * a) + '.')}`
+    this.correction = `Comme les graduations vont de $${a}$ en $${a}$, le nombre repéré par la croix correspond à $${texNombre(c + 2 * a)} + ${a}$, donc c'est $${miseEnEvidence(texNombre(c + 3 * a))}$.`
   }
 }

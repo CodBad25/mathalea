@@ -155,7 +155,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
           a === '-4\\pi'
         ) {
           if (a === '0') {
-            this.correction = 'Le point $I$ est le point-image du réel $0$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('I')} est le point-image du réel $0$.`
           } else {
             this.correction = `Comme $${a}=0$ modulo $2\\pi$, le point-image de $${a}$ est le point ${texteEnCouleurEtGras('I')}.  `
           }
@@ -163,7 +163,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (a === '\\pi' || a === '-\\pi' || a === '3\\pi' || a === '5\\pi') {
           if (a === '\\pi') {
-            this.correction = 'Le point $K$ est le point-image du réel $\\pi$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('K')} est le point-image du réel $\\pi$.`
           } else {
             this.correction = `Comme $${a}=\\pi$ modulo $2\\pi$, le point-image de $${a}$ est le point ${texteEnCouleurEtGras('K')}.  `
           }
@@ -184,8 +184,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         this.question += `${objet}`
         if (k === 1 || k === 13 || k === -11) {
           if (k === 1) {
-            this.correction =
-              'Le point $A$ est le point-image du réel $\\dfrac{\\pi}{6}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('A')} est le point-image du réel $\\dfrac{\\pi}{6}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{6}=\\dfrac{\\pi}{6}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{6}$ est le point ${texteEnCouleurEtGras('A')}.`
           }
@@ -193,8 +192,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 5 || k === -7) {
           if (k === 5) {
-            this.correction =
-              'Le point $F$ est le point-image du réel $\\dfrac{5\\pi}{6}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('F')} est le point-image du réel $\\dfrac{5\\pi}{6}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{6}=\\dfrac{5\\pi}{6}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{6}$ est le point ${texteEnCouleurEtGras('F')}.  `
           }
@@ -202,7 +200,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 7 || k === -5) {
           if (k === 7) {
-            this.correction = `Le point $G$ est le point-image du réel $\\dfrac{${k}\\pi}{6}$.`
+            this.correction = `Le point ${texteEnCouleurEtGras('G')} est le point-image du réel $\\dfrac{${k}\\pi}{6}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{6}=\\dfrac{7\\pi}{6}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{6}$ est le point ${texteEnCouleurEtGras('G')}.  `
           }
@@ -210,8 +208,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 11 || k === -1 || k === -13) {
           if (k === -1) {
-            this.correction =
-              'Le point $Q$ est le point-image du réel $-\\dfrac{\\pi}{6}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('Q')} est le point-image du réel $-\\dfrac{\\pi}{6}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{6}=\\dfrac{7\\pi}{6}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{6}$ est le point ${texteEnCouleurEtGras('Q')}.  `
           }
@@ -233,8 +230,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         this.question += `${objet}`
         if (k === 1 || k === 9 || k === -7) {
           if (k === 1) {
-            this.correction =
-              'Le point $B$ est le point-image du réel $\\dfrac{\\pi}{4}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('B')} est le point-image du réel $\\dfrac{\\pi}{4}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{4}=\\dfrac{\\pi}{4}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{4}$ est le point ${texteEnCouleurEtGras('B')}.`
           }
@@ -242,8 +238,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 3 || k === -5) {
           if (k === 3) {
-            this.correction =
-              'Le point $E$ est le point-image du réel $\\dfrac{3\\pi}{4}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('E')} est le point-image du réel $\\dfrac{3\\pi}{4}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{4}=\\dfrac{3\\pi}{4}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{4}$ est le point ${texteEnCouleurEtGras('E')}.  `
           }
@@ -259,8 +254,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 7 || k === -1 || k === -9) {
           if (k === -1) {
-            this.correction =
-              'Le point $P$ est le point-image du réel $-\\dfrac{\\pi}{4}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('P')} est le point-image du réel $-\\dfrac{\\pi}{4}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{4}=-\\dfrac{\\pi}{4}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{4}$ est le point ${texteEnCouleurEtGras('P')}.  `
           }
@@ -282,8 +276,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         this.question += `${objet}`
         if (k === 1 || k === 7 || k === -5) {
           if (k === 1) {
-            this.correction =
-              'Le point $C$ est le point-image du réel $\\dfrac{\\pi}{3}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('C')} est le point-image du réel $\\dfrac{\\pi}{3}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{3}=\\dfrac{\\pi}{3}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{3}$ est le point ${texteEnCouleurEtGras('C')}.`
           }
@@ -291,8 +284,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 2 || k === -4 || k === 8) {
           if (k === 2) {
-            this.correction =
-              'Le point $D$ est le point-image du réel $\\dfrac{2\\pi}{3}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('D')} est le point-image du réel $\\dfrac{2\\pi}{3}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{3}=\\dfrac{2\\pi}{3}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{3}$ est le point ${texteEnCouleurEtGras('D')}.  `
           }
@@ -304,8 +296,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 5 || k === -1 || k === -7) {
           if (k === -1) {
-            this.correction =
-              'Le point $N$ est le point-image du réel $-\\dfrac{\\pi}{3}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('N')} est le point-image du réel $-\\dfrac{\\pi}{3}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{3}=-\\dfrac{\\pi}{3}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{3}$ est le point ${texteEnCouleurEtGras('N')}.  `
           }
@@ -327,8 +318,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         this.question += `${objet}`
         if (k === 1 || k === 5 || k === -3 || k === -7) {
           if (k === 1) {
-            this.correction =
-              'Le point $J$ est le point-image du réel $\\dfrac{\\pi}{2}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('J')} est le point-image du réel $\\dfrac{\\pi}{2}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{2}=\\dfrac{\\pi}{2}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{2}$ est le point ${texteEnCouleurEtGras('J')}.`
           }
@@ -336,8 +326,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         }
         if (k === 3 || k === -1 || k === -5 || k === 7) {
           if (k === -1) {
-            this.correction =
-              'Le point $L$ est le point-image du réel $-\\dfrac{\\pi}{2}$.'
+            this.correction = `Le point ${texteEnCouleurEtGras('L')} est le point-image du réel $-\\dfrac{\\pi}{2}$.`
           } else {
             this.correction = `Comme $\\dfrac{${rienSi1(k)}\\pi}{2}=-\\dfrac{\\pi}{2}$ modulo $2\\pi$, le point-image de $\\dfrac{${rienSi1(k)}\\pi}{2}$ est le point ${texteEnCouleurEtGras('L')}.  `
           }

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
@@ -250,7 +251,7 @@ export default class Can2026CE1Q15 extends ExerciceCan {
 
     this.correction =
       monQcm.texteCorr +
-      `La figure ${positionCorrecte} possède exactement deux angles droits. Les autres figures n'en ont pas deux.`
+      `La ${texteEnCouleurEtGras(`figure ${positionCorrecte}`)} possède exactement deux angles droits. Les autres figures n'en ont pas deux.`
     this.canReponseACompleter = monQcm.texte
   }
 

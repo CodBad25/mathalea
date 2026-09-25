@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import {
   Angle,
   angleOppose,
@@ -55,7 +56,7 @@ export default class NomExercice extends ExerciceSimple {
     this.question = `Soit le nombre complexe $z=${k}\\left(\\cos\\left(${teta.radians}\\right) + \\mathrm{i}\\sin\\left(${teta.radians}\\right)\\right)$.<br> Écrire $z$ sous  forme algébrique. `
     this.correction = `On a :<br>$\\begin{aligned}z&=${k}\\left( ${cos}+\\mathrm{i}${parenthesesSiNegatifStrigArray(sin)}\\right)\\\\
     &= ${k}\\times ${parenthesesSiNegatifStrigArray(cos)} + ${k}\\times${parenthesesSiNegatifStrigArray(sin)}\\mathrm{i}\\\\
-    &=${parsedReel}${ajoutePlusSiPasMoins(`${parsedImaginaire !== '1' ? parsedImaginaire : ''}\\mathrm{i}`)}\\end{aligned}$`
+    &=${miseEnEvidence(`${parsedReel}${ajoutePlusSiPasMoins(`${parsedImaginaire !== '1' ? parsedImaginaire : ''}\\mathrm{i}`)}`)}\\end{aligned}$`
     this.reponse = ''
   }
 }

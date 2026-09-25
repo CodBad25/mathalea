@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { PieceBuilder } from '../../../lib/2d/pieces'
 import { addSvgSelection } from '../../../lib/customElements/SvgSelectionElement'
@@ -134,10 +135,10 @@ export default class Can2026CE2Q16 extends ExerciceCan {
     const solutionIndices = this.findSolution(pieces, somme)
     this.correction = `Voici les pièces qu'il faut donner : ${solutionIndices
       .slice(0, -1)
-      .map((index) => `$${texPrix(pieces[index])}$€`)
+      .map((index) => `$${miseEnEvidence(texPrix(pieces[index]))}$€`)
       .join(
         ' ; ',
-      )} et $${texPrix(pieces[solutionIndices[solutionIndices.length - 1]])}$€.<br>
+      )} et $${miseEnEvidence(texPrix(pieces[solutionIndices[solutionIndices.length - 1]]))}$€.<br>
       ${addSvgSelection(this, 0, {
         id: `svgSelection-correctionEx${this.numeroExercice}Q0`,
         svgs: solutionIndices.map((index) => {

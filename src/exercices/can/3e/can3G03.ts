@@ -127,7 +127,7 @@ export default class CalculLongueurThales2 extends ExerciceSimple {
       this.correction = ` Le triangle $${nom[0]}${nom[3]}${nom[4]}$ est un agrandissement du triangle $${nom[0]}${nom[1]}${nom[2]}$.<br>
        Le coefficient d'agrandissement est  donné par : $\\dfrac{${nom[3]}${nom[4]}}{${nom[2]}${nom[1]}}=\\dfrac{${texNombre(a)}}{${b}}=${texNombre(a / b)}$.<br>
        On en déduit que les longueurs du triangle $${nom[0]}${nom[3]}${nom[4]}$ sont $${texNombre(a / b)}$ fois plus grandes que les longueurs du triangle $${nom[0]}${nom[1]}${nom[2]}$. <br>
-           Ainsi, $${nom[3]}${nom[0]}=${texNombre(a / b)}\\times ${c}=${texNombre((a * c) / b)}$.
+           Ainsi, $${nom[3]}${nom[0]}=${texNombre(a / b)}\\times ${c}=${miseEnEvidence(texNombre((a * c) / b))}$.
                      <br>`
       this.reponse = (a * c) / b
       this.canReponseACompleter = `$${nom[3]}${nom[0]}=\\ldots$`

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebriqueSauf1,
@@ -47,7 +48,7 @@ export default class IntegraleAffine extends ExerciceSimple {
     }
     this.correction = `$\\begin{aligned}\\displaystyle\\int_{${a}}^{${b}} \\left(${reduireAxPlusB(c, d)} \\right)\\ \\mathrm{d}x&=\\Bigl[${rienSi1(fraction.simplifie())}x^2 ${ecritureAlgebriqueSauf1(d)}x\\Bigr]_{${a}}^{${b}}\\\\
     &=${fraction.texFractionSimplifiee}\\times${ecritureParentheseSiNegatif(b)}^2 ${ecritureAlgebriqueSauf1(d)}\\times ${ecritureParentheseSiNegatif(b)} - ${fraction.texFractionSimplifiee}\\times${ecritureParentheseSiNegatif(a)}^2 ${ecritureAlgebriqueSauf1(d)}\\times ${ecritureParentheseSiNegatif(a)}\\\\
-    =&${(b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d}\\end{aligned}$`
+    &=${miseEnEvidence((b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d)}\\end{aligned}$`
     this.reponse = (b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d
   }
 }

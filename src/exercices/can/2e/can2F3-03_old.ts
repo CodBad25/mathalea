@@ -293,28 +293,28 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
               if (k === 1) {
                 texteCorr += `Comme $-\\sqrt{${k}}=-${Math.sqrt(k)}$ et $\\sqrt{${k}}=${Math.sqrt(k)}$ alors
             les solutions de l'équation peuvent s'écrire plus simplement : $-${Math.sqrt(k)}$ et $${Math.sqrt(k)}$.<br>
-            Ainsi,  $S=\\{-${Math.sqrt(k)}${sp(1)};${sp(1)}${Math.sqrt(k)}\\}$.`
+            Ainsi,  $S=${miseEnEvidence(`\\{-${Math.sqrt(k)}${sp(1)};${sp(1)}${Math.sqrt(k)}\\}`)}$.`
               } else {
-                texteCorr += `Ainsi, $S=\\{-\\sqrt{${k}}${sp(1)};${sp(1)}\\sqrt{${k}}\\}$.`
+                texteCorr += `Ainsi, $S=${miseEnEvidence(`\\{-\\sqrt{${k}}${sp(1)};${sp(1)}\\sqrt{${k}}\\}`)}$.`
               }
             } else {
               if (k === a) {
                 texteCorr += `Comme $-\\sqrt{${k}}=-${Math.sqrt(k)}$ et $\\sqrt{${k}}=${Math.sqrt(k)}$ alors
             les solutions de l'équation peuvent s'écrire plus simplement : $-${Math.sqrt(k)}$ et $${Math.sqrt(k)}$.<br>
-            Ainsi,  $S=\\{-${Math.sqrt(k)}${sp(1)};${sp(1)}${Math.sqrt(k)}\\}$.`
+            Ainsi,  $S=${miseEnEvidence(`\\{-${Math.sqrt(k)}${sp(1)};${sp(1)}${Math.sqrt(k)}\\}`)}$.`
               } else {
                 texteCorr += `Comme $-\\sqrt{${k}}=-${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}$ et $\\sqrt{${k}}=${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}$ alors
                 les solutions de l'équation peuvent s'écrire plus simplement : $-${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}$ et $${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}$.<br>
-                Ainsi,  $S=\\{-${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}${sp(1)};${sp(1)}${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}\\}$.`
+                Ainsi,  $S=${miseEnEvidence(`\\{-${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}${sp(1)};${sp(1)}${extraireRacineCarree(k)[0]}\\sqrt{${extraireRacineCarree(k)[1]}}\\}`)}$.`
               }
             }
           } else {
             if (k === 0) {
               texteCorr += `L'équation est de la forme $x^2=k$ avec $k=${k}$. Comme $k=${k}$ alors L'équation admet une unique solution : $0$.<br>
-            Ainsi, $S=\\{0\\}$.`
+            Ainsi, $S=${miseEnEvidence(`\\{0\\}`)}$.`
             } else {
               texteCorr += `L'équation est de la forme $x^2=k$. Comme $k=${k}$ et $${k}<0$, alors l'équation n'admet aucune solution.<br>
-              Ainsi, $S=\\emptyset$.`
+              Ainsi, $S=${miseEnEvidence(`\\emptyset`)}$.`
             }
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $x^2=${k}$.`
@@ -349,7 +349,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
           if (this.interactif) texte += props.texte
           else texte = `Résoudre dans $\\mathbb{R}$ :<br>$x^3=${k}$.`
 
-          texteCorr = `La fonction cube est strictement croissante sur $\\mathbb{R}$. L'équation $x^3=${k}$ admet donc une unique solution.<br>Or $${solution}^3=${k}$. Ainsi, $S=\\{${solution}\\}$.`
+          texteCorr = `La fonction cube est strictement croissante sur $\\mathbb{R}$. L'équation $x^3=${k}$ admet donc une unique solution.<br>Or $${solution}^3=${k}$. Ainsi, $S=${miseEnEvidence(`\\{${solution}\\}`)}$.`
           this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $x^3=${k}$.`
           break
         }
@@ -478,12 +478,12 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
 
           if (k < 0) {
             texteCorr += `L'équation est de la forme $\\sqrt{x}=k$. Comme $k=${k}$ et $${k}<0$ alors l'équation n'admet pas de solution.<br>
-            Ainsi,   $S=\\emptyset$.
+            Ainsi,   $S=${miseEnEvidence(`\\emptyset`)}$.
             `
           }
           if (k > 0 || k === 0) {
             texteCorr += `$k=${k}$ et $${k}>0$ donc l'équation admet une solution : $${k}^2=${k ** 2}$.<br>
-             Ainsi $S=\\{${k ** 2}\\}$.
+             Ainsi $S=${miseEnEvidence(`\\{${k ** 2}\\}`)}$.
             `
           }
           this.canEnonce = `Résoudre dans $[0${sp(1)};${sp(1)}+\\infty[$ l'équation $\\sqrt{x}=${k}$.`
@@ -570,13 +570,13 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
 
           if (k === 0) {
             texteCorr += `L'équation est de la forme $\\dfrac{1}{x}=k$ avec $k=${k}$. Comme $k=${k}$, alors l'équation n'admet pas de solution.<br>
-              Ainsi,   $S=\\emptyset$.
+              Ainsi,   $S=${miseEnEvidence(`\\emptyset`)}$.
               `
           }
           if (k !== 0) {
             texteCorr += `L'équation est de la forme $\\dfrac{1}{x}=k$ avec $k=${k}$. Comme $${k}\\neq 0$ alors l'équation admet une solution :
               $${texFractionReduite(1, k)}$.<br>
-             Ainsi $S=\\left\\{${texFractionReduite(1, k)}\\right\\}$.
+             Ainsi $S=${miseEnEvidence(`\\left\\{${texFractionReduite(1, k)}\\right\\}`)}$.
             `
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}^*$ l'équation $\\dfrac{1}{x}=${k}$.`

@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import Decimal from 'decimal.js'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../../lib/2d/TracePoint'
@@ -10,7 +11,7 @@ import {
   pointAdistance,
   pointIntersectionCC,
 } from '../../../lib/2d/utilitairesPoint'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
@@ -104,11 +105,11 @@ export default class Perimetre extends ExerciceSimple {
         objets,
       )
     this.reponse = reponse
-    this.correction = ` Le périmètre est : $${texNombre(reponse, 1)}\\text{ m}$. `
+    this.correction = ` Le périmètre est : $${miseEnEvidence(texNombre(reponse, 1))}\\text{ m}$. `
     this.optionsChampTexte = { texteApres: '$\\text{ m}$' }
     this.correction += texteEnCouleur(`<br> Mentalement : <br>
    On doit calculer la somme des valeurs. On regroupe pour faciliter le calcul : <br>
-   $\\underbrace{${texNombre(a, 1)}+${texNombre(b, 1)}}_{${texNombre(a + b, 1)}}+\\underbrace{${texNombre(c, 1)}+${texNombre(d, 1)}}_{${texNombre(new Decimal(c).add(d), 1)}}=${texNombre(reponse, 1)}\\text{ m}$.`)
+   $\\underbrace{${texNombre(a, 1)}+${texNombre(b, 1)}}_{${texNombre(a + b, 1)}}+\\underbrace{${texNombre(c, 1)}+${texNombre(d, 1)}}_{${texNombre(new Decimal(c).add(d), 1)}}=${texNombre(reponse, 1)}\\text{ m}$.`, bleuMathalea)
 
     this.canReponseACompleter = ' $\\dots\\text{ m}$'
   }

@@ -1,4 +1,5 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { prenom } from '../../../lib/outils/Personne'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -37,10 +38,10 @@ export default class ProportionnaliteNotes extends ExerciceSimple {
       this.question = `${prenom()} a obtenu $${n}$ sur $30$ à son devoir.<br>
 
       Quelle est sa note sur $20$ ?`
-      this.correction = `Sa note est de $${(n * 2) / 3}$ sur $20$.`
+      this.correction = `Sa note est de $${miseEnEvidence((n * 2) / 3)}$ sur $20$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Pour obtenir la note sur $20$, on multiplie sa note par $2$ (on obtient $${n * 2}$), puis on divise le résultat par $3$, soit  $${n * 2}\\div 3=${(n * 2) / 3}$.<br>
-      En multipliant par $2$, on obtient sa note sur $60$, puis en divisant par $3$, on la ramène sur $20$. `)
+      En multipliant par $2$, on obtient sa note sur $60$, puis en divisant par $3$, on la ramène sur $20$. `, bleuMathalea)
       this.reponse = (n * 2) / 3
     }
     if (a === 40) {
@@ -49,9 +50,9 @@ export default class ProportionnaliteNotes extends ExerciceSimple {
       this.question = `${prenom()} a obtenu $${n}$ sur $40$ à son devoir.<br>
 
         Quelle est sa note sur $20$ ?`
-      this.correction = `Sa note est de $${texNombre(n / 2)}$ sur $20$.`
+      this.correction = `Sa note est de $${miseEnEvidence(texNombre(n / 2))}$ sur $20$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
-      Pour obtenir la note sur $20$, on divise la note sur $40$ par $2$. `)
+      Pour obtenir la note sur $20$, on divise la note sur $40$ par $2$. `, bleuMathalea)
       this.reponse = n / 2
     }
     if (a === 50) {
@@ -61,10 +62,10 @@ export default class ProportionnaliteNotes extends ExerciceSimple {
       this.question = `${prenom()} a obtenu $${n}$ sur $50$ à son devoir.<br>
 
         Quelle est sa note sur $20$ ?`
-      this.correction = `Sa note est de $${texNombre((n * 2) / 5)}$ sur $20$.`
+      this.correction = `Sa note est de $${miseEnEvidence(texNombre((n * 2) / 5))}$ sur $20$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
         Pour obtenir la note sur $20$, on multiplie sa note par $2$ (on obtient $${n * 2}$), puis on divise le résultat par $5$, soit  $${n * 2}\\div 5=${(n * 2) / 5}$.<br>
-        En multipliant par $2$, on obtient sa note sur $100$, puis en divisant par $5$, on la ramène sur $20$. `)
+        En multipliant par $2$, on obtient sa note sur $100$, puis en divisant par $5$, on la ramène sur $20$. `, bleuMathalea)
       this.reponse = (n * 2) / 5
     }
     if (a === 60) {
@@ -74,9 +75,9 @@ export default class ProportionnaliteNotes extends ExerciceSimple {
       this.question = `${prenom()} a obtenu $${n}$ sur $60$ à son devoir.<br>
 
         Quelle est sa note sur $20$ ?`
-      this.correction = `Sa note est de $${texNombre(n / 3)}$ sur $20$.`
+      this.correction = `Sa note est de $${miseEnEvidence(texNombre(n / 3))}$ sur $20$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
-        Pour obtenir la note sur $20$, on divise la note sur $60$ par $3$. `)
+        Pour obtenir la note sur $20$, on divise la note sur $60$ par $3$. `, bleuMathalea)
       this.reponse = n / 3
     }
     if (a === 80) {
@@ -86,9 +87,9 @@ export default class ProportionnaliteNotes extends ExerciceSimple {
       this.question = `${prenom()} a obtenu $${n}$ sur $80$ à son devoir.<br>
 
         Quelle est sa note sur $20$ ?`
-      this.correction = `Sa note est de $${texNombre(n / 4)}$ sur $20$.`
+      this.correction = `Sa note est de $${miseEnEvidence(texNombre(n / 4))}$ sur $20$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
-        Pour obtenir la note sur $20$, on divise la note sur $80$ par $4$. `)
+        Pour obtenir la note sur $20$, on divise la note sur $80$ par $4$. `, bleuMathalea)
       this.reponse = n / 4
     }
     if (a === 100) {
@@ -98,9 +99,9 @@ export default class ProportionnaliteNotes extends ExerciceSimple {
       this.question = `${prenom()} a obtenu $${n}$ sur $100$ à son devoir.<br>
 
         Quelle est sa note sur $20$ ?`
-      this.correction = `Sa note est de $${texNombre(n / 5)}$ sur $20$.`
+      this.correction = `Sa note est de $${miseEnEvidence(texNombre(n / 5))}$ sur $20$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
-        Pour obtenir la note sur $20$, on divise la note sur $100$ par $5$. `)
+        Pour obtenir la note sur $20$, on divise la note sur $100$ par $5$. `, bleuMathalea)
       this.reponse = n / 5
     }
   }

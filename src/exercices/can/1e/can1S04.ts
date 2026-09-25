@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import { sp } from '../../../lib/outils/outilString'
@@ -64,7 +65,7 @@ export default class RelationRec extends Exercice {
           texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-${texNombre(a / 100)}${s}_{n}}_{\\text{Perte de } ${a}${sp(1)}\\%} +${b}=${texNombre(1 - a / 100)}${s}_{n}+${b}$.<br>
 
 
-          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${texNombre(1 - a / 100)}${s}_{n}+${b}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${miseEnEvidence(`${texNombre(1 - a / 100)}${s}_{n}+${b}`)}$.<br>`
           handleAnswers(this, i, {
             bareme: (listePoints: number[]) => [
               Math.min(listePoints[0], listePoints[1]),
@@ -99,7 +100,7 @@ export default class RelationRec extends Exercice {
           texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-${texNombre(a / 100)}${s}_{n}}_{\\text{Perte de } ${a}${sp(1)}\\%} =${texNombre(1 - a / 100)}${s}_{n}$.<br>
 
 
-          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${texNombre(1 - a / 100)}${s}_{n}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${miseEnEvidence(`${texNombre(1 - a / 100)}${s}_{n}`)}$.<br>`
           handleAnswers(this, i, {
             bareme: (listePoints: number[]) => [
               Math.min(listePoints[0], listePoints[1]),
@@ -132,7 +133,7 @@ export default class RelationRec extends Exercice {
           }
 
           texteCorr = `On a $${s}_{n+1}=${s}_{n}-${a}$.<br>
-          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${s}_{n}-${a}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${miseEnEvidence(`${s}_{n}-${a}`)}$.<br>`
           handleAnswers(this, i, {
             bareme: (listePoints: number[]) => [
               Math.min(listePoints[0], listePoints[1]),
@@ -174,23 +175,23 @@ export default class RelationRec extends Exercice {
           if (T === 'le quart') {
             texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{4}${s}_{n}}_{\\text{Perte du quart }} +${b}=0,75${s}_{n}+${b}$.<br>
 
-          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,75${s}_{n}+${b}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=${miseEnEvidence(`0,75${s}_{n}+${b}`)}$.<br>`
           } else if (T === 'le tiers') {
             texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{3}${s}_{n}}_{\\text{Perte du tiers }} +${b}=\\dfrac{2}{3}${s}_{n}+${b}$.<br>
 
-          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=\\dfrac{2}{3}${s}_{n}+${b}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=${miseEnEvidence(`\\dfrac{2}{3}${s}_{n}+${b}`)}$.<br>`
           } else if (T === 'le cinquième') {
             texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{5}${s}_{n}}_{\\text{Perte du cinquième }} +${b}=0,8${s}_{n}+${b}$.<br>
 
-          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,8${s}_{n}+${b}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=${miseEnEvidence(`0,8${s}_{n}+${b}`)}$.<br>`
           } else if (T === 'le dixième') {
             texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{10}${s}_{n}}_{\\text{Perte du dixième }} +${b}=0,9${s}_{n}+${b}$.<br>
 
-          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,9${s}_{n}+${b}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=${miseEnEvidence(`0,9${s}_{n}+${b}`)}$.<br>`
           } else {
             texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{2}${s}_{n}}_{\\text{Perte de la moitié }} +${b}=0,5${s}_{n}+${b}$.<br>
 
-          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,5${s}_{n}+${b}$.<br>`
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=${miseEnEvidence(`0,5${s}_{n}+${b}`)}$.<br>`
           }
 
           if (T === 'la moitié') {

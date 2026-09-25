@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { papierPointe } from '../../../lib/2d/reperes'
 import { labelPoint } from '../../../lib/2d/textes'
@@ -154,7 +155,7 @@ export default class CompterlesSymetriquesCan5e extends Exercice {
       texte = context.isAmc
         ? 'Voici une grille contenant des points et un centre de symétrie.<br>Quel nombre minimum de points faut-il ajouter pour que chacun ait son symétrique ?<br>Écrire le nombre de points ajoutés dans le cadre. Coder ensuite ce nombre de points.<br>'
         : 'Voici une grille contenant des points et un centre de symétrie.<br>Quel nombre minimum de points faut-il ajouter pour que chacun ait son symétrique ?<br>'
-      texteCorr = ''
+      texteCorr = `Il y a $${miseEnEvidence(pointsEnPlusCorr.length)}$ points à ajouter (en rouge sur la figure).<br>`
       // On prépare la figure...
       texte += mathalea2d(
         {

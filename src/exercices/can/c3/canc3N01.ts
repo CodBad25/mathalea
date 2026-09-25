@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -77,7 +78,7 @@ export default class EcritureDeNombreEntier extends Exercice {
       if (!context.isAmc) {
         texte += monQcm.texte
       }
-      const texteCorr = `$${texNombre(n1)}$ s'écrit ${nombreEnLettres(n1)}.`
+      const texteCorr = `$${texNombre(n1)}$ s'écrit ${texteEnCouleurEtGras(nombreEnLettres(n1))}.`
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
