@@ -1234,6 +1234,8 @@ export interface IExerciceStatique {
   mois: any
   numeroInitial: any
   examen: string
+  /** Titre propre de la ressource (MathAdata, banques externes), absent pour les annales */
+  titre?: string
 }
 
 export interface IEtiquette {
