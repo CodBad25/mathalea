@@ -186,6 +186,26 @@ export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num, dx: 0pt) 
   [#metadata((kind: kind, num: num, page: position.page, x: (position.x + dx).pt(), y: position.y.pt())) <mathalea-anchor>]
 }`
 
+/**
+ * Saut de colonne (ou de page) conditionnel avant un exercice ou une
+ * correction : s'il reste moins de `hauteur` sous la position courante, on
+ * passe à la colonne suivante ; sinon rien n'est produit et le rendu est
+ * inchangé. Sans cela, avec les habillages pleine largeur d'exercise-bank
+ * (`underline` — « Épuré » —, `border-accent`, `rounded-box`, `header-card`),
+ * le titre « Exercice N » et son filet pouvaient rester seuls en bas de
+ * page : le paquet ne les rend collants (`sticky`) que pour les habillages à
+ * badge. Un bloc insécable vide suivi d'un `v` négatif ferait le même travail
+ * mais casserait la fusion des espacements autour de l'exercice.
+ */
+export const MATHALEA_NEEDSPACE_HELPER = `#let mathalea-needspace(hauteur: 5em) = context {
+  // \`page.height\` ignore \`flipped\` (paysage) : la hauteur réelle est alors la largeur
+  let haut-page = if page.flipped { page.width } else { page.height }
+  let marge = page.margin
+  let bas = if type(marge) == dictionary { marge.at("bottom", default: marge.at("y", default: auto)) } else { marge }
+  bas = if bas == auto { 2.5 / 21 * calc.min(page.width, page.height) } else if type(bas) == relative { bas.length.to-absolute() + bas.ratio * haut-page } else { bas.to-absolute() }
+  if haut-page - bas - here().position().y < hauteur.to-absolute() { colbreak(weak: true) }
+}`
+
 /** Marqueur de fin de ligne des insertions faites via la palette */
 export const INSERTION_TAG = '// mathalea:insertion'
 /** Marqueur de fin de ligne des insertions faites via la palette, avant une correction */
@@ -3212,6 +3232,9 @@ function buildVersionContent(
     renderLines.push(...insertionLines(0, '  '))
     for (const group of groups) {
       const last = group.members[group.members.length - 1]
+      // placé avant le repère "exo", qui doit suivre l'exercice s'il est
+      // renvoyé à la page suivante (voir `MATHALEA_NEEDSPACE_HELPER`)
+      renderLines.push(`  #mathalea-needspace()`)
       // repère "exo" : contrôles de l'exercice (nombre de questions,
       // suppression) dans la palette de l'aperçu
       if (emitAnchors || emitVersionExerciseAnchors) {
@@ -3267,6 +3290,7 @@ function buildVersionContent(
         const ref =
           group.members.length === 1 ? exercises[group.head].ref.trim() : ''
         const exerciseId = ref.length > 0 ? ref : `exo-${num}`
+        renderLines.push('    #mathalea-needspace()')
         renderLines.push('    #exo-solution-box(')
         renderLines.push(`      number: ${num},`)
         renderLines.push(`      exercise-id: ${typstString(exerciseId)},`)
@@ -3689,6 +3713,7 @@ export function buildTypstDocument(
   lines.push('#let en-colonnes(corps) = if colonnes > 1 {')
   lines.push('  columns(colonnes, gutter: 8mm, corps)')
   lines.push('} else { corps }')
+  lines.push(MATHALEA_NEEDSPACE_HELPER)
   lines.push(
     '// titre de section, insérable entre les exercices : #section[Fractions]',
   )
