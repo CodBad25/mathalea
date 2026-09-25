@@ -352,7 +352,7 @@ function tireNumerateur(denominateur: number, contigue: boolean): number {
 }
 
 // rotation : faire tourner les secteurs si polygone ou disque
-function zonesAColorier(
+export function zonesAColorier(
   numerateur: number,
   denominateur: number,
   contigue: boolean,
