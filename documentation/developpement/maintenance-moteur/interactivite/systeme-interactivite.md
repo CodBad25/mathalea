@@ -364,8 +364,9 @@ Les paramètres d'un exercice affiché en interactif proposent un réglage « Ba
 
 ### Stabilité du barème face au tirage aléatoire
 
-Le barème maximum d'un exercice interactif ne doit **jamais** dépendre du
-tirage aléatoire (seed, ou paramètres tirés au sort qui changent le nombre de
+**Règle impérative :** chaque question d'un exercice doit toujours rapporter le
+même nombre de points maximum. Plus largement, le barème maximum d'un exercice
+interactif ne doit **jamais** dépendre du tirage aléatoire (seed, ou paramètres tirés au sort qui changent le nombre de
 champs de réponse). `pointsMaxExercice()` (voir ci-dessus) est recalculé
 *a posteriori*, une fois l'énoncé généré : rien n'empêche ce total de varier
 d'un élève à l'autre si l'énoncé lui-même varie en nombre de champs. Un
