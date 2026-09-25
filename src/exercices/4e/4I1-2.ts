@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 // on importe les fonctions nécessaires.
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -653,7 +654,7 @@ export default class AlgoTortue extends Exercice {
     this.autoCorrection[0].formatInteractif = 'clique-figure'
     this.indiceBonneFigure = ordreLutins.indexOf(bonneReponse)
     // Ici, la figure contient la grille, le point de départ et le lutin qui s'anime sur sa trace...
-    texteCorr += `La bonne figure est la figure ${this.indiceBonneFigure + 1}<br>
+    texteCorr += `La bonne figure est la figure $${miseEnEvidence(this.indiceBonneFigure + 1)}$.<br>
     ${
       context.isHtml
         ? DomReadyActionElement.create({

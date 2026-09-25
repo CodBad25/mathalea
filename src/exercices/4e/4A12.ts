@@ -410,7 +410,7 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
           'On multiplie les facteurs communs aux deux décompositions avec les facteurs spécifiques à chaque décomposition :<br>'
       }
       texteCorr += `${decompositionCommun} $\\times$ ${decompositionA} $\\times$ ${decompositionB} = ${nombreAvecEspace(Commun * A * B)}<br>
-      Ce phénomène se produira à nouveau au bout de ${nombreAvecEspace(Commun * A * B)} ${unite}, `
+      Ce phénomène se produira à nouveau au bout de ${texteEnCouleurEtGras(nombreAvecEspace(Commun * A * B))} ${unite}, `
       if (saveurs[i] === 'restau-ciné') {
         texteCorr += `lorsqu'${Robert.pronom} ${texteEnCouleurEtGras('ira au restaurant', 'red')} pour la ${texteEnCouleurEtGras(nombreAvecEspace(B), 'green')}ème fois et qu'${Robert.pronom} ${texteEnCouleurEtGras('ira au cinéma', 'green')} pour la ${texteEnCouleurEtGras(nombreAvecEspace(A), 'red')}ème fois.<br>`
       } else if (saveurs[i] === 'engrenages') {

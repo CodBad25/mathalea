@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { codageSegment } from '../../lib/2d/CodageSegment'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
@@ -295,7 +296,7 @@ export default class PavageEtTranslation2d extends Exercice {
     }
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       texte = `Quelle est l'image de la figure $${couples[i][0]}$ dans la translation transformant la figure $${index1 + 1}$ en la figure $${index2 + 1}$ ?<br>`
-      texteCorr = `L'image de la figure $${couples[i][0]}$ dans la translation transformant la figure $${index1 + 1}$ en la figure $${index2 + 1}$ est la figure ${couples[i][1]}.<br>`
+      texteCorr = `L'image de la figure $${couples[i][0]}$ dans la translation transformant la figure $${index1 + 1}$ en la figure $${index2 + 1}$ est la figure $${miseEnEvidence(couples[i][1])}$.<br>`
       //      symetriques=associesommets(monpavage.polygones[couples[i][0]-1],monpavage.polygones[couples[i][1]-1],d)
       if (this.correctionDetaillee) {
         A = monpavage.barycentres[couples[i][0] - 1]

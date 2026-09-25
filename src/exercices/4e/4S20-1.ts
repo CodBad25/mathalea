@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexte } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -55,35 +56,30 @@ export default class nomExercice extends Exercice {
           texte =
             "Les résultats possibles d'une expérience aléatoire s'appellent les ..." // Le LateX entre deux symboles $, les variables dans des ${ }
           rep = 'issues'
-          texteCorr =
-            "Les résultats possibles d'une expérience aléatoire s'appellent les issues."
+          texteCorr = `Les résultats possibles d'une expérience aléatoire s'appellent les ${texteEnCouleurEtGras('issues')}.`
           break
         case 'imp':
           texte = 'Un événement qui ne se réalise jamais est un événement ...'
           rep = 'impossible'
-          texteCorr =
-            'Un événement qui ne se réalise jamais est un événement impossible.'
+          texteCorr = `Un événement qui ne se réalise jamais est un événement ${texteEnCouleurEtGras('impossible')}.`
           break
         case 'equiprob':
           texte =
             "Lorsque toutes les issues ont la même probabilité de se produire, on dit qu'il y a …"
           rep = 'équiprobabilité'
-          texteCorr =
-            "Lorsque toutes les issues ont la même probabilité de se produire, on dit qu'il y a équiprobabilité."
+          texteCorr = `Lorsque toutes les issues ont la même probabilité de se produire, on dit qu'il y a ${texteEnCouleurEtGras('équiprobabilité')}.`
           break
         case 'alea':
           texte = 'Une expérience liée au hasard est une expérience …'
           rep = 'aléatoire'
-          texteCorr =
-            'Une expérience liée au hasard est une expérience aléatoire.'
+          texteCorr = `Une expérience liée au hasard est une expérience ${texteEnCouleurEtGras('aléatoire')}.`
           break
         case 'certain':
         default:
           texte =
             "Un événement qui se réalise quelle que soit l'issue est un événement …"
           rep = 'certain'
-          texteCorr =
-            "Un événement qui se réalise quelle que soit l'issue est un événement certain."
+          texteCorr = `Un événement qui se réalise quelle que soit l'issue est un événement ${texteEnCouleurEtGras('certain')}.`
           break
       }
       if (this.interactif) {

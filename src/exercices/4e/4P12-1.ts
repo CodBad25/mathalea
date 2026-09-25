@@ -1,9 +1,10 @@
+import { bleuMathalea } from '../../lib/colors'
 import type { MathfieldElement } from 'mathlive'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import {
   numAlpha,
@@ -187,8 +188,8 @@ export default class ProblemeDeRatio extends Exercice {
           texte += `.<br>Combien de ${objets[index % 5]} chaque enfant reçoit-il ?<br>`
           if (n === 2) {
             texteCorr += `Si les enfants se partageaient $${x}+${y}=${x + y}$ ${objets[index % 5]} alors ${prenoms[0].prenom} en aurait $${x}$ et ${prenoms[1].prenom} en aurait $${y}$.`
-            texteCorr += `<br>Mais il y a $${total}$ ${objets[index % 5]}, soit $${miseEnEvidence(k)}\\times ${x + y + z}$ ${objets[index % 5]}.<br>`
-            texteCorr += `Donc ${prenoms[0].prenom} en aura $${miseEnEvidence(k)}\\times ${x}=${k * x}$ et ${prenoms[1].prenom} en aura $${miseEnEvidence(k)}\\times ${y}=${k * y}$.<br>`
+            texteCorr += `<br>Mais il y a $${total}$ ${objets[index % 5]}, soit $${miseEnEvidence(k, bleuMathalea)}\\times ${x + y + z}$ ${objets[index % 5]}.<br>`
+            texteCorr += `Donc ${prenoms[0].prenom} en aura $${miseEnEvidence(k, bleuMathalea)}\\times ${x}=${miseEnEvidence(k * x)}$ et ${prenoms[1].prenom} en aura $${miseEnEvidence(k, bleuMathalea)}\\times ${y}=${miseEnEvidence(k * y)}$.<br>`
             texteCorr += `Conclusion : ${prenoms[0].prenom} aura $${k * x}$ ${objets[index % 5]} et ${prenoms[1].prenom} en aura $${k * y}$.`
             if (this.interactif) {
               texte += ajouteQuestionMathlive({
@@ -206,8 +207,8 @@ export default class ProblemeDeRatio extends Exercice {
             }
           } else {
             texteCorr += `Si les enfants se partageaient $${x}+${y}+${z}=${x + y + z}$ ${objets[index % 5]} alors ${prenoms[0].prenom} en aurait $${x}$, ${prenoms[1].prenom} en aurait $${y}$ et ${prenoms[2].prenom} en aurait $${z}$.`
-            texteCorr += `<br>Mais il y a $${total}$ ${objets[index % 5]}, soit $${miseEnEvidence(k)}\\times ${x + y + z}$ ${objets[index % 5]}.<br>`
-            texteCorr += `Donc ${prenoms[0].prenom} en aura $${miseEnEvidence(k)}\\times ${x}=${k * x}$, ${prenoms[1].prenom} en aura $${miseEnEvidence(k)}\\times ${y}=${k * y}$ et  ${prenoms[2].prenom} en aura $${miseEnEvidence(k)}\\times ${z}=${k * z}$.<br>`
+            texteCorr += `<br>Mais il y a $${total}$ ${objets[index % 5]}, soit $${miseEnEvidence(k, bleuMathalea)}\\times ${x + y + z}$ ${objets[index % 5]}.<br>`
+            texteCorr += `Donc ${prenoms[0].prenom} en aura $${miseEnEvidence(k, bleuMathalea)}\\times ${x}=${miseEnEvidence(k * x)}$, ${prenoms[1].prenom} en aura $${miseEnEvidence(k, bleuMathalea)}\\times ${y}=${miseEnEvidence(k * y)}$ et  ${prenoms[2].prenom} en aura $${miseEnEvidence(k, bleuMathalea)}\\times ${z}=${miseEnEvidence(k * z)}$.<br>`
             texteCorr += `Conclusion : ${prenoms[0].prenom} aura $${k * x}$ ${objets[index % 5]}, ${prenoms[1].prenom} en aura $${k * y}$ et  ${prenoms[2].prenom} en aura $${k * z}$.`
             if (this.interactif) {
               texte += ajouteQuestionMathlive({
@@ -245,8 +246,8 @@ export default class ProblemeDeRatio extends Exercice {
             if (choice([true, false])) {
               texte += `${premiereLettreEnMajuscule(article)} désire préparer $${total}\\text{ cL} $ de boisson. Quelle quantité de sirop et d'eau doit-${article} mélanger ?`
               texteCorr += `Si ${quidam.prenom} mélange selon le ratio donné $${x}\\text{ cL} $ de sirop ${sirops[index % 5]} et $${y}\\text{ cL} $ d'eau ${article} obtiendra $${x + y}\\text{ cL} $ de mélange.<br>`
-              texteCorr += `${premiereLettreEnMajuscule(article)} veut obtenir $${total}\\text{ cL} $ $=${miseEnEvidence(k)}\\times ${x + y}\\text{ cL} $.<br>`
-              texteCorr += `Donc pour cela, ${article} doit mélanger $${miseEnEvidence(k)}\\times ${x}\\text{ cL} $$=${k * x}\\text{ cL} $ de sirop ${sirops[index % 5]} et $${miseEnEvidence(k)}\\times ${y}\\text{ cL} $$=${k * y}\\text{ cL} $ d'eau`
+              texteCorr += `${premiereLettreEnMajuscule(article)} veut obtenir $${total}\\text{ cL} $ $=${miseEnEvidence(k, bleuMathalea)}\\times ${x + y}\\text{ cL} $.<br>`
+              texteCorr += `Donc pour cela, ${article} doit mélanger $${miseEnEvidence(k, bleuMathalea)}\\times ${x}\\text{ cL} $$=${miseEnEvidence(k * x)}\\text{ cL} $ de sirop ${sirops[index % 5]} et $${miseEnEvidence(k, bleuMathalea)}\\times ${y}\\text{ cL} $$=${miseEnEvidence(k * y)}\\text{ cL} $ d'eau`
               if (this.interactif) {
                 texte += ajouteQuestionMathlive({
                   exercice: this,
@@ -268,7 +269,7 @@ export default class ProblemeDeRatio extends Exercice {
               texteCorr += `$${texFractionFromString('\\text{Volume de sirop en cL}', x + '\\text{ cL}')}=${texFractionFromString("\\text{Volume d'eau en cL}", y + '\\text{ cL}')}$.<br>`
               texteCorr += `Avec la valeur numérique : $${texFractionFromString(String(k * x) + '\\text{ cL}', String(x) + '\\text{ cL}')}=${texFractionFromString("\\text{Volume d'eau en cL}", String(y) + '\\text{ cL}')}$.<br>`
               texteCorr += `${quidam.prenom} doit ajouter un volume d'eau de : $${texFractionFromString(y + '\\times' + k * x, x)}=${y * k}\\text{ cL}$.<br>
-              Ainsi, ${quidam.pronom} obtiendra un volume de boisson de : $${k * x}\\text{ cL}+${k * y}\\text{ cL}=${k * (x + y)}\\text{ cL}$.`
+              Ainsi, ${quidam.pronom} obtiendra un volume de boisson de : $${k * x}\\text{ cL}+${k * y}\\text{ cL}=${miseEnEvidence(k * (x + y))}\\text{ cL}$.`
               if (this.interactif) {
                 texte += ajouteQuestionMathlive({
                   exercice: this,
@@ -291,8 +292,8 @@ export default class ProblemeDeRatio extends Exercice {
             if (choice([true, false])) {
               texte += `${premiereLettreEnMajuscule(article)} désire préparer $${total}\\text{ cL} $ de boisson. Quelle quantité de sirop, de jus et d'eau gazeuse doit-${article} mélanger ?<br>`
               texteCorr += `Si ${quidam.prenom} mélange selon le ratio donné $${x}\\text{ cL} $ de sirop ${sirops[index % 5]}, $${y}\\text{ cL} $ de jus ${jusdefruit[index2 % 5]} et $${z}\\text{ cL} $ d'eau gazeuse ${article} obtiendra $${x + y + z}\\text{ cL} $ de cocktail.<br>`
-              texteCorr += `${premiereLettreEnMajuscule(article)} veut obtenir $${total}\\text{ cL} $ $=${miseEnEvidence(k)}\\times ${x + y + z}\\text{ cL} $ de cocktail.<br>`
-              texteCorr += `Donc pour cela, ${article} doit mélanger $${miseEnEvidence(k)}\\times ${x}\\text{ cL} $$=${k * x}\\text{ cL} $ de sirop ${sirops[index % 5]}, $${miseEnEvidence(k)}\\times ${y}\\text{ cL} $$=${k * y}\\text{ cL} $ de jus ${jusdefruit[index2 % 5]} et $${miseEnEvidence(k)}\\times ${z}\\text{ cL} $$=${k * z}\\text{ cL} $ d'eau gazeuse.`
+              texteCorr += `${premiereLettreEnMajuscule(article)} veut obtenir $${total}\\text{ cL} $ $=${miseEnEvidence(k, bleuMathalea)}\\times ${x + y + z}\\text{ cL} $ de cocktail.<br>`
+              texteCorr += `Donc pour cela, ${article} doit mélanger $${miseEnEvidence(k, bleuMathalea)}\\times ${x}\\text{ cL} $$=${miseEnEvidence(k * x)}\\text{ cL} $ de sirop ${sirops[index % 5]}, $${miseEnEvidence(k, bleuMathalea)}\\times ${y}\\text{ cL} $$=${miseEnEvidence(k * y)}\\text{ cL} $ de jus ${jusdefruit[index2 % 5]} et $${miseEnEvidence(k, bleuMathalea)}\\times ${z}\\text{ cL} $$=${miseEnEvidence(k * z)}\\text{ cL} $ d'eau gazeuse.`
               if (this.interactif) {
                 texte += ajouteQuestionMathlive({
                   exercice: this,
@@ -313,8 +314,8 @@ export default class ProblemeDeRatio extends Exercice {
               texteCorr += `Pour ce cocktail le sirop ${sirops[index % 5]}, le jus ${jusdefruit[index2 % 5]} et l'eau gazeuse sont dans un ratio de $${x}~:~${y}~:~${z}$<br>`
               texteCorr += `ce qui signifie que $${texFractionFromString('\\text{Volume de sirop en cL}', x + '\\text{ cL}')}=${texFractionFromString('\\text{Volume de jus de fruit en cL}', y + '\\text{ cL}')}=${texFractionFromString("\\text{Volume d'eau gazeuse en cL}", z + '\\text{ cL}')}$<br>`
               texteCorr += `Avec la valeur numérique : $${texFractionFromString(k * x + '\\text{ cL}', x + '\\text{ cL}')}=${texFractionFromString('\\text{Volume de jus de fruit en cL}', y + '\\text{ cL}')}=${texFractionFromString("\\text{Volume d'eau gazeuse en cL}", z + '\\text{ cL}')}$.<br>`
-              texteCorr += `${quidam.prenom} en déduit que le volume de jus ${jusdefruit[index2 % 5]} est : $${texFractionFromString(k * x + '\\times' + y, x)}\\text{ cL}=${y * k}\\text{ cL}$.<br>`
-              texteCorr += `Et le volume d'eau gazeuse est : $${texFractionFromString(k * x + '\\times' + z, x)}\\text{ cL}=${z * k}\\text{ cL}$.<br>`
+              texteCorr += `${quidam.prenom} en déduit que le volume de jus ${jusdefruit[index2 % 5]} est : $${texFractionFromString(k * x + '\\times' + y, x)}\\text{ cL}=${miseEnEvidence(y * k)}\\text{ cL}$.<br>`
+              texteCorr += `Et le volume d'eau gazeuse est : $${texFractionFromString(k * x + '\\times' + z, x)}\\text{ cL}=${miseEnEvidence(z * k)}\\text{ cL}$.<br>`
               if (this.interactif) {
                 texte += ajouteQuestionMathlive({
                   exercice: this,
@@ -355,7 +356,7 @@ export default class ProblemeDeRatio extends Exercice {
                 "À quel pourcentage de produit concentré dans le mélange final correspond ce ratio ? (arrondir à l'unité).<br>"
               texteCorr += `Une dilution selon le ratio $~${x}~:~${y}~$ signifie qu'on dilue $${x}$ unités de volume de ${produits[index % 5]} dans $${y}$ unités de volume d'eau.<br>`
               texteCorr += `Ce qui fait donc un total de $${x + y}$ unités de volume de produit dilué.<br>`
-              texteCorr += `La proportion de ${produits[index % 5]} est donc : $${texFractionFromString(x + '\\text{ unités de volume}', x + y + '\\text{ unités de volume}')}\\approx ${texNombre(arrondi(x / (x + y)), 3)}$ soit environ $${Math.round((100 * x) / (x + y))}\\%$.`
+              texteCorr += `La proportion de ${produits[index % 5]} est donc : $${texFractionFromString(x + '\\text{ unités de volume}', x + y + '\\text{ unités de volume}')}\\approx ${texNombre(arrondi(x / (x + y)), 3)}$ soit environ $${miseEnEvidence(Math.round((100 * x) / (x + y)))}\\,\\%$.`
               if (this.interactif) {
                 texte += ajouteQuestionMathlive({
                   exercice: this,
@@ -375,7 +376,7 @@ export default class ProblemeDeRatio extends Exercice {
               total = k * (x + y)
               texte += `Si on veut préparer $${total}\\text{ cL} $ de produit dilué, quel volume d\`eau et de ${produits[index % 5]} faut-il mélanger ?<br>`
               texteCorr += `Selon le ratio donné, pour $${x}$ unités de volume de ${produits[index % 5]} il faut $${y}$ unités de volume d'eau soit au total un volume de $${x + y}$ unités de volume.<br>`
-              texteCorr += `Or $${total}\\text{ cL} $ $=${miseEnEvidence(k)}\\times ${x + y}$ donc il faut $${miseEnEvidence(k)}\\times ${x}=${k * x}\\text{ cL} $ de ${produits[index % 5]} et $${miseEnEvidence(k)}\\times ${y}=${k * y}\\text{ cL} $ d'eau.<br>`
+              texteCorr += `Or $${total}\\text{ cL} $ $=${miseEnEvidence(k, bleuMathalea)}\\times ${x + y}$ donc il faut $${miseEnEvidence(k, bleuMathalea)}\\times ${x}=${miseEnEvidence(k * x)}\\text{ cL} $ de ${produits[index % 5]} et $${miseEnEvidence(k, bleuMathalea)}\\times ${y}=${miseEnEvidence(k * y)}\\text{ cL} $ d'eau.<br>`
               if (this.interactif) {
                 texte += ajouteQuestionMathlive({
                   exercice: this,
@@ -398,9 +399,9 @@ export default class ProblemeDeRatio extends Exercice {
                 "Donner les pourcentages minimum de produit concentré dans le mélange final (arrondi à l'unité).<br>"
               texteCorr += `Une dilution selon le ratio $~${x}~:~${y}~$ signifie qu'on dilue $${x}$ unités de volume de ${produits[index % 5]} dans $${y}$ unités de volume d'eau.<br>`
               texteCorr += `Ce qui fait donc un total de $${x}+${y}=${x + y}$ unités de volume de produit dilué.<br>`
-              texteCorr += `La proportion de ${produits[index % 5]} est donc : $${texFractionFromString(x + '\\text{ unités de volume}', x + y + '\\text{ unités de volume}')}\\approx ${texNombre(arrondi(x / (x + y)), 4)}$ soit environ $${Math.round((100 * x) / (x + y))}\\%$<br>`
+              texteCorr += `La proportion de ${produits[index % 5]} est donc : $${texFractionFromString(x + '\\text{ unités de volume}', x + y + '\\text{ unités de volume}')}\\approx ${texNombre(arrondi(x / (x + y)), 4)}$ soit environ $${miseEnEvidence(Math.round((100 * x) / (x + y)))}\\,\\%$<br>`
               texteCorr += `De la même façon, selon le ratio $~${x}~:~${z}$, on obtient la proportion suivante :<br>`
-              texteCorr += `$${texFractionFromString(x + '\\text{ unités de volume}', `(${x}+${z})\\text{ unités de volume}`)}=${texFractionFromString(x, x + z)}\\approx ${texNombre(arrondi(x / (x + z)), 4)}$ soit environ $${Math.round((100 * x) / (x + z))}\\%$.<br>`
+              texteCorr += `$${texFractionFromString(x + '\\text{ unités de volume}', `(${x}+${z})\\text{ unités de volume}`)}=${texFractionFromString(x, x + z)}\\approx ${texNombre(arrondi(x / (x + z)), 4)}$ soit environ $${miseEnEvidence(Math.round((100 * x) / (x + z)))}\\,\\%$.<br>`
               texteCorr +=
                 'Conclusion : les pourcentages et les ratios annoncés correspondent bien.'
               if (this.interactif) {
@@ -429,10 +430,10 @@ export default class ProblemeDeRatio extends Exercice {
               texte += ` ${numAlpha(0)} Si on veut préparer $${total}\\text{ cL} $ de produit dilué selon le ratio $~${x}~:~${y}$, quel volume de ${produits[index % 5]} et d'eau faut-il mélanger ?<br>`
               texte += ` ${numAlpha(1)} Quel volume d'eau faut-il ajouter au mélange précédent pour obtenir un produit dilué selon le ratio $~${x}~:~${z}$ ?`
               texteCorr += ` ${numAlpha(0)} Selon le ratio donné, pour $${x}$ unités de volume de ${produits[index % 5]} il faut $${y}$ unités de volume d'eau soit au total un volume de $${x + y}$ unités de volume.<br>`
-              texteCorr += `${sp(4)}Or $${total}\\text{ cL} $ $=${miseEnEvidence(k)}\\times ${x + y}$ donc il faut $${miseEnEvidence(k)}\\times ${x}=${k * x}\\text{ cL} $ de ${produits[index % 5]} et $${miseEnEvidence(k)}\\times ${y}=${k * y}\\text{ cL} $ d'eau.<br>`
+              texteCorr += `${sp(4)}Or $${total}\\text{ cL} $ $=${miseEnEvidence(k, bleuMathalea)}\\times ${x + y}$ donc il faut $${miseEnEvidence(k, bleuMathalea)}\\times ${x}=${miseEnEvidence(k * x)}\\text{ cL} $ de ${produits[index % 5]} et $${miseEnEvidence(k, bleuMathalea)}\\times ${y}=${miseEnEvidence(k * y)}\\text{ cL} $ d'eau.<br>`
               texteCorr += ` ${numAlpha(1)} Le ratio $~${x}~:~${z}~$ pour le ${produits[index % 5]} signifie que :<br>`
-              texteCorr += `${sp(4)}$${texFractionFromString(k * x + '\\text{ cL}', x + '\\text{ cL}')}=${texFractionFromString("\\text{volume d'eau en cL}", z + '\\text{ cL}')}=${miseEnEvidence(k)}$.<br>`
-              texteCorr += `${sp(4)}Donc il faut donc $${miseEnEvidence(k)}\\times ${z}\\text{ cL}=${k * z}\\text{ cL}$ d'eau pour obtenir une dilution selon le ratio $~${x}~:~${z}$, et comme le mélange précédent contient déjà $${k * y}\\text{ cL} $ d'eau, il faut donc ajouter :<br>
+              texteCorr += `${sp(4)}$${texFractionFromString(k * x + '\\text{ cL}', x + '\\text{ cL}')}=${texFractionFromString("\\text{volume d'eau en cL}", z + '\\text{ cL}')}=${miseEnEvidence(k, bleuMathalea)}$.<br>`
+              texteCorr += `${sp(4)}Donc il faut donc $${miseEnEvidence(k, bleuMathalea)}\\times ${z}\\text{ cL}=${miseEnEvidence(k * z)}\\text{ cL}$ d'eau pour obtenir une dilution selon le ratio $~${x}~:~${z}$, et comme le mélange précédent contient déjà $${k * y}\\text{ cL} $ d'eau, il faut donc ajouter :<br>
               $${k * z}\\text{ cL} - ${k * y}\\text{ cL}=${k * z - k * y}\\text{ cL}$ d'eau.`
               if (this.interactif) {
                 texte += ajouteQuestionMathlive({
@@ -467,9 +468,9 @@ export default class ProblemeDeRatio extends Exercice {
             texte += `${numAlpha(0)} ${premiereLettreEnMajuscule(article)} dispose de $${k * z}\\text{ g}$ de beurre. Quelle masse de farine et de sucre doit-${article} utiliser si ${article} utilise tout le beurre disponible ?<br>`
             texte += `${numAlpha(1)} Quelle sera alors la masse totale du "sable" produit ?<br>`
             texteCorr += `${numAlpha(0)} La farine, le sucre et le beurre respecte le ratio $~${x}~:~${y}~:~${z}$, ce qui signifie :<br>`
-            texteCorr += `$${texFractionFromString('\\text{masse de farine en gramme}', x + '\\text{ g}')}=${texFractionFromString('\\text{masse de sucre en gramme}', y + '\\text{ g}')}=${texFractionFromString(`${k * z}\\text{ g}`, `${z}\\text{ g}`)}=${miseEnEvidence(k)}$.<br>`
-            texteCorr += `On en déduit que ${quidam.prenom} devra utiliser $${miseEnEvidence(k)}\\times ${x}\\text{ g}=${k * x}\\text{ g}$ de farine et $${miseEnEvidence(k)}\\times ${y}\\text{ g}=${k * y}\\text{ g}$ de sucre.<br>`
-            texteCorr += `${numAlpha(1)} La masse de "sable" sera donc : $${k * x}\\text{ g} + ${k * y}\\text{ g} +${k * z}\\text{ g} =${total}\\text{ g}$.`
+            texteCorr += `$${texFractionFromString('\\text{masse de farine en gramme}', x + '\\text{ g}')}=${texFractionFromString('\\text{masse de sucre en gramme}', y + '\\text{ g}')}=${texFractionFromString(`${k * z}\\text{ g}`, `${z}\\text{ g}`)}=${miseEnEvidence(k, bleuMathalea)}$.<br>`
+            texteCorr += `On en déduit que ${quidam.prenom} devra utiliser $${miseEnEvidence(k, bleuMathalea)}\\times ${x}\\text{ g}=${miseEnEvidence(k * x)}\\text{ g}$ de farine et $${miseEnEvidence(k, bleuMathalea)}\\times ${y}\\text{ g}=${miseEnEvidence(k * y)}\\text{ g}$ de sucre.<br>`
+            texteCorr += `${numAlpha(1)} La masse de "sable" sera donc : $${k * x}\\text{ g} + ${k * y}\\text{ g} +${k * z}\\text{ g} =${miseEnEvidence(total)}\\text{ g}$.`
             if (this.interactif) {
               texte += ajouteQuestionMathlive({
                 exercice: this,
@@ -497,9 +498,9 @@ export default class ProblemeDeRatio extends Exercice {
             texte += `${numAlpha(0)} Quel volume de vinaigre doit-${article} utiliser ?<br>`
             texte += `${numAlpha(1)} Quel volume de vinaigrette ${quidam.prenom} réalisera-t-${article} ?<br>`
             texteCorr += `${numAlpha(0)} Comme le ratio de vinaigre et d'huile est $${x}~:~${y}$, alors on a :<br>`
-            texteCorr += `${sp(6)}$${texFractionFromString('\\text{volume de vinagre en mL}', x + '\\text{ mL}')}=${texFractionFromString(`${y * k}\\times 15 \\text{ mL}`, y + '\\text{ mL}')}=${miseEnEvidence(k * 15)}$.<br>`
-            texteCorr += `${sp(6)}Le volume de vinaigre doit-être : $${miseEnEvidence(k * 15)}\\times ${x}\\text{ mL}=${k * 15 * x}\\text{ mL}$.<br>`
-            texteCorr += `${numAlpha(1)} Donc le volume de vinaigrette est : $${miseEnEvidence(k * 15)}\\text{ mL}\\times \\left( ${x}+${y} \\right)=${miseEnEvidence(k * 15)}\\text{ mL}\\times ${x + y}=${k * 15 * (x + y)}\\text{ mL}$.`
+            texteCorr += `${sp(6)}$${texFractionFromString('\\text{volume de vinagre en mL}', x + '\\text{ mL}')}=${texFractionFromString(`${y * k}\\times 15 \\text{ mL}`, y + '\\text{ mL}')}=${miseEnEvidence(k * 15, bleuMathalea)}$.<br>`
+            texteCorr += `${sp(6)}Le volume de vinaigre doit-être : $${miseEnEvidence(k * 15, bleuMathalea)}\\times ${x}\\text{ mL}=${miseEnEvidence(k * 15 * x)}\\text{ mL}$.<br>`
+            texteCorr += `${numAlpha(1)} Donc le volume de vinaigrette est : $${miseEnEvidence(k * 15, bleuMathalea)}\\text{ mL}\\times \\left( ${x}+${y} \\right)=${miseEnEvidence(k * 15, bleuMathalea)}\\text{ mL}\\times ${x + y}=${miseEnEvidence(k * 15 * (x + y))}\\text{ mL}$.`
             if (this.interactif) {
               texte += ajouteQuestionMathlive({
                 exercice: this,
@@ -525,7 +526,7 @@ export default class ProblemeDeRatio extends Exercice {
           b = resolutions[index2 % 8][1]
           texte += `Un écran au format $${x}~:~${y}$ est-il adapté à une résolution de $${texNombre(a, 0)}\\times ${texNombre(b, 0)}$ ?<br>`
           if (a / x === b / y) {
-            texteCorr += `La résolution d'image $${texNombre(a, 0)}\\times ${texNombre(b, 0)}$ respecte effectivement le format $${x}~:~${y}$.<br>`
+            texteCorr += `La résolution d'image $${texNombre(a, 0)}\\times ${texNombre(b, 0)}$ ${texteEnCouleurEtGras('respecte effectivement')} le format $${x}~:~${y}$.<br>`
             texteCorr += `En effet, $${texFractionFromString(a, x)}=${texFractionFromString(b, y)}=${texNombre(a / x)}$`
             if (this.interactif) {
               texte +=
@@ -540,7 +541,7 @@ export default class ProblemeDeRatio extends Exercice {
                 })
             }
           } else {
-            texteCorr += `La résolution d'image $${a}\\times ${b}$ ne respecte pas le format $${x}~:~${y}$.<br>`
+            texteCorr += `La résolution d'image $${a}\\times ${b}$ ${texteEnCouleurEtGras('ne respecte pas')} le format $${x}~:~${y}$.<br>`
 
             if (Number.isInteger(a / x)) {
               texteCorr += `En effet, $${texFractionFromString(a, x)}=${texNombre(a / x)}$ et $${texFractionFromString(b, y)}\\approx ${texNombre(b / y)}$.<br>`
@@ -561,7 +562,7 @@ export default class ProblemeDeRatio extends Exercice {
                   })
               }
               texteCorr += `On doit avoir : $${texFractionFromString(a, x)}=${texFractionFromString('h', y)}$<br>`
-              texteCorr += `Donc $h=${texFractionFromString(`${y}\\times ${texNombre(a, 0)}`, String(x))}=${k * y}$. La résolution $${a}\\times ${k * y}$ respecte le format $${x}~:~${y}$.`
+              texteCorr += `Donc $h=${texFractionFromString(`${y}\\times ${texNombre(a, 0)}`, String(x))}=${miseEnEvidence(k * y)}$. La résolution $${a}\\times ${k * y}$ respecte le format $${x}~:~${y}$.`
             } else if (Number.isInteger(b / y)) {
               texteCorr += `En effet, $${texFractionFromString(a, x)}\\approx ${texNombre(a / x)}$ et $${texFractionFromString(b, y)}=${texNombre(b / y)}$.<br>`
               k = b / y
@@ -581,7 +582,7 @@ export default class ProblemeDeRatio extends Exercice {
                   })
               }
               texteCorr += `On doit avoir : $${texFractionFromString(b, y)}=${texFractionFromString('L', x)}$<br>`
-              texteCorr += `Donc $L=${texFractionFromString(x + '\\times' + b, y)}=${k * x}$. La résolution $${k * x}\\times ${b}$ respecte le format $${x}~:~${y}$.`
+              texteCorr += `Donc $L=${texFractionFromString(x + '\\times' + b, y)}=${miseEnEvidence(k * x)}$. La résolution $${k * x}\\times ${b}$ respecte le format $${x}~:~${y}$.`
             } else {
               texteCorr += `En effet, $${texFractionFromString(a, x)}\\approx ${texNombre(a / x)}$ et $${texFractionFromString(b, y)}\\approx ${texNombre(b / y)}$.<br>`
 

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -199,25 +200,7 @@ export default class FractionsIrreductibles extends Exercice {
           texteCorr =
             numAlpha(0) +
             ' La décomposition en produit de facteurs premier de $A = '
-          switch (tabPremMultNb1[0].mult) {
-            case 1:
-              texteCorr += `${tabPremMultNb1[0].prem}`
-              break
-            default:
-              texteCorr += `${tabPremMultNb1[0].prem}^{${tabPremMultNb1[0].mult}}`
-              break
-          }
-          for (let k = 1; k < tabNb1.length; k++) {
-            switch (tabPremMultNb1[k].mult) {
-              case 1:
-                texteCorr += `\\times${tabPremMultNb1[k].prem}`
-                break
-              default:
-                texteCorr += `\\times${tabPremMultNb1[k].prem}^{${tabPremMultNb1[k].mult}}`
-                break
-            }
-          }
-          texteCorr += '$.'
+          texteCorr += `${miseEnEvidence(reponseA)}$.`
           // break;
           // case 2 : // décomposition de B
           texte +=
@@ -228,25 +211,7 @@ export default class FractionsIrreductibles extends Exercice {
             '<br>' +
             numAlpha(1) +
             ' La décomposition en produit de facteurs premier de $B = '
-          switch (tabPremMultNb2[0].mult) {
-            case 1:
-              texteCorr += `${tabPremMultNb2[0].prem}`
-              break
-            default:
-              texteCorr += `${tabPremMultNb2[0].prem}^{${tabPremMultNb2[0].mult}}`
-              break
-          }
-          for (let k = 1; k < tabNb2.length; k++) {
-            switch (tabPremMultNb2[k].mult) {
-              case 1:
-                texteCorr += `\\times${tabPremMultNb2[k].prem}`
-                break
-              default:
-                texteCorr += `\\times${tabPremMultNb2[k].prem}^{${tabPremMultNb2[k].mult}}`
-                break
-            }
-          }
-          texteCorr += '$.'
+          texteCorr += `${miseEnEvidence(reponseB)}$.`
           // break;
           // case 3 : // reduction de A sur B
           texte +=
@@ -303,7 +268,7 @@ export default class FractionsIrreductibles extends Exercice {
               '}'
           }
           texteCorr += `\\times ${nb2Dist}} = `
-          texteCorr += `\\dfrac{${nb1Dist}}{${nb2Dist}}$`
+          texteCorr += `${miseEnEvidence(`\\dfrac{${nb1Dist}}{${nb2Dist}}`)}$`
           // break;
           // case 4 : // reduction de B sur A
           texte +=
@@ -360,7 +325,7 @@ export default class FractionsIrreductibles extends Exercice {
               '}'
           }
           texteCorr += `\\times ${nb1Dist}} = `
-          texteCorr += `\\dfrac{${nb2Dist}}{${nb1Dist}}$.`
+          texteCorr += `${miseEnEvidence(`\\dfrac{${nb2Dist}}{${nb1Dist}}`)}$.`
           context.isHtml
             ? (texteCorr += '<hr>')
             : (texteCorr += '\\par \\hrulefill \\par')
