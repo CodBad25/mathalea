@@ -55,5 +55,6 @@ export function heritage(decimal = false): Probleme {
       type: 'accolade',
     },
   ]
+  probleme.optionsChampTexteMathlive = { texteApres: ' €' }
   return probleme
 }

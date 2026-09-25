@@ -28,5 +28,6 @@ export function gateaux1(decimal = false): Probleme {
   probleme.schema.topBraces[0].start = 1
   probleme.schema.topBraces[0].end = nbPaquets < 8 ? 2 * nbPaquets + 1 : 15
   probleme.styleChampTexteMathlive = KeyboardType.clavierDeBase
+  probleme.optionsChampTexteMathlive = { texteApres: ' gâteaux' }
   return probleme
 }

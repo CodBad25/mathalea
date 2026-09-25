@@ -53,5 +53,6 @@ export function musique(decimal = false): Probleme {
       type: 'accolade',
     },
   ]
+  probleme.optionsChampTexteMathlive = { texteApres: ' min' }
   return probleme
 }

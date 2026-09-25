@@ -29,5 +29,6 @@ export function plantation(): Probleme {
   probleme.schema.topBraces[0].text = 'arbres plantés en tout'
   probleme.styleChampTexteMathlive = KeyboardType.clavierDeBase
   probleme.reponse = `${texNombre(nb1 + nb2, 0)}`
+  probleme.optionsChampTexteMathlive = { texteApres: ' arbres' }
   return probleme
 }
