@@ -1,6 +1,7 @@
+import { orangeMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   listeDesDiviseurs,
   pgcd,
@@ -57,9 +58,9 @@ export default class Exercice3A10DNB0 extends ExerciceBrevetA {
     const sousListe2Correction = createList({
       items: [
         `Anne et Jean
-ont acheté en tout $${roses} + ${blanches} = ${nbTotal}$ dragées.`,
+ont acheté en tout $${roses} + ${blanches} = ${miseEnEvidence(nbTotal)}$ dragées.`,
         `Il y a $${couleurChoisie}$ dragées ${couleur}s parmi les $${nbTotal}$ dragées ; la probabilité est donc égale à : 
-        $${proba.texFraction}${proba.texSimplificationAvecEtapes()}$.`,
+        $${proba.estIrreductible ? miseEnEvidence(proba.texFraction) : proba.texFraction + proba.texSimplificationAvecEtapes(false, orangeMathalea)}$.`,
       ],
       style: 'alpha',
     })
@@ -81,19 +82,19 @@ ont acheté en tout $${roses} + ${blanches} = ${nbTotal}$ dragées.`,
         `Avec ${ballotins} ballotins, on aurait $${rosesParBallotin.texFraction}${rosesParBallotin.texSimplificationAvecEtapes()}$ dragées roses par ballotin
         ${
           !rosesParBallotin.estEntiere
-            ? ` qui n'est pas un nombre entier.<br>Ils ne peuvent pas réaliser $${ballotins}$ ballotins identiques.`
+            ? ` qui n'est pas un nombre entier.<br>Ils ${texteEnCouleurEtGras('ne peuvent pas')} réaliser $${ballotins}$ ballotins identiques.`
             : ` et $${blanchesParBallotin.texFraction}${blanchesParBallotin.texSimplificationAvecEtapes()}$ dragées blanches par ballotin
         ${
           !blanchesParBallotin.estEntiere
-            ? ` qui n'est pas un nombre entier.<br>Ils ne peuvent pas réaliser $${ballotins}$ ballotins identiques.`
-            : `.<br>Ils peuvent réaliser donc $${ballotins}$ ballotins identiques.`
+            ? ` qui n'est pas un nombre entier.<br>Ils ${texteEnCouleurEtGras('ne peuvent pas')} réaliser $${ballotins}$ ballotins identiques.`
+            : `.<br>Ils ${texteEnCouleurEtGras('peuvent')} donc réaliser $${ballotins}$ ballotins identiques.`
         }`
         }`,
-        `$${roses}=${texFactorisation(roses)}$.<br>$${blanches}=${texFactorisation(blanches)}$.<br>
+        `$${roses}=${miseEnEvidence(texFactorisation(roses))}$.<br>$${blanches}=${miseEnEvidence(texFactorisation(blanches))}$.<br>
        Les facteurs communs à $${roses}$ et $${blanches}$ les plus nombreux sont : $${decompo}$.<br>
        Autrement dit le plus grand diviseur de $${roses}$ et de $${blanches}$ est $${decompo}=${pgcdRoseBlanche}$.<br>
        On a $${roses} = ${pgcdRoseBlanche}\\times ${rosesParBallotinFinal}$ et $${blanches} = ${pgcdRoseBlanche}\\times ${blanchesParBallotinFinal}$.<br>
-       Conclusion : Anne et Jean pourront faire $${pgcdRoseBlanche}$ ballotins identiques de $${rosesParBallotinFinal}$ dragées roses et $${blanchesParBallotinFinal}$ dragées blanches.`,
+       Conclusion : Anne et Jean pourront faire $${miseEnEvidence(pgcdRoseBlanche)}$ ballotins identiques de $${miseEnEvidence(rosesParBallotinFinal)}$ dragées roses et $${miseEnEvidence(blanchesParBallotinFinal)}$ dragées blanches.`,
       ],
       style: 'alpha',
     })

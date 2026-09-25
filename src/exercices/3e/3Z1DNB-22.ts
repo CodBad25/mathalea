@@ -11,7 +11,7 @@ import { milieu } from '../../lib/2d/utilitairesPoint'
 import { createList } from '../../lib/format/lists'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   premierMultipleInferieur,
   premierMultipleSuperieur,
@@ -158,11 +158,11 @@ $OV = ${texNombre(hauteurToit, 1)}\\text{ m}$<br>`,
     const productionMin = productions[indexMin]
     const productionMax = productions[indexMax]
     const productionTotale = productions.reduce((a, b) => a + b, 0)
-    const correction1a = `La production d'électricité a été la plus grande le ${jourMax} avec $${productionMax}$ kWh.`
+    const correction1a = `La production d'électricité a été la plus grande le ${jourMax} avec $${miseEnEvidence(productionMax)}$ kWh.`
     const correction1b = `La production a été la plus faible le ${jourMin} avec $${productionMin}$ kWh, donc l'étendue de ces productions d'électricité est :<br>
-    $${productionMax} - ${productionMin}=${productionMax - productionMin}$ kWh.`
+    $${productionMax} - ${productionMin}=${miseEnEvidence(productionMax - productionMin)}$ kWh.`
     const correction1c = `La production moyenne d'électricité par jour sur cette période est :<br>
-    $\\dfrac{${productions.map((el) => String(el)).join('+')}}{7}=\\dfrac{${texNombre(productionTotale, 0)}}{7}=${texNombre(productionTotale / 7, 2)}$ kWh.`
+    $\\dfrac{${productions.map((el) => String(el)).join('+')}}{7}=\\dfrac{${texNombre(productionTotale, 0)}}{7}=${miseEnEvidence(texNombre(productionTotale / 7, 2))}$ kWh.`
     const correction1 = createList({
       items: [correction1a, correction1b, correction1c],
       style: 'alpha',
@@ -173,12 +173,12 @@ $OV = ${texNombre(hauteurToit, 1)}\\text{ m}$<br>`,
     L'entreprise revend $${pourcentage}\\,\\%$ de sa production d'électricité soit :<br>
     $${texNombre(productionTotale, 0)}\\times \\dfrac{${pourcentage}}{100} = ${texNombre(productionRevendue, 2)}$ kWh.<br>
     $${texNombre(productionRevendue, 2)}\\times${tarif} = ${texNombre(prixRevente, 2)}$ (centimes)<br>
-    Donc elle a gagné environ $${texNombre(prixRevente / 100, 2)}$€.`
+    Donc elle a gagné environ $${miseEnEvidence(texNombre(prixRevente / 100, 2))}$€.`
     const angle = (Math.asin(hauteurToit / longueurToit) * 180) / Math.PI
     const correction3 = `Afin que les panneaux solaires aient une production maximale, le toit doit avoir une pente avec l'horizontale comprise entre $30^\\circ$ et $35^\\circ$.<br>
 Le triangle $OLV$ est rectangle en $V$ donc on peut utiliser la fonction trigonométrique sinus :<br>
 $\\sin(\\widehat{OLV})=\\dfrac{OV}{OL}=\\dfrac{${texNombre(hauteurToit, 1)}}{${texNombre(longueurToit, 1)}}$.<br>
-On en déduit que $\\widehat{OLV}\\approx ${texNombre(angle, 1)}^\\circ$.<br>
+On en déduit que $${miseEnEvidence(`\\widehat{OLV}\\approx ${texNombre(angle, 1)}^\\circ`)}$.<br>
 ${
   angle < 30
     ? `La pente du toit avec l'horizontale est de $${texNombre(angle, 1)}^\\circ$ qui est inférieur à $30^\\circ$, donc les panneaux solaires n'ont pas une production maximale.`

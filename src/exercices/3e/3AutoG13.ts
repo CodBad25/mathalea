@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -106,10 +107,10 @@ export default class FormuleCosinus extends ExerciceSimple {
     $\\text{${fonctionTrigo}}(${nomAngle}) = 
     ${
       fonctionTrigo === 'cosinus'
-        ? `\\dfrac{\\text{longueur du côté adjacent à l’angle } ${nomAngle}}{\\text{longueur de l’hypoténuse }}=${this.reponse[0]}$.`
+        ? `\\dfrac{\\text{longueur du côté adjacent à l’angle } ${nomAngle}}{\\text{longueur de l’hypoténuse }}=${miseEnEvidence(this.reponse[0])}$.`
         : fonctionTrigo === 'sinus'
-          ? `\\dfrac{\\text{longueur du côté opposé à l’angle } ${nomAngle}}{\\text{longueur de l’hypoténuse }}=${this.reponse[0]}$.`
-          : `\\dfrac{\\text{longueur du côté opposé à l’angle } ${nomAngle}}{\\text{longueur du côté adjacent à l’angle } ${nomAngle}}=${this.reponse[0]}$.`
+          ? `\\dfrac{\\text{longueur du côté opposé à l’angle } ${nomAngle}}{\\text{longueur de l’hypoténuse }}=${miseEnEvidence(this.reponse[0])}$.`
+          : `\\dfrac{\\text{longueur du côté opposé à l’angle } ${nomAngle}}{\\text{longueur du côté adjacent à l’angle } ${nomAngle}}=${miseEnEvidence(this.reponse[0])}$.`
     }`
   }
 }

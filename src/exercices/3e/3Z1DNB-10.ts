@@ -1,7 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { createList } from '../../lib/format/lists'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { texteGras, texteItalique, miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre, texPrix } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceBrevetA from '../ExerciceBrevetA'
@@ -111,33 +111,33 @@ En admettant qu'elle soit entièrement remplie, déterminer en $\\text{ m}^3$, l
     this.enonce += listeQuestions
     const listeCorrections1 = createList({
       items: [
-        `Le prix total pour $${d}$ entrées avec le tarif A est de $${d}\\times ${texPrix(a)}=${texPrix(a * d)}$ €.`,
-        `Le prix total pour $${d}$ entrées avec le tarif B est de $${d}\\times ${texPrix(b)}+${texPrix(c)}=${texPrix(b * d)}+${texPrix(c)}=${texPrix(b * d + c)}$ €.`,
+        `Le prix total pour $${d}$ entrées avec le tarif A est de $${d}\\times ${texPrix(a)}=${miseEnEvidence(texPrix(a * d))}$ €.`,
+        `Le prix total pour $${d}$ entrées avec le tarif B est de $${d}\\times ${texPrix(b)}+${texPrix(c)}=${texPrix(b * d)}+${texPrix(c)}=${miseEnEvidence(texPrix(b * d + c))}$ €.`,
       ],
       style: 'alpha',
     })
     const correction2 = `On note $f$ et $g$ les fonctions qui modélisent les prix, en euro, respectivement du tarif A et du tarif B en fonction du nombre $x$ d'entrées.<br>
-$f(x) = ${texPrix(a)}x$ et $g(x) = ${texPrix(b)}x + ${texPrix(c)}$.`
+$f(x) = ${miseEnEvidence(`${texPrix(a)}x`)}$ et $g(x) = ${miseEnEvidence(`${texPrix(b)}x + ${texPrix(c)}`)}$.`
     const listeCorrections3 = createList({
       items: [
         `On a $${texPrix(a)}x = ${texPrix(b)}x + ${texPrix(c)}$<br>
         d'où $${texPrix(a)}x - ${texPrix(b)}x = ${texPrix(c)}$<br>
         soit $${texPrix(a - b)}x = ${texPrix(c)}$<br>
         donc $x = \\dfrac{${texPrix(c)}}{${texPrix(a - b)}}$<br>
-        soit $x = ${texNombre(c / (a - b), 0)}$<br>`,
-        `D'après la solution de l'équation précédente, le nombre d'entrées pour lequel les tarifs A et B donnent le même prix à payer est de $${texNombre(c / (a - b), 0)}$ entrées.`,
+        soit $x = ${miseEnEvidence(texNombre(c / (a - b), 0))}$<br>`,
+        `D'après la solution de l'équation précédente, le nombre d'entrées pour lequel les tarifs A et B donnent le même prix à payer est de $${miseEnEvidence(texNombre(c / (a - b), 0))}$ entrées.`,
       ],
       style: 'alpha',
     })
     const listeCorrections4 = createList({
       items: [
-        `Le nombre moyen d'entrées par mois est de :<br>$\\dfrac{${entrees[0]}+${entrees[1]}+\\ldots+${entrees[11]}}{12}=\\dfrac{${entrees.reduce((a, b) => a + b, 0)}}{12} = ${texNombre(entrees.reduce((a, b) => a + b, 0) / 12, 0)}$ entrées.`,
-        `L'étendue du nombre d'entrées par mois est de $${texNombre(Math.max(...entrees), 0)}-${texNombre(Math.min(...entrees), 0)}=${texNombre(Math.max(...entrees) - Math.min(...entrees), 0)}$ entrées.`,
+        `Le nombre moyen d'entrées par mois est de :<br>$\\dfrac{${entrees[0]}+${entrees[1]}+\\ldots+${entrees[11]}}{12}=\\dfrac{${entrees.reduce((a, b) => a + b, 0)}}{12} = ${miseEnEvidence(texNombre(entrees.reduce((a, b) => a + b, 0) / 12, 0))}$ entrées.`,
+        `L'étendue du nombre d'entrées par mois est de $${texNombre(Math.max(...entrees), 0)}-${texNombre(Math.min(...entrees), 0)}=${miseEnEvidence(texNombre(Math.max(...entrees) - Math.min(...entrees), 0))}$ entrées.`,
       ],
       style: 'alpha',
     })
     const correction4 = listeCorrections4
-    const correction5 = `Le volume d'eau qui sera évacué pour réaliser la vidange est de :<br>$${L}\\times ${l}\\times ${texNombre(p, 1)}=${texNombre(L * l * p, 2)}\\text{ m}^3$.`
+    const correction5 = `Le volume d'eau qui sera évacué pour réaliser la vidange est de :<br>$${L}\\times ${l}\\times ${texNombre(p, 1)}=${miseEnEvidence(texNombre(L * l * p, 2))}\\text{ m}^3$.`
     const listeCorrections = createList({
       items: [
         listeCorrections1,

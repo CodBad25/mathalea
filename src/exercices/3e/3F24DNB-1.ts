@@ -16,7 +16,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -194,7 +194,7 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
     )
     const sousListe1Corr = createList({
       items: [
-        "La fonction $f$ n'est pas affine car une fonction affine est représentée par une droite.",
+        `La fonction $f$ ${texteEnCouleurEtGras("n'est pas affine")} car une fonction affine est représentée par une droite.`,
         `${
           this.correctionDetaillee
             ? `Le tableau de valeurs peut être rempli par lecture graphique.<br>
@@ -203,7 +203,7 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
         }
         Le tableau de valeurs est le suivant :<br>
        ${tableau2}<br>`,
-        `La formule correcte est : $=(B1${ecritureAlgebrique(c)})\\times(B1${ecritureAlgebrique(d)})$.<br>
+        `La formule correcte est : $${miseEnEvidence(`=(B1${ecritureAlgebrique(c)})\\times(B1${ecritureAlgebrique(d)})`)}$.<br>
         ${
           this.correctionDetaillee
             ? `$=B1${ecritureAlgebrique(poly.fonction(-3) + 3)}$ donnerait comme images dans cet ordre : $${rangeMinMax(
@@ -232,8 +232,8 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
     const antecedent = new FractionEtendue(y0 - b, a)
     const sousListe2Corr = createList({
       items: [
-        `$g(${x0}) = ${a}\\times${ecritureParentheseSiNegatif(x0)}${ecritureAlgebrique(b)} = ${a * x0}${ecritureAlgebrique(b)}=${a * x0 + b}$ (point $A$).`,
-        `$g(${x1}) = ${a}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}= ${a * x1}${ecritureAlgebrique(b)} = ${a * x1 + b}$ (point $B$).`,
+        `$g(${x0}) = ${a}\\times${ecritureParentheseSiNegatif(x0)}${ecritureAlgebrique(b)} = ${a * x0}${ecritureAlgebrique(b)}=${miseEnEvidence(a * x0 + b)}$ (point $A$).`,
+        `$g(${x1}) = ${a}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}= ${a * x1}${ecritureAlgebrique(b)} = ${miseEnEvidence(a * x1 + b)}$ (point $B$).`,
         `On cherche $x$ tel que $g(x) = ${y0}$ et on résout alors $${a}\\times x ${ecritureAlgebrique(b)}= ${y0}$, et on obtient donc 
          ${
            a === 1
@@ -244,7 +244,7 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
                  (antecedent.estIrreductible
                    ? '$.'
                    : `= ${antecedent.simplifie().texFraction}$.`)
-         }<br>L'antécédent de $${y0}$ par la fonction $g$ est donc $${antecedent.simplifie().texFraction}$ et on note : $g(${antecedent.simplifie().texFraction})=${y0}$.`,
+         }<br>L'antécédent de $${y0}$ par la fonction $g$ est donc $${miseEnEvidence(antecedent.simplifie().texFraction)}$ et on note : $g(${antecedent.simplifie().texFraction})=${y0}$.`,
         `Comme indiqué dans l'énoncé, $g$ est affine et sa représentation graphique est une droite. Cette droite passe par le point $A(${x0};${a * x0 + b})$ et le point $B(${x1};${a * x1 + b})$.<br>
         ${this.correctionDetaillee ? 'En effet, aux questions 2.a et 2.b, on a trouvé les coordonnées de ces deux points.<br>' : ''}${figureCorr}`,
       ],
@@ -260,7 +260,7 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
     })
     const sousListe3Corr = createList({
       items: [
-        `$(x${ecritureAlgebrique(c)})(x${ecritureAlgebrique(d)}) = x^2${ecritureAlgebriqueSauf1(c)}x${ecritureAlgebriqueSauf1(d)}x${ecritureAlgebrique((c * d) / Math.abs(d))}\\times ${Math.abs(d)} = x^2${ecritureAlgebriqueSauf1(c + d)}x${ecritureAlgebrique(c * d)}$`,
+        `$(x${ecritureAlgebrique(c)})(x${ecritureAlgebrique(d)}) = x^2${ecritureAlgebriqueSauf1(c)}x${ecritureAlgebriqueSauf1(d)}x${ecritureAlgebrique((c * d) / Math.abs(d))}\\times ${Math.abs(d)} = ${miseEnEvidence(`x^2${ecritureAlgebriqueSauf1(c + d)}x${ecritureAlgebrique(c * d)}`)}$`,
         `$f(x)= x^2${ecritureAlgebriqueSauf1(c + d)}x${ecritureAlgebrique(c * d)}$<br>
         $g(x)=${rienSi1(a)}x${ecritureAlgebrique(b)}$<br>
         Donc, $f(x)=g(x)$ équivaut à : 
@@ -270,7 +270,7 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
         (x${ecritureAlgebrique(A.x)})(x${ecritureAlgebrique(-A.x)})&=0~\\text{( on factorise )}\\\\
         \\end{aligned}$<br>
         ${this.correctionDetaillee ? `Un produit est nul si l'un des facteurs est nul, soit : $x${ecritureAlgebrique(A.x)}=0$ ou $x${ecritureAlgebrique(-A.x)}=0$.<br>` : ''}
-        On en déduit que les solutions de l'équation $f(x) = g(x)$ sont $x=${-A.x}$ et $x=${A.x}$.<br>
+        On en déduit que les solutions de l'équation $f(x) = g(x)$ sont $x=${miseEnEvidence(-A.x)}$ et $x=${miseEnEvidence(A.x)}$.<br>
          ${
            this.correctionDetaillee
              ? `On peut vérifier les solutions trouvées par lecture graphique en procédant ainsi :<br>

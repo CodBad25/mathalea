@@ -16,10 +16,7 @@ import { createList } from '../../lib/format/lists'
 import { centrage, deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
-import {
-  texteEnCouleurEtGras,
-  texteItalique,
-} from '../../lib/outils/embellissements'
+import { texteEnCouleurEtGras, texteItalique, miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -208,23 +205,23 @@ On rappelle la volume de formule :
         En remplaçant par les valeurs numériques, on a :<br>
         $${texNombre(hypo, 2)}^2 = ${texNombre(hauteur, 2)}^2 + BC^2$, soit : $${texNombre(hypo ** 2, 4)} = ${texNombre(hauteur ** 2, 4)} + BC^2$.<br>
         On en déduit : $BC^2 = ${texNombre(hypo ** 2, 4)} - ${texNombre(hauteur ** 2, 4)}=${texNombre(hypo ** 2 - hauteur ** 2, 4)}$<br>
-        D'où $BC = \\sqrt{${texNombre(hypo ** 2 - hauteur ** 2, 4)}}= ${texNombre(base, 2)}$<br>
+        D'où $BC = \\sqrt{${texNombre(hypo ** 2 - hauteur ** 2, 4)}}= ${miseEnEvidence(texNombre(base, 2))}$<br>
         Donc $[CB]$ mesure bien $${texNombre(base, 2)}\\text{ m}$.`,
         `On a dans le triangle $ABC$ rectangle en $C$ :<br>
         $\\sin(\\widehat{ABC}) = \\dfrac{AC}{AB}$.<br>
         $\\sin(\\widehat{ABC}) = \\dfrac{${texNombre(hauteur, 2)}}{${texNombre(hypo, 2)}}$<br>
         $\\sin(\\widehat{ABC}) ${egalOuApprox(hauteur / hypo, 3)} ${texNombre(hauteur / hypo, 3)}$<br>
-        $\\widehat{ABC} \\approx ${texNombre((Math.asin(hauteur / hypo) * 180) / Math.PI, 1)}^{\\circ}$<br>
+        $\\widehat{ABC} \\approx ${miseEnEvidence(texNombre((Math.asin(hauteur / hypo) * 180) / Math.PI, 1))}^{\\circ}$<br>
         Or ${
           (Math.asin(hauteur / hypo) * 180) / Math.PI > 8.5
-            ? ' $\\widehat{ABC} > 8,5°$, donc le surcoût des travaux est à prévoir.'
-            : " $\\widehat{ABC} \\leq 8,5°$, donc il n'y aura pas de surcoût."
+            ? ` $\\widehat{ABC} > 8,5°$, donc ${texteEnCouleurEtGras('le surcoût des travaux est à prévoir')}.`
+            : ` $\\widehat{ABC} \\leq 8,5°$, donc ${texteEnCouleurEtGras("il n'y aura pas de surcoût")}.`
         }`,
         `Le volume du prisme droit $CBAFED$ est égal à l'aire de la base $ABC$ multipliée par la hauteur $CF$ du prisme.<br>
         $V = \\mathscr{A}_{ABC} \\times CF$<br>
         $V = \\dfrac{AC \\times BC}{2} \\times CF$<br>
         $V = \\dfrac{${texNombre(hauteur, 2)} \\times ${texNombre(base, 2)}}{2} \\times ${texNombre(profondeur, 1)}$<br>
-        $V = ${texNombre((hauteur * base * profondeur) / 2, 5)}\\text{ m}^3$`,
+        $V = ${miseEnEvidence(texNombre((hauteur * base * profondeur) / 2, 5))}\\text{ m}^3$`,
       ],
       style: 'nombres',
     })

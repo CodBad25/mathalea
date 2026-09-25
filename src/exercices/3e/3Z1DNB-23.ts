@@ -2,7 +2,7 @@ import { createList } from '../../lib/format/lists'
 import { choisitNombresEntreMetN } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence } from '../../lib/outils/embellissements'
 import { estPremier } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -99,12 +99,12 @@ Les boules sont indiscernables au toucher.<br>`
       .filter((n) => n % 2 === 0)
       .map((n) => `$${n}$`)
       .join(' ; ')}.<br>
-  Il y a donc $${urneA.filter((n) => n % 2 === 0).length}$ nombres pairs sur $${urneA.length}$. La probabilité d'obtenir un nombre pair est de $${probaPair.texFraction}${probaPair.estIrreductible ? '' : '=' + probaPair.texFractionSimplifiee}$.`
+  Il y a donc $${urneA.filter((n) => n % 2 === 0).length}$ nombres pairs sur $${urneA.length}$. La probabilité d'obtenir un nombre pair est de $${miseEnEvidence(`${probaPair.texFraction}${probaPair.estIrreductible ? '' : '=' + probaPair.texFractionSimplifiee}`)}$.`
     const correction2 = `Les nombres premiers présents dans l'urne B sont : ${urneB
       .filter((n) => estPremier(n))
       .map((n) => `$${n}$`)
       .join(' ; ')}.<br>
-  Il y a donc $${nbPrem}$ nombres premiers sur $${urneB.length}$. La probabilité d'obtenir un nombre premier est de $${probaPrem.texFraction}${probaPrem.estIrreductible ? '' : '=' + probaPrem.texFractionSimplifiee}$.`
+  Il y a donc $${nbPrem}$ nombres premiers sur $${urneB.length}$. La probabilité d'obtenir un nombre premier est de $${miseEnEvidence(`${probaPrem.texFraction}${probaPrem.estIrreductible ? '' : '=' + probaPrem.texFractionSimplifiee}`)}$.`
     const correction3 = `L'urne A contient ${nbMulA} boules dont le numéro est un multiple de $${table}$ (${urneA
       .filter((n) => n % table === 0)
       .map((el) => `$\\,${el}\\,$`)
@@ -118,7 +118,7 @@ Les boules sont indiscernables au toucher.<br>`
       : ` B contient donc le plus grand nombre de boules dont le numéro est un multiple de $${table}$.`
   }`
     const correction4 = `Il y a $${urneA.filter((n) => n >= min).length}$ nombres supérieurs ou égaux à $${min}$ dans l'urne A et $${urneB.filter((n) => n >= min).length}$ dans l'urne B.<br>
-    La probabilité d'obtenir un nombre supérieur ou égal à $${min}$ est de $${probaSupA.texFraction}${probaSupA.estIrreductible ? '' : '=' + probaSupA.texFractionSimplifiee}$ dans l'urne A, et de $${probaSupB.texFraction}${probaSupB.estIrreductible ? '' : '=' + probaSupB.texFractionSimplifiee}$ dans l'urne B.`
+    La probabilité d'obtenir un nombre supérieur ou égal à $${min}$ est de $${probaSupA.texFraction}${probaSupA.estIrreductible ? '' : '=' + probaSupA.texFractionSimplifiee}$ dans l'urne A, et de $${miseEnEvidence(`${probaSupB.texFraction}${probaSupB.estIrreductible ? '' : '=' + probaSupB.texFractionSimplifiee}`)}$ dans l'urne B.`
     const correction5 = `Il y a maintenant $${[...urneA, ajout].filter((n) => n >= min).length}$ nombres sur $${urneA.length + 1}$, supérieurs ou égaux à $${min}$, dans l'urne A et $${[...urneB, ajout].filter((n) => n >= min).length}$ sur $${urneB.length + 1}$ dans l'urne B.<br>
   La probabilité d'obtenir un nombre supérieur ou égal à $${min}$ dans l'urne A est de $${probaSupAajout.texFraction}${probaSupAajout.estIrreductible ? '' : '=' + probaSupAajout.texFractionSimplifiee}$.<br>
   La probabilité d'obtenir un nombre supérieur ou égal à $${min}$ dans l'urne B est de $${probaSupBajout.texFraction}${probaSupBajout.estIrreductible ? '' : '=' + probaSupBajout.texFractionSimplifiee}$.<br>

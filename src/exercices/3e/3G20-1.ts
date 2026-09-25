@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -143,7 +144,7 @@ export default class ProblemesThales extends Exercice {
         texteCorr += `<br>De plus les points $${A}$, $${E}$, $${D}$  et $${A}$, $${B}$, $${C}$ sont alignés dans cet ordre donc d'après le théorème de Thalès on a :`
         texteCorr += `<br><br>$\\dfrac{${A}${E}}{${A}${D}}=\\dfrac{${E}${B}}{${D}${C}}=\\dfrac{${A}${B}}{${A}${C}}$`
         texteCorr += `<br><br>$\\dfrac{${x}}{${texNombre(k * x)}}=\\dfrac{${texNombre(y)}}{${D}${C}}$`
-        texteCorr += `<br><br>$${D}${C}=\\dfrac{${texNombre(k * x)}\\times${texNombre(y)}}{${x}}=${texNombre(k * y)}$`
+        texteCorr += `<br><br>$${D}${C}=\\dfrac{${texNombre(k * x)}\\times${texNombre(y)}}{${x}}=${miseEnEvidence(texNombre(k * y))}$`
         break
 
       case 2:
@@ -211,7 +212,7 @@ export default class ProblemesThales extends Exercice {
         texteCorr += `<br><br> $${texFractionFromString(nomA + 'M', nomA + nomB)}=${texFractionFromString(nomA + 'N', nomA + nomD)}=${texFractionFromString('MN', nomB + nomD)}$`
         texteCorr += `<br><br> $${texFractionFromString(nomA + 'M', nomA + nomB)}=${texFractionFromString(nomA + 'N', BC)}=${texFractionFromString(texNombre(MN, 1), BD)}$`
         texteCorr += `<br><br> $${nomA}N = ${texFractionFromString(BC + '\\times' + stringNombre(MN), BD)}=${texNombre(MN.mul(BC).div(BD), 1)}\\text{ cm}$`
-        texteCorr += `<br><br> Les points $${nomA}$, $N$ et $${nomD}$ sont alignés dans cet ordre donc $N${nomD}=${nomA + nomD}-${nomA}N= ${BC}-${texNombre(MN.mul(BC).div(BD), 1)}=${texNombre(MN.mul(-BC).div(BD).plus(BC), 1)}\\text{ cm}$.`
+        texteCorr += `<br><br> Les points $${nomA}$, $N$ et $${nomD}$ sont alignés dans cet ordre donc $N${nomD}=${nomA + nomD}-${nomA}N= ${BC}-${texNombre(MN.mul(BC).div(BD), 1)}=${miseEnEvidence(texNombre(MN.mul(-BC).div(BD).plus(BC), 1))}\\text{ cm}$.`
         break
     }
 

@@ -9,7 +9,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { createList } from '../../lib/format/lists'
 import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
-import { texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { texteGras, texteItalique, miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre, texPrix } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -186,11 +186,11 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
       objetsD,
     )
     const question1 = `Montrer que $FJ= ${texNombre(fj, 1)}~\\mathrm{m}$.`
-    const correction1 = `EFGH est un rectangle, donc $HG = EF = ${texNombre(petiteBase, 1)}~\\mathrm{m}$, puis $FJ = EI - EF = ${texNombre(grandeBase, 1)} - ${texNombre(petiteBase, 1)} = ${texNombre(fj, 1)}~\\mathrm{m}$.`
+    const correction1 = `EFGH est un rectangle, donc $HG = EF = ${texNombre(petiteBase, 1)}~\\mathrm{m}$, puis $FJ = EI - EF = ${texNombre(grandeBase, 1)} - ${texNombre(petiteBase, 1)} = ${miseEnEvidence(`${texNombre(fj, 1)}~\\mathrm{m}`)}$.`
 
     const correction2 = `Dans le triangle GJF rectangle en $F$, le théorème de Pythagore permet d'écrire :<br>
 $GJ^2 = GF^2 + FJ^2 = ${texNombre(hauteur, 1)}^2 + ${texNombre(fj, 1)}^2 = ${texNombre(hauteur * hauteur, 2)} + ${texNombre(fj * fj, 2)} = ${texNombre(hauteur * hauteur + fj * fj, 1)}$, d'où $GJ = \\sqrt{${texNombre(hauteur * hauteur + fj * fj, 1)}}${egalOuApprox(gj, 1)}${texNombre(gj, 1)}~\\mathrm{m}$.<br>
-On a donc $EJ + JG + GH + HE = ${texNombre(grandeBase, 1)} + ${texNombre(gj, 1)} + ${texNombre(petiteBase, 1)} + ${texNombre(hauteur, 1)}  = ${texNombre(perimetre, 1)}~\\mathrm{m}$.<br>
+On a donc $EJ + JG + GH + HE = ${texNombre(grandeBase, 1)} + ${texNombre(gj, 1)} + ${texNombre(petiteBase, 1)} + ${texNombre(hauteur, 1)}  = ${miseEnEvidence(`${texNombre(perimetre, 1)}~\\mathrm{m}`)}$.<br>
 ${
   Number.isInteger(perimetre)
     ? `Il leur faudra au minimum $${texNombre(perimetre, 0)}~\\mathrm{m}$`
@@ -203,7 +203,7 @@ $\\mathcal{V} = \\mathcal{A}(EFJGH) \\times ${texNombre(epaisseur / 100, 2)} = $
     const correction3b = `Comme il faut $250~\\mathrm{kg}$ de ciment pour faire $1~\\mathrm{m}^3$ de béton, il faut donc $${volumeBeton}\\times 250 = ${texNombre(250 * volumeBeton, 0)}~\\mathrm{kg}$ de ciment pour $${volumeBeton}~\\mathrm{m}^3$ de béton.`
     const correction3c = `Le ratio, peut également s'écrire par proportionnalité $1~;~3,5~;~2,5$, d'où pour faire $${volumeBeton}~\\mathrm{m}^3$ de béton :<br>
 -- quantité de gravier nécessaire $${texNombre(masseCiment, 0)}\\times ${texNombre(3.5, 1)}= ${texNombre(masseGravier, 1)}~\\mathrm{kg}$ ;<br>
--- quantité de sable nécessaire $${texNombre(masseCiment, 0)}\\times ${texNombre(2.5, 1)}= ${texNombre(masseSable, 1)}~\\mathrm{kg}$.`
+-- quantité de sable nécessaire $${texNombre(masseCiment, 0)}\\times ${texNombre(2.5, 1)}= ${miseEnEvidence(`${texNombre(masseSable, 1)}~\\mathrm{kg}`)}$.`
     const correction3 = createList({
       items: [correction3a, correction3b, correction3c],
       style: 'alpha',
@@ -211,7 +211,7 @@ $\\mathcal{V} = \\mathcal{A}(EFJGH) \\times ${texNombre(epaisseur / 100, 2)} = $
     const nbLitres = Math.ceil(surfacePeinture / 5)
     const correction4 = `Nous avons la surface de la terrasse, soit $${texNombre(surfaceTerrasse, 3)}~\\mathrm{m}^2$.<br>
     Passer $2$ couches revient à peindre $${texNombre(surfacePeinture, 3)}~\\mathrm{m}^2$.<br>
-    Il faut donc : $\\dfrac{${texNombre(surfacePeinture, 3)}}{5}=\\dfrac{${texNombre(surfacePeinture * 2, 3)}}{10}=${texNombre(surfacePeinture / 5, 4)}~\\mathrm{l}$.<br>
+    Il faut donc : $\\dfrac{${texNombre(surfacePeinture, 3)}}{5}=\\dfrac{${texNombre(surfacePeinture * 2, 3)}}{10}=${miseEnEvidence(`${texNombre(surfacePeinture / 5, 4)}~\\mathrm{l}`)}$.<br>
     ${meilleurPrix(prixPotA, prixPotB, nbLitres)}`
 
     const question2 = `Afin de pouvoir couler le béton, M. et M$^\\text{me}$ ${nomFamille} doivent délimiter la terrasse en installant des planches tout autour. Quelle longueur de planches doivent-ils acheter au minimum ?`

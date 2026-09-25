@@ -223,10 +223,10 @@ export default class ComprendreScriptListeMultiples extends Exercice {
         ],
         [
           `Si le nombre saisi est ${nb03}, que dit précisément le lutin ?`,
-          `${choixScript[i] === 1 ? nb03 + ' est un multiple de 1' : choixScript[i] === 2 ? '1 divise ' + nb03 : '1 est un diviseur de ' + nb03}.<br>
-      ${choixScript[i] === 1 ? nb03 + ' est un multiple de ' + Math.min(nb01, nb02) : choixScript[i] === 2 ? Math.min(nb01, nb02) + ' divise ' + nb03 : Math.min(nb01, nb02) + ' est un diviseur de ' + nb03}.<br>
-      ${choixScript[i] === 1 ? nb03 + ' est un multiple de ' + Math.max(nb01, nb02) : choixScript[i] === 2 ? Math.max(nb01, nb02) + ' divise ' + nb03 : Math.max(nb01, nb02) + ' est un diviseur de ' + nb03}.<br>
-      ${choixScript[i] === 1 ? nb03 + ' est un multiple de ' + nb03 : choixScript[i] === 2 ? nb03 + ' divise ' + nb03 : nb03 + ' est un diviseur de ' + nb03}.`,
+          `${texteEnCouleurEtGras(choixScript[i] === 1 ? nb03 + ' est un multiple de 1' : choixScript[i] === 2 ? '1 divise ' + nb03 : '1 est un diviseur de ' + nb03)}.<br>
+      ${texteEnCouleurEtGras(choixScript[i] === 1 ? nb03 + ' est un multiple de ' + Math.min(nb01, nb02) : choixScript[i] === 2 ? Math.min(nb01, nb02) + ' divise ' + nb03 : Math.min(nb01, nb02) + ' est un diviseur de ' + nb03)}.<br>
+      ${texteEnCouleurEtGras(choixScript[i] === 1 ? nb03 + ' est un multiple de ' + Math.max(nb01, nb02) : choixScript[i] === 2 ? Math.max(nb01, nb02) + ' divise ' + nb03 : Math.max(nb01, nb02) + ' est un diviseur de ' + nb03)}.<br>
+      ${texteEnCouleurEtGras(choixScript[i] === 1 ? nb03 + ' est un multiple de ' + nb03 : choixScript[i] === 2 ? nb03 + ' divise ' + nb03 : nb03 + ' est un diviseur de ' + nb03)}.`,
           1,
         ],
         [
