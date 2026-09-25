@@ -19,5 +19,7 @@ export default class PuissanceDUnEntier3e extends PuissanceDUnEntier {
   constructor() {
     super()
     this.niveau = 3
+    this.besoinFormulaire2CaseACocher = ['Avec des exposants négatifs', false]
+    this.sup2 = false
   }
 }
