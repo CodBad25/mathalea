@@ -651,7 +651,7 @@ class Latex {
     if (latexFileInfos.qrcodeOption === 'AvecQrcode') {
       content += `\n\\begin{exercice}[${
         latexFileInfos.titleOption === 'AvecTitre'
-          ? `Titre=${exercice.titre}, `
+          ? `Titre={${exercice.titre}}, `
           : ''
       }Ajout={\\node[anchor=north east, inner sep=2pt, fill=white]
         at (frame.north east) {\\hypersetup{urlcolor=black}\\qrcode[height=2cm]{${getUrlFromExercice(exercice, indiceVersion)}&v=eleve&es=0211}};
@@ -659,7 +659,7 @@ class Latex {
     } else {
       const keys = [
         ...(latexFileInfos.titleOption === 'AvecTitre'
-          ? [`Titre=${exercice.titre}`]
+          ? [`Titre={${exercice.titre}}`]
           : []),
         ...this.referenceKeyFor(
           latexFileInfos,
