@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import SchemaEnBoite from '../../lib/outils/SchemaEnBoite'
@@ -106,7 +107,7 @@ export default class NumericPatterns extends Exercice {
           ? `$${texNombre(nb0 - u0, 0)}$ est un multiple de $${raison}$`
           : `$${texNombre(nb0 - u0, 0)}$ n'est pas un multiple de $${raison}$`
       }.<br>
-      Donc, $${texNombre(nb0, 0)}$ ${(nb0 - u0) % raison === 0 ? 'est ' : "n'est pas "}dans la suite.<br>
+      Donc, $${texNombre(nb0, 0)}$ ${texteEnCouleurEtGras((nb0 - u0) % raison === 0 ? 'est dans la suite' : "n'est pas dans la suite")}.<br>
       $${texNombre(nb1, 0)}$ est dans la suite si et seulement si la différence entre $${texNombre(nb1, 0)}$ et $${texNombre(u0, 0)}$ est un multiple de $${raison}$.<br>
       $${texNombre(nb1, 0)} - ${texNombre(u0, 0)} = ${texNombre(nb1 - u0, 0)}$.<br>
       et ${
@@ -114,7 +115,7 @@ export default class NumericPatterns extends Exercice {
           ? `$${texNombre(nb1 - u0, 0)}$ est un multiple de $${raison}$`
           : `$${texNombre(nb1 - u0, 0)}$ n'est pas un multiple de $${raison}$`
       }.<br>
-        Donc, $${texNombre(nb1, 0)}$ ${(nb1 - u0) % raison === 0 ? 'est ' : "n'est pas "}dans la suite.<br>
+        Donc, $${texNombre(nb1, 0)}$ ${texteEnCouleurEtGras((nb1 - u0) % raison === 0 ? 'est dans la suite' : "n'est pas dans la suite")}.<br>
         `
       if (
         this.questionJamaisPosee(

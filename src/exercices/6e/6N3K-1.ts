@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { nombreDeChiffresDe, rangeMinMax } from '../../lib/outils/nombres'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -96,7 +97,7 @@ export default class FractionsCalculsSimples extends Exercice {
             KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: '=' },
           )
-          texteCorr = `$${f1.texFraction} + ${f2.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
+          texteCorr = `$${f1.texFraction} + ${f2.texFraction} = ${f3.estEntiere ? `${f3.texFraction}=${miseEnEvidence(f3.texFractionSimplifiee)}` : miseEnEvidence(f3.texFraction)}$`
           schema = fractionCliquable(0, 0, 4, b, { couleur: 'none' })
           if (this.sup)
             texte +=
@@ -144,8 +145,8 @@ export default class FractionsCalculsSimples extends Exercice {
           )
           texteCorr =
             c > a
-              ? `$${f2.texFraction} - ${f1.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
-              : `$${f1.texFraction} - ${f2.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
+              ? `$${f2.texFraction} - ${f1.texFraction} = ${f3.estEntiere ? `${f3.texFraction}=${miseEnEvidence(f3.texFractionSimplifiee)}` : miseEnEvidence(f3.texFraction)}$`
+              : `$${f1.texFraction} - ${f2.texFraction} = ${f3.estEntiere ? `${f3.texFraction}=${miseEnEvidence(f3.texFractionSimplifiee)}` : miseEnEvidence(f3.texFraction)}$`
           schema = fractionCliquable(0, 0, 4, b, { couleur: 'none' })
           if (this.sup)
             texte +=
@@ -198,7 +199,7 @@ export default class FractionsCalculsSimples extends Exercice {
             KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: '=' },
           )
-          texteCorr = `$${n} + ${f1.texFraction} = ${f2.texFraction} + ${f1.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
+          texteCorr = `$${n} + ${f1.texFraction} = ${f2.texFraction} + ${f1.texFraction} = ${f3.estEntiere ? `${f3.texFraction}=${miseEnEvidence(f3.texFractionSimplifiee)}` : miseEnEvidence(f3.texFraction)}$`
           schema = fractionCliquable(0, 0, 4, b, { couleur: 'none' })
           schemaCorr = fractionCliquable(
             0,
@@ -243,7 +244,7 @@ export default class FractionsCalculsSimples extends Exercice {
             KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: '=' },
           )
-          texteCorr = `$${n} - ${f1.texFraction} = ${f2.texFraction} - ${f1.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
+          texteCorr = `$${n} - ${f1.texFraction} = ${f2.texFraction} - ${f1.texFraction} = ${f3.estEntiere ? `${f3.texFraction}=${miseEnEvidence(f3.texFractionSimplifiee)}` : miseEnEvidence(f3.texFraction)}$`
           schemaCorr = fractionCliquable(
             0,
             0,
@@ -290,7 +291,7 @@ export default class FractionsCalculsSimples extends Exercice {
             KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: '=' },
           )
-          texteCorr = `$${n} \\times ${f1.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
+          texteCorr = `$${n} \\times ${f1.texFraction} = ${f3.estEntiere ? `${f3.texFraction}=${miseEnEvidence(f3.texFractionSimplifiee)}` : miseEnEvidence(f3.texFraction)}$`
           texteCorr += '<br>'
           if (this.correctionDetaillee) {
             // Liste pour alterner les couleurs

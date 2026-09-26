@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras, miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -112,8 +113,8 @@ export default class ÉcrireNombresEntiers extends Exercice {
           texte = `$${texNombre(nombre)} ${!this.interactif ? ' :  $' : '$ <br>' + ajouteChampTexteMathLive(this, i, KeyboardType.alphanumeric)}`
         else texte = `$${texNombre(nombre)}$`
         if (context.vue !== 'diap')
-          texteCorr = `$${texNombre(nombre)}$ : ${nombreEnLettres(nombre)}`
-        else texteCorr = `${nombreEnLettres(nombre)}`
+          texteCorr = `$${texNombre(nombre)}$ : ${texteEnCouleurEtGras(nombreEnLettres(nombre))}`
+        else texteCorr = `${texteEnCouleurEtGras(nombreEnLettres(nombre))}`
       } else {
         handleAnswers(this, i, {
           reponse: {
@@ -125,8 +126,8 @@ export default class ÉcrireNombresEntiers extends Exercice {
           texte = `${nombreEnLettres(nombre)} ${!this.interactif ? ' :  ' : ' <br>' + ajouteChampTexteMathLive(this, i, KeyboardType.numbersSpace, { espace: true })}`
         else texte = `${nombreEnLettres(nombre)}`
         if (context.vue !== 'diap')
-          texteCorr = `${nombreEnLettres(nombre)} : $${texNombre(nombre)}$`
-        else texteCorr = `$${texNombre(nombre)}$`
+          texteCorr = `${nombreEnLettres(nombre)} : $${miseEnEvidence(texNombre(nombre))}$`
+        else texteCorr = `$${miseEnEvidence(texNombre(nombre))}$`
       }
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre

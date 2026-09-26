@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { droite } from '../../lib/2d/droites'
 import { labelPoint } from '../../lib/2d/textes'
@@ -77,14 +78,14 @@ export default class ReconnaitreDesPointsAlignes extends Exercice {
           const traceC = tracePoint(C)
           traceC.taille = context.isHtml ? 2 : 1
           objetsEnonce.push(traceC, labelPoint(C))
-          texteCorr += `$${C.nom}$.<br>La droite ($${A.nom + B.nom}$) passe aussi par le point $${C.nom}$ donc graphiquement on observe que les points $${A.nom}$, $${B.nom}$ et $${C.nom}$ sont alignés.<br>`
+          texteCorr += `$${C.nom}$.<br>La droite ($${A.nom + B.nom}$) passe aussi par le point $${C.nom}$ donc graphiquement on observe que les points $${A.nom}$, $${B.nom}$ et $${C.nom}$ sont ${texteEnCouleurEtGras('alignés')}.<br>`
           break
         }
         case 'non': {
           const traceD = tracePoint(D)
           traceD.taille = context.isHtml ? 2 : 1
           objetsEnonce.push(traceD, labelPoint(D))
-          texteCorr += `$${D.nom}$.<br>La droite ($${A.nom + B.nom}$) ne passe pas par le point $${D.nom}$ donc graphiquement on observe que les points $${A.nom}$, $${B.nom}$ et $${D.nom}$ ne sont pas alignés.<br>`
+          texteCorr += `$${D.nom}$.<br>La droite ($${A.nom + B.nom}$) ne passe pas par le point $${D.nom}$ donc graphiquement on observe que les points $${A.nom}$, $${B.nom}$ et $${D.nom}$ ${texteEnCouleurEtGras('ne sont pas alignés')}.<br>`
           break
         }
       }

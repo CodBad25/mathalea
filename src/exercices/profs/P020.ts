@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
@@ -201,7 +202,7 @@ export default class EncodeurTexte extends Exercice {
         this.questionJamaisPosee(i, texteAEncoder[i], table.flat().join(''))
       ) {
         this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteAEncoder[i]
+        this.listeCorrections[i] = texteEnCouleurEtGras(texteAEncoder[i])
           .replaceAll('~', ' ')
           .replaceAll('/', ' ')
         i++

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { demiDroite, type DemiDroite } from '../../lib/2d/DemiDroite'
 import { Droite, droite } from '../../lib/2d/droites'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -106,23 +107,23 @@ export default class DescriptionSegmentDroiteDemiDroite extends Exercice {
         switch (listeTypeDeQuestions[i]) {
           case 1:
             trait = droite(A, B)
-            correction = `La droite qui passe par les points $${A.nom}$ et $${B.nom}$ notée $(${A.nom}${B.nom})$.`
+            correction = `La droite qui passe par les points $${A.nom}$ et $${B.nom}$ notée $${miseEnEvidence(`(${A.nom}${B.nom})`)}$.`
             propsQcm.droite.bonneReponse = true
             break
           case 2:
             trait = demiDroite(A, B)
-            correction = `La demi-droite d'origine $${A.nom}$ passant par $${B.nom}$ notée $[${A.nom}${B.nom})$.`
+            correction = `La demi-droite d'origine $${A.nom}$ passant par $${B.nom}$ notée $${miseEnEvidence(`[${A.nom}${B.nom})`)}$.`
             propsQcm.demiDroite1.bonneReponse = true
             break
           case 3:
             trait = demiDroite(B, A)
-            correction = `La demi-droite d'origine $${B.nom}$ passant par $${A.nom}$ notée $[${B.nom}${A.nom})$.`
+            correction = `La demi-droite d'origine $${B.nom}$ passant par $${A.nom}$ notée $${miseEnEvidence(`[${B.nom}${A.nom})`)}$.`
             propsQcm.demiDroite2.bonneReponse = true
             break
           case 4:
           default:
             trait = segment(A, B)
-            correction = `Le segment d'extrémités $${A.nom}$ et $${B.nom}$ noté $[${A.nom}${B.nom}]$.`
+            correction = `Le segment d'extrémités $${A.nom}$ et $${B.nom}$ noté $${miseEnEvidence(`[${A.nom}${B.nom}]`)}$.`
             propsQcm.segment.bonneReponse = true
             break
         }

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { codageMediatrice } from '../../lib/2d/CodageMediatrice'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -176,7 +177,7 @@ export default class ConstruireMediatrices6e extends Exercice {
         codageMediatrice(B1, B2, 'green', marks[2]),
       )
 
-      texteCorr += `Le point $I$ d'intersection des deux médiatrices est dans la case ${cellule} de la grille.<br>`
+      texteCorr += `Le point $I$ d'intersection des deux médiatrices est dans la case ${texteEnCouleurEtGras(cellule)} de la grille.<br>`
 
       // On appelle la fonction fixBordures qui va déterminer la fenêtre Mathalea2d.
       // Ici, la cible était un objet centré sur (cible.x, cible.y) et de taille 4, on crée deux points en diagonale

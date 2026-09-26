@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sommeDesChiffres } from '../../lib/outils/nombres'
@@ -160,53 +161,53 @@ export default class ExerciceVraiFauxDivisibleMultipleDiviseur extends Exercice 
       ) {
         case 'Ndiviseur':
           texte = `$${N}$ est un diviseur de $${texNombre(a)}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Vrai'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Vrai')
           texteCorr += justification(N, a, true)
           this.autoCorrection[i].propositions![0].statut = true
           break
         case 'divisibleParN':
           texte = `$${texNombre(a)}$ est divisible par $${N}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Vrai'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Vrai')
           texteCorr += justification(N, a, true)
           this.autoCorrection[i].propositions![0].statut = true
           break
         case 'multipleDeN':
           texte = `$${texNombre(a)}$ est un multiple de $${N}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Vrai'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Vrai')
           texteCorr += justification(N, a, true)
           this.autoCorrection[i].propositions![0].statut = true
           break
         case 'NdiviseurF':
           a += randint(1, N - 1)
           texte = `$${N}$ est un diviseur de $${texNombre(a)}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Faux'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Faux')
           texteCorr += justification(N, a, false)
           this.autoCorrection[i].propositions![1].statut = true
           break
         case 'divisibleParNF':
           a += randint(1, N - 1)
           texte = `$${texNombre(a)}$ est divisible par $${N}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Faux'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Faux')
           texteCorr += justification(N, a, false)
           this.autoCorrection[i].propositions![1].statut = true
           break
         case 'multipleDeNF':
           a += randint(1, N - 1)
           texte = `$${texNombre(a)}$ est un multiple de $${N}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Faux'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Faux')
           texteCorr += justification(N, a, false)
           this.autoCorrection[i].propositions![1].statut = true
           break
         case 'NdiviseurEnvers':
           texte = `$${texNombre(a)}$ est un diviseur de $${N}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Faux'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Faux')
           texteCorr += `, il faudrait plutôt dire $${N}$ est un diviseur de $${texNombre(a)}$`
           texteCorr += justification(N, a, true)
           this.autoCorrection[i].propositions![1].statut = true
           break
         case 'divisibleParNEnvers':
           texte = `$${N}$ est divisible par $${texNombre(a)}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Faux'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Faux')
           texteCorr += `, il faudrait plutôt dire $${texNombre(a)}$ est divisible par $${N}$`
           texteCorr += justification(N, a, true)
           this.autoCorrection[i].propositions![1].statut = true
@@ -214,7 +215,7 @@ export default class ExerciceVraiFauxDivisibleMultipleDiviseur extends Exercice 
         case 'multipleDeNEnvers':
         default:
           texte = `$${N}$ est un multiple de $${texNombre(a)}$.`
-          texteCorr = texte.replace('.', ' ') + ' : Faux'
+          texteCorr = texte.replace('.', ' ') + ' : ' + texteEnCouleurEtGras('Faux')
           texteCorr += `, il faudrait plutôt dire $${a}$ est un multiple de $${N}$`
           texteCorr += justification(N, a, true)
           this.autoCorrection[i].propositions![1].statut = true

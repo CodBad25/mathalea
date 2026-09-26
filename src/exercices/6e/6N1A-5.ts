@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -135,18 +136,18 @@ export default class ExerciceNumerationEntier extends Exercice {
       }
       if (this.sup2) {
         texte = `$${b}$  ${rangs[rangB]} et $${a}$ ${rangs[rangA]}`
-        texteCorr = `$${b}$  ${rangs[rangB]} et $${a}$ ${rangs[rangA]} $ = ${texNombre(b * Math.pow(10, rangB))} + ${texNombre(a * Math.pow(10, rangA))} =${texNombre(
+        texteCorr = `$${b}$  ${rangs[rangB]} et $${a}$ ${rangs[rangA]} $ = ${texNombre(b * Math.pow(10, rangB))} + ${texNombre(a * Math.pow(10, rangA))} =${miseEnEvidence(texNombre(
           b * Math.pow(10, rangB) + a * Math.pow(10, rangA),
-        )}$`
+        ))}$`
       } else {
         texte = `$${b}$  ${rangs[rangB]} et $${a}$ ${rangs[rangA]} correspondent à `
         texte += !this.interactif
           ? `$\\text{\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots}$ ${rangs[rangRef]}.`
           : ''
         texteCorr = `$${b}$  ${rangs[rangB]} et $${a}$ ${rangs[rangA]} correspondent à `
-        texteCorr += ` $${texNombre(b * Math.pow(10, rangB - rangRef))}$ ${rangs[rangRef]} + $${texNombre(a * Math.pow(10, rangA - rangRef))}$ ${rangs[rangRef]} $=${texNombre(
+        texteCorr += ` $${texNombre(b * Math.pow(10, rangB - rangRef))}$ ${rangs[rangRef]} + $${texNombre(a * Math.pow(10, rangA - rangRef))}$ ${rangs[rangRef]} $=${miseEnEvidence(texNombre(
           b * Math.pow(10, rangB - rangRef) + a * Math.pow(10, rangA - rangRef),
-        )}$ ${rangs[rangRef]}`
+        ))}$ ${rangs[rangRef]}`
       }
       const reponse = texNombre(
         this.sup2

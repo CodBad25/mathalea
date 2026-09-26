@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texPrix } from '../../lib/format/style'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
@@ -106,17 +107,17 @@ export default class CompleterUneFacture extends Exercice {
         texteCorr +=
           '\\text{Designations} & \\text{Quantités} & \\text{Prix unitaires H.T.} & \\text{Montants} \\\\ \n'
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{${article1[0]}} & ${q1} & ${texPrix(p1)} & ${texPrix(p1 * q1)} \\\\ \n`
+        texteCorr += `\\text{${article1[0]}} & ${q1} & ${texPrix(p1)} & ${miseEnEvidence(texPrix(p1 * q1))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{${article2[0]}} & ${q2} & ${texPrix(p2)} & ${texPrix(p2 * q2)} \\\\ \n`
+        texteCorr += `\\text{${article2[0]}} & ${q2} & ${texPrix(p2)} & ${miseEnEvidence(texPrix(p2 * q2))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{${article3[0]}} & ${q3} & ${texPrix(p3)} & ${texPrix(p3 * q3)} \\\\ \n`
+        texteCorr += `\\text{${article3[0]}} & ${q3} & ${texPrix(p3)} & ${miseEnEvidence(texPrix(p3 * q3))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{Prix total (H.T.)} & & & ${texPrix(p1 * q1 + p2 * q2 + p3 * q3)} \\\\ \n`
+        texteCorr += `\\text{Prix total (H.T.)} & & & ${miseEnEvidence(texPrix(p1 * q1 + p2 * q2 + p3 * q3))} \\\\ \n`
         texteCorr += '\\hline\\hline\n'
-        texteCorr += `\\text{TVA (20~\\%)} & & & ${texPrix((p1 * q1 + p2 * q2 + p3 * q3) * 0.2)} \\\\ \n`
+        texteCorr += `\\text{TVA (20~\\%)} & & & ${miseEnEvidence(texPrix((p1 * q1 + p2 * q2 + p3 * q3) * 0.2))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{Prix total (T.T.C.)} & & & ${texPrix((p1 * q1 + p2 * q2 + p3 * q3) * 1.2)} \\\\ \n `
+        texteCorr += `\\text{Prix total (T.T.C.)} & & & ${miseEnEvidence(texPrix((p1 * q1 + p2 * q2 + p3 * q3) * 1.2))} \\\\ \n `
         texteCorr += '\\hline\n'
 
         texteCorr += '\\end{array}$'
@@ -157,21 +158,21 @@ export default class CompleterUneFacture extends Exercice {
         texteCorr +=
           '\\text{Designations} & \\text{Quantités} & \\text{Prix unitaires H.T.} & \\text{Montants} \\\\ \n'
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{${article1[0]}} & ${q1} & ${texPrix(p1)} & ${texPrix(p1 * q1)} \\\\ \n`
+        texteCorr += `\\text{${article1[0]}} & ${q1} & ${texPrix(p1)} & ${miseEnEvidence(texPrix(p1 * q1))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{${article2[0]}} & ${q2} & ${texPrix(p2)} & ${texPrix(p2 * q2)} \\\\ \n`
+        texteCorr += `\\text{${article2[0]}} & ${q2} & ${texPrix(p2)} & ${miseEnEvidence(texPrix(p2 * q2))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{${article3[0]}} & ${q3} & ${texPrix(p3)} & ${texPrix(p3 * q3)} \\\\ \n`
+        texteCorr += `\\text{${article3[0]}} & ${q3} & ${texPrix(p3)} & ${miseEnEvidence(texPrix(p3 * q3))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{Prix total brut (H.T.)} & & & ${texPrix(p1 * q1 + p2 * q2 + p3 * q3)} \\\\ \n`
+        texteCorr += `\\text{Prix total brut (H.T.)} & & & ${miseEnEvidence(texPrix(p1 * q1 + p2 * q2 + p3 * q3))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{Réduction (${r}~\\%)} & & & ${texPrix(((p1 * q1 + p2 * q2 + p3 * q3) * r) / 100)} \\\\ \n`
+        texteCorr += `\\text{Réduction (${r}~\\%)} & & & ${miseEnEvidence(texPrix(((p1 * q1 + p2 * q2 + p3 * q3) * r) / 100))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{Prix total net (H.T.)} & & & ${texPrix((p1 * q1 + p2 * q2 + p3 * q3) * (1 - r / 100))} \\\\ \n`
+        texteCorr += `\\text{Prix total net (H.T.)} & & & ${miseEnEvidence(texPrix((p1 * q1 + p2 * q2 + p3 * q3) * (1 - r / 100)))} \\\\ \n`
         texteCorr += '\\hline\\hline\n'
-        texteCorr += `\\text{TVA (20~\\%)} & & & ${texPrix((p1 * q1 + p2 * q2 + p3 * q3) * (1 - r / 100) * 0.2)} \\\\ \n`
+        texteCorr += `\\text{TVA (20~\\%)} & & & ${miseEnEvidence(texPrix((p1 * q1 + p2 * q2 + p3 * q3) * (1 - r / 100) * 0.2))} \\\\ \n`
         texteCorr += '\\hline\n'
-        texteCorr += `\\text{Prix total (T.T.C.)} & & & ${texPrix((p1 * q1 + p2 * q2 + p3 * q3) * (1 - r / 100) * 1.2)} \\\\ \n `
+        texteCorr += `\\text{Prix total (T.T.C.)} & & & ${miseEnEvidence(texPrix((p1 * q1 + p2 * q2 + p3 * q3) * (1 - r / 100) * 1.2))} \\\\ \n `
         texteCorr += '\\hline\n'
 
         texteCorr += '\\end{array}$'

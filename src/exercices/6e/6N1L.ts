@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
@@ -143,7 +144,7 @@ export default class ValeurApprocheeDivisionDecimale extends Exercice {
                 : ':') +
               '<br>',
             texteCorr:
-              ligne + `$${texNombre(reponse, exposant, true, true)}$.<br>`,
+              ligne + `$${miseEnEvidence(texNombre(reponse, exposant, true, true))}$.<br>`,
           })
           handleAnswers(
             this,

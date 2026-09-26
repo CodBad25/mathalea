@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
@@ -137,7 +138,7 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
           )
           texte = figure + 'Calculer le périmètre du carré en cm.'
 
-          texteCorr += `$\\mathcal{P}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=4\\times ${c}\\text{ cm}=${4 * c}\\text{ cm}$`
+          texteCorr += `$\\mathcal{P}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=4\\times ${c}\\text{ cm}=${miseEnEvidence(4 * c)}\\text{ cm}$`
           handleAnswers(this, i, {
             reponse: {
               value: 4 * c,
@@ -171,9 +172,9 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
             objetsRectangle,
           )
           texte = figure + 'Calculer le périmètre du rectangle en cm.'
-          texteCorr += `$\\mathcal{P}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=2\\times ${L}\\text{ cm} + 2\\times${l}\\text{ cm}=${
+          texteCorr += `$\\mathcal{P}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=2\\times ${L}\\text{ cm} + 2\\times${l}\\text{ cm}=${miseEnEvidence(
             2 * L + 2 * l
-          }\\text{ cm}$`
+          )}\\text{ cm}$`
           handleAnswers(this, i, {
             reponse: {
               value: 2 * L + 2 * l,
@@ -208,7 +209,7 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
             objetsTriangle,
           )
           texte = figure + 'Calculer le périmètre du triangle en cm.'
-          texteCorr += `$\\mathcal{P}_{${nom[8] + nom[9] + nom[10]}}=${a}\\text{ cm} + ${b}\\text{ cm} + ${d}\\text{ cm} =${a + b + d}\\text{ cm}$`
+          texteCorr += `$\\mathcal{P}_{${nom[8] + nom[9] + nom[10]}}=${a}\\text{ cm} + ${b}\\text{ cm} + ${d}\\text{ cm} =${miseEnEvidence(a + b + d)}\\text{ cm}$`
           handleAnswers(this, i, {
             reponse: {
               value: texNombre(a + b + d),

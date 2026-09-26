@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 // on importe les fonctions nécessaires.
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { listeShapes2DInfos } from '../../lib/2d/figures2d/shapes2d'
@@ -460,7 +461,7 @@ export default class DeplacerReperer extends Exercice {
         handleAnswers(this, i, valeur, { formatInteractif: 'multi-mathfield' })
       }
 
-      const texteCorr = `À la fin de son déplacement, le robot se trouve sur la case $${numerosPositionsSuccessives[numerosPositionsSuccessives.length - 1]}$, et il regarde vers le ${directions[positionCourante.angle as 0 | 90 | 180 | 270]}.<br>
+      const texteCorr = `À la fin de son déplacement, le robot se trouve sur la case $${miseEnEvidence(numerosPositionsSuccessives[numerosPositionsSuccessives.length - 1])}$, et il regarde vers le ${directions[positionCourante.angle as 0 | 90 | 180 | 270]}.<br>
       Voici la séquence complète des positions successives du robot :<br>
       ${numerosPositionsSuccessives
         .filter((p, i) => i % 2 === 0)
