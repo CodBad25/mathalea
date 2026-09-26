@@ -75,12 +75,13 @@ export default function figureApigeom({
   const idApigeom = `apigeomEx${exercice.numeroExercice}F${indexQuestionAffichee}${idAddendum}`
   figure.id = idApigeom
 
+  // Ne pas déduire cet état de autoCorrection[i] : un tirage peut être rejeté
+  // après avoir appelé figureApigeom(), puis être remplacé à ce même index.
   const isEvaluatedFigure =
     hasFeedback &&
+    idAddendum === '' &&
     exercice.interactif === true &&
-    typeof exercice.correctionInteractive === 'function' &&
-    exercice.autoCorrection[i]?.formatInteractif !==
-      ApigeomFigureElement.elementTag
+    typeof exercice.correctionInteractive === 'function'
   const verifyCallbackName = `${idApigeom}-verification`
   const verificationCallback = (
     displayedExercice: IExercice,
