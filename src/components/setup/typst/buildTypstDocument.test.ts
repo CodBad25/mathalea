@@ -665,6 +665,38 @@ describe('buildTypstDocument', () => {
         ).not.toThrow()
       },
     )
+
+    it.skipIf(!shouldRunTypstCliTests())(
+      'compile avec typst : deux QCM à cinq propositions',
+      async () => {
+        const qcmFiveChoices = (question: number) =>
+          '<div class="my-3">' +
+          Array.from(
+            { length: 5 },
+            (_, choice) =>
+              `<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q${question}R${choice}">$\\mathbb{${['N', 'Z', 'D', 'Q', 'R'][choice]}$</label></div>`,
+          ).join('') +
+          '</div>'
+        const code = buildTypstDocument([
+          exercise({
+            questions: [qcmFiveChoices(0), qcmFiveChoices(1)],
+            numbered: true,
+          }),
+        ])
+        const { execFileSync } = await import('node:child_process')
+        const { writeFileSync, mkdtempSync } = await import('node:fs')
+        const { tmpdir } = await import('node:os')
+        const { join } = await import('node:path')
+        const dir = mkdtempSync(join(tmpdir(), 'typst-qcm-five-'))
+        const file = join(dir, 'doc.typ')
+        writeFileSync(file, code, 'utf-8')
+        expect(() =>
+          execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+            stdio: 'pipe',
+          }),
+        ).not.toThrow()
+      },
+    )
   })
 
   it("n'ajoute pas de section figures sans figure", () => {
