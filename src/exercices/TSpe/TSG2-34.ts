@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import Exercice from '../Exercice'
 import {
   combinaisonListes,
@@ -30,7 +31,7 @@ const situationAleatoire = function (choix: number) {
   let zB = zA + deltaZ // On s'arrange pour que zB-zA = -2, -1, 1 ou 2.
   const k = randint(-2, 2, [0]) // ce qui donne (xAB/zAB = k)
   let xB = xA + k * (zB - zA)
-  
+
   // on doit trouver a, b et c tels que a*xAB+b*yAB+c*zAB=0
   // on prend b=0
   // on trouve c=-a*x/z=-a*k
@@ -44,7 +45,6 @@ const situationAleatoire = function (choix: number) {
     else if (choix === 2) b++
     else c++
   }
- 
 
   const x = randint(-10, 10, [0, xA, xB])
   const y = randint(-10, 10, [0, yA, yB])
@@ -63,7 +63,7 @@ const situationAleatoire = function (choix: number) {
   xB = tab3[0]
   yB = tab3[1]
   zB = tab3[2]
-const xAB = xB - xA
+  const xAB = xB - xA
   const yAB = yB - yA
   const zAB = zB - zA
   if ((xAB * a + yAB * b + zAB * c === 0) !== ortho)
@@ -93,7 +93,6 @@ export default class nomExercice extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       // Modifier a, b ou c pour que le produit scalaire soit non nul (et donc que les droites ne soient pas orthogonales)
@@ -128,26 +127,23 @@ export default class nomExercice extends Exercice {
       texteCorr += `On en déduit que dans notre situation, un vecteur directeur de la droite $(\\Delta)$ est $\\overrightarrow{u}\\begin{pmatrix} ${a}\\\\${b}\\\\${c}\\end{pmatrix}$<br>`
       texteCorr +=
         'On calcule les coordonnées du vecteur $\\overrightarrow{AB}$ vecteur directeur de la droite $(AB)$ :<br>'
-      texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix} ${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}\\iff\\overrightarrow{AB}\\begin{pmatrix} ${xB-xA}\\\\${yB - yA}\\\\${zB - zA}\\end{pmatrix}$<br>`
+      texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix} ${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}\\iff\\overrightarrow{AB}\\begin{pmatrix} ${xB - xA}\\\\${yB - yA}\\\\${zB - zA}\\end{pmatrix}$<br>`
       texteCorr += 'On calcule le produit scalaire de ces deux vecteurs : <br>'
       texteCorr += `$\\overrightarrow{u}\\cdot\\overrightarrow{AB} = ${a}\\times ${ecritureParentheseSiNegatif(xB - xA)}+${ecritureParentheseSiNegatif(b)}\\times ${ecritureParentheseSiNegatif(yB - yA)}+${ecritureParentheseSiNegatif(c)}\\times ${ecritureParentheseSiNegatif(zB - zA)}=${a * (xB - xA) + b * (yB - yA) + c * (zB - zA)}$<br>`
       texteCorr += 'Le produit scalaire des deux vecteurs directeurs étant'
       if (produitScalaire === 0) {
         texteCorr += ' nul, ils sont orthogonaux.<br>'
-        texteCorr +=
-          'Les droites $(\\Delta)$ et $(AB)$ sont donc orthogonales.<br>'
+        texteCorr += `Les droites $(\\Delta)$ et $(AB)$ ${texteEnCouleurEtGras('sont donc orthogonales')}.<br>`
       } else {
         texteCorr += ' non nul, ils ne sont pas orthogonaux.<br>'
-        texteCorr +=
-          'Les droites $(\\Delta)$ et $(AB)$ ne sont donc pas orthogonales.'
+        texteCorr += `Les droites $(\\Delta)$ et $(AB)$ ${texteEnCouleurEtGras('ne sont donc pas orthogonales')}.`
       }
 
-     
-        // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
-        i++
-      
+      // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
+      this.listeQuestions[i] = texte
+      this.listeCorrections[i] = texteCorr
+      i++
+
       cpt++
     }
     listeQuestionsToContenu(this) // On envoie l'exercice à la fonction de mise en page

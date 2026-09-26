@@ -3,7 +3,10 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -143,23 +146,21 @@ export default class LimitesSuitesDeReference extends Exercice {
           donnees = {
             expression: `${coefficient}\\times(-1)^n`,
             reponse: '\\not\\exists',
-            correction: `Pour tout entier naturel $n$, $${coefficient}\\times(-1)^{2n}=${coefficient}$ et $${coefficient}\\times(-1)^{2n+1}=${-coefficient}$.<br>Donc la suite $(u_n)$ n'a pas de limite.`,
+            correction: `Pour tout entier naturel $n$, $${coefficient}\\times(-1)^{2n}=${coefficient}$ et $${coefficient}\\times(-1)^{2n+1}=${-coefficient}$.<br>Donc la suite $(u_n)$ ${texteEnCouleurEtGras("n'a pas de limite")}.`,
           }
           break
         case 'cosinus':
           donnees = {
             expression: `${rienSi1(coefficient)}\\cos(n)`,
             reponse: '\\not\\exists',
-            correction:
-              "La fonction cosinus est périodique. La suite $(u_n)$ n'admet donc pas de limite.",
+            correction: `La fonction cosinus est périodique. La suite $(u_n)$ ${texteEnCouleurEtGras("n'admet donc pas de limite")}.`,
           }
           break
         case 'sinus':
           donnees = {
             expression: `${rienSi1(coefficient)}\\sin(${coefficientArgument}n)`,
             reponse: '\\not\\exists',
-            correction:
-              "La fonction sinus est périodique. La suite $(u_n)$ n'admet donc pas de limite.",
+            correction: `La fonction sinus est périodique. La suite $(u_n)$ ${texteEnCouleurEtGras("n'admet donc pas de limite")}.`,
           }
           break
       }

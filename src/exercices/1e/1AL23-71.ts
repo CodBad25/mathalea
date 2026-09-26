@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { shuffle2tableaux } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
 import { numAlpha } from '../../lib/outils/outilString'
@@ -40,7 +41,7 @@ export default class EtudeTrinome extends Exercice {
     let correction1 = `$f(x)=${p.texFormeCanonique}$`
     correction1 += `<br><br>$f(x)=${etapesDeveloppement[0]}$`
     correction1 += `<br><br>$f(x)=${etapesDeveloppement[1]}$`
-    correction1 += `<br><br>$f(x)=${etapesDeveloppement[2]}$`
+    correction1 += `<br><br>$f(x)=${miseEnEvidence(etapesDeveloppement[2])}$`
 
     const question2 = `Montrer que $f(x)$ se factorise sous la forme $f(x)=${p.texFormeFactorisee}$.`
     let correction2 = "On développe l'expression : "
@@ -61,7 +62,7 @@ export default class EtudeTrinome extends Exercice {
     corr3a += `<br><br>$f(x)=0 \\iff ${p.texFormeFactorisee} = 0$`
     corr3a += `<br><br>$\\phantom{f(x)=0} \\iff x${ecritureAlgebrique(-x1)} = 0 \\text{\\quad ou \\quad} x${ecritureAlgebrique(-x2)} = 0$`
     corr3a += `<br><br>$\\phantom{f(x)=0} \\iff x=${x1} \\text{\\quad ou \\quad} x=${x2}$`
-    corr3a += `<br><br>$S=\\{${x1}\\, ;\\, ${x2}\\}$`
+    corr3a += `<br><br>$S=\\{${miseEnEvidence(x1)}\\, ;\\, ${miseEnEvidence(x2)}\\}$`
 
     const q3b = `Résoudre l'équation $f(x) = ${p.c.simplifie().texFraction}$.`
     let corr3b = 'Ici, on va utiliser la forme développée.'
@@ -73,8 +74,8 @@ export default class EtudeTrinome extends Exercice {
     corr3b += `<br><br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x = 0 \\text{\\quad ou \\quad} x = ${solution2} $`
     corr3b +=
       p.alpha.valeurDecimale === 0
-        ? '<br><br>$S=\\{0\\}$'
-        : `<br><br>$S=\\{0\\, ;\\, ${solution2}\\}$`
+        ? `<br><br>$S=\\{${miseEnEvidence(0)}\\}$`
+        : `<br><br>$S=\\{${miseEnEvidence(0)}\\, ;\\, ${miseEnEvidence(solution2)}\\}$`
 
     const q3c = `Résoudre l'inéquation $f(x) < ${p.beta.simplifie().texFraction}$.`
     let corr3c = 'Ici, on va utiliser la forme canonique.'
@@ -82,11 +83,11 @@ export default class EtudeTrinome extends Exercice {
     corr3c += `<br><br>$\\phantom{f(x) < ${p.beta.simplifie().texFraction}} \\iff ${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2  < 0$`
     if (p.a.s === 1) {
       corr3c += `<br> <br> Or, pour tout $x \\in \\mathbb{R}$, $${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2 \\geqslant 0$.`
-      corr3c += '<br><br>$S=\\emptyset$'
+      corr3c += `<br><br>$S=${miseEnEvidence('\\emptyset')}$`
     } else {
       const nonSolution = p.alpha.simplifie().texFraction
       corr3c += `<br><br> Or, $${p.a.simplifie().texFractionSaufUn}\\left( x ${p.alpha.oppose().simplifie().texFractionSignee} \\right)^2$ est toujours négatif et ne s'annule que pour $x=${nonSolution}$.`
-      corr3c += `<br><br>$S=\\R \\smallsetminus \\{${nonSolution}\\}$`
+      corr3c += `<br><br>$S=${miseEnEvidence(`\\R \\smallsetminus \\{${nonSolution}\\}`)}$`
     }
     const [sousQuestions, sousCorrections] = [
       [q3a, q3b, q3c],

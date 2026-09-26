@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   texFractionFromString,
@@ -100,7 +101,7 @@ export default class ResoudreEquationDegre2 extends Exercice {
           "<br>$\\Delta>0$ donc l'équation admet deux solutions : $x_1 = \\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}$"
         texteCorr += `<br>$x_1 =\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${x1}$`
         texteCorr += `<br>$x_2 =\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${x2}$`
-        texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${Math.min(x1, x2)} ; ${Math.max(x2, x1)}\\right\\}$.`
+        texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(Math.min(x1, x2))} ; ${miseEnEvidence(Math.max(x2, x1))}\\right\\}$.`
       }
       if (listeTypeDeQuestions[i] === 'solutionDouble') {
         // (dx+e)^2=d^2x^2+2dex+e^2
@@ -123,9 +124,9 @@ export default class ResoudreEquationDegre2 extends Exercice {
         texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
         texteCorr += `<br>$\\Delta=0$ donc l'équation admet une unique solution : $${texFractionFromString('-b', '2a')} = ${texFractionReduite(-b, 2 * a)}$`
         if (b % (2 * a) === 0) {
-          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${-b / (2 * a)}\\right\\}$.`
+          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(-b / (2 * a))}\\right\\}$.`
         } else {
-          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${texFractionReduite(-b, 2 * a)}\\right\\}$.`
+          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(texFractionReduite(-b, 2 * a))}\\right\\}$.`
         }
       }
       if (listeTypeDeQuestions[i] === 'solutionsReelles') {
@@ -153,9 +154,9 @@ export default class ResoudreEquationDegre2 extends Exercice {
         texteCorr += `<br>$x_1 =\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}\\approx ${texNombre((-b - Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a), 2)}$`
         texteCorr += `<br>$x_2 =\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}\\approx ${texNombre((-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a), 2)}$`
         if (a > 0) {
-          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}} ; \\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}\\right\\}$.`
+          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(`\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}`)} ; ${miseEnEvidence(`\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}`)}\\right\\}$.`
         } else {
-          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}} ; \\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}\\right\\}$.`
+          texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(`\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}`)} ; ${miseEnEvidence(`\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}`)}\\right\\}$.`
         }
       }
 
@@ -171,7 +172,7 @@ export default class ResoudreEquationDegre2 extends Exercice {
           "<br>Si un produit est nul alors l'un au moins de ses facteurs est nul."
         texteCorr += `<br>$x=0\\quad$ ou $\\quad${rienSi1(a)}x${ecritureAlgebrique(b)}=0$`
         texteCorr += `<br>$x=0\\quad$ ou $\\quad x=${texFractionSigne(-b, a)}$`
-        texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{0 ; ${texFractionReduite(-b, a)}\\right\\}$.`
+        texteCorr += `<br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(0)} ; ${miseEnEvidence(texFractionReduite(-b, a))}\\right\\}$.`
       }
       if (listeTypeDeQuestions[i] === 'ax2+c') {
         // x(ax+b)=ax^2+bx
@@ -191,18 +192,18 @@ export default class ResoudreEquationDegre2 extends Exercice {
             ].includes(-c / a)
           ) {
             texteCorr += `<br>$x=\\sqrt{${texFractionReduite(-c, a)}}=${Math.sqrt(-c / a)}\\quad$ ou $\\quad x=-\\sqrt{${texFractionReduite(-c, a)}}=${-Math.sqrt(-c / a)}$`
-            texteCorr += `<br><br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${Math.sqrt(-c / a)} ; ${-Math.sqrt(-c / a)}\\right\\}$.`
+            texteCorr += `<br><br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(Math.sqrt(-c / a))} ; ${miseEnEvidence(-Math.sqrt(-c / a))}\\right\\}$.`
           } else if (-c % a === 0) {
             texteCorr += `<br>$x=\\sqrt{${-c / a}}\\quad$ ou $\\quad x=-\\sqrt{${-c / a}}$`
-            texteCorr += `<br><br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{\\sqrt{${-c / a}} ; -\\sqrt{${-c / a}}\\right\\}$.`
+            texteCorr += `<br><br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(`\\sqrt{${-c / a}}`)} ; ${miseEnEvidence(`-\\sqrt{${-c / a}}`)}\\right\\}$.`
           } else {
             texteCorr += `<br>$x=\\sqrt{${texFractionReduite(-c, a)}}\\quad$ ou $\\quad x=-\\sqrt{${texFractionReduite(-c, a)}}$`
-            texteCorr += `<br><br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{\\sqrt{${texFractionReduite(-c, a)}} ; -\\sqrt{${texFractionReduite(-c, a)}}\\right\\}$.`
+            texteCorr += `<br><br>L'ensemble des solutions de cette équation est : $\\mathcal{S}=\\left\\{${miseEnEvidence(`\\sqrt{${texFractionReduite(-c, a)}}`)} ; ${miseEnEvidence(`-\\sqrt{${texFractionReduite(-c, a)}}`)}\\right\\}$.`
           }
         } else {
           texteCorr +=
             "<br>Dans $\\mathbb{R}$, un carré est toujours positif donc cette équation n'a pas de solution."
-          texteCorr += '<br>$\\mathcal{S}=\\emptyset$'
+          texteCorr += `<br>$\\mathcal{S}=${miseEnEvidence('\\emptyset')}$`
         }
       }
       if (listeTypeDeQuestions[i] === 'pasDeSolution') {
@@ -226,7 +227,7 @@ export default class ResoudreEquationDegre2 extends Exercice {
         }
         texteCorr = `$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
         texteCorr += "<br>$\\Delta<0$ donc l'équation n'admet pas de solution."
-        texteCorr += '<br>$\\mathcal{S}=\\emptyset$'
+        texteCorr += `<br>$\\mathcal{S}=${miseEnEvidence('\\emptyset')}$`
       }
 
       if (this.questionJamaisPosee(i, a, b, c)) {

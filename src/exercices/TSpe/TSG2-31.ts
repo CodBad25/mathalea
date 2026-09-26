@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -27,7 +28,7 @@ export default class PointAppartientDroite extends Exercice {
   constructor() {
     super()
     this.consigne = ''
-    this.nbQuestions=1
+    this.nbQuestions = 1
   }
 
   nouvelleVersion() {
@@ -66,7 +67,7 @@ export default class PointAppartientDroite extends Exercice {
           texteCorr += `<br>$\\iff \\begin{cases}${rienSi1(a)} t=${xM}${ecritureAlgebrique(-xA)}\\\\${rienSi1(b)} t=${yM}${ecritureAlgebrique(-yA)}\\\\${rienSi1(c)} t=${zM}${ecritureAlgebrique(-zA)}\\end{cases}$<br>`
           texteCorr += `<br>$\\iff \\begin{cases}${rienSi1(a)} t=${xM - xA}\\\\${rienSi1(b)} t=${yM - yA}\\\\${rienSi1(c)} t=${zM - zA}\\end{cases}$<br>`
           texteCorr += `<br>$\\iff \\begin{cases} t=${t}\\\\ t=${t}\\\\t=${t}\\end{cases}$`
-          texteCorr += `<br>Le système a pour solution $t=${t}$ donc le point M appartient à la droite  $(\\Delta)$.`
+          texteCorr += `<br>Le système a pour solution $t=${t}$ donc le point M ${texteEnCouleurEtGras('appartient')} à la droite  $(\\Delta)$.`
           break
         case 'type2': // défavorable
         default:
@@ -98,8 +99,7 @@ export default class PointAppartientDroite extends Exercice {
             texteCorr += `$\\iff \\begin{cases} t=${t}\\\\t=${t}\\\\t=\\dfrac{${texNombre(zM - zA)}}{${texNombre(c)}}\\end{cases}$<br>`
           }
 
-          texteCorr +=
-            "<br>Le système n'admet pas de solution.  Le point M n'appartient pas à la droite  $(\\Delta)$."
+          texteCorr += `<br>Le système n'admet pas de solution.  Le point M ${texteEnCouleurEtGras("n'appartient pas")} à la droite  $(\\Delta)$.`
 
           break
       }

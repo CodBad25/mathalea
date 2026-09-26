@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { numAlpha } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -42,8 +43,8 @@ export default class EtudeParabole extends Exercice {
       '<br><br> On sait que $f(x)=a(x-\\alpha)^2+\\beta$ avec $\\alpha = \\dfrac{-b}{2a}$ et $\\beta=f(\\alpha)$.'
     correction1 += `<br><br> $\\alpha = \\dfrac{-b}{2a}=\\dfrac{${p.b.simplifie().oppose().texFraction}}{${p.a.multiplieEntier(2).simplifie().texFraction}}=${p.alpha.simplifie().texFraction}$`
     correction1 += `<br><br> $\\beta = f(\\alpha) = f\\left(${p.alpha.simplifie().texFraction} \\right)=${p.texCalculImage(p.alpha.simplifie())}$`
-    correction1 += `<br><br> On a donc $f(x) = ${p.texFormeCanonique}$.`
-    correction1 += `<br><br>${numAlpha(1)} Le sommet de cette parabole a donc pour coordonnées $\\left(${p.alpha.simplifie().texFraction} \\,;\\, ${p.beta.simplifie().texFraction}\\right)$.`
+    correction1 += `<br><br> On a donc $f(x) = ${miseEnEvidence(p.texFormeCanonique)}$.`
+    correction1 += `<br><br>${numAlpha(1)} Le sommet de cette parabole a donc pour coordonnées $\\left(${miseEnEvidence(p.alpha.simplifie().texFraction)} \\,;\\, ${miseEnEvidence(p.beta.simplifie().texFraction)}\\right)$.`
 
     correction1 += `<br><br>$f(x) = ${p.texFormeCanonique}$ avec $a ${p.a.s === 1 ? '>' : '<'} 0$ d'où le tableau de variations : `
 
@@ -115,7 +116,7 @@ export default class EtudeParabole extends Exercice {
       }
       const px1 =
         typeof p.x1 === 'number' ? String(p.x1) : p.x1.simplifie().texFraction
-      correction2 += `<br><br>Conclusion : <br>La parabole coupe l'axe des abscisses en un unique point $M\\left(${px1} \\,;\\, 0 \\right)$.`
+      correction2 += `<br><br>Conclusion : <br>La parabole coupe l'axe des abscisses en un unique point $M\\left(${miseEnEvidence(px1)} \\,;\\, ${miseEnEvidence(0)} \\right)$.`
     } else {
       correction2 +=
         '<br><br>$\\Delta$ est strictement positif donc cette équation admet deux solutions.'
@@ -128,7 +129,7 @@ export default class EtudeParabole extends Exercice {
         typeof p.x1 === 'number' ? String(p.x1) : p.x1.simplifie().texFraction
       const px2 =
         typeof p.x2 === 'number' ? String(p.x2) : p.x2.simplifie().texFraction
-      correction2 += `<br><br>Conclusion :<br>La parabole coupe donc l'axe des abscisses en deux points de coordonnées $\\left(${px1} \\,;\\, 0 \\right)$ et  $\\left(${px2} \\,;\\, 0 \\right)$.`
+      correction2 += `<br><br>Conclusion :<br>La parabole coupe donc l'axe des abscisses en deux points de coordonnées $\\left(${miseEnEvidence(px1)} \\,;\\, ${miseEnEvidence(0)} \\right)$ et  $\\left(${miseEnEvidence(px2)} \\,;\\, ${miseEnEvidence(0)} \\right)$.`
     }
 
     this.listeQuestions = [question1, question2]

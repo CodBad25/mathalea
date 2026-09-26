@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf1,
@@ -38,7 +39,7 @@ export default class nomExercice extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let finCorrection = ''
@@ -66,8 +67,7 @@ export default class nomExercice extends Exercice {
             \\end{cases}$<br>`
           finCorrection += `Le système admet donc un couple solution : $S=\\{\\left(${lambda1};${lambda2}\\right)\\}$.<br>`
           finCorrection += `On vient donc de montrer que $\\overrightarrow{AD}=${rienSi1(lambda1)} \\overrightarrow{AB} ${ecritureAlgebriqueSauf1(lambda2)} \\overrightarrow{AC}$.`
-          finCorrection +=
-            '<br>Les points $A$, $B$, $C$ et $D$ sont coplanaires.'
+          finCorrection += `<br>Les points $A$, $B$, $C$ et $D$ ${texteEnCouleurEtGras('sont coplanaires')}.`
           break
         default: {
           // case 'non-coplanaires':
@@ -100,8 +100,7 @@ export default class nomExercice extends Exercice {
             "On observe trivialement que ce système n'admet pas de solution. Les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ ne sont donc pas colinéaires."
           finCorrection +=
             "<br>On vient donc de montrer que les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment une base d'un plan et que le vecteur $\\overrightarrow{AD}$ n'est pas une combinaison linéaire de ces vecteurs."
-          finCorrection +=
-            '<br>Les trois vecteurs ne sont donc pas coplanaires.<br> Les points $A$, $B$, $C$ et $D$ ne sont pas coplanaires.'
+          finCorrection += `<br>Les trois vecteurs ne sont donc pas coplanaires.<br> Les points $A$, $B$, $C$ et $D$ ${texteEnCouleurEtGras('ne sont pas coplanaires')}.`
           break
         }
       }
