@@ -22,5 +22,6 @@ export default class Auto1AC13 extends ExprimerEnFonction {
   constructor() {
     super()
     this.versionQcm = true
+    this.formatInteractif = 'qcm'
   }
 }
