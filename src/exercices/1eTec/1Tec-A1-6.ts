@@ -61,7 +61,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         Dans cette sous-population, on sait que la population de ceux qui ont plus de $${d}$ années d'ancienneté représente $p_2=${c}\\,\\%$.<br>
         <br> D'après le cours, on calcule $p=p_1\\times p_2$, ce qui représente $${b}\\,\\%$ de $${c}\\,\\%$.<br>
       <br>Ainsi,  $p=${texNombre(tauxb)}\\times ${texNombre(tauxc)}=${texNombre(tauxG, 4)}$.<br>
-      Il y a donc $${texNombre(g, 2)}\\,\\%$ d'adhérents de plus de $${a}$ ans ayant plus de $${a}$ années d'ancienneté.`
+      Il y a donc $${miseEnEvidence(texNombre(g, 2))}\\,\\%$ d'adhérents de plus de $${a}$ ans ayant plus de $${d}$ années d'ancienneté.`
         this.reponse = g.toFixed(2)
         break
       case 'associationBis':
@@ -101,10 +101,10 @@ export default class ProportiondeProportion extends ExerciceSimple {
             Quel est le pourcentage d'élèves en première technologique de ce lycée ?<br>`
         this.correction = `La population de référence est celle des élèves du lycée.<br>
             La sous-population est celle des élèves de première et d'après l'énoncé, $p_1=${b}\\,\\%$.<br>
-             Les élèves de 1ère technologique sont une sous-population des élèves de première, qui représente d'après l'énnoncé d'après l'énoncé, $p_2=${c}\\,\\%$. <br>
+             Les élèves de 1ère technologique sont une sous-population des élèves de première, qui représente d'après l'énoncé, $p_2=${c}\\,\\%$. <br>
              <br>Pour connaitre la proportion $p$ des élèves de première technologique par rapport à la population de référence (les élèves du lycée), on calcule $p=p_1\\times p_2$, ce qui revient à calculer $${b}\\,\\%$ de $${c}\\,\\%$.<br>
              <br>Ainsi, $p=${texNombre(b / 100)}\\times ${texNombre(tauxc, 2)}=${texNombre(tauxG, 4)}$.<br>
-             Il y a $${texNombre(g, 2)}\\,\\%$ d'élèves de première technologique parmi les élèves du lycée.`
+             Il y a $${miseEnEvidence(texNombre(g, 2))}\\,\\%$ d'élèves de première technologique parmi les élèves du lycée.`
         this.reponse = g.toFixed(2)
         break
       case 'lyceeBis':
@@ -145,7 +145,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
                  Les suffrages du candidat sont une sous-population des suffrages exprimés, qui représentent d'après l'énoncé, $p_2=${c}\\,\\%$. <br>
                  <br>Pour connaitre le pourcentage de voix obtenues  par ce candidat par rapport aux nombre d'inscrits, on calcule $p=p_1\\times p_2$, ce qui revient à calculer $${b}\\,\\%$ de $${c}\\,\\%$.<br>
                  <br>Ainsi, $p=${texNombre(tauxb, 2)}\\times ${texNombre(tauxc, 2)}=${texNombre(tauxG, 4)}$.<br>
-                Ce candidat a donc obtenu $${texNombre(g, 2)}\\,\\%$ des voix des inscrits.`
+                Ce candidat a donc obtenu $${miseEnEvidence(texNombre(g, 2))}\\,\\%$ des voix des inscrits.`
         this.reponse = g.toFixed(2)
         break
 

@@ -1,4 +1,8 @@
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { bleuMathalea } from '../../lib/colors'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
@@ -120,7 +124,7 @@ export default class SignefonctionaffineVariation extends Exercice {
        Comme on sait que : $${nom}(${texNombre(sol, 1)})=0$, on en déduit :
         $${nom}(${texNombre(sol, 1)})=${a > 0 ? `${texNombre(sol, 1)}` : `${texNombre(-sol, 1)}`}   + b=0$.<br>
        d'où $b=${a > 0 ? `${texNombre(-sol, 1)}` : `${texNombre(sol, 1)}`}$.<br>
-       On obtient la fonction $${nom}$ définie par $${nom}(x)=${a > 0 ? '' : '-'}x${a > 0 ? `${ecritureAlgebrique(-sol)}` : `${ecritureAlgebrique(sol)}`}$.<br>
+       On obtient la fonction $${nom}$ définie par $${miseEnEvidence(`${nom}(x)=${a > 0 ? '' : '-'}x${a > 0 ? ecritureAlgebrique(-sol) : ecritureAlgebrique(sol)}`)}$.<br>
        En partant d'une autre valeur pour $a$, on aurait obtenu une autre expression pour $${nom}$.<br>
        Il existe une infinité de fonctions qui possèdent ces trois propriétés. <br>
        Toutes les fonctions de la forme $${nom}(x)= k\\times\\left( ${a > 0 ? '' : '-'}x${a > 0 ? `${ecritureAlgebrique(-sol)}` : `${ecritureAlgebrique(sol)}`}\\right)$ avec $k$ un réel strictement positif sont solutions de l'exercice.
@@ -143,7 +147,7 @@ export default class SignefonctionaffineVariation extends Exercice {
           est donc soit strictement croissante, soit strictement décroissante.<br>
          On observe que $${sol}<${x}$ implique ${a > 0 ? `$${nom}(${sol}) < ${nom}(${x})$` : `$${nom}(${sol}) > ${nom}(${x})$`}.<br>
           Les images et les antécédents sont donc rangés ${a > 0 ? 'dans le même ordre' : "dans l'ordre inverse"}.<br>
-          On en déduit que la fonction $${nom}$ est ${texteEnCouleurEtGras(a > 0 ? 'croissante' : 'décroissante')} sur $\\mathbb R$.<br>
+          On en déduit que la fonction $${nom}$ est ${texteEnCouleurEtGras(a > 0 ? 'croissante' : 'décroissante', bleuMathalea)} sur $\\mathbb R$.<br>
           Les images sont donc ${a > 0 ? "d'abord négatives, puis positives" : "d'abord positives, puis négatives"}.<br>
           Sachant que $${nom}$ s'annule en $${texNombre(sol, 1)}$, le changement de signe intervient donc en $x=${texNombre(sol, 1)}$. <br>
           On obtient ainsi le tableau de signes suivant : <br>
@@ -153,7 +157,7 @@ export default class SignefonctionaffineVariation extends Exercice {
            est donc soit strictement croissante, soit strictement décroissante.<br>
            On observe que $${x}<${sol}$ implique ${a > 0 ? `$${nom}(${x}) < ${nom}(${sol})$` : `$${nom}(${x}) > ${nom}(${sol})$`}.<br>
           Les images et les antécédents sont donc rangés ${a > 0 ? 'dans le même ordre' : "dans l'ordre inverse"}.<br>
-          On en déduit que la fonction $${nom}$ est ${texteEnCouleurEtGras(a > 0 ? 'croissante' : 'décroissante')} sur $\\mathbb R$.<br>
+          On en déduit que la fonction $${nom}$ est ${texteEnCouleurEtGras(a > 0 ? 'croissante' : 'décroissante', bleuMathalea)} sur $\\mathbb R$.<br>
 
            Les images sont ${a > 0 ? "d'abord négatives, puis positives" : "d'abord positives, puis négatives"}.<br>
            Sachant que $${nom}$ s'annule en $${texNombre(sol, 1)}$, le changement de signe intervient donc en $x=${texNombre(sol, 1)}$. <br>
@@ -251,10 +255,10 @@ export default class SignefonctionaffineVariation extends Exercice {
           les antécédents et les images sont rangées ${a > 0 ? 'dans le même ordre' : "dans l'ordre inverse"}. <br>
          `
             if (x2 > x1) {
-              texteCorr += ` Comme $${x1} < ${x2}$, alors  ${a > 0 ? `$${nom}(${x1}) < ${nom}(${x2})$` : `$${nom}(${x1}) > ${nom}(${x2})$`}
+              texteCorr += ` Comme $${x1} < ${x2}$, alors  $${miseEnEvidence(a > 0 ? `${nom}(${x1}) < ${nom}(${x2})` : `${nom}(${x1}) > ${nom}(${x2})`)}$.
          `
             } else {
-              texteCorr += ` Comme $${x2} < ${x1}$, alors  ${a > 0 ? `$${nom}(${x2}) < ${nom}(${x1})$` : `$${nom}(${x2}) > ${nom}(${x1})$`}
+              texteCorr += ` Comme $${x2} < ${x1}$, alors  $${miseEnEvidence(a > 0 ? `${nom}(${x2}) < ${nom}(${x1})` : `${nom}(${x2}) > ${nom}(${x1})`)}$.
           `
             }
             variables.push(a, b, sol, x1, x2)

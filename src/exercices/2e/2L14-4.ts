@@ -4,6 +4,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { bleuMathalea } from '../../lib/colors'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -80,15 +81,15 @@ class FormeTrinome extends Exercice {
         correction1 = 'On développe la forme factorisée : '
         if (a !== 1) {
           correction1 += `<br>$\\begin{aligned}
-       ${p.texFormeFactorisee} &= ${etapesDeveloppement2[0]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe  avec la double distributivité}')}` : ''}\\\\
-        & = ${etapesDeveloppement2[1]} ${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la simple distributivité}')}` : ''}\\\\
-       &= ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{ On réduit}')}` : ''}\\\\
+       ${p.texFormeFactorisee} &= ${etapesDeveloppement2[0]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe  avec la double distributivité}', bleuMathalea)}` : ''}\\\\
+        & = ${etapesDeveloppement2[1]} ${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la simple distributivité}', bleuMathalea)}` : ''}\\\\
+       &= ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{ On réduit}', bleuMathalea)}` : ''}\\\\
        &=f(x)
         \\end{aligned}$`
         } else {
           correction1 += `<br>$\\begin{aligned}
-        ${p.texFormeFactorisee} &= ${etapesDeveloppement2[1]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la double distributivité}')}` : ''}\\\\
-         & = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}\\\\
+        ${p.texFormeFactorisee} &= ${etapesDeveloppement2[1]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la double distributivité}', bleuMathalea)}` : ''}\\\\
+         & = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}', bleuMathalea)}` : ''}\\\\
          &=f(x)
          \\end{aligned}$`
         }
@@ -103,18 +104,18 @@ class FormeTrinome extends Exercice {
         if (a !== 1) {
           correction1 += `<br>$\\begin{aligned}
            f(x)&=${p.texFormeFactorisee}\\\\
-        &= ${etapesDeveloppement2[0]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la double distributivité}')}` : ''}\\\\
-        & = ${etapesDeveloppement2[1]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la simple distributivité}')}` : ''}\\\\
-       &= ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}
+        &= ${etapesDeveloppement2[0]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la double distributivité}', bleuMathalea)}` : ''}\\\\
+        & = ${etapesDeveloppement2[1]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la simple distributivité}', bleuMathalea)}` : ''}\\\\
+       &= ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}', bleuMathalea)}` : ''}
         \\end{aligned}$`
         } else {
           correction1 += `<br>$\\begin{aligned}
            f(x)&=${p.texFormeFactorisee}\\\\
-        &= ${etapesDeveloppement2[1]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la double distributivité}')}` : ''}\\\\
-         & = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}
+        &= ${etapesDeveloppement2[1]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la double distributivité}', bleuMathalea)}` : ''}\\\\
+         & = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}', bleuMathalea)}` : ''}
          \\end{aligned}$`
         }
-        correction1 += `<br> On en déduit que $f(x)$ s'écrit sous forme développée : $f(x)=${p.tex}$.`
+        correction1 += `<br> On en déduit que $f(x)$ s'écrit sous forme développée : $f(x)=${miseEnEvidence(p.tex)}$.`
 
         break
     }
@@ -127,36 +128,38 @@ class FormeTrinome extends Exercice {
     let corr2a =
       '$\\bullet$ Pour déterminer $f(0)$, les calculs à partir de la forme développée sont plus rapides : '
     if (a !== 1) {
-      corr2a += `<br>$f(0)= ${p.texCalculImage(0)}$ `
+      const calculImage = p.texCalculImage(0)
+      const indexResultat = calculImage.lastIndexOf('=')
+      corr2a += `<br>$f(0)= ${calculImage.slice(0, indexResultat)}= ${miseEnEvidence(calculImage.slice(indexResultat + 1).trim())}$ `
     } else {
-      corr2a += `<br>$f(0)= 0^2${ecritureAlgebrique(-a * (x1 + x2))}\\times 0${ecritureAlgebrique(-a * (x1 + x2))}${ecritureAlgebrique(a * x1 * x2)}=${a * x1 * x2}$ `
+      corr2a += `<br>$f(0)= 0^2${ecritureAlgebrique(-a * (x1 + x2))}\\times 0${ecritureAlgebrique(-a * (x1 + x2))}${ecritureAlgebrique(a * x1 * x2)}=${miseEnEvidence(a * x1 * x2)}$ `
     }
 
     corr2a += `<br>$\\bullet$ Pour déterminer $f(${x1})$, les calculs à partir de la forme factorisée sont plus rapides : `
 
     corr2a += `<br>$f(${x1})= ${rienSi1(a)}(${x1}${ecritureAlgebrique(-x1)})(${x1}${ecritureAlgebrique(-x2)})
-    = ${Math.abs(a) === 1 ? '' : `${a}\\times `}0\\times ${ecritureParentheseSiNegatif(x1 - x2)}=0$ `
+    = ${Math.abs(a) === 1 ? '' : `${a}\\times `}0\\times ${ecritureParentheseSiNegatif(x1 - x2)}=${miseEnEvidence(0)}$ `
 
     const q2b = "Résoudre l'équation $f(x)=0$."
     let corr2b =
       'En utilisant la forme factorisée, cela revient à résoudre  une équation produit-nul.'
     // @fixme : p.x1 n'est pas forcément une FractionEtendue : son type est false | number | FractionEtendue (dans les deux premiers cas, le code ci-dessous plante)
 
-    corr2b += `<br>$f(x)=0 \\iff ${p.texFormeFactorisee} = 0${this.correctionDetaillee === true ? `${sp(25)}${miseEnEvidence('\\textit{Équation produit-nul }')}` : ''}$`
-    corr2b += `<br>$\\phantom{f(x)=0} \\iff x${ecritureAlgebrique(-x1)} = 0 \\text{\\quad ou \\quad} x${ecritureAlgebrique(-x2)} = 0${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence("\\textit{L'un au moins des deux facteurs est nul}")}` : ''}$`
+    corr2b += `<br>$f(x)=0 \\iff ${p.texFormeFactorisee} = 0${this.correctionDetaillee === true ? `${sp(25)}${miseEnEvidence('\\textit{Équation produit-nul }', bleuMathalea)}` : ''}$`
+    corr2b += `<br>$\\phantom{f(x)=0} \\iff x${ecritureAlgebrique(-x1)} = 0 \\text{\\quad ou \\quad} x${ecritureAlgebrique(-x2)} = 0${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence("\\textit{L'un au moins des deux facteurs est nul}", bleuMathalea)}` : ''}$`
     corr2b += `<br>$\\phantom{f(x)=0} \\iff x=${x1} \\text{\\quad ou \\quad} x=${x2}$`
-    corr2b += `<br>L'équation a deux solutions : $${x1}$ et $${x2}$.`
+    corr2b += `<br>L'équation a deux solutions : $${miseEnEvidence(x1)}$ et $${miseEnEvidence(x2)}$.`
 
     const q2c = `Résoudre l'équation $f(x) = ${p.c.simplifie().texFraction}$.`
     let corr2c = `  On remarque que $${p.c.simplifie().texFraction}$ est la constante de la forme développée.<br>
     En utilisant la forme développée, on obtient  :`
     corr2c += `<br> $f(x) = ${p.c.simplifie().texFraction} \\iff ${p.tex} = ${p.c.simplifie().texFraction}$`
-    corr2c += `<br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff ${p.a.simplifie().texFractionSaufUn}x^2 ${p.b.simplifie().texFractionSaufUnSignee}x = 0 ${this.correctionDetaillee === true ? `${sp(30)}${miseEnEvidence('\\textit{Le second membre est nul }')}` : ''}$`
-    corr2c += `<br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x \\left(${p.a.simplifie().texFractionSaufUn}x ${p.b.simplifie().texFractionSaufUnSignee}\\right) = 0 ${this.correctionDetaillee === true ? `${sp(25)}${miseEnEvidence('\\textit{On met x en facteur }')}` : ''}$`
-    corr2c += `<br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x = 0 \\text{\\quad ou \\quad} ${p.a.simplifie().texFractionSaufUn}x ${p.b.simplifie().texFractionSaufUnSignee} = 0 ${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence("\\textit{L'un au moins des deux facteurs est nul}")}` : ''}$`
+    corr2c += `<br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff ${p.a.simplifie().texFractionSaufUn}x^2 ${p.b.simplifie().texFractionSaufUnSignee}x = 0 ${this.correctionDetaillee === true ? `${sp(30)}${miseEnEvidence('\\textit{Le second membre est nul }', bleuMathalea)}` : ''}$`
+    corr2c += `<br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x \\left(${p.a.simplifie().texFractionSaufUn}x ${p.b.simplifie().texFractionSaufUnSignee}\\right) = 0 ${this.correctionDetaillee === true ? `${sp(25)}${miseEnEvidence('\\textit{On met x en facteur }', bleuMathalea)}` : ''}$`
+    corr2c += `<br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x = 0 \\text{\\quad ou \\quad} ${p.a.simplifie().texFractionSaufUn}x ${p.b.simplifie().texFractionSaufUnSignee} = 0 ${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence("\\textit{L'un au moins des deux facteurs est nul}", bleuMathalea)}` : ''}$`
     corr2c += `<br> $\\phantom{f(x) = ${p.c.simplifie().texFraction}} \\iff x = 0 \\text{\\quad ou \\quad} x = ${p.b.oppose().diviseFraction(p.a).simplifie().texFraction} $`
     corr2c += `<br>
-    L'équation a deux solutions : $0$ et $${p.b.oppose().diviseFraction(p.a).simplifie().texFraction}$.`
+    L'équation a deux solutions : $${miseEnEvidence(0)}$ et $${miseEnEvidence(p.b.oppose().diviseFraction(p.a).simplifie().texFraction)}$.`
     const [sousQuestions, sousCorrections] = [
       [q2a, q2b, q2c],
       [corr2a, corr2b, corr2c],
