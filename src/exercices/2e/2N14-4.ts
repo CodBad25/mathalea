@@ -98,8 +98,6 @@ export default class ComparerDesNombresAUn extends Exercice {
     this.spacingCorr = 3
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
-    this.consigne =
-      'Pour chacun des nombres suivants, compléter avec le symbole $<$, $>$ ou $=$.'
     this.sup = '5'
     this.besoinFormulaireTexte = [
       'Types de nombres',
@@ -114,6 +112,9 @@ export default class ComparerDesNombresAUn extends Exercice {
     ]
   }
   nouvelleVersion() {
+    this.consigne = this.interactif
+      ? 'Pour chacun des nombres suivants, compléter avec le symbole $<$, $>$ ou $=$.'
+      : 'Comparer à $1$ chacun des nombres suivants.'
     const typesDeNombres = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
