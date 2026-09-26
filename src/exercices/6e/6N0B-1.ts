@@ -69,6 +69,25 @@ export default class VocabulaireEtOperations extends Exercice {
       melange: 5,
       nbQuestions: this.nbQuestions,
     }).map((el) => Number(el) - 1)
+    const unSeulTypeDeQuestion = new Set(listeTypeDeQuestions).size === 1
+    this.consigne = ''
+    if (unSeulTypeDeQuestion) {
+      switch (listeTypeDeQuestions[0]) {
+        case 1:
+          this.consigne = this.interactif
+            ? 'Choisir le bon calcul correspondant à chaque phrase.'
+            : "Traduire chaque phrase par un calcul sans l'effectuer."
+          break
+        case 2:
+          this.consigne = this.interactif
+            ? 'Choisir la bonne phrase correspondant à chaque calcul.'
+            : 'Traduire chaque calcul par une phrase en français.'
+          break
+        case 3:
+          this.consigne = 'Donner le résultat de chaque expression.'
+          break
+      }
+    }
     if (this.sup2) decimal = 10 ** randint(1, 2)
     else decimal = 1
 
@@ -108,13 +127,16 @@ export default class VocabulaireEtOperations extends Exercice {
         case 1: // proposer le calcul
           texte +=
             numAlpha(i) +
-            (this.interactif
-              ? 'Choisir le bon calcul pour calculer '
-              : "Traduire la phrase par un calcul (il n'est pas demandé d'effectuer ce calcul) : ")
+            (unSeulTypeDeQuestion
+              ? ''
+              : this.interactif
+                ? 'Choisir le bon calcul pour calculer '
+                : "Traduire la phrase par un calcul (il n'est pas demandé d'effectuer ce calcul) : ")
           expf = 'l' + String(expf).substring(1)
           texte += `${expf}.`
           expf = 'L' + String(expf).substring(1)
-          texteCorr += numAlpha(i) + `${expf} s'écrit ${texteEnCouleurEtGras(expn)}.`
+          texteCorr +=
+            numAlpha(i) + `${expf} s'écrit ${texteEnCouleurEtGras(expn)}.`
           propsQcm = {
             enonce: texte,
             propositions: [
@@ -149,12 +171,15 @@ export default class VocabulaireEtOperations extends Exercice {
           } // on supprime la deuxième expression fractionnaire
           texte +=
             numAlpha(i) +
-            (this.interactif
-              ? 'Choisir la bonne expression pour traduire '
-              : 'Traduire le calcul par une phrase en français : ')
+            (unSeulTypeDeQuestion
+              ? ''
+              : this.interactif
+                ? 'Choisir la bonne expression pour traduire '
+                : 'Traduire le calcul par une phrase en français : ')
           texte += `${expn}.`
           expf = 'l' + String(expf).substring(1)
-          texteCorr += numAlpha(i) + `${expn} est ${texteEnCouleurEtGras(expf)}.`
+          texteCorr +=
+            numAlpha(i) + `${expn} est ${texteEnCouleurEtGras(expf)}.`
           propsQcm = {
             enonce: texte,
             propositions: [
@@ -186,9 +211,11 @@ export default class VocabulaireEtOperations extends Exercice {
         case 3: // proposer un résultat
           texte +=
             numAlpha(i) +
-            (this.interactif
-              ? 'Donner le résultat de : '
-              : 'Traduire la phrase par un calcul et effectuer ce calcul : ')
+            (unSeulTypeDeQuestion
+              ? ''
+              : this.interactif
+                ? 'Donner le résultat de : '
+                : 'Traduire la phrase par un calcul et effectuer ce calcul : ')
           expf = 'l' + String(expf).substring(1)
           texte += `${expf}.`
           if (this.interactif) {
@@ -200,7 +227,8 @@ export default class VocabulaireEtOperations extends Exercice {
             handleAnswers(this, i, { reponse: { value: resultat } })
           }
           expf = 'L' + String(expf).substring(1)
-          texteCorr += numAlpha(i) + `${expf} s'écrit ${texteEnCouleurEtGras(expn)}.<br>`
+          texteCorr +=
+            numAlpha(i) + `${expf} s'écrit ${texteEnCouleurEtGras(expn)}.<br>`
           texteCorr += `${expc}`
           break
       }
