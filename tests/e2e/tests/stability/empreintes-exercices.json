@@ -2493,7 +2493,7 @@
  "9b711": {"ex":"can/can1a-2025/can1a-2025-Q13.ts","v":{"":"e9615279:21728f10"}},
  "9b8f9": {"ex":"can/canNY-2025/can6NY-2025-Q23.ts","v":{"":"e963ed54:1dfa09f1"}},
  "9bbc7": {"ex":"can/can1a-2024/can1a-2024-Q26.ts","v":{"":"3e07a0b8:c35981d0"}},
- "9bc44": {"ex":"can/2e/can2a-2023.ts","v":{"":"11e93e62:69fd3b0e"}},
+ "9bc44": {"ex":"can/2e/can2a-2023.ts","v":{"":"11e93e62:69fd3b0e","s2=true":"0f58bc5b:84ddcbf5"}},
  "9bcab": {"ex":"6e/6M3A.ts","v":{"":"83814c7e:07d5fe7e","s=1":"20630a36:7234f90a","s=2":"83814c7e:fea42db7","s=3":"ad1fda30:2803ae82"}},
  "9bd72": {"ex":"1e/1A-G03-3.ts","v":{"":"353ad063:0e3ce2d2","s2=true":"353ad063:0e3ce2d2"}},
  "9bfb4": {"ex":"QCMStatiques/Convexite1.ts","v":{"":"f621b1e1:cc3372f0","s2=true":"f621b1e1:cc3372f0"}},
