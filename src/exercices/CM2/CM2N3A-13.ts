@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -50,7 +51,7 @@ export default class Soustraire11 extends Exercice {
       }
 
       texte = `$${a}-11$`
-      texteCorr = `$${a}-11=${a - 11}$`
+      texteCorr = `$${a}-11=${miseEnEvidence(a - 11)}$`
       handleAnswers(this, i, { reponse: { value: a - 11 } })
       if (this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
@@ -115,7 +116,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
     this.question = `${monQcm.texte}`
     this.correction =
       monQcm.texteCorr +
-      `Le carré (figure 1) a $4$ axes de symétrie, le rectangle (figure 2) en a $2$, la maison (figure 3) en a un et la figure 4 n'en a pas.`
+      `Le carré (figure 1) a $4$ axes de symétrie, le rectangle (figure 2) en a $2$, la maison (figure 3) en a un et la figure 4 n'en a pas. La réponse est donc la ${texteEnCouleurEtGras(`figure ${[4, 2, 1, 0].indexOf(a) + 1}`)}.`
     this.canReponseACompleter = monQcm.texte
   }
 

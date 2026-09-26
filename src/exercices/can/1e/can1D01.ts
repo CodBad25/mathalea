@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
@@ -44,7 +45,7 @@ export default class CalculCoeffDir extends ExerciceSimple {
 
         this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
         La fonction $f$ définie par $f(x)=x^2$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=2x$.<br>
-        Comme $f'(${a})=2\\times ${ecritureParentheseSiNegatif(a)}=${2 * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${2 * a}$. `
+        Comme $f'(${a})=2\\times ${ecritureParentheseSiNegatif(a)}=${2 * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${miseEnEvidence(2 * a)}$. `
 
         this.reponse = 2 * a
 
@@ -56,15 +57,15 @@ export default class CalculCoeffDir extends ExerciceSimple {
          `
 
         this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
-        La fonction $f$ définie par $f(x)=\\sqrt{x}$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=\\dfrac{1}{2\\sqrt{x}}$.<br>
+        La fonction $f$ définie par $f(x)=\\sqrt{x}$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=${miseEnEvidence(`\\dfrac{1}{2\\sqrt{x}}`)}$.<br>
 
 `
         if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
           f = new FractionEtendue(1, 2 * Math.sqrt(a))
-          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}=\\dfrac{1}{${2 * Math.sqrt(a)}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{${2 * Math.sqrt(a)}}$.`
+          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}=\\dfrac{1}{${2 * Math.sqrt(a)}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${miseEnEvidence(`\\dfrac{1}{${2 * Math.sqrt(a)}}`)}$.`
           this.reponse = [`\\dfrac{1}{2\\sqrt{${a}}}`, f.texFraction]
         } else {
-          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{2\\sqrt{${a}}}$.`
+          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${miseEnEvidence(`\\dfrac{1}{2\\sqrt{${a}}}`)}$.`
           this.reponse = [
             `\\dfrac{1}{2\\sqrt{${a}}}`,
             `\\dfrac{0,5}{\\sqrt{${a}}}`,
@@ -79,7 +80,7 @@ export default class CalculCoeffDir extends ExerciceSimple {
 
         this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
         La fonction $f$ définie par $f(x)=\\dfrac{1}{x}$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=-\\dfrac{1}{x^2}$.<br>
-Comme $f'(${a})=-\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^2}=-\\dfrac{1}{${a * a}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $-\\dfrac{1}{${a * a}}$`
+Comme $f'(${a})=-\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^2}=-\\dfrac{1}{${a * a}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${miseEnEvidence(`-\\dfrac{1}{${a * a}}`)}$`
 
         if (a === 1 || a === -1) {
           this.correction += '$=-1$.'
@@ -110,7 +111,7 @@ Comme $f'(${a})=-\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^2}=-\\dfrac{1}{${a
 
         this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
         La fonction $f$ définie par $f(x)=x^3$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=3x^2$.<br>
-        Comme $f'(${a})=3\\times ${ecritureParentheseSiNegatif(a)}^2=${3 * a * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${3 * a * a}$. `
+        Comme $f'(${a})=3\\times ${ecritureParentheseSiNegatif(a)}^2=${3 * a * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${miseEnEvidence(3 * a * a)}$. `
 
         this.reponse = String(3 * a * a)
 

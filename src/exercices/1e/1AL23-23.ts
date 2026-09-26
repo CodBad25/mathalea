@@ -227,9 +227,9 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
         texteCorr += '$\\underline{\\text{Conclusion}}$ :<br>'
         texteCorr += createList({
           items: [
-            `Si $m < ${m1}$, l'équation n'a pas de solution réelle;`,
-            `Si $m = ${m1}$, l'équation a une unique solution réelle;`,
-            `Si $m > ${m1}$, l'équation a 2 solutions réelles.`,
+            `Si $m < ${m1}$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")};`,
+            `Si $m = ${m1}$, l'équation ${texteEnCouleurEtGras('a une unique solution réelle')};`,
+            `Si $m > ${m1}$, l'équation ${texteEnCouleurEtGras('a 2 solutions réelles')}.`,
           ],
           style: 'fleches',
         })
@@ -239,9 +239,9 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
         texteCorr += '$\\underline{\\text{Conclusion}}$ :<br>'
         texteCorr += createList({
           items: [
-            `Si $m < ${m1}$, l'équation a 2 solutions réelles;`,
-            `Si $m = ${m1}$, l'équation a une unique solution réelle;`,
-            `Si $m > ${m1}$, l'équation n'a pas de solution réelle.`,
+            `Si $m < ${m1}$, l'équation ${texteEnCouleurEtGras('a 2 solutions réelles')};`,
+            `Si $m = ${m1}$, l'équation ${texteEnCouleurEtGras('a une unique solution réelle')};`,
+            `Si $m > ${m1}$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")}.`,
           ],
           style: 'fleches',
         })
@@ -286,13 +286,11 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
     if (coeffAA > 0) {
       texteCorr +=
         'Comme le coefficient devant $m^2$ est positif, $\\Delta > 0$.<br>'
-      texteCorr +=
-        "$\\underline{\\text{Conclusion}}$ : L'équation du départ admet toujours 2 solutions.<br>"
+      texteCorr += `$\\underline{\\text{Conclusion}}$ : L'équation du départ ${texteEnCouleurEtGras('admet toujours 2 solutions')}.<br>`
     } else {
       texteCorr +=
         'Comme le coefficient devant $m^2$ est négatif, $\\Delta < 0$.<br>'
-      texteCorr +=
-        "$\\underline{\\text{Conclusion}}$ : L'équation du départ n'a pas de solution réelle.<br>"
+      texteCorr += `$\\underline{\\text{Conclusion}}$ : L'équation du départ ${texteEnCouleurEtGras("n'a pas de solution réelle")}.<br>`
     }
     return texteCorr
   }
@@ -308,10 +306,10 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
 
     if (coeffAA > 0) {
       texteCorr += `De plus le coefficient $${coeffAA}$ devant $m^2$ étant positif, $\\Delta > 0$ si $m\\neq${m1}$.<br>`
-      texteCorr += `$\\underline{\\text{Conclusion}}$ : Si $m=${m1}$ l'équation admet une unique solution, sinon l'équation admet 2 solutions.<br>`
+      texteCorr += `$\\underline{\\text{Conclusion}}$ : Si $m=${m1}$ l'équation ${texteEnCouleurEtGras('admet une unique solution')}, sinon l'équation ${texteEnCouleurEtGras('admet 2 solutions')}.<br>`
     } else {
       texteCorr += `De plus le coefficient $${coeffAA}$ devant $m^2$ étant négatif, $\\Delta < 0$ si $m\\neq${m1}$.<br>`
-      texteCorr += `$\\underline{\\text{Conclusion}}$ : Si $m=${m1}$ l'équation admet une unique solution, sinon l'équation n'admet pas de solution.<br>`
+      texteCorr += `$\\underline{\\text{Conclusion}}$ : Si $m=${m1}$ l'équation ${texteEnCouleurEtGras('admet une unique solution')}, sinon l'équation ${texteEnCouleurEtGras("n'admet pas de solution")}.<br>`
     }
     return texteCorr
   }
@@ -343,9 +341,9 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
       texteCorr += `$\\underline{\\text{Conclusion}}$ :<br>
         ${createList({
           items: [
-            `Si $m=${m1}$ ou $m=${m2}$, l'équation admet une unique solution;`,
-            `Si $m\\in {\\Large]}${m1},${m2}{\\Large[}$, l'équation n'a pas de solution réelle;`,
-            `Si $m\\in {\\Large]}-\\infty,${m1}{\\Large[\\cup]}${m2},+\\infty{\\Large[}$, l'équation admet 2 solutions réelles.`,
+            `Si $m=${m1}$ ou $m=${m2}$, l'équation ${texteEnCouleurEtGras('admet une unique solution')};`,
+            `Si $m\\in {\\Large]}${m1},${m2}{\\Large[}$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")};`,
+            `Si $m\\in {\\Large]}-\\infty,${m1}{\\Large[\\cup]}${m2},+\\infty{\\Large[}$, l'équation ${texteEnCouleurEtGras('admet 2 solutions réelles')}.`,
           ],
           style: 'fleches',
         })}`
@@ -357,9 +355,9 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
       texteCorr += `$\\underline{\\text{Conclusion}}$ :<br>
         ${createList({
           items: [
-            `Si $m=${m1}$ ou $m=${m2}$, l'équation admet une unique solution;`,
-            `Si $m\\in {\\Large ]}${m1},${m2}{\\Large [}$, l'équation admet 2 solutions réelles;`,
-            `Si $m\\in {\\Large]}-\\infty,${m1}{\\Large[} {\\Large\\cup} {\\Large]}${m2},+\\infty{\\Large[}$, l'équation n'a pas de solution réelle.`,
+            `Si $m=${m1}$ ou $m=${m2}$, l'équation ${texteEnCouleurEtGras('admet une unique solution')};`,
+            `Si $m\\in {\\Large ]}${m1},${m2}{\\Large [}$, l'équation ${texteEnCouleurEtGras('admet 2 solutions réelles')};`,
+            `Si $m\\in {\\Large]}-\\infty,${m1}{\\Large[} {\\Large\\cup} {\\Large]}${m2},+\\infty{\\Large[}$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")}.`,
           ],
           style: 'fleches',
         })}`
@@ -427,7 +425,7 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const { equation, coefficients, coeffsDiscriminant, params } =
         this.genererCoefficients(typesDeQuestions[i])
       const expr0 = ce.parse(equation).simplify().latex

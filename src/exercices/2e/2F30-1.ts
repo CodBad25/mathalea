@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { simplificationDeFractionAvecEtapes } from '../../lib/outils/deprecatedFractions'
 import {
@@ -137,11 +138,11 @@ export default class PointSurCourbe extends Exercice {
               if (ord === a * abs + b) {
                 correction += `$${abs}$ est bien dans l'ensemble de définition de $f$ et :<br>
                    $f(x_A)=f(${abs})=${a}\\times ${ecritureParentheseSiNegatif(abs)}${ecritureAlgebrique(b)}=${ord}=y_A$.<br>
-                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
               } else {
                 correction += `$${abs}$ est bien dans l'ensemble de définition de $f$ et :<br>
                   $f(x_A)=f(${abs})=${a}\\times ${ecritureParentheseSiNegatif(abs)}${ecritureAlgebrique(b)}=${a * abs + b}\\neq${ord}$.<br>
-                L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$.`
+                L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$.`
               }
 
               break
@@ -174,13 +175,13 @@ export default class PointSurCourbe extends Exercice {
                   ${rienSi1(a)}${f.texFraction}${fractionb.ecritureAlgebrique} =
                   \\dfrac{${rienSi1(a)}${f.n}${ecritureAlgebrique(b * f.d)}}{${f.d}}=
                ${f1.texFraction}${simplificationDeFractionAvecEtapes(a * f.n + b * f.d, f.d)}=y_A$.<br>
-               L'image de $${f.texFraction}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+               L'image de $${f.texFraction}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
                 } else {
                   correction += `$${a}\\times ${f.texFraction}${ecritureAlgebrique(b)}=
                   ${a}\\times${f.texFraction}${fractionb.ecritureAlgebrique} =
                   \\dfrac{${a}\\times${f.n}${ecritureAlgebrique(b * f.d)}}{${f.d}}=
                ${f1.texFraction}${simplificationDeFractionAvecEtapes(a * f.n + b * f.d, f.d)}=y_A$.<br>
-               L'image de $${f.texFraction}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+               L'image de $${f.texFraction}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
                 }
               } else {
                 correction += `$${f.texFraction}$ est bien dans l'ensemble de définition de $f$ et  : <br>
@@ -190,13 +191,13 @@ export default class PointSurCourbe extends Exercice {
                 ${rienSi1(a)}${f.texFraction}${fractionb.ecritureAlgebrique} =
                 \\dfrac{${rienSi1(a)}${f.n}${ecritureAlgebrique(b * f.d)}}{${f.d}}=
              ${f.texFraction}${simplificationDeFractionAvecEtapes(a * f.n + b * f.d, f.d)}\\neq${f2.texFractionSimplifiee}$.<br>
-             L'image de $${f.texFraction}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$.`
+             L'image de $${f.texFraction}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$.`
                 } else {
                   correction += `$${a}\\times ${f.texFraction}${ecritureAlgebrique(b)}=
                 ${a}\\times${f.texFraction}${fractionb.ecritureAlgebrique} =
                 \\dfrac{${a}\\times${f.n}${ecritureAlgebrique(b * f1.d)}}{${f1.d}}=
              ${f1.texFraction}${simplificationDeFractionAvecEtapes(a * f.n + b * f.d, f.d)}\\neq${f2.texFractionSimplifiee}$.<br>
-             L'image de $${f.texFraction}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$.`
+             L'image de $${f.texFraction}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$.`
                 }
               }
               break
@@ -232,11 +233,11 @@ export default class PointSurCourbe extends Exercice {
                 if (a !== 1) {
                   correction += `$f(x_A)=f(${abs})=${a}\\times ${ecritureParentheseSiNegatif(abs)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(abs)}${ecritureAlgebrique(c)}
                 =${a * abs ** 2}${ecritureAlgebrique(b * abs)}${ecritureAlgebrique(c)}=${ord}=y_A$.<br>
-                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
                 } else {
                   correction += `$f(x_A)=f(${abs})= ${ecritureParentheseSiNegatif(abs)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(abs)}${ecritureAlgebrique(c)}
                 =${a * abs ** 2}${ecritureAlgebrique(b * abs)}${ecritureAlgebrique(c)}=${ord}=y_A$.<br>
-                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
                 }
               } else {
                 correction += `$${abs}$ est bien dans l'ensemble de définition de $f$ et :<br> `
@@ -244,11 +245,11 @@ export default class PointSurCourbe extends Exercice {
                   correction += `
                 $f(x_A)=f(${abs})=${a}\\times ${ecritureParentheseSiNegatif(abs)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(abs)}${ecritureAlgebrique(c)}
                 =${a * abs ** 2}${ecritureAlgebrique(b * abs)}${ecritureAlgebrique(c)}=${a * abs ** 2 + b * abs + c}\\neq${ord}$.<br>
-                L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$`
+                L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$`
                 } else {
                   correction += ` $f(x_A)=f(${abs})= ${ecritureParentheseSiNegatif(abs)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(abs)}${ecritureAlgebrique(c)}
                 =${a * abs ** 2}${ecritureAlgebrique(b * abs)}${ecritureAlgebrique(c)}=${a * abs ** 2 + b * abs + c}\\neq${ord}$.<br>
-                L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$`
+                L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$`
                 }
               }
               break
@@ -297,10 +298,10 @@ default:
   
   if (fc.isEqual(imageA)) {
     correction += `$=y_A$.<br>
-    L'image de $${f.texFSD}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+    L'image de $${f.texFSD}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
   } else {
     correction += `$\\neq${fc.texFractionSimplifiee}$.<br>
-    L'image de $${f.texFSD}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$.`
+    L'image de $${f.texFSD}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$.`
   }
 }
   break
@@ -342,10 +343,10 @@ default:
               $`
               if (fc === f1) {
                 correction += `$=y_A$.<br>
-                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+                L'image de $${abs}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
               } else {
                 correction += `$\\neq${fc.texFractionSimplifiee}$.<br>
-                               L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$`
+                               L'image de $${abs}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$`
               }
 
               break
@@ -382,10 +383,10 @@ default:
               $`
               if (fc === f1) {
                 correction += `$=y_A$.<br>
-                L'image de $${abs.texFractionSimplifiee}$ est bien l'ordonnée du point $A$, donc le point $A$ est sur $\\mathscr{C}_f$.`
+                L'image de $${abs.texFractionSimplifiee}$ est bien l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("est sur")} $\\mathscr{C}_f$.`
               } else {
                 correction += `$\\neq${fc.texFractionSimplifiee}$.<br>
-                               L'image de $${abs.texFractionSimplifiee}$ n'est pas l'ordonnée du point $A$, donc le point $A$ n'est pas sur $\\mathscr{C}_f$`
+                               L'image de $${abs.texFractionSimplifiee}$ n'est pas l'ordonnée du point $A$, donc le point $A$ ${texteEnCouleurEtGras("n'est pas sur")} $\\mathscr{C}_f$`
               }
               break
           }

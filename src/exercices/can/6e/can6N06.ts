@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -36,22 +37,22 @@ export default class ArrondiDixiemeCentieme extends ExerciceSimple {
       this.question = `Quel est l'arrondi au dixième de $${texNombre(d)}$ ?`
       if (c > 4) {
         this.correction = `Pour arrondir au dixième, on regarde le chiffre des centièmes : $${c}$.<br>
-     Comme $${c}\\geqslant 5$, alors l'arrondi au dixième de $${texNombre(d)}$ est $${texNombre(arrondi(d, 1))}$.`
+     Comme $${c}\\geqslant 5$, alors l'arrondi au dixième de $${texNombre(d)}$ est $${miseEnEvidence(texNombre(arrondi(d, 1)))}$.`
         this.reponse = arrondi(d, 1)
       } else {
         this.correction = `Pour arrondir au dixième, on regarde le chiffre des centièmes : $${c}$.<br>
-        Comme $${c}< 5$, alors l'arrondi au dixième de $${texNombre(d)}$  est $${texNombre(arrondi(d, 1))}$.`
+        Comme $${c}< 5$, alors l'arrondi au dixième de $${texNombre(d)}$  est $${miseEnEvidence(texNombre(arrondi(d, 1)))}$.`
         this.reponse = arrondi(d, 1)
       }
     } else {
       this.question = `Quel est l'arrondi au centième de $${texNombre(d)}$ ?`
       if (e > 4) {
         this.correction = `Pour arrondir au centième, on regarde le chiffre des millièmes : $${e}$.<br>
-     Comme $${e}\\geqslant 5$, alors l'arrondi au centième de $${texNombre(d)}$ est $${texNombre(arrondi(d, 2))}$.`
+     Comme $${e}\\geqslant 5$, alors l'arrondi au centième de $${texNombre(d)}$ est $${miseEnEvidence(texNombre(arrondi(d, 2)))}$.`
         this.reponse = arrondi(d, 2)
       } else {
         this.correction = `Pour arrondir au centième, on regarde le chiffre des millièmes : $${e}$.<br>
-        Comme $${e}< 5$, alors l'arrondi au centième de $${texNombre(d)}$ est $${texNombre(arrondi(d, 2))}$.`
+        Comme $${e}< 5$, alors l'arrondi au centième de $${texNombre(d)}$ est $${miseEnEvidence(texNombre(arrondi(d, 2)))}$.`
         this.reponse = arrondi(d, 2)
       }
     }

@@ -1,3 +1,4 @@
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { texPrix } from '../../../lib/format/style'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import {
@@ -169,7 +170,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(2, 5)
           resultat = a * b
           texte = `$${a} \\times ${b}$`
-          texteCorr = `$${a} \\times ${b}=${a * b}$`
+          texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q2':
@@ -177,7 +178,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(50, 99)
           resultat = arrondi(a + b)
           texte = `$${b} + ${a}$`
-          texteCorr = `$${b} + ${a}=${a + b}$`
+          texteCorr = `$${b} + ${a}=${miseEnEvidence(a + b)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q3':
@@ -185,7 +186,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(50, 99)
           resultat = arrondi(a - b)
           texte = `$${a} - ${b}$`
-          texteCorr = `$${a} - ${b}=${a - b}$`
+          texteCorr = `$${a} - ${b}=${miseEnEvidence(a - b)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q4':
@@ -195,7 +196,7 @@ export default class CourseAuxNombres5e extends Exercice {
           d = randint(1, 9, [a, b, c])
           resultat = arrondi(10 + (b + d) * 0.1 + c * 0.01)
           texte = `$${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}$`
-          texteCorr = `$${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}=${texNombre(10 + (b + d) * 0.1 + c * 0.01)}$`
+          texteCorr = `$${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}=${miseEnEvidence(texNombre(10 + (b + d) * 0.1 + c * 0.01))}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q5':
@@ -205,7 +206,7 @@ export default class CourseAuxNombres5e extends Exercice {
           d = randint(10, 15) * 10 - c
           resultat = arrondi(2 * (c + d))
           texte = `$${c - a} + ${d + b} + ${c + a} + ${d - b}$`
-          texteCorr = `$${c - a} + ${d + b} + ${c + a} + ${d - b} = ${2 * c} + ${2 * d} = ${2 * (c + d)}$`
+          texteCorr = `$${c - a} + ${d + b} + ${c + a} + ${d - b} = ${2 * c} + ${2 * d} = ${miseEnEvidence(2 * (c + d))}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
 
           break
@@ -214,13 +215,13 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(10, 59)
           d = arrondi(a * 60 + b)
           texte = `Convertir $${d}$ minutes en heures(h) et minutes(min) :`
-          texteCorr = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes = ${a}h ${b}min`
+          texteCorr = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes $=${miseEnEvidence(`${a}\\text{ h }${b}\\text{ min}`)}$.`
           handleAnswers(this, i, { reponse: { value: `${a}h${b}min` } })
           break
         case 'q7':
           a = randint(1, 10) * 2
           texte = `Le triple d'un nombre vaut ${3 * a}, combien vaut sa moitié ?`
-          texteCorr = `Le nombre est ${a}, sa moitié est ${arrondi(a / 2)}.`
+          texteCorr = `Le nombre est $${a}$, sa moitié est $${miseEnEvidence(texNombre(arrondi(a / 2)))}$.`
           handleAnswers(this, i, { reponse: { value: arrondi(a / 2) } })
           break
         case 'q8':
@@ -232,19 +233,19 @@ export default class CourseAuxNombres5e extends Exercice {
           switch (choice([1, 2, 3, 4])) {
             case 1:
               texte = `$4 \\times ${texNombre(d)}\\times 25$`
-              texteCorr = `$4 \\times ${texNombre(d)}\\times 25 = 100 \\times ${texNombre(d)} = ${arrondi(100 * d)}$`
+              texteCorr = `$4 \\times ${texNombre(d)}\\times 25 = 100 \\times ${texNombre(d)} = ${miseEnEvidence(arrondi(100 * d))}$`
               break
             case 2:
               texte = `$2 \\times ${texNombre(d)}\\times 50$`
-              texteCorr = `$2 \\times ${texNombre(d)}\\times 50 = 100 \\times ${texNombre(d)} = ${arrondi(100 * d)}$`
+              texteCorr = `$2 \\times ${texNombre(d)}\\times 50 = 100 \\times ${texNombre(d)} = ${miseEnEvidence(arrondi(100 * d))}$`
               break
             case 3:
               texte = `$25 \\times ${texNombre(d)}\\times 4$`
-              texteCorr = `$25 \\times ${texNombre(d)}\\times 4 = 100 \\times ${texNombre(d)} = ${arrondi(100 * d)}$`
+              texteCorr = `$25 \\times ${texNombre(d)}\\times 4 = 100 \\times ${texNombre(d)} = ${miseEnEvidence(arrondi(100 * d))}$`
               break
             case 4:
               texte = `$50 \\times ${texNombre(d)}\\times 2$`
-              texteCorr = `$50 \\times ${texNombre(d)}\\times 2 = 100 \\times ${texNombre(d)} = ${arrondi(100 * d)}$`
+              texteCorr = `$50 \\times ${texNombre(d)}\\times 2 = 100 \\times ${texNombre(d)} = ${miseEnEvidence(arrondi(100 * d))}$`
               break
           }
           handleAnswers(this, i, { reponse: { value: resultat } })
@@ -255,7 +256,7 @@ export default class CourseAuxNombres5e extends Exercice {
           c = a * b
           resultat = a
           texte = `$${c} \\div ${b}$`
-          texteCorr = `$${c} \\div ${b}=${a}$`
+          texteCorr = `$${c} \\div ${b}=${miseEnEvidence(a)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q10':
@@ -264,7 +265,7 @@ export default class CourseAuxNombres5e extends Exercice {
           c = randint(3, 9)
           d = c * a + b
           texte = `Quel est le reste de la division euclidienne de ${d} par ${a} ?`
-          texteCorr = `$${d}=${a} \\times ${c} + ${b}$ avec $${b}<${a}$ donc le reste de la division de ${d} par ${a} est ${b}.`
+          texteCorr = `$${d}=${a} \\times ${c} + ${b}$ avec $${b}<${a}$ donc le reste de la division de ${d} par $${a}$ est $${miseEnEvidence(b)}$.`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q11':
@@ -273,7 +274,7 @@ export default class CourseAuxNombres5e extends Exercice {
           c = randint(3, 9)
           resultat = b + a * c
           texte = `$${b} + ${a} \\times ${c}$`
-          texteCorr = `$${b} + ${a} \\times ${c}= ${b} + ${a * c} = ${resultat}$`
+          texteCorr = `$${b} + ${a} \\times ${c}= ${b} + ${a * c} = ${miseEnEvidence(resultat)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q12':
@@ -281,7 +282,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(20, 70, a)
           resultat = a * 100 + b * 10
           texte = `$${a}$ centaines et $${b}$ dizaines = ?`
-          texteCorr = `$${a} \\times 100 + ${b} \\times 10 = ${a * 100 + b * 10}$`
+          texteCorr = `$${a} \\times 100 + ${b} \\times 10 = ${miseEnEvidence(a * 100 + b * 10)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q13':
@@ -289,7 +290,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(10, 59)
           d = arrondi(a * 60 + b)
           texte = `$${a}$ heures et ${b} minutes font combien de minutes ?`
-          texteCorr = `$${a}h ${b}min = ${a} \\times 60 + ${b}= ${d}$ donc $${d}$ minutes`
+          texteCorr = `$${a}h ${b}min = ${a} \\times 60 + ${b}= ${d}$ donc $${miseEnEvidence(d)}$ minutes.`
           handleAnswers(this, i, { reponse: { value: d } })
           break
         case 'q14':
@@ -299,7 +300,7 @@ export default class CourseAuxNombres5e extends Exercice {
           a = arrondi(b * 100 + c * 10 + d)
           resultat = a % 3
           texte = `Quel est le reste de la division de $${a}$ par $3$ ?`
-          texteCorr = `Le reste de la division de $${a}$ par $3$ est ${a % 3}.`
+          texteCorr = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(a % 3)}$.`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q15':
@@ -307,7 +308,7 @@ export default class CourseAuxNombres5e extends Exercice {
           a = b * 90 + 9
           resultat = b * 10 + 1
           texte = `$${a}\\div 9$`
-          texteCorr = `$${a}\\div 9 = ${resultat}$`
+          texteCorr = `$${a}\\div 9 = ${miseEnEvidence(resultat)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q16':
@@ -316,7 +317,7 @@ export default class CourseAuxNombres5e extends Exercice {
           c = randint(1, 3)
           resultat = arrondi(a * 10 + b + c * 10 + 9)
           texte = `$${a * 10 + b} + ${c * 10 + 9}$`
-          texteCorr = `$${a * 10 + b} + ${c * 10 + 9}=${a * 10 + b}+${(c + 1) * 10} - 1 = ${resultat}$`
+          texteCorr = `$${a * 10 + b} + ${c * 10 + 9}=${a * 10 + b}+${(c + 1) * 10} - 1 = ${miseEnEvidence(resultat)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q17':
@@ -324,7 +325,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = a * 8
           resultat = a * 2
           texte = `Quel est le quart de $${b}$ ?`
-          texteCorr = `Le quart de $${b}$ est $${a * 2}.$`
+          texteCorr = `Le quart de $${b}$ est $${miseEnEvidence(a * 2)}$.`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q18':
@@ -334,14 +335,14 @@ export default class CourseAuxNombres5e extends Exercice {
           d = randint(1, 4)
           resultat = d * 10 + b
           texte = `$${c * 10 + a} + \\dots = ${arrondi((c + d) * 10 + b + a)}$`
-          texteCorr = `$${arrondi((c + d) * 10 + b + a)} - ${c * 10 + a} = ${resultat}$`
+          texteCorr = `$${arrondi((c + d) * 10 + b + a)} - ${c * 10 + a} = ${miseEnEvidence(resultat)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q19':
           a = randint(11, 24) * 2 + 1
           resultat = arrondi(a * 5)
           texte = `$${a}\\times 5$`
-          texteCorr = `$${a}\\times 5 = ${a} \\div 2 \\times 10 = ${arrondi(a / 2)}\\times 10 =${resultat}$`
+          texteCorr = `$${a}\\times 5 = ${a} \\div 2 \\times 10 = ${arrondi(a / 2)}\\times 10 =${miseEnEvidence(resultat)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q20':
@@ -350,7 +351,7 @@ export default class CourseAuxNombres5e extends Exercice {
           c = randint(fruits[a][2], fruits[a][3])
           resultat = arrondi((c / 50) * b)
           texte = `$${texNombre(c / 100)}$ kg de ${fruits[a][0]} coûtent $${texNombre((c / 100) * b)}$ €, combien coûtent $${texNombre(c / 50)}$ kg de ${fruits[a][0]} ?`
-          texteCorr = `$${texNombre((c / 100) * b)} \\times 2 = ${texNombre(resultat)}$`
+          texteCorr = `$${texNombre((c / 100) * b)} \\times 2 = ${miseEnEvidence(texNombre(resultat))}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q21':
@@ -366,7 +367,7 @@ export default class CourseAuxNombres5e extends Exercice {
             `$${texNombre((a * 1000 + b * 100 + c) * d)}$`,
           ])
           texte += `${propositions[0]} ${sp(4)} ${propositions[1]} ${sp(4)} ${propositions[2]}`
-          texteCorr = `$${texNombre(a * 100 + b * 10 + c)} \\times ${d} = ${texNombre(resultat)}$`
+          texteCorr = `$${texNombre(a * 100 + b * 10 + c)} \\times ${d} = ${miseEnEvidence(texNombre(resultat))}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q22':
@@ -374,11 +375,11 @@ export default class CourseAuxNombres5e extends Exercice {
           if (choice([true, false])) {
             resultat = arrondi(a / 100)
             texte = `Convertir $${a}\\text{ cm}$ en m.`
-            texteCorr = `$${a}\\text{ cm}$ $= ${a} / 100$m $=${texNombre(resultat)}\\text{ m}$`
+            texteCorr = `$${a}\\text{ cm}$ $= ${a} / 100$m $=${miseEnEvidence(texNombre(resultat))}\\text{ m}$`
           } else {
             resultat = arrondi(a / 1000)
             texte = `Convertir $${a}\\text{ mm}$ en m.`
-            texteCorr = `$${a}\\text{ mm}$ $= ${a} / 1000$m $=${texNombre(resultat)}\\text{ m}$`
+            texteCorr = `$${a}\\text{ mm}$ $= ${a} / 1000$m $=${miseEnEvidence(texNombre(resultat))}\\text{ m}$`
           }
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
@@ -389,7 +390,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = arrondi(resultat * a)
 
           texte = `$\\dfrac{${c}}{${a}} \\text{ de } ${b} \\text{ L} = \\dots \\text{ L}$`
-          texteCorr = `$\\dfrac{${c}}{${a}}$ de $${b}$ L = $${c}\\times \\dfrac{${b}}{${a}}=${c}\\times ${resultat}=${resultat * c}$ L`
+          texteCorr = `$\\dfrac{${c}}{${a}}$ de $${b}$ L = $${c}\\times \\dfrac{${b}}{${a}}=${c}\\times ${resultat}=${miseEnEvidence(resultat * c)}$ L`
           handleAnswers(this, i, { reponse: { value: resultat * c } })
           break
         case 'q24':
@@ -399,7 +400,7 @@ export default class CourseAuxNombres5e extends Exercice {
           c = d * a + b
           resultat = c % a
           texte = `Je possède ${c} bonbons et je fabrique des sacs de ${a} bonbons. Une fois mes sacs complétés, combien me restera-t-il de bonbons ?`
-          texteCorr = `$${c}=${d}\\times ${a} + ${b}$, donc il me restera ${b} bonbons.`
+          texteCorr = `$${c}=${d}\\times ${a} + ${b}$, donc il me restera $${miseEnEvidence(b)}$ bonbons.`
           handleAnswers(this, i, { reponse: { value: b } })
           break
         case 'q25':
@@ -412,7 +413,7 @@ export default class CourseAuxNombres5e extends Exercice {
           ])
           texte = `Choisis parmi les propositions suivantes la hauteur d'une ${hauteurs[a][0]}<br>`
           texte += `${propositions[0]} ${sp(4)} ${propositions[1]} ${sp(4)} ${propositions[2]}`
-          texteCorr = `La hauteur d'une ${hauteurs[a][0]} est ${b} ${hauteurs[a][3]}.`
+          texteCorr = `La hauteur d'une ${hauteurs[a][0]} est $${miseEnEvidence(`${b}\\text{ ${hauteurs[a][3]}}`)}$.`
           {
             const grandeur = new Grandeur(b, hauteurs[a][3])
             handleAnswers(this, i, {
@@ -432,7 +433,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(2, 9, a) * 10
           resultat = arrondi((a * b) / 100)
           texte = `$${a}\\%$ de $${b}$`
-          texteCorr = `$${a}\\%$ de $${b} = ${resultat}$`
+          texteCorr = `$${a}\\%$ de $${b} = ${miseEnEvidence(resultat)}$`
           handleAnswers(this, i, { reponse: { value: resultat } })
           break
         case 'q27':
@@ -440,7 +441,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(1, 3)
           resultat = arrondi(a * (b + 0.25))
           texte = `Une voiture roule à une vitesse constante de ${a} km/h. Quelle distance en $\\text{km}$ parcourt-elle en ${b} h et 20 min`
-          texteCorr = `$${a}\\times ${arrondi(b + 0.5)} = ${resultat}$`
+          texteCorr = `$${a}\\times ${arrondi(b + 0.5)} = ${miseEnEvidence(resultat)}$`
           {
             const grandeur = new Grandeur(resultat, 'km')
             handleAnswers(this, i, {
@@ -460,7 +461,7 @@ export default class CourseAuxNombres5e extends Exercice {
           b = randint(0, 1)
           texte = `Est-il vrai qu'un carré de côté ${a} cm a le même périmètre qu'un rectangle de largeur ${a - b} cm et de longueur ${a + 1} cm ? (V ou F)`
           if (b === 0) {
-            texteCorr = `Faux car $4\\times ${a}\\text{ cm}$ $ \\neq 2\\times ${a}\\text{ cm}$ $ + 2\\times ${a + 1}\\text{ cm}$.`
+            texteCorr = `${texteEnCouleurEtGras('Faux')} car $4\\times ${a}\\text{ cm}$ $ \\neq 2\\times ${a}\\text{ cm}$ $ + 2\\times ${a + 1}\\text{ cm}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: 'f',
@@ -468,7 +469,7 @@ export default class CourseAuxNombres5e extends Exercice {
               },
             })
           } else {
-            texteCorr = `Vrai car $4\\times ${a}\\text{ cm}$ $ = 2\\times ${a - 1}\\text{ cm}$ $ + 2\\times ${a + 1}\\text{ cm}$ $ = ${4 * a}\\text{ cm}$.`
+            texteCorr = `${texteEnCouleurEtGras('Vrai')} car $4\\times ${a}\\text{ cm}$ $ = 2\\times ${a - 1}\\text{ cm}$ $ + 2\\times ${a + 1}\\text{ cm}$ $ = ${4 * a}\\text{ cm}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: 'v',
@@ -510,7 +511,7 @@ export default class CourseAuxNombres5e extends Exercice {
                 step2: 1,
               }),
             )
-          texteCorr = `L'abscisse du point A est $\\dfrac{${b}}{${a}}$.`
+          texteCorr = `L'abscisse du point A est $${miseEnEvidence(`\\dfrac{${b}}{${a}}`)}$.`
           if (a === 3) {
             handleAnswers(this, i, {
               reponse: {
@@ -541,7 +542,7 @@ export default class CourseAuxNombres5e extends Exercice {
           d = randint(2, 6) // nombre de kg supplémentaires
           resultat = arrondi(d * b)
           texte = `$${c}$ kg de ${fruits[a][0]} coûtent $${texPrix(c * b)}$ €.<br> $${c + d}$ kg de ces mêmes ${fruits[a][0]} coûtent $${texPrix((c + d) * b)}$ €.<br>Combien coûtent ${d} kg de ces ${fruits[a][0]} ?`
-          texteCorr = `$${texPrix((c + d) * b)} € - ${texPrix(c * b)} € =${texPrix(resultat)} €$`
+          texteCorr = `$${texPrix((c + d) * b)} € - ${texPrix(c * b)} € =${miseEnEvidence(texPrix(resultat))} €$`
           handleAnswers(this, i, {
             reponse: { value: texPrix(resultat) + '€' },
           })

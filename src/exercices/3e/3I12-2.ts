@@ -221,12 +221,12 @@ export default class ComprendreScriptMultiples extends Exercice {
         ],
         [
           `Si les nombres saisis sont d'abord ${diviseurEnPremier ? nb02 : nb01} puis ensuite ${diviseurEnPremier ? nb01 : nb02}, que dit précisément le lutin au final ?`,
-          `${choixScript[i] === 1 ? nb01 + ' est un multiple de ' + nb02 : choixScript[i] === 2 ? nb02 + ' divise ' + nb01 : nb02 + ' est un diviseur de ' + nb01}.`,
+          `${texteEnCouleurEtGras(choixScript[i] === 1 ? nb01 + ' est un multiple de ' + nb02 : choixScript[i] === 2 ? nb02 + ' divise ' + nb01 : nb02 + ' est un diviseur de ' + nb01)}.`,
           1,
         ],
         [
           `Si les nombres saisis sont d'abord ${diviseurEnPremier ? nb02 : nb03} puis ensuite ${diviseurEnPremier ? nb03 : nb02}, que dit précisément le lutin au final ?`,
-          `${choixScript[i] === 1 ? nb03 + " n'est pas un multiple de " + nb02 : choixScript[i] === 2 ? nb02 + ' ne divise pas ' + nb03 : nb02 + " n'est pas un diviseur de " + nb03}.`,
+          `${texteEnCouleurEtGras(choixScript[i] === 1 ? nb03 + " n'est pas un multiple de " + nb02 : choixScript[i] === 2 ? nb02 + ' ne divise pas ' + nb03 : nb02 + " n'est pas un diviseur de " + nb03)}.`,
           1,
         ],
         [

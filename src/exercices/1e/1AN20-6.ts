@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { createList } from '../../lib/format/lists'
 import { texteCentre } from '../../lib/format/miseEnPage'
 import {
@@ -393,14 +394,14 @@ f'(x)&=\\dfrac{u'(x)v(x)-u(x)v'(x)}{(v(x))^2}\\\\
       // Q4 : extremums (valeurs exactes) - réutilise fDeX1Tex/fDeX2Tex de Q3
       let correctionQ4 = ''
       if (cas === 1) {
-        correctionQ4 = `D'après le tableau de variations, $f$ admet un minimum sur ${intervalleTex} atteint en $x=${x2}$, égal à $f(${x2})=${fDeX2Tex}$.`
+        correctionQ4 = `D'après le tableau de variations, $f$ admet un minimum sur ${intervalleTex} atteint en $x=${miseEnEvidence(x2)}$, égal à $f(${x2})=${miseEnEvidence(fDeX2Tex)}$.`
       } else if (cas === 2) {
-        correctionQ4 = `D'après le tableau de variations, $f$ admet un maximum sur ${intervalleTex} atteint en $x=${x1}$, égal à $f(${x1})=${fDeX1Tex}$.`
+        correctionQ4 = `D'après le tableau de variations, $f$ admet un maximum sur ${intervalleTex} atteint en $x=${miseEnEvidence(x1)}$, égal à $f(${x1})=${miseEnEvidence(fDeX1Tex)}$.`
       } else {
         correctionQ4 =
           `D'après le tableau de variations, $f$ admet sur ${intervalleTex} :<br>` +
-          `$\\bullet$ un maximum local en $x=${x1}$, égal à $f(${x1})=${fDeX1Tex}$ ;<br>` +
-          `$\\bullet$ un minimum local en $x=${x2}$, égal à $f(${x2})=${fDeX2Tex}$.`
+          `$\\bullet$ un maximum local en $x=${miseEnEvidence(x1)}$, égal à $f(${x1})=${miseEnEvidence(fDeX1Tex)}$ ;<br>` +
+          `$\\bullet$ un minimum local en $x=${miseEnEvidence(x2)}$, égal à $f(${x2})=${miseEnEvidence(fDeX2Tex)}$.`
       }
 
       // Q5 : équation réduite de la tangente en x0
@@ -439,14 +440,14 @@ f'(x)&=\\dfrac{u'(x)v(x)-u(x)v'(x)}{(v(x))^2}\\\\
       // Équation réduite
       if (x0 === 0) {
         // y = f'(0)·x + f(0) = coeffDir·x + fDeX0
-        correctionQ5 += `L'équation réduite de la tangente est $y=${coeffDirTex}x${ordOrigine.s >= 0 ? '+' : ''}${ordOrigineTex}$`
+        correctionQ5 += `L'équation réduite de la tangente est $y=${miseEnEvidence(`${coeffDirTex}x${ordOrigine.s >= 0 ? '+' : ''}${ordOrigineTex}`)}$.`
       } else {
         correctionQ5 += `$y=${coeffDirTex}(x-${x0})+${fDeX0Tex}$`
         // Forme réduite y = coeffDir·x + ordOrigine
         if (ordOrigine.num === 0) {
-          correctionQ5 += `, soit $y=${coeffDirTex}x$.`
+          correctionQ5 += `, soit $y=${miseEnEvidence(`${coeffDirTex}x`)}$.`
         } else {
-          correctionQ5 += `, soit $y=${coeffDirTex}x${ordOrigine.s >= 0 ? '+' : ''}${ordOrigineTex}$.`
+          correctionQ5 += `, soit $y=${miseEnEvidence(`${coeffDirTex}x${ordOrigine.s >= 0 ? '+' : ''}${ordOrigineTex}`)}$.`
         }
       }
 

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -42,7 +43,7 @@ export default class IsDecimal extends Exercice {
       this.typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const typeQuestion = listeTypeQuestions[i]
@@ -63,8 +64,7 @@ export default class IsDecimal extends Exercice {
           } else {
             texteCorr = `$${texNombre(n)} = \\dfrac{${texNombre(n.mul(1000))}}{1\\,000}$`
           }
-          texteCorr +=
-            "<br><br>Ce nombre peut s'écrire sous forme de fraction donc il est rationnel."
+          texteCorr += `<br><br>Ce nombre peut s'écrire sous forme de fraction donc il ${texteEnCouleurEtGras('est rationnel')}.`
           break
         }
         case 'num/2^m5^n': {
@@ -77,8 +77,7 @@ export default class IsDecimal extends Exercice {
           texteCorr =
             'Décomposons en produit de facteurs premiers le numérateur et le dénominateur de la fraction.'
           texteCorr += `<br><br>$${f.texFraction} = \\dfrac{${texFactorisation(num)}}{2^{${n}}\\times5^{${m}}}$`
-          texteCorr +=
-            "<br><br>Ce nombre peut s'écrire sous la forme $\\dfrac{k}{2^n \\times 5^m}$, avec $k$ un entier naturel, il est donc décimal."
+          texteCorr += `<br><br>Ce nombre peut s'écrire sous la forme $\\dfrac{k}{2^n \\times 5^m}$, avec $k$ un entier naturel, il ${texteEnCouleurEtGras('est donc décimal')}.`
           break
         }
         case 'num/2^m5^nX': {
@@ -113,8 +112,7 @@ export default class IsDecimal extends Exercice {
           } else {
             texteCorr += `=\\dfrac{${texFactorisation(f.numIrred)}}{${texFactorisation(f.denIrred)}}$`
           }
-          texteCorr +=
-            "<br><br>Ce nombre peut s'écrire sous la forme d'une  fraction irréductible qui a un facteur différent de 2 et 5 au dénominateur, il n'est donc pas décimal."
+          texteCorr += `<br><br>Ce nombre peut s'écrire sous la forme d'une  fraction irréductible qui a un facteur différent de 2 et 5 au dénominateur, il ${texteEnCouleurEtGras("n'est donc pas décimal")}.`
           break
         }
         case 'numX/2^m5^nX': {
@@ -139,8 +137,7 @@ export default class IsDecimal extends Exercice {
           } else {
             texteCorr += `=\\dfrac{${texFactorisation(f.numIrred)}}{${texFactorisation(f.denIrred)}}$`
           }
-          texteCorr +=
-            "<br><br>Ce nombre peut s'écrire sous la forme $\\dfrac{k}{2^n \\times 5^m}$, il est donc décimal."
+          texteCorr += `<br><br>Ce nombre peut s'écrire sous la forme $\\dfrac{k}{2^n \\times 5^m}$, il ${texteEnCouleurEtGras('est donc décimal')}.`
           break
         }
       }

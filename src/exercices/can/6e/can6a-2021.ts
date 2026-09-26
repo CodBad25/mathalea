@@ -758,7 +758,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               texte += '$\\ldots\\text{ cm}$'
             }
             texteCorr = ` Comme $1\\text{ m}$ $=100\\text{ cm}$,  pour passer des $\\text{m}$ au $\\text{cm}$, on multiplie par $100$.<br>
-                        Comme : $${texNombre(a, 0)}\\times 100 =${texNombre(a * 100, 0)}$, alors $${texNombre(a, 0)}\\text{ m}=${texNombre(a * 100, 0)}\\text{ cm}$.
+                        Comme : $${texNombre(a, 0)}\\times 100 =${texNombre(a * 100, 0)}$, alors $${texNombre(a, 0)}\\text{ m}=${miseEnEvidence(texNombre(a * 100, 0))}\\text{ cm}$.
                         `
           } else {
             a = randint(1, 12) * choice([1, 10, 100])
@@ -904,7 +904,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           texte = `$2$ BD identiques coûtent $${2 * a}$ €.<br>
           Combien coûtent $${b}$ BD identiques ?
       `
-          texteCorr = `Une BD coûte $${2 * a}\\div 2=${a}$ €, donc $${b}$ BD identiques coûtent $${a}\\times ${b}=${reponse}$ €.
+          texteCorr = `Une BD coûte $${2 * a}\\div 2=${a}$ €, donc $${b}$ BD identiques coûtent $${a}\\times ${b}=${miseEnEvidence(reponse)}$ €.
 
           `
 

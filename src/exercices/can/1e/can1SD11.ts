@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -51,37 +52,46 @@ export default class NombreSolutionsSecondDegre extends ExerciceSimple {
         if (d < 0) {
           this.correction = `Le nombre de solutions est donné par le signe de $\\Delta$ :<br>
     $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${d}$.<br>
-    Comme $${d}$ est strictement négatif, l'équation n'a pas de solution.`
-          this.correction += texteEnCouleur(`<br> Mentalement : <br>
+    Comme $${d}$ est strictement négatif, l'équation a $${miseEnEvidence(0)}$ solution.`
+          this.correction += texteEnCouleur(
+            `<br> Mentalement : <br>
           Il n'est pas nécessaire de faire le calcul du discriminant puisque seul
           le signe de celui-ci permet de répondre à la question :<br>
           faites deux calculs séparés mentalement :
           $b^2=${ecritureParentheseSiNegatif(b)}^2=${b ** 2}$ puis
           $4ac=4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${4 * a * c}$
-          et évaluez le signe de leur différence.  `)
+          et évaluez le signe de leur différence.  `,
+            bleuMathalea,
+          )
 
           this.reponse = 0
         }
         if (d > 0) {
           this.correction = `Le nombre de solutions est donné par le signe de $\\Delta$ :<br>
     $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${d}$.<br>
-    Comme $${d}$ est strictement positif, l'équation a 2 solutions.`
-          this.correction += texteEnCouleur(`<br> Mentalement : <br>
+    Comme $${d}$ est strictement positif, l'équation a $${miseEnEvidence(2)}$ solutions.`
+          this.correction += texteEnCouleur(
+            `<br> Mentalement : <br>
           Il n'est pas nécessaire de faire le calcul du discriminant puisque seul
           le signe de celui-ci permet de répondre à la question :<br>
     par exemple, si le produit $4\\times a\\times c$ (c'est le cas lorsque $a$ et $c$ sont de signes contraires) est négatif, l'équation aura deux solutions puisque $\\Delta$ sera strictement positif.
 <br>  Dans les autres cas, faites deux calculs séparés mentalement : $b^2=${ecritureParentheseSiNegatif(b)}^2=${b ** 2}$ puis
 $4ac=4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${4 * a * c}$
-et évaluez le signe de leur différence. `)
+et évaluez le signe de leur différence. `,
+            bleuMathalea,
+          )
           this.reponse = 2
         }
         if (d === 0) {
           this.correction = `Le nombre de solutions est donné par le signe de $\\Delta$ :<br>
             $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${d}$.<br>
-            Comme $${d}$ est nul, l'équation a une unique solution.`
-          this.correction += texteEnCouleur(`<br> Mentalement : <br>
+            Comme $${d}$ est nul, l'équation a une unique solution : il y en a $${miseEnEvidence(1)}$.`
+          this.correction += texteEnCouleur(
+            `<br> Mentalement : <br>
                Faites deux calculs séparés mentalement : $b^2=${ecritureParentheseSiNegatif(b)}^2=${b ** 2}$ puis
-     $4ac=4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${4 * a * c}$.  `)
+     $4ac=4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${4 * a * c}$.  `,
+            bleuMathalea,
+          )
           this.reponse = 1
         }
         break
@@ -104,7 +114,7 @@ et évaluez le signe de leur différence. `)
           this.correction += `
         (${reduireAxPlusB(1, b)})^2&=${maFraction.texFractionSimplifiee}
                 \\end{aligned}$<br>
-        Puisque $${maFraction.texFractionSimplifiee}$ est strictement positif, il y a deux nombres dont le carré est égal à $${maFraction.texFractionSimplifiee}$, donc l'équation a deux solutions. `
+        Puisque $${maFraction.texFractionSimplifiee}$ est strictement positif, il y a deux nombres dont le carré est égal à $${maFraction.texFractionSimplifiee}$, donc l'équation a $${miseEnEvidence(2)}$ solutions. `
 
           this.reponse = 2
         }
@@ -119,7 +129,7 @@ et évaluez le signe de leur différence. `)
             this.correction += `
              (${reduireAxPlusB(1, b)})^2&=${maFraction.texFractionSimplifiee}
                      \\end{aligned}$<br>
-             Il y a un nombre dont le carré est nul, donc l'équation a une solution. `
+             Il y a un nombre dont le carré est nul, donc l'équation a $${miseEnEvidence(1)}$ solution. `
 
             this.reponse = 1
           } else {
@@ -135,7 +145,7 @@ et évaluez le signe de leur différence. `)
             this.correction += `
                 (${reduireAxPlusB(1, b)})^2&=${maFraction.texFractionSimplifiee}
                         \\end{aligned}$<br>
-                Il y a un nombre dont le carré est nul, donc l'équation a une solution. `
+                Il y a un nombre dont le carré est nul, donc l'équation a $${miseEnEvidence(1)}$ solution. `
 
             this.reponse = 1
           }
@@ -153,7 +163,7 @@ et évaluez le signe de leur différence. `)
               : `\\dfrac{${a}}{${miseEnEvidence(a)}}(${reduireAxPlusB(1, b)})^2&=\\dfrac{${-c}}{${miseEnEvidence(a)}}\\\\`
           this.correction += `(${reduireAxPlusB(1, b)})^2&=${maFraction.texFractionSimplifiee}
                          \\end{aligned}$<br>
-                         Puisque $${maFraction.texFractionSimplifiee}$ est strictement négatif, il n'existe pas de nombres réels dont le carré est strictement négatif, donc l'équation n'a pas de solution. `
+                         Puisque $${maFraction.texFractionSimplifiee}$ est strictement négatif, il n'existe pas de nombres réels dont le carré est strictement négatif, donc l'équation a $${miseEnEvidence(0)}$ solution. `
 
           this.reponse = 0
         }

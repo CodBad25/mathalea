@@ -266,10 +266,10 @@ export default class ProblemesGrandeursComposees extends Exercice {
             duree,
           )}\\text{ h}=${texNombre(
             puissance / 1000,
-          )}\\text{ kW}\\times${texNombre(duree)}\\text{ h}=${texNombre(
+          )}\\text{ kW}\\times${texNombre(duree)}\\text{ h}=${miseEnEvidence(texNombre(
             puissance * duree * 0.001,
             3,
-          )}\\text{ kWh}$<br>`
+          ))}\\text{ kWh}$<br>`
           texteCorr +=
             numAlpha(1) +
             ` Le prix de cette énergie consommée est : $${texPrix(
@@ -284,10 +284,10 @@ export default class ProblemesGrandeursComposees extends Exercice {
               Math.round((prixkWh * puissance * duree) / 10)
             )
           ) {
-            texteCorr += `\\approx${texPrix(((prixkWh * puissance) / 1000) * duree)}$ €.`
+            texteCorr += `\\approx${miseEnEvidence(texPrix(((prixkWh * puissance) / 1000) * duree))}$ €.`
           } else {
-            texteCorr += `=${texPrix(
-              ((prixkWh * puissance) / 1000) * duree,
+            texteCorr += `=${miseEnEvidence(
+              texPrix(((prixkWh * puissance) / 1000) * duree),
             )}$ €.`
           }
           break
@@ -346,10 +346,10 @@ export default class ProblemesGrandeursComposees extends Exercice {
                 ((h1 + h2) / 200) * L,
                 2,
               )}\\text{ m}^2\\times${l}\\text{ m}$`
-              texteCorr += ` $=${texNombre(
+              texteCorr += ` $=${miseEnEvidence(texNombre(
                 ((h1 + h2) / 200) * L * l,
                 2,
-              )}\\text{ m}^3$.<br>`
+              ))}\\text{ m}^3$.<br>`
               texteCorr +=
                 numAlpha(1) +
                 ` Convertissons le volume de la piscine en litres : $${texNombre(
@@ -366,10 +366,10 @@ export default class ProblemesGrandeursComposees extends Exercice {
               )}\\text{ L}\\times${deltaT}\\text{ °C}\\times 1,162 \\dfrac{\\text{Wh}}{\\text{°C}\\times\\text{L}}=${texNombre(
                 (h1 + h2) * L * l * 5 * deltaT * 1.162,
                 3,
-              )}\\text{ Wh}=${texNombre(
+              )}\\text{ Wh}=${miseEnEvidence(texNombre(
                 (((h1 + h2) * L * l) / 200) * deltaT * 1.162,
                 7,
-              )}\\text{ kWh}$<br>`
+              ))}\\text{ kWh}$<br>`
               break
             case 1: // Volume d'un tonneau cylindrique
             default:
@@ -409,9 +409,8 @@ export default class ProblemesGrandeursComposees extends Exercice {
               )}\\pi\\text{ cm}^3\\approx${texNombre(
                 r * r * h * Math.PI,
                 1,
-              )}\\text{ cm}^3\\approx${texNombre(
-                (r * r * h * Math.PI) / 1000,
-                1,
+              )}\\text{ cm}^3\\approx${miseEnEvidence(
+                texNombre((r * r * h * Math.PI) / 1000, 1),
               )}\\text{ dm}^3$<br>`
               texteCorr +=
                 numAlpha(1) +
@@ -421,9 +420,8 @@ export default class ProblemesGrandeursComposees extends Exercice {
                 1,
               )}\\text{ dm}^3\\times ${texNombre(
                 liquides[index2][1],
-              )} \\dfrac{\\text{kg}}{\\text{dm}^3}\\approx${texNombre(
-                ((r * r * h * Math.PI) / 1000) * liquides[index2][1],
-                3,
+              )} \\dfrac{\\text{kg}}{\\text{dm}^3}\\approx${miseEnEvidence(
+                texNombre(((r * r * h * Math.PI) / 1000) * liquides[index2][1], 3),
               )}\\text{ kg}.$`
               break
           }
@@ -469,13 +467,13 @@ export default class ProblemesGrandeursComposees extends Exercice {
             ' en Joules.'
           texteCorr =
             numAlpha(0) +
-            ` La quantité de mouvement de ${quidam} est : $${masse} \\text{ kg}\\times ${vitesseMoy}\\text{ m/s}=${stringNombre(
-              masse * vitesseMoy,
+            ` La quantité de mouvement de ${quidam} est : $${masse} \\text{ kg}\\times ${vitesseMoy}\\text{ m/s}=${miseEnEvidence(
+              stringNombre(masse * vitesseMoy),
             )}\\text{ kg.m.s}^{-1}$.<br>`
           texteCorr +=
             numAlpha(1) +
-            ` L'énergie cinétique de ${quidam} est : $\\dfrac{1}{2}\\times ${masse} \\text{ kg}\\times (${vitesseMoy}\\text{ m/s})^2=\\dfrac{${masse}\\times${vitesseMoy}^2}{2}\\text{ J}=${texNombre(
-              (masse * vitesseMoy ** 2) / 2,
+            ` L'énergie cinétique de ${quidam} est : $\\dfrac{1}{2}\\times ${masse} \\text{ kg}\\times (${vitesseMoy}\\text{ m/s})^2=\\dfrac{${masse}\\times${vitesseMoy}^2}{2}\\text{ J}=${miseEnEvidence(
+              texNombre((masse * vitesseMoy ** 2) / 2),
             )}\\text{ J}$.`
           break
         case 4: // problème de moment et de couple de forces qui s'annulent.
@@ -528,7 +526,7 @@ export default class ProblemesGrandeursComposees extends Exercice {
           )} \\text{ m} = ${texNombre(
             index1,
             3,
-          )}\\text{ kg.m}^2\\text{.s}^{-2}=${texNombre(index1)}\\text{ J}$.<br>`
+          )}\\text{ kg.m}^2\\text{.s}^{-2}=${miseEnEvidence(texNombre(index1))}\\text{ J}$.<br>`
           texteCorr +=
             numAlpha(1) +
             ` Afin d'équilibrer le trébuchet, le père de ${quidam} doit se placer de façon que le moment de son poids sur son point d'assise par rapport au pivot central du trébuchet soit égal à celui de ${quidam}, on obtient l'équation suivante où $${miseEnEvidence(
@@ -574,14 +572,14 @@ export default class ProblemesGrandeursComposees extends Exercice {
             '.'
           texteCorr =
             numAlpha(0) +
-            ` Le trafic moyen de ce bus de ville est : $${n1}\\text{ voyageurs}\\times${d1}\\text{ km}=${
-              n1 * d1
-            }\\text{ voyageurs.km}$.<br>`
+            ` Le trafic moyen de ce bus de ville est : $${n1}\\text{ voyageurs}\\times${d1}\\text{ km}=${miseEnEvidence(
+              n1 * d1,
+            )}\\text{ voyageurs.km}$.<br>`
           texteCorr +=
             numAlpha(1) +
-            ` Le trafic moyen de ce bus de ville est : $${n2}\\text{ voyageurs}\\times${d2}\\text{ km}=${
-              n2 * d2
-            }\\text{ voyageurs.km}$, donc ces deux bus ont le même trafic.`
+            ` Le trafic moyen de ce bus de ville est : $${n2}\\text{ voyageurs}\\times${d2}\\text{ km}=${miseEnEvidence(
+              n2 * d2,
+            )}\\text{ voyageurs.km}$, donc ces deux bus ont le même trafic.`
           break
         case 6: // problème de puissance électrique.
           index = randint(0, 3)
@@ -605,9 +603,9 @@ export default class ProblemesGrandeursComposees extends Exercice {
           texteCorr =
             numAlpha(0) +
             ` La tension du secteur étant de $${texNombre(230)}$ V, la puissance maximale de ce ${appareils[index][0]} est de :<br>`
-          texteCorr += `$230\\text{ V}\\times${I1}\\text{ A}=${texNombre(
+          texteCorr += `$230\\text{ V}\\times${I1}\\text{ A}=${miseEnEvidence(texNombre(
             230 * I1,
-          )}\\text{ W}$.<br>`
+          ))}\\text{ W}$.<br>`
           I2 = Math.round(appareils[index1][1] / 230) + 1
           texteCorr +=
             numAlpha(1) +
@@ -615,11 +613,11 @@ export default class ProblemesGrandeursComposees extends Exercice {
           texteCorr += `$\\dfrac{${stringNombre(
             appareils[index1][1],
             0,
-          )}\\text{ W}}{230 \\text{ V}} = ${texNombre(
+          )}\\text{ W}}{230 \\text{ V}} = ${miseEnEvidence(texNombre(
             appareils[index1][1] / 230,
             1,
-          )}\\text{ A}$.<br>`
-          texteCorr += `Le fusible nécessaire pour protéger cet appareil des courts-circuits devra avoir une intensité de rupture minimum de $${I2}$ ampères.`
+          ))}\\text{ A}$.<br>`
+          texteCorr += `Le fusible nécessaire pour protéger cet appareil des courts-circuits devra avoir une intensité de rupture minimum de $${miseEnEvidence(I2)}$ ampères.`
           break
         case 7: // problème de vitesses
           index2 = liste7[flag7]
@@ -728,12 +726,16 @@ export default class ProblemesGrandeursComposees extends Exercice {
                 texteCorr += `+${nbsecondes}`
               }
               texteCorr = texteCorr.replace('++', '+') + '\\text{ s}=' // au cas ou nbminutes === 0 il y aurait ++
-              if (nbheures !== 0)
-                texteCorr += `${texNombre(nbheures)}\\text{ h}` // affichage de la réponse
-              if (nbminutes !== 0)
-                texteCorr += ` ${texNombre(nbminutes)}\\text{ min}`
-              if (nbsecondes !== 0) texteCorr += ` ${nbsecondes}\\text{s}`
-              texteCorr += '$.'
+              // affichage de la réponse
+              texteCorr += `${miseEnEvidence(
+                [
+                  nbheures !== 0 ? `${texNombre(nbheures)}\\text{ h}` : '',
+                  nbminutes !== 0 ? `${texNombre(nbminutes)}\\text{ min}` : '',
+                  nbsecondes !== 0 ? `${nbsecondes}\\text{ s}` : '',
+                ]
+                  .filter((morceau) => morceau !== '')
+                  .join('~'),
+              )}$.`
               break
             case 1: // l'orage et la vitesse du son
               duree = randint(2, 15) // durée pour question a)
@@ -783,7 +785,7 @@ export default class ProblemesGrandeursComposees extends Exercice {
                 '1 \\text{ s}',
                 texNombre(distance, 0) + '\\text{ m}',
                 0,
-              )}=${texNombre(distance / 340, 0)}\\text{ s}$.<br>`
+              )}=${miseEnEvidence(texNombre(distance / 340, 0))}\\text{ s}$.<br>`
               texteCorr += `${quidam} entendra le tonnerre $${texNombre(
                 distance / 340,
                 0,
@@ -873,12 +875,12 @@ export default class ProblemesGrandeursComposees extends Exercice {
               texteCorr += `$${allures[distance - 1][0]}\\text{ min }${
                 allures[distance - 1][1]
               }\\text{ s }= ${sp()}$`
-              if (duree !== 0) texteCorr += `$${duree}\\text{ h}$`
+              if (duree !== 0) texteCorr += `$${miseEnEvidence(duree)}\\text{ h}$`
               if (allures[distance][0] !== 0) {
-                texteCorr += `$${sp()}${allures[distance][0]}\\text{ min}$`
+                texteCorr += `$${sp()}${miseEnEvidence(allures[distance][0])}\\text{ min}$`
               }
               if (allures[distance][1] !== 0) {
-                texteCorr += `$${sp()}${allures[distance][1]}\\text{ s}$.`
+                texteCorr += `$${sp()}${miseEnEvidence(allures[distance][1])}\\text{ s}$.`
               }
               texteCorr +=
                 '<br>' +
@@ -928,7 +930,7 @@ export default class ProblemesGrandeursComposees extends Exercice {
                 3600,
               )}}{${duree}}\\text{km.h}^{-1}`
               vitesseMoy = Number(((distance * 3600) / duree).toFixed(1))
-              texteCorr += `\\approx${texNombre(vitesseMoy, 1)}\\text{ km/h}$.<br>`
+              texteCorr += `\\approx${miseEnEvidence(texNombre(vitesseMoy, 1))}\\text{ km/h}$.<br>`
               texteCorr +=
                 numAlpha(2) +
                 ` Si elle court $${texNombre(21.0975, 4)}\\text{ km}$ à cette vitesse moyenne de $${texNombre(
@@ -960,12 +962,16 @@ export default class ProblemesGrandeursComposees extends Exercice {
                 texteCorr += `+${nbsecondes}`
               }
               texteCorr = texteCorr.replace('++', '+') + '\\text{ s}=' // au cas ou nbminutes === 0 il y aurait ++
-              if (nbheures !== 0)
-                texteCorr += `${texNombre(nbheures)}\\text{ h}` // affichage de la réponse
-              if (nbminutes !== 0)
-                texteCorr += ` ${texNombre(nbminutes)}\\text{ min}`
-              if (nbsecondes !== 0) texteCorr += ` ${nbsecondes}\\text{s}`
-              texteCorr += '$.'
+              // affichage de la réponse
+              texteCorr += `${miseEnEvidence(
+                [
+                  nbheures !== 0 ? `${texNombre(nbheures)}\\text{ h}` : '',
+                  nbminutes !== 0 ? `${texNombre(nbminutes)}\\text{ min}` : '',
+                  nbsecondes !== 0 ? `${nbsecondes}\\text{ s}` : '',
+                ]
+                  .filter((morceau) => morceau !== '')
+                  .join('~'),
+              )}$.`
               break
           }
           break
@@ -1018,7 +1024,7 @@ export default class ProblemesGrandeursComposees extends Exercice {
               fruits[index][0]
             } au prix unitaire de : $${texPrix(prix3)}$ € $~\\div~ ${texNombre(
               masse3,
-            )}\\text{ kg } = ${texPrix(fruits[index][1])}$ €$\\text{/kg}$.`
+            )}\\text{ kg } = ${miseEnEvidence(texPrix(fruits[index][1]))}$ €$\\text{/kg}$.`
           break
         case 9: // problème de prix horaire
           index1 = randint(0, 3)
@@ -1043,8 +1049,8 @@ export default class ProblemesGrandeursComposees extends Exercice {
             numAlpha(0) +
             ` ${quidam} va dépenser pour sa location d'${locations[index1][0]} : $${texNombre(
               nbheures,
-            )}\\text{ h} \\times ${texPrix(prix1)}$ €$\\text{/h} = ${texPrix(
-              nbheures * prix1,
+            )}\\text{ h} \\times ${texPrix(prix1)}$ €$\\text{/h} = ${miseEnEvidence(
+              texPrix(nbheures * prix1),
             )}$ €.<br>`
           texteCorr +=
             numAlpha(1) +
@@ -1052,7 +1058,7 @@ export default class ProblemesGrandeursComposees extends Exercice {
               prix2,
             )}$ € $${sp()}\\div${sp()}${texNombre(
               prix2 / cours[index2][1],
-            )}\\text{ h} = ${texPrix(cours[index2][1])}$ €$\\text{/h}$.<br>`
+            )}\\text{ h} = ${miseEnEvidence(texPrix(cours[index2][1]))}$ €$\\text{/h}$.<br>`
           break
         case 10: // problème de densité de population
           index1 = randint(0, 14)
@@ -1097,9 +1103,8 @@ export default class ProblemesGrandeursComposees extends Exercice {
             )}\\text{ hab}}{${texNombre(
               villes[index1][2],
               2,
-            )}\\text{ km}^2}\\approx${texNombre(
-              villes[index1][1] / villes[index1][2],
-              0,
+            )}\\text{ km}^2}\\approx${miseEnEvidence(
+              texNombre(villes[index1][1] / villes[index1][2], 0),
             )}\\text{ hab/km}^{2}$.<br>`
           texteCorr +=
             numAlpha(1) +
@@ -1117,7 +1122,7 @@ export default class ProblemesGrandeursComposees extends Exercice {
             )}\\text{ hab/km}^2\\times ${texNombre(
               villes[index2][2],
               1,
-            )}\\text{ km}^{2}\\approx${texNombre(villes[index2][1], 0)}\\text{ hab}$.`
+            )}\\text{ km}^{2}\\approx${miseEnEvidence(texNombre(villes[index2][1], 0))}\\text{ hab}$.`
           break
         case 11: // problème de masse volumique
           index1 = randint(0, 14)
@@ -1164,7 +1169,7 @@ export default class ProblemesGrandeursComposees extends Exercice {
             )}\\text{ kg/m}^3\\times ${texNombre(
               v1 / 1000000,
               6,
-            )}\\text{ m}^3=${texNombre(masse, 6)}\\text{ kg}${egalOuApprox(masse * 1000, 0)}${texNombre(masse * 1000, 0)}$ g.<br>`
+            )}\\text{ m}^3=${texNombre(masse, 6)}\\text{ kg}${egalOuApprox(masse * 1000, 0)}${miseEnEvidence(texNombre(masse * 1000, 0))}$ g.<br>`
           texteCorr +=
             numAlpha(1) +
             ` Le volume de cette pièce ${materiaux[index2][3]}${
@@ -1175,9 +1180,8 @@ export default class ProblemesGrandeursComposees extends Exercice {
             )}\\text{ kg/m}^3${egalOuApprox(v2, 6)}${texNombre(
               v2,
               6,
-            )}\\text{ m}^3${egalOuApprox(arrondi(v2, 6) * 1000000, 0)}${texNombre(
-              v2 * 1000000,
-              0,
+            )}\\text{ m}^3${egalOuApprox(arrondi(v2, 6) * 1000000, 0)}${miseEnEvidence(
+              texNombre(v2 * 1000000, 0),
             )}\\text{ cm}^3$.<br>`
           break
         case 12: // problème de concentration massique
@@ -1219,14 +1223,14 @@ export default class ProblemesGrandeursComposees extends Exercice {
           texteCorr += ` $\\dfrac{${texNombre(masse, 1)}\\text{ g}}{${texNombre(
             volume1,
             1,
-          )}\\text{ L}}=${texNombre(masse / volume1, 1)}\\text{ g/L}.$<br>`
+          )}\\text{ L}}=${miseEnEvidence(texNombre(masse / volume1, 1))}\\text{ g/L}.$<br>`
           texteCorr +=
             numAlpha(1) +
             ` La masse de ${solutes[index2][0]} dissous est de :<br>`
           texteCorr += `$${texNombre(volume2, 1)}\\text{ L}\\times ${texNombre(
             concentration2,
             1,
-          )}\\text{ g/L}=${texNombre(volume2 * concentration2, 2)}\\text{ g}.$`
+          )}\\text{ g/L}=${miseEnEvidence(texNombre(volume2 * concentration2, 2))}\\text{ g}.$`
           break
 
         case 13: // problème de débit
@@ -1263,9 +1267,9 @@ export default class ProblemesGrandeursComposees extends Exercice {
             rivieres[index2][2]
           }\\text{ m}^3\\text{/s}=${duree}\\times 3600\\text{ s}\\times${
             rivieres[index2][2]
-          }\\text{ m}^3\\text{/s}=${texNombre(
+          }\\text{ m}^3\\text{/s}=${miseEnEvidence(texNombre(
             duree * 3600 * rivieres[index2][2],
-          )}\\text{ m}^3$.<br>`
+          ))}\\text{ m}^3$.<br>`
           texteCorr +=
             numAlpha(1) +
             ` En ${rivieres[index2][4]}, lors de la crue historique ${rivieres[index2][6]}${rivieres[index2][0]} à ${rivieres[index2][1]}, le débit a été de :<br>`
@@ -1275,10 +1279,10 @@ export default class ProblemesGrandeursComposees extends Exercice {
             vMax,
           )}\\text{ m}^3}{1\\text{ h}}=\\dfrac{${texNombre(
             vMax,
-          )}\\text{ m}^3}{${texNombre(3600)}\\text{ s}}=${texNombre(
+          )}\\text{ m}^3}{${texNombre(3600)}\\text{ s}}=${miseEnEvidence(`${texNombre(
             vMax / 3600,
             0,
-          )}\\text{ m}^3\\text{/s}$.<br>`
+          )}\\text{ m}^3`)}\\text{/s}$.<br>`
 
           break
         case 14: // problème de vitesse de téléchargement
@@ -1319,11 +1323,11 @@ export default class ProblemesGrandeursComposees extends Exercice {
             nbminutes * 60 + nbsecondes
           }\\text{ s}\\times ${vitesseMoy} \\text{ ${
             unites[index]
-          }/s} = ${texNombre(tailleFichier, 0)} \\text{ ${unites[index]}}$`
+          }/s} = ${miseEnEvidence(`${texNombre(tailleFichier, 0)} \\text{ ${unites[index]}}`)}$`
           if (tailleFichier > 1000) {
-            texteCorr += `$ =${texNombre(tailleFichier / 1000, 3)} \\text{ ${
+            texteCorr += `$ =${miseEnEvidence(`${texNombre(tailleFichier / 1000, 3)} \\text{ ${
               unites[index + 1]
-            }}$`
+            }}`)}$`
           }
           texteCorr += '.<br>'
           texteCorr += numAlpha(1) + ' La durée du téléchargement sera de :<br>'
@@ -1354,10 +1358,13 @@ export default class ProblemesGrandeursComposees extends Exercice {
           ) {
             texteCorr += '='
           } else texteCorr += '\\approx'
-          if (nbheures !== 0) texteCorr += `${nbheures} \\text{ h }`
-          if (nbminutes !== 0) texteCorr += `${nbminutes} \\text{ min }`
-          if (nbsecondes !== 0) texteCorr += `${nbsecondes} \\text{ s}`
-          texteCorr += '$.'
+          texteCorr += `${miseEnEvidence(
+            [
+              nbheures !== 0 ? `${nbheures} \\text{ h }` : '',
+              nbminutes !== 0 ? `${nbminutes} \\text{ min }` : '',
+              nbsecondes !== 0 ? `${nbsecondes} \\text{ s}` : '',
+            ].join(''),
+          )}$.`
 
           break
       }

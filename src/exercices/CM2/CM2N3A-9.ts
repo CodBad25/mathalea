@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -114,7 +115,7 @@ export default class TablesDeDivisions extends Exercice {
           handleAnswers(this, i, { reponse: { value: a * b } })
         }
       }
-      texteCorr = `$ ${a * b} \\div ${a} = ${b}$`
+      texteCorr = `$ ${a * b} \\div ${a} = ${miseEnEvidence(b)}$`
       if (this.questionJamaisPosee(i, a, b)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

@@ -34,7 +34,7 @@ Ces exercices posent aussi `nbQuestionsModifiable = false` : le champ « Nombres
 | `1` | `Q->R->Q` — la correction remplace la question |
 | `2` | `Q->(Q+R)->Q` — la correction s'ajoute sous la question |
 
-Dans les modes `1` et `2`, la correction est une diapositive à part entière : elle a son propre décompte, de même durée que la question, et l'enchaînement se poursuit tout seul. Seuls le défilement manuel (`manualMode`) et l'option « Avec une pause après chaque question » (`pauseAfterEachQuestion`) mettent le diaporama en pause.
+Dans les modes `1` et `2`, la correction est une diapositive à part entière : elle a son propre décompte et l'enchaînement se poursuit tout seul. Ce décompte dure autant que la question, sauf si `$globalOptions.durationCorrection` est défini (réglage « Durée d'affichage de la correction », paramètre d'URL `dCorr`, en secondes). Seuls le défilement manuel (`manualMode`) et l'option « Avec une pause après chaque question » (`pauseAfterEachQuestion`) mettent le diaporama en pause.
 
 Le décompte est porté par `ratioTime` (0 à 100) et `startTimer()` dans `SlideshowPlay.svelte` ; `nextQuestion()` est la seule porte de sortie d'une diapositive, qu'elle soit déclenchée par le décompte, par la flèche droite ou par le bouton suivant.
 

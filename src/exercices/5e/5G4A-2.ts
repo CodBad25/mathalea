@@ -10,7 +10,7 @@ import { Latex2d } from '../../lib/2d/textes'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { bleuMathalea } from '../../lib/colors'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -226,25 +226,25 @@ export default class TracerCarresRectangleslongueurDonnees extends Exercice {
           texteCorr += this.correctionDetaillee
             ? 'Or, si deux droites sont perpendiculaires à une même droite alors elles sont parallèles entre elles.<br>'
             : ''
-          texteCorr += `Donc ${texDroiteEnonce(2)} et ${texDroiteEnonce(1)} sont parallèles.<br><br>`
+          texteCorr += `Donc ${texteEnCouleurEtGras(`${texDroiteEnonce(2)} et ${texDroiteEnonce(1)}`)} sont parallèles.<br><br>`
           texteCorr += `Les droites ${texDroiteEnonce(0)} et ${texDroiteEnonce(2)} sont parallèles à la même droite ${texDroiteEnonce(1)}.<br>`
           texteCorr += this.correctionDetaillee
             ? 'Or, si deux droites sont parallèles à une même troisième droite alors elles sont parallèles entre elles.<br>'
             : ''
-          texteCorr += `Donc ${texDroiteEnonce(0)} et ${texDroiteEnonce(2)} sont parallèles.<br>`
+          texteCorr += `Donc ${texteEnCouleurEtGras(`${texDroiteEnonce(0)} et ${texDroiteEnonce(2)}`)} sont parallèles.<br>`
           texteCorr += `<br>Remarque :<br>La droite ${texDroiteEnonce(4)} semble elle aussi être parallèle aux autres mais rien ne nous permet de l'affirmer.<br>Il aurait fallu que l'énoncé dise qu'elle est parallèle à une autre ou qu'un angle droit soit marqué par exemple.`
           break
         case 'Perpendiculaires':
         default:
           texte +=
             'Donner tous les couples de droites perpendiculaires en justifiant.'
-          texteCorr = `Les codages permettent d'affirmer que les droites ${texDroiteEnonce(1)} et ${texDroiteEnonce(2)} sont toutes les deux perpendiculaires à ${texDroiteEnonce(3)}.<br><br>`
+          texteCorr = `Les codages permettent d'affirmer que les droites ${texteEnCouleurEtGras(`${texDroiteEnonce(1)}`)} et ${texteEnCouleurEtGras(`${texDroiteEnonce(2)}`)} sont toutes les deux perpendiculaires à ${texteEnCouleurEtGras(`${texDroiteEnonce(3)}`)}.<br><br>`
           texteCorr += `Les droites ${texDroiteEnonce(0)} et ${texDroiteEnonce(1)} sont parallèles (c'est l'énoncé qui le dit) et ${texDroiteEnonce(3)} est perpendiculaire à ${texDroiteEnonce(1)}`
 
           texteCorr += this.correctionDetaillee
             ? ".<br>Or, si deux droites sont parallèles et si une troisième droite est perpendiculaire à l'une alors elle est perpendiculaire à l'autre.<br>D"
             : ' d'
-          texteCorr += `onc ${texDroiteEnonce(3)} est aussi perpendiculaire à ${texDroiteEnonce(0)}.<br>`
+          texteCorr += `onc ${texteEnCouleurEtGras(`${texDroiteEnonce(3)}`)} est aussi perpendiculaire à ${texteEnCouleurEtGras(`${texDroiteEnonce(0)}`)}.<br>`
           texteCorr += `<br>Remarque :<br>La droite ${texDroiteEnonce(4)} semble elle aussi être perpendiculaire à ${texDroiteEnonce(3)} mais rien ne nous permet de l'affirmer.<br>Il aurait fallu que l'énoncé dise qu'elle est parallèle à une autre ou qu'un angle droit soit marqué par exemple.`
           break
       }

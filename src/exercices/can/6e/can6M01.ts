@@ -1,5 +1,6 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -52,20 +53,20 @@ export default class QuestionDePerimetres extends Exercice {
         texte += monQcm.texte
       }
       this.correction = VF[b]
-        ? `Vrai <br>
+        ? `${texteEnCouleurEtGras('Vrai')} <br>
       $\\bullet$ Pour le carré : $4\\times ${a}=${4 * a}\\text{ cm}$.<br>
       $\\bullet$ Pour le rectangle  : $2\\times (${a - b}+ ${a + 1}) = ${4 * a}\\text{ cm}$.`
-        : `Faux <br>
+        : `${texteEnCouleurEtGras('Faux')} <br>
       $\\bullet$ Pour le carré : $4\\times ${a}=${4 * a}\\text{ cm}$.<br>
       $\\bullet$ Pour le rectangle  : $2\\times (${a}+${a + 1})= ${2 * 2 * a + 2}\\text{ cm}$.`
       this.correction += VF[b]
         ? texteEnCouleur(`<br> Mentalement : <br>
            Pour le rectangle, la somme de la longueur $${a + 1}$ et de la largeur $${a - b}$ donne le demi-périmètre : $${2 * a - b + 1}$.<br>
-      Pour avoir son périmètre, on multiplie  par $2$, on obtient : $2\\times ${2 * a - b + 1}=${4 * a - 2 * b + 2}$.`)
+      Pour avoir son périmètre, on multiplie  par $2$, on obtient : $2\\times ${2 * a - b + 1}=${4 * a - 2 * b + 2}$.`, bleuMathalea)
         : texteEnCouleur(`<br> Mentalement : <br>
       Pour le rectangle, la somme de la longueur $${a + 1}$ et de la largeur $${a}$ donne le demi-périmètre : $${2 * a + 1}$.<br>
       Pour avoir son périmètre, on multiplie  par $2$, on obtient : $2\\times ${2 * a + 1}=${4 * a + 2}$.
-      `)
+      `, bleuMathalea)
 
       if (this.questionJamaisPosee(i, a, b)) {
         this.listeQuestions[i] = texte

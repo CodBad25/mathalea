@@ -1321,6 +1321,115 @@ class FractionEtendue {
   }
 
   /**
+   * Montre les facteurs communs de deux produits, puis les barre.
+   * Seuls des diviseurs strictement inférieurs à 12 ou des multiples de 10
+   * sont dégagés ; on répète l'opération si nécessaire.
+   * Les facteurs fournis doivent représenter le numérateur et le dénominateur
+   * de cette fraction. La chaîne retournée commence par un signe égal.
+   */
+  texSimplificationParFacteursCommuns(
+    facteursNumerateur: number[],
+    facteursDenominateur: number[],
+  ): string {
+    if (this.num === 0) return '=0'
+    const produit = (valeurs: number[]): number =>
+      valeurs.reduce((resultat, valeur) => resultat * valeur, 1)
+    if (
+      facteursNumerateur.some((valeur) => !Number.isInteger(valeur)) ||
+      facteursDenominateur.some((valeur) => !Number.isInteger(valeur)) ||
+      produit(facteursDenominateur) === 0 ||
+      !new FractionEtendue(
+        produit(facteursNumerateur),
+        produit(facteursDenominateur),
+      ).isEqual(this)
+    ) {
+      throw new Error('Facteurs incompatibles avec la fraction à simplifier.')
+    }
+    type Facteur = { valeur: number; barre: boolean }
+    const signe = this.sign === -1 ? '-' : ''
+    const facteurs = (valeurs: number[]): Facteur[] =>
+      valeurs
+        .map((valeur) => ({ valeur: Math.abs(valeur), barre: false }))
+        .filter((facteur) => facteur.valeur !== 1)
+    const numerateur = facteurs(facteursNumerateur)
+    const denominateur = facteurs(facteursDenominateur)
+    const afficher = (liste: Facteur[], barrer = false): string =>
+      liste.length === 0
+        ? '1'
+        : liste
+            .map(({ valeur, barre }) =>
+              barrer && barre ? `\\cancel{${valeur}}` : String(valeur),
+            )
+            .join('\\times ')
+    const fraction = (barrer = false): string =>
+      `${signe}\\dfrac{${afficher(numerateur, barrer)}}{${afficher(denominateur, barrer)}}`
+    const initiale = `${signe}\\dfrac{${afficher(facteurs(facteursNumerateur))}}{${afficher(facteurs(facteursDenominateur))}}`
+    const diviseurFacile = (a: number, b: number): number => {
+      for (
+        let diviseur = Math.floor(Math.min(a, b) / 10) * 10;
+        diviseur >= 10;
+        diviseur -= 10
+      ) {
+        if (a % diviseur === 0 && b % diviseur === 0) return diviseur
+      }
+      for (let diviseur = 11; diviseur >= 2; diviseur--) {
+        if (a % diviseur === 0 && b % diviseur === 0) return diviseur
+      }
+      return 1
+    }
+
+    let simplification = false
+    while (true) {
+      let paire: [number, number, number] | undefined
+      for (let i = 0; i < numerateur.length; i++) {
+        if (numerateur[i].barre) continue
+        for (let j = 0; j < denominateur.length; j++) {
+          if (denominateur[j].barre) continue
+          const diviseur = diviseurFacile(
+            numerateur[i].valeur,
+            denominateur[j].valeur,
+          )
+          if (diviseur > (paire?.[2] ?? 1)) {
+            paire = [i, j, diviseur]
+          }
+        }
+      }
+      if (!paire) break
+      const [i, j, diviseur] = paire
+      const resteNumerateur = numerateur[i].valeur / diviseur
+      const resteDenominateur = denominateur[j].valeur / diviseur
+      numerateur.splice(
+        i,
+        1,
+        { valeur: diviseur, barre: true },
+        ...(resteNumerateur === 1
+          ? []
+          : [{ valeur: resteNumerateur, barre: false }]),
+      )
+      denominateur.splice(
+        j,
+        1,
+        { valeur: diviseur, barre: true },
+        ...(resteDenominateur === 1
+          ? []
+          : [{ valeur: resteDenominateur, barre: false }]),
+      )
+      simplification = true
+    }
+
+    const restant = (liste: Facteur[]): number =>
+      produit(liste.filter((facteur) => !facteur.barre).map((f) => f.valeur))
+    if (pgcd(restant(numerateur), restant(denominateur)) > 1) {
+      throw new Error(
+        'Aucun diviseur commun inférieur à 12 ou multiple de 10 ne permet de terminer la simplification.',
+      )
+    }
+
+    if (!simplification) return `=${initiale}=${this.simplifie().texFSD}`
+    return `=${initiale}=${fraction()}=${fraction(true)}=${this.simplifie().texFSD}`
+  }
+
+  /**
    * @return {FractionEtendue|number} NaN si la FractionEtendue n'est pas un nombre décimal sinon retourne une FractionEtendue avec la bonne puissance de 10 au dénominateur
    */
   fractionDecimale(): FractionEtendue {

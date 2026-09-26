@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -39,7 +40,7 @@ export default class EquationAXPlusBEgalZero extends ExerciceSimple {
      ${a}x${ecritureAlgebrique(b)}&=0\\\\
     ${a}x&=${ecritureAlgebrique(-b)}\\\\
     x&=${texFractionFromString(-b, a)}\\\\
-    x&=${this.reponse}
+    x&=${miseEnEvidence(this.reponse)}
     \\end{aligned}$
    `
   }

@@ -1,4 +1,5 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un produit d’entiers'
 export const interactifReady = true
@@ -29,10 +30,10 @@ export default class ProduitEntiers5e extends ExerciceSimple {
     const a = this.quotaRandint('a', 12, 19)
     this.reponse = a * b
     this.question = `Calculer $${a} \\times ${b}$.`
-    this.correction = `$${a} \\times ${b}=${a * b}$`
+    this.correction = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
     this.correction += texteEnCouleur(`<br> Mentalement : <br>
     On décompose le calcul $${a} \\times ${b}$ en  $(10+${a - 10})\\times ${b}=10\\times ${b} +${a - 10}\\times ${b}$.<br>
        Cela donne :  $${10 * b}+${(a - 10) * b}=${this.reponse}$.
-      `)
+      `, bleuMathalea)
   }
 }

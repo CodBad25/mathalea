@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { codageSegment } from '../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { vecteur } from '../../lib/2d/Vecteur'
@@ -8,7 +9,7 @@ import { rotation, translation } from '../../lib/2d/transformations'
 import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -143,7 +144,7 @@ export default class TrianglesEgaux extends Exercice {
             $${B.nom}${C.nom} = ${E.nom}${F.nom}$<br>
             $${C.nom}${A.nom} = ${F.nom}${D.nom}$<br>
             Les triangles ${nom1} et ${nom2} ont leurs trois côtés deux à deux de même longueur.<br>
-            Ils sont donc égaux.`
+            Ils sont donc ${texteEnCouleurEtGras('égaux')}.`
           trianglesEgaux = true
           break
         case 'CAC':
@@ -163,7 +164,7 @@ export default class TrianglesEgaux extends Exercice {
             $${B.nom}${C.nom} = ${E.nom}${F.nom}$<br>
             $\\widehat{${A.nom}${B.nom}${C.nom}} = \\widehat{${D.nom}${E.nom}${F.nom}}$<br>
             Les triangles ${nom1} et ${nom2} ont un angle de même mesure compris entre deux côtés deux à deux de même longueur.<br>
-            Ils sont donc égaux.`
+            Ils sont donc ${texteEnCouleurEtGras('égaux')}.`
           trianglesEgaux = true
           break
         case 'ACA':
@@ -183,7 +184,7 @@ export default class TrianglesEgaux extends Exercice {
             $\\widehat{${B.nom}${A.nom}${C.nom}} = \\widehat{${E.nom}${D.nom}${F.nom}}$<br>
             $\\widehat{${A.nom}${B.nom}${C.nom}} = \\widehat{${D.nom}${E.nom}${F.nom}}$<br>
             Les triangles ${nom1} et ${nom2} ont un côté de même longueur compris entre deux angles deux à deux de même mesure.<br>
-            Ils sont donc égaux.`
+            Ils sont donc ${texteEnCouleurEtGras('égaux')}.`
           trianglesEgaux = true
           break
         case 'AAA':
@@ -199,7 +200,7 @@ export default class TrianglesEgaux extends Exercice {
             nommeP1,
             nommeP2,
           )
-          texteCorr = `On ne peut pas déterminer si ces triangles sont égaux. Ils ont la même forme mais leurs longueurs peuvent être différentes. On dit qu'ils sont ${texteEnCouleur('semblables')}.`
+          texteCorr = `${texteEnCouleurEtGras('On ne peut pas déterminer')} si ces triangles sont égaux. Ils ont la même forme mais leurs longueurs peuvent être différentes. On dit qu'ils sont ${texteEnCouleur('semblables', bleuMathalea)}.`
           trianglesEgaux = false
           break
         case 'CC':
@@ -214,7 +215,7 @@ export default class TrianglesEgaux extends Exercice {
             nommeP2,
           )
           texteCorr =
-            'On ne peut pas déterminer si ces triangles sont égaux (il manque une troisième information).'
+            `${texteEnCouleurEtGras('On ne peut pas déterminer')} si ces triangles sont égaux (il manque une troisième information).`
           trianglesEgaux = false
           break
       }

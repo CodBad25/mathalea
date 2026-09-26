@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { bleuMathalea, orangeMathalea } from '../../../lib/colors'
@@ -84,7 +85,7 @@ export default class VecteursCol extends ExerciceSimple {
        sont colinéaires de même sens. Le nombre cherché est donc positif.<br>
        Les graduations indiquent $${noms[0]}${noms[2]}=${a}$ et $${noms[0]}${noms[1]}=${b}$. <br>
        La valeur de $k$ est donc : $${f1.texFraction} ${f1.texSimplificationAvecEtapes(true, orangeMathalea)}$.<br>
-       Ainsi, $\\overrightarrow{${noms[0]}${noms[1]}}= ${f1.texFractionSimplifiee}\\overrightarrow{${noms[0]}${noms[2]}}$
+       Ainsi, $\\overrightarrow{${noms[0]}${noms[1]}}= ${miseEnEvidence(`${f1.texFractionSimplifiee}\\overrightarrow{${noms[0]}${noms[2]}}`)}$
       `
         this.canEnonce =
           `Compléter l’égalité vectorielle.<br>
@@ -159,7 +160,7 @@ export default class VecteursCol extends ExerciceSimple {
        sont colinéaires de même sens. Le nombre cherché est donc positif.<br>
        Les graduations indiquent $${noms[0]}${noms[1]}=${b}$ et $${noms[0]}${noms[2]}=${a}$. <br>
        La valeur de $k$ est donc : $${f2.texFraction} ${f2.texSimplificationAvecEtapes(true, orangeMathalea)}$.<br>
-       Ainsi, $\\overrightarrow{${noms[0]}${noms[2]}}= ${f2.texFractionSimplifiee}\\overrightarrow{${noms[0]}${noms[1]}}$
+       Ainsi, $\\overrightarrow{${noms[0]}${noms[2]}}= ${miseEnEvidence(`${f2.texFractionSimplifiee}\\overrightarrow{${noms[0]}${noms[1]}}`)}$
       `
         this.canEnonce =
           `Compléter l’égalité vectorielle.<br>
@@ -235,7 +236,7 @@ export default class VecteursCol extends ExerciceSimple {
          sont colinéaires de sens contraires. Le nombre cherché est donc négatif.<br>
          Les graduations indiquent $${noms[0]}${noms[2]}=${a}$ et $${noms[0]}${noms[1]}=${b}$. <br>
          La valeur de $k$ est donc : $${f3.texFraction} ${f3.texSimplificationAvecEtapes(true, orangeMathalea)}$.<br>
-         Ainsi, $\\overrightarrow{${noms[0]}${noms[1]}}= ${f3.texFractionSimplifiee}\\overrightarrow{${noms[2]}${noms[0]}}$
+         Ainsi, $\\overrightarrow{${noms[0]}${noms[1]}}= ${miseEnEvidence(`${f3.texFractionSimplifiee}\\overrightarrow{${noms[2]}${noms[0]}}`)}$
         `
         this.canEnonce =
           `Compléter l’égalité vectorielle.<br>
@@ -311,7 +312,7 @@ export default class VecteursCol extends ExerciceSimple {
            sont colinéaires de sens contraires. Le nombre cherché est donc négatif.<br>
            Les graduations indiquent $${noms[1]}${noms[0]}=${b}$ et $${noms[0]}${noms[2]}=${a}$. <br>
            La valeur de $k$ est donc : $${f4.texFraction} ${f4.texSimplificationAvecEtapes(true, orangeMathalea)}$.<br>
-           Ainsi, $\\overrightarrow{${noms[0]}${noms[2]}}= ${f4.texFractionSimplifiee}\\overrightarrow{${noms[1]}${noms[0]}}$
+           Ainsi, $\\overrightarrow{${noms[0]}${noms[2]}}= ${miseEnEvidence(`${f4.texFractionSimplifiee}\\overrightarrow{${noms[1]}${noms[0]}}`)}$
           `
         this.canEnonce =
           `Compléter l’égalité vectorielle.<br>

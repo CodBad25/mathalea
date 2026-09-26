@@ -7,7 +7,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { nombreEnLettres } from '../../modules/nombreEnLettres'
@@ -115,21 +115,21 @@ export default class Exercice3F14DNB1 extends ExerciceBrevetA {
     const sousListe1Correction = createList({
       items: [
         `${this.correctionDetaillee ? `Calculons $f(x) = x^2${ecritureAlgebriqueSauf1(bb)}x${ecritureAlgebriqueSauf1(cc)}$ pour $x=${x0}$.<br>` : ''}
-       $f(${x0}) = ${ecritureParentheseSiNegatif(x0)}^2 ${ecritureAlgebriqueSauf1(bb)}${Math.abs(bb) === 1 ? '' : '\\times'}${ecritureParentheseSiNegatif(x0)} ${ecritureAlgebrique(cc)} = ${String(x0 * x0)}${ecritureAlgebrique(bb * x0)} ${ecritureAlgebrique(cc)}=${f(x0)}$`,
+       $f(${x0}) = ${ecritureParentheseSiNegatif(x0)}^2 ${ecritureAlgebriqueSauf1(bb)}${Math.abs(bb) === 1 ? '' : '\\times'}${ecritureParentheseSiNegatif(x0)} ${ecritureAlgebrique(cc)} = ${String(x0 * x0)}${ecritureAlgebrique(bb * x0)} ${ecritureAlgebrique(cc)}=${miseEnEvidence(f(x0))}$`,
         `${this.correctionDetaillee ? `Calculons l'antécédent de $${y1}$ par la fonction $g$.<br>` : ''}
         On cherche $x$ tel que $g(x)= ${y1}$, soit $${rienSi1(c)}x = ${y1}$, soit $x = \\dfrac{${y1}}{${rienSi1(c)}}=${y1 / c}$.<br>
-        L'antécédent de $${y1}$ par la fonction $g$ est $${y1 / c}$.`,
+        L'antécédent de $${y1}$ par la fonction $g$ est $${miseEnEvidence(y1 / c)}$.`,
         `D'après la réponse 1.a., $${x0}$  est un antécédent de $${f(x0)}$ par la fonction $f$.<br>
-        Et d'après le tableau, $${listeX.find((e) => f(e) === f(x0))}$ est un autre antécédent de $${f(x0)}$ par la fonction $f$.`,
-        `On peut saisir la formule = B1 * B1 ${bb === -1 ? '- B1' : bb === 1 ? '+ B1' : `${bb < 0 ? '- ' : '+ '} ${Math.abs(bb)} * B1`} ${cc < 0 ? '- ' : '+ '} ${Math.abs(cc)} dans la cellule B2 avant de l'étirer vers la droite jusqu'à la cellule ${lettreDepuisChiffre(1 + listeX.length)}2.<br>
+        Et d'après le tableau, $${miseEnEvidence(String(listeX.find((e) => f(e) === f(x0))))}$ est un autre antécédent de $${f(x0)}$ par la fonction $f$.`,
+        `On peut saisir la formule ${texteEnCouleurEtGras(`= B1 * B1 ${bb === -1 ? '- B1' : bb === 1 ? '+ B1' : `${bb < 0 ? '- ' : '+ '} ${Math.abs(bb)} * B1`} ${cc < 0 ? '- ' : '+ '} ${Math.abs(cc)}`)} dans la cellule B2 avant de l'étirer vers la droite jusqu'à la cellule ${lettreDepuisChiffre(1 + listeX.length)}2.<br>
         ${this.correctionDetaillee ? 'Cette formule calcule $f(x)$ pour la valeur de $x$ située en ligne 1 et colonne B.' : ''}`,
         `${
           listeAntGEgalG.length > 1
             ? `D'après le tableau, il existe ${nombreEnLettres(listeAntGEgalG.length)} nombres qui sont :<br>
-        ${listeAntGEgalG.map((e) => `$${e}$ qui a pour image $${f(e)}$ par les fonctions $f$ et $g$.`).join('<br>')}`
+        ${listeAntGEgalG.map((e) => `$${miseEnEvidence(e)}$ qui a pour image $${f(e)}$ par les fonctions $f$ et $g$.`).join('<br>')}`
             : listeAntGEgalG.length === 1
-              ? `D'après le tableau, il existe un nombre qui a pour image $${f(listeAntGEgalG[0])}$ par les fonctions $f$ et $g$, c'est le nombre $${listeAntGEgalG[0]}$.`
-              : "D'après le tableau, il n'existe pas de nombre qui a la même image par les fonctions $f$ et $g$."
+              ? `D'après le tableau, il existe un nombre qui a pour image $${f(listeAntGEgalG[0])}$ par les fonctions $f$ et $g$, c'est le nombre $${miseEnEvidence(listeAntGEgalG[0])}$.`
+              : `D'après le tableau, il ${texteEnCouleurEtGras("n'existe pas")} de nombre qui a la même image par les fonctions $f$ et $g$.`
         }`,
       ],
       style: 'alpha',
@@ -142,7 +142,7 @@ export default class Exercice3F14DNB1 extends ExerciceBrevetA {
         Ce qui est la définition de $f(x)$.`,
         `Pour résoudre l'équation $f(x) = 0$, on cherche les solutions de l'équation $(x${ecritureAlgebrique(a)})(x${ecritureAlgebrique(b)}) = 0$.<br>
           ${this.correctionDetaillee ? `Un produit est nul si l'un des facteurs est nul, soit : $x${ecritureAlgebrique(a)}=0$ ou $x${ecritureAlgebrique(b)}=0$.<br>` : ''}
-        On en déduit que les solutions de l'équation $f(x) = g(x)$ sont $x=${-a}$ et $x=${-b}$.<br>`,
+        On en déduit que les solutions de l'équation $f(x) = 0$ sont $x=${miseEnEvidence(-a)}$ et $x=${miseEnEvidence(-b)}$.<br>`,
       ],
       style: 'alpha',
     })

@@ -1,3 +1,7 @@
+import {
+  texteEnCouleurEtGras,
+  miseEnEvidence,
+} from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import FractionEtendue from '../../modules/FractionEtendue'
 import operation from '../../modules/operations'
@@ -36,15 +40,12 @@ export default class nomExercice extends Exercice {
     let question1 =
       'Le nombre $A$ est-il un nombre entier naturel ? un nombre décimal ? un nombre rationnel ?'
     question1 += '<br>Justifier chacune des réponses'
-    let correction1 = `${num} n'est pas divisible par ${den}, donc $A$ n'est pas un nombre entier naturel.`
-    correction1 +=
-      "<br>$A$ est un fraction irréductible qui a pour dénominateur un nombre premier différent de 2 et 5 donc $A$ n'est pas un nombre décimal."
-    correction1 +=
-      "<br>$A$ s'écrit sous la forme d'une fraction $\\dfrac{a}{b}$ avec $a$ et $b$ des nombres entiers donc c'est un nombre rationnel."
+    let correction1 = `${num} n'est pas divisible par ${den}, donc $A$ ${texteEnCouleurEtGras("n'est pas un nombre entier naturel")}.`
+    correction1 += `<br>$A$ est une fraction irréductible qui a pour dénominateur un nombre premier différent de 2 et 5 donc $A$ ${texteEnCouleurEtGras("n'est pas un nombre décimal")}.`
+    correction1 += `<br>$A$ s'écrit sous la forme d'une fraction $\\dfrac{a}{b}$ avec $a$ et $b$ des nombres entiers donc ${texteEnCouleurEtGras("c'est un nombre rationnel")}.`
 
     const question2 = "Que peut-on dire de l'écriture décimale de $A$ ?"
-    let correction2 =
-      '$A$ est un nombre rationnel non décimal donc son écriture décimale est illimitée et périodique.'
+    let correction2 = `$A$ est un nombre rationnel non décimal donc son écriture décimale ${texteEnCouleurEtGras('est illimitée et périodique')}.`
     correction2 += '<br>'
 
     const n = new Date().getFullYear()
@@ -75,10 +76,10 @@ export default class nomExercice extends Exercice {
       rang === 1 ? `$${rang}^{\\text{re}}$` : `$${rang}^{\\mathrm{e}}$`
     if (rang === 0) {
       correction3 += `$${n} = ${periodLength} \\times ${Math.floor(n / periodLength)}$<br>`
-      correction3 += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la dernière décimale de la période soit ${toFixedTruncate(num / den, periodLength).at(-1)}.`
+      correction3 += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la dernière décimale de la période soit $${miseEnEvidence(String(toFixedTruncate(num / den, periodLength).at(-1)))}$.`
     } else {
       correction3 += `$${n} = ${periodLength} \\times ${Math.floor(n / periodLength)} + ${n % periodLength}$<br>`
-      correction3 += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la ${rangString} décimale soit ${toFixedTruncate(num / den, n % periodLength).at(-1)}.`
+      correction3 += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la ${rangString} décimale soit $${miseEnEvidence(String(toFixedTruncate(num / den, n % periodLength).at(-1)))}$.`
     }
 
     this.listeQuestions.push(question1, question2, question3)

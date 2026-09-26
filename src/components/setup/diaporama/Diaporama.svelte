@@ -320,6 +320,7 @@
     $globalOptions.select = options.select
     $globalOptions.order = options.order
     $globalOptions.durationGlobal = options.durationGlobal
+    $globalOptions.durationCorrection = options.durationCorrection
   }
 
   async function applySlideshowFromHistory(

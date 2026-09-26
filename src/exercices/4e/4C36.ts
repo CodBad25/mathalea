@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { prenomPronom } from '../../lib/outils/Personne'
@@ -236,7 +237,7 @@ export default class nomExercice extends Exercice {
       }
       resultatObtenu = resultatObtenu.times(10 ** puissanceObtenue)
       texteCorr = `${premiereLettreEnMajuscule(prenom.prenom)} a obtenu un résultat de l'ordre de $10^{${puissanceObtenue}} ${probleme.unite}$, `
-      texteCorr += remarque
+      texteCorr += texteEnCouleurEtGras(remarque)
       switch (listeDesProblemes[i]) {
         case 1:
           texte = `${prenom.prenom} a calculé ${probleme.intitule} et a obtenu $${texNombre(resultatObtenu)} ${probleme.unite}$.<br>

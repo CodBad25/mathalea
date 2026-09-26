@@ -208,7 +208,7 @@ export default class TracerAvecScratch extends Exercice {
           ${situations[0].fig}`,
           question: '',
           correction: `
-          La figure tracée par le programme a ${situations[0].nbCotes} côtés de même longueur et ${situations[0].nbCotes} angles de même mesure, c'est un ${texteEnCouleurEtGras(situations[0].nom, bleuMathalea)}.<br><br>
+          La figure tracée par le programme a ${situations[0].nbCotes} côtés de même longueur et ${situations[0].nbCotes} angles de même mesure, c'est un ${texteEnCouleurEtGras(situations[0].nom)}.<br><br>
           ${situations[0].fig_corr}`,
           scratchCorrection: situations[0].codeScratch,
         })

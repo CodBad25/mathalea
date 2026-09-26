@@ -94,7 +94,7 @@ export default class TablesAdditionsSoustractions extends Exercice {
               },
             )
           }
-          texteCorr = `$${a} + ${b} = ${a + b}$`
+          texteCorr = `$${a} + ${b} = ${miseEnEvidence(a + b)}$`
           handleAnswers(this, i, { reponse: { value: a + b } })
           break
         case 'addition_a_trou':
@@ -131,7 +131,7 @@ export default class TablesAdditionsSoustractions extends Exercice {
               },
             )
           }
-          texteCorr = `$${a} - ${b} = ${a - b}$`
+          texteCorr = `$${a} - ${b} = ${miseEnEvidence(a - b)}$`
           handleAnswers(this, i, { reponse: { value: a - b } })
           break
         case 'soustraction_a_trou':

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { createList } from '../../lib/format/lists'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { tableauVariationsFonction } from '../../lib/mathFonctions/etudeFonction'
@@ -116,7 +117,7 @@ export default class DistancePointDroite extends Exercice {
      &=\\left(${xA - x0}${ecritureAlgebriqueSauf1(-u1)}t\\right)^2+\\left(${yA - y0}${ecritureAlgebriqueSauf1(-u2)}t\\right)^2+\\left(${zA - z0}${ecritureAlgebriqueSauf1(-u3)}t\\right)^2\\\\
      &=\\left(${u1 ** 2}+${u2 ** 2}+${u3 ** 2}\\right)t^2+2\\left(${-u1 * AB1}${ecritureAlgebrique(-AB2 * u2)}${ecritureAlgebrique(-AB3 * u3)}\\right)t+${AB1 ** 2}+${AB2 ** 2}+${AB3 ** 2}\\\\
      &=${a}t^2${ecritureAlgebriqueSauf1(b)}t${ecritureAlgebrique(c)}\\end{aligned}$<br>
-     D'où $AM=\\sqrt{${exprF.replaceAll('x', 't')}}$`
+     D'où $AM=${miseEnEvidence(`\\sqrt{${exprF.replaceAll('x', 't')}}`)}$`
           .replaceAll('-0', '')
           .replaceAll('+0', '')
           .replaceAll('(0+', '(')

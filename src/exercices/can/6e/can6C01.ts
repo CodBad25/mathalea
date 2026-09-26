@@ -1,5 +1,6 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
@@ -64,20 +65,20 @@ export default class OrdreDeGrandeur extends Exercice {
       if (!context.isAmc) {
         texte += monQcm.texte
       }
-      let texteCorr = `$${texNombre(nombre, 0)} \\times ${d} = ${texNombre(resultat, 0)}$<br>
+      let texteCorr = `$${texNombre(nombre, 0)} \\times ${d} = ${miseEnEvidence(texNombre(resultat, 0))}$<br>
         `
       if (nombre > a * 100 + 50) {
         texteCorr += texteEnCouleur(`
     Mentalement : <br>
 On remplace le premier facteur $${texNombre(nombre, 0)}$ par $${(a + 1) * 100}$, on calcule
 $${(a + 1) * 100}\\times ${d}=${texNombre((a + 1) * 100 * d, 0)}$ et on sélectionne le résultat qui s'en rapproche le plus.
-    `)
+    `, bleuMathalea)
       } else {
         texteCorr += texteEnCouleur(`
     Mentalement : <br>
     On remplace le premier facteur $${texNombre(nombre, 0)}$ par $${a * 100}$, on calcule
     $${a * 100}\\times ${d}=${texNombre(a * 100 * d, 0)}$ et on sélectionne le résultat qui s'en rapproche le plus.
-           `)
+           `, bleuMathalea)
       }
       if (this.questionJamaisPosee(i, a, nombre)) {
         // Si la question n'a jamais été posée, on en crée une autre

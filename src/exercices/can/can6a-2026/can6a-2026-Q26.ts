@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Figure from 'apigeom'
 import Segment from 'apigeom/src/elements/lines/Segment'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -57,7 +58,7 @@ export default class Can2026Q26 extends ExerciceCan {
     this.reponse = num
     this.question = `Tracer un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
     this.correction = `L'unité a une longueur de $${den}~\\text{carreaux}$ donc $\\dfrac{1}{${den}}~\\text{u.l}=1~\\text{carreau}$.`
-    this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${num}~\\text{carreaux}$.`
+    this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${miseEnEvidence(num)}~\\text{carreaux}$.`
     this.canEnonce = this.question
 
     const figure = new Figure({

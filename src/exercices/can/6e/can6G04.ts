@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { droite } from '../../../lib/2d/droites'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -103,6 +104,6 @@ export default class ProblemesDeLongueurs extends ExerciceSimple {
         objets,
       )
     this.reponse = abc
-    this.correction = `Comme $AB=${b}\\times DE$ et $DE=${a}\\times FE$, alors $AB=${b}\\times${a}\\times ${c} \\text{ cm} =${this.reponse}\\text{ cm}$.`
+    this.correction = `Comme $AB=${b}\\times DE$ et $DE=${a}\\times FE$, alors $AB=${b}\\times${a}\\times ${c} \\text{ cm} =${miseEnEvidence(this.reponse)}\\text{ cm}$.`
   }
 }

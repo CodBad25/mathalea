@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { numTrie } from '../../../lib/outils/nombres'
 import { randint } from '../../../modules/outils'
@@ -37,6 +38,6 @@ export default class PlusGrandNombreEntier extends ExerciceSimple {
 
     this.question = `Quel est le plus grand nombre que l'on peut écrire avec les trois chiffres : ${a}, ${b} et ${c} ?`
     this.reponse = chiffres[2] * 100 + chiffres[1] * 10 + chiffres[0]
-    this.correction = `Le plus grand nombre possible est : $${chiffres[2]}\\times 100 + ${chiffres[1]}\\times 10 + ${chiffres[0]}=${chiffres[2] * 100 + chiffres[1] * 10 + chiffres[0]}$`
+    this.correction = `Le plus grand nombre possible est : $${chiffres[2]}\\times 100 + ${chiffres[1]}\\times 10 + ${chiffres[0]}=${miseEnEvidence(chiffres[2] * 100 + chiffres[1] * 10 + chiffres[0])}$`
   }
 }

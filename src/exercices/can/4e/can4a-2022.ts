@@ -1,3 +1,6 @@
+import { pgcd } from '../../../lib/outils/primalite'
+import { orangeMathalea } from '../../../lib/colors'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
@@ -162,7 +165,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           a = randint(4, 9)
           b = randint(4, 9)
           texte = `$${a} \\times ${b}=$ `
-          texteCorr = `$${a} \\times ${b}=${a * b}$`
+          texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           reponse = a * b
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -225,13 +228,13 @@ export default class SujetCAN2022quatrieme extends Exercice {
               ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre[c][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]
               texteCorr = ` ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre[c][0]}$=
-              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]}$ `
+              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1])}$ `
             } else {
               texte = `Écris en chiffres le nombre : <br>
                           ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre[c][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]
               texteCorr = ` ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre[c][0]}$=
-                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]}$ `
+                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1])}$ `
             }
           } else {
             if (a === 0) {
@@ -239,13 +242,13 @@ export default class SujetCAN2022quatrieme extends Exercice {
               ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre2[d][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]
               texteCorr = ` ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre2[d][0]}$=
-              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]}$ `
+              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1])}$ `
             } else {
               texte = `Écris en chiffres le nombre : <br>
                           ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre2[d][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]
               texteCorr = ` ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre2[d][0]}$=
-                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]}$ `
+                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1])}$ `
             }
           }
 
@@ -262,7 +265,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           b = choice([19, 29])
           reponse = a - b
           texte = `$${a}-${b}=$ `
-          texteCorr = `$${a}-${b}=${a}-${b + 1}+1=${a - b}$ `
+          texteCorr = `$${a}-${b}=${a}-${b + 1}+1=${miseEnEvidence(a - b)}$ `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -282,7 +285,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             texteCorr = `
         Comme $1\\text{ m}$ $=100\\text{ cm}$, alors $1\\text{ cm}$ $=0,01\\text{ m}$.<br>
         Ainsi pour passer des $\\text{m}$ au $\\text{cm}$, on divise par $100$.<br>
-          Comme : $${a}\\div 100 =${texNombre(a / 100, 2)}$, alors $${a}\\text{ cm}=${texNombre(a / 100, 2)}\\text{ m}$.  `
+          Comme : $${a}\\div 100 =${texNombre(a / 100, 2)}$, alors $${a}\\text{ cm}=${miseEnEvidence(texNombre(a / 100, 2))}\\text{ m}$.  `
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(this, index, '') + 'm'
@@ -294,7 +297,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             reponse = a * 100
             texte = `$${texNombre(a, 1)}\\text{ m}$  $=$ `
             texteCorr = ` Comme $1\\text{ m}$ $=100\\text{ cm}$,  pour passer des $\\text{m}$ au $\\text{cm}$, on multiplie par $100$.<br>
-                Comme : $${texNombre(a, 1)}\\times 100 =${texNombre(a * 100, 0)}$, alors $${texNombre(a, 2)}\\text{ m}=${texNombre(reponse, 0)}\\text{ cm}$.`
+                Comme : $${texNombre(a, 1)}\\times 100 =${texNombre(a * 100, 0)}$, alors $${texNombre(a, 2)}\\text{ m}=${miseEnEvidence(texNombre(reponse, 0))}\\text{ cm}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -317,11 +320,11 @@ export default class SujetCAN2022quatrieme extends Exercice {
             if (choice([true, false])) {
               texte = `$2\\times${a}\\times 5=$
              `
-              texteCorr = `$2\\times${a}\\times 5=10\\times ${a}=${10 * a}$`
+              texteCorr = `$2\\times${a}\\times 5=10\\times ${a}=${miseEnEvidence(10 * a)}$`
             } else {
               texte = `$5\\times${a}\\times 2=$
              `
-              texteCorr = `$5\\times${a}\\times 2=10\\times ${a}=${10 * a}$`
+              texteCorr = `$5\\times${a}\\times 2=10\\times ${a}=${miseEnEvidence(10 * a)}$`
             }
 
             reponse = 10 * a
@@ -330,11 +333,11 @@ export default class SujetCAN2022quatrieme extends Exercice {
             if (choice([true, false])) {
               texte = `$4\\times${a}\\times 25=$
              `
-              texteCorr = `$4\\times${a}\\times 25=100\\times ${a}=${100 * a}$`
+              texteCorr = `$4\\times${a}\\times 25=100\\times ${a}=${miseEnEvidence(100 * a)}$`
             } else {
               texte = `$50\\times${a}\\times 2=$
              `
-              texteCorr = `$50\\times${a}\\times 2=100\\times ${a}=${100 * a}$`
+              texteCorr = `$50\\times${a}\\times 2=100\\times ${a}=${miseEnEvidence(100 * a)}$`
             }
 
             reponse = 100 * a
@@ -354,10 +357,10 @@ export default class SujetCAN2022quatrieme extends Exercice {
           reponse = u + a * 0.1 + c * 0.001
           if (choice([true, false])) {
             texte = `Écrire sous forme décimale : $${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}$ `
-            texteCorr = `$${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${u}+${texNombre(a / 10, 1)}+${texNombre(c / 1000, 3)}=${texNombre(u + a / 10 + c / 1000, 3)}$`
+            texteCorr = `$${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${u}+${texNombre(a / 10, 1)}+${texNombre(c / 1000, 3)}=${miseEnEvidence(texNombre(u + a / 10 + c / 1000, 3))}$`
           } else {
             texte = `Écrire sous forme décimale : $${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}$ `
-            texteCorr = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}=${u}+${texNombre(c / 1000, 3)}+${texNombre(a / 10, 1)}=${texNombre(u + a / 10 + c / 1000, 3)}$
+            texteCorr = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}=${u}+${texNombre(c / 1000, 3)}+${texNombre(a / 10, 1)}=${miseEnEvidence(texNombre(u + a / 10 + c / 1000, 3))}$
              `
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -373,7 +376,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           c = randint(3, 9)
           reponse = a + b * c
           texte = `$${a}+${b}\\times ${c}=$`
-          texteCorr = `La multiplication est prioritaire : $${a}+${b}\\times ${c}=${a}+${b * c}=${a + b * c}$
+          texteCorr = `La multiplication est prioritaire : $${a}+${b}\\times ${c}=${a}+${b * c}=${miseEnEvidence(a + b * c)}$
                                    `
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -389,7 +392,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           b = choice([19, 29])
           reponse = a + b
           texte = `$${a}+${b}=$ `
-          texteCorr = `$${a}+${b}=${a}+${b + 1}-1=${a + b}$ `
+          texteCorr = `$${a}+${b}=${a}+${b + 1}-1=${miseEnEvidence(a + b)}$ `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -417,7 +420,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
             texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}`
             texteCorr = `En prenant un ordre de grandeur pour chacun des deux nombres, on obtient  $50\\times ${Math.round(b)}=${50 * Math.round(b)}$.<br>
-            Comme le résultat exact est proche de cet ordre de grandeur, on choisit $${texNombre(reponse)}$ parmi les propositions.`
+            Comme le résultat exact est proche de cet ordre de grandeur, on choisit $${miseEnEvidence(texNombre(reponse))}$ parmi les propositions.`
           }
           if (choix === 'b') {
             a = randint(3, 9) + randint(1, 9) / 10
@@ -433,7 +436,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
             texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}`
             texteCorr = `En prenant un ordre de grandeur pour chacun des deux nombres, on obtient  $${Math.round(a)}\\times ${Math.round(b)}=${Math.round(a) * Math.round(b)}$.<br>
-            Comme le résultat exact est proche de cet ordre de grandeur, on choisit $${texNombre(reponse)}$ parmi les propositions.`
+            Comme le résultat exact est proche de cet ordre de grandeur, on choisit $${miseEnEvidence(texNombre(reponse))}$ parmi les propositions.`
           }
           if (choix === 'c') {
             a = randint(45, 49) + randint(1, 9) / 10
@@ -449,7 +452,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
             texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}`
             texteCorr = `En prenant un ordre de grandeur pour chacun des deux nombres, on obtient  $30\\times 50=1500$.<br>
-            Comme le résultat exact est proche de cet ordre de grandeur, on choisit $${texNombre(reponse)}$ parmi les propositions.`
+            Comme le résultat exact est proche de cet ordre de grandeur, on choisit $${miseEnEvidence(texNombre(reponse))}$ parmi les propositions.`
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -468,20 +471,20 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
           if (d === 0.1) {
             texte = `$${f}\\times ${texNombre(d, 1)}=$`
-            texteCorr = `$${f}\\times ${texNombre(d, 1)}=${texNombre(reponse)}$`
+            texteCorr = `$${f}\\times ${texNombre(d, 1)}=${miseEnEvidence(texNombre(reponse))}$`
             texteCorr += `
           $${f}\\times ${texNombre(d, 1)}=${f}\\div 10=${a}${b},\\underline{${c}}$ `
           }
           if (d === 0.01) {
             texte = `$${f}\\times ${texNombre(d, 2)}=$`
-            texteCorr = `$${f}\\times ${texNombre(d, 2)}=${texNombre(reponse)}$`
+            texteCorr = `$${f}\\times ${texNombre(d, 2)}=${miseEnEvidence(texNombre(reponse))}$`
             texteCorr += `
           $${f}\\times ${texNombre(d, 2)}=${f}\\div 100=${a},${b}\\underline{${c}}$<br>
                       `
           }
           if (d === 0.001) {
             texte = `$${f}\\times ${texNombre(d, 3)}=$`
-            texteCorr = `$${f}\\times ${texNombre(d, 3)}=${texNombre(reponse)}$`
+            texteCorr = `$${f}\\times ${texNombre(d, 3)}=${miseEnEvidence(texNombre(reponse))}$`
             texteCorr += `
           $${f}\\times ${texNombre(d, 3)}=${f}\\div 1000=0,${a}${b}\\underline{${c}}$<br>
 
@@ -500,7 +503,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           texte = `$${a}\\,\\%$ de $${b} =$
          `
 
-          texteCorr = `$${a}\\,\\%$ de $${b} =${texNombre(a / 100, 2)}\\times ${b}=${texNombre((b * a) / 100, 2)}$.
+          texteCorr = `$${a}\\,\\%$ de $${b} =${texNombre(a / 100, 2)}\\times ${b}=${miseEnEvidence(texNombre((b * a) / 100, 2))}$.
           `
 
           reponse = arrondi((a / 100) * b, 2)
@@ -519,7 +522,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
           texte = `Écris $\\dfrac{${a[0]}}{${a[1]}}$ sous forme décimale.`
 
-          texteCorr = `$\\dfrac{${a[0]}}{${a[1]}}=${texNombre(a[0] / a[1], 2)}$`
+          texteCorr = `$\\dfrac{${a[0]}}{${a[1]}}=${miseEnEvidence(texNombre(a[0] / a[1], 2))}$`
 
           reponse = arrondi(a[0] / a[1], 2)
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -557,7 +560,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             e,
           )
           texteCorr = `Le périmètre en cm est donné par :
-            $2\\times ${a}+2\\times ${b} =2\\times(${a}+${b})=${reponse}\\text{ cm}$`
+            $2\\times ${a}+2\\times ${b} =2\\times(${a}+${b})=${miseEnEvidence(reponse)}\\text{ cm}$`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -588,7 +591,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
               texte += ajouteChampTexteMathLive(this, index, '')
             }
             handleAnswers(this, index, { reponse: { value: reponse } })
-            texteCorr = `$${a}+(${-a})=0$. Les nombres $${a}$ et $${-a}$ sont opposés.`
+            texteCorr = `$${a}+(${-a})=0$. Les nombres $${a}$ et $${miseEnEvidence(-a)}$ sont opposés.`
           } else {
             reponse = fraction(1, a)
             if (!this.interactif) {
@@ -600,7 +603,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             handleAnswers(this, index, {
               reponse: { value: reponse, options: { fractionEgale: true } },
             })
-            texteCorr = `$${a}\\times\\dfrac{1}{${a}}=1$. Les nombres $${a}$ et $\\dfrac{1}{${a}}$ sont inverses.`
+            texteCorr = `$${a}\\times\\dfrac{1}{${a}}=1$. Les nombres $${a}$ et $${miseEnEvidence(`\\dfrac{1}{${a}}`)}$ sont inverses.`
           }
 
           nbChamps = 1
@@ -611,7 +614,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
           texte = `La moitié de $${texNombre(a, 2)}$ est égale à : `
 
-          texteCorr = `La moitié de $${texNombre(a, 2)}$ est égale à $${texNombre(a, 2)}\\div 2=${texNombre(a / 2, 2)}$.`
+          texteCorr = `La moitié de $${texNombre(a, 2)}$ est égale à $${texNombre(a, 2)}\\div 2=${miseEnEvidence(texNombre(a / 2, 2))}$.`
 
           reponse = arrondi(a / 2, 2)
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -630,7 +633,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           Combien de cL reste-t-il dans la bouteille ?`
 
           texteCorr = `$${texNombre(a, 1)}$ L $=${texNombre(a * 100, 0)}$ cL.<br>
-          Il reste donc dans la bouteille : $${texNombre(a * 100, 0)}-${b}=${texNombre(a * 100 - b, 0)}$ cL`
+          Il reste donc dans la bouteille : $${texNombre(a * 100, 0)}-${b}=${miseEnEvidence(texNombre(a * 100 - b, 0))}$ cL`
 
           reponse = a * 100 - b
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -663,7 +666,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             for (indice = a - 1; indice < a; indice++) {
               texteCorr += `$${a - indice}$`
             }
-            texteCorr += `$=${reponse}$`
+            texteCorr += `$=${miseEnEvidence(reponse)}$`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -693,7 +696,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
             texteCorr += '$0$'
 
-            texteCorr += `$=${reponse}$`
+            texteCorr += `$=${miseEnEvidence(reponse)}$`
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
@@ -712,7 +715,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
            $ ${a.texFraction}=\\dfrac{\\ldots}{${texNombre(1.5 * fraction18[1], 0)}}$`
 
           texteCorr = `$${a.texFraction}=\\dfrac{${texNombre(fraction18[0] / 2, 0)}}{${texNombre(fraction18[1] / 2, 0)}}=
-          \\dfrac{3\\times ${texNombre(fraction18[0] / 2, 0)}}{3\\times${texNombre(fraction18[1] / 2, 0)}}=\\dfrac{${texNombre((3 * fraction18[0]) / 2, 0)}}{${texNombre((3 * fraction18[1]) / 2, 0)}}$`
+          \\dfrac{3\\times ${texNombre(fraction18[0] / 2, 0)}}{3\\times${texNombre(fraction18[1] / 2, 0)}}=\\dfrac{${miseEnEvidence(texNombre((3 * fraction18[0]) / 2, 0))}}{${texNombre((3 * fraction18[1]) / 2, 0)}}$`
 
           reponse = arrondi(1.5 * fraction18[0], 0)
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -762,12 +765,12 @@ export default class SujetCAN2022quatrieme extends Exercice {
           if (choice([true, false])) {
             texte = "L'abscisse du point $A$ est :<br>"
             texteCorr = `L'abscisse du point $A$ se lit sur l'axe horizontal. L'unité (sur l'axe des abscisses) est divisée en $${k1}$. <br>
-            Le point $A$ a pour abscisse $\\dfrac{${a}}{${k1}}${simplificationDeFractionAvecEtapes(a, k1)}$.`
+            Le point $A$ a pour abscisse $${pgcd(a, k1) === 1 && a * k1 > 0 ? miseEnEvidence(`\\dfrac{${a}}{${k1}}`) : `\\dfrac{${a}}{${k1}}${simplificationDeFractionAvecEtapes(a, k1, { couleur2: orangeMathalea })}`}$.`
             reponse = fraction(a, k1)
           } else {
             texte = "L'ordonnée du point $A$ est :<br>"
             texteCorr = `L'ordonnée du point $A$ se lit sur l'axe vertical. L'unité (sur l'axe des ordonnées) est divisée en $${k2}$. <br>
-            Le point $A$ a pour ordonnée $\\dfrac{${b}}{${k2}}${simplificationDeFractionAvecEtapes(b, k2)}$.`
+            Le point $A$ a pour ordonnée $${pgcd(b, k2) === 1 && b * k2 > 0 ? miseEnEvidence(`\\dfrac{${b}}{${k2}}`) : `\\dfrac{${b}}{${k2}}${simplificationDeFractionAvecEtapes(b, k2, { couleur2: orangeMathalea })}`}$.`
             reponse = fraction(b, k2)
           }
           texte += mathalea2d(
@@ -801,7 +804,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           texte = `Calcule : <br>
              $${a}+\\dfrac{${k * b}}{${b - c}+${c}}=$`
 
-          texteCorr = `$${a}+\\dfrac{${k * b}}{${b - c}+${c}}=${a}+\\dfrac{${k * b}}{${b}}=${a}+${k}=${a + k}$`
+          texteCorr = `$${a}+\\dfrac{${k * b}}{${b - c}+${c}}=${a}+\\dfrac{${k * b}}{${b}}=${a}+${k}=${miseEnEvidence(a + k)}$`
 
           reponse = a + k
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -820,7 +823,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           texte = `Un véhicule roule à $${c}\\text{ km/h}$. Quelle distance parcourt-il en $${b}$ minutes ?`
           texteCorr = `Le véhicule parcourt $${c / a}\\text{ km}$.<br>
              En $${b}$ minutes, il parcourt $${a}$ fois moins de $\\text{km}$ qu'en $1$ heure, soit $\\dfrac{${c}}{${a}}=
-              ${c / a}\\text{ km}$.`
+              ${miseEnEvidence(c / a)}\\text{ km}$.`
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -839,7 +842,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           reponse = a * b * c
           texte = `Calcule : <br>
                 $${a}\\times ${ecritureParentheseSiNegatif(b)}\\times (${c})=$`
-          texteCorr = `$${a}\\times ${ecritureParentheseSiNegatif(b)}\\times (${c})=${a * b}\\times (${c})=${reponse}$`
+          texteCorr = `$${a}\\times ${ecritureParentheseSiNegatif(b)}\\times (${c})=${a * b}\\times (${c})=${miseEnEvidence(reponse)}$`
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
@@ -855,7 +858,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           reponse = a ** 2
           texte = `Calcule : <br>
                   $ ${ecritureParentheseSiNegatif(a)}^2=$`
-          texteCorr = `$ ${ecritureParentheseSiNegatif(a)}^2=${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(a)}=${reponse}$`
+          texteCorr = `$ ${ecritureParentheseSiNegatif(a)}^2=${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(a)}=${miseEnEvidence(reponse)}$`
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, index, '')
@@ -874,7 +877,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
                $\\dfrac{${b.n * k1}}{${b.d * k1}}$
                  `
 
-          texteCorr = `$\\dfrac{${b.n * k1}}{${b.d * k1}}=\\dfrac{${b.n}\\times ${k1}}{${b.d}\\times ${k1}}=\\dfrac{${b.n}}{${b.d}}$.`
+          texteCorr = `$\\dfrac{${b.n * k1}}{${b.d * k1}}=\\dfrac{${b.n}\\times ${k1}}{${b.d}\\times ${k1}}=${miseEnEvidence(`\\dfrac{${b.n}}{${b.d}}`)}$.`
 
           reponse = fraction(b.n, b.d).simplifie()
           handleAnswers(this, i, {
@@ -900,7 +903,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
                 `
 
           texteCorr = `La somme des $3$ valeurs est : $${a}+${b}+${c} =${d}$.<br>
-                La moyenne est donc $\\dfrac{${d}}{3}=${texNombre(d / 3, 0)}$.`
+                La moyenne est donc $\\dfrac{${d}}{3}=${miseEnEvidence(texNombre(d / 3, 0))}$.`
 
           reponse = arrondi(d / 3, 0)
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -923,7 +926,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
                   `
           }
 
-          texteCorr = `$1,5\\times ${a}=${a}\\times 1,5=1\\times ${a}+\\underbrace{0,5\\times ${a}}_{=${a}\\div 2}=${a}+${texNombre(a * 0.5, 0)}=${reponse}$`
+          texteCorr = `$1,5\\times ${a}=${a}\\times 1,5=1\\times ${a}+\\underbrace{0,5\\times ${a}}_{=${a}\\div 2}=${a}+${texNombre(a * 0.5, 0)}=${miseEnEvidence(reponse)}$`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -941,7 +944,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             texte = `Complète.<br>
                  $${a}$ L $=$ `
             texteCorr = `$1\\text{ dm}^3 = 1$ L et $1\\text{ dm}^3 = 1000\\text{ cm}^3$.<br>
-                  $${a}$ L = ${a} dm$^3 =${a} \\times 1000\\text{ cm}^3=${texNombre(reponse, 3)}\\text{ cm}^3$.`
+                  $${a}$ L = ${a} dm$^3 =${a} \\times 1000\\text{ cm}^3=${miseEnEvidence(texNombre(reponse, 3))}\\text{ cm}^3$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(this, index, '') + ' cm$^3$'
@@ -953,7 +956,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             texte = `Complète.<br>
                    $${a}\\text{ cm}^3$ $=$ `
             texteCorr = `$1\\text{ dm}^3 = 1$ L et $1\\text{ cm}^3 = 0,001\\text{ dm}^3$.<br>
-                   $${a}\\text{ cm}^3 = ${a} \\div 1000\\text{ dm}^3= ${texNombre(a / 1000, 3)}\\text{ dm}^3 =${texNombre(reponse, 3)}$ L.`
+                   $${a}\\text{ cm}^3 = ${a} \\div 1000\\text{ dm}^3= ${texNombre(a / 1000, 3)}\\text{ dm}^3 =${miseEnEvidence(texNombre(reponse, 3))}$ L.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(this, index, '') + ' L'
@@ -1021,7 +1024,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
               On a $AB^2=BC^2-AC^2$, soit $AB^2=${a[2]}^2-${a[0]}^2=${a[2] ** 2 - a[0] ** 2}$.<br>
-              Par conséquent, $AB=${a[1]}$.`
+              Par conséquent, $AB=${miseEnEvidence(a[1])}$.`
           }
           if (choix === 'b') {
             objets.push(pol[0])
@@ -1060,7 +1063,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                 On a $AC^2=BC^2-AB^2$, soit $AC^2=${a[2]}^2-${a[1]}^2=${a[2] ** 2 - a[1] ** 2}$.<br>
-                Par conséquent, $AC=${a[0]}$.`
+                Par conséquent, $AC=${miseEnEvidence(a[0])}$.`
           }
           if (choix === 'c') {
             objets.push(pol[0])
@@ -1099,7 +1102,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                   On a $BC^2=AB^2+AC^2$, soit $BC^2=${a[0]}^2+${a[1]}^2=${a[0] ** 2 + a[1] ** 2}$.<br>
-                  Par conséquent, $BC=${a[2]}$.`
+                  Par conséquent, $BC=${miseEnEvidence(a[2])}$.`
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -1125,7 +1128,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
           texte = `Calcule $${a}x+${b}y$ pour $x=${c}$ et $y=${d}$.
                 `
 
-          texteCorr = `$${a}x+${b}y=${a}\\times ${ecritureParentheseSiNegatif(c)}+${b}\\times ${ecritureParentheseSiNegatif(d)}=${a * c}+${ecritureParentheseSiNegatif(b * d)}=${reponse}$`
+          texteCorr = `$${a}x+${b}y=${a}\\times ${ecritureParentheseSiNegatif(c)}+${b}\\times ${ecritureParentheseSiNegatif(d)}=${a * c}+${ecritureParentheseSiNegatif(b * d)}=${miseEnEvidence(reponse)}$`
           if (a * c + b * d === 0) {
             handleAnswers(this, index, {
               reponse: { value: '0', options: { texteAvecCasse: true } },
@@ -1151,7 +1154,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
 
           texteCorr = `Le nombre de caramels et le prix mayé sont deux grandeurs proportionnelles. <br>
             Le prix payé est la moitié du nombre de caramels. Autrement dit, le prix d'un caramels est $0,50$ €.<br>
-            $${c}$ caramels coûtent donc $${c}\\times 0,5=${texNombre(reponse, 2)}$ €.`
+            $${c}$ caramels coûtent donc $${c}\\times 0,5=${miseEnEvidence(texNombre(reponse, 2))}$ €.`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {

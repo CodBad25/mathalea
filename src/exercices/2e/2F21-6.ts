@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
 import { addTableauSignesVariations } from '../../lib/customElements/TableauSignesVariationsElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -119,10 +120,10 @@ export default class Variationsfonctionaffine extends Exercice {
           Son sens de variation dépend du signe de $a$.<br>`
             let ligne1
             if (a > 0) {
-              texteCorr += `Comme $a=${a}>0$, la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
+              texteCorr += `Comme $a=${a}>0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement croissante')} sur $\\mathbb{R}$.<br>`
               ligne1 = ['Var', 10, '-/', 30, '+/', 30]
             } else {
-              texteCorr += `Comme $a=${a}<0$, la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
+              texteCorr += `Comme $a=${a}<0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement décroissante')} sur $\\mathbb{R}$.<br>`
 
               ligne1 = ['Var', 10, '+/', 30, '-/', 30]
             }
@@ -187,10 +188,10 @@ export default class Variationsfonctionaffine extends Exercice {
           Son sens de variation dépend du signe de $a$.<br>`
             let ligne1
             if (a > 0) {
-              texteCorr += `Comme $a=${texFractionReduite(a, d)}>0$, la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
+              texteCorr += `Comme $a=${texFractionReduite(a, d)}>0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement croissante')} sur $\\mathbb{R}$.<br>`
               ligne1 = ['Var', 10, '-/', 30, '+/', 30]
             } else {
-              texteCorr += `Comme $a=${texFractionReduite(a, d)}<0$, la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
+              texteCorr += `Comme $a=${texFractionReduite(a, d)}<0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement décroissante')} sur $\\mathbb{R}$.<br>`
 
               ligne1 = ['Var', 10, '+/', 30, '-/', 30]
             }
@@ -253,11 +254,11 @@ export default class Variationsfonctionaffine extends Exercice {
             Son sens de variation dépend du signe de $a$.<br>`
             let ligne1
             if (a > 0) {
-              texteCorr += `Comme $a=${a}>0$, la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>
+              texteCorr += `Comme $a=${a}>0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement croissante')} sur $\\mathbb{R}$.<br>
             `
               ligne1 = ['Var', 10, `-/$${fc}$`, 30, `+/$${fd}$`, 30]
             } else {
-              texteCorr += `Comme $a=${a}<0$, la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
+              texteCorr += `Comme $a=${a}<0$, la fonction $${nomF}$ est ${texteEnCouleurEtGras('strictement décroissante')} sur $\\mathbb{R}$.<br>`
 
               ligne1 = ['Var', 10, `+/$${fc}$`, 30, `-/$${fd}$`, 30]
             }

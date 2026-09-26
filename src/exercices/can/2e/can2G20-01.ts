@@ -112,7 +112,7 @@ export default class RelationChasles1 extends Exercice {
             $\\begin{aligned}
             \\overrightarrow{${nom[0]}${nom[1]}}\\underbrace{-\\overrightarrow{${nom[1]}${nom[0]}}}_{+\\overrightarrow{${nom[0]}${nom[1]}}}
             &=\\overrightarrow{${nom[0]}${nom[1]}}+\\overrightarrow{${nom[0]}${nom[1]}}\\\\
-            &=2${sp(1)}\\overrightarrow{${nom[0]}${nom[1]}}
+            &=${miseEnEvidence(`2${sp(1)}\\overrightarrow{${nom[0]}${nom[1]}}`)}
             \\end{aligned}$
             `
 
@@ -150,7 +150,7 @@ export default class RelationChasles1 extends Exercice {
             $\\begin{aligned}
             \\underbrace{-\\overrightarrow{${nom[0]}${nom[1]}}}_{+\\overrightarrow{${nom[1]}${nom[0]}}}+\\overrightarrow{${nom[1]}${nom[0]}}
             &=\\overrightarrow{${nom[1]}${nom[0]}}+\\overrightarrow{${nom[1]}${nom[0]}}\\\\
-            &=2${sp(1)}\\overrightarrow{${nom[1]}${nom[0]}}
+            &=${miseEnEvidence(`2${sp(1)}\\overrightarrow{${nom[1]}${nom[0]}}`)}
             \\end{aligned}$
             `
 

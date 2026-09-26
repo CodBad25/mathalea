@@ -1,4 +1,5 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une différence d’entiers'
 export const interactifReady = true
@@ -30,7 +31,7 @@ export default class DifferenceEntiers5e extends ExerciceSimple {
     const a = this.quotaRandint('a', 2, 30) + 100
     this.reponse = a - b
     this.question = `Calculer $${a} - ${b}$.`
-    this.correction = `$${a} - ${b}=${a - b}$`
+    this.correction = `$${a} - ${b}=${miseEnEvidence(a - b)}$`
     this.correction += texteEnCouleur(`<br> Mentalement : <br>
     On décompose le calcul $${a} - ${b}$ en  $(100+${a - 100})- ${b}$.<br>
     On obtient : <br>
@@ -40,6 +41,6 @@ export default class DifferenceEntiers5e extends ExerciceSimple {
     &=${a - b}
     \\end{aligned}$<br>
        Cela donne :  $${a} - ${b}=${a - b}$.
-      `)
+      `, bleuMathalea)
   }
 }

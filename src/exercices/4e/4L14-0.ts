@@ -1,10 +1,11 @@
+import { bleuMathalea } from '../../lib/colors'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -112,7 +113,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
            )}=${2 * x1}${ecritureAlgebrique(b)}=${2 * x1 + b}$<br>`
           texteCorr += `$${3 * x1 - a}\\not=${2 * x1 + b}$ donc l'égalité n'est pas vraie.<br>`
           texteCorr += `${texteEnCouleur(
-            `$x=${x1}$ n'est donc pas solution de l'équation $3x${ecritureAlgebrique(-a)}=2x${ecritureAlgebrique(b)}~$`,
+            `$x=${x1}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $3x${ecritureAlgebrique(-a)}=2x${ecritureAlgebrique(b)}~$`, bleuMathalea,
           )}<br><br>`
           texteCorr += `Pour $x=${ecritureParentheseSiNegatif(x2)}$ : <br>`
           texteCorr += `$3x-${ecritureParentheseSiNegatif(
@@ -127,9 +128,9 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           texteCorr +=
             "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
           texteCorr += `${texteEnCouleur(
-            `$x=${x2}$ est donc solution de l'équation $3x${ecritureAlgebrique(
+            `$x=${x2}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $3x${ecritureAlgebrique(
               -a,
-            )}=2x${ecritureAlgebrique(b)}~$`,
+            )}=2x${ecritureAlgebrique(b)}~$`, bleuMathalea,
           )}`
           break
         case 2: // 3x+a=5x-b  => x=(a+b)/2 donc a et b impairs pour une solution entière
@@ -156,7 +157,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           texteCorr +=
             "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
           texteCorr += `${texteEnCouleur(
-            `$x=${x1}$ est donc solution de l'équation $3x${ecritureAlgebrique(a)}=5x-${ecritureParentheseSiNegatif(b)}~$`,
+            `$x=${x1}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $3x${ecritureAlgebrique(a)}=5x-${ecritureParentheseSiNegatif(b)}~$`, bleuMathalea,
           )}<br><br>`
           texteCorr += `Pour $x=${x2}$ : <br>`
           texteCorr += `$3x${ecritureAlgebrique(a)}=3\\times ${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(
@@ -167,7 +168,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
            )}=${5 * x2}${ecritureAlgebrique(-b)}=${5 * x2 - b}$<br>`
           texteCorr += `$${3 * x2 + a}\\not=${5 * x2 - b}$ donc l'égalité n'est pas vraie.<br>`
           texteCorr += `${texteEnCouleur(
-            `$x=${x2}$ n'est donc pas solution de l'équation $3x${ecritureAlgebrique(a)}=5x-${ecritureParentheseSiNegatif(b)}~$`,
+            `$x=${x2}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $3x${ecritureAlgebrique(a)}=5x-${ecritureParentheseSiNegatif(b)}~$`, bleuMathalea,
           )}`
           break
         case 3: // 10(x-a)=4(2x+b) => x=(10a+4b)/2
@@ -198,9 +199,9 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           )}${ecritureAlgebrique(b)}\\Big)=4\\times ${ecritureParentheseSiNegatif(2 * x1 + b)}=${4 * (2 * x1 + b)}$<br>`
           texteCorr += `$${10 * (x1 - a)}\\not=${4 * (2 * x1 + b)}$ donc l'égalité n'est pas vraie.<br>`
           texteCorr += `${texteEnCouleur(
-            `$x=${x1}$ n'est donc pas solution de l'équation $10\\Big(x-${ecritureParentheseSiNegatif(
+            `$x=${x1}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $10\\Big(x-${ecritureParentheseSiNegatif(
               a,
-            )}\\Big)=4(2x${ecritureAlgebrique(b)})~$`,
+            )}\\Big)=4(2x${ecritureAlgebrique(b)})~$`, bleuMathalea,
           )}<br><br>`
           texteCorr += `Pour $x=${x2}$ : <br>`
           texteCorr += `$10\\Big(x-${ecritureParentheseSiNegatif(
@@ -215,9 +216,9 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           texteCorr +=
             "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
           texteCorr += `${texteEnCouleur(
-            `$x=${x2}$ est donc solution de l'équation $10\\Big(x-${ecritureParentheseSiNegatif(
+            `$x=${x2}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $10\\Big(x-${ecritureParentheseSiNegatif(
               a,
-            )}\\Big)=4(2x${ecritureAlgebrique(b)})~$`,
+            )}\\Big)=4(2x${ecritureAlgebrique(b)})~$`, bleuMathalea,
           )}`
           break
         case 4: // ax+b=(a+1)x-c => x=b+c
@@ -250,9 +251,9 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           texteCorr +=
             "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
           texteCorr += `${texteEnCouleur(
-            `$x=${x1}$ est donc solution de l'équation $${ecritureParentheseSiNegatif(
+            `$x=${x1}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $${ecritureParentheseSiNegatif(
               a,
-            )}x${ecritureAlgebrique(b)}=${a + 1}x${ecritureAlgebrique(-c)}~$`,
+            )}x${ecritureAlgebrique(b)}=${a + 1}x${ecritureAlgebrique(-c)}~$`, bleuMathalea,
           )}<br><br>`
           texteCorr += `Pour $x=${x2}$ : <br>`
           texteCorr += `$${a}x${ecritureAlgebrique(b)}=${a}\\times ${ecritureParentheseSiNegatif(
@@ -263,9 +264,9 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
            )}${ecritureAlgebrique(-c)}=${(a + 1) * x2}${ecritureAlgebrique(-c)}=${(a + 1) * x2 - c}$<br>`
           texteCorr += `$${a * x2 + b}\\not=${(a + 1) * x2 - c}$ donc l'égalité n'est pas vraie.<br>`
           texteCorr += `${texteEnCouleur(
-            `$x=${x2}$ n'est donc pas solution de l'équation $${ecritureParentheseSiNegatif(
+            `$x=${x2}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $${ecritureParentheseSiNegatif(
               a,
-            )}x${ecritureAlgebrique(b)}=${a + 1}x${ecritureAlgebrique(-c)}~$`,
+            )}x${ecritureAlgebrique(b)}=${a + 1}x${ecritureAlgebrique(-c)}~$`, bleuMathalea,
           )}<br><br>`
           break
         case 5: // a-2x=b+2x => x=(a-b)/4
@@ -291,7 +292,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           texteCorr +=
             "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
           texteCorr += `${texteEnCouleur(
-            `$x=${x1}$ est donc solution de l'équation $${a}-2x=${b}+2x~$`,
+            `$x=${x1}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $${a}-2x=${b}+2x~$`, bleuMathalea,
           )}<br><br>`
           texteCorr += `Pour $x=${x2}$ : <br>`
           texteCorr += `$${a}-2x=${a}-2\\times ${ecritureParentheseSiNegatif(
@@ -301,7 +302,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           )}=${b}${ecritureAlgebrique(2 * x2)}=${b + 2 * x2}$<br>`
           texteCorr += `$${a - 2 * x2}\\not=${b + 2 * x2}$ donc l'égalité n'est pas vraie.<br>`
           texteCorr += `${texteEnCouleur(
-            `$x=${x2}$ n'est donc pas solution de l'équation $${a}-2x=${b}+2x~$`,
+            `$x=${x2}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $${a}-2x=${b}+2x~$`, bleuMathalea,
           )}<br><br>`
           break
         case 6: // ax-ab=x²-bx => (a-x)(x-b)=0 solutions a et b.
@@ -378,7 +379,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
            )}${ecritureAlgebrique(b)}\\Big)=4\\times (${2 * x1}${ecritureAlgebrique(b)})=4\\times ${ecritureParentheseSiNegatif(2 * x1 + b)}=${4 * (2 * x1 + b)}$<br>`
           texteCorr += `$${12 * x1 - 4 * a}\\not=${4 * (2 * x1 + b)}$ donc l'égalité n'est pas vraie.<br>`
           texteCorr += `${texteEnCouleur(
-            `$x=${x1}$ n'est donc pas solution de l'équation $12x-${ecritureParentheseSiNegatif(4 * a)}=4(2x${ecritureAlgebrique(b)})~$`,
+            `$x=${x1}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $12x-${ecritureParentheseSiNegatif(4 * a)}=4(2x${ecritureAlgebrique(b)})~$`, bleuMathalea,
           )}<br><br>`
           texteCorr += `Pour $x=${x2}$ : <br>`
           texteCorr += `$12x-${ecritureParentheseSiNegatif(
@@ -393,7 +394,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           texteCorr +=
             "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
           texteCorr += `${texteEnCouleur(
-            `$x=${x2}$ est donc solution de l'équation $12x-${ecritureParentheseSiNegatif(4 * a)}=4(2x${ecritureAlgebrique(b)})~$`,
+            `$x=${x2}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $12x-${ecritureParentheseSiNegatif(4 * a)}=4(2x${ecritureAlgebrique(b)})~$`, bleuMathalea,
           )}<br><br>`
           break
         case 9: // x²-bx-ax+ab=0 => (a-x)(x-b)=0 solutions a et b.
@@ -446,13 +447,13 @@ function testOneValueForCase6(x1: number, a: number, b: number) {
     texteCorr +=
       "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
     texteCorr += `${texteEnCouleur(
-      `$x=${x1}$ est donc solution de l'équation $${rienSi1(a)}x${ecritureAlgebrique(-1 * a * b)}=x^2${ecritureAlgebrique(b)}x~$`,
+      `$x=${x1}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $${rienSi1(a)}x${ecritureAlgebrique(-1 * a * b)}=x^2${ecritureAlgebrique(b)}x~$`, bleuMathalea,
     )}<br><br>`
   } else {
     texteCorr += `$${a * x1 - a * b}\\not=${x1 * x1 - b * x1}$ donc l'égalité n'est pas vraie.<br>`
 
     texteCorr += `${texteEnCouleur(
-      `$x=${x1}$ n'est donc pas solution de l'équation $${rienSi1(a)}x${ecritureAlgebrique(-1 * a * b)}=x^2${ecritureAlgebrique(b)}x~$`,
+      `$x=${x1}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $${rienSi1(a)}x${ecritureAlgebrique(-1 * a * b)}=x^2${ecritureAlgebrique(b)}x~$`, bleuMathalea,
     )}<br><br>`
   }
   return texteCorr
@@ -478,13 +479,13 @@ function testOneValueForCase7(
       "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
 
     texteCorr += `${texteEnCouleur(
-      `$x=${x1}$ est donc solution de l'équation $${a * d}x${ecritureAlgebrique(-1 * b * d)}=${a * c}x^2${ecritureAlgebrique(-1 * b * c)}x~$`,
+      `$x=${x1}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $${a * d}x${ecritureAlgebrique(-1 * b * d)}=${a * c}x^2${ecritureAlgebrique(-1 * b * c)}x~$`, bleuMathalea,
     )}<br><br>`
   } else {
     texteCorr += `$${a * d * x1 - d * b}\\not=${a * c * x1 * x1 + b * c * x1}$ donc l'égalité n'est pas vraie.<br>`
 
     texteCorr += `${texteEnCouleur(
-      `$x=${x1}$ n'est donc pas solution de l'équation $${a * d}x${ecritureAlgebrique(-1 * b * d)}=${a * c}x^2${ecritureAlgebrique(-1 * b * c)}x~$`,
+      `$x=${x1}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $${a * d}x${ecritureAlgebrique(-1 * b * d)}=${a * c}x^2${ecritureAlgebrique(-1 * b * c)}x~$`, bleuMathalea,
     )}<br><br>`
   }
   return texteCorr
@@ -502,13 +503,13 @@ function testOneValueForCase9(x1: number, b: number, a: number) {
       "On trouve bien $0$ pour le membre de gauche donc l'égalité est vraie.<br>"
 
     texteCorr += `${texteEnCouleur(
-      `$x=${x1}$ est donc solution de l'équation $x^2${ecritureAlgebrique(-1 * (b + a))}x${ecritureAlgebrique(a * b)}=0~$`,
+      `$x=${x1}$ ${texteEnCouleurEtGras("est donc solution")} de l'équation $x^2${ecritureAlgebrique(-1 * (b + a))}x${ecritureAlgebrique(a * b)}=0~$`, bleuMathalea,
     )}<br><br>`
   } else {
     texteCorr += `$${x1 * x1 - (a + b) * x1 + a * b}\\not=0$ donc l'égalité n'est pas vraie.<br>`
 
     texteCorr += `${texteEnCouleur(
-      `$x=${x1}$ n'est donc pas solution de l'équation $x^2${ecritureAlgebrique(-1 * (b + a))}x${ecritureAlgebrique(a * b)}=0~$`,
+      `$x=${x1}$ ${texteEnCouleurEtGras("n'est donc pas solution")} de l'équation $x^2${ecritureAlgebrique(-1 * (b + a))}x${ecritureAlgebrique(a * b)}=0~$`, bleuMathalea,
     )}<br><br>`
   }
   return texteCorr

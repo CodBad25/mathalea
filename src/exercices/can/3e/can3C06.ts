@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { abs, arrondi } from '../../../lib/outils/nombres'
 import { randint } from '../../../modules/outils'
@@ -40,20 +41,20 @@ export default class CalculDivers1 extends ExerciceSimple {
         c = randint(-9, 9, 0)
         this.question = `Calculer $${ecritureParentheseSiNegatif(a)}^2-${b}\\times ${ecritureParentheseSiNegatif(c)}$.`
         this.correction = `La multiplication étant prioritaire, on obtient : <br>
-        $${ecritureParentheseSiNegatif(a)}^2-${b}\\times ${ecritureParentheseSiNegatif(c)}=${a * a}-${ecritureParentheseSiNegatif(b * c)}=${a * a - b * c}$.`
+        $${ecritureParentheseSiNegatif(a)}^2-${b}\\times ${ecritureParentheseSiNegatif(c)}=${a * a}-${ecritureParentheseSiNegatif(b * c)}=${miseEnEvidence(a * a - b * c)}$.`
         this.reponse = arrondi(a * a - b * c)
         break
       case 'b':
         a = randint(-10, -1)
         this.question = `Calculer $(${a})^2+${abs(a)}^2$.`
-        this.correction = `$(${a})^2+${abs(a)}^2=${a * a}+${a * a}=${2 * a * a}$.`
+        this.correction = `$(${a})^2+${abs(a)}^2=${a * a}+${a * a}=${miseEnEvidence(2 * a * a)}$.`
         this.reponse = arrondi(2 * a * a)
         break
       case 'c':
         a = randint(-7, 7, 0)
         b = randint(-7, 7, [0, 1, a])
         this.question = `Calculer $${ecritureParentheseSiNegatif(a)}^2+${ecritureParentheseSiNegatif(b)}^2$.`
-        this.correction = `$${ecritureParentheseSiNegatif(a)}^2+${ecritureParentheseSiNegatif(b)}^2=${a * a}+${b * b}=${a * a + b * b}$.`
+        this.correction = `$${ecritureParentheseSiNegatif(a)}^2+${ecritureParentheseSiNegatif(b)}^2=${a * a}+${b * b}=${miseEnEvidence(a * a + b * b)}$.`
         this.reponse = arrondi(a ** 2 + b ** 2)
         break
 
@@ -62,7 +63,7 @@ export default class CalculDivers1 extends ExerciceSimple {
         b = randint(-4, 4, [0, 1])
         c = randint(-9, 9, 0)
         this.question = `Calculer $${a}\\times ${ecritureParentheseSiNegatif(c)}+${ecritureParentheseSiNegatif(b)}^2$.`
-        this.correction = `La multiplication étant prioritaire, on obtient : <br> $${a}\\times ${ecritureParentheseSiNegatif(c)}+${ecritureParentheseSiNegatif(b)}^2=${a * c}+${ecritureParentheseSiNegatif(b)}^2=${a * c + b * b}$.`
+        this.correction = `La multiplication étant prioritaire, on obtient : <br> $${a}\\times ${ecritureParentheseSiNegatif(c)}+${ecritureParentheseSiNegatif(b)}^2=${a * c}+${ecritureParentheseSiNegatif(b)}^2=${miseEnEvidence(a * c + b * b)}$.`
         this.reponse = arrondi(a * c + b * b)
         break
     }

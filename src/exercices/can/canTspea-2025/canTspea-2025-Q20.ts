@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
@@ -60,12 +61,12 @@ export default class Can2025TQ20 extends ExerciceSimple {
     if (this.canOfficielle) {
       this.correction += `On calcule le discriminant $\\Delta=${signe === '-' ? `(${signe}\\sqrt{${b}})^2` : `\\sqrt{${b}}^2`} -4\\times 1\\times \\dfrac{1}{2}
   =${b}-\\dfrac{4}{2}=0$.<br>
-  On en déduit que l'équation admet une unique solution.`
+  On en déduit que l'équation ${texteEnCouleurEtGras('admet une unique solution')}.`
     } else {
       this.correction += `On calcule le discriminant :<br>
          $\\Delta=${signe === '-' ? `(${signe}\\sqrt{${b}})^2` : `\\sqrt{${b}}^2`} -4\\times 1\\times ${c.texFraction}
          =${b}-\\dfrac{${c.num * 4}}{${c.den}}${c.den === 4 ? '=0' : '\\neq 0'} $.<br>
-         ${c.den === 4 ? "On en déduit que l'équation admet une unique solution." : "On en déduit que l'équation n'admet pas une unique solution."}`
+         On en déduit que l'équation ${texteEnCouleurEtGras(c.den === 4 ? 'admet une unique solution' : "n'admet pas une unique solution")}.`
     }
     this.canEnonce = `L'équation $x^2${signe}\\sqrt{${b}}x+ ${this.canOfficielle ? '\\dfrac{1}{2}' : `${c.texFraction}`}=0$ admet une unique solution.`
     this.canReponseACompleter = `Entoure la bonne réponse :<br>Vrai ${sp(7)} Faux`

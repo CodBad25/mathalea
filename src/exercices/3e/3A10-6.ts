@@ -307,7 +307,7 @@ export default class TrouverChiffre extends Exercice {
           texteCorr += 'par $9$ donc ici, '
           texteCorr +=
             ajoutPourTroisouNeuf.length === 2
-              ? `les chiffres qui conviennent sont : $0$ et $9$.<br>$${nbAvecChiffreCache.replace(symboleChiffreCache, String(ajoutPourTroisouNeuf[0]))}$ et $${nbAvecChiffreCache.replace(symboleChiffreCache, String(ajoutPourTroisouNeuf[1]))}$ sont divisibles par $9$.`
+              ? `les chiffres qui conviennent sont : ${texteEnCouleurEtGras('0')} et ${texteEnCouleurEtGras('9')}.<br>$${nbAvecChiffreCache.replace(symboleChiffreCache, String(ajoutPourTroisouNeuf[0]))}$ et $${nbAvecChiffreCache.replace(symboleChiffreCache, String(ajoutPourTroisouNeuf[1]))}$ sont divisibles par $9$.`
               : `le chiffre qui convient est : ${texteEnCouleurEtGras(ajoutPourTroisouNeuf[0])}.<br>$${nbAvecChiffreCache.replace(symboleChiffreCache, String(ajoutPourTroisouNeuf[0]))}$  est divisible par $9$.`
           break
         case 5: // Divisible par 2 et par 3
@@ -462,7 +462,7 @@ export default class TrouverChiffre extends Exercice {
                 texteCorr += texteEnCouleurEtGras(
                   'pour que le nombre soit divisible par $3$.<br>',
                 )
-                texteCorr += `<br>${numAlpha(2)} Donc les chiffresYYYY qui conviennent sont les chiffres en commun à ${numAlpha(0, true)} et ${numAlpha(1, true)}, soit `
+                texteCorr += `<br>${numAlpha(2)} Donc les chiffres qui conviennent sont les chiffres en commun à ${numAlpha(0, true)} et ${numAlpha(1, true)}, soit `
                 for (let ee = 0; ee < ajoutPourTroisouNeuf.length - 2; ee++) {
                   texteCorr +=
                     texteEnCouleurEtGras(ajoutPourTroisouNeuf[ee]) + ', '

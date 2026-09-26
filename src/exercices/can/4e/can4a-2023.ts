@@ -631,7 +631,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
               )
             : `\\Fraction[Reponse,Couleur=LightGray,Rayon=0.8cm]{${num}/${den}}`
           texte += context.isHtml ? '' : '\\end{center}'
-          texteCorr = `L'aire grisée représente $${f.texFraction}$ de l'aire du disque.`
+          texteCorr = `L'aire grisée représente $${miseEnEvidence(f.texFraction)}$ de l'aire du disque.`
 
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { fractionEgale: true } },
@@ -993,7 +993,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
               e,
             )
             texteCorr = `L'aire du triangle est $\\dfrac{\\text{AB}\\times \\text{AC}}{2}=\\dfrac{${a}\\times \\text{AC}}{2}$.<br>
-          On obtient ainsi,  $\\dfrac{${a}\\times \\text{AC}}{2}=${c}$ soit $${a}\\times AC=2\\times ${c}$, soit $AC=\\dfrac{${c * 2}}{${a}}=${reponse}\\text{ cm}$.`
+          On obtient ainsi,  $\\dfrac{${a}\\times \\text{AC}}{2}=${c}$ soit $${a}\\times AC=2\\times ${c}$, soit $AC=\\dfrac{${c * 2}}{${a}}=${miseEnEvidence(reponse)}\\text{ cm}$.`
             texte += context.isHtml ? `${sp(4)}$AC= $` : ''
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {

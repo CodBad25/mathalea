@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
@@ -31,7 +32,7 @@ export default class Proportion extends ExerciceSimple {
     const a = randint(10, 100) /* Valeur */
     this.question = `Calculer  $${b}\\,\\%$ de $${a}$. `
     this.correction = `Calculer $p\\,\\%$ d'un nombre, c'est multiplier ce nombre par $\\dfrac{p}{100}$.<br>
-    Ainsi, $${b}\\,\\%$  de $${a}$ est égal à $${texNombre(b / 100)}\\times ${a}=${texNombre((b * a) / 100)}$.`
+    Ainsi, $${b}\\,\\%$  de $${a}$ est égal à $${texNombre(b / 100)}\\times ${a}=${miseEnEvidence(texNombre((b * a) / 100))}$.`
     this.reponse = ((a * b) / 100).toFixed(2)
   }
 }

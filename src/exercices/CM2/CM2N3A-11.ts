@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -63,7 +64,7 @@ export default class QuatreOperations extends Exercice {
             b = randint(110 - a, 110 - a + 50)
           }
           texte = `$${a}+${b} = $`
-          texteCorr = `$${a}+${b}=${a + b}$`
+          texteCorr = `$${a}+${b}=${miseEnEvidence(a + b)}$`
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
               this,
@@ -84,7 +85,7 @@ export default class QuatreOperations extends Exercice {
             b = randint(a - 39, a - 21)
           }
           texte = `$${a}-${b}=$`
-          texteCorr = `$${a}-${b}=${a - b}$`
+          texteCorr = `$${a}-${b}=${miseEnEvidence(a - b)}$`
           handleAnswers(this, i, { reponse: { value: a - b } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
@@ -105,7 +106,7 @@ export default class QuatreOperations extends Exercice {
             b = randint(2, 9)
           }
           texte = `$${a}\\times${b}=$`
-          texteCorr = `$${a}\\times${b}=${a * b}$`
+          texteCorr = `$${a}\\times${b}=${miseEnEvidence(a * b)}$`
           handleAnswers(this, i, { reponse: { value: a * b } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(
@@ -127,7 +128,7 @@ export default class QuatreOperations extends Exercice {
             b = randint(2, 9)
           }
           texte = `$${a * b}\\div${a}=$`
-          texteCorr = `$${a * b}\\div${a}=${b}$`
+          texteCorr = `$${a * b}\\div${a}=${miseEnEvidence(b)}$`
           handleAnswers(this, i, { reponse: { value: b } })
           if (this.interactif)
             texte += ajouteChampTexteMathLive(

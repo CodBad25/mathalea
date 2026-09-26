@@ -1,3 +1,7 @@
+import {
+  texteEnCouleurEtGras,
+  miseEnEvidence,
+} from '../../lib/outils/embellissements'
 import { matrice, range } from '../../lib/mathFonctions/Matrice'
 import type { Matrice } from '../../lib/mathFonctions/Matrice'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -124,10 +128,9 @@ export default class NomExercice extends Exercice {
         }
         detail += `${produit.subset(nblignes[0] - 1, nbcolonnes[1] - 1)}`
         texteCorr += `<br> Le détail du calcul de $c_{${nblignes[0]}, ${nbcolonnes[1]}}$ où $c_{${nblignes[0]}, ${nbcolonnes[1]}}$ est le coefficient de la $${nblignes[0]}$-ème ligne et de la $${nbcolonnes[1]}$-ème colonne de la matrice $C = AB$ donne : <br> $${detail}$.`
-        texteCorr += `<br> On trouve $A \\times B =  ${produitprint}$.`
+        texteCorr += `<br> On trouve $A \\times B =  ${miseEnEvidence(produitprint)}$.`
       } else {
-        texteCorr +=
-          "<br><br> Le produit $A \\times B$ n'est pas possible car le nombre de colonnes de $A$ n'est pas égal au nombre de lignes de $B$."
+        texteCorr += `<br><br> Le produit $A \\times B$ ${texteEnCouleurEtGras("n'est pas possible")} car le nombre de colonnes de $A$ n'est pas égal au nombre de lignes de $B$.`
       }
       if (nbcolonnes[1] === nblignes[0]) {
         const produit = matrices[1].multiply(matrices[0])
@@ -148,10 +151,9 @@ export default class NomExercice extends Exercice {
         }
         detail += `${produit.subset(nblignes[1] - 1, nbcolonnes[0] - 1)}`
         texteCorr += `<br> Le détail du calcul de $c_{${nblignes[1]}, ${nbcolonnes[0]}}$ où $c_{${nblignes[1]}, ${nbcolonnes[0]}}$ est le coefficient de la $${nblignes[1]}$-ème ligne et de la $${nbcolonnes[0]}$-ème colonne de la matrice $C = BA$ donne : <br> $${detail}$.`
-        texteCorr += `<br> On trouve $B \\times A =  ${produitprint}$.`
+        texteCorr += `<br> On trouve $B \\times A =  ${miseEnEvidence(produitprint)}$.`
       } else {
-        texteCorr +=
-          "<br><br> Le produit $B \\times A$ n'est pas possible car le nombre de colonnes de $B$ n'est pas égal au nombre de lignes de $A$."
+        texteCorr += `<br><br> Le produit $B \\times A$ ${texteEnCouleurEtGras("n'est pas possible")} car le nombre de colonnes de $B$ n'est pas égal au nombre de lignes de $A$.`
       }
       // Si la question n'a jamais été posée, on l'enregistre
       if (

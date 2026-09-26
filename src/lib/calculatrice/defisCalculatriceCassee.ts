@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../outils/embellissements'
 import { randint } from '../../modules/outils'
 import { range } from '../outils/nombres'
 
@@ -51,7 +52,7 @@ const situation1 = () => {
       question: `Produire un calcul donnant $${somme}$ en utilisant les touches de la calculatrice.<br>
     Certaines touches sont cassées.`,
       reponse: String(somme),
-      solution: `Une solution pour obtenir $${somme}$ est de faire $${x} + ${y}$ EXE.`,
+      solution: `Une solution pour obtenir $${somme}$ est de faire $${miseEnEvidence(`${x} + ${y}`)}$ EXE.`,
       listeTouchesCassees,
     }
   } while (solutions.length < 1)
@@ -73,7 +74,7 @@ const situation2 = () => {
     question: `Produire un calcul donnant $${reponse}$ en utilisant les touches de la calculatrice.<br>
     Certaines touches sont cassées.`,
     reponse,
-    solution: `Une solution pour obtenir $${reponse}$ est de faire $${a}${b} - ${c}$ EXE.`,
+    solution: `Une solution pour obtenir $${reponse}$ est de faire $${miseEnEvidence(`${a}${b} - ${c}`)}$ EXE.`,
     listeTouchesCassees,
   }
 }

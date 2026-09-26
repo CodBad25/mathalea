@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
@@ -417,19 +418,19 @@ export default class AssocierGraphiqueSysteme extends Exercice {
         if (![b3, b4, b5, b6].includes(b)) {
           texteCorr =
             texteCorr +
-            `L'ordonnée à l'origine de la première droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')]} est ${b} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')]} est associé au premier graphique.<br>`
+            `L'ordonnée à l'origine de la première droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')]} est ${b} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')])} est associé au premier graphique.<br>`
         } else if (![b3, b4, b5, b6].includes(b2)) {
           texteCorr =
             texteCorr +
-            `L'ordonnée à l'origine de la deuxième droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')]} est ${b2} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')]} est associé au graphique premier graphique.`
+            `L'ordonnée à l'origine de la deuxième droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')]} est ${b2} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')])} est associé au graphique premier graphique.`
         } else if (![b, b2, b5, b6].includes(b3)) {
           texteCorr =
             texteCorr +
-            `L'ordonnée à l'origine de la première droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')]} est ${b3} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')]} est associé au deuxième graphique.`
+            `L'ordonnée à l'origine de la première droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')]} est ${b3} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')])} est associé au deuxième graphique.`
         } else if (![b, b2, b5, b6].includes(b4)) {
           texteCorr =
             texteCorr +
-            `L'ordonnée à l'origine de la deuxième droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')]} est ${b4} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')]} est associé au deuxième graphique.`
+            `L'ordonnée à l'origine de la deuxième droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')]} est ${b4} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')])} est associé au deuxième graphique.`
         } else if (![b, b2, b3, b4].includes(b5)) {
           texteCorr =
             texteCorr +
@@ -437,7 +438,7 @@ export default class AssocierGraphiqueSysteme extends Exercice {
         } else if (![b, b2, b3, b4].includes(b6)) {
           texteCorr =
             texteCorr +
-            `L'ordonnée à l'origine de la deuxième droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '3')]} est ${b6} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '3')]} est associé au troisième graphique.`
+            `L'ordonnée à l'origine de la deuxième droite dans le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '3')]} est ${b6} et aucune droite dans un autre système n'a la même ordonnée à l'origine. Ainsi le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '3')])} est associé au troisième graphique.`
         }
         texteCorr =
           texteCorr +
@@ -445,8 +446,8 @@ export default class AssocierGraphiqueSysteme extends Exercice {
       }
       texteCorr =
         texteCorr +
-        `Le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')]} est associé au premier graphique,` +
-        ` le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')]} est associé au deuxième graphique, le système ${['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '3')]} au troisième graphique.`
+        `Le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '1')])} est associé au premier graphique,` +
+        ` le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '2')])} est associé au deuxième graphique, le système ${texteEnCouleurEtGras(['$A$', '$B$', '$C$'][lass.findIndex((item) => item === '3')])} au troisième graphique.`
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte

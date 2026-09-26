@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras, miseEnEvidence } from '../../lib/outils/embellissements'
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/view.capytale.review.1.test.ts ⚠️
  */
@@ -455,8 +456,8 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
           }
         } else texte = `$${texNombre(NombreAEcrire)}$`
         if (context.vue !== 'diap')
-          texteCorr = `$${texNombre(NombreAEcrire)}$ : ${nombreEnLettres(NombreAEcrire)}`
-        else texteCorr = `${nombreEnLettres(NombreAEcrire)}`
+          texteCorr = `$${texNombre(NombreAEcrire)}$ : ${texteEnCouleurEtGras(nombreEnLettres(NombreAEcrire))}`
+        else texteCorr = `${texteEnCouleurEtGras(nombreEnLettres(NombreAEcrire))}`
       } else {
         handleAnswers(this, i, {
           reponse: {
@@ -468,8 +469,8 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
           texte = `${nombreEnLettres(NombreAEcrire)} ${!context.isHtml ? ': $\\pointilles[5cm]$' : !this.interactif ? ' : $\\dotfill$' : ' <br>' + ajouteChampTexteMathLive(this, i, KeyboardType.numbersSpace, { espace: true })}`
         else texte = `${nombreEnLettres(NombreAEcrire)}`
         if (context.vue !== 'diap')
-          texteCorr = `${nombreEnLettres(NombreAEcrire)} : $${texNombre(NombreAEcrire)}$`
-        else texteCorr = `$${texNombre(NombreAEcrire)}$`
+          texteCorr = `${nombreEnLettres(NombreAEcrire)} : $${miseEnEvidence(texNombre(NombreAEcrire))}$`
+        else texteCorr = `$${miseEnEvidence(texNombre(NombreAEcrire))}$`
       }
 
       // Si la question n'a jamais été posée, on l'enregistre

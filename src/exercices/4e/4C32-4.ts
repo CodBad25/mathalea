@@ -107,7 +107,7 @@ export default class CalculsPuissancesDe10 extends Exercice {
           ? ` \\dfrac{${miseEnEvidence(texFactorisation(a), bleuMathalea)} \\times ${miseEnEvidence(texFactorisation(b), '#FF1493')}}{${miseEnEvidence(texFactorisation(c), '#8A2BE2')} \\times ${miseEnEvidence(texFactorisation(d), '#2E8B57')}}  \\times \\dfrac{${miseEnEvidence(`10^{${aexp}}`, bleuMathalea)} \\times ${miseEnEvidence(`10^{${bexp}}`, '#FF1493')}}{${miseEnEvidence(`10^{${cexp}}`, '#8A2BE2')} \\times ${miseEnEvidence(`10^{${dexp}}`, '#2E8B57')}} =`
           : ''
       }$`
-      texteCorr += ` $ ${scientifiquestring}$`
+      texteCorr += ` $ ${miseEnEvidence(scientifiquestring)}$`
       this.autoCorrection[i] = {}
       this.autoCorrection[i].enonce = `${texte}\n`
       this.autoCorrection[i].options = {

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { courbe } from '../../../lib/2d/Courbe'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import RepereBuilder from '../../../lib/2d/RepereBuilder'
@@ -179,11 +180,11 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
           this.correction = `L'équation réduite de la tangente au point d'abscisse $${nbre}$ est  : $y=f'(${nbre})(x-${ecritureParentheseSiNegatif(nbre)})+f(${nbre})$.<br>
         On lit graphiquement $f(${nbre})=${F(nbre)}$ et $f'(${nbre})=${f(nbre)}$.<br>
         L'équation réduite de la tangente est donc donnée par :
-        $y=${f(nbre)}(x${ecritureAlgebrique(-nbre)})${ecritureAlgebrique(F(nbre))}$, soit `
+        $y=${miseEnEvidence(`${f(nbre)}(x${ecritureAlgebrique(-nbre)})${ecritureAlgebrique(F(nbre))}`)}$, soit `
           if (-nbre * f(nbre) + F(nbre) === 0) {
-            this.correction += `$y=${rienSi1(f(nbre))}x$.`
+            this.correction += `$y=${miseEnEvidence(`${rienSi1(f(nbre))}x`)}$.`
           } else {
-            this.correction += `$y=${rienSi1(f(nbre))}x${ecritureAlgebrique(-nbre * f(nbre) + F(nbre))}$.`
+            this.correction += `$y=${miseEnEvidence(`${rienSi1(f(nbre))}x${ecritureAlgebrique(-nbre * f(nbre) + F(nbre))}`)}$.`
           }
 
           this.reponse = [`y=${f(nbre)}x+${-nbre * f(nbre) + F(nbre)}`]
@@ -325,11 +326,11 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
         this.correction = `L'équation réduite de la tangente au point d'abscisse $${nbre}$ est  : $y=f'(${nbre})(x-${ecritureParentheseSiNegatif(nbre)})+f(${nbre})$.<br>
       On lit graphiquement $f(${nbre})=${F(nbre)}$ et $f'(${nbre})=${f(nbre)}$.<br>
       L'équation réduite de la tangente est donc donnée par :
-      $y=${f(nbre)}(x${ecritureAlgebrique(-nbre)})${ecritureAlgebrique(F(nbre))}$, soit `
+      $y=${miseEnEvidence(`${f(nbre)}(x${ecritureAlgebrique(-nbre)})${ecritureAlgebrique(F(nbre))}`)}$, soit `
         if (-nbre * f(nbre) + F(nbre) === 0) {
-          this.correction += `$y=${f(nbre)}x$.`
+          this.correction += `$y=${miseEnEvidence(`${f(nbre)}x`)}$.`
         } else {
-          this.correction += `$y=${f(nbre)}x${ecritureAlgebrique(-nbre * f(nbre) + F(nbre))}$.`
+          this.correction += `$y=${miseEnEvidence(`${f(nbre)}x${ecritureAlgebrique(-nbre * f(nbre) + F(nbre))}`)}$.`
         }
         this.reponse = [`y=${f(nbre)}x+${-nbre * f(nbre) + F(nbre)}`]
         this.canEnonce = `On donne les représentations graphiques d'une fonction et de sa dérivée.<br>

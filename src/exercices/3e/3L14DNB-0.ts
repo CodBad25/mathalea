@@ -5,7 +5,7 @@ import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
 } from '../../lib/outils/ecritures'
-import { texteEnBoite, texteItalique } from '../../lib/outils/embellissements'
+import { texteEnBoite, texteItalique, miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -103,9 +103,9 @@ export default class Exercice3L14DNB0 extends ExerciceBrevetA {
 
     const listeCorrections = createList({
       items: [
-        `On a successivement : $${depart} \\to ${depart}^2 = ${depart * depart} \\to ${depart * depart} - ${facteur} \\times ${depart} = ${depart * depart - facteur * depart}  \\to, ${depart * depart - facteur * depart} - ${retrait} = ${f(depart)}$.`,
+        `On a successivement : $${depart} \\to ${depart}^2 = ${depart * depart} \\to ${depart * depart} - ${facteur} \\times ${depart} = ${depart * depart - facteur * depart}  \\to, ${depart * depart - facteur * depart} - ${retrait} = ${miseEnEvidence(f(depart))}$.`,
         `De même avec $x$ au départ : <br>
-              $x \\to x^2 \\to x^2 - ${facteur}x \\to x^2 - ${facteur}x - ${retrait}$.`,
+              $x \\to x^2 \\to x^2 - ${facteur}x \\to ${miseEnEvidence(`x^2 - ${facteur}x - ${retrait}`)}$.`,
         `On développe $(x+${a})(x-${b}) = x^2 ${ecritureAlgebriqueSauf1(-b)}x${ecritureAlgebriqueSauf1(a)}x${ecritureAlgebrique(-b * a)}=x^2-${facteur}x-${retrait}$.<br>On retrouve l'expression de la question 2.<br>
               On a donc $x^2 - ${facteur}x - ${retrait} = (x+${a})(x-${b})$.`,
         `Il faut trouver un ou des nombres $x$ tels que $x^2-${facteur}x-${retrait}=0$ ou d'après la question précédente tels que :<br>
@@ -116,9 +116,9 @@ export default class Exercice3L14DNB0 extends ExerciceBrevetA {
               &\\text{ou}&\\\\
               x-${b}&=&0
               \\end{array}\\right.$ d'où $\\left\\{\\begin{array}{l c l}
-              x&=&${-a}\\\\
+              x&=&${miseEnEvidence(-a)}\\\\
               &\\text{ou}&\\\\
-              x&=& ${b}
+              x&=& ${miseEnEvidence(b)}
               \\end{array}\\right.$.`,
         `Juliette doit compléter en ligne 4 et 6 :<br>
               ${scratchblock(texteScratch2)}

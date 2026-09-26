@@ -1,3 +1,4 @@
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
@@ -156,7 +157,7 @@ export default class Milieu extends Exercice {
             texteCorr +=
               "On applique les formules avec les données de l'énoncé  : <br><br>"
             texteCorr += `$\\begin{cases}x_${M.nom}=\\dfrac{x_${A.nom}+x_${B.nom}}{2}=\\dfrac{${xA}+${ecritureParentheseSiNegatif(xB)}}{2}=\\dfrac{${texNombre(xA + xB)}}{2}${xM.texSimplificationAvecEtapes()}\\\\[0.5em]y_${M.nom}=\\dfrac{y_${A.nom}+y_${B.nom}}{2}=\\dfrac{${yA}+${ecritureParentheseSiNegatif(yB)}}{2}=\\dfrac{${texNombre(yA + yB)}}{2}${yM.texSimplificationAvecEtapes()}\\end{cases}$`
-            texteCorr += `  <br>Ainsi : $${M.nom}\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)$ ou 
+            texteCorr += `  <br>Ainsi : $${miseEnEvidence(`${M.nom}\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)`)}$ ou 
           $${M.nom}\\left(${texNombre((xA + xB) / 2, 1)}\\,;\\,${texNombre((yA + yB) / 2, 1)}\\right)$<br> `
           }
           break
@@ -204,7 +205,7 @@ export default class Milieu extends Exercice {
             texteCorr += `$\\begin{cases}x_${M.nom}=\\dfrac{x_${A.nom}+x_${B.nom}}{2}\\\\[0.5em]y_${M.nom}=\\dfrac{y_${A.nom}+y_${B.nom}}{2}\\end{cases}$ `
             texteCorr += `$\\iff\\begin{cases}${texNombre(xM, 1)}=\\dfrac{${xA}+x_${B.nom}}{2}\\\\[0.5em]${texNombre(yM, 1)}=\\dfrac{${yA}+y_${B.nom}}{2}\\end{cases}\\iff \\begin{cases}${xA}+x_${B.nom}=2\\times ${ecritureParentheseSiNegatif(xM)}  \\\\[0.5em] ${yA}+y_${B.nom}=2\\times ${ecritureParentheseSiNegatif(yM)}\\end{cases}\\iff \\begin{cases}x_${B.nom}=${texNombre(2 * xM, 0)} ${ecritureAlgebrique(-xA)} \\\\[0.5em] y_${B.nom}=${texNombre(2 * yM, 0)}${ecritureAlgebrique(-yA)}\\end{cases}$`
             texteCorr += `<br>On en déduit :  $\\begin{cases}x_${B.nom}={${texNombre(2 * xM - xA)}}\\\\[0.5em]y_${B.nom}=${texNombre(2 * yM - yA)}\\end{cases}$`
-            texteCorr += `<br>Ainsi : $${B.nom}\\left( ${texNombre(2 * xM - xA)}\\,;\\,${texNombre(2 * yM - yA)}\\right)$`
+            texteCorr += `<br>Ainsi : $${miseEnEvidence(`${B.nom}\\left( ${texNombre(2 * xM - xA)}\\,;\\,${texNombre(2 * yM - yA)}\\right)`)}$`
           }
           break
 
@@ -349,7 +350,7 @@ export default class Milieu extends Exercice {
           \\dfrac{\\dfrac{${Ax.num * Bx.den}}{${Ax.den * Bx.den}}+\\dfrac{${Bx.num * Ax.den}}{${Ax.den * Bx.den}}}{2}=\\dfrac{\\dfrac{${Ax.num * Bx.den + Bx.num * Ax.den}}{${Ax.den * Bx.den}}}{2}=\\dfrac{${Ax.num * Bx.den + Bx.num * Ax.den}}{${Ax.den * Bx.den}}\\times \\dfrac{1}{2}=${xM.texFraction}${xM.texSimplificationAvecEtapes()}\\\\[1em]
           y_${M.nom}=\\dfrac{y_${A.nom}+y_${B.nom}}{2}=\\dfrac{${Ay.texFSD}+${By.num < 0 ? `\\left(${By.texFSD}\\right)` : `${By.texFSD}`}}{2}=
           \\dfrac{\\dfrac{${Ay.num * By.den}}{${Ay.den * By.den}}+\\dfrac{${By.num * Ay.den}}{${Ay.den * By.den}}}{2}=\\dfrac{\\dfrac{${Ay.num * By.den + By.num * Ay.den}}{${Ay.den * By.den}}}{2}=\\dfrac{${Ay.num * By.den + By.num * Ay.den}}{${Ay.den * By.den}}\\times \\dfrac{1}{2}=${yM.texFraction}${yM.texSimplificationAvecEtapes()}\\end{cases}$`
-            texteCorr += `  <br>Ainsi : $${M.nom}\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)$. `
+            texteCorr += `  <br>Ainsi : $${miseEnEvidence(`${M.nom}\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)`)}$. `
           }
           break
       }

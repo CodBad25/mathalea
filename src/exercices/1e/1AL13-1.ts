@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -152,7 +153,7 @@ Donner un calcul permettant de justifier les propos du journaliste.`,
 &=${texNombre(new Decimal(u0).mul(cm), 3)}                                    
                        \\end{aligned}$ 
                        <br>
-                       En février $2024$, on compte donc $${texNombre(new Decimal(u0).mul(cm).mul(1000), 0)}$ créations d'entreprise.`,
+                       En février $2024$, on compte donc $${miseEnEvidence(texNombre(new Decimal(u0).mul(cm).mul(1000), 0))}$ créations d'entreprise.`,
               createList({
                 items: [
                   `Pour tout entier naturel $n$, on a $ ${NomS}_{n+1} = ${NomS}_n \\times ${texNombre(cm, 3)}$.<br>
@@ -223,7 +224,7 @@ ${scriptPython(
             items: [
               `Augmenter de $${p}\\,\\%$ revient à multiplier par $${texNombre(cm, 2)}$.<br>
                     Ainsi, $${NomS}_{1}=${texNombre(cm, 2)}\\times ${u0}=${texNombre(new Decimal(cm).mul(u0), 2)}$ et $${NomS}_{2}=${texNombre(cm, 2)}\\times ${texNombre(new Decimal(cm).mul(u0), 2)}=${texNombre(new Decimal(cm).mul(u0).mul(cm), 2)}$.<br>
-                    Un an après son lancement, le téléphone coûte $${texNombre(new Decimal(cm).mul(u0), 2)}$ € et deux ans après, il coûte $${texNombre(new Decimal(cm).mul(u0).mul(cm), 2)}$ €.`,
+                    Un an après son lancement, le téléphone coûte $${miseEnEvidence(texNombre(new Decimal(cm).mul(u0), 2))}$ € et deux ans après, il coûte $${miseEnEvidence(texNombre(new Decimal(cm).mul(u0).mul(cm), 2))}$ €.`,
               `Pour tout entier naturel $n$,  $${NomS}_{n+1}=${texNombre(cm, 2)}\\times ${NomS}_n$.<br>
                 On reconnaît la définition par récurrence d'une suite géométrique de raison $${texNombre(cm, 2)}$.<br>
                 Son premier terme est $${NomS}_{0}=${u0}$.`,
@@ -248,7 +249,7 @@ ${scriptPython(
             \n ${n}&${texNombre(r, 2)} > ${b} \\\\\n \\hline\n
             \\end{array}\n$
             <br>On en déduit que l'algorithme retourne la valeur $${n}$.<br>
-            C'est donc $${n}$ ans après le lancement que le prix du téléphone dépassera $${b}$  €.`,
+            C'est donc $${miseEnEvidence(n)}$ ans après le lancement que le prix du téléphone dépassera $${b}$  €.`,
             ],
             style: 'nombres',
           })
@@ -291,7 +292,7 @@ Préciser sa raison et son premier terme.`,
             items: [
               `Diminuer de $${p}\\,\\%$ revient à multiplier par $${texNombre(cm, 2)}$.<br>
                   Ainsi, $${NomS}_{1}=${texNombre(cm, 2)}\\times ${u0}=${texNombre(new Decimal(cm).mul(u0), 2)}$.<br>
-                   Ce modèle prévoit $${texNombre(new Decimal(cm).mul(u0), 2)}$ habitants en $${2025}$.`,
+                   Ce modèle prévoit $${miseEnEvidence(texNombre(new Decimal(cm).mul(u0), 2))}$ habitants en $${2025}$.`,
               `On obtient le nombre d'habitants d'une année en multipliant le nombre d'habitants l'année précédente par $${texNombre(cm, 2)}$.<br>
               Ainsi, pour tout entier naturel $n$,  $${NomS}_{n+1}=${texNombre(cm, 2)}\\times ${NomS}_n$.<br>
               On reconnaît la définition par récurrence d'une suite géométrique de raison $${texNombre(cm, 2)}$.<br>
@@ -299,7 +300,7 @@ Préciser sa raison et son premier terme.`,
               `Pour tout entier naturel $n$, $${NomS}_n=${u0}\\times ${texNombre(cm, 2)}^n$.`,
               `$${2024 + Rannee}$ correspond à $n=${Rannee}$, d'où :<br>
 $${NomS}_{${Rannee}}=${u0}\\times (${texNombre(cm, 2)})^{${Rannee}}\\approx ${texNombre(new Decimal(cm).pow(Rannee).mul(u0), 0)}$.<br>
-Ce modèle prévoit $${texNombre(new Decimal(cm).pow(Rannee).mul(u0), 0)}$ habitants en $${2024 + Rannee}$.`,
+Ce modèle prévoit $${miseEnEvidence(texNombre(new Decimal(cm).pow(Rannee).mul(u0), 0))}$ habitants en $${2024 + Rannee}$.`,
               `On complète la fonction Python ci-dessous afin qu'elle permette de calculer, pour tout entier naturel $n$, le terme $${NomS}_n$.<br><br>
               ${scriptPython(
                 `def ${NomS}(n):
@@ -341,8 +342,8 @@ Préciser sa raison et son premier terme.`,
             items: [
               `$${NomS}_1=${texNombre(u0, 0)}+${r}=${texNombre(u0 + r, 0)}$<br>
               $${NomS}_2=${texNombre(u0 + r, 0)}+${r}=${texNombre(u0 + 2 * r, 0)}$<br>
-                  En $2025$, ce modèle prévoit $${texNombre(u0 + r, 0)}$ abonnés.<br>
-                   En $2026$, ce modèle prévoit $${texNombre(u0 + 2 * r, 0)}$ abonnés.`,
+                  En $2025$, ce modèle prévoit $${miseEnEvidence(texNombre(u0 + r, 0))}$ abonnés.<br>
+                   En $2026$, ce modèle prévoit $${miseEnEvidence(texNombre(u0 + 2 * r, 0))}$ abonnés.`,
               `On obtient le nombre d'abonnés d'une année sur l'autre en ajoutant $${r}$ abonnés.<br>
               Ainsi, pour tout entier naturel $n$,  $${NomS}_{n+1}= ${NomS}_n+${r}$.<br>
               On reconnaît la définition par récurrence d'une suite arithmétique de raison $${r}$.<br>
@@ -358,7 +359,7 @@ n&= ${choix === true ? `${texNombre(u0 / r, 1)}` : `${texNombre((2 * u0) / r, 1)
 \\end{aligned}$<br>
 On en déduit que c'est à partir de 
 $${choix === true ? `${texNombre(2024, 0)}+${texNombre(u0 / r, 1)}` : `${texNombre(2024, 0)}+${texNombre((2 * u0) / r, 1)}`}$
-soit en $${choix === true ? `${texNombre(2024 + u0 / r, 1)}` : `${texNombre(2024 + (2 * u0) / r, 1)}`}$ que le nombre d'abonnés aura ${choix ? 'doublé' : 'triplé'} par rapport à l'année $2024$.
+soit en $${miseEnEvidence(choix === true ? `${texNombre(2024 + u0 / r, 1)}` : `${texNombre(2024 + (2 * u0) / r, 1)}`)}$ que le nombre d'abonnés aura ${choix ? 'doublé' : 'triplé'} par rapport à l'année $2024$.
 `,
             ],
             style: 'nombres',
@@ -423,7 +424,7 @@ l'unité).`,
                 Ainsi, $${NomS}_{1}=${texNombre(cm, 2)}\\times ${texNombre(u0, 0)}=${texNombre(new Decimal(cm).mul(u0), 2)}$.<br>
                  Ce modèle prévoit $${texNombre(new Decimal(cm).mul(u0), 2)}$ visionnages une semaine après le début de la diffusion.`,
               `Toutes les semaines, le nombre de visionnages prévu est multiplié par $${texNombre(cm, 2)}$.<br>
-On en déduit que $(${NomS}_{n})$ est une suite géométrique de raison $${texNombre(cm, 2)}$.<br>
+On en déduit que $(${NomS}_{n})$ est une suite géométrique de raison $${miseEnEvidence(texNombre(cm, 2))}$.<br>
 Ainsi, pour tout entier naturel $n$, $${NomS}_n=${texNombre(u0, 0)}\\times ${texNombre(cm, 2)}^n$.`,
               `On cherche $n$ tel que $${NomS}_n > ${texNombre(b1, 0)}$, c'est-à-dire $${texNombre(u0, 0)}\\times ${texNombre(cm, 2)}^n>${texNombre(b1, 0)}$.<br>
 En utilisant la calculatrice, on trouve $n=${n1}$.`,
@@ -434,7 +435,7 @@ En utilisant la calculatrice, on trouve $n=${n1}$.`,
             \n ${n2}&${texNombre(a2, 2)} > ${texNombre(b, 0)} \\\\\n \\hline\n
             \\end{array}\n$
             <br>On en déduit que l'algorithme retourne la valeur $${n2}$.<br>
-            C'est donc à partir de la $${n2}$ ième semaine que le nombre de visionnages dépassera  $${texNombre(b, 0)}$.
+            C'est donc à partir de la $${miseEnEvidence(n2)}$ ième semaine que le nombre de visionnages dépassera  $${texNombre(b, 0)}$.
  `,
               `$S_n$ est la somme des $(n+1)$ premiers termes d'une suite géométrique de premier terme $${texNombre(u0, 0)}$ et de raison $${texNombre(cm, 2)}$.<br>
  Ainsi : <br>
@@ -508,7 +509,7 @@ Calculer $t_0$, puis montrer que la suite $(t_n)$ est géométrique de raison $q
            &=${texNombre(cm, 2)}t_n
            \\end{aligned}$<br>
            On a donc $t_{n+1}=${texNombre(cm, 2)}t_n$.<br>
-           $(t_n)$ est donc une suite géométrique de raison $${texNombre(cm, 2)}$.<br>
+           $(t_n)$ est donc une suite géométrique de raison $${miseEnEvidence(texNombre(cm, 2))}$.<br>
            On calcule son premier terme $t_0$ : <br>
            $\\begin{aligned}
           t_0&=${NomS}_0${ecritureAlgebrique(-b)}\\\\
@@ -516,7 +517,7 @@ Calculer $t_0$, puis montrer que la suite $(t_n)$ est géométrique de raison $q
           &=${texNombre(new Decimal(u0).sub(b), 1)}
           \\end{aligned}$`,
                   ` On en déduit l'expression de $t_n$ en fonction de $n$ pour tout entier naturel $n$ : $t_n=${texNombre(new Decimal(u0).sub(b), 1)}\\times ${texNombre(cm, 2)}^n$.<br>
-Or $t_n = ${NomS}_n${ecritureAlgebrique(-b)}$ donc $${NomS}_n = ${texNombre(new Decimal(u0).sub(b), 1)}\\times ${texNombre(cm, 2)}^n${ecritureAlgebrique(b)}$
+Or $t_n = ${NomS}_n${ecritureAlgebrique(-b)}$ donc $${NomS}_n = ${miseEnEvidence(`${texNombre(new Decimal(u0).sub(b), 1)}\\times ${texNombre(cm, 2)}^n${ecritureAlgebrique(b)}`)}$
 `,
                   `On a $${NomS}_{${nbreS}}=${texNombre(new Decimal(u0).sub(b), 1)}\\times ${texNombre(cm, 2)}^{${nbreS}}${ecritureAlgebrique(b)}
 \\approx ${texNombre(new Decimal(b.sub(u0).mul(-1).mul(cm.pow(nbreS)).add(b)), 0)}$.<br>
@@ -587,7 +588,7 @@ On a ainsi $d_1 = ${u0}$.
                   `,
               `Chaque semaine, la distance parcourue augmente de $${p}\\,\\%$ par rapport à celle parcourue la semaine précédente. <br>
               Ainsi, quel que soit $n \\geqslant 1$, $d_{n+1} = ${texNombre(cm, 2)} \\times d_n$.<br>
-              On reconnaît la définition par récurrence d'une suite géométrique de raison $${texNombre(cm, 2)}$ et de premier terme $d_1=${u0}$.`,
+              On reconnaît la définition par récurrence d'une suite géométrique de raison $${miseEnEvidence(texNombre(cm, 2))}$ et de premier terme $d_1=${u0}$.`,
               `Pour tout entier naturel $n \\geqslant 1$, $d_n=${u0}\\times ${texNombre(cm, 2)}^{n-1}$.`,
               `La fonction $\\texttt{distance(${b})}$ renverra le nombre de semaines nécessaires pour atteindre une distance de $${b}\\text{ km}$.<br>
 On obtient à l'aide de la calcultarice le tableau suivant : <br>
@@ -597,7 +598,7 @@ On obtient à l'aide de la calcultarice le tableau suivant : <br>
             \n ${n1 + 1}&${texNombre(u1, 2)} > ${texNombre(b, 0)} \\\\\n \\hline\n
             \\end{array}\n$
             <br>On en déduit que l'algorithme retourne la valeur $${n1 + 1}$.<br>
-            C'est donc  la $${n1 + 1}$ ième semaine que la distance parcourue lors de l'entraînement dépasse  pour la première fois $${b}\\text{ km}$.`,
+            C'est donc  la $${miseEnEvidence(n1 + 1)}$ ième semaine que la distance parcourue lors de l'entraînement dépasse  pour la première fois $${b}\\text{ km}$.`,
               `La distance totale parcourue par le cycliste pendant les $${n1 + 1}$ premières semaines d'entraînement est donnée par : $S_{${n1 + 1}}=d_1+d_2+\\ldots +d_{${n1 + 1}}$.<br>
             $S_{${n1 + 1}}$ est la somme des $${n1 + 1}$ premiers termes d'une suite géométrique de raison $${texNombre(cm, 2)}$ et de premier terme $d_1=${u0}$.<br>
              $\\begin{aligned}
@@ -685,7 +686,7 @@ La balle rebondit à une hauteur de $${texNombre(cm.pow(n).mul(u0), 2)}\\text{ m
             \n ${n1 - 1}&${texNombre(new Decimal(u1).div(cm), 3)} >${texNombre(b1, 2)}\\\\\n \\hline\n
             \n ${n1}&${texNombre(u1, 3)} < ${texNombre(b1, 2)} \\\\\n \\hline\n
             \\end{array}\n$<br>
-            C'est donc à partir du $${n1}$ ième rebond que   la hauteur maximale de la balle sera inférieure ou égale à $${b}$ centimètres.
+            C'est donc à partir du $${miseEnEvidence(n1)}$ ième rebond que   la hauteur maximale de la balle sera inférieure ou égale à $${b}$ centimètres.
  `,
             ],
             style: 'nombres',
@@ -774,7 +775,7 @@ ${texNombre(u0, 0)}+${r}n&> ${texNombre(u0 + k * r + 10, 0)} \\\\
 ${r}n&>${texNombre(k * r + 10, 0)}\\\\
 n&>\\dfrac{${texNombre(k * r + 10, 0)}}{${r}}
 \\end{aligned}$<br>
-$\\dfrac{${texNombre(k * r + 10, 0)}}{${r}}\\approx ${texNombre((k * r + 10) / r, 2)}$, c'est donc $${Math.ceil((k * r + 10) / r)}$ ans après $2020$ que le salaire de ${quidam[0]} dépassera $${texNombre(u0 + k * r + 10, 0)}$, 
+$\\dfrac{${texNombre(k * r + 10, 0)}}{${r}}\\approx ${texNombre((k * r + 10) / r, 2)}$, c'est donc $${miseEnEvidence(Math.ceil((k * r + 10) / r))}$ ans après $2020$ que le salaire de ${quidam[0]} dépassera $${texNombre(u0 + k * r + 10, 0)}$, 
 c'est-à-dire en $${texNombre(2020 + Math.ceil((k * r + 10) / r), 0)}$.`,
                   `Le salaire de ${quidam[1]} augmente tous les ans de $${p}\\,\\%$.<br>
 On a donc pour tout entier naturel $n$, $v_{n+1}=${texNombre(cm, 2)}\\times v_n$.<br>
@@ -808,7 +809,7 @@ $v_{${texNombre(annee - 2020, 0)}}=${texNombre(v0, 0)}\\times ${texNombre(cm, 2)
             \n ${n1}&${texNombre(new Decimal(u1).sub(r), 0)} &${texNombre(new Decimal(v1).div(cm), 1)}\\\\\n \\hline\n
             \n ${n1 + 1}&${texNombre(new Decimal(u1), 0)} &${texNombre(new Decimal(v1), 1)}\\\\\n \\hline\n
             \\end{array}\n$<br>
-            C'est donc  $${n1 + 1}$ après $2020$ que  le salaire de ${quidam[1]} dépassera celui de ${quidam[0]}, soit en  $${texNombre(2020 + n1 + 1, 0)}$.`,
+            C'est donc  $${miseEnEvidence(n1 + 1)}$ après $2020$ que  le salaire de ${quidam[1]} dépassera celui de ${quidam[0]}, soit en  $${miseEnEvidence(texNombre(2020 + n1 + 1, 0))}$.`,
             ],
             style: 'nombres',
           })
@@ -940,7 +941,7 @@ $v_{${texNombre(annee - 2020, 0)}}=${texNombre(v0, 0)}\\times ${texNombre(cm, 2)
                     `On lit l'ordonnée du point d'abscisse $${a}$.<br>
  Ainsi, d'après le graphique, le nombre d'abeilles prévues en $${annee + a}$ est $${texNombre(arrondi((u0 + a * r) / 10, 0) * 10, 0)}$.`,
                     `Les ordonnées des points dépassent $${texNombre(limite, 0)}$ à partir de $n=${b + 1}$.<br>
-C'est donc en  $${annee + b + 1}$ que le nombre d'abeilles dépassera $${texNombre(limite, 0)}$.`,
+C'est donc en  $${miseEnEvidence(annee + b + 1)}$ que le nombre d'abeilles dépassera $${texNombre(limite, 0)}$.`,
                     'Les points sur le graphique sont alignés, on conjecture que la suite est arithmétique.',
                   ],
                   style: 'alpha',
@@ -948,7 +949,7 @@ C'est donc en  $${annee + b + 1}$ que le nombre d'abeilles dépassera $${texNomb
                 `La raison $r$ de la suite est donnée par : $r=\\dfrac{u_{${c}}-u_0}{${c}}$.<br>
               $r=\\dfrac{${texNombre(u0 + c * r, 0)}-${texNombre(u0, 0)}}{${c}}=${texNombre(r, 0)}$.
               `,
-                `L'expression du terme général de la suite $(u_n)$ est $u_n=${texNombre(u0, 0)}+n\\times ${r}$.<br>
+                `L'expression du terme général de la suite $(u_n)$ est $u_n=${miseEnEvidence(`${texNombre(u0, 0)}+n\\times ${r}`)}$.<br>
               On cherche $n$ tel que $${texNombre(u0, 0)}+n\\times ${r}>${texNombre(nbre, 0)}$.<br>
               $\\begin{aligned}
               ${texNombre(u0, 0)}+n\\times ${r}&>${texNombre(nbre, 0)}\\\\

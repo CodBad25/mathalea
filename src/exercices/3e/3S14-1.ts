@@ -144,7 +144,7 @@ export default class CalculerCaracteristiques extends Exercice {
             if (typeQuestions[k] === 1) {
               // moyenne
               texteAMC[questind] =
-                'Calculer la moyenne des lancers arrondie au dixième.'
+                'Calculer la moyenne des scores arrondie au dixième.'
 
               const [, somme] = OutilsStats.computeMoyenneTirages2D(tirages)
               repMoyenne = arrondi(somme / nombreTirages, 1)
@@ -156,11 +156,11 @@ export default class CalculerCaracteristiques extends Exercice {
                   tirages,
                   somme,
                   nombreTirages,
-                  'lancers',
+                  'scores',
                 )
             } else if (typeQuestions[k] === 2) {
               // médiane
-              texteAMC[questind] = 'Trouver la médiane des lancers.'
+              texteAMC[questind] = 'Trouver le score médian.'
 
               const [scoresMedians, medianeCorr] =
                 OutilsStats.computeMedianeTirages2D(nombreTirages, tirages)
@@ -194,7 +194,7 @@ export default class CalculerCaracteristiques extends Exercice {
                 )
             } else {
               // étendue
-              texteAMC[questind] = "Calculer l'étendue des lancers."
+              texteAMC[questind] = "Calculer l'étendue des scores."
 
               const [min, max] = [tirages[0][0], tirages[tirages.length - 1][0]]
               repEtendue = max - min
@@ -202,7 +202,7 @@ export default class CalculerCaracteristiques extends Exercice {
 
               texteCorr +=
                 numAlpha(questind++) +
-                OutilsStats.texteCorrEtendueNotes(min, max, 'lancer')
+                OutilsStats.texteCorrEtendueNotes(min, max, 'scores')
             }
           }
           break

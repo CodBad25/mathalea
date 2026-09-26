@@ -1,3 +1,7 @@
+import {
+  texteEnCouleurEtGras,
+  miseEnEvidence,
+} from '../../lib/outils/embellissements'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import {
@@ -82,9 +86,9 @@ export default class VariationDUneSuiteDefinieParRecurrence extends Exercice {
           texteCorr = `On étudie le signe de la différence entre deux termes consécutifs :  <br> Soit $n\\in\\mathbb{N}$, on a $u_{n+1} - u_n = ${a}$`
           texteCorr += '<br><br>'
           if (a >= 0) {
-            texteCorr += `$${a}>0$, on en déduit que $u_{n+1} - u_n >0$, soit $u_{n+1} > u_n$. <br> La suite $(u_n)$ est donc croissante sur $\\mathbb{N}$.`
+            texteCorr += `$${a}>0$, on en déduit que $u_{n+1} - u_n >0$, soit $u_{n+1} > u_n$. <br> La suite $(u_n)$ est donc ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
           } else {
-            texteCorr += `$${a}<0$, on en déduit que $u_{n+1} - u_n <0$, soit $u_{n+1} < u_n$. <br> La suite $(u_n)$ est donc décroissante sur $\\mathbb{N}$.`
+            texteCorr += `$${a}<0$, on en déduit que $u_{n+1} - u_n <0$, soit $u_{n+1} < u_n$. <br> La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
           }
           break
         }
@@ -104,13 +108,11 @@ export default class VariationDUneSuiteDefinieParRecurrence extends Exercice {
           if (b >= 0) {
             texteCorr += `$${b}>0$ et $n \\geqslant 0$, on en déduit que $${b}n \\geqslant 0$.`
             texteCorr += '<br>'
-            texteCorr +=
-              '$u_{n+1} - u_n \\geqslant 0$, soit $u_{n+1} \\geqslant u_n$. <br> La suite $(u_n)$ est donc croissante sur $\\mathbb{N}$.'
+            texteCorr += `$u_{n+1} - u_n \\geqslant 0$, soit $u_{n+1} \\geqslant u_n$. <br> La suite $(u_n)$ est donc ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
           } else {
             texteCorr += `$${b}<0$ et $n \\geqslant 0$, on en déduit que $${b}n \\leqslant 0$.`
             texteCorr += '<br>'
-            texteCorr +=
-              '$u_{n+1} - u_n \\leqslant 0$, soit $u_{n+1} \\leqslant u_n$. <br> La suite $(u_n)$ est donc décroissante sur $\\mathbb{N}$.'
+            texteCorr += `$u_{n+1} - u_n \\leqslant 0$, soit $u_{n+1} \\leqslant u_n$. <br> La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
           }
           break
         }
@@ -134,10 +136,9 @@ export default class VariationDUneSuiteDefinieParRecurrence extends Exercice {
             texteCorr += `On en déduit que pour tout $n>${new FractionEtendue(-d, c).texFractionSimplifiee}$ : $u_{n+1} - u_n > 0$, soit $u_{n+1} > u_n$. `
             texteCorr += '<br>'
             if (-d / c > 0) {
-              texteCorr += `La suite $(u_n)$ est donc croissante à partir du rang $${texNombre(Math.ceil(-d / c))}$.`
+              texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('croissante')} à partir du rang $${miseEnEvidence(texNombre(Math.ceil(-d / c)))}$.`
             } else {
-              texteCorr +=
-                'La suite $(u_n)$ est donc croissante sur $\\mathbb{N}$.'
+              texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
             }
           } else {
             texteCorr += `$${rienSi1(c)}n ${ecritureAlgebrique(d)}<0 \\iff ${rienSi1(c)}n<${-d} \\iff n>${new FractionEtendue(-d, c).texFractionSimplifiee}$.`
@@ -145,10 +146,9 @@ export default class VariationDUneSuiteDefinieParRecurrence extends Exercice {
             texteCorr += `On en déduit que pour tout $n>${new FractionEtendue(-d, c).texFractionSimplifiee}$ : $u_{n+1} - u_n < 0$, soit $u_{n+1} < u_n$. `
             texteCorr += '<br>'
             if (-d / c > 0) {
-              texteCorr += `La suite $(u_n)$ est donc décroissante à partir du rang $${texNombre(Math.ceil(-d / c))}$.`
+              texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante')} à partir du rang $${miseEnEvidence(texNombre(Math.ceil(-d / c)))}$.`
             } else {
-              texteCorr +=
-                'La suite $(u_n)$ est donc décroissante sur $\\mathbb{N}$.'
+              texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
             }
           }
           break

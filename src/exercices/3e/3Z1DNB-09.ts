@@ -11,7 +11,7 @@ import { createList } from '../../lib/format/lists'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -145,14 +145,14 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
     const MN = Math.round(Math.tan((MON * Math.PI) / 180) * ON * 10) / 10
     const question1Corr = `Dans le triangle $${nom1[0]}${nom1[1]}$ rectangle en $${nom1[1]}$, on a:
     $\\tan\\left(\\widehat{${nom1[1]}${nom1[0]}${nom1[2]}}\\right)=\\dfrac{${nom1[1]}${nom1[2]}}{${nom1[0]}${nom1[1]}}$<br>
-    donc $${nom1[1]}${nom1[2]}=${nom1[0]}${nom1[1]}\\times\\tan\\left(\\widehat{${nom1[1]}${nom1[0]}${nom1[2]}}\\right)=${texNombre(ON, 1)}\\times\\tan\\left(${texNombre(MON, 0)}\\right)\\approx ${texNombre(MN, 1)}$.`
+    donc $${nom1[1]}${nom1[2]}=${nom1[0]}${nom1[1]}\\times\\tan\\left(\\widehat{${nom1[1]}${nom1[0]}${nom1[2]}}\\right)=${texNombre(ON, 1)}\\times\\tan\\left(${texNombre(MON, 0)}\\right)\\approx ${miseEnEvidence(texNombre(MN, 1))}$.`
     const question2Corr = `On applique le théorème de Pythagore dans le triangle $${triangle2}$ rectangle en $${nom2[0]}$:<br>
     $${nom1[0]}${nom2[0]}^2 + ${nom2[0]}${nom2[1]}^2 = ${nom1[0]}${nom2[1]}^2$ soit $${nom1[0]}${nom2[0]}^2 = ${nom1[0]}${nom2[1]}^2 - ${nom2[0]}${nom2[1]}^2$<br>
     $${nom1[0]}${nom2[0]}^2 = ${texNombre(OQ, 2)}^2-${texNombre(PQ, 2)}^2= ${texNombre(OQ * OQ, 4)}-${texNombre(PQ * PQ, 4)}= ${texNombre(OQ ** 2 - PQ ** 2, 4)}$<br>
     d'où $${nom1[0]}${nom2[0]} = \\sqrt{${texNombre(OQ ** 2 - PQ ** 2, 4)}}= ${texNombre(Math.sqrt(OQ ** 2 - PQ ** 2), 2)}$<br>
-    donc $${nom1[0]}${nom2[0]} = ${texNombre(Math.sqrt(OQ ** 2 - PQ ** 2), 2)}\\text{~cm}$.`
+    donc $${nom1[0]}${nom2[0]} = ${miseEnEvidence(texNombre(Math.sqrt(OQ ** 2 - PQ ** 2), 2))}\\text{~cm}$.`
     const question3Corr = `$${nom1[0]}${nom1[1]}=${nom1[0]}${nom2[0]}=${texNombre(ON, 1)}\\text{~cm}$ mais $${nom1[1]}${nom1[2]} = ${texNombre(MN, 1)}\\text{~cm}$ et $${nom2}=${texNombre(PQ, 2)}\\text{~cm}$ donc $${nom1[1]}${nom1[2]}\\neq ${nom2}$.<br>
-    Les triangles $${nom1}$ et $${triangle2}$ ne sont pas des triangles égaux car ils n'ont pas les mêmes longueurs de côtés de l'angle droit.`
+    Les triangles $${nom1}$ et $${triangle2}$ ${texteEnCouleurEtGras('ne sont pas des triangles égaux')} car ils n'ont pas les mêmes longueurs de côtés de l'angle droit.`
     const coeff = OQ / OS
     const question4Corr = `On sait que le triangle $${triangle2}$ est un agrandissement du triangle $${triangle3}$ et que $${nom1[0]}${nom3[1]}=${texNombre(OS, 2)}$.<br>
     $${nom1[0]}${nom3[1]}$ est l'hypoténuse du triangle $${triangle3}$ et $${nom1[0]}${nom3[1]}=${texNombre(OS, 2)}$;<br>
@@ -160,7 +160,7 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
 Comme $${texNombre(OQ, 2)}=${texNombre(coeff, 1)}\\times ${texNombre(OS, 2)}$, On peut dire que le triangle $${triangle2}$ est un agrandissement du triangle $${triangle3}$ de facteur $${texNombre(coeff, 1)}$, et donc l'aire du triangle $${triangle2}$ est $${coeff * coeff}$ fois plus grande que l'aire du triangle $${triangle3}$.<br>
 L'aire du triangle $${triangle2}$ est: $\\dfrac{${nom1[0]}${nom2[0]}\\times ${nom2[0]}${nom2[1]}}{2} = \\dfrac{${texNombre(Math.sqrt(OQ ** 2 - PQ ** 2), 1)}\\times ${texNombre(PQ, 1)}}{2}= ${texNombre((Math.sqrt(OQ ** 2 - PQ ** 2) * PQ) / 2, 1)}$.<br>
 L'aire du triangle $${triangle2}$ est $${texNombre(coeff * coeff, 1)}$ fois plus grande que l'aire du triangle $${triangle3}$ donc l'aire du triangle $${triangle3}$ est $${texNombre(coeff * coeff, 1)}$ fois plus petite que l'aire du triangle $${triangle2}$, donc est égale à:
-$\\dfrac{${texNombre((Math.sqrt(OQ ** 2 - PQ ** 2) * PQ) / 2, 1)}}{${texNombre(coeff * coeff, 1)}}$ c'est-à-dire $${texNombre((Math.sqrt(OQ ** 2 - PQ ** 2) * PQ) / (2 * coeff * coeff), 1)}\\text{~cm}^2$.`
+$\\dfrac{${texNombre((Math.sqrt(OQ ** 2 - PQ ** 2) * PQ) / 2, 1)}}{${texNombre(coeff * coeff, 1)}}$ c'est-à-dire $${miseEnEvidence(texNombre((Math.sqrt(OQ ** 2 - PQ ** 2) * PQ) / (2 * coeff * coeff), 1))}\\text{~cm}^2$.`
     const listeQuestionsCorr = createList({
       items: [question1Corr, question2Corr, question3Corr, question4Corr],
       style: 'nombres',

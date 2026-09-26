@@ -1370,7 +1370,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             )
             texteCorr = '$1$ uA est représentée par $10$ petits carreaux. <br>'
             texteCorr += `$\\dfrac{1}{${f[a][1]}}$ d'unité d'aire est donc rerésentée par $${texNombre(10 / f[a][1], 0)}$ petits carreaux. <br>
-          Ainsi, une figure de $\\dfrac{${f[a][0]}}{${f[a][1]}}$ d'unité d'aire se représente par une figure de $${texNombre((10 / f[a][1]) * f[a][0], 0)}$ petits carreaux.`
+          Ainsi, une figure de $\\dfrac{${f[a][0]}}{${f[a][1]}}$ d'unité d'aire se représente par une figure de $${miseEnEvidence(texNombre((10 / f[a][1]) * f[a][0], 0))}$ petits carreaux.`
             reponse = (10 / f[a][1]) * f[a][0]
           } else {
             prenom1 = prenomF()

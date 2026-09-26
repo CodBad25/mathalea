@@ -59,8 +59,8 @@ export default class Can20266Q25 extends ExerciceCan {
     this.question += monQcm.texte
 
     this.correction = vf
-      ? `Oui, tous les ${a} sont ${b} particuliers.`
-      : `Non, ce n'est pas vrai.`
+      ? `${texteEnCouleurEtGras('Vrai')} : tous les ${a} sont ${b} particuliers.`
+      : `${texteEnCouleurEtGras('Faux')}.`
     if (!vf) {
       switch (a) {
         case 'triangles équilatéraux':

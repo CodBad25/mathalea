@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -11,7 +12,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 
-export const titre = 'Dresser un bilan sur les équations et inéquations du second degré'
+export const titre =
+  'Dresser un bilan sur les équations et inéquations du second degré'
 export const interactifReady = false
 
 export const dateDePublication = '28/10/2022'
@@ -69,7 +71,7 @@ export default class EquationsEtInequations extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const typeInequation = listeTypeInequation[i]
@@ -144,19 +146,19 @@ export default class EquationsEtInequations extends Exercice {
           (typeInequation === '>' && a * c > 0) ||
           (typeInequation === '<' && a * c < 0)
         ) {
-          texteCorr += `$S=\\left]-\\infty;${x1.simplifie().texFraction}\\right[\\cup\\left]${x2.simplifie().texFraction};+\\infty\\right[$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left]-\\infty;${x1.simplifie().texFraction}\\right[\\cup\\left]${x2.simplifie().texFraction};+\\infty\\right[`)}$.`
         } else if (
           (typeInequation === '<' && a * c > 0) ||
           (typeInequation === '>' && a * c < 0)
         ) {
-          texteCorr += `$S=\\left]${x1.simplifie().texFraction};${x2.simplifie().texFraction}\\right[$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left]${x1.simplifie().texFraction};${x2.simplifie().texFraction}\\right[`)}$.`
         } else if (
           (typeInequation === '\\geq' && a * c > 0) ||
           (typeInequation === '\\leq' && a * c < 0)
         ) {
-          texteCorr += `$S=\\left]-\\infty;${x1.simplifie().texFraction}\\right]\\cup\\left[${x2.simplifie().texFraction};+\\infty\\right[$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left]-\\infty;${x1.simplifie().texFraction}\\right]\\cup\\left[${x2.simplifie().texFraction};+\\infty\\right[`)}$.`
         } else {
-          texteCorr += `$S=\\left[${x1.simplifie().texFraction};${x2.simplifie().texFraction}\\right]$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left[${x1.simplifie().texFraction};${x2.simplifie().texFraction}\\right]`)}$.`
         }
       } else if (
         listeTypeQuestions[i] === 'inequationFormeDevelopeeSansRacine' ||
@@ -186,13 +188,13 @@ export default class EquationsEtInequations extends Exercice {
           p.a.valeurDecimale > 0 &&
           (typeInequation === '>' || typeInequation === '\\geq')
         )
-          texteCorr += '\\R'
+          texteCorr += miseEnEvidence('\\R')
         else if (
           p.a.valeurDecimale < 0 &&
           (typeInequation === '<' || typeInequation === '\\leq')
         )
-          texteCorr += '\\R'
-        else texteCorr += '\\empty'
+          texteCorr += miseEnEvidence('\\R')
+        else texteCorr += miseEnEvidence('\\emptyset')
         texteCorr += '$.'
       } else if (
         listeTypeQuestions[i] === 'inequationFormeDevelopeeAvecRacines' ||
@@ -232,25 +234,25 @@ export default class EquationsEtInequations extends Exercice {
         ) {
           texteCorr +=
             "On sait que le polynôme est du signe de $a$ à l'extérieur de ses racines donc "
-          texteCorr += `$S=\\left]-\\infty;${p.texX1}\\right[\\cup\\left]${p.texX2};+\\infty\\right[$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left]-\\infty;${p.texX1}\\right[\\cup\\left]${p.texX2};+\\infty\\right[`)}$.`
         } else if (
           (typeInequation === '<' && a > 0) ||
           (typeInequation === '>' && a < 0)
         ) {
           texteCorr +=
             'On sait que le polynôme est du signe de $-a$ entre ses racines donc '
-          texteCorr += `$S=\\left]${p.texX1};${p.texX2}\\right[$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left]${p.texX1};${p.texX2}\\right[`)}$.`
         } else if (
           (typeInequation === '\\geq' && a > 0) ||
           (typeInequation === '\\leq' && a < 0)
         ) {
           texteCorr +=
             "On sait que le polynôme est du signe de $a$ à l'extérieur de ses racines donc "
-          texteCorr += `$S=\\left]-\\infty;${p.texX1}\\right]\\cup\\left[${p.texX2};+\\infty\\right[$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left]-\\infty;${p.texX1}\\right]\\cup\\left[${p.texX2};+\\infty\\right[`)}$.`
         } else {
           texteCorr +=
             'On sait que le polynôme est du signe de $-a$ entre ses racines donc '
-          texteCorr += `$S=\\left[${p.texX1};${p.texX2}\\right]$.`
+          texteCorr += `$S=${miseEnEvidence(`\\left[${p.texX1};${p.texX2}\\right]`)}$.`
         }
       } else if (listeTypeQuestions[i] === 'ax2=bx') {
         const a = randint(-5, 5, 0)
@@ -261,7 +263,7 @@ export default class EquationsEtInequations extends Exercice {
         texteCorr += `<br><br>$\\phantom{${rienSi1(a)}x^2 = ${rienSi1(-b)}x} \\iff x(${rienSi1(a)}x  ${ecritureAlgebrique(b)})=0$`
         texteCorr += `<br><br>$\\phantom{${rienSi1(a)}x^2 = ${rienSi1(-b)}x} \\iff x = 0 \\text{ \\qquad ou \\qquad }${rienSi1(a)}x  ${ecritureAlgebrique(b)}=0$`
         const x = new FractionEtendue(-b, a)
-        texteCorr += `<br><br>Finalement $S=\\left\\{ 0 \\,;\\, ${x.simplifie().texFraction}  \\right\\}$.`
+        texteCorr += `<br><br>Finalement $S=${miseEnEvidence(`\\left\\{ 0 \\,;\\, ${x.simplifie().texFraction}  \\right\\}`)}$.`
       }
 
       if (this.questionJamaisPosee(i, texte)) {

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -66,7 +67,7 @@ export default class ReconnaitreExpL extends Exercice {
           texte += monQcm.texte
 
           texteCorr = `La dernière oprération à effectuer pour faire ce calcul est un produit. <br>
-            On en déduit que l’expression est un produit de deux facteurs $A$ et $B$ :`
+            On en déduit que l’expression est ${texteEnCouleurEtGras('un produit')} de deux facteurs $A$ et $B$ :`
           texteCorr += `<br>$\\underbrace{${a}}_{A}(\\underbrace{${inc}+ ${b}}_{B})$`
 
           break
@@ -100,11 +101,11 @@ export default class ReconnaitreExpL extends Exercice {
             texte += monQcm.texte
             if (b > 0) {
               texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
               texteCorr += `<br>$\\underbrace{${a}\\times ${inc}}_{A}+\\underbrace{${b}}_{B}$`
             } else {
               texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
               texteCorr += `<br>$\\underbrace{${rienSi1(a)}${inc}}_{A}+\\underbrace{(${b})}_{B}$`
             }
           } else {
@@ -135,11 +136,11 @@ export default class ReconnaitreExpL extends Exercice {
             texte += monQcm.texte
             if (b > 0) {
               texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
               texteCorr += `<br>$\\underbrace{${a}}_{A}+\\underbrace{${b}\\times ${inc}}_{B}$`
             } else {
               texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
               texteCorr += `<br>$\\underbrace{${a}}_{A}+\\underbrace{(${b})\\times x}_{B}$`
             }
           }
@@ -171,11 +172,11 @@ export default class ReconnaitreExpL extends Exercice {
           texte += monQcm.texte
           if (b > 0) {
             texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
             texteCorr += `<br>$\\underbrace{${a}a}_{A}+\\underbrace{${b}b}_{B}$`
           } else {
             texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
             texteCorr += `<br>$\\underbrace{${a}a}_{A}+\\underbrace{(${b}b)}_{B}$`
           }
 
@@ -208,7 +209,7 @@ export default class ReconnaitreExpL extends Exercice {
             monQcm = propositionsQcm(this, i)
             texte += monQcm.texte
             texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
             texteCorr += `<br>$\\underbrace{${a}x}_{A}+\\underbrace{${b}\\times(x${ecritureAlgebrique(c)})}_{B}$`
           } else {
             a = randint(2, 10)
@@ -236,7 +237,7 @@ export default class ReconnaitreExpL extends Exercice {
             monQcm = propositionsQcm(this, i)
             texte += monQcm.texte
             texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme (la multiplication étant prioritaire). <br>
-          On en déduit que l’expression est une somme de deux termes $A$ et $B$ :`
+          On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes $A$ et $B$ :`
             texteCorr += `<br>$\\underbrace{${b}\\times(x${ecritureAlgebrique(c)})}_{A}+\\underbrace{${a}x}_{B}$`
           }
 
@@ -269,7 +270,7 @@ export default class ReconnaitreExpL extends Exercice {
           monQcm = propositionsQcm(this, i)
           texte += monQcm.texte
           texteCorr = `La dernière oprération à effectuer pour faire ce calcul est un produit. <br>
-            On en déduit que l’expression est un produit de deux facteurs  $A$ et $B$ :`
+            On en déduit que l’expression est ${texteEnCouleurEtGras('un produit')} de deux facteurs  $A$ et $B$ :`
           texteCorr += `<br>$\\underbrace{(${a}x+${b})}_{A}\\underbrace{(${c}x${ecritureAlgebrique(d)})}_{B}$`
 
           break
@@ -300,7 +301,7 @@ export default class ReconnaitreExpL extends Exercice {
           monQcm = propositionsQcm(this, i)
           texte += monQcm.texte
           texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme. <br>
-            On en déduit que l’expression est une somme de deux termes  $A$ et $B$ :`
+            On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes  $A$ et $B$ :`
           texteCorr += `<br>$\\underbrace{(${a}x+${b})}_{A}+\\underbrace{(${c}x${ecritureAlgebrique(d)})}_{B}$`
 
           break
@@ -331,7 +332,7 @@ export default class ReconnaitreExpL extends Exercice {
           monQcm = propositionsQcm(this, i)
           texte += monQcm.texte
           texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme. <br>
-            On en déduit que l’expression est une somme de deux termes  $A$ et $B$ :`
+            On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes  $A$ et $B$ :`
           texteCorr += `<br>$\\underbrace{(${a}x+${b})}_{A}+\\underbrace{(${c}x${ecritureAlgebrique(d)})(${a}x${ecritureAlgebrique(b)})}_{B}$<br>
               Dans cette somme, il y a un facteur commun $${a}x${ecritureAlgebrique(b)}$ permettant de factoriser cette expression.`
 
@@ -365,7 +366,7 @@ export default class ReconnaitreExpL extends Exercice {
           monQcm = propositionsQcm(this, i)
           texte += monQcm.texte
           texteCorr = `La dernière oprération à effectuer pour faire ce calcul est une somme. <br>
-            On en déduit que l’expression est une somme de deux termes  $A$ et $B$ :`
+            On en déduit que l’expression est ${texteEnCouleurEtGras('une somme')} de deux termes  $A$ et $B$ :`
           texteCorr += `<br>$\\underbrace{(${a}x+${b})(${c}x${ecritureAlgebrique(d)})}_{A}+\\underbrace{${e}}_{B}$
               `
 
@@ -400,7 +401,7 @@ export default class ReconnaitreExpL extends Exercice {
           monQcm = propositionsQcm(this, i)
           texte += monQcm.texte
           texteCorr = `La dernière oprération à effectuer pour faire ce calcul est un produit. <br>
-            On en déduit que l’expression est un produit de trois facteurs  $A$, $B$ et $C$ :`
+            On en déduit que l’expression est ${texteEnCouleurEtGras('un produit')} de trois facteurs  $A$, $B$ et $C$ :`
           texteCorr += `<br>$\\underbrace{${e}}_{A}\\underbrace{(${a}x+${b})}_{B}\\underbrace{(${c}x${ecritureAlgebrique(d)})}_{C}$
               `
 

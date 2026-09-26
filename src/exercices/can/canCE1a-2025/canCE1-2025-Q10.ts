@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -99,7 +100,8 @@ export default class VocabulaireSolide extends ExerciceSimple {
       ) +
       `Que montre la flèche ?<br>
        Coche la bonne réponse.`
-    this.correction = qcm.texteCorr
+    this.correction =
+      qcm.texteCorr + `La flèche montre ${texteEnCouleurEtGras('une face')}.`
     this.canReponseACompleter = qcm.texte
   }
 }

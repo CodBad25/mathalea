@@ -1,3 +1,4 @@
+import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { arcenciel, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
@@ -44,6 +45,7 @@ ${miseEnEvidence(u, arcenciel(indice, true))} \\times ${raison} = ${miseEnEviden
       u = u * raison
     }
 
+    texteCorr += `<br>Ainsi, $u_{${k}}=${miseEnEvidence(texNombre(u))}$.`
     this.correction = texteCorr
     this.reponse = u
     this.canEnonce = `Pour tout entier naturel $n$, <br>

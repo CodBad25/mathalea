@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -35,11 +36,11 @@ export default class recurrence extends ExerciceSimple {
       '<br>Pour quelle(s) valeur(s) de $n$ la propriété $\\mathcal{P}_n$ est-elle vraie ?'
     if (p < n) {
       this.correction = `Comme $n=${n}>p=${p}$, on peut dire que la propriété $\\mathcal{P}_n$ est vraie pour une valeur à partir de laquelle elle est héréditaire. `
-      this.correction += `<br>$\\mathcal{P}_n$ est donc vraie à partir du rang $n=${n}$.`
+      this.correction += `<br>$\\mathcal{P}_n$ est donc vraie à partir du rang $n=${n}$, c'est-à-dire pour $n${miseEnEvidence(`\\geqslant ${n}`)}$.`
       reponse = `$\\geqslant ${n}$`
     } else {
       this.correction = `Comme $n=${n} < p=${p}$, il n'existe pas d'entier $k$ pour lequel $\\mathcal{P}_k$ est vraie et héréditaire.`
-      this.correction += `<br> $\\mathcal{P}_n$ est donc vraie uniquement en $n=${n}$.`
+      this.correction += `<br> $\\mathcal{P}_n$ est donc vraie uniquement en $n=${miseEnEvidence(n)}$.`
       reponse = `=${n}`
     }
     this.reponse = reponse

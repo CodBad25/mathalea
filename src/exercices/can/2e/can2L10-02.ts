@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { rienSi1 } from '../../../lib/outils/ecritures'
 import { randint } from '../../../modules/outils'
@@ -35,7 +36,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(1, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${rienSi1(b)}x+\\dfrac{${a}}{x}$.`
-          this.correction = `$${rienSi1(b)}x+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^2}{x}+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^2+${a}}{x}$`
+          this.correction = `$${rienSi1(b)}x+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^2}{x}+\\dfrac{${a}}{x}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x^2+${a}}{x}`)}$`
           this.reponse = [`\\dfrac{${b}x^2+${a}}{x}`]
         }
         break
@@ -44,7 +45,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(1, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${rienSi1(b)}x-\\dfrac{${a}}{x}$.`
-          this.correction = `$${rienSi1(b)}x-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^2}{x}-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^2-${a}}{x}$`
+          this.correction = `$${rienSi1(b)}x-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^2}{x}-\\dfrac{${a}}{x}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x^2-${a}}{x}`)}$`
           this.reponse = [`\\dfrac{${b}x^2-${a}}{x}`]
         }
         break
@@ -54,7 +55,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const b = randint(-9, 9, 0)
 
           this.question = ` Écrire avec un seul quotient : $${rienSi1(b)}x^2-\\dfrac{${a}}{x}$.`
-          this.correction = `$${rienSi1(b)}x^2-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^3}{x}-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^3-${a}}{x}$`
+          this.correction = `$${rienSi1(b)}x^2-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^3}{x}-\\dfrac{${a}}{x}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x^3-${a}}{x}`)}$`
           this.reponse = [`\\dfrac{${b}x^3-${a}}{x}`]
         }
         break
@@ -63,7 +64,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(1, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${rienSi1(b)}x^2+\\dfrac{${a}}{x}$.`
-          this.correction = `$${rienSi1(b)}x^2+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^3}{x}+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^3+${a}}{x}$`
+          this.correction = `$${rienSi1(b)}x^2+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x^3}{x}+\\dfrac{${a}}{x}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x^3+${a}}{x}`)}$`
           this.reponse = [`\\dfrac{${b}x^3+${a}}{x}`]
         }
         break
@@ -72,7 +73,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(1, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${b}+\\dfrac{${a}}{x}$.`
-          this.correction = `$${b}+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x}{x}+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x+${a}}{x}$`
+          this.correction = `$${b}+\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x}{x}+\\dfrac{${a}}{x}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x+${a}}{x}`)}$`
           this.reponse = [`\\dfrac{${b}x+${a}}{x}`]
         }
         break
@@ -81,7 +82,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(1, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${b}-\\dfrac{${a}}{x}$.`
-          this.correction = `$${b}-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x}{x}-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x-${a}}{x}$`
+          this.correction = `$${b}-\\dfrac{${a}}{x}=\\dfrac{${rienSi1(b)}x}{x}-\\dfrac{${a}}{x}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x-${a}}{x}`)}$`
           this.reponse = [`\\dfrac{${b}x-${a}}{x}`]
         }
         break
@@ -91,7 +92,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(1, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${b}+\\dfrac{${a}}{x^2}$.`
-          this.correction = `$${b}+\\dfrac{${a}}{x^2}=\\dfrac{${rienSi1(b)}x^2}{x^2}+\\dfrac{${a}}{x^2}=\\dfrac{${rienSi1(b)}x^2+${a}}{x^2}$`
+          this.correction = `$${b}+\\dfrac{${a}}{x^2}=\\dfrac{${rienSi1(b)}x^2}{x^2}+\\dfrac{${a}}{x^2}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x^2+${a}}{x^2}`)}$`
           this.reponse = [`\\dfrac{${b}x^2+${a}}{x^2}`]
         }
         break
@@ -100,7 +101,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(1, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${b}-\\dfrac{${a}}{x^2}$.`
-          this.correction = `$${b}-\\dfrac{${a}}{x^2}=\\dfrac{${rienSi1(b)}x^2}{x^2}-\\dfrac{${a}}{x^2}=\\dfrac{${rienSi1(b)}x^2-${a}}{x^2}$`
+          this.correction = `$${b}-\\dfrac{${a}}{x^2}=\\dfrac{${rienSi1(b)}x^2}{x^2}-\\dfrac{${a}}{x^2}=${miseEnEvidence(`\\dfrac{${rienSi1(b)}x^2-${a}}{x^2}`)}$`
           this.reponse = [`\\dfrac{${b}x^2-${a}}{x^2}`]
         }
         break
@@ -110,7 +111,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const b = randint(-9, 9, 0)
 
           this.question = ` Écrire avec un seul quotient : $${b}+\\dfrac{x}{${a}}$.`
-          this.correction = `$${b}+\\dfrac{x}{${a}}=\\dfrac{${a * b}}{${a}}+\\dfrac{x}{${a}}=\\dfrac{${a * b}+x}{${a}}$`
+          this.correction = `$${b}+\\dfrac{x}{${a}}=\\dfrac{${a * b}}{${a}}+\\dfrac{x}{${a}}=${miseEnEvidence(`\\dfrac{${a * b}+x}{${a}}`)}$`
           this.reponse = [`\\dfrac{${a * b}+x}{${a}}`]
         }
         break
@@ -119,7 +120,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
           const a = randint(2, 9)
           const b = randint(-9, 9, 0)
           this.question = ` Écrire avec un seul quotient : $${b}-\\dfrac{x}{${a}}$.`
-          this.correction = `$${b}-\\dfrac{x}{${a}}=\\dfrac{${a * b}}{${a}}-\\dfrac{x}{${a}}=\\dfrac{${a * b}-x}{${a}}$`
+          this.correction = `$${b}-\\dfrac{x}{${a}}=\\dfrac{${a * b}}{${a}}-\\dfrac{x}{${a}}=${miseEnEvidence(`\\dfrac{${a * b}-x}{${a}}`)}$`
           this.reponse = [`\\dfrac{${a * b}-x}{${a}}`]
         }
         break

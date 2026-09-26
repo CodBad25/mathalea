@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -45,15 +46,15 @@ export default class multiple extends ExerciceSimple {
     this.canReponseACompleter = `OUI ${sp(7)} NON`
     if (a === 2 || a === 10) {
       this.correction = `$${texNombre(2025, 0)}$  a pour chiffre des unités $5$ qui ${a === 2 ? "n'est pas pair" : "n'est pas $0$"}. <br>
-    Donc  $${texNombre(2025, 0)}$  n'est pas un multiple de ${a === 2 ? '$2$' : '$10$'}.`
+    Donc  $${texNombre(2025, 0)}$  ${texteEnCouleurEtGras("n'est pas un multiple")} de ${a === 2 ? '$2$' : '$10$'}.`
     }
     if (a === 3) {
       this.correction = `La somme des chiffres de $${texNombre(2025, 0)}$ est $2+0+2+5=9$ qui est divisible par ${a === 3 ? '$3$' : '$9$'}. <br>
-        Donc  $${texNombre(2025)}$  est un multiple de ${a === 3 ? '$3$' : '$9$'}.`
+        Donc  $${texNombre(2025)}$  ${texteEnCouleurEtGras("est un multiple")} de ${a === 3 ? '$3$' : '$9$'}.`
     }
     if (a === 5) {
       this.correction = `$${texNombre(2025, 0)}$  a pour chiffre des unités $5$. <br>
-    Donc  $${texNombre(2025, 0)}$  est un multiple de $5$.`
+    Donc  $${texNombre(2025, 0)}$  ${texteEnCouleurEtGras("est un multiple")} de $5$.`
     }
   }
 }

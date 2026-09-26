@@ -181,7 +181,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{P}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}=${miseEnEvidence(4 * c)}${sp()}\\text{cm}$<br>`
+                `$\\mathcal{P}_{${nom[0] + nom[1] + nom[2] + nom[3]}}=${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}+${c}${sp()}\\text{cm}=${miseEnEvidence(
+                  4 * c,
+                )}${sp()}\\text{cm}$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC
@@ -276,7 +278,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{P}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}+${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}=${miseEnEvidence(2 * L + 2 * l)}${sp()}\\text{cm}$<br>`
+                `$\\mathcal{P}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}+${L}${sp()}\\text{cm}+${l}${sp()}\\text{cm}=${miseEnEvidence(
+                  2 * L + 2 * l,
+                )}${sp()}\\text{cm}$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC
@@ -319,7 +323,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               texteCorr +=
                 (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                `$\\mathcal{A}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}\\times${l}${sp()}\\text{cm}=${miseEnEvidence(L * l)}${sp()}\\text{cm}^2$<br>`
+                `$\\mathcal{A}_{${nom[4] + nom[5] + nom[6] + nom[7]}}=${L}${sp()}\\text{cm}\\times${l}${sp()}\\text{cm}=${miseEnEvidence(
+                  L * l,
+                )}${sp()}\\text{cm}^2$<br>`
 
               if (context.isAmc) {
                 texte += texteAMC

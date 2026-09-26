@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { Matrice } from '../../lib/mathFonctions/Matrice'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -89,7 +90,7 @@ export default class NomExercice extends Exercice {
 
           texte = `Calculer le déterminant de la matrice $${nommatrice} = ${matrice.toTex()}$.` // Les questions sont modifiées en fonction de la difficulté
           texteCorr = ''
-          texteCorr += `On calcule $${matrice.texDet()} = ${ecritureParentheseSiNegatif(table[0][0])} \\times ${ecritureParentheseSiNegatif(table[1][1])} - ${ecritureParentheseSiNegatif(table[1][0])} \\times ${ecritureParentheseSiNegatif(table[0][1])}  = ${matrice.determinant()}$.`
+          texteCorr += `On calcule $${matrice.texDet()} = ${ecritureParentheseSiNegatif(table[0][0])} \\times ${ecritureParentheseSiNegatif(table[1][1])} - ${ecritureParentheseSiNegatif(table[1][0])} \\times ${ecritureParentheseSiNegatif(table[0][1])}  = ${miseEnEvidence(matrice.determinant())}$.`
           break
         }
         case 'type2': {
@@ -132,7 +133,7 @@ export default class NomExercice extends Exercice {
           }
           if (parcel.startsWith('+')) parcel = parcel.substring(1)
           texteCorr += parcel + '\\\\\n&='
-          texteCorr += `${matrice.determinant()}`
+          texteCorr += `${miseEnEvidence(matrice.determinant())}`
           texteCorr += '\\end{aligned}$.'
           break
         }
