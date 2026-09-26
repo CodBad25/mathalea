@@ -7,7 +7,7 @@ import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { shuffle } from '../../lib/outils/arrayOutils'
-import { texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { texteGras, texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { lettreMinusculeDepuisChiffre } from '../../lib/outils/outilString'
 import { premierMultipleSuperieur } from '../../lib/outils/primalite'
 import { texNombre, texPrix } from '../../lib/outils/texNombre'
@@ -150,9 +150,9 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
   ${texteGras('Tarif "Essentiel"')} : La personne paye un abonnement annuel de $${texPrix(essentielAbo)}$€ puis chaque entrée coûte $${texPrix(essentielUnitaire)}$€.<br>
   ${texteGras('Tarif "Liberté"')} : La personne paye un abonnement annuel de $${liberteAbo}$€ avec un nombre d'entrées illimité.<br>`
     const question1 = `Avec le tarif "Classique", une personne souhaite acheter ${nombreEnLettres(nbClassique)} entrées au cinéma.<br>Combien va-t-elle payer ?`
-    const correction1 = `Au tarif "Classique", ${nombreEnLettres(nbClassique)} entrées coûtent : $${nbClassique}\\times ${texPrix(classique)}=${texPrix(nbClassique * classique)}$€.`
+    const correction1 = `Au tarif "Classique", ${nombreEnLettres(nbClassique)} entrées coûtent : $${nbClassique}\\times ${texPrix(classique)}=${miseEnEvidence(texPrix(nbClassique * classique))}$€.`
     const question2 = `Avec le tarif "Essentiel", une personne souhaite aller ${nombreEnLettres(nbEssentiel)} fois au cinéma.<br>Montrer qu'elle va payer $${texPrix(essentielAbo + nbEssentiel * essentielUnitaire)}$€.`
-    const correction2 = `Avec Le tarif "Essentiel", ${nombreEnLettres(nbEssentiel)} entrées coûtent : $${nbEssentiel}\\times ${texPrix(essentielUnitaire)}+${texPrix(essentielAbo)}=${texPrix(nbEssentiel * essentielUnitaire)}+${texPrix(essentielAbo)}=${texPrix(f2(nbEssentiel))}$€.`
+    const correction2 = `Avec Le tarif "Essentiel", ${nombreEnLettres(nbEssentiel)} entrées coûtent : $${nbEssentiel}\\times ${texPrix(essentielUnitaire)}+${texPrix(essentielAbo)}=${texPrix(nbEssentiel * essentielUnitaire)}+${texPrix(essentielAbo)}=${miseEnEvidence(texPrix(f2(nbEssentiel)))}$€.`
     const question3 = `Dans la suite, $x$ désigne le nombre d'entrées au cinéma.<br>
 On considère les trois fonctions $f, g$ et $h$ suivantes :<br>
 $f: ${fonctions[0].expr} \\quad g: ${fonctions[1].expr} \\quad h: ${fonctions[2].expr}$<br>
@@ -163,22 +163,22 @@ La droite ($d_{1}$) représente la fonction correspondant au tarif "Classique".<
 La droite ($d_{2}$) représente la fonction correspondant au tarif "Essentiel".<br>
 La droite ($d_{3}$) représente la fonction correspondant au tarif "Liberté".<br>`
     const correction3 = `$f: ${fonctions[0].expr} \\quad g: ${fonctions[1].expr} \\quad h: ${fonctions[2].expr}$<br>
-$f$ correspond au tarif "${fonctions[0].name}".<br>
-$g$ correspond au tarif "${fonctions[1].name}".<br>
-$h$ correspond au tarif "${fonctions[2].name}".<br>`
+$f$ correspond au tarif "${texteEnCouleurEtGras(fonctions[0].name)}".<br>
+$g$ correspond au tarif "${texteEnCouleurEtGras(fonctions[1].name)}".<br>
+$h$ correspond au tarif "${texteEnCouleurEtGras(fonctions[2].name)}".<br>`
     const question5a = `Avec $${texPrix(prixEssentiel)}$€, combien peut-on acheter d'entrées au maximum avec le tarif "Essentiel" ?`
     const xA = (prixEssentiel - essentielAbo) / essentielUnitaire
-    const correction5a = `Avec $${texPrix(prixEssentiel)}$€, Il peut acheter $${Math.floor(xA)}$ entrées.<br>
+    const correction5a = `Avec $${texPrix(prixEssentiel)}$€, Il peut acheter $${miseEnEvidence(Math.floor(xA))}$ entrées.<br>
     La droite horizontale d'équation $y=${prixEssentiel}$ coupe la droite $d_2$ au point d'abscisse $${texNombre(xA, 1)}$.`
     const xB = (liberteAbo - essentielAbo) / essentielUnitaire
     const correction5b = `La droite horizontale d'équation $y=${liberteAbo}$ coupe la droite $d_2$ au point d'abscisse $${texNombre(xB, 1)}$.<br>
-    À partir de $${Math.ceil(xB)}$ entrées, le tarif "liberté" devient plus intéressant.`
+    À partir de $${miseEnEvidence(Math.ceil(xB))}$ entrées, le tarif "liberté" devient plus intéressant.`
     const question5b =
       'À partir de combien d\'entrées, le tarif "Liberté" devient-il le tarif le plus intéressant ?'
 
     const question5c = `Si on décide de ne pas dépasser un budget de $${texPrix(budgetMax)}$€, quel est le tarif qui permet d'acheter le plus grand nombre d'entrées ?`
     const correction5c = `La droite horizontale d'équation $y=${budgetMax}$ coupe en dernier ${entreeMax[1] === 'Classique' ? 'la droite $(d_1)$' : 'la droite $(d_2)$'} au point d'abscisse $${texNombre(Number(entreeMax[0]), 1)}$.<br>
-    Pour $${budgetMax}$€, c'est le tarif ${entreeMax[1]} qui donne le plus d'entrées.`
+    Pour $${budgetMax}$€, c'est le tarif ${texteEnCouleurEtGras(entreeMax[1])} qui donne le plus d'entrées.`
     const listeQuestions5 = createList({
       items: [question5a, question5b, question5c],
       style: 'alpha',
@@ -192,7 +192,7 @@ $h$ correspond au tarif "${fonctions[2].name}".<br>`
     const fClass = fonctions.findIndex(
       (el) => el.expr === `x \\longmapsto ${texPrix(classique)} x`,
     )
-    const correction4 = `C'est le tarif "Classique" qui propose un prix proportionnel au nombre d'entrées (la fonction $${lettreMinusculeDepuisChiffre(fClass + 6)}$ est linéaire).<br>
+    const correction4 = `C'est le tarif ${texteEnCouleurEtGras('"Classique"')} qui propose un prix proportionnel au nombre d'entrées (la fonction $${lettreMinusculeDepuisChiffre(fClass + 6)}$ est linéaire).<br>
     ${figureCorr}`
     const question5 = `Pour les questions suivantes, aucune justification n'est attendue.<br>
     ${listeQuestions5}`

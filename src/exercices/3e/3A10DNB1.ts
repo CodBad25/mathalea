@@ -8,10 +8,7 @@ import { createList } from '../../lib/format/lists'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
-import {
-  texteEnCouleurEtGras,
-  texteItalique,
-} from '../../lib/outils/embellissements'
+import { texteEnCouleurEtGras, texteItalique, miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   listeDesDiviseurs,
   pgcd,
@@ -130,15 +127,15 @@ ${deuxColonnesResp(
   ${createList({
     items: [
       `On a $${autocollantsParSachet.texFraction} ${egalOuApprox(autocollants / sachets, 2)} ${texNombre(autocollants / sachets, 2)}$ qui ${autocollantsParSachet.estEntiere ? 'est' : "n'est pas"} entier, et on a $${drapeauxParSachet.texFraction} ${egalOuApprox(drapeaux / sachets, 2)} ${texNombre(drapeaux / sachets, 2)}$ qui ${drapeauxParSachet.estEntiere ? 'est' : "n'est pas"} entier.<br>
-      On ne peut donc pas faire ${sachets} sachets car ${autocollantsParSachet.estEntiere ? drapeaux : autocollants} n'est pas un multiple de ${sachets}.`,
+      On ${texteEnCouleurEtGras('ne peut donc pas')} faire ${sachets} sachets car ${autocollantsParSachet.estEntiere ? drapeaux : autocollants} n'est pas un multiple de ${sachets}.`,
       createList({
         items: [
-          `On a $${autocollants} = ${decompo1}$ et $${drapeaux} = ${decompo2}$.<br>
+          `On a $${autocollants} = ${miseEnEvidence(decompo1)}$ et $${drapeaux} = ${miseEnEvidence(decompo2)}$.<br>
           Les facteurs communs à $${autocollants}$ et à $${drapeaux}$ les plus nombreux sont : $${texFactorisation(pgcdAutocollantsDrapeaux)}=${pgcdAutocollantsDrapeaux}$.<br>
           Autrement dit le plus grand diviseur de $${autocollants}$ et de $${drapeaux}$ est $${pgcdAutocollantsDrapeaux}$.<br>
-          La présidente pourra donc réaliser $${pgcdAutocollantsDrapeaux}$ sachets identiques.<br>`,
+          La présidente pourra donc réaliser $${miseEnEvidence(pgcdAutocollantsDrapeaux)}$ sachets identiques.<br>`,
           `On a $${autocollants} = ${pgcdAutocollantsDrapeaux}\\times ${autocollants / pgcdAutocollantsDrapeaux}$ et $${drapeaux} = ${pgcdAutocollantsDrapeaux}\\times ${drapeaux / pgcdAutocollantsDrapeaux}$.<br>
-          Chaque sachet contiendra $${autocollantsParSachetFinal}$ autocollants et $${drapeauxParSachetFinal}$ drapeaux.`,
+          Chaque sachet contiendra $${miseEnEvidence(autocollantsParSachetFinal)}$ autocollants et $${miseEnEvidence(drapeauxParSachetFinal)}$ drapeaux.`,
         ],
         style: 'alpha',
       }),
@@ -151,7 +148,7 @@ ${deuxColonnesResp(
   La question ayant été jugée ambigue, voici trois réponses possibles (la première est celle envisagée initialement par l'auteur du sujet) :<br>
   ${createList({
     items: [
-      `Si on considère que la question porte sur le coût de remplissage de $${fracR.texFractionSimplifiee}$ du volume total de la piscine, alors le prix du remplissage est :  $${fracR.texFractionSimplifiee}\\times ${texNombre(volume * prixM3, 2, true)}=${texNombre(prixFinal, 2, true)}$ €.`,
+      `Si on considère que la question porte sur le coût de remplissage de $${fracR.texFractionSimplifiee}$ du volume total de la piscine, alors le prix du remplissage est :  $${fracR.texFractionSimplifiee}\\times ${texNombre(volume * prixM3, 2, true)}=${miseEnEvidence(texNombre(prixFinal, 2, true))}$ €.`,
       `Si on considère que la piscine est déjà remplie de $${fracR.texFractionSimplifiee}$ du volume total et qu'on veut la remplir totalement, alors il reste $${fraction(1, 1).differenceFraction(fracR).texFractionSimplifiee}$ du volume à remplir.<br>
       Le prix du remplissage est alors : $${fraction(1, 1).differenceFraction(fracR).texFractionSimplifiee}\\times ${texNombre(volume * prixM3, 2, true)}=${texNombre(volume * prixM3 - prixFinal, 2, true)}$ €.`,
       `Si on considère que la question porte sur le remplissage complet de la piscine, alors le prix du remplissage est : $${texNombre(volume * prixM3, 2, true)}$ €.`,

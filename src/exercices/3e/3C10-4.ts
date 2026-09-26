@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import DragAndDrop from '../../lib/interactif/DragAndDrop'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -77,7 +78,7 @@ export default class LireUnePuissance extends Exercice {
       })
 
       const value = `"${mantisseEnLettres} exposant ${exposantEnLettres}" ou "${mantisseEnLettres} à la puissance ${exposantEnLettres}"`
-      const texteCorr = `$${mantisse < 0 ? `(${String(mantisse)})` : String(mantisse)}^{${exposant}}$ se lit : ${value}.`
+      const texteCorr = `$${mantisse < 0 ? `(${String(mantisse)})` : String(mantisse)}^{${exposant}}$ se lit : ${texteEnCouleurEtGras(value)}.`
       if (this.questionJamaisPosee(i, mantisse, exposant)) {
         this.dragAndDrops[i] = leDragAndDrop
         this.listeQuestions[i] =

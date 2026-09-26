@@ -4,7 +4,7 @@ import { polyline } from '../../lib/2d/Polyline'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { createList } from '../../lib/format/lists'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { prenomsPronoms } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -82,36 +82,36 @@ export default class ExerciceAmeriqueNord4062025 extends ExerciceBrevetA {
       1, // nestedLevel: number = 0, ici sous question niveau 1
     )
 
-    const correction1 = `La représentation graphique de la distance parcourue en fonction du temps n'est pas un segment contenant l'origine : la distance parcourue par ${prenom1} n'est pas proportionnelle au temps de course.`
-    const correction2 = `On lit sur la courbe qu'au bout de  $${texNombre(Question2.x, 1)}\\text{ minutes}$, ${prenom1} a parcouru $${texNombre(Question2.y, 1)}\\text{ km}$.`
-    const correction3 = `${prenom1} a parcouru ${txtPremiersKm} en $${texNombre(Question3.x, 1)}\\text{ minutes}$.`
+    const correction1 = `La représentation graphique de la distance parcourue en fonction du temps n'est pas un segment contenant l'origine : la distance parcourue par ${prenom1} ${texteEnCouleurEtGras("n'est pas proportionnelle")} au temps de course.`
+    const correction2 = `On lit sur la courbe qu'au bout de  $${texNombre(Question2.x, 1)}\\text{ minutes}$, ${prenom1} a parcouru $${miseEnEvidence(texNombre(Question2.y, 1))}\\text{ km}$.`
+    const correction3 = `${prenom1} a parcouru ${txtPremiersKm} en $${miseEnEvidence(texNombre(Question3.x, 1))}\\text{ minutes}$.`
     let correction4 = `${prenom1} a parcouru les $${texNombre(longueurParcours, 1)}\\text{ km}$ en $${texNombre(tempsParcours, 1)}\\text{ minutes}$ :`
     let sousCorrection4a = ``
     let sousCorrection4b = ``
     let vitesse: number
     if (tempsParcours === 60) {
-      sousCorrection4a = `$60 \\text{ minutes}= 1 \\text{ h}$ donc sans compter son arrêt de $10 \\text{ minutes}$, sa vitesse moyenne a été de $v_1$ = $${texNombre(longueurParcours, 1)}\\text{ km/h}$`
+      sousCorrection4a = `$60 \\text{ minutes}= 1 \\text{ h}$ donc sans compter son arrêt de $10 \\text{ minutes}$, sa vitesse moyenne a été de $v_1$ = $${miseEnEvidence(texNombre(longueurParcours, 1))}\\text{ km/h}$`
     } else {
       sousCorrection4a = `Sans compter son arrêt de $10 \\text{ minutes}$, sa vitesse moyenne a été de $v_1$ = `
       sousCorrection4a += `$\\dfrac{d}{t}$<br>`
       sousCorrection4a += `$v_2 = \\dfrac{${texNombre(longueurParcours, 1)} \\text{ km}}{\\dfrac{${texNombre(tempsParcours, 1)}}{60}\\text{ h}}$ = $${texNombre(longueurParcours, 1)} \\times \\dfrac{60}{${texNombre(tempsParcours, 1)}}$`
       vitesse = longueurParcours / (tempsParcours / 60)
       if (texNombre(vitesse, 2) === texNombre(vitesse, 1)) {
-        sousCorrection4a += `= $${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
+        sousCorrection4a += `= $${miseEnEvidence(texNombre(vitesse, 1))}\\text{ km/h}$.<br>`
       } else {
-        sousCorrection4a += `$\\approx ${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
+        sousCorrection4a += `$\\approx ${miseEnEvidence(texNombre(vitesse, 1))}\\text{ km/h}$.<br>`
       }
     }
     if (tempsParcours - 10 === 60) {
-      sousCorrection4b = `$60 \\text{ minutes}= 1 \\text{ h}$ donc avec son arrêt de $10 \\text{ minutes}$, sa vitesse moyenne a été de $v_1$ = $${texNombre(longueurParcours, 1)}\\text{ km/h}$`
+      sousCorrection4b = `$60 \\text{ minutes}= 1 \\text{ h}$ donc avec son arrêt de $10 \\text{ minutes}$, sa vitesse moyenne a été de $v_1$ = $${miseEnEvidence(texNombre(longueurParcours, 1))}\\text{ km/h}$`
     } else {
       sousCorrection4b = `Avec son arrêt de $10 \\text{ minutes}$, sa vitesse moyenne a été de $v_2 = \\dfrac{d}{t}$<br>`
       sousCorrection4b += `$v_2 = \\dfrac{${texNombre(longueurParcours, 1)} \\text{ km}}{\\dfrac{${texNombre(tempsParcours - 10, 1)}}{60}\\text{ h}}$ = $${texNombre(longueurParcours, 1)} \\times \\dfrac{60}{${texNombre(tempsParcours - 10, 1)}}$`
       vitesse = longueurParcours / ((tempsParcours - 10) / 60)
       if (texNombre(vitesse, 2) === texNombre(vitesse, 1)) {
-        sousCorrection4b += `= $${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
+        sousCorrection4b += `= $${miseEnEvidence(texNombre(vitesse, 1))}\\text{ km/h}$.<br>`
       } else {
-        sousCorrection4b += `$\\approx ${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
+        sousCorrection4b += `$\\approx ${miseEnEvidence(texNombre(vitesse, 1))}\\text{ km/h}$.<br>`
       }
     }
     const listeCorrectionsSousQuestion4 = createList(
@@ -152,10 +152,10 @@ export default class ExerciceAmeriqueNord4062025 extends ExerciceBrevetA {
     }
     // heuristique simple pour l'article : mot commençant par voyelle
     const motQue = /^[AEIOUH]/i.test(prenomLent) ? "qu'" : 'que '
-    const sousCorrection5a = `${prenomRapide} courant plus vite ${motQue}${prenomLent} est arrivée la première !`
+    const sousCorrection5a = `${prenomRapide} courant plus vite ${motQue}${prenomLent} ${texteEnCouleurEtGras('est arrivée la première')} !`
     let sousCorrection5b = `${prenomRapide} a parcouru les $${texNombre(longueurParcours, 1)}$ km à la vitesse de $${texNombre(vitesseRapide, 1)}$ km/h en un temps t tel que t = $\\dfrac{${texNombre(longueurParcours, 1)}}{${texNombre(vitesseRapide, 1)}}$.<br>`
     sousCorrection5b += `Au bout de ce temps ${prenomLent} a parcouru $${texNombre(vitesseLente, 1)}\\times \\dfrac{${texNombre(longueurParcours, 1)}}{${texNombre(vitesseRapide, 1)}}$ ${egalOuApprox}$${texNombre(distanceDernier, 2)}\\text{ km}$.<br>`
-    sousCorrection5b += ` ${prenomLent} est donc à ce moment à $${texNombre(longueurParcours, 1)} − ${texNombre(distanceDernier, 2)} = ${texNombre(longueurParcours - distanceDernier, 2)}\\text{ km}$ ${ajouteEnviron} de l'arrivée donc de ${prenomRapide}. `
+    sousCorrection5b += ` ${prenomLent} est donc à ce moment à $${texNombre(longueurParcours, 1)} − ${texNombre(distanceDernier, 2)} = ${miseEnEvidence(texNombre(longueurParcours - distanceDernier, 2))}\\text{ km}$ ${ajouteEnviron} de l'arrivée donc de ${prenomRapide}. `
     const correction5 = createList(
       {
         items: [sousCorrection5a, sousCorrection5b],

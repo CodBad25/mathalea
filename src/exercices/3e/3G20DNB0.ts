@@ -12,7 +12,7 @@ import {
 import { createList } from '../../lib/format/lists'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -136,28 +136,28 @@ export default class Exercice3G2DNB0 extends ExerciceBrevetA {
     })
     const listePrincipaleCorrection = createList({
       items: [
-        `On a $${A}${B} = 2R = 2 \\times ${texNombre(rayon, 2)} = ${texNombre(diametre, 2)}\\text{ cm}$.`,
+        `On a $${A}${B} = 2R = 2 \\times ${texNombre(rayon, 2)} = ${miseEnEvidence(texNombre(diametre, 2))}\\text{ cm}$.`,
         `On a $${A}${D}^2 = ${texNombre(DA, 2)}^2$ et $${D}${B}^2 = ${texNombre(BD, 2)}^2$, d'où<br>
          $\\begin{aligned}${A}${D}^2 + ${D}${B}^2 &= ${texNombre(DA, 2)}^2 + ${texNombre(BD, 2)}^2\\\\
           &= ${texNombre(DA * DA, 4)} + ${texNombre(BD * BD, 4)}\\\\
            &= ${texNombre(AB * AB, 4)}
            \\end{aligned}$<br>
            Or, $${A}${B}^2 = ${texNombre(AB, 2)}^2= ${texNombre(AB * AB, 4)}$.<br>
-         Donc $${A}${D}^2+${D}${B}^2 = $${A}${B}$^2$ : d'après la réciproque du théorème de Pythagore le triangle $${A}${B}${D}$ est rectangle en $${D}$.<br>
+         Donc $${A}${D}^2+${D}${B}^2 = $${A}${B}$^2$ : d'après la réciproque du théorème de Pythagore le triangle $${A}${B}${D}$ ${texteEnCouleurEtGras('est rectangle')} en $${D}$.<br>
          $[${A}${B}]$ est l'hypoténuse.`,
         `Comme les points $${B}$, $${E}$, $${A}$ sont alignés, ainsi que les points $${D}$, $${F}$, $${A}$ et que les droites $(${B}${D})$ et $(${E}${F})$ sont parallèles on est dans une situation de Thalès et on a donc les égalités :<br>
         $\\dfrac{${A}${E}}{${A}${B}} = \\dfrac{${A}${F}}{${A}${D}} = \\dfrac{${E}${F}}{${B}${D}}$.<br><br>
         En particulier  $\\dfrac{${A}${E}}{${A}${B}} = \\dfrac{${A}${F}}{${A}${D}}$<br><br>
         ou $\\dfrac{${texNombre(EF, 2)}}{${texNombre(diametre, 2)}} =  \\dfrac{${A}${F}}{${texNombre(DA, 2)}}$<br><br>
-        soit $${texNombre(ratio, 1)} = \\dfrac{${A}${F}}{${texNombre(DA, 2)}}$, d'où $${A}${F} = ${texNombre(ratio, 1)} \\times ${texNombre(DA, 2)} = ${texNombre(AF, 3)}\\text{ cm}$.`,
+        soit $${texNombre(ratio, 1)} = \\dfrac{${A}${F}}{${texNombre(DA, 2)}}$, d'où $${A}${F} = ${texNombre(ratio, 1)} \\times ${texNombre(DA, 2)} = ${miseEnEvidence(texNombre(AF, 3))}\\text{ cm}$.`,
         createList({
           items: [
-            `Si $\\mathscr{A}$ est l'aire du triangle $${A}${B}${D}$, on sait que $\\mathscr{A} = \\dfrac{${D}${B} \\times ${A}${D}}{2} = \\dfrac{${texNombre(BD, 2)} \\times ${texNombre(DA, 2)}}{2} = \\dfrac{${texNombre(DA * BD, 4)}}{2}= ${texNombre(aireTriangle, 4)}\\text{ cm}^2$.`,
-            `L'aire du disque est égale à $\\pi \\times R^2 = \\pi \\times ${texNombre(rayon, 1)}^2 = \\left(${rayonFrac.texFraction}\\right)^2 \\times \\pi  = ${rayonFracCarre.texFraction}\\pi \\approx ${texNombre(aireDisque, 3)}\\text{ cm}^2$, soit $${texNombre(aireDisque, 2)}$ au centième de $\\text{cm}^2$.`,
+            `Si $\\mathscr{A}$ est l'aire du triangle $${A}${B}${D}$, on sait que $\\mathscr{A} = \\dfrac{${D}${B} \\times ${A}${D}}{2} = \\dfrac{${texNombre(BD, 2)} \\times ${texNombre(DA, 2)}}{2} = \\dfrac{${texNombre(DA * BD, 4)}}{2}= ${miseEnEvidence(texNombre(aireTriangle, 4))}\\text{ cm}^2$.`,
+            `L'aire du disque est égale à $\\pi \\times R^2 = \\pi \\times ${texNombre(rayon, 1)}^2 = \\left(${rayonFrac.texFraction}\\right)^2 \\times \\pi  = ${rayonFracCarre.texFraction}\\pi \\approx ${texNombre(aireDisque, 3)}\\text{ cm}^2$, soit $${miseEnEvidence(texNombre(aireDisque, 2))}$ au centième de $\\text{cm}^2$.`,
           ],
           style: 'alpha',
         }),
-        `L'aire du triangle $${A}${B}${D}$ représente pour l'aire du disque un pourcentage égal à environ : $\\dfrac{${texNombre(aireTriangle, 4)}}{${texNombre(aireDisque, 2)}} \\times 100$ soit environ $${texNombre((100 * aireTriangle) / aireDisque, 1)}\\,\\%$.`,
+        `L'aire du triangle $${A}${B}${D}$ représente pour l'aire du disque un pourcentage égal à environ : $\\dfrac{${texNombre(aireTriangle, 4)}}{${texNombre(aireDisque, 2)}} \\times 100$ soit environ $${miseEnEvidence(texNombre((100 * aireTriangle) / aireDisque, 1))}\\,\\%$.`,
       ],
       style: 'nombres',
     })

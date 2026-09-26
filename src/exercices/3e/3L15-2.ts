@@ -3,7 +3,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { getLang } from '../../lib/stores/languagesStore'
 import type { Valeur } from '../../lib/types'
@@ -262,7 +262,7 @@ export default class nomExercice extends Exercice {
         texteCorr += ` On réduit pour obtenir $x^2=${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}$.<br>`
       }
       if (coeffConstant.multiplieEntier(-1).entierDivise(coeffX).signe === -1) {
-        texteCorr += ` On en déduit que l'équation n'a pas de solution ${lang === 'fr-CH' ? 'réelle' : 'car un carré est toujours positif'}.`
+        texteCorr += ` On en déduit que l'équation ${texteEnCouleurEtGras("n'a pas de solution")} ${lang === 'fr-CH' ? 'réelle' : 'car un carré est toujours positif'}.`
       } else {
         texteCorr +=
           lang === 'fr-CH'
@@ -291,7 +291,9 @@ export default class nomExercice extends Exercice {
         sol = `\\left\\{-${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)};${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}\\right\\}$.`
       }
       texteCorr +=
-        lang === 'fr-CH' ? ` L'ensemble de solutions est $S=${sol}` : ''
+        lang === 'fr-CH'
+          ? ` L'ensemble de solutions est $S=${miseEnEvidence(sol.replace(/\$\.$/, ''))}$.`
+          : ''
       if (this.questionJamaisPosee(i, coeffConstant, coeffX)) {
         this.listeQuestions[i] =
           texte +

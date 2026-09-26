@@ -1,9 +1,9 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { lampeMessage } from '../../lib/format/message'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
-import { texteGras } from '../../lib/format/style'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import type {
   AMCQcmChoice,
@@ -435,9 +435,9 @@ export default class ScratchMultiScript extends Exercice {
       )
 
       let texteCorr = 'On obtient la série de couleurs suivante :<br> '
-      texteCorr += `${texteGras(couleurs[i][0])} `
+      texteCorr += `${texteEnCouleurEtGras(couleurs[i][0])} `
       for (let k = 1; k < couleurs[i].length; k++) {
-        texteCorr += `- ${texteGras(couleurs[i][k])} `
+        texteCorr += `- ${texteEnCouleurEtGras(couleurs[i][k])} `
       }
       texteCorr += '<br>'
       lutins[i].animation =

@@ -8,7 +8,7 @@ import {
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { texteItalique, miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { signe } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
 import { fraction } from '../../modules/fractions'
@@ -161,7 +161,7 @@ export default class Exercice3L14DNB1 extends ExerciceBrevetA {
     Ensuite, calculons le nombre de droite du programme :<br>
     $${x0}\\times ${mult2}${ecritureAlgebrique(add2)} = ${x0 * mult2}${ecritureAlgebrique(add2)} = ${droite0}$<br>
     Enfin, le résultat du programme est :<br>
-    $${gauche0}\\times${ecritureParentheseSiNegatif(droite0)} = ${y0}$`
+    $${gauche0}\\times${ecritureParentheseSiNegatif(droite0)} = ${miseEnEvidence(y0)}$`
     const gauche1 = gauche(x1)
     const droite1 = droite(x1)
     const correction2 = `Tout d'abord, calculons le nombre de gauche du programme :<br>
@@ -169,11 +169,11 @@ export default class Exercice3L14DNB1 extends ExerciceBrevetA {
     Ensuite, calculons le nombre de droite du programme :<br>
     $${x1}\\times ${mult2}${ecritureAlgebrique(add2)} = ${x1 * mult2}${ecritureAlgebrique(add2)} = ${droite1}$<br>
     Enfin, le résultat du programme est :<br>
-    $${gauche1}\\times${ecritureParentheseSiNegatif(droite1)} = ${y1}$`
+    $${gauche1}\\times${ecritureParentheseSiNegatif(droite1)} = ${miseEnEvidence(y1)}$`
     const justifications = listeProps
       .map((el, index) => {
         const exp = el.exp
-        return `Expression ${String.fromCharCode(65 + index)} : $${exp}$ est ${el.isGood ? 'vraie' : 'fausse'}`
+        return `Expression ${String.fromCharCode(65 + index)} : $${exp}$ est ${texteEnCouleurEtGras(el.isGood ? 'vraie' : 'fausse')}`
       })
       .filter((el) => el.includes('vraie'))
       .join('<br>')
@@ -187,11 +187,11 @@ export default class Exercice3L14DNB1 extends ExerciceBrevetA {
     const correction4 = `Pour que le résultat du programme soit égal à 0, il faut que l'un des deux nombres soit égal à 0.<br>
     Le nombre de gauche est égal à $0$ si $x${signe1 ? '+' : '-'}${Math.abs(add1)} = 0$ donc $x = ${-add1}$.<br>
     Le nombre de droite est égal à $0$ si $${mult2}x${ecritureAlgebrique(add2)} = 0$ soit $${mult2}x = ${-add2}$ et donc $x=${fraction(-add2, mult2).simplifie().texFSD}$.<br>
-    Le résultat du programme est égal à $0$ si $x = ${-add1}$ ou $x=${fraction(-add2, mult2).simplifie().texFSD}$`
+    Le résultat du programme est égal à $0$ si $x = ${miseEnEvidence(-add1)}$ ou $x=${miseEnEvidence(fraction(-add2, mult2).simplifie().texFSD)}$.`
     const correction5 = `Développons l'expression ${String.fromCharCode(65 + indexB)} :<br>
     $\\begin{aligned}${expression}&=${mult1}x\\times${mult2}x+${mult1}x\\times${ecritureParentheseSiNegatif(add2)}${ecritureAlgebrique(add1)}\\times${mult2}x${ecritureAlgebrique(add1)}\\times${ecritureParentheseSiNegatif(add2)}\\\\
     &=${mult1 * mult2}x^2${ecritureAlgebrique(mult1 * add2)}x${ecritureAlgebrique(mult2 * add1)}x${ecritureAlgebrique(add1 * add2)}\\\\
-    &=${mult1 * mult2}x^2${mult1 * add2 + add1 * mult2 !== 0 ? `${ecritureAlgebriqueSauf1(mult1 * add2 + mult2 * add1)}x` : ''}${ecritureAlgebrique(add1 * add2)}\\end{aligned}$`
+    &=${miseEnEvidence(`${mult1 * mult2}x^2${mult1 * add2 + add1 * mult2 !== 0 ? `${ecritureAlgebriqueSauf1(mult1 * add2 + mult2 * add1)}x` : ''}${ecritureAlgebrique(add1 * add2)}`)}\\end{aligned}$`
 
     const corrections = createList({
       items: [

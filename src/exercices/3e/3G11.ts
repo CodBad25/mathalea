@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -309,7 +310,7 @@ export default class ConstruireHomothetiePoint3e extends Exercice {
               break
           }
 
-          texteCorr += `$${noms[k]}'$, l'image du point $${noms[k]}$ est dans la case ${cellules[k]} de la grille ${plusieursCiblesPourUnPoint ? choixNumGrille[3] : k + 1}.<br>`
+          texteCorr += `$${noms[k]}'$, l'image du point $${noms[k]}$ est dans la case ${texteEnCouleurEtGras(cellules[k])} de la grille ${plusieursCiblesPourUnPoint ? choixNumGrille[3] : k + 1}.<br>`
           propositionsAMC.push({
             type: 'AMCOpen',
             propositions: [

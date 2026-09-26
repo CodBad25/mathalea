@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { arcPointPointAngle } from '../../lib/2d/Arc'
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -134,7 +135,7 @@ export default class ConstruireRotationPoint3e extends Exercice {
       objetsCorrection.push(
         arcPointPointAngle(M[i], N[i], angle, true, arcenciel(i), 'gray', 0.2),
       )
-      texteCorr += `$${noms[i]}'$, l'image du point $${noms[i]}$ est dans la case ${cellules[i]} de la grille ${i + 1}.<br>`
+      texteCorr += `$${noms[i]}'$, l'image du point $${noms[i]}$ est dans la case ${texteEnCouleurEtGras(cellules[i])} de la grille ${i + 1}.<br>`
     }
 
     for (let i = 0; i < nbpoints; i++) {
