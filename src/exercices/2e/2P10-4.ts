@@ -503,15 +503,15 @@ function urneDeuxTiragesAvecRemise(
   )
   texteCorr += `<br>${numAlpha(0)} L'événement "obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}" est réalisé par l'issue {${choix[2]} ${choix[2]}}.`
   texteCorr += ` On comptabilise ${Number(choix[0]) ** 2} issues {${choix[2]}${choix[2]}} sur ${card ** 2} issues en tout.<br>`
-  texteCorr += `La probabilité de cet événement est donc de $${probaChoix.texFraction}${!probaChoix.estIrreductible ? '=' + probaChoix.texFractionSimplifiee : ''}$.<br>`
+  texteCorr += `La probabilité de cet événement est donc de $${probaChoix.estIrreductible ? miseEnEvidence(probaChoix.texFraction) : `${probaChoix.texFraction}=${miseEnEvidence(probaChoix.texFractionSimplifiee)}`}$.<br>`
   texteCorr += `${numAlpha(1)} L'événement "obtenir deux boules de la même couleur" est réalisé par les issues {${b1Char + b1Char}, ${b2Char + b2Char}}.`
   texteCorr += ` On comptabilise ${nbBoule1 ** 2} issues {${b1Char + b1Char}} et   ${nbBoule2 ** 2} issues {${b2Char + b2Char}} sur ${card ** 2} issues en tout.<br>`
   texteCorr += `La probabilité de cet événement est donc de $${proba1.texFraction}+${proba2.texFraction}`
-  texteCorr += `=${proba1et2.texFraction}${!proba1et2.estIrreductible ? '=' + proba1et2.texFractionSimplifiee : ''}$.<br>`
+  texteCorr += `=${proba1et2.estIrreductible ? miseEnEvidence(proba1et2.texFraction) : `${proba1et2.texFraction}=${miseEnEvidence(proba1et2.texFractionSimplifiee)}`}$.<br>`
 
   texteCorr += `${numAlpha(2)} L'événement "obtenir deux boules de couleurs différentes" est réalisé par les issues {${b1Char + b2Char}, ${b2Char + b1Char}}.`
   texteCorr += ` On comptabilise ${nbBoule1 * nbBoule2} issues {${b1Char + b2Char}} et autant d'issues {${b2Char + b1Char}} sur ${card ** 2} issues en tout.<br>`
-  texteCorr += `La probabilité de cet événement est donc de $2\\times ${proba3.texFraction}=${proba4.texFraction}${!proba4.estIrreductible ? '=' + proba4.texFractionSimplifiee : ''}$.<br>`
+  texteCorr += `La probabilité de cet événement est donc de $2\\times ${proba3.texFraction}=${proba4.estIrreductible ? miseEnEvidence(proba4.texFraction) : `${proba4.texFraction}=${miseEnEvidence(proba4.texFractionSimplifiee)}`}$.<br>`
   texteCorr += `Une autre façon de faire est de considéré que c'est l'événement contraire de "obtenir deux boules de la même couleur" dont on a calculé la probabilité à la question ${numAlpha(1)}.<br>`
   texteCorr += `On peut donc calculer la probabilité de cet événement en calculant : $1 -${proba1et2.texFractionSimplifiee} = ${proba1et2.entierMoinsFraction(1).texFractionSimplifiee}$.`
 

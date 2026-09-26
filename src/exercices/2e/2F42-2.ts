@@ -140,32 +140,32 @@ export default class LireUnTableauDevariations extends Exercice {
           if (choix === 1) {
             if (M === y1) {
               texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${y1}$, c'est-à-dire  $f(x)\\leqslant f(${x1})$.<br>
-           Ainsi, le maximum de $f$ est $${y1}$. Il est atteint en $x=${x1}$. `
+           Ainsi, le maximum de $f$ est $${miseEnEvidence(y1)}$. Il est atteint en $x=${miseEnEvidence(x1)}$. `
             } else {
               texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${y3}$, c'est-à-dire  $f(x)\\leqslant f(${x3})$.<br>
-          Ainsi, le maximum de $f$ est $${y3}$. Il est atteint en $x=${x3}$.  `
+          Ainsi, le maximum de $f$ est $${miseEnEvidence(y3)}$. Il est atteint en $x=${miseEnEvidence(x3)}$.  `
             }
             if (m === y2) {
               texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${y2}$, c'est-à-dire  $f(x)\\geqslant f(${x2})$.<br>
-          Ainsi, le minimum de $f$ est $${y2}$. Il est atteint en $x=${x2}$. `
+          Ainsi, le minimum de $f$ est $${miseEnEvidence(y2)}$. Il est atteint en $x=${miseEnEvidence(x2)}$. `
             } else {
               texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${y4}$, c'est-à-dire  $f(x)\\geqslant f(${x4})$.<br>
-         Ainsi, le minimum de $f$ est $${y4}$. Il est atteint en $x=${x4}$.  `
+         Ainsi, le minimum de $f$ est $${miseEnEvidence(y4)}$. Il est atteint en $x=${miseEnEvidence(x4)}$.  `
             }
           } else {
             if (M === y1) {
               texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${-y1}$, c'est-à-dire  $f(x)\\geqslant f(${x1})$.<br>
-           Ainsi, le minimum de $f$ est $${-y1}$. Il est atteint en $x=${x1}$. `
+           Ainsi, le minimum de $f$ est $${miseEnEvidence(-y1)}$. Il est atteint en $x=${miseEnEvidence(x1)}$. `
             } else {
               texteCorr += `Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\geqslant ${-y3}$, c'est-à-dire  $f(x)\\geqslant f(${x3})$.<br>
-          Ainsi, le minimum de $f$ est $${-y3}$. Il est atteint en $x=${x3}$.  `
+          Ainsi, le minimum de $f$ est $${miseEnEvidence(-y3)}$. Il est atteint en $x=${miseEnEvidence(x3)}$.  `
             }
             if (m === y2) {
               texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${-y2}$, c'est-à-dire  $f(x)\\leqslant f(${x2})$.<br>
-          Ainsi, le maximum de $f$ est $${-y2}$. Il est atteint en $x=${x2}$. `
+          Ainsi, le maximum de $f$ est $${miseEnEvidence(-y2)}$. Il est atteint en $x=${miseEnEvidence(x2)}$. `
             } else {
               texteCorr += `<br>Pour tout réel $x$ de $[${x1};${x4}]$, on a  $f(x)\\leqslant ${-y4}$, c'est-à-dire  $f(x)\\leqslant f(${x4})$.<br>
-         Ainsi, le maximum de $f$ est $${-y4}$. Il est atteint en $x=${x4}$.  `
+         Ainsi, le maximum de $f$ est $${miseEnEvidence(-y4)}$. Il est atteint en $x=${miseEnEvidence(x4)}$.  `
             }
           }
           break

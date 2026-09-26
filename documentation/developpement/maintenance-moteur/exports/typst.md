@@ -593,10 +593,10 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrectio
 
 `minimalCorrection` (`components/setup/typst/minimalCorrection.ts`) reconnaît les **deux** façons de mettre une réponse en évidence :
 
-- `miseEnEvidence()` — dans une formule, produit `{\color{#F15929}\boldsymbol{…}}`. Repérée par `occurrencesMiseEnEvidence` (`components/setup/diaporama/answersTable.ts`, partagée avec le tableau des réponses du diaporama), qui tient compte des accolades imbriquées ;
+- `miseEnEvidence()` — dans une formule, produit `{\color{#F15929}\boldsymbol{…}}`. Repérée par `occurrencesMiseEnEvidence`, qui tient compte des accolades imbriquées ;
 - `texteEnCouleurEtGras()` — hors formule, produit en HTML un `<span>` orange et gras ; c'est ce qu'emploient les exercices à QCM pour désigner la bonne réponse. Repérée par un balayage des spans qui compte les imbrications. Les repères de sous-question de `numAlpha` (`a)`, `b)`…), orange et gras eux aussi, sont exclus : ils ne désignent aucune réponse.
 
-Les réponses trouvées sont remises dans leur ordre d'apparition, dédoublonnées, puis réémises telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
+`reponsesMisesEnEvidence` renvoie les réponses trouvées dans leur ordre d'apparition, dédoublonnées ; le tableau des réponses du diaporama s'en sert aussi (voir [Vue Diaporama](diaporama.md#tableau-des-réponses)). `minimalCorrection` les réémet telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
 
 ## Styles d'exercice (badges exercise-bank)
 

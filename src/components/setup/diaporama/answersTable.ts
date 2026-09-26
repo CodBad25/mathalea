@@ -1,91 +1,45 @@
-import { orangeMathalea } from '../../../lib/colors'
 import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
 import type { IExercice } from '../../../lib/types'
+import {
+  reponsesMisesEnEvidence,
+  type ReponseMiseEnEvidence,
+} from '../typst/minimalCorrection'
 
 /**
- * Motif produit par `miseEnEvidence()` en HTML : `{\color{#F15929}\boldsymbol{…}}`.
- * On accepte aussi la variante LaTeX `\color[HTML]{F15929}` et la casse
- * indifférente du code hexadécimal.
+ * Extrait d'une correction les réponses courtes mises en évidence en orange
+ * (`miseEnEvidence()` dans une formule, `texteEnCouleurEtGras()` hors formule),
+ * prêtes à afficher : voir `formuleReponseCourte`. Les doublons sont
+ * supprimés, l'ordre d'apparition est conservé.
+ *
+ * Pour un QCM (`avecTextes` à `false`), les textes orange sont ignorés : ce
+ * sont les lettres des bonnes propositions, déjà affichées par `lettresQcm`.
  */
-const hexOrange = orangeMathalea.replace('#', '')
-const regexpMiseEnEvidence = new RegExp(
-  `\\\\color(?:\\[HTML\\])?\\{#?${hexOrange}\\}\\s*\\\\boldsymbol\\s*\\{`,
-  'gi',
-)
-
-/**
- * Renvoie le contenu de l'accolade ouverte à `indexOuvrante`, en tenant compte
- * des accolades imbriquées et des accolades échappées.
- */
-function contenuAccolade(
-  texte: string,
-  indexOuvrante: number,
-): { contenu: string; indexFermante: number } | undefined {
-  if (texte[indexOuvrante] !== '{') return undefined
-  let profondeur = 0
-  for (let i = indexOuvrante; i < texte.length; i++) {
-    const caractere = texte[i]
-    if (caractere === '\\') {
-      i++ // on saute le caractère échappé (\{ , \} , \\ …)
-      continue
-    }
-    if (caractere === '{') profondeur++
-    else if (caractere === '}') {
-      profondeur--
-      if (profondeur === 0) {
-        return { contenu: texte.slice(indexOuvrante + 1, i), indexFermante: i }
-      }
-    }
-  }
-  return undefined
-}
-
-/**
- * Occurrences de `miseEnEvidence()` en orange dans une correction, avec leur
- * position de départ dans le texte (pour pouvoir les remettre dans l'ordre
- * avec d'autres mises en évidence, voir `minimalCorrection` côté Typst).
- * Le contenu est renvoyé brut, sans dédoublonnage.
- */
-export function occurrencesMiseEnEvidence(
+export function extraitReponsesCourtes(
   correction: string,
-): { index: number; contenu: string }[] {
-  const occurrences: { index: number; contenu: string }[] = []
-  regexpMiseEnEvidence.lastIndex = 0
-  let correspondance: RegExpExecArray | null
-  while ((correspondance = regexpMiseEnEvidence.exec(correction)) !== null) {
-    const indexOuvrante =
-      correspondance.index + correspondance[0].length - 1 /* l'accolade */
-    const accolade = contenuAccolade(correction, indexOuvrante)
-    if (accolade === undefined) break
-    occurrences.push({
-      index: correspondance.index,
-      contenu: accolade.contenu.trim(),
-    })
-    regexpMiseEnEvidence.lastIndex = accolade.indexFermante + 1
-  }
-  return occurrences
-}
-
-/**
- * Extrait d'une correction les réponses courtes mises en évidence en orange,
- * c'est-à-dire les contenus passés à `miseEnEvidence()` avec la couleur par
- * défaut. Les doublons sont supprimés, l'ordre d'apparition est conservé.
- */
-export function extraitReponsesCourtes(correction: string): string[] {
+  avecTextes = true,
+): string[] {
   const reponses: string[] = []
-  for (const { contenu } of occurrencesMiseEnEvidence(correction)) {
-    if (contenu !== '' && !reponses.includes(contenu)) reponses.push(contenu)
+  for (const { nature, contenu } of reponsesMisesEnEvidence(correction)) {
+    if (nature === 'texte' && !avecTextes) continue
+    const reponse = formuleReponseCourte(contenu, nature)
+    if (!reponses.includes(reponse)) reponses.push(reponse)
   }
   return reponses
 }
 
 /**
- * Réécrit une réponse courte extraite sous forme de formule LaTeX autonome.
- * La couleur d'origine n'est volontairement pas reprise : dans le tableau des
- * réponses, seule la lettre du QCM est mise en orange.
+ * Réécrit une réponse courte extraite en gras, sous forme de formule LaTeX
+ * autonome ou de texte HTML. La couleur d'origine n'est volontairement pas
+ * reprise : dans le tableau des réponses, seule la lettre du QCM est mise en
+ * orange.
  */
-export function formuleReponseCourte(reponse: string): string {
-  return `$\\boldsymbol{${reponse}}$`
+export function formuleReponseCourte(
+  reponse: string,
+  nature: ReponseMiseEnEvidence['nature'] = 'formule',
+): string {
+  return nature === 'formule'
+    ? `$\\boldsymbol{${reponse}}$`
+    : `<b>${reponse}</b>`
 }
 
 /**
@@ -153,8 +107,7 @@ export function calculeNombreDeColonnes(
   // Avec quatre questions, trois ou quatre mini-tableaux compressent trop la
   // dernière colonne dans le panneau d'aperçu. Deux colonnes de deux lignes
   // conservent toutes les réponses visibles sans défilement horizontal.
-  const colonnesAffichees =
-    nombreDeQuestions === 4 ? 2 : colonnesSouhaitees
+  const colonnesAffichees = nombreDeQuestions === 4 ? 2 : colonnesSouhaitees
   return Math.max(1, Math.min(colonnesAffichees, nombreDeQuestions))
 }
 

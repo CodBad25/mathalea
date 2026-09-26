@@ -1,5 +1,4 @@
 import { orangeMathalea } from '../../../lib/colors'
-import { occurrencesMiseEnEvidence } from '../diaporama/answersTable'
 
 /**
  * Réglage « Correction minimale » de la vue Typst : ne garder d'une correction
@@ -14,6 +13,70 @@ import { occurrencesMiseEnEvidence } from '../diaporama/answersTable'
  * une autre couleur, choisie justement pour ne pas désigner la réponse — est
  * renvoyée telle quelle.
  */
+
+/**
+ * Motif produit par `miseEnEvidence()` en HTML : `{\color{#F15929}\boldsymbol{…}}`.
+ * On accepte aussi la variante LaTeX `\color[HTML]{F15929}` et la casse
+ * indifférente du code hexadécimal.
+ */
+const hexOrange = orangeMathalea.replace('#', '')
+const regexpMiseEnEvidence = new RegExp(
+  `\\\\color(?:\\[HTML\\])?\\{#?${hexOrange}\\}\\s*\\\\boldsymbol\\s*\\{`,
+  'gi',
+)
+
+/**
+ * Renvoie le contenu de l'accolade ouverte à `indexOuvrante`, en tenant compte
+ * des accolades imbriquées et des accolades échappées.
+ */
+function contenuAccolade(
+  texte: string,
+  indexOuvrante: number,
+): { contenu: string; indexFermante: number } | undefined {
+  if (texte[indexOuvrante] !== '{') return undefined
+  let profondeur = 0
+  for (let i = indexOuvrante; i < texte.length; i++) {
+    const caractere = texte[i]
+    if (caractere === '\\') {
+      i++ // on saute le caractère échappé (\{ , \} , \\ …)
+      continue
+    }
+    if (caractere === '{') profondeur++
+    else if (caractere === '}') {
+      profondeur--
+      if (profondeur === 0) {
+        return { contenu: texte.slice(indexOuvrante + 1, i), indexFermante: i }
+      }
+    }
+  }
+  return undefined
+}
+
+/**
+ * Occurrences de `miseEnEvidence()` en orange dans une correction, avec leur
+ * position de départ dans le texte (pour pouvoir les remettre dans l'ordre
+ * avec les mises en évidence par `texteEnCouleurEtGras()`).
+ * Le contenu est renvoyé brut, sans dédoublonnage.
+ */
+function occurrencesMiseEnEvidence(
+  correction: string,
+): { index: number; contenu: string }[] {
+  const occurrences: { index: number; contenu: string }[] = []
+  regexpMiseEnEvidence.lastIndex = 0
+  let correspondance: RegExpExecArray | null
+  while ((correspondance = regexpMiseEnEvidence.exec(correction)) !== null) {
+    const indexOuvrante =
+      correspondance.index + correspondance[0].length - 1 /* l'accolade */
+    const accolade = contenuAccolade(correction, indexOuvrante)
+    if (accolade === undefined) break
+    occurrences.push({
+      index: correspondance.index,
+      contenu: accolade.contenu.trim(),
+    })
+    regexpMiseEnEvidence.lastIndex = accolade.indexFermante + 1
+  }
+  return occurrences
+}
 
 /** Séparateur entre plusieurs réponses d'une même correction (cadratin) */
 const SEPARATEUR = '&emsp;'
@@ -31,6 +94,16 @@ const OUVERTURE_SPAN = /<span([^>]*)>/gi
 interface Reponse {
   index: number
   /** Fragment à réémettre tel quel (HTML ou formule LaTeX) */
+  extrait: string
+}
+
+/** Réponse mise en évidence en orange, dans l'ordre de la correction */
+export interface ReponseMiseEnEvidence {
+  /** `formule` : `miseEnEvidence()` ; `texte` : `texteEnCouleurEtGras()` */
+  nature: 'formule' | 'texte'
+  /** Contenu mis en évidence, sans la mise en forme orange */
+  contenu: string
+  /** Fragment d'origine, mise en forme orange comprise */
   extrait: string
 }
 
@@ -81,8 +154,10 @@ function fermetureDuSpan(
 }
 
 /** Occurrences de `texteEnCouleurEtGras()` en orange, hors repères de sous-question */
-function occurrencesTexteEnCouleurEtGras(correction: string): Reponse[] {
-  const occurrences: Reponse[] = []
+function occurrencesTexteEnCouleurEtGras(
+  correction: string,
+): (Reponse & { contenu: string })[] {
+  const occurrences: (Reponse & { contenu: string })[] = []
   OUVERTURE_SPAN.lastIndex = 0
   let ouverture: RegExpExecArray | null
   while ((ouverture = OUVERTURE_SPAN.exec(correction)) !== null) {
@@ -95,6 +170,7 @@ function occurrencesTexteEnCouleurEtGras(correction: string): Reponse[] {
     if (contenu.trim() === '' || REPERE_SOUS_QUESTION.test(contenu)) continue
     occurrences.push({
       index: ouverture.index,
+      contenu: contenu.trim(),
       extrait: correction.slice(ouverture.index, fermeture.finFermeture),
     })
   }
@@ -102,12 +178,14 @@ function occurrencesTexteEnCouleurEtGras(correction: string): Reponse[] {
 }
 
 /**
- * Correction réduite à ses réponses mises en évidence en orange, séparées par
- * un cadratin. Renvoie la correction inchangée quand elle n'en contient aucune.
+ * Réponses mises en évidence en orange dans une correction, dans leur ordre
+ * d'apparition et sans doublon. Tableau vide quand il n'y en a aucune.
  */
-export function minimalCorrection(correction: string): string {
+export function reponsesMisesEnEvidence(
+  correction: string,
+): ReponseMiseEnEvidence[] {
   const spans = occurrencesTexteEnCouleurEtGras(correction)
-  const reponses: Reponse[] = [
+  const reponses: (Reponse & ReponseMiseEnEvidence)[] = [
     ...occurrencesMiseEnEvidence(correction)
       .filter(
         ({ index, contenu }) =>
@@ -121,18 +199,29 @@ export function minimalCorrection(correction: string): string {
       )
       .map(({ index, contenu }) => ({
         index,
+        nature: 'formule' as const,
+        contenu,
         extrait: `$${miseEnEvidenceOrange(contenu)}$`,
       })),
-    ...spans,
+    ...spans.map((span) => ({ ...span, nature: 'texte' as const })),
   ]
-  if (reponses.length === 0) return correction
   reponses.sort((a, b) => a.index - b.index)
   const vus = new Set<string>()
-  const extraits: string[] = []
-  for (const { extrait } of reponses) {
+  const resultat: ReponseMiseEnEvidence[] = []
+  for (const { nature, contenu, extrait } of reponses) {
     if (vus.has(extrait)) continue
     vus.add(extrait)
-    extraits.push(extrait)
+    resultat.push({ nature, contenu, extrait })
   }
-  return extraits.join(SEPARATEUR)
+  return resultat
+}
+
+/**
+ * Correction réduite à ses réponses mises en évidence en orange, séparées par
+ * un cadratin. Renvoie la correction inchangée quand elle n'en contient aucune.
+ */
+export function minimalCorrection(correction: string): string {
+  const reponses = reponsesMisesEnEvidence(correction)
+  if (reponses.length === 0) return correction
+  return reponses.map(({ extrait }) => extrait).join(SEPARATEUR)
 }
