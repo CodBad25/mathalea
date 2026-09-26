@@ -137,7 +137,6 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
       '',
       '',
       '',
-      '',
     ]
 
     const tableau1 = tableauColonneLigne(
