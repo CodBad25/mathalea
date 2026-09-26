@@ -7,6 +7,7 @@ import {
   miseEnEvidence,
   texteGras,
   texteItalique,
+  texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
@@ -137,7 +138,7 @@ $\\dfrac{\\sin(\\widehat{${angC}})}{${sc}} = \\dfrac{\\sin(\\widehat{${angA}})}{
 $\\sin(\\widehat{${angC}}) = \\dfrac{${sc} \\times \\sin(\\widehat{${angA}})}{${sa}} = \\dfrac{${texNombre(sideC, 2)} \\times \\sin(${texDeg(texNombre(angleA, 1))})}{${texNombre(sideA, 2)}} \\approx ${texNombre(arrondi(sinC, 4), 4)}$<br><br>`
 
         texteCorr += `Comme $\\sin(\\widehat{${angC}}) \\approx ${texNombre(arrondi(sinC, 4), 4)} > 1$, aucun triangle ne satisfait ces données.<br><br>`
-        texteCorr += `Il n'y a ${texteGras('aucune solution')}.`
+        texteCorr += `Il n'y a ${texteEnCouleurEtGras('aucune solution')}.`
       } else if (typeQ === 2) {
         // ======== 1 solution ========
         let angleA: number, sideA: number, sideC: number, sinC: number

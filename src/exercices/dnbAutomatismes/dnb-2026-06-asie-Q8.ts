@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -52,7 +53,7 @@ export default class AutoQ8Asiebrevet2026 extends ExerciceCan {
 
     this.reponse = `${90 - angle}`
     this.correction = `L'angle $\\widehat{BAC}$ est complémentaire de l'angle $\\widehat{ABC}$, donc :<br>
-$\\widehat{BAC} = 90^\\circ - \\widehat{ABC} = 90^\\circ - ${angle}^\\circ = ${90 - angle}^\\circ$`
+$\\widehat{BAC} = 90^\\circ - \\widehat{ABC} = 90^\\circ - ${angle}^\\circ = ${miseEnEvidence(`${90 - angle}^\\circ`)}$`
   }
 
   nouvelleVersion() {

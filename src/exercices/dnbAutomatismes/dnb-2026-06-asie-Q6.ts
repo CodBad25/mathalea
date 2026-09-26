@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arc } from '../../lib/2d/Arc'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -104,7 +105,7 @@ Quelle est la probabilité que le joueur gagne ${objets?.[indexChoisi] || 'un ca
 Le cardinal de l'événement est le nombre de secteurs donnant ${objets?.[indexChoisi] || 'un casque audio'}, soit ${cardinalObjetChoisi}.<br>
 Le cardinal de l'univers est le nombre total de secteurs, soit 10.<br>
 Donc la probabilité est :<br>
-$P(\\text{gagner un ${objets?.[indexChoisi].split(' ')[1].slice(0, -1) || 'un casque audio'}})=\\dfrac{${cardinalObjetChoisi}}{10}$`
+$P(\\text{gagner un ${objets?.[indexChoisi].split(' ')[1].slice(0, -1) || 'un casque audio'}})=${miseEnEvidence(`\\dfrac{${cardinalObjetChoisi}}{10}`)}$`
   }
 
   nouvelleVersion() {

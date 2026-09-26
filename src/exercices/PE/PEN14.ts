@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { obtenirListeFacteursPremiers } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -24,7 +25,7 @@ export default class NiemeDecimale extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const den = choice([7, 13])
       const num = randint(den + 1, 2 * den - 1)
       let n = randint(1, 9) * 100 + randint(1, 9) * 10 + randint(1, 9)
@@ -54,10 +55,10 @@ export default class NiemeDecimale extends Exercice {
         rang === 1 ? `$${rang}^{\\text{re}}$` : `$${rang}^{\\mathrm{e}}$`
       if (rang === 0) {
         texteCorr += `$${n} = ${periodLength} \\times ${Math.floor(n / periodLength)}$<br>`
-        texteCorr += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la dernière décimale de la période soit ${toFixedTruncate(num / den, periodLength).at(-1)}.`
+        texteCorr += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la dernière décimale de la période soit $${miseEnEvidence(String(toFixedTruncate(num / den, periodLength).at(-1)))}$.`
       } else {
         texteCorr += `$${n} = ${periodLength} \\times ${Math.floor(n / periodLength)} + ${n % periodLength}$<br>`
-        texteCorr += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la ${rangString} décimale soit ${toFixedTruncate(num / den, n % periodLength).at(-1)}.`
+        texteCorr += `La $${n}^{\\mathrm{e}}$ décimale du nombre $\\dfrac{${num}}{${den}}$ est donc identique à la ${rangString} décimale soit $${miseEnEvidence(String(toFixedTruncate(num / den, n % periodLength).at(-1)))}$.`
       }
 
       if (this.questionJamaisPosee(i, texte)) {
