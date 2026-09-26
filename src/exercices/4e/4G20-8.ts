@@ -65,12 +65,14 @@ function figureTriangleRectangle(
     codageAngleDroit(B, A, C),
   ]
   const cotes = [
-    [A, B],
+    [B, A],
     [A, C],
-    [B, C],
+    [C, B],
   ]
   for (const [k, label] of labels.entries()) {
     if (label !== '') {
+      // const G = centreGraviteTriangle(A,B,C)
+
       objets.push(
         placeLatexSurSegment(label, cotes[k][0], cotes[k][1], {
           distance: 0.6,
