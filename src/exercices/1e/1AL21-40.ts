@@ -2,7 +2,9 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
+import { boutonReponsePredefinie } from '../../lib/interactif/boutonReponsePredefinie'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisiDelta } from '../../lib/mathFonctions/outilsMaths'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -19,7 +21,7 @@ import { fraction } from '../../modules/fractions'
 import { egal, listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const interactifReady = false
+export const interactifReady = true
 //
 export const titre = 'Factoriser un polynôme du second degré'
 
@@ -74,6 +76,7 @@ export default class Resolutionavecformecanonique extends Exercice {
         c,
         delta,
         alpha,
+        reponse,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
@@ -204,13 +207,32 @@ export default class Resolutionavecformecanonique extends Exercice {
           "<br> D'après le cours, on sait que le polynôme se factorise alors sous la forme : $a(x-x_1)(x-x_2)$"
         // x1String et x2String contiennent ce qui suit le x dans chaque facteur,
         // que les racines soient rationnelles ou irrationnelles, avec ou sans dénominateur.
-        texteCorr += `<br> Finalement, $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=${miseEnEvidence(`${rienSi1(a)}\\left(x ${x1String}\\right)\\left(x ${x2String}\\right)`)}$.`
+        reponse = `${rienSi1(a)}\\left(x ${x1String}\\right)\\left(x ${x2String}\\right)`
+        texteCorr += `<br> Finalement, $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=${miseEnEvidence(reponse)}$.`
       }
+
+      if (delta < 0) {
+        reponse = '\\text{Pas factorisable}'
+        handleAnswers(this, i, { reponse: { value: reponse } })
+      } else {
+        handleAnswers(this, i, {
+          reponse: { value: reponse, options: { factorisation: true } },
+        })
+      }
+
       texte += ajouteChampTexteMathLive(
         this,
         i,
-        KeyboardType.clavierDeBaseAvecX,
+        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
+        delta < 0 ? {} : { texteAvant: ' $=$' },
       )
+      if (this.interactif) {
+        texte += boutonReponsePredefinie({
+          numeroExercice: this.numeroExercice,
+          indiceQuestion: i,
+          label: 'Pas factorisable',
+        })
+      }
       if (this.questionJamaisPosee(i, a, b, c)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
