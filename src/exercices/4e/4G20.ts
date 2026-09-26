@@ -274,26 +274,22 @@ export default class Pythagore2D extends Exercice {
       listeTypeDeQuestions = ['AB', 'BC', 'AC']
     }
     let listeDeNomsDePolygones: string[] = []
-    if (this.sup4) {
-      if (this.sup === 1) {
-        this.consigne =
-          (context.vue !== 'diap' && this.nbQuestions > 1
-            ? 'Dans chaque cas, donner'
-            : 'Donner') + " l'égalité de Pythagore."
-      } else if (this.sup === 2) {
-        this.consigne =
-          (context.vue !== 'diap' && this.nbQuestions > 1
-            ? 'Dans chaque cas, compléter'
-            : 'Compléter') + " l'égalité en utilisant le théorème de Pythagore."
-      } else {
-        this.consigne =
-          (context.vue !== 'diap' && this.nbQuestions > 1
-            ? 'Dans chaque cas, calculer'
-            : 'Calculer') +
-          " la longueur manquante (si nécessaire, l'arrondir au millimètre près)."
-      }
+    if (this.sup === 1) {
+      this.consigne =
+        (context.vue !== 'diap' && this.nbQuestions > 1
+          ? 'Dans chaque cas, donner'
+          : 'Donner') + " l'égalité de Pythagore."
+    } else if (this.sup === 2) {
+      this.consigne =
+        (context.vue !== 'diap' && this.nbQuestions > 1
+          ? 'Dans chaque cas, compléter'
+          : 'Compléter') + " l'égalité en utilisant le théorème de Pythagore."
     } else {
-      this.consigne = ''
+      this.consigne =
+        (context.vue !== 'diap' && this.nbQuestions > 1
+          ? 'Dans chaque cas, calculer'
+          : 'Calculer') +
+        " la longueur manquante (si nécessaire, l'arrondir au millimètre près)."
     }
     listeTypeDeQuestions = combinaisonListes(
       listeTypeDeQuestions,
