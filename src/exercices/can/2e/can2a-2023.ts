@@ -27,7 +27,11 @@ import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { grille } from '../../../lib/2d/Grille'
@@ -64,18 +68,41 @@ export default class SujetCAN2023Seconde extends Exercice {
     super()
 
     this.nbQuestions = 30
+    this.sup = range1(30).join('-')
+    this.sup2 = false
+    this.besoinFormulaire2CaseACocher = ['Choix des questions']
 
     this.comment = `Cet exercice fait partie des annales des Courses Aux Nombres.<br>
   Il est composé de 30 questions réparties de la façon suivante :<br>
   Les 10 premières questions, parfois communes à plusieurs niveaux, font appel à des questions élémentaires et les 20 suivantes (qui ne sont pas rangées dans un ordre de difficulté) sont un peu plus « coûteuses » cognitivement.<br>
   Par défaut, les questions sont rangées dans le même ordre que le sujet officiel avec des données aléatoires. Ainsi, en cliquant sur « Nouvelles données », on obtient une nouvelle Course Aux Nombres avec des données différentes.
+  En cochant « Choix des questions », saisir les numéros des questions à afficher, séparés par des tirets.
   En choisissant un nombre de questions inférieur à 30, on fabrique une « mini » Course Aux Nombres qui respecte la proportion de nombre de questions élémentaires par rapport aux autres.
   Par exemple, en choisissant 20 questions, la course aux nombres sera composée de 7 ou 8 questions élémentaires choisies aléatoirement dans les 10 premières questions du sujet officiel puis de 12 ou 13 autres questions choisies aléatoirement parmi les 20 autres questions du sujet officiel.`
   }
 
   nouvelleVersion() {
-    let typeQuestionsDisponibles = []
-    if (this.nbQuestions === 30) {
+    this.nbQuestionsModifiable = !this.sup2
+    this.besoinFormulaireTexte = this.sup2
+      ? [
+          'Choix des questions',
+          'Numéros des questions (de 1 à 30) séparés par des tirets. Par exemple : 1-3-12-30',
+        ]
+      : false
+
+    let typeQuestionsDisponibles: number[]
+    if (this.sup2) {
+      typeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        saisie: String(this.sup ?? ''),
+        min: 1,
+        max: 30,
+        defaut: 31,
+        melange: 31,
+        shuffle: false,
+        nbQuestions: 0,
+      }).map(Number)
+      this.nbQuestions = typeQuestionsDisponibles.length
+    } else if (this.nbQuestions === 30) {
       typeQuestionsDisponibles = range1(30)
     } else {
       const nbQ1 = Math.min(Math.round((this.nbQuestions * 10) / 30), 10) // Choisir d'un nb de questions de niveau 1 parmi les 10 possibles.
@@ -1491,12 +1518,66 @@ export default class SujetCAN2023Seconde extends Exercice {
 
           break
 
-        case 27:
+        case 27: {
           a = xA26 * 2
           b = 2 * (yA26 - yB26) + randint(0, 1)
           reponse = 'V'
           texte = `Vrai/Faux<br>
           Sur le graphique de la question précédente, $M(${a};${b})$ est un point de la droite.`
+
+          // La question 27 utilise le graphique de la 26. Si elle est choisie
+          // seule, on affiche ce même graphique avec son énoncé.
+          let graphiqueQuestion27 = ''
+          if (this.sup2 && typeQuestionsDisponibles[i - 1] !== 26) {
+            const A0 = pointAbstrait(xA26, 0)
+            const A1 = pointAbstrait(0, yA26)
+            const s26 = segment(A26, A0)
+            const s26B = segment(A26, A1)
+            s26.epaisseur = 1.5
+            s26.pointilles = 5
+            s26B.epaisseur = 1.5
+            s26B.pointilles = 5
+            const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
+            const lA = texteParPosition('A', xA26, yA26 + 0.5, 0, 'black', 1.5)
+            const traceA = tracePoint(A26, 'black')
+            const d = droite(A26, B26, '', bleuMathalea)
+            d.epaisseur = 2
+            traceA.taille = 3
+            traceA.epaisseur = 2
+            const r = repere({
+              xMin: -2,
+              xMax: 8,
+              xUnite: 1,
+              yMin: -1,
+              yMax: 5,
+              grille: false,
+              yUnite: 1,
+              thickHauteur: 0,
+              axeXStyle: '->',
+              axeYStyle: '->',
+              xLabelListe: [xA26],
+              yLabelListe: yB26 === 0 ? [yA26] : [yA26, 1],
+            })
+            graphiqueQuestion27 = mathalea2d(
+              {
+                xmin: -2,
+                xmax: 8,
+                ymin: -1,
+                ymax: 5.25,
+                pixelsParCm: 30,
+                scale: 0.75,
+                center: !context.isHtml,
+              },
+              d,
+              r,
+              o,
+              lA,
+              traceA,
+              s26,
+              s26B,
+            )
+            texte = `Vrai/Faux<br>${graphiqueQuestion27}<br>Le point $M(${a};${b})$ est-il sur la droite ?`
+          }
 
           if (yB26 === 0) {
             if (b === 2 * (yA26 - yB26)) {
@@ -1532,12 +1613,16 @@ export default class SujetCAN2023Seconde extends Exercice {
           }
           this.canEnonce = `Cette question utilise le graphique de la question précédente.<br>
            Le point $M$ a pour coordonnées $(${a};${b})$.`
+          if (graphiqueQuestion27) {
+            this.canEnonce = `${graphiqueQuestion27}<br>Le point $M$ a pour coordonnées $(${a};${b})$.`
+          }
           this.canReponseACompleter = `Complète avec $\\in$ ou $\\notin$.<br>
           $M \\ldots (d)$`
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
           break
+        }
         case 28:
           {
             const A0 = pointAbstrait(x0, y0)
