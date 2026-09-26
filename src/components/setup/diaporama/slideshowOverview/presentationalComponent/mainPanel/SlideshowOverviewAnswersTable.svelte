@@ -1,11 +1,11 @@
 <script lang="ts">
   import { tick } from 'svelte'
   import { mathaleaRenderDiv } from '../../../../../../lib/mathalea'
+  import BasicClassicModal from '../../../../../shared/modal/BasicClassicModal.svelte'
   import ZoomButtons from '../../../../start/presentationalComponents/header/headerButtons/setupButtons/ZoomButtons.svelte'
   import {
     calculeNombreDeColonnes,
     doitAfficherFormuleComplete,
-    formuleReponseCourte,
     repartisEnColonnes,
   } from '../../../answersTable'
   import type { Slide } from '../../../types'
@@ -43,6 +43,19 @@
   // d'apparaître dans le DOM et n'a jamais été traité par KaTeX.
   $: if (colonnes.length > 0 && revealedAnswersCount >= 0) {
     tick().then(() => mathaleaRenderDiv(tableauConteneur, -1))
+  }
+
+  // Correction complète agrandie, pour une question sans réponse courte
+  // (figure, tableau, construction…) dont le tableau n'affiche qu'une miniature.
+  let correctionAgrandie: { numero: number; correction: string } | undefined
+  let isCorrectionAgrandieDisplayed = false
+  let correctionAgrandieConteneur: HTMLElement
+
+  async function agrandisCorrection(numero: number, correction: string) {
+    correctionAgrandie = { numero, correction }
+    isCorrectionAgrandieDisplayed = true
+    await tick()
+    mathaleaRenderDiv(correctionAgrandieConteneur, -1)
   }
 
   function zoomUpdate(plusMinus: '+' | '-') {
@@ -188,12 +201,40 @@
                           opacity-0 group-hover:opacity-100"
                         ></i>
                       </button>
-                    {:else if vue === undefined || (vue.lettresQcm.length === 0 && vue.reponsesCourtes.length === 0)}
+                    {:else if vue === undefined || vue.correction.trim() === ''}
                       <span
                         class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
                       >
                         –
                       </span>
+                    {:else if vue.lettresQcm.length === 0 && vue.reponsesCourtes.length === 0}
+                      <!-- Pas de réponse courte (figure, tableau, construction…) :
+                      miniature de la correction complète, agrandie au clic.
+                      Elle est calée sur la fin de la correction, là où se
+                      trouve en général la réponse. -->
+                      <button
+                        type="button"
+                        class="relative flex flex-col justify-end w-full max-h-[8em] overflow-hidden
+                        text-left cursor-zoom-in rounded
+                        hover:ring-2 ring-coopmaths-action dark:ring-coopmathsdark-action"
+                        aria-label="Agrandir la correction de la question {numeroQuestion +
+                          1}"
+                        title="Cliquer pour agrandir"
+                        on:click={() =>
+                          agrandisCorrection(
+                            numeroQuestion + 1,
+                            vue.correction,
+                          )}
+                      >
+                        <span class="miniature-correction">
+                          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                          {@html vue.correction}
+                        </span>
+                        <span
+                          class="absolute inset-x-0 top-0 h-6 bg-gradient-to-b
+                          from-coopmaths-canvas dark:from-coopmathsdark-canvas"
+                        ></span>
+                      </button>
                     {:else if doitAfficherFormuleComplete(vue.lettresQcm, vue.reponsesCourtes)}
                       <!-- Plusieurs blancs (ex : remplisLesBlancs) : afficher
                       la correction complète est plus compréhensible que les
@@ -215,7 +256,7 @@
                         {#each vue.reponsesCourtes as reponse, indexReponse (indexReponse)}
                           <span>
                             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                            {@html formuleReponseCourte(reponse)}
+                            {@html reponse}
                           </span>
                         {/each}
                       </div>
@@ -230,3 +271,32 @@
     </div>
   </div>
 </div>
+
+<BasicClassicModal bind:isDisplayed={isCorrectionAgrandieDisplayed}>
+  <div slot="header">
+    {#if correctionAgrandie}
+      Question {correctionAgrandie.numero}
+    {/if}
+  </div>
+  <div
+    slot="content"
+    class="text-left overflow-auto max-h-[70vh]"
+    bind:this={correctionAgrandieConteneur}
+  >
+    {#if correctionAgrandie}
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      {@html correctionAgrandie.correction}
+    {/if}
+  </div>
+</BasicClassicModal>
+
+<style>
+  /* La miniature réduit tout, figures SVG comprises, et reste inerte : le
+  clic revient au bouton qui l'agrandit. */
+  .miniature-correction {
+    display: block;
+    flex-shrink: 0;
+    zoom: 0.5;
+    pointer-events: none;
+  }
+</style>

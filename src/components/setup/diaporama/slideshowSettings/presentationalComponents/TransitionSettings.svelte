@@ -2,6 +2,7 @@
   import { isIntegerInRange0to3 } from '../../../../../lib/types/integerInRange'
   import CheckboxWithLabel from '../../../../shared/forms/CheckboxWithLabel.svelte'
   import FormRadio from '../../../../shared/forms/FormRadio.svelte'
+  import NumberInput from '../../../../shared/forms/InputNumber.svelte'
 
   export let transitionSounds: {
     0: HTMLAudioElement
@@ -20,6 +21,20 @@
   export let questionThenCorrectionToggle: boolean
   export let questionWithCorrectionToggle: boolean
   export let pauseAfterEachQuestion: boolean
+  export let isManualModeActive: boolean
+  export let durationCorrection: number | undefined
+  export let updateDurationCorrection: (
+    durationCorrection: number | undefined,
+  ) => void
+
+  let previousDurationCorrection = durationCorrection || 10
+  let isSpecificCorrectionDuration = !!durationCorrection
+  function handleChangeIsSpecificCorrectionDuration(isSpecific: boolean) {
+    isSpecificCorrectionDuration = isSpecific
+    updateDurationCorrection(
+      isSpecific ? previousDurationCorrection : undefined,
+    )
+  }
 
   const labelsForSounds = [
     { label: 'Son 1', value: 0 },
@@ -64,6 +79,34 @@
         updateFlow(isChecked ? 2 : 1)
       }}
     />
+    <div class="flex items-center">
+      <CheckboxWithLabel
+        id="slideshow-transition-correction-duration-checkbox"
+        isChecked={isSpecificCorrectionDuration}
+        isDisabled={!questionThenCorrectionToggle || isManualModeActive}
+        label="Durée d'affichage de la correction (en s)"
+        on:change={(e) => {
+          const isChecked = e.detail
+          handleChangeIsSpecificCorrectionDuration(isChecked)
+        }}
+      />
+      <div class="w-20 ml-2">
+        <NumberInput
+          id="slideshow-transition-correction-duration-input"
+          ariaLabel="Durée d'affichage de la correction en secondes"
+          value={previousDurationCorrection}
+          isDisabled={!isSpecificCorrectionDuration ||
+            !questionThenCorrectionToggle ||
+            isManualModeActive}
+          on:change={(e) => {
+            const newDuration = e.detail
+            if (!newDuration) return
+            previousDurationCorrection = newDuration
+            updateDurationCorrection(newDuration)
+          }}
+        />
+      </div>
+    </div>
   </div>
   <CheckboxWithLabel
     id="slideshow-transition-screen-between-checkbox"

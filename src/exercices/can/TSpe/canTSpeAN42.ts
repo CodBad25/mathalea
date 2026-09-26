@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { Courbe, courbe } from '../../../lib/2d/Courbe'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { IntegraleComptable } from '../../../lib/2d/IntegraleComptable'
@@ -154,7 +155,7 @@ export default class IntegraleSurface extends ExerciceSimple {
           ? "Comme l'unité d'aire est de 1 carreau"
           : "Comme l'unité d'aire est de 4 carreaux"
       }
- on obtient $${texNombre(Math.floor(aireInf), 0)}<\\int_{0}^{5}f(x).dx<${texNombre(Math.ceil(aireSup), 0)}$<br>
+ on obtient $${miseEnEvidence(texNombre(Math.floor(aireInf), 0))}<\\int_{0}^{5}f(x).dx<${miseEnEvidence(texNombre(Math.ceil(aireSup), 0))}$<br>
      
       ${figCorr1} ${figCorr2}`
       this.autoCorrection[0] = {

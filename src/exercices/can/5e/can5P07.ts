@@ -1,3 +1,5 @@
+import { orangeMathalea } from '../../../lib/colors'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -70,7 +72,7 @@ export default class Proportionnalite2 extends ExerciceSimple {
             this.optionsChampTexte = { texteApres: ' €' }
           }
           this.correction = `Un kg de ${fruits[0]} coûte $\\dfrac{9}{${a}}$ €.<br>
-          On en déduit que $${b}$ kg de ${fruits[0]}s coûtent $\\dfrac{9\\times${b}}{${a}}=\\dfrac{${9 * b}}{${a}}${frac.texSimplificationAvecEtapes()}$ €.
+          On en déduit que $${b}$ kg de ${fruits[0]}s coûtent $\\dfrac{9\\times${b}}{${a}}=${frac.estIrreductible ? miseEnEvidence(`\\dfrac{${9 * b}}{${a}}`) : `\\dfrac{${9 * b}}{${a}}${frac.texSimplificationAvecEtapes(false, orangeMathalea)}`}$ €.
        
         `
         } else if (choix === 'b') {
@@ -95,7 +97,7 @@ export default class Proportionnalite2 extends ExerciceSimple {
             this.optionsChampTexte = { texteApres: ' €' }
           }
           this.correction = `Un kg de ${fruits[0]} coûte $\\dfrac{7}{${a}}$ €.<br>
-             On en déduit que $${b}$ kg de ${fruits[0]}s coûtent $\\dfrac{7\\times${b}}{${a}}=\\dfrac{${7 * b}}{${a}}${frac.texSimplificationAvecEtapes()}$ €.
+             On en déduit que $${b}$ kg de ${fruits[0]}s coûtent $\\dfrac{7\\times${b}}{${a}}=${frac.estIrreductible ? miseEnEvidence(`\\dfrac{${7 * b}}{${a}}`) : `\\dfrac{${7 * b}}{${a}}${frac.texSimplificationAvecEtapes(false, orangeMathalea)}`}$ €.
           
            `
         } else {
@@ -121,7 +123,7 @@ export default class Proportionnalite2 extends ExerciceSimple {
             this.optionsChampTexte = { texteApres: ' €' }
           }
           this.correction = `Un kg de ${fruits[0]} coûte $\\dfrac{11}{${a}}$ €.<br>
-             On en déduit que $${b}$ kg de ${fruits[0]}s coûtent $\\dfrac{11\\times${b}}{${a}}=\\dfrac{${11 * b}}{${a}}${frac.texSimplificationAvecEtapes()}$ €.
+             On en déduit que $${b}$ kg de ${fruits[0]}s coûtent $\\dfrac{11\\times${b}}{${a}}=${frac.estIrreductible ? miseEnEvidence(`\\dfrac{${11 * b}}{${a}}`) : `\\dfrac{${11 * b}}{${a}}${frac.texSimplificationAvecEtapes(false, orangeMathalea)}`}$ €.
           
            `
         }
@@ -144,7 +146,7 @@ export default class Proportionnalite2 extends ExerciceSimple {
             this.optionsChampTexte = { texteApres: '  kg' }
           }
           this.correction = `La masse de $1$ ${fruits2[1]} est : $\\dfrac{${poids1}}{3}$ kg.<br>
-          On en déduit que $${a}$ ${fruits2[0]} ont une masse de $\\dfrac{${a}\\times${poids1}}{3}=\\dfrac{${a * poids1}}{3}${frac.texSimplificationAvecEtapes()}$ kg.
+          On en déduit que $${a}$ ${fruits2[0]} ont une masse de $\\dfrac{${a}\\times${poids1}}{3}=${frac.estIrreductible ? miseEnEvidence(`\\dfrac{${a * poids1}}{3}`) : `\\dfrac{${a * poids1}}{3}${frac.texSimplificationAvecEtapes(false, orangeMathalea)}`}$ kg.
       `
         }
         if (choix === 'b') {
@@ -161,7 +163,7 @@ export default class Proportionnalite2 extends ExerciceSimple {
             this.optionsChampTexte = { texteApres: '  kg' }
           }
           this.correction = `La masse de $1$ ${fruits2[1]} est : $\\dfrac{${poids1}}{4}$ kg.<br>
-        On en déduit que $${a}$ ${fruits2[0]} ont une masse de $\\dfrac{${a}\\times${poids1}}{4}=\\dfrac{${a * poids1}}{4}${frac.texSimplificationAvecEtapes()}$ kg.
+        On en déduit que $${a}$ ${fruits2[0]} ont une masse de $\\dfrac{${a}\\times${poids1}}{4}=${frac.estIrreductible ? miseEnEvidence(`\\dfrac{${a * poids1}}{4}`) : `\\dfrac{${a * poids1}}{4}${frac.texSimplificationAvecEtapes(false, orangeMathalea)}`}$ kg.
     `
         }
 

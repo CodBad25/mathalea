@@ -1,3 +1,5 @@
+import { orangeMathalea } from '../../../lib/colors'
+import { pgcd } from '../../../lib/outils/primalite'
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -156,7 +158,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           a = randint(4, 9)
           b = randint(4, 9)
           texte = `$${a} \\times ${b}=$ `
-          texteCorr = `$${a} \\times ${b}=${a * b}$`
+          texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           reponse = a * b
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -223,13 +225,13 @@ export default class SujetCAN2022troisieme extends Exercice {
               ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre[c][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]
               texteCorr = ` ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre[c][0]}$=
-              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]}$ `
+              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1])}$ `
             } else {
               texte = `Écris en chiffres le nombre : <br>
                           ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre[c][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]
               texteCorr = ` ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre[c][0]}$=
-                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1]}$ `
+                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre[c][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre[c][1])}$ `
             }
           } else {
             if (a === 0) {
@@ -237,13 +239,13 @@ export default class SujetCAN2022troisieme extends Exercice {
               ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre2[d][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]
               texteCorr = ` ${chiffre2[b][0]}-et-${chiffre[a][0]}-mille-${chiffre2[d][0]}$=
-              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]}$ `
+              ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1])}$ `
             } else {
               texte = `Écris en chiffres le nombre : <br>
                           ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre2[d][0]} `
               reponse = (chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]
               texteCorr = ` ${chiffre2[b][0]}-${chiffre[a][0]}-mille-${chiffre2[d][0]}$=
-                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${(chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1]}$ `
+                          ${(chiffre2[b][1] + chiffre[a][1]) * 1000} + ${chiffre2[d][1]}=${miseEnEvidence((chiffre2[b][1] + chiffre[a][1]) * 1000 + chiffre2[d][1])}$ `
             }
           }
 
@@ -264,7 +266,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           b = choice([19, 29])
           reponse = a - b
           texte = `$${a}-${b}=$ `
-          texteCorr = `$${a}-${b}=${a}-${b + 1}+1=${a - b}$ `
+          texteCorr = `$${a}-${b}=${a}-${b + 1}+1=${miseEnEvidence(a - b)}$ `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -288,7 +290,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             texteCorr = `
         Comme $1\\text{ m}$ $=100\\text{ cm}$, alors $1\\text{ cm}$ $=0,01\\text{ m}$.<br>
         Ainsi pour passer des $\\text{m}$ au $\\text{cm}$, on divise par $100$.<br>
-          Comme : $${a}\\div 100 =${texNombre(reponse, 2)}$<br> alors $${a}\\text{ cm}=${texNombre(reponse, 2)}\\text{ m}$.  `
+          Comme : $${a}\\div 100 =${texNombre(reponse, 2)}$<br> alors $${a}\\text{ cm}=${miseEnEvidence(texNombre(reponse, 2))}\\text{ m}$.  `
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte +=
@@ -305,7 +307,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             reponse = a.mul(100)
             texte = `$${texNombre(a, 1)}\\text{ m}$  $=$ `
             texteCorr = ` Comme $1\\text{ m}$ $=100\\text{ cm}$,  pour passer des $\\text{m}$ au $\\text{cm}$, on multiplie par $100$.<br>
-                Comme : $${texNombre(a, 1)}\\times 100 =${texNombre(reponse, 0)}$, alors $${texNombre(a, 2)}\\text{ m}=${texNombre(reponse, 0)}\\text{ cm}$.`
+                Comme : $${texNombre(a, 1)}\\times 100 =${texNombre(reponse, 0)}$, alors $${texNombre(a, 2)}\\text{ m}=${miseEnEvidence(texNombre(reponse, 0))}\\text{ cm}$.`
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
@@ -328,11 +330,11 @@ export default class SujetCAN2022troisieme extends Exercice {
             if (choice([true, false])) {
               texte = `$2\\times${a}\\times 5=$
              `
-              texteCorr = `$2\\times${a}\\times 5=10\\times ${a}=${10 * a}$`
+              texteCorr = `$2\\times${a}\\times 5=10\\times ${a}=${miseEnEvidence(10 * a)}$`
             } else {
               texte = `$5\\times${a}\\times 2=$
              `
-              texteCorr = `$5\\times${a}\\times 2=10\\times ${a}=${10 * a}$`
+              texteCorr = `$5\\times${a}\\times 2=10\\times ${a}=${miseEnEvidence(10 * a)}$`
             }
 
             reponse = 10 * a
@@ -341,11 +343,11 @@ export default class SujetCAN2022troisieme extends Exercice {
             if (choice([true, false])) {
               texte = `$4\\times${a}\\times 25=$
              `
-              texteCorr = `$4\\times${a}\\times 25=100\\times ${a}=${100 * a}$`
+              texteCorr = `$4\\times${a}\\times 25=100\\times ${a}=${miseEnEvidence(100 * a)}$`
             } else {
               texte = `$50\\times${a}\\times 2=$
              `
-              texteCorr = `$50\\times${a}\\times 2=100\\times ${a}=${100 * a}$`
+              texteCorr = `$50\\times${a}\\times 2=100\\times ${a}=${miseEnEvidence(100 * a)}$`
             }
 
             reponse = 100 * a
@@ -374,11 +376,11 @@ export default class SujetCAN2022troisieme extends Exercice {
           if (choice([true, false])) {
             texte = `Écris sous forme décimale : $${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}$ `
             texteCorr = `$${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${u}+${texNombre(a / 10, 1)}+${texNombre(c / 1000, 3)}=
-            ${texNombre(reponse, 3)}$`
+            ${miseEnEvidence(texNombre(reponse, 3))}$`
           } else {
             texte = `Écris sous forme décimale : $${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}$ `
             texteCorr = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}=${u}+${texNombre(c / 1000, 3)}+${texNombre(a / 10, 1)}=
-            ${texNombre(reponse, 3)}$
+            ${miseEnEvidence(texNombre(reponse, 3))}$
              `
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -398,7 +400,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           c = randint(3, 9)
           reponse = a + b * c
           texte = `$${a}+${b}\\times ${c}=$`
-          texteCorr = `La multiplication est prioritaire : $${a}+${b}\\times ${c}=${a}+${b * c}$
+          texteCorr = `La multiplication est prioritaire : $${a}+${b}\\times ${c}=${a}+${b * c}=${miseEnEvidence(a + b * c)}$
                                    `
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -418,7 +420,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           b = choice([19, 29])
           reponse = a + b
           texte = `$${a}+${b}=$ `
-          texteCorr = `$${a}+${b}=${a}+${b + 1}-1=${a + b}$ `
+          texteCorr = `$${a}+${b}=${a}+${b + 1}-1=${miseEnEvidence(a + b)}$ `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -463,7 +465,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `Recopie le résultat de  :
             $${texNombre(a, 1)}\\times ${texNombre(b, 1)}$<br>`
           texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}`
-          texteCorr += `<br>On en déduit que la bonne réponse est $${texNombre(reponse, 2)}$`
+          texteCorr += `<br>On en déduit que la bonne réponse est $${miseEnEvidence(texNombre(reponse, 2))}$.`
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -486,7 +488,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           ])
           reponse = d.mul(f)
           texte = `$${f}\\times ${texNombre(d, 3)}=$`
-          texteCorr = `$${f}\\times ${texNombre(d, 3)}=${texNombre(reponse, 3)}$<br>`
+          texteCorr = `$${f}\\times ${texNombre(d, 3)}=${miseEnEvidence(texNombre(reponse, 3))}$<br>`
           texteCorr += `
           $${f}\\times ${texNombre(d, 3)}=${f}\\div ${texNombre(Decimal.pow(d, -1), 0)}=${texNombre(reponse, 3).slice(0, -1)}\\underline{${texNombre(reponse, 3).slice(-1)}}$ `
 
@@ -508,7 +510,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `Complète :<br>
           $\\dfrac{${a[0]}}{${a[1]}}=\\dfrac{\\ldots}{${a[1] * k}}$`
 
-          texteCorr = `Le dénominateur a été multiplié par $${k}$, donc le numérateur est $${a[0]}\\times ${k}=${a[0] * k}$.<br>
+          texteCorr = `Le dénominateur a été multiplié par $${k}$, donc le numérateur est $${a[0]}\\times ${k}=${miseEnEvidence(a[0] * k)}$.<br>
           Ainsi,  $\\dfrac{${a[0]}}{${a[1]}}=\\dfrac{${a[0] * k}}{${a[1] * k}}$.`
 
           reponse = a[0] * k
@@ -531,7 +533,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `$a=${a}$ et $b=${b}$<br>
           Calcule  $a^2+2\\times b^2$`
           reponse = a ** 2 + 2 * b ** 2
-          texteCorr = `$a^2+2\\times b^2=${a}^2+2\\times ${b}^2=${a ** 2}+2\\times ${b ** 2}=${a ** 2}+${2 * b ** 2}=${reponse}$ `
+          texteCorr = `$a^2+2\\times b^2=${a}^2+2\\times ${b}^2=${a ** 2}+2\\times ${b ** 2}=${a ** 2}+${2 * b ** 2}=${miseEnEvidence(reponse)}$ `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -550,7 +552,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `Complète :<br>
           $${texNombre(a, 2)}=$`
 
-          texteCorr = `$${texNombre(a, 2)}=\\dfrac{${texNombre(reponse, 0)}}{100}=${texNombre(reponse, 0)} \\%$ `
+          texteCorr = `$${texNombre(a, 2)}=\\dfrac{${texNombre(reponse, 0)}}{100}=${miseEnEvidence(texNombre(reponse, 0))} \\%$ `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -577,7 +579,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             texteCorr = ` On factorise : <br>     $\\begin{aligned}
     ${b}\\times${texNombre(a, 1)} + ${texNombre(a, 1)}\\times${c}&=${texNombre(a, 1)}\\times \\underbrace{(${b}+${c})}_{=10}\\\\
     &=${texNombre(a, 1)}\\times 10\\\\
-    &=${texNombre(a.mul(10), 0)}
+    &=${miseEnEvidence(texNombre(a.mul(10), 0))}
     \\end{aligned}$`
             reponse = a.mul(10)
           } else {
@@ -589,7 +591,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             texteCorr = ` On factorise : <br>     $\\begin{aligned}
       ${b}\\times${texNombre(a, 1)} + ${texNombre(a, 1)}\\times${texNombre(c, 0)}&=${texNombre(a, 1)}\\times \\underbrace{(${b}+${c})}_{=100}\\\\
       &=${texNombre(a, 1)}\\times 100\\\\
-      &=${texNombre(a.mul(100), 0)}
+      &=${miseEnEvidence(texNombre(a.mul(100), 0))}
       \\end{aligned}$`
             reponse = a.mul(100)
           }
@@ -620,7 +622,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           texteCorr = `$\\underbrace{${texNombre(a, 1)}}_{${moy}-${k2}}$ ${sp(4)} $\\underbrace{${texNombre(b, 1)}}_{${moy}-${k1}}$ ${sp(4)}$${texNombre(moy)}$${sp(4)}
           $\\underbrace{${texNombre(c, 1)}}_{${moy}+${k1}}$${sp(4)}$\\underbrace{${texNombre(d, 1)}}_{${moy}+${k2}}$<br>
-          La moyenne est donc $${moy}$.`
+          La moyenne est donc $${miseEnEvidence(moy)}$.`
 
           reponse = moy
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -665,7 +667,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             e,
           )
           texteCorr = `L'aire du triangle est $\\dfrac{\\text{AB}\\times \\text{AC}}{2}=\\dfrac{${a}\\times \\text{AC}}{2}$.<br>
-          On obtient ainsi,  $\\dfrac{${a}\\times \\text{AC}}{2}=${c}$ soit $${a}\\times AC=2\\times ${c}$, soit $AC=\\dfrac{${c * 2}}{${a}}=${reponse}\\text{ cm}$.`
+          On obtient ainsi,  $\\dfrac{${a}\\times \\text{AC}}{2}=${c}$ soit $${a}\\times AC=2\\times ${c}$, soit $AC=\\dfrac{${c * 2}}{${a}}=${miseEnEvidence(reponse)}\\text{ cm}$.`
           texte += ' $AC= $'
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -691,7 +693,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           d = arrondi(b.mul(60).toNumber())
           if (!this.interactif) {
             texte = `Convertir en heures/minutes : <br>$${texNombre(b.plus(a), 2)}$ h $=$ .....  h ..... min`
-            texteCorr = `$${texNombre(b.plus(a), 2)}$h$ = ${a}$ h $ + ${texNombre(b, 2)} \\times 60  = ${a}$ h $${texNombre(d, 0)}$ min`
+            texteCorr = `$${texNombre(b.plus(a), 2)}$h$ = ${a}$ h $ + ${texNombre(b, 2)} \\times 60  = ${miseEnEvidence(a)}$ h $${miseEnEvidence(texNombre(d, 0))}$ min`
           } else {
             texte = `Convertir en heures/minutes : <br>$${texNombre(b.plus(a), 2)}$ h $=$`
             texte += ajouteChampTexteMathLive(
@@ -706,7 +708,7 @@ export default class SujetCAN2022troisieme extends Exercice {
                 options: { HMS: true },
               },
             })
-            texteCorr = `$${texNombre(b.plus(a), 2)}\\text{ h } = ${a}\\text{ h }+${texNombre(b, 2)} \\times 60\\text{ min } = ${a}\\text{ h }${texNombre(d, 0)}\\text{ min }$`
+            texteCorr = `$${texNombre(b.plus(a), 2)}\\text{ h } = ${a}\\text{ h }+${texNombre(b, 2)} \\times 60\\text{ min } = ${miseEnEvidence(a)}\\text{ h }${miseEnEvidence(texNombre(d, 0))}\\text{ min }$`
 
             nbChamps = 1
           }
@@ -722,7 +724,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           texteCorr = `          Prendre $${p}\\,\\%$  de $${a}$ revient à prendre $${p / 10}\\times 10\\,\\%$  de $${a}$.<br>
             Comme $10\\,\\%$  de $${a}$ vaut $${a / 10}$ (pour prendre $10\\,\\%$  d'une quantité, on la divise par $10$), alors
-            $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${reponse}$.
+            $${p}\\,\\%$ de $${a}=${p / 10}\\times ${a / 10}=${miseEnEvidence(reponse)}$.
            `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -747,12 +749,12 @@ export default class SujetCAN2022troisieme extends Exercice {
           if (choice([true, false])) {
             texte = `$${a}+${c}+${b}+${d}+${e}=$
       `
-            texteCorr = `$${a}+${c}+${b}+${d}+${e}=\\underbrace{${a}+${b}}_{=100}+\\underbrace{${c}+${d}}_{=100}+${e}=${reponse}$
+            texteCorr = `$${a}+${c}+${b}+${d}+${e}=\\underbrace{${a}+${b}}_{=100}+\\underbrace{${c}+${d}}_{=100}+${e}=${miseEnEvidence(reponse)}$
           `
           } else {
             texte = `$${a}+${e}+${c}+${b}+${d}=$
           `
-            texteCorr = `$${a}+${e}+${c}+${b}+${d}=\\underbrace{${a}+${b}}_{=100}+\\underbrace{${c}+${d}}_{=100}+${e}=${reponse}$
+            texteCorr = `$${a}+${e}+${c}+${b}+${d}=\\underbrace{${a}+${b}}_{=100}+\\underbrace{${c}+${d}}_{=100}+${e}=${miseEnEvidence(reponse)}$
               `
           }
 
@@ -779,7 +781,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           texte = `$${texNombre(a, 2)}\\div ${texNombre(b, 2)}=$
       `
-          texteCorr = `$${texNombre(a, 2)}\\div ${texNombre(b, 2)}=${texNombre(a, 2)}\\times ${texNombre(Decimal.pow(b, -1), 0)}=${texNombre(reponse, 2)}$.
+          texteCorr = `$${texNombre(a, 2)}\\div ${texNombre(b, 2)}=${texNombre(a, 2)}\\times ${texNombre(Decimal.pow(b, -1), 0)}=${miseEnEvidence(texNombre(reponse, 2))}$.
           `
 
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -824,7 +826,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             e,
           )
           texteCorr = `Le périmètre en cm est donné par :
-          $2\\times ${texNombre(a, 1)}+2\\times ${texNombre(b, 1)} =2\\times(${texNombre(a, 1)}+${texNombre(b, 1)})=${texNombre(reponse, 0)}\\text{ cm}$`
+          $2\\times ${texNombre(a, 1)}+2\\times ${texNombre(b, 1)} =2\\times(${texNombre(a, 1)}+${texNombre(b, 1)})=${miseEnEvidence(texNombre(reponse, 0))}\\text{ cm}$`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -855,7 +857,7 @@ export default class SujetCAN2022troisieme extends Exercice {
             $\\dfrac{${a}}{${b}}\\times\\dfrac{${c}}{${d}}\\times\\dfrac{0}{${e}}\\times\\dfrac{${f}}{${g}}$ `
             reponse = fraction(0, 1)
             texteCorr =
-              "Il s'agit d'un produit avec un facteur nul, donc la résultat est 0."
+              `Il s'agit d'un produit avec un facteur nul, donc le résultat est $${miseEnEvidence(0)}$.`
           }
           if (choix === 'b') {
             if (choice([true, false])) {
@@ -863,13 +865,13 @@ export default class SujetCAN2022troisieme extends Exercice {
             $\\dfrac{${a}}{${b}}\\times\\dfrac{${c}}{${d}}\\times\\dfrac{${d}}{${a}}\\times\\dfrac{${b}}{${c}}$ `
               reponse = fraction(3, 3)
               texteCorr = `En simplifiant, on obtient : <br>
-            $\\dfrac{${a}}{${a}}\\times\\dfrac{${b}}{${b}}\\times\\dfrac{${c}}{${c}}\\times\\dfrac{${d}}{${d}}=1$ .`
+            $\\dfrac{${a}}{${a}}\\times\\dfrac{${b}}{${b}}\\times\\dfrac{${c}}{${c}}\\times\\dfrac{${d}}{${d}}=${miseEnEvidence(1)}$.`
             } else {
               texte = `Calcule : <br>
     $\\dfrac{${a}}{${b}}\\times\\dfrac{${-c}}{${d}}\\times\\dfrac{${d}}{${a}}\\times\\dfrac{${b}}{${c}}$ `
               reponse = fraction(-3, 3)
               texteCorr = `En simplifiant, on obtient : <br>
-    $\\dfrac{${a}}{${a}}\\times\\dfrac{${b}}{${b}}\\times\\dfrac{${d}}{${d}}\\times\\dfrac{${-c}}{${c}}=-1$ .`
+    $\\dfrac{${a}}{${a}}\\times\\dfrac{${b}}{${b}}\\times\\dfrac{${d}}{${d}}\\times\\dfrac{${-c}}{${c}}=${miseEnEvidence(-1)}$.`
             }
           }
           if (choix === 'c') {
@@ -878,13 +880,13 @@ export default class SujetCAN2022troisieme extends Exercice {
             $\\dfrac{${a}}{${f}}\\times\\dfrac{${c}}{${d}}\\times\\dfrac{${d}}{${a}}\\times\\dfrac{${e}}{${c}}$ `
               reponse = fraction(e, f)
               texteCorr = `En simplifiant, on obtient : <br>
-            $\\dfrac{${a}}{${a}}\\times\\dfrac{${c}}{${c}}\\times\\dfrac{${d}}{${d}}\\times\\dfrac{${e}}{${f}}=\\dfrac{${e}}{${f}}${simplificationDeFractionAvecEtapes(e, f)}$ .`
+            $\\dfrac{${a}}{${a}}\\times\\dfrac{${c}}{${c}}\\times\\dfrac{${d}}{${d}}\\times\\dfrac{${e}}{${f}}=${pgcd(e, f) === 1 && e * f > 0 ? miseEnEvidence(`\\dfrac{${e}}{${f}}`) : `\\dfrac{${e}}{${f}}${simplificationDeFractionAvecEtapes(e, f, { couleur2: orangeMathalea })}`}$.`
             } else {
               texte = `Calcule : <br>
     $\\dfrac{${a}}{${b}}\\times\\dfrac{${e}}{${d}}\\times\\dfrac{${d}}{${a}}\\times\\dfrac{${b}}{${f}}$ `
               reponse = fraction(e, f)
               texteCorr = `En simplifiant, on obtient : <br>
-    $\\dfrac{${a}}{${a}}\\times\\dfrac{${b}}{${b}}\\times\\dfrac{${d}}{${d}}\\times\\dfrac{${e}}{${f}}=\\dfrac{${e}}{${f}}${simplificationDeFractionAvecEtapes(e, f)}$ .`
+    $\\dfrac{${a}}{${a}}\\times\\dfrac{${b}}{${b}}\\times\\dfrac{${d}}{${d}}\\times\\dfrac{${e}}{${f}}=${pgcd(e, f) === 1 && e * f > 0 ? miseEnEvidence(`\\dfrac{${e}}{${f}}`) : `\\dfrac{${e}}{${f}}${simplificationDeFractionAvecEtapes(e, f, { couleur2: orangeMathalea })}`}$.`
             }
           }
           handleAnswers(this, index, {
@@ -907,7 +909,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           k = randint(3, 9)
           reponse = fraction23[0] / fraction23[1]
           texte = `Écriture décimale de $\\dfrac{${fraction23[0] * k}}{${fraction23[1] * k}}$.`
-          texteCorr = `En simplifiant, on obtient : $\\dfrac{${fraction23[0] * k}}{${fraction23[1] * k}}=\\dfrac{${fraction23[0]}}{${fraction23[1]}}=${texNombre(reponse, 2)}$`
+          texteCorr = `En simplifiant, on obtient : $\\dfrac{${fraction23[0] * k}}{${fraction23[1] * k}}=\\dfrac{${fraction23[0]}}{${fraction23[1]}}=${miseEnEvidence(texNombre(reponse, 2))}$`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -927,7 +929,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `Complète :<br>
           $${a}+$ `
 
-          texteCorr = `Le nombre cherché est $${b}-${a}=${b - a}$.`
+          texteCorr = `Le nombre cherché est $${b}-${a}=${miseEnEvidence(b - a)}$.`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -953,7 +955,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           texte = `Un véhicule se déplace à vitesse constante de $${c}\\text{ km/h}$. Combien de $\\text{km}$ parcourt-il en $${b}$ minutes ?`
           texteCorr = `Le véhicule parcourt $${texNombre(reponse, 0)}\\text{ km}$.<br>
          En $${texNombre(b, 0)}$ minutes, il parcourt $${texNombre(a, 0)}$ fois moins de $\\text{km}$ qu'en $1$ heure, soit $\\dfrac{${texNombre(c, 0)}}{${texNombre(a, 0)}}=
-          ${texNombre(reponse, 0)}\\text{ km}$.`
+          ${miseEnEvidence(texNombre(reponse, 0))}\\text{ km}$.`
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -1022,7 +1024,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $IJK$ :<br>
               On a $IJ^2=JK^2-IK^2$, soit $IJ^2=${b}^2-${a}^2=${b ** 2 - a ** 2}$.<br>
-              Par conséquent, $IJ=\\sqrt{${b ** 2 - a ** 2}}$.`
+              Par conséquent, $IJ=${miseEnEvidence(`\\sqrt{${b ** 2 - a ** 2}}`)}$.`
           } else {
             a = randint(2, 6)
             b = randint(7, 10)
@@ -1078,7 +1080,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $IJK$ :<br>
                     On a $IJ^2=JK^2+IK^2$, soit $IJ^2=${b}^2+${a}^2=${b ** 2 + a ** 2}$.<br>
-                    Par conséquent, $IJ=\\sqrt{${b ** 2 + a ** 2}}$.`
+                    Par conséquent, $IJ=${miseEnEvidence(`\\sqrt{${b ** 2 + a ** 2}}`)}$.`
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -1138,7 +1140,7 @@ export default class SujetCAN2022troisieme extends Exercice {
           Quel est le pourcentage de voix de Sylvie ?
       `
           texteCorr = `$${a}\\times ${100 / a}=100$, donc s'il y avait $100$ élèves, le nombre de  voix de Sylvie serait $${100 / a}\\times ${b}=${reponse}$.<br>
-          Ainsi, le pourcentage de voix de Sylvie est $${reponse}\\,\\%$.
+          Ainsi, le pourcentage de voix de Sylvie est $${miseEnEvidence(reponse)}\\,\\%$.
 
           `
 
@@ -1164,7 +1166,7 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           reponse = multiplicateur[1] * 10 ** a
           texte = `Le ${multiplicateur[0]} de $10^{${a}}$ est : `
-          texteCorr = `Le ${multiplicateur[0]} de $10^{${a}}$ est : $${multiplicateur[1]}\\times 10^{${a}} =${multiplicateur[1]}\\times${texNombre(10 ** a)}=${texNombre(multiplicateur[1] * 10 ** a, 3)}$.`
+          texteCorr = `Le ${multiplicateur[0]} de $10^{${a}}$ est : $${multiplicateur[1]}\\times 10^{${a}} =${multiplicateur[1]}\\times${texNombre(10 ** a)}=${miseEnEvidence(texNombre(multiplicateur[1] * 10 ** a, 3))}$.`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
@@ -1189,14 +1191,14 @@ export default class SujetCAN2022troisieme extends Exercice {
             texte = `Quel est le reste de la division euclidienne de $${a}$ par $3$ ?`
             if (a % 3 === 0) {
               reponse = 0
-              texteCorr = `Le reste de la division de $${a}$ par $3$ est $${a % 3}$.`
+              texteCorr = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(a % 3)}$.`
               texteCorr += ` Un entier est divisible par $3$ lorsque la somme de ses chiffres est un multiple de $3$.<br>
             La somme des chiffres qui composent $${a}$ est :  $${b}+${c}+${d}=${b + c + d}$.<br>
          $${b + c + d}$ est un mutiple de $3$, donc le reste de la division de $${a}$ par $3$ est $0$.
             `
             }
             if (a % 3 === 2) {
-              texteCorr = `Le reste de la division de $${a}$ par $3$ est ${a % 3}.`
+              texteCorr = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(a % 3)}$.`
               texteCorr += `Un entier est divisible par $3$ lorsque la somme de ses chiffres est un multiple de $3$.<br>
             La somme des chiffres qui composent $${a}$ est : $${b}+${c}+${d}=${b + c + d}$.<br>
             $${b + c + d}$ n'est pas un mutiple de $3$. <br>
@@ -1205,7 +1207,7 @@ export default class SujetCAN2022troisieme extends Exercice {
            Ainsi, le reste de la division de $${a}$ par $3$ est donc $2$.`
             }
             if (a % 3 === 1) {
-              texteCorr = `Le reste de la division de $${a}$ par $3$ est ${a % 3}.`
+              texteCorr = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(a % 3)}$.`
               texteCorr += `Un entier est divisible par $3$ lorsque la somme de ses chiffres est un multiple de $3$.<br>
            La somme des chiffres qui composent $${a}$ est : $${b}+${c}+${d}=${b + c + d}$.<br>
            $${b + c + d}$ n'est pas un mutiple de $3$. <br>
@@ -1222,12 +1224,12 @@ export default class SujetCAN2022troisieme extends Exercice {
             texte = `Quel est le reste de la division euclidienne de $${a}$ par $2$ ?`
             if (a % 2 === 0) {
               texteCorr = `
-            Le nombre est pair, le reste de la division de $${a}$ par $2$ est donc $0$.
+            Le nombre est pair, le reste de la division de $${a}$ par $2$ est donc $${miseEnEvidence(0)}$.
              `
             }
             if (a % 2 === 1) {
               texteCorr = `
-             Le nombre est impair, le reste de la division de $${a}$ par $2$ est donc $1$.
+             Le nombre est impair, le reste de la division de $${a}$ par $2$ est donc $${miseEnEvidence(1)}$.
               `
             }
           }

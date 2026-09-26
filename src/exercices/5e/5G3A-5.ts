@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { codageMilieu } from '../../lib/2d/CodageMilieu'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -134,7 +135,7 @@ export default class ConstruireSymetriquePoint5e extends Exercice {
         codageMilieu(M[i], N[i], arcenciel(i + 5), marks[i]),
       )
       objetsCorrection.push(traceCompas(O, N[i], 20))
-      texteCorr += `$${noms[i]}'$, le symétrique du point $${noms[i]}$ est dans la case ${cellules[i]} de la grille ${i + 1}.<br>`
+      texteCorr += `$${noms[i]}'$, le symétrique du point $${noms[i]}$ est dans la case ${texteEnCouleurEtGras(cellules[i])} de la grille ${i + 1}.<br>`
     }
 
     for (let i = 0; i < nbpoints; i++) {

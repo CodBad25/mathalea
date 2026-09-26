@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -117,43 +118,43 @@ export default class ReconnaitreFonctionDegre2 extends Exercice {
           if (choix === 'a') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
             $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=${c}$.<br>
              $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
           } else if (choix === 'b') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
             $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=0$ et $c=${c}$.<br>
             $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
           } else if (choix === 'c') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
             $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=0$.<br>
             $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
           } else if (choix === 'd') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
             $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=${c}$.<br>
             $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
           } else if (choix === 'e') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
             $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=${c}$.<br>
             $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
           } else if (choix === 'f') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
             $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=\\dfrac{${a}}{${d}}$, $b=0$ et $c=\\dfrac{${c}}{${d}}$.<br>
             $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
                 $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=\\sqrt{${r1}}$ et $c=${c}$.<br>
                 $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
           }
@@ -218,33 +219,33 @@ export default class ReconnaitreFonctionDegre2 extends Exercice {
           if (choix === 'a') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
               $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=${a}$, $x_1=${-x1}$ et $x_2=${-x2}$.<br>  Il s'agit de la forme factorisée d'une fonction polynôme du second degré. `
           } else if (choix === 'b') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
               $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=${a}$, $x_1=0$ et $x_2=${-x2}$.<br> Il s'agit de la forme factorisée d'une fonction polynôme du second degré.   `
           } else if (choix === 'c') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
               $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=1$, $x_1=0$ et $x_2=${-x2}$.<br> Il s'agit de la forme factorisée d'une fonction polynôme du second degré.   `
           } else if (choix === 'd') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
                 $${nom}(x)=(${x1}-x)(x${ecritureAlgebrique(x2)})=-(x${ecritureAlgebrique(-x1)})(x${ecritureAlgebrique(x2)})$.<br>
                 $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=1$, $x_1=0$ et $x_2=${-x2}$.<br> Il s'agit de la forme factorisée d'une fonction polynôme du second degré.   `
           } else if (choix === 'e') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
               $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=${a}$, $x_1=-\\sqrt{${r1}}$ et $x_2=\\sqrt{${r2}}$.<br>  Il s'agit de la forme factorisée d'une fonction polynôme du second degré. `
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
               $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=\\sqrt{${r1}}$, $x_1=${-x1}$ et $x_2=${-x2}$.<br>  Il s'agit de la forme factorisée d'une fonction polynôme du second degré. `
           }
           break
@@ -292,17 +293,17 @@ export default class ReconnaitreFonctionDegre2 extends Exercice {
           if (choix === 'a') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
                   $${nom}(x)$ est de la forme $a(x-\\alpha)^2+\\beta$ avec $a=${a}$, $\\alpha=${-alpha}$ et $\\beta=${beta}$. <br> Il s'agit de la forme canonique d'une fonction polynôme du second degré. `
           } else if (choix === 'b') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
                   $${nom}(x)$ est de la forme $a(x-\\alpha)^2+\\beta$ avec $a=${a}$, $\\alpha=${-alpha}$ et $\\beta=0$. <br> Il s'agit de la forme canonique d'une fonction polynôme du second degré. `
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second degré. <br>
                     $${nom}(x)$ est de la forme $a(x-\\alpha)^2+\\beta$ avec $a=1$, $\\alpha=${-alpha}$ et $\\beta=0$. <br> Il s'agit de la forme canonique d'une fonction polynôme du second degré. `
           }
           break
@@ -356,22 +357,22 @@ export default class ReconnaitreFonctionDegre2 extends Exercice {
           if (choix === 'a') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
               $${nom}(x)$ est une fonction polynôme du troisième degré.   `
           } else if (choix === 'b') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
               $${nom}(x)$ est une fonction polynôme du troisième degré.   `
           } else if (choix === 'c') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
              L'expression  $${nom}(x)$ contient une division par $x$.  `
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ est une fonction polynôme du second. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras('est')} une fonction polynôme du second. <br>
               L'expression  $${nom}(x)$ contient une racine carrée de $x$.   `
           }
           break
@@ -414,12 +415,12 @@ export default class ReconnaitreFonctionDegre2 extends Exercice {
           if (choix === 'a') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
                    En développant l'expression, on obtient une fonction polynôme du troisième degré. `
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
                   L'expression $${nom}(x)$ contient une racine carrée de $x$. `
           }
 
@@ -468,17 +469,17 @@ export default class ReconnaitreFonctionDegre2 extends Exercice {
           if (choix === 'a') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
                       En développant l'expression, on obtient une fonction polynôme du troisième degré. `
           } else if (choix === 'b') {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
                       L'expression $${nom}(x)$ contient une racine carrée de $x$. `
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              `La fonction $${nom}$ ${texteEnCouleurEtGras("n'est pas")} une fonction polynôme du second degré. <br>
                         L'expression $${nom}(x)$ contient une racine carrée de $x$. `
           }
 

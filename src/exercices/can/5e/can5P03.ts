@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texPrix } from '../../../lib/format/style'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -61,7 +62,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         this.question = `$${c}$ kg de ${fruits[a][0]} coûtent $${texPrix(c * b)}$ €.<br>        
         $${c + d}$ kg de ces mêmes ${fruits[a][0]} coûtent $${texPrix((c + d) * b)}$ €.<br>        
         Combien coûtent ${d} kg de ces ${fruits[a][0]} ?`
-        this.correction = `$${texPrix((c + d) * b)} € - ${texPrix(c * b)} € =${texPrix(this.reponse)} €$`
+        this.correction = `$${texPrix((c + d) * b)} € - ${texPrix(c * b)} € =${miseEnEvidence(texPrix(this.reponse))} €$`
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -77,7 +78,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         this.reponse = (c / a) * b
         this.question = `Le débit d’un robinet est de $${a}$ L en $${b}$ min.<br>        
         Combien de temps (en minutes) faut-il pour remplir un réservoir de $${c}$ L ?`
-        this.correction = `$\\dfrac{${c}}{${a}}\\times ${b}=${this.reponse}$. Il faut donc $${this.reponse}$ minutes pour remplir le réservoir.`
+        this.correction = `$\\dfrac{${c}}{${a}}\\times ${b}=${this.reponse}$. Il faut donc $${miseEnEvidence(this.reponse)}$ minutes pour remplir le réservoir.`
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: 'min' }
         }
@@ -94,7 +95,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         a = randint(2, 6)
         this.reponse = n * u * a
         this.question = `$${a}$ ${plat[c]} coûtent $${u * a}$ €, combien coûtent $${n * a}$ ${plat[c]} ?`
-        this.correction = `$${n * a}$ ${plat[c]} coûtent $${u}\\times ${n * a}$ €, soit $${this.reponse}$ €.`
+        this.correction = `$${n * a}$ ${plat[c]} coûtent $${u}\\times ${n * a}$ €, soit $${miseEnEvidence(this.reponse)}$ €.`
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -123,7 +124,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         ${b} & ${c} ${context.isHtml ? '\\\\' : '\\tabularnewline'}
          \\hline
         \\end{array}$`
-          this.correction = `On passe de la première ligne à la deuxième en multipliant par $${n}$, ainsi, ?$=\\dfrac{${b}}{${n}}=${b / n}$`
+          this.correction = `On passe de la première ligne à la deuxième en multipliant par $${n}$, ainsi, ?$=\\dfrac{${b}}{${n}}=${miseEnEvidence(b / n)}$`
         } else {
           a = randint(1, 9)
           b = randint(1, 9, a)
@@ -144,7 +145,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         ${texNombre(c)} &${texNombre(d)} & ${texNombre(c + d)} ${context.isHtml ? '\\\\' : '\\tabularnewline'}
          \\hline
          \\end{array}$`
-          this.correction = `La valeur cherchée est donnée par la somme $${a}+${b}=${a + b}$.`
+          this.correction = `La valeur cherchée est donnée par la somme $${a}+${b}=${miseEnEvidence(a + b)}$.`
         }
 
         this.canEnonce = this.question
@@ -162,7 +163,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         ])
         this.question = `En $${a * b}$ minutes, ${d[0]} fait $${a * c}$ tours.<br>        
         En $${b}$ minutes, ${d[1]} fait ${this.interactif ? '' : '$\\ldots\\ldots$ tours.'}`
-        this.correction = `En $${a}$ fois moins de temps, ${d[1]} fait $${a}$ fois moins de tours, soit : $${a * c} \\div ${a}=${c}$ tours.`
+        this.correction = `En $${a}$ fois moins de temps, ${d[1]} fait $${a}$ fois moins de tours, soit : $${a * c} \\div ${a}=${miseEnEvidence(c)}$ tours.`
         this.optionsChampTexte = { texteApres: ' tours.' }
         this.reponse = c
         this.canEnonce = 'Compléter.'

@@ -1,3 +1,7 @@
+import {
+  texteEnCouleurEtGras,
+  miseEnEvidence,
+} from '../../lib/outils/embellissements'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -96,9 +100,9 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
           texteCorr += `<br>$\\phantom{u_{n+1} - u_n} = ${m}$ `
           texteCorr += '<br>'
           if (m >= 0) {
-            texteCorr += `$${m}>0$, on en déduit que $u_{n+1} - u_n >0$, soit $u_{n+1} > u_n$. <br> La suite $(u_n)$ est donc croissante sur $\\mathbb{N}$.`
+            texteCorr += `$${m}>0$, on en déduit que $u_{n+1} - u_n >0$, soit $u_{n+1} > u_n$. <br> La suite $(u_n)$ est donc ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
           } else {
-            texteCorr += `$${m}<0$, on en déduit que $u_{n+1} - u_n <0$, soit $u_{n+1} < u_n$. <br> La suite $(u_n)$ est donc décroissante sur $\\mathbb{N}$.`
+            texteCorr += `$${m}<0$, on en déduit que $u_{n+1} - u_n <0$, soit $u_{n+1} < u_n$. <br> La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
           }
           texteCorr += '<br><br>'
           texteCorr += `Méthode 2 : en utilisant le sens de variation de la fonction associée : <br> Pour tout $n\\in\\mathbb{N}$ on a $(u_n) = f(n)$ où $f$ est la fonction définie sur $[0;+\\infty[$ par $f(x) = ${rienSi1(m)}x ${ecritureAlgebrique(p)}$`
@@ -107,9 +111,9 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
             "$f$ est une fonction affine et le sens de variation d'une fonction affine dépend du signe de a :"
           texteCorr += '<br>'
           if (m >= 0) {
-            texteCorr += `Or $a=${m}>0$, la fonction $f$ est donc croissante sur $[0;+\\infty[$. <br> On en déduit que la suite $(u_n)$ est croissante sur $\\mathbb{N}$.`
+            texteCorr += `Or $a=${m}>0$, la fonction $f$ est donc croissante sur $[0;+\\infty[$. <br> On en déduit que la suite $(u_n)$ est ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
           } else {
-            texteCorr += `Or $a=${m}<0$, la fonction $f$ est donc décroissante sur $[0;+\\infty[$. <br> On en déduit que la suite $(u_n)$ est décroissante sur $\\mathbb{N}$.`
+            texteCorr += `Or $a=${m}<0$, la fonction $f$ est donc décroissante sur $[0;+\\infty[$. <br> On en déduit que la suite $(u_n)$ est ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
           }
           break
         }
@@ -140,19 +144,17 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
             texteCorr += `De plus $a = ${a}>0$, la fonction $f$ est donc décroissante sur $]-\\infty;${new FractionEtendue(-b, 2 * a).texFractionSimplifiee}[$ et croissante sur $]${new FractionEtendue(-b, 2 * a).texFractionSimplifiee};+\\infty[$.`
             texteCorr += '<br>'
             if (rangP >= 0) {
-              texteCorr += `On en déduit que la suite $(u_n)$ est croissante pour tout entier $n \\geqslant ${rangP}$.`
+              texteCorr += `On en déduit que la suite $(u_n)$ est ${texteEnCouleurEtGras('croissante')} pour tout entier $n \\geqslant ${miseEnEvidence(rangP)}$.`
             } else {
-              texteCorr +=
-                'On en déduit que la suite $(u_n)$ est croissante sur $\\mathbb{N}$.'
+              texteCorr += `On en déduit que la suite $(u_n)$ est ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
             }
           } else {
             texteCorr += `De plus $${a}<0$, la fonction $f$ est donc croissante sur $]-\\infty;${new FractionEtendue(-b, 2 * a).texFractionSimplifiee}[$ et décroissante sur $]${new FractionEtendue(-b, 2 * a).texFractionSimplifiee};+\\infty[$.`
             texteCorr += '<br>'
             if (rangP >= 0) {
-              texteCorr += `On en déduit que la suite $(u_n)$ est décroissante pour tout entier $n \\geqslant${rangP}$.`
+              texteCorr += `On en déduit que la suite $(u_n)$ est ${texteEnCouleurEtGras('décroissante')} pour tout entier $n \\geqslant ${miseEnEvidence(rangP)}$.`
             } else {
-              texteCorr +=
-                'On en déduit que la suite $(u_n)$ est décroissante sur $\\mathbb{N}$.'
+              texteCorr += `On en déduit que la suite $(u_n)$ est ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
             }
           }
           break
@@ -229,15 +231,13 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
               if (numerateur >= 0) {
                 texteCorr += `On peut conjecturer que la suite $(u_n)$ est croissante pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$.`
               } else {
-                texteCorr += `On peut conjecturer que la suite $(u_n)$ est décroissante à partir du rang $${texNombre(Math.ceil(-denomD / denomC))}$.`
+                texteCorr += `On peut conjecturer que la suite $(u_n)$ est ${texteEnCouleurEtGras('décroissante')} à partir du rang $${miseEnEvidence(texNombre(Math.ceil(-denomD / denomC)))}$.`
               }
             } else {
               if (numerateur >= 0) {
-                texteCorr +=
-                  'On peut conjecturer que la suite $(u_n)$ est croissante sur $\\mathbb{N}$.'
+                texteCorr += `On peut conjecturer que la suite $(u_n)$ est ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
               } else {
-                texteCorr +=
-                  'On peut conjecturer que la suite $(u_n)$ est décroissante sur $\\mathbb{N}$.'
+                texteCorr += `On peut conjecturer que la suite $(u_n)$ est ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
               }
             }
             texteCorr += '<br><br>'
@@ -313,26 +313,24 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
                 texteCorr += `On peut alors en déduire que $u_{n+1}-u_n > 0$ pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$.`
                 texteCorr += '<br>'
                 texteCorr += '<br>'
-                texteCorr += `La suite $(u_n)$ est donc croissante à partir du rang $${texNombre(Math.ceil(-denomD / denomC))}$.`
+                texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('croissante')} à partir du rang $${miseEnEvidence(texNombre(Math.ceil(-denomD / denomC)))}$.`
               } else {
                 texteCorr += `On peut alors en déduire que $u_{n+1}-u_n < 0$ pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$.`
                 texteCorr += '<br>'
                 texteCorr += '<br>'
-                texteCorr += `La suite $(u_n)$ est donc décroissante à partir du rang $${texNombre(Math.ceil(-denomD / denomC))}$.`
+                texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante')} à partir du rang $${miseEnEvidence(texNombre(Math.ceil(-denomD / denomC)))}$.`
               }
             } else {
               if (numerateur >= 0) {
                 texteCorr +=
                   'On peut alors en déduire que $u_{n+1}-u_n > 0$, soit $u_{n+1} > u_n$ pour tout entier $\\in\\mathbb{N}$.'
                 texteCorr += '<br>'
-                texteCorr +=
-                  'La suite $(u_n)$ est donc croissante sur $\\mathbb{N}$.'
+                texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('croissante')} sur $\\mathbb{N}$.`
               } else {
                 texteCorr +=
                   'On peut alors en déduire que $u_{n+1}-u_n < 0$ pour tout entier $\\in\\mathbb{N}$.'
                 texteCorr += '<br>'
-                texteCorr +=
-                  'La suite $(u_n)$ est donc décroissante sur $\\mathbb{N}$.'
+                texteCorr += `La suite $(u_n)$ est donc ${texteEnCouleurEtGras('décroissante')} sur $\\mathbb{N}$.`
               }
             }
           }

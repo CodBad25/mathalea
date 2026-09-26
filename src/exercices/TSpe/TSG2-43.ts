@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import Exercice from '../Exercice'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -7,7 +8,8 @@ import {
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
-export const titre = 'Déterminer si un vecteur est orthogonal à un plan engendré par 3 points'
+export const titre =
+  'Déterminer si un vecteur est orthogonal à un plan engendré par 3 points'
 
 export const dateDePublication = '26/01/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
@@ -39,7 +41,6 @@ export default class nomExercice extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       let a1 = randint(-5, 5, 0) // coord du vecteur AB
@@ -93,8 +94,7 @@ export default class nomExercice extends Exercice {
           texteCorr += '<br>On calcule alors les deux produits scalaires :'
           texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AB}\\cdot\\vec{n}&=${a1}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b1)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c1)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a1 * a + b1 * b + c1 * c}\\end{aligned}$`
           texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AC}\\cdot\\vec{n}&=${a2}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b2)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c2)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a2 * a + b2 * b + c2 * c}\\end{aligned}$`
-          texteCorr +=
-            '<br>On en déduit que $\\vec n$ est orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il est donc normal au plan $\\mathcal{ABC}$'
+          texteCorr += `<br>On en déduit que $\\vec n$ est orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il ${texteEnCouleurEtGras('est donc normal')} au plan $\\mathcal{ABC}$.`
           break
         case 'type2': // pas Normal
         default:
@@ -126,8 +126,7 @@ export default class nomExercice extends Exercice {
           texteCorr += '<br>On calcule alors les deux produits scalaires :'
           texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AB}\\cdot\\vec{n}&=${a1}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b1)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c1)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a1 * a + b1 * b + c1 * c}\\end{aligned}$`
           texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AC}\\cdot\\vec{n}&=${a2}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b2)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c2)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a2 * a + b2 * b + c2 * c}\\end{aligned}$`
-          texteCorr +=
-            "<br>On en déduit que $\\vec n$ n'est pas orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il n'est donc pas normal au plan $\\mathcal{ABC}$"
+          texteCorr += `<br>On en déduit que $\\vec n$ n'est pas orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il ${texteEnCouleurEtGras("n'est donc pas normal")} au plan $\\mathcal{ABC}$.`
 
           break
       }

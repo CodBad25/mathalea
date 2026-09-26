@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -333,7 +334,7 @@ export default class Reperage2e extends Exercice {
           .join('<br>')
       }
       const reponse = `Dans le repère $(${labelO}; ${labelI}; ${labelK})$ sont :<br>
-            $${points[i].map((p, k) => `${listeNoms[k + 3]}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join(', ')}$`
+            $${points[i].map((p, k) => miseEnEvidence(`${listeNoms[k + 3]}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`)).join(', ')}$`
       if (
         this.questionJamaisPosee(
           i,

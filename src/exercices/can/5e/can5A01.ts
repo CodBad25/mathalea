@@ -1,5 +1,6 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { scratchblock } from '../../../modules/scratchblock'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -69,9 +70,9 @@ export default class RepetitionScratch extends Exercice {
         this.listeQuestions[0] =
           `${scratchblock(prog)}<br>Quel nombre doit-on écrire à la place des pointillés pour tracer un ${b[1]} ?` +
           ajouteChampTexteMathLive(this, 0, KeyboardType.clavierNumbers)
-        this.listeCorrections[0] = `Un ${b[1]} a des anlges de $${arrondi(180 - angleRot)}^\\circ$. Le lutin doit tourner de $180-${arrondi(180 - angleRot)}=${angleRot}^\\circ$ après avoir tracé un côté.<br>`
+        this.listeCorrections[0] = `Un ${b[1]} a des anlges de $${arrondi(180 - angleRot)}^\\circ$. Le lutin doit tourner de $180-${arrondi(180 - angleRot)}=${miseEnEvidence(angleRot)}^\\circ$ après avoir tracé un côté.<br>`
         this.listeCorrections[0] += texteEnCouleur(
-          `Mentalement on divise $360$ par $${nbRep}$ : $\\dfrac{360}{${nbRep}}=${angleRot}$.`,
+          `Mentalement on divise $360$ par $${nbRep}$ : $\\dfrac{360}{${nbRep}}=${angleRot}$.`, bleuMathalea,
         )
         break
       case 2: // trouver le nombre de répétition
@@ -86,9 +87,9 @@ export default class RepetitionScratch extends Exercice {
         this.listeQuestions[0] =
           `${scratchblock(prog)}<br>Quel nombre doit-on écrire à la place des pointillés pour tracer un ${b[1]} ?` +
           ajouteChampTexteMathLive(this, 0, KeyboardType.clavierNumbers)
-        this.listeCorrections[0] = `Un ${b[1]} a ${nbRep} côtés ($${nbRep}\\times ${angleRot}=360^\\circ$), il faut donc répéter ${nbRep} fois les instructions de la boucle.<br>`
+        this.listeCorrections[0] = `Un ${b[1]} a ${nbRep} côtés ($${nbRep}\\times ${angleRot}=360^\\circ$), il faut donc répéter $${miseEnEvidence(nbRep)}$ fois les instructions de la boucle.<br>`
         this.listeCorrections[0] += texteEnCouleur(
-          `Mentalement, on divise $360$ par $${angleRot}$ : $\\dfrac{360}{${angleRot}}=${nbRep}$.`,
+          `Mentalement, on divise $360$ par $${angleRot}$ : $\\dfrac{360}{${angleRot}}=${nbRep}$.`, bleuMathalea,
         )
         break
       case 3:
@@ -136,9 +137,9 @@ export default class RepetitionScratch extends Exercice {
         this.listeQuestions[0] =
           `${scratchblock(prog)}<br>Quelle figure le lutin va-t-il tracer ?` +
           propositionsQcm(this, 0).texte
-        this.listeCorrections[0] = `Un ${b[1]} a ${nbRep} côtés ($${nbRep}\\times ${angleRot}=360^\\circ$), il faut donc répéter ${nbRep} fois les instructions de la boucle.<br>`
+        this.listeCorrections[0] = `Le lutin trace un ${texteEnCouleurEtGras(b[1])}.<br>Un ${b[1]} a ${nbRep} côtés ($${nbRep}\\times ${angleRot}=360^\\circ$), il faut donc répéter ${nbRep} fois les instructions de la boucle.<br>`
         this.listeCorrections[0] += texteEnCouleur(
-          `Mentalement, on divise $360$ par $${angleRot}$ : $\\dfrac{360}{${angleRot}}=${nbRep}$.`,
+          `Mentalement, on divise $360$ par $${angleRot}$ : $\\dfrac{360}{${angleRot}}=${nbRep}$.`, bleuMathalea,
         )
         substitut = ''
         break

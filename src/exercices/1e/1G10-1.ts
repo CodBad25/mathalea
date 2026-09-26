@@ -219,7 +219,7 @@ export default class SuperExoMathalea2d extends Exercice {
       let texteCorr = ''
 
       if (casPositionH === 3 || casProjection[i] === 'angle droit penché') {
-        texteCorr += `Comme les deux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont ${texteGras('orthogonaux')}, je déduis que $${miseEnEvidence('\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = 0', 'black')}$.`
+        texteCorr += `Comme les deux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont ${texteGras('orthogonaux')}, je déduis que $\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = ${miseEnEvidence(0)}$.`
         objetsCorrection.push(
           g,
           tracePoint(A, B, C),
@@ -232,7 +232,7 @@ export default class SuperExoMathalea2d extends Exercice {
           monCodage,
         )
       } else if (casPositionH === 2) {
-        texteCorr += `Soit $H$ le projeté orthogonal de  $${pointProjete}$ sur $${surDroite}$. Les vecteurs $\\overrightarrow{AH}$ et $\\overrightarrow{A${autrePoint}}$ sont ${texteGras('de sens opposés')}.<br> J'en déduis que $\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = - AH \\times A${autrePoint} = -${AH} \\times ${autreLongueur}= ${miseEnEvidence(`${-AH * autreLongueur}`, 'black')}$.`
+        texteCorr += `Soit $H$ le projeté orthogonal de  $${pointProjete}$ sur $${surDroite}$. Les vecteurs $\\overrightarrow{AH}$ et $\\overrightarrow{A${autrePoint}}$ sont ${texteGras('de sens opposés')}.<br> J'en déduis que $\\overrightarrow{AB} \\cdot \\overrightarrow{AC} = - AH \\times A${autrePoint} = -${AH} \\times ${autreLongueur}= ${miseEnEvidence(`${-AH * autreLongueur}`)}$.`
         objetsCorrection.push(
           g,
           tracePoint(A, B, C),
@@ -245,7 +245,7 @@ export default class SuperExoMathalea2d extends Exercice {
           monCodage,
         )
       } else if (casPositionH === 1) {
-        texteCorr += `Soit $H$ le projeté orthogonal de  $${pointProjete}$ sur $${surDroite}$. Les vecteurs $\\overrightarrow{AH}$ et $\\overrightarrow{A${autrePoint}}$ sont ${texteGras('de même sens')}.<br> J'en déduis que $\\overrightarrow{AB} \\cdot \\overrightarrow{AC} =  AH \\times A${autrePoint} = ${AH} \\times ${autreLongueur}= ${miseEnEvidence(`${AH * autreLongueur}`, 'black')}$.`
+        texteCorr += `Soit $H$ le projeté orthogonal de  $${pointProjete}$ sur $${surDroite}$. Les vecteurs $\\overrightarrow{AH}$ et $\\overrightarrow{A${autrePoint}}$ sont ${texteGras('de même sens')}.<br> J'en déduis que $\\overrightarrow{AB} \\cdot \\overrightarrow{AC} =  AH \\times A${autrePoint} = ${AH} \\times ${autreLongueur}= ${miseEnEvidence(`${AH * autreLongueur}`)}$.`
         objetsCorrection.push(
           g,
           tracePoint(A, B, C),

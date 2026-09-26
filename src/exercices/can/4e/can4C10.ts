@@ -1,6 +1,7 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { fraction } from '../../../modules/fractions'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -39,24 +40,24 @@ export default class SommeDifferenceFractionsEgyptiennes extends ExerciceSimple 
       const laFraction = fraction(b + a, a * b).simplifie()
       this.reponse = laFraction
       this.question = `Calculer sous la forme d'une fraction simplifiée $\\dfrac{1}{${a}}+\\dfrac{1}{${b}}$.`
-      this.correction = `$\\dfrac{1}{${a}}+\\dfrac{1}{${b}}=\\dfrac{1\\times ${b}}{${a}\\times ${b}}+\\dfrac{1\\times ${a}}{${b}\\times ${a}}=\\dfrac{${b}+${a}}{${a * b}}=${laFraction.texFraction}$`
+      this.correction = `$\\dfrac{1}{${a}}+\\dfrac{1}{${b}}=\\dfrac{1\\times ${b}}{${a}\\times ${b}}+\\dfrac{1\\times ${a}}{${b}\\times ${a}}=\\dfrac{${b}+${a}}{${a * b}}=${miseEnEvidence(laFraction.texFraction)}$`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Pour additionner des fractions, on les met au même dénominateur.<br>
       On prend pour  dénominateur commun  le produit des deux dénominateurs $${a}\\times ${b}=${a * b}$.<br>
       $\\dfrac{1}{${a}}=\\dfrac{${b}}{${a * b}}$ et $\\dfrac{1}{${b}}=\\dfrac{${a}}{${a * b}}$.<br>
       On en déduit : $\\dfrac{1}{${a}}+\\dfrac{1}{${b}}=\\dfrac{${b}+${a}}{${a * b}}=\\dfrac{${a + b}}{${a * b}}${simplificationDeFractionAvecEtapes(a + b, a * b)}$.
-          `)
+          `, bleuMathalea)
     } else {
       const laFraction = fraction(b - a, a * b).simplifie()
       this.reponse = laFraction
       this.question = `Calculer sous la forme d'une fraction simplifiée $\\dfrac{1}{${a}}-\\dfrac{1}{${b}}$.`
-      this.correction = `$\\dfrac{1}{${a}}-\\dfrac{1}{${b}}=\\dfrac{1\\times ${b}}{${a}\\times ${b}}-\\dfrac{1\\times ${a}}{${a}\\times ${b}}=\\dfrac{${b}-${a}}{${a * b}}=\\dfrac{${b - a}}{${a * b}}=${laFraction.texFraction}$`
+      this.correction = `$\\dfrac{1}{${a}}-\\dfrac{1}{${b}}=\\dfrac{1\\times ${b}}{${a}\\times ${b}}-\\dfrac{1\\times ${a}}{${a}\\times ${b}}=\\dfrac{${b}-${a}}{${a * b}}=\\dfrac{${b - a}}{${a * b}}=${miseEnEvidence(laFraction.texFraction)}$`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Pour additionner des fractions, on les met au même dénominateur.<br>
       On prend pour  dénominateur commun  le produit des deux dénominateurs $${a}\\times ${b}=${a * b}$.<br>
       $\\dfrac{1}{${a}}=\\dfrac{${b}}{${a * b}}$ et $\\dfrac{1}{${b}}=\\dfrac{${a}}{${a * b}}$.<br>
       On en déduit : $\\dfrac{1}{${a}}-\\dfrac{1}{${b}}=\\dfrac{${b}-${a}}{${a * b}}=\\dfrac{${b - a}}{${a * b}}${simplificationDeFractionAvecEtapes(b - a, a * b)}$.
-          `)
+          `, bleuMathalea)
     }
   }
 }

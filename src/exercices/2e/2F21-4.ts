@@ -171,7 +171,7 @@ export default class Lecturefonctionaffine extends Exercice {
               : 'Puisque $f$ est une fonction affine, on a : $f(x)=ax+b$.<br>'
             if (a === 0) {
               texteCorr += `La droite est horizontale. Elle représente une fonction affine constante ($a=0$).<br>
-          Ainsi, $f(x)=${b}$.`
+          Ainsi, $f(x)=${miseEnEvidence(b)}$.`
             } else {
               texteCorr += `$\\bullet$ $b$ est l'ordonnée à l'origine de la droite. On lit $b=${b}$.<br>`
               if (this.correctionDetaillee) {

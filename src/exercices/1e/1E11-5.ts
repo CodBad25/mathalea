@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisiDelta } from '../../lib/mathFonctions/outilsMaths'
@@ -83,7 +84,7 @@ export default class Resolutionavecdelta extends Exercice {
       if (delta < 0) {
         texteCorr +=
           "<br>Le discriminant étant négatif, d'après le cours, l'équation n'admet pas de solutions réelles."
-        texteCorr += '<br>On en déduit que $S=\\emptyset$'
+        texteCorr += `<br>On en déduit que $S=${miseEnEvidence(`\\emptyset`)}$`
       } else if (delta > 0) {
         // Cas des deux solutions :
         texteCorr +=
@@ -149,9 +150,9 @@ export default class Resolutionavecdelta extends Exercice {
         }
         texteCorr += `<br> Après simplification, on obtient : $x_1= ${stringX1}$ et  $x_2=${stringX2}$` // Solution
         if (a < 0) {
-          texteCorr += `<br> $S =\\left\\{${stringX2};${stringX1}\\right\\}$`
+          texteCorr += `<br> $S =${miseEnEvidence(`\\left\\{${stringX2};${stringX1}\\right\\}`)}$`
         } else {
-          texteCorr += `<br> $S =\\left\\{${stringX1};${stringX2}\\right\\}$`
+          texteCorr += `<br> $S =${miseEnEvidence(`\\left\\{${stringX1};${stringX2}\\right\\}`)}$`
         }
       } else {
         // cas de delta  = 0

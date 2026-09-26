@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 import { context } from '../../../modules/context'
@@ -43,7 +44,7 @@ export default class VocabulaireImageAntecedent extends ExerciceSimple {
           this.correction = `Dans l'écriture $${NomF}(a)=b$, on peut dire que : <br>
           $\\bullet$ $b$ est l'image de $a$ par la fonction $${NomF}$ ;<br>
           $\\bullet$ $a$ est un antécédent de $b$ par la fonction $${NomF}$.<br>
-          Ainsi,  ${choix ? `le  nombre image  est $${b}$` : ` un antécédent est $${a}$`}.`
+          Ainsi,  ${choix ? `le  nombre image  est $${miseEnEvidence(b)}$` : ` un antécédent est $${miseEnEvidence(a)}$`}.`
           this.reponse = choix ? `${b}` : `${a}`
         }
         break
@@ -68,7 +69,7 @@ export default class VocabulaireImageAntecedent extends ExerciceSimple {
 
           this.correction = `Sur la première ligne du tableau on lit les valeurs de $x$ donc les antécédents. <br>
           Sur la deuxième ligne, on lit les valeurs de $${NomF}(x)$, donc les images.<br>
-          Ainsi, ${choix ? `le  nombre image  est $${b}$` : `un antécédent est $${a}$`}.`
+          Ainsi, ${choix ? `le  nombre image  est $${miseEnEvidence(b)}$` : `un antécédent est $${miseEnEvidence(a)}$`}.`
           this.reponse = choix ? `${b}` : `${a}`
         }
         break
@@ -84,7 +85,7 @@ export default class VocabulaireImageAntecedent extends ExerciceSimple {
           this.correction = `Dans l'écriture $${NomF}$ : $a \\longmapsto b$, on peut dire que : <br>
               $\\bullet$ $b$ est l'image de $a$ par la fonction $${NomF}$ ;<br>
               $\\bullet$ $a$ est un antécédent de $b$ par la fonction $${NomF}$.<br>
-              Ainsi,  ${choix ? `le  nombre image  est $${b}$` : `un antécédent est $${a}$`}.`
+              Ainsi,  ${choix ? `le  nombre image  est $${miseEnEvidence(b)}$` : `un antécédent est $${miseEnEvidence(a)}$`}.`
           this.reponse = choix ? `${b}` : `${a}`
         }
         break

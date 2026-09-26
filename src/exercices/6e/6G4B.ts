@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -158,7 +159,7 @@ export default class MesurerUnAngle extends Exercice {
         },
         objetsEnonce,
       )
-      texteCorr += `$${Math.abs(angle)}^\\circ$`
+      texteCorr += `$${miseEnEvidence(Math.abs(angle))}^\\circ$`
       this.autoCorrection[i] = {}
       this.autoCorrection[i].enonce = `${texte}\n`
       if (!this.sup2) {

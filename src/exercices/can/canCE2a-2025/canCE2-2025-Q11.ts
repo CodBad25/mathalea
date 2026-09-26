@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { cube } from '../../../lib/3d/3dProjectionMathalea2d/CubeIso'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
@@ -366,7 +367,9 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const monQcm = propositionsQcm(this, 0)
     this.question += monQcm.texte
-    this.correction = monQcm.texteCorr
+    this.correction =
+      monQcm.texteCorr +
+      `La pièce différente est la ${texteEnCouleurEtGras(['première', 'deuxième', 'troisième', 'quatrième'][statuts.indexOf(true)])}.`
     this.canEnonce = 'Entoure la pièce qui est différente des trois autres.'
     this.canReponseACompleter = `${figures[0]}${figures[1]}<br>${figures[2]}${figures[3]}`
   }

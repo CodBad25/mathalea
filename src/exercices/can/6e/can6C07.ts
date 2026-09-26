@@ -1,5 +1,6 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -37,15 +38,15 @@ export default class ResteDivisionPar3 extends ExerciceSimple {
     this.reponse = a % 3
     this.question = `Quel est le reste de la division euclidienne de $${a}$ par $3$ ?`
     if (a % 3 === 0) {
-      this.correction = `Le reste de la division de $${a}$ par $3$ est $${a % 3}$.`
+      this.correction = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(a % 3)}$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Un entier est divisible par $3$ lorsque la somme de ses chiffres est un multiple de $3$.<br>
       La somme des chiffres qui composent $${a}$ est :  $${b}+${c}+${d}=${b + c + d}$.<br>
    $${b + c + d}$ est un mutiple de $3$, donc le reste de la division de $${a}$ par $3$ est $0$.
-      `)
+      `, bleuMathalea)
     }
     if (a % 3 === 1) {
-      this.correction = `Le reste de la division de $${a}$ par $3$ est ${a % 3}.`
+      this.correction = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(a % 3)}$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Un entier est divisible par $3$ lorsque la somme de ses chiffres est un multiple de $3$.<br>
       La somme des chiffres qui composent $${a}$ est : $${b}+${c}+${d}=${b + c + d}$.<br>
@@ -53,10 +54,10 @@ export default class ResteDivisionPar3 extends ExerciceSimple {
       En enlevant 1 unité à $${b + c + d}$, on obtient $${b + c + d - 1}$ qui est un multiple de $3$.<br>
       Cela signifie que $${a}-1=${a - 1}$ est un multiple de $3$.<br>
      Ainsi, le reste de la division de $${a}$ par $3$ est donc $1$.
-         `)
+         `, bleuMathalea)
     }
     if (a % 3 === 2) {
-      this.correction = `Le reste de la division de $${a}$ par $3$ est ${a % 3}.`
+      this.correction = `Le reste de la division de $${a}$ par $3$ est $${miseEnEvidence(a % 3)}$.`
       this.correction += texteEnCouleur(`<br> Mentalement : <br>
       Un entier est divisible par $3$ lorsque la somme de ses chiffres est un multiple de $3$.<br>
       La somme des chiffres qui composent $${a}$ est : $${b}+${c}+${d}=${b + c + d}$.<br>
@@ -64,7 +65,7 @@ export default class ResteDivisionPar3 extends ExerciceSimple {
       En enlevant 2 unités à $${b + c + d}$, on obtient $${b + c + d - 2}$ qui est un multiple de $3$.<br>
       Cela signifie que $${a}-2=${a - 2}$ est un multiple de $3$.<br>
      Ainsi, le reste de la division de $${a}$ par $3$ est donc $2$.
-         `)
+         `, bleuMathalea)
     }
   }
 }

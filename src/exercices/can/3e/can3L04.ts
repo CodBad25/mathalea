@@ -5,7 +5,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -67,21 +67,21 @@ export default class SolutionInequation extends Exercice {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ est solution car : $${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}>${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("est solution")} car : $${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}>${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ est solution car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}>${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("est solution")} car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}>${c}$.`
             }
           } else {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ n'est pas  solution car : $ ${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}\\leqslant${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("n'est pas solution")} car : $ ${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}\\leqslant${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ n'est pas solution car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}\\leqslant${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("n'est pas solution")} car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}\\leqslant${c}$.`
             }
           }
 
@@ -113,21 +113,21 @@ export default class SolutionInequation extends Exercice {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ est solution car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}>${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("est solution")} car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}>${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ est solution car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}>${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("est solution")} car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}>${c}$.`
             }
           } else {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ n'est pas  solution car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}\\leqslant${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("n'est pas solution")} car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}\\leqslant${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `$${d}$ n'est pas solution car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}\\leqslant${c}$.`
+                `$${d}$ ${texteEnCouleurEtGras("n'est pas solution")} car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}\\leqslant${c}$.`
             }
           }
           break
@@ -158,7 +158,7 @@ export default class SolutionInequation extends Exercice {
           if (d ** 2 <= a * d + b) {
             texteCorr =
               monQcm.texteCorr +
-              `$${d}$ est  solution car : $${d ** 2}\\leqslant${a * d + b}$<br>
+              `$${d}$ ${texteEnCouleurEtGras("est solution")} car : $${d ** 2}\\leqslant${a * d + b}$<br>
           `
             texteCorr += texteEnCouleur(` Mentalement : <br>
           Faites deux calculs séparés puis comparez les résultats :<br>
@@ -169,7 +169,7 @@ export default class SolutionInequation extends Exercice {
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `$${d}$ n'est pas solution car : $${d ** 2}>${a * d + b}$<br>
+              `$${d}$ ${texteEnCouleurEtGras("n'est pas solution")} car : $${d ** 2}>${a * d + b}$<br>
          `
             texteCorr += texteEnCouleur(` Mentalement : <br>
           Faites deux calculs séparés puis comparez les résultats :<br>

@@ -31,5 +31,6 @@ Le coût total des tickets est : $${texNombre(nbFois, 0)}\\times ${texNombre(fac
     })
   }
   probleme.reponse = `${texNombre(nbFois * facteur, 1)}`
+  probleme.optionsChampTexteMathlive = { texteApres: ' €' }
   return probleme
 }

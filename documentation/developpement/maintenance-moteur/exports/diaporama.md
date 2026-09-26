@@ -34,9 +34,21 @@ Ces exercices posent aussi `nbQuestionsModifiable = false` : le champ « Nombres
 | `1` | `Q->R->Q` — la correction remplace la question |
 | `2` | `Q->(Q+R)->Q` — la correction s'ajoute sous la question |
 
-Dans les modes `1` et `2`, la correction est une diapositive à part entière : elle a son propre décompte, de même durée que la question, et l'enchaînement se poursuit tout seul. Seuls le défilement manuel (`manualMode`) et l'option « Avec une pause après chaque question » (`pauseAfterEachQuestion`) mettent le diaporama en pause.
+Dans les modes `1` et `2`, la correction est une diapositive à part entière : elle a son propre décompte et l'enchaînement se poursuit tout seul. Ce décompte dure autant que la question, sauf si `$globalOptions.durationCorrection` est défini (réglage « Durée d'affichage de la correction », paramètre d'URL `dCorr`, en secondes). Seuls le défilement manuel (`manualMode`) et l'option « Avec une pause après chaque question » (`pauseAfterEachQuestion`) mettent le diaporama en pause.
 
 Le décompte est porté par `ratioTime` (0 à 100) et `startTimer()` dans `SlideshowPlay.svelte` ; `nextQuestion()` est la seule porte de sortie d'une diapositive, qu'elle soit déclenchée par le décompte, par la flèche droite ou par le bouton suivant.
+
+## Tableau des réponses
+
+`SlideshowOverviewAnswersTable.svelte` affiche, pour chaque question, dans l'ordre :
+
+1. les lettres des bonnes propositions si la question est un QCM (`extraitLettresQcm`, lues dans `autoCorrection[i].propositions`) ;
+2. les réponses mises en évidence en orange dans la correction (`extraitReponsesCourtes`), repérées par `reponsesMisesEnEvidence` comme pour la [correction minimale Typst](typst.md#correction-minimale) : `miseEnEvidence()` dans une formule et `texteEnCouleurEtGras()` hors formule. Pour un QCM, les textes orange sont ignorés : ce sont les lettres déjà affichées. Plusieurs réponses (typiquement `remplisLesBlancs`) font afficher la correction entière, plus lisible que des valeurs isolées (`doitAfficherFormuleComplete`) ;
+3. sinon, une **miniature** de la correction complète, SVG compris, calée sur sa fin (là où se trouve en général la réponse : figure, tableau de signes, construction). Un clic l'ouvre en grand dans une modale.
+
+Une question sans correction affiche « – ».
+
+Côté exercice, une réponse n'est donc reprise que si elle est en orange : les étapes intermédiaires ou les commentaires de la correction détaillée doivent être mis en évidence dans une autre couleur (`bleuMathalea`), sinon ils apparaissent comme réponses dans le tableau et dans la correction minimale.
 
 ## Passerelles vers les exports PDF
 

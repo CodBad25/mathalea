@@ -32,6 +32,17 @@ exactly what the student must type (no units if the input field doesn't
 expect them). See `documentation/developpement/auteurs-exercices/rediger-un-exercice.md`
 for the full rules and examples.
 
+## Interactive exercises: fixed points per question (mandatory)
+
+A given question of an exercise must always be worth the same number of
+points, whatever the seed and whatever is drawn (number of answer fields,
+sub-problem, etc.). Score reporting to recorders (Capytale, Moodle…) relies on
+a fixed maximum. When the number of fields of a question depends on the draw,
+set a `bareme` with a fixed total in `handleAnswers()` (e.g.
+`troisPointsProportionnels`, `toutPourUnPoint`) instead of the default
+`toutAUnPoint`. Check this rule whenever you touch interactivity. See
+`documentation/developpement/auteurs-exercices/interactivite-simple.md`.
+
 ## Modifying a published exercise
 
 Shared links carry the exercise uuid, the random seed and the chosen parameters

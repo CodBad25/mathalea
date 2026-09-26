@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -110,7 +111,7 @@ export default class TripletsPythagoriciens extends ExerciceSimple {
       this.question += `$${nom[index * 2]}${nom[1]}=${triplet[1 - index]}\\text{ cm}$, $${nom[1]}${nom[(1 - index) * 2]}=${triplet[index]}\\text{ cm}$.<br>Calculer $${nom[0]}${nom[2]}$.`
       objets.push()
       this.correction = `D'après le théorème de Pythagore, $${nom[0]}${nom[2]}^2=${nom[0]}${nom[1]}^2+${nom[1]}${nom[2]}^2=${triplet[1]}^2+${triplet[0]}^2=${triplet[1] ** 2}+${triplet[0] ** 2}=${triplet[2] ** 2}$.<br>`
-      this.correction += `D'où $${nom[0]}${nom[1]}=\\sqrt{${triplet[2] ** 2}}=${triplet[2]}$.`
+      this.correction += `D'où $${nom[0]}${nom[1]}=\\sqrt{${triplet[2] ** 2}}=${miseEnEvidence(triplet[2])}$.`
       this.reponse = triplet[2]
       this.optionsChampTexte = {
         texte: `$${nom[0]}${nom[2]}$=`,
@@ -123,7 +124,7 @@ export default class TripletsPythagoriciens extends ExerciceSimple {
       this.question += `$${nom[0]}${nom[2]}=${triplet[2]}\\text{ cm}$, $${nom[index2]}${nom[1]}=${triplet[(2 - index2) / 2]}\\text{ cm}$.<br>Calculer $${nom[2 - index2]}${nom[1]}$.`
       this.correction = `D'après le théorème de Pythagore, $${nom[0]}${nom[2]}^2=${nom[0]}${nom[1]}^2+${nom[1]}${nom[2]}^2$ soit $${triplet[2]}^2=${nom[2 - index2]}${nom[1]}^2+${triplet[(2 - index2) / 2]}^2$.<br>`
       this.correction += `Donc $${nom[2 - index2]}${nom[1]}^2=${triplet[2]}^2-${triplet[(2 - index2) / 2]}^2=${triplet[2] ** 2}-${triplet[(2 - index2) / 2] ** 2}=${triplet[index2 / 2] ** 2}$.<br>`
-      this.correction += `D'où $${nom[2 - index2]}${nom[1]}=\\sqrt{${triplet[index2 / 2] ** 2}}=${triplet[index2 / 2]}$.`
+      this.correction += `D'où $${nom[2 - index2]}${nom[1]}=\\sqrt{${triplet[index2 / 2] ** 2}}=${miseEnEvidence(triplet[index2 / 2])}$.`
       this.reponse = triplet[index2 / 2]
       this.optionsChampTexte = {
         texte: `$${nom[2 - index2]}${nom[1]}=$`,

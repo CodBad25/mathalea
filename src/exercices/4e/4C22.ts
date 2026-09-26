@@ -44,6 +44,8 @@ const space = '\\phantom{\\dfrac{(_(^(}{(_(^(}}' // Utilisé pour mettre de l'es
 const space2 = '\\phantom{(_(^(}' // Utilisé pour mettre de l'espace dans une fraction de fraction lorsque le numérateur ou le dénominateur est entier
 
 export default class ExerciceMultiplierFractions extends Exercice {
+  protected simplificationParDiviseurCommun = false
+
   constructor() {
     super()
     // this.nbCols = 4 // Pour Latex
@@ -199,12 +201,30 @@ export default class ExerciceMultiplierFractions extends Exercice {
       if (listeTypesDoperation[i] === 'mul') {
         const f2 = new FractionEtendue(c, d)
         texte = `$${lettreIndiceeDepuisChiffre(i + 1)} = ${f1.texFraction}\\times${f2.texFraction}$`
-        texteCorr = `$\\begin{aligned}${lettreIndiceeDepuisChiffre(i + 1)} &= ${f1.texProduitFraction(f2, this.sup3 || this.sup4 ? this.sup2 : 'none').replaceAll('=', '\\\\&=')}\\end{aligned}$`
+        const produit = f1.produitFraction(f2)
+        const correction =
+          this.simplificationParDiviseurCommun && (this.sup3 || this.sup4)
+            ? `${f1.texFraction}\\times${f2.texFraction}${produit.texSimplificationParFacteursCommuns([a, c], [b, d])}`
+            : f1.texProduitFraction(
+                f2,
+                this.sup3 || this.sup4 ? this.sup2 : 'none',
+              )
+        texteCorr = `$\\begin{aligned}${lettreIndiceeDepuisChiffre(i + 1)} &= ${correction.replaceAll('=', '\\\\&=')}\\end{aligned}$`
         reponse = f1.produitFraction(f2).simplifie()
       } else {
         const f2 = new FractionEtendue(d, c)
-        texte = `$${lettreIndiceeDepuisChiffre(i + 1)} = \\dfrac{${(f1.den === 1 ? space2 : space) + f1.texFSD + (f1.den === 1 ? space2 : space)}}{${(f2.den === 1 ? space2 : space) + f2.texFraction + (f2.den === 1 ? space2 : space)}}$`
-        texteCorr = `$\\begin{aligned}${lettreIndiceeDepuisChiffre(i + 1)} &= ${f1.texDiviseFraction(f2, this.sup3 || this.sup4 ? this.sup2 : 'none', '/').replaceAll('=', '\\\\&=')}\\end{aligned}$`
+        const division = `\\dfrac{${(f1.den === 1 ? space2 : space) + f1.texFSD + (f1.den === 1 ? space2 : space)}}{${(f2.den === 1 ? space2 : space) + f2.texFraction + (f2.den === 1 ? space2 : space)}}`
+        texte = `$${lettreIndiceeDepuisChiffre(i + 1)} = ${division}$`
+        const quotient = f1.diviseFraction(f2)
+        const correction =
+          this.simplificationParDiviseurCommun && (this.sup3 || this.sup4)
+            ? `${division}=${f1.texFraction}\\times${f2.inverse().texFraction}${quotient.texSimplificationParFacteursCommuns([a, c], [b, d])}`
+            : f1.texDiviseFraction(
+                f2,
+                this.sup3 || this.sup4 ? this.sup2 : 'none',
+                '/',
+              )
+        texteCorr = `$\\begin{aligned}${lettreIndiceeDepuisChiffre(i + 1)} &= ${correction.replaceAll('=', '\\\\&=')}\\end{aligned}$`
         reponse = f1.diviseFraction(f2).simplifie()
       }
       if (this.questionJamaisPosee(i, a, b, c, d, typesDeQuestions)) {

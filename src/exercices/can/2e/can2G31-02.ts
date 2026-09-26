@@ -5,7 +5,7 @@ import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
-import { bleuMathalea } from '../../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -192,7 +192,7 @@ export default class CoeffDirDroite extends ExerciceSimple {
           this.correction = `La droite est horizontale. On en déduit que $m=${miseEnEvidence('0')}$.`
         } else {
           this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par :<br><br>
-            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${yA}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(yB - yA, bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
+            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${yA}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(yB - yA, bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}${m.estIrreductible && m.num * m.den > 0 ? `=${miseEnEvidence(m.texFraction)}` : m.texSimplificationAvecEtapes(false, orangeMathalea)}$.<br><br>`
           this.correction += `${objetC}`
         }
         break
@@ -323,7 +323,7 @@ export default class CoeffDirDroite extends ExerciceSimple {
           this.correction = `La droite est horizontale. On en déduit que $m=${miseEnEvidence('0')}$.`
         } else {
           this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par :<br><br>
-            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${2 * yB}-${ecritureParentheseSiNegatif(2 * yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(2 * (yB - yA), bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
+            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${2 * yB}-${ecritureParentheseSiNegatif(2 * yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(2 * (yB - yA), bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}${m.estIrreductible && m.num * m.den > 0 ? `=${miseEnEvidence(m.texFraction)}` : m.texSimplificationAvecEtapes(false, orangeMathalea)}$.<br><br>`
           this.correction += `${objetC}`
         }
         break

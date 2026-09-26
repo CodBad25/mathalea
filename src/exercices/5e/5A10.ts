@@ -1,79 +1,81 @@
-import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+import {
+  addMultiMathfield,
+  type DataOptionsMultiMathfield,
+} from '../../lib/customElements/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { troisPointsProportionnels } from '../../lib/interactif/fonctionsBaremes'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
+import type { ResultType, Valeur } from '../../lib/types'
 import { context } from '../../modules/context'
 import {
-  contraindreValeur,
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-
-import { amcConvert } from '../../lib/amc/amcBuilders'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-
 export const titre = "Écrire la liste de tous les diviseurs d'un entier - V2"
 export const interactifReady = true
+export const interactifType = 'mathLive'
 
-export const dateDeModifImportante = '03/10/2023'
+export const dateDeModifImportante = '25/09/2026'
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
 
 /**
- * 5A10 - Division Euclidienne; diviseurs, multiples, critères de divisibilité
- * Exercice bilan
- * @author Sébastien Lozano & Jean-claude Lhote
+ * Trouver tous les produits de deux entiers égaux à un nombre donné,
+ * puis en déduire la liste de ses diviseurs.
+ * @author Rémi Angot
  */
-export const uuid = '4828d'
+export const uuid = '9ea32'
 
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['9NO1A-16'],
 }
+
+/**
+ * Lit une saisie de la forme a × b (a et b entiers naturels).
+ * Renvoie le couple trié [min, max] ou null si la saisie n'est pas un produit
+ * de deux entiers.
+ */
+function lireProduit(saisie: string): [number, number] | null {
+  const facteurs = saisie
+    .replace(/\\left|\\right|[{}\s]|\\,|\\;|\\!/g, '')
+    .replace(/\\times|\\cdot|×|\*/g, 'x')
+    .split('x')
+  if (facteurs.length !== 2) return null
+  if (!facteurs.every((facteur) => /^\d+$/.test(facteur))) return null
+  const [a, b] = facteurs.map(Number)
+  return a <= b ? [a, b] : [b, a]
+}
+
 export default class ListeDesDiviseurs5e extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireTexte = [
-      'Nombre de chiffres des entiers (entre 1 et 5)',
+      'Nombre de chiffres des entiers (entre 1 et 4)',
       'Nombres séparés par des tirets :',
     ]
     this.besoinFormulaire2Texte = [
-      'Nombre maximum de diviseurs des entiers',
+      'Nombre maximum de diviseurs des entiers (entre 2 et 16)',
       'Nombres séparés par des tirets :',
     ]
-    this.besoinFormulaire4Texte = [
-      'Type de questions',
-      [
-        'Nombres séparés par des tirets :',
-        '1 : Avec aide (tableau)',
-        '2 : Sans Aide (tableau)',
-        '3 : Mélange',
-      ].join('\n'),
-    ]
-
-    this.spacing = context.isHtml ? 2 : 1
-    this.spacingCorr = context.isHtml ? 2 : 1
 
     this.nbQuestions = 3
-
     this.sup = 2
-    this.sup2 = 6
-    this.sup3 = 10
-    this.sup4 = 3
+    this.sup2 = 8
   }
 
   nouvelleVersion() {
-    let typesDeQuestions
-
-    this.sup3 = contraindreValeur(2, 16, parseInt(this.sup3), 10)
-    const nombresDeChiffresMax = gestionnaireFormulaireTexte({
-      max: 5,
+    const nbChiffres = gestionnaireFormulaireTexte({
+      min: 1,
+      max: 4,
       defaut: 2,
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
@@ -81,225 +83,142 @@ export default class ListeDesDiviseurs5e extends Exercice {
       melange: 0,
     }).map(Number)
 
-    const nombresDeDiviseursMax = gestionnaireFormulaireTexte({
+    const nbDiviseursMax = gestionnaireFormulaireTexte({
       min: 2,
-      max: parseInt(this.sup3),
-      defaut: 6,
+      max: 16,
+      defaut: 8,
       nbQuestions: this.nbQuestions,
       saisie: this.sup2,
       shuffle: false,
       melange: 0,
     }).map(Number)
 
-    const listeTypeDeQuestions = gestionnaireFormulaireTexte({
-      nbQuestions: this.nbQuestions,
-      saisie: this.sup4,
-      max: 2,
-      shuffle: false,
-      melange: 3,
-      defaut: 2,
-    }).map(Number)
-
-    // const typesDeQuestionsDisponibles = [1, 1, 2]
-    const nbChiffresMax = combinaisonListesSansChangerOrdre(
-      nombresDeChiffresMax,
-      this.nbQuestions,
-    )
-    const nbDiviseursMax = combinaisonListesSansChangerOrdre(
-      nombresDeDiviseursMax,
-      this.nbQuestions,
-    )
-
-    // const listeTypeDeQuestions = combinaisonListesSansChangerOrdre(typesDeQuestionsDisponibles, this.nbQuestions)
-    const listeDesMDejaTrouves = []
-    for (
-      let i = 0, nbDiviseursM, M, texte, texteCorr, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-    ) {
-      typesDeQuestions = listeTypeDeQuestions[i]
-      if (nbDiviseursMax[i] > 10) {
-        nbChiffresMax[i] = Math.min(nbChiffresMax[i], 3)
-      }
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      // Il n'existe pas d'entier à un chiffre ayant plus de 4 diviseurs.
+      const nbChiffresQuestion =
+        nbDiviseursMax[i] > 4 ? Math.max(2, nbChiffres[i]) : nbChiffres[i]
+      let n = 0
+      let diviseurs: number[] = []
       let essais = 0
       do {
-        M = randint(10 ** (nbChiffresMax[i] - 1), 10 ** nbChiffresMax[i] - 1)
-        const listeDiviseursM = listeDesDiviseurs(M)
-        nbDiviseursM = listeDiviseursM.length
+        n = randint(
+          Math.max(2, 10 ** (nbChiffresQuestion - 1)),
+          10 ** nbChiffresQuestion - 1,
+        )
+        diviseurs = listeDesDiviseurs(n)
         essais++
       } while (
-        (nbDiviseursM < Math.max(2, nbDiviseursMax[i] - 3) ||
-          nbDiviseursM > nbDiviseursMax[i] ||
-          listeDesMDejaTrouves.indexOf(M) !== -1) &&
-        essais < 20
+        (diviseurs.length < Math.max(2, nbDiviseursMax[i] - 3) ||
+          diviseurs.length > nbDiviseursMax[i]) &&
+        essais < 100
       )
-      listeDesMDejaTrouves.push(M)
 
-      switch (typesDeQuestions) {
-        case 1:
-          texte = ''
-          if (this.interactif) {
-            texte += `À l'aide du tableau, écrire la liste de tous les diviseurs de $${texNombre(M)}$ <b>séparés par un point-virgule.</b>`
-          } else {
-            texte += `Compléter le tableau suivant et faire la liste de tous les diviseurs de ${texNombre(M)}.`
-          }
-          if (!context.isHtml) {
-            texte += '$\\medskip$'
-          }
-          texte += '<br>'
-          if (context.isHtml) {
-            texte += '$\\def\\arraystretch{2.5}\\begin{array}{|c|c|c|}\n'
-          } else {
-            texte += '$\\begin{array}{|c|c|c|}\n'
-          }
-          texte += '\\hline\n'
-          texte += `\\text{Facteur n°1} & \\text{Facteur n°2} & \\text{Produit donnant } ${M} \\\\\n`
-          texte += '\\hline\n'
+      // Couples (d, n / d) avec d ≤ n / d : il y en a au plus 8.
+      const produits = diviseurs
+        .filter((d) => d * d <= n)
+        .map((d) => [d, n / d] as [number, number])
+      const nbProduits = produits.length
 
-          if (nbDiviseursM % 2 === 0) {
-            // si il y a un nombre pair de diviseurs
-            for (let m = 0; m < listeDesDiviseurs(M).length / 2; m++) {
-              texte +=
-                texteOuPas(String(listeDesDiviseurs(M)[m])) +
-                ' & ' +
-                texteOuPas(
-                  String(
-                    listeDesDiviseurs(M)[listeDesDiviseurs(M).length - m - 1],
-                  ),
-                ) +
-                `& ${texteOuPas(M.toString())} \\\\\n`
-              texte += '\\hline\n'
-            }
-          } else {
-            // sinon il est impair, cela n'arrive qu'avvec les carrés parfaits
-            for (let m = 0; m < (listeDesDiviseurs(M).length - 1) / 2; m++) {
-              texte +=
-                texteOuPas(String(listeDesDiviseurs(M)[m])) +
-                ' & ' +
-                texteOuPas(
-                  String(
-                    listeDesDiviseurs(M)[listeDesDiviseurs(M).length - m - 1],
-                  ),
-                ) +
-                `& ${texteOuPas(M.toString())} \\\\\n`
-            }
-            texte +=
-              texteOuPas(
-                listeDesDiviseurs(M)[(nbDiviseursM - 1) / 2].toString(),
-              ) +
-              ' & ' +
-              texteOuPas(
-                listeDesDiviseurs(M)[(nbDiviseursM - 1) / 2].toString(),
-              ) +
-              `& ${texteOuPas(M.toString())} \\\\\n`
-            texte += '\\hline\n'
-          }
-          texte += '\\end{array}\n$'
-          texte += '<br>'
-          // correction
-          texteCorr = `Le tableau suivant contient tous les couples de facteurs dont le produit vaut ${M}.`
-          if (!context.isHtml) {
-            texteCorr += '$\\medskip$'
-          }
-          texteCorr += '<br>'
-          if (context.isHtml) {
-            texteCorr += '$\\def\\arraystretch{2.5}\\begin{array}{|c|c|c|}\n'
-          } else {
-            texteCorr += '$\\begin{array}{|c|c|c|}\n'
-          }
-          texteCorr += '\\hline\n'
-          texteCorr += `\\text{Facteur n°1} & \\text{Facteur n°2} & \\text{Produit donnant } ${M} \\\\\n`
-          texteCorr += '\\hline\n'
+      let texte = `Compléter avec tous les produits de deux nombres entiers égaux à $${texNombre(n)}$ (l'ordre des facteurs ne compte pas).<br>`
+      texte += `En déduire la liste de tous les diviseurs de $${texNombre(n)}$.<br>`
 
-          if (nbDiviseursM % 2 === 0) {
-            // si il y a un nombre pair de diviseurs
-            for (let m = 0; m < listeDesDiviseurs(M).length / 2; m++) {
-              texteCorr +=
-                listeDesDiviseurs(M)[m] +
-                ' & ' +
-                listeDesDiviseurs(M)[listeDesDiviseurs(M).length - m - 1] +
-                `& ${M} \\\\\n`
-              texteCorr += '\\hline\n'
-            }
-          } else {
-            // sinon il est impair, cela n'arrive qu'avvec les carrés parfaits
-            for (let m = 0; m < (listeDesDiviseurs(M).length - 1) / 2; m++) {
-              texteCorr +=
-                listeDesDiviseurs(M)[m] +
-                ' & ' +
-                listeDesDiviseurs(M)[listeDesDiviseurs(M).length - m - 1] +
-                `& ${M} \\\\\n`
-            }
-            texteCorr +=
-              listeDesDiviseurs(M)[(nbDiviseursM - 1) / 2] +
-              ' & ' +
-              listeDesDiviseurs(M)[(nbDiviseursM - 1) / 2] +
-              `& ${M} \\\\\n`
-            texteCorr += '\\hline\n'
+      if (this.interactif && context.isHtml) {
+        const dataOptions: DataOptionsMultiMathfield = {}
+        const lignes: string[] = []
+        for (let k = 0; k < nbProduits; k++) {
+          dataOptions[`field${k}` as 'field0'] = {
+            keyboard: KeyboardType.clavierDeBase,
+            minWidth: 100,
           }
-          texteCorr += '\\end{array}\n$'
-          if (!context.isHtml) {
-            texteCorr += '$\\medskip$'
-          }
-          texteCorr += '<br>'
-          texteCorr += `${M} a donc ${nbDiviseursM} diviseurs qui sont : `
-          break
-        case 2: // liste des diviseurs
-        default:
-          texte = ''
-          if (this.interactif) {
-            texte += `Écrire la liste de tous les diviseurs de $${texNombre(M)}$ <b>séparés par un point-virgule.</b>`
-          } else {
-            texte += `Écrire la liste de tous les diviseurs de ${texNombre(M)}.`
-          }
-          texteCorr = `Pour trouver la liste des diviseurs de ${M}, on cherche tous les produits de deux facteurs qui donnent ${M}, en écrivant toujours le plus petit facteur en premier.<br>`
-          texteCorr += `On vérifie si les nombres de 1 à ${Math.trunc(Math.sqrt(M))} sont des diviseurs de ${M} (inutile d'aller au-delà car $${1 + Math.trunc(Math.sqrt(M))} \\times ${1 + Math.trunc(Math.sqrt(M))} = ${(1 + Math.trunc(Math.sqrt(M))) ** 2})$, on trouve alors :<br>`
-          // texteCorr += `Il est suffisant de chercher des diviseurs inférieurs au plus grand nombre dont le carré vaut ${M}, par exemple ici, ${Math.trunc(Math.sqrt(M))}$\\times $${Math.trunc(Math.sqrt(M))} = ${Math.trunc(Math.sqrt(M)) * Math.trunc(Math.sqrt(M))}<${M}`
-          // texteCorr += ` et ${Math.trunc(Math.sqrt(M)) + 1}$\\times $${Math.trunc(Math.sqrt(M)) + 1} = ${(Math.trunc(Math.sqrt(M)) + 1) * (Math.trunc(Math.sqrt(M)) + 1)}>${M} donc il suffit d'arrêter la recherche de facteur à ${Math.trunc(Math.sqrt(M))}.`
-          // texteCorr += ` En effet, si ${M} est le produit de deux entiers p et q  (p$\\times $q = ${M}) avec p < q alors, si p$\\times $p > ${M}, c'est que q$\\times $q < ${M} mais dans ce cas p serait supérieur à q sinon p$\\times $q serait inférieur à ${M} ce qui ne doit pas être le cas.<br>`
-          if (listeDesDiviseurs(M).length % 2 === 0) {
-            // si il y a un nombre pair de diviseurs
-            for (let m = 0; m < listeDesDiviseurs(M).length / 2; m++) {
-              texteCorr +=
-                '' +
-                listeDesDiviseurs(M)[m] +
-                '$\\times $' +
-                listeDesDiviseurs(M)[listeDesDiviseurs(M).length - m - 1] +
-                ` = ${M}<br>`
-            }
-          } else {
-            for (let m = 0; m < (listeDesDiviseurs(M).length - 1) / 2; m++) {
-              texteCorr +=
-                '' +
-                listeDesDiviseurs(M)[m] +
-                '$\\times $' +
-                listeDesDiviseurs(M)[listeDesDiviseurs(M).length - m - 1] +
-                '<br>'
-            }
-            texteCorr +=
-              '' +
-              listeDesDiviseurs(M)[(listeDesDiviseurs(M).length - 1) / 2] +
-              '$\\times $' +
-              listeDesDiviseurs(M)[(listeDesDiviseurs(M).length - 1) / 2] +
-              ` = ${M}<br>`
-          }
-          texteCorr += `Chacun des facteurs de la liste ci-dessus est un diviseur de ${M}.<br>`
-          texteCorr += `La liste des diviseurs de ${M} est donc `
-          break
+          lignes.push(`%{field${k}}$\\;=${texNombre(n)}$`)
+        }
+        dataOptions[`field${nbProduits}` as 'field0'] = {
+          keyboard: KeyboardType.clavierFullOperations,
+          minWidth: 200,
+        }
+        lignes.push(
+          `Les diviseurs de $${texNombre(n)}$ séparés par des points-virgules : %{field${nbProduits}}`,
+        )
+        texte += addMultiMathfield(this, i, {
+          dataTemplate: lignes.join('\n'),
+          dataOptions,
+        })
+      } else {
+        texte += produits
+          .map(
+            () => `$\\ldots\\ldots \\times \\ldots\\ldots = ${texNombre(n)}$`,
+          )
+          .join('<br>')
       }
-      texteCorr += texteEnCouleurEtGras('1')
-      for (let w = 1; w < listeDesDiviseurs(M).length; w++) {
-        texteCorr +=
-          texteEnCouleurEtGras(' ; ') +
-          texteEnCouleurEtGras(listeDesDiviseurs(M)[w])
-      }
-      texteCorr += '.'
 
-      handleAnswers(this, i, {
-        reponse: {
-          value: listeDesDiviseurs(M).join(';'),
-          options: { suiteDeNombres: true },
-        },
+      /**
+       * Une multiplication est juste si son résultat vaut n et si le même
+       * produit (à l'ordre des facteurs près) n'a pas été écrit dans un champ
+       * précédent.
+       */
+      const idMulti = `multi-mathfieldEx${this.numeroExercice}Q${i}`
+      const compareProduit =
+        (rang: number) =>
+        (saisie: string): ResultType => {
+          const couple = lireProduit(saisie)
+          if (couple == null) {
+            return {
+              isOk: false,
+              feedback: 'Il faut écrire un produit de deux nombres entiers.',
+            }
+          }
+          if (couple[0] * couple[1] !== n) {
+            return {
+              isOk: false,
+              feedback: `Certains produits ne sont pas égaux à $${texNombre(n)}$.`,
+            }
+          }
+          const multi = document.getElementById(idMulti) as
+            (HTMLElement & { getValue?: () => Record<string, string> }) | null
+          const saisies = multi?.getValue?.() ?? {}
+          for (let k = 0; k < rang; k++) {
+            const autre = lireProduit(saisies[`field${k}`] ?? '')
+            if (
+              autre != null &&
+              autre[0] === couple[0] &&
+              autre[1] === couple[1]
+            ) {
+              return {
+                isOk: false,
+                feedback: 'Un même produit a été écrit plusieurs fois.',
+              }
+            }
+          }
+          return { isOk: true }
+        }
+
+      // Le nombre de champs dépend du nombre tiré : la question vaut
+      // toujours 3 points (remontée des scores vers les recorders).
+      const reponses: Valeur = { bareme: troisPointsProportionnels }
+      for (let k = 0; k < nbProduits; k++) {
+        reponses[`field${k}` as 'field0'] = {
+          value: `${produits[k][0]}\\times${produits[k][1]}`,
+          compare: compareProduit(k),
+        }
+      }
+      reponses[`field${nbProduits}` as 'field0'] = {
+        value: diviseurs.join(';'),
+        options: { suiteDeNombres: true },
+      }
+      handleAnswers(this, i, reponses, {
+        formatInteractif: 'multi-mathfield',
       })
+
+      let texteCorr = `On cherche tous les produits de deux entiers égaux à $${texNombre(n)}$, en écrivant le plus petit facteur en premier. `
+      texteCorr += `Il suffit de tester les entiers de $1$ à $${Math.trunc(Math.sqrt(n))}$ car $${Math.trunc(Math.sqrt(n)) + 1} \\times ${Math.trunc(Math.sqrt(n)) + 1} = ${texNombre((Math.trunc(Math.sqrt(n)) + 1) ** 2)}$ est supérieur à $${texNombre(n)}$.<br>`
+      texteCorr += produits
+        .map(
+          ([a, b]) =>
+            `$${texNombre(a)} \\times ${texNombre(b)} = ${texNombre(n)}$`,
+        )
+        .join('<br>')
+      texteCorr += `<br>Chacun des facteurs ci-dessus est un diviseur de $${texNombre(n)}$.<br>`
+      texteCorr += `La liste des diviseurs de $${texNombre(n)}$ est donc : $${miseEnEvidence(diviseurs.map((d) => texNombre(d)).join('\\;;\\;'))}$.`
 
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
@@ -307,7 +226,7 @@ export default class ListeDesDiviseurs5e extends Exercice {
           propositions: [
             {
               texte: texteCorr,
-              statut: 5,
+              statut: nbProduits + 2,
               sanscadre: false,
               pointilles: true,
               feedback: '',
@@ -316,15 +235,8 @@ export default class ListeDesDiviseurs5e extends Exercice {
         }
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
-      texte += ajouteChampTexteMathLive(
-        this,
-        i,
-        KeyboardType.clavierFullOperations,
-        { texteAvant: `<br> Les diviseurs de $${texNombre(M)}$ sont : ` },
-      )
 
-      if (this.questionJamaisPosee(i, texteCorr)) {
-        // Si la question n'a jamais été posée, on en créé une autre
+      if (this.questionJamaisPosee(i, n)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
@@ -333,19 +245,5 @@ export default class ListeDesDiviseurs5e extends Exercice {
     }
 
     listeQuestionsToContenu(this)
-  }
-}
-
-/**
- * tire à pile ou face pour écrire ou non un texte
- * @param {string} texte
- */
-
-function texteOuPas(texte: string) {
-  const bool = randint(0, 1)
-  if (bool === 0) {
-    return '\\ldots'
-  } else {
-    return texte
   }
 }

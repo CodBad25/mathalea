@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { MathfieldElement } from 'mathlive'
 import { codageAngle } from '../../lib/2d/angles'
 import { demiDroite } from '../../lib/2d/DemiDroite'
@@ -241,7 +242,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
               `Quel est le symétrique du segment $[${noms[index(choix)]}${noms[index(choix + 1)]}]$ ?`
             texteCorr +=
               numAlpha(ii) +
-              `Le symétrique du segment $[${noms[index(choix)]}${noms[index(choix + 1)]}]$ est le segment $[${noms[index(choix + 12)]}${noms[index(choix + 13)]}]$.<br>`
+              `Le symétrique du segment $[${noms[index(choix)]}${noms[index(choix + 1)]}]$ est le segment $${miseEnEvidence(`[${noms[index(choix + 12)]}${noms[index(choix + 13)]}]`)}$.<br>`
             s1 = segment(
               points[index(choix)],
               points[index(choix + 1)],
@@ -264,7 +265,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
               `Quel est le symétrique de la droite $(${noms[index(choix)]}${noms[index(choix + 1)]})$ ?`
             texteCorr +=
               numAlpha(ii) +
-              `Le symétrique de la droite $(${noms[index(choix)]}${noms[index(choix + 1)]})$ est la droite $(${noms[index(choix + 12)]}${noms[index(choix + 13)]})$.<br>`
+              `Le symétrique de la droite $(${noms[index(choix)]}${noms[index(choix + 1)]})$ est la droite $${miseEnEvidence(`(${noms[index(choix + 12)]}${noms[index(choix + 13)]})`)}$.<br>`
             objetsCorrection.push(
               droite(
                 points[index(choix)],
@@ -290,7 +291,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
               `Quel est le symétrique de la demi-droite $[${noms[index(choix)]}${noms[index(choix + 1)]})$ ?`
             texteCorr +=
               numAlpha(ii) +
-              `Le symétrique de la demi-droite $[${noms[index(choix)]}${noms[index(choix + 1)]})$ est la demi-droite $[${noms[index(choix + 12)]}${noms[index(choix + 13)]})$.<br>`
+              `Le symétrique de la demi-droite $[${noms[index(choix)]}${noms[index(choix + 1)]})$ est la demi-droite $${miseEnEvidence(`[${noms[index(choix + 12)]}${noms[index(choix + 13)]})`)}$.<br>`
             objetsCorrection.push(
               demiDroite(
                 points[index(choix)],
@@ -322,7 +323,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
               `Quel est le symétrique du triangle $${noms[index(choix)]}${noms[index(choix + 1)]}${noms[index(choix + 2)]}$ ?`
             texteCorr +=
               numAlpha(ii) +
-              `Le symétrique du triangle $${noms[index(choix)]}${noms[index(choix + 1)]}${noms[index(choix + 2)]}$ est le triangle $${noms[index(choix + 12)]}${noms[index(choix + 13)]}${noms[index(choix + 14)]}$.<br>`
+              `Le symétrique du triangle $${noms[index(choix)]}${noms[index(choix + 1)]}${noms[index(choix + 2)]}$ est le triangle $${miseEnEvidence(`${noms[index(choix + 12)]}${noms[index(choix + 13)]}${noms[index(choix + 14)]}`)}$.<br>`
             objetsCorrection.push(
               polygone(
                 [
@@ -361,7 +362,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
               `Quel est le symétrique de l'angle $\\widehat{${noms[index(choix)]}${noms[index(choix + 1)]}${noms[index(choix + 2)]}}$ ?`
             texteCorr +=
               numAlpha(ii) +
-              `Le symétrique de l'angle $\\widehat{${noms[index(choix)]}${noms[index(choix + 1)]}${noms[index(choix + 2)]}}$ est l'angle $\\widehat{${noms[index(choix + 12)]}${noms[index(choix + 13)]}${noms[index(choix + 14)]}}$.<br>`
+              `Le symétrique de l'angle $\\widehat{${noms[index(choix)]}${noms[index(choix + 1)]}${noms[index(choix + 2)]}}$ est l'angle $${miseEnEvidence(`\\widehat{${noms[index(choix + 12)]}${noms[index(choix + 13)]}${noms[index(choix + 14)]}}`)}$.<br>`
             objetsCorrection.push(
               codageAngle(
                 points[index(choix)],

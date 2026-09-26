@@ -208,13 +208,37 @@ export const MATHALEA_TASKS_HELPER = `#let mathalea-items-questions(corps) = {
     grid(columns: (largeur, 1fr), column-gutter: ecart, align(top, boite), corps)
   }
 }
+// plus grand nombre de colonnes « équilibré » (toutes les lignes pleines
+// sauf la dernière, sans colonne inutile : 4, 2 ou 1 pour 4 items, jamais 3)
+// où chaque item tient sur une seule ligne, sinon 1
+#let mathalea-colonnes-equilibrees(items, largeur, gouttiere, retrait) = {
+  let n = items.len()
+  let plus-large = calc.max(0pt, ..items.map(item => measure(item).width))
+  range(n, 0, step: -1)
+    .filter(c => calc.ceil(n / calc.ceil(n / c)) == c)
+    .find(c => (largeur - (c - 1) * gouttiere) / c - retrait >= plus-large)
+}
 // numéro aligné sur la première ligne de l'énoncé, y compris quand celui-ci
-// contient un bloc (QCM, figure) : taskize alignerait alors par le haut
+// contient un bloc (QCM, figure) : taskize alignerait alors par le haut.
+// \`equilibre: true\` (propositions de QCM) : \`columns: "auto-fit"\` choisit
+// un nombre de colonnes équilibré plutôt que celui de taskize, qui peut
+// laisser un item seul sur sa ligne ou étaler un item sur plusieurs colonnes
 #let tasks(
   label: auto, start: 1, label-width: auto, indent-after-label: auto,
-  label-weight: "regular", ..args, corps,
+  label-weight: "regular", equilibre: false, ..args, corps,
 ) = context {
   let items = mathalea-items-questions(corps)
+  if equilibre and args.named().at("columns", default: auto) == "auto-fit" and items.len() > 0 {
+    return layout(size => {
+      let gouttiere = args.named().at("column-gutter", default: 1em).to-absolute()
+      let retrait = (if indent-after-label == auto { 0.4em } else { indent-after-label }).to-absolute()
+      tasks(
+        label: label, start: start, label-width: label-width,
+        indent-after-label: indent-after-label, label-weight: label-weight, ..args,
+        columns: mathalea-colonnes-equilibrees(items, size.width, gouttiere, retrait), corps,
+      )
+    })
+  }
   if label in (auto, none) or items.len() == 0 or items.all(is-inline-content) {
     taskize-tasks(
       label: label, start: start, label-width: label-width,
@@ -2720,7 +2744,7 @@ function qcmToTypst(
     withFigure && qcmColumns.endsWith('-qcm-colonnes')
       ? ` ${QCM_FIGURES_MARKER}`
       : ''
-  return `#tasks(columns: ${columns}, label: none, above: 0.4em, below: 0.4em)[${figuresMarker}\n${items}\n]`
+  return `#tasks(columns: ${columns}, label: none, above: 0.4em, below: 0.4em, equilibre: true)[${figuresMarker}\n${items}\n]`
 }
 
 /**
@@ -3158,6 +3182,20 @@ function protectQcm(
   }
   if (order.length === 0) return html
   for (const container of order) {
+    // les `<br>` qui séparent l'énoncé des propositions (`buildQcmForExercise`
+    // en pose deux pour aérer la page web) laisseraient une ou deux lignes
+    // vides au-dessus du bloc, qui a déjà son propre espacement (`above:`)
+    let previous = container.previousSibling
+    while (
+      previous != null &&
+      (previous.nodeName === 'BR' ||
+        (previous.nodeType === Node.TEXT_NODE &&
+          (previous.textContent ?? '').trim() === ''))
+    ) {
+      const toRemove = previous
+      previous = previous.previousSibling
+      toRemove.remove()
+    }
     // le bloc #tasks(...) commence et finit sur sa propre ligne dans le
     // code généré (l'espacement fait partie du segment protégé pour
     // survivre à la normalisation des blancs)

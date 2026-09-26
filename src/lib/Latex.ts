@@ -19,7 +19,10 @@ import { isMathadataUuid } from './components/mathadataReferentiel'
 import genericPreamble from './latex/preambule.tex?raw'
 import mathadataCompatTex from './latex/mathadata-compat.tex?raw'
 import { decodeExosGrouping, findExoPosition } from './LatexGroup'
-import { preambuleBanque, referentielBanquesExternes } from './stores/banquesExternesStore'
+import {
+  preambuleBanque,
+  referentielBanquesExternes,
+} from './stores/banquesExternesStore'
 import { estUuidBanqueExterne } from './types/banquesExternes'
 import { isBanqueExterneType } from './types/referentiels'
 import type {
@@ -45,6 +48,13 @@ export function sanitizeLatexInput(str: string): string {
     .replace(/\$/g, '\\$')
     .replace(/\^/g, '\\^{}')
     .replace(/~/g, '\\textasciitilde{}')
+}
+
+/** Référence d'une annale : examen, mois, année et lieu. */
+function staticReferenceOf(exercice: IExerciceStatique): string {
+  return `${exercice.examen || ''} ${exercice.mois || ''} ${exercice.annee || ''} ${exercice.lieu || ''}`
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function testIfLoaded(
@@ -575,11 +585,13 @@ class Latex {
   }
 
   /**
-   * Clé `Ajout` de ProfMaquette affichant l'identifiant de l'exercice en haut
-   * à droite de son cadre, comme le fait l'habillage Coopmaths.
+   * Clé `Ajout` de ProfMaquette affichant l'identifiant de l'exercice sur le
+   * filet inférieur de son cadre, à droite. En haut à droite, il chevauchait
+   * les titres longs (posés sur le filet supérieur) ou la première ligne de
+   * l'énoncé.
    *
    * Renvoie une liste vide quand l'identifiant est masqué, ou quand le
-   * QR-code occupe déjà ce coin (il mène de toute façon à l'exercice).
+   * QR-code est affiché (il mène de toute façon à l'exercice).
    */
   private referenceKeyFor(
     latexFileInfos: LatexFileInfos,
@@ -589,8 +601,26 @@ class Latex {
     if (latexFileInfos.qrcodeOption === 'AvecQrcode') return []
     if (reference === '') return []
     return [
-      `Ajout={\\node[anchor=north east, inner sep=2pt] at (frame.north east) {\\scriptsize ${sanitizeLatexInput(reference)}};}`,
+      `Ajout={\\node[anchor=east, xshift=-10pt, fill=tcbcolback, inner sep=2pt] at (frame.south east) {\\scriptsize ${sanitizeLatexInput(reference)}};}`,
     ]
+  }
+
+  /**
+   * Titre ProfMaquette d'un exercice statique : le titre propre de la
+   * ressource (MathAdata, banques externes) ou, pour une annale, sa
+   * référence (examen, mois, année, lieu) quand les références sont
+   * affichées. Chaîne vide s'il n'y a rien de pertinent à afficher.
+   */
+  private staticTitleFor(
+    exercice: IExerciceStatique,
+    latexFileInfos: LatexFileInfos,
+  ): string {
+    if (latexFileInfos.titleOption !== 'AvecTitre') return ''
+    if (typeof exercice.titre === 'string' && exercice.titre.trim() !== '') {
+      return exercice.titre.trim()
+    }
+    if (latexFileInfos.withReferences !== true) return ''
+    return staticReferenceOf(exercice)
   }
 
   private generateStaticExerciseContent(
@@ -605,23 +635,23 @@ class Latex {
     } else {
       content += breaksBefore(confExo)
       content += '\n\\needspace{10\\baselineskip}'
+      const title = this.staticTitleFor(exercice, latexFileInfos)
+      const titleKey =
+        title !== '' ? `Titre={${sanitizeLatexInput(title)}}` : ''
       if (latexFileInfos.qrcodeOption === 'AvecQrcode') {
         content += `\n\\begin{exercice}[${
-          latexFileInfos.titleOption === 'AvecTitre'
-            ? `Titre=${latexFileInfos.titleOption}, `
-            : ''
+          titleKey !== '' ? `${titleKey}, ` : ''
         }Ajout={\\node[anchor=north east, inner sep=2pt, fill=white]
         at (frame.north east) {\\hypersetup{urlcolor=black, pdfnewwindow=true}\\qrcode[height=2cm]{${getUrlFromExercice(exercice, indiceVersion)}&v=eleve&es=0211}};
 }]%[Lignes=5,Interieur]`
       } else {
+        const reference = staticReferenceOf(exercice)
         const keys = [
-          ...(latexFileInfos.titleOption === 'AvecTitre'
-            ? [`Titre=${latexFileInfos.titleOption}`]
-            : []),
-          ...this.referenceKeyFor(
-            latexFileInfos,
-            `${exercice.examen || ''} ${exercice.mois || ''} ${exercice.annee || ''} ${exercice.lieu || ''}`.trim(),
-          ),
+          ...(titleKey !== '' ? [titleKey] : []),
+          // la référence déjà affichée en titre n'est pas répétée en haut à droite
+          ...(title === reference
+            ? []
+            : this.referenceKeyFor(latexFileInfos, reference)),
         ]
         content += `\n\\begin{exercice}${
           keys.length > 0 ? `[${keys.join(', ')}]` : ''
@@ -651,7 +681,7 @@ class Latex {
     if (latexFileInfos.qrcodeOption === 'AvecQrcode') {
       content += `\n\\begin{exercice}[${
         latexFileInfos.titleOption === 'AvecTitre'
-          ? `Titre=${exercice.titre}, `
+          ? `Titre={${exercice.titre}}, `
           : ''
       }Ajout={\\node[anchor=north east, inner sep=2pt, fill=white]
         at (frame.north east) {\\hypersetup{urlcolor=black}\\qrcode[height=2cm]{${getUrlFromExercice(exercice, indiceVersion)}&v=eleve&es=0211}};
@@ -659,7 +689,7 @@ class Latex {
     } else {
       const keys = [
         ...(latexFileInfos.titleOption === 'AvecTitre'
-          ? [`Titre=${exercice.titre}`]
+          ? [`Titre={${exercice.titre}}`]
           : []),
         ...this.referenceKeyFor(
           latexFileInfos,
@@ -1129,10 +1159,7 @@ function writingLinesAtEnd(confExo: ExerciceLayoutConfig): string {
 }
 
 /** Enveloppe un contenu dans l'interligne demandé pour l'exercice */
-function wrapInSpacing(
-  content: string,
-  confExo: ExerciceLayoutConfig,
-): string {
+function wrapInSpacing(content: string, confExo: ExerciceLayoutConfig): string {
   const stretch = confExo.baselinestretch
   if (stretch == null || stretch === 1) return content
   return `\n\\begin{spacing}{${stretch}}${content}\n\\end{spacing}`
@@ -1156,7 +1183,11 @@ function correctionConf(confExo: ExerciceLayoutConfig): ExerciceLayoutConfig {
  */
 function wrapInColumns(content: string, columns?: number): string {
   if (columns == null || columns < 2 || content.trim() === '') return content
-  return `\n\\begin{multicols}{${columns}}${content}\n\\end{multicols}`
+  // `\raggedcolumns` : sans lui, multicol étire chaque colonne jusqu'en bas
+  // de page en ouvrant de grands blancs entre les exercices.
+  // `\mathaleaFitPictures` (voir `loadLayoutOverrides`) : les figures sont
+  // conçues pour la pleine largeur et déborderaient d'une colonne.
+  return `\n\\begin{multicols}{${columns}}\\raggedcolumns\\mathaleaFitPictures${content}\n\\end{multicols}`
 }
 
 /** Faut-il inscrire le numéro de version dans l'en-tête ? */

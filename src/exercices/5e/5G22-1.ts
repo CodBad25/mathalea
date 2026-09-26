@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { distance } from 'apigeom/src/elements/calculus/Coords'
 import { bissectrice } from '../../lib/2d/Bissectrice'
 import { codageBissectrice } from '../../lib/2d/CodageBissectrice'
@@ -399,13 +400,13 @@ export default class DroitesRemarquablesPointsConcours extends Exercice {
         }
       }
       if (monObjet.genre === 'droite') {
-        texteCorr += `La droite tracée est ${interprete(monObjet.txtCorr1, nomSommets)} dans le triangle $${nomDuTriangle}$.`
+        texteCorr += `La droite tracée est ${texteEnCouleurEtGras(interprete(monObjet.txtCorr1, nomSommets))} dans le triangle $${nomDuTriangle}$.`
         if (listeTypeQuestions[i] === 'onpps') {
-          texteCorr = `On ne peut pas savoir. En effet, il n'y a pas de codage indiquant de quel type de droite il s'agit.`
+          texteCorr = `${texteEnCouleurEtGras('On ne peut pas savoir')}. En effet, il n'y a pas de codage indiquant de quel type de droite il s'agit.`
         }
       } else {
         texteCorr += `Le point ${nomPt} est le point de concours des ${monObjet.txtCorr1} dans le triangle $${nomDuTriangle}$.<br>`
-        texteCorr += `Le point ${nomPt} est le ${monObjet.txtCorr2} au triangle $${nomDuTriangle}$.`
+        texteCorr += `Le point ${nomPt} est le ${texteEnCouleurEtGras(monObjet.txtCorr2)} au triangle $${nomDuTriangle}$.`
       }
       if (monObjet.genre === 'droite') {
         const listeReponsesDteComplete = [

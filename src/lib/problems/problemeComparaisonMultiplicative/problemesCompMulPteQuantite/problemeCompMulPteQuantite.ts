@@ -73,5 +73,6 @@ export default class ProblemeCompMulPteQuantite extends Probleme {
 <br>Quel est le prix d'un sachet ?`
     this.correction = `Le prix d'un sachet est : $${texNombre(data.nb2, 2, true)}$ € $\\div ${texNombre(data.nbFois, 0)}=${miseEnEvidence(texNombre(nb1, 2, true))}$ €.`
     this.reponse = texNombre(nb1, 2)
+    this.optionsChampTexteMathlive = { texteApres: ' €' }
   }
 }

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -304,7 +305,7 @@ export default class CompleterParSymetrie6e extends Exercice {
           { formatInteractif: 'points-cliquables' },
         )
       }
-      texteCorr = `Il faut ajouter au minimum ${pointsEnPlusCorr.length} points (en rouge sur la figure) afin que la figure soit symétrique par rapport à l'axe.
+      texteCorr = `Il faut ajouter au minimum $${miseEnEvidence(pointsEnPlusCorr.length)}$ points (en rouge sur la figure) afin que la figure soit symétrique par rapport à l'axe.
       ${mathalea2d({ xmin: -1, ymin: -1, xmax: 11, ymax: 11, scale: 0.5, display: 'inline' }, ...objetsEnonce[i], ...objetsCorrection[i])}`
 
       if (

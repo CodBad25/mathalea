@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
@@ -92,7 +93,7 @@ export default class MultiplierEnDistribuant extends Exercice {
               &=${a}\\times (${dizaineSupOuInf} + ${b % 10})\\\\
               &= ${a}\\times ${dizaineSupOuInf} + ${a}\\times ${b % 10}\\\\
               &= ${a * dizaineSupOuInf}+${a * (b % 10)}\\\\
-              &=${a * b}
+              &=${miseEnEvidence(a * b)}
               \\end{aligned}$`
               break
             default:
@@ -103,7 +104,7 @@ export default class MultiplierEnDistribuant extends Exercice {
               &=  ${a}\\times (${dizaineSupOuInf} - ${dizaineSupOuInf - b})\\\\
               &= ${a}\\times ${dizaineSupOuInf} - ${a}\\times ${dizaineSupOuInf - b}\\\\
               &= ${a * dizaineSupOuInf}-${a * (dizaineSupOuInf - b)}\\\\
-              &=${a * b}
+              &=${miseEnEvidence(a * b)}
               \\end{aligned}$`
               break
           }
@@ -116,14 +117,14 @@ export default class MultiplierEnDistribuant extends Exercice {
               b = randint(1, 3) + randint(1, 3) * 10
               c = 10 - (b % 10) + randint(1, 6) * 10
               texte = `$${a} \\times ${b}+${a} \\times ${c}$`
-              texteCorr = `$\\begin{aligned}${a} \\times ${b}+${a} \\times ${c} &= ${a}\\times (${b} + ${c})\\\\ &= ${a} \\times ${b + c}\\\\ &=${a * (b + c)}\\end{aligned}$`
+              texteCorr = `$\\begin{aligned}${a} \\times ${b}+${a} \\times ${c} &= ${a}\\times (${b} + ${c})\\\\ &= ${a} \\times ${b + c}\\\\ &=${miseEnEvidence(a * (b + c))}\\end{aligned}$`
               reponse = String(a * (b + c))
               break
             default:
               b = randint(6, 9) * 10 - choice([1, 2])
               c = b - randint(2, 5) * 10
               texte = `$${a} \\times ${b}-${a} \\times ${c}$`
-              texteCorr = `$\\begin{aligned}${a} \\times ${b}-${a} \\times ${c} &= ${a}\\times (${b} - ${c})\\\\ &= ${a} \\times ${b - c}\\\\ &=${a * (b - c)}\\end{aligned}$`
+              texteCorr = `$\\begin{aligned}${a} \\times ${b}-${a} \\times ${c} &= ${a}\\times (${b} - ${c})\\\\ &= ${a} \\times ${b - c}\\\\ &=${miseEnEvidence(a * (b - c))}\\end{aligned}$`
               reponse = String(a * (b - c))
               break
           }

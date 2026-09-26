@@ -1,5 +1,8 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  texteEnCouleurEtGras,
+  miseEnEvidence,
+} from '../../lib/outils/embellissements'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -78,15 +81,15 @@ export default class EvolutionPopulation extends Exercice {
     texte += `4. Déterminer la limite de la suite $(u_n)$ lorsque $n$ tend vers $+\\infty$, puis interpréter le résultat dans le contexte de l’exercice, en admettant que ce modèle soit réaliste sur une longue période.`
 
     let correction = `${texteEnCouleurEtGras('Partie 1', 'black')}<br><br>`
-    correction += `1. La population est exprimée en milliers. En ${anneeInitiale}, la ville compte $${texNombre(1000 * u0, 0)}$ habitants, soit $${u0}$ milliers d’habitants. Ainsi, $u_0=${u0}$.<br><br>`
+    correction += `1. La population est exprimée en milliers. En ${anneeInitiale}, la ville compte $${texNombre(1000 * u0, 0)}$ habitants, soit $${u0}$ milliers d’habitants. Ainsi, $u_0=${miseEnEvidence(u0)}$.<br><br>`
     correction += `2. Chaque année, la ville conserve $${100 - tauxDepart}\\,\\%$ de sa population, ce qui revient à multiplier $u_n$ par $${qTex}$. De plus, elle gagne $${texNombre(apportHabitants, 0)}$ habitants, soit $${apportTex}$ ${apport > 1 ? 'milliers' : 'millier'} d’habitants.<br>`
-    correction += `Ainsi, pour tout entier naturel $n$, $u_{n+1}=${qTex}u_n+${apportTex}$.<br><br>`
+    correction += `Ainsi, pour tout entier naturel $n$, $u_{n+1}=${miseEnEvidence(`${qTex}u_n+${apportTex}`)}$.<br><br>`
     correction += `3. L’année ${anneeProche} correspond au rang $n=2$.<br>`
     correction += `$\\begin{aligned}
 u_1&=${qTex}\\times ${u0}+${apportTex}=${texNombre(u1, 3)}\\\\
 u_2&=${qTex}\\times ${texNombre(u1, 3)}+${apportTex}=${texNombre(u2, 3)}.
 \\end{aligned}$<br>`
-    correction += `En ${anneeProche}, la ville comptera donc $${texNombre(1000 * u2, 0)}$ habitants.<br><br>`
+    correction += `En ${anneeProche}, la ville comptera donc $${miseEnEvidence(texNombre(1000 * u2, 0))}$ habitants.<br><br>`
 
     correction += `${texteEnCouleurEtGras('Partie 2', 'black')}<br><br>`
     correction += `1. Pour tout entier naturel $n$ :<br>`
@@ -104,18 +107,18 @@ $v_n=v_0\\times q^n$.<br>
 Ici, $v_0=${v0}$ et $q=${qTex}$. On obtient donc :<br>
 $v_n=${v0}\\times ${qTex}^n$.<br>`
     correction += `Comme $u_n=v_n+${equilibre}$, on obtient :<br>`
-    correction += `$u_n=${equilibre}${ecritureAlgebrique(v0)}\\times ${qTex}^n$.<br><br>`
+    correction += `$u_n=${miseEnEvidence(`${equilibre}${ecritureAlgebrique(v0)}\\times ${qTex}^n`)}$.<br><br>`
     correction += `3. L’année ${anneeLointaine} correspond au rang $n=${rangLointain}$.<br>`
     correction += `$\\begin{aligned}
 u_{${rangLointain}}&=${equilibre}${ecritureAlgebrique(v0)}\\times ${qTex}^{${rangLointain}}\\\\
 &\\approx ${texNombre(uLointain, 6)}.
 \\end{aligned}$<br>`
-    correction += `Cela représente environ $${texNombre(habitantsLointains, 0)}$ habitants.<br><br>`
+    correction += `Cela représente environ $${miseEnEvidence(texNombre(habitantsLointains, 0))}$ habitants.<br><br>`
     correction += `4. Comme $${qTex}\\in]0\\,;\\,1[$, on sait que $\\displaystyle \\lim_{n\\to+\\infty}${qTex}^n=0$.<br>`
     correction += `Par produit, $\\displaystyle \\lim_{n\\to+\\infty}${v0}\\times ${qTex}^n=0$.<br>`
     correction += `Or, $u_n=${equilibre}${ecritureAlgebrique(v0)}\\times ${qTex}^n$. Par somme :<br>
-$\\displaystyle \\lim_{n\\to+\\infty}u_n=${equilibre}$.<br>
-La population de la ville tend ainsi vers $${texNombre(1000 * equilibre, 0)}$ habitants.`
+$\\displaystyle \\lim_{n\\to+\\infty}u_n=${miseEnEvidence(equilibre)}$.<br>
+La population de la ville tend ainsi vers $${miseEnEvidence(texNombre(1000 * equilibre, 0))}$ habitants.`
 
     this.listeQuestions[0] = texte
     this.listeCorrections[0] = correction

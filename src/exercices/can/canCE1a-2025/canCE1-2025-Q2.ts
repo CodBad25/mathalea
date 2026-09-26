@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -65,7 +66,7 @@ export default class Can2025CE2Q4 extends ExerciceCan {
 
     this.correction =
       monQcm.texteCorr +
-      ` Pour passer des $\\text{${b}}$ au $\\text{${c}}$, on multiplie par $${texNombre(a, 0)}$.`
+      `$1 \\text{ ${c}} = ${miseEnEvidence(`${texNombre(a)} \\text{ ${b}}`)}$. Pour passer des $\\text{${b}}$ au $\\text{${c}}$, on multiplie par $${texNombre(a, 0)}$.`
     this.canReponseACompleter = monQcm.texte
   }
 

@@ -1,3 +1,5 @@
+import { orangeMathalea } from '../../../lib/colors'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -51,7 +53,7 @@ export default class EcondDegreAbscisseOrdonneeSommet extends ExerciceSimple {
 
       this.correction = `$${nom}$ est une fonction polynôme du second degré écrite sous forme développée $ax^2+bx+c$.<br>
       Le sommet de la parabole a pour abscisse $-\\dfrac{b}{2a}$.<br>
-          L'abscisse du sommet est donc : $-\\dfrac{${b}}{2\\times${ecritureParentheseSiNegatif(a)} }= ${r.texFraction}${r.texSimplificationAvecEtapes()}$.`
+          L'abscisse du sommet est donc : $-\\dfrac{${b}}{2\\times${ecritureParentheseSiNegatif(a)} }= ${r.estIrreductible && r.num * r.den > 0 ? miseEnEvidence(r.texFraction) : `${r.texFraction}${r.texSimplificationAvecEtapes(false, orangeMathalea)}`}$.`
       this.reponse = r
     } else {
       // this.formatInteractif = 'mathLive'
@@ -68,28 +70,28 @@ export default class EcondDegreAbscisseOrdonneeSommet extends ExerciceSimple {
           Quelle est l'ordonnée du sommet de la parabole représentant $${nom}$ ?`
 
       this.correction = `$${nom}$ est une fonction polynôme du second degré écrite sous forme développée $ax^2+bx+c$.<br>
-          Le sommet de la parabole a pour abscisse $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times${ecritureParentheseSiNegatif(a)} }= ${alpha}$.<br>
+          Le sommet de la parabole a pour abscisse $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times${ecritureParentheseSiNegatif(a)} }= ${miseEnEvidence(alpha)}$.<br>
           L'ordonnée du sommet est donnée par l'image de l'abscisse, soit `
 
       if (a === 1) {
         if (b === 0) {
           if (c === 0) {
-            this.correction += `$ ${ecritureParentheseSiNegatif(alpha)}^2=${r}$.`
+            this.correction += `$ ${ecritureParentheseSiNegatif(alpha)}^2=${miseEnEvidence(r)}$.`
           } else {
-            this.correction += `$${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(c)}=${r}$.`
+            this.correction += `$${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(c)}=${miseEnEvidence(r)}$.`
           }
         } else {
-          this.correction += `$${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(alpha)}${ecritureAlgebrique(c)}=${r}$.`
+          this.correction += `$${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(alpha)}${ecritureAlgebrique(c)}=${miseEnEvidence(r)}$.`
         }
       } else {
         if (b === 0) {
           if (c === 0) {
-            this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2=${r}$.`
+            this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2=${miseEnEvidence(r)}$.`
           } else {
-            this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(c)}=${r}$.`
+            this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(c)}=${miseEnEvidence(r)}$.`
           }
         } else {
-          this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(alpha)}${ecritureAlgebrique(c)}=${r}$.`
+          this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(alpha)}${ecritureAlgebrique(c)}=${miseEnEvidence(r)}$.`
         }
       }
       this.reponse = r

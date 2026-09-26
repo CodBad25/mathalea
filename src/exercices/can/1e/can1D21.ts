@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -50,7 +51,7 @@ export default class CalculFonctionDeriveeFctRef extends ExerciceSimple {
         }
         this.correction = `$f(x)=\\dfrac{${a}}{x}=${a}\\times \\dfrac{1}{x}$.<br>
           Or  $x\\longmapsto \\dfrac{1}{x}$ a pour dérivée $x\\longmapsto -\\dfrac{1}{x^2}$.<br>
-          Par conséquent, $f'(x)=${a}\\times \\left(-\\dfrac{1}{x^2}\\right)=\\dfrac{${-a}}{x^2}$.`
+          Par conséquent, $f'(x)=${a}\\times \\left(-\\dfrac{1}{x^2}\\right)=${miseEnEvidence(`\\dfrac{${-a}}{x^2}`)}$.`
 
         this.reponse = [
           `\\dfrac{${-a}}{x^2}`,
@@ -72,7 +73,7 @@ export default class CalculFonctionDeriveeFctRef extends ExerciceSimple {
         }
         this.correction = `$f(x)=${a}\\sqrt{x}=${a}\\times\\sqrt{x}$.<br>
           Or  $x\\longmapsto \\sqrt{x}$ a pour dérivée $x\\longmapsto \\dfrac{1}{2\\sqrt{x}}$.<br>
-          Par conséquent, $f'(x)=${a}\\times \\dfrac{1}{2\\sqrt{x}}=\\dfrac{${a}}{2\\sqrt{x}}=\\dfrac{${texNombre(b, 1)}}{\\sqrt{x}}$.`
+          Par conséquent, $f'(x)=${a}\\times \\dfrac{1}{2\\sqrt{x}}=\\dfrac{${a}}{2\\sqrt{x}}=${miseEnEvidence(`\\dfrac{${texNombre(b, 1)}}{\\sqrt{x}}`)}$.`
 
         this.reponse = [
           `\\dfrac{${a}}{2\\sqrt{x}}`,

@@ -31,7 +31,7 @@ import {
   combinaisonListes,
   enleveElementBis,
 } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
@@ -302,7 +302,7 @@ export default class nomExercice extends Exercice {
           }
         }
       } else {
-        texteCorr += `Il n'y a aucun codage d'angle droit sur cette figure. On ne peut donc pas déterminer de hauteur ni de base associée<br>`
+        texteCorr += `Il n'y a aucun codage d'angle droit sur cette figure. On ne peut donc ${texteEnCouleurEtGras('pas déterminer de hauteur ni de base associée')}<br>`
       }
       if (this.interactif) {
         texte += `${addMultiMathfield(this, i, {

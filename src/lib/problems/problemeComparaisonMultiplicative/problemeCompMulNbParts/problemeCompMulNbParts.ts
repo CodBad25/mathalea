@@ -58,5 +58,6 @@ export default class ProblemeCompMulNbParts extends Probleme {
 <br>Combien de sachets peut-on avoir pour le prix d'une boite ?`
     this.correction = `Pour le prix d'une boite, le nombre de sachets qu'on peut acheter est : $\{${texNombre(nb2, 2)}}\\text{\\,€} \\div {${texNombre(data.nb1, 2)}}\\text{\\,€}=${miseEnEvidence(texNombre(nb2 / data.nb1, 0))}$.`
     this.reponse = texNombre(data.nbFois, 0)
+    this.optionsChampTexteMathlive = { texteApres: ' sachets' }
   }
 }

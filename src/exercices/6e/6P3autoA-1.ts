@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -52,7 +53,7 @@ export default class Tiers extends Exercice {
         case 1: // Table de 3
           a = randint(2, 9)
           texte = `$\\text{Le tiers de }${a * 3}$`
-          texteCorr = `$\\text{Le tiers de }${a * 3} \\text{ est } ${a}$`
+          texteCorr = `$\\text{Le tiers de }${a * 3} \\text{ est } ${miseEnEvidence(a)}$`
           handleAnswers(this, i, { reponse: { value: a } })
           texte += ajouteChampTexteMathLive(
             this,
@@ -65,7 +66,7 @@ export default class Tiers extends Exercice {
           texte = `$\\text{Le tiers de }${texNombre(a * 3 * 100)}$`
           texteCorr = `$\\text{Le tiers de }${texNombre(
             a * 3 * 100,
-          )} \\text{ est } ${texNombre(a * 100)}$`
+          )} \\text{ est } ${miseEnEvidence(texNombre(a * 100))}$`
           handleAnswers(this, i, { reponse: { value: a * 100 } })
           texte += ajouteChampTexteMathLive(
             this,
@@ -78,7 +79,7 @@ export default class Tiers extends Exercice {
           texte = `$\\text{Le tiers de }${texNombre(a * 3 * 10)}$`
           texteCorr = `$\\text{Le tiers de }${texNombre(
             a * 3 * 10,
-          )} \\text{ est } ${texNombre(a * 10)}$`
+          )} \\text{ est } ${miseEnEvidence(texNombre(a * 10))}$`
           handleAnswers(this, i, { reponse: { value: a * 10 } })
           texte += ajouteChampTexteMathLive(
             this,
@@ -92,7 +93,7 @@ export default class Tiers extends Exercice {
           texte = `$\\text{Le tiers de }${texNombre(a * 3 + (b * 3) / 100)}$`
           texteCorr = `$\\text{Le tiers de }${texNombre(
             a * 3 + (b * 3) / 100,
-          )} \\text{ est } ${texNombre(a + b / 100)}$`
+          )} \\text{ est } ${miseEnEvidence(texNombre(a + b / 100))}$`
           handleAnswers(this, i, { reponse: { value: a + b / 100 } })
           texte += ajouteChampTexteMathLive(this, i)
           break

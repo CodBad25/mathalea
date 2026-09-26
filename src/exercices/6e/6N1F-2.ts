@@ -1,3 +1,4 @@
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -138,9 +139,9 @@ export default class ÉcrireNombresDecimal extends Exercice {
           texte = `Écrire le nombre $${texNombre(nombre)}$ en lettres ${type === 2 ? 'en utilisant le mot virgule' : 'sans utiliser le mot virgule'} : ${this.interactif ? ajouteChampTexte(this, i, '') : '\\dotfill'}`
         } else texte = `$${texNombre(nombre)}$`
         if (context.vue !== 'diap') {
-          texteCorr = `$${texNombre(nombre)}$ : ${nombreEnLettres(nombre, type)}.`
+          texteCorr = `$${texNombre(nombre)}$ : ${texteEnCouleurEtGras(nombreEnLettres(nombre, type))}.`
         } else {
-          texteCorr = `${nombreEnLettres(nombre, type)}.`
+          texteCorr = `${texteEnCouleurEtGras(nombreEnLettres(nombre, type))}.`
         }
         handleAnswers(this, i, {
           reponse: {
@@ -155,9 +156,9 @@ export default class ÉcrireNombresDecimal extends Exercice {
           texte = ` ${nombreEnLettres(nombre, type)}`
         }
         if (context.vue !== 'diap') {
-          texteCorr = ` ${nombreEnLettres(nombre, type)} : $${texNombre(nombre)}$.`
+          texteCorr = ` ${nombreEnLettres(nombre, type)} : $${miseEnEvidence(texNombre(nombre))}$.`
         } else {
-          texteCorr = `$${texNombre(nombre)}$.`
+          texteCorr = `$${miseEnEvidence(texNombre(nombre))}$.`
         }
         handleAnswers(this, i, { reponse: { value: nombre } })
       }

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionSigne } from '../../lib/outils/deprecatedFractions'
@@ -61,7 +62,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
           texteCorr +=
             "On observe que la fonction $f$ s'écrit bien sous la forme $f(x)= a x+ b$  avec $a$ et $b$ des nombres réels.<br>"
           texteCorr += `Ici, on a : $a=${a}$ et $b=${b}$.<br>`
-          texteCorr += '$f$ est donc bien une fonction affine.<br>'
+          texteCorr += `$f$ ${texteEnCouleurEtGras("est donc bien")} une fonction affine.<br>`
           bonneReponse = 'oui'
           break
         case 2: // Cas f(x)=b+a x
@@ -83,7 +84,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
           texteCorr +=
             "On observe que la fonction $f$ s'écrit bien sous la forme $f(x)= a x+ b$ avec $a$ et $b$ des nombres réels.<br>"
           texteCorr += `Ici, on a : $a=${a}$ et $b=${b}$.<br>`
-          texteCorr += '$f$ est donc bien une fonction affine.'
+          texteCorr += `$f$ ${texteEnCouleurEtGras("est donc bien")} une fonction affine.`
           bonneReponse = 'oui'
 
           break
@@ -94,7 +95,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
             "On observe que la fonction $f$ est du second degré, puisqu'il y a un terme en $x^{2}$.<br>"
           texteCorr +=
             "Elle s'écrit sous la forme $f(x)= a x^{2}+ bx+c$ et non pas sous la forme $ax+b$.<br>"
-          texteCorr += "$f$ n'est donc pas une fonction affine.<br>"
+          texteCorr += `$f$ ${texteEnCouleurEtGras("n'est donc pas")} une fonction affine.<br>`
           bonneReponse = 'non'
 
           break
@@ -104,7 +105,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
           texteCorr +=
             "On observe que la fonction $f$ s'écrit bien sous la forme $f(x)= a x+ b$ avec $a$ et $b$ des nombres réels.<br>"
           texteCorr += `Ici, on a : $a=\\sqrt{${c}}$ et $b=\\sqrt{${d}}$.<br>`
-          texteCorr += '$f$ est donc bien une fonction affine.<br>'
+          texteCorr += `$f$ ${texteEnCouleurEtGras("est donc bien")} une fonction affine.<br>`
           bonneReponse = 'oui'
 
           break
@@ -115,7 +116,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
             "On observe que la fonction $f$ est du second degré, puisqu'il y a un terme en $x^{2}$.<br>"
           texteCorr +=
             "Elle s'écrit sous la forme $f(x)= a x^{2}+b$ avec $a$ et $b$ des nombres réels, et non pas sous la forme $ax+b$.<br>"
-          texteCorr += "$f$ n'est donc pas une fonction affine.<br>"
+          texteCorr += `$f$ ${texteEnCouleurEtGras("n'est donc pas")} une fonction affine.<br>`
           bonneReponse = 'non'
 
           break
@@ -125,7 +126,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
           texteCorr +=
             "On observe que la fonction $f$ est une fonction rationnelle, puisqu'il y une fraction avec des termes en $x$ au dénominateur.<br>"
           texteCorr += "Elle ne s'écrit  pas sous la forme $ax+b$.<br>"
-          texteCorr += "$f$ n'est donc pas une fonction affine.<br>"
+          texteCorr += `$f$ ${texteEnCouleurEtGras("n'est donc pas")} une fonction affine.<br>`
           bonneReponse = 'non'
 
           break
@@ -135,7 +136,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
           texteCorr +=
             "On observe que la fonction $f$ s'écrit bien sous la forme $f(x)= a x+ b$ avec $a$ et $b$ des nombres réels.<br>"
           texteCorr += `Ici, on a : $a=${texFractionSigne(1, a)}$ et $b=${texFractionSigne(1, e)}$.<br>`
-          texteCorr += '$f$ est donc bien une fonction affine.<br>'
+          texteCorr += `$f$ ${texteEnCouleurEtGras("est donc bien")} une fonction affine.<br>`
           bonneReponse = 'oui'
 
           break
@@ -148,7 +149,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
           texteCorr +=
             "On observe que la fonction $f$ s'écrit bien sous la forme $f(x)= a x+ b$ avec $a$ et $b$ des nombres réels.<br>"
           texteCorr += `Ici, on a : $a=${a * c}$ et $b=${b * c}$.<br>`
-          texteCorr += '$f$ est donc bien une fonction affine.<br>'
+          texteCorr += `$f$ ${texteEnCouleurEtGras("est donc bien")} une fonction affine.<br>`
           bonneReponse = 'oui'
 
           break
@@ -160,7 +161,7 @@ export default class Reconnaitrefonctionaffine extends Exercice {
           texteCorr +=
             "On observe que la fonction $f$ s'écrit bien sous la forme $f(x)= a x+ b$ avec $a$ et $b$ des nombres réels.<br>"
           texteCorr += `Ici, on a : $a=${texFractionSigne(1, a)}$ et $b=${texFractionSigne(1, e)}$.<br>`
-          texteCorr += '$f$ est donc bien une fonction affine.<br>'
+          texteCorr += `$f$ ${texteEnCouleurEtGras("est donc bien")} une fonction affine.<br>`
           bonneReponse = 'oui'
 
           break

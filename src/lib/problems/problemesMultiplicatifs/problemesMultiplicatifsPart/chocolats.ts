@@ -47,5 +47,6 @@ export function chocolats(decimal = false): Probleme {
       ],
     },
   ]
+  probleme.optionsChampTexteMathlive = { texteApres: ` ${unite}` }
   return probleme
 }

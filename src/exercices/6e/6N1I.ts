@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -147,13 +148,13 @@ export default class ComparerDecimaux extends Exercice {
       prop2 = `$${texNombre(x, 6)} < ${texNombre(y, 6)}$`
       prop3 = `$${texNombre(x, 6)} = ${texNombre(y, 6)}$`
       if (x > y) {
-        texteCorr = `$${texNombre(x, 6)} > ${texNombre(y, 6)}$`
+        texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('>')} ${texNombre(y, 6)}$`
       } else if (x < y) {
         signe = '<'
-        texteCorr = `$${texNombre(x, 6)} < ${texNombre(y, 6)}$`
+        texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('<')} ${texNombre(y, 6)}$`
       } else {
         signe = '='
-        texteCorr = `$${texNombre(x, 6)} = ${texNombre(y, 6)}$`
+        texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('=')} ${texNombre(y, 6)}$`
       }
 
       if (zeroInutile) {
@@ -163,13 +164,13 @@ export default class ComparerDecimaux extends Exercice {
           prop2 = `$${texNombre(x, 2, true)} < ${texNombre(y, 6)}$`
           prop3 = `$${texNombre(x, 2, true)} = ${texNombre(y, 6)}$`
           if (x > y) {
-            texteCorr = `$${texNombre(x, 2, true)} > ${texNombre(y, 6)}$`
+            texteCorr = `$${texNombre(x, 2, true)} ${miseEnEvidence('>')} ${texNombre(y, 6)}$`
           } else if (x < y) {
             signe = '<'
-            texteCorr = `$${texNombre(x, 2, true)} < ${texNombre(y, 6)}$`
+            texteCorr = `$${texNombre(x, 2, true)} ${miseEnEvidence('<')} ${texNombre(y, 6)}$`
           } else {
             signe = '='
-            texteCorr = `$${texNombre(x, 2, true)} = ${texNombre(y, 6)}$`
+            texteCorr = `$${texNombre(x, 2, true)} ${miseEnEvidence('=')} ${texNombre(y, 6)}$`
           }
         } else {
           texte = `$${texNombre(x, 6)}${sp(3)}\\ldots\\ldots${sp(3)}${texNombre(y, 2, true)}$`
@@ -177,12 +178,12 @@ export default class ComparerDecimaux extends Exercice {
           prop2 = `$${texNombre(x, 6)} < ${texNombre(y, 2, true)}$`
           prop3 = `$${texNombre(x, 6)} = ${texNombre(y, 2, true)}$`
           if (x > y) {
-            texteCorr = `$${texNombre(x, 6)} > ${texNombre(y, 2, true)}$`
+            texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('>')} ${texNombre(y, 2, true)}$`
           } else if (x < y) {
-            texteCorr = `$${texNombre(x, 6)} < ${texNombre(y, 2, true)}$`
+            texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('<')} ${texNombre(y, 2, true)}$`
             signe = '<'
           } else {
-            texteCorr = `$${texNombre(x, 6)} = ${texNombre(y, 2, true)}$`
+            texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('=')} ${texNombre(y, 2, true)}$`
             signe = '='
           }
         }

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
@@ -61,7 +62,7 @@ export default class MultiplicationMentalDecimaux extends Exercice {
           a = 10 * randint(1, 9) + randint(1, 9)
           b = 10 * randint(1, 9) + randint(1, 9)
           texte += `Calcul : $${a} + ${b}$.`
-          texteCorr += `$${a} + ${b}=${texNombre2(arrondi(a + b))}$`
+          texteCorr += `$${a} + ${b}=${miseEnEvidence(texNombre2(arrondi(a + b)))}$`
 
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
@@ -97,7 +98,7 @@ export default class MultiplicationMentalDecimaux extends Exercice {
           a = 10 * randint(1, 9) + randint(1, 9)
           b = 10 * randint(1, 9) + randint(1, 9)
           texte += `Calcul : $${a} \\times ${b}$.`
-          texteCorr += `$${a} \\times ${b}=${texNombre2(arrondi(a * b))}$`
+          texteCorr += `$${a} \\times ${b}=${miseEnEvidence(texNombre2(arrondi(a * b)))}$`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
@@ -140,7 +141,7 @@ export default class MultiplicationMentalDecimaux extends Exercice {
             10 * randint(0, 9) +
             randint(0, 9)
           texte += `Calcul : $${texNombre2(a / 100)} + ${texNombre2(b / 100)}$.`
-          texteCorr += ` $${texNombre2(a / 100)} + ${texNombre2(b / 100)}=${texNombre2(arrondi(a / 100 + b / 100))}$.`
+          texteCorr += ` $${texNombre2(a / 100)} + ${texNombre2(b / 100)}=${miseEnEvidence(texNombre2(arrondi(a / 100 + b / 100)))}$.`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
@@ -185,7 +186,7 @@ export default class MultiplicationMentalDecimaux extends Exercice {
             10 * randint(1, 9) +
             randint(0, 9)
           texte += `Calcul : $${texNombre2(a / 100)} \\times ${texNombre2(b / 100)}$.`
-          texteCorr += `$${texNombre2(a / 100)} \\times ${texNombre2(b / 100)}=${texNombre2(arrondi((a * b) / 10000))}$.`
+          texteCorr += `$${texNombre2(a / 100)} \\times ${texNombre2(b / 100)}=${miseEnEvidence(texNombre2(arrondi((a * b) / 10000)))}$.`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [

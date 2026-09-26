@@ -1,5 +1,4 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
-import { warnMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -50,33 +49,16 @@ export default class DecompositionFacteursPremiers extends Exercice {
     this.nbQuestions = 3
     // this.correctionDetailleeDisponible = true;
 
-    this.besoinFormulaireCaseACocher = [
-      'Afficher la liste des nombres premiers inférieurs à 100',
-    ]
     this.besoinFormulaire2Texte = [
       'Choix des décompositions',
       'Nombres séparés par des tirets :\n1 : 3 à 5 petits facteurs premiers max\n2 : 2 facteurs premiers entre 30 et 100\n3 : Un seul grand nombre premier\n4 : Mélange',
     ]
-    this.sup = true
     this.sup2 = 4
   }
 
   nouvelleVersion() {
     let typesDeQuestions
 
-    let stringRappel =
-      'Cette liste des nombres premiers inférieurs à 100 pourra être utile : <br>' +
-      cribleEratostheneN(100)[0]
-    for (let k = 1; k < cribleEratostheneN(100).length; k++) {
-      stringRappel += ', ' + cribleEratostheneN(100)[k]
-    }
-    stringRappel += '.'
-
-    if (this.sup) {
-      this.introduction = warnMessage(stringRappel, 'nombres', 'Coup de pouce')
-    } else {
-      this.introduction = ''
-    }
     // Rajout EE modifié par JCL
     const listeDesProblemes = gestionnaireFormulaireTexte({
       saisie: this.sup2,

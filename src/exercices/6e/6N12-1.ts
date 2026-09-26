@@ -1,4 +1,4 @@
-import MultiplierUnNombreParPuissanceDeDix from './6N2B-4'
+import MultiplierUnNombreParPuissanceDeDixOld from './6N2B-4Old'
 
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -22,7 +22,7 @@ export const refs = {
   'fr-2016': ['6N12-1'],
   'fr-ch': ['PR-31'],
 }
-export default class Exercice6N121 extends MultiplierUnNombreParPuissanceDeDix {
+export default class Exercice6N121 extends MultiplierUnNombreParPuissanceDeDixOld {
   constructor() {
     super()
     this.sup = true

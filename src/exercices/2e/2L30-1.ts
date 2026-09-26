@@ -15,6 +15,7 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { bleuMathalea } from '../../lib/colors'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
@@ -112,11 +113,11 @@ export default class ModeliseInequations extends Exercice {
                        On résout cette inéquation : <br>
               $\\begin{aligned}
               ${texNombre(d, 2)}x+${b}&<${texNombre(c, 2)}x+${a}\\\\
-              ${texNombre(d, 2)}x+${b}-${miseEnEvidence(texNombre(c, 2))}${miseEnEvidence('\\textit{x}')}&< ${texNombre(c, 2)}x-${miseEnEvidence(texNombre(c, 2))}${miseEnEvidence('\\textit{x}')}+${a}\\\\
+              ${texNombre(d, 2)}x+${b}-${miseEnEvidence(texNombre(c, 2), bleuMathalea)}${miseEnEvidence('\\textit{x}', bleuMathalea)}&< ${texNombre(c, 2)}x-${miseEnEvidence(texNombre(c, 2), bleuMathalea)}${miseEnEvidence('\\textit{x}', bleuMathalea)}+${a}\\\\
                      ${texNombre(d - c)}x+${b}&<${a}\\\\
-              ${texNombre(d - c, 2)}x+${b}-${miseEnEvidence(texNombre(b))}&<${a}-${b}\\\\
+              ${texNombre(d - c, 2)}x+${b}-${miseEnEvidence(texNombre(b), bleuMathalea)}&<${a}-${b}\\\\
               ${texNombre(d - c, 2)}x&<${a - b}\\\\
-      \\dfrac{${texNombre(d - c, 2)}x}{${miseEnEvidence(texNombre(d - c, 2))}}&>\\dfrac{${a - b}}{${miseEnEvidence(texNombre(d - c, 2))}}${sp(7)} \\text{On divise par } ${texNombre(d - c, 2)} <0\\\\
+      \\dfrac{${texNombre(d - c, 2)}x}{${miseEnEvidence(texNombre(d - c, 2), bleuMathalea)}}&>\\dfrac{${a - b}}{${miseEnEvidence(texNombre(d - c, 2), bleuMathalea)}}${sp(7)} \\text{On divise par } ${texNombre(d - c, 2)} <0\\\\
       x&>\\dfrac{${abs(a - b)}}{${texNombre(abs(d - c), 2)}}
       \\end{aligned}$<br>`
             if (Math.round((a - b) / (d - c)) === (a - b) / (d - c)) {
@@ -156,12 +157,12 @@ export default class ModeliseInequations extends Exercice {
             Le budget de ${quidam} étant de  $${budget}$ €, le nombre de $\\text{km}$ $x$ qu'elle pourra parcourir doit vérifier $${reduireAxPlusB(a, b)}<${budget}$.<br>
             $\\begin{aligned}
             ${reduireAxPlusB(a, b)}&\\leqslant${budget}\\\\
-            ${texNombre(a, 2)}x+${b}-${miseEnEvidence(b)}&\\leqslant ${budget}x-${miseEnEvidence(b)}\\\\
+            ${texNombre(a, 2)}x+${b}-${miseEnEvidence(b, bleuMathalea)}&\\leqslant ${budget}x-${miseEnEvidence(b, bleuMathalea)}\\\\
             ${texNombre(a, 2)}x&\\leqslant${budget - b}\\\\
             x&\\leqslant\\dfrac{${budget - b}}{${texNombre(a, 2)}}
     \\end{aligned}$<br>`
 
-            texteCorr += `Comme $\\dfrac{${budget - b}}{${texNombre(a, 2)}}${Math.round((budget - b) / a) === (budget - b) / a ? '=' : '\\approx'} ${texNombre((budget - b) / a, 2)}$, ${quidam} pourra faire au maximum  $${Math.floor((budget - b) / a)}\\text{ km}$ pendant le mois avec son budget de $${budget}$ €.
+            texteCorr += `Comme $\\dfrac{${budget - b}}{${texNombre(a, 2)}}${Math.round((budget - b) / a) === (budget - b) / a ? '=' : '\\approx'} ${texNombre((budget - b) / a, 2)}$, ${quidam} pourra faire au maximum  $${miseEnEvidence(Math.floor((budget - b) / a))}\\text{ km}$ pendant le mois avec son budget de $${budget}$ €.
        `
             reponse = texNombre(Math.floor((budget - b) / a), 0)
 
@@ -189,12 +190,12 @@ export default class ModeliseInequations extends Exercice {
 
                 $\\begin{aligned}
                 ${texNombre(PB * EM, 2)} +${texNombre(PB, 2)} x&\\geqslant ${texNombre(RT)}\\\\
-                ${texNombre(PB * EM, 2)} +${texNombre(PB, 2)}x-${miseEnEvidence(texNombre(PB * EM, 2))}&\\geqslant ${texNombre(RT)}-${miseEnEvidence(texNombre(PB * EM, 2))}\\\\
+                ${texNombre(PB * EM, 2)} +${texNombre(PB, 2)}x-${miseEnEvidence(texNombre(PB * EM, 2), bleuMathalea)}&\\geqslant ${texNombre(RT)}-${miseEnEvidence(texNombre(PB * EM, 2), bleuMathalea)}\\\\
                 ${texNombre(PB, 2)}x&\\geqslant ${texNombre(RT - PB * EM, 2)}\\\\
                 x&\\geqslant \\dfrac{${texNombre(RT - PB * EM, 2)}}{${texNombre(PB, 2)}}\\\\
     \\end{aligned}$<br>
   Comme  $\\dfrac{${texNombre(RT - PB * EM, 2)}}{${texNombre(PB, 2)}}${Math.round((RT - PB * EM) / PB) === (RT - PB * EM) / PB ? '=' : '\\approx'} ${texNombre((RT - PB * EM) / PB, 1)}$,
-  il faudra au minimum ${Math.round((RT - PB * EM) / PB) === (RT - PB * EM) / PB ? `$${texNombre((RT - PB * EM) / PB, 0)}$` : `$${texNombre(Math.floor((RT - PB * EM) / PB) + 1, 0)} $`} entrées pour que la recette de la journée soit au moins égale à  $${texNombre(RT)}$ €.
+  il faudra au minimum ${Math.round((RT - PB * EM) / PB) === (RT - PB * EM) / PB ? `$${miseEnEvidence(texNombre((RT - PB * EM) / PB, 0))}$` : `$${miseEnEvidence(texNombre(Math.floor((RT - PB * EM) / PB) + 1, 0))}$`} entrées pour que la recette de la journée soit au moins égale à  $${texNombre(RT)}$ €.
                             `
             reponse =
               Math.round((RT - PB * EM) / PB) === (RT - PB * EM) / PB
@@ -442,7 +443,7 @@ export default class ModeliseInequations extends Exercice {
             x&>\\dfrac{${P - 2 * b - 2 * a}}{4}`
             texteCorr += '\\end{aligned}$<br>'
 
-            texteCorr += `Comme $\\dfrac{${P - 2 * b - 2 * a}}{4}=${texNombre((P - 2 * b - 2 * a) / 4, 2)}$, $x$ doit être supérieur à $${texNombre((P - 2 * b - 2 * a) / 4, 2)}\\text{ cm}$ pour que le périmètre de la figure soit supérieur à $${P}\\text{ cm}$.
+            texteCorr += `Comme $\\dfrac{${P - 2 * b - 2 * a}}{4}=${texNombre((P - 2 * b - 2 * a) / 4, 2)}$, $x$ doit être supérieur à $${miseEnEvidence(texNombre((P - 2 * b - 2 * a) / 4, 2))}\\text{ cm}$ pour que le périmètre de la figure soit supérieur à $${P}\\text{ cm}$.
 
              `
             reponse = new FractionEtendue(P - 2 * b - 2 * a, 4).texFraction
@@ -562,13 +563,13 @@ Le problème revient donc à trouver les valeurs de $x$ vérifiant : $${rienSi1(
             x&>\\dfrac{${Aire - a ** 2}}{${texNombre(a + b / 2, 0)}}`
             texteCorr += '\\end{aligned}$<br>'
             if (pgcd(Aire - a ** 2, a + b / 2) === 1) {
-              texteCorr += `$x$ doit être supérieur à $\\dfrac{${Aire - a ** 2}}{${texNombre(a + b / 2, 0)}}\\text{ cm}$ pour que l'aire  de la figure dépasse $${Aire}\\text{ cm}^2$.
+              texteCorr += `$x$ doit être supérieur à $${miseEnEvidence(`\\dfrac{${Aire - a ** 2}}{${texNombre(a + b / 2, 0)}}`)}\\text{ cm}$ pour que l'aire  de la figure dépasse $${Aire}\\text{ cm}^2$.
             `
 
               reponse = new FractionEtendue(Aire - a ** 2, a + b / 2)
                 .texFraction
             } else {
-              texteCorr += `Comme $\\dfrac{${Aire - a ** 2}}{${texNombre(a + b / 2, 0)}}=${f.texFraction}$, $x$ doit être supérieur à $${f.texFraction}\\text{ cm}$ pour que l'aire  de la figure dépasse $${Aire}\\text{ cm}^2$.
+              texteCorr += `Comme $\\dfrac{${Aire - a ** 2}}{${texNombre(a + b / 2, 0)}}=${f.texFraction}$, $x$ doit être supérieur à $${miseEnEvidence(f.texFraction)}\\text{ cm}$ pour que l'aire  de la figure dépasse $${Aire}\\text{ cm}^2$.
              `
               reponse = f.texFraction
             }
@@ -616,7 +617,7 @@ Le problème revient donc à trouver les valeurs de $x$ vérifiant : $${rienSi1(
             texteCorr += ` x &${c * a > 0 ? `${choix[1]}` : `${choix[2]}`}\\dfrac{${res - b * c}}{${texNombre(c * a)}}\\\\`
             texteCorr += '\\end{aligned}$<br>'
             if (pgcd(res - b * c, c * a) === 1) {
-              texteCorr += `On doit choisir $x${c * a > 0 ? `${choix[1]}` : `${choix[2]}`}${f.texFraction}$ pour obtenir un nombre ${choix[0]} à $${res}$. .
+              texteCorr += `On doit choisir $x${c * a > 0 ? `${choix[1]}` : `${choix[2]}`}${miseEnEvidence(f.texFraction)}$ pour obtenir un nombre ${choix[0]} à $${res}$.
             `
               texte += ajouteChampTexteMathLive(
                 this,
@@ -628,7 +629,7 @@ Le problème revient donc à trouver les valeurs de $x$ vérifiant : $${rienSi1(
                 },
               )
             } else {
-              texteCorr += `Comme $\\dfrac{${res - b * c}}{${texNombre(c * a)}}=${f.texFraction}$, on doit choisir $x${c * a > 0 ? `${choix[1]}` : `${choix[2]}`}${f.texFraction}$ pour obtenir un nombre ${choix[0]} à $${res}$.
+              texteCorr += `Comme $\\dfrac{${res - b * c}}{${texNombre(c * a)}}=${f.texFraction}$, on doit choisir $x${c * a > 0 ? `${choix[1]}` : `${choix[2]}`}${miseEnEvidence(f.texFraction)}$ pour obtenir un nombre ${choix[0]} à $${res}$.
              `
               texte += ajouteChampTexteMathLive(
                 this,
@@ -696,11 +697,11 @@ Le problème revient donc à trouver les valeurs de $x$ vérifiant : $${rienSi1(
             }
             texteCorr += '\\end{aligned}$<br>'
             if (pgcd(b * b, a - 2 * b) === 1) {
-              texteCorr += `On doit choisir $x${a - 2 * b > 0 ? `${choix[1]}` : `${choix[2]}`}${f.texFraction}$ pour que le résultat obtenu
+              texteCorr += `On doit choisir $x${a - 2 * b > 0 ? `${choix[1]}` : `${choix[2]}`}${miseEnEvidence(f.texFraction)}$ pour que le résultat obtenu
   avec le programme 1 soit ${choix[0]} à celui obtenu avec le programme 2.
 `
             } else {
-              texteCorr += `Comme $\\dfrac{${b * b}}{${a - 2 * b}}=${f.texFraction}$, on doit choisir $x${a - 2 * b > 0 ? `${choix[1]}` : `${choix[2]}`}${f.texFraction}$ pour que le résultat obtenu
+              texteCorr += `Comme $\\dfrac{${b * b}}{${a - 2 * b}}=${f.texFraction}$, on doit choisir $x${a - 2 * b > 0 ? `${choix[1]}` : `${choix[2]}`}${miseEnEvidence(f.texFraction)}$ pour que le résultat obtenu
   avec le programme 1 soit ${choix[0]} à celui obtenu avec le programme 2.`
             }
             texte += ajouteChampTexteMathLive(

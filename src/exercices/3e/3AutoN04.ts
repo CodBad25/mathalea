@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { nombreEnLettres } from '../../modules/nombreEnLettres'
 import { randint } from '../../modules/outils'
@@ -47,8 +48,8 @@ export default class TiersQuartsEtCinquiemes extends ExerciceSimple {
         : `Combien valent les ${nombreEnLettres(numerateur)} ${nomFraction}${denominateur === 3 ? '' : 's'} de $${nombreADiviser}$ ?`
     this.correction =
       numerateur === 1
-        ? `Le ${nomFraction} de $${nombreADiviser}$ est égal à $${nombreADiviser} \\div ${denominateur} = ${this.reponse}$.`
+        ? `Le ${nomFraction} de $${nombreADiviser}$ est égal à $${nombreADiviser} \\div ${denominateur} = ${miseEnEvidence(String(this.reponse))}$.`
         : `Un ${nomFraction} de $${nombreADiviser}$ est égal à $${nombreADiviser} \\div ${denominateur}$, soit ${nombreADiviser / denominateur}.<br>
-        Donc les ${nombreEnLettres(numerateur)} ${nomFraction}s de $${nombreADiviser}$ valent $${numerateur} \\times ${nombreADiviser / denominateur} = ${this.reponse}$.`
+        Donc les ${nombreEnLettres(numerateur)} ${nomFraction}s de $${nombreADiviser}$ valent $${numerateur} \\times ${nombreADiviser / denominateur} = ${miseEnEvidence(String(this.reponse))}$.`
   }
 }

@@ -61,9 +61,9 @@ modification régénère le code et l'enregistre dans l'URL, sans compiler.
 | Habillage | `Coopmaths`, `Classique`, `ProfMaquette`, `ProfMaquette + QR-code`, `Course aux nombres` |
 | Type de fiche, titres des exercices, QR-code | ProfMaquette seulement |
 | Durée de l'épreuve | Course aux nombres seulement |
-| Colonnes de la fiche | `multicols` autour du contenu d'une version |
+| Colonnes de la fiche | `multicols` autour du contenu d'une version, avec `\raggedcolumns` et `\mathaleaFitPictures` (figures TikZ réduites à la largeur de la colonne, titres pgfplots renvoyés à la ligne) |
 | Noir et blanc | `\selectcolormodel{gray}` |
-| Marges | `\geometry{...}` en fin de préambule |
+| Marges | `\geometry{...}` en fin de préambule ; le cadre des corrections (`\tikzfootMA`) est redessiné à mi-marge |
 | Titre, sous-titre, référence | En-tête de la fiche |
 | Correction | Émission du bloc `Correction` |
 | Identifiant des exercices | `withReferences` |

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -38,12 +39,12 @@ export default class DecimalVersFraction extends ExerciceSimple {
       case 1: // division par 10
         d = a / 10
         maFraction = new FractionEtendue(a, 10)
-        this.correction = `$${texNombre(d, 1)}=\\dfrac{${texNombre(d * 10, 0)}}{10}${maFraction.texSimplificationAvecEtapes(true, orangeMathalea)}$ `
+        this.correction = `$${texNombre(d, 1)}=${maFraction.estIrreductible ? miseEnEvidence(`\\dfrac{${texNombre(d * 10, 0)}}{10}`) : `\\dfrac{${texNombre(d * 10, 0)}}{10}`}${maFraction.texSimplificationAvecEtapes(true, orangeMathalea)}$ `
         break
       case 2: // division par 100
         d = a / 100
         maFraction = new FractionEtendue(a, 100)
-        this.correction = `$${texNombre(d, 2)}=\\dfrac{${texNombre(d * 100, 2)}}{100}${maFraction.texSimplificationAvecEtapes(true, orangeMathalea)}$ `
+        this.correction = `$${texNombre(d, 2)}=${maFraction.estIrreductible ? miseEnEvidence(`\\dfrac{${texNombre(d * 100, 2)}}{100}`) : `\\dfrac{${texNombre(d * 100, 2)}}{100}`}${maFraction.texSimplificationAvecEtapes(true, orangeMathalea)}$ `
         break
 
       case 3: // division par 1000
@@ -54,7 +55,7 @@ export default class DecimalVersFraction extends ExerciceSimple {
         ])
         d = a / 1000
         maFraction = new FractionEtendue(a, 1000)
-        this.correction = `$${texNombre(d, 3)}=\\dfrac{${texNombre(d * 1000, 3)}}{1000}${maFraction.texSimplificationAvecEtapes(true, orangeMathalea)}$ `
+        this.correction = `$${texNombre(d, 3)}=${maFraction.estIrreductible ? miseEnEvidence(`\\dfrac{${texNombre(d * 1000, 3)}}{1000}`) : `\\dfrac{${texNombre(d * 1000, 3)}}{1000}`}${maFraction.texSimplificationAvecEtapes(true, orangeMathalea)}$ `
         break
     }
     if (this.interactif)

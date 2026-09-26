@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -94,8 +95,8 @@ export default class ÉcrireNombresEntiersFormates extends Exercice {
           texteAvant: '$=$',
         })
       if (context.vue !== 'diap')
-        texteCorr = `$${nombrestring}$ s'écrit plus lisiblement $${texNombre(nombre, 0)}$.`
-      else texteCorr = `${texNombre(nombre, 0)}`
+        texteCorr = `$${nombrestring}$ s'écrit plus lisiblement $${miseEnEvidence(texNombre(nombre, 0))}$.`
+      else texteCorr = `$${miseEnEvidence(texNombre(nombre, 0))}$`
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte + '<br>',

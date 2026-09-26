@@ -32,7 +32,7 @@ export default class NomExercice extends ExerciceSimple {
       const b = this.quotaChoice('b', [19, 29])
       this.reponse = a - b
       this.question = `$${a}-${b}$ `
-      this.correction = `$${a}-${b}=${a}-${b + 1}+1=${a - b}$`
+      this.correction = `$${a}-${b}=${a}-${b + 1}+1=${miseEnEvidence(a - b)}$`
     }
 
     if (this.interactif) {

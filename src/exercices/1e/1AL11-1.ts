@@ -7,7 +7,10 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -57,8 +60,8 @@ export default class ReconnaitreSuites extends Exercice {
         const reponseSA = `La suite $(${NomS}_n)$ est arithmétique de raison `
         const reponseSG = `La suite $(${NomS}_n)$ est géométrique de raison `
         const reponseNiNi = `La suite $(${NomS}_n)$ n'est ni arithmétique, ni géométrique. `
-        const NiNi = `$${NomS}_{1}-${NomS}_{0}\\neq ${NomS}_{2}-${NomS}_{1}$ donc la suite ${texteEnCouleur("n'est pas arithmétque")}.<br>
-          $\\dfrac{${NomS}_{1}}{${NomS}_{0}}\\neq \\dfrac{${NomS}_{2}}{${NomS}_{1}}$ donc la suite ${texteEnCouleur("n'est pas géométrique")}.`
+        const NiNi = `$${NomS}_{1}-${NomS}_{0}\\neq ${NomS}_{2}-${NomS}_{1}$ donc la suite ${texteEnCouleurEtGras("n'est pas arithmétique")}.<br>
+          $\\dfrac{${NomS}_{1}}{${NomS}_{0}}\\neq \\dfrac{${NomS}_{2}}{${NomS}_{1}}$ donc la suite ${texteEnCouleurEtGras("n'est pas géométrique")}.`
         switch (typeDeQuestion) {
           case 1: // SA
             switch (randint(1, 3)) {
@@ -113,7 +116,7 @@ export default class ReconnaitreSuites extends Exercice {
             }
             texteCorr =
               texteCorr +
-              `<br> ${texteEnCouleur(`$(${NomS}_n)$ est une suite arithmétique de raison $${r}$`)}.`
+              `<br> $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('arithmétique')} de raison $${miseEnEvidence(r)}$.`
             break
 
           case 2: // SG
@@ -177,7 +180,7 @@ export default class ReconnaitreSuites extends Exercice {
             }
             texteCorr =
               texteCorr +
-              `<br> ${texteEnCouleur(`$(${NomS}_n)$ est une suite géométrique de raison $${texNombre(q, 2)}$`)}.`
+              `<br> $(${NomS}_n)$ est une suite ${texteEnCouleurEtGras('géométrique')} de raison $${miseEnEvidence(texNombre(q, 2))}$.`
             break
 
           default: // NiNi

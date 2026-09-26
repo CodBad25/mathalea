@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer et utiliser un agrandissement/réduction'
@@ -37,7 +38,7 @@ export default class AgrandissementReduction extends ExerciceSimple {
         `
 
         this.reponse = a * a
-        this.correction = ` Si les longueurs sont multiplées par $k$, les aires sont multipliées par $k^2$, soit ici par $${a}^2=${a ** 2}$.<br>
+        this.correction = ` Si les longueurs sont multiplées par $k$, les aires sont multipliées par $k^2$, soit ici par $${a}^2=${miseEnEvidence(a ** 2)}$.<br>
         `
         break
       case 'b':
@@ -49,7 +50,7 @@ export default class AgrandissementReduction extends ExerciceSimple {
         `
 
         this.reponse = a
-        this.correction = ` Si les aires sont multiplées par $k$, les longueurs sont multipliées par $\\sqrt{k}$, soit ici par $\\sqrt{${b}}=${a}$.<br>
+        this.correction = ` Si les aires sont multiplées par $k$, les longueurs sont multipliées par $\\sqrt{k}$, soit ici par $\\sqrt{${b}}=${miseEnEvidence(a)}$.<br>
         `
         break
       case 'c':
@@ -62,7 +63,7 @@ export default class AgrandissementReduction extends ExerciceSimple {
         this.optionsChampTexte = { texteApres: '$\\text{ cm}^2$' }
         this.reponse = a * c * c
         this.correction = ` Si les longueurs sont multiplées par $k$, les aires sont multipliées par $k^2$, soit ici par $${c}^2=${c ** 2}$.<br>
-            Ainsi, l'aire du nouveau rectangle est : $${a}\\times ${c * c}=${a * c * c}\\text{ cm}^2$.
+            Ainsi, l'aire du nouveau rectangle est : $${a}\\times ${c * c}=${miseEnEvidence(a * c * c)}\\text{ cm}^2$.
     `
         break
     }

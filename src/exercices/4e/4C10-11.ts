@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
@@ -153,7 +154,7 @@ export default class ValeurApprocheeQuotientRelatif extends Exercice {
                   ) + '.'
                 : ':') +
               '<br>',
-            texteCorr: ligne + `$${reponse}$.<br>`,
+            texteCorr: ligne + `$${miseEnEvidence(reponse)}$.<br>`,
           })
           handleAnswers(
             this,

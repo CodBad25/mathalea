@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { cercle } from '../../../lib/2d/cercle'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -214,7 +215,7 @@ export default class Can2026CE1Q18 extends ExerciceCan {
 
     this.correction =
       monQcm.texteCorr +
-      `La pendule ${positionCorrecte} indique ${heureAffichage}.`
+      `La ${texteEnCouleurEtGras(`pendule ${positionCorrecte}`)} indique ${heureAffichage}.`
     this.canReponseACompleter = monQcm.texte
   }
 

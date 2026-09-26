@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -46,10 +47,10 @@ export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {
 
         if (choice([true, false])) {
           this.question = `Calculer $\\dfrac{${b}}{100}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}$ sous forme décimale. `
-          this.correction = `$\\dfrac{${b}}{100}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${texNombre(b / 100)}+${texNombre(a / 10)}+${texNombre(c / 1000)}=${texNombre(a / 10 + b / 100 + c / 1000)}$`
+          this.correction = `$\\dfrac{${b}}{100}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${texNombre(b / 100)}+${texNombre(a / 10)}+${texNombre(c / 1000)}=${miseEnEvidence(texNombre(a / 10 + b / 100 + c / 1000))}$`
         } else {
           this.question = `Calculer $\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}+\\dfrac{${b}}{100}$ sous forme décimale. `
-          this.correction = `$\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}+\\dfrac{${b}}{100}=${texNombre(c / 1000)}+${texNombre(a / 10)}+${texNombre(b / 100)}=${texNombre(a / 10 + b / 100 + c / 1000)}$`
+          this.correction = `$\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}+\\dfrac{${b}}{100}=${texNombre(c / 1000)}+${texNombre(a / 10)}+${texNombre(b / 100)}=${miseEnEvidence(texNombre(a / 10 + b / 100 + c / 1000))}$`
         }
         break
       case 'b':
@@ -64,10 +65,10 @@ export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {
 
         if (choice([true, false])) {
           this.question = `Calculer  $${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}$ sous forme décimale. `
-          this.correction = `$${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${u}+${texNombre(a / 10)}+${texNombre(c / 1000)}=${texNombre(u + a / 10 + c / 1000)}$`
+          this.correction = `$${u}+\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${u}+${texNombre(a / 10)}+${texNombre(c / 1000)}=${miseEnEvidence(texNombre(u + a / 10 + c / 1000))}$`
         } else {
           this.question = `Calculer  $${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}$ sous forme décimale. `
-          this.correction = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}=${u}+${texNombre(c / 1000)}+${texNombre(a / 10)}=${texNombre(u + a / 10 + c / 1000)}$
+          this.correction = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}=${u}+${texNombre(c / 1000)}+${texNombre(a / 10)}=${miseEnEvidence(texNombre(u + a / 10 + c / 1000))}$
          `
         }
         break
@@ -83,10 +84,10 @@ export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {
 
         if (choice([true, false])) {
           this.question = `Calculer  $${u}+\\dfrac{${b}}{100}+\\dfrac{${c}}{1000}$ sous forme décimale. `
-          this.correction = `$${u}+\\dfrac{${b}}{100}+\\dfrac{${c}}{1000}=${u}+${texNombre(b / 100)}+${texNombre(c / 1000)}=${texNombre(u + b / 100 + c / 1000)}$`
+          this.correction = `$${u}+\\dfrac{${b}}{100}+\\dfrac{${c}}{1000}=${u}+${texNombre(b / 100)}+${texNombre(c / 1000)}=${miseEnEvidence(texNombre(u + b / 100 + c / 1000))}$`
         } else {
           this.question = `Calculer  $${u}+\\dfrac{${c}}{1000}+\\dfrac{${b}}{100}$ sous forme décimale. `
-          this.correction = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${b}}{100}=${u}+${texNombre(c / 1000)}+${texNombre(b / 100)}=${texNombre(u + b / 100 + c / 1000)}$`
+          this.correction = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${b}}{100}=${u}+${texNombre(c / 1000)}+${texNombre(b / 100)}=${miseEnEvidence(texNombre(u + b / 100 + c / 1000))}$`
         }
         break
       case 'd':
@@ -98,10 +99,10 @@ export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {
 
         if (choice([true, false])) {
           this.question = `Calculer  $\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}$ sous forme décimale. `
-          this.correction = `$\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${texNombre(a / 10)}+${texNombre(c / 1000)}=${texNombre(a / 10 + c / 1000)}$`
+          this.correction = `$\\dfrac{${a}}{10}+\\dfrac{${c}}{1000}=${texNombre(a / 10)}+${texNombre(c / 1000)}=${miseEnEvidence(texNombre(a / 10 + c / 1000))}$`
         } else {
           this.question = `Calculer $\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}$ sous forme décimale. `
-          this.correction = `$\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}=${texNombre(c / 1000)}+${texNombre(a / 10)}=${texNombre(a / 10 + c / 1000)}$`
+          this.correction = `$\\dfrac{${c}}{1000}+\\dfrac{${a}}{10}=${texNombre(c / 1000)}+${texNombre(a / 10)}=${miseEnEvidence(texNombre(a / 10 + c / 1000))}$`
         }
         break
       case 'e':
@@ -117,10 +118,10 @@ export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {
 
         if (choice([true, false])) {
           this.question = `Calculer  $${u}+\\dfrac{${b}}{100}+\\dfrac{${c}}{1000}$ sous forme décimale. `
-          this.correction = `$${u}+\\dfrac{${b}}{100}+\\dfrac{${c}}{1000}=${u}+${texNombre(b / 100)}+${texNombre(c / 1000)}=${texNombre(u + b / 100 + c / 1000)}$`
+          this.correction = `$${u}+\\dfrac{${b}}{100}+\\dfrac{${c}}{1000}=${u}+${texNombre(b / 100)}+${texNombre(c / 1000)}=${miseEnEvidence(texNombre(u + b / 100 + c / 1000))}$`
         } else {
           this.question = `Calculer  $${u}+\\dfrac{${c}}{1000}+\\dfrac{${b}}{100}$ sous forme décimale. `
-          this.correction = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${b}}{100}=${u}+${texNombre(c / 1000)}+${texNombre(b / 100)}=${texNombre(u + b / 100 + c / 1000)}$`
+          this.correction = `$${u}+\\dfrac{${c}}{1000}+\\dfrac{${b}}{100}=${u}+${texNombre(c / 1000)}+${texNombre(b / 100)}=${miseEnEvidence(texNombre(u + b / 100 + c / 1000))}$`
         }
         break
     }

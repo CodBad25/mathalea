@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -50,7 +51,7 @@ export default class CalculAvecUnite extends ExerciceSimple {
           this.correction = `$${a}\\text{ ${prefixes[k]}${unite} }=${a * 10}\\text{ ${prefixes[k + 1]}${unite} }$<br>
         Ainsi, $${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 1]}${unite} }
         = ${a * 10}\\text{ ${prefixes[k + 1]}${unite}}+${b}\\text{ ${prefixes[k + 1]}${unite} }
-        = ${a * 10 + b}\\text{ ${prefixes[k + 1]}${unite}}$.`
+        = ${miseEnEvidence(a * 10 + b)}\\text{ ${prefixes[k + 1]}${unite}}$.`
           this.canEnonce = 'Compléter. '
           this.canReponseACompleter = `$${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 1]}${unite} }= \\ldots \\text{ ${prefixes[k + 1]}${unite}}$`
         } else {
@@ -63,7 +64,7 @@ export default class CalculAvecUnite extends ExerciceSimple {
           this.correction = `$${b}\\text{ ${prefixes[k + 1]}${unite} }=${texNombre(b / 10, 1)}\\text{ ${prefixes[k]}${unite} }$<br>
         Ainsi, $${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 1]}${unite} }
         = ${a}\\text{ ${prefixes[k]}${unite}}+${texNombre(b / 10, 1)}\\text{ ${prefixes[k]}${unite} }
-        = ${texNombre(a + b / 10, 1)}\\text{ ${prefixes[k]}${unite}}$.`
+        = ${miseEnEvidence(texNombre(a + b / 10, 1))}\\text{ ${prefixes[k]}${unite}}$.`
           this.canEnonce = 'Compléter. '
           this.canReponseACompleter = `$${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 1]}${unite} }= \\ldots \\text{ ${prefixes[k]}${unite}}$`
         }
@@ -81,7 +82,7 @@ export default class CalculAvecUnite extends ExerciceSimple {
           this.correction = `$${a}\\text{ ${prefixes[k]}${unite} }=${a * 100}\\text{ ${prefixes[k + 2]}${unite} }$<br>
             Ainsi, $${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 2]}${unite} }
             = ${a * 100}\\text{ ${prefixes[k + 2]}${unite}}+${b}\\text{ ${prefixes[k + 2]}${unite} }
-            = ${a * 100 + b}\\text{ ${prefixes[k + 2]}${unite}}$.`
+            = ${miseEnEvidence(a * 100 + b)}\\text{ ${prefixes[k + 2]}${unite}}$.`
           this.canEnonce = 'Compléter. '
           this.canReponseACompleter = `$${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 2]}${unite} }= \\ldots \\text{ ${prefixes[k + 2]}${unite}}$`
         } else {
@@ -94,7 +95,7 @@ export default class CalculAvecUnite extends ExerciceSimple {
           this.correction = `$${b}\\text{ ${prefixes[k + 2]}${unite} }=${texNombre(b / 100, 2)}\\text{ ${prefixes[k]}${unite} }$<br>
             Ainsi, $${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 2]}${unite} }
             = ${a}\\text{ ${prefixes[k]}${unite}}+${texNombre(b / 100, 2)}\\text{ ${prefixes[k]}${unite} }
-            = ${texNombre(a + b / 100, 2)}\\text{ ${prefixes[k]}${unite}}$.`
+            = ${miseEnEvidence(texNombre(a + b / 100, 2))}\\text{ ${prefixes[k]}${unite}}$.`
           this.canEnonce = 'Compléter. '
           this.canReponseACompleter = `$${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 2]}${unite} }= \\ldots \\text{ ${prefixes[k]}${unite}}$`
         }
@@ -112,7 +113,7 @@ export default class CalculAvecUnite extends ExerciceSimple {
           this.correction = `$${a}\\text{ ${prefixes[k]}${unite} }=${texNombre(a * 1000)}\\text{ ${prefixes[k + 3]}${unite} }$<br>
                 Ainsi, $${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 3]}${unite} }
                 = ${texNombre(a * 1000)}\\text{ ${prefixes[k + 3]}${unite}}+${b}\\text{ ${prefixes[k + 3]}${unite} }
-                = ${texNombre(a * 1000 + b)}\\text{ ${prefixes[k + 3]}${unite}}$.`
+                = ${miseEnEvidence(texNombre(a * 1000 + b))}\\text{ ${prefixes[k + 3]}${unite}}$.`
           this.canEnonce = 'Compléter. '
           this.canReponseACompleter = `$${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 3]}${unite} }= \\ldots \\text{ ${prefixes[k + 3]}${unite}}$`
         } else {
@@ -125,7 +126,7 @@ export default class CalculAvecUnite extends ExerciceSimple {
           this.correction = `$${b}\\text{ ${prefixes[k + 3]}${unite} }=${texNombre(b / 1000, 3)}\\text{ ${prefixes[k]}${unite} }$<br>
                 Ainsi, $${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 3]}${unite} }
                 = ${a}\\text{ ${prefixes[k]}${unite}}+${texNombre(b / 1000, 3)}\\text{ ${prefixes[k]}${unite} }
-                = ${texNombre(a + b / 1000, 3)}\\text{ ${prefixes[k]}${unite}}$.`
+                = ${miseEnEvidence(texNombre(a + b / 1000, 3))}\\text{ ${prefixes[k]}${unite}}$.`
           this.canEnonce = 'Compléter. '
           this.canReponseACompleter = `$${a}\\text{ ${prefixes[k]}${unite}}+${b}\\text{ ${prefixes[k + 3]}${unite} }= \\ldots \\text{ ${prefixes[k]}${unite}}$`
         }

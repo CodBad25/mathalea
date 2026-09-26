@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
@@ -41,7 +42,7 @@ export default class ProportionnaliteExpressionAlgebrique extends ExerciceSimple
       `
     this.correction = `Comme ${sp(1)} $${reduireAxPlusB(n * a, n * b)}=${n}\\times (${reduireAxPlusB(a, b)})$, <br>
      alors${sp(1)}
-      $${reduireAxPlusB(n * a, n * b)}=${n}\\times ${ecritureParentheseSiNegatif(c)}=${n * c}$`
+      $${reduireAxPlusB(n * a, n * b)}=${n}\\times ${ecritureParentheseSiNegatif(c)}=${miseEnEvidence(n * c)}$`
 
     this.reponse = n * c
   }

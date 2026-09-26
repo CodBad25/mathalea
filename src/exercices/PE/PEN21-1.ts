@@ -62,7 +62,7 @@ export default class PasserDeLaBase12Ou16ALaBase10 extends Exercice {
         "Les symboles que l'on utilise en base 16 sont les dix chiffres habituels, la lettre A pour désigner 10 unités, B pour 11 unités, C pour 12 unités, D pour 13 unités, "
       this.introduction += 'E pour 14 unités et F pour 15 unités.'
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let [n, m, chiffre1, chiffre2, chiffre3, chiffre4] = [
@@ -165,13 +165,13 @@ export default class PasserDeLaBase12Ou16ALaBase10 extends Exercice {
               ])
           }
           texte = `Les nombre $(${n})_{${b}}$ et $(${m})_{${b}}$ sont écrits en base ${b}. Donner leur écriture en base 10.`
-          texteCorr = `$(${n})_{${b}}=${valeurBase(n.toString()[0])}\\times${b}+${valeurBase(n.toString()[1])}=${texNombre(parseInt(n, b))}$`
+          texteCorr = `$(${n})_{${b}}=${valeurBase(n.toString()[0])}\\times${b}+${valeurBase(n.toString()[1])}=${miseEnEvidence(texNombre(parseInt(n, b)))}$`
           if (b === 12) {
             // m est un nombre à 4 chiffres
-            texteCorr += `<br>$(${m})_{${b}}=${valeurBase(m.toString()[0])}\\times${b}^3+${valeurBase(m.toString()[1])}\\times${b}^2+${valeurBase(m.toString()[2])}\\times${b}+${valeurBase(m.toString()[3])}=${texNombre(parseInt(m, b))}$`
+            texteCorr += `<br>$(${m})_{${b}}=${valeurBase(m.toString()[0])}\\times${b}^3+${valeurBase(m.toString()[1])}\\times${b}^2+${valeurBase(m.toString()[2])}\\times${b}+${valeurBase(m.toString()[3])}=${miseEnEvidence(texNombre(parseInt(m, b)))}$`
           } else {
             // m est un nombre à 3 chiffres
-            texteCorr += `<br>$(${m})_{${b}}=${valeurBase(m.toString()[0])}\\times${b}^2+${valeurBase(m.toString()[1])}\\times${b}+${valeurBase(m.toString()[2])}=${texNombre(parseInt(m, b))}$`
+            texteCorr += `<br>$(${m})_{${b}}=${valeurBase(m.toString()[0])}\\times${b}^2+${valeurBase(m.toString()[1])}\\times${b}+${valeurBase(m.toString()[2])}=${miseEnEvidence(texNombre(parseInt(m, b)))}$`
           }
           break
         case 'vers_base_n_3_chiffres':
@@ -343,11 +343,11 @@ export default class PasserDeLaBase12Ou16ALaBase10 extends Exercice {
           if (b === 12) {
             texteCorr = `En base ${b} le plus grand chiffre est $B$`
             texteCorr += ` donc le plus grand nombre à 4 chiffres est $(BBBB)_{${b}}$ et son successeur immédiat est $(10000)_{${b}}$.`
-            texteCorr += `<br> $(10000)_{${b}}=1\\times${b}^4=${texNombre(b ** 4)}$ donc $(BBBB)_{${b}}=${b ** 4}-1=${texNombre(b ** 4 - 1)}$.`
+            texteCorr += `<br> $(10000)_{${b}}=1\\times${b}^4=${texNombre(b ** 4)}$ donc $(BBBB)_{${b}}=${b ** 4}-1=${miseEnEvidence(texNombre(b ** 4 - 1))}$.`
           } else {
             texteCorr = `En base ${b} le plus grand chiffre est $F$`
             texteCorr += ` donc le plus grand nombre à 4 chiffres est $(FFFF)_{${b}}$ et son successeur immédiat est $(10000)_{${b}}$.`
-            texteCorr += `<br> $(10000)_{${b}}=1\\times${b}^4=${texNombre(b ** 4)}$ donc $(FFFF)_{${b}}=${b ** 4}-1=${texNombre(b ** 4 - 1)}$.`
+            texteCorr += `<br> $(10000)_{${b}}=1\\times${b}^4=${texNombre(b ** 4)}$ donc $(FFFF)_{${b}}=${b ** 4}-1=${miseEnEvidence(texNombre(b ** 4 - 1))}$.`
           }
           break
         case 'plus_grand_3_chiffres':
@@ -356,11 +356,11 @@ export default class PasserDeLaBase12Ou16ALaBase10 extends Exercice {
           if (b === 12) {
             texteCorr = `En base ${b} le plus grand chiffre est $B$`
             texteCorr += ` donc le plus grand nombre à 3 chiffres est $(BBB)_{${b}}$ et son successeur immédiat est $(1000)_{${b}}$.`
-            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(BBB)_{${b}}=${b ** 3}-1=${texNombre(b ** 3 - 1)}$.`
+            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(BBB)_{${b}}=${b ** 3}-1=${miseEnEvidence(texNombre(b ** 3 - 1))}$.`
           } else {
             texteCorr = `En base ${b} le plus grand chiffre est $F$`
             texteCorr += ` donc le plus grand nombre à 3 chiffres est $(FFF)_{${b}}$ et son successeur immédiat est $(1000)_{${b}}$.`
-            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(FFF)_{${b}}=${b ** 3}-1=${texNombre(b ** 3 - 1)}$.`
+            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(FFF)_{${b}}=${b ** 3}-1=${miseEnEvidence(texNombre(b ** 3 - 1))}$.`
           }
           break
         case 'plus_petit_4_chiffres':
@@ -369,11 +369,11 @@ export default class PasserDeLaBase12Ou16ALaBase10 extends Exercice {
           if (b === 12) {
             texteCorr = `En base ${b} le plus petit chiffre est $0$ et le plus grand chiffre est $B$`
             texteCorr += ` donc le plus petit nombre à 4 chiffres est $(1000)_{${b}}$ et son prédécesseur immédiat est $(BBB)_{${b}}$.`
-            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(BBB)_{${b}}=${b ** 3}-1=${texNombre(b ** 3 - 1)}$.`
+            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(BBB)_{${b}}=${b ** 3}-1=${miseEnEvidence(texNombre(b ** 3 - 1))}$.`
           } else {
             texteCorr = `En base ${b} le plus petit chiffre est $0$ et le plus grand chiffre est $F$`
             texteCorr += ` donc le plus petit nombre à 4 chiffres est $(1000)_{${b}}$ et son prédécesseur immédiat est $(FFF)_{${b}}$.`
-            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(FFF)_{${b}}=${b ** 3}-1=${texNombre(b ** 3 - 1)}$.`
+            texteCorr += `<br> $(1000)_{${b}}=1\\times${b}^3=${texNombre(b ** 3)}$ donc $(FFF)_{${b}}=${b ** 3}-1=${miseEnEvidence(texNombre(b ** 3 - 1))}$.`
           }
           break
         case 'plus_petit_3_chiffres':
@@ -382,11 +382,11 @@ export default class PasserDeLaBase12Ou16ALaBase10 extends Exercice {
           if (b === 12) {
             texteCorr = `En base ${b} le plus petit chiffre est $0$ et le plus grand chiffre est $B$`
             texteCorr += ` donc le plus petit nombre à 3 chiffres est $(100)_{${b}}$ et son prédécesseur immédiat est $(BB)_{${b}}$.`
-            texteCorr += `<br> $(100)_{${b}}=1\\times${b}^2=${texNombre(b ** 2)}$ donc $(BB)_{${b}}=${b ** 2}-1=${texNombre(b ** 2 - 1)}$.`
+            texteCorr += `<br> $(100)_{${b}}=1\\times${b}^2=${texNombre(b ** 2)}$ donc $(BB)_{${b}}=${b ** 2}-1=${miseEnEvidence(texNombre(b ** 2 - 1))}$.`
           } else {
             texteCorr = `En base ${b} le plus petit chiffre est $0$ et le plus grand chiffre est $F$`
             texteCorr += ` donc le plus petit nombre à 3 chiffres est $(100)_{${b}}$ et son prédécesseur immédiat est $(FF)_{${b}}$.`
-            texteCorr += `<br> $(100)_{${b}}=1\\times${b}^2=${texNombre(b ** 2)}$ donc $(FF)_{${b}}=${b ** 2}-1=${texNombre(b ** 2 - 1)}$.`
+            texteCorr += `<br> $(100)_{${b}}=1\\times${b}^2=${texNombre(b ** 2)}$ donc $(FF)_{${b}}=${b ** 2}-1=${miseEnEvidence(texNombre(b ** 2 - 1))}$.`
           }
           break
       }

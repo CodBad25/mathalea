@@ -106,7 +106,7 @@ export function simplificationDeFractionAvecEtapes(
 ): string {
   let result = '='
   if (num === 0) {
-    return '=0'
+    return colorisationResultat ? `=${miseEnEvidence(0, couleur2)}` : '=0'
   }
   const signe = num * den < 0 ? '-' : ''
   const numAbs = Math.abs(num)

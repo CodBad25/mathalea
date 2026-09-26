@@ -35,7 +35,11 @@ function generate(exercice: IExercice, isHtml: boolean, isAmc: boolean) {
 }
 
 function qcmSignature(item: any) {
-  return (item?.propositions ?? [])
+  const qcmBlock = item?.propositions?.find(
+    (proposition: any) =>
+      proposition?.type === 'qcmMono' || proposition?.type === 'qcmMult',
+  )
+  return (qcmBlock?.propositions ?? item?.propositions ?? [])
     .map((proposition: any) => ({
       texte: String(proposition?.texte ?? ''),
       statut: Boolean(proposition?.statut),

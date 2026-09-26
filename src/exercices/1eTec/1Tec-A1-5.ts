@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
@@ -34,7 +35,7 @@ export default class Proportion extends ExerciceSimple {
     const a = c * d
     this.question = `Calculer  $\\dfrac{${b}}{${c}}$ de $${a}$.  <br> `
     this.correction = `Calculer la fraction d'un nombre, c'est multiplier la fraction par ce nombre.
-<br><br>    Ainsi, $\\dfrac{${b}}{${c}}$  de $${a}$ est égal à $\\dfrac{${b}}{${c}}\\times ${a}=\\dfrac{${b}\\times${a}}{${c}}=\\dfrac{${b}\\times${c}\\times${d}}{${c}}=${texNombre(b * d)}$.`
+<br><br>    Ainsi, $\\dfrac{${b}}{${c}}$  de $${a}$ est égal à $\\dfrac{${b}}{${c}}\\times ${a}=\\dfrac{${b}\\times${a}}{${c}}=\\dfrac{${b}\\times${c}\\times${d}}{${c}}=${miseEnEvidence(texNombre(b * d))}$.`
     this.reponse = d * b
   }
 }

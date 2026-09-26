@@ -25,7 +25,7 @@ export const dateDePublication = '15/09/2021'
 export const uuid = '53034'
 
 export const refs = {
-  'fr-fr': ['can6C24', '6N2B-flash1'],
+  'fr-fr': ['can6C24'],
   'fr-ch': ['9NO1G-6'],
 }
 export default class MultiplierParPuissanceDixNeg extends ExerciceSimple {

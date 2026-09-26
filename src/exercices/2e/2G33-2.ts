@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -139,15 +140,15 @@ export default class PositionsDeDroites extends Exercice {
         texteCorr +=
           '<br>On observe que le déterminant est non nul. <br>Les vecteurs directeurs des deux droites ne sont donc pas colinéaires.'
         texteCorr +=
-          "<br>Les droites $(d)$ et $(d')$ ne sont donc pas parallèles."
+          `<br>Les droites $(d)$ et $(d')$ ${texteEnCouleurEtGras('ne sont donc pas parallèles')}.`
       } else {
         texteCorr +=
           '<br>On observe que le déterminant est nul. <br>Les vecteurs directeurs des deux droites sont donc colinéaires.'
-        texteCorr += "<br>Les droites $(d)$ et $(d')$ sont alors parallèles."
+        texteCorr += `<br>Les droites $(d)$ et $(d')$ ${texteEnCouleurEtGras('sont alors parallèles')}.`
       }
       if (a1 * b2 === a2 * b1 && a1 * c1 === a2 * c2 && b1 * c2 === b2 * c1) {
         texteCorr +=
-          "On observe même que dans cette situation, les équations étant multiples l'une de l'autre, les deux droites sont confondues."
+          `On observe même que dans cette situation, les équations étant multiples l'une de l'autre, les deux droites ${texteEnCouleurEtGras('sont confondues')}.`
       }
 
       if (this.questionJamaisPosee(i, a1, b1, c1, b2, c2, a2, k)) {

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -37,7 +38,7 @@ export default class ComplementAuDixiemeOuALaDizaine extends ExerciceSimple {
       b = Math.ceil(a)
       this.reponse = arrondi(b - a)
       this.question = `Compléter : $${texNombre(a)}+\\dots=${b}$`
-      this.correction = `On doit compléter les dixièmes du nombre $${texNombre(a)}$ pour obtenir une unité de plus.<br>Il faut donc ajouter $${texNombre(this.reponse)}$.`
+      this.correction = `On doit compléter les dixièmes du nombre $${texNombre(a)}$ pour obtenir une unité de plus.<br>Il faut donc ajouter $${miseEnEvidence(texNombre(this.reponse))}$.`
       this.canEnonce = 'Compléter.'
       this.canReponseACompleter = `$${texNombre(a)}+\\dots=${b}$`
     } else {
@@ -45,7 +46,7 @@ export default class ComplementAuDixiemeOuALaDizaine extends ExerciceSimple {
       b = Math.ceil(a / 10) * 10
       this.reponse = b - a
       this.question = `Compléter : $${a}+\\dots=${b}$`
-      this.correction = `On doit compléter les unités du nombre $${a}$ pour obtenir une dizaine de plus.<br>Il faut donc ajouter $${this.reponse}$.`
+      this.correction = `On doit compléter les unités du nombre $${a}$ pour obtenir une dizaine de plus.<br>Il faut donc ajouter $${miseEnEvidence(this.reponse)}$.`
       this.canEnonce = 'Compléter.'
       this.canReponseACompleter = `$${a}+\\dots=${b}$`
     }

@@ -31,6 +31,11 @@ handleAnswers(
 )
 ```
 
+> **Règle impérative :** une question doit toujours rapporter le même nombre de
+> points, quel que soit le tirage. Si le nombre de champs varie, fixez le total
+> avec un `bareme` (voir
+> [un nombre de points fixe par question](../interactivite-simple.md#règle-impérative--un-nombre-de-points-fixe-par-question)).
+
 Depuis `src/exercices/6e/`, les imports commencent souvent par `../../lib/...`. Depuis `src/exercices/can/6e/`, ils commencent plutôt par `../../../lib/...`.
 
 # liste des éléments interactifs

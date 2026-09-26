@@ -44,10 +44,10 @@ export default class EgaliteFG18 extends Exercice {
         ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/mirzakhani-portrait.jpg" alt="Portrait de Maryam Mirzakhani" style="width:130px; height:auto; border-radius:9999px; border:3px solid #f15929;"><p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Maryam Mirzakhani (1977-2017) — Source : Florian Caullery — Wikimedia Commons — CC BY-SA 3.0</p></div>'
         : '') +
       '<br>Maryam Mirzakhani (1977-2017), mathématicienne iranienne, est la première femme à avoir reçu la médaille Fields, en 2014.<br>'
-    const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0; font-size:0.85rem;">
+    const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0; font-size:0.85rem; text-align:center;">
       <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de prix Nobel<br>de 1901 à 2024</th><th style="border: 1px solid #888; padding: 4px 10px;">Nombre de médailles Fields<br>de 1936 à 2024</th></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Femmes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">65</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">2</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Hommes</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">915</td><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">62</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Femmes</td><td align="center" style="border: 1px solid #888; padding: 4px 10px; text-align:center;">65</td><td align="center" style="border: 1px solid #888; padding: 4px 10px; text-align:center;">2</td></tr>
+      <tr><td style="border: 1px solid #888; padding: 4px 10px; text-align:center;">Hommes</td><td align="center" style="border: 1px solid #888; padding: 4px 10px; text-align:center;">915</td><td align="center" style="border: 1px solid #888; padding: 4px 10px; text-align:center;">62</td></tr>
       </table>
       <p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Source : Wikipedia</p>`
     const tableauLatex =
@@ -116,7 +116,7 @@ export default class EgaliteFG18 extends Exercice {
       texte3 +=
         '<br>' +
         addMultiMathfield(this, 3, {
-          dataTemplate: '$630=$%{champ1}\n$456=$%{champ2}',
+          dataTemplate: '%{champ1}\n%{champ2}',
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierDeBase },
             champ2: { keyboard: KeyboardType.clavierDeBase },
@@ -163,8 +163,7 @@ export default class EgaliteFG18 extends Exercice {
       texte5 +=
         '<br>' +
         addMultiMathfield(this, 5, {
-          dataTemplate:
-            'Nombre maximal de lots : %{champ1}\nNombre de chocolats par lot : %{champ2}\nNombre de caramels par lot : %{champ3}',
+          dataTemplate: '%{champ1}\n%{champ2}\n%{champ3}',
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierNumbers },
             champ2: { keyboard: KeyboardType.clavierNumbers },

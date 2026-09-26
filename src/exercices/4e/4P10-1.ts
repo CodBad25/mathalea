@@ -5,7 +5,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { bleuMathalea } from '../../lib/colors'
 import { texPrix, texteGras } from '../../lib/format/style'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { numAlpha } from '../../lib/outils/outilString'
 import { prenom } from '../../lib/outils/Personne'
@@ -224,8 +224,8 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
         // question:``,
         correction: `
          ${numAlpha(kCorr++)} Ce graphique est une droite qui passe par l'origine.<br>
-          ${texteEnCouleur("C'est donc bien le graphique d'une situation de proportionnalité.")}<br>
-          ${numAlpha(kCorr++)} Par lecture graphique, en utilisant les pointillés rouges du graphe ci-dessous, ${texteEnCouleur(`${situation.qte_max} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))} €.`)}<br>
+          ${texteEnCouleurEtGras("C'est donc bien le graphique d'une situation de proportionnalité.")}<br>
+          ${numAlpha(kCorr++)} Par lecture graphique, en utilisant les pointillés rouges du graphe ci-dessous, ${texteEnCouleurEtGras(`${situation.qte_max} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))} €.`)}<br>
           ${situation.figureCorr}
         ${numAlpha(kCorr++)} Pour $${situation.qte2}$ ${situation.unite}  ${situation.articles}, la lecture graphique est moins facile, nous allons détailler deux méthodes.<br><br>
          ${texteGras('Première méthode par lecture graphique :')}<br>
@@ -233,7 +233,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
            ${texteGras('Seconde méthode en calculant une quatrième proportionnelle :')}<br>
          $${situation.qte_max}$ ${situation.unite}  ${situation.articles} coûtent $${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ €
         donc $${situation.qte2}$ ${situation.unite}  ${situation.articles} coûtent : <br> $(${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ € $\\div ${situation.qte_max}$ ${situation.articles} $)\\times (${situation.qte2}$ ${situation.articles})  $= ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire))}$ €<br><br>
-        ${texteEnCouleur(`Quelle que soit la méthode utilisée, ${situation.qte2} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire)).replace(',', ',')} €.`)}
+        ${texteEnCouleurEtGras(`Quelle que soit la méthode utilisée, ${situation.qte2} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire)).replace(',', ',')} €.`)}
         `,
       })
       texte = `${enonces[0].enonce}`

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -39,6 +40,6 @@ export default class ProgrammeCalculInverse extends ExerciceSimple {
     Quel est ce nombre ?`
     this.correction = `Le nombre qui, divisé par $${b}$ donne $${res}$ est $${res}\\times ${b}=${res * b}$.<br>
       Le nombre qui, augmenté de $${a}$ donne $${res * b}$ est $${res * b}-${a}=${this.reponse}$.<br>
-      Le nombre cherché est donc $${this.reponse}$.`
+      Le nombre cherché est donc $${miseEnEvidence(this.reponse)}$.`
   }
 }

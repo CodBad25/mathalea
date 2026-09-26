@@ -65,6 +65,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
           }
         }
         this.reponse = u + a
+        this.correction += `<br>Ainsi, $u_{${k}}=${miseEnEvidence(texNombre(u + a))}$.`
         break
       case 'b': // suite géométrique
         a = randint(2, 10) * choice([-1, 1])
@@ -94,6 +95,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
           }
         }
         this.reponse = u * a
+        this.correction += `<br>Ainsi, $u_{${k}}=${miseEnEvidence(texNombre(u * a))}$.`
         break
 
       case 'c': // suite géométrique avec fraction
@@ -146,6 +148,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
           }
         }
         this.reponse = n1 * a
+        this.correction += `<br>Ainsi, $u_{${k}}=${miseEnEvidence(texNombre(n1 * a))}$.`
         break
 
       case 'd': // suite arithmético-géométrique
@@ -180,6 +183,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
           }
         }
         this.reponse = u * a + b
+        this.correction += `<br>Ainsi, $u_{${k}}=${miseEnEvidence(texNombre(u * a + b))}$.`
         break
 
       case 'e': // suite de la forme u(n+1) = a +- u(n)^2
@@ -215,6 +219,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
           }
         }
         this.reponse = a + b * u * u
+        this.correction += `<br>Ainsi, $u_{${k}}=${miseEnEvidence(texNombre(a + b * u * u))}$.`
         break
     }
   }

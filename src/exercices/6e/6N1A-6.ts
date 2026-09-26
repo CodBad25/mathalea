@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -116,8 +117,8 @@ export default class ÉcrireNombresDecimauxFormates extends Exercice {
           texteAvant: '$=$',
         })
       if (context.vue !== 'diap')
-        texteCorr = `$${nombrestring}$ s'écrit plus lisiblement $${texNombre(nombre, 6)}$.`
-      else texteCorr = `${texNombre(nombre, 6)}`
+        texteCorr = `$${nombrestring}$ s'écrit plus lisiblement $${miseEnEvidence(texNombre(nombre, 6))}$.`
+      else texteCorr = `$${miseEnEvidence(texNombre(nombre, 6))}$`
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte + '<br>',

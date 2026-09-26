@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -29,6 +30,6 @@ export default class Can2025TQ22 extends ExerciceSimple {
     this.reponse = `e^{2x}-${a ** 2}`
     this.question = `Simplifier au maximum $(\\mathrm{e}^x+${a})(\\mathrm{e}^x-${a})$.`
     this.correction = `On développe en utilisant l'égalité remarquable $(a-b)(a+b)=a^2-b^2$ avec $a=\\mathrm{e}^x$ et $b=${a}$.<br>
-    $(\\mathrm{e}^x+${a})(\\mathrm{e}^x-${a})=\\mathrm{e}^{2x}-${a ** 2}$`
+    $(\\mathrm{e}^x+${a})(\\mathrm{e}^x-${a})=${miseEnEvidence(`\\mathrm{e}^{2x}-${a ** 2}`)}$`
   }
 }

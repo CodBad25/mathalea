@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -81,7 +82,7 @@ export default class Trigo extends ExerciceSimple {
 
         `
         this.correction = ` Dans le triangle $${nom[0]}${nom[1]}${nom[2]}$ rectangle en $${nom[1]}$, on a : <br>
-        $\\cos${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}=\\dfrac{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}{\\text{Hypoténuse}}=\\dfrac{${b}}{${c}}.$
+        $\\cos${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}=\\dfrac{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}{\\text{Hypoténuse}}=${miseEnEvidence(`\\dfrac{${b}}{${c}}`)}.$
       <br>`
         this.reponse = `\\dfrac{${b}}{${c}}`
         break
@@ -89,7 +90,7 @@ export default class Trigo extends ExerciceSimple {
         this.question = `Donner la valeur de $\\sin${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}$ sous forme d'une fraction irréductible.<br>
         `
         this.correction = ` Dans le triangle $${nom[0]}${nom[1]}${nom[2]}$ rectangle en $${nom[1]}$, on a : <br>
-        $\\sin${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}{\\text{Hypoténuse}}=\\dfrac{${a}}{${c}}.$
+        $\\sin${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}{\\text{Hypoténuse}}=${miseEnEvidence(`\\dfrac{${a}}{${c}}`)}.$
       <br>`
         this.reponse = `\\dfrac{${a}}{${c}}`
         break
@@ -97,7 +98,7 @@ export default class Trigo extends ExerciceSimple {
         this.question = `Donner la valeur de $\\tan${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}$ sous forme d'une fraction irréductible.<br>
         `
         this.correction = ` Dans le triangle $${nom[0]}${nom[1]}${nom[2]}$ rectangle en $${nom[1]}$, on a : <br>
-        $\\tan${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}=\\dfrac{${a}}{${b}}.$
+        $\\tan${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}}=${miseEnEvidence(`\\dfrac{${a}}{${b}}`)}.$
       <br>`
         this.reponse = `\\dfrac{${a}}{${b}}`
         break
@@ -105,7 +106,7 @@ export default class Trigo extends ExerciceSimple {
         this.question = `Donner la valeur de  $\\cos${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}$ sous forme d'une fraction irréductible.<br>
         `
         this.correction = ` Dans le triangle $${nom[0]}${nom[1]}${nom[2]}$ rectangle en $${nom[1]}$, on a : <br>
-        $\\cos${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}=\\dfrac{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}{\\text{Hypoténuse}}=\\dfrac{${a}}{${c}}.$
+        $\\cos${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}=\\dfrac{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}{\\text{Hypoténuse}}=${miseEnEvidence(`\\dfrac{${a}}{${c}}`)}.$
       <br>`
 
         this.reponse = `\\dfrac{${a}}{${c}}`
@@ -114,7 +115,7 @@ export default class Trigo extends ExerciceSimple {
         this.question = `Donner la valeur de $\\sin${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}$ sous forme d'une fraction irréductible.<br>
         `
         this.correction = ` Dans le triangle $${nom[0]}${nom[1]}${nom[2]}$ rectangle en $${nom[1]}$, on a :<br>
-        $\\sin${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}{\\text{Hypoténuse}}=\\dfrac{${b}}{${c}}.$
+        $\\sin${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}{\\text{Hypoténuse}}=${miseEnEvidence(`\\dfrac{${b}}{${c}}`)}.$
       <br>`
         this.reponse = `\\dfrac{${b}}{${c}}`
         break
@@ -122,7 +123,7 @@ export default class Trigo extends ExerciceSimple {
         this.question = `Donner la valeur de $\\tan${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}$ sous forme d'une fraction irréductible.<br>
         `
         this.correction = ` Dans le triangle $${nom[0]}${nom[1]}${nom[2]}$ rectangle en $${nom[0]}$, on a : <br>
-        $\\tan${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}=\\dfrac{${b}}{${a}}.$
+        $\\tan${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}=\\dfrac{\\text{Côté opposé à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}{\\text{Côté adjacent à } ${lang === 'fr-CH' ? `\\widehat{${nom[1] + nom[0] + nom[2]}}` : `\\widehat{${nom[0]}}`}}=${miseEnEvidence(`\\dfrac{${b}}{${a}}`)}.$
       <br>`
         this.reponse = `\\dfrac{${b}}{${a}}`
         break

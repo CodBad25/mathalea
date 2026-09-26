@@ -26,12 +26,13 @@ export const titre =
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '04/11/2021'
+export const dateDeModifImportante = '25/09/2026'
 
 /**
  * Presentation didactique : Par combien multiplier un nombre pour que le chiffre des unités devienne le chiffre des ...
  * @author Éric Elter (inspiré par Aude Duvold)
  */
-export const uuid = '18559'
+export const uuid = '1855e'
 
 export const refs = {
   'fr-fr': ['6N2B-4'],
@@ -63,7 +64,7 @@ export default class MultiplierUnNombreParPuissanceDeDix extends Exercice {
 
     this.sup = false
     this.sup2 = true
-    this.sup3 = 3
+    this.sup3 = 2
     this.sup4 = true
   }
 

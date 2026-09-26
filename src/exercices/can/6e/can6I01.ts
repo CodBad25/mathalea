@@ -1,9 +1,9 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { texteParPositionEchelle } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
-import { texteGras } from '../../../lib/format/style'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
@@ -342,7 +342,7 @@ export default class CanNoteLaCouleur6 extends Exercice {
         } ${mathalea2d(paramsCorrection, objetsEnonce)}`
       }
       texteCorr = 'On obtient la couleur suivante :<br> '
-      texteCorr += `${texteGras(this.sup === 4 || this.sup === 2 ? '(' + traducNum(couleurs[0] as 'Blanc' | 'Noir' | 'Jaune' | 'Bleu' | 'Vert' | 'Orange' | 'Rouge' | 'Gris' | 'Rose') + ')' + couleurs[0] : couleurs[0])} `
+      texteCorr += `${texteEnCouleurEtGras(this.sup === 4 || this.sup === 2 ? '(' + traducNum(couleurs[0] as 'Blanc' | 'Noir' | 'Jaune' | 'Bleu' | 'Vert' | 'Orange' | 'Rouge' | 'Gris' | 'Rose') + ')' + couleurs[0] : couleurs[0])} `
       handleAnswers(this, q, {
         reponse: {
           value: [couleurs[0], couleurs[0].toLowerCase()],

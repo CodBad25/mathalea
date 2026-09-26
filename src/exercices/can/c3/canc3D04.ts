@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/view.capytale.save.can.test.ts ⚠️
  */
@@ -68,6 +69,7 @@ export default class ExerciceInteractiveClock extends Exercice {
         interactivityOn: false,
         showHands: true,
       })
+      correction += `<br>Les aiguilles indiquent $${miseEnEvidence(`${hour}\\text{ h }${formatMinute(minute)}`)}$.`
       if (hour > 12) {
         correction += `<br>Remarque : ${hour} h correspond à ${hour - 12} h ${hour < 18 ? "de l'après-midi" : 'du soir'}.`
       }

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
   numAlpha,
@@ -222,7 +223,7 @@ function unePieceDeuxUrnes(
   texteCorr += `la probabilité de tirer une boule ${boules[choix]} dans la deuxième urne est de $${texProba(urne2.getProba(B[choix]))}$.<br>`
   texteCorr += `La probabilité de l'issue ('Face','${boules[choix]}') est donc : $\\dfrac{1}{2}\\times ${texProba(urne2.getProba(B[choix]))}=${texProba(fraction(n2[choix], 2 * card2))}$.<br>`
   texteCorr += `L'événement 'obtenir une boule ${boules[choix]}' est réalisé par les issues ('Pile','${boules[choix]}') et ('Face','${boules[choix]}'), donc sa probabilité est la somme des probabilités calculées ci-dessus.<br>`
-  texteCorr += `La probabilité d'obtenir une boule ${boules[choix]} est donc de $${texProba(fraction(n1[choix], 2 * card1))}+${texProba(fraction(n2[choix], 2 * card2))}=${texProba(p[choix])}$.`
+  texteCorr += `La probabilité d'obtenir une boule ${boules[choix]} est donc de $${texProba(fraction(n1[choix], 2 * card1))}+${texProba(fraction(n2[choix], 2 * card2))}=${miseEnEvidence(texProba(p[choix]))}$.`
 
   return { texte, texteCorr, alea: [...n1, ...n2] }
 }
@@ -502,15 +503,15 @@ function urneDeuxTiragesAvecRemise(
   )
   texteCorr += `<br>${numAlpha(0)} L'événement "obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}" est réalisé par l'issue {${choix[2]} ${choix[2]}}.`
   texteCorr += ` On comptabilise ${Number(choix[0]) ** 2} issues {${choix[2]}${choix[2]}} sur ${card ** 2} issues en tout.<br>`
-  texteCorr += `La probabilité de cet événement est donc de $${probaChoix.texFraction}${!probaChoix.estIrreductible ? '=' + probaChoix.texFractionSimplifiee : ''}$.<br>`
+  texteCorr += `La probabilité de cet événement est donc de $${probaChoix.estIrreductible ? miseEnEvidence(probaChoix.texFraction) : `${probaChoix.texFraction}=${miseEnEvidence(probaChoix.texFractionSimplifiee)}`}$.<br>`
   texteCorr += `${numAlpha(1)} L'événement "obtenir deux boules de la même couleur" est réalisé par les issues {${b1Char + b1Char}, ${b2Char + b2Char}}.`
   texteCorr += ` On comptabilise ${nbBoule1 ** 2} issues {${b1Char + b1Char}} et   ${nbBoule2 ** 2} issues {${b2Char + b2Char}} sur ${card ** 2} issues en tout.<br>`
   texteCorr += `La probabilité de cet événement est donc de $${proba1.texFraction}+${proba2.texFraction}`
-  texteCorr += `=${proba1et2.texFraction}${!proba1et2.estIrreductible ? '=' + proba1et2.texFractionSimplifiee : ''}$.<br>`
+  texteCorr += `=${proba1et2.estIrreductible ? miseEnEvidence(proba1et2.texFraction) : `${proba1et2.texFraction}=${miseEnEvidence(proba1et2.texFractionSimplifiee)}`}$.<br>`
 
   texteCorr += `${numAlpha(2)} L'événement "obtenir deux boules de couleurs différentes" est réalisé par les issues {${b1Char + b2Char}, ${b2Char + b1Char}}.`
   texteCorr += ` On comptabilise ${nbBoule1 * nbBoule2} issues {${b1Char + b2Char}} et autant d'issues {${b2Char + b1Char}} sur ${card ** 2} issues en tout.<br>`
-  texteCorr += `La probabilité de cet événement est donc de $2\\times ${proba3.texFraction}=${proba4.texFraction}${!proba4.estIrreductible ? '=' + proba4.texFractionSimplifiee : ''}$.<br>`
+  texteCorr += `La probabilité de cet événement est donc de $2\\times ${proba3.texFraction}=${proba4.estIrreductible ? miseEnEvidence(proba4.texFraction) : `${proba4.texFraction}=${miseEnEvidence(proba4.texFractionSimplifiee)}`}$.<br>`
   texteCorr += `Une autre façon de faire est de considéré que c'est l'événement contraire de "obtenir deux boules de la même couleur" dont on a calculé la probabilité à la question ${numAlpha(1)}.<br>`
   texteCorr += `On peut donc calculer la probabilité de cet événement en calculant : $1 -${proba1et2.texFractionSimplifiee} = ${proba1et2.entierMoinsFraction(1).texFractionSimplifiee}$.`
 

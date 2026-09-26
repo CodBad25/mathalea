@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -47,6 +48,10 @@ function supprimeDoublons(correction: string) {
 
 function miseEnFormeCorrection(correction: string, colonne: boolean) {
   correction = supprimeDoublons(correction)
+  // Le dernier membre est le résultat final : on le met en évidence
+  const membres = correction.split('=')
+  membres.push(miseEnEvidence(membres.pop() ?? ''))
+  correction = membres.join('=')
   if (!colonne) {
     return `$${correction}$`
   }

@@ -66,7 +66,7 @@ export default class EtudeSuiteFonctionRecurrence extends Exercice {
         'La fonction $f$ est une fonction polynôme du second degré. Elle est donc dérivable sur $\\R$ et pour tout $x$ de $\\R$ :'
       correction1 += `<br><br> $f'(x)=${f.derivee.tex}$`
       correction1 += `<br><br> $f'(x) \\geqslant 0 \\Leftrightarrow x \\geqslant ${alpha}$`
-      correction1 += `<br><br>donc $f$ est croissante sur $[${i1}\\;;\\;${i2}]$.`
+      correction1 += `<br><br>donc $f$ est ${texteEnCouleurEtGras('croissante')} sur $[${i1}\\;;\\;${i2}]$.`
 
       const fonction = (x: FractionEtendue | number) => f.image(x).toNumber()
       const derivee = (x: FractionEtendue | number) =>

@@ -1,5 +1,8 @@
 import { get } from 'svelte/store'
-import { type InterfaceGlobalOptions } from '../../lib/types'
+import {
+  type InterfaceGlobalOptions,
+  type InterfaceParams,
+} from '../../lib/types'
 import { type VueType } from '../VueType'
 import { canOptions } from '../stores/canStore'
 import { exercicesParams } from '../stores/generalStore'
@@ -27,25 +30,8 @@ export class MathAleaURL extends URL {
         window.location.host +
         window.location.pathname,
     )
-    const params = get(exercicesParams)
-    for (const ex of params) {
-      url.searchParams.append('uuid', ex.uuid)
-      if (ex.id != null) url.searchParams.append('id', ex.id)
-      if (ex.nbQuestions !== undefined)
-        url.searchParams.append('n', ex.nbQuestions.toString())
-      if (ex.duration != null)
-        url.searchParams.append('d', ex.duration.toString())
-      if (ex.sup != null) url.searchParams.append('s', ex.sup)
-      if (ex.sup2 != null) url.searchParams.append('s2', ex.sup2)
-      if (ex.sup3 != null) url.searchParams.append('s3', ex.sup3)
-      if (ex.sup4 != null) url.searchParams.append('s4', ex.sup4)
-      if (ex.sup5 != null) url.searchParams.append('s5', ex.sup5)
-      if (ex.versionQcm != null) url.searchParams.append('qcm', ex.versionQcm)
-      if (ex.alea != null) url.searchParams.append('alea', ex.alea)
-      if (ex.interactif === '1') url.searchParams.append('i', '1')
-      if (ex.cd != null) url.searchParams.append('cd', ex.cd)
-      if (ex.tip != null) url.searchParams.append('tip', ex.tip)
-      if (ex.cols != null) url.searchParams.append('cols', ex.cols.toString())
+    for (const ex of get(exercicesParams)) {
+      appendExerciseParams(url, ex)
     }
     return new MathAleaURL(url.toString())
   }
@@ -99,6 +85,83 @@ export class MathAleaURL extends URL {
     this.setParam('v', value)
     return this
   }
+}
+
+/**
+ * Paramètres d'URL propres à un exercice (tous les autres concernent la série)
+ */
+const EXERCISE_URL_PARAMS = [
+  'uuid',
+  'id',
+  'n',
+  'd',
+  's',
+  's2',
+  's3',
+  's4',
+  's5',
+  'qcm',
+  'coef',
+  'alea',
+  'i',
+  'cd',
+  'tip',
+  'cols',
+]
+
+/**
+ * Paramètres d'URL qui dépendent de la liste complète des exercices ou de
+ * l'état d'une copie et n'ont plus de sens pour un exercice isolé
+ */
+const SERIES_URL_PARAMS = ['select', 'order', 'shuffle', 'answers', 'done']
+
+/**
+ * Ajoute à l'URL les paramètres d'un exercice (référence, options, graine...)
+ * @param url URL à compléter
+ * @param ex paramètres de l'exercice
+ */
+export function appendExerciseParams(url: URL, ex: InterfaceParams): void {
+  url.searchParams.append('uuid', ex.uuid)
+  if (ex.id != null) url.searchParams.append('id', ex.id)
+  if (ex.nbQuestions !== undefined)
+    url.searchParams.append('n', ex.nbQuestions.toString())
+  if (ex.duration != null) url.searchParams.append('d', ex.duration.toString())
+  if (ex.sup != null) url.searchParams.append('s', ex.sup)
+  if (ex.sup2 != null) url.searchParams.append('s2', ex.sup2)
+  if (ex.sup3 != null) url.searchParams.append('s3', ex.sup3)
+  if (ex.sup4 != null) url.searchParams.append('s4', ex.sup4)
+  if (ex.sup5 != null) url.searchParams.append('s5', ex.sup5)
+  if (ex.versionQcm != null) url.searchParams.append('qcm', ex.versionQcm)
+  if (ex.alea != null) url.searchParams.append('alea', ex.alea)
+  if (ex.interactif === '1') url.searchParams.append('i', '1')
+  if (ex.cd != null) url.searchParams.append('cd', ex.cd)
+  if (ex.tip != null) url.searchParams.append('tip', ex.tip)
+  if (ex.cols != null) url.searchParams.append('cols', ex.cols.toString())
+}
+
+/**
+ * Construit l'URL d'un exercice seul (même graine, mêmes options) à partir de
+ * l'URL d'une série : les réglages globaux (vue, zoom...) sont conservés,
+ * les exercices de la série sont remplacés par celui fourni.
+ * @param seriesUrl URL de la série (éventuellement cryptée)
+ * @param ex paramètres de l'exercice à isoler
+ */
+export function buildSingleExerciseURL(
+  seriesUrl: URL,
+  ex: InterfaceParams,
+): URL {
+  const url = new URL(decrypt(seriesUrl))
+  for (const param of [...EXERCISE_URL_PARAMS, ...SERIES_URL_PARAMS]) {
+    url.searchParams.delete(param)
+  }
+  // les exercices sont placés en tête, comme dans les URLs de MathALÉA
+  const globalParams = [...url.searchParams.entries()]
+  url.search = ''
+  appendExerciseParams(url, ex)
+  for (const [key, value] of globalParams) {
+    url.searchParams.append(key, value)
+  }
+  return url
 }
 
 /**

@@ -92,7 +92,7 @@ function sommeDenombresConsecutifs() {
     -Math.floor(nbTermes / 2),
     Math.floor(nbTermes / 2),
   )
-    .map((n) => `$${x + n}$`)
+    .map((n) => `$${miseEnEvidence(x + n)}$`)
     .join(' ; ')}.<br>`
   const figure = ''
   const uniteOptions = ['', '', '']

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { tableauDeVariation } from '../../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -130,7 +131,7 @@ export default class TableauSignes extends Exercice {
             },
           ],
         }
-        texteCorr += `<br>Comme $${a}>0~$, $~f(x)$ est positif pour $~x>${texFractionReduite(-b, a)} ~$ et négatif pour $~x<${texFractionReduite(-b, a)} $.<br>`
+        texteCorr += `<br>Comme $${a}>0~$, $~f(x)$ est ${texteEnCouleurEtGras(`positif pour $x>${texFractionReduite(-b, a)}$ et négatif pour $x<${texFractionReduite(-b, a)}$`)}.<br>`
         ligne1 = ['Line', 30, '', 0, '-', 20, 'z', 20, '+']
       } else {
         this.autoCorrection[i] = {
@@ -220,7 +221,7 @@ export default class TableauSignes extends Exercice {
             },
           ],
         }
-        texteCorr += `<br>Comme $${a}<0$,  $f(x)~$ est négatif pour $~x>${texFractionReduite(-b, a)} ~$ et positif pour $~x<${texFractionReduite(-b, a)} $.<br>`
+        texteCorr += `<br>Comme $${a}<0$,  $f(x)~$ est ${texteEnCouleurEtGras(`négatif pour $x>${texFractionReduite(-b, a)}$ et positif pour $x<${texFractionReduite(-b, a)}$`)}.<br>`
         ligne1 = ['Line', 30, '', 0, '+', 20, 'z', 20, '-']
       }
       props = propositionsQcm(this, i)

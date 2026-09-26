@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
@@ -164,12 +165,12 @@ export default class ProprietesMediatrice extends Exercice {
           // S'il est sur la médiatrice
           texteCorr = `$${nomDesPoints[2]}${nomDesPoints[0]} = ${nomDesPoints[2]}${nomDesPoints[1]} = ${texNombre(arrondi(longueur(C, A), 1))}$ $cm$ donc le point $${nomDesPoints[2]}$ est équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.<br>`
           texteCorr += `Comme tout point équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$ appartient à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$], `
-          texteCorr += `alors le point $${nomDesPoints[2]}$ appartient à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].`
+          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras("appartient à la médiatrice")} du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].`
         } else {
           // Si le point C doit ne pas être sur la médiatrice,
           texteCorr = `$${nomDesPoints[2]}${nomDesPoints[0]} = ${texNombre(arrondi(longueur(C, A), 1))}$ alors que $${nomDesPoints[2]}${nomDesPoints[1]} = ${texNombre(arrondi(longueur(C, B), 1))}$ donc le point $${nomDesPoints[2]}$ n'est pas équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.<br>`
           texteCorr += `Comme tout point qui n'est pas équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$ n'appartient pas à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$], `
-          texteCorr += `alors le point $${nomDesPoints[2]}$ n'appartient pas à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].`
+          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras("n'appartient pas à la médiatrice")} du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].`
         }
       } else {
         objetsCorrection.push(
@@ -192,13 +193,13 @@ export default class ProprietesMediatrice extends Exercice {
           texteCorr = `Le point $${nomDesPoints[2]}$ appartient à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].<br>`
           texteCorr +=
             "Comme tout point qui appartient à la médiatrice d'un segment est équidistant des extrémités de ce segment, "
-          texteCorr += `alors le point $${nomDesPoints[2]}$ est équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.`
+          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras("est équidistant")} de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.`
         } else {
           // Si le point $${nomDesPoints[2]}$ doit ne pas être sur la médiatrice,
           texteCorr = `Le point $${nomDesPoints[2]}$ n'appartient pas à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].<br>`
           texteCorr +=
             "Comme tout point qui n'appartient pas à la médiatrice d'un segment n'est pas équidistant des extrémités de ce segment, "
-          texteCorr += `alors le point $${nomDesPoints[2]}$ n'est pas équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.`
+          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras("n'est pas équidistant")} de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.`
         }
       }
       // On push les objets

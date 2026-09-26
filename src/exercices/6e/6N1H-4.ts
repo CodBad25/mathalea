@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -114,7 +115,7 @@ export default class GradueeZommGrdNombres extends Exercice {
         handleAnswers(this, i, { reponse: { value: arrondi(Number(x0), 5) } })
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       }
-      texteCorr += `L'abscisse du point $${nomsPoints[0]}$ est $${texNombre(x0, 5)}$ :`
+      texteCorr += `L'abscisse du point $${nomsPoints[0]}$ est $${miseEnEvidence(texNombre(x0, 5))}$ :`
       texteCorr += '<br><br>Voici la figure avec les lectures successives :<br>'
       texteCorr += faitLesDroites(
         Number(x0),

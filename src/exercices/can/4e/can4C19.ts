@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
@@ -61,7 +62,7 @@ export default class MultiplicationRelatifCAN extends ExerciceSimple {
         ' \\times  ' +
         ecritureParentheseSiNegatif(b) +
         ' = ' +
-        a * b +
+        miseEnEvidence(a * b) +
         ' $'
     } else {
       if (this.interactif) {
@@ -85,7 +86,7 @@ export default class MultiplicationRelatifCAN extends ExerciceSimple {
         ' \\times  ' +
         ecritureNombreRelatifc(b) +
         ' = ' +
-        ecritureNombreRelatifc(a * b) +
+        miseEnEvidence(ecritureNombreRelatif(a * b)) +
         ' $'
     }
 

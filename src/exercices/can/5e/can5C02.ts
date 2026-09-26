@@ -1,4 +1,5 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une somme d’entiers'
 export const interactifReady = true
@@ -30,10 +31,10 @@ export default class SommeEntiers5e extends ExerciceSimple {
     const a = this.quotaRandint('a', 2, 39, [10, 20, 30]) + 100
     this.reponse = a + b
     this.question = `Calculer $${a} + ${b}$.`
-    this.correction = `$${a} + ${b}=${a + b}$`
+    this.correction = `$${a} + ${b}=${miseEnEvidence(a + b)}$`
     this.correction += texteEnCouleur(`<br> Mentalement : <br>
     On décompose le calcul $${a} + ${b}$ en  $(100+${a - 100})+ ${b}=100+ (\\underbrace{${a - 100} +${b}}_{${a - 100 + b}})$ .<br>
        Cela donne :  $100+${a - 100 + b}=${this.reponse}$.
-      `)
+      `, bleuMathalea)
   }
 }

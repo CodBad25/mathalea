@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Figure from 'apigeom/src/Figure'
 import { createApigeomFigureHtml } from '../../lib/apigeom/apigeom-figure'
 import { bleuMathalea } from '../../lib/colors'
@@ -113,7 +114,7 @@ export default class ExerciceFractionsDecomposer extends Exercice {
         i,
         `\\dfrac{${total}}{${denominateur}}~=~%{champ1} + \\dfrac{%{champ2}}{%{champ3}}`,
       )
-      const texteCorr = `$${fraction} = ${partieEntiere} + ${fractionReste} $`
+      const texteCorr = `$${fraction} = ${miseEnEvidence(`${partieEntiere} + ${fractionReste}`)} $`
       this.enregistreReponses(i, {
         partieEntiere,
         partieFractionnaire,

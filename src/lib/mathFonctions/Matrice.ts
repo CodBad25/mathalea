@@ -103,7 +103,7 @@ export class Matrice {
     let content = ''
     for (let arrIndex = 0; arrIndex < this._data.length; arrIndex++) {
       content += `${this._data[arrIndex].join(' & ')}`
-      if (arrIndex < this._data.length - 1) content += '\\'
+      if (arrIndex < this._data.length - 1) content += '\\\\'
     }
     return `\\begin{vmatrix}\n${content}\n\\end{vmatrix}`
   }

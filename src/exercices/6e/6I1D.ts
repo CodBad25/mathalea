@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { runAStar } from '../../modules/findPath'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -95,7 +96,7 @@ export default class ExerciceLabyrintheChemin extends Exercice {
       createSolutionStr(parcours.edges).forEach((instruction, index) => {
         const parts = instruction.split('-')
         const lieu = parts.length > 1 ? parts[1].trim() : instruction.trim()
-        texteCorr += `${index + 1} - ${lieu}<br>`
+        texteCorr += `${index + 1} - ${texteEnCouleurEtGras(lieu)}<br>`
       })
       if (this.interactif) {
         texte += `<div class="ml-2 py-2" id="resultatCheckEx${this.numeroExercice}Q${q}"></div>`

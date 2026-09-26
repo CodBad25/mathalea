@@ -74,7 +74,7 @@ export default class EcritureDecimalePuissanceDe10 extends Exercice {
             },
           })
           if (n < 2) {
-            texteCorr = `$10^${n}=${10 ** n}$`
+            texteCorr = `$10^${n}=${miseEnEvidence(10 ** n)}$`
           } else {
             if (context.isHtml) {
               texteCorr = `$10^{${n}}=${puissanceEnProduit(10, n)}=${miseEnEvidence(texNombre(10 ** n, 0))}$`

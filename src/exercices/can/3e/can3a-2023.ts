@@ -732,7 +732,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               )
             : `\\Fraction[Reponse,Couleur=LightGray,Rayon=1.2cm]{${num}/${den}}`
           texte += context.isHtml ? '' : '\\end{center}'
-          texteCorr = `L'aire grisée représente $${f.texFraction}$ de l'aire du disque.`
+          texteCorr = `L'aire grisée représente $${miseEnEvidence(f.texFraction)}$ de l'aire du disque.`
 
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { fractionEgale: true } },
@@ -1314,15 +1314,15 @@ export default class SujetCAN2023troisieme extends Exercice {
           if (a === 1) {
             // ne pas écrire 1x
             texte = `Développe $${k}${inconnue}(${inconnue}${ecritureAlgebrique(b)})$`
-            texteCorr = `$${k}${inconnue}(${inconnue}${ecritureAlgebrique(b)})=${k}${inconnue}\\times ${inconnue} ${signe(k * b)}${k}${inconnue}\\times ${Math.abs(b)}=${k * a}${inconnue}^2${ecritureAlgebrique(k * b)}${inconnue}$`
+            texteCorr = `$${k}${inconnue}(${inconnue}${ecritureAlgebrique(b)})=${k}${inconnue}\\times ${inconnue} ${signe(k * b)}${k}${inconnue}\\times ${Math.abs(b)}=${miseEnEvidence(`${rienSi1(k * a)}${inconnue}^2${ecritureAlgebriqueSauf1(k * b)}${inconnue}`)}$`
             reponse = `${rienSi1(k * a)}${inconnue}^2${ecritureAlgebriqueSauf1(k * b)}${inconnue}`
           } else {
             texte = `Développe $${k}${inconnue}(${a}${inconnue}${ecritureAlgebrique(b)})$`
             if (k > 0) {
-              texteCorr = `$${k}${inconnue}(${a}${inconnue}${ecritureAlgebrique(b)})=${k}${inconnue}\\times ${a}${inconnue} + ${k}${inconnue}\\times ${ecritureParentheseSiNegatif(b)}=${k * a}${inconnue}^2${ecritureAlgebrique(k * b)}${inconnue}$`
+              texteCorr = `$${k}${inconnue}(${a}${inconnue}${ecritureAlgebrique(b)})=${k}${inconnue}\\times ${a}${inconnue} + ${k}${inconnue}\\times ${ecritureParentheseSiNegatif(b)}=${miseEnEvidence(`${rienSi1(k * a)}${inconnue}^2${ecritureAlgebriqueSauf1(k * b)}${inconnue}`)}$`
               reponse = `${rienSi1(k * a)}${inconnue}^2${ecritureAlgebriqueSauf1(k * b)}${inconnue}`
             } else {
-              texteCorr = `$${k}${inconnue}(${a}${inconnue}${ecritureAlgebrique(b)})=${k}${inconnue}\\times ${a}${inconnue} + (${k}${inconnue})\\times ${ecritureParentheseSiNegatif(b)}=${k * a}${inconnue}^2${ecritureAlgebrique(k * b)}${inconnue}$`
+              texteCorr = `$${k}${inconnue}(${a}${inconnue}${ecritureAlgebrique(b)})=${k}${inconnue}\\times ${a}${inconnue} + (${k}${inconnue})\\times ${ecritureParentheseSiNegatif(b)}=${miseEnEvidence(`${rienSi1(k * a)}${inconnue}^2${ecritureAlgebriqueSauf1(k * b)}${inconnue}`)}$`
               reponse = `${rienSi1(k * a)}${inconnue}^2${ecritureAlgebriqueSauf1(k * b)}${inconnue}`
             }
           }
@@ -2053,7 +2053,7 @@ export default class SujetCAN2023troisieme extends Exercice {
 
           texteCorr = ` On cherche le carré parfait le plus proche de $${a}$ inférieur à $${a}$.<br>
          Comme $${Math.floor(Math.sqrt(a)) ** 2}=${Math.floor(Math.sqrt(a))}^2$, alors :
-       $${Math.floor(Math.sqrt(a))}< \\sqrt{${a}} < ${Math.floor(Math.sqrt(a)) + 1}$.`
+       $${miseEnEvidence(Math.floor(Math.sqrt(a)))}< \\sqrt{${a}} < ${miseEnEvidence(Math.floor(Math.sqrt(a)) + 1)}$.`
           handleAnswers(this, index, {
             reponse: { value: reponse, options: { suiteDeNombres: true } },
           })

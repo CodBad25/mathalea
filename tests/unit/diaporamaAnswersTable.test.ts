@@ -7,7 +7,10 @@ import {
   formuleReponseCourte,
   repartisEnColonnes,
 } from '../../src/components/setup/diaporama/answersTable'
-import { miseEnEvidence } from '../../src/lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../src/lib/outils/embellissements'
 import type { IExercice } from '../../src/lib/types'
 
 function exerciceAvecPropositions(
@@ -19,17 +22,22 @@ function exerciceAvecPropositions(
 describe('extraitReponsesCourtes', () => {
   it("extrait le contenu d'une mise en évidence", () => {
     const correction = `Le résultat est $2\\times 3 = ${miseEnEvidence('6')}$.`
-    expect(extraitReponsesCourtes(correction)).toEqual(['6'])
+    expect(extraitReponsesCourtes(correction)).toEqual(['$\\boldsymbol{6}$'])
   })
 
   it('gère les accolades imbriquées', () => {
     const correction = `$${miseEnEvidence('\\dfrac{3}{4}')}$`
-    expect(extraitReponsesCourtes(correction)).toEqual(['\\dfrac{3}{4}'])
+    expect(extraitReponsesCourtes(correction)).toEqual([
+      '$\\boldsymbol{\\dfrac{3}{4}}$',
+    ])
   })
 
   it('conserve l’ordre et supprime les doublons', () => {
     const correction = `$${miseEnEvidence('12')}$ puis $${miseEnEvidence('5')}$ et enfin $${miseEnEvidence('12')}$`
-    expect(extraitReponsesCourtes(correction)).toEqual(['12', '5'])
+    expect(extraitReponsesCourtes(correction)).toEqual([
+      '$\\boldsymbol{12}$',
+      '$\\boldsymbol{5}$',
+    ])
   })
 
   it('ignore les mises en évidence dans une autre couleur', () => {
@@ -40,11 +48,32 @@ describe('extraitReponsesCourtes', () => {
   it('renvoie un tableau vide sans mise en évidence', () => {
     expect(extraitReponsesCourtes('Aucune couleur ici.')).toEqual([])
   })
+
+  it('extrait aussi les textes en orange et gras, dans l’ordre', () => {
+    const correction = `Les droites sont ${texteEnCouleurEtGras('parallèles')} et $d=${miseEnEvidence('3')}$.`
+    expect(extraitReponsesCourtes(correction)).toEqual([
+      '<b>parallèles</b>',
+      '$\\boldsymbol{3}$',
+    ])
+  })
+
+  it('ignore les textes en orange pour un QCM (lettres déjà affichées)', () => {
+    const correction = `${texteEnCouleurEtGras('B')}. $${miseEnEvidence('12')}$`
+    expect(extraitReponsesCourtes(correction, false)).toEqual([
+      '$\\boldsymbol{12}$',
+    ])
+  })
 })
 
 describe('formuleReponseCourte', () => {
   it('réécrit une formule grasse sans couleur', () => {
     expect(formuleReponseCourte('6')).toBe('$\\boldsymbol{6}$')
+  })
+
+  it('réécrit un texte en gras sans couleur', () => {
+    expect(formuleReponseCourte('parallèles', 'texte')).toBe(
+      '<b>parallèles</b>',
+    )
   })
 })
 

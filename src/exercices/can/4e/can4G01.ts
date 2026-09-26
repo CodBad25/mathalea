@@ -1,9 +1,10 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngle } from '../../../lib/2d/angles'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
@@ -78,7 +79,7 @@ Calculer la longueur $${nom[0]}${nom[1]}$.<br>`
           },
           objets,
         )
-        this.correction = ` $${nom[0]}${nom[1]}=${b}\\text{ cm}$.`
+        this.correction = ` $${nom[0]}${nom[1]}=${miseEnEvidence(b)}\\text{ cm}$.`
         this.reponse = b
 
         this.canReponseACompleter = ` $${nom[0]}${nom[1]}=\\ldots\\text{ cm}$.`
@@ -99,7 +100,7 @@ Calculer la longueur $${nom[0]}${nom[1]}$.<br>`
           },
           objets,
         )
-        this.correction = ` $${nom[1]}${nom[2]}=${a}\\text{ cm}$.`
+        this.correction = ` $${nom[1]}${nom[2]}=${miseEnEvidence(a)}\\text{ cm}$.`
         this.reponse = a
 
         this.canReponseACompleter = ` $${nom[1]}${nom[2]}=\\ldots\\text{ cm}$.`
@@ -121,7 +122,7 @@ Calculer la longueur $${nom[0]}${nom[1]}$.<br>`
           objets,
         )
 
-        this.correction = ` $${nom[0]}${nom[2]}=${c}\\text{ cm}$.`
+        this.correction = ` $${nom[0]}${nom[2]}=${miseEnEvidence(c)}\\text{ cm}$.`
         this.reponse = c
 
         this.canReponseACompleter = ` $${nom[0]}${nom[2]}=\\ldots\\text{ cm}$.`
@@ -134,6 +135,6 @@ Calculer la longueur $${nom[0]}${nom[1]}$.<br>`
     $\\bullet$  $${texNombre(triplet[0] / 3)}\\times 3= ${texNombre(triplet[0])}\\text{ cm}$ ;<br>
     $\\bullet$  $${texNombre(triplet[0] / 3)}\\times 4= ${texNombre(triplet[1])}\\text{ cm}$ ;<br>
     $\\bullet$  $${texNombre(triplet[0] / 3)}\\times 5= ${texNombre(triplet[2])}\\text{ cm}$ ;<br>
-    On obtient la longueur manquante par déduction.`)
+    On obtient la longueur manquante par déduction.`, bleuMathalea)
   }
 }

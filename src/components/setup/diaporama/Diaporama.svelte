@@ -131,6 +131,7 @@
                 splitSvgFromText(consigne)
               const { svgs: correctionSvgs, text: correctionText } =
                 splitSvgFromText(correction)
+              const lettresQcm = extraitLettresQcm(exercise, i)
               vue = {
                 consigne,
                 question,
@@ -142,8 +143,11 @@
                 correctionSvgs,
                 correctionText,
                 key: exercise.key,
-                lettresQcm: extraitLettresQcm(exercise, i),
-                reponsesCourtes: extraitReponsesCourtes(correction),
+                lettresQcm,
+                reponsesCourtes: extraitReponsesCourtes(
+                  correction,
+                  lettresQcm.length === 0,
+                ),
               }
             } while (
               attempt < 10 &&
@@ -320,6 +324,7 @@
     $globalOptions.select = options.select
     $globalOptions.order = options.order
     $globalOptions.durationGlobal = options.durationGlobal
+    $globalOptions.durationCorrection = options.durationCorrection
   }
 
   async function applySlideshowFromHistory(

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
@@ -140,7 +141,7 @@ export default class ExerciceProbleme001 extends Exercice {
           correction = `Pour trouver la masse moyenne d'${coquillage.nomSingulier}, on divise la masse totale par le nombre de ${coquillage.nomPluriel}.<br>
    $${texNombre(masseCoquillages)}\\text{ g}\\div ${nbCoquillages}$ ${egalOuApprox(masseCoquillages.div(nbCoquillages), 2)} $${texNombre(masseCoquillages.div(nbCoquillages), 2)}$ g<br>
      ${this.sup3 ? `${operation({ operande1: masseCoquillages.toNumber(), operande2: nbCoquillages, type: 'division', precision: 2, options: { solution: true, colore: orangeMathalea } })}` : ''}
-        ${premiereLettreEnMajuscule(coquillage.nomSingulier)} pèse $${texNombre(masseCoquillages.div(nbCoquillages), 2)}$ g.<br>`
+        ${premiereLettreEnMajuscule(coquillage.nomSingulier)} pèse $${miseEnEvidence(texNombre(masseCoquillages.div(nbCoquillages), 2))}$ g.<br>`
         } else {
           listePrincipale += ajouteQuestionMathlive({
             exercice: this,
@@ -157,7 +158,7 @@ export default class ExerciceProbleme001 extends Exercice {
           correction = `Pour trouver la masse moyenne d'${coquillage.nomSingulier}, on divise la masse totale par le nombre de ${coquillage.nomPluriel}.<br>
     $${texNombre(masseCoquillages.round())}\\text{ g}\\div ${nbCoquillages} ${egalOuApprox(masseCoquillages.div(nbCoquillages), 0)} ${texNombre(masseCoquillages.div(nbCoquillages), 0)}$ g<br>
     ${this.sup3 ? `${operation({ operande1: masseCoquillages.round().toNumber(), operande2: nbCoquillages, type: 'division', precision: 1, options: { solution: true, colore: orangeMathalea } })}` : ''}
-        ${premiereLettreEnMajuscule(coquillage.nomSingulier)} pèse environ $${texNombre(masseCoquillages.div(nbCoquillages), 0)}$ g au gramme près.<br>`
+        ${premiereLettreEnMajuscule(coquillage.nomSingulier)} pèse environ $${miseEnEvidence(texNombre(masseCoquillages.div(nbCoquillages), 0))}$ g au gramme près.<br>`
         }
       } else {
         // this.sup = 1

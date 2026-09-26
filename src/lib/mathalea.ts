@@ -350,6 +350,7 @@ export async function mathaleaGetExercicesFromParams(
           (await recupererSourceLatexDeBanque(texCorUrl)) ??
           '\n\n\t%Pas de correction LaTeX disponible\n\n',
         examen: '',
+        titre: titre !== param.uuid ? titre : undefined,
       } as IExerciceStatique)
       continue
     }
@@ -473,6 +474,11 @@ export async function mathaleaGetExercicesFromParams(
         mois,
         numeroInitial,
         examen,
+        titre:
+          'titre' in infosExerciceStatique &&
+          typeof infosExerciceStatique.titre === 'string'
+            ? infosExerciceStatique.titre
+            : undefined,
       } as IExerciceStatique)
     } else {
       const exercice = await mathaleaLoadExerciceFromUuid(param.uuid)
@@ -625,6 +631,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let v: VueType | undefined
   let z = '1'
   let durationGlobal = 0
+  let durationCorrection: number | undefined
   let ds
   let nbVues: 1 | 2 | 3 | 4 = 1
   let flow: 0 | 1 | 2 = 0
@@ -773,6 +780,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         z = entry[1]
       } else if (entry[0] === 'dGlobal') {
         durationGlobal = parseInt(entry[1])
+      } else if (entry[0] === 'dCorr') {
+        durationCorrection = parseInt(entry[1]) || undefined
       } else if (entry[0] === 'shuffle') {
         shuffle = true
       } else if (entry[0] === 'select') {
@@ -939,6 +948,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     v,
     z,
     durationGlobal,
+    durationCorrection,
     ds,
     nbVues,
     flow,

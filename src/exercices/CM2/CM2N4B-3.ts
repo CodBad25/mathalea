@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   contraindreValeur,
   listeQuestionsToContenu,
@@ -80,7 +81,7 @@ export default class LeCompteEstBonV4 extends Exercice {
     const expression = solutionMathador[3]
 
     const texte = `Le tirage est le suivant : $${tirage[0]}~;~${tirage[1]}~;~${tirage[2]}~;~${tirage[3]}~;~${tirage[4]}$ <br>La cible est : $${solution}$`
-    texteCorr = `Pour le tirage $${tirage[0]}~;~${tirage[1]}~;~${tirage[2]}~;~${tirage[3]}~;~${tirage[4]}$ et pour la cible $${solution}$, la solution est : $${expression}=${solution}$ `
+    texteCorr = `Pour le tirage $${tirage[0]}~;~${tirage[1]}~;~${tirage[2]}~;~${tirage[3]}~;~${tirage[4]}$ et pour la cible $${solution}$, la solution est : $${miseEnEvidence(String(expression))}=${solution}$ `
     texteCorr += `ou $${solutionMathador[4]}$.<br>`
     texteCorr += 'En effet : <br>'
     for (let i = 0; i < 4; i++) {

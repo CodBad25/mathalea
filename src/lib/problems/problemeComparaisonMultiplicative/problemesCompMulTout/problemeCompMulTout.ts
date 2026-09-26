@@ -70,5 +70,6 @@ ${personnage.prenom} décide d'acheter un sachet et une boite. <br>Combien va-t-
     this.correction = `Le prix d'une boite est : $${texNombre(data.nbFois, 0)}\\times ${texNombre(data.nb1, 2, true)}$ € $=${texNombre(nb2, 2)}$ € et le prix d'un sachet est $${texNombre(data.nb1, 2)}$ €.
    <br> ${personnage.prenom} va payer en tout : $${texNombre(nb2, 2)}$ € $+${texNombre(data.nb1, 2)}$ € $=${miseEnEvidence(texNombre(nb2 + data.nb1, 2))}$ €.`
     this.reponse = texNombre(nb2 + data.nb1, 2)
+    this.optionsChampTexteMathlive = { texteApres: ' €' }
   }
 }

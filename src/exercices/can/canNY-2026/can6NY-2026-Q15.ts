@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -51,42 +52,42 @@ export default class multiple2026 extends ExerciceSimple {
     if (a === 2) {
       if (annee % 2 === 0) {
         this.correction = `$${texNombre(annee)}$ a pour chiffre des unités $${annee.toString().charAt(annee.toString().length - 1)}$ qui est pair. <br>
-      Donc $${texNombre(annee)}$ est un multiple de $2$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("est un multiple")} de $2$.`
       } else {
         this.correction = `$${texNombre(annee)}$ a pour chiffre des unités $${annee.toString().charAt(annee.toString().length - 1)}$ qui n'est pas pair. <br>
-      Donc $${texNombre(annee)}$ n'est pas un multiple de $2$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("n'est pas un multiple")} de $2$.`
       }
     } else if (a === 3) {
       if (annee % 3 === 0) {
         this.correction = `La somme des chiffres de $${texNombre(annee)}$ est divisible par $3$. <br>
-      Donc $${texNombre(annee)}$ est un multiple de $3$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("est un multiple")} de $3$.`
       } else {
         this.correction = `La somme des chiffres de $${texNombre(annee)}$ n'est pas divisible par $3$. <br>
-      Donc $${texNombre(annee)}$ n'est pas un multiple de $3$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("n'est pas un multiple")} de $3$.`
       }
     } else if (a === 5) {
       if (annee % 5 === 0) {
         this.correction = `$${texNombre(annee)}$ a pour chiffre des unités $${annee.toString().charAt(annee.toString().length - 1)}$. <br>
-      Donc $${texNombre(annee)}$ est un multiple de $5$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("est un multiple")} de $5$.`
       } else {
         this.correction = `$${texNombre(annee)}$ a pour chiffre des unités $${annee.toString().charAt(annee.toString().length - 1)}$. <br>
-      Donc $${texNombre(annee)}$ n'est pas un multiple de $5$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("n'est pas un multiple")} de $5$.`
       }
     } else if (a === 9) {
       if (annee % 9 === 0) {
         this.correction = `La somme des chiffres de $${texNombre(annee)}$ est divisible par $9$. <br>
-      Donc $${texNombre(annee)}$ est un multiple de $9$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("est un multiple")} de $9$.`
       } else {
         this.correction = `La somme des chiffres de $${texNombre(annee)}$ n'est pas divisible par $9$. <br>
-      Donc $${texNombre(annee)}$ n'est pas un multiple de $9$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("n'est pas un multiple")} de $9$.`
       }
     } else if (a === 10) {
       if (annee % 10 === 0) {
         this.correction = `$${texNombre(annee)}$ a pour chiffre des unités $${annee.toString().charAt(annee.toString().length - 1)}$. <br>
-      Donc $${texNombre(annee)}$ est un multiple de $10$.`
+      Donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("est un multiple")} de $10$.`
       } else {
         this.correction = `$${texNombre(annee)}$ a pour chiffre des unités $${annee.toString().charAt(annee.toString().length - 1)}$. <br>
-      Ce n'est pas $0$, donc $${texNombre(annee)}$ n'est pas un multiple de $10$.`
+      Ce n'est pas $0$, donc $${texNombre(annee)}$ ${texteEnCouleurEtGras("n'est pas un multiple")} de $10$.`
       }
     }
   }

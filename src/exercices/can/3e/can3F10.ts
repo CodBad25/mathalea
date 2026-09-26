@@ -156,7 +156,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
         Ainsi, l'abscisse du point $B$ est donnée par $(${yB}\\times 2)\\div 5=${miseEnEvidence(yB / a)}$.`
         } else if (a === 3.5) {
           this.correction += `Diviser par $${texNombre(a, 1)}$ (soit par $\\dfrac{7}{2}$) revient à multiplier par $2$ puis diviser par $7$.<br>
-        Ainsi, l'abscisse du point $B$ est donnée par $(${yB}\\times 2)\\div 7=${yB / a}$.`
+        Ainsi, l'abscisse du point $B$ est donnée par $(${yB}\\times 2)\\div 7=${miseEnEvidence(yB / a)}$.`
         } else {
           this.correction += `Ainsi, l'abscisse du point $B$ est donnée par  $${yB}\\div ${a}=${miseEnEvidence(yB / a)}$. `
         }

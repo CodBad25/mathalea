@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { labelLatexPoint, labelPoint, texteParPoint } from '../../lib/2d/textes'
@@ -303,8 +304,8 @@ export default class ReperageSurLaSphere extends Exercice {
           texte += `${this.nbQuestions > 1 ? numAlpha(i) : ''} Donner les coordonnées GPS du point $${nom[i]}$.<br>`
           texteCorrection += `${numAlpha(i)} Les coordonnées de $${nom[i]}$ sont `
           texteCorrection += this.sup2
-            ? `($${latitudes[i]}^\\circ$ ; $${longitudes[i]}^\\circ$).<br>`
-            : `($${Math.abs(latitudes[i])}^\\circ$${NordouSud[i]} ; $${Math.abs(longitudes[i])}^\\circ$${EstouOuest[i]}).<br>`
+            ? `${texteEnCouleurEtGras(`($${latitudes[i]}^\\circ$ ; $${longitudes[i]}^\\circ$)`)}.<br>`
+            : `${texteEnCouleurEtGras(`($${Math.abs(latitudes[i])}^\\circ$${NordouSud[i]} ; $${Math.abs(longitudes[i])}^\\circ$${EstouOuest[i]})`)}.<br>`
           objetsEnonce.push(croix, lab)
           objetsCorrection.push(croix, lab)
           if (context.isAmc) {

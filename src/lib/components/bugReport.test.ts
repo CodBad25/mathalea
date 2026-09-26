@@ -117,6 +117,18 @@ describe('buildBugReportDescription', () => {
     expect(description).toContain('- Système : macOS')
     expect(description).toContain('- Date : 16/08/2026')
   })
+  it('ajoute l’URL de l’exercice seul quand elle est fournie', () => {
+    const description = buildBugReportDescription({
+      url: 'https://coopmaths.fr/alea/?uuid=abc&uuid=def',
+      exerciseUrl: 'https://coopmaths.fr/alea/?uuid=def',
+    })
+    expect(description).toContain(
+      "- URL de l'exercice seul : https://coopmaths.fr/alea/?uuid=def",
+    )
+  })
+  it('n’ajoute pas de ligne pour l’exercice seul sans URL dédiée', () => {
+    expect(buildBugReportDescription({})).not.toContain('exercice seul')
+  })
   it('signale les informations manquantes', () => {
     const description = buildBugReportDescription({})
     expect(description).toContain('- URL : inconnue')

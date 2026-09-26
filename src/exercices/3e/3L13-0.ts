@@ -1,4 +1,4 @@
-import ExerciceEquationASolutionEntiere from '../4e/4L20-0'
+import ExerciceEquationASolutionEntiere from '../4e/4L20-0-old'
 export const interactifReady = true
 
 export const amcReady = true

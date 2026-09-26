@@ -1,3 +1,4 @@
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
@@ -190,14 +191,14 @@ export default class Parallélogramme extends Exercice {
             texteCorr += `${texteGras('En utilisant les milieux :')} : <br> `
             texteCorr += `<br> $\\bullet$ Soit $M$ le milieu de $[${A.nom}${D.nom}]$ : <br> `
             texteCorr += `$\\begin{cases}x_M=\\dfrac{x_${A.nom}+x_${D.nom}}{2}= \\dfrac{${xA}+${ecritureParentheseSiNegatif(xD)}}{2}=\\dfrac{${texNombre(xA + xD)}}{2}${xM.texSimplificationAvecEtapes()}\\\\[0.8em] y_M=\\dfrac{y_${A.nom}+y_${D.nom}}{2}= \\dfrac{${yA}+${ecritureParentheseSiNegatif(yD)}}{2}=\\dfrac{${texNombre(yA + yD)}}{2}${yM.texSimplificationAvecEtapes()}\\end{cases}$`
-            texteCorr += `  <br><br>Ainsi : $ M\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)$`
+            texteCorr += `  <br><br>Ainsi : $${miseEnEvidence(`M\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)`)}$`
             texteCorr += `<br><br> $\\bullet$ Soit $N$ le milieu de $[${B.nom}${C.nom}]$ : <br> `
             texteCorr += `$\\begin{cases}x_N=\\dfrac{x_${B.nom}+x_${C.nom}}{2}= \\dfrac{${xB}+${ecritureParentheseSiNegatif(xC)}}{2}=\\dfrac{${texNombre(xB + xC)}}{2}${xN.texSimplificationAvecEtapes()}\\\\[0.8em] y_N=\\dfrac{y_${B.nom}+y_${C.nom}}{2}= \\dfrac{${yB}+${ecritureParentheseSiNegatif(yC)}}{2}=\\dfrac{${texNombre(yB + yC)}}{2}${yN.texSimplificationAvecEtapes()}\\end{cases}$`
 
-            texteCorr += `  <br><br>Ainsi : $ N\\left(${xN.simplifie().texFSD}\\,;\\,${yN.simplifie().texFSD}\\right)$`
+            texteCorr += `  <br><br>Ainsi : $${miseEnEvidence(`N\\left(${xN.simplifie().texFSD}\\,;\\,${yN.simplifie().texFSD}\\right)`)}$`
             texteCorr +=
               '<br><br>On observe que $M$ et $N$ ont les mêmes coordonnées, donc les deux diagonales du quadrilatère se coupent en leur milieu.'
-            texteCorr += '<br>$ABDC$ est donc un parallélogramme.'
+            texteCorr += `<br>$ABDC$ ${texteEnCouleurEtGras('est donc un parallélogramme')}.`
 
             texteCorr += `<br><br> ${texteGras('En utilisant les longueurs :')}  <br> `
             texteCorr += `<br>$${A.nom}${B.nom}=\\sqrt{(x_{${B.nom}}-x_${A.nom})^2+(y_{${B.nom}}-y_${A.nom})^2}=\\sqrt{(${xB}-${ecritureParentheseSiNegatif(xA)})^2+(${yB}-${ecritureParentheseSiNegatif(yA)})^2}=\\sqrt{${ecritureParentheseSiNegatif(xB - xA)}^2+${ecritureParentheseSiNegatif(yB - yA)}^2}=\\sqrt{${AB2}}${AB2 === 1 || AB2 === 4 || AB2 === 9 || AB2 === 16 || AB2 === 25 || AB2 === 36 || AB2 === 49 || AB2 === 64 || AB2 === 81 ? `=${texRacineCarree(AB2)}` : ''}$<br>`
@@ -209,7 +210,7 @@ export default class Parallélogramme extends Exercice {
 
             texteCorr += `  <br>On observe que : $${A.nom}${B.nom}=${C.nom}${D.nom}$ et $${B.nom}${D.nom}=${A.nom}${C.nom}$.<br>
            `
-            texteCorr += `Les côtés opposés du quadrilatère $${A.nom}${B.nom}${D.nom}${C.nom}$ sont deux à deux de même longueur, donc $${A.nom}${B.nom}${D.nom}${C.nom}$ est donc un parallélogramme.`
+            texteCorr += `Les côtés opposés du quadrilatère $${A.nom}${B.nom}${D.nom}${C.nom}$ sont deux à deux de même longueur, donc $${A.nom}${B.nom}${D.nom}${C.nom}$ ${texteEnCouleurEtGras("est donc un parallélogramme")}.`
             variables.push(xA, yA, xB, yB, xC, yC, xD, yD)
           }
           break
@@ -349,11 +350,11 @@ export default class Parallélogramme extends Exercice {
             texteCorr += `<br> $\\bullet$ Soit $M$ le milieu de $[${A.nom}${D.nom}]$ : <br> `
             texteCorr += `$\\begin{cases}x_M=\\dfrac{x_${A.nom}+x_${D.nom}}{2}= \\dfrac{${xA}+${ecritureParentheseSiNegatif(xD)}}{2}=\\dfrac{${texNombre(xA + xD)}}{2}${xM.texSimplificationAvecEtapes()}\\\\[0.8em] y_M=\\dfrac{y_${A.nom}+y_${D.nom}}{2}= \\dfrac{${yA}+${ecritureParentheseSiNegatif(yD)}}{2}=\\dfrac{${texNombre(yA + yD)}}{2}${yM.texSimplificationAvecEtapes()}\\end{cases}$`
 
-            texteCorr += `  <br><br>Ainsi : $ M\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)$`
+            texteCorr += `  <br><br>Ainsi : $${miseEnEvidence(`M\\left(${xM.simplifie().texFSD}\\,;\\,${yM.simplifie().texFSD}\\right)`)}$`
             texteCorr += `<br><br>$\\bullet$ Soit $N$ le milieu de $[${B.nom}${C.nom}]$ : <br> `
             texteCorr += `$\\begin{cases}x_N=\\dfrac{x_${B.nom}+x_${C.nom}}{2}= \\dfrac{${xB}+${ecritureParentheseSiNegatif(xC)}}{2}=\\dfrac{${texNombre(xB + xC)}}{2}${xN.texSimplificationAvecEtapes()}\\\\[0.8em] y_N=\\dfrac{y_${B.nom}+y_${C.nom}}{2}= \\dfrac{${yB}+${ecritureParentheseSiNegatif(yC)}}{2}=\\dfrac{${texNombre(yB + yC)}}{2}${yN.texSimplificationAvecEtapes()}\\end{cases}$`
 
-            texteCorr += `  <br><br>Ainsi : $ N\\left(${xN.simplifie().texFSD}\\,;\\,${yN.simplifie().texFSD}\\right)$`
+            texteCorr += `  <br><br>Ainsi : $${miseEnEvidence(`N\\left(${xN.simplifie().texFSD}\\,;\\,${yN.simplifie().texFSD}\\right)`)}$`
             texteCorr +=
               "<br><br>On observe que $M$ et $N$ n'ont pas les mêmes coordonnées, donc les deux diagonales du quadrilatère ne se coupent pas en leur milieu."
             texteCorr += `<br>$${A.nom}${B.nom}${D.nom}${C.nom}$ n'est pas un parallélogramme.`
@@ -369,7 +370,7 @@ export default class Parallélogramme extends Exercice {
 
             texteCorr += `  <br>On observe que les côtés opposés de $${A.nom}${B.nom}${D.nom}${C.nom}$ ne sont pas  deux à deux de même longueur.<br>
            `
-            texteCorr += `$${A.nom}${B.nom}${D.nom}${C.nom}$ n'est donc pas un parallélogramme.`
+            texteCorr += `$${A.nom}${B.nom}${D.nom}${C.nom}$ ${texteEnCouleurEtGras("n'est donc pas un parallélogramme")}.`
             variables.push(xA, yA, xB, yB, xC, yC, xD, yD)
           }
           break

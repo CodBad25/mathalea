@@ -13,7 +13,10 @@ export type Vue = {
   key: string
   /** Lettres des bonnes réponses si la question est un QCM. */
   lettresQcm: string[]
-  /** Réponses mises en évidence en orange dans la correction. */
+  /**
+   * Réponses mises en évidence en orange dans la correction, prêtes à
+   * afficher (voir `extraitReponsesCourtes`).
+   */
   reponsesCourtes: string[]
 }
 
@@ -48,6 +51,7 @@ export type SlideshowHistoryOptions = {
   select?: number[]
   order?: number[]
   durationGlobal?: number
+  durationCorrection?: number
 }
 
 export type SlideshowHistoryItem = {

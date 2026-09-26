@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { Matrice } from '../../lib/mathFonctions/Matrice'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -97,7 +98,7 @@ export default class NomExercice extends Exercice {
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de $\\mathbb{R}^2$.
             <br><br> On calcule : $${nomfonction}(1,0) = ${table[0][0]}$ et $${nomfonction}(0,1) = ${table[0][1]}$.
-            <br><br> On en déduit que  la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
+            <br><br> On en déduit que  la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${miseEnEvidence(matrice.toTex())}$.`
           } else if (n === 2) {
             expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y`)
@@ -109,7 +110,7 @@ export default class NomExercice extends Exercice {
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^2$ dans la base de $\\mathbb{R}^2$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique. 
               <br><br> On calcule : $${nomfonction}(1,0) = (${table[0][0]},${table[1][0]})$ et $${nomfonction}(0,1) = (${table[0][1]},${table[1][1]})$.
-              <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
+              <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${miseEnEvidence(matrice.toTex())}$.`
           } else if (n === 3) {
             expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y`)
@@ -124,7 +125,7 @@ export default class NomExercice extends Exercice {
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^2$ dans la base de $\\mathbb{R}^3$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique.  
               <br><br> On calcule : $${nomfonction}(1,0) = (${table[0][0]},${table[1][0]},${table[2][0]})$ et $${nomfonction}(0,1) = (${table[0][1]},${table[1][1]},${table[2][1]})$.
-              <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
+              <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${miseEnEvidence(matrice.toTex())}$.`
           }
           break
         }
@@ -155,7 +156,7 @@ export default class NomExercice extends Exercice {
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de $\\mathbb{R}^3$.
             <br><br> On calcule : $${nomfonction}(1,0,0) = ${table[0][0]}$, $${nomfonction}(0,1,0) = ${table[0][1]}$ et $${nomfonction}(0,0,1) = ${table[0][2]}$.
-            <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
+            <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${miseEnEvidence(matrice.toTex())}$.`
           } else if (n === 2) {
             expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y + ${table[0][2]} z`)
@@ -167,7 +168,7 @@ export default class NomExercice extends Exercice {
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^3$ dans la base de $\\mathbb{R}^2$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique.  
               <br><br> On calcule : $${nomfonction}(1,0,0) = (${table[0][0]},${table[1][0]})$, $${nomfonction}(0,1,0) = (${table[0][1]},${table[1][1]})$ et $${nomfonction}(0,0,1) = (${table[0][2]},${table[1][2]})$.
-              <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
+              <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${miseEnEvidence(matrice.toTex())}$.`
           } else if (n === 3) {
             expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y + ${table[0][2]} z`)
@@ -182,7 +183,7 @@ export default class NomExercice extends Exercice {
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^3$ dans la base de $\\mathbb{R}^3$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique.   
             <br><br> On calcule : $${nomfonction}(1,0,0) = (${table[0][0]},${table[1][0]},${table[2][0]})$, $${nomfonction}(0,1,0) = (${table[0][1]},${table[1][1]},${table[2][1]})$ et $${nomfonction}(0,0,1) = (${table[0][2]},${table[1][2]},${table[2][2]})$.
-            <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
+            <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${miseEnEvidence(matrice.toTex())}$.`
           }
           break
         }

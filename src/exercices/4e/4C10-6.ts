@@ -130,7 +130,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
               `<br><br> ${texteEnCouleurEtGras('Conclusion :', bleuMathalea)} <br>` +
               `Il faut donc que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'négatif' : 'positif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           } else {
-            texteCorr = `Il faut que $ ${lettre} $ soit ${signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'positif' : 'négatif'} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
+            texteCorr = `Il faut que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'positif' : 'négatif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           }
           break
         case 2: // quotient de 2 produits
@@ -160,7 +160,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
               `<br><br> ${texteEnCouleurEtGras('Conclusion :', bleuMathalea)} <br>` +
               `Il faut donc que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'négatif' : 'positif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           } else {
-            texteCorr = `Il faut que $ ${lettre} $ soit ${signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'positif' : 'négatif'} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
+            texteCorr = `Il faut que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'positif' : 'négatif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           }
 
           break
