@@ -969,6 +969,13 @@ function qcmFigureTasksPrefixes(code: string | string[]): Set<string> {
 const TRUE_SIZE_FIGURE_MARKER = '// mathalea:vraie-grandeur'
 
 /**
+ * Marqueur posé sur une liste de questions dont les items contiennent eux-mêmes
+ * une grille `tasks` (notamment plusieurs QCM). `taskize` ne peut pas choisir
+ * ses colonnes automatiquement dans cette configuration imbriquée.
+ */
+const NESTED_TASKS_MARKER = '// mathalea:taches-imbriquees'
+
+/**
  * Préfixes (`ex1`, `ex2-corr`...) des exercices dont au moins une question
  * contient une figure `vraieGrandeur`, repérés au marqueur
  * `TRUE_SIZE_FIGURE_MARKER`. Une telle figure ne se réduit jamais pour tenir
@@ -983,6 +990,19 @@ function trueSizeFigureTasksPrefixes(code: string | string[]): Set<string> {
   return new Set(
     lines
       .filter((line) => line.includes(TRUE_SIZE_FIGURE_MARKER))
+      .flatMap((line) => [
+        ...line.matchAll(/#tasks\(columns: (ex\d+(?:-corr)?)-colonnes/g),
+      ])
+      .map((match) => match[1]),
+  )
+}
+
+/** Préfixes des listes de questions contenant une autre grille `tasks`. */
+function nestedTasksPrefixes(code: string | string[]): Set<string> {
+  const lines = Array.isArray(code) ? code : code.split('\n')
+  return new Set(
+    lines
+      .filter((line) => line.includes(NESTED_TASKS_MARKER))
       .flatMap((line) => [
         ...line.matchAll(/#tasks\(columns: (ex\d+(?:-corr)?)-colonnes/g),
       ])
@@ -1083,6 +1103,7 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
   const qcmFigurePrefixes = qcmFigureTasksPrefixes(code)
   const perQuestionLinesPrefixes = perQuestionLinesTasksPrefixes(code)
   const trueSizeFigurePrefixes = trueSizeFigureTasksPrefixes(code)
+  const nestedTaskPrefixes = nestedTasksPrefixes(code)
   for (const match of code.matchAll(
     /^#let (ex\d+(?:-corr)?(?:-qcm)?)-colonnes = (.+?)\s*$/gm,
   )) {
@@ -1092,7 +1113,8 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
     const defaultColumns =
       qcmFigurePrefixes.has(match[1]) ||
       perQuestionLinesPrefixes.has(match[1]) ||
-      trueSizeFigurePrefixes.has(match[1])
+      trueSizeFigurePrefixes.has(match[1]) ||
+      nestedTaskPrefixes.has(match[1])
         ? '1'
         : match[1].endsWith('-qcm')
           ? DEFAULT_TASKS_COLUMNS
@@ -2153,6 +2175,13 @@ function exerciseBody(
   const hasTrueSizeFigure = converted.some((question) =>
     question.includes('force-true-size: true'),
   )
+  // taskize ne sait pas résoudre `auto-fit` pour une liste dont tous les
+  // items contiennent une autre grille tasks (cas de plusieurs QCM) : sa
+  // sélection de colonnes devient `none`, puis échoue dans render-tasks-grid.
+  // La grille intérieure des propositions garde, elle, son auto-fit.
+  const hasNestedTasks = converted.some((question) =>
+    question.includes('#tasks('),
+  )
   const willBuildList =
     tasksPrefix != null &&
     (converted.length > 1 || (forceList && converted.length === 1))
@@ -2222,7 +2251,7 @@ function exerciseBody(
       : ''
     const columnsExpr = exportMode
       ? (layoutOverride?.columns ??
-        (hasTrueSizeFigure
+        (hasTrueSizeFigure || hasNestedTasks
           ? '1'
           : questionsColumnsLiteral(options.questionsColumns)))
       : `${tasksPrefix}-colonnes`
@@ -2232,10 +2261,16 @@ function exerciseBody(
     // repéré par `trueSizeFigureTasksPrefixes` pour donner par défaut une
     // seule colonne à cet exercice en mode aperçu (le mode export a déjà
     // résolu `columnsExpr` ci-dessus, ce marqueur ne lui sert à rien)
-    const trueSizeMarker =
-      !exportMode && hasTrueSizeFigure ? ` ${TRUE_SIZE_FIGURE_MARKER}` : ''
+    const tasksMarkers = !exportMode
+      ? [
+          hasTrueSizeFigure ? TRUE_SIZE_FIGURE_MARKER : '',
+          hasNestedTasks ? NESTED_TASKS_MARKER : '',
+        ]
+          .filter((marker) => marker.length > 0)
+          .join(' ')
+      : ''
     parts.push(
-      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, options.boldQuestionNumbers, labelIsVariableRef)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[${trueSizeMarker}\n${items.join('\n')}\n]`,
+      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, options.boldQuestionNumbers, labelIsVariableRef)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[${tasksMarkers.length > 0 ? ` ${tasksMarkers}` : ''}\n${items.join('\n')}\n]`,
     )
     return {
       code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
@@ -3449,6 +3484,9 @@ export function buildTypstDocument(
   // exercice dont au moins une question contient une figure `vraieGrandeur` :
   // une seule colonne par défaut (voir `trueSizeFigureTasksPrefixes`)
   const trueSizeFigurePrefixes = trueSizeFigureTasksPrefixes(allLines)
+  // une liste qui contient elle-même une grille taskize (plusieurs QCM) ne
+  // peut pas rester en auto-fit : le paquet échoue à en déduire les colonnes
+  const nestedTaskPrefixes = nestedTasksPrefixes(allLines)
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -3646,7 +3684,8 @@ export function buildTypstDocument(
       const defaultColumns =
         qcmFigurePrefixes.has(prefix) ||
         perQuestionLinesPrefixes.has(prefix) ||
-        trueSizeFigurePrefixes.has(prefix)
+        trueSizeFigurePrefixes.has(prefix) ||
+        nestedTaskPrefixes.has(prefix)
           ? '1'
           : prefix.endsWith('-qcm')
             ? DEFAULT_TASKS_COLUMNS

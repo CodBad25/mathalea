@@ -925,6 +925,13 @@ Un exercice à question unique n'a pas de liste `tasks`, donc pas de repère
 `mathalea-anchor` : `exerciseBody` en émet un quand le corps référence la
 variable de QCM, sinon la palette n'aurait nulle part où poser ses contrôles.
 
+Quand plusieurs questions contiennent chacune un QCM, la liste extérieure est
+forcée à une colonne (`// mathalea:taches-imbriquees`) : `taskize` ne sait pas
+résoudre son mode `auto-fit` pour des items qui contiennent eux-mêmes une
+grille et transmettrait `none` à `render-tasks-grid`. Les propositions de
+chaque QCM gardent leur propre calcul de colonnes ; cinq ensembles courts
+restent donc sur une même ligne.
+
 La variable globale `#let qcm-colonnes = 2` subsiste comme **repli** des
 chemins sans réglage par exercice : le tableau « Course aux nombres » (dont les
 énoncés ne passent pas par `exerciseBody`) et les trois autres vues Typst
