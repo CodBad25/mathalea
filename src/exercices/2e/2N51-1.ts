@@ -1,3 +1,4 @@
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -65,7 +66,7 @@ export default class Proprietesracinecarree extends Exercice {
           texteCorr = `$\\left(${a} \\sqrt{${b}}\\right)^{2}=${ecritureParentheseSiNegatif(a)}^{2}\\times \\left(\\sqrt{${b}}\\right)^{2}$
                         $\\phantom{\\left(${a} \\sqrt{${b}}\\right)^{2}}$<br>
                         $\\phantom{\\left(${a} \\sqrt{${b}}\\right)^{2}}=${d}\\times ${b}$<br>
-                        $\\phantom{\\left(${a} \\sqrt{${b}}\\right)^{2}}=${c}$`
+                        $\\phantom{\\left(${a} \\sqrt{${b}}\\right)^{2}}=${miseEnEvidence(c)}$`
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -100,7 +101,7 @@ export default class Proprietesracinecarree extends Exercice {
           texte = `$${c} \\sqrt{${b}}\\times ${ecritureParentheseSiNegatif(d)}\\sqrt{${b}}$`
           texteCorr = `$ ${c} \\sqrt{${b}}\\times ${ecritureParentheseSiNegatif(d)} \\sqrt{${b}}=${c}\\times ${ecritureParentheseSiNegatif(d)} \\sqrt{${b}} \\times \\sqrt{${b}}$<br>
                         $\\phantom{${c} \\sqrt{${b}}\\times ${ecritureParentheseSiNegatif(d)} \\sqrt{${b}}}=${e}\\times ${b}$<br>
-                        $\\phantom{${c} \\sqrt{${b}}\\times ${ecritureParentheseSiNegatif(d)} \\sqrt{${b}}}=${e * b}$`
+                        $\\phantom{${c} \\sqrt{${b}}\\times ${ecritureParentheseSiNegatif(d)} \\sqrt{${b}}}=${miseEnEvidence(e * b)}$`
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -136,7 +137,7 @@ export default class Proprietesracinecarree extends Exercice {
           texteCorr = `$${a} \\sqrt{${b}}\\left( ${c}  ${ecritureAlgebrique(d)}\\sqrt{${b}}\\right)=
                         ${a} \\sqrt{${b}}\\times ${ecritureParentheseSiNegatif(c)}${ecritureAlgebrique(a)} \\sqrt{${b}}\\times ${ecritureParentheseSiNegatif(d)}\\sqrt{${b}}$<br>
                         $\\phantom{${a} \\sqrt{${b}}\\left( ${c}  ${ecritureAlgebrique(d)}\\sqrt{${b}}\\right)}=${a * c}\\sqrt{${b}}${ecritureAlgebrique(a)}\\times ${ecritureParentheseSiNegatif(d)}\\times ${b}$<br>
-                        $\\phantom{${a} \\sqrt{${b}}\\left( ${c}  ${ecritureAlgebrique(d)}\\sqrt{${b}}\\right)}=${a * c}\\sqrt{${b}}${ecritureAlgebrique(a * d * b)}$`
+                        $\\phantom{${a} \\sqrt{${b}}\\left( ${c}  ${ecritureAlgebrique(d)}\\sqrt{${b}}\\right)}=${miseEnEvidence(`${a * c}\\sqrt{${b}}${ecritureAlgebrique(a * d * b)}`)}$`
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -170,7 +171,7 @@ export default class Proprietesracinecarree extends Exercice {
           e = c * d
 
           texte = `$\\sqrt{${b}}+\\sqrt{${c}}$`
-          texteCorr = `$  \\sqrt{${b}}+\\sqrt{${c}}$ n'est pas simplifiable`
+          texteCorr = `$  \\sqrt{${b}}+\\sqrt{${c}}$ ${texteEnCouleurEtGras("n'est pas simplifiable")}`
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -201,7 +202,7 @@ export default class Proprietesracinecarree extends Exercice {
           e = c * d
 
           texte = `$  \\sqrt{${b * b}}+\\sqrt{${c * c}}$`
-          texteCorr = `$  \\sqrt{${b * b}}+\\sqrt{${c * c}}=${b}+${c}=${b + c}$ `
+          texteCorr = `$  \\sqrt{${b * b}}+\\sqrt{${c * c}}=${b}+${c}=${miseEnEvidence(b + c)}$ `
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -234,7 +235,7 @@ export default class Proprietesracinecarree extends Exercice {
           texte = `$ \\sqrt{\\dfrac{${d}}{${c}}}$`
           texteCorr = `$ \\sqrt{\\dfrac{${d}}{${c}}}= \\sqrt{\\dfrac{${b}^{2}\\times${c}}{${c}}}$<br>
                         $\\phantom{\\sqrt{\\dfrac{${d}}{${c}}}}=\\sqrt{${b}^{2}}$<br>
-                        $\\phantom{\\sqrt{\\dfrac{${d}}{${c}}}}=${b}$ `
+                        $\\phantom{\\sqrt{\\dfrac{${d}}{${c}}}}=${miseEnEvidence(b)}$ `
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -281,7 +282,7 @@ export default class Proprietesracinecarree extends Exercice {
           texte = `$ \\sqrt{${d}}\\times \\sqrt{${c}}$`
           texteCorr = `$ \\sqrt{${d}}\\times \\sqrt{${c}}=\\sqrt{${d}\\times${c}}$<br>
                         $\\phantom{\\sqrt{${d}}\\times \\sqrt{${c}}}=\\sqrt{${b}\\times${c}\\times${c}}$<br>
-                        $\\phantom{\\sqrt{${d}}\\times \\sqrt{${c}}}=${c}\\sqrt{${b}}$ `
+                        $\\phantom{\\sqrt{${d}}\\times \\sqrt{${c}}}=${miseEnEvidence(`${c}\\sqrt{${b}}`)}$ `
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [

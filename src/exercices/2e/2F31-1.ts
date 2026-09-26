@@ -10,7 +10,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import { createList } from '../../lib/format/lists'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texteGras } from '../../lib/outils/embellissements'
+import { texteGras, miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { prenom, prenomM } from '../../lib/outils/Personne'
 import { texNombre, texPrix } from '../../lib/outils/texNombre'
@@ -120,7 +120,7 @@ export default class EtudeFctPoly3 extends Exercice {
                 `Le nombre minimal de séances dans le mois est $0$ et le nombre maximal est $${e}$, donc l'ensemble de définition des fonctions $f$ et $g$ est l'ensemble des entiers de l'intervalle $[0\\,;\\,${e}]$.`,
                 ` Les formules comprennent un abonnement fixe et un tarif particulier pour une séance. <br>
           Ainsi, le montant mensuel pour une formule est : Abonnement + Coût d'une séance $\\times$ Nombre de séances. <br>
-          La fonction $f$ est définie par $f(x)=${a}+${texPrix(b)}x$ et la fonction $g$ est définie par $g(x)=${c}+${texPrix(d)}x$.`,
+          La fonction $f$ est définie par $f(x)=${a}+${texPrix(b)}x$ et la fonction $g$ est définie par $g(x)=${miseEnEvidence(`${c}+${texPrix(d)}x`)}$.`,
                 ` On cherche le nombre de séances maximum que l'on peut faire avec $${T}$ € avec les formule A et B.<br>
           Pour la formule A, on cherche $x$ tel que $f(x)\\leqslant${T}$.<br>
           $\\begin{aligned}
@@ -131,7 +131,7 @@ x&\\leqslant \\dfrac{${T - a}}{${texPrix(b)}}${sp(8)}\\text{(On divise par ${tex
 \\end{aligned}$
 <br>
 Le plus grand entier inférieur ou égal à $\\dfrac{${T - a}}{${texPrix(b)}}$ est $${new Decimal(T - a).div(b).floor()}$.<br>
-Avec la formule A, ${P} pourra faire au maximum $${new Decimal(T - a).div(b).floor()}$ séances.<br><br>
+Avec la formule A, ${P} pourra faire au maximum $${miseEnEvidence(new Decimal(T - a).div(b).floor().toString())}$ séances.<br><br>
 Pour la formule B, on cherche $x$ tel que $g(x)\\leqslant${T}$.<br>
 $\\begin{aligned}
 ${c}+${texPrix(d)}x&\\leqslant${T}\\\\
@@ -141,7 +141,7 @@ x&\\leqslant \\dfrac{${T - c}}{${texPrix(d)}}${sp(8)} \\text{(On divise par ${te
 \\end{aligned}$
 <br>
 Le plus grand entier inférieur ou égal à $\\dfrac{${T - c}}{${texPrix(d)}}$ est $${new Decimal(T - c).div(d).floor()}$.<br>
-Avec la formule B, ${P} pourra faire au maximum $${new Decimal(T - c).div(d).floor()}$ séances.<br><br>
+Avec la formule B, ${P} pourra faire au maximum $${miseEnEvidence(new Decimal(T - c).div(d).floor().toString())}$ séances.<br><br>
                ${texteGras('Conclusion : ')}  ${
                  new Decimal(T - c)
                    .div(d)
@@ -198,7 +198,7 @@ Avec la formule B, ${P} pourra faire au maximum $${new Decimal(T - c).div(d).flo
                   définition de la fonction $T$ est $[0\\,;\\,${km}]$.`,
                 ` Le tarif  comprend un forfait fixe et un tarif par $\\text{km}$ parcouru. <br>
           Ainsi, le montant de la location est  : 
-          Forfait + Coût d'un $\\text{km}$ $\\times$ Nombre de $\\text{km}$ parcourus, soit $T(x)=${a}+${texNombre(c, 2)}x$.`,
+          Forfait + Coût d'un $\\text{km}$ $\\times$ Nombre de $\\text{km}$ parcourus, soit $T(x)=${miseEnEvidence(`${a}+${texNombre(c, 2)}x`)}$.`,
                 ` On résout l'équation  $T(x)=${texNombre(prix, 2)}$.<br>
           $\\begin{aligned}
           ${a}+${texNombre(c, 2)}x&=${texNombre(prix, 2)}\\\\
@@ -207,7 +207,7 @@ x&=\\dfrac{${texNombre(new Decimal(prix).sub(a), 2)}}{${texNombre(c, 2)}}${sp(8)
 x&=${texNombre(d, 0)}
 \\end{aligned}$<br>
 L'équation a pour solution $${texNombre(d, 2)}$.<br>
-On peut dire que lorsque le prix payé pour la location est $${texNombre(prix, 2)}$ €, le client a parcouru $${texNombre(d, 0)}\\text{ km}$ durant le week-end.`,
+On peut dire que lorsque le prix payé pour la location est $${texNombre(prix, 2)}$ €, le client a parcouru $${miseEnEvidence(texNombre(d, 0))}\\text{ km}$ durant le week-end.`,
               ],
               style: 'nombres',
             })
@@ -235,8 +235,8 @@ On peut dire que lorsque le prix payé pour la location est $${texNombre(prix, 2
 
             texteCorr = createList({
               items: [
-                ` Le carré de la vitesse est $v^2$, donc la fonction $d$ est définie par : $d(v)=\\dfrac{v^2}{${texNombre(a, 1)}}$. `,
-                ` $d(${v})=\\dfrac{${v}^2}{${texNombre(a, 1)}}\\approx ${texNombre(new Decimal(v.pow(2).div(a)), 0)}$. La distance de freinage est d'environ $${texNombre(new Decimal(v.pow(2).div(a)), 0)}$.`,
+                ` Le carré de la vitesse est $v^2$, donc la fonction $d$ est définie par : $d(v)=${miseEnEvidence(`\\dfrac{v^2}{${texNombre(a, 1)}}`)}$. `,
+                ` $d(${v})=\\dfrac{${v}^2}{${texNombre(a, 1)}}\\approx ${texNombre(new Decimal(v.pow(2).div(a)), 0)}$. La distance de freinage est d'environ $${miseEnEvidence(texNombre(new Decimal(v.pow(2).div(a)), 0))}$.`,
                 " La distance de freinage n'est pas proportionnelle à la vitesse car la fonction $d$ n'est pas une fonction linéaire. Elle ne traduit pas une situation de proportionnalité.",
                 `   On cherche $v$ tel que $d(v)=${b}$.<br>
                     $\\begin{aligned}
@@ -246,7 +246,7 @@ v^2&= ${texNombre(new Decimal(b).mul(a), 2)}\\\\
 v&= -\\sqrt{${texNombre(new Decimal(b).mul(a), 2)}} ${sp(8)} \\text{ou} ${sp(8)} v= \\sqrt{${texNombre(new Decimal(b).mul(a), 2)}}${sp(8)}\\text{(deux nombres ont pour carré } ${texNombre(new Decimal(b).mul(a), 2)} \\text{)}
 \\end{aligned}$<br>
 Puisque $v$ est un nombre positif, on en déduit $v= \\sqrt{${texNombre(new Decimal(b).mul(a), 2)}}\\approx ${new Decimal(b).mul(a).sqrt().round()}$.<br>
-Lorsque la distance de freinage de la voiture est $${b}\\text{ m}$, sa vitesse est alors d'environ $${new Decimal(b).mul(a).sqrt().round()}\\text{ km/h}$.<br>
+Lorsque la distance de freinage de la voiture est $${b}\\text{ m}$, sa vitesse est alors d'environ $${miseEnEvidence(new Decimal(b).mul(a).sqrt().round().toString())}\\text{ km/h}$.<br>
 `,
               ],
               style: 'nombres',
@@ -280,7 +280,7 @@ Lorsque la distance de freinage de la voiture est $${b}\\text{ m}$, sa vitesse e
 
             texteCorr = createList({
               items: [
-                ` En notant $x$ la variable, l'expression algébrique de $${nom}$ est : $${nom}(x)=${texNombre(a)}-${b}x$.`,
+                ` En notant $x$ la variable, l'expression algébrique de $${nom}$ est : $${nom}(x)=${miseEnEvidence(`${texNombre(a)}-${b}x`)}$.`,
                 ` La relation $${nom}(x)=${texNombre(a)}-${b}x$ montre que lorsque le prix de l'abonnement $x$ augmente, le nombre d'abonnés $${nom}(x)$ diminue. <br>
           Plus précisément, à chaque hausse de $1$ €, le nombre d'abonnés diminue de $${b}$ (coefficient devant $x$).`,
 
@@ -295,7 +295,7 @@ x&=\\dfrac{${texNombre(a)}}{${b}}\\\\
 x&=${texNombre(a / b, 2)}
 \\end{aligned}$<br>
 On en déduit que le montant de l'abonnement doit se situer entre $0$ € et $${texNombre(a / b, 2)}$ €. <br>
-Par conséquent l'ensemble de définition de la fonction $${nom}$ est : $[0\\,;\\,${texNombre(a / b, 2)}]$.`,
+Par conséquent l'ensemble de définition de la fonction $${nom}$ est : $${miseEnEvidence(`[0\\,;\\,${texNombre(a / b, 2)}]`)}$.`,
                 ` On cherche la valeur de $x$  afin que $${nom}(x)=${texNombre(c)}$.<br>
           $\\begin{aligned}
           ${texNombre(a)}-${b}x&=${texNombre(c)}\\\\
@@ -304,9 +304,9 @@ x&=\\dfrac{${texNombre(-a + c)}}{${-b}}${sp(8)}\\text{(On divise par } ${-b} \\t
 x&=\\dfrac{${texNombre(a - c)}}{${b}}\\\\
 x&=${texNombre((a - c) / b, 2)}
 \\end{aligned}$<br>
-Pour avoir $${texNombre(c)}$ abonnés, la directrice des abonnements doit fixer le prix de l'abonnement à $${texPrix((a - c) / b)}$ €.`,
+Pour avoir $${texNombre(c)}$ abonnés, la directrice des abonnements doit fixer le prix de l'abonnement à $${miseEnEvidence(texPrix((a - c) / b))}$ €.`,
                 ` Comme $x$ désigne le montant de l'abonnement et $${nom}(x)$ le nombre d'abonnés, le produit du nombre d'abonnés par le prix d'un abonnement est $${nom}(x)\\times x$, soit $(${texNombre(a)}-${b}x)\\times x$.<br>
-          Son expression développée est :  $${texNombre(a)}x-${b}x^2$.`,
+          Son expression développée est :  $${miseEnEvidence(`${texNombre(a)}x-${b}x^2`)}$.`,
               ],
               style: 'nombres',
             })
@@ -344,7 +344,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ` Le minimum de litres que ${P} peut mettre est  $${b}$ et le maximum est $${c}$. <br>
             L'ensemble de définition de $${nom}$ est donc $[${b}\\,;\\,${c}]$.`,
                 ` Pour obtenir le prix payé, on multiplie le nombre de litres par le prix d'un litre. <br>
-            Ainsi, l'expression algébrique de $${nom}$ est : $${nom}(x)=${texNombre(a, 2)}\\times x$, soit $${nom}(x)=${texNombre(a, 2)}x$.`,
+            Ainsi, l'expression algébrique de $${nom}$ est : $${nom}(x)=${texNombre(a, 2)}\\times x$, soit $${nom}(x)=${miseEnEvidence(`${texNombre(a, 2)}x`)}$.`,
                 ` Le prix payé est proportionnel au nombre de litres. La fonction $${nom}$ est une fonction linéaire traduisant une situation de proportionnalité.`,
                 `   On cherche $x$ tel que $${nom}(x)=${texNombre(prix, 2)}$.<br>
             $\\begin{aligned}
@@ -352,7 +352,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
   x&=\\dfrac{${texNombre(prix, 2)}}{${texNombre(a, 2)}} ${sp(8)} \\text{(On divise par ${texNombre(a, 2)} chaque membre)} \\\\
   x&= ${d}
     \\end{aligned}$<br>
-  Pour $${d}$ litres mis dans le réservoir, le coût est de  $${texNombre(prix, 2)}$ €.`,
+  Pour $${d}$ litres mis dans le réservoir, le coût est de  $${miseEnEvidence(texNombre(prix, 2))}$ €.`,
               ],
               style: 'nombres',
             })
@@ -440,7 +440,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                   Comme le résultat est négatif, on en déduit que le saut dure moins de $4$ secondes.`,
                 ` La hauteur du début du saut est donnée par : $${nom}(0)=(${texNombre(a, 3)}\\times 0${texNombre(b, 2)})(0 ${texNombre(c, 2)})
                     =${texNombre(b.mul(c), 2)}$.<br>
-                     ${P} se trouve à $${texNombre(b.mul(c), 2)}$ mètres au début du saut.`,
+                     ${P} se trouve à $${miseEnEvidence(texNombre(b.mul(c), 2))}$ mètres au début du saut.`,
                 ` Le saut commence à $t=0$ et se termine lorsque ${P} se retrouve au sol, c'est-à-dire lorsque la hauteur est nulle. <br>
                     Ainsi, le temps du saut est donnée par la solution positive de l'équation $(${texNombre(a, 3)}t${texNombre(b, 2)})(t${texNombre(c, 2)})=0$<br>
                     Il s'agit d'une équation produit nul qui a deux solutions : $t_1= -\\dfrac{${texNombre(-b, 2)}}{${texNombre(-a, 2)}}$ (valeur négative)  et   $t_2= ${texNombre(-c, 2)}$.  <br>
@@ -449,7 +449,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                     $\\begin{aligned}
                     ${nom}(t)&=(${texNombre(a, 3)}t${texNombre(b, 2)})(t${texNombre(c, 2)})\\\\
                     &=${texNombre(a, 3)}t^2+${texNombre(a.mul(c), 3)}t${texNombre(b, 2)}t+${texNombre(b.mul(c), 2)}\\\\
-                    &=${texNombre(a, 3)}t^2+${texNombre(a.mul(c).plus(b), 2)}t+${texNombre(b.mul(c), 2)}     
+                    &=${miseEnEvidence(`${texNombre(a, 3)}t^2+${texNombre(a.mul(c).plus(b), 2)}t+${texNombre(b.mul(c), 2)}`)}     
                   \\end{aligned}$`,
               ],
               style: 'nombres',
@@ -632,9 +632,9 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
             texteCorr = createList({
               items: [
                 `     Le taux d'alcoolémie maximal est atteint lorsque $t=${texNombre(Math.round(s0 * 10) / 10, 1)}$. Sa valeur
-            est environ  $${texNombre(Math.round(f(s0) * 100) / 100, 2)}$.`,
+            est environ  $${miseEnEvidence(texNombre(Math.round(f(s0) * 100) / 100, 2))}$.`,
                 ` Les solutions de l'inéquation $${nom}(t)>0,5$ sont les abscisses des points de la courbe qui se situent strictement en dessous de la droite d'équation $y=0,5$. <br>
-            Cette inéquation a pour ensemble de solution $]${texNombre(Math.round(s1 * 10) / 10, 1)}\\,;\\,${texNombre(Math.round(s2 * 10) / 10, 1)}[$. <br>
+            Cette inéquation a pour ensemble de solution $${miseEnEvidence(`]${texNombre(Math.round(s1 * 10) / 10, 1)}\\,;\\,${texNombre(Math.round(s2 * 10) / 10, 1)}[`)}$. <br>
               `,
                 `${
                   Math.round(s2 * 10) / 10 === 2 ||
@@ -786,7 +786,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
             \n \\text{Temps (en s)}&${texNombre(a5 / 1000, 3)}&60  \\\\\n \\hline\n
             \\end{array}\n$
             <br>
-             $n=\\dfrac{60\\times 1}{${texNombre(a5 / 1000, 3)}}\\approx ${texNombre((60 * 1000) / a5, 0)}$.<br>
+             $n=${miseEnEvidence(`\\dfrac{60\\times 1}{${texNombre(a5 / 1000, 3)}}\\approx ${texNombre((60 * 1000) / a5, 0)}`)}$.<br>
              ${
                (60 * 1000) / a5 > 100
                  ? `Comme $${texNombre((60 * 1000) / a5, 0)}>100$, ce patient souffre de tachycardie.`
@@ -830,7 +830,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
             texteCorr = createList({
               items: [
                 ` $f(${j})=${texNombre(p, 0)}-${texNombre(m, 1)}\\times ${j}=${texNombre(new Decimal(p).sub(m.mul(j)), 2)}$.<br>
-            Au bout de $${j}$ jours, il reste $${texNombre(new Decimal(p).sub(m.mul(j)), 2)}$ kg de grains dans le silo.`,
+            Au bout de $${j}$ jours, il reste $${miseEnEvidence(texNombre(new Decimal(p).sub(m.mul(j)), 2))}$ kg de grains dans le silo.`,
                 ` L'antécédent de $${texNombre(ant, 1)}$ est la solution de l'équation $f(x)=${texNombre(ant, 1)}$. <br>
           $\\begin{aligned}
           ${texNombre(p, 0)}-${texNombre(m, 1)}t&=${texNombre(ant, 1)}\\\\
@@ -838,10 +838,10 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
          t&=\\dfrac{${texNombre(new Decimal(ant).sub(p), 1)}}{-${texNombre(m, 1)}}\\\\
          t&=${texNombre(new Decimal(p.sub(ant)).div(m), 1)}
           \\end{aligned}$<br>
-          L'antécédent de $${texNombre(ant, 1)}$ est $${texNombre(new Decimal(p.sub(ant)).div(m), 1)}$.
+          L'antécédent de $${texNombre(ant, 1)}$ est $${miseEnEvidence(texNombre(new Decimal(p.sub(ant)).div(m), 1))}$.
 `,
                 ` La contenance du silo est donnée par $f(0)$. <br>
-          Comme $f(0)=${texNombre(p, 0)}-${texNombre(m, 1)}\\times 0=${texNombre(p, 0)}$, la contenance du silo est $${texNombre(p, 0)}$ kg.
+          Comme $f(0)=${texNombre(p, 0)}-${texNombre(m, 1)}\\times 0=${texNombre(p, 0)}$, la contenance du silo est $${miseEnEvidence(texNombre(p, 0))}$ kg.
           `,
                 ` On cherche $t$ tel que $f(t)=0$.<br>
 $\\begin{aligned}
@@ -851,13 +851,13 @@ t&=\\dfrac{${texNombre(-p, 0)}}{-${texNombre(m, 1)}}\\\\
 t&=${texNombre(-p / -m, 0)}
 \\end{aligned}$<br>
 
-Au bout de $${texNombre(new Decimal(p).div(m), 0)}$ jours, l'éleveur sera à court de grains.`,
+Au bout de $${miseEnEvidence(texNombre(new Decimal(p).div(m), 0))}$ jours, l'éleveur sera à court de grains.`,
                 ` Chaque jour les poulets consomment $${texNombre(m, 1)}$ kg de grains. <br>
 Par exemple,  la masse de grains mangés le premier jour est donnée par $f(0)-f(1)$.<br>
 $\\begin{aligned}
 f(0)-f(1)&=(${texNombre(p, 0)}-${texNombre(m, 1)}\\times 0)-(${texNombre(p, 0)}-${texNombre(m, 1)}\\times 1)\\\\
 &=${texNombre(p, 0)}-${texNombre(new Decimal(p).sub(m), 1)}\\\\
-&=${texNombre(m, 1)}
+&=${miseEnEvidence(texNombre(m, 1))}
 \\end{aligned}$
 `,
                 ` La fonction $g$ est donnée par : <br>
@@ -903,7 +903,7 @@ Calculer sa vitesse de rotation au bout de $1$ minute.`,
                   &=${texNombre(new Decimal(a.mul(60).add(v)), 3)}
                   \\end{aligned}$
             <br>
-            Au bout d'une minute, le hand-spinner a une vitesse de  $${texNombre(new Decimal(a.mul(60).add(v)), 3)}$ tours par seconde.`,
+            Au bout d'une minute, le hand-spinner a une vitesse de  $${miseEnEvidence(texNombre(new Decimal(a.mul(60).add(v)), 3))}$ tours par seconde.`,
                 "Le temps et la vitesse de rotation du  hand-spinner ne sont pas proportionnels car la fonction $V$ n'est pas une fonction linéaire (elle n'est pas de la forme $V(t)=a\\times t$).",
                 `Le hand-spinner s'arrête lorsque la vitesse de rotation est nulle. <br>
             On cherche donc la valeur de $t$ telle que : <br>
@@ -913,7 +913,7 @@ Calculer sa vitesse de rotation au bout de $1$ minute.`,
            ${texNombre(a, 3)} \\times t&=-${v}\\\\
            t&=\\dfrac{${v}}{${texNombre(-a, 3)}}
            \\end{aligned}$<br>
-           Comme  $\\dfrac{${v}}{${texNombre(-a, 3)}}\\approx ${texNombre(new Decimal(-v).div(a), 0)}$, le hand-spinner s'arrte au bout de $${texNombre(new Decimal(-v).div(a), 0)}$ secondes (valeur arrondie à la seconde).`,
+           Comme  $\\dfrac{${v}}{${texNombre(-a, 3)}}\\approx ${texNombre(new Decimal(-v).div(a), 0)}$, le hand-spinner s'arrte au bout de $${miseEnEvidence(texNombre(new Decimal(-v).div(a), 0))}$ secondes (valeur arrondie à la seconde).`,
                 ` D'une manière générale, on a  : <br>
            $\\begin{aligned}
             V(t)&=0\\\\
@@ -978,10 +978,10 @@ Calculer sa vitesse de rotation au bout de $1$ minute.`,
                 createList({
                   items: [
                     `Le tarif est composé du montant de l'abonnement et $${texNombre(p, 2, true)}$ € par mètre cube consommé, on en déduit que : <br>
-                      $f(x)=${texNombre(abo, 2, true)}+${texNombre(p, 2, true)}x$.`,
+                      $f(x)=${miseEnEvidence(`${texNombre(abo, 2, true)}+${texNombre(p, 2, true)}x`)}$.`,
                     `Le prix payé par un ménage consommant $${conso}\\text{ m}^3$ d'eau par an est donné par $f(${conso})$.<br>
                      $f(${conso})=${texNombre(abo, 2, true)}+${texNombre(p, 2, true)}\\times ${conso}=${texNombre(new Decimal(p).mul(conso).add(abo), 2)}$.<br>
-                     Le ménage devra payer  $${texNombre(new Decimal(p).mul(conso).add(abo), 2, true)}$ €.`,
+                     Le ménage devra payer  $${miseEnEvidence(texNombre(new Decimal(p).mul(conso).add(abo), 2, true))}$ €.`,
                     `On cherche $x$ tel que : <br>
                       $\\begin{aligned}
                       f(x)&\\geqslant ${texNombre(fac2, 2, true)}\\\\
@@ -990,7 +990,7 @@ Calculer sa vitesse de rotation au bout de $1$ minute.`,
                        x&\\geqslant \\dfrac{${texNombre(new Decimal(fac2).sub(abo), 3)}}{${texNombre(p, 2, true)}}
                        \\end{aligned}$
                        <br>
-                       Comme $\\dfrac{${texNombre(new Decimal(fac2).sub(abo), 3)}}{${texNombre(p, 2, true)}}= ${texNombre(new Decimal(fac2.sub(abo)).div(p), 3)}$, c'est à partir d'une consommation de $${texNombre(new Decimal(fac2.sub(abo)).div(p), 3)}\\text{ m}^3$ d'eau que la facture sera supérieure ou égale à  $${texNombre(fac2, 2, true)}$ €.
+                       Comme $\\dfrac{${texNombre(new Decimal(fac2).sub(abo), 3)}}{${texNombre(p, 2, true)}}= ${texNombre(new Decimal(fac2.sub(abo)).div(p), 3)}$, c'est à partir d'une consommation de $${texNombre(new Decimal(fac2.sub(abo)).div(p), 3)}\\text{ m}^3$ d'eau que la facture sera supérieure ou égale à  $${miseEnEvidence(texNombre(fac2, 2, true))}$ €.
 
                        
                        `,

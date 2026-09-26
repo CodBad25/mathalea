@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -61,7 +62,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
         // Combien de chiffres ? Quelles valeurs ?
         case 1:
           a = randint(2, 9)
-          corr = `Comme $\\sqrt{${a}} \\geqslant 0$, alors $\\sqrt{\\sqrt{${a}}}$ existe.`
+          corr = `Comme $\\sqrt{${a}} \\geqslant 0$, alors $\\sqrt{\\sqrt{${a}}}$ ${texteEnCouleurEtGras("existe")}.`
           texte = `$\\sqrt{\\sqrt{${a}}}$`
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
@@ -76,7 +77,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           a = randint(2, 9) * -1
           texte = `$\\sqrt{${a}}$`
           reponse = 'N'
-          corr = `$${a}$ est un nombre négatif donc $\\sqrt{${a}}$ n'existe pas. `
+          corr = `$${a}$ est un nombre négatif donc $\\sqrt{${a}}$ ${texteEnCouleurEtGras("n'existe pas")}. `
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
             texteCorr += corr
@@ -89,7 +90,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           texte = `$\\sqrt{\\left(${a}\\right)^{2}}$`
           reponse = 'O'
           corr = `On a $\\left(${a}\\right)^{2}=\\left(${a}\\right)\\times \\left(${a}\\right)=${a * a}$. <br>
-          Comme $${a * a}$ est un nombre positf, $\\sqrt{\\left(${a}\\right)^{2}}$ existe.`
+          Comme $${a * a}$ est un nombre positf, $\\sqrt{\\left(${a}\\right)^{2}}$ ${texteEnCouleurEtGras("existe")}.`
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
             texteCorr += corr
@@ -102,7 +103,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           a = randint(2, 9)
           texte = `$-\\sqrt{${a}}$`
           reponse = 'O'
-          corr = `${a} est un nombre positif donc $-\\sqrt{${a}}$ existe.<br>
+          corr = `${a} est un nombre positif donc $-\\sqrt{${a}}$ ${texteEnCouleurEtGras("existe")}.<br>
           ${texteGras('Remarque')} :   Le signe $-$ étant placé devant le symbole radical, le nombre $-\\sqrt{${a}}$ est donc négatif. `
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
@@ -116,7 +117,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           texte = `$\\sqrt{-\\left(${a}\\right)^{2}}$`
           reponse = 'N'
           corr = `On a $-\\left(${a}\\right)^{2}=-\\left(${a}\\right)\\times \\left(${a}\\right)=-${a * a}$.<br>
-          Comme $-${a * a}$ est un nombre négatif,   $\\sqrt{-\\left(${a}\\right)^{2}}$ n'existe pas.`
+          Comme $-${a * a}$ est un nombre négatif,   $\\sqrt{-\\left(${a}\\right)^{2}}$ ${texteEnCouleurEtGras("n'existe pas")}.`
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
             texteCorr += corr
@@ -129,7 +130,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           texte = `$\\sqrt{${a}-\\pi}$`
           reponse = 'N'
           corr = `Comme $\\pi>3$ alors $${a}-\\pi$ est un nombre négatif. <br>
-          Ainsi, $\\sqrt{${a}-\\pi}$ n'existe pas.`
+          Ainsi, $\\sqrt{${a}-\\pi}$ ${texteEnCouleurEtGras("n'existe pas")}.`
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
             texteCorr += corr
@@ -143,7 +144,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           texte = `$\\sqrt{${a}-\\pi}$`
           reponse = 'O'
           corr = `Comme  $\\pi\\approx 3,14$ alors $${a}-\\pi$  est un nombre positif.<br>
-          Ainsi, $\\sqrt{${a}-\\pi}$ existe.`
+          Ainsi, $\\sqrt{${a}-\\pi}$ ${texteEnCouleurEtGras("existe")}.`
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
             texteCorr += corr
@@ -158,7 +159,7 @@ export default class ExistenceDUneRacineCarree extends Exercice {
           texte = `$\\sqrt{-${a}^{2}}$`
           reponse = 'N'
           corr = `On a $-${a}^{2}=-${a}\\times ${a}=-${a * a}$. <br>
-          Comme $-${a * a}$ est un réel négatif,  $\\sqrt{-${a}^{2}}$ n'existe pas.`
+          Comme $-${a * a}$ est un réel négatif,  $\\sqrt{-${a}^{2}}$ ${texteEnCouleurEtGras("n'existe pas")}.`
           if (this.correctionDetaillee) {
             texteCorr = corrDetail
             texteCorr += corr

@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   texFractionFromString,
@@ -93,7 +94,7 @@ export default class Alignementdetroispoints extends Exercice {
           texteCorr += '<br><br>On observe que $m_1 \\neq m_2$. '
           texteCorr +=
             '<br>Les droites $(AB)$ et $(AC)$ ne sont donc pas parallèles. '
-          texteCorr += '<br>Les points $A$, $B$ et $C$ ne sont pas alignés. '
+          texteCorr += `<br>Les points $A$, $B$ et $C$ ${texteEnCouleurEtGras('ne sont pas alignés')}. `
 
           break
         case 'oui':
@@ -139,7 +140,7 @@ export default class Alignementdetroispoints extends Exercice {
             texteCorr +=
               '<br>Le point $A$ appartenant aux deux droites parallèles, $(AB)$ et $(AC)$ sont des droites confondues.'
             texteCorr +=
-              '<br>On en déduit que les points $A$, $B$ et $C$ sont alignés. '
+              `<br>On en déduit que les points $A$, $B$ et $C$ ${texteEnCouleurEtGras('sont alignés')}. `
           }
           break
       }

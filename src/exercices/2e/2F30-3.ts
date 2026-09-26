@@ -195,7 +195,7 @@ export default class LecturesGraphiques extends Exercice {
             })
           reponses[i] = minimum[1]
           texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
-          texteCorr = `Le minimum de $f$ est $${texNombre(minimum[1], 1)}$ et il est atteint en $x=${minimum[0]}$.<br>`
+          texteCorr = `Le minimum de $f$ est $${miseEnEvidence(texNombre(minimum[1], 1))}$ et il est atteint en $x=${minimum[0]}$.<br>`
           if (this.correctionDetaillee) {
             s[0] =
               minimum[1] !== 0
@@ -525,15 +525,15 @@ export default class LecturesGraphiques extends Exercice {
               break
             case 1:
               texteCorr = `$${texNombre(y0, 1)}$ ${texteEnCouleurEtGras('possède un unique antécédent')} sur $[-4;4]$.<br>`
-              texteCorr = `L'antécédent de $${texNombre(y0, 1)}$ est aux environs de $${texNombre(antecedents[0], 1)}$.<br>`
+              texteCorr = `L'antécédent de $${texNombre(y0, 1)}$ est aux environs de $${miseEnEvidence(texNombre(antecedents[0], 1))}$.<br>`
               break
             default:
               texteCorr = `$${texNombre(y0, 1)}$ possède $${miseEnEvidence(antecedentTrouve)}$ antécédents sur $[-4;4]$.<br>`
               texteCorr += `Les antécédents de $${texNombre(y0, 1)}$ sont aux environs des nombres suivants : `
               for (let l = 0; l < antecedentTrouve - 1; l++) {
-                texteCorr += `$${texNombre(antecedents[l], 1)}$ ; `
+                texteCorr += `$${miseEnEvidence(texNombre(antecedents[l], 1))}$ ; `
               }
-              texteCorr += `$${texNombre(antecedents[antecedentTrouve - 1], 1)}$.<br>`
+              texteCorr += `$${miseEnEvidence(texNombre(antecedents[antecedentTrouve - 1], 1))}$.<br>`
               break
           }
           if (!context.isAmc)

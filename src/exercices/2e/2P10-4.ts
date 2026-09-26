@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
   numAlpha,
@@ -222,7 +223,7 @@ function unePieceDeuxUrnes(
   texteCorr += `la probabilité de tirer une boule ${boules[choix]} dans la deuxième urne est de $${texProba(urne2.getProba(B[choix]))}$.<br>`
   texteCorr += `La probabilité de l'issue ('Face','${boules[choix]}') est donc : $\\dfrac{1}{2}\\times ${texProba(urne2.getProba(B[choix]))}=${texProba(fraction(n2[choix], 2 * card2))}$.<br>`
   texteCorr += `L'événement 'obtenir une boule ${boules[choix]}' est réalisé par les issues ('Pile','${boules[choix]}') et ('Face','${boules[choix]}'), donc sa probabilité est la somme des probabilités calculées ci-dessus.<br>`
-  texteCorr += `La probabilité d'obtenir une boule ${boules[choix]} est donc de $${texProba(fraction(n1[choix], 2 * card1))}+${texProba(fraction(n2[choix], 2 * card2))}=${texProba(p[choix])}$.`
+  texteCorr += `La probabilité d'obtenir une boule ${boules[choix]} est donc de $${texProba(fraction(n1[choix], 2 * card1))}+${texProba(fraction(n2[choix], 2 * card2))}=${miseEnEvidence(texProba(p[choix]))}$.`
 
   return { texte, texteCorr, alea: [...n1, ...n2] }
 }

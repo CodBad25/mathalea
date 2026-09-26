@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
@@ -62,7 +63,7 @@ export default class ValeurAbsolueEtEquation extends Exercice {
           b = randint(1, 15) * -1
 
           texte = `$\\vert x ${ecritureAlgebrique(a)}\\vert =${b}$`
-          texteCorr = ` ${b} étant négatif, il n'existe pas de solution à cette équation. $S=\\emptyset$`
+          texteCorr = ` ${b} étant négatif, il n'existe pas de solution à cette équation. $S=${miseEnEvidence('\\emptyset')}$`
 
           break
         case 2:
@@ -76,7 +77,7 @@ export default class ValeurAbsolueEtEquation extends Exercice {
                     $x ${ecritureAlgebrique(a)} =${b}$ et    $x ${ecritureAlgebrique(a)} =${-b}$<br>
                     Il existe donc deux solutions à cette équation :<br>
                     $x_1=${c} ${ecritureAlgebrique(b)}$ et $x_2=${c} -${ecritureParentheseSiNegatif(b)}$<br>
-                    $S=\\{${c - b};${c + b}\\}$`
+                    $S=${miseEnEvidence(`\\{${c - b};${c + b}\\}`)}$`
           if (this.correctionDetaillee) {
             const s = segment(pointAbstrait(0, 0), pointAbstrait(12, 0))
             s.styleExtremites = '->'

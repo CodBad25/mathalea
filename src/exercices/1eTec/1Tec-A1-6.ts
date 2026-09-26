@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
@@ -83,7 +84,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         La proportion $P$ des adhérents de  plus $${a}$ ans qui ont plus de $${d}$ ans d'ancienneté est $P=${texNombre(g, 2)}\\,\\%$.<br>
         <br> D'après le cours, on a $P=p_1\\times p_2$, ce qui donne  $${texNombre(tauxG, 4)}=${texNombre(tauxb, 2)}\\times p_2$<br>
         <br>Ainsi, $p_2=\\dfrac{${texNombre(tauxG, 4)}}{${texNombre(tauxb, 2)}}=${texNombre(tauxc, 4)}$.<br>
-      Il y a donc $${texNombre(c, 2)}\\,\\%$ d'adhérents de plus de  $${d}$ ans d'ancienneté parmi les adhérents de plus de $${a}$ ans.`
+      Il y a donc $${miseEnEvidence(texNombre(c, 2))}\\,\\%$ d'adhérents de plus de  $${d}$ ans d'ancienneté parmi les adhérents de plus de $${a}$ ans.`
         this.reponse = c.toString()
         break
 
@@ -122,7 +123,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
               La proportion $P$ des élèves en première technologique parmi les élèves du lycée est $P=${texNombre(g, 2)}\\,\\%$.<br>
               <br> D'après le cours, on a $P=p_1\\times p_2$, ce qui donne  $${texNombre(tauxG, 4)}=${texNombre(tauxb, 2)}\\times p_2$<br>
               Ainsi, $p_2=\\dfrac{${texNombre(tauxG, 4)}}{${texNombre(tauxb, 2)}}=${texNombre(tauxc, 4)}$.<br>
-              Il y a donc $${texNombre(c, 2)}\\,\\%$ des élèves de première en première technologique.`
+              Il y a donc $${miseEnEvidence(texNombre(c, 2))}\\,\\%$ des élèves de première en première technologique.`
 
         this.reponse = c.toString()
         break
@@ -166,7 +167,7 @@ Dans cette sous-population, on note $p_2$ la proportion des suffrages du candida
 La proportion $P$ des suffrages du candidat parmi les inscrits est $P=${texNombre(g, 2)}\\,\\%$.<br>
 <br>D'après le cours, on a $P=p_1\\times p_2$, ce qui donne  $${texNombre(tauxG, 4)}=${texNombre(tauxb, 2)}\\times p_2$<br>
 <br>Ainsi, $p_2=\\dfrac{${texNombre(tauxG, 4)}}{${texNombre(tauxb, 2)}}=${texNombre(tauxc, 4)}$.<br>
-$${texNombre(c, 2)}\\,\\%$ des suffrages exprimés ont voté pour le candidat.`
+$${miseEnEvidence(texNombre(c, 2))}\\,\\%$ des suffrages exprimés ont voté pour le candidat.`
         this.reponse = c.toString()
         break
     }

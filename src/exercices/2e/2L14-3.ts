@@ -91,7 +91,7 @@ export default class EtudeTrinome extends Exercice {
       & = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}\\\\&=f(x)` : '\\\\&=f(x)'}
       \\end{aligned}$<br>`
       }
-      correction1 += `On retrouve la forme développée, donc on en déduit que $f(x)$ peut s'écrire sous forme factorisée : $f(x)=${p.texFormeFactorisee}$.`
+      correction1 += `On retrouve la forme développée, donc on en déduit que $f(x)$ peut s'écrire sous forme factorisée : $f(x)=${miseEnEvidence(p.texFormeFactorisee)}$.`
       correction2 = `On développe la forme canonique : <br>
       $\\begin{aligned}${p.texFormeCanonique} &=${etapesDeveloppement[0]}${
         this.correctionDetaillee === true
@@ -104,7 +104,7 @@ export default class EtudeTrinome extends Exercice {
                 : ''}\\\\`
           : ''}&=${etapesDeveloppement[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}
    \\end{aligned}$<br>`
-      correction2 += `On en déduit que $f(x)$ s'écrit sous forme canonique :  $f(x)=${p.texFormeCanonique}$.`
+      correction2 += `On en déduit que $f(x)$ s'écrit sous forme canonique :  $f(x)=${miseEnEvidence(p.texFormeCanonique)}$.`
     }
     if (this.sup === 2) {
       this.introduction = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par $f(x)=${p.texFormeFactorisee}$. ${sp(5)} ($\\textit{Forme factorisée}$)
@@ -141,7 +141,7 @@ ${p.texFormeCanonique}  &=${etapesDeveloppement[1]}${this.correctionDetaillee ==
 \\end{aligned}$<br>`
       }
 
-      correction2 += `On en déduit que $f(x)$ s'écrit sous forme canonique :  $f(x)=${p.texFormeCanonique}$.`
+      correction2 += `On en déduit que $f(x)$ s'écrit sous forme canonique :  $f(x)=${miseEnEvidence(p.texFormeCanonique)}$.`
     }
     if (this.sup === 3) {
       this.introduction = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par $f(x)=${p.texFormeCanonique}$. ${sp(5)} ($\\textit{Forme canonique}$)
@@ -179,7 +179,7 @@ ${p.texFormeCanonique}  &=${etapesDeveloppement[1]}${this.correctionDetaillee ==
         correction2 += `$\\phantom{${p.texFormeFactorisee}} = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}$<br>`
         correction2 += `$\\phantom{${p.texFormeFactorisee}} = f(x)$<br>`
       }
-      correction2 += `On retrouve la même forme développée que celle de la question précédente donc on a bien $f(x)=${p.texFormeFactorisee}$.<br>`
+      correction2 += `On retrouve la même forme développée que celle de la question précédente donc on a bien $f(x)=${miseEnEvidence(p.texFormeFactorisee)}$.<br>`
     }
     question3 =
       "Répondre aux questions suivantes en utilisant l'écriture de $f(x)$ la mieux adaptée :<br>"

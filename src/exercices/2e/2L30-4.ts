@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -74,7 +75,7 @@ export default class SolInequation extends Exercice {
           }
           if (a * x0 * x0 + b * x0 + c > d) {
             texteCorr += `<br>Or  $${a * x0 * x0 + b * x0 + c} >${d}$<br>
-          On en déduit que $${x0}$ n'est pas solution de l'inéquation.`
+          On en déduit que $${x0}$ ${texteEnCouleurEtGras("n'est pas solution")} de l'inéquation.`
           }
           if (a * x0 * x0 + b * x0 + c < d) {
             texteCorr += `<br> Or  $${a * x0 * x0 + b * x0 + c}<${d}$<br>
@@ -82,7 +83,7 @@ export default class SolInequation extends Exercice {
           }
           if (a * x0 * x0 + b * x0 + c === d) {
             texteCorr += `<br>$${d}$ n'est pas strictement inférieur à $${d}$.<br>
-          On en déduit que $${x0}$ n'est pas solution de l'inéquation.`
+          On en déduit que $${x0}$ ${texteEnCouleurEtGras("n'est pas solution")} de l'inéquation.`
           }
           if (a * x0 * x0 + b * x0 + c < d) {
             this.autoCorrection[i] = {
@@ -132,10 +133,10 @@ export default class SolInequation extends Exercice {
           }
           if (a * x0 * x0 + b * x0 + c > d || a * x0 * x0 + b * x0 + c === d) {
             texteCorr += `<br> Or $${a * x0 * x0 + b * x0 + c}\\geqslant ${d}$.<br>
-          On en déduit que $${x0}$ est solution de l'inéquation.`
+          On en déduit que $${x0}$ ${texteEnCouleurEtGras("est solution")} de l'inéquation.`
           } else {
             texteCorr += `<br>Or $${a * x0 * x0 + b * x0 + c}< ${d}$.<br>
-          On en déduit que $${x0}$ n'est pas solution de l'inéquation.`
+          On en déduit que $${x0}$ ${texteEnCouleurEtGras("n'est pas solution")} de l'inéquation.`
           }
 
           if (a * x0 * x0 + b * x0 + c > d || a * x0 * x0 + b * x0 + c === d) {
@@ -194,9 +195,9 @@ export default class SolInequation extends Exercice {
             a * x0 * x0 + b * x0 + c < m * x0 + p ||
             a * x0 * x0 + b * x0 + c === m * x0 + p
           ) {
-            texteCorr += `<br>Comme $${a * x0 * x0 + b * x0 + c}\\leqslant ${m * x0 + p}$, le nombre $${x0}$ est solution de l'inéquation.`
+            texteCorr += `<br>Comme $${a * x0 * x0 + b * x0 + c}\\leqslant ${m * x0 + p}$, le nombre $${x0}$ ${texteEnCouleurEtGras("est solution")} de l'inéquation.`
           } else {
-            texteCorr += `<br>Comme $${a * x0 * x0 + b * x0 + c} > ${m * x0 + p}$, le nombre $${x0}$ n'est pas solution de l'inéquation.`
+            texteCorr += `<br>Comme $${a * x0 * x0 + b * x0 + c} > ${m * x0 + p}$, le nombre $${x0}$ ${texteEnCouleurEtGras("n'est pas solution")} de l'inéquation.`
           }
 
           if (
