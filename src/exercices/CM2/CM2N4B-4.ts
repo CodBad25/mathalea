@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { arrondi, range1 } from '../../lib/outils/nombres'
 import {
@@ -62,27 +63,27 @@ export default class CompteEstBon extends Exercice {
             case 1:
               cible = arrondi(a * 100 + b * 10 + c + d)
               tirage = shuffle([100, 10, a, b, c, d])
-              texteCorr = `Le compte est bon : $${cible}=100\\times${a}+10\\times${b}+${c}+${d}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`100\\times${a}+10\\times${b}+${c}+${d}`)}$`
               break
             case 2:
               cible = arrondi(a * 100 + b * 10 + c - d)
               tirage = shuffle([100, 10, a, b, c, d])
-              texteCorr = `Le compte est bon : $${cible}=100\\times${a}+10\\times${b}+${c}-${d}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`100\\times${a}+10\\times${b}+${c}-${d}`)}$`
               break
             case 3:
               cible = arrondi(a * 100 - b * 10 + c + d)
               tirage = shuffle([100, 10, a, b, c, d])
-              texteCorr = `Le compte est bon : $${cible}=100\\times${a}-10\\times${b}+${c}+${d}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`100\\times${a}-10\\times${b}+${c}+${d}`)}$`
               break
             case 4:
               cible = arrondi(a * 100 - b * 10 + c - d)
               tirage = shuffle([100, 10, a, b, c, d])
-              texteCorr = `Le compte est bon : $${cible}=100\\times${a}-10\\times${b}+${c}-${d}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`100\\times${a}-10\\times${b}+${c}-${d}`)}$`
               break
             default:
               cible = arrondi(a * 100 + (b + c) * 10 + d)
               tirage = shuffle([100, 10, a, b, c, d])
-              texteCorr = `Le compte est bon : $${cible}=100\\times${a}+10\\times(${b}+${c})+${d}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`100\\times${a}+10\\times(${b}+${c})+${d}`)}$`
           }
           break
 
@@ -94,27 +95,27 @@ export default class CompteEstBon extends Exercice {
             case 1:
               cible = arrondi(a * 100 + b * 10 + c)
               tirage = shuffle([50, 50, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=(50+50)\\times${a}+10\\times${b}+${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`(50+50)\\times${a}+10\\times${b}+${c}`)}$`
               break
             case 2:
               cible = arrondi(a * 100 + b * 10 - c)
               tirage = shuffle([50, 50, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=(50+50)\\times${a}+10\\times${b}-${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`(50+50)\\times${a}+10\\times${b}-${c}`)}$`
               break
             case 3:
               cible = arrondi(a * 100 - b * 10 + c)
               tirage = shuffle([50, 50, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=(50+50)\\times${a}-10\\times${b}+${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`(50+50)\\times${a}-10\\times${b}+${c}`)}$`
               break
             case 4:
               cible = arrondi(a * 100 - b * 10 - c)
               tirage = shuffle([50, 2, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=2\\times50\\times${a}-10\\times${b}-${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`2\\times50\\times${a}-10\\times${b}-${c}`)}$`
               break
             default:
               cible = arrondi(a * 100 + b * 10 - c)
               tirage = shuffle([25, 4, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=4\\times25\\times${a}+10\\times${b}-${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`4\\times25\\times${a}+10\\times${b}-${c}`)}$`
           }
           break
         case 3:
@@ -126,27 +127,27 @@ export default class CompteEstBon extends Exercice {
             case 1:
               cible = arrondi(a * (100 + b * 10) + c)
               tirage = shuffle([50, 2, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=${a}\\times(50\\times2+10\\times${b})+${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`${a}\\times(50\\times2+10\\times${b})+${c}`)}$`
               break
             case 2:
               cible = arrondi(a * (100 + b * 10) - c)
               tirage = shuffle([50, 2, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=${a}\\times(50\\times2+10\\times${b})-${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`${a}\\times(50\\times2+10\\times${b})-${c}`)}$`
               break
             case 3:
               cible = arrondi(a * (100 + b * 10) + c)
               tirage = shuffle([25, 4, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=${a}\\times(25\\times4+10\\times${b})+${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`${a}\\times(25\\times4+10\\times${b})+${c}`)}$`
               break
             case 4:
               cible = arrondi(a * (100 + b * 10) - c)
               tirage = shuffle([25, 4, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=${a}\\times(25\\times4+10\\times${b})-${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`${a}\\times(25\\times4+10\\times${b})-${c}`)}$`
               break
             default:
               cible = arrondi(a * (100 + b * 10) + c)
               tirage = shuffle([25, 75, 10, a, b, c])
-              texteCorr = `Le compte est bon : $${cible}=${a}\\times((25+75)+10\\times${b})+${c}$`
+              texteCorr = `Le compte est bon : $${cible}=${miseEnEvidence(`${a}\\times((25+75)+10\\times${b})+${c}`)}$`
           }
           break
       }

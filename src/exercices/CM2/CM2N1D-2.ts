@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice, shuffle2tableaux } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import {
@@ -47,6 +48,12 @@ export const refs = {
   'fr-2016': ['c3N10-1'],
   'fr-ch': [''],
 }
+/** Met en évidence le membre de droite d'une égalité en cours de construction (formule sans `$` final). */
+function surligneMembreDroit(egalite: string) {
+  const debut = egalite.indexOf('=') + 1
+  return `${egalite.slice(0, debut)}${miseEnEvidence(egalite.slice(debut))}`
+}
+
 export default class RecomposerEntierC3 extends Exercice {
   nombreDeChiffresMin: number
   nombreDeChamps: number[]
@@ -182,7 +189,7 @@ export default class RecomposerEntierC3 extends Exercice {
             }
           }
           texte = `${texte.substring(0, texte.length - 1)}$`
-          texteCorr = `${texteCorr.substring(0, texteCorr.length - 1)}$`
+          texteCorr = `${surligneMembreDroit(texteCorr.substring(0, texteCorr.length - 1))}$`
           this.nombreDeChamps[i] = indexChamp - this.premierChamp[i]
 
           break
@@ -242,7 +249,7 @@ export default class RecomposerEntierC3 extends Exercice {
             }
           }
           texte = `${texte.substring(0, texte.length - 1)}$`
-          texteCorr = `${texteCorr.substring(0, texteCorr.length - 1)}$`
+          texteCorr = `${surligneMembreDroit(texteCorr.substring(0, texteCorr.length - 1))}$`
           this.nombreDeChamps[i] = indexChamp - this.premierChamp[i]
           break
         case 3: // trouver le nombre sans groupement
@@ -280,7 +287,7 @@ export default class RecomposerEntierC3 extends Exercice {
           }
           texte = `${texte.substring(0, texte.length - 1)}`
           texteCorr = texteCorr.substring(0, texteCorr.length - 1)
-          texteCorr += `=${texNombre(nombre, 0)}$`
+          texteCorr += `=${miseEnEvidence(texNombre(nombre, 0))}$`
           if (!this.interactif) {
             texte += '= \\ldots\\ldots\\ldots$'
           } else {
@@ -350,7 +357,7 @@ export default class RecomposerEntierC3 extends Exercice {
             texte += `=$${ajouteChampTexteMathLive(this, indexChamp, this.sup ? KeyboardType.numeration : KeyboardType.clavierDeBase)}`
             indexChamp++
           }
-          texteCorr += `=${texNombre(nombre, 0)}$`
+          texteCorr += `=${miseEnEvidence(texNombre(nombre, 0))}$`
           this.nombreDeChamps[i] = indexChamp - this.premierChamp[i]
           break
       }

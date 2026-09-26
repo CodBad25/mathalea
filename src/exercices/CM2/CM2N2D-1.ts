@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.fillInTheBlanks.test.ts ⚠️
  */
@@ -72,7 +73,7 @@ export default class nomExercice extends Exercice {
       const a = Math.floor(num / den)
       const b = a + 1
       texteCorr = ` $\\dfrac{${texNombre(a * den, 1)}}{${texNombre(den, 1)}} < \\dfrac{${texNombre(num, 1)}}{${texNombre(den, 1)}} < \\dfrac{${texNombre(b * den, 1)}}{${texNombre(den, 1)}}\\quad$ `
-      texteCorr += ` donc $\\quad${a} < \\dfrac{${texNombre(num, 1)}}{${texNombre(den, 1)}} < ${b}$.<br><br>`
+      texteCorr += ` donc $\\quad${miseEnEvidence(a)} < \\dfrac{${texNombre(num, 1)}}{${texNombre(den, 1)}} < ${miseEnEvidence(b)}$.<br><br>`
       if (a === 0) {
         texteCorr += `Remarque : on sait que $0 = \\dfrac{0}{${texNombre(den, 1)}}\\quad$ et $\\quad\\dfrac{${texNombre(den, 1)}}{${texNombre(den, 1)}} = ${b}$.`
       } else {

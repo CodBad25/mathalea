@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -42,7 +43,7 @@ export default class DiviserPar101001000 extends Exercice {
       a = choice([randint(1, 9), randint(11, 99), randint(101, 999)])
       b = choice([10, 100, 1000])
       texte = `$${texNombre(a)}\\div${texNombre(b)}=$`
-      texteCorr = `$${texNombre(a)}\\div${texNombre(b)}=${texNombre(a / b)}$`
+      texteCorr = `$${texNombre(a)}\\div${texNombre(b)}=${miseEnEvidence(texNombre(a / b))}$`
       handleAnswers(this, i, { reponse: { value: arrondi(a / b) } })
       if (this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)

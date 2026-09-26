@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -312,7 +313,7 @@ export default class Solide6e extends Exercice {
           texte += this.interactif
             ? `Parmi les arêtes proposées, citer toutes celles parallèles à [$${nom[aretesParalleles[k][l][s]] + nom[aretesParalleles[k][l][(s + 1) % 2]]}$].<br>`
             : `Citer toutes les arêtes parallèles à [$${nom[aretesParalleles[k][l][s]] + nom[aretesParalleles[k][l][(s + 1) % 2]]}$].<br>`
-          correction = `Les arêtes parallèles à [$${nom[aretesParalleles[k][l][s]] + nom[aretesParalleles[k][l][(s + 1) % 2]]}$] sont [$${nom[aretesParalleles[k][(l + 1) % 4][s]] + nom[aretesParalleles[k][(l + 1) % 4][(s + 1) % 2]]}$], [$${nom[aretesParalleles[k][(l + 2) % 4][s]] + nom[aretesParalleles[k][(l + 2) % 4][(s + 1) % 2]]}$] et [$${nom[aretesParalleles[k][(l + 3) % 4][s]] + nom[aretesParalleles[k][(l + 3) % 4][(s + 1) % 2]]}$].<br>`
+          correction = `Les arêtes parallèles à [$${nom[aretesParalleles[k][l][s]] + nom[aretesParalleles[k][l][(s + 1) % 2]]}$] sont [$${miseEnEvidence(nom[aretesParalleles[k][(l + 1) % 4][s]] + nom[aretesParalleles[k][(l + 1) % 4][(s + 1) % 2]])}$], [$${miseEnEvidence(nom[aretesParalleles[k][(l + 2) % 4][s]] + nom[aretesParalleles[k][(l + 2) % 4][(s + 1) % 2]])}$] et [$${miseEnEvidence(nom[aretesParalleles[k][(l + 3) % 4][s]] + nom[aretesParalleles[k][(l + 3) % 4][(s + 1) % 2]])}$].<br>`
           resultatCorrect = [
             `[$${nom[aretesParalleles[k][(l + 1) % 4][s]] + nom[aretesParalleles[k][(l + 1) % 4][(s + 1) % 2]]}$]`,
             `[$${nom[aretesParalleles[k][(l + 2) % 4][s]] + nom[aretesParalleles[k][(l + 2) % 4][(s + 1) % 2]]}$]`,
@@ -333,7 +334,7 @@ export default class Solide6e extends Exercice {
         case 2: // citer la face parallèle à une face donnée
           ;[k, l, s] = [randint(0, 2), randint(0, 1), randint(0, 3)]
           texte += `Quelle est la face parallèle à $${nom[facesParalleles[k][l][s]] + nom[facesParalleles[k][l][(s + 1) % 4]] + nom[facesParalleles[k][l][(s + 2) % 4]] + nom[facesParalleles[k][l][(s + 3) % 4]]}$ ?<br>`
-          correction = `La face parallèle à $${nom[facesParalleles[k][l][s]] + nom[facesParalleles[k][l][(s + 1) % 4]] + nom[facesParalleles[k][l][(s + 2) % 4]] + nom[facesParalleles[k][l][(s + 3) % 4]]}$ est la face $${nom[facesParalleles[k][(l + 1) % 2][s]] + nom[facesParalleles[k][(l + 1) % 2][(s + 1) % 4]] + nom[facesParalleles[k][(l + 1) % 2][(s + 2) % 4]] + nom[facesParalleles[k][(l + 1) % 2][(s + 3) % 4]]}$.<br>`
+          correction = `La face parallèle à $${nom[facesParalleles[k][l][s]] + nom[facesParalleles[k][l][(s + 1) % 4]] + nom[facesParalleles[k][l][(s + 2) % 4]] + nom[facesParalleles[k][l][(s + 3) % 4]]}$ est la face $${miseEnEvidence(nom[facesParalleles[k][(l + 1) % 2][s]] + nom[facesParalleles[k][(l + 1) % 2][(s + 1) % 4]] + nom[facesParalleles[k][(l + 1) % 2][(s + 2) % 4]] + nom[facesParalleles[k][(l + 1) % 2][(s + 3) % 4]])}$.<br>`
           resultatCorrect = [
             `$${nom[facesParalleles[k][(l + 1) % 2][s]] + nom[facesParalleles[k][(l + 1) % 2][(s + 1) % 4]] + nom[facesParalleles[k][(l + 1) % 2][(s + 2) % 4]] + nom[facesParalleles[k][(l + 1) % 2][(s + 3) % 4]]}$`,
           ]
@@ -354,7 +355,7 @@ export default class Solide6e extends Exercice {
           texte += this.interactif
             ? `Parmi les arêtes proposées, citer toutes celles perpendiculaires à l'arête [$${nom[aretesPerp[k][l][s]] + nom[aretesPerp[k][l][(s + 1) % 2]]}$].<br>`
             : `Quelles sont les arêtes perpendiculaires à l'arête [$${nom[aretesPerp[k][l][s]] + nom[aretesPerp[k][l][(s + 1) % 2]]}$] ?<br>`
-          correction = `Les arêtes perpendiculaires à l'arête [$${nom[aretesPerp[k][l][s]] + nom[aretesPerp[k][l][(s + 1) % 2]]}$] sont [$${nom[aretesPerp[k][1][s]] + nom[aretesPerp[k][1][(s + 1) % 2]]}$], [$${nom[aretesPerp[k][2][s]] + nom[aretesPerp[k][2][(s + 1) % 2]]}$], [$${nom[aretesPerp[k][3][s]] + nom[aretesPerp[k][3][(s + 1) % 2]]}$] et [$${nom[aretesPerp[k][4][s]] + nom[aretesPerp[k][4][(s + 1) % 2]]}$].`
+          correction = `Les arêtes perpendiculaires à l'arête [$${nom[aretesPerp[k][l][s]] + nom[aretesPerp[k][l][(s + 1) % 2]]}$] sont [$${miseEnEvidence(nom[aretesPerp[k][1][s]] + nom[aretesPerp[k][1][(s + 1) % 2]])}$], [$${miseEnEvidence(nom[aretesPerp[k][2][s]] + nom[aretesPerp[k][2][(s + 1) % 2]])}$], [$${miseEnEvidence(nom[aretesPerp[k][3][s]] + nom[aretesPerp[k][3][(s + 1) % 2]])}$] et [$${miseEnEvidence(nom[aretesPerp[k][4][s]] + nom[aretesPerp[k][4][(s + 1) % 2]])}$].`
           resultatCorrect = [
             `[$${nom[aretesPerp[k][1][s]] + nom[aretesPerp[k][1][(s + 1) % 2]]}$]`,
             `[$${nom[aretesPerp[k][2][s]] + nom[aretesPerp[k][2][(s + 1) % 2]]}$]`,
@@ -381,10 +382,10 @@ export default class Solide6e extends Exercice {
           ;[k, l, s] = [randint(0, 5), 0, randint(0, 3)]
           texte += `Quelles sont les faces perpendiculaires à la face $${nom[facesPerp[k][l][s]] + nom[facesPerp[k][l][(s + 1) % 4]] + nom[facesPerp[k][l][(s + 2) % 4]] + nom[facesPerp[k][l][(s + 3) % 4]]}$ ?<br>`
           correction = `Les faces perpendiculaires à la face $${nom[facesPerp[k][l][s]] + nom[facesPerp[k][l][(s + 1) % 4]] + nom[facesPerp[k][l][(s + 2) % 4]] + nom[facesPerp[k][l][(s + 3) % 4]]}$ `
-          correction += `sont les faces $${nom[facesPerp[k][l + 1][s]] + nom[facesPerp[k][l + 1][(s + 1) % 4]] + nom[facesPerp[k][l + 1][(s + 2) % 4]] + nom[facesPerp[k][l + 1][(s + 3) % 4]]}$, `
-          correction += `$${nom[facesPerp[k][l + 2][s]] + nom[facesPerp[k][l + 2][(s + 1) % 4]] + nom[facesPerp[k][l + 2][(s + 2) % 4]] + nom[facesPerp[k][l + 2][(s + 3) % 4]]}$, `
-          correction += `$${nom[facesPerp[k][l + 3][s]] + nom[facesPerp[k][l + 3][(s + 1) % 4]] + nom[facesPerp[k][l + 3][(s + 2) % 4]] + nom[facesPerp[k][l + 3][(s + 3) % 4]]}$ et `
-          correction += `$${nom[facesPerp[k][l + 4][s]] + nom[facesPerp[k][l + 4][(s + 1) % 4]] + nom[facesPerp[k][l + 4][(s + 2) % 4]] + nom[facesPerp[k][l + 4][(s + 3) % 4]]}$.`
+          correction += `sont les faces $${miseEnEvidence(nom[facesPerp[k][l + 1][s]] + nom[facesPerp[k][l + 1][(s + 1) % 4]] + nom[facesPerp[k][l + 1][(s + 2) % 4]] + nom[facesPerp[k][l + 1][(s + 3) % 4]])}$, `
+          correction += `$${miseEnEvidence(nom[facesPerp[k][l + 2][s]] + nom[facesPerp[k][l + 2][(s + 1) % 4]] + nom[facesPerp[k][l + 2][(s + 2) % 4]] + nom[facesPerp[k][l + 2][(s + 3) % 4]])}$, `
+          correction += `$${miseEnEvidence(nom[facesPerp[k][l + 3][s]] + nom[facesPerp[k][l + 3][(s + 1) % 4]] + nom[facesPerp[k][l + 3][(s + 2) % 4]] + nom[facesPerp[k][l + 3][(s + 3) % 4]])}$ et `
+          correction += `$${miseEnEvidence(nom[facesPerp[k][l + 4][s]] + nom[facesPerp[k][l + 4][(s + 1) % 4]] + nom[facesPerp[k][l + 4][(s + 2) % 4]] + nom[facesPerp[k][l + 4][(s + 3) % 4]])}$.`
           resultatCorrect = []
           for (let ee = 1; ee < 5; ee++) {
             resultatCorrect.push(

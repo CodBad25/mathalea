@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -101,8 +102,9 @@ export default class TablesMultiplicationsDivisions extends Exercice {
             texte =
               `$${a} \\times ${b} = $` +
               ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-          texteCorr = '$ ' + a + ' \\times ' + b + ' = ' + a * b + ' $'
+          texteCorr = `$ ${a} \\times ${b} = ${miseEnEvidence(a * b)} $`
         } else {
+          let premierFacteurCherche = false
           if (tables.length > 2) {
             // Si pour le premier facteur il y a plus de 2 posibilités on peut le chercher
             if (randint(1, 2) === 1) {
@@ -123,6 +125,7 @@ export default class TablesMultiplicationsDivisions extends Exercice {
                 { formatInteractif: 'mathalea-mathfield' },
               )
             } else {
+              premierFacteurCherche = true
               texte =
                 '$ \\ldots\\ldots' + ' \\times ' + b + ' = ' + a * b + ' $'
               if (this.interactif)
@@ -153,7 +156,9 @@ export default class TablesMultiplicationsDivisions extends Exercice {
               { formatInteractif: 'mathalea-mathfield' },
             )
           }
-          texteCorr = '$ ' + a + ' \\times ' + b + ' = ' + a * b + ' $'
+          texteCorr = premierFacteurCherche
+            ? `$ ${miseEnEvidence(a)} \\times ${b} = ${a * b} $`
+            : `$ ${a} \\times ${miseEnEvidence(b)} = ${a * b} $`
         }
       } else {
         if (typesDeQuestions === 'classique') {
@@ -198,7 +203,7 @@ export default class TablesMultiplicationsDivisions extends Exercice {
                 `$\\div ${b} = ${a}$`
           }
         }
-        texteCorr = `$ ${a * b} \\div ${b} = ${a}$`
+        texteCorr = `$ ${a * b} \\div ${b} = ${miseEnEvidence(a)}$`
       }
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)

@@ -1,4 +1,4 @@
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texteEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -83,10 +83,10 @@ export default class VocabulaireDeBaseDesPolygones extends Exercice {
       const item = items[randint(0, items.length - 1)]
       if (typeQuestions[i] === 1) {
         texte = `Donner la définition d'un ${item.mot}.`
-        texteCorr = `Un ${item.mot} est ${texteEnCouleur(`un ${item.definition}`)}.`
+        texteCorr = `Un ${item.mot} est ${texteEnCouleurEtGras(`un ${item.definition}`)}.`
       } else {
         texte = `Comment s'appelle un ${item.definition} ?`
-        texteCorr = `Un ${item.definition} s'appelle ${texteEnCouleur(`un ${item.mot}`)}.`
+        texteCorr = `Un ${item.definition} s'appelle ${texteEnCouleurEtGras(`un ${item.mot}`)}.`
       }
       if (this.questionJamaisPosee(i, typeQuestions[i], item.mot)) {
         this.listeQuestions[i] = texte
