@@ -4,7 +4,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -98,13 +98,13 @@ export default class AnglesEtVocabulaire extends Exercice {
             texteCorr = `$\\widehat{xOy}+\\widehat{yOz}=${a}^\\circ+${b}^\\circ=${a + b}^\\circ$.<br>`
             if (goodAnswer === 'complémentaires') {
               texteCorr +=
-                'Les deux angles sont complémentaires car leurs côtés non communs forment un angle droit.'
+                `Les deux angles sont ${texteEnCouleurEtGras('complémentaires')} car leurs côtés non communs forment un angle droit.`
             } else if (goodAnswer === 'supplémentaires') {
               texteCorr +=
-                'Les deux angles sont supplémentaires car leurs côtés non communs forment un angle plat.'
+                `Les deux angles sont ${texteEnCouleurEtGras('supplémentaires')} car leurs côtés non communs forment un angle plat.`
             } else {
               texteCorr +=
-                'Les deux angles ne sont ni complémentaires ni supplémentaires car leurs côtés non communs ne forment ni un angle droit, ni un angle plat.'
+                `Les deux angles ${texteEnCouleurEtGras('ne sont ni complémentaires ni supplémentaires')} car leurs côtés non communs ne forment ni un angle droit, ni un angle plat.`
             }
           }
           break

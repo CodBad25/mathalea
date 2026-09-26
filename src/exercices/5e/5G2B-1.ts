@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -164,7 +165,7 @@ export default class nomExercice extends Exercice {
       }
 
       texteCorr += `Lorsque le prisme n'est pas un pavé droit, les bases sont les deux faces superposables qui ne sont pas des rectangles.<br>`
-      texteCorr += `Les bases sont donc les faces ${reponse1} et ${reponse2}`
+      texteCorr += `Les bases sont donc les faces $${miseEnEvidence(reponse1)}$ et $${miseEnEvidence(reponse2)}$.`
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

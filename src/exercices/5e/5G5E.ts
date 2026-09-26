@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { bissectrice } from '../../lib/2d/Bissectrice'
 import { codageBissectrice } from '../../lib/2d/CodageBissectrice'
 import { codageMediatrice } from '../../lib/2d/CodageMediatrice'
@@ -112,7 +113,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           d[i].epaisseur = 1
           c[i] = codageHauteurTriangle(C[i], B[i], A[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
-          texteCorr = `La droite tracée est la hauteur issue de $${sommets[i][2]}$ dans le triangle ${triangles[i].getNom()}.<br>`
+          texteCorr = `La droite tracée est la ${texteEnCouleurEtGras('hauteur')} issue de $${sommets[i][2]}$ dans le triangle ${triangles[i].getNom()}.<br>`
           rep = 'hauteur'
           break
         case 2:
@@ -120,7 +121,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           d[i].epaisseur = 1
           c[i] = codageMediatrice(A[i], B[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
-          texteCorr = `La droite tracée est la médiatrice du segment [$${sommets[i][0]}${sommets[i][1]}]$.<br>`
+          texteCorr = `La droite tracée est la ${texteEnCouleurEtGras('médiatrice')} du segment [$${sommets[i][0]}${sommets[i][1]}]$.<br>`
           rep = 'mediatrice'
           break
         case 3:
@@ -128,7 +129,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           d[i].epaisseur = 1
           c[i] = codageMedianeTriangle(B[i], A[i], 'black', '//')
           objets[i] = [t[i], d[i], n[i], c[i]]
-          texteCorr = `La droite tracée est la médiane issue de $${sommets[i][2]}$ dans le triangle ${triangles[i].getNom()}.<br>`
+          texteCorr = `La droite tracée est la ${texteEnCouleurEtGras('médiane')} issue de $${sommets[i][2]}$ dans le triangle ${triangles[i].getNom()}.<br>`
           rep = 'mediane'
           break
         case 4:
@@ -137,7 +138,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           d[i].epaisseur = 1
           c[i] = codageBissectrice(A[i], B[i], C[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
-          texteCorr = `La droite tracée est la bissectrice de l'angle $\\widehat{${sommets[i][0]}${sommets[i][1]}${sommets[i][2]}}$.<br>`
+          texteCorr = `La droite tracée est la ${texteEnCouleurEtGras('bissectrice')} de l'angle $\\widehat{${sommets[i][0]}${sommets[i][1]}${sommets[i][2]}}$.<br>`
           rep = 'bissectrice'
           break
       }

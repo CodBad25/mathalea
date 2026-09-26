@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -354,7 +355,7 @@ export default class nomExercice extends Exercice {
       texteCorr +=
         lOperation === 11 // inverse on laisse 1 sur nombre1
           ? ''
-          : `$${texNombre(operations[lOperation - 1].fct(nombre1, nombre2))}$.`
+          : `$${miseEnEvidence(texNombre(operations[lOperation - 1].fct(nombre1, nombre2)))}$.`
       // fin de la correction
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte

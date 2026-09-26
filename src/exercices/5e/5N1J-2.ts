@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sommeDesChiffres } from '../../lib/outils/nombres'
@@ -85,12 +86,12 @@ export default class CriteresDeDivisibilite extends Exercice {
           if (u % 2 === 0) {
             texteCorr = `Le chiffre des unités de $${texNombre(
               n,
-            )}$ est $${u}$ donc $${texNombre(n)}$ est divisible par $2$.`
+            )}$ est $${u}$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("est divisible")} par $2$.`
             this.autoCorrection[i].propositions![0].statut = true
           } else {
             texteCorr = `Le chiffre des unités de $${texNombre(
               n,
-            )}$ est $${u}$ donc $${texNombre(n)}$ n'est pas divisible par $2$.`
+            )}$ est $${u}$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("n'est pas divisible")} par $2$.`
             this.autoCorrection[i].propositions![1].statut = true
           }
           break
@@ -101,7 +102,7 @@ export default class CriteresDeDivisibilite extends Exercice {
           texte = `$${texNombre(n)}$ est-il divisible par $3$ ?`
           if (n % 3 === 0) {
             texteCorr = `$${sommeString[1]}=${sommeString[0]}=3\\times ${sommeString[0] / 3}$<br>`
-            texteCorr += `La somme des chiffres de $${texNombre(n)}$ est divisible par $3$ donc $${texNombre(n)}$ est divisible par $3$.`
+            texteCorr += `La somme des chiffres de $${texNombre(n)}$ est divisible par $3$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("est divisible")} par $3$.`
             this.autoCorrection[i].propositions![0].statut = true
           } else {
             texteCorr = `$${sommeString[1]}=${sommeString[0]}=3\\times ${
@@ -111,7 +112,7 @@ export default class CriteresDeDivisibilite extends Exercice {
               n,
             )}$ n'est pas divisible par $3$ donc $${texNombre(
               n,
-            )}$ n'est pas divisible par $3$.`
+            )}$ ${texteEnCouleurEtGras("n'est pas divisible")} par $3$.`
             this.autoCorrection[i].propositions![1].statut = true
           }
           break
@@ -122,11 +123,11 @@ export default class CriteresDeDivisibilite extends Exercice {
           texte = `$${texNombre(n)}$ est-il divisible par $9$ ?`
           if (sommeString[0] % 9 === 0) {
             texteCorr = `$${sommeString[1]}=${sommeString[0]}=9\\times ${sommeString[0] / 9}$<br>`
-            texteCorr += `La somme des chiffres de $${texNombre(n)}$ est divisible par $9$ donc $${texNombre(n)}$ est divisible par $9$.`
+            texteCorr += `La somme des chiffres de $${texNombre(n)}$ est divisible par $9$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("est divisible")} par $9$.`
             this.autoCorrection[i].propositions![0].statut = true
           } else {
             texteCorr = `$${sommeString[1]}=${sommeString[0]}=9\\times ${(sommeString[0] - (sommeString[0] % 9)) / 9}+${sommeString[0] % 9}$<br>`
-            texteCorr += `La somme des chiffres de $${texNombre(n)}$ n'est pas divisible par $9$ donc $${texNombre(n)}$ n'est pas divisible par $9$.`
+            texteCorr += `La somme des chiffres de $${texNombre(n)}$ n'est pas divisible par $9$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("n'est pas divisible")} par $9$.`
             this.autoCorrection[i].propositions![1].statut = true
           }
           break
@@ -138,12 +139,12 @@ export default class CriteresDeDivisibilite extends Exercice {
           if (u % 5 === 0) {
             texteCorr = `Le chiffre des unités de $${texNombre(
               n,
-            )}$ est $${u}$ donc $${texNombre(n)}$ est divisible par $5$.`
+            )}$ est $${u}$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("est divisible")} par $5$.`
             this.autoCorrection[i].propositions![0].statut = true
           } else {
             texteCorr = `Le chiffre des unités de $${texNombre(
               n,
-            )}$ est $${u}$ donc $${texNombre(n)}$ n'est pas divisible par $5$.`
+            )}$ est $${u}$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("n'est pas divisible")} par $5$.`
             this.autoCorrection[i].propositions![1].statut = true
           }
           break
@@ -155,12 +156,12 @@ export default class CriteresDeDivisibilite extends Exercice {
           if (u === 0) {
             texteCorr = `Le chiffre des unités de $${texNombre(
               n,
-            )}$ est $${u}$ donc $${texNombre(n)}$ est divisible par $10$.`
+            )}$ est $${u}$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("est divisible")} par $10$.`
             this.autoCorrection[i].propositions![0].statut = true
           } else {
             texteCorr = `Le chiffre des unités de $${texNombre(
               n,
-            )}$ est $${u}$ donc $${texNombre(n)}$ n'est pas divisible par $10$.`
+            )}$ est $${u}$ donc $${texNombre(n)}$ ${texteEnCouleurEtGras("n'est pas divisible")} par $10$.`
             this.autoCorrection[i].propositions![1].statut = true
           }
           break
@@ -190,7 +191,7 @@ export default class CriteresDeDivisibilite extends Exercice {
             texteCorr += `$${texNombre(n)}=${u}\\times${texNombre(n / u)}$<br>`
             texteCorr += `Le reste de la division euclidienne est nul donc $${texNombre(
               n,
-            )}$ est divisible par $${u}$.`
+            )}$ ${texteEnCouleurEtGras("est divisible")} par $${u}$.`
             this.autoCorrection[i].propositions![0].statut = true
           } else {
             texteCorr += `$${texNombre(n)}=${u}\\times${(n - (n % u)) / u}+${
@@ -198,7 +199,7 @@ export default class CriteresDeDivisibilite extends Exercice {
             }$<br>`
             texteCorr += `Le reste de la division euclidienne n'est pas nul donc $${texNombre(
               n,
-            )}$ n'est pas divisible par $${u}$.`
+            )}$ ${texteEnCouleurEtGras("n'est pas divisible")} par $${u}$.`
             this.autoCorrection[i].propositions![1].statut = true
           }
 

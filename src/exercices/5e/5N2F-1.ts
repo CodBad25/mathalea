@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -97,10 +98,10 @@ export default class RelatifsOrdre extends Exercice {
       let texteCorr = ''
       switch (listeTypeQuestions[i]) {
         case 'croissant':
-          texteCorr = `$${orderedNumbers.map((num) => `${texNombre(num)}`).join('\\quad < \\quad')}$.`
+          texteCorr = `$${miseEnEvidence(orderedNumbers.map((num) => `${texNombre(num)}`).join('\\quad < \\quad'))}$.`
           break
         case 'décroissant':
-          texteCorr = `$${orderedNumbers.map((num) => `${texNombre(num)}`).join('\\quad > \\quad')}$.`
+          texteCorr = `$${miseEnEvidence(orderedNumbers.map((num) => `${texNombre(num)}`).join('\\quad > \\quad'))}$.`
           break
       }
       if (this.questionJamaisPosee(i, JSON.stringify(numbers))) {

@@ -1,3 +1,4 @@
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { codageSegment } from '../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { vecteur } from '../../lib/2d/Vecteur'
@@ -458,9 +459,9 @@ export default class TrianglesEgaux extends Exercice {
         },
         objetsAfficher,
       )
-      texteCorr = `$[${A.nom + B.nom}]$ et $[${D.nom + E.nom}]$ sont homologues.<br>`
-      texteCorr += `$[${B.nom + C.nom}]$ et $[${E.nom + F.nom}]$ sont homologues.<br>`
-      texteCorr += `$[${C.nom + A.nom}]$ et $[${F.nom + D.nom}]$ sont homologues.<br>`
+      texteCorr = `$[${A.nom + B.nom}]$ et $${miseEnEvidence(`[${D.nom + E.nom}]`)}$ sont homologues.<br>`
+      texteCorr += `$[${B.nom + C.nom}]$ et $${miseEnEvidence(`[${E.nom + F.nom}]`)}$ sont homologues.<br>`
+      texteCorr += `$[${C.nom + A.nom}]$ et $${miseEnEvidence(`[${F.nom + D.nom}]`)}$ sont homologues.<br>`
       if (
         this.questionJamaisPosee(
           i,
