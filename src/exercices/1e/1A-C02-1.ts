@@ -1,4 +1,4 @@
-import ProgrammeCalcul2 from '../can/2e/can2N43-03'
+import ProgrammeCalcul2 from '../can/2e/can2N4-04'
 export const titre = 'Calculer avec un programme de calcul'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2N31-04 pour les auto 1er
+ * Clone de can2N4-04 pour les auto 1er
  * @author Gilles Mora
  */
 

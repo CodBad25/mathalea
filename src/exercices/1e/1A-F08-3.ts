@@ -1,4 +1,4 @@
-import TrouverCoeffDir from '../can/2e/can2F21-09'
+import TrouverCoeffDir from '../can/2e/can2F20-06'
 
 export const titre =
   "Déterminer le coefficient directeur d'une fonction affine à partir de deux images"
@@ -8,7 +8,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2G31-09 pour les auto 1er avec énoncé différent par A.Meistermann
+ * Clone de can2F20-06 pour les auto 1er avec énoncé différent par A.Meistermann
 
  * @author Gilles Mora
  */

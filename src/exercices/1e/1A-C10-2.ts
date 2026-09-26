@@ -1,4 +1,4 @@
-import EquationsCarree from '../can/2e/can2L22-02'
+import EquationsCarree from '../can/2e/can2L2-05'
 export const titre = 'Résoudre une équation du type $(x+a)^2=k$'
 export const dateDePublication = '27/07/2025'
 export const amcReady = true

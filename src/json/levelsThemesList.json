@@ -138,73 +138,40 @@
     "titre": "Généralités sur les fonctions"
   },
   "can2F10": {
-    "titre": "Utiliser les notations et le vocabulaire fonctionnels"
+    "titre": "Lectures graphiques"
   },
   "can2F11": {
-    "titre": "Déterminer une image ou un antécédent par une fonction définie par un tableau de valeurs"
+    "titre": "Images/Antécédents"
   },
   "can2F12": {
-    "titre": "Déterminer une image ou un antécédent par une fonction définie par une représentation graphique"
-  },
-  "can2F13": {
-    "titre": "Déterminer une image ou un antécédent par une fonction définie par une expression algébrique"
-  },
-  "can2F14": {
-    "titre": "Passer d'un mode de représentation d'une fonction à un autre"
-  },
-  "can2F15": {
-    "titre": "Recherche du domaine de définition"
-  },
-  "can2F16": {
-    "titre": "Modéliser un phénomène continu par une fonction"
-  },
-  "can2F17": {
-    "titre": "Résoudre des problèmes modélisés par des fonctions en utilisant un ou plusieurs modes de représentation"
-  },
-  "can2F1Q": {
-    "titre": "QCM"
+    "titre": "Généralités"
   },
   "can2F2": {
     "titre": "Se constituer un répertoire de fonctions de référence"
   },
-  "can2F21": {
+  "can2F20": {
     "titre": "Connaître les fonctions affines"
   },
+  "can2F21": {
+    "titre": "Variations et signes d'une fonction affine"
+  },
   "can2F22": {
-    "titre": "Comparer et calculer des images en utilisant les fonctions de référence"
+    "titre": "Calculer des images avec des fonctions de référence"
   },
   "can2F23": {
-    "titre": "Résoudre algébriquement ou graphiquement $f(x)=k$, $f(x)<k$ ou $f(x)>k$ avec $f$ fonction de référence"
+    "titre": "Comparer des images avec des fonctions de référence"
+  },
+  "can2F24": {
+    "titre": "Déterminer des antécédents avec une fonction de référence"
+  },
+  "can2F25": {
+    "titre": "Résoudre des équations avec une fonction de référence"
   },
   "can2F3": {
     "titre": "Représenter algébriquement et graphiquement les fonctions"
   },
-  "can2F30": {
-    "titre": "Exploiter l'équation y=f(x) d'une courbe : appartenance, calcul de coordonnées"
-  },
-  "can2F31": {
-    "titre": "Modéliser par des fonctions des situations issues des mathématiques, des autres disciplines"
-  },
-  "can2F32": {
-    "titre": "Résoudre $f(x)=k$ ou $f(x)<k$ en choisissant une méthode adaptée"
-  },
-  "can2F33": {
-    "titre": "Résoudre une équation, une inéquation produit ou quotient, à l'aide d'un tableau de signes"
-  },
-  "can2F34": {
-    "titre": "Résoudre graphiquement ou avec un outil numérique, $f(x)=g(x)$ ou $f(x)<g(x)$"
-  },
   "can2F4": {
     "titre": "Étudier les variations et les extremums d'une fonction"
-  },
-  "can2F40": {
-    "titre": "Relier représentation graphique et tableau de variations"
-  },
-  "can2F41": {
-    "titre": "Utiliser les variations d'une fonction"
-  },
-  "can2F42": {
-    "titre": "Déterminer les extremums d'une fonction"
   },
   "can2G": {
     "titre": "Géométrie"
@@ -212,62 +179,23 @@
   "can2G1": {
     "titre": "Les bases en géométrie"
   },
-  "can2G10": {
-    "titre": "Définitions et propriétés de base en géométrie plane"
-  },
-  "can2G11": {
-    "titre": "Longueurs, angles, aires et volumes"
-  },
-  "can2G12": {
-    "titre": "Distance entre deux points. Coordonnées du milieu d'un segment"
-  },
-  "can2G13": {
-    "titre": "Traiter des problèmes d'optimisation"
-  },
   "can2G2": {
     "titre": "Les vecteurs"
   },
   "can2G20": {
-    "titre": "Définition - Translation - Relation de Chasles (année de transition)"
+    "titre": "Sans coordonnées"
   },
   "can2G21": {
-    "titre": "Égalité et colinéarité de deux vecteurs. Notation $\\vec{u}$. Vecteur nul"
-  },
-  "can2G22": {
-    "titre": "Représentants d’un vecteur"
-  },
-  "can2G23": {
-    "titre": "Somme de vecteurs et produit d’un vecteur par un nombre réel"
-  },
-  "can2G24": {
-    "titre": "Représentation d’un vecteur comme combinaison de deux vecteurs non colinéaires"
-  },
-  "can2G25": {
-    "titre": "Base orthonormée. Coordonnées d’un vecteur. Norme d’un vecteur"
-  },
-  "can2G26": {
-    "titre": "Coordonnées d’une somme de vecteurs et d’un produit d’un vecteur par un nombre réel"
-  },
-  "can2G27": {
-    "titre": "Déterminant de deux vecteurs. Colinéarité et parallélisme"
-  },
-  "can2G28": {
-    "titre": "Caractérisation vectorielle du milieu d’un segment"
+    "titre": "Avec coordonnées"
   },
   "can2G3": {
     "titre": "Les droites du plan"
   },
+  "can2G30": {
+    "titre": "Équations réduites"
+  },
   "can2G31": {
-    "titre": "Équations réduites de droite"
-  },
-  "can2G32": {
-    "titre": "Équations cartésiennes de droite"
-  },
-  "can2G33": {
-    "titre": "Établir alignement et parallélisme"
-  },
-  "can2G34": {
-    "titre": "Résoudre un système de deux équations linéaires à deux inconnues, déterminer le point d'intersection de deux droites sécantes"
+    "titre": "Équations cartésiennes"
   },
   "can2N": {
     "titre": "Calcul numérique"
@@ -279,115 +207,40 @@
     "titre": "Nombres réels"
   },
   "can2N10": {
-    "titre": "Ensembles de nombres"
+    "titre": "Intervalles, ensembles de nombres"
   },
   "can2N11": {
-    "titre": "La droite des réels"
-  },
-  "can2N12": {
-    "titre": "Intervalles de $\\mathbb{R}$"
-  },
-  "can2N13": {
-    "titre": "Passer d'une écriture d'un nombre à une autre"
-  },
-  "can2N14": {
-    "titre": "Distance entre deux réels"
-  },
-  "can2N15": {
-    "titre": "Résoudre des inéquations avec une valeur absolue"
-  },
-  "can2N16": {
-    "titre": "Comparer des nombres réels"
+    "titre": "Changement d'écriture"
   },
   "can2N2": {
     "titre": "Arithmétique"
   },
-  "can2N20": {
-    "titre": "Définitions de multiple et de diviseur"
-  },
-  "can2N21": {
-    "titre": "Nombres pairs et impairs"
-  },
   "can2N3": {
     "titre": "Fractions"
-  },
-  "can2N30": {
-    "titre": "Simplifier, décomposer, comparer ou encadrer une fraction"
-  },
-  "can2N31": {
-    "titre": "Effectuer les quatre opérations élémentaires avec des fractions"
-  },
-  "can2N32": {
-    "titre": "Effectuer des calculs avec des fractions"
-  },
-  "can2N33": {
-    "titre": "Résoudre des problèmes avec des fractions"
   },
   "can2N4": {
     "titre": "Puissances"
   },
-  "can2N40": {
-    "titre": "Définition et notation"
-  },
-  "can2N41": {
-    "titre": "Puissances de 10"
-  },
-  "can2N42": {
-    "titre": "Notation scientifique"
-  },
-  "can2N43": {
-    "titre": "Calculer avec les puissances"
-  },
-  "can2N44": {
-    "titre": "Comparer et classer"
-  },
   "can2N5": {
     "titre": "Racines carrées"
-  },
-  "can2N50": {
-    "titre": "Définition, existence et encadrement"
-  },
-  "can2N51": {
-    "titre": "Effectuer des calculs numériques avec les racines carrées"
   },
   "can2L1": {
     "titre": "Utiliser le calcul littéral"
   },
   "can2L10": {
-    "titre": "Les bases du calcul littéral"
+    "titre": "Calcul littéral élémentaire"
   },
   "can2L11": {
-    "titre": "Développer et factoriser des expressions algébriques"
+    "titre": "Égalités remarquables"
   },
   "can2L12": {
-    "titre": "Développer et factoriser avec les identités remarquables"
-  },
-  "can2L13": {
-    "titre": "Effectuer des calculs complexes sur des expressions algébriques"
-  },
-  "can2L14": {
-    "titre": "Utiliser le calcul littéral"
+    "titre": "Exprimer en fonction de"
   },
   "can2L2": {
     "titre": "Équations"
   },
-  "can2L20": {
-    "titre": "Modéliser un problème par une équation"
-  },
-  "can2L21": {
-    "titre": "Résoudre une équation du premier degré"
-  },
-  "can2L22": {
-    "titre": "Résoudre une équation avec un produit nul"
-  },
   "can2L3": {
     "titre": "Inéquations"
-  },
-  "can2L30": {
-    "titre": "Résoudre une inéquation du premier degré"
-  },
-  "can2L31": {
-    "titre": "Résoudre une inéquation produit ou quotient"
   },
   "can2I": {
     "titre": "Informations chiffrées"
@@ -395,53 +248,17 @@
   "can2I1": {
     "titre": "Proportions"
   },
-  "can2I10": {
-    "titre": "Exploiter la relation entre effectifs, proportions et pourcentages. Pourcentage de pourcentage"
-  },
   "can2I2": {
     "titre": "Évolutions"
   },
-  "can2I20": {
-    "titre": "Exploiter la relation entre deux valeurs successives et leur taux d'évolution"
+  "can2P": {
+    "titre": "Probabilités"
   },
-  "can2I21": {
-    "titre": "Calculer le taux d'évolution global à partir des taux d'évolution successifs. Calculer un taux d'évolution réciproque"
+  "can2P1": {
+    "titre": "Probabilités simples"
   },
-  "can2S": {
-    "titre": "Statistiques et Probabilités"
-  },
-  "can2S1": {
-    "titre": "Croisement de deux variables qualitatives"
-  },
-  "can2S10": {
-    "titre": "Tableau croisé d’effectifs"
-  },
-  "can2S11": {
-    "titre": "Fréquence conditionnelle, fréquence marginale"
-  },
-  "can2S2": {
-    "titre": "Statistique descriptive"
-  },
-  "can2S20": {
-    "titre": "Les indicateurs statistiques"
-  },
-  "can2S21": {
-    "titre": "Décrire les différences entre deux séries statistiques"
-  },
-  "can2S22": {
-    "titre": "Lire et comprendre une fonction écrite en Python renvoyant la moyenne $m$, l'écart type $s$ et la proportion d'éléments dans $[m-2s;m+2s]$"
-  },
-  "can2S3": {
-    "titre": "Calculer des probabilités"
-  },
-  "can2S30": {
-    "titre": "Calculer des probabilités dans des cas simples"
-  },
-  "can2S31": {
-    "titre": "Utiliser des modèles théoriques de référence"
-  },
-  "can2S4": {
-    "titre": "Échantillonnage"
+  "can2P2": {
+    "titre": "Probabilités conditionnelles"
   },
   "can1SD": {
     "titre": "Second degré"

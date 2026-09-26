@@ -1,25 +1,19 @@
-import AntecedentFonctionReference from './can2F3-02_old'
+import ComparerAvecFctRef from './can2F3-06_old'
 
-export const titre = 'Déterminer un antécédent avec la fonction inverse'
+export const titre = 'Comparer deux nombres avec la fonction inverse'
 export const interactifReady = true
 
 export const dateDePublication = '18/08/2026'
-
-export const uuid = 'c63ea'
-
-export const refs = {
-  'fr-fr': ['can2F23-02', '2F23-flash2'],
-  'fr-ch': [],
-}
+export const uuid = 'a25f6'
+export const refs = { 'fr-fr': ['can2F23-02', '2F22-flash4'], 'fr-ch': [] }
 
 /**
- * @author Stéphane Guyon
- * @author Gilles Mora
+ * Modèle d'exercice très simple pour la course aux nombres
+ * @author Gilles Mora et Stéphane Guyon
  */
-export default class AntecedentFonctionInverse extends AntecedentFonctionReference {
+export default class ComparerAvecFonctionInverse extends ComparerAvecFctRef {
   constructor() {
     super()
-    this.typeFonction = 3
-    this.besoinFormulaire3Numerique = false
+    this.typeQuestionFixe = 1
   }
 }

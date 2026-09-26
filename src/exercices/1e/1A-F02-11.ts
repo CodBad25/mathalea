@@ -1,4 +1,4 @@
-import ordonneePointDroite from '../can/2e/can2G31-06'
+import ordonneePointDroite from '../can/2e/can2G30-06'
 export const titre =
   "Calculer l'ordonnée d'un point sur une droite (non définie explicitement)"
 export const dateDePublication = '06/08/2025'
@@ -7,7 +7,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2G31-06 pour les auto 1er
+ * Clone de can2G30-06 pour les auto 1er
  * @author Gilles Mora
  */
 
