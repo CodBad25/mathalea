@@ -11,7 +11,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { ajouterBoutonMathalea2d } from '../../lib/outils/enrichissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -257,7 +257,7 @@ export default class ReciproqueThales extends Exercice {
             })
           // droites non parallèles
           texteCorr += `<br>D'où : $\\dfrac{${s1 + s2}}{${s1 + s4}}\\not=\\dfrac{${s1 + s3}}{${s1 + s5}}$.<br>`
-          texteCorr += `Donc d'après le théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ ne sont pas parallèles.<br>`
+          texteCorr += `Donc d'après le théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ ${texteEnCouleurEtGras('ne sont pas parallèles')}.<br>`
         } else {
           if (!context.isAmc)
             handleAnswers(this, i, {
@@ -273,7 +273,7 @@ export default class ReciproqueThales extends Exercice {
           } else {
             texteCorr += `De plus, $${s4}$, $${s1}$, $${s2}$ et $${s5}$, $${s1}$, $${s3}$ sont alignés dans le même ordre.<br>`
           }
-          texteCorr += `Donc d'après la réciproque du théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ sont parallèles.<br>`
+          texteCorr += `Donc d'après la réciproque du théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ ${texteEnCouleurEtGras('sont parallèles')}.<br>`
         }
 
         if (this.sup !== 3) {
@@ -461,7 +461,7 @@ export default class ReciproqueThales extends Exercice {
         if (!k.eq(k2)) {
           // droites pas parallèles
           texteCorr += `<br>$\\dfrac{${s1 + s2}}{${s1 + s4}}\\not=\\dfrac{${s1 + s3}}{${s1 + s5}}$.<br>`
-          texteCorr += `Donc d'après le théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ ne sont pas parallèles.<br>`
+          texteCorr += `Donc d'après le théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ ${texteEnCouleurEtGras('ne sont pas parallèles')}.<br>`
         } else {
           // droites parallèles
           texteCorr += `<br>$\\dfrac{${s1 + s2}}{${s1 + s4}}=\\dfrac{${s1 + s3}}{${s1 + s5}}$.<br>`
@@ -470,7 +470,7 @@ export default class ReciproqueThales extends Exercice {
           } else {
             texteCorr += `$${s4}$,$${s1}$,$${s2}$ et $${s5}$,$${s1}$,$${s3}$ sont alignés dans le même ordre.<br>`
           }
-          texteCorr += `Donc d'après la réciproque du théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ sont parallèles.<br>`
+          texteCorr += `Donc d'après la réciproque du théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ ${texteEnCouleurEtGras('sont parallèles')}.<br>`
         }
         this.autoCorrectionAMC[i] = {
           enonce: '',

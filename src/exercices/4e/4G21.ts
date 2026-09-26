@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
@@ -221,13 +222,13 @@ export default class ReciproquePythagore extends Exercice {
           this.autoCorrection[i].propositions![0].statut = true
         texteCorr += `<br>On constate que $${A + B}^2=${A + C}^2+${
           B + C
-        }^2$, l'égalité de Pythagore est vérifiée.<br> D'après la réciproque du théorème de Pythagore, le triangle $${nomTriangle}$ est rectangle en $${C}$.`
+        }^2$, l'égalité de Pythagore est vérifiée.<br> D'après la réciproque du théorème de Pythagore, le triangle $${nomTriangle}$ ${texteEnCouleurEtGras('est rectangle')} en $${C}$.`
       } else {
         if (!context.isAmc)
           this.autoCorrection[i].propositions![1].statut = true
         texteCorr += `<br>On constate que $${A + B}^2\\not=${A + C}^2+${
           B + C
-        }^2$, l'égalité de Pythagore n'est pas vérifiée.<br> D'après ${this.sup2 ? 'la contraposée du' : 'le'} théorème de Pythagore, le triangle  $${nomTriangle}$ n'est pas rectangle.`
+        }^2$, l'égalité de Pythagore n'est pas vérifiée.<br> D'après ${this.sup2 ? 'la contraposée du' : 'le'} théorème de Pythagore, le triangle  $${nomTriangle}$ ${texteEnCouleurEtGras("n'est pas rectangle")}.`
       }
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {

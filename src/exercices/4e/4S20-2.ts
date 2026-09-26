@@ -1,3 +1,4 @@
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -56,75 +57,75 @@ export default class ExerciceProbaLancerDeDes extends Exercice {
         case 'type1':
           texte = `Obtenir $ ${texNombre(n - p)}$ est un événement ...<br>` // Le LateX entre deux symboles $, les variables dans des ${ }
           bonneReponse = 'impossible'
-          texteCorr = `Obtenir $ ${texNombre(n - p)}$ est un événement impossible.<br>`
+          texteCorr = `Obtenir $ ${texNombre(n - p)}$ est un événement ${texteEnCouleurEtGras('impossible')}.<br>`
           break
         case 'type2':
           if (k === 1) {
             texte = 'Obtenir un nombre impair est un événement ...<br>'
             texteCorr =
-              'Obtenir un nombre impair est un événement possible.<br>'
+              `Obtenir un nombre impair est un événement ${texteEnCouleurEtGras('possible')}.<br>`
           } else if (k === 2) {
             texte = 'Obtenir un nombre pair est un événement ...<br>'
-            texteCorr = 'Obtenir un nombre pair est un événement possible.<br>'
+            texteCorr = `Obtenir un nombre pair est un événement ${texteEnCouleurEtGras('possible')}.<br>`
           } else if (k === 3) {
             texte = 'Ne pas obtenir un nombre impair est un événement ...<br>'
             texteCorr =
-              'Ne pas obtenir un nombre impair est un événement possible.<br>'
+              `Ne pas obtenir un nombre impair est un événement ${texteEnCouleurEtGras('possible')}.<br>`
           } else if (k === 4) {
             texte = 'Ne pas obtenir un nombre pair est un événement ...<br>'
             texteCorr =
-              'Ne pas obtenir un nombre pair est un événement possible.<br>'
+              `Ne pas obtenir un nombre pair est un événement ${texteEnCouleurEtGras('possible')}.<br>`
           }
           bonneReponse = 'possible'
           break
         case 'type3':
           if (k === 1) {
             texte = `Obtenir un nombre compris entre $ ${texNombre(n)}$ et $ ${texNombre(m)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre compris entre $ ${texNombre(n)}$ et $ ${texNombre(m)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre compris entre $ ${texNombre(n)}$ et $ ${texNombre(m)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
           }
           if (k === 2) {
             texte = `Obtenir un nombre compris entre $ ${texNombre(m)}$ et $ ${texNombre(n)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre compris entre $ ${texNombre(m)}$ et $ ${texNombre(n)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre compris entre $ ${texNombre(m)}$ et $ ${texNombre(n)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
           }
           if (k === 3) {
             texte = `Obtenir un nombre supérieur à $ ${texNombre(n)}$ et inférieur à $ ${texNombre(m)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre supérieur à $ ${texNombre(n)}$ et inférieur à $ ${texNombre(m)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre supérieur à $ ${texNombre(n)}$ et inférieur à $ ${texNombre(m)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
           }
           if (k === 4) {
             texte = `Obtenir un nombre inférieur à $ ${texNombre(m)}$ et supérieur à $ ${texNombre(n)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre inférieur à $ ${texNombre(m)}$ et supérieur à $ ${texNombre(n)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre inférieur à $ ${texNombre(m)}$ et supérieur à $ ${texNombre(n)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
           }
           bonneReponse = 'certain'
           break
         case 'type4':
           texte = `Obtenir $ ${texNombre(m + p)}$ est un événement ...<br>`
           bonneReponse = 'impossible'
-          texteCorr = `Obtenir $ ${texNombre(m + p)}$ est un événement impossible.<br>`
+          texteCorr = `Obtenir $ ${texNombre(m + p)}$ est un événement ${texteEnCouleurEtGras('impossible')}.<br>`
           break
         case 'type5':
           texte = `Obtenir $ ${texNombre(n + p)}$ est un événement ...<br>`
           bonneReponse = 'possible'
-          texteCorr = `Obtenir $ ${texNombre(n + p)}$ est un événement possible.<br>`
+          texteCorr = `Obtenir $ ${texNombre(n + p)}$ est un événement ${texteEnCouleurEtGras('possible')}.<br>`
           break
         case 'type6':
           if (k === 1) {
             texte = `Obtenir un nombre supérieur à $ ${texNombre(m)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre supérieur à $ ${texNombre(m)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre supérieur à $ ${texNombre(m)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
             bonneReponse = 'impossible'
           }
           if (k === 2) {
             texte = `Obtenir un nombre inférieur à $ ${texNombre(n)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre inférieur à $ ${texNombre(n)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre inférieur à $ ${texNombre(n)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
             bonneReponse = 'impossible'
           }
           if (k === 3) {
             texte = `Obtenir un nombre supérieur à $ ${texNombre(n)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre supérieur à $ ${texNombre(n)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre supérieur à $ ${texNombre(n)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
             bonneReponse = 'possible'
           }
           if (k === 4) {
             texte = `Obtenir un nombre inférieur à $ ${texNombre(m)}$ est un événement ...<br>`
-            texteCorr = `Obtenir un nombre inférieur à $ ${texNombre(m)}$ est un événement certain.<br>`
+            texteCorr = `Obtenir un nombre inférieur à $ ${texNombre(m)}$ est un événement ${texteEnCouleurEtGras('certain')}.<br>`
             bonneReponse = 'possible'
           }
           break
