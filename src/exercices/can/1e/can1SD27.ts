@@ -43,12 +43,16 @@ export default class FormeCanoniqueXCarrePlusBx extends ExerciceSimple {
       champ1: { value: moitie },
       champ2: { value: carreMoitie },
     }
-    this.consigne = 'Compléter l\'égalité.'
+    this.consigne = "Compléter l'égalité."
     this.question = `x^2${signe}${termeX}=\\left(x${signe}%{champ1}\\right)^2-%{champ2}`
 
     this.correction = `On fait apparaître le début du développement d'une identité remarquable : $x^2${signe}${termeX}=x^2${signe}2\\times ${moitie}\\times x$.<br>
-    Or $\\left(x${signe}${moitie}\\right)^2=x^2${signe}${termeX}+${moitieAuCarre}=x^2${signe}${termeX}+${carreMoitie}$.<br>
-    Il faut donc retrancher $${carreMoitie}$ : $x^2${signe}${termeX}=\\left(x${signe}${miseEnEvidence(moitie)}\\right)^2-${miseEnEvidence(carreMoitie)}$.`
+    On ajoute et on retranche $${moitieAuCarre}$ :<br>
+    $\\begin{aligned}
+    x^2${signe}${termeX}&=\\underbrace{x^2${signe}2\\times ${moitie}\\times x+${moitieAuCarre}}_{\\small\\left(x${signe}${moitie.replace('\\dfrac', '\\frac')}\\right)^2}-${moitieAuCarre}\\\\
+    &=\\left(x${signe}${moitie}\\right)^2-${moitieAuCarre}\\\\
+    &=\\left(x${signe}${miseEnEvidence(moitie)}\\right)^2-${miseEnEvidence(carreMoitie)}
+    \\end{aligned}$`
 
     this.canEnonce = `$x^2${signe}${termeX}=$`
     this.canReponseACompleter = `$\\left(x${signe}\\ldots\\right)^2-\\ldots$`
