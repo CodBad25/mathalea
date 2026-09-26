@@ -1,4 +1,4 @@
-import EquationDroite from '../can/2e/can2G31-03'
+import EquationDroite from '../can/2e/can2G30-03'
 export const titre = "Lire graphiquement l'équation réduite d’une droite"
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2G31-03 pour les auto 1er
+ * Clone de can2G30-03 pour les auto 1er
  * @author Gilles Mora
  */
 

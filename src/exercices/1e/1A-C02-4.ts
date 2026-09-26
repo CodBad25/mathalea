@@ -1,4 +1,4 @@
-import NombreInverse from '../can/2e/can2N32-02'
+import NombreInverse from '../can/2e/can2N3-03'
 export const titre = 'Calculer un nombre connaissant son inverse'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2N32-02 pour les auto 1er
+ * Clone de can2N3-03 pour les auto 1er
  * @author Gilles Mora
  */
 

@@ -1,4 +1,4 @@
-import EvolSuccessives from '../can/2e/can2I21-02'
+import EvolSuccessives from '../can/2e/can2I2-05'
 export const titre =
   'Déterminer une évolution globale après deux évolutions successives'
 export const dateDePublication = '22/07/2025'

@@ -66,7 +66,7 @@ type PointFigure = { abscisse: number; tex: string }
 
 /**
  * Droite graduée (pas de 1) sur laquelle sont placés deux points,
- * avec une accolade matérialisant la distance qui les sépare (même style que can2F23-11).
+ * avec une accolade matérialisant la distance qui les sépare (même style que can2F25-06).
  */
 const figureDistance = (
   p: PointFigure,

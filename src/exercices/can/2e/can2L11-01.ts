@@ -1,131 +1,73 @@
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-
-import { shuffle } from '../../../lib/outils/arrayOutils'
-import {
-  ecritureAlgebrique,
-  ecritureAlgebriqueSauf1,
-  ecritureParentheseSiNegatif,
-  reduireAxPlusB,
-  reduirePolynomeDegre3,
-  rienSi1,
-} from '../../../lib/outils/ecritures'
-export const titre = 'Développer avec la double distributivité'
+export const titre = 'Calculer une différence de deux carrés'
 export const interactifReady = true
 
-export const dateDePublication = '07/04/2024'
-export const dateDeModifImportante = '25/03/2026'
-export const uuid = '69fed'
-export const refs = {
-  'fr-fr': ['can2L11-01', 'BP1AUTO083', '2L11-flash4'],
-  'fr-ch': [],
-}
+export const amcReady = true
+export const amcType = 'AMCNum'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
+ * Créé pendant l'été 2021
 
+ * Date de publication
 */
-export default class DeveloppementDouble extends ExerciceSimple {
+export const uuid = '76ac6'
+
+export const refs = {
+  'fr-fr': ['can2L11-01'],
+  'fr-ch': [],
+}
+export default class CalculAstucieuxAvecDifferenceCarre extends ExerciceSimple {
   constructor() {
     super()
-
-    this.canOfficielle = false
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.versionQcmDisponible = true
-    this.optionsDeComparaison = { expressionsForcementReduites: true }
+    this.versionQcm = false
   }
 
   nouvelleVersion() {
-    switch (this.quotaChoice('type', [1, 2, 3])) {
-      case 1: // (ax+b)(cx+d) avec a et c =1
-        {
-          const a = 1
-          const b = randint(-10, 10, 0)
-          const c = 1
-          const d = randint(-10, 10, [0, b, -b])
-          this.reponse = `x^2${ecritureAlgebriqueSauf1(b + d)}x${ecritureAlgebriqueSauf1(b * d)}`
-          let tableau = [
-            `$x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b * d)}$`,
-            `$x^2${ecritureAlgebriqueSauf1(b + d)}x${ecritureAlgebrique(b + d)}$`,
-            `$2x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b + d)}$`,
-          ]
-          tableau = shuffle(tableau)
-          this.distracteurs = tableau.slice(0, 3)
-          this.question = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.`
-          this.correction = `$\\begin{aligned}
-            (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})&=${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)}\\\\
-            &=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}
-            \\end{aligned}$`
-          this.correction += `<br>Le terme en $x^2$ vient de $${rienSi1(a)}x\\times ${c === 1 ? 'x' : `${ecritureParentheseSiNegatif(c)}x`}=${rienSi1(a * c)}x^2$.`
-          this.correction += `<br>Le terme en $x$ vient de la somme de $${rienSi1(a)}x \\times ${ecritureParentheseSiNegatif(d)}$ et de $${b} \\times ${c === 1 ? 'x' : `${ecritureParentheseSiNegatif(c)}x`}$.`
-          this.correction += `<br>Le terme constant vient de $${b}\\times ${ecritureParentheseSiNegatif(d)}= ${b * d}$.`
-        }
-        break
-      case 2: // (ax+b)(cx+d) avec a et c différent de 1
-        {
-          const a = randint(2, 4)
-          const b = randint(-3, 3, 0)
-          let c = randint(2, 4)
-          const d = randint(-10, 10, [0, b, -b])
-          if (a === 2 && c === 2) {
-            c = 3
-          } // pour éviter a=c=2 car a+b=a*c
-          this.reponse = `${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebriqueSauf1(b * d)}`
-          let tableau = [
-            `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b * d)}$`,
-            `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b + d)}$`,
-            `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b * d)}$`,
-            `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b + d)}$`,
-            `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b + d)}$`,
-          ]
-          tableau = shuffle(tableau)
-          this.distracteurs = tableau.slice(0, 3)
-          this.question = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.`
-          this.correction = `$\\begin{aligned}
-            (${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})&=${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)}\\\\
-            &=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}
-            \\end{aligned}$`
-          this.correction += `<br>Le terme en $x^2$ vient de $${rienSi1(a)}x\\times ${c === 1 ? 'x' : `${ecritureParentheseSiNegatif(c)}x`}=${rienSi1(a * c)}x^2$.`
-          this.correction += `<br>Le terme en $x$ vient de la somme de $${rienSi1(a)}x \\times ${ecritureParentheseSiNegatif(d)}$ et de $${b} \\times ${c === 1 ? 'x' : `${ecritureParentheseSiNegatif(c)}x`}$.`
-          this.correction += `<br>Le terme constant vient de $${b}\\times ${ecritureParentheseSiNegatif(d)}= ${b * d}$.`
-        }
-        break
-      case 3: // (b+ax)(d+cx) avec a et c différent de 1
-        {
-          const a = randint(1, 2)
-          const b = randint(-3, 3, 0)
-          const c = randint(1, 2)
-          const d = randint(-10, 10, [0, b, -b])
-          this.reponse = `${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b * d)}`
-          let tableau = [
-            `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b * d)}$`,
-            `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b + d)}$`,
-            `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b * d)}$`,
-            `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b + d)}$`,
-            `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b + d)}$`,
-          ]
-          tableau = shuffle(tableau)
-          this.distracteurs = tableau.slice(0, 3)
-          this.question = `Développer et réduire l'expression $(${b}${ecritureAlgebriqueSauf1(a)}x)(${reduireAxPlusB(c, d)})$.`
-          this.correction = `$\\begin{aligned}
-            (${b}${ecritureAlgebriqueSauf1(a)}x)(${reduireAxPlusB(c, d)})&=${rienSi1(b * c)}x${ecritureAlgebrique(b * d)}${ecritureAlgebriqueSauf1(a * c)}x^2${ecritureAlgebrique(a * d)}x\\\\
-            &=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}
-            \\end{aligned}$`
-          this.correction += `<br>Le terme en $x^2$ vient de $${rienSi1(a)}x\\times ${c === 1 ? 'x' : `${ecritureParentheseSiNegatif(c)}x`}=${rienSi1(a * c)}x^2$.`
-          this.correction += `<br>Le terme en $x$ vient de la somme de $${rienSi1(a)}x \\times ${ecritureParentheseSiNegatif(d)}$ et de $${b} \\times ${c === 1 ? 'x' : `${ecritureParentheseSiNegatif(c)}x`}$.`
-          this.correction += `<br>Le terme constant vient de $${b}\\times ${ecritureParentheseSiNegatif(d)}= ${b * d}$.`
-        }
-        break
+    const a = this.quotaRandint('a', 15, 40)
+
+    if (context.isAmc) this.versionQcm = false
+    const b = this.versionQcm ? a + randint(1, 2) : a + 1
+    if (this.quotaChoice('ordre', [true, false])) {
+      this.question = this.versionQcm
+        ? `$${b}^2-${a}^2$ est égal à : `
+        : `Calculer $${b}^2-${a}^2$.`
+      this.correction = `La forme du calcul fait penser à l'identité remarquable :<br> $a^2-b^2=(a+b)(a-b)$.<br>
+      En l'utilisant avec $a=${b}$ et $b=${a}$, on obtient : <br>
+      $${b}^2-${a}^2=(${b}+${a})(${b}-${a})=${b + a}\\times ${b - a}=${miseEnEvidence(b ** 2 - a ** 2)}$.`
+      this.reponse = b ** 2 - a ** 2
+      if (this.versionQcm) {
+        this.distracteurs = [
+          `$${(a - b) ** 2}$`,
+          `$${-b - a}$`,
+          `$${-1 * (a - b) ** 2}$`,
+        ]
+      }
+    } else {
+      this.question = this.versionQcm
+        ? `$${a}^2-${b}^2$ est égal à : `
+        : `Calculer $${a}^2-${b}^2$.`
+      this.correction = `La forme du calcul fait penser à l'identité remarquable :<br> $a^2-b^2=(a-b)(a+b)$.<br>
+      En l'utilisant avec $a=${a}$ et $b=${b}$, on obtient : <br>
+      $${a}^2-${b}^2=(${a}-${b})(${a}+${b})=${a - b}\\times ${a + b}=${miseEnEvidence(a ** 2 - b ** 2)}$.`
+      this.reponse = a ** 2 - b ** 2
+      if (this.versionQcm) {
+        this.distracteurs = [
+          `$${(a - b) ** 2}$`,
+          `$${a + b}$`,
+          `$${-1 * (a - b) ** 2}$`,
+        ]
+      }
     }
-    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
-    if (!this.versionQcm) {
-      this.question += '<br>'
-    }
-    this.canEnonce = this.question
+    this.canEnonce = this.question // 'Compléter'
     this.canReponseACompleter = ''
   }
 }

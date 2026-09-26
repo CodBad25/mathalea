@@ -1,4 +1,4 @@
-import LectureGraphiqueVecteurRepere from '../can/2e/can2G25-01'
+import LectureGraphiqueVecteurRepere from '../can/2e/can2G21-01'
 
 export const titre =
   'Lire les coordonnées d’un vecteur représenté dans un repère'

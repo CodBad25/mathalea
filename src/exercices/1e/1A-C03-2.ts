@@ -1,4 +1,4 @@
-import CalculPuissancesOperation from '../can/2e/can2N43-02'
+import CalculPuissancesOperation from '../can/2e/can2N4-03'
 export const titre = 'Simplifier avec les propriétés des puissances'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2N31-03 pour les auto 1er
+ * Clone de can2N4-03 pour les auto 1er
  * @author Gilles Mora
  */
 
