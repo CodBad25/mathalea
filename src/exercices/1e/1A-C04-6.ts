@@ -1,4 +1,4 @@
-import ÉcrirePourcentage from '../can/5e/can5P06'
+import ÉcrirePourcentage from '../can/5e/can5P2-02'
 export const titre = 'Écrire sous la forme d’un pourcentage'
 export const dateDePublication = '09/12/2025'
 export const amcReady = true

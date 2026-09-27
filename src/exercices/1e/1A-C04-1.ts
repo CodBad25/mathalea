@@ -1,4 +1,4 @@
-import FractionDecimaleEcritureDecimale2 from '../can/5e/can5N02'
+import FractionDecimaleEcritureDecimale2 from '../can/5e/can5C4-10'
 export const titre = 'Passer de la fraction décimale à l’écriture décimale'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true

@@ -22,12 +22,21 @@
     "5e": {
       "can5a": {},
       "can5A": {},
-      "can5C": {},
+      "can5C": {
+        "can5C1": {},
+        "can5C2": {},
+        "can5C3": {},
+        "can5C4": {},
+        "can5C5": {},
+        "can5C6": {}
+      },
       "can5D": {},
       "can5G": {},
       "can5L": {},
-      "can5N": {},
-      "can5P": {}
+      "can5P": {
+        "can5P1": {},
+        "can5P2": {}
+      }
     },
     "4e": {
       "can4a": {},
