@@ -217,6 +217,10 @@ export default class SujetCAN2023troisieme extends Exercice {
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      // Les réponses CAN sont facultatives : garder leur indice aligné sur
+      // celui de la question, y compris après un nouveau tirage d'un doublon.
+      this.listeCanEnonces[i] = ''
+      this.listeCanReponsesACompleter[i] = ''
       switch (typeQuestionsDisponibles[i]) {
         case 1:
           a = randint(4, 9)
@@ -225,7 +229,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texteCorr = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
           reponse = a * b
           handleAnswers(this, index, { reponse: { value: reponse } })
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           if (this.interactif) {
             texte +=
               ' $=$' +
@@ -288,7 +292,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             )
             handleAnswers(this, index, { reponse: { value: reponse } })
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           nbChamps = 1
 
           break
@@ -316,8 +320,8 @@ export default class SujetCAN2023troisieme extends Exercice {
             handleAnswers(this, index, { reponse: { value: reponse } })
           }
           nbChamps = 1
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('\\dots{} min')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '\\dots{} min'
 
           break
 
@@ -345,7 +349,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             )
           }
           nbChamps = 1
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           break
 
         case 5:
@@ -604,8 +608,8 @@ export default class SujetCAN2023troisieme extends Exercice {
               texteCorr = `? $=${ang1}-90=${miseEnEvidence(ang1 - 90)}^\\circ$.  `
             }
           }
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('? $=\\ldots ^\\circ$')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '? $=\\ldots ^\\circ$'
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
@@ -640,8 +644,8 @@ export default class SujetCAN2023troisieme extends Exercice {
             } else {
               texte += context.isHtml ? '  $\\ldots\\text{ dm}^2$' : ''
             }
-            this.listeCanEnonces.push(`$${texNombre(a, 1)}\\text{ m}^2$  $=$`)
-            this.listeCanReponsesACompleter.push('$\\ldots\\text{dm}^2$')
+            this.listeCanEnonces[i] = `$${texNombre(a, 1)}\\text{ m}^2$  $=$`
+            this.listeCanReponsesACompleter[i] = '$\\ldots\\text{dm}^2$'
           } else {
             a = new Decimal(randint(101, 199)).div(10)
             reponse = new Decimal(a).div(100)
@@ -660,8 +664,8 @@ export default class SujetCAN2023troisieme extends Exercice {
             } else {
               texte += context.isHtml ? '  $\\ldots\\text{ m}^2$' : ''
             }
-            this.listeCanEnonces.push(`$${texNombre(a, 1)}\\text{ dm}^2$  $=$`)
-            this.listeCanReponsesACompleter.push('$\\ldots\text{m}^2$')
+            this.listeCanEnonces[i] = `$${texNombre(a, 1)}\\text{ dm}^2$  $=$`
+            this.listeCanReponsesACompleter[i] = '$\\ldots\text{m}^2$'
           }
 
           break
@@ -697,8 +701,8 @@ export default class SujetCAN2023troisieme extends Exercice {
               ) + ' €'
           }
           nbChamps = 1
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('$\\ldots €$')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '$\\ldots €$'
           break
 
         case 8:
@@ -744,7 +748,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBaseAvecFraction,
             )
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           break
 
         case 9:
@@ -755,7 +759,7 @@ export default class SujetCAN2023troisieme extends Exercice {
           texteCorr = `$${texNombre(a, 1)}+${texNombre(b, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           if (this.interactif) {
             texte +=
               ' $=$' +
@@ -804,7 +808,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             )
           }
           nbChamps = 1
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           break
         case 11:
           if (choice([true, false])) {
@@ -935,7 +939,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             )
           }
           handleAnswers(this, index, { reponse: { value: reponse } })
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           if (this.interactif) {
             texte +=
               ajouteChampTexteMathLive(
@@ -971,8 +975,8 @@ export default class SujetCAN2023troisieme extends Exercice {
           $x$ est donc la somme de $${b}$ et $${d}$. Ainsi, $x=${miseEnEvidence(b + d)}$.`
 
           handleAnswers(this, index, { reponse: { value: reponse } })
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('$x=\\ldots$')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '$x=\\ldots$'
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -1003,8 +1007,8 @@ export default class SujetCAN2023troisieme extends Exercice {
             texte += ' $\\ldots$'
           }
           texteCorr = `Pour $x=${a}$, ${sp(2)} $${b}x^2=${b}\\times${ecritureParentheseSiNegatif(a)}^2=${miseEnEvidence(reponse)}$.`
-          this.listeCanEnonces.push(`Pour $x=${a}$`)
-          this.listeCanReponsesACompleter.push(`$${b}x^2=\\ldots$`)
+          this.listeCanEnonces[i] = `Pour $x=${a}$`
+          this.listeCanReponsesACompleter[i] = `$${b}x^2=\\ldots$`
           handleAnswers(this, index, { reponse: { value: reponse } })
 
           nbChamps = 1
@@ -1074,22 +1078,20 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                 On a $AB^2=BC^2-AC^2$, soit $AB^2=${a[2]}^2-${a[0]}^2=${a[2] ** 2 - a[0] ** 2}$.<br>
                 Par conséquent, $AB=${miseEnEvidence(a[1])}\\text{ cm}$.`
-            this.listeCanEnonces.push(
-              mathalea2d(
-                {
-                  xmin,
-                  ymin,
-                  xmax,
-                  ymax,
-                  pixelsParCm: 50,
-                  mainlevee: false,
-                  scale: 1,
-                  center: !context.isHtml,
-                },
-                objets,
-              ),
+            this.listeCanEnonces[i] = mathalea2d(
+              {
+                xmin,
+                ymin,
+                xmax,
+                ymax,
+                pixelsParCm: 50,
+                mainlevee: false,
+                scale: 1,
+                center: !context.isHtml,
+              },
+              objets,
             )
-            this.listeCanReponsesACompleter.push('$AB=\\ldots$')
+            this.listeCanReponsesACompleter[i] = '$AB=\\ldots$'
           } else if (choix === 'b') {
             objets.push(pol[0])
             objets.push(
@@ -1136,22 +1138,20 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                   On a $AC^2=BC^2-AB^2$, soit $AC^2=${a[2]}^2-${a[1]}^2=${a[2] ** 2 - a[1] ** 2}$.<br>
                   Par conséquent, $AC=${miseEnEvidence(a[0])}\\text{ cm}$.`
-            this.listeCanEnonces.push(
-              mathalea2d(
-                {
-                  xmin,
-                  ymin,
-                  xmax,
-                  ymax,
-                  pixelsParCm: 50,
-                  mainlevee: false,
-                  scale: 1,
-                  center: !context.isHtml,
-                },
-                objets,
-              ),
+            this.listeCanEnonces[i] = mathalea2d(
+              {
+                xmin,
+                ymin,
+                xmax,
+                ymax,
+                pixelsParCm: 50,
+                mainlevee: false,
+                scale: 1,
+                center: !context.isHtml,
+              },
+              objets,
             )
-            this.listeCanReponsesACompleter.push('$AC=\\ldots$')
+            this.listeCanReponsesACompleter[i] = '$AC=\\ldots$'
           } else {
             objets.push(pol[0])
             objets.push(
@@ -1198,22 +1198,20 @@ export default class SujetCAN2023troisieme extends Exercice {
             texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                     On a $BC^2=AB^2+AC^2$, soit $BC^2=${a[0]}^2+${a[1]}^2=${a[0] ** 2 + a[1] ** 2}$.<br>
                     Par conséquent, $BC=${miseEnEvidence(a[2])}\\text{ cm}$.`
-            this.listeCanEnonces.push(
-              mathalea2d(
-                {
-                  xmin,
-                  ymin,
-                  xmax,
-                  ymax,
-                  pixelsParCm: 40,
-                  mainlevee: false,
-                  scale: 1,
-                  center: !context.isHtml,
-                },
-                objets,
-              ),
+            this.listeCanEnonces[i] = mathalea2d(
+              {
+                xmin,
+                ymin,
+                xmax,
+                ymax,
+                pixelsParCm: 40,
+                mainlevee: false,
+                scale: 1,
+                center: !context.isHtml,
+              },
+              objets,
             )
-            this.listeCanReponsesACompleter.push('$BC=\\ldots$')
+            this.listeCanReponsesACompleter[i] = '$BC=\\ldots$'
           }
 
           handleAnswers(this, index, { reponse: { value: reponse } })
@@ -1259,10 +1257,9 @@ export default class SujetCAN2023troisieme extends Exercice {
           } else {
             texte += ' $\\ldots$ min'
           }
-          this.listeCanEnonces.push('Complète.')
-          this.listeCanReponsesACompleter.push(
-            `$${texNombre(a, 2)}\\text{ h }=\\ldots \\text{ min}$ `,
-          )
+          this.listeCanEnonces[i] = 'Complète.'
+          this.listeCanReponsesACompleter[i] =
+            `$${texNombre(a, 2)}\\text{ h }=\\ldots \\text{ min}$ `
           nbChamps = 1
           break
 
@@ -1282,7 +1279,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBase,
             )
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           nbChamps = 1
           break
 
@@ -1302,7 +1299,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierNumbers,
             )
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           nbChamps = 1
           break
         case 18:
@@ -1334,7 +1331,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBaseAvecVariable,
             )
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           nbChamps = 1
           break
         case 19:
@@ -1366,7 +1363,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierNumbers,
             )
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           nbChamps = 1
           break
 
@@ -1635,24 +1632,23 @@ export default class SujetCAN2023troisieme extends Exercice {
           } else {
             texte += ' $\\ldots$ '
           }
-          this.listeCanEnonces.push(
+          this.listeCanEnonces[i] =
             'Loïs a représenté un problème :<br>' +
-              mathalea2d(
-                {
-                  xmin,
-                  ymin,
-                  xmax,
-                  ymax,
-                  pixelsParCm: 30,
-                  mainlevee: false,
-                  amplitude: 0.3,
-                  scale: 0.6,
-                  center: !context.isHtml,
-                },
-                objets,
-              ),
-          )
-          this.listeCanReponsesACompleter.push('$a=\\ldots$')
+            mathalea2d(
+              {
+                xmin,
+                ymin,
+                xmax,
+                ymax,
+                pixelsParCm: 30,
+                mainlevee: false,
+                amplitude: 0.3,
+                scale: 0.6,
+                center: !context.isHtml,
+              },
+              objets,
+            )
+          this.listeCanReponsesACompleter[i] = '$a=\\ldots$'
           nbChamps = 1
           break
 
@@ -1694,7 +1690,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBaseAvecFraction,
             )
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           nbChamps = 1
           break
         case 22:
@@ -1716,7 +1712,7 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierNumbers,
             )
           }
-          this.listeCanEnonces.push(texte)
+          this.listeCanEnonces[i] = texte
           nbChamps = 1
           break
 
@@ -1820,24 +1816,23 @@ export default class SujetCAN2023troisieme extends Exercice {
             } else {
               texte += '<br>$AE=\\ldots$'
             }
-            this.listeCanEnonces.push(
+            this.listeCanEnonces[i] =
               '$(BE)//(DC)$<br>' +
-                mathalea2d(
-                  {
-                    xmin,
-                    ymin,
-                    xmax,
-                    ymax,
-                    pixelsParCm: 30,
-                    mainlevee: false,
-                    amplitude: 0.5,
-                    scale: 0.6,
-                    center: !context.isHtml,
-                  },
-                  objets,
-                ),
-            )
-            this.listeCanReponsesACompleter.push('$AE=\\ldots$')
+              mathalea2d(
+                {
+                  xmin,
+                  ymin,
+                  xmax,
+                  ymax,
+                  pixelsParCm: 30,
+                  mainlevee: false,
+                  amplitude: 0.5,
+                  scale: 0.6,
+                  center: !context.isHtml,
+                },
+                objets,
+              )
+            this.listeCanReponsesACompleter[i] = '$AE=\\ldots$'
           } else {
             a = randint(1, 4) // AB
             k = randint(2, 3) // coeff
@@ -1924,24 +1919,23 @@ export default class SujetCAN2023troisieme extends Exercice {
             } else {
               texte += ' $CE=\\ldots$ '
             }
-            this.listeCanEnonces.push(
+            this.listeCanEnonces[i] =
               '$(AB)//(CD)$<br>' +
-                mathalea2d(
-                  {
-                    xmin,
-                    ymin,
-                    xmax,
-                    ymax,
-                    pixelsParCm: 25,
-                    mainlevee: false,
-                    amplitude: 0.5,
-                    scale: 0.6,
-                    center: !context.isHtml,
-                  },
-                  objets,
-                ),
-            )
-            this.listeCanReponsesACompleter.push('$CE=\\ldots$')
+              mathalea2d(
+                {
+                  xmin,
+                  ymin,
+                  xmax,
+                  ymax,
+                  pixelsParCm: 25,
+                  mainlevee: false,
+                  amplitude: 0.5,
+                  scale: 0.6,
+                  center: !context.isHtml,
+                },
+                objets,
+              )
+            this.listeCanReponsesACompleter[i] = '$CE=\\ldots$'
           }
           nbChamps = 1
           break
@@ -2022,26 +2016,25 @@ export default class SujetCAN2023troisieme extends Exercice {
               ) +
               '$)$'
           }
-          this.listeCanEnonces.push(
+          this.listeCanEnonces[i] =
             '$ABCD$ est un carré.<br>' +
-              mathalea2d(
-                {
-                  xmin: -6,
-                  xmax: 5,
-                  ymin: -3,
-                  ymax: 3,
-                  pixelsParCm: 25,
-                  scale: 0.7,
-                },
-                r,
-                o,
-                traceA,
-                traceB,
-                traceC,
-                labelPoint(A, B, C),
-              ),
-          )
-          this.listeCanReponsesACompleter.push('$D(\\ldots;\\ldots)$')
+            mathalea2d(
+              {
+                xmin: -6,
+                xmax: 5,
+                ymin: -3,
+                ymax: 3,
+                pixelsParCm: 25,
+                scale: 0.7,
+              },
+              r,
+              o,
+              traceA,
+              traceB,
+              traceC,
+              labelPoint(A, B, C),
+            )
+          this.listeCanReponsesACompleter[i] = '$D(\\ldots;\\ldots)$'
           nbChamps = 1
 
           break
@@ -2065,10 +2058,9 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             )
           }
-          this.listeCanEnonces.push('Complète avec deux entiers consécutifs.')
-          this.listeCanReponsesACompleter.push(
-            `$\\ldots < \\sqrt{${a}} < \\ldots$`,
-          )
+          this.listeCanEnonces[i] = 'Complète avec deux entiers consécutifs.'
+          this.listeCanReponsesACompleter[i] =
+            `$\\ldots < \\sqrt{${a}} < \\ldots$`
           nbChamps = 1
           break
         case 26:
@@ -2099,12 +2091,10 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBaseAvecFraction,
             )
           }
-          this.listeCanEnonces
-            .push(`Une urne contient $${a}$ boules rouges et $${b}$ boules bleues. <br>
-          On tire une boule au hasard.`)
-          this.listeCanReponsesACompleter.push(
-            `La probabilité de tirer une boule ${choix1 ? 'rouge' : 'bleue'} est : $\\ldots$`,
-          )
+          this.listeCanEnonces[i] =
+            `Une urne contient $${a}$ boules rouges et $${b}$ boules bleues. <br>          On tire une boule au hasard.`
+          this.listeCanReponsesACompleter[i] =
+            `La probabilité de tirer une boule ${choix1 ? 'rouge' : 'bleue'} est : $\\ldots$`
           nbChamps = 1
           break
 
@@ -2160,8 +2150,8 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBaseAvecFraction,
             )
           }
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('? $=\\ldots$')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '? $=\\ldots$'
           nbChamps = 1
 
           break
@@ -2192,8 +2182,8 @@ export default class SujetCAN2023troisieme extends Exercice {
               KeyboardType.clavierDeBase,
             )
           }
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('$x=\\ldots$')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '$x=\\ldots$'
           nbChamps = 1
           break
 
@@ -2227,8 +2217,8 @@ export default class SujetCAN2023troisieme extends Exercice {
             reponse = b
           }
 
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('$\\ldots\\,\\%$')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '$\\ldots\\,\\%$'
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
@@ -2250,8 +2240,8 @@ export default class SujetCAN2023troisieme extends Exercice {
               Donc en une heure, Zoé parcourt $${texNombre(new Decimal(60).div(b))}\\times ${texNombre(a)}\\text{ m}$ $= ${miseEnEvidence(texNombre(Number(reponse) * 1000, 0))}\\text{ m}$, soit $${texNombre(reponse, 0)}\\text{ km}$.<br>
               Sa vitesse moyenne est donc $${miseEnEvidence(texNombre(reponse))}\\text{ km/h}$.
               `
-          this.listeCanEnonces.push(texte)
-          this.listeCanReponsesACompleter.push('$\\ldots\\text{ km/h}$')
+          this.listeCanEnonces[i] = texte
+          this.listeCanReponsesACompleter[i] = '$\\ldots\\text{ km/h}$'
           handleAnswers(this, index, { reponse: { value: reponse } })
           if (this.interactif) {
             texte +=
