@@ -1,7 +1,10 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
-import { texteEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Soustraire $10n + 9$'
 export const interactifReady = true
@@ -26,6 +29,7 @@ export default class SoustraireX9 extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.consigne = 'Calculer :'
   }
 
   nouvelleVersion() {
@@ -33,7 +37,7 @@ export default class SoustraireX9 extends ExerciceSimple {
     const b = this.quotaRandint('b', 1, 8)
     const c = this.quotaRandint('c', 1, 4)
     this.reponse = a * 10 + b - c * 10 - 9
-    this.question = `Calculer $${a * 10 + b} - ${c * 10 + 9}$.`
+    this.question = `$${a * 10 + b} - ${c * 10 + 9}$`
     this.correction = `$${a * 10 + b} - ${c * 10 + 9}= ${miseEnEvidence(this.reponse)}$<br>`
     this.correction += texteEnCouleur(
       `<br> Mentalement : <br>

@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -27,7 +27,7 @@ export default class Soustraire9 extends Exercice {
   constructor() {
     super()
 
-    this.consigne = 'Calculer.'
+    this.consigne = 'Calculer :'
 
     this.nbCols = 2
     this.nbColsCorr = 2
@@ -43,7 +43,7 @@ export default class Soustraire9 extends Exercice {
       texteCorr = `$${a}-9=${miseEnEvidence(a - 9)}$`
       handleAnswers(this, i, { reponse: { value: a - 9 } })
       if (this.interactif)
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
+        texte += ` = ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)}`
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre

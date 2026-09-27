@@ -27,6 +27,7 @@ export const refs = {
 export default class ComplementAUneDizaine extends Exercice {
   constructor() {
     super()
+    this.consigne = 'Compléter :'
     this.besoinFormulaireNumerique = [
       "Type d'écriture",
       2,

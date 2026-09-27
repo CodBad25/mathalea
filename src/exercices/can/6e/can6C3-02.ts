@@ -28,17 +28,21 @@ export const refs = {
 export default class FSomme2Decimaux extends ExerciceSimple {
   constructor() {
     super()
+    this.consigne = 'Calculer :'
     this.typeExercice = 'simple'
     this.formatChampTexte = KeyboardType.clavierNumbers
     this.nbQuestions = 1
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.besoinFormulaire2CaseACocher = ['Pas de retenues', false]
+    this.sup2 = false
   }
 
   nouvelleVersion() {
     let a, b, c, d, e
+    const sansRetenue = this.sup2
     if (this.quotaChoice('typeDeQuestions', [true, false])) {
       a = randint(3, 9)
-      b = randint(1, 9, a)
+      b = sansRetenue ? randint(1, 9 - a) : randint(1, 9, a)
       c = randint(1, 9, [a, b])
       d = randint(1, 9, [a, b, c])
       e = randint(10, 13)
@@ -46,7 +50,7 @@ export default class FSomme2Decimaux extends ExerciceSimple {
       const n2 = n1.plus(a)
       this.reponse = n1.plus(e)
 
-      this.question = `Calculer $${texNombre(n2, 1)}+${texNombre(e - a, 0)}$.`
+      this.question = `$${texNombre(n2, 1)}+${texNombre(e - a, 0)}$`
       this.correction = `$${texNombre(n2, 1)}+${texNombre(e - a, 0)}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$<br>`
       this.correction += texteEnCouleur(
         `Mentalement : <br>
@@ -56,15 +60,15 @@ export default class FSomme2Decimaux extends ExerciceSimple {
       )
     } else {
       a = randint(1, 9)
-      b = randint(3, 5)
+      b = sansRetenue ? randint(1, 4) : randint(3, 5)
       c = randint(1, 9)
-      d = randint(7, 9)
+      d = sansRetenue ? randint(1, 4) : randint(7, 9)
       const n1 = new Decimal(b).div(10)
       const n2 = new Decimal(d).div(10)
       const n3 = n1.plus(n2)
 
       this.reponse = n3.plus(a + c)
-      this.question = `Calculer $${texNombre(n1.plus(a), 1)}+${texNombre(n2.plus(c), 1)}$.`
+      this.question = `$${texNombre(n1.plus(a), 1)}+${texNombre(n2.plus(c), 1)}$`
       this.correction = `$${texNombre(n1.plus(a), 1)}+${texNombre(n2.plus(c), 1)}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$<br>`
       this.correction += texteEnCouleur(
         `Mentalement : <br>

@@ -31,9 +31,9 @@ export const refs = {
 export default class TrouverFractionDecimaleEgale extends Exercice {
   constructor() {
     super()
+    this.consigne = 'Compléter :'
     this.comment =
       '12 questions sont possibles au maximum si le numérateur est égal à 1.'
-    this.consigne = 'Compléter.'
     this.nbQuestions = 3
     this.besoinFormulaireTexte = [
       'Choix de la fraction',
