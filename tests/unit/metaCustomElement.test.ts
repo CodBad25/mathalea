@@ -44,6 +44,36 @@ class SousExerciceApigeom extends Exercice {
   }
 }
 
+/** Régression : un tirage rejeté ne doit pas empêcher d’enregistrer son remplaçant. */
+class SousExerciceApigeomAvecTirageRejete extends Exercice {
+  figure?: Figure
+
+  constructor() {
+    super()
+    this.nbQuestions = 1
+    this.consigne = 'Tracer une figure.'
+  }
+
+  nouvelleVersion(): void {
+    // Le premier tirage est préparé, puis rejeté par questionJamaisPosee().
+    // figureApigeom() a donc déjà posé autoCorrection[0].
+    figureApigeom({
+      exercice: this,
+      i: 0,
+      figure: new Figure({ xMin: 0, yMin: 0, width: 100, height: 100 }),
+    })
+
+    this.figure = new Figure({ xMin: 0, yMin: 0, width: 100, height: 100 })
+    this.listeQuestions[0] = figureApigeom({
+      exercice: this,
+      i: 0,
+      figure: this.figure,
+    })
+  }
+
+  correctionInteractive = () => 'OK'
+}
+
 /** Exercice simple custom dont la correction est une méthode de prototype (cf. `3AutoG12-0`) */
 class SousExerciceSimpleCustom extends ExerciceSimple {
   constructor() {
@@ -171,6 +201,17 @@ describe('questions custom réhébergées par MetaExerciceCan', () => {
     expect(meta.answers).toEqual({
       apigeomEx7F1: 'figure de la question 1',
     })
+  })
+
+  it('enregistre le vérificateur du tirage apiGeom conservé après un doublon', () => {
+    const exercice = new SousExerciceApigeomAvecTirageRejete()
+    exercice.numeroExercice = 7
+    exercice.interactif = true
+    exercice.nouvelleVersion()
+    document.body.innerHTML = exercice.listeQuestions[0]
+
+    expect(document.querySelector('apigeom-figure')).not.toBeNull()
+    expect(ApigeomFigureElement.verifQuestion(exercice, 0).isOk).toBe(true)
   })
 
   it('conserve le format apiGeom découvert dans un exercice simple', () => {

@@ -29,7 +29,7 @@ export const titre = 'Lire des antécédents graphiquement'
 export const uuid = '0e1c6'
 
 export const refs = {
-  'fr-fr': ['can3F12', 'can2F12-02', '2F12-flash2'],
+  'fr-fr': ['can3F12', 'can2F10-02', '2F12-flash2'],
   'fr-ch': ['1mF1-17'],
 }
 type Noeud = {

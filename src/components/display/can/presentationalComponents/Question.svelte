@@ -228,8 +228,12 @@
         }
         $keyboardState.idMathField = mf.id
         window.setTimeout(() => {
-          const activeMathfield = mathfields.find(
-            (mathfield) => document.activeElement === mathfield,
+          // Sur Safari, notamment dans un iframe, document.activeElement peut
+          // rester sur le document hôte alors que le focus est dans le shadow
+          // DOM de MathLive. `:focus-within` conserve l'information du champ
+          // réellement visé et évite de refocaliser le premier champ.
+          const activeMathfield = mathfields.find((mathfield) =>
+            mathfield.matches(':focus-within'),
           )
           if (activeMathfield) {
             ensureKeyboardVisibleForMathfield(activeMathfield)

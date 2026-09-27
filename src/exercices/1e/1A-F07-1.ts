@@ -1,4 +1,4 @@
-import CoeffDirecteurDroite from '../can/2e/can2G31-01'
+import CoeffDirecteurDroite from '../can/2e/can2G30-01'
 export const titre =
   "Déterminer le coefficient directeur d'une droite à partir de son équation réduite"
 export const dateDePublication = '25/07/2025'
@@ -7,7 +7,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2G31-01 pour les auto 1er
+ * Clone de can2G30-01 pour les auto 1er
  * @author Gilles Mora
  */
 

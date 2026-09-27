@@ -1,4 +1,4 @@
-import calculAvecPourcentage from '../can/2e/can2I10-03'
+import calculAvecPourcentage from '../can/2e/can2I1-03'
 export const titre = "Calculer un effectif à partir d'un pourcentage"
 export const dateDePublication = '23/03/2026'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2I10-03 pour les auto 1er
+ * Clone de can2I1-03 pour les auto 1er
  * @author Gilles Mora
  */
 

@@ -125,10 +125,16 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
           } else if (nbdigits === 1 && b === 10) {
             precision = randint(2, 3)
           }
-          handleAnswers(this, i, {
-            bareme: (listePoints) => [listePoints[0], 1],
-            champ1: { value: String(a) },
-          })
+          if (this.sup2) {
+            handleAnswers(this, i, {
+              bareme: (listePoints) => [listePoints[0], 1],
+              champ1: { value: String(a) },
+            })
+          } else {
+            handleAnswers(this, i, {
+              reponse: { value: n, options: { fractionDecimale: true } },
+            })
+          }
 
           if (this.interactif) {
             texte = this.sup2
@@ -147,11 +153,6 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
                   },
                 )
 
-            if (!this.sup2) {
-              handleAnswers(this, i, {
-                reponse: { value: n, options: { fractionDecimale: true } },
-              })
-            }
           } else {
             texte = this.sup2
               ? `$${texNombre(n, precision, this.sup3)} = ${texFraction('\\ldots\\ldots\\ldots\\ldots', texNombre(b))} $`

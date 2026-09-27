@@ -1,4 +1,4 @@
-import DevelopperEgalitesRemarquables from '../can/2e/can2L12-05'
+import DevelopperEgalitesRemarquables from '../can/2e/can2L11-05'
 export const titre = 'Développer avec les égalités remarquables'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true

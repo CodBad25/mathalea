@@ -728,7 +728,8 @@ Certains énoncés « Course aux nombres » sont écrits en LaTeX **mode texte**
 (hors `$...$`) plutôt qu'en HTML : `htmlToTypst` y traduit aussi `\quad`,
 `\qquad`, `\medskip`, `\underline`, `\newline`, `\hspace{…}`,
 `\texttt{…}` (`#raw`), `\fbox{…}`/`\framebox{…}` (cadre), `\parbox{L}{…}`
-(boîte) et supprime `\setlength{…}{…}`, sans équivalent Typst. La largeur de
+(boîte) et supprime `\setlength{…}{…}`, sans équivalent Typst. `\dots{}` et
+`\ldots` hors formule deviennent des pointillés de réponse. La largeur de
 `\parbox` n'est pas reprise : les exercices l'expriment en fraction de
 `\linewidth`, mesure prise sur la page A4 de la sortie LaTeX, alors que la
 boîte atterrit souvent dans une cellule bien plus étroite (tableau « Course
@@ -739,12 +740,14 @@ Les arguments sont lus à accolades équilibrées (`replaceLatexCommand`), donc
 les boîtes imbriquées le sont aussi ; `\linewidth` et ses synonymes deviennent
 un pourcentage (`0.5\linewidth` → `50%`).
 
-Les macros ProfCollege de la sortie LaTeX (`\Lg[cm]{5}`, `\Prix[0]{12}`) sont
-écrites par les `canEnonce`/`canReponseACompleter` sans tester
+Les macros ProfCollege de la sortie LaTeX (`\Lg[cm]{5}`, `\Capa[cL]{5}`,
+`\Prix[0]{12}`) sont écrites par les `canEnonce`/`canReponseACompleter` sans
+tester
 `context.isHtml` : elles arrivent donc dans la conversion Typst, en mode
 mathématique comme en mode texte. `remplaceMacrosProfCollege` les rend en
-valeur suivie de son unité (`\Prix` formatant le nombre avec les décimales de
-son argument optionnel, deux par défaut) ; l'argument entre accolades est vide
+valeur suivie de son unité. `\Capa` utilise L par défaut ; `\Prix` formate le
+nombre avec les décimales de son argument optionnel, deux par défaut.
+L'argument entre accolades est vide
 derrière des pointillés à compléter (`$\ldots$ \Lg[mm]{}`), seule l'unité est
 alors rendue. Sans cela, `$\Lg[mm]{24}$` deviendrait la variable Typst
 inconnue `Lg`, donc une erreur de compilation.
@@ -924,6 +927,13 @@ régénérations.
 Un exercice à question unique n'a pas de liste `tasks`, donc pas de repère
 `mathalea-anchor` : `exerciseBody` en émet un quand le corps référence la
 variable de QCM, sinon la palette n'aurait nulle part où poser ses contrôles.
+
+Quand plusieurs questions contiennent chacune un QCM, la liste extérieure est
+forcée à une colonne (`// mathalea:taches-imbriquees`) : `taskize` ne sait pas
+résoudre son mode `auto-fit` pour des items qui contiennent eux-mêmes une
+grille et transmettrait `none` à `render-tasks-grid`. Les propositions de
+chaque QCM gardent leur propre calcul de colonnes ; cinq ensembles courts
+restent donc sur une même ligne.
 
 La variable globale `#let qcm-colonnes = 2` subsiste comme **repli** des
 chemins sans réglage par exercice : le tableau « Course aux nombres » (dont les

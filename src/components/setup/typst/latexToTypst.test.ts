@@ -597,6 +597,11 @@ describe('htmlToTypst', () => {
     )
   })
 
+  it('convertit les pointillés LaTeX hors mode maths des réponses CAN', () => {
+    expect(htmlToTypst('\\dots{} min')).toBe('... ... ... min')
+    expect(htmlToTypst('\\ldots min')).toBe('... ... ... min')
+  })
+
   it('convertit les cases à cocher \\faSquare / \\faCheckSquare (réponses CAN)', () => {
     const carreVide =
       '#box(baseline: 0.15em, width: 0.85em, height: 0.85em, radius: 1pt, stroke: 0.6pt)'
@@ -615,7 +620,7 @@ describe('htmlToTypst', () => {
     expect(htmlToTypst('\\faCheckSquare Vrai')).toBe(`${carrePlein} Vrai`)
   })
 
-  it('convertit les macros ProfCollege \\Lg et \\Prix (énoncés CAN)', () => {
+  it('convertit les macros ProfCollege \\Lg, \\Capa et \\Prix (énoncés CAN)', () => {
     // canc3a-2023 Q18 : en mode mathématique, `\Lg` deviendrait la variable
     // Typst inconnue `Lg` (erreur de compilation)
     const enonce = htmlToTypst(
@@ -633,6 +638,8 @@ describe('htmlToTypst', () => {
     ).toBe('alors une pile de $18$ pièces a une hauteur de $... ... ...$ mm.')
     // `\Prix` : l'argument optionnel est le nombre de décimales, l'unité est €
     expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$... ... ...$ €.')
+    expect(htmlToTypst('$\\ldots\\Capa{}$')).toBe('$... ... ...#txt("L")$')
+    expect(htmlToTypst('$\\ldots\\Capa[cL]{}$')).toBe('$... ... ...#txt("cL")$')
     expect(htmlToTypst('coûte $\\Prix[0]{12}$')).toContain('12')
     expect(htmlToTypst('coûte $\\Prix[0]{12}$')).not.toContain('Prix')
     expect(htmlToTypst('coûte \\Prix{12.5}')).toBe('coûte 12,50~€')

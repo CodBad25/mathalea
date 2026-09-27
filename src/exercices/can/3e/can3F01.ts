@@ -21,7 +21,7 @@ export const titre = 'Lire une image graphiquement'
 export const uuid = '966a6'
 
 export const refs = {
-  'fr-fr': ['can3F01', 'can2F12-01', '2F12-flash1'],
+  'fr-fr': ['can3F01', 'can2F10-01', '2F12-flash1'],
   'fr-ch': [],
 }
 type Noeud = {
