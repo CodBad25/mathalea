@@ -3663,6 +3663,33 @@ describe('fonctionComparaison', () => {
     )
     expect(result.isOk).toBe(true)
 
+    // Égalité de Pythagore attendue, avec somme
+    result = pythagoreCompare(
+      'AB^2+AC^2=BC^2',
+      '\\mathrm{AB}^2+\\mathrm{AC}^2=\\mathrm{BC}^2',
+    )
+    expect(result.isOk).toBe(true)
+
+    // Égalité équivalente (vraie) mais écrite avec une soustraction pour isoler un côté :
+    // refusée avec un feedback dédié, car ce n'est pas l'égalité de Pythagore attendue
+    result = pythagoreCompare(
+      'AB^2=BC^2-AC^2',
+      '\\mathrm{AB}^2+\\mathrm{AC}^2=\\mathrm{BC}^2',
+    )
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      "Cette égalité est vraie, mais ce n'est pas l'égalité attendue : le carré de la longueur de l'hypoténuse est égal à la somme des carrés des longueurs des deux autres côtés.",
+    )
+
+    // Soustraction fausse (l'hypoténuse n'est pas égale à la différence des deux côtés) :
+    // refusée sans laisser croire que l'égalité saisie est vraie
+    result = pythagoreCompare(
+      'BC^2=AB^2-AC^2',
+      '\\mathrm{AB}^2+\\mathrm{AC}^2=\\mathrm{BC}^2',
+    )
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).not.toMatch(/vraie, mais/)
+
     result = fonctionComparaison(
       '\\sqrt7;\\dfrac23;10^2',
       '\\sqrt7;\\dfrac23;10^{2}',

@@ -48,7 +48,12 @@ function handleFocusMathField(event: FocusEvent) {
       alphanumericLayout: value.alphanumericLayout,
       blocks:
         'keyboard' in mf.dataset
-          ? ((mf.dataset.keyboard || '').split(' ') as BlockForKeyboard[])
+          ? // Un data-keyboard="" (clavier n'utilisant que des touches
+            // personnalisées, voir `clavierEntierementPersonnalisable`) doit
+            // donner un clavier vide : `''.split(' ')` vaudrait `['']` sinon.
+            ((mf.dataset.keyboard || '')
+              .split(' ')
+              .filter((bloc) => bloc !== '') as BlockForKeyboard[])
           : (['numbers', 'fullOperations', 'variables'] as BlockForKeyboard[]),
       customKeys: litTouchesPersonnalisees(mf.dataset.keys),
     }
