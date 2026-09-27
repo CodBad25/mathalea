@@ -263,25 +263,40 @@
   "can1SD": {
     "titre": "Second degré"
   },
-  "can1SD0": {
+  "can1SD1": {
     "titre": "Paraboles"
   },
-  "can1SD1": {
-    "titre": "Equations - Inéquations"
+  "can1SD11": {
+    "titre": "Lectures graphiques"
+  },
+  "can1SD12": {
+    "titre": "Sommet et axe de symétrie"
   },
   "can1SD2": {
-    "titre": "Polynômes - Variations"
+    "titre": "Équations, inéquations, variations"
+  },
+  "can1SD21": {
+    "titre": "Discriminant, équations"
+  },
+  "can1SD22": {
+    "titre": "Inéquations, tableaux de signes"
+  },
+  "can1SD23": {
+    "titre": "Variations"
+  },
+  "can1SD3": {
+    "titre": "Différentes écritures"
   },
   "can1D": {
     "titre": "Dérivation"
   },
-  "can1D0": {
+  "can1D1": {
     "titre": "Tangentes - Nombre dérivé"
   },
-  "can1D1": {
+  "can1D2": {
     "titre": "Dérivées de polynômes"
   },
-  "can1D2": {
+  "can1D3": {
     "titre": "Dérivées"
   },
   "can1E": {
@@ -293,14 +308,20 @@
   "can1F": {
     "titre": "Fonctions"
   },
-  "can1F0": {
+  "can1F1": {
     "titre": "Généralités avec les fonctions"
   },
-  "can1F1": {
+  "can1F2": {
     "titre": "Fonctions de références"
   },
   "can1G": {
     "titre": "Géométrie"
+  },
+  "can1G1": {
+    "titre": "Produit scalaire"
+  },
+  "can1G2": {
+    "titre": "Trigonométrie"
   },
   "can1L": {
     "titre": "Calcul littéral"
@@ -308,14 +329,35 @@
   "can1P": {
     "titre": "Probabilités"
   },
+  "can1P1": {
+    "titre": "Probabilités conditionnelles"
+  },
+  "can1P11": {
+    "titre": "Arbres pondérés"
+  },
+  "can1P12": {
+    "titre": "Tableaux et calculs"
+  },
+  "can1P13": {
+    "titre": "Événements indépendants"
+  },
+  "can1P2": {
+    "titre": "Variable aléatoire"
+  },
   "can1S": {
     "titre": "Suites"
   },
-  "can1S0": {
+  "can1S1": {
     "titre": "Généralités avec les suites"
   },
-  "can1S1": {
+  "can1S2": {
     "titre": "Suites arithmétiques et géométriques"
+  },
+  "can1S21": {
+    "titre": "Nature d'une suite"
+  },
+  "can1S22": {
+    "titre": "Calculs, expression"
   },
   "canTEC1": {
     "titre": "Nombres complexes algèbre"
