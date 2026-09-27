@@ -65,6 +65,24 @@
   "can5C": {
     "titre": "Calculs"
   },
+  "can5C1": {
+    "titre": "Nombres entiers"
+  },
+  "can5C2": {
+    "titre": "Calcul astucieux"
+  },
+  "can5C3": {
+    "titre": "Nombres décimaux"
+  },
+  "can5C4": {
+    "titre": "Fractions"
+  },
+  "can5C5": {
+    "titre": "Nombres relatifs"
+  },
+  "can5C6": {
+    "titre": "Priorités, arithmétique"
+  },
   "can5D": {
     "titre": "Durées"
   },
@@ -72,13 +90,22 @@
     "titre": "Géométrie"
   },
   "can5P": {
+    "titre": "Proportionnalité, pourcentages"
+  },
+  "can5P1": {
     "titre": "Proportionnalité"
+  },
+  "can5P2": {
+    "titre": "Pourcentages"
   },
   "can5L": {
     "titre": "Calcul littéral"
   },
   "can5N": {
     "titre": "Numération"
+  },
+  "can4A": {
+    "titre": "Algorithmes"
   },
   "can4C": {
     "titre": "Calculs"

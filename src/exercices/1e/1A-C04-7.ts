@@ -1,4 +1,4 @@
-import ProgrammeCalcul2 from '../can/5e/can5C14'
+import ProgrammeCalcul2 from '../can/5e/can5C3-01'
 export const titre = 'Écrire une fraction avec un nombre décimal'
 export const dateDePublication = '05/01/2026'
 export const amcReady = true

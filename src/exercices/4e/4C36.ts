@@ -269,7 +269,7 @@ export default class nomExercice extends Exercice {
         ],
         options: {
           ordered: true, // (true si les réponses doivent rester dans l'ordre ci-dessus, false s'il faut les mélanger),
-          vertical: true, // facultatif. true : si on veut une présentation en plusieurs colonnes. false : valeur par défaut, les cases à cocher sont à la suite, toutes sur une colonne. Exercice-témoin : can5A01
+          vertical: true, // facultatif. true : si on veut une présentation en plusieurs colonnes. false : valeur par défaut, les cases à cocher sont à la suite, toutes sur une colonne. Exercice-témoin : can5A-01
           nbCols: 2, // Le nb de colonnes si vertical est true. Sans effet si vertical est false.
         },
       }
