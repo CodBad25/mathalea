@@ -239,7 +239,7 @@ export default class DecompositionNombreDecimal extends Exercice {
               break
             }
             case 'milliers':
-              texte = `Le nombre des milliers du nombre $${n}$ est : `
+              texte = `Le nombre de milliers du nombre $${n}$ est : `
               reponse = m!
               break
             case 'dixiemes':
