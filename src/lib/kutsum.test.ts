@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import DecomposerUnNombreDecimal from '../exercices/6e/6N1A'
-import DeterminerLeNombre from '../exercices/can/6e/can6N14'
+import DeterminerLeNombre from '../exercices/can/6e/can6N22-02'
 import { buildKutsumQuestionsFromAutoCorrection } from './kutsum'
 import type { AutoCorrection, IExercice } from './types'
 
@@ -135,7 +135,7 @@ describe('buildKutsumQuestionsFromAutoCorrection', () => {
  * `kutsum.ts` suive, ce test échoue au lieu d'un export silencieusement vide.
  */
 describe('export Kutsum sur de vrais exercices', () => {
-  it('remonte les QCM de can6N14 (uuid dcf22)', () => {
+  it('remonte les QCM de can6N22-02 (uuid dcf22)', () => {
     const exercice = new DeterminerLeNombre() as unknown as IExercice
     exercice.nbQuestions = 3
     exercice.seed = '43rE'

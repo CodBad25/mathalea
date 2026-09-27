@@ -1,4 +1,4 @@
-import ComparerFractionEtEntier from '../6e/can6C68'
+import ComparerFractionEtEntier from '../6e/can6C52-05'
 
 export const titre = 'Comparer un entier et une fraction'
 export const interactifReady = true

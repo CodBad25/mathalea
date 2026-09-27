@@ -3648,7 +3648,7 @@
     await loadExercises()
     // Course aux nombres par défaut si la fiche ne contient que des
     // exercices « can » (identifiant commençant par « can », comme
-    // `can6M20`) : présentation en tableau, format A5 (feuille de passation
+    // `can6M4-07`) : présentation en tableau, format A5 (feuille de passation
     // plus petite) et page de garde assortie — sauf si un lien partagé fixe
     // déjà l'un de ces réglages.
     const loaded = exercises.filter(

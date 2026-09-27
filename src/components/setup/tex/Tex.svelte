@@ -104,7 +104,7 @@
   /**
    * Habillage proposé par défaut, une fois les exercices chargés : Course
    * aux nombres si la fiche n'en contient que (identifiant commençant par
-   * « can », comme `can6M20` — les exercices statiques n'en ont pas et
+   * « can », comme `can6M4-07` — les exercices statiques n'en ont pas et
    * excluent donc ce cas), ProfMaquette sinon. Appelé seulement quand
    * l'URL ne fixe pas déjà un habillage (`restored.style` absent) : un lien
    * partagé ne doit pas changer d'habillage selon les exercices qu'on y a

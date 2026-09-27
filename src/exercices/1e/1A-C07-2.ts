@@ -1,4 +1,4 @@
-import HeureDecimalesMinutes from '../can/6e/can6D09'
+import HeureDecimalesMinutes from '../can/6e/can6D3-03'
 
 export const uuid = '42707'
 export const refs = {

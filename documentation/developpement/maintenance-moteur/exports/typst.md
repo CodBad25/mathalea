@@ -469,7 +469,7 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.canMode`) : pend
 
 - **Détection automatique** (`Typst.svelte`, au chargement) : si la fiche ne
   contient que des exercices « can » (identifiant contenant `can`, ex.
-  `can6M20`), `canMode` est coché par défaut, le format passe en **A5**
+  `can6M4-07`), `canMode` est coché par défaut, le format passe en **A5**
   (feuille de passation plus petite), la [page de garde](#page-de-garde)
   bascule sur le modèle **Course aux nombres** et l'habillage en-tête sur
   **Aucun** (même raison que le choix manuel d'un modèle de page de garde :

@@ -1,4 +1,4 @@
-import PoucentageProportion from '../can/6e/can6P07'
+import PoucentageProportion from '../can/6e/can6P2-04'
 export const titre = 'Déterminer un pourcentage de proportion'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can6P07 pour les auto 1er
+ * Clone de can6P2-04 pour les auto 1er
  * @author Gilles Mora
  */
 

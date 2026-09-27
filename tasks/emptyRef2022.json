@@ -10,13 +10,48 @@
     },
     "6e": {
       "can6a": {},
-      "can6C": {},
-      "can6D": {},
-      "can6G": {},
+      "can6C": {
+        "can6C1": {},
+        "can6C2": {},
+        "can6C3": {},
+        "can6C4": {},
+        "can6C5": {
+          "can6C51": {},
+          "can6C52": {},
+          "can6C53": {}
+        },
+        "can6C6": {},
+        "can6C7": {}
+      },
+      "can6D": {
+        "can6D1": {},
+        "can6D2": {},
+        "can6D3": {}
+      },
+      "can6G": {
+        "can6G1": {},
+        "can6G2": {},
+        "can6G3": {}
+      },
       "can6I": {},
-      "can6M": {},
-      "can6N": {},
-      "can6P": {},
+      "can6M": {
+        "can6M1": {},
+        "can6M2": {},
+        "can6M3": {},
+        "can6M4": {}
+      },
+      "can6N": {
+        "can6N1": {},
+        "can6N2": {
+          "can6N21": {},
+          "can6N22": {}
+        },
+        "can6N3": {}
+      },
+      "can6P": {
+        "can6P1": {},
+        "can6P2": {}
+      },
       "can6S": {}
     },
     "5e": {
