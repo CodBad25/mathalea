@@ -342,8 +342,8 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
         ${createList({
           items: [
             `Si $m=${m1}$ ou $m=${m2}$, l'équation ${texteEnCouleurEtGras('admet une unique solution')};`,
-            `Si $m\\in {\\Large]}${m1},${m2}{\\Large[}$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")};`,
-            `Si $m\\in {\\Large]}-\\infty,${m1}{\\Large[\\cup]}${m2},+\\infty{\\Large[}$, l'équation ${texteEnCouleurEtGras('admet 2 solutions réelles')}.`,
+            `Si $m\\in \\left]${m1},${m2}\\right[$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")};`,
+            `Si $m\\in \\left]-\\infty,${m1}\\right[$ ou $m\\in \\left]${m2},+\\infty\\right[$, l'équation ${texteEnCouleurEtGras('admet 2 solutions réelles')}.`,
           ],
           style: 'fleches',
         })}`
@@ -356,8 +356,8 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
         ${createList({
           items: [
             `Si $m=${m1}$ ou $m=${m2}$, l'équation ${texteEnCouleurEtGras('admet une unique solution')};`,
-            `Si $m\\in {\\Large ]}${m1},${m2}{\\Large [}$, l'équation ${texteEnCouleurEtGras('admet 2 solutions réelles')};`,
-            `Si $m\\in {\\Large]}-\\infty,${m1}{\\Large[} {\\Large\\cup} {\\Large]}${m2},+\\infty{\\Large[}$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")}.`,
+            `Si $m\\in \\left]${m1},${m2}\\right[$, l'équation ${texteEnCouleurEtGras('admet 2 solutions réelles')};`,
+            `Si $m\\in \\left]-\\infty,${m1}\\right[$ ou $m\\in \\left]${m2},+\\infty\\right[$, l'équation ${texteEnCouleurEtGras("n'a pas de solution réelle")}.`,
           ],
           style: 'fleches',
         })}`
