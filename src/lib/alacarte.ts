@@ -165,6 +165,8 @@ const preambuleLight = `
 \\usepackage{qrcode}
 \\usepackage{etoolbox}
 \\usepackage{pgf,tikz}
+\\usepackage{tcolorbox}
+\\tcbuselibrary{breakable}
 
 \\setlength{\\parindent}{0mm}
 \\renewcommand{\\arraystretch}{1.5}
