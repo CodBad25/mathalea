@@ -17,7 +17,11 @@ import {
 import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
@@ -56,6 +60,8 @@ export default class SujetCAN2021Sixieme extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 30 // 10,20,30
+    this.sup = Array.from({ length: 30 }, (_, i) => i + 1).join('-')
+    this.sup2 = false
 
     this.comment = `Cet exercice fait partie des annales des Courses Aux Nombres.<br>
 Il est composé de 30 questions réparties de la façon suivante :<br>
@@ -66,22 +72,46 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
   }
 
   nouvelleVersion() {
-    const nbQ1 = Math.min(Math.round((this.nbQuestions * 10) / 30), 10) // Choisir d'un nb de questions de niveau 1 parmi les 8 possibles.
-    const nbQ2 = Math.min(this.nbQuestions - nbQ1, 20)
-    const typeQuestionsDisponiblesNiv1 = shuffle([
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 11,
-    ])
-      .slice(-nbQ1)
-      .sort(compareNombres)
-    const typeQuestionsDisponiblesNiv2 = shuffle([
-      10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
-      29, 30,
-    ])
-      .slice(-nbQ2)
-      .sort(compareNombres)
-    const typeQuestionsDisponibles = typeQuestionsDisponiblesNiv1.concat(
-      typeQuestionsDisponiblesNiv2,
-    )
+    this.nbQuestionsModifiable = Boolean(this.sup2)
+    this.besoinFormulaireTexte = this.sup2
+      ? false
+      : [
+          'Choix des questions',
+          'Numéros des questions (de 1 à 30) séparés par des tirets. Par exemple : 1-3-12-30',
+        ]
+    this.besoinFormulaire2CaseACocher = ['Choix du nombre de questions']
+
+    let typeQuestionsDisponibles: number[]
+    if (this.sup2) {
+      // Conserver exactement les deux mélanges historiques, y compris pour 30 questions.
+      const nbQ1 = Math.min(Math.round((this.nbQuestions * 10) / 30), 10) // Choisir d'un nb de questions de niveau 1 parmi les 8 possibles.
+      const nbQ2 = Math.min(this.nbQuestions - nbQ1, 20)
+      const typeQuestionsDisponiblesNiv1 = shuffle([
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 11,
+      ])
+        .slice(-nbQ1)
+        .sort(compareNombres)
+      const typeQuestionsDisponiblesNiv2 = shuffle([
+        10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+        29, 30,
+      ])
+        .slice(-nbQ2)
+        .sort(compareNombres)
+      typeQuestionsDisponibles = typeQuestionsDisponiblesNiv1.concat(
+        typeQuestionsDisponiblesNiv2,
+      )
+    } else {
+      typeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        saisie: String(this.sup ?? ''),
+        min: 1,
+        max: 30,
+        defaut: 31,
+        melange: 31,
+        shuffle: false,
+        nbQuestions: 0,
+      }).map(Number)
+      this.nbQuestions = typeQuestionsDisponibles.length
+    }
 
     const listeFractions15 = [
       [1, 3],
