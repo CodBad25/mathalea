@@ -80,8 +80,8 @@ importers:
         specifier: ^0.185.1
         version: 0.185.1
       apigeom:
-        specifier: git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.8.3
-        version: git+https://forge.apps.education.fr/coopmaths/apigeom.git#b0fd0e06356606003504e5c5c04a777ccd3a7512
+        specifier: git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.8.6
+        version: git+https://forge.apps.education.fr/coopmaths/apigeom.git#d2dc8c43c44dd1bd5c6cfb4ec5452c88e10c7a90
       blockly:
         specifier: 12.5.1
         version: 12.5.1(supports-color@4.4.0)
@@ -305,9 +305,6 @@ importers:
 
 packages:
 
-  '@arnog/colors@0.3.0':
-    resolution: {integrity: sha512-CDZFMVWeE3HqcrzvacY2Y8257RS9c0f8+D+MWjbjmb5IWpOZPPeJSqWyxkVcFleCjA+x5aq6foc57cVaP+AMQg==}
-
   '@arnog/colors@0.5.0':
     resolution: {integrity: sha512-NB7yqrO7qvInsqJdqz6C6mDU+2oiKmbBbk3czMS0E7KkGxLRy538tEHCsB5TKqmaxxXpi6/U120TnGl8NsDePg==}
 
@@ -406,10 +403,6 @@ packages:
 
   '@codemirror/view@6.43.13':
     resolution: {integrity: sha512-sihaFrUzAsYBQsL9J2t69y8nfMQGwcYmggAZsk+kjPbjYZMyuf2hU8tUNTZ+P+isb6XRr8JE22TZlJxBoVdH1A==}
-
-  '@cortex-js/compute-engine@0.55.6':
-    resolution: {integrity: sha512-lWnZ34gtFpUDpFmEMdsL+5HJuh7hyj0DoaZhVTFnVtGX2Rf7qFyD+zgTs1vY9h2qhcpKymiakE6evvWzI6kwtA==}
-    engines: {node: '>=21.7.3', npm: '>=10.5.0'}
 
   '@cortex-js/compute-engine@0.58.0':
     resolution: {integrity: sha512-N0+vXjVZfKwJS7ZIGvq41mojI55m5TrdDXveAXzNjzjZ9iNiNrdEzXL2EmrcP+9GCWCwTonrEeZWAIG78f3INg==}
@@ -1642,9 +1635,9 @@ packages:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
 
-  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#b0fd0e06356606003504e5c5c04a777ccd3a7512:
-    resolution: {commit: b0fd0e06356606003504e5c5c04a777ccd3a7512, repo: https://forge.apps.education.fr/coopmaths/apigeom.git, type: git}
-    version: 1.8.3
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#d2dc8c43c44dd1bd5c6cfb4ec5452c88e10c7a90:
+    resolution: {commit: d2dc8c43c44dd1bd5c6cfb4ec5452c88e10c7a90, repo: https://forge.apps.education.fr/coopmaths/apigeom.git, type: git}
+    version: 1.8.6
 
   archive-type@4.0.0:
     resolution: {integrity: sha512-zV4Ky0v1F8dBrdYElwTvQhweQ0P7Kwc1aluqJsYtOBP01jXcWCyW2IEfI1YiqsG+Iy7ZR+o5LF1N+PGECBxHWA==}
@@ -1887,10 +1880,6 @@ packages:
   commander@5.1.0:
     resolution: {integrity: sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==}
     engines: {node: '>= 6'}
-
-  commander@8.3.0:
-    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
-    engines: {node: '>= 12'}
 
   complex-esm@2.1.1-esm1:
     resolution: {integrity: sha512-IShBEWHILB9s7MnfyevqNGxV0A1cfcSnewL/4uPFiSxkcQL4Mm3FxJ0pXMtCXuWLjYz3lRRyk6OfkeDZcjD6nw==}
@@ -2874,10 +2863,6 @@ packages:
   jszip@3.10.2:
     resolution: {integrity: sha512-3l+rb15IOWtUhU0H5MFqES/T6Kh7abYwjosBey/vD6hDt8zoEffkSC5Ws5SGtgVw3gBx2NEbhTeSW1+kWkpyTQ==}
 
-  katex@0.16.47:
-    resolution: {integrity: sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==}
-    hasBin: true
-
   katex@0.18.9:
     resolution: {integrity: sha512-8ad9RyoKsb/g8/yLFE+KAlP+DhbCTRUNi/V9XGsxn0R+trJJltNwzcDNo0q/DEkOy5fQUQTAQyCXCYSE+OakTQ==}
     hasBin: true
@@ -3057,9 +3042,6 @@ packages:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
 
-  mathlive@0.109.2:
-    resolution: {integrity: sha512-/2uNk8xFP8msIINwWFKv9bBLnCnaNL2wzUWaDu89Vj7sSuIUX8FFg0PY6XER0pNpHJCa/T+Ct5MK6m+zFTdPKw==}
-
   mathlive@0.110.0:
     resolution: {integrity: sha512-UOpJsQ6h1eeN0xZULGTl1MwUB/lZLCDuzKeHvKEh7Zra8U/rtgDNrssj5PZdJtBTIV48AfEhtv6rv47AeMOxJA==}
 
@@ -3122,8 +3104,8 @@ packages:
   mkpath@1.0.0:
     resolution: {integrity: sha512-PbNHr7Y/9Y/2P5pKFv5XOGBfNQqZ+fdiHWcuf7swLACN5ZW5LU7J5tMU8LSBjpluAxAxKYGD9nnaIbdRy9+m1w==}
 
-  mobx@6.16.1:
-    resolution: {integrity: sha512-syNcDdX3KT+Jq3je6eGjBhuc24Z68td2VG0zNFqRswaE433D9SNH5VRy/xrGbJsUixfppLLccXhAW9JSf6n+SQ==}
+  mobx@7.0.5:
+    resolution: {integrity: sha512-Q3TZfmgJhhHfEVyQ2Wl+1Q9nkfH+y3DnoAB/Gny/gm7Yga43kMdwmfwa8lO4aiGmkty3NNy4rgjfjVM1D8vYAQ==}
 
   mocha@4.1.0:
     resolution: {integrity: sha512-0RVnjg1HJsXY2YFDoTNzcc1NKhYuXKRrBAG2gDygmJJA136Cs2QlRliZG1mA0ap7cuaT30mw16luAeln+4RiNA==}
@@ -4287,8 +4269,8 @@ packages:
     resolution: {integrity: sha512-TEU+nJVUUnA4CYJFLvK5X9AOeH4KvDvhIfm0vV1GaQRtchnG0hgK5p8hw/xjv8cunWYCsiPCSDzObPyhEwq3KQ==}
     engines: {node: '>=0.4.0'}
 
-  xstate@5.32.5:
-    resolution: {integrity: sha512-ULazi1oe6wGrXl0Frb6otSlkm5HLifbbVTkMk5kkSKqz4TkxJaVpnl6jOJwKeid3ORPxYyZQgNLUSYX9q65SIA==}
+  xstate@5.33.2:
+    resolution: {integrity: sha512-8tC7yXgeCvpT8gKEeEje6ikJJG1wpnoLiXe+HfECW8m10ubMd3QxKOwWA8KxPJVBcLwfdRoMKYxIBGYKmo37/A==}
 
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
@@ -4337,8 +4319,6 @@ packages:
     resolution: {integrity: sha512-B58NGBEoc8Y9MWWCQGl/gq9xBCe4IiKM0a2x7GZdQKOW5Exr8S1W24J6OgM1njK8xCRGvAJIL/MxXHf6SkmQKQ==}
 
 snapshots:
-
-  '@arnog/colors@0.3.0': {}
 
   '@arnog/colors@0.5.0': {}
 
@@ -4482,12 +4462,6 @@ snapshots:
       crelt: 1.0.7
       style-mod: 4.1.3
       w3c-keyname: 2.2.8
-
-  '@cortex-js/compute-engine@0.55.6':
-    dependencies:
-      '@arnog/colors': 0.3.0
-      complex-esm: 2.1.1-esm1
-      decimal.js: 10.6.0
 
   '@cortex-js/compute-engine@0.58.0':
     dependencies:
@@ -5470,12 +5444,12 @@ snapshots:
 
   ansi-styles@5.2.0: {}
 
-  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#b0fd0e06356606003504e5c5c04a777ccd3a7512:
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#d2dc8c43c44dd1bd5c6cfb4ec5452c88e10c7a90:
     dependencies:
-      katex: 0.16.47
-      mathlive: 0.109.2
-      mobx: 6.16.1
-      xstate: 5.32.5
+      katex: 0.18.9
+      mathlive: 0.110.0
+      mobx: 7.0.5
+      xstate: 5.33.2
 
   archive-type@4.0.0:
     dependencies:
@@ -5740,8 +5714,6 @@ snapshots:
   commander@2.20.3: {}
 
   commander@5.1.0: {}
-
-  commander@8.3.0: {}
 
   complex-esm@2.1.1-esm1: {}
 
@@ -6802,10 +6774,6 @@ snapshots:
       readable-stream: 2.3.8
       setimmediate: 1.0.5
 
-  katex@0.16.47:
-    dependencies:
-      commander: 8.3.0
-
   katex@0.18.9:
     dependencies:
       commander: 15.0.0
@@ -6957,10 +6925,6 @@ snapshots:
 
   math-intrinsics@1.1.0: {}
 
-  mathlive@0.109.2:
-    dependencies:
-      '@cortex-js/compute-engine': 0.55.6
-
   mathlive@0.110.0:
     dependencies:
       '@cortex-js/compute-engine': 0.58.0
@@ -7010,7 +6974,7 @@ snapshots:
 
   mkpath@1.0.0: {}
 
-  mobx@6.16.1: {}
+  mobx@7.0.5: {}
 
   mocha@4.1.0:
     dependencies:
@@ -8202,7 +8166,7 @@ snapshots:
 
   xmlhttprequest-ssl@2.1.2: {}
 
-  xstate@5.32.5: {}
+  xstate@5.33.2: {}
 
   xtend@4.0.2: {}
 
