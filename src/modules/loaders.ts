@@ -310,8 +310,17 @@ export async function loadMathLive(divExercice?: HTMLElement) {
           mf.classList.remove('invisible')
         }
         //   mf.classList.add('ml-1')
-        mf.addEventListener('focus', handleFocusMathField)
-        mf.addEventListener('focusout', handleFocusOutMathField)
+        // Un math-field enveloppé dans <mathalea-mathfield> a déjà ses propres
+        // écouteurs focus/focusout (voir `lib/interactif/setMathfield.ts`, qui
+        // marque `data-listener-added`). Les ajouter une deuxième fois ici fait
+        // tourner deux mises à jour concurrentes de `keyboardState` sur les
+        // mêmes variables partagées de `Keyboard.svelte`, ce qui peut faire
+        // disparaître les touches personnalisées de la question au clavier
+        // (une des deux mises à jour écrase l'autre en cours de rendu).
+        if (mf.dataset.listenerAdded !== 'true') {
+          mf.addEventListener('focus', handleFocusMathField)
+          mf.addEventListener('focusout', handleFocusOutMathField)
+        }
         mf.addEventListener(
           'keydown',
           (event) => handleMathfieldPowerKeydown(event, mf),
@@ -455,7 +464,13 @@ const defaultKeyboardBlocks: BlockForKeyboard[] = [
   'variables',
 ]
 
-function getKeyboardBlocks(value: string | undefined): BlockForKeyboard[] {
-  if (!value) return defaultKeyboardBlocks
-  return value.split(' ') as BlockForKeyboard[]
+export function getKeyboardBlocks(
+  value: string | undefined,
+): BlockForKeyboard[] {
+  // `data-keyboard` absent (undefined) : clavier par défaut. `data-keyboard=""`
+  // (clavier n'utilisant que des touches personnalisées, voir
+  // `clavierEntierementPersonnalisable`) : clavier volontairement vide, à ne
+  // pas confondre avec le cas précédent malgré leur fausseté commune.
+  if (value === undefined) return defaultKeyboardBlocks
+  return value.split(' ').filter((bloc) => bloc !== '') as BlockForKeyboard[]
 }
