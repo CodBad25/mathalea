@@ -734,8 +734,8 @@ export default class RecomposerEntierC3 extends Exercice {
           Number.parseInt(
             String(
               this.autoCorrection[this.premierChamp[i] + k]?.valeur?.reponse
-                ?.value,
-            ) ?? '',
+                ?.value ?? '',
+            ),
           )
     }
     if (spanResultat != null) {
