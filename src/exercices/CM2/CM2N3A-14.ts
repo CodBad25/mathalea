@@ -35,7 +35,7 @@ export const refs = {
 export default class ComplementA100 extends Exercice {
   constructor() {
     super()
-
+    this.consigne = 'Compléter :'
     this.besoinFormulaireTexte = [
       "Type d'écriture",
       [

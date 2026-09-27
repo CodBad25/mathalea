@@ -27,6 +27,7 @@ export const refs = {
 export default class Ajoute10NPlus9 extends ExerciceSimple {
   constructor() {
     super()
+    this.consigne = 'Calculer :'
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierNumbers
@@ -38,7 +39,7 @@ export default class Ajoute10NPlus9 extends ExerciceSimple {
     const b = this.quotaRandint('b', 2, 8)
     const c = this.quotaRandint('c', 1, 5)
     this.reponse = a * 10 + b + c * 10 + 9
-    this.question = `Calculer $${texNombre(a * 10 + b, 0)} + ${texNombre(c * 10 + 9, 0)}$.`
+    this.question = `$${texNombre(a * 10 + b, 0)} + ${texNombre(c * 10 + 9, 0)}$`
 
     // `${this.question} \\dots \\dots`
     this.correction = `$${texNombre(a * 10 + b, 0)} + ${texNombre(c * 10 + 9, 0)}= ${miseEnEvidence(texNombre(this.reponse, 0))}$<br>`
