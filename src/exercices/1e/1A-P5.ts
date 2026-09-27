@@ -19,7 +19,7 @@ export const refs = {
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Rémi Angot clone de can1P04 de Jean-claude Lhote, Stéphane Guyon pour le QCM
+ * @author Rémi Angot clone de can1P11-04 de Jean-claude Lhote, Stéphane Guyon pour le QCM
 
 */
 export default class can1P04 extends ExerciceSimple {

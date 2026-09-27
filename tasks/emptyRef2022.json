@@ -107,30 +107,50 @@
     "1e": {
       "can1a": {},
       "can1D": {
-        "can1D0": {},
         "can1D1": {},
-        "can1D2": {}
+        "can1D2": {},
+        "can1D3": {}
       },
       "can1SD": {
-        "can1SD0": {},
-        "can1SD1": {},
-        "can1SD2": {}
+        "can1SD1": {
+          "can1SD11": {},
+          "can1SD12": {}
+        },
+        "can1SD2": {
+          "can1SD21": {},
+          "can1SD22": {},
+          "can1SD23": {}
+        },
+        "can1SD3": {}
       },
       "can1E": {
         "can1E1": {},
         "can1E2": {}
       },
-      "can1G": {},
+      "can1G": {
+        "can1G1": {},
+        "can1G2": {}
+      },
       "can1L": {},
-      "can1P": {},
+      "can1P": {
+        "can1P1": {
+          "can1P11": {},
+          "can1P12": {},
+          "can1P13": {}
+        },
+        "can1P2": {}
+      },
       "can1S": {
-        "can1S0": {},
-        "can1S1": {}
+        "can1S1": {},
+        "can1S2": {
+          "can1S21": {},
+          "can1S22": {}
+        }
       },
       "can1F": {
-        "can1F0": {},
         "can1F1": {},
-        "can1F2": {}
+        "can1F2": {},
+        "can1F3": {}
       }
     },
     "Terminale": {

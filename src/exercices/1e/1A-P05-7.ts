@@ -1,4 +1,4 @@
-import ProbaCond from '../can/1e/can1P11'
+import ProbaCond from '../can/1e/can1P12-04'
 export const titre =
   'Calculer une probabilité conditionnelle (tirage sans remise dans une urne)'
 export const dateDePublication = '20/02/2026'

@@ -124,6 +124,12 @@ ses refs suivent le format `<sous-rubrique>-<numéro>` (`can2N10-01`,
 et `can2G3`. Une question qui appartient à deux sous-rubriques porte une ref
 dans chacune (par exemple `can2F12-04` et `can2F20-08`).
 
+La Course aux nombres de Première suit le même principe, mais ses rubriques et
+sous-rubriques sont numérotées à partir de 1 : `can1SD` contient `can1SD1`
+(« Paraboles »), elle-même divisée en `can1SD11` et `can1SD12`, puis `can1SD2`
+et `can1SD3`. Les refs suivent le format `<rubrique ou sous-rubrique>-<numéro>`
+(`can1D1-01`, `can1SD11-01`, `can1SD3-01`).
+
 Dans les rubriques du lycée (seconde, première et terminale), `ReferentielNode.svelte` place explicitement en tête les exercices dont la référence contient `-flash`. Cette priorité ne modifie pas l'ordre des référentiels du collège.
 
 ## Génération par `tasks/dictionnaireToReferentiel.js`
