@@ -122,7 +122,6 @@
     "@myriaddreamin/typst-ts-web-compiler": "^0.7.0",
     "@myriaddreamin/typst.ts": "^0.7.0",
     "@scratch2latex/scratch-core": "git+https://forge.apps.education.fr/coopmaths/scratch-core.git#main",
-    "@svgdotjs/svg.js": "^3.2.8",
     "@types/jsdom": "^28.0.3",
     "@types/jspreadsheet-ce": "^4.7.9",
     "@types/nunjucks": "^3.2.6",
@@ -135,14 +134,12 @@
     "driver.js": "^1.8.0",
     "earcut": "^3.2.3",
     "fraction-visualizer": "git+https://forge.apps.education.fr/coopmaths/apps/fraction-visualizer.git",
-    "git-precommit-checks": "^3.1.0",
     "glisse-nombre": "git+https://forge.apps.education.fr/coopmaths/apps/glisse-nombre.git",
     "instrumenpoche": "git+https://git.sesamath.net/sesamath/instrumenpoche.git",
     "jspdf": "^4.2.1",
     "jspreadsheet-ce": "git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git",
     "jsqr": "^1.4.0",
     "jszip": "^3.10.2",
-    "jszip-utils": "^0.1.0",
     "katex": "^0.18.9",
     "mathlive": "^0.110.0",
     "modern-screenshot": "^4.7.0",
@@ -158,8 +155,7 @@
     "tex2typst": "^0.6.2",
     "three": "^0.185.1",
     "troika-three-text": "^0.52.5",
-    "ua-parser-js": "^2.0.10",
-    "wait-on": "^9.1.0"
+    "ua-parser-js": "^2.0.10"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -174,18 +170,13 @@
     "@types/seedrandom": "^3.0.8",
     "@vitest/coverage-v8": "^4.1.11",
     "@vitest/ui": "^4.1.11",
-    "autoprefixer": "^10.6.1",
     "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.6",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
-    "patch-package": "^8.0.1",
     "playwright": "1.61.1",
     "pnpm": "11.16.0",
-    "postcss": "^8.5.28",
-    "postcss-load-config": "^6.0.1",
     "prettier": "^3.9.9",
     "prettier-plugin-svelte": "^3.5.2",
     "rollup-plugin-visualizer": "^6.0.11",
@@ -193,47 +184,13 @@
     "svelte": "^5.57.1",
     "svelte-check": "^4.7.6",
     "tailwindcss": "^4.3.3",
-    "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
-    "typed-function": "^4.2.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.70.1",
-    "util": "^0.12.5",
     "vite": "^7.3.6",
     "vite-plugin-dynamic-import": "^1.6.0",
     "vite-plugin-generate-file": "0.3.1",
     "vitest": "^4.1.11"
-  },
-  "git-precommit-checks": {
-    "display": {
-      "notifications": true,
-      "offendingContent": true,
-      "rulesSummary": true,
-      "shortStats": true,
-      "verbose": true
-    },
-    "rules": [
-      {
-        "filter": "\\.js$|\\.ts$",
-        "nonBlocking": "true",
-        "message": "🤫 Oula, aurais-tu oublié des `console.log` inopportuns ?",
-        "regex": "console\\.log"
-      },
-      {
-        "message": "😨 On dirait que tu as oublié des marqueurs de conflits",
-        "regex": "/^[<>|=]{4,}/m"
-      },
-      {
-        "message": "🤔 Aurais-tu oublié de finir des développement ?",
-        "nonBlocking": "true",
-        "regex": "(?:FIXME|TODO)"
-      }
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "git-precommit-checks"
-    }
   },
   "packageManager": "pnpm@11.16.0"
 }

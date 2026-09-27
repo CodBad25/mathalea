@@ -1,5 +1,18 @@
 import JSZip from 'jszip'
-import JSZipUtils from 'jszip-utils'
+
+async function addRemoteFiles(zip: JSZip, urls: string[]): Promise<void> {
+  await Promise.all(
+    urls.map(async (url) => {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`Impossible de télécharger ${url} (${response.status}).`)
+      }
+      const fileName = url.split('/').pop() ?? ''
+      zip.file(fileName, await response.arrayBuffer())
+    }),
+  )
+}
+
 function saveAs(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -18,25 +31,10 @@ import {
 import { type latexFileType } from './LatexTypes'
 import type { IExercice, IExerciceStatique } from './types'
 
-export function downloadZip(filesUrls: string[], zipFileName: string) {
+export async function downloadZip(filesUrls: string[], zipFileName: string) {
   const zip = new JSZip()
-  let count = 0
-  filesUrls.forEach((url) => {
-    JSZipUtils.getBinaryContent(url, (err: Error | null, data: ArrayBuffer | null) => {
-      if (err) {
-        throw err
-      }
-      const splitUrl = url.split('/')
-      const fileName = splitUrl[splitUrl.length - 1]
-      zip.file(fileName, data ?? '', { binary: true })
-      count++
-      if (count === filesUrls.length) {
-        zip.generateAsync({ type: 'blob' }).then((content) => {
-          saveAs(content, zipFileName)
-        })
-      }
-    })
-  })
+  await addRemoteFiles(zip, filesUrls)
+  saveAs(await zip.generateAsync({ type: 'blob' }), zipFileName)
 }
 
 /**
@@ -57,30 +55,9 @@ export async function downloadTexWithImagesZip(
   const picsNames = getPicsNames(exosContentList)
   zip.file('main.tex', latexFile.latexWithPreamble)
   if (withImages) {
-    const urls = buildImagesUrlsList(exosContentList, picsNames)
-    let count = 0
-    urls.forEach((url) => {
-      JSZipUtils.getBinaryContent(url, (err: Error | null, data: ArrayBuffer | null) => {
-        if (err) {
-          throw err
-        }
-        const splitUrl = url.split('/')
-        const fileName = splitUrl[splitUrl.length - 1]
-        zip.file(fileName, data ?? '', { binary: true })
-        count++
-        if (count === urls.length) {
-          zip.generateAsync({ type: 'blob' }).then((content) => {
-            // saveAs(content, [archiveName.replace(/\.(?:.*)$/g, ""), "zip"].join("."))
-            saveAs(content, [zipFileName, 'zip'].join('.'))
-          })
-        }
-      })
-    })
-  } else {
-    zip.generateAsync({ type: 'blob' }).then((content) => {
-      saveAs(content, [zipFileName, 'zip'].join('.'))
-    })
+    await addRemoteFiles(zip, buildImagesUrlsList(exosContentList, picsNames))
   }
+  saveAs(await zip.generateAsync({ type: 'blob' }), `${zipFileName}.zip`)
 }
 
 export async function downloadFile(
