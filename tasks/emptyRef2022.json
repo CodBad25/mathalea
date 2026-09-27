@@ -1721,8 +1721,16 @@
       },
       "TEA2": {},
       "TEA3": {},
-      "TEM1": {},
-      "TEM2": {}
+      "TEM1": {
+        "TEM1-1": {},
+        "TEM1-2": {},
+        "TEM1-3": {}
+      },
+      "TEG1": {
+        "TEG1-1": {},
+        "TEG1-2": {},
+        "TEG1-3": {}
+      }
     },
     "Terminale Complementaire": {
       "TCA1": {

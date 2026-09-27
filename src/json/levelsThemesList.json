@@ -3659,8 +3659,32 @@
     "titre": "Les Matrices",
     "sousThemes": {}
   },
-  "TEM2": {
+  "TEM1-1": {
+    "titre": "Calcul matriciel",
+    "sousThemes": {}
+  },
+  "TEM1-2": {
+    "titre": "Matrice inverse et systèmes linéaires",
+    "sousThemes": {}
+  },
+  "TEM1-3": {
+    "titre": "Suites de matrices",
+    "sousThemes": {}
+  },
+  "TEG1": {
     "titre": "Les graphes",
+    "sousThemes": {}
+  },
+  "TEG1-1": {
+    "titre": "Vocabulaire des graphes",
+    "sousThemes": {}
+  },
+  "TEG1-2": {
+    "titre": "Matrice d'adjacence et chemins",
+    "sousThemes": {}
+  },
+  "TEG1-3": {
+    "titre": "Chaînes de Markov",
     "sousThemes": {}
   },
   "TEA1": {
