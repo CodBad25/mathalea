@@ -51,7 +51,6 @@ export default class EcrireUneExpressionNumerique extends Exercice {
   }
 
   nouvelleVersion() {
-
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup4,
       min: 1,
@@ -88,10 +87,12 @@ export default class EcrireUneExpressionNumerique extends Exercice {
       combinaisonListes(range(2), this.nbQuestions),
       combinaisonListes(range(4), this.nbQuestions),
     ]
+    const enoncesLitteraux = new Set<string>()
+    const operationsFinalesParType = new Map<number, Set<string>>()
     for (
       let i = 0, val1, val2, cpt = 0;
-      // i < Math.min(this.nbQuestions, 4 * new Set(listeTypeDeQuestions).size) &&
-      i < this.nbQuestions && cpt < 50;
+      i < this.nbQuestions &&
+      cpt < (this.litteral ? 50 + 10 * this.nbQuestions : 50);
     ) {
       let texte: string
       let texteCorr: string
@@ -123,24 +124,42 @@ export default class EcrireUneExpressionNumerique extends Exercice {
       expc = resultats[2]
       nbval = resultats[3]
       const expNom = this.litteral ? String(resultats[6]) : resultats[5] // Le split, c'est pour virer le déterminant.
+      // Les anciens tirages distinguent les expressions littérales par leur dernière
+      // opération. Une fois ces opérations épuisées, l'énoncé distingue les suivantes.
+      const operationsFinales = operationsFinalesParType.get(nbOperations)
+      const operationsEpuisees =
+        this.litteral &&
+        (operationsFinales?.size ?? 0) >= (nbOperations === 4 ? 3 : 4)
       if (
-        (this.questionJamaisPosee(
-          i,
-          nbOperations,
-          String(nbval),
-          this.version,
-          String(expf),
-        ) &&
-          !this.litteral) ||
-        (this.litteral &&
+        (!this.litteral &&
           this.questionJamaisPosee(
             i,
             nbOperations,
             String(nbval),
             this.version,
-            String(resultats[4]),
+            String(expf),
+          )) ||
+        (this.litteral &&
+          !enoncesLitteraux.has(String(expf)) &&
+          this.questionJamaisPosee(
+            i,
+            nbOperations,
+            String(nbval),
+            this.version,
+            operationsEpuisees ? String(expf) : String(resultats[4]),
           ))
       ) {
+        if (this.litteral) {
+          enoncesLitteraux.add(String(expf))
+          if (!operationsFinales) {
+            operationsFinalesParType.set(
+              nbOperations,
+              new Set([String(resultats[4])]),
+            )
+          } else {
+            operationsFinales.add(String(resultats[4]))
+          }
+        }
         this.autoCorrectionAMC[i] = {}
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         switch (this.version) {
