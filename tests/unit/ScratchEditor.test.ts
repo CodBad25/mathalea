@@ -142,7 +142,7 @@ describe('ScratchEditor conversions', () => {
     document.body.append(element)
 
     try {
-      expect(element.querySelector('.scratchCategoryMenu')).toBeNull()
+      expect(element.querySelector('.blocklyToolboxCategory')).toBeNull()
       expect(element.querySelector('.blocklyFlyout')).not.toBeNull()
     } finally {
       element.remove()
@@ -172,7 +172,7 @@ describe('ScratchEditor conversions', () => {
     document.body.append(element)
 
     try {
-      expect(element.querySelector('.scratchCategoryMenu')).not.toBeNull()
+      expect(element.querySelector('.blocklyToolboxCategory')).not.toBeNull()
     } finally {
       element.remove()
     }
