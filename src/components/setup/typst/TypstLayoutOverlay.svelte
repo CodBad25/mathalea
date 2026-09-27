@@ -1782,9 +1782,7 @@
 </div>
 
 <style>
-  /* Toolbars de la palette de mise en page : même style que la vue A4
-     (fond blanc plein, bordure bleu clair, ombre nette) pour une bonne
-     visibilité par-dessus le document. */
+  /* Toolbars de la palette de mise en page, visibles par-dessus le document. */
   .typst-pill {
     background: white;
     border: 1px solid #b9d4f1;

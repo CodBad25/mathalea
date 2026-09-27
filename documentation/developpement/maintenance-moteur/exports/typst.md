@@ -1,6 +1,6 @@
 # Vue Typst
 
-La vue Typst (`v=typst` dans l'URL) génère une fiche d'exercices au format [Typst](https://typst.app/docs/), compilée directement dans le navigateur. Elle est accessible depuis les boutons d'export de la page d'accueil (comme la vue A4, uniquement sur `localhost` ou avec `?beta=1`).
+La vue Typst (`v=typst` dans l'URL) génère une fiche d'exercices au format [Typst](https://typst.app/docs/), compilée directement dans le navigateur. Elle est accessible depuis les boutons d'export de la page d'accueil.
 
 ## Interfaces
 
@@ -666,7 +666,7 @@ Toutes les modifications de la fiche sont sauvegardées dans l'URL (paramètre `
 
 La liste des exercices, leurs graines et leurs réglages restent portés par les paramètres habituels de l'URL (`exercicesParams`), mis à jour par le store du même nom : suppression, déplacement, changement de graine ou de nombre de questions y sont déjà reflétés.
 
-`persistToUrl` (dans `Typst.svelte`) est appelée après chaque modification (réglage du document ou édition de la palette, via le `updateListener` de CodeMirror). Comme la vue A4 avec `a4Param`, elle écrit dans `typstParamStore` (source de vérité), redéclenche l'écrivain d'URL de l'app (`mathaleaUpdateUrlFromExercicesParams`, sinon sa prochaine écriture débouncée réécrirait l'URL sans `typstParam`) puis pose immédiatement le paramètre avec `history.replaceState`. Au chargement, `parsed.carryOver` est réinjecté dans la première génération du code (`buildCode` part de `urlCarryOver` tant que l'éditeur n'existe pas). `typstParam` est aussi le canal par lequel le diaporama transmet son nombre de vues (`goToTypstWithSeries`).
+`persistToUrl` (dans `Typst.svelte`) est appelée après chaque modification (réglage du document ou édition de la palette, via le `updateListener` de CodeMirror). Elle écrit dans `typstParamStore` (source de vérité), redéclenche l'écrivain d'URL de l'app (`mathaleaUpdateUrlFromExercicesParams`, sinon sa prochaine écriture débouncée réécrirait l'URL sans `typstParam`) puis pose immédiatement le paramètre avec `history.replaceState`. Au chargement, `parsed.carryOver` est réinjecté dans la première génération du code (`buildCode` part de `urlCarryOver` tant que l'éditeur n'existe pas). `typstParam` est aussi le canal par lequel le diaporama transmet son nombre de vues (`goToTypstWithSeries`).
 
 ## Visite guidée
 
@@ -705,7 +705,7 @@ Les constantes d'import (`EXERCISE_BANK_IMPORT`, `TASKIZE_IMPORT`, `VARTABLE_IMP
 
 ## Pipeline de génération
 
-1. Les exercices sont chargés comme dans la vue A4 (`buildExercisesList`, graines `alea`, contenu HTML avec formules KaTeX en `$...$`), en régénérant chaque exercice avec `context.isHtml = true` et `context.isTypst = true` (le rendu HTML est réutilisé, pas le rendu LaTeX). Voir [Variantes d'exercices — branches de rendu](../../auteurs-exercices/complements/variantes-exercices.md#branches-de-rendu) pour ce que cela implique côté code d'exercice (branches `context.isHtml` qui posent un composant interactif non convertible).
+1. Les exercices sont chargés avec `buildExercisesList` (graines `alea`, contenu HTML avec formules KaTeX en `$...$`), en régénérant chaque exercice avec `context.isHtml = true` et `context.isTypst = true` (le rendu HTML est réutilisé, pas le rendu LaTeX). Voir [Variantes d'exercices — branches de rendu](../../auteurs-exercices/complements/variantes-exercices.md#branches-de-rendu) pour ce que cela implique côté code d'exercice (branches `context.isHtml` qui posent un composant interactif non convertible).
 2. `buildTypstDocument` assemble le document : réglages éditables en tête de fichier (`#let colonnes`, `#let corrige`, `#let couleur`), en-tête de fiche, un bloc par exercice, section corrections dans un `#if corrige [...]`.
 3. `htmlToTypst` convertit chaque contenu : balises simples (`<br>`, `<b>`, `<i>`, `<sup>`, listes...) vers le balisage Typst, échappement des caractères spéciaux, et formules LaTeX converties par [tex2typst](https://github.com/qwinsi/tex2typst).
 
@@ -1113,7 +1113,7 @@ contient tous.
 
 `buildAllVersionInputs` (`Typst.svelte`) calcule le contenu de chaque sujet :
 le sujet A part de la graine de base (`exercicesParams`), les suivants d'une
-graine dérivée `${graineA}${index}` — même formule que la vue A4
+graine dérivée `${graineA}${index}` — même formule que le diaporama
 (`Diaporama.svelte` `reroll`), pour que le 2ᵉ sujet corresponde à la 2ᵉ vue du
 diaporama.
 

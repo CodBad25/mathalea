@@ -326,7 +326,7 @@
    */
   let urlCarryOver: TypstCarryOver | null = null
   // Le diaporama (bouton « PDF sujets + corrigés ») transmet ici son nombre
-  // de vues via typstParam — comme le fait la vue A4 avec a4Param — pour que
+  // de vues via typstParam pour que
   // le nombre de sujets Typst corresponde au nombre de vues jouées. Depuis
   // que la vue Typst réécrit ce paramètre à chaque modification, il porte
   // aussi tous les réglages du document et de la mise en page (rechargeables).
@@ -2579,7 +2579,7 @@
     const encoded = encodeBase64({ options: documentOptions, carryOver })
     // le store est la source de vérité ; on redéclenche ensuite l'écrivain
     // d'URL de l'app pour que sa prochaine écriture (débouncée) reparte de
-    // cette valeur et ne réécrive pas l'URL sans typstParam (comme la vue A4)
+    // cette valeur et ne réécrive pas l'URL sans typstParam
     typstParamStore.set(encoded)
     mathaleaUpdateUrlFromExercicesParams()
     if (encoded === lastTypstParam) return
@@ -2916,7 +2916,7 @@
   /**
    * Contenu de chaque version du sujet (Sujet A, B...) : la version 0 utilise
    * la graine de base (visible dans les réglages), les suivantes une graine
-   * dérivée — même formule que la vue A4 (`Diaporama.svelte` `reroll`), pour
+   * dérivée — même formule que `Diaporama.svelte` (`reroll`), pour
    * que la 2e version corresponde à la 2e vue du diaporama.
    */
   function buildAllVersionInputs(): TypstExerciseInput[][] {
