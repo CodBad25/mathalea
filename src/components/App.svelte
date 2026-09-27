@@ -22,7 +22,6 @@
 
   import Can from './display/can/Can.svelte'
   import Eleve from './display/eleve/Eleve.svelte'
-  import A4 from './setup/a4/A4.svelte'
   import Alacarte from './setup/alacarte/Alacarte.svelte'
   import Amc from './setup/amc/Amc.svelte'
   import Anki from './setup/anki/Anki.svelte'
@@ -241,8 +240,6 @@
     <Latex />
   {:else if $globalOptions.v === 'raw'}
     <RawLatex />
-  {:else if $globalOptions.v === 'a4'}
-    <A4 />
   {:else if $globalOptions.v === 'alacarte'}
     <Alacarte />
   {:else if $globalOptions.v === 'confeleve'}

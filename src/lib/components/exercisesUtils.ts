@@ -87,7 +87,7 @@ export const buildExercise = (
         foundResource.titre.length > 0
       ) {
         // ressources titrées (banques externes, MathAdata) : sans cela le
-        // titre affiché resterait l'uuid brut dans les vues A4 et Typst
+        // titre affiché resterait l'uuid brut dans la vue Typst
         exo.titre = foundResource.titre
       }
       const pngUrls = computeStaticExercicePngUrls(foundResource)
@@ -186,7 +186,7 @@ export const getStaticExercicePngUrls = (
  * Calcule l'URL locale du fichier source Typst d'une ressource statique
  * (annales DNB, BAC...), si son entrée de référentiel déclare la clé
  * `typ: true`. Utilisé par la vue Typst uniquement (voir `Typst.svelte`) :
- * les autres vues (A4, QuestionParPage...) continuent d'afficher le png.
+ * les autres vues (QuestionParPage...) continuent d'afficher le png.
  * @param uuid uuid de la ressource statique
  * @returns l'URL relative du fichier `.typ`, ou `null` si non déclarée
  */

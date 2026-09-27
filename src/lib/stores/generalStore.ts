@@ -18,12 +18,6 @@ import { globalOptions } from './globalOptions'
 export const freezeUrl = writable<boolean>(false)
 
 /**
- * Réglages encodés (base64) de la vue Impression, maintenus dans l'URL
- * par updateGlobalOptionsInURL. Alimenté par la vue A4 elle-même.
- */
-export const a4ParamStore = writable<string>('')
-
-/**
  * Réglages encodés (base64) de la vue Typst, maintenus dans l'URL
  * par updateGlobalOptionsInURL. Alimenté par la vue Typst elle-même.
  */
@@ -277,13 +271,6 @@ export function updateGlobalOptionsInURL(url: URL) {
     )
   ) {
     url.searchParams.append('pdfParam', pdfParam)
-  }
-  // La vue A4 alimente son propre store plutôt que l'URL courante :
-  // on évite ainsi toute course entre son history.replaceState et
-  // l'écriture débouncée réalisée ici.
-  const a4Param = get(a4ParamStore)
-  if (options.v === 'a4' && a4Param.length > 0) {
-    url.searchParams.append('a4Param', a4Param)
   }
   // Même principe pour la vue Typst.
   const typstParam = get(typstParamStore)
