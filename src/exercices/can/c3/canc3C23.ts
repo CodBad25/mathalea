@@ -22,7 +22,7 @@ export const dateDePublication = '03/08/2025'
 export const uuid = 'cb93a'
 
 export const refs = {
-  'fr-fr': ['can6C62', 'canc3C23'],
+  'fr-fr': ['can6C1-08', 'canc3C23'],
   'fr-ch': [],
 }
 export default class ComplementADixCentMille extends ExerciceSimple {

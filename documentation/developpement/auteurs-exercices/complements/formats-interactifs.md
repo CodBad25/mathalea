@@ -1297,7 +1297,7 @@ Les touches sont désignées par la valeur de leur bouton (tableau `buttons` de
 Hors HTML, une calculatrice statique est dessinée en LaTeX et en Typst, avec
 les touches cassées grisées. Des défis prêts à l'emploi sont dans
 `src/lib/calculatrice/defisCalculatriceCassee.ts`. Exemple :
-`src/exercices/can/6e/can6C67.ts`.
+`src/exercices/can/6e/can6C7-07.ts`.
 
 ## Couteau suisse
 

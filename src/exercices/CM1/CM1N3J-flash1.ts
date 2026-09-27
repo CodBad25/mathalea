@@ -1,4 +1,4 @@
-import AbscisseFractionnaire from '../can/6e/can6N04'
+import AbscisseFractionnaire from '../can/6e/can6N3-01'
 export const titre = 'Lire une abscisse décimale sur une droite graduée'
 export const interactifReady = true
 

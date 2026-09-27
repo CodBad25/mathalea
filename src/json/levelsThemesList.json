@@ -38,11 +38,59 @@
   "can6C": {
     "titre": "Calculs"
   },
+  "can6C1": {
+    "titre": "Tables, doubles, moitiés, compléments"
+  },
+  "can6C2": {
+    "titre": "Calcul astucieux"
+  },
+  "can6C3": {
+    "titre": "Nombres décimaux"
+  },
+  "can6C4": {
+    "titre": "Division euclidienne"
+  },
+  "can6C5": {
+    "titre": "Fractions"
+  },
+  "can6C51": {
+    "titre": "Écritures"
+  },
+  "can6C52": {
+    "titre": "Comparer"
+  },
+  "can6C53": {
+    "titre": "Calculer"
+  },
+  "can6C6": {
+    "titre": "Problèmes"
+  },
+  "can6C7": {
+    "titre": "Pyramides, énigmes, ordres de grandeur"
+  },
   "can6D": {
     "titre": "Durées"
   },
+  "can6D1": {
+    "titre": "Unités, conversions"
+  },
+  "can6D2": {
+    "titre": "Calculer des durées"
+  },
+  "can6D3": {
+    "titre": "Heures décimales, fractions d'heure"
+  },
   "can6G": {
     "titre": "Géométrie"
+  },
+  "can6G1": {
+    "titre": "Symétrie"
+  },
+  "can6G2": {
+    "titre": "Solides"
+  },
+  "can6G3": {
+    "titre": "Longueurs"
   },
   "can6I": {
     "titre": "Algorithmique"
@@ -50,11 +98,44 @@
   "can6M": {
     "titre": "Mesure"
   },
+  "can6M1": {
+    "titre": "Longueurs, périmètres"
+  },
+  "can6M2": {
+    "titre": "Aires"
+  },
+  "can6M3": {
+    "titre": "Volumes"
+  },
+  "can6M4": {
+    "titre": "Unités, conversions"
+  },
   "can6N": {
     "titre": "Numération"
   },
+  "can6N1": {
+    "titre": "Nombres entiers"
+  },
+  "can6N2": {
+    "titre": "Décimaux, fractions décimales"
+  },
+  "can6N21": {
+    "titre": "Fractions décimales"
+  },
+  "can6N22": {
+    "titre": "Écriture décimale, arrondis"
+  },
+  "can6N3": {
+    "titre": "Droites graduées"
+  },
   "can6P": {
+    "titre": "Proportionnalité, pourcentages"
+  },
+  "can6P1": {
     "titre": "Proportionnalité"
+  },
+  "can6P2": {
+    "titre": "Pourcentages"
   },
   "can6S": {
     "titre": "Statistiques"

@@ -21,7 +21,7 @@ export const amcType = 'AMCNum'
 
 /**
  * @author Olivier Mimeau
- * Variante plus difficile de can6C05 : les mêmes produits remarquables
+ * Variante plus difficile de can6C2-04 : les mêmes produits remarquables
  * (4x25, 2x50, 2x5, 8x125) sont rendus méconnaissables par un décalage de
  * la virgule sur chacun des deux facteurs concernés, ce qui oblige à
  * repérer le "bon" décalage global (jeu sur les virgules et les zéros).

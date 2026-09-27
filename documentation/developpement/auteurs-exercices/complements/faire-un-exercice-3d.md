@@ -5,7 +5,7 @@ Ce guide explique comment créer ou maintenir un exercice qui affiche un solide 
 - le rendu dynamique HTML avec `<canvas-3d>` et Three.js ;
 - le rendu statique par projection 3D vers `mathalea2d()`, compatible HTML, LaTeX, PDF et AMC.
 
-Les exemples et imports ci-dessous ont été vérifiés dans le code courant, notamment dans `src/exercices/can/6e/can6M11.ts`, `src/exercices/5e/5G53.ts`, `src/exercices/3e/3A10DNB1.ts`, `src/lib/3d/3d_dynamique/Canvas3DElement.ts` et `src/lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere.ts`.
+Les exemples et imports ci-dessous ont été vérifiés dans le code courant, notamment dans `src/exercices/can/6e/can6M3-04.ts`, `src/exercices/5e/5G53.ts`, `src/exercices/3e/3A10DNB1.ts`, `src/lib/3d/3d_dynamique/Canvas3DElement.ts` et `src/lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere.ts`.
 
 ## Pré-requis
 
@@ -34,7 +34,7 @@ Utiliser un rendu statique `mathalea2d()` quand la figure doit apparaître en La
 
 Utiliser `ajouteCanvas3d()` seulement pour l'HTML quand la rotation, le plein écran ou la visualisation dynamique apporte vraiment quelque chose. `Canvas3DElement` rend d'abord une image statique, puis ouvre une scène Three.js manipulable au clic ou au bouton plein écran. Ce rendu ne doit pas être le seul support de l'exercice, car il ne s'exporte pas en LaTeX.
 
-Un bon modèle pour débuter est `src/exercices/can/6e/can6M11.ts` : si l'option "3D dynamique" est cochée et que le contexte est HTML, l'exercice affiche un canvas ; sinon il affiche le même pavé en projection statique.
+Un bon modèle pour débuter est `src/exercices/can/6e/can6M3-04.ts` : si l'option "3D dynamique" est cochée et que le contexte est HTML, l'exercice affiche un canvas ; sinon il affiche le même pavé en projection statique.
 
 ## Structure recommandée
 
@@ -44,7 +44,7 @@ Séparer trois choses dans `nouvelleVersion()` :
 2. la description de la scène dynamique ;
 3. le rendu statique de secours.
 
-Exemple minimal inspiré de `can6M11` :
+Exemple minimal inspiré de `can6M3-04` :
 
 ```ts
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -241,7 +241,7 @@ En HTML, le canvas dynamique peut être utilisé dans `this.question`, `this.con
 
 En LaTeX et PDF, utiliser `mathalea2d()`. Les objets issus de `.c2d` sont rendus en TikZ quand c'est possible, alors qu'un `<canvas-3d>` brut ne produira pas une figure exploitable.
 
-En AMC, éviter que la réponse dépende d'une manipulation du canvas. Si l'exercice est déclaré compatible AMC (`amcReady = true`), l'énoncé AMC doit contenir une figure statique ou une description textuelle suffisante. `can6M11` garde `amcReady = true` parce que le rendu dynamique est conditionné par `context.isHtml` et qu'un pavé statique est généré sinon.
+En AMC, éviter que la réponse dépende d'une manipulation du canvas. Si l'exercice est déclaré compatible AMC (`amcReady = true`), l'énoncé AMC doit contenir une figure statique ou une description textuelle suffisante. `can6M3-04` garde `amcReady = true` parce que le rendu dynamique est conditionné par `context.isHtml` et qu'un pavé statique est généré sinon.
 
 ## Interactivité
 
@@ -269,7 +269,7 @@ pnpm dev
 - la correction ;
 - un export LaTeX/PDF ou AMC si l'exercice annonce cette compatibilité.
 
-1. Pour cibler rapidement un exercice, utiliser sa référence déclarée dans `refs`, par exemple `can6M11`, ou son `uuid` si l'interface locale le permet.
+1. Pour cibler rapidement un exercice, utiliser sa référence déclarée dans `refs`, par exemple `can6M3-04`, ou son `uuid` si l'interface locale le permet.
 
 ## Tests et vérifications
 
