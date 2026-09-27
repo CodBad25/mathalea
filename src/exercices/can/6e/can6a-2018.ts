@@ -17,7 +17,11 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { fraction } from '../../../modules/fractions'
 import Hms from '../../../modules/Hms'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
@@ -55,29 +59,57 @@ export default class SujetCAN20186ieme extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 30 // 10,20,30
+    this.sup = Array.from({ length: 30 }, (_, i) => i + 1).join('-')
+    // Les liens antérieurs n'ont pas de paramètre s2 : ils gardent le tirage
+    // historique par nombre de questions.
+    this.sup2 = true
+    this.besoinFormulaire2CaseACocher = ['Choix du nombre de questions']
     this.comment = `Cet exercice fait partie des annales des Courses Aux Nombres.<br>
 Il est composé de 30 questions réparties de la façon suivante :<br>
-Les 10 premières questions, parfois communes à plusieurs niveaux, font appel à des questions élémentaires et les 20 suivantes (qui ne sont pas rangées dans un ordre de difficulté) sont un peu plus « coûteuses » cognitivement.<br>
+Sept questions font appel à des connaissances élémentaires et les 23 autres sont un peu plus « coûteuses » cognitivement.<br>
 Par défaut, les questions sont rangées dans le même ordre que le sujet officiel avec des données aléatoires. Ainsi, en cliquant sur « Nouvelles données », on obtient une nouvelle Course Aux Nombres avec des données différentes.
 En choisissant un nombre de questions inférieur à 30, on fabrique une « mini » Course Aux Nombres qui respecte la proportion de nombre de questions élémentaires par rapport aux autres.
-Par exemple, en choisissant 20 questions, la course aux nombres sera composée de 7 ou 8 questions élémentaires choisies aléatoirement dans les 10 premières questions du sujet officiel puis de 12 ou 13 autres questions choisies aléatoirement parmi les 20 autres questions du sujet officiel.`
+Par exemple, en choisissant 20 questions, la course aux nombres sera composée de 5 questions élémentaires choisies aléatoirement parmi les 7 possibles, puis de 15 autres questions choisies aléatoirement parmi les 23 restantes.<br>
+Pour choisir des numéros précis, décocher « Choix du nombre de questions », puis saisir les numéros séparés par des tirets.`
   }
 
   nouvelleVersion() {
-    const nbQ1 = Math.min(Math.round((this.nbQuestions * 7) / 30), 7) // Choisir d'un nb de questions de niveau 1 parmi les 7 possibles.
-    const nbQ2 = Math.min(this.nbQuestions - nbQ1, 23)
-    const typeQuestionsDisponiblesNiv1 = shuffle([1, 2, 4, 5, 6, 7, 10])
-      .slice(-nbQ1)
-      .sort(compareNombres)
-    const typeQuestionsDisponiblesNiv2 = shuffle([
-      3, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-      27, 28, 29, 30,
-    ])
-      .slice(-nbQ2)
-      .sort(compareNombres)
-    const typeQuestionsDisponibles = typeQuestionsDisponiblesNiv1.concat(
-      typeQuestionsDisponiblesNiv2,
-    )
+    const selectByCount = this.sup2 !== false
+    this.nbQuestionsModifiable = selectByCount
+    this.besoinFormulaireTexte = selectByCount
+      ? false
+      : [
+          'Choix des questions',
+          'Numéros des questions (de 1 à 30) séparés par des tirets. Par exemple : 1-3-12-30',
+        ]
+    let typeQuestionsDisponibles: number[]
+    if (selectByCount) {
+      const nbQ1 = Math.min(Math.round((this.nbQuestions * 7) / 30), 7) // Choisir d'un nb de questions de niveau 1 parmi les 7 possibles.
+      const nbQ2 = Math.min(this.nbQuestions - nbQ1, 23)
+      const typeQuestionsDisponiblesNiv1 = shuffle([1, 2, 4, 5, 6, 7, 10])
+        .slice(-nbQ1)
+        .sort(compareNombres)
+      const typeQuestionsDisponiblesNiv2 = shuffle([
+        3, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+        27, 28, 29, 30,
+      ])
+        .slice(-nbQ2)
+        .sort(compareNombres)
+      typeQuestionsDisponibles = typeQuestionsDisponiblesNiv1.concat(
+        typeQuestionsDisponiblesNiv2,
+      )
+    } else {
+      typeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        saisie: String(this.sup ?? ''),
+        min: 1,
+        max: 30,
+        defaut: 31,
+        melange: 31,
+        shuffle: false,
+        nbQuestions: 0,
+      }).map(Number)
+      this.nbQuestions = typeQuestionsDisponibles.length
+    }
     const listeFractions1 = [
       [5, 3],
       [7, 3],
