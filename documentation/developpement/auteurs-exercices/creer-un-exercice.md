@@ -4,6 +4,13 @@ Un exercice génératif classique est un fichier TypeScript de `src/exercices/`.
 Il hérite de `Exercice`, construit ses questions dans `nouvelleVersion()`, puis
 remplit les listes de questions et de corrections.
 
+Dans un exercice « Course aux nombres », `listeCanEnonces` et
+`listeCanReponsesACompleter` sont indexées comme `listeQuestions` : l'entrée
+`i` décrit la question `i`. Si une réponse à compléter est facultative,
+initialiser `listeCanReponsesACompleter[i]` à `''` et affecter la valeur à
+`[i]` dans les cas concernés. Éviter `push()` : une question sans réponse
+décalerait toutes les réponses suivantes dans le tableau imprimé.
+
 ## 1. Partir d'un exercice proche
 
 Cherchez un exercice récent du même niveau et du même type :
