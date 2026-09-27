@@ -1,4 +1,4 @@
-import DeveloppementNiveau1 from '../can/4e/can4L05'
+import DeveloppementNiveau1 from '../can/4e/can4L2-02'
 export const titre = 'Développer avec la simple distributivité'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can4L05 pour les auto 1er
+ * Clone de can4L2-02 pour les auto 1er
  * @author Gilles Mora
  */
 
