@@ -120,7 +120,7 @@ export default class Determinerfonctionaffine extends Exercice {
       grilleXDistance: 2,
     })
 
-    // Segments pour illustrer le coefficient directeur (cf. can3F07.ts)
+    // Segments pour illustrer le coefficient directeur (cf. can3F3-02.ts)
     const s1 = segment(0, p, 2, p, 'green')
     const s2 = segment(2, p, 2, p + m, 'red')
     s1.epaisseur = 2

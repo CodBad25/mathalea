@@ -1,4 +1,4 @@
-import SolutionsEquationProduit from '../can/3e/can3L05'
+import SolutionsEquationProduit from '../can/3e/can3L1-05'
 export const titre =
   'Calculer le produit des solutions d’une équation produit nul'
 export const dateDePublication = '27/07/2025'
@@ -7,7 +7,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can3L05 pour les auto 1er
+ * Clone de can3L1-05 pour les auto 1er
  * @author Gilles Mora
  */
 

@@ -225,7 +225,7 @@ if (context.isAmc) {
 }
 ```
 
-Voir aussi `src/exercices/can/3e/can3C01.ts` pour un exercice existant qui garde `amcType = 'AMCNum'` et configure `basePuissance` / `exposantPuissance`.
+Voir aussi `src/exercices/can/3e/can3C2-01.ts` pour un exercice existant qui garde `amcType = 'AMCNum'` et configure `basePuissance` / `exposantPuissance`.
 
 ## Cas QCM
 

@@ -101,17 +101,29 @@
   "can4N": {
     "titre": "Numération"
   },
-  "can3A": {
-    "titre": "Algorithmes"
-  },
   "can3C": {
     "titre": "Calculs"
   },
-  "can3D": {
-    "titre": "Durées"
+  "can3C1": {
+    "titre": "Fractions"
+  },
+  "can3C2": {
+    "titre": "Puissances, écriture scientifique"
+  },
+  "can3C3": {
+    "titre": "Racines carrées"
+  },
+  "can3C4": {
+    "titre": "Calculs numériques"
   },
   "can3G": {
     "titre": "Géométrie"
+  },
+  "can3G1": {
+    "titre": "Transformations"
+  },
+  "can3G2": {
+    "titre": "Théorèmes et trigonométrie"
   },
   "can3P": {
     "titre": "Proportionnalité"
@@ -119,8 +131,11 @@
   "can3L": {
     "titre": "Calcul littéral"
   },
-  "can3N": {
-    "titre": "Numération"
+  "can3L1": {
+    "titre": "Équations, inéquations"
+  },
+  "can3L2": {
+    "titre": "Expressions"
   },
   "can3M": {
     "titre": "Mesure"
@@ -128,8 +143,23 @@
   "can3F": {
     "titre": "Fonctions"
   },
+  "can3F1": {
+    "titre": "Vocabulaire, lectures graphiques"
+  },
+  "can3F2": {
+    "titre": "Calculs d'images et d'antécédents"
+  },
+  "can3F3": {
+    "titre": "Fonctions affines"
+  },
   "can3S": {
     "titre": "Statistiques et probabilités"
+  },
+  "can3S1": {
+    "titre": "Statistiques"
+  },
+  "can3S2": {
+    "titre": "Probabilités"
   },
   "can2F": {
     "titre": "Fonctions"

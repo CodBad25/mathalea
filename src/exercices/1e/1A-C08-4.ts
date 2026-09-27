@@ -1,4 +1,4 @@
-import ReduireAvecFraction from '../can/3e/can3L06'
+import ReduireAvecFraction from '../can/3e/can3L2-01'
 
 export const uuid = 'c1c68'
 export const refs = {

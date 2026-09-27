@@ -1,4 +1,4 @@
-import CalculProduitSommeImageParFonctionAffine from '../can/3e/can3F14'
+import CalculProduitSommeImageParFonctionAffine from '../can/3e/can3F2-07'
 export const titre =
   "Calculer un produit ou une somme d'images par une fonction affine"
 export const dateDePublication = '23/07/2025'
@@ -7,7 +7,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can3F14 pour les auto 1er
+ * Clone de can3F2-07 pour les auto 1er
  * @author Gilles Mora
  */
 
