@@ -76,7 +76,7 @@ export default class Resolutionavecformecanonique extends Exercice {
         c,
         delta,
         alpha,
-        reponse,
+        reponse = '',
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
