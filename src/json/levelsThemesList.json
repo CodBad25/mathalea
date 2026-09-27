@@ -80,26 +80,56 @@
   "can5N": {
     "titre": "Numération"
   },
-  "can4A": {
-    "titre": "Algorithmes"
-  },
   "can4C": {
     "titre": "Calculs"
   },
-  "can4D": {
-    "titre": "Durées"
+  "can4C1": {
+    "titre": "Nombres relatifs"
+  },
+  "can4C2": {
+    "titre": "Fractions"
+  },
+  "can4C21": {
+    "titre": "Écritures, comparaisons"
+  },
+  "can4C22": {
+    "titre": "Calculs avec des fractions"
+  },
+  "can4C3": {
+    "titre": "Puissances"
+  },
+  "can4C4": {
+    "titre": "Calculs numériques"
   },
   "can4G": {
     "titre": "Géométrie"
   },
+  "can4G1": {
+    "titre": "Théorème de Pythagore"
+  },
+  "can4G2": {
+    "titre": "Thalès, agrandissements, transformations"
+  },
+  "can4G3": {
+    "titre": "Périmètres, aires, angles"
+  },
   "can4P": {
+    "titre": "Proportionnalité, pourcentages"
+  },
+  "can4P1": {
     "titre": "Proportionnalité"
+  },
+  "can4P2": {
+    "titre": "Pourcentages"
   },
   "can4L": {
     "titre": "Calcul littéral"
   },
-  "can4N": {
-    "titre": "Numération"
+  "can4L1": {
+    "titre": "Équations"
+  },
+  "can4L2": {
+    "titre": "Expressions littérales"
   },
   "can3C": {
     "titre": "Calculs"

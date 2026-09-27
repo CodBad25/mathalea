@@ -124,6 +124,10 @@ ses refs suivent le format `<sous-rubrique>-<numéro>` (`can2N10-01`,
 et `can2G3`. Une question qui appartient à deux sous-rubriques porte une ref
 dans chacune (par exemple `can2F12-04` et `can2F20-08`).
 
+La Course aux nombres de Quatrième est découpée en rubriques numérotées à
+partir de 1 (`can4C` contient `can4C1` à `can4C4`), et ses refs suivent le
+format `<rubrique>-<numéro>` (`can4C1-01`).
+
 La Course aux nombres de Troisième est découpée en rubriques numérotées à
 partir de 1 (`can3C` contient `can3C1` à `can3C4`), et ses refs suivent le
 format `<rubrique>-<numéro>` (`can3C1-01`). Les domaines sans rubrique

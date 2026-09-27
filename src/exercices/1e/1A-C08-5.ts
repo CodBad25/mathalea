@@ -1,4 +1,4 @@
-import ReduireDecimaux from '../can/4e/can4L09'
+import ReduireDecimaux from '../can/4e/can4L2-06'
 
 export const uuid = 'c4012'
 export const refs = {
