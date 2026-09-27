@@ -63,6 +63,10 @@ function compareNombres(a: number, b: number) {
   return a - b
 }
 
+function scriptPythonTypst(code: string): string {
+  return `<mathalea-typst>#box(stroke: 0.6pt + luma(60), inset: (x: 6pt, y: 5pt))[#raw(${JSON.stringify(code)}, block: true, lang: "python")]</mathalea-typst>`
+}
+
 export default class SujetCAN2023Seconde extends Exercice {
   constructor() {
     super()
@@ -468,7 +472,9 @@ export default class SujetCAN2023Seconde extends Exercice {
             a = randint(2, 9)
 
             texte = 'Soit le script python : <br>'
-            if (context.isHtml) {
+            if (context.isTypst) {
+              texte += scriptPythonTypst(`def calcul(a) :\n    return a*a-${b}`)
+            } else if (context.isHtml) {
               texte += '$\\begin{array}{|l|}\n'
               texte += '\\hline\n'
               texte += '\\\n \\texttt{def calcul(a) :}  \\\n '
@@ -499,7 +505,11 @@ export default class SujetCAN2023Seconde extends Exercice {
             a = randint(2, 9)
             c = randint(2, 9)
             texte = 'Soit le script python : <br>'
-            if (context.isHtml) {
+            if (context.isTypst) {
+              texte += scriptPythonTypst(
+                `def calcul(a,b) :\n    return a*b-${c}`,
+              )
+            } else if (context.isHtml) {
               texte += '$\\begin{array}{|l|}\n'
               texte += '\\hline\n'
               texte += '\\\n \\texttt{def calcul(a,b) :}  \\\n '

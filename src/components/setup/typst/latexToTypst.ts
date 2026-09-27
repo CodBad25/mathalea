@@ -494,9 +494,10 @@ function formatePrixProfCollege(valeur: string, decimales: string): string {
 }
 
 /**
- * Macros ProfCollege `\Lg[cm]{5}` (longueur) et `\Prix[0]{12}` (prix en
- * euros). Elles n'existent que dans le préambule de la sortie LaTeX, mais les
- * `canEnonce`/`canReponseACompleter` des « Course aux nombres » les écrivent
+ * Macros ProfCollege `\Lg[cm]{5}` (longueur), `\Capa[cL]{5}` (capacité) et
+ * `\Prix[0]{12}` (prix en euros). Elles n'existent que dans le préambule de la
+ * sortie LaTeX, mais les `canEnonce`/`canReponseACompleter` des « Course aux
+ * nombres » les écrivent
  * sans tester `context.isHtml` : elles arrivent donc telles quelles dans la
  * conversion Typst, où `$\Lg[mm]{24}$` devient la variable inconnue `Lg`
  * (erreur de compilation, ex. canc3a-2023). L'argument entre accolades peut
@@ -509,12 +510,15 @@ function remplaceMacrosProfCollege(
   format: (valeur: string, unite: string) => string,
 ): string {
   return text.replace(
-    /\\(Lg|Prix)\s*(?:\[([^\]]*)\])?\s*\{([^{}]*)\}/g,
+    /\\(Lg|Capa|Prix)\s*(?:\[([^\]]*)\])?\s*\{([^{}]*)\}/g,
     (_match, nom: string, option: string | undefined, valeur: string) => {
       const options = option ?? ''
       return nom === 'Prix'
         ? format(formatePrixProfCollege(valeur, options), '€')
-        : format(valeur.trim(), options.trim())
+        : format(
+            valeur.trim(),
+            nom === 'Capa' && option == null ? 'L' : options.trim(),
+          )
     },
   )
 }
@@ -3382,6 +3386,8 @@ export function htmlToTypst(
   // LaTeX explicite (ex. can6a-2026 : `Viens-tu à vélo ? \\\medskip …`) :
   // ce `\\` est absorbé avec la commande pour ne pas fuir en texte littéral.
   text = text.replace(/\\underline\s*\{([^{}]*)\}/g, '<u>$1</u>')
+  // Certaines réponses CAN utilisent des pointillés LaTeX hors mode maths.
+  text = text.replace(/\\(?:ldots|dots)\b(?:\s*\{\})?/g, '... ... ...')
   text = text.replace(/\\qquad\b\s*/g, () => protect('#h(2em)'))
   text = text.replace(/\\quad\b\s*/g, () => protect('#h(1em)'))
   text = text.replace(/(?:\\\\\s*)?\\medskip\b\s*/g, () =>
