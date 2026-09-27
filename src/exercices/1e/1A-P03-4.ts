@@ -1,4 +1,4 @@
-import CalculProbaSimple from '../can/3e/can3S01'
+import CalculProbaSimple from '../can/3e/can3S2-01'
 
 export const titre = 'Calculer une probabilité dans un cas simple'
 export const dateDePublication = '06/01/2026'
@@ -7,7 +7,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can3S01 pour les auto 1er
+ * Clone de can3S2-01 pour les auto 1er
  * @author Gilles Mora
  */
 export const uuid = '79057'

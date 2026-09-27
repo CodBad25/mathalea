@@ -1,4 +1,4 @@
-import ImageSpline from '../can/3e/can3F01'
+import ImageSpline from '../can/3e/can3F1-01'
 export const titre = 'Lire une image graphiquement'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can3F01 pour les auto 1er
+ * Clone de can3F1-01 pour les auto 1er
  * @author Gilles Mora
  */
 

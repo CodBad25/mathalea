@@ -38,13 +38,31 @@
     },
     "3e": {
       "can3a": {},
-      "can3C": {},
-      "can3F": {},
-      "can3G": {},
-      "can3L": {},
+      "can3C": {
+        "can3C1": {},
+        "can3C2": {},
+        "can3C3": {},
+        "can3C4": {}
+      },
+      "can3F": {
+        "can3F1": {},
+        "can3F2": {},
+        "can3F3": {}
+      },
+      "can3G": {
+        "can3G1": {},
+        "can3G2": {}
+      },
+      "can3L": {
+        "can3L1": {},
+        "can3L2": {}
+      },
       "can3M": {},
       "can3P": {},
-      "can3S": {}
+      "can3S": {
+        "can3S1": {},
+        "can3S2": {}
+      }
     },
     "2e": {
       "can2a": {},

@@ -1,4 +1,4 @@
-import MoyenneStat from '../can/3e/can3S05'
+import MoyenneStat from '../can/3e/can3S1-02'
 export const titre = 'Calculer une moyenne'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can3S05 pour les auto 1er
+ * Clone de can3S1-02 pour les auto 1er
  * @author Gilles Mora
  */
 
