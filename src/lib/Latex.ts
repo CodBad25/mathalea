@@ -957,7 +957,7 @@ class Latex {
     // Les réglages de mise en page des vues d'export n'ont aucun sens dans un
     // lien vers la vue élève, et sont assez volumineux pour rendre le lien
     // (repris dans l'en-tête de la fiche) illisible.
-    for (const param of ['pdfParam', 'texParam', 'typstParam', 'a4Param']) {
+    for (const param of ['pdfParam', 'texParam', 'typstParam']) {
       currentUrl.searchParams.delete(param)
     }
     return currentUrl

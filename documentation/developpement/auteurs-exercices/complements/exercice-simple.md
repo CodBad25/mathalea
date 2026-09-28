@@ -153,7 +153,7 @@ exercice à une seule question, ces méthodes reviennent à `choice()` et
 ## Spécificités de la Course aux nombres
 
 - Les questions de CAN sont rangées dans `src/exercices/can/` par niveau, avec
-  une référence commençant par `can` (`can6C04`, `can2L07`…).
+  une référence commençant par `can` (`can6C2-02`, `can2L10-01`…).
 - Pour la version papier du concours, `this.canEnonce` remplace l'énoncé dans
   la grille et `this.canReponseACompleter` donne la zone à compléter (par
   exemple `$\\ldots < 3{,}5 < \\ldots$`).

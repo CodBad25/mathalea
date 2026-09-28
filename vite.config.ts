@@ -20,7 +20,7 @@ export default defineConfig({
       'blockly/core',
       'blockly/javascript',
       'blockly/msg/en',
-      'scratch-blocks/dist/vertical',
+      'scratch-blocks',
     ],
   },
   build: {

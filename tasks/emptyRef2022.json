@@ -10,41 +10,121 @@
     },
     "6e": {
       "can6a": {},
-      "can6C": {},
-      "can6D": {},
-      "can6G": {},
+      "can6C": {
+        "can6C1": {},
+        "can6C2": {},
+        "can6C3": {},
+        "can6C4": {},
+        "can6C5": {
+          "can6C51": {},
+          "can6C52": {},
+          "can6C53": {}
+        },
+        "can6C6": {},
+        "can6C7": {}
+      },
+      "can6D": {
+        "can6D1": {},
+        "can6D2": {},
+        "can6D3": {}
+      },
+      "can6G": {
+        "can6G1": {},
+        "can6G2": {},
+        "can6G3": {}
+      },
       "can6I": {},
-      "can6M": {},
-      "can6N": {},
-      "can6P": {},
+      "can6M": {
+        "can6M1": {},
+        "can6M2": {},
+        "can6M3": {},
+        "can6M4": {}
+      },
+      "can6N": {
+        "can6N1": {},
+        "can6N2": {
+          "can6N21": {},
+          "can6N22": {}
+        },
+        "can6N3": {}
+      },
+      "can6P": {
+        "can6P1": {},
+        "can6P2": {}
+      },
       "can6S": {}
     },
     "5e": {
       "can5a": {},
       "can5A": {},
-      "can5C": {},
+      "can5C": {
+        "can5C1": {},
+        "can5C2": {},
+        "can5C3": {},
+        "can5C4": {},
+        "can5C5": {},
+        "can5C6": {}
+      },
       "can5D": {},
       "can5G": {},
       "can5L": {},
-      "can5N": {},
-      "can5P": {}
+      "can5P": {
+        "can5P1": {},
+        "can5P2": {}
+      }
     },
     "4e": {
       "can4a": {},
-      "can4C": {},
-      "can4G": {},
-      "can4L": {},
-      "can4P": {}
+      "can4C": {
+        "can4C1": {},
+        "can4C2": {
+          "can4C21": {},
+          "can4C22": {}
+        },
+        "can4C3": {},
+        "can4C4": {}
+      },
+      "can4G": {
+        "can4G1": {},
+        "can4G2": {},
+        "can4G3": {}
+      },
+      "can4L": {
+        "can4L1": {},
+        "can4L2": {}
+      },
+      "can4P": {
+        "can4P1": {},
+        "can4P2": {}
+      }
     },
     "3e": {
       "can3a": {},
-      "can3C": {},
-      "can3F": {},
-      "can3G": {},
-      "can3L": {},
+      "can3C": {
+        "can3C1": {},
+        "can3C2": {},
+        "can3C3": {},
+        "can3C4": {}
+      },
+      "can3F": {
+        "can3F1": {},
+        "can3F2": {},
+        "can3F3": {}
+      },
+      "can3G": {
+        "can3G1": {},
+        "can3G2": {}
+      },
+      "can3L": {
+        "can3L1": {},
+        "can3L2": {}
+      },
       "can3M": {},
       "can3P": {},
-      "can3S": {}
+      "can3S": {
+        "can3S1": {},
+        "can3S2": {}
+      }
     },
     "2e": {
       "can2a": {},
@@ -107,30 +187,50 @@
     "1e": {
       "can1a": {},
       "can1D": {
-        "can1D0": {},
         "can1D1": {},
-        "can1D2": {}
+        "can1D2": {},
+        "can1D3": {}
       },
       "can1SD": {
-        "can1SD0": {},
-        "can1SD1": {},
-        "can1SD2": {}
+        "can1SD1": {
+          "can1SD11": {},
+          "can1SD12": {}
+        },
+        "can1SD2": {
+          "can1SD21": {},
+          "can1SD22": {},
+          "can1SD23": {}
+        },
+        "can1SD3": {}
       },
       "can1E": {
         "can1E1": {},
         "can1E2": {}
       },
-      "can1G": {},
+      "can1G": {
+        "can1G1": {},
+        "can1G2": {}
+      },
       "can1L": {},
-      "can1P": {},
+      "can1P": {
+        "can1P1": {
+          "can1P11": {},
+          "can1P12": {},
+          "can1P13": {}
+        },
+        "can1P2": {}
+      },
       "can1S": {
-        "can1S0": {},
-        "can1S1": {}
+        "can1S1": {},
+        "can1S2": {
+          "can1S21": {},
+          "can1S22": {}
+        }
       },
       "can1F": {
-        "can1F0": {},
         "can1F1": {},
-        "can1F2": {}
+        "can1F2": {},
+        "can1F3": {}
       }
     },
     "Terminale": {
@@ -1621,8 +1721,16 @@
       },
       "TEA2": {},
       "TEA3": {},
-      "TEM1": {},
-      "TEM2": {}
+      "TEM1": {
+        "TEM1-1": {},
+        "TEM1-2": {},
+        "TEM1-3": {}
+      },
+      "TEG1": {
+        "TEG1-1": {},
+        "TEG1-2": {},
+        "TEG1-3": {}
+      }
     },
     "Terminale Complementaire": {
       "TCA1": {

@@ -105,6 +105,17 @@
     /** URL des QR-codes globaux, par sujet, lues dans le code Typst */
     qrCodeUrls?: Record<number, string>
     /**
+     * Titre courant de la fiche (`documentOptions.title`), utilisé pour
+     * composer le titre du raccourci edurl.fr (voir `onGetFicheLongUrl`).
+     */
+    ficheTitle?: string
+    /**
+     * Nombre de sujets (Sujet A, B, C...) de la fiche : au-delà de 1, un
+     * raccourcissement edurl.fr lancé depuis un sujet raccourcit aussi
+     * automatiquement l'URL propre à chacun des autres (voir `shortenViaEdurl`).
+     */
+    nbVersions?: number
+    /**
      * Étiquette « Sujet A/B... » masquée : reste dans le document (`hide()`,
      * voir `headerBlock`), pour que les élèves n'y lisent pas leur version.
      */
@@ -148,6 +159,13 @@
     onUpdateCoverConsignes: (consignes: string[]) => void
     onUpdateFooterText: (value: string) => void
     onUpdateQrCodeUrl: (version: number, value: string) => void
+    /**
+     * URL longue de la fiche pour le sujet indiqué, recalculée à la volée
+     * (indépendamment de ce que porte déjà le QR-code dans le code Typst,
+     * qui peut avoir été raccourcie ou personnalisée) : c'est elle qu'on
+     * raccourcit via edurl.fr. `undefined` si aucun exercice imprimable.
+     */
+    onGetFicheLongUrl: (version: number) => string | undefined
     /** Affiche ou masque l'étiquette « Sujet A/B... » de l'en-tête */
     onToggleVersionLabel: () => void
     /** Nombre de questions par exercice (null : non réglable) */
@@ -257,6 +275,8 @@
     coverTemplate = 'aucune',
     footerText = '',
     qrCodeUrls = {},
+    ficheTitle = '',
+    nbVersions = 1,
     hideVersionLabel = false,
     onAdjustColumns,
     onAdjustGutter,
@@ -272,6 +292,7 @@
     onUpdateCoverConsignes,
     onUpdateFooterText,
     onUpdateQrCodeUrl,
+    onGetFicheLongUrl,
     onToggleVersionLabel,
     questionCounts = {},
     staticExercises = {},
@@ -452,6 +473,9 @@
     if (qrCodeOpen) {
       qrCodeVersion = version
       qrCodeDraft = qrCodeUrls[version] ?? ''
+      edurlAskToken = false
+      edurlError = ''
+      edurlTokenSaved = getEdurlToken() != null
     }
   }
 
@@ -459,6 +483,159 @@
     if (qrCodeDraft !== (qrCodeUrls[qrCodeVersion] ?? ''))
       onUpdateQrCodeUrl(qrCodeVersion, qrCodeDraft)
     qrCodeOpen = false
+  }
+
+  /**
+   * Raccourcissement de l'URL du QR-code global via edurl.fr (API Shlink de
+   * raccourcisseur.apps.education.fr), en appel direct depuis MathALÉA vers
+   * le relais CORS n8n existant — même principe que le widget autonome
+   * `poc-widget-edurl`, sans en reprendre l'iframe : le jeton est ici propre
+   * à MathALÉA (clef localStorage dédiée, non partagée avec le widget, les
+   * deux vivant sur des origines différentes).
+   *
+   * L'URL raccourcie est toujours celle recalculée à la volée par
+   * `onGetFicheLongUrl` — jamais le contenu actuel de `qrCodeDraft`, qui peut
+   * déjà être une URL courte ou collée à la main : on ne raccourcit jamais un
+   * raccourci, et un collage manuel reste un choix delibéré de l'utilisateur
+   * qu'un clic sur « Raccourcir » n'écrase pas silencieusement.
+   */
+  const EDURL_TOKEN_KEY = 'mathalea-edurl-token'
+  const EDURL_API_URL =
+    'https://n8n.incubateur.education.gouv.fr/webhook/mathalea-edurl-relay'
+
+  function getEdurlToken(): string | null {
+    try {
+      return window.localStorage.getItem(EDURL_TOKEN_KEY)
+    } catch {
+      return null
+    }
+  }
+
+  function setEdurlToken(value: string) {
+    try {
+      window.localStorage.setItem(EDURL_TOKEN_KEY, value)
+    } catch {
+      // stockage indisponible (navigation privée, quota...) : le jeton sera
+      // simplement redemandé au prochain raccourcissement
+    }
+  }
+
+  function clearEdurlToken() {
+    try {
+      window.localStorage.removeItem(EDURL_TOKEN_KEY)
+    } catch {
+      // rien à faire : sans stockage, il n'y avait de toute façon rien à retirer
+    }
+  }
+
+  let edurlAskToken = $state(false)
+  let edurlTokenInput = $state('')
+  let edurlTokenSaved = $state(false)
+  let edurlBusy = $state(false)
+  let edurlError = $state('')
+
+  function pad2(n: number): string {
+    return String(n).padStart(2, '0')
+  }
+
+  /** `mathalea-<date>-<hhmmss>-<titre de la fiche>`, heure locale du poste */
+  function edurlLinkTitle(): string {
+    const now = new Date()
+    const date = `${now.getFullYear()}${pad2(now.getMonth() + 1)}${pad2(now.getDate())}`
+    const time = `${pad2(now.getHours())}${pad2(now.getMinutes())}${pad2(now.getSeconds())}`
+    return `mathalea-${date}-${time}-${ficheTitle}`
+  }
+
+  async function callEdurl(longUrl: string, token: string): Promise<string> {
+    const response = await fetch(EDURL_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        longUrl,
+        title: edurlLinkTitle(),
+        enabled: true,
+        token,
+      }),
+    })
+    if (response.status === 401) {
+      throw { code: 'TOKEN_INVALID' }
+    }
+    if (!response.ok) {
+      const text = await response.text().catch(() => '')
+      throw { code: 'HTTP_ERROR', message: text || `Erreur ${response.status}` }
+    }
+    const data = await response.json()
+    return data.shortUrl
+  }
+
+  /** Lance (ou relance après saisie du jeton) le raccourcissement edurl.fr */
+  async function shortenViaEdurl() {
+    edurlError = ''
+    const longUrl = onGetFicheLongUrl(qrCodeVersion)
+    if (longUrl == null) {
+      edurlError = 'Aucun exercice imprimable : pas d’URL de fiche à raccourcir.'
+      return
+    }
+    const token = getEdurlToken()
+    if (token == null) {
+      edurlAskToken = true
+      return
+    }
+    edurlBusy = true
+    try {
+      qrCodeDraft = await callEdurl(longUrl, token)
+      // Fiche à plusieurs sujets : chacun pointe vers son propre contenu
+      // (URL longue distincte), donc chacun reçoit son propre raccourci
+      // edurl.fr — pas une copie de celui du sujet en cours. Les sujets qui
+      // échouent (jeton déjà validé ici, mais une erreur amont éphémère
+      // reste possible) gardent leur URL courante plutôt que de bloquer les
+      // suivants ; `edurlError` rapporte alors la liste des sujets en échec.
+      const failedVersions: string[] = []
+      for (let version = 0; version < nbVersions; version += 1) {
+        if (version === qrCodeVersion) continue
+        const otherLongUrl = onGetFicheLongUrl(version)
+        if (otherLongUrl == null) continue
+        try {
+          const shortUrl = await callEdurl(otherLongUrl, token)
+          onUpdateQrCodeUrl(version, shortUrl)
+        } catch {
+          failedVersions.push(String.fromCharCode(65 + version))
+        }
+      }
+      if (failedVersions.length > 0) {
+        edurlError = `Raccourcissement échoué pour le(s) sujet(s) ${failedVersions.join(', ')} : URL conservée telle quelle pour ce(s) sujet(s).`
+      }
+    } catch (err) {
+      const code = (err as { code?: string } | undefined)?.code
+      if (code === 'TOKEN_INVALID') {
+        clearEdurlToken()
+        edurlTokenSaved = false
+        edurlAskToken = true
+        edurlError = "Ce jeton n'est plus valide. Merci d'en saisir un nouveau."
+      } else {
+        edurlError =
+          (err as { message?: string } | undefined)?.message ??
+          'Une erreur est survenue.'
+      }
+    } finally {
+      edurlBusy = false
+    }
+  }
+
+  function saveEdurlTokenAndShorten() {
+    const value = edurlTokenInput.trim()
+    if (!value) return
+    setEdurlToken(value)
+    edurlTokenInput = ''
+    edurlTokenSaved = true
+    edurlAskToken = false
+    shortenViaEdurl()
+  }
+
+  function forgetEdurlToken() {
+    clearEdurlToken()
+    edurlTokenSaved = false
+    edurlAskToken = false
   }
 
   /** Brouillons d'édition des insertions existantes du panneau ouvert */
@@ -1032,6 +1209,70 @@
                 }}
               />
             </label>
+
+            <!-- Raccourcissement automatique via edurl.fr : reste optionnel, le
+                 champ ci-dessus accepte toujours une URL collée à la main. -->
+            <div class="space-y-1 border-t border-gray-200 pt-2">
+              {#if edurlAskToken}
+                <label class="block space-y-0.5">
+                  <span class="text-[0.65rem] uppercase text-gray-500">Jeton d’accès edurl.fr</span>
+                  <input
+                    type="password"
+                    class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
+                    autocomplete="off"
+                    spellcheck="false"
+                    bind:value={edurlTokenInput}
+                    onkeydown={(e) => {
+                      if (e.key === 'Enter') saveEdurlTokenAndShorten()
+                      if (e.key === 'Escape') edurlAskToken = false
+                    }}
+                  />
+                </label>
+                <div class="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    class="px-2 py-0.5 hover:text-coopmaths-action"
+                    onclick={() => (edurlAskToken = false)}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded bg-coopmaths-action px-2 py-0.5 text-white"
+                    onclick={saveEdurlTokenAndShorten}
+                  >
+                    Enregistrer et raccourcir
+                  </button>
+                </div>
+              {:else}
+                <div class="flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    class="flex items-center gap-1 text-xs text-coopmaths-action disabled:opacity-50"
+                    disabled={edurlBusy}
+                    onclick={shortenViaEdurl}
+                  >
+                    {#if edurlBusy}
+                      <i class="bx bx-loader-alt bx-spin"></i>
+                    {/if}
+                    Raccourcir via edurl.fr
+                  </button>
+                  {#if edurlTokenSaved}
+                    <button
+                      type="button"
+                      class="text-[0.65rem] text-gray-500 hover:text-coopmaths-action"
+                      onclick={forgetEdurlToken}
+                    >
+                      Oublier le jeton
+                    </button>
+                  {/if}
+                </div>
+              {/if}
+              {#if edurlError}
+                <p class="text-[0.65rem] text-red-600">{edurlError}</p>
+              {/if}
+            </div>
+
             <div class="flex justify-end gap-2">
               <button
                 type="button"
@@ -1782,9 +2023,7 @@
 </div>
 
 <style>
-  /* Toolbars de la palette de mise en page : même style que la vue A4
-     (fond blanc plein, bordure bleu clair, ombre nette) pour une bonne
-     visibilité par-dessus le document. */
+  /* Toolbars de la palette de mise en page, visibles par-dessus le document. */
   .typst-pill {
     background: white;
     border: 1px solid #b9d4f1;

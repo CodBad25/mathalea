@@ -265,10 +265,10 @@
    * Gérer le téléchargement des images dans une archive `images.zip` lors du clic sur le bouton du modal
    * @author sylvain
    */
-  function handleActionFromDownloadPicsModal() {
+  async function handleActionFromDownloadPicsModal() {
     // console.log('handleActionFromDownloadPicsModal')
     const imagesFilesUrls = makeImageFilesUrls(exercices)
-    downloadZip(imagesFilesUrls, 'images.zip')
+    await downloadZip(imagesFilesUrls, 'images.zip')
     isDownloadPicsModalDisplayed = false
   }
 
@@ -296,7 +296,7 @@
       picsWanted || /\\includegraphics/.test(latexForDownload.latexWithPreamble)
 
     if (picsWantedForDownload) {
-      downloadTexWithImagesZip('coopmaths', latexForDownload, exercices)
+      await downloadTexWithImagesZip('coopmaths', latexForDownload, exercices)
     } else {
       downloadFile(latexForDownload.latexWithPreamble, 'coopmaths.tex')
     }

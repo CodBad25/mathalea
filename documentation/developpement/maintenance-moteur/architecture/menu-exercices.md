@@ -124,6 +124,32 @@ ses refs suivent le format `<sous-rubrique>-<numéro>` (`can2N10-01`,
 et `can2G3`. Une question qui appartient à deux sous-rubriques porte une ref
 dans chacune (par exemple `can2F12-04` et `can2F20-08`).
 
+La Course aux nombres de Sixième est découpée en rubriques numérotées à partir
+de 1 (`can6C` contient `can6C1` à `can6C7`, et `can6C5` est elle-même divisée
+en `can6C51` à `can6C53`). Ses refs suivent le format `<rubrique>-<numéro>`
+(`can6C1-01`, `can6C51-01`). Les domaines sans rubrique (`can6I`, `can6S`)
+portent directement des refs `can6I-01`, `can6S-01`…
+
+La Course aux nombres de Cinquième est découpée en rubriques numérotées à
+partir de 1 (`can5C` contient `can5C1` à `can5C6`), et ses refs suivent le
+format `<rubrique>-<numéro>` (`can5C1-01`). Les domaines sans rubrique
+(`can5A`, `can5D`, `can5G`, `can5L`) portent directement des refs `can5D-01`…
+
+La Course aux nombres de Quatrième est découpée en rubriques numérotées à
+partir de 1 (`can4C` contient `can4C1` à `can4C4`), et ses refs suivent le
+format `<rubrique>-<numéro>` (`can4C1-01`).
+
+La Course aux nombres de Troisième est découpée en rubriques numérotées à
+partir de 1 (`can3C` contient `can3C1` à `can3C4`), et ses refs suivent le
+format `<rubrique>-<numéro>` (`can3C1-01`). Les domaines sans rubrique
+(`can3M`, `can3P`) portent directement des refs `can3M-01`, `can3P-01`.
+
+La Course aux nombres de Première suit le même principe, mais ses rubriques et
+sous-rubriques sont numérotées à partir de 1 : `can1SD` contient `can1SD1`
+(« Paraboles »), elle-même divisée en `can1SD11` et `can1SD12`, puis `can1SD2`
+et `can1SD3`. Les refs suivent le format `<rubrique ou sous-rubrique>-<numéro>`
+(`can1D1-01`, `can1SD11-01`, `can1SD3-01`).
+
 Dans les rubriques du lycée (seconde, première et terminale), `ReferentielNode.svelte` place explicitement en tête les exercices dont la référence contient `-flash`. Cette priorité ne modifie pas l'ordre des référentiels du collège.
 
 ## Génération par `tasks/dictionnaireToReferentiel.js`

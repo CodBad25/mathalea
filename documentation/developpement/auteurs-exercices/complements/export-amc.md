@@ -225,7 +225,7 @@ if (context.isAmc) {
 }
 ```
 
-Voir aussi `src/exercices/can/3e/can3C01.ts` pour un exercice existant qui garde `amcType = 'AMCNum'` et configure `basePuissance` / `exposantPuissance`.
+Voir aussi `src/exercices/can/3e/can3C2-01.ts` pour un exercice existant qui garde `amcType = 'AMCNum'` et configure `basePuissance` / `exposantPuissance`.
 
 ## Cas QCM
 
@@ -465,4 +465,4 @@ Quand un exercice échoue seulement en contexte AMC, cherchez d'abord les champs
 rg -n "amcReady|amcType|autoCorrectionAMC|questionsAMC|handleAnswers|propositionsQcm" src/exercices/chemin/de/lexercice.ts
 ```
 
-Puis comparez avec un exercice court du même type, par exemple un `AMCNum` simple dans `src/exercices/can/6e/can6C02.ts`, un QCM dans `src/exercices/can/6e/can6M01.ts`, ou un `AMCHybride` dans `src/exercices/can/6e/can6C15.ts`.
+Puis comparez avec un exercice court du même type, par exemple un `AMCNum` simple dans `src/exercices/can/6e/can6C2-01.ts`, un QCM dans `src/exercices/can/6e/can6M1-01.ts`, ou un `AMCHybride` dans `src/exercices/can/6e/can6C51-01.ts`.

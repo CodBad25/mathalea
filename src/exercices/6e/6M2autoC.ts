@@ -33,7 +33,7 @@ export const refs = {
 export default class AireParComptage extends Exercice {
   constructor() {
     super()
-    this.comment = `Une version course aux nombres de cet exercice est disponible sous la référence can6M14 pour l'aire et can6M15 pour le périmètre. Dans les versions can, il n'y a qu'une figure.<br>
+    this.comment = `Une version course aux nombres de cet exercice est disponible sous la référence can6M2-02 pour l'aire et can6M1-05 pour le périmètre. Dans les versions can, il n'y a qu'une figure.<br>
     Les figures sont générées aléatoirement à partir d'une aire choisie. Les possiblités sont nombreuses, mais aucune vérification n'a été faite afin d'éviter les doublons.`
     this.besoinFormulaireTexte = [
       'Aire maximale',

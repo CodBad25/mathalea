@@ -1,6 +1,6 @@
 # Vue Typst
 
-La vue Typst (`v=typst` dans l'URL) génère une fiche d'exercices au format [Typst](https://typst.app/docs/), compilée directement dans le navigateur. Elle est accessible depuis les boutons d'export de la page d'accueil (comme la vue A4, uniquement sur `localhost` ou avec `?beta=1`).
+La vue Typst (`v=typst` dans l'URL) génère une fiche d'exercices au format [Typst](https://typst.app/docs/), compilée directement dans le navigateur. Elle est accessible depuis les boutons d'export de la page d'accueil.
 
 ## Interfaces
 
@@ -469,7 +469,7 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.canMode`) : pend
 
 - **Détection automatique** (`Typst.svelte`, au chargement) : si la fiche ne
   contient que des exercices « can » (identifiant contenant `can`, ex.
-  `can6M20`), `canMode` est coché par défaut, le format passe en **A5**
+  `can6M4-07`), `canMode` est coché par défaut, le format passe en **A5**
   (feuille de passation plus petite), la [page de garde](#page-de-garde)
   bascule sur le modèle **Course aux nombres** et l'habillage en-tête sur
   **Aucun** (même raison que le choix manuel d'un modèle de page de garde :
@@ -639,6 +639,45 @@ Un repère `qr-code`, indexé par sujet, est émis au centre de chaque code : la
 
 La page de garde « Course aux nombres » termine par un saut de page. Lorsque cette présentation est active, elle reçoit donc le QR-code comme paramètre et le place avant ce saut : l'ajouter dans le bloc d'en-tête commun l'aurait placé sur la deuxième page, où le garde de première page l'aurait masqué.
 
+## Raccourcissement de l'URL du QR-code de fiche via edurl.fr
+
+Dans le popover d'édition du QR-code de fiche (widget `qr-code`, `TypstLayoutOverlay.svelte`), le champ de saisie manuelle de l'URL est accompagné d'un bouton « Raccourcir via edurl.fr », qui appelle l'API Shlink de `raccourcisseur.apps.education.fr` pour remplacer l'URL longue par une URL courte plus lisible sur un document imprimé. Limité à ce QR-code global : le QR-code par exercice (« QR-code vers l'exercice » ci-dessus) n'a pas de champ d'URL éditable et n'est donc pas concerné.
+
+La saisie manuelle de l'URL reste possible à tout moment, indépendamment de ce bouton : les deux voies remplissent le même champ (`qrCodeDraft`), et c'est toujours l'utilisateur qui valide (Entrée ou « Enregistrer ») pour l'écrire dans le source Typst — le clic sur « Raccourcir » ne l'applique jamais tout seul.
+
+### Toujours la vraie URL longue, jamais un raccourci de raccourci
+
+Le bouton ne repart jamais de ce qu'il y a dans le champ (qui peut déjà être une URL courte issue d'un raccourcissement précédent, ou collée à la main) : il redemande systématiquement l'URL longue d'origine via `onGetFicheLongUrl` (prop de `TypstLayoutOverlay.svelte`, implémentée dans `Typst.svelte` par `ficheUrlForVersion`), qui rappelle `buildAllVersionInputs()` puis la même fonction `ficheUrl` (`buildTypstDocument.ts`, désormais exportée) que celle qui calcule l'URL longue à la génération du document. Sans ce recalcul à la volée, la vraie URL longue serait perdue dès le premier raccourcissement : une fois écrite, `#let qr-code-global-url(-N) = "..."` dans le source ne contient plus que l'URL courte, et `qrCodeUrlValues` (lu depuis le code) ne reflète alors plus que celle-ci.
+
+### Jeton d'accès
+
+edurl.fr exige un jeton personnel (portail.apps.education.fr → Mon profil → Jeton d'accès). Il est stocké dans une clé localStorage dédiée, `mathalea-edurl-token`, séparée du blob de préférences (`STORAGE_KEY`) que gère par ailleurs `Typst.svelte` : ce n'est pas un réglage de mise en page, il ne doit donc pas être remis à zéro par « Réinitialiser les réglages ».
+
+Le popover gère tout le cycle de vie du jeton lui-même :
+
+- premier clic sur « Raccourcir » sans jeton enregistré (ou après un rejet, voir plus bas) : un champ `type="password"` apparaît à la place du bouton ; l'enregistrer relance immédiatement le raccourcissement ;
+- une fois un jeton présent, un lien « Oublier le jeton » reste visible à côté du bouton, pour le retirer et en ressaisir un autre à tout moment, sans attendre une erreur.
+
+Ce jeton est propre à MathALÉA : il n'est pas partagé avec celui du widget autonome `poc-widget-edurl` (voir plus bas), les deux vivant de toute façon sur des origines différentes et ne pouvant pas se partager de localStorage.
+
+### Titre du raccourci
+
+Le raccourci créé sur edurl.fr reçoit un titre composé `mathalea-<date>-<hhmmss>-<titre de la fiche>` (par exemple `mathalea-20260920-143512-Fiche d'exercices`), bâti par `edurlLinkTitle()` à partir de l'heure locale du poste et de `ficheTitle` (prop reflétant `documentOptions.title`, donc le titre éventuellement personnalisé par l'utilisateur, pas la valeur par défaut « Fiche d'exercices » figée).
+
+### Réseau : appel direct, pas d'iframe
+
+Contrairement au widget `poc-widget-edurl` (projet GitLab séparé, pensé pour être embarqué en iframe sur plusieurs sites via `postMessage`, afin d'isoler complètement le jeton du site hôte), l'intégration MathALÉA fait un appel `fetch` direct depuis `TypstLayoutOverlay.svelte` vers le même relais CORS n8n (`POST https://n8n.incubateur.education.gouv.fr/webhook/edurl-shorten-relay`, workflow « Raccourcisseur — Relais CORS edurl.fr », id `tF9a89KpEaj6zvtm`) : corps `{ longUrl, title, enabled: true, token }`, réponse `{ shortUrl }`. Le relais répond déjà `Access-Control-Allow-Origin: *`, aucune modification côté n8n n'a été nécessaire pour l'appeler depuis l'origine de MathALÉA. Ce choix simplifie l'UX (pas d'iframe cachée ni d'écoute `postMessage` dans un composant déjà dense) au prix de dupliquer la petite logique d'appel plutôt que de réutiliser le widget tel quel.
+
+Un jeton rejeté (`401`) est effacé du localStorage et le champ de saisie du jeton réapparaît avec un message d'erreur, sur le même principe que `poc-widget-edurl`.
+
+### Fichiers touchés
+
+| Fichier | Rôle dans cette fonctionnalité |
+| --- | --- |
+| `buildTypstDocument.ts` | `ficheUrl` exportée (était privée) pour être réutilisée hors génération du document |
+| `Typst.svelte` | `ficheUrlForVersion(version)` : recalcule l'URL longue à la volée ; props `ficheTitle` et `onGetFicheLongUrl` passées à `TypstLayoutOverlay` |
+| `TypstLayoutOverlay.svelte` | Clé localStorage `mathalea-edurl-token`, appel `fetch` vers le relais, composition du titre, UI du popover (bouton, spinner, formulaire de jeton, « Oublier le jeton », message d'erreur) |
+
 ## Impression recto-verso (démarrage sur page impaire)
 
 Case à cocher « Impression recto-verso » des Réglages du document (`TypstDocumentOptions.oddPageStarts`, **active par défaut**) : chaque partie qui commence sur une nouvelle page — le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions — commence sur une page impaire, Typst insérant au besoin une page blanche. En impression recto-verso en série, une partie ne commence ainsi jamais au dos de la précédente ; le partage énoncé/corrigé en deux PDF (`downloadPdfSeparate`) en profite de la même façon, chaque sujet y restant sur un recto.
@@ -666,7 +705,7 @@ Toutes les modifications de la fiche sont sauvegardées dans l'URL (paramètre `
 
 La liste des exercices, leurs graines et leurs réglages restent portés par les paramètres habituels de l'URL (`exercicesParams`), mis à jour par le store du même nom : suppression, déplacement, changement de graine ou de nombre de questions y sont déjà reflétés.
 
-`persistToUrl` (dans `Typst.svelte`) est appelée après chaque modification (réglage du document ou édition de la palette, via le `updateListener` de CodeMirror). Comme la vue A4 avec `a4Param`, elle écrit dans `typstParamStore` (source de vérité), redéclenche l'écrivain d'URL de l'app (`mathaleaUpdateUrlFromExercicesParams`, sinon sa prochaine écriture débouncée réécrirait l'URL sans `typstParam`) puis pose immédiatement le paramètre avec `history.replaceState`. Au chargement, `parsed.carryOver` est réinjecté dans la première génération du code (`buildCode` part de `urlCarryOver` tant que l'éditeur n'existe pas). `typstParam` est aussi le canal par lequel le diaporama transmet son nombre de vues (`goToTypstWithSeries`).
+`persistToUrl` (dans `Typst.svelte`) est appelée après chaque modification (réglage du document ou édition de la palette, via le `updateListener` de CodeMirror). Elle écrit dans `typstParamStore` (source de vérité), redéclenche l'écrivain d'URL de l'app (`mathaleaUpdateUrlFromExercicesParams`, sinon sa prochaine écriture débouncée réécrirait l'URL sans `typstParam`) puis pose immédiatement le paramètre avec `history.replaceState`. Au chargement, `parsed.carryOver` est réinjecté dans la première génération du code (`buildCode` part de `urlCarryOver` tant que l'éditeur n'existe pas). `typstParam` est aussi le canal par lequel le diaporama transmet son nombre de vues (`goToTypstWithSeries`).
 
 ## Visite guidée
 
@@ -705,7 +744,7 @@ Les constantes d'import (`EXERCISE_BANK_IMPORT`, `TASKIZE_IMPORT`, `VARTABLE_IMP
 
 ## Pipeline de génération
 
-1. Les exercices sont chargés comme dans la vue A4 (`buildExercisesList`, graines `alea`, contenu HTML avec formules KaTeX en `$...$`), en régénérant chaque exercice avec `context.isHtml = true` et `context.isTypst = true` (le rendu HTML est réutilisé, pas le rendu LaTeX). Voir [Variantes d'exercices — branches de rendu](../../auteurs-exercices/complements/variantes-exercices.md#branches-de-rendu) pour ce que cela implique côté code d'exercice (branches `context.isHtml` qui posent un composant interactif non convertible).
+1. Les exercices sont chargés avec `buildExercisesList` (graines `alea`, contenu HTML avec formules KaTeX en `$...$`), en régénérant chaque exercice avec `context.isHtml = true` et `context.isTypst = true` (le rendu HTML est réutilisé, pas le rendu LaTeX). Voir [Variantes d'exercices — branches de rendu](../../auteurs-exercices/complements/variantes-exercices.md#branches-de-rendu) pour ce que cela implique côté code d'exercice (branches `context.isHtml` qui posent un composant interactif non convertible).
 2. `buildTypstDocument` assemble le document : réglages éditables en tête de fichier (`#let colonnes`, `#let corrige`, `#let couleur`), en-tête de fiche, un bloc par exercice, section corrections dans un `#if corrige [...]`.
 3. `htmlToTypst` convertit chaque contenu : balises simples (`<br>`, `<b>`, `<i>`, `<sup>`, listes...) vers le balisage Typst, échappement des caractères spéciaux, et formules LaTeX converties par [tex2typst](https://github.com/qwinsi/tex2typst).
 
@@ -1113,7 +1152,7 @@ contient tous.
 
 `buildAllVersionInputs` (`Typst.svelte`) calcule le contenu de chaque sujet :
 le sujet A part de la graine de base (`exercicesParams`), les suivants d'une
-graine dérivée `${graineA}${index}` — même formule que la vue A4
+graine dérivée `${graineA}${index}` — même formule que le diaporama
 (`Diaporama.svelte` `reroll`), pour que le 2ᵉ sujet corresponde à la 2ᵉ vue du
 diaporama.
 

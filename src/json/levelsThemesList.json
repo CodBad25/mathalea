@@ -38,11 +38,59 @@
   "can6C": {
     "titre": "Calculs"
   },
+  "can6C1": {
+    "titre": "Tables, doubles, moitiés, compléments"
+  },
+  "can6C2": {
+    "titre": "Calcul astucieux"
+  },
+  "can6C3": {
+    "titre": "Nombres décimaux"
+  },
+  "can6C4": {
+    "titre": "Division euclidienne"
+  },
+  "can6C5": {
+    "titre": "Fractions"
+  },
+  "can6C51": {
+    "titre": "Écritures"
+  },
+  "can6C52": {
+    "titre": "Comparer"
+  },
+  "can6C53": {
+    "titre": "Calculer"
+  },
+  "can6C6": {
+    "titre": "Problèmes"
+  },
+  "can6C7": {
+    "titre": "Pyramides, énigmes, ordres de grandeur"
+  },
   "can6D": {
     "titre": "Durées"
   },
+  "can6D1": {
+    "titre": "Unités, conversions"
+  },
+  "can6D2": {
+    "titre": "Calculer des durées"
+  },
+  "can6D3": {
+    "titre": "Heures décimales, fractions d'heure"
+  },
   "can6G": {
     "titre": "Géométrie"
+  },
+  "can6G1": {
+    "titre": "Symétrie"
+  },
+  "can6G2": {
+    "titre": "Solides"
+  },
+  "can6G3": {
+    "titre": "Longueurs"
   },
   "can6I": {
     "titre": "Algorithmique"
@@ -50,11 +98,44 @@
   "can6M": {
     "titre": "Mesure"
   },
+  "can6M1": {
+    "titre": "Longueurs, périmètres"
+  },
+  "can6M2": {
+    "titre": "Aires"
+  },
+  "can6M3": {
+    "titre": "Volumes"
+  },
+  "can6M4": {
+    "titre": "Unités, conversions"
+  },
   "can6N": {
     "titre": "Numération"
   },
+  "can6N1": {
+    "titre": "Nombres entiers"
+  },
+  "can6N2": {
+    "titre": "Décimaux, fractions décimales"
+  },
+  "can6N21": {
+    "titre": "Fractions décimales"
+  },
+  "can6N22": {
+    "titre": "Écriture décimale, arrondis"
+  },
+  "can6N3": {
+    "titre": "Droites graduées"
+  },
   "can6P": {
+    "titre": "Proportionnalité, pourcentages"
+  },
+  "can6P1": {
     "titre": "Proportionnalité"
+  },
+  "can6P2": {
+    "titre": "Pourcentages"
   },
   "can6S": {
     "titre": "Statistiques"
@@ -65,6 +146,24 @@
   "can5C": {
     "titre": "Calculs"
   },
+  "can5C1": {
+    "titre": "Nombres entiers"
+  },
+  "can5C2": {
+    "titre": "Calcul astucieux"
+  },
+  "can5C3": {
+    "titre": "Nombres décimaux"
+  },
+  "can5C4": {
+    "titre": "Fractions"
+  },
+  "can5C5": {
+    "titre": "Nombres relatifs"
+  },
+  "can5C6": {
+    "titre": "Priorités, arithmétique"
+  },
   "can5D": {
     "titre": "Durées"
   },
@@ -72,7 +171,13 @@
     "titre": "Géométrie"
   },
   "can5P": {
+    "titre": "Proportionnalité, pourcentages"
+  },
+  "can5P1": {
     "titre": "Proportionnalité"
+  },
+  "can5P2": {
+    "titre": "Pourcentages"
   },
   "can5L": {
     "titre": "Calcul littéral"
@@ -86,32 +191,77 @@
   "can4C": {
     "titre": "Calculs"
   },
-  "can4D": {
-    "titre": "Durées"
+  "can4C1": {
+    "titre": "Nombres relatifs"
+  },
+  "can4C2": {
+    "titre": "Fractions"
+  },
+  "can4C21": {
+    "titre": "Écritures, comparaisons"
+  },
+  "can4C22": {
+    "titre": "Calculs avec des fractions"
+  },
+  "can4C3": {
+    "titre": "Puissances"
+  },
+  "can4C4": {
+    "titre": "Calculs numériques"
   },
   "can4G": {
     "titre": "Géométrie"
   },
+  "can4G1": {
+    "titre": "Théorème de Pythagore"
+  },
+  "can4G2": {
+    "titre": "Thalès, agrandissements, transformations"
+  },
+  "can4G3": {
+    "titre": "Périmètres, aires, angles"
+  },
   "can4P": {
+    "titre": "Proportionnalité, pourcentages"
+  },
+  "can4P1": {
     "titre": "Proportionnalité"
+  },
+  "can4P2": {
+    "titre": "Pourcentages"
   },
   "can4L": {
     "titre": "Calcul littéral"
   },
-  "can4N": {
-    "titre": "Numération"
+  "can4L1": {
+    "titre": "Équations"
   },
-  "can3A": {
-    "titre": "Algorithmes"
+  "can4L2": {
+    "titre": "Expressions littérales"
   },
   "can3C": {
     "titre": "Calculs"
   },
-  "can3D": {
-    "titre": "Durées"
+  "can3C1": {
+    "titre": "Fractions"
+  },
+  "can3C2": {
+    "titre": "Puissances, écriture scientifique"
+  },
+  "can3C3": {
+    "titre": "Racines carrées"
+  },
+  "can3C4": {
+    "titre": "Calculs numériques"
   },
   "can3G": {
     "titre": "Géométrie"
+  },
+  "can3G1": {
+    "titre": "Transformations"
+  },
+  "can3G2": {
+    "titre": "Théorèmes et trigonométrie"
   },
   "can3P": {
     "titre": "Proportionnalité"
@@ -119,8 +269,11 @@
   "can3L": {
     "titre": "Calcul littéral"
   },
-  "can3N": {
-    "titre": "Numération"
+  "can3L1": {
+    "titre": "Équations, inéquations"
+  },
+  "can3L2": {
+    "titre": "Expressions"
   },
   "can3M": {
     "titre": "Mesure"
@@ -128,8 +281,23 @@
   "can3F": {
     "titre": "Fonctions"
   },
+  "can3F1": {
+    "titre": "Vocabulaire, lectures graphiques"
+  },
+  "can3F2": {
+    "titre": "Calculs d'images et d'antécédents"
+  },
+  "can3F3": {
+    "titre": "Fonctions affines"
+  },
   "can3S": {
     "titre": "Statistiques et probabilités"
+  },
+  "can3S1": {
+    "titre": "Statistiques"
+  },
+  "can3S2": {
+    "titre": "Probabilités"
   },
   "can2F": {
     "titre": "Fonctions"
@@ -263,25 +431,40 @@
   "can1SD": {
     "titre": "Second degré"
   },
-  "can1SD0": {
+  "can1SD1": {
     "titre": "Paraboles"
   },
-  "can1SD1": {
-    "titre": "Equations - Inéquations"
+  "can1SD11": {
+    "titre": "Lectures graphiques"
+  },
+  "can1SD12": {
+    "titre": "Sommet et axe de symétrie"
   },
   "can1SD2": {
-    "titre": "Polynômes - Variations"
+    "titre": "Équations, inéquations, variations"
+  },
+  "can1SD21": {
+    "titre": "Discriminant, équations"
+  },
+  "can1SD22": {
+    "titre": "Inéquations, tableaux de signes"
+  },
+  "can1SD23": {
+    "titre": "Variations"
+  },
+  "can1SD3": {
+    "titre": "Différentes écritures"
   },
   "can1D": {
     "titre": "Dérivation"
   },
-  "can1D0": {
+  "can1D1": {
     "titre": "Tangentes - Nombre dérivé"
   },
-  "can1D1": {
+  "can1D2": {
     "titre": "Dérivées de polynômes"
   },
-  "can1D2": {
+  "can1D3": {
     "titre": "Dérivées"
   },
   "can1E": {
@@ -293,14 +476,20 @@
   "can1F": {
     "titre": "Fonctions"
   },
-  "can1F0": {
+  "can1F1": {
     "titre": "Généralités avec les fonctions"
   },
-  "can1F1": {
+  "can1F2": {
     "titre": "Fonctions de références"
   },
   "can1G": {
     "titre": "Géométrie"
+  },
+  "can1G1": {
+    "titre": "Produit scalaire"
+  },
+  "can1G2": {
+    "titre": "Trigonométrie"
   },
   "can1L": {
     "titre": "Calcul littéral"
@@ -308,14 +497,35 @@
   "can1P": {
     "titre": "Probabilités"
   },
+  "can1P1": {
+    "titre": "Probabilités conditionnelles"
+  },
+  "can1P11": {
+    "titre": "Arbres pondérés"
+  },
+  "can1P12": {
+    "titre": "Tableaux et calculs"
+  },
+  "can1P13": {
+    "titre": "Événements indépendants"
+  },
+  "can1P2": {
+    "titre": "Variable aléatoire"
+  },
   "can1S": {
     "titre": "Suites"
   },
-  "can1S0": {
+  "can1S1": {
     "titre": "Généralités avec les suites"
   },
-  "can1S1": {
+  "can1S2": {
     "titre": "Suites arithmétiques et géométriques"
+  },
+  "can1S21": {
+    "titre": "Nature d'une suite"
+  },
+  "can1S22": {
+    "titre": "Calculs, expression"
   },
   "canTEC1": {
     "titre": "Nombres complexes algèbre"
@@ -3449,8 +3659,32 @@
     "titre": "Les Matrices",
     "sousThemes": {}
   },
-  "TEM2": {
+  "TEM1-1": {
+    "titre": "Calcul matriciel",
+    "sousThemes": {}
+  },
+  "TEM1-2": {
+    "titre": "Matrice inverse et systèmes linéaires",
+    "sousThemes": {}
+  },
+  "TEM1-3": {
+    "titre": "Suites de matrices",
+    "sousThemes": {}
+  },
+  "TEG1": {
     "titre": "Les graphes",
+    "sousThemes": {}
+  },
+  "TEG1-1": {
+    "titre": "Vocabulaire des graphes",
+    "sousThemes": {}
+  },
+  "TEG1-2": {
+    "titre": "Matrice d'adjacence et chemins",
+    "sousThemes": {}
+  },
+  "TEG1-3": {
+    "titre": "Chaînes de Markov",
     "sousThemes": {}
   },
   "TEA1": {

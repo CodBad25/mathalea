@@ -21,12 +21,17 @@
       .replace(' ', '-')}"
   >
     {#if isInLine}
+      <!-- Pas de clé de contenu sur ce each : le bloc « Pour cette question »
+           (voir Keyboard.svelte) est entièrement reconstruit à chaque question
+           et partage souvent des touches (+, -, =...) avec la question
+           précédente. Une clé du style `key + '_' + index` fait alors
+           disparaître ces touches communes au lieu de les réutiliser. -->
       <div
         class="grid customgap h-full"
         style="grid-template-columns: repeat({block.keycaps.inline
           .length}, minmax(0, 1fr)); --gapsize:{gapsize};"
       >
-        {#each block.keycaps.inline as key, index (key + '_' + index)}
+        {#each block.keycaps.inline as key, index}
           <Key
             keyName={key}
             key={keys[key]}
@@ -42,7 +47,7 @@
         class="grid customgap h-full"
         style="grid-template-columns: repeat({block.cols}, minmax(0, 1fr)); --gapsize:{gapsize};"
       >
-        {#each block.keycaps.block as key, index (key + '_' + index)}
+        {#each block.keycaps.block as key, index}
           <Key
             keyName={key}
             key={keys[key]}

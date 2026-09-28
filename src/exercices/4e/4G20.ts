@@ -21,10 +21,8 @@ import Exercice from '../Exercice'
 import { RedactionPythagore } from './_pythagore'
 
 import { isFunction } from '@cortex-js/compute-engine'
-import type { MathfieldElement } from 'mathlive'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
-import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { ordreAlphabetique } from '../../lib/outils/ecritures'
@@ -36,8 +34,6 @@ export const titre = 'Calculer une longueur avec le théorème de Pythagore'
 export const amcType = 'AMCHybride'
 export const amcReady = true
 export const interactifReady = true
-
-const mathliveButtonsAction = '4G20:mathlive-buttons'
 
 /**
  * Fonction utilisée pour la vérification des questions de cet exercice.
@@ -81,6 +77,65 @@ export function pythagoreCompare(input: string, goodAnswer: string) {
             const inputT2 = inputSum.ops![1]
             const answerT1 = answerSum.ops![0]
             const answerT2 = answerSum.ops![1]
+
+            // L'élève a-t-il saisi une différence (ex. BC^2=AB^2-AC^2) plutôt que la somme attendue ?
+            const negatedTerm = [inputT1, inputT2].find(
+              (term) => term.operator === 'Negate',
+            )
+            if (negatedTerm && isFunction(answerT1) && isFunction(answerT2)) {
+              const positiveTerm = inputT1 === negatedTerm ? inputT2 : inputT1
+              const negatedInner = isFunction(negatedTerm)
+                ? negatedTerm.ops?.[0]
+                : undefined
+              const estCarre = (t: typeof inputT1 | undefined) =>
+                isFunction(t) &&
+                ['Square', 'Power'].includes(t.operator) &&
+                t.ops![1]?.toString() === '2'
+              if (
+                estCarre(positiveTerm) &&
+                estCarre(negatedInner) &&
+                estCarre(inputHypo) &&
+                isFunction(positiveTerm) &&
+                isFunction(negatedInner)
+              ) {
+                // La soustraction saisie n'est vraie que si le terme positif est le carré
+                // de la vraie hypoténuse et le terme soustrait est l'un des deux autres côtés
+                // (l'hypoténuse isolée devenant alors l'autre côté).
+                const positiveLettres = ordreAlphabetique(
+                  positiveTerm.ops![0].toString(),
+                )
+                const negativeLettres = ordreAlphabetique(
+                  negatedInner.ops![0].toString(),
+                )
+                const inputHypoLettres = ordreAlphabetique(
+                  inputHypo.ops![0].toString(),
+                )
+                const trueHypoLettres = ordreAlphabetique(
+                  answerHypo.ops![0].toString(),
+                )
+                const trueLeg1Lettres = ordreAlphabetique(
+                  answerT1.ops![0].toString(),
+                )
+                const trueLeg2Lettres = ordreAlphabetique(
+                  answerT2.ops![0].toString(),
+                )
+                const estVraie =
+                  positiveLettres === trueHypoLettres &&
+                  ((inputHypoLettres === trueLeg1Lettres &&
+                    negativeLettres === trueLeg2Lettres) ||
+                    (inputHypoLettres === trueLeg2Lettres &&
+                      negativeLettres === trueLeg1Lettres))
+                if (estVraie) {
+                  return {
+                    isOk: false,
+                    feedback:
+                      "Cette égalité est vraie, mais ce n'est pas l'égalité attendue : le carré de la longueur de l'hypoténuse est égal à la somme des carrés des longueurs des deux autres côtés.",
+                  }
+                }
+              }
+              return { isOk: false, feedback: "Cette égalité n'est pas vraie." }
+            }
+
             for (const term of [inputT1, inputT2]) {
               // On ne vérifie pas la réponse, c'est nous qui l'avons écrite
               if (!['Square', 'Power'].includes(term.operator)) {
@@ -499,10 +554,6 @@ export default class Pythagore2D extends Exercice {
           `\\mathrm{${ordreAlphabetique(A.nom + C.nom)}}^2`,
         ]
 
-        if (this.interactif) {
-          registerMathliveButtons()
-        }
-
         redaction = RedactionPythagore(
           A.nom,
           B.nom,
@@ -545,17 +596,9 @@ export default class Pythagore2D extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            `${KeyboardType.clavierDeBase} ${KeyboardType.alphanumeric}`,
+            KeyboardType.clavierEntierementPersonnalisable,
+            { dataKeys: [A.nom, B.nom, C.nom, '+', '-', '=', 'SQ'] },
           )
-          texte += DomReadyActionElement.create({
-            id: `containerForButtonsEx${this.numeroExercice}Q${i}`,
-            action: mathliveButtonsAction,
-            payload: {
-              numeroExercice: this.numeroExercice,
-              indiceQuestion: i,
-              labels: [A.nom, B.nom, C.nom],
-            },
-          })
         }
       }
       if (this.questionJamaisPosee(i, B1.x, B.y, C1.x, C1.y)) {
@@ -568,53 +611,4 @@ export default class Pythagore2D extends Exercice {
     }
     listeQuestionsToContenu(this)
   }
-}
-
-let mathliveButtonsRegistered = false
-
-function registerMathliveButtons() {
-  if (mathliveButtonsRegistered) return
-  mathliveButtonsRegistered = true
-  DomReadyActionElement.registerCallback<{
-    numeroExercice: number
-    indiceQuestion: number
-    labels: string[]
-  }>(mathliveButtonsAction, ({ element, payload }) => {
-    element.innerHTML = ''
-    element.classList.add('my-4')
-    const mathfield = document.querySelector(
-      `#champTexteEx${payload.numeroExercice}Q${payload.indiceQuestion}`,
-    ) as MathfieldElement | null
-    if (!mathfield) return
-
-    const cleanups: Array<() => void> = []
-    const addButton = (label: string, insertText: string) => {
-      const button = document.createElement('button')
-      button.textContent = label
-      button.className =
-        'inline-flex mx-4 justify-center items-center text-sm md:text-xl border-b-2 border-r border-r-slate-400 dark:border-r-gray-500 border-b-slate-300 dark:border-b-gray-600 active:border-b-0 active:border-r-0 text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light active:text-coopmaths-canvas active:translate-y-[1.5px] dark:active:text-coopmathsdark-canvas active:bg-coopmaths-action active:shadow-none dark:active:bg-coopmathsdark-action dark:active:shadow-none transition-transform ease-in-out shadow-[2px_2px_4px_rgba(180,180,180,0.5)] bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas py-1 px-1 md:py-2 md:px-4 text-center rounded-md font-mono touch-none'
-      const onClick = () => {
-        if (insertText === 'remove') {
-          mathfield.executeCommand('deleteBackward')
-        } else {
-          mathfield.insert(insertText)
-        }
-      }
-      button.addEventListener('click', onClick)
-      cleanups.push(() => button.removeEventListener('click', onClick))
-      element.appendChild(button)
-    }
-
-    payload.labels.forEach((label) => addButton(label, label))
-    addButton('+', '+')
-    addButton('-', '-')
-    addButton('=', '=')
-    addButton('²', '^2')
-    addButton('⌫', 'remove')
-
-    return () => {
-      cleanups.forEach((cleanup) => cleanup())
-      element.innerHTML = ''
-    }
-  })
 }

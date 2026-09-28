@@ -43,6 +43,7 @@ const RACCOURCIS: Record<string, KeyCap> = {
     insert: '\\sum_{#0}^{#1}',
   },
   SIN: { display: 'sin', insert: '\\sin(#0)' },
+  SQ: { display: '$\\square^2$', insert: '^2' },
   SQRT: { display: '$\\sqrt{\\square}$', insert: '\\sqrt{#1}' },
   VECT: {
     display: '$\\overrightarrow{\\square}$',

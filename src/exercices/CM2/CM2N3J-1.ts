@@ -28,7 +28,7 @@ export default class Ajouter9 extends Exercice {
   constructor() {
     super()
 
-    this.consigne = 'Calculer.'
+    this.consigne = 'Calculer :'
 
     this.nbCols = 2
     this.nbColsCorr = 2
@@ -40,13 +40,11 @@ export default class Ajouter9 extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       a = randint(0, 9) * 10 + randint(1, 9)
-      texte = `$${a}+9 = $`
+      texte = `$${a}+9$`
       texteCorr = `$${a}+9=${miseEnEvidence(texNombre(a + 9))}$`
       handleAnswers(this, i, { reponse: { value: a + 9 } })
       if (this.interactif) {
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-      } else {
-        texte += `$\\dots$`
+        texte += ` = ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)}`
       }
 
       if (this.listeQuestions.indexOf(texte) === -1) {

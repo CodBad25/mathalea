@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can5P11 pour les auto 1er
+ * Clone de can5P1-06 pour les auto 1er
  * @author Gilles Mora
  */
 

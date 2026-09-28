@@ -52,6 +52,7 @@
     buildStandaloneExerciseCode,
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    ficheUrl,
     getGeneratedCanRowCode,
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
@@ -326,7 +327,7 @@
    */
   let urlCarryOver: TypstCarryOver | null = null
   // Le diaporama (bouton « PDF sujets + corrigés ») transmet ici son nombre
-  // de vues via typstParam — comme le fait la vue A4 avec a4Param — pour que
+  // de vues via typstParam pour que
   // le nombre de sujets Typst corresponde au nombre de vues jouées. Depuis
   // que la vue Typst réécrit ce paramètre à chaque modification, il porte
   // aussi tous les réglages du document et de la mise en page (rechargeables).
@@ -2579,7 +2580,7 @@
     const encoded = encodeBase64({ options: documentOptions, carryOver })
     // le store est la source de vérité ; on redéclenche ensuite l'écrivain
     // d'URL de l'app pour que sa prochaine écriture (débouncée) reparte de
-    // cette valeur et ne réécrive pas l'URL sans typstParam (comme la vue A4)
+    // cette valeur et ne réécrive pas l'URL sans typstParam
     typstParamStore.set(encoded)
     mathaleaUpdateUrlFromExercicesParams()
     if (encoded === lastTypstParam) return
@@ -2916,7 +2917,7 @@
   /**
    * Contenu de chaque version du sujet (Sujet A, B...) : la version 0 utilise
    * la graine de base (visible dans les réglages), les suivantes une graine
-   * dérivée — même formule que la vue A4 (`Diaporama.svelte` `reroll`), pour
+   * dérivée — même formule que `Diaporama.svelte` (`reroll`), pour
    * que la 2e version corresponde à la 2e vue du diaporama.
    */
   function buildAllVersionInputs(): TypstExerciseInput[][] {
@@ -2950,6 +2951,19 @@
       if (exercise != null) exercise.seed = baseSeeds[k]
     }
     return perVersion
+  }
+
+  /**
+   * URL longue de la fiche pour un sujet donné, recalculée à la volée — passée
+   * à la palette de mise en page pour le raccourcissement edurl.fr du QR-code
+   * global : contrairement à `qrCodeUrlValues` (lu dans le code Typst), elle
+   * reste la vraie URL d'origine même après que le QR-code a déjà été
+   * raccourci ou personnalisé à la main.
+   */
+  function ficheUrlForVersion(version: number): string | undefined {
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const inputs = version === 0 ? primary : extraVersions[version - 1]
+    return inputs != null ? ficheUrl(inputs) : undefined
   }
 
   function buildCode(options: { dropWritingLines?: boolean } = {}): string {
@@ -3648,7 +3662,7 @@
     await loadExercises()
     // Course aux nombres par défaut si la fiche ne contient que des
     // exercices « can » (identifiant commençant par « can », comme
-    // `can6M20`) : présentation en tableau, format A5 (feuille de passation
+    // `can6M4-07`) : présentation en tableau, format A5 (feuille de passation
     // plus petite) et page de garde assortie — sauf si un lien partagé fixe
     // déjà l'un de ces réglages.
     const loaded = exercises.filter(
@@ -4896,6 +4910,8 @@
                     coverTemplate={documentOptions.coverPage.template}
                     footerText={footerValue}
                     qrCodeUrls={qrCodeUrlValues}
+                    ficheTitle={documentOptions.title}
+                    nbVersions={Math.max(1, documentOptions.nbVersions)}
                     hideVersionLabel={documentOptions.hideVersionLabel}
                     {documentColumns}
                     {questionCounts}
@@ -4933,6 +4949,7 @@
                     onUpdateCoverConsignes={updateCoverConsignes}
                     onUpdateFooterText={updateFooterText}
                     onUpdateQrCodeUrl={updateQrCodeUrl}
+                    onGetFicheLongUrl={ficheUrlForVersion}
                     onToggleVersionLabel={toggleVersionLabel}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}

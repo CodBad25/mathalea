@@ -9,6 +9,7 @@ const KEYBOARD_CATEGORIES = [
   'clavierHms',
   'clavierDeBase',
   'clavierPersonnalisable',
+  'clavierEntierementPersonnalisable',
   'clavierLimites',
   'clavierLectureLimites',
   'clavierLimitesSimple',
@@ -114,6 +115,10 @@ export const convertKeyboardTypeToBlocks = (
     // par `dataKeys` (voir `components/keyboard/lib/touchesPersonnalisees.ts`).
     case KeyboardType.clavierPersonnalisable:
       return ['numbers', 'basicOperations']
+    // Rien que les touches propres à la question (voir `dataKeys`) : aucun
+    // bloc habituel n'est ajouté.
+    case KeyboardType.clavierEntierementPersonnalisable:
+      return []
     case KeyboardType.college6eme: // A supprimer
       return ['numbersOperations']
     case KeyboardType.clavierLimites:
@@ -232,9 +237,14 @@ export const buildDataKeyboardFromStyle = (
     return ['numbers', 'fullOperations', 'variables']
   }
   const blocks: BlockForKeyboard[] = []
+  // Un style reconnu (ex. clavierEntierementPersonnalisable) peut légitimement
+  // ne demander aucun bloc habituel : on ne doit alors pas retomber sur le
+  // clavier par défaut, contrairement à un style non reconnu.
+  let styleReconnu = false
   const styleValues = style?.split(' ')
   for (const value of styleValues) {
     if (isKeyboardCategory(value)) {
+      styleReconnu = true
       blocks.push(...convertKeyboardTypeToBlocks(value))
     } else {
       // peut-être des unités... du style unites[longueurs,aires]
@@ -255,7 +265,7 @@ export const buildDataKeyboardFromStyle = (
       }
     }
   }
-  if (blocks.length !== 0) {
+  if (blocks.length !== 0 || styleReconnu) {
     const blks = blocks.filter((element, index, array) => {
       return array.indexOf(element) === index
     })

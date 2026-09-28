@@ -12,7 +12,7 @@ import { typstImport } from './typstPackages'
  * vers du balisage Typst, pour la vue Typst.
  *
  * Le HTML traité est celui produit par les exercices en contexte HTML
- * (le même que celui affiché par la vue A4) : texte, balises simples
+ * : texte, balises simples
  * (br, b, i, sup, listes...), formules KaTeX, tableaux et figures SVG.
  * Les tableaux (HTML ou array LaTeX) deviennent des `#table(...)` natifs ;
  * les figures SVG sont embarquées. Les images restantes sont remplacées par
@@ -2443,7 +2443,7 @@ const UNRENDERED_SCRATCH_MARKUP =
  * `createScratchSimulatorElement()` en contexte HTML). Contrairement aux
  * figures mathalea2d (déjà du SVG dans la chaîne HTML), ce balisage n'est
  * converti en SVG que par un rendu DOM de la librairie `scratchblocks`
- * (`renderScratchDiv`, utilisé par la vue A4/prof mais jamais par la vue
+ * (`renderScratchDiv`, utilisé par la vue prof mais jamais par la vue
  * Typst, qui ne fait que lire les chaînes produites par `nouvelleVersion()`).
  * Le rendu se fait hors-écran mais attaché au document : `renderMatching`
  * (appelé par `renderScratchDiv`) cherche ses éléments via

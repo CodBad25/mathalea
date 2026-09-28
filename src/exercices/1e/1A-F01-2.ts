@@ -1,4 +1,4 @@
-import ImageSpline from '../can/3e/can3F12'
+import ImageSpline from '../can/3e/can3F1-03'
 export const titre = 'Déterminer des antécédents graphiquement'
 export const dateDePublication = '02/11/2025'
 export const amcReady = true
@@ -6,7 +6,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can3F01 pour les auto 1er
+ * Clone de can3F1-01 pour les auto 1er
  * @author Gilles Mora
  */
 

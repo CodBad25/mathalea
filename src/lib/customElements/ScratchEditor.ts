@@ -1,5 +1,5 @@
 import scratchFr from '@scratch2latex/scratch-core/json/scratchFr.json'
-import * as ScratchBlocksModule from 'scratch-blocks/dist/vertical'
+import * as scratchBlocks from 'scratch-blocks'
 import {
   areArithmeticAstsEquivalent,
   blocklyWorkspaceToArithmeticAst,
@@ -10,6 +10,51 @@ import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
+
+const scratchCategoryColours = {
+  control: '#FFAB19',
+  data: '#FF8C1A',
+  data_lists: '#FF661A',
+  sounds: '#CF63CF',
+  motion: '#4C97FF',
+  looks: '#9966FF',
+  event: '#FFBF00',
+  sensing: '#5CB1D6',
+  pen: '#0FBD8C',
+  operators: '#59C059',
+  more: '#FF6680',
+  textField: '#FFFFFF',
+}
+
+// Le moteur Scratch 2 attend une couleur tertiaire pour chaque style Blockly.
+const scratchTheme = scratchBlocks.Theme.defineTheme('mathalea-scratch', {
+  name: 'mathalea-scratch',
+  base: scratchBlocks.Themes.Classic,
+  blockStyles: {
+    ...Object.fromEntries(
+      Object.entries(scratchBlocks.Themes.Classic.blockStyles).map(
+        ([name, style]) => [
+          name,
+          {
+            ...style,
+            colourSecondary: style.colourSecondary ?? style.colourPrimary,
+            colourTertiary: style.colourTertiary ?? style.colourPrimary,
+          },
+        ],
+      ),
+    ),
+    ...Object.fromEntries(
+      Object.entries(scratchCategoryColours).map(([name, colour]) => [
+        name,
+        {
+          colourPrimary: colour,
+          colourSecondary: colour,
+          colourTertiary: colour,
+        },
+      ]),
+    ),
+  },
+})
 
 type ScratchWorkspaceJson = Record<string, unknown>
 
@@ -76,38 +121,6 @@ type ScratchVerificationCallback = (
   ctx: ScratchVerificationCallbackContext,
 ) => ScratchVerificationResult
 
-type ScratchBlocksWorkspace = {
-  clear(): void
-  dispose(): void
-  addChangeListener(listener: (event: { isUiEvent?: boolean }) => void): void
-}
-
-type ScratchBlocksApi = {
-  inject(
-    container: HTMLElement,
-    options: Record<string, unknown>,
-  ): ScratchBlocksWorkspace
-  svgResize(workspace: ScratchBlocksWorkspace): void
-  Xml: {
-    workspaceToDom(workspace: ScratchBlocksWorkspace): Element
-    domToText(dom: Element): string
-    textToDom(xml: string): Element
-    domToWorkspace(dom: Element, workspace: ScratchBlocksWorkspace): void
-  }
-  Msg?: Record<string, string>
-}
-
-function getScratchBlocksApi(): ScratchBlocksApi {
-  const moduleValue = ScratchBlocksModule as unknown as {
-    default?: unknown
-    inject?: unknown
-  }
-  const candidate =
-    moduleValue.inject != null ? ScratchBlocksModule : moduleValue.default
-  return candidate as ScratchBlocksApi
-}
-
-const scratchBlocks = getScratchBlocksApi()
 let areScratchMessagesTranslated = false
 
 function ensureScratchBlocksFrenchMessages(): void {
@@ -285,7 +298,7 @@ class ScratchToolboxBuilder {
 }
 
 class ScratchWorkspaceAdapter {
-  private workspace: ScratchBlocksWorkspace
+  private workspace: ReturnType<typeof scratchBlocks.inject>
 
   constructor({
     container,
@@ -302,6 +315,7 @@ class ScratchWorkspaceAdapter {
   }) {
     ensureScratchBlocksFrenchMessages()
     this.workspace = scratchBlocks.inject(container, {
+      theme: scratchTheme,
       toolbox: ScratchToolboxBuilder.build(toolbox, showCategories),
       comments: false,
       collapse: false,
@@ -337,7 +351,7 @@ class ScratchWorkspaceAdapter {
   loadXml(xml: string): void {
     this.workspace.clear()
     scratchBlocks.Xml.domToWorkspace(
-      scratchBlocks.Xml.textToDom(xml),
+      scratchBlocks.utils.xml.textToDom(xml),
       this.workspace,
     )
   }
@@ -546,15 +560,11 @@ export class ScratchEditorElement extends MathaleaCustomElement {
 
     this.innerHTML = `
       <style>
-        scratch-editor .scratch-editor-area .blocklyToolboxDiv {
+        scratch-editor .scratch-editor-area .blocklyToolbox {
           border-right: 1px solid #d8dee9;
           box-shadow: 1px 0 0 #eef1f6;
           background: #ffffff;
           z-index: 20;
-        }
-        scratch-editor .scratch-editor-area .scratchCategoryMenu {
-          border-right: 1px solid #d8dee9;
-          background: #ffffff;
         }
         scratch-editor .scratch-editor-area .blocklyFlyoutBackground {
           fill: #f7f8fb;
@@ -566,7 +576,7 @@ export class ScratchEditorElement extends MathaleaCustomElement {
           stroke: #e5e7eb;
           stroke-width: 1px;
         }
-        scratch-editor .scratch-editor-area .scratchCategoryMenuItem {
+        scratch-editor .scratch-editor-area .blocklyToolboxCategory {
           border-radius: 6px;
           margin: 2px 6px;
         }
