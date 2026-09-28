@@ -62,7 +62,7 @@ function qrCodeToTypstImage(url: string): string {
  * toute la fiche plutôt que par exercice. `undefined` si aucun exercice
  * imprimé n'a d'URL (fiche entièrement composée d'exercices non chargés).
  */
-function ficheUrl(exercises: TypstExerciseInput[]): string | undefined {
+export function ficheUrl(exercises: TypstExerciseInput[]): string | undefined {
   const url = new URL('https://coopmaths.fr/alea')
   let hasExercise = false
   for (const exercise of exercises) {
@@ -100,10 +100,22 @@ function qrCodeGlobalVariableName(version: number): string {
   return version === 0 ? 'qr-code-global-url' : `qr-code-global-url-${version}`
 }
 
+/**
+ * Décalage vertical du QR-code global, vers le haut, pour qu'il ne recouvre
+ * pas la ligne d'en-tête (titre, et étiquette « Sujet A/B... » sur une fiche
+ * à plusieurs versions) : sans lui, le `#place` se peint par-dessus cette
+ * ligne (voir le commentaire plus haut) et masque l'étiquette. Valeur
+ * négative de l'ordre de la taille du QR-code lui-même (`FICHE_QRCODE_SIZE`)
+ * plutôt que calculée sur la hauteur réelle du bloc de titre (variable selon
+ * l'habillage) : le QR-code remonte dans la marge haute de la page, au-dessus
+ * du titre plutôt que par-dessus.
+ */
+const FICHE_QRCODE_OFFSET_TOP = '-0.5cm'
+
 function ficheQrCodeLines(version: number): string[] {
   const urlVariable = qrCodeGlobalVariableName(version)
   return [
-    '#place(top + right, context [',
+    `#place(top + right, dy: ${FICHE_QRCODE_OFFSET_TOP}, context [`,
     '  #if here().page() == 1 [',
     `    #mathalea-anchor("qr-code", ${version})#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${urlVariable}, width: 100%)]`,
     '  ]',
