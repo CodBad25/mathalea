@@ -1,4 +1,5 @@
 import { context } from '../../modules/context'
+import { coopmathsActionLight, coopmathsActionLightest } from '../colors'
 import type { ClickFigures, IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -163,6 +164,7 @@ export class CliqueFigureElement extends MathaleaCustomElement {
     figure.addEventListener('mouseenter', mouseOverSvgEffect)
     figure.addEventListener('mouseleave', mouseOutSvgEffect)
     figure.addEventListener('click', mouseSvgClick)
+    figure.style.cursor = 'pointer'
     if (figure.etat !== true) figure.etat = false
     figure.hasMathaleaListener = true
   }
@@ -172,6 +174,8 @@ export class CliqueFigureElement extends MathaleaCustomElement {
       figure.removeEventListener('mouseenter', mouseOverSvgEffect)
       figure.removeEventListener('mouseleave', mouseOutSvgEffect)
       figure.removeEventListener('click', mouseSvgClick)
+      figure.style.cursor = ''
+      figure.style.filter = ''
       figure.hasMathaleaListener = false
     }
   }
@@ -221,9 +225,8 @@ export class CliqueFigureElement extends MathaleaCustomElement {
   }
 
   private paintFigure(figure: FigureClicable): void {
-    figure.style.border = figure.etat
-      ? '3px solid #f15929'
-      : '3px solid transparent'
+    figure.style.filter = ''
+    paintFigureOutline(figure, figure.etat ? coopmathsActionLight : null)
   }
 }
 
@@ -312,27 +315,35 @@ export function verifQuestionCliqueFigure(
 
 function mouseOverSvgEffect(event: MouseEvent) {
   const elt = event.currentTarget as FigureClicable
-  elt.style.border = '3px solid #1DA962'
+  if (!elt.etat)
+    elt.style.filter = `drop-shadow(0 0 2px ${coopmathsActionLightest})`
 }
 
 function mouseOutSvgEffect(event: MouseEvent) {
   const elt = event.currentTarget as FigureClicable
-  elt.style.border = '3px solid transparent'
+  elt.style.filter = ''
 }
 
 function mouseSvgClick(event: MouseEvent) {
   const elt = event.currentTarget as FigureClicable
   if (elt.etat) {
-    elt.style.border = '3px solid transparent'
+    paintFigureOutline(elt, null)
+    elt.style.filter = `drop-shadow(0 0 2px ${coopmathsActionLightest})`
     elt.addEventListener('mouseenter', mouseOverSvgEffect)
     elt.addEventListener('mouseleave', mouseOutSvgEffect)
     elt.etat = false
   } else {
     elt.removeEventListener('mouseenter', mouseOverSvgEffect)
     elt.removeEventListener('mouseleave', mouseOutSvgEffect)
-    elt.style.border = '3px solid #f15929'
+    paintFigureOutline(elt, coopmathsActionLight)
+    elt.style.filter = ''
     elt.etat = true
   }
+}
+
+function paintFigureOutline(figure: FigureClicable, color: string | null) {
+  figure.style.outline = color == null ? 'none' : `3px solid ${color}`
+  figure.style.outlineOffset = '-3px'
 }
 
 function parseFigures(value: string | null): ClickFigures {
