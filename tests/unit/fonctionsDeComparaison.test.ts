@@ -3663,6 +3663,30 @@ describe('fonctionComparaison', () => {
     )
     expect(result.isOk).toBe(true)
 
+    result = pythagoreCompare(
+      'IH^2-IG^2',
+      '\\mathrm{HI}^2-\\mathrm{GI}^2',
+    )
+    expect(result.isOk).toBe(true)
+
+    result = pythagoreCompare(
+      'GI^2-HI^2',
+      '\\mathrm{HI}^2-\\mathrm{GI}^2',
+    )
+    expect(result).toEqual({
+      isOk: false,
+      feedback: 'Les deux carrés sont dans le mauvais ordre dans la soustraction.',
+    })
+
+    result = pythagoreCompare(
+      'AB^2-GI^2',
+      '\\mathrm{HI}^2-\\mathrm{GI}^2',
+    )
+    expect(result).toEqual({
+      isOk: false,
+      feedback: "Ce n'est pas la soustraction attendue.",
+    })
+
     // Égalité de Pythagore attendue, avec somme
     result = pythagoreCompare(
       'AB^2+AC^2=BC^2',
