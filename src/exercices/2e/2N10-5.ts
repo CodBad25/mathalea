@@ -1,7 +1,7 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { gcd } from '../../lib/outils/primalite'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { gcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
