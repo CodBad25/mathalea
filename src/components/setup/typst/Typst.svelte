@@ -52,6 +52,7 @@
     buildStandaloneExerciseCode,
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    ficheUrl,
     getGeneratedCanRowCode,
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
@@ -2952,6 +2953,19 @@
     return perVersion
   }
 
+  /**
+   * URL longue de la fiche pour un sujet donné, recalculée à la volée — passée
+   * à la palette de mise en page pour le raccourcissement edurl.fr du QR-code
+   * global : contrairement à `qrCodeUrlValues` (lu dans le code Typst), elle
+   * reste la vraie URL d'origine même après que le QR-code a déjà été
+   * raccourci ou personnalisé à la main.
+   */
+  function ficheUrlForVersion(version: number): string | undefined {
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const inputs = version === 0 ? primary : extraVersions[version - 1]
+    return inputs != null ? ficheUrl(inputs) : undefined
+  }
+
   function buildCode(options: { dropWritingLines?: boolean } = {}): string {
     // les ajustements faits via la palette de mise en page (colonnes,
     // espacement, insertions) sont repris du code courant pour survivre
@@ -4896,6 +4910,8 @@
                     coverTemplate={documentOptions.coverPage.template}
                     footerText={footerValue}
                     qrCodeUrls={qrCodeUrlValues}
+                    ficheTitle={documentOptions.title}
+                    nbVersions={Math.max(1, documentOptions.nbVersions)}
                     hideVersionLabel={documentOptions.hideVersionLabel}
                     {documentColumns}
                     {questionCounts}
@@ -4933,6 +4949,7 @@
                     onUpdateCoverConsignes={updateCoverConsignes}
                     onUpdateFooterText={updateFooterText}
                     onUpdateQrCodeUrl={updateQrCodeUrl}
+                    onGetFicheLongUrl={ficheUrlForVersion}
                     onToggleVersionLabel={toggleVersionLabel}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}

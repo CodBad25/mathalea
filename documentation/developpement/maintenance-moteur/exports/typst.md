@@ -639,6 +639,45 @@ Un repère `qr-code`, indexé par sujet, est émis au centre de chaque code : la
 
 La page de garde « Course aux nombres » termine par un saut de page. Lorsque cette présentation est active, elle reçoit donc le QR-code comme paramètre et le place avant ce saut : l'ajouter dans le bloc d'en-tête commun l'aurait placé sur la deuxième page, où le garde de première page l'aurait masqué.
 
+## Raccourcissement de l'URL du QR-code de fiche via edurl.fr
+
+Dans le popover d'édition du QR-code de fiche (widget `qr-code`, `TypstLayoutOverlay.svelte`), le champ de saisie manuelle de l'URL est accompagné d'un bouton « Raccourcir via edurl.fr », qui appelle l'API Shlink de `raccourcisseur.apps.education.fr` pour remplacer l'URL longue par une URL courte plus lisible sur un document imprimé. Limité à ce QR-code global : le QR-code par exercice (« QR-code vers l'exercice » ci-dessus) n'a pas de champ d'URL éditable et n'est donc pas concerné.
+
+La saisie manuelle de l'URL reste possible à tout moment, indépendamment de ce bouton : les deux voies remplissent le même champ (`qrCodeDraft`), et c'est toujours l'utilisateur qui valide (Entrée ou « Enregistrer ») pour l'écrire dans le source Typst — le clic sur « Raccourcir » ne l'applique jamais tout seul.
+
+### Toujours la vraie URL longue, jamais un raccourci de raccourci
+
+Le bouton ne repart jamais de ce qu'il y a dans le champ (qui peut déjà être une URL courte issue d'un raccourcissement précédent, ou collée à la main) : il redemande systématiquement l'URL longue d'origine via `onGetFicheLongUrl` (prop de `TypstLayoutOverlay.svelte`, implémentée dans `Typst.svelte` par `ficheUrlForVersion`), qui rappelle `buildAllVersionInputs()` puis la même fonction `ficheUrl` (`buildTypstDocument.ts`, désormais exportée) que celle qui calcule l'URL longue à la génération du document. Sans ce recalcul à la volée, la vraie URL longue serait perdue dès le premier raccourcissement : une fois écrite, `#let qr-code-global-url(-N) = "..."` dans le source ne contient plus que l'URL courte, et `qrCodeUrlValues` (lu depuis le code) ne reflète alors plus que celle-ci.
+
+### Jeton d'accès
+
+edurl.fr exige un jeton personnel (portail.apps.education.fr → Mon profil → Jeton d'accès). Il est stocké dans une clé localStorage dédiée, `mathalea-edurl-token`, séparée du blob de préférences (`STORAGE_KEY`) que gère par ailleurs `Typst.svelte` : ce n'est pas un réglage de mise en page, il ne doit donc pas être remis à zéro par « Réinitialiser les réglages ».
+
+Le popover gère tout le cycle de vie du jeton lui-même :
+
+- premier clic sur « Raccourcir » sans jeton enregistré (ou après un rejet, voir plus bas) : un champ `type="password"` apparaît à la place du bouton ; l'enregistrer relance immédiatement le raccourcissement ;
+- une fois un jeton présent, un lien « Oublier le jeton » reste visible à côté du bouton, pour le retirer et en ressaisir un autre à tout moment, sans attendre une erreur.
+
+Ce jeton est propre à MathALÉA : il n'est pas partagé avec celui du widget autonome `poc-widget-edurl` (voir plus bas), les deux vivant de toute façon sur des origines différentes et ne pouvant pas se partager de localStorage.
+
+### Titre du raccourci
+
+Le raccourci créé sur edurl.fr reçoit un titre composé `mathalea-<date>-<hhmmss>-<titre de la fiche>` (par exemple `mathalea-20260920-143512-Fiche d'exercices`), bâti par `edurlLinkTitle()` à partir de l'heure locale du poste et de `ficheTitle` (prop reflétant `documentOptions.title`, donc le titre éventuellement personnalisé par l'utilisateur, pas la valeur par défaut « Fiche d'exercices » figée).
+
+### Réseau : appel direct, pas d'iframe
+
+Contrairement au widget `poc-widget-edurl` (projet GitLab séparé, pensé pour être embarqué en iframe sur plusieurs sites via `postMessage`, afin d'isoler complètement le jeton du site hôte), l'intégration MathALÉA fait un appel `fetch` direct depuis `TypstLayoutOverlay.svelte` vers le même relais CORS n8n (`POST https://n8n.incubateur.education.gouv.fr/webhook/edurl-shorten-relay`, workflow « Raccourcisseur — Relais CORS edurl.fr », id `tF9a89KpEaj6zvtm`) : corps `{ longUrl, title, enabled: true, token }`, réponse `{ shortUrl }`. Le relais répond déjà `Access-Control-Allow-Origin: *`, aucune modification côté n8n n'a été nécessaire pour l'appeler depuis l'origine de MathALÉA. Ce choix simplifie l'UX (pas d'iframe cachée ni d'écoute `postMessage` dans un composant déjà dense) au prix de dupliquer la petite logique d'appel plutôt que de réutiliser le widget tel quel.
+
+Un jeton rejeté (`401`) est effacé du localStorage et le champ de saisie du jeton réapparaît avec un message d'erreur, sur le même principe que `poc-widget-edurl`.
+
+### Fichiers touchés
+
+| Fichier | Rôle dans cette fonctionnalité |
+| --- | --- |
+| `buildTypstDocument.ts` | `ficheUrl` exportée (était privée) pour être réutilisée hors génération du document |
+| `Typst.svelte` | `ficheUrlForVersion(version)` : recalcule l'URL longue à la volée ; props `ficheTitle` et `onGetFicheLongUrl` passées à `TypstLayoutOverlay` |
+| `TypstLayoutOverlay.svelte` | Clé localStorage `mathalea-edurl-token`, appel `fetch` vers le relais, composition du titre, UI du popover (bouton, spinner, formulaire de jeton, « Oublier le jeton », message d'erreur) |
+
 ## Impression recto-verso (démarrage sur page impaire)
 
 Case à cocher « Impression recto-verso » des Réglages du document (`TypstDocumentOptions.oddPageStarts`, **active par défaut**) : chaque partie qui commence sur une nouvelle page — le bloc « Corrections » et chaque sujet d'une fiche à plusieurs versions — commence sur une page impaire, Typst insérant au besoin une page blanche. En impression recto-verso en série, une partie ne commence ainsi jamais au dos de la précédente ; le partage énoncé/corrigé en deux PDF (`downloadPdfSeparate`) en profite de la même façon, chaque sujet y restant sur un recto.
