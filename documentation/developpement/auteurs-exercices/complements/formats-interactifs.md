@@ -802,6 +802,11 @@ texteCorr += 'Il fallait cliquer sur la figure A.'
 
 Le helper injecte un custom element `clique-figure` et renseigne le `formatInteractif`. Ici, on n'appelle pas `handleAnswers()` : la réponse attendue est portée par `this.cliqueFiguresArray[i]`.
 
+L'élève peut sélectionner plusieurs figures et les désélectionner jusqu'à la
+validation. Un halo orange clair indique le survol, et le contour orange indique
+la sélection ; aucun des deux ne révèle si la réponse est correcte. La
+correction et la note sont calculées à la validation.
+
 ## Glisser-déposer
 
 À utiliser quand l'élève doit placer des étiquettes dans des zones.
