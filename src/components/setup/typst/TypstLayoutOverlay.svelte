@@ -729,11 +729,12 @@
     afterEachQuestion: 'Après chaque question',
   }
 
-  /** Libellés des traits proposés pour les lignes */
+  /** Libellés des rendus proposés pour les lignes */
   const WRITING_LINES_STYLE_LABELS: Record<WritingLinesStyle, string> = {
     pointilles: 'Pointillés',
     points: 'Points',
     plein: 'Trait',
+    vide: 'Vide',
   }
 
   /**
@@ -961,7 +962,7 @@
 
 {#snippet writingLinesPanel(num: number)}
   <!-- panneau de réglage des lignes (pour que l'élève y écrive) de
-       l'exercice `num` : emplacement, trait (pointillés ou points), nombre
+       l'exercice `num` : emplacement, rendu, nombre
        de lignes, espacement. Régénère le code à chaque changement (voir onSetWritingLines). -->
   {#if openWritingLines === num}
     <div class="absolute top-6 right-0 z-30 w-64 space-y-2 typst-panel p-2">
