@@ -101,9 +101,11 @@ export function tableToMarkup(table: TableData) {
       (cellule) => `\\text{${cellule}}`,
     ),
     table.lignes.map((cellule) => `\\text{${cellule}}`),
-    table.valeurs.flat().map((cellule) =>
-      typeof cellule === 'string' ? `\\text{${cellule}}` : cellule,
-    ),
+    table.valeurs
+      .flat()
+      .map((cellule) =>
+        typeof cellule === 'string' ? `\\text{${cellule}}` : cellule,
+      ),
     1.3,
   )
 }
@@ -407,7 +409,9 @@ export function buildDoubleEntryTable(): DoubleEntryTable {
     return table
   }
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export default class LireInformationsTableau extends Exercice {
   constructor() {
     super()
