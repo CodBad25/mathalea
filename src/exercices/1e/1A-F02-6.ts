@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'e251e'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '93dc8'
 
 export const refs = {
   'fr-fr': ['1A-F02-6'],
-  'fr-ch': ['NR'],
+  'fr-ch': [],
 }
 export default class Auto1AF1d extends CalculProduitSommeImageParFonctionAffine {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

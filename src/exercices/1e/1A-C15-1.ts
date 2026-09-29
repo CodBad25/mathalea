@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '8a682'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '243b1'
 
 export const refs = {
   'fr-fr': ['1A-C15-1'],
-  'fr-ch': ['10QCM-32'],
+  'fr-ch': [],
 }
 export default class Auto1AC19a extends ProblemeFractions {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

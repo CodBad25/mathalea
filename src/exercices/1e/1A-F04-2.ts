@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '21516'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'cc322'
 
 export const refs = {
   'fr-fr': ['1A-F04-2'],
-  'fr-ch': ['1mQCM-1', '2mQCM-1'],
+  'fr-ch': [],
 }
 export default class Auto1AF4a extends EquationsGSplineNombre {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

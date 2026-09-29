@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '3dd44'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '3af9a'
 
 export const refs = {
   'fr-fr': ['1A-C10-7', '2A-C3-3'],
-  'fr-ch': ['1mQCM-28', '11QCM-33'],
+  'fr-ch': [],
 }
 export default class Auto1AC10 extends EquationPlusMoinsX2PlusAEgalB {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

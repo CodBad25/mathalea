@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '04c8b'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '5c0d8'
 
 export const refs = {
   'fr-fr': ['1A-E01-3', '2A-E1-3'],
-  'fr-ch': ['NR'],
+  'fr-ch': [],
 }
 export default class Auto1AE1b extends CoeffMul {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

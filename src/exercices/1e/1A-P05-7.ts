@@ -11,7 +11,9 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'da49c'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'd0470'
 
 export const refs = {
   'fr-fr': ['1A-P05-7'],
@@ -20,6 +22,6 @@ export const refs = {
 export default class Auto1AP057 extends ProbaCond {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

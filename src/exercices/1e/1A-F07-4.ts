@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'c4579'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '9f86b'
 
 export const refs = {
   'fr-fr': ['1A-F07-4'],
-  'fr-ch': ['11QCM-77', '1mQCM-64'],
+  'fr-ch': [],
 }
 export default class Auto1AF6 extends EquationDroite {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

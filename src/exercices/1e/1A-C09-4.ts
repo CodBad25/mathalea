@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'aa40c'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'cc02d'
 
 export const refs = {
-  'fr-fr': ['1A-C09-4', '2A-C2-2', 'BP1AUTO072'],
-  'fr-ch': ['10QCM-30'],
+  'fr-fr': ['1A-C09-4', '2A-C2-2'],
+  'fr-ch': [],
 }
 export default class Auto1AC9c extends DeveloppementNiveau1 {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

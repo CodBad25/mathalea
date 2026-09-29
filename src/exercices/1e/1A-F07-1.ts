@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '4a79c'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '3da78'
 
 export const refs = {
   'fr-fr': ['1A-F07-1'],
-  'fr-ch': ['NR'],
+  'fr-ch': [],
 }
 export default class Auto1AF6a extends CoeffDirecteurDroite {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

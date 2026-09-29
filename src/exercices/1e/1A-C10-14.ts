@@ -16,11 +16,13 @@ export const interactifReady = true
  * @author Arnaud Meistermann
  */
 
-export const uuid = 'b8716'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '3d6d3'
 
 export const refs = {
   'fr-fr': ['1A-C10-14', '2A-C3-10'],
-  'fr-ch': ['2mIneq-11'],
+  'fr-ch': [],
 }
 
 const symbols = ['\\leqslant', '<', '\\geqslant', '>'] as const
@@ -69,7 +71,7 @@ export default class Auto1AC1014 extends ExerciceSimple {
     this.formatChampTexte = KeyboardType.clavierEnsemble
     this.optionsDeComparaison = { intervalle: true }
     this.versionQcmDisponible = true
-    this.versionQcm = true
+    this.versionQcm = false
     this.versionQcmOptions = {
       radio: true,
       format: 'caseLettre',
