@@ -89,13 +89,13 @@ export default class nomExercice extends Exercice {
         }
         intervalle += `{${borneInf}}{${borneSup}} `
       }
-      let ensemble = `\\{ x \\in \\mathbb{R} \\, | \\, ${borneInf} ${semiOuvertGauche ? '<' : '\\leq'} x ${semiOuvertDroite ? '<' : '\\leq'} ${borneSup} \\}`
+      let ensemble = `\\{ x \\in \\mathbb{R} \\, | \\, ${borneInf} ${semiOuvertGauche ? '<' : '\\leqslant'} x ${semiOuvertDroite ? '<' : '\\leqslant'} ${borneSup} \\}`
       if (borneInf === '-\\infty' && borneSup === '+\\infty') {
         ensemble = '\\mathbb{R}'
       } else if (borneInf === '-\\infty') {
-        ensemble = `\\{ x \\in \\mathbb{R} \\, | \\, x ${semiOuvertDroite ? '<' : '\\leq'} ${borneSup} \\}`
+        ensemble = `\\{ x \\in \\mathbb{R} \\, | \\, x ${semiOuvertDroite ? '<' : '\\leqslant'} ${borneSup} \\}`
       } else if (borneSup === '+\\infty') {
-        ensemble = `\\{ x \\in \\mathbb{R} \\, | \\, ${borneInf} ${semiOuvertGauche ? '<' : '\\leq'} x \\}`
+        ensemble = `\\{ x \\in \\mathbb{R} \\, | \\, ${borneInf} ${semiOuvertGauche ? '<' : '\\leqslant'} x \\}`
       }
       switch (listeTypeDeQuestions[i]) {
         case 'intervalle': {

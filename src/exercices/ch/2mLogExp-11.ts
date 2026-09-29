@@ -166,7 +166,7 @@ export default class EquationsLogarithmiques extends Exercice {
           if (borneStr.includes('frac')) {
             texteCorr += `<br>`
           }
-          texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} ${x2 > borne ? `> ${borneStr} \\quad \\implies \\quad x_2 \\in D` : `\\leq ${borneStr} \\quad \\implies \\quad x_2 \\notin D`}$<br>`
+          texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} ${x2 > borne ? `> ${borneStr} \\quad \\implies \\quad x_2 \\in D` : `\\leqslant ${borneStr} \\quad \\implies \\quad x_2 \\notin D`}$<br>`
 
           const solutions = [x1, x2].filter((x) => x > borne)
           if (solutions.length === 1) {
@@ -237,7 +237,7 @@ export default class EquationsLogarithmiques extends Exercice {
             texteCorr += `$x_1 \\approx ${texNombre(x1, 2, true)} > ${borneStr} \\quad \\implies \\quad x_1 \\in D$<br>`
             solutions.push(x1)
           } else {
-            texteCorr += `$x_1 \\approx ${texNombre(x1, 2, true)} \\leq ${borneStr} \\quad \\implies \\quad x_1 \\notin D$<br>`
+            texteCorr += `$x_1 \\approx ${texNombre(x1, 2, true)} \\leqslant ${borneStr} \\quad \\implies \\quad x_1 \\notin D$<br>`
           }
           if (borneStr.includes('frac')) {
             texteCorr += `<br>`
@@ -246,7 +246,7 @@ export default class EquationsLogarithmiques extends Exercice {
             texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} > ${borneStr} \\quad \\implies \\quad x_2 \\in D$<br>`
             solutions.push(x2)
           } else {
-            texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} \\leq ${borneStr} \\quad \\implies \\quad x_2 \\notin D$<br>`
+            texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} \\leqslant ${borneStr} \\quad \\implies \\quad x_2 \\notin D$<br>`
           }
 
           if (solutions.length >= 1) {
@@ -308,7 +308,7 @@ export default class EquationsLogarithmiques extends Exercice {
             texteCorr += `$S \\approx \\left\\{ ${miseEnEvidence(texNombre(solution, 2, true))} \\right\\}$`
             reponse = new Decimal(solution).toDecimalPlaces(2).toFixed(2)
           } else {
-            texteCorr += `$x \\approx ${texNombre(solution, 2, true)} \\leq ${borneStr} \\quad \\implies \\quad x \\notin D$<br>`
+            texteCorr += `$x \\approx ${texNombre(solution, 2, true)} \\leqslant ${borneStr} \\quad \\implies \\quad x \\notin D$<br>`
             texteCorr += `$S = ${miseEnEvidence('\\emptyset')}$`
             reponse = '\\emptyset'
           }
@@ -371,7 +371,7 @@ export default class EquationsLogarithmiques extends Exercice {
             texteCorr += `$x_1 \\approx ${texNombre(x1, 2, true)} > ${borneStr} \\quad \\implies \\quad x_1 \\in D$<br>`
             solutions.push(x1)
           } else {
-            texteCorr += `$x_1 \\approx ${texNombre(x1, 2, true)} \\leq ${borneStr} \\quad \\implies \\quad x_1 \\notin D$<br>`
+            texteCorr += `$x_1 \\approx ${texNombre(x1, 2, true)} \\leqslant ${borneStr} \\quad \\implies \\quad x_1 \\notin D$<br>`
           }
           if (borneStr.includes('frac')) {
             texteCorr += `<br>`
@@ -380,7 +380,7 @@ export default class EquationsLogarithmiques extends Exercice {
             texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} > ${borneStr} \\quad \\implies \\quad x_2 \\in D$<br>`
             solutions.push(x2)
           } else {
-            texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} \\leq ${borneStr} \\quad \\implies \\quad x_2 \\notin D$<br>`
+            texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} \\leqslant ${borneStr} \\quad \\implies \\quad x_2 \\notin D$<br>`
           }
 
           if (solutions.length >= 1) {
@@ -430,7 +430,7 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `$x_2 = \\dfrac{${a2} - \\sqrt{${delta}}}{${2 * A}} \\approx ${texNombre(x2, 2, true)}$<br>`
           texteCorr += `Vérifions que les solutions appartiennent au domaine :<br>`
           texteCorr += `$x_1 \\approx ${texNombre(x1, 2, true)} > 0 \\quad \\implies \\quad x_1 \\in D$<br>`
-          texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} ${x2 > 0 ? '> 0 \\quad \\implies \\quad x_2 \\in D' : '\\leq 0 \\quad \\implies \\quad x_2 \\notin D'}$<br>`
+          texteCorr += `$x_2 \\approx ${texNombre(x2, 2, true)} ${x2 > 0 ? '> 0 \\quad \\implies \\quad x_2 \\in D' : '\\leqslant 0 \\quad \\implies \\quad x_2 \\notin D'}$<br>`
 
           const solutions = [x1, x2].filter((x) => x > 0)
           if (solutions.length >= 1) {
@@ -498,7 +498,7 @@ export default class EquationsLogarithmiques extends Exercice {
             texteCorr += `$S \\approx \\left\\{ ${miseEnEvidence(texNombre(solution, 2, true))} \\right\\}$`
             reponse = new Decimal(solution).toDecimalPlaces(2).toFixed(2)
           } else {
-            texteCorr += `$x \\approx ${texNombre(solution, 2, true)} \\leq ${borneStr} \\quad \\implies \\quad x \\notin D$<br>`
+            texteCorr += `$x \\approx ${texNombre(solution, 2, true)} \\leqslant ${borneStr} \\quad \\implies \\quad x \\notin D$<br>`
             texteCorr += `$S = ${miseEnEvidence('\\emptyset')}$`
             reponse = '\\emptyset'
           }
@@ -772,7 +772,7 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `x_1 &= ${x1Str} > ${borneStr} \\quad \\implies \\quad x_1 \\in D\\\\`
           solsProd.push(x1Str)
         } else {
-          texteCorr += `x_1 &= ${x1Str} \\leq ${borneStr} \\quad \\implies \\quad x_1 \\notin D\\\\`
+          texteCorr += `x_1 &= ${x1Str} \\leqslant ${borneStr} \\quad \\implies \\quad x_1 \\notin D\\\\`
         }
         if (borneStr.includes('frac')) {
           texteCorr += `\\\\`
@@ -781,7 +781,7 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `x_2 &= ${x2Str} > ${borneStr} \\quad \\implies \\quad x_2 \\in D\\\\`
           solsProd.push(x2Str)
         } else {
-          texteCorr += `x_2 &= ${x2Str} \\leq ${borneStr} \\quad \\implies \\quad x_2 \\notin D\\\\`
+          texteCorr += `x_2 &= ${x2Str} \\leqslant ${borneStr} \\quad \\implies \\quad x_2 \\notin D\\\\`
         }
         texteCorr += '\\end{aligned}$<br>'
 
@@ -956,7 +956,7 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `x_1 &= ${x1Str} > ${borneStr} \\quad \\implies \\quad x_1 \\in D\\\\`
           solsQuot.push(x1Str)
         } else {
-          texteCorr += `x_1 &= ${x1Str} \\leq ${borneStr} \\quad \\implies \\quad x_1 \\notin D\\\\`
+          texteCorr += `x_1 &= ${x1Str} \\leqslant ${borneStr} \\quad \\implies \\quad x_1 \\notin D\\\\`
         }
         if (borneStr.includes('frac')) {
           texteCorr += `\\\\`
@@ -965,7 +965,7 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `x_2 &= ${x2Str} > ${borneStr} \\quad \\implies \\quad x_2 \\in D`
           solsQuot.push(x2Str)
         } else {
-          texteCorr += `x_2 &= ${x2Str} \\leq ${borneStr} \\quad \\implies \\quad x_2 \\notin D`
+          texteCorr += `x_2 &= ${x2Str} \\leqslant ${borneStr} \\quad \\implies \\quad x_2 \\notin D`
         }
         texteCorr += '\\end{aligned}$<br>'
 

@@ -213,7 +213,7 @@ function bus() {
     contexte: `Un collège organise une sortie scolaire pour $${nbEleves}$ élèves.<br>Les élèves doivent être répartis dans des bus de $${nbPlaces}$ places.<br>`,
     question: `Combien de bus faudra-t-il sachant qu'il y a $${nbAccompagnateurs}$ accompagnateurs adultes ?`,
     reponses: [nbBus, mr1, mr2, mr3, mr4],
-    reponseRedigee: `Il faudra $${miseEnEvidence(nbBus)}$ pour transporter les $${nbEleves}$ élèves et les $${nbAccompagnateurs}$ accompagnateurs, soit $${nbEleves + nbAccompagnateurs}$ passagers, car cela fait $${nbBus}\\times ${nbPlaces} = ${nbPlacesDispo}$ places disponibles et $${nbEleves + nbAccompagnateurs} \\leq ${nbPlacesDispo}$.<br>`,
+    reponseRedigee: `Il faudra $${miseEnEvidence(nbBus)}$ pour transporter les $${nbEleves}$ élèves et les $${nbAccompagnateurs}$ accompagnateurs, soit $${nbEleves + nbAccompagnateurs}$ passagers, car cela fait $${nbBus}\\times ${nbPlaces} = ${nbPlacesDispo}$ places disponibles et $${nbEleves + nbAccompagnateurs} \\leqslant ${nbPlacesDispo}$.<br>`,
   }
 }
 const listePb = [

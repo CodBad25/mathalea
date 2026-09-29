@@ -169,9 +169,9 @@ export default class CalculsLoiNormale extends Exercice {
               expression
 
             texteCorr =
-              'On décompose pour exprimer la probabilité avec la fonction de répartition $t \\mapsto \\mathrm{P}(X \\leq t)$ en utilisant la tabulation de ses valeurs pour $t \\geq 0$ : <br>'
+              'On décompose pour exprimer la probabilité avec la fonction de répartition $t \\mapsto \\mathrm{P}(X \\leqslant t)$ en utilisant la tabulation de ses valeurs pour $t \\geqslant 0$ : <br>'
             calculstep.push(
-              `\\mathrm{P}(${bornea} < X < ${borneb}) &=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X \\leq ${bornea}) &&`,
+              `\\mathrm{P}(${bornea} < X < ${borneb}) &=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X \\leqslant ${bornea}) &&`,
             )
             if (variables.b < 0) {
               resultatB = texNombre(
@@ -184,13 +184,13 @@ export default class CalculsLoiNormale extends Exercice {
                   3,
                 )
                 calculstep.push(
-                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\geq ${oppbornea}) && (\\text{symétrie de la loi normale})`,
+                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\geqslant ${oppbornea}) && (\\text{symétrie de la loi normale})`,
                 )
                 calculstep.push(
-                  ` &=  1 - \\mathrm{P}(X \\leq ${oppborneb}) - (1-\\mathrm{P}(X < ${oppbornea})) && (\\text{passage au complémentaire})`,
+                  ` &=  1 - \\mathrm{P}(X \\leqslant ${oppborneb}) - (1-\\mathrm{P}(X < ${oppbornea})) && (\\text{passage au complémentaire})`,
                 )
                 calculstep.push(
-                  ` &=  \\mathrm{P}(X < ${oppbornea}) - \\mathrm{P}(X \\leq ${oppborneb}) &&`,
+                  ` &=  \\mathrm{P}(X < ${oppbornea}) - \\mathrm{P}(X \\leqslant ${oppborneb}) &&`,
                 )
                 calculstep.push(` &\\approx ${resultatA} - ${resultatB} &&`)
               } else {
@@ -199,10 +199,10 @@ export default class CalculsLoiNormale extends Exercice {
                   3,
                 )
                 calculstep.push(
-                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\leq ${bornea}) && (\\text{symétrie de la loi normale})`,
+                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\leqslant ${bornea}) && (\\text{symétrie de la loi normale})`,
                 )
                 calculstep.push(
-                  ` &=  1 - \\mathrm{P}(X \\leq ${oppborneb}) - \\mathrm{P}(X \\leq ${bornea}) && (\\text{passage au complémentaire})`,
+                  ` &=  1 - \\mathrm{P}(X \\leqslant ${oppborneb}) - \\mathrm{P}(X \\leqslant ${bornea}) && (\\text{passage au complémentaire})`,
                 )
                 calculstep.push(` &\\approx 1 - ${resultatB} - ${resultatA} &&`)
               }
@@ -219,7 +219,7 @@ export default class CalculsLoiNormale extends Exercice {
                 ` &=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X > ${oppbornea}) && (\\text{symétrie de la loi normale})`,
               )
               calculstep.push(
-                ` &=  \\mathrm{P}(X < ${borneb}) - (1 - \\mathrm{P}(X \\leq ${oppbornea})) && (\\text{passage au complémentaire})`,
+                ` &=  \\mathrm{P}(X < ${borneb}) - (1 - \\mathrm{P}(X \\leqslant ${oppbornea})) && (\\text{passage au complémentaire})`,
               )
               calculstep.push(
                 ` &\\approx  ${resultatB} - (1 - ${resultatA}) &&`,
@@ -338,7 +338,7 @@ export default class CalculsLoiNormale extends Exercice {
               `&= \\mathrm{P}\\left( ${bornea}   < Z < ${borneb}  \\right)`,
             )
             calculstep.push(
-              `&=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X \\leq ${bornea}) &&`,
+              `&=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X \\leqslant ${bornea}) &&`,
             )
             if (variables.b < 0) {
               resultatB = texNombre(
@@ -351,13 +351,13 @@ export default class CalculsLoiNormale extends Exercice {
                   3,
                 )
                 calculstep.push(
-                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\geq ${oppbornea}) && (\\text{symétrie de la loi normale})`,
+                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\geqslant ${oppbornea}) && (\\text{symétrie de la loi normale})`,
                 )
                 calculstep.push(
-                  ` &=  1 - \\mathrm{P}(X \\leq ${oppborneb}) - (1-\\mathrm{P}(X < ${oppbornea})) && (\\text{passage au complémentaire})`,
+                  ` &=  1 - \\mathrm{P}(X \\leqslant ${oppborneb}) - (1-\\mathrm{P}(X < ${oppbornea})) && (\\text{passage au complémentaire})`,
                 )
                 calculstep.push(
-                  ` &=  \\mathrm{P}(X < ${oppbornea}) - \\mathrm{P}(X \\leq ${oppborneb}) &&`,
+                  ` &=  \\mathrm{P}(X < ${oppbornea}) - \\mathrm{P}(X \\leqslant ${oppborneb}) &&`,
                 )
                 calculstep.push(` &\\approx ${resultatA} - ${resultatB} &&`)
               } else {
@@ -366,10 +366,10 @@ export default class CalculsLoiNormale extends Exercice {
                   3,
                 )
                 calculstep.push(
-                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\leq ${bornea}) && (\\text{symétrie de la loi normale})`,
+                  ` &=  \\mathrm{P}(X > ${oppborneb}) - \\mathrm{P}(X \\leqslant ${bornea}) && (\\text{symétrie de la loi normale})`,
                 )
                 calculstep.push(
-                  ` &=  1 - \\mathrm{P}(X \\leq ${oppborneb}) - \\mathrm{P}(X \\leq ${bornea}) && (\\text{passage au complémentaire})`,
+                  ` &=  1 - \\mathrm{P}(X \\leqslant ${oppborneb}) - \\mathrm{P}(X \\leqslant ${bornea}) && (\\text{passage au complémentaire})`,
                 )
                 calculstep.push(` &\\approx 1 - ${resultatB} - ${resultatA} &&`)
               }
@@ -386,7 +386,7 @@ export default class CalculsLoiNormale extends Exercice {
                 ` &=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X > ${oppbornea}) && (\\text{symétrie de la loi normale})`,
               )
               calculstep.push(
-                ` &=  \\mathrm{P}(X < ${borneb}) - (1 - \\mathrm{P}(X \\leq ${oppbornea})) && (\\text{passage au complémentaire})`,
+                ` &=  \\mathrm{P}(X < ${borneb}) - (1 - \\mathrm{P}(X \\leqslant ${oppbornea})) && (\\text{passage au complémentaire})`,
               )
               calculstep.push(
                 ` &\\approx  ${resultatB} - (1 - ${resultatA}) &&`,
@@ -497,7 +497,7 @@ export default class CalculsLoiNormale extends Exercice {
               `&= \\mathrm{P}\\left( ${bornea}   < Z < ${borneb}  \\right)`,
             )
             calculstep.push(
-              `&=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X \\leq ${bornea}) &&`,
+              `&=  \\mathrm{P}(X < ${borneb}) - \\mathrm{P}(X \\leqslant ${bornea}) &&`,
             )
             resultatA = texNombre(
               0.5 + 0.5 * erf(variables.a / Math.sqrt(2)),

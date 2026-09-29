@@ -51,7 +51,7 @@ $\\bullet~~$ $G$ :  "Le joueur gagne la partie" .<br><br>`
 
     this.correction = "On utilise l'événement complémentaire :<br>"
     this.correction +=
-      '$P(X \\geq 1) = 1 - P(X = 0) = 1 - \\left(\\dfrac{13}{25}\\right)^{10}.$<br>'
+      '$P(X \\geqslant 1) = 1 - P(X = 0) = 1 - \\left(\\dfrac{13}{25}\\right)^{10}.$<br>'
     this.correction += `La bonne réponse est donc $${miseEnEvidence('1 - \\left(\\dfrac{13}{25}\\right)^{10}')}$.`
   }
 

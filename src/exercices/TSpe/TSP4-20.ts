@@ -37,7 +37,7 @@ export default class Concentration extends Exercice {
     this.nbQuestions = 3
     this.besoinFormulaireTexte = [
       'Choix des questions',
-      '1 : Majorer $\\mathrm{P}\\left(\\lvert M_n-\\mathrm{E}\\left(X\\right)\\rvert \\geq a\\right)$ \n2 : Minorer $\\mathrm{P}\\left(M_n \\in ]\\mathrm{E}\\left(X\\right)-a ; \\mathrm{E}\\left(X\\right)+a[\\right)$  \n3 : Déterminer $n$ pour que $\\mathrm{P}\\left(\\lvert M_n-\\mathrm{E}\\left(X\\right)\\rvert \\geq a\\right)\\leq p$ \n4 : Mélange des cas précédents',
+      '1 : Majorer $\\mathrm{P}\\left(\\lvert M_n-\\mathrm{E}\\left(X\\right)\\rvert \\geqslant a\\right)$ \n2 : Minorer $\\mathrm{P}\\left(M_n \\in ]\\mathrm{E}\\left(X\\right)-a ; \\mathrm{E}\\left(X\\right)+a[\\right)$  \n3 : Déterminer $n$ pour que $\\mathrm{P}\\left(\\lvert M_n-\\mathrm{E}\\left(X\\right)\\rvert \\geqslant a\\right)\\leqslant p$ \n4 : Mélange des cas précédents',
     ]
     this.sup = '4'
 

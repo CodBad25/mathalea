@@ -173,9 +173,9 @@ export default class ResoudreEquationDegre2Old extends Exercice {
         const delta = b * b - 4 * a * c
         const racine1 = (-b - Math.sqrt(delta)) / (2 * a)
         const racine2 = (-b + Math.sqrt(delta)) / (2 * a)
-        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\geq 0$`
+        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\geqslant 0$`
         texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
-        texteCorr += '<br>On cherche à résoudre $P(x)\\geq 0$.'
+        texteCorr += '<br>On cherche à résoudre $P(x)\\geqslant 0$.'
         texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
         texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
         texteCorr +=
@@ -210,7 +210,7 @@ export default class ResoudreEquationDegre2Old extends Exercice {
 
           // xmin détermine la marge à gauche, ymin la hauteur réservée pour le tableau, xmax la largeur réservée pour le tableau et ymax la marge au dessus du tableau
         } else {
-          texteCorr += `<0$, on peut dire que $P(x)\\geq 0$ sur $S=]-\\infty;${x1}]\\cup[${x2};+\\infty[$`
+          texteCorr += `<0$, on peut dire que $P(x)\\geqslant 0$ sur $S=]-\\infty;${x1}]\\cup[${x2};+\\infty[$`
           ligne1 = [
             'Line',
             30,
@@ -264,9 +264,9 @@ export default class ResoudreEquationDegre2Old extends Exercice {
         a = k
         b = -k * x1 - k * x2
         c = k * x1 * x2
-        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\leq 0$`
+        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\leqslant 0$`
         texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
-        texteCorr += '<br>On cherche à résoudre $P(x)\\leq 0$.'
+        texteCorr += '<br>On cherche à résoudre $P(x)\\leqslant 0$.'
         texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
         texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
         texteCorr +=
@@ -489,15 +489,15 @@ export default class ResoudreEquationDegre2Old extends Exercice {
           b = 2 * k * x1
           c = -k * x1 * x1 - y1
         }
-        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\leq 0$`
+        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\leqslant 0$`
         if (b === 0) {
-          texte = `$${rienSi1(a)}x^2${ecritureAlgebrique(c)}\\leq0$`
+          texte = `$${rienSi1(a)}x^2${ecritureAlgebrique(c)}\\leqslant0$`
         }
         texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
         if (b === 0) {
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=$${rienSi1(a)}x^2${ecritureAlgebrique(c)}$.`
         }
-        texteCorr += '<br>On cherche à résoudre $P(x)\\leq 0$.'
+        texteCorr += '<br>On cherche à résoudre $P(x)\\leqslant 0$.'
         texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
         texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
         texteCorr +=
@@ -525,15 +525,15 @@ export default class ResoudreEquationDegre2Old extends Exercice {
           b = 2 * k * x1
           c = -k * x1 * x1 - y1
         }
-        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\geq 0$`
+        texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\geqslant 0$`
         if (b === 0) {
-          texte = `$${rienSi1(a)}x^2${ecritureAlgebrique(c)}\\geq0$`
+          texte = `$${rienSi1(a)}x^2${ecritureAlgebrique(c)}\\geqslant0$`
         }
         texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
         if (b === 0) {
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=$${rienSi1(a)}x^2${ecritureAlgebrique(c)}$.`
         }
-        texteCorr += '<br>On cherche à résoudre $P(x)\\geq 0$.'
+        texteCorr += '<br>On cherche à résoudre $P(x)\\geqslant 0$.'
         texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
         texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
         texteCorr +=

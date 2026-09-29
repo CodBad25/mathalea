@@ -37,7 +37,7 @@ export default class Tcheby extends Exercice {
     this.nbQuestions = 4
     this.besoinFormulaireTexte = [
       'Choix des questions',
-      '1 : Majorer $P(\\lvert{X-E(X)}\\rvert \\geq a)$ \n2 : Minorer $P(X \\in ]E(X)-a;E(X)+a[)$  \n3 : Majorer $P(\\lvert{S_n-E(S_n)}\\rvert \\geq a)$  \n4 : Déterminer $n$ pour que $P(\\lvert{M_n-E(X)}\\rvert \\geq a)\\leq p$ \n5 : Mélange des cas précédents',
+      '1 : Majorer $P(\\lvert{X-E(X)}\\rvert \\geqslant a)$ \n2 : Minorer $P(X \\in ]E(X)-a;E(X)+a[)$  \n3 : Majorer $P(\\lvert{S_n-E(S_n)}\\rvert \\geqslant a)$  \n4 : Déterminer $n$ pour que $P(\\lvert{M_n-E(X)}\\rvert \\geqslant a)\\leqslant p$ \n5 : Mélange des cas précédents',
     ]
     this.sup = '5'
 

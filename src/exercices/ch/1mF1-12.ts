@@ -577,7 +577,7 @@ export default class DomaineDeDefinition extends Exercice {
             const domLatexP = this.convertDomainToLatex(
               this.computeDomainePolynome('sqrt', p, racinesP),
             )
-            texteCorr += `La condition sur le domaine de définition est la suivante : \\[${stringP}\\geq 0,\\] car la racine est définie sur les nombres positifs.
+            texteCorr += `La condition sur le domaine de définition est la suivante : \\[${stringP}\\geqslant 0,\\] car la racine est définie sur les nombres positifs.
           <br>`
             if (degP === 2) {
               texteCorr += `On détermine les valeurs qui annulent $${stringP}$. On obtient que ces valeurs sont $\\left\\{${racinesP.map((item) => item.texFractionSimplifiee).join(',')}\\right\\}.$ Le coefficient dominant de $${stringP}$ est $${coeffDomP.texFractionSimplifiee}${coeffDomP.signe === 1 ? '>0' : '<0'}$, donc la parabole associée est ${coeffDomP.signe === 1 ? 'convexe' : 'concave'}. `
@@ -597,7 +597,7 @@ export default class DomaineDeDefinition extends Exercice {
             const domLatexQ = this.convertDomainToLatex(
               this.computeDomainePolynome('inverse', q, racinesQ),
             )
-            texteCorr += `Les conditions sur le domaine de définition sont les suivantes : \\[\\text{Première condition : }${stringP}\\geq 0,\\] car la racine est définie sur les nombres positifs. \\[\\text{Deuxième condition : }${stringQ}\\neq 0,\\] car le dénominateur ne peut pas valoir $0$.
+            texteCorr += `Les conditions sur le domaine de définition sont les suivantes : \\[\\text{Première condition : }${stringP}\\geqslant 0,\\] car la racine est définie sur les nombres positifs. \\[\\text{Deuxième condition : }${stringQ}\\neq 0,\\] car le dénominateur ne peut pas valoir $0$.
           <br>`
             if (degP === 2) {
               texteCorr += `On détermine les valeurs qui annulent $${stringP}$. On obtient que ces valeurs sont $\\left\\{${racinesP.map((item) => item.texFractionSimplifiee).join(',')}\\right\\}.$ Le coefficient dominant de $${stringP}$ est $${coeffDomP.texFractionSimplifiee}${coeffDomP.signe === 1 ? '>0' : '<0'}$, donc la parabole associée est ${coeffDomP.signe === 1 ? 'convexe' : 'concave'}. `
@@ -640,7 +640,7 @@ export default class DomaineDeDefinition extends Exercice {
               this.computeDomainePolynome('invSqrt', q, racinesQ),
             )
             texte += `\\dfrac{\\sqrt{${stringP}}}{\\sqrt{${stringQ}}}$`
-            texteCorr += `Les conditions sur le domaine de définition sont les suivantes : \\[\\text{Première condition : }${stringP}\\geq 0,\\] car la racine est définie sur les nombres positifs. \\[\\text{Deuxième condition : }${stringQ}> 0,\\] car la racine est définie sur les nombres positifs et le dénominateur ne peut pas valoir $0$.
+            texteCorr += `Les conditions sur le domaine de définition sont les suivantes : \\[\\text{Première condition : }${stringP}\\geqslant 0,\\] car la racine est définie sur les nombres positifs. \\[\\text{Deuxième condition : }${stringQ}> 0,\\] car la racine est définie sur les nombres positifs et le dénominateur ne peut pas valoir $0$.
           <br>`
             if (degP === 2) {
               texteCorr += `On détermine les valeurs qui annulent $${stringP}$. On obtient que ces valeurs sont $\\left\\{${racinesP.map((item) => item.texFractionSimplifiee).join(',')}\\right\\}.$ Le coefficient dominant de $${stringP}$ est $${coeffDomP.texFractionSimplifiee}${coeffDomP.signe === 1 ? '>0' : '<0'}$, donc la parabole associée est ${coeffDomP.signe === 1 ? 'convexe' : 'concave'}. `
@@ -666,7 +666,7 @@ export default class DomaineDeDefinition extends Exercice {
             const domLatexQ = this.convertDomainToLatex(
               this.computeDomainePolynome('sqrt', q, racinesQ),
             )
-            texteCorr += `Les conditions sur le domaine de définition sont les suivantes : \\[\\text{Première condition : }${stringP}\\geq 0\\] \\[\\text{Deuxième condition : }${stringQ}\\geq 0,\\] car la racine est définie sur les nombres positifs.
+            texteCorr += `Les conditions sur le domaine de définition sont les suivantes : \\[\\text{Première condition : }${stringP}\\geqslant 0\\] \\[\\text{Deuxième condition : }${stringQ}\\geqslant 0,\\] car la racine est définie sur les nombres positifs.
           <br>`
             if (degP === 2) {
               texteCorr += `On détermine les valeurs qui annulent $${stringP}$. On obtient que ces valeurs sont $\\left\\{${racinesP.map((item) => item.texFractionSimplifiee).join(',')}\\right\\}.$ Le coefficient dominant de $${stringP}$ est $${coeffDomP.texFractionSimplifiee}${coeffDomP.signe === 1 ? '>0' : '<0'}$, donc la parabole associée est ${coeffDomP.signe === 1 ? 'convexe' : 'concave'}. `

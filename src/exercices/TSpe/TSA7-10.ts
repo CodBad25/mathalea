@@ -26,7 +26,7 @@ export default class VraiFauxSuites extends ExerciceVraiFaux {
           'Si $F$ est une primitive de $f$ sur $I$, alors $f$ est positive sur $I$ équivaut à $F$ croissante sur $I$.',
         statut: true,
         correction:
-          "Vrai car $F'=f$ donc $f\\geq 0 \\Leftrightarrow F'\\geq 0 \\Leftrightarrow F$ croissante.",
+          "Vrai car $F'=f$ donc $f\\geqslant 0 \\Leftrightarrow F'\\geqslant 0 \\Leftrightarrow F$ croissante.",
       },
       {
         texte:
