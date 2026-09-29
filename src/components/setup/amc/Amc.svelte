@@ -158,6 +158,7 @@
   let pendingSettingsSeed: string | null = null
   let previousExercicesCount = 0 // Pour détecter les nouveaux exercices
   let configImportInput: HTMLInputElement | null = null
+  let latexSection: HTMLDetailsElement | null = null
   let skipNextExercicesParamsRefresh = false
 
   let unsubscribeExercicesParams: (() => void) | null = null
@@ -2476,6 +2477,13 @@
     isDocumentSettingsOpen = false
   }
 
+  function scrollToLatexSection() {
+    if (latexSection == null) return
+
+    latexSection.open = true
+    latexSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   onMount(async () => {
     await mathaleaUpdateExercicesParamsFromUrl()
     await refreshExercicesFromStore($exercicesParams)
@@ -2917,6 +2925,8 @@
           {/if}
 
           <details
+            id="amc-latex-output"
+            bind:this={latexSection}
             class="rounded-xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/20 p-3 dark:border-coopmathsdark-struct-light/30 dark:bg-coopmathsdark-canvas-dark/30"
           >
             <summary
@@ -4058,8 +4068,22 @@
         </aside>
       </div>
     </div>
-  </div></SetupShell
->
+  </div>
+
+  {#if latexContent.trim()}
+    <div class="print-hidden fixed bottom-5 right-5 z-40">
+      <button
+        type="button"
+        aria-controls="amc-latex-output"
+        class="flex items-center gap-2 rounded-full bg-coopmaths-action px-4 py-2 font-semibold text-white shadow-lg transition hover:bg-coopmaths-action-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coopmaths-action focus-visible:ring-offset-2 dark:bg-coopmathsdark-action dark:text-coopmathsdark-canvas dark:hover:bg-coopmathsdark-action-light"
+        on:click={scrollToLatexSection}
+      >
+        <i class="bx bx-down-arrow-alt text-xl" aria-hidden="true"></i>
+        Voir le LaTeX
+      </button>
+    </div>
+  {/if}
+</SetupShell>
 
 {#if isExerciseSettingsModalOpen && exerciseSettingsTargetIndex != null && exercices[exerciseSettingsTargetIndex]}
   <BasicClassicModal
