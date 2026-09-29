@@ -161,6 +161,14 @@ export default function figureApigeom({
     }
     // console.log('ExZoom:' + idApigeom)
     const customEvent = event as CustomEvent
+    const targetContainer = customEvent.detail.container
+    const figureContainer = document.getElementById(idApigeom)
+    if (
+      targetContainer instanceof HTMLElement &&
+      (figureContainer === null || !targetContainer.contains(figureContainer))
+    ) {
+      return
+    }
     const zoom = Number(customEvent.detail.zoom)
     if (oldZoom !== zoom) {
       oldZoom = zoom
@@ -176,47 +184,13 @@ export default function figureApigeom({
   }
   document.addEventListener('zoomChanged', updateZoom)
 
-  let retryTimeout: number | null = null
-  let retryCount = 0
-  const MAX_RETRY = 3
-  function updateAffichage(): void {
+  function updateAffichage(container: HTMLDivElement): void {
     if (!figure.options) {
       // figure effacée, donc on annule la mise à jour...
       destroy()
       return
     }
     if (!context.isHtml) {
-      return
-    }
-
-    const eles = document.querySelectorAll(`#${idApigeom}`)
-    if (eles.length > 1) {
-      if (retryCount < MAX_RETRY) {
-        retryCount++
-        // MGu ca arrive quand on duplique un exercice,
-        //  le temps que l'autre soit modifié,
-        // où se retrouve avec 2 éléments avec le même id dans la page
-        window.notify(
-          `Plusieurs éléments avec le même id ${idApigeom} dans la page.`,
-          { exercice, figure, eles },
-        )
-
-        // 🔥 retry dans 300 millisecondes
-        if (retryTimeout === null) {
-          retryTimeout = window.setTimeout(() => {
-            retryTimeout = null
-            updateAffichage()
-          }, 300)
-        }
-
-        return
-      }
-    }
-    // ✅ reset si tout est OK
-    retryCount = 0
-    const container = document.querySelector(`#${idApigeom}`) as HTMLDivElement
-    // console.log('container:' + figure.id + ':' + container)
-    if (container == null) {
       return
     }
 
@@ -269,14 +243,17 @@ export default function figureApigeom({
   // rechargement de la page). La désinscription réelle est déjà assurée par
   // destroy() ci-dessous, appelé explicitement quand la figure est vraiment
   // détruite (cf. exportedReinit).
-  const setupCallback = () => {
-    updateAffichage()
-    return () => {
-      if (retryTimeout !== null) {
-        window.clearTimeout(retryTimeout)
-        retryTimeout = null
-      }
+  const setupCallback = ({ element }: { element: HTMLElement }) => {
+    // Le conteneur de cette figure est le frère placé juste avant son
+    // <mathalea-dom-ready>. On part de l'élément qui a déclenché le montage
+    // plutôt que d'interroger tout le document par id : lors d'un changement
+    // de vue Svelte, l'ancien et le nouveau sous-arbre peuvent coexister le
+    // temps d'une frame et porter brièvement le même id.
+    const container = element.previousElementSibling
+    if (!(container instanceof HTMLDivElement) || container.id !== idApigeom) {
+      return
     }
+    updateAffichage(container)
   }
   DomReadyActionElement.registerCallback(setupAction, setupCallback)
 
@@ -288,10 +265,6 @@ export default function figureApigeom({
   const destroy = () => {
     if (destroyed) return
     destroyed = true
-    if (retryTimeout !== null) {
-      window.clearTimeout(retryTimeout)
-      retryTimeout = null
-    }
     DomReadyActionElement.unregisterCallback(setupAction, setupCallback)
     if (isEvaluatedFigure) {
       ApigeomFigureElement.unregisterVerificationCallback(

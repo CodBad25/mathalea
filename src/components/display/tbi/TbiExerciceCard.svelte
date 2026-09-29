@@ -167,11 +167,27 @@
    */
   function renderMath(node: HTMLElement, currentZoom: number) {
     mathaleaRenderDiv(node, currentZoom)
+    notifyApigeomZoom(node, currentZoom)
     return {
       update(newZoom: number) {
         mathaleaRenderDiv(node, newZoom)
+        notifyApigeomZoom(node, newZoom)
       },
     }
+  }
+
+  /**
+   * apiGeom gère son propre dimensionnement et ne fait pas partie des SVG
+   * redimensionnés par resizeContent(). Le conteneur dans le détail de
+   * l'événement permet de ne modifier que les figures de cette carte : deux
+   * cartes TBI peuvent avoir des zooms différents.
+   */
+  function notifyApigeomZoom(container: HTMLElement, currentZoom: number) {
+    document.dispatchEvent(
+      new CustomEvent('zoomChanged', {
+        detail: { zoom: currentZoom, container },
+      }),
+    )
   }
 
   function openDialog(node: HTMLDialogElement) {
