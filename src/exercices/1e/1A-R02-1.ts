@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '458eb'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'c71ce'
 
 export const refs = {
-  'fr-fr': ['1A-R02-1', '2A-R2-1', 'BP1SP07'],
+  'fr-fr': ['1A-R02-1', '2A-R2-1'],
   'fr-ch': [],
 }
 export default class Auto1AR4 extends CalculPartieAvecTout {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

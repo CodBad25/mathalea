@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '6ffd3'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'df833'
 
 export const refs = {
-  'fr-fr': ['1A-E01-1', '2A-E1-1', 'BP1CF01'],
-  'fr-ch': ['9QCM-19'],
+  'fr-fr': ['1A-E01-1', '2A-E1-1'],
+  'fr-ch': [],
 }
 export default class Auto1AE1 extends TauxCoeff {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

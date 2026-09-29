@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '51125'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'b147f'
 
 export const refs = {
-  'fr-fr': ['1A-S02-8', '2A-S2-8', '3AutoS02-3', 'BP1AUTO042'],
-  'fr-ch': ['QCM9-1'],
+  'fr-fr': ['1A-S02-8', '2A-S2-8'],
+  'fr-ch': [],
 }
 export default class Auto1AS4 extends MoyenneStat {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '816f5'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '72786'
 
 export const refs = {
   'fr-fr': ['1A-C07-7', '2A-N7-7'],
-  'fr-ch': ['10QCM-25'],
+  'fr-ch': [],
 }
 export default class Auto1AC077 extends ConversionEnTousSens {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

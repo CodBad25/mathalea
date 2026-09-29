@@ -10,11 +10,13 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'efc17'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '2373f'
 
 export const refs = {
   'fr-fr': ['1A-C02-4', '2A-N2-4'],
-  'fr-ch': ['1mQCM-14'],
+  'fr-ch': [],
 }
 export default class Auto1AC2a extends NombreInverse {
   constructor() {
@@ -27,6 +29,6 @@ export default class Auto1AC2a extends NombreInverse {
     <li>Effectuer d'abord les calculs de fractions dans le membre de droite pour obtenir une égalité de fractions.</li>
     <li>Comparer ensuite les deux membres de l'égalité obtenue.</li>
   </ul>`
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

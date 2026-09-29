@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import AutoC8d from '../exercices/1e/1A-C08-4'
+import AutoC8d from '../exercices/1e/1A-C08-4-old'
 import { mathaleaHandleExerciceSimple } from './mathalea'
 import type { IExercice } from './types'
 import { qcmCamExport } from './qcmCam'

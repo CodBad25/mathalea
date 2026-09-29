@@ -10,18 +10,18 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const dateDeModifImportante = '13/09/2026'
+export const dateDeModifImportante = '29/09/2026'
 
-export const uuid = '6bdc0'
+export const uuid = '8e718'
 
 export const refs = {
   'fr-fr': ['1A-C04-6', '2A-N4-6'],
-  'fr-ch': ['9QCM-14'],
+  'fr-ch': [],
 }
 export default class Auto1AC4f extends ÉcrirePourcentage {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut écrire un nombre sous forme de pourcentage.<br>

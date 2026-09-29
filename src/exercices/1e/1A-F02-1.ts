@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'fdba8'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '98ca2'
 
 export const refs = {
   'fr-fr': ['1A-F02-1'],
-  'fr-ch': ['1mQCM-38', '11QCM-56'],
+  'fr-ch': [],
 }
 export default class Auto1AF1 extends CalculImageSecondDegre {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

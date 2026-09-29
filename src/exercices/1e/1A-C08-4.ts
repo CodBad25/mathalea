@@ -1,9 +1,11 @@
 import ReduireAvecFraction from '../can/3e/can3L2-01'
 
-export const uuid = 'c1c68'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '9f40e'
 export const refs = {
   'fr-fr': ['1A-C08-4', '2A-C1-2'],
-  'fr-ch': ['10QCM-28'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
@@ -20,6 +22,6 @@ export const dateDePublication = '18/02/2026'
 export default class AutoC8d extends ReduireAvecFraction {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

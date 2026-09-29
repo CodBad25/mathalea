@@ -67,7 +67,7 @@ les paramètres qui suivent s'y rapportent jusqu'au suivant.
 | Paramètre | Portée | Rôle |
 | --- | --- | --- |
 | `uuid` | exercice | identifiant permanent de l'exercice |
-| `id` | exercice | référence dans le référentiel, utilisée seulement sans `uuid` |
+| `id` | exercice | référence choisie dans le référentiel ; avec `uuid`, elle est conservée si elle correspond à cet UUID |
 | `n` | exercice | nombre de questions |
 | `s`, `s2` … `s5` | exercice | valeurs des formulaires de paramètres (`sup` … `sup5`) |
 | `alea` | exercice | graine du tirage aléatoire |

@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '09d80'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '9c8b9'
 
 export const refs = {
   'fr-fr': ['1A-C09-8'],
-  'fr-ch': ['1mQCM-19', '11QCM-26'],
+  'fr-ch': [],
 }
 export default class Auto1AC9i extends CalculAstucieuxAvecDifferenceCarre {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

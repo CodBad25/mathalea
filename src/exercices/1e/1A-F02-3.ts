@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'e3ea1'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '10e03'
 
 export const refs = {
   'fr-fr': ['1A-F02-3'],
-  'fr-ch': ['11QCM-65', '10QCM-55'],
+  'fr-ch': [],
 }
 export default class Auto1AF1b extends CalculImageParFonctionAffineFraction {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

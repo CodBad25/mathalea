@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '8d5ec'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'ad00a'
 
 export const refs = {
   'fr-fr': ['1A-C10-2', '2A-C3-2'],
-  'fr-ch': ['11QCM-32', '1mQCM-26'],
+  'fr-ch': [],
 }
 export default class Auto1AC10b extends EquationsCarree {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

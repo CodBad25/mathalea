@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'c9efa'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '1ac07'
 
 export const refs = {
   'fr-fr': ['1A-E03-1', '2A-E3-1'],
-  'fr-ch': ['11QCM-46', '10QCM-43'],
+  'fr-ch': [],
 }
 export default class Auto1AE3 extends PoucentageE2 {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

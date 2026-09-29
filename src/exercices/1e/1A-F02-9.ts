@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '08208'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'ef907'
 
 export const refs = {
   'fr-fr': ['1A-F02-9', '2A-F2-3'],
-  'fr-ch': ['1mQCM-5'],
+  'fr-ch': [],
 }
 export default class Auto1AF2a extends CoordonneesPointIntersectionAxeAbscissesDroite {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

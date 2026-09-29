@@ -10,7 +10,9 @@ export const interactifReady = true
  * Clone de can3S2-01 pour les auto 1er
  * @author Gilles Mora
  */
-export const uuid = '79057'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'cfd64'
 
 export const refs = {
   'fr-fr': ['1A-P03-4', '2A-P3-4'],
@@ -20,6 +22,6 @@ export const refs = {
 export default class Auto1AP03d extends CalculProbaSimple {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

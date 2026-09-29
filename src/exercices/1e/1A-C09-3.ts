@@ -1,7 +1,7 @@
 import DeveloppementDouble from '../can/2e/can2L10-04'
 export const titre = 'Développer avec la double distributivité'
 export const dateDePublication = '28/07/2025'
-export const dateDeModifImportante = '25/03/2026'
+export const dateDeModifImportante = '29/09/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
@@ -11,15 +11,15 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '106e7'
+export const uuid = '85c64'
 
 export const refs = {
-  'fr-fr': ['1A-C09-3', '2A-C2-3', 'BP1AUTO071'],
-  'fr-ch': ['11QCM-4', '1mQCM-7'],
+  'fr-fr': ['1A-C09-3', '2A-C2-3'],
+  'fr-ch': [],
 }
 export default class Auto1AC9b extends DeveloppementDouble {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

@@ -10,16 +10,18 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'e0d49'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '71491'
 
 export const refs = {
   'fr-fr': ['1A-C03-16', '2A-N3-11'],
-  'fr-ch': ['11QCM-19'],
+  'fr-ch': [],
 }
 export default class Auto1AC3p extends calculPuissancesAvecn {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut retrouver une valeur de $n$ dans une égalité avec des puissances.

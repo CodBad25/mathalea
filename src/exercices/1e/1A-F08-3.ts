@@ -13,15 +13,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '69ad3'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '4fd31'
 
 export const refs = {
   'fr-fr': ['1A-F08-3'],
-  'fr-ch': ['11QCM-80', '1mQCM-68'],
+  'fr-ch': [],
 }
 export default class Auto1AF6d extends TrouverCoeffDir {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

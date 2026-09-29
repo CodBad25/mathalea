@@ -10,7 +10,9 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'cd464'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'c1ae7'
 
 export const refs = {
   'fr-fr': ['1A-R01-2', '2A-R1-2'],
@@ -19,6 +21,6 @@ export const refs = {
 export default class Auto1AR1a extends PourcentageARetrouver {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

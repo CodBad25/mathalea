@@ -10,11 +10,13 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '1252f'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '3dfef'
 
 export const refs = {
   'fr-fr': ['1A-C02-2', '2A-N2-2'],
-  'fr-ch': ['11QCM-6', '1mQCM-9'],
+  'fr-ch': [],
 }
 export default class Auto1AC2c extends CalculComplexeFraction {
   constructor() {
@@ -35,6 +37,6 @@ export default class Auto1AC2c extends CalculComplexeFraction {
      </li>
   </ul>
 `
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }
