@@ -3312,6 +3312,8 @@ export function htmlToTypst(
    * celle des vues sans réglage par exercice.
    */
   qcmColumns: string = DEFAULT_QCM_COLUMNS,
+  /** Met en gras les repères des listes alphabétiques comme les numéros des questions. */
+  boldQuestionNumbers = false,
 ): string {
   // 1. Les formules et les blocs générés sont protégés par des jetons
   //    pour traverser intacts l'échappement du texte.
@@ -3609,7 +3611,9 @@ export function htmlToTypst(
           const className = token.match(/\bclass\s*=\s*["']([^"']*)["']/i)?.[1]
           const numbering =
             name === 'ol' && /\balpha\b/i.test(className ?? '')
-              ? '"a)"'
+              ? boldQuestionNumbers
+                ? '(..n) => strong(numbering("a)", ..n))'
+                : '"a)"'
               : undefined
           listStack.push({ type: name, numbering })
           if (numbering != null) {
@@ -3631,7 +3635,9 @@ export function htmlToTypst(
           // s'agissait d'un début de ligne saisi dans le texte
           output +=
             '\n' +
-            protect(listStack[listStack.length - 1]?.type === 'ol' ? '+ ' : '- ')
+            protect(
+              listStack[listStack.length - 1]?.type === 'ol' ? '+ ' : '- ',
+            )
         }
         break
       case 'p':

@@ -172,6 +172,68 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#let ex1-colonnes = colonnes-questions')
   })
 
+  it('applique le réglage gras aux sous-questions alpha de l’énoncé et du corrigé', () => {
+    const item = exercise({
+      questions: [
+        "<ol class='alpha alpha-parenthesis'><li>un</li><li>deux</li></ol>",
+      ],
+      corrections: [
+        "<ol class='alpha alpha-parenthesis'><li>un</li><li>deux</li></ol>",
+      ],
+    })
+    const bold = buildTypstDocument([item], {
+      ...defaultTypstDocumentOptions,
+      boldQuestionNumbers: true,
+    })
+    const normal = buildTypstDocument([item], {
+      ...defaultTypstDocumentOptions,
+      boldQuestionNumbers: false,
+    })
+
+    expect(
+      bold.match(
+        /#set enum\(numbering: \(\.\.n\) => strong\(numbering\("a\)", \.\.n\)\)\)/g,
+      )?.length,
+    ).toBeGreaterThanOrEqual(2)
+    expect(
+      normal.match(/#set enum\(numbering: "a\)"\)/g)?.length,
+    ).toBeGreaterThanOrEqual(2)
+  })
+
+  it.skipIf(!shouldRunTypstCliTests())(
+    'compile les sous-questions alpha en gras',
+    async () => {
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync } = await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join } = await import('node:path')
+      const dir = mkdtempSync(join(tmpdir(), 'typst-alpha-bold-'))
+      const file = join(dir, 'doc.typ')
+      writeFileSync(
+        file,
+        buildTypstDocument(
+          [
+            exercise({
+              questions: [
+                "<ol class='alpha alpha-parenthesis'><li>un</li><li>deux</li></ol>",
+              ],
+              corrections: [
+                "<ol class='alpha alpha-parenthesis'><li>un</li><li>deux</li></ol>",
+              ],
+            }),
+          ],
+          { ...defaultTypstDocumentOptions, boldQuestionNumbers: true },
+        ),
+        'utf-8',
+      )
+      expect(() =>
+        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+          stdio: 'pipe',
+        }),
+      ).not.toThrow()
+    },
+  )
+
   it('découpe aussi les repères stylizeItems (multiMathfield) en sous-questions', () => {
     // stylizeItems ajoute des propriétés de style après font-weight:bold
     const marker = (letter: string) =>

@@ -266,7 +266,10 @@ describe('MultiMathfieldElement', () => {
     // sous peine d'en glisser un juste après `<ol class='alpha'>`, ce qui
     // casse le `#set enum(...)` généré par htmlToTypst pour cette liste.
     const dataTemplate = createList({
-      items: ['Quel nombre $-19$ a-t-il comme image ?', 'Quelle est l’image de $8$ ?'],
+      items: [
+        'Quel nombre $-19$ a-t-il comme image ?',
+        'Quelle est l’image de $8$ ?',
+      ],
       style: 'alpha',
     })
 
@@ -282,6 +285,61 @@ describe('MultiMathfieldElement', () => {
       '#[\n#set enum(numbering: "a)")\n' +
         '+ Quel nombre $-19$ a-t-il comme image ?\n' +
         '+ Quelle est l’image de $8$ ?]',
+    )
+  })
+
+  it('conserve la liste alpha et ses champs dans le rendu interactif de 3F10', () => {
+    const multi = document.createElement(
+      'multi-mathfield',
+    ) as MultiMathfieldElement
+    multi.id = 'multi-mathfieldEx0Q0'
+    multi.setAttribute('interactivity-on', 'true')
+    multi.setAttribute(
+      'data-template',
+      createList({
+        items: [
+          'Quelle est l’image de $2$ ? %{champ1}',
+          'Quelle est l’image de $3$ ? %{champ2}',
+          'Compléter $f(4)=$ %{champ3}',
+        ],
+        style: 'alpha',
+        classOptions: 'alpha-parenthesis',
+      }),
+    )
+    multi.setAttribute(
+      'data-options',
+      encodeURIComponent(
+        JSON.stringify({
+          champ1: { qcm: ['Oui', 'Non'] },
+          champ2: { qcm: ['Oui', 'Non'] },
+          champ3: { qcm: ['Oui', 'Non'] },
+        }),
+      ),
+    )
+    document.body.appendChild(multi)
+
+    const list = multi.shadowRoot?.querySelector('ol.alpha')
+    expect(list?.children).toHaveLength(3)
+    expect(
+      Array.from(list?.children ?? []).every((item) => item.tagName === 'LI'),
+    ).toBe(true)
+    expect(list?.querySelectorAll('[data-type="qcm"]')).toHaveLength(3)
+    expect(multi.shadowRoot?.querySelectorAll('ol')).toHaveLength(1)
+    expect(multi.shadowRoot?.querySelectorAll('br')).toHaveLength(0)
+    expect(multi.shadowRoot?.querySelector('style')?.textContent).toContain(
+      'list-style-type: lower-alpha',
+    )
+    expect(multi.shadowRoot?.querySelector('style')?.textContent).toContain(
+      'padding-left: 0',
+    )
+    expect(multi.shadowRoot?.querySelector('style')?.textContent).toContain(
+      'ol.alpha > li::marker',
+    )
+    expect(multi.shadowRoot?.querySelector('style')?.textContent).toContain(
+      'font-weight: bold',
+    )
+    expect(multi.shadowRoot?.querySelector('style')?.textContent).toContain(
+      "content: counter(list-item, lower-alpha) ') '",
     )
   })
 })

@@ -115,7 +115,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       )
       if (!onlyWithImage) questionItems.push(`Compléter $f($%{champ6}$)=${c}$`)
       texte += addMultiMathfield(this, i, {
-        dataTemplate: createList({ items: questionItems, style: 'alpha' }),
+        dataTemplate: createList({
+          items: questionItems,
+          style: 'alpha',
+          classOptions: 'alpha-parenthesis',
+        }),
 
         dataOptions: onlyWithImage
           ? {
@@ -250,7 +254,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       }
 
       if (!onlyWithImage) correctionItems.push(`$f(${miseEnEvidence(f)})=${c}$`)
-      texteCorr = createList({ items: correctionItems, style: 'alpha' })
+      texteCorr = createList({
+        items: correctionItems,
+        style: 'alpha',
+        classOptions: 'alpha-parenthesis',
+      })
       handleAnswers(
         this,
         i,
@@ -265,12 +273,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
               bareme: toutAUnPoint,
               champ1: { value: b },
               champ2: { value: d },
-              champ3: inversion
-                ? { value: `${e};${c}`, options: { suiteDeNombres: true } }
-                : { value: d },
-              champ4: inversion
-                ? { value: d }
-                : { value: `${e};${c}`, options: { suiteDeNombres: true } },
+              champ3: { value: d },
+              champ4: {
+                value: `${e};${c}`,
+                options: { suiteDeNombres: true },
+              },
               champ5: { value: d },
               champ6: { value: f },
             },
