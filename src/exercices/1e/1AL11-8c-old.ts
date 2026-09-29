@@ -1,10 +1,13 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 974a9 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
+import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Calculer la somme des termes d'une suite géométrique"
@@ -18,14 +21,12 @@ export const dateDePublication = '28/12/2022'
  */
 
 export const refs = {
-  'fr-fr': ['1AL11-8c'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
-export const dateDeModifImportante = '29/09/2026'
-
-export const uuid = '58ca0'
-export default class SommeSuiteGeometrique extends ExerciceSimple {
+export const uuid = '974a9'
+export default class SommeSuiteGeometriqueOld extends ExerciceSimple {
   constructor() {
     super()
     this.typeExercice = 'simple'
@@ -35,33 +36,19 @@ export default class SommeSuiteGeometrique extends ExerciceSimple {
     this.correctionDetailleeDisponible = true
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = { texteAvant: '<br>$S=$' }
-    this.besoinFormulaireTexte = [
-      'Premier indice',
-      '1 : Le premier indice est 0\n2 : Le premier indice est 1\n3 : Le premier indice est supérieur à 1',
-    ]
-    this.sup = '1'
+    this.besoinFormulaireCaseACocher = ['Le premier indice est toujours 1']
+    this.sup = false
   }
 
   nouvelleVersion() {
-    const typePremierIndice = Number(
-      gestionnaireFormulaireTexte({
-        saisie: this.sup,
-        max: 3,
-        defaut: 1,
-        nbQuestions: 1,
-        melange: 0,
-      })[0],
-    )
     const premierTerme = randint(2, 10)
-    const premierRang =
-      typePremierIndice === 3 ? randint(5, 50) : typePremierIndice - 1
+    const premierRang = this.sup ? 1 : 0
     const q = arrondi(randint(2, 19, 10) / 10, 1)
     const n = choice([10, 12, 15])
     const u = choice(['u', 'v', 'w'])
-    const nombreDeTermes = premierRang === 0 ? n + 1 : n
     const besoinDArrondi =
-      arrondi((premierTerme * (1 - q ** nombreDeTermes)) / (1 - q), 7) !==
-      arrondi((premierTerme * (1 - q ** nombreDeTermes)) / (1 - q), 3)
+      arrondi((premierTerme * (1 - q ** (n + 1))) / (1 - q), 7) !==
+      arrondi((premierTerme * (1 - q ** (n + 1))) / (1 - q), 3)
     if (premierRang === 0) {
       this.question = `Soit $${u}$ la suite géométrique de premier terme $${u}_0 = ${premierTerme}$ et de raison $${texNombre(q)}$.`
       this.question += `<br>Calculer $\\displaystyle S = ${u}_0 + ${u}_1 + ... + ${u}_{${n}} =\\sum_{k=0}^{${n}}${u}_k$`
@@ -80,7 +67,7 @@ export default class SommeSuiteGeometrique extends ExerciceSimple {
           '<br>$S=\\left(1^\\text{er}\\text{ terme}\\times \\dfrac{1-q^{\\text{nombre de termes}}}{1-q}\\right)$.'
         this.correction = `D'après la formule du cours : $S = ${premierTerme} \\times \\dfrac{1-${texNombre(q)}^{${n + 1}}}{1-${texNombre(q)}}$.`
       }
-    } else if (premierRang === 1) {
+    } else {
       this.question = `Soit $${u}$ la suite géométrique de premier terme $${u}_1 = ${premierTerme}$ et de raison $${texNombre(q)}$.`
       this.question += `<br>Calculer $\\displaystyle S = ${u}_1 + ${u}_2 + ... + ${u}_{${n}} =\\sum_{k=1}^{${n}}${u}_k$`
       this.question += besoinDArrondi
@@ -97,28 +84,6 @@ export default class SommeSuiteGeometrique extends ExerciceSimple {
         this.consigneCorrection +=
           '<br>$S=\\left(1^\\text{er}\\text{ terme}\\times \\dfrac{1-q^{\\text{nombre de termes}}}{1-q}\\right)$.'
         this.correction = `D'après la formule du cours : $S = ${premierTerme} \\times \\dfrac{1-${texNombre(q)}^{${n}}}{1-${texNombre(q)}}$.`
-      }
-    } else {
-      const dernierRang = premierRang + nombreDeTermes - 1
-      this.question = `Soit $${u}$ la suite géométrique de premier terme $${u}_{${premierRang}} = ${premierTerme}$ et de raison $${texNombre(q)}$.`
-      this.question += `<br>Calculer $\\displaystyle S = ${u}_{${premierRang}} + ${u}_{${premierRang + 1}} + ... + ${u}_{${dernierRang}} =\\sum_{k=${premierRang}}^{${dernierRang}}${u}_k$`
-      this.question += besoinDArrondi
-        ? ' et donner un arrondi au millième près.'
-        : '.'
-      this.reponse = arrondi(
-        (premierTerme * (1 - q ** nombreDeTermes)) / (1 - q),
-        3,
-      )
-      if (this.correctionDetaillee) {
-        this.consigneCorrection = `${texteGras('Rappel')} : $1 + q + q^2 + ... + q^n = \\dfrac{1 - q^{n + 1}}{1 - q}$.`
-        this.correction = `$S = \\underbrace{${premierTerme}}_{${u}_{${premierRang}}} + (\\underbrace{${premierTerme} \\times ${texNombre(q)}}_{${u}_{${premierRang + 1}}}) + ... + (\\underbrace{${premierTerme} \\times ${texNombre(q)}^{${nombreDeTermes - 1}}}_{${u}_{${dernierRang}}})$`
-        this.correction += `<br>$S = ${premierTerme} \\times (1 + ${texNombre(q)} + ... + ${texNombre(q)}^{${nombreDeTermes - 1}})$`
-        this.correction += `<br>$S = ${premierTerme} \\times \\dfrac{1-${texNombre(q)}^{${nombreDeTermes}}}{1-${texNombre(q)}}$`
-      } else {
-        this.consigneCorrection = `${texteGras('Rappel')} : La somme $S$ de plusieurs termes consécutifs d'une suite géométrique de raison $q$ est telle que : `
-        this.consigneCorrection +=
-          '<br>$S=\\left(1^\\text{er}\\text{ terme}\\times \\dfrac{1-q^{\\text{nombre de termes}}}{1-q}\\right)$.'
-        this.correction = `D'après la formule du cours : $S = ${premierTerme} \\times \\dfrac{1-${texNombre(q)}^{${nombreDeTermes}}}{1-${texNombre(q)}}$.`
       }
     }
     this.correction += `<br>$S ${besoinDArrondi ? '\\approx' : '='} ${miseEnEvidence(texNombre(this.reponse))}$`
