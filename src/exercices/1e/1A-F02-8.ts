@@ -20,7 +20,7 @@ export const uuid = '7f5f6'
  */
 export const refs = {
   'fr-fr': ['1A-F02-8'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-51', '2mQCM-14'],
 }
 type Noeud = {
   x: number

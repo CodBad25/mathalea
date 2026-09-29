@@ -14,7 +14,7 @@ export const uuid = '84f02'
 
 export const refs = {
   'fr-fr': ['1A-C13-2'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-34', '11QCM-37'],
 }
 export default class Auto1AC15 extends EquationSecondDegreParticuliere {
   constructor() {

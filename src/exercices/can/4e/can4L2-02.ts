@@ -22,7 +22,7 @@ export const uuid = '56a2d'
 
 export const refs = {
   'fr-fr': ['can4L2-02', 'BP1AUTO084', '2L11-flash3'],
-  'fr-ch': [],
+  'fr-ch': ['10FA4C-10'],
 }
 export default class DeveloppementNiveau1 extends ExerciceSimple {
   constructor() {

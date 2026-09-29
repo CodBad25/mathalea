@@ -14,7 +14,7 @@ export const uuid = 'aa40c'
 
 export const refs = {
   'fr-fr': ['1A-C09-4', '2A-C2-2', 'BP1AUTO072'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-30'],
 }
 export default class Auto1AC9c extends DeveloppementNiveau1 {
   constructor() {

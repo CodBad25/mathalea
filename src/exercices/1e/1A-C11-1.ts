@@ -14,7 +14,7 @@ export const uuid = 'a78e8'
 
 export const refs = {
   'fr-fr': ['1A-C11-1', '2A-C4-1'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-30'],
 }
 export default class Auto1AC13a extends ExprimerVariable {
   constructor() {

@@ -22,7 +22,7 @@ export const uuid = '96a78'
 
 export const refs = {
   'fr-fr': ['can2L3-01', 'BP1AUTO051', '2L30-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['2mIneq-10'],
 }
 export default class SolutionInequation extends ExerciceSimple {
   constructor() {

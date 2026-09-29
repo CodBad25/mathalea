@@ -22,7 +22,7 @@ export const uuid = '5586f'
  */
 export const refs = {
   'fr-fr': ['1A-F04-4'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-58'],
 }
 
 export const interactifReady = true

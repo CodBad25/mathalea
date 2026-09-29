@@ -17,7 +17,7 @@ export const uuid = '3b832'
 
 export const refs = {
   'fr-fr': ['can2L2-04', '2L22-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-27'],
 }
 export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
   constructor() {

@@ -14,7 +14,7 @@ export const uuid = '8d5ec'
 
 export const refs = {
   'fr-fr': ['1A-C10-2', '2A-C3-2'],
-  'fr-ch': [],
+  'fr-ch': ['11QCM-32', '1mQCM-26'],
 }
 export default class Auto1AC10b extends EquationsCarree {
   constructor() {

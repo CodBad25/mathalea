@@ -14,7 +14,7 @@ export const uuid = 'f0230'
 
 export const refs = {
   'fr-fr': ['1A-C10-13', '2A-C3-9', 'BP1AUTO050'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class Auto1AC12 extends SolutionInequation {
   constructor() {

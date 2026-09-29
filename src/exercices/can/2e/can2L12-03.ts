@@ -19,7 +19,7 @@ export const uuid = '14e86'
 
 export const refs = {
   'fr-fr': ['can2L12-03', '2L14-flash5'],
-  'fr-ch': [],
+  'fr-ch': ['11FA4E-3'],
 }
 export default class ExprimerEnFonctionRac extends ExerciceSimple {
   constructor() {

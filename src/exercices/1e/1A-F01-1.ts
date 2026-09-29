@@ -14,7 +14,7 @@ export const uuid = 'f32dd'
 
 export const refs = {
   'fr-fr': ['1A-F01-1', '2A-F1-1'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-50', '11QCM-52'],
 }
 export default class Auto1AF1c extends ImageSpline {
   constructor() {

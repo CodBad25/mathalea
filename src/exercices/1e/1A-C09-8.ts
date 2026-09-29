@@ -15,7 +15,7 @@ export const uuid = '09d80'
 
 export const refs = {
   'fr-fr': ['1A-C09-8'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-19', '11QCM-26'],
 }
 export default class Auto1AC9i extends CalculAstucieuxAvecDifferenceCarre {
   constructor() {

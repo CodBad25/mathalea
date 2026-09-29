@@ -23,7 +23,7 @@ export const uuid = 'b5c9c'
 
 export const refs = {
   'fr-fr': ['can2L12-01', '2L14-flash3'],
-  'fr-ch': [],
+  'fr-ch': ['1mCL1-15'],
 }
 export default class ExprimerVariable extends ExerciceSimple {
   constructor() {

@@ -23,7 +23,7 @@ export const uuid = '6adb0'
 
 export const refs = {
   'fr-fr': ['can1SD21-07'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class EquationSecondDegreParticuliere extends ExerciceSimple {
   constructor() {

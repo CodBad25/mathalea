@@ -11,7 +11,7 @@ export const uuid = '1aa6a'
 
 export const refs = {
   'fr-fr': ['1A-C11-3', '2A-C4-3'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-32'],
 }
 export const interactifReady = true
 

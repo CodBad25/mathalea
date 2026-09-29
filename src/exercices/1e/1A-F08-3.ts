@@ -17,7 +17,7 @@ export const uuid = '69ad3'
 
 export const refs = {
   'fr-fr': ['1A-F08-3'],
-  'fr-ch': [],
+  'fr-ch': ['11QCM-80', '1mQCM-68'],
 }
 export default class Auto1AF6d extends TrouverCoeffDir {
   constructor() {

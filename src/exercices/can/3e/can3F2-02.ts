@@ -24,7 +24,7 @@ export const uuid = 'cf55d'
 
 export const refs = {
   'fr-fr': ['can3F2-02', '2F13-flash4'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculImageParFonctionAffine extends ExerciceSimple {
   constructor() {
