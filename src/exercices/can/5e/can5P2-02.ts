@@ -44,7 +44,7 @@ export default class ÉcrirePourcentage extends ExerciceSimple {
           } else {
             this.question += this.versionQcm
               ? ``
-              : `${sp(1)} $\\ldots${sp(1)}\\%$`
+              : `${sp(1)} $\\ldots\\ldots\\ldots${sp(1)}\\%$`
           }
           this.correction = `$${texNombre(a)}=\\dfrac{${texNombre(a * 100, 0)}}{100}=${miseEnEvidence(texNombre(a * 100))} ${sp()}${this.versionQcm ? miseEnEvidence('\\%') : '\\%'}$`
           this.reponse = this.versionQcm
@@ -72,7 +72,7 @@ export default class ÉcrirePourcentage extends ExerciceSimple {
           } else {
             this.question += this.versionQcm
               ? ``
-              : `${sp(1)} $\\ldots${sp(1)}\\%$`
+              : `${sp(1)} $\\ldots\\ldots\\ldots${sp(1)}\\%$`
           }
           this.correction = `$${texNombre(dec, 3)}=\\dfrac{${texNombre(pourc, 2)}}{100}=${miseEnEvidence(texNombre(pourc, 2))} ${sp()}${this.versionQcm ? miseEnEvidence('\\%') : '\\%'}$`
           this.reponse = this.versionQcm ? `$${texNombre(pourc)}\\,\\%$` : pourc
@@ -99,7 +99,7 @@ export default class ÉcrirePourcentage extends ExerciceSimple {
           } else {
             this.question += this.versionQcm
               ? ``
-              : `${sp(1)} $\\ldots${sp(1)}\\%$`
+              : `${sp(1)} $\\ldots\\ldots\\ldots${sp(1)}\\%$`
           }
           this.correction = `$${texNombre(dec, 4)}=\\dfrac{${texNombre(pourc, 3)}}{100}=${miseEnEvidence(texNombre(pourc, 3))} ${sp()}${this.versionQcm ? miseEnEvidence('\\%') : '\\%'}$`
           this.reponse = this.versionQcm ? `$${texNombre(pourc)}\\,\\%$` : pourc
