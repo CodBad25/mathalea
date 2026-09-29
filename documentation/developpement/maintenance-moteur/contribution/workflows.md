@@ -43,10 +43,17 @@ supplémentaire. Le dossier est ignoré par Git et utilisé comme cache en CI.
 
 ## Build et dépendances
 
-- `pnpm install` synchronise les dépendances ;
+- `pnpm install` installe les versions de `pnpm-lock.yaml` sans modifier ce fichier ;
+- si le manifeste et le lockfile divergent, l'installation échoue : vérifier que
+  les deux fichiers ont été récupérés ensemble ;
+- pour modifier volontairement les dépendances, lancer
+  `pnpm install --no-frozen-lockfile` après avoir changé `package.json`, puis
+  relire et committer les deux fichiers ;
 - `pnpm build` vérifie la production d'une application distribuable ;
 - les navigateurs Playwright et les outils LaTeX sont des prérequis séparés ;
-- une modification de dépendance doit conserver `pnpm-lock.yaml` cohérent.
+- la version de pnpm est fixée par `packageManager` dans `package.json` et doit
+  rester alignée avec la CI ; pnpm est l'outil d'installation, pas une
+  `devDependency` du projet.
 
 ### Diagnostiquer la durée du build
 

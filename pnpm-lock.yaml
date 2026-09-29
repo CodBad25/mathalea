@@ -397,9 +397,6 @@ importers:
       playwright:
         specifier: 1.61.1
         version: 1.61.1
-      pnpm:
-        specifier: 11.16.0
-        version: 11.16.0
       prettier:
         specifier: ^3.9.9
         version: 3.9.9

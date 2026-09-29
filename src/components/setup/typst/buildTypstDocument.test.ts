@@ -1234,7 +1234,7 @@ describe('buildTypstDocument', () => {
       ],
       { ...defaultTypstDocumentOptions, showQrCodeFiche: true },
     )
-    expect(withQr).toContain('#place(top + right, context [')
+    expect(withQr).toContain('#place(top + right, dy: -0.5cm, context [')
     expect(withQr).toContain('#if here().page() == 1 [')
     expect(withQr).toContain('#import "@preview/tiaoma:0.3.0": qrcode')
     // L'URL reste une variable Typst lisible et modifiable dans le source,
@@ -2102,7 +2102,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     )
     // La couverture provoque un saut de page : le QR doit être émis avant,
     // et non dans le bloc d'en-tête qui suit.
-    expect(code).not.toContain('#place(top + right, context [')
+    expect(code).not.toContain('#place(top + right, dy: -0.5cm, context [')
   })
 
   it('préfère les énoncés CAN (canQuestions) aux questions ordinaires', () => {
