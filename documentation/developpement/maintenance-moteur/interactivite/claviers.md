@@ -13,7 +13,11 @@ pour les essayer.
 ```ts
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
-texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction)
+texte += ajouteChampTexteMathLive(
+  this,
+  i,
+  KeyboardType.clavierDeBaseAvecFraction,
+)
 ```
 
 Plusieurs types se combinent en les séparant par une espace
@@ -27,17 +31,18 @@ et `dataKeys` : voir
 
 Quelques types courants :
 
-| Type | Usage |
-| --- | --- |
-| `clavierDeBase` | nombres et opérations |
-| `clavierDeBaseAvecFraction` | nombres, opérations, fractions |
-| `clavierDeBaseAvecVariable` | idem avec des lettres |
-| `lycee`, `lyceeClassique` | fonctions et opérations du lycée |
-| `grecTrigo` | lettres grecques et fonctions trigonométriques |
-| `clavierHms` | durées et horaires |
-| `clavierEnsemble` | ensembles et intervalles |
-| `longueur`, `aire`, `volume`, `masse` | grandeurs avec unités |
-| `alphanumeric` | clavier alphanumérique |
+| Type                                  | Usage                                                                          |
+| ------------------------------------- | ------------------------------------------------------------------------------ |
+| `clavierDeBase`                       | nombres et opérations                                                          |
+| `clavierDeBaseAvecFraction`           | nombres, opérations, fractions                                                 |
+| `clavierDeBaseAvecVariable`           | idem avec des lettres                                                          |
+| `clavierMatrice`                      | coefficients usuels du lycée et insertion d'une matrice de dimensions choisies |
+| `lycee`, `lyceeClassique`             | fonctions et opérations du lycée                                               |
+| `grecTrigo`                           | lettres grecques et fonctions trigonométriques                                 |
+| `clavierHms`                          | durées et horaires                                                             |
+| `clavierEnsemble`                     | ensembles et intervalles                                                       |
+| `longueur`, `aire`, `volume`, `masse` | grandeurs avec unités                                                          |
+| `alphanumeric`                        | clavier alphanumérique                                                         |
 
 La liste complète est `KEYBOARD_CATEGORIES` dans
 `src/lib/interactif/claviers/keyboard.ts`.
@@ -72,7 +77,13 @@ Dans `src/lib/interactif/claviers/keyboard.ts` :
 
    `inline` donne l'ordre des touches sur une ligne (petits écrans), `block`
    leur ordre dans la grille de `cols` colonnes.
+
 3. Les touches elles-mêmes (affichage et commande insérée) sont définies dans
    `src/components/keyboard/lib/keycaps.ts`.
+
+La touche `MATRIX` ouvre un choix du nombre de lignes et de colonnes, puis
+insère une `pmatrix` dont chaque coefficient est un placeholder MathLive. Elle
+est fournie par `KeyboardType.clavierMatrice` avec les nombres, fractions,
+racines, puissances et opérations usuelles.
 
 Vérifier le résultat sur la page de test `?uuid=clavier`.

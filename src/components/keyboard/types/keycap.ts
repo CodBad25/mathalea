@@ -4,6 +4,7 @@ export type KeyCap = {
   display: string
   insert?: string
   command?: string | string[]
+  action?: 'insertMatrix'
 }
 
 export const isSpecialKey = (key: Keys): boolean =>

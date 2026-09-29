@@ -786,6 +786,11 @@ const advancedCaps: CompleteKeysList = {
   ],
 }
 
+const matrixCaps: CompleteKeysList = {
+  inline: ['MATRIX'],
+  block: ['MATRIX'],
+}
+
 const anglesCaps: CompleteKeysList = {
   inline: ['ANG', 'DEG', 'QUOTE', '='],
   block: ['ANG', 'DEG', 'QUOTE', '='],
@@ -1283,6 +1288,13 @@ export const masses: KeyboardBlock = {
   isUnits: true,
 }
 
+export const matrix: KeyboardBlock = {
+  keycaps: matrixCaps,
+  cols: 1,
+  title: 'Matrice',
+  isUnits: false,
+}
+
 export const majuscules: KeyboardBlock = {
   keycaps: majusculesCaps,
   cols: 7,
@@ -1375,6 +1387,7 @@ export const keyboardBlocks: {
   majuscules,
   minuscules,
   masses,
+  matrix,
   numbers,
   numbersSpace,
   numbersX,

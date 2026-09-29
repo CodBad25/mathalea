@@ -13,6 +13,7 @@ const KEYBOARD_CATEGORIES = [
   'clavierLimites',
   'clavierLectureLimites',
   'clavierLimitesSimple',
+  'clavierMatrice',
   'clavierCompare',
   'clavierCompareAvecNombres',
   'clavierDeBaseAvecX',
@@ -127,6 +128,10 @@ export const convertKeyboardTypeToBlocks = (
       return ['lectureLimites']
     case KeyboardType.clavierLimitesSimple:
       return ['limitesSimple']
+    case KeyboardType.clavierMatrice:
+      // La touche structurante doit rester sur la première page du clavier,
+      // notamment en mode horizontal sur ordinateur.
+      return ['matrix', 'numbers', 'fullOperations']
     case KeyboardType.vFON:
       return ['numbersOperations', 'vFON']
     case KeyboardType.clavierDeBaseAvecX:
