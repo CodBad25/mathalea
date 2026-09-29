@@ -921,6 +921,9 @@ ol.alpha {
 ol.alpha > li {
   margin-top: 0.5em;
 }
+ol.alpha.alpha-parenthesis > li::marker {
+  content: counter(list-item, lower-alpha) ') ';
+}
 ol.Alpha {
   @apply list-[upper-alpha] list-outside ml-4  marker:text-coopmaths-struct;
 }

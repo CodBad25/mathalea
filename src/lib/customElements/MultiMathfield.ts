@@ -65,7 +65,10 @@ function isTemplateNewlineBetweenTags(
 ): boolean {
   const before = template.slice(0, start).replace(/\s+$/, '')
   const after = template.slice(end).replace(/^\s+/, '')
-  return (before === '' || before.endsWith('>')) && (after === '' || after.startsWith('<'))
+  return (
+    (before === '' || before.endsWith('>')) &&
+    (after === '' || after.startsWith('<'))
+  )
 }
 
 function buildLatexEnumitemBlock(lines: string[]): string | null {
@@ -134,6 +137,7 @@ type MultiMathfieldOption = {
   keyboard?: string
   placeholder?: string
   minWidth?: number
+  maxWidth?: number
   texteApres?: string
   ldots?: boolean
   choices?: AllChoicesType
@@ -311,6 +315,24 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       math-field:focus-within::part(container) {
         outline: none;
         border: none;
+      }
+      ol.alpha {
+        list-style-type: lower-alpha;
+        list-style-position: outside;
+        margin-left: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-left: 0;
+      }
+      ol.alpha > li {
+        margin-top: 0.5em;
+      }
+      ol.alpha > li::marker {
+        color: var(--color-coopmaths-struct, #216d9a);
+        font-weight: bold;
+      }
+      ol.alpha.alpha-parenthesis > li::marker {
+        content: counter(list-item, lower-alpha) ') ';
       }
       /* QCU : le shadowRoot ne reçoit ni Tailwind ni la surcharge de app.css.
          On reproduit ici le style des autres QCM du site (ex. 1A-E01-1) :
@@ -649,12 +671,9 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
   }
 
   render() {
-    const template = (this.getAttribute('data-template') || '').replaceAll(
-      '<br>',
-      '\n',
-    )
+    const template = this.getAttribute('data-template') || ''
     const rawOptionsAttr = this.getAttribute('data-options') || '%7B%7D'
-    let options
+    let options: Record<string, MultiMathfieldOption>
     try {
       options = JSON.parse(decodeURIComponent(rawOptionsAttr))
     } catch (e) {
@@ -678,187 +697,91 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       )
       return
     }
-    const champNames: string[] = []
-    // On extrait les noms de champs pour gérer la navigation au clavier
-    const champRegex = /%\{([^}:]+)(:[^}]*)?\}/g
-    let matchChamp
-    while ((matchChamp = champRegex.exec(template)) !== null) {
-      const name = matchChamp[1]
-      if (!champNames.includes(name)) {
-        champNames.push(name)
-      }
-    }
-    // Regex qui détecte $...$, %{champ}, \n ou texte
-    const regex = /(\$[^$]+\$|%\{[^}]+\}|\n)/g
-    let lastIndex = 0
-    let match
-    // On commence avec un span courant
-    let currentSpan = document.createElement('span')
-    currentSpan.style.display = 'inline-block'
-    const container = document.createElement('span')
-    container.style.display = 'inline-block'
-    container.style.verticalAlign = 'top'
-    while ((match = regex.exec(template)) !== null) {
-      if (match.index > lastIndex) {
-        // Stylise les items a), b), ... dans le texte brut
-        const rawText = template.slice(lastIndex, match.index)
-        // On utilise innerHTML pour insérer le HTML stylisé
-        const temp = document.createElement('span')
-        temp.innerHTML = stylizeItems(rawText)
-        Array.from(temp.childNodes).forEach((node) =>
-          currentSpan.appendChild(node),
-        )
-      }
-      const token = match[0]
-      if (token === '\n') {
-        // On ferme le span courant, ajoute <br>, puis nouveau span
-        if (currentSpan.childNodes.length > 0) {
-          container.appendChild(currentSpan)
-        }
-        container.appendChild(document.createElement('br'))
-        currentSpan = document.createElement('span')
-        currentSpan.style.display = 'inline-block'
-      } else if (token.startsWith('%{')) {
-        // Champ éditable
-        const name = token.slice(2, -1)
-        const fieldOptions: MultiMathfieldOption = options[name] ?? {}
-        if (
-          Array.isArray(fieldOptions.choices) &&
-          fieldOptions.choices.length > 0
-        ) {
-          // Le champ est une liste déroulante et non un MathLive.
-          const liste = this.createListeDeroulante(name, fieldOptions)
-          const checkSpanListe = document.createElement('span')
-          checkSpanListe.id =
-            'check-' + (this.id ? this.id : 'multi-mathfield') + '-' + name
-          currentSpan.appendChild(liste)
-          if (fieldOptions.texteApres) {
-            const texteApresListe = document.createElement('span')
-            texteApresListe.style.marginLeft = '0'
-            texteApresListe.innerHTML = fieldOptions.texteApres
-            currentSpan.appendChild(texteApresListe)
-          }
-          currentSpan.appendChild(checkSpanListe)
-          lastIndex = regex.lastIndex
-          continue
-        }
-        if (Array.isArray(fieldOptions.qcm) && fieldOptions.qcm.length > 0) {
-          const qcm = this.createQcm(name, fieldOptions)
-          const checkSpanQcm = document.createElement('span')
-          checkSpanQcm.id =
-            'check-' + (this.id ? this.id : 'multi-mathfield') + '-' + name
-          currentSpan.appendChild(qcm)
-          if (fieldOptions.texteApres) {
-            const texteApresQcm = document.createElement('span')
-            texteApresQcm.style.marginLeft = '0'
-            texteApresQcm.innerHTML = fieldOptions.texteApres
-            currentSpan.appendChild(texteApresQcm)
-          }
-          currentSpan.appendChild(checkSpanQcm)
-          lastIndex = regex.lastIndex
-          continue
-        }
-        const div = document.createElement('DIV')
-        div.style.display = 'inline-block'
-        div.classList.add('ml-1')
-        div.style.marginLeft = '2px'
-        div.style.marginRight = '2px'
-        div.style.marginTop = '0'
-        div.style.marginBottom = '0'
-        div.style.paddingTop = '0'
-        div.style.paddingBottom = '0'
-        div.style.paddingLeft = '0'
-        div.style.paddingRight = '0'
-        const mathfield = new MathfieldElement()
 
+    // Construire d'abord tout le HTML : découper chaque fragment autour des
+    // champs détruit les <ol>/<li> et recommence la numérotation à chaque item.
+    const htmlTemplate = template.replace(/\n/g, (_newline, index: number) =>
+      isTemplateNewlineBetweenTags(template, index, index + 1) ? '' : '<br>',
+    )
+    const tokens: string[] = []
+    const tokenRegex = /(\$[^$]+\$|%\{[^}]+\})/g
+    let lastIndex = 0
+    let html = ''
+    for (const match of htmlTemplate.matchAll(tokenRegex)) {
+      const index = match.index ?? 0
+      html += stylizeItems(htmlTemplate.slice(lastIndex, index))
+      tokens.push(match[0])
+      html += `<span data-multi-token="${tokens.length - 1}"></span>`
+      lastIndex = index + match[0].length
+    }
+    html += stylizeItems(htmlTemplate.slice(lastIndex))
+    this.contentHost.innerHTML = html
+
+    for (const placeholder of Array.from(
+      this.contentHost.querySelectorAll<HTMLElement>('[data-multi-token]'),
+    )) {
+      const token = tokens[Number(placeholder.dataset.multiToken)]
+      if (token.startsWith('$')) {
+        const span = document.createElement('span')
+        span.textContent = token
+        placeholder.replaceWith(span)
+        continue
+      }
+
+      const name = token.slice(2, -1)
+      const fieldOptions = options[name] ?? {}
+      const fieldContent = document.createDocumentFragment()
+      if (
+        Array.isArray(fieldOptions.choices) &&
+        fieldOptions.choices.length > 0
+      ) {
+        fieldContent.appendChild(this.createListeDeroulante(name, fieldOptions))
+      } else if (
+        Array.isArray(fieldOptions.qcm) &&
+        fieldOptions.qcm.length > 0
+      ) {
+        fieldContent.appendChild(this.createQcm(name, fieldOptions))
+      } else {
+        const wrapper = document.createElement('div')
+        wrapper.style.cssText =
+          'display:inline-block;margin:0 2px;padding:0;vertical-align:middle'
+        const mathfield = new MathfieldElement()
         mathfield.classList.add('ml-1')
-        if (options[name]) {
-          const style = options[name].keyboard ? options[name].keyboard : ''
-          const placeHolder = options[name].placeholder
-            ? options[name].placeholder
-            : ''
-          const maxWidth = options[name].maxWidth ? options[name].maxWidth : 100
-          mathfield.style.maxWidth = `${maxWidth}px`
-          const minWidth = options[name].minWidth ? options[name].minWidth : 30
-          mathfield.style.minWidth = `${minWidth}px`
-          const dataKeyboard = buildDataKeyboardString(
-            typeof style === 'string' ? style : '',
-          )
-          mathfield.setAttribute('data-keyboard', dataKeyboard)
-          if (placeHolder !== '') {
-            mathfield.setAttribute('placeholder', placeHolder)
-          }
+        mathfield.style.maxWidth = `${fieldOptions.maxWidth ?? 100}px`
+        mathfield.style.minWidth = `${fieldOptions.minWidth ?? 30}px`
+        mathfield.setAttribute(
+          'data-keyboard',
+          buildDataKeyboardString(fieldOptions.keyboard ?? ''),
+        )
+        if (fieldOptions.placeholder) {
+          mathfield.setAttribute('placeholder', fieldOptions.placeholder)
         }
-        // On donne comme id la concaténation de l'id du MultiMathfield (this.id) et du name du champ pour être sûr d'avoir un id unique
-        mathfield.id = (this.id ? this.id : 'multi-mathfield') + '-' + name
+        mathfield.id = (this.id || 'multi-mathfield') + '-' + name
         mathfield.setAttribute('data-name', name)
         mathfield.setAttribute('virtual-keyboard-mode', 'manual')
         mathfield.style.border = 'none'
-
-        // mathfield.style.verticalAlign = 'middle'
-        // mathfield.style.boxShadow =
-        //   'inset 2px 2px 6px #ccc, inset -2px -2px 6px #fff'
-
-        // Ajout gestionnaire TAB pour navigation globale entre tous les mathfields du DOM (y compris dans les shadowRoots)
-        mathfield.addEventListener('keydown', (e) => {
-          if (e.key === 'Tab') {
-            e.preventDefault()
-            // Fonction utilitaire pour collecter tous les mathfields du DOM et des shadowRoots
-            function collectAllMathfields(): MathfieldElement[] {
-              const mathfields = []
-              // 1. Mathfields dans le document principal
-              mathfields.push(
-                ...Array.from(document.querySelectorAll('math-field')),
-              )
-              // 2. Mathfields dans les shadowRoots des MultiMathfieldElement
-              const multiEls = Array.from(
-                document.querySelectorAll('multi-mathfield'),
-              )
-              for (const el of multiEls) {
-                if (el.shadowRoot) {
-                  mathfields.push(
-                    ...Array.from(el.shadowRoot.querySelectorAll('math-field')),
-                  )
-                }
-              }
-              return mathfields as MathfieldElement[]
-            }
-            const allMathfields = collectAllMathfields().filter(
-              (mf) => !mf.readOnly,
-            )
-            // Trouver l'index du mathfield courant
-            const current = e.target as MathfieldElement
-            const idx = allMathfields.indexOf(current)
-            let nextIdx
-            if (!e.shiftKey) {
-              nextIdx = (idx + 1) % allMathfields.length
-            } else {
-              nextIdx = (idx - 1 + allMathfields.length) % allMathfields.length
-            }
-            const next = allMathfields[nextIdx]
-            if (next) {
-              ;(next as HTMLElement).focus()
-            }
-          }
+        mathfield.addEventListener('keydown', (event) => {
+          if (event.key !== 'Tab') return
+          event.preventDefault()
+          const allMathfields = [
+            ...document.querySelectorAll<MathfieldElement>('math-field'),
+            ...Array.from(document.querySelectorAll('multi-mathfield')).flatMap(
+              (element) =>
+                Array.from(
+                  element.shadowRoot?.querySelectorAll<MathfieldElement>(
+                    'math-field',
+                  ) ?? [],
+                ),
+            ),
+          ].filter((field) => !field.readOnly)
+          const index = allMathfields.indexOf(event.target as MathfieldElement)
+          const nextIndex = event.shiftKey
+            ? (index - 1 + allMathfields.length) % allMathfields.length
+            : (index + 1) % allMathfields.length
+          allMathfields[nextIndex]?.focus()
         })
-        div.appendChild(mathfield)
-        let texteApres: HTMLElement | null = null
-        if (options[name] && options[name].texteApres) {
-          texteApres = document.createElement('span')
-          texteApres.style.marginLeft = '0'
-          texteApres.innerHTML = options[name].texteApres // On met le LaTeX brut dans le span, renderMathInElement va le transformer
-        }
-
-        // Ajoute un span de vérification après chaque Mathfield
-
-        const checkSpan = document.createElement('span')
-        checkSpan.id = 'check-' + mathfield.id
-        currentSpan.appendChild(div)
-        if (texteApres) {
-          currentSpan.appendChild(texteApres)
-        }
-        currentSpan.appendChild(checkSpan)
-
+        wrapper.appendChild(mathfield)
+        fieldContent.appendChild(wrapper)
         if (mathfield.isConnected) {
           setMathfield(mathfield)
         } else {
@@ -866,29 +789,18 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
             once: true,
           })
         }
-      } else if (token.startsWith('$')) {
-        const span = document.createElement('span')
-        span.textContent = token // On met le LaTeX brut dans le span, renderMathInElement va le transformer
-        currentSpan.appendChild(span)
       }
-      lastIndex = regex.lastIndex
-    }
-    if (lastIndex < template.length) {
-      // Stylise les items a), b), ... dans le texte brut restant
-      const rawText = template.slice(lastIndex)
-      const temp = document.createElement('span')
-      temp.innerHTML = stylizeItems(rawText)
-      Array.from(temp.childNodes).forEach((node) =>
-        currentSpan.appendChild(node),
-      )
-    }
-    // Ajoute le dernier span s'il n'est pas vide
-    if (currentSpan.childNodes.length > 0) {
-      container.appendChild(currentSpan)
+      if (fieldOptions.texteApres) {
+        const texteApres = document.createElement('span')
+        texteApres.innerHTML = fieldOptions.texteApres
+        fieldContent.appendChild(texteApres)
+      }
+      const checkSpan = document.createElement('span')
+      checkSpan.id = 'check-' + (this.id || 'multi-mathfield') + '-' + name
+      fieldContent.appendChild(checkSpan)
+      placeholder.replaceWith(fieldContent)
     }
 
-    // On ne remplace que le contenu, les styles du shadowRoot restent en place.
-    this.contentHost.replaceChildren(container)
     try {
       renderKatexInElement(this.contentHost)
     } catch (error) {

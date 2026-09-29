@@ -232,9 +232,7 @@ describe('latexMathToTypst', () => {
     const highlightedClose = latexMathToTypst(
       '{\\color{#f15929}\\boldsymbol{]}}',
     )
-    expect(highlightedOpen).toBe(
-      'text(fill: #rgb("#f15929"), bold(bracket.l))',
-    )
+    expect(highlightedOpen).toBe('text(fill: #rgb("#f15929"), bold(bracket.l))')
     expect(highlightedClose).toBe(
       'text(fill: #rgb("#f15929"), bold(bracket.r))',
     )
@@ -772,9 +770,24 @@ describe('htmlToTypst', () => {
     expect(htmlToTypst('<ol><li>un</li><li>deux</li></ol>')).toBe(
       '+ un\n+ deux',
     )
+    expect(htmlToTypst("<ol class='alpha'><li>un</li><li>deux</li></ol>")).toBe(
+      '#[\n#set enum(numbering: "a)")\n+ un\n+ deux]',
+    )
+  })
+
+  it('met en gras les repères alpha quand les numéros des questions sont en gras', () => {
     expect(
-      htmlToTypst("<ol class='alpha'><li>un</li><li>deux</li></ol>"),
-    ).toBe('#[\n#set enum(numbering: "a)")\n+ un\n+ deux]')
+      htmlToTypst(
+        "<ol class='alpha alpha-parenthesis'><li>un</li><li>deux</li></ol>",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true,
+      ),
+    ).toBe(
+      '#[\n#set enum(numbering: (..n) => strong(numbering("a)", ..n)))\n+ un\n+ deux]',
+    )
   })
 
   it('numérote chaque sous-question en continu à travers un saut de ligne', () => {
@@ -791,9 +804,9 @@ describe('htmlToTypst', () => {
   })
 
   it('conserve l’espace avant une formule mise en évidence', () => {
-    expect(
-      htmlToTypst('Ainsi, ${\\color{#f15929}\\boldsymbol{x=2}}$'),
-    ).toBe('Ainsi, $text(fill: #rgb("#f15929"), bold(x = 2))$')
+    expect(htmlToTypst('Ainsi, ${\\color{#f15929}\\boldsymbol{x=2}}$')).toBe(
+      'Ainsi, $text(fill: #rgb("#f15929"), bold(x = 2))$',
+    )
   })
 
   it('décode les entités HTML', () => {
@@ -862,7 +875,7 @@ describe('htmlToTypst', () => {
     expect(figures[0]).toContain('image(bytes("<svg')
   })
 
-  it("passe force-true-size: true à mathalea-figure-block pour une figure `vraieGrandeur` (construction/mesure), sans plafonner sa taille", () => {
+  it('passe force-true-size: true à mathalea-figure-block pour une figure `vraieGrandeur` (construction/mesure), sans plafonner sa taille', () => {
     const figures: string[] = []
     const result = htmlToTypst(
       '<div class="svgContainer"><div><svg class="mathalea2d" data-width-cm="20" data-height-cm="10" data-vraie-grandeur="1" width="600" height="300"><line x1="0" y1="0" x2="10" y2="10"/></svg></div></div>',
@@ -1143,7 +1156,7 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('\\color')
     expect(result).not.toContain('boldsymbol')
     expect(result).toBe(
-      "Donc l'ensemble de définition de $h$ est $text(fill: #rgb(\"#F15929\"), bold(RR))$.",
+      'Donc l\'ensemble de définition de $h$ est $text(fill: #rgb("#F15929"), bold(RR))$.',
     )
   })
 })
@@ -1210,7 +1223,7 @@ describe('svgToTypstImage', () => {
     )
   })
 
-  it("ne plafonne pas une figure `vraieGrandeur` (data-vraie-grandeur) même au-delà de la largeur maximale habituelle", () => {
+  it('ne plafonne pas une figure `vraieGrandeur` (data-vraie-grandeur) même au-delà de la largeur maximale habituelle', () => {
     expect(
       svgToTypstImage(
         '<svg width="600" height="300" data-width-cm="20" data-height-cm="10" data-vraie-grandeur="1"></svg>',
