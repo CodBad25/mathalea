@@ -12,6 +12,8 @@ hauteur et fait le pont entre l'app et les stores de MathALÉA.
 
 - les paramètres de l'exercice (`sup`) sous forme de `searchParams` ;
 - `v=eleve` en vue élève ;
+- `embed=1` si l'URL initiale demandait `v=embed`, afin que l'app conserve
+  l'information d'intégration même lorsque la vue élève remplace `v` ;
 - `numeroExercice` (indice de l'exercice dans la séance) ;
 - `seed`.
 
@@ -20,16 +22,23 @@ hauteur et fait le pont entre l'app et les stores de MathALÉA.
 Tous les messages portent `numeroExercice` : `ExternalApp` ignore ceux qui ne
 correspondent pas à son propre indice.
 
-| `type` | Sens | Rôle |
-| --- | --- | --- |
-| `mathaleaSettings` | app → MathALÉA | L'app renvoie ses paramètres (`urlParams`), stockés dans `exercicesParams[i].sup` |
-| `height` | app → MathALÉA | Ajuste la hauteur de l'`iframe` |
-| `mathaleaSendScore` | app → MathALÉA | Score final d'une tentative (`score`, `numberOfQuestions`, `finalState`) |
-| `mathaleaAskScore` | app → MathALÉA | L'app demande le score déjà enregistré |
-| `mathaleaHasScore` | MathALÉA → app | Restitution d'une copie précédente (`score`, `numberOfQuestions`, `finalState`) |
+| `type`              | Sens           | Rôle                                                                                      |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------- |
+| `mathaleaSettings`  | app → MathALÉA | L'app renvoie ses paramètres (`urlParams`), stockés dans `exercicesParams[i].sup`         |
+| `height`            | app → MathALÉA | Ajuste la hauteur de l'`iframe` à la hauteur de contenu annoncée, avec une marge de 20 px |
+| `mathaleaSendScore` | app → MathALÉA | Score final d'une tentative (`score`, `numberOfQuestions`, `finalState`)                  |
+| `mathaleaAskScore`  | app → MathALÉA | L'app demande le score déjà enregistré                                                    |
+| `mathaleaHasScore`  | MathALÉA → app | Restitution d'une copie précédente (`score`, `numberOfQuestions`, `finalState`)           |
 
 `mathaleaHasScore` est émis par `handleCapytale.ts` au chargement d'une copie
 d'élève (`window.postMessage`), puis relayé à l'`iframe`.
+
+Avant le premier message `height`, MathALÉA dimensionne l'iframe avec un ratio
+de secours dépendant de l'orientation de la fenêtre. Dès que l'app publie une
+hauteur finie et strictement positive, cette hauteur devient la source de vérité
+et les redimensionnements de la fenêtre ne réappliquent plus le ratio. Le
+message n'est accepté que s'il provient de l'iframe concernée et porte son
+`numeroExercice`.
 
 ## Règle du meilleur score
 
@@ -77,16 +86,33 @@ Côté app, lire les paramètres ajoutés à l'URL et répondre par `postMessage
 const urlParams = new URLSearchParams(window.location.search)
 const numeroExercice = Number(urlParams.get('numeroExercice'))
 const vue = urlParams.get('v')
+const isEmbedded = urlParams.get('embed') === '1' || vue === 'embed'
 
 // en fin de partie
 window.parent.postMessage(
-  { type: 'mathaleaSendScore', score, numberOfQuestions, numeroExercice, finalState },
+  {
+    type: 'mathaleaSendScore',
+    score,
+    numberOfQuestions,
+    numeroExercice,
+    finalState,
+  },
   '*',
 )
 
 // quand le professeur change un réglage
 window.parent.postMessage(
-  { type: 'mathaleaSettings', urlParams: window.location.search, numeroExercice },
+  {
+    type: 'mathaleaSettings',
+    urlParams: window.location.search,
+    numeroExercice,
+  },
+  '*',
+)
+
+// À chaque changement de taille du contenu intégré
+window.parent.postMessage(
+  { type: 'height', height: document.body.scrollHeight, numeroExercice },
   '*',
 )
 ```

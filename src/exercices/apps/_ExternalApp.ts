@@ -14,6 +14,7 @@ class ExternalApp extends Exercice {
   container: HTMLDivElement
   iframe: HTMLIFrameElement
   url: URL
+  isEmbedded: boolean
   state: 'done' | ''
   type = 'app'
   // Le getter html est appelé à chaque rendu : sans ce drapeau on empilerait
@@ -22,6 +23,7 @@ class ExternalApp extends Exercice {
   constructor(url: string) {
     super()
     this.url = new URL(url)
+    this.isEmbedded = this.url.searchParams.get('v') === 'embed'
 
     this.typeExercice = 'html'
     this.state = ''
@@ -32,7 +34,9 @@ class ExternalApp extends Exercice {
     this.iframe.classList.add('my-10')
     this.iframe.setAttribute('allowfullscreen', '')
     this.container.appendChild(this.iframe)
+    let hasReportedHeight = false
     const updateIframeSize = () => {
+      if (hasReportedHeight) return
       if (window.innerWidth > window.innerHeight) {
         this.iframe.setAttribute('width', '100%')
         this.iframe.setAttribute(
@@ -68,10 +72,14 @@ class ExternalApp extends Exercice {
       }
       if (
         event.data?.type === 'height' &&
-        event.data?.numeroExercice === this.numeroExercice
+        event.data?.numeroExercice === this.numeroExercice &&
+        event.source === this.iframe.contentWindow
       ) {
+        const height = Number(event.data.height)
+        if (!Number.isFinite(height) || height <= 0) return
+        hasReportedHeight = true
         this.iframe.setAttribute('scrolling', 'no')
-        this.iframe.setAttribute('height', event.data.height + 20)
+        this.iframe.setAttribute('height', (height + 20).toString())
       }
     })
   }
@@ -95,6 +103,9 @@ class ExternalApp extends Exercice {
     }
     if (get(globalOptions).v === 'eleve') {
       this.url.searchParams.set('v', 'eleve')
+    }
+    if (this.isEmbedded) {
+      this.url.searchParams.set('embed', '1')
     }
     if (this.numeroExercice !== undefined) {
       this.url.searchParams.set(
