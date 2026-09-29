@@ -48,6 +48,7 @@ export {
   isEquation,
   isEquivalentEquation,
 } from './equationChecks'
+export { isEquivalentInequality, splitInequality } from './inequalityChecks'
 export { sameIntegerProgressionSet } from './sameIntegerProgressionSet'
 export { sameParametricLine } from './sameParametricLine'
 export { sameSet } from './sameSet'
