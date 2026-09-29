@@ -15,7 +15,7 @@ export const uuid = 'a7d80'
 
 export const refs = {
   'fr-fr': ['1A-E04-2'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-47', '11QCM-49'],
 }
 export default class Auto1AE4a extends EvolSuccessives {
   constructor() {

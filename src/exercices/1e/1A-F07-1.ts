@@ -15,7 +15,7 @@ export const uuid = '4a79c'
 
 export const refs = {
   'fr-fr': ['1A-F07-1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class Auto1AF6a extends CoeffDirecteurDroite {
   constructor() {

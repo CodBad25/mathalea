@@ -802,6 +802,11 @@ texteCorr += 'Il fallait cliquer sur la figure A.'
 
 Le helper injecte un custom element `clique-figure` et renseigne le `formatInteractif`. Ici, on n'appelle pas `handleAnswers()` : la réponse attendue est portée par `this.cliqueFiguresArray[i]`.
 
+L'élève peut sélectionner plusieurs figures et les désélectionner jusqu'à la
+validation. Un halo orange clair indique le survol, et le contour orange indique
+la sélection ; aucun des deux ne révèle si la réponse est correcte. La
+correction et la note sont calculées à la validation.
+
 ## Glisser-déposer
 
 À utiliser quand l'élève doit placer des étiquettes dans des zones.
@@ -1057,6 +1062,45 @@ Hors HTML, `demiDroiteInteractive()` produit une figure statique :
 Quand `interactivityOn` vaut `true`, la demi-droite graduée est affichée sans
 les points à placer. Quand `interactivityOn` vaut `false`, les points fournis
 dans l'option `points` sont dessinés, ce qui convient au rendu de correction.
+
+## Intervalle sur une droite graduée
+
+À utiliser quand l'élève doit colorier une partie d'une droite graduée et
+choisir le sens des crochets. Les deux premiers clics fixent les bornes ; un
+clic ultérieur sur une borne intérieure inverse son crochet. Les extrémités de
+la droite représentent les infinis et ne portent donc jamais de crochet.
+
+```ts
+import {
+  addIntervalleDroite,
+  type IntervalleDroiteValue,
+} from '../../lib/customElements/IntervalleDroiteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+
+const reponse: IntervalleDroiteValue = {
+  start: 2,
+  end: 5,
+  leftBracket: '[',
+  rightBracket: null,
+}
+
+texte += addIntervalleDroite(this, i, {
+  min: -1,
+  max: 5,
+  labelValue: 2,
+})
+
+handleAnswers(
+  this,
+  i,
+  { reponse: { value: JSON.stringify(reponse) } },
+  { formatInteractif: 'intervalle-droite' },
+)
+```
+
+`leftBracket` et `rightBracket` acceptent `'['`, `']'` ou `null`. Utiliser
+`null` uniquement lorsque la borne correspond à `min` ou `max`. Chaque
+question vaut un point, indépendamment du nombre de clics nécessaires.
 
 ## Cercle trigonométrique
 

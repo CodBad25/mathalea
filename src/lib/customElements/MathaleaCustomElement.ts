@@ -52,6 +52,7 @@ export const listOfCustomElements = [
   'schema-en-barre',
   'shape-2d-grid-editor',
   'apigeom-figure',
+  'intervalle-droite',
 ]
 
 /**

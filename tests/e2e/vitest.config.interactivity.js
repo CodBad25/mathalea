@@ -16,7 +16,10 @@ export default mergeConfig(
       },
     },
     test: {
-      include: ['./tests/interactivity/mathLive.*.test.{js,ts}'],
+      include: [
+        './tests/interactivity/mathLive.*.test.{js,ts}',
+        './tests/interactivity/customElements.replay.test.ts',
+      ],
       exclude: ['./tests/interactivity/mathLive.moule.test.ts'],
       // on veut laisser le navigateur ouvert sur un plantage (10min)
       hookTimeout: 600_000,

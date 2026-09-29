@@ -31,7 +31,8 @@ La dernière version est disponible sur <https://coopmaths.fr/alea>.
 
 Vous pouvez récupérer une copie du dépot et l'utiliser en local. Pour cela, vous aurez besoin d'une version récente de NodeJS afin d'exécuter les commandes suivantes.
 
-De notre côté, on utilise pnpm, mais vous pouvez le remplacer par npm.
+Le dépôt utilise pnpm et son lockfile versionné pour installer les mêmes
+dépendances sur chaque poste. La version de pnpm est fixée dans `package.json`.
 
 ```
 pnpm install

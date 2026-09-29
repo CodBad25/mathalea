@@ -19,7 +19,7 @@ export const uuid = '7d3d1'
 
 export const refs = {
   'fr-fr': ['can2I2-05', '2I21-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class EvolSuccessives extends ExerciceSimple {
   constructor() {

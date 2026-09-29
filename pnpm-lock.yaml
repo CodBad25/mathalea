@@ -6,6 +6,9 @@ importers:
   .:
     configDependencies: {}
     packageManagerDependencies:
+      '@pnpm/exe':
+        specifier: 12.6.0
+        version: 12.6.0
       pnpm:
         specifier: 12.6.0
         version: 12.6.0
@@ -89,6 +92,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@pnpm/exe@12.6.0':
+    resolution: {integrity: sha512-CkNetlJZugjKp9vPvWqCm5ahORU6FfO46BlOqqSCKLJ+W6QcRgM0qmmPTvlgrXVvkAiH+9hE+mMp/wSaqcU5Aw==}
+    engines: {node: '>=18.*'}
+    hasBin: true
+
   pnpm@12.6.0:
     resolution: {integrity: sha512-PvaPlRyxEawgS0paFvCy3fDaVqluBBPoHYVdnwtV75JnFHCQKOHNAMQFwsX7e56OxNxGd3yAXQNzwvL/AP0g7A==}
     engines: {node: '>=18.*'}
@@ -137,6 +145,23 @@ snapshots:
 
   '@pnpm/exe.win32-x64@12.6.0':
     optional: true
+
+  '@pnpm/exe@12.6.0':
+    optionalDependencies:
+      '@pnpm/exe.android-arm64': 12.6.0
+      '@pnpm/exe.android-x64': 12.6.0
+      '@pnpm/exe.darwin-arm64': 12.6.0
+      '@pnpm/exe.darwin-x64': 12.6.0
+      '@pnpm/exe.freebsd-x64': 12.6.0
+      '@pnpm/exe.linux-arm64': 12.6.0
+      '@pnpm/exe.linux-arm64-musl': 12.6.0
+      '@pnpm/exe.linux-ppc64': 12.6.0
+      '@pnpm/exe.linux-riscv64': 12.6.0
+      '@pnpm/exe.linux-s390x': 12.6.0
+      '@pnpm/exe.linux-x64': 12.6.0
+      '@pnpm/exe.linux-x64-musl': 12.6.0
+      '@pnpm/exe.win32-arm64': 12.6.0
+      '@pnpm/exe.win32-x64': 12.6.0
 
   pnpm@12.6.0:
     optionalDependencies:
@@ -224,9 +249,6 @@ importers:
       '@types/jsdom':
         specifier: ^28.0.3
         version: 28.0.3
-      '@types/jspreadsheet-ce':
-        specifier: ^4.7.9
-        version: 4.7.9
       '@types/nunjucks':
         specifier: ^3.2.6
         version: 3.2.6
@@ -265,7 +287,7 @@ importers:
         version: git+https://git.sesamath.net/sesamath/instrumenpoche.git#638a049c93f037a36db9b570959bcf3410832ad6
       jspreadsheet-ce:
         specifier: git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git
-        version: git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git#ccc67c6319b52150f094c05230a6a6db8fe12e4e
+        version: git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git#644786a54fb2ca73038e239712f7cab8c3aa91fc
       jsqr:
         specifier: ^1.4.0
         version: 1.4.0
@@ -372,9 +394,6 @@ importers:
       playwright:
         specifier: 1.61.1
         version: 1.61.1
-      pnpm:
-        specifier: 11.16.0
-        version: 11.16.0
       prettier:
         specifier: ^3.9.9
         version: 3.9.9
@@ -1519,9 +1538,6 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/jspreadsheet-ce@4.7.9':
-    resolution: {integrity: sha512-hUK1zZIova7WAABlj1zV+EHMw70h/UergJy6ps+tJBfZ1kvzqNNe2L6RrXts1txyFDWvBxZ7byQ+MkeL+7W4Wg==}
-
   '@types/node@25.9.5':
     resolution: {integrity: sha512-OScDchr2fwuUmWdf4kZ9h7PcJiYDVInhJizG/biAq3cAvqwYktuy/TYGGdZNMtNTFUP7rnb0NU4TUdm82kt4Rg==}
 
@@ -2291,8 +2307,8 @@ packages:
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
 
-  jspreadsheet-ce@git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git#ccc67c6319b52150f094c05230a6a6db8fe12e4e:
-    resolution: {commit: ccc67c6319b52150f094c05230a6a6db8fe12e4e, repo: https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git, type: git}
+  jspreadsheet-ce@git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git#644786a54fb2ca73038e239712f7cab8c3aa91fc:
+    resolution: {commit: 644786a54fb2ca73038e239712f7cab8c3aa91fc, repo: https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git, type: git}
     version: 5.0.5
 
   jsqr@1.4.0:
@@ -4088,8 +4104,6 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/jspreadsheet-ce@4.7.9': {}
-
   '@types/node@25.9.5':
     dependencies:
       undici-types: 7.24.6
@@ -4939,7 +4953,7 @@ snapshots:
 
   json-stable-stringify-without-jsonify@1.0.1: {}
 
-  jspreadsheet-ce@git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git#ccc67c6319b52150f094c05230a6a6db8fe12e4e:
+  jspreadsheet-ce@git+https://forge.apps.education.fr/coopmaths/apps/spreadsheet-ce.git#644786a54fb2ca73038e239712f7cab8c3aa91fc:
     dependencies:
       '@jspreadsheet/formula': 2.0.2
       jsuites: 5.13.5

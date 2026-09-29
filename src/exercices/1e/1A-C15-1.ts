@@ -14,7 +14,7 @@ export const uuid = '8a682'
 
 export const refs = {
   'fr-fr': ['1A-C15-1'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-32'],
 }
 export default class Auto1AC19a extends ProblemeFractions {
   constructor() {

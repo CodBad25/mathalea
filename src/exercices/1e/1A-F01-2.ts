@@ -14,7 +14,7 @@ export const uuid = 'cb0a5'
 
 export const refs = {
   'fr-fr': ['1A-F01-2', '2A-F1-2'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-51', '11QCM-53'],
 }
 export default class Auto1AF1b extends ImageSpline {
   constructor() {

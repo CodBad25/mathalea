@@ -282,12 +282,12 @@ export const MATHALEA_INLINE_FORMULA_RULE = `#let mathalea-formule-multiligne(co
  * Lignes insérables (fin d'exercice ou après chaque question), pour que
  * l'élève y écrive. `n` lignes espacées de `gutter` ; sans effet visuel (ni
  * espace) tant que `n` vaut 0, valeur de départ dans la palette. `style`
- * choisit le trait, sur les trois que propose aussi le `answer-line-style` du
- * paquet taskize : `"pointilles"` (filet pointillé, valeur d'origine),
- * `"points"` (points de conduite) ou `"plein"` (filet continu).
+ * choisit le rendu : `"pointilles"` (filet pointillé, valeur d'origine),
+ * `"points"` (points de conduite), `"plein"` (filet continu) ou `"vide"`
+ * (espace de la même hauteur, sans trait).
  */
 export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2em, style: "pointilles") = if n > 0 { block(above: 2em, below: 0.8em,
-  stack(spacing: gutter, ..range(n).map(i => if style == "points" { box(width: 100%, text(fill: luma(120), repeat(gap: 2pt)[.])) } else { line(length: 100%, stroke: (paint: luma(120), thickness: 0.6pt, dash: if style == "plein" { none } else { "dotted" })) }))
+  stack(spacing: gutter, ..range(n).map(i => if style == "vide" { box(width: 100%, height: 0.6pt) } else if style == "points" { box(width: 100%, text(fill: luma(120), repeat(gap: 2pt)[.])) } else { line(length: 100%, stroke: (paint: luma(120), thickness: 0.6pt, dash: if style == "plein" { none } else { "dotted" })) }))
 ) }`
 
 /**
@@ -1262,10 +1262,10 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
   // l'emplacement ; en mode « après chaque question » plusieurs appels
   // portent le même marqueur (un par question), avec les mêmes réglages
   // le style est absent des codes émis avant son introduction : il reste
-  // facultatif dans le motif, et vaut alors `trait` (le rendu d'origine)
+  // facultatif dans le motif, et vaut alors `pointilles` (le rendu d'origine)
   const writingLines: Record<number, WritingLinesSetting> = {}
   for (const match of code.matchAll(
-    /^\s*#mathalea-lignes\((\d+), gutter: ([\d.]+)em(?:, style: "(pointilles|points|plein)")?\) \/\/ mathalea:lignes-(fin|apres)\((\d+)\)\s*$/gm,
+    /^\s*#mathalea-lignes\((\d+), gutter: ([\d.]+)em(?:, style: "(pointilles|points|plein|vide)")?\) \/\/ mathalea:lignes-(fin|apres)\((\d+)\)\s*$/gm,
   )) {
     writingLines[Number(match[5])] = {
       position: match[4] === 'fin' ? 'endOfExercise' : 'afterEachQuestion',
@@ -1701,9 +1701,9 @@ export type WritingLinesPosition = (typeof WRITING_LINES_POSITIONS)[number]
 /**
  * Trait des lignes : `pointilles` (filet pointillé, valeur d'origine, donc
  * celle des codes déjà enregistrés qui ne portent pas de style), `points`
- * (points de conduite) ou `plein` (filet continu).
+ * (points de conduite), `plein` (filet continu) ou `vide` (espace sans trait).
  */
-export const WRITING_LINES_STYLES = ['pointilles', 'points', 'plein'] as const
+export const WRITING_LINES_STYLES = ['pointilles', 'points', 'plein', 'vide'] as const
 export type WritingLinesStyle = (typeof WRITING_LINES_STYLES)[number]
 
 /** Réglage de lignes d'un exercice (palette de mise en page) */

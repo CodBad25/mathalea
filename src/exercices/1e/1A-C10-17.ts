@@ -14,7 +14,7 @@ export const uuid = '029b7'
 
 export const refs = {
   'fr-fr': ['1A-C10-17'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-25', '2mQCM-5'],
 }
 export default class Auto1AC12a extends seuilFctAff {
   constructor() {

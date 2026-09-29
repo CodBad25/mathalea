@@ -159,6 +159,64 @@ export function addDiagramXxxAssessment(
 - Le setter `value` réinjecte un état (correction figée, restitution Capytale, reprise de session).
 - Le type exact dépend du composant, mais la propriété s'appelle toujours `value`.
 
+### Contrat de sérialisation et de rejeu — obligatoire
+
+`verifQuestion()` enregistre la réponse dans `exercice.answers`, dont les valeurs
+sont des chaînes. Lors du rejeu, notamment dans Capytale,
+`mathaleaWriteStudentPreviousAnswers()` transmet **cette chaîne sans la
+désérialiser** :
+
+```ts
+element.value = answers[element.id]
+```
+
+Par conséquent, même si le getter retourne un objet, un tableau ou un nombre,
+le setter doit toujours accepter la représentation sérialisée effectivement
+stockée dans `exercice.answers`. Accepter uniquement le type natif du getter ne
+respecte pas le contrat.
+
+Pour un état structuré, utiliser ce modèle :
+
+```ts
+get value(): MonEtat {
+  return this.readState()
+}
+
+update(nextValue: MonEtat | string): void {
+  let state: MonEtat
+  if (typeof nextValue === 'string') {
+    try {
+      const parsed: unknown = JSON.parse(nextValue)
+      if (!isMonEtat(parsed)) return
+      state = parsed
+    } catch {
+      return
+    }
+  } else {
+    state = nextValue
+  }
+  this.applyState(state)
+}
+
+set value(nextValue: MonEtat | string) {
+  this.update(nextValue)
+}
+```
+
+Le parsing doit être défensif : une sauvegarde vide, ancienne ou corrompue ne
+doit ni lever d'exception ni effacer un état valide. Si le getter retourne un
+nombre, le setter doit au minimum accepter `number | string` et convertir avec
+`Number(...)` après validation.
+
+Le cycle à garantir est exactement celui-ci :
+
+1. l'élève produit un état non vide ;
+2. `verifQuestion()` enregistre `exercice.answers[element.id]` ;
+3. la page est recréée avec la même graine ;
+4. `mathaleaWriteStudentPreviousAnswers()` réinjecte la chaîne enregistrée ;
+5. le getter restitue le même état métier et une nouvelle vérification donne la
+   même note.
+
 Convention recommandée pour éviter les divergences getter/setter :
 
 - Implémenter une méthode publique `update(state)` qui applique l'état restaurable et déclenche le `redraw`/`render`.
@@ -166,6 +224,27 @@ Convention recommandée pour éviter les divergences getter/setter :
 - Faire retourner par le getter `value` toutes les propriétés nécessaires à une restauration fidèle par `update(state)`.
 - Ne pas piloter `update(state)` avec des champs dérivés/recalculés au rendu (exemples : ratio formaté, booléen de seuil, longueurs recalculées). Ces champs peuvent être présents dans le getter pour l'affichage/diagnostic, mais doivent être recalculés après `update`.
 - En cas d'évolution de schéma de données (`targetAB` renommé, etc.), lire l'ancien et le nouveau nom côté parsing pendant une période de compatibilité, et n'écrire que le nouveau nom côté production.
+
+### Test Playwright de rejeu — obligatoire
+
+Tout nouveau `MathaleaCustomElement` qui porte une réponse élève doit être livré
+avec un test Playwright de rejeu. Le test doit utiliser un état représentatif et
+non vide ; un aller-retour sur la valeur initiale vide ne constitue pas une
+preuve suffisante.
+
+Le scénario doit :
+
+- produire une réponse dans le composant puis la vérifier ;
+- récupérer la chaîne réellement enregistrée dans `exercice.answers` ;
+- recharger la même URL et la même graine ;
+- injecter la réponse avec `mathaleaWriteStudentPreviousAnswers()` ou reproduire
+  strictement son affectation `element.value = storedAnswer` ;
+- comparer l'état restauré à l'état saisi ;
+- relancer la vérification et comparer la note avant et après rejeu.
+
+Un composant purement technique, qui ne possède aucune réponse persistée, peut
+être exempté. Cette exemption doit être explicite et justifiée dans le catalogue
+des tests ; l'absence silencieuse de scénario n'est pas admise.
 
 6. Propriété interactivityOn
 
@@ -207,6 +286,9 @@ Afin que le custom element soit correctement pris en charge par le système d'in
 - Ajouter l'import du module dans `tests/unit/canSolutions.test.ts` : ce test
   vérifie que chaque tag de `listOfCustomElements` est bien dans le registre, ce
   qui suppose que le module a été chargé.
+- Ajouter le scénario Playwright de rejeu du composant. Le registre et le
+  catalogue de rejeu doivent rester exhaustifs : l'ajout d'un tag sans scénario
+  ni exemption technique justifiée doit faire échouer la CI.
 - La méthode statique `verifQuestion(exercice,questionIndex)` doit être implémentée dans l'élément. Elle porte la vérification, l'hydratation de `exercice.answers`, du `span#resultatCheckEx` et du `div#feedbackEx`.
 - Le retour de la fonction doit être : `{
 isOk: boolean

@@ -65,7 +65,7 @@ default:
 
 .pnpm_setup:
   before_script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
 
 setup:
   stage: setup
@@ -124,7 +124,7 @@ build_ci_pdf:
   allow_failure: false
   timeout: 5h
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
   rules:
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: always
@@ -238,7 +238,7 @@ playwright-console-consolidated:
   timeout: 5h
   allow_failure: true
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -304,7 +304,7 @@ playwright-pdf-consolidated:
   timeout: 5h
   allow_failure: false
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 30
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -369,7 +369,7 @@ playwright-pdf-dnb-consolidated:
   timeout: 5h
   allow_failure: true
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -413,7 +413,7 @@ playwright-pdf-bac-consolidated:
   timeout: 5h
   allow_failure: true
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -468,7 +468,7 @@ jsdom-all-exercises:
   stage: planified
   timeout: 1h
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm run makeJson >/dev/null
     - sleep 50
@@ -540,7 +540,7 @@ playwright-caneleve:
   allow_failure: true
   timeout: 5h
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - NODE_OPTIONS=--max-old-space-size=4096
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
@@ -592,7 +592,7 @@ playwright-consistency:
   allow_failure: true
   timeout: 5h
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - NODE_OPTIONS=--max-old-space-size=4096
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
@@ -643,7 +643,7 @@ playwright-interactivity:
   allow_failure: false
   timeout: 5h
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - NODE_OPTIONS=--max-old-space-size=4096
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
@@ -770,7 +770,7 @@ testExosModifiedConsolidated:
       - .pnpm-store/
     policy: pull
   script:
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - NODE_OPTIONS=--max-old-space-size=4096
     # Récupérer les fichiers modifiés depuis les 2 derniers commits
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
@@ -928,7 +928,7 @@ testExosModifiedLatex:
         CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
       fi
 
-    - npm install -g pnpm@11.16.0
+    - npm install -g pnpm@12.6.0
     - pnpm run makeJson >/dev/null
     - sleep 50
     - echo "$CHANGED_FILES"

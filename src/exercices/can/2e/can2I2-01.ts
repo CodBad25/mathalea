@@ -20,7 +20,7 @@ export const uuid = '4b11f'
 
 export const refs = {
   'fr-fr': ['can2I2-01', 'BP1CF09', '2I20-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3C-22'],
 }
 export default class TauxCoeff extends ExerciceSimple {
   constructor() {

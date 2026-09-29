@@ -24,7 +24,7 @@ export const uuid = '9d51d'
 
 export const refs = {
   'fr-fr': ['can2I2-04', 'BP1CF11', '2I21-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class TauxGlobal extends ExerciceSimple {
   constructor() {

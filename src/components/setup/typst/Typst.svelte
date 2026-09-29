@@ -2662,11 +2662,12 @@
     afterEachQuestion: 'Après chaque question',
   }
 
-  /** Libellés des traits proposés pour les lignes de réponse du document */
+  /** Libellés des rendus proposés pour les lignes de réponse du document */
   const ANSWER_LINES_STYLE_LABELS: Record<WritingLinesStyle, string> = {
     pointilles: 'Pointillés',
     points: 'Points',
     plein: 'Trait',
+    vide: 'Vide',
   }
 
   /**
@@ -4332,7 +4333,7 @@
                 <label
                   class="flex items-center justify-between gap-2 text-sm min-w-0"
                 >
-                  Trait des lignes
+                  Rendu des lignes
                   <select
                     class="max-w-[60%] truncate rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
                     bind:value={documentOptions.answerLinesStyle}

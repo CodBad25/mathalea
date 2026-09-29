@@ -1234,7 +1234,7 @@ describe('buildTypstDocument', () => {
       ],
       { ...defaultTypstDocumentOptions, showQrCodeFiche: true },
     )
-    expect(withQr).toContain('#place(top + right, context [')
+    expect(withQr).toContain('#place(top + right, dy: -0.5cm, context [')
     expect(withQr).toContain('#if here().page() == 1 [')
     expect(withQr).toContain('#import "@preview/tiaoma:0.3.0": qrcode')
     // L'URL reste une variable Typst lisible et modifiable dans le source,
@@ -1586,6 +1586,27 @@ describe('buildTypstDocument', () => {
         '#mathalea-lignes(2, gutter: 2em, style: "plein") // mathalea:lignes-fin(1)',
       )
       expect(code).toContain('if style == "plein" { none } else { "dotted" }')
+    })
+
+    it('émet et relit le style « vide » sans dessiner de trait', () => {
+      const setting = {
+        position: 'endOfExercise' as const,
+        count: 3,
+        spacing: 1.5,
+        style: 'vide' as const,
+      }
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        defaultTypstDocumentOptions,
+        { writingLines: { 1: setting } },
+      )
+      expect(code).toContain(
+        '#mathalea-lignes(3, gutter: 1.5em, style: "vide") // mathalea:lignes-fin(1)',
+      )
+      expect(code).toContain(
+        'if style == "vide" { box(width: 100%, height: 0.6pt) }',
+      )
+      expect(harvestCarryOver(code).writingLines).toEqual({ 1: setting })
     })
 
     it('relit un appel sans style (code émis avant le réglage) comme un filet pointillé', () => {
@@ -2102,7 +2123,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     )
     // La couverture provoque un saut de page : le QR doit être émis avant,
     // et non dans le bloc d'en-tête qui suit.
-    expect(code).not.toContain('#place(top + right, context [')
+    expect(code).not.toContain('#place(top + right, dy: -0.5cm, context [')
   })
 
   it('préfère les énoncés CAN (canQuestions) aux questions ordinaires', () => {

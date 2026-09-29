@@ -14,7 +14,7 @@ export const uuid = 'c4579'
 
 export const refs = {
   'fr-fr': ['1A-F07-4'],
-  'fr-ch': [],
+  'fr-ch': ['11QCM-77', '1mQCM-64'],
 }
 export default class Auto1AF6 extends EquationDroite {
   constructor() {

@@ -28,3 +28,13 @@ describe('clavierEntierementPersonnalisable', () => {
     )
   })
 })
+
+describe('clavierMatrice', () => {
+  it('fournit les coefficients usuels et la touche matrice', () => {
+    expect(convertKeyboardTypeToBlocks('clavierMatrice')).toEqual([
+      'matrix',
+      'numbers',
+      'fullOperations',
+    ])
+  })
+})

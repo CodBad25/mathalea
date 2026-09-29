@@ -31,6 +31,7 @@ export type BlockForKeyboard =
   | 'majuscules'
   | 'minuscules'
   | 'masses'
+  | 'matrix'
   | 'numbers'
   | 'numbersX'
   | 'numbers2'

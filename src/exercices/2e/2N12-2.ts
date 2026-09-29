@@ -781,7 +781,7 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
               "<br>On regarde donc la partie de l'intervalle qui est coloriée, soit en bleu, soit en rouge, soit en bleu et rouge<br>"
             texteCorr +=
               'On observe que les deux intervalles sont disjoints donc <br>'
-            texteCorr += `$I=]-\\infty;${b}] \\cup ]${c};${d}]$`
+            texteCorr += `$I=]-\\infty;${b}] \\cup [${c};${d}]$`
           } else if (test === 2) {
             texte += `$I=]-\\infty;${b}] \\cup [${c};${d}]$`
             texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans $]-\\infty;${b}]$ ou bien dans $[${c};${d}]$, ou dans les deux.`
@@ -792,12 +792,12 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
             texteCorr += `$I=]-\\infty;${b}] \\cup [${c};${d}]$`
           } else if (test === 3) {
             texte += `$I=]-\\infty;${b}]\\cup]${c};${d}]$`
-            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans $]-\\infty;${b}]$ ou bien dans $[${c};${d}]$, ou dans les deux.`
+            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans $]-\\infty;${b}]$ ou bien dans $]${c};${d}]$, ou dans les deux.`
             texteCorr +=
               "<br>On regarde donc la partie de l'intervalle qui est coloriée, soit en bleu, soit en rouge, soit en bleu et rouge.<br>"
             texteCorr +=
               'On observe que les deux intervalles sont disjoints donc <br>'
-            texteCorr += `$I=]-\\infty;${b}] \\cup [${c};${d}]$`
+            texteCorr += `$I=]-\\infty;${b}] \\cup ]${c};${d}]$`
           } else if (test === 4) {
             texte += `$I=[${a};${b}[\\cup]${c};+\\infty[$`
             texteCorr = context.isHtml
@@ -824,7 +824,7 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
                 "On regarde donc la partie de l'intervalle qui est coloriée, soit en bleu, soit en rouge, soit en bleu et rouge.<br>"
             texteCorr +=
               'On observe que les deux intervalles sont disjoints donc <br>'
-            texteCorr += `$I=[${a};${b}]\\cup]${c};+\\infty[$`
+            texteCorr += `$I=]${a};${b}]\\cup]${c};+\\infty[$`
           }
 
           break
@@ -911,8 +911,21 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            ` ${KeyboardType.clavierCompare} ${KeyboardType.clavierEnsemble}`,
-            { texteAvant: '<br>$I=$' },
+            KeyboardType.clavierDeBase,
+            {
+              texteAvant: '<br>$I=$',
+              dataKeys: [
+                '[',
+                ']',
+                ';',
+                '\\emptyset',
+                '\\mathbb{R}',
+                '\\cup',
+                '\\cap',
+                '-\\infty',
+                '+\\infty',
+              ],
+            },
           )
           handleAnswers(this, i, {
             reponse: { value: aRemplacer, options: { intervalle: true } },

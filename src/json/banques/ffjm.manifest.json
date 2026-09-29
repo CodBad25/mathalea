@@ -151,6 +151,196 @@
       "texCor": "tex/trois-ronds_cor.tex"
     },
     {
+      "id": "1a5",
+      "titre": "De 1 a 5",
+      "categorie": "Diagramme de nombres",
+      "tags": [
+        "diagramme",
+        "raisonnement",
+        "somme",
+        "2001F1"
+      ],
+      "etoiles": 1,
+      "png": "png/1a5.png",
+      "pngCor": "png/1a5_cor.png",
+      "typ": "typ/1a5.typ",
+      "typCor": "typ/1a5_cor.typ",
+      "tex": "tex/1a5.tex",
+      "texCor": "tex/1a5_cor.tex"
+    },
+    {
+      "id": "5nombres",
+      "titre": "Les 5 nombres",
+      "categorie": "Diagramme de nombres",
+      "tags": [
+        "diagramme",
+        "raisonnement",
+        "somme",
+        "2001Q8"
+      ],
+      "etoiles": 3,
+      "png": "png/5nombres.png",
+      "pngCor": "png/5nombres_cor.png",
+      "typ": "typ/5nombres.typ",
+      "typCor": "typ/5nombres_cor.typ",
+      "tex": "tex/5nombres.tex",
+      "texCor": "tex/5nombres_cor.tex"
+    },
+    {
+      "id": "6nombres",
+      "titre": "Les 6 nombres",
+      "categorie": "Diagramme de nombres",
+      "tags": [
+        "diagramme",
+        "raisonnement",
+        "somme",
+        "2005Q3"
+      ],
+      "etoiles": 1,
+      "png": "png/6nombres.png",
+      "pngCor": "png/6nombres_cor.png",
+      "typ": "typ/6nombres.typ",
+      "typCor": "typ/6nombres_cor.typ",
+      "tex": "tex/6nombres.tex",
+      "texCor": "tex/6nombres_cor.tex"
+    },
+    {
+      "id": "9triangles",
+      "titre": "Les 9 triangles",
+      "categorie": "Diagramme de nombres",
+      "tags": [
+        "diagramme",
+        "raisonnement",
+        "systeme",
+        "somme",
+        "2006D%"
+      ],
+      "etoiles": 2,
+      "png": "png/9triangles.png",
+      "pngCor": "png/9triangles_cor.png",
+      "typ": "typ/9triangles.typ",
+      "typCor": "typ/9triangles_cor.typ",
+      "tex": "tex/9triangles.tex",
+      "texCor": "tex/9triangles_cor.tex"
+    },
+    {
+      "id": "labyrinthe-grenouille",
+      "titre": "Labyrinthe",
+      "categorie": "Diagramme de nombres",
+      "sousCategorie": "Optimisation de chemin",
+      "tags": [
+        "labyrinthe",
+        "chemin",
+        "unicité",
+        "minimum",
+        "nénuphar",
+        "parité",
+        "2003D3"
+      ],
+      "etoiles": 1,
+      "png": "png/labyrinthe-grenouille.png",
+      "pngCor": "png/labyrinthe-grenouille_cor.png",
+      "typ": "typ/labyrinthe-grenouille.typ",
+      "typCor": "typ/labyrinthe-grenouille_cor.typ",
+      "tex": "tex/labyrinthe-grenouille.tex",
+      "texCor": "tex/labyrinthe-grenouille_cor.tex"
+    },
+    {
+      "id": "labyrinthe1",
+      "titre": "Labyrinthe",
+      "categorie": "Diagramme de nombres",
+      "sousCategorie": "Optimisation de chemin",
+      "tags": [
+        "labyrinthe",
+        "somme",
+        "unicité",
+        "2004Q8"
+      ],
+      "etoiles": 1,
+      "png": "png/labyrinthe1.png",
+      "pngCor": "png/labyrinthe1_cor.png",
+      "typ": "typ/labyrinthe1.typ",
+      "typCor": "typ/labyrinthe1_cor.typ",
+      "tex": "tex/labyrinthe1.tex",
+      "texCor": "tex/labyrinthe1_cor.tex"
+    },
+    {
+      "id": "marre-mare",
+      "titre": "Marre de la mare",
+      "categorie": "Diagramme de nombres",
+      "sousCategorie": "Optimisation de chemin",
+      "tags": [
+        "labyrinthe",
+        "mare",
+        "nombre premier",
+        "2004D8"
+      ],
+      "etoiles": 3,
+      "png": "png/marre-mare.png",
+      "pngCor": "png/marre-mare_cor.png",
+      "typ": "typ/marre-mare.typ",
+      "typCor": "typ/marre-mare_cor.typ",
+      "tex": "tex/marre-mare.tex",
+      "texCor": "tex/marre-mare_cor.tex"
+    },
+    {
+      "id": "parcours-chevalier",
+      "titre": "Le parcours du chevalier",
+      "categorie": "Diagramme de nombres",
+      "sousCategorie": "Optimisation de chemin",
+      "tags": [
+        "labyrinthe",
+        "portes",
+        "2006D7"
+      ],
+      "etoiles": 3,
+      "png": "png/parcours-chevalier.png",
+      "pngCor": "png/parcours-chevalier_cor.png",
+      "typ": "typ/parcours-chevalier.typ",
+      "typCor": "typ/parcours-chevalier_cor.typ",
+      "tex": "tex/parcours-chevalier.tex",
+      "texCor": "tex/parcours-chevalier_cor.tex"
+    },
+    {
+      "id": "visite-eclair-musee",
+      "titre": "Visite éclair au musée",
+      "categorie": "Diagramme de nombres",
+      "sousCategorie": "Optimisation de chemin",
+      "tags": [
+        "labyrinthe",
+        "maximum",
+        "musée",
+        "2002Q4"
+      ],
+      "etoiles": 2,
+      "png": "png/visite-eclair-musee.png",
+      "pngCor": "png/visite-eclair-musee_cor.png",
+      "typ": "typ/visite-eclair-musee.typ",
+      "typCor": "typ/visite-eclair-musee_cor.typ",
+      "tex": "tex/visite-eclair-musee.tex",
+      "texCor": "tex/visite-eclair-musee_cor.tex"
+    },
+    {
+      "id": "visite-guidee",
+      "titre": "Visite guidée",
+      "categorie": "Diagramme de nombres",
+      "sousCategorie": "Optimisation de chemin",
+      "tags": [
+        "labyrinthe",
+        "plan",
+        "unicitée",
+        "musée",
+        "2002D2"
+      ],
+      "etoiles": 1,
+      "png": "png/visite-guidee.png",
+      "pngCor": "png/visite-guidee_cor.png",
+      "typ": "typ/visite-guidee.typ",
+      "typCor": "typ/visite-guidee_cor.typ",
+      "tex": "tex/visite-guidee.tex",
+      "texCor": "tex/visite-guidee_cor.tex"
+    },
+    {
       "id": "les-cubes",
       "titre": "Les cubes",
       "categorie": "Dénombrement",

@@ -347,9 +347,10 @@ export class SvgSelectionElement extends MathaleaCustomElement {
     return this._svgsWithValue
   }
 
-  set value(val: number) {
-    if (!Number.isFinite(val) || val < 0) return
-    this._selectedIndices = this.decodeValue(val)
+  set value(val: number | string) {
+    const numericValue = Number(val)
+    if (!Number.isFinite(numericValue) || numericValue < 0) return
+    this._selectedIndices = this.decodeValue(numericValue)
     this.syncValueAttribute()
     this.updateSelectionState()
   }

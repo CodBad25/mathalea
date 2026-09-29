@@ -87,7 +87,9 @@ pnpm install
 ```
 
 `git clone` crée une copie locale du dépôt. `pnpm install` installe les
-dépendances décrites par `package.json` et `pnpm-lock.yaml`.
+versions de `pnpm-lock.yaml` sans le modifier. Si ce fichier n'est pas cohérent
+avec `package.json`, l'installation échoue ; voir
+[les règles de mise à jour des dépendances](../maintenance-moteur/contribution/workflows.md#build-et-dépendances).
 
 Vérifiez l'environnement :
 

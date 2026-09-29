@@ -26,7 +26,7 @@ export const uuid = '6d577'
 
 export const refs = {
   'fr-fr': ['1A-G01-1', '2A-G1-1'],
-  'fr-ch': [],
+  'fr-ch': ['9QCM-22'],
 }
 
 type GraduationData = {

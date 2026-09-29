@@ -1,6 +1,7 @@
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../modules/context'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
+import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import { renderKatex } from '../latex/renderKatex'
 import type {
   AnswerType,
@@ -18,6 +19,7 @@ export type MathaleaBranchingQcmFollowup = {
   callback?: (
     answer: string,
     choice: MathaleaBranchingQcmChoice,
+    mathfield?: MathfieldElement,
   ) => {
     isOk: boolean
     feedback?: string
@@ -141,6 +143,7 @@ export class MathaleaBranchingQcmElement extends MathaleaCustomElement {
       const followupResult = verifyFollowup(
         state.followupAnswer,
         selectedChoice,
+        element.querySelector('math-field') as MathfieldElement | null,
       )
       if (followupResult.isOk) {
         earnedPoints += selectedChoice.followup.points ?? 3
@@ -257,6 +260,13 @@ export class MathaleaBranchingQcmElement extends MathaleaCustomElement {
         this.followupAnswer = mathfield.value
       })
       fieldRow.append(mathfield)
+      if (mathfield.isConnected) {
+        setMathfield(mathfield)
+      } else {
+        mathfield.addEventListener('mount', setMathfieldListener, {
+          once: true,
+        })
+      }
       if (selectedChoice.followup.texteApres != null) {
         const texteApres = document.createElement('span')
         texteApres.innerHTML = selectedChoice.followup.texteApres
@@ -270,6 +280,10 @@ export class MathaleaBranchingQcmElement extends MathaleaCustomElement {
     result.id = `resultatCheckEx${numeroExercice}Q${questionIndex}`
     result.className = 'm-2'
     container.append(result)
+    const feedback = document.createElement('div')
+    feedback.id = `feedbackEx${numeroExercice}Q${questionIndex}`
+    feedback.style.display = 'none'
+    container.append(feedback)
     this.append(container)
     try {
       renderKatex(this)
@@ -339,7 +353,11 @@ export class MathaleaBranchingQcmElement extends MathaleaCustomElement {
     const followupOk =
       selectedChoice?.followup == null
         ? true
-        : verifyFollowup(state.followupAnswer, selectedChoice).isOk
+        : verifyFollowup(
+            state.followupAnswer,
+            selectedChoice,
+            this.querySelector('math-field') as MathfieldElement | null,
+          ).isOk
     if (result != null) {
       result.innerHTML =
         selectedChoice?.statut === true && followupOk
@@ -389,11 +407,12 @@ function getBranchingQcmData(
 function verifyFollowup(
   answer: string,
   choice: MathaleaBranchingQcmChoice,
+  mathfield: MathfieldElement | null = null,
 ): { isOk: boolean; feedback?: string } {
   const followup = choice.followup
   if (followup == null) return { isOk: true }
   if (typeof followup.callback === 'function') {
-    return followup.callback(answer, choice)
+    return followup.callback(answer, choice, mathfield ?? undefined)
   }
   const expected = followup.expected
   if (expected == null) return { isOk: answer.trim().length > 0 }

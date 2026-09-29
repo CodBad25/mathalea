@@ -52,6 +52,7 @@
     : null
 
   let itemsTexte: ItemPondere[] = []
+  let listeTexteOuverte = true
   /**
    * Dernière valeur de `supValue` reflétée par `itemsTexte`. `null` tant que rien
    * n'a été lu, pour distinguer l'initialisation d'un `sup` vide.
@@ -65,10 +66,13 @@
     casTexte !== null &&
     (casTexte !== derniersCas || String(supValue ?? '') !== derniereSaisie)
   ) {
+    if (casTexte !== derniersCas) listeTexteOuverte = true
     derniersCas = casTexte
     derniereSaisie = String(supValue ?? '')
     itemsTexte = itemsFormulaireTexte(casTexte, supValue)
   }
+
+  $: nombreCasCoches = itemsTexte.filter((item) => item.poids > 0).length
 
   /**
    * Range les cases cochées dans `supValue`, sous la forme historique attendue par
@@ -225,36 +229,65 @@
 {/if}
 
 {#if texte && casTexte !== null}
-  <div
-    id="settings-formTextListe{supIndex}-{exerciceIndex}"
-    class="flex flex-col gap-y-1"
-  >
+  <div id="settings-formTextListe{supIndex}-{exerciceIndex}">
     <div
       id="settings-formTextTitre{supIndex}-{exerciceIndex}"
-      class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+      class="flex items-center gap-1
+        text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct
+        font-light"
     >
-      {(texte as [string, string])[0]} :
+      <button
+        type="button"
+        class="shrink-0 rounded focus-visible:outline-2 focus-visible:outline-coopmaths-action"
+        aria-label={listeTexteOuverte
+          ? 'Replier les réglages de ' + (texte as [string, string])[0]
+          : 'Déplier les réglages de ' + (texte as [string, string])[0]}
+        aria-expanded={listeTexteOuverte}
+        aria-controls="settings-formTextContenu{supIndex}-{exerciceIndex}"
+        on:click={() => (listeTexteOuverte = !listeTexteOuverte)}
+      >
+        <i
+          class="bx bx-chevron-right transition-transform {listeTexteOuverte
+            ? 'rotate-90'
+            : ''}"
+          aria-hidden="true"
+        ></i>
+      </button>
+      <span class="min-w-0 grow">{(texte as [string, string])[0]} :</span>
+      <span
+        class="shrink-0 text-xs text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+      >
+        <span aria-hidden="true">{nombreCasCoches}/{itemsTexte.length}</span>
+        <span class="sr-only"
+          >{nombreCasCoches} choix cochés sur {itemsTexte.length}</span
+        >
+      </span>
     </div>
     <div
-      class="w-full pl-4 pb-1 text-[80%] text-coopmaths-struct-light leading-tight"
+      id="settings-formTextContenu{supIndex}-{exerciceIndex}"
+      class="{listeTexteOuverte ? 'flex' : 'hidden'} flex-col gap-y-1 pt-1"
     >
-      Cochez les cas voulus et réglez leur poids d'apparition.
-      <button
-        id="settings-formTextTout{supIndex}-{exerciceIndex}"
-        type="button"
-        class="underline text-coopmaths-action dark:text-coopmathsdark-action
-          hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
-        on:click={cocheTousLesCasTexte}>Tout cocher</button
+      <div
+        class="w-full pl-4 pb-1 text-[80%] text-coopmaths-struct-light leading-tight"
       >
+        Cochez les cas voulus et réglez leur poids d'apparition.
+        <button
+          id="settings-formTextTout{supIndex}-{exerciceIndex}"
+          type="button"
+          class="underline text-coopmaths-action dark:text-coopmathsdark-action
+            hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
+          on:click={cocheTousLesCasTexte}>Tout cocher</button
+        >
+      </div>
+      <ListePondereeItems
+        items={itemsTexte}
+        idItem={(item) =>
+          `settings-formTextListe${supIndex}-${exerciceIndex}-${item.nom}`}
+        poidsMax={POIDS_MAX_DEFAUT}
+        on:bascule={(e) => basculeCasTexte(e.detail.index, e.detail.actif)}
+        on:poids={(e) => changePoidsCasTexte(e.detail.index, e.detail.poids)}
+      />
     </div>
-    <ListePondereeItems
-      items={itemsTexte}
-      idItem={(item) =>
-        `settings-formTextListe${supIndex}-${exerciceIndex}-${item.nom}`}
-      poidsMax={POIDS_MAX_DEFAUT}
-      on:bascule={(e) => basculeCasTexte(e.detail.index, e.detail.actif)}
-      on:poids={(e) => changePoidsCasTexte(e.detail.index, e.detail.poids)}
-    />
   </div>
 {:else if texte}
   <form

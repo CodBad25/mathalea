@@ -126,7 +126,7 @@ export default class ProblemesAvecSuitesE3C extends Exercice {
 En janvier $2024$ on compte $${texNombre(u0 * 1000, 0)}$ créations d'entreprise.<br>
 On modélise le nombre de créations d'entreprise au $n$-ième mois par une suite $(${NomS}_n)$ telle que : 
 $${NomS}_0 = ${u0}$ et $${NomS}_{n+1} = ${NomS}_n \\times ${texNombre(cm, 3)}$<br>
-où $${NomS}_n$ est exprimé en milliers d'euros. `
+où $${NomS}_n$ est exprimé en milliers d'entreprises. `
           texte += createList({
             items: [
               `Calculer $${NomS}_1$ puis interpréter ce résultat dans le contexte de l'exercice.`,

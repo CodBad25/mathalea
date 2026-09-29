@@ -19,7 +19,7 @@ export const uuid = 'adb5c'
 
 export const refs = {
   'fr-fr': ['can3F2-06', 'can2F11-05'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculImageParFonctionAffineFraction extends ExerciceSimple {
   constructor() {

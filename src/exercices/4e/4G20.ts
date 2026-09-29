@@ -211,17 +211,18 @@ export function pythagoreCompare(input: string, goodAnswer: string) {
         }
       }
 
-      const isSubX = parsedAnswer.ops![0]
-      const isSub = isSubX.operator === 'Negate'
-      const inputOp = parsedInput.ops![0].operator
+      const isSub = parsedAnswer.ops!.some((term) => term.operator === 'Negate')
+      const inputIsSub = parsedInput.ops!.some(
+        (term) => term.operator === 'Negate',
+      )
 
-      if (isSub && inputOp !== 'Negate')
+      if (isSub && !inputIsSub)
         return {
           isOk: false,
           feedback: 'Il fallait saisir une différence de deux carrés.',
         }
 
-      if (!isSub && inputOp === 'Negate')
+      if (!isSub && inputIsSub)
         return {
           isOk: false,
           feedback: 'Il fallait saisir une somme de deux carrés.',
@@ -233,20 +234,30 @@ export function pythagoreCompare(input: string, goodAnswer: string) {
           feedback: "L'opération n'est pas une somme ou une différence.",
         }
 
-      const inputT1 = parsedInput.ops![1]
-      const answerT1 = parsedAnswer.ops![1]
+      if (parsedInput.ops!.length !== 2)
+        return { isOk: false, feedback: "L'expression saisie est incorrecte." }
 
-      /**
-       * Retire le Negate si présent, sinon retourne le terme tel quel
-       */
+      const inputNegative = parsedInput.ops!.find(
+        (term) => term.operator === 'Negate',
+      )
+      const answerNegative = parsedAnswer.ops!.find(
+        (term) => term.operator === 'Negate',
+      )
+      const inputT1 = isSub
+        ? parsedInput.ops!.find((term) => term !== inputNegative)
+        : parsedInput.ops![1]
+      const answerT1 = isSub
+        ? parsedAnswer.ops!.find((term) => term !== answerNegative)
+        : parsedAnswer.ops![1]
+      const inputT2 = isSub && isFunction(inputNegative)
+        ? inputNegative.ops?.[0]
+        : parsedInput.ops![0]
+      const answerT2 = isSub && isFunction(answerNegative)
+        ? answerNegative.ops?.[0]
+        : parsedAnswer.ops![0]
 
-      let inputT2 = parsedInput.ops![0]
-      if (isSub && isFunction(parsedInput.ops![0]))
-        inputT2 = parsedInput.ops![0].ops![0]
-
-      let answerT2 = parsedAnswer.ops![0]
-      if (isSub && isFunction(parsedAnswer.ops![0]))
-        answerT2 = parsedAnswer.ops![0].ops![0]
+      if (!inputT1 || !inputT2 || !answerT1 || !answerT2)
+        return { isOk: false, feedback: "L'expression saisie est incorrecte." }
 
       for (const term of [inputT1, inputT2]) {
         if (!['Square', 'Power'].includes(term.operator)) {
@@ -271,11 +282,26 @@ export function pythagoreCompare(input: string, goodAnswer: string) {
         const LL1 = answerT1.ops![0].toString().replaceAll('"', '')
         const LL2 = answerT2.ops![0].toString().replaceAll('"', '')
 
-        if ((LL1 === L1 && LL2 === L2) || (LL1 === L2 && LL2 === L1 && !isSub))
+        if (LL1 === L1 && LL2 === L2)
           return { isOk: true }
+        if (isSub) {
+          if (LL1 === L2 && LL2 === L1)
+            return {
+              isOk: false,
+              feedback: 'Les deux carrés sont dans le mauvais ordre dans la soustraction.',
+            }
+          return {
+            isOk: false,
+            feedback: "Ce n'est pas la soustraction attendue.",
+          }
+        }
+        if (LL1 === L2 && LL2 === L1) return { isOk: true }
       }
 
-      return { isOk: false }
+      return {
+        isOk: false,
+        feedback: isSub ? "Ce n'est pas la soustraction attendue." : '',
+      }
     }
   }
   // return { isOk: parsedInput.isEqual(parsedAnswer), feedback: '' }

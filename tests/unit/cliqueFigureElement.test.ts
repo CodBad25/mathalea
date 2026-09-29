@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import {
+  coopmathsActionLight,
+  coopmathsActionLightest,
+} from '../../src/lib/colors'
+import {
   CliqueFigureElement,
+  addCliqueFigure,
   prepareCliqueFigure,
 } from '../../src/lib/customElements/CliqueFigureElement'
 import {
@@ -107,5 +112,46 @@ describe('CliqueFigureElement', () => {
       perQuestionIsOk: [true],
     })
     expect(exercice.answers?.figureA).toBe('1')
+  })
+
+  it('permet plusieurs sélections et désélections avant la validation', () => {
+    document.body.innerHTML = `
+      <div id="exercice3">
+        <div id="figureA"></div>
+        <div id="figureB"></div>
+        ${addCliqueFigure(exercice, 0)}
+        <span id="resultatCheckEx3Q0"></span>
+      </div>
+    `
+    const host = document.querySelector('clique-figure') as CliqueFigureElement
+    const figureA = document.getElementById('figureA')!
+    const figureB = document.getElementById('figureB')!
+    figureA.dispatchEvent(new MouseEvent('mouseenter'))
+    expect(figureA.style.filter).toBe(
+      `drop-shadow(0 0 2px ${coopmathsActionLightest})`,
+    )
+    expect(figureA.style.outline).toBe('')
+    expect(figureA.style.cursor).toBe('pointer')
+
+    figureA.click()
+    expect(figureA.style.filter).toBe('')
+    figureB.click()
+    expect(host.value).toBe('["figureA","figureB"]')
+    expect(figureA.style.outline).toBe(figureB.style.outline)
+    expect(figureA.style.outline).toBe(`3px solid ${coopmathsActionLight}`)
+    expect(figureA.style.outlineOffset).toBe('-3px')
+
+    figureB.click()
+    expect(host.value).toBe('["figureA"]')
+    expect(figureB.style.outline).toBe('none')
+    expect(figureB.style.filter).toBe(
+      `drop-shadow(0 0 2px ${coopmathsActionLightest})`,
+    )
+    figureB.dispatchEvent(new MouseEvent('mouseleave'))
+    expect(figureB.style.filter).toBe('')
+    expect(CliqueFigureElement.verifQuestion(exercice, 0).score).toEqual({
+      nbBonnesReponses: 1,
+      nbReponses: 1,
+    })
   })
 })

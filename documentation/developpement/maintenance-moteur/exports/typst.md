@@ -162,7 +162,7 @@ FREE_EXERCISE_UUID`) : l'énoncé « généré » auquel il reviendrait n'est qu
 
 ## Lignes de réponse (« Lignes pour écrire »)
 
-Bouton (icône liste, `bx-detail`) de la barre d'outils de chaque exercice (à côté de « Éditer le code Typst ») : ajoute des lignes pour que l'élève y écrive, réglées **par exercice** — soit après le corps entier de l'exercice, soit après chaque question de cet exercice (y compris la dernière). Le popover règle l'emplacement, le **trait** (`Pointillés`, `Points`, `Trait`), le nombre de lignes (0 par défaut : rien ne s'affiche tant qu'il n'est pas incrémenté) et l'espacement (2 em par défaut, pas de 0,5) ; « Retirer » efface le réglage. Ne s'applique jamais à la correction.
+Bouton (icône liste, `bx-detail`) de la barre d'outils de chaque exercice (à côté de « Éditer le code Typst ») : ajoute des lignes pour que l'élève y écrive, réglées **par exercice** — soit après le corps entier de l'exercice, soit après chaque question de cet exercice (y compris la dernière). Le popover règle le rendu (`Pointillés`, `Points`, `Trait`, `Vide`), le nombre de lignes (0 par défaut : rien ne s'affiche tant qu'il n'est pas incrémenté) et l'espacement (2 em par défaut, pas de 0,5) ; « Retirer » efface le réglage. Ne s'applique jamais à la correction.
 
 Réglage **du document** (Réglages du document, sous les cases à cocher) : « Lignes de réponse par exercice » (`TypstDocumentOptions.answerLines`, 0 par défaut) en ajoute d'office à **chaque** exercice de la fiche ; l'emplacement (`answerLinesPosition`) et le trait (`answerLinesStyle`) se règlent juste en dessous, affichés seulement quand le nombre est non nul. Le réglage d'un exercice fait dans la palette l'emporte sur ce défaut (`carryOver.writingLines?.[k + 1] ?? …` dans `computeGeneratedExercises`). Le modèle de page de garde « récitation » met ce nombre à 2 à sa sélection.
 
@@ -170,11 +170,12 @@ Ces trois champs régénèrent le code **en oubliant les réglages par exercice*
 
 Comme la fusion d'exercices (`onToggleMergeBefore`), le réglage change la structure du document (les appels s'intercalent après chaque question en mode « Après chaque question ») : il régénère donc tout le code plutôt que de l'éditer ponctuellement. Porté par `TypstCarryOver.writingLines` (`Record<number, WritingLinesSetting>` — `{ position, count, spacing, style }` —, clé = numéro d'exercice 1-based), il survit à la régénération comme les autres réglages de la palette. Chaque appel généré `#mathalea-lignes(n, gutter: ...em, style: "...")` est tagué d'un marqueur `// mathalea:lignes-fin(N)` ou `// mathalea:lignes-apres(N)`, relu par `harvestCarryOver` (comme `// mathalea:insertion` pour les insertions de texte) ; `shiftCarryOver`/`swapCarryOver` décalent ces réglages à la suppression/au déplacement d'un exercice, comme `tasksLayout`/`codeOverrides`. Le helper Typst réutilisable `#mathalea-lignes(n, gutter: ..., style: ...)` (`MATHALEA_WRITING_LINES_HELPER` dans `buildTypstDocument.ts`) n'est déclaré dans le préambule que s'il est effectivement utilisé, et ne produit aucun rendu (ni espace) tant que `n` vaut 0.
 
-Les trois traits (`WRITING_LINES_STYLES`) reprennent ceux du `answer-line-style` du paquet taskize, mais sont dessinés par le helper plutôt que par le paquet : l'option `answer-lines` de taskize ne s'applique qu'aux questions d'un `#tasks`, alors que le réglage couvre aussi la fin d'exercice et les exercices à question unique, qui n'ont pas de liste.
+Les trois traits (`WRITING_LINES_STYLES`) reprennent ceux du `answer-line-style` du paquet taskize ; le quatrième rendu, `vide`, réserve le même espace sans dessiner de trait. Le helper produit ces rendus plutôt que le paquet : l'option `answer-lines` de taskize ne s'applique qu'aux questions d'un `#tasks`, alors que le réglage couvre aussi la fin d'exercice et les exercices à question unique, qui n'ont pas de liste.
 
 - `pointilles` : filet pointillé gris (rendu d'origine, donc valeur retenue quand un code émis avant ce réglage ne porte pas de `style:` — le groupe est facultatif dans le motif de `harvestCarryOver`) ;
 - `points` : points de conduite (`repeat(gap: 2pt)[.]`, même espacement que les champs « Nom : ..... » de la page de garde) ;
 - `plein` : filet continu.
+- `vide` : espace sans trait, dont la hauteur dépend du nombre de lignes et de leur espacement.
 
 Une surcharge de code (icône crayon, voir plus haut) remplace tout l'énoncé
 généré par `exerciseBody`, y compris l'appel `#mathalea-lignes` qu'il y avait
