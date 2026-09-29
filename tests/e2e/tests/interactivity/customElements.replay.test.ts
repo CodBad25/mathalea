@@ -1,0 +1,218 @@
+import { expect } from '@playwright/test'
+import type { Page } from 'playwright'
+import prefs from '../../helpers/prefs.js'
+import { runTest } from '../../helpers/run'
+
+const customElementModules = [
+  '/alea/src/lib/apigeom/apigeom-figure.ts',
+  '/alea/src/lib/customElements/BlocklyEditor.ts',
+  'CalculatorElement',
+  'CliqueFigureElement',
+  'CubeStackEditorElement',
+  'DiagramBarAssessmentElement',
+  'DiagramBuilderElement',
+  'DiagramCartesianAssessmentElement',
+  'DiagramHistogramAssessmentElement',
+  'DiagramPieAssessmentElement',
+  'DomReadyAction',
+  'DragAndDropElement',
+  'EchiquierProblemeElement',
+  'ElementIepEditeur',
+  'EtoileCalculsElement',
+  'FillInTheBlank',
+  'FractionCliquableElement',
+  'GrimukuGrilleElement',
+  'GuideAne',
+  'InteractiveClock',
+  'IntervalleDroiteElement',
+  'JuniperGreenElement',
+  'KenKenGrilleElement',
+  'LabyrintheBlockly',
+  'ListeDeroulanteElement',
+  'MathaleaBranchingQcm',
+  'MathaleaCompteEstBonElement',
+  'MathaleaCouteauSuisse',
+  'MathaleaLabyrintheElement',
+  'MathaleaMathfield',
+  'MathaleaQcm',
+  'MathaleaTextfield',
+  'MetaCustomElement',
+  'MetaInteractif2dElement',
+  'MultiMathfield',
+  'MySpreadSheet',
+  'ObjetsCliquablesElement',
+  'PointsCliquablesElement',
+  'PyramideNombresElement',
+  'RelierEtiquettesElement',
+  'SchemaEnBarreElement',
+  'ScratchEditor',
+  'Shape2DGridEditorElement',
+  'SvgSelectionElement',
+  'TableauHybride',
+  'TableauMathlive',
+  'TableauSignesVariationsElement',
+  'TablesEffaceesGrilleElement',
+  'TraceurDeCourbe',
+  'TrigoCircleSelectionElement',
+  '/alea/src/lib/customElements/demi_droite_interactive.ts',
+] as const
+
+// Ces éléments ne possèdent pas de réponse autonome dans exercice.answers.
+// Ils orchestrent une action ou délèguent la persistance à leurs enfants.
+const technicalElementsWithoutOwnReplay = new Set([
+  'apigeom-figure',
+  'labyrinthe-blockly',
+  'mathalea-dom-ready',
+  'meta-custom',
+  'meta-interactif-2d',
+])
+
+type ReplayResult = {
+  tag: string
+  before?: unknown
+  after?: unknown
+  error?: string
+}
+
+async function testCustomElementsSerializedReplay(page: Page) {
+  const port =
+    process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')
+  const origin = `http://localhost:${port}`
+  await page.goto(`${origin}/alea/`)
+
+  await Promise.all(
+    customElementModules.map((moduleName) => {
+      const path = moduleName.startsWith('/')
+        ? moduleName
+        : `/alea/src/lib/customElements/${moduleName}.ts`
+      return page.addScriptTag({ type: 'module', url: `${origin}${path}` })
+    }),
+  )
+  await page.addScriptTag({
+    type: 'module',
+    content: `
+      import { listOfCustomElements, mathaleaCustomElementsRegistry } from '/alea/src/lib/customElements/MathaleaCustomElement.ts'
+      window.__mathaleaReplayRegistry = { listOfCustomElements, mathaleaCustomElementsRegistry }
+    `,
+  })
+  await page.addScriptTag({
+    type: 'module',
+    content: `
+      import handleInteractiveClock from '/alea/src/lib/customElements/InteractiveClock.ts'
+      handleInteractiveClock()
+    `,
+  })
+  await page.waitForFunction(() => '__mathaleaReplayRegistry' in window)
+
+  const results = await page.evaluate(
+    async ({ exemptions }): Promise<ReplayResult[]> => {
+      const { listOfCustomElements, mathaleaCustomElementsRegistry } = (
+        window as typeof window & {
+          __mathaleaReplayRegistry: {
+            listOfCustomElements: string[]
+            mathaleaCustomElementsRegistry: Map<
+              string,
+              CustomElementConstructor
+            >
+          }
+        }
+      ).__mathaleaReplayRegistry
+
+      return listOfCustomElements.map((tag: string) => {
+        if (exemptions.includes(tag)) return { tag }
+        const elementClass = mathaleaCustomElementsRegistry.get(tag)
+        if (elementClass == null) {
+          return { tag, error: 'classe absente du registre' }
+        }
+
+        let prototype: object | null = elementClass.prototype
+        let descriptor: PropertyDescriptor | undefined
+        while (prototype != null && descriptor == null) {
+          descriptor = Object.getOwnPropertyDescriptor(prototype, 'value')
+          prototype = Object.getPrototypeOf(prototype)
+        }
+        if (descriptor?.get == null || descriptor.set == null) {
+          return { tag, error: 'getter/setter value manquant sans exemption' }
+        }
+
+        try {
+          const template = document.createElement('template')
+          template.innerHTML = `<${tag}></${tag}>`
+          const element = template.content.firstElementChild as HTMLElement & {
+            value: unknown
+          }
+          const before = element.value
+          const storedAnswer =
+            typeof before === 'string' ? before : JSON.stringify(before)
+          element.value = storedAnswer
+          const after = element.value
+          const normalizedStoredAnswer =
+            typeof after === 'string' ? after : JSON.stringify(after)
+          element.value = normalizedStoredAnswer
+          return { tag, before: after, after: element.value }
+        } catch (error) {
+          return {
+            tag,
+            error: error instanceof Error ? error.message : String(error),
+          }
+        }
+      })
+    },
+    {
+      exemptions: [...technicalElementsWithoutOwnReplay],
+    },
+  )
+
+  const failures = results.filter(
+    ({ tag, before, after, error }) =>
+      !technicalElementsWithoutOwnReplay.has(tag) &&
+      (error != null || JSON.stringify(after) !== JSON.stringify(before)),
+  )
+  expect(failures).toEqual([])
+
+  const exerciseUrl = `${origin}/alea/?uuid=b74c8&n=1&d=10&s=1&alea=rejeu-tableau-hybride&i=1&cd=1`
+  await page.goto(exerciseUrl)
+  await page.waitForSelector('tableau-hybride math-field')
+  const savedAnswer = await page.evaluate(() => {
+    const tableau = document.querySelector('tableau-hybride') as HTMLElement & {
+      value: Record<string, string>
+    }
+    const data = JSON.parse(tableau.getAttribute('tableau') ?? '{}') as {
+      rows?: Array<Array<{ id?: string; value?: string | number }>>
+    }
+    const answer: Record<string, string> = {}
+    data.rows?.flat().forEach((cell) => {
+      if (cell.id != null && cell.value != null) {
+        answer[cell.id] = String(cell.value)
+      }
+    })
+    tableau.value = answer
+    return JSON.stringify(tableau.value)
+  })
+  await page.locator('#verif0').click()
+  const scoreBeforeReplay = await page
+    .locator('tableau-hybride [data-result-cell-id]')
+    .allTextContents()
+
+  await page.goto(exerciseUrl)
+  await page.waitForSelector('tableau-hybride math-field')
+  await page.evaluate((storedAnswer) => {
+    const tableau = document.querySelector('tableau-hybride') as HTMLElement & {
+      value: string
+    }
+    tableau.value = storedAnswer
+  }, savedAnswer)
+  await page.locator('#verif0').click()
+  const scoreAfterReplay = await page
+    .locator('tableau-hybride [data-result-cell-id]')
+    .allTextContents()
+
+  expect(scoreAfterReplay).toEqual(scoreBeforeReplay)
+  expect(scoreAfterReplay.every((state) => state === '😎')).toBe(true)
+  return true
+}
+
+prefs.headless = true
+runTest(testCustomElementsSerializedReplay, import.meta.url, {
+  pauseOnError: false,
+})

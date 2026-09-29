@@ -14,11 +14,28 @@ Index des documents liés aux tests locaux, à la CI GitLab et aux rapports d'ex
 Les tests utilisent [Vitest](https://vitest.dev/api/expect.html) ; les tests de
 bout en bout pilotent un navigateur avec Playwright.
 
-| Type | Emplacement | Modèle | Lancement |
-| --- | --- | --- | --- |
-| Unitaire (fonction, classe) | `tests/unit/` | `tests/unit/grandeur.test.ts` | `pnpm test:unit` |
-| Unitaire à côté du code | `src/**/*.test.ts` | `src/lib/interactif/checks/atoms.test.ts` | `pnpm test:src` |
+| Type                          | Emplacement                      | Modèle                                       | Lancement                     |
+| ----------------------------- | -------------------------------- | -------------------------------------------- | ----------------------------- |
+| Unitaire (fonction, classe)   | `tests/unit/`                    | `tests/unit/grandeur.test.ts`                | `pnpm test:unit`              |
+| Unitaire à côté du code       | `src/**/*.test.ts`               | `src/lib/interactif/checks/atoms.test.ts`    | `pnpm test:src`               |
 | Interactivité de bout en bout | `tests/e2e/tests/interactivity/` | `tests/e2e/tests/dev/mathLive.moule.test.ts` | `pnpm test:e2e:interactivity` |
+
+## Rejeu des MathaleaCustomElement
+
+Tout composant interactif dérivé de `MathaleaCustomElement` doit posséder un
+test Playwright qui vérifie le cycle complet de sauvegarde et de rejeu. Le test
+ne doit pas injecter directement le type natif retourné par le getter : il doit
+réinjecter la chaîne réellement conservée dans `exercice.answers`, comme le fait
+Capytale.
+
+Le scénario de référence et les règles d'exemption sont décrits dans
+[`custom-elements.md`](../developpement/maintenance-moteur/interactivite/custom-elements.md#test-playwright-de-rejeu--obligatoire).
+
+Une modification d'un custom element doit être contrôlée avec :
+
+```sh
+AUTOTEST=true PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:interactivity
+```
 
 Pour lancer un seul fichier :
 

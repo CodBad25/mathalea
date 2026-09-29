@@ -138,13 +138,32 @@ export class TableauMathliveElement extends MathaleaCustomElement {
     return values
   }
 
-  set value(nextValue: Record<string, string>) {
+  update(nextValue: Record<string, string> | string): void {
+    if (typeof nextValue === 'string') {
+      try {
+        const parsedValue: unknown = JSON.parse(nextValue)
+        if (
+          typeof parsedValue !== 'object' ||
+          parsedValue == null ||
+          Array.isArray(parsedValue)
+        ) {
+          return
+        }
+        nextValue = parsedValue as Record<string, string>
+      } catch {
+        return
+      }
+    }
     Object.entries(nextValue).forEach(([id, value]) => {
       const field = this.querySelector(`#${CSS.escape(id)}`) as {
         value?: string
       } | null
       if (field != null) field.value = value
     })
+  }
+
+  set value(nextValue: Record<string, string> | string) {
+    this.update(nextValue)
   }
 
   protected onInteractivityChanged(isOn: boolean): void {
@@ -155,8 +174,7 @@ export class TableauMathliveElement extends MathaleaCustomElement {
     })
     const listes = this.querySelectorAll('liste-deroulante')
     listes.forEach((liste) => {
-      ;(liste as unknown as { interactivityOn: boolean }).interactivityOn =
-        isOn
+      ;(liste as unknown as { interactivityOn: boolean }).interactivityOn = isOn
     })
   }
 }

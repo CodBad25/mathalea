@@ -29,10 +29,11 @@ type DemiDroiteInteractiveValue = {
   x0: number
 }
 
-type DemiDroiteInteractiveIncomingValue = DemiDroiteInteractiveValue & {
-  showNegative?: boolean
-  showwNegative?: boolean
-}
+type DemiDroiteInteractiveIncomingValue =
+  Partial<DemiDroiteInteractiveValue> & {
+    showNegative?: boolean
+    showwNegative?: boolean
+  }
 
 function formatPointValue(pointValue: number, partsCount: number): string {
   const numerator = pointValue * partsCount
@@ -350,12 +351,24 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     }
   }
 
-  public set value(nextValue: DemiDroiteInteractiveIncomingValue | null) {
+  public set value(
+    nextValue: DemiDroiteInteractiveIncomingValue | string | null,
+  ) {
     if (nextValue === null) {
       this.points = []
       this.isPointPlacementArmed = false
       this.render()
       return
+    }
+
+    if (typeof nextValue === 'string') {
+      try {
+        const parsedValue: unknown = JSON.parse(nextValue)
+        if (typeof parsedValue !== 'object' || parsedValue == null) return
+        nextValue = parsedValue as DemiDroiteInteractiveIncomingValue
+      } catch {
+        return
+      }
     }
 
     const maxT = Number(nextValue.maxT)
