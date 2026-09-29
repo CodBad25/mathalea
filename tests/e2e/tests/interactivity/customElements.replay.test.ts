@@ -35,6 +35,7 @@ const customElementModules = [
   'MathaleaLabyrintheElement',
   'MathaleaMathfield',
   'MathaleaQcm',
+  'MathaleaSolveurElement',
   'MathaleaTextfield',
   'MetaCustomElement',
   'MetaInteractif2dElement',
