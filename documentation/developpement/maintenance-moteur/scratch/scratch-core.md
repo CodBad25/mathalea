@@ -37,7 +37,7 @@ Procédure dans MathALÉA :
 1. Mettre à jour la dépendance :
 
 ```bash
-pnpm install
+pnpm install --no-frozen-lockfile
 ```
 
 2. Vérifier que `pnpm-lock.yaml` pointe vers la nouvelle version et le nouveau
@@ -71,7 +71,8 @@ Missing "./json/scratchFr.json" specifier in "@scratch2latex/scratch-core" packa
 cela signifie que la version installée de `scratch-core` ne déclare pas encore
 ce sous-chemin dans son champ `exports`, ou que `pnpm-lock.yaml` pointe encore
 vers un ancien commit. Corriger d'abord `scratch-core`, puis relancer
-`pnpm install` dans MathALÉA.
+`pnpm install --no-frozen-lockfile` dans MathALÉA et vérifier le diff du
+lockfile.
 
 ## Symptôme de commande inconnue
 

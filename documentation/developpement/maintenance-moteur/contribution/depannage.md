@@ -31,11 +31,14 @@ Pour une erreur incompréhensible qui semble venir d'une dépendance, essayer
 dans l'ordre, en passant à l'étape suivante si le problème persiste :
 
 1. `pnpm install` ;
-2. réinstaller exactement les versions du fichier de verrouillage :
-   `pnpm install --frozen-lockfile` ;
-3. supprimer `node_modules`, puis `pnpm install` (plus long) ;
-4. si `pnpm-lock.yaml` a changé sans raison, le restaurer avec
-   `git restore pnpm-lock.yaml`, puis `pnpm install --frozen-lockfile`.
+2. supprimer `node_modules`, puis `pnpm install` (plus long) ;
+3. si `pnpm-lock.yaml` a changé sans raison, le restaurer avec
+   `git restore pnpm-lock.yaml`, puis relancer `pnpm install`.
+
+`pnpm install` utilise toujours le lockfile sans le modifier. S'il signale une
+incohérence avec `package.json`, récupérer les deux fichiers du même commit ;
+pour une modification voulue des dépendances, voir
+[les workflows de contribution](workflows.md#build-et-dépendances).
 
 Si l'erreur persiste, elle vient du code ou d'une nouvelle version d'une
 dépendance. Revenir à un commit qui fonctionne (`git switch --detach <sha>`
