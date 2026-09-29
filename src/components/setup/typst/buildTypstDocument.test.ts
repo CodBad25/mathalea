@@ -1588,6 +1588,27 @@ describe('buildTypstDocument', () => {
       expect(code).toContain('if style == "plein" { none } else { "dotted" }')
     })
 
+    it('émet et relit le style « vide » sans dessiner de trait', () => {
+      const setting = {
+        position: 'endOfExercise' as const,
+        count: 3,
+        spacing: 1.5,
+        style: 'vide' as const,
+      }
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        defaultTypstDocumentOptions,
+        { writingLines: { 1: setting } },
+      )
+      expect(code).toContain(
+        '#mathalea-lignes(3, gutter: 1.5em, style: "vide") // mathalea:lignes-fin(1)',
+      )
+      expect(code).toContain(
+        'if style == "vide" { box(width: 100%, height: 0.6pt) }',
+      )
+      expect(harvestCarryOver(code).writingLines).toEqual({ 1: setting })
+    })
+
     it('relit un appel sans style (code émis avant le réglage) comme un filet pointillé', () => {
       const code = [
         '#mathalea-lignes(3, gutter: 1.5em) // mathalea:lignes-fin(1)',
