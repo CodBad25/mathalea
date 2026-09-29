@@ -24,7 +24,7 @@ export const uuid = 'ab46f'
 
 export const refs = {
   'fr-fr': ['1A-F02-10'],
-  'fr-ch': [],
+  'fr-ch': ['1mQCM-39', '11QCM-57'],
 }
 export default class AutoFO2j extends ExerciceQcmA {
   appliquerLesValeurs = (valeurs: {

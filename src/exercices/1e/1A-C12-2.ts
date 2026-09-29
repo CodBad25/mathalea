@@ -3,7 +3,7 @@ import AutoQ4AGt2026 from '../EAMPremiere/EAM-AGTechno-2026-Q4'
 export const uuid = '1c981'
 export const refs = {
   'fr-fr': ['1A-C12-2', '2A-C5-2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 

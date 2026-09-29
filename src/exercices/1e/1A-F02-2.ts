@@ -14,7 +14,7 @@ export const uuid = '4969a'
 
 export const refs = {
   'fr-fr': ['1A-F02-2'],
-  'fr-ch': [],
+  'fr-ch': ['10QCM-54', '11QCM-62'],
 }
 export default class Auto1AF1a extends CalculImageParFonctionAffine {
   constructor() {

@@ -24,7 +24,7 @@ export const uuid = 'f3e87'
 
 export const refs = {
   'fr-fr': ['can2F20-07'],
-  'fr-ch': [],
+  'fr-ch': ['1mF2-22'],
 }
 export default class CalculCompose extends ExerciceSimple {
   constructor() {

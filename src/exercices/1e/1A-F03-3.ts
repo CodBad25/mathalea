@@ -31,7 +31,7 @@ export const uuid = 'efa32'
  */
 export const refs = {
   'fr-fr': ['1A-F03-3'],
-  'fr-ch': [],
+  'fr-ch': ['11QCM-70', '1mQCM-54'],
 }
 
 export const interactifReady = true

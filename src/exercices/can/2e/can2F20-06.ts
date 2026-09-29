@@ -13,7 +13,7 @@ export const dateDePublication = '01/09/2026'
 export const uuid = '7b93d'
 export const refs = {
   'fr-fr': ['can2F20-06'],
-  'fr-ch': [''],
+  'fr-ch': ['NR'],
 }
 /*** Copie de can2G30-05 pour les auto 1ere avec énoncé différent par A.Meistermann
  * @author Gilles Mora

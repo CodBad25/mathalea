@@ -19,7 +19,7 @@ export const uuid = '66b7e'
 
 export const refs = {
   'fr-fr': ['can4P2-05'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PoucentageE2 extends ExerciceSimple {
   constructor() {

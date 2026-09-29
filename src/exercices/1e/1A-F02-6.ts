@@ -15,7 +15,7 @@ export const uuid = 'e251e'
 
 export const refs = {
   'fr-fr': ['1A-F02-6'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class Auto1AF1d extends CalculProduitSommeImageParFonctionAffine {
   constructor() {

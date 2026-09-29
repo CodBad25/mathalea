@@ -31,7 +31,7 @@ export const uuid = 'cc015'
  */
 export const refs = {
   'fr-fr': ['1A-C10-6'],
-  'fr-ch': [],
+  'fr-ch': ['2mQCM-7'],
 }
 export const interactifReady = true
 

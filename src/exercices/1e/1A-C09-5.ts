@@ -14,7 +14,7 @@ export const uuid = 'b49c5'
 
 export const refs = {
   'fr-fr': ['1A-C09-5'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class Auto1AC9d extends CalculCompose {
   constructor() {
