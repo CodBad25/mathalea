@@ -107,7 +107,7 @@ function genereQuotientTrigonometrique(nom: string): QuestionGeneree {
     \\end{aligned}$<br>
     <br>
     De plus, par simplification par le terme de plus haut degré :<br>
-    $\\displaystyle \\lim_{n\\to+\\infty} \\dfrac{${a}n - ${absB}}{${denominateur}} = ${limite} \\quad \\text{et} \\quad \\lim_{n\\to+\\infty} \\dfrac{${a}n + ${absB}}{${denominateur}} = ${limite}$<br>
+    $\\displaystyle \\lim_{n\\to+\\infty} \\dfrac{${a}n - ${absB}}{${denominateur}} = ${limite} \\quad \\text{et} \\quad \\displaystyle \\lim_{n\\to+\\infty} \\dfrac{${a}n + ${absB}}{${denominateur}} = ${limite}$<br>
     <br>
     D'après le théorème des gendarmes, on conclut que :<br>
     $${miseEnEvidence(`\\displaystyle \\lim_{n\\to+\\infty}${nom}_n=${limite}`)}$.`,
@@ -159,10 +159,10 @@ function genereQuotientPuissances(nom: string): QuestionGeneree {
 
   if (baseNum > baseDenom) {
     limiteTex = "-\\infty"
-    explicationLimite = `car \\dfrac{${baseNum}}{${baseDenom}} > 1 \\text{ donc } \\lim_{n\\to+\\infty}\\left(\\dfrac{${baseNum}}{${baseDenom}}\\right)^n = +\\infty`
+    explicationLimite = `car \\dfrac{${baseNum}}{${baseDenom}} > 1 \\text{ donc } \\displaystyle \\lim_{n\\to+\\infty}\\left(\\dfrac{${baseNum}}{${baseDenom}}\\right)^n = +\\infty`
   } else if (baseNum < baseDenom) {
     limiteTex = "0"
-    explicationLimite = `car 0 \\leqslant \\dfrac{${baseNum}}{${baseDenom}} < 1 \\text{ donc } \\lim_{n\\to+\\infty}\\left(\\dfrac{${baseNum}}{${baseDenom}}\\right)^n = 0`
+    explicationLimite = `car 0 \\leqslant \\dfrac{${baseNum}}{${baseDenom}} < 1 \\text{ donc } \\displaystyle \\lim_{n\\to+\\infty}\\left(\\dfrac{${baseNum}}{${baseDenom}}\\right)^n = 0`
   } else {
     limiteTex = "-1"
     explicationLimite = `car \\dfrac{${baseNum}}{${baseNum}} = 1 \\text{ donc } \\left(\\dfrac{${baseNum}}{${baseNum}}\\right)^n = 1`
@@ -183,9 +183,9 @@ function genereQuotientPuissances(nom: string): QuestionGeneree {
     <br>
     Étude des limites des différents blocs :<br>
     $\\begin{aligned}
-    \\lim_{n\\to+\\infty} \\left(\\dfrac{${a}}{${baseNum}}\\right)^n &= 0 & & \\text{car } 0 \\leqslant \\dfrac{${a}}{${baseNum}} < 1 \\\
-    \\lim_{n\\to+\\infty} \\left(\\dfrac{${b}}{${baseDenom}}\\right)^n &= 0 & & \\text{car } 0 \\leqslant \\dfrac{${b}}{${baseDenom}} < 1 \\\
-    \\lim_{n\\to+\\infty} \\left(\\dfrac{${baseNum}}{${baseDenom}}\\right)^n &= ${baseNum > baseDenom ? "+\\infty" : baseNum < baseDenom ? "0" : "1"} & & ${explicationLimite}
+    \\displaystyle \\lim_{n\\to+\\infty} \\left(\\dfrac{${a}}{${baseNum}}\\right)^n &= 0 & & \\text{car } 0 \\leqslant \\dfrac{${a}}{${baseNum}} < 1 \\\
+    \\displaystyle \\lim_{n\\to+\\infty} \\left(\\dfrac{${b}}{${baseDenom}}\\right)^n &= 0 & & \\text{car } 0 \\leqslant \\dfrac{${b}}{${baseDenom}} < 1 \\\
+    \\displaystyle \\lim_{n\\to+\\infty} \\left(\\dfrac{${baseNum}}{${baseDenom}}\\right)^n &= ${baseNum > baseDenom ? "+\\infty" : baseNum < baseDenom ? "0" : "1"} & & ${explicationLimite}
     \\end{aligned}$<br>
     <br>
     Par produit et par quotient, on en déduit que :<br>
@@ -313,7 +313,7 @@ function genereCombinaisonGeometrique(nom: string): QuestionGeneree {
   
   const etapeCoefficient = coefficientSomme === 1 
     ? '' 
-    : `<br>$\\begin{aligned}\\lim_{n\\to+\\infty} ${coefficientSomme}\\times\\dfrac{1-\\left(${raison}\\right)^n}{1-${raison}} &= ${coefficientSomme} \\times \\dfrac{1}{${denominateurSoustraction}} \\\\ &= ${limite}\\end{aligned}$<br>`
+    : `<br>$\\begin{aligned}\\displaystyle \\lim_{n\\to+\\infty} ${coefficientSomme}\\times\\dfrac{1-\\left(${raison}\\right)^n}{1-${raison}} &= ${coefficientSomme} \\times \\dfrac{1}{${denominateurSoustraction}} \\\\ &= ${limite}\\end{aligned}$<br>`
 
   return {
     expression,
@@ -322,16 +322,16 @@ function genereCombinaisonGeometrique(nom: string): QuestionGeneree {
     <br>
     <b>1. Premier terme :</b><br>
     $\\begin{aligned}
-    \\lim_{n\\to+\\infty} \\left(${raison2}\\right)^n &= 0 & & \\text{car } 0 < ${raison2} < 1 \\\
-    \\lim_{n\\to+\\infty} ${coefficientGeometrique}\\times\\left(${raison2}\\right)^n &= 0 & & \\text{par produit}
+    \\displaystyle \\lim_{n\\to+\\infty} \\left(${raison2}\\right)^n &= 0 & & \\text{car } 0 < ${raison2} < 1 \\\
+    \\displaystyle \\lim_{n\\to+\\infty} ${coefficientGeometrique}\\times\\left(${raison2}\\right)^n &= 0 & & \\text{par produit}
     \\end{aligned}$<br>
     <br>
     <b>2. Second terme (somme géométrique) :</b><br>
     $\\begin{aligned}
     1 - ${raison} &= ${denominateurSoustraction} \\\
-    \\lim_{n\\to+\\infty} \\left(${raison}\\right)^n &= 0 & & \\text{car } 0 < ${raison} < 1 \\\
-    \\lim_{n\\to+\\infty} \\left(1 - \\left(${raison}\\right)^n\\right) &= 1 - 0 = 1 & & \\text{par somme} \\\
-    \\lim_{n\\to+\\infty} \\dfrac{1-\\left(${raison}\\right)^n}{1-${raison}} &= \\dfrac{1}{${denominateurSoustraction}} & & \\text{par quotient}
+    \\displaystyle \\lim_{n\\to+\\infty} \\left(${raison}\\right)^n &= 0 & & \\text{car } 0 < ${raison} < 1 \\\
+    \\displaystyle \\lim_{n\\to+\\infty} \\left(1 - \\left(${raison}\\right)^n\\right) &= 1 - 0 = 1 & & \\text{par somme} \\\
+    \\displaystyle \\lim_{n\\to+\\infty} \\dfrac{1-\\left(${raison}\\right)^n}{1-${raison}} &= \\dfrac{1}{${denominateurSoustraction}} & & \\text{par quotient}
     \\end{aligned}$<br>
     ${etapeCoefficient}
     <br>
