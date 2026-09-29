@@ -113,6 +113,22 @@ describe('TableauHybrideElement', () => {
     ).toBe(true)
   })
 
+  it('restaure les saisies sérialisées par Capytale', () => {
+    const tableau = document.createElement(
+      'tableau-hybride',
+    ) as TableauHybrideElement
+    const premierChamp = document.createElement('math-field')
+    premierChamp.dataset.cellId = 'L1C1'
+    const secondChamp = document.createElement('math-field')
+    secondChamp.dataset.cellId = 'L1C2'
+    tableau.append(premierChamp, secondChamp)
+    const saisies = { L1C1: '5', L1C2: '8' }
+
+    tableau.value = JSON.stringify(saisies)
+
+    expect(tableau.value).toEqual(saisies)
+  })
+
   it('utilise les styles partages des tableaux MathLive', () => {
     document.body.innerHTML = creeTableauHybrideElement({
       numeroExercice: 0,

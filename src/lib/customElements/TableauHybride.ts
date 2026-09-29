@@ -206,7 +206,22 @@ export class TableauHybrideElement extends MathaleaCustomElement {
     return values
   }
 
-  set value(values: Record<string, string>) {
+  update(values: Record<string, string> | string) {
+    if (typeof values === 'string') {
+      try {
+        const parsedValues: unknown = JSON.parse(values)
+        if (
+          typeof parsedValues !== 'object' ||
+          parsedValues == null ||
+          Array.isArray(parsedValues)
+        ) {
+          return
+        }
+        values = parsedValues as Record<string, string>
+      } catch {
+        return
+      }
+    }
     Object.entries(values).forEach(([id, value]) => {
       const field = this.querySelector<MathfieldElement>(
         `math-field[data-cell-id="${CSS.escape(id)}"]`,
@@ -217,6 +232,10 @@ export class TableauHybrideElement extends MathaleaCustomElement {
       )
       if (select != null) select.value = value
     })
+  }
+
+  set value(values: Record<string, string> | string) {
+    this.update(values)
   }
 
   static verifQuestion(
