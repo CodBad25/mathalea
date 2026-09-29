@@ -67,7 +67,7 @@ export default class EquationsEtInequations extends Exercice {
       this.nbQuestions,
     )
     const listeTypeInequation = combinaisonListes(
-      ['<', '\\leq', '>', '\\geq'],
+      ['<', '\\leqslant', '>', '\\geqslant'],
       this.nbQuestions,
     )
 
@@ -153,8 +153,8 @@ export default class EquationsEtInequations extends Exercice {
         ) {
           texteCorr += `$S=${miseEnEvidence(`\\left]${x1.simplifie().texFraction};${x2.simplifie().texFraction}\\right[`)}$.`
         } else if (
-          (typeInequation === '\\geq' && a * c > 0) ||
-          (typeInequation === '\\leq' && a * c < 0)
+          (typeInequation === '\\geqslant' && a * c > 0) ||
+          (typeInequation === '\\leqslant' && a * c < 0)
         ) {
           texteCorr += `$S=${miseEnEvidence(`\\left]-\\infty;${x1.simplifie().texFraction}\\right]\\cup\\left[${x2.simplifie().texFraction};+\\infty\\right[`)}$.`
         } else {
@@ -186,12 +186,12 @@ export default class EquationsEtInequations extends Exercice {
         texteCorr += '<br><br>Finalement $S='
         if (
           p.a.valeurDecimale > 0 &&
-          (typeInequation === '>' || typeInequation === '\\geq')
+          (typeInequation === '>' || typeInequation === '\\geqslant')
         )
           texteCorr += miseEnEvidence('\\R')
         else if (
           p.a.valeurDecimale < 0 &&
-          (typeInequation === '<' || typeInequation === '\\leq')
+          (typeInequation === '<' || typeInequation === '\\leqslant')
         )
           texteCorr += miseEnEvidence('\\R')
         else texteCorr += miseEnEvidence('\\emptyset')
@@ -243,8 +243,8 @@ export default class EquationsEtInequations extends Exercice {
             'On sait que le polynôme est du signe de $-a$ entre ses racines donc '
           texteCorr += `$S=${miseEnEvidence(`\\left]${p.texX1};${p.texX2}\\right[`)}$.`
         } else if (
-          (typeInequation === '\\geq' && a > 0) ||
-          (typeInequation === '\\leq' && a < 0)
+          (typeInequation === '\\geqslant' && a > 0) ||
+          (typeInequation === '\\leqslant' && a < 0)
         ) {
           texteCorr +=
             "On sait que le polynôme est du signe de $a$ à l'extérieur de ses racines donc "

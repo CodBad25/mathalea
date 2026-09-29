@@ -1,6 +1,6 @@
 import InequationsLog from '../TT/TTE-3'
 
-export const titre = 'Résoudre des inéquations du type $a^x \\leq b$'
+export const titre = 'Résoudre des inéquations du type $a^x \\leqslant b$'
 export const dateDePublication = '4/5/2024'
 export const dateDeModifImportante = '18/07/2024'
 export const uuid = 'e7929'

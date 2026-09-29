@@ -15,6 +15,6 @@ export default class ÉcrireEntiersCycle3 extends ÉcrireNombresEntiers {
   constructor() {
     super()
     this.sup2 = 0
-    this.sup = 1
+    this.sup = 3
   }
 }

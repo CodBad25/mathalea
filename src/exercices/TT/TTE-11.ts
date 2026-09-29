@@ -331,7 +331,7 @@ export default class DomaineDefFnLog extends Exercice {
                   lgt: 8, // taille de la première colonne en cm
                   hauteurLignes: [12, 15],
                 })
-                correction += `le coefficient de $x^2$ étant positif, $${fonction}\\leq 0$ pour $x\\in \\left[${frac1.texFractionSimplifiee};${frac2.texFractionSimplifiee}\\right]$.<br>`
+                correction += `le coefficient de $x^2$ étant positif, $${fonction}\\leqslant 0$ pour $x\\in \\left[${frac1.texFractionSimplifiee};${frac2.texFractionSimplifiee}\\right]$.<br>`
                 answer = `\\left]-\\infty;${frac1.texFractionSimplifiee}\\right[\\cup\\left]${frac2.texFractionSimplifiee};+\\infty\\right[`
               } else {
                 // a<0 donc positif entre les racines.

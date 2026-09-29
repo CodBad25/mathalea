@@ -205,9 +205,9 @@ export default class NombresContraintes extends Exercice {
           const chiffresDisponibles = 10 - seuil
           reponse = Math.pow(chiffresDisponibles, nbChiffres)
 
-          texte = `Combien de nombres à $${nbChiffres}$ chiffres ne s'écrivent qu'avec des chiffres $\\geq ${seuil}$ ?`
+          texte = `Combien de nombres à $${nbChiffres}$ chiffres ne s'écrivent qu'avec des chiffres $\\geqslant ${seuil}$ ?`
 
-          texteCorr = `Les chiffres disponibles sont $\\{${seuil}, ${seuil + 1}, ..., 9\\}$, soit $${chiffresDisponibles}$ chiffres (tous $\\geq 1$).<br>`
+          texteCorr = `Les chiffres disponibles sont $\\{${seuil}, ${seuil + 1}, ..., 9\\}$, soit $${chiffresDisponibles}$ chiffres (tous $\\geqslant 1$).<br>`
           texteCorr += `Arrangement avec répétition :<br>`
           texteCorr += `$\\overline{A}_{${nbChiffres}}^{${chiffresDisponibles}} = ${chiffresDisponibles}^{${nbChiffres}} = ${miseEnEvidence(texNombre(reponse, 0))}$`
         } else if (variante === 'inferieur') {

@@ -291,12 +291,12 @@ export default class MinMaxFonctionTrigonometrique extends Exercice {
       )
 
       const texteCorr =
-        `Pour tout réel $x$, on a $-1\\leq \\${fonction}\\left(${coefficientX}${translation}\\right)\\leq 1$. ` +
+        `Pour tout réel $x$, on a $-1\\leqslant \\${fonction}\\left(${coefficientX}${translation}\\right)\\leqslant 1$. ` +
         `Donc le terme $${coefficientAmplitude.texFractionSaufUn}\\${fonction}\\left(${coefficientX}${translation}\\right)$ varie entre ` +
         `$-${amplitude.texFraction}$ et $${amplitude.texFraction}$, car son amplitude vaut ` +
         `$\\left|${coefficientAmplitude.texFraction}\\right|=${amplitude.texFraction}$.<br>` +
         `En ajoutant $${axe.texFraction}$, on obtient :` +
-        `\\[${axe.texFraction}-${amplitude.texFraction}\\leq f(x)\\leq ${axe.texFraction}+${amplitude.texFraction}.\\]` +
+        `\\[${axe.texFraction}-${amplitude.texFraction}\\leqslant f(x)\\leqslant ${axe.texFraction}+${amplitude.texFraction}.\\]` +
         `Ainsi, la valeur minimale de $f$ est $${miseEnEvidence(minimum.texFraction)}$ et sa valeur maximale est $${miseEnEvidence(maximum.texFraction)}$.`
 
       if (
