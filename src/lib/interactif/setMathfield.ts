@@ -66,7 +66,13 @@ function handleFocusOutMathField(event: FocusEvent) {
   // car au focusout, le focus est sur body
   if (get(globalOptions).v === 'can') return
   setTimeout(() => {
-    if (!isMathfieldFocused(document.activeElement)) {
+    const focusDansClavier = document.activeElement?.closest(
+      '#mathalea-virtual-keyboard',
+    )
+    if (
+      !isMathfieldFocused(document.activeElement) &&
+      focusDansClavier == null
+    ) {
       keyboardState.update((value) => {
         const newValue = value
         newValue.isVisible = false

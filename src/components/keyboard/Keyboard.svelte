@@ -5,6 +5,7 @@
   import { mathaleaRenderDiv } from '../../lib/mathalea'
   import { keyboardBlocks } from './layouts/keysBlocks'
   import { GAP_BETWEEN_BLOCKS, getMode } from './lib/sizes'
+  import { latexMatriceAvecPlaceholders } from './lib/matrix'
   import { enregistreTouchesPersonnalisees } from './lib/touchesPersonnalisees'
   import Alphanumeric from './presentationalComponents/alphanumeric/Alphanumeric.svelte'
   import KeyboardPage from './presentationalComponents/keyboardpage/KeyboardPage.svelte'
@@ -29,6 +30,9 @@
   let isVisible = false
   let isInLine = false
   let pageType: AlphanumericPages = 'AlphaLow'
+  let matrixSelectorVisible = false
+  let matrixRows = 2
+  let matrixColumns = 2
   const myKeyboard: Keyboard = new Keyboard()
 
   const computePages = () => {
@@ -124,6 +128,32 @@
     mathaleaRenderDiv(divKeyboard)
   }
 
+  function mathfieldActif(): MathfieldElement | null {
+    const selecteur = ('#' + $keyboardState.idMathField).replace('-button', '')
+    let mf = document.querySelector(selecteur) as MathfieldElement | null
+    if (mf != null) return mf
+    const shadowHosts = document.querySelectorAll(
+      'multi-mathfield, tableau-signes-variations',
+    )
+    for (const el of shadowHosts) {
+      mf = el.shadowRoot?.querySelector(selecteur) as MathfieldElement | null
+      if (mf != null) return mf
+    }
+    return null
+  }
+
+  function insereMatrice() {
+    const mf = mathfieldActif()
+    if (mf == null) return
+    mf.focus()
+    mf.executeCommand([
+      'insert',
+      latexMatriceAvecPlaceholders(matrixRows, matrixColumns),
+      { selectionMode: 'placeholder' },
+    ])
+    matrixSelectorVisible = false
+  }
+
   const clickKeycap = (key: KeyCap, event: MouseEvent, value?: Keys) => {
     if (value && isPageKey(value)) {
       // la touche est une touche du clavier alphanumeric pour changer de page
@@ -143,33 +173,12 @@
       }
     } else {
       if (event.currentTarget instanceof HTMLButtonElement) {
-        const idMathField = $keyboardState.idMathField
-        // Recherche dans le DOM global
-        let mf = document.querySelector(
-          ('#' + idMathField).replace('-button', ''),
-        ) as MathfieldElement | null
-        // Si non trouvé, cherche dans les shadowRoot des custom elements
-        // qui embarquent des math-field (multi-mathfield, tableau-signes-variations, ...)
-        if (!mf) {
-          const shadowHosts = document.querySelectorAll(
-            'multi-mathfield, tableau-signes-variations',
-          )
-          for (const el of shadowHosts) {
-            const shadow = el.shadowRoot
-            if (shadow) {
-              const found = shadow.querySelector(
-                ('#' + idMathField).replace('-button', ''),
-              ) as MathfieldElement | null
-              if (found) {
-                mf = found
-                break
-              }
-            }
-          }
-        }
+        const mf = mathfieldActif()
         if (mf != null) {
           mf.focus()
-          if (key.command && key.command === 'closeKeyboard') {
+          if (key.action === 'insertMatrix') {
+            matrixSelectorVisible = !matrixSelectorVisible
+          } else if (key.command && key.command === 'closeKeyboard') {
             keyboardState.update((value) => {
               value.isVisible = false
               value.idMathField = ''
@@ -201,6 +210,49 @@
     id="mathalea-virtual-keyboard"
     class=" bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark p-2 md:p-4 w-full fixed bottom-0 left-0 right-0 z-[9999] drop-shadow-[0_-3px_5px_rgba(130,130,130,0.25)] dark:drop-shadow-[0_-3px_5px_rgba(250,250,250,0.25)]"
   >
+    {#if matrixSelectorVisible}
+      <div
+        class="absolute bottom-full left-1/2 flex -translate-x-1/2 items-end gap-3 rounded-t-lg bg-coopmaths-canvas-dark p-3 shadow-lg dark:bg-coopmathsdark-canvas-dark"
+        role="dialog"
+        tabindex="-1"
+        aria-label="Choisir les dimensions de la matrice"
+        on:mousedown={(e) => e.stopPropagation()}
+      >
+        <label class="flex flex-col text-sm">
+          Lignes
+          <input
+            class="w-16 rounded p-1 text-black"
+            type="number"
+            min="1"
+            max="10"
+            bind:value={matrixRows}
+          />
+        </label>
+        <label class="flex flex-col text-sm">
+          Colonnes
+          <input
+            class="w-16 rounded p-1 text-black"
+            type="number"
+            min="1"
+            max="10"
+            bind:value={matrixColumns}
+          />
+        </label>
+        <button
+          class="rounded bg-coopmaths-action px-3 py-1 text-white"
+          type="button"
+          on:click={insereMatrice}
+        >
+          Insérer
+        </button>
+        <button
+          class="px-2 py-1"
+          type="button"
+          aria-label="Annuler"
+          on:click={() => (matrixSelectorVisible = false)}>×</button
+        >
+      </div>
+    {/if}
     {#if alphanumericDisplayed}
       <Alphanumeric {clickKeycap} {pageType} />
     {:else}

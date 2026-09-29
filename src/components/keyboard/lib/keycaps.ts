@@ -65,6 +65,11 @@ const basicKeys = {
     display: '$\\square^\\square$',
     insert: '#@^{#0}',
   },
+  MATRIX: {
+    display:
+      '$\\begin{pmatrix}\\square&\\square\\\\\\square&\\square\\end{pmatrix}$',
+    action: 'insertMatrix' as const,
+  },
   'e^': {
     display: '$\\mathrm{e}^{\\square}$',
     insert: '\\mathrm{e}^{#0}',
