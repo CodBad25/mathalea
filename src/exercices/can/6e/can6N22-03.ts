@@ -150,7 +150,7 @@ export default class decomposerDecimal extends Exercice {
                 { formatInteractif: 'multi-mathfield' },
               )
             } else {
-              texte += `$${texNombre(nbre, 2)}= \\ldots$ dixième(s) $\\ldots$ centième(s)`
+              texte += `$${texNombre(nbre, 2)}= \\ldots\\ldots$ dixième(s) $\\ldots\\ldots$ centième(s)`
             }
             texteCorr = `Comme $1$ dixième $=0,1$ et $1$ centième $=0,01$ :<br>
          $\\begin{aligned}
@@ -159,7 +159,7 @@ export default class decomposerDecimal extends Exercice {
          \\end{aligned}$<br>
          Et donc $${texNombre(nbre, 2)}=${miseEnEvidence(texNombre(u * 10 + d, 0))}$ dixièmes $~+ ${miseEnEvidence(texNombre(c, 0))}$ ${c === 1 ? ' centième' : ' centièmes'}`
             this.canEnonce = 'Compléter.'
-            this.canReponseACompleter = `$${texNombre(nbre, 2)}=\\ldots$ dixième(s) $\\ldots$ centième(s)`
+            this.canReponseACompleter = `$${texNombre(nbre, 2)}=\\ldots\\ldots$ dixième(s) $\\ldots\\ldots$ centième(s)`
           } else {
             texte = 'Compléter avec un nombre décimal :  <br>'
             let nombreDecrit = ''
@@ -213,7 +213,7 @@ export default class decomposerDecimal extends Exercice {
                 { formatInteractif: 'multi-mathfield' },
               )
             } else {
-              texte += `$${texNombre(nbre, 2)}= \\ldots$ centièmes   `
+              texte += `$${texNombre(nbre, 2)}= \\ldots\\ldots\\ldots$ centièmes   `
             }
             texteCorr = `Comme $1$ centième $=0,01$ :<br>
          $\\begin{aligned}
@@ -222,7 +222,7 @@ export default class decomposerDecimal extends Exercice {
          \\end{aligned}$<br>
          Et donc $${texNombre(nbre, 2)}=${miseEnEvidence(texNombre(u * 100 + d * 10 + c, 0))}$ centièmes`
             this.canEnonce = 'Compléter.'
-            this.canReponseACompleter = `$${texNombre(nbre, 2)}=\\ldots$ centième(s)`
+            this.canReponseACompleter = `$${texNombre(nbre, 2)}=\\ldots\\ldots\\ldots$ centième(s)`
           } else {
             texte = 'Compléter avec un nombre décimal : <br>'
             let nombreDecrit = ''
