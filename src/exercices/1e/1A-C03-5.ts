@@ -1,76 +1,32 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { context } from '../../modules/context'
+import ExerciceSimple from '../ExerciceSimple'
 export const dateDePublication = '10/08/2025'
-export const uuid = '66ec4'
-// @Author Stéphane Guyon
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = 'facdf'
+
 export const refs = {
-  'fr-fr': ['1A-C03-5', ],
-  'fr-ch': ['10NO3D-15'],
+  'fr-fr': ['1A-C03-5'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Appliquer la propriété des quotients avec des puissances'
-export default class Auto1AC3e extends ExerciceQcmA {
-  private appliquerLesValeurs(k: number, inverse: boolean = false): void {
-    if (inverse) {
-      // Cas inversé : a^n / a^(n^k)
-      this.enonce = `Soit $a$ un nombre réel non nul et $n$ un entier non nul.<br> À quelle expression est égale $\\dfrac{a^{n}}{a^{n^{${k}}}}$ ?`
 
-      this.correction = `On applique la propriété du quotient des puissances d'un réel.<br>
-      Soit $n$ et $p$ deux entiers et $a$ un réel :  $\\dfrac{a^n}{a^p}=a^{n-p}$<br>
-      $\\begin{aligned} \\dfrac{a^{n}}{a^{n^{${k}}}}&=a^{n-n^{${k}}}\\\\
-      &=a^{-n(-1+n^{${rienSi1(k - 1)}})}\\\\
-      &=${miseEnEvidence(`a^{-n(n^{${rienSi1(k - 1)}}-1)}`)}
-      \\end{aligned}$<br>`
-
-      this.reponses = [
-        `$a^{-n(n^{${rienSi1(k - 1)}}-1)}$`,
-        `$a^{-${rienSi1(k - 1)}n}$`,
-        k === 2 ? '$a^{1-n}$' : `$a^{-n^${k - 1}}$`,
-        `$a^{n(n^{${rienSi1(k - 1)}}-1)}$`,
-      ]
-    } else {
-      // Cas normal : a^(n^k) / a^n
-      this.enonce = `Soit $a$ un nombre réel non nul et $n$ un entier non nul.<br> À quelle expression est égale $\\dfrac{a^{n^{${k}}}}{a^{n}}$ ?`
-
-      this.correction = `On applique la propriété du quotient des puissances d'un réel.<br>
-      Soit $n$ et $p$ deux entiers et $a$ un réel :  $\\dfrac{a^n}{a^p}=a^{n-p}$<br>
-      $\\begin{aligned} \\dfrac{a^{n^{${k}}}}{a^{n}}&=a^{n^{${k}}-n}\\\\
-      &=${miseEnEvidence(`a^{n(n^{${rienSi1(k - 1)}}-1)}`)}
-      \\end{aligned}$<br>`
-
-      this.reponses = [
-        `$a^{n(n^{${rienSi1(k - 1)}}-1)}$`,
-        `$a^{${rienSi1(k - 1)}n}$`,
-        k === 2 ? '$a^{n-1}$' : `$a^{n^${k - 1}}$`,
-        `$a^{${k}}$`,
-      ]
-    }
-  }
-
-  versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(2)
-  }
-
-  versionAleatoire = () => {
-    const casChoisi = randint(1, 2)
-    const k = randint(2, 5)
-
-    if (casChoisi === 1) {
-      // Cas normal : a^(n^k) / a^n
-      this.appliquerLesValeurs(k, false)
-    } else {
-      // Cas inversé : a^n / a^(n^k)
-      this.appliquerLesValeurs(k, true)
-    }
-  }
-
+// @Author Stéphane Guyon
+export default class Auto1AC3e extends ExerciceSimple {
   constructor() {
     super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.versionQcmDisponible = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut simplifier un quotient de puissances ayant la même base.
@@ -82,6 +38,61 @@ export default class Auto1AC3e extends ExerciceQcmA {
     <li>Faire le même calcul avec des nombres à la place de $n$ si la variable gêne.</li>
   </ul>
 `
-    this.versionAleatoire()
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+    this.formatInteractif = this.versionQcm ? 'mathlive' : 'fillInTheBlank'
+
+    const inverse = this.quotaChoice('cas', [false, true])
+    const k = this.quotaRandint('k', 2, 5)
+    const exposant = `n(n${k > 2 ? `^{${k - 1}}` : ''}-1)`
+    const fraction = inverse
+      ? `\\dfrac{a^{n}}{a^{n^{${k}}}}`
+      : `\\dfrac{a^{n^{${k}}}}{a^{n}}`
+
+    if (inverse) {
+      // Cas inversé : a^n / a^(n^k)
+      this.correction = `On applique la propriété du quotient des puissances d'un réel.<br>
+      Soit $n$ et $p$ deux entiers et $a$ un réel :  $\\dfrac{a^n}{a^p}=a^{n-p}$<br>
+      $\\begin{aligned} \\dfrac{a^{n}}{a^{n^{${k}}}}&=a^{n-n^{${k}}}\\\\
+      &=a^{-n(-1+n^{${rienSi1(k - 1)}})}\\\\
+      &=${miseEnEvidence(`a^{-${exposant}}`)}
+      \\end{aligned}$<br>`
+    } else {
+      // Cas normal : a^(n^k) / a^n
+      this.correction = `On applique la propriété du quotient des puissances d'un réel.<br>
+      Soit $n$ et $p$ deux entiers et $a$ un réel :  $\\dfrac{a^n}{a^p}=a^{n-p}$<br>
+      $\\begin{aligned} \\dfrac{a^{n^{${k}}}}{a^{n}}&=a^{n^{${k}}-n}\\\\
+      &=${miseEnEvidence(`a^{${exposant}}`)}
+      \\end{aligned}$<br>`
+    }
+
+    if (this.versionQcm) {
+      this.consigne = ''
+      this.question = `Soit $a$ un nombre réel non nul et $n$ un entier non nul.<br> À quelle expression est égale $${fraction}$ ?`
+      if (inverse) {
+        this.reponse = `$a^{-${exposant}}$`
+        this.distracteurs = [
+          `$a^{-${rienSi1(k - 1)}n}$`,
+          k === 2 ? '$a^{1-n}$' : `$a^{-n^${k - 1}}$`,
+          `$a^{${exposant}}$`,
+        ]
+      } else {
+        this.reponse = `$a^{${exposant}}$`
+        this.distracteurs = [
+          `$a^{${rienSi1(k - 1)}n}$`,
+          k === 2 ? '$a^{n-1}$' : `$a^{n^${k - 1}}$`,
+          `$a^{${k}}$`,
+        ]
+      }
+    } else {
+      this.consigne =
+        "Soit $a$ un nombre réel non nul et $n$ un entier non nul. Compléter l'égalité."
+      this.question = `${fraction}=a^{%{champ1}}`
+      this.reponse = {
+        champ1: { value: inverse ? `-${exposant}` : exposant },
+      }
+    }
   }
 }

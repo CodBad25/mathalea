@@ -32,4 +32,13 @@ export default class Auto1AC4g extends ProgrammeCalcul2 {
     <li>Tester les propositions en surveillant les erreurs de facteur $10$.</li>
   </ul>`
   }
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    if (!this.versionQcm && this.question != null) {
+      this.question = this.question.replace(
+        /^Calculer sous forme décimale\s+/,
+        "Donner l'écriture décimale de ",
+      )
+    }
+  }
 }
