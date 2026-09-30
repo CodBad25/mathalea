@@ -1,100 +1,104 @@
-import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 export const dateDePublication = '07/09/2025'
-export const uuid = '96187'
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = '15839'
 
 export const refs = {
   'fr-fr': ['1A-C10-9', '2A-C3-7'],
-  'fr-ch': ['11QCM-34', '1mQCM-29'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre =
   'Résoudre une équation du type $\\dfrac{a}{x}=b$ ou $\\dfrac{x}{a}=b$'
 /**
  * @author Gilles Mora
  */
-export default class Auto1AC11a extends ExerciceQcmA {
-  versionOriginale: () => void = () => {
-    this.enonce = "La solution de l'équation  $\\dfrac{144}{x}=9$ est : "
-    this.correction = ` L'équation  $\\dfrac{144}{x}=9$ est équivalente à $9\\times x=144$, soit $x=\\dfrac{144}{9}$.<br>
-        Ainsi, la solution de l'équation est $${miseEnEvidence('\\dfrac{144}{9}')}$.`
-
-    this.reponses = [
-      '$\\vphantom{\\dfrac{1}{3}}\\dfrac{144}{9}$',
-      '$\\dfrac{9}{144}$',
-      '$\\vphantom{\\dfrac{1}{3}}144\\times 9$',
-      '$-16$',
-    ]
-  }
-
-  versionAleatoire = () => {
-    let compteur = 0
-    do {
-      switch (randint(1, 3)) {
-        case 1:
-          {
-            const a = randint(6, 9)
-            const b = a * randint(13, 19)
-            this.enonce = `La solution de l'équation  $\\dfrac{${b}}{x}=${a}$ est : `
-            this.correction = ` L'équation   $\\dfrac{${b}}{x}=${a}$ est équivalente à $${a}\\times x=${b}$, soit $x=\\dfrac{${b}}{${a}}$.<br>
-        Ainsi, la solution de l'équation est $${miseEnEvidence(`\\dfrac{${b}}{${a}}`)}$.`
-
-            this.reponses = [
-              `$\\dfrac{${b}}{${a}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}\\dfrac{${a}}{${b}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}${b}\\times ${a}$`,
-              `$\\vphantom{\\dfrac{1}{3}}-${texNombre(b / a, 0)}$`,
-            ]
-          }
-          break
-        case 2:
-          {
-            const a = randint(6, 9)
-            const b = a * randint(13, 19)
-            this.enonce = `La solution de l'équation $\\dfrac{x}{${a}}=${b}$ est : `
-            this.correction = `L'équation $\\dfrac{x}{${a}}=${b}$ est équivalente à $x=${a}\\times ${b}$.<br>
-    Ainsi, la solution de l'équation est $${miseEnEvidence(`${a}\\times ${b}`)}$.`
-
-            this.reponses = [
-              `$\\vphantom{\\dfrac{1}{3}}${a} \\times ${b}$`,
-              `$\\dfrac{${b}}{${a}}$`,
-              `$\\dfrac{${a}}{${b}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}-${texNombre(a * b)}$`,
-            ]
-          }
-          break
-
-        // Cas 3: Solution sous forme d'entier avec fraction comme distracteur
-        case 3:
-          {
-            const a = randint(6, 9)
-            const b = a * randint(13, 19)
-            const solution = b / a // Cette fois c'est un entier
-            this.enonce = `La solution de l'équation $\\dfrac{${b}}{x}=${a}$ est : `
-            this.correction = `L'équation $\\dfrac{${b}}{x}=${a}$ est équivalente à $${a}\\times x=${b}$, soit $x=\\dfrac{${b}}{${a}}=${texNombre(b / a, 0)}$.<br>
-    Ainsi, la solution de l'équation est $${miseEnEvidence(`${texNombre(b / a, 0)}`)}$.`
-
-            this.reponses = [
-              `$\\vphantom{\\dfrac{1}{3}}${solution}$`,
-              `$-\\dfrac{${b}}{${a}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}\\dfrac{${a}}{${b}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}-${solution}$`,
-            ]
-          }
-          break
-      }
-      compteur++
-    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
-  }
-
+export default class Auto1AC11a extends ExerciceSimple {
   constructor() {
     super()
-    this.versionAleatoire()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { fractionIrreductible: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
+    const fraction = (num: number, den: number) =>
+      new FractionEtendue(num, den).simplifie().texFractionSimplifiee
+    let solution: string
+    let distracteurs: string[]
+    const a = randint(2, 9)
+
+    switch (this.quotaChoice('cas', [1, 2, 3])) {
+      case 1: {
+        // Solution fractionnaire : x = b/a
+        let b = randint(2, 30)
+        while (b % a === 0) b = randint(2, 30)
+        this.question = `Résoudre l'équation $\\dfrac{${b}}{x}=${a}$.`
+        this.correction = `L'équation $\\dfrac{${b}}{x}=${a}$ est équivalente à $${a}\\times x=${b}$, soit $x=\\dfrac{${b}}{${a}}$.<br>
+        Ainsi, la solution de l'équation est $${miseEnEvidence(fraction(b, a))}$.`
+        solution = fraction(b, a)
+        distracteurs = [
+          fraction(a, b),
+          String(a * b),
+          fraction(-b, a),
+          fraction(b + a, a),
+        ]
+        break
+      }
+      case 2: {
+        // x/a = b : x = a × b
+        const b = randint(2, 12)
+        this.question = `Résoudre l'équation $\\dfrac{x}{${a}}=${b}$.`
+        this.correction = `L'équation $\\dfrac{x}{${a}}=${b}$ est équivalente à $x=${a}\\times ${b}$.<br>
+    Ainsi, la solution de l'équation est $${miseEnEvidence(String(a * b))}$.`
+        solution = String(a * b)
+        distracteurs = [
+          fraction(b, a),
+          fraction(a, b),
+          String(-a * b),
+          String(a + b),
+        ]
+        break
+      }
+      case 3:
+      default: {
+        // Solution entière : x = b/a
+        const n = randint(2, 12)
+        const b = a * n
+        this.question = `Résoudre l'équation $\\dfrac{${b}}{x}=${a}$.`
+        this.correction = `L'équation $\\dfrac{${b}}{x}=${a}$ est équivalente à $${a}\\times x=${b}$, soit $x=\\dfrac{${b}}{${a}}=${n}$.<br>
+    Ainsi, la solution de l'équation est $${miseEnEvidence(String(n))}$.`
+        solution = String(n)
+        distracteurs = [
+          fraction(a, b),
+          String(-n),
+          String(a * b),
+          String(b - a),
+        ]
+        break
+      }
+    }
+
+    if (this.versionQcm) {
+      this.reponse = `$${solution}$`
+      this.distracteurs = distracteurs.map((d) => `$${d}$`)
+    } else {
+      this.reponse = solution
+      if (this.interactif) this.question += '<br>$x=$'
+    }
   }
 }
