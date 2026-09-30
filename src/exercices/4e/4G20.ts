@@ -528,7 +528,7 @@ export default class Pythagore2D extends Exercice {
 
         if (context.isAmc) {
           this.autoCorrectionAMC[i] = {
-            enonce: texte,
+            enonce: '',
             enonceAvant: false,
             propositions: [
               {
@@ -536,7 +536,7 @@ export default class Pythagore2D extends Exercice {
                 propositions: [
                   {
                     texte: '',
-                    enonce: 'Calculer la longueur manquante.\\\\',
+                    enonce: `${texte}Calculer la longueur manquante.\\\\`,
                     statut: 3,
                     pointilles: true,
                     multicolsBegin: true,
@@ -551,7 +551,7 @@ export default class Pythagore2D extends Exercice {
                     statut: '',
                     multicolsEnd: true,
                     reponse: {
-                      texte: texte + 'longueur arrondie à 0,1 cm : ',
+                      texte: 'Longueur arrondie à 0,1 cm : ',
                       valeur: [arrondi(reponse, 1)],
                       param: {
                         digits: Math.max(nombreDeChiffresDe(reponse), 2),
