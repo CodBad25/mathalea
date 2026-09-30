@@ -53,6 +53,7 @@ export const listOfCustomElements = [
   'shape-2d-grid-editor',
   'apigeom-figure',
   'intervalle-droite',
+  'ensemble-intervalles-droite',
   'mathalea-solveur',
 ]
 
