@@ -1777,6 +1777,15 @@ function latexTableCell(cell: string, figures?: string[]): TypstTableCell {
   const { color, rest } = extractCellColor(cell)
   const stripped = stripCellLatex(rest)
   if (stripped.length === 0) return { body: '', fill: color }
+  // Dans les tableaux à compléter, \phantom{rrrrr} réserve une vraie zone
+  // d'écriture en LaTeX. Le convertisseur mathématique le réduit à une espace.
+  const writingSpace = /^\\phantom\{r{5}\}(\\%)?$/.exec(stripped)
+  if (writingSpace != null) {
+    return {
+      body: `#box(width: 45pt, height: 14pt)[]${writingSpace[1] ? '$%$' : ''}`,
+      fill: color,
+    }
+  }
   const textContent = unwrapWholeTextCommand(stripped)
   if (textContent != null) {
     const sizedContent = /<svg/i.test(textContent)
@@ -1894,8 +1903,8 @@ function renderTypstTable(
   const header: string[] = [
     `columns: ${columns}`,
     uniform
-      ? `align: ${aligns[0] ?? 'center'}`
-      : `align: ${formatTypstArray(aligns)}`,
+      ? `align: ${aligns[0] ?? 'center'} + horizon`
+      : `align: ${formatTypstArray(aligns.map((align) => `${align} + horizon`))}`,
     `inset: (x: 5pt, y: ${insetY.toFixed(1)}pt)`,
     `stroke: ${fullBorder ? '0.5pt' : 'none'}`,
   ]

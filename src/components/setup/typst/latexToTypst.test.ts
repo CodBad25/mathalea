@@ -681,7 +681,7 @@ describe('htmlToTypst', () => {
       '$\\def\\arraystretch{1.5}\\begin{array}{|l|c|c|}\\hline x & 1 & 2 \\\\ \\hline f(x) & 3 & 4 \\\\ \\hline\\end{array}$',
     )
     expect(result).toContain('#table(')
-    expect(result).toContain('align: (left, center, center,)')
+    expect(result).toContain('align: (left + horizon, center + horizon, center + horizon,)')
     expect(result).toContain('inset: (x: 5pt, y: 4.5pt)')
     expect(result).toContain('stroke: 0.5pt')
     expect(result).toContain('[$x$]')
@@ -698,6 +698,19 @@ describe('htmlToTypst', () => {
     expect(result).toContain('table.cell(fill: rgb("#d3d3d3"))[$x$]')
     expect(result).not.toContain('arraystretch')
     expect(result).not.toContain('cellcolor')
+  })
+
+  it('réserve des cases à remplir et centre verticalement les intitulés de 6N1E', () => {
+    const result = htmlToTypst(
+      '$\\renewcommand{\\arraystretch}{2.5}\\begin{array}{|c|c|c|}\\hline ' +
+        '\\cellcolor{lightgray} \\text{Fraction décimale} & \\phantom{rrrrr} & \\dfrac{30}{100} \\\\ \\hline ' +
+        '\\cellcolor{lightgray} \\text{Pourcentage} & \\phantom{rrrrr}\\% & 30\\% \\\\ \\hline' +
+        '\\end{array}\\renewcommand{\\arraystretch}{1}$',
+    )
+    expect(result).toContain('align: center + horizon')
+    expect(result).toContain('#box(width: 45pt, height: 14pt)[]')
+    expect(result).toContain('#box(width: 45pt, height: 14pt)[]$%$')
+    expect(result).toContain('Fraction décimale')
   })
 
   it("ne coupe pas une cellule sur le `&` d'une entité HTML (`10&nbsp;\\%`, BP2AutoB3)", () => {
