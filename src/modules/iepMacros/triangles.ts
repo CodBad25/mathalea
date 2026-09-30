@@ -16,6 +16,91 @@ import type { IAlea2iep, OptionsCompas } from '../Alea2iep.types'
 import { randint } from '../outils'
 import { bleuMathalea } from '../../lib/colors'
 
+type PositionNom = Pick<PointAbstrait, 'x' | 'y'>
+type TraitNom = readonly [PositionNom, PositionNom]
+
+function distanceAuTrait(x: number, y: number, [A, B]: TraitNom): number {
+  const dx = B.x - A.x
+  const dy = B.y - A.y
+  const projection =
+    dx * dx + dy * dy === 0
+      ? 0
+      : Math.max(
+          0,
+          Math.min(1, ((x - A.x) * dx + (y - A.y) * dy) / (dx * dx + dy * dy)),
+        )
+  return Math.hypot(x - A.x - projection * dx, y - A.y - projection * dy)
+}
+
+/** Segments qui approchent l'arc IEP de 10° de part et d'autre du point. */
+function traitsArc(centre: PointAbstrait, point: PointAbstrait): TraitNom[] {
+  const rayon = longueur(centre, point)
+  const angle = Math.atan2(point.y - centre.y, point.x - centre.x)
+  const points = Array.from({ length: 9 }, (_, index) => {
+    const direction = angle + ((index - 4) * 2.5 * Math.PI) / 180
+    return {
+      x: centre.x + rayon * Math.cos(direction),
+      y: centre.y + rayon * Math.sin(direction),
+    }
+  })
+  return points
+    .slice(1)
+    .map((pointFinal, index): TraitNom => [points[index], pointFinal])
+}
+
+/** Choisit un emplacement éloigné des traits de la figure et de la construction. */
+function optionsNomSommet(
+  sommet: PointAbstrait,
+  sommets: PointAbstrait[],
+  options: OptionsCompas,
+  traitsSupplementaires: TraitNom[] = [],
+): OptionsCompas {
+  if (!options.placerNomsSommets) return options
+  const centreX = sommets.reduce((somme, point) => somme + point.x, 0) / 3
+  const centreY = sommets.reduce((somme, point) => somme + point.y, 0) / 3
+  const traits: TraitNom[] = [
+    [sommets[0], sommets[1]],
+    [sommets[1], sommets[2]],
+    [sommets[2], sommets[0]],
+    ...traitsSupplementaires,
+  ]
+  let meilleurScore = -Infinity
+  let dx = 0
+  let dy = 0
+  for (const rayon of [0.65, 0.85, 1.05]) {
+    for (let index = 0; index < 16; index++) {
+      const angle = (index * Math.PI) / 8
+      const directionX = Math.cos(angle)
+      const directionY = Math.sin(angle)
+      // Les textes IEP sont ancrés en haut à gauche : environ 0,5 cm de côté.
+      const x = sommet.x + rayon * directionX
+      const y = sommet.y + rayon * directionY
+      const distance = Math.min(
+        ...traits.map((trait) => distanceAuTrait(x, y, trait)),
+        ...sommets
+          .filter((point) => point !== sommet)
+          .map((point) => Math.hypot(x - point.x, y - point.y)),
+      )
+      const eloignementDuCentre =
+        directionX * (sommet.x - centreX) + directionY * (sommet.y - centreY)
+      const score =
+        Math.min(distance, 0.75) -
+        0.35 * (rayon - 0.65) +
+        0.01 * eloignementDuCentre
+      if (score > meilleurScore) {
+        meilleurScore = score
+        dx = x - sommet.x - 0.25
+        dy = y - sommet.y + 0.25
+      }
+    }
+  }
+  return {
+    ...options,
+    dx: options.dx ?? dx,
+    dy: options.dy ?? dy,
+  }
+}
+
 /**
  * Macro de construction d'un triangle à partir de ses 3 dimensions. Le premier point aura pour coordonnées (6,0).
  * @param {string} ABC Une chaine de caractère de 3 lettre
@@ -53,7 +138,14 @@ export const triangle3longueurs = function (
       -2,
       options,
     )
-  this.pointCreer(A, options)
+  const traitsSupplementaires: TraitNom[] = [
+    ...traitsArc(A, C),
+    ...traitsArc(B, C),
+  ]
+  this.pointCreer(
+    A,
+    optionsNomSommet(A, [A, B, C], options, traitsSupplementaires),
+  )
   // this.regleRotation(droite(A,B).angleAvecHorizontale, options)
   // this.regleMontrer(A, options)
   this.regleSegment(
@@ -61,7 +153,10 @@ export const triangle3longueurs = function (
     B,
     Object.assign({}, options, { zeroSurPremierPoint: true }),
   )
-  this.pointCreer(B, options)
+  this.pointCreer(
+    B,
+    optionsNomSommet(B, [A, B, C], options, traitsSupplementaires),
+  )
   this.crayonMasquer(options)
   if (description)
     this.textePosition(
@@ -95,7 +190,10 @@ export const triangle3longueurs = function (
       -5,
       options,
     )
-  this.pointCreer(C, options)
+  this.pointCreer(
+    C,
+    optionsNomSommet(C, [A, B, C], options, traitsSupplementaires),
+  )
   this.regleSegment(B, C, options)
   this.regleSegment(C, A, options)
   this.crayonMasquer(options)
@@ -143,9 +241,18 @@ export const triangleRectangleCoteHypotenuse = function (
   if (description)
     this.textePosition(`${A.nom + B.nom} = ${nombreAvecEspace(AB)} cm`, 0, -2)
   this.equerreRotation(dAB.angleAvecHorizontale, options)
-  this.pointCreer(A, options)
+  const traitsSupplementaires: TraitNom[] = options.placerNomsSommets
+    ? [[B, c], ...traitsArc(A, C)]
+    : []
+  this.pointCreer(
+    A,
+    optionsNomSommet(A, [A, B, C], options, traitsSupplementaires),
+  )
   this.regleSegment(A, B, options)
-  this.pointCreer(B, options)
+  this.pointCreer(
+    B,
+    optionsNomSommet(B, [A, B, C], options, traitsSupplementaires),
+  )
   if (description)
     this.textePosition(
       `${A.nom + B.nom + C.nom} est un triangle rectangle en ${B.nom} donc ${C.nom} appartient à la perpendiculaire à (${A.nom + B.nom}) passant par ${B.nom}.`,
@@ -181,7 +288,10 @@ export const triangleRectangleCoteHypotenuse = function (
       options,
     )
   this.crayonMontrer(C, options)
-  this.pointCreer(C, options)
+  this.pointCreer(
+    C,
+    optionsNomSommet(C, [A, B, C], options, traitsSupplementaires),
+  )
   this.compasMasquer(options)
   this.regleSegment(A, C, options)
   this.regleMasquer(options)
@@ -235,9 +345,18 @@ export const triangleRectangle2Cotes = function (
       options,
     )
   this.equerreRotation(dAB.angleAvecHorizontale, options)
-  this.pointCreer(A, options)
+  const traitsSupplementaires: TraitNom[] = options.placerNomsSommets
+    ? [[B, c]]
+    : []
+  this.pointCreer(
+    A,
+    optionsNomSommet(A, [A, B, C], options, traitsSupplementaires),
+  )
   this.regleSegment(A, B, options)
-  this.pointCreer(B, options)
+  this.pointCreer(
+    B,
+    optionsNomSommet(B, [A, B, C], options, traitsSupplementaires),
+  )
   if (description)
     this.textePosition(
       `${A.nom + B.nom + C.nom} est un triangle rectangle en ${B.nom} donc ${C.nom} appartient à la perpendiculaire à (${A.nom + B.nom}) passant par ${B.nom}.`,
@@ -260,7 +379,10 @@ export const triangleRectangle2Cotes = function (
   this.regleMontrer(B, options)
   this.regleRotation(C, options)
   this.crayonDeplacer(C, options)
-  this.pointCreer(C, options)
+  this.pointCreer(
+    C,
+    optionsNomSommet(C, [A, B, C], options, traitsSupplementaires),
+  )
   this.couleur = bleuMathalea
   this.epaisseur = 2
   this.compasMasquer(options)
@@ -320,7 +442,14 @@ export const triangle1longueur2angles = function (
   }
   this.couleur = bleuMathalea
   this.epaisseur = 3
-  this.pointCreer(A, options)
+  const traitsSupplementaires: TraitNom[] = [
+    [A, D2],
+    [B, E2],
+  ]
+  this.pointCreer(
+    A,
+    optionsNomSommet(A, [A, B, C], options, traitsSupplementaires),
+  )
   if (description)
     this.textePosition(
       `On trace le côté [${A.nom + B.nom}] de ${nombreAvecEspace(AB)} cm.`,
@@ -329,7 +458,10 @@ export const triangle1longueur2angles = function (
       options,
     )
   this.regleSegment(A, B, options)
-  this.pointCreer(B, options)
+  this.pointCreer(
+    B,
+    optionsNomSommet(B, [A, B, C], options, traitsSupplementaires),
+  )
   this.couleur = 'grey'
   this.epaisseur = 1
   this.rapporteurMontrer(A, options)
@@ -366,7 +498,10 @@ export const triangle1longueur2angles = function (
   this.regleMontrer(B, options)
   this.regleSegment(B, E2, options)
   this.angleCodage(C, B, A, options)
-  this.pointCreer(C, options)
+  this.pointCreer(
+    C,
+    optionsNomSommet(C, [A, B, C], options, traitsSupplementaires),
+  )
   // this.pointNommer(C, C.nom, -0.5, 1, options)
   this.couleur = bleuMathalea
   this.epaisseur = 3
@@ -419,7 +554,13 @@ export const triangle2longueurs1angle = function (
   }
   this.couleur = bleuMathalea
   this.epaisseur = 3
-  this.pointCreer(A, options)
+  const traitsSupplementaires: TraitNom[] = options.placerNomsSommets
+    ? [[A, D2]]
+    : []
+  this.pointCreer(
+    A,
+    optionsNomSommet(A, [A, B, C], options, traitsSupplementaires),
+  )
   if (description)
     this.textePosition(
       `On trace le côté [${A.nom + B.nom}] de ${nombreAvecEspace(AB)} cm.`,
@@ -428,7 +569,10 @@ export const triangle2longueurs1angle = function (
       options,
     )
   this.regleSegment(A, B, options)
-  this.pointCreer(B, options)
+  this.pointCreer(
+    B,
+    optionsNomSommet(B, [A, B, C], options, traitsSupplementaires),
+  )
   this.couleur = 'grey'
   this.epaisseur = 1
   this.rapporteurMontrer(A, options)
@@ -458,7 +602,10 @@ export const triangle2longueurs1angle = function (
   this.epaisseur = 3
   this.couleur = bleuMathalea
   this.crayonDeplacer(C, options)
-  this.pointCreer(C, options)
+  this.pointCreer(
+    C,
+    optionsNomSommet(C, [A, B, C], options, traitsSupplementaires),
+  )
   this.regleSegment(A, C, options)
   this.crayonMasquer(options)
   if (description)
@@ -514,6 +661,7 @@ export const triangleEquilateral = function (
   this: IAlea2iep,
   NOM: string | string[],
   AB: number,
+  options: OptionsCompas = {},
 ) {
   const A = pointAbstrait(6, 0)
   const B = pointAdistance(A, AB, randint(-20, 20))
@@ -524,12 +672,25 @@ export const triangleEquilateral = function (
     C.nom = NOM[2]
   }
   this.regleSegment(A, B)
-  this.pointCreer(A)
-  this.pointCreer(B)
+  const traitsSupplementaires: TraitNom[] = [
+    ...traitsArc(A, C),
+    ...traitsArc(B, C),
+  ]
+  this.pointCreer(
+    A,
+    optionsNomSommet(A, [A, B, C], options, traitsSupplementaires),
+  )
+  this.pointCreer(
+    B,
+    optionsNomSommet(B, [A, B, C], options, traitsSupplementaires),
+  )
   this.compasEcarter2Points(A, B)
   this.compasTracerArcCentrePoint(A, C)
   this.compasTracerArcCentrePoint(B, C)
-  this.pointCreer(C)
+  this.pointCreer(
+    C,
+    optionsNomSommet(C, [A, B, C], options, traitsSupplementaires),
+  )
   this.compasMasquer()
   this.regleSegment(A, C)
   this.regleSegment(C, B)

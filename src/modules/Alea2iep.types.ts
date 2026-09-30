@@ -14,6 +14,7 @@ export type OptionsIep = {
   couleurLabel?: string
   couleurPoint?: string
   description?: boolean
+  placerNomsSommets?: boolean
   positionsRangementInstruments?: PositionsInstrumentsIep
 }
 
@@ -102,12 +103,7 @@ export type CompasState = {
 }
 
 export type OutilIep =
-  | 'regle'
-  | 'equerre'
-  | 'requerre'
-  | 'rapporteur'
-  | 'compas'
-  | 'crayon'
+  'regle' | 'equerre' | 'requerre' | 'rapporteur' | 'compas' | 'crayon'
 
 export type VisibiliteInstrumentsIep = Record<OutilIep, boolean>
 export type PositionsInstrumentsIep = Partial<Record<OutilIep, PointAbstrait>>
@@ -260,6 +256,7 @@ export interface IAlea2iep {
 
   // Points et polygones
   pointCreer(A: PointAbstrait, options?: OptionsOutil): void
+  pointNomDeplacer(A: PointAbstrait, options?: OptionsIep): void
   milieuALaRegle(A: PointAbstrait, B: PointAbstrait, nom?: string): void
   pointMasquer(...points: (PointAbstrait | OptionsOutil)[]): void
   polygoneRapide(...args: (PointAbstrait | OptionsCrayon)[]): void
@@ -375,6 +372,7 @@ export interface IAlea2iep {
 
   // Points et polygones
   pointCreer(A: PointAbstrait, options?: OptionsOutil): void
+  pointNomDeplacer(A: PointAbstrait, options?: OptionsIep): void
   pointMasquer(...points: (PointAbstrait | OptionsOutil)[]): void
   polygoneRapide(...args: (PointAbstrait | OptionsCrayon)[]): void
 

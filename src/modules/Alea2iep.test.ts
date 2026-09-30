@@ -1,6 +1,79 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { pointAbstrait } from '../lib/2d/PointAbstrait'
 import Alea2iep from './Alea2iep'
+
+describe('Alea2iep.pointNomDeplacer', () => {
+  it('moves the existing point name without creating another text or moving the point', () => {
+    const iep = new Alea2iep()
+    const A = pointAbstrait(2, 3, 'A')
+
+    iep.pointCreer(A)
+    iep.pointNomDeplacer(A, { dx: -0.5, dy: 0.75, tempo: 0 })
+
+    const xml = iep.script()
+    expect(xml.match(/mouvement="creer" objet="texte"/g)).toHaveLength(1)
+    expect(xml).toContain(
+      '<action objet="texte" id="2" mouvement="translation" abscisse="45" ordonnee="188" tempo="0" vitesse="10" />',
+    )
+    expect(xml).not.toContain('mouvement="translation" objet="point"')
+  })
+})
+
+describe('Alea2iep.triangleEquilateral', () => {
+  it('places the names outside the triangle when requested', () => {
+    const iep = new Alea2iep()
+    const [A, , C] = iep.triangleEquilateral('ABC', 4, {
+      placerNomsSommets: true,
+    })
+    const noms = [
+      ...iep
+        .script()
+        .matchAll(
+          /<action abscisse="(-?\d+)" ordonnee="(-?\d+)" id="\d+" mouvement="creer" objet="texte" \/>/g,
+        ),
+    ]
+
+    expect(noms).toHaveLength(3)
+    expect(Number(noms[0][1])).toBeLessThan(iep.x(A))
+    expect(Number(noms[2][2])).toBeLessThan(iep.y(C))
+  })
+})
+
+describe('Alea2iep.triangle1longueur2angles', () => {
+  it('keeps the name of an acute vertex clear of both construction rays', () => {
+    const random = vi.spyOn(Math, 'random')
+    try {
+      for (const tirage of [0, 0.5, 0.999]) {
+        random.mockReturnValue(tirage)
+        const iep = new Alea2iep()
+        const [A, B, C] = iep.triangle1longueur2angles('ABC', 3, 30, 120, {
+          description: false,
+          placerNomsSommets: true,
+        })
+        const nomC = iep.liste_script.find((action) =>
+          action.includes('texte="$C$"'),
+        )
+        const position = nomC?.match(
+          /abscisse="(-?\d+)" ordonnee="(-?\d+)" id="\d+" mouvement="creer" objet="texte"/,
+        )
+        expect(position).toBeDefined()
+        const x = Number(position?.[1]) / 30 - iep.translationX + 0.25
+        const y = iep.translationY - Number(position?.[2]) / 30 - 0.25
+        const distanceDroite = (origine: typeof A) =>
+          Math.abs(
+            (C.y - origine.y) * (x - origine.x) -
+              (C.x - origine.x) * (y - origine.y),
+          ) / Math.hypot(C.x - origine.x, C.y - origine.y)
+
+        expect(Math.min(distanceDroite(A), distanceDroite(B))).toBeGreaterThan(
+          0.6,
+        )
+      }
+    } finally {
+      random.mockRestore()
+    }
+  })
+})
 
 describe('Alea2iep.regleSegment', () => {
   it('centers the ruler around a horizontal segment before drawing it', () => {

@@ -64,7 +64,7 @@ export default class ConstruisMonTriangle extends Exercice {
           donnees[0],
           donnees[1],
           donnees[2],
-          { description: true },
+          { description: true, placerNomsSommets: true },
         )
         objetsEnonceml.push(
           afficheLongueurSegment(triangle[1], triangle[0]),
@@ -79,7 +79,7 @@ export default class ConstruisMonTriangle extends Exercice {
           donnees[0],
           donnees[1],
           donnees[2],
-          { description: true },
+          { description: true, placerNomsSommets: true },
         )
         objetsEnonceml.push(
           afficheLongueurSegment(triangle[1], triangle[0]),
@@ -91,6 +91,7 @@ export default class ConstruisMonTriangle extends Exercice {
       case 3:
         triangle = anim.triangleRectangle2Cotes(nom, donnees[0], donnees[1], {
           description: true,
+          placerNomsSommets: true,
         })
         objetsEnonceml.push(
           afficheLongueurSegment(triangle[1], triangle[0]),
@@ -104,7 +105,7 @@ export default class ConstruisMonTriangle extends Exercice {
           nom,
           Math.min(donnees[0], donnees[1]),
           Math.max(donnees[0], donnees[1]),
-          { description: true },
+          { description: true, placerNomsSommets: true },
         )
         objetsEnonceml.push(
           afficheLongueurSegment(triangle[1], triangle[0]),
@@ -114,7 +115,9 @@ export default class ConstruisMonTriangle extends Exercice {
         break
 
       case 5:
-        triangle = anim.triangleEquilateral(nom, donnees[0])
+        triangle = anim.triangleEquilateral(nom, donnees[0], {
+          placerNomsSommets: true,
+        })
         objetsEnonceml.push(
           afficheLongueurSegment(triangle[1], triangle[0]),
           codageSegments(
@@ -136,6 +139,7 @@ export default class ConstruisMonTriangle extends Exercice {
           donnees[0],
           donnees[1],
           donnees[2],
+          { placerNomsSommets: true },
         )
         objetsEnonceml.push(
           afficheLongueurSegment(triangle[1], triangle[0]),
