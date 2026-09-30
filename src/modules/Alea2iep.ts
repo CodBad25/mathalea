@@ -134,6 +134,7 @@ export type OptionsIep = {
   couleurLabel?: string // Couleur du label des points
   couleurPoint?: string // Couleur du nom des points
   description?: boolean // Pour ajouter un texte qui décrit les étapes de construction
+  placerNomsSommets?: boolean // Place les noms à l'extérieur d'un triangle
   positionsRangementInstruments?: PositionsInstrumentsIep
 }
 
@@ -220,6 +221,7 @@ export default class Alea2iep {
   compas: Compas
   xml: string // Code XML de l'animation
   private visibilitesPreservees: VisibiliteInstrumentsIep[] = []
+  private nomsDesPoints = new WeakMap<PointAbstrait, number>()
   symetrieAxialePoint = symetrieAxialePoint
   parallelogramme3sommetsConsecutifs = parallelogramme3sommetsConsecutifs
   parallelogrammeAngleCentre = parallelogrammeAngleCentre
@@ -631,7 +633,11 @@ export default class Alea2iep {
     this.deplacer('regle', A, options)
   }
 
-  texteDeplacer(id: string, A: PointAbstrait, options: OptionsIep = {}) {
+  texteDeplacer(
+    id: string | number,
+    A: PointAbstrait,
+    options: OptionsIep = {},
+  ) {
     const tempo = options.tempo ?? this.tempo
     const vitesse = options.vitesse ?? this.vitesse
     const codeXML = `<action objet="texte" id="${id}" mouvement="translation" abscisse="${this.x(A)}" ordonnee="${this.y(A)}" tempo="${tempo}" vitesse="${vitesse}" />`
@@ -871,12 +877,14 @@ export default class Alea2iep {
       if (options.dy) {
         M.y += options.dy
       }
-      this.textePoint(`$${label}$`, M, {
+      const idNom = this.textePoint(`$${label}$`, M, {
         tempo: 0,
         couleur: couleurLabel,
         taille: options.taille,
       })
+      this.nomsDesPoints.set(A, idNom)
     } else {
+      this.nomsDesPoints.delete(A)
       codeXML = `<action abscisse="${this.x(A)}" ordonnee="${this.y(A)}" couleur="${couleur}" id="${A.id}" mouvement="creer" objet="point" tempo="${tempo}" />`
     }
     this.liste_script.push(codeXML)
@@ -972,8 +980,20 @@ export default class Alea2iep {
     if (options.dy) {
       M.y += options.dy
     }
-    this.textePoint(`$${nom}$`, M, options)
+    const idNom = this.textePoint(`$${nom}$`, M, options)
+    this.nomsDesPoints.set(A, idNom)
     // this.liste_script.push(`<action couleur="${couleur}" nom="${nom}" id="${A.id}" mouvement="nommer" objet="point" tempo="${tempo}" ${coordonneesTexte} />`)
+  }
+
+  /** Déplace le nom créé par pointCreer ou pointNommer, sans déplacer le point. */
+  pointNomDeplacer(A: PointAbstrait, options: OptionsPoint = {}) {
+    const idNom = this.nomsDesPoints.get(A)
+    if (idNom === undefined) return
+    const position = pointAbstrait(
+      A.x + (options.dx ?? 0),
+      A.y + (options.dy ?? 0),
+    )
+    this.texteDeplacer(idNom, position, options)
   }
 
   /**

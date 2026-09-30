@@ -1,5 +1,20 @@
 # Éditeur Instrumenpoche
 
+## Lisibilité des noms de points dans les animations
+
+`Alea2iep.pointCreer(point, { dx, dy })` place le nom du point avec un décalage
+en coordonnées de la figure. La méthode `pointNomDeplacer(point, { dx, dy })`
+déplace ensuite ce même texte, sans créer un second nom ni déplacer le point.
+Elle agit sur le dernier nom créé pour ce point par `pointCreer()` ou
+`pointNommer()`.
+
+Les macros de triangles acceptent `placerNomsSommets: true` dans leurs options
+pour choisir chaque emplacement dès la création du point. Elles comparent
+plusieurs positions autour du sommet et retiennent celle qui s'éloigne des côtés,
+des traits de construction et, pour les constructions au compas, des arcs connus.
+P011 utilise ce réglage pour ses six constructions. Sans cette option, les macros
+conservent leur placement historique.
+
 Le custom element `alea-iep-editeur` affiche un éditeur de programme de
 construction aux instruments. Il sert notamment pour les exercices où l'élève
 doit compléter une suite d'étapes puis tester l'animation avec Instrumenpoche.
@@ -262,7 +277,7 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 | `protege`                        | Propriété d'une instruction initiale qui la protège contre l'édition, la suppression et le déplacement.                                                                            |
 | `instructionsInitialesProtegees` | Indices des instructions initiales à protéger.                                                                                                                                     |
 | `programmeInitialProtege`        | Raccourci pour protéger tout le programme initial.                                                                                                                                 |
-| `programmeAttendu`               | Programme complet attendu, utilisé seulement pour cadrer la figure imprimable de l'énoncé quand `interactivityOn` vaut `true`.                                                    |
+| `programmeAttendu`               | Programme complet attendu, utilisé seulement pour cadrer la figure imprimable de l'énoncé quand `interactivityOn` vaut `true`.                                                     |
 | `loadSaveButtons`                | Affiche les boutons de sauvegarde et chargement JSON.                                                                                                                              |
 | `allowFullscreen`                | Ajoute le bouton de test de l'animation en plein écran.                                                                                                                            |
 | `interactivityOn`                | Désactive l'édition quand la valeur vaut `false` : la zone d'ajout et les boutons de modification des lignes sont masqués, mais le bouton « Tester l'animation » reste disponible. |
