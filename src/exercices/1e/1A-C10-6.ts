@@ -13,7 +13,7 @@ import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -87,6 +87,8 @@ export default class Auto1AC10f extends ExerciceSimple {
     )
     const { graphique, graphiqueC } = this.creerGraphiques(val, elements)
     const reponses = this.formaterReponses(val, estInegStrict, typeInequation)
+    // Intervalle attendu, sans le « S = » (qui reste hors de la mise en évidence)
+    const intervalle = reponses[0].replace(/^\$S = /, '').replace(/\$$/, '')
 
     // Énoncé
     this.question = this.sup5
@@ -104,7 +106,7 @@ export default class Auto1AC10f extends ExerciceSimple {
       estInegStrict,
       typeInequation,
       graphiqueC,
-      reponses[0],
+      intervalle,
     )
 
     // Réponse : l'intervalle seul, ou « S = intervalle » (propositions du QCM)
@@ -112,9 +114,7 @@ export default class Auto1AC10f extends ExerciceSimple {
       this.reponse = reponses[0]
       this.distracteurs = reponses.slice(1)
     } else {
-      this.reponse = reponses[0]
-        .replace(/^\$S = /, '')
-        .replace(/\$$/, '')
+      this.reponse = intervalle
         .replaceAll('\\,', '')
         .replaceAll('\\left', '')
         .replaceAll('\\right', '')
@@ -332,6 +332,6 @@ export default class Auto1AC10f extends ExerciceSimple {
             $\\bullet$ On trace la droite horizontale d'équation $y=${val}$. Cette droite coupe la courbe en $${val}^2=${borne}$. <br>
             $\\bullet$ Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${positionText} la droite.<br>
             ${graphiqueC}<br>
-            Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $(I)$ est : ${texteEnCouleurEtGras(reponseCorrecte)}.`
+            Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $(I)$ est : $S=${miseEnEvidence(reponseCorrecte)}$.`
   }
 }
