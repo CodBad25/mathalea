@@ -2193,6 +2193,59 @@ export function sanitizeSvg(svg: string): string {
   )
 }
 
+/** Lettre latine convertie en lettre italique mathématique (Unicode, `𝐴`, `𝑎`…) */
+function toMathItalicLetter(char: string): string {
+  if (char === 'h') return '\u210E' // le « h » italique mathématique est le « ℎ » de Planck (trou du bloc)
+  const code = char.charCodeAt(0)
+  if (code >= 65 && code <= 90) return String.fromCodePoint(0x1d434 + code - 65)
+  if (code >= 97 && code <= 122)
+    return String.fromCodePoint(0x1d44e + code - 97)
+  return char
+}
+
+/** Retire les caractères qui casseraient un attribut XML dans un littéral Typst */
+function safeFontFamily(family: string): string {
+  return family.replace(/["\\<>&]/g, '').trim()
+}
+
+/**
+ * Aligne les textes d'une figure sur les polices du document. Typst n'hérite
+ * rien de la page pour un SVG embarqué : sans `font-family` ou avec une police
+ * qu'il ne connaît pas (« Book Antiqua »), il rend les textes dans une police
+ * de repli, différente du reste du PDF (les labels KaTeX, eux, deviennent de
+ * vraies formules Typst).
+ * - les noms de points `texteParPoint(..., mathOn = true)` (SVG `<text
+ *   font-family="Book Antiqua" font-style="italic">`) passent dans la police
+ *   mathématique, en lettres italiques mathématiques Unicode comme dans une
+ *   formule Typst ;
+ * - les autres `<text>` sans police propre passent dans la police du texte.
+ * S'applique au code Typst d'une figure (`image(bytes("<svg…>"), …)`).
+ */
+export function applyDocumentFontsToFigure(
+  figure: string,
+  fonts: { font: string; mathFont: string },
+): string {
+  const mathFamily = safeFontFamily(fonts.mathFont)
+  const textFamily = safeFontFamily(fonts.font)
+  return figure.replace(
+    /<text\b([^>]*)>([^<]*)<\/text>/g,
+    (text, attrs: string, content: string) => {
+      if (/\sfont-family=\s*\\?"Book Antiqua\\?"/.test(attrs)) {
+        if (mathFamily === '') return text
+        const rest = attrs
+          .replace(/\sfont-family=\s*\\?"Book Antiqua\\?"/g, '')
+          .replace(/\sfont-style=\s*\\?"italic\\?"/g, '')
+          .replace(/\s+$/, '')
+        const letters = content.replace(/[A-Za-z]/g, toMathItalicLetter)
+        return `<text${rest} font-family=\\"${mathFamily}\\">${letters}</text>`
+      }
+      // police déjà fixée (attribut, style en ligne ou classe CSS du SVG)
+      if (textFamily === '' || /font-family|\sclass=/.test(attrs)) return text
+      return `<text${attrs.replace(/\s+$/, '')} font-family=\\"${textFamily}\\">${content}</text>`
+    },
+  )
+}
+
 /** Chaîne littérale Typst (`"..."`) */
 function typstStringLiteral(text: string): string {
   return `"${text.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"`

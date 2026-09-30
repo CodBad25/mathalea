@@ -7,6 +7,7 @@ import {
   MATHALEA_TASKS_HELPER,
   TASKIZE_IMPORT,
   htmlToTypst,
+  applyDocumentFontsToFigure,
 } from '../typst/latexToTypst'
 import {
   BREATHER_CALL,
@@ -216,10 +217,10 @@ export function harvestSlidesCarryOver(code: string): SlidesCarryOver {
   }
   if (Object.keys(slideScales).length > 0) carryOver.slideScales = slideScales
 
-  const defaultAlignMatch = /^#let diapo-align-defaut = "(top|center|bottom)"/m.exec(
-    code,
-  )
-  const defaultAlign = (defaultAlignMatch?.[1] as SlideAlign | undefined) ?? 'center'
+  const defaultAlignMatch =
+    /^#let diapo-align-defaut = "(top|center|bottom)"/m.exec(code)
+  const defaultAlign =
+    (defaultAlignMatch?.[1] as SlideAlign | undefined) ?? 'center'
   const slideAligns: Record<string, SlideAlign> = {}
   for (const match of code.matchAll(
     /^#let diapo-(\d+)-(question|correction)-align = "(top|center|bottom)"/gm,
@@ -467,7 +468,9 @@ export function buildSlidesDocument(
   lines.push(
     `#let ajustement-auto = ${options.autoFit} // réduit le texte s’il déborde de la page`,
   )
-  lines.push('#let taille-numero = 16pt // numéro (et « Correction N ») du coin')
+  lines.push(
+    '#let taille-numero = 16pt // numéro (et « Correction N ») du coin',
+  )
   lines.push(`#let garde-titre = ${typstString(options.coverTitle)}`)
   lines.push(`#let garde-sous-titre = ${typstString(options.coverSubtitle)}`)
   lines.push(`#let titre = ${typstString(options.slideTitle)}`)
@@ -526,18 +529,24 @@ export function buildSlidesDocument(
   lines.push('// Le pied de page vit dans la marge : il n’empiète pas sur le')
   lines.push('// contenu de la diapositive. Le titre des diapositives ancré en')
   lines.push('// bas le rejoint sur cette ligne : ils sont ainsi alignés et de')
-  lines.push('// même taille. Le pied va à droite, sauf si le titre y est déjà.')
+  lines.push(
+    '// même taille. Le pied va à droite, sauf si le titre y est déjà.',
+  )
   // parenthèses obligatoires : sans elles, le `else` d’une ligne suivante ne
   // ferait plus partie de l’expression (Typst clôt le `#let` en fin de ligne)
   lines.push('#let colonne-titre = (')
   lines.push('  if titre-position.ends-with("left") { 0 }')
   lines.push('  else if titre-position.ends-with("right") { 2 } else { 1 })')
-  lines.push('#let colonne-pied = if titre-en-bas and colonne-titre == 2 { 0 } else { 2 }')
+  lines.push(
+    '#let colonne-pied = if titre-en-bas and colonne-titre == 2 { 0 } else { 2 }',
+  )
   lines.push('#let ligne-pied = {')
   lines.push('  let cellule(numero, ali) = align(ali,')
   lines.push('    if titre-en-bas and colonne-titre == numero {')
   lines.push('      text(fill: titre-couleur, titre)')
-  lines.push('    } else if pied-de-page.trim() != "" and colonne-pied == numero {')
+  lines.push(
+    '    } else if pied-de-page.trim() != "" and colonne-pied == numero {',
+  )
   lines.push('      text(fill: gray, pied-de-page)')
   lines.push('    } else { [] })')
   lines.push('  text(size: titre-taille, grid(columns: (1fr, 1fr, 1fr),')
@@ -552,7 +561,9 @@ export function buildSlidesDocument(
   lines.push(
     '#set text(font: police-texte, size: taille-questions, lang: "fr")',
   )
-  lines.push('// police des formules ; le texte inséré garde la police du texte')
+  lines.push(
+    '// police des formules ; le texte inséré garde la police du texte',
+  )
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
   lines.push(MATHALEA_INLINE_FORMULA_RULE)
@@ -573,7 +584,9 @@ export function buildSlidesDocument(
     lines.push('// ----- Figures (SVG embarqués) -----')
     for (const [index, figure] of figures.entries()) {
       const figNum = index + 1
-      lines.push(`#let fig-${figNum} = ${figure}`)
+      lines.push(
+        `#let fig-${figNum} = ${applyDocumentFontsToFigure(figure, options)}`,
+      )
       lines.push(
         `#let fig-${figNum}-zoom = ${carryOver.figureZooms?.[figNum] ?? options.figureZoom}`,
       )
@@ -589,7 +602,9 @@ export function buildSlidesDocument(
   lines.push('#let aligne(nom) = alignement-horizontal + (')
   lines.push('  if nom == "top" { top } else if nom == "bottom" { bottom }')
   lines.push('  else { horizon })')
-  lines.push('// une diapositive trop chargée (correction détaillée…) déborderait')
+  lines.push(
+    '// une diapositive trop chargée (correction détaillée…) déborderait',
+  )
   lines.push('// de la page : son texte est réduit jusqu’à ce qu’elle tienne.')
   lines.push('// Réduire la police diminue à la fois la hauteur des lignes et')
   lines.push('// leur nombre : la racine carrée du dépassement donne une bonne')
@@ -633,7 +648,9 @@ export function buildSlidesDocument(
     '      if correction and etiquette-correction { "Correction " + str(num) } else { str(num) }))',
   )
   lines.push('  }')
-  lines.push('  // titre ancré en haut ; ancré en bas, il est dans le pied de page')
+  lines.push(
+    '  // titre ancré en haut ; ancré en bas, il est dans le pied de page',
+  )
   lines.push('  #if titre-en-haut {')
   lines.push('    place(')
   lines.push('      top + (if titre-position.ends-with("left") { left }')
@@ -644,9 +661,15 @@ export function buildSlidesDocument(
   lines.push(
     '  #let taille-texte = (if correction { taille-corrections } else { taille-questions }) * taille',
   )
-  lines.push('  // numéro et titre sont posés en `place` : ils ne prennent pas de')
-  lines.push('  // place dans le flux, on leur réserve donc un bandeau pour que le')
-  lines.push('  // contenu ne passe pas dessous (l’ajustement automatique tient')
+  lines.push(
+    '  // numéro et titre sont posés en `place` : ils ne prennent pas de',
+  )
+  lines.push(
+    '  // place dans le flux, on leur réserve donc un bandeau pour que le',
+  )
+  lines.push(
+    '  // contenu ne passe pas dessous (l’ajustement automatique tient',
+  )
   lines.push('  // compte de la hauteur restante)')
   lines.push('  #let bandeau(en-haut) = calc.max(')
   lines.push(
@@ -662,7 +685,9 @@ export function buildSlidesDocument(
   lines.push('    align(aligne(alignement), ajuster(corps, taille-texte)))')
   lines.push(']')
   if (usesMultivue) {
-    lines.push('// variante « multivue » : plusieurs versions différentes de la')
+    lines.push(
+      '// variante « multivue » : plusieurs versions différentes de la',
+    )
     lines.push('// même question côte à côte, en colonnes de largeur égale')
     lines.push(
       '#let diapo-multi(num, corps-liste, taille: 1, alignement: "center", correction: false) = box(',
@@ -770,7 +795,9 @@ export function buildSlidesDocument(
     if (extraVersions.length > 0) {
       const bodies = [
         `diapo-${num}-${side}`,
-        ...extraVersions.map((_, index) => `diapo-${num}-${side}-v${index + 2}`),
+        ...extraVersions.map(
+          (_, index) => `diapo-${num}-${side}-v${index + 2}`,
+        ),
       ]
       const args = [
         `${num}`,
@@ -844,7 +871,9 @@ export function buildSlidesDocument(
   }
   if (options.recapAnswers) {
     lines.push('')
-    lines.push('// ----- Récapitulatif des questions et de leurs réponses -----')
+    lines.push(
+      '// ----- Récapitulatif des questions et de leurs réponses -----',
+    )
     lines.push('#pagebreak()')
     lines.push('#recap(recap-titre-reponses, (')
     for (const num of order) {

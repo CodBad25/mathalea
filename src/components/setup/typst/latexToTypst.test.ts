@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import {
+  applyDocumentFontsToFigure,
   escapeTypstText,
   htmlToTypst,
   latexMathToTypst,
@@ -691,7 +692,9 @@ describe('htmlToTypst', () => {
       '$\\def\\arraystretch{1.5}\\begin{array}{|l|c|c|}\\hline x & 1 & 2 \\\\ \\hline f(x) & 3 & 4 \\\\ \\hline\\end{array}$',
     )
     expect(result).toContain('#table(')
-    expect(result).toContain('align: (left + horizon, center + horizon, center + horizon,)')
+    expect(result).toContain(
+      'align: (left + horizon, center + horizon, center + horizon,)',
+    )
     expect(result).toContain('inset: (x: 5pt, y: 4.5pt)')
     expect(result).toContain('stroke: 0.5pt')
     expect(result).toContain('[$x$]')
@@ -1189,6 +1192,48 @@ describe('htmlToTypst', () => {
     expect(result).toBe(
       'Donc l\'ensemble de définition de $h$ est $text(fill: #rgb("#F15929"), bold(RR))$.',
     )
+  })
+})
+
+describe('applyDocumentFontsToFigure', () => {
+  const fonts = { font: 'Libertinus Serif', mathFont: 'Libertinus Math' }
+  const svgText = (attrs: string, content: string) =>
+    `image(bytes("<svg><text ${attrs} x=\\"1\\">${content}</text></svg>"), format: "svg")`
+
+  it('passe les noms de points en lettres italiques mathématiques dans la police maths', () => {
+    const figure = svgText(
+      'font-family=\\"Book Antiqua\\" font-style=\\"italic\\"',
+      'J',
+    )
+    const result = applyDocumentFontsToFigure(figure, fonts)
+    expect(result).toContain('font-family=\\"Libertinus Math\\"')
+    expect(result).toContain('>\u{1D43D}</text>')
+    expect(result).not.toContain('Book Antiqua')
+    expect(result).not.toContain('font-style')
+  })
+
+  it('laisse inchangés les textes qui ne sont pas en police maths', () => {
+    const figure = svgText('font-family=\\"Arial\\"', 'J')
+    expect(applyDocumentFontsToFigure(figure, fonts)).toBe(figure)
+  })
+
+  it('met dans la police du texte les textes sans police propre', () => {
+    const figure = svgText('style=\\"font-size:14px\\"', 'cm')
+    const result = applyDocumentFontsToFigure(figure, fonts)
+    expect(result).toContain('font-family=\\"Libertinus Serif\\"')
+    expect(result).toContain('>cm</text>')
+  })
+
+  it("ne touche pas un texte dont la police vient du style ou d'une classe", () => {
+    const inStyle = svgText('style=\\"font-family:serif\\"', 'x')
+    const inClass = svgText('class=\\"trigo\\"', 'x')
+    expect(applyDocumentFontsToFigure(inStyle, fonts)).toBe(inStyle)
+    expect(applyDocumentFontsToFigure(inClass, fonts)).toBe(inClass)
+  })
+
+  it('convertit le h en ℎ (U+210E)', () => {
+    const figure = svgText('font-family=\\"Book Antiqua\\"', 'h')
+    expect(applyDocumentFontsToFigure(figure, fonts)).toContain('>\u210E<')
   })
 })
 
