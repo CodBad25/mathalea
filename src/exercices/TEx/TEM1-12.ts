@@ -7,7 +7,10 @@ import {
   buildDataKeyboardFromStyle,
   KeyboardType,
 } from '../../lib/interactif/claviers/keyboard'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import {
+  comparerMatrices,
+  lireMatriceSaisie,
+} from '../../lib/interactif/comparaisonMatrices'
 import { matrice, type Matrice } from '../../lib/mathFonctions/Matrice'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -150,33 +153,6 @@ function detailSomme(
   }
 }
 
-/** Lit une matrice MathLive, ou l'ancien format textuel `(1,2;3,4)`. */
-function lireMatriceSaisie(saisie: string): string[][] {
-  const environnement = saisie.match(
-    /\\begin\{(?:p|b|B|v|V)?matrix\}([\s\S]*)\\end\{(?:p|b|B|v|V)?matrix\}/,
-  )
-  if (environnement != null) {
-    return environnement[1]
-      .split('\\\\')
-      .map((ligne) =>
-        ligne
-          .split('&')
-          .map((coef) =>
-            coef
-              .trim()
-              .replace(/^\\placeholder\[matrix\d+\]\{([\s\S]*)\}$/, '$1'),
-          ),
-      )
-  }
-  return saisie
-    .replace(/\\left|\\right|\\[,:!]|[()\s]/g, '')
-    .replace(/\{,\}/g, ',')
-    .split(';')
-    .map((ligne) =>
-      ligne.split(',').map((coef) => coef.replace(/^\{(.*)\}$/, '$1')),
-    )
-}
-
 /**
  * QCM ramifié : le calcul est-il possible ? Si oui, l'élève saisit la matrice résultat.
  */
@@ -209,46 +185,21 @@ function qcmCalculPossible(
           callback: (answer, _choice, mathfield?: MathfieldElement) => {
             if (resultat == null) return { isOk: false }
             const saisie = lireMatriceSaisie(answer)
-            const attendu = resultat.toArray()
-            let promptIndex = 0
-            const coefficientsOk = saisie.map((ligne, i) =>
-              ligne.map(
-                (coef, j) =>
-                  i < attendu.length &&
-                  j < attendu[0].length &&
-                  fonctionComparaison(coef, String(attendu[i][j])).isOk,
-              ),
+            const { isOk, feedback, coefficientsOk } = comparerMatrices(
+              saisie,
+              resultat.toArray(),
             )
-            saisie.forEach((ligne, i) =>
-              ligne.forEach((_coef, j) => {
+            let promptIndex = 0
+            coefficientsOk.forEach((ligne) =>
+              ligne.forEach((coefficientOk) => {
                 mathfield?.setPromptState(
                   `matrix${promptIndex++}`,
-                  coefficientsOk[i][j] ? 'correct' : 'incorrect',
+                  coefficientOk ? 'correct' : 'incorrect',
                   true,
                 )
               }),
             )
-            if (
-              saisie.length !== attendu.length ||
-              saisie.some((ligne) => ligne.length !== attendu[0].length)
-            ) {
-              return { isOk: false, feedback: 'La taille est incorrecte.' }
-            }
-            if (saisie.some((ligne) => ligne.some((coef) => coef === ''))) {
-              return { isOk: false, feedback: 'Il manque des coefficients.' }
-            }
-            const nombreIncorrects = coefficientsOk
-              .flat()
-              .filter((coefficientOk) => !coefficientOk).length
-            const isOk = nombreIncorrects === 0
-            return {
-              isOk,
-              feedback: isOk
-                ? ''
-                : nombreIncorrects === 1
-                  ? 'Un coefficient est incorrect.'
-                  : `${nombreIncorrects} coefficients sont incorrects.`,
-            }
+            return { isOk, feedback }
           },
         },
       },
