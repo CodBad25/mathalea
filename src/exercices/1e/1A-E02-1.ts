@@ -2,7 +2,6 @@ import PoucentageE from '../can/4e/can4P2-03'
 export const titre = 'Calculer un prix après une évolution en pourcentage'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

@@ -2,7 +2,6 @@ import CalculImageParFonctionAffine from '../can/3e/can3F2-02'
 export const titre = 'Calculer une image par une fonction affine'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

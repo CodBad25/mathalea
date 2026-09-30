@@ -2,7 +2,6 @@ import ProbaEvenementContraire from '../can/3e/can3S2-02'
 export const titre = 'Calculer la probabilité d’un évènement contraire'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

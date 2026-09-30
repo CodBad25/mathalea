@@ -19,7 +19,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Retrouver la bonne fonction affine à partir de données'
 /**
  * @author Gilles Mora

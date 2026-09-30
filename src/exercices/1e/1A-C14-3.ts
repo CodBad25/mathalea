@@ -20,7 +20,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre =
   'Retrouver une fonction affine à partir de son tableau de signes'
 export const dateDePublication = '10/07/2025'

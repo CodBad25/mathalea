@@ -2,7 +2,6 @@ import EquationSecondDegreParticuliere from '../can/1e/can1SD21-07'
 export const titre = 'Résoudre une équation $ax^2+bx+c=c$'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

@@ -2,7 +2,6 @@ import ValeursDefPourcentage from '../can/4e/can4P2-01'
 export const titre = 'Déterminer une valeur définie avec un pourcentage'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

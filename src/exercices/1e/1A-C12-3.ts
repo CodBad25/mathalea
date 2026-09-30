@@ -11,7 +11,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Effectuer une application numérique'
 export const dateDePublication = '06/08/2026'
 

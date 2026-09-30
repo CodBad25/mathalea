@@ -2,7 +2,6 @@ import TauxCoeff from '../can/2e/can2I2-01'
 export const titre = 'Passer du taux d’évolution au coefficient multiplicateur'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

@@ -775,7 +775,7 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `x_1 &= ${x1Str} \\leqslant ${borneStr} \\quad \\implies \\quad x_1 \\notin D\\\\`
         }
         if (borneStr.includes('frac')) {
-          texteCorr += `\\\\`
+          texteCorr += `[1ex]`
         }
         if (x2 > borne) {
           texteCorr += `x_2 &= ${x2Str} > ${borneStr} \\quad \\implies \\quad x_2 \\in D\\\\`
@@ -959,7 +959,7 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `x_1 &= ${x1Str} \\leqslant ${borneStr} \\quad \\implies \\quad x_1 \\notin D\\\\`
         }
         if (borneStr.includes('frac')) {
-          texteCorr += `\\\\`
+          texteCorr += `[1ex]`
         }
         if (x2 > borne) {
           texteCorr += `x_2 &= ${x2Str} > ${borneStr} \\quad \\implies \\quad x_2 \\in D`

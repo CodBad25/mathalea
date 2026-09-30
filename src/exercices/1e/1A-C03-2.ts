@@ -2,7 +2,6 @@ import CalculPuissancesOperation from '../can/2e/can2N4-03'
 export const titre = 'Simplifier avec les propriétés des puissances'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

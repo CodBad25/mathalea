@@ -2,7 +2,6 @@ import ConversionEnTousSens from '../can/6e/can6M4-03'
 export const titre = 'Convertir une unité de longueur, masse ou capacité'
 export const dateDePublication = '25/08/2026'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

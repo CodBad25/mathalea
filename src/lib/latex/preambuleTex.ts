@@ -669,6 +669,8 @@ export function loadPackagesFromContent(contents: contentsType) {
     contents,
   )
   testIfLoaded(['\\e'], '\\newcommand{\\e}{\\mathrm{e}}', contents)
+  testIfLoaded(['\\lt'], '\\providecommand{\\lt}{<}', contents)
+  testIfLoaded(['\\gt'], '\\providecommand{\\gt}{>}', contents)
   testIfLoaded(
     [
       '\\ldots',

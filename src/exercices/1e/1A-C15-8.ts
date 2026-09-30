@@ -17,7 +17,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = "Calculer une fraction d'un paiement"
 export const dateDePublication = '06/01/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire

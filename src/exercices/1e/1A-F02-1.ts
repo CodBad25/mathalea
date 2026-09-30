@@ -2,7 +2,6 @@ import CalculImageSecondDegre from '../can/2e/can2F11-02'
 export const titre = 'Calculer une image avec une fonction'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

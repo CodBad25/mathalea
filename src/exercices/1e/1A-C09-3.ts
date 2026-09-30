@@ -3,7 +3,6 @@ export const titre = 'Développer avec la double distributivité'
 export const dateDePublication = '28/07/2025'
 export const dateDeModifImportante = '29/09/2026'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

@@ -8,7 +8,6 @@ import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Résoudre une inéquation $ax+b>cx+d$'
 export const dateDePublication = '16/08/2026'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
