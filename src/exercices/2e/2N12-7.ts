@@ -2,6 +2,7 @@ import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { crochetD, crochetG, intervalle } from '../../lib/2d/intervalles'
 import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { segment } from '../../lib/2d/segmentsVecteurs'
 import { orangeMathalea } from '../../lib/colors'
 import {
   addIntervalleDroite,
@@ -16,11 +17,11 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Représenter une inégalité sur une droite graduée'
-export const dateDePublication = '28/09/2026'
+export const dateDePublication = '30/09/2026'
 export const uuid = 'a6e62'
 export const interactifReady = true
 export const refs = {
-  'fr-fr': ['2N10-6'],
+  'fr-fr': ['2N12-7'],
   'fr-ch': [],
 }
 
@@ -29,13 +30,27 @@ type TypeInegalite = 1 | 2 | 3 | 4
 const symboleInegalite = (type: TypeInegalite) => {
   switch (type) {
     case 1:
-      return '>'
+      return '\\gt'
     case 2:
-      return '<'
+      return '\\lt'
     case 3:
       return '\\geqslant'
     case 4:
       return '\\leqslant'
+  }
+}
+
+const inegaliteTex = (type: TypeInegalite, a: number, inversee: boolean) => {
+  if (!inversee) return `x${symboleInegalite(type)}${a}`
+  switch (type) {
+    case 1:
+      return `${a}\\lt x`
+    case 2:
+      return `${a}\\gt x`
+    case 3:
+      return `${a}\\leqslant x`
+    case 4:
+      return `${a}\\geqslant x`
   }
 }
 
@@ -97,16 +112,17 @@ function construitDroite(a: number, type?: TypeInegalite) {
     y: 0,
     axeEpaisseur: 1.5,
     thickDistance: 1,
-    thickEpaisseur: 1,
+    thickEpaisseur: 0,
     labelsPrincipaux: false,
     labelListe: type === undefined ? [[a, String(a)]] : [],
   })
-  const objets: ObjetMathalea2D[] = [axe]
+  const graduation = segment(xA, -0.15, xA, 0.15)
+  const objets: ObjetMathalea2D[] = [axe, graduation]
 
   if (type !== undefined) {
     const A = pointAbstrait(xA, 0, String(a))
-    const gauche = pointAbstrait(0, 0)
-    const droite = pointAbstrait(xMax, 0)
+    const gauche = pointAbstrait(-0.2, 0)
+    const droite = pointAbstrait(xMax + 0.2, 0)
     const versDroite = type === 1 || type === 3
     const egalite = type === 3 || type === 4
     const partieColoriee = versDroite
@@ -145,6 +161,7 @@ function construitDroite(a: number, type?: TypeInegalite) {
 export default class RepresenterInegaliteSurDroite extends Exercice {
   constructor() {
     super()
+    this.interactif = true
     this.nbQuestions = 4
     this.consigne =
       'Représenter sur chaque droite graduée l’ensemble des nombres réels vérifiant l’inégalité donnée.'
@@ -157,23 +174,29 @@ export default class RepresenterInegaliteSurDroite extends Exercice {
       [1, 2, 3, 4] as TypeInegalite[],
       this.nbQuestions,
     )
+    const orientationsInversees = combinaisonListes(
+      [false, false, true, true],
+      this.nbQuestions,
+    )
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const type = types[i]
       const a = randint(-8, 8)
-      const inegalite = `x${symboleInegalite(type)}${a}`
+      const inversee = orientationsInversees[i]
+      const inegalite = inegaliteTex(type, a, inversee)
       const texte = `$${inegalite}$<br><br>${
         this.interactif
           ? addIntervalleDroite(this, i, {
               min: a - 3,
               max: a + 3,
               labelValue: a,
+              showGraduations: false,
             })
           : construitDroite(a)
       }`
       const texteCorr = `${justification(type, a)}<br><br>${construitDroite(a, type)}<br>L’ensemble des solutions est $${miseEnEvidence(intervalleTex(type, a))}$.`
 
-      if (this.questionJamaisPosee(i, type, a)) {
+      if (this.questionJamaisPosee(i, type, a, Number(inversee))) {
         if (this.interactif) {
           handleAnswers(
             this,
