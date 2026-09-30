@@ -1,61 +1,40 @@
-import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
-// import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
+export const dateDePublication = '11/10/2025'
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = '72f4c'
 
-export const uuid = '6b959'
 export const refs = {
   'fr-fr': ['1A-C03-10', '2A-N3-5'],
-  'fr-ch': ['10NO3F-4'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = "Passer de l'écriture scientifique à l'écriture décimale"
-export const dateDePublication = '11/10/2025'
-// Ceci est un exemple de QCM avec version originale et version aléatoire
+
 /**
  *
  * @author Gilles Mora
  *
  */
-export default class Auto1AC3j extends ExerciceQcmA {
-  private appliquerLesValeurs(a: number, n: number): void {
-    this.enonce = `Quelle est l'écriture décimale du nombre dont l'écriture scientifique est $${texNombre(a, 4)}\\times 10^{${n}}$ ?`
-
-    this.correction = `Multiplier par  $10^{${n}}$ revient à multiplier par $${texNombre(10 ** n, 6)}$,  donc l'écriture décimale de $${texNombre(a, 6)}\\times 10^{${n}}$ est : $${miseEnEvidence(texNombre(a * 10 ** n, 6))}$.`
-
-    this.reponses = [
-      `$${texNombre(a * 10 ** n, 8)}$`,
-      `$${texNombre(a * 10 ** (n - 1), 8)}$`,
-      ` $${texNombre(a * 10 ** -n, 8)}$`,
-      n < 0
-        ? `$${texNombre(a * 10 ** (n + 1), 8)}$`
-        : `$${texNombre(Math.floor(a) * 10 ** n + a / 10, 8)}$`,
-    ]
-  }
-
-  versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(3.56, -3)
-  }
-
-  versionAleatoire: () => void = () => {
-    let compteur = 0
-    do {
-      const a = choice([randint(101, 999) / 100, randint(1001, 9999) / 1000])
-      const n = choice([randint(-5, -2), randint(2, 5)])
-      this.appliquerLesValeurs(a, n)
-      compteur++
-    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
-  }
-
+export default class Auto1AC3j extends ExerciceSimple {
   constructor() {
     super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut passer d'une écriture scientifique à une écriture décimale.
@@ -66,7 +45,34 @@ export default class Auto1AC3j extends ExerciceQcmA {
     <li>Compter soigneusement le nombre de rangs de déplacement.</li>
     <li>Construire au brouillon un tableau de numération en cas d'hésitation.</li>
   </ul>`
+  }
 
-    this.versionAleatoire()
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
+    const a = choice([
+      new Decimal(randint(101, 999)).div(100),
+      new Decimal(randint(1001, 9999)).div(1000),
+    ])
+    const n = this.quotaChoice('signe', [-1, 1]) * randint(2, 5)
+    const puissance = new Decimal(10).pow(n)
+    const resultat = a.mul(puissance)
+
+    this.question = `Quelle est l'écriture décimale du nombre dont l'écriture scientifique est $${texNombre(a, 4)}\\times 10^{${n}}$ ?`
+    this.correction = `Multiplier par  $10^{${n}}$ revient à multiplier par $${texNombre(puissance, 6)}$,  donc l'écriture décimale de $${texNombre(a, 6)}\\times 10^{${n}}$ est : $${miseEnEvidence(texNombre(resultat, 8))}$.`
+
+    if (this.versionQcm) {
+      this.reponse = `$${texNombre(resultat, 8)}$`
+      this.distracteurs = [
+        `$${texNombre(a.mul(new Decimal(10).pow(n - 1)), 8)}$`,
+        `$${texNombre(a.mul(new Decimal(10).pow(-n)), 8)}$`,
+        n < 0
+          ? `$${texNombre(a.mul(new Decimal(10).pow(n + 1)), 8)}$`
+          : `$${texNombre(a.floor().mul(puissance).plus(a.div(10)), 8)}$`,
+      ]
+    } else {
+      this.question = `Donner l'écriture décimale du nombre dont l'écriture scientifique est $${texNombre(a, 4)}\\times 10^{${n}}$.`
+      this.reponse = resultat
+    }
   }
 }

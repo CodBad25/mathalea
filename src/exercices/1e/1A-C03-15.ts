@@ -1,59 +1,38 @@
-import { choice } from '../../lib/outils/arrayOutils'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
+export const dateDePublication = '14/02/2026'
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = 'cc145'
 
-export const uuid = 'c091a'
 export const refs = {
   'fr-fr': ['1A-C03-15', '2A-N3-10'],
-  'fr-ch': ['10QCM-14'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre =
   "Calculer le double ou le triple d'un nombre écrit avec une puissance"
-export const dateDePublication = '14/02/2026'
+
 /**
  *
  * @author Gilles Mora
  *
  */
-export default class Auto1AC3j extends ExerciceQcmA {
-  private appliquerLesValeurs(a: number, n: number, choix: string): void {
-    this.enonce = `Le ${choix} de  $${texNombre(a * a, 0)}^{${n}}$ est égal à :`
-    const k = choix === 'double' ? 2 : 3
-    this.correction = `On a $${a * a}=${a}^{2}$ et on cherche ${choix === 'double' ? `le double de ` : `le triple de `} $${texNombre(a * a, 0)}^{${n}}$, soit $${k} \\times ${texNombre(a * a, 0)}^{${n}}$ donc :<br>
-    $\\begin{aligned}
-    ${k} \\times ${texNombre(a * a, 0)}^{${n}} & = ${k}\\times ${choix === 'double' ? ` \\left(2^{2}\\right)^{${n}}` : `\\left(3^{2}\\right)^{${n}}`} \\\\
-    &=${k}\\times ${choix === 'double' ? ` 2^{${2 * n}}` : `3^{${2 * n}}`} \\\\
-    &=${choix === 'double' ? `${miseEnEvidence(`2^{${2 * n + 1}}`)}` : `${miseEnEvidence(`3^{${2 * n + 1}}`)}`} \\\\
-    \\end{aligned}$`
-
-    this.reponses = [
-      `${choix === 'double' ? `$2^{${2 * n + 1}}$` : `$3^{${2 * n + 1}}$`}`,
-      `${choix === 'double' ? `$${2 * a * a}^{${n}}$` : `$${3 * a * a}^{${n}}$`}`,
-      `${choix === 'double' ? `$2^{${n + 1}}$` : `$3^{${n + 1}}$`}`,
-      `${choix === 'double' ? `$${a * a}^{${2 * n}}$` : `$${a * a}^{${3 * n}}$`}`,
-    ]
-  }
-
-  versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(2, 50, 'double')
-  }
-
-  versionAleatoire: () => void = () => {
-    const n = randint(2, 5) * 10
-    const choix = choice(['double', 'triple'])
-    const a = choix === 'double' ? 2 : 3
-    this.appliquerLesValeurs(a, n, choix)
-  }
-
+export default class Auto1AC3j extends ExerciceSimple {
   constructor() {
     super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.versionQcmDisponible = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut calculer le double ou le triple d'un nombre écrit avec une puissance.
@@ -65,6 +44,38 @@ export default class Auto1AC3j extends ExerciceQcmA {
     <li>Utiliser les propriétés des puissances pour identifier la bonne réponse.</li>
     <li>Procéder par élimination si plusieurs réponses semblent possibles.</li>
   </ul>`
-    this.versionAleatoire()
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+    this.formatInteractif = this.versionQcm ? 'mathlive' : 'fillInTheBlank'
+
+    const n = randint(2, 5) * 10
+    const choix = this.quotaChoice('choix', ['double', 'triple'])
+    const a = choix === 'double' ? 2 : 3
+    const k = a // double : 2 ; triple : 3
+    const carre = a * a
+
+    this.correction = `On a $${carre}=${a}^{2}$ et on cherche le ${choix} de $${texNombre(carre, 0)}^{${n}}$, soit $${k} \\times ${texNombre(carre, 0)}^{${n}}$ donc :<br>
+    $\\begin{aligned}
+    ${k} \\times ${texNombre(carre, 0)}^{${n}} & = ${k}\\times \\left(${a}^{2}\\right)^{${n}} \\\\
+    &=${k}\\times ${a}^{${2 * n}} \\\\
+    &=${miseEnEvidence(`${a}^{${2 * n + 1}}`)} \\\\
+    \\end{aligned}$`
+
+    if (this.versionQcm) {
+      this.consigne = ''
+      this.question = `Le ${choix} de $${texNombre(carre, 0)}^{${n}}$ est égal à :`
+      this.reponse = `$${a}^{${2 * n + 1}}$`
+      this.distracteurs = [
+        `$${k * carre}^{${n}}$`,
+        `$${a}^{${n + 1}}$`,
+        `$${carre}^{${k * n}}$`,
+      ]
+    } else {
+      this.consigne = "Compléter l'égalité."
+      this.question = `${k} \\times ${texNombre(carre, 0)}^{${n}}=${a}^{%{champ1}}`
+      this.reponse = { champ1: { value: String(2 * n + 1) } }
+    }
   }
 }
