@@ -84,6 +84,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
         scale: step,
       })
       figure.options.labelAutomaticBeginsWith = label1
+      figure.options.labelAutomaticForPoints = true
       figure.options.pointDescriptionWithCoordinates = false
       figure.options.distanceWithoutNewPoint = 0.00001
       this.figuresApiGeom[i] = figure

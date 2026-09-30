@@ -41,6 +41,7 @@ class ConstructionRectangle extends ExerciceSimple {
       border: true,
     })
     this.figure.options.labelAutomaticBeginsWith = 'A'
+    this.figure.options.labelAutomaticForPoints = true
 
     const enonce = 'Tracer un rectangle $ABCD$.'
     this.figure.setToolbar({

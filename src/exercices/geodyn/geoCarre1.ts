@@ -41,6 +41,7 @@ class ConstructionCarre extends ExerciceSimple {
       border: true,
     })
     this.figure.options.labelAutomaticBeginsWith = 'A'
+    this.figure.options.labelAutomaticForPoints = true
 
     const enonce = 'Tracer un carré $ABCD$.'
     this.figure.setToolbar({
