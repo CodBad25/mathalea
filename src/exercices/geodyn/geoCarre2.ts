@@ -43,6 +43,7 @@ class ConstructionCarre2 extends ExerciceSimple {
       border: true,
     })
     this.figure.options.labelAutomaticBeginsWith = 'A'
+    this.figure.options.labelAutomaticForPoints = true
     this.cote = randint(3, 10)
 
     const enonce = `Tracer un carré $ABCD$ de côté ${this.cote}.`

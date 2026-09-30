@@ -83,6 +83,7 @@ class ConstructionTriangle extends ExerciceSimple {
       position: 'top',
     })
     this.figure.options.labelAutomaticBeginsWith = labelA
+    this.figure.options.labelAutomaticForPoints = true
     const emplacementPourFigure = figureApigeom({
       exercice: this,
       i: 0,

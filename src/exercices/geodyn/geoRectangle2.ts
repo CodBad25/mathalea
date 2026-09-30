@@ -44,6 +44,7 @@ class ConstructionRectangleDimensions extends ExerciceSimple {
       border: true,
     })
     this.figure.options.labelAutomaticBeginsWith = 'A'
+    this.figure.options.labelAutomaticForPoints = true
     this.L = randint(4, 10)
     this.l = randint(2, this.L - 1)
     const enonce = `Tracer un rectangle $ABCD$ tel que $AB=${this.L}$ et $BC=${this.l}$.`

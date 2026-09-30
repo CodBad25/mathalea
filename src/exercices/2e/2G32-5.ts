@@ -209,6 +209,7 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
           height: 290,
         })
         figure.options.labelAutomaticBeginsWith = 'A'
+        figure.options.labelAutomaticForPoints = true
         figure.create('Grid')
         figure.options.color = bleuMathalea
         figure.options.gridWithTwoPointsOnSamePosition = false
