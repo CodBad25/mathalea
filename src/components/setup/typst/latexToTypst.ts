@@ -2125,6 +2125,13 @@ function missingBox(label: string): string {
  */
 export function sanitizeSvg(svg: string): string {
   const cleaned = svg
+    // Animations SMIL et compteurs associés : inutiles sur une page imprimée
+    // (et figés sur leur état initial, ils donneraient un dessin trompeur).
+    .replace(/<(animate\w*|set)\b[^>]*?(?:\/>|>[\s\S]*?<\/\1\s*>)/gi, '')
+    .replace(
+      /<text\b[^>]*\bclass="compteurDeTours"[^>]*>[\s\S]*?<\/text>/gi,
+      '',
+    )
     // attribut parasite tel que sérialisé par le DOM (`;=""`)
     .replace(/\s;=""/g, '')
     // point-virgule orphelin après la valeur d'un attribut
@@ -3332,6 +3339,13 @@ export function htmlToTypst(
   let text = html.replace(
     /<mathalea-typst>([\s\S]*?)<\/mathalea-typst>/gi,
     (_, code: string) => protect(decodeEntities(code)),
+  )
+  // Éléments purement interactifs (boutons « Relancer l'animation »,
+  // déclencheurs JavaScript au montage) : sans objet sur une page imprimée.
+  text = text.replace(/<button\b[\s\S]*?<\/button>/gi, '')
+  text = text.replace(
+    /<mathalea-dom-ready\b[^>]*>(?:[\s\S]*?<\/mathalea-dom-ready>)?/gi,
+    '',
   )
   text = protectResponsiveColumns(text, protect, figures, qcmColumns)
   text = protectQcm(

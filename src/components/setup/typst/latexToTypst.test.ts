@@ -563,6 +563,14 @@ describe('htmlToTypst — schémas en barres (SchemaEnBoite)', () => {
 })
 
 describe('htmlToTypst', () => {
+  it("retire les boutons et les déclencheurs d'animation (inutiles à l'impression)", () => {
+    const typst = htmlToTypst(
+      'Correction.<br><button id="b1" class="x">Relancer l\'animation</button><mathalea-dom-ready action="a" payload="{}"></mathalea-dom-ready>',
+    )
+    expect(typst).toContain('Correction.')
+    expect(typst).not.toMatch(/Relancer|mathalea-dom-ready|button/)
+  })
+
   it('convertit du texte avec formules', () => {
     expect(htmlToTypst('Calculer $\\dfrac{1}{2}+\\dfrac{1}{3}$.')).toBe(
       'Calculer $frac(1, 2) + frac(1, 3)$.',
@@ -1181,6 +1189,17 @@ describe('sanitizeSvg', () => {
     expect(
       sanitizeSvg('<path stroke-opacity="0.5" stroke-opacity="0.5" d="M0 0"/>'),
     ).toBe('<path stroke-opacity="0.5" d="M0 0"/>')
+  })
+
+  it('retire les animations SMIL et les compteurs de tours des engrenages', () => {
+    const svg =
+      '<svg><g><path d="M0 0"/><animateTransform attributeName="transform" type="rotate" dur="5" repeatCount="indefinite"\n/></g>' +
+      '<circle cx="1" cy="1" r="2"/><text class="compteurDeTours" id="c1" x="1" y="1">0</text></svg>'
+    const result = sanitizeSvg(svg)
+    expect(result).not.toMatch(/animate/i)
+    expect(result).not.toContain('compteurDeTours')
+    expect(result).toContain('<path d="M0 0"/>')
+    expect(result).toContain('<circle')
   })
 
   it('rend les entités compatibles XML', () => {
