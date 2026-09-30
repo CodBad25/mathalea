@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 1aa6a continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -5,15 +8,13 @@ import {
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '14/10/2025'
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = 'e6a55'
+export const uuid = '1aa6a'
 
 export const refs = {
-  'fr-fr': ['1A-C11-3', '2A-C4-3'],
-  'fr-ch': ['1mQCM-32'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -24,7 +25,7 @@ export const titre =
 /**
  * @author Gilles Mora
  */
-export default class Auto1AC11c extends ExerciceQcmACourt {
+export default class Auto1AC11cOld extends ExerciceQcmA {
   private appliquerLesValeurs(
     a: number,
     b: number,
@@ -129,9 +130,7 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
 
   constructor() {
     super()
-    this.clavierReponseCourte = 'lycee'
-    this.enonceCourt = () => this.enonce.replace('On peut affirmer que :', 'Exprimer $u$ en fonction des autres variables.')
-    this.reponseCourte = () => this.reponses[0].replace(/^\$u=/, '').replace(/\$$/, '')
+
     this.versionAleatoire()
   }
 }

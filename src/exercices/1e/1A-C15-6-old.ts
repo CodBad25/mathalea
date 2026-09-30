@@ -1,17 +1,18 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid c9fb7 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { randint } from '../../modules/outils'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = 'cfce9'
+export const uuid = 'c9fb7'
 export const refs = {
-  'fr-fr': ['1A-C15-6'],
-  'fr-ch': ['10QCM-36', '11QCM-41'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -25,7 +26,7 @@ export const dateDePublication = '15/12/2025'
  * @author Gilles Mora
  *
  */
-export default class Auto1C15r extends ExerciceQcmACourt {
+export default class Auto1C15rOld extends ExerciceQcmA {
   private appliquerLesValeurs(
     prixH: number,
     nbreSeance1: number,
@@ -48,7 +49,7 @@ $${nbreSeance2} p - ${nbreSeance1}  p = ${texNombre((nbreSeance2 - nbreSeance1) 
 Donc le montant pour $1$ séance  est : $p = ${prixH}$ €.<br>
 On peut alors calculer le montant de l'abonnement mensuel :<br>
 $a = ${texNombre(abo + nbreSeance1 * prixH)} - ${nbreSeance1} \\times ${prixH} = ${texNombre(abo + nbreSeance1 * prixH)} - ${texNombre(nbreSeance1 * prixH)} = ${abo}$ €.<br>
- Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo)}${sp(1)}\\text{€}$.`
+Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '€')}$.`
 
     this.reponses = [
       `$${abo}\\text{ €}$`,

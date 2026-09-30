@@ -132,6 +132,17 @@ Le détail technique (calcul de `pointsMaxExercice()`) est dans
 
 ## Formats plus complexes
 
+### Conserver un QCM en option
+
+Pour un automatisme construit avec `ExerciceQcmA`, la classe
+`src/exercices/ExerciceQcmACourt.ts` conserve le tirage et les propositions du
+QCM, mais affiche une saisie courte par défaut. La case « Mode QCM » (`sup3`)
+réactive le QCM. La réponse attendue est normalement la première proposition,
+sans délimiteurs mathématiques ni unité ; les propriétés `reponseCourte`,
+`enonceCourt`, `correctionCourte` et `clavierReponseCourte` permettent de traiter
+les cas qui exigent une autre saisie ou une consigne adaptée. Le score de la
+saisie courte est toujours d’un point par question.
+
 Le livre de recettes [Formats interactifs spécialisés](complements/formats-interactifs.md)
 couvre notamment :
 

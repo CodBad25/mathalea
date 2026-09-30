@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid ac9b0 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -6,14 +9,12 @@ import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { arrondi } from '../../lib/outils/nombres'
 import { prenom } from '../../lib/outils/Personne'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = '90f36'
+export const uuid = 'ac9b0'
 export const refs = {
-  'fr-fr': ['1A-C15-5'],
-  'fr-ch': ['10QCM-35', '11QCM-40'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -27,7 +28,7 @@ export const dateDePublication = '09/12/2025'
  * @author Gilles Mora assisté de Claude ai
  *
  */
-export default class Auto1C15r extends ExerciceQcmACourt {
+export default class Auto1C15rOld extends ExerciceQcmA {
   private appliquerLesValeurs(
     puissance: number,
     duree: number,
@@ -81,8 +82,7 @@ export default class Auto1C15r extends ExerciceQcmACourt {
     ]
 
     // Bonne réponse en premier (choisir aléatoirement euros ou centimes)
-    const reponseTiree = choice([coutEuros, coutCentimes])
-    const bonneReponse = this.sup3 ? reponseTiree : coutEuros
+    const bonneReponse = choice([coutEuros, coutCentimes])
 
     // Construction de la correction
     let correctionFinale = `La puissance de l'appareil est de $${texNombre(puissance)}$ W, soit $${texNombre(puissanceKW, 1)}$ kW.<br>
@@ -141,7 +141,6 @@ export default class Auto1C15r extends ExerciceQcmACourt {
 
   constructor() {
     super()
-    this.enonceCourt = () => this.enonce.replace('Le coût en électricité pour cette utilisation est :', 'Calculer le coût en euros de cette utilisation.')
     this.versionAleatoire()
     this.spacing = 1.5
   }
