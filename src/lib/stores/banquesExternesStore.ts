@@ -62,6 +62,15 @@ const BANQUES_INTEGREES: { cle: string; manifest: unknown; base: string }[] = [
 /** Banques actuellement chargées, dans l'ordre d'installation */
 export const banquesExternes = writable<BanqueExterneChargee[]>([])
 
+/** Une seule provenance par identifiant : la dernière banque ajoutée prévaut. */
+function banquesActives(): BanqueExterneChargee[] {
+  const parId = new Map<string, BanqueExterneChargee>()
+  for (const banque of get(banquesExternes)) {
+    parId.set(banque.manifest.id, banque)
+  }
+  return [...parId.values()]
+}
+
 /**
  * Clés de banques réclamées par les paramètres `bq` de l'URL d'arrivée. Elles
  * sont mémorisées **avant** le chargement (qui est asynchrone) pour que la
@@ -432,7 +441,8 @@ async function chargerDepuisForge(
  * Remplace ou ajoute une banque dans le store, en révoquant au passage les
  * `blob:` d'une éventuelle version précédente de la même banque (réinstallation
  * d'une archive mise à jour) : sans cela, ces URLs resteraient allouées jusqu'à
- * la fermeture de l'onglet.
+ * la fermeture de l'onglet. Une banque réinstallée passe en dernier et devient
+ * donc la version active si plusieurs provenances portent le même identifiant.
  * @param {BanqueExterneChargee} banque banque à publier
  */
 function publierBanque(banque: BanqueExterneChargee): void {
@@ -448,6 +458,9 @@ function publierBanque(banque: BanqueExterneChargee): void {
   banquesExternes.update((liste) => {
     const index = liste.findIndex((b) => b.source.cle === banque.source.cle)
     if (index === -1) return [...liste, banque]
+    if (banque.source.type !== 'builtin') {
+      return [...liste.filter((b) => b.source.cle !== cle), banque]
+    }
     const remplacee = [...liste]
     remplacee[index] = banque
     return remplacee
@@ -674,7 +687,7 @@ export async function chargerBanquesDepuisUrl(
  */
 export function referentielBanquesExternes(): JSONReferentielObject {
   const referentiel: JSONReferentielObject = {}
-  for (const banque of get(banquesExternes)) {
+  for (const banque of banquesActives()) {
     Object.assign(
       referentiel,
       construireReferentielBanque(banque.manifest, (chemin) =>
@@ -696,7 +709,7 @@ export function referentielBanquesExternes(): JSONReferentielObject {
 export function preambuleBanque(
   idBanque: string,
 ): BanqueExternePreambule | undefined {
-  return get(banquesExternes).find((banque) => banque.manifest.id === idBanque)
+  return banquesActives().find((banque) => banque.manifest.id === idBanque)
     ?.preambuleTexte
 }
 
@@ -712,7 +725,7 @@ export function preambuleBanque(
 export function clesBanquesPartageables(uuids: string[]): string[] {
   const recherches = new Set(uuids)
   const cles: string[] = []
-  for (const banque of get(banquesExternes)) {
+  for (const banque of banquesActives()) {
     if (banque.source.type !== 'forge') continue
     const fournitUnExercice = banque.manifest.exercices.some((exercice) =>
       recherches.has(uuidBanqueExterne(banque.manifest.id, exercice.id)),
