@@ -176,14 +176,30 @@ export default class AntecedentEtImageGraphique extends Exercice {
     let cont2
     if (ordre === 1) {
       cont2 = `${numAlpha(2)} Déterminer le (ou les) antécédent(s) de $${b}$.`
-      cont2 += ajouteChampTexteMathLive(this, 2, KeyboardType.clavierDeBase)
+      cont2 += ajouteChampTexteMathLive(
+        this,
+        2,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+      )
       cont2 += `<br>${numAlpha(3)} Déterminer le (ou les) antécédent(s) de $${c}$.`
-      cont2 += ajouteChampTexteMathLive(this, 3, KeyboardType.clavierDeBase)
+      cont2 += ajouteChampTexteMathLive(
+        this,
+        3,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+      )
     } else {
       cont2 = `${numAlpha(2)} Déterminer le (ou les) antécédent(s) de $${c}$.`
-      cont2 += ajouteChampTexteMathLive(this, 2, KeyboardType.clavierDeBase)
+      cont2 += ajouteChampTexteMathLive(
+        this,
+        2,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+      )
       cont2 += `<br>${numAlpha(3)} Déterminer le (ou les) antécédent(s) de $${b}$.`
-      cont2 += ajouteChampTexteMathLive(this, 3, KeyboardType.clavierDeBase)
+      cont2 += ajouteChampTexteMathLive(
+        this,
+        3,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+      )
     }
     if (context.isAmc) {
       this.autoCorrectionAMC[0].propositions?.push({
