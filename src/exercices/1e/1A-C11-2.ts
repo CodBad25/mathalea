@@ -16,7 +16,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Exprimer une variable en fonction des autres'
 export const dateDePublication = '05/08/2025'
 

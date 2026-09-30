@@ -18,7 +18,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre =
   'Exprimer une variable en fonction des autres (avec des quotients)'
 /**

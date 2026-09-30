@@ -2,7 +2,6 @@ import PoucentageP2 from '../can/4e/can4P2-04'
 export const titre = 'Calculer avec un pourcentage de proportion'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

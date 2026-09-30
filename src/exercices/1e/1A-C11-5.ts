@@ -4,7 +4,6 @@ export const titre =
 export const dateDePublication = '13/01/2026'
 export const dateDeModifImportante = '29/09/2026'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

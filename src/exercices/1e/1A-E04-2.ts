@@ -3,7 +3,6 @@ export const titre =
   'Déterminer une évolution globale après deux évolutions successives'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
