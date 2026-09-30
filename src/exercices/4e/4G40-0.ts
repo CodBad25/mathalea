@@ -125,7 +125,7 @@ export default class VocabulaireTriangleRectangle extends Exercice {
               : `L'hypoténuse du triangle ${nom} est :`
           goodAnswer =
             listeTypeDeQuestions[i] === 1
-              ? `le côté adjacent à $\\widehat{${nom}}$.`
+              ? "l'hypoténuse du triangle."
               : `[${nom[1]}${nom[2]}]`
           texteCorr =
             listeTypeDeQuestions[i] === 1
