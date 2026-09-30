@@ -573,7 +573,8 @@
     edurlError = ''
     const longUrl = onGetFicheLongUrl(qrCodeVersion)
     if (longUrl == null) {
-      edurlError = 'Aucun exercice imprimable : pas d’URL de fiche à raccourcir.'
+      edurlError =
+        'Aucun exercice imprimable : pas d’URL de fiche à raccourcir.'
       return
     }
     const token = getEdurlToken()
@@ -884,16 +885,7 @@
         <hr class="border-gray-200" />
       {/if}
       <div class="flex overflow-hidden rounded border border-gray-300">
-        {#each space === 'exo'
-          ? [
-              { kind: 'section', label: 'Section' },
-              { kind: 'texte', label: 'Texte' },
-              { kind: 'exercice', label: 'Exercice' },
-            ]
-          : [
-              { kind: 'section', label: 'Section' },
-              { kind: 'texte', label: 'Texte' },
-            ] as choice}
+        {#each space === 'exo' ? [{ kind: 'section', label: 'Section' }, { kind: 'texte', label: 'Texte' }, { kind: 'exercice', label: 'Exercice' }] : [{ kind: 'section', label: 'Section' }, { kind: 'texte', label: 'Texte' }] as choice}
           <button
             type="button"
             class="flex-1 px-2 py-0.5 {insertionKind === choice.kind
@@ -1197,9 +1189,13 @@
           <i class="bx bx-pencil"></i>
         </button>
         {#if qrCodeOpen}
-          <div class="absolute right-4 top-0 z-20 w-80 space-y-2 typst-panel p-2">
+          <div
+            class="absolute right-4 top-0 z-20 w-80 space-y-2 typst-panel p-2"
+          >
             <label class="block space-y-0.5">
-              <span class="text-[0.65rem] uppercase text-gray-500">URL du QR-code</span>
+              <span class="text-[0.65rem] uppercase text-gray-500"
+                >URL du QR-code</span
+              >
               <input
                 type="url"
                 class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
@@ -1216,7 +1212,9 @@
             <div class="space-y-1 border-t border-gray-200 pt-2">
               {#if edurlAskToken}
                 <label class="block space-y-0.5">
-                  <span class="text-[0.65rem] uppercase text-gray-500">Jeton d’accès edurl.fr</span>
+                  <span class="text-[0.65rem] uppercase text-gray-500"
+                    >Jeton d’accès edurl.fr</span
+                  >
                   <input
                     type="password"
                     class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
@@ -1492,9 +1490,8 @@
       </div>
     {:else if widget.kind === 'version-label'}
       <!-- masque/affiche l'étiquette « Sujet A/B... » de l'en-tête (fiche à
-           plusieurs versions) : l'espace qu'elle occupe reste réservé côté
-           Typst (`hide()`, voir `headerBlock`), pour que l'icône garde la
-           même position une fois l'étiquette masquée -->
+           plusieurs versions) ; son repère reste dans le titre quand elle
+           est masquée, sans réserver de place dans la ligne d'en-tête -->
       <div
         class="pointer-events-auto absolute -translate-y-1/2"
         style="left: {widget.left}%; top: {widget.top}%;"
@@ -1775,7 +1772,8 @@
             data-testid={hasColumnBreak
               ? 'typst-overlay-corr-colbreak-active'
               : 'typst-overlay-corr-colbreak'}
-            onclick={() => toggleBreak('corr', widget.num, COLUMN_BREAK_SNIPPET)}
+            onclick={() =>
+              toggleBreak('corr', widget.num, COLUMN_BREAK_SNIPPET)}
           >
             <i class="bx bx-arrow-to-right"></i>
           </button>

@@ -1502,10 +1502,8 @@ export interface TypstDocumentOptions {
   versionSeeds?: (readonly (string | null)[] | null)[]
   /**
    * Masque l'étiquette « Sujet A/B... » de l'en-tête (`nbVersions > 1`
-   * seulement) : l'espace qu'elle occupe reste réservé (`hide()` côté Typst),
-   * pour que l'icône de la palette qui la fait réapparaître garde la même
-   * place. Permet de distribuer des sujets mélangés sans que les élèves n'y
-   * lisent quelle version ils ont.
+   * seulement). Le repère de la palette reste dans l'en-tête sans réserver
+   * de place à l'étiquette masquée.
    */
   hideVersionLabel: boolean
   /**
@@ -4182,17 +4180,18 @@ function headerBlock(
   const labelExpr = hasVersionLabel
     ? `text(weight: "bold", fill: couleur)[${escapeTypstText(versionLabel)}]`
     : null
-  // masquée (`hide()`) plutôt que retirée : l'étiquette garde sa place dans
-  // la grille, pour que l'icône de la palette qui la fait réapparaître (voir
-  // `#mathalea-anchor("version-label", 0)`) reste au même endroit
+  // Le repère de l'étiquette masquée reste dans le titre, hors du flux.
+  // La ligne d'en-tête peut alors disparaître si elle est vide.
+  const hiddenVersionAnchor =
+    hasVersionLabel && hideVersionLabel && emitAnchor
+      ? '  #place(top + right)[#mathalea-anchor("version-label", 0)]'
+      : null
   const versionCell =
-    labelExpr == null
+    labelExpr == null || hideVersionLabel
       ? null
       : emitAnchor
-        ? `[#mathalea-anchor("version-label", 0)#${hideVersionLabel ? `hide(${labelExpr})` : labelExpr}]`
-        : hideVersionLabel
-          ? `hide(${labelExpr})`
-          : labelExpr
+        ? `[#mathalea-anchor("version-label", 0)#${labelExpr}]`
+        : labelExpr
   /**
    * Ligne d'en-tête (`entete`), avec l'étiquette de version à sa droite
    * quand il y en a une ; sans étiquette, rendu inchangé (simple `text`,
@@ -4206,7 +4205,8 @@ function headerBlock(
     const plain = 'text(fill: gray.darken(20%))[#entete]'
     return centered ? `align(center, ${plain})` : plain
   }
-  const enteteCondition = hasVersionLabel ? 'true' : 'entete != ""'
+  const enteteCondition =
+    hasVersionLabel && !hideVersionLabel ? 'true' : 'entete != ""'
   // aucun bloc de titre : la fiche commence directement par les exercices.
   // Avec plusieurs versions, l'étiquette « Sujet A/B... » n'a alors nulle
   // part où s'afficher — c'est un compromis accepté du réglage.
@@ -4214,6 +4214,7 @@ function headerBlock(
   if (style === 'cadre') {
     return [
       '#block(width: 100%, stroke: (top: 1pt + couleur, bottom: 1pt + couleur), inset: (y: 8pt))[',
+      ...(hiddenVersionAnchor ? [hiddenVersionAnchor] : []),
       '  #set align(center)',
       '  #text(size: 1.4em, weight: "bold", fill: couleur, tracking: 0.5pt)[#smallcaps(titre)]',
       '  #if sous-titre != "" [',
@@ -4230,6 +4231,7 @@ function headerBlock(
     return [
       '#block(width: 100%, fill: couleur.transparentize(90%), stroke: (left: 3pt + couleur),',
       '  inset: 9pt, radius: (right: 4pt))[',
+      ...(hiddenVersionAnchor ? [hiddenVersionAnchor] : []),
       '  #text(size: 1.5em, weight: "bold", fill: couleur)[#titre]',
       '  #if sous-titre != "" [',
       '    #h(1fr)',
@@ -4248,6 +4250,7 @@ function headerBlock(
   // style « épuré » (défaut)
   return [
     '#block(width: 100%, inset: (y: 4pt))[',
+    ...(hiddenVersionAnchor ? [hiddenVersionAnchor] : []),
     '  #text(size: 1.5em, weight: "bold", fill: couleur)[#titre]',
     '  #if sous-titre != "" [ #h(1fr) #text(fill: gray)[#sous-titre] ]',
     '  #v(-3pt)',

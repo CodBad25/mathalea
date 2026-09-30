@@ -490,6 +490,37 @@ describe('buildTypstDocument', () => {
     expect(single).not.toContain('Sujet A')
   })
 
+  it.each(['epure', 'cartouche', 'cadre'] as const)(
+    'libère la ligne de version masquée dans l’en-tête %s',
+    (headerStyle) => {
+      const build = (hideVersionLabel: boolean, headerLine = '') =>
+        buildTypstDocument(
+          [exercise()],
+          {
+            ...defaultTypstDocumentOptions,
+            headerStyle,
+            headerLine,
+            hideVersionLabel,
+          },
+          {},
+          [[exercise()]],
+        )
+      const visible = build(false)
+      const hidden = build(true)
+      expect(visible).toContain('#if true [')
+      expect(visible).toContain('#mathalea-anchor("version-label", 0)#text(')
+      expect(hidden).toContain('#if entete != "" [')
+      expect(hidden).toContain(
+        '#place(top + right)[#mathalea-anchor("version-label", 0)]',
+      )
+      expect(hidden).not.toContain('hide(text(weight: "bold"')
+      expect(hidden).not.toContain('grid(columns: (1fr, auto)')
+      expect(build(true, 'Nom et prénom')).toContain(
+        '#let entete = "Nom et prénom"',
+      )
+    },
+  )
+
   it('n’importe pas ctz-euclide quand aucune annale ne l’utilise', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).not.toContain('ctz-euclide')
