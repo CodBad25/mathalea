@@ -39,6 +39,14 @@ catalogue des sous-exercices, y compris quand celui-ci est construit à partir
 du référentiel. Si cette exclusion change les tirages déjà enregistrés, traiter
 la dérive selon les règles ci-dessous avant de mettre à jour les empreintes.
 
+Pour archiver un sélecteur après une modification de son catalogue, figer aussi
+la liste historique **et la version du module associée à chaque référence**.
+Un simple `-old.ts` qui relit le catalogue courant reproduirait la dérive. Les
+sélecteurs `1a-automatismes-old.ts` et `3a-automatismes-old.ts` utilisent des
+catalogues figés dans `src/lib/automatismesCatalogues/` ; les sélecteurs courants
+ont de nouveaux `uuid`. Le cache des classes chargées doit distinguer les
+entrées des deux catalogues, même lorsqu'elles portent la même référence.
+
 ## La règle
 
 > Pour un `uuid` et une graine donnés, les valeurs numériques de l'énoncé ne

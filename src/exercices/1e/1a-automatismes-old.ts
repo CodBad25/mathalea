@@ -1,3 +1,7 @@
+// Version publiée figée avant la modification du catalogue d'automatismes.
+// Les liens avec l'uuid 722e4 conservent leurs sous-exercices et leurs tirages.
+import { getExerciseModuleLoader } from '../../lib/exerciseLoader'
+import catalogue from '../../lib/automatismesCatalogues/1a-old.json'
 import {
   createAutomatismesCanExercice,
   type ExerciceModule,
@@ -6,20 +10,17 @@ import {
 export const titre = "Sélection d'automatismes"
 export const interactifReady = true
 
-export const dateDeModifImportante = '29/09/2026'
-export const uuid = 'ce2ea'
-export const refs = { 'fr-fr': ['1A'], 'fr-ch': ['NR'] }
+export const uuid = '722e4'
+export const refs = { 'fr-fr': [], 'fr-ch': ['NR'] }
 export const dateDePublication = '30/04/2026'
 
-/**
- * @author Rémi Angot
- */
-
-// Chargement lazy : les versions archivées ne participent pas au tirage.
-const allModules = import.meta.glob([
-  './1A-*.ts',
-  '!./1A-*[oO][lL][dD]*.ts',
-]) as Record<string, () => Promise<ExerciceModule>>
+// Références de 80af0fc1f4, avant l'archivage des QCM dans 8825e26641.
+const allModules: Record<string, () => Promise<ExerciceModule>> = {}
+for (const [ref, url] of Object.entries(catalogue)) {
+  const loader = getExerciseModuleLoader(`../exercices/${url}`)
+  if (!loader) throw new Error(`Module historique introuvable : ${url}`)
+  allModules[ref] = loader
+}
 
 export default createAutomatismesCanExercice({
   modules: allModules,

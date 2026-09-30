@@ -139,7 +139,7 @@ export function raisonDuRefus(
   const dernier = suite.at(-1)
   if (dernier === undefined) {
     if (debutPremierInterdit(regles.modeDepart) && estPremier(nombre)) {
-      return `Il est interdit de commencer par un nombre premier, et ${nombre} en est un.`
+      return `Il est interdit de commencer par un nombre premier (c'est à dire un nombre qui possède seulement comme diviseur 1 autre que lui-même), et ${nombre} en est un.`
     }
     return null
   }
@@ -296,7 +296,10 @@ function renderLatexGrille(
     '\\end{center}',
   ].join('\n')
   if (suite.length === 0) return grille
-  return `${grille}\nSuite des nombres choisis : $${suite.join(' \\to ')}$.`
+  const suiteEnCouleurs = suite
+    .map((nombre, index) => miseEnEvidence(nombre, couleurDuCoup(index)))
+    .join(' \\to ')
+  return `${grille}\nSuite des nombres choisis : $${suiteEnCouleurs}$.`
 }
 
 function renderTypstGrille(
@@ -644,8 +647,26 @@ export class JuniperGreenElement extends MathaleaCustomElement {
   }
 
   private rafraichitSuite(): void {
-    if (!this.zoneSuite) return
-    this.zoneSuite.textContent = texteSuite(this.nombresAffiches, ' → ')
+    const zoneSuite = this.zoneSuite
+    if (zoneSuite === null) return
+    const nombres = this.nombresAffiches
+    if (nombres.length === 0) {
+      zoneSuite.textContent = texteSuite(nombres, ' → ')
+      return
+    }
+    zoneSuite.replaceChildren(
+      document.createTextNode('Suite des nombres choisis : '),
+    )
+    nombres.forEach((nombre, index) => {
+      if (index > 0) zoneSuite.append(' → ')
+      const nombreEnCouleur = document.createElement('span')
+      nombreEnCouleur.dataset.indexCoup = String(index)
+      nombreEnCouleur.style.color = couleurDuCoup(index)
+      nombreEnCouleur.style.fontWeight = 'bold'
+      nombreEnCouleur.textContent = String(nombre)
+      zoneSuite.appendChild(nombreEnCouleur)
+    })
+    zoneSuite.append('.')
   }
 
   /** « La suite compte N nombre(s). », ou une formulation dédiée quand elle est vide. */
@@ -671,12 +692,11 @@ export class JuniperGreenElement extends MathaleaCustomElement {
     )
   }
 
-  /** Message affiché une fois la partie figée par `finalise()`, score inclus. */
+  /** Message affiché une fois la partie figée par `finalise()`. */
   private texteVerification(): string {
-    const score = `Score : ${this.scoreFinal}/${SCORE_MAX}.`
-    if (this.partieTerminee) return `${this.texteTerminee('Bravo ! ')} ${score}`
-    if (this.arretee) return `${this.texteArretee()} ${score}`
-    return `Partie arrêtée. ${this.texteTailleSuite()} ${score}`
+    if (this.partieTerminee) return `${this.texteTerminee('Bravo ! ')}`
+    if (this.arretee) return `${this.texteArretee()}`
+    return `Partie arrêtée. ${this.texteTailleSuite()}`
   }
 
   private rafraichitMessage(): void {

@@ -154,6 +154,32 @@ describe('rendus du composant juniper-green', () => {
     expect(element.textContent).toContain(
       'Suite des nombres choisis : 4 → 8 → 1 → 5.',
     )
+    const nombresDeLaSuite =
+      element.querySelectorAll<HTMLElement>('[data-index-coup]')
+    expect(nombresDeLaSuite).toHaveLength(4)
+    expect(nombresDeLaSuite[0].style.color).toBe(normaliseCouleur(bleuMathalea))
+    expect(nombresDeLaSuite[1].style.color).toBe(
+      normaliseCouleur(orangeMathalea),
+    )
+  })
+
+  it('conserve les couleurs de la suite quand la partie se termine', () => {
+    setOutputHtml()
+    document.body.innerHTML = JuniperGreenElement.create({ max: 24 })
+    const element = document.querySelector(
+      'juniper-green',
+    ) as JuniperGreenElement
+    ;(element.querySelector('[data-nombre="1"]') as HTMLButtonElement).click()
+    ;(element.querySelector('[data-nombre="23"]') as HTMLButtonElement).click()
+
+    expect(element.textContent).toContain('Partie terminée')
+    const nombresDeLaSuite =
+      element.querySelectorAll<HTMLElement>('[data-index-coup]')
+    expect(nombresDeLaSuite).toHaveLength(2)
+    expect(nombresDeLaSuite[0].style.color).toBe(normaliseCouleur(bleuMathalea))
+    expect(nombresDeLaSuite[1].style.color).toBe(
+      normaliseCouleur(orangeMathalea),
+    )
   })
 
   it('dévoile la partie une seconde par nombre quand l’animation est demandée', () => {
@@ -237,7 +263,13 @@ describe('rendus du composant juniper-green', () => {
       suite: [4, 8, 1],
     })
     expect(latex).toContain('\\boldsymbol{4}')
-    expect(latex).toContain('Suite des nombres choisis : $4 \\to 8 \\to 1$.')
+    expect(latex).toContain(
+      `Suite des nombres choisis : $${[
+        `{\\color[HTML]{${bleuMathalea.slice(1)}}\\boldsymbol{4}}`,
+        `{\\color[HTML]{${orangeMathalea.slice(1)}}\\boldsymbol{8}}`,
+        `{\\color[HTML]{${bleuMathalea.slice(1)}}\\boldsymbol{1}}`,
+      ].join(' \\to ')}$.`,
+    )
   })
 
   it('produit une table Typst encadrée par le marqueur mathalea-typst', () => {
@@ -386,7 +418,7 @@ describe('interactivité et score du composant juniper-green', () => {
     expect(element.value).toEqual([1, 23])
     expect(element.finalise()).toBe(2)
     expect(element.textContent).toContain('Bravo')
-    expect(element.textContent).toContain('Score : 2/2.')
+    expect(element.textContent).not.toContain('Score :')
   })
 
   it('finalise() attribue 1/2 si au moins 4 nombres ont été choisis mais la partie n’est pas finie', () => {
@@ -405,7 +437,7 @@ describe('interactivité et score du composant juniper-green', () => {
     }
     expect(element.value).toEqual([2, 4, 8, 16])
     expect(element.finalise()).toBe(1)
-    expect(element.textContent).toContain('Score : 1/2.')
+    expect(element.textContent).not.toContain('Score :')
   })
 
   it('finalise() attribue 0/2 si moins de 4 nombres ont été choisis et la partie n’est pas finie', () => {
@@ -419,7 +451,7 @@ describe('interactivité et score du composant juniper-green', () => {
     ) as JuniperGreenElement
     ;(document.querySelector('[data-nombre="2"]') as HTMLButtonElement).click()
     expect(element.finalise()).toBe(0)
-    expect(element.textContent).toContain('Score : 0/2.')
+    expect(element.textContent).not.toContain('Score :')
   })
 
   it('verifQuestion() fige la partie, calcule le score et enregistre la réponse', () => {

@@ -51,13 +51,13 @@ function pickRandom<T>(arr: T[], n: number, rng: () => number): T[] {
 }
 
 /**
- * Cache des classes d'exercices déjà chargées, indexé par référence (nom de
- * fichier). Partagé entre tous les niveaux : les refs (ex. `3AutoN01`) sont
- * uniques. Permet de reconstruire une version de façon synchrone une fois les
- * modules téléchargés, ce qui est indispensable en sortie diaporama où
- * `reroll()` lit le contenu immédiatement après `nouvelleVersionWrapper()`.
+ * Cache des classes d'exercices déjà chargées, indexé par entrée du catalogue.
+ * Une même référence peut désigner une version publiée et sa version courante :
+ * leurs classes doivent rester distinctes. Le cache permet de reconstruire une
+ * version de façon synchrone une fois les modules téléchargés, notamment en
+ * sortie diaporama où `reroll()` lit le contenu immédiatement.
  */
-const loadedClassCache = new Map<string, new () => Exercice>()
+const loadedClassCache = new WeakMap<CategoryEntry, new () => Exercice>()
 
 /**
  * Fabrique la classe d'un exercice « Sélection d'automatismes » à partir de sa
@@ -293,7 +293,7 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       // diaporama : `reroll()` lit `listeQuestions` juste après l'appel, et un
       // rechargement asynchrone provoquerait une boucle (chaque `updateAsyncEx`
       // relançant un `reroll`) tout en n'affichant que « chargement... ».
-      const cachedClasses = selected.map((e) => loadedClassCache.get(e.ref))
+      const cachedClasses = selected.map((e) => loadedClassCache.get(e))
       if (cachedClasses.every((c): c is new () => Exercice => c != null)) {
         buildFromClasses(cachedClasses)
         return
@@ -307,10 +307,10 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       // Chargement uniquement des modules sélectionnés (manquants du cache)
       Promise.all(
         selected.map((e) => {
-          const cached = loadedClassCache.get(e.ref)
+          const cached = loadedClassCache.get(e)
           if (cached) return Promise.resolve(cached)
           return e.loader().then((m) => {
-            loadedClassCache.set(e.ref, m.default)
+            loadedClassCache.set(e, m.default)
             return m.default
           })
         }),

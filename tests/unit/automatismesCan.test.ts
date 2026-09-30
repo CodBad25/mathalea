@@ -122,6 +122,48 @@ describe('createAutomatismesCanExercice', () => {
     expect(form.categories.map((c) => c.max)).toEqual([2, 1])
     expect(exercice.sup).toBe('2-1')
   })
+
+  it('sépare le cache des catalogues publiés et courants qui partagent une référence', async () => {
+    class AncienneVersion extends Exercice {
+      nouvelleVersion() {
+        this.listeQuestions[0] = 'Ancienne version.'
+      }
+    }
+    class VersionCourante extends Exercice {
+      nouvelleVersion() {
+        this.listeQuestions[0] = 'Version courante.'
+      }
+    }
+    const config = {
+      refRegex: /^X([A])/,
+      categories: ['A'],
+      categoriesForm: {
+        titre: 'Nombre de questions',
+        categories: [{ label: 'Questions :', max: 1 }],
+        defaut: [1],
+      },
+      defaultSup: '1',
+    }
+    const AncienCatalogue = createAutomatismesCanExercice({
+      ...config,
+      modules: { './XA01.ts': async () => ({ default: AncienneVersion }) },
+    })
+    const CatalogueCourant = createAutomatismesCanExercice({
+      ...config,
+      modules: { './XA01.ts': async () => ({ default: VersionCourante }) },
+    })
+    const ancien = new AncienCatalogue()
+    ancien.seed = 'catalogue'
+    ancien.nouvelleVersion()
+    await vi.waitFor(() => expect(ancien.generationStatus).toBe('ready'))
+
+    const courant = new CatalogueCourant()
+    courant.seed = 'catalogue'
+    courant.nouvelleVersion()
+    await vi.waitFor(() => expect(courant.generationStatus).toBe('ready'))
+    expect(ancien.Exercices[0]).toBe(AncienneVersion)
+    expect(courant.Exercices[0]).toBe(VersionCourante)
+  })
 })
 
 describe('MetaExerciceCan', () => {

@@ -8,13 +8,13 @@ import {
   type ModeErreur,
   type ReglesJuniperGreen,
 } from '../../lib/customElements/JuniperGreenElement'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   lireFormulaireComplexe,
   serialiseFormulaireComplexe,
   valeursParDefaut,
   type FormulaireComplexe,
 } from '../../lib/formulaireComplexe'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -206,7 +206,7 @@ export default class JuniperGreen extends Exercice {
         animation: true,
         interactivityOn: false,
       }) +
-      `<br>La partie s’arrête sur ${dernier} car aucun de ses multiples ni de ses diviseurs ` +
+      `<br>La partie s’arrête sur ${dernier} car aucun de ses multiples, ni de ses diviseurs ` +
       'n’est encore disponible dans la grille.'
 
     listeQuestionsToContenu(this)
