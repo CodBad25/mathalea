@@ -312,7 +312,10 @@ le choisit fige son navigateur. Ils se corrigent à part, dans l'exercice.
 ## Limites
 
 - Les entrées techniques du catalogue (`apps/`, `ressources/` et outils Svelte)
-  sont explicitement exclues. Un exercice ordinaire qui ne se charge pas dans
+  sont explicitement exclues, ainsi que les sélecteurs `1a-automatismes`,
+  `2a-automatismes` et `3a-automatismes` (archives `-old` comprises) : leur
+  catalogue évolue à chaque ajout d'automatisme, ce qui les faisait échouer sans
+  qu'un tirage ait été déplacé. Un exercice ordinaire qui ne se charge pas dans
   l'environnement de test fait échouer le contrôle.
 - Une seule graine par exercice : une dérive qui ne se manifesterait que pour
   certaines valeurs tirées peut passer inaperçue.
