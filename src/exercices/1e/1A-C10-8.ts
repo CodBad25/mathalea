@@ -1,108 +1,112 @@
-import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
-import { choice } from '../../lib/outils/arrayOutils'
-import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { abs, signe } from '../../lib/outils/nombres'
-import { pgcd } from '../../lib/outils/primalite'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 
-export const uuid = '2e7a5'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'cabfe'
 export const refs = {
   'fr-fr': ['1A-C10-8', '2A-C3-6'],
-  'fr-ch': ['11QCM-12', '1mQCM-12'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation du premier degré'
 export const dateDePublication = '05/08/2025'
-//
 /**
- *
  * @author Gilles Mora
- *
  */
-export default class Auto1C11 extends ExerciceQcmA {
-  versionOriginale: () => void = () => {
-    this.enonce = "La solution de l'équation $4(x-5)=7x+3$ est : "
-    this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
- $\\begin{aligned}
- 4(x-5)&=7x+3\\\\
- 4x-20&=7x+3\\\\
- 4x-7x&=3+20\\\\
- -3x&=23\\\\
- x&=-\\dfrac{23}{3}
-\\end{aligned}$
- `
-
-    this.correction += ` La solution est $${miseEnEvidence('-\\dfrac{23}{3}')}$.`
-
-    this.reponses = [
-      '$-\\dfrac{23}{3}$',
-      '$\\dfrac{23}{3}$',
-      '$26$',
-      '$-\\dfrac{17}{3}$',
-    ]
+export default class Auto1C11 extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { fractionIrreductible: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
   }
 
-  versionAleatoire: () => void = () => {
-    let compteur = 0
-    do {
-      const typeEquation = choice(['k(ax+b)=cx+d', 'k-(ax+b)=cx+d'])
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
 
-      let bonnereponse, c
-      let erreur1, erreur2, erreur3
+    const typeEquation = this.quotaChoice('type', [
+      'k(ax+b)=cx+d',
+      'k-(ax+b)=cx+d',
+    ])
 
-      // Génération des coefficients
-      const a = randint(-9, 9, 0)
-      const b = randint(-9, 9, 0)
-      c = randint(-9, 9, a)
-      const d = randint(-9, 9, 0)
-      const k = randint(2, 9, b)
+    // Génération des coefficients
+    const a = randint(-9, 9, 0)
+    const b = randint(-9, 9, 0)
+    let c = randint(-9, 9, [0, a])
+    const d = randint(-9, 9, 0)
+    const k = randint(2, 9, b)
 
-      if (typeEquation === 'k(ax+b)=cx+d') {
-        if (c === k * a) {
-          c = randint(1, 9, [k * a])
-        } // éviter division par 0
+    // Fraction simplifiée, ou null si le dénominateur est nul (erreur de calcul possible d'un élève)
+    const fraction = (num: number, den: number) =>
+      den === 0 ? null : new FractionEtendue(num, den).simplifie()
 
-        this.enonce = `La solution de l'équation $${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$ est : `
-        this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
+    // Dernières lignes de la résolution : x = n/m, puis la fraction simplifiée si elle est différente
+    const dernieresLignes = (
+      n: number,
+      m: number,
+      solution: FractionEtendue,
+    ) => {
+      if (m === 1) return ''
+      const brute = `\\dfrac{${n}}{${m}}`
+      const simplifiee = solution.texFractionSimplifiee
+      return `\\\\\n x&=${brute}${simplifiee === brute ? '' : `\\\\\n x&=${simplifiee}`}`
+    }
+
+    let solution: FractionEtendue
+    let erreurs: (FractionEtendue | null)[]
+
+    if (typeEquation === 'k(ax+b)=cx+d') {
+      if (c === k * a) {
+        c = randint(1, 9, [k * a])
+      } // éviter division par 0
+      solution = new FractionEtendue(d - k * b, k * a - c).simplifie()
+
+      this.question = `Résoudre l'équation $${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$.`
+      this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
  $\\begin{aligned}
  ${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
  ${k * a}x${ecritureAlgebrique(k * b)}&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
  ${k * a}x${ecritureAlgebrique(k * b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x')}&=${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x')}\\\\
  ${rienSi1(k * a - c)}x${ecritureAlgebrique(k * b)}&=${d}\\\\
  ${rienSi1(k * a - c)}x${ecritureAlgebrique(k * b)}${miseEnEvidence(ecritureAlgebrique(-k * b))}&=${d}${miseEnEvidence(ecritureAlgebrique(-k * b))}\\\\
- ${rienSi1(k * a - c)}x&=${d - k * b}\\\\
- x&=${texFractionFromString(d - k * b, k * a - c)}\\\\
- ${pgcd(abs(d - k * b), abs(k * a - c)) > 1 || k * a - c < 0 ? `x&=${new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee}` : ''}\\end{aligned}$<br>`
-        this.correction += `La solution est $${miseEnEvidence(new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee)}$.`
+ ${rienSi1(k * a - c)}x&=${d - k * b}${dernieresLignes(d - k * b, k * a - c, solution)}
+ \\end{aligned}$<br>`
+      this.correction += `La solution est $${miseEnEvidence(solution.texFractionSimplifiee)}$.`
 
-        bonnereponse = new FractionEtendue(d - k * b, k * a - c)
-          .texFractionSimplifiee
+      erreurs = [
+        fraction(d - b, a - c), // Oubli du k dans le développement
+        fraction(d + k * b, k * a - c), // Erreur de signe
+        fraction(d - k * b, k * a + c), // Erreur dans la soustraction des x
+        fraction(k * b - d, k * a - c), // Opposé de la solution
+        fraction(k * a - c, d - k * b), // Inverse de la solution
+        fraction(d - k * b, k * a - c + 1),
+      ]
+    } else {
+      // k-(ax+b)=cx+d
+      if (c === -a) {
+        c = randint(-9, 9, [0, a, -a])
+      } // éviter division par 0
 
-        // Erreurs possibles
-        erreur1 = new FractionEtendue(d - b, a - c).texFractionSimplifiee // Oubli du k dans le développement
-        erreur2 = new FractionEtendue(d + k * b, k * a - c)
-          .texFractionSimplifiee // Erreur de signe
-        erreur3 = new FractionEtendue(d - k * b, k * a + c)
-          .texFractionSimplifiee // Erreur dans la soustraction des x
-      } else {
-        // k-(ax+b)=cx+d
-        if (c === -a) {
-          c = randint(-9, 9, [0, a, -a])
-        } // éviter division par 0
+      const newA = -a
+      const newB = k - b
+      solution = new FractionEtendue(d - newB, newA - c).simplifie()
 
-        // On calcule les nouvelles valeurs dès le début
-        const newA = -a
-        const newB = k - b
-
-        this.enonce = `La solution de l'équation $${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$ est : `
-        this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
+      this.question = `Résoudre l'équation $${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$.`
+      this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
  $\\begin{aligned}
  ${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
  ${k}${ecritureAlgebrique(-a)}x${ecritureAlgebrique(-b)}&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
@@ -110,36 +114,33 @@ export default class Auto1C11 extends ExerciceQcmA {
  ${rienSi1(newA)}x${ecritureAlgebrique(newB)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x')}&=${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x')}\\\\
  ${rienSi1(newA - c)}x${ecritureAlgebrique(newB)}&=${d}\\\\
  ${rienSi1(newA - c)}x${ecritureAlgebrique(newB)}${miseEnEvidence(ecritureAlgebrique(-1 * newB))}&=${d}${miseEnEvidence(ecritureAlgebrique(-1 * newB))}\\\\
- ${rienSi1(newA - c)}x&=${d - newB}\\\\
- x&=${texFractionFromString(d - newB, newA - c)}\\\\
- ${pgcd(abs(d - newB), abs(newA - c)) > 1 || newA - c < 0 ? `x&=${new FractionEtendue(d - newB, newA - c).texFractionSimplifiee}` : ''}\\end{aligned}$`
+ ${rienSi1(newA - c)}x&=${d - newB}${dernieresLignes(d - newB, newA - c, solution)}
+ \\end{aligned}$`
+      this.correction += `<br> La solution est $${miseEnEvidence(solution.texFractionSimplifiee)}$.`
 
-        this.correction += `<br> La solution est $${miseEnEvidence(new FractionEtendue(d - newB, newA - c).texFractionSimplifiee)}$.`
-
-        bonnereponse = new FractionEtendue(d - newB, newA - c)
-          .texFractionSimplifiee
-
-        // Erreurs possibles
-        erreur1 = new FractionEtendue(d + newB, newA - c).texFractionSimplifiee // Erreur de signe
-        erreur2 = new FractionEtendue(d - b, a - c).texFractionSimplifiee // Pas de développement du membre de gauche
-        erreur3 = new FractionEtendue(-d + newB, newA - c).texFractionSimplifiee // Erreur dans la soustraction des x
-      }
-
-      this.reponses = [
-        `$${bonnereponse}$`,
-        `$${erreur1}$`,
-        `$${erreur2}$`,
-        `$${erreur3}$`,
+      erreurs = [
+        fraction(d + newB, newA - c), // Erreur de signe
+        fraction(d - b, a - c), // Pas de développement du membre de gauche
+        fraction(-d + newB, newA - c), // Opposé de la solution
+        fraction(d - newB, newA + c), // Erreur dans la soustraction des x
+        fraction(newA - c, d - newB), // Inverse de la solution
+        fraction(d - newB, newA - c + 1),
       ]
-      compteur++
-    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
-  }
+    }
 
-  // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
-  constructor() {
-    super()
-
-    this.versionAleatoire()
-    this.spacing = 1.5
+    if (this.versionQcm) {
+      // Solutions décalées de 1 : garantissent assez de distracteurs, même si la solution est nulle
+      erreurs.push(
+        new FractionEtendue(solution.num + solution.den, solution.den),
+        new FractionEtendue(solution.num - solution.den, solution.den),
+      )
+      this.reponse = `$${solution.texFractionSimplifiee}$`
+      this.distracteurs = erreurs
+        .filter((f): f is FractionEtendue => f !== null)
+        .map((f) => `$${f.texFractionSimplifiee}$`)
+    } else {
+      this.reponse = solution.texFractionSimplifiee
+      if (this.interactif) this.question += '<br>$x=$'
+    }
   }
 }
