@@ -7,6 +7,7 @@ import {
   MATHALEA_TASKS_HELPER,
   TASKIZE_IMPORT,
   htmlToTypst,
+  applyDocumentFontsToFigure,
 } from '../typst/latexToTypst'
 import {
   BREATHER_CALL,
@@ -288,7 +289,9 @@ export function buildFlashcardsDocument(
     '#set text(font: police-texte, size: taille-questions, lang: "fr")',
   )
   lines.push('#set par(leading: interligne)')
-  lines.push('// police des formules ; le texte inséré garde la police du texte')
+  lines.push(
+    '// police des formules ; le texte inséré garde la police du texte',
+  )
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
   lines.push(MATHALEA_INLINE_FORMULA_RULE)
@@ -306,7 +309,9 @@ export function buildFlashcardsDocument(
     lines.push('// ----- Figures (SVG embarqués) -----')
     for (const [index, figure] of figures.entries()) {
       const figNum = index + 1
-      lines.push(`#let fig-${figNum} = ${figure}`)
+      lines.push(
+        `#let fig-${figNum} = ${applyDocumentFontsToFigure(figure, options)}`,
+      )
       // zoom réglable par les boutons +/− de l'aperçu (repris du code
       // courant à la régénération, voir harvestFlashcardsCarryOver)
       lines.push(
@@ -318,12 +323,18 @@ export function buildFlashcardsDocument(
   }
   lines.push('// ----- Habillage des cartes -----')
   lines.push('// une carte : contenu centré, numéro au coin (côté opposé au')
-  lines.push('// verso pour rester au même endroit une fois la carte retournée),')
-  lines.push('// taille du texte de la face (taille de base × facteur de la carte)')
+  lines.push(
+    '// verso pour rester au même endroit une fois la carte retournée),',
+  )
+  lines.push(
+    '// taille du texte de la face (taille de base × facteur de la carte)',
+  )
   lines.push('#let carte(num, corps, taille: 1, verso: false) = box(')
   lines.push('  width: 100%, height: 100%, inset: 4mm, clip: true,')
   lines.push(')[')
-  lines.push('  // repère des boutons +/− de l’aperçu, au coin opposé au numéro')
+  lines.push(
+    '  // repère des boutons +/− de l’aperçu, au coin opposé au numéro',
+  )
   lines.push('  #if num != none {')
   lines.push('    place(top + if verso { left } else { right },')
   lines.push(
@@ -338,7 +349,9 @@ export function buildFlashcardsDocument(
     '  #set text(size: (if verso { taille-reponses } else { taille-questions }) * taille)',
   )
   lines.push('  #align(center + horizon, corps)')
-  lines.push('  // titre ancré à un coin de la carte (recto/verso), commun à toutes les cartes')
+  lines.push(
+    '  // titre ancré à un coin de la carte (recto/verso), commun à toutes les cartes',
+  )
   lines.push('  #let titre = if verso { titre-verso } else { titre-recto }')
   lines.push('  #if titre.trim() != "" {')
   lines.push('    place(')

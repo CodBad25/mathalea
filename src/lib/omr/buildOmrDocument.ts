@@ -16,6 +16,7 @@ import {
   MATHALEA_TASKS_HELPER,
   TASKIZE_IMPORT,
   VARTABLE_IMPORT,
+  applyDocumentFontsToFigure,
 } from '../../components/setup/typst/latexToTypst'
 import { OMR_PREAMBULE, reperesRelatifs, typstString } from './omrTypstTemplate'
 
@@ -428,7 +429,7 @@ function corpsDeCopie(
     blocs.push(
       copie.figures
         .flatMap((figure, index) => [
-          `#let fig-${index + 1} = ${figure}`,
+          `#let fig-${index + 1} = ${applyDocumentFontsToFigure(figure, options)}`,
           `#let fig-${index + 1}-zoom = 1`,
           `#let fig-${index + 1}-align = center`,
         ])

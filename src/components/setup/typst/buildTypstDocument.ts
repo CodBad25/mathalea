@@ -14,6 +14,7 @@ import {
   QCM_FIGURES_MARKER,
   TASKIZE_IMPORT,
   VARTABLE_IMPORT,
+  applyDocumentFontsToFigure,
   escapeTypstText,
   htmlToTypst,
   sanitizeSvg,
@@ -2684,7 +2685,9 @@ export function buildStandaloneExerciseCode(
   if (usesFigures) {
     for (const [index, figure] of figures.entries()) {
       const figNum = index + 1
-      lines.push(`#let fig-${figNum} = ${figure}`)
+      lines.push(
+        `#let fig-${figNum} = ${applyDocumentFontsToFigure(figure, options)}`,
+      )
       lines.push(
         `#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`,
       )
@@ -3874,7 +3877,9 @@ export function buildTypstDocument(
     lines.push('// ----- Figures (SVG embarqués) -----')
     for (const [index, figure] of figures.entries()) {
       const figNum = index + 1
-      lines.push(`#let fig-${figNum} = ${figure}`)
+      lines.push(
+        `#let fig-${figNum} = ${applyDocumentFontsToFigure(figure, options)}`,
+      )
       lines.push(
         `#let fig-${figNum}-zoom = ${stableCarryOver.figureZoom?.[figNum] ?? 1}`,
       )
