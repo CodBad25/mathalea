@@ -63,7 +63,7 @@ console.log(
 const registreModifieNonIndexe =
   spawnSync('git', ['diff', '--quiet', '--', FICHIER_EMPREINTES]).status !== 0
 
-const resultat = spawnSync('pnpm', ['-s', 'stability:update'], {
+const resultat = spawnSync('pnpm', ['stability:update'], {
   stdio: 'inherit',
   env: { ...process.env, STABILITY_UUIDS: [...manquants.keys()].join(' ') },
 })
