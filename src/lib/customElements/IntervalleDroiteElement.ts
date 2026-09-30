@@ -19,6 +19,8 @@ export type IntervalleDroiteOptions = {
   min: number
   max: number
   labelValue?: number
+  labelValues?: number[]
+  showGraduations?: boolean
   interactivityOn?: boolean
 }
 
@@ -44,6 +46,8 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
     min,
     max,
     labelValue,
+    labelValues,
+    showGraduations = true,
     interactivityOn = true,
   }: IntervalleDroiteOptions): string {
     return super.create({
@@ -53,6 +57,8 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
       min,
       max,
       labelValue,
+      labelValues,
+      showGraduations,
       interactivityOn,
     })
   }
@@ -119,6 +125,8 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
     const min = this.getNumberAttribute('min', 0)
     const max = this.getNumberAttribute('max', 1)
     const labelValue = this.getNumberAttribute('label-value', Number.NaN)
+    const valuesToLabel = this.getNumberArrayAttribute('label-values')
+    const showGraduations = this.getAttribute('show-graduations') !== 'false'
     const width = 560
     const height = 105
     const margin = 34
@@ -143,10 +151,10 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
       .map((value) => {
         const x = xFor(value)
         const selected = this.selectedValues.includes(value)
-        const label =
-          value === labelValue ? `<text x="${x}" y="82">${value}</text>` : ''
-        return `<g class="point${selected ? ' selected' : ''}" data-value="${value}" role="button" tabindex="${this.interactivityOn ? '0' : '-1'}" aria-label="Graduation ${value}">
-          <line x1="${x}" y1="39" x2="${x}" y2="57" />
+        const isLabeled = value === labelValue || valuesToLabel.includes(value)
+        const label = isLabeled ? `<text x="${x}" y="82">${value}</text>` : ''
+        return `<g class="point${selected ? ' selected' : ''}" data-value="${value}" role="button" tabindex="${this.interactivityOn ? '0' : '-1'}" aria-label="Valeur ${value}">
+          ${showGraduations || isLabeled ? `<line x1="${x}" y1="39" x2="${x}" y2="57" />` : ''}
           <circle cx="${x}" cy="${axisY}" r="13" />${label}
         </g>`
       })
@@ -263,8 +271,23 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
   }
 
   private getNumberAttribute(name: string, fallback: number): number {
-    const value = Number(this.getAttribute(name))
+    const rawValue = this.getAttribute(name)
+    if (rawValue == null) return fallback
+    const value = Number(rawValue)
     return Number.isFinite(value) ? value : fallback
+  }
+
+  private getNumberArrayAttribute(name: string): number[] {
+    const rawValue = this.getAttribute(name)
+    if (rawValue == null) return []
+    try {
+      const value: unknown = JSON.parse(rawValue)
+      return Array.isArray(value)
+        ? value.filter((item): item is number => typeof item === 'number')
+        : []
+    } catch {
+      return []
+    }
   }
 }
 
