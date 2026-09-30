@@ -61,6 +61,7 @@ async function fetchVitrineHtml(): Promise<string | null> {
   const url = new URL(VITRINE_FRAGMENT_PATH, origin)
   const response = await fetch(url.toString(), {
     headers: { Accept: 'text/html' },
+    cache: 'no-store',
   })
   if (!response.ok) return null
   return prepareVitrineHtml(await response.text())
