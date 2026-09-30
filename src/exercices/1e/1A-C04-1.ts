@@ -10,11 +10,13 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '1ac8c'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '87440'
 
 export const refs = {
   'fr-fr': ['1A-C04-1', '2A-N4-1'],
-  'fr-ch': ['10QCM-3'],
+  'fr-ch': [],
 }
 export default class Auto1AC4 extends FractionDecimaleEcritureDecimale2 {
   constructor() {
@@ -26,6 +28,6 @@ export default class Auto1AC4 extends FractionDecimaleEcritureDecimale2 {
   </p>
   
 `
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

@@ -169,6 +169,7 @@ export default class constructionElementaire extends Exercice {
           height: 468,
         })
         figure.options.labelAutomaticBeginsWith = E.nom
+        figure.options.labelAutomaticForPoints = true
         figure.options.thickness = 2
         this.figuresApiGeom[i] = figure
         const pA = figure.create('Point', {

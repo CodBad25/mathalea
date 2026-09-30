@@ -54,6 +54,7 @@ describe('loadVitrineHtml', () => {
     expect(fetchMock.mock.calls[0][0]).toBe(
       `${window.location.origin}/www/vitrine/fragment/`,
     )
+    expect(fetchMock.mock.calls[0][1]).toMatchObject({ cache: 'no-store' })
   })
 
   it('récupère le fragment sur coopmaths.fr en production, quelle que soit l’origine courante', async () => {
@@ -68,6 +69,7 @@ describe('loadVitrineHtml', () => {
     expect(fetchMock.mock.calls[0][0]).toBe(
       'https://coopmaths.fr/www/vitrine/fragment/',
     )
+    expect(fetchMock.mock.calls[0][1]).toMatchObject({ cache: 'no-store' })
   })
 
   it('renvoie null si le serveur répond en erreur', async () => {

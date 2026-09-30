@@ -10,16 +10,18 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'ba2ec'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'abe50'
 
 export const refs = {
   'fr-fr': ['1A-C04-7', '2A-N4-7'],
-  'fr-ch': ['9QCM-15'],
+  'fr-ch': [],
 }
 export default class Auto1AC4g extends ProgrammeCalcul2 {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut calculer un quotient avec des nombres décimaux.<br>
@@ -29,5 +31,14 @@ export default class Auto1AC4g extends ProgrammeCalcul2 {
     <li>Réduire la fraction obtenue.</li>
     <li>Tester les propositions en surveillant les erreurs de facteur $10$.</li>
   </ul>`
+  }
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    if (!this.versionQcm && this.question != null) {
+      this.question = this.question.replace(
+        /^Calculer sous forme décimale\s+/,
+        "Donner l'écriture décimale de ",
+      )
+    }
   }
 }

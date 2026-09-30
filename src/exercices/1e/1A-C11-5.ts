@@ -2,7 +2,7 @@ import ExprimerEnFonctionRac from '../can/2e/can2L12-03'
 export const titre =
   'Exprimer une variable en fonction des autres (formules avec carrés/racines carrées)'
 export const dateDePublication = '13/01/2026'
-export const dateDeModifImportante = '14/02/2026'
+export const dateDeModifImportante = '29/09/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
@@ -12,15 +12,15 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '15638'
+export const uuid = '3a2cd'
 
 export const refs = {
   'fr-fr': ['1A-C11-5', '2A-C4-5'],
-  'fr-ch': ['1mQCM-33', '11QCM-35'],
+  'fr-ch': [],
 }
 export default class Auto1AC11e extends ExprimerEnFonctionRac {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

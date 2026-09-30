@@ -6,9 +6,11 @@ import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ppcm } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = '2ab24'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '894b2'
 export const refs = {
   'fr-fr': ['1A-C15-2'],
   'fr-ch': ['10QCM-8'],
@@ -25,7 +27,7 @@ export const dateDePublication = '05/08/2025'
  * @author Gilles Mora
  *
  */
-export default class Auto1C19b extends ExerciceQcmA {
+export default class Auto1C19b extends ExerciceQcmACourt {
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 
   versionOriginale: () => void = () => {
@@ -48,7 +50,7 @@ export default class Auto1C19b extends ExerciceQcmA {
 
     this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ en trois mois.<br>
         En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
-        En mars, elle doit rembourser :`
+        Déterminer la part du crédit à rembourser en mars sous forme de fraction.`
 
     this.correction = `
        
@@ -123,7 +125,7 @@ export default class Auto1C19b extends ExerciceQcmA {
       )
       this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ en trois mois.<br>
         En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
-        En mars elle doit rembourser :`
+        Déterminer la part du crédit à rembourser en mars sous forme de fraction.`
 
       this.correction = `
        

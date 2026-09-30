@@ -1,12 +1,14 @@
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 /**
  * @author Gilles Mora
  *
  */
-export const uuid = '8d642'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '3e19c'
 export const refs = {
   'fr-fr': ['1A-C11-2', '2A-C4-2'],
   'fr-ch': ['1mQCM-31'],
@@ -18,7 +20,7 @@ export const amcType = 'qcmMono'
 export const titre = 'Exprimer une variable en fonction des autres'
 export const dateDePublication = '05/08/2025'
 
-export default class Auto1AC13b extends ExerciceQcmA {
+export default class Auto1AC13b extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
     this.enonce = `Soient $a$, $b$, $c$ et $d$ quatre nombres (avec $d$ non nul) vérifiant l'égalité :<br>
     $a = b - cd$.<br>
@@ -64,7 +66,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = ${nomV[1]} - ${nomV[2]}${nomV[3]}$.<br>
-        Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est :`
+        Exprimer $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$.`
 
         this.correction = `On isole $${nomV[2]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -89,7 +91,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[2]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = ${nomV[1]} - ${nomV[2]}${nomV[3]}$.<br>
-        Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est :`
+        Exprimer $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$.`
 
         this.correction = `On isole $${nomV[3]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -114,7 +116,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = ${nomV[1]} - ${nomV[2]}${nomV[3]}$.<br>
-         Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est :`
+         Exprimer $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$.`
 
         this.correction = `On isole $${nomV[1]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -137,7 +139,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[2]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = ${nomV[1]}${nomV[2]} + ${nomV[3]}$.<br>
-        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est :`
+        Exprimer $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$.`
 
         this.correction = `On isole $${nomV[1]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -161,7 +163,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres vérifiant l'égalité suivante :`
 
         this.enonce = `${intro} $${nomV[0]} = ${nomV[1]}${nomV[2]} + ${nomV[3]}$.<br>
-         Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est :`
+         Exprimer $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$.`
 
         this.correction = `On isole $${nomV[3]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -184,7 +186,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[3]}}$.<br>
-        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est :`
+        Exprimer $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$.`
 
         this.correction = `On isole $${nomV[1]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -208,7 +210,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[3]}}$.<br>
-         Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est :`
+         Exprimer $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$.`
 
         this.correction = `On isole $${nomV[2]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -232,7 +234,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ et $${nomV[0]}$ non nuls) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[3]}}$.<br>
-         Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est :`
+         Exprimer $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$.`
 
         this.correction = `On isole $${nomV[3]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -256,7 +258,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = (${nomV[1]} + ${nomV[2]})${nomV[3]}$.<br>
-         Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$ est :`
+         Exprimer $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$.`
 
         this.correction = `On isole $${nomV[1]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -281,7 +283,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[1]} + ${nomV[2]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = (${nomV[1]} + ${nomV[2]})${nomV[3]}$.<br>
-         Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est :`
+         Exprimer $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$.`
 
         this.correction = `On isole $${nomV[3]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -304,7 +306,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = (${nomV[1]} - ${nomV[2]})${nomV[3]}$.<br>
-        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$ est :`
+        Exprimer $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$.`
 
         this.correction = `On isole $${nomV[1]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -330,7 +332,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
         const intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité :`
 
         this.enonce = `${intro} $${nomV[0]} = (${nomV[1]} - ${nomV[2]})${nomV[3]}$.<br>
-        Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est :`
+        Exprimer $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$.`
 
         this.correction = `On isole $${nomV[2]}$ dans un membre de l'égalité :<br>
         $\\begin{aligned}
@@ -355,6 +357,7 @@ export default class Auto1AC13b extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.clavierReponseCourte = 'lycee'
     this.versionAleatoire()
   }
 }

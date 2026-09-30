@@ -3,9 +3,11 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '02/08/2025'
-export const uuid = 'd7ba2'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '97a0b'
 
 export const refs = {
   'fr-fr': ['1A-C14-4'],
@@ -19,7 +21,7 @@ export const titre = 'Résoudre une inéquation avec un tableau de signes'
 /**
  * @author Gilles Mora
  */
-export default class Auto1AC16 extends ExerciceQcmA {
+export default class Auto1AC16 extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
     // Version fixe pour les tests ou exemple
     const ligneMPP = [
@@ -87,8 +89,8 @@ export default class Auto1AC16 extends ExerciceQcmA {
       20,
     ]
 
-    this.enonce = `L'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
-    $2(x-3)(x+1) > 0$ est :`
+    this.enonce = `Déterminer l'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
+    $2(x-3)(x+1) > 0$.`
 
     this.correction =
       `$(x-3)(x+1)$ est un produit de deux fonctions affines.<br>
@@ -132,8 +134,8 @@ export default class Auto1AC16 extends ExerciceQcmA {
         ? choice(['>', '\\geqslant'])
         : choice(['<', '\\leqslant'])
 
-    this.enonce = `L'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
-   ${b === 0 ? `$${rienSi1(a)}x(x${ecritureAlgebrique(-c)}) ${inegalite} 0$` : `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)}) ${inegalite} 0$`}  est :`
+    this.enonce = `Déterminer l'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
+   ${b === 0 ? `$${rienSi1(a)}x(x${ecritureAlgebrique(-c)}) ${inegalite} 0$` : `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)}) ${inegalite} 0$`}.`
 
     // Construction de la correction avec tableau de variation
     const r1 = Math.min(b, c) // première racine (la plus petite)
@@ -359,6 +361,7 @@ export default class Auto1AC16 extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.clavierReponseCourte = 'clavierEnsemble'
     this.versionAleatoire()
     this.options.vertical = true
   }

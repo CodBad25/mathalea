@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'a7d80'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '0f10c'
 
 export const refs = {
   'fr-fr': ['1A-E04-2'],
-  'fr-ch': ['10QCM-47', '11QCM-49'],
+  'fr-ch': [],
 }
 export default class Auto1AE4a extends EvolSuccessives {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

@@ -10,16 +10,18 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '71eba'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '32a31'
 
 export const refs = {
   'fr-fr': ['1A-C03-2', '2A-N3-2'],
-  'fr-ch': ['10NO3D-12'],
+  'fr-ch': [],
 }
 export default class Auto1AC3b extends CalculPuissancesOperation {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut simplifier une expression avec des puissances.

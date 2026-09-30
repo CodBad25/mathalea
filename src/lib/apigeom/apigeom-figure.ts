@@ -183,7 +183,15 @@ export class ApigeomFigureElement extends MathaleaCustomElement {
 
   private onZoom = (event: Event) => {
     if (!this.figure?.options) return
-    const zoom = Number((event as CustomEvent).detail.zoom)
+    const detail = (event as CustomEvent).detail
+    const targetContainer = detail.container
+    if (
+      targetContainer instanceof HTMLElement &&
+      !targetContainer.contains(this)
+    ) {
+      return
+    }
+    const zoom = Number(detail.zoom)
     if (zoom !== this.oldZoom) {
       this.oldZoom = zoom
       this.figure.zoom(zoom, {

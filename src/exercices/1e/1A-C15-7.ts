@@ -4,9 +4,11 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomM } from '../../lib/outils/Personne'
 import { texPrix } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = '9823a'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '2d15c'
 export const refs = {
   'fr-fr': ['1A-C15-7'],
   'fr-ch': ['10FA5A-6'],
@@ -23,7 +25,7 @@ export const dateDePublication = '15/12/2025'
  * @author Gilles Mora
  *
  */
-export default class AutoC15g extends ExerciceQcmA {
+export default class AutoC15g extends ExerciceQcmACourt {
   // Cas 1 : nombre de viennoiseries × prix unitaire
   private cas1(
     prenom: string,
@@ -329,6 +331,8 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants}x-$
 
   constructor() {
     super()
+    this.clavierReponseCourte = 'lycee'
+    this.enonceCourt = () => this.enonce.replace(/Parmi les équations suivantes, une seule modélise la situation\. Laquelle \?/, 'Écrire une équation qui modélise la situation.')
     this.versionAleatoire()
     this.spacing = 1.5
   }

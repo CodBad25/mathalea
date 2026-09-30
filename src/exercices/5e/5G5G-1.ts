@@ -235,6 +235,7 @@ export default class nomExercice extends Exercice {
           pixelsPerUnit: 20,
         })
         figure.options.labelAutomaticBeginsWith = 'A'
+        figure.options.labelAutomaticForPoints = true
         figure.options.thickness = 2
 
         this.pA[i] = figure.create('Point', {

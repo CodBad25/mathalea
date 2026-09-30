@@ -112,6 +112,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
       })
 
       figureEnonce.figure.options.labelAutomaticBeginsWith = label
+      figureEnonce.figure.options.labelAutomaticForPoints = true
       figureEnonce.figure.options.pointDescriptionWithCoordinates = false
       figureEnonce.figure.options.labelIsVisible = false
       this.figuresApiGeom![i] = figureEnonce.figure

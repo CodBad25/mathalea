@@ -1,16 +1,19 @@
 import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 /**
  * @author Gilles Mora
  *
  */
-export const uuid = 'cf226'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'b8dd2'
 export const refs = {
   'fr-fr': ['1A-C14-1'],
   'fr-ch': ['1mQCM-35', '2mQCM-8'],
@@ -22,10 +25,11 @@ export const amcType = 'qcmMono'
 export const titre = "Déterminer le tableau de signes d'une fonction affine"
 export const dateDePublication = '27/08/2025'
 
-export default class Auto1AC16a extends ExerciceQcmA {
+export default class Auto1AC16a extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
     const a = -3
     const b = 6
+    this.reponseCourte = () => `]-\\infty;${texNombre(-b / a)}[`
 
     this.enonce = `On considère la fonction $f$ définie sur $\\mathbb{R}$ par $f(x) = ${reduireAxPlusB(a, b)}$.<br><br>
         Parmi les quatre tableaux de signes proposés, lequel correspond à cette fonction ?`
@@ -96,6 +100,9 @@ export default class Auto1AC16a extends ExerciceQcmA {
     const k2 = randint(1, 10)
     const k = choice([k1, k2, k2, k2])
     const b = a * k // coefficient b de la fonction affine
+    this.reponseCourte = () => a > 0
+      ? `]${texNombre(-b / a)};+\\infty[`
+      : `]-\\infty;${texNombre(-b / a)}[`
 
     this.enonce = `On considère la fonction $f$ définie sur $\\mathbb{R}$ par $f(x) = ${reduireAxPlusB(a, b)}$.<br>
         Parmi les quatre tableaux de signes proposés, lequel correspond à cette fonction ?`
@@ -169,6 +176,9 @@ export default class Auto1AC16a extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.clavierReponseCourte = 'clavierEnsemble'
+    this.enonceCourt = () => this.enonce.replace(/Parmi les quatre tableaux de signes proposés, lequel correspond à cette fonction \?/, 'Déterminer l’ensemble des réels $x$ tels que $f(x)>0$.')
+    this.correctionCourte = () => `${this.correction}<br>L’ensemble des solutions de $f(x)>0$ est $${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
     this.versionAleatoire()
     this.options.vertical = true
   }

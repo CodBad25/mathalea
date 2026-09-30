@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '27154'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'af81c'
 
 export const refs = {
   'fr-fr': ['1A-F02-11'],
-  'fr-ch': ['1mQCM-2', '2mQCM-3'],
+  'fr-ch': [],
 }
 export default class Auto1AF2c extends ordonneePointDroite {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

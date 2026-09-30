@@ -234,6 +234,7 @@ export default class DeriveeExp1AN312 extends Exercice {
               rand: true,
               coeffs: [c - b, b - 2 * a, a],
             })
+            const value = `\\dfrac{${rienSi1(m)}(${polySol})\\mathrm{e}^{x}}{(${poly})^2}`
             texteCorr = `La fonction $f$ est dérivable sur $\\mathbb{R}$ comme quotient de fonctions dérivables sur $\\mathbb{R}$ dont le dénominateur ne s'annule pas sur $\\mathbb{R}$.<br>
           $f$ est de la forme $\\dfrac{u}{v}$ avec $u(x)=${rienSi1(m)}\\mathrm{e}^{x}$ et $v(x)=${poly}$, donc sa fonction dérivée est donnée par 
           $f'=\\dfrac{u'\\times v- u\\times v'}{v^2}$.<br><br>
@@ -245,7 +246,7 @@ export default class DeriveeExp1AN312 extends Exercice {
             $\\begin{aligned}
             f'(x)&=\\dfrac{\\overbrace{${rienSi1(m)}\\mathrm{e}^{x}}^{u'(x)}\\times (\\overbrace{${poly}}^{v(x)})-\\overbrace{${rienSi1(m)}\\mathrm{e}^{x}}^{u(x)}\\times \\overbrace{(${polyDer})}^{v'(x)}}{\\underbrace{(${poly})^2}_{(v(x))^2}}\\\\
        &=\\dfrac{ ${rienSi1(m)}\\mathrm{e}^{x}\\left(${poly}- (${polyDer})\\right)}{(${poly})^2} \\\\
-      &=${miseEnEvidence(`\\dfrac{(${polySol})\\mathrm{e}^{x}}{(${poly})^2}`)}.
+      &=${miseEnEvidence(value)}.
             \\end{aligned}$`
 
             texte += ajouteChampTexteMathLive(
@@ -254,7 +255,6 @@ export default class DeriveeExp1AN312 extends Exercice {
               KeyboardType.clavierFonctionsTerminales,
               { texteAvant: "<br>$f'(x)=$" },
             )
-            const value = `\\dfrac{${m}(${poly} - ${polyDer})e^{x}}{(${poly})^2}`
             handleAnswers(this, i, {
               reponse: { value, options: { fonction: true } },
             })

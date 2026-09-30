@@ -6,9 +6,11 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '22/04/2026'
-export const uuid = 'af470'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'c5cb6'
 
 export const refs = {
   'fr-fr': ['1A-C14-5'],
@@ -22,7 +24,7 @@ export const titre = 'Retrouver la bonne fonction affine à partir de données'
 /**
  * @author Gilles Mora
  */
-export default class Auto1AC14e extends ExerciceQcmA {
+export default class Auto1AC14e extends ExerciceQcmACourt {
   private tableau(f: (x: number | FractionEtendue) => number): string {
     return tableauSignesFonction(f, -20, 20, {
       step: 1,
@@ -35,6 +37,8 @@ export default class Auto1AC14e extends ExerciceQcmA {
   }
 
   private appliquerLesValeurs(a: number, r: number): void {
+    const aCourt = a > 0 ? 1 : -1
+    this.reponseCourte = () => reduireAxPlusB(aCourt, -aCourt * r)
     // bonne réponse   : f(x) = a(x - r)  => racine r, pente a
     // distracteur 1   : racine r,  pente -a  => g(x) = -a(x - r)
     // distracteur 2   : racine -r, pente a   => h(x) = a(x + r)
@@ -95,6 +99,9 @@ export default class Auto1AC14e extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.clavierReponseCourte = 'lycee'
+    this.enonceCourt = () => this.enonce.replace('Une seule des expressions suivantes est celle de la fonction $f$. Laquelle ?', 'Donner l’expression de la fonction affine $f$ dont le coefficient directeur vaut $1$ ou $-1$.')
+    this.correctionCourte = () => `Une expression qui vérifie les conditions est $f(x)=${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
     this.versionAleatoire()
   }
 }

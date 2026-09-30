@@ -1,162 +1,53 @@
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-// import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { context } from '../../modules/context'
+import ExerciceSimple from '../ExerciceSimple'
+export const dateDePublication = '18/01/2026'
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = '4e582'
 
-export const uuid = '43516'
 export const refs = {
   'fr-fr': ['1A-C04-5', '2A-N4-5'],
-  'fr-ch': ['10QCM-16'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Calculer une somme de nombres'
-export const dateDePublication = '18/01/2026'
-// Ceci est un exemple de QCM avec version originale et version aléatoire
+
 /**
  *
  * @author Gilles Mora
  *
  */
-export default class AutoC4e extends ExerciceQcmA {
-  private appliquerLesValeurs(
-    partieEntiere: number,
-    partieDecimale: number,
-    denominateur: number,
-    typeBonneReponse: 'decimal' | 'fraction',
-  ): void {
-    // Calcul du résultat
-    const resultatDecimal = partieEntiere + partieDecimale + 1 / denominateur
-
-    // Construction du numérateur de la fraction correcte
-    const numerateurFraction =
-      partieEntiere * denominateur + partieDecimale * denominateur + 1
-
-    // Énoncé
-    this.enonce = `On considère $A = ${texNombre(partieEntiere)} + ${texNombre(partieDecimale)} + \\dfrac{1}{${texNombre(denominateur)}}$. <br>
-    On a :`
-
-    // Créer tous les distracteurs possibles
-    const tousLesDistracteursDecimaux = [
-      `$A = ${texNombre(partieEntiere + partieDecimale + 0.1)}$`,
-      `$A = ${texNombre(partieEntiere + 1 / denominateur)}$`,
-      `$A = ${texNombre(partieEntiere + partieDecimale)}$`,
-      `$A = ${texNombre(partieEntiere + partieDecimale + 0.01)}$`,
-      `$A = ${texNombre(partieEntiere + partieDecimale + 0.11)}$`,
-      `$A = ${texNombre(partieEntiere + 0.01 + 1 / denominateur)}$`,
-      `$A = ${texNombre(partieEntiere + 0.1)}$`,
-      `$A = ${texNombre(partieEntiere + 1)}$`,
-      `$A = ${texNombre(partieEntiere + partieDecimale + 1)}$`,
-      `$A = ${texNombre(partieEntiere + partieDecimale + 0.001)}$`,
-      `$A = ${texNombre(partieEntiere + 0.001)}$`,
-    ]
-
-    const tousLesDistracteursFractions = [
-      `$A = \\dfrac{${texNombre(partieEntiere + denominateur)}}{${texNombre(denominateur)}}$`,
-      `$A = \\dfrac{${texNombre(partieEntiere * denominateur + 1)}}{${texNombre(denominateur)}}$`,
-      `$A = \\dfrac{${texNombre(partieEntiere * denominateur + partieDecimale * 10 * denominateur)}}{${texNombre(denominateur)}}$`,
-      `$A = \\dfrac{${texNombre(partieEntiere * denominateur)}}{${texNombre(denominateur)}}$`,
-      `$A = \\dfrac{${texNombre(Math.round((partieEntiere + partieDecimale) * denominateur))}}{${texNombre(denominateur)}}$`,
-      `$A = \\dfrac{${texNombre(partieEntiere * denominateur + 10)}}{${texNombre(denominateur)}}$`,
-    ]
-
-    if (typeBonneReponse === 'decimal') {
-      const bonneReponse = `$A = ${texNombre(resultatDecimal)}$`
-
-      // Filtrer les distracteurs décimaux différents de la bonne réponse et éliminer les doublons
-      const distracteursDisponiblesDecimaux = shuffle(
-        [...new Set(tousLesDistracteursDecimaux)].filter(
-          (d) => d !== bonneReponse,
-        ),
-      )
-
-      // Prendre 1 distracteur décimal aléatoire
-      const distracteurDecimal = distracteursDisponiblesDecimaux[0]
-
-      // Prendre 2 distracteurs fractions aléatoires
-      const distracteursFractionsSelectionnes = shuffle(
-        tousLesDistracteursFractions,
-      ).slice(0, 2)
-
-      this.reponses = [
-        bonneReponse,
-        distracteurDecimal,
-        ...distracteursFractionsSelectionnes,
-      ]
-
-      this.correction = `On a : <br>$\\begin{aligned}  
-      A &= ${texNombre(partieEntiere)} + ${texNombre(partieDecimale)} + \\dfrac{1}{${texNombre(denominateur)}}\\\\
-      & = ${texNombre(partieEntiere + partieDecimale)} + ${texNombre(1 / denominateur)}\\\\
-      & = ${miseEnEvidence(texNombre(resultatDecimal))}
-      \\end{aligned}$.`
-    } else {
-      const bonneReponse = `$A = \\dfrac{${texNombre(numerateurFraction)}}{${texNombre(denominateur)}}$`
-      const bonneReponseDecimale = `$A = ${texNombre(resultatDecimal)}$`
-
-      // Filtrer les distracteurs fractions différents de la bonne réponse et éliminer les doublons
-      const distracteursDisponiblesFractions = shuffle(
-        [...new Set(tousLesDistracteursFractions)].filter(
-          (d) => d !== bonneReponse,
-        ),
-      )
-
-      // Prendre 1 distracteur fraction aléatoire
-      const distracteurFraction = distracteursDisponiblesFractions[0]
-
-      // Filtrer les distracteurs décimaux et éliminer les doublons
-      const distracteursDisponiblesDecimaux = shuffle(
-        [...new Set(tousLesDistracteursDecimaux)].filter(
-          (d) => d !== bonneReponseDecimale,
-        ),
-      )
-
-      // Prendre 2 distracteurs décimaux aléatoires
-      const distracteursDecimauxSelectionnes =
-        distracteursDisponiblesDecimaux.slice(0, 2)
-
-      this.reponses = [
-        bonneReponse,
-        distracteurFraction,
-        ...distracteursDecimauxSelectionnes,
-      ]
-
-      const numerateurEntier = partieEntiere * denominateur
-      const numerateurDecimal = partieDecimale * denominateur
-
-      this.correction = `On a : <br>
-      
-      $\\begin{aligned}
-      A &= ${texNombre(partieEntiere)} + ${texNombre(partieDecimale)} + \\dfrac{1}{${texNombre(denominateur)}}\\\\
-      & = \\dfrac{${texNombre(numerateurEntier)}}{${texNombre(denominateur)}} + \\dfrac{${texNombre(numerateurDecimal)}}{${texNombre(denominateur)}} + \\dfrac{1}{${texNombre(denominateur)}}\\\\
-      & = ${miseEnEvidence('\\dfrac{' + texNombre(numerateurFraction) + '}{' + texNombre(denominateur) + '}')}
-      \\end{aligned}$.<br>`
-    }
+export default class AutoC4e extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut additionner un entier, un nombre décimal et une fraction décimale.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Identifier séparément la partie entière, la partie décimale et la fraction.</li>
+    <li>Convertir la fraction décimale en écriture décimale ou vice-versa.</li>
+    <li>Vérifier les propositions en repérant les erreurs classiques de virgule pour vous piéger.</li>
+  </ul>`
   }
 
-  versionOriginale: () => void = () => {
-    // Version originale conforme à l'image : 10 + 0,1 + 1/1000 = 10,101
-    this.enonce = `On considère $A = ${texNombre(10)} + ${texNombre(0.1)} + \\dfrac{1}{${texNombre(1000)}}$. On a :`
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
 
-    this.reponses = [
-      `$A = ${texNombre(10.101)}$`,
-      `$A = \\dfrac{20^{-1}}{${texNombre(1000)}}$`,
-      `$A = \\dfrac{1}{${texNombre(1000)}}$`,
-      `$A = ${texNombre(10.11)}$`,
-    ]
-
-    this.correction = `On a : <br>
-    $\\begin{aligned}
-    A &= ${texNombre(10)} + ${texNombre(0.1)} + \\dfrac{1}{${texNombre(1000)}}\\\\
-    &= ${texNombre(10.1)} + ${texNombre(0.001)}\\\\
-    &= ${miseEnEvidence(texNombre(10.101))}
-    \\end{aligned}$.`
-  }
-
-  versionAleatoire: () => void = () => {
-    // Configurations possibles : [partieEntiere, partieDecimale, denominateur]
+    // Configurations possibles : [partie entière, partie décimale, dénominateur]
     const configurations = [
       [10, 0.1, 1000],
       [100, 0.01, 100],
@@ -168,23 +59,82 @@ export default class AutoC4e extends ExerciceQcmA {
       [100, 0.001, 1000],
       [1000, 0.001, 1000],
     ]
+    const config = this.quotaChoice('config', configurations)
+    const partieEntiere = new Decimal(config[0])
+    const partieDecimale = new Decimal(config[1])
+    const denominateur = config[2]
+    const unSurDen = new Decimal(1).div(denominateur)
+    const typeBonneReponse = this.quotaChoice('type', [
+      'decimal',
+      'fraction',
+    ] as const)
 
-    const config = choice(configurations)
-    const typeBonneReponse = choice(['decimal', 'fraction'] as const)
+    const resultatDecimal = partieEntiere.plus(partieDecimale).plus(unSurDen)
+    const numerateurEntier = partieEntiere.mul(denominateur)
+    const numerateurDecimal = partieDecimale.mul(denominateur)
+    const numerateurFraction = numerateurEntier.plus(numerateurDecimal).plus(1)
+    const fraction = (numerateur: Decimal | number) =>
+      `\\dfrac{${texNombre(numerateur)}}{${texNombre(denominateur)}}`
+    const somme = `${texNombre(partieEntiere)} + ${texNombre(partieDecimale)} + \\dfrac{1}{${texNombre(denominateur)}}`
 
-    this.appliquerLesValeurs(config[0], config[1], config[2], typeBonneReponse)
-  }
+    if (typeBonneReponse === 'decimal') {
+      this.correction = `On a : <br>$\\begin{aligned}
+      A &= ${somme}\\\\
+      & = ${texNombre(partieEntiere.plus(partieDecimale))} + ${texNombre(unSurDen)}\\\\
+      & = ${miseEnEvidence(texNombre(resultatDecimal))}
+      \\end{aligned}$.`
+    } else {
+      this.correction = `On a : <br>
+      $\\begin{aligned}
+      A &= ${somme}\\\\
+      & = ${fraction(numerateurEntier)} + ${fraction(numerateurDecimal)} + ${fraction(1)}\\\\
+      & = ${miseEnEvidence(fraction(numerateurFraction))}
+      \\end{aligned}$.<br>`
+    }
 
-  constructor() {
-    super()
-    this.tip = `
-  <p style="margin: 0 0 10px 0;">
-    Il faut additionner un entier, un nombre décimal et une fraction décimale.
-  </p>
-  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li>Identifier séparément la partie entière, la partie décimale et la fraction.</li>
-    <li>Convertir la fraction décimale en écriture décimale ou vice-versa.</li>
-    <li>Vérifier les propositions en repérant les erreurs classiques de virgule pour vous piéger.</li>
-  </ul>`
+    if (this.versionQcm) {
+      const bonneReponse = `$A = ${typeBonneReponse === 'decimal' ? texNombre(resultatDecimal) : fraction(numerateurFraction)}$`
+      const decimaux = [
+        partieEntiere.plus(partieDecimale).plus(0.1),
+        partieEntiere.plus(unSurDen),
+        partieEntiere.plus(partieDecimale),
+        partieEntiere.plus(partieDecimale).plus(0.01),
+        partieEntiere.plus(partieDecimale).plus(0.11),
+        partieEntiere.plus(0.01).plus(unSurDen),
+        partieEntiere.plus(0.1),
+        partieEntiere.plus(1),
+        partieEntiere.plus(partieDecimale).plus(1),
+        partieEntiere.plus(partieDecimale).plus(0.001),
+        partieEntiere.plus(0.001),
+      ].map((d) => `$A = ${texNombre(d)}$`)
+      const fractions = [
+        partieEntiere.plus(denominateur),
+        partieEntiere.mul(denominateur).plus(1),
+        partieEntiere
+          .mul(denominateur)
+          .plus(partieDecimale.mul(10 * denominateur)),
+        partieEntiere.mul(denominateur),
+        partieEntiere.plus(partieDecimale).mul(denominateur).round(),
+        partieEntiere.mul(denominateur).plus(10),
+      ].map((n) => `$A = ${fraction(n)}$`)
+      const autres = (liste: string[]) =>
+        shuffle([...new Set(liste)].filter((d) => d !== bonneReponse))
+      this.question = `On considère $A = ${somme}$. <br>On a :`
+      this.reponse = bonneReponse
+      this.distracteurs =
+        typeBonneReponse === 'decimal'
+          ? [...autres(decimaux).slice(0, 1), ...autres(fractions).slice(0, 2)]
+          : [...autres(fractions).slice(0, 1), ...autres(decimaux).slice(0, 2)]
+    } else if (typeBonneReponse === 'decimal') {
+      this.formatChampTexte = KeyboardType.clavierDeBase
+      this.question = `Calculer $A = ${somme}$ et donner le résultat sous forme décimale.`
+      this.optionsDeComparaison = { nombreDecimalSeulement: true }
+      this.reponse = resultatDecimal
+    } else {
+      this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+      this.question = `Calculer $A = ${somme}$ et donner le résultat sous la forme d'une fraction décimale.`
+      this.optionsDeComparaison = { fractionDecimale: true }
+      this.reponse = `\\dfrac{${numerateurFraction.toFixed()}}{${denominateur}}`
+    }
   }
 }

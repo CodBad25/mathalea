@@ -1,87 +1,74 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { randint } from '../../modules/outils'
-// import ExerciceQcmA from '../../ExerciceQcmA'
-import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 
-export const uuid = 'e6b50'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '4301a'
 export const refs = {
   'fr-fr': ['1A-C10-16'],
-  'fr-ch': ['11QCM-31', '10FA5B-5'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Manipuler une équation du type $ax+b=c$'
 export const dateDePublication = '22/04/2026'
-// Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
- *
  * @author Gilles Mora
- *
  */
-export default class Auto1C10p extends ExerciceQcmA {
-  private appliquerLesValeurs(
-    a: number,
-    p: number,
-    b: number,
-    k: number,
-    d: number,
-  ): void {
-    // ax = p  =>  c = p + b
-    // x = p/a
-    // kx = kp/a
-    // kx + d = kp/a + d
+export default class Auto1C10p extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { fractionIrreductible: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
+    const a = choice([3, 4, 5, 6, 7])
+    // p non multiple de a (pour que x soit une vraie fraction)
+    let p = randint(1, 10)
+    while (p % a === 0) p = randint(1, 10)
+    const b = randint(1, 8)
+    // k différent de a
+    let k = choice([2, 3, 4, 5, 6, 7, 8])
+    while (k === a) k = choice([2, 3, 4, 5, 6, 7, 8])
+    const d = choice([-3, -2, -1, 1, 2, 3])
+
+    // ax = p  =>  c = p + b, x = p/a, kx = kp/a, kx + d = kp/a + d
     const c = p + b
     const fX = new FractionEtendue(p, a)
     const fKX = new FractionEtendue(k * p, a)
-    const fReponse = fKX.ajouteEntier(d)
-    const fDist1 = fX
-    const fDist2 = new FractionEtendue(k * p + d, a).simplifie()
-    const fDist3 = new FractionEtendue(p, a).ajouteEntier(d)
+    const fReponse = fKX.ajouteEntier(d).simplifie()
 
-    this.enonce = `Si $${reduireAxPlusB(a, b)} = ${c}$, alors $${reduireAxPlusB(k, d)} =$`
+    this.question = `Si $${reduireAxPlusB(a, b)}=${c}$, alors $${reduireAxPlusB(k, d)}${this.interactif || this.versionQcm ? '=' : '=\\ldots'}$`
+    this.correction = `De $${reduireAxPlusB(a, b)}=${c}$, on obtient $${a}x=${p}$, soit $x=${fX.texFractionSimplifiee}$.<br>
+     Ainsi  $${reduireAxPlusB(k, d)} = ${k}\\times ${fX.texFractionSimplifiee}${ecritureAlgebrique(d)}=${fKX.texFractionSimplifiee}${ecritureAlgebrique(d)} = ${miseEnEvidence(fReponse.texFractionSimplifiee)}$`
 
-    this.correction = `De $${a}x + ${b} = ${c}$, on  obtient $x = ${fX.texFractionSimplifiee}$.<br>
-     Ainsi  $${reduireAxPlusB(k, d)} = ${fKX.texFractionSimplifiee}  ${ecritureAlgebrique(d)} = ${miseEnEvidence(fReponse.texFractionSimplifiee)}$`
-
-    this.reponses = [
-      `$${fReponse.texFractionSimplifiee}$`,
-      `$${fDist1.texFractionSimplifiee}$`,
-      `$${fDist2.texFractionSimplifiee}$`,
-      `$${fDist3.texFractionSimplifiee}$`,
-    ]
-  }
-
-  versionOriginale: () => void = () => {
-    // 3x + 5 = 7  =>  3x = 2  =>  x = 2/3
-    // 4x - 1 = 4*(2/3) - 1 = 8/3 - 1 = 5/3
-    this.appliquerLesValeurs(3, 2, 5, 4, -1)
-  }
-
-  versionAleatoire = () => {
-    let compteur = 0
-    do {
-      const a = choice([3, 4, 5, 6, 7])
-      // p non multiple de a (pour que x soit une vraie fraction)
-      let p = randint(1, 10)
-      while (p % a === 0) p = randint(1, 10)
-      const b = randint(1, 8)
-      // k différent de a
-      let k = choice([2, 3, 4, 5, 6, 7, 8])
-      while (k === a) k = choice([2, 3, 4, 5, 6, 7, 8])
-      const d = choice([-3, -2, -1, 1, 2, 3])
-      this.appliquerLesValeurs(a, p, b, k, d)
-      compteur++
-    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
-  }
-
-  constructor() {
-    super()
-    this.versionAleatoire()
+    if (this.versionQcm) {
+      this.reponse = `$${fReponse.texFractionSimplifiee}$`
+      this.distracteurs = [
+        fX.texFractionSimplifiee,
+        new FractionEtendue(k * p + d, a).simplifie().texFractionSimplifiee,
+        fX.ajouteEntier(d).simplifie().texFractionSimplifiee,
+        new FractionEtendue(k * p - d, a).simplifie().texFractionSimplifiee,
+        fKX.texFractionSimplifiee,
+      ].map((f) => `$${f}$`)
+    } else {
+      this.reponse = fReponse.texFractionSimplifiee
+    }
   }
 }

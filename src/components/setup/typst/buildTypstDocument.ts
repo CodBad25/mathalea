@@ -1703,7 +1703,12 @@ export type WritingLinesPosition = (typeof WRITING_LINES_POSITIONS)[number]
  * celle des codes déjà enregistrés qui ne portent pas de style), `points`
  * (points de conduite), `plein` (filet continu) ou `vide` (espace sans trait).
  */
-export const WRITING_LINES_STYLES = ['pointilles', 'points', 'plein', 'vide'] as const
+export const WRITING_LINES_STYLES = [
+  'pointilles',
+  'points',
+  'plein',
+  'vide',
+] as const
 export type WritingLinesStyle = (typeof WRITING_LINES_STYLES)[number]
 
 /** Réglage de lignes d'un exercice (palette de mise en page) */
@@ -2161,6 +2166,7 @@ function exerciseBody(
           zoomVariable,
           undefined,
           qcmColumnsExpr,
+          options.boldQuestionNumbers,
         )
         if (head.length > 0) {
           splitHead = head
@@ -2175,7 +2181,14 @@ function exerciseBody(
   }
   const converted = questionList
     .map((question) =>
-      htmlToTypst(question, figures, zoomVariable, undefined, qcmColumnsExpr),
+      htmlToTypst(
+        question,
+        figures,
+        zoomVariable,
+        undefined,
+        qcmColumnsExpr,
+        options.boldQuestionNumbers,
+      ),
     )
     .filter((question) => question.length > 0)
   // une figure `vraieGrandeur` (voir mathalea2d.ts) ne se réduit jamais pour
@@ -2204,7 +2217,14 @@ function exerciseBody(
   // une seule fois avant la liste.
   const consigneInline =
     options.mergeExercises && willBuildList && consigne.trim().length > 0
-      ? htmlToTypst(consigne, figures, zoomVariable, undefined, qcmColumnsExpr)
+      ? htmlToTypst(
+          consigne,
+          figures,
+          zoomVariable,
+          undefined,
+          qcmColumnsExpr,
+          options.boldQuestionNumbers,
+        )
       : ''
   // une consigne qui se rend sur plusieurs lignes (bloc) ne peut pas être
   // glissée en tête d'item derrière un simple retour à la ligne : on garde
@@ -2220,6 +2240,7 @@ function exerciseBody(
         zoomVariable,
         undefined,
         qcmColumnsExpr,
+        options.boldQuestionNumbers,
       ),
     )
   }
@@ -2814,14 +2835,25 @@ function computeGeneratedCanRows(
                 figures,
                 undefined,
                 CAN_FIGURE_MAX_WIDTH_PT,
+                undefined,
+                options.boldQuestionNumbers,
               ),
         reponse: htmlToTypst(
           exercise.canAnswers?.[i] ?? '',
           figures,
           undefined,
           CAN_FIGURE_MAX_WIDTH_PT,
+          undefined,
+          options.boldQuestionNumbers,
         ),
-        correction: htmlToTypst(exercise.corrections[i] ?? '', figures),
+        correction: htmlToTypst(
+          exercise.corrections[i] ?? '',
+          figures,
+          undefined,
+          undefined,
+          undefined,
+          options.boldQuestionNumbers,
+        ),
         exerciseNum: k + 1,
         isFirstOfExercise: i === 0,
         enonceRowspan: Math.max(1, rowspans[i]),

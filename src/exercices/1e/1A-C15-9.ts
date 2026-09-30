@@ -6,9 +6,11 @@ import {
 
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = '83a52'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '01d9a'
 export const refs = {
   'fr-fr': ['1A-C15-9'],
   'fr-ch': ['9QCM-18', '10QCM-38'],
@@ -25,7 +27,7 @@ export const dateDePublication = '14/01/2026'
  * @author Gilles Mora
  *
  */
-export default class Auto1C15h extends ExerciceQcmA {
+export default class Auto1C15h extends ExerciceQcmACourt {
   private appliquerLesValeurs(
     masse1L: number,
     unite1L: string,
@@ -111,7 +113,7 @@ Pour convertir en g : $${texNombre(masseEnKg)}$ kg $= ${texNombre(bonneReponse)}
     }
 
     this.enonce = `La masse d'un litre d'huile est égale à $${texNombre(masse1L)}$ ${unite1L}.<br>
-La masse de $${volume}$ millilitres de cette huile est égale à :`
+Calculer la masse de $${volume}$ millilitres de cette huile.`
 
     this.correction = `Pour trouver la masse de $${volume}$ mL d'huile, on utilise la proportionnalité :
 <br>
@@ -127,6 +129,7 @@ La bonne réponse est donc : $${miseEnEvidence(`${texNombre(bonneReponse)}`)}$ $
       `$${texNombre(dist2)}\\text{ ${unite2}}$`,
       `$${texNombre(dist3)}\\text{ ${unite3}}$`,
     ]
+    this.enonceCourt = () => `${this.enonce}<br>Exprimer la réponse en $\\text{${uniteReponse}}$.`
   }
 
   versionOriginale: () => void = () => {

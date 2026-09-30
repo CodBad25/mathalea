@@ -41,59 +41,59 @@ export default class ExerciceCalculsDeLog extends Exercice {
       let answer = ''
       switch (listeTypeQuestions[i]) {
         case '>=':
-          texte = `$${a}^x \\geq ${b}$`
+          texte = `$${a}^x \\geqslant ${b}$`
           if (Math.log(a) > 0) {
-            texteCorr = `$\\log{${a}^x} \\geq \\log{(${b})}$`
-            texteCorr += `<br>$x\\log{(${a})} \\geq \\log{(${b})}$`
-            texteCorr += `<br>$x \\geq \\frac{\\log(${b})}{\\log(${a})}$  car $\\log(${a}) >0$`
+            texteCorr = `$\\log{${a}^x} \\geqslant \\log{(${b})}$`
+            texteCorr += `<br>$x\\log{(${a})} \\geqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\geqslant \\frac{\\log(${b})}{\\log(${a})}$  car $\\log(${a}) >0$`
             texteCorr += `<br>$S=[\\frac{\\log(${b})}{\\log(${a})};+\\infty[$`
             
           } else {
-            texteCorr = `$\\log{${a}^x} \\geq \\log{${a}}(${b})$`
-            texteCorr += `<br>$x\\log{(${a})} \\geq \\log{(${b})}$`
-            texteCorr += `<br>$x \\leq \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) <0$`
+            texteCorr = `$\\log{${a}^x} \\geqslant \\log{${a}}(${b})$`
+            texteCorr += `<br>$x\\log{(${a})} \\geqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\leqslant \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) <0$`
             texteCorr += `<br>$S=]-\\infty;\\frac{\\log(${b})}{\\log(${a})}]$`
           }
           break
         case '>':
           texte = `$${a}^x > ${b}$`
           if (Math.log(a) > 0) {
-            texteCorr = `$\\log{(${a}^x)} \\geq \\log{(${b})}$`
-            texteCorr += `<br>$x\\log{(${a})} \\geq \\log{(${b})}$`
-            texteCorr += `<br>$x \\geq \\frac{\\log(${b})}{\\log(${a})}$ $\\log(${a}) >0$`
+            texteCorr = `$\\log{(${a}^x)} \\geqslant \\log{(${b})}$`
+            texteCorr += `<br>$x\\log{(${a})} \\geqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\geqslant \\frac{\\log(${b})}{\\log(${a})}$ $\\log(${a}) >0$`
             texteCorr += `<br>$S=]\\frac{\\log(${b})}{\\log(${a})};+\\infty[$`
           } else {
-            texteCorr = `$\\log{${a}^x} \\geq \\log{${a}}(${b})$`
-            texteCorr += `<br>$x\\log{(${a})} \\geq \\log{(${b})}$`
-            texteCorr += `<br>$x \\leq \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) <0$`
+            texteCorr = `$\\log{${a}^x} \\geqslant \\log{${a}}(${b})$`
+            texteCorr += `<br>$x\\log{(${a})} \\geqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\leqslant \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) <0$`
             texteCorr += `<br>$S=]-\\infty;\\frac{\\log(${b})}{\\log(${a})}[$`
           }
           break
           case '<=':
-          texte = `$${a}^x \\geq ${b}$`
+          texte = `$${a}^x \\geqslant ${b}$`
           if (Math.log(a) > 0) {
-            texteCorr = `$\\log{${a}^x} \\leq \\log{(${b})}$`
-            texteCorr += `<br>$x\\log{(${a})} \\leq \\log{(${b})}$`
-            texteCorr += `<br>$x \\leq \\frac{\\log(${b})}{\\log(${a})}$  car $\\log(${a}) >0$`
+            texteCorr = `$\\log{${a}^x} \\leqslant \\log{(${b})}$`
+            texteCorr += `<br>$x\\log{(${a})} \\leqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\leqslant \\frac{\\log(${b})}{\\log(${a})}$  car $\\log(${a}) >0$`
             texteCorr += `<br>$S=]-\\infty;\\frac{\\log(${b})}{\\log(${a})}]$`
           } else {
-            texteCorr = `$\\log{${a}^x} \\leq \\log{${a}}(${b})$`
-            texteCorr += `<br>$x\\log{(${a})} \\leq \\log{(${b})}$`
-            texteCorr += `<br>$x \\geq \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) <0$`
+            texteCorr = `$\\log{${a}^x} \\leqslant \\log{${a}}(${b})$`
+            texteCorr += `<br>$x\\log{(${a})} \\leqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\geqslant \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) <0$`
             texteCorr += `<br>$S=[\\frac{\\log(${b})}{\\log(${a})};+\\infty[$`
           }
           break
         case '<':
           texte = `$${a}^x < ${b}$`
           if (Math.log(a) > 0) {
-            texteCorr = `$\\log{(${a}^x)} \\leq \\log{(${b})}$`
-            texteCorr += `<br>$x\\log{(${a})} \\leq \\log{(${b})}$`
-            texteCorr += `<br>$x \\leq \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) >0$`
+            texteCorr = `$\\log{(${a}^x)} \\leqslant \\log{(${b})}$`
+            texteCorr += `<br>$x\\log{(${a})} \\leqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\leqslant \\frac{\\log(${b})}{\\log(${a})}$ car $\\log(${a}) >0$`
             texteCorr += `<br>$S=]-\\infty;\\frac{\\log(${b})}{\\log(${a})}[$`
           } else {
-            texteCorr = `$\\log{${a}^x} \\leq \\log{${a}}(${b})$`
-            texteCorr += `<br>$x\\log{(${a})} \\leq \\log{(${b})}$`
-            texteCorr += `<br>$x \\geq \\frac{\\log(${b})}{\\log(${a})}$ $\\log(${a}) <0$`
+            texteCorr = `$\\log{${a}^x} \\leqslant \\log{${a}}(${b})$`
+            texteCorr += `<br>$x\\log{(${a})} \\leqslant \\log{(${b})}$`
+            texteCorr += `<br>$x \\geqslant \\frac{\\log(${b})}{\\log(${a})}$ $\\log(${a}) <0$`
             texteCorr += `<br>$S=]\\frac{\\log(${b})}{\\log(${a})};+\\infty[$`
           }
           break

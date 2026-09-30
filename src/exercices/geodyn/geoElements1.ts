@@ -128,6 +128,7 @@ class ConstructionSegmentRayLine extends ExerciceSimple {
     this.nameB = String.fromCharCode(indiceFirstLetter + 1)
     this.nameC = String.fromCharCode(indiceFirstLetter + 2)
     this.figure.options.labelAutomaticBeginsWith = this.nameA
+    this.figure.options.labelAutomaticForPoints = true
 
     const types = shuffle(['Segment', 'Line', 'Ray']) as (
       | 'Segment'

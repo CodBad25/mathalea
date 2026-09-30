@@ -619,7 +619,7 @@ function tarifs(valeurEntiere: boolean, _cd: boolean) {
     (c * 2) % ((b - d) * 2) !== 0
   )
   const x = Math.ceil(c / (b - d))
-  const equation = `x\\times${b}\\geq${c}+x\\times${texNombre(d, 1)}`
+  const equation = `x\\times${b}\\geqslant${c}+x\\times${texNombre(d, 1)}`
   const resolution = {
     equation,
     texteCorr: `${texteEnCouleurEtGras('Résolvons cette inéquation :', 'black')}<br>
@@ -634,7 +634,7 @@ function tarifs(valeurEntiere: boolean, _cd: boolean) {
   ${
     rienSi1(b - d) !== ''
       ? `Divisons les deux membres par $${texNombre(b - d, 1)}$ :<br>
-  $x \\geq \\dfrac{${c}}{${texNombre(b - d, 1)}} = ${texNombre(c / (b - d), 2)}$.<br>`
+  $x \\geqslant \\dfrac{${c}}{${texNombre(b - d, 1)}} = ${texNombre(c / (b - d), 2)}$.<br>`
       : ''
   }
       ${

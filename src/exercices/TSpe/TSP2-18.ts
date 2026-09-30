@@ -50,7 +50,7 @@ $\\bullet~~$ $G$ :  "Le joueur gagne la partie" .<br><br>`
       'On considère un entier naturel $n$ pour lequel la probabilité, arrondie au millième,<br> que le joueur gagne au plus $n$ parties est de $0,207$. Alors :'
 
     this.correction =
-      'On cherche $n$ tel que $P(X \\leq n) \\approx 0,207$.<br>'
+      'On cherche $n$ tel que $P(X \\leqslant n) \\approx 0,207$.<br>'
     this.correction +=
       'En utilisant la loi binomiale avec $n = 10$ et $p = \\dfrac{12}{25}$, on trouve que $n = 3$.<br>'
     this.correction += `La bonne réponse est donc $${miseEnEvidence('n = 3')}$.`

@@ -1,58 +1,33 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 export const dateDePublication = '10/08/2025'
-export const uuid = 'd388c'
-// @Author Stéphane Guyon
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = '0af93'
+
 export const refs = {
   'fr-fr': ['1A-C03-11', '2A-N3-6'],
-  'fr-ch': ['11QCM-18'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Travailler les expressions rationnelles'
-export default class Puissances extends ExerciceQcmA {
-  versionOriginale: () => void = () => {
-    this.enonce = 'Soit $x$ un réel non nul.<br>'
 
-    this.enonce = 'Soit $x$ un réel non nul.<br>'
-
-    this.enonce += `À quelle expression est égale $\\dfrac{4x^2}{\\dfrac{2}{x^2}}$?`
-    this.correction = `On peut simplifier l'expression : <br>$\\begin{aligned}
-        \\dfrac{4x^2}{\\dfrac{2}{x^2}}&=4x^2 \\times \\dfrac{x^2}{2}\\\\
-        &=\\dfrac{4x^4}{2}\\\\
-        &=2x^4.
-     \\end{aligned}$`
-
-    this.reponses = ['$2x^4$', '$2$ ', '$8$ ', '$8x^4$ ']
-  }
-
-  versionAleatoire = () => {
-    const n = randint(2, 5)
-    const p = randint(2, 5)
-    const a = randint(2, 7)
-    const k = randint(2, 5)
-    this.enonce = 'Soit $x$ un réel non nul.<br>'
-
-    this.enonce += `À quelle expression est égale $\\dfrac{${k * a}x^{${n}}}{\\dfrac{${a}}{x^${p}}}$?`
-    this.correction = `On peut simplifier l'expression : <br>
-              $\\begin{aligned}
-       \\dfrac{${k * a}x^{${n}}}{\\dfrac{${a}}{x^${p}}}&=${k * a}x^{${n}} \\times \\dfrac{x^${p}}{${a}}\\\\
-        &=\\dfrac{${k * a}x^{${n + p}}}{${a}}\\\\
-        &=${k}x^{${n + p}}.
-     \\end{aligned}$`
-
-    this.reponses = [
-      `$${k}x^{${n + p}}$`,
-      `$${k}x^{${n - p}}$`,
-      `$${k * a}x^{${n - p}}$`,
-      `$${k * a}x^{${n + p}}$`,
-    ]
-  }
-
+// @Author Stéphane Guyon
+export default class Puissances extends ExerciceSimple {
   constructor() {
     super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.versionQcmDisponible = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut simplifier une expression rationnelle.
@@ -63,6 +38,44 @@ export default class Puissances extends ExerciceQcmA {
     <li>Regrouper ensuite les nombres d'un côté et les puissances de $x$ de l'autre.</li>
     <li>Effectuer le même genre de calcul avec des nombres si la variable $x$ gêne.</li>
   </ul>`
-    this.versionAleatoire()
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
+    const n = randint(2, 5)
+    const p = randint(2, 5)
+    const a = randint(2, 7)
+    const k = randint(2, 5)
+    const expression = `\\dfrac{${k * a}x^{${n}}}{\\dfrac{${a}}{x^${p}}}`
+
+    this.correction = `On peut simplifier l'expression : <br>
+              $\\begin{aligned}
+       ${expression}&=${k * a}x^{${n}} \\times \\dfrac{x^${p}}{${a}}\\\\
+        &=\\dfrac{${k * a}x^{${n + p}}}{${a}}\\\\
+        &=${miseEnEvidence(`${k}x^{${n + p}}`)}.
+     \\end{aligned}$`
+
+    if (this.versionQcm) {
+      this.consigne = ''
+      this.question = `Soit $x$ un réel non nul.<br>À quelle expression est égale $${expression}$ ?`
+      this.reponse = `$${k}x^{${n + p}}$`
+      this.distracteurs = [
+        `$${k}x^{${n - p}}$`,
+        `$${k * a}x^{${n - p}}$`,
+        `$${k * a}x^{${n + p}}$`,
+      ]
+    } else {
+      this.consigne = ''
+      this.question = `Soit $x$ un réel non nul.<br>Simplifier cette expression pour l'écrire sans trait de fraction : $${expression}$.`
+      this.compare = (saisie, reponse, options) =>
+        /\\[dt]?frac|\\div|\//.test(saisie)
+          ? {
+              isOk: false,
+              feedback: 'Il ne doit plus rester de trait de fraction.',
+            }
+          : fonctionComparaison(saisie, reponse, options)
+      this.reponse = `${k}x^{${n + p}}`
+    }
   }
 }

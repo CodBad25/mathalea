@@ -220,6 +220,8 @@ Les callbacks de `typstStyle` (`onAdjustColumns`, `onAdjustGutter`, `onSetNumber
 
 Le style de numérotation par exercice utilise le même mécanisme que colonnes/espacement (`#let exN-numerotation = ...`), avec une subtilité : la mise en gras (`TypstDocumentOptions.boldQuestionNumbers`, réglage global, pas par exercice) enrobe le motif dans `(..n) => strong(numbering(motif, ..n))` (voir `boldableLabel`) ; `numbering()` échoue si son premier argument vaut `none`. Quand le motif est un littéral connu d'avance en JS (mode export, ou repères `a)`/`b)` détectés dans le contenu), ce cas est déjà écarté avant l'appel. Mais référencer `exN-numerotation` (pour que l'édition ciblée du code fonctionne, palette ou modale) délègue la valeur réelle à la compilation Typst, où elle peut valoir `none` sans que `boldableLabel` le sache : le label émis est alors une garde `if exN-numerotation == none { none } else { (..n) => strong(numbering(exN-numerotation, ..n)) }` plutôt qu'un appel direct.
 
+Les listes HTML `ol.alpha` situées à l'intérieur d'une question ou de sa correction sont converties en sous-questions Typst `a)`, `b)` par `htmlToTypst`. Leurs repères suivent aussi `boldQuestionNumbers` : ils sont en gras quand l'option est cochée, sans modifier le texte des items.
+
 ## En-tête et pied de page
 
 Le pied de page conserve le texte de gauche et la pagination centrale ; le rappel du titre en bas à droite est supprimé pour tous les habillages.

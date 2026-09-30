@@ -14,7 +14,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre =
-  'Résoudre des inéquations du type $a^x \\leq b$ avec logarithme'
+  'Résoudre des inéquations du type $a^x \\leqslant b$ avec logarithme'
 export const dateDePublication = '4/5/2024'
 export const dateDeModifImportante = '18/07/2024'
 export const uuid = '00a7a'
@@ -276,13 +276,13 @@ export default class InequationsLog extends Exercice {
 
       switch (listeTypeOperators[i]) {
         case '>=':
-          signe0 = '\\geq'
+          signe0 = '\\geqslant'
           if (Math.log(a) > 0) {
-            signe1 = '\\geq'
+            signe1 = '\\geqslant'
             signe2 = '>'
             answer = `\\left[${resultat};+\\infty\\right[`
           } else {
-            signe1 = '\\leq'
+            signe1 = '\\leqslant'
             signe2 = '<'
             answer = `\\left]-\\infty;${resultat}\\right]`
           }
@@ -300,13 +300,13 @@ export default class InequationsLog extends Exercice {
           }
           break
         case '<=':
-          signe0 = '\\leq'
+          signe0 = '\\leqslant'
           if (Math.log(a) > 0) {
-            signe1 = '\\leq'
+            signe1 = '\\leqslant'
             signe2 = '>'
             answer = `\\left]-\\infty;${resultat}\\right]`
           } else {
-            signe1 = '\\geq'
+            signe1 = '\\geqslant'
             signe2 = '<'
             answer = `\\left[${resultat};+\\infty\\right[`
           }

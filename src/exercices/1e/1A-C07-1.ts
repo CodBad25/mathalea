@@ -1,9 +1,11 @@
 import MinutesHeuresDecimale from '../can/6e/can6D3-02'
 
-export const uuid = '5fb9e'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '6fd2a'
 export const refs = {
   'fr-fr': ['1A-C07-1', '2A-N7-1'],
-  'fr-ch': ['10QCM-22'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
@@ -20,6 +22,6 @@ export const dateDePublication = '04/09/2025'
 export default class AutoC7 extends MinutesHeuresDecimale {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

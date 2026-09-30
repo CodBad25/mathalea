@@ -332,8 +332,8 @@ const shortcutsByKeyboards = {
     '/': { mode: 'math', value: '\\frac{#@}{#1}' },
     '<': '<',
     '>': '>',
-    '>=': '\\geq',
-    '<=': '\\leq',
+    '>=': '\\geqslant',
+    '<=': '\\leqslant',
     '(': '\\lparen',
     ')': '\\rparen',
 

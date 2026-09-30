@@ -4,9 +4,11 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = '344f3'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'c17bc'
 export const refs = {
   'fr-fr': ['1A-C15-3'],
   'fr-ch': ['10QCM-33', '11QCM-38'],
@@ -23,7 +25,7 @@ export const dateDePublication = '23/09/2025'
  * @author Gilles Mora
  *
  */
-export default class Auto1C19c extends ExerciceQcmA {
+export default class Auto1C19c extends ExerciceQcmACourt {
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 
   versionOriginale: () => void = () => {

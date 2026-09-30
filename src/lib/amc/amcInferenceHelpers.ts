@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js'
 import FractionEtendue from '../../modules/FractionEtendue'
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
@@ -455,6 +456,10 @@ export function extractAMCValue(
   }
   if (typeof value === 'number') {
     return Number.isFinite(value) ? value : undefined
+  }
+  if (value instanceof Decimal) {
+    const numberValue = value.toNumber()
+    return Number.isFinite(numberValue) ? numberValue : undefined
   }
   if (value instanceof FractionEtendue) {
     const simplified = value.simplifie()

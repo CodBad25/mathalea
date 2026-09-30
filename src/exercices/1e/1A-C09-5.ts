@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'b49c5'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'df493'
 
 export const refs = {
   'fr-fr': ['1A-C09-5'],
-  'fr-ch': ['NR'],
+  'fr-ch': [],
 }
 export default class Auto1AC9d extends CalculCompose {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

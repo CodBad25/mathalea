@@ -394,6 +394,7 @@ export type InteractivityType =
   | 'schema-en-barre' // Non compatible AMC
   | 'shape-2d-grid-editor' // Non compatible AMC
   | 'intervalle-droite' // Non compatible AMC
+  | 'mathalea-solveur' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -463,7 +464,8 @@ export function isInteractivityType(
     value === 'cube-stack-editor' ||
     value === 'schema-en-barre' ||
     value === 'shape-2d-grid-editor' ||
-    value === 'intervalle-droite'
+    value === 'intervalle-droite' ||
+    value === 'mathalea-solveur'
   )
 }
 
@@ -515,7 +517,8 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'cube-stack-editor' ||
     value === 'schema-en-barre' ||
     value === 'shape-2d-grid-editor' ||
-    value === 'intervalle-droite'
+    value === 'intervalle-droite' ||
+    value === 'mathalea-solveur'
   )
 }
 

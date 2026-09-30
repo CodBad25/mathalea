@@ -41,6 +41,7 @@ class ConstructionParallelogramme extends ExerciceSimple {
       border: true,
     })
     this.figure.options.labelAutomaticBeginsWith = 'A'
+    this.figure.options.labelAutomaticForPoints = true
     const A = this.figure.create('Point', { x: 8, y: 11, label: 'A' })
     const B = this.figure.create('Point', { x: 18, y: 12, label: 'B' })
     const C = this.figure.create('Point', { x: 20, y: 9, label: 'C' })

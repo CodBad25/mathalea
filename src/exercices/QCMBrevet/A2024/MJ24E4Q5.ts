@@ -43,7 +43,7 @@ export default class MetropoleJuin24Exo4Q5 extends ExerciceQcmA {
       `$${texNombre(listOrd[index - 1], 2)}$`,
     ]
     this.enonce = `On a mesuré les tailles, en $\\text{ m}$, de ${nombreEnLettres(nbEleves)} élèves :<br>$${listeValeurs}$<br>Quelle est la médiane, en $\\text{ m}$, de ces tailles ?`
-    this.correction = `On a dans l'ordre croissant : $${listOrd.map((el) => texNombre(el, 2)).join('~\\leq~')}$.<br>
+    this.correction = `On a dans l'ordre croissant : $${listOrd.map((el) => texNombre(el, 2)).join('~\\leqslant~')}$.<br>
     Il y a autant de tailles inférieures à $${mediane}$m que de tailles supérieures à $${mediane}$m, donc $${miseEnEvidence(`${mediane}`)}$ est la médiane.`
   }
 

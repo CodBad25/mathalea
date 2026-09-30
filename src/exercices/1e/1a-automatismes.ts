@@ -6,7 +6,8 @@ import {
 export const titre = "Sélection d'automatismes"
 export const interactifReady = true
 
-export const uuid = '722e4'
+export const dateDeModifImportante = '29/09/2026'
+export const uuid = 'ce2ea'
 export const refs = { 'fr-fr': ['1A'], 'fr-ch': ['NR'] }
 export const dateDePublication = '30/04/2026'
 
@@ -18,10 +19,7 @@ export const dateDePublication = '30/04/2026'
 const allModules = import.meta.glob([
   './1A-*.ts',
   '!./1A-*[oO][lL][dD]*.ts',
-]) as Record<
-  string,
-  () => Promise<ExerciceModule>
->
+]) as Record<string, () => Promise<ExerciceModule>>
 
 export default createAutomatismesCanExercice({
   modules: allModules,

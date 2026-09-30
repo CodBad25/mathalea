@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import Decimal from 'decimal.js'
 
 import DecimalToScientifique from '../../exercices/3e/3AutoN07-1'
 import ExoCompletAffine from '../../exercices/2e/2F21-9'
@@ -12,6 +13,7 @@ import { mathaleaHandleExerciceSimple } from '../mathalea'
 import { context } from '../../modules/context'
 import seedrandom from 'seedrandom'
 import { mathaleaEnsureAMCCompatibility } from './amcInference'
+import { extractAMCValue } from './amcInferenceHelpers'
 import { exportQcmAmc } from './creerDocumentAmc'
 import { normalizeAMCNumBlocks } from './amcNormalize'
 
@@ -28,6 +30,19 @@ function exercise(overrides: Record<string, unknown>) {
     ...overrides,
   } as any
 }
+
+describe('extractAMCValue', () => {
+  it('convertit une réponse Decimal finie en number', () => {
+    expect(extractAMCValue(new Decimal('-24.5'))).toBe(-24.5)
+  })
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])(
+    'ignore un Decimal non fini (%s)',
+    (value) => {
+      expect(extractAMCValue(new Decimal(value))).toBeUndefined()
+    },
+  )
+})
 
 describe('inférence AMC depuis formatInteractif', () => {
   it('infère les enfants de 2F21-9 avec l’index du parent par défaut', () => {

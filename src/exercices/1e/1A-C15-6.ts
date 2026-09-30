@@ -4,9 +4,11 @@ import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = 'c9fb7'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'cfce9'
 export const refs = {
   'fr-fr': ['1A-C15-6'],
   'fr-ch': ['10QCM-36', '11QCM-41'],
@@ -23,7 +25,7 @@ export const dateDePublication = '15/12/2025'
  * @author Gilles Mora
  *
  */
-export default class Auto1C15r extends ExerciceQcmA {
+export default class Auto1C15r extends ExerciceQcmACourt {
   private appliquerLesValeurs(
     prixH: number,
     nbreSeance1: number,
@@ -46,7 +48,7 @@ $${nbreSeance2} p - ${nbreSeance1}  p = ${texNombre((nbreSeance2 - nbreSeance1) 
 Donc le montant pour $1$ séance  est : $p = ${prixH}$ €.<br>
 On peut alors calculer le montant de l'abonnement mensuel :<br>
 $a = ${texNombre(abo + nbreSeance1 * prixH)} - ${nbreSeance1} \\times ${prixH} = ${texNombre(abo + nbreSeance1 * prixH)} - ${texNombre(nbreSeance1 * prixH)} = ${abo}$ €.<br>
-Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '€')}$.`
+ Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo)}${sp(1)}\\text{€}$.`
 
     this.reponses = [
       `$${abo}\\text{ €}$`,

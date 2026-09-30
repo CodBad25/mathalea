@@ -5,12 +5,14 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 /**
  * @author Gilles Mora (et Claude)
  *
  */
-export const uuid = '6fc42'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'b509e'
 export const refs = {
   'fr-fr': ['1A-C14-3'],
   'fr-ch': ['2mQCM-10', '1mQCM-36'],
@@ -23,8 +25,9 @@ export const titre =
   'Retrouver une fonction affine à partir de son tableau de signes'
 export const dateDePublication = '10/07/2025'
 
-export default class Auto1AC16c extends ExerciceQcmA {
+export default class Auto1AC16c extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
+    this.reponseCourte = () => '-x+2'
     const f = (x: number | FractionEtendue) => -3 * Number(x) + 6
     this.enonce = `On considère une fonction $f$ définie sur $\\mathbb{R}$ dont le tableau de signes est donné ci-dessous. <br><br>
   ${tableauSignesFonction(f, -10, 10, {
@@ -55,6 +58,8 @@ export default class Auto1AC16c extends ExerciceQcmA {
 
     // Calcul du terme constant : b = -a * racine (pour que f(racine) = 0)
     const b = -a * racine
+    const aCourt = estDecroissante ? -1 : 1
+    this.reponseCourte = () => `${rienSi1(aCourt)}x${ecritureAlgebrique(-aCourt * racine)}`
 
     // Définition de la fonction f(x) = ax + b
     const f = (x: number | FractionEtendue) => a * Number(x) + b
@@ -99,6 +104,9 @@ ${tableauSignesFonction(f, -10, 10, {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
+    this.clavierReponseCourte = 'lycee'
+    this.enonceCourt = () => this.enonce.replace(/Parmi les quatre expressions proposées pour la fonction \$f\$, une seule est possible\./, 'Donner une expression possible de $f(x)$ dont le coefficient directeur vaut $1$ ou $-1$.')
+    this.correctionCourte = () => `Une expression possible de la fonction est $f(x)=${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
 
     this.versionAleatoire()
   }

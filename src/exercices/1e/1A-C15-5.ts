@@ -6,9 +6,11 @@ import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { arrondi } from '../../lib/outils/nombres'
 import { prenom } from '../../lib/outils/Personne'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = 'ac9b0'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '90f36'
 export const refs = {
   'fr-fr': ['1A-C15-5'],
   'fr-ch': ['10QCM-35', '11QCM-40'],
@@ -25,7 +27,7 @@ export const dateDePublication = '09/12/2025'
  * @author Gilles Mora assisté de Claude ai
  *
  */
-export default class Auto1C15r extends ExerciceQcmA {
+export default class Auto1C15r extends ExerciceQcmACourt {
   private appliquerLesValeurs(
     puissance: number,
     duree: number,
@@ -79,7 +81,8 @@ export default class Auto1C15r extends ExerciceQcmA {
     ]
 
     // Bonne réponse en premier (choisir aléatoirement euros ou centimes)
-    const bonneReponse = choice([coutEuros, coutCentimes])
+    const reponseTiree = choice([coutEuros, coutCentimes])
+    const bonneReponse = this.sup3 ? reponseTiree : coutEuros
 
     // Construction de la correction
     let correctionFinale = `La puissance de l'appareil est de $${texNombre(puissance)}$ W, soit $${texNombre(puissanceKW, 1)}$ kW.<br>
@@ -138,6 +141,7 @@ export default class Auto1C15r extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.enonceCourt = () => this.enonce.replace('Le coût en électricité pour cette utilisation est :', 'Calculer le coût en euros de cette utilisation.')
     this.versionAleatoire()
     this.spacing = 1.5
   }

@@ -10,15 +10,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'f32dd'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '85c31'
 
 export const refs = {
   'fr-fr': ['1A-F01-1', '2A-F1-1'],
-  'fr-ch': ['10QCM-50', '11QCM-52'],
+  'fr-ch': [],
 }
 export default class Auto1AF1c extends ImageSpline {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

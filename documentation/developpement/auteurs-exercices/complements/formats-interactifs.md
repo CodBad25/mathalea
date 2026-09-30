@@ -1102,6 +1102,62 @@ handleAnswers(
 `null` uniquement lorsque la borne correspond à `min` ou `max`. Chaque
 question vaut un point, indépendamment du nombre de clics nécessaires.
 
+## Solveur d'équations et d'inéquations
+
+`mathalea-solveur` fait rédiger une suite de transformations équivalentes à
+l'élève. La première ligne reste affichée et chaque clic sur « Évaluer » ajoute
+une ligne lorsque la transformation est correcte. La dernière ligne non vide
+est exposée dans `value` et vérifiée par le bouton standard « Vérifier les
+réponses » avec la valeur déclarée dans `handleAnswers()`.
+
+```ts
+import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+
+texte += addMathaleaSolveur(this, i, {
+  initial: '3x+5=17',
+  kind: 'equation',
+  mode: 'entrainement',
+})
+
+handleAnswers(
+  this,
+  i,
+  { reponse: { value: 'x=4' } },
+  { formatInteractif: 'mathalea-solveur' },
+)
+```
+
+Deux variantes sont disponibles :
+
+- `kind: 'equation'` conserve le signe `=` et contrôle l'équivalence des deux
+  membres ;
+- `kind: 'inequation'` accepte `<`, `>`, `\\leqslant` et `\\geqslant`, et
+  contrôle le retournement du signe lors d'une transformation par un facteur
+  négatif.
+
+En mode `entrainement`, une étape fausse est conservée en rouge et figée, puis
+une nouvelle ligne permet de reprendre depuis la dernière étape correcte. Les
+étapes fausses sont ignorées lors du contrôle d'équivalence et ne deviennent
+jamais la valeur finale du composant. En mode `evaluation`, la première étape
+fausse fige immédiatement le solveur ; le bouton standard comptabilise ensuite
+la question sur un point.
+
+Pour une inéquation résolue sous la forme `x<...`, `x\\leqslant...`, `x>...` ou
+`x\\geqslant...`, `showInterval: true` ajoute une représentation en lecture
+seule avec `IntervalleDroiteElement`. Les options `intervalMin` et
+`intervalMax` fixent la fenêtre affichée :
+
+```ts
+texte += addMathaleaSolveur(this, i, {
+  initial: '-2x+3<7',
+  kind: 'inequation',
+  showInterval: true,
+  intervalMin: -5,
+  intervalMax: 5,
+})
+```
+
 ## Cercle trigonométrique
 
 À utiliser pour sélectionner une position sur le cercle trigonométrique.

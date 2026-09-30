@@ -10,9 +10,9 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const dateDeModifImportante = '21/09/2026'
+export const dateDeModifImportante = '29/09/2026'
 
-export const uuid = '9878e'
+export const uuid = '6ffd6'
 
 export const refs = {
   'fr-fr': ['1A-R01-7', '2A-R1-7'],
@@ -21,6 +21,6 @@ export const refs = {
 export default class Auto1AR1g extends calculAvecPourcentage {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

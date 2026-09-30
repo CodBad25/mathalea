@@ -5,8 +5,8 @@ import { repere } from '../../lib/2d/reperes'
 import { segment, type Segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
-import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 
 import {
@@ -16,13 +16,13 @@ import {
   type CrochetG,
 } from '../../lib/2d/intervalles'
 import { bleuMathalea } from '../../lib/colors'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { randint } from '../../modules/outils'
 import type { SquareInequalityGraphicElements } from '../../types/1A-C10'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 export const dateDePublication = '26/09/2025'
-export const dateDeModifImportante = '12/10/2025'
-export const uuid = '84c9f'
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = '47df3'
 //
 /**
  *
@@ -31,15 +31,39 @@ export const uuid = '84c9f'
  */
 export const refs = {
   'fr-fr': ['1A-C10-4'],
-  'fr-ch': ['2mIneq-13'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre =
   "Résoudre une inéquation du type $x^2<a$ ou $x^2>a$  avec ou sans courbe (solutions sous forme d'intervalles)"
-export default class Auto1AC10d extends ExerciceQcmA {
+export default class Auto1AC10d extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierEnsemble
+    this.optionsDeComparaison = { intervalle: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+    this.besoinFormulaire5CaseACocher = ['Sans la courbe']
+    this.sup5 = false
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
+    const typeInequation = this.quotaChoice('type', ['inf', 'sup'] as (
+      'inf' | 'sup'
+    )[])
+    const estInegStrict = this.quotaChoice('strict', [true, false])
+    const val = this.quotaRandint('val', 2, 19, [4, 9, 16])
+    this.appliquerLesValeurs(val, estInegStrict, typeInequation)
+  }
+
   private appliquerLesValeurs(
     val: number,
     estInegStrict: boolean,
@@ -63,18 +87,20 @@ export default class Auto1AC10d extends ExerciceQcmA {
     )
     const { graphique, graphiqueC } = this.creerGraphiques(val, elements)
     const reponses = this.formaterReponses(val, estInegStrict, typeInequation)
+    // Intervalle attendu, sans le « S = » (qui reste hors de la mise en évidence)
+    const intervalle = reponses[0].replace(/^\$S = /, '').replace(/\$$/, '')
 
     // Énoncé
-    this.enonce = this.sup5
+    this.question = this.sup5
       ? `On note $(I)$ l'inéquation, sur $\\mathbb{R}$, $x^2${signeInegalité} ${val}$.<br><br>
-         L'ensemble des solutions $S$ de cette inéquation est :`
+         Déterminer l'ensemble $S$ des solutions de cette inéquation.`
       : `${deuxColonnes(
           `On a représenté la parabole d'équation $y=x^2$. <br><br>
            On note $(I)$ l'inéquation, sur $\\mathbb{R}$, $x^2${signeInegalité} ${val}$.<br><br>`,
           `${graphique}`,
         )}
          
-         L'ensemble des solutions $S$ de cette inéquation est :`
+         Déterminer l'ensemble $S$ des solutions de cette inéquation.`
 
     // Correction
     this.correction = this.genererCorrection(
@@ -82,11 +108,20 @@ export default class Auto1AC10d extends ExerciceQcmA {
       estInegStrict,
       typeInequation,
       graphiqueC,
-      reponses[0],
+      intervalle,
     )
 
-    // Réponses
-    this.reponses = reponses
+    // Réponse : l'intervalle seul, ou « S = intervalle » (propositions du QCM)
+    if (this.versionQcm) {
+      this.reponse = reponses[0]
+      this.distracteurs = reponses.slice(1)
+    } else {
+      this.reponse = intervalle
+        .replaceAll('\\,', '')
+        .replaceAll('\\left', '')
+        .replaceAll('\\right', '')
+      if (this.interactif) this.question += '<br>$S=$'
+    }
   }
 
   // Méthode utilitaire pour créer les éléments graphiques communs
@@ -305,30 +340,6 @@ export default class Auto1AC10d extends ExerciceQcmA {
             $\\bullet$ On trace la droite horizontale d'équation $y=${val}$. Cette droite coupe la parabole en $-\\sqrt{${val}}$ et $\\sqrt{${val}}$. <br>
             $\\bullet$ Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${positionText} la droite.<br>
             ${graphiqueC}<br>
-            On en déduit que l'ensemble des solutions de l'inéquation $(I)$ est : ${texteEnCouleurEtGras(reponseCorrecte)}.`
-  }
-
-  versionOriginale: () => void = () => {
-    // Version originale : x² ≥ 10
-    this.appliquerLesValeurs(
-      10, // val
-      false, // estInegStrict
-      'sup', // typeInequation
-    )
-  }
-
-  versionAleatoire: () => void = () => {
-    const typeInequation = choice(['inf', 'sup'] as const)
-    const estInegStrict = choice([true, false])
-    const val = randint(2, 19, [4, 9, 16])
-
-    this.appliquerLesValeurs(val, estInegStrict, typeInequation)
-  }
-
-  constructor() {
-    super()
-
-    this.versionAleatoire()
-    this.besoinFormulaire5CaseACocher = ['Sans la courbe']
+            On en déduit que l'ensemble des solutions de l'inéquation $(I)$ est : $S=${miseEnEvidence(reponseCorrecte)}$.`
   }
 }

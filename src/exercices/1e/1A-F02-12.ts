@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '2f147'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = 'dd96b'
 
 export const refs = {
   'fr-fr': ['1A-F02-12'],
-  'fr-ch': ['1mF3-22'],
+  'fr-ch': [],
 }
 export default class Auto1AF2d extends LectureGraphiqueParaboleA {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

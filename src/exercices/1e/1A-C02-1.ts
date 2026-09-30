@@ -10,11 +10,13 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = 'dac3c'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '247cc'
 
 export const refs = {
   'fr-fr': ['1A-C02-1', '2A-N2-1'],
-  'fr-ch': ['9QCM-13'],
+  'fr-ch': [],
 }
 export default class Auto1AC2b extends ProgrammeCalcul2 {
   constructor() {
@@ -32,6 +34,6 @@ export default class Auto1AC2b extends ProgrammeCalcul2 {
   <p style="margin: 0;">
     Attention au piège de l'ordre des mots : "l'école du directeur" ne veut pas dire la même chose que "le directeur de l'école".
   </p>`
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

@@ -5,8 +5,8 @@ import { repere } from '../../lib/2d/reperes'
 import { segment, type Segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
-import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 import {
   crochetD,
@@ -15,13 +15,13 @@ import {
   type CrochetG,
 } from '../../lib/2d/intervalles'
 import { bleuMathalea } from '../../lib/colors'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { randint } from '../../modules/outils'
 import type { ReciprocalInequalityGraphicElements } from '../../types/1A-C10'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 export const dateDePublication = '01/10/2025'
-export const dateDeModifImportante = '12/10/2025'
-export const uuid = '26802'
+export const dateDeModifImportante = '30/09/2026'
+export const uuid = '4503b'
 //
 /**
  *
@@ -30,15 +30,39 @@ export const uuid = '26802'
  */
 export const refs = {
   'fr-fr': ['1A-C10-5'],
-  'fr-ch': ['2mQCM-2'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre =
   'Résoudre une inéquation du type $\\dfrac{1}{x}<a$ ou $\\dfrac{1}{x}>a$ (avec ou sans courbe)'
-export default class Auto1AC10e extends ExerciceQcmA {
+export default class Auto1AC10e extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierEnsemble
+    this.optionsDeComparaison = { intervalle: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+    this.besoinFormulaire5CaseACocher = ['Sans la courbe']
+    this.sup5 = false
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
+    const typeInequation = this.quotaChoice('type', ['inf', 'sup'] as (
+      'inf' | 'sup'
+    )[])
+    const estInegStrict = this.quotaChoice('strict', [true, false])
+    const val = this.quotaRandint('val', -6, 6, [-1, 0, 1])
+    this.appliquerLesValeurs(val, estInegStrict, typeInequation)
+  }
+
   private appliquerLesValeurs(
     val: number,
     estInegStrict: boolean,
@@ -62,16 +86,18 @@ export default class Auto1AC10e extends ExerciceQcmA {
     )
     const { graphique, graphiqueC } = this.creerGraphiques(val, elements)
     const reponses = this.formaterReponses(val, estInegStrict, typeInequation)
+    // Intervalle attendu, sans le « S = » (qui reste hors de la mise en évidence)
+    const intervalle = reponses[0].replace(/^\$S = /, '').replace(/\$$/, '')
 
     // Énoncé
-    this.enonce = this.sup5
+    this.question = this.sup5
       ? `On note $(I)$ l'inéquation, sur $\\mathbb{R}^*$, $\\dfrac{1}{x}${signeInégalité} ${val}$.<br><br>
-         L'ensemble des solutions $S$ de cette inéquation est :`
+         Déterminer l'ensemble $S$ des solutions de cette inéquation.`
       : `${deuxColonnes(
           `On a représenté l'hyperbole d'équation $y=\\dfrac{1}{x}$. <br><br>
            On note $(I)$ l'inéquation, sur $\\mathbb{R}^*$, $\\dfrac{1}{x}${signeInégalité} ${val}$.<br><br>`,
           `${graphique}`,
-        )} L'ensemble des solutions $S$ de cette inéquation est :`
+        )} Déterminer l'ensemble $S$ des solutions de cette inéquation.`
 
     // Correction
     this.correction = this.genererCorrection(
@@ -79,11 +105,20 @@ export default class Auto1AC10e extends ExerciceQcmA {
       estInegStrict,
       typeInequation,
       graphiqueC,
-      reponses[0],
+      intervalle,
     )
 
-    // Réponses
-    this.reponses = reponses
+    // Réponse : l'intervalle seul, ou « S = intervalle » (propositions du QCM)
+    if (this.versionQcm) {
+      this.reponse = reponses[0]
+      this.distracteurs = reponses.slice(1)
+    } else {
+      this.reponse = intervalle
+        .replaceAll('\\,', '')
+        .replaceAll('\\left', '')
+        .replaceAll('\\right', '')
+      if (this.interactif) this.question += '<br>$S=$'
+    }
   }
 
   private creerElementsGraphiques(
@@ -321,8 +356,8 @@ export default class Auto1AC10e extends ExerciceQcmA {
         ]
       } else {
         // Pour 1/x < a avec a < 0 : ]1/a,0[
-        const intervalleCorrect = `\\left]${borne}\\,;\\,0\\right[`
-        const intervalleIncorrect = `\\left]${val}\\,;\\,0\\right[`
+        const intervalleCorrect = `\\left${estInegStrict ? ']' : '['}${borne}\\,;\\,0\\right[`
+        const intervalleIncorrect = `\\left${estInegStrict ? ']' : '['}${val}\\,;\\,0\\right[`
         return [
           `$S = ${intervalleCorrect}$`,
           `$S = ${intervalleIncorrect}$`,
@@ -378,30 +413,6 @@ export default class Auto1AC10e extends ExerciceQcmA {
             $\\bullet$ On trace la droite horizontale d'équation $y=${val}$. Cette droite coupe l'hyperbole en un point dont l'abscisse est : $${borne}$. <br>
             $\\bullet$ Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${positionText} la droite.<br>
             ${graphiqueC}
-            Comme la fonction inverse est définie sur $\\mathbb{R}^*$, $0$ est une valeur interdite et donc l'ensemble des solutions de l'inéquation $(I)$ est : ${texteEnCouleurEtGras(reponseCorrecte)}.`
-  }
-
-  versionOriginale: () => void = () => {
-    // Version originale : 1/x ≥ 3
-    this.appliquerLesValeurs(
-      3, // val
-      false, // estInegStrict
-      'sup', // typeInequation
-    )
-  }
-
-  versionAleatoire: () => void = () => {
-    const typeInequation = choice(['inf', 'sup'] as const)
-    const estInegStrict = choice([true, false])
-    const val = randint(-6, 6, [-1, 0, 1])
-
-    this.appliquerLesValeurs(val, estInegStrict, typeInequation)
-  }
-
-  constructor() {
-    super()
-
-    this.versionAleatoire()
-    this.besoinFormulaire5CaseACocher = ['Sans la courbe']
+            Comme la fonction inverse est définie sur $\\mathbb{R}^*$, $0$ est une valeur interdite et donc l'ensemble des solutions de l'inéquation $(I)$ est : $S=${miseEnEvidence(reponseCorrecte)}$.`
   }
 }

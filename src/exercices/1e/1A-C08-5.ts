@@ -1,9 +1,11 @@
 import ReduireDecimaux from '../can/4e/can4L2-06'
 
-export const uuid = 'c4012'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '4fb38'
 export const refs = {
   'fr-fr': ['1A-C08-5', '2A-C1-3'],
-  'fr-ch': ['10QCM-29'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
@@ -20,6 +22,6 @@ export const dateDePublication = '05/09/2025'
 export default class AutoC08e extends ReduireDecimaux {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

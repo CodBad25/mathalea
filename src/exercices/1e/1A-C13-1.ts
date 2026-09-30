@@ -11,15 +11,17 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '0ed0f'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '5b90f'
 
 export const refs = {
   'fr-fr': ['1A-C13-1'],
-  'fr-ch': ['1mQCM-6', '2mQCM-4'],
+  'fr-ch': [],
 }
 export default class Auto1AC15a extends SolutionsEquationProduit {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
   }
 }

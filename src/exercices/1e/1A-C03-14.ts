@@ -10,16 +10,18 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const uuid = '7233e'
+export const dateDeModifImportante = '29/09/2026'
+
+export const uuid = '4afdb'
 
 export const refs = {
   'fr-fr': ['1A-C03-14', '2A-N3-9'],
-  'fr-ch': ['10QCM-13'],
+  'fr-ch': [],
 }
 export default class Auto1AC03n extends calculPuissancesNegativeFraction {
   constructor() {
     super()
-    this.versionQcm = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut utiliser le sens d'un exposant négatif.

@@ -4,17 +4,20 @@ import {
 } from '../../lib/mathFonctions/etudeFonction'
 
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 /**
  * @author Gilles Mora
  *
  */
-export const uuid = 'fdf27'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '3846a'
 export const refs = {
   'fr-fr': ['1A-C14-2'],
   'fr-ch': ['2mQCM-9'],
@@ -26,8 +29,9 @@ export const amcType = 'qcmMono'
 export const titre = "Retrouver le tableau de signes d'un produit de fonctions"
 export const dateDePublication = '26/07/2025'
 
-export default class Auto1AC16b extends ExerciceQcmA {
+export default class Auto1AC16b extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
+    this.reponseCourte = () => ']-\\infty;-2[\\cup]5;+\\infty['
     const f = (x: number | FractionEtendue) =>
       (3 * Number(x) - 15) * (Number(x) + 2)
     const f1 = (x: number | FractionEtendue) =>
@@ -161,6 +165,9 @@ export default class Auto1AC16b extends ExerciceQcmA {
     const racines = [racine1, racine2].sort((x, y) => x - y)
     const rMin = racines[0]
     const rMax = racines[1]
+    this.reponseCourte = () => a * m > 0
+      ? `]-\\infty;${texNombre(rMin)}[\\cup]${texNombre(rMax)};+\\infty[`
+      : rMin === rMax ? '\\varnothing' : `]${texNombre(rMin)};${texNombre(rMax)}[`
 
     const f = (x: number | FractionEtendue) =>
       (a * Number(x) + b) * (m * Number(x) + p)
@@ -393,6 +400,9 @@ export default class Auto1AC16b extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
+    this.clavierReponseCourte = 'clavierEnsemble'
+    this.enonceCourt = () => this.enonce.replace(/ admet pour tableau de signes\s*:/, '. Déterminer l’ensemble des réels $x$ tels que $f(x)>0$.')
+    this.correctionCourte = () => `${this.correction}<br>L’ensemble des solutions de $f(x)>0$ est $${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
     this.options.vertical = true
     this.versionAleatoire()
   }

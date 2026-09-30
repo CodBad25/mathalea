@@ -1,86 +1,72 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { randint } from '../../modules/outils'
-// import ExerciceQcmA from '../../ExerciceQcmA'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 
-export const uuid = '459d1'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = '2976a'
 export const refs = {
   'fr-fr': ['1A-C10-12', '2A-C3-5'],
-  'fr-ch': ['11QCM-30', '1mQCM-24'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation'
 export const dateDePublication = '26/09/2025'
-// Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
- *
  * @author Gilles Mora
- *
  */
-export default class Auto1C11d extends ExerciceQcmA {
-  // S'occupe de passser les données originales à la fonction appliquerLesValeurs
-
-  versionOriginale: () => void = () => {
-    this.enonce = `La solution de l'équation $(5x+3)-(3x-2)=0$ est : `
-
-    this.correction = `On se ramène à une équation du type $ax=b$ en isolant les  « $x$ » dans le membre de gauche et les « non $x$ » dans le membre de droite.<br>
-    $\\begin{aligned}
-    (5x+3)-(3x-2)&=0\\\\
-    5x+3-3x+2&=0\\\\
-2x&=-5\\\\
-x&=-\\dfrac{5}{2}
-\\end{aligned}$<br>
-    
-   La solution de cette équation est  $${miseEnEvidence(`-\\dfrac{5}{2}`)}$.`
-
-    this.reponses = [
-      '$-\\dfrac{5}{2}$',
-      '$-\\dfrac{3}{5}$',
-      '$\\dfrac{2}{3}$',
-      '$-\\dfrac{1}{2}$',
-    ]
+export default class Auto1C11d extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { fractionIrreductible: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
   }
 
-  versionAleatoire: () => void = () => {
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
     const a = randint(1, 10)
-    const b = randint(-10, 10, 0)
+    const b = randint(-10, 10, [0])
     const c = randint(2, 10, [a, a - 1, a + 1])
     const d = randint(-10, 10, [0, b])
-    const reponse = new FractionEtendue(d - b, a - c)
-    const dist1 = new FractionEtendue(-b, a)
-    const dist2 = new FractionEtendue(-d, c)
-    const dist3 = new FractionEtendue(-d - b, a - c)
-    this.enonce = `La solution de l'équation $(${reduireAxPlusB(a, b)})-(${reduireAxPlusB(c, d)})=0$ est : `
+    const solution = new FractionEtendue(d - b, a - c).simplifie()
 
+    this.question = `Résoudre l'équation $(${reduireAxPlusB(a, b)})-(${reduireAxPlusB(c, d)})=0$.`
     this.correction = `On se ramène à une équation du type $ax=b$ en isolant les  « $x$ » dans le membre de gauche et les « non $x$ » dans le membre de droite.<br>
     $\\begin{aligned}
     (${reduireAxPlusB(a, b)})-(${reduireAxPlusB(c, d)})&=0\\\\
    ${a}x${ecritureAlgebrique(b)}${ecritureAlgebrique(-c)}x${ecritureAlgebrique(-d)}&=0\\\\
  ${a - c}x${ecritureAlgebrique(b - d)}&=0\\\\
  ${a - c}x&=${d - b}\\\\
-x&= ${reponse.simplifie().texFSD}
+x&= ${solution.texFSD}
 \\end{aligned}$<br>
-    
-   La solution de cette équation est  $${miseEnEvidence(reponse.simplifie().texFSD)}$.`
+   La solution de cette équation est  $${miseEnEvidence(solution.texFSD)}$.`
 
-    this.reponses = [
-      `$${reponse.simplifie().texFSD}$`,
-      `$${dist1.simplifie().texFSD}$`,
-      `$${dist2.simplifie().texFSD}$`,
-      `$${dist3.simplifie().texFSD}$`,
-    ]
-  }
-
-  // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
-  constructor() {
-    super()
-
-    this.versionAleatoire()
-    this.spacing = 1.5
+    if (this.versionQcm) {
+      this.reponse = `$${solution.texFSD}$`
+      this.distracteurs = [
+        new FractionEtendue(-b, a),
+        new FractionEtendue(-d, c),
+        new FractionEtendue(-d - b, a - c),
+        new FractionEtendue(b - d, a - c),
+        new FractionEtendue(d + b, a - c),
+        new FractionEtendue(d - b, a + c),
+      ].map((f) => `$${f.simplifie().texFSD}$`)
+    } else {
+      this.reponse = solution.texFSD
+      if (this.interactif) this.question += '<br>$x=$'
+    }
   }
 }
