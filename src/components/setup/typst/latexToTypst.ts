@@ -812,6 +812,15 @@ function preprocessTex(tex: string): string {
   // \hspace*{0.4cm} : tex2typst produirait `#h(*) 0.4 c m` (étoile invalide) ;
   // ces espaces servent surtout à élargir des colonnes, on les neutralise
   output = output.replace(/\\hspace\s*\*?\s*\{[^{}]*\}/g, '\\;')
+  // \begin{cases}\begin{aligned}…\end{aligned}\end{cases} (systèmes
+  // d'équations) : tex2typst produit `cases(a &= b \\ c &= d)`, or Typst
+  // ignore les sauts de ligne `\` dans les branches d'un `cases` et colle les
+  // équations sur une seule ligne. On retire l'`aligned` intermédiaire pour
+  // obtenir `cases(a &= b, c &= d)`, qui conserve l'alignement sur les `&`.
+  output = output.replace(
+    /\\begin\{cases\}\s*\\begin\{aligned\}((?:(?!\\begin\{)[\s\S])*?)\\end\{aligned\}\s*\\end\{cases\}/g,
+    '\\begin{cases}$1\\end{cases}',
+  )
   // & d'alignement hors environnement (ex. `a \leqslant & b \\ c & d`) :
   // on enveloppe dans \begin{aligned}...\end{aligned} pour que tex2typst
   // accepte la formule sans erreur

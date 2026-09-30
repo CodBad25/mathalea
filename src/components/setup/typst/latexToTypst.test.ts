@@ -329,6 +329,16 @@ describe('latexMathToTypst', () => {
     ).toBe('2 x &= 4 \\ x &= 2')
   })
 
+  it("sépare les équations d'un système par des virgules (cases + aligned)", () => {
+    // 2G34-5 : Typst ignore `\\` dans les branches d'un `cases`, les équations
+    // s'affichaient collées sur une seule ligne.
+    expect(
+      latexMathToTypst(
+        '\\begin{cases}\\begin{aligned}3x+2y &=5\\\\ x-y &=1\\end{aligned}\\end{cases}',
+      ),
+    ).toBe('cases(3 x + 2 y &= 5, x - y &= 1)')
+  })
+
   it('sépare le saut de ligne et le #txt qui le suit (évite l’échappement `\\#`)', () => {
     // 4G20 (Pythagore) : `\\text{Donc :}` en tout début de ligne d'un
     // `aligned` collait le `\` de saut de ligne au `#txt(` généré pour le
