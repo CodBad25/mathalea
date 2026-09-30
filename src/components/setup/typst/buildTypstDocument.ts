@@ -1378,7 +1378,7 @@ export interface TypstDocumentOptions {
   headerLine: string
   /** Style de l'en-tête ; `aucun` n'affiche ni titre, ni sous-titre, ni ligne d'en-tête */
   headerStyle: HeaderStyle
-  /** Affiche le pied de page (crédit MathALÉA, pagination, titre) */
+  /** Affiche le pied de page (crédit MathALÉA) */
   showFooter: boolean
   /** Texte affiché à gauche du pied de page (« MathALÉA — coopmaths.fr » par défaut) */
   footerText: string
@@ -4262,7 +4262,7 @@ function headerBlock(
 }
 
 /**
- * Pied de page (texte éditable `pied-page`, pagination, titre) selon
+ * Pied de page (texte éditable `pied-page`, sans numéro de page) selon
  * l'habillage. Renvoie l'argument `footer: ...` du `#set page(...)` —
  * `footer: none,` quand `showFooter` est décoché, quel que soit l'habillage.
  *
@@ -4278,7 +4278,6 @@ function pageFooter(
   exportMode: boolean,
 ): string[] {
   if (!showFooter) return ['footer: none,']
-  const pagination = '#counter(page).display("1 / 1", both: true)'
   const anchorLines = exportMode
     ? []
     : ['  #if here().page() == 1 [#mathalea-anchor("footer", 0)]']
@@ -4289,11 +4288,7 @@ function pageFooter(
       '  #set text(size: 8pt, style: "italic")',
       '  #line(length: 100%, stroke: 0.4pt)',
       '  #v(-2pt)',
-      '  #grid(columns: (1fr, auto, 1fr),',
-      '    align(left)[#pied-page],',
-      `    align(center)[${pagination}],`,
-      '    [],',
-      '  )',
+      '  #align(left)[#pied-page]',
       '],',
     ]
   }
@@ -4304,11 +4299,7 @@ function pageFooter(
       '  #set text(size: 8pt, fill: couleur)',
       '  #line(length: 100%, stroke: 0.6pt + couleur.lighten(30%))',
       '  #v(-2pt)',
-      '  #grid(columns: (1fr, auto, 1fr),',
-      '    align(left)[#pied-page],',
-      `    align(center)[${pagination}],`,
-      '    [],',
-      '  )',
+      '  #align(left)[#pied-page]',
       '],',
     ]
   }
@@ -4318,11 +4309,7 @@ function pageFooter(
     '  #set text(size: 8pt, fill: gray)',
     '  #line(length: 100%, stroke: 0.4pt + gray.lighten(30%))',
     '  #v(-2pt)',
-    '  #grid(columns: (1fr, auto, 1fr),',
-    '    align(left)[#pied-page],',
-    `    align(center)[${pagination}],`,
-    '    [],',
-    '  )',
+    '  #align(left)[#pied-page]',
     '],',
   ]
 }
