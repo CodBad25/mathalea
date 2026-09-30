@@ -218,7 +218,7 @@ export default class InverseMatriceRelationPolynomiale extends Exercice {
       let texteCorr = `${numAlpha(0)}$A^2=A\\times A=${A2.toTex()}$<br>`
       texteCorr += `Ainsi,<br>$\\begin{aligned}${texRelation}&=${A2.toTex()}${ecritureAlgebriqueSauf1(a)}${A.toTex()}${relationNulle ? `${ecritureAlgebriqueSauf1(b)}${I.toTex()}` : ''}\\\\&=${texPmatrix(termes)}\\\\&=${miseEnEvidence(R.toTex())}\\end{aligned}$<br>`
       if (!relationNulle) {
-        texteCorr += `Ainsi, $${texRelation}=${texCIn}$, donc la relation est vérifiée avec $${miseEnEvidence(`\\lambda=${c}`)}$.<br>`
+        texteCorr += `Ainsi, $${texRelation}=${texCIn}$, donc la relation est vérifiée avec $\\lambda=${miseEnEvidence(c)}$.<br>`
       }
 
       // Étape 2 : on factorise par A.
@@ -238,7 +238,7 @@ export default class InverseMatriceRelationPolynomiale extends Exercice {
       texteCorr += `D'après la relation précédente, on a :<br>`
       texteCorr += `$\\begin{aligned}${equivalences.map((ligne, k) => `${k === 0 ? '' : '\\iff{}'}&${ligne}`).join('\\\\')}\\end{aligned}$<br>`
       texteCorr += `Par conséquent, $A$ est inversible et $A^{-1}=${texInverse}$.<br>`
-      texteCorr += `On obtient donc : $${miseEnEvidence(`A^{-1}=${texInverseDeveloppe}`)}$`
+      texteCorr += `On obtient donc : $A^{-1}=${miseEnEvidence(texInverseDeveloppe)}$`
 
       if (this.questionJamaisPosee(i, A.toString(), listeRelations[i])) {
         this.listeQuestions[i] = texte

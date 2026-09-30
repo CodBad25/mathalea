@@ -102,7 +102,7 @@ export default class InverseMatrice2x2 extends Exercice {
       const sautDeLigne = coefficients.every((f) => f.estEntiere)
         ? '\\\\'
         : '\\\\[1em]'
-      texteCorr += `Donc $${miseEnEvidence(`A^{-1}=\\begin{pmatrix}${texCoefficients[0]} & ${texCoefficients[1]}${sautDeLigne}${texCoefficients[2]} & ${texCoefficients[3]}\\end{pmatrix}`)}$`
+      texteCorr += `Donc $A^{-1}=${miseEnEvidence(`\\begin{pmatrix}${texCoefficients[0]} & ${texCoefficients[1]}${sautDeLigne}${texCoefficients[2]} & ${texCoefficients[3]}\\end{pmatrix}`)}$`
 
       if (this.questionJamaisPosee(i, a, b, c, d)) {
         this.listeQuestions[i] = texte
