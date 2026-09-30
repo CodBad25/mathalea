@@ -14,9 +14,12 @@ import {
   banquesExternes,
   chargerBanquesIntegrees,
   clesBanquesPartageables,
+  preambuleBanque,
   referentielBanquesExternes,
   supprimerBanque,
 } from './banquesExternesStore'
+import { retrieveResourceFromUuid } from '../components/refUtils'
+import type { BanqueExterneChargee } from '../types/banquesExternes'
 
 describe('manifest FFJM versionné', () => {
   it('est un manifest de banque valide', () => {
@@ -95,5 +98,41 @@ describe('chargerBanquesIntegrees', () => {
     await chargerBanquesIntegrees()
     const uuids = [uuidBanqueExterne('ffjm', 'tirelire')]
     expect(clesBanquesPartageables(uuids)).toEqual([])
+  })
+
+  it('utilise la version de test FFJM et retrouve la version intégrée après son retrait', async () => {
+    await chargerBanquesIntegrees()
+    const uuid = uuidBanqueExterne('ffjm', 'tirelire')
+    const versionTest: BanqueExterneChargee = {
+      source: {
+        type: 'forge',
+        cle: 'forge:coopmaths/ffjm@test',
+        projet: 'coopmaths/ffjm',
+        ref: 'test',
+      },
+      manifest: {
+        ...validerManifest(ffjmManifest),
+        titre: 'FFJM en cours de test',
+      },
+      assets: new Map([
+        ['png/tirelire.png', 'https://forge.example/tirelire.png'],
+      ]),
+      preambuleTexte: { tex: '% version de test' },
+    }
+    banquesExternes.update((liste) => [...liste, versionTest])
+
+    const referentiel = referentielBanquesExternes()
+    expect(Object.keys(referentiel)).toEqual(['FFJM en cours de test'])
+    expect(retrieveResourceFromUuid(referentiel, uuid)).toMatchObject({
+      png: 'https://forge.example/tirelire.png',
+    })
+    expect(preambuleBanque('ffjm')?.tex).toBe('% version de test')
+    expect(clesBanquesPartageables([uuid])).toEqual([versionTest.source.cle])
+
+    await supprimerBanque(versionTest.source.cle)
+    expect(Object.keys(referentielBanquesExternes())).toEqual([
+      ffjmManifest.titre,
+    ])
+    expect(preambuleBanque('ffjm')?.tex).toBe('% préambule')
   })
 })
