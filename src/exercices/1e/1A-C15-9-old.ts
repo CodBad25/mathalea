@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 83a52 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -6,14 +9,12 @@ import {
 
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = '01d9a'
+export const uuid = '83a52'
 export const refs = {
-  'fr-fr': ['1A-C15-9'],
-  'fr-ch': ['9QCM-18', '10QCM-38'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -27,7 +28,7 @@ export const dateDePublication = '14/01/2026'
  * @author Gilles Mora
  *
  */
-export default class Auto1C15h extends ExerciceQcmACourt {
+export default class Auto1C15hOld extends ExerciceQcmA {
   private appliquerLesValeurs(
     masse1L: number,
     unite1L: string,
@@ -113,7 +114,7 @@ Pour convertir en g : $${texNombre(masseEnKg)}$ kg $= ${texNombre(bonneReponse)}
     }
 
     this.enonce = `La masse d'un litre d'huile est égale à $${texNombre(masse1L)}$ ${unite1L}.<br>
-Calculer la masse de $${volume}$ millilitres de cette huile.`
+La masse de $${volume}$ millilitres de cette huile est égale à :`
 
     this.correction = `Pour trouver la masse de $${volume}$ mL d'huile, on utilise la proportionnalité :
 <br>
@@ -129,7 +130,6 @@ La bonne réponse est donc : $${miseEnEvidence(`${texNombre(bonneReponse)}`)}$ $
       `$${texNombre(dist2)}\\text{ ${unite2}}$`,
       `$${texNombre(dist3)}\\text{ ${unite3}}$`,
     ]
-    this.enonceCourt = () => `${this.enonce}<br>Exprimer la réponse en $\\text{${uniteReponse}}$.`
   }
 
   versionOriginale: () => void = () => {

@@ -23,4 +23,12 @@ export default class Auto1AC14 extends CalculExpAvecValeurs {
     super()
     this.versionQcm = false
   }
+
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    this.question = (this.question ?? '').replace(
+      /Lorsque (.*?),\s*(?:<br>)?\s*la valeur de \$F\$ est égale à :/s,
+      'Calculer la valeur de $F$ lorsque $1.',
+    )
+  }
 }

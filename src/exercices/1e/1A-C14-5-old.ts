@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid af470 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -6,15 +9,13 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '22/04/2026'
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = 'c5cb6'
+export const uuid = 'af470'
 
 export const refs = {
-  'fr-fr': ['1A-C14-5'],
-  'fr-ch': ['2mQCM-12', '1mQCM-37'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -24,7 +25,7 @@ export const titre = 'Retrouver la bonne fonction affine à partir de données'
 /**
  * @author Gilles Mora
  */
-export default class Auto1AC14e extends ExerciceQcmACourt {
+export default class Auto1AC14eOld extends ExerciceQcmA {
   private tableau(f: (x: number | FractionEtendue) => number): string {
     return tableauSignesFonction(f, -20, 20, {
       step: 1,
@@ -37,8 +38,6 @@ export default class Auto1AC14e extends ExerciceQcmACourt {
   }
 
   private appliquerLesValeurs(a: number, r: number): void {
-    const aCourt = a > 0 ? 1 : -1
-    this.reponseCourte = () => reduireAxPlusB(aCourt, -aCourt * r)
     // bonne réponse   : f(x) = a(x - r)  => racine r, pente a
     // distracteur 1   : racine r,  pente -a  => g(x) = -a(x - r)
     // distracteur 2   : racine -r, pente a   => h(x) = a(x + r)
@@ -99,9 +98,6 @@ export default class Auto1AC14e extends ExerciceQcmACourt {
 
   constructor() {
     super()
-    this.clavierReponseCourte = 'lycee'
-    this.enonceCourt = () => this.enonce.replace('Une seule des expressions suivantes est celle de la fonction $f$. Laquelle ?', 'Donner l’expression de la fonction affine $f$ dont le coefficient directeur vaut $1$ ou $-1$.')
-    this.correctionCourte = () => `Une expression qui vérifie les conditions est $f(x)=${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
     this.versionAleatoire()
   }
 }

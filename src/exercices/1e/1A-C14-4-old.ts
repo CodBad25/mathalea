@@ -1,17 +1,18 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid d7ba2 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '02/08/2025'
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = '97a0b'
+export const uuid = 'd7ba2'
 
 export const refs = {
-  'fr-fr': ['1A-C14-4'],
-  'fr-ch': ['2mQCM-11'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -21,7 +22,7 @@ export const titre = 'Résoudre une inéquation avec un tableau de signes'
 /**
  * @author Gilles Mora
  */
-export default class Auto1AC16 extends ExerciceQcmACourt {
+export default class Auto1AC16Old extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     // Version fixe pour les tests ou exemple
     const ligneMPP = [
@@ -89,8 +90,8 @@ export default class Auto1AC16 extends ExerciceQcmACourt {
       20,
     ]
 
-    this.enonce = `Déterminer l'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
-    $2(x-3)(x+1) > 0$.`
+    this.enonce = `L'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
+    $2(x-3)(x+1) > 0$ est :`
 
     this.correction =
       `$(x-3)(x+1)$ est un produit de deux fonctions affines.<br>
@@ -134,8 +135,8 @@ export default class Auto1AC16 extends ExerciceQcmACourt {
         ? choice(['>', '\\geqslant'])
         : choice(['<', '\\leqslant'])
 
-    this.enonce = `Déterminer l'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
-   ${b === 0 ? `$${rienSi1(a)}x(x${ecritureAlgebrique(-c)}) ${inegalite} 0$` : `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)}) ${inegalite} 0$`}.`
+    this.enonce = `L'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
+   ${b === 0 ? `$${rienSi1(a)}x(x${ecritureAlgebrique(-c)}) ${inegalite} 0$` : `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)}) ${inegalite} 0$`}  est :`
 
     // Construction de la correction avec tableau de variation
     const r1 = Math.min(b, c) // première racine (la plus petite)
@@ -361,7 +362,6 @@ export default class Auto1AC16 extends ExerciceQcmACourt {
 
   constructor() {
     super()
-    this.clavierReponseCourte = 'clavierEnsemble'
     this.versionAleatoire()
     this.options.vertical = true
   }

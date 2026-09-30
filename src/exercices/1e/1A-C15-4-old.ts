@@ -1,17 +1,18 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 8cf80 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import Decimal from 'decimal.js'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = '94dbd'
+export const uuid = '8cf80'
 export const refs = {
-  'fr-fr': ['1A-C15-4'],
-  'fr-ch': ['10QCM-34', '11QCM-39'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -25,14 +26,14 @@ export const dateDePublication = '29/07/2025'
  * @author Gilles Mora
  *
  */
-export default class Auto1C19 extends ExerciceQcmACourt {
+export default class Auto1C19Old extends ExerciceQcmA {
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 
   versionOriginale: () => void = () => {
     this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
               Un abonnement annuel et $3,50$ € par mètre cube consommé. <br>
               Une famille a payé une facture de $352,50$ € pour une consommation de $85\\text{ m}^3$.<br>
-            Écrire le calcul permettant de déterminer le prix de l'abonnement.`
+            Le prix de l'abonnement est donné par le calcul :`
 
     this.correction = `La facture s'élève à $352,50$ € pour une consommation de $85\\text{ m}^3$.<br>
                    En notant $a$ le montant de l'abonnement, on obtient : <br>
@@ -60,7 +61,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
           this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
                     un abonnement annuel et $${texNombre(p, 2, true)}$ € par mètre cube consommé. <br>
                     Une famille a payé une facture de $${texNombre(fac, 2, true)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
-                  Écrire le calcul permettant de déterminer le prix de l'abonnement.`
+                  Le prix de l'abonnement est donné par le calcul :`
 
           this.correction = `La facture s'élève à $${texNombre(fac, 3)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
                          En notant $a$ le montant de l'abonnement, on obtient : <br>
@@ -87,7 +88,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
           this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
                     un abonnement annuel de $${texNombre(abo, 2, true)}$ € et un prix par mètre cube consommé. <br>
                     Une famille a payé une facture de $${texNombre(fac, 2, true)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
-                  Écrire le calcul permettant de déterminer le prix du mètre cube consommé.`
+                  Le prix du mètre cube consommé est donné par le calcul :`
 
           this.correction = `La facture s'élève à $${texNombre(fac, 3)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
                          En notant $a$ le prix du mètre cube, on obtient : <br>
@@ -115,7 +116,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
           this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
                   un abonnement annuel de $${texNombre(abo, 2, true)}$ € et $${texNombre(p, 2, true)}$ € par mètre cube consommé. <br>
                     Une famille a payé une facture de $${texNombre(fac, 2, true)}$ € pour sa consommation annuelle.<br>
-                  Écrire le calcul permettant de déterminer le nombre de mètres cubes consommés.`
+                  Le nombre de mètres cubes consommés est donné par le calcul :`
 
           this.correction = `La facture s'élève à $${texNombre(fac, 3)}$ € pour la consommation annuelle.<br>
                          En notant $a$ le nombre de  mètres cubes consommés, on obtient : <br>

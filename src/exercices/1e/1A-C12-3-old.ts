@@ -1,11 +1,11 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 8e0cd continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import AutoQ7AGns2026 from '../EAMPremiere/EAM-AGnonSpe-2026-Q7'
-import { genereReponsesCourtes } from '../ExerciceQcmACourt'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = 'd23e7'
+export const uuid = '8e0cd'
 export const refs = {
-  'fr-fr': ['1A-C12-3', '2A-C5-3'],
+  'fr-fr': [],
   'fr-ch': ['NR'],
 }
 export const interactifReady = true
@@ -19,17 +19,10 @@ export const dateDePublication = '06/08/2026'
  * @author Gilles Mora , clone de Stéphane Guyon
  * Clone de EAM-AGnonSpe-2026-Q7 en version exclusivement aléatoire.
  */
-export default class CalculerUneResistance extends AutoQ7AGns2026 {
+export default class CalculerUneResistanceOld extends AutoQ7AGns2026 {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.sup3 = false
-    this.besoinFormulaire3CaseACocher = ['Mode QCM', false]
     this.versionAleatoire()
-  }
-
-  nouvelleVersion() {
-    if (this.sup3) super.nouvelleVersion()
-    else genereReponsesCourtes(this)
   }
 }

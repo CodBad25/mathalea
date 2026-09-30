@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 7e7b0 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -5,14 +8,12 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { prenomPronom } from '../../lib/outils/Personne'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = 'e81fe'
+export const uuid = '7e7b0'
 export const refs = {
-  'fr-fr': ['1A-C15-8'],
-  'fr-ch': ['10QCM-37', '11QCM-42'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -26,7 +27,7 @@ export const dateDePublication = '06/01/2026'
  * @author Gilles Mora
  *
  */
-export default class Auto1C15h extends ExerciceQcmACourt {
+export default class Auto1C15hOld extends ExerciceQcmA {
   private appliquerLesValeurs(
     num: number,
     den: number,

@@ -1,17 +1,18 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 9823a continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomM } from '../../lib/outils/Personne'
 import { texPrix } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = '2d15c'
+export const uuid = '9823a'
 export const refs = {
-  'fr-fr': ['1A-C15-7'],
-  'fr-ch': ['10FA5A-6'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -25,7 +26,7 @@ export const dateDePublication = '15/12/2025'
  * @author Gilles Mora
  *
  */
-export default class AutoC15g extends ExerciceQcmACourt {
+export default class AutoC15gOld extends ExerciceQcmA {
   // Cas 1 : nombre de viennoiseries × prix unitaire
   private cas1(
     prenom: string,
@@ -331,8 +332,6 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants}x-$
 
   constructor() {
     super()
-    this.clavierReponseCourte = 'lycee'
-    this.enonceCourt = () => this.enonce.replace(/Parmi les équations suivantes, une seule modélise la situation\. Laquelle \?/, 'Écrire une équation qui modélise la situation.')
     this.versionAleatoire()
     this.spacing = 1.5
   }

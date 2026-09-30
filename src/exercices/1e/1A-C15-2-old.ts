@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 2ab24 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
@@ -6,14 +9,12 @@ import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ppcm } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '30/09/2026'
-
-export const uuid = '894b2'
+export const uuid = '2ab24'
 export const refs = {
-  'fr-fr': ['1A-C15-2'],
-  'fr-ch': ['10QCM-8'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -27,7 +28,7 @@ export const dateDePublication = '05/08/2025'
  * @author Gilles Mora
  *
  */
-export default class Auto1C19b extends ExerciceQcmACourt {
+export default class Auto1C19bOld extends ExerciceQcmA {
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 
   versionOriginale: () => void = () => {
@@ -50,7 +51,7 @@ export default class Auto1C19b extends ExerciceQcmACourt {
 
     this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ en trois mois.<br>
         En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
-        Déterminer la part du crédit à rembourser en mars sous forme de fraction.`
+        En mars, elle doit rembourser :`
 
     this.correction = `
        
@@ -125,7 +126,7 @@ export default class Auto1C19b extends ExerciceQcmACourt {
       )
       this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ en trois mois.<br>
         En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
-        Déterminer la part du crédit à rembourser en mars sous forme de fraction.`
+        En mars elle doit rembourser :`
 
       this.correction = `
        
