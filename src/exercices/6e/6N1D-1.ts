@@ -43,11 +43,12 @@ const famillesVraies: FamilleVraie[] = [
   'fractionEntiere',
 ]
 // π ne peut être tiré qu'une fois : les fractions non décimales sont donc deux fois plus présentes.
-const famillesFausses: FamilleFausse[] = [
+const famillesFaussesAvecPi: FamilleFausse[] = [
   'pi',
   'fractionNonDecimale',
   'fractionNonDecimale',
 ]
+const famillesFaussesSansPi: FamilleFausse[] = ['fractionNonDecimale']
 
 /** Écrit l'entier `numerateur` divisé par 10^nbDecimales, sans arrondi ni regroupement des chiffres. */
 function ecritureDecimale(numerateur: number, nbDecimales: number) {
@@ -134,12 +135,14 @@ function genereQuestion(famille: Famille): Question {
       }
     }
     case 'fractionEntiere': {
-      const quotient = randint(2, 9)
-      const diviseur = choice([3, 6, 7, 9, 11, 12])
+      // La division tombe juste (reste nul) : le quotient est un entier, donc un nombre décimal.
+      const quotient = randint(2, 19)
+      const diviseur = choice([3, 6, 7, 9, 11, 12, 13, 14, 15, 16, 18])
+      const dividende = quotient * diviseur
       return {
-        nombre: `$\\dfrac{${quotient * diviseur}}{${diviseur}}$`,
+        nombre: `$\\dfrac{${dividende}}{${diviseur}}$`,
         estDecimal: true,
-        justification: `$\\dfrac{${quotient * diviseur}}{${diviseur}}=${quotient}=\\dfrac{${quotient * 10}}{10}$.`,
+        justification: `$\\dfrac{${dividende}}{${diviseur}}=${dividende}\\div${diviseur}=${quotient}=\\dfrac{${quotient * 10}}{10}$.`,
       }
     }
     case 'pi':
@@ -161,7 +164,10 @@ function genereQuestion(famille: Famille): Question {
 }
 
 /** Alterne les familles de nombres décimaux et non décimaux, dans un ordre mélangé. */
-function choisirFamilles(nbQuestions: number): Famille[] {
+function choisirFamilles(
+  nbQuestions: number,
+  famillesFausses: FamilleFausse[],
+): Famille[] {
   let vraies: Famille[] = []
   let fausses: Famille[] = []
   let doitEtreVraie = choice([true, false])
@@ -187,14 +193,19 @@ export default class ReconnaitreNombreDecimal extends Exercice {
     this.consigne = 'Les nombres suivants sont-ils des nombres décimaux ?'
     this.spacing = 1.5
     this.spacingCorr = 1.5
+    this.besoinFormulaireCaseACocher = ['Exclure le nombre π', false]
+    this.sup = false
   }
 
   nouvelleVersion() {
-    const familles = choisirFamilles(this.nbQuestions)
+    const famillesFausses = this.sup
+      ? famillesFaussesSansPi
+      : famillesFaussesAvecPi
+    const familles = choisirFamilles(this.nbQuestions, famillesFausses)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
       const question = genereQuestion(familles[i])
       if (!this.questionJamaisPosee(i, question.nombre)) {
-        familles[i] = choisirFamilles(1)[0]
+        familles[i] = choisirFamilles(1, famillesFausses)[0]
         continue
       }
       this.autoCorrection[i] = {
