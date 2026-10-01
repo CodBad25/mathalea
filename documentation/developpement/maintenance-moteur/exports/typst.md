@@ -1053,6 +1053,56 @@ Chaque `<img>` du contenu HTML d'un exercice (pas seulement les annales scannée
 
 Les tableaux HTML (par opposition aux tableaux LaTeX visuels, voir ci-dessus) ne sont **pas convertis** : un encart grisé « tableau non converti » les remplace.
 
+#### Annales en images et hauteur de page
+
+Une annale sans source Typst est insérée comme une ou plusieurs images,
+et non comme du texte paginable. Dans `latexToTypst.ts`, `mathalea-fit`
+ajuste leur largeur à celle de la page ou de la colonne, puis applique le
+zoom de l'exercice ; il ne découpe pas leur hauteur. Un saut de page avant
+l'exercice ne résout donc pas le cas d'une image plus haute qu'une page
+entière. La palette propose « Réduire l'exercice », mais ce réglage réduit
+aussi la taille du texte de l'image.
+
+`computeStaticExercicePngUrls` (`src/lib/components/refUtils.ts`) accepte
+déjà des listes d'URL dans `png` et `pngCor` ; `buildExercise`
+(`src/lib/components/exercisesUtils.ts`) produit un `<img>` par URL.
+Chaque image est ensuite convertie séparément en Typst : plusieurs images
+permettent une pagination entre les fragments, sans imposer un saut de page
+entre chacun. Ces listes ne choisissent pas les coupures à l’intérieur d’une image. Une source native `.typ` permet, elle,
+de composer le texte avec les réglages du document.
+
+#### Outil « Découper l’image »
+
+La palette de mise en page propose un bouton ciseaux pour les énoncés et
+les corrections statiques sans source Typst, hors présentation « Course aux
+nombres ». `TypstImageCutModal.svelte` affiche chaque image originale :
+
+- cliquer entre deux questions ajoute une coupure ;
+- déplacer sa ligne horizontale ajuste la coupure ; les flèches haut/bas et
+  le champ en pourcentage permettent également un réglage au clavier ;
+- « Ajouter une coupure » partage en deux le plus grand fragment restant ;
+- chaque coupure peut être supprimée, ou toutes retirées avant d’appliquer ;
+- « Annuler » et Échap ferment sans modifier la fiche.
+
+Les fragments conservent la même échelle et passent automatiquement à la
+page ou colonne suivante quand l’espace restant ne suffit pas. Une coupure
+n’impose pas à elle seule un saut de page. Chaque fragment doit tenir dans
+une page : ajouter d’autres coupures si nécessaire. L’énoncé et la correction
+se règlent indépendamment, de même que les différents sujets d’une fiche.
+
+`imageCuts.ts` produit des appels à `mathalea-image-slice` : le helper réserve
+la taille complète de l’image dans une boîte avant de recadrer chaque
+fragment avec `block(clip: true)`. Aucune image n’est rééchantillonnée ou
+créée : les octets originaux restent utilisés pour l’aperçu, le PDF et
+l’export Typst avec ses ressources.
+
+Les commentaires `// mathalea:image-cuts(N,enonce|correction)` portent les
+positions relatives à la hauteur de chaque image. `harvestCarryOver` les
+relit dans `imageCuts`, persisté dans `typstParam`. Les coupures survivent à
+la régénération, au rechargement du lien, à la duplication et au déplacement
+des exercices ; les modifications sont annulables dans l’éditeur. Les
+sources d’annales publiées restent inchangées.
+
 ## Compilation dans le navigateur
 
 `typstCompiler.ts` s'appuie sur `@myriaddreamin/typst.ts` : le compilateur WASM (~28 Mo) et le moteur de rendu sont chargés à la première compilation (import dynamique, URL des `.wasm` résolues par Vite). L'aperçu est un rendu SVG du document ; le bouton « Télécharger le PDF » compile en vrai PDF côté client, sans serveur.
@@ -1182,6 +1232,7 @@ nombre de sujets tronque la liste (`applyDocumentOptions`).
 ## Tests
 
 - `src/components/setup/typst/latexToTypst.test.ts` : conversion des formules et du HTML ;
+- `src/components/setup/typst/imageCuts.test.ts` : découpage des images, conservation par sujet et partie, export et compilation des fragments sur plusieurs pages ;
 - `src/components/setup/typst/typstDiagnostics.test.ts` : lecture du format « unix » et traduction des messages ;
 - `src/components/setup/typst/buildTypstDocument.test.ts` : structure du document généré. Les cas qui lancent le binaire externe `typst compile` sont exécutés en local quand le CLI `typst` est installé, ignorés en CI par défaut, et réactivables avec `TYPST_CLI_TESTS=1` pour un job dédié ;
 - `pnpm typst:check:compile` : vérification explicite par compilation CLI Typst pour les environnements qui installent le binaire `typst`.
