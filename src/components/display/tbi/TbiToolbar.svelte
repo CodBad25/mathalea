@@ -54,10 +54,22 @@
     label: string
     icon: string
   }[] = [
-    { value: 'left', label: 'Colonne sur la moitié gauche', icon: 'bx-dock-left' },
+    {
+      value: 'left',
+      label: 'Colonne sur la moitié gauche',
+      icon: 'bx-dock-left',
+    },
     { value: 'center', label: 'Colonne centrée', icon: 'bx-align-middle' },
-    { value: 'right', label: 'Colonne sur la moitié droite', icon: 'bx-dock-right' },
-    { value: 'full', label: 'Colonne sur toute la largeur', icon: 'bx-expand-horizontal' },
+    {
+      value: 'right',
+      label: 'Colonne sur la moitié droite',
+      icon: 'bx-dock-right',
+    },
+    {
+      value: 'full',
+      label: 'Colonne sur toute la largeur',
+      icon: 'bx-expand-horizontal',
+    },
   ]
 
   function setSingleColumnAlign(singleColumnAlign: TbiSingleColumnAlign) {
@@ -107,7 +119,9 @@
     )
   }
 
-  function setActiveTabSingleColumnAlign(singleColumnAlign: TbiSingleColumnAlign) {
+  function setActiveTabSingleColumnAlign(
+    singleColumnAlign: TbiSingleColumnAlign,
+  ) {
     setTbiTabSingleColumnAlign(activeTab, singleColumnAlign)
   }
 
@@ -139,6 +153,13 @@
   function toggleLyceeCalculator() {
     tbiState.update((state) => {
       state.lyceeCalculator.visible = !state.lyceeCalculator.visible
+      return state
+    })
+  }
+
+  function toggleCalculette() {
+    tbiState.update((state) => {
+      state.calculette.visible = !state.calculette.visible
       return state
     })
   }
@@ -264,7 +285,9 @@
         </button>
       {/each}
       {#if activeTabLayout === 'columns'}
-        <div class="w-px h-5 bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light"></div>
+        <div
+          class="w-px h-5 bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light"
+        ></div>
         <button
           type="button"
           aria-label="Diminuer le nombre de colonnes de l'onglet"
@@ -390,6 +413,16 @@
         <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
         <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
       </span>
+    </button>
+    <button
+      type="button"
+      class={toggleButtonClass($tbiState.calculette.visible)}
+      aria-pressed={$tbiState.calculette.visible}
+      title="Calculette"
+      aria-label="Calculette"
+      onclick={toggleCalculette}
+    >
+      <i class="bx bx-dialpad-alt text-xl"></i>
     </button>
     <button
       type="button"

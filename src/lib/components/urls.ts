@@ -1,4 +1,5 @@
 import { get } from 'svelte/store'
+import { CALCULATRICES_NON_FORCEES } from '../calculatrices'
 import {
   type InterfaceGlobalOptions,
   type InterfaceParams,
@@ -137,7 +138,8 @@ export function appendExerciseParams(url: URL, ex: InterfaceParams): void {
   if (ex.interactif === '1') url.searchParams.append('i', '1')
   if (ex.cd != null) url.searchParams.append('cd', ex.cd)
   if (ex.tip != null) url.searchParams.append('tip', ex.tip)
-  if (ex.calc === '1') url.searchParams.append('calc', '1')
+  if (ex.calc != null && ex.calc !== '0')
+    url.searchParams.append('calc', ex.calc)
   if (ex.cols != null) url.searchParams.append('cols', ex.cols.toString())
 }
 
@@ -256,7 +258,7 @@ export function buildEsParams(
     ['verso', 5],
   ])
   let es = ''
-  // Paramètre 'es' : presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError
+  // Paramètre 'es' : presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)
   es += presentationMode.get(
     mode !== undefined ? mode : (options.presMode ?? 'liste_exos'),
   )
@@ -268,6 +270,10 @@ export function buildEsParams(
   es += options.isTitleDisplayed ? '1' : '0'
   es += options.isReferenceDisplayed !== false ? '1' : '0'
   es += options.isCorrectionOnlyOnError ? '1' : '0'
+  // Calculatrices forcées : caractère ajouté seulement s'il y en a une, pour
+  // ne pas allonger les URLs par défaut
+  const forcees = options.calculatricesForcees ?? CALCULATRICES_NON_FORCEES
+  if (forcees !== CALCULATRICES_NON_FORCEES) es += forcees
   return es
 }
 

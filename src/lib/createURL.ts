@@ -40,8 +40,9 @@ export function createURL(params: InterfaceParams[]) {
     if (ex.interactif === '1') url.searchParams.append('i', '1')
     if (ex.cd != null) url.searchParams.append('cd', ex.cd)
     if (ex.tip != null) url.searchParams.append('tip', String(ex.tip))
-    // Calculatrice non autorisée par défaut : seul `calc=1` alourdit l'URL
-    if (ex.calc === '1') url.searchParams.append('calc', '1')
+    // Calculatrice non autorisée par défaut : seuls `calc=1|2|3|9` alourdissent l'URL
+    if (ex.calc != null && ex.calc !== '0')
+      url.searchParams.append('calc', ex.calc)
     if (ex.cols != null) url.searchParams.append('cols', ex.cols.toString())
     if (ex.alea != null) url.searchParams.append('alea', ex.alea)
   }
