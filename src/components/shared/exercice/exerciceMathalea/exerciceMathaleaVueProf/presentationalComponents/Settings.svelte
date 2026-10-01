@@ -72,6 +72,8 @@
   $: isBaremeDisplayed = isInteractif && pointsMax > 0
 
   let isCommentDisplayed: boolean = false
+  /** Le sélecteur de calculatrices reste replié tant qu'on n'a pas cliqué sur le bouton. */
+  let isCalculatriceDisplayed: boolean = false
 
   let formNum1: FormNumerique
   let formNum2: FormNumerique
@@ -145,6 +147,8 @@
     correctionDetaillee = exercice.correctionDetaillee
     tipAvailable = exercice.tipAvailable ?? !!exercice.tip?.length
     calculatrices = exercice.calculatrices ?? '0'
+    // Un réglage non standard (venu d'un lien par exemple) doit rester visible.
+    isCalculatriceDisplayed = calculatrices !== '0'
 
     if (
       Array.isArray(exercice.besoinFormulaireNumerique) &&
@@ -288,9 +292,58 @@
   <div
     class="text-lg lg:text-base ml-2 lg:ml-4 space-y-4 p-3 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
   >
-    <h3 class="text-coopmaths-struct dark:text-coopmathsdark-struct font-bold">
-      Paramètres
-    </h3>
+    <div class="flex flex-row items-center gap-x-2">
+      <h3
+        class="text-coopmaths-struct dark:text-coopmathsdark-struct font-bold"
+      >
+        Paramètres
+      </h3>
+      {#if isCalculatriceProposee}
+        <button
+          type="button"
+          id="settings-calculatrices-bouton-{exerciceIndex}"
+          class="flex items-center justify-center w-6 h-6 rounded
+            text-coopmaths-action dark:text-coopmathsdark-action
+            hover:bg-coopmaths-action hover:text-coopmaths-canvas
+            dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas
+            {isCalculatriceDisplayed
+            ? 'bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark'
+            : 'opacity-60 hover:opacity-100'}"
+          title="Calculatrices disponibles"
+          aria-label="Calculatrices disponibles"
+          aria-expanded={isCalculatriceDisplayed}
+          aria-controls="settings-calculatrices-{exerciceIndex}"
+          on:click={() => {
+            isCalculatriceDisplayed = !isCalculatriceDisplayed
+          }}
+        >
+          <i class="bx bx-calculator"></i>
+        </button>
+      {/if}
+    </div>
+    {#if isCalculatriceProposee && isCalculatriceDisplayed}
+      <div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-1">
+        <label
+          class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+          for="settings-calculatrices-{exerciceIndex}"
+        >
+          Calculatrices disponibles&nbsp;:
+        </label>
+        <select
+          id="settings-calculatrices-{exerciceIndex}"
+          bind:value={calculatrices}
+          on:change={dispatchNewSettings}
+          class="h-6 rounded border px-1 py-0 text-xs leading-none
+            border-coopmaths-action dark:border-coopmathsdark-action
+            bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
+            text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+        >
+          {#each CALCULATRICES_AUTORISEES_OPTIONS as option (option.value)}
+            <option value={option.value}>{option.label}</option>
+          {/each}
+        </select>
+      </div>
+    {/if}
     <div class="w-full flex flex-row items-end gap-x-4">
       <div class="w-1/2">
         {#if exercice.nbQuestionsModifiable}
@@ -494,30 +547,6 @@
         label="Indice disponible pour les élèves"
         on:change={dispatchNewSettings}
       />
-    {/if}
-
-    {#if isCalculatriceProposee}
-      <div class="flex flex-col items-start gap-y-1 p-1">
-        <label
-          class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
-          for="settings-calculatrices-{exerciceIndex}"
-        >
-          Calculatrices disponibles
-        </label>
-        <select
-          id="settings-calculatrices-{exerciceIndex}"
-          bind:value={calculatrices}
-          on:change={dispatchNewSettings}
-          class="h-6 w-full rounded border px-1 py-0 text-xs leading-none
-            border-coopmaths-action dark:border-coopmathsdark-action
-            bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
-            text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-        >
-          {#each CALCULATRICES_AUTORISEES_OPTIONS as option (option.value)}
-            <option value={option.value}>{option.label}</option>
-          {/each}
-        </select>
-      </div>
     {/if}
 
     {#if exercice.correctionDetailleeDisponible}
