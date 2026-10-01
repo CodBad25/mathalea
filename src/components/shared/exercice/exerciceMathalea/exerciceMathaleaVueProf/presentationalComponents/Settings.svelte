@@ -32,6 +32,8 @@
   export let isInteractif: boolean = false
   /** Nombre de points maximum de l'exercice, avant coefficient. */
   export let pointsMax: number = 0
+  /** Propose la case « Calculatrice autorisée » (vue prof, dont les liens élèves l'exploitent). */
+  export let isCalculatriceProposee: boolean = false
   /**
    * Contrôles de mise en page des questions (colonnes, espacement,
    * numérotation), fournis uniquement par la vue Typst — masque la section
@@ -60,6 +62,7 @@
   let alea: string
   let correctionDetaillee: boolean
   let tipAvailable: boolean
+  let calculatriceAutorisee: boolean
   let coeffBareme: number = normaliseCoeffBareme(exercice.coeffBareme)
 
   $: isBaremeDisplayed = isInteractif && pointsMax > 0
@@ -137,6 +140,7 @@
       exercice instanceof ExerciceSimple ? exercice.versionQcm || false : false
     correctionDetaillee = exercice.correctionDetaillee
     tipAvailable = exercice.tipAvailable ?? !!exercice.tip?.length
+    calculatriceAutorisee = exercice.calculatriceAutorisee ?? false
 
     if (
       Array.isArray(exercice.besoinFormulaireNumerique) &&
@@ -238,6 +242,7 @@
       alea,
       correctionDetaillee,
       tipAvailable,
+      calculatriceAutorisee,
       coeffBareme,
     })
   }
@@ -485,6 +490,15 @@
         id="settings-indice-disponible-{exerciceIndex}"
         bind:isChecked={tipAvailable}
         label="Indice disponible pour les élèves"
+        on:change={dispatchNewSettings}
+      />
+    {/if}
+
+    {#if isCalculatriceProposee}
+      <CheckboxWithLabel
+        id="settings-calculatrice-autorisee-{exerciceIndex}"
+        bind:isChecked={calculatriceAutorisee}
+        label="Calculatrice autorisée"
         on:change={dispatchNewSettings}
       />
     {/if}

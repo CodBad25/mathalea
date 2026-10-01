@@ -50,6 +50,6 @@ export default class TiersQuartsEtCinquiemes extends ExerciceSimple {
       numerateur === 1
         ? `Le ${nomFraction} de $${nombreADiviser}$ est égal à $${nombreADiviser} \\div ${denominateur} = ${miseEnEvidence(String(this.reponse))}$.`
         : `Un ${nomFraction} de $${nombreADiviser}$ est égal à $${nombreADiviser} \\div ${denominateur}$, soit ${nombreADiviser / denominateur}.<br>
-        Donc les ${nombreEnLettres(numerateur)} ${nomFraction}s de $${nombreADiviser}$ valent $${numerateur} \\times ${nombreADiviser / denominateur} = ${miseEnEvidence(String(this.reponse))}$.`
+        Donc les ${nombreEnLettres(numerateur)} ${nomFraction}${nomFraction===`tiers` ? '' : 's'} de $${nombreADiviser}$ valent $${numerateur} \\times ${nombreADiviser / denominateur} = ${miseEnEvidence(String(this.reponse))}$.`
   }
 }

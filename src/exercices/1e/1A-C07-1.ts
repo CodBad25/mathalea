@@ -10,7 +10,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Transformer des minutes en heures décimales'
 export const dateDePublication = '04/09/2025'
 // Ceci est un exemple de QCM avec version originale et version aléatoire

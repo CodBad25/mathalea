@@ -82,6 +82,7 @@ export interface InterfaceParams extends Partial<
   interactif?: '0' | '1'
   cd?: '0' | '1'
   tip?: '0' | '1'
+  calc?: '0' | '1' // calculatrice autorisée en vue élève
   sup?: string
   sup2?: string
   sup3?: string
@@ -394,6 +395,7 @@ export type InteractivityType =
   | 'schema-en-barre' // Non compatible AMC
   | 'shape-2d-grid-editor' // Non compatible AMC
   | 'intervalle-droite' // Non compatible AMC
+  | 'ensemble-intervalles-droite' // Non compatible AMC
   | 'mathalea-solveur' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
@@ -465,6 +467,7 @@ export function isInteractivityType(
     value === 'schema-en-barre' ||
     value === 'shape-2d-grid-editor' ||
     value === 'intervalle-droite' ||
+    value === 'ensemble-intervalles-droite' ||
     value === 'mathalea-solveur'
   )
 }
@@ -518,6 +521,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'schema-en-barre' ||
     value === 'shape-2d-grid-editor' ||
     value === 'intervalle-droite' ||
+    value === 'ensemble-intervalles-droite' ||
     value === 'mathalea-solveur'
   )
 }
@@ -1084,6 +1088,8 @@ export interface IExercice {
   canEnonce?: string
   tip?: string
   tipAvailable?: boolean
+  /** Calculatrice autorisée en vue élève (par défaut : non) */
+  calculatriceAutorisee?: boolean
   canReponseACompleter: string
   canNumeroLie: number
   canLiee: number[]

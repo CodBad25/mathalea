@@ -3,7 +3,6 @@ export const titre =
   "Déterminer le coefficient directeur d'une droite à partir de son équation réduite"
 export const dateDePublication = '25/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

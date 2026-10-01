@@ -2,7 +2,6 @@ import TauxGlobal from '../can/2e/can2I2-04'
 export const titre = 'Déterminer une évolution globale avec une aide'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

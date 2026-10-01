@@ -2,7 +2,6 @@ import ÉcrirePourcentage from '../can/5e/can5P2-02'
 export const titre = 'Écrire sous la forme d’un pourcentage'
 export const dateDePublication = '09/12/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

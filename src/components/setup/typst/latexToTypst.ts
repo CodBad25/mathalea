@@ -812,6 +812,15 @@ function preprocessTex(tex: string): string {
   // \hspace*{0.4cm} : tex2typst produirait `#h(*) 0.4 c m` (étoile invalide) ;
   // ces espaces servent surtout à élargir des colonnes, on les neutralise
   output = output.replace(/\\hspace\s*\*?\s*\{[^{}]*\}/g, '\\;')
+  // \begin{cases}\begin{aligned}…\end{aligned}\end{cases} (systèmes
+  // d'équations) : tex2typst produit `cases(a &= b \\ c &= d)`, or Typst
+  // ignore les sauts de ligne `\` dans les branches d'un `cases` et colle les
+  // équations sur une seule ligne. On retire l'`aligned` intermédiaire pour
+  // obtenir `cases(a &= b, c &= d)`, qui conserve l'alignement sur les `&`.
+  output = output.replace(
+    /\\begin\{cases\}\s*\\begin\{aligned\}((?:(?!\\begin\{)[\s\S])*?)\\end\{aligned\}\s*\\end\{cases\}/g,
+    '\\begin{cases}$1\\end{cases}',
+  )
   // & d'alignement hors environnement (ex. `a \leqslant & b \\ c & d`) :
   // on enveloppe dans \begin{aligned}...\end{aligned} pour que tex2typst
   // accepte la formule sans erreur
@@ -1777,6 +1786,15 @@ function latexTableCell(cell: string, figures?: string[]): TypstTableCell {
   const { color, rest } = extractCellColor(cell)
   const stripped = stripCellLatex(rest)
   if (stripped.length === 0) return { body: '', fill: color }
+  // Dans les tableaux à compléter, \phantom{rrrrr} réserve une vraie zone
+  // d'écriture en LaTeX. Le convertisseur mathématique le réduit à une espace.
+  const writingSpace = /^\\phantom\{r{5}\}(\\%)?$/.exec(stripped)
+  if (writingSpace != null) {
+    return {
+      body: `#box(width: 45pt, height: 14pt)[]${writingSpace[1] ? '$%$' : ''}`,
+      fill: color,
+    }
+  }
   const textContent = unwrapWholeTextCommand(stripped)
   if (textContent != null) {
     const sizedContent = /<svg/i.test(textContent)
@@ -1894,8 +1912,8 @@ function renderTypstTable(
   const header: string[] = [
     `columns: ${columns}`,
     uniform
-      ? `align: ${aligns[0] ?? 'center'}`
-      : `align: ${formatTypstArray(aligns)}`,
+      ? `align: ${aligns[0] ?? 'center'} + horizon`
+      : `align: ${formatTypstArray(aligns.map((align) => `${align} + horizon`))}`,
     `inset: (x: 5pt, y: ${insetY.toFixed(1)}pt)`,
     `stroke: ${fullBorder ? '0.5pt' : 'none'}`,
   ]
@@ -2125,6 +2143,13 @@ function missingBox(label: string): string {
  */
 export function sanitizeSvg(svg: string): string {
   const cleaned = svg
+    // Animations SMIL et compteurs associés : inutiles sur une page imprimée
+    // (et figés sur leur état initial, ils donneraient un dessin trompeur).
+    .replace(/<(animate\w*|set)\b[^>]*?(?:\/>|>[\s\S]*?<\/\1\s*>)/gi, '')
+    .replace(
+      /<text\b[^>]*\bclass="compteurDeTours"[^>]*>[\s\S]*?<\/text>/gi,
+      '',
+    )
     // attribut parasite tel que sérialisé par le DOM (`;=""`)
     .replace(/\s;=""/g, '')
     // point-virgule orphelin après la valeur d'un attribut
@@ -2164,6 +2189,59 @@ export function sanitizeSvg(svg: string): string {
         kept.unshift(attr[0].trim())
       }
       return `<${name}${kept.length > 0 ? ' ' + kept.join(' ') : ''}${selfClosing ? '/>' : '>'}`
+    },
+  )
+}
+
+/** Lettre latine convertie en lettre italique mathématique (Unicode, `𝐴`, `𝑎`…) */
+function toMathItalicLetter(char: string): string {
+  if (char === 'h') return '\u210E' // le « h » italique mathématique est le « ℎ » de Planck (trou du bloc)
+  const code = char.charCodeAt(0)
+  if (code >= 65 && code <= 90) return String.fromCodePoint(0x1d434 + code - 65)
+  if (code >= 97 && code <= 122)
+    return String.fromCodePoint(0x1d44e + code - 97)
+  return char
+}
+
+/** Retire les caractères qui casseraient un attribut XML dans un littéral Typst */
+function safeFontFamily(family: string): string {
+  return family.replace(/["\\<>&]/g, '').trim()
+}
+
+/**
+ * Aligne les textes d'une figure sur les polices du document. Typst n'hérite
+ * rien de la page pour un SVG embarqué : sans `font-family` ou avec une police
+ * qu'il ne connaît pas (« Book Antiqua »), il rend les textes dans une police
+ * de repli, différente du reste du PDF (les labels KaTeX, eux, deviennent de
+ * vraies formules Typst).
+ * - les noms de points `texteParPoint(..., mathOn = true)` (SVG `<text
+ *   font-family="Book Antiqua" font-style="italic">`) passent dans la police
+ *   mathématique, en lettres italiques mathématiques Unicode comme dans une
+ *   formule Typst ;
+ * - les autres `<text>` sans police propre passent dans la police du texte.
+ * S'applique au code Typst d'une figure (`image(bytes("<svg…>"), …)`).
+ */
+export function applyDocumentFontsToFigure(
+  figure: string,
+  fonts: { font: string; mathFont: string },
+): string {
+  const mathFamily = safeFontFamily(fonts.mathFont)
+  const textFamily = safeFontFamily(fonts.font)
+  return figure.replace(
+    /<text\b([^>]*)>([^<]*)<\/text>/g,
+    (text, attrs: string, content: string) => {
+      if (/\sfont-family=\s*\\?"Book Antiqua\\?"/.test(attrs)) {
+        if (mathFamily === '') return text
+        const rest = attrs
+          .replace(/\sfont-family=\s*\\?"Book Antiqua\\?"/g, '')
+          .replace(/\sfont-style=\s*\\?"italic\\?"/g, '')
+          .replace(/\s+$/, '')
+        const letters = content.replace(/[A-Za-z]/g, toMathItalicLetter)
+        return `<text${rest} font-family=\\"${mathFamily}\\">${letters}</text>`
+      }
+      // police déjà fixée (attribut, style en ligne ou classe CSS du SVG)
+      if (textFamily === '' || /font-family|\sclass=/.test(attrs)) return text
+      return `<text${attrs.replace(/\s+$/, '')} font-family=\\"${textFamily}\\">${content}</text>`
     },
   )
 }
@@ -3332,6 +3410,13 @@ export function htmlToTypst(
   let text = html.replace(
     /<mathalea-typst>([\s\S]*?)<\/mathalea-typst>/gi,
     (_, code: string) => protect(decodeEntities(code)),
+  )
+  // Éléments purement interactifs (boutons « Relancer l'animation »,
+  // déclencheurs JavaScript au montage) : sans objet sur une page imprimée.
+  text = text.replace(/<button\b[\s\S]*?<\/button>/gi, '')
+  text = text.replace(
+    /<mathalea-dom-ready\b[^>]*>(?:[\s\S]*?<\/mathalea-dom-ready>)?/gi,
+    '',
   )
   text = protectResponsiveColumns(text, protect, figures, qcmColumns)
   text = protectQcm(

@@ -490,6 +490,37 @@ describe('buildTypstDocument', () => {
     expect(single).not.toContain('Sujet A')
   })
 
+  it.each(['epure', 'cartouche', 'cadre'] as const)(
+    'libère la ligne de version masquée dans l’en-tête %s',
+    (headerStyle) => {
+      const build = (hideVersionLabel: boolean, headerLine = '') =>
+        buildTypstDocument(
+          [exercise()],
+          {
+            ...defaultTypstDocumentOptions,
+            headerStyle,
+            headerLine,
+            hideVersionLabel,
+          },
+          {},
+          [[exercise()]],
+        )
+      const visible = build(false)
+      const hidden = build(true)
+      expect(visible).toContain('#if true [')
+      expect(visible).toContain('#mathalea-anchor("version-label", 0)#text(')
+      expect(hidden).toContain('#if entete != "" [')
+      expect(hidden).toContain(
+        '#place(top + right)[#mathalea-anchor("version-label", 0)]',
+      )
+      expect(hidden).not.toContain('hide(text(weight: "bold"')
+      expect(hidden).not.toContain('grid(columns: (1fr, auto)')
+      expect(build(true, 'Nom et prénom')).toContain(
+        '#let entete = "Nom et prénom"',
+      )
+    },
+  )
+
   it('n’importe pas ctz-euclide quand aucune annale ne l’utilise', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).not.toContain('ctz-euclide')
@@ -969,7 +1000,7 @@ describe('buildTypstDocument', () => {
     // texte du pied de page : variable éditable, partagée entre les trois
     // habillages (voir le groupe de tests « en-tête et pied de page »)
     expect(epure).toContain('#let pied-page = "MathALÉA — coopmaths.fr"')
-    expect(epure).toContain('align(left)[#pied-page]')
+    expect(epure).toContain('#align(left)[#pied-page]')
 
     const cartouche = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
       ...defaultTypstDocumentOptions,
@@ -984,11 +1015,11 @@ describe('buildTypstDocument', () => {
     expect(cadre).toContain(
       'stroke: (top: 1pt + couleur, bottom: 1pt + couleur)',
     )
-    expect(cadre).toContain('align(left)[#pied-page]')
+    expect(cadre).toContain('#align(left)[#pied-page]')
   })
 
   it.each(['epure', 'cartouche', 'cadre'] as const)(
-    'supprime le rappel du titre en bas à droite (%s)',
+    'supprime la pagination et le rappel du titre du pied de page (%s)',
     (headerStyle) => {
       const code = buildTypstDocument([exercise()], {
         ...defaultTypstDocumentOptions,
@@ -998,8 +1029,8 @@ describe('buildTypstDocument', () => {
         code.indexOf('footer: context ['),
         code.indexOf('#set text(font:'),
       )
-      expect(footer).toContain('align(left)[#pied-page]')
-      expect(footer).toContain('align(center)[#counter(page).display')
+      expect(footer).toContain('#align(left)[#pied-page]')
+      expect(footer).not.toContain('counter(page)')
       expect(footer).not.toContain('align(right)')
     },
   )

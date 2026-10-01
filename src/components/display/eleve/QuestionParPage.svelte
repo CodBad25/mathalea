@@ -46,6 +46,8 @@
   /** Callback quand les questions sont prêtes */
   export let onQuestionsReady: (data: {
     questions: (string | IExercice)[]
+    /** Indice de l'exercice auquel appartient chaque question */
+    indiceExercice: number[]
   }) => void = () => {}
 
   /** Callback quand l'index courant change */
@@ -103,7 +105,7 @@
     await tick()
     mathaleaRenderDiv(containerRef)
     loadMathLive()
-    onQuestionsReady({ questions })
+    onQuestionsReady({ questions, indiceExercice })
   }
   // @TODO gérer les questions rapportant plusieurs points !
   async function checkQuestion(i: number) {

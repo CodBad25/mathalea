@@ -18,7 +18,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Calculer en utilisant une proportionnalité'
 export const dateDePublication = '14/01/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire

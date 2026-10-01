@@ -174,10 +174,11 @@ export default class ProprietesDesParallelogrammes extends Exercice {
             texte: 'se coupent en leur milieu',
             statut: listeTypeQuestions[i] === 2,
           },
-          {
-            texte: 'opposés sont égaux',
-            statut: listeTypeQuestions[i] === 3,
-          },
+          // « opposés sont égaux » n'est valide que pour les angles et prête à
+          // confusion avec « opposés sont de même longueur » pour les côtés.
+          listeTypeQuestions[i] === 3
+            ? { texte: 'opposés sont égaux', statut: true }
+            : { texte: 'consécutifs sont de même longueur', statut: false },
           {
             texte: " sont le point d'intersection de ses diagonales",
             statut: false,

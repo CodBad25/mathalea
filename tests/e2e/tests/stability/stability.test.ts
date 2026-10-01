@@ -136,12 +136,16 @@ function libelle(cle: string): string {
   return cle === '' ? 'paramètres par défaut' : cle
 }
 
+/** Sélecteurs d'automatismes (y compris leurs archives `-old`) : exclus du contrôle. */
+const SELECTEURS_AUTOMATISMES = /(^|\/)[123]a-automatismes(-old\d*)?\.ts$/
+
 /** Les entrées techniques du catalogue ne sont pas des exercices à empreinter. */
 function estExerciceControlable(chemin: string): boolean {
   return (
     !chemin.endsWith('.svelte') &&
     !chemin.startsWith('apps/') &&
-    !chemin.startsWith('ressources/')
+    !chemin.startsWith('ressources/') &&
+    !SELECTEURS_AUTOMATISMES.test(chemin)
   )
 }
 

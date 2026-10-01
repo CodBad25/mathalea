@@ -21,7 +21,9 @@ import Exercice from '../Exercice'
 
 export const titre = 'Factoriser une expression algébrique'
 export const dateDePublication = '24/08/2026'
-export const uuid = '0fe88'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'f4abb'
 
 export const refs = {
   'fr-fr': ['2L11-6'],
@@ -31,14 +33,14 @@ export const refs = {
 export const interactifReady = true
 
 /**
- * Factoriser des expressions en mettant en évidence un facteur commun.
+ * Factoriser des expressions avec un facteur commun ou une identité remarquable.
  * @author Stéphane Guyon
  */
 export default class FactoriserAvecFacteurCommun extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
-    this.sup = '9'
+    this.sup = '1-2-3-4-5-6-7-8-9'
     this.spacing = 2
     this.spacingCorr = 2
     this.listeAvecNumerotation = false
@@ -54,7 +56,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         '6 : $AB-AC$',
         '7 : $A^2+AB$',
         '8 : $A^2-AB$',
-        '9 : Mélange',
+        '9 : $A^2-B^2$ avec $A$ et $B$ affines',
       ].join('\n'),
     ]
   }
@@ -69,9 +71,8 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
       gestionnaireFormulaireTexte({
         saisie: this.sup,
         min: 1,
-        max: 8,
-        melange: 9,
-        defaut: 9,
+        max: 9,
+        defaut: 1,
         nbQuestions: this.nbQuestions,
       }).map(Number),
       this.nbQuestions,
@@ -82,7 +83,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
       let a = randint(-6, 6, 0)
       let b = randint(-9, 9, 0)
       let c = randint(-6, 6, [0, a])
-      const d = randint(-9, 9, [0, b])
+      let d = randint(-9, 9, [0, b])
       let e = randint(-6, 6, [0, a, c])
       let f = randint(-9, 9, [0, b, d])
 
@@ -120,6 +121,17 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         ) {
           e = randint(-6, 6, [0, a])
           f = randint(-9, 9, [0, b])
+        }
+      }
+
+      if (type === 9) {
+        while (
+          a === c || a === -c || b === d || b === -d ||
+          pgcd(Math.abs(a - c), Math.abs(b - d)) !== 1 ||
+          pgcd(Math.abs(a + c), Math.abs(b + d)) !== 1
+        ) {
+          c = randint(-6, 6, [0, a, -a])
+          d = randint(-9, 9, [0, b, -b])
         }
       }
 
@@ -205,6 +217,18 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
           ${expression}&=(${facteurCommun})(${facteurCommun})-(${facteurCommun})(${facteurE})\\\\
           &=(${facteurCommun})\\left[(${facteurCommun})-(${facteurE})\\right]\\\\
           &=(${facteurCommun})\\left[${facteurCommun}${ecritureAlgebriqueSauf1(-e)}x${ecritureAlgebrique(-f)}\\right]\\\\
+          &=${miseEnEvidence(reponse)}.
+          \\end{aligned}$`
+          break
+        }
+        case 9: {
+          const difference = reduireAxPlusB(a - c, b - d)
+          const somme = reduireAxPlusB(a + c, b + d)
+          expression = `(${facteurCommun})^2-(${facteurC})^2`
+          reponse = `(${difference})(${somme})`
+          correction = `On reconnaît l'identité remarquable $A^2-B^2=(A-B)(A+B)$.<br>
+          $\\begin{aligned}
+          ${expression}&=\\left[(${facteurCommun})-(${facteurC})\\right]\\left[(${facteurCommun})+(${facteurC})\\right]\\\\
           &=${miseEnEvidence(reponse)}.
           \\end{aligned}$`
           break

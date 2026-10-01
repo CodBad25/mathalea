@@ -25,7 +25,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = "Retrouver le tableau de signes d'un produit de fonctions"
 export const dateDePublication = '26/07/2025'
 

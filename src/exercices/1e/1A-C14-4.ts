@@ -16,7 +16,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Résoudre une inéquation avec un tableau de signes'
 /**
  * @author Gilles Mora

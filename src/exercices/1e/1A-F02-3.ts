@@ -2,7 +2,6 @@ import CalculImageParFonctionAffineFraction from '../can/3e/can3F2-06'
 export const titre = "Calculer l'image d'une fraction par une fonction affine"
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

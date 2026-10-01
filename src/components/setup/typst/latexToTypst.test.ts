@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import {
+  applyDocumentFontsToFigure,
   escapeTypstText,
   htmlToTypst,
   latexMathToTypst,
@@ -329,6 +330,16 @@ describe('latexMathToTypst', () => {
     ).toBe('2 x &= 4 \\ x &= 2')
   })
 
+  it("sépare les équations d'un système par des virgules (cases + aligned)", () => {
+    // 2G34-5 : Typst ignore `\\` dans les branches d'un `cases`, les équations
+    // s'affichaient collées sur une seule ligne.
+    expect(
+      latexMathToTypst(
+        '\\begin{cases}\\begin{aligned}3x+2y &=5\\\\ x-y &=1\\end{aligned}\\end{cases}',
+      ),
+    ).toBe('cases(3 x + 2 y &= 5, x - y &= 1)')
+  })
+
   it('sépare le saut de ligne et le #txt qui le suit (évite l’échappement `\\#`)', () => {
     // 4G20 (Pythagore) : `\\text{Donc :}` en tout début de ligne d'un
     // `aligned` collait le `\` de saut de ligne au `#txt(` généré pour le
@@ -563,6 +574,14 @@ describe('htmlToTypst — schémas en barres (SchemaEnBoite)', () => {
 })
 
 describe('htmlToTypst', () => {
+  it("retire les boutons et les déclencheurs d'animation (inutiles à l'impression)", () => {
+    const typst = htmlToTypst(
+      'Correction.<br><button id="b1" class="x">Relancer l\'animation</button><mathalea-dom-ready action="a" payload="{}"></mathalea-dom-ready>',
+    )
+    expect(typst).toContain('Correction.')
+    expect(typst).not.toMatch(/Relancer|mathalea-dom-ready|button/)
+  })
+
   it('convertit du texte avec formules', () => {
     expect(htmlToTypst('Calculer $\\dfrac{1}{2}+\\dfrac{1}{3}$.')).toBe(
       'Calculer $frac(1, 2) + frac(1, 3)$.',
@@ -673,7 +692,9 @@ describe('htmlToTypst', () => {
       '$\\def\\arraystretch{1.5}\\begin{array}{|l|c|c|}\\hline x & 1 & 2 \\\\ \\hline f(x) & 3 & 4 \\\\ \\hline\\end{array}$',
     )
     expect(result).toContain('#table(')
-    expect(result).toContain('align: (left, center, center,)')
+    expect(result).toContain(
+      'align: (left + horizon, center + horizon, center + horizon,)',
+    )
     expect(result).toContain('inset: (x: 5pt, y: 4.5pt)')
     expect(result).toContain('stroke: 0.5pt')
     expect(result).toContain('[$x$]')
@@ -690,6 +711,19 @@ describe('htmlToTypst', () => {
     expect(result).toContain('table.cell(fill: rgb("#d3d3d3"))[$x$]')
     expect(result).not.toContain('arraystretch')
     expect(result).not.toContain('cellcolor')
+  })
+
+  it('réserve des cases à remplir et centre verticalement les intitulés de 6N1E', () => {
+    const result = htmlToTypst(
+      '$\\renewcommand{\\arraystretch}{2.5}\\begin{array}{|c|c|c|}\\hline ' +
+        '\\cellcolor{lightgray} \\text{Fraction décimale} & \\phantom{rrrrr} & \\dfrac{30}{100} \\\\ \\hline ' +
+        '\\cellcolor{lightgray} \\text{Pourcentage} & \\phantom{rrrrr}\\% & 30\\% \\\\ \\hline' +
+        '\\end{array}\\renewcommand{\\arraystretch}{1}$',
+    )
+    expect(result).toContain('align: center + horizon')
+    expect(result).toContain('#box(width: 45pt, height: 14pt)[]')
+    expect(result).toContain('#box(width: 45pt, height: 14pt)[]$%$')
+    expect(result).toContain('Fraction décimale')
   })
 
   it("ne coupe pas une cellule sur le `&` d'une entité HTML (`10&nbsp;\\%`, BP2AutoB3)", () => {
@@ -1161,6 +1195,48 @@ describe('htmlToTypst', () => {
   })
 })
 
+describe('applyDocumentFontsToFigure', () => {
+  const fonts = { font: 'Libertinus Serif', mathFont: 'Libertinus Math' }
+  const svgText = (attrs: string, content: string) =>
+    `image(bytes("<svg><text ${attrs} x=\\"1\\">${content}</text></svg>"), format: "svg")`
+
+  it('passe les noms de points en lettres italiques mathématiques dans la police maths', () => {
+    const figure = svgText(
+      'font-family=\\"Book Antiqua\\" font-style=\\"italic\\"',
+      'J',
+    )
+    const result = applyDocumentFontsToFigure(figure, fonts)
+    expect(result).toContain('font-family=\\"Libertinus Math\\"')
+    expect(result).toContain('>\u{1D43D}</text>')
+    expect(result).not.toContain('Book Antiqua')
+    expect(result).not.toContain('font-style')
+  })
+
+  it('laisse inchangés les textes qui ne sont pas en police maths', () => {
+    const figure = svgText('font-family=\\"Arial\\"', 'J')
+    expect(applyDocumentFontsToFigure(figure, fonts)).toBe(figure)
+  })
+
+  it('met dans la police du texte les textes sans police propre', () => {
+    const figure = svgText('style=\\"font-size:14px\\"', 'cm')
+    const result = applyDocumentFontsToFigure(figure, fonts)
+    expect(result).toContain('font-family=\\"Libertinus Serif\\"')
+    expect(result).toContain('>cm</text>')
+  })
+
+  it("ne touche pas un texte dont la police vient du style ou d'une classe", () => {
+    const inStyle = svgText('style=\\"font-family:serif\\"', 'x')
+    const inClass = svgText('class=\\"trigo\\"', 'x')
+    expect(applyDocumentFontsToFigure(inStyle, fonts)).toBe(inStyle)
+    expect(applyDocumentFontsToFigure(inClass, fonts)).toBe(inClass)
+  })
+
+  it('convertit le h en ℎ (U+210E)', () => {
+    const figure = svgText('font-family=\\"Book Antiqua\\"', 'h')
+    expect(applyDocumentFontsToFigure(figure, fonts)).toContain('>\u210E<')
+  })
+})
+
 describe('sanitizeSvg', () => {
   it('supprime le point-virgule parasite des textes mathalea2d', () => {
     // forme brute générée par lib/2d/textes.ts
@@ -1181,6 +1257,17 @@ describe('sanitizeSvg', () => {
     expect(
       sanitizeSvg('<path stroke-opacity="0.5" stroke-opacity="0.5" d="M0 0"/>'),
     ).toBe('<path stroke-opacity="0.5" d="M0 0"/>')
+  })
+
+  it('retire les animations SMIL et les compteurs de tours des engrenages', () => {
+    const svg =
+      '<svg><g><path d="M0 0"/><animateTransform attributeName="transform" type="rotate" dur="5" repeatCount="indefinite"\n/></g>' +
+      '<circle cx="1" cy="1" r="2"/><text class="compteurDeTours" id="c1" x="1" y="1">0</text></svg>'
+    const result = sanitizeSvg(svg)
+    expect(result).not.toMatch(/animate/i)
+    expect(result).not.toContain('compteurDeTours')
+    expect(result).toContain('<path d="M0 0"/>')
+    expect(result).toContain('<circle')
   })
 
   it('rend les entités compatibles XML', () => {

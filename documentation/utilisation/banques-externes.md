@@ -82,6 +82,26 @@ Le script télécharge `dist/manifest.json` du dépôt et réécrit
 puis commit du manifest. Si des exercices ont été ajoutés ou renommés, penser à
 mettre à jour en parallèle les fichiers sous `static/ffjm/`.
 
+### Tester une modification de FFJM
+
+Pour tester des fichiers encore présents uniquement sur votre machine,
+construisez l'archive de la banque FFJM et importez-la avec **« Ajouter une
+banque d'exercices » → « Ajouter une archive »**. Réimportez l'archive après
+chaque modification. Pour tester une branche publiée, poussez les fichiers
+construits (`dist.zip` ou `dist/`) sur une branche publique de la forge, puis
+ajoutez l'URL `https://forge.apps.education.fr/coopmaths/ffjm/-/tree/ma-branche`.
+Rechargez MathALÉA après chaque mise à jour de la branche : le dépôt est relu
+au démarrage. Si `dist.zip` existe, il est lu avant `dist/` ; reconstruisez-le
+aussi pour éviter de tester une ancienne version.
+
+Le manifest de test doit garder l'identifiant `ffjm`. La dernière version
+ajoutée pour cet identifiant prend alors la place de la banque intégrée dans
+« Ressources partenaires » et pour les images, les sources et les préambules
+des exercices. Son titre peut être différent. Le retrait de la version de test
+redonne immédiatement accès à la version intégrée. Une archive locale ne peut
+pas être partagée par lien ; utilisez une branche de la forge pour un test
+partagé.
+
 ## Partager un lien
 
 Quand une sélection contient des exercices venant d'un dépôt de forge, le lien
@@ -144,14 +164,14 @@ tex/somme-de-fractions.tex
 
 Champs de la banque :
 
-| Champ                                         | Obligatoire | Rôle                                                                                                                                                                 |
-| --------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `schema`                                      | oui         | doit valoir `mathalea-banque-v1`                                                                                                                                     |
-| `id`                                          | oui         | identifiant court (lettres, chiffres, `.`, `_`, `-`) ; il entre dans les uuid des exercices, donc dans les liens partagés                                            |
-| `titre`                                       | oui         | nom du nœud affiché dans « Ressources partenaires »                                                                                                                  |
+| Champ                                         | Obligatoire | Rôle                                                                                                                                                                                                                                          |
+| --------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `schema`                                      | oui         | doit valoir `mathalea-banque-v1`                                                                                                                                                                                                              |
+| `id`                                          | oui         | identifiant court (lettres, chiffres, `.`, `_`, `-`) ; il entre dans les uuid des exercices, donc dans les liens partagés                                                                                                                     |
+| `titre`                                       | oui         | nom du nœud affiché dans « Ressources partenaires »                                                                                                                                                                                           |
 | `auteur`, `licence`, `version`, `description` | non         | `auteur` figure aussi en attribution discrète au-dessus de chaque exercice de la banque (vues prof et élève), sauf pour la banque FFJM où seul le titre de la banque apparaît ; les quatre sont affichés dans la liste des banques installées |
-| `preambule`                                   | non         | personnalisation du document généré, voir ci-dessous                                                                                                                 |
-| `exercices`                                   | oui         | liste des exercices, non vide                                                                                                                                        |
+| `preambule`                                   | non         | personnalisation du document généré, voir ci-dessous                                                                                                                                                                                          |
+| `exercices`                                   | oui         | liste des exercices, non vide                                                                                                                                                                                                                 |
 
 Champs d'un exercice :
 

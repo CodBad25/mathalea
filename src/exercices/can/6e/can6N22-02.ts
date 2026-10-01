@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -46,14 +46,14 @@ export default class DeterminerLeNombre extends Exercice {
             randint(10, 99),
             randint(100, 999),
             randint(1000, 2000),
-            randint(1, 9),
+            randint(2, 9),
           ])
-          texte = `Quel est le nombre égal à $${a}$ dixièmes ?
+          texte = `Quel est le nombre égal à $${texNombre(a)}$ dixièmes ?
           `
           this.canEnonce = texte
           reponse = a / 10
           texteCorr = ` $1$ dixième est égal à $0,1$. <br>
-          Ainsi, $${a}$ dixièmes $=${a}\\times 0,1=${miseEnEvidence(texNombre(reponse))}$. `
+          Ainsi, $${texNombre(a)}$ dixièmes $=${texNombre(a)}\\times 0,1=${miseEnEvidence(texNombre(reponse))}$. `
           if (this.sup) {
             this.autoCorrection[i] = {
               enonce: texte,
@@ -80,9 +80,14 @@ export default class DeterminerLeNombre extends Exercice {
             texte += monQcm.texte
             this.canReponseACompleter = monQcm.texte
           } else {
-            texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-              texteAvant: '<br>',
-            })
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBase,
+              {
+                texteAvant: '<br>',
+              },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
             this.canReponseACompleter = ''
           }
@@ -92,14 +97,14 @@ export default class DeterminerLeNombre extends Exercice {
             randint(10, 99),
             randint(100, 999),
             randint(1000, 2000),
-            randint(1, 9),
+            randint(2, 9),
           ])
-          texte = `Quel est le nombre égal à $${a}$ centièmes ?
+          texte = `Quel est le nombre égal à $${texNombre(a)}$ centièmes ?
           `
           this.canEnonce = texte
           reponse = a / 100
           texteCorr = ` $1$ centième est égal à $0,01$. <br>
-          Ainsi, $${a}$ centièmes $=${a}\\times 0,01=${miseEnEvidence(texNombre(reponse))}$. `
+          Ainsi, $${texNombre(a)}$ centièmes $=${texNombre(a)}\\times 0,01=${miseEnEvidence(texNombre(reponse))}$. `
           if (this.sup) {
             this.autoCorrection[i] = {
               enonce: texte,
@@ -126,9 +131,14 @@ export default class DeterminerLeNombre extends Exercice {
             texte += monQcm.texte
             this.canReponseACompleter = monQcm.texte
           } else {
-            texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-              texteAvant: '<br>',
-            })
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBase,
+              {
+                texteAvant: '<br>',
+              },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
             this.canReponseACompleter = ''
           }
@@ -140,14 +150,14 @@ export default class DeterminerLeNombre extends Exercice {
             randint(10, 99),
             randint(100, 999),
             randint(1000, 2000),
-            randint(1, 9),
+            randint(2, 9),
           ])
-          texte = `Quel est le nombre égal à $${a}$ millièmes ?
+          texte = `Quel est le nombre égal à $${texNombre(a)}$ millièmes ?
           `
           this.canEnonce = texte
           reponse = a / 1000
           texteCorr = ` $1$ millième est égal à $0,001$. <br>
-          Ainsi, $${a}$ millièmes $=${a}\\times 0,001=${miseEnEvidence(texNombre(reponse))}$. `
+          Ainsi, $${texNombre(a)}$ millièmes $=${texNombre(a)}\\times 0,001=${miseEnEvidence(texNombre(reponse))}$. `
           if (this.sup) {
             this.autoCorrection[i] = {
               enonce: texte,
@@ -174,9 +184,14 @@ export default class DeterminerLeNombre extends Exercice {
             texte += monQcm.texte
             this.canReponseACompleter = monQcm.texte
           } else {
-            texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-              texteAvant: '<br>',
-            })
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBase,
+              {
+                texteAvant: '<br>',
+              },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
             this.canReponseACompleter = ''
           }

@@ -18,7 +18,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = "Calculer le coût de consommation électrique d'un appareil"
 export const dateDePublication = '09/12/2025'
 // Ceci est un exemple de QCM avec version originale et version aléatoire

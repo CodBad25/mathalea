@@ -1802,7 +1802,16 @@
             // car il contient les SVG substitués pour les figures LaTeX
             // sauf si le texte spécifique a un contenu pertinent et pas de figures
             if (figureEnvRegex.test(raw)) {
-              return childrenHtmlContent
+              const svgBlocks =
+                childrenHtmlContent.match(/<svg[\s\S]*?<\/svg>/gi) ?? []
+              let svgIndex = 0
+              const contentWithSvg = raw.replace(
+                /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/gi,
+                () => svgBlocks[svgIndex++] ?? '',
+              )
+              return svgBlocks.length > 0
+                ? latexTextToHtmlForAMCPreview(contentWithSvg)
+                : childrenHtmlContent
             }
             // Si le texte spécifique n'a pas de figures, on peut l'utiliser.
             // Pour AMCNum, AMCOpen et QCM, le texte vient souvent de la passe isAmc
@@ -1979,6 +1988,14 @@
     const html =
       typeof header.htmlContent === 'string' ? header.htmlContent.trim() : ''
     const enonce = typeof header.enonce === 'string' ? header.enonce.trim() : ''
+
+    const showOnlyOnce = Boolean(header.data?.enonceAvantUneFois)
+    const isHidden =
+      header.data?.enonceAvant === false &&
+      header.data?.enonceApresNumQuestion !== true &&
+      !(showOnlyOnce && header.questionRef.questionIndex === 0)
+    if (isHidden) return false
+
     return html.length > 0 || enonce.length > 0
   }
 
@@ -2365,6 +2382,22 @@
         }
       }
     }
+
+    const sourceTikzScaleFactor = getQuestionTikzScaleFactor(
+      selectedRef.exerciseIndex,
+      selectedRef.questionIndex,
+    )
+    const nextTikzScaleFactors = { ...tikzScaleFactorsByQuestion }
+    for (
+      let questionIndex = 0;
+      questionIndex < autoCorrection.length;
+      questionIndex++
+    ) {
+      nextTikzScaleFactors[
+        getQuestionKey(selectedRef.exerciseIndex, questionIndex)
+      ] = sourceTikzScaleFactor
+    }
+    tikzScaleFactorsByQuestion = nextTikzScaleFactors
 
     exercices = [...exercices]
     updateLatexPreview()

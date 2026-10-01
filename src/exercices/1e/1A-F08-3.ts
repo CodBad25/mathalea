@@ -4,7 +4,6 @@ export const titre =
   "Déterminer le coefficient directeur d'une fonction affine à partir de deux images"
 export const dateDePublication = '01/09/2026'
 export const amcReady = true
-export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**

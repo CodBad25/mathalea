@@ -474,7 +474,7 @@ export default class EngrenagesAnimes extends Exercice {
       )
 
       texte += mathalea2d(paramsEnonce, objetsEnonce)
-      if (context.isHtml) {
+      if (context.isHtml && !context.isTypst) {
         texteCorr += `<div id="containerAnimRoues${numeroExercice}_${i}">${mathalea2d(paramsCorrection, objetsCorrection)}</div>`
         const oneCycle = this.sup2
         const button = document.createElement('button')

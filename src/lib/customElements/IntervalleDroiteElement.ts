@@ -19,6 +19,8 @@ export type IntervalleDroiteOptions = {
   min: number
   max: number
   labelValue?: number
+  labelValues?: number[]
+  showGraduations?: boolean
   interactivityOn?: boolean
 }
 
@@ -44,6 +46,8 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
     min,
     max,
     labelValue,
+    labelValues,
+    showGraduations = true,
     interactivityOn = true,
   }: IntervalleDroiteOptions): string {
     return super.create({
@@ -53,6 +57,8 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
       min,
       max,
       labelValue,
+      labelValues,
+      showGraduations,
       interactivityOn,
     })
   }
@@ -119,21 +125,27 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
     const min = this.getNumberAttribute('min', 0)
     const max = this.getNumberAttribute('max', 1)
     const labelValue = this.getNumberAttribute('label-value', Number.NaN)
+    const valuesToLabel = this.getNumberArrayAttribute('label-values')
+    const showGraduations = this.getAttribute('show-graduations') !== 'false'
     const width = 560
     const height = 105
     const margin = 34
     const axisY = 48
-    const usableWidth = width - 2 * margin
+    const axisStartX = margin - 10
+    const axisEndX = width - margin + 10
+    const arrowTipX = width - margin + 16
+    const usableWidth = axisEndX - axisStartX
     const xFor = (value: number) =>
-      margin + ((value - min) / Math.max(1, max - min)) * usableWidth
+      axisStartX + ((value - min) / Math.max(1, max - min)) * usableWidth
     const points = Array.from(
       { length: Math.max(0, Math.round(max - min)) + 1 },
       (_, index) => min + index,
     )
     const [start, end] = this.selectedValues
+    const rightInfinitySelected = end != null && this.rightBracket == null
     const colored =
       start != null && end != null
-        ? `<line class="colored" x1="${xFor(start)}" y1="${axisY}" x2="${xFor(end)}" y2="${axisY}" />`
+        ? `<line class="colored" x1="${this.leftBracket == null ? axisStartX : xFor(start)}" y1="${axisY}" x2="${rightInfinitySelected ? arrowTipX : xFor(end)}" y2="${axisY}" />`
         : ''
     const brackets =
       start != null && end != null
@@ -143,10 +155,10 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
       .map((value) => {
         const x = xFor(value)
         const selected = this.selectedValues.includes(value)
-        const label =
-          value === labelValue ? `<text x="${x}" y="82">${value}</text>` : ''
-        return `<g class="point${selected ? ' selected' : ''}" data-value="${value}" role="button" tabindex="${this.interactivityOn ? '0' : '-1'}" aria-label="Graduation ${value}">
-          <line x1="${x}" y1="39" x2="${x}" y2="57" />
+        const isLabeled = value === labelValue || valuesToLabel.includes(value)
+        const label = isLabeled ? `<text x="${x}" y="82">${value}</text>` : ''
+        return `<g class="point${selected ? ' selected' : ''}" data-value="${value}" role="button" tabindex="${this.interactivityOn ? '0' : '-1'}" aria-label="Valeur ${value}">
+          ${showGraduations || isLabeled ? `<line x1="${x}" y1="39" x2="${x}" y2="57" />` : ''}
           <circle cx="${x}" cy="${axisY}" r="13" />${label}
         </g>`
       })
@@ -160,6 +172,7 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
         svg { display: block; width: min(100%, 560px); height: auto; overflow: visible; }
         .axis { stroke: currentColor; stroke-width: 2; }
         .arrow { fill: currentColor; }
+        .arrow.infinity-selected { fill: ${bleuMathalea}; }
         .point line { stroke: currentColor; stroke-width: 1.5; pointer-events: none; }
         .point circle { fill: transparent; stroke: transparent; cursor: pointer; }
         .point text { fill: currentColor; font: 16px sans-serif; text-anchor: middle; pointer-events: none; }
@@ -173,8 +186,8 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
       ${this.interactivityOn ? '<p class="instructions">Cliquer sur les deux extrémités de la partie à colorier. Cliquer ensuite sur une extrémité pour changer le sens de son crochet.</p>' : ''}
       <div class="figure">
         <svg viewBox="0 0 ${width} ${height}" aria-label="Droite graduée interactive">
-          <line class="axis" x1="${margin - 10}" y1="${axisY}" x2="${width - margin + 10}" y2="${axisY}" />
-          <path class="arrow" d="M ${width - margin + 16} ${axisY} l -8 -5 v 10 z" />
+          <line class="axis" x1="${axisStartX}" y1="${axisY}" x2="${axisEndX}" y2="${axisY}" />
+          <path class="arrow${rightInfinitySelected ? ' infinity-selected' : ''}" d="M ${arrowTipX} ${axisY} l -8 -5 v 10 z" />
           ${colored}${ticks}${brackets}
         </svg>
         ${this.interactivityOn ? '<button type="button">Réinitialiser</button>' : ''}
@@ -263,8 +276,23 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
   }
 
   private getNumberAttribute(name: string, fallback: number): number {
-    const value = Number(this.getAttribute(name))
+    const rawValue = this.getAttribute(name)
+    if (rawValue == null) return fallback
+    const value = Number(rawValue)
     return Number.isFinite(value) ? value : fallback
+  }
+
+  private getNumberArrayAttribute(name: string): number[] {
+    const rawValue = this.getAttribute(name)
+    if (rawValue == null) return []
+    try {
+      const value: unknown = JSON.parse(rawValue)
+      return Array.isArray(value)
+        ? value.filter((item): item is number => typeof item === 'number')
+        : []
+    } catch {
+      return []
+    }
   }
 }
 
