@@ -1,3 +1,9 @@
+import {
+  applyImageCuts,
+  harvestImageCuts,
+  IMAGE_SLICE_HELPER,
+  type ExerciseImageCuts,
+} from './imageCuts'
 import QRCode from 'qrcode'
 import {
   CETZ_IMPORT,
@@ -752,6 +758,8 @@ export interface TypstCarryOver {
    * figure. Expression Typst brute (`left`, `center` ou `right`).
    */
   figureAlign?: Record<number, string>
+  /** Coupures des images par exercice, indépendantes pour chaque sujet et partie. */
+  imageCuts?: Record<number, ExerciseImageCuts>
   /**
    * Zoom d'un exercice statique sans source `.typ` (`#let exo-N-zoom = ...`),
    * par numéro d'exercice — contrairement à `figureZoom` (numérotation
@@ -1281,6 +1289,7 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
     insertionsCorrection,
     figureZoom,
     figureAlign,
+    imageCuts: harvestImageCuts(code),
     exerciseZoom,
     exerciseCorrectionZoom,
     merges,
@@ -2530,7 +2539,27 @@ function computeGeneratedExercises(
       nextCorrectionStart += body.itemCount
       correction = body.code
     }
-    return { enonce: enonce.code, correction, qrUrl, writingLines }
+    return {
+      enonce: exercise.isStaticImage
+        ? applyImageCuts(
+            enonce.code,
+            carryOver.imageCuts?.[k + 1]?.enonce,
+            k + 1,
+            'enonce',
+          )
+        : enonce.code,
+      correction:
+        correction != null && exercise.isStaticCorrectionImage
+          ? applyImageCuts(
+              correction,
+              carryOver.imageCuts?.[k + 1]?.correction,
+              k + 1,
+              'correction',
+            )
+          : correction,
+      qrUrl,
+      writingLines,
+    }
   })
 }
 
@@ -2647,6 +2676,7 @@ export function buildStandaloneExerciseCode(
   if (usesFigures) {
     lines.push(
       MATHALEA_FIT_HELPER,
+      IMAGE_SLICE_HELPER,
       '',
       stripAnchorCall(MATHALEA_FIGURE_BLOCK_HELPER),
       '',
@@ -3463,6 +3493,7 @@ export function buildTypstDocument(
         stabilizeStructuralInsertions(
           {
             ...stableCarryOver,
+            imageCuts: undefined,
             codeOverrides: undefined,
             codeOverridesCorrection: undefined,
             codeOverridesCan: undefined,
@@ -3643,7 +3674,7 @@ export function buildTypstDocument(
   // à labels, il doit donc être défini avant.
   if (figures.length > 0) {
     lines.push('// ----- Figures : adaptation à la largeur et alignement -----')
-    lines.push(MATHALEA_FIT_HELPER)
+    lines.push(MATHALEA_FIT_HELPER, IMAGE_SLICE_HELPER)
     lines.push('')
     // le repère `mathalea-anchor` de ce bloc (contrôle de zoom de la
     // palette) n'a pas de sens dans le code exporté, où il n'est jamais défini

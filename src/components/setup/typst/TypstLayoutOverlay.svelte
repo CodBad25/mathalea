@@ -230,6 +230,7 @@
     onAddExercise: () => void
     onToggleMergeBefore: (num: number) => void
     onAdjustFigureZoom: (num: number, delta: number) => void
+    onCutImage: (num: number, part: 'enonce' | 'correction') => void
     onAdjustExerciseZoom: (num: number, delta: number) => void
     onAdjustExerciseCorrectionZoom: (num: number, delta: number) => void
     onSetFigureAlign: (num: number, align: 'left' | 'center' | 'right') => void
@@ -313,6 +314,7 @@
     onAddExercise,
     onToggleMergeBefore,
     onAdjustFigureZoom,
+    onCutImage,
     onAdjustExerciseZoom,
     onAdjustExerciseCorrectionZoom,
     onSetFigureAlign,
@@ -1581,6 +1583,13 @@
           {@const exoZoom = exerciseZoomValues[widget.num] ?? 1}
           <button
             type="button"
+            title="Découper l'image"
+            aria-label="Découper l'image de l'exercice {widget.num}"
+            onclick={() => onCutImage(widget.num, 'enonce')}
+            ><i class="bx bx-cut"></i></button
+          >
+          <button
+            type="button"
             title="Réduire l'exercice"
             aria-label="Réduire l'exercice {widget.num}"
             onclick={() => onAdjustExerciseZoom(widget.num, -1)}
@@ -1780,6 +1789,13 @@
         {/if}
         {#if nonEditableCorrections[widget.num] && !canMode}
           {@const corrZoom = exerciseCorrectionZoomValues[widget.num] ?? 1}
+          <button
+            type="button"
+            title="Découper l'image"
+            aria-label="Découper l'image de la correction de l'exercice {widget.num}"
+            onclick={() => onCutImage(widget.num, 'correction')}
+            ><i class="bx bx-cut"></i></button
+          >
           <span class="typst-pill-sep"></span>
           <button
             type="button"

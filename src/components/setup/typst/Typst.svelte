@@ -77,6 +77,8 @@
   import CoverDateField from './CoverDateField.svelte'
   import { defaultCoverPoints } from './coverBareme'
   import TypstAddExerciseModal from './addExercise/TypstAddExerciseModal.svelte'
+  import TypstImageCutModal from './TypstImageCutModal.svelte'
+  import type { ExerciseImageCuts } from './imageCuts'
   import TypstLayoutOverlay, {
     type OverlayWidget,
     type TasksLayoutValue,
@@ -1521,6 +1523,14 @@
       writingLines,
       exerciseZoom,
       exerciseCorrectionZoom,
+      imageCuts: Object.fromEntries(
+        Object.entries(carryOver.imageCuts ?? {})
+          .filter(([key]) => Number(key) !== removed)
+          .map(([key, value]) => [
+            Number(key) > removed ? Number(key) - 1 : Number(key),
+            value,
+          ]),
+      ),
     }
   }
 
@@ -1590,6 +1600,7 @@
       writingLines: shiftMap(carryOver.writingLines),
       exerciseZoom: shiftMap(carryOver.exerciseZoom),
       exerciseCorrectionZoom: shiftMap(carryOver.exerciseCorrectionZoom),
+      imageCuts: shiftMap(carryOver.imageCuts),
     }
   }
 
@@ -1874,6 +1885,12 @@
       writingLines,
       exerciseZoom,
       exerciseCorrectionZoom,
+      imageCuts: Object.fromEntries(
+        Object.entries(carryOver.imageCuts ?? {}).map(([key, value]) => [
+          swapNum(Number(key)),
+          value,
+        ]),
+      ),
     }
   }
 
@@ -1972,6 +1989,54 @@
 
   function openSettings(num: number) {
     settingsExerciseIndex = num - 1
+  }
+
+  let imageCutEditor: {
+    num: number
+    part: keyof ExerciseImageCuts
+    urls: string[]
+    cuts: number[][]
+  } | null = $state(null)
+
+  function openImageCuts(num: number, part: keyof ExerciseImageCuts) {
+    const input = buildAllVersionInputs()[previewVersion][num - 1]
+    if (input == null) return
+    const html =
+      part === 'enonce'
+        ? [input.intro, ...input.questions].join('')
+        : [input.introCorrection, ...input.corrections].join('')
+    const urls = [...html.matchAll(/<img[^>]*\ssrc=["']([^"']+)["']/gi)].map(
+      (match) => match[1],
+    )
+    const carry = activeCarryOver(harvestCarryOver(currentCode()))
+    imageCutEditor = {
+      num,
+      part,
+      urls,
+      cuts: carry.imageCuts?.[num]?.[part] ?? [],
+    }
+  }
+
+  function updateImageCuts(cuts: number[][]) {
+    if (imageCutEditor == null || !confirmOverwrite()) return
+    const { num, part } = imageCutEditor
+    const allCarry = harvestCarryOver(currentCode())
+    const carry = activeCarryOver(allCarry)
+    carry.imageCuts = {
+      ...carry.imageCuts,
+      [num]: { ...carry.imageCuts?.[num], [part]: cuts },
+    }
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const code = buildTypstDocument(
+      primary,
+      documentOptions,
+      allCarry,
+      extraVersions,
+      { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
+    )
+    setEditorContent(code)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
+    imageCutEditor = null
   }
 
   /**
@@ -4936,6 +5001,7 @@
                     onAdjustGutter={adjustGutter}
                     onAdjustFigureZoom={adjustFigureZoom}
                     onAdjustExerciseZoom={adjustExerciseZoom}
+                    onCutImage={openImageCuts}
                     onAdjustExerciseCorrectionZoom={adjustExerciseCorrectionZoom}
                     onSetFigureAlign={setFigureAlign}
                     onInsert={insertAfterExercise}
@@ -5179,6 +5245,18 @@
         {/key}
       </div>
     </div>
+  {/if}
+
+  {#if imageCutEditor !== null}
+    <TypstImageCutModal
+      urls={imageCutEditor.urls}
+      initialCuts={imageCutEditor.cuts}
+      title={`${imageCutEditor.part === 'correction' ? 'Correction de l’exercice' : 'Exercice'} ${imageCutEditor.num}`}
+      onApply={updateImageCuts}
+      onClose={() => {
+        imageCutEditor = null
+      }}
+    />
   {/if}
 
   {#if codeEditNum !== null}
