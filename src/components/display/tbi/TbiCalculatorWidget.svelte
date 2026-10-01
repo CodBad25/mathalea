@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { get } from 'svelte/store'
+  import { get, type Writable } from 'svelte/store'
   import { draggable, resizable } from '../../../lib/components/tbiPointer'
   import {
     calculatorHeightForWidth,
     calculatorStateOf,
     tbiState,
+    type CalculatorsState,
     TBI_CALCULATOR_ASPECT,
     TBI_CALCULATOR_MAX_W,
     TBI_CALCULATOR_MIN_W,
@@ -16,10 +17,22 @@
   interface Props {
     kind: TbiCalculatorKind
     /** Sauvegarde de la position/taille (localStorage), appelée en fin de geste */
-    persistLayout: () => void
+    persistLayout?: () => void
+    /** Store portant l'état des calculatrices (vue TBI par défaut) */
+    store?: Writable<CalculatorsState>
+    /** Signalement statistique de l'ouverture (vue TBI par défaut) */
+    onOpen?: (kind: TbiCalculatorKind) => void
+    /** Masque le widget sans le démonter, pour conserver l'état de la calculatrice */
+    hidden?: boolean
   }
 
-  let { kind, persistLayout }: Props = $props()
+  let {
+    kind,
+    persistLayout = () => {},
+    store = tbiState,
+    onOpen = statsTbiCalculatorTracker,
+    hidden = false,
+  }: Props = $props()
 
   /**
    * Les émulateurs NumWorks (pages statiques dans public/calculators/) sont
@@ -45,7 +58,7 @@
 
   // copie superficielle : calculatorStateOf renvoie la même référence mutée
   // en place, ce qui empêcherait $derived de détecter un changement
-  let calc = $derived({ ...calculatorStateOf($tbiState, kind) })
+  let calc = $derived({ ...calculatorStateOf($store, kind) })
 
   /**
    * L'iframe ne déclenche pas d'événement d'erreur exploitable en cas de
@@ -56,7 +69,7 @@
   let fileAvailable: boolean | null = $state(null)
 
   onMount(async () => {
-    statsTbiCalculatorTracker(kind)
+    onOpen(kind)
     try {
       const response = await fetch(config[kind].src)
       const text = response.ok ? await response.text() : ''
@@ -67,7 +80,7 @@
   })
 
   function close() {
-    tbiState.update((state) => {
+    store.update((state) => {
       calculatorStateOf(state, kind).visible = false
       return state
     })
@@ -111,7 +124,7 @@
   }
 
   function beginDrag() {
-    const c = calculatorStateOf(get(tbiState), kind)
+    const c = calculatorStateOf(get(store), kind)
     gesture = { x: c.x, y: c.y, w: c.w, h: c.h, corner: null, raf: null }
   }
 
@@ -123,7 +136,7 @@
   }
 
   function beginResize(corner: Corner) {
-    const c = calculatorStateOf(get(tbiState), kind)
+    const c = calculatorStateOf(get(store), kind)
     gesture = { x: c.x, y: c.y, w: c.w, h: c.h, corner, raf: null }
   }
 
@@ -160,7 +173,7 @@
     applyGestureStyle()
     const { x, y, w, h } = gesture
     gesture = null
-    tbiState.update((state) => {
+    store.update((state) => {
       const c = calculatorStateOf(state, kind)
       c.x = x
       c.y = y
@@ -173,7 +186,7 @@
 
   onMount(() => {
     // position par défaut : en cascade à droite des autres widgets
-    tbiState.update((state) => {
+    store.update((state) => {
       const c = calculatorStateOf(state, kind)
       if (c.x === 0 && c.y === 0) {
         c.x = config[kind].defaultX
@@ -191,6 +204,7 @@
 <div
   bind:this={widgetEl}
   class="fixed z-40 flex flex-col rounded-xl shadow-xl overflow-hidden bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest print-hidden"
+  style:display={hidden ? 'none' : undefined}
   style="left: {calc.x}px; top: {calc.y}px; width: {calc.w}px; height: {calc.h}px;"
 >
   <div

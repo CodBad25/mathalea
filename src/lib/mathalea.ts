@@ -534,6 +534,7 @@ export function mathaleaHandleParamOfOneExercice(
   if (param.cols !== undefined && param.cols > 1) exercice.nbCols = param.cols
   if (param.cd !== undefined) exercice.correctionDetaillee = param.cd === '1'
   if (param.tip !== undefined) exercice.tipAvailable = param.tip === '1'
+  exercice.calculatriceAutorisee = param.calc === '1'
   if (exercice.seed === undefined) {
     exercice.seed = mathaleaGenerateSeed()
   }
@@ -762,6 +763,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         newExercisesParams[indiceExercice].cd = entry[1]
       } else if (entry[0] === 'tip' && (entry[1] === '0' || entry[1] === '1')) {
         newExercisesParams[indiceExercice].tip = entry[1]
+      } else if (entry[0] === 'calc' && entry[1] === '1') {
+        newExercisesParams[indiceExercice].calc = entry[1]
       } else if (entry[0] === 'v') {
         v = convertVueType(entry[1].trim().toLowerCase())
       } else if (entry[0] === 'recorder') {

@@ -82,6 +82,7 @@ export interface InterfaceParams extends Partial<
   interactif?: '0' | '1'
   cd?: '0' | '1'
   tip?: '0' | '1'
+  calc?: '0' | '1' // calculatrice autorisée en vue élève
   sup?: string
   sup2?: string
   sup3?: string
@@ -1087,6 +1088,8 @@ export interface IExercice {
   canEnonce?: string
   tip?: string
   tipAvailable?: boolean
+  /** Calculatrice autorisée en vue élève (par défaut : non) */
+  calculatriceAutorisee?: boolean
   canReponseACompleter: string
   canNumeroLie: number
   canLiee: number[]

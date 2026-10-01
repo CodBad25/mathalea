@@ -106,6 +106,7 @@ const EXERCISE_URL_PARAMS = [
   'i',
   'cd',
   'tip',
+  'calc',
   'cols',
 ]
 
@@ -136,6 +137,7 @@ export function appendExerciseParams(url: URL, ex: InterfaceParams): void {
   if (ex.interactif === '1') url.searchParams.append('i', '1')
   if (ex.cd != null) url.searchParams.append('cd', ex.cd)
   if (ex.tip != null) url.searchParams.append('tip', ex.tip)
+  if (ex.calc === '1') url.searchParams.append('calc', '1')
   if (ex.cols != null) url.searchParams.append('cols', ex.cols.toString())
 }
 
