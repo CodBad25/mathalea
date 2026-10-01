@@ -11,6 +11,7 @@ import {
 } from '../../lib/customElements/ObjetsCliquablesElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -27,6 +28,25 @@ export const uuid = '40d57'
 export const refs = {
   'fr-fr': ['4G20-0'],
   'fr-ch': ['10GM1D-1'],
+}
+
+function correctionCote(
+  terme: string,
+  triangle: string,
+  sommetDroit: string,
+  sommetAngle: string,
+  angle: string,
+  hypotenuse: string,
+  coteAttendu: string,
+): string {
+  const reponse = `$${miseEnEvidence(`[${coteAttendu}]`)}$.`
+  if (terme === 'hypoténuse') {
+    return `Le triangle $${triangle}$ est rectangle en $${sommetDroit}$. L'hypoténuse est le côté opposé au sommet $${sommetDroit}$ : c'est ${reponse}`
+  }
+  if (terme === 'adjacent') {
+    return `Le triangle $${triangle}$ est rectangle en $${sommetDroit}$, donc son hypoténuse est $[${hypotenuse}]$. Le côté adjacent à l'angle $\\widehat{${angle}}$ touche le sommet $${sommetAngle}$ sans être l'hypoténuse : c'est ${reponse}`
+  }
+  return `Le côté opposé à l'angle $\\widehat{${angle}}$ est le seul côté du triangle $${triangle}$ qui ne touche pas le sommet $${sommetAngle}$ : c'est ${reponse}`
 }
 
 /**
@@ -68,6 +88,7 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
       const terme = listeTermes[i]
       const indexSommet = choice([0, 2])
       let question = ''
+      let correction = ''
       const nom = creerNomDePolygone(6)
 
       const A = pointAbstrait(0, 0, nom[0])
@@ -133,16 +154,26 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
                 etat: false,
               },
             ]
+            const coteAttendu =
+              terme === 'hypoténuse'
+                ? AC
+                : (terme === 'adjacent' && indexSommet === 0) ||
+                    (terme === 'opposé' && indexSommet === 2)
+                  ? AB
+                  : BC
             const objetAttendu = objets.map((objet) => ({
               ...objet,
-              etat:
-                terme === 'hypoténuse'
-                  ? objet.id === AC
-                  : (terme === 'adjacent' && indexSommet === 0) ||
-                      (terme === 'opposé' && indexSommet === 2)
-                    ? objet.id === AB
-                    : objet.id === BC,
+              etat: objet.id === coteAttendu,
             }))
+            correction = correctionCote(
+              terme,
+              nom.slice(0, 3),
+              nom[1],
+              nom[indexSommet],
+              `${nom[2 - indexSommet]}${nom[indexSommet]}${nom[1]}`,
+              AC,
+              coteAttendu,
+            )
             if (this.interactif) {
               question += addObjetsCliquables(this, i, { figureId, objets })
             }
@@ -224,6 +255,19 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
                         (terme === 'opposé' && indexSommet === 2)
                       ? BH
                       : CH
+            correction = correctionCote(
+              terme,
+              choixTriangle,
+              choixTriangle === listeTriangles[0] ? nom[1] : nom[3],
+              choixTriangle[indexSommet],
+              `${choixTriangle[2 - indexSommet]}${choixTriangle[indexSommet]}${choixTriangle[1]}`,
+              choixTriangle === listeTriangles[0]
+                ? AC
+                : choixTriangle === listeTriangles[1]
+                  ? AB
+                  : BC,
+              coteAttendu,
+            )
             const objets: ObjetCliquableData[] = [
               {
                 type: 'segment',
@@ -305,7 +349,7 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
           break
       }
       this.listeQuestions.push(question)
-      this.listeCorrections.push('')
+      this.listeCorrections.push(correction)
       i++
     }
   }
