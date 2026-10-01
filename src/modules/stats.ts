@@ -2,7 +2,7 @@ import { get } from 'svelte/store'
 import { capytaleMode, exercicesParams } from '../lib/stores/generalStore'
 import { globalOptions } from '../lib/stores/globalOptions'
 import type { InterfaceParams } from '../lib/types'
-import { getIntrus, log, logDebug } from './statsUtils'
+import { getIntrus, log, logDebug, statsPageTracker } from './statsUtils'
 
 declare global {
   interface Window {
@@ -23,7 +23,7 @@ if (activeStats) {
   _paq.push(['setSiteId', '1'])
   _paq.push(['addTracker', forgeUrl + 'matomo.php', '17'])
   _paq.push(['disableCookies'])
-  _paq.push(['trackPageView'])
+  statsPageTracker()
   _paq.push(['enableLinkTracking'])
   ;(function () {
     const d = document

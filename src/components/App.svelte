@@ -19,6 +19,7 @@
   import { vendor } from '../lib/stores/vendorStore'
   import type { CanSolutionsMode } from '../lib/types/can'
   import { context } from '../modules/context'
+  import { statsPageTracker } from '../modules/statsUtils'
 
   import Can from './display/can/Can.svelte'
   import Eleve from './display/eleve/Eleve.svelte'
@@ -134,6 +135,7 @@
     updateParamsFromUrl()
     updateContext()
     updateVendor()
+    statsPageTracker()
   }
 
   /**
