@@ -135,7 +135,7 @@ export default class CalculsComplexesFractions extends Exercice {
             `\\dfrac{${fractionA.texFraction}${operation}${entierC.texFSD}}{${fractionD.texFraction}${operation2}${entierF.texFSD}}&\\text{On met au même dénominateur dans le numérateur et le dénominateur.}`,
             `\\dfrac{\\dfrac{${a}${operation}${c * b}}{${b}}}{\\dfrac{${d}${operation2}${f * e}}{${e}}}&\\text{On calcule les sommes ou les différences.}`,
             `\\dfrac{${numerateur.texFSD}}{${denominateur.texFSD}}`,
-            `${numerateur.simplifie().texFSD}\\times${denominateur.inverse().simplifie().texFSD}&\\text{Diviser par un réel non nul, c’est multiplier par son inverse.}`,
+            `${numerateur.simplifie().texFSD}\\times${denominateur.inverse().texFSD}&\\text{Diviser par un réel non nul, c’est multiplier par son inverse.}`,
             ...(reponse.estIrreductible ? [] : [reponse.texFSD]),
           ]
           break
