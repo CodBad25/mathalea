@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -24,15 +25,16 @@ export default class MoitiePlusOuMoinsUn extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = this.quotaRandint('a', 21, 35, [30]) / 10
+    const a = new Decimal(this.quotaRandint('a', 21, 35, [30])).div(10)
+    const moitie = a.div(2)
     if (this.quotaChoice('plusOuMoinsUn', [true, false])) {
-      this.reponse = a / 2 + 1
+      this.reponse = moitie.plus(1)
       this.question = `On a  $2\\times a=${texNombre(a)}$, combien vaut $a+1$ ?`
-      this.correction = `$2\\times a=${texNombre(a)}$, donc le nombre $a$ est égal à $\\dfrac{${texNombre(a)}}{2}=${texNombre(a / 2)}$.<br>Donc $a+1=${texNombre(a / 2)}+1=${miseEnEvidence(texNombre(a / 2 + 1))}$.`
+      this.correction = `$2\\times a=${texNombre(a)}$, donc le nombre $a$ est égal à $\\dfrac{${texNombre(a)}}{2}=${texNombre(moitie)}$.<br>Donc $a+1=${texNombre(moitie)}+1=${miseEnEvidence(texNombre(this.reponse))}$.`
     } else {
-      this.reponse = a / 2 - 1
+      this.reponse = moitie.minus(1)
       this.question = `On a  $2\\times a=${texNombre(a)}$, combien vaut $a-1$ ?`
-      this.correction = `$2\\times a=${texNombre(a)}$, donc le nombre $a$ est égal à $\\dfrac{${texNombre(a)}}{2}=${texNombre(a / 2)}$.<br>Donc $a-1=${texNombre(a / 2)}-1=${miseEnEvidence(texNombre(a / 2 - 1))}$.`
+      this.correction = `$2\\times a=${texNombre(a)}$, donc le nombre $a$ est égal à $\\dfrac{${texNombre(a)}}{2}=${texNombre(moitie)}$.<br>Donc $a-1=${texNombre(moitie)}-1=${miseEnEvidence(texNombre(this.reponse))}$.`
     }
   }
 }
