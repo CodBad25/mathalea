@@ -481,6 +481,10 @@
       isTipAvailable = event.detail.tipAvailable
       interfaceParams.tip = exercise.tipAvailable ? '1' : '0'
     }
+    if (event.detail.calculatriceAutorisee !== undefined) {
+      exercise.calculatriceAutorisee = event.detail.calculatriceAutorisee
+      interfaceParams.calc = exercise.calculatriceAutorisee ? '1' : '0'
+    }
     if (event.detail.coeffBareme !== undefined) {
       exercise.coeffBareme = normaliseCoeffBareme(event.detail.coeffBareme)
       interfaceParams.coeffBareme = exercise.coeffBareme
@@ -1066,6 +1070,7 @@
         exerciceIndex={exerciseIndex}
         isInteractif={Boolean(isInteractif)}
         {pointsMax}
+        isCalculatriceProposee={true}
         on:settings={handleNewSettings}
       />
     </div>

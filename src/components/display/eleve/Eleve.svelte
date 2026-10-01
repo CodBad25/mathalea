@@ -21,6 +21,7 @@
     resultsByExercice,
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
+  import { eleveCalculatrices } from '../../../lib/stores/tbiStore'
   import { vendor } from '../../../lib/stores/vendorStore'
   import { type IExercice, type QuestionResult } from '../../../lib/types'
 
@@ -34,9 +35,13 @@
   import FlipCard from './FlipCard.svelte'
   import Footer2 from './Footer2.svelte'
   import QuestionParPage from './QuestionParPage.svelte'
+  import TbiCalculatorWidget from '../tbi/TbiCalculatorWidget.svelte'
+  import { statsEleveCalculatorTracker } from '../../../modules/statsUtils'
 
   let currentIndex: number = 0
   let questions: (string | IExercice)[] = []
+  /** Indice de l'exercice de chaque question (présentation une question par page) */
+  let questionsExerciceIndex: number[] = []
   let consignes: string[] = []
   let corrections: string[] = []
   let resultsByQuestion: QuestionResult[] = []
@@ -155,6 +160,28 @@
 
   $: questionsCount = questions.length
   $: questionTitle = buildQuestionTitle(currentWindowWidth, questionsCount)
+
+  /**
+   * Les calculatrices ne sont proposées que pour les exercices dont l'enseignant
+   * a coché « Calculatrice autorisée ». Quand plusieurs exercices sont affichés
+   * en même temps (liste), elles le sont dès que l'un d'eux les autorise.
+   */
+  $: isCalculatriceAutorisee =
+    $globalOptions.presMode === 'un_exo_par_page'
+      ? $exercicesParams[currentIndex]?.calc === '1'
+      : $globalOptions.presMode === 'une_question_par_page'
+        ? $exercicesParams[questionsExerciceIndex[currentIndex] ?? 0]?.calc ===
+          '1'
+        : $exercicesParams.some((param) => param.calc === '1')
+
+  function toggleCalculatrice(kind: 'college' | 'lycee') {
+    eleveCalculatrices.update((state) => {
+      const calculatrice =
+        kind === 'college' ? state.collegeCalculator : state.lyceeCalculator
+      calculatrice.visible = !calculatrice.visible
+      return state
+    })
+  }
 
   let debug = false
   function log(str: string, level: number = 3) {
@@ -291,8 +318,10 @@
 
   async function handleQuestionsReady(data: {
     questions: (string | import('../../../lib/types').IExercice)[]
+    indiceExercice: number[]
   }) {
     questions = data.questions
+    questionsExerciceIndex = data.indiceExercice
     resultsByQuestion = []
     await tick()
     const hauteurExercice = eleveSection?.scrollHeight ?? 0
@@ -340,13 +369,24 @@
         ? 'translate-y-16'
         : ''}"
     >
-      <!-- Pas de recorder (Capytale, Moodle…) : on propose à l'enseignant de
-      revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice.
-      Masqué sur un lien sans correction visible (isSolutionAccessible faux) :
-      ce raccourci ouvre la vue prof où la correction est toujours affichée,
-      il rendrait inopérant le masquage voulu par l'enseignant. -->
-      {#if $globalOptions.recorder == null && $globalOptions.v === 'eleve' && $globalOptions.isSolutionAccessible}
-        <BtnRetourReglages class="text-3xl" />
+      {#if isCalculatriceAutorisee}
+        {#each [{ kind: 'college', title: 'Calculatrice collège', icon: 'bxs-calculator', visible: $eleveCalculatrices.collegeCalculator.visible }, { kind: 'lycee', title: 'Calculatrice lycée', icon: 'bx-calculator', visible: $eleveCalculatrices.lyceeCalculator.visible }] as calculatrice (calculatrice.kind)}
+          <button
+            type="button"
+            class="tooltip tooltip-left tooltip-neutral"
+            data-tip={calculatrice.title}
+            aria-label={calculatrice.title}
+            aria-pressed={calculatrice.visible}
+            on:click={() =>
+              toggleCalculatrice(calculatrice.kind as 'college' | 'lycee')}
+          >
+            <i
+              class="bx {calculatrice.icon} bx-sm md:bx-md rounded-full p-1 border border-coopmaths-action hover:border-coopmaths-action-lightest {calculatrice.visible
+                ? 'bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas'
+                : 'bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest'}"
+            ></i>
+          </button>
+        {/each}
       {/if}
       <BtnZoom
         size="bx-sm md:bx-md"
@@ -607,13 +647,45 @@
     </div>
   </div>
   <Keyboard />
+  <!-- Masquées (et non démontées) hors des exercices autorisés : la
+  calculatrice retrouve son état quand l'élève revient sur l'un d'eux -->
+  {#if $eleveCalculatrices.collegeCalculator.visible}
+    <TbiCalculatorWidget
+      kind="college"
+      store={eleveCalculatrices}
+      onOpen={statsEleveCalculatorTracker}
+      hidden={!isCalculatriceAutorisee}
+    />
+  {/if}
+  {#if $eleveCalculatrices.lyceeCalculator.visible}
+    <TbiCalculatorWidget
+      kind="lycee"
+      store={eleveCalculatrices}
+      onOpen={statsEleveCalculatorTracker}
+      hidden={!isCalculatriceAutorisee}
+    />
+  {/if}
   {#if $globalOptions.v !== 'myriade' && $globalOptions.v !== 'indices' && $globalOptions.v !== 'indice'}
     <div
-      class="flex justify-center w-full {$keyboardState.isVisible
+      class="relative flex justify-center w-full {$keyboardState.isVisible
         ? 'mt-52'
         : ''}"
     >
       <Footer2 />
+      <!-- Pas de recorder (Capytale, Moodle…) : on propose à l'enseignant de
+      revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice.
+      Placé en bas de page, petit et estompé, à l'écart des boutons de zoom et
+      de calculatrice : en haut à droite, il provoquait des clics par erreur.
+      Masqué sur un lien sans correction visible (isSolutionAccessible faux) :
+      ce raccourci ouvre la vue prof où la correction est toujours affichée,
+      il rendrait inopérant le masquage voulu par l'enseignant. -->
+      {#if $globalOptions.recorder == null && $globalOptions.v === 'eleve' && $globalOptions.isSolutionAccessible}
+        <div
+          class="absolute right-2 bottom-2 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity"
+        >
+          <BtnRetourReglages class="text-xl" tooltipPosition="top" />
+        </div>
+      {/if}
     </div>
   {/if}
 </section>

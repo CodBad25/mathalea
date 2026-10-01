@@ -219,15 +219,32 @@ export function defaultTbiState(): TbiState {
   }
 }
 
+/**
+ * Les deux calculatrices d'un conteneur : `tbiState` en vue TBI, le store
+ * `eleveCalculatrices` en vue élève (même widget, état indépendant).
+ */
+export type CalculatorsState = Pick<
+  TbiState,
+  'collegeCalculator' | 'lyceeCalculator'
+>
+
 /** Renvoie l'état du widget calculatrice correspondant au modèle demandé */
 export function calculatorStateOf(
-  state: TbiState,
+  state: CalculatorsState,
   kind: TbiCalculatorKind,
 ): TbiCalculatorState {
   return kind === 'college' ? state.collegeCalculator : state.lyceeCalculator
 }
 
 export const tbiState = writable<TbiState>(defaultTbiState())
+
+/** Calculatrices de la vue élève (autorisées exercice par exercice) */
+export const eleveCalculatrices = writable<CalculatorsState>(
+  (({ collegeCalculator, lyceeCalculator }) => ({
+    collegeCalculator,
+    lyceeCalculator,
+  }))(defaultTbiState()),
+)
 
 /**
  * paramsIndex de la carte dont la correction est actuellement affichée en

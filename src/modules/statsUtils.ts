@@ -84,6 +84,21 @@ export function statsTbiCalculatorTracker(kind: 'college' | 'lycee') {
   log('CalculatriceTbi', kind)
 }
 
+const openedEleveCalculators = new Set<'college' | 'lycee'>()
+
+/** Signale l'ouverture d'une calculatrice en vue élève (une fois par session). */
+export function statsEleveCalculatorTracker(kind: 'college' | 'lycee') {
+  if (openedEleveCalculators.has(kind)) return
+  openedEleveCalculators.add(kind)
+  if (window._paq)
+    window._paq.push([
+      'trackEvent',
+      'CalculatriceEleve',
+      kind === 'college' ? 'College' : 'Lycee',
+    ])
+  log('CalculatriceEleve', kind)
+}
+
 let oldUrl = ''
 
 export function statsPageTracker() {

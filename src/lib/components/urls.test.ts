@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildSingleExerciseURL, encrypt } from './urls'
+import { appendExerciseParams, buildSingleExerciseURL, encrypt } from './urls'
 
 const seriesUrl =
   'https://coopmaths.fr/alea/?uuid=aaa&id=3L11&n=4&s=2&alea=Xy12&i=1' +
@@ -48,5 +48,24 @@ describe('buildSingleExerciseURL', () => {
     })
     expect(fromCrypted.searchParams.getAll('uuid')).toEqual(['aaa'])
     expect(fromCrypted.searchParams.get('v')).toBe('eleve')
+  })
+})
+
+describe('calculatrice autorisée (calc)', () => {
+  it('n’alourdit pas l’URL par défaut', () => {
+    const url = new URL('https://coopmaths.fr/alea/')
+    appendExerciseParams(url, { uuid: 'aaa', calc: '0' })
+    expect(url.searchParams.has('calc')).toBe(false)
+  })
+
+  it('est conservé pour un exercice isolé', () => {
+    const url = new URL('https://coopmaths.fr/alea/')
+    appendExerciseParams(url, { uuid: 'aaa', calc: '1' })
+    expect(url.searchParams.get('calc')).toBe('1')
+    const single = buildSingleExerciseURL(
+      new URL('https://coopmaths.fr/alea/?uuid=aaa&calc=1&uuid=bbb&v=eleve'),
+      { uuid: 'bbb' },
+    )
+    expect(single.searchParams.has('calc')).toBe(false)
   })
 })

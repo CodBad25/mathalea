@@ -74,6 +74,7 @@ les paramètres qui suivent s'y rapportent jusqu'au suivant.
 | `i` | exercice | interactivité (`0` ou `1`) |
 | `cd` | exercice | correction détaillée (`0` ou `1`) |
 | `qcm` | exercice | version QCM (`0` ou `1`) |
+| `calc` | exercice | calculatrice autorisée en vue élève (`1` ; absent = non, valeur par défaut) |
 | `coef` | exercice | coefficient du barème |
 | `cols` | exercice | nombre de colonnes |
 | `d` | exercice | durée par question en diaporama |
@@ -109,6 +110,10 @@ Pour ajouter un nouveau réglage `es` :
 3. Ajouter une nouvelle branche `es.length === N` (N = longueur actuelle + 1) dans `mathaleaUpdateExercicesParamsFromUrl()`, sans modifier les branches existantes, et inclure le nouveau champ dans l'objet retourné par la fonction.
 4. Ajouter le toggle correspondant dans `ConfigEleve.svelte` (`src/components/setup/configEleve/ConfigEleve.svelte`), en suivant le pattern `ButtonToggleAlt` existant dans la section concernée.
 
+### Calculatrice autorisée (vue élève)
+
+La case « Calculatrice autorisée » du panneau `Settings` (vue prof uniquement, prop `isCalculatriceProposee`) écrit `calc=1` dans `InterfaceParams` ; elle vaut non par défaut. `Eleve.svelte` affiche alors, à côté du zoom, les deux boutons de calculatrices NumWorks (collège / lycée) et le widget `TbiCalculatorWidget` (store `eleveCalculatrices`, indépendant de `tbiState`). La disponibilité suit l'exercice affiché : exercice courant en `un_exo_par_page`, exercice de la question courante en `une_question_par_page`, et dès qu'un exercice l'autorise quand plusieurs sont affichés ensemble. Hors d'un exercice autorisé, le widget est masqué sans être démonté, pour retrouver son état au retour. Les exercices statiques (sans panneau `Settings`) ne portent pas ce réglage.
+
 ### Accès aux corrections et `localStorage`
 
 `isSolutionAccessible` (caractère 2 de `es`) est sérialisé en clair : un élève
@@ -140,8 +145,8 @@ garde-fous côté navigateur limitent l'intérêt de la manipulation.
   correction dans ce navigateur : une graine fraîche d'auteur n'est jamais
   concernée.
 
-- **Retour aux réglages.** Le bouton roue dentée (`BtnRetourReglages` dans
-  `Eleve.svelte`) ramène à la vue prof ; il est masqué quand
+- **Retour aux réglages.** Le bouton maison (`BtnRetourReglages` dans
+  le pied de page de `Eleve.svelte`, petit et estompé pour éviter les clics par erreur) ramène à la vue prof ; il est masqué quand
   `isSolutionAccessible` est faux, sinon il offrirait un accès en un clic.
 
 Ces mécanismes sont désactivés pour `presMode` `recto`/`verso` (feuilles
