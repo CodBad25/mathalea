@@ -128,7 +128,7 @@ export default class ConvexitePolynomeDegreTrois extends Exercice {
       this.listeQuestions[0] = `On considère la fonction $f$ définie sur $\\mathbb R$ par
       $f(x)=${f.toLatex()}$ et on note $\\mathcal{C}_f$ sa courbe représentative.<br><br>
       La courbe $\\mathcal{C}_f$ admet un unique point d'inflexion, noté $I$. Déterminer ses coordonnées :<br>
-      ${remplisLesBlancs(this, 0, 'I\\left(%{champ1}\\,;\\,%{champ2}\\right)', KeyboardType.clavierNumbers)}`
+      ${remplisLesBlancs(this, 0, 'I\\left(%{champ1}\\,;\\,%{champ2}\\right)', KeyboardType.clavierDeBase)}`
     } else {
       this.listeQuestions[0] = `On considère la fonction $f$ définie sur $\\mathbb R$ par
     $f(x)=${f.toLatex()}$ et on note $\\mathcal{C}_f$ sa courbe représentative.<br><br>
