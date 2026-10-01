@@ -13,6 +13,8 @@ La vue Diaporama (`v=diaporama` dans l'URL) projette les questions une par une, 
 
 `setSlidesContent()` appelle `reroll()` sur chaque exercice puis découpe `listeQuestions` en diapositives, une par question et par vue (`nbVues`, jusqu'à 4 vues obtenues en dérivant la graine).
 
+Les exercices statiques (annales et banques externes, dont FFJM) sont chargés avec `buildExercise()` : leurs images d'énoncé et de correction alimentent `listeQuestions` et `listeCorrections`. Ils donnent une seule question, dont le nombre n'est pas modifiable, et `reroll()` conserve leurs images telles quelles. Le diaporama remplace le marqueur `{zoomFactor}` de leurs balises d'image par `1` avant le rendu.
+
 Deux invariants à respecter dans cette fonction :
 
 - **elle peut être rejouée pendant la lecture.** `Diaporama.svelte` écoute l'événement `updateAsyncEx` : un exercice qui charge ses modules en tâche de fond (voir plus bas) le déclenche quand son contenu réel remplace les `« chargement... »`. La question courante (`slideshow.currentQuestion`) doit donc être conservée, sinon le diaporama revient aux réglages en pleine séance ;

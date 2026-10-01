@@ -4,7 +4,6 @@
   import { get } from 'svelte/store'
   import { notify } from '../../../bugsnag'
   import {
-    getExercisesFromExercicesParams,
     mathaleaFormatExercice,
     mathaleaGenerateSeed,
     mathaleaHandleExerciceSimple,
@@ -12,6 +11,8 @@
     mathaleaUpdateExercicesParamsFromUrl,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
+  import { isSvelte } from '../../../lib/components/componentsUtils'
+  import { buildExercise } from '../../../lib/components/exercisesUtils'
   import { shuffle } from '../../../lib/outils/arrayOutils'
   import {
     darkMode,
@@ -61,7 +62,7 @@
     if ($previousView === undefined) state = 'start'
     context.vue = 'diap'
     document.addEventListener('updateAsyncEx', forceUpdate)
-    exercises = await getExercisesFromExercicesParams()
+    exercises = await loadExercises()
     // Certains exercices (les « Sélection d'automatismes ») ne connaissent leur
     // nombre de questions qu'après une première génération : sans cela l'écran
     // de réglages afficherait 0 question.
@@ -77,6 +78,21 @@
 
   async function forceUpdate() {
     updateExercises(true)
+  }
+
+  async function loadExercises(): Promise<IExercice[]> {
+    const params = get(exercicesParams).filter((param) => !isSvelte(param.uuid))
+    const loaded: IExercice[] = []
+    for (const param of params) {
+      const exercise = await buildExercise(param)
+      exercise.duration = param.duration ?? 10
+      if (exercise.typeExercice === 'statique') {
+        exercise.nbQuestions = 1
+        exercise.nbQuestionsModifiable = false
+      }
+      loaded.push(exercise)
+    }
+    return loaded
   }
 
   async function updateExercises(
@@ -121,10 +137,10 @@
               )
               const question = mathaleaFormatExercice(
                 exercise.listeQuestions[i],
-              )
+              ).replaceAll('{zoomFactor}', '1')
               const correction = mathaleaFormatExercice(
                 exercise.listeCorrections[i],
-              )
+              ).replaceAll('{zoomFactor}', '1')
               const { svgs: questionSvgs, text: questionText } =
                 splitSvgFromText(question)
               const { svgs: consigneSvgs, text: consigneText } =
@@ -150,6 +166,7 @@
                 ),
               }
             } while (
+              exercise.typeExercice !== 'statique' &&
               attempt < 10 &&
               slide.vues.some((v) => v.questionText === vue.questionText)
             )
@@ -174,6 +191,7 @@
   }
 
   function reroll(exercise: IExercice, idVue?: 0 | 1 | 2 | 3, attempt = 0) {
+    if (exercise.typeExercice === 'statique') return
     const interactif = exercise.interactif
     exercise.interactif = false
     if (exercise.seed === undefined) exercise.seed = mathaleaGenerateSeed()
@@ -332,7 +350,7 @@
     autoStart: boolean,
   ) {
     exercicesParams.set(item.exercicesParams.map((param) => ({ ...param })))
-    exercises = await getExercisesFromExercicesParams()
+    exercises = await loadExercises()
     applyHistoryOptions(item.options)
     $globalOptions.v = 'diaporama'
     updateExercises(true)
