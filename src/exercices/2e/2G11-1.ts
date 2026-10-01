@@ -1,6 +1,6 @@
 import ProblemesPythagore from '../4e/4G22'
 export const titre = 'Résoudre des problèmes utilisant le théorème de Pythagore'
-export const interactifReady = false
+export const interactifReady = true
 
 /**
  * Clone de 4G22 pour les 2nde
