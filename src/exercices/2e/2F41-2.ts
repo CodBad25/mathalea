@@ -59,8 +59,8 @@ let promptInequalitySymbolsActionRegistered = false
 export const inequalitySymbolButtons = [
   { label: '<', insertText: '<' },
   { label: '>', insertText: '>' },
-  { label: '≤', insertText: '\\leqslant' },
-  { label: '≥', insertText: '\\geqslant' },
+  { label: '⩽', insertText: '\\leqslant' },
+  { label: '⩾', insertText: '\\geqslant' },
 ]
 
 function registerPromptInequalitySymbolsAction() {
