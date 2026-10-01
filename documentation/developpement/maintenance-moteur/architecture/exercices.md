@@ -74,7 +74,7 @@ les paramètres qui suivent s'y rapportent jusqu'au suivant.
 | `i` | exercice | interactivité (`0` ou `1`) |
 | `cd` | exercice | correction détaillée (`0` ou `1`) |
 | `qcm` | exercice | version QCM (`0` ou `1`) |
-| `calc` | exercice | calculatrice autorisée en vue élève (`1` ; absent = non, valeur par défaut) |
+| `calc` | exercice | calculatrices autorisées en vue élève : `0` aucune (valeur par défaut, absent de l'URL), `1` calculette, `2` calculatrice collège, `3` calculatrice lycée, `9` toutes |
 | `coef` | exercice | coefficient du barème |
 | `cols` | exercice | nombre de colonnes |
 | `d` | exercice | durée par question en diaporama |
@@ -99,9 +99,9 @@ Les composants qui modifient le store `exercicesParams` doivent appeler `exercic
 
 Le store `globalOptions` (`src/lib/stores/globalOptions.ts`) contient les réglages de la vue élève classique (présentation, interactivité, corrections). Plutôt qu'un paramètre d'URL par réglage, ces booléens/énumérations sont compressés dans une seule chaîne `es` : un caractère par réglage, dans un ordre fixe.
 
-- Construction : `buildEsParams()` dans `src/lib/components/urls.ts`. Chaque réglage est ajouté à la chaîne dans l'ordre `presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError`.
+- Construction : `buildEsParams()` dans `src/lib/components/urls.ts`. Chaque réglage est ajouté à la chaîne dans l'ordre `presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError` ; un dixième caractère facultatif, `calculatricesForcees`, n'est ajouté que s'il impose une calculatrice (voir ci-dessous).
 - Décodage : la fonction `mathaleaUpdateExercicesParamsFromUrl()` dans `src/lib/mathalea.ts` lit `es` et affecte chaque caractère (`es.charAt(i)`) au réglage correspondant.
-- Rétrocompatibilité : le décodage teste `es.length` (6, 7, 8, 9 caractères actuellement) et choisit la branche qui correspond, pour que les anciennes URLs partagées (avec moins de réglages) restent valides. Chaque nouvelle branche reprend le décodage complet des caractères précédents avant d'ajouter le nouveau.
+- Rétrocompatibilité : le décodage teste `es.length` (6, 7, 8, 9 ou 10 caractères actuellement) et choisit la branche qui correspond, pour que les anciennes URLs partagées (avec moins de réglages) restent valides. Chaque nouvelle branche reprend le décodage complet des caractères précédents avant d'ajouter le nouveau.
 
 Pour ajouter un nouveau réglage `es` :
 
@@ -110,9 +110,11 @@ Pour ajouter un nouveau réglage `es` :
 3. Ajouter une nouvelle branche `es.length === N` (N = longueur actuelle + 1) dans `mathaleaUpdateExercicesParamsFromUrl()`, sans modifier les branches existantes, et inclure le nouveau champ dans l'objet retourné par la fonction.
 4. Ajouter le toggle correspondant dans `ConfigEleve.svelte` (`src/components/setup/configEleve/ConfigEleve.svelte`), en suivant le pattern `ButtonToggleAlt` existant dans la section concernée.
 
-### Calculatrice autorisée (vue élève)
+### Calculatrices autorisées (vue élève)
 
-La case « Calculatrice autorisée » du panneau `Settings` (vue prof uniquement, prop `isCalculatriceProposee`) écrit `calc=1` dans `InterfaceParams` ; elle vaut non par défaut. `Eleve.svelte` affiche alors, à côté du zoom, les deux boutons de calculatrices NumWorks (collège / lycée) et le widget `TbiCalculatorWidget` (store `eleveCalculatrices`, indépendant de `tbiState`). La disponibilité suit l'exercice affiché : exercice courant en `un_exo_par_page`, exercice de la question courante en `une_question_par_page`, et dès qu'un exercice l'autorise quand plusieurs sont affichés ensemble. Hors d'un exercice autorisé, le widget est masqué sans être démonté, pour retrouver son état au retour. Les exercices statiques (sans panneau `Settings`) ne portent pas ce réglage.
+La liste déroulante « Calculatrices disponibles » du panneau `Settings` (vue prof uniquement, prop `isCalculatriceProposee`) écrit `calc` (`0`, `1`, `2`, `3` ou `9`, voir `src/lib/calculatrices.ts`) dans `InterfaceParams` ; elle vaut « Aucune calculatrice » par défaut. `Eleve.svelte` affiche alors, à côté du zoom, uniquement les boutons des calculatrices autorisées, dans l'ordre calculette, NumWorks collège, NumWorks lycée et le widget `TbiCalculatorWidget` (store `eleveCalculatrices`, indépendant de `tbiState`). La disponibilité suit l'exercice affiché : exercice courant en `un_exo_par_page`, exercice de la question courante en `une_question_par_page`, et dès qu'un exercice l'autorise quand plusieurs sont affichés ensemble. Hors d'un exercice autorisé, le widget est masqué sans être démonté, pour retrouver son état au retour. Les exercices statiques (sans panneau `Settings`) ne portent pas ce réglage.
+
+La page de configuration du lien élève (`ConfigEleve.svelte`, section « Calculatrices ») propose en plus un réglage global, `globalOptions.calculatricesForcees`, qui passe outre les `calc` individuels : `-` (valeur par défaut) les laisse tels quels, `0`, `1`, `2`, `3` ou `9` s'appliquent à tous les exercices (`0` retire donc toute calculatrice, même là où un exercice en autorise). Il est porté par le dixième caractère de `es` ; `codesCalculatricesEffectifs()` (`src/lib/calculatrices.ts`) fait la substitution dans `Eleve.svelte`.
 
 ### Accès aux corrections et `localStorage`
 

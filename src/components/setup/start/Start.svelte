@@ -179,7 +179,8 @@
       if (ex.alea !== undefined) url.searchParams.append('alea', ex.alea)
       if (ex.interactif === '1') url.searchParams.append('i', '1')
       if (ex.cd !== undefined) url.searchParams.append('cd', ex.cd)
-      if (ex.calc === '1') url.searchParams.append('calc', '1')
+      if (ex.calc != null && ex.calc !== '0')
+        url.searchParams.append('calc', ex.calc)
       if (ex.cols !== undefined) {
         url.searchParams.append('cols', ex.cols.toString())
       }

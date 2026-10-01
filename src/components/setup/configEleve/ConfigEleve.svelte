@@ -1,5 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import {
+    CALCULATRICES_FORCEES_OPTIONS,
+    CALCULATRICES_NON_FORCEES,
+    isCalculatricesForcees,
+  } from '../../../lib/calculatrices'
   import { buildMathAleaURL } from '../../../lib/components/urls'
   import {
     mathaleaGenerateSeed,
@@ -66,6 +71,8 @@
   type LinkFormat = keyof typeof availableLinkFormats
   let currentLinkFormat: LinkFormat = 'clear'
   let setInteractive: string = $globalOptions.setInteractive ?? '2'
+  let calculatricesForcees: string =
+    $globalOptions.calculatricesForcees ?? CALCULATRICES_NON_FORCEES
   let presMode:
     | 'liste_exos'
     | 'un_exo_par_page'
@@ -270,7 +277,11 @@
   $: if (shortenedUrlSource !== null && shortenedUrlSource !== eleveLongUrl) {
     shortenedUrl = null
     shortenedUrlSource = null
-    if (currentLinkFormat === 'short' && !edurlBusy && getEdurlToken() != null) {
+    if (
+      currentLinkFormat === 'short' &&
+      !edurlBusy &&
+      getEdurlToken() != null
+    ) {
       shortenEleveUrl(eleveLongUrl)
     }
   }
@@ -426,6 +437,29 @@
                     "Les élèves pourront refaire les exercices autant de fois qu'ils le souhaitent.",
                   ]}
                 />
+              </div>
+            </div>
+            <div class="pb-2">
+              <div
+                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+              >
+                Calculatrices
+              </div>
+              <FormRadio
+                title="Calculatrices"
+                bind:valueSelected={calculatricesForcees}
+                on:newvalue={() => {
+                  if (isCalculatricesForcees(calculatricesForcees)) {
+                    $globalOptions.calculatricesForcees = calculatricesForcees
+                  }
+                }}
+                labelsValues={CALCULATRICES_FORCEES_OPTIONS}
+              />
+              <div
+                class="pl-2 pt-2 text-sm font-light text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
+              >
+                Un choix autre que « selon les réglages de chaque exercice »
+                s'applique à tous les exercices.
               </div>
             </div>
             <div class="pb-2">
@@ -727,7 +761,9 @@
           <div class="flex flex-col items-start px-4 pt-2 space-y-1">
             {#if edurlAskToken}
               <div class="flex flex-row items-center gap-2">
-                <label class="text-sm font-light text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70">
+                <label
+                  class="text-sm font-light text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+                >
                   Jeton d’accès edurl.fr&nbsp;:
                 </label>
                 <input
@@ -748,7 +784,9 @@
                 />
               </div>
             {:else if edurlBusy}
-              <div class="flex items-center gap-1 text-xs text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70">
+              <div
+                class="flex items-center gap-1 text-xs text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+              >
                 <i class="bx bx-loader-alt bx-spin"></i>
                 Raccourcissement du lien en cours…
               </div>

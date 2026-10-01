@@ -51,21 +51,26 @@ describe('buildSingleExerciseURL', () => {
   })
 })
 
-describe('calculatrice autorisée (calc)', () => {
+describe('calculatrices autorisées (calc)', () => {
   it('n’alourdit pas l’URL par défaut', () => {
     const url = new URL('https://coopmaths.fr/alea/')
     appendExerciseParams(url, { uuid: 'aaa', calc: '0' })
     expect(url.searchParams.has('calc')).toBe(false)
   })
 
-  it('est conservé pour un exercice isolé', () => {
-    const url = new URL('https://coopmaths.fr/alea/')
-    appendExerciseParams(url, { uuid: 'aaa', calc: '1' })
-    expect(url.searchParams.get('calc')).toBe('1')
-    const single = buildSingleExerciseURL(
-      new URL('https://coopmaths.fr/alea/?uuid=aaa&calc=1&uuid=bbb&v=eleve'),
-      { uuid: 'bbb' },
-    )
-    expect(single.searchParams.has('calc')).toBe(false)
-  })
+  it.each(['1', '2', '3', '9'] as const)(
+    'conserve calc=%s, y compris pour un exercice isolé',
+    (calc) => {
+      const url = new URL('https://coopmaths.fr/alea/')
+      appendExerciseParams(url, { uuid: 'aaa', calc })
+      expect(url.searchParams.get('calc')).toBe(calc)
+      const single = buildSingleExerciseURL(
+        new URL(
+          `https://coopmaths.fr/alea/?uuid=aaa&calc=${calc}&uuid=bbb&v=eleve`,
+        ),
+        { uuid: 'bbb' },
+      )
+      expect(single.searchParams.has('calc')).toBe(false)
+    },
+  )
 })

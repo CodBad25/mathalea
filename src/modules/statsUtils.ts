@@ -1,4 +1,5 @@
 import type TypeExercice from '../exercices/Exercice'
+import type { TbiCalculatorKind } from '../lib/stores/tbiStore'
 
 window.logDebug = window.logDebug || 0
 
@@ -64,37 +65,43 @@ export function statsPdfCreatedTracker(vue: 'typst' | 'tex', uuids: string[] = [
   log('PdfCree', vue)
 }
 
+const CALCULATOR_STATS_LABELS: Record<TbiCalculatorKind, string> = {
+  college: 'College',
+  lycee: 'Lycee',
+  calculette: 'Calculette',
+}
+
 /**
  * Calculatrices déjà comptées comme ouvertes en vue TBI, pour ne pas
  * recompter une réouverture sur la même session (réinitialisé au
  * rechargement de la page).
  */
-const openedTbiCalculators = new Set<'college' | 'lycee'>()
+const openedTbiCalculators = new Set<TbiCalculatorKind>()
 
 /** Signale l'ouverture d'une calculatrice en vue TBI (une fois par session). */
-export function statsTbiCalculatorTracker(kind: 'college' | 'lycee') {
+export function statsTbiCalculatorTracker(kind: TbiCalculatorKind) {
   if (openedTbiCalculators.has(kind)) return
   openedTbiCalculators.add(kind)
   if (window._paq)
     window._paq.push([
       'trackEvent',
       'CalculatriceTbi',
-      kind === 'college' ? 'College' : 'Lycee',
+      CALCULATOR_STATS_LABELS[kind],
     ])
   log('CalculatriceTbi', kind)
 }
 
-const openedEleveCalculators = new Set<'college' | 'lycee'>()
+const openedEleveCalculators = new Set<TbiCalculatorKind>()
 
 /** Signale l'ouverture d'une calculatrice en vue élève (une fois par session). */
-export function statsEleveCalculatorTracker(kind: 'college' | 'lycee') {
+export function statsEleveCalculatorTracker(kind: TbiCalculatorKind) {
   if (openedEleveCalculators.has(kind)) return
   openedEleveCalculators.add(kind)
   if (window._paq)
     window._paq.push([
       'trackEvent',
       'CalculatriceEleve',
-      kind === 'college' ? 'College' : 'Lycee',
+      CALCULATOR_STATS_LABELS[kind],
     ])
   log('CalculatriceEleve', kind)
 }
