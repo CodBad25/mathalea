@@ -35,8 +35,9 @@ Cette représentation évite la perte des paramètres répétés lors du traitem
 serveur de Matomo, décrite dans
 [l'issue nº 9842](https://github.com/matomo-org/matomo/issues/9842). Elle est
 réservée aux statistiques : elle ne modifie ni l'adresse du navigateur ni les
-liens partageables. Pour ouvrir une série à partir de l'URL statistique, utiliser
-`buildNormalUrl()` pour reconstituer un lien MathALÉA normal.
+liens partageables. Lorsqu'une URL statistique est ouverte dans le navigateur,
+l'application utilise automatiquement `buildNormalUrl()` pour reconstituer
+un lien MathALÉA normal avant son démarrage.
 
 ## Conversion inverse et paramètres facultatifs
 
@@ -86,6 +87,37 @@ incohérent. Les anciennes URL statistiques sans métadonnées ne permettent pas
 de retrouver les paramètres omis : elles sont rejetées plutôt que de deviner
 leur affectation. Une URL sans aucun paramètre reste inchangée dans les deux sens.
 
+## Ouverture directe d'un lien Matomo
+
+[`index.html`](../../../../index.html) charge
+[`bootstrap.ts`](../../../../src/bootstrap.ts), qui appelle
+[`restoreStatsUrl()`](../../../../src/modules/statsUrlNavigation.ts) avant
+d'importer dynamiquement `main.ts`. Cet ordre est nécessaire : certains imports
+de `main.ts` lisent l'URL dès leur évaluation, notamment les statistiques.
+
+La restauration reconnaît `uuids` dans une URL sans `uuid`, ou des métadonnées
+versionnées pour une sélection vide. Elle appelle `buildNormalUrl()` puis
+`history.replaceState()`, en conservant l'état de l'historique. L'adresse devient
+un lien partageable normal, sans rechargement et sans entrée d'historique
+supplémentaire. Les banques externes, les exercices et les trackers démarrent
+ensuite avec cette URL restaurée. Une URL contenant déjà `uuid` reste intacte,
+même si elle contient aussi des clés nommées `uuids` ou `_mathaleaStats`.
+
+Si le lien statistique est incomplet, invalide ou issu de l'ancien format sans
+métadonnées, le bootstrap affiche un message et ne démarre pas l'application.
+L'adresse d'origine reste disponible pour diagnostiquer le lien.
+
+Le [`public/.htaccess`](../../../../public/.htaccess) conserve ses règles HTTPS,
+cache et en-têtes. Aucune règle de conversion n'est nécessaire : l'URL `/alea/`
+charge déjà la page de l'application. `mod_rewrite` pourrait détecter `uuids`
+avec une condition sur `QUERY_STRING` et aiguiller la requête vers un script,
+mais une expression régulière seule ne reconstitue pas l'ordre décrit par les
+métadonnées JSON. Une conversion côté serveur nécessiterait du code serveur,
+ou un `RewriteMap` déclaré dans la configuration Apache du serveur/hôte virtuel
+([documentation Apache](https://httpd.apache.org/docs/2.4/rewrite/rewritemap.html#perdir)).
+La conversion JavaScript réutilise le codec existant et fonctionne également
+avec Vite, sans dépendre d'Apache ou de PHP.
+
 ## Pages vues et changements d'URL
 
 `statsPageTracker()` envoie `setCustomUrl` avec l'URL de statistiques, puis
@@ -113,4 +145,7 @@ vérifient l'aller-retour, les paramètres facultatifs, les caractères réserv�
 les collisions et la validation des métadonnées. Ceux de
 [`statsUtils.test.ts`](../../../../src/modules/statsUtils.test.ts) vérifient
 l'ordre des commandes Matomo, l'absence de doublons et la conservation de
-l'URL du navigateur.
+l'URL du navigateur. Les tests de
+[`bootstrap.test.ts`](../../../../src/bootstrap.test.ts) vérifient que la
+restauration précède le chargement de l'application, préserve l'historique
+et empêche le démarrage à partir d'un lien invalide.

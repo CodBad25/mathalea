@@ -20,7 +20,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Série aléatoire](architecture/serie-aleatoire.md)            | App qui compose un lien vers des exercices tirés au sort                 |
 | [Plein écran dans Moodle](architecture/moodle-plein-ecran.md) | Bouton plein écran des vues intégrées, natif ou délégué à la page hôte   |
 | [Signalement de bug](architecture/signalement-bug.md)         | Bouton bug des vues prof et élève, modale mail/forge et texte pré-rempli |
-| [Statistiques Matomo](architecture/statistiques.md)          | URL réservée aux statistiques, conversion réversible et pages vues      |
+| [Statistiques Matomo](architecture/statistiques.md)          | URL réversibles, ouverture directe des liens Matomo et pages vues      |
 
 ## Interactivité
 
