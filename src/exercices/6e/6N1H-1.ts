@@ -221,6 +221,10 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
       )
 
       if (this.interactif && context.isHtml) {
+        const keyboard =
+          this.niveau === 2
+            ? KeyboardType.clavierDeBase
+            : KeyboardType.clavierNumbers
         handleAnswers(
           this,
           i,
@@ -242,9 +246,9 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
         texte += addMultiMathfield(this, i, {
           dataTemplate: `$${l1}($%{champ1}$)$ ${sp(6)} $${l2}($%{champ2}$)$ ${sp(6)} $${l3}($%{champ3} $)$`,
           dataOptions: {
-            champ1: { keyboard: KeyboardType.clavierNumbers },
-            champ2: { keyboard: KeyboardType.clavierNumbers },
-            champ3: { keyboard: KeyboardType.clavierNumbers },
+            champ1: { keyboard },
+            champ2: { keyboard },
+            champ3: { keyboard },
           },
         })
       } else {
