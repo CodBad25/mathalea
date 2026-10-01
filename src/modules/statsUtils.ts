@@ -1,5 +1,8 @@
 import type TypeExercice from '../exercices/Exercice'
 import type { TbiCalculatorKind } from '../lib/stores/tbiStore'
+import { buildStatsUrl } from './statsUrl'
+
+export { buildNormalUrl, buildStatsUrl } from './statsUrl'
 
 window.logDebug = window.logDebug || 0
 
@@ -55,13 +58,21 @@ const trackedTypstPdfSeries = new Set<string>()
  * même série (mêmes exercices, ordre indifférent) n'est compté qu'une fois.
  * Pour Tex, chaque export compte (pas de déduplication demandée).
  */
-export function statsPdfCreatedTracker(vue: 'typst' | 'tex', uuids: string[] = []) {
+export function statsPdfCreatedTracker(
+  vue: 'typst' | 'tex',
+  uuids: string[] = [],
+) {
   if (vue === 'typst') {
     const key = [...new Set(uuids)].sort().join(',')
     if (trackedTypstPdfSeries.has(key)) return
     trackedTypstPdfSeries.add(key)
   }
-  if (window._paq) window._paq.push(['trackEvent', 'PdfCree', vue === 'typst' ? 'Typst' : 'Tex'])
+  if (window._paq)
+    window._paq.push([
+      'trackEvent',
+      'PdfCree',
+      vue === 'typst' ? 'Typst' : 'Tex',
+    ])
   log('PdfCree', vue)
 }
 
@@ -106,22 +117,16 @@ export function statsEleveCalculatorTracker(kind: TbiCalculatorKind) {
   log('CalculatriceEleve', kind)
 }
 
-let oldUrl = ''
+let lastTrackedUrl = ''
 
 export function statsPageTracker() {
   logDebug('Tracking pages...')
-  // Informer Matomo
-  if (window.location.href !== oldUrl) {
-    if (window._paq)
-      window._paq.push([
-        'trackEvent',
-        'PageTracking',
-        'VisitedURL',
-        window.location.href,
-      ])
-    oldUrl = window.location.href
-    log('statsPageTracker called with URL:', window.location.href)
-  }
+  const pageUrl = window.location.href
+  if (!window._paq || pageUrl === lastTrackedUrl) return
+  window._paq.push(['setCustomUrl', buildStatsUrl(pageUrl)])
+  window._paq.push(['trackPageView'])
+  lastTrackedUrl = pageUrl
+  log('statsPageTracker called with URL:', pageUrl)
 }
 
 /*
