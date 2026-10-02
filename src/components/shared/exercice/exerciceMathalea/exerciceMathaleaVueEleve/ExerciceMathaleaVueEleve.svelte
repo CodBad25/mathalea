@@ -20,6 +20,7 @@
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../../../lib/mathalea'
   import { mathaleaWriteStudentPreviousAnswers } from '../../../../../lib/mathaleaUtils'
+  import { usesHostActivityProtocol } from '../../../../../lib/recorder'
   import {
     isSeedBlockedForCorrection,
     rememberSeedServedWithoutCorrection,
@@ -213,7 +214,7 @@
     }
 
     // Check boutonValidation mode after component is mounted
-    if ($globalOptions.recorder === 'flowmath') {
+    if (usesHostActivityProtocol($globalOptions.recorder)) {
       try {
         const urlParams = new URLSearchParams(window.location.search)
         boutonValidationUrlFlag = urlParams.get('boutonValidation') !== 'false'
@@ -794,10 +795,12 @@
         {switchInteractif}
         {columnsCount}
         {columnsCountUpdate}
-        showCorrectionButton={$globalOptions.recorder === 'flowmath'
+        showCorrectionButton={usesHostActivityProtocol($globalOptions.recorder)
           ? boutonCorrectionUrlFlag
           : true}
-        showInteractivityButton={$globalOptions.recorder === 'flowmath'
+        showInteractivityButton={usesHostActivityProtocol(
+          $globalOptions.recorder,
+        )
           ? boutonInteractiviteUrlFlag
           : true}
         showNewDataButton={!exercise.pasDeVersionAleatoire}
@@ -871,9 +874,9 @@
                   focus:shadow-lg focus:outline-none focus:ring-0
                   active:bg-coopmaths-action-lightest dark:active:bg-coopmathsdark-action-lightest
                   active:shadow-lg transition duration-150 ease-in-out checkReponses`}
-          class:hidden={$globalOptions.recorder === 'flowmath' &&
+          class:hidden={usesHostActivityProtocol($globalOptions.recorder) &&
             !boutonValidationUrlFlag}
-          hidden={$globalOptions.recorder === 'flowmath' &&
+          hidden={usesHostActivityProtocol($globalOptions.recorder) &&
             !boutonValidationUrlFlag}
         >
           Vérifier {numberOfAnswerFields > 1 ? 'les réponses' : 'la réponse'}

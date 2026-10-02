@@ -13,6 +13,16 @@ vi.mock('../../src/lib/components/version', () => ({
 }))
 
 describe('mathaleaUpdateExercicesParamsFromUrl', () => {
+  it('reconnaît le recorder Sésathèque', async () => {
+    const { mathaleaUpdateExercicesParamsFromUrl } =
+      await import('../../src/lib/mathalea')
+    const result = mathaleaUpdateExercicesParamsFromUrl(
+      'https://coopmaths.fr/alea/?recorder=sesatheque',
+    )
+
+    expect(result.recorder).toBe('sesatheque')
+  })
+
   it('should accept uppercase view value for AMC', async () => {
     const url = 'https://coopmaths.fr/alea/?v=AMC'
     const { mathaleaUpdateExercicesParamsFromUrl } =

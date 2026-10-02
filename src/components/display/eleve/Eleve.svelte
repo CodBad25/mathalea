@@ -13,6 +13,7 @@
     mathaleaFormatExercice,
     mathaleaUpdateExercicesParamsFromUrl,
   } from '../../../lib/mathalea'
+  import { usesHostActivityProtocol } from '../../../lib/recorder'
   import {
     darkMode,
     exercicesParams,
@@ -244,9 +245,10 @@
   onMount(async () => {
     log('Eleve.svelte mount')
 
-    // Pour FlowMath, on initialise d'abord le handler RPC AVANT de charger depuis l'URL
+    // Pour les plateformes qui pilotent l'activité, on initialise d'abord le
+    // handler RPC AVANT de charger depuis l'URL.
     // Car les exercices peuvent arriver via postMessage plutôt que via l'URL
-    if ($globalOptions.recorder === 'flowmath') {
+    if (usesHostActivityProtocol($globalOptions.recorder)) {
       handleFlowmath(exercicesParams, resultsByExercice)
     }
 
@@ -278,7 +280,7 @@
       $globalOptions.recorder === 'moodle' ||
       $globalOptions.recorder === 'anki' ||
       $globalOptions.recorder === 'labomep' ||
-      $globalOptions.recorder === 'flowmath'
+      usesHostActivityProtocol($globalOptions.recorder)
     ) {
       // attend la fin de la mise à jour pour mettre l'observer
       await tick()

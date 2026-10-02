@@ -29,7 +29,8 @@ interface FlowmathActivityParams {
 
 /**
  * Handler pour la communication RPC avec FlowMath
- * Ne s'active que si globalOptions.recorder === 'flowmath'
+ * Activé pour les recorders utilisant le protocole piloté par la plateforme
+ * hôte (`flowmath` et `sesatheque`).
  */
 export function handleFlowmath(
   exercicesParams: Writable<any[]>,
@@ -178,10 +179,14 @@ export function handleFlowmath(
             }
 
             if (foundCount === expectedButtonCount) {
-              console.info(`[MathALEA-FlowMath] All ${expectedButtonCount} validation buttons found`)
+              console.info(
+                `[MathALEA-FlowMath] All ${expectedButtonCount} validation buttons found`,
+              )
               resolve()
             } else if (attempts >= maxAttempts) {
-              console.warn(`[MathALEA-FlowMath] Timeout waiting for validation buttons (found ${foundCount}/${expectedButtonCount})`)
+              console.warn(
+                `[MathALEA-FlowMath] Timeout waiting for validation buttons (found ${foundCount}/${expectedButtonCount})`,
+              )
               resolve() // Resolve anyway to not block forever
             } else {
               attempts++
@@ -208,7 +213,9 @@ export function handleFlowmath(
       await waitForValidationButtons()
 
       // Signal that replay is complete - parent can now send FINISH_ATTEMPT
-      console.info('[MathALEA-FlowMath] Replay complete, sending REPLAY_COMPLETED')
+      console.info(
+        '[MathALEA-FlowMath] Replay complete, sending REPLAY_COMPLETED',
+      )
       sendFlowmathReplayCompleted()
     }
   }

@@ -24,6 +24,7 @@
   import handleCapytale from '../../../lib/handleCapytale'
   import { sendActivityParams } from '../../../lib/handleRecorder'
   import { hasSeenTour, startTour } from '../../../lib/onboarding/tour'
+  import { usesHostActivityProtocol } from '../../../lib/recorder'
   import {
     getExercisesFromExercicesParams,
     mathaleaHandleExerciceSimple,
@@ -153,10 +154,9 @@
    * ici ferait enregistrer cette vue comme celle de l'activité Capytale.
    */
   function openCapytaleViewInNewTab(view: ExternalCapytaleView) {
-    window.open(
-      buildMathAleaURL({ view, recorder: true }).toString(),
-      '_blank',
-    )?.focus()
+    window
+      .open(buildMathAleaURL({ view, recorder: true }).toString(), '_blank')
+      ?.focus()
   }
 
   // Gestion de la graine
@@ -526,7 +526,7 @@
           {toggleSidenav}
           {exportQcmCam}
           {isMd}
-          isFlowmath={$globalOptions.recorder === 'flowmath'}
+          isFlowmath={usesHostActivityProtocol($globalOptions.recorder)}
         />
         {#if isMd}
           <!-- ====================================================================================
