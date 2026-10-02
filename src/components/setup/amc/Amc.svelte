@@ -2615,7 +2615,7 @@
         : ''}"
     >
       <div
-        class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] gap-4 mt-4 xl:h-[calc(100vh-10rem)] xl:overflow-hidden"
+        class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] xl:grid-rows-[minmax(0,1fr)] gap-4 mt-4 xl:h-[calc(100vh-10rem)] xl:overflow-hidden"
       >
         <section
           class="space-y-4 xl:h-full xl:min-h-0 xl:overflow-y-auto xl:pr-2"
@@ -3019,7 +3019,7 @@
         </section>
 
         <aside
-          class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30 h-fit xl:h-[calc(100vh-10rem)] xl:overflow-y-auto xl:self-start"
+          class="amc-settings-panel rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30"
         >
           <h3
             class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
@@ -4143,6 +4143,16 @@
 {/if}
 
 <style>
+  @media (min-width: 80rem) {
+    .amc-settings-panel {
+      height: calc(100dvh - 10rem);
+      min-height: 0;
+      max-height: calc(100dvh - 10rem);
+      overflow-y: auto;
+      scrollbar-gutter: stable;
+    }
+  }
+
   :global(#amcBuilder) {
     color: var(--color-coopmaths-corpus);
     color-scheme: light;
