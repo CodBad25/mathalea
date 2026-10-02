@@ -30,6 +30,7 @@ export default class DivisionAvecDecimaux extends ExerciceSimple {
     this.nbQuestions = 1
     this.versionQcmDisponible = true
     this.spacingCorr = 2
+    this.optionsChampTexte = { texteAvant: '<br>' }
   }
 
   nouvelleVersion() {
