@@ -59,6 +59,7 @@ export default class AutoC4c extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsDeComparaison = { fractionIrreductible: true }
     this.versionQcmDisponible = true
@@ -101,7 +102,7 @@ export default class AutoC4c extends ExerciceSimple {
         dfrac(p + 1, q + r),
       ].map((d) => `$${d}$`)
     } else {
-      this.question = `Calculer : ${debut.charAt(0).toLowerCase()}${debut.slice(1)} ${fin}.<br>Donner le résultat sous la forme d'une fraction irréductible.`
+      this.question = `Écrire ${debut.charAt(0).toLowerCase()}${debut.slice(1)} ${fin}  sous la forme d'une fraction irréductible.`
       this.reponse = produit
     }
   }
