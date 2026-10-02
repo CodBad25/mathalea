@@ -73,8 +73,8 @@ export default class Auto1AC3j extends ExerciceSimple {
         `$${carre}^{${k * n}}$`,
       ]
     } else {
-      this.consigne = "Compléter l'égalité."
-      this.question = `${k} \\times ${texNombre(carre, 0)}^{${n}}=${a}^{%{champ1}}`
+      this.consigne = 'Compléter.'
+      this.question = `\\text{Le ${choix} de }${texNombre(carre, 0)}^{${n}}\\text{ est égal à }${a}^{%{champ1}}.`
       this.reponse = { champ1: { value: String(2 * n + 1) } }
     }
   }

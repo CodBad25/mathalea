@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
@@ -25,7 +25,8 @@ export default class Puissances extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsChampTexte = { texteAvant: '<br>', dataKeys: ['x', 'POW'] }
     this.versionQcmDisponible = true
     this.versionQcm = false
     this.tip = `
@@ -53,7 +54,7 @@ export default class Puissances extends ExerciceSimple {
               $\\begin{aligned}
        ${expression}&=${k * a}x^{${n}} \\times \\dfrac{x^${p}}{${a}}\\\\
         &=\\dfrac{${k * a}x^{${n + p}}}{${a}}\\\\
-        &=${miseEnEvidence(`${k}x^{${n + p}}`)}.
+        &=${miseEnEvidence(`${k}x^{${n + p}}`)}
      \\end{aligned}$`
 
     if (this.versionQcm) {
@@ -68,13 +69,21 @@ export default class Puissances extends ExerciceSimple {
     } else {
       this.consigne = ''
       this.question = `Soit $x$ un réel non nul.<br>Simplifier cette expression pour l'écrire sans trait de fraction : $${expression}$.`
-      this.compare = (saisie, reponse, options) =>
-        /\\[dt]?frac|\\div|\//.test(saisie)
-          ? {
-              isOk: false,
-              feedback: 'Il ne doit plus rester de trait de fraction.',
-            }
-          : fonctionComparaison(saisie, reponse, options)
+      this.compare = (saisie, reponse, options) => {
+        if (/\\[dt]?frac|\\div|\//.test(saisie)) {
+          return {
+            isOk: false,
+            feedback: 'Il ne doit plus rester de trait de fraction.',
+          }
+        }
+        // MathLive écrit x^{10} sous la forme x^10 : on remet les accolades
+        const saisieNormalisee = saisie.replace(/\^(\d{2,})/g, '^{$1}')
+        // Mêmes facteurs que la réponse attendue, dans n'importe quel ordre
+        return fonctionComparaison(saisieNormalisee, reponse, {
+          ...options,
+          exclusifFactorisation: true,
+        })
+      }
       this.reponse = `${k}x^{${n + p}}`
     }
   }
