@@ -47,8 +47,8 @@ export default class ProbabilitesTirageSansRemise extends Exercice {
         'Nombres séparés par des tirets :',
         '1 : Conditionnelle (même couleur)',
         '2 : Conditionnelle (couleurs différentes)',
-        '3 :  Intersection (même couleur)',
-        '4 :  Intersection (couleurs différentes)',
+        '3 : Intersection (même couleur)',
+        '4 : Intersection (couleurs différentes)',
         '5 : Mélange',
       ].join('\n'),
     ]
@@ -70,7 +70,6 @@ export default class ProbabilitesTirageSansRemise extends Exercice {
     // que deux questions différentes, et le barème doit correspondre aux questions posées
     const nbCategories = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
       max: 4,
       melange: 5,
       defaut: 5,
