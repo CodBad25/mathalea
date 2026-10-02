@@ -1,31 +1,55 @@
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { context } from '../../modules/context'
-import ExerciceSimple from '../ExerciceSimple'
+import { randint } from '../../modules/outils'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '10/08/2025'
-export const dateDeModifImportante = '30/09/2026'
-export const uuid = 'd232e'
-
+export const uuid = '65cdf'
+// @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C03-3', '2A-N3-3'],
-  'fr-ch': [],
+  'fr-ch': ['10NO3D-13'],
 }
 export const interactifReady = true
 
-export const amcReady = true
+export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Appliquer la propriété des puissances de puissances'
+export default class Auto1AC3c extends ExerciceQcmA {
+  private appliquerLesValeurs(a: number, k: number): void {
+    this.enonce = `Soit $n$ un entier${a === 3 && k === 2 ? ' non nul' : ''}. <br>À quelle expression est égale $\\left(${a}^n\\right)^{${k}}$ ?`
 
-// @Author Stéphane Guyon
-export default class Auto1AC3c extends ExerciceSimple {
+    this.correction = `On applique la propriété des puissances de puissances d'un réel.<br>
+    Soit $n\\in \\mathbb{N}$, et $p \\in \\mathbb{N}$, on a : 
+     $\\left(a^{n}\\right)^{p}=a^{np}$<br>
+    $\\begin{aligned}\\left(${a}^{n}\\right)^{${k}}&=${a}^{${k}n}\\\\
+    &=\\left(${a}^{${k}}\\right)^{n}\\\\
+    &=${miseEnEvidence(`${a ** k}^{n}`)}
+    \\end{aligned}$`
+
+    this.reponses = [
+      `$${a ** k}^{n}$`,
+      `$${a}^{n^{${k}}}$`,
+      k === 2 ? 'Aucune de ces propositions' : `$${a}^{${k}+n}$`,
+      k === 2 ? `$${a * k}^{n}$` : `$${a * k}^{n}$`,
+    ]
+  }
+
+  versionOriginale: () => void = () => {
+    this.appliquerLesValeurs(3, 2)
+  }
+
+  versionAleatoire = () => {
+    let compteur = 0
+    do {
+      const k = randint(2, 3)
+      const a = randint(2, 4)
+      this.appliquerLesValeurs(a, k)
+      compteur++
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
+  }
+
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.versionQcmDisponible = true
-    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut reconnaître une puissance de puissance.
@@ -36,37 +60,7 @@ export default class Auto1AC3c extends ExerciceSimple {
     <li>Utiliser la propriété des puissances de puissances.</li>
   </ul>
 `
-  }
-
-  nouvelleVersion() {
-    if (context.isAmc) this.versionQcm = true
-    this.formatInteractif = this.versionQcm ? 'mathlive' : 'fillInTheBlank'
-
-    const k = this.quotaRandint('k', 2, 3)
-    const a = this.quotaRandint('a', 2, 4)
-
-    this.correction = `On applique la propriété des puissances de puissances d'un réel.<br>
-    Soit $n\\in \\mathbb{N}$, et $p \\in \\mathbb{N}$, on a : 
-     $\\left(a^{n}\\right)^{p}=a^{np}$<br>
-    $\\begin{aligned}\\left(${a}^{n}\\right)^{${k}}&=${a}^{${k}n}\\\\
-    &=\\left(${a}^{${k}}\\right)^{n}\\\\
-    &=${miseEnEvidence(`${a ** k}^{n}`)}
-    \\end{aligned}$`
-
-    if (this.versionQcm) {
-      this.consigne = ''
-      this.question = `Soit $n$ un entier${a === 3 && k === 2 ? ' non nul' : ''}. <br>À quelle expression est égale $\\left(${a}^n\\right)^{${k}}$ ?`
-      this.reponse = `$${a ** k}^{n}$`
-      this.distracteurs = [
-        `$${a}^{n^{${k}}}$`,
-        `$${a}^{${k}+n}$`,
-        `$${a * k}^{n}$`,
-        'Aucune de ces propositions',
-      ]
-    } else {
-      this.consigne = "Soit $n$ un entier. Compléter l'égalité."
-      this.question = `\\left(${a}^n\\right)^{${k}}=%{champ1}^{n}`
-      this.reponse = { champ1: { value: String(a ** k) } }
-    }
+    this.optionsDeComparaison = { texteSansCasse: true } // Pour le test qcm_exercice, sinon, il va croire que c'est des fractions ou unite...
+    this.versionAleatoire()
   }
 }

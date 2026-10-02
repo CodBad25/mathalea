@@ -73,13 +73,18 @@ export default class Auto1AC3m extends ExerciceSimple {
       .mul(new Decimal(10).pow(exposant))
       .mul(nbFeuillesPile)
       .div(nbFeuillesReference)
-    // Unité de la réponse : celle qui donne un nombre raisonnable (entre 1 et 100)
-    const uniteReponse =
-      cas === 3 || (unite === 'mm' && cas === 2)
+    // Unité de la réponse :
+    // - en QCM, celle qui donne un nombre raisonnable (entre 1 et 100) ;
+    // - sinon, l'autre unité que celle de l'énoncé (cm → mm, mm → cm).
+    const uniteReponse = this.versionQcm
+      ? cas === 3 || (unite === 'mm' && cas === 2)
         ? 'cm'
         : nbFeuillesPile === 1000
           ? 'mm'
           : 'cm'
+      : unite === 'mm'
+        ? 'cm'
+        : 'mm'
     const pileEnMm = unite === 'mm' ? pileDansUnite : pileDansUnite.mul(10)
     const reponse = uniteReponse === 'mm' ? pileEnMm : pileEnMm.div(10)
     const autreUnite = uniteReponse === 'mm' ? 'cm' : 'mm'
@@ -124,8 +129,13 @@ export default class Auto1AC3m extends ExerciceSimple {
         avecUnite(reponse.div(100), uniteReponse),
       ]
     } else {
-      this.question = `${enonce}Calculer l'épaisseur d'une pile de $${texNombre(nbFeuillesPile)}$ feuilles, en $\\text{${uniteReponse}}$.`
-      this.optionsChampTexte = { texteApres: `$\\text{${uniteReponse}}$` }
+      // En interactif, phrase à compléter : « L'épaisseur … est : [champ] unité »
+      this.question = this.interactif
+        ? `${enonce}L'épaisseur d'une pile de $${texNombre(nbFeuillesPile)}$ feuilles est :`
+        : `${enonce}Calculer l'épaisseur d'une pile de $${texNombre(nbFeuillesPile)}$ feuilles, en $\\text{${uniteReponse}}$.`
+      this.optionsChampTexte = {
+        texteApres: `$\\text{${uniteReponse}}$`,
+      }
       this.reponse = reponse
     }
   }
