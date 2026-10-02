@@ -2,6 +2,12 @@ import Decimal from 'decimal.js'
 import seedrandom from 'seedrandom'
 import { get } from 'svelte/store'
 import Exercice from '../exercices/Exercice'
+import {
+  CALCULATRICES_NON_FORCEES,
+  isCalculatricesAutorisees,
+  isCalculatricesForcees,
+  type CalculatricesForcees,
+} from './calculatrices'
 import ExerciceSimple from '../exercices/ExerciceSimple'
 import referentielStaticCH from '../json/referentielStaticCH.json'
 import referentielStaticFR from '../json/referentielStaticFRHydrated'
@@ -534,7 +540,9 @@ export function mathaleaHandleParamOfOneExercice(
   if (param.cols !== undefined && param.cols > 1) exercice.nbCols = param.cols
   if (param.cd !== undefined) exercice.correctionDetaillee = param.cd === '1'
   if (param.tip !== undefined) exercice.tipAvailable = param.tip === '1'
-  exercice.calculatriceAutorisee = param.calc === '1'
+  exercice.calculatrices = isCalculatricesAutorisees(param.calc)
+    ? param.calc
+    : '0'
   if (exercice.seed === undefined) {
     exercice.seed = mathaleaGenerateSeed()
   }
@@ -653,7 +661,13 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let pin = ''
   let gameId = ''
   let recorder:
-    'capytale' | 'moodle' | 'labomep' | 'anki' | 'flowmath' | undefined
+    | 'capytale'
+    | 'moodle'
+    | 'labomep'
+    | 'anki'
+    | 'flowmath'
+    | 'sesatheque'
+    | undefined
   let done: '1' | undefined
   let es
   let presMode:
@@ -663,6 +677,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     | 'recto'
     | 'verso' = 'liste_exos'
   let setInteractive = '2'
+  let calculatricesForcees: CalculatricesForcees = CALCULATRICES_NON_FORCEES
   let isSolutionAccessible = true
   let isInteractiveFree = true
   let oneShot = false
@@ -763,7 +778,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         newExercisesParams[indiceExercice].cd = entry[1]
       } else if (entry[0] === 'tip' && (entry[1] === '0' || entry[1] === '1')) {
         newExercisesParams[indiceExercice].tip = entry[1]
-      } else if (entry[0] === 'calc' && entry[1] === '1') {
+      } else if (entry[0] === 'calc' && isCalculatricesAutorisees(entry[1])) {
         newExercisesParams[indiceExercice].calc = entry[1]
       } else if (entry[0] === 'v') {
         v = convertVueType(entry[1].trim().toLowerCase())
@@ -773,7 +788,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
           entry[1] === 'moodle' ||
           entry[1] === 'labomep' ||
           entry[1] === 'anki' ||
-          entry[1] === 'flowmath'
+          entry[1] === 'flowmath' ||
+          entry[1] === 'sesatheque'
         ) {
           recorder = entry[1]
         }
@@ -909,7 +925,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   /**
    * es permet de résumer les réglages de la vue élève
    * Il est de la forme 21011010
-   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError
+   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)
    */
   if (es && es.length === 6) {
     presMode = presModeId[parseInt(es.charAt(0))]
@@ -935,7 +951,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     twoColumns = es.charAt(5) === '1'
     isTitleDisplayed = es.charAt(6) === '1'
     isReferenceDisplayed = es.charAt(7) === '1'
-  } else if (es && es.length === 9) {
+  } else if (es && (es.length === 9 || es.length === 10)) {
     presMode = presModeId[parseInt(es.charAt(0))]
     setInteractive = es.charAt(1)
     isSolutionAccessible = es.charAt(2) === '1'
@@ -945,6 +961,9 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     isTitleDisplayed = es.charAt(6) === '1'
     isReferenceDisplayed = es.charAt(7) === '1'
     isCorrectionOnlyOnError = es.charAt(8) === '1'
+    if (isCalculatricesForcees(es.charAt(9))) {
+      calculatricesForcees = es.charAt(9) as CalculatricesForcees
+    }
   }
   v = v ?? ''
   return {
@@ -966,6 +985,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     title,
     presMode,
     setInteractive,
+    calculatricesForcees,
     isSolutionAccessible,
     isInteractiveFree,
     oneShot,

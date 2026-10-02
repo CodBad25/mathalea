@@ -63,6 +63,7 @@ export const TBI_CALCULATOR_MAX_W = 480
 export const TBI_CALCULATOR_ASPECT: Record<TbiCalculatorKind, number> = {
   college: 0.571,
   lycee: 0.5159,
+  calculette: 0.72,
 }
 
 /**
@@ -140,8 +141,11 @@ export interface TbiTrafficLightState {
   h: number
 }
 
-/** Les deux modèles de calculatrice NumWorks proposés en widget TBI */
-export type TbiCalculatorKind = 'college' | 'lycee'
+/**
+ * Les modèles de calculatrice proposés en widget : les deux modèles NumWorks
+ * (collège, lycée) et la « calculette » MathALÉA, très basique.
+ */
+export type TbiCalculatorKind = 'college' | 'lycee' | 'calculette'
 
 export interface TbiCalculatorState {
   visible: boolean
@@ -166,6 +170,7 @@ export interface TbiState {
   trafficLight: TbiTrafficLightState
   collegeCalculator: TbiCalculatorState
   lyceeCalculator: TbiCalculatorState
+  calculette: TbiCalculatorState
 }
 
 export function defaultTbiCardState(index: number): TbiCardState {
@@ -216,16 +221,23 @@ export function defaultTbiState(): TbiState {
       w: 260,
       h: calculatorHeightForWidth('lycee', 260),
     },
+    calculette: {
+      visible: false,
+      x: 0,
+      y: 0,
+      w: 260,
+      h: calculatorHeightForWidth('calculette', 260),
+    },
   }
 }
 
 /**
- * Les deux calculatrices d'un conteneur : `tbiState` en vue TBI, le store
+ * Les calculatrices d'un conteneur : `tbiState` en vue TBI, le store
  * `eleveCalculatrices` en vue élève (même widget, état indépendant).
  */
 export type CalculatorsState = Pick<
   TbiState,
-  'collegeCalculator' | 'lyceeCalculator'
+  'collegeCalculator' | 'lyceeCalculator' | 'calculette'
 >
 
 /** Renvoie l'état du widget calculatrice correspondant au modèle demandé */
@@ -233,16 +245,24 @@ export function calculatorStateOf(
   state: CalculatorsState,
   kind: TbiCalculatorKind,
 ): TbiCalculatorState {
-  return kind === 'college' ? state.collegeCalculator : state.lyceeCalculator
+  switch (kind) {
+    case 'college':
+      return state.collegeCalculator
+    case 'lycee':
+      return state.lyceeCalculator
+    case 'calculette':
+      return state.calculette
+  }
 }
 
 export const tbiState = writable<TbiState>(defaultTbiState())
 
 /** Calculatrices de la vue élève (autorisées exercice par exercice) */
 export const eleveCalculatrices = writable<CalculatorsState>(
-  (({ collegeCalculator, lyceeCalculator }) => ({
+  (({ collegeCalculator, lyceeCalculator, calculette }) => ({
     collegeCalculator,
     lyceeCalculator,
+    calculette,
   }))(defaultTbiState()),
 )
 
@@ -644,6 +664,7 @@ export interface TbiSharedState {
   trafficLightVisible: boolean
   collegeCalculatorVisible: boolean
   lyceeCalculatorVisible: boolean
+  calculetteVisible: boolean
   /** Zoom de chaque exercice, aligné par indice sur exercicesParams */
   zooms: number[]
   /** Espacement des questions de chaque exercice, aligné sur exercicesParams */
@@ -656,6 +677,8 @@ export interface TbiSharedState {
   collegeCalculatorY: number
   lyceeCalculatorX: number
   lyceeCalculatorY: number
+  calculetteX: number
+  calculetteY: number
 }
 
 export function getTbiSharedState(state: TbiState): TbiSharedState {
@@ -671,6 +694,7 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     trafficLightVisible: state.trafficLight.visible,
     collegeCalculatorVisible: state.collegeCalculator.visible,
     lyceeCalculatorVisible: state.lyceeCalculator.visible,
+    calculetteVisible: state.calculette.visible,
     zooms: state.cards.map((card) => card.zoom),
     questionSpacings: state.cards.map((card) => card.questionSpacing),
     widgetX: state.widget.x,
@@ -681,6 +705,8 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     collegeCalculatorY: state.collegeCalculator.y,
     lyceeCalculatorX: state.lyceeCalculator.x,
     lyceeCalculatorY: state.lyceeCalculator.y,
+    calculetteX: state.calculette.x,
+    calculetteY: state.calculette.y,
   }
 }
 
@@ -760,6 +786,7 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   if (shared.trafficLightVisible) fields.push('f-1')
   if (shared.collegeCalculatorVisible) fields.push('cc-1')
   if (shared.lyceeCalculatorVisible) fields.push('cl-1')
+  if (shared.calculetteVisible) fields.push('ct-1')
   if (!isDefaultZooms(shared.zooms)) {
     fields.push(
       `z-${shared.zooms
@@ -786,6 +813,11 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   if (shared.lyceeCalculatorX !== 0 || shared.lyceeCalculatorY !== 0) {
     fields.push(
       `clp-${encodePosition(shared.lyceeCalculatorX, shared.lyceeCalculatorY)}`,
+    )
+  }
+  if (shared.calculetteX !== 0 || shared.calculetteY !== 0) {
+    fields.push(
+      `ctp-${encodePosition(shared.calculetteX, shared.calculetteY)}`,
     )
   }
   return fields.join(TBI_PARAM_FIELD_SEP)
@@ -854,6 +886,9 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
       case 'cl':
         shared.lyceeCalculatorVisible = value === '1'
         break
+      case 'ct':
+        shared.calculetteVisible = value === '1'
+        break
       case 'z':
         shared.zooms = value
           .split(TBI_PARAM_LIST_SEP)
@@ -895,6 +930,14 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
         if (position) {
           shared.lyceeCalculatorX = position.x
           shared.lyceeCalculatorY = position.y
+        }
+        break
+      }
+      case 'ctp': {
+        const position = decodePosition(value)
+        if (position) {
+          shared.calculetteX = position.x
+          shared.calculetteY = position.y
         }
         break
       }
@@ -966,6 +1009,9 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
     if (typeof shared.lyceeCalculatorVisible === 'boolean') {
       state.lyceeCalculator.visible = shared.lyceeCalculatorVisible
     }
+    if (typeof shared.calculetteVisible === 'boolean') {
+      state.calculette.visible = shared.calculetteVisible
+    }
     if (Array.isArray(shared.zooms)) {
       shared.zooms.forEach((zoom, i) => {
         if (state.cards[i] && typeof zoom === 'number') {
@@ -1011,6 +1057,13 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
       state.lyceeCalculator.x = shared.lyceeCalculatorX
       state.lyceeCalculator.y = shared.lyceeCalculatorY
     }
+    if (
+      typeof shared.calculetteX === 'number' &&
+      typeof shared.calculetteY === 'number'
+    ) {
+      state.calculette.x = shared.calculetteX
+      state.calculette.y = shared.calculetteY
+    }
     ensureTabConfigs(state)
     return state
   })
@@ -1029,6 +1082,7 @@ interface TbiLocalLayout {
   }
   collegeCalculator?: { x: number; y: number; w: number; h: number }
   lyceeCalculator?: { x: number; y: number; w: number; h: number }
+  calculette?: { x: number; y: number; w: number; h: number }
 }
 
 function tbiStorageKey(uuids: string[]): string {
@@ -1059,6 +1113,12 @@ export function saveTbiLocalLayout(uuids: string[]) {
       y: state.lyceeCalculator.y,
       w: state.lyceeCalculator.w,
       h: state.lyceeCalculator.h,
+    },
+    calculette: {
+      x: state.calculette.x,
+      y: state.calculette.y,
+      w: state.calculette.w,
+      h: state.calculette.h,
     },
   }
   try {
@@ -1132,8 +1192,13 @@ export function loadTbiLocalLayout(uuids: string[]) {
     const calculatorKindOf = {
       collegeCalculator: 'college',
       lyceeCalculator: 'lycee',
+      calculette: 'calculette',
     } as const
-    for (const key of ['collegeCalculator', 'lyceeCalculator'] as const) {
+    for (const key of [
+      'collegeCalculator',
+      'lyceeCalculator',
+      'calculette',
+    ] as const) {
       const saved = layout[key]
       if (typeof saved?.x === 'number' && typeof saved?.y === 'number') {
         state[key].x = saved.x

@@ -13,6 +13,7 @@
     type TbiCalculatorKind,
   } from '../../../lib/stores/tbiStore'
   import { statsTbiCalculatorTracker } from '../../../modules/statsUtils'
+  import Calculette from './Calculette.svelte'
 
   interface Props {
     kind: TbiCalculatorKind
@@ -42,8 +43,14 @@
    * graphique lycée). Leur barre d'actions (capture d'écran, plein écran,
    * partage) a été masquée par CSS à la source : ce widget n'expose que
    * l'écran et le clavier de la calculatrice.
+   *
+   * La « calculette » MathALÉA, très basique, n'a pas de page : elle est
+   * rendue directement par le composant Calculette (pas d'`src`).
    */
-  const config: Record<TbiCalculatorKind, { title: string; src: string; defaultX: number }> = {
+  const config: Record<
+    TbiCalculatorKind,
+    { title: string; src?: string; defaultX: number }
+  > = {
     college: {
       title: 'Calculatrice collège',
       src: `${import.meta.env.BASE_URL}calculators/numworks-scientific.html`,
@@ -53,6 +60,10 @@
       title: 'Calculatrice lycée',
       src: `${import.meta.env.BASE_URL}calculators/numworks-graphing.html`,
       defaultX: 780,
+    },
+    calculette: {
+      title: 'Calculette',
+      defaultX: 220,
     },
   }
 
@@ -70,8 +81,10 @@
 
   onMount(async () => {
     onOpen(kind)
+    const src = config[kind].src
+    if (src === undefined) return
     try {
-      const response = await fetch(config[kind].src)
+      const response = await fetch(src)
       const text = response.ok ? await response.text() : ''
       fileAvailable = response.ok && !text.includes('id="appMathalea"')
     } catch {
@@ -224,7 +237,9 @@
     </button>
   </div>
   <div class="flex-1 min-h-0">
-    {#if fileAvailable === false}
+    {#if config[kind].src === undefined}
+      <Calculette />
+    {:else if fileAvailable === false}
       <div
         class="w-full h-full flex items-center justify-center text-center p-4 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
       >

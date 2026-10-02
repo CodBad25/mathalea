@@ -40,7 +40,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
-    this.sup = '1-2-3-4-5-6-7-8-9'
+    this.sup = '0'
     this.spacing = 2
     this.spacingCorr = 2
     this.listeAvecNumerotation = false
@@ -57,6 +57,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         '7 : $A^2+AB$',
         '8 : $A^2-AB$',
         '9 : $A^2-B^2$ avec $A$ et $B$ affines',
+        '0 : Mélange',
       ].join('\n'),
     ]
   }
@@ -74,6 +75,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         max: 9,
         defaut: 1,
         nbQuestions: this.nbQuestions,
+        melange: 0,
       }).map(Number),
       this.nbQuestions,
     )
@@ -126,7 +128,10 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
 
       if (type === 9) {
         while (
-          a === c || a === -c || b === d || b === -d ||
+          a === c ||
+          a === -c ||
+          b === d ||
+          b === -d ||
           pgcd(Math.abs(a - c), Math.abs(b - d)) !== 1 ||
           pgcd(Math.abs(a + c), Math.abs(b + d)) !== 1
         ) {
@@ -258,11 +263,7 @@ export default class FactoriserAvecFacteurCommun extends Exercice {
         const lettre = lettreDepuisChiffre(i + 1)
         const texte = this.interactif
           ? `$${lettre}=${expression}=$` +
-            ajouteChampTexteMathLive(
-              this,
-              i,
-              KeyboardType.lyceeClassique,
-            )
+            ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique)
           : `$${lettre}=${expression}$`
         this.listeQuestions.push(texte)
         this.listeCorrections.push(`$${lettre}=${expression}$<br>${correction}`)

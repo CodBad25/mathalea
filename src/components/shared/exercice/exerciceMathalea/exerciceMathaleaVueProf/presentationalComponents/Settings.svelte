@@ -7,6 +7,10 @@
     COEFF_BAREME_MIN,
     normaliseCoeffBareme,
   } from '../../../../../../lib/interactif/baremeExercice'
+  import {
+    CALCULATRICES_AUTORISEES_OPTIONS,
+    type CalculatricesAutorisees,
+  } from '../../../../../../lib/calculatrices'
   import type { IExercice } from '../../../../../../lib/types'
   import CheckboxWithLabel from '../../../../forms/CheckboxWithLabel.svelte'
   import InputNumber from '../../../../forms/InputNumber.svelte'
@@ -32,7 +36,7 @@
   export let isInteractif: boolean = false
   /** Nombre de points maximum de l'exercice, avant coefficient. */
   export let pointsMax: number = 0
-  /** Propose la case « Calculatrice autorisée » (vue prof, dont les liens élèves l'exploitent). */
+  /** Propose la liste « Calculatrices disponibles » (vue prof, dont les liens élèves l'exploitent). */
   export let isCalculatriceProposee: boolean = false
   /**
    * Contrôles de mise en page des questions (colonnes, espacement,
@@ -62,12 +66,14 @@
   let alea: string
   let correctionDetaillee: boolean
   let tipAvailable: boolean
-  let calculatriceAutorisee: boolean
+  let calculatrices: CalculatricesAutorisees
   let coeffBareme: number = normaliseCoeffBareme(exercice.coeffBareme)
 
   $: isBaremeDisplayed = isInteractif && pointsMax > 0
 
   let isCommentDisplayed: boolean = false
+  /** Le sélecteur de calculatrices reste replié tant qu'on n'a pas cliqué sur le bouton. */
+  let isCalculatriceDisplayed: boolean = false
 
   let formNum1: FormNumerique
   let formNum2: FormNumerique
@@ -140,7 +146,9 @@
       exercice instanceof ExerciceSimple ? exercice.versionQcm || false : false
     correctionDetaillee = exercice.correctionDetaillee
     tipAvailable = exercice.tipAvailable ?? !!exercice.tip?.length
-    calculatriceAutorisee = exercice.calculatriceAutorisee ?? false
+    calculatrices = exercice.calculatrices ?? '0'
+    // Un réglage non standard (venu d'un lien par exemple) doit rester visible.
+    isCalculatriceDisplayed = calculatrices !== '0'
 
     if (
       Array.isArray(exercice.besoinFormulaireNumerique) &&
@@ -242,7 +250,7 @@
       alea,
       correctionDetaillee,
       tipAvailable,
-      calculatriceAutorisee,
+      calculatrices,
       coeffBareme,
     })
   }
@@ -284,9 +292,58 @@
   <div
     class="text-lg lg:text-base ml-2 lg:ml-4 space-y-4 p-3 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
   >
-    <h3 class="text-coopmaths-struct dark:text-coopmathsdark-struct font-bold">
-      Paramètres
-    </h3>
+    <div class="flex flex-row items-center gap-x-2">
+      <h3
+        class="text-coopmaths-struct dark:text-coopmathsdark-struct font-bold"
+      >
+        Paramètres
+      </h3>
+      {#if isCalculatriceProposee}
+        <button
+          type="button"
+          id="settings-calculatrices-bouton-{exerciceIndex}"
+          class="flex items-center justify-center w-6 h-6 rounded
+            text-coopmaths-action dark:text-coopmathsdark-action
+            hover:bg-coopmaths-action hover:text-coopmaths-canvas
+            dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas
+            {isCalculatriceDisplayed
+            ? 'bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark'
+            : 'opacity-60 hover:opacity-100'}"
+          title="Calculatrices disponibles"
+          aria-label="Calculatrices disponibles"
+          aria-expanded={isCalculatriceDisplayed}
+          aria-controls="settings-calculatrices-{exerciceIndex}"
+          on:click={() => {
+            isCalculatriceDisplayed = !isCalculatriceDisplayed
+          }}
+        >
+          <i class="bx bx-calculator"></i>
+        </button>
+      {/if}
+    </div>
+    {#if isCalculatriceProposee && isCalculatriceDisplayed}
+      <div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-1">
+        <label
+          class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+          for="settings-calculatrices-{exerciceIndex}"
+        >
+          Calculatrices disponibles&nbsp;:
+        </label>
+        <select
+          id="settings-calculatrices-{exerciceIndex}"
+          bind:value={calculatrices}
+          on:change={dispatchNewSettings}
+          class="h-6 rounded border px-1 py-0 text-xs leading-none
+            border-coopmaths-action dark:border-coopmathsdark-action
+            bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
+            text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+        >
+          {#each CALCULATRICES_AUTORISEES_OPTIONS as option (option.value)}
+            <option value={option.value}>{option.label}</option>
+          {/each}
+        </select>
+      </div>
+    {/if}
     <div class="w-full flex flex-row items-end gap-x-4">
       <div class="w-1/2">
         {#if exercice.nbQuestionsModifiable}
@@ -439,8 +496,7 @@
                 hover:bg-coopmaths-action hover:text-coopmaths-canvas
                 dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
               aria-label="Réduire l'espacement des questions"
-              on:click={() => style.onAdjustGutter(-1)}
-            >−</button
+              on:click={() => style.onAdjustGutter(-1)}>−</button
             >
             <span
               class="w-11 text-center text-xs tabular-nums select-none
@@ -455,8 +511,7 @@
                 hover:bg-coopmaths-action hover:text-coopmaths-canvas
                 dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
               aria-label="Augmenter l'espacement des questions"
-              on:click={() => style.onAdjustGutter(1)}
-            >+</button
+              on:click={() => style.onAdjustGutter(1)}>+</button
             >
           </span>
         </div>
@@ -490,15 +545,6 @@
         id="settings-indice-disponible-{exerciceIndex}"
         bind:isChecked={tipAvailable}
         label="Indice disponible pour les élèves"
-        on:change={dispatchNewSettings}
-      />
-    {/if}
-
-    {#if isCalculatriceProposee}
-      <CheckboxWithLabel
-        id="settings-calculatrice-autorisee-{exerciceIndex}"
-        bind:isChecked={calculatriceAutorisee}
-        label="Calculatrice autorisée"
         on:change={dispatchNewSettings}
       />
     {/if}

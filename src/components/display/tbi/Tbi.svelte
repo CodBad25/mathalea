@@ -1,10 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
   import { get, type Unsubscriber } from 'svelte/store'
-  import {
-    isStatic,
-    isSvelte,
-  } from '../../../lib/components/componentsUtils'
+  import { isStatic, isSvelte } from '../../../lib/components/componentsUtils'
   import { getStaticExercicePngUrls } from '../../../lib/components/exercisesUtils'
   import {
     mathaleaHandleParamOfOneExercice,
@@ -220,7 +217,10 @@
         class="flex flex-col items-center justify-center min-h-screen gap-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
       >
         <i class="bx bx-chalkboard text-6xl"></i>
-        <p>Aucun exercice à afficher. Cliquez sur le + en bas à droite pour en ajouter.</p>
+        <p>
+          Aucun exercice à afficher. Cliquez sur le + en bas à droite pour en
+          ajouter.
+        </p>
       </div>
     {:else if $tbiState.mode === 'columns'}
       <TbiColumnsLayout
@@ -246,6 +246,9 @@
   {/if}
   {#if $tbiState.trafficLight.visible}
     <TbiTrafficLightWidget {persistLayout} />
+  {/if}
+  {#if $tbiState.calculette.visible}
+    <TbiCalculatorWidget kind="calculette" {persistLayout} />
   {/if}
   {#if $tbiState.collegeCalculator.visible}
     <TbiCalculatorWidget kind="college" {persistLayout} />

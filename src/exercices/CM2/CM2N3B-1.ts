@@ -1,178 +1,104 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { range1 } from '../../lib/outils/nombres'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Calculer la moitié'
+export const titre =
+  'Ajouter ou soustraire un nombre entier à un nombre décimal sans retenue'
+export const dateDePublication = '01/10/2026'
 export const amcReady = true
+export const amcType = 'AMCNum'
 export const interactifReady = true
 
-export const amcType = 'AMCNum'
 /**
- * Calculer la moitié d'un nombre pair, d'un impair inférieur à 20, d'un multiple de 200, d'un nombre de la forme a00 avec a impair, d'un nombre de la forme
- *  a,b avec a et b pairs ou 1xx avec xx un nombre pair
+ * Ajouter ou soustraire un entier (à un ou deux chiffres) à un nombre décimal, sans retenue.
  * @author Rémi Angot
-
  */
-export const uuid = '14688'
+export const uuid = 'e3e9b'
 
 export const refs = {
   'fr-fr': ['CM2N3B-1'],
-  'fr-2016': ['CM009'],
-  'fr-ch': ['PR-1'],
+  'fr-ch': [],
 }
-export default class Moitie extends Exercice {
+export default class AjouterSoustraireEntierSansRetenue extends Exercice {
   constructor() {
     super()
-
     this.consigne = 'Calculer.'
-
     this.nbCols = 2
     this.nbColsCorr = 2
-    this.sup = 1 // niveau de difficulté
   }
 
   nouvelleVersion() {
-    const typesDeQuestionsDisponibles = range1(6)
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
+    const typesDeQuestions = combinaisonListes(
+      ['addition', 'soustraction'],
       this.nbQuestions,
-    ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
-    for (
-      let i = 0, texte, texteCorr, a, b, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-    ) {
-      switch (listeTypeDeQuestions[i]) {
-        case 1: // Table de 2
-          a = randint(2, 9)
-          texte = `$\\text{La moitié de }${a * 2}$`
-          texteCorr = `$\\text{La moitié de }${a * 2} \\text{ est } ${miseEnEvidence(texNombre(a))}$`
-          handleAnswers(
-            this,
-            i,
-            { reponse: { value: a.toString() } },
-            { formatInteractif: 'mathalea-mathfield' },
-          )
-          if (this.interactif)
-            texte += ajouteChampTexteMathLive(
-              this,
-              i,
-              KeyboardType.clavierNumbers,
-            )
-          break
-        case 2: // Impair inférieur à 20
-          a = randint(2, 9)
-          texte = `$\\text{La moitié de }${a * 2 + 1}$`
-          texteCorr = `$\\text{La moitié de }${
-            a * 2 + 1
-          } \\text{ est } ${miseEnEvidence(texNombre(a + 5 / 10, 1))}$`
-          handleAnswers(
-            this,
-            i,
-            { reponse: { value: texNombre(a + 5 / 10, 1) } },
-            { formatInteractif: 'mathalea-mathfield' },
-          )
-          if (this.interactif)
-            texte += ajouteChampTexteMathLive(
-              this,
-              i,
-              KeyboardType.clavierNumbers,
-            )
-          break
-        case 3: // Table de 200
-          a = randint(2, 9)
-          texte = `$\\text{La moitié de }${texNombre(a * 2 * 100)}$`
-          texteCorr = `$\\text{La moitié de }${texNombre(
-            a * 2 * 100,
-          )} \\text{ est } ${miseEnEvidence(texNombre(a * 100, 0))}$`
-          handleAnswers(
-            this,
-            i,
-            { reponse: { value: texNombre(a * 100, 0) } },
-            { formatInteractif: 'mathalea-mathfield' },
-          )
-          if (this.interactif)
-            texte += ajouteChampTexteMathLive(
-              this,
-              i,
-              KeyboardType.clavierNumbers,
-            )
-          break
-        case 4: // a00 avec a impair
-          a = randint(2, 9)
-          texte = `$\\text{La moitié de }${texNombre((a * 2 + 1) * 100, 0)}$`
-          texteCorr = `$\\text{La moitié de }${texNombre(
-            (a * 2 + 1) * 100,
-          )} \\text{ est } ${miseEnEvidence(texNombre(a * 100 + 50, 0))}$`
-          handleAnswers(
-            this,
-            i,
-            { reponse: { value: texNombre(a * 100 + 50, 0) } },
-            { formatInteractif: 'mathalea-mathfield' },
-          )
-          if (this.interactif)
-            texte += ajouteChampTexteMathLive(
-              this,
-              i,
-              KeyboardType.clavierNumbers,
-            )
-          break
-        case 5: // a,b avec a et b pairs
-          a = randint(2, 9)
-          b = randint(2, 9)
-          texte = `$\\text{La moitié de }${texNombre(a * 2 + (b * 2) / 100, 2)}$`
-          texteCorr = `$\\text{La moitié de }${texNombre(
-            a * 2 + (b * 2) / 100,
-          )} \\text{ est } ${miseEnEvidence(texNombre(a + b / 100, 2))}$`
-          handleAnswers(
-            this,
-            i,
-            { reponse: { value: texNombre(a + b / 100, 2) } },
-            { formatInteractif: 'mathalea-mathfield' },
-          )
-          if (this.interactif)
-            texte += ajouteChampTexteMathLive(
-              this,
-              i,
-              KeyboardType.clavierNumbers,
-            )
-          break
-        case 6: // 1xx avec xx un nombre pair
-        default:
-          a = randint(2, 9)
-          texte = `$\\text{La moitié de }${100 + a * 2}$`
-          texteCorr = `$\\text{La moitié de }${100 + a * 2} \\text{ est } ${miseEnEvidence(
-            texNombre(50 + a, 0),
-          )}$`
-          handleAnswers(
-            this,
-            i,
-            { reponse: { value: texNombre(50 + a, 0) } },
-            { formatInteractif: 'mathalea-mathfield' },
-          )
-          if (this.interactif)
-            texte += ajouteChampTexteMathLive(
-              this,
-              i,
-              KeyboardType.clavierNumbers,
-            )
-          break
+    )
+    const tailles = combinaisonListes(
+      ['unites', 'dizainesUnites'],
+      this.nbQuestions,
+    )
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
+      const addition = typesDeQuestions[i] === 'addition'
+      const unitesSeulement = tailles[i] === 'unites'
+      const nbDecimales = randint(1, 2)
+      const partieDecimale = randint(
+        1,
+        10 ** nbDecimales - 1,
+        [10, 20, 30, 40, 50, 60, 70, 80, 90],
+      )
+      const dizainesA = randint(2, 8)
+      const unitesA = randint(1, 8)
+      let dizainesB = 0
+      let unitesB: number
+      if (addition) {
+        unitesB = randint(1, 9 - unitesA)
+        if (!unitesSeulement) dizainesB = randint(1, 9 - dizainesA)
+      } else {
+        unitesB = randint(1, unitesA)
+        if (!unitesSeulement) dizainesB = randint(1, dizainesA - 1)
       }
-
-      if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], String(a))) {
-        // Si la question n'a jamais été posée, on en crée une autre
-        this.listeQuestions[i] = texte
+      const a = 10 * dizainesA + unitesA
+      const b = 10 * dizainesB + unitesB
+      const decimal = arrondi(
+        a + partieDecimale / 10 ** nbDecimales,
+        nbDecimales,
+      )
+      const resultat = arrondi(
+        addition ? decimal + b : decimal - b,
+        nbDecimales,
+      )
+      const signe = addition ? '+' : '-'
+      const partieEntiereResultat = addition ? a + b : a - b
+      const texte = `$${texNombre(decimal, nbDecimales)}${signe}${b}=$`
+      const texteCorr =
+        texteEnCouleur(
+          `Il n'y a pas de retenue : on ${addition ? 'ajoute' : 'soustrait'} $${b}$ ${addition ? 'à' : 'de'} la partie entière, $${a}$, et la partie décimale ne change pas.<br>` +
+            `$${a}${signe}${b}=${partieEntiereResultat}$`,
+          bleuMathalea,
+        ) +
+        `<br>$${texNombre(decimal, nbDecimales)}${signe}${b}=${miseEnEvidence(texNombre(resultat, nbDecimales))}$`
+      if (
+        this.questionJamaisPosee(i, a, b, partieDecimale, nbDecimales, signe)
+      ) {
+        handleAnswers(this, i, { reponse: { value: resultat } })
+        this.listeQuestions[i] =
+          texte +
+          (this.interactif
+            ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
+            : '$\\dots$')
         this.listeCorrections[i] = texteCorr
         i++
       }
-      cpt++
     }
     listeQuestionsToContenu(this)
   }
-  // this.besoinFormulaireNumerique = ['Niveau de difficulté',3];
 }

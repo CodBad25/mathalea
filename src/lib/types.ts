@@ -1,5 +1,9 @@
 import type Figure from 'apigeom/src/Figure'
 import type { PartialKbType } from '../lib/interactif/claviers/keyboard'
+import type {
+  CalculatricesAutorisees,
+  CalculatricesForcees,
+} from './calculatrices'
 import type { CanOptions, CanSolutionsMode } from './types/can'
 import type { Language } from './types/languages'
 
@@ -44,13 +48,15 @@ export interface InterfaceGlobalOptions {
     | 'verso'
   // | 'cartes'
   setInteractive?: string
+  /** Calculatrices imposées à tous les exercices (vue élève), `-` : réglages de chaque exercice */
+  calculatricesForcees?: CalculatricesForcees
   isSolutionAccessible?: boolean
   isCorrectionOnlyOnError?: boolean
   isTitleDisplayed?: boolean
   isReferenceDisplayed?: boolean
   isInteractiveFree?: boolean
   oneShot?: boolean
-  recorder?: 'capytale' | 'labomep' | 'moodle' | 'anki' | 'flowmath'
+  recorder?: Recorder
   done?: '1' | '0' // pourquoi n'y a-t-il qu'une valeur possible ? à vérifier JC
   answers?: string
   iframe?: string
@@ -82,7 +88,7 @@ export interface InterfaceParams extends Partial<
   interactif?: '0' | '1'
   cd?: '0' | '1'
   tip?: '0' | '1'
-  calc?: '0' | '1' // calculatrice autorisée en vue élève
+  calc?: CalculatricesAutorisees // calculatrices autorisées en vue élève
   sup?: string
   sup2?: string
   sup3?: string
@@ -114,6 +120,8 @@ export type DetailedQuestionResult = {
   score: QuestionScore
 }
 export type QuestionResult = boolean | DetailedQuestionResult
+export type Recorder =
+  'capytale' | 'labomep' | 'moodle' | 'anki' | 'flowmath' | 'sesatheque'
 export interface InterfaceResultExercice {
   numberOfPoints: number
   numberOfQuestions: number
@@ -1088,8 +1096,8 @@ export interface IExercice {
   canEnonce?: string
   tip?: string
   tipAvailable?: boolean
-  /** Calculatrice autorisée en vue élève (par défaut : non) */
-  calculatriceAutorisee?: boolean
+  /** Calculatrices autorisées en vue élève (par défaut : aucune) */
+  calculatrices?: CalculatricesAutorisees
   canReponseACompleter: string
   canNumeroLie: number
   canLiee: number[]

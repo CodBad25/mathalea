@@ -13,6 +13,7 @@
     mathaleaFormatExercice,
     mathaleaUpdateExercicesParamsFromUrl,
   } from '../../../lib/mathalea'
+  import { usesHostActivityProtocol } from '../../../lib/recorder'
   import {
     darkMode,
     exercicesParams,
@@ -21,7 +22,15 @@
     resultsByExercice,
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
-  import { eleveCalculatrices } from '../../../lib/stores/tbiStore'
+  import {
+    codesCalculatricesEffectifs,
+    isCalculatriceAutorisee,
+  } from '../../../lib/calculatrices'
+  import {
+    calculatorStateOf,
+    eleveCalculatrices,
+    type TbiCalculatorKind,
+  } from '../../../lib/stores/tbiStore'
   import { vendor } from '../../../lib/stores/vendorStore'
   import { type IExercice, type QuestionResult } from '../../../lib/types'
 
@@ -163,21 +172,35 @@
 
   /**
    * Les calculatrices ne sont proposées que pour les exercices dont l'enseignant
-   * a coché « Calculatrice autorisée ». Quand plusieurs exercices sont affichés
-   * en même temps (liste), elles le sont dès que l'un d'eux les autorise.
+   * les a autorisées (paramètre `calc`). Quand plusieurs exercices sont
+   * affichés en même temps (liste), une calculatrice l'est dès que l'un d'eux
+   * l'autorise. Le réglage global de la page de configuration
+   * (`calculatricesForcees`) passe outre ceux des exercices.
    */
-  $: isCalculatriceAutorisee =
+  $: codesCalculatrices = codesCalculatricesEffectifs(
+    $globalOptions.calculatricesForcees,
     $globalOptions.presMode === 'un_exo_par_page'
-      ? $exercicesParams[currentIndex]?.calc === '1'
+      ? [$exercicesParams[currentIndex]?.calc]
       : $globalOptions.presMode === 'une_question_par_page'
-        ? $exercicesParams[questionsExerciceIndex[currentIndex] ?? 0]?.calc ===
-          '1'
-        : $exercicesParams.some((param) => param.calc === '1')
+        ? [$exercicesParams[questionsExerciceIndex[currentIndex] ?? 0]?.calc]
+        : $exercicesParams.map((param) => param.calc),
+  )
 
-  function toggleCalculatrice(kind: 'college' | 'lycee') {
+  $: calculatriceAutorisee = {
+    calculette: codesCalculatrices.some((code) =>
+      isCalculatriceAutorisee(code, 'calculette'),
+    ),
+    college: codesCalculatrices.some((code) =>
+      isCalculatriceAutorisee(code, 'college'),
+    ),
+    lycee: codesCalculatrices.some((code) =>
+      isCalculatriceAutorisee(code, 'lycee'),
+    ),
+  } satisfies Record<TbiCalculatorKind, boolean>
+
+  function toggleCalculatrice(kind: TbiCalculatorKind) {
     eleveCalculatrices.update((state) => {
-      const calculatrice =
-        kind === 'college' ? state.collegeCalculator : state.lyceeCalculator
+      const calculatrice = calculatorStateOf(state, kind)
       calculatrice.visible = !calculatrice.visible
       return state
     })
@@ -222,9 +245,10 @@
   onMount(async () => {
     log('Eleve.svelte mount')
 
-    // Pour FlowMath, on initialise d'abord le handler RPC AVANT de charger depuis l'URL
+    // Pour les plateformes qui pilotent l'activité, on initialise d'abord le
+    // handler RPC AVANT de charger depuis l'URL.
     // Car les exercices peuvent arriver via postMessage plutôt que via l'URL
-    if ($globalOptions.recorder === 'flowmath') {
+    if (usesHostActivityProtocol($globalOptions.recorder)) {
       handleFlowmath(exercicesParams, resultsByExercice)
     }
 
@@ -256,7 +280,7 @@
       $globalOptions.recorder === 'moodle' ||
       $globalOptions.recorder === 'anki' ||
       $globalOptions.recorder === 'labomep' ||
-      $globalOptions.recorder === 'flowmath'
+      usesHostActivityProtocol($globalOptions.recorder)
     ) {
       // attend la fin de la mise à jour pour mettre l'observer
       await tick()
@@ -369,8 +393,8 @@
         ? 'translate-y-16'
         : ''}"
     >
-      {#if isCalculatriceAutorisee}
-        {#each [{ kind: 'college', title: 'Calculatrice collège', icon: 'bxs-calculator', visible: $eleveCalculatrices.collegeCalculator.visible }, { kind: 'lycee', title: 'Calculatrice lycée', icon: 'bx-calculator', visible: $eleveCalculatrices.lyceeCalculator.visible }] as calculatrice (calculatrice.kind)}
+      {#each [{ kind: 'calculette', title: 'Calculette', icon: 'bx-dialpad-alt', visible: $eleveCalculatrices.calculette.visible }, { kind: 'college', title: 'Calculatrice collège', icon: 'bxs-calculator', visible: $eleveCalculatrices.collegeCalculator.visible }, { kind: 'lycee', title: 'Calculatrice lycée', icon: 'bx-calculator', visible: $eleveCalculatrices.lyceeCalculator.visible }] as calculatrice (calculatrice.kind)}
+        {#if calculatriceAutorisee[calculatrice.kind as TbiCalculatorKind]}
           <button
             type="button"
             class="tooltip tooltip-left tooltip-neutral"
@@ -378,7 +402,7 @@
             aria-label={calculatrice.title}
             aria-pressed={calculatrice.visible}
             on:click={() =>
-              toggleCalculatrice(calculatrice.kind as 'college' | 'lycee')}
+              toggleCalculatrice(calculatrice.kind as TbiCalculatorKind)}
           >
             <i
               class="bx {calculatrice.icon} bx-sm md:bx-md rounded-full p-1 border border-coopmaths-action hover:border-coopmaths-action-lightest {calculatrice.visible
@@ -386,8 +410,8 @@
                 : 'bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest'}"
             ></i>
           </button>
-        {/each}
-      {/if}
+        {/if}
+      {/each}
       <BtnZoom
         size="bx-sm md:bx-md"
         isBorderTransparent={typeof $globalOptions.title === 'string' &&
@@ -649,12 +673,20 @@
   <Keyboard />
   <!-- Masquées (et non démontées) hors des exercices autorisés : la
   calculatrice retrouve son état quand l'élève revient sur l'un d'eux -->
+  {#if $eleveCalculatrices.calculette.visible}
+    <TbiCalculatorWidget
+      kind="calculette"
+      store={eleveCalculatrices}
+      onOpen={statsEleveCalculatorTracker}
+      hidden={!calculatriceAutorisee.calculette}
+    />
+  {/if}
   {#if $eleveCalculatrices.collegeCalculator.visible}
     <TbiCalculatorWidget
       kind="college"
       store={eleveCalculatrices}
       onOpen={statsEleveCalculatorTracker}
-      hidden={!isCalculatriceAutorisee}
+      hidden={!calculatriceAutorisee.college}
     />
   {/if}
   {#if $eleveCalculatrices.lyceeCalculator.visible}
@@ -662,7 +694,7 @@
       kind="lycee"
       store={eleveCalculatrices}
       onOpen={statsEleveCalculatorTracker}
-      hidden={!isCalculatriceAutorisee}
+      hidden={!calculatriceAutorisee.lycee}
     />
   {/if}
   {#if $globalOptions.v !== 'myriade' && $globalOptions.v !== 'indices' && $globalOptions.v !== 'indice'}

@@ -7,6 +7,7 @@ import type { InterfaceGlobalOptions } from '../types'
  * * `title` : titre pour la vue élève uniquement
  * * `presMode` : type d'affichage pour la vue eleve uniquement (page, exos, liste, questions)
  * * `setInteractive` : uniquement pour la vue eleve (0 : pas d'interactivité, 1 : tout interactif, 2 : au choix exercice par exercice)
+ * * `calculatricesForcees` : uniquement pour la vue eleve (`-` : selon le réglage `calc` de chaque exercice, sinon 0 / 1 / 2 / 3 / 9 imposé à tous les exercices)
  * * `isSolutionAccessible` : uniquement pour la vue eleve, pour savoir si les corrections sont disponibles ou pas
  * * `isCorrectionOnlyOnError` : uniquement pour la vue eleve, pour n'afficher la correction que sous les questions dont la réponse est fausse (sous les bonnes réponses, seul le smiley est affiché)
  * * `isInteractiveFree` : uniquement pour la vue eleve, pour savoir si l'élève peut changer l'interactivité ou pas
@@ -26,6 +27,7 @@ export const globalOptions = writable<InterfaceGlobalOptions>({
   title: 'Évaluation',
   presMode: 'liste_exos',
   setInteractive: '2',
+  calculatricesForcees: '-',
   isSolutionAccessible: true,
   isCorrectionOnlyOnError: false,
   isInteractiveFree: true,

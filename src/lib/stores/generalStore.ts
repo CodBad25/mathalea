@@ -1,5 +1,6 @@
 import { derived, get, writable } from 'svelte/store'
 import { statsPageTracker } from '../../modules/statsUtils'
+import { CALCULATRICES_NON_FORCEES } from '../calculatrices'
 import { buildDsParams } from '../components/buildDsParams'
 import { normaliseCoeffBareme } from '../interactif/baremeExercice'
 import type {
@@ -199,6 +200,14 @@ export function updateGlobalOptionsInURL(url: URL) {
       es += options.twoColumns ? '1' : '0'
       es += options.isTitleDisplayed ? '1' : '0'
       es += options.isReferenceDisplayed ? '1' : '0'
+      es += options.isCorrectionOnlyOnError ? '1' : '0'
+      // Calculatrices forcées : caractère facultatif (voir buildEsParams)
+      if (
+        options.calculatricesForcees != null &&
+        options.calculatricesForcees !== CALCULATRICES_NON_FORCEES
+      ) {
+        es += options.calculatricesForcees
+      }
       url.searchParams.append('es', es)
     }
     if (options.done) {

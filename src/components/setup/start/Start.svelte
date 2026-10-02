@@ -23,13 +23,14 @@
   import { downloadFile } from '../../../lib/files'
   import handleCapytale from '../../../lib/handleCapytale'
   import { sendActivityParams } from '../../../lib/handleRecorder'
-  import { hasSeenTour, startTour } from '../../../lib/onboarding/tour'
+  import { usesHostActivityProtocol } from '../../../lib/recorder'
   import {
     getExercisesFromExercicesParams,
     mathaleaHandleExerciceSimple,
     mathaleaUpdateExercicesParamsFromUrl,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
+  import { hasSeenTour, startTour } from '../../../lib/onboarding/tour'
   import { canOptions } from '../../../lib/stores/canStore'
   import {
     darkMode,
@@ -38,6 +39,7 @@
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import {
+    getLang,
     localisedIDToUuid,
     referentielLocale,
   } from '../../../lib/stores/languagesStore'
@@ -56,18 +58,17 @@
   import { SM_BREAKPOINT } from '../../keyboard/lib/sizes'
   import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
   import Sidenav from '../../shared/sidenav/Sidenav.svelte'
+  import MobileView from '../mobile/MobileView.svelte'
+  import TypstAddExerciseModal from '../typst/addExercise/TypstAddExerciseModal.svelte'
   import ButtonBackToTop from './presentationalComponents/ButtonBackToTop.svelte'
+  import MobileCarouselCards from './presentationalComponents/carousel/MobileCarouselCards.svelte'
   import Exercices from './presentationalComponents/Exercices.svelte'
   import Header from './presentationalComponents/header/Header.svelte'
   import SideMenuWrapper from './presentationalComponents/header/SideMenuWrapper.svelte'
   import ModalCapytalSettings from './presentationalComponents/modalCapytalSettings/ModalCapytalSettings.svelte'
   import ModalThirdApps from './presentationalComponents/ModalThirdApps.svelte'
   import Placeholder from './presentationalComponents/Placeholder.svelte'
-  import MobileCarouselCards from './presentationalComponents/carousel/MobileCarouselCards.svelte'
-  import MobileView from '../mobile/MobileView.svelte'
-  import { getLang } from '../../../lib/stores/languagesStore'
   import SideMenu from './presentationalComponents/sideMenu/SideMenu.svelte'
-  import TypstAddExerciseModal from '../typst/addExercise/TypstAddExerciseModal.svelte'
 
   const lang = getLang()
   let isNavBarVisible: boolean = true
@@ -153,10 +154,9 @@
    * ici ferait enregistrer cette vue comme celle de l'activité Capytale.
    */
   function openCapytaleViewInNewTab(view: ExternalCapytaleView) {
-    window.open(
-      buildMathAleaURL({ view, recorder: true }).toString(),
-      '_blank',
-    )?.focus()
+    window
+      .open(buildMathAleaURL({ view, recorder: true }).toString(), '_blank')
+      ?.focus()
   }
 
   // Gestion de la graine
@@ -179,7 +179,8 @@
       if (ex.alea !== undefined) url.searchParams.append('alea', ex.alea)
       if (ex.interactif === '1') url.searchParams.append('i', '1')
       if (ex.cd !== undefined) url.searchParams.append('cd', ex.cd)
-      if (ex.calc === '1') url.searchParams.append('calc', '1')
+      if (ex.calc != null && ex.calc !== '0')
+        url.searchParams.append('calc', ex.calc)
       if (ex.cols !== undefined) {
         url.searchParams.append('cols', ex.cols.toString())
       }
@@ -525,7 +526,7 @@
           {toggleSidenav}
           {exportQcmCam}
           {isMd}
-          isFlowmath={$globalOptions.recorder === 'flowmath'}
+          isFlowmath={usesHostActivityProtocol($globalOptions.recorder)}
         />
         {#if isMd}
           <!-- ====================================================================================

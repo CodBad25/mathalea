@@ -363,6 +363,9 @@ describe('tbiStore', () => {
       state.lyceeCalculator.visible = true
       state.lyceeCalculator.x = 30
       state.lyceeCalculator.y = 40
+      state.calculette.visible = true
+      state.calculette.x = 50
+      state.calculette.y = 60
       return state
     })
     const shared = getTbiSharedState(get(tbiState))
@@ -381,6 +384,7 @@ describe('tbiStore', () => {
       trafficLightVisible: true,
       collegeCalculatorVisible: true,
       lyceeCalculatorVisible: true,
+      calculetteVisible: true,
       zooms: [1.5, 1, 1],
       questionSpacings: [1, 12, 1],
       widgetX: 120,
@@ -391,6 +395,8 @@ describe('tbiStore', () => {
       collegeCalculatorY: 20,
       lyceeCalculatorX: 30,
       lyceeCalculatorY: 40,
+      calculetteX: 50,
+      calculetteY: 60,
     })
 
     tbiState.set(defaultTbiState())
@@ -426,6 +432,9 @@ describe('tbiStore', () => {
     expect(state.lyceeCalculator.visible).toBe(true)
     expect(state.lyceeCalculator.x).toBe(30)
     expect(state.lyceeCalculator.y).toBe(40)
+    expect(state.calculette.visible).toBe(true)
+    expect(state.calculette.x).toBe(50)
+    expect(state.calculette.y).toBe(60)
   })
 
   it('zoomAllCardsBy fait varier et borne le zoom de tous les exercices', () => {
@@ -458,6 +467,7 @@ describe('tbiStore', () => {
       trafficLightVisible: true,
       collegeCalculatorVisible: false,
       lyceeCalculatorVisible: false,
+      calculetteVisible: false,
       zooms: [1.5, 0.8],
       questionSpacings: [1, 3],
       widgetX: 0,
@@ -468,6 +478,8 @@ describe('tbiStore', () => {
       collegeCalculatorY: 0,
       lyceeCalculatorX: 0,
       lyceeCalculatorY: 0,
+      calculetteX: 0,
+      calculetteY: 0,
     })
     expect(encoded).toBe('w-1_f-1_z-15.8_qs-1.3')
     expect(decodeTbiParam(encoded)).toEqual({
@@ -490,6 +502,7 @@ describe('tbiStore', () => {
         trafficLightVisible: false,
         collegeCalculatorVisible: false,
         lyceeCalculatorVisible: false,
+        calculetteVisible: false,
         zooms: [1, 1],
         questionSpacings: [1, 1],
         widgetX: 0,
@@ -500,6 +513,8 @@ describe('tbiStore', () => {
         collegeCalculatorY: 0,
         lyceeCalculatorX: 0,
         lyceeCalculatorY: 0,
+        calculetteX: 0,
+        calculetteY: 0,
       }),
     ).toBe('')
   })
@@ -516,6 +531,7 @@ describe('tbiStore', () => {
       trafficLightVisible: false,
       collegeCalculatorVisible: false,
       lyceeCalculatorVisible: false,
+      calculetteVisible: false,
       zooms: [],
       questionSpacings: [],
       widgetX: 0,
@@ -526,6 +542,8 @@ describe('tbiStore', () => {
       collegeCalculatorY: 0,
       lyceeCalculatorX: 0,
       lyceeCalculatorY: 0,
+      calculetteX: 0,
+      calculetteY: 0,
     }
     // 'center' est la valeur par défaut : rien n'est encodé
     expect(encodeTbiParam({ ...base, singleColumnAlign: 'center' })).toBe('')
@@ -557,6 +575,7 @@ describe('tbiStore', () => {
       trafficLightVisible: false,
       collegeCalculatorVisible: true,
       lyceeCalculatorVisible: true,
+      calculetteVisible: true,
       zooms: [],
       questionSpacings: [],
       widgetX: 0,
@@ -567,15 +586,20 @@ describe('tbiStore', () => {
       collegeCalculatorY: 20,
       lyceeCalculatorX: -5,
       lyceeCalculatorY: 15,
+      calculetteX: 7,
+      calculetteY: -3,
     })
-    expect(encoded).toBe('cc-1_cl-1_ccp-10.20_clp--5.15')
+    expect(encoded).toBe('cc-1_cl-1_ct-1_ccp-10.20_clp--5.15_ctp-7.-3')
     expect(decodeTbiParam(encoded)).toEqual({
       collegeCalculatorVisible: true,
       lyceeCalculatorVisible: true,
+      calculetteVisible: true,
       collegeCalculatorX: 10,
       collegeCalculatorY: 20,
       lyceeCalculatorX: -5,
       lyceeCalculatorY: 15,
+      calculetteX: 7,
+      calculetteY: -3,
     })
   })
 
@@ -592,6 +616,7 @@ describe('tbiStore', () => {
       trafficLightVisible: false,
       collegeCalculatorVisible: false,
       lyceeCalculatorVisible: false,
+      calculetteVisible: false,
       zooms: [],
       questionSpacings: [],
       widgetX: 120,
@@ -602,6 +627,8 @@ describe('tbiStore', () => {
       collegeCalculatorY: 0,
       lyceeCalculatorX: 0,
       lyceeCalculatorY: 0,
+      calculetteX: 0,
+      calculetteY: 0,
     })
     expect(encoded).toBe('wp-120.-40_fp--15.300')
     expect(decodeTbiParam(encoded)).toEqual({
