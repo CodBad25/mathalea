@@ -1,4 +1,4 @@
-import EcrirePetitsNombresEntiers from '../../6e/6N0A-6'
+import EcrirePetitsNombresEntiersOld from '../../6e/6N0A-6Old'
 export const titre = 'Lire et écrire des nombres'
 export const interactifReady = true
 
@@ -11,20 +11,20 @@ export const dateDePublication = '14/08/2022'
  * @author Jean-claude Lhote
  */
 
-export const uuid = '4103e'
+export const uuid = '41030'
 
 export const refs = {
-  'fr-fr': ['can6N1-07', '6N1C-flash1'],
+  'fr-fr': [],
   'fr-ch': ['NR'],
 }
-export default class EcrirePetitsNombresEntiersCan extends EcrirePetitsNombresEntiers {
+export default class EcrirePetitsNombresEntiersCanOld extends EcrirePetitsNombresEntiersOld {
   constructor() {
     super()
 
     this.nbQuestions = 1 // on en fait un exo qui n'aura qu'une question
     this.nbQuestionsModifiable = false // on fait disparaitre le paramètre nombre de questions
-    this.sup = '4'
-    this.sup2 = '0'
+    this.sup = 4
+    this.sup2 = 0
     this.sup3 = 2
     this.besoinFormulaireTexte = false // pour ne pas qu'il y ait de paramètrage possible.
     this.besoinFormulaire2Texte = false // afin de conserver les paramètres fixés ci-dessus et choisis par le programmeur
