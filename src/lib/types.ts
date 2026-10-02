@@ -56,7 +56,7 @@ export interface InterfaceGlobalOptions {
   isReferenceDisplayed?: boolean
   isInteractiveFree?: boolean
   oneShot?: boolean
-  recorder?: 'capytale' | 'labomep' | 'moodle' | 'anki' | 'flowmath'
+  recorder?: Recorder
   done?: '1' | '0' // pourquoi n'y a-t-il qu'une valeur possible ? à vérifier JC
   answers?: string
   iframe?: string
@@ -120,6 +120,8 @@ export type DetailedQuestionResult = {
   score: QuestionScore
 }
 export type QuestionResult = boolean | DetailedQuestionResult
+export type Recorder =
+  'capytale' | 'labomep' | 'moodle' | 'anki' | 'flowmath' | 'sesatheque'
 export interface InterfaceResultExercice {
   numberOfPoints: number
   numberOfQuestions: number
