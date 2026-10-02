@@ -6,8 +6,8 @@
   import { renderKatex } from '../../lib/latex/renderKatex'
   import { resizeContent } from '../../lib/components/sizeTools'
   import { globalOptions } from '../../lib/stores/globalOptions'
-  import { keyboardBlocks } from './layouts/keysBlocks'
-  import { GAP_BETWEEN_BLOCKS, getMode } from './lib/sizes'
+  import { keyboardBlocks, specialKeys } from './layouts/keysBlocks'
+  import { GAP_BETWEEN_BLOCKS, MD_BREAKPOINT, getMode } from './lib/sizes'
   import { latexMatriceAvecPlaceholders } from './lib/matrix'
   import {
     enregistreTouchesPersonnalisees,
@@ -71,29 +71,46 @@
       ])
       return
     }
-    let pageWidth: number = 0
-    let page: KeyboardBlock[] = []
     const mode = getMode(innerWidth, true)
-    const blockList = [...usualBlocks, ...unitsBlocks].reverse()
-    while (blockList.length > 0) {
-      const block = blockList.pop()
-      const blockWidth =
-        inLineBlockWidth(block!, mode) + GAP_BETWEEN_BLOCKS[mode]
-      if (pageWidth + blockWidth > 0.8 * innerWidth) {
+    // Largeur réellement disponible : le clavier a un padding de 8 px (16 px
+    // dès `md`) et le conteneur en ligne 40 px de marge de chaque côté pour
+    // les flèches de navigation.
+    const largeurDisponible =
+      innerWidth - 2 * 40 - (innerWidth >= MD_BREAKPOINT ? 32 : 16)
+    const espaceEntreBlocs = GAP_BETWEEN_BLOCKS[mode]
+    // Les touches spéciales (effacer, flèches…) sont répétées sur chaque page :
+    // une page ne doit jamais se réduire à elles seules.
+    const largeurTouchesSpeciales = inLineBlockWidth(specialKeys, mode)
+    let page: KeyboardBlock[] = [specialKeys]
+    let pageWidth = largeurTouchesSpeciales
+    let pageAUnBloc = false
+    const blocsDuClavier = [...usualBlocks, ...unitsBlocks].filter(
+      (block) => block !== specialKeys,
+    )
+    for (const block of blocsDuClavier) {
+      const blockWidth = espaceEntreBlocs + inLineBlockWidth(block, mode)
+      if (pageAUnBloc && pageWidth + blockWidth > largeurDisponible) {
         // plus de places
         pages.push(page.reverse())
-        page = []
-        pageWidth = 0
+        page = [specialKeys]
+        pageWidth = largeurTouchesSpeciales
+        pageAUnBloc = false
       }
-      page.push(block!)
-      pageWidth = +blockWidth
+      page.push(block)
+      pageWidth += blockWidth
+      pageAUnBloc = true
     }
-    if (page.length !== 0) {
-      pages.push(page.reverse())
-    }
+    pages.push(page.reverse())
   }
 
+  let idChampPrecedent = ''
   keyboardState.subscribe(async (value) => {
+    // Un nouveau champ repart de la première page du clavier : sinon l'index
+    // de page du champ précédent s'applique à un clavier différent.
+    if (value.idMathField !== idChampPrecedent) {
+      idChampPrecedent = value.idMathField
+      currentPageIndex = 0
+    }
     isVisible = value.isVisible
     isInLine = value.isInLine
     pageType = value.alphanumericLayout
