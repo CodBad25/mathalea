@@ -202,6 +202,7 @@ export default class ReconnaitreVecteurs extends Exercice {
           }
           monQcm = propositionsQcm(this, i)
           texte = texte + monQcm.texte
+          texteCorr += monQcm.texteCorr
           break
         }
 
@@ -269,6 +270,7 @@ export default class ReconnaitreVecteurs extends Exercice {
           }
           monQcm = propositionsQcm(this, i)
           texte = texte + monQcm.texte
+          texteCorr += monQcm.texteCorr
           break
         }
 
@@ -324,6 +326,7 @@ export default class ReconnaitreVecteurs extends Exercice {
           }
           monQcm = propositionsQcm(this, i)
           texte = texte + monQcm.texte
+          texteCorr += monQcm.texteCorr
           break
         }
       }
