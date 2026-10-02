@@ -34,7 +34,10 @@
   style="--blockgapsize:{blockgapsize}"
 >
   {#if isInLine}
-    <div id="kb-page" class="flex flex-row blockgap items-start justify-center">
+    <div
+      id="kb-page"
+      class="flex max-w-full flex-row blockgap items-start justify-start overflow-x-auto"
+    >
       {#each page as block}
         <BlockOfKeyCaps {block} {isInLine} {innerWidth} {clickKeycap} />
       {/each}

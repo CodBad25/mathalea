@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { MathfieldElement } from 'mathlive'
 import { codageAngle } from '../../lib/2d/angles'
 import { demiDroite } from '../../lib/2d/DemiDroite'
@@ -18,6 +17,7 @@ import { generateCleaner } from '../../lib/interactif/cleaners'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   lettreDepuisChiffre,
   numAlpha,
@@ -30,6 +30,14 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 const cleaner = generateCleaner(['parentheses', 'espaces'])
+const touchesClavier = [
+  ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  '(',
+  ')',
+  '[',
+  ']',
+  '\\widehat{#0}',
+]
 export const titre =
   'Appliquer les propriétés de conservation de la symétrie axiale'
 
@@ -563,7 +571,8 @@ export default class SymetrieAxialeConservation1 extends Exercice {
           texteAMC += ajouteChampTexteMathLive(
             this,
             i * this.sup3 + ii,
-            KeyboardType.angles,
+            KeyboardType.clavierEntierementPersonnalisable,
+            { dataKeys: touchesClavier },
           )
           handleAnswers(this, i * this.sup3 + ii, {
             reponse: { value: reponse },

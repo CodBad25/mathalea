@@ -29,7 +29,9 @@
       <div
         class="grid customgap h-full"
         style="grid-template-columns: repeat({block.keycaps.inline
-          .length}, minmax(0, 1fr)); --gapsize:{gapsize};"
+          .length}, {block.keycaps.inline.length > 12
+          ? 'max-content'
+          : 'minmax(0, 1fr)'}); --gapsize:{gapsize};"
       >
         {#each block.keycaps.inline as key, index}
           <Key
