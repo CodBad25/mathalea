@@ -74,6 +74,38 @@ class SousExerciceApigeomAvecTirageRejete extends Exercice {
   correctionInteractive = () => 'OK'
 }
 
+/** Régression : la figure évaluée peut avoir un idAddendum (ex. 6G2B), la figure de correction n'est pas évaluée. */
+class SousExerciceApigeomAvecIdAddendum extends Exercice {
+  constructor() {
+    super()
+    this.nbQuestions = 1
+    this.consigne = 'Tracer une figure.'
+  }
+
+  nouvelleVersion(): void {
+    const figure = new Figure({ xMin: 0, yMin: 0, width: 100, height: 100 })
+    const figureCorr = new Figure({ xMin: 0, yMin: 0, width: 100, height: 100 })
+    this.listeQuestions[0] = figureApigeom({
+      exercice: this,
+      i: 0,
+      figure,
+      idAddendum: '6GXX0',
+    })
+    this.listeCorrections[0] = figureApigeom({
+      exercice: this,
+      i: 0,
+      figure: figureCorr,
+      idAddendum: '6GXXCor0',
+      isDynamic: false,
+    })
+  }
+
+  correctionInteractive = () => {
+    this.answers = { apigeomEx7F06GXX0: '{}' }
+    return 'OK'
+  }
+}
+
 /** Exercice simple custom dont la correction est une méthode de prototype (cf. `3AutoG12-0`) */
 class SousExerciceSimpleCustom extends ExerciceSimple {
   constructor() {
@@ -212,6 +244,19 @@ describe('questions custom réhébergées par MetaExerciceCan', () => {
 
     expect(document.querySelector('apigeom-figure')).not.toBeNull()
     expect(ApigeomFigureElement.verifQuestion(exercice, 0).isOk).toBe(true)
+  })
+
+  it("enregistre le vérificateur d'une figure apiGeom avec idAddendum", () => {
+    const exercice = new SousExerciceApigeomAvecIdAddendum()
+    exercice.numeroExercice = 7
+    exercice.interactif = true
+    exercice.nouvelleVersion()
+    document.body.innerHTML =
+      exercice.listeQuestions[0] + exercice.listeCorrections[0]
+
+    expect(document.querySelectorAll('apigeom-figure')).toHaveLength(1)
+    expect(ApigeomFigureElement.verifQuestion(exercice, 0).isOk).toBe(true)
+    expect(exercice.answers).toHaveProperty('apigeomEx7F06GXX0')
   })
 
   it('conserve le format apiGeom découvert dans un exercice simple', () => {

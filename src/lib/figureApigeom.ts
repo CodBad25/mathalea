@@ -11,6 +11,17 @@ import { context } from '../modules/context'
 import { exercicesParams } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
 
+/**
+ * Identifiant de la figure évaluée de chaque question (indice de question
+ * affiché → id de la figure), pour chaque tableau `autoCorrection`. Ce tableau
+ * est recréé par reinit() à chaque nouveau tirage de l'exercice : l'état est
+ * ainsi remis à zéro avec lui.
+ */
+const evaluatedFigureIds = new WeakMap<
+  IExercice['autoCorrection'],
+  Map<number, string>
+>()
+
 export function isFigureArray(
   figs: IExercice['figuresApiGeom'],
 ): figs is Figure[] {
@@ -75,13 +86,24 @@ export default function figureApigeom({
   const idApigeom = `apigeomEx${exercice.numeroExercice}F${indexQuestionAffichee}${idAddendum}`
   figure.id = idApigeom
 
-  // Ne pas déduire cet état de autoCorrection[i] : un tirage peut être rejeté
-  // après avoir appelé figureApigeom(), puis être remplacé à ce même index.
+  // Une question n'a qu'une figure évaluée : la première figure dynamique
+  // enregistrée (la figure de correction, appelée ensuite, ne l'est pas), quel
+  // que soit son idAddendum. Ne pas déduire cet état de autoCorrection[i] : un
+  // tirage peut être rejeté après avoir appelé figureApigeom(), puis être
+  // remplacé à ce même index, avec le même id.
+  const evaluatedIds =
+    evaluatedFigureIds.get(exercice.autoCorrection) ?? new Map()
+  evaluatedFigureIds.set(exercice.autoCorrection, evaluatedIds)
+  const registeredId = evaluatedIds.get(indexQuestionAffichee)
   const isEvaluatedFigure =
     hasFeedback &&
-    idAddendum === '' &&
     exercice.interactif === true &&
-    typeof exercice.correctionInteractive === 'function'
+    typeof exercice.correctionInteractive === 'function' &&
+    isDynamic !== false &&
+    (idAddendum === '' ||
+      registeredId === undefined ||
+      registeredId === idApigeom)
+  if (isEvaluatedFigure) evaluatedIds.set(indexQuestionAffichee, idApigeom)
   const verifyCallbackName = `${idApigeom}-verification`
   const verificationCallback = (
     displayedExercice: IExercice,
