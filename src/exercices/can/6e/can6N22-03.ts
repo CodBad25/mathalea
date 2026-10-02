@@ -113,8 +113,8 @@ export default class decomposerDecimal extends Exercice {
                 nombreDecrit += `${texNombre(d, 0)}$ ${d === 1 ? ' dixième ' : ' dixièmes '} $+~`
               }
               nombreDecrit += `${texNombre(c, 0)}$ ${c === 1 || c === 0 ? ' centième' : ' centièmes'} `
+              texte += nombreDecrit + '$=\\ldots$'
             }
-            texte += nombreDecrit + '$=\\ldots$'
             texteCorr = `Comme $1$ dixième $=0,1$ et $1$ centième $=0,01$ :<br>
             ${nombreDecrit}=$~(${texNombre(u, 0)}\\times 1) + (${texNombre(d, 1)}\\times 0,1)+(${texNombre(c, 2)}\\times 0,01)\\\\
            =${miseEnEvidence(texNombre(nbre, 2))}$`
