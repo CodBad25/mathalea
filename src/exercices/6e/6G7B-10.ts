@@ -31,12 +31,8 @@ import Exercice from '../Exercice'
 
 const cleaner = generateCleaner(['parentheses', 'espaces'])
 const touchesClavier = [
-  ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  '(',
-  ')',
-  '[',
-  ']',
-  '\\widehat{#0}',
+  ['(', ')', '[', ']', '\\widehat{#0}'],
+  [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
 ]
 export const titre =
   'Appliquer les propriétés de conservation de la symétrie axiale'

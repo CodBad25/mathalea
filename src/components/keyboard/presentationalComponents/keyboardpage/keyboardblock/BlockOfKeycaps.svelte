@@ -13,7 +13,10 @@
 </script>
 
 {#if block !== undefined}
+  <!-- En ligne, la page défile horizontalement (`overflow-x-auto`) : un bloc ne
+       doit pas se comprimer, sinon ses touches se chevauchent. -->
   <div
+    class:shrink-0={isInLine}
     id="kb-block-{block.title
       .toLowerCase()
       .normalize('NFD')

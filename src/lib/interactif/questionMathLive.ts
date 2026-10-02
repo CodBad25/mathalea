@@ -15,6 +15,7 @@ import {
   MathaleaTextfieldElement,
   type MathaleaTextfieldVerificationCallback,
 } from '../customElements/MathaleaTextfield'
+import type { ToucheDeQuestion } from '../../components/keyboard/lib/touchesPersonnalisees'
 import { sp } from '../outils/outilString'
 import './champTexte.scss'
 import { buildDataKeyboardFromStyle } from './claviers/keyboard'
@@ -180,8 +181,9 @@ type OptionsChamp = {
   /**
    * Touches propres à cette question, ajoutées au clavier en plus des blocs
    * du `style` (voir `components/keyboard/lib/touchesPersonnalisees.ts`).
+   * Une liste de listes donne un bloc par sous-liste.
    */
-  dataKeys?: string[]
+  dataKeys?: ToucheDeQuestion
   verifyCallbackName?: string
   verifyCallback?:
     | MathaleaMathfieldVerificationCallback
