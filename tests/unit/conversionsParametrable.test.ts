@@ -27,7 +27,7 @@ function genere(sup: string, nbQuestions = 12) {
 
 describe('exercice de conversions paramétrable', () => {
   it('utilise par défaut les longueurs, contenances et masses en multipliant', () => {
-    expect(supParDefaut).toBe('mult*0_0.1-1.1-2.1-3.0-4.0*0*div')
+    expect(supParDefaut).toBe('mult*0_0.1-1.1-2.1-3.0-4.0-5.0*0*div')
     const exo = genere(supParDefaut)
     expect(exo.listeQuestions).toHaveLength(12)
     const enonces = exo.listeQuestions.join(' ')
@@ -97,6 +97,29 @@ describe('exercice de conversions paramétrable', () => {
     for (const question of exo.listeQuestions) {
       expect(question).toMatch(/\\text\{(o|ko|Mo|Go|To)\}/)
     }
+  })
+
+  it('gère le quintal et la tonne, avec le kilogramme pour référence', () => {
+    const mult = genere('mult*0_0.0-1.0-2.0-3.0-4.0-5.1*0*div', 12)
+    for (const question of mult.listeQuestions) {
+      expect(question).toMatch(/\\text\{(q|t)\}.*\\text\{kg\}/)
+    }
+    const div = genere('div*0_0.0-1.0-2.0-3.0-4.0-5.1*0*div', 12)
+    for (const question of div.listeQuestions) {
+      expect(question).toMatch(/\\text\{kg\}.*\\text\{(q|t)\}/)
+    }
+    const tous = genere('tous*0_0.0-1.0-2.0-3.0-4.0-5.1*0*div', 40)
+    const enonces = tous.listeQuestions.join(' ')
+    expect(enonces).toMatch(/\\text\{t\} = .*\\text\{q\}/)
+    expect(enonces).toMatch(/\\text\{q\} = .*\\text\{t\}/)
+  })
+
+  it('garde le même contenu pour une ancienne URL sans le champ quintal et tonne', () => {
+    const ancien = genere('mult*0_0.1-1.1-2.1-3.0-4.0*0*div', 5)
+    const nouveau = genere(supParDefaut, 5)
+    expect(ancien.listeQuestions).toHaveLength(5)
+    expect(ancien.listeQuestions.join(' ')).not.toMatch(/\\text\{(q|t)\}/)
+    expect(nouveau.listeQuestions.join(' ')).not.toMatch(/\\text\{(q|t)\}/)
   })
 
   it('écarte l’euro quand seules les divisions sont demandées', () => {

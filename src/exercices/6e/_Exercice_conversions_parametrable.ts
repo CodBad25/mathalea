@@ -178,6 +178,81 @@ function phraseExplication(
   return `Un ${nomPrefixe} est ${prefixe.explication} ${liaison}${complement}`
 }
 
+/** Unités de masse supérieures au kilogramme, utilisées avec le kilogramme comme référence. */
+type UniteMasseLourde = {
+  symbole: string
+  singulier: string
+  pluriel: string
+  article: string
+  /** Nombre de kilogrammes dans l'unité. */
+  kilogrammes: number
+}
+
+const quintal: UniteMasseLourde = {
+  symbole: 'q',
+  singulier: 'quintal',
+  pluriel: 'quintaux',
+  article: 'Un',
+  kilogrammes: 100,
+}
+const tonne: UniteMasseLourde = {
+  symbole: 't',
+  singulier: 'tonne',
+  pluriel: 'tonnes',
+  article: 'Une',
+  kilogrammes: 1000,
+}
+
+/** Façon de dire « 1 / facteur » dans la correction d'une division. */
+const fractionEnToutesLettres: Record<number, string> = {
+  10: 'un dixième',
+  100: 'un centième',
+  1000: 'un millième',
+}
+
+/**
+ * Conversion de masses faisant intervenir le quintal et la tonne, avec le kilogramme
+ * comme unité de référence : `3 t = 3 000 kg`, `450 kg = 4,5 q` ou `7 q = 0,7 t`.
+ *
+ * Contrairement aux préfixes usuels, le quintal et la tonne sont plus grands que
+ * l'unité de référence : les « multiplications vers la référence » vont donc de q ou t
+ * vers kg, et les « divisions » de kg vers q ou t.
+ */
+function conversionMassesLourdes(typeConversion: TypeConversion): {
+  division: boolean
+  uniteDepart: string
+  uniteArrivee: string
+  facteur: number
+  phrase: string
+} {
+  const division =
+    typeConversion === 'divRef' || typeConversion === 'divSansRef'
+  const sansReference =
+    typeConversion === 'multSansRef' || typeConversion === 'divSansRef'
+  // `grande` est l'unité qui vaut `facteur` fois la `petite`.
+  const grande = sansReference ? tonne : choice([quintal, tonne])
+  const petite = sansReference
+    ? quintal
+    : {
+        symbole: 'kg',
+        singulier: 'kilogramme',
+        pluriel: 'kilogrammes',
+        article: 'Un',
+        kilogrammes: 1,
+      }
+  const facteur = grande.kilogrammes / petite.kilogrammes
+  const phrase = division
+    ? `${petite.article} ${petite.singulier} est ${fractionEnToutesLettres[facteur]} de ${grande.singulier}`
+    : `${grande.article} ${grande.singulier} est égal${grande.article === 'Une' ? 'e' : ''} à ${texNombre(facteur, 0)} ${petite.pluriel}`
+  return {
+    division,
+    uniteDepart: division ? petite.symbole : grande.symbole,
+    uniteArrivee: division ? grande.symbole : petite.symbole,
+    facteur,
+    phrase,
+  }
+}
+
 /** Unités de stockage informatique, séparées de 1 000 en 1 000. */
 const unitesInformatiques = ['o', 'ko', 'Mo', 'Go', 'To']
 
@@ -209,6 +284,7 @@ export const formulaireConversions: FormulaireComplexe = {
         { nom: 'g', label: 'Masses (g)', poids: 1 },
         { nom: 'euro', label: 'Prix (€)', poids: 0 },
         { nom: 'octet', label: 'Stockage informatique (o)', poids: 0 },
+        { nom: 'masseLourde', label: 'Masses (kg, quintal, tonne)', poids: 0 },
       ],
     },
 
@@ -308,7 +384,7 @@ export default class ExerciceConversionsParametrable extends Exercice {
     // Une unité n'est retenue que si elle possède des préfixes compatibles avec le
     // type d'opérations choisi (il n'existe pas de sous-multiple usuel de l'euro).
     const estCompatible = (nom: string) => {
-      if (nom === 'octet') return true
+      if (nom === 'octet' || nom === 'masseLourde') return true
       const definition = definitionsUnites[nom]
       if (definition === undefined) return false
       if (operations === 'mult') return definition.multiplicateurs.length > 0
@@ -408,7 +484,8 @@ export default class ExerciceConversionsParametrable extends Exercice {
         // une conversion classique si l'unité n'a pas au moins deux préfixes utilisables
         // (l'euro, qui n'a que « k », ne peut par exemple pas en bénéficier).
         const echelles =
-          typeConversion === 'multSansRef' || typeConversion === 'divSansRef'
+          nomUnite !== 'masseLourde' &&
+          (typeConversion === 'multSansRef' || typeConversion === 'divSansRef')
             ? echellesDisponibles(definition)
             : []
         const sansReference = echelles.length >= 2
@@ -418,9 +495,17 @@ export default class ExerciceConversionsParametrable extends Exercice {
         let uniteArrivee: string
         let facteurMultiplication: number | undefined
         let facteurDivision: number | undefined
-        let prefixeVersReference: Prefixe | undefined
+        let phraseExplicative: string | undefined
 
-        if (sansReference) {
+        if (nomUnite === 'masseLourde') {
+          const conversion = conversionMassesLourdes(typeConversion)
+          division = conversion.division
+          uniteDepart = conversion.uniteDepart
+          uniteArrivee = conversion.uniteArrivee
+          if (division) facteurDivision = conversion.facteur
+          else facteurMultiplication = conversion.facteur
+          phraseExplicative = conversion.phrase
+        } else if (sansReference) {
           const veutMultiplication = typeConversion === 'multSansRef'
           const [a, b] = getRandomSubarray(echelles, 2)
           const [depart, arrivee] =
@@ -447,13 +532,18 @@ export default class ExerciceConversionsParametrable extends Exercice {
             ? definition.diviseurs
             : definition.multiplicateurs
           if (symbolesPossibles.length === 0) continue
-          prefixeVersReference = division
+          const prefixeVersReference = division
             ? prefixesDiviseurs[choice(symbolesPossibles)]
             : prefixesMultiplicateurs[choice(symbolesPossibles)]
           uniteDepart = prefixeVersReference.symbole + definition.symbole
           uniteArrivee = definition.symbole
           if (division) facteurDivision = prefixeVersReference.facteur
           else facteurMultiplication = prefixeVersReference.facteur
+          phraseExplicative = phraseExplication(
+            definition,
+            prefixeVersReference,
+            division,
+          )
         }
 
         valeur = valeurADistribuer(avecDecimaux)
@@ -475,8 +565,8 @@ export default class ExerciceConversionsParametrable extends Exercice {
           `$ ${texNombre(valeur, decimalesValeur)}${texTexte(uniteDepart)} = ` +
           `${etapeIntermediaire}${texTexte(uniteArrivee)} = ` +
           `${miseEnEvidence(texNombre(resultat, decimalesResultat))}${texTexte(uniteArrivee)}$`
-        if (this.correctionDetaillee && prefixeVersReference !== undefined) {
-          texteCorr = `${phraseExplication(definition, prefixeVersReference, division)} donc :<br>${texteCorr}`
+        if (this.correctionDetaillee && phraseExplicative !== undefined) {
+          texteCorr = `${phraseExplicative} donc :<br>${texteCorr}`
         }
       }
 
