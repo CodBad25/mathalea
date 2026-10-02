@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { droite } from '../../lib/2d/droites'
@@ -27,6 +26,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -272,7 +272,8 @@ export default class ConservationTransformation extends Exercice {
       texteCorr += `Le segment [$${B.nom + C.nom}$] mesure $${texNombre(longueur(B, C, 1))}\\text{ cm}$.<br>`
       texteCorr += `Or, la ${transformation} conserve les longueurs.<br>`
       texteCorr += `Donc le segment [$${B.nom}'${C.nom}'$] mesure lui aussi $${miseEnEvidence(texNombre(longueur(B, C, 1)))}\\text{ cm}$.<br>`
-      texte += `Compléter l'image ${figure} ${enonceTransformation} en utilisant les propriétés de conservation de la ${transformation} et en justifiant ses démarches.<br>`
+      texte += `Compléter l'image ${figure} ${enonceTransformation} en utilisant les propriétés de conservation de la ${transformation}`
+      texte += this.interactif ? '.' : ' et en justifiant ses démarches.<br>'
       // On applique la transformation
       const imPoly = this.sup2
         ? polygone(imageA, imageB, imageC)
