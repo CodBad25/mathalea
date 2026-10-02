@@ -152,7 +152,7 @@ type ChampMathLive = {
   clavier: string
   /** Touches ajoutées via `dataKeys` (voir `touchesPersonnalisees.ts`), en
    * plus des blocs habituels de `data-keyboard` (ex : `KeyboardType.clavierPersonnalisable`). */
-  touchesPersonnalisees: string[]
+  touchesPersonnalisees: string[][]
 }
 
 /** Inverse `escapeHtmlAttribute` (`MathaleaCustomElement.ts`) sur un attribut HTML. */
@@ -230,7 +230,9 @@ export function verifyKeyboardCoverage(exercice: IExercice): ResultatClavier[] {
     // un raccourci connu (`POW`...), soit sont insérées telles quelles : dans
     // les deux cas leur propre nom suffit à satisfaire les règles ci-dessous
     // (ex : une touche `"a"` satisfait la règle « variable a »).
-    for (const cle of champ.touchesPersonnalisees) clesDisponibles.add(cle)
+    for (const cle of champ.touchesPersonnalisees.flat()) {
+      clesDisponibles.add(cle)
+    }
 
     for (const [key, answer] of Object.entries(valeur)) {
       if (key === 'bareme' || key === 'feedback') continue

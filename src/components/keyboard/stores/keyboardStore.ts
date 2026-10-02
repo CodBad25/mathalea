@@ -10,8 +10,8 @@ export const keyboardState = writable<{
   idMathField: string
   alphanumericLayout: AlphanumericPages
   blocks: BlockForKeyboard[]
-  /** Touches demandées par la question en cours, en plus des blocs. */
-  customKeys: string[]
+  /** Blocs de touches demandés par la question en cours, en plus des blocs. */
+  customKeys: string[][]
 }>({
   isVisible: false,
   isInLine: !('ontouchstart' in window),

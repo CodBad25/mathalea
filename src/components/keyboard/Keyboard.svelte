@@ -9,7 +9,10 @@
   import { keyboardBlocks } from './layouts/keysBlocks'
   import { GAP_BETWEEN_BLOCKS, getMode } from './lib/sizes'
   import { latexMatriceAvecPlaceholders } from './lib/matrix'
-  import { enregistreTouchesPersonnalisees } from './lib/touchesPersonnalisees'
+  import {
+    enregistreTouchesPersonnalisees,
+    TITRE_BLOC_PERSONNALISE,
+  } from './lib/touchesPersonnalisees'
   import Alphanumeric from './presentationalComponents/alphanumeric/Alphanumeric.svelte'
   import KeyboardPage from './presentationalComponents/keyboardpage/KeyboardPage.svelte'
   import { keyboardState } from './stores/keyboardStore'
@@ -54,15 +57,17 @@
 
   const computePages = () => {
     pages.length = 0
-    const largeCustomBlock = myKeyboard.blocks.find(
-      (block) =>
-        block.title === 'Pour cette question' &&
-        block.keycaps.inline.length > 12,
+    const customBlocks = myKeyboard.blocks.filter(
+      (block) => block.title === TITRE_BLOC_PERSONNALISE,
     )
-    if (isInLine && largeCustomBlock) {
+    const nbCustomKeys = customBlocks.reduce(
+      (total, block) => total + block.keycaps.inline.length,
+      0,
+    )
+    if (isInLine && nbCustomKeys > 12) {
       pages.push([
-        largeCustomBlock,
-        ...myKeyboard.blocks.filter((block) => block !== largeCustomBlock),
+        ...customBlocks,
+        ...myKeyboard.blocks.filter((block) => !customBlocks.includes(block)),
       ])
       return
     }
@@ -95,12 +100,13 @@
     myKeyboard.empty()
     // Les touches propres à la question sont présentées en premier : ce sont
     // celles dont l'élève a besoin pour cette réponse précise.
-    if (value.customKeys != null && value.customKeys.length > 0) {
-      const noms = enregistreTouchesPersonnalisees(value.customKeys)
+    for (const touches of value.customKeys ?? []) {
+      const noms = enregistreTouchesPersonnalisees(touches)
+      if (noms.length === 0) continue
       myKeyboard.add({
         keycaps: { inline: noms, block: noms },
         cols: Math.min(noms.length, noms.length > 12 ? 7 : 3),
-        title: 'Pour cette question',
+        title: TITRE_BLOC_PERSONNALISE,
         isUnits: false,
       })
     }

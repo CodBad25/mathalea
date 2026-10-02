@@ -13,10 +13,20 @@ import { ajouteTouche } from './keycaps'
  * - toute autre chaîne est du LaTeX inséré tel quel (`a`, `\\pi`, `u_n`,
  *   `f(#0)`…), affiché sur la touche entre `$…$`.
  *
+ * Les touches peuvent être groupées en plusieurs blocs, séparés à l'écran comme
+ * les blocs habituels du clavier : `[['a', 'b'], ['+', '-']]` donne deux blocs.
+ * Une liste plate (`['a', 'b']`) donne un seul bloc.
+ *
  * Les emplacements MathLive (`#0`, `#1`, `#@`, `#?`) sont remplacés par un
  * carré dans l'affichage de la touche, mais conservés à l'insertion : le
  * curseur se place donc dans le trou après l'appui.
  */
+
+/** Titre des blocs de touches propres à la question. */
+export const TITRE_BLOC_PERSONNALISE = 'Pour cette question'
+
+/** Touches d'une question : une liste plate (un bloc) ou une liste de blocs. */
+export type ToucheDeQuestion = string[] | string[][]
 
 /** Préfixe des noms de touches personnalisées dans la table `keys`. */
 const PREFIXE = 'perso:'
@@ -85,15 +95,34 @@ export function enregistreTouchesPersonnalisees(cles: string[]): Keys[] {
 }
 
 /**
- * Relit la liste de touches stockée sur un champ de saisie
+ * Les touches d'une question sous forme de blocs : une liste plate de chaînes
+ * forme un seul bloc, une liste de listes donne un bloc par sous-liste.
+ * Les blocs vides sont ignorés.
+ */
+export function blocsDeTouches(touches: ToucheDeQuestion): string[][] {
+  const blocs = touches.every((element) => typeof element === 'string')
+    ? [touches as string[]]
+    : (touches as string[][])
+  return blocs.filter((bloc) => bloc.length > 0)
+}
+
+/**
+ * Relit les blocs de touches stockés sur un champ de saisie
  * (attribut `data-keys`, écrit par `ajouteChampTexteMathLive`).
  */
-export function litTouchesPersonnalisees(valeur: string | undefined): string[] {
+export function litTouchesPersonnalisees(
+  valeur: string | undefined,
+): string[][] {
   if (valeur == null || valeur === '') return []
   try {
-    const cles: unknown = JSON.parse(valeur)
-    if (!Array.isArray(cles)) return []
-    return cles.filter((cle): cle is string => typeof cle === 'string')
+    const touches: unknown = JSON.parse(valeur)
+    if (!Array.isArray(touches)) return []
+    const estChaine = (cle: unknown): cle is string => typeof cle === 'string'
+    const blocs = touches.some(Array.isArray) ? touches : [touches]
+    return blocs
+      .filter(Array.isArray)
+      .map((bloc: unknown[]) => bloc.filter(estChaine))
+      .filter((bloc) => bloc.length > 0)
   } catch {
     // Un attribut illisible ne doit pas empêcher le clavier de s'afficher.
     return []
