@@ -2,6 +2,7 @@
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
+  import { orangeMathalea } from '../../../lib/colors'
   import { buildExercisesList } from '../../../lib/components/exercisesUtils'
   import {
     mathaleaFormatExercice,
@@ -18,6 +19,7 @@
   import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
   import { minimalCorrection } from '../typst/minimalCorrection'
   import type { TypstAnchor } from '../typst/typstCompiler'
+  import { memotestQuestionSpeech } from './memotestSpeech'
   import {
     anchorPosition,
     separatePages,
@@ -172,9 +174,7 @@
           front: format(
             intro.length > 0 ? `${intro}<br>${question}` : question,
           ),
-          back: minimalCorrections
-            ? minimalCorrection(correction)
-            : correction,
+          back: minimalCorrections ? minimalCorrection(correction) : correction,
         })
       }
     }
@@ -389,7 +389,11 @@
    * la palette de la vue Typst, elle ne marque pas le code comme modifié :
    * elle est reprise à la régénération (voir `harvestFlashcardsCarryOver`).
    */
-  function adjustCardScale(num: number, side: 'recto' | 'verso', delta: number) {
+  function adjustCardScale(
+    num: number,
+    side: 'recto' | 'verso',
+    delta: number,
+  ) {
     const pattern = new RegExp(`^#let carte-${num}-${side}-taille = .*$`, 'm')
     if (!pattern.test(code)) return
     const next = Math.min(
@@ -400,10 +404,7 @@
           100,
       ),
     )
-    code = code.replace(
-      pattern,
-      `#let carte-${num}-${side}-taille = ${next}`,
-    )
+    code = code.replace(pattern, `#let carte-${num}-${side}-taille = ${next}`)
     scheduleCompile(code, 0)
   }
 
@@ -531,6 +532,48 @@
       `${exportFilename()}.typ`,
     )
   }
+
+  /** Exporte les cartes générées dans le format JSON compris par Mémotest. */
+  function exportToMemotest() {
+    const cards = buildCards().map(({ front, back }) => ({
+      question: `${front}<div style="font-size: 0.6em; font-style: italic; color: ${orangeMathalea}; margin-top: 0.5em;">Généré par Mathaléa</div>`,
+      questionSpeech: memotestQuestionSpeech(front),
+      answer: back,
+      answerSpeech: memotestQuestionSpeech(back),
+    }))
+
+    if (cards.length === 0) {
+      window.alert("Aucune carte compatible avec Mémotest n'a été générée.")
+      return
+    }
+
+    const payload = {
+      title: `Flashcards : ${documentOptions.title.trim() || 'MathALÉA'}`,
+      cards,
+      source: {
+        application: 'MathALÉA',
+        url: window.location.href,
+        exercises: exercises.flatMap((exercise) =>
+          exercise == null
+            ? []
+            : [
+                {
+                  uuid: exercise.uuid,
+                  title: exercise.titre,
+                  seed: exercise.seed,
+                },
+              ],
+        ),
+      },
+    }
+
+    downloadBlob(
+      new Blob([JSON.stringify(payload, null, 2)], {
+        type: 'application/json;charset=utf-8',
+      }),
+      `${exportFilename()}-memotest.json`,
+    )
+  }
 </script>
 
 <svelte:head>
@@ -624,6 +667,13 @@
         />
       {/if}
       <ButtonTextAction
+        text="Exporter vers Mémotest"
+        icon="bx-export"
+        inverted={true}
+        class="rounded-lg py-1 px-2"
+        on:click={exportToMemotest}
+      />
+      <ButtonTextAction
         text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
         icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
         inverted={true}
@@ -663,9 +713,9 @@
           </div>
 
           <p class="text-xs opacity-75">
-            Une carte par question : la question au recto, la réponse au
-            verso. Imprimez en recto-verso (retournement sur les bords longs)
-            puis découpez en suivant les pointillés.
+            Une carte par question : la question au recto, la réponse au verso.
+            Imprimez en recto-verso (retournement sur les bords longs) puis
+            découpez en suivant les pointillés.
           </p>
 
           <ExportViewLinks current="flashcards" />
@@ -926,7 +976,10 @@
                     >
                       <button
                         type="button"
-                        title="Réduire le texte de cette carte ({widget.side === 'verso' ? 'réponse' : 'question'} {widget.num})"
+                        title="Réduire le texte de cette carte ({widget.side ===
+                        'verso'
+                          ? 'réponse'
+                          : 'question'} {widget.num})"
                         class="px-1 py-0.5 text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
                         on:click={() =>
                           adjustCardScale(widget.num, widget.side, -1)}
@@ -935,7 +988,10 @@
                       </button>
                       <button
                         type="button"
-                        title="Agrandir le texte de cette carte ({widget.side === 'verso' ? 'réponse' : 'question'} {widget.num})"
+                        title="Agrandir le texte de cette carte ({widget.side ===
+                        'verso'
+                          ? 'réponse'
+                          : 'question'} {widget.num})"
                         class="px-1 py-0.5 text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
                         on:click={() =>
                           adjustCardScale(widget.num, widget.side, 1)}
@@ -1026,8 +1082,8 @@
         </div>
 
         <p class="text-xs opacity-75">
-          Ancrage, taille, couleur et opacité sont communs au titre recto et
-          au titre verso, sur toutes les cartes.
+          Ancrage, taille, couleur et opacité sont communs au titre recto et au
+          titre verso, sur toutes les cartes.
         </p>
 
         <div class="space-y-1.5">
@@ -1041,8 +1097,7 @@
                 type="button"
                 title={choice.label}
                 aria-label={choice.label}
-                aria-pressed={documentOptions.titlePosition ===
-                  choice.position}
+                aria-pressed={documentOptions.titlePosition === choice.position}
                 class="flex items-center justify-center rounded {documentOptions.titlePosition ===
                 choice.position
                   ? 'bg-coopmaths-action/20 dark:bg-coopmathsdark-action/20'
