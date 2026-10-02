@@ -38,6 +38,7 @@ export default class DeterminerLeNombre extends Exercice {
     let texte, texteCorr, a, monQcm, reponse
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      texte = `Quel est le nombre, en écriture décimale, égal à `
       switch (
         choice([1, 2, 3]) // 1
       ) {
@@ -48,7 +49,7 @@ export default class DeterminerLeNombre extends Exercice {
             randint(1000, 2000),
             randint(2, 9),
           ])
-          texte = `Quel est le nombre égal à $${texNombre(a)}$ dixièmes ?
+          texte += `$${texNombre(a)}$ dixièmes ?
           `
           this.canEnonce = texte
           reponse = a / 10
@@ -99,7 +100,7 @@ export default class DeterminerLeNombre extends Exercice {
             randint(1000, 2000),
             randint(2, 9),
           ])
-          texte = `Quel est le nombre égal à $${texNombre(a)}$ centièmes ?
+          texte += `$${texNombre(a)}$ centièmes ?
           `
           this.canEnonce = texte
           reponse = a / 100
@@ -152,7 +153,7 @@ export default class DeterminerLeNombre extends Exercice {
             randint(1000, 2000),
             randint(2, 9),
           ])
-          texte = `Quel est le nombre égal à $${texNombre(a)}$ millièmes ?
+          texte = `$${texNombre(a)}$ millièmes ?
           `
           this.canEnonce = texte
           reponse = a / 1000
