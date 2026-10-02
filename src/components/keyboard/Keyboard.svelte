@@ -1,8 +1,11 @@
 <script lang="ts">
   import { MathfieldElement } from 'mathlive'
+  import { get } from 'svelte/store'
   import { tick } from 'svelte'
   import { fly } from 'svelte/transition'
-  import { mathaleaRenderDiv } from '../../lib/mathalea'
+  import { renderKatex } from '../../lib/latex/renderKatex'
+  import { resizeContent } from '../../lib/components/sizeTools'
+  import { globalOptions } from '../../lib/stores/globalOptions'
   import { keyboardBlocks } from './layouts/keysBlocks'
   import { GAP_BETWEEN_BLOCKS, getMode } from './lib/sizes'
   import { latexMatriceAvecPlaceholders } from './lib/matrix'
@@ -35,8 +38,34 @@
   let matrixColumns = 2
   const myKeyboard: Keyboard = new Keyboard()
 
+  function renderKeyboard() {
+    if (!divKeyboard) return
+    // Le rendu KaTeX sur tout le clavier retire les nœuds de contrôle de
+    // Svelte lors du passage entre les claviers alphanumérique et mathématique.
+    // Seuls les libellés des touches contiennent des formules à composer.
+    divKeyboard
+      .querySelectorAll<HTMLElement>('button[class*="key--"]')
+      .forEach((button) => {
+        if (button.textContent?.includes('$')) renderKatex(button)
+      })
+    const zoom = Number(get(globalOptions).z)
+    if (zoom !== -1) resizeContent(divKeyboard, zoom)
+  }
+
   const computePages = () => {
     pages.length = 0
+    const largeCustomBlock = myKeyboard.blocks.find(
+      (block) =>
+        block.title === 'Pour cette question' &&
+        block.keycaps.inline.length > 12,
+    )
+    if (isInLine && largeCustomBlock) {
+      pages.push([
+        largeCustomBlock,
+        ...myKeyboard.blocks.filter((block) => block !== largeCustomBlock),
+      ])
+      return
+    }
     let pageWidth: number = 0
     let page: KeyboardBlock[] = []
     const mode = getMode(innerWidth, true)
@@ -70,7 +99,7 @@
       const noms = enregistreTouchesPersonnalisees(value.customKeys)
       myKeyboard.add({
         keycaps: { inline: noms, block: noms },
-        cols: Math.min(noms.length, 3),
+        cols: Math.min(noms.length, noms.length > 12 ? 7 : 3),
         title: 'Pour cette question',
         isUnits: false,
       })
@@ -99,7 +128,7 @@
     if (currentPageIndex >= pages.length) currentPageIndex = 0
     alphanumericDisplayed = value.blocks.includes('alphanumeric')
     await tick()
-    mathaleaRenderDiv(divKeyboard)
+    renderKeyboard()
     // document.dispatchEvent(new window.Event('KeyboardUpdated', { bubbles: true }))
     // console.log('message envoyé: ' + 'KeyboardUpdated')
   })
@@ -113,7 +142,7 @@
     // console.log('page à afficher n°' + currentPageIndex)
     // console.log(pages[currentPageIndex])
     await tick()
-    mathaleaRenderDiv(divKeyboard)
+    renderKeyboard()
   }
 
   async function navLeft(e: MouseEvent) {
@@ -125,7 +154,7 @@
     // console.log('page à afficher n°' + currentPageIndex)
     // console.log(pages[currentPageIndex])
     await tick()
-    mathaleaRenderDiv(divKeyboard)
+    renderKeyboard()
   }
 
   function mathfieldActif(): MathfieldElement | null {
@@ -309,7 +338,7 @@
         computePages()
         $keyboardState.isInLine = !$keyboardState.isInLine
         await tick()
-        mathaleaRenderDiv(divKeyboard)
+        renderKeyboard()
       }}
       on:mousedown={(e) => {
         e.preventDefault()
@@ -333,7 +362,7 @@
         e.stopPropagation()
         alphanumericDisplayed = !alphanumericDisplayed
         await tick()
-        mathaleaRenderDiv(divKeyboard)
+        renderKeyboard()
       }}
       on:mousedown={(e) => {
         e.preventDefault()
