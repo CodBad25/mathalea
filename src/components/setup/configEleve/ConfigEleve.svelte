@@ -762,11 +762,13 @@
             {#if edurlAskToken}
               <div class="flex flex-row items-center gap-2">
                 <label
+                  for="edurl-token"
                   class="text-sm font-light text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
                 >
                   Jeton d’accès edurl.fr&nbsp;:
                 </label>
                 <input
+                  id="edurl-token"
                   type="password"
                   class="rounded border border-coopmaths-action/40 px-1.5 py-0.5 text-xs"
                   autocomplete="off"

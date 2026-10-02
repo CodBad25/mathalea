@@ -3,6 +3,7 @@ import {
   type IExercice,
   type UneProposition,
 } from '../lib/types'
+import { bleuMathalea, orangeMathalea } from './colors'
 import { lettreDepuisChiffre } from './outils/outilString'
 
 export function shuffleJusquaWithIndexes(array: unknown[], lastChoice: number) {
@@ -102,13 +103,27 @@ export function qcmCamExport(
 }
 
 export function qcmCamExportAll(exercices: IExercice[]): string {
-  const questionnaire = []
+  const questionnaire = [
+    [
+      '0',
+      {
+        question: `<div style="display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 1em; box-sizing: border-box;"><div style="border: 3px solid ${bleuMathalea}; border-radius: 16px; padding: 2em; max-width: 800px; text-align: center; color: ${orangeMathalea}; font-size: 1.5em; line-height: 1.5;"><strong>Cette série de questions a été générée par MathALÉA</strong></div></div>`,
+        reponse: '',
+      },
+    ],
+  ]
   const listExercices = exercices.slice()
-  let index = 0
+  let index = 1
   for (const exo of listExercices) {
     const materiel = qcmCamExport(exo)
     for (const { question, reponse } of materiel) {
-      questionnaire.push([String(index++), { question, reponse }])
+      questionnaire.push([
+        String(index++),
+        {
+          question,
+          reponse,
+        },
+      ])
     }
   }
   const questions = questionnaire.map(
