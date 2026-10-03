@@ -20,7 +20,7 @@ Avec `canI=0`, les énoncés ne doivent donc contenir aucun champ de saisie ni c
 
 `canOptions.isInteractive` est un réglage indépendant de `globalOptions.setInteractive`, qui ne concerne que la page Élève classique :
 
-- il se règle dans l'onglet « Course aux nombres » de la page de configuration élève (`src/components/setup/configEleve/ConfigEleve.svelte`), pas dans l'onglet « Présentation classique » ;
+- il se règle dans l'onglet « Course aux nombres » de la page de configuration élève (`src/components/setup/configEleve/ConfigEleve.svelte`, section `sections/ReglagesCan.svelte`), pas dans l'onglet « Présentation classique » ;
 - sa valeur par défaut dans `src/lib/stores/canStore.ts` est `true`, pour que les liens antérieurs au paramètre `canI` restent interactifs ;
 - le flux Capytale reste l'exception : `handleCapytale()` dérive `isInteractive` de `setInteractive` parce que l'activité Capytale ne transporte qu'un seul réglage d'interactivité.
 
