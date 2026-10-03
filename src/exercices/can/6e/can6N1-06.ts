@@ -1,40 +1,34 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { sp } from '../../../lib/outils/outilString'
-import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Trouver le nombre qui suit'
+import EcrirePetitsNombresEntiers from '../../6e/6N0A-6'
+export const titre = 'Lire et écrire des nombres'
 export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCNum'
-
+export const dateDePublication = '14/08/2022'
 /**
+ * Écrire en chiffres un nombre donné en lettres
+ * variante Can de 6N10
  * @author Jean-claude Lhote
- * Publié le 11 / 09 / 2021
-
  */
-export const uuid = 'cc882'
+
+export const uuid = '4103e'
 
 export const refs = {
-  'fr-fr': ['can6N1-06', '6N2A-flash8', '6AutoN3-2'],
-  'fr-ch': [],
+  'fr-fr': ['can6N1-06', '6N1C-flash1'],
+  'fr-ch': ['NR'],
 }
-export default class PositionDesChiffres extends ExerciceSimple {
+export default class EcrirePetitsNombresEntiersCan extends EcrirePetitsNombresEntiers {
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-  }
 
-  nouvelleVersion() {
-    const f = this.quotaChoice('f', [1, 10, 100])
-    const a =
-      this.quotaRandint('aDizaines', 1, 9) * 10 +
-      this.quotaRandint('aUnites', 1, 9)
-    this.question = ` Compléter la suite logique : <br>$${texNombre((a + 0.6) / f)}$ ${sp(1)} ; ${sp(1)}$${texNombre((a + 0.7) / f)}$ ${sp(1)} ; ${sp(1)}$${texNombre((a + 0.8) / f)}$ ${sp(1)} ; ${sp(1)}$${texNombre((a + 0.9) / f)}$ ${sp(1)} ; ${sp(1)} .....`
-    this.correction = `On passe d'un nombre au suivant en ajoutant $0,1$.<br>Donc le prochain nombre est : $${texNombre((a + 0.9) / f)}+${texNombre(0.1 / f)}=${miseEnEvidence(texNombre((a + 1) / f))}$.`
-    this.reponse = (a + 1) / f
-    this.canEnonce = 'Compléter la suite logique.'
-    this.canReponseACompleter = `$${texNombre((a + 0.6) / f)}$ ${sp(1)} ; ${sp(1)}$${texNombre((a + 0.7) / f)}$ ${sp(1)} ; ${sp(1)}$${texNombre((a + 0.8) / f)}$ ${sp(1)} ; ${sp(1)}$${texNombre((a + 0.9) / f)}$${sp(1)} ; ${sp(1)} $\\ldots$`
+    this.nbQuestions = 1 // on en fait un exo qui n'aura qu'une question
+    this.nbQuestionsModifiable = false // on fait disparaitre le paramètre nombre de questions
+    this.sup = '4'
+    this.sup2 = '0'
+    this.sup3 = 2
+    this.besoinFormulaireTexte = false // pour ne pas qu'il y ait de paramètrage possible.
+    this.besoinFormulaire2Texte = false // afin de conserver les paramètres fixés ci-dessus et choisis par le programmeur
+    this.besoinFormulaire3Numerique = false
+    this.besoinFormulaire4CaseACocher = false
   }
 }
