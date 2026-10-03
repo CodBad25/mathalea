@@ -36,7 +36,7 @@ export default class AutoC1c extends ExerciceQcmA {
           `${texNombre(6.4185)}\\times 10^{23}\\text{ kg}`,
         ],
       ) +
-      `<br>La planète dont la masse est la plus importante est :`
+      `<br><br>La planète dont la masse est la plus importante est :`
 
     this.correction = `On écrit les masses en écriture scientifique pour les comparer :<br><br>
     • Terre : $${texNombre(5973)}\\times 10^{21} = ${texNombre(5.973)}\\times 10^{3}\\times 10^{21} =${texNombre(5.973)}\\times 10^{24}$ kg<br>
@@ -246,8 +246,8 @@ export default class AutoC1c extends ExerciceQcmA {
     // Déterminer le texte de la question selon le type
     const questionText =
       typeExercice === 1
-        ? 'La planète dont la masse est la plus importante est :'
-        : `La cellule dont la taille est la plus importante est :`
+        ? '<br>La planète dont la masse est la plus importante est :'
+        : `<br>La cellule dont la taille est la plus importante est :`
 
     this.enonce =
       `${contexte} :<br>` +
