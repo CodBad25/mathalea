@@ -2,7 +2,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { reduirePolynomeDegre3 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Développer avec les égalités remarquables'
 export const interactifReady = true
@@ -32,20 +31,22 @@ export default class DevelopperEgalitesRemarquables extends ExerciceSimple {
     const inconnue = choice(['x', 'y', 'a'])
     const a = this.quotaRandint('a', 1, 9)
     const b = this.quotaRandint('b', 2, 5)
-    const expression1 = `$(${inconnue}+${a})^2$` // (x+a)^2
-    const expression2 = `$(${inconnue}-${a})^2$` // (x-a)^2
-    const expression3 = `$(${inconnue}-${a})(${inconnue}+${a})$` // (x-a)(x+a)
-    const expression4 = `$(${b}${inconnue}+${a})^2$` // (bx+a)^2 avec b>1
-    const expression5 = `$(${b}${inconnue}-${a})^2$` // (bx-a)^2 avec b>1
-    const expression6 = `$(${b}${inconnue}-${a})(${b}${inconnue}+${a})$` // (bx-a)(bx+a) avec b>1
+    const expression1 = `(${inconnue}+${a})^2` // (x+a)^2
+    const expression2 = `(${inconnue}-${a})^2` // (x-a)^2
+    const expression3 = `(${inconnue}-${a})(${inconnue}+${a})` // (x-a)(x+a)
+    const expression4 = `(${b}${inconnue}+${a})^2` // (bx+a)^2 avec b>1
+    const expression5 = `(${b}${inconnue}-${a})^2` // (bx-a)^2 avec b>1
+    const expression6 = `(${b}${inconnue}-${a})(${b}${inconnue}+${a})` // (bx-a)(bx+a) avec b>1
+    let expression = ''
     switch (
       this.quotaRandint('cas', 1, 6) //, 'b'
     ) {
       case 1:
+        expression = expression1
         if (this.versionQcm) {
-          this.question = `La forme développée de ${expression1} est :` // (x+a)²
+          this.question = `La forme développée de $${expression1}$ est :` // (x+a)²
         } else {
-          this.question = `Développer  ${expression1}.` // (x+a)²
+          this.question = `Développer $${expression1}$.` // (x+a)²
         }
         this.reponse = `${reduirePolynomeDegre3(0, 1, 2 * a, a ** 2, inconnue)}`
         this.correction = `On utilise l'égalité remarquable $(a+b)^2=a^2+2ab+b^2$ avec $a=${inconnue}$ et $b=${a}$.<br>
@@ -61,10 +62,11 @@ $\\begin{aligned}
         ]
         break
       case 2:
+        expression = expression2
         if (this.versionQcm) {
-          this.question = `La forme développée de ${expression2} est :` // (x-a)²
+          this.question = `La forme développée de $${expression2}$ est :` // (x-a)²
         } else {
-          this.question = `Développer ${expression2}.` // (x-a)²
+          this.question = `Développer $${expression2}$.` // (x-a)²
         }
         this.reponse = `${reduirePolynomeDegre3(0, 1, -2 * a, a ** 2, inconnue)}`
         this.correction = `On utilise l'égalité remarquable $(a-b)^2=a^2-2ab+b^2$ avec $a=${inconnue}$ et $b=${a}$.<br>
@@ -81,10 +83,11 @@ $\\begin{aligned}
         ]
         break
       case 3:
+        expression = expression3
         if (this.versionQcm) {
-          this.question = `La forme développée de ${expression3} est :` // (x-a)(x+a)
+          this.question = `La forme développée de $${expression3}$ est :` // (x-a)(x+a)
         } else {
-          this.question = `Développer ${expression3}.` // (x-a)(x+a)
+          this.question = `Développer $${expression3}$.` // (x-a)(x+a)
         }
         this.correction = `On utilise l'égalité remarquable $(a+b)(a-b)=a^2-b^2$ avec $a=${inconnue}$ et $b=${a}$.<br>
  $\\begin{aligned}
@@ -101,10 +104,11 @@ $\\begin{aligned}
         break
 
       case 4:
+        expression = expression4
         if (this.versionQcm) {
-          this.question = `La forme développée de ${expression4} est :` // (bx+a)²  b>1
+          this.question = `La forme développée de $${expression4}$ est :` // (bx+a)²  b>1
         } else {
-          this.question = `Développer ${expression4}.` // (bx+a)²  b>1
+          this.question = `Développer $${expression4}$.` // (bx+a)²  b>1
         }
         this.correction = `On utilise l'égalité remarquable $(a+b)^2=a^2+2ab+b^2$ avec $a=${b}${inconnue}$ et $b=${a}$.<br>
  $\\begin{aligned}
@@ -120,10 +124,11 @@ $\\begin{aligned}
         ]
         break
       case 5:
+        expression = expression5
         if (this.versionQcm) {
-          this.question = `La forme développée de ${expression5} est :` // (bx-a)² b>1
+          this.question = `La forme développée de $${expression5}$ est :` // (bx-a)² b>1
         } else {
-          this.question = `Développer ${expression5}.` // (bx-a)² b>1
+          this.question = `Développer $${expression5}$.` // (bx-a)² b>1
         }
         this.correction = `On utilise l'égalité remarquable $(a-b)^2=a^2-2ab+b^2$ avec $a=${b}${inconnue}$ et $b=${a}$.<br>
         $\\begin{aligned}
@@ -141,10 +146,11 @@ $\\begin{aligned}
         break
       case 6:
       default:
+        expression = expression6
         if (this.versionQcm) {
-          this.question = `La forme développée de ${expression6} est :` // (bx-a)(bx+a) b>1
+          this.question = `La forme développée de $${expression6}$ est :` // (bx-a)(bx+a) b>1
         } else {
-          this.question = `Développer ${expression6}.` // (bx-a)(bx+a) b>1
+          this.question = `Développer $${expression6}$.` // (bx-a)(bx+a) b>1
         }
         this.correction = `On utilise l'égalité remarquable $(a+b)(a-b)=a^2-b^2$ avec $a=${b}${inconnue}$ et $b=${a}$.<br>
    $\\begin{aligned}
@@ -161,8 +167,8 @@ $\\begin{aligned}
         break
     }
     if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
-    if (context.isHtml && !this.versionQcm) {
-      this.question += '<br>'
+    if (!this.versionQcm) {
+      this.optionsChampTexte = { texteAvant: `<br>$${expression}=$` }
     }
   }
 }
