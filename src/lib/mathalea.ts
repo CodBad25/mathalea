@@ -685,6 +685,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let isTitleDisplayed = true
   let isReferenceDisplayed = true
   let isCorrectionOnlyOnError = false
+  let isCheckPerQuestion = false
   let beta = false
   let url: URL
   let canDuration = 540
@@ -939,7 +940,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   /**
    * es permet de résumer les réglages de la vue élève
    * Il est de la forme 21011010
-   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)
+   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)|isCheckPerQuestion (facultatif)
    */
   if (es && es.length === 6) {
     presMode = presModeId[parseInt(es.charAt(0))]
@@ -965,7 +966,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     twoColumns = es.charAt(5) === '1'
     isTitleDisplayed = es.charAt(6) === '1'
     isReferenceDisplayed = es.charAt(7) === '1'
-  } else if (es && (es.length === 9 || es.length === 10)) {
+  } else if (es && es.length >= 9 && es.length <= 11) {
     presMode = presModeId[parseInt(es.charAt(0))]
     setInteractive = es.charAt(1)
     isSolutionAccessible = es.charAt(2) === '1'
@@ -978,6 +979,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     if (isCalculatricesForcees(es.charAt(9))) {
       calculatricesForcees = es.charAt(9) as CalculatricesForcees
     }
+    isCheckPerQuestion = es.charAt(10) === '1'
   }
   v = v ?? ''
   return {
@@ -1007,6 +1009,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     isTitleDisplayed,
     isReferenceDisplayed,
     isCorrectionOnlyOnError,
+    isCheckPerQuestion,
     recorder,
     done,
     beta,

@@ -58,4 +58,16 @@
       ]}
     />
   </div>
+  <div class="pl-2 pt-2">
+    <ButtonToggleAlt
+      title={'Vérifier question par question'}
+      isDisabled={globalOptions.setInteractive === '0'}
+      bind:value={globalOptions.isCheckPerQuestion}
+      id={'config-eleve-verifier-par-question-toggle'}
+      explanations={[
+        "Chaque question d'un exercice interactif aura son propre bouton « Vérifier » : les élèves sont corrigés question après question.",
+        "Les élèves vérifieront toutes les réponses d'un exercice en une seule fois.",
+      ]}
+    />
+  </div>
 </div>

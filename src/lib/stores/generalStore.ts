@@ -201,13 +201,12 @@ export function updateGlobalOptionsInURL(url: URL) {
       es += options.isTitleDisplayed ? '1' : '0'
       es += options.isReferenceDisplayed ? '1' : '0'
       es += options.isCorrectionOnlyOnError ? '1' : '0'
-      // Calculatrices forcées : caractère facultatif (voir buildEsParams)
-      if (
-        options.calculatricesForcees != null &&
-        options.calculatricesForcees !== CALCULATRICES_NON_FORCEES
-      ) {
-        es += options.calculatricesForcees
-      }
+      // Calculatrices forcées et vérification question par question :
+      // caractères facultatifs (voir buildEsParams)
+      const forcees = options.calculatricesForcees ?? CALCULATRICES_NON_FORCEES
+      if (forcees !== CALCULATRICES_NON_FORCEES || options.isCheckPerQuestion)
+        es += forcees
+      if (options.isCheckPerQuestion) es += '1'
       url.searchParams.append('es', es)
     }
     if (options.done) {

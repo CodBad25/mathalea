@@ -307,6 +307,62 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
     // })
   })
 
+  describe('réglages es à 9 et 11 caractères', () => {
+    it('lit isCorrectionOnlyOnError (9e caractère) sans activer isCheckPerQuestion', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      const result = mathaleaUpdateExercicesParamsFromUrl(
+        'https://coopmaths.fr/alea/?uuid=edb61&id=5P13&alea=Wm22&v=eleve&es=021100111',
+      )
+      expect(result.isCorrectionOnlyOnError).toBe(true)
+      expect(result.isCheckPerQuestion).toBe(false)
+    })
+
+    it('lit isCheckPerQuestion (11e caractère, après calculatricesForcees)', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      const result = mathaleaUpdateExercicesParamsFromUrl(
+        'https://coopmaths.fr/alea/?uuid=edb61&id=5P13&alea=Wm22&v=eleve&es=021100110-1',
+      )
+      expect(result).toMatchObject({
+        presMode: 'liste_exos',
+        setInteractive: '2',
+        isSolutionAccessible: true,
+        isInteractiveFree: true,
+        isCorrectionOnlyOnError: false,
+        isCheckPerQuestion: true,
+      })
+    })
+
+    it('isCheckPerQuestion est faux pour un ancien lien à 8 caractères', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      const result = mathaleaUpdateExercicesParamsFromUrl(
+        'https://coopmaths.fr/alea/?uuid=edb61&id=5P13&alea=Wm22&v=eleve&es=02110011',
+      )
+      expect(result.isCheckPerQuestion).toBe(false)
+    })
+
+    it('buildEsParams écrit isCheckPerQuestion en 11e caractère, seulement quand il est activé', async () => {
+      const { buildEsParams } = await import('../../src/lib/components/urls')
+      const { globalOptions } =
+        await import('../../src/lib/stores/globalOptions')
+      globalOptions.update((options) => ({
+        ...options,
+        isCheckPerQuestion: true,
+      }))
+      const es = buildEsParams()
+      expect(es).toHaveLength(11)
+      expect(es.charAt(9)).toBe('-')
+      expect(es.charAt(10)).toBe('1')
+      globalOptions.update((options) => ({
+        ...options,
+        isCheckPerQuestion: false,
+      }))
+      expect(buildEsParams()).toHaveLength(9)
+    })
+  })
+
   describe('paramètre beta (phase de test du quizz)', () => {
     it('parse beta=1 depuis l’URL', async () => {
       const { mathaleaUpdateExercicesParamsFromUrl } =

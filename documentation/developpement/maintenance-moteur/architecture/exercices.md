@@ -99,9 +99,9 @@ Les composants qui modifient le store `exercicesParams` doivent appeler `exercic
 
 Le store `globalOptions` (`src/lib/stores/globalOptions.ts`) contient les réglages de la vue élève classique (présentation, interactivité, corrections). Plutôt qu'un paramètre d'URL par réglage, ces booléens/énumérations sont compressés dans une seule chaîne `es` : un caractère par réglage, dans un ordre fixe.
 
-- Construction : `buildEsParams()` dans `src/lib/components/urls.ts`. Chaque réglage est ajouté à la chaîne dans l'ordre `presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError` ; un dixième caractère facultatif, `calculatricesForcees`, n'est ajouté que s'il impose une calculatrice (voir ci-dessous).
+- Construction : `buildEsParams()` dans `src/lib/components/urls.ts`. Chaque réglage est ajouté à la chaîne dans l'ordre `presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError` ; un dixième caractère facultatif, `calculatricesForcees`, n'est ajouté que s'il impose une calculatrice (voir ci-dessous), et un onzième, `isCheckPerQuestion`, n'est ajouté que s'il est activé (le dixième vaut alors `-` si aucune calculatrice n'est forcée).
 - Décodage : la fonction `mathaleaUpdateExercicesParamsFromUrl()` dans `src/lib/mathalea.ts` lit `es` et affecte chaque caractère (`es.charAt(i)`) au réglage correspondant.
-- Rétrocompatibilité : le décodage teste `es.length` (6, 7, 8, 9 ou 10 caractères actuellement) et choisit la branche qui correspond, pour que les anciennes URLs partagées (avec moins de réglages) restent valides. Chaque nouvelle branche reprend le décodage complet des caractères précédents avant d'ajouter le nouveau.
+- Rétrocompatibilité : le décodage teste `es.length` (6, 7, 8, 9, 10 ou 11 caractères actuellement) et choisit la branche qui correspond, pour que les anciennes URLs partagées (avec moins de réglages) restent valides. Chaque nouvelle branche reprend le décodage complet des caractères précédents avant d'ajouter le nouveau.
 
 Pour ajouter un nouveau réglage `es` :
 
@@ -173,3 +173,15 @@ Pour les changements TypeScript ou Svelte, lancer aussi :
 ```sh
 pnpm check
 ```
+
+### Vérification question par question (`isCheckPerQuestion`)
+
+Dans la vue élève, un exercice interactif est normalement vérifié d'un seul coup (bouton « Vérifier » unique, `exerciceInteractif()` dans `src/lib/interactif/gestionInteractif.ts`). Avec `isCheckPerQuestion` (11ᵉ caractère facultatif de `es`, toggle « Vérifier question par question » dans `ConfigEleve.svelte` et dans la modale de réglages Capytale), `ExerciceMathaleaVueEleve.svelte` ajoute un bouton « Vérifier » sous chaque question (`Question.svelte`) :
+
+- la question est corrigée par `verifQuestionExercice()`, la même fonction que celle utilisée par `exerciceInteractif()` ; ses champs sont verrouillés et sa correction (si `isSolutionAccessible`) s'affiche aussitôt. Le bouton est placé à la suite du contenu de la question, donc sur la ligne du champ de réponse quand il y a la place ;
+- le score de l'exercice n'est calculé, affiché (sous l'exercice et dans l'onglet de la vue « un exercice par page ») et transmis à Moodle ou Capytale (`resultsByExercice`) que lorsque toutes les questions sont vérifiées : la vérification de la dernière question a donc le même effet que « Tout vérifier ». Avant cela, une question n'affiche que son smiley, son feedback et sa correction, et un « Score : x / y » seulement si elle peut rapporter plus d'un point ;
+- le bouton `#buttonScoreEx{i}` est conservé, sous le libellé « Tout vérifier » : il vérifie les questions restantes, et reste le point d'entrée des composants externes (relecture Capytale, FlowMath, Labyrinthe, Juniper Green) ;
+- le mode ne s'applique que si l'exercice est interactif, a plusieurs questions et autant d'entrées dans `autoCorrection` que dans `listeQuestions` ; sinon le bouton unique est conservé ;
+- le bloc bouton/score d'une question porte la classe `katex-ignore` (`ignoredClasses` dans `src/lib/latex/Katex.ts`) : sans elle, l'auto-render KaTeX remplace les nœuds texte vides qui servent d'ancres aux blocs `{#if}` de Svelte et vide le bloc. À appliquer à toute zone d'interface Svelte ajoutée dans le contenu d'un exercice.
+
+Le mode « une question par page » (`QuestionParPage.svelte`) vérifie déjà chaque question séparément et n'est pas concerné.
