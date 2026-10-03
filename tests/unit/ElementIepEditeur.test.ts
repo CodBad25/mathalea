@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
   construireAnimation,
   ElementIepEditeur,
@@ -494,6 +494,58 @@ describe('ElementIepEditeur instruction selection', () => {
   })
 })
 
+describe('ElementIepEditeur fullscreen view', () => {
+  it('moves the player into a modal and restores it on close', () => {
+    const showModal = vi.fn(function (this: HTMLDialogElement) {
+      this.setAttribute('open', '')
+    })
+    const close = vi.fn(function (this: HTMLDialogElement) {
+      this.removeAttribute('open')
+      this.dispatchEvent(new Event('close'))
+    })
+    Object.defineProperties(HTMLDialogElement.prototype, {
+      showModal: { configurable: true, value: showModal },
+      close: { configurable: true, value: close },
+    })
+    const editor = document.createElement(
+      ElementIepEditeur.elementTag,
+    ) as ElementIepEditeur
+    editor.setAttribute('allow-fullscreen', 'true')
+    editor.setAttribute(
+      'programme-initial',
+      JSON.stringify([{ type: 'point', nom: 'A', x: 0, y: 0 }]),
+    )
+    document.body.appendChild(editor)
+
+    try {
+      Object.assign(editor, { animationVisible: true })
+      const player = editor.querySelector<HTMLDivElement>('div.basis-full')
+      const parentInitial = player?.parentNode
+      ;[...editor.querySelectorAll<HTMLButtonElement>('button')]
+        .find((bouton) => bouton.innerText === 'Voir en plein écran')
+        ?.click()
+
+      const modal = document.body.querySelector<HTMLDialogElement>(
+        'dialog[aria-label="Animation Instrumenpoche en plein écran"]',
+      )
+      expect(modal?.hasAttribute('open')).toBe(true)
+      expect(modal?.contains(player ?? null)).toBe(true)
+
+      modal
+        ?.querySelector<HTMLButtonElement>(
+          'button[aria-label="Fermer la vue plein écran"]',
+        )
+        ?.click()
+      expect(player?.parentNode).toBe(parentInitial)
+      expect(modal?.hasAttribute('open')).toBe(false)
+    } finally {
+      editor.remove()
+      delete (HTMLDialogElement.prototype as { showModal?: unknown }).showModal
+      delete (HTMLDialogElement.prototype as { close?: unknown }).close
+    }
+  })
+})
+
 describe('P025 editor identity', () => {
   it('keeps the same editor id when the exercise number changes', () => {
     const htmlContextAvantTest = context.isHtml
@@ -511,5 +563,18 @@ describe('P025 editor identity', () => {
     expect(secondId).toBe(premierId)
     expect(secondId).toMatch(/^editeur-iep-p025-\d+$/)
     context.isHtml = htmlContextAvantTest
+  })
+
+  it('enables the fullscreen animation view', () => {
+    const htmlContextAvantTest = context.isHtml
+    context.isHtml = true
+    try {
+      const exercice = new CreateurAnimationInstruments()
+      exercice.nouvelleVersion()
+
+      expect(exercice.listeQuestions[0]).toContain('allow-fullscreen="true"')
+    } finally {
+      context.isHtml = htmlContextAvantTest
+    }
   })
 })
