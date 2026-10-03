@@ -204,8 +204,10 @@ export default class OrdonnerCroissant extends ExerciceSimple {
         .slice(0, 3)
         .map((ordre) => `$${ordre}$`)
     } else {
-      this.consigne = "Ranger les trois nombres dans l'ordre croissant."
-      this.question = `\\begin{array}{c}${a.tex}\\qquad ${b.tex}\\qquad ${c.tex}\\\\[1em]%{champ1}<%{champ2}<%{champ3}\\end{array}`
+      // Les nombres sont hors du champ : dans un tableau (`array`), MathLive affiche les fractions
+      // saisies en petit (\frac au lieu de \dfrac) et le smiley est décalé par rapport à la ligne de réponse.
+      this.consigne = `Ranger les trois nombres dans l'ordre croissant.<br>$${a.tex}\\qquad ${b.tex}\\qquad ${c.tex}$`
+      this.question = '%{champ1}<%{champ2}<%{champ3}'
       this.reponse = {
         bareme: toutPourUnPoint,
         champ1: { value: nombresTries[0].tex },
