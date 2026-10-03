@@ -96,8 +96,7 @@ export default class Puissances extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     const cible = polynome([2, 1]).multiply(polynome([1, -3]))
     const facteurUnitaire = '\\left(x+\\dfrac12\\right)\\left(x-3\\right)'
-    this.enonce = 'Soit $x$ un réel.<br>'
-    this.enonce += `À quelle expression est égale $${cible.toLatex()}$ ?`
+    this.enonce = `À quelle expression est égale $${cible.toLatex()}$ ?`
 
     this.reponses = [
       `$${ecritureProduit([2, 1], [1, -3])}$`,
@@ -130,8 +129,7 @@ export default class Puissances extends ExerciceQcmA {
       // Le premier facteur rendu unitaire : c'est l'expression de l'énoncé divisée par a1.
       const facteurUnitaire = `\\left(x${distracteur.simplifie().ecritureAlgebrique}\\right)\\left(${reduireAxPlusB(a2, b2)}\\right)`
       const cible = polynome([a1, b1]).multiply(polynome([a2, b2]))
-      this.enonce = 'Soit $x$ un réel.<br>'
-      this.enonce += `À quelle expression est égale $${cible.toLatex()}$ ?`
+      this.enonce = `À quelle expression est égale $${cible.toLatex()}$ ?`
 
       this.reponses = [
         `$${ecritureProduit([a1, b1], [a2, b2])}$`,

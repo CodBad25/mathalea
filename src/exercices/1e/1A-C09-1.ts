@@ -21,5 +21,6 @@ export default class Auto1AC9 extends FatorisationEgR {
   constructor() {
     super()
     this.versionQcm = false
+    this.consigneProduit = true
   }
 }
