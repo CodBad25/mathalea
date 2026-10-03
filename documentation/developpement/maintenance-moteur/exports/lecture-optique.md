@@ -27,7 +27,7 @@ La vue reprend la coque de `Slides.svelte` et `Flashcards.svelte` : NavBar,
 onglets d'étape, barre d'outils (Code / Côte à côte / Aperçu, réglages, mise en
 page, nouvelles données, téléchargement), volet de réglages, pastilles posées
 sur l'aperçu aux positions publiées par les repères `mathalea-anchor`. La barre
-d'outils ne s'affiche que sur l'onglet *Générer*.
+d'outils ne s'affiche que sur l'onglet _Générer_.
 
 La palette reprend les icônes, la place et les styles de `TypstLayoutOverlay`
 (classes `omr-pill*`, calquées sur `typst-pill*`) : barre de l'exercice au bord
@@ -40,7 +40,7 @@ n'auraient rien à faire lire optiquement.
 
 Déplacer, dupliquer ou supprimer un exercice touche `exercicesParams`, le store
 partagé par toutes les vues. Les réglages de mise en page sont attachés au
-*rang* de l'exercice : `decalerOmrCarryOver` et `echangerOmrCarryOver` les
+_rang_ de l'exercice : `decalerOmrCarryOver` et `echangerOmrCarryOver` les
 renumérotent en même temps, sans quoi les colonnes de l'exercice 2 se
 retrouveraient sur l'exercice 3.
 
@@ -88,12 +88,12 @@ verdict et servirait à l'élève suivant les réponses du précédent.
 
 ### De la structure AMC aux cases
 
-| Type inféré           | Ce qui est imprimé                                              |
-| --------------------- | --------------------------------------------------------------- |
-| `qcmMono` / `qcmMult` | une case par proposition ; l'énoncé vient de l'item, pas de `listeQuestions`, qui contient déjà les propositions |
+| Type inféré           | Ce qui est imprimé                                                                                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `qcmMono` / `qcmMult` | une case par proposition ; l'énoncé vient de l'item, pas de `listeQuestions`, qui contient déjà les propositions                                             |
 | `AMCNum`              | une colonne de chiffres par `digits`, virgule ou barre de fraction comprise, calibrée par `normalizeAMCNumBlocks` — la fonction qu'utilise déjà l'export AMC |
-| `AMCOpen`             | un cadre de rédaction et la rangée de cases de barème            |
-| `AMCHybride`          | une question à cases **par bloc**, chacune avec son propre type  |
+| `AMCOpen`             | un cadre de rédaction et la rangée de cases de barème                                                                                                        |
+| `AMCHybride`          | une question à cases **par bloc**, chacune avec son propre type                                                                                              |
 
 Le séparateur d'une réponse numérique (`OmrColonneNumerique.separateurAvant`)
 n'a pas de case : il ne compte pas dans les colonnes relues, il évite seulement
@@ -143,8 +143,8 @@ corrigé, anonyme ; graines par élève ⇒ un corrigé nommé par version disti
 Une question sans correction rédigée retombe sur la réponse déduite de ses
 cases, ce qui garde un QCM exploitable.
 
-Ces pages ne portent aucune case : `omrRoundTrip` le vérifie sur un document
-réellement compilé, car une case y serait comptée comme une réponse d'élève.
+Ces pages ne portent aucune case, car une case y serait comptée comme une
+réponse d'élève.
 
 ## Ce qui est réglable, et ce qui ne l'est pas
 
@@ -178,7 +178,7 @@ face grasse. La limite vaut pour tous les exports Typst, pas seulement celui-ci.
 Par défaut, toute la classe compose la même version des exercices. Au choix,
 chaque élève reçoit une version propre : `preparerExercices` accepte une graine
 de remplacement (`omrPreparation.ts`), et la vue la construit comme
-`` `${graineDeBase}-${eleve.id}` `` — reprendre la même *graine de base*
+`` `${graineDeBase}-${eleve.id}` `` — reprendre la même _graine de base_
 régénère exactement les mêmes sujets. `decrireDocument` reçoit alors une liste
 d'exercices par élève au lieu d'une liste commune.
 
@@ -188,7 +188,7 @@ ne demande ensuite qu'une passe de `preparerExercices`. Recharger le référenti
 
 Conséquence pour l'accompagnement : deux copies peuvent avoir la **même
 géométrie** de cases tout en attendant des **réponses différentes**.
-`sensDesCases` tient donc une table de corrigé *par copie*, et `signature()`
+`sensDesCases` tient donc une table de corrigé _par copie_, et `signature()`
 (fusion des mises en page, `omrLayout.ts`) intègre `correct`/`valeur` à sa clé —
 sans quoi les corrigés fusionneraient et toute la classe sauf une copie serait
 notée sur le mauvais corrigé.
@@ -328,31 +328,31 @@ page ; `buildEvaluation` le ramène ensuite au rang dans la copie via
 Une feuille passée à l'envers est redressée automatiquement. La détection ne
 peut pas reposer sur un échec de décodage — un lecteur de QR-code lit aussi bien
 un code à l'envers — et les quatre marqueurs sont symétriques par demi-tour, si
-bien que le recalage *réussirait* en lisant chaque case à la place de sa
+bien que le recalage _réussirait_ en lisant chaque case à la place de sa
 symétrique. C'est la **position** du QR-code dans l'image qui tranche : imprimé
 en haut, retrouvé en bas, la feuille est retournée (`qr.ts`).
 
 ## Fichiers
 
-| Fichier                    | Rôle                                                        |
-| -------------------------- | ----------------------------------------------------------- |
-| `omrTypstTemplate.ts`      | Préambule Typst : marqueurs, case publiant sa position, en-tête et QR |
-| `buildOmrDocument.ts`      | `OmrDocumentOptions` ; `assemblerGabarit` (gabarit + corps par copie) ; QCM, grille numérique, cases de barème |
-| `omrCarryOver.ts`          | Relecture et réécriture des réglages de mise en page dans le gabarit (palette) |
-| `omrLayout.ts`             | Jointure positions ↔ corrigé *par copie*, fusion des mises en page identiques (corrigé compris dans la signature) |
-| `omrPreparation.ts`        | Double génération (interactive puis papier) et inférence du type AMC, avec graine de remplacement pour un sujet par élève |
-| `genererEvaluation.ts`     | Liste de classe, aperçu SVG d'une copie, compilation, téléchargement des deux fichiers |
-| `omrQuestions.ts`          | `autoCorrectionAMC` → exercices groupés et questions à cases, énoncés via `htmlToTypst` |
-| `../../components/setup/shared/typstPreview.ts` | Préparation du SVG d'aperçu et position des pastilles, partagée par les quatre vues Typst |
-| `pdfRaster.ts`             | Rastérisation des scans par pdf.js, à 150 dpi                |
-| `qr.ts`                    | `BarcodeDetector` puis repli `jsqr` ; orientation de la feuille |
-| `binarize.ts`              | Otsu et image intégrale (mesure d'un rectangle en temps constant) |
-| `registration.ts`          | Détection des marqueurs et homographie                       |
-| `readBoxes.ts`             | Mesure et classement des cases                               |
-| `scoring.ts`               | Barème, y compris les conventions `b/m/p/P/mz` d'AMC          |
-| `analyseScan.ts`           | Chaîne complète, une seule passe de rastérisation             |
-| `omrWorker.ts` / `omrWorkerClient.ts` | Analyse hors du fil principal                     |
-| `omrExport.ts`             | Bilan en XLSX, ODS et CSV, via `src/lib/spreadsheet.ts`       |
+| Fichier                                         | Rôle                                                                                                                      |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `omrTypstTemplate.ts`                           | Préambule Typst : marqueurs, case publiant sa position, en-tête et QR                                                     |
+| `buildOmrDocument.ts`                           | `OmrDocumentOptions` ; `assemblerGabarit` (gabarit + corps par copie) ; QCM, grille numérique, cases de barème            |
+| `omrCarryOver.ts`                               | Relecture et réécriture des réglages de mise en page dans le gabarit (palette)                                            |
+| `omrLayout.ts`                                  | Jointure positions ↔ corrigé _par copie_, fusion des mises en page identiques (corrigé compris dans la signature)         |
+| `omrPreparation.ts`                             | Double génération (interactive puis papier) et inférence du type AMC, avec graine de remplacement pour un sujet par élève |
+| `genererEvaluation.ts`                          | Liste de classe, aperçu SVG d'une copie, compilation, téléchargement des deux fichiers                                    |
+| `omrQuestions.ts`                               | `autoCorrectionAMC` → exercices groupés et questions à cases, énoncés via `htmlToTypst`                                   |
+| `../../components/setup/shared/typstPreview.ts` | Préparation du SVG d'aperçu et position des pastilles, partagée par les quatre vues Typst                                 |
+| `pdfRaster.ts`                                  | Rastérisation des scans par pdf.js, à 150 dpi                                                                             |
+| `qr.ts`                                         | `BarcodeDetector` puis repli `jsqr` ; orientation de la feuille                                                           |
+| `binarize.ts`                                   | Otsu et image intégrale (mesure d'un rectangle en temps constant)                                                         |
+| `registration.ts`                               | Détection des marqueurs et homographie                                                                                    |
+| `readBoxes.ts`                                  | Mesure et classement des cases                                                                                            |
+| `scoring.ts`                                    | Barème, y compris les conventions `b/m/p/P/mz` d'AMC                                                                      |
+| `analyseScan.ts`                                | Chaîne complète, une seule passe de rastérisation                                                                         |
+| `omrWorker.ts` / `omrWorkerClient.ts`           | Analyse hors du fil principal                                                                                             |
+| `omrExport.ts`                                  | Bilan en XLSX, ODS et CSV, via `src/lib/spreadsheet.ts`                                                                   |
 
 ## pdf.js dans un Web Worker
 
@@ -365,22 +365,19 @@ protocole interne vers la page. L'analyse échoue alors sans message exploitable
 ## Tests
 
 - `src/lib/omr/*.test.ts` — modules purs : homographie, mesure, barème, export.
-- `tests/unit/omrRoundTrip.test.ts` — compile un vrai document, décode les
-  QR-codes, recale, noircit des cases et les relit.
 - `tests/unit/omrAnalyse.test.ts` — lot de trois copies scannées : pages
   mélangées, feuille à l'envers, copie manquante, scanner mal réglé.
 
-Ces deux derniers exigent le binaire `typst` et sont ignorés s'il est absent.
-`omrRoundTrip` est en outre ignoré en CI : sa génération PNG par le CLI est une
-vérification locale, indépendante de la suite CI.
+Ce test exige le binaire `typst` et est ignoré s'il est absent.
 `tests/unit/omrPngDecode.ts` fournit un décodeur PNG minimal : les tests
 tournent sous Node et jsdom, où il n'y a ni canevas ni `ImageData`.
 
-`omrRoundTrip` est aussi ce qui garantit que la mise en page n'a pas cassé la
-lecture : il compile pour de bon et relit les cases. C'est lui qui a établi que
-le passage des questions dans un `#tasks` de `taskize` ne perturbe pas
-`here().position()`, donc que les positions publiées décrivent toujours le PDF
-imprimé — le seul point où une régression serait silencieuse.
+Il n'existe plus de test de bout en bout qui compile un document, décode les
+QR-codes, recale, noircit des cases et les relit (l'ancien `omrRoundTrip`, retiré
+car il échouait en CI). Une régression de mise en page est donc silencieuse :
+après une modification du gabarit, vérifier à la main que le passage des
+questions dans un `#tasks` de `taskize` ne perturbe pas `here().position()`,
+c'est-à-dire que les positions publiées décrivent toujours le PDF imprimé.
 
 ## Limites connues
 

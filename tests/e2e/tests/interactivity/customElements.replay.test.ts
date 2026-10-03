@@ -18,6 +18,7 @@ const customElementModules = [
   'DragAndDropElement',
   'EchiquierProblemeElement',
   'ElementIepEditeur',
+  'EnsembleIntervallesDroiteElement',
   'EtoileCalculsElement',
   'FillInTheBlank',
   'FractionCliquableElement',

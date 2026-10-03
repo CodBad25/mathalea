@@ -62,8 +62,8 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
 
   nouvelleVersion() {
     const choix = shuffle([0, 1, 2])
-    for (let i = 0; i < this.nbQuestions;) {
-      const index = choix[i]
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
+      const index = choix[i % choix.length]
       let texte = ''
       let texteCorr = ''
       const nom = creerNomDePolygone(11, 'QD')

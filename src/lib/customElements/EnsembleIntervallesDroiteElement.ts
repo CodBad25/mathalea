@@ -192,6 +192,46 @@ export class EnsembleIntervallesDroiteElement extends MathaleaCustomElement {
     return JSON.stringify({ intervals, empty: this.empty })
   }
 
+  /**
+   * Restaure la réponse sérialisée par le getter (reprise d'une copie Capytale, correction CAN).
+   * Un crochet `null` à une extrémité de la droite graduée correspond à une borne « ouverte à l'infini ».
+   */
+  set value(nextValue: string) {
+    const parsed = parseValue(nextValue)
+    this.intervals = []
+    this.openInfinityBrackets.clear()
+    this.pendingStart = null
+    this.pendingInfinityOpen = false
+    this.empty = false
+    if (parsed != null && Array.isArray(parsed.intervals)) {
+      const min = Number(this.getAttribute('min'))
+      const max = Number(this.getAttribute('max'))
+      this.empty = parsed.empty === true
+      if (!this.empty) {
+        for (const {
+          start,
+          end,
+          leftBracket,
+          rightBracket,
+        } of parsed.intervals) {
+          const interval: IntervalleDroiteValue = {
+            start,
+            end,
+            leftBracket: start === min ? null : (leftBracket ?? '['),
+            rightBracket: end === max ? null : (rightBracket ?? ']'),
+          }
+          if (start === min && leftBracket == null)
+            this.openInfinityBrackets.add(this.infinityKey(interval, 'left'))
+          if (end === max && rightBracket == null)
+            this.openInfinityBrackets.add(this.infinityKey(interval, 'right'))
+          this.intervals.push(interval)
+        }
+        this.intervals.sort((a, b) => a.start - b.start)
+      }
+    }
+    this.render()
+  }
+
   private select(value: number, min: number, max: number, limit: number) {
     if (this.empty) this.empty = false
     const endpoint = this.intervals.find(

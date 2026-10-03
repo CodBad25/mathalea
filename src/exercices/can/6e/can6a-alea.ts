@@ -1,9 +1,5 @@
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import {
-  combinaisonListesSansChangerOrdre,
-  enleveElementBis,
-} from '../../../lib/outils/arrayOutils'
-import { gestionnaireFormulaireTexte } from '../../../modules/outils'
+import { shuffle } from '../../../lib/outils/arrayOutils'
 
 import seedrandom from 'seedrandom'
 import uuidToUrl from '../../../json/uuidsToUrlFR.json'
@@ -34,22 +30,64 @@ const log = function (str: string) {
   if (window.logDebug > 1) console.info(str)
 }
 
+/**
+ * Questions disponibles classées par rubrique : « can6C51-02 » appartient à la rubrique « C51 ».
+ * Les anciennes versions (can6C1-01Old, can6a-2024...) ne suivent pas ce nommage et sont ignorées.
+ */
+const questionsParRubrique = new Map<string, string[]>()
+for (const url of Object.values(uuidToUrl)) {
+  const nomFichier = url.replaceAll('\\', '/').split('/').reverse()[0]
+  const trouve = /^(can6([A-Z]\d*)-\d+)\.ts$/.exec(nomFichier)
+  if (trouve == null) continue
+  const questions = questionsParRubrique.get(trouve[2]) ?? []
+  questions.push(trouve[1])
+  questionsParRubrique.set(trouve[2], questions)
+}
+
+/**
+ * Renvoie les noms de fichiers des questions des rubriques dont le code commence par l'un des
+ * codes de la saisie (« C » pour tout le calcul, « N2 » pour N21 et N22, « I » pour l'informatique...).
+ * Une saisie vide, « All » ou sans code reconnu sélectionne toutes les rubriques.
+ */
+function questionsDeLaSaisie(saisie: string): Map<string, string[]> {
+  const codes = saisie
+    .split('-')
+    .map((code) => code.trim().toUpperCase())
+    .filter((code) => code !== '' && code !== 'ALL')
+  const rubriques = [...questionsParRubrique.keys()].filter(
+    (rubrique) =>
+      codes.length === 0 || codes.some((code) => rubrique.startsWith(code)),
+  )
+  const parFamille = new Map<string, string[]>()
+  for (const rubrique of rubriques.length > 0
+    ? rubriques
+    : questionsParRubrique.keys()) {
+    const famille = rubrique[0]
+    parFamille.set(famille, [
+      ...(parFamille.get(famille) ?? []),
+      ...(questionsParRubrique.get(rubrique) ?? []),
+    ])
+  }
+  return parFamille
+}
+
 export default class can6eAll extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireTexte = [
       'Type de questions',
       [
-        'Nombres séparés\n par des tirets :',
+        'Codes des rubriques séparés par des tirets :',
         'All : Mélange',
-        'C1 à C65 : can de 6C01 à 6C65 (sauf 6C37)',
-        'G1 à G8 : can de 6G01 à 6G08',
-        'M1 à M20 : can de 6M01 à 6M20',
-        'N1 à N20 : can de 6N01 à 6N20',
-        'C : Mélange calcul',
-        'G : Mélange géométrie',
-        'M : Mélange mesure',
-        'N : Mélange numération',
+        'C1 à C7, C51 à C53 : calcul',
+        'D1 à D3 : durées',
+        'G1 à G3 : géométrie',
+        'I : informatique',
+        'M1 à M4 : mesure',
+        'N1, N21, N22, N3 : numération',
+        'P1, P2 : proportionnalité',
+        'S : statistiques',
+        'Une lettre seule (C, G, M, N...) ou un début de code (C5, N2) sélectionne toutes les rubriques correspondantes',
       ].join('\n'),
     ]
     this.nbQuestions = 4
@@ -86,183 +124,20 @@ export default class can6eAll extends Exercice {
     }
 
     log(this.sup)
-    const qCal = this.sup.replaceAll('C', '')
-    let questionsDisponiblesCalc = enleveElementBis(
-      gestionnaireFormulaireTexte({
-        saisie: qCal,
-        min: 0,
-        max: 65,
-        defaut: 0,
-        melange: 66,
-        nbQuestions: 0,
-        shuffle: false,
-        exclus: [37, 0],
-      }),
-      0,
+    // On alterne les familles (calcul, géométrie...) dans un ordre aléatoire, puis on pioche
+    // sans répétition dans chaque famille tant qu'il reste des questions.
+    const parFamille = questionsDeLaSaisie(this.sup)
+    const familles = shuffle([...parFamille.keys()])
+    const questionsMelangees = new Map(
+      familles.map((famille) => [famille, shuffle(parFamille.get(famille)!)]),
     )
-    log('pass1:' + questionsDisponiblesCalc)
-
-    if (
-      questionsDisponiblesCalc.length === 0 &&
-      (this.sup.includes('C') || this.sup.includes('All'))
-    ) {
-      // pas de question du type C1
-      questionsDisponiblesCalc = gestionnaireFormulaireTexte({
-        saisie: 66,
-        min: 1,
-        max: 65,
-        defaut: 1,
-        melange: 66,
-        nbQuestions: this.nbQuestions,
-        shuffle: true,
-        exclus: [37],
-      })
-      log('pass2:' + questionsDisponiblesCalc)
+    const questionsDisponibles: string[] = []
+    for (let q = 0; q < this.nbQuestions; q++) {
+      const famille = familles[q % familles.length]
+      const questions = questionsMelangees.get(famille)!
+      const rang = Math.floor(q / familles.length)
+      questionsDisponibles.push(questions[rang % questions.length])
     }
-
-    const qGeo = this.sup.replaceAll('G', '')
-    let questionsDisponiblesGeo = enleveElementBis(
-      gestionnaireFormulaireTexte({
-        saisie: qGeo,
-        min: 0,
-        max: 8,
-        defaut: 0,
-        melange: 9,
-        nbQuestions: 0,
-        shuffle: false,
-      }),
-      0,
-    )
-    log('pass1:' + questionsDisponiblesGeo)
-    if (
-      questionsDisponiblesGeo.length === 0 &&
-      (this.sup.includes('G') || this.sup.includes('All'))
-    ) {
-      // pas de question du type G2
-      questionsDisponiblesGeo = gestionnaireFormulaireTexte({
-        saisie: 9,
-        min: 1,
-        max: 8,
-        defaut: 1,
-        melange: 9,
-        nbQuestions: this.nbQuestions,
-        shuffle: true,
-      })
-      log('pass2:' + questionsDisponiblesGeo)
-    }
-
-    const qNum = this.sup.replaceAll('N', '')
-    let questionsDisponiblesNum = enleveElementBis(
-      gestionnaireFormulaireTexte({
-        saisie: qNum,
-        min: 0,
-        max: 20,
-        defaut: 0,
-        melange: 21,
-        nbQuestions: 0,
-        shuffle: false,
-      }),
-      0,
-    )
-    log('pass1:' + questionsDisponiblesNum)
-    if (
-      questionsDisponiblesNum.length === 0 &&
-      (this.sup.includes('N') || this.sup.includes('All'))
-    ) {
-      // pas de question du type N2
-      questionsDisponiblesNum = gestionnaireFormulaireTexte({
-        saisie: 21,
-        min: 1,
-        max: 20,
-        defaut: 1,
-        melange: 21,
-        nbQuestions: this.nbQuestions,
-        shuffle: true,
-      })
-      log('pass2:' + questionsDisponiblesNum)
-    }
-
-    const qMes = this.sup.replaceAll('M', '')
-    let questionsDisponiblesMes = enleveElementBis(
-      gestionnaireFormulaireTexte({
-        saisie: qMes,
-        min: 0,
-        max: 20,
-        defaut: 0,
-        melange: 21,
-        nbQuestions: 0,
-        shuffle: false,
-      }),
-      0,
-    )
-    log('pass1:' + questionsDisponiblesMes)
-    if (
-      questionsDisponiblesMes.length === 0 &&
-      (this.sup.includes('M') || this.sup.includes('All'))
-    ) {
-      // pas de question du type N2
-      questionsDisponiblesMes = gestionnaireFormulaireTexte({
-        saisie: 21,
-        min: 1,
-        max: 20,
-        defaut: 1,
-        melange: 21,
-        nbQuestions: this.nbQuestions,
-        shuffle: true,
-      })
-      log('pass2:' + questionsDisponiblesMes)
-    }
-
-    function combineTheme(...args: string[][]) {
-      const output = []
-      let countA = 0
-      for (let k = 0; k < args.length; k++) {
-        countA = Math.max(args[k].length, countA)
-      }
-      for (let p = 0; p < countA; p++) {
-        for (let h = 0; h < args.length; h++) {
-          const a = args[h].shift()
-          if (a) output.push(a)
-        }
-      }
-      return output
-    }
-
-    if (
-      questionsDisponiblesCalc.length === 0 &&
-      questionsDisponiblesGeo.length === 0 &&
-      questionsDisponiblesNum.length === 0 &&
-      questionsDisponiblesMes.length === 0
-    ) {
-      // pas de question du type C2-G4
-      questionsDisponiblesCalc[0] = '1'
-      questionsDisponiblesGeo[0] = '1'
-      questionsDisponiblesNum[0] = '1'
-      questionsDisponiblesMes[0] = '1'
-    }
-    const comQuestions = combineTheme(
-      Array.from(
-        questionsDisponiblesCalc,
-        (x) => 'C' + String(x).padStart(2, '0'),
-      ),
-      Array.from(
-        questionsDisponiblesGeo,
-        (x) => 'G' + String(x).padStart(2, '0'),
-      ),
-      Array.from(
-        questionsDisponiblesNum,
-        (x) => 'N' + String(x).padStart(2, '0'),
-      ),
-      Array.from(
-        questionsDisponiblesMes,
-        (x) => 'M' + String(x).padStart(2, '0'),
-      ),
-    )
-
-    const questionsDisponibles = combinaisonListesSansChangerOrdre(
-      comQuestions,
-      this.nbQuestions,
-    ).slice(0, this.nbQuestions)
     log(questionsDisponibles.join('\n'))
 
     async function loadAllQuests(exercice: can6eAll, numeros: string[]) {
@@ -272,9 +147,9 @@ export default class can6eAll extends Exercice {
           /** MGu
            * On est obligé car la première question (indice:0) dans HandleAnswers réinitialise : exercice.autoCorrection
            */
-          await loadQuest(exercice, `can6${numeros[q]}`, q)
+          await loadQuest(exercice, numeros[q], q)
         } else {
-          promises.push(loadQuest(exercice, `can6${numeros[q]}`, q))
+          promises.push(loadQuest(exercice, numeros[q], q))
         }
       }
 
