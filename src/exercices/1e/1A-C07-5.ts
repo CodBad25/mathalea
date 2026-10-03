@@ -107,7 +107,10 @@ L'aire du carré est : $${texNombre(coteConverti)} \\text{ ${uniteAire}}\\times 
       ].map(avecUnite)
     } else {
       this.question = `Calculer l'aire, en $\\text{${uniteAire}}^2$, d'un carré de côté $${texNombre(cote)}$ $\\text{${uniteCote}}$.`
-      this.optionsChampTexte = { texteApres: `$\\text{${uniteAire}}^2$` }
+      this.optionsChampTexte = {
+        texteAvant: "<br>L'aire du carré est ",
+        texteApres: `$\\text{${uniteAire}}^2$.`,
+      }
       this.reponse = aire
     }
   }

@@ -28,7 +28,10 @@ export default class auto1AC7b extends ExerciceSimple {
     this.spacing = 1.5
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
-    this.optionsChampTexte = { texteApres: '$\\text{km/h}$' }
+    this.optionsChampTexte = {
+      texteAvant: '<br>Sa vitesse moyenne est ',
+      texteApres: '$\\text{km/h}$.',
+    }
     this.versionQcmDisponible = true
     this.versionQcm = false
   }

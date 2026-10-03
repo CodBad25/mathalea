@@ -49,11 +49,11 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
 
           if (totalMinutes >= 60) {
             // Cas avec 1h + 15min ou 1h + 45min
-            this.correction = `$${totalMinutes}\\text{ min}= ${heures * 60} \\text{ min}+${minutes}\\text{ min}=${heures}\\text{ h}+${fractionText}\\text{ h}=${texNombre(heuresDecimales, 2)}\\text{ h}$<br>
+            this.correction = `$${totalMinutes}\\text{ min}= ${heures * 60} \\text{ min}+${minutes}\\text{ min}=${heures}\\text{ h}+${fractionText}\\text{ h}=${texNombre(heuresDecimales, 2)}\\text{ h}$.<br>
                Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ heure.`
           } else {
             // Cas avec seulement 15min ou 45min
-            this.correction = `$${totalMinutes}\\text{ min}= ${fractionText}\\text{ h}=${decimalText}\\text{ h}$<br>
+            this.correction = `$${totalMinutes}\\text{ min}= ${fractionText}\\text{ h}=${decimalText}\\text{ h}$.<br>
                Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ heure.`
           }
 
@@ -128,10 +128,10 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
     }
     this.canReponseACompleter = this.question + '$\\ldots$ ' + 'heure(s)'
     if (!this.interactif && !this.versionQcm) {
-      this.question = this.canReponseACompleter
+      this.question = this.canReponseACompleter + '.'
     }
 
     this.canEnonce = 'Compléter.'
-    this.optionsChampTexte = { texteApres: 'heure(s)' }
+    this.optionsChampTexte = { texteApres: 'heure(s).' }
   }
 }
