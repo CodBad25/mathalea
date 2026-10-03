@@ -85,7 +85,7 @@ export default class AutoC4c extends ExerciceSimple {
     const simplifiee = produit.texFraction
     const dfrac = (num: number, den: number) => `\\dfrac{${num}}{${den}}`
 
-    this.correction = `${debut} ${fin} correspond${pluriel ? 'ent' : ''} à $${fractionP}\\times ${fractionR}$ soit $${
+    this.correction = `${debut} ${fin} correspond${pluriel ? 'ent' : ''} à $${fractionP}\\times ${fractionR}$, soit $${
       simplifiee === dfrac(p, q * r)
         ? miseEnEvidence(simplifiee)
         : `${dfrac(p, q * r)} = ${miseEnEvidence(simplifiee)}`
