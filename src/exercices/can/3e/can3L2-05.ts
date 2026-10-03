@@ -39,7 +39,13 @@ export default class ReduireAvecParentheses2 extends ExerciceSimple {
     const reponse = choix
       ? reduireAxPlusB(a + k * c, k * d, variable)
       : reduireAxPlusB(k * c, k * d + a, variable) // texNombre(b).mul(-1).plus(a), 2) + `${variable}`
-    this.reponse = { reponse: { value: reponse } }
+    this.reponse = {
+      reponse: {
+        value: reponse,
+        // Seule une expression réduite est acceptée
+        options: { expressionsForcementReduites: true },
+      },
+    }
     this.question = `Écrire le plus simplement possible  $${choix ? `${rienSi1(a)}${variable}` : `${a}`}${ecritureAlgebrique(k)}(${reduireAxPlusB(c, d, variable)})$.`
     if (this.interactif) {
       this.question += `<br>$${choix ? `${rienSi1(a)}${variable}` : `${a}`}${ecritureAlgebrique(k)}(${reduireAxPlusB(c, d, variable)})=$`
