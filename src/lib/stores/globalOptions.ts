@@ -10,6 +10,7 @@ import type { InterfaceGlobalOptions } from '../types'
  * * `calculatricesForcees` : uniquement pour la vue eleve (`-` : selon le réglage `calc` de chaque exercice, sinon 0 / 1 / 2 / 3 / 9 imposé à tous les exercices)
  * * `isSolutionAccessible` : uniquement pour la vue eleve, pour savoir si les corrections sont disponibles ou pas
  * * `isCorrectionOnlyOnError` : uniquement pour la vue eleve, pour n'afficher la correction que sous les questions dont la réponse est fausse (sous les bonnes réponses, seul le smiley est affiché)
+ * * `isCheckPerQuestion` : uniquement pour la vue eleve, pour que chaque question d'un exercice interactif ait son propre bouton « Vérifier » (retour immédiat question par question) au lieu d'un seul bouton pour tout l'exercice
  * * `isInteractiveFree` : uniquement pour la vue eleve, pour savoir si l'élève peut changer l'interactivité ou pas
  * * `oneShot` : uniquement pour la vue eleve, pour savoir si l'élève peut répondre une ou plusieurs fois en interactif.
  * * `twoColumns` : dans les vues élèves avec tous les exercices/questions sur une même page, on adopte la présentation du texte sur deux colonnes
@@ -30,6 +31,7 @@ export const globalOptions = writable<InterfaceGlobalOptions>({
   calculatricesForcees: '-',
   isSolutionAccessible: true,
   isCorrectionOnlyOnError: false,
+  isCheckPerQuestion: false,
   isInteractiveFree: true,
   isTitleDisplayed: true,
   isReferenceDisplayed: true,

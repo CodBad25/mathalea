@@ -128,10 +128,17 @@ function getSaisieBruteChampAvecUnite(
  * Indique si l'exercice contient une réponse attendant une unité (options.unite === true)
  * dont la saisie actuelle en oublie une. Sert à bloquer la toute première vérification
  * pour inviter l'élève à compléter l'unité avant de corriger.
+ * Avec `questionIndex`, seule cette question est examinée (vérification question par question).
  */
-export function exerciceAUneUniteManquante(exercice: IExercice): boolean {
+export function exerciceAUneUniteManquante(
+  exercice: IExercice,
+  questionIndex?: number,
+): boolean {
   if (exercice.numeroExercice == null) return false
-  for (let i = 0; i < exercice.autoCorrection.length; i++) {
+  const debut = questionIndex ?? 0
+  const fin =
+    questionIndex == null ? exercice.autoCorrection.length : questionIndex + 1
+  for (let i = debut; i < fin; i++) {
     const valeur = exercice.autoCorrection[i]?.valeur
     if (valeur == null) continue
     for (const key of VALEUR_NAMES) {
@@ -151,8 +158,78 @@ export function exerciceAUneUniteManquante(exercice: IExercice): boolean {
   return false
 }
 
+export type ResultOfQuestionInteractive = {
+  isOk: boolean
+  feedback: string
+  score: { nbBonnesReponses: number; nbReponses: number }
+}
+
 /**
- * Cette fonction vérifie les réponses de chaque question en appelant la fonction associée à son formatInteractif ('mathlive', 'listeDeroulante', 'cliqueFigure', 'qcm')
+ * Vérifie la réponse d'une seule question en appelant la fonction associée à son formatInteractif ('mathlive', 'listeDeroulante', 'cliqueFigure', 'qcm')
+ * et affiche son éventuel feedback sous la question.
+ * @param {Exercice} exercice
+ * @param {number} i indice de la question
+ * @returns le résultat de la question, ou `undefined` si elle n'est pas vérifiable (pas de réponse attendue ou format non géré)
+ */
+export function verifQuestionExercice(
+  exercice: IExercice,
+  i: number,
+): ResultOfQuestionInteractive | undefined {
+  // Une question sans réponse attendue (question de démonstration, de rédaction...)
+  // au milieu de questions interactives ne doit pas être vérifiée ni comptée.
+  if (exercice.autoCorrection[i] == null) return undefined
+  const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
+  const customElementFormat =
+    interactivityTypeToCustomElementFormat(format) ?? format
+  if (!listOfCustomElements.includes(customElementFormat)) return undefined
+  // On traite le cas de tous les MathaleaCustomElement ici
+  const liste = Array.from(mathaleaCustomElementsRegistry)
+  const [tag, elementClasse] =
+    liste.find((custom) => custom[0] === customElementFormat) ?? []
+  if (tag == null || elementClasse == null) {
+    throw Error(
+      "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+    )
+  }
+  if (
+    elementClasse.verifQuestion == null ||
+    typeof elementClasse.verifQuestion !== 'function'
+  ) {
+    throw Error(
+      `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'est pas une fonction`,
+    )
+  }
+  const result = elementClasse.verifQuestion(exercice, i)
+  if (
+    result == null ||
+    typeof result !== 'object' ||
+    !('isOk' in result) ||
+    !('score' in result)
+  ) {
+    throw Error(
+      `L'élément '${tag}' a une fonction verifQuestion qui n'a pas retourné une valeur conforme.`,
+    )
+  }
+  if (result.feedback && result.feedback !== '') {
+    const divFeedback = document.querySelector(
+      `#feedbackEx${exercice.numeroExercice}Q${i}`,
+    )
+    if (divFeedback != null) {
+      divFeedback.innerHTML = `💡 ${result.feedback}`
+      divFeedback.classList.add(
+        'py-2',
+        'italic',
+        'text-coopmaths-warn-darkest',
+        'dark:text-coopmathsdark-warn-darkest',
+      )
+      ;(divFeedback as HTMLDivElement).style.display = 'block'
+    }
+  }
+  return result
+}
+
+/**
+ * Cette fonction vérifie les réponses de chaque question avec `verifQuestionExercice`
  * @param {Exercice} exercice
  * @param {HTMLDivElement} divScore
  * @param {HTMLButtonElement} buttonScore
@@ -171,62 +248,12 @@ export function exerciceInteractif(
   const nbQuestions = exercice.autoCorrection.length
 
   for (let i = 0; i < nbQuestions; i++) {
-    // Une question sans réponse attendue (question de démonstration, de rédaction...)
-    // au milieu de questions interactives ne doit pas être vérifiée ni comptée.
-    if (exercice.autoCorrection[i] == null) continue
-    const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
-    const customElementFormat =
-      interactivityTypeToCustomElementFormat(format) ?? format
-    if (listOfCustomElements.includes(customElementFormat)) {
-      // On traite le cas de tous les MathaleaCustomElement ici
-      const liste = Array.from(mathaleaCustomElementsRegistry)
-      const [tag, elementClasse] =
-        liste.find((custom) => custom[0] === customElementFormat) ?? []
-      if (tag == null || elementClasse == null) {
-        throw Error(
-          "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
-        )
-      }
-      if (
-        elementClasse.verifQuestion == null ||
-        typeof elementClasse.verifQuestion !== 'function'
-      ) {
-        throw Error(
-          `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'est pas une fonction`,
-        )
-      }
-      const result = elementClasse.verifQuestion(exercice, i)
-      if (
-        result == null ||
-        typeof result !== 'object' ||
-        !('isOk' in result) ||
-        !('score' in result)
-      ) {
-        throw Error(
-          `L'élément '${tag}' a une fonction verifQuestion qui n'a pas retourné une valeur conforme.`,
-        )
-      }
-
-      nbQuestionsValidees += result.score.nbBonnesReponses
-      nbQuestionsNonValidees +=
-        result.score.nbReponses - result.score.nbBonnesReponses
-      perQuestionIsOk[i] = result.isOk
-      if (result.feedback && result.feedback !== '') {
-        const divFeedback = document.querySelector(
-          `#feedbackEx${exercice.numeroExercice}Q${i}`,
-        )
-        if (divFeedback != null) {
-          divFeedback.innerHTML = `💡 ${result.feedback}`
-          divFeedback.classList.add(
-            'py-2',
-            'italic',
-            'text-coopmaths-warn-darkest',
-            'dark:text-coopmathsdark-warn-darkest',
-          )
-          ;(divFeedback as HTMLDivElement).style.display = 'block'
-        }
-      }
-    }
+    const result = verifQuestionExercice(exercice, i)
+    if (result == null) continue
+    nbQuestionsValidees += result.score.nbBonnesReponses
+    nbQuestionsNonValidees +=
+      result.score.nbReponses - result.score.nbBonnesReponses
+    perQuestionIsOk[i] = result.isOk
   }
   return afficheScore(
     exercice,

@@ -4,12 +4,17 @@
   import { get } from 'svelte/store'
   import type TypeExercice from '../../../../../exercices/Exercice'
   import { sendToCapytaleSaveStudentAssignment } from '../../../../../lib/handleCapytale'
-  import { afficheAlerteUniteManquante } from '../../../../../lib/interactif/afficheScore'
+  import {
+    afficheAlerteUniteManquante,
+    afficheScore,
+  } from '../../../../../lib/interactif/afficheScore'
   import {
     exerciceAUneUniteManquante,
     exerciceContientCliqueFigure,
     exerciceInteractif,
     prepareExerciceCliqueFigure,
+    verifQuestionExercice,
+    type ResultOfQuestionInteractive,
   } from '../../../../../lib/interactif/gestionInteractif'
   import { decodeAnswers } from '../../../../../lib/lms/answersCodec'
   import {
@@ -34,6 +39,7 @@
   import { globalOptions } from '../../../../../lib/stores/globalOptions'
   import { isLocalStorageAvailable } from '../../../../../lib/stores/storage'
   import type {
+    InterfaceGlobalOptions,
     InterfaceParams,
     InterfaceResultExercice,
   } from '../../../../../lib/types'
@@ -97,6 +103,46 @@
   // résultat (correct/incorrect) de chaque question, utilisé pour n'afficher la correction que sous les questions fausses
   let questionsIsOk: boolean[] = []
 
+  // Vérification question par question (option `isCheckPerQuestion`) :
+  // chaque question a son bouton « Vérifier » et son score, l'exercice cumule.
+  let questionsChecked: boolean[] = []
+  let questionsScore: (ResultOfQuestionInteractive['score'] | undefined)[] = []
+  let questionsUniteSignalee: boolean[] = []
+  let isStatsTracked = false
+
+  /**
+   * La vérification question par question n'a de sens que pour un exercice
+   * interactif dont chaque question a sa propre entrée dans `autoCorrection`.
+   * Sinon (une seule question, ou énoncé unique portant plusieurs champs)
+   * on garde le bouton unique de l'exercice.
+   */
+  function isVerificationParQuestion(
+    options: InterfaceGlobalOptions,
+    interactif: boolean | undefined,
+    exo: TypeExercice,
+  ): boolean {
+    return (
+      options.isCheckPerQuestion === true &&
+      interactif === true &&
+      options.presMode !== 'recto' &&
+      options.presMode !== 'verso' &&
+      exo.listeQuestions.length > 1 &&
+      exo.autoCorrection.length === exo.listeQuestions.length
+    )
+  }
+  $: isCheckPerQuestion = isVerificationParQuestion(
+    $globalOptions,
+    isInteractif,
+    exercise,
+  )
+  function areAllQuestionsChecked(checked: boolean[]): boolean {
+    return exercise.autoCorrection.every(
+      (autoCorrection, i) => autoCorrection == null || checked[i],
+    )
+  }
+  $: isAllChecked =
+    isCheckPerQuestion && areAllQuestionsChecked(questionsChecked)
+
   // URL-driven display toggles (only used for FlowMath recorder)
   let boutonValidationUrlFlag = true
   let boutonCorrectionUrlFlag = true
@@ -121,6 +167,7 @@
 
   let numberOfAnswerFields: number = 0
   let lastRenderedSignature = ''
+  let lastCheckedSignature = ''
 
   /**
    * Action Svelte pour la consigne et l'introduction : injecte le contenu HTML
@@ -156,6 +203,14 @@
       questionsSignature,
       correctionsSignature,
     ].join('::')
+  }
+
+  /**
+   * Signature des questions déjà vérifiées : quand elle change, le feedback et
+   * la correction affichés sous ces questions doivent passer par KaTeX.
+   */
+  function getCheckedSignature() {
+    return questionsChecked.map((checked) => (checked ? '1' : '0')).join('')
   }
 
   async function forceUpdate() {
@@ -276,12 +331,18 @@
     if (exercise && divExercice) {
       const renderSignature = getRenderSignature()
       const shouldRenderContent = renderSignature !== lastRenderedSignature
+      const checkedSignature = getCheckedSignature()
+      const shouldRenderChecked = checkedSignature !== lastCheckedSignature
+      lastCheckedSignature = checkedSignature
       let time = window.performance.now()
       if (shouldRenderContent) {
         mathaleaRenderDiv(divExercice)
         lastRenderedSignature = renderSignature
         time = window.performance.now()
         log('duration mathaleaRenderDiv:' + (time - starttime))
+      } else if (shouldRenderChecked) {
+        // pas de loadMathLive ici : les champs existent déjà
+        mathaleaRenderDiv(divExercice)
       }
       adjustMathalea2dFiguresWidth()
       time = window.performance.now()
@@ -322,6 +383,11 @@
     exercise.isDone = false
     if (isCorrectVisible) switchCorrectionVisible(false)
     questionsIsOk = []
+    questionsChecked = []
+    questionsScore = []
+    questionsUniteSignalee = []
+    isStatsTracked = false
+    exercise.answers = {}
     exercise.seed = generateFreshSeed()
     if (buttonScore?.dataset?.capytaleLoadAnswers === '1') {
       // si les données ont été chargées par Capytale, on remet à 0
@@ -511,15 +577,203 @@
     return serializableAnswers
   }
 
+  /**
+   * Enregistre le score de l'exercice (meilleur score, résultats transmis
+   * à Moodle ou Capytale) une fois qu'il a été calculé.
+   */
+  function enregistreScore(numberOfPoints: number, numberOfQuestions: number) {
+    if (exercise.numeroExercice == null) return
+    const previousBestScore = interfaceParams?.bestScore ?? 0
+    const isThisTryBetter = numberOfPoints >= previousBestScore
+    if (
+      buttonScore?.dataset.capytaleLoadAnswers === '1' &&
+      previousBestScore !== numberOfPoints
+    ) {
+      // ICI les réponses ont été chargées par Capytale et
+      //  le score ne peut pas être inferieur à best score,
+      //  car c'est de la restitution de la meilleure copie
+      // donc si on est ici dans ce IF, c'est un bug du moteur à faire vite remonter
+      const newStudentAssignement = get(capytaleStudentAssignment) || []
+      const previousResultatByExercice =
+        newStudentAssignement[exercise.numeroExercice as number]
+      if (exercise?.checkSum !== previousResultatByExercice?.checkSum) {
+        window.notify(
+          `Exercice ${exercise.numeroExercice} a changé, passé de ${previousBestScore} à ${numberOfPoints}. Checksum différent avant ${previousResultatByExercice?.checkSum} et maintenant ${exercise?.checkSum}.`,
+          {
+            exo: exercise,
+            globalOptions: get(globalOptions),
+            exercicesParams: get(exercicesParams),
+            resultsByExercice: get(resultsByExercice),
+          },
+        )
+      }
+
+      window.notify(
+        `Le score de l'exercice ${exercise.numeroExercice} est incorrect, checksum(${exercise?.checkSum === previousResultatByExercice?.checkSum}), passé de ${previousBestScore} à ${numberOfPoints}. Merci de le signaler au support.`,
+        {
+          exo: exercise,
+          globalOptions: get(globalOptions),
+          exercicesParams: get(exercicesParams),
+          resultsByExercice: get(resultsByExercice),
+        },
+      )
+    }
+
+    let bestScore = previousBestScore
+    // On ne met à jour resultsByExercice que si le score est meilleur
+    if (isThisTryBetter) {
+      bestScore = numberOfPoints
+      exercicesParams.update((l: InterfaceParams[]) => {
+        l[exercise.numeroExercice as number].bestScore = bestScore
+        return l
+      })
+      resultsByExercice.update((l: InterfaceResultExercice[]) => {
+        l[exercise.numeroExercice as number] = {
+          uuid: exercise.uuid,
+          title: exercise.titre,
+          indice: exercise.numeroExercice as number,
+          state: 'done',
+          alea: exercise.seed,
+          answers: getCapytaleSerializableAnswers(exercise.answers),
+          numberOfPoints,
+          numberOfQuestions,
+          bestScore,
+          checkSum: exercise.checkSum,
+        }
+        return l
+      })
+    }
+
+    if ($globalOptions.recorder === 'moodle') {
+      const url = new URL(window.location.href)
+      const iframe = url.searchParams.get('iframe')
+      console.info({
+        resultsByExercice: $resultsByExercice,
+        action: 'mathalea:score',
+        iframe,
+      })
+      window.parent.postMessage(
+        {
+          resultsByExercice: $resultsByExercice,
+          action: 'mathalea:score',
+          iframe,
+        },
+        '*',
+      )
+    } else if ($globalOptions.recorder === 'capytale') {
+      if (buttonScore?.dataset.capytaleLoadAnswers === '1') {
+        console.info(
+          'Les réponses ont été chargées par Capytale donc on ne les renvoie pas à nouveau',
+        )
+        return
+      }
+      if (isThisTryBetter) {
+        sendToCapytaleSaveStudentAssignment({
+          indiceExercice: exerciseIndex,
+        })
+      }
+    }
+  }
+
+  /**
+   * Vérifie une question (sans enregistrer le score) et mémorise son résultat.
+   * Les champs de la question sont verrouillés par sa vérification.
+   */
+  function verifieUneQuestion(questionIndex: number) {
+    if (questionsChecked[questionIndex]) return
+    if (!isStatsTracked && exercise.isDone !== true) {
+      statsTracker(
+        exercise,
+        $globalOptions.recorder ?? '',
+        $globalOptions.v ?? '',
+        buttonScore?.dataset?.capytaleLoadAnswers === '1' ? 'review' : '',
+      )
+      isStatsTracked = true
+    }
+    exercise.answers ??= {}
+    const result = verifQuestionExercice(exercise, questionIndex)
+    questionsScore[questionIndex] = result?.score ?? {
+      nbBonnesReponses: 0,
+      nbReponses: 0,
+    }
+    questionsIsOk[questionIndex] = result?.isOk ?? false
+    questionsChecked[questionIndex] = true
+  }
+
+  /**
+   * Met à jour l'affichage après la vérification d'une ou plusieurs questions.
+   * Chaque question affiche son propre résultat (smiley, feedback, correction),
+   * mais le score de l'exercice n'est calculé, affiché et transmis (onglet,
+   * Moodle, Capytale) que lorsque toutes les questions sont vérifiées : c'est
+   * alors l'équivalent du bouton unique de l'exercice.
+   */
+  function metsAJourApresVerificationParQuestion() {
+    questionsChecked = [...questionsChecked]
+    questionsScore = [...questionsScore]
+    questionsIsOk = [...questionsIsOk]
+    if (!areAllQuestionsChecked(questionsChecked)) return
+    let nbBonnesReponses = 0
+    let nbReponsesTotal = 0
+    for (const score of questionsScore) {
+      if (score == null) continue
+      nbBonnesReponses += score.nbBonnesReponses
+      nbReponsesTotal += score.nbReponses
+    }
+    const { numberOfPoints, numberOfQuestions } = afficheScore(
+      exercise,
+      nbBonnesReponses,
+      nbReponsesTotal - nbBonnesReponses,
+      divScore,
+    )
+    exercise.isDone = true
+    if ($globalOptions.isSolutionAccessible) isCorrectVisible = true
+    enregistreScore(numberOfPoints, numberOfQuestions)
+  }
+
+  /** Bouton « Vérifier » d'une question (option `isCheckPerQuestion`) */
+  function verifQuestionVueEleve(questionIndex: number) {
+    if (exercise.numeroExercice == null || questionsChecked[questionIndex])
+      return
+    if (
+      !questionsUniteSignalee[questionIndex] &&
+      exerciceAUneUniteManquante(exercise, questionIndex)
+    ) {
+      questionsUniteSignalee[questionIndex] = true
+      const divAlerte = document.getElementById(
+        `alerteUniteEx${exerciseIndex}Q${questionIndex}`,
+      ) as HTMLDivElement | null
+      afficheAlerteUniteManquante(divAlerte ?? undefined)
+      return
+    }
+    verifieUneQuestion(questionIndex)
+    metsAJourApresVerificationParQuestion()
+  }
+
   async function verifExerciceVueEleve() {
     log('verifExerciceVueEleve')
     exercise.nbTentativesVerification =
       (exercise.nbTentativesVerification ?? 0) + 1
-    if (
-      exercise.nbTentativesVerification === 1 &&
-      exerciceAUneUniteManquante(exercise)
-    ) {
+    // Avec la vérification question par question, seules les questions
+    // restantes comptent : les autres ont déjà été corrigées.
+    const isUniteManquante = isCheckPerQuestion
+      ? exercise.autoCorrection.some(
+          (autoCorrection, i) =>
+            autoCorrection != null &&
+            !questionsChecked[i] &&
+            exerciceAUneUniteManquante(exercise, i),
+        )
+      : exerciceAUneUniteManquante(exercise)
+    if (exercise.nbTentativesVerification === 1 && isUniteManquante) {
       afficheAlerteUniteManquante(divScore)
+      return
+    }
+    if (isCheckPerQuestion) {
+      // Bouton « Tout vérifier » : on vérifie les questions restantes
+      if (exercise.numeroExercice == null) return
+      for (let i = 0; i < exercise.autoCorrection.length; i++) {
+        if (exercise.autoCorrection[i] != null) verifieUneQuestion(i)
+      }
+      metsAJourApresVerificationParQuestion()
       return
     }
     if (exercise.numeroExercice != null && !(exercise.isDone === true))
@@ -532,103 +786,15 @@
     exercise.isDone = true
 
     if (exercise.numeroExercice != null) {
-      const previousBestScore = interfaceParams?.bestScore ?? 0
       const { numberOfPoints, numberOfQuestions, perQuestionIsOk } =
         exerciceInteractif(exercise, divScore, buttonScore)
       questionsIsOk = perQuestionIsOk
-      const isThisTryBetter = numberOfPoints >= previousBestScore
-      if (
-        buttonScore.dataset.capytaleLoadAnswers === '1' &&
-        previousBestScore !== numberOfPoints
-      ) {
-        // ICI les réponses ont été chargées par Capytale et
-        //  le score ne peut pas être inferieur à best score,
-        //  car c'est de la restitution de la meilleure copie
-        // donc si on est ici dans ce IF, c'est un bug du moteur à faire vite remonter
-        const newStudentAssignement = get(capytaleStudentAssignment) || []
-        const previousResultatByExercice =
-          newStudentAssignement[exercise.numeroExercice as number]
-        if (exercise?.checkSum !== previousResultatByExercice?.checkSum) {
-          window.notify(
-            `Exercice ${exercise.numeroExercice} a changé, passé de ${previousBestScore} à ${numberOfPoints}. Checksum différent avant ${previousResultatByExercice?.checkSum} et maintenant ${exercise?.checkSum}.`,
-            {
-              exo: exercise,
-              globalOptions: get(globalOptions),
-              exercicesParams: get(exercicesParams),
-              resultsByExercice: get(resultsByExercice),
-            },
-          )
-        }
-
-        window.notify(
-          `Le score de l'exercice ${exercise.numeroExercice} est incorrect, checksum(${exercise?.checkSum === previousResultatByExercice?.checkSum}), passé de ${previousBestScore} à ${numberOfPoints}. Merci de le signaler au support.`,
-          {
-            exo: exercise,
-            globalOptions: get(globalOptions),
-            exercicesParams: get(exercicesParams),
-            resultsByExercice: get(resultsByExercice),
-          },
-        )
-      }
-
-      let bestScore = previousBestScore
-      // On ne met à jour resultsByExercice que si le score est meilleur
-      if (isThisTryBetter) {
-        bestScore = numberOfPoints
-        exercicesParams.update((l: InterfaceParams[]) => {
-          l[exercise.numeroExercice as number].bestScore = bestScore
-          return l
-        })
-        resultsByExercice.update((l: InterfaceResultExercice[]) => {
-          l[exercise.numeroExercice as number] = {
-            uuid: exercise.uuid,
-            title: exercise.titre,
-            indice: exercise.numeroExercice as number,
-            state: 'done',
-            alea: exercise.seed,
-            answers: getCapytaleSerializableAnswers(exercise.answers),
-            numberOfPoints,
-            numberOfQuestions,
-            bestScore,
-            checkSum: exercise.checkSum,
-          }
-          return l
-        })
-      }
 
       if ($globalOptions.isSolutionAccessible) {
         isCorrectVisible = true
       }
 
-      if ($globalOptions.recorder === 'moodle') {
-        const url = new URL(window.location.href)
-        const iframe = url.searchParams.get('iframe')
-        console.info({
-          resultsByExercice: $resultsByExercice,
-          action: 'mathalea:score',
-          iframe,
-        })
-        window.parent.postMessage(
-          {
-            resultsByExercice: $resultsByExercice,
-            action: 'mathalea:score',
-            iframe,
-          },
-          '*',
-        )
-      } else if ($globalOptions.recorder === 'capytale') {
-        if (buttonScore.dataset.capytaleLoadAnswers === '1') {
-          console.info(
-            'Les réponses ont été chargées par Capytale donc on ne les renvoie pas à nouveau',
-          )
-          return
-        }
-        if (isThisTryBetter) {
-          sendToCapytaleSaveStudentAssignment({
-            indiceExercice: exerciseIndex,
-          })
-        }
-      }
+      enregistreScore(numberOfPoints, numberOfQuestions)
     }
   }
 
@@ -850,16 +1016,25 @@
                 {exercise}
                 {questionIndex}
                 {exerciseIndex}
-                isCorrectionVisible={isCorrectVisible}
+                isCorrectionVisible={isCorrectVisible ||
+                  ($globalOptions.isSolutionAccessible === true &&
+                    questionsChecked[questionIndex] === true)}
                 isQuestionCorrect={questionsIsOk[questionIndex]}
                 hideCorrectionOnSuccess={$globalOptions.isCorrectionOnlyOnError}
+                isCheckable={isCheckPerQuestion &&
+                  exercise.autoCorrection[questionIndex] != null}
+                isChecked={questionsChecked[questionIndex] === true}
+                score={questionsScore[questionIndex]}
+                onCheck={() => verifQuestionVueEleve(questionIndex)}
+                isCheckButtonHidden={$globalOptions.recorder === 'flowmath' &&
+                  !boutonValidationUrlFlag}
               />
             {/each}
             <div bind:this={divScore} id="divScoreEx{exerciseIndex}"></div>
           </ul>
         </div>
       </article>
-      {#if isInteractif && !isCorrectVisible}
+      {#if isInteractif && !isCorrectVisible && !isAllChecked}
         <button
           type="submit"
           bind:this={buttonScore}
@@ -879,7 +1054,11 @@
           hidden={usesHostActivityProtocol($globalOptions.recorder) &&
             !boutonValidationUrlFlag}
         >
-          Vérifier {numberOfAnswerFields > 1 ? 'les réponses' : 'la réponse'}
+          {#if isCheckPerQuestion}
+            Tout vérifier
+          {:else}
+            Vérifier {numberOfAnswerFields > 1 ? 'les réponses' : 'la réponse'}
+          {/if}
         </button>
       {:else if !exercise.interactifReady && !isCorrectVisible && $globalOptions.isSolutionAccessible && $globalOptions.recorder === undefined && $globalOptions.presMode !== 'recto' && $globalOptions.presMode !== 'verso' && exercise.listeQuestions.length > 0}
         <p

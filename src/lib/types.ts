@@ -52,6 +52,8 @@ export interface InterfaceGlobalOptions {
   calculatricesForcees?: CalculatricesForcees
   isSolutionAccessible?: boolean
   isCorrectionOnlyOnError?: boolean
+  /** Vue élève : chaque question d'un exercice interactif a son propre bouton « Vérifier » */
+  isCheckPerQuestion?: boolean
   isTitleDisplayed?: boolean
   isReferenceDisplayed?: boolean
   isInteractiveFree?: boolean

@@ -27,4 +27,8 @@ export const optionsKatex = {
     'option',
     'math-field',
   ],
+  // Les zones d'interface gérées par Svelte (ex : bouton « Vérifier » et score
+  // d'une question) portent cette classe : l'auto-render remplacerait sinon les
+  // nœuds texte vides qui servent d'ancres aux blocs `{#if}` et détruirait leur contenu.
+  ignoredClasses: ['katex-ignore'],
 }
