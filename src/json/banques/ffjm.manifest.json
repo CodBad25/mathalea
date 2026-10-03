@@ -110,8 +110,11 @@
       ],
       "etoiles": 2,
       "png": "png/appartenance-triple.png",
+      "pngCor": "png/appartenance-triple_cor.png",
       "typ": "typ/appartenance-triple.typ",
-      "tex": "tex/appartenance-triple.tex"
+      "typCor": "typ/appartenance-triple_cor.typ",
+      "tex": "tex/appartenance-triple.tex",
+      "texCor": "tex/appartenance-triple_cor.tex"
     },
     {
       "id": "mur-de-couleur",
@@ -1384,7 +1387,9 @@
       "png": "png/histoire-de-famille.png",
       "pngCor": "png/histoire-de-famille_cor.png",
       "typ": "typ/histoire-de-famille.typ",
-      "typCor": "typ/histoire-de-famille_cor.typ"
+      "typCor": "typ/histoire-de-famille_cor.typ",
+      "tex": "tex/histoire-de-famille.tex",
+      "texCor": "tex/histoire-de-famille_cor.tex"
     },
     {
       "id": "images-de-mathilde",
