@@ -30,6 +30,7 @@ export default class DeveloppementNiveau1 extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
     this.versionQcmDisponible = true
     this.optionsChampTexte = { texteAvant: '<br>$A=$' }
   }
