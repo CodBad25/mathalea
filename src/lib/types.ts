@@ -71,6 +71,10 @@ export interface InterfaceGlobalOptions {
   canI?: boolean
   /** no chrono : course aux nombres sans chronomètre */
   canNC?: boolean
+  /** durée par question en secondes : chronomètre par question plutôt que global */
+  canQ?: number
+  /** feedback après chaque question (« FeedBack ») */
+  canFB?: boolean
   lang?: Language
   subject?: string // titre du quizz (vues quizzconf et quizz)
   quizzParam?: string // paramètres du quizz encodés en base64 (vues quizzconf et quizz)

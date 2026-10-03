@@ -694,6 +694,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let canSolMode = 'gathered'
   let canIsInteractive = true
   let canIsTimerDisabled = false
+  let canSecondsPerQuestion: number | undefined
+  let canFeedbackEach = false
   try {
     url = new URL(urlString)
   } catch (error) {
@@ -848,6 +850,13 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         canIsInteractive = entry[1] === '1'
       } else if (entry[0] === 'canNC') {
         canIsTimerDisabled = entry[1] === '1'
+      } else if (entry[0] === 'canQ') {
+        const seconds = parseInt(entry[1])
+        if (Number.isFinite(seconds) && seconds > 0) {
+          canSecondsPerQuestion = seconds
+        }
+      } else if (entry[0] === 'canFB') {
+        canFeedbackEach = entry[1] === '1'
       }
 
       if (entry[0] === 'uuid') previousEntryWasUuid = true
@@ -900,6 +909,11 @@ export function mathaleaUpdateExercicesParamsFromUrl(
       e.title = canMainTitle
       e.isInteractive = canIsInteractive
       e.isTimerDisabled = canIsTimerDisabled
+      e.timerMode = canSecondsPerQuestion === undefined ? 'global' : 'question'
+      if (canSecondsPerQuestion !== undefined) {
+        e.durationPerQuestionInSeconds = canSecondsPerQuestion
+      }
+      e.feedbackMode = canFeedbackEach ? 'each' : 'end'
       e.solutionsAccess = canSolAccess
       if (canSolMode === 'gathered') e.solutionsMode = 'gathered'
       else e.solutionsMode = 'split'

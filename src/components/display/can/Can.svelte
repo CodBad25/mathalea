@@ -83,6 +83,12 @@
   let indiceQuestionInExercice: number[] = []
   let resultsByQuestion: QuestionResult[] = []
   let answers: string[] = []
+  // Réponses déjà corrigées (feedback après chaque question) : la correction
+  // finale ne les revérifie pas, sinon le score serait compté deux fois.
+  let checkedQuestions: boolean[] = []
+  let answersType: AnswerType[] = []
+  // Une nouvelle tentative (Capytale) doit pouvoir être corrigée à nouveau
+  $: if (state === 'race') checkedQuestions = []
   let recordedTimeInSeconds: number
   let unavailableMessage = ''
 
@@ -198,7 +204,9 @@
       type,
       index: displayQuestionIndex,
       answers,
-      answerTxt: answerTxt.includes('apiGeomVersion') ? 'Voir figure' : answerTxt,
+      answerTxt: answerTxt.includes('apiGeomVersion')
+        ? 'Voir figure'
+        : answerTxt,
     }
   }
 
@@ -341,6 +349,7 @@
     indiceExercice = [...splitResults.indiceExercice]
     indiceQuestionInExercice = [...splitResults.indiceQuestionInExercice]
     $canOptions.questionGetAnswer = questions.map(() => false)
+    checkedQuestions = []
   }
 
   function forceUpdate() {
@@ -359,6 +368,119 @@
   }
 
   /**
+   * Corrige la question `i` à partir de ce qui est saisi dans le DOM et
+   * alimente `answers`, `answersType` et `resultsByQuestion`.
+   */
+  function checkQuestion(i: number) {
+    if (checkedQuestions[i]) return
+    checkedQuestions[i] = true
+    const exercice = exercises[indiceExercice[i]]
+    const type =
+      exercice.autoCorrection?.[indiceQuestionInExercice[i]]
+        ?.formatInteractif ?? 'mathlive'
+    const customElementType =
+      interactivityTypeToCustomElementFormat(type) ?? type
+
+    if (type === 'custom') {
+      // si le type est `custom` on est sûr que `correctionInteractive` existe
+      // d'où le ! après `correctionInteractive`
+      if (exercice instanceof MetaExercice) {
+        const result = exercice.correctionInteractives[
+          indiceQuestionInExercice[i]
+        ](indiceQuestionInExercice[i])
+        Array.isArray(result)
+          ? (resultsByQuestion[i] = result.every((el) => typeof el === 'string')
+              ? !result.includes('KO')
+              : false)
+          : (resultsByQuestion[i] =
+              typeof result === 'string' ? result === 'OK' : result) // On prévoit le cas où un custom renvoie un DetailledQuestionResult
+      } else {
+        const result = exercice.correctionInteractive!(
+          indiceQuestionInExercice[i],
+        )
+        Array.isArray(result)
+          ? (resultsByQuestion[i] = result.every((el) => typeof el === 'string')
+              ? !result.includes('KO')
+              : false)
+          : (resultsByQuestion[i] =
+              typeof result === 'string' ? result === 'OK' : result) // On prévoit le cas où un custom renvoie un DetailledQuestionResult
+      }
+      resultsByQuestion[i] = oneResultToBoolean(resultsByQuestion[i]) // normalement il n'y en a pas besoin, mais sait-on jamais ...
+      answersType[i] = {
+        type,
+        index: i,
+        answers: collectAnswers(
+          exercice,
+          (key) =>
+            key.endsWith(
+              `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+            ) ||
+            key.startsWith(
+              `apigeomEx${indiceExercice[i]}F${indiceQuestionInExercice[i]}`,
+            ),
+        ),
+        answerTxt: '',
+      }
+      answersType[i].answerTxt = Object.keys(answersType[i].answers ?? {})
+        .filter((key: string, index: number) => index === 0)
+        .reduce((result: string, k) => {
+          result = answersType[i].answers![k]
+          return result
+        }, '')
+      answers[i] = answersType[i].answerTxt.includes('apiGeomVersion')
+        ? 'Voir figure'
+        : answersType[i].answerTxt
+    } else if (listOfCustomElements.includes(customElementType)) {
+      const liste = Array.from(mathaleaCustomElementsRegistry)
+      const [tag, elementClasse] =
+        liste.find((custom) => custom[0] === customElementType) ?? []
+      if (tag == null || elementClasse == null) {
+        throw Error(
+          "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+        )
+      }
+      const result = elementClasse.verifQuestion(
+        exercice,
+        indiceQuestionInExercice[i],
+      )
+      if (
+        result == null ||
+        typeof result !== 'object' ||
+        !('isOk' in result) ||
+        !('score' in result)
+      ) {
+        throw Error(
+          `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
+        )
+      }
+      resultsByQuestion[i] = result.isOk
+      answersType[i] = getCanAnswerTypeForCustomElement({
+        exercice,
+        type: type as InteractivityType,
+        customElementType: tag,
+        displayQuestionIndex: i,
+        exerciceIndex: indiceExercice[i],
+        questionIndex: indiceQuestionInExercice[i],
+      })
+      answers[i] = answersType[i].answerTxt
+    } else {
+      answersType[i] = {
+        type: 'mathlive',
+        index: i,
+        answers: collectAnswers(exercice, (key) =>
+          key.endsWith(`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`),
+        ),
+        answerTxt: '',
+      }
+    }
+    // Pour Capytale, on a besoin du score de l'exercice et non de la question
+    // donc on sauvegarde le score dans l'exercice
+    if (resultsByQuestion[i] && exercice.score !== undefined) {
+      exercice.score++
+    }
+  }
+
+  /**
    * Corrige les réponses présentes dans le DOM et alimente `answers` et
    * `resultsByQuestion`.
    * @param record `false` lors de la relecture d'une copie déjà enregistrée :
@@ -369,116 +491,8 @@
     if (record) {
       statsCanTracker($globalOptions.recorder ?? '', $globalOptions.v ?? '')
     }
-    const answersType: AnswerType[] = []
     for (let i = 0; i < questions.length; i++) {
-      const exercice = exercises[indiceExercice[i]]
-      const type =
-        exercice.autoCorrection?.[indiceQuestionInExercice[i]]
-          ?.formatInteractif ?? 'mathlive'
-      const customElementType =
-        interactivityTypeToCustomElementFormat(type) ?? type
-
-      if (type === 'custom') {
-        // si le type est `custom` on est sûr que `correctionInteractive` existe
-        // d'où le ! après `correctionInteractive`
-        if (exercice instanceof MetaExercice) {
-          const result = exercice.correctionInteractives[
-            indiceQuestionInExercice[i]
-          ](indiceQuestionInExercice[i])
-          Array.isArray(result)
-            ? (resultsByQuestion[i] = result.every(
-                (el) => typeof el === 'string',
-              )
-                ? !result.includes('KO')
-                : false)
-            : (resultsByQuestion[i] =
-                typeof result === 'string' ? result === 'OK' : result) // On prévoit le cas où un custom renvoie un DetailledQuestionResult
-        } else {
-          const result = exercice.correctionInteractive!(
-            indiceQuestionInExercice[i],
-          )
-          Array.isArray(result)
-            ? (resultsByQuestion[i] = result.every(
-                (el) => typeof el === 'string',
-              )
-                ? !result.includes('KO')
-                : false)
-            : (resultsByQuestion[i] =
-                typeof result === 'string' ? result === 'OK' : result) // On prévoit le cas où un custom renvoie un DetailledQuestionResult
-        }
-        resultsByQuestion[i] = oneResultToBoolean(resultsByQuestion[i]) // normalement il n'y en a pas besoin, mais sait-on jamais ...
-        answersType[i] = {
-          type,
-          index: i,
-          answers: collectAnswers(
-            exercice,
-            (key) =>
-              key.endsWith(
-                `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-              ) ||
-              key.startsWith(
-                `apigeomEx${indiceExercice[i]}F${indiceQuestionInExercice[i]}`,
-              ),
-          ),
-          answerTxt: '',
-        }
-        answersType[i].answerTxt = Object.keys(answersType[i].answers ?? {})
-          .filter((key: string, index: number) => index === 0)
-          .reduce((result: string, k) => {
-            result = answersType[i].answers![k]
-            return result
-          }, '')
-        answers[i] = answersType[i].answerTxt.includes('apiGeomVersion')
-          ? 'Voir figure'
-          : answersType[i].answerTxt
-      } else if (listOfCustomElements.includes(customElementType)) {
-        const liste = Array.from(mathaleaCustomElementsRegistry)
-        const [tag, elementClasse] =
-          liste.find((custom) => custom[0] === customElementType) ?? []
-        if (tag == null || elementClasse == null) {
-          throw Error(
-            "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
-          )
-        }
-        const result = elementClasse.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        )
-        if (
-          result == null ||
-          typeof result !== 'object' ||
-          !('isOk' in result) ||
-          !('score' in result)
-        ) {
-          throw Error(
-            `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
-          )
-        }
-        resultsByQuestion[i] = result.isOk
-        answersType[i] = getCanAnswerTypeForCustomElement({
-          exercice,
-          type: type as InteractivityType,
-          customElementType: tag,
-          displayQuestionIndex: i,
-          exerciceIndex: indiceExercice[i],
-          questionIndex: indiceQuestionInExercice[i],
-        })
-        answers[i] = answersType[i].answerTxt
-      } else {
-        answersType[i] = {
-          type: 'mathlive',
-          index: i,
-          answers: collectAnswers(exercice, (key) =>
-            key.endsWith(`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`),
-          ),
-          answerTxt: '',
-        }
-      }
-      // Pour Capytale, on a besoin du score de l'exercice et non de la question
-      // donc on sauvegarde le score dans l'exercice
-      if (resultsByQuestion[i] && exercice.score !== undefined) {
-        exercice.score++
-      }
+      checkQuestion(i)
     }
 
     // Désactiver l'interactivité avant l'affichage des solutions
@@ -500,10 +514,7 @@
           numberOfQuestions: 1,
           bestScore: resultsByQuestion[ind] ? 1 : 0,
           resultsByQuestion: [resultsByQuestion[ind]],
-          duration: Math.floor(
-            $canOptions.durationInMinutes * 60 -
-              $canOptions.remainingTimeInSeconds,
-          ),
+          duration: getDuration(),
         }
         ind++
         resultsByExerciceArray.push(quest)
@@ -551,9 +562,19 @@
     }
   }
 
+  /**
+   * Durée totale prévue : celle de la course, ou la somme des durées de chaque
+   * question avec un chronomètre par question.
+   */
+  function getTotalDurationInSeconds(): number {
+    return $canOptions.timerMode === 'question'
+      ? $canOptions.durationPerQuestionInSeconds * questions.length
+      : $canOptions.durationInMinutes * 60
+  }
+
   function getDuration(): number {
     return Math.floor(
-      $canOptions.durationInMinutes * 60 - $canOptions.remainingTimeInSeconds,
+      getTotalDurationInSeconds() - $canOptions.remainingTimeInSeconds,
     )
   }
 
@@ -592,9 +613,7 @@
    * Construit la chaîne MM:SS qui sera affichée pour le temps mis à faire la course
    */
   function buildTime(): string {
-    const nbOfSeconds =
-      recordedTimeInSeconds ||
-      $canOptions.durationInMinutes * 60 - $canOptions.remainingTimeInSeconds
+    const nbOfSeconds = recordedTimeInSeconds || getDuration()
     const time = millisecondToMinSec(nbOfSeconds * 1000)
     return [
       time.minutes.toString().padStart(2, '0'),
@@ -669,14 +688,18 @@
     </KickOff>
   {/if}
   {#if state === 'countdown'}
-    <CountDown bind:state />
+    <CountDown bind:state count={3} />
   {/if}
   {#if state === 'race'}
     <Race
-      numberOfSeconds={$canOptions.durationInMinutes * 60}
+      numberOfSeconds={getTotalDurationInSeconds()}
       bind:state
       {questions}
       {consignes}
+      {corrections}
+      {consignesCorrections}
+      {resultsByQuestion}
+      {checkQuestion}
       {checkAnswers}
     />
   {/if}
@@ -697,8 +720,10 @@
   {/if}
   <div class="fixed flex flex-row items-center space-x-2 bottom-2 right-2">
     <!-- Pas de recorder (Capytale, Moodle…) : on propose à l'enseignant de
-    revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice. -->
-    {#if $globalOptions.recorder == null}
+    revenir à la vue prof, comme le fait déjà la bannière Myriade / Indice,
+    mais seulement tout à la fin (corrections, ou écran de fin si l'élève n'a
+    pas accès aux solutions) pour ne pas interrompre la course. -->
+    {#if $globalOptions.recorder == null && (state === 'solutions' || (state === 'end' && !$canOptions.solutionsAccess))}
       <BtnRetourReglages class="text-2xl" tooltipPosition="top" />
     {/if}
     <!-- Dans Moodle, l'iframe est à l'étroit dans la page du cours -->

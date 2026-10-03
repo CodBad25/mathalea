@@ -12,6 +12,18 @@
   export let handleEndOfRace: () => void
   export let state: CanState
   export let resultsByQuestion: QuestionResult[]
+  /**
+   * Navigation linéaire (chronomètre par question ou feedback après chaque
+   * question) : plus de flèches ni de balayage, un seul bouton fait avancer.
+   */
+  export let isLinear: boolean = false
+  export let primaryLabel: string = ''
+  export let onPrimary: () => void = () => {}
+  /**
+   * Bouton de fin de course affiché à la dernière question. Avec un feedback
+   * après chaque question, le bouton principal joue déjà ce rôle.
+   */
+  export let showEndButton: boolean = true
 
   let isModalOpen = false
 
@@ -36,6 +48,7 @@
     }
 
     function handleTouchEnd(event: TouchEvent) {
+      if (isLinear) return
       const touchEndX = event.changedTouches[0].clientX
       const touchEndY = event.changedTouches[0].clientY
       const touchEndTime = Date.now()
@@ -69,100 +82,117 @@
     }
   }
 
+  // Le bouton de fin de course n'apparaît qu'à la dernière question : il
+  // reste inactif les 5 premières secondes de la course (clic accidentel).
+  let isEndButtonEnabled = false
   onMount(() => {
-    setTimeout(() => {
-      const endButtonDiv = document.getElementById('race-ended-by-user-btn')
-      if (endButtonDiv) {
-        endButtonDiv.removeAttribute('disabled')
-      }
+    const timeout = setTimeout(() => {
+      isEndButtonEnabled = true
     }, 5 * 1000)
+    return () => clearTimeout(timeout)
   })
 </script>
 
 <div
   use:swipe
-  class="w-full pb-8 md:pb-10 px-10 space-y-4 flex flex-col md:flex-row justify-start md:justify-between items-center"
+  class="w-full pb-8 md:pb-10 px-10 space-y-4 flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] items-center"
 >
-  <div class="w-50"></div>
-  <div class="flex flex-row space-x-10">
-    <button
-      class="md:hidden flex justify-center items-center"
-      type="button"
-      aria-label="Reculer de 10 questions"
-      on:click={() => {
-        if (current >= 10) {
-          current -= 10
-        }
-      }}
-    >
-      <i
-        class="bx bxs-chevrons-left text-3xl md:text-7xl
+  <div></div>
+  {#if isLinear}
+    <div class="flex flex-row items-center space-x-10">
+      <ShortPagination {current} {state} {resultsByQuestion} />
+      {#if primaryLabel !== ''}
+        <button
+          id="can-primary-btn"
+          type="button"
+          class="inline-block p-3 md:p-5 font-bold rounded-lg text-lg md:text-3xl leading-normal text-coopmaths-canvas dark:text-coopmathsdark-canvas transition duration-150 ease-in-out bg-coopmaths-action hover:bg-coopmaths-action-lightest focus:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none focus:ring-0 active:bg-coopmaths-action-light dark:active:bg-coopmathsdark-action-light"
+          on:click={onPrimary}
+        >
+          {primaryLabel}
+        </button>
+      {/if}
+    </div>
+  {:else}
+    <div class="flex flex-row space-x-10">
+      <button
+        class="md:hidden flex justify-center items-center"
+        type="button"
+        aria-label="Reculer de 10 questions"
+        on:click={() => {
+          if (current >= 10) {
+            current -= 10
+          }
+        }}
+      >
+        <i
+          class="bx bxs-chevrons-left text-3xl md:text-7xl
             {current < 10
-          ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
-          : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
-      ></i>
-    </button>
-    <button
-      type="button"
-      aria-label="Question précédente"
-      on:click={() => {
-        if (current > 0) {
-          current -= 1
-        }
-      }}
-    >
-      <i
-        class="bx bxs-chevron-left md:bxs-left-arrow text-3xl md:text-7xl
+            ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
+            : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
+        ></i>
+      </button>
+      <button
+        type="button"
+        aria-label="Question précédente"
+        on:click={() => {
+          if (current > 0) {
+            current -= 1
+          }
+        }}
+      >
+        <i
+          class="bx bxs-chevron-left md:bxs-left-arrow text-3xl md:text-7xl
             {current === 0
-          ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
-          : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
-      ></i>
-    </button>
-    <ShortPagination {current} {state} {resultsByQuestion} />
-    <button
-      type="button"
-      aria-label="Question suivante"
-      on:click={() => {
-        if (current < numberOfQuestions - 1) {
-          current += 1
-        }
-      }}
-    >
-      <i
-        class="bx bxs-chevron-right md:bxs-right-arrow text-3xl md:text-7xl
+            ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
+            : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
+        ></i>
+      </button>
+      <ShortPagination {current} {state} {resultsByQuestion} />
+      <button
+        type="button"
+        aria-label="Question suivante"
+        on:click={() => {
+          if (current < numberOfQuestions - 1) {
+            current += 1
+          }
+        }}
+      >
+        <i
+          class="bx bxs-chevron-right md:bxs-right-arrow text-3xl md:text-7xl
             {current === numberOfQuestions - 1
-          ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
-          : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
-      ></i>
-    </button>
-    <button
-      class="md:hidden flex justify-center items-center"
-      type="button"
-      aria-label="Avancer de 10 questions"
-      on:click={() => {
-        if (current + 10 <= numberOfQuestions - 1) {
-          current += 10
-        }
-      }}
-    >
-      <i
-        class="bx bxs-chevrons-right text-3xl md:text-7xl
+            ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
+            : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
+        ></i>
+      </button>
+      <button
+        class="md:hidden flex justify-center items-center"
+        type="button"
+        aria-label="Avancer de 10 questions"
+        on:click={() => {
+          if (current + 10 <= numberOfQuestions - 1) {
+            current += 10
+          }
+        }}
+      >
+        <i
+          class="bx bxs-chevrons-right text-3xl md:text-7xl
             {current > numberOfQuestions - 11
-          ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
-          : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
-      ></i>
-    </button>
-  </div>
-  <div>
-    {#if state === 'race'}
+            ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
+            : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
+        ></i>
+      </button>
+    </div>
+  {/if}
+  <div class="md:justify-self-end">
+    {#if state === 'race' && showEndButton && current === numberOfQuestions - 1}
       <button
         id="race-ended-by-user-btn"
         type="button"
         class="inline-block p-2 md:p-4 font-bold rounded-lg text-sm md:text-xl leading-normal text-coopmaths-canvas dark:text-coopmathsdark-canvas transition duration-150 ease-in-out bg-coopmaths-action hover:bg-coopmaths-action-lightest focus:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none focus:ring-0 active:bg-coopmaths-action-light dark:active:bg-coopmathsdark-action-light disabled:bg-coopmaths-action/10"
         on:click={() => (isModalOpen = true)}
-        disabled
+        disabled={!isEndButtonEnabled}
       >
-        Rendre la copie
+        Terminer et enregistrer les résultats
       </button>
     {/if}
   </div>
@@ -175,13 +205,12 @@
   >
     <div>
       Si vous cliquez sur le bouton
-      <span class="font-bold">Rendre la copie</span>
+      <span class="font-bold">Terminer et enregistrer les résultats</span>
       alors vous ne pourrez plus revenir en arrière.
     </div>
     {#if unansweredQuestionNumbers.length > 0}
       <div class="mt-4 font-bold">
-        Attention, vous n'avez pas répondu {unansweredQuestionNumbers.length >
-        1
+        Attention, vous n'avez pas répondu {unansweredQuestionNumbers.length > 1
           ? 'aux questions'
           : 'à la question'}
         {enumeration(unansweredQuestionNumbers.map(String))}.
@@ -205,7 +234,7 @@
         isModalOpen = false
       }}
     >
-      Rendre la copie
+      Terminer et enregistrer les résultats
     </button>
   </div>
 </BasicClassicModal>

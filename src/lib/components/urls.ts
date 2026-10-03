@@ -207,6 +207,15 @@ export function buildMathAleaURL(options: {
     if (can.isTimerDisabled) {
       url.addParam('canNC', '1')
     }
+    // Idem pour le chronomètre par question (`canQ`, en secondes) et le
+    // feedback après chaque question (`canFB`) : absents, on retrouve le
+    // comportement historique (chronomètre global, feedback à la fin).
+    if (can.timerMode === 'question') {
+      url.addParam('canQ', can.durationPerQuestionInSeconds.toString())
+    }
+    if (can.feedbackMode === 'each') {
+      url.addParam('canFB', '1')
+    }
   } else if (options.view === 'diaporama') {
     url.addParam('ds', buildDsParams())
     if (
