@@ -35,6 +35,12 @@ function loadUrl(url: string): Promise<void> {
   })
 }
 
+// Champs ayant déjà reçu les écouteurs anonymes de `loadMathLive()` : certains
+// composants (vue CAN, une question par page) l'appellent à chaque montage sur
+// tout le document, et un écouteur anonyme n'est pas dédoublonné par le
+// navigateur (un ^ saisi serait alors interprété autant de fois que d'appels).
+const mathfieldsWithListeners = new WeakSet<MathfieldElement>()
+
 let hasGlobalTabTracker = false
 let lastTabDirection: 'backward' | 'forward' | null = null
 let lastTabTimestamp = 0
@@ -321,11 +327,22 @@ export async function loadMathLive(divExercice?: HTMLElement) {
           mf.addEventListener('focus', handleFocusMathField)
           mf.addEventListener('focusout', handleFocusOutMathField)
         }
-        mf.addEventListener(
-          'keydown',
-          (event) => handleMathfieldPowerKeydown(event, mf),
-          true,
-        )
+        if (!mathfieldsWithListeners.has(mf)) {
+          mathfieldsWithListeners.add(mf)
+          mf.addEventListener(
+            'keydown',
+            (event) => handleMathfieldPowerKeydown(event, mf),
+            true,
+          )
+          mf.addEventListener('input', () => {
+            const content = mf.getValue()
+            // Remplace les espaces consécutifs par un seul espace
+            const filteredContent = content.replaceAll('\\,\\,', '\\,')
+            if (filteredContent !== content) {
+              mf.setValue(filteredContent)
+            }
+          })
+        }
         if (mf.classList.contains('fillInTheBlanks')) {
           mf.addEventListener(
             'pointerdown',
@@ -344,14 +361,6 @@ export async function loadMathLive(divExercice?: HTMLElement) {
           )
           mf.addEventListener('keydown', handleFillInTheBlanksKeydown, true)
         }
-        mf.addEventListener('input', () => {
-          const content = mf.getValue()
-          // Remplace les espaces consécutifs par un seul espace
-          const filteredContent = content.replaceAll('\\,\\,', '\\,')
-          if (filteredContent !== content) {
-            mf.setValue(filteredContent)
-          }
-        })
         if (mf.getAttribute('data-space') === 'true') {
           mf.mathModeSpace = '\\,'
         }
