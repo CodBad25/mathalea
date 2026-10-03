@@ -73,6 +73,13 @@ vi.mock('../../../../src/lib/renderScratch', () => ({
   renderScratch: vi.fn(() => 'mocked value'),
 }))
 
+// Sous Node, mathlive se résout vers sa version SSR qui n'exporte pas renderMathInElement
+// (appelé par ListeDeroulanteElement) : on le remplace par une fonction sans effet.
+vi.mock('mathlive', async (original) => ({
+  ...(await original<Record<string, unknown>>()),
+  renderMathInElement: vi.fn(),
+}))
+
 vi.mock('apigeom', async (original) => {
   const real = await original()
 
