@@ -36,6 +36,7 @@ export default class Auto1AC8a extends ExerciceSimple {
       texteAvant: '<br>',
       dataKeys: ['x', 'POW'],
     }
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
     this.versionQcmDisponible = true
     this.versionQcm = false
   }
@@ -49,15 +50,14 @@ export default class Auto1AC8a extends ExerciceSimple {
     this.correction = donnees.correction
     if (this.versionQcm) {
       this.consigne = ''
-      this.question = `${donnees.situation}<br>Le résultat est égal à :`
+      this.question = `${donnees.situation}<br>Choisir le résultat correct.`
       this.reponse = `$${donnees.reponseQcm ?? donnees.reponse}$`
       this.distracteurs = donnees.distracteurs.map(
         (distracteur) => `$${distracteur}$`,
       )
     } else {
-      this.consigne =
-        'Écrire une expression littérale réduite correspondant à la situation suivante :'
-      this.question = donnees.situation
+      this.consigne = ''
+      this.question = `${donnees.situation}<br>Écrire une expression littérale réduite correspondant à cette situation.`
       this.reponse = donnees.reponse
     }
   }
