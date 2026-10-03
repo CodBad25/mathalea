@@ -73,10 +73,18 @@ export default class auto1AC5a extends ExerciceSimple {
       this.distracteurs = distracteurs.map((d) => `$${d}$`)
     } else if (cas === 3) {
       this.question = `Donner un ordre de grandeur de $${expression}$ sous la forme d'un nombre entier.`
+      this.optionsChampTexte = {
+        texteAvant: `<br>Un ordre de grandeur de $${expression}$ est `,
+        texteApres: '.',
+      }
       this.optionsDeComparaison = { nombreDecimalSeulement: true }
       this.reponse = attendu
     } else {
       this.question = `Donner un ordre de grandeur de $${expression}$ sous la forme d'une puissance de $10$.`
+      this.optionsChampTexte = {
+        texteAvant: `<br>Un ordre de grandeur de $${expression}$ est `,
+        texteApres: '.',
+      }
       this.optionsDeComparaison = { puissance: true }
       this.reponse = attendu
     }
