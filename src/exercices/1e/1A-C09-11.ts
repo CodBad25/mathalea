@@ -1,4 +1,5 @@
-import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
@@ -7,12 +8,15 @@ import {
   reduireAxPlusB,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = 'Factoriser une expression avec un facteur commun'
 export const dateDePublication = '25/08/2026'
-export const uuid = '604af'
+export const dateDeModifImportante = '03/10/2026'
+
+export const uuid = '18d0d'
 
 export const refs = {
   'fr-fr': ['1A-C09-11', '2A-C2-8'],
@@ -28,21 +32,53 @@ export const amcType = 'qcmMono'
  * Factoriser une expression de la forme (ax+b)^2-(ax+b)(cx+d).
  * @author Stéphane Guyon
  */
-export default class FactoriserFacteurCommun extends ExerciceQcmA {
-  versionAleatoire = () => {
+export default class FactoriserFacteurCommun extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.optionsDeComparaison = { unSeulFacteurLitteral: true }
+    this.compare = (saisie, reponse, options) => {
+      // Une fraction ferait passer une écriture comme x^2(-4+6/x)
+      if (/\\[dt]?frac|\\div|\//.test(saisie)) {
+        return {
+          isOk: false,
+          feedback: 'Les facteurs ne doivent pas contenir de fraction.',
+        }
+      }
+      return fonctionComparaison(saisie, reponse, options)
+    }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
+    let a: number
+    let b: number
+    let c: number
+    let d: number
+    let facteurCommun: string
+    let secondFacteur: string
+    let differenceCorrecte: string
+    let bonneReponse: string
+    let distracteurs: string[]
     let compteur = 0
     do {
-      const a = randint(-6, 6, 0)
-      const b = randint(-9, 9, 0)
-      const c = randint(-6, 6, [0, a])
-      const d = randint(-9, 9, [0, b, -b])
+      a = randint(-6, 6, 0)
+      b = randint(-9, 9, 0)
+      c = randint(-6, 6, [0, a])
+      d = randint(-9, 9, [0, b, -b])
 
-      const facteurCommun = reduireAxPlusB(a, b)
-      const secondFacteur = reduireAxPlusB(c, d)
-      const differenceCorrecte = reduireAxPlusB(a - c, b - d)
+      facteurCommun = reduireAxPlusB(a, b)
+      secondFacteur = reduireAxPlusB(c, d)
+      differenceCorrecte = reduireAxPlusB(a - c, b - d)
       const differenceAvecErreurImposee = reduireAxPlusB(a - c, b + d)
 
-      const bonneReponse = `\\left(${facteurCommun}\\right)\\left(${differenceCorrecte}\\right)`
+      bonneReponse = `\\left(${facteurCommun}\\right)\\left(${differenceCorrecte}\\right)`
       // Ce distracteur doit toujours être proposé : le signe « -d » devient « +d ».
       const distracteurImpose = `\\left(${facteurCommun}\\right)\\left(${differenceAvecErreurImposee}\\right)`
 
@@ -63,11 +99,17 @@ export default class FactoriserFacteurCommun extends ExerciceQcmA {
         // Le mauvais facteur est mis en facteur.
         `\\left(${secondFacteur}\\right)\\left(${differenceCorrecte}\\right)`,
       ]).slice(0, 2)
-      const expressionInitiale = `$\\left(${facteurCommun}\\right)^2-\\left(${facteurCommun}\\right)\\left(${secondFacteur}\\right)$`
-      this.enonce = 'Soit $x$ un réel.<br>'
-      this.enonce += `Parmi ces $4$ expressions, quelle expression est une forme factorisée de ${expressionInitiale} ?`
+      distracteurs = [distracteurImpose, ...autresDistracteurs]
+      compteur++
+      // On s'assure d'avoir 4 propositions différentes, sinon on retire de nouvelles valeurs
+    } while (
+      compteur < 100 &&
+      new Set([bonneReponse, ...distracteurs]).size < 4
+    )
 
-      this.correction = `On reconnaît le facteur commun $\\left(${facteurCommun}\\right)$.<br>
+    const expressionInitiale = `$\\left(${facteurCommun}\\right)^2-\\left(${facteurCommun}\\right)\\left(${secondFacteur}\\right)$`
+
+    this.correction = `On reconnaît le facteur commun $\\left(${facteurCommun}\\right)$.<br>
       $\\begin{aligned}
       \\left(${facteurCommun}\\right)^2-\\left(${facteurCommun}\\right)\\left(${secondFacteur}\\right)
       &=\\left(${facteurCommun}\\right)\\left(${facteurCommun}\\right)-\\left(${facteurCommun}\\right)\\left(${secondFacteur}\\right)\\\\
@@ -75,21 +117,20 @@ export default class FactoriserFacteurCommun extends ExerciceQcmA {
       &=\\left(${facteurCommun}\\right)\\left[${facteurCommun}${ecritureAlgebriqueSauf1(-c)}x${ecritureAlgebrique(-d)}\\right]\\\\
       &=\\left(${facteurCommun}\\right)\\left(${differenceCorrecte}\\right).
       \\end{aligned}$<br>`
-      // this.correction += `Le signe $-$ placé devant la parenthèse change le signe de chacun de ses termes.<br>`
-      this.correction += `Une forme factorisée de ${expressionInitiale} est donc $${miseEnEvidence(bonneReponse)}$.`
+    this.correction += `Une forme factorisée de ${expressionInitiale} est donc $${miseEnEvidence(bonneReponse)}$.`
 
-      this.reponses = [
-        `$${bonneReponse}$`,
-        `$${distracteurImpose}$`,
-        ...autresDistracteurs.map((reponse) => `$${reponse}$`),
-      ]
-      compteur++
-    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
-  }
-
-  constructor() {
-    super()
-    this.besoinFormulaireCaseACocher = false
-    this.versionAleatoire()
+    if (this.versionQcm) {
+      this.question = 'Soit $x$ un réel.<br>'
+      this.question += `Parmi ces $4$ expressions, quelle expression est une forme factorisée de ${expressionInitiale} ?`
+      this.reponse = `$${bonneReponse}$`
+      this.distracteurs = distracteurs.map((distracteur) => `$${distracteur}$`)
+    } else {
+      this.question = 'Soit $x$ un réel.<br>'
+      this.question += `Factoriser ${expressionInitiale} en un produit de deux facteurs du premier degré.`
+      this.optionsChampTexte = {
+        texteAvant: `<br>$\\left(${facteurCommun}\\right)^2-\\left(${facteurCommun}\\right)\\left(${secondFacteur}\\right)=$`,
+      }
+      this.reponse = `(${facteurCommun})(${differenceCorrecte})`
+    }
   }
 }

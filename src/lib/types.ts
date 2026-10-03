@@ -303,6 +303,7 @@ export type OptionsComparaisonType = {
   exclusifFactorisation?: boolean
   nbFacteursIdentiquesFactorisation?: boolean
   unSeulFacteurLitteral?: boolean
+  facteursPremierDegre?: boolean
   nonReponseAcceptee?: boolean
   developpementEgal?: boolean
   fonction?: boolean
