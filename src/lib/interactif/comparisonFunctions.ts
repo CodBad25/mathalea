@@ -610,7 +610,9 @@ function handleIntervalle(saisie: string, answer: string): ResultType {
 
     if (localSaisie === localAnswer) return ok()
 
-    return fail(`La bonne réponse était $\\mathbb{${lettre}}\\{${valeur}\\}$.`)
+    return fail(
+      `La bonne réponse était $\\mathbb{${lettre}}\\backslash\\{${valeur}\\}$.`,
+    )
   }
 
   // ── Interval(s) with brackets (including unions / intersections) ──────
