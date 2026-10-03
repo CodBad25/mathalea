@@ -122,8 +122,8 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
     }
     this.canReponseACompleter = this.question + '$\\ldots$ ' + 'minutes'
     if (!this.interactif && !this.versionQcm)
-      this.question = this.canReponseACompleter
+      this.question = this.canReponseACompleter + '.'
     this.canEnonce = 'Compléter.'
-    this.optionsChampTexte = { texteApres: 'minutes' }
+    this.optionsChampTexte = { texteApres: 'minutes.' }
   }
 }

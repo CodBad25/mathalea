@@ -59,7 +59,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ g}$ est égal à :`
-            : `$${texNombre(a)}\\text{ g}$  =`
+            : `Compléter.<br>$${texNombre(a)}\\text{ g}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ kg}$'
           }
@@ -95,7 +95,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ kg}$ est égal à :`
-            : `$${texNombre(a)}\\text{ kg}$  = `
+            : `Compléter.<br>$${texNombre(a)}\\text{ kg}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ g}$'
           }
@@ -132,7 +132,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 100
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ m}$ est égal à :`
-            : `$${texNombre(a)}\\text{ m}$  =`
+            : `Compléter.<br>$${texNombre(a)}\\text{ m}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ cm}$'
           }
@@ -164,7 +164,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 100
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ cm}$ est égal à :`
-            : `$${texNombre(a)}\\text{ cm}$  =`
+            : `Compléter.<br>$${texNombre(a)}\\text{ cm}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ m}$'
           }
@@ -200,7 +200,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 10
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ cL}$ est égal à :`
-            : `$${texNombre(a)}\\text{ cL}$  =  `
+            : `Compléter.<br>$${texNombre(a)}\\text{ cL}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ mL}$'
           }
@@ -232,7 +232,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 10
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ mL}$ est égal à :`
-            : `$${texNombre(a)}\\text{ mL}$  = `
+            : `Compléter.<br>$${texNombre(a)}\\text{ mL}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ cL}$'
           }
@@ -268,7 +268,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ m}$ est égal à :`
-            : `$${texNombre(a)}\\text{ m}$  $=$ `
+            : `Compléter.<br>$${texNombre(a)}\\text{ m}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ km}$'
           }
@@ -301,7 +301,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ km}$ est égal à :`
-            : `$${texNombre(a)}\\text{ km}$ $=$`
+            : `Compléter.<br>$${texNombre(a)}\\text{ km}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ m}$'
           }
