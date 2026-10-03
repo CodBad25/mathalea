@@ -18,6 +18,7 @@
   import { keyboardState } from './stores/keyboardStore'
   import {
     Keyboard,
+    decoupeBlocEnLigne,
     inLineBlockWidth,
     type AlphanumericPages,
     type KeyboardBlock,
@@ -84,9 +85,13 @@
     let page: KeyboardBlock[] = [specialKeys]
     let pageWidth = largeurTouchesSpeciales
     let pageAUnBloc = false
-    const blocsDuClavier = [...usualBlocks, ...unitsBlocks].filter(
-      (block) => block !== specialKeys,
-    )
+    // Un bloc plus large que ce qui reste à côté des touches spéciales est
+    // découpé : sinon sa page déborde de l'écran et des touches sont coupées.
+    const largeurMaxBloc =
+      largeurDisponible - largeurTouchesSpeciales - espaceEntreBlocs
+    const blocsDuClavier = [...usualBlocks, ...unitsBlocks]
+      .filter((block) => block !== specialKeys)
+      .flatMap((block) => decoupeBlocEnLigne(block, mode, largeurMaxBloc))
     for (const block of blocsDuClavier) {
       const blockWidth = espaceEntreBlocs + inLineBlockWidth(block, mode)
       if (pageAUnBloc && pageWidth + blockWidth > largeurDisponible) {
