@@ -377,7 +377,7 @@ export default class DecimaleAFractionnaireBasique extends Exercice {
                   '\\dfrac{1}{%{champ1}}',
                   KeyboardType.clavierNumbers,
                 )
-              : texFractionFromString(4, '\\ldots') + '$')
+              : texFractionFromString(1, '\\ldots') + '$')
           reponse = '5'
           texteCorr += texFractionFromString(1, miseEnEvidence(reponse)) + '$'
           break
@@ -467,7 +467,7 @@ export default class DecimaleAFractionnaireBasique extends Exercice {
                   )
                 : texFractionFromString(3, '\\ldots') + '$')
             reponse = '5'
-            texteCorr += texFractionFromString(5, miseEnEvidence(reponse)) + '$'
+            texteCorr += texFractionFromString(3, miseEnEvidence(reponse)) + '$'
           } else if (k === 4) {
             texteCorr = `$${texNombre(0.8)}=`
             texte =
