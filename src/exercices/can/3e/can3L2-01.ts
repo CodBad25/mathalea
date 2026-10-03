@@ -68,6 +68,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
       false,
     ]
     this.versionQcmDisponible = true
+    this.optionsDeComparaison = { exclusifFactorisation: true }
   }
 
   nouvelleVersion() {
@@ -200,7 +201,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
         break
       case 3:
         {
-          const frac6 = `\\dfrac{${1 + a * d}}{${d}}`
+          const frac6 = fraction(1 + a * d, d).texFSD
           const frac7 = `\\dfrac{${1 + a * d}x}{${d}}`
           if (choice([true, false])) {
             this.question = this.versionQcm
@@ -244,13 +245,15 @@ export default class ReduireAvecFraction extends ExerciceSimple {
             this.question = this.versionQcm
               ? `Une simplification de $${frac10}-${rienSi1(a)}x$ est :`
               : `${enonceIntro} $${frac10}-${rienSi1(a)}x$`
+            const frac6 = fraction(1 - a * d, d).texFSD
+
             this.correction = texteCorrectionEtapes(
               [
                 `${frac10}-${rienSi1(a)}x`,
                 `${frac10}-\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}`,
                 `${frac10}-${frac8}`,
                 `\\dfrac{${1 - a * d}x}{${d}}`,
-                `\\dfrac{${1 - a * d}}{${d}}x`,
+                frac6 + 'x',
               ],
               !!this.sup,
               lettre,
@@ -263,6 +266,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
               (1 - a * d) / d + 'x',
             ]
           } else {
+            const frac7 = fraction(a * d - 1, d).texFSD
             this.question = this.versionQcm
               ? `Une simplification de $${rienSi1(a)}x-${frac10}$ est :`
               : `${enonceIntro} $${rienSi1(a)}x-${frac10}$`
@@ -272,7 +276,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
                 `\\dfrac{${rienSi1(a)}x\\times ${d}}{${d}}-${frac10}`,
                 `${frac8}-${frac10}`,
                 `\\dfrac{${a * d - 1}x}{${d}}`,
-                `\\dfrac{${a * d - 1}}{${d}}x`,
+                frac7 + 'x',
               ],
               !!this.sup,
               lettre,
