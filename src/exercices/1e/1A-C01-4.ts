@@ -179,13 +179,15 @@ export default class OrdonnerCroissant extends ExerciceSimple {
 
     const [a, b, c] = this.quotaChoice('triplet', triplets)
     const nombresTries = [a, b, c].sort((x, y) => x.val - y.val)
-    const ordreCorrect = nombresTries.map((n) => n.tex).join(' < ')
+    const ordreCorrect = nombresTries
+      .map((n) => miseEnEvidence(n.tex))
+      .join(' < ')
 
     this.correction =
       'Pour comparer ces trois nombres, on les écrit sous forme décimale :<br>' +
       [a, b, c].map((n) => this.ligneCorrection(n)).join('') +
       `On a donc : $${nombresTries.map((n) => texNombre(n.val, 3)).join(' < ')}$.<br>` +
-      `Finalement : $${miseEnEvidence(ordreCorrect)}$.`
+      `Finalement : $${ordreCorrect}$.`
 
     if (this.versionQcm) {
       this.consigne = ''
