@@ -29,8 +29,7 @@ export default class CalculComplexeFraction extends ExerciceSimple {
     this.nbQuestions = 1
     this.spacingCorr = 2
     this.optionsDeComparaison = {
-      fractionEgale: true,
-      nombreDecimalSeulement: true,
+      fractionIrreductible: true,
     }
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsChampTexte = { texteAvant: '<br>$A=$' }
@@ -45,9 +44,9 @@ export default class CalculComplexeFraction extends ExerciceSimple {
     const b = randint(1, 6, [frac1.num]) // sinon division par zéro avec les distracteurs
 
     this.question = this.versionQcm
-      ? `On considère $A=\\dfrac{${a}}{${b}-${frac1.texFraction}}$.<br>
+      ? `On considère $A=\\dfrac{${a}}{${b}-${frac1.texFraction}}$.
        $A$ est égal à  :`
-      : `Calculer $A=\\dfrac{${a}}{${b}-${frac1.texFraction}}$.`
+      : `Calculer $A=\\dfrac{${a}}{${b}-${frac1.texFraction}}$. Donner le résultat sous la forme d'une fraction irréductible ou d'un entier.`
 
     // Calculs pour la correction
     const bFraction = new FractionEtendue(b, 1) // Conversion de b en fraction
