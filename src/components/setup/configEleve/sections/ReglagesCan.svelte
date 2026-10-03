@@ -9,6 +9,9 @@
   export let canOptions: CanOptions
   export let mode: ReglagesEleveMode = 'lien'
 
+  // Sans champ de saisie, il n'y a aucune réponse à corriger
+  $: isFeedbackAvailable = mode !== 'lien' || canOptions.isInteractive
+
   $: labelClass = canOptions.isChoosen
     ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
     : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'
@@ -22,6 +25,18 @@
       Présentation
     </div>
     <div class="flex flex-col items-stretch space-y-2 px-4">
+      <FormRadio
+        title="can-timer-mode"
+        bind:valueSelected={canOptions.timerMode}
+        isDisabled={!canOptions.isChoosen || canOptions.isTimerDisabled}
+        labelsValues={[
+          { label: 'Temps global pour toute la course.', value: 'global' },
+          {
+            label: 'Temps par question (on ne peut pas revenir en arrière).',
+            value: 'question',
+          },
+        ]}
+      />
       <div class="flex flex-row items-center">
         <div
           class="w-24 shrink-0 whitespace-nowrap text-sm font-light {labelClass}"
@@ -29,23 +44,40 @@
           Durée&nbsp;:
         </div>
         <div class="flex flex-row items-center space-x-2">
-          <InputNumber
-            id="config-eleve-can-duration-input"
-            min={1}
-            max={60}
-            bind:value={canOptions.durationInMinutes}
-            isDisabled={!canOptions.isChoosen || canOptions.isTimerDisabled}
-          />
+          {#if canOptions.timerMode === 'question'}
+            <InputNumber
+              id="config-eleve-can-duration-per-question-input"
+              min={5}
+              max={600}
+              bind:value={canOptions.durationPerQuestionInSeconds}
+              isDisabled={!canOptions.isChoosen || canOptions.isTimerDisabled}
+            />
+          {:else}
+            <InputNumber
+              id="config-eleve-can-duration-input"
+              min={1}
+              max={60}
+              bind:value={canOptions.durationInMinutes}
+              isDisabled={!canOptions.isChoosen || canOptions.isTimerDisabled}
+            />
+          {/if}
           <div
             class="text-sm font-light {canOptions.isChoosen &&
             !canOptions.isTimerDisabled
               ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
               : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
           >
-            minute{canOptions.durationInMinutes !== undefined &&
-            canOptions.durationInMinutes > 1
-              ? 's'
-              : ''}.
+            {#if canOptions.timerMode === 'question'}
+              seconde{canOptions.durationPerQuestionInSeconds !== undefined &&
+              canOptions.durationPerQuestionInSeconds > 1
+                ? 's'
+                : ''} par question.
+            {:else}
+              minute{canOptions.durationInMinutes !== undefined &&
+              canOptions.durationInMinutes > 1
+                ? 's'
+                : ''}.
+            {/if}
           </div>
         </div>
       </div>
@@ -148,6 +180,38 @@
           },
         ]}
       />
+    </div>
+  </div>
+  <div class="pb-2 md:col-start-1 md:row-start-3">
+    <div
+      class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+    >
+      Feedback
+    </div>
+    <div class="flex flex-col items-start justify-start space-y-2 px-4">
+      <FormRadio
+        title="can-feedback-mode"
+        bind:valueSelected={canOptions.feedbackMode}
+        isDisabled={!canOptions.isChoosen || !isFeedbackAvailable}
+        labelsValues={[
+          {
+            label: 'Après toutes les questions.',
+            value: 'end',
+          },
+          {
+            label: 'Après chaque question (on ne peut pas revenir en arrière).',
+            value: 'each',
+          },
+        ]}
+      />
+      <div class="text-sm font-light {labelClass}">
+        {#if isFeedbackAvailable}
+          Le score et les solutions sont de toute façon affichés à la fin de la
+          course.
+        {:else}
+          Le feedback nécessite des questions interactives.
+        {/if}
+      </div>
     </div>
   </div>
 </div>

@@ -231,6 +231,15 @@ export function updateGlobalOptionsInURL(url: URL) {
       url.searchParams.append('canSA', canStore.solutionsAccess ? '1' : '0')
       url.searchParams.append('canSM', canStore.solutionsMode)
       url.searchParams.append('canI', canStore.isInteractive ? '1' : '0')
+      if (canStore.timerMode === 'question') {
+        url.searchParams.append(
+          'canQ',
+          canStore.durationPerQuestionInSeconds.toString(),
+        )
+      }
+      if (canStore.feedbackMode === 'each') {
+        url.searchParams.append('canFB', '1')
+      }
     }
   }
   if (options.recorder) {

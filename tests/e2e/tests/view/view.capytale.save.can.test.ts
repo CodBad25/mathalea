@@ -247,13 +247,13 @@ async function testV(page: Page) {
   await page
     .locator('#iframe')
     .contentFrame()
-    .getByRole('button', { name: 'Rendre la copie' })
+    .getByRole('button', { name: 'Terminer et enregistrer les résultats' })
     .click()
   await page
     .locator('#iframe')
     .contentFrame()
     .getByRole('dialog')
-    .getByRole('button', { name: 'Rendre la copie' })
+    .getByRole('button', { name: 'Terminer et enregistrer les résultats' })
     .click()
   await page
     .locator('#iframe')
