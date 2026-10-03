@@ -3101,6 +3101,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   private inputChargerJSON!: HTMLInputElement
   // undefined si allowfullscreen n'est pas activé
   private boutonPleinEcran?: HTMLButtonElement
+  private modalePleinEcran?: HTMLDialogElement
+  private emplacementAnimation?: {
+    parent: Node
+    prochainElement: ChildNode | null
+  }
   // Index de l'étape en cours de modification, null si on est en mode ajout
   private editingIndex: number | null = null
 
@@ -3273,10 +3278,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   /**
    * Ajoute un bouton pour ne voir que l'animation en plein écran
-   * @attr {boolean} [allowfullscreen=false]
+   * @attr {boolean} [allow-fullscreen=false]
    */
   private get allowFullscreenActif(): boolean {
-    return this.getAttribute('allowfullscreen') === 'true'
+    return this.getAttribute('allow-fullscreen') === 'true'
   }
 
   private get tailleLabelsPoints(): number | undefined {
@@ -3292,6 +3297,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     this.prochaineLettre = pointsDefinis(this.programmeComplet()).length
     this.construireInterface()
     this.rafraichirProgramme()
+  }
+
+  disconnectedCallback() {
+    this.restaurerAnimationDepuisModale()
+    this.modalePleinEcran?.remove()
+    this.modalePleinEcran = undefined
+    super.disconnectedCallback()
   }
 
   attributeChangedCallback(
@@ -3862,19 +3874,95 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     lecteur.readAsText(fichier)
   }
 
-  /**
-   * Affiche l'animation seule en plein écran (API Fullscreen du navigateur)
-   */
+  /** Affiche l'animation seule dans une modale occupant toute la fenêtre. */
   private async basculerPleinEcran() {
     if (!this.animationVisible) {
       this.animationVisible = true
       await this.chargerAnimation()
     }
-    if (document.fullscreenElement === this.divAnimation) {
-      await document.exitFullscreen()
-    } else {
-      await this.divAnimation.requestFullscreen()
+    if (this.modalePleinEcran?.open === true) {
+      this.modalePleinEcran.close()
+      return
     }
+
+    const modale = this.construireModalePleinEcran()
+    this.emplacementAnimation = {
+      parent: this.divAnimation.parentNode as Node,
+      prochainElement: this.divAnimation.nextSibling,
+    }
+    this.divAnimation.classList.add(
+      'w-full',
+      'h-full',
+      'max-w-none',
+      'overflow-auto',
+    )
+    this.divAnimation.classList.remove('max-w-5xl')
+    modale.querySelector('[data-contenu-animation]')?.append(this.divAnimation)
+    modale.showModal()
+  }
+
+  private construireModalePleinEcran(): HTMLDialogElement {
+    if (this.modalePleinEcran !== undefined) return this.modalePleinEcran
+
+    const modale = document.createElement('dialog')
+    modale.setAttribute('aria-label', 'Animation Instrumenpoche en plein écran')
+    modale.classList.add(
+      'fixed',
+      'inset-0',
+      'm-0',
+      'h-screen',
+      'w-screen',
+      'max-h-none',
+      'max-w-none',
+      'border-0',
+      'bg-white',
+      'p-0',
+    )
+
+    const panneau = document.createElement('div')
+    panneau.classList.add('flex', 'h-full', 'w-full', 'flex-col', 'p-3')
+    const entete = document.createElement('div')
+    entete.classList.add('flex', 'shrink-0', 'justify-end')
+    const fermer = document.createElement('button')
+    fermer.type = 'button'
+    fermer.innerText = 'Fermer'
+    fermer.setAttribute('aria-label', 'Fermer la vue plein écran')
+    fermer.classList.add(...classesBouton)
+    fermer.onclick = () => modale.close()
+    entete.appendChild(fermer)
+
+    const contenu = document.createElement('div')
+    contenu.dataset.contenuAnimation = 'true'
+    contenu.classList.add(
+      'flex',
+      'min-h-0',
+      'grow',
+      'items-center',
+      'justify-center',
+      'overflow-auto',
+    )
+    panneau.append(entete, contenu)
+    modale.appendChild(panneau)
+    modale.addEventListener('close', () =>
+      this.restaurerAnimationDepuisModale(),
+    )
+    document.body.appendChild(modale)
+    this.modalePleinEcran = modale
+    return modale
+  }
+
+  private restaurerAnimationDepuisModale() {
+    if (this.emplacementAnimation === undefined) return
+    const { parent, prochainElement } = this.emplacementAnimation
+    parent.insertBefore(this.divAnimation, prochainElement)
+    this.divAnimation.classList.remove(
+      'w-full',
+      'h-full',
+      'max-w-none',
+      'overflow-auto',
+    )
+    this.divAnimation.classList.add('max-w-5xl')
+    this.emplacementAnimation = undefined
   }
 
   private rafraichirParametres(valeursInitiales?: Record<string, string>) {

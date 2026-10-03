@@ -279,7 +279,7 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 | `programmeInitialProtege`        | Raccourci pour protéger tout le programme initial.                                                                                                                                 |
 | `programmeAttendu`               | Programme complet attendu, utilisé seulement pour cadrer la figure imprimable de l'énoncé quand `interactivityOn` vaut `true`.                                                     |
 | `loadSaveButtons`                | Affiche les boutons de sauvegarde et chargement JSON.                                                                                                                              |
-| `allowFullscreen`                | Ajoute le bouton de test de l'animation en plein écran.                                                                                                                            |
+| `allowFullscreen`                | Ajoute un bouton qui ouvre le lecteur dans une modale plein écran. La fermeture replace le même lecteur dans l'éditeur, sans perdre son état. Cette option est désactivée par défaut et peut aussi être activée dans un exercice élève. |
 | `interactivityOn`                | Désactive l'édition quand la valeur vaut `false` : la zone d'ajout et les boutons de modification des lignes sont masqués, mais le bouton « Tester l'animation » reste disponible. |
 | `verifyCallbackName`             | Nom d'une callback de vérification enregistrée avec `ElementIepEditeur.registerVerificationCallback()`.                                                                            |
 
