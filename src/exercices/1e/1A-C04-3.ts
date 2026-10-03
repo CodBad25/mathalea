@@ -31,6 +31,7 @@ export default class AutoC4b extends ExerciceSimple {
     this.spacing = 1.5
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.versionQcmDisponible = true
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">

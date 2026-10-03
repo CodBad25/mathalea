@@ -34,12 +34,10 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    if (!this.versionQcm) {
-      this.question = `Écrire sous la forme $a^n$ où $a$ et $n$  sont ${context.isDiaporama ? '<br>' : ''} des  entiers relatifs. <br>`
-    } else {
-      this.question = ''
-    }
     let a, b, n, p, s
+    let expression = ''
+    // Espace historique devant l'expression (cas c et e) dans la version QCM
+    let espaceQcm = ''
     switch (
       this.quotaChoice('type', ['a', 'b', 'c', 'd', 'e']) //
     ) {
@@ -48,7 +46,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         n = randint(-9, 9, [0, 1, -1])
         p = randint(-9, 9, [0, 1, -1])
         s = n + p
-        this.question += `$${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}$`
+        expression = `${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}`
         this.correction = `On utilise la formule $a^n\\times a^m=a^{n+m}$ avec $a=${a}$, $n=${n}$ et $m=${p}$.<br>
         $${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(a)}^{${p}}=${ecritureParentheseSiNegatif(a)}^{${n}+${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n + p}}`)}$`
         this.distracteurs = [
@@ -64,7 +62,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         b = randint(-9, 9, [0, 1, -1])
         n = randint(-9, 9, [0, 1, -1])
         p = a * b
-        this.question += `$${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(b)}^{${n}}$`
+        expression = `${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(b)}^{${n}}`
         this.distracteurs = [
           `$${ecritureParentheseSiNegatif(p)}^{${n + n}}$`,
           `$${ecritureParentheseSiNegatif(p)}^{${n * n}}$`,
@@ -81,7 +79,8 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         p = randint(-9, 9, [0, 1])
         n = randint(-9, 9, [0, 1, -1])
         s = n * p
-        this.question += ` $\\left(${ecritureParentheseSiNegatif(a)}^{${n}}\\right)^{${p}}$`
+        expression = `\\left(${ecritureParentheseSiNegatif(a)}^{${n}}\\right)^{${p}}`
+        espaceQcm = ' '
         this.distracteurs = [
           `$${ecritureParentheseSiNegatif(a)}^{${n + p}}$`,
           `$${ecritureParentheseSiNegatif(a * n)}^{${p}}$`,
@@ -98,7 +97,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         p = randint(-9, 9, [0, 1])
         n = randint(-9, 9, [0, 1, -1, p])
         s = n - p
-        this.question += `$\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(a)}^{${p}}}$`
+        expression = `\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(a)}^{${p}}}`
         this.correction = `On utilise la formule $\\dfrac{a^n}{a^p}=a^{n-p}$ avec $a=${a}$,  $n=${n}$ et $p=${p}$.<br>
         $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(a)}^{${p}}}=${ecritureParentheseSiNegatif(a)}^{${n}- ${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n - p}}`)}$`
         this.distracteurs = [
@@ -113,7 +112,8 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         a = choice([2, 3, 4, 5, 6, 7]) * b
         n = randint(-9, 9, [0, 1, -1])
         s = a / b
-        this.question += ` $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(b)}^{${n}}}$`
+        expression = `\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(b)}^{${n}}}`
+        espaceQcm = ' '
         this.correction = `On utilise la formule $\\dfrac{a^n}{b^n}=\\left(\\dfrac{a}{b}\\right)^{n}$ avec
         $a=${a}$,  $b=${b}$ et $n=${n}$.<br>
         $\\dfrac{${ecritureParentheseSiNegatif(a)}^{${n}}}{${ecritureParentheseSiNegatif(b)}^{${n}}}=\\left(\\dfrac{${ecritureParentheseSiNegatif(a)}}{${ecritureParentheseSiNegatif(b)}}\\right)^{${n}}=${miseEnEvidence(`${s}^{${n}}`)}$
@@ -126,9 +126,16 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         this.reponse = `${s}^{${n}}`
         break
     }
-    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
-    if (this.interactif || this.versionQcm) {
-      this.question += '$=$'
+    if (this.versionQcm) {
+      // Version QCM inchangée : l'expression suivie de « = »
+      this.question = `${espaceQcm}$${expression}$ est égal à :`
+      this.reponse = '$' + this.reponse + '$'
+    } else {
+      this.question = `Écrire $${expression}$ sous la forme $a^n$ où $a$ et $n$ sont ${context.isDiaporama ? '<br>' : ''}des entiers relatifs.`
+      if (this.interactif) {
+        // L'égalité à compléter, sur sa propre ligne
+        this.question += `<br>$${expression}=$`
+      }
     }
   }
 }

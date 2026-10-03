@@ -64,10 +64,12 @@ export default class AutoC4e extends ExerciceSimple {
     const partieDecimale = new Decimal(config[1])
     const denominateur = config[2]
     const unSurDen = new Decimal(1).div(denominateur)
-    const typeBonneReponse = this.quotaChoice('type', [
+    const typeTire = this.quotaChoice('type', [
       'decimal',
       'fraction',
     ] as const)
+    // Hors QCM, on ne demande que l'écriture décimale
+    const typeBonneReponse = this.versionQcm ? typeTire : 'decimal'
 
     const resultatDecimal = partieEntiere.plus(partieDecimale).plus(unSurDen)
     const numerateurEntier = partieEntiere.mul(denominateur)
@@ -125,16 +127,11 @@ export default class AutoC4e extends ExerciceSimple {
         typeBonneReponse === 'decimal'
           ? [...autres(decimaux).slice(0, 1), ...autres(fractions).slice(0, 2)]
           : [...autres(fractions).slice(0, 1), ...autres(decimaux).slice(0, 2)]
-    } else if (typeBonneReponse === 'decimal') {
-      this.formatChampTexte = KeyboardType.clavierDeBase
-      this.question = `Calculer $A = ${somme}$ et donner le résultat sous forme décimale.`
+    } else {
+      this.question = `Écrire sous forme décimale $A = ${somme}$.`
+      this.optionsChampTexte = { texteAvant: '<br>$A=$' }
       this.optionsDeComparaison = { nombreDecimalSeulement: true }
       this.reponse = resultatDecimal
-    } else {
-      this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-      this.question = `Calculer $A = ${somme}$ et donner le résultat sous la forme d'une fraction décimale.`
-      this.optionsDeComparaison = { fractionDecimale: true }
-      this.reponse = `\\dfrac{${numerateurFraction.toFixed()}}{${denominateur}}`
     }
   }
 }

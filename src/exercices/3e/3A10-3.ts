@@ -22,7 +22,7 @@ export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const titre = 'Décomposer un entier en produit de facteurs premiers'
-
+export const dateDeModifImportante = '01/10/2026'
 /**
  * Décomposer un nombre en facteurs premiers et compter son nombre de diviseurs à partir d'un tableau
  * plusieurs type de nombres à décomposer
@@ -115,9 +115,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
               tabMultiplicites[k] = randint(1, 2)
             }
 
-            // yapluka écrire le nombre dans l'énoncé et sa décomposition dans la correction
-            texte =
-              "À l'aide de la calculatrice, si c'est possible, décomposer "
+            texte = "Décomposer, si c'est possible,  "
             let nombreTodecompose = 1
             for (let k = 0; k < tabRangs.length; k++) {
               for (let m = 0; m < tabMultiplicites[k]; m++) {
@@ -197,7 +195,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
               premier2 = p
             }
 
-            texte = `À l'aide de la calculatrice, si c'est possible, décomposer $${texNombre(premier1 * premier2)}$ en produit de facteurs premiers.`
+            texte = `Décomposer, si c'est possible,  $${texNombre(premier1 * premier2)}$ en produit de facteurs premiers.`
             const racinePrem = Math.trunc(Math.sqrt(premier1 * premier2))
             texteCorr = `Il est suffisant de tester la divisibilité de $${texNombre(premier1 * premier2)}$ par tous les nombres premiers inférieurs ou égaux à $\\sqrt{${texNombre(premier1 * premier2)}}$, c'est-à-dire inférieurs à $${texNombre(racinePrem)}$.<br>`
             texteCorr += 'Ce sont les nombres de la liste suivante : <br>$'
@@ -229,7 +227,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
             const r = randint(0, premiersEntreBornes(1000, 2000).length - 1)
             const premier = premiersEntreBornes(1000, 2000)[r]
             const racinePremier = Math.trunc(Math.sqrt(premier))
-            texte = `À l'aide de la calculatrice, si c'est possible, décomposer $${texNombre(premier)}$ en produit de facteurs premiers.`
+            texte = `Décomposer, si c'est possible, $${texNombre(premier)}$ en produit de facteurs premiers.`
             texteCorr = `Il est suffisant de tester la divisibilité de $${texNombre(premier)}$ par tous les nombres premiers inférieurs ou égaux à $\\sqrt{${texNombre(premier)}}$, c'est-à-dire inférieurs à $${racinePremier}$.<br>`
             texteCorr += 'Ce sont les nombres de la liste $'
             texteCorr += cribleEratostheneN(racinePremier)[0]
@@ -252,7 +250,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
         i,
         KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
         {
-          texteAvant: `<br> <b>Écrire les facteurs premiers dans l'ordre croissant et la décomposition à l'aide de puissances lorsque l'exposant est supérieur ou égal à deux.</b> <br> La décomposition de $${texNombre(nombre)}$ est : `,
+          texteAvant: `<br> Écrire les facteurs premiers dans l'ordre croissant et la décomposition à l'aide de puissances lorsque l'exposant est supérieur ou égal à deux. <br> La décomposition de $${texNombre(nombre)}$ est : `,
         },
       )
       if (context.isAmc) {

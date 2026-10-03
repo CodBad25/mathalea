@@ -114,14 +114,14 @@ export const etiquettesNumeration = [
  * Relecture : Novembre 2021 par EE
  * Ajout d'une version drag & drop pour la version 'en lettres' par Jean-claude Lhote
  */
-export const uuid = '068ee'
+export const uuid = '0688e'
 
 export const refs = {
-  'fr-fr': ['6N0A-6'],
+  'fr-fr': [],
   'fr-2016': ['6N10'],
   'fr-ch': [''], // Primaire anciennement :['9NO1-1'],
 }
-export default class EcrirePetitsNombresEntiers extends Exercice {
+export default class EcrirePetitsNombresEntiersOld extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 5
@@ -129,12 +129,12 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
       'Type de nombres',
       'Nombres séparés par des tirets :\n2 : À deux chiffres\n3 : À trois chiffres\n4 : À quatre chiffres\n5 : À cinq chiffres\n6 : À six chiffres\n7 : À neuf chiffres\n8 : À douze chiffres',
     ]
-    this.sup = '4' // Valeur du paramètre par défaut
+    this.sup = 4 // Valeur du paramètre par défaut
     this.besoinFormulaire2Texte = [
       'Demande particulière',
       'Nombres séparés par des tirets :\n0 : Aucune demande particulière.\n1 : Les nombres se terminent par 80.\n2 : Les nombres contiennent un nombre entre 81 et 99.\n3 : Les nombres se terminent par un multiple de 100.\n4 : Les nombres commencent par mille.\n5 : Les nombres ne possèdent ni centaines ou ni centaines de mille.',
     ]
-    this.sup2 = '0' // Valeur du paramètre par défaut
+    this.sup2 = 0 // Valeur du paramètre par défaut
     this.besoinFormulaire3Numerique = [
       'Type de questions',
       3,
@@ -171,7 +171,7 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
       min: 2,
       max: 8,
       defaut: 8,
-      melange: 8,
+      melange: 0,
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
     }).map(Number)

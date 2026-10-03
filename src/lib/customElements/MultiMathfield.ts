@@ -684,6 +684,14 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       )
       throw e
     }
+    // Un gabarit sur plusieurs lignes ne doit pas former un inline-block : il
+    // serait aligné sur sa dernière ligne (ligne de base du bloc), donc décalé
+    // par rapport au numéro et à l'énoncé, et ses lignes seraient décalées
+    // à droite de l'énoncé. En `inline`, les <br> coupent la ligne de la
+    // question et chaque ligne repart de la marge gauche.
+    const isMultiline = /<br\s*\/?>|\n/i.test(template)
+    this.contentHost.style.display = isMultiline ? 'inline' : 'inline-block'
+
     if (!this.interactivityOn) {
       this.contentHost.innerHTML = MultiMathfieldElement.renderStaticTemplate(
         template,

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { keys } from './keycaps'
 import {
+  blocsDeTouches,
   enregistreTouchesPersonnalisees,
   litTouchesPersonnalisees,
   toucheDepuisCle,
@@ -41,8 +42,19 @@ describe('touches personnalisées', () => {
     expect(table[noms[1]].insert).toBe('#@^{#0}')
   })
 
-  it('relit la liste stockée sur le champ, même mal formée', () => {
-    expect(litTouchesPersonnalisees('["a","b"]')).toEqual(['a', 'b'])
+  it('regroupe les touches en blocs', () => {
+    expect(blocsDeTouches(['a', 'b'])).toEqual([['a', 'b']])
+    expect(blocsDeTouches([['a', 'b'], [], ['+']])).toEqual([['a', 'b'], ['+']])
+    expect(blocsDeTouches([])).toEqual([])
+  })
+
+  it('relit les blocs stockés sur le champ, même mal formés', () => {
+    expect(litTouchesPersonnalisees('["a","b"]')).toEqual([['a', 'b']])
+    expect(litTouchesPersonnalisees('[["a","b"],["+"]]')).toEqual([
+      ['a', 'b'],
+      ['+'],
+    ])
+    expect(litTouchesPersonnalisees('[["a",1],[2],"x"]')).toEqual([['a']])
     expect(litTouchesPersonnalisees(undefined)).toEqual([])
     expect(litTouchesPersonnalisees('pas du json')).toEqual([])
     expect(litTouchesPersonnalisees('{"a":1}')).toEqual([])

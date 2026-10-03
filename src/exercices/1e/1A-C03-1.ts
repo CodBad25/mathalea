@@ -14,7 +14,7 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const titre = 'Transformer un calcul comportant des puissances'
+export const titre = 'Transformer un quotient comportant des puissances'
 
 /**
  * @author Gilles Mora
@@ -74,7 +74,7 @@ export default class Auto1AC3a extends ExerciceSimple {
 
     if (this.versionQcm) {
       this.consigne = ''
-      this.question = `On considère le nombre $N=${fraction}$. On a :<br>`
+      this.question = `On considère le nombre $N=${fraction}$. <br>On a :`
       this.reponse = `$N=${coefficient}\\times ${produit}^{${k}}$`
       this.distracteurs = [
         `$N=${a[1]}^{${k}}$`,
@@ -82,8 +82,8 @@ export default class Auto1AC3a extends ExerciceSimple {
         `$N=${produit ** k / a[0]}$`,
       ]
     } else {
-      this.consigne = "Compléter l'égalité."
-      this.question = `N=${fraction}=%{champ1}\\times ${produit}^{${k}}`
+      this.consigne = "Compléter l'égalité avec un nombre entier."
+      this.question = `${fraction}=%{champ1}\\times ${produit}^{${k}}`
       this.reponse = { champ1: { value: String(coefficient) } }
     }
   }

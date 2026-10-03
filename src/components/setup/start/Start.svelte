@@ -448,6 +448,20 @@
     }
   }
 
+  let showQcmCamExportModal = false
+  let qcmCamFilename = 'questions.txt'
+  let qcmCamContent = ''
+
+  function downloadQcmCam() {
+    const filename = qcmCamFilename.trim()
+    if (!filename) return
+    downloadFile(
+      qcmCamContent,
+      /\.txt$/i.test(filename) ? filename : `${filename}.txt`,
+    )
+    showQcmCamExportModal = false
+  }
+
   async function exportQcmCam(): Promise<void> {
     const exercises = await getExercisesFromExercicesParams()
     const exercisesQcms = exercises.filter((exercise, index) => {
@@ -477,7 +491,8 @@
       )
       return
     }
-    downloadFile(content, 'questions.txt') // @todo Si possible, il faudrait l'nvoyer directement à travers l'ouverture d'un nouvel onglet qcmcam.net avec le lien vers ce fichier en argument.
+    qcmCamContent = content
+    showQcmCamExportModal = true
   }
 </script>
 
@@ -658,6 +673,36 @@
     />
   {/if}
 {/if}
+
+<BasicClassicModal bind:isDisplayed={showQcmCamExportModal}>
+  <span slot="header">Exporter vers QCM Cam</span>
+  <form slot="content" on:submit|preventDefault={downloadQcmCam}>
+    <label for="qcmcam-filename" class="mb-2 block">Nom du fichier</label>
+    <input
+      id="qcmcam-filename"
+      type="text"
+      bind:value={qcmCamFilename}
+      required
+      class="w-full rounded border p-2"
+      aria-describedby="qcmcam-filename-help"
+    />
+    <p id="qcmcam-filename-help" class="mt-2 text-sm">
+      L’extension .txt sera ajoutée si nécessaire.
+    </p>
+    <div class="mt-6 flex justify-center gap-3">
+      <button
+        type="button"
+        class="btn btn-ghost"
+        on:click={() => (showQcmCamExportModal = false)}>Annuler</button
+      >
+      <button
+        type="submit"
+        class="btn btn-primary"
+        disabled={!qcmCamFilename.trim()}>Télécharger</button
+      >
+    </div>
+  </form>
+</BasicClassicModal>
 
 <style>
   :root {

@@ -1,52 +1,49 @@
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { context } from '../../modules/context'
-import { randint } from '../../modules/outils'
-import ExerciceSimple from '../ExerciceSimple'
-export const dateDePublication = '23/07/2025'
-export const dateDeModifImportante = '30/09/2026'
-export const uuid = '35b05'
 
+import { randint } from '../../modules/outils'
+// import ExerciceQcmA from '../../ExerciceQcmA'
+import ExerciceQcmA from '../ExerciceQcmA'
+
+export const uuid = '2137a'
 export const refs = {
   'fr-fr': ['1A-C03-12', '2A-N3-7'],
-  'fr-ch': [],
+  'fr-ch': ['11QCM-9'],
 }
 export const interactifReady = true
 
-export const amcReady = true
+export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Trouver  l'égalité correcte (puissances)"
-
+export const dateDePublication = '23/07/2025'
+// Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
  * @author Gilles Mora
  *
  */
-export default class TrouverEgalite extends ExerciceSimple {
-  constructor() {
-    super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.versionQcmDisponible = true
-    this.versionQcm = false
-    this.tip = `
-  <p style="margin: 0 0 10px 0;">
-    Il faut vérifier plusieurs égalités avec des puissances.
-  </p>
-  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li>Traiter les propositions une par une.</li>
-    <li>Identifier la propriété utilisée dans chaque proposition.</li>
-    <li>Vérifier si cette propriété est appliquée correctement.</li>
-    <li>Procéder par élimination : une seule égalité est vraie dans ce QCM.</li>
-  </ul>`
+export default class TrouverEgalite extends ExerciceQcmA {
+  // S'occupe de passser les données originales à la fonction appliquerLesValeurs
+
+  versionOriginale: () => void = () => {
+    this.correction = `La seule égalité vraie est  : $${miseEnEvidence('\\dfrac{10^{-5}}{10^8}=10^{-13}')}$.<br>
+    En effet, <br>  
+      $\\begin{aligned}
+     \\dfrac{10^{-5}}{10^8}&=10^{-5-8}\\\\
+      &=10^{-13}
+      \\end{aligned}$<br>
+      Les égalités corrigées (et donc correctes) pour les autres égalités, sont :  <br>
+      $40\\times \\dfrac{1}{40^3}=40^{-2}$<br>
+       $\\left(2^{-4}\\right)^3=2^{-12}$<br>
+       $5^{-6}\\times 11^{-6}=55^{-6}$`
+    this.reponses = [
+      '$\\dfrac{10^{-5}}{10^8}=10^{-13}$',
+      '$40\\times \\dfrac{1}{40^3}=40^2$',
+      '$\\left(2^{-4}\\right)^3=2^{-1}$',
+      '$5^{-6}\\times 11^{-6}=55^{-12}$',
+    ]
   }
 
-  nouvelleVersion() {
-    if (context.isAmc) this.versionQcm = true
-    this.formatInteractif = this.versionQcm ? 'mathlive' : 'fillInTheBlank'
-
+  versionAleatoire: () => void = () => {
     const a = randint(3, 15)
     const n = randint(-10, -3)
     const p = -n + randint(4, 8)
@@ -58,77 +55,113 @@ export default class TrouverEgalite extends ExerciceSimple {
     const a3 = randint(3, 7)
     const b3 = randint(3, 7, a3)
     const n3 = randint(-6, -2)
-    const cas = this.quotaChoice('cas', [1, 2, 3, 4])
+    const calc1 = `\\dfrac{${a}^{${n}}}{${a}^{${p}}}=${a}^{${n - p}}` // a^n/a^p=a^(n-p)
+    const calc2 = `${a1}\\times \\dfrac{1}{${a1}^{${n1}}}=${a1}^{${1 - n1}}` // a*1/a^n=a^(1-n)
+    const calc3 = `\\left(${a2}^{${n2}}\\right)^${p2}=${a2}^{${n2 * p2}}` // (a^n)^p=a^(n*p)
+    const calc4 = `${a3}^{${n3}}\\times ${b3}^{${n3}}=${a3 * b3}^{${n3}}` // a^n*b^n=(a*b)^n
 
-    // Chaque cas : le membre de gauche, l'exposant (ou la base) à trouver, des étapes de calcul
-    // et une égalité fausse proche de l'égalité vraie (pour le QCM).
-    const cases = [
-      {
-        // a^n/a^p=a^(n-p)
-        gauche: `\\dfrac{${a}^{${n}}}{${a}^{${p}}}`,
-        droite: (x: string) => `${a}^{${x}}`,
-        reponse: String(n - p),
-        fausse: `${a}^{${n + p}}`,
-        etapes: `\\dfrac{${a}^{${n}}}{${a}^{${p}}}&=${a}^{${n}-${p}}\\\\
-      &=${a}^{${n - p}}`,
-      },
-      {
-        // a*1/a^n=a^(1-n)
-        gauche: `${a1}\\times \\dfrac{1}{${a1}^{${n1}}}`,
-        droite: (x: string) => `${a1}^{${x}}`,
-        reponse: String(1 - n1),
-        fausse: `${a1}^{${n1 - 1}}`,
-        etapes: `${a1}\\times \\dfrac{1}{${a1}^{${n1}}}&=\\dfrac{${a1}^1}{${a1}^{${n1}}}\\\\
-    &=${a1}^{1-${n1}}\\\\
-      &=${a1}^{${1 - n1}}`,
-      },
-      {
-        // (a^n)^p=a^(n*p)
-        gauche: `\\left(${a2}^{${n2}}\\right)^${p2}`,
-        droite: (x: string) => `${a2}^{${x}}`,
-        reponse: String(n2 * p2),
-        fausse: `${a2}^{${n2 + p2}}`,
-        etapes: `\\left(${a2}^{${n2}}\\right)^${p2}&=${a2}^{${n2} \\times ${p2}}\\\\
-    &=${a2}^{${n2 * p2}}`,
-      },
-      {
-        // a^n*b^n=(a*b)^n
-        gauche: `${a3}^{${n3}}\\times ${b3}^{${n3}}`,
-        droite: (x: string) => `${x}^{${n3}}`,
-        reponse: String(a3 * b3),
-        fausse: `${a3 * b3}^{${2 * n3}}`,
-        etapes: `${a3}^{${n3}}\\times ${b3}^{${n3}}&=(${a3}\\times  ${b3})^{${n3}}\\\\
-    &=${a3 * b3}^{${n3}}`,
-      },
-    ]
-    const courant = cases[cas - 1]
-    const vraie = `${courant.gauche}=${courant.droite(courant.reponse)}`
-    const fausses = cases
-      .filter((c) => c !== courant)
-      .map((c) => `${c.gauche}=${c.fausse}`)
-
-    if (this.versionQcm) {
-      this.consigne = ''
-      this.question = 'Parmi ces égalités, la seule égalité vraie est :'
-      this.correction = `La seule égalité vraie est  : $${miseEnEvidence(vraie)}$.<br>
+    const calc1F = `\\dfrac{${a}^{${n}}}{${a}^{${p}}}=${a}^{${n + p}}` // a^n/a^p=a^(n-p)
+    const calc2F = `${a1}\\times \\dfrac{1}{${a1}^{${n1}}}=${a1}^{${n1 - 1}}` // a*1/a^n=a^(1-n) réponse fausse
+    const calc3F = `\\left(${a2}^{${n2}}\\right)^${p2}=${a2}^{${n2 + p2}}` // (a^n)^p=a^(n*p) réponse fausse
+    const calc4F = `${a3}^{${n3}}\\times ${b3}^{${n3}}=${a3 * b3}^{${2 * n3}}` // a^n*b^n=(a*b)^n
+    this.enonce = 'Parmi ces égalités, la seule égalité vraie est :'
+    switch (
+      randint(1, 4) //
+    ) {
+      case 1: //  a^n/a^p=a^n-p
+        this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc1}`)}$.<br>
     En effet, <br>  
       $\\begin{aligned}
-    ${courant.etapes}
+    \\dfrac{${a}^{${n}}}{${a}^{${p}}}&=${a}^{${n}-${p}}\\\\
+      &=${a}^{${n - p}}
       \\end{aligned}$<br>
     Concernant les autres propositions  :  <br>
-    ${cases
-      .filter((c) => c !== courant)
-      .map((c) => `$${c.gauche}\\neq ${c.fausse}$`)
-      .join('<br>')}`
-      this.reponse = `$${vraie}$`
-      this.distracteurs = fausses.map((f) => `$${f}$`)
-    } else {
-      this.consigne = "Compléter l'égalité."
-      this.question = `${courant.gauche}=${courant.droite('%{champ1}')}`
-      this.correction = `$\\begin{aligned}
-    ${courant.etapes.replace(/&=[^&]*$/, `&=${miseEnEvidence(courant.droite(courant.reponse))}`)}
-      \\end{aligned}$`
-      this.reponse = { champ1: { value: courant.reponse } }
+     $${calc2}\\neq ${a1}^{${n1 - 1}}$<br>
+  $${calc3}\\neq ${a2}^{${n2 + p2}}$<br>
+       $${calc4}\\neq ${a3 * b3}^{${2 * n3}}$`
+        this.reponses = [
+          `$${calc1}$`,
+          `$${calc2F}$`,
+          `$${calc3F}$`,
+          `$${calc4F}$`,
+        ]
+        break
+
+      case 2: // égalité vraie est la a*1/a^n
+        this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc2}`)}$.<br>
+    En effet, <br>  
+      $\\begin{aligned}
+    ${a1}\\times \\dfrac{1}{${a1}^{${n1}}}&=\\dfrac{${a1}^1}{${a1}^{${n1}}}\\\\
+    &=${a1}^{1-${n1}}\\\\
+      &=${a1}^{${1 - n1}}
+      \\end{aligned}$<br>
+     Concernant les autres propositions  :  <br>
+    $${calc1}\\neq ${a}^{${n + p}}$<br>
+  $${calc3}\\neq ${a2}^{${n2 + p2}}$<br>
+       $${calc4}\\neq ${a3 * b3}^{${2 * n3}}$`
+        this.reponses = [
+          `$${calc2}$`,
+          `$${calc1F}$`,
+          `$${calc3F}$`,
+          `$${calc4F}$`,
+        ]
+        break
+
+      case 3: // égalité vraie est la (a^n)^p
+        this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc3}`)}$.<br>
+    En effet, <br>  
+      $\\begin{aligned}
+    \\left(${a2}^{${n2}}\\right)^${p2}&=${a2}^{${n2} \\times ${p2}}\\\\
+    &=${a2}^{${n2 * p2}}
+      \\end{aligned}$<br>
+     Concernant les autres propositions  :  <br>
+     $${calc1}\\neq ${a}^{${n + p}}$<br>
+  $${calc2}\\neq ${a1}^{${n1 - 1}}$<br>
+       $${calc4}\\neq ${a3 * b3}^{${2 * n3}}$`
+        this.reponses = [
+          `$${calc3}$`,
+          `$${calc2F}$`,
+          `$${calc1F}$`,
+          `$${calc4F}$`,
+        ]
+        break
+
+      case 4: // égalité vraie est a^n*b^n=(a*b)*n
+      default:
+        this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc4}`)}$.<br>
+    En effet, <br>  
+      $\\begin{aligned}
+      ${a3}^{${n3}}\\times ${b3}^{${n3}}&=(${a3}\\times  ${b3})^{${n3}}\\\\
+    &=${a3 * b3}^{${n3}}
+      \\end{aligned}$<br>
+     Concernant les autres propositions  :  <br>
+    $${calc1}\\neq ${a}^{${n + p}}$<br>
+  $${calc2}\\neq ${a1}^{${n1 - 1}}$<br>
+       $${calc3}\\neq ${a2}^{${n2 + p2}}$`
+        this.reponses = [
+          `$${calc4}$`,
+          `$${calc1F}$`,
+          `$${calc3F}$`,
+          `$${calc2F}$`,
+        ]
+        break
     }
+  }
+
+  // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
+  constructor() {
+    super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut vérifier plusieurs égalités avec des puissances.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Traiter les propositions une par une.</li>
+    <li>Identifier la propriété utilisée dans chaque proposition.</li>
+    <li>Vérifier si cette propriété est appliquée correctement.</li>
+    <li>Procéder par élimination : une seule égalité est vraie dans ce QCM.</li>
+  </ul>`
+
+    this.versionAleatoire()
   }
 }

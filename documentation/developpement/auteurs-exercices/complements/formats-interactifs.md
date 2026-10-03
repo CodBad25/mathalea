@@ -85,6 +85,19 @@ texte += ajouteChampTexteMathLive(
 ```
 
 Elles apparaissent dans un bloc « Pour cette question », en tête du clavier.
+Pour séparer les touches en plusieurs blocs, comme sur les claviers existants,
+passer une liste de listes : chaque sous-liste forme un bloc.
+
+```ts
+{
+  dataKeys: [
+    ['[', ']', ';'],
+    ['\\emptyset', '\\mathbb{R}'],
+    ['\\cup', '\\cap'],
+  ]
+}
+```
+
 Chaque touche est décrite par une chaîne :
 
 - un nom de raccourci prédéfini (`POW`, `SQRT`, `VECT`, `SIGMA`,

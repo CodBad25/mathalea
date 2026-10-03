@@ -1,12 +1,18 @@
 <script lang="ts">
   import { MathfieldElement } from 'mathlive'
+  import { get } from 'svelte/store'
   import { tick } from 'svelte'
   import { fly } from 'svelte/transition'
-  import { mathaleaRenderDiv } from '../../lib/mathalea'
-  import { keyboardBlocks } from './layouts/keysBlocks'
-  import { GAP_BETWEEN_BLOCKS, getMode } from './lib/sizes'
+  import { renderKatex } from '../../lib/latex/renderKatex'
+  import { resizeContent } from '../../lib/components/sizeTools'
+  import { globalOptions } from '../../lib/stores/globalOptions'
+  import { keyboardBlocks, specialKeys } from './layouts/keysBlocks'
+  import { GAP_BETWEEN_BLOCKS, MD_BREAKPOINT, getMode } from './lib/sizes'
   import { latexMatriceAvecPlaceholders } from './lib/matrix'
-  import { enregistreTouchesPersonnalisees } from './lib/touchesPersonnalisees'
+  import {
+    enregistreTouchesPersonnalisees,
+    TITRE_BLOC_PERSONNALISE,
+  } from './lib/touchesPersonnalisees'
   import Alphanumeric from './presentationalComponents/alphanumeric/Alphanumeric.svelte'
   import KeyboardPage from './presentationalComponents/keyboardpage/KeyboardPage.svelte'
   import { keyboardState } from './stores/keyboardStore'
@@ -35,43 +41,89 @@
   let matrixColumns = 2
   const myKeyboard: Keyboard = new Keyboard()
 
-  const computePages = () => {
-    pages.length = 0
-    let pageWidth: number = 0
-    let page: KeyboardBlock[] = []
-    const mode = getMode(innerWidth, true)
-    const blockList = [...usualBlocks, ...unitsBlocks].reverse()
-    while (blockList.length > 0) {
-      const block = blockList.pop()
-      const blockWidth =
-        inLineBlockWidth(block!, mode) + GAP_BETWEEN_BLOCKS[mode]
-      if (pageWidth + blockWidth > 0.8 * innerWidth) {
-        // plus de places
-        pages.push(page.reverse())
-        page = []
-        pageWidth = 0
-      }
-      page.push(block!)
-      pageWidth = +blockWidth
-    }
-    if (page.length !== 0) {
-      pages.push(page.reverse())
-    }
+  function renderKeyboard() {
+    if (!divKeyboard) return
+    // Le rendu KaTeX sur tout le clavier retire les nœuds de contrôle de
+    // Svelte lors du passage entre les claviers alphanumérique et mathématique.
+    // Seuls les libellés des touches contiennent des formules à composer.
+    divKeyboard
+      .querySelectorAll<HTMLElement>('button[class*="key--"]')
+      .forEach((button) => {
+        if (button.textContent?.includes('$')) renderKatex(button)
+      })
+    const zoom = Number(get(globalOptions).z)
+    if (zoom !== -1) resizeContent(divKeyboard, zoom)
   }
 
+  const computePages = () => {
+    pages.length = 0
+    const customBlocks = myKeyboard.blocks.filter(
+      (block) => block.title === TITRE_BLOC_PERSONNALISE,
+    )
+    const nbCustomKeys = customBlocks.reduce(
+      (total, block) => total + block.keycaps.inline.length,
+      0,
+    )
+    if (isInLine && nbCustomKeys > 12) {
+      pages.push([
+        ...customBlocks,
+        ...myKeyboard.blocks.filter((block) => !customBlocks.includes(block)),
+      ])
+      return
+    }
+    const mode = getMode(innerWidth, true)
+    // Largeur réellement disponible : le clavier a un padding de 8 px (16 px
+    // dès `md`) et le conteneur en ligne 40 px de marge de chaque côté pour
+    // les flèches de navigation.
+    const largeurDisponible =
+      innerWidth - 2 * 40 - (innerWidth >= MD_BREAKPOINT ? 32 : 16)
+    const espaceEntreBlocs = GAP_BETWEEN_BLOCKS[mode]
+    // Les touches spéciales (effacer, flèches…) sont répétées sur chaque page :
+    // une page ne doit jamais se réduire à elles seules.
+    const largeurTouchesSpeciales = inLineBlockWidth(specialKeys, mode)
+    let page: KeyboardBlock[] = [specialKeys]
+    let pageWidth = largeurTouchesSpeciales
+    let pageAUnBloc = false
+    const blocsDuClavier = [...usualBlocks, ...unitsBlocks].filter(
+      (block) => block !== specialKeys,
+    )
+    for (const block of blocsDuClavier) {
+      const blockWidth = espaceEntreBlocs + inLineBlockWidth(block, mode)
+      if (pageAUnBloc && pageWidth + blockWidth > largeurDisponible) {
+        // plus de places
+        pages.push(page.reverse())
+        page = [specialKeys]
+        pageWidth = largeurTouchesSpeciales
+        pageAUnBloc = false
+      }
+      page.push(block)
+      pageWidth += blockWidth
+      pageAUnBloc = true
+    }
+    pages.push(page.reverse())
+  }
+
+  let idChampPrecedent = ''
   keyboardState.subscribe(async (value) => {
+    // Un nouveau champ repart de la première page du clavier : sinon l'index
+    // de page du champ précédent s'applique à un clavier différent.
+    if (value.idMathField !== idChampPrecedent) {
+      idChampPrecedent = value.idMathField
+      currentPageIndex = 0
+    }
     isVisible = value.isVisible
     isInLine = value.isInLine
     pageType = value.alphanumericLayout
     myKeyboard.empty()
     // Les touches propres à la question sont présentées en premier : ce sont
     // celles dont l'élève a besoin pour cette réponse précise.
-    if (value.customKeys != null && value.customKeys.length > 0) {
-      const noms = enregistreTouchesPersonnalisees(value.customKeys)
+    for (const touches of value.customKeys ?? []) {
+      const noms = enregistreTouchesPersonnalisees(touches)
+      if (noms.length === 0) continue
       myKeyboard.add({
         keycaps: { inline: noms, block: noms },
-        cols: Math.min(noms.length, 3),
-        title: 'Pour cette question',
+        cols: Math.min(noms.length, noms.length > 12 ? 7 : 3),
+        title: TITRE_BLOC_PERSONNALISE,
         isUnits: false,
       })
     }
@@ -99,7 +151,7 @@
     if (currentPageIndex >= pages.length) currentPageIndex = 0
     alphanumericDisplayed = value.blocks.includes('alphanumeric')
     await tick()
-    mathaleaRenderDiv(divKeyboard)
+    renderKeyboard()
     // document.dispatchEvent(new window.Event('KeyboardUpdated', { bubbles: true }))
     // console.log('message envoyé: ' + 'KeyboardUpdated')
   })
@@ -113,7 +165,7 @@
     // console.log('page à afficher n°' + currentPageIndex)
     // console.log(pages[currentPageIndex])
     await tick()
-    mathaleaRenderDiv(divKeyboard)
+    renderKeyboard()
   }
 
   async function navLeft(e: MouseEvent) {
@@ -125,7 +177,7 @@
     // console.log('page à afficher n°' + currentPageIndex)
     // console.log(pages[currentPageIndex])
     await tick()
-    mathaleaRenderDiv(divKeyboard)
+    renderKeyboard()
   }
 
   function mathfieldActif(): MathfieldElement | null {
@@ -309,7 +361,7 @@
         computePages()
         $keyboardState.isInLine = !$keyboardState.isInLine
         await tick()
-        mathaleaRenderDiv(divKeyboard)
+        renderKeyboard()
       }}
       on:mousedown={(e) => {
         e.preventDefault()
@@ -333,7 +385,7 @@
         e.stopPropagation()
         alphanumericDisplayed = !alphanumericDisplayed
         await tick()
-        mathaleaRenderDiv(divKeyboard)
+        renderKeyboard()
       }}
       on:mousedown={(e) => {
         e.preventDefault()

@@ -38,7 +38,7 @@ export default class ÉcrirePourcentage extends ExerciceSimple {
           const a = randint(10, 99) / 100
           this.question = this.versionQcm
             ? `$${texNombre(a)}$ est égal à : `
-            : `Compléter :<br> $${texNombre(a)}=$`
+            : `Compléter.<br> $${texNombre(a)}=$`
           if (this.interactif) {
             this.optionsChampTexte = { texteApres: ' $\\%$' }
           } else {
@@ -66,7 +66,7 @@ export default class ÉcrirePourcentage extends ExerciceSimple {
           const pourc = new Decimal(a).div(10)
           this.question = this.versionQcm
             ? `$${texNombre(dec, 3)}$ est égal à : `
-            : `Compléter :<br> $${texNombre(dec, 3)}=$`
+            : `Compléter.<br> $${texNombre(dec, 3)}=$`
           if (this.interactif) {
             this.optionsChampTexte = { texteApres: ' $\\%$' }
           } else {
@@ -93,7 +93,7 @@ export default class ÉcrirePourcentage extends ExerciceSimple {
           const pourc = new Decimal(a).div(100)
           this.question = this.versionQcm
             ? `$${texNombre(dec, 4)}$ est égal à : `
-            : `Compléter :<br> $${texNombre(dec, 4)}=$`
+            : `Compléter.<br> $${texNombre(dec, 4)}=$`
           if (this.interactif) {
             this.optionsChampTexte = { texteApres: ' $\\%$' }
           } else {

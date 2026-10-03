@@ -1,4 +1,5 @@
 import { MathfieldElement } from 'mathlive'
+import type { ToucheDeQuestion } from '../../components/keyboard/lib/touchesPersonnalisees'
 import { pointsMaxDuBareme } from '../interactif/baremeExercice'
 import { verifySingleMathLiveField } from '../interactif/mathLiveVerifications'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
@@ -27,7 +28,7 @@ export type MathaleaMathfieldOptions = {
   className?: string
   dataKeyboard?: string
   /** Touches propres à la question, ajoutées au clavier (voir `touchesPersonnalisees.ts`). */
-  dataKeys?: string[]
+  dataKeys?: ToucheDeQuestion
   espace?: boolean
   placeholder?: string
   readonly?: boolean

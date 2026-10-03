@@ -1,48 +1,46 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 
-export const uuid = '6d860'
+export const uuid = '7f979'
 export const refs = {
   'fr-fr': ['1A-C01-1'],
-  'fr-ch': ['11QCM-13'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Comparer deux nombres'
 export const dateDePublication = '02/09/2025'
-// Ceci est un exemple de QCM avec version originale et version aléatoire
+export const dateDeModifImportante = '02/10/2026'
+
+type Comparaison = {
+  gauche: string
+  droite: string
+  signe: '<' | '>'
+  justification: string
+}
+
 /**
  *
  * @author Gilles Mora
  *
  */
-export default class AutoC1a extends ExerciceQcmA {
-  private appliquerLesValeurs(
-    choixType: number,
-    a1: number,
-    b1: number,
-    c1: number,
-    d1: number,
-    e1: number,
-    f1: number,
-    g1: number,
-    h1: number,
-  ): void {
-    const aStr1 = texNombre(-a1, 4) // -a plus grand
-    const bStr1 = texNombre(-b1, 4) // -b plus petit
-
-    // Création des fausses réponses réutilisables
-    const fausseReponse1 = `$(${aStr1})^2>(${bStr1})^2$ est fausse car la fonction carré est strictement décroissante sur $]-\\infty\\,;\\,0]$, 
-        on a :  $(${aStr1})^2 < (${bStr1})^2$ car $${aStr1} > ${bStr1}$.<br>`
-    const fausseReponse2 = `$\\dfrac{1}{${texNombre(c1, 3)}}<\\dfrac{1}{${texNombre(d1, 3)}}$ est fausse car la fonction inverse est strictement décroissante sur $]0\\,;\\,+\\infty[$, donc $\\dfrac{1}{${texNombre(c1, 3)}} > \\dfrac{1}{${texNombre(d1, 3)}}$ car $${texNombre(c1, 3)}<${texNombre(d1, 3)}$.<br>`
-    const fausseReponse3 = `$${texNombre(g1, 3)}^2>${texNombre(h1, 3)}^2$ est fausse car la fonction carré est strictement croissante sur $[0\\,;\\,+\\infty[$, donc $${texNombre(g1, 3)}^2<${texNombre(h1, 3)}^2$ car $${texNombre(g1, 3)}<${texNombre(h1, 3)}$.<br>`
-    const fausseReponse4 = `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2>\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$ est fausse car la fonction carré est strictement croissante sur $]0\\,;\\,+\\infty[$, donc $\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2<\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$ car $\\dfrac{1}{${texNombre(f1, 4)}} < \\dfrac{1}{${texNombre(e1, 4)}}$.<br>`
-
-    this.enonce = `La seule inégalité vraie est : `
+export default class AutoC1a extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.spacingCorr = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.versionQcmDisponible = true
+    this.versionQcm = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut penser aux fonctions de référence, en particulier :
@@ -58,97 +56,12 @@ export default class AutoC1a extends ExerciceQcmA {
             background:#e8f1fb; text-decoration:none;">
     ▶ Voir la vidéo explicative
   </a>`
-
-    switch (choixType) {
-      case 1: // Fonction carré (nombres négatifs)
-        this.correction = `La seule inégalité vraie est : $${miseEnEvidence(`(${aStr1})^2 < (${bStr1})^2`)}$.<br>
-        En effet, la fonction carré étant strictement décroissante sur $]-\\infty\\,;\\,0]$, 
-        on a : $(${aStr1})^2 < (${bStr1})^2$ car $${aStr1} > ${bStr1}$.<br><br>
-        Concernant les autres propositions :<br>
-        ${fausseReponse2}
-        ${fausseReponse3}
-        ${fausseReponse4}`
-
-        this.reponses = [
-          `$(${aStr1})^2<(${bStr1})^2$`,
-          `$\\dfrac{1}{${texNombre(c1, 3)}} < \\dfrac{1}{${texNombre(d1, 3)}}$`,
-          `$${texNombre(g1, 3)}^2>${texNombre(h1, 3)}^2$`,
-          `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2>\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$`,
-        ]
-        break
-
-      case 2: // Fonction inverse (nombres positifs)
-        this.correction = `La seule inégalité vraie est : $${miseEnEvidence(`\\dfrac{1}{${texNombre(c1, 3)}}>\\dfrac{1}{${texNombre(d1, 3)}}`)}$.<br>
-        En effet, la fonction inverse étant strictement décroissante sur $]0\\,;\\,+\\infty[$, donc $\\dfrac{1}{${texNombre(c1, 3)}} > \\dfrac{1}{${texNombre(d1, 3)}}$ car $${texNombre(c1, 3)}<${texNombre(d1, 3)}$.<br><br>
-        Concernant les autres propositions :<br>
-        ${fausseReponse1}
-        ${fausseReponse3}
-        ${fausseReponse4}`
-
-        this.reponses = [
-          `$\\dfrac{1}{${texNombre(c1, 3)}} > \\dfrac{1}{${texNombre(d1, 3)}}$`,
-          `$(${aStr1})^2>(${bStr1})^2$`,
-          `$${texNombre(g1, 3)}^2>${texNombre(h1, 3)}^2$`,
-          `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2>\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$`,
-        ]
-        break
-
-      case 3: // Fonction carré (nombres positifs simples)
-        this.correction = `La seule inégalité vraie est : $${miseEnEvidence(`${texNombre(g1, 3)}^2<${texNombre(h1, 3)}^2`)}$.<br>
-        En effet, la fonction carré étant strictement croissante sur $[0\\,;\\,+\\infty[$, 
-        on a : $${texNombre(g1, 3)}^2<${texNombre(h1, 3)}^2$ car $${texNombre(g1, 3)}<${texNombre(h1, 3)}$.<br><br>
-        Concernant les autres propositions :<br>
-        ${fausseReponse1}
-        ${fausseReponse2}
-        ${fausseReponse4}`
-
-        this.reponses = [
-          `$${texNombre(g1, 3)}^2<${texNombre(h1, 3)}^2$`,
-          `$(${aStr1})^2>(${bStr1})^2$`,
-          `$\\dfrac{1}{${texNombre(c1, 3)}} < \\dfrac{1}{${texNombre(d1, 3)}}$`,
-          `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2>\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$`,
-        ]
-        break
-
-      case 4: // Fonction carré (avec fractions)
-      default:
-        this.correction = `La seule inégalité vraie est : $${miseEnEvidence(`\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2<\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2`)}$.<br>
-        En effet, la fonction carré étant strictement croissante sur $[0\\,;\\,+\\infty[$, 
-        on a : $\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2<\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$ car $\\dfrac{1}{${texNombre(f1, 4)}} < \\dfrac{1}{${texNombre(e1, 4)}}$.<br><br>
-        Concernant les autres propositions :<br>
-        ${fausseReponse1}
-        ${fausseReponse2}
-        ${fausseReponse3}`
-
-        this.reponses = [
-          `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2<\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$`,
-          `$${texNombre(g1, 3)}^2>${texNombre(h1, 3)}^2$`,
-          `$\\dfrac{1}{${texNombre(c1, 3)}} < \\dfrac{1}{${texNombre(d1, 3)}}$`,
-          `$(${aStr1})^2>(${bStr1})^2$`,
-        ]
-        break
-    }
   }
 
-  versionOriginale: () => void = () => {
-    // Valeurs originales de l'exercice
-    this.appliquerLesValeurs(
-      1, // choixType : cas de la fonction carré avec nombres négatifs
-      1.075, // a1
-      1.076, // b1
-      2.03, // c1
-      2.032, // d1
-      3, // e1 (pour 1/3)
-      4, // f1 (pour 1/4)
-      1.5, // g1 (valeur arbitraire)
-      2.0, // h1 (valeur arbitraire)
-    )
-  }
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
 
-  versionAleatoire: () => void = () => {
-    const choixType = randint(1, 4) // 4 cas différents
-
-    // Génération des nombres aléatoires
+    const choixType = this.quotaChoice('type', [1, 2, 3, 4])
     const a1 = randint(1, 5) + randint(1, 9) / 10 + randint(1, 9) / 100
     const b1 = a1 + randint(1, 9) / 100
     const c1 = randint(1, 5) + randint(1, 9) / 10 + randint(1, 9) / 100
@@ -157,14 +70,86 @@ export default class AutoC1a extends ExerciceQcmA {
     const f1 = e1 + randint(1, 9) / 10 + randint(1, 9) / 100
     const g1 = randint(1, 5) + randint(1, 9) / 10 + randint(1, 9) / 100
     const h1 = g1 + randint(1, 9) / 10 + randint(1, 9) / 100
+    // Hors QCM, les deux membres sont présentés dans un ordre aléatoire
+    const inverser = choice([true, false])
 
-    this.appliquerLesValeurs(choixType, a1, b1, c1, d1, e1, f1, g1, h1)
-  }
+    const a = texNombre(-a1, 4) // -a plus grand
+    const b = texNombre(-b1, 4) // -b plus petit
+    const c = texNombre(c1, 3)
+    const d = texNombre(d1, 3)
+    const e = texNombre(e1, 4)
+    const f = texNombre(f1, 4)
+    const g = texNombre(g1, 3)
+    const h = texNombre(h1, 3)
 
-  constructor() {
-    super()
-    this.versionAleatoire()
-    this.spacing = 1.5
-    this.spacingCorr = 1.5
+    // Les quatre inégalités vraies, une par fonction de référence
+    const comparaisons: Record<number, Comparaison> = {
+      1: {
+        gauche: `(${a})^2`,
+        droite: `(${b})^2`,
+        signe: '<',
+        justification: `la fonction carré est strictement décroissante sur $]-\\infty\\,;\\,0]$ et $${a} > ${b}$, donc $(${a})^2 < (${b})^2$.`,
+      },
+      2: {
+        gauche: `\\dfrac{1}{${c}}`,
+        droite: `\\dfrac{1}{${d}}`,
+        signe: '>',
+        justification: `la fonction inverse est strictement décroissante sur $]0\\,;\\,+\\infty[$ et $${c}<${d}$, donc $\\dfrac{1}{${c}} > \\dfrac{1}{${d}}$.`,
+      },
+      3: {
+        gauche: `${g}^2`,
+        droite: `${h}^2`,
+        signe: '<',
+        justification: `la fonction carré est strictement croissante sur $[0\\,;\\,+\\infty[$ et $${g}<${h}$, donc $${g}^2<${h}^2$.`,
+      },
+      4: {
+        gauche: `\\left(\\dfrac{1}{${f}}\\right)^2`,
+        droite: `\\left(\\dfrac{1}{${e}}\\right)^2`,
+        signe: '<',
+        justification: `la fonction carré est strictement croissante sur $[0\\,;\\,+\\infty[$ et $\\dfrac{1}{${f}} < \\dfrac{1}{${e}}$, donc $\\left(\\dfrac{1}{${f}}\\right)^2<\\left(\\dfrac{1}{${e}}\\right)^2$.`,
+      },
+    }
+
+    if (this.versionQcm) {
+      // Propositions fausses : l'inégalité de chaque autre cas, renversée
+      const fausses: Record<number, string> = {
+        1: `$(${a})^2>(${b})^2$`,
+        2: `$\\dfrac{1}{${c}} < \\dfrac{1}{${d}}$`,
+        3: `$${g}^2>${h}^2$`,
+        4: `$\\left(\\dfrac{1}{${f}}\\right)^2>\\left(\\dfrac{1}{${e}}\\right)^2$`,
+      }
+      const autres = [1, 2, 3, 4].filter((k) => k !== choixType)
+      const vraie = comparaisons[choixType]
+      this.consigne = ''
+      this.question = 'La seule inégalité vraie est : '
+      this.reponse = `$${vraie.gauche} ${vraie.signe} ${vraie.droite}$`
+      this.distracteurs = autres.map((k) => fausses[k])
+      this.correction =
+        `La seule inégalité vraie est : $${miseEnEvidence(`${vraie.gauche} ${vraie.signe} ${vraie.droite}`)}$.<br>
+        En effet, ${vraie.justification}<br><br>
+        Concernant les autres propositions :<br>` +
+        autres
+          .map(
+            (k) =>
+              `${fausses[k]} est fausse car ${comparaisons[k].justification}<br>`,
+          )
+          .join('')
+    } else {
+      const { gauche, droite, signe, justification } = comparaisons[choixType]
+      const [membre1, membre2] = inverser ? [droite, gauche] : [gauche, droite]
+      const symbole = inverser ? (signe === '<' ? '>' : '<') : signe
+      this.consigne = 'Compléter avec le symbole $<$ ou $>$.'
+      // En interactif, les deux membres entourent le champ de réponse
+      this.question = this.interactif ? '' : `$${membre1} \\,\\ldots\\, ${membre2}$`
+      this.optionsChampTexte = {
+        texteAvant: `$${membre1}$`,
+        texteApres: `$${membre2}$`,
+        dataKeys: ['<', '>'],
+      }
+      this.optionsDeComparaison = { texteSansCasse: true }
+      this.reponse = symbole
+      this.correction = `On a : ${justification}<br>
+      Ainsi, $${membre1} ${miseEnEvidence(symbole)} ${membre2}$.`
+    }
   }
 }

@@ -818,6 +818,11 @@ div[id^='title-lampeMessage'] {
   font-size: 1em !important;
 }
 
+/* Le texte (\text{}) rendu par KaTeX utilise la police de la page, comme dans les champs MathLive */
+.katex .text {
+  font-family: var(--font-sans);
+}
+
 .mathalea2d {
   @apply dark:bg-coopmathsdark-canvas-light;
 }
@@ -1029,6 +1034,8 @@ math-field {
   --contains-highlight-color: hsl(212, 40%, 49%);
   --contains-highlight-background-color: hsl(212, 40%, 95%);
   --highlight-text: hsla(212, 40%, 50%, 0.1);
+  /* Le texte (\text{}) des champs MathLive utilise la police du reste de la page (par défaut : system-ui) */
+  --text-font-family: var(--font-sans);
   line-height: 1;
   border-radius: 4px;
   border: none;

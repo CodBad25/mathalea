@@ -33,6 +33,7 @@ export default class Auto1AC3j extends ExerciceSimple {
     this.spacing = 1.5
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.versionQcmDisponible = true
     this.versionQcm = false
     this.tip = `

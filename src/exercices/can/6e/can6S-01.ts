@@ -35,13 +35,9 @@ export default class LectureDiagrammeBarre extends ExerciceSimple {
   nouvelleVersion() {
     const objets = []
     const valeurs: [string, string, string[]][] = [
-      ['nombre de fruits', 'une corbeille', ['bananes', 'oranges', 'pommes']],
-      [
-        'nombre de voitures',
-        'un garage',
-        ['berline', 'utilitaire', 'cross over'],
-      ],
-      ['nombre de vêtements', 'une armoire', ['chemises', 'T-shirts', 'pulls']],
+      ['fruits', 'une corbeille', ['bananes', 'oranges', 'pommes']],
+      ['voitures', 'un garage', ['berline', 'utilitaire', 'cross over']],
+      ['vêtements', 'une armoire', ['chemises', 'T-shirts', 'pulls']],
     ]
     const quidam = prenom()
     const n = this.quotaRandint('n', 0, 2)
@@ -64,7 +60,7 @@ export default class LectureDiagrammeBarre extends ExerciceSimple {
       yMin: 0,
       axeYStyle: '',
       axeXStyle: '->',
-      xLegende: `${valeurs[n][0]}`,
+      xLegende: `nombre de ${valeurs[n][0]}`,
       xLegendePosition: [10.5, -0.5],
     })
     objets.push(r)
