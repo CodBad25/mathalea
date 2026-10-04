@@ -172,7 +172,7 @@ export function ajouteFeedback(
   return `<div class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exo}Q${question}" ${style !== '' ? style : ''}></div>`
 }
 
-type OptionsChamp = {
+export type OptionsChamp = {
   texteApres?: string
   texteAvant?: string
   blocCenter?: boolean

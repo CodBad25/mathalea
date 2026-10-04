@@ -1,5 +1,5 @@
 import { handleAnswers } from '../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../lib/interactif/questionMathLive'
+import { ajouteChampTexteMathLive, type OptionsChamp } from '../lib/interactif/questionMathLive'
 import { KeyboardType } from '../lib/interactif/claviers/keyboard'
 import ExerciceQcmA from './ExerciceQcmA'
 
@@ -8,6 +8,7 @@ type ExerciceAvecSaisie = ExerciceQcmA & {
   enonceCourt?: () => string
   correctionCourte?: () => string
   clavierReponseCourte?: string
+  optionsChampReponseCourte?: OptionsChamp
 }
 
 export function genereReponsesCourtes(exercice: ExerciceAvecSaisie) {
@@ -24,7 +25,7 @@ export function genereReponsesCourtes(exercice: ExerciceAvecSaisie) {
     const enonce = exercice.enonceCourt?.() ?? exercice.enonce
     if (exercice.questionJamaisPosee(i, enonce, reponse)) {
       exercice.listeQuestions[i] = enonce + (exercice.interactif
-        ? `<br>${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase)}`
+        ? `<br>${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase, exercice.optionsChampReponseCourte)}`
         : '')
       exercice.listeCorrections[i] = exercice.correctionCourte?.() ?? exercice.correction ?? ''
       handleAnswers(exercice, i, { reponse: { value: reponse } }, { formatInteractif: 'mathalea-mathfield' })
@@ -40,6 +41,7 @@ export default class ExerciceQcmACourt extends ExerciceQcmA {
   enonceCourt?: () => string
   correctionCourte?: () => string
   clavierReponseCourte?: string
+  optionsChampReponseCourte?: OptionsChamp
 
   constructor() {
     super()

@@ -26,8 +26,10 @@ export default class Auto1AC14 extends CalculExpAvecValeurs {
   nouvelleVersion() {
     super.nouvelleVersion()
     this.question = (this.question ?? '').replace(
-      /Lorsque (.*?),\s*(?:<br>)?\s*la valeur de \$F\$ est égale à :/s,
-      'Calculer la valeur de $F$ lorsque $1.',
+      /Lorsque (.*?),\s*(?:<br>)?\s*la valeur de \$F\$ est égale à :\s*(?:\$\\ldots\$)?/s,
+      (_match: string, valeurs: string) =>
+        `Calculer la valeur de $F$ lorsque ${valeurs}.`,
     )
+    this.optionsChampTexte = { texteAvant: '<br>$F=$' }
   }
 }

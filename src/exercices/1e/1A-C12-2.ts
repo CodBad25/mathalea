@@ -20,14 +20,20 @@ export const dateDePublication = '06/08/2026'
  * Clone de EAM-AGTechno-2026-Q4 en version exclusivement aléatoire.
  */
 export default class ConvertirCelsiusEnFahrenheit extends AutoQ4AGt2026 {
-  reponseCourte = () => this.reponses[0].slice(1).split('\\,')[0]
+  reponseCourte = () => this.reponses[0].slice(1).split('\\,^')[0]
   correctionCourte = () => `En appliquant la formule $F=1,8C+32$, on obtient $F=${miseEnEvidence(this.reponseCourte())}$.`
   enonceCourt = () => this.enonce.replace(
     /,\s*(?:sa conversion|la température d'ébulition de l'eau) en degrés Fahrenheit est donc :<br>/,
     '.<br>Calculer la température correspondante en degrés Fahrenheit.',
   )
+  optionsChampReponseCourte = {
+    texteAvant: 'La température en degrés Fahrenheit est ',
+    texteApres: '.',
+  }
+
   constructor() {
     super()
+    this.spacing = 1.5
     this.besoinFormulaireCaseACocher = false
     this.sup3 = false
     this.besoinFormulaire3CaseACocher = ['Mode QCM', false]
