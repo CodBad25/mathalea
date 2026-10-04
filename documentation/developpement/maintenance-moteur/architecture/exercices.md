@@ -87,6 +87,7 @@ les paramètres qui suivent s'y rapportent jusqu'au suivant.
 | `iframe` | global | identifiant d'intégration, conservé dans les URL régénérées |
 | `beta` | global | ouvre les vues encore en test (`quizzconf`, `omr`…) |
 | `triche` | global, `localhost` | affiche les réponses attendues dans la console |
+| `cor` | global, `localhost` | affiche l'énoncé et la correction de tous les exercices (relecture) |
 
 La valeur de `alea` et des `s…` fait partie des liens partagés : voir
 [Stabilité des tirages](../../../tests/stabilite-exercices.md).

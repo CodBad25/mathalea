@@ -13,6 +13,7 @@ import type { InterfaceGlobalOptions } from '../types'
  * * `isCheckPerQuestion` : uniquement pour la vue eleve, pour que chaque question d'un exercice interactif ait son propre bouton « Vérifier » (retour immédiat question par question) au lieu d'un seul bouton pour tout l'exercice
  * * `isInteractiveFree` : uniquement pour la vue eleve, pour savoir si l'élève peut changer l'interactivité ou pas
  * * `oneShot` : uniquement pour la vue eleve, pour savoir si l'élève peut répondre une ou plusieurs fois en interactif.
+ * * `cor` : uniquement en local (`localhost`), affiche l'énoncé et la correction de tous les exercices pour faciliter la relecture (paramètre d'URL `cor`)
  * * `twoColumns` : dans les vues élèves avec tous les exercices/questions sur une même page, on adopte la présentation du texte sur deux colonnes
  *
  * `globalOptions` est utilisé dans `Mathalea.updateUrl()` et dans `Mathalea.loadExercicesFromUrl()`
@@ -38,5 +39,6 @@ export const globalOptions = writable<InterfaceGlobalOptions>({
   oneShot: false,
   twoColumns: false,
   beta: false,
+  cor: false,
   lang: 'fr-FR',
 })

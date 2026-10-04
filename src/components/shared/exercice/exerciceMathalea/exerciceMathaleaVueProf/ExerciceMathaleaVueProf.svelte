@@ -133,6 +133,9 @@
   const isMobileView = getContext('mobileView') === true
   let isSettingsVisible = !isMobileView
   let isInteractif = exercise.interactif || exercise.interactifObligatoire
+  // Relecture (`&cor` en local) : la correction est affichée dès le départ,
+  // sauf pour un exercice interactif dont la correction suit la vérification.
+  if (get(globalOptions).cor && !isInteractif) isCorrectionVisible = true
   const interactifReady = exercise.interactifReady
   const exerciceHasNoSettingsExceptBareme =
     !exercise.nbQuestionsModifiable &&
@@ -200,6 +203,7 @@
     headerProps.indiceExercice = exerciseIndex
     headerProps.indiceLastExercice = exercicesNumber
     headerProps.isSettingsVisible = isSettingsVisible
+    headerProps.isCorrectionVisible = isCorrectionVisible
     headerProps = headerProps
     isCorrectionVisible = isCorrectionVisible // MGU pour déclencher le reactive
   }
