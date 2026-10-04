@@ -1,5 +1,8 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -26,12 +29,12 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
     this.nbQuestions = 1
     this.versionQcmDisponible = true
     this.typeExercice = 'simple'
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierNumbers
   }
 
   nouvelleVersion() {
     const choixType = this.quotaChoice('choixType', [1, 2, 2])
-
+    let totalMinutes = 0
     switch (choixType) {
       case 1:
         {
@@ -40,7 +43,7 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
           const fractionsQuart = [0.25, 0.75] // 1/4 ou 3/4 d'heure
           const fractionDecimale = fractionsQuart[randint(0, 1)]
           const heuresDecimales = heures + fractionDecimale
-          const totalMinutes = heuresDecimales * 60
+          totalMinutes = heuresDecimales * 60
 
           this.question = `Une durée de $${texNombre(heuresDecimales, 2)}$ ${heuresDecimales >= 2 ? 'heures' : 'heure'} correspond à : `
 
@@ -51,11 +54,11 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
           if (heures > 0) {
             // Cas avec heures entières + fraction
             this.correction = `$${texNombre(heuresDecimales, 2)}\\text{ h} =${heures} \\text{ h} + ${texNombre(fractionDecimale, 2)} \\text{ h}$, soit $${heures}\\text{ h} + ${fractionText} \\text{ h} = ${heures * 60} \\text{ min} + ${minutesFraction}\\text{ min} = ${totalMinutes} \\text{ min}$.<br>
-            Ainsi, $${texNombre(heuresDecimales, 2)}$ ${heuresDecimales >= 2 ? 'heures' : 'heure'} correspond à $${miseEnEvidence(totalMinutes.toString())}$ minutes.`
+            Ainsi, $${texNombre(heuresDecimales, 2)}$ ${heuresDecimales >= 2 ? 'heures' : 'heure'} correspond à`
           } else {
             // Cas avec seulement une fraction d'heure
             this.correction = `$${texNombre(heuresDecimales, 2)}\\text{ h} = ${fractionText} \\text{ h} = ${minutesFraction} \\text{ min}$.<br>
-            Ainsi, $${texNombre(heuresDecimales, 2)}$ heure correspond à $${miseEnEvidence(totalMinutes.toString())}$ minutes.`
+            Ainsi, $${texNombre(heuresDecimales, 2)}$ heure correspond à`
           }
 
           // Générer des fausses réponses
@@ -84,7 +87,7 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
           const heuresEntieres = randint(1, 2) // 1 ou 2 heures
           const dixiemes = [1, 2, 3, 4, 6, 7, 8, 9][randint(0, 7)] // Éviter 0 et 5 pour plus de variété
           const heuresDecimales = heuresEntieres + dixiemes / 10
-          const totalMinutes = heuresDecimales * 60
+          totalMinutes = heuresDecimales * 60
 
           this.question = `Une durée de $${texNombre(heuresDecimales, 1)}$ ${heuresDecimales >= 2 ? 'heures' : 'heure'} correspond à : `
 
@@ -98,7 +101,7 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
           else if (dixiemes === 8) fractionText = '\\dfrac{4}{5}'
 
           this.correction = `$${texNombre(heuresDecimales, 1)}\\text{ h} =${heuresEntieres} \\text{ h} + ${texNombre(dixiemes / 10, 1)} \\text{ h}$, soit $${heuresEntieres}\\text{ h} + ${fractionText} \\text{ h} = ${heuresEntieres * 60} \\text{ min} + ${minutesFraction}\\text{ min} = ${totalMinutes} \\text{ min}$.<br>
-          Ainsi, $${texNombre(heuresDecimales, 1)}$ heures correspond à $${miseEnEvidence(totalMinutes.toString())}$ minutes.`
+          Ainsi, $${texNombre(heuresDecimales, 1)}$ heures correspond à`
 
           // Générer des fausses réponses
           const erreurClassique = heuresEntieres * 60 + dixiemes // Ex: 1,3h → 61 min au lieu de 78 min
@@ -120,6 +123,10 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
         }
         break
     }
+    this.correction += this.versionQcm
+      ? ` $${miseEnEvidence(texNombre(totalMinutes, 1))}$ ${texteEnCouleurEtGras('minutes')}.`
+      : ` $${miseEnEvidence(texNombre(totalMinutes, 1))}$ minutes.`
+
     this.canReponseACompleter = this.question + '$\\ldots$ ' + 'minutes'
     if (!this.interactif && !this.versionQcm)
       this.question = this.canReponseACompleter + '.'
