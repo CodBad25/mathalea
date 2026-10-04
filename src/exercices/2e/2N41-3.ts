@@ -43,7 +43,7 @@ export default class ConversionsPuissancesDe10 extends Exercice {
       'm>km',
       'u>M',
       'u>G',
-      'g>t',
+      'g>kg',
       'M>G',
       'M>T',
       'G>T',
@@ -120,16 +120,16 @@ export default class ConversionsPuissancesDe10 extends Exercice {
             `1 G${unite[0]}, c'est 1 milliard de ${unite[1]}, on va donc multiplier par 1 milliard, c'est-à-dire multiplier par $10^{9}$.<br>`,
           ]
           break
-        case 'g>t':
+        case 'g>kg':
           n = listeDeSens[i] === 'div' ? randint(13, 20) : randint(4, 10)
           uniteOrdre =
             listeDeSens[i] === 'div'
-              ? ['\\text{g}', '\\text{t}']
-              : ['\\text{t}', '\\text{g}']
-          exposantReponse = listeDeSens[i] === 'div' ? n - 6 : n + 6
+              ? ['\\text{g}', '\\text{kg}']
+              : ['\\text{kg}', '\\text{g}']
+          exposantReponse = listeDeSens[i] === 'div' ? n - 3 : n + 3
           correctionDetail = [
-            "Il faut 1 million de grammes pour 1 tonne, on va donc diviser par 1 million, c'est-à-dire multiplier par $10^{-6}$.<br>",
-            "1 tonne c'est 1 million de grammes, on va donc multiplier par 1 million, c'est-à-dire multiplier par $10^{6}$.<br>",
+            `Il faut $${texNombre(1000)}\\text{ g}$ pour $1\\text{ kg}$, on va donc diviser par $${texNombre(1000)}$, c'est-à-dire multiplier par $10^{-3}$.<br>`,
+            `$1\\text{ kg}=${texNombre(1000)}\\text{ g}$, on va donc multiplier par $${texNombre(1000)}$, c'est-à-dire multiplier par $10^{3}$.<br>`,
           ]
           break
         case 'M>G':
