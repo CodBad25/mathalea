@@ -4,18 +4,22 @@ import {
 } from '../../lib/mathFonctions/etudeFonction'
 
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import type {
+  CelluleSigne,
+  LigneSigne,
+  TableauSVConfig,
+} from '../../lib/interactif/tableauSignesVariations/types'
 
 import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmACourt, { genereTableauxDeSignes } from '../ExerciceQcmACourt'
 
 /**
  * @author Gilles Mora
  *
  */
-export const dateDeModifImportante = '30/09/2026'
+export const dateDeModifImportante = '04/10/2026'
 
 export const uuid = '3846a'
 export const refs = {
@@ -29,8 +33,12 @@ export const titre = "Retrouver le tableau de signes d'un produit de fonctions"
 export const dateDePublication = '26/07/2025'
 
 export default class Auto1AC16b extends ExerciceQcmACourt {
+  private racines: [number, number] = [0, 0]
+  private produitPositifAuxBornes = true
+
   versionOriginale: () => void = () => {
-    this.reponseCourte = () => ']-\\infty;-2[\\cup]5;+\\infty['
+    this.racines = [-2, 5]
+    this.produitPositifAuxBornes = true
     const f = (x: number | FractionEtendue) =>
       (3 * Number(x) - 15) * (Number(x) + 2)
     const f1 = (x: number | FractionEtendue) =>
@@ -130,8 +138,8 @@ export default class Auto1AC16b extends ExerciceQcmACourt {
     ]
     this.correction =
       `L'équation $3x-15=0$ a pour solution $x=5$.<br>
-    L'équation $x+2=0$ a pour solution $x=2$.<br>
-    Le tableau de signe du produit $(3x+15)(x+2)$ est : <br>` +
+    L'équation $x+2=0$ a pour solution $x=-2$.<br>
+    Le tableau de signe du produit $(3x-15)(x+2)$ est : <br>` +
       tableauDeVariation({
         tabInit: [
           [
@@ -164,9 +172,8 @@ export default class Auto1AC16b extends ExerciceQcmACourt {
     const racines = [racine1, racine2].sort((x, y) => x - y)
     const rMin = racines[0]
     const rMax = racines[1]
-    this.reponseCourte = () => a * m > 0
-      ? `]-\\infty;${texNombre(rMin)}[\\cup]${texNombre(rMax)};+\\infty[`
-      : rMin === rMax ? '\\varnothing' : `]${texNombre(rMin)};${texNombre(rMax)}[`
+    this.racines = [rMin, rMax]
+    this.produitPositifAuxBornes = a * m > 0
 
     const f = (x: number | FractionEtendue) =>
       (a * Number(x) + b) * (m * Number(x) + p)
@@ -325,43 +332,65 @@ export default class Auto1AC16b extends ExerciceQcmACourt {
       ligne3 = ligneMPM // - puis + puis -
     }
 
+    // Racine double : une seule valeur dans le tableau, le produit garde son signe
+    const racineDouble = rMin === rMax
+    if (racineDouble) {
+      const ligneSimple = (avant: string, apres: string) => [
+        'Line',
+        30,
+        '',
+        0,
+        avant,
+        20,
+        'z',
+        20,
+        apres,
+        20,
+      ]
+      ligne1 = a > 0 ? ligneSimple('-', '+') : ligneSimple('+', '-')
+      ligne2 = m > 0 ? ligneSimple('-', '+') : ligneSimple('+', '-')
+      ligne3 = a * m > 0 ? ligneSimple('+', '+') : ligneSimple('-', '-')
+    }
+
     this.enonce = `La fonction $f$ définie sur $\\mathbb{R}$ par $f(x)=(${reduireAxPlusB(a, b)})(${reduireAxPlusB(m, p)})$ admet pour tableau de signes :   `
 
-    const tableauReponse = `${tableauSignesFonction(f, -20, 20, {
-      step: 1,
-      tolerance: 0.1,
-      substituts: [
-        { antVal: -20, antTex: '-\\infty' },
-        { antVal: 20, antTex: '+\\infty' },
-      ],
-    })}`
+    const tableauSignes = (fonction: (x: number) => number) =>
+      tableauSignesFonction(fonction, -20, 20, {
+        step: 1,
+        tolerance: 0.1,
+        substituts: [
+          { antVal: -20, antTex: '-\\infty' },
+          { antVal: 20, antTex: '+\\infty' },
+        ],
+      })
+    // tableauSignesFonction ne repère que les changements de signe :
+    // une racine double (signe identique de part et d'autre) est ajoutée à la main.
+    const tableauRacineDouble = (racine: number, signe: '+' | '-') =>
+      tableauDeVariation({
+        tabInit: [
+          [
+            ['x', 1.5, 10],
+            ['f(x)', 1.5, 10],
+          ],
+          ['-\\infty', 10, texNombre(racine), 10, '+\\infty', 10],
+        ],
+        tabLines: [['Line', 30, '', 10, signe, 10, 'z', 10, signe, 10]],
+        espcl: 2.1,
+        deltacl: 0.8,
+        lgt: 3,
+      })
+    const signeAuxBornes = a * m > 0 ? '+' : '-'
+    const signeOppose = a * m > 0 ? '-' : '+'
+
+    const tableauReponse = racineDouble
+      ? tableauRacineDouble(rMin, signeAuxBornes)
+      : tableauSignes(f)
     this.reponses = [
       tableauReponse,
-      `${tableauSignesFonction(f1, -20, 20, {
-        step: 1,
-        tolerance: 0.1,
-        substituts: [
-          { antVal: -20, antTex: '-\\infty' },
-          { antVal: 20, antTex: '+\\infty' },
-        ],
-      })}`,
-
-      `${tableauSignesFonction(f2, -20, 20, {
-        step: 1,
-        tolerance: 0.1,
-        substituts: [
-          { antVal: -20, antTex: '-\\infty' },
-          { antVal: 20, antTex: '+\\infty' },
-        ],
-      })}`,
-      `${tableauSignesFonction(f3, -20, 20, {
-        step: 1,
-        tolerance: 0.1,
-        substituts: [
-          { antVal: -20, antTex: '-\\infty' },
-          { antVal: 20, antTex: '+\\infty' },
-        ],
-      })}`,
+      racineDouble ? tableauRacineDouble(rMin, signeOppose) : tableauSignes(f1),
+      tableauSignes(f2),
+      // f3 a pour racine double l'opposé de celle de f
+      racineDouble ? tableauRacineDouble(-rMin, signeAuxBornes) : tableauSignes(f3),
     ]
 
     // Construction de la correction dynamique
@@ -377,16 +406,18 @@ export default class Auto1AC16b extends ExerciceQcmACourt {
             [`$${reduireAxPlusB(m, p)}$`, 2, 50],
             [`$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(m, p)})$`, 2, 100],
           ],
-          [
-            '$-\\infty$',
-            30,
-            `$${texNombre(rMin)}$`,
-            20,
-            `$${texNombre(rMax)}$`,
-            20,
-            '$+\\infty$',
-            30,
-          ],
+          racineDouble
+            ? ['$-\\infty$', 30, `$${texNombre(rMin)}$`, 20, '$+\\infty$', 30]
+            : [
+                '$-\\infty$',
+                30,
+                `$${texNombre(rMin)}$`,
+                20,
+                `$${texNombre(rMax)}$`,
+                20,
+                '$+\\infty$',
+                30,
+              ],
         ],
         tabLines: [ligne1, ligne2, ligne3],
         espcl: 3,
@@ -396,12 +427,56 @@ export default class Auto1AC16b extends ExerciceQcmACourt {
       `Le tableau de signes de $f$ est donc : <br>${tableauReponse}`
   }
 
-  // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
+  /** Tableau de signes de f(x) à compléter : les racines et les signes. */
+  configTableauSignes(): TableauSVConfig {
+    const [rMin, rMax] = this.racines
+    const exterieur = this.produitPositifAuxBornes ? '+' : '-'
+    const interieur = this.produitPositifAuxBornes ? '-' : '+'
+    const ligne = (signes: CelluleSigne['symbole'][]): LigneSigne => ({
+      type: 'signe',
+      label: 'f(x)',
+      cellules: [
+        { symbole: '' },
+        ...signes.flatMap((signe, k): CelluleSigne[] => [
+          ...(k > 0 ? [{ symbole: '|0' } as CelluleSigne] : []),
+          { symbole: '', editable: true, expected: signe },
+        ]),
+        { symbole: '' },
+      ],
+    })
+    if (rMin === rMax) {
+      return {
+        variableName: 'x',
+        colonnes: [
+          { valeur: '-\\infty' },
+          { valeur: '', editable: true, expected: texNombre(rMin, 2) },
+          { valeur: '+\\infty' },
+        ],
+        lignes: [ligne([exterieur, exterieur])],
+      }
+    }
+    return {
+      variableName: 'x',
+      colonnes: [
+        { valeur: '-\\infty' },
+        { valeur: '', editable: true, expected: texNombre(rMin, 2) },
+        { valeur: '', editable: true, expected: texNombre(rMax, 2) },
+        { valeur: '+\\infty' },
+      ],
+      lignes: [ligne([exterieur, interieur, exterieur])],
+    }
+  }
+
+  nouvelleVersion() {
+    if (this.sup3) super.nouvelleVersion()
+    else genereTableauxDeSignes(this)
+  }
+
   constructor() {
     super()
-    this.clavierReponseCourte = 'clavierEnsemble'
-    this.enonceCourt = () => this.enonce.replace(/ admet pour tableau de signes\s*:/, '. Déterminer l’ensemble des réels $x$ tels que $f(x)>0$.')
-    this.correctionCourte = () => `${this.correction}<br>L’ensemble des solutions de $f(x)>0$ est $${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
+    this.enonceCourt = () => this.enonce
+      .replace(/^La fonction/, 'On considère la fonction')
+      .replace(/ admet pour tableau de signes\s*:\s*$/, '.<br>Déterminer le tableau de signes de $f$.')
     this.options.vertical = true
     this.versionAleatoire()
   }

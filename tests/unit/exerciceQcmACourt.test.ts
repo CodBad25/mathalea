@@ -3,6 +3,7 @@ import ConvertirCelsius from '../../src/exercices/1e/1A-C12-2'
 import CalculerF from '../../src/exercices/1e/1A-C12-1'
 import ExprimerVariable from '../../src/exercices/1e/1A-C11-2'
 import SigneAffine from '../../src/exercices/1e/1A-C14-1'
+import SigneProduit from '../../src/exercices/1e/1A-C14-2'
 import FonctionDepuisSignes from '../../src/exercices/1e/1A-C14-3'
 import FonctionDepuisDonnees from '../../src/exercices/1e/1A-C14-5'
 import ResoudreInequation from '../../src/exercices/1e/1A-C14-4'
@@ -34,27 +35,41 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
     expect(exercice.listeQuestions[0]).toContain('Calculer la température correspondante')
   })
 
-  it('demande un intervalle pour le signe d’une fonction affine', () => {
-    const exercice = new SigneAffine()
-    exercice.interactif = true
-    exercice.nouvelleVersion()
-
-    expect(exercice.listeQuestions[0]).toContain('$f(x)>0$')
-    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')
-  })
-
-  it.each([FonctionDepuisSignes, FonctionDepuisDonnees])(
-    'demande une expression possible avec un coefficient fixé',
+  it.each([SigneAffine, SigneProduit])(
+    'demande de compléter un tableau de signes',
     (ClasseExercice) => {
       const exercice = new ClasseExercice()
       exercice.interactif = true
       exercice.nouvelleVersion()
 
-      expect(exercice.listeQuestions[0]).toContain('coefficient directeur')
-      expect(exercice.listeQuestions[0]).not.toContain('Parmi les quatre expressions')
-      expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')
+      expect(exercice.listeQuestions[0]).toContain('Déterminer le tableau de signes de $f$.')
+      expect(exercice.autoCorrection[0].formatInteractif).toBe('tableau-signes-variations')
+      expect(exercice.autoCorrection[0].valeur?.bareme?.([1, 1, 1])).toEqual([1, 1])
     },
   )
+
+  it('accepte toute fonction affine vérifiant les données sur le signe', () => {
+    const exercice = new FonctionDepuisDonnees()
+    exercice.interactif = true
+    exercice.nouvelleVersion()
+
+    expect(exercice.listeQuestions[0]).toContain('vérifiant ces conditions')
+    expect(exercice.autoCorrection[0].valeur?.reponse?.compare).toBeDefined()
+    expect(exercice.listeQuestions[0]).not.toContain('Parmi les quatre expressions')
+    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')
+  })
+
+  it('accepte toute fonction affine ayant le tableau de signes donné', () => {
+    const exercice = new FonctionDepuisSignes()
+    exercice.interactif = true
+    exercice.nouvelleVersion()
+
+    expect(exercice.listeQuestions[0]).toContain('ayant ce tableau de signes')
+    expect(exercice.listeQuestions[0]).not.toContain('Parmi les quatre expressions')
+    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')
+
+    expect(exercice.autoCorrection[0].valeur?.reponse?.compare).toBeDefined()
+  })
 
   it('formule les consignes de calcul et de réponse courte à l’infinitif', () => {
     const calculerF = new CalculerF()

@@ -211,6 +211,28 @@ congruences.
 | `2x`       | `4x`             | ✗ Les expressions ne décrivent pas le même ensemble. |
 | `2x+1`     | `2x+2`           | ✗                                                    |
 
+#### `sameAffineSignTable`
+
+La saisie est-elle une fonction affine qui a le même tableau de signes que la
+réponse attendue (même racine, coefficient directeur de même signe) ? Utile
+quand plusieurs fonctions affines conviennent, par exemple pour retrouver une
+fonction à partir de son tableau de signes. Un préfixe `f(x)=` dans la saisie
+est ignoré. `coefficientsAffines(latex)`, exporté par le même fichier, renvoie
+les coefficients `[a, b]` d'une expression affine.
+
+| Option     | Rôle                       |
+| ---------- | -------------------------- |
+| `variable` | Variable, `x` par défaut   |
+
+| Saisie        | Réponse attendue | Verdict                                                        |
+| ------------- | ---------------- | -------------------------------------------------------------- |
+| `-2(x-3)`     | `-x+3`           | ✓                                                              |
+| `6-2x`        | `-x+3`           | ✓                                                              |
+| `x-3`         | `-x+3`           | ✗ Cette fonction affine ne convient pas.                       |
+| `-x^2+9`      | `-x+3`           | ✗ La réponse doit être de la forme $ax+b$ avec $a\neq 0$.      |
+
+Exemples : `src/exercices/1e/1A-C14-3.ts`, `src/exercices/1e/1A-C14-5.ts`.
+
 #### `sameParametricLine`
 
 La saisie, un système `\begin{cases}…\end{cases}` affine en une variable, est
