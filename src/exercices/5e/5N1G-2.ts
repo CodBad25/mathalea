@@ -3,6 +3,7 @@ import type { MathfieldElement } from 'mathlive'
 import { assignVariablesCe } from '../../lib/assignVariablesCe'
 import { calculerCe } from '../../lib/calculerCe'
 import ce from '../../lib/interactif/comparisonFunctions'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -391,10 +392,10 @@ class MettreDesParentheses extends Exercice {
         const saisies = prompts.map((pr) =>
           mfe
             .getPromptValue(pr)
-            .replace('\\left(', '(')
-            .replace('\\right)', ')')
-            .replace('\\lparen', '(')
-            .replace('\\rparen', ')'),
+            .replaceAll('\\left(', '(')
+            .replaceAll('\\right)', ')')
+            .replaceAll('\\lparen', '(')
+            .replaceAll('\\rparen', ')'),
         )
         let laSaisie = ''
         for (let k = 0, index = 0; k < materiel.expSP.length; k++) {
@@ -405,12 +406,35 @@ class MettreDesParentheses extends Exercice {
             laSaisie += char
           }
         }
-        const expSaisie = assignVariablesCe(laSaisie, valeurs, {
-          invisibleMultiply: '\\times',
-          multiplySymbol: '\\times',
-        })
-        const saisieParsed = ce.parse(expSaisie)
-        const isOk1 = goodAnswer.isEqual(saisieParsed) ?? false // L'expression saisie et la bonne réponse donne le même résultat, c'est trés bon signe.
+        const onlyParentheses = saisies.every((saisie) =>
+          /^[()]*$/.test(saisie),
+        )
+        let depth = 0
+        const balancedParentheses =
+          saisies
+            .join('')
+            .split('')
+            .every((char) => {
+              if (char === '(') depth++
+              if (char === ')') depth--
+              return depth >= 0
+            }) && depth === 0
+        let isOk1 = false
+        let expSaisie = ''
+        let evaluatedValue = NaN
+        if (onlyParentheses && balancedParentheses) {
+          expSaisie = assignVariablesCe(laSaisie, valeurs, {
+            invisibleMultiply: '\\times',
+            multiplySymbol: '\\times',
+          })
+          const saisieParsed = ce.parse(expSaisie)
+          if (saisieParsed.isValid) {
+            evaluatedValue = saisieParsed.evaluate().re
+            isOk1 =
+              Number.isFinite(evaluatedValue) &&
+              (goodAnswer.isEqual(saisieParsed) ?? false)
+          }
+        }
         // cependant, il peut y avoir des parenthèses inutiles.
         let isOk2 = true
         for (let index2 = 0; index2 < variables.length; index2++) {
@@ -418,13 +442,22 @@ class MettreDesParentheses extends Exercice {
             isOk2 = false
           }
         }
-        if (isOk1 && !isOk2) {
+        if (!onlyParentheses) {
+          feedback =
+            'Saisir uniquement des parenthèses ou laisser les cases vides.'
+        } else if (!balancedParentheses) {
+          feedback =
+            'Les parenthèses sont mal équilibrées : chaque parenthèse ouvrante doit être refermée.'
+        } else if (!Number.isFinite(evaluatedValue)) {
+          feedback =
+            "L'expression est mal écrite. Vérifier le placement des parenthèses."
+        } else if (isOk1 && !isOk2) {
           feedback =
             "L'égalité est respectée, mais il y a des parenthèses inutiles."
         } else if (!isOk1) {
-          feedback = `L'égalité n'est pas respectée : en effet, $${expSaisie.replace('*', '\\times ')}=${saisieParsed.evaluate().re}$`
+          feedback = `L'égalité n'est pas respectée : en effet, $${expSaisie.replace('*', '\\times ')}=${evaluatedValue}$.`
         } else {
-          feedback = 'L`égalité est respectée.'
+          feedback = "L'égalité est respectée."
         }
 
         for (let index3 = 0; index3 < variables.length; index3++) {
@@ -475,6 +508,7 @@ class MettreDesParentheses extends Exercice {
               champ2: { value: listePar[1] === '(' ? '(' : '' },
               champ3: { value: listePar[2] === ')' ? ')' : '' },
               champ4: { value: listePar[3] === ')' ? ')' : '' },
+              bareme: toutPourUnPoint,
               callback,
             })
           } else {
@@ -489,6 +523,7 @@ class MettreDesParentheses extends Exercice {
             champ2: { value: '' },
             champ3: { value: '' },
             champ4: { value: '' },
+            bareme: toutPourUnPoint,
             callback,
           })
         }
@@ -516,6 +551,7 @@ class MettreDesParentheses extends Exercice {
                 value:
                   listePar[5] === '(' ? '(' : listePar[5] === ')' ? ')' : '',
               },
+              bareme: toutPourUnPoint,
               callback,
             })
           } else {
@@ -532,6 +568,7 @@ class MettreDesParentheses extends Exercice {
             champ4: { value: '' },
             champ5: { value: '' },
             champ6: { value: '' },
+            bareme: toutPourUnPoint,
             callback,
           })
         }
