@@ -2732,7 +2732,9 @@ export function buildStandaloneExerciseCode(
   lines.push(
     `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
   )
-  lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
+  // pas de `numbering` : « 1. » est la valeur par défaut, et le préambule
+  // d'une banque externe (inséré plus haut) peut avoir réglé la sienne
+  lines.push('#set enum(spacing: 1.2em)')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
   lines.push(MATHALEA_INLINE_FORMULA_RULE)
@@ -3837,7 +3839,9 @@ export function buildTypstDocument(
   lines.push(
     `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
   )
-  lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
+  // pas de `numbering` : « 1. » est la valeur par défaut, et le préambule
+  // d'une banque externe (inséré plus haut) peut avoir réglé la sienne
+  lines.push('#set enum(spacing: 1.2em)')
   // police des formules ; les nombres et symboles restent en police maths
   lines.push('#show math.equation: set text(font: police-maths)')
   // #txt : texte inséré dans une formule mais rendu avec la police du texte
