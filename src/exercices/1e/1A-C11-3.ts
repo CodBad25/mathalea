@@ -41,7 +41,7 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
           $\\begin{aligned} \\dfrac{${a}}{x}+\\dfrac{${b}}{y}&= \\dfrac{${c}}{u} \\\\ 
          \\dfrac{${rienSi1(a)}y${ecritureAlgebriqueSauf1(b)}x}{xy}&= \\dfrac{${c}}{u} \\\\ 
           ${c === 1 ? `u` : `\\dfrac{u}{${c}}`} &=   \\dfrac{xy}{${rienSi1(a)}y${ecritureAlgebriqueSauf1(b)}x} \\\\
-          u&= ${miseEnEvidence(`\\dfrac{${rienSi1(c)}xy}{${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}y}`)} 
+          ${this.resultat(`\\dfrac{${rienSi1(c)}xy}{${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}y}`)} 
           \\end{aligned}$`
 
       this.reponses = [
@@ -55,7 +55,7 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
           $\\begin{aligned} \\dfrac{${a}}{x}-\\dfrac{${rienSi1(b)}}{y}&= \\dfrac{${c}}{u} \\\\ 
           \\dfrac{${rienSi1(a)}y-${rienSi1(b)}x}{xy}&= \\dfrac{${c}}{u} \\\\ 
            ${c === 1 ? `u` : `\\dfrac{u}{${c}}`}&= \\dfrac{xy}{${rienSi1(a)}y-${rienSi1(b)}x} \\\\
-          u&= ${miseEnEvidence(`\\dfrac{${rienSi1(c)}xy}{${rienSi1(a)}y-${rienSi1(b)}x}`)} 
+          ${this.resultat(`\\dfrac{${rienSi1(c)}xy}{${rienSi1(a)}y-${rienSi1(b)}x}`)} 
           \\end{aligned}$`
 
       this.reponses = [
@@ -65,6 +65,14 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
         `$u=\\dfrac{${rienSi1(a)}y-${rienSi1(b)}x}{${rienSi1(c)}xy}$`,
       ]
     }
+  }
+
+  // Dernière ligne de la correction : toute l'égalité en évidence en QCM,
+  // seulement l'expression saisie sinon (« u = » est écrit devant le champ)
+  private resultat(expression: string) {
+    return this.sup3
+      ? `${miseEnEvidence('u')}&${miseEnEvidence(`=${expression}`)}`
+      : `u&= ${miseEnEvidence(expression)}`
   }
 
   versionOriginale: () => void = () => {
@@ -89,7 +97,7 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
               $\\begin{aligned} \\dfrac{${a}}{x}+\\dfrac{1}{${b}}&= \\dfrac{${c}}{u} \\\\ 
               \\dfrac{${a * b}+x}{${rienSi1(b)}x}&= \\dfrac{${c}}{u} \\\\ 
               u&= \\dfrac{${c === 1 ? '' : `${c}\\times `}${b}x}{${a * b}+x}\\\\
-              u&= ${miseEnEvidence(`\\dfrac{${c * b}x}{${a * b}+x}`)} 
+              ${this.resultat(`\\dfrac{${c * b}x}{${a * b}+x}`)} 
               \\end{aligned}$`
 
         this.reponses = [
@@ -114,7 +122,7 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
                \\dfrac{${rienSi1(a)}x}{y}+${b}&= \\dfrac{${c}}{u} \\\\ 
               \\dfrac{${rienSi1(a)}x+${rienSi1(b)}y}{y}&= \\dfrac{${c}}{u} \\\\ 
               u&=\\dfrac{${c === 1 ? `` : `${c}\\times `}y}{${rienSi1(a)}x+${b}y} \\\\
-              u&= ${miseEnEvidence(`\\dfrac{${rienSi1(c)}y}{${rienSi1(a)}x+${rienSi1(b)}y}`)} 
+              ${this.resultat(`\\dfrac{${rienSi1(c)}y}{${rienSi1(a)}x+${rienSi1(b)}y}`)} 
               \\end{aligned}$`
 
         this.reponses = [
@@ -131,7 +139,10 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
     super()
     this.clavierReponseCourte = KeyboardType.clavierDeBaseAvecFraction
     // En saisie courte : « u = » devant le champ et les lettres utiles sur le clavier
-    this.optionsChampTexte = { texteAvant: '$u=$', dataKeys: ['u', 'x', 'y'] }
+    this.optionsChampReponseCourte = {
+      texteAvant: '$u=$',
+      dataKeys: ['u', 'x', 'y'],
+    }
     this.enonceCourt = () =>
       this.enonce.replace(
         'On peut affirmer que :',
