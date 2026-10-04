@@ -14,14 +14,17 @@ type ExerciceAvecSaisie = ExerciceQcmA & {
 export function genereReponsesCourtes(exercice: ExerciceAvecSaisie) {
   exercice.consigne = ''
   for (let i = 0, cpt = 0; i < exercice.nbQuestions && cpt < 30; cpt++) {
-    if (exercice.sup && exercice.versionOriginale != null) exercice.versionOriginale()
+    if (exercice.sup && exercice.versionOriginale != null)
+      exercice.versionOriginale()
     else exercice.versionAleatoire()
 
-    const reponse = exercice.reponseCourte?.() ?? exercice.reponses[0]
-      .replace(/^\$|\$$/g, '')
-      .replace(/\\(?:text|mathrm)\{[^}]*\}/g, '')
-      .replace(/\\,|\\ /g, '')
-      .trim()
+    const reponse =
+      exercice.reponseCourte?.() ??
+      exercice.reponses[0]
+        .replace(/^\$|\$$/g, '')
+        .replace(/\\(?:text|mathrm)\{[^}]*\}/g, '')
+        .replace(/\\,|\\ /g, '')
+        .trim()
     const enonce = exercice.enonceCourt?.() ?? exercice.enonce
     if (exercice.questionJamaisPosee(i, enonce, reponse)) {
       exercice.listeQuestions[i] = enonce + (exercice.interactif

@@ -91,10 +91,10 @@ export default class ExprimerEnFonctionRac extends ExerciceSimple {
         // Fin nouvelle version
 
         this.correction = choixQ
-          ? `Puisque $a=\\dfrac{v^2}{R}$, alors $v^2 = a \\times R$. <br>Comme $a \\times R\\geqslant 0$, $${miseEnEvidence('v = \\sqrt{aR}')}$.`
+          ? `Puisque $a=\\dfrac{v^2}{R}$, alors $v^2 = a \\times R$. <br>Comme $a \\times R\\geqslant 0$, $v = ${miseEnEvidence('\\sqrt{aR}')}$.`
           : `On part de la formule $v = \\sqrt{aR}$.<br>
 En élevant les deux membres au carré, on obtient : $v^2 = aR$.<br>
-Puis en isolant $a$, on obtient : $${miseEnEvidence('a = \\dfrac{v^2}{R}')}$.`
+Puis en isolant $a$, on obtient : $a = ${miseEnEvidence('\\dfrac{v^2}{R}')}$.`
         break
       case 2:
         this.question =
@@ -140,12 +140,12 @@ Puis en isolant $a$, on obtient : $${miseEnEvidence('a = \\dfrac{v^2}{R}')}$.`
         if (choixQ) {
           this.correction = `On part de la relation : $v = \\sqrt{\\dfrac{x}{y}}$.<br>
 En élevant les deux membres au carré, on obtient : $v^2 = \\dfrac{x}{y}$.<br>
-Puis en isolant $y$, on obtient : $${miseEnEvidence('y = \\dfrac{x}{v^2}')}$.`
+Puis en isolant $y$, on obtient : $y = ${miseEnEvidence('\\dfrac{x}{v^2}')}$.`
         } else {
           this.correction = `On part de la formule : $y = (1 + vx)^2$.<br>
 Comme les deux membres sont positifs, on peut prendre la racine carrée : $\\sqrt{y} = 1 + vx$.<br>
 En isolant  $v$, on obtient : $vx = \\sqrt{y} - 1$.<br>
-Donc : $${miseEnEvidence('v = \\dfrac{\\sqrt{y} - 1}{x}')}$.`
+Donc : $v = ${miseEnEvidence('\\dfrac{\\sqrt{y} - 1}{x}')}$.`
         }
         break
 
@@ -171,7 +171,7 @@ Donc : $${miseEnEvidence('v = \\dfrac{\\sqrt{y} - 1}{x}')}$.`
         }
         this.correction = `On part de la formule : $C = (1 + t)^2$.<br>
 Comme les deux membres sont positifs, on peut prendre la racine carrée : $\\sqrt{C} = 1 + t$.<br>
-En isolant $t$, on obtient : $${miseEnEvidence('t = \\sqrt{C} - 1')}$.`
+En isolant $t$, on obtient : $t = ${miseEnEvidence('\\sqrt{C} - 1')}$.`
         break
 
       case 4:
@@ -229,11 +229,11 @@ En isolant $t$, on obtient : $${miseEnEvidence('t = \\sqrt{C} - 1')}$.`
 
         if (choixQ) {
           this.correction = `On part de la formule : $V = \\pi r^2 h$.<br>
-En isolant $h$, on obtient : $${miseEnEvidence('h = \\dfrac{V}{\\pi r^2}')}$.`
+En isolant $h$, on obtient : $h = ${miseEnEvidence('\\dfrac{V}{\\pi r^2}')}$.`
         } else {
           this.correction = `On part de la formule : $V = \\pi r^2 h$.<br>
 En isolant $r^2$, on obtient : $r^2 = \\dfrac{V}{\\pi h}$.<br>
-Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvidence('r = \\sqrt{\\dfrac{V}{\\pi h}}')}$.`
+Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $r = ${miseEnEvidence('\\sqrt{\\dfrac{V}{\\pi h}}')}$.`
         }
         break
 
@@ -299,12 +299,12 @@ On cherche à isoler $h$. On a :`
         if (choixQ) {
           this.correction = `On part de la formule : $V = \\dfrac{1}{3}\\pi r^2 h$.<br>
 En multipliant les deux membres par $3$, on obtient : $3V = \\pi r^2 h$.<br>
-En isolant $h$, on obtient : $${miseEnEvidence('h = \\dfrac{3V}{\\pi r^2}')}$.`
+En isolant $h$, on obtient : $h = ${miseEnEvidence('\\dfrac{3V}{\\pi r^2}')}$.`
         } else {
           this.correction = `On part de la formule : $V = \\dfrac{1}{3}\\pi r^2 h$.<br>
 En multipliant les deux membres par $3$, on obtient : $3V = \\pi r^2 h$.<br>
 En isolant $r^2$, on obtient : $r^2 = \\dfrac{3V}{\\pi h}$.<br>
-Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvidence('r = \\sqrt{\\dfrac{3V}{\\pi h}}')}$.`
+Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $r = ${miseEnEvidence('\\sqrt{\\dfrac{3V}{\\pi h}}')}$.`
         }
         break
       case 6:
@@ -354,12 +354,12 @@ Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvid
         if (choixQ) {
           this.correction = `On part de la formule : $E = \\dfrac{1}{2}mv^2$.<br>
 En multipliant les deux membres par $2$, on obtient : $2E = mv^2$.<br>
-En isolant $m$, on obtient : $${miseEnEvidence('m = \\dfrac{2E}{v^2}')}$.`
+En isolant $m$, on obtient : $m = ${miseEnEvidence('\\dfrac{2E}{v^2}')}$.`
         } else {
           this.correction = `On part de la formule : $E = \\dfrac{1}{2}mv^2$.<br>
 En multipliant les deux membres par $2$, on obtient : $2E = mv^2$.<br>
 En isolant $v^2$, on obtient : $v^2 = \\dfrac{2E}{m}$.<br>
-Comme $v \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvidence('v = \\sqrt{\\dfrac{2E}{m}}')}$.`
+Comme $v \\geqslant 0$, en prenant la racine carrée, on obtient : $v = ${miseEnEvidence('\\sqrt{\\dfrac{2E}{m}}')}$.`
         }
         break
     }
