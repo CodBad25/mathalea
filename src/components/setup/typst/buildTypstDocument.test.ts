@@ -2652,6 +2652,22 @@ describe('sourceUrl (URL de régénération en commentaire)', () => {
   })
 })
 
+describe('préambule d’une banque externe (extraPreamble)', () => {
+  it('ne réécrit pas la numérotation des listes réglée par le préambule', () => {
+    const preambule = '#set enum(numbering: n => strong[#n.])'
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      defaultTypstDocumentOptions,
+      {},
+      [],
+      { extraPreamble: preambule },
+    )
+    expect(code).toContain(preambule)
+    const apres = code.slice(code.indexOf(preambule) + preambule.length)
+    expect(apres).not.toMatch(/#set enum\([^)]*numbering/)
+  })
+})
+
 describe('exportMode (fichier .typ téléchargé, bouton copier)', () => {
   it('inline les colonnes/espacement des tasks, sans variables exN-colonnes/exN-gutter', () => {
     const code = buildTypstDocument(
