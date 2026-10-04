@@ -1,8 +1,11 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid de90b continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import type { OptionsComparaisonType } from '../../lib/types'
 import Exercice from '../Exercice'
-import Equation3L13 from './3L13'
+import Equation3L13 from './3L13-old3'
 import Equation3L14 from './3L14'
 import Equation3L15 from './3L15'
 
@@ -11,19 +14,19 @@ export const interactifReady = true
 export const dateDePublication = '13/06/2026'
 export const titre = 'Exercice de synthèse sur les équations'
 
-export const dateDeModifImportante = '03/10/2026'
+export const dateDeModifImportante = '18/09/2026'
 
-export const uuid = '9ae36'
+export const uuid = 'de90b'
 export const refs = {
-  'fr-fr': ['3L15-3'],
-  'fr-ch': ['11FA5B-8'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
 /**
  * Mélange d'équations du premier degré ou assimilées, de niveau facile à difficile. Les types d'équations sont ceux des exercices 3L13, 3L14 et 3L15.
  * @author Jean-Claude Lhote
  */
-export default class EquationMelees extends Exercice {
+export default class EquationMeleesOld2 extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -115,16 +118,11 @@ export default class EquationMelees extends Exercice {
             },
           })
         } else {
-          handleAnswers(
-            this,
-            i,
-            {
-              reponse: {
-                value: exo.autoCorrection[0]?.valeur?.reponse?.value ?? '',
-              },
+          handleAnswers(this, i, {
+            reponse: {
+              value: exo.autoCorrection[0]?.valeur?.reponse?.value ?? '',
             },
-            { formatInteractif: exo.autoCorrection[0]?.formatInteractif },
-          )
+          })
         }
         this.consigne =
           this.nbQuestions === 1
@@ -132,21 +130,11 @@ export default class EquationMelees extends Exercice {
             : `Résoudre les équations suivantes. S'il y a plusieurs solutions, les donner en les séparant par un point-virgule.`
         this.listeQuestions.push(
           exo.listeQuestions[0]
-            .replaceAll(
-              'mathalea-solveurEx0Q0',
-              `mathalea-solveurEx${numeroExercice}Q${i}`,
-            )
-            .replace(
-              'numero-exercice="0"',
-              `numero-exercice="${numeroExercice}"`,
-            )
-            .replace('question-index="0"', `question-index="${i}"`)
             .replace('champTexteEx0Q0', `champTexteEx${numeroExercice}Q${i}`)
             .replace(
               'resultatCheckEx0Q0',
               `resultatCheckEx${numeroExercice}Q${i}`,
-            )
-            .replace('feedbackEx0Q0', `feedbackEx${numeroExercice}Q${i}`),
+            ),
         )
         this.listeCorrections.push(exo.listeCorrections[0])
         i++

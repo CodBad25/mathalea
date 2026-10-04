@@ -34,6 +34,7 @@ export type BlockForKeyboard =
   | 'matrix'
   | 'numbers'
   | 'numbersX'
+  | 'numbersInconnue'
   | 'numbers2'
   | 'numbersOperations'
   | 'numbersOperationsX'

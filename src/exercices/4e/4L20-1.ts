@@ -47,7 +47,6 @@ export default class ResoudreEquationPasAPas extends Exercice {
         initial: data.equation,
         kind: 'equation',
         mode: this.interactif ? 'evaluation' : 'entrainement',
-        interactivityOn: true,
       })
 
       this.listeCorrections[i] =

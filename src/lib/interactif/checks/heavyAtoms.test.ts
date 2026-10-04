@@ -681,6 +681,27 @@ describe('checks heavy atoms', () => {
       })
     })
 
+    it('accepts an isolated solution equivalent to a rational equation', () => {
+      expect(
+        all([isEquivalentEquation()])(
+          'x=\\frac{63}{8}',
+          '\\frac{8}{9}=\\frac{7}{x}',
+        ),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+    })
+
+    it('refuses a different isolated solution for a rational equation', () => {
+      expect(
+        all([isEquivalentEquation()])('x=8', '\\frac{8}{9}=\\frac{7}{x}'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
     it('checks that one member is zero', () => {
       expect(all([hasZeroMember()])('2x+3y-5=0', 'anything')).toMatchObject({
         isOk: true,

@@ -6,7 +6,9 @@ export const amcType = 'AMCNum'
 
 export const interactifReady = true
 export const dateDePublication = '24/11/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const uuid = '7f2be'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'c94eb'
 export const refs = {
   'fr-fr': ['4C20-3'],
   'fr-ch': [],

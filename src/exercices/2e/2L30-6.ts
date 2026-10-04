@@ -54,7 +54,6 @@ export default class ResoudreInequationPasAPas extends Exercice {
         showInterval: Boolean(this.sup),
         intervalMin: -6,
         intervalMax: 6,
-        interactivityOn: true,
       })
 
       this.listeCorrections[i] =

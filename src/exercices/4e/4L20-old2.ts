@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 799c4 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -12,8 +15,9 @@ import Exercice from '../Exercice'
 
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { sp } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
@@ -27,15 +31,15 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const dateDeModifImportante = '03/10/2026'
+export const dateDeModifImportante = '02/04/2024'
 /**
  * Équation du premier degré
  * @author Rémi Angot
  */
-export const uuid = '70132'
+export const uuid = '799c4'
 
 export const refs = {
-  'fr-fr': ['4L20', 'BP2RES8', '3AutoL04-1', 'BP1AUTO019'],
+  'fr-fr': [],
   'fr-ch': ['NR'],
 }
 
@@ -45,7 +49,7 @@ function gestionEspaceMiseEnEvidence(texte: string) {
   return sp(2) + texte[0] + sp(2) + texteSepare[1]
 }
 
-export default class ExerciceEquation1 extends Exercice {
+export default class ExerciceEquation1Old2 extends Exercice {
   protected xPlusBEgalCAvecRelatifsNonNuls = false
 
   constructor() {
@@ -168,7 +172,11 @@ export default class ExerciceEquation1 extends Exercice {
             b = randint(1, 13)
             c = randint(1, 13)
           }
-          if (!this.xPlusBEgalCAvecRelatifsNonNuls && !this.sup && c < b) {
+          if (
+            !this.xPlusBEgalCAvecRelatifsNonNuls &&
+            !this.sup &&
+            c < b
+          ) {
             b = randint(-9, 9, [0]) // b peut être négatif, ça sera une équation du type ${inconnue}-b=c
             c = Math.abs(randint(b, 15)) // c sera plus grand que b pour que c-b>0
           }
@@ -367,20 +375,15 @@ export default class ExerciceEquation1 extends Exercice {
 
       if (this.questionJamaisPosee(i, a, b, c, listeTypeDeQuestions[i])) {
         // Si la question n'a jamais été posée, on en créé une autre
-        this.listeQuestions[i] = context.isHtml
-          ? addMathaleaSolveur(this, i, {
-              initial: texte.slice(1, -1),
-              kind: 'equation',
-              mode: this.interactif ? 'evaluation' : 'entrainement',
-              variable: inconnue,
-            })
-          : texte
-        handleAnswers(
-          this,
-          i,
-          { reponse: { value: `${inconnue}=${reponse.texFSD}` } },
-          { formatInteractif: 'mathalea-solveur' },
-        )
+        this.listeQuestions[i] =
+          texte +
+          `${ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierDeBaseAvecFraction,
+            { texteAvant: `<br>Solution de l'équation  : ` },
+          )}`
+        handleAnswers(this, i, { reponse: { value: reponse.texFSD } })
         this.listeCorrections[i] = texteCorr
         if (context.isAmc) {
           this.autoCorrectionAMC[i] = {
