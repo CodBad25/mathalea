@@ -23,7 +23,7 @@ export default class auto1AC5a extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.lycee
     this.versionQcmDisponible = true
     this.versionQcm = false
   }
