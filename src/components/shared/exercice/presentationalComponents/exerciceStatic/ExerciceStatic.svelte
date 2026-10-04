@@ -63,7 +63,7 @@
     isStaticType(foundResource) || isCrpeType(foundResource)
       ? { ...foundResource }
       : null
-  let isCorrectionVisible = false
+  let isCorrectionVisible = $globalOptions.cor === true
   let isContentVisible = true
   let title = ''
   if (resourceToDisplay !== null) {
@@ -151,6 +151,7 @@
     {...headerExerciceProps}
     {indiceExercice}
     {indiceLastExercice}
+    {isCorrectionVisible}
     on:clickCorrection={(event) => {
       isCorrectionVisible = event.detail.isCorrectionVisible
     }}

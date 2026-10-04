@@ -400,6 +400,26 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
       expect(result.beta).toBe(true)
     })
 
+    it('active cor (relecture) uniquement en local', async () => {
+      const { mathaleaUpdateExercicesParamsFromUrl } =
+        await import('../../src/lib/mathalea')
+      expect(
+        mathaleaUpdateExercicesParamsFromUrl(
+          'http://localhost:5173/alea/?uuid=2359a&cor=1',
+        ).cor,
+      ).toBe(true)
+      expect(
+        mathaleaUpdateExercicesParamsFromUrl(
+          'https://coopmaths.fr/alea/?uuid=2359a&cor=1',
+        ).cor,
+      ).toBe(false)
+      expect(
+        mathaleaUpdateExercicesParamsFromUrl(
+          'http://localhost:5173/alea/?uuid=2359a',
+        ).cor,
+      ).toBe(false)
+    })
+
     it('persiste beta dans l’URL reconstruite (updateGlobalOptionsInURL)', async () => {
       const { updateGlobalOptionsInURL } =
         await import('../../src/lib/stores/generalStore')

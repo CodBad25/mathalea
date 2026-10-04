@@ -64,6 +64,7 @@ export interface InterfaceGlobalOptions {
   iframe?: string
   twoColumns?: boolean
   beta?: boolean
+  cor?: boolean
   isDataRandom?: boolean
   canD?: string
   canTi?: string

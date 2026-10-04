@@ -271,6 +271,9 @@ export function updateGlobalOptionsInURL(url: URL) {
   if (options.beta) {
     url.searchParams.append('beta', '1')
   }
+  if (options.cor) {
+    url.searchParams.append('cor', '1')
+  }
   const currentUrl = new URL(window.location.href)
   if (currentUrl.searchParams.has('triche')) {
     url.searchParams.append('triche', '1')

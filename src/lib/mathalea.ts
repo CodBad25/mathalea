@@ -687,6 +687,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let isCorrectionOnlyOnError = false
   let isCheckPerQuestion = false
   let beta = false
+  let cor = false
   let url: URL
   let canDuration = 540
   let canMainTitle = 'Course aux Nombres'
@@ -706,7 +707,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   // Le site est considéré « beta » dès qu'on développe en local, sans avoir
   // à ajouter `&beta` à l'URL (le paramètre `beta` reste géré plus bas pour
   // les autres hôtes).
-  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+  const isLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1'
+  if (isLocal) {
     beta = true
   }
   if (isCrypted(url)) {
@@ -837,6 +839,10 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         answers = entry[1]
       } else if (entry[0] === 'beta') {
         beta = true
+      } else if (entry[0] === 'cor') {
+        // Relecture : énoncé et correction de tous les exercices affichés,
+        // réservé au développement local
+        cor = isLocal
       } else if (entry[0] === 'canD') {
         canDuration = parseInt(entry[1])
       } else if (entry[0] === 'canTi') {
@@ -1013,6 +1019,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     recorder,
     done,
     beta,
+    cor,
     iframe,
     answers,
     subject,
