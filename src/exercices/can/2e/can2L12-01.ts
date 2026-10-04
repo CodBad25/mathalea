@@ -158,10 +158,10 @@ export default class ExprimerVariable extends ExerciceSimple {
     for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
       this.correction += textCorrSplit[ee] + ':'
     }
-    // « X = » reste hors de la mise en évidence : seule l'expression saisie est en orange
+    // Hors QCM, « X = » reste hors de la mise en évidence : seule l'expression saisie est en orange
     const [membreGauche, ...membreDroit] = aRemplacer.split('=')
     this.correction +=
-      membreDroit.length > 0
+      membreDroit.length > 0 && !this.versionQcm
         ? ` $${membreGauche}=${miseEnEvidence(membreDroit.join('=').trim())}$`
         : ` $${miseEnEvidence(aRemplacer)}$`
     // Fin de cette uniformisation

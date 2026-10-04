@@ -359,7 +359,7 @@ export default class Auto1AC13b extends ExerciceQcmACourt {
 
   /** Clavier avec les lettres de la question et le signe = (l'élève écrit l'égalité complète) */
   private prepareSaisie(lettres: string[]) {
-    this.optionsChampTexte = { dataKeys: [...lettres, '='] }
+    this.optionsChampReponseCourte = { dataKeys: [...lettres, '='] }
   }
 
   constructor() {
