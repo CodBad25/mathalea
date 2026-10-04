@@ -125,13 +125,37 @@ describe('buildTypstDocument', () => {
       exercise({ questions: ['$2+2$'], corrections: ['$4$'] }),
     ])
 
-    expect(code).toContain(
-      '#exo-solution-box(\n      number: 1,',
-    )
+    expect(code).toContain('#exo-solution-box(\n      number: 1,')
     expect(code).toContain(
       '#mathalea-needspace()\n    #exo-solution-box(\n      number: 2,',
     )
     expect(code).toContain('solution-above: 1.8em,')
+  })
+
+  it('titre les corrections « Exercice N »', () => {
+    const code = buildTypstDocument([
+      exercise({ questions: ['$1+1$'], corrections: ['$2$'] }),
+    ])
+
+    expect(code).toContain('solution-label: "Exercice",')
+    expect(code).not.toContain('solution-label: "Correction"')
+  })
+
+  it('resserre le filet des corrections du style souligné seulement', () => {
+    const exercises = [exercise({ questions: ['$1+1$'], corrections: ['$2$'] })]
+    const underline = buildTypstDocument(exercises, {
+      ...defaultTypstDocumentOptions,
+      badgeStyle: 'underline',
+    })
+    expect(underline).toContain('exo-solution-box as exo-solution-box-pkg')
+    expect(underline).toContain('#let exo-solution-box(corps, ..args)')
+
+    const box = buildTypstDocument(exercises, {
+      ...defaultTypstDocumentOptions,
+      badgeStyle: 'box',
+    })
+    expect(box).not.toContain('exo-solution-box-pkg')
+    expect(box).not.toContain('#let exo-solution-box(')
   })
 
   it('fait commencer chaque sujet sur une page impaire', () => {
