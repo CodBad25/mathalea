@@ -95,14 +95,14 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
         " est strictement positif, l'équation a deux solutions : "
       const choix = choice([true, false])
       if (!this.can) {
-        this.consigne = 'Résoudre dans $\\mathbb{R}$ :'
+        this.consigne = 'Résoudre, dans $\\mathbb{R}$, :'
       }
       switch (listeTypeDeQuestions[i]) {
         case 1:
           a = randint(1, 9)
           b = randint(2, 19, [4, 8, 9, 12, 16])
           if (this.can) {
-            texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+            texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
             texte += `${choix ? `$x^{2}-${a * a}=0$` : `$${a * a}-x^2=0$`} `
           } else {
             texte = `${choix ? `$x^{2}-${a * a}=0$` : `$${a * a}-x^2=0$`} `
@@ -140,7 +140,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
             `\\{-\\sqrt{${b}};\\sqrt{${b}}\\}`,
           ]
           if (this.can) {
-            texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+            texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
             texte += `$x^{2}-${b}=0$`
           } else {
             texte = `$x^{2}-${b}=0$`
@@ -184,7 +184,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
           b = randint(2, 19, [4, 8, 9, 12, 16])
           reponse = '\\emptyset'
           if (this.can) {
-            texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+            texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
             texte += `$x^{2}+${a * a}=0$`
           } else {
             texte = `$x^{2}+${a * a}=0$`
@@ -206,7 +206,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
               a = randint(-24, 24, [0, 1, 4, 9, 16])
               reduction = extraireRacineCarree(a)
               if (this.can) {
-                texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+                texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
                 texte += `$x^{2}=${a}$`
               } else {
                 texte = `$x^{2}=${a}$`
@@ -239,7 +239,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
               b = randint(1, 12)
               a = b ** 2 * choice([-1, 1])
               if (this.can) {
-                texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+                texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
                 texte += `$x^{2}=${a}$`
               } else {
                 texte = `$x^{2}=${a}$`
@@ -271,7 +271,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
           k = randint(-7, 17, [0, 1, 4, 9])
           b = a * k
           if (this.can) {
-            texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+            texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
             texte += `${choix ? `$${a}x^{2}${ecritureAlgebrique(-b)}=0$` : `$${-b}${ecritureAlgebrique(a)}x^{2}=0$`}`
           } else {
             texte = `${choix ? `$${a}x^{2}${ecritureAlgebrique(-b)}=0$` : `$${-b}${ecritureAlgebrique(a)}x^{2}=0$`}`
@@ -310,7 +310,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
             `\\{${texNombre((alpha * a1 + beta1) / a1, 1)};${texNombre((a1 * alpha - beta1) / a1, 1)}\\}`,
           ]
           if (this.can) {
-            texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+            texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
             texte += `$${p.texFormeCanonique}=0$`
           } else {
             texte = `$${p.texFormeCanonique}=0$`
@@ -358,7 +358,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
           p.defFormeCanonique(a, alpha, beta)
           frac = new FractionEtendue(-beta, a)
           if (this.can) {
-            texte = 'Résoudre dans $\\mathbb{R}$ :<br>'
+            texte = 'Résoudre, dans $\\mathbb{R}$, :<br>'
             texte += `$${p.texFormeCanonique}=0$`
           } else {
             texte = `$${p.texFormeCanonique}=0$`

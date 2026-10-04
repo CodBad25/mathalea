@@ -1,10 +1,10 @@
 import { arcPointPointAngle } from '../../lib/2d/Arc'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { crochetD, crochetG } from '../../lib/2d/intervalles'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
-import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { bleuMathalea } from '../../lib/colors'
 import { lampeMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -198,7 +198,7 @@ export default class ValeurAbsolueEtDistance extends Exercice {
     const avecEquation = typesDeQuestions.includes(1)
     const avecInequation = typesDeQuestions.some((t) => t !== 1)
     const pluriel = this.nbQuestions > 1
-    this.consigne = `Résoudre dans $\\mathbb{R}$ ${
+    this.consigne = `Résoudre, dans $\\mathbb{R}$, ${
       avecEquation && avecInequation
         ? pluriel
           ? 'les équations et inéquations suivantes'

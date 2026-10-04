@@ -42,6 +42,7 @@ export default class Auto1AC11b extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    let equation = ''
     if (context.isAmc) this.versionQcm = true
 
     const typeDeQuestion = Number(
@@ -60,7 +61,7 @@ export default class Auto1AC11b extends ExerciceSimple {
     switch (typeDeQuestion) {
       case 1: {
         const a = randint(-9, 9, [-1, 1, 0])
-        this.question = `Résoudre l'équation $${a}x=0$.`
+        equation = `$${a}x=0$`
         this.correction = ` On divise par $${a}$ chacun des deux membres  de l'équation pour obtenir $x=0$.<br>
     C'est bien $${a}\\times 0$ qui est égal à 0.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence('0')}$.`
@@ -74,7 +75,7 @@ export default class Auto1AC11b extends ExerciceSimple {
       }
       case 2: {
         const a = randint(2, 10)
-        this.question = `Résoudre l'équation $\\dfrac{x}{${a}}=0$.`
+        equation = `$\\dfrac{x}{${a}}=0$`
         this.correction = ` On multiplie par $${a}$ chacun des deux membres  de l'équation pour obtenir $x=0$.<br>
     C'est bien $0\\div ${a}$ qui est égal à 0.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence('0')}$.`
@@ -84,8 +85,8 @@ export default class Auto1AC11b extends ExerciceSimple {
       }
       case 3: {
         const a = randint(-10, 10, [-1, 1, 0])
-        this.question = `Résoudre l'équation $\\dfrac{${a}}{x}=1$.`
-        this.correction = ` Le quotient $\\dfrac{${a}}{x}$ est égal à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
+        equation = `$\\dfrac{${a}}{x}=1$`
+        this.correction = ` La fraction $\\dfrac{${a}}{x}$ est égale à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence(a)}$.`
         solution = `${a}`
         distracteurs = [
@@ -97,8 +98,8 @@ export default class Auto1AC11b extends ExerciceSimple {
       }
       case 4: {
         const a = randint(-10, 10, [-1, 1, 0])
-        this.question = `Résoudre l'équation $\\dfrac{x}{${a}}=1$.`
-        this.correction = ` Le quotient $\\dfrac{x}{${a}}$ est égal à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
+        equation = `$\\dfrac{x}{${a}}=1$`
+        this.correction = ` La fraction $\\dfrac{x}{${a}}$ est égale à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence(a)}$.`
         solution = `${a}`
         distracteurs = [
@@ -110,8 +111,8 @@ export default class Auto1AC11b extends ExerciceSimple {
       }
       case 5: {
         const a = randint(-10, 10, [-1, 1, 0])
-        this.question = `Résoudre l'équation $\\dfrac{${a}}{x}=${a}$.`
-        this.correction = ` Le quotient $\\dfrac{${a}}{x}$ est égal à $${a}$, lorsque son  dénominateur est égal à $1$.<br>
+        equation = `$\\dfrac{${a}}{x}=${a}$`
+        this.correction = ` La fraction $\\dfrac{${a}}{x}$ est égale à $${a}$, lorsque son  dénominateur est égal à $1$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence('1')}$.`
         solution = '1'
         distracteurs = [`${a}`, `${-a}`, `\\dfrac{1}{${abs(a)}}`]
@@ -119,7 +120,7 @@ export default class Auto1AC11b extends ExerciceSimple {
       }
       case 6: {
         const a = randint(-9, 9, [-1, 1, 0])
-        this.question = `Résoudre l'équation $${a}x=${a}$.`
+        equation = `$${a}x=${a}$`
         this.correction = ` On divise par $${a}$ chacun des deux membres  de l'équation pour obtenir $x=1$.<br>
     C'est bien $${a}\\times 1$ qui est égal à $${a}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence('1')}$.`
@@ -138,7 +139,7 @@ export default class Auto1AC11b extends ExerciceSimple {
         const a = randint(-10, 10, [-1, 0, 1])
         const b = randint(-10, 10, [-1, 0, 1, a, -a])
         const solutionFraction = new FractionEtendue(a, b)
-        this.question = `Résoudre l'équation $\\dfrac{${a}}{x}=${b}$.`
+        equation = `$\\dfrac{${a}}{x}=${b}$`
         this.correction = `L'équation est définie si le dénominateur $x$ n'est pas nul, c'est-à-dire si $x\\neq 0$.<br>
     De plus, l'équation $\\dfrac{${a}}{x}=${b}$ équivaut à $\\dfrac{${a}}{x}=\\dfrac{${b}}{1}$, ce qui conduit par produit en croix à $${a}\\times 1=${b}\\times x$, soit à $x=${solutionFraction.texFraction}$${
       solutionFraction.texFraction === solutionFraction.texFractionSimplifiee
@@ -182,7 +183,7 @@ export default class Auto1AC11b extends ExerciceSimple {
                   ? ''
                   : `, c'est-à-dire à $x=${solutionFraction.texFractionSimplifiee}$`
               }`
-        this.question = `Résoudre l'équation $${equationTex}$.`
+        equation = `$${equationTex}$`
         this.correction = `L'équation est définie si le dénominateur $x$ n'est pas nul, c'est-à-dire si $x\\neq 0$.<br>
     De plus, l'équation $${equationTex}$ équivaut à ${isolementTex}.<br>
     Comme $\\dfrac{${absB}}{x}=\\dfrac{${secondMembre}}{1}$, le produit en croix conduit à $${absB}\\times 1=${secondMembre}\\times x$, soit à ${resolutionTex}.<br>
@@ -255,7 +256,7 @@ export default class Auto1AC11b extends ExerciceSimple {
                   ? ''
                   : `, c'est-à-dire à $x=${solutionFraction.texFractionSimplifiee}$`
               }`
-        this.question = `Résoudre l'équation $${equationTex}$.`
+        equation = `$${equationTex}$`
         this.correction = `L'équation est définie si le dénominateur $x$ n'est pas nul, c'est-à-dire si $x\\neq 0$.<br>
     De plus, l'équation $${equationTex}$ équivaut à ${isolementTex}.<br>
     Le produit en croix conduit à $${absB}\\times ${secondMembre.den}=${ecritureParentheseSiNegatif(secondMembre.num)}\\times x$, soit à ${resolutionTex}.<br>
@@ -271,13 +272,17 @@ export default class Auto1AC11b extends ExerciceSimple {
     }
 
     if (this.versionQcm) {
+      this.question = `La solution de l'équation ${equation} est :`
       // Le \vphantom aligne la hauteur des propositions, qu'elles soient fractionnaires ou non
       const proposition = (tex: string) => `$\\vphantom{\\dfrac{1}{3}}${tex}$`
       this.reponse = proposition(solution)
       this.distracteurs = distracteurs.map(proposition)
     } else {
       this.reponse = solution
-      if (this.interactif) this.question += '<br>$x=$'
+      // En interactif, x= à la ligne devant le champ ; sur papier (PDF), consigne classique
+      this.question = this.interactif
+        ? `La solution de l'équation ${equation} est :<br>$x=$`
+        : `Déterminer la solution de l'équation ${equation}.`
     }
   }
 }

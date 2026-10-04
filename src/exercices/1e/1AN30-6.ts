@@ -321,7 +321,7 @@ export default class InequationsProduitExponentielles extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
-    this.consigne = 'Résoudre dans $\\mathbb{R}$ les inéquations suivantes.'
+    this.consigne = 'Résoudre, dans $\\mathbb{R}$, les inéquations suivantes.'
     this.spacing = 1.5
     this.spacingCorr = 1.5
   }
@@ -329,8 +329,8 @@ export default class InequationsProduitExponentielles extends Exercice {
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions > 1
-        ? 'Résoudre dans $\\mathbb{R}$ les inéquations suivantes.'
-        : "Résoudre dans $\\mathbb{R}$ l'inéquation suivante."
+        ? 'Résoudre, dans $\\mathbb{R}$, les inéquations suivantes.'
+        : "Résoudre, dans $\\mathbb{R}$, l'inéquation suivante."
 
     const types = combinaisonListes(
       ['affineEtExponentielle', 'deuxExponentielles', 'facteurPositif'],

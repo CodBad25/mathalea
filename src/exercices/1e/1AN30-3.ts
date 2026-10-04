@@ -53,7 +53,7 @@ export default class DeriveeExp1AN303 extends Exercice {
       let texte = ''
       let texteCorr = ''
       let value = ''
-      const texteIntro = "Résoudre dans $\\mathbb{R}$ l'équation : $"
+      const texteIntro = "Résoudre, dans $\\mathbb{R}$, l'équation : $"
       const propriete = `On utilise la propriété : <br>
               Pour tous réels $a$ et $b$, $\\mathrm{e}^a = \\mathrm{e}^b \\iff a = b$<br>
              On en déduit que :<br>`

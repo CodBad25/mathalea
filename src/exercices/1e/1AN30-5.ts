@@ -167,7 +167,7 @@ export default class InequationsExponentielles extends Exercice {
       let texte = ''
       let texteCorr = ''
       let value = ''
-      const texteIntro = "Résoudre dans $\\mathbb{R}$ l'inéquation : $"
+      const texteIntro = "Résoudre, dans $\\mathbb{R}$, l'inéquation : $"
 
       switch (listeDeQuestions[i]) {
         case 1: {

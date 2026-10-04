@@ -88,7 +88,7 @@ export default class Auto1AC16 extends ExerciceQcmACourt {
       20,
     ]
 
-    this.enonce = `Déterminer l'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
+    this.enonce = `Déterminer l'ensemble des solutions, dans $\\mathbb{R}$, de l'inéquation
     $2(x-3)(x+1) > 0$.`
 
     this.correction =
@@ -133,7 +133,7 @@ export default class Auto1AC16 extends ExerciceQcmACourt {
         ? choice(['>', '\\geqslant'])
         : choice(['<', '\\leqslant'])
 
-    this.enonce = `Déterminer l'ensemble des solutions dans $\\mathbb{R}$ de l'inéquation
+    this.enonce = `Déterminer l'ensemble des solutions, dans $\\mathbb{R}$, de l'inéquation
    ${b === 0 ? `$${rienSi1(a)}x(x${ecritureAlgebrique(-c)}) ${inegalite} 0$` : `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)}) ${inegalite} 0$`}.`
 
     // Construction de la correction avec tableau de variation

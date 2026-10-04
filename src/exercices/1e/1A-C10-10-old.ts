@@ -91,7 +91,7 @@ export default class Auto1AC11bOld extends ExerciceQcmA {
           const a = randint(-10, 10, [-1, 1, 0])
           this.enonce = `La solution de l'équation $\\dfrac{${a}}{x}=1$ est : `
 
-          this.correction = ` Le quotient $\\dfrac{${a}}{x}$ est égal à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
+          this.correction = ` La fraction $\\dfrac{${a}}{x}$ est égale à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence(a)}$.`
           this.reponses = [
             `$\\vphantom{\\dfrac{1}{3}}${a}$`,
@@ -106,7 +106,7 @@ export default class Auto1AC11bOld extends ExerciceQcmA {
           const a = randint(-10, 10, [-1, 1, 0])
           this.enonce = `La solution de l'équation $\\dfrac{x}{${a}}=1$ est : `
 
-          this.correction = ` Le quotient $\\dfrac{x}{${a}}$ est égal à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
+          this.correction = ` La fraction $\\dfrac{x}{${a}}$ est égale à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence(a)}$.`
           this.reponses = [
             `$\\vphantom{\\dfrac{1}{3}}${a}$`,
@@ -122,7 +122,7 @@ export default class Auto1AC11bOld extends ExerciceQcmA {
           const a = randint(-10, 10, [-1, 1, 0])
           this.enonce = `La solution de l'équation $\\dfrac{${a}}{x}=${a}$ est : `
 
-          this.correction = ` Le quotient $\\dfrac{${a}}{x}$ est égal à $${a}$, lorsque son  dénominateur est égal à $1$.<br>
+          this.correction = ` La fraction $\\dfrac{${a}}{x}$ est égale à $${a}$, lorsque son  dénominateur est égal à $1$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence('1')}$.`
           this.reponses = [
             `$\\vphantom{\\dfrac{1}{3}}1$`,

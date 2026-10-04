@@ -248,7 +248,7 @@ const qcmBac: QcmItem[] = [
       '$]-2;1[$',
     ],
     correction:
-      'Il faut $\\dfrac{x-1}{2x+4}>0$. Le quotient est positif lorsque le numérateur et le dénominateur sont de même signe, soit sur $]-\\infty;-2[\\cup]1;+\\infty[$.',
+      'Il faut $\\dfrac{x-1}{2x+4}>0$. La fraction est positive lorsque le numérateur et le dénominateur sont de même signe, soit sur $]-\\infty;-2[\\cup]1;+\\infty[$.',
   },
   {
     enonce:

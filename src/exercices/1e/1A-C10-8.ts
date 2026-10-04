@@ -36,6 +36,7 @@ export default class Auto1C11 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    let equation = ''
     if (context.isAmc) this.versionQcm = true
 
     const typeEquation = this.quotaChoice('type', [
@@ -75,7 +76,7 @@ export default class Auto1C11 extends ExerciceSimple {
       } // éviter division par 0
       solution = new FractionEtendue(d - k * b, k * a - c).simplifie()
 
-      this.question = `Résoudre l'équation $${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$.`
+      equation = `$${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$`
       this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
  $\\begin{aligned}
  ${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
@@ -105,7 +106,7 @@ export default class Auto1C11 extends ExerciceSimple {
       const newB = k - b
       solution = new FractionEtendue(d - newB, newA - c).simplifie()
 
-      this.question = `Résoudre l'équation $${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$.`
+      equation = `$${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$`
       this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
  $\\begin{aligned}
  ${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
@@ -129,6 +130,7 @@ export default class Auto1C11 extends ExerciceSimple {
     }
 
     if (this.versionQcm) {
+      this.question = `La solution de l'équation ${equation} est :`
       // Solutions décalées de 1 : garantissent assez de distracteurs, même si la solution est nulle
       erreurs.push(
         new FractionEtendue(solution.num + solution.den, solution.den),
@@ -140,7 +142,10 @@ export default class Auto1C11 extends ExerciceSimple {
         .map((f) => `$${f.texFractionSimplifiee}$`)
     } else {
       this.reponse = solution.texFractionSimplifiee
-      if (this.interactif) this.question += '<br>$x=$'
+      // En interactif, x= à la ligne devant le champ ; sur papier (PDF), consigne classique
+      this.question = this.interactif
+        ? `La solution de l'équation ${equation} est :<br>$x=$`
+        : `Déterminer la solution de l'équation ${equation}.`
     }
   }
 }

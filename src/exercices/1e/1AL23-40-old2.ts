@@ -1,7 +1,6 @@
 // Version archivée : conservée pour que les liens (sujets et corrigés)
 // déjà partagés avec l'uuid 3517b continuent d'afficher les mêmes
 // valeurs. Ne plus la modifier : toute correction va dans la version courante.
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -10,6 +9,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -55,7 +55,7 @@ export default class ResoudreEquationDegre2Old2 extends Exercice {
   constructor() {
     super()
 
-    this.consigne = 'Résoudre dans $\\mathbb{R}$ les inéquations suivantes.'
+    this.consigne = 'Résoudre, dans $\\mathbb{R}$, les inéquations suivantes.'
     this.nbQuestions = 2
     this.nbCols = 2
     this.nbColsCorr = 2
@@ -71,8 +71,8 @@ export default class ResoudreEquationDegre2Old2 extends Exercice {
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions === 1
-        ? "Résoudre dans $\\mathbb{R}$ l'inéquation suivante."
-        : 'Résoudre dans $\\mathbb{R}$ les inéquations suivantes.'
+        ? "Résoudre, dans $\\mathbb{R}$, l'inéquation suivante."
+        : 'Résoudre, dans $\\mathbb{R}$, les inéquations suivantes.'
     const typesDeRacinesDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -89,7 +89,6 @@ export default class ResoudreEquationDegre2Old2 extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, c, x1, x2, y1, k, ligne1, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const nombreDeRacines = listeNombreDeRacines[i]
       const inegalite = choice([
@@ -350,21 +349,25 @@ export default class ResoudreEquationDegre2Old2 extends Exercice {
           hauteurLignes: [12, 15],
         })
         if (inegalite === 'strictement supérieur') {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
-            : `<br> Finalement $S=${miseEnEvidence('\\emptyset')}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
+              : `<br> Finalement $S=${miseEnEvidence('\\emptyset')}$.`
         } else if (inegalite === 'supérieur ou égal') {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
-            : `<br> Finalement $S=${miseEnEvidence(`\\{${x1}\\}`)}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
+              : `<br> Finalement $S=${miseEnEvidence(`\\{${x1}\\}`)}$.`
         } else if (inegalite === 'inférieur ou égal') {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence(`\\{${x1}\\}`)}$.`
-            : `<br> Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence(`\\{${x1}\\}`)}$.`
+              : `<br> Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
         } else {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence('\\emptyset')}$.`
-            : `<br> Finalement $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence('\\emptyset')}$.`
+              : `<br> Finalement $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
         }
       } else {
         // Δ < 0 : aucune racine
@@ -396,7 +399,8 @@ export default class ResoudreEquationDegre2Old2 extends Exercice {
         }
         texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
         texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
-        texteCorr += "<br>$\\Delta<0$ donc le polynôme $P$ n'admet pas de racine."
+        texteCorr +=
+          "<br>$\\Delta<0$ donc le polynôme $P$ n'admet pas de racine."
         texteCorr += `<br> Il est toujours du signe de $a=${a}`
         texteCorr += a > 0 ? '>0$' : '<0$'
         texteCorr +=
@@ -416,21 +420,25 @@ export default class ResoudreEquationDegre2Old2 extends Exercice {
           hauteurLignes: [12, 15],
         })
         if (inegalite === 'strictement supérieur') {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
-            : `<br> Finalement $S=${miseEnEvidence('\\emptyset')}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
+              : `<br> Finalement $S=${miseEnEvidence('\\emptyset')}$.`
         } else if (inegalite === 'supérieur ou égal') {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
-            : `<br> Finalement $S=${miseEnEvidence('\\emptyset')}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
+              : `<br> Finalement $S=${miseEnEvidence('\\emptyset')}$.`
         } else if (inegalite === 'inférieur ou égal') {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence('\\emptyset')}$.`
-            : `<br> Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence('\\emptyset')}$.`
+              : `<br> Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
         } else {
-          texteCorr += a > 0
-            ? `<br>Finalement $S=${miseEnEvidence('\\emptyset')}$.`
-            : `<br> Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
+          texteCorr +=
+            a > 0
+              ? `<br>Finalement $S=${miseEnEvidence('\\emptyset')}$.`
+              : `<br> Finalement $S=${miseEnEvidence('\\mathbb{R}')}$.`
         }
       }
       if (this.questionJamaisPosee(i, a, b, c)) {

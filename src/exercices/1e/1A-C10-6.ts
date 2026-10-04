@@ -45,7 +45,11 @@ export default class Auto1AC10f extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierEnsemble
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    // Clavier allégé : crochets, point-virgule et infini
+    this.optionsChampTexte = {
+      dataKeys: ['[', ']', ';', '\\infty'],
+    }
     this.optionsDeComparaison = { intervalle: true }
     this.versionQcmDisponible = true
     this.versionQcm = false

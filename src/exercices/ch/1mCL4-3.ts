@@ -62,17 +62,17 @@ export default class ExerciceEquationSecondDegre extends Exercice {
     })
     if (this.nbQuestions === 1) {
       this.consigne =
-        "Résoudre dans $\\mathbb{R}$ l'équation suivante en utilisant un changement de variable puis la formule du deuxième degré."
+        "Résoudre, dans $\\mathbb{R}$, l'équation suivante en utilisant un changement de variable puis la formule du deuxième degré."
     } else {
       this.consigne =
-        'Résoudre dans $\\mathbb{R}$ les équations suivantes en utilisant un changement de variable puis la formule du deuxième degré.'
+        'Résoudre, dans $\\mathbb{R}$, les équations suivantes en utilisant un changement de variable puis la formule du deuxième degré.'
     }
     if (this.interactif) {
       this.consigne +=
         " Entrer les solutions sous forme d'un ensemble en séparant chaque élément par un point-virgule. Si une équation n'a pas de solution, saisir l'ensemble vide."
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let equation = new EquationSecondDegre(

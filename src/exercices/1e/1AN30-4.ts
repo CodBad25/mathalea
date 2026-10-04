@@ -57,7 +57,7 @@ export default class EquationsProduitNulExponentielles extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
-    this.consigne = 'Résoudre dans $\\mathbb{R}$ les équations suivantes.'
+    this.consigne = 'Résoudre, dans $\\mathbb{R}$, les équations suivantes.'
 
     this.spacing = 1.5
     this.spacingCorr = 1.5
@@ -66,8 +66,8 @@ export default class EquationsProduitNulExponentielles extends Exercice {
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions > 1
-        ? 'Résoudre dans $\\mathbb{R}$ les équations suivantes.'
-        : "Résoudre dans $\\mathbb{R}$ l'équation suivante."
+        ? 'Résoudre, dans $\\mathbb{R}$, les équations suivantes.'
+        : "Résoudre, dans $\\mathbb{R}$, l'équation suivante."
 
     const listeTypeQuestions = combinaisonListes(
       [
