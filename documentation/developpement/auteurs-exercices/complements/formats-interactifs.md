@@ -1141,6 +1141,13 @@ handleAnswers(
 )
 ```
 
+Hors interactivité (`exercice.interactif` faux), `addMathaleaSolveur` n'écrit
+que l'équation (`$3x+5=17$`) : ni boutons, ni cadres, ni lignes d'étapes. Il
+n'y a donc rien à tester dans l'exercice. L'option `interactivityOn` n'a besoin
+d'être renseignée que pour forcer ce comportement. Un élément créé avec
+`interactivity-on="false"` (ex : correction de la CAN) n'affiche lui aussi que
+l'équation.
+
 Deux variantes sont disponibles :
 
 - `kind: 'equation'` conserve le signe `=` et contrôle l'équivalence des deux

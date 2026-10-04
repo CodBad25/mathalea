@@ -1,6 +1,10 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 01b77 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { bleuMathalea } from '../../lib/colors'
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -23,7 +27,7 @@ export const titre =
   'Résoudre une équation du premier degré (utilisant éventuellement la distributivité)'
 export const interactifReady = true
 
-export const dateDeModifImportante = '30/09/2026'
+export const dateDeModifImportante = '18/08/2026'
 
 /**
  * Équation du premier degré
@@ -37,13 +41,13 @@ export const dateDeModifImportante = '30/09/2026'
  * Éric Elter : Rajouter de deux paramètres, passage de la réponse en couleur
  * Arnaud Meistermann : ajout du cas x²+a=(x+b)²
  */
-export const uuid = '57ba1'
+export const uuid = '01b77'
 
 export const refs = {
-  'fr-fr': ['3L13-1', 'BP2RES12'],
-  'fr-ch': ['10FA5C-7'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
-export default class ExerciceEquation1Tiret2 extends Exercice {
+export default class ExerciceEquation1Tiret2Old extends Exercice {
   protected niveau: number
 
   constructor(niveau = 3) {
@@ -314,21 +318,22 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
 
         texteCorr += `La solution de l'équation ${equation} est $${miseEnEvidence(reponse.simplifie().texFSD)}$.`
 
-        texte = addMathaleaSolveur(this, i, {
-          initial: equation.slice(1, -1),
-          kind: 'equation',
-          mode: this.interactif ? 'evaluation' : 'entrainement',
-        })
-        handleAnswers(
-          this,
-          i,
-          {
+        if (this.interactif) {
+          texte +=
+            '$x = $' +
+            ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBaseAvecFraction,
+            ) +
+            '<br><br>'
+          handleAnswers(this, i, {
             reponse: {
-              value: `x=${reponse.simplifie().texFSD}`,
+              value: reponse,
+              options: { fractionEgale: true, nombreDecimalSeulement: true },
             },
-          },
-          { formatInteractif: 'mathalea-solveur' },
-        )
+          })
+        }
 
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

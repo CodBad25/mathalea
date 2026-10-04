@@ -3,7 +3,9 @@ export const titre =
   'Résoudre une équation du premier degré (utilisant éventuellement la distributivité)'
 export const interactifReady = true
 
-export const uuid = '3ad01'
+export const dateDeModifImportante = '30/09/2026'
+
+export const uuid = 'b1962'
 export const refs = {
   'fr-fr': ['2L21-5', 'BP2RES30'],
   'fr-ch': ['NR'],
