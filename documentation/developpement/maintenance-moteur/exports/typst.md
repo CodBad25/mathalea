@@ -759,6 +759,7 @@ lieu d'être aplaties comme un `<span>` HTML ordinaire.
 
 Particularités de la conversion des formules (`latexMathToTypst`) :
 
+- blanc à compléter (`\ldots` seul, comme dans `remplisLesBlancs`) rendu par une boîte de 5 em de pointillés de conduite (`#box(width: 5em, repeat(gap: 2pt)[.])`, constante `ANSWER_BLANK`) pour que l'élève puisse écrire dedans, y compris une fraction ; les vraies ellipses de suites (bordées de virgules) sont épargnées. `mathaleaFormatExercice` ayant déjà remplacé les `\ldots` des énoncés par `....` (quatre points) avant la conversion, ce motif est reconnu au même titre que `\ldots` ;
 - virgule décimale française rendue sans espace (`3,5` → `3","5`) ;
 - `\num`/`\numprint` dépliés en conservant les espaces fines (`\,`) ;
 - espaces LaTeX explicites (`\thinspace`, `\medspace`, `\thickspace`) normalisées vers les espaces mathématiques Typst ;
