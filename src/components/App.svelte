@@ -130,6 +130,14 @@
   if (canIsInteractive !== null) {
     $canOptions.isInteractive = canIsInteractive === '1'
   }
+  const canPerQuestion = parseInt(url.searchParams.get('canQ') ?? '')
+  if (Number.isFinite(canPerQuestion) && canPerQuestion > 0) {
+    $canOptions.timerMode = 'question'
+    $canOptions.durationPerQuestionInSeconds = canPerQuestion
+  }
+  if (url.searchParams.get('canFB') === '1') {
+    $canOptions.feedbackMode = 'each'
+  }
 
   function updateParams() {
     updateParamsFromUrl()

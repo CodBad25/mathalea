@@ -52,6 +52,8 @@ export interface InterfaceGlobalOptions {
   calculatricesForcees?: CalculatricesForcees
   isSolutionAccessible?: boolean
   isCorrectionOnlyOnError?: boolean
+  /** Vue élève : chaque question d'un exercice interactif a son propre bouton « Vérifier » */
+  isCheckPerQuestion?: boolean
   isTitleDisplayed?: boolean
   isReferenceDisplayed?: boolean
   isInteractiveFree?: boolean
@@ -71,6 +73,10 @@ export interface InterfaceGlobalOptions {
   canI?: boolean
   /** no chrono : course aux nombres sans chronomètre */
   canNC?: boolean
+  /** durée par question en secondes : chronomètre par question plutôt que global */
+  canQ?: number
+  /** feedback après chaque question (« FeedBack ») */
+  canFB?: boolean
   lang?: Language
   subject?: string // titre du quizz (vues quizzconf et quizz)
   quizzParam?: string // paramètres du quizz encodés en base64 (vues quizzconf et quizz)
@@ -297,6 +303,7 @@ export type OptionsComparaisonType = {
   exclusifFactorisation?: boolean
   nbFacteursIdentiquesFactorisation?: boolean
   unSeulFacteurLitteral?: boolean
+  facteursPremierDegre?: boolean
   nonReponseAcceptee?: boolean
   developpementEgal?: boolean
   fonction?: boolean

@@ -88,25 +88,25 @@ export default class AutoC1a extends ExerciceSimple {
         gauche: `(${a})^2`,
         droite: `(${b})^2`,
         signe: '<',
-        justification: `la fonction carré est strictement décroissante sur $]-\\infty\\,;\\,0]$ et $${a} > ${b}$, donc $(${a})^2 < (${b})^2$.`,
+        justification: `La fonction carré est strictement décroissante sur $]-\\infty\\,;\\,0]$ et $${a} > ${b}$, donc $(${a})^2 < (${b})^2$.`,
       },
       2: {
         gauche: `\\dfrac{1}{${c}}`,
         droite: `\\dfrac{1}{${d}}`,
         signe: '>',
-        justification: `la fonction inverse est strictement décroissante sur $]0\\,;\\,+\\infty[$ et $${c}<${d}$, donc $\\dfrac{1}{${c}} > \\dfrac{1}{${d}}$.`,
+        justification: `La fonction inverse est strictement décroissante sur $]0\\,;\\,+\\infty[$ et $${c}<${d}$, donc $\\dfrac{1}{${c}} > \\dfrac{1}{${d}}$.`,
       },
       3: {
         gauche: `${g}^2`,
         droite: `${h}^2`,
         signe: '<',
-        justification: `la fonction carré est strictement croissante sur $[0\\,;\\,+\\infty[$ et $${g}<${h}$, donc $${g}^2<${h}^2$.`,
+        justification: `La fonction carré est strictement croissante sur $[0\\,;\\,+\\infty[$ et $${g}<${h}$, donc $${g}^2<${h}^2$.`,
       },
       4: {
         gauche: `\\left(\\dfrac{1}{${f}}\\right)^2`,
         droite: `\\left(\\dfrac{1}{${e}}\\right)^2`,
         signe: '<',
-        justification: `la fonction carré est strictement croissante sur $[0\\,;\\,+\\infty[$ et $\\dfrac{1}{${f}} < \\dfrac{1}{${e}}$, donc $\\left(\\dfrac{1}{${f}}\\right)^2<\\left(\\dfrac{1}{${e}}\\right)^2$.`,
+        justification: `La fonction carré est strictement croissante sur $[0\\,;\\,+\\infty[$ et $\\dfrac{1}{${f}} < \\dfrac{1}{${e}}$, donc $\\left(\\dfrac{1}{${f}}\\right)^2<\\left(\\dfrac{1}{${e}}\\right)^2$.`,
       },
     }
 
@@ -140,7 +140,9 @@ export default class AutoC1a extends ExerciceSimple {
       const symbole = inverser ? (signe === '<' ? '>' : '<') : signe
       this.consigne = 'Compléter avec le symbole $<$ ou $>$.'
       // En interactif, les deux membres entourent le champ de réponse
-      this.question = this.interactif ? '' : `$${membre1} \\,\\ldots\\, ${membre2}$`
+      this.question = this.interactif
+        ? ''
+        : `$${membre1} \\,\\ldots\\, ${membre2}$`
       this.optionsChampTexte = {
         texteAvant: `$${membre1}$`,
         texteApres: `$${membre2}$`,
@@ -148,7 +150,7 @@ export default class AutoC1a extends ExerciceSimple {
       }
       this.optionsDeComparaison = { texteSansCasse: true }
       this.reponse = symbole
-      this.correction = `On a : ${justification}<br>
+      this.correction = `${justification}<br>
       Ainsi, $${membre1} ${miseEnEvidence(symbole)} ${membre2}$.`
     }
   }

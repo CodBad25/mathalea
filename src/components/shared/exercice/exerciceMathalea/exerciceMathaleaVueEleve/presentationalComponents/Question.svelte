@@ -8,6 +8,14 @@
   export let isCorrectionVisible: boolean
   export let isQuestionCorrect: boolean | undefined = undefined
   export let hideCorrectionOnSuccess: boolean = false
+  /** Vérification question par question : la question a son propre bouton « Vérifier » */
+  export let isCheckable: boolean = false
+  export let isChecked: boolean = false
+  export let score: { nbBonnesReponses: number; nbReponses: number } | undefined =
+    undefined
+  export let onCheck: () => void = () => {}
+  /** Bouton masqué (FlowMath sans bouton de validation) */
+  export let isCheckButtonHidden: boolean = false
 
   $: isCorrectionDisplayed =
     isCorrectionVisible && !(hideCorrectionOnSuccess && isQuestionCorrect === true)
@@ -30,6 +38,37 @@
     {/if}
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     {@html mathaleaFormatExercice(exercise.listeQuestions[questionIndex])}
+    <!-- Bouton « Vérifier » et score de la question, à la suite du champ de
+         réponse (sur la même ligne s'il y a de la place). Le conteneur est
+         toujours présent et ignoré par KaTeX : l'auto-render remplacerait
+         sinon les nœuds texte vides qui servent d'ancres aux blocs `{#if}`. -->
+    <span class="katex-ignore">
+      {#if isCheckable}
+        {#if !isChecked}
+          {#if !isCheckButtonHidden}
+            <button
+              type="button"
+              id="buttonScoreEx{exerciseIndex}Q{questionIndex}"
+              class="inline-flex items-center gap-1 ml-3 align-middle text-xs text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest hover:underline underline-offset-2"
+              on:click={onCheck}
+            >
+              <i class="bx bx-check-circle text-sm" aria-hidden="true"></i>
+              Vérifier
+            </button>
+          {/if}
+        {:else if score != null && score.nbReponses > 1}
+          <!-- le smiley suffit pour une question sur 1 point -->
+          <span
+            id="scoreEx{exerciseIndex}Q{questionIndex}"
+            class="ml-3 align-middle text-sm font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+            >Score : {score.nbBonnesReponses} / {score.nbReponses}</span
+          >
+        {/if}
+        <!-- message « unité manquante » propre à la question -->
+        <span id="alerteUniteEx{exerciseIndex}Q{questionIndex}" class="ml-3"
+        ></span>
+      {/if}
+    </span>
   </li>
   {#if isCorrectionDisplayed}
     <div

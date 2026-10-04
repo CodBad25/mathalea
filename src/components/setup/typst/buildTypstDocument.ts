@@ -158,6 +158,34 @@ export const EXERCISE_BANK_IMPORT = typstImport(
   'exo, exo-setup, exo-solution-box, exo-counter',
 )
 
+/**
+ * Même import, avec `exo-solution-box` renommé en `exo-solution-box-pkg` :
+ * le style `underline` redéfinit `exo-solution-box` (voir
+ * `MATHALEA_SOLUTION_UNDERLINE_HELPER`) pour resserrer le titre des corrections.
+ */
+export const EXERCISE_BANK_IMPORT_UNDERLINE = typstImport(
+  'exercise-bank',
+  'exo, exo-setup, exo-solution-box as exo-solution-box-pkg, exo-counter',
+)
+
+/**
+ * `exo-solution-box` pour le style `underline`, dont le paquet fige le filet
+ * sous le titre : `style-underline` empile titre, `v(-0.3em)`, filet,
+ * `v(0.5em)` puis corps, chacun dans son paragraphe, si bien que
+ * l'espacement entre paragraphes (`par.spacing`, 1,2 em par défaut) s'ajoute
+ * deux fois — entre le titre et le filet, puis entre le filet et le corps.
+ * Aucun réglage du paquet n'agit dessus. On resserre donc `par.spacing` le
+ * temps de l'appel (le filet passe à environ 0,2 em du titre), on le rétablit
+ * pour le corps de la correction (ses propres paragraphes gardent leur
+ * espacement) et un `v` négatif ramène le blanc sous le filet à environ la
+ * moitié de celui qui sépare deux corrections (`solution-above`).
+ */
+export const MATHALEA_SOLUTION_UNDERLINE_HELPER = `#let exo-solution-box(corps, ..args) = context {
+  let espacement = par.spacing
+  set par(spacing: 0.5em)
+  exo-solution-box-pkg(..args, { set par(spacing: espacement); v(0.35em - espacement); corps })
+}`
+
 /** QR-code Typst natif utilisé par le QR-code global de la fiche. */
 export const TIAOMA_IMPORT = typstImport('tiaoma', 'qrcode')
 
@@ -2704,7 +2732,9 @@ export function buildStandaloneExerciseCode(
   lines.push(
     `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
   )
-  lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
+  // pas de `numbering` : « 1. » est la valeur par défaut, et le préambule
+  // d'une banque externe (inséré plus haut) peut avoir réglé la sienne
+  lines.push('#set enum(spacing: 1.2em)')
   lines.push('#show math.equation: set text(font: police-maths)')
   lines.push('#let txt(corps) = text(font: police-texte, corps)')
   lines.push(MATHALEA_INLINE_FORMULA_RULE)
@@ -3617,7 +3647,13 @@ export function buildTypstDocument(
     usesCetzPlotChart
   ) {
     lines.push('// ----- Paquets -----')
-    if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
+    if (usesExerciseBank) {
+      lines.push(
+        options.badgeStyle === 'underline'
+          ? EXERCISE_BANK_IMPORT_UNDERLINE
+          : EXERCISE_BANK_IMPORT,
+      )
+    }
     if (hasGlobalQrCode) lines.push(TIAOMA_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
@@ -3803,7 +3839,9 @@ export function buildTypstDocument(
   lines.push(
     `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
   )
-  lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
+  // pas de `numbering` : « 1. » est la valeur par défaut, et le préambule
+  // d'une banque externe (inséré plus haut) peut avoir réglé la sienne
+  lines.push('#set enum(spacing: 1.2em)')
   // police des formules ; les nombres et symboles restent en police maths
   lines.push('#show math.equation: set text(font: police-maths)')
   // #txt : texte inséré dans une formule mais rendu avec la police du texte
@@ -3850,7 +3888,9 @@ export function buildTypstDocument(
     )
     lines.push('#exo-setup(')
     lines.push('  exercise-label: "Exercice",')
-    lines.push('  solution-label: "Correction",')
+    // les corrections gardent le titre « Exercice N » : elles sont déjà dans
+    // une section « Corrections », et le numéro renvoie à l'énoncé
+    lines.push('  solution-label: "Exercice",')
     lines.push('  // les corrections sont regroupées en fin de fiche')
     lines.push('  corr-loc: "end-chapter",')
     lines.push('  display: if corrige { "both" } else { "ex" },')
@@ -3861,10 +3901,14 @@ export function buildTypstDocument(
       lines.push(`  badge-position: "${badgePosition(options)}",`)
     }
     lines.push('  badge-color: couleur,')
-    // le corrigé est placé dans le champ `solution` (étiquette « Correction ») :
+    // le corrigé est placé dans le champ `solution` (étiquette `solution-label`) :
     // sa couleur suit donc `solution-color`, réglée sur la couleur des badges
     lines.push('  solution-color: couleur,')
     lines.push('  correction-color: couleur,')
+    // Blanc au-dessus de chaque correction ; celui sous le filet du titre
+    // souligné en vaut environ la moitié (voir
+    // `MATHALEA_SOLUTION_UNDERLINE_HELPER`).
+    lines.push('  solution-above: 1.8em,')
     lines.push(`  show-id: ${options.showExerciseRefs},`)
     lines.push(`  exercise-above: ${options.exerciseSpacing}em,`)
     if (usesQrCode) lines.push(`  qr-size: ${QRCODE_SIZE},`)
@@ -3880,6 +3924,9 @@ export function buildTypstDocument(
       lines.push(`  margin-position: ${marginWidth.exo},`)
     }
     lines.push(')')
+    if (options.badgeStyle === 'underline') {
+      lines.push(MATHALEA_SOLUTION_UNDERLINE_HELPER)
+    }
   }
   if (usesQcm) {
     lines.push('// ----- QCM (case à cocher) -----')

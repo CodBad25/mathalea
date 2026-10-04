@@ -10,7 +10,7 @@ vi.mock('mathlive', () => {
   return { MathfieldElement: MockMathfieldElement }
 })
 
-import InequationsPasAPas from '../../src/exercices/2e/2L30-0'
+import InequationsPasAPas from '../../src/exercices/2e/2L30-6'
 import EquationsPasAPas from '../../src/exercices/4e/4L20-1'
 import { setOutputHtml } from '../../src/modules/context'
 
@@ -40,7 +40,7 @@ describe('exercices modèles de mathalea-solveur', () => {
     })
   })
 
-  it('pilote la droite graduée de 2L30-0 avec la case à cocher', () => {
+  it('pilote la droite graduée de 2L30-6 avec la case à cocher', () => {
     const avecDroite = new InequationsPasAPas()
     avecDroite.numeroExercice = 3
     avecDroite.interactif = true

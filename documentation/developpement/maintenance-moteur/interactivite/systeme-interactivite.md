@@ -20,9 +20,24 @@ Avec `canI=0`, les énoncés ne doivent donc contenir aucun champ de saisie ni c
 
 `canOptions.isInteractive` est un réglage indépendant de `globalOptions.setInteractive`, qui ne concerne que la page Élève classique :
 
-- il se règle dans l'onglet « Course aux nombres » de la page de configuration élève (`src/components/setup/configEleve/ConfigEleve.svelte`), pas dans l'onglet « Présentation classique » ;
+- il se règle dans l'onglet « Course aux nombres » de la page de configuration élève (`src/components/setup/configEleve/ConfigEleve.svelte`, section `sections/ReglagesCan.svelte`), pas dans l'onglet « Présentation classique » ;
 - sa valeur par défaut dans `src/lib/stores/canStore.ts` est `true`, pour que les liens antérieurs au paramètre `canI` restent interactifs ;
 - le flux Capytale reste l'exception : `handleCapytale()` dérive `isInteractive` de `setInteractive` parce que l'activité Capytale ne transporte qu'un seul réglage d'interactivité.
+
+### Chronomètre et feedback dans la vue Course aux nombres
+
+Deux réglages de `canOptions` (onglet « Course aux nombres », `ReglagesCan.svelte`) modifient le déroulement de `Race.svelte`. Absents de l'URL, ils laissent le comportement historique (chronomètre global, feedback à la fin), si bien que les liens existants ne changent pas.
+
+| Réglage                                                  | Paramètre d'URL   | Effet                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `timerMode: 'question'` + `durationPerQuestionInSeconds` | `canQ=<secondes>` | Un décompte par question ; à son terme on passe à la suivante. La durée totale prévue vaut `durationPerQuestionInSeconds × nombre de questions` (`getTotalDurationInSeconds()` dans `Can.svelte`), ce qui garde cohérents le « temps mis » et le temps remonté aux LMS. |
+| `feedbackMode: 'each'`                                   | `canFB=1`         | L'élève valide chaque question (bouton « Valider » ou Entrée), `checkQuestion()` la corrige aussitôt et `Feedback.svelte` affiche le résultat, plus la correction si `solutionsAccess` est actif. Sans effet si la course n'est pas interactive.                        |
+
+Dans les deux cas la navigation devient linéaire (`isLinear` dans `Race.svelte`) : plus de retour en arrière, pagination non cliquable, un seul bouton fait avancer. Le bouton « Terminer et enregistrer les résultats » (`#race-ended-by-user-btn`) n'apparaît qu'à la dernière question ; avec un feedback après chaque question, il n'y a pas de second bouton : les résultats sont envoyés au recorder (`checkAnswers()`) dès que la dernière question est corrigée, et le bouton principal se contente de « Terminer ». Avec un chronomètre global, celui-ci est mis en pause (`isPaused` de `Timer.svelte`) tant que le feedback est affiché et reprend à la question suivante : le temps de lecture du feedback n'est pas décompté. `isTimerDisabled` (`canNC`) l'emporte sur `timerMode` : sans chronomètre, il n'y a plus de décompte par question.
+
+`Can.svelte` corrige désormais question par question (`checkQuestion(i)`) ; `checkedQuestions` évite de recompter à la fin de la course les questions déjà corrigées, `checkAnswers()` ne traitant que les questions restantes. Le bilan global (score, temps, solutions) reste affiché à la fin dans tous les cas.
+
+Ces deux réglages ne sont pas encore proposés dans l'export Gift de `Moodle.svelte`.
 
 ## Formats interactifs
 

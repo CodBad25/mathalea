@@ -179,13 +179,15 @@ export default class OrdonnerCroissant extends ExerciceSimple {
 
     const [a, b, c] = this.quotaChoice('triplet', triplets)
     const nombresTries = [a, b, c].sort((x, y) => x.val - y.val)
-    const ordreCorrect = nombresTries.map((n) => n.tex).join(' < ')
+    const ordreCorrect = nombresTries
+      .map((n) => miseEnEvidence(n.tex))
+      .join(' < ')
 
     this.correction =
       'Pour comparer ces trois nombres, on les écrit sous forme décimale :<br>' +
       [a, b, c].map((n) => this.ligneCorrection(n)).join('') +
       `On a donc : $${nombresTries.map((n) => texNombre(n.val, 3)).join(' < ')}$.<br>` +
-      `Finalement : $${miseEnEvidence(ordreCorrect)}$.`
+      `Finalement : $${ordreCorrect}$.`
 
     if (this.versionQcm) {
       this.consigne = ''
@@ -204,8 +206,15 @@ export default class OrdonnerCroissant extends ExerciceSimple {
         .slice(0, 3)
         .map((ordre) => `$${ordre}$`)
     } else {
-      this.consigne = "Ranger les trois nombres dans l'ordre croissant."
-      this.question = `\\begin{array}{c}${a.tex}\\qquad ${b.tex}\\qquad ${c.tex}\\\\[1em]%{champ1}<%{champ2}<%{champ3}\\end{array}`
+      // Les nombres sont hors du champ : dans un tableau (`array`), MathLive affiche les fractions
+      // saisies en petit (\frac au lieu de \dfrac) et le smiley est décalé par rapport à la ligne de réponse.
+      this.consigne = `Ranger les trois nombres dans l'ordre croissant.<br><br>$${a.tex}\\qquad ${b.tex}\\qquad ${c.tex}$`
+      // Les pointillés ne s'affichent en HTML que si l'exercice est interactif
+      // (champs à remplir) ; en Typst et en LaTeX, ils servent de blancs à compléter.
+      this.question =
+        context.isHtml && !context.isTypst && !this.interactif
+          ? ''
+          : '%{champ1}<%{champ2}<%{champ3}'
       this.reponse = {
         bareme: toutPourUnPoint,
         champ1: { value: nombresTries[0].tex },

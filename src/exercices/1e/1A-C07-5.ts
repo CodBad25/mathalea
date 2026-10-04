@@ -71,7 +71,7 @@ export default class auto1AC7e extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.versionQcmDisponible = true
     this.versionQcm = false
@@ -89,7 +89,10 @@ export default class auto1AC7e extends ExerciceSimple {
     const aire = coteConverti.mul(coteConverti)
 
     this.correction = `$${texNombre(cote)}$ $\\text{ ${uniteCote}}$ $= ${texNombre(coteConverti)}$ $\\text{${uniteAire}}$<br>
-L'aire du carré est : $${texNombre(coteConverti)} \\text{ ${uniteAire}}\\times ${texNombre(coteConverti)} \\text{ ${uniteAire}} = ${miseEnEvidence(`${texNombre(aire)}\\text{ ${uniteAire}}^2`)}$ .`
+L'aire du carré est : $${texNombre(coteConverti)} \\text{ ${uniteAire}}\\times ${texNombre(coteConverti)} \\text{ ${uniteAire}} = `
+    this.correction += this.versionQcm
+      ? `${miseEnEvidence(`${texNombre(aire)}\\text{ ${uniteAire}}^2`)}$ .`
+      : `${miseEnEvidence(texNombre(aire))}\\text{ ${uniteAire}}^2$ .`
 
     const enonce = `l'aire en $\\text{${uniteAire}}^2$ d'un carré de côté $${texNombre(cote)}$ $\\text{${uniteCote}}$`
     if (this.versionQcm) {
@@ -107,7 +110,10 @@ L'aire du carré est : $${texNombre(coteConverti)} \\text{ ${uniteAire}}\\times 
       ].map(avecUnite)
     } else {
       this.question = `Calculer l'aire, en $\\text{${uniteAire}}^2$, d'un carré de côté $${texNombre(cote)}$ $\\text{${uniteCote}}$.`
-      this.optionsChampTexte = { texteApres: `$\\text{${uniteAire}}^2$` }
+      this.optionsChampTexte = {
+        texteAvant: "<br>L'aire du carré est ",
+        texteApres: `$\\text{${uniteAire}}^2$.`,
+      }
       this.reponse = aire
     }
   }

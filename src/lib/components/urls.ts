@@ -207,6 +207,15 @@ export function buildMathAleaURL(options: {
     if (can.isTimerDisabled) {
       url.addParam('canNC', '1')
     }
+    // Idem pour le chronomètre par question (`canQ`, en secondes) et le
+    // feedback après chaque question (`canFB`) : absents, on retrouve le
+    // comportement historique (chronomètre global, feedback à la fin).
+    if (can.timerMode === 'question') {
+      url.addParam('canQ', can.durationPerQuestionInSeconds.toString())
+    }
+    if (can.feedbackMode === 'each') {
+      url.addParam('canFB', '1')
+    }
   } else if (options.view === 'diaporama') {
     url.addParam('ds', buildDsParams())
     if (
@@ -258,7 +267,7 @@ export function buildEsParams(
     ['verso', 5],
   ])
   let es = ''
-  // Paramètre 'es' : presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)
+  // Paramètre 'es' : presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)|isCheckPerQuestion (facultatif)
   es += presentationMode.get(
     mode !== undefined ? mode : (options.presMode ?? 'liste_exos'),
   )
@@ -270,10 +279,15 @@ export function buildEsParams(
   es += options.isTitleDisplayed ? '1' : '0'
   es += options.isReferenceDisplayed !== false ? '1' : '0'
   es += options.isCorrectionOnlyOnError ? '1' : '0'
-  // Calculatrices forcées : caractère ajouté seulement s'il y en a une, pour
-  // ne pas allonger les URLs par défaut
+  // Calculatrices forcées et vérification question par question : caractères
+  // ajoutés seulement s'ils s'écartent des valeurs par défaut, pour ne pas
+  // allonger les URLs par défaut. `isCheckPerQuestion` occupe la position
+  // suivant celle des calculatrices, qui est alors écrite même sans calculatrice
+  // forcée (`-`).
   const forcees = options.calculatricesForcees ?? CALCULATRICES_NON_FORCEES
-  if (forcees !== CALCULATRICES_NON_FORCEES) es += forcees
+  if (forcees !== CALCULATRICES_NON_FORCEES || options.isCheckPerQuestion)
+    es += forcees
+  if (options.isCheckPerQuestion) es += '1'
   return es
 }
 

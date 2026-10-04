@@ -1,10 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import {
-    CALCULATRICES_FORCEES_OPTIONS,
-    CALCULATRICES_NON_FORCEES,
-    isCalculatricesForcees,
-  } from '../../../lib/calculatrices'
   import { buildMathAleaURL } from '../../../lib/components/urls'
   import {
     mathaleaGenerateSeed,
@@ -18,12 +13,12 @@
   import ButtonActionInfo from '../../shared/forms/ButtonActionInfo.svelte'
   import ButtonQRCode from '../../shared/forms/ButtonQRCode.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
-  import ButtonToggleAlt from '../../shared/forms/ButtonToggleAlt.svelte'
   import FormRadio from '../../shared/forms/FormRadio.svelte'
-  import InputNumber from '../../shared/forms/InputNumber.svelte'
-  import InputText from '../../shared/forms/InputText.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
   import Tabs from '../../shared/ui/Tabs.svelte'
+  import ReglagesCan from './sections/ReglagesCan.svelte'
+  import ReglagesClassique from './sections/ReglagesClassique.svelte'
+  import ReglagesDonnees from './sections/ReglagesDonnees.svelte'
 
   $: activeTab = $canOptions.isChoosen ? 'can' : 'classic'
 
@@ -70,15 +65,6 @@
   // (`globalOptions.setInteractive`), qui ne concerne que la page Élève.
   type LinkFormat = keyof typeof availableLinkFormats
   let currentLinkFormat: LinkFormat = 'clear'
-  let setInteractive: string = $globalOptions.setInteractive ?? '2'
-  let calculatricesForcees: string =
-    $globalOptions.calculatricesForcees ?? CALCULATRICES_NON_FORCEES
-  let presMode:
-    | 'liste_exos'
-    | 'un_exo_par_page'
-    | 'une_question_par_page'
-    | 'recto'
-    | 'verso' = $globalOptions.presMode ?? 'liste_exos'
 
   /**
    * Raccourcissement du lien Élève via edurl.fr (API Shlink de
@@ -332,207 +318,11 @@
           >
             Les exercices seront posés suivant les réglages ci-dessous.
           </div>
-          <div class="pt-2 px-4 grid grid-flow-row md:grid-cols-3 gap-4">
-            <div class="pb-2 w-full flex flex-col">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Présentation
-              </div>
-              <div class="pl-4 pb-4 w-full flex flex-col">
-                <div class="flex flex-row items-center">
-                  <div
-                    class="shrink-0 whitespace-nowrap text-sm font-light text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
-                  >
-                    Titre&nbsp;:
-                  </div>
-                  <InputText
-                    inputID="config-eleve-titre-input"
-                    bind:value={$globalOptions.title}
-                    showTitle={false}
-                    classAddenda="font-light m-2"
-                  />
-                </div>
-                <div
-                  class="mt-1 text-coopmaths-corpus font-light italic text-xs {!$globalOptions.title ||
-                  $globalOptions.title.length === 0
-                    ? ''
-                    : 'invisible'}"
-                >
-                  Pas de bandeau si laissé vide.
-                </div>
-              </div>
-              <FormRadio
-                title="présentation"
-                bind:valueSelected={presMode}
-                on:newvalue={() => ($globalOptions.presMode = presMode)}
-                labelsValues={[
-                  {
-                    label: 'Tous les exercices sur une page',
-                    value: 'liste_exos',
-                  },
-                  {
-                    label: 'Une page par exercice',
-                    value: 'un_exo_par_page',
-                    isDisabled: $exercicesParams.length === 1,
-                  },
-                  {
-                    label: 'Une page par question',
-                    value: 'une_question_par_page',
-                  },
-                  // { label: 'Cartes', value: 'cartes' }
-                ]}
-              />
-              <div class="pl-4 pt-4">
-                <ButtonToggleAlt
-                  title={'Deux colonnes'}
-                  isDisabled={$globalOptions.presMode === 'un_exo_par_page' ||
-                    $globalOptions.presMode === 'une_question_par_page'}
-                  bind:value={$globalOptions.twoColumns}
-                  id={'config-eleve-nb-colonnes-toggle'}
-                  explanations={[
-                    'Les exercices seront présentés sur deux colonnes.',
-                    'Les exercices seront présentés sur une seule colonne.',
-                  ]}
-                />
-              </div>
-            </div>
-
-            <div class="pb-2">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Interactivité
-              </div>
-              <FormRadio
-                title="Interactif"
-                bind:valueSelected={setInteractive}
-                on:newvalue={() =>
-                  ($globalOptions.setInteractive = setInteractive)}
-                labelsValues={[
-                  { label: 'Laisser tel quel', value: '2' },
-                  { label: 'Tout interactif', value: '1' },
-                  { label: "Pas d'interactivité", value: '0' },
-                ]}
-              />
-              <div class="pl-2 pt-4">
-                <ButtonToggleAlt
-                  title={"Modifier l'interactivité"}
-                  bind:value={$globalOptions.isInteractiveFree}
-                  id={'config-eleve-interactif-permis-toggle'}
-                  explanations={[
-                    "Les élèves peuvent rendre l'exercice interactif ou pas.",
-                    "Les élèves ne pourront pas changer le statut de l'interactivité.",
-                  ]}
-                />
-              </div>
-              <div class="pl-2 pt-2">
-                <ButtonToggleAlt
-                  title={'Une seule réponse'}
-                  isDisabled={$globalOptions.setInteractive === '0'}
-                  bind:value={$globalOptions.oneShot}
-                  id={'config-eleve-refaire-toggle'}
-                  explanations={[
-                    "Les élèves n'auront qu'une seule possibilité pour répondre aux exercices.",
-                    "Les élèves pourront refaire les exercices autant de fois qu'ils le souhaitent.",
-                  ]}
-                />
-              </div>
-            </div>
-            <div class="pb-2">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Calculatrices
-              </div>
-              <FormRadio
-                title="Calculatrices"
-                bind:valueSelected={calculatricesForcees}
-                on:newvalue={() => {
-                  if (isCalculatricesForcees(calculatricesForcees)) {
-                    $globalOptions.calculatricesForcees = calculatricesForcees
-                  }
-                }}
-                labelsValues={CALCULATRICES_FORCEES_OPTIONS}
-              />
-              <div
-                class="pl-2 pt-2 text-sm font-light text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
-              >
-                Un choix autre que « selon les réglages de chaque exercice »
-                s'applique à tous les exercices.
-              </div>
-            </div>
-            <div class="pb-2">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Correction
-              </div>
-              <div class="flex flex-row justify-start items-center px-4">
-                <ButtonToggleAlt
-                  title={'Accès aux corrections'}
-                  bind:value={$globalOptions.isSolutionAccessible}
-                  id={'config-eleve-acces-corrections-toggle'}
-                  explanations={[
-                    'Les élèves pourront accéder aux corrections en cliquant sur un bouton.',
-                    "Les élèves n'auront aucun moyen de voir la correction.",
-                  ]}
-                />
-              </div>
-              <div class="flex flex-row justify-start items-center px-4 pt-2">
-                <ButtonToggleAlt
-                  title={"N'afficher la correction que si la réponse est fausse"}
-                  isDisabled={!$globalOptions.isSolutionAccessible}
-                  bind:value={$globalOptions.isCorrectionOnlyOnError}
-                  id={'config-eleve-correction-si-erreur-toggle'}
-                  explanations={[
-                    'Sous une bonne réponse, seul le smiley sera affiché ; la correction ne sera affichée que sous les mauvaises réponses.',
-                    'La correction sera affichée sous toutes les questions, bonnes ou mauvaises.',
-                  ]}
-                />
-              </div>
-            </div>
-          </div>
-          <div class="pt-2 px-4 grid grid-flow-row md:grid-cols-2 gap-4">
-            <div class="pb-2">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Affichage du titre de l'exercice
-              </div>
-              <div class="flex flex-row justify-start items-center px-4">
-                <ButtonToggleAlt
-                  title={"Titre de l'exercice"}
-                  bind:value={$globalOptions.isTitleDisplayed}
-                  id={'config-eleve-title-displayed-toggle'}
-                  explanations={[
-                    'Les titres sont affichés',
-                    'Les titres sont masqués.',
-                  ]}
-                  on:toggle={handleSeed}
-                />
-              </div>
-            </div>
-            <div class="pb-2">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Affichage de la référence de l'exercice
-              </div>
-              <div class="flex flex-row justify-start items-center px-4">
-                <ButtonToggleAlt
-                  title={"Référence de l'exercice"}
-                  bind:value={$globalOptions.isReferenceDisplayed}
-                  id={'config-eleve-reference-displayed-toggle'}
-                  explanations={[
-                    'Les références sont affichées',
-                    'Les références sont masquées.',
-                  ]}
-                  on:toggle={handleSeed}
-                />
-              </div>
-            </div>
-          </div>
+          <ReglagesClassique
+            bind:globalOptions={$globalOptions}
+            canOptions={$canOptions}
+            onAffichageToggle={handleSeed}
+          />
         </div>
         <div
           class="transition-opacity duration-150 ease-linear
@@ -548,173 +338,14 @@
             Les questions seront posées les unes à la suite des autres en temps
             limité.
           </div>
-          <div class="pt-2 px-4 grid grid-flow-row md:grid-cols-2 gap-4">
-            <div
-              class="pb-2 w-full flex flex-col md:col-start-1 md:row-start-1"
-            >
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Présentation
-              </div>
-              <div class="flex flex-col items-stretch space-y-2 px-4">
-                <div class="flex flex-row items-center">
-                  <div
-                    class="w-24 shrink-0 whitespace-nowrap text-sm font-light {$canOptions.isChoosen
-                      ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
-                      : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
-                  >
-                    Durée&nbsp;:
-                  </div>
-                  <div class="flex flex-row items-center space-x-2">
-                    <InputNumber
-                      id="config-eleve-can-duration-input"
-                      min={1}
-                      max={60}
-                      bind:value={$canOptions.durationInMinutes}
-                      isDisabled={!$canOptions.isChoosen ||
-                        $canOptions.isTimerDisabled}
-                    />
-                    <div
-                      class="text-sm font-light {$canOptions.isChoosen &&
-                      !$canOptions.isTimerDisabled
-                        ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
-                        : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
-                    >
-                      minute{$canOptions.durationInMinutes !== undefined &&
-                      $canOptions.durationInMinutes > 1
-                        ? 's'
-                        : ''}.
-                    </div>
-                  </div>
-                </div>
-                <ButtonToggleAlt
-                  title={'Désactiver le chronomètre'}
-                  id={'config-eleve-can-no-timer-toggle'}
-                  bind:value={$canOptions.isTimerDisabled}
-                  isDisabled={!$canOptions.isChoosen}
-                  explanations={[
-                    'La course se déroule sans limite de temps : les élèves la terminent en rendant leur copie.',
-                    'La course est chronométrée et se termine automatiquement au bout de la durée indiquée.',
-                  ]}
-                />
-                <div class="flex flex-row items-center">
-                  <div
-                    class="w-24 shrink-0 whitespace-nowrap text-sm font-light {$canOptions.isChoosen
-                      ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
-                      : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
-                  >
-                    Titre&nbsp;:
-                  </div>
-                  <InputText
-                    inputID="config-eleve-can-title-input"
-                    bind:value={$canOptions.title}
-                    isDisabled={!$canOptions.isChoosen}
-                    showTitle={false}
-                    classAddenda="font-light"
-                  />
-                </div>
-                <div class="flex flex-row items-center">
-                  <div
-                    class="w-24 shrink-0 whitespace-nowrap text-sm font-light {$canOptions.isChoosen
-                      ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
-                      : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
-                  >
-                    Sous-titre&nbsp;:
-                  </div>
-                  <InputText
-                    inputID="config-eleve-can-subtitle-input"
-                    bind:value={$canOptions.subTitle}
-                    isDisabled={!$canOptions.isChoosen}
-                    showTitle={false}
-                    classAddenda="font-light"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="pb-2 md:col-start-1 md:row-start-2">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Interactivité
-              </div>
-              <div
-                class="flex flex-col items-start justify-start space-y-2 px-4"
-              >
-                <ButtonToggleAlt
-                  title={'Questions interactives'}
-                  id={'config-eleve-can-interactif-toggle'}
-                  bind:value={$canOptions.isInteractive}
-                  isDisabled={!$canOptions.isChoosen}
-                  explanations={[
-                    'Les élèves saisissent leurs réponses et obtiennent un score à la fin de la course.',
-                    'Les questions sont affichées sans champ de saisie : les élèves répondent sur une autre feuille.',
-                  ]}
-                />
-              </div>
-            </div>
-            <div class="pb-2 md:col-start-2 md:row-start-2">
-              <div
-                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-              >
-                Solutions
-              </div>
-              <div
-                class="flex flex-col items-start justify-start space-y-2 px-4"
-              >
-                <ButtonToggleAlt
-                  title={'Accès aux solutions'}
-                  id={'config-eleve-solutions-can-toggle'}
-                  bind:value={$canOptions.solutionsAccess}
-                  isDisabled={!$canOptions.isChoosen}
-                  explanations={[
-                    'Les élèves auront accès aux solutions dans le format défini ci-dessous.',
-                    "Les élèves n'auront pas accès aux solutions.",
-                  ]}
-                />
-                <FormRadio
-                  title="can-solutions-config"
-                  bind:valueSelected={$canOptions.solutionsMode}
-                  isDisabled={!$canOptions.isChoosen ||
-                    !$canOptions.solutionsAccess}
-                  labelsValues={[
-                    {
-                      label: 'Solutions rassemblées à la fin.',
-                      value: 'gathered',
-                    },
-                    {
-                      label: 'Solutions avec les questions.',
-                      value: 'split',
-                    },
-                  ]}
-                />
-              </div>
-            </div>
-          </div>
+          <ReglagesCan bind:canOptions={$canOptions} />
         </div>
       </div>
 
       <div
         class="pt-2 pl-2 grid grid-flow-row md:grid-cols-2 gap-4 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
       >
-        <div class="pb-2">
-          <div
-            class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-          >
-            Données
-          </div>
-          <div class="flex flex-row justify-start items-center px-4">
-            <ButtonToggleAlt
-              title={'Données différentes'}
-              bind:value={isDataRandom}
-              id={'config-eleve-donnes-differentes-toggle'}
-              explanations={[
-                "Chaque élève aura des pages avec des données différentes d'un autre élève.",
-                'Tous les élèves auront des pages identiques.',
-              ]}
-            />
-          </div>
-        </div>
+        <ReglagesDonnees bind:isDataRandom />
       </div>
       <div
         class="pt-4 pb-8 px-4 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"

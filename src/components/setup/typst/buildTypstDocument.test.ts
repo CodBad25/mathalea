@@ -119,6 +119,45 @@ describe('buildTypstDocument', () => {
     expect(code).not.toContain('to: "odd"')
   })
 
+  it('espace les boîtes de correction successives', () => {
+    const code = buildTypstDocument([
+      exercise({ questions: ['$1+1$'], corrections: ['$2$'] }),
+      exercise({ questions: ['$2+2$'], corrections: ['$4$'] }),
+    ])
+
+    expect(code).toContain('#exo-solution-box(\n      number: 1,')
+    expect(code).toContain(
+      '#mathalea-needspace()\n    #exo-solution-box(\n      number: 2,',
+    )
+    expect(code).toContain('solution-above: 1.8em,')
+  })
+
+  it('titre les corrections « Exercice N »', () => {
+    const code = buildTypstDocument([
+      exercise({ questions: ['$1+1$'], corrections: ['$2$'] }),
+    ])
+
+    expect(code).toContain('solution-label: "Exercice",')
+    expect(code).not.toContain('solution-label: "Correction"')
+  })
+
+  it('resserre le filet des corrections du style souligné seulement', () => {
+    const exercises = [exercise({ questions: ['$1+1$'], corrections: ['$2$'] })]
+    const underline = buildTypstDocument(exercises, {
+      ...defaultTypstDocumentOptions,
+      badgeStyle: 'underline',
+    })
+    expect(underline).toContain('exo-solution-box as exo-solution-box-pkg')
+    expect(underline).toContain('#let exo-solution-box(corps, ..args)')
+
+    const box = buildTypstDocument(exercises, {
+      ...defaultTypstDocumentOptions,
+      badgeStyle: 'box',
+    })
+    expect(box).not.toContain('exo-solution-box-pkg')
+    expect(box).not.toContain('#let exo-solution-box(')
+  })
+
   it('fait commencer chaque sujet sur une page impaire', () => {
     const options = { ...defaultTypstDocumentOptions, nbVersions: 2 }
     const versions = [[exercise({ questions: ['$5+5$'] })]]
@@ -2184,7 +2223,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // les questions des deux exercices se suivent dans le même tableau
     expect(code).toContain('[$7 times 5$],')
     expect(code).toContain('[Combien de boules ?],')
-    expect(code).toContain('[$... ... ...$ boules],')
+    expect(code).toContain('[$#box(width: 5em, repeat(gap: 2pt)[.])$ boules],')
     // corrections numérotées à la suite, dans l'ordre des lignes, et
     // réparties en colonnes (les réponses tiennent en quelques caractères)
     expect(code).toContain('#if corrige [')
@@ -2314,7 +2353,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code.match(/Courbe de \$f\$/g)).toHaveLength(1)
     // la deuxième question n'a plus de cellule d'énoncé, seulement sa réponse
     expect(code).toContain('none,')
-    expect(code).toContain('$S = ... ... ...$')
+    expect(code).toContain('$S = #box(width: 5em, repeat(gap: 2pt)[.])$')
     // la modale d'édition de cette ligne ne propose donc pas d'énoncé
     expect(
       getGeneratedCanRowCode(
@@ -2634,6 +2673,22 @@ describe('sourceUrl (URL de régénération en commentaire)', () => {
     expect(code).toContain(
       '// Pour régénérer cette fiche : https://coopmaths.fr/alea/?uuid=abc12&v=typst',
     )
+  })
+})
+
+describe('préambule d’une banque externe (extraPreamble)', () => {
+  it('ne réécrit pas la numérotation des listes réglée par le préambule', () => {
+    const preambule = '#set enum(numbering: n => strong[#n.])'
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      defaultTypstDocumentOptions,
+      {},
+      [],
+      { extraPreamble: preambule },
+    )
+    expect(code).toContain(preambule)
+    const apres = code.slice(code.indexOf(preambule) + preambule.length)
+    expect(apres).not.toMatch(/#set enum\([^)]*numbering/)
   })
 })
 

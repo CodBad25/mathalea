@@ -3,6 +3,7 @@ import type { CompareResult } from '../interactif/checks/types'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutPourUnPoint } from '../interactif/fonctionsBaremes'
 import type { IExercice } from '../types'
+import type ListeDeroulanteElement from './ListeDeroulanteElement'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -108,6 +109,30 @@ export class MetaInteractif2dElement extends MathaleaCustomElement {
       noFeedback = noFeedback || Boolean(options?.noFeedback)
       const compareFunction = reponse.compare ?? fonctionComparaison
       const index = parseInt(field.replace('field', ''), 10)
+      // Un champ peut être une liste déroulante placée hors de la figure
+      // (id `liste-deroulanteEx<n>Q<i>field<k>`).
+      const liste = document.querySelector<ListeDeroulanteElement>(
+        `#liste-deroulanteEx${exercice.numeroExercice}Q${i}field${index}`,
+      )
+      if (liste != null) {
+        const choix = liste.value
+        const smiley = liste.querySelector<HTMLSpanElement>(
+          `[id="resultatCheckEx${exercice.numeroExercice}Q${i}field${index}"]`,
+        )
+        if (choix === '') {
+          compteurSaisiesVides++
+          points.push(0)
+          if (smiley != null) smiley.innerHTML = '❌'
+          continue
+        }
+        saisies[`liste-deroulanteEx${exercice.numeroExercice}Q${i}${field}`] =
+          choix
+        const estJuste = choix === String(reponse.value)
+        if (estJuste) compteurBonnesReponses++
+        points.push(estJuste ? 1 : 0)
+        if (smiley != null) smiley.innerHTML = estJuste ? '✅' : '❌'
+        continue
+      }
       const mf = document.querySelector(
         `#MetaInteractif2dEx${exercice.numeroExercice}Q${i}field${index}`,
       ) as MathfieldElement
@@ -177,6 +202,13 @@ export class MetaInteractif2dElement extends MathaleaCustomElement {
       .forEach((element) => {
         element.interactivityOn = false
       })
+    document
+      .querySelectorAll<ListeDeroulanteElement>(
+        `liste-deroulante[id^="liste-deroulanteEx${exercice.numeroExercice}Q${i}field"]`,
+      )
+      .forEach((liste) => {
+        liste.interactivityOn = false
+      })
 
     return {
       isOk: nbBonnesReponses === nbReponses,
@@ -206,10 +238,15 @@ function scoreFromResult(result: { isOk: boolean }): number {
 function formatMetaInteractif2dAnswer(rawAnswer: string): string {
   try {
     const parsed = JSON.parse(rawAnswer) as Record<string, unknown>
-    const values = Object.values(parsed).filter(
-      (value): value is string => typeof value === 'string' && value !== '',
+    const values = Object.entries(parsed).filter(
+      (entry): entry is [string, string] =>
+        typeof entry[1] === 'string' && entry[1] !== '',
     )
-    return values.map((value) => `$${value}$`).join(' et ')
+    return values
+      .map(([key, value]) =>
+        key.startsWith('liste-deroulante') ? value : `$${value}$`,
+      )
+      .join(' et ')
   } catch {
     return rawAnswer
   }

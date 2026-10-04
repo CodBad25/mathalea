@@ -615,6 +615,10 @@ Les styles pleine largeur écrivent le titre, son filet et l'énoncé à la suit
 
 Pour les styles à colonne de badge, `MARGIN_BADGE_WIDTH` fixe une largeur compacte par style (`margin-position`) et annule le débordement dans la marge de la page (`label-extra: 0pt`) : sans cela le paquet dimensionne la colonne sur « Correction 100 » et étrangle le contenu. La colonne est étroite pour les énoncés et élargie juste avant les corrections, dont le libellé est plus long. Les badges au seul numéro (`circled`, `filled-circle`, `rect`, `filled-rect`) partagent la même largeur de 1,4 cm.
 
+Les corrections portent le même titre que les énoncés, « Exercice N » (`solution-label: "Exercice"` dans `exo-setup`) : elles sont déjà regroupées sous « Corrections » et le numéro renvoie à l'énoncé. Ce libellé se règle donc côté MathALÉA, sans toucher au paquet.
+
+Pour le style `underline`, le paquet fige l'espace entre le titre, son filet et le corps (`v(-0.3em)` et `v(0.5em)` dans `style-underline`) et aucun réglage n'agit dessus : l'espacement entre paragraphes (`par.spacing`) s'y ajoute deux fois et éloigne le filet du titre. `buildTypstDocument` importe alors `exo-solution-box` sous le nom `exo-solution-box-pkg` (`EXERCISE_BANK_IMPORT_UNDERLINE`) et le redéfinit (`MATHALEA_SOLUTION_UNDERLINE_HELPER`) : `par.spacing` est resserré le temps de l'appel (filet à environ 0,2 em du titre), rétabli pour le corps de la correction, et un `v` négatif ramène le blanc sous le filet à environ la moitié de celui qui sépare deux corrections (`solution-above: 1.8em`). Les autres styles gardent l'import et l'appel d'origine. Seules les corrections de la section « Corrections » sont concernées : l'impression directe via `display: "sol"` (corrigé seul) appelle le `exo-solution-box` du paquet et garde l'espacement d'origine.
+
 Le réglage « Position du titre » (`TypstDocumentOptions.badgePosition`, `badge-position` du paquet depuis 0.6.2) choisit entre la colonne de badge (`margin`, défaut) et une ligne d'en-tête au-dessus d'un énoncé pleine largeur (`above`). En `above` il n'y a plus de colonne à dimensionner : `marginBadgeWidth()` renvoie `undefined`, donc ni `margin-position` ni `label-extra` ne sont émis, et la marge horizontale de page repasse à 10 mm. C'est la position à prendre en colonnes, où la colonne du badge coûte une bonne part de la largeur, et avec les énoncés numérotés, dont le retrait s'ajoute à celui du badge.
 
 `badgePosition(options)` neutralise le réglage pour un style pleine largeur (retour `margin`) : la valeur reste mémorisée si l'on repasse à un style à titre latéral, mais aucun `badge-position` n'est émis pendant ce temps. L'interface désactive alors la liste et l'explique en infobulle.
@@ -759,6 +763,7 @@ lieu d'être aplaties comme un `<span>` HTML ordinaire.
 
 Particularités de la conversion des formules (`latexMathToTypst`) :
 
+- blanc à compléter (`\ldots` seul, comme dans `remplisLesBlancs`) rendu par une boîte de 5 em de pointillés de conduite (`#box(width: 5em, repeat(gap: 2pt)[.])`, constante `ANSWER_BLANK`) pour que l'élève puisse écrire dedans, y compris une fraction ; les vraies ellipses de suites (bordées de virgules) sont épargnées. `mathaleaFormatExercice` ayant déjà remplacé les `\ldots` des énoncés par `....` (quatre points) avant la conversion, ce motif est reconnu au même titre que `\ldots` ;
 - virgule décimale française rendue sans espace (`3,5` → `3","5`) ;
 - `\num`/`\numprint` dépliés en conservant les espaces fines (`\,`) ;
 - espaces LaTeX explicites (`\thinspace`, `\medspace`, `\thickspace`) normalisées vers les espaces mathématiques Typst ;

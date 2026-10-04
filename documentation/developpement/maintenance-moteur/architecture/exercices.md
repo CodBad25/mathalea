@@ -99,22 +99,22 @@ Les composants qui modifient le store `exercicesParams` doivent appeler `exercic
 
 Le store `globalOptions` (`src/lib/stores/globalOptions.ts`) contient les réglages de la vue élève classique (présentation, interactivité, corrections). Plutôt qu'un paramètre d'URL par réglage, ces booléens/énumérations sont compressés dans une seule chaîne `es` : un caractère par réglage, dans un ordre fixe.
 
-- Construction : `buildEsParams()` dans `src/lib/components/urls.ts`. Chaque réglage est ajouté à la chaîne dans l'ordre `presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError` ; un dixième caractère facultatif, `calculatricesForcees`, n'est ajouté que s'il impose une calculatrice (voir ci-dessous).
+- Construction : `buildEsParams()` dans `src/lib/components/urls.ts`. Chaque réglage est ajouté à la chaîne dans l'ordre `presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError` ; un dixième caractère facultatif, `calculatricesForcees`, n'est ajouté que s'il impose une calculatrice (voir ci-dessous), et un onzième, `isCheckPerQuestion`, n'est ajouté que s'il est activé (le dixième vaut alors `-` si aucune calculatrice n'est forcée).
 - Décodage : la fonction `mathaleaUpdateExercicesParamsFromUrl()` dans `src/lib/mathalea.ts` lit `es` et affecte chaque caractère (`es.charAt(i)`) au réglage correspondant.
-- Rétrocompatibilité : le décodage teste `es.length` (6, 7, 8, 9 ou 10 caractères actuellement) et choisit la branche qui correspond, pour que les anciennes URLs partagées (avec moins de réglages) restent valides. Chaque nouvelle branche reprend le décodage complet des caractères précédents avant d'ajouter le nouveau.
+- Rétrocompatibilité : le décodage teste `es.length` (6, 7, 8, 9, 10 ou 11 caractères actuellement) et choisit la branche qui correspond, pour que les anciennes URLs partagées (avec moins de réglages) restent valides. Chaque nouvelle branche reprend le décodage complet des caractères précédents avant d'ajouter le nouveau.
 
 Pour ajouter un nouveau réglage `es` :
 
 1. Ajouter le champ à `InterfaceGlobalOptions` dans `src/lib/types.ts` et sa valeur par défaut dans `src/lib/stores/globalOptions.ts`.
 2. Ajouter un caractère à la fin de la chaîne dans `buildEsParams()`.
 3. Ajouter une nouvelle branche `es.length === N` (N = longueur actuelle + 1) dans `mathaleaUpdateExercicesParamsFromUrl()`, sans modifier les branches existantes, et inclure le nouveau champ dans l'objet retourné par la fonction.
-4. Ajouter le toggle correspondant dans `ConfigEleve.svelte` (`src/components/setup/configEleve/ConfigEleve.svelte`), en suivant le pattern `ButtonToggleAlt` existant dans la section concernée.
+4. Ajouter le toggle correspondant dans la section concernée de `src/components/setup/configEleve/sections/` (`ReglagesPresentation`, `ReglagesInteractivite`, `ReglagesCalculatrices`, `ReglagesCorrection`, `ReglagesAffichage`, `ReglagesDonnees` ou `ReglagesCan`), en suivant le pattern `ButtonToggleAlt` existant. Ces sections sont partagées par la page de configuration du lien élève (`ConfigEleve.svelte`) et par la modale de réglages de la séance Capytale (`ModalCapytalSettings.svelte`) : le nouveau réglage apparaît donc aux deux endroits. Si Capytale impose sa valeur (comme la présentation « une page par exercice » ou `isInteractiveFree`), le masquer avec `{#if mode === 'lien'}` (prop `mode: 'lien' | 'capytale'`, voir `sections/types.ts`).
 
 ### Calculatrices autorisées (vue élève)
 
 La liste déroulante « Calculatrices disponibles » du panneau `Settings` (vue prof uniquement, prop `isCalculatriceProposee`) écrit `calc` (`0`, `1`, `2`, `3` ou `9`, voir `src/lib/calculatrices.ts`) dans `InterfaceParams` ; elle vaut « Aucune calculatrice » par défaut. `Eleve.svelte` affiche alors, à côté du zoom, uniquement les boutons des calculatrices autorisées, dans l'ordre calculette, NumWorks collège, NumWorks lycée et le widget `TbiCalculatorWidget` (store `eleveCalculatrices`, indépendant de `tbiState`). La disponibilité suit l'exercice affiché : exercice courant en `un_exo_par_page`, exercice de la question courante en `une_question_par_page`, et dès qu'un exercice l'autorise quand plusieurs sont affichés ensemble. Hors d'un exercice autorisé, le widget est masqué sans être démonté, pour retrouver son état au retour. Les exercices statiques (sans panneau `Settings`) ne portent pas ce réglage.
 
-La page de configuration du lien élève (`ConfigEleve.svelte`, section « Calculatrices ») propose en plus un réglage global, `globalOptions.calculatricesForcees`, qui passe outre les `calc` individuels : `-` (valeur par défaut) les laisse tels quels, `0`, `1`, `2`, `3` ou `9` s'appliquent à tous les exercices (`0` retire donc toute calculatrice, même là où un exercice en autorise). Il est porté par le dixième caractère de `es` ; `codesCalculatricesEffectifs()` (`src/lib/calculatrices.ts`) fait la substitution dans `Eleve.svelte`.
+La page de configuration du lien élève (`ConfigEleve.svelte`) et la modale de la séance Capytale (section `ReglagesCalculatrices.svelte`) propose en plus un réglage global, `globalOptions.calculatricesForcees`, qui passe outre les `calc` individuels : `-` (valeur par défaut) les laisse tels quels, `0`, `1`, `2`, `3` ou `9` s'appliquent à tous les exercices (`0` retire donc toute calculatrice, même là où un exercice en autorise). Il est porté par le dixième caractère de `es` ; `codesCalculatricesEffectifs()` (`src/lib/calculatrices.ts`) fait la substitution dans `Eleve.svelte`.
 
 ### Accès aux corrections et `localStorage`
 
@@ -173,3 +173,15 @@ Pour les changements TypeScript ou Svelte, lancer aussi :
 ```sh
 pnpm check
 ```
+
+### Vérification question par question (`isCheckPerQuestion`)
+
+Dans la vue élève, un exercice interactif est normalement vérifié d'un seul coup (bouton « Vérifier » unique, `exerciceInteractif()` dans `src/lib/interactif/gestionInteractif.ts`). Avec `isCheckPerQuestion` (11ᵉ caractère facultatif de `es`, toggle « Vérifier question par question » dans `ConfigEleve.svelte` et dans la modale de réglages Capytale), `ExerciceMathaleaVueEleve.svelte` ajoute un bouton « Vérifier » sous chaque question (`Question.svelte`) :
+
+- la question est corrigée par `verifQuestionExercice()`, la même fonction que celle utilisée par `exerciceInteractif()` ; ses champs sont verrouillés et sa correction (si `isSolutionAccessible`) s'affiche aussitôt. Le bouton est placé à la suite du contenu de la question, donc sur la ligne du champ de réponse quand il y a la place ;
+- le score de l'exercice n'est calculé, affiché (sous l'exercice et dans l'onglet de la vue « un exercice par page ») et transmis à Moodle ou Capytale (`resultsByExercice`) que lorsque toutes les questions sont vérifiées : la vérification de la dernière question a donc le même effet que « Tout vérifier ». Avant cela, une question n'affiche que son smiley, son feedback et sa correction, et un « Score : x / y » seulement si elle peut rapporter plus d'un point ;
+- le bouton `#buttonScoreEx{i}` est conservé, sous le libellé « Tout vérifier » : il vérifie les questions restantes, et reste le point d'entrée des composants externes (relecture Capytale, FlowMath, Labyrinthe, Juniper Green) ;
+- le mode ne s'applique que si l'exercice est interactif, a plusieurs questions et autant d'entrées dans `autoCorrection` que dans `listeQuestions` ; sinon le bouton unique est conservé ;
+- le bloc bouton/score d'une question porte la classe `katex-ignore` (`ignoredClasses` dans `src/lib/latex/Katex.ts`) : sans elle, l'auto-render KaTeX remplace les nœuds texte vides qui servent d'ancres aux blocs `{#if}` de Svelte et vide le bloc. À appliquer à toute zone d'interface Svelte ajoutée dans le contenu d'un exercice.
+
+Le mode « une question par page » (`QuestionParPage.svelte`) vérifie déjà chaque question séparément et n'est pas concerné.

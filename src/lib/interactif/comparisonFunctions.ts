@@ -610,7 +610,9 @@ function handleIntervalle(saisie: string, answer: string): ResultType {
 
     if (localSaisie === localAnswer) return ok()
 
-    return fail(`La bonne réponse était $\\mathbb{${lettre}}\\{${valeur}\\}$.`)
+    return fail(
+      `La bonne réponse était $\\mathbb{${lettre}}\\backslash\\{${valeur}\\}$.`,
+    )
   }
 
   // ── Interval(s) with brackets (including unions / intersections) ──────
@@ -1547,7 +1549,9 @@ function handleNombreDecimalSeulement(
       'Résultat incorrect car une valeur décimale (ou entière) est attendue.',
     )
 
-  return mathEqual(parse(saisie), parse(answer)) ? ok() : fail('Résultat incorrect.')
+  return mathEqual(parse(saisie), parse(answer))
+    ? ok()
+    : fail('Résultat incorrect.')
 }
 
 function handleExpressionNumerique(
@@ -1689,6 +1693,25 @@ function handleFactorisation(
     if (sCount < aCount)
       return fail("L'expression saisie peut être davantage factorisée.")
     if (sCount > aCount) return fail("L'expression saisie a trop de facteurs.")
+    return ok()
+  }
+
+  if (options.facteursPremierDegre) {
+    if (!valuesEqual) return fail()
+    if (isFunction(s, 'Add') || isFunction(s, 'Subtract'))
+      return fail(
+        "L'expression saisie n'est pas factorisée bien qu'elle soit égale à l'expression attendue.",
+      )
+    const sLitFactors = getRawFactors(parseRaw(clean(saisie)))
+      .map((f) => ce.expr(f.json))
+      .filter((f) => !isNumber(f))
+    if (sLitFactors.some((f) => f.polynomialCoefficients()?.length !== 2))
+      return fail('Chaque facteur doit être du premier degré.')
+    const aLitCount = countLiteralFactors(aFactors)
+    if (sLitFactors.length < aLitCount)
+      return fail("L'expression saisie peut être davantage factorisée.")
+    if (sLitFactors.length > aLitCount)
+      return fail("L'expression saisie a trop de facteurs.")
     return ok()
   }
 
@@ -3042,11 +3065,9 @@ export function handleEntiersConsecutifs(
         .split('>')
         .map((el) => Number(ce.parse(el).re))
         .sort((a: number, b: number) => a - b)
-  if (
-    !(
-      Number.isInteger(Number(entierSup)) && Number.isInteger(Number(entierInf))
-    )
-  ) {
+  if (!(
+    Number.isInteger(Number(entierSup)) && Number.isInteger(Number(entierInf))
+  )) {
     feedback = 'On attend comme réponse deux nombres entiers.'
     return { isOk: false, feedback }
   }
@@ -3077,16 +3098,14 @@ export function handleEntiersConsecutifs(
     const diff2 = Number(
       ce.expr(['Subtract', String(valeurInter), String(entierInf)]).N().re,
     )
-    if (
-      !(
-        diff1 != null &&
-        diff2 != null &&
-        diff1 < 1 &&
-        diff1 >= 0 &&
-        diff2 < 1 &&
-        diff2 >= 0
-      )
-    ) {
+    if (!(
+      diff1 != null &&
+      diff2 != null &&
+      diff1 < 1 &&
+      diff1 >= 0 &&
+      diff2 < 1 &&
+      diff2 >= 0
+    )) {
       return {
         isOk: false,
         feedback: `Les deux nombres entiers sont biens consécutifs mais n'encadrent pas la valeur ${valeurInter}`,
@@ -3248,7 +3267,8 @@ export function fonctionComparaison(
     options.factorisation ||
     options.exclusifFactorisation ||
     options.nbFacteursIdentiquesFactorisation ||
-    options.unSeulFacteurLitteral
+    options.unSeulFacteurLitteral ||
+    options.facteursPremierDegre
   )
     return handleFactorisation(saisie, answer, options)
 
@@ -3315,12 +3335,10 @@ export function fonctionComparaison(
     parsedSaisie.freeVariables.length > 0 ||
     parsedAnswer.freeVariables.length > 0
 
-  return (
-    (estSymbolique
-      ? parsedSaisie.is(parsedAnswer)
-      : parsedSaisie.is(parsedAnswer, 0)) ||
+  return (estSymbolique
+    ? parsedSaisie.is(parsedAnswer)
+    : parsedSaisie.is(parsedAnswer, 0)) ||
     (estSymbolique && parsedSaisie.isEqual(parsedAnswer))
-  )
     ? ok()
     : fail()
 }

@@ -47,7 +47,7 @@ export default class Auto1C19b extends ExerciceQcmACourt {
       denomCommun,
     )
 
-    this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ en trois mois.<br>
+    this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ € en trois mois.<br>
         En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
         Déterminer la part du crédit à rembourser en mars sous forme de fraction.`
 
@@ -122,7 +122,7 @@ export default class Auto1C19b extends ExerciceQcmACourt {
         fracFevrier.num * (denomCommun / fracFevrier.den),
         denomCommun,
       )
-      this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ en trois mois.<br>
+      this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ € en trois mois.<br>
         En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
         Déterminer la part du crédit à rembourser en mars sous forme de fraction.`
 

@@ -3,11 +3,10 @@
   import type { CanOptions } from '../../../../../lib/types/can'
   import ButtonTextAction from '../../../../shared/forms/ButtonTextAction.svelte'
   import BasicClassicModal from '../../../../shared/modal/BasicClassicModal.svelte'
-  import ModalCapytalSettingsCan from './ModalCapytalSettingsCAN.svelte'
-  import ModalCapytalSettingsCorrection from './ModalCapytalSettingsCorrection.svelte'
-  import ModalCapytalSettingsData from './ModalCapytalSettingsData.svelte'
-  import ModalCapytalSettingsInteractivity from './ModalCapytalSettingsInteractivity.svelte'
-  import ModalCapytalSettingsTitles from './ModalCapytalSettingsTitles.svelte'
+  import SegmentedControl from '../../../../shared/ui/SegmentedControl.svelte'
+  import ReglagesCan from '../../../configEleve/sections/ReglagesCan.svelte'
+  import ReglagesClassique from '../../../configEleve/sections/ReglagesClassique.svelte'
+  import ReglagesDonnees from '../../../configEleve/sections/ReglagesDonnees.svelte'
 
   export let isSettingsDialogDisplayed = false
   export let globalOptions: InterfaceGlobalOptions
@@ -32,8 +31,20 @@
     params.canOptions = canOptions
   }
 
-  function setInteractivity(value: string) {
-    params.globalOptions.setInteractive = value
+  const tabs = [
+    {
+      id: 'classic',
+      label: 'Présentation classique',
+      ariaControls: 'tabs-pres-classic',
+    },
+    { id: 'can', label: 'Course aux nombres', ariaControls: 'tabs-pres-can' },
+  ]
+
+  $: activeTab = params.canOptions.isChoosen ? 'can' : 'classic'
+
+  function handleTabChange(e: CustomEvent<string>) {
+    params.canOptions.isChoosen = e.detail === 'can'
+    toggleCan()
   }
 </script>
 
@@ -42,37 +53,42 @@
   on:close={() => updateParams(params)}
 >
   <div slot="header">Réglages de l'affichage des exercices</div>
-  <div
-    slot="content"
-    class="pt-2 pl-2 grid grid-flow-row text-justify
-      lg:grid-cols-2 md:gap-4 font-light"
-  >
-    <div class="pb-2">
-      <ModalCapytalSettingsInteractivity
-        setInteractive={params.globalOptions.setInteractive ?? '2'}
-        {setInteractivity}
-        bind:oneShot={params.globalOptions.oneShot}
-        bind:isDisabled={params.canOptions.isChoosen}
-      />
-    </div>
-    <div class="pb-2">
-      <ModalCapytalSettingsCan
-        bind:canOptions={params.canOptions}
-        bind:toggleCan
-      />
-    </div>
-    <div class="pb-2">
-      <ModalCapytalSettingsData bind:globalOptions={params.globalOptions} />
-    </div>
-    <div class="pb-2">
-      <ModalCapytalSettingsTitles bind:globalOptions={params.globalOptions} />
-    </div>
-    <div class="pb-2">
-      <ModalCapytalSettingsCorrection
-        bind:globalOptions={params.globalOptions}
-        bind:canOptions={params.canOptions}
-      />
-    </div>
+  <div slot="content" class="pt-2 pl-2 text-justify font-light">
+    <!-- Le contenu n'est monté qu'à l'ouverture : les champs partagent leurs
+         identifiants avec la page de configuration du lien élève -->
+    {#if isSettingsDialogDisplayed}
+      <div class="px-4 pb-2">
+        <SegmentedControl {tabs} {activeTab} on:change={handleTabChange} />
+        <div
+          class="pt-2 text-center text-sm font-light text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
+        >
+          {#if activeTab === 'can'}
+            Les questions seront posées les unes à la suite des autres en temps
+            limité.
+          {:else}
+            Les exercices seront posés suivant les réglages ci-dessous.
+          {/if}
+        </div>
+      </div>
+      {#if activeTab === 'classic'}
+        <div id="tabs-pres-classic" role="tabpanel">
+          <ReglagesClassique
+            bind:globalOptions={params.globalOptions}
+            canOptions={params.canOptions}
+            mode="capytale"
+          />
+        </div>
+      {:else}
+        <div id="tabs-pres-can" role="tabpanel">
+          <ReglagesCan bind:canOptions={params.canOptions} mode="capytale" />
+        </div>
+      {/if}
+      <div class="pt-2 px-4">
+        <ReglagesDonnees
+          bind:isDataRandom={params.globalOptions.isDataRandom}
+        />
+      </div>
+    {/if}
   </div>
   <div slot="footer" class="flex flex-row justify-end space-x-4 w-full">
     <div class="pt-4 pb-8 px-4">

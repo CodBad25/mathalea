@@ -2534,6 +2534,33 @@ describe('fonctionComparaison', () => {
     )
   })
 
+  it("Vérifie le fonctionnement de l'option facteursPremierDegre.", () => {
+    for (const saisie of [
+      '(2x+4)^2',
+      '(2x+4)(2x+4)',
+      '4(x+2)^2',
+      '(-2x-4)^2',
+    ]) {
+      const result = fonctionComparaison(saisie, '(2x+4)^2', {
+        facteursPremierDegre: true,
+      })
+      expect(result.isOk).toBe(true)
+    }
+    let result = fonctionComparaison('4(x^2+4x+4)', '(2x+4)^2', {
+      facteursPremierDegre: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe('Chaque facteur doit être du premier degré.')
+    result = fonctionComparaison('4x^2+16x+16', '(2x+4)^2', {
+      facteursPremierDegre: true,
+    })
+    expect(result.isOk).toBe(false)
+    result = fonctionComparaison('(2x-3)(2x-3)', '(2x-3)(2x+3)', {
+      facteursPremierDegre: true,
+    })
+    expect(result.isOk).toBe(false)
+  })
+
   //     ██████  ██████  ████████ ██  ██████  ███    ██
   //    ██    ██ ██   ██    ██    ██ ██    ██ ████   ██
   //    ██    ██ ██████     ██    ██ ██    ██ ██ ██  ██
@@ -3663,25 +3690,17 @@ describe('fonctionComparaison', () => {
     )
     expect(result.isOk).toBe(true)
 
-    result = pythagoreCompare(
-      'IH^2-IG^2',
-      '\\mathrm{HI}^2-\\mathrm{GI}^2',
-    )
+    result = pythagoreCompare('IH^2-IG^2', '\\mathrm{HI}^2-\\mathrm{GI}^2')
     expect(result.isOk).toBe(true)
 
-    result = pythagoreCompare(
-      'GI^2-HI^2',
-      '\\mathrm{HI}^2-\\mathrm{GI}^2',
-    )
+    result = pythagoreCompare('GI^2-HI^2', '\\mathrm{HI}^2-\\mathrm{GI}^2')
     expect(result).toEqual({
       isOk: false,
-      feedback: 'Les deux carrés sont dans le mauvais ordre dans la soustraction.',
+      feedback:
+        'Les deux carrés sont dans le mauvais ordre dans la soustraction.',
     })
 
-    result = pythagoreCompare(
-      'AB^2-GI^2',
-      '\\mathrm{HI}^2-\\mathrm{GI}^2',
-    )
+    result = pythagoreCompare('AB^2-GI^2', '\\mathrm{HI}^2-\\mathrm{GI}^2')
     expect(result).toEqual({
       isOk: false,
       feedback: "Ce n'est pas la soustraction attendue.",

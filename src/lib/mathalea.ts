@@ -685,6 +685,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let isTitleDisplayed = true
   let isReferenceDisplayed = true
   let isCorrectionOnlyOnError = false
+  let isCheckPerQuestion = false
   let beta = false
   let url: URL
   let canDuration = 540
@@ -694,6 +695,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let canSolMode = 'gathered'
   let canIsInteractive = true
   let canIsTimerDisabled = false
+  let canSecondsPerQuestion: number | undefined
+  let canFeedbackEach = false
   try {
     url = new URL(urlString)
   } catch (error) {
@@ -848,6 +851,13 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         canIsInteractive = entry[1] === '1'
       } else if (entry[0] === 'canNC') {
         canIsTimerDisabled = entry[1] === '1'
+      } else if (entry[0] === 'canQ') {
+        const seconds = parseInt(entry[1])
+        if (Number.isFinite(seconds) && seconds > 0) {
+          canSecondsPerQuestion = seconds
+        }
+      } else if (entry[0] === 'canFB') {
+        canFeedbackEach = entry[1] === '1'
       }
 
       if (entry[0] === 'uuid') previousEntryWasUuid = true
@@ -900,6 +910,11 @@ export function mathaleaUpdateExercicesParamsFromUrl(
       e.title = canMainTitle
       e.isInteractive = canIsInteractive
       e.isTimerDisabled = canIsTimerDisabled
+      e.timerMode = canSecondsPerQuestion === undefined ? 'global' : 'question'
+      if (canSecondsPerQuestion !== undefined) {
+        e.durationPerQuestionInSeconds = canSecondsPerQuestion
+      }
+      e.feedbackMode = canFeedbackEach ? 'each' : 'end'
       e.solutionsAccess = canSolAccess
       if (canSolMode === 'gathered') e.solutionsMode = 'gathered'
       else e.solutionsMode = 'split'
@@ -925,7 +940,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   /**
    * es permet de résumer les réglages de la vue élève
    * Il est de la forme 21011010
-   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)
+   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError|calculatricesForcees (facultatif)|isCheckPerQuestion (facultatif)
    */
   if (es && es.length === 6) {
     presMode = presModeId[parseInt(es.charAt(0))]
@@ -951,7 +966,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     twoColumns = es.charAt(5) === '1'
     isTitleDisplayed = es.charAt(6) === '1'
     isReferenceDisplayed = es.charAt(7) === '1'
-  } else if (es && (es.length === 9 || es.length === 10)) {
+  } else if (es && es.length >= 9 && es.length <= 11) {
     presMode = presModeId[parseInt(es.charAt(0))]
     setInteractive = es.charAt(1)
     isSolutionAccessible = es.charAt(2) === '1'
@@ -964,6 +979,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     if (isCalculatricesForcees(es.charAt(9))) {
       calculatricesForcees = es.charAt(9) as CalculatricesForcees
     }
+    isCheckPerQuestion = es.charAt(10) === '1'
   }
   v = v ?? ''
   return {
@@ -993,6 +1009,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     isTitleDisplayed,
     isReferenceDisplayed,
     isCorrectionOnlyOnError,
+    isCheckPerQuestion,
     recorder,
     done,
     beta,

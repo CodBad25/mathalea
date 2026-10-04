@@ -40,6 +40,18 @@ const texteCorr = `Le résultat est ${resultat}...`
 Ne jamais utiliser `...` pour couper court à une phrase dans une correction :
 écrire la phrase complète.
 
+Quand le champ de saisie interactif termine une phrase, le point final va dans
+`texteApres`, après l'unité s'il y en a une. Sans phrase autour du champ
+(simple retour à la ligne, `$A=$`…), pas de point.
+
+```ts
+// Oui
+this.optionsChampTexte = {
+  texteAvant: '<br>Sa vitesse moyenne est ',
+  texteApres: '$\\text{km/h}$.',
+}
+```
+
 En revanche, quand des points de suspension sont réellement nécessaires
 (énumération, suite qui continue, valeur à compléter…), ils doivent être
 écrits `\ldots` et non trois points littéraux, pour un rendu typographique
@@ -134,7 +146,8 @@ Le détail de la règle et des trois issues possibles est dans
 - [ ] le titre commence par un infinitif ;
 - [ ] la consigne et les énoncés sont à l'infinitif ;
 - [ ] toutes les phrases finissent par un point (sauf formule à la ligne
-      après un deux-points) ;
+      après un deux-points), y compris celle qui se termine par le champ
+      de saisie (point dans `texteApres`) ;
 - [ ] aucun `...` pour couper court à une phrase ; les points de suspension
       réellement utiles sont écrits `\ldots` ;
 - [ ] tous les nombres (sauf les dates) sont entre `$...$` ;

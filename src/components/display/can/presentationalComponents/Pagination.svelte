@@ -7,6 +7,8 @@
   export let numberOfQuestions: number
   export let state: CanState
   export let resultsByQuestion: QuestionResult[]
+  /** Navigation linéaire : on ne peut pas choisir la question en cliquant. */
+  export let isLinear: boolean = false
 </script>
 
 <nav
@@ -23,10 +25,12 @@
           aria-controls="tab-{i + 1}"
           aria-selected={current === i ? 'true' : 'false'}
           type="button"
+          disabled={isLinear}
           class="rounded-full px-3 py-1.5 text-sm md:text-base font-black transition-all duration-300
         {i === current
             ? 'text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-struct dark:bg-coopmathsdark-struct'
-            : 'bg-transparent text-coopmaths-action hover:bg-coopmaths-action-lightest/20 dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest/20'}"
+            : 'bg-transparent text-coopmaths-action hover:bg-coopmaths-action-lightest/20 dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest/20'}
+        {isLinear && i !== current ? 'opacity-40 cursor-default' : ''}"
           on:click={() => {
             current = i
           }}

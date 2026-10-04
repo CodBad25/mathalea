@@ -200,6 +200,7 @@ export default class auto1AC7f extends ExerciceSimple {
       this.distracteurs = distracteurs.map((d) => `$\\text{${d}}$`)
     } else {
       this.question = `Compléter la phrase suivante avec l'unité qui convient.<br>${objet.trim()} $${texNombre(valeur)}$ ${this.interactif ? '' : '$\\ldots$'}`
+      this.optionsChampTexte = { texteApres: '.' }
       this.reponse = bonneUnite
     }
   }

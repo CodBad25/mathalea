@@ -19,8 +19,18 @@
   export let mode: 'display' | 'correction' = 'display'
   export let visible: boolean
   export let index: number
+  /**
+   * Question verrouillée (feedback après validation) : plus aucune saisie ni
+   * clavier virtuel, mais l'affichage du feedback reste visible.
+   */
+  export let isLocked: boolean = false
 
   let questionContainer: HTMLDivElement
+
+  $: if (questionContainer) {
+    if (isLocked) questionContainer.setAttribute('inert', '')
+    else questionContainer.removeAttribute('inert')
+  }
 
   onDestroy(() => {
     const mathfields = questionContainer?.querySelectorAll(
@@ -144,6 +154,7 @@
   }
 
   function updateInteractivity() {
+    if (isLocked) return
     if (questionContainer) {
       const multiMf = questionContainer.querySelector('multi-mathfield')
       // gestion des MultiMathfield

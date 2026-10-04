@@ -3,13 +3,13 @@ import FonctionsProbabilite2 from '../2e/2P10-5'
 export const interactifReady = true
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à deux épreuves'
-export const dateDeModifImportante = '20/06/2024'
+export const dateDeModifImportante = '04/10/2026'
 
 /**
  * Calculs de probabilités sur une expérience aléatoire à deux épreuves
  * @author Jean-claude Lhote
  */
-export const uuid = '04f53'
+export const uuid = 'd944a'
 export const refs = {
   'fr-fr': [], // Déréférencé car hors programme. Voir 3Z1DNB-19 pour un exercice sur ce thème.
   'fr-ch': ['NR'],

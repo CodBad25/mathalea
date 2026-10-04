@@ -37,6 +37,7 @@ export default class CreateurAnimationInstruments extends Exercice {
     const contenuGenere = ElementIepEditeur.create({
       id: this.editorId,
       loadSaveButtons: true,
+      allowFullscreen: true,
     })
     this.contenu = contenuGenere
     this.listeQuestions[0] = contenuGenere

@@ -523,6 +523,11 @@ function remplaceMacrosProfCollege(
   )
 }
 
+/** Triple `\ldots` tel que tex2typst le rend : marque un espace-réponse élève */
+const TRIPLE_ELLIPSIS = '... ... ...'
+/** Espace-réponse élève : pointillés de conduite sur une largeur fixe */
+const ANSWER_BLANK = '#box(width: 5em, repeat(gap: 2pt)[.])'
+
 /** Prépare une formule LaTeX de MathALÉA avant sa conversion par tex2typst */
 function preprocessTex(tex: string): string {
   // les jetons de protection htmlToTypst (\uE000N\uE001) ne sont pas du LaTeX
@@ -544,8 +549,11 @@ function preprocessTex(tex: string): string {
   // qu'un élève y écrive sa réponse : on le triple pour ~3× plus de place.
   // On épargne les vraies ellipses de suites, reconnaissables à la virgule qui
   // borde le `\ldots` (`x_1, \ldots, x_n`).
+  // `mathaleaFormatExercice` a déjà remplacé tous les `\ldots` des énoncés par
+  // `....` (quatre points, pour KaTeX) avant d'arriver ici : on reconnaît donc
+  // aussi ce motif, sans quoi il deviendrait quatre points séparés (`. . . .`).
   output = output.replace(
-    /(?<![,][ \t~]{0,4})\\ldots(?![a-zA-Z])(?![ \t~]{0,4}[,])/g,
+    /(?<![,][ \t~]{0,4})(?:\\ldots(?![a-zA-Z])|(?<!\.)\.{4}(?!\.))(?![ \t~]{0,4}[,])/g,
     '\\ldots\\ldots\\ldots',
   )
   output = stripLatexSizeCommands(output)
@@ -2069,6 +2077,8 @@ export function latexMathToTypst(tex: string): string {
         // filet de sécurité : aucun marqueur #txt ne doit fuir dans la sortie
         .replaceAll(TXT_MARK_OPEN, '')
         .replaceAll(TXT_MARK_CLOSE, '')
+        // espace-réponse (voir preprocessTex) : pointillés assez longs pour écrire
+        .replaceAll(TRIPLE_ELLIPSIS, ANSWER_BLANK)
     )
   }
 
@@ -3474,7 +3484,9 @@ export function htmlToTypst(
   // ce `\\` est absorbé avec la commande pour ne pas fuir en texte littéral.
   text = text.replace(/\\underline\s*\{([^{}]*)\}/g, '<u>$1</u>')
   // Certaines réponses CAN utilisent des pointillés LaTeX hors mode maths.
-  text = text.replace(/\\(?:ldots|dots)\b(?:\s*\{\})?/g, '... ... ...')
+  text = text.replace(/\\(?:ldots|dots)\b(?:\s*\{\})?/g, () =>
+    protect(ANSWER_BLANK),
+  )
   text = text.replace(/\\qquad\b\s*/g, () => protect('#h(2em)'))
   text = text.replace(/\\quad\b\s*/g, () => protect('#h(1em)'))
   text = text.replace(/(?:\\\\\s*)?\\medskip\b\s*/g, () =>

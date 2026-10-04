@@ -49,14 +49,16 @@ export default class NombreInverse extends ExerciceSimple {
     const Nom = choice(listeNom)
 
     if (context.isAmc) this.versionQcm = false
+    // Champ de réponse à la ligne, précédé du nom de l'inconnue
+    this.optionsChampTexte = { texteAvant: `<br>$${Nom}=$` }
     if (this.quotaChoice('ordre', [true, false])) {
       this.reponse = this.versionQcm
         ? `$${Nom}=${new FractionEtendue(a * c + b, c).inverse().texFraction}$`
         : new FractionEtendue(a * c + b, c).inverse().texFraction
       this.question = this.versionQcm
         ? `On considère l'égalité $\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$.<br> On a :`
-        : `Calculer $${Nom}$  sachant que : <br>
-     $\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$`
+        : `Calculer $${Nom}$  sachant que :
+     $\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$.`
       this.correction = `$\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)} = \\dfrac{${a} \\times ${c}}{${c}} + \\dfrac{${b}}{${c}} = \\dfrac{${a * c}}{${c}} + \\dfrac{${b}}{${c}}  =${d.texFraction}$<br><br>
    L'inverse de $${Nom}$ vaut  $${d.texFraction}$, donc $${Nom}=${miseEnEvidence(`${d.inverse().texFraction}`)}$.`
       this.canEnonce = `$\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$` // 'Compléter'
@@ -76,13 +78,12 @@ export default class NombreInverse extends ExerciceSimple {
         : new FractionEtendue(a * c - b, c).inverse().texFraction
       this.question = this.versionQcm
         ? `On considère l'égalité $\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$. <br>On a :`
-        : `Calculer $${Nom}$ sachant que : <br>
-         $\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$`
+        : `Calculer $${Nom}$ sachant que : 
+         $\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$.`
       this.correction = `$\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)} = \\dfrac{${a} \\times ${c}}{${c}} - \\dfrac{${b}}{${c}} = \\dfrac{${a * c}}{${c}} - \\dfrac{${b}}{${c}}  =${e.texFraction}$<br><br>
         L'inverse de $${Nom}$ vaut  $${e.texFraction}$, donc $${Nom}=${miseEnEvidence(`${e.inverse().texFraction}`)}$.`
       this.canEnonce = `$\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$` // 'Compléter'
       this.canReponseACompleter = `$${Nom}=\\ldots$`
-      this.optionsChampTexte = { texteAvant: `<br>$${Nom}=$` }
 
       if (this.versionQcm) {
         this.distracteurs = [

@@ -1,13 +1,17 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 export const dateDePublication = '02/09/2025'
-export const uuid = 'ba2e1'
+export const dateDeModifImportante = '03/10/2026'
+
+export const uuid = '6c241'
 // @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C09-7', '2A-C2-4'],
@@ -15,65 +19,53 @@ export const refs = {
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
+export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Développer une expression algébrique'
-export default class Puissances extends ExerciceQcmA {
-  versionOriginale: () => void = () => {
-    this.enonce = 'Soit $x$ un réel.<br>'
-    this.enonce += `À quelle expression est égale $3(x+2)^2-8$ ?`
-    this.correction = `On cherche parmi les  propositions, lesquelles peuvent donner, après développement, l'expression de l'énoncé. <br>
-     $\\begin{aligned}
-       (2x+1)(x-3)&=2x^2-6x+x-3\\\\
-        &=2x^2-5x-3.
-     \\end{aligned}$`
-
-    this.reponses = [
-      '$3x^2+12x+4$',
-      '$3x^2+12x-4$ ',
-      '$3x^2+6x+4$ ',
-      '$3x^2+6x-2$ ',
-    ]
+export default class Puissances extends ExerciceSimple {
+  constructor() {
+    super()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
+    this.versionQcmDisponible = true
+    this.versionQcm = false
   }
 
-  versionAleatoire = () => {
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = true
+
     const a = randint(-4, 4, 0)
     const alpha = randint(-5, 5, [-1, 0, 1])
     const beta = randint(-4, 4, [0, 1])
 
-    this.enonce = 'Soit $x$ un réel.<br>'
-
-    this.enonce += `À quelle expression est égale $${rienSi1(a)}(x${ecritureAlgebrique(-alpha)})^2${ecritureAlgebrique(beta)}$ ?`
-    this.correction = `On développe $${rienSi1(a)}(x${ecritureAlgebrique(-alpha)})^2${ecritureAlgebrique(beta)}$. <br>
-              $\\begin{aligned}
-    ${rienSi1(a)}(x${ecritureAlgebrique(-alpha)})^2${ecritureAlgebrique(beta)}&=${ecritureAlgebriqueSauf1(a)}\\left(x^2 ${ecritureAlgebrique(2 * -alpha)}x${ecritureAlgebrique(-alpha * -alpha)}\\right)${ecritureAlgebrique(beta)}\\\\
-    &=${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha)} ${ecritureAlgebrique(beta)}\\\\
-        &=${miseEnEvidence(`${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}`)}\\\\
-          \\end{aligned}$`
+    const expression = `${rienSi1(a)}(x${ecritureAlgebrique(-alpha)})^2${ecritureAlgebrique(beta)}`
     const constante = a * -alpha * -alpha + beta
-    let constante2 = 2 * alpha + beta
-    if (constante2 === 0) {
-      constante2 = alpha * alpha - beta
-    }
-    if (constante === 0) {
-      this.reponses = [
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
+    // Sans terme constant quand il est nul
+    const constanteEcrite = constante === 0 ? '' : ecritureAlgebrique(constante)
+    const bonneReponse = `${rienSi1(a)}x^2${ecritureAlgebrique(-2 * a * alpha)}x${constanteEcrite}`
+
+    this.correction = `On développe $${expression}$. <br>
+              $\\begin{aligned}
+    ${expression}&=${ecritureAlgebriqueSauf1(a)}\\left(x^2 ${ecritureAlgebrique(2 * -alpha)}x${ecritureAlgebrique(-alpha * -alpha)}\\right)${ecritureAlgebrique(beta)}\\\\
+    &=${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha)} ${ecritureAlgebrique(beta)}\\\\
+        &=${miseEnEvidence(bonneReponse)}
+          \\end{aligned}$`
+
+    if (this.versionQcm) {
+      this.question = `À quelle expression est égale $${expression}$ ?`
+      this.reponse = `$${bonneReponse}$`
+      this.distracteurs = [
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(2 * a * alpha)}x${constanteEcrite}$`,
         `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha - beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-a * alpha)}x${constanteEcrite}$`,
       ]
     } else {
-      this.reponses = [
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha - beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
-      ]
+      this.question = `Donner une expression développée et réduite de $${expression}$.`
+      this.optionsChampTexte = { texteAvant: `<br>$${expression}=$` }
+      this.reponse = bonneReponse
     }
-  }
-
-  constructor() {
-    super()
-    this.versionAleatoire()
   }
 }

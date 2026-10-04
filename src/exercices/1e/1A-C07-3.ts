@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomF } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -26,9 +25,12 @@ export default class auto1AC7b extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
-    this.optionsChampTexte = { texteApres: '$\\text{km/h}$' }
+    this.optionsChampTexte = {
+      texteAvant: '<br>Sa vitesse moyenne est ',
+      texteApres: '$\\text{km/h}$.',
+    }
     this.versionQcmDisponible = true
     this.versionQcm = false
   }
@@ -51,8 +53,11 @@ export default class auto1AC7b extends ExerciceSimple {
       vitesse = 5 * dist
       distracteurs = [4 * dist, 12 * dist, 24, 6 * dist]
       this.correction = `Dans une $1$ heure, il y a $12\\times 5$ minutes.<br>
-      Ainsi, en $1$ heure, ${dist > 2 ? 'cette athlète' : choix}  parcourt $5$ fois plus de distance, soit $${texNombre(5 * dist)}\\text{ km}$.<br>
-      Sa vitesse moyenne est donc $${miseEnEvidence(texNombre(5 * dist))}\\text{ km/h}$. `
+      Ainsi, en $1$ heure, ${dist > 2 ? 'cette athlète' : choix}  parcourt $5$ fois plus de distance, soit $${texNombre(dist)}\\text{ km}\\times ${facteur}=${texNombre(5 * dist)}\\text{ km}$.<br>
+      Sa vitesse moyenne est donc `
+      this.correction += this.versionQcm
+        ? `$${miseEnEvidence(`${texNombre(5 * dist)}\\text{ km/h}`)}$. `
+        : `$${miseEnEvidence(texNombre(5 * dist))}\\text{ km/h}$. `
     } else {
       const dist = randint(3, 9)
       enonce = `${choix} parcourt $${texNombre(dist * 100, 0)}\\text{ m}$ en $${duree}$ minutes.`
@@ -66,8 +71,11 @@ export default class auto1AC7b extends ExerciceSimple {
               (duree * dist) / 10,
             ]
       this.correction = `Dans une $1$ heure, il y a $${duree}\\times ${facteur}$ minutes.<br>
-      Ainsi, en $1$ heure, ${choix} parcourt $${facteur}$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\times ${facteur}=${texNombre(vitesse, 2)}\\text{ km}$.<br>
-      Sa vitesse moyenne est donc $${miseEnEvidence(texNombre(vitesse, 2))}\\text{ km/h}$. `
+      Ainsi, en $1$ heure, ${choix} parcourt $${facteur}$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\text{ km}\\times ${facteur}=${texNombre(vitesse, 2)}\\text{ km}$.<br>
+      Sa vitesse moyenne est donc `
+      this.correction += this.versionQcm
+        ? `$${miseEnEvidence(`${texNombre(vitesse, 2)}\\text{ km/h}`)}$. `
+        : `$${miseEnEvidence(texNombre(vitesse, 2))}\\text{ km/h}$. `
     }
 
     if (this.versionQcm) {

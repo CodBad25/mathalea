@@ -153,3 +153,40 @@ export const usualBlockWidth = (
     (numberOfCols - 1) * GAP_BETWEEN_KEYS[mode]
   )
 }
+
+/**
+ * Découpe un bloc en tranches de touches consécutives dont la largeur en ligne
+ * ne dépasse pas `largeurMax`, pour qu'un bloc trop large ne déborde pas de
+ * l'écran. Un bloc qui tient en entier est renvoyé tel quel.
+ * @param block bloc à découper
+ * @param mode mode d'affichage (tailles des touches)
+ * @param largeurMax largeur maximale d'une tranche, en pixels
+ */
+export const decoupeBlocEnLigne = (
+  block: KeyboardBlock,
+  mode: 'sm' | 'md' | 'lg' | 'xl',
+  largeurMax: number,
+): KeyboardBlock[] => {
+  const touches = block?.keycaps?.inline ?? []
+  const nbTouchesMax = Math.max(
+    1,
+    Math.floor(
+      (largeurMax + GAP_BETWEEN_KEYS[mode]) /
+        (KEYCAP_WIDTH[mode] + GAP_BETWEEN_KEYS[mode]),
+    ),
+  )
+  if (touches.length <= nbTouchesMax) return [block]
+  // Tranches de tailles voisines pour éviter une touche isolée sur sa page.
+  const nbTranches = Math.ceil(touches.length / nbTouchesMax)
+  const taille = Math.ceil(touches.length / nbTranches)
+  const tranches: KeyboardBlock[] = []
+  for (let debut = 0; debut < touches.length; debut += taille) {
+    const inline = touches.slice(debut, debut + taille)
+    tranches.push({
+      ...block,
+      keycaps: { inline, block: inline },
+      cols: inline.length,
+    })
+  }
+  return tranches
+}

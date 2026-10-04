@@ -56,7 +56,7 @@ export default class ComparerFractionsAvecDifference extends ExerciceSimple {
     const explication =
       forme === 1
         ? `La différence $${fraction1}-${fraction2}$ est négative.<br>
-        Le premier nombre est donc inférieur au second`
+        Le premier nombre $\\left(${fraction1}\\right)$ est donc inférieur au second $\\left(${fraction2}\\right)$`
         : `La différence $${fraction2}-${fraction1}$ est positive.<br>
         On a donc $${fraction2} > ${fraction1}$`
 

@@ -10,6 +10,11 @@
    * la course.
    */
   export let isDisabled: boolean = false
+  /**
+   * Chronomètre en pause (feedback affiché entre deux questions) : le temps
+   * passé en pause n'est pas décompté.
+   */
+  export let isPaused: boolean = false
   const dispatch = createEventDispatcher()
 
   let elapsed = 0
@@ -25,11 +30,13 @@
       duration,
     })
   }
+  /** Temps décompté jusqu'ici (en millisecondes), sans arrêter le chronomètre. */
+  export const getElapsed = (): number => elapsed
   let lastTime = window.performance.now()
   let frame: number | undefined
   ;(function update() {
     const time = window.performance.now()
-    elapsed += time - lastTime
+    if (!isPaused) elapsed += time - lastTime
 
     if (elapsed > duration && !isDisabled) {
       terminateTimer()

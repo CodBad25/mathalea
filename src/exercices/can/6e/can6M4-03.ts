@@ -1,3 +1,5 @@
+import { bleuMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -46,10 +48,12 @@ export default class ConversionEnTousSens extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.versionQcmDisponible = true
+    this.formatChampTexte = KeyboardType.clavierNumbers
   }
 
   nouvelleVersion() {
     let a, resultat
+    let explication = ''
     switch (
       this.quotaChoice('typeConversion', ['a', 'b', 'c', 'd']) //
     ) {
@@ -59,7 +63,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ g}$ est égal à :`
-            : `$${texNombre(a)}\\text{ g}$  =`
+            : `Compléter.<br>$${texNombre(a)}\\text{ g}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ kg}$'
           }
@@ -68,19 +72,16 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$${texNombre(a)}\\text{ g}$  $=\\dots\\text{ kg}$`
           // Avant
-          // this.correction = `$${texNombre(a)}\\text{ g}$$=${miseEnEvidence(texNombre(a / 1000))}\\text{ kg}$`
+          // this.correction = `$${texNombre(a)}\\text{ g}=${miseEnEvidence(texNombre(a / 1000))}\\text{ kg}$`
           // Après
-          this.correction = `$${texNombre(a)}\\text{ g}$$=`
+          this.correction = `$${texNombre(a)}\\text{ g}=`
           this.correction += this.versionQcm
             ? `${miseEnEvidence(texNombre(a / 1000) + '\\text{ kg}')}$`
             : `${miseEnEvidence(texNombre(a / 1000))}\\text{ kg}$`
           {
-            const explication = `Comme $1\\text{ kg}$ $=${texNombre(1000)}\\text{ g}$, alors $1\\text{ g}$ $${sp()}=${sp()}${texNombre(0.001)}\\text{ kg}$.<br>
-  Ainsi pour passer des $\\text{g}$ au $\\text{kg}$, on divise par $${texNombre(1000)}$.<br>
+            explication = `Comme $1\\text{ kg}$ $=${texNombre(1000)}\\text{ g}$, alors $1\\text{ g}$ $${sp()}=${sp()}${texNombre(0.001)}\\text{ kg}$.<br>
+  Ainsi, pour passer des $\\text{g}$ au $\\text{kg}$, on divise par $${texNombre(1000)}$.<br>
     Comme $${texNombre(a)}\\div ${texNombre(1000)} =${texNombre(a / 1000)}$, alors $${texNombre(a)}\\text{ g}$$${sp()}=${texNombre(a / 1000)}\\text{ kg}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
           }
 
           this.reponse = this.versionQcm
@@ -95,7 +96,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ kg}$ est égal à :`
-            : `$${texNombre(a)}\\text{ kg}$  = `
+            : `Compléter.<br>$${texNombre(a)}\\text{ kg}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ g}$'
           }
@@ -110,11 +111,8 @@ export default class ConversionEnTousSens extends ExerciceSimple {
             ? `${miseEnEvidence(texNombre(a * 1000) + '\\text{ g}')}$`
             : `${miseEnEvidence(texNombre(a * 1000))}\\text{ g}$`
           {
-            const explication = `Comme $1\\text{ kg}$ $=${texNombre(1000)}\\text{ g}$, alors pour passer des $\\text{kg}$ au $\\text{g}$, on multiplie par $${texNombre(1000)}$.<br>
+            explication = `Comme $1\\text{ kg}$ $=${texNombre(1000)}\\text{ g}$, alors pour passer des $\\text{kg}$ au $\\text{g}$, on multiplie par $${texNombre(1000)}$.<br>
             Comme $${texNombre(a)}\\times ${texNombre(1000)} =${texNombre(a * 1000)}$, alors $${texNombre(a)}\\text{ kg}$$${sp()}=${resultat}\\text{ g}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
           }
 
           this.reponse = this.versionQcm
@@ -132,7 +130,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 100
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ m}$ est égal à :`
-            : `$${texNombre(a)}\\text{ m}$  =`
+            : `Compléter.<br>$${texNombre(a)}\\text{ m}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ cm}$'
           }
@@ -145,11 +143,8 @@ export default class ConversionEnTousSens extends ExerciceSimple {
             ? `${miseEnEvidence(texNombre(a * 100) + '\\text{ cm}')}$`
             : `${miseEnEvidence(texNombre(a * 100))}\\text{ cm}$`
           {
-            const explication = `Comme $1\\text{ m}$ $=100\\text{ cm}$,  pour passer des $\\text{m}$ au $\\text{cm}$, on multiplie par $100$.<br>
+            explication = `Comme $1\\text{ m}$ $=100\\text{ cm}$,  pour passer des $\\text{m}$ au $\\text{cm}$, on multiplie par $100$.<br>
             Comme : $${texNombre(a)}\\times 100 =${texNombre(a * 100)}$, alors $${texNombre(a)}\\text{ m}=${texNombre(a * 100)}\\text{ cm}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
           }
 
           this.reponse = this.versionQcm
@@ -164,7 +159,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 100
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ cm}$ est égal à :`
-            : `$${texNombre(a)}\\text{ cm}$  =`
+            : `Compléter.<br>$${texNombre(a)}\\text{ cm}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ m}$'
           }
@@ -177,12 +172,9 @@ export default class ConversionEnTousSens extends ExerciceSimple {
             ? `${miseEnEvidence(texNombre(a / 100) + '\\text{ m}')}$.`
             : `${miseEnEvidence(texNombre(a / 100))}\\text{ m}$.`
           {
-            const explication = `Comme $1\\text{ m}$ $=100\\text{ cm}$, alors $1\\text{ cm}$ $=0,01\\text{ m}$.<br>
-          Ainsi pour passer des $\\text{cm}$ au $\\text{m}$, on divise par $100$.<br>
+            explication = `Comme $1\\text{ m}$ $=100\\text{ cm}$, alors $1\\text{ cm}$ $=0,01\\text{ m}$.<br>
+          Ainsi, pour passer des $\\text{cm}$ au $\\text{m}$, on divise par $100$.<br>
             Comme  $${texNombre(a)}\\div 100 =${texNombre(a / 100)}$, alors $${texNombre(a)}\\text{ cm}=${texNombre(a / 100)}\\text{ m}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
           }
 
           this.reponse = this.versionQcm
@@ -200,7 +192,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 10
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ cL}$ est égal à :`
-            : `$${texNombre(a)}\\text{ cL}$  =  `
+            : `Compléter.<br>$${texNombre(a)}\\text{ cL}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ mL}$'
           }
@@ -213,11 +205,8 @@ export default class ConversionEnTousSens extends ExerciceSimple {
             ? `${miseEnEvidence(texNombre(a * 10) + '\\text{ mL}')}$`
             : `${miseEnEvidence(texNombre(a * 10))}\\text{ mL}$`
           {
-            const explication = `Comme $1\\text{ cL}$$ =10\\text{ mL}$,  pour passer des $\\text{cL}$ au $\\text{mL}$, on multiplie par $10$.<br>
-            Comme  $${texNombre(a)}\\times 10 =${texNombre(a * 10)}$, alors $${texNombre(a)}\\text{ cL}$$=${texNombre(a * 10)}\\text{ mL}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
+            explication = `Comme $1\\text{ cL}$$ =10\\text{ mL}$,  pour passer des $\\text{cL}$ au $\\text{mL}$, on multiplie par $10$.<br>
+            Comme  $${texNombre(a)}\\times 10 =${texNombre(a * 10)}$, alors $${texNombre(a)}\\text{ cL}=${texNombre(a * 10)}\\text{ mL}$.  `
           }
 
           this.reponse = this.versionQcm
@@ -232,7 +221,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 10
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ mL}$ est égal à :`
-            : `$${texNombre(a)}\\text{ mL}$  = `
+            : `Compléter.<br>$${texNombre(a)}\\text{ mL}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ cL}$'
           }
@@ -240,17 +229,14 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           this.optionsChampTexte = { texteApres: '$\\text{ cL}$' }
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$${texNombre(a)}\\text{ mL}$ $= \\dots\\text{ cL}$`
-          this.correction = `$${texNombre(a)}\\text{ mL}$$=`
+          this.correction = `$${texNombre(a)}\\text{ mL}=`
           this.correction += this.versionQcm
             ? `${miseEnEvidence(texNombre(a / 10) + '\\text{ cL}')}$`
             : `${miseEnEvidence(texNombre(a / 10))}\\text{ cL}$`
           {
-            const explication = `Comme $1\\text{ cL}$$ =10\\text{ mL}$, alors $1\\text{ mL}$ $=0,1\\text{ cL}$.<br>
-          Ainsi pour passer des $\\text{mL}$ au $\\text{cL}$, on divise par $10$.<br>
-            Comme  $${texNombre(a)}\\div 10 =${texNombre(a / 10)}$, alors $${texNombre(a)}\\text{ mL}$$=${texNombre(a / 10)}\\text{ cL}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
+            explication = `Comme $1\\text{ cL}$$ =10\\text{ mL}$, alors $1\\text{ mL}$ $=0,1\\text{ cL}$.<br>
+          Ainsi, pour passer des $\\text{mL}$ au $\\text{cL}$, on divise par $10$.<br>
+            Comme  $${texNombre(a)}\\div 10 =${texNombre(a / 10)}$, alors $${texNombre(a)}\\text{ mL}=${texNombre(a / 10)}\\text{ cL}$.  `
           }
 
           this.reponse = this.versionQcm
@@ -268,7 +254,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a / 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ m}$ est égal à :`
-            : `$${texNombre(a)}\\text{ m}$  $=$ `
+            : `Compléter.<br>$${texNombre(a)}\\text{ m}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ km}$'
           }
@@ -281,12 +267,9 @@ export default class ConversionEnTousSens extends ExerciceSimple {
             ? `${miseEnEvidence(texNombre(a / 1000) + '\\text{ km}')}$`
             : `${miseEnEvidence(texNombre(a / 1000))}\\text{ km}$`
           {
-            const explication = `Comme $1\\text{ km}$ $=${texNombre(1000)}\\text{ m}$, alors $1\\text{ m}$ $=0,001\\text{ km}$.<br>
-          Ainsi pour passer des $\\text{m}$ au $\\text{km}$, on divise par $${texNombre(1000)}$.<br>
+            explication = `Comme $1\\text{ km}$ $=${texNombre(1000)}\\text{ m}$, alors $1\\text{ m}$ $=0,001\\text{ km}$.<br>
+          Ainsi, pour passer des $\\text{m}$ au $\\text{km}$, on divise par $${texNombre(1000)}$.<br>
             Comme  $${texNombre(a)}\\div ${texNombre(1000)} =${texNombre(a / 1000)}$, alors $${texNombre(a)}\\text{ m}=${texNombre(a / 1000)}\\text{ km}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
           }
 
           this.reponse = this.versionQcm
@@ -301,7 +284,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           resultat = a * 1000
           this.question = this.versionQcm
             ? `$${texNombre(a)}\\text{ km}$ est égal à :`
-            : `$${texNombre(a)}\\text{ km}$ $=$`
+            : `Compléter.<br>$${texNombre(a)}\\text{ km}=$`
           if (!this.interactif && !this.versionQcm) {
             this.question += ' $\\ldots\\text{ m}$'
           }
@@ -309,16 +292,13 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           this.optionsChampTexte = { texteApres: '$\\text{ m}$' }
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$${texNombre(a)}\\text{ km}$ $= \\dots\\text{ m}$`
-          this.correction = `$${texNombre(a)}\\text{ km}$$=`
+          this.correction = `$${texNombre(a)}\\text{ km}=`
           this.correction += this.versionQcm
             ? `${miseEnEvidence(texNombre(a * 1000) + '\\text{ m}')}$`
             : `${miseEnEvidence(texNombre(a * 1000))}\\text{ m}$`
           {
-            const explication = `Comme $1\\text{ km}$ $=${texNombre(1000)}\\text{ m}$,  pour passer des $\\text{km}$ au $\\text{m}$, on multiplie par $${texNombre(1000)}$.<br>
-            Comme  $${texNombre(a)}\\times ${texNombre(1000)} =${texNombre(a * 1000)}$, alors $${texNombre(a)}\\text{ km}$$=${texNombre(a * 1000)}\\text{ m}$.  `
-            this.correction += this.versionQcm
-              ? `<br>${explication}`
-              : texteEnCouleur(`<br> Mentalement : <br>${explication}`)
+            explication = `Comme $1\\text{ km}$ $=${texNombre(1000)}\\text{ m}$,  pour passer des $\\text{km}$ au $\\text{m}$, on multiplie par $${texNombre(1000)}$.<br>
+            Comme  $${texNombre(a)}\\times ${texNombre(1000)} =${texNombre(a * 1000)}$, alors $${texNombre(a)}\\text{ km}=${texNombre(a * 1000)}\\text{ m}$.  `
           }
 
           this.reponse = this.versionQcm
@@ -331,5 +311,9 @@ export default class ConversionEnTousSens extends ExerciceSimple {
         }
         break
     }
+    this.correction += texteEnCouleur(
+      `<br> Mentalement : <br>${explication}`,
+      bleuMathalea,
+    )
   }
 }

@@ -46,7 +46,13 @@ export default class ReduireAvecParentheses extends ExerciceSimple {
           this.reponse = choix
             ? reduireAxPlusB(a + c, d, variable)
             : reduireAxPlusB(c, d + a, variable) // texNombre(b).mul(-1).plus(a), 2) + `${variable}`
-          this.reponse = { reponse: { value: this.reponse } }
+          this.reponse = {
+            reponse: {
+              value: this.reponse,
+              // Seule une expression réduite est acceptée
+              options: { expressionsForcementReduites: true },
+            },
+          }
           this.question = `Écrire le plus simplement possible  $${choix ? `${rienSi1(a)}${variable}` : `${a}`}+(${reduireAxPlusB(c, d, variable)})$.`
           if (this.interactif) {
             this.question += `<br>$${choix ? `${rienSi1(a)}${variable}` : `${a}`}+(${reduireAxPlusB(c, d, variable)})=$`
@@ -70,7 +76,13 @@ export default class ReduireAvecParentheses extends ExerciceSimple {
           this.reponse = choix
             ? reduireAxPlusB(a - c, -d, variable)
             : reduireAxPlusB(-c, a - d, variable) // texNombre(b).mul(-1).plus(a), 2) + `${variable}`
-          this.reponse = { reponse: { value: this.reponse } }
+          this.reponse = {
+            reponse: {
+              value: this.reponse,
+              // Seule une expression réduite est acceptée
+              options: { expressionsForcementReduites: true },
+            },
+          }
           this.question = `Écrire le plus simplement possible  $${choix ? `${rienSi1(a)}${variable}` : `${a}`}-(${reduireAxPlusB(c, d, variable)})$.`
           if (this.interactif) {
             this.question += `<br>$${choix ? `${rienSi1(a)}${variable}` : `${a}`}-(${reduireAxPlusB(c, d, variable)})=$`

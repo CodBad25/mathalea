@@ -20,6 +20,9 @@ export const refs = {
 
 */
 export default class FatorisationEgR extends ExerciceSimple {
+  // Précise dans la consigne la forme attendue (produit de deux facteurs du premier degré)
+  consigneProduit = false
+
   constructor() {
     super()
     this.canOfficielle = false
@@ -32,6 +35,10 @@ export default class FatorisationEgR extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    this.optionsDeComparaison = this.consigneProduit
+      ? { facteursPremierDegre: true }
+      : { factorisation: true }
+    let expression = ''
     switch (this.quotaChoice('type', [1, 2, 3])) {
       case 1: // (ax+b)^2
         {
@@ -49,18 +56,13 @@ export default class FatorisationEgR extends ExerciceSimple {
           ]
           tableau = shuffle(tableau)
           this.distracteurs = [tableau[0], tableau[1], tableau[2]]
+          expression = choix
+            ? `${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}`
+            : `${reduireAxPlusB(2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2`
           if (this.versionQcm) {
-            this.question = ` Une  factorisation de    ${
-              choix
-                ? `$${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}$`
-                : `$${reduireAxPlusB(2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$`
-            } est :`
+            this.question = `Une factorisation de $${expression}$ est :`
           } else {
-            this.question = ` Factoriser : ${this.interactif ? '<br>' : ''} ${
-              choix
-                ? `$${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}$${this.interactif ? ' $=$' : '.'}`
-                : `$${reduireAxPlusB(2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
-            }`
+            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit de deux facteurs du premier degré" : ''}.`
           }
           this.correction = `On reconnaît le développement de l'identité remarquable : <br>
           $(a+b)^2=a^2+2ab+b^2$ avec $a=${rienSi1(a)}x$ et $b=${b}$.<br>
@@ -102,18 +104,13 @@ export default class FatorisationEgR extends ExerciceSimple {
           ]
           tableau = shuffle(tableau)
           this.distracteurs = [tableau[0], tableau[1], tableau[2]]
+          expression = choix
+            ? `${rienSi1(a ** 2)}x^2-${reduireAxPlusB(2 * a * b, b ** 2)}`
+            : `${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2`
           if (this.versionQcm) {
-            this.question = ` Une  factorisation de    ${
-              choix
-                ? `$${rienSi1(a ** 2)}x^2-${reduireAxPlusB(2 * a * b, b ** 2)}$`
-                : `$${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$`
-            } est :`
+            this.question = `Une factorisation de $${expression}$ est :`
           } else {
-            this.question = ` Factoriser : ${this.interactif ? '<br>' : ''} ${
-              choix
-                ? `$${rienSi1(a ** 2)}x^2-${reduireAxPlusB(2 * a * b, b ** 2)}$${this.interactif ? ' $=$' : '.'}`
-                : `$${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
-            }`
+            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit de deux facteurs du premier degré" : ''}.`
           }
           this.correction = `On reconnaît le développement de l'identité remarquable : <br>
         $(a-b)^2=a^2-2ab+b^2$ avec $a=${rienSi1(a)}x$ et $b=${b}$.<br>
@@ -147,18 +144,13 @@ export default class FatorisationEgR extends ExerciceSimple {
             `$(${reduireAxPlusB(a ** 2, b ** 2)})(${reduireAxPlusB(a ** 2, -b * b)})$`,
             `$(${reduireAxPlusB(a ** 2, b)})(${reduireAxPlusB(a ** 2, -b)})$`,
           ]
+          expression = choix
+            ? `${rienSi1(a ** 2)}x^2-${b ** 2}`
+            : `${b ** 2}-${rienSi1(a ** 2)}x^2`
           if (this.versionQcm) {
-            this.question = ` Une  factorisation de    ${
-              choix
-                ? `$${rienSi1(a ** 2)}x^2-${b ** 2}$`
-                : `$${b ** 2}-${rienSi1(a ** 2)}x^2$`
-            } est :`
+            this.question = `Une factorisation de $${expression}$ est :`
           } else {
-            this.question = ` Factoriser : ${this.interactif ? '<br>' : ''} ${
-              choix
-                ? `$${rienSi1(a ** 2)}x^2-${b ** 2}$${this.interactif ? ' $=$' : '.'}`
-                : `$${b ** 2}-${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
-            }`
+            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit de deux facteurs du premier degré" : ''}.`
           }
           this.correction = `On reconnaît le développement de l'identité remarquable : <br>
           $(a+b)(a-b)=a^2-b^2$ avec $a=${choix ? `${rienSi1(a)}x` : `${b}`}$ et $b=${choix ? `${b}` : `${rienSi1(a)}x`}$.<br>
@@ -170,6 +162,9 @@ export default class FatorisationEgR extends ExerciceSimple {
       }`
         }
         break
+    }
+    if (!this.versionQcm) {
+      this.optionsChampTexte = { texteAvant: `<br>$${expression}=$` }
     }
     this.canEnonce = this.question // 'Compléter'
     this.canReponseACompleter = ''

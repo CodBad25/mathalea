@@ -1,5 +1,12 @@
-import { describe, expect, it } from 'vitest'
-import { appendExerciseParams, buildSingleExerciseURL, encrypt } from './urls'
+import { afterEach, describe, expect, it } from 'vitest'
+import { get } from 'svelte/store'
+import { canOptions } from '../stores/canStore'
+import {
+  appendExerciseParams,
+  buildMathAleaURL,
+  buildSingleExerciseURL,
+  encrypt,
+} from './urls'
 
 const seriesUrl =
   'https://coopmaths.fr/alea/?uuid=aaa&id=3L11&n=4&s=2&alea=Xy12&i=1' +
@@ -73,4 +80,27 @@ describe('calculatrices autorisées (calc)', () => {
       expect(single.searchParams.has('calc')).toBe(false)
     },
   )
+})
+
+describe('buildMathAleaURL en vue can', () => {
+  const defaultOptions = { ...get(canOptions) }
+  afterEach(() => canOptions.set(defaultOptions))
+
+  it('n’ajoute ni canQ ni canFB par défaut (chronomètre global, feedback à la fin)', () => {
+    const url = buildMathAleaURL({ view: 'can' })
+    expect(url.searchParams.has('canQ')).toBe(false)
+    expect(url.searchParams.has('canFB')).toBe(false)
+  })
+
+  it('transmet la durée par question et le feedback après chaque question', () => {
+    canOptions.update((options) => ({
+      ...options,
+      timerMode: 'question',
+      durationPerQuestionInSeconds: 20,
+      feedbackMode: 'each',
+    }))
+    const url = buildMathAleaURL({ view: 'can' })
+    expect(url.searchParams.get('canQ')).toBe('20')
+    expect(url.searchParams.get('canFB')).toBe('1')
+  })
 })

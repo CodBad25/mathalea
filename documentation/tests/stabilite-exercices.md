@@ -177,7 +177,7 @@ pnpm stability:update
 ### 3. La modification change l'exercice en profondeur
 
 C'est la règle du dépôt : la version publiée est archivée avec son `uuid`, la
-version corrigée prend un `uuid` neuf.
+version corrigée prend un `uuid` neuf. Tous les enfants de l'exercice doivent subir l'archivage car leur empreinte sera obsolète aussi.
 
 ```bash
 pnpm archive 6N1E

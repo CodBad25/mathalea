@@ -33,7 +33,7 @@ export default class CalculCompose extends ExerciceSimple {
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.optionsDeComparaison = { developpementEgal: true }
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
   }
 
   nouvelleVersion() {
@@ -44,7 +44,7 @@ export default class CalculCompose extends ExerciceSimple {
     this.question = `Soit $${nomF}$ la fonction définie par : $${nomF}(x)=${reduireAxPlusB(a, b)}$.<br>`
     this.question += this.versionQcm
       ? ` $${nomF}(x${ecritureAlgebrique(c)})$ est égal à : `
-      : `Exprimer $${nomF}(x${ecritureAlgebrique(c)})$ sous forme développée. `
+      : `Exprimer $${nomF}(x${ecritureAlgebrique(c)})$ sous forme développée et réduite. `
 
     this.reponse = this.versionQcm
       ? `$${reduireAxPlusB(a, a * c + b)}$`
