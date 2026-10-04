@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   texFractionFromString,
@@ -11,6 +10,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -36,7 +36,7 @@ export default class ResoudreEquationDegre2 extends Exercice {
   constructor() {
     super()
 
-    this.consigne = 'Résoudre dans $\\mathbb{R}$ les équations suivantes.'
+    this.consigne = 'Résoudre, dans $\\mathbb{R}$, les équations suivantes.'
     this.nbQuestions = 4
     this.nbCols = 2
     this.nbColsCorr = 2

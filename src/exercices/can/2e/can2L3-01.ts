@@ -25,6 +25,8 @@ export const refs = {
   'fr-ch': ['2mIneq-10'],
 }
 export default class SolutionInequation extends ExerciceSimple {
+  /** Formulation utilisée par le clone 1A-C10-13 (automatismes de 1re) */
+  versionAutomatisme = false
   constructor() {
     super()
 
@@ -76,9 +78,18 @@ export default class SolutionInequation extends ExerciceSimple {
 
         const inequationLaTeX = (align = false) =>
           `${reduireAxPlusB(a, b)}${align ? '&' : ''}${symbol}0`
-        this.question = `Quel est l'ensemble des solutions de l'inéquation $${inequationLaTeX()}$ ?`
-        if (this.interactif && this.versionQcm === false) {
-          this.question += '<br>$S=$'
+        if (this.versionAutomatisme) {
+          // Formulation des automatismes de 1re (1A-C10-13)
+          this.question = this.versionQcm
+            ? `L'inéquation $${inequationLaTeX()}$ a pour ensemble de solutions :`
+            : this.interactif
+              ? `L'inéquation $${inequationLaTeX()}$ a pour ensemble de solutions :<br>$S=$`
+              : `Résoudre, dans $\\mathbb{R}$, l'inéquation $${inequationLaTeX()}$.`
+        } else {
+          this.question = `Quel est l'ensemble des solutions de l'inéquation $${inequationLaTeX()}$ ?`
+          if (this.interactif && this.versionQcm === false) {
+            this.question += '<br>$S=$'
+          }
         }
         this.correction = `$
 \\begin{aligned}

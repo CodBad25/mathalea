@@ -31,6 +31,7 @@ export default class Auto1C10p extends ExerciceSimple {
     this.spacing = 1.5
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsDeComparaison = { fractionIrreductible: true }
+    this.optionsChampTexte = { texteApres: '.' }
     this.versionQcmDisponible = true
     this.versionQcm = false
   }
@@ -54,9 +55,9 @@ export default class Auto1C10p extends ExerciceSimple {
     const fKX = new FractionEtendue(k * p, a)
     const fReponse = fKX.ajouteEntier(d).simplifie()
 
-    this.question = `Si $${reduireAxPlusB(a, b)}=${c}$, alors $${reduireAxPlusB(k, d)}${this.interactif || this.versionQcm ? '=' : '=\\ldots'}$`
+    this.question = `${this.versionQcm ? '' : 'Compléter.<br>'}Si $${reduireAxPlusB(a, b)}=${c}$, alors $${reduireAxPlusB(k, d)}${this.interactif || this.versionQcm ? '=' : '=\\ldots'}$`
     this.correction = `De $${reduireAxPlusB(a, b)}=${c}$, on obtient $${a}x=${p}$, soit $x=${fX.texFractionSimplifiee}$.<br>
-     Ainsi  $${reduireAxPlusB(k, d)} = ${k}\\times ${fX.texFractionSimplifiee}${ecritureAlgebrique(d)}=${fKX.texFractionSimplifiee}${ecritureAlgebrique(d)} = ${miseEnEvidence(fReponse.texFractionSimplifiee)}$`
+     Ainsi, $${reduireAxPlusB(k, d)} = ${k}\\times ${fX.texFractionSimplifiee}${ecritureAlgebrique(d)}=${fKX.texFractionSimplifiee}${ecritureAlgebrique(d)} = ${miseEnEvidence(fReponse.texFractionSimplifiee)}$.`
 
     if (this.versionQcm) {
       this.reponse = `$${fReponse.texFractionSimplifiee}$`

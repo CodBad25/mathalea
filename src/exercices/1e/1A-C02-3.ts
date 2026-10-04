@@ -93,7 +93,7 @@ const unSeulQuotient: CompareFunction = (saisie, reponse) => {
     return {
       isOk: false,
       feedback:
-        'Le quotient doit être de la forme $\\dfrac{ax+b}{cx}$, avec un numérateur réduit.',
+        'La fraction doit être de la forme $\\dfrac{ax+b}{cx}$, avec un numérateur réduit.',
     }
   }
   return fonctionComparaison(saisie, reponse, { fonction: true })

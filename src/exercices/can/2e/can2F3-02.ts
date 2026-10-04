@@ -32,7 +32,7 @@ export default class seuilFctAff extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.versionQcmDisponible = true
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsChampTexte = { texteAvant: '<br>' }
   }
 
@@ -48,15 +48,14 @@ export default class seuilFctAff extends ExerciceSimple {
             const k = randint(-10, -2)
             const p = k * m + randint(1, m)
             const choix = choice([true, false])
-            if (Number.isInteger(-p / m)) {
-              choix
-                ? (this.reponse = Math.ceil(-p / m) + 1)
-                : (this.reponse = Math.ceil(-p / m) - 1)
-            } else {
-              choix
-                ? (this.reponse = Math.ceil(-p / m))
-                : (this.reponse = Math.floor(-p / m))
-            }
+            this.reponse = Number.isInteger(-p / m)
+              ? choix
+                ? Math.ceil(-p / m) + 1
+                : Math.ceil(-p / m) - 1
+              : choix
+                ? Math.ceil(-p / m)
+                : Math.floor(-p / m)
+
             this.question = `Soit la fonction $${nomF}$ 
     définie par $${nomF}(x)=${reduireAxPlusB(m, p)}$.<br>`
             if (this.versionQcm) {
@@ -113,15 +112,14 @@ export default class seuilFctAff extends ExerciceSimple {
             const k = randint(-10, -2)
             const p = k * m + randint(1, m)
             const choix = choice([true, false])
-            if (Number.isInteger(-p / m)) {
-              choix
-                ? (this.reponse = Math.ceil(-p / m) + 1)
-                : (this.reponse = Math.ceil(-p / m) - 1)
-            } else {
-              choix
-                ? (this.reponse = Math.ceil(-p / m))
-                : (this.reponse = Math.floor(-p / m))
-            }
+            this.reponse = Number.isInteger(-p / m)
+              ? choix
+                ? Math.ceil(-p / m) + 1
+                : Math.ceil(-p / m) - 1
+              : choix
+                ? Math.ceil(-p / m)
+                : Math.floor(-p / m)
+
             this.question = `Soit la fonction $${nomF}$ 
     définie par $${nomF}(x)=${reduireAxPlusB(m, p)}$.<br>
    Le plus  ${choix ? 'petit ' : 'grand'} entier naturel $n$ ${context.isDiaporama ? '<br>' : ''} tel que 

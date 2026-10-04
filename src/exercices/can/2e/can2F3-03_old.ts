@@ -171,7 +171,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
           props = propositionsQcm(this, i)
           if (this.interactif) texte += props.texte
           else {
-            texte = `Résoudre dans $\\mathbb{R}$ :<br>$${membreValeurAbsolue}=${b}$.`
+            texte = `Résoudre, dans $\\mathbb{R}$, :<br>$${membreValeurAbsolue}=${b}$.`
           }
 
           if (b > 0) {
@@ -182,7 +182,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
           } else {
             texteCorr = `Une valeur absolue est toujours positive ou nulle. Elle ne peut donc pas être égale au nombre négatif $${b}$.<br>Ainsi, $S=${miseEnEvidence('\\emptyset')}$.`
           }
-          this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $${membreValeurAbsolue}=${b}$.`
+          this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation $${membreValeurAbsolue}=${b}$.`
           break
         }
         case 2:
@@ -280,7 +280,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
           props = propositionsQcm(this, i)
           if (this.interactif) texte += props.texte
           else {
-            texte = `Résoudre dans $\\mathbb{R}$ :<br>
+            texte = `Résoudre, dans $\\mathbb{R}$, :<br>
   
          $x^2=${k}$`
           }
@@ -317,7 +317,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
               Ainsi, $S=${miseEnEvidence(`\\emptyset`)}$.`
             }
           }
-          this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $x^2=${k}$.`
+          this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation $x^2=${k}$.`
 
           break
         case 4: {
@@ -347,10 +347,10 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
           }
           props = propositionsQcm(this, i)
           if (this.interactif) texte += props.texte
-          else texte = `Résoudre dans $\\mathbb{R}$ :<br>$x^3=${k}$.`
+          else texte = `Résoudre, dans $\\mathbb{R}$, :<br>$x^3=${k}$.`
 
           texteCorr = `La fonction cube est strictement croissante sur $\\mathbb{R}$. L'équation $x^3=${k}$ admet donc une unique solution.<br>Or $${solution}^3=${k}$. Ainsi, $S=${miseEnEvidence(`\\{${solution}\\}`)}$.`
-          this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $x^3=${k}$.`
+          this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation $x^3=${k}$.`
           break
         }
         case 5:

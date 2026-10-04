@@ -152,7 +152,7 @@ export default class EquationsFonctionsRef extends Exercice {
                   choice([-1, 1]),
                 a,
               ])
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
               ${sp(50)} $x^2=${k}$`
               correction = ''
               if (this.correctionDetaillee) {
@@ -197,7 +197,7 @@ export default class EquationsFonctionsRef extends Exercice {
                 a,
               ])
               c = k + b
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
               ${sp(50)} $x^2${ecritureAlgebrique(b)}=${c}$`
               correction =
                 'On isole $x^2$ dans le membre de gauche pour obtenir une équation du type $x^2=k$.<br> '
@@ -251,7 +251,7 @@ export default class EquationsFonctionsRef extends Exercice {
                 a,
               ])
               c = b - k
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
               ${sp(50)} $-x^2${ecritureAlgebrique(b)}=${c}$`
               correction =
                 'On isole $x^2$ dans le membre de gauche pour obtenir une équation du type $x^2=k$.<br> '
@@ -306,7 +306,7 @@ export default class EquationsFonctionsRef extends Exercice {
               c = randint(-10, 10, 0)
               k = (c - b) / a
               f1 = new FractionEtendue(c - b, a)
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
               ${sp(50)} $${a}x^2${ecritureAlgebrique(b)}=${c}$`
               correction =
                 'On isole $x^2$ dans le membre de gauche pour obtenir une équation du type $x^2=k$.<br> '
@@ -702,7 +702,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               k1 = choice([-10, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 10])
               k = k1 ** 3
 
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                 ${sp(50)} $x^3=${k}$`
               correction = ''
               if (this.correctionDetaillee) {
@@ -723,7 +723,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               k1 = choice([-10, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 10])
               k = k1 ** 3
               c = k + b
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                    ${sp(50)} $x^3${ecritureAlgebrique(b)}=${c}$`
               correction = ''
               if (b > 0) {
@@ -754,7 +754,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               k1 = choice([-10, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 10])
               k = k1 ** 3
               c = k * a
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                      ${sp(50)} $${a}x^3=${c}$`
               correction = ''
 
@@ -777,7 +777,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               k1 = choice([-10, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 10])
               k = k1 ** 3
               c = k * a + b
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                      ${sp(50)} $${a}x^3${ecritureAlgebrique(b)}=${c}$`
               correction = ''
 
@@ -816,7 +816,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               b = 0
               k = randint(-10, 10)
               c = k
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                 ${sp(50)} $|x|=${k}$`
               correction = `L'équation est de la forme $|x|=k$ avec $k=${k}$.<br>`
               break
@@ -826,7 +826,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               b = randint(-10, 10, 0)
               k = randint(-10, 10)
               c = k + b
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                 ${sp(50)} $|x|${ecritureAlgebrique(b)}=${c}$`
               correction =
                 'On isole $|x|$ dans le membre de gauche pour obtenir une équation du type $|x|=k$.<br>'
@@ -850,7 +850,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               b = randint(-10, 10, 0)
               k = randint(-10, 10)
               c = b - k
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                 ${sp(50)} $-|x|${ecritureAlgebrique(b)}=${c}$`
               correction = `On isole $|x|$ dans le membre de gauche pour obtenir une équation du type $|x|=k$.<br>
                 $\\begin{aligned}
@@ -866,7 +866,7 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
               b = randint(-10, 10, 0)
               k = randint(-10, 10)
               c = a * k + b
-              enonce = `Résoudre dans $\\mathbb{R}$ :<br>
+              enonce = `Résoudre, dans $\\mathbb{R}$, :<br>
                 ${sp(50)} $${a}|x|${ecritureAlgebrique(b)}=${c}$`
               correction = `On isole $|x|$ dans le membre de gauche pour obtenir une équation du type $|x|=k$.<br>`
               if (b > 0) {

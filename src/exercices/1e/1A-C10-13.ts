@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import SolutionInequation from '../can/2e/can2L3-01'
 export const titre = 'Résoudre une inéquation $ax+b>0$'
 export const dateDePublication = '23/07/2025'
@@ -21,5 +22,11 @@ export default class Auto1AC12 extends SolutionInequation {
   constructor() {
     super()
     this.versionQcm = false
+    this.versionAutomatisme = true
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    // Clavier allégé : crochets, point-virgule et infini
+    this.optionsChampTexte = {
+      dataKeys: ['[', ']', ';', '\\infty'],
+    }
   }
 }

@@ -33,15 +33,15 @@ export default class ResoudreEquationDegre2Entiers extends Exercice {
   constructor() {
     super()
 
-    this.consigne = 'Résoudre dans $\\mathbb{R}$ les équations suivantes.'
+    this.consigne = 'Résoudre, dans $\\mathbb{R}$, les équations suivantes.'
     this.nbQuestions = 3
   }
 
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions > 1
-        ? 'Résoudre dans $\\mathbb{R}$ les équations suivantes.'
-        : "Résoudre dans $\\mathbb{R}$ l'équation suivante."
+        ? 'Résoudre, dans $\\mathbb{R}$, les équations suivantes.'
+        : "Résoudre, dans $\\mathbb{R}$, l'équation suivante."
     const listeTypeDeQuestions = combinaisonListes(
       ['solutionsEntieres', 'solutionUnique', 'pasDeSolution'],
       this.nbQuestions,

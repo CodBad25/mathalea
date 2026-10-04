@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -6,6 +5,7 @@ import {
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import { sp } from '../../../lib/outils/outilString'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -127,11 +127,11 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
           if (this.interactif) texte += props.texte
           if (!this.interactif) {
             if (choice([true, false])) {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
             $${a}x^2${ecritureAlgebrique(b)}=0$.`
               this.canEnonce = texte
             } else {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
             $${b}${ecritureAlgebrique(a)}x^2=0$.`
               this.canEnonce = texte
             }
@@ -207,11 +207,11 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
           if (this.interactif) texte += props.texte
           if (!this.interactif) {
             if (choice([true, false])) {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
             $${a}x^2${ecritureAlgebrique(b)}=0$.`
               this.canEnonce = texte
             } else {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
             $${b}${ecritureAlgebrique(a)}x^2=0$.`
               this.canEnonce = texte
             }
@@ -288,11 +288,11 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
           if (this.interactif) texte += props.texte
           else {
             if (choice([true, false])) {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
               $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x=0$.`
               this.canEnonce = texte
             } else {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
               $${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}x^2=0$.`
               this.canEnonce = texte
             }
@@ -374,11 +374,11 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
           if (this.interactif) texte += props.texte
           else {
             if (choice([true, false])) {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
               $${rienSi1(a * a)}x^2${ecritureAlgebriqueSauf1(b * 2 * a)}x+${c}=0$.`
               this.canEnonce = texte
             } else {
-              texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
+              texte = `Résoudre, dans $\\mathbb{R}$, :${sp(2)}
               $${rienSi1(b * 2 * a)}x${ecritureAlgebriqueSauf1(a * a)}x^2+${c}=0$.`
               this.canEnonce = texte
             }

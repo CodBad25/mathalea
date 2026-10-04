@@ -30,7 +30,7 @@ export default class ResoudreUneEquation extends ExerciceSimple {
     const a = this.canOfficielle
       ? 3
       : choice([2, 5, 7, 10, 11]) * choice([-1, 1])
-    this.question = `Résoudre dans $\\mathbb{R}$ : $x^{2}=${a}$.`
+    this.question = `Résoudre, dans $\\mathbb{R}$, : $x^{2}=${a}$.`
     this.correction = ` On reconnaît une équation du type $x^2=k$ avec $k=${a}$.<br>`
     if (a > 0) {
       this.correction += `Puisque $${a}$ est strictement positif, l'équation a deux solutions : `

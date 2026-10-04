@@ -2,6 +2,7 @@ import { courbe } from '../../lib/2d/Courbe'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { bleuMathalea } from '../../lib/colors'
 import type { AllChoicesType } from '../../lib/customElements/ListeDeroulanteElement'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -22,7 +23,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Calculer le discriminant  d'une équation du second degré"
 export const interactifReady = true
@@ -63,7 +63,7 @@ export default class CalculDiscriminant extends Exercice {
       { label: 'Une solution', value: '1' },
       { label: 'Deux solutions', value: '2' },
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let aNbPointsIntersection
       let nbSolutions = ''
       let a: number, b: number, c: number, k: number, x1: number, y1: number
@@ -146,7 +146,7 @@ export default class CalculDiscriminant extends Exercice {
       if (this.interactif) {
         texte += addMultiMathfield(this, i, {
           dataTemplate:
-            '<br>Discriminant : $\\Delta=$ %{field0}<br>Nombre de solutions dans $\\mathbb{R}$ : %{field1}',
+            '<br>Discriminant : $\\Delta=$ %{field0}<br>Nombre de solutions, dans $\\mathbb{R}$, : %{field1}',
           dataOptions: {
             field0: { keyboard: KeyboardType.clavierDeBase },
             field1: { choices: choixNombreSolutions },

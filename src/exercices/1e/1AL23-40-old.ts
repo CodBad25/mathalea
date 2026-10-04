@@ -29,7 +29,7 @@ export default class ResoudreEquationDegre2Old extends Exercice {
   constructor() {
     super()
 
-    this.consigne = 'Résoudre dans $\\mathbb{R}$ les inéquations suivantes.'
+    this.consigne = 'Résoudre, dans $\\mathbb{R}$, les inéquations suivantes.'
     this.nbQuestions = 4
     this.nbCols = 2
     this.nbColsCorr = 2
@@ -63,7 +63,6 @@ export default class ResoudreEquationDegre2Old extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, c, x1, x2, y1, k, ligne1, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       //* ***************************************************
       if (listeTypeDeQuestions[i] === 'strictement supérieur') {

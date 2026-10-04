@@ -34,6 +34,7 @@ export default class Auto1AC11a extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    let equation = ''
     if (context.isAmc) this.versionQcm = true
 
     const fraction = (num: number, den: number) =>
@@ -47,7 +48,7 @@ export default class Auto1AC11a extends ExerciceSimple {
         // Solution fractionnaire : x = b/a
         let b = randint(2, 30)
         while (b % a === 0) b = randint(2, 30)
-        this.question = `Résoudre l'équation $\\dfrac{${b}}{x}=${a}$.`
+        equation = `$\\dfrac{${b}}{x}=${a}$`
         this.correction = `L'équation $\\dfrac{${b}}{x}=${a}$ est équivalente à $${a}\\times x=${b}$, soit $x=\\dfrac{${b}}{${a}}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence(fraction(b, a))}$.`
         solution = fraction(b, a)
@@ -62,7 +63,7 @@ export default class Auto1AC11a extends ExerciceSimple {
       case 2: {
         // x/a = b : x = a × b
         const b = randint(2, 12)
-        this.question = `Résoudre l'équation $\\dfrac{x}{${a}}=${b}$.`
+        equation = `$\\dfrac{x}{${a}}=${b}$`
         this.correction = `L'équation $\\dfrac{x}{${a}}=${b}$ est équivalente à $x=${a}\\times ${b}$.<br>
     Ainsi, la solution de l'équation est $${miseEnEvidence(String(a * b))}$.`
         solution = String(a * b)
@@ -79,7 +80,7 @@ export default class Auto1AC11a extends ExerciceSimple {
         // Solution entière : x = b/a
         const n = randint(2, 12)
         const b = a * n
-        this.question = `Résoudre l'équation $\\dfrac{${b}}{x}=${a}$.`
+        equation = `$\\dfrac{${b}}{x}=${a}$`
         this.correction = `L'équation $\\dfrac{${b}}{x}=${a}$ est équivalente à $${a}\\times x=${b}$, soit $x=\\dfrac{${b}}{${a}}=${n}$.<br>
     Ainsi, la solution de l'équation est $${miseEnEvidence(String(n))}$.`
         solution = String(n)
@@ -94,11 +95,15 @@ export default class Auto1AC11a extends ExerciceSimple {
     }
 
     if (this.versionQcm) {
+      this.question = `La solution de l'équation ${equation} est :`
       this.reponse = `$${solution}$`
       this.distracteurs = distracteurs.map((d) => `$${d}$`)
     } else {
       this.reponse = solution
-      if (this.interactif) this.question += '<br>$x=$'
+      // En interactif, x= à la ligne devant le champ ; sur papier (PDF), consigne classique
+      this.question = this.interactif
+        ? `La solution de l'équation ${equation} est :<br>$x=$`
+        : `Déterminer la solution de l'équation ${equation}.`
     }
   }
 }

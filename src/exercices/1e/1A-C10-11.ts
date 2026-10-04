@@ -34,6 +34,7 @@ export default class Auto1AC11c extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    let equation = ''
     if (context.isAmc) this.versionQcm = true
 
     let a: number
@@ -59,11 +60,12 @@ export default class Auto1AC11c extends ExerciceSimple {
         ? `$x=${miseEnEvidence(solution)}$`
         : `$x=${brute}$, soit $x=${miseEnEvidence(solution)}$`
 
-    this.question = `Résoudre l'équation $${reduireAxPlusB(a, b)}=${c}$.`
+    equation = `$${reduireAxPlusB(a, b)}=${c}$`
     this.correction = `On obtient $x$ en ${b < 0 ? `ajoutant $${-b}$ à` : `retranchant $${b}$ à`} $${c}$, puis en divisant le résultat par $${a}$.<br>
     Ainsi, $x=\\dfrac{${c}${ecritureAlgebrique(-b)}}{${a}}$, c'est-à-dire ${conclusion}.`
 
     if (this.versionQcm) {
+      this.question = `La solution de l'équation ${equation} est :`
       this.reponse = `$${solution}$`
       this.distracteurs = [
         fraction(c + b, a),
@@ -74,7 +76,10 @@ export default class Auto1AC11c extends ExerciceSimple {
       ].map((d) => `$${d}$`)
     } else {
       this.reponse = solution
-      if (this.interactif) this.question += '<br>$x=$'
+      // En interactif, x= à la ligne devant le champ ; sur papier (PDF), consigne classique
+      this.question = this.interactif
+        ? `La solution de l'équation ${equation} est :<br>$x=$`
+        : `Déterminer la solution de l'équation ${equation}.`
     }
   }
 }
