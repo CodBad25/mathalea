@@ -119,6 +119,21 @@ describe('buildTypstDocument', () => {
     expect(code).not.toContain('to: "odd"')
   })
 
+  it('espace les boîtes de correction successives', () => {
+    const code = buildTypstDocument([
+      exercise({ questions: ['$1+1$'], corrections: ['$2$'] }),
+      exercise({ questions: ['$2+2$'], corrections: ['$4$'] }),
+    ])
+
+    expect(code).toContain(
+      '#exo-solution-box(\n      number: 1,',
+    )
+    expect(code).toContain(
+      '#mathalea-needspace()\n    #exo-solution-box(\n      number: 2,',
+    )
+    expect(code).toContain('solution-above: 1.8em,')
+  })
+
   it('fait commencer chaque sujet sur une page impaire', () => {
     const options = { ...defaultTypstDocumentOptions, nbVersions: 2 }
     const versions = [[exercise({ questions: ['$5+5$'] })]]

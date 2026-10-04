@@ -3865,6 +3865,10 @@ export function buildTypstDocument(
     // sa couleur suit donc `solution-color`, réglée sur la couleur des badges
     lines.push('  solution-color: couleur,')
     lines.push('  correction-color: couleur,')
+    // Une correction soulignée contient déjà un espacement interne sous son
+    // trait. L'espace au-dessus de la boîte suivante est augmenté pour que
+    // les deux blancs encadrant ce titre aient le même rythme visuel.
+    lines.push('  solution-above: 1.8em,')
     lines.push(`  show-id: ${options.showExerciseRefs},`)
     lines.push(`  exercise-above: ${options.exerciseSpacing}em,`)
     if (usesQrCode) lines.push(`  qr-size: ${QRCODE_SIZE},`)
