@@ -1,9 +1,6 @@
 import Decimal from 'decimal.js'
 import { choice } from '../../lib/outils/arrayOutils'
-import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -36,8 +33,8 @@ export default class auto1AC7d extends ExerciceQcmA {
     const numApprox = Math.round(energieCoeff)
     const resultatApprox = numApprox / 4
 
-    this.enonce = `Un appareil a besoin d'une énergie de $${texNombre(energieCoeff)} \\times 10^{6}$ Joules (J) pour se mettre en route.<br>
-À combien de kilowatt-heures (kWh) cela correspond-il ?<br>
+    this.enonce = `Un appareil a besoin d'une énergie de $${texNombre(energieCoeff)} \\times 10^{6}$ Joules ($\\text{J}$) pour se mettre en route.<br>
+À combien de kilowatt-heures ($\\text{kWh}$) cela correspond-il ?<br>
 <br>
 $\\textit{Données :}$ $1~\\text{kWh} = 3,6 \\times 10^{6}~\\text{J}.$`
 
@@ -48,7 +45,7 @@ Pour trouver l'énergie en kWh, on divise par $3,6 \\times 10^{6}$ :<br>
 $E_{\\text{kWh}} = \\dfrac{${texNombre(energieCoeff)} \\times 10^{6}}{3,6 \\times 10^{6}} = \\dfrac{${texNombre(energieCoeff)}}{3,6} ${symbole} ${texNombre(bonneReponse)}~\\text{kWh}$<br>
 Sans calculatrice, on peut estimer la valeur en approchant $${texNombre(energieCoeff)}$ par $${numApprox}$ et $3,6$ par $4$.<br>
 On obtient alors : $\\dfrac{${numApprox}}{4} = ${texNombre(resultatApprox)}$, ce qui nous indique que le résultat est proche de $${texNombre(resultatApprox)}$.<br>
-La seule réponse possible est $${miseEnEvidence(texNombre(bonneReponse))}$ ${texteEnCouleur('$\\text{kWh}$')}.`
+La seule réponse possible est $${miseEnEvidence(`${texNombre(bonneReponse)}\\text{ kWh}`)}$.`
 
     this.reponses = [
       `$${texNombre(bonneReponse)}~\\text{kWh}$`,
