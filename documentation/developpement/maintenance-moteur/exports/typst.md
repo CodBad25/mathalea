@@ -916,7 +916,8 @@ Hors fusion, `exerciseBody` affiche `TypstExerciseInput.intro` (consigne
 
 ### Colonnes des QCM
 
-Les propositions d'un QCM (`propositionsQcm`, repérées par les libellés
+Les propositions d'un QCM (`propositionsQcm`, ou le QCM statique d'un
+`multi-mathfield` — `<span class="ex0">` au lieu de `<div>` —, repérées par les libellés
 `labelEx{N}Q{i}R{rep}`) sont mises en colonnes par le même paquet `taskize`
 que les questions : `qcmToTypst` (`latexToTypst.ts`) émet
 `#tasks(columns: …, label: none, equilibre: true)`. Les `<br>` qui séparent

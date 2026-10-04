@@ -1013,6 +1013,27 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('#qcm-bonne')
   })
 
+  it('convertit le QCM statique d’un multi-mathfield (propositions en span)', () => {
+    // régression : `staticQcm` pose chaque proposition dans un
+    // `<span class="ex0">` (et non un `<div>`) ; elles n'étaient pas reconnues
+    // et leurs libellés sortaient collés (« BufflesServalsGirafes »)
+    const proposition = (index: number, texte: string) =>
+      '<span class="ex0" style="display:inline-flex;align-items:center;gap:0.5rem">' +
+      '<input type="radio" disabled style="appearance:none">' +
+      `<label id="labelEx0Q0R${index}">${texte}</label></span>`
+    const result = htmlToTypst(
+      'Quelle est l’espèce la plus nombreuse ?<br> ' +
+        '<span class="mx-2" style="display:inline-flex;align-items:center;gap:1.5rem">' +
+        proposition(0, 'Buffles') +
+        proposition(1, 'Servals') +
+        '</span>',
+    )
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: none')
+    expect(result).toContain('+ #qcm-case(false) Buffles')
+    expect(result).toContain('+ #qcm-case(false) Servals')
+    expect(result).not.toContain('BufflesServals')
+  })
+
   it('retire les sauts de ligne entre l’énoncé et les propositions de QCM', () => {
     // `buildQcmForExercise` sépare l'énoncé des propositions par `<br><br>` :
     // convertis, ils laissaient deux lignes vides au-dessus du bloc `#tasks`
