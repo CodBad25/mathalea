@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -128,9 +129,16 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
 
   constructor() {
     super()
-    this.clavierReponseCourte = 'lycee'
-    this.enonceCourt = () => this.enonce.replace('On peut affirmer que :', 'Exprimer $u$ en fonction des autres variables.')
-    this.reponseCourte = () => this.reponses[0].replace(/^\$u=/, '').replace(/\$$/, '')
+    this.clavierReponseCourte = KeyboardType.clavierDeBaseAvecFraction
+    // En saisie courte : « u = » devant le champ et les lettres utiles sur le clavier
+    this.optionsChampTexte = { texteAvant: '$u=$', dataKeys: ['u', 'x', 'y'] }
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        'On peut affirmer que :',
+        'Exprimer $u$ en fonction des autres variables.',
+      )
+    this.reponseCourte = () =>
+      this.reponses[0].replace(/^\$u=/, '').replace(/\$$/, '')
     this.versionAleatoire()
   }
 }
