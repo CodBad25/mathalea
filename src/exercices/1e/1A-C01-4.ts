@@ -208,8 +208,13 @@ export default class OrdonnerCroissant extends ExerciceSimple {
     } else {
       // Les nombres sont hors du champ : dans un tableau (`array`), MathLive affiche les fractions
       // saisies en petit (\frac au lieu de \dfrac) et le smiley est décalé par rapport à la ligne de réponse.
-      this.consigne = `Ranger les trois nombres dans l'ordre croissant.<br>$${a.tex}\\qquad ${b.tex}\\qquad ${c.tex}$`
-      this.question = '%{champ1}<%{champ2}<%{champ3}'
+      this.consigne = `Ranger les trois nombres dans l'ordre croissant.<br><br>$${a.tex}\\qquad ${b.tex}\\qquad ${c.tex}$`
+      // Les pointillés ne s'affichent en HTML que si l'exercice est interactif
+      // (champs à remplir) ; en Typst et en LaTeX, ils servent de blancs à compléter.
+      this.question =
+        context.isHtml && !context.isTypst && !this.interactif
+          ? ''
+          : '%{champ1}<%{champ2}<%{champ3}'
       this.reponse = {
         bareme: toutPourUnPoint,
         champ1: { value: nombresTries[0].tex },

@@ -51,7 +51,7 @@ describe('latexMathToTypst', () => {
     // jeton irait en exposant et le reste de la formule serait absorbé à côté
     // (le `\ldots` initial est un espace-réponse élève, élargi ×3)
     expect(latexMathToTypst('\\ldots \\xrightarrow{\\div 2} 15')).toBe(
-      '... ... ... limits(->)^(div 2) 15',
+      '#box(width: 5em, repeat(gap: 2pt)[.]) limits(->)^(div 2) 15',
     )
     // l'étiquette peut être dans l'argument optionnel (rendue sous la flèche)
     expect(latexMathToTypst('14 \\xleftarrow[\\times 2]{} 7')).toBe(
@@ -62,15 +62,22 @@ describe('latexMathToTypst', () => {
   })
 
   it('élargit ×3 un espace-réponse `\\ldots` isolé mais épargne les ellipses de suites', () => {
-    // blanc à compléter seul : trop court pour écrire une réponse → triplé
-    expect(latexMathToTypst('\\ldots')).toBe('... ... ...')
+    // blanc à compléter seul : trop court pour écrire une réponse → boîte pointillée
+    expect(latexMathToTypst('\\ldots')).toBe('#box(width: 5em, repeat(gap: 2pt)[.])')
     expect(latexMathToTypst('3 \\times \\ldots = 12')).toBe(
-      '3 times ... ... ... = 12',
+      '3 times #box(width: 5em, repeat(gap: 2pt)[.]) = 12',
     )
     // vraie ellipse de suite (bordée de virgules) : inchangée
     expect(latexMathToTypst('x_1, \\ldots, x_n')).not.toContain('... ...')
     expect(latexMathToTypst('x_1, \\ldots, x_n')).toContain('...')
     expect(latexMathToTypst('x_1 , \\ldots , x_n')).not.toContain('... ...')
+  })
+
+  it('élargit aussi les `....` produits par mathaleaFormatExercice à partir de `\\ldots`', () => {
+    expect(latexMathToTypst('....<....<....')).toBe(
+      '#box(width: 5em, repeat(gap: 2pt)[.]) < #box(width: 5em, repeat(gap: 2pt)[.]) < #box(width: 5em, repeat(gap: 2pt)[.])',
+    )
+    expect(latexMathToTypst('x_1, ...., x_n')).not.toContain('... ...')
   })
 
   it('parenthèse les étiquettes multi-jetons de \\overset/\\underset', () => {
@@ -615,8 +622,8 @@ describe('htmlToTypst', () => {
   })
 
   it('convertit les pointillés LaTeX hors mode maths des réponses CAN', () => {
-    expect(htmlToTypst('\\dots{} min')).toBe('... ... ... min')
-    expect(htmlToTypst('\\ldots min')).toBe('... ... ... min')
+    expect(htmlToTypst('\\dots{} min')).toBe('#box(width: 5em, repeat(gap: 2pt)[.]) min')
+    expect(htmlToTypst('\\ldots min')).toBe('#box(width: 5em, repeat(gap: 2pt)[.]) min')
   })
 
   it('convertit les cases à cocher \\faSquare / \\faCheckSquare (réponses CAN)', () => {
@@ -652,11 +659,11 @@ describe('htmlToTypst', () => {
       htmlToTypst(
         'alors une pile de $18$ pièces a une hauteur de $\\ldots$ \\Lg[mm]{}.',
       ),
-    ).toBe('alors une pile de $18$ pièces a une hauteur de $... ... ...$ mm.')
+    ).toBe('alors une pile de $18$ pièces a une hauteur de $#box(width: 5em, repeat(gap: 2pt)[.])$ mm.')
     // `\Prix` : l'argument optionnel est le nombre de décimales, l'unité est €
-    expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$... ... ...$ €.')
-    expect(htmlToTypst('$\\ldots\\Capa{}$')).toBe('$... ... ...#txt("L")$')
-    expect(htmlToTypst('$\\ldots\\Capa[cL]{}$')).toBe('$... ... ...#txt("cL")$')
+    expect(htmlToTypst('$\\ldots$ \\Prix[0]{}.')).toBe('$#box(width: 5em, repeat(gap: 2pt)[.])$ €.')
+    expect(htmlToTypst('$\\ldots\\Capa{}$')).toBe('$#box(width: 5em, repeat(gap: 2pt)[.])#txt("L")$')
+    expect(htmlToTypst('$\\ldots\\Capa[cL]{}$')).toBe('$#box(width: 5em, repeat(gap: 2pt)[.])#txt("cL")$')
     expect(htmlToTypst('coûte $\\Prix[0]{12}$')).toContain('12')
     expect(htmlToTypst('coûte $\\Prix[0]{12}$')).not.toContain('Prix')
     expect(htmlToTypst('coûte \\Prix{12.5}')).toBe('coûte 12,50~€')
