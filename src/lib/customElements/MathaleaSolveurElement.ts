@@ -198,7 +198,7 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
         mathalea-solveur .line { display: grid; grid-template-columns: 5.5rem minmax(12rem, 1fr) auto; align-items: center; gap: .55rem; }
         mathalea-solveur .step { color: ${bleuMathalea}; font-size: .82rem; font-weight: 600; }
         mathalea-solveur .solver-field { display: block; min-width: 0; margin: 0; padding: 0; border: 0; background: transparent; }
-        mathalea-solveur math-field { display: block !important; width: 100%; min-height: 2.75rem; margin: 0 !important; padding: 0; box-sizing: border-box; }
+        mathalea-solveur math-field { display: block !important; width: 100%; margin: 0 !important; padding: 0; box-sizing: border-box; }
         mathalea-solveur math-field::part(container) { border: none !important; }
         mathalea-solveur math-field:not(.solver-readonly) { border: 1px solid #aab2bd !important; border-radius: .35rem; }
         mathalea-solveur math-field:not(.solver-readonly):focus-within { border-color: transparent !important; }
@@ -396,7 +396,7 @@ function normalizeEquationVariable(equation: string, variable: string): string {
   )
 }
 
-function isSolvedForm(
+export function isSolvedForm(
   value: string,
   kind: SolveurKind,
   variable: string,
@@ -406,10 +406,29 @@ function isSolvedForm(
   if (relation == null) return false
   return (
     (isVariableAlone(relation.left, variable) &&
-      !containsVariable(relation.right, variable)) ||
+      isFinalNumber(relation.right, variable)) ||
     (isVariableAlone(relation.right, variable) &&
-      !containsVariable(relation.left, variable))
+      isFinalNumber(relation.left, variable))
   )
+}
+
+/**
+ * Un membre est terminal s'il s'agit d'un nombre en écriture décimale ou
+ * fractionnaire (ex : `-3`, `2,5`, `\\dfrac{-6}{5}`), pas d'un calcul à
+ * poursuivre (ex : `2\\times\\frac{3}{5}`).
+ */
+function isFinalNumber(expression: string, variable: string): boolean {
+  if (containsVariable(expression, variable)) return false
+  const compact = expression
+    .replaceAll('\\left', '')
+    .replaceAll('\\right', '')
+    .replaceAll('{,}', ',')
+    .replace(/\s/g, '')
+  const unsigned = '\\d+(?:[.,]\\d+)?'
+  const signed = `[+-]?${unsigned}`
+  return new RegExp(
+    `^(?:${signed}|[+-]?\\\\[dt]?frac\\{${signed}\\}\\{${signed}\\})$`,
+  ).test(compact)
 }
 
 function splitEquation(
