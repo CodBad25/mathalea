@@ -10,7 +10,7 @@ import { rotation, similitude } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi, nombreDeChiffresDe } from '../../lib/outils/nombres'
 import { creerNomDePolygone, sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -351,6 +351,9 @@ export default class Pythagore2D extends Exercice {
       listeTypeDeQuestions = ['BC']
     } else if (this.sup2 === 2) {
       listeTypeDeQuestions = ['AB', 'AC']
+    } else if (this.nbQuestions === 2) {
+      // Avec deux questions : une pour l'hypoténuse, l'autre pour un côté de l'angle droit
+      listeTypeDeQuestions = ['BC', choice(['AB', 'AC'])]
     } else {
       listeTypeDeQuestions = ['AB', 'BC', 'AC']
     }
