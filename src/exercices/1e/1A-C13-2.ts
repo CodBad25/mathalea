@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import EquationSecondDegreParticuliere from '../can/1e/can1SD21-07'
 export const titre = 'Résoudre une équation $ax^2+bx+c=c$'
 export const dateDePublication = '23/07/2025'
@@ -21,5 +22,10 @@ export default class Auto1AC15 extends EquationSecondDegreParticuliere {
   constructor() {
     super()
     this.versionQcm = false
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    // Clavier allégé : on ajoute les accolades et le point-virgule
+    this.optionsChampTexte = {
+      dataKeys: ['\\{#0\\}', ';'],
+    }
   }
 }

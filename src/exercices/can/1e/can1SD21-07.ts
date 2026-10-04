@@ -40,38 +40,36 @@ export default class EquationSecondDegreParticuliere extends ExerciceSimple {
     const b = randint(-10, 10, [0, a, -a])
     const c = this.quotaRandint('c', -10, 10, [0])
     const f = new FractionEtendue(-b, a)
-    if (this.versionQcm) {
-      this.question = `L'ensemble des solutions $\\mathscr{S}$ de l'équation  $${reduirePolynomeDegre3(0, a, b, c)}=${c}$ est :`
-    } else {
-      this.question = `Donner l'ensemble des solutions $\\mathscr{S}$ de l'équation :<br> $${reduirePolynomeDegre3(0, a, b, c)}=${c}$.`
-    }
+    const equation = `$${reduirePolynomeDegre3(0, a, b, c)}=${c}$`
+    // En interactif, S= à la ligne devant le champ ; sur papier (PDF), consigne classique
+    this.question = this.versionQcm
+      ? `L'équation ${equation} a pour ensemble de solutions :`
+      : this.interactif
+        ? `L'équation ${equation} a pour ensemble de solutions :<br>$S=$`
+        : `Résoudre dans $\\mathbb{R}$ l'équation ${equation}.`
     if (-b * a < 0) {
       this.reponse = this.versionQcm
-        ? `$\\mathscr{S}=\\left\\{${f.texFractionSimplifiee}\\,;\\,0\\right\\}$`
+        ? `$\\left\\{${f.texFractionSimplifiee}\\,;\\,0\\right\\}$`
         : `\\{0;${f.texFSD}\\}`
       this.distracteurs = [
-        `$\\mathscr{S}=\\left\\{${f.texFractionSimplifiee}\\right\\}$`,
-        `$\\mathscr{S}=\\left\\{0\\,;\\,${f.oppose().texFractionSimplifiee}\\right\\}$`,
-        `$\\mathscr{S}=\\left\\{${f.inverse().texFractionSimplifiee}\\,;\\,0\\right\\}$`,
+        `$\\left\\{${f.texFractionSimplifiee}\\right\\}$`,
+        `$\\left\\{0\\,;\\,${f.oppose().texFractionSimplifiee}\\right\\}$`,
+        `$\\left\\{${f.inverse().texFractionSimplifiee}\\,;\\,0\\right\\}$`,
       ]
     } else {
       this.reponse = this.versionQcm
-        ? `$\\mathscr{S}=\\left\\{0\\,;\\,${f.texFractionSimplifiee}\\right\\}$`
+        ? `$\\left\\{0\\,;\\,${f.texFractionSimplifiee}\\right\\}$`
         : `\\{0;${f.texFSD}\\}`
       this.distracteurs = [
-        `$\\mathscr{S}=\\left\\{${f.texFractionSimplifiee}\\right\\}$`,
-        `$\\mathscr{S}=\\left\\{${f.oppose().texFractionSimplifiee}\\,;\\,0\\right\\}$`,
-        `$\\mathscr{S}=\\left\\{0\\,;\\,${f.inverse().texFractionSimplifiee}\\right\\}$`,
+        `$\\left\\{${f.texFractionSimplifiee}\\right\\}$`,
+        `$\\left\\{${f.oppose().texFractionSimplifiee}\\,;\\,0\\right\\}$`,
+        `$\\left\\{0\\,;\\,${f.inverse().texFractionSimplifiee}\\right\\}$`,
       ]
-    }
-
-    if (this.interactif && !this.versionQcm) {
-      this.question += '<br>$\\mathscr{S}=$'
     }
 
     this.correction = `L'équation $${reduirePolynomeDegre3(0, a, b, c)}=${c}$ s'écrit $${reduirePolynomeDegre3(0, a, b, 0)}=0$.<br>
           En factorisant le premier membre (facteur commun $x$), on obtient $x(${rienSi1(a)}x${ecritureAlgebrique(b)})=0$.<br>
           On reconnaît une équation produit nul dont les solutions sont : $0$ et $\\dfrac{${-b}}{${a}}${f.texSimplificationAvecEtapes()}$.<br>
-          $\\mathscr{S}=${miseEnEvidence(`\\{0;${new FractionEtendue(-b, a).texFractionSimplifiee}\\}`)}$`
+          $S=${miseEnEvidence(`\\left\\{0\\,;\\,${new FractionEtendue(-b, a).texFractionSimplifiee}\\right\\}`)}$`
   }
 }
