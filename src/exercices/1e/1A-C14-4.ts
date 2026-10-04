@@ -21,6 +21,8 @@ export const titre = 'Résoudre une inéquation avec un tableau de signes'
  * @author Gilles Mora
  */
 export default class Auto1AC16 extends ExerciceQcmACourt {
+  optionsChampReponseCourte = { texteAvant: '$S=$' }
+
   versionOriginale: () => void = () => {
     // Version fixe pour les tests ou exemple
     const ligneMPP = [

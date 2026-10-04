@@ -1,14 +1,19 @@
+import { all } from '../../lib/interactif/checks'
+import {
+  coefficientsAffines,
+  sameAffineSignTable,
+} from '../../lib/interactif/checks/sameAffineSignTable'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../lib/outils/arrayOutils'
-import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '22/04/2026'
-export const dateDeModifImportante = '30/09/2026'
+export const dateDeModifImportante = '04/10/2026'
 
 export const uuid = 'c5cb6'
 
@@ -19,7 +24,8 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const titre = 'Retrouver la bonne fonction affine à partir de données'
+export const titre =
+  'Déterminer une fonction affine à partir de données sur son signe'
 /**
  * @author Gilles Mora
  */
@@ -99,8 +105,16 @@ export default class Auto1AC14e extends ExerciceQcmACourt {
   constructor() {
     super()
     this.clavierReponseCourte = 'lycee'
-    this.enonceCourt = () => this.enonce.replace('Une seule des expressions suivantes est celle de la fonction $f$. Laquelle ?', 'Donner l’expression de la fonction affine $f$ dont le coefficient directeur vaut $1$ ou $-1$.')
-    this.correctionCourte = () => `Une expression qui vérifie les conditions est $f(x)=${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
+    this.compareReponseCourte = all([sameAffineSignTable()])
+    this.optionsChampReponseCourte = { texteAvant: '$f(x)=$' }
+    this.enonceCourt = () => this.enonce.replace('Une seule des expressions suivantes est celle de la fonction $f$. Laquelle ?', 'Donner une expression d’une fonction affine $f$ vérifiant ces conditions.')
+    this.correctionCourte = () => {
+      const exemple = this.reponseCourte?.() ?? ''
+      const [a, b] = coefficientsAffines(exemple) ?? [1, 0]
+      const racine = -b / a
+      return `La fonction $f$ s'annule en $${texNombre(racine)}$ et est ${a < 0 ? 'positive puis négative' : 'négative puis positive'} : son coefficient directeur est ${a < 0 ? 'négatif' : 'positif'}.<br>
+Toute expression $f(x)=a(x${ecritureAlgebrique(-racine)})$ avec $a${a < 0 ? '<' : '>'}0$ convient, par exemple $f(x)=${miseEnEvidence(exemple)}$.`
+    }
     this.versionAleatoire()
   }
 }

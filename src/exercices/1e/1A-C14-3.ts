@@ -1,3 +1,8 @@
+import { all } from '../../lib/interactif/checks'
+import {
+  coefficientsAffines,
+  sameAffineSignTable,
+} from '../../lib/interactif/checks/sameAffineSignTable'
 import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -10,7 +15,7 @@ import ExerciceQcmACourt from '../ExerciceQcmACourt'
  * @author Gilles Mora (et Claude)
  *
  */
-export const dateDeModifImportante = '30/09/2026'
+export const dateDeModifImportante = '04/10/2026'
 
 export const uuid = 'b509e'
 export const refs = {
@@ -104,8 +109,16 @@ ${tableauSignesFonction(f, -10, 10, {
   constructor() {
     super()
     this.clavierReponseCourte = 'lycee'
-    this.enonceCourt = () => this.enonce.replace(/Parmi les quatre expressions proposées pour la fonction \$f\$, une seule est possible\./, 'Donner une expression possible de $f(x)$ dont le coefficient directeur vaut $1$ ou $-1$.')
-    this.correctionCourte = () => `Une expression possible de la fonction est $f(x)=${miseEnEvidence(this.reponseCourte?.() ?? '')}$.`
+    this.compareReponseCourte = all([sameAffineSignTable()])
+    this.optionsChampReponseCourte = { texteAvant: '$f(x)=$' }
+    this.enonceCourt = () => this.enonce.replace(/Parmi les quatre expressions proposées pour la fonction \$f\$, une seule est possible\./, 'Donner une expression d’une fonction affine $f$ ayant ce tableau de signes.')
+    this.correctionCourte = () => {
+      const exemple = this.reponseCourte?.() ?? ''
+      const [a, b] = coefficientsAffines(exemple) ?? [1, 0]
+      const racine = -b / a
+      return `D'après le tableau de signes, $f$ s'annule en $${texNombre(racine)}$ et est ${a < 0 ? 'positive puis négative' : 'négative puis positive'} : son coefficient directeur est ${a < 0 ? 'négatif' : 'positif'}.<br>
+Toute expression $f(x)=a(x${ecritureAlgebrique(-racine)})$ avec $a${a < 0 ? '<' : '>'}0$ convient, par exemple $f(x)=${miseEnEvidence(exemple)}$.`
+    }
 
     this.versionAleatoire()
   }
