@@ -21,6 +21,7 @@ import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { orangeMathalea } from '../../lib/colors'
+import ListeDeroulanteElement from '../../lib/customElements/ListeDeroulanteElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
@@ -195,7 +196,7 @@ export default class ConservationTransformation extends Exercice {
           break
         case 'rotation':
         default: {
-          transformation = 'symétrie centrale'
+          transformation = 'rotation'
           let O: PointAbstrait
           const sensDeRotation = choice([-1, 1])
           let angleRotation = randint(8, 17) * 10 * sensDeRotation
@@ -273,7 +274,22 @@ export default class ConservationTransformation extends Exercice {
       texteCorr += `Or, la ${transformation} conserve les longueurs.<br>`
       texteCorr += `Donc le segment [$${B.nom}'${C.nom}'$] mesure lui aussi $${miseEnEvidence(texNombre(longueur(B, C, 1)))}\\text{ cm}$.<br>`
       texte += `Compléter l'image ${figure} ${enonceTransformation} en utilisant les propriétés de conservation de la ${transformation}`
-      texte += this.interactif ? '.' : ' et en justifiant ses démarches.<br>'
+      texte += ' et en justifiant ses démarches.<br>'
+      if (this.interactif) {
+        const choixPropriete = [
+          { label: 'Choisir', value: '' },
+          { label: 'conserve les angles', value: 'conserve les angles' },
+          { label: 'conserve les longueurs', value: 'conserve les longueurs' },
+        ]
+        const listeDeroulante = (champ: number) =>
+          ListeDeroulanteElement.create({
+            id: `liste-deroulanteEx${this.numeroExercice}Q${i}field${champ}`,
+            choices: choixPropriete,
+            className: 'mx-2 listeDeroulante',
+          })
+        texte += `Pour justifier la mesure de l'angle : la ${transformation} ${listeDeroulante(2)}.<br>`
+        texte += `Pour justifier la longueur du segment : la ${transformation} ${listeDeroulante(3)}.<br>`
+      }
       // On applique la transformation
       const imPoly = this.sup2
         ? polygone(imageA, imageB, imageC)
@@ -346,6 +362,8 @@ export default class ConservationTransformation extends Exercice {
               noFeedback: true,
             },
           },
+          field2: { value: 'conserve les angles' },
+          field3: { value: 'conserve les longueurs' },
         },
         {
           formatInteractif: 'MetaInteractif2d',
