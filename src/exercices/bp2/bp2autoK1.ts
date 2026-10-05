@@ -5,9 +5,9 @@ export const interactifReady = true
 
 export const dateDePublication = '13/4/2025'
 
-export const dateDeModifImportante = '03/10/2026'
+export const dateDeModifImportante = '04/10/2026'
 
-export const uuid = '3f9ae'
+export const uuid = '5a644'
 export const refs = {
   'fr-fr': ['BP2AutoK1'],
   'fr-ch': [],

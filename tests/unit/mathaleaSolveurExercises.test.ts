@@ -198,6 +198,57 @@ describe('exercices modèles de mathalea-solveur', () => {
     },
   )
 
+  it.each([
+    ['4L20', EquationsPremierDegre, 'sup4'],
+    ['2L21-4', EquationsPremierDegre2nde, 'sup4'],
+    ['3L13', EquationsPremierDegre3e, 'sup4'],
+    ['bp2autoK1', EquationsPremierDegreBP, 'sup4'],
+    ['2L21-6', EquationAvecQuotient, 'sup'],
+    ['3L13-1', EquationsAvecDistributivite3e, 'sup3'],
+    ['2L21-5', EquationsAvecDistributivite2nde, 'sup3'],
+    ['3L13-2', EquationsProduitsEnCroix3e, 'sup2'],
+    ['2L21-3', EquationsProduitsEnCroix2nde, 'sup2'],
+    ['4L15-1', EquationsProduitsEnCroix4e, 'sup2'],
+    ['4C20-3', EquationsAvecDistances, 'sup2'],
+    ['4P10-2', QuatriemeProportionnelle, 'sup2'],
+    ['4L20-1', EquationsPasAPas, 'sup'],
+    ['2L30-6', InequationsPasAPas, 'sup2'],
+  ])(
+    'active le solveur de %s en mode entraînement hors interactivité',
+    (_ref, ExerciseClass, option) => {
+      const exercice = new ExerciseClass()
+      exercice.numeroExercice = 15
+      exercice.interactif = false
+      Object.assign(exercice, { [option]: true })
+      exercice.nouvelleVersion()
+
+      expect(exercice.listeQuestions).toHaveLength(exercice.nbQuestions)
+      exercice.listeQuestions.forEach((question) => {
+        expect(question).toContain('<mathalea-solveur')
+        expect(question).toContain('mode="entrainement"')
+        expect(question).toContain('interactivity-on="true"')
+      })
+    },
+  )
+
+  it('active les questions avec solveur de 3L15-3 en mode entraînement hors interactivité', () => {
+    const exercice = new EquationsMelees()
+    exercice.numeroExercice = 16
+    exercice.interactif = false
+    exercice.sup2 = true
+    exercice.nbQuestions = 6
+    exercice.nouvelleVersion()
+
+    const questionsAvecSolveur = exercice.listeQuestions.filter((question) =>
+      question.includes('<mathalea-solveur'),
+    )
+    expect(questionsAvecSolveur.length).toBeGreaterThan(0)
+    questionsAvecSolveur.forEach((question) => {
+      expect(question).toContain('mode="entrainement"')
+      expect(question).toContain('interactivity-on="true"')
+    })
+  })
+
   it('génère 4L20-1 avec une équation finale attendue par question', () => {
     const exercice = new EquationsPasAPas()
     exercice.numeroExercice = 2
@@ -265,11 +316,13 @@ describe('exercices modèles de mathalea-solveur', () => {
     const entrainement = new InequationsPasAPas()
     entrainement.numeroExercice = 5
     entrainement.interactif = false
+    entrainement.sup2 = true
     entrainement.nouvelleVersion()
     expect(
       entrainement.listeQuestions.every(
         (question) =>
-          !question.includes('<mathalea-solveur') && /^\$.+\$$/.test(question),
+          question.includes('<mathalea-solveur') &&
+          question.includes('mode="entrainement"'),
       ),
     ).toBe(true)
   })

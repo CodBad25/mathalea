@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 57ba1 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { bleuMathalea } from '../../lib/colors'
 import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -23,7 +26,7 @@ export const titre =
   'Résoudre une équation du premier degré (utilisant éventuellement la distributivité)'
 export const interactifReady = true
 
-export const dateDeModifImportante = '04/10/2026'
+export const dateDeModifImportante = '30/09/2026'
 
 /**
  * Équation du premier degré
@@ -37,24 +40,20 @@ export const dateDeModifImportante = '04/10/2026'
  * Éric Elter : Rajouter de deux paramètres, passage de la réponse en couleur
  * Arnaud Meistermann : ajout du cas x²+a=(x+b)²
  */
-export const uuid = 'b9e01'
+export const uuid = '57ba1'
 
 export const refs = {
-  'fr-fr': ['3L13-1', 'BP2RES12'],
-  'fr-ch': ['10FA5C-7'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
-export default class ExerciceEquation1Tiret2 extends Exercice {
+export default class ExerciceEquation1Tiret2Old2 extends Exercice {
   protected niveau: number
 
   constructor(niveau = 3) {
     super()
     this.niveau = niveau
 
-    this.comment = `Les équations sont de la forme :<br>$ax+b=cx+d$<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$${this.niveau === 2 ? '<br>$x^2+a=(x+b)^2$' : ''}<br>avec des nombres à un chiffre${this.niveau === 2 ? ' (sauf pour le dernier type où $a$ et $b$ sont compris entre $-10$ et $10$)' : ''}.<br><br>
-    Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = `Les équations sont de la forme :<br>$ax+b=cx+d$<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$${this.niveau === 2 ? '<br>$x^2+a=(x+b)^2$' : ''}<br>avec des nombres à un chiffre${this.niveau === 2 ? ' (sauf pour le dernier type où $a$ et $b$ sont compris entre $-10$ et $10$)' : ''}.`
     this.spacing = 2
     this.spacingCorr = context.isHtml ? 3 : 2
     this.correctionDetailleeDisponible = true
@@ -80,8 +79,6 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
       false,
     ]
     this.sup2 = false
-    this.besoinFormulaire3CaseACocher = ['Mode entrainement en non interactif']
-    this.sup3 = false
   }
 
   nouvelleVersion() {
@@ -323,8 +320,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
         texte = addMathaleaSolveur(this, i, {
           initial: equation.slice(1, -1),
           kind: 'equation',
-          mode: this.sup3 && !this.interactif ? 'entrainement' : 'evaluation',
-          interactivityOn: this.interactif || Boolean(this.sup3),
+          mode: this.interactif ? 'evaluation' : 'entrainement',
         })
         handleAnswers(
           this,

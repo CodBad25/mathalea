@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 70132 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -27,15 +30,15 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const dateDeModifImportante = '04/10/2026'
+export const dateDeModifImportante = '03/10/2026'
 /**
  * Équation du premier degré
  * @author Rémi Angot
  */
-export const uuid = '5772b'
+export const uuid = '70132'
 
 export const refs = {
-  'fr-fr': ['4L20', 'BP2RES8', '3AutoL04-1', 'BP1AUTO019'],
+  'fr-fr': [],
   'fr-ch': ['NR'],
 }
 
@@ -45,16 +48,11 @@ function gestionEspaceMiseEnEvidence(texte: string) {
   return sp(2) + texte[0] + sp(2) + texteSepare[1]
 }
 
-export default class ExerciceEquation1 extends Exercice {
+export default class ExerciceEquation1Old3 extends Exercice {
   protected xPlusBEgalCAvecRelatifsNonNuls = false
 
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
-
     this.besoinFormulaireCaseACocher = ['Avec des nombres relatifs']
     this.besoinFormulaire2Texte = [
       "Type d'équations",
@@ -71,7 +69,6 @@ export default class ExerciceEquation1 extends Exercice {
       ].join('\n'),
     ]
     this.besoinFormulaire3CaseACocher = ['Avec uniquement la lettre $x$']
-    this.besoinFormulaire4CaseACocher = ['Mode entrainement en non interactif']
     this.spacing = 2
     this.spacingCorr = context.isHtml ? 3 : 2
     this.correctionDetailleeDisponible = true
@@ -79,7 +76,6 @@ export default class ExerciceEquation1 extends Exercice {
     this.sup = true // Avec des nombres relatifs
     this.sup2 = '1-2-3-4-5' // Choix du type d'équation
     this.sup3 = true
-    this.sup4 = false
     this.nbQuestions = 6
   }
 
@@ -378,9 +374,7 @@ export default class ExerciceEquation1 extends Exercice {
           ? addMathaleaSolveur(this, i, {
               initial: texte.slice(1, -1),
               kind: 'equation',
-              mode:
-                this.sup4 && !this.interactif ? 'entrainement' : 'evaluation',
-              interactivityOn: this.interactif || this.sup4,
+              mode: this.interactif ? 'evaluation' : 'entrainement',
               variable: inconnue,
             })
           : texte

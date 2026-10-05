@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid a7f2d continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -9,12 +12,10 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre une équation pas à pas'
 export const interactifReady = true
 export const dateDePublication = '29/09/2026'
-export const dateDeModifImportante = '04/10/2026'
-
-export const uuid = 'c19b6'
+export const uuid = 'a7f2d'
 
 export const refs = {
-  'fr-fr': ['4L20-1'],
+  'fr-fr': [],
   'fr-ch': ['NR'],
 }
 
@@ -31,15 +32,9 @@ type EquationData = {
  * entières afin que l'exercice reste centré sur les étapes de résolution.
  * @author Jean-Claude Lhote
  */
-export default class ResoudreEquationPasAPas extends Exercice {
+export default class ResoudreEquationPasAPasOld extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
-    this.besoinFormulaireCaseACocher = ['Mode entrainement en non interactif']
-    this.sup = false
     this.consigne = 'Résoudre les équations suivantes pas à pas.'
     this.nbQuestions = 4
     this.spacing = 2
@@ -54,8 +49,7 @@ export default class ResoudreEquationPasAPas extends Exercice {
       this.listeQuestions[i] = addMathaleaSolveur(this, i, {
         initial: data.equation,
         kind: 'equation',
-        mode: this.sup && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup),
+        mode: this.interactif ? 'evaluation' : 'entrainement',
       })
 
       this.listeCorrections[i] =

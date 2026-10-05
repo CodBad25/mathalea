@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid b0ac4 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import {
   choice,
   combinaisonListesSansChangerOrdre,
@@ -29,37 +32,31 @@ export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '15/12/2020'
-export const dateDeModifImportante = '04/10/2026'
+export const dateDeModifImportante = '30/09/2026'
 /**
  * * Équations résolvantes pour le théorème de Thalès
  * @author Sébastien Lozano
  */
-export const uuid = '1aaa0'
+export const uuid = 'b0ac4'
 
 export const refs = {
-  'fr-fr': ['3L13-2', '3G20-3', 'BP2RES13'],
-  'fr-ch': ['11GM1B-5'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
-export default class EqResolvantesThales extends Exercice {
+export default class EqResolvantesThalesOld2 extends Exercice {
   consignePluriel: string
   consigneSingulier: string
   exo: string
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
     this.besoinFormulaireNumerique = [
       'Type de nombres',
       4,
       '1 : Entiers naturels\n2 : Entiers relatifs\n3 : Décimaux\n4 : Mélange',
     ]
-    this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
 
     this.nbQuestions = 2
     this.sup = 1
-    this.sup2 = false
     this.consignePluriel = 'Résoudre les équations suivantes.'
     this.consigneSingulier = "Résoudre l'équation suivante."
     this.exo = '3L13-2'
@@ -282,8 +279,7 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
       const solver = addMathaleaSolveur(this, i, {
         initial: solverEquation,
         kind: 'equation',
-        mode: this.sup2 && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup2),
+        mode: this.interactif ? 'evaluation' : 'entrainement',
         variable: solverVariable,
       })
       texte = this.exo === '4P10-2' ? `${texte}<br>${solver}` : solver
