@@ -1,7 +1,11 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  choice,
+  combinaisonListes,
+  sortRandomlyLikeV8,
+} from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd, ppcmListe } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -60,9 +64,7 @@ export default class Comparer3FractionsDenominateursNonMultiples extends Exercic
           denominateursPossibles.push(5, 10, choice([3, 7, 9]))
           break
       }
-      const denominateurs = denominateursPossibles.sort(
-        () => Math.random() - 0.5,
-      )
+      const denominateurs = sortRandomlyLikeV8(denominateursPossibles)
       const denominateurCommun = ppcmListe(denominateursPossibles)
       const numerateurs = []
       const order = orders[i]
