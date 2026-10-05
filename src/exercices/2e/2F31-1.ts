@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import Decimal from 'decimal.js'
 import { antecedentParDichotomie } from '../../lib/2d/antecedentParDichotomie'
 import { courbe } from '../../lib/2d/Courbe'
@@ -8,12 +7,14 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texteGras, miseEnEvidence } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { prenom, prenomM } from '../../lib/outils/Personne'
 import { texNombre, texPrix } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
@@ -21,7 +22,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = "Modéliser une situation à l'aide d'une fonction"
 export const dateDePublication = '14/02/2023'
 export const dateDeModifImportante = '13/12/2024'
@@ -633,7 +633,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
               items: [
                 `     Le taux d'alcoolémie maximal est atteint lorsque $t=${texNombre(Math.round(s0 * 10) / 10, 1)}$. Sa valeur
             est environ  $${miseEnEvidence(texNombre(Math.round(f(s0) * 100) / 100, 2))}$.`,
-                ` Les solutions de l'inéquation $${nom}(t)>0,5$ sont les abscisses des points de la courbe qui se situent strictement en dessous de la droite d'équation $y=0,5$. <br>
+                ` Les solutions de l'inéquation $${nom}(t)>0,5$ sont les abscisses respectives des points de la courbe qui se situent strictement en dessous de la droite d'équation $y=0,5$. <br>
             Cette inéquation a pour ensemble de solution $${miseEnEvidence(`]${texNombre(Math.round(s1 * 10) / 10, 1)}\\,;\\,${texNombre(Math.round(s2 * 10) / 10, 1)}[`)}$. <br>
               `,
                 `${

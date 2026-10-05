@@ -1,13 +1,13 @@
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   texFractionFromString,
   texFractionReduite,
 } from '../../lib/outils/deprecatedFractions'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre = 'Déterminer si trois points sont alignés'
 /**
  * Déterminer si trois points sont alignés avec les coefficients directeurs
@@ -38,7 +38,7 @@ export default class Alignementdetroispoints extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       let xA: number
       let xB: number
@@ -74,7 +74,7 @@ export default class Alignementdetroispoints extends Exercice {
           texteCorr =
             'Pour déterminer si les points $A$, $B$, et $C$ sont alignés, on va étudier les positions relatives des droites $(AB)$ et $(AC)$'
           texteCorr +=
-            '<br>On observe que les droites ne sont pas verticales car les abscisses des points $A$, $B$ et $C$ sont distinctes.'
+            '<br>On observe que les droites ne sont pas verticales car les abscisses respectives des points $A$, $B$ et $C$ sont distinctes.'
           texteCorr +=
             '<br>On peut donc calculer leur coefficient directeur respectif.'
           texteCorr +=
@@ -139,8 +139,7 @@ export default class Alignementdetroispoints extends Exercice {
               '<br>Les droites $(AB)$ et $(AC)$ ont le même coefficient directeur, elles sont donc parallèles. '
             texteCorr +=
               '<br>Le point $A$ appartenant aux deux droites parallèles, $(AB)$ et $(AC)$ sont des droites confondues.'
-            texteCorr +=
-              `<br>On en déduit que les points $A$, $B$ et $C$ ${texteEnCouleurEtGras('sont alignés')}. `
+            texteCorr += `<br>On en déduit que les points $A$, $B$ et $C$ ${texteEnCouleurEtGras('sont alignés')}. `
           }
           break
       }

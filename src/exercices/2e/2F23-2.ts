@@ -253,7 +253,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace la parabole d'équation $y=x^2$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe la parabole en $-\\sqrt{${a}}$ et $\\sqrt{${a}}$. <br>
-            $\\bullet$  Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
+            $\\bullet$  Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
             texteCorr += `${graphiqueC}`
 
             if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
@@ -411,7 +411,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace la parabole d'équation $y=x^2$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. <br>
-            $\\bullet$    Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de '} la droite.<br>`
+            $\\bullet$    Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de '} la droite.<br>`
             texteCorr += `${graphiqueC}`
 
             if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
@@ -626,7 +626,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace l'hyperbole d'équation $y=\\dfrac{1}{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe l'hyperbole en un point dont l'abscisse est : $${borne}$.<br>
-            $\\bullet$    Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
+            $\\bullet$    Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
             if (a > 0) {
               ensembleSolutions =
                 intervalleLaTex('-\\infty', 0, true, true) +
@@ -839,7 +839,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace l'hyperbole d'équation $y=\\dfrac{1}{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe l'hyperbole en un point dont l'abscisse est : $${borne}$. <br>
-            $\\bullet$    Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de '} la droite.<br>`
+            $\\bullet$    Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de '} la droite.<br>`
             if (a > 0) {
               ensembleSolutions = intervalleLaTex(0, borne, true, estInegStrict)
               texteCorr += `${graphiqueC1}`
@@ -971,7 +971,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace la courbe d'équation $y=\\sqrt{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe la courbe en $${a}^2=${borne}$. <br>
-            $\\bullet$  Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
+            $\\bullet$  Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
             texteCorr += `${graphiqueC}`
             texteCorr += `Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $\\sqrt{x}${signeInégalité}${a}$ est : `
           }
@@ -1099,7 +1099,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace la courbe d'équation $y=\\sqrt{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe la courbe en $${a}^2=${borne}$. <br>
-            $\\bullet$  Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de'} la droite.<br>`
+            $\\bullet$  Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de'} la droite.<br>`
             texteCorr += `${graphiqueC}`
             texteCorr += `Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $\\sqrt{x}${signeInégalité}${a}$ est : `
           }
@@ -1219,7 +1219,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
               $\\bullet$ On trace la courbe d'équation $y=|x|$. <br>
               $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Elle coupe la courbe aux points d'abscisses $-${a}$ et $${a}$. <br>
-              $\\bullet$ Les solutions sont les abscisses des points de la courbe situés ${inferieure ? (estInegStrict ? 'strictement en dessous de' : 'sur ou sous') : estInegStrict ? 'strictement au-dessus de' : 'sur ou au-dessus de'} la droite.<br>
+              $\\bullet$ Les solutions sont les abscisses respectives des points de la courbe situés ${inferieure ? (estInegStrict ? 'strictement en dessous de' : 'sur ou sous') : estInegStrict ? 'strictement au-dessus de' : 'sur ou au-dessus de'} la droite.<br>
               ${graphiqueC}
               L'ensemble des solutions de l'inéquation $|x|${signeInégalité}${a}$ est : `
           }
@@ -1316,7 +1316,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             texteCorr = `Pour résoudre graphiquement cette inéquation : <br>
               $\\bullet$ On trace la courbe d'équation $y=x^3$. <br>
               $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Elle coupe la courbe au point d'abscisse $${borne}$, car $${borne}^3=${a}$. <br>
-              $\\bullet$ Les solutions sont les abscisses des points de la courbe situés ${inferieure ? (estInegStrict ? 'strictement en dessous de' : 'sur ou sous') : estInegStrict ? 'strictement au-dessus de' : 'sur ou au-dessus de'} la droite.<br>
+              $\\bullet$ Les solutions sont les abscisses respectives des points de la courbe situés ${inferieure ? (estInegStrict ? 'strictement en dessous de' : 'sur ou sous') : estInegStrict ? 'strictement au-dessus de' : 'sur ou au-dessus de'} la droite.<br>
               ${graphiqueC}
               L'ensemble des solutions de l'inéquation $x^3${signeInégalité}${a}$ est : `
           }

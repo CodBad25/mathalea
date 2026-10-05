@@ -104,7 +104,7 @@ export default class ResoudreGraphiqumentInequation extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.correction = `Les solutions sont les abscisses des points d'intersection entre les deux courbes :
+    this.correction = `Les solutions sont les abscisses respectives des points d'intersection entre les deux courbes :
    $S=\\{${miseEnEvidence('-1\\,;\\,2')}\\}$. `
 
     this.reponse = ['-1;2', '2;-1', '\\{-1;2\\}', '\\{2;-1\\}']

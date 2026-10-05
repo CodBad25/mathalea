@@ -144,7 +144,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
 
         this.correction = `La fonction représentée est une fonction linéaire.<br>
         Il y a donc une proportionnalité entre les abscisses et les ordonnées des points de la droite.<br>
-        L'abscisse du point $A$ est $${xA}$ et son ordonnée $${yA}$. Les abscisses des points s'obtiennent en divisant par $${texNombre(a, 1)}$ les ordonnées.<br>`
+        L'abscisse du point $A$ est $${xA}$ et son ordonnée $${yA}$. les abscisses respectives des points s'obtiennent en divisant par $${texNombre(a, 1)}$ les ordonnées.<br>`
         if (a === 0.5) {
           this.correction += `Diviser par $${texNombre(a, 1)}$ (soit par $\\dfrac{1}{2}$) revient à multiplier par $2$.<br>
         Ainsi, l'abscisse du point $B$ est donnée par $${yB}\\times 2=${miseEnEvidence(yB / a)}$.`

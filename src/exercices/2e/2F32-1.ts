@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { droiteParPointEtPente } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
@@ -12,6 +11,7 @@ import {
   type NoeudSpline,
 } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -276,7 +276,7 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
 
       const correctionPartA = `${numAlpha(0)} Le nombre de solutions de l'équation $f(x)=${y0}$ est donné par le nombre d'antécédents de $${y0}$ par $f$. <br>
           ${solutions0.length === 0 ? `Il n'y en a pas, donc l'équation a $${miseEnEvidence(0)}$ solution.` : `Il y en a $${miseEnEvidence(solutions0.length)}$ (tracé rouge en pointillés).`}<br>`
-      const correctionPartB = `${numAlpha(1)} Résoudre l'équation $f(x)=${y1}$ graphiquement revient à lire les abscisses des points d'intersection entre $\\mathscr{C}_f$ et ${y1 === 0 ? "l'axe des abscisses." : `la droite (parallèle à l'axe des abscisses tracée en pointillés verts) d'équation $y = ${y1}$.`}<br>
+      const correctionPartB = `${numAlpha(1)} Résoudre l'équation $f(x)=${y1}$ graphiquement revient à lire les abscisses respectives des points d'intersection entre $\\mathscr{C}_f$ et ${y1 === 0 ? "l'axe des abscisses." : `la droite (parallèle à l'axe des abscisses tracée en pointillés verts) d'équation $y = ${y1}$.`}<br>
           On en déduit : ${solutions1.length === 0 ? `$S=${miseEnEvidence('\\emptyset')}$.` : `$S=${miseEnEvidence(`\\{${solutions1.join('\\,;\\,')}\\}`)}$.`}<br>`
       const correctionPartC = `${numAlpha(2)}  Par exemple, l'équation $f(x)=${miseEnEvidence(texNombre(y2, 1))}$ possède exactement ${nombreAntecedentsCherches2} solution${nombreAntecedentsCherches2 > 1 ? 's' : ''}.<br>`
       const repere1 = repere({
