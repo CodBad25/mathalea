@@ -107,13 +107,11 @@ export default class FactoriserXCommun extends ExerciceSimple {
       Une forme factorisée de $${expression}$ est donc $${miseEnEvidence(bonneReponse)}$.`
 
     if (this.versionQcm) {
-      this.question = 'Soit $x$ un réel.<br>'
-      this.question += `Parmi ces $4$ expressions, quelle expression est une forme factorisée de $${expression}$ ?`
+      this.question = `Parmi ces $4$ expressions, quelle expression est une forme factorisée de $${expression}$ ?`
       this.reponse = `$${bonneReponse}$`
       this.distracteurs = distracteurs.map((distracteur) => `$${distracteur}$`)
     } else {
-      this.question = 'Soit $x$ un réel.<br>'
-      this.question += `Factoriser $${expression}$ en un produit de deux facteurs du premier degré.`
+      this.question = `Factoriser $${expression}$ en un produit de deux facteurs du premier degré.`
       this.optionsChampTexte = { texteAvant: `<br>$${expression}=$` }
       this.reponse = `x(${facteurRestant})`
     }

@@ -62,7 +62,7 @@ export default class FatorisationEgR extends ExerciceSimple {
           if (this.versionQcm) {
             this.question = `Une factorisation de $${expression}$ est :`
           } else {
-            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit de deux facteurs du premier degré" : ''}.`
+            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit (ou d'un carré) de deux facteurs" : ''}.`
           }
           this.correction = `On reconnaît le développement de l'identité remarquable : <br>
           $(a+b)^2=a^2+2ab+b^2$ avec $a=${rienSi1(a)}x$ et $b=${b}$.<br>
@@ -110,7 +110,7 @@ export default class FatorisationEgR extends ExerciceSimple {
           if (this.versionQcm) {
             this.question = `Une factorisation de $${expression}$ est :`
           } else {
-            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit de deux facteurs du premier degré" : ''}.`
+            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit (ou d'un carré) de deux facteurs" : ''}.`
           }
           this.correction = `On reconnaît le développement de l'identité remarquable : <br>
         $(a-b)^2=a^2-2ab+b^2$ avec $a=${rienSi1(a)}x$ et $b=${b}$.<br>
@@ -150,7 +150,7 @@ export default class FatorisationEgR extends ExerciceSimple {
           if (this.versionQcm) {
             this.question = `Une factorisation de $${expression}$ est :`
           } else {
-            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit de deux facteurs du premier degré" : ''}.`
+            this.question = `Factoriser $${expression}$${this.consigneProduit ? " sous la forme d'un produit (ou d'un carré) de deux facteurs" : ''}.`
           }
           this.correction = `On reconnaît le développement de l'identité remarquable : <br>
           $(a+b)(a-b)=a^2-b^2$ avec $a=${choix ? `${rienSi1(a)}x` : `${b}`}$ et $b=${choix ? `${b}` : `${rienSi1(a)}x`}$.<br>

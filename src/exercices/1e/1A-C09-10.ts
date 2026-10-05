@@ -51,8 +51,8 @@ export default class Puissances extends ExerciceQcmA {
     // Variante : les deux signes de d inversés
     const factFaux2 = `\\left(${reduireAxPlusB(fact1a, b + d)}\\right)\\left(${reduireAxPlusB(fact2a, b - d)}\\right)`
 
-    this.enonce = 'Soit $x$ un réel.<br>'
-    this.enonce += `À quelle expression est égale $\\left(${reduireAxPlusB(a, b)}\\right)^2-\\left(${reduireAxPlusB(c, d)}\\right)^2$ ?`
+  
+    this.enonce = `À quelle expression est égale $\\left(${reduireAxPlusB(a, b)}\\right)^2-\\left(${reduireAxPlusB(c, d)}\\right)^2$ ?`
 
     const ligneFact =
       cas === 1 ? `&=${miseEnEvidence(factBonne)}\\\\` : `&=${factBonne}\\\\`
