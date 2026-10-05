@@ -374,6 +374,51 @@ export function shuffle<T>(array: T[]): T[] {
   return arrayBis
 }
 
+/**
+ * Mélange un tableau en place en reproduisant exactement `array.sort(() => Math.random() - 0.5)`
+ * tel que l'exécute V8 (Chrome, Node), mais avec le même résultat dans tous les navigateurs.
+ *
+ * Le comparateur aléatoire étant incohérent, le résultat dépend de l'algorithme de tri du moteur
+ * (Firefox et Safari n'appellent pas `Math.random` dans le même ordre). Les exercices déjà publiés
+ * qui utilisaient ce tri doivent garder les mêmes tirages pour une graine donnée : ne pas modifier
+ * cet algorithme (insertion binaire pour moins de 64 éléments, comme V8).
+ * À partir de 64 éléments, on retombe sur le tri natif.
+ *
+ * Pour un nouvel exercice, préférer `shuffle`.
+ */
+export function sortRandomlyLikeV8<T>(array: T[]): T[] {
+  const n = array.length
+  if (n < 2) return array
+  if (n >= 64) return array.sort(() => Math.random() - 0.5)
+  // Plus longue séquence initiale déjà ordonnée (ou strictement décroissante, alors retournée)
+  const descendante = Math.random() - 0.5 < 0
+  let longueur = 2
+  while (longueur < n) {
+    const ordre = Math.random() - 0.5
+    if (descendante ? ordre >= 0 : ordre < 0) break
+    longueur++
+  }
+  if (descendante) {
+    for (let i = 0, j = longueur - 1; i < j; i++, j--) {
+      ;[array[i], array[j]] = [array[j], array[i]]
+    }
+  }
+  // Insertion binaire des éléments restants
+  for (let debut = longueur; debut < n; debut++) {
+    const pivot = array[debut]
+    let gauche = 0
+    let droite = debut
+    while (gauche < droite) {
+      const milieu = gauche + ((droite - gauche) >> 1)
+      if (Math.random() - 0.5 < 0) droite = milieu
+      else gauche = milieu + 1
+    }
+    for (let i = debut; i > gauche; i--) array[i] = array[i - 1]
+    array[gauche] = pivot
+  }
+  return array
+}
+
 export function shuffleJusqua<T>(array: T[], indice: number): T[] {
   if (indice > array.length || indice < 0 || indice === undefined) {
     return shuffle(array)

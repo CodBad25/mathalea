@@ -15,6 +15,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { sortRandomlyLikeV8 } from '../../lib/outils/arrayOutils'
 
 export const interactifReady = true
 
@@ -166,10 +167,11 @@ function creerListeArcs() {
     if (remaining === 0) {
       return bondPrecedent === 2 && premierBond === 2 ? undefined : []
     }
-    const bondsPossibles = [2, 4, 6]
-      .filter((bond) => bond <= remaining)
-      .filter((bond) => bondPrecedent !== 2 || bond !== 2)
-      .sort(() => Math.random() - 0.5)
+    const bondsPossibles = sortRandomlyLikeV8(
+      [2, 4, 6]
+        .filter((bond) => bond <= remaining)
+        .filter((bond) => bondPrecedent !== 2 || bond !== 2),
+    )
     for (const bond of bondsPossibles) {
       const extremite2 = (extremite1 + bond) % 12
       if (!arcPossible(extremite1, extremite2, bond)) continue
