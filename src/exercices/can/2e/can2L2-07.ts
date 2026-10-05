@@ -106,7 +106,7 @@ export default class EquationProduitNul extends ExerciceSimple {
       // En interactif, S= à la ligne devant le champ ; sur papier (PDF), consigne classique
       this.question = this.interactif
         ? `L'équation ${equation} a pour ensemble de solutions :<br>$S=$`
-        : `Résoudre dans $\\mathbb{R}$ l'équation ${equation}.`
+        : `Résoudre, dans $\\mathbb{R}$, l'équation ${equation}.`
       this.reponse = ensemble([petite, grande], false)
     }
   }
