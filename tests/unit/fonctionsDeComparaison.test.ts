@@ -5,6 +5,22 @@ import { fonctionComparaison } from '../../src/lib/interactif/comparisonFunction
 import { texNombre } from '../../src/lib/outils/texNombre'
 
 describe('fonctionComparaison', () => {
+  it('Accepte une variable romaine ou un × collé à une lettre (1AL10-1)', () => {
+    const reponse = '1.05\\times c_{n}-22'
+    for (const saisie of [
+      '1,05\\times c_\\mathrm{n}-22',
+      '1{,}05\\times c_{\\mathrm{n}}-22',
+      '1,05\\times\\mathrm{c}_n-22',
+      '1,05×c_n-22',
+    ]) {
+      expect(fonctionComparaison(saisie, reponse).isOk).toBe(true)
+      expect(
+        fonctionComparaison(saisie, reponse, { calculFormel: true }).isOk,
+      ).toBe(true)
+    }
+    expect(fonctionComparaison('1,05×c_n-23', reponse).isOk).toBe(false)
+  })
+
   it('Doit retourner true for si saisie et answer sont identiques', () => {
     let result = fonctionComparaison('test', 'test', { texteAvecCasse: true })
     expect(result.isOk).toBe(true)
