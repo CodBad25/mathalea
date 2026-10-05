@@ -2615,7 +2615,7 @@ describe('correction minimale (minimalCorrections)', () => {
     expect(code).not.toContain('Le PGCD est')
     // les deux réponses se suivent, séparées par un cadratin
     expect(code).toContain(
-      '$text(fill: #rgb("#F15929"), bold(6))$\u2003$text(fill: #rgb("#F15929"), bold(60))$',
+      '$text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(6))$\u2003$text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(60))$',
     )
   })
 
