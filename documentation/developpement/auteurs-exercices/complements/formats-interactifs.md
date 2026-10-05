@@ -1141,6 +1141,8 @@ handleAnswers(
 )
 ```
 
+(exemple minimal : voir plus bas pour le choix du mode et du barème.)
+
 Hors interactivité (`exercice.interactif` faux), `addMathaleaSolveur` n'écrit
 que l'équation (`$3x+5=17$`) : ni boutons, ni cadres, ni lignes d'étapes. Il
 n'y a donc rien à tester dans l'exercice. L'option `interactivityOn` n'a besoin
@@ -1156,12 +1158,72 @@ Deux variantes sont disponibles :
   contrôle le retournement du signe lors d'une transformation par un facteur
   négatif.
 
-En mode `entrainement`, une étape fausse est conservée en rouge et figée, puis
-une nouvelle ligne permet de reprendre depuis la dernière étape correcte. Les
-étapes fausses sont ignorées lors du contrôle d'équivalence et ne deviennent
-jamais la valeur finale du composant. En mode `evaluation`, la première étape
-fausse fige immédiatement le solveur ; le bouton standard comptabilise ensuite
-la question sur un point.
+Le `mode` choisit la façon de traiter une étape fausse :
+
+- `evaluation` : la première étape fausse fige immédiatement le solveur et la
+  question est comptée fausse. Elle vaut 1 point.
+- `entrainement` : une étape fausse est conservée en rouge et figée, puis une
+  nouvelle ligne permet de reprendre depuis la dernière étape correcte. Les
+  étapes fausses sont ignorées lors du contrôle d'équivalence et ne deviennent
+  jamais la valeur finale du composant. Dans un exercice interactif, avec
+  `baremeSolveur('entrainement')`, la question vaut 2 points : 0 si la solution
+  n'est pas trouvée, 1 si elle est trouvée malgré au moins une étape fausse, 2
+  si elle est trouvée sans aucune étape fausse. Dans un exercice non
+  interactif, c'est un brouillon sans note.
+
+Les exercices proposent deux paramètres, qui ne servent pas dans la même
+situation :
+
+- une case à cocher « Mode entrainement en non interactif » : l'élément
+  s'affiche alors en brouillon dans un exercice non interactif ;
+- un choix de barème, utilisé lorsque l'exercice est interactif (1 : sur
+  1 point, mode `evaluation`, valeur par défaut ; 2 : sur 2 points, mode
+  `entrainement` évalué). `formulaireBaremeSolveur()` fournit sa déclaration et
+  `modeSolveur()` convertit sa valeur en mode. `optionsSolveur()` combine les
+  deux paramètres et renvoie les options `mode` et `interactivityOn`
+  d'`addMathaleaSolveur()`.
+
+Le barème doit toujours être déclaré dans `handleAnswers()` avec
+`baremeSolveur(mode)` : c'est lui qui fixe le total de la question (1 ou
+2 points), conformément à la règle des points fixes par question. Le
+commentaire `commentaireSolveur` décrit ces options à l'enseignant.
+
+```ts
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
+
+// constructeur : les deux paramètres suivants libres, ici sup et sup2
+this.comment = commentaireSolveur
+this.besoinFormulaireCaseACocher = ['Mode entrainement en non interactif']
+this.sup = false
+this.besoinFormulaire2Numerique = formulaireBaremeSolveur()
+this.sup2 = 1
+
+// nouvelleVersion()
+texte += addMathaleaSolveur(this, i, {
+  initial: '3x+5=17',
+  ...optionsSolveur(this.interactif, this.sup, this.sup2),
+})
+handleAnswers(
+  this,
+  i,
+  {
+    reponse: { value: 'x=4' },
+    bareme: baremeSolveur(modeSolveur(this.sup2)),
+  },
+  { formatInteractif: 'mathalea-solveur' },
+)
+```
+
+Un exercice qui mélange des questions avec solveur et d'autres questions doit
+garder le même total pour chaque question quel que soit le tirage : voir
+`3L15-3`, où les questions sans solveur sont doublées avec le barème sur 2 points.
 
 Pour une inéquation résolue sous la forme `x<...`, `x\\leqslant...`, `x>...` ou
 `x\\geqslant...`, `showInterval: true` ajoute une représentation en lecture

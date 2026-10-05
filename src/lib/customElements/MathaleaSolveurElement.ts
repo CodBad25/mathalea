@@ -7,7 +7,9 @@ import {
   isEquivalentInequality,
   splitInequality,
 } from '../interactif/checks/inequalityChecks'
+import { pointsMaxDuBareme } from '../interactif/baremeExercice'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
+import { toutAUnPoint, toutPourUnPoint } from '../interactif/fonctionsBaremes'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice } from '../types'
 import {
@@ -19,7 +21,71 @@ import MathaleaCustomElement, {
 } from './MathaleaCustomElement'
 
 export type SolveurKind = 'equation' | 'inequation'
+/**
+ * - `evaluation` : la première étape fausse fige le solveur, la question est
+ *   comptée fausse (1 point au maximum).
+ * - `entrainement` : l'élève peut continuer et se corriger après une étape
+ *   fausse. Dans un exercice interactif, avec `baremeSolveur('entrainement')`,
+ *   la question vaut 2 points : 0 si la solution n'est pas trouvée, 1 si elle
+ *   est trouvée malgré au moins une étape fausse, 2 si elle est trouvée sans
+ *   aucune étape fausse. Dans un exercice non interactif, c'est un brouillon
+ *   sans note.
+ */
 export type SolveurMode = 'entrainement' | 'evaluation'
+
+/**
+ * Barème à déclarer dans `handleAnswers()` pour une question avec solveur.
+ * Il doit correspondre au mode utilisé lorsque l'exercice est interactif.
+ */
+export function baremeSolveur(
+  mode: SolveurMode,
+): (listePoints: number[]) => [number, number] {
+  return mode === 'entrainement' ? toutAUnPoint : toutPourUnPoint
+}
+
+/**
+ * Paramètre de formulaire (`besoinFormulaire2Numerique`...) permettant à
+ * l'enseignant de choisir le barème du solveur lorsque l'exercice est
+ * interactif. La valeur 1 (sur 1 point, mode `evaluation`) est la valeur par
+ * défaut à affecter au paramètre.
+ */
+export function formulaireBaremeSolveur(): [string, number, string] {
+  return [
+    'Barème',
+    2,
+    "1 : Sur 1 point : une étape fausse rend la question fausse\n2 : Sur 2 points : l'élève peut se corriger après une étape fausse mais perd 1 point",
+  ]
+}
+
+/** Convertit la valeur du paramètre de `formulaireBaremeSolveur()` en mode. */
+export function modeSolveur(choixBareme: unknown): SolveurMode {
+  return Number(choixBareme) === 2 ? 'entrainement' : 'evaluation'
+}
+
+/**
+ * Options `mode` et `interactivityOn` d'`addMathaleaSolveur()` pour un exercice
+ * qui propose à la fois le choix du barème (exercice interactif) et le mode
+ * brouillon (exercice non interactif, case à cocher `brouillon`).
+ */
+export function optionsSolveur(
+  interactif: boolean | undefined,
+  brouillon: unknown,
+  choixBareme: unknown,
+): { mode: SolveurMode; interactivityOn: boolean } {
+  if (interactif)
+    return { mode: modeSolveur(choixBareme), interactivityOn: true }
+  return {
+    mode: brouillon ? 'entrainement' : 'evaluation',
+    interactivityOn: Boolean(brouillon),
+  }
+}
+
+/** Texte du commentaire (`this.comment`) des exercices avec solveur. */
+export const commentaireSolveur = `Cet exercice propose un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.<br>
+Lorsque l'exercice est interactif, le barème est au choix :<br>
+- sur 1 point : la résolution s'arrête dès la première étape non équivalente et la question est comptée fausse ;<br>
+- sur 2 points (mode entraînement évalué) : l'élève peut se corriger après une étape fausse. Il obtient 2 points s'il trouve la solution sans aucune étape fausse, 1 point s'il la trouve malgré une ou plusieurs étapes fausses, 0 sinon.<br>
+Lorsque l'exercice n'est pas interactif, activer le mode entraînement affiche l'élément en version brouillon : les erreurs restent visibles et il n'y a pas de note.`
 
 export type MathaleaSolveurOptions = {
   id?: string
@@ -115,14 +181,28 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     const expectedValues = Array.isArray(expected)
       ? expected.map(String)
       : [String(expected ?? '')]
-    const isOk = expectedValues.some((candidate) =>
+    const isSolved = expectedValues.some((candidate) =>
       isConformToExpected(actual, candidate, element?.kind ?? 'equation'),
     )
+    const hasWrongStep = (element?.nbEtapesFausses ?? 0) > 0
+    // En mode entrainement, le second « champ » vaut 1 si aucune étape n'est fausse.
+    const points =
+      element?.mode === 'entrainement'
+        ? [isSolved ? 1 : 0, isSolved && !hasWrongStep ? 1 : 0]
+        : [isSolved ? 1 : 0]
+    const bareme =
+      exercice.autoCorrection[questionIndex]?.valeur?.bareme ?? toutPourUnPoint
+    const [nbBonnesReponses, nbReponses] = bareme(points)
+    const isOk = nbBonnesReponses === nbReponses
+    const resolu =
+      element?.kind === 'inequation' ? "L'inéquation" : "L'équation"
     const feedback = isOk
       ? ''
-      : element?.kind === 'inequation'
-        ? "La dernière inéquation n'est pas la solution attendue."
-        : "La dernière équation n'est pas la solution attendue."
+      : isSolved
+        ? `${resolu} est résolue mais au moins une étape était incorrecte.`
+        : element?.kind === 'inequation'
+          ? "La dernière inéquation n'est pas la solution attendue."
+          : "La dernière équation n'est pas la solution attendue."
 
     exercice.answers ??= {}
     if (element != null) {
@@ -135,8 +215,17 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     return {
       isOk,
       feedback,
-      score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+      score: { nbBonnesReponses, nbReponses },
     }
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
+    // Le barème s'applique à deux « champs » en mode entrainement (solution
+    // trouvée, aucune étape fausse) et à un seul en mode evaluation.
+    return pointsMaxDuBareme(
+      exercice.autoCorrection?.[questionIndex]?.valeur?.bareme,
+      2,
+    )
   }
 
   get kind(): SolveurKind {
@@ -149,6 +238,11 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     return this.getAttribute('mode') === 'evaluation'
       ? 'evaluation'
       : 'entrainement'
+  }
+
+  /** Nombre d'étapes évaluées et reconnues fausses (mode entrainement). */
+  get nbEtapesFausses(): number {
+    return this.invalidLineIndexes.size
   }
 
   get value(): string {

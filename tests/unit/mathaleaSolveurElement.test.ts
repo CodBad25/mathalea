@@ -25,7 +25,10 @@ import {
 } from '../../src/lib/customElements/MathaleaCustomElement'
 import {
   addMathaleaSolveur,
+  baremeSolveur,
   MathaleaSolveurElement,
+  modeSolveur,
+  optionsSolveur,
 } from '../../src/lib/customElements/MathaleaSolveurElement'
 import { isEquivalentInequality } from '../../src/lib/interactif/checks/inequalityChecks'
 import {
@@ -133,7 +136,7 @@ describe('MathaleaSolveurElement', () => {
       '.solver-field { display: block; min-width: 0; margin: 0; padding: 0; border: 0; background: transparent; }',
     )
     expect(solver?.querySelector('style')?.textContent).toContain(
-      'math-field { display: block !important; width: 100%; min-height: 2.75rem; margin: 0 !important; padding: 0; box-sizing: border-box; }',
+      'math-field { display: block !important; width: 100%; margin: 0 !important; padding: 0; box-sizing: border-box; }',
     )
     expect(solver?.querySelector('style')?.textContent).toContain(
       'math-field::part(container) { border: none !important; }',
@@ -365,6 +368,102 @@ describe('MathaleaSolveurElement', () => {
     expect(solver.querySelector('.message')?.textContent).toBe(
       "L'équation est résolue.",
     )
+  })
+
+  describe('barème', () => {
+    function creeSolveur(mode: 'entrainement' | 'evaluation') {
+      document.body.innerHTML = addMathaleaSolveur(exercice, 0, {
+        initial: '2x+4=10',
+        mode,
+      })
+      exercice.autoCorrection[0].valeur = {
+        reponse: { value: 'x=3' },
+        bareme: baremeSolveur(mode),
+      }
+      return document.querySelector(
+        'mathalea-solveur',
+      ) as MathaleaSolveurElement
+    }
+
+    function evalue(
+      solver: MathaleaSolveurElement,
+      rang: number,
+      ligne: string,
+    ) {
+      const input = solver.querySelectorAll('math-field')[rang] as
+        (HTMLElement & { value: string }) | undefined
+      if (input == null) throw new Error('Champ de saisie absent')
+      input.value = ligne
+      input.dispatchEvent(new InputEvent('input', { bubbles: true }))
+      solver.evaluate()
+    }
+
+    it('convertit le paramètre de formulaire en mode', () => {
+      expect(modeSolveur(1)).toBe('evaluation')
+      expect(modeSolveur('2')).toBe('entrainement')
+      expect(modeSolveur(undefined)).toBe('evaluation')
+    })
+
+    it('combine le mode brouillon (non interactif) et le barème (interactif)', () => {
+      expect(optionsSolveur(true, false, 2)).toEqual({
+        mode: 'entrainement',
+        interactivityOn: true,
+      })
+      expect(optionsSolveur(true, true, 1)).toEqual({
+        mode: 'evaluation',
+        interactivityOn: true,
+      })
+      expect(optionsSolveur(false, true, 2)).toEqual({
+        mode: 'entrainement',
+        interactivityOn: true,
+      })
+      expect(optionsSolveur(false, false, 2)).toEqual({
+        mode: 'evaluation',
+        interactivityOn: false,
+      })
+    })
+
+    it('mode evaluation : la question vaut 1 point et une étape fausse la rend fausse', () => {
+      const solver = creeSolveur('evaluation')
+      expect(MathaleaSolveurElement.pointsMaxQuestion(exercice, 0)).toBe(1)
+      evalue(solver, 1, '2x=5')
+      expect(MathaleaSolveurElement.verifQuestion(exercice, 0)).toMatchObject({
+        isOk: false,
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      })
+    })
+
+    it('mode entrainement : 2 points sans aucune étape fausse', () => {
+      const solver = creeSolveur('entrainement')
+      expect(MathaleaSolveurElement.pointsMaxQuestion(exercice, 0)).toBe(2)
+      evalue(solver, 1, 'x=3')
+      expect(MathaleaSolveurElement.verifQuestion(exercice, 0)).toEqual({
+        isOk: true,
+        feedback: '',
+        score: { nbBonnesReponses: 2, nbReponses: 2 },
+      })
+    })
+
+    it('mode entrainement : 1 point si la solution est trouvée malgré une étape fausse', () => {
+      const solver = creeSolveur('entrainement')
+      evalue(solver, 1, '2x=5')
+      evalue(solver, 2, '2x=6')
+      evalue(solver, 3, 'x=3')
+      const resultat = MathaleaSolveurElement.verifQuestion(exercice, 0)
+      expect(resultat.isOk).toBe(false)
+      expect(resultat.score).toEqual({ nbBonnesReponses: 1, nbReponses: 2 })
+      expect(resultat.feedback).toContain('étape était incorrecte')
+    })
+
+    it("mode entrainement : 0 point si la solution n'est pas trouvée", () => {
+      const solver = creeSolveur('entrainement')
+      evalue(solver, 1, '2x=5')
+      evalue(solver, 2, '2x=6')
+      expect(MathaleaSolveurElement.verifQuestion(exercice, 0)).toMatchObject({
+        isOk: false,
+        score: { nbBonnesReponses: 0, nbReponses: 2 },
+      })
+    })
   })
 })
 

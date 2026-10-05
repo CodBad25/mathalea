@@ -1,5 +1,12 @@
 import { bleuMathalea } from '../../lib/colors'
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -50,11 +57,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
     super()
     this.niveau = niveau
 
-    this.comment = `Les équations sont de la forme :<br>$ax+b=cx+d$<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$${this.niveau === 2 ? '<br>$x^2+a=(x+b)^2$' : ''}<br>avec des nombres à un chiffre${this.niveau === 2 ? ' (sauf pour le dernier type où $a$ et $b$ sont compris entre $-10$ et $10$)' : ''}.<br><br>
-    Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = `Les équations sont de la forme :<br>$ax+b=cx+d$<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$${this.niveau === 2 ? '<br>$x^2+a=(x+b)^2$' : ''}<br>avec des nombres à un chiffre${this.niveau === 2 ? ' (sauf pour le dernier type où $a$ et $b$ sont compris entre $-10$ et $10$)' : ''}.<br><br>${commentaireSolveur}`
     this.spacing = 2
     this.spacingCorr = context.isHtml ? 3 : 2
     this.correctionDetailleeDisponible = true
@@ -82,6 +85,8 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
     this.sup2 = false
     this.besoinFormulaire3CaseACocher = ['Mode entrainement en non interactif']
     this.sup3 = false
+    this.besoinFormulaire4Numerique = formulaireBaremeSolveur()
+    this.sup4 = 1
   }
 
   nouvelleVersion() {
@@ -323,8 +328,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
         texte = addMathaleaSolveur(this, i, {
           initial: equation.slice(1, -1),
           kind: 'equation',
-          mode: this.sup3 && !this.interactif ? 'entrainement' : 'evaluation',
-          interactivityOn: this.interactif || Boolean(this.sup3),
+          ...optionsSolveur(this.interactif, this.sup3, this.sup4),
         })
         handleAnswers(
           this,
@@ -333,6 +337,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
             reponse: {
               value: `x=${reponse.simplifie().texFSD}`,
             },
+            bareme: baremeSolveur(modeSolveur(this.sup4)),
           },
           { formatInteractif: 'mathalea-solveur' },
         )

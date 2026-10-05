@@ -25,6 +25,7 @@ import EquationsPremierDegre from '../../src/exercices/4e/4L20'
 import EquationsPasAPas from '../../src/exercices/4e/4L20-1'
 import QuatriemeProportionnelle from '../../src/exercices/4e/4P10-2'
 import EquationsPremierDegreBP from '../../src/exercices/bp2/bp2autoK1'
+import { pointsMaxExercice } from '../../src/lib/interactif/baremeExercice'
 import { setOutputHtml, setOutputLatex } from '../../src/modules/context'
 
 describe('exercices modèles de mathalea-solveur', () => {
@@ -230,6 +231,67 @@ describe('exercices modèles de mathalea-solveur', () => {
       })
     },
   )
+
+  it.each([
+    ['4L20', EquationsPremierDegre, 'sup5'],
+    ['2L21-4', EquationsPremierDegre2nde, 'sup5'],
+    ['3L13', EquationsPremierDegre3e, 'sup5'],
+    ['bp2autoK1', EquationsPremierDegreBP, 'sup5'],
+    ['2L21-6', EquationAvecQuotient, 'sup2'],
+    ['3L13-1', EquationsAvecDistributivite3e, 'sup4'],
+    ['2L21-5', EquationsAvecDistributivite2nde, 'sup4'],
+    ['3L13-2', EquationsProduitsEnCroix3e, 'sup3'],
+    ['2L21-3', EquationsProduitsEnCroix2nde, 'sup3'],
+    ['4L15-1', EquationsProduitsEnCroix4e, 'sup3'],
+    ['4C20-3', EquationsAvecDistances, 'sup3'],
+    ['4P10-2', QuatriemeProportionnelle, 'sup3'],
+    ['4L20-1', EquationsPasAPas, 'sup2'],
+    ['2L30-6', InequationsPasAPas, 'sup3'],
+  ])(
+    'propose pour %s un barème sur 1 ou sur 2 points en mode interactif',
+    (_ref, ExerciseClass, option) => {
+      const genere = (choix: number) => {
+        const exercice = new ExerciseClass()
+        exercice.numeroExercice = 17
+        exercice.interactif = true
+        Object.assign(exercice, { [option]: choix })
+        exercice.nouvelleVersion()
+        return exercice
+      }
+
+      const surUnPoint = genere(1)
+      surUnPoint.listeQuestions.forEach((question) =>
+        expect(question).toContain('mode="evaluation"'),
+      )
+      expect(pointsMaxExercice(surUnPoint)).toBe(surUnPoint.nbQuestions)
+
+      const surDeuxPoints = genere(2)
+      surDeuxPoints.listeQuestions.forEach((question) =>
+        expect(question).toContain('mode="entrainement"'),
+      )
+      expect(pointsMaxExercice(surDeuxPoints)).toBe(
+        2 * surDeuxPoints.nbQuestions,
+      )
+    },
+  )
+
+  it('garde 2 points par question dans 3L15-3 avec le barème sur 2 points', () => {
+    const exercice = new EquationsMelees()
+    exercice.numeroExercice = 18
+    exercice.interactif = true
+    exercice.sup3 = 2
+    exercice.nbQuestions = 6
+    exercice.nouvelleVersion()
+
+    expect(
+      exercice.autoCorrection.map((_, i) =>
+        pointsMaxExercice({
+          ...exercice,
+          autoCorrection: [exercice.autoCorrection[i]],
+        } as never),
+      ),
+    ).toEqual(new Array(6).fill(2))
+  })
 
   it('active les questions avec solveur de 3L15-3 en mode entraînement hors interactivité', () => {
     const exercice = new EquationsMelees()

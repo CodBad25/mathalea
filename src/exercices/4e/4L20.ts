@@ -12,7 +12,14 @@ import Exercice from '../Exercice'
 
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { sp } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -50,10 +57,7 @@ export default class ExerciceEquation1 extends Exercice {
 
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = commentaireSolveur
 
     this.besoinFormulaireCaseACocher = ['Avec des nombres relatifs']
     this.besoinFormulaire2Texte = [
@@ -80,6 +84,8 @@ export default class ExerciceEquation1 extends Exercice {
     this.sup2 = '1-2-3-4-5' // Choix du type d'équation
     this.sup3 = true
     this.sup4 = false
+    this.besoinFormulaire5Numerique = formulaireBaremeSolveur()
+    this.sup5 = 1
     this.nbQuestions = 6
   }
 
@@ -378,16 +384,17 @@ export default class ExerciceEquation1 extends Exercice {
           ? addMathaleaSolveur(this, i, {
               initial: texte.slice(1, -1),
               kind: 'equation',
-              mode:
-                this.sup4 && !this.interactif ? 'entrainement' : 'evaluation',
-              interactivityOn: this.interactif || this.sup4,
+              ...optionsSolveur(this.interactif, this.sup4, this.sup5),
               variable: inconnue,
             })
           : texte
         handleAnswers(
           this,
           i,
-          { reponse: { value: `${inconnue}=${reponse.texFSD}` } },
+          {
+            reponse: { value: `${inconnue}=${reponse.texFSD}` },
+            bareme: baremeSolveur(modeSolveur(this.sup5)),
+          },
           { formatInteractif: 'mathalea-solveur' },
         )
         this.listeCorrections[i] = texteCorr

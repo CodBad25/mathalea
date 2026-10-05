@@ -1,4 +1,11 @@
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   ecritureAlgebrique,
@@ -30,13 +37,12 @@ export const refs = {
 export default class ResoudreEquationAvecQuotient extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = commentaireSolveur
 
     this.besoinFormulaireCaseACocher = ['Mode entrainement en non interactif']
     this.sup = false
+    this.besoinFormulaire2Numerique = formulaireBaremeSolveur()
+    this.sup2 = 1
     this.nbQuestions = 1
   }
 
@@ -69,8 +75,7 @@ export default class ResoudreEquationAvecQuotient extends Exercice {
       const texte = addMathaleaSolveur(this, i, {
         initial: equation(),
         kind: 'equation',
-        mode: this.sup && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup),
+        ...optionsSolveur(this.interactif, this.sup, this.sup2),
       })
 
       let texteCorr = `Pour tous réels $a$, $b$, $c$, $d$ tels que $b$ et $d$ soient non nuls, $\\dfrac{a}{b}=\\dfrac{c}{d}$ si et seulement si $ad=bc$.`
@@ -99,6 +104,7 @@ ${rienSi1(e * a)}x&=${c * d - b * e}`
           reponse: {
             value: `x=${resultatFinal.texFractionSimplifiee}`,
           },
+          bareme: baremeSolveur(modeSolveur(this.sup2)),
         },
         { formatInteractif: 'mathalea-solveur' },
       )

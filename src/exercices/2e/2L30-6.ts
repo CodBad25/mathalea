@@ -1,4 +1,11 @@
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -35,16 +42,15 @@ type InequationData = {
 export default class ResoudreInequationPasAPas extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'inéquation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = commentaireSolveur
     this.besoinFormulaireCaseACocher = [
       'Afficher la représentation graphique des solutions',
     ]
     this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
     this.sup = true
     this.sup2 = false
+    this.besoinFormulaire3Numerique = formulaireBaremeSolveur()
+    this.sup3 = 1
     this.consigne = 'Résoudre les inéquations suivantes pas à pas.'
     this.nbQuestions = 2
     this.spacing = 2
@@ -58,8 +64,7 @@ export default class ResoudreInequationPasAPas extends Exercice {
       this.listeQuestions[i] = addMathaleaSolveur(this, i, {
         initial: data.inequation,
         kind: 'inequation',
-        mode: this.sup2 && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup2),
+        ...optionsSolveur(this.interactif, this.sup2, this.sup3),
         showInterval: Boolean(this.sup),
         intervalMin: -6,
         intervalMax: 6,
@@ -72,7 +77,10 @@ export default class ResoudreInequationPasAPas extends Exercice {
       handleAnswers(
         this,
         i,
-        { reponse: { value: data.solution } },
+        {
+          reponse: { value: data.solution },
+          bareme: baremeSolveur(modeSolveur(this.sup3)),
+        },
         { formatInteractif: 'mathalea-solveur' },
       )
       i++
