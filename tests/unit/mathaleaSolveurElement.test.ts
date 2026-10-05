@@ -133,7 +133,7 @@ describe('MathaleaSolveurElement', () => {
       '.solver-field { display: block; min-width: 0; margin: 0; padding: 0; border: 0; background: transparent; }',
     )
     expect(solver?.querySelector('style')?.textContent).toContain(
-      'math-field { display: block !important; width: 100%; min-height: 2.75rem; margin: 0 !important; padding: 0; box-sizing: border-box; }',
+      'math-field { display: block !important; width: 100%; margin: 0 !important; padding: 0; box-sizing: border-box; }',
     )
     expect(solver?.querySelector('style')?.textContent).toContain(
       'math-field::part(container) { border: none !important; }',
