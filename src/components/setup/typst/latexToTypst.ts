@@ -214,9 +214,11 @@ export const MATHALEA_TASKS_HELPER = `#let mathalea-items-questions(corps) = {
 #let mathalea-colonnes-equilibrees(items, largeur, gouttiere, retrait) = {
   let n = items.len()
   let plus-large = calc.max(0pt, ..items.map(item => measure(item).width))
-  range(n, 0, step: -1)
+  let colonnes = range(n, 0, step: -1)
     .filter(c => calc.ceil(n / calc.ceil(n / c)) == c)
     .find(c => (largeur - (c - 1) * gouttiere) / c - retrait >= plus-large)
+  // aucune proposition ne tient sur une ligne, même seule : une colonne
+  if colonnes == none { 1 } else { colonnes }
 }
 // numéro aligné sur la première ligne de l'énoncé, y compris quand celui-ci
 // contient un bloc (QCM, figure) : taskize alignerait alors par le haut.

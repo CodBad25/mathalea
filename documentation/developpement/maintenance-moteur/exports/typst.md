@@ -970,7 +970,9 @@ Deux différences avec les listes de questions :
     pleines sauf la dernière : 4, 2 ou 1 pour quatre propositions) où la
     proposition la plus large tient sur une ligne. Quatre fractions courtes
     s'étalent sur quatre, des phrases moyennes passent sur deux lignes de deux,
-    une phrase longue retombe sur une colonne. L'`auto-fit` de `taskize`
+    une phrase longue retombe sur une colonne (y compris quand aucune proposition
+    ne tient sur une ligne : `mathalea-colonnes-equilibrees` renvoie alors `1`,
+    et non `none`, que `taskize` refuse comme nombre de colonnes). L'`auto-fit` de `taskize`
     pouvait choisir trois colonnes (la quatrième proposition seule sur sa
     ligne) ou, en mode `fill`, étaler une proposition sur plusieurs colonnes ;
   - **au moins une proposition est une figure : 1 colonne.** `auto-fit` serait
