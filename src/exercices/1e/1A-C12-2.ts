@@ -1,6 +1,8 @@
 import AutoQ4AGt2026 from '../EAMPremiere/EAM-AGTechno-2026-Q4'
 import { genereReponsesCourtes } from '../ExerciceQcmACourt'
+import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 
 export const dateDeModifImportante = '30/09/2026'
 
@@ -21,8 +23,11 @@ export const dateDePublication = '06/08/2026'
  */
 export default class ConvertirCelsiusEnFahrenheit extends AutoQ4AGt2026 {
   reponseCourte = () => this.reponses[0].slice(1).split('\\,^')[0]
-  correctionCourte = () =>
-    `En appliquant la formule $F=1,8C+32$, on obtient $F=${miseEnEvidence(this.reponseCourte())}$.`
+  correctionCourte = () => {
+    const c = this.temperatureCelsius
+    return `On applique la formule $F=1,8C+32$ avec $C=${texNombre(c, 2)}$ :<br>
+$F=1,8\\times ${ecritureParentheseSiNegatif(c)}+32=${texNombre(1.8 * c, 2)}+32=${miseEnEvidence(this.reponseCourte())}$`
+  }
   enonceCourt = () =>
     this.enonce.replace(
       /,\s*(?:sa conversion|la température d'ébulition de l'eau) en degrés Fahrenheit est donc :<br>/,
