@@ -1,6 +1,9 @@
 import { addTableauSignesVariations } from '../lib/customElements/TableauSignesVariationsElement'
 import { handleAnswers } from '../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive, type OptionsChamp } from '../lib/interactif/questionMathLive'
+import {
+  ajouteChampTexteMathLive,
+  type OptionsChamp,
+} from '../lib/interactif/questionMathLive'
 import { KeyboardType } from '../lib/interactif/claviers/keyboard'
 import type { TableauSVConfig } from '../lib/interactif/tableauSignesVariations/types'
 import type { CompareFunction } from '../lib/types'
@@ -31,16 +34,26 @@ export function genereReponsesCourtes(exercice: ExerciceAvecSaisie) {
         .trim()
     const enonce = exercice.enonceCourt?.() ?? exercice.enonce
     if (exercice.questionJamaisPosee(i, enonce, reponse)) {
-      exercice.listeQuestions[i] = enonce + (exercice.interactif
-        ? `<br>${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase, exercice.optionsChampReponseCourte)}`
-        : '')
-      exercice.listeCorrections[i] = exercice.correctionCourte?.() ?? exercice.correction ?? ''
-      handleAnswers(exercice, i, {
-        reponse: {
-          value: reponse,
-          ...(exercice.compareReponseCourte ? { compare: exercice.compareReponseCourte } : {}),
+      exercice.listeQuestions[i] =
+        enonce +
+        (exercice.interactif
+          ? `<br>${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase, exercice.optionsChampReponseCourte)}`
+          : '')
+      exercice.listeCorrections[i] =
+        exercice.correctionCourte?.() ?? exercice.correction ?? ''
+      handleAnswers(
+        exercice,
+        i,
+        {
+          reponse: {
+            value: reponse,
+            ...(exercice.compareReponseCourte
+              ? { compare: exercice.compareReponseCourte }
+              : {}),
+          },
         },
-      }, { formatInteractif: 'mathalea-mathfield' })
+        { formatInteractif: 'mathalea-mathfield' },
+      )
       i++
     }
     if (exercice.sup) break
@@ -60,17 +73,20 @@ export function genereTableauxDeSignes(
 ) {
   exercice.consigne = ''
   for (let i = 0, cpt = 0; i < exercice.nbQuestions && cpt < 30; cpt++) {
-    if (exercice.sup && exercice.versionOriginale != null) exercice.versionOriginale()
+    if (exercice.sup && exercice.versionOriginale != null)
+      exercice.versionOriginale()
     else exercice.versionAleatoire()
 
     const enonce = exercice.enonceCourt?.() ?? exercice.enonce
     if (exercice.questionJamaisPosee(i, enonce)) {
-      exercice.listeQuestions[i] = enonce + (exercice.interactif
-        ? `<br>${addTableauSignesVariations(exercice, i, {
-          config: exercice.configTableauSignes(),
-          bareme: 1,
-        })}`
-        : '')
+      exercice.listeQuestions[i] =
+        enonce +
+        (exercice.interactif
+          ? `<br>${addTableauSignesVariations(exercice, i, {
+              config: exercice.configTableauSignes(),
+              bareme: 1,
+            })}`
+          : '')
       exercice.listeCorrections[i] = exercice.correction ?? ''
       i++
     }
@@ -90,7 +106,7 @@ export default class ExerciceQcmACourt extends ExerciceQcmA {
   constructor() {
     super()
     this.sup3 = false
-    this.besoinFormulaire3CaseACocher = ['Mode QCM', false]
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
   }
 
   nouvelleVersion() {

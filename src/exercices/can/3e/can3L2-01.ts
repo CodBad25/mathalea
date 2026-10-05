@@ -311,7 +311,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
       distracteursSet.add(`$\\dfrac{${Math.abs(n - a)}}{${d}}x$`)
       distracteursSet.add(`$-\\dfrac{${Math.abs(n - a)}}{${d}}x$`)
 
-      // Formatage de la bonne réponse en mode QCM
+      // Formatage de la bonne réponse en Version QCM
       const bonneReponse = String(
         Array.isArray(this.reponse) ? this.reponse[0] : this.reponse,
       )

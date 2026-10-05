@@ -17,7 +17,7 @@ export const dateDeModifImportante = '27/08/2025'
 /**
  * Écrire une fraction avec un nouveau dénominateur qui est un multiple de son dénominateur (ce multiple est inférieur à une valeur maximale de 11 par défaut)
  * @author Rémi Angot
- * @author Jean-claude Lhote (Mode QCM et alternance numérateur / dénominateur)
+ * @author Jean-claude Lhote (Version QCM et alternance numérateur / dénominateur)
  */
 export const uuid = '06633'
 
