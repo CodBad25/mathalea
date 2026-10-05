@@ -7,6 +7,8 @@ uniquement les commandes de terminal et de Git nécessaires pour commencer.
 
 Installez Node.js, Git et un éditeur, dans cet ordre.
 
+Si vous réinstallez le dossier pour partir d'un répertoire complètement nettoyé (suite à des erreurs), la réinstallation de l'editeur est facultative.
+
 ### Node.js
 
 Version `>=22.13`, qui fournit Corepack (nécessaire à `pnpm`, voir plus bas).
@@ -78,6 +80,8 @@ Toutes les commandes suivantes doivent être lancées depuis la racine du dépô
 le dossier qui contient `package.json`.
 
 ## Récupérer le projet
+
+Sous Windows, la commande `corepack enable` doit s'exécuter dans une console lancée en tant qu'administrateur.
 
 ```sh
 git clone https://forge.apps.education.fr/coopmaths/mathalea.git
