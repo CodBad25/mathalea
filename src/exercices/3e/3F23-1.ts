@@ -47,7 +47,7 @@ export const dateDeModifImportante = '20/08/2026'
  * membre sans changer de signe, quotient inversé, développement incomplet).
  */
 
-// En mode QCM, l'énoncé énonce directement la question à choix ("... est :") ;
+// En Version QCM, l'énoncé énonce directement la question à choix ("... est :") ;
 // en mode calcul, il garde la formulation à l'infinitif ("Déterminer ...").
 function consigneQuestion(m: number, expr: string, versionQcm: boolean) {
   return versionQcm

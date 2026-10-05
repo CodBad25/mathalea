@@ -31,7 +31,7 @@ export default class CalculerUneResistance extends AutoQ7AGns2026 {
     this.spacing = 1.5
     this.besoinFormulaireCaseACocher = false
     this.sup3 = false
-    this.besoinFormulaire3CaseACocher = ['Mode QCM', false]
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
     this.versionAleatoire()
   }
 

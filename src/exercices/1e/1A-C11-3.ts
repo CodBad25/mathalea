@@ -71,8 +71,8 @@ export default class Auto1AC11c extends ExerciceQcmACourt {
   // seulement l'expression saisie sinon (« u = » est écrit devant le champ)
   private resultat(expression: string) {
     return this.sup3
-      ? `${miseEnEvidence('u')}&${miseEnEvidence(`=${expression}`)}`
-      : `u&= ${miseEnEvidence(expression)}`
+      ? `${miseEnEvidence('u~')}&${miseEnEvidence(`=${expression}`)}`
+      : `u &= ${miseEnEvidence(expression)}`
   }
 
   versionOriginale: () => void = () => {
