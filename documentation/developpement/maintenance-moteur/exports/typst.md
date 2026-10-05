@@ -29,6 +29,20 @@ L'éditeur est CodeMirror 6, configuré par `editor/typstEditorSetup.ts` (`typst
 - **Sélection** : `app.css` redéfinit globalement `::selection` avec une couleur de texte noire, illisible sur le fond sombre de l'éditeur. `drawSelection()` dessine le fond de sélection et un correctif de thème (`Prec.highest`) rétablit `color: inherit` sur le texte sélectionné.
 - **Repliage** : il n'y a pas d'arbre syntaxique exploitable, le `foldService` se fonde donc sur l'indentation — ce qui correspond à la structure du code généré (exercices, corrections et listes de questions sont des blocs indentés).
 
+## Réglages numériques de mise en page
+
+`normalizeTypstLayoutOptions` valide la taille du texte, l'interligne et les
+espacements entre mots, exercices et questions. Un champ numérique vide ou
+invalide reprend sa valeur par défaut : `null`, `undefined`, les valeurs non
+finies et négatives ne doivent pas être interpolées dans le code Typst
+(`nullem`, `undefinedpt`…). Les espacements nuls sont conservés ; la taille du
+texte doit être strictement positive.
+
+Cette normalisation s'applique aux préférences et liens restaurés, à la
+validation des réglages dans `Typst.svelte`, ainsi qu'aux deux générateurs
+`buildTypstDocument` et `buildStandaloneExerciseCode`, pour protéger aussi les
+exports autonomes.
+
 ## Erreurs de compilation
 
 `typstDiagnostics.ts` transforme les lignes brutes renvoyées par le compilateur (format « unix » : `main.typ:ligne:colonne[-ligne:colonne]: sévérité: message`, positions comptées à partir de 1) en `TypstDiagnostic` : position, sévérité, message traduit en français et piste de résolution. La table de règles (`RULES`) va du plus spécifique au plus général ; un message non couvert reste affiché en anglais, jugé plus utile qu'une approximation, et le message d'origine reste consultable dans le panneau. Un même message répété sur une même ligne n'est affiché qu'une fois, et un diagnostic venant d'un paquet importé est signalé comme tel (sa ligne ne correspond à rien dans l'éditeur).

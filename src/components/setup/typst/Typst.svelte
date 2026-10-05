@@ -58,7 +58,7 @@
     getGeneratedExerciseCode,
     harvestCarryOver,
     subjectEditorCode,
-    normalizeTypstLineSpacing,
+    normalizeTypstLayoutOptions,
     parseNumberingLiteral,
     questionNumberingLabel,
     type ActiveCoverTemplate,
@@ -362,15 +362,14 @@
       restoredDocumentOptions.coverPage = sanitizeCoverPage(
         restoredDocumentOptions.coverPage,
       )
-      restoredDocumentOptions.lineSpacing = normalizeTypstLineSpacing(
-        restoredDocumentOptions.lineSpacing,
-      )
     }
     if (parsed.carryOver != null) {
       urlCarryOver = parsed.carryOver
     }
   }
-  let documentOptions: TypstDocumentOptions = $state(restoredDocumentOptions)
+  let documentOptions: TypstDocumentOptions = $state(
+    normalizeTypstLayoutOptions(restoredDocumentOptions),
+  )
 
   /**
    * Page de garde restaurée d'un lien partagé ou des préférences : un réglage
@@ -2671,9 +2670,7 @@
 
   /** Regénère le code à partir des réglages du document (interligne...) */
   function applyDocumentOptions() {
-    documentOptions.lineSpacing = normalizeTypstLineSpacing(
-      documentOptions.lineSpacing,
-    )
+    documentOptions = normalizeTypstLayoutOptions(documentOptions)
     // moins de sujets qu'avant : celui qu'on regardait peut ne plus exister
     if (previewVersion >= Math.max(1, documentOptions.nbVersions)) {
       previewVersion = 0

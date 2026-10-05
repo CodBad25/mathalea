@@ -10,6 +10,7 @@ import {
   getGeneratedCanRowCode,
   getGeneratedExerciseCode,
   harvestCarryOver,
+  normalizeTypstLayoutOptions,
   subjectEditorCode,
   type TypstDocumentOptions,
   type TypstExerciseInput,
@@ -38,14 +39,60 @@ const shouldRunTypstCliTests = () =>
   (process.env.CI == null && hasTypstCli())
 
 describe('buildTypstDocument', () => {
-  it('remplace un interligne absent par la valeur par défaut', () => {
-    const code = buildTypstDocument([exercise()], {
-      ...defaultTypstDocumentOptions,
-      lineSpacing: null as unknown as number,
-    })
+  it.each([null, undefined, NaN, Infinity, -1, '0,8'])(
+    'remplace les réglages de mise en page invalides (%s) avant génération',
+    (value) => {
+      const options = {
+        ...defaultTypstDocumentOptions,
+        fontSize: value,
+        lineSpacing: value,
+        wordSpacing: value,
+        exerciseSpacing: value,
+        questionsGutter: value,
+      } as TypstDocumentOptions
+      const inputs = [
+        exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+      ]
+      expect(buildTypstDocument(inputs, options)).toBe(
+        buildTypstDocument(inputs),
+      )
+      expect(
+        buildTypstDocument(inputs, options, {}, [], { exportMode: true }),
+      ).toBe(
+        buildTypstDocument(inputs, defaultTypstDocumentOptions, {}, [], {
+          exportMode: true,
+        }),
+      )
+      expect(buildStandaloneExerciseCode(inputs, 1, options)).toBe(
+        buildStandaloneExerciseCode(inputs, 1),
+      )
+      // Le chargement ne modifie pas les options reçues par l'appelant.
+      expect(options.exerciseSpacing).toBe(value)
+    },
+  )
 
-    expect(code).toContain('#set par(leading: 0.65em)')
-    expect(code).not.toContain('nullem')
+  it('conserve les espacements nuls et les valeurs décimales valides', () => {
+    const options = {
+      ...defaultTypstDocumentOptions,
+      fontSize: 12.5,
+      lineSpacing: 0.8,
+      wordSpacing: 105,
+      exerciseSpacing: 0,
+      questionsGutter: 0,
+    }
+    expect(normalizeTypstLayoutOptions(options)).toEqual(options)
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+      options,
+    )
+    expect(code).toContain('#let taille-texte = 12.5pt')
+    expect(code).toContain('#set par(leading: 0.8em)')
+    expect(code).toContain('spacing: 105%')
+    expect(code).toContain('exercise-above: 0em')
+    expect(code).toContain('#let interligne-questions = 0em')
+    expect(
+      normalizeTypstLayoutOptions({ ...options, fontSize: 0 }).fontSize,
+    ).toBe(defaultTypstDocumentOptions.fontSize)
   })
 
   it('génère un document avec en-tête, exercice et correction', () => {
