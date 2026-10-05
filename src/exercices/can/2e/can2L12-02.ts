@@ -34,6 +34,12 @@ export default class ExprimerEnFonction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    // En QCM, toute l'égalité est mise en évidence ; sinon seule l'expression saisie
+    // (« X = » est écrit devant le champ)
+    const egalite = (lettre: string, expression: string) =>
+      this.versionQcm
+        ? miseEnEvidence(`${lettre} = ${expression}`)
+        : `${lettre} = ${miseEnEvidence(expression)}`
     const choixQ = this.quotaChoice('choixQ', [true, false])
 
     if (context.isAmc) this.versionQcm = false
@@ -109,10 +115,10 @@ export default class ExprimerEnFonction extends ExerciceSimple {
         this.correction = choixQ
           ? `On part de la formule : $F = \\dfrac{9}{5}C + 32$.<br>
 En isolant  $C$, on obtient  : $F - 32 = \\dfrac{9}{5}C$.<br>
-En multipliant les deux membres par $\\dfrac{5}{9}$, on obtient  : $${miseEnEvidence('C = \\dfrac{5}{9}(F - 32)')}$.`
+En multipliant les deux membres par $\\dfrac{5}{9}$, on obtient  : $${egalite('C', '\\dfrac{5}{9}(F - 32)')}$.`
           : `On part de la formule : $C = \\dfrac{5}{9}(F - 32)$<br>
 En multipliant les deux membres par $\\dfrac{9}{5}$, on obtient : $\\dfrac{9}{5}C = F - 32$.<br>
-Puis en isolant  $F$, on obtient : $${miseEnEvidence('F = \\dfrac{9}{5}C + 32')}$.`
+Puis en isolant  $F$, on obtient : $${egalite('F', '\\dfrac{9}{5}C + 32')}$.`
         break
       case 2:
         this.question = `Le taux d'évolution $T$ entre une valeur initiale $I$ et une valeur finale $F$ est donné par la formule : <br>`
@@ -156,11 +162,11 @@ Puis en isolant  $F$, on obtient : $${miseEnEvidence('F = \\dfrac{9}{5}C + 32')}
           this.correction = `On part de la formule : $T = \\dfrac{F-I}{I}$.<br>
 En multipliant  par $I$ les deux membres, on obtient : $TI = F - I$.<br>
 En isolant $I$ et en factorisant, on obtient : $TI + I = F$, soit $I(T + 1) = F$.<br>
-Donc : $${miseEnEvidence('I = \\dfrac{F}{1 + T}')}$.`
+Donc : $${egalite('I', '\\dfrac{F}{1 + T}')}$.`
         } else {
           this.correction = `On part de la formule : $F = I(1 + T)$.<br>
 En divisant les deux membres par $I$, on obtient : $\\dfrac{F}{I} = 1 + T$.<br>
-En isolant $T$, on obtient : $${miseEnEvidence('T = \\dfrac{F}{I} - 1 = \\dfrac{F - I}{I}')}$.`
+En isolant $T$, on obtient : $T = \\dfrac{F}{I} - 1$, soit $${egalite('T', '\\dfrac{F - I}{I}')}$.`
         }
         break
 
@@ -206,12 +212,12 @@ En isolant $T$, on obtient : $${miseEnEvidence('T = \\dfrac{F}{I} - 1 = \\dfrac{
         if (choixQ) {
           this.correction = `On part de la formule : $A = \\dfrac{(b + B) \\times h}{2}$.<br>
 En multipliant les deux membres par $2$, on obtient : $2A = (b + B) \\times h$.<br>
-En isolant $h$, on obtient : $${miseEnEvidence('h = \\dfrac{2A}{b + B}')}$.`
+En isolant $h$, on obtient : $${egalite('h', '\\dfrac{2A}{b + B}')}$.`
         } else {
           this.correction = `On part de la formule : $A = \\dfrac{(b + B) \\times h}{2}$.<br>
 En multipliant les deux membres par $2$, on obtient : $2A = (b + B) \\times h$.<br>
 En divisant par $h$, on obtient : $\\dfrac{2A}{h} = b + B$.<br>
-En isolant $B$, on obtient : $${miseEnEvidence('B = \\dfrac{2A}{h} - b')}$.`
+En isolant $B$, on obtient : $${egalite('B', '\\dfrac{2A}{h} - b')}$.`
         }
         break
       case 3:
@@ -219,7 +225,7 @@ En isolant $B$, on obtient : $${miseEnEvidence('B = \\dfrac{2A}{h} - b')}$.`
         this.question += context.isHtml
           ? '$P=2(L+\\ell)$<br>'
           : texteCentre('$P=2(L+\\ell)$')
-        this.reponse = choixQ ? '$\\dfrac{P}{2}-l$' : '$\\dfrac{P}{2}-L$'
+        this.reponse = choixQ ? '$\\dfrac{P}{2}-\\ell$' : '$\\dfrac{P}{2}-L$'
         if (this.versionQcm) {
           this.question += choixQ
             ? `L'expression permettant, à partir de cette formule, d'exprimer $L$ est : `
@@ -258,11 +264,11 @@ En isolant $B$, on obtient : $${miseEnEvidence('B = \\dfrac{2A}{h} - b')}$.`
         if (choixQ) {
           this.correction = `On part de la formule : $P = 2(L + \\ell)$.<br>
 En développant, on obtient : $P = 2L + 2\\ell$.<br>
-En isolant $2L$, puis en divisant par $2$, on obtient : $2L = P - 2\\ell$ soit $${miseEnEvidence('L = \\dfrac{P}{2} - \\ell')}$.<br>`
+En isolant $2L$, puis en divisant par $2$, on obtient : $2L = P - 2\\ell$ soit $${egalite('L', '\\dfrac{P}{2} - \\ell')}$.<br>`
         } else {
           this.correction = `On part de la formule : $P = 2(L + \\ell)$.<br>
 En développant, on obtient : $P = 2L + 2\\ell$.<br>
-En isolant $2\\ell$, puis en divisant par $2$, on obtient : $2\\ell = P - 2L$, soit $${miseEnEvidence('\\ell = \\dfrac{P}{2} - L')}$. `
+En isolant $2\\ell$, puis en divisant par $2$, on obtient : $2\\ell = P - 2L$, soit $${egalite('\\ell', '\\dfrac{P}{2} - L')}$. `
         }
         break
 
@@ -313,14 +319,21 @@ En isolant $2\\ell$, puis en divisant par $2$, on obtient : $2\\ell = P - 2L$, s
         if (choixQ) {
           this.correction = `On part de la formule : $T = \\dfrac{M}{C} \\times 100$.<br>
 En divisant les deux membres par $100$, on obtient : $\\dfrac{T}{100} = \\dfrac{M}{C}$.<br>
-En multipliant les deux membres par $C$, on obtient : $${miseEnEvidence('M = \\dfrac{TC}{100}')}$.`
+En multipliant les deux membres par $C$, on obtient : $${egalite('M', '\\dfrac{TC}{100}')}$.`
         } else {
           this.correction = `On part de la formule : $T = \\dfrac{M}{C} \\times 100$.<br>
 En divisant les deux membres par $100$, on obtient : $\\dfrac{T}{100} = \\dfrac{M}{C}$.<br>
 En multipliant les deux membres par $C$, on obtient : $\\dfrac{TC}{100} = M$.<br>
-En divisant les deux membres par $\\dfrac{T}{100}$, on obtient : $${miseEnEvidence('C = \\dfrac{100M}{T}')}$.`
+En divisant les deux membres par $\\dfrac{T}{100}$, on obtient : $${egalite('C', '\\dfrac{100M}{T}')}$.`
         }
         break
+    }
+    // Hors QCM, la réponse attendue est comparée à la saisie : sans les $ de mise en forme
+    if (!this.versionQcm) {
+      const sansDollars = (r: string) => r.replace(/^\$|\$$/g, '')
+      this.reponse = Array.isArray(this.reponse)
+        ? this.reponse.map((r) => sansDollars(String(r)))
+        : sansDollars(String(this.reponse))
     }
   }
 }

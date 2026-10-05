@@ -37,7 +37,7 @@
   let isVisible = true
   export let isSettingsVisible = true
   const isContentVisible = true
-  let isCorrectionVisible = false
+  export let isCorrectionVisible = false
   let isBugReportDisplayed = false
   // redéfinition du titre lorsqu'un exercice apparait plusieurs fois :
   // si le titre contient le caractère | (ajouté lors de la création de l'exercice)

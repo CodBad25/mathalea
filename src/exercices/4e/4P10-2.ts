@@ -3,8 +3,8 @@ export const titre = 'Déterminer une quatrième proportionnelle dans un tableau
 export const interactifReady = true
 
 export const dateDePublication = '15/12/2020'
-export const dateDeModifImportante = '15/06/2024'
-export const uuid = 'a6b5b'
+export const dateDeModifImportante = '04/10/2026'
+export const uuid = 'dda72'
 export const refs = {
   'fr-fr': ['4P10-2', 'BP2AutoL1'],
   'fr-ch': ['10FA2-4'],
@@ -18,6 +18,5 @@ export default class TableauxEtQuatriemeProportionnelle extends EqResolvantesTha
     this.consigneSingulier =
       'Déterminer la quatrième proportionnelle dans le tableau suivant.'
     this.sup = 1
-    this.clavierAvecFraction = true
   }
 }

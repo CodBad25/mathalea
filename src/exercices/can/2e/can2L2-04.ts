@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texRacineCarree } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -24,6 +25,7 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
     super()
     this.versionQcmDisponible = true
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierNumbers
     this.nbQuestions = 1
   }
 

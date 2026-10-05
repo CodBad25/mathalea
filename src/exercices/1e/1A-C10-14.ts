@@ -67,7 +67,11 @@ export default class Auto1AC1014 extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierEnsemble
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    // Clavier allégé : crochets, point-virgule et infini
+    this.optionsChampTexte = {
+      dataKeys: ['[', ']', ';', '\\infty'],
+    }
     this.optionsDeComparaison = { intervalle: true }
     this.versionQcmDisponible = true
     this.versionQcm = false
@@ -99,10 +103,12 @@ export default class Auto1AC1014 extends ExerciceSimple {
     const inequation = (align = false) =>
       `${reduireAxPlusB(a, b)}${align ? '&' : ''}${symbol} ${reduireAxPlusB(c, d)}`
 
-    this.question = `Quel est l'ensemble des solutions de l'inéquation $${inequation()}$ ?`
-    if (this.interactif && this.versionQcm === false) {
-      this.question += '$S=$'
-    }
+    // En interactif, S= à la ligne devant le champ ; sur papier (PDF), consigne classique
+    this.question = this.versionQcm
+      ? `L'inéquation $${inequation()}$ a pour ensemble de solutions :`
+      : this.interactif
+        ? `L'inéquation $${inequation()}$ a pour ensemble de solutions :<br>$S=$`
+        : `Résoudre, dans $\\mathbb{R}$, l'inéquation $${inequation()}$.`
 
     this.correction = `$
 \\begin{aligned}

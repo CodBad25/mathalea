@@ -1,12 +1,16 @@
 import { compile } from '@cortex-js/compute-engine'
 import { MathfieldElement } from 'mathlive'
+import { context } from '../../modules/context'
 import { bleuMathalea } from '../colors'
 import { isEquivalentEquation } from '../interactif/checks/equationChecks'
 import {
   isEquivalentInequality,
   splitInequality,
 } from '../interactif/checks/inequalityChecks'
+import { pointsMaxDuBareme } from '../interactif/baremeExercice'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
+import { toutAUnPoint, toutPourUnPoint } from '../interactif/fonctionsBaremes'
+import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice } from '../types'
 import {
   IntervalleDroiteElement,
@@ -17,7 +21,71 @@ import MathaleaCustomElement, {
 } from './MathaleaCustomElement'
 
 export type SolveurKind = 'equation' | 'inequation'
+/**
+ * - `evaluation` : la première étape fausse fige le solveur, la question est
+ *   comptée fausse (1 point au maximum).
+ * - `entrainement` : l'élève peut continuer et se corriger après une étape
+ *   fausse. Dans un exercice interactif, avec `baremeSolveur('entrainement')`,
+ *   la question vaut 2 points : 0 si la solution n'est pas trouvée, 1 si elle
+ *   est trouvée malgré au moins une étape fausse, 2 si elle est trouvée sans
+ *   aucune étape fausse. Dans un exercice non interactif, c'est un brouillon
+ *   sans note.
+ */
 export type SolveurMode = 'entrainement' | 'evaluation'
+
+/**
+ * Barème à déclarer dans `handleAnswers()` pour une question avec solveur.
+ * Il doit correspondre au mode utilisé lorsque l'exercice est interactif.
+ */
+export function baremeSolveur(
+  mode: SolveurMode,
+): (listePoints: number[]) => [number, number] {
+  return mode === 'entrainement' ? toutAUnPoint : toutPourUnPoint
+}
+
+/**
+ * Paramètre de formulaire (`besoinFormulaire2Numerique`...) permettant à
+ * l'enseignant de choisir le barème du solveur lorsque l'exercice est
+ * interactif. La valeur 1 (sur 1 point, mode `evaluation`) est la valeur par
+ * défaut à affecter au paramètre.
+ */
+export function formulaireBaremeSolveur(): [string, number, string] {
+  return [
+    'Barème',
+    2,
+    "1 : Sur 1 point : une étape fausse rend la question fausse\n2 : Sur 2 points : l'élève peut se corriger après une étape fausse mais perd 1 point",
+  ]
+}
+
+/** Convertit la valeur du paramètre de `formulaireBaremeSolveur()` en mode. */
+export function modeSolveur(choixBareme: unknown): SolveurMode {
+  return Number(choixBareme) === 2 ? 'entrainement' : 'evaluation'
+}
+
+/**
+ * Options `mode` et `interactivityOn` d'`addMathaleaSolveur()` pour un exercice
+ * qui propose à la fois le choix du barème (exercice interactif) et le mode
+ * brouillon (exercice non interactif, case à cocher `brouillon`).
+ */
+export function optionsSolveur(
+  interactif: boolean | undefined,
+  brouillon: unknown,
+  choixBareme: unknown,
+): { mode: SolveurMode; interactivityOn: boolean } {
+  if (interactif)
+    return { mode: modeSolveur(choixBareme), interactivityOn: true }
+  return {
+    mode: brouillon ? 'entrainement' : 'evaluation',
+    interactivityOn: Boolean(brouillon),
+  }
+}
+
+/** Texte du commentaire (`this.comment`) des exercices avec solveur. */
+export const commentaireSolveur = `Cet exercice propose un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.<br>
+Lorsque l'exercice est interactif, le barème est au choix :<br>
+- sur 1 point : la résolution s'arrête dès la première étape non équivalente et la question est comptée fausse ;<br>
+- sur 2 points (mode entraînement évalué) : l'élève peut se corriger après une étape fausse. Il obtient 2 points s'il trouve la solution sans aucune étape fausse, 1 point s'il la trouve malgré une ou plusieurs étapes fausses, 0 sinon.<br>
+Lorsque l'exercice n'est pas interactif, activer le mode entraînement affiche l'élément en version brouillon : les erreurs restent visibles et il n'y a pas de note.`
 
 export type MathaleaSolveurOptions = {
   id?: string
@@ -48,6 +116,8 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
   private invalidLineIndexes = new Set<number>()
   private message = ''
   private messageIsSuccess = false
+  // Élément créé sans interactivité (ex : correction CAN) : seule l'équation est affichée.
+  private equationOnly = false
 
   static create({
     id,
@@ -62,10 +132,15 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     intervalMax = 5,
     interactivityOn = true,
   }: MathaleaSolveurOptions): string {
+    // Hors interactivité (ou hors HTML), seule l'équation est écrite.
+    if (!context.isHtml || context.isTypst || !interactivityOn)
+      return `$${initial}$`
     return super.create({
       id:
         id ??
         `${MathaleaSolveurElement.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`,
+      numeroExercice: numeroExercice ?? 0,
+      questionIndex: questionIndex ?? 0,
       initial,
       kind,
       mode,
@@ -78,6 +153,8 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
   }
 
   connectedCallback(): void {
+    if (this.getAttribute('interactivity-on') === 'false')
+      this.equationOnly = this.lines.length === 0
     if (this.lines.length === 0)
       this.lines = [this.getAttribute('initial') ?? '', '']
     super.connectedCallback()
@@ -104,14 +181,28 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     const expectedValues = Array.isArray(expected)
       ? expected.map(String)
       : [String(expected ?? '')]
-    const isOk = expectedValues.some((candidate) =>
+    const isSolved = expectedValues.some((candidate) =>
       isConformToExpected(actual, candidate, element?.kind ?? 'equation'),
     )
+    const hasWrongStep = (element?.nbEtapesFausses ?? 0) > 0
+    // En mode entrainement, le second « champ » vaut 1 si aucune étape n'est fausse.
+    const points =
+      element?.mode === 'entrainement'
+        ? [isSolved ? 1 : 0, isSolved && !hasWrongStep ? 1 : 0]
+        : [isSolved ? 1 : 0]
+    const bareme =
+      exercice.autoCorrection[questionIndex]?.valeur?.bareme ?? toutPourUnPoint
+    const [nbBonnesReponses, nbReponses] = bareme(points)
+    const isOk = nbBonnesReponses === nbReponses
+    const resolu =
+      element?.kind === 'inequation' ? "L'inéquation" : "L'équation"
     const feedback = isOk
       ? ''
-      : element?.kind === 'inequation'
-        ? "La dernière inéquation n'est pas la solution attendue."
-        : "La dernière équation n'est pas la solution attendue."
+      : isSolved
+        ? `${resolu} est résolue mais au moins une étape était incorrecte.`
+        : element?.kind === 'inequation'
+          ? "La dernière inéquation n'est pas la solution attendue."
+          : "La dernière équation n'est pas la solution attendue."
 
     exercice.answers ??= {}
     if (element != null) {
@@ -124,8 +215,17 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     return {
       isOk,
       feedback,
-      score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+      score: { nbBonnesReponses, nbReponses },
     }
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, questionIndex: number): number {
+    // Le barème s'applique à deux « champs » en mode entrainement (solution
+    // trouvée, aucune étape fausse) et à un seul en mode evaluation.
+    return pointsMaxDuBareme(
+      exercice.autoCorrection?.[questionIndex]?.valeur?.bareme,
+      2,
+    )
   }
 
   get kind(): SolveurKind {
@@ -138,6 +238,11 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     return this.getAttribute('mode') === 'evaluation'
       ? 'evaluation'
       : 'entrainement'
+  }
+
+  /** Nombre d'étapes évaluées et reconnues fausses (mode entrainement). */
+  get nbEtapesFausses(): number {
+    return this.invalidLineIndexes.size
   }
 
   get value(): string {
@@ -162,6 +267,12 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
   }
 
   render(): string | void {
+    if (this.equationOnly) {
+      this.innerHTML = `<span class="solver-equation">$${this.getAttribute('initial') ?? ''}$</span>`
+      return
+    }
+    const numeroExercice = this.getAttribute('numero-exercice') ?? '0'
+    const questionIndex = this.getAttribute('question-index') ?? '0'
     const editableIndex = this.lines.length - 1
     let stepNumber = 1
     const rows = this.lines
@@ -171,7 +282,7 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
         const invalid = this.invalidLineIndexes.has(index)
         const label = index === 0 ? 'Énoncé' : `Étape ${stepNumber}`
         if (index > 0 && !invalid && line.trim() !== '') stepNumber++
-        return `<div class="line${invalid ? ' invalid' : ''}"><span class="step">${label}</span><span class="field" data-index="${index}"></span>${invalid ? '<span class="line-status">Étape incorrecte</span>' : editable ? '<button class="evaluate" type="button">Évaluer</button>' : ''}</div>`
+        return `<div class="line${invalid ? ' invalid' : ''}"><span class="step">${label}</span><span class="solver-field" data-index="${index}"></span>${invalid ? '<span class="line-status">Étape incorrecte</span>' : editable ? '<button class="evaluate" type="button">Évaluer</button>' : ''}</div>`
       })
       .join('')
     this.innerHTML = `
@@ -180,9 +291,14 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
         mathalea-solveur .solver { display: grid; gap: .45rem; }
         mathalea-solveur .line { display: grid; grid-template-columns: 5.5rem minmax(12rem, 1fr) auto; align-items: center; gap: .55rem; }
         mathalea-solveur .step { color: ${bleuMathalea}; font-size: .82rem; font-weight: 600; }
-        mathalea-solveur math-field { width: 100%; min-height: 2.45rem; border: 1px solid #aab2bd; border-radius: .35rem; padding: .15rem .4rem; }
-        mathalea-solveur math-field[read-only] { border-color: transparent; background: color-mix(in srgb, currentColor 5%, transparent); }
-        mathalea-solveur .line.invalid math-field { color: #b42318; border-color: #b42318; background: #b4231810; }
+        mathalea-solveur .solver-field { display: block; min-width: 0; margin: 0; padding: 0; border: 0; background: transparent; }
+        mathalea-solveur math-field { display: block !important; width: 100%; margin: 0 !important; padding: 0; box-sizing: border-box; }
+        mathalea-solveur math-field::part(container) { border: none !important; }
+        mathalea-solveur math-field:not(.solver-readonly) { border: 1px solid #aab2bd !important; border-radius: .35rem; }
+        mathalea-solveur math-field:not(.solver-readonly):focus-within { border-color: transparent !important; }
+        mathalea-solveur math-field.solver-readonly::part(container) { border: none !important; outline: none !important; box-shadow: none !important; background: transparent; }
+        mathalea-solveur .line.invalid math-field { color: #b42318; }
+        mathalea-solveur .line.invalid math-field::part(container) { border: none; background: transparent; }
         mathalea-solveur .line.invalid .step, mathalea-solveur .line-status { color: #b42318; }
         mathalea-solveur .line-status { font-size: .8rem; font-weight: 600; }
         mathalea-solveur button { border: 1px solid ${bleuMathalea}; border-radius: .35rem; background: transparent; color: ${bleuMathalea}; cursor: pointer; padding: .4rem .7rem; font: inherit; }
@@ -195,19 +311,34 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
       </style>
       <div class="solver">${rows}</div>
       <p class="message ${this.messageIsSuccess ? 'ok' : 'ko'}" role="status">${this.message}</p>
-      <div class="interval"></div>`
+      <div class="interval"></div>
+      <span id="resultatCheckEx${numeroExercice}Q${questionIndex}"></span>
+      <div id="feedbackEx${numeroExercice}Q${questionIndex}"></div>`
 
     this.lines.forEach((line, index) => {
       const host = this.querySelector<HTMLElement>(
-        `.field[data-index="${index}"]`,
+        `.solver-field[data-index="${index}"]`,
       )
       if (host == null) return
       const field = new MathfieldElement()
+      field.id = `${this.id}-line-${index}`
+      field.id = `${this.id}-line-${index}`
       field.value = line
       const editable =
         this.interactivityOn && index === editableIndex && index > 0
       field.readOnly = !editable
+      field.classList.toggle('solver-readonly', !editable)
       field.setAttribute('virtual-keyboard-mode', 'manual')
+
+      // Clavier de base avec fractions, où la touche π est remplacée par la
+      // lettre de l'inconnue.
+      field.setAttribute(
+        'data-keyboard',
+        this.kind === 'inequation'
+          ? 'numbersInconnue basicOperations compare'
+          : 'numbersInconnue basicOperations2',
+      )
+      field.dataset.inconnue = this.getAttribute('variable') ?? 'x'
       field.setAttribute(
         'aria-label',
         index === 0 ? 'Équation de départ' : `Étape ${index}`,
@@ -219,6 +350,16 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
         })
       }
       host.appendChild(field)
+      if (field.isConnected) {
+        setMathfield(field)
+      } else {
+        field.addEventListener('mount', setMathfieldListener, { once: true })
+      }
+      if (field.isConnected) {
+        setMathfield(field)
+      } else {
+        field.addEventListener('mount', setMathfieldListener, { once: true })
+      }
     })
     this.querySelector('.evaluate')?.addEventListener('click', () =>
       this.evaluate(),
@@ -240,7 +381,16 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
   ): { passed: boolean; feedbackKo: string; feedbackOk?: string } {
     return this.kind === 'inequation'
       ? isEquivalentInequality().run(input, expected)
-      : isEquivalentEquation().run(input, expected)
+      : isEquivalentEquation().run(
+          normalizeEquationVariable(
+            input,
+            this.getAttribute('variable') ?? 'x',
+          ),
+          normalizeEquationVariable(
+            expected,
+            this.getAttribute('variable') ?? 'x',
+          ),
+        )
   }
 
   private evaluateCurrentLine(): void {
@@ -259,8 +409,18 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
       : result.feedbackKo
     this.messageIsSuccess = result.passed
     if (result.passed) {
-      this.lines.push('')
-      this.render()
+      if (
+        isSolvedForm(current, this.kind, this.getAttribute('variable') ?? 'x')
+      ) {
+        this.message =
+          this.kind === 'inequation'
+            ? "L'inéquation est résolue."
+            : "L'équation est résolue."
+        this.interactivityOn = false
+      } else {
+        this.lines.push('')
+        this.render()
+      }
     } else if (this.mode === 'evaluation') this.interactivityOn = false
     else {
       this.invalidLineIndexes.add(index)
@@ -315,6 +475,79 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     const value = Number(this.getAttribute(name))
     return Number.isFinite(value) ? value : fallback
   }
+}
+
+/**
+ * Remplace l'inconnue par `x` sans toucher aux commandes LaTeX
+ * (ex : le `s` de `\\times` quand l'inconnue est `s`).
+ */
+function normalizeEquationVariable(equation: string, variable: string): string {
+  if (variable === 'x' || variable === '') return equation
+  const escaped = variable.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return equation.replace(
+    new RegExp(`\\\\[a-zA-Z]+|${escaped}`, 'g'),
+    (token) => (token === variable ? 'x' : token),
+  )
+}
+
+export function isSolvedForm(
+  value: string,
+  kind: SolveurKind,
+  variable: string,
+): boolean {
+  const relation =
+    kind === 'inequation' ? splitInequality(value) : splitEquation(value)
+  if (relation == null) return false
+  return (
+    (isVariableAlone(relation.left, variable) &&
+      isFinalNumber(relation.right, variable)) ||
+    (isVariableAlone(relation.right, variable) &&
+      isFinalNumber(relation.left, variable))
+  )
+}
+
+/**
+ * Un membre est terminal s'il s'agit d'un nombre en écriture décimale ou
+ * fractionnaire (ex : `-3`, `2,5`, `\\dfrac{-6}{5}`), pas d'un calcul à
+ * poursuivre (ex : `2\\times\\frac{3}{5}`).
+ */
+function isFinalNumber(expression: string, variable: string): boolean {
+  if (containsVariable(expression, variable)) return false
+  const compact = expression
+    .replaceAll('\\left', '')
+    .replaceAll('\\right', '')
+    .replaceAll('{,}', ',')
+    .replace(/\s/g, '')
+  const unsigned = '\\d+(?:[.,]\\d+)?'
+  const signed = `[+-]?${unsigned}`
+  return new RegExp(
+    `^(?:${signed}|[+-]?\\\\[dt]?frac\\{${signed}\\}\\{${signed}\\})$`,
+  ).test(compact)
+}
+
+function splitEquation(
+  value: string,
+): { left: string; right: string } | undefined {
+  const parts = value.split('=')
+  if (parts.length !== 2 || parts.some((part) => part.trim() === ''))
+    return undefined
+  return { left: parts[0], right: parts[1] }
+}
+
+function isVariableAlone(expression: string, variable: string): boolean {
+  return normalizedVariableExpression(expression) === variable
+}
+
+function containsVariable(expression: string, variable: string): boolean {
+  return normalizedVariableExpression(expression).includes(variable)
+}
+
+function normalizedVariableExpression(expression: string): string {
+  return expression
+    .replaceAll('\\left', '')
+    .replaceAll('\\right', '')
+    .replace(/\\[a-z]+/gi, '')
+    .replace(/[{}\s]/g, '')
 }
 
 function inequalityToInterval(
@@ -432,6 +665,7 @@ export function addMathaleaSolveur(
     MathaleaSolveurElement.elementTag
   return MathaleaSolveurElement.create({
     ...options,
+    interactivityOn: options.interactivityOn ?? Boolean(exercice.interactif),
     numeroExercice: exercice.numeroExercice ?? 0,
     questionIndex,
   })

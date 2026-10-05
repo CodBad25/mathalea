@@ -172,6 +172,120 @@ async function testCustomElementsSerializedReplay(page: Page) {
   )
   expect(failures).toEqual([])
 
+  const solverReplayUrl = `${origin}/alea/?uuid=b74c8&n=1&d=10&s=1&alea=rejeu-mathalea-solveur&i=1&cd=1`
+  const mountSolverFixture = async () => {
+    await page.addScriptTag({
+      type: 'module',
+      content: `
+        import Exercice from '/alea/src/exercices/Exercice.ts'
+        import { addMathaleaSolveur, MathaleaSolveurElement } from '/alea/src/lib/customElements/MathaleaSolveurElement.ts'
+        import { mathaleaWriteStudentPreviousAnswers } from '/alea/src/lib/mathaleaUtils.ts'
+
+        const exercice = new Exercice()
+        exercice.numeroExercice = 91
+        exercice.autoCorrection[0] = {
+          valeur: { reponse: { value: 'x=3' } },
+          formatInteractif: 'mathalea-solveur',
+        }
+        document.querySelector('#solver-replay-fixture')?.remove()
+        const container = document.createElement('div')
+        container.id = 'solver-replay-fixture'
+        container.innerHTML = addMathaleaSolveur(exercice, 0, {
+          initial: '2x+4=10',
+          kind: 'equation',
+          mode: 'evaluation',
+        })
+        document.body.append(container)
+        window.__mathaleaSolverReplayFixture = {
+          exercice,
+          elementClass: MathaleaSolveurElement,
+          writeAnswers: mathaleaWriteStudentPreviousAnswers,
+        }
+      `,
+    })
+    await page.waitForSelector('#mathalea-solveurEx91Q0 math-field')
+  }
+
+  await page.goto(solverReplayUrl)
+  await mountSolverFixture()
+  const solverInput = page.locator('#mathalea-solveurEx91Q0-line-1')
+  await solverInput.focus()
+  await page.waitForSelector('#mathalea-virtual-keyboard')
+  await page.locator('#mathalea-virtual-keyboard button.key--1').click()
+  await expect(solverInput).toHaveJSProperty('value', '1')
+  const solverBeforeReplay = await page.evaluate(() => {
+    const fixture = (
+      window as typeof window & {
+        __mathaleaSolverReplayFixture: {
+          exercice: {
+            answers?: Record<string, string>
+          }
+          elementClass: {
+            verifQuestion: (
+              exercice: unknown,
+              questionIndex: number,
+            ) => unknown
+          }
+        }
+      }
+    ).__mathaleaSolverReplayFixture
+    const solver = document.querySelector(
+      '#mathalea-solveurEx91Q0',
+    ) as HTMLElement & { value: string }
+    const input = solver.querySelectorAll('math-field')[1] as HTMLElement & {
+      value: string
+    }
+    input.value = 'x=3'
+    input.dispatchEvent(new InputEvent('input', { bubbles: true }))
+    solver.querySelector<HTMLButtonElement>('.evaluate')?.click()
+    const score = fixture.elementClass.verifQuestion(fixture.exercice, 0)
+    return {
+      storedAnswer: fixture.exercice.answers?.[solver.id],
+      value: solver.value,
+      score,
+    }
+  })
+
+  await page.goto(solverReplayUrl)
+  await mountSolverFixture()
+  const solverAfterReplay = await page.evaluate(
+    async (storedAnswer) => {
+      const fixture = (
+        window as typeof window & {
+          __mathaleaSolverReplayFixture: {
+            exercice: unknown
+            elementClass: {
+              verifQuestion: (
+                exercice: unknown,
+                questionIndex: number,
+              ) => unknown
+            }
+            writeAnswers: (
+              answers: Record<string, string>,
+            ) => Promise<boolean>[]
+          }
+        }
+      ).__mathaleaSolverReplayFixture
+      await Promise.all(
+        fixture.writeAnswers({
+          'mathalea-solveurEx91Q0': storedAnswer,
+        }),
+      )
+      const solver = document.querySelector(
+        '#mathalea-solveurEx91Q0',
+      ) as HTMLElement & { value: string }
+      return {
+        value: solver.value,
+        score: fixture.elementClass.verifQuestion(fixture.exercice, 0),
+      }
+    },
+    solverBeforeReplay.storedAnswer ?? '',
+  )
+
+  expect(solverBeforeReplay.storedAnswer).toBe('x=3')
+  expect(solverAfterReplay.value).toBe(solverBeforeReplay.value)
+  expect(solverAfterReplay.score).toEqual(solverBeforeReplay.score)
+
   const exerciseUrl = `${origin}/alea/?uuid=b74c8&n=1&d=10&s=1&alea=rejeu-tableau-hybride&i=1&cd=1`
   await page.goto(exerciseUrl)
   await page.waitForSelector('tableau-hybride math-field')

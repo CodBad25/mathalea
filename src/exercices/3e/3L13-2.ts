@@ -15,9 +15,15 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableau } from '../../lib/2d/tableau'
 import { bleuMathalea } from '../../lib/colors'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -30,12 +36,12 @@ export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '15/12/2020'
-export const dateDeModifImportante = '15/06/2024'
+export const dateDeModifImportante = '04/10/2026'
 /**
  * * Équations résolvantes pour le théorème de Thalès
  * @author Sébastien Lozano
  */
-export const uuid = '6516e'
+export const uuid = '1aaa0'
 
 export const refs = {
   'fr-fr': ['3L13-2', '3G20-3', 'BP2RES13'],
@@ -45,21 +51,24 @@ export default class EqResolvantesThales extends Exercice {
   consignePluriel: string
   consigneSingulier: string
   exo: string
-  clavierAvecFraction: boolean
   constructor() {
     super()
+    this.comment = commentaireSolveur
     this.besoinFormulaireNumerique = [
       'Type de nombres',
       4,
       '1 : Entiers naturels\n2 : Entiers relatifs\n3 : Décimaux\n4 : Mélange',
     ]
+    this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
 
     this.nbQuestions = 2
     this.sup = 1
+    this.sup2 = false
+    this.besoinFormulaire3Numerique = formulaireBaremeSolveur()
+    this.sup3 = 1
     this.consignePluriel = 'Résoudre les équations suivantes.'
     this.consigneSingulier = "Résoudre l'équation suivante."
     this.exo = '3L13-2'
-    this.clavierAvecFraction = false
   }
 
   nouvelleVersion() {
@@ -257,6 +266,7 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
         })
       }
 
+      const situation = situations[listeTypeDeQuestions[i]]
       texte = `${enonces[listeTypeDeQuestions[i]].enonce}`
       texteCorr = `${enonces[listeTypeDeQuestions[i]].correction}`
 
@@ -266,30 +276,33 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
         .replace('{', '')
         .replace('}', '')
 
-      texte += ajouteChampTexteMathLive(
-        this,
-        i,
-        this.clavierAvecFraction
-          ? KeyboardType.clavierDeBaseAvecFraction
-          : KeyboardType.clavierDeBase,
-        { texteAvant: `<br> $${inc} =$ ` },
-      )
       reponse = new FractionEtendue(
         Number(correctionInteractif) * 10000,
         10000,
       ).simplifie()
-      handleAnswers(this, i, {
-        reponse: {
-          value: reponse,
-          options: {
-            fractionEgale: true,
-            // La quatrième proportionnelle est toujours un décimal : on accepte
-            // aussi bien l'écriture décimale (celle du corrigé) qu'une fraction
-            // égale, même lorsque le clavier fraction est proposé (cf. 4P10-2).
-            nombreDecimalSeulement: true,
-          },
-        },
+      const solverVariable = this.exo === '4P10-2' ? 'x' : inc
+      const solverEquation =
+        this.exo === '4P10-2'
+          ? situation.eq.replaceAll('?', solverVariable)
+          : situation.eq
+      const solver = addMathaleaSolveur(this, i, {
+        initial: solverEquation,
+        kind: 'equation',
+        ...optionsSolveur(this.interactif, this.sup2, this.sup3),
+        variable: solverVariable,
       })
+      texte = this.exo === '4P10-2' ? `${texte}<br>${solver}` : solver
+      handleAnswers(
+        this,
+        i,
+        {
+          reponse: {
+            value: `${solverVariable}=${reponse.texFSD}`,
+          },
+          bareme: baremeSolveur(modeSolveur(this.sup3)),
+        },
+        { formatInteractif: 'mathalea-solveur' },
+      )
 
       if (this.questionJamaisPosee(i, nbAlea.join(';'))) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)

@@ -260,7 +260,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
           props = propositionsQcm(this, i)
           if (this.interactif) texte += props.texte
           else {
-            texte = `Résoudre dans $\\mathbb{R}$ :<br>
+            texte = `Résoudre, dans $\\mathbb{R}$, :<br>
   
         $x^2${ecritureAlgebrique(b)}=${c}$`
           }
@@ -311,7 +311,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
             <br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(c - b)}$, alors l'équation n'a pas de solution.
               <br>Ainsi, $${miseEnEvidence('S=\\emptyset')}$. `
           }
-          this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $x^2${ecritureAlgebrique(b)}=${c}$.`
+          this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation $x^2${ecritureAlgebrique(b)}=${c}$.`
 
           break
         case 2:
@@ -448,7 +448,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
           props = propositionsQcm(this, i)
           if (this.interactif) texte += props.texte
           else {
-            texte = `Résoudre dans $\\mathbb{R}$ :<br>
+            texte = `Résoudre, dans $\\mathbb{R}$, :<br>
   
    $-x^2${ecritureAlgebrique(b)}=${c}$`
           }
@@ -503,7 +503,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
             L'équation est de la forme $x^2=k$ avec $k=${texNombre(k)}$, alors l'équation n'a pas de solution.
         <br>Ainsi, $${miseEnEvidence('S=\\emptyset')}$. `
           }
-          this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $-x^2${ecritureAlgebrique(b)}=${c}$.`
+          this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation $-x^2${ecritureAlgebrique(b)}=${c}$.`
 
           break
 
@@ -1088,7 +1088,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
           if (this.interactif) {
             texte += props.texte
           } else {
-            texte = `Résoudre dans $\\mathbb{R}$ :<br>
+            texte = `Résoudre, dans $\\mathbb{R}$, :<br>
 
             $|x|${ecritureAlgebrique(b)}=${c}$`
           }
@@ -1109,7 +1109,7 @@ Ainsi, $${miseEnEvidence('S=\\{0\\}')}$.`
             texteCorr += `L'équation est de la forme $|x|=k$ avec $k=${k}<0$. Or une valeur absolue est toujours positive ou nulle : l'équation n'admet donc aucune solution.<br>
 Ainsi, $${miseEnEvidence('S=\\emptyset')}$.`
           }
-          this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $|x|${ecritureAlgebrique(b)}=${c}$.`
+          this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation $|x|${ecritureAlgebrique(b)}=${c}$.`
           break
         case 8:
         default: {
@@ -1166,7 +1166,7 @@ Ainsi, $${miseEnEvidence('S=\\emptyset')}$.`
           props = propositionsQcm(this, i)
           if (this.interactif) texte += props.texte
           else {
-            texte = `Résoudre dans $\\mathbb{R}$ :<br>
+            texte = `Résoudre, dans $\\mathbb{R}$, :<br>
 
             $${membreValeurAbsolue}${ecritureAlgebrique(b)}=${c}$`
           }
@@ -1184,7 +1184,7 @@ Sur une droite graduée, les deux nombres situés à une distance de $${k}$ de $
 ${illustrationDistance(a, k)}<br>
 $${a}-${k}=${a - k}$ et $${a}+${k}=${a + k}$.<br>
 Ainsi, $${miseEnEvidence(`S=\\{${a - k}${sp(1)};${sp(1)}${a + k}\\}`)}$.`
-          this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $${membreValeurAbsolue}${ecritureAlgebrique(b)}=${c}$.`
+          this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation $${membreValeurAbsolue}${ecritureAlgebrique(b)}=${c}$.`
           break
         }
       }

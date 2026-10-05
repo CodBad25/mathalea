@@ -1,3 +1,5 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { touchesDeLaReponse } from '../../lib/interactif/claviers/touchesDeLaReponse'
 import ExprimerEnFonctionRac from '../can/2e/can2L12-03'
 export const titre =
   'Exprimer une variable en fonction des autres (formules avec carrés/racines carrées)'
@@ -21,5 +23,24 @@ export default class Auto1AC11e extends ExprimerEnFonctionRac {
   constructor() {
     super()
     this.versionQcm = false
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+  }
+
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    // Clavier allégé : la lettre à exprimer (écrite devant le champ, « X = »)
+    // et les lettres de la réponse (et la racine carrée si besoin)
+    const lettreAExprimer = String(
+      (this.optionsChampTexte as { texteAvant?: string } | undefined)
+        ?.texteAvant ?? '',
+    ).match(/\$(\\?[a-zA-Z]+)=\$/)?.[1]
+    const touches = touchesDeLaReponse(this.reponse)
+    this.optionsChampTexte = {
+      ...this.optionsChampTexte,
+      dataKeys:
+        lettreAExprimer == null || touches.includes(lettreAExprimer)
+          ? touches
+          : [lettreAExprimer, ...touches],
+    }
   }
 }

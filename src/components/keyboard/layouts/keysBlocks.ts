@@ -69,6 +69,10 @@ const complexesCap: CompleteKeysList = {
     'NORM',
   ],
 }
+const numbersCapsInconnue: CompleteKeysList = {
+  inline: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'COMMA', 'INCONNUE'],
+  block: [7, 8, 9, 4, 5, 6, 1, 2, 3, 0, 'COMMA', 'INCONNUE'],
+}
 const numbersCaps2: CompleteKeysList = {
   inline: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'COMMA', '='],
   block: [7, 8, 9, 4, 5, 6, 1, 2, 3, 0, 'COMMA', '='],
@@ -1052,6 +1056,12 @@ export const numbersX: KeyboardBlock = {
   title: 'Nombres',
   isUnits: false,
 }
+export const numbersInconnue: KeyboardBlock = {
+  keycaps: numbersCapsInconnue,
+  cols: 3,
+  title: 'Nombres',
+  isUnits: false,
+}
 export const numbers2: KeyboardBlock = {
   keycaps: numbersCaps2,
   cols: 3,
@@ -1391,6 +1401,7 @@ export const keyboardBlocks: {
   numbers,
   numbersSpace,
   numbersX,
+  numbersInconnue,
   numbers2,
   numbersOperations,
   numbersOperationsX,

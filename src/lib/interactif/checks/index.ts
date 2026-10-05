@@ -49,6 +49,7 @@ export {
   isEquivalentEquation,
 } from './equationChecks'
 export { isEquivalentInequality, splitInequality } from './inequalityChecks'
+export { sameAffineSignTable } from './sameAffineSignTable'
 export { sameIntegerProgressionSet } from './sameIntegerProgressionSet'
 export { sameParametricLine } from './sameParametricLine'
 export { sameSet } from './sameSet'

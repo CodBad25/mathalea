@@ -19,8 +19,16 @@ export const dateDePublication = '06/08/2026'
  * Clone de EAM-AGnonSpe-2026-Q7 en version exclusivement aléatoire.
  */
 export default class CalculerUneResistance extends AutoQ7AGns2026 {
+  optionsChampReponseCourte = {
+    texteAvant: 'La résistance est égale à ',
+    texteApres: ' ohms.',
+  }
+
+  enonceCourt = () => this.enonce.replace('<br><br>', '<br>')
+
   constructor() {
     super()
+    this.spacing = 1.5
     this.besoinFormulaireCaseACocher = false
     this.sup3 = false
     this.besoinFormulaire3CaseACocher = ['Mode QCM', false]

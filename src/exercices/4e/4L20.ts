@@ -12,9 +12,15 @@ import Exercice from '../Exercice'
 
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { sp } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
@@ -28,12 +34,12 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const dateDeModifImportante = '02/04/2024'
+export const dateDeModifImportante = '04/10/2026'
 /**
  * Équation du premier degré
  * @author Rémi Angot
  */
-export const uuid = '799c4'
+export const uuid = '5772b'
 
 export const refs = {
   'fr-fr': ['4L20', 'BP2RES8', '3AutoL04-1', 'BP1AUTO019'],
@@ -51,6 +57,8 @@ export default class ExerciceEquation1 extends Exercice {
 
   constructor() {
     super()
+    this.comment = commentaireSolveur
+
     this.besoinFormulaireCaseACocher = ['Avec des nombres relatifs']
     this.besoinFormulaire2Texte = [
       "Type d'équations",
@@ -67,6 +75,7 @@ export default class ExerciceEquation1 extends Exercice {
       ].join('\n'),
     ]
     this.besoinFormulaire3CaseACocher = ['Avec uniquement la lettre $x$']
+    this.besoinFormulaire4CaseACocher = ['Mode entrainement en non interactif']
     this.spacing = 2
     this.spacingCorr = context.isHtml ? 3 : 2
     this.correctionDetailleeDisponible = true
@@ -74,6 +83,9 @@ export default class ExerciceEquation1 extends Exercice {
     this.sup = true // Avec des nombres relatifs
     this.sup2 = '1-2-3-4-5' // Choix du type d'équation
     this.sup3 = true
+    this.sup4 = false
+    this.besoinFormulaire5Numerique = formulaireBaremeSolveur()
+    this.sup5 = 1
     this.nbQuestions = 6
   }
 
@@ -169,11 +181,7 @@ export default class ExerciceEquation1 extends Exercice {
             b = randint(1, 13)
             c = randint(1, 13)
           }
-          if (
-            !this.xPlusBEgalCAvecRelatifsNonNuls &&
-            !this.sup &&
-            c < b
-          ) {
+          if (!this.xPlusBEgalCAvecRelatifsNonNuls && !this.sup && c < b) {
             b = randint(-9, 9, [0]) // b peut être négatif, ça sera une équation du type ${inconnue}-b=c
             c = Math.abs(randint(b, 15)) // c sera plus grand que b pour que c-b>0
           }
@@ -372,15 +380,23 @@ export default class ExerciceEquation1 extends Exercice {
 
       if (this.questionJamaisPosee(i, a, b, c, listeTypeDeQuestions[i])) {
         // Si la question n'a jamais été posée, on en créé une autre
-        this.listeQuestions[i] =
-          texte +
-          `${ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierDeBaseAvecFraction,
-            { texteAvant: `<br>Solution de l'équation  : ` },
-          )}`
-        handleAnswers(this, i, { reponse: { value: reponse.texFSD } })
+        this.listeQuestions[i] = context.isHtml
+          ? addMathaleaSolveur(this, i, {
+              initial: texte.slice(1, -1),
+              kind: 'equation',
+              ...optionsSolveur(this.interactif, this.sup4, this.sup5),
+              variable: inconnue,
+            })
+          : texte
+        handleAnswers(
+          this,
+          i,
+          {
+            reponse: { value: `${inconnue}=${reponse.texFSD}` },
+            bareme: baremeSolveur(modeSolveur(this.sup5)),
+          },
+          { formatInteractif: 'mathalea-solveur' },
+        )
         this.listeCorrections[i] = texteCorr
         if (context.isAmc) {
           this.autoCorrectionAMC[i] = {

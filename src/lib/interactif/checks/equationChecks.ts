@@ -1,4 +1,4 @@
-import { compile } from '@cortex-js/compute-engine'
+import { compile, ComputeEngine } from '@cortex-js/compute-engine'
 import type { Check, CheckOverrides } from './types'
 import {
   insertImplicitProducts,
@@ -14,6 +14,7 @@ type EvaluationPoint = Record<string, number>
 
 const TOLERANCE = 1e-8
 const VARIABLE_NAMES = 'abcdefghijklmnopqrstuvwxyz'.split('')
+const computeEngine = new ComputeEngine()
 
 function splitEquation(value: string): Equation | undefined {
   const parts = value.split('=')
@@ -132,6 +133,59 @@ function areEquivalentEquations(input: Equation, answer: Equation): boolean {
   return ratio !== undefined
 }
 
+function haveSameFiniteUnivariateSolutions(
+  input: Equation,
+  answer: Equation,
+): boolean {
+  const variables = variablesInEquations([input, answer])
+  if (variables.length !== 1) return false
+
+  const solutions = [input, answer].map((equation) => {
+    try {
+      const difference = computeEngine.box([
+        'Subtract',
+        computeEngine.parse(equation.left).json,
+        computeEngine.parse(equation.right).json,
+      ])
+      const solved = difference.solve(variables[0])
+      if (!Array.isArray(solved) || solved.length === 0) return null
+      const boxedSolutions = solved as unknown as Array<{
+        readonly isFinite?: boolean
+        readonly latex: string
+      }>
+      if (
+        boxedSolutions.some(
+          (solution) =>
+            solution.isFinite !== true ||
+            variablesInExpression(solution.latex).length > 0,
+        )
+      )
+        return null
+      return boxedSolutions.map((solution) => solution.latex)
+    } catch {
+      return null
+    }
+  })
+
+  const [inputSolutions, answerSolutions] = solutions
+  if (
+    inputSolutions == null ||
+    answerSolutions == null ||
+    inputSolutions.length !== answerSolutions.length
+  )
+    return false
+
+  const unmatched = [...answerSolutions]
+  return inputSolutions.every((inputSolution) => {
+    const matchIndex = unmatched.findIndex((answerSolution) =>
+      isZeroExpression(`(${inputSolution})-(${answerSolution})`),
+    )
+    if (matchIndex === -1) return false
+    unmatched.splice(matchIndex, 1)
+    return true
+  })
+}
+
 export function isEquation(options: CheckOverrides = {}): Check {
   return {
     name: options.name ?? 'isEquation',
@@ -162,7 +216,8 @@ export function isEquivalentEquation(options: CheckOverrides = {}): Check {
       const passed =
         inputEquation !== undefined &&
         answerEquation !== undefined &&
-        areEquivalentEquations(inputEquation, answerEquation)
+        (areEquivalentEquations(inputEquation, answerEquation) ||
+          haveSameFiniteUnivariateSolutions(inputEquation, answerEquation))
 
       return {
         passed,

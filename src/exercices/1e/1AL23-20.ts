@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -10,6 +9,7 @@ import {
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
@@ -81,9 +81,9 @@ export default class Resolutionavecformecanonique extends Exercice {
       alpha = fraction(b, 2 * a)
       delta = b * b - 4 * a * c
       b2 = fraction(delta, 4 * a * a).simplifie() // terme b² dans l'expression a²-b²
-      texte = `Résoudre dans $\\mathbb{R}$ l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0$ sans utiliser le discriminant,`
+      texte = `Résoudre, dans $\\mathbb{R}$, l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0$ sans utiliser le discriminant,`
       texte += ' mais en utilisant la forme canonique du polynôme.'
-      texteCorr = `On veut résoudre dans $\\mathbb{R}$ l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0\\quad(1)$.`
+      texteCorr = `On veut résoudre, dans $\\mathbb{R}$, l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0\\quad(1)$.`
       texteCorr +=
         '<br>On reconnaît une équation du second degré sous la forme $ax^2+bx+c = 0$.'
       texteCorr +=

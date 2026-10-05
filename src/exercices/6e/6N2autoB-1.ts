@@ -410,10 +410,19 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
       false,
       style,
     )
+    // Un point par ligne : le total affiché (x1) doit correspondre au score
+    // calculé par `verifieLeTableau()`, qui ne passe pas par les champs `L1C1`…
+    const pointsParLigne = (): [number, number] => [
+      lignes.length,
+      lignes.length,
+    ]
     handleAnswers(
       this,
       0,
-      { callback: (exercice) => verifieLeTableau(exercice, lignes) },
+      {
+        bareme: pointsParLigne,
+        callback: (exercice) => verifieLeTableau(exercice, lignes),
+      },
       { formatInteractif: 'tableauMathlive' },
     )
     return tableau.output

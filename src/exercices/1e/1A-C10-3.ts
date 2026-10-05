@@ -6,7 +6,10 @@ import { segment, type Segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 
 import {
   crochetD,
@@ -300,12 +303,21 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
           ? 'strictement au-dessus de'
           : ' sur ou au-dessus de '
 
+    // Toute la réponse en orange : les parties mathématiques avec miseEnEvidence,
+    // le « ou » (hors des $) avec texteEnCouleurEtGras
+    const reponseEnEvidence = reponseCorrecte
+      .replace(
+        /\$([^$]+)\$/g,
+        (_, expression: string) => `$${miseEnEvidence(expression)}$`,
+      )
+      .replace(/ ou /g, ` ${texteEnCouleurEtGras('ou')} `)
+
     return `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace la parabole d'équation $y=x^2$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${val}$. Cette droite coupe la parabole en $-\\sqrt{${val}}$ et $\\sqrt{${val}}$. <br>
             $\\bullet$ Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${positionText} la droite.<br>
             ${graphiqueC}<br>
-            On en déduit que l'inéquation $(I)$ est équivalente à : ${texteEnCouleurEtGras(reponseCorrecte)}.`
+            On en déduit que l'inéquation $(I)$ est équivalente à : ${reponseEnEvidence}.`
   }
 
   versionOriginale: () => void = () => {

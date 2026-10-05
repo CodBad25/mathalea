@@ -61,6 +61,39 @@ export default class ConstruireUnTriangle extends Exercice {
     this.sup2 = false
   }
 
+  /**
+   * Types de questions (numéros des `case` de `nouvelleVersion`) correspondant au paramètre `sup`
+   */
+  typesDeQuestionsDisponibles(): number[] {
+    if (this.classe !== 6 && this.classe !== 5) return [1]
+    switch (this.sup) {
+      case 1:
+        return [1]
+      case 2:
+        return [2]
+      case 3:
+        return [1, 2]
+      case 4:
+        return [3]
+      case 5:
+        return [4]
+      case 6:
+        return [5]
+      case 7:
+        return [6]
+      case 8:
+        return [7]
+      case 9:
+        return [4, 5, 6, 7]
+      case 10:
+        return [3, 4, 5, 6, 7]
+      case 11:
+        return [3, 4, 7]
+      default:
+        return [1, 2]
+    }
+  }
+
   nouvelleVersion() {
     let IEP
     let typesDeQuestionsDisponibles,
@@ -83,46 +116,7 @@ export default class ConstruireUnTriangle extends Exercice {
       paramsCorrection,
       nom,
       sommets
-    if (this.classe === 6 || this.classe === 5) {
-      switch (this.sup) {
-        case 1:
-          typesDeQuestionsDisponibles = [1]
-          break
-        case 2:
-          typesDeQuestionsDisponibles = [2]
-          break
-        case 3:
-          typesDeQuestionsDisponibles = [1, 2]
-          break
-        case 4:
-          typesDeQuestionsDisponibles = [3]
-          break
-        case 5:
-          typesDeQuestionsDisponibles = [4]
-          break
-        case 6:
-          typesDeQuestionsDisponibles = [5]
-          break
-        case 7:
-          typesDeQuestionsDisponibles = [6]
-          break
-        case 8:
-          typesDeQuestionsDisponibles = [7]
-          break
-        case 9:
-          typesDeQuestionsDisponibles = [4, 5, 6, 7]
-          break
-        case 10:
-          typesDeQuestionsDisponibles = [3, 4, 5, 6, 7]
-          break
-        case 11:
-          typesDeQuestionsDisponibles = [3, 4, 7]
-          break
-        default:
-          typesDeQuestionsDisponibles = [1, 2]
-          break
-      }
-    } else typesDeQuestionsDisponibles = [1]
+    typesDeQuestionsDisponibles = this.typesDeQuestionsDisponibles()
     const listeTypeDeQuestions = combinaisonListes(
       typesDeQuestionsDisponibles,
       this.nbQuestions,

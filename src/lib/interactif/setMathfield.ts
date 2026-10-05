@@ -1,6 +1,7 @@
 import { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { keyboardState } from '../../components/keyboard/stores/keyboardStore'
+import { ajouteTouche } from '../../components/keyboard/lib/keycaps'
 import { litTouchesPersonnalisees } from '../../components/keyboard/lib/touchesPersonnalisees'
 import type { BlockForKeyboard } from '../../components/keyboard/types/keyboardContent'
 import { injectFontInMetaInteractif2d } from '../../modules/loaders'
@@ -40,6 +41,9 @@ function handleFocusMathField(event: FocusEvent) {
   const mf = event.target as MathfieldElement
   const isCorrected = mf.classList.contains('corrected')
   getKeyboardShortcusts(mf)
+  // Touche `INCONNUE` (bloc `numbersInconnue`) : la lettre dépend du champ.
+  const inconnue = mf.dataset.inconnue || 'x'
+  ajouteTouche('INCONNUE', { display: `$${inconnue}$`, insert: inconnue })
   keyboardState.update((value) => {
     return {
       isVisible: true && !isCorrected,

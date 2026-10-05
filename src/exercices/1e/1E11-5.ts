@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisiDelta } from '../../lib/mathFonctions/outilsMaths'
@@ -10,6 +9,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -72,8 +72,8 @@ export default class Resolutionavecdelta extends Exercice {
       alpha = fraction(-b, 2 * a)
       delta = b * b - 4 * a * c
       b2 = fraction(delta, 4 * a * a).simplifie() // terme b² dans l'expression a²-b²
-      texte = `Résoudre dans $\\mathbb{R}$ l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0$ .`
-      texteCorr = `On veut résoudre dans $\\mathbb{R}$ l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0\\quad(1)$.`
+      texte = `Résoudre, dans $\\mathbb{R}$, l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0$ .`
+      texteCorr = `On veut résoudre, dans $\\mathbb{R}$, l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0\\quad(1)$.`
       texteCorr +=
         '<br>On reconnaît une équation du second degré sous la forme $ax^2+bx+c = 0$.'
       texteCorr +=

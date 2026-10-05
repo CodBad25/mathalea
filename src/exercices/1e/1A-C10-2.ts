@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import EquationsCarree from '../can/2e/can2L2-05'
 export const titre = 'Résoudre une équation du type $(x+a)^2=k$'
 export const dateDePublication = '27/07/2025'
@@ -21,5 +22,11 @@ export default class Auto1AC10b extends EquationsCarree {
   constructor() {
     super()
     this.versionQcm = false
+    this.versionAutomatisme = true
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    // Clavier allégé : accolades, point-virgule, racine carrée et ensemble vide
+    this.optionsChampTexte = {
+      dataKeys: ['\\{#0\\}', ';', 'SQRT', '\\emptyset'],
+    }
   }
 }

@@ -57,7 +57,7 @@ export default class ExprimerVariable extends ExerciceSimple {
 
       if (this.quotaChoice('ordre', [true, false])) {
         this.question = ` On donne la relation  : $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$.<br>
-      ${this.versionQcm ? `On cherche à isoler $${var1}$. On a : ` : `Exprimer $${var1}$ en fonction de $${var2}$ ${this.interactif ? `<br>$${var1}=$` : '.'}`}  `
+      ${this.versionQcm ? `On cherche à isoler $${var1}$. On a : ` : `Exprimer $${var1}$ en fonction de $${var2}$. ${this.interactif ? `<br>$${var1}=$` : ''}`}  `
         if (a === 1) {
           this.correction = `${corr1}`
         } else if (a > 0) {
@@ -103,7 +103,7 @@ export default class ExprimerVariable extends ExerciceSimple {
       } else {
         this.question = ` On donne la relation  : $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$.<br>
         
-         ${this.versionQcm ? `On cherche à isoler $${var2}$. On a : ` : ` Exprimer $${var2}$ en fonction de $${var1}$${this.interactif ? `<br>$${var2}=$` : '.'}`}  `
+         ${this.versionQcm ? `On cherche à isoler $${var2}$. On a : ` : ` Exprimer $${var2}$ en fonction de $${var1}$.${this.interactif ? `<br>$${var2}=$` : ''}`}  `
 
         if (b === 1) {
           this.correction = `${corr3}`
@@ -158,7 +158,12 @@ export default class ExprimerVariable extends ExerciceSimple {
     for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
       this.correction += textCorrSplit[ee] + ':'
     }
-    this.correction += ` $${miseEnEvidence(aRemplacer)}$`
+    // Hors QCM, « X = » reste hors de la mise en évidence : seule l'expression saisie est en orange
+    const [membreGauche, ...membreDroit] = aRemplacer.split('=')
+    this.correction +=
+      membreDroit.length > 0 && !this.versionQcm
+        ? ` $${membreGauche}=${miseEnEvidence(membreDroit.join('=').trim())}$`
+        : ` $${miseEnEvidence(aRemplacer)}$`
     // Fin de cette uniformisation
     this.correction += '.'
 

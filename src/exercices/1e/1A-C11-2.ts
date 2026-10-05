@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
@@ -40,6 +41,7 @@ export default class Auto1AC13b extends ExerciceQcmACourt {
       '$c=d(b - a)$',
       '$c=\\dfrac{b + a}{d}$',
     ]
+    this.prepareSaisie(['a', 'b', 'c', 'd'])
   }
 
   versionAleatoire: () => void = () => {
@@ -352,11 +354,17 @@ export default class Auto1AC13b extends ExerciceQcmACourt {
         break
       }
     }
+    this.prepareSaisie(nomV)
+  }
+
+  /** Clavier avec les lettres de la question et le signe = (l'élève écrit l'égalité complète) */
+  private prepareSaisie(lettres: string[]) {
+    this.optionsChampReponseCourte = { dataKeys: [...lettres, '='] }
   }
 
   constructor() {
     super()
-    this.clavierReponseCourte = 'lycee'
+    this.clavierReponseCourte = KeyboardType.clavierDeBaseAvecFraction
     this.versionAleatoire()
   }
 }

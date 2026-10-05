@@ -3232,8 +3232,10 @@ function qcmChoiceFormat(choice: Element): 'case' | 'lettre' {
 /**
  * Détecte les propositions de QCM produites par `propositionsQcm` : chaque
  * proposition porte un libellé `<label id="labelEx{N}Q{i}R{rep}">` (présent
- * quel que soit le format, `case` ou `lettre`). Les propositions d'un même
- * conteneur sont regroupées dans un `#tasks(...)`. Traité avant les formules :
+ * quel que soit le format, `case` ou `lettre`). Une proposition est un `<div>`
+ * (`propositionsQcm`) ou un `<span class="ex0">` (QCM statique d'un
+ * `multi-mathfield`, `staticQcm`). Les propositions d'un même conteneur sont
+ * regroupées dans un `#tasks(...)`. Traité avant les formules :
  * les libellés sont reconvertis récursivement par `htmlToTypst`.
  */
 function protectQcm(
@@ -3254,7 +3256,7 @@ function protectQcm(
   const formats = new Map<Element, 'case' | 'lettre'>()
   const order: Element[] = []
   for (const label of labels) {
-    const choice = label.closest('div')
+    const choice = label.closest('div, span.ex0')
     const container = choice?.parentElement
     if (choice == null || container == null) continue
     const body = htmlToTypst(

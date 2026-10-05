@@ -1,4 +1,3 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -6,6 +5,7 @@ import {
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -37,10 +37,10 @@ export default class EquationsEtInequations extends Exercice {
 
   nouvelleVersion() {
     if (context.vue === 'diap' || this.nbQuestions === 1) {
-      this.introduction = 'Résoudre dans $\\mathbb{R}$ :'
+      this.introduction = 'Résoudre, dans $\\mathbb{R}$, :'
     } else
       this.introduction =
-        'Résoudre dans $\\mathbb{R}$ les équations et inéquations suivantes.'
+        'Résoudre, dans $\\mathbb{R}$, les équations et inéquations suivantes.'
     let typesDeQuestionsDisponibles = [
       'inequationFormeFactorisee',
       'inequationFormeDevelopeeSansRacine',

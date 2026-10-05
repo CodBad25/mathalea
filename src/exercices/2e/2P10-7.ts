@@ -65,7 +65,7 @@ export default class CoherenceLoiProbabilite extends Exercice {
       const sommeLatex = frequenceLatex(somme)
 
       let texte = `${proprietaire.prenom} possède un dé truqué et affirme que la probabilité d'apparition de chacune des faces est donnée par le tableau suivant.<br>`
-      texte += `${contradicteur.prenom} affirme que ce tableau est nécessairement faux. A-t-il raison ?<br><br>`
+      texte += `${contradicteur.prenom} affirme que ce tableau est nécessairement faux. A-t-${contradicteur.pronom} raison ?<br><br>`
       texte += tableauColonneLigne(
         ['\\text{Issue}', '1', '2', '3', '4', '5', '6'],
         ['\\text{Probabilité}'],

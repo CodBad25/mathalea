@@ -84,6 +84,13 @@ En local, ajouter `&triche` à l'URL de MathALÉA
 (`http://localhost:5173/alea/?uuid=…&triche`) : la console du navigateur
 affiche les réponses attendues de chaque question interactive.
 
+### Relire énoncé et correction
+
+En local, ajouter `&cor` à l'URL (`http://localhost:5173/alea/?uuid=…&cor`) :
+tous les exercices s'affichent avec leur correction, sans cliquer sur le bouton
+de chaque exercice. Le paramètre est ignoré hors `localhost`, et les exercices
+interactifs gardent leur comportement habituel (correction après vérification).
+
 ### Points d'arrêt dans le navigateur
 
 Vite sert les sources TypeScript avec leurs source maps : dans les outils de

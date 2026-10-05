@@ -55,7 +55,7 @@ export default class Can2a2026Q28 extends ExerciceCan {
     const factorisationTexte = `x(${rienSi1(a)}x${ecritureAlgebrique(b)})=0`
     const equation2Texte = `${rienSi1(a)}x${ecritureAlgebrique(b)}=0`
 
-    this.question = `Résoudre dans $\\mathbb{R}$ l'équation : $${equationTexte}$.`
+    this.question = `Résoudre, dans $\\mathbb{R}$, l'équation : $${equationTexte}$.`
 
     this.correction = `$${equationTexte}$<br>
     En factorisant, on obtient une équation produit-nul  : $${factorisationTexte}$<br>
@@ -64,7 +64,7 @@ export default class Can2a2026Q28 extends ExerciceCan {
     Ainsi : $x=0$ ou $x=${a === 1 ? `${-b}` : `\\dfrac{${-b}}{${a}}`}$.<br>
     $S=\\left\\{${miseEnEvidence(`0\\,;\\,${sol2.texFSD}`)}\\right\\}$`
 
-    this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation : $${equationTexte}$`
+    this.canEnonce = `Résoudre, dans $\\mathbb{R}$, l'équation : $${equationTexte}$`
     this.canReponseACompleter = '$S=\\ldots$'
 
     if (this.interactif) {

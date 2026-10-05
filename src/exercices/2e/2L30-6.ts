@@ -1,4 +1,11 @@
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -9,7 +16,9 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre une inéquation pas à pas'
 export const interactifReady = true
 export const dateDePublication = '29/09/2026'
-export const uuid = 'd4e8a'
+export const dateDeModifImportante = '04/10/2026'
+
+export const uuid = '58286'
 
 export const refs = {
   'fr-fr': [],
@@ -33,10 +42,15 @@ type InequationData = {
 export default class ResoudreInequationPasAPas extends Exercice {
   constructor() {
     super()
+    this.comment = commentaireSolveur
     this.besoinFormulaireCaseACocher = [
       'Afficher la représentation graphique des solutions',
     ]
+    this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
     this.sup = true
+    this.sup2 = false
+    this.besoinFormulaire3Numerique = formulaireBaremeSolveur()
+    this.sup3 = 1
     this.consigne = 'Résoudre les inéquations suivantes pas à pas.'
     this.nbQuestions = 2
     this.spacing = 2
@@ -50,11 +64,10 @@ export default class ResoudreInequationPasAPas extends Exercice {
       this.listeQuestions[i] = addMathaleaSolveur(this, i, {
         initial: data.inequation,
         kind: 'inequation',
-        mode: this.interactif ? 'evaluation' : 'entrainement',
+        ...optionsSolveur(this.interactif, this.sup2, this.sup3),
         showInterval: Boolean(this.sup),
         intervalMin: -6,
         intervalMax: 6,
-        interactivityOn: true,
       })
 
       this.listeCorrections[i] =
@@ -64,7 +77,10 @@ export default class ResoudreInequationPasAPas extends Exercice {
       handleAnswers(
         this,
         i,
-        { reponse: { value: data.solution } },
+        {
+          reponse: { value: data.solution },
+          bareme: baremeSolveur(modeSolveur(this.sup3)),
+        },
         { formatInteractif: 'mathalea-solveur' },
       )
       i++

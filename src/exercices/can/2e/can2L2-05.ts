@@ -20,6 +20,8 @@ export const refs = {
 
 */
 export default class EquationsCarree extends ExerciceSimple {
+  /** Formulation utilisée par le clone 1A-C10-2 (automatismes de 1re) */
+  versionAutomatisme = false
   constructor() {
     super()
 
@@ -32,6 +34,7 @@ export default class EquationsCarree extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    let equation = ''
     switch (
       this.quotaChoice('type', [1, 2, 3]) // 1, 1, 2, 2, 3
     ) {
@@ -45,9 +48,7 @@ export default class EquationsCarree extends ExerciceSimple {
           this.reponse = this.versionQcm
             ? `$S=\\{${sol1}\\,;\\,${sol2}\\}$`
             : `\\{${sol1};${sol2}\\}`
-          this.question = this.versionQcm
-            ? `L'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
-            : `Donner l'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
+          equation = `$(x${ecritureAlgebrique(a)})^2=${k}$`
 
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
           Comme $k>0$, les solutions de $(x${ecritureAlgebrique(a)})^2=${k}$ sont données par les solutions de chacune des équations :           $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ et $x${ecritureAlgebrique(a)}=\\sqrt{${k}}$.<br>
@@ -75,9 +76,7 @@ export default class EquationsCarree extends ExerciceSimple {
           this.reponse = this.versionQcm
             ? `$S=\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)}\\,;\\,\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}$`
             : `\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)};\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}`
-          this.question = this.versionQcm
-            ? `L'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
-            : `Donner l'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
+          equation = `$(x${ecritureAlgebrique(a)})^2=${k}$`
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
         Comme $k>0$, les solutions de $(x${ecritureAlgebrique(a)})^2=${k}$ sont données par les solutions de chacune des équations :         $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ et $x${ecritureAlgebrique(a)}=\\sqrt{${k}}$.<br>
         $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ a pour solution $-\\sqrt{${k}}${ecritureAlgebrique(-a)}$ et 
@@ -103,9 +102,7 @@ export default class EquationsCarree extends ExerciceSimple {
           const a = randint(-10, 10, 0)
           const k = randint(-10, -1)
           this.reponse = this.versionQcm ? '$S=\\emptyset$' : '\\emptyset'
-          this.question = this.versionQcm
-            ? `L'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
-            : `Donner l'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
+          equation = `$(x${ecritureAlgebrique(a)})^2=${k}$`
 
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
         Comme $k<0$, l'équation n'a pas de solution sur $\\mathbb{R}$.<br>
@@ -128,9 +125,21 @@ export default class EquationsCarree extends ExerciceSimple {
     }
 
     this.canReponseACompleter = '\\hspace{-2.5cm}$S=\\ldots$'
-    if (this.interactif && !this.versionQcm) {
-      this.question += `<br>
+    if (this.versionAutomatisme) {
+      // Formulation des automatismes de 1re (1A-C10-2)
+      this.question = this.versionQcm
+        ? `L'équation ${equation} a pour ensemble de solutions :`
+        : this.interactif
+          ? `L'équation ${equation} a pour ensemble de solutions :<br>$S=$`
+          : `Résoudre, dans $\\mathbb{R}$, l'équation ${equation}.`
+    } else {
+      this.question = this.versionQcm
+        ? `L'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  ${equation} est :`
+        : `Donner l'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  ${equation}.`
+      if (this.interactif && !this.versionQcm) {
+        this.question += `<br>
           Respecter les notations pour écrire les solutions.<br>$S=$`
+      }
     }
   }
 }

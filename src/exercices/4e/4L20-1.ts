@@ -1,4 +1,11 @@
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -9,7 +16,9 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre une équation pas à pas'
 export const interactifReady = true
 export const dateDePublication = '29/09/2026'
-export const uuid = 'a7f2d'
+export const dateDeModifImportante = '04/10/2026'
+
+export const uuid = 'c19b6'
 
 export const refs = {
   'fr-fr': ['4L20-1'],
@@ -32,6 +41,11 @@ type EquationData = {
 export default class ResoudreEquationPasAPas extends Exercice {
   constructor() {
     super()
+    this.comment = commentaireSolveur
+    this.besoinFormulaireCaseACocher = ['Mode entrainement en non interactif']
+    this.sup = false
+    this.besoinFormulaire2Numerique = formulaireBaremeSolveur()
+    this.sup2 = 1
     this.consigne = 'Résoudre les équations suivantes pas à pas.'
     this.nbQuestions = 4
     this.spacing = 2
@@ -46,8 +60,7 @@ export default class ResoudreEquationPasAPas extends Exercice {
       this.listeQuestions[i] = addMathaleaSolveur(this, i, {
         initial: data.equation,
         kind: 'equation',
-        mode: this.interactif ? 'evaluation' : 'entrainement',
-        interactivityOn: true,
+        ...optionsSolveur(this.interactif, this.sup, this.sup2),
       })
 
       this.listeCorrections[i] =
@@ -57,7 +70,10 @@ export default class ResoudreEquationPasAPas extends Exercice {
       handleAnswers(
         this,
         i,
-        { reponse: { value: expected } },
+        {
+          reponse: { value: expected },
+          bareme: baremeSolveur(modeSolveur(this.sup2)),
+        },
         { formatInteractif: 'mathalea-solveur' },
       )
       i++

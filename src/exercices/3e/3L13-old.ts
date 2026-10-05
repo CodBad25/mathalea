@@ -1,7 +1,7 @@
 // Version archivée : conservée pour que les liens (sujets et corrigés)
 // déjà partagés avec l'uuid f239f continuent d'afficher les mêmes
 // valeurs. Ne plus la modifier : toute correction va dans la version courante.
-import ExerciceEquation1 from '../4e/4L20'
+import ExerciceEquation1 from '../4e/4L20-old2'
 export const interactifReady = true
 
 export const amcReady = true

@@ -28,7 +28,11 @@ export default class Puissances extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
-    this.formatChampTexte = KeyboardType.clavierEnsemble
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    // Clavier allégé : accolades, point-virgule, racine carrée et ensemble vide
+    this.optionsChampTexte = {
+      dataKeys: ['\\{#0\\}', ';', 'SQRT', '\\emptyset'],
+    }
     this.optionsDeComparaison = { ensembleDeNombres: true }
     this.versionQcmDisponible = true
     this.versionQcm = false
@@ -44,23 +48,27 @@ export default class Puissances extends ExerciceSimple {
     const corrPositif =
       " est strictement positif, l'équation a deux solutions : "
     const ensemble = (a: string) => `\\{-${a};${a}\\}`
+    // Ensemble des solutions mis en évidence, avec un séparateur aéré
+    const ensembleEnEvidence = (a: string) =>
+      miseEnEvidence(`\\{-${a}\\,;\\,${a}\\}`)
 
     const choix = this.quotaChoice('ecriture', [true, false])
     // Solution (sans le « S= ») et distracteurs pour la version QCM
     let solution: string
+    let equation: string
     let distracteurs: string[]
 
     switch (this.quotaChoice('cas', [1, 1, 2, 3, 3, 4, 4])) {
       case 1: {
         const a = this.quotaRandint('a1', 1, 9)
-        this.question = `Résoudre dans $\\mathbb{R}$ l'équation ${choix ? `$x^{2}-${a * a}=0$` : `$${a * a}-x^2=0$`}.`
+        equation = choix ? `$x^{2}-${a * a}=0$` : `$${a * a}-x^2=0$`
         this.correction =
           corrCarre +
           ` $x^2=${a * a}$.<br>
         Puisque $${a * a}$` +
           corrPositif +
           `$-\\sqrt{${a * a}}=-${a}$ et $\\sqrt{${a * a}}=${a}$.<br>
-        Ainsi, $S=${miseEnEvidence(ensemble(String(a)))}$.`
+        Ainsi, $S=${ensembleEnEvidence(String(a))}$.`
         solution = ensemble(String(a))
         distracteurs = [
           ensemble(`\\sqrt{${a}}`),
@@ -72,7 +80,7 @@ export default class Puissances extends ExerciceSimple {
       }
       case 2: {
         const a = this.quotaRandint('a2', 1, 9)
-        this.question = `Résoudre dans $\\mathbb{R}$ l'équation $x^{2}+${a * a}=0$.`
+        equation = `$x^{2}+${a * a}=0$`
         this.correction = `On isole le carré. L'équation s'écrit $x^{2}=-${a * a}$.<br>
           Comme  $-${a * a}$${corrNegatif}`
         solution = '\\emptyset'
@@ -86,11 +94,11 @@ export default class Puissances extends ExerciceSimple {
       case 3: {
         const b = this.quotaRandint('b3', 1, 12)
         const a = b ** 2 * this.quotaChoice('signe3', [-1, 1])
-        this.question = `Résoudre dans $\\mathbb{R}$ l'équation $x^{2}=${a}$.`
+        equation = `$x^{2}=${a}$`
         this.correction = ` On reconnaît une équation du type $x^2=k$ avec $k=${a}$.<br>`
         if (a > 0) {
           this.correction += `Puisque $${a}$ ${corrPositif} $-\\sqrt{${a}}=-${b}$ et $\\sqrt{${a}}=${b}$.<br>
-          Ainsi, $S=${miseEnEvidence(ensemble(String(b)))}$.`
+          Ainsi, $S=${ensembleEnEvidence(String(b))}$.`
           solution = ensemble(String(b))
           distracteurs = [
             '\\emptyset',
@@ -113,7 +121,9 @@ export default class Puissances extends ExerciceSimple {
         const a = this.quotaRandint('a4', 2, 9)
         const k = this.quotaRandint('k4', -7, 13, [0, 1, 4, 9])
         const b = a * k
-        this.question = `Résoudre dans $\\mathbb{R}$ l'équation ${choix ? `$${a}x^{2}${ecritureAlgebrique(-b)}=0$` : `$${-b}${ecritureAlgebrique(a)}x^{2}=0$`}.`
+        equation = choix
+          ? `$${a}x^{2}${ecritureAlgebrique(-b)}=0$`
+          : `$${-b}${ecritureAlgebrique(a)}x^{2}=0$`
         this.correction = `${corrCarre} $x^2=${k}$.<br>  `
         if (k < 0) {
           this.correction += `Puisque $${k}$ ${corrNegatif}`
@@ -125,7 +135,7 @@ export default class Puissances extends ExerciceSimple {
           ]
         } else {
           this.correction += `Puisque $${k}$ ${corrPositif} $-\\sqrt{${k}}$ et $\\sqrt{${k}}$.<br>
-          Ainsi, $S=${miseEnEvidence(ensemble(`\\sqrt{${k}}`))}$.`
+          Ainsi, $S=${ensembleEnEvidence(`\\sqrt{${k}}`)}$.`
           solution = ensemble(`\\sqrt{${k}}`)
           distracteurs = [
             `\\{\\sqrt{${k}}\\}`,
@@ -138,11 +148,15 @@ export default class Puissances extends ExerciceSimple {
     }
 
     if (this.versionQcm) {
+      this.question = `L'équation ${equation} a pour ensemble de solutions :`
       this.reponse = `$S=${solution}$`
       this.distracteurs = distracteurs.map((d) => `$S=${d}$`)
     } else {
+      // En interactif, S= à la ligne devant le champ ; sur papier (PDF), consigne classique
+      this.question = this.interactif
+        ? `L'équation ${equation} a pour ensemble de solutions :<br>$S=$`
+        : `Résoudre, dans $\\mathbb{R}$, l'équation ${equation}.`
       this.reponse = solution
-      if (this.interactif) this.question += '<br>$S=$'
     }
   }
 }

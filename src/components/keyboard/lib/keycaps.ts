@@ -344,6 +344,8 @@ const basicKeys = {
   Z: { display: 'Z' },
   // ================== maths letters
   xMath: { display: '$x$', insert: 'x' },
+  // Lettre de l'inconnue, redéfinie par `ajouteTouche` selon le champ (voir `setMathfield.ts`).
+  INCONNUE: { display: '$x$', insert: 'x' },
   yMath: { display: '$y$', insert: 'y' },
   zMath: { display: '$z$', insert: 'z' },
   aMath: { display: '$a$', insert: 'a' },

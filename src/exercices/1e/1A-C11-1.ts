@@ -1,3 +1,5 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { touchesDeLaReponse } from '../../lib/interactif/claviers/touchesDeLaReponse'
 import ExprimerVariable from '../can/2e/can2L12-01'
 export const titre = "Exprimer une variable en fonction d'une autre"
 export const dateDePublication = '26/07/2025'
@@ -21,5 +23,22 @@ export default class Auto1AC13a extends ExprimerVariable {
   constructor() {
     super()
     this.versionQcm = false
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+  }
+
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    // Clavier allégé : la lettre à exprimer et celles de la réponse
+    const lettreAExprimer = String(this.question).match(
+      /Exprimer\s+\$([a-zA-Z])\$/,
+    )?.[1]
+    const touches = touchesDeLaReponse(this.reponse)
+    this.optionsChampTexte = {
+      ...this.optionsChampTexte,
+      dataKeys:
+        lettreAExprimer == null || touches.includes(lettreAExprimer)
+          ? touches
+          : [lettreAExprimer, ...touches],
+    }
   }
 }

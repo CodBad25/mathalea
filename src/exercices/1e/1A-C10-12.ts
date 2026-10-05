@@ -35,6 +35,7 @@ export default class Auto1C11d extends ExerciceSimple {
   }
 
   nouvelleVersion() {
+    let equation = ''
     if (context.isAmc) this.versionQcm = true
 
     const a = randint(1, 10)
@@ -43,7 +44,7 @@ export default class Auto1C11d extends ExerciceSimple {
     const d = randint(-10, 10, [0, b])
     const solution = new FractionEtendue(d - b, a - c).simplifie()
 
-    this.question = `Résoudre l'équation $(${reduireAxPlusB(a, b)})-(${reduireAxPlusB(c, d)})=0$.`
+    equation = `$(${reduireAxPlusB(a, b)})-(${reduireAxPlusB(c, d)})=0$`
     this.correction = `On se ramène à une équation du type $ax=b$ en isolant les  « $x$ » dans le membre de gauche et les « non $x$ » dans le membre de droite.<br>
     $\\begin{aligned}
     (${reduireAxPlusB(a, b)})-(${reduireAxPlusB(c, d)})&=0\\\\
@@ -55,6 +56,7 @@ x&= ${solution.texFSD}
    La solution de cette équation est  $${miseEnEvidence(solution.texFSD)}$.`
 
     if (this.versionQcm) {
+      this.question = `La solution de l'équation ${equation} est :`
       this.reponse = `$${solution.texFSD}$`
       this.distracteurs = [
         new FractionEtendue(-b, a),
@@ -66,7 +68,10 @@ x&= ${solution.texFSD}
       ].map((f) => `$${f.simplifie().texFSD}$`)
     } else {
       this.reponse = solution.texFSD
-      if (this.interactif) this.question += '<br>$x=$'
+      // En interactif, x= à la ligne devant le champ ; sur papier (PDF), consigne classique
+      this.question = this.interactif
+        ? `La solution de l'équation ${equation} est :<br>$x=$`
+        : `Déterminer la solution de l'équation ${equation}.`
     }
   }
 }

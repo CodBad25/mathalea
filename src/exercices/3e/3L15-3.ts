@@ -1,3 +1,10 @@
+import {
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import type { OptionsComparaisonType } from '../../lib/types'
@@ -11,9 +18,9 @@ export const interactifReady = true
 export const dateDePublication = '13/06/2026'
 export const titre = 'Exercice de synthèse sur les équations'
 
-export const dateDeModifImportante = '18/09/2026'
+export const dateDeModifImportante = '04/10/2026'
 
-export const uuid = 'de90b'
+export const uuid = 'bff54'
 export const refs = {
   'fr-fr': ['3L15-3'],
   'fr-ch': ['11FA5B-8'],
@@ -26,16 +33,22 @@ export const refs = {
 export default class EquationMelees extends Exercice {
   constructor() {
     super()
+    this.comment = commentaireSolveur
     this.besoinFormulaireNumerique = [
       'Niveau de difficulté',
       4,
       '1 : facile\n2 : Moyen\n3 : difficile\n4 : mélange',
     ]
+    this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
     this.sup = 1
+    this.sup2 = false
+    this.besoinFormulaire3Numerique = formulaireBaremeSolveur()
+    this.sup3 = 1
   }
   nouvelleVersion() {
     const interactif = this.interactif
     const numeroExercice = this.numeroExercice
+    const modeInteractif = modeSolveur(this.sup3)
 
     const niveau =
       this.sup === 1
@@ -74,6 +87,8 @@ export default class EquationMelees extends Exercice {
           exo.sup2 = choice(typeMelangeFor3L13)
         }
         exo.sup3 = true
+        exo.sup4 = this.sup2
+        exo.sup5 = this.sup3
         exo.sup = true
       } else if (listeExos[i] === 1) {
         exo = new Equation3L14()
@@ -107,19 +122,39 @@ export default class EquationMelees extends Exercice {
       exo.nouvelleVersion()
       if (this.questionJamaisPosee(i, listeExos[i], exo.listeCorrections[0])) {
         const options = exo.autoCorrection[0]?.valeur?.reponse?.options ?? {}
+        const estSolveur =
+          exo.autoCorrection[0]?.formatInteractif === 'mathalea-solveur'
+        // Chaque question doit valoir le même nombre de points quel que soit
+        // le type tiré : avec le barème sur 2 points, les questions avec
+        // solveur sont sur 2 points, les autres sont donc doublées.
+        const bareme = estSolveur
+          ? baremeSolveur(modeInteractif)
+          : modeInteractif === 'entrainement'
+            ? (listePoints: number[]): [number, number] => [
+                2 * Math.min(...listePoints),
+                2,
+              ]
+            : toutPourUnPoint
         if (options.suiteDeNombres) {
           handleAnswers(this, i, {
             reponse: {
               value: exo.autoCorrection[0]?.valeur?.reponse?.value ?? '',
               options,
             },
+            bareme,
           })
         } else {
-          handleAnswers(this, i, {
-            reponse: {
-              value: exo.autoCorrection[0]?.valeur?.reponse?.value ?? '',
+          handleAnswers(
+            this,
+            i,
+            {
+              reponse: {
+                value: exo.autoCorrection[0]?.valeur?.reponse?.value ?? '',
+              },
+              bareme,
             },
-          })
+            { formatInteractif: exo.autoCorrection[0]?.formatInteractif },
+          )
         }
         this.consigne =
           this.nbQuestions === 1
@@ -127,11 +162,21 @@ export default class EquationMelees extends Exercice {
             : `Résoudre les équations suivantes. S'il y a plusieurs solutions, les donner en les séparant par un point-virgule.`
         this.listeQuestions.push(
           exo.listeQuestions[0]
+            .replaceAll(
+              'mathalea-solveurEx0Q0',
+              `mathalea-solveurEx${numeroExercice}Q${i}`,
+            )
+            .replace(
+              'numero-exercice="0"',
+              `numero-exercice="${numeroExercice}"`,
+            )
+            .replace('question-index="0"', `question-index="${i}"`)
             .replace('champTexteEx0Q0', `champTexteEx${numeroExercice}Q${i}`)
             .replace(
               'resultatCheckEx0Q0',
               `resultatCheckEx${numeroExercice}Q${i}`,
-            ),
+            )
+            .replace('feedbackEx0Q0', `feedbackEx${numeroExercice}Q${i}`),
         )
         this.listeCorrections.push(exo.listeCorrections[0])
         i++

@@ -42,7 +42,9 @@ export const dateDePublication = '10/01/2026'
 /**
  * @author Jean-claude Lhote
  */
-export const uuid = '2ac3c'
+export const dateDeModifImportante = '05/10/2026'
+
+export const uuid = '03b30'
 
 export const refs = {
   'fr-fr': ['6G2C-1'],
@@ -74,12 +76,12 @@ export default class RegionsDuPlan extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
       let content = ''
       let objetReponse: Valeur
       let texte = '$M$ est un point de la partie grisée du plan.<br>'
       texte +=
-        'Trouve la ou les conditions vérifiées par le point $M$ :<br><br>'
+        'Trouver la ou les conditions vérifiées par le point $M$.<br><br>'
       let texteCorr = ''
       const objetsEnonce: NestedObjetMathalea2dArray = []
       let donneesAleatoires: (number | string)[] = []
@@ -229,6 +231,14 @@ export default class RegionsDuPlan extends Exercice {
             const xC2 = randint(0, 2, xC1)
             const yC2 = randint(0, 2, yC1)
             const r2 = randint(25, 35) / 10
+            // Exclure les cercles disjoints, tangents ou emboîtés.
+            const distanceCentres = Math.hypot(xC2 - xC1, yC2 - yC1)
+            if (
+              distanceCentres <= Math.abs(r1 - r2) ||
+              distanceCentres >= r1 + r2
+            ) {
+              continue
+            }
             const C1 = pointAbstrait(xC1, yC1, noms[0], 'left')
             const C2 = pointAbstrait(xC2, yC2, noms[1], 'right')
             const c1 = cercle(C1, r1)
@@ -281,6 +291,14 @@ export default class RegionsDuPlan extends Exercice {
             const xC2 = randint(0, 2, xC1)
             const yC2 = randint(0, 2, yC1)
             const r2 = randint(25, 35) / 10
+            // Exclure les cercles disjoints, tangents ou emboîtés.
+            const distanceCentres = Math.hypot(xC2 - xC1, yC2 - yC1)
+            if (
+              distanceCentres <= Math.abs(r1 - r2) ||
+              distanceCentres >= r1 + r2
+            ) {
+              continue
+            }
             const C1 = pointAbstrait(xC1, yC1, noms[0], 'left')
             const C2 = pointAbstrait(xC2, yC2, noms[1], 'right')
             const c1 = cercle(C1, r1)
@@ -369,6 +387,14 @@ export default class RegionsDuPlan extends Exercice {
             const xC2 = randint(0, 2, xC1)
             const yC2 = randint(0, 2, yC1)
             const r2 = randint(15, 25) / 10
+            // Exclure les cercles disjoints, tangents ou emboîtés.
+            const distanceCentres = Math.hypot(xC2 - xC1, yC2 - yC1)
+            if (
+              distanceCentres <= Math.abs(r1 - r2) ||
+              distanceCentres >= r1 + r2
+            ) {
+              continue
+            }
             const C1 = pointAbstrait(xC1, yC1, noms[0], 'left')
             const C2 = pointAbstrait(xC2, yC2, noms[1], 'right')
             const c1 = cercle(C1, r1)
@@ -440,7 +466,6 @@ export default class RegionsDuPlan extends Exercice {
         this.listeCorrections.push(texteCorr)
         i++
       }
-      cpt++
     }
   }
 }

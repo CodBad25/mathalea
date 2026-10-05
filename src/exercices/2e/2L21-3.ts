@@ -5,7 +5,9 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const uuid = '7959f'
+export const dateDeModifImportante = '04/10/2026'
+
+export const uuid = '2e46e'
 export const refs = {
   'fr-fr': ['2L21-3', 'BP2RES27'],
   'fr-ch': ['NR'],

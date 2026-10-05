@@ -1972,14 +1972,32 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
 }
 
 /**
- * Une valeur vide d'un `<input type="number">` est liée à `null` par Svelte.
- * Les réglages partagés peuvent donc contenir une ancienne valeur `null` : ne
- * jamais l'interpoler dans une longueur Typst (`nullem`).
+ * Les champs numériques vides (null/undefined) et les anciens réglages partagés
+ * invalides ne doivent jamais produire de longueurs Typst comme « nullem ».
+ * Les espacements nuls restent autorisés ; la taille du texte doit être positive.
  */
-export function normalizeTypstLineSpacing(value: unknown): number {
-  return typeof value === 'number' && Number.isFinite(value)
-    ? value
-    : defaultTypstDocumentOptions.lineSpacing
+export function normalizeTypstLayoutOptions(
+  options: TypstDocumentOptions,
+): TypstDocumentOptions {
+  const normalized = { ...options }
+  for (const key of [
+    'fontSize',
+    'lineSpacing',
+    'wordSpacing',
+    'exerciseSpacing',
+    'questionsGutter',
+  ] as const) {
+    const value = options[key]
+    if (
+      typeof value !== 'number' ||
+      !Number.isFinite(value) ||
+      value < 0 ||
+      (key === 'fontSize' && value === 0)
+    ) {
+      normalized[key] = defaultTypstDocumentOptions[key]
+    }
+  }
+  return normalized
 }
 
 /**
@@ -2662,6 +2680,7 @@ export function buildStandaloneExerciseCode(
   codeOverride?: string,
   part: 'enonce' | 'correction' = 'enonce',
 ): string {
+  options = normalizeTypstLayoutOptions(options)
   const figures: string[] = []
   const generated = computeGeneratedExercises(
     exercises,
@@ -2729,9 +2748,7 @@ export function buildStandaloneExerciseCode(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(
-    `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
-  )
+  lines.push(`#set par(leading: ${options.lineSpacing}em)`)
   // pas de `numbering` : « 1. » est la valeur par défaut, et le préambule
   // d'une banque externe (inséré plus haut) peut avoir réglé la sienne
   lines.push('#set enum(spacing: 1.2em)')
@@ -3490,6 +3507,7 @@ export function buildTypstDocument(
   extraVersions: TypstExerciseInput[][] = [],
   { exportMode = false, sourceUrl, extraPreamble }: TypstBuildOptions = {},
 ): string {
+  options = normalizeTypstLayoutOptions(options)
   const stableCarryOver = stabilizeStructuralInsertions(
     carryOver,
     exercises.length,
@@ -3836,9 +3854,7 @@ export function buildTypstDocument(
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
   )
-  lines.push(
-    `#set par(leading: ${normalizeTypstLineSpacing(options.lineSpacing)}em)`,
-  )
+  lines.push(`#set par(leading: ${options.lineSpacing}em)`)
   // pas de `numbering` : « 1. » est la valeur par défaut, et le préambule
   // d'une banque externe (inséré plus haut) peut avoir réglé la sienne
   lines.push('#set enum(spacing: 1.2em)')

@@ -64,7 +64,7 @@ export default class ExerciceEquationSecondDegre extends Exercice {
     )
 
     if (this.nbQuestions === 1) {
-      this.consigne = "Résoudre dans $\\mathbb{R}$ l'équation suivante."
+      this.consigne = "Résoudre, dans $\\mathbb{R}$, l'équation suivante."
     } else {
       this.consigne = 'Résoudre $\\mathbb{R}$ les équations suivantes.'
     }
