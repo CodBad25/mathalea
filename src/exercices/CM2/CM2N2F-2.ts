@@ -167,7 +167,7 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
         { num: num2, den: den2 },
       ])
       texte =
-        'Donner les abscisses des points ' +
+        'Donner les abscisses respectives des points ' +
         remplisLesBlancs(
           this,
           i,

@@ -219,7 +219,7 @@ export default class AutoQ5PolynesieSpe2026 extends ExerciceQcmA {
       `$${intervalleNegatif}\\cup${intervallePositifFerme}$`,
     ]
 
-    this.correction = `Pour résoudre graphiquement l'inéquation $\\dfrac{1}{x}${sensTex} ${seuil}$, on cherche les abscisses des points de la courbe situés ${positionCourbe}.<br>
+    this.correction = `Pour résoudre graphiquement l'inéquation $\\dfrac{1}{x}${sensTex} ${seuil}$, on cherche les abscisses respectives des points de la courbe situés ${positionCourbe}.<br>
     ${figureCorrection}
     La courbe coupe cette droite horizontale en un point d'abscisse $x=${borne}$.<br>
     ${lectureGraphique}<br>

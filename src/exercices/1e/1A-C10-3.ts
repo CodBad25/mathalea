@@ -315,7 +315,7 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
     return `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace la parabole d'équation $y=x^2$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${val}$. Cette droite coupe la parabole en $-\\sqrt{${val}}$ et $\\sqrt{${val}}$. <br>
-            $\\bullet$ Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${positionText} la droite.<br>
+            $\\bullet$ Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${positionText} la droite.<br>
             ${graphiqueC}<br>
             On en déduit que l'inéquation $(I)$ est équivalente à : ${reponseEnEvidence}.`
   }

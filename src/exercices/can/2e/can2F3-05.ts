@@ -161,10 +161,10 @@ export default class InequationsGSpline extends ExerciceSimple {
       '>',
       '\\geqslant',
     ]) //
-    const correction = `Les solutions de l'inéquation $f(x)${symbole}${y1}$ sont les abscisses des points de $\\mathscr{C}_f$ 
+    const correction = `Les solutions de l'inéquation $f(x)${symbole}${y1}$ sont les abscisses respectives des points de $\\mathscr{C}_f$ 
 qui se situent  ${symbole === '>' || symbole === '<' ? 'strictement' : 'sur ou '} ${symbole === '>' || symbole === '\\geqslant' ? 'au-dessus' : 'en dessous'} de la droite d'équation $y=${y1}$.<br>
 On en déduit `
-    const correctionBis = `Les solutions de l'inéquation $f(x)${symbole}${y1}$ sont les abscisses des points de $\\mathscr{C}_f$ 
+    const correctionBis = `Les solutions de l'inéquation $f(x)${symbole}${y1}$ sont les abscisses respectives des points de $\\mathscr{C}_f$ 
 qui se situent  ${symbole === '>' || symbole === '<' ? 'strictement' : 'sur ou '} ${symbole === '>' || symbole === '\\geqslant' ? 'au-dessus' : 'en dessous'} de la droite d'équation $y=${y1}$.<br>
 On en déduit `
     this.question =

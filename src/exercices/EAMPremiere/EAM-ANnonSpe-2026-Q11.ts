@@ -144,7 +144,7 @@ export default class AutoQ11ANns2026 extends ExerciceQcmA {
         ? `$${sols[0]}$ et $${sols[1]}$`
         : `$${sols[0]}$, $${sols[1]}$ et $${sols[2]}$`
 
-    this.correction = `Pour résoudre graphiquement l'équation $h(x) = ${k}$, on cherche les abscisses des points d'intersection de la courbe avec la droite horizontale d'équation $y = ${k}$.<br>`
+    this.correction = `Pour résoudre graphiquement l'équation $h(x) = ${k}$, on cherche les abscisses respectives des points d'intersection de la courbe avec la droite horizontale d'équation $y = ${k}$.<br>`
     this.correction += `La courbe coupe cette droite en ${strNbPoints} points dont les abscisses sont ${strSolsList}.<br>`
     this.correction += `Donc l'ensemble solution est : $${miseEnEvidence(`S = \\{${sols.join('\\,;\\,')}\\}`)}$.`
   }

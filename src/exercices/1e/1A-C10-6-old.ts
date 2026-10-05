@@ -299,7 +299,7 @@ export default class Auto1AC10fOld extends ExerciceQcmA {
     return `Pour résoudre graphiquement cette inéquation : <br>
             $\\bullet$ On trace la courbe d'équation $y=\\sqrt{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${val}$. Cette droite coupe la courbe en $${val}^2=${borne}$. <br>
-            $\\bullet$ Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${positionText} la droite.<br>
+            $\\bullet$ Les solutions de l'inéquation sont les abscisses respectives des points de la courbe qui se situent ${positionText} la droite.<br>
             ${graphiqueC}<br>
             Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $(I)$ est : ${texteEnCouleurEtGras(reponseCorrecte)}.`
   }

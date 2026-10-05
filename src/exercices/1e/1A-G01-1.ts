@@ -153,7 +153,7 @@ export default class Auto2AG10 extends ExerciceQcmA {
 Sur quelle droite graduée le point $A$ est-il correctement placé ?`
     const laBonneDroite = this.buildLineWithPoint(data, data.x)
 
-    this.correction = `Voici les abscisses des différents points $A$ sur les droites graduées proposées :<br>`
+    this.correction = `Voici les abscisses respectives des différents points $A$ sur les droites graduées proposées :<br>`
     this.corrections = [
       `$${miseEnEvidence(`A(${texNombre(data.x, data.precision)})`)}$${laBonneDroite}`,
       ...distractors.map(
