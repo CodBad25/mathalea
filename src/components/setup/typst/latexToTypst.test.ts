@@ -121,7 +121,7 @@ describe('latexMathToTypst', () => {
     )
     expect(result).not.toContain('text paren.l')
     expect(result).not.toContain('bold()')
-    expect(result).toContain('text(fill: #rgb("#F15929"), bold(-3))')
+    expect(result).toContain('text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(-3))')
     expect((result.match(/\(/g) ?? []).length).toBe(
       (result.match(/\)/g) ?? []).length,
     )
@@ -240,9 +240,9 @@ describe('latexMathToTypst', () => {
     const highlightedClose = latexMathToTypst(
       '{\\color{#f15929}\\boldsymbol{]}}',
     )
-    expect(highlightedOpen).toBe('text(fill: #rgb("#f15929"), bold(bracket.l))')
+    expect(highlightedOpen).toBe('text(fill: #rgb("#f15929"), stroke: #stroke(paint: rgb("#f15929"), thickness: 0.025em), bold(bracket.l))')
     expect(highlightedClose).toBe(
-      'text(fill: #rgb("#f15929"), bold(bracket.r))',
+      'text(fill: #rgb("#f15929"), stroke: #stroke(paint: rgb("#f15929"), thickness: 0.025em), bold(bracket.r))',
     )
     for (const result of [highlightedOpen, highlightedClose]) {
       expect(result).not.toContain('text paren.l')
@@ -690,7 +690,7 @@ describe('htmlToTypst', () => {
     // miseEnEvidence() produit {\color{…}\boldsymbol{…}} : \boldsymbol est du
     // gras *italique*, contrairement à \mathbf
     expect(htmlToTypst('$={\\color{#F15929}\\boldsymbol{x(3x+1)}}$')).toBe(
-      '$= text(fill: #rgb("#F15929"), bold(x(3 x + 1)))$',
+      '$= text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(x(3 x + 1)))$',
     )
   })
 
@@ -846,7 +846,7 @@ describe('htmlToTypst', () => {
 
   it('conserve l’espace avant une formule mise en évidence', () => {
     expect(htmlToTypst('Ainsi, ${\\color{#f15929}\\boldsymbol{x=2}}$')).toBe(
-      'Ainsi, $text(fill: #rgb("#f15929"), bold(x = 2))$',
+      'Ainsi, $text(fill: #rgb("#f15929"), stroke: #stroke(paint: rgb("#f15929"), thickness: 0.025em), bold(x = 2))$',
     )
   })
 
@@ -1218,7 +1218,7 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('\\color')
     expect(result).not.toContain('boldsymbol')
     expect(result).toBe(
-      'Donc l\'ensemble de définition de $h$ est $text(fill: #rgb("#F15929"), bold(RR))$.',
+      'Donc l\'ensemble de définition de $h$ est $text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(RR))$.',
     )
   })
 })

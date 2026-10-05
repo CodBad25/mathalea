@@ -29,6 +29,10 @@ L'éditeur est CodeMirror 6, configuré par `editor/typstEditorSetup.ts` (`typst
 - **Sélection** : `app.css` redéfinit globalement `::selection` avec une couleur de texte noire, illisible sur le fond sombre de l'éditeur. `drawSelection()` dessine le fond de sélection et un correctif de thème (`Prec.highest`) rétablit `color: inherit` sur le texte sélectionné.
 - **Repliage** : il n'y a pas d'arbre syntaxique exploitable, le `foldService` se fonde donc sur l'indentation — ce qui correspond à la structure du code généré (exercices, corrections et listes de questions sont des blocs indentés).
 
+## Réponses mises en évidence (orange et gras)
+
+`miseEnEvidence()` produit `{\color{#F15929}\boldsymbol{…}}`, converti en `text(fill: …, bold(…))`. `bold()` ne met en gras que les lettres et les chiffres : la police de maths n'a pas de variante grasse pour les opérateurs, parenthèses et radicaux (`\boldsymbol` LaTeX les épaissit tous). `latexToTypst.ts` ajoute donc à ces formules un contour de la couleur du texte (`stroke: #stroke(paint: …, thickness: 0.025em)`), ce qui donne un gras homogène avec n'importe quelle police de maths.
+
 ## Réglages numériques de mise en page
 
 `normalizeTypstLayoutOptions` valide la taille du texte, l'interligne et les

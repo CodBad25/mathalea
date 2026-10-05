@@ -1030,6 +1030,16 @@ function postprocessTypst(typst: string): string {
       } else {
         mathFill = fill
       }
+      // `bold()` n'épaissit que les lettres et chiffres : la police de maths
+      // n'a pas de variante grasse pour les opérateurs, parenthèses ou
+      // radicaux (`\boldsymbol` LaTeX les épaissit tous). Un léger contour de
+      // la même couleur rétablit un gras homogène sur toute la réponse.
+      const paint = /^#(?:rgb\(|[a-z])/.test(mathFill)
+        ? mathFill.slice(1)
+        : null
+      if (paint != null && /^bold\(/.test(math)) {
+        return `text(fill: ${mathFill}, stroke: #stroke(paint: ${paint}, thickness: 0.025em), ${math})`
+      }
       return `text(fill: ${mathFill}, ${math})`
     })
   }
