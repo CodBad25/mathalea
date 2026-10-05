@@ -1,8 +1,11 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 9ae36 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import type { OptionsComparaisonType } from '../../lib/types'
 import Exercice from '../Exercice'
-import Equation3L13 from './3L13'
+import Equation3L13 from './3L13-old4'
 import Equation3L14 from './3L14'
 import Equation3L15 from './3L15'
 
@@ -11,33 +14,27 @@ export const interactifReady = true
 export const dateDePublication = '13/06/2026'
 export const titre = 'Exercice de synthèse sur les équations'
 
-export const dateDeModifImportante = '04/10/2026'
+export const dateDeModifImportante = '03/10/2026'
 
-export const uuid = 'bff54'
+export const uuid = '9ae36'
 export const refs = {
-  'fr-fr': ['3L15-3'],
-  'fr-ch': ['11FA5B-8'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
 /**
  * Mélange d'équations du premier degré ou assimilées, de niveau facile à difficile. Les types d'équations sont ceux des exercices 3L13, 3L14 et 3L15.
  * @author Jean-Claude Lhote
  */
-export default class EquationMelees extends Exercice {
+export default class EquationMeleesOld3 extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
     this.besoinFormulaireNumerique = [
       'Niveau de difficulté',
       4,
       '1 : facile\n2 : Moyen\n3 : difficile\n4 : mélange',
     ]
-    this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
     this.sup = 1
-    this.sup2 = false
   }
   nouvelleVersion() {
     const interactif = this.interactif
@@ -80,7 +77,6 @@ export default class EquationMelees extends Exercice {
           exo.sup2 = choice(typeMelangeFor3L13)
         }
         exo.sup3 = true
-        exo.sup4 = this.sup2
         exo.sup = true
       } else if (listeExos[i] === 1) {
         exo = new Equation3L14()

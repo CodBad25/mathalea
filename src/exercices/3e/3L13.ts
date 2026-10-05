@@ -4,8 +4,8 @@ export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Résoudre une équation du premier degré'
-export const dateDeModifImportante = '03/10/2026'
-export const uuid = '0e152'
+export const dateDeModifImportante = '04/10/2026'
+export const uuid = '23bdc'
 export const refs = {
   'fr-fr': ['3L13', 'BP2RES10', 'BP1AUTO021'],
   'fr-ch': ['10FA5C-2'],

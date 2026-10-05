@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 8cdfa continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -19,24 +22,18 @@ export const dateDePublication = '10/09/2025'
  *
  * @author Jean-Léon Henry
  */
-export const dateDeModifImportante = '04/10/2026'
+export const dateDeModifImportante = '30/09/2026'
 
-export const uuid = '45156'
+export const uuid = '8cdfa'
 
 export const refs = {
-  'fr-fr': ['2L21-6'],
-  'fr-ch': ['10FA5C-5'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
-export default class ResoudreEquationAvecQuotient extends Exercice {
+export default class ResoudreEquationAvecQuotientOld2 extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
 
-    this.besoinFormulaireCaseACocher = ['Mode entrainement en non interactif']
-    this.sup = false
     this.nbQuestions = 1
   }
 
@@ -69,8 +66,7 @@ export default class ResoudreEquationAvecQuotient extends Exercice {
       const texte = addMathaleaSolveur(this, i, {
         initial: equation(),
         kind: 'equation',
-        mode: this.sup && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup),
+        mode: this.interactif ? 'evaluation' : 'entrainement',
       })
 
       let texteCorr = `Pour tous réels $a$, $b$, $c$, $d$ tels que $b$ et $d$ soient non nuls, $\\dfrac{a}{b}=\\dfrac{c}{d}$ si et seulement si $ad=bc$.`

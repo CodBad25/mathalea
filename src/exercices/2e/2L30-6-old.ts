@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid d4e8a continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -9,13 +12,11 @@ import Exercice from '../Exercice'
 export const titre = 'Résoudre une inéquation pas à pas'
 export const interactifReady = true
 export const dateDePublication = '29/09/2026'
-export const dateDeModifImportante = '04/10/2026'
-
-export const uuid = '58286'
+export const uuid = 'd4e8a'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 type Relation = '<' | '>' | '\\leqslant' | '\\geqslant'
@@ -32,19 +33,13 @@ type InequationData = {
  * inéquations. Les formes proposées sont reprises de 2L30-3.
  * @author Jean-Claude Lhote
  */
-export default class ResoudreInequationPasAPas extends Exercice {
+export default class ResoudreInequationPasAPasOld extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'inéquation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
     this.besoinFormulaireCaseACocher = [
       'Afficher la représentation graphique des solutions',
     ]
-    this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
     this.sup = true
-    this.sup2 = false
     this.consigne = 'Résoudre les inéquations suivantes pas à pas.'
     this.nbQuestions = 2
     this.spacing = 2
@@ -58,8 +53,7 @@ export default class ResoudreInequationPasAPas extends Exercice {
       this.listeQuestions[i] = addMathaleaSolveur(this, i, {
         initial: data.inequation,
         kind: 'inequation',
-        mode: this.sup2 && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup2),
+        mode: this.interactif ? 'evaluation' : 'entrainement',
         showInterval: Boolean(this.sup),
         intervalMin: -6,
         intervalMax: 6,
