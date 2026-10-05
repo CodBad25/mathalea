@@ -15,7 +15,14 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableau } from '../../lib/2d/tableau'
 import { bleuMathalea } from '../../lib/colors'
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -46,10 +53,7 @@ export default class EqResolvantesThales extends Exercice {
   exo: string
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = commentaireSolveur
     this.besoinFormulaireNumerique = [
       'Type de nombres',
       4,
@@ -60,6 +64,8 @@ export default class EqResolvantesThales extends Exercice {
     this.nbQuestions = 2
     this.sup = 1
     this.sup2 = false
+    this.besoinFormulaire3Numerique = formulaireBaremeSolveur()
+    this.sup3 = 1
     this.consignePluriel = 'Résoudre les équations suivantes.'
     this.consigneSingulier = "Résoudre l'équation suivante."
     this.exo = '3L13-2'
@@ -282,8 +288,7 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
       const solver = addMathaleaSolveur(this, i, {
         initial: solverEquation,
         kind: 'equation',
-        mode: this.sup2 && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup2),
+        ...optionsSolveur(this.interactif, this.sup2, this.sup3),
         variable: solverVariable,
       })
       texte = this.exo === '4P10-2' ? `${texte}<br>${solver}` : solver
@@ -294,6 +299,7 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
           reponse: {
             value: `${solverVariable}=${reponse.texFSD}`,
           },
+          bareme: baremeSolveur(modeSolveur(this.sup3)),
         },
         { formatInteractif: 'mathalea-solveur' },
       )

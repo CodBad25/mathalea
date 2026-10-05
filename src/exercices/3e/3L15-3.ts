@@ -1,3 +1,10 @@
+import {
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import type { OptionsComparaisonType } from '../../lib/types'
@@ -26,10 +33,7 @@ export const refs = {
 export default class EquationMelees extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = commentaireSolveur
     this.besoinFormulaireNumerique = [
       'Niveau de difficulté',
       4,
@@ -38,10 +42,13 @@ export default class EquationMelees extends Exercice {
     this.besoinFormulaire2CaseACocher = ['Mode entrainement en non interactif']
     this.sup = 1
     this.sup2 = false
+    this.besoinFormulaire3Numerique = formulaireBaremeSolveur()
+    this.sup3 = 1
   }
   nouvelleVersion() {
     const interactif = this.interactif
     const numeroExercice = this.numeroExercice
+    const modeInteractif = modeSolveur(this.sup3)
 
     const niveau =
       this.sup === 1
@@ -81,6 +88,7 @@ export default class EquationMelees extends Exercice {
         }
         exo.sup3 = true
         exo.sup4 = this.sup2
+        exo.sup5 = this.sup3
         exo.sup = true
       } else if (listeExos[i] === 1) {
         exo = new Equation3L14()
@@ -114,12 +122,26 @@ export default class EquationMelees extends Exercice {
       exo.nouvelleVersion()
       if (this.questionJamaisPosee(i, listeExos[i], exo.listeCorrections[0])) {
         const options = exo.autoCorrection[0]?.valeur?.reponse?.options ?? {}
+        const estSolveur =
+          exo.autoCorrection[0]?.formatInteractif === 'mathalea-solveur'
+        // Chaque question doit valoir le même nombre de points quel que soit
+        // le type tiré : avec le barème sur 2 points, les questions avec
+        // solveur sont sur 2 points, les autres sont donc doublées.
+        const bareme = estSolveur
+          ? baremeSolveur(modeInteractif)
+          : modeInteractif === 'entrainement'
+            ? (listePoints: number[]): [number, number] => [
+                2 * Math.min(...listePoints),
+                2,
+              ]
+            : toutPourUnPoint
         if (options.suiteDeNombres) {
           handleAnswers(this, i, {
             reponse: {
               value: exo.autoCorrection[0]?.valeur?.reponse?.value ?? '',
               options,
             },
+            bareme,
           })
         } else {
           handleAnswers(
@@ -129,6 +151,7 @@ export default class EquationMelees extends Exercice {
               reponse: {
                 value: exo.autoCorrection[0]?.valeur?.reponse?.value ?? '',
               },
+              bareme,
             },
             { formatInteractif: exo.autoCorrection[0]?.formatInteractif },
           )

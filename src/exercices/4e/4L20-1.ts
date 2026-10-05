@@ -1,4 +1,11 @@
-import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
+import {
+  addMathaleaSolveur,
+  baremeSolveur,
+  commentaireSolveur,
+  formulaireBaremeSolveur,
+  modeSolveur,
+  optionsSolveur,
+} from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -34,12 +41,11 @@ type EquationData = {
 export default class ResoudreEquationPasAPas extends Exercice {
   constructor() {
     super()
-    this.comment = `Cet exercice propose maintenant un élément interactif permettant à l'élève d'effectuer la résolution pas à pas.
-    En activant le mode entrainement, l'exercice étant non interactif, cet élément sera activé en version brouillon n'entrainant pas de dotes et laissant les erreurs faites.
-    Lorsque l'exercice est interactif, l'élément bascule en mode évaluation ne tolérant pas d'équation non équivalente.
-    La résolution s'arrête alors dés la première erreur.`
+    this.comment = commentaireSolveur
     this.besoinFormulaireCaseACocher = ['Mode entrainement en non interactif']
     this.sup = false
+    this.besoinFormulaire2Numerique = formulaireBaremeSolveur()
+    this.sup2 = 1
     this.consigne = 'Résoudre les équations suivantes pas à pas.'
     this.nbQuestions = 4
     this.spacing = 2
@@ -54,8 +60,7 @@ export default class ResoudreEquationPasAPas extends Exercice {
       this.listeQuestions[i] = addMathaleaSolveur(this, i, {
         initial: data.equation,
         kind: 'equation',
-        mode: this.sup && !this.interactif ? 'entrainement' : 'evaluation',
-        interactivityOn: this.interactif || Boolean(this.sup),
+        ...optionsSolveur(this.interactif, this.sup, this.sup2),
       })
 
       this.listeCorrections[i] =
@@ -65,7 +70,10 @@ export default class ResoudreEquationPasAPas extends Exercice {
       handleAnswers(
         this,
         i,
-        { reponse: { value: expected } },
+        {
+          reponse: { value: expected },
+          bareme: baremeSolveur(modeSolveur(this.sup2)),
+        },
         { formatInteractif: 'mathalea-solveur' },
       )
       i++
