@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import {
   addTableauSignesVariations,
@@ -88,5 +88,30 @@ describe('TableauSignesVariationsElement', () => {
       element.shadowRoot?.querySelectorAll('.tab-sv__cell--editable').length,
     ).toBe(0)
     expect(element.shadowRoot?.querySelector('.tab-sv__toolbar')).toBeNull()
+  })
+
+  it("ne cumule pas les écouteurs globaux de la barre d'outils à chaque rendu", () => {
+    const ajouts = vi.spyOn(document, 'addEventListener')
+    const retraits = vi.spyOn(document, 'removeEventListener')
+    const actifs = () =>
+      ['mousedown', 'keydown'].reduce(
+        (total, type) =>
+          total +
+          ajouts.mock.calls.filter(([t]) => t === type).length -
+          retraits.mock.calls.filter(([t]) => t === type).length,
+        0,
+      )
+
+    const element = new TableauSignesVariationsElement()
+    element.config = config
+    document.body.appendChild(element)
+    for (let i = 0; i < 5; i++) element.update({ L0C0: '0', L1C0: '+' })
+
+    // une seule barre d'outils (2 écouteurs) reste branchée
+    expect(actifs()).toBe(2)
+
+    element.remove()
+    expect(actifs()).toBe(0)
+    vi.restoreAllMocks()
   })
 })
