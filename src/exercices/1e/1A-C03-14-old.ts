@@ -1,7 +1,7 @@
 // Version archivée : conservée pour que les liens (sujets et corrigés)
 // déjà partagés avec l'uuid 7233e continuent d'afficher les mêmes
 // valeurs. Ne plus la modifier : toute correction va dans la version courante.
-import calculPuissancesNegativeFraction from '../can/2e/can2N4-05'
+import calculPuissancesNegativeFraction from '../can/2e/can2N4-04'
 export const titre = 'Calculer $\\dfrac{1}{a}$ à la puissance $-1$ ou $-2$'
 export const dateDePublication = '02/02/2026'
 export const amcReady = true
@@ -9,7 +9,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 
 /**
- * Clone de can2N4-05 pour les auto 1er
+ * Clone de can2N4-04 pour les auto 1er
  * @author Gilles Mora
  */
 
