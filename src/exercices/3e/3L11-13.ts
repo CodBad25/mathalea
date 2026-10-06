@@ -63,7 +63,7 @@ export default class nomExercice extends Exercice {
       '1\n2\n3\n4\n5',
     ]
     this.besoinFormulaire5Numerique = [
-      'Nombre de termes maximal dans un polynôme',
+      'Nombre de termes dans un polynôme (limité par le degré et les variables)',
       5,
       '2\n3\n4\n5\n6',
     ]
@@ -99,6 +99,13 @@ export default class nomExercice extends Exercice {
       const degMax = Math.max(this.sup3, 1)
       const variables = ['x', 'y', 'z', 'r', 's', 't']
       const variablesSelect = getRandomSubarray(variables, this.sup4)
+      // Une variable offre degMax + 1 monômes ; au degré 1, il y en a
+      // autant que de variables, plus la constante. Les autres réglages
+      // permettent au moins les six termes proposés dans le formulaire.
+      const nbTermes =
+        variablesSelect.length === 1 || degMax === 1
+          ? Math.min(this.sup5 + 1, degMax + variablesSelect.length)
+          : this.sup5 + 1
       const typeCoeffListe = ['entier', 'fractionnaire']
       let typeofCoeff = []
       let solution: PolynomePlusieursVariables
@@ -112,19 +119,19 @@ export default class nomExercice extends Exercice {
       const p1 = PolynomePlusieursVariables.createRandomPolynome(
         degMin,
         degMax,
-        this.sup5 + 1,
+        nbTermes,
         choice(typeofCoeff),
         variablesSelect,
       )
       const p2 = PolynomePlusieursVariables.createRandomPolynome(
         degMin,
         degMax,
-        this.sup5 + 1,
+        nbTermes,
         choice(typeofCoeff),
         variablesSelect,
         getRandomSubarray(
           p1.monomes,
-          randint(Math.min(1, this.sup5), this.sup5 + 1),
+          randint(Math.min(1, this.sup5), nbTermes),
         ),
       )
       // On redéfinit à présent le coefficient des monômes fractionnaires afin que toutes les fractions soient des multiples les unes des autres
