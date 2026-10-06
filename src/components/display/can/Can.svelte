@@ -6,6 +6,10 @@
     buildExercisesList,
     splitExercisesIntoQuestions,
   } from '../../../lib/components/exercisesUtils'
+  import {
+    scoreQuestionCan,
+    totalScoresCan,
+  } from '../../../lib/components/canScore'
   import { millisecondToMinSec } from '../../../lib/components/time'
   import {
     listOfCustomElements,
@@ -33,6 +37,7 @@
     type InteractivityType,
     type InterfaceResultExercice,
     type QuestionResult,
+    type QuestionScore,
   } from '../../../lib/types'
   import type { CanState } from '../../../lib/types/can'
   import { context } from '../../../modules/context'
@@ -82,13 +87,17 @@
   let indiceExercice: number[] = []
   let indiceQuestionInExercice: number[] = []
   let resultsByQuestion: QuestionResult[] = []
+  let scoresByQuestion: QuestionScore[] = []
   let answers: string[] = []
   // Réponses déjà corrigées (feedback après chaque question) : la correction
   // finale ne les revérifie pas, sinon le score serait compté deux fois.
   let checkedQuestions: boolean[] = []
   let answersType: AnswerType[] = []
   // Une nouvelle tentative (Capytale) doit pouvoir être corrigée à nouveau
-  $: if (state === 'race') checkedQuestions = []
+  $: if (state === 'race') {
+    checkedQuestions = []
+    scoresByQuestion = []
+  }
   let recordedTimeInSeconds: number
   let unavailableMessage = ''
 
@@ -253,6 +262,7 @@
         resultsByQuestion = resultsByQuestiontoBoolean(
           assignmentDataFromCapytale.resultsByQuestion,
         )
+      scoresByQuestion = assignmentDataFromCapytale?.scoresByQuestion ?? []
       if (assignmentDataFromCapytale?.duration !== undefined)
         recordedTimeInSeconds = assignmentDataFromCapytale.duration
     })
@@ -405,6 +415,11 @@
           : (resultsByQuestion[i] =
               typeof result === 'string' ? result === 'OK' : result) // On prévoit le cas où un custom renvoie un DetailledQuestionResult
       }
+      scoresByQuestion[i] = scoreQuestionCan(
+        exercice,
+        indiceQuestionInExercice[i],
+        resultsByQuestion[i],
+      )
       resultsByQuestion[i] = oneResultToBoolean(resultsByQuestion[i]) // normalement il n'y en a pas besoin, mais sait-on jamais ...
       answersType[i] = {
         type,
@@ -453,6 +468,11 @@
           `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
         )
       }
+      scoresByQuestion[i] = scoreQuestionCan(
+        exercice,
+        indiceQuestionInExercice[i],
+        result,
+      )
       resultsByQuestion[i] = result.isOk
       answersType[i] = getCanAnswerTypeForCustomElement({
         exercice,
@@ -473,11 +493,11 @@
         answerTxt: '',
       }
     }
-    // Pour Capytale, on a besoin du score de l'exercice et non de la question
-    // donc on sauvegarde le score dans l'exercice
-    if (resultsByQuestion[i] && exercice.score !== undefined) {
-      exercice.score++
-    }
+    scoresByQuestion[i] ??= scoreQuestionCan(
+      exercice,
+      indiceQuestionInExercice[i],
+      resultsByQuestion[i],
+    )
   }
 
   /**
@@ -510,9 +530,9 @@
           state: 'done',
           alea: exercise.seed,
           answers: answersType[ind].answers,
-          numberOfPoints: resultsByQuestion[ind] ? 1 : 0,
-          numberOfQuestions: 1,
-          bestScore: resultsByQuestion[ind] ? 1 : 0,
+          numberOfPoints: scoresByQuestion[ind].nbBonnesReponses,
+          numberOfQuestions: scoresByQuestion[ind].nbReponses,
+          bestScore: scoresByQuestion[ind].nbBonnesReponses,
           resultsByQuestion: [resultsByQuestion[ind]],
           duration: getDuration(),
         }
@@ -557,6 +577,7 @@
         assignmentData: {
           duration: getDuration(),
           resultsByQuestion: resultsByQuestiontoBoolean(resultsByQuestion),
+          scoresByQuestion,
         },
       })
     }
@@ -582,31 +603,43 @@
    * Construit la chaîne qui sera affichée pour le score
    * nombre de points obtenu / nombre de questions
    */
+  function scoresForResults(results: QuestionResult[]): QuestionScore[] {
+    return results.map((result, i) =>
+      scoreQuestionCan(
+        exercises[indiceExercice[i]],
+        indiceQuestionInExercice[i],
+        result,
+      ),
+    )
+  }
+
+  function getCurrentScore(): QuestionScore {
+    // Les anciennes copies Capytale ne contiennent que des booléens.
+    return totalScoresCan(
+      scoresByQuestion.length > 0
+        ? scoresByQuestion
+        : scoresForResults(resultsByQuestion),
+    )
+  }
+
   function buildStringScore(): string {
-    const score = getScoreTotal()
-    return score + '/' + resultsByQuestion.length
+    const score = getCurrentScore()
+    return score.nbBonnesReponses + '/' + score.nbReponses
   }
 
   function getScoreTotal(): number {
-    let score = 0
-    for (const result of resultsByQuestion) {
-      if (result === true) {
-        score++
-      }
-    }
-    return score
+    return getCurrentScore().nbBonnesReponses
+  }
+
+  function getRecordedScores(): QuestionScore[] {
+    return (
+      assignmentDataFromCapytale?.scoresByQuestion ??
+      scoresForResults(assignmentDataFromCapytale?.resultsByQuestion ?? [])
+    )
   }
 
   function getRecordedScore(): number {
-    let score = 0
-    if (assignmentDataFromCapytale?.resultsByQuestion !== undefined) {
-      for (const result of assignmentDataFromCapytale.resultsByQuestion) {
-        if (result === true) {
-          score++
-        }
-      }
-    }
-    return score
+    return totalScoresCan(getRecordedScores()).nbBonnesReponses
   }
 
   /**
@@ -665,6 +698,9 @@
     </div>
   {:else if state === 'start' || state === 'canHomeScreen'}
     <KickOff
+      recordedScore={exercises.length > 0
+        ? totalScoresCan(getRecordedScores())
+        : undefined}
       title={$canOptions.title}
       subTitle={$canOptions.subTitle}
       canStart={!unavailableMessage}

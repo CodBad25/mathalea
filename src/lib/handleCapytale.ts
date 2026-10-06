@@ -8,6 +8,7 @@ import type {
   Activity,
   InterfaceResultExercice,
   QuestionResult,
+  QuestionScore,
 } from '../lib/types'
 import {
   mathaleaGoToView,
@@ -29,6 +30,7 @@ import type { CanState } from './types/can'
 interface AssignmentData {
   duration?: number
   resultsByQuestion?: QuestionResult[]
+  scoresByQuestion?: QuestionScore[]
 }
 
 interface ActivityParams {
@@ -111,7 +113,16 @@ async function toolSetActivityParams({
   // On récupère les paramètres de l'activité
   capytaleMode.set(mode)
   const canOptions = get(canOptionsStore)
-  if (activity === null || activity === undefined) return
+  if (activity === null || activity === undefined) {
+    if (mode === 'create') {
+      globalOptions.update((options) => ({
+        ...options,
+        setInteractive: '1',
+        isInteractiveFree: false,
+      }))
+    }
+    return
+  }
   activityFromCapytale = structuredClone(activity)
   const [newExercicesParams, newGlobalOptions, newCanOptions] = [
     activity.exercicesParams,
@@ -135,6 +146,7 @@ async function toolSetActivityParams({
   // Puis mettre à jour la liste des exercices exercicesParams
   globalOptions.update((l) => {
     Object.assign(l, newGlobalOptions)
+    l.setInteractive = newGlobalOptions.setInteractive ?? '1'
     l.presMode = 'un_exo_par_page'
     // On conserve la valeur de isDataRandom si elle a été définie par l'enseignant
     if (newGlobalOptions.isDataRandom === undefined) {
@@ -182,7 +194,7 @@ async function toolSetActivityParams({
     if (newCanOptions) newCanOptions.state = 'canHomeScreen'
     Object.assign(l, newCanOptions)
     l.state = 'canHomeScreen'
-    l.isInteractive = newGlobalOptions.setInteractive === '1'
+    l.isInteractive = get(globalOptions).setInteractive === '1'
     return l
   })
   // On charge l'aléa qui a pu être modifié par l'élève

@@ -13,6 +13,20 @@ vi.mock('../../src/lib/components/version', () => ({
 }))
 
 describe('mathaleaUpdateExercicesParamsFromUrl', () => {
+  it('utilise Tout interactif pour une nouvelle séance Capytale', async () => {
+    const { mathaleaUpdateExercicesParamsFromUrl } =
+      await import('../../src/lib/mathalea')
+    const result = mathaleaUpdateExercicesParamsFromUrl(
+      'https://coopmaths.fr/alea/?recorder=capytale',
+    )
+    expect(result.setInteractive).toBe('1')
+    expect(result.isInteractiveFree).toBe(false)
+    const existing = mathaleaUpdateExercicesParamsFromUrl(
+      'https://coopmaths.fr/alea/?recorder=capytale&es=02010011',
+    )
+    expect(existing.setInteractive).toBe('2')
+  })
+
   it('reconnaît le recorder Sésathèque', async () => {
     const { mathaleaUpdateExercicesParamsFromUrl } =
       await import('../../src/lib/mathalea')

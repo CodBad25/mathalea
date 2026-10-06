@@ -1,9 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { get } from 'svelte/store'
 import { canOptions } from '../stores/canStore'
+import { globalOptions } from '../stores/globalOptions'
+import { exercicesParams } from '../stores/generalStore'
 import {
   appendExerciseParams,
   buildMathAleaURL,
+  buildCapytalePreviewURL,
   buildSingleExerciseURL,
   encrypt,
 } from './urls'
@@ -102,5 +105,50 @@ describe('buildMathAleaURL en vue can', () => {
     const url = buildMathAleaURL({ view: 'can' })
     expect(url.searchParams.get('canQ')).toBe('20')
     expect(url.searchParams.get('canFB')).toBe('1')
+  })
+})
+
+describe('aperçu Capytale', () => {
+  const defaultGlobal = { ...get(globalOptions) }
+  const defaultCan = { ...get(canOptions) }
+  const defaultExercises = get(exercicesParams)
+  afterEach(() => {
+    globalOptions.set(defaultGlobal)
+    canOptions.set(defaultCan)
+    exercicesParams.set(defaultExercises)
+  })
+
+  it('verrouille l’interactivité et transmet le barème sans modifier les stores', () => {
+    globalOptions.update((options) => ({
+      ...options,
+      setInteractive: '1',
+      isInteractiveFree: true,
+    }))
+    exercicesParams.set([
+      { uuid: 'aaa', coeffBareme: 3, alea: 'abcd', interactif: '1' },
+    ])
+    const url = buildCapytalePreviewURL('eleve')
+    expect(url.searchParams.get('es')?.[3]).toBe('0')
+    expect(url.searchParams.get('coef')).toBe('3')
+    expect(url.searchParams.get('alea')).toBe('abcd')
+    expect(url.searchParams.has('recorder')).toBe(false)
+    expect(get(globalOptions).isInteractiveFree).toBe(true)
+  })
+
+  it('reprend le feedback, le chronomètre et l’interactivité globale de la CAN', () => {
+    globalOptions.update((options) => ({ ...options, setInteractive: '1' }))
+    canOptions.update((options) => ({
+      ...options,
+      isInteractive: false,
+      feedbackMode: 'each',
+      timerMode: 'question',
+      durationPerQuestionInSeconds: 25,
+      isTimerDisabled: true,
+    }))
+    const url = buildCapytalePreviewURL('can')
+    expect(url.searchParams.get('canI')).toBe('1')
+    expect(url.searchParams.get('canFB')).toBe('1')
+    expect(url.searchParams.get('canQ')).toBe('25')
+    expect(url.searchParams.get('canNC')).toBe('1')
   })
 })
