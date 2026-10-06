@@ -1,7 +1,8 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Calculer la proportion d'une partie restante"
 export const dateDePublication = '15/07/2026'
@@ -14,7 +15,7 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = true
-export const amcType = 'qcmMono'
+export const amcType = 'AMCNum'
 
 type Contexte = {
   introduction: (total: number) => string
@@ -45,7 +46,7 @@ function deCategorie(categorie: string): string {
   return categorie === 'employés' ? "d'employés" : `de ${categorie}`
 }
 
-export default class ProportionPartieRestante extends ExerciceQcmA {
+export default class ProportionPartieRestante extends ExerciceSimple {
   private appliquerLesValeurs({
     total,
     contexte,
@@ -86,10 +87,12 @@ export default class ProportionPartieRestante extends ExerciceQcmA {
       if (propositions.length >= 4) break
     }
 
-    this.enonce = `${contexte.introduction(total)}<br>
+    this.question = `${contexte.introduction(total)}<br>
     On compte $${effectif}$ ${categorieEffectif}.<br>
-    La proportion ${deCategorie(categorieFraction)} est égale à $${proportionDonnee.texFractionSimplifiee}$.<br><br>
-    Quelle est la proportion ${deCategorie(categorieDemandee)} dans ${contexte.ensemble} ?`
+    La proportion ${deCategorie(categorieFraction)} est égale à $${proportionDonnee.texFractionSimplifiee}$.<br>`
+    this.question += this.versionQcm
+      ? `La proportion ${deCategorie(categorieDemandee)} dans ${contexte.ensemble} est égale à :`
+      : `Quelle est la proportion ${deCategorie(categorieDemandee)} dans ${contexte.ensemble} ?`
 
     this.correction = `La proportion ${deCategorie(categorieEffectif)} est :
     $\\dfrac{${effectif}}{${total}}=${proportionEffectif.texFractionSimplifiee}$.<br>
@@ -97,10 +100,16 @@ export default class ProportionPartieRestante extends ExerciceQcmA {
     La proportion ${deCategorie(categorieDemandee)} est alors :
     $1-${proportionEffectif.texFractionSimplifiee}-${proportionDonnee.texFractionSimplifiee}=${miseEnEvidence(proportionDemandee.texFractionSimplifiee)}$.`
 
-    this.reponses = propositions.slice(0, 4)
+    this.reponse = this.versionQcm
+      ? `$${proportionDemandee.texFractionSimplifiee}$`
+      : proportionDemandee.texFractionSimplifiee
+    this.distracteurs = propositions.slice(1, 4)
+    this.optionsChampTexte = { texteAvant: '<br>' }
+    this.canEnonce = this.question
+    this.canReponseACompleter = '$\\ldots$'
   }
 
-  versionAleatoire = (): void => {
+  nouvelleVersion(): void {
     const contexte = choice<Contexte>([
       {
         introduction: (total) =>
@@ -158,8 +167,10 @@ export default class ProportionPartieRestante extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.besoinFormulaireCaseACocher = false
-
-    this.versionAleatoire()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.versionQcmDisponible = true
+    this.versionQcm = false
   }
 }
