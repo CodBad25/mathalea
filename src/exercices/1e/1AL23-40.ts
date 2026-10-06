@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -15,6 +18,8 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Résoudre une inéquation du second degré'
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
 /**
  * Résoudre une inéquation du second degré
@@ -56,11 +61,11 @@ export default class ResoudreEquationDegre2 extends Exercice {
     this.nbQuestions = 2
     this.nbCols = 2
     this.nbColsCorr = 2
-    this.spacingCorr = 1.5
+    this.spacingCorr = 1
 
     this.besoinFormulaireTexte = [
       'Nombre de racines du polynôme',
-      '1 : Deux racines\n2 : Une racine\n3 : Aucune racine\n4 : Mélange',
+      '1 : Deux racines distinctes\n2 : Une racine double\n3 : Aucune racine\n4 : Mélange',
     ]
     this.sup = '4'
   }
@@ -87,6 +92,11 @@ export default class ResoudreEquationDegre2 extends Exercice {
       let i = 0, texte, texteCorr, a, b, c, x1, x2, y1, k, ligne1, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      let answer = ''
+      const highlightedSolution = (value: string) => {
+        answer = value
+        return miseEnEvidence(value)
+      }
       const nombreDeRacines = listeNombreDeRacines[i]
       const inegalite = choice([
         'strictement supérieur',
@@ -109,16 +119,15 @@ export default class ResoudreEquationDegre2 extends Exercice {
         if (inegalite === 'strictement supérieur') {
           texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}>0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)>0$.'
-          texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
-          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
+          texteCorr += ' On cherche à résoudre $P(x)>0$.'
+          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$.`
           texteCorr +=
-            '<br>$\\Delta>0$ donc le polynôme admet deux racines : $x_1 = \\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}$.'
-          texteCorr += `<br>$x_1 =\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine1}$`
-          texteCorr += `<br>$x_2 =\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine2}$`
+            ' $\\Delta>0$, donc le polynôme admet deux racines : $x_1 = \\frac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\frac{-b+\\sqrt{\\Delta}}{2a}$.'
+          texteCorr += `<br>$x_1 =\\frac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine1}$`
+          texteCorr += ` et $x_2 =\\frac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine2}$.`
           texteCorr +=
             "<br>On sait qu'un polynôme du second degré est du signe de $a$ à l'extérieur de ses racines."
-          texteCorr += `<br>Comme $a=${a}`
+          texteCorr += ` Comme $a=${a}`
           if (a > 0) {
             texteCorr += '>0$, '
             ligne1 = ligneDeuxRacines(true)
@@ -131,55 +140,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
           texteCorr += tableauDeVariation({
             tabInit: [
               [
-                ['$x$', 2, 30],
+                ['$x$', 1.5, 30],
                 [
                   `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$`,
-                  2,
-                  50,
-                ],
-              ],
-              ['$-\\infty$', 30, `${x1}`, 20, `${x2}`, 20, '$+\\infty$', 30],
-            ],
-            tabLines: [ligne1],
-            espcl: 3.5,
-            deltacl: 0.8,
-            lgt: 8,
-            hauteurLignes: [12, 15],
-          })
-          if (a > 0) {
-            texteCorr += `<br>Finalement $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x2}\\,;\\,+\\infty[`)}$.`
-          } else {
-            texteCorr += `<br> Finalement $S=${miseEnEvidence(`]${x1}\\,;\\,${x2}[`)}$.`
-          }
-        } else if (inegalite === 'supérieur ou égal') {
-          texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\geqslant 0$`
-          texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)\\geqslant 0$.'
-          texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
-          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
-          texteCorr +=
-            '<br>$\\Delta>0$ donc  le polynôme admet deux racines : $x_1 = \\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}$.'
-          texteCorr += `<br>$x_1 =\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine1}$`
-          texteCorr += `<br>$x_2 =\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine2}$`
-          texteCorr +=
-            "<br>On sait qu'un polynôme du second degré est du signe de $a$ à l'extérieur de ses racines."
-          texteCorr += `<br>Comme $a=${a}`
-          if (a > 0) {
-            texteCorr += '>0$, '
-            ligne1 = ligneDeuxRacines(true)
-          } else {
-            texteCorr += `<0$, on peut dire que $P(x)\\geqslant 0$ sur $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}]\\cup[${x2}\\,;\\,+\\infty[`)}$`
-            ligne1 = ligneDeuxRacines(false)
-          }
-          texteCorr +=
-            '<br>On peut résumer le signe du polynôme dans un tableau de signes :'
-          texteCorr += tableauDeVariation({
-            tabInit: [
-              [
-                ['$x$', 2, 30],
-                [
-                  `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$`,
-                  2,
+                  1.5,
                   50,
                 ],
               ],
@@ -192,23 +156,22 @@ export default class ResoudreEquationDegre2 extends Exercice {
             hauteurLignes: [10, 10],
           })
           if (a > 0) {
-            texteCorr += `<br>Finalement, $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}]\\cup[${x2}\\,;\\,+\\infty[`)}$.`
+            texteCorr += `<br>Finalement $S=${highlightedSolution(`]-\\infty\\,;\\,${x1}[\\cup]${x2}\\,;\\,+\\infty[`)}$.`
           } else {
-            texteCorr += `<br> Finalement, $S=${miseEnEvidence(`[${x1}\\,;\\,${x2}]`)}$.`
+            texteCorr += `<br> Finalement $S=${highlightedSolution(`]${x1}\\,;\\,${x2}[`)}$.`
           }
-        } else if (inegalite === 'inférieur ou égal') {
-          texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\leqslant 0$`
+        } else if (inegalite === 'supérieur ou égal') {
+          texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\geqslant 0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)\\leqslant 0$.'
-          texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
-          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
+          texteCorr += ' On cherche à résoudre $P(x)\\geqslant 0$.'
+          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$.`
           texteCorr +=
-            '<br>$\\Delta>0$, donc  le polynôme admet deux racines : $x_1 = \\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}$.'
-          texteCorr += `<br>$x_1 =\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${x1}$`
-          texteCorr += `<br>$x_2 =\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${x2}$`
+            ' $\\Delta>0$, donc le polynôme admet deux racines : $x_1 = \\frac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\frac{-b+\\sqrt{\\Delta}}{2a}$.'
+          texteCorr += `<br>$x_1 =\\frac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine1}$`
+          texteCorr += ` et $x_2 =\\frac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine2}$.`
           texteCorr +=
             "<br>On sait qu'un polynôme du second degré est du signe de $a$ à l'extérieur de ses racines."
-          texteCorr += `<br>Comme $a=${a}`
+          texteCorr += ` Comme $a=${a}`
           if (a > 0) {
             texteCorr += '>0$, '
             ligne1 = ligneDeuxRacines(true)
@@ -221,10 +184,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
           texteCorr += tableauDeVariation({
             tabInit: [
               [
-                ['$x$', 2, 30],
+                ['$x$', 1.5, 30],
                 [
                   `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$`,
-                  2,
+                  1.5,
                   50,
                 ],
               ],
@@ -234,27 +197,70 @@ export default class ResoudreEquationDegre2 extends Exercice {
             espcl: 3.5,
             deltacl: 0.8,
             lgt: 8,
-            hauteurLignes: [15, 15],
+            hauteurLignes: [10, 10],
+          })
+          if (a > 0) {
+            texteCorr += `<br>Finalement, $S=${highlightedSolution(`]-\\infty\\,;\\,${x1}]\\cup[${x2}\\,;\\,+\\infty[`)}$.`
+          } else {
+            texteCorr += `<br> Finalement, $S=${highlightedSolution(`[${x1}\\,;\\,${x2}]`)}$.`
+          }
+        } else if (inegalite === 'inférieur ou égal') {
+          texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}\\leqslant 0$`
+          texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
+          texteCorr += ' On cherche à résoudre $P(x)\\leqslant 0$.'
+          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$.`
+          texteCorr +=
+            ' $\\Delta>0$, donc le polynôme admet deux racines : $x_1 = \\frac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\frac{-b+\\sqrt{\\Delta}}{2a}$.'
+          texteCorr += `<br>$x_1 =\\frac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine1}$`
+          texteCorr += ` et $x_2 =\\frac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine2}$.`
+          texteCorr +=
+            "<br>On sait qu'un polynôme du second degré est du signe de $a$ à l'extérieur de ses racines."
+          texteCorr += ` Comme $a=${a}`
+          if (a > 0) {
+            texteCorr += '>0$, '
+            ligne1 = ligneDeuxRacines(true)
+          } else {
+            texteCorr += '<0$, '
+            ligne1 = ligneDeuxRacines(false)
+          }
+          texteCorr +=
+            'on peut résumer le signe du polynôme dans un tableau de signes :'
+          texteCorr += tableauDeVariation({
+            tabInit: [
+              [
+                ['$x$', 1.5, 30],
+                [
+                  `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$`,
+                  1.5,
+                  50,
+                ],
+              ],
+              ['$-\\infty$', 30, `${x1}`, 20, `${x2}`, 20, '$+\\infty$', 30],
+            ],
+            tabLines: [ligne1],
+            espcl: 3.5,
+            deltacl: 0.8,
+            lgt: 8,
+            hauteurLignes: [10, 10],
           })
           if (a < 0) {
-            texteCorr += `<br>Finalement, $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}]\\cup[${x2}\\,;\\,+\\infty[`)}$.`
+            texteCorr += `<br>Finalement, $S=${highlightedSolution(`]-\\infty\\,;\\,${x1}]\\cup[${x2}\\,;\\,+\\infty[`)}$.`
           } else {
-            texteCorr += `<br> Finalement, $S=${miseEnEvidence(`[${x1}\\,;\\,${x2}]`)}$.`
+            texteCorr += `<br> Finalement, $S=${highlightedSolution(`[${x1}\\,;\\,${x2}]`)}$.`
           }
         } else {
           // strictement inférieur
           texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}< 0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)< 0$.'
-          texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
-          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
+          texteCorr += ' On cherche à résoudre $P(x)< 0$.'
+          texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$.`
           texteCorr +=
-            '<br>$\\Delta>0$, donc le polynôme admet deux racines : $x_1 = \\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}$.'
-          texteCorr += `<br>$x_1 =\\dfrac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${x1}$`
-          texteCorr += `<br>$x_2 =\\dfrac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${x2}$`
+            ' $\\Delta>0$, donc le polynôme admet deux racines : $x_1 = \\frac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\frac{-b+\\sqrt{\\Delta}}{2a}$.'
+          texteCorr += `<br>$x_1 =\\frac{${-b}-\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine1}$`
+          texteCorr += ` et $x_2 =\\frac{${-b}+\\sqrt{${b * b - 4 * a * c}}}{${2 * a}}=${racine2}$.`
           texteCorr +=
             "<br>On sait qu'un polynôme du second degré est du signe de $a$ à l'extérieur de ses racines."
-          texteCorr += `<br>Comme $a=${a}`
+          texteCorr += ` Comme $a=${a}`
           if (a > 0) {
             texteCorr += '>0$, '
             ligne1 = ligneDeuxRacines(true)
@@ -267,10 +273,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
           texteCorr += tableauDeVariation({
             tabInit: [
               [
-                ['$x$', 2, 30],
+                ['$x$', 1.5, 30],
                 [
                   `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$`,
-                  2,
+                  1.5,
                   50,
                 ],
               ],
@@ -280,12 +286,12 @@ export default class ResoudreEquationDegre2 extends Exercice {
             espcl: 3.5,
             deltacl: 0.8,
             lgt: 8,
-            hauteurLignes: [15, 15],
+            hauteurLignes: [10, 10],
           })
           if (a < 0) {
-            texteCorr += `<br>Finalement, $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x2}\\,;\\,+\\infty[`)}$.`
+            texteCorr += `<br>Finalement, $S=${highlightedSolution(`]-\\infty\\,;\\,${x1}[\\cup]${x2}\\,;\\,+\\infty[`)}$.`
           } else {
-            texteCorr += `<br> Finalement $S=${miseEnEvidence(`]${x1}\\,;\\,${x2}[`)}$.`
+            texteCorr += `<br> Finalement $S=${highlightedSolution(`]${x1}\\,;\\,${x2}[`)}$.`
           }
         }
       } else if (nombreDeRacines === 2) {
@@ -300,28 +306,27 @@ export default class ResoudreEquationDegre2 extends Exercice {
         if (inegalite === 'strictement supérieur') {
           texte = `$${polynome}>0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)>0$.'
+          texteCorr += ' On cherche à résoudre $P(x)>0$.'
         } else if (inegalite === 'supérieur ou égal') {
           texte = `$${polynome}\\geqslant 0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)\\geqslant 0$.'
+          texteCorr += ' On cherche à résoudre $P(x)\\geqslant 0$.'
         } else if (inegalite === 'inférieur ou égal') {
           texte = `$${polynome}\\leqslant 0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)\\leqslant 0$.'
+          texteCorr += ' On cherche à résoudre $P(x)\\leqslant 0$.'
         } else {
           texte = `$${polynome}< 0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)< 0$.'
+          texteCorr += ' On cherche à résoudre $P(x)< 0$.'
         }
-        texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
-        texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=0$`
+        texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=0$.`
         texteCorr +=
-          '<br>$\\Delta=0$, donc le polynôme admet une unique racine (racine double) : $x_0 = \\dfrac{-b}{2a}' +
+          ' $\\Delta=0$, donc le polynôme admet une unique racine (racine double) : $x_0 = \\frac{-b}{2a}' +
           `=${x1}$.`
         texteCorr +=
           "<br>On sait qu'un polynôme du second degré est du signe de $a$ partout, sauf en sa racine double où il s'annule."
-        texteCorr += `<br>Comme $a=${a}`
+        texteCorr += ` Comme $a=${a}`
         if (a > 0) {
           texteCorr += '>0$, '
           ligne1 = ligneUneRacine(true)
@@ -334,8 +339,8 @@ export default class ResoudreEquationDegre2 extends Exercice {
         texteCorr += tableauDeVariation({
           tabInit: [
             [
-              ['$x$', 2, 30],
-              [`$${polynome}$`, 2, 50],
+              ['$x$', 1.5, 30],
+              [`$${polynome}$`, 1.5, 50],
             ],
             ['$-\\infty$', 30, `${x1}`, 20, '$+\\infty$', 30],
           ],
@@ -343,28 +348,28 @@ export default class ResoudreEquationDegre2 extends Exercice {
           espcl: 3.5,
           deltacl: 0.8,
           lgt: 8,
-          hauteurLignes: [12, 15],
+          hauteurLignes: [10, 10],
         })
         if (inegalite === 'strictement supérieur') {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
-              : `<br> Finalement, $S=${miseEnEvidence('\\emptyset')}$.`
+              ? `<br>Finalement, $S=${highlightedSolution(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
+              : `<br> Finalement, $S=${highlightedSolution('\\emptyset')}$.`
         } else if (inegalite === 'supérieur ou égal') {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence('\\mathbb{R}')}$.`
-              : `<br> Finalement, $S=${miseEnEvidence(`\\{${x1}\\}`)}$.`
+              ? `<br>Finalement, $S=${highlightedSolution('\\mathbb{R}')}$.`
+              : `<br> Finalement, $S=${highlightedSolution(`\\{${x1}\\}`)}$.`
         } else if (inegalite === 'inférieur ou égal') {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence(`\\{${x1}\\}`)}$.`
-              : `<br> Finalement, $S=${miseEnEvidence('\\mathbb{R}')}$.`
+              ? `<br>Finalement, $S=${highlightedSolution(`\\{${x1}\\}`)}$.`
+              : `<br> Finalement, $S=${highlightedSolution('\\mathbb{R}')}$.`
         } else {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence('\\emptyset')}$.`
-              : `<br> Finalement, $S=${miseEnEvidence(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
+              ? `<br>Finalement, $S=${highlightedSolution('\\emptyset')}$.`
+              : `<br> Finalement, $S=${highlightedSolution(`]-\\infty\\,;\\,${x1}[\\cup]${x1}\\,;\\,+\\infty[`)}$.`
         }
       } else {
         // Δ < 0 : aucune racine
@@ -380,33 +385,32 @@ export default class ResoudreEquationDegre2 extends Exercice {
         if (inegalite === 'strictement supérieur') {
           texte = `$${b === 0 ? polynomeSansB : polynome}> 0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${b === 0 ? polynomeSansB : polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)> 0$.'
+          texteCorr += ' On cherche à résoudre $P(x)> 0$.'
         } else if (inegalite === 'supérieur ou égal') {
           texte = `$${b === 0 ? polynomeSansB : polynome}\\geqslant0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${b === 0 ? polynomeSansB : polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)\\geqslant 0$.'
+          texteCorr += ' On cherche à résoudre $P(x)\\geqslant 0$.'
         } else if (inegalite === 'inférieur ou égal') {
           texte = `$${b === 0 ? polynomeSansB : polynome}\\leqslant0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${b === 0 ? polynomeSansB : polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)\\leqslant 0$.'
+          texteCorr += ' On cherche à résoudre $P(x)\\leqslant 0$.'
         } else {
           texte = `$${b === 0 ? polynomeSansB : polynome}< 0$`
           texteCorr = `Soit $P$ le polynôme défini pour tout $x$ de $\\mathbb R$ par $P(x)=${b === 0 ? polynomeSansB : polynome}$.`
-          texteCorr += '<br>On cherche à résoudre $P(x)< 0$.'
+          texteCorr += ' On cherche à résoudre $P(x)< 0$.'
         }
-        texteCorr += '<br>Pour cela, on cherche ses racines éventuelles.'
-        texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$`
+        texteCorr += `<br>$\\Delta = ${ecritureParentheseSiNegatif(b)}^2-4\\times${ecritureParentheseSiNegatif(a)}\\times${ecritureParentheseSiNegatif(c)}=${b * b - 4 * a * c}$.`
         texteCorr +=
           "<br>$\\Delta<0$, donc le polynôme $P$ n'admet pas de racine."
-        texteCorr += `<br> Il est toujours du signe de $a=${a}`
+        texteCorr += ` Il est toujours du signe de $a=${a}`
         texteCorr += a > 0 ? '>0$.' : '<0$.'
         texteCorr +=
-          '<br>on en déduit le signe du polynôme dans un tableau de signes :'
+          ' On en déduit le signe du polynôme dans un tableau de signes :'
         texteCorr += tableauDeVariation({
           tabInit: [
             [
-              ['$x$', 2, 30],
-              [`$${b === 0 ? polynomeSansB : polynome}$`, 2, 50],
+              ['$x$', 1.5, 30],
+              [`$${b === 0 ? polynomeSansB : polynome}$`, 1.5, 50],
             ],
             ['$-\\infty$', 30, '$+\\infty$', 30],
           ],
@@ -414,31 +418,47 @@ export default class ResoudreEquationDegre2 extends Exercice {
           espcl: 3.5,
           deltacl: 0.8,
           lgt: 8,
-          hauteurLignes: [12, 15],
+          hauteurLignes: [10, 10],
         })
         if (inegalite === 'strictement supérieur') {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence('\\mathbb{R}')}$.`
-              : `<br> Finalement, $S=${miseEnEvidence('\\emptyset')}$.`
+              ? `<br>Finalement, $S=${highlightedSolution('\\mathbb{R}')}$.`
+              : `<br> Finalement, $S=${highlightedSolution('\\emptyset')}$.`
         } else if (inegalite === 'supérieur ou égal') {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence('\\mathbb{R}')}$.`
-              : `<br> Finalement, $S=${miseEnEvidence('\\emptyset')}$.`
+              ? `<br>Finalement, $S=${highlightedSolution('\\mathbb{R}')}$.`
+              : `<br> Finalement, $S=${highlightedSolution('\\emptyset')}$.`
         } else if (inegalite === 'inférieur ou égal') {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence('\\emptyset')}$.`
-              : `<br> Finalement, $S=${miseEnEvidence('\\mathbb{R}')}$.`
+              ? `<br>Finalement, $S=${highlightedSolution('\\emptyset')}$.`
+              : `<br> Finalement, $S=${highlightedSolution('\\mathbb{R}')}$.`
         } else {
           texteCorr +=
             a > 0
-              ? `<br>Finalement, $S=${miseEnEvidence('\\emptyset')}$.`
-              : `<br> Finalement, $S=${miseEnEvidence('\\mathbb{R}')}$.`
+              ? `<br>Finalement, $S=${highlightedSolution('\\emptyset')}$.`
+              : `<br> Finalement, $S=${highlightedSolution('\\mathbb{R}')}$.`
         }
       }
       if (this.questionJamaisPosee(i, a, b, c)) {
+        if (this.interactif) {
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierEnsemble,
+            { texteAvant: '<br>$S=$' },
+          )
+          handleAnswers(this, i, {
+            reponse: {
+              value: answer,
+              options: answer.startsWith('\\{')
+                ? { ensembleDeNombres: true }
+                : { intervalle: true },
+            },
+          })
+        }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
