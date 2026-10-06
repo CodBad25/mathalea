@@ -843,6 +843,12 @@ export interface TypstCarryOver {
    * à la correction.
    */
   writingLines?: Record<number, WritingLinesSetting>
+  /**
+   * Titres d'exercice modifiés dans la palette, par numéro d'exercice
+   * (`#let exo-N-titre = ... // mathalea:titre-perso`). Une chaîne vide
+   * retire le titre de cet exercice.
+   */
+  exerciseTitles?: Record<number, string>
 }
 
 /**
@@ -1121,6 +1127,26 @@ export function subjectEditorCode(code: string, version: number): string {
     .join('\n')
 }
 
+/**
+ * Ligne `#let exo-N-titre = ...` du préambule : le titre MathALÉA de
+ * l'exercice, ou le titre saisi dans la palette (`custom`, marqué pour
+ * survivre à la régénération ; une chaîne vide retire le titre).
+ */
+export function exerciseTitleLine(
+  num: number,
+  title: string,
+  custom?: string,
+): string {
+  if (custom != null) {
+    const value =
+      custom === ''
+        ? 'none'
+        : `"${custom.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+    return `#let exo-${num}-titre = ${value} // mathalea:titre-perso`
+  }
+  return `#let exo-${num}-titre = ${title ? `[${htmlToTypst(title)}]` : 'none'}`
+}
+
 export function harvestCarryOver(code: string): TypstCarryOver {
   const versions = [...code.matchAll(/^\/\/ mathalea:sujet\((\d+)\)/gm)]
     .map((match) => Number(match[1]))
@@ -1313,6 +1339,12 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
       style: (match[3] ?? 'pointilles') as WritingLinesStyle,
     }
   }
+  const exerciseTitles: Record<number, string> = {}
+  for (const match of code.matchAll(
+    /^#let exo-(\d+)-titre = (?:none|"((?:[^"\\]|\\.)*)") \/\/ mathalea:titre-perso$/gm,
+  )) {
+    exerciseTitles[Number(match[1])] = (match[2] ?? '').replace(/\\(.)/g, '$1')
+  }
   return {
     tasksLayout,
     insertions,
@@ -1331,6 +1363,7 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
     codeOverridesCan,
     codeOverridesCanReponse,
     writingLines,
+    exerciseTitles,
   }
 }
 
@@ -3343,9 +3376,9 @@ function buildVersionContent(
         bankLines.push(`// ----- Exercice ${k + 1}${suffix} -----`)
       }
       bankLines.push(`#let ${varPrefix}ex${group.head + 1} = exo.with(`)
-      const title = exercises[group.head].title
-      if (options.showExerciseTitles && title) {
-        bankLines.push(`  title: [${htmlToTypst(title)}],`)
+      // titre déclaré dans le préambule (`exo-N-titre`), modifiable dans la palette
+      if (options.showExerciseTitles) {
+        bankLines.push(`  title: exo-${group.head + 1}-titre,`)
       }
       if (isWorkedGroup(group)) bankLines.push('  worked: true,')
       // la référence et le QR-code ne sont affichés que pour un groupe d'un
@@ -4008,6 +4041,19 @@ export function buildTypstDocument(
       )
       lines.push(
         `#let fig-${figNum}-align = ${stableCarryOver.figureAlign?.[figNum] ?? 'center'}`,
+      )
+    }
+    lines.push('')
+  }
+  if (options.showExerciseTitles) {
+    lines.push('// ----- Titres des exercices -----')
+    for (const [k, exercise] of exercises.entries()) {
+      lines.push(
+        exerciseTitleLine(
+          k + 1,
+          exercise.title ?? '',
+          stableCarryOver.exerciseTitles?.[k + 1],
+        ),
       )
     }
     lines.push('')

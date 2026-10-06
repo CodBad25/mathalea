@@ -628,6 +628,17 @@ l'intitulé MathALÉA après « Exercice N » (`showExerciseTitles`, `title:`).
 Elle est décochée par défaut. Un groupe fusionné reprend le titre de son
 premier exercice. Les titres conservent la mise en forme du style de badge.
 
+Chaque titre est déclaré dans le préambule (`#let exo-N-titre = [...]`) et
+`exo.with` y renvoie (`title: exo-N-titre`). Quand la case est cochée, le
+bouton « Titre » (`bx-heading`) de la barre d'outils de l'exercice ouvre un
+champ prérempli avec le titre : la validation (Entrée ou « Valider ») modifie
+seulement cette ligne (`setExerciseTitle`, pas de régénération), un champ vide
+retire le titre de cet exercice (`none`), « Titre par défaut » rétablit le
+titre MathALÉA. Un titre modifié porte le marqueur `// mathalea:titre-perso`,
+relu par `harvestCarryOver` (`TypstCarryOver.exerciseTitles`) : il survit à la
+régénération et suit l'exercice à la suppression, à la duplication et au
+déplacement. Il est saisi en texte simple (littéral `"..."`, sans formule).
+
 Dans les réglages d'un exercice, « Exemple corrigé (correction sous l'énoncé) »
 active `worked: true` : la correction reste visible sous l'énoncé même sur une
 fiche élève, et n'est pas répétée dans la section finale « Corrections ».

@@ -7,6 +7,7 @@ import {
   buildTypstDocument,
   COVER_TEMPLATE_DEFAULTS,
   defaultTypstDocumentOptions,
+  exerciseTitleLine,
   getGeneratedCanRowCode,
   getGeneratedExerciseCode,
   harvestCarryOver,
@@ -3366,4 +3367,50 @@ describe('page de garde', () => {
       }
     },
   )
+})
+
+describe('titres des exercices', () => {
+  const options = { ...defaultTypstDocumentOptions, showExerciseTitles: true }
+  const inputs = [
+    exercise({ title: 'Calculer une somme', questions: ['$1+1$'] }),
+    exercise({ title: 'Calculer un produit', questions: ['$2 \\times 3$'] }),
+  ]
+
+  it('déclare le titre MathALÉA de chaque exercice dans le préambule', () => {
+    const code = buildTypstDocument(inputs, options)
+    expect(code).toContain('#let exo-1-titre = [Calculer une somme]')
+    expect(code).toContain('title: exo-1-titre,')
+    expect(code).toContain('#let exo-2-titre = [Calculer un produit]')
+  })
+
+  it("n'ajoute rien quand les titres ne sont pas affichés", () => {
+    const code = buildTypstDocument(inputs, defaultTypstDocumentOptions)
+    expect(code).not.toContain('exo-1-titre')
+  })
+
+  it('garde un titre modifié ou retiré après une régénération', () => {
+    const first = buildTypstDocument(inputs, options, {
+      exerciseTitles: { 1: 'Mon "titre"', 2: '' },
+    })
+    expect(first).toContain(
+      '#let exo-1-titre = "Mon \\"titre\\"" // mathalea:titre-perso',
+    )
+    expect(first).toContain('#let exo-2-titre = none // mathalea:titre-perso')
+    const harvested = harvestCarryOver(first)
+    expect(harvested.exerciseTitles).toEqual({ 1: 'Mon "titre"', 2: '' })
+    expect(buildTypstDocument(inputs, options, harvested)).toBe(first)
+  })
+
+  it('ne garde pas un titre MathALÉA comme titre modifié', () => {
+    const code = buildTypstDocument(inputs, options)
+    expect(harvestCarryOver(code).exerciseTitles).toEqual({})
+  })
+
+  it('écrit la ligne de titre attendue pour la palette', () => {
+    expect(exerciseTitleLine(3, 'Titre')).toBe('#let exo-3-titre = [Titre]')
+    expect(exerciseTitleLine(3, '')).toBe('#let exo-3-titre = none')
+    expect(exerciseTitleLine(3, 'Titre', '')).toBe(
+      '#let exo-3-titre = none // mathalea:titre-perso',
+    )
+  })
 })

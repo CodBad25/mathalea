@@ -255,6 +255,14 @@
     writingLinesValues?: Record<number, WritingLinesSetting>
     /** Règle (`value`) ou retire (`null`) les lignes en pointillés de l'exercice num */
     onSetWritingLines: (num: number, value: WritingLinesSetting | null) => void
+    /** Les titres d'exercice sont affichés (réglage « Afficher le titre des exercices ») */
+    showExerciseTitles?: boolean
+    /** Titre affiché de chaque exercice (modifié dans la palette, sinon titre MathALÉA) */
+    exerciseTitles?: Record<number, string>
+    /** Titre MathALÉA de chaque exercice, proposé pour revenir au titre d'origine */
+    defaultExerciseTitles?: Record<number, string>
+    /** Modifie (`value`, vide pour aucun titre) ou rétablit (`null`) le titre de l'exercice num */
+    onSetExerciseTitle?: (num: number, value: string | null) => void
   }
 
   let {
@@ -330,6 +338,10 @@
     onEditCanRow,
     writingLinesValues = {},
     onSetWritingLines,
+    showExerciseTitles = false,
+    exerciseTitles = {},
+    defaultExerciseTitles = {},
+    onSetExerciseTitle,
   }: Props = $props()
 
   /** Espace des insertions : `exo` (entre les exercices) ou `corr` (avant une correction) */
@@ -756,9 +768,29 @@
   let openWritingLines: number | null = $state(null)
   let writingLinesDraft = $state({ ...WRITING_LINES_DEFAULT })
 
+  /** Numéro de l'exercice dont le panneau de titre est ouvert */
+  let openTitle: number | null = $state(null)
+  let titleDraft = $state('')
+
+  function toggleTitle(num: number) {
+    openTitle = openTitle === num ? null : num
+    openInsertion = null
+    openWritingLines = null
+    if (openTitle != null) titleDraft = exerciseTitles[num] ?? ''
+  }
+
+  /** Enregistre le titre saisi (une seule modification du code, à la validation) */
+  function submitTitle(num: number) {
+    if (titleDraft !== (exerciseTitles[num] ?? '')) {
+      onSetExerciseTitle?.(num, titleDraft.trim())
+    }
+    openTitle = null
+  }
+
   function toggleWritingLines(num: number) {
     openWritingLines = openWritingLines === num ? null : num
     openInsertion = null
+    openTitle = null
     if (openWritingLines != null) {
       writingLinesDraft = writingLinesValues[num] ?? {
         ...WRITING_LINES_DEFAULT,
@@ -948,6 +980,46 @@
           onclick={submitInsertion}
         >
           Insérer
+        </button>
+      </div>
+    </div>
+  {/if}
+{/snippet}
+
+{#snippet titlePanel(num: number)}
+  <!-- panneau du titre de l'exercice `num` : titre MathALÉA par défaut,
+       modifiable ; vide, l'exercice n'a pas de titre -->
+  {#if openTitle === num}
+    <div class="absolute top-6 right-0 z-30 w-72 space-y-2 typst-panel p-2">
+      <input
+        type="text"
+        class="w-full rounded border border-gray-300 px-1 py-0.5 text-xs"
+        placeholder="Pas de titre"
+        aria-label="Titre de l'exercice {num}"
+        bind:value={titleDraft}
+        onkeydown={(e) => {
+          if (e.key === 'Enter') submitTitle(num)
+          if (e.key === 'Escape') openTitle = null
+        }}
+      />
+      <div class="flex items-center justify-between gap-2">
+        <button
+          type="button"
+          class="px-2 py-0.5 text-xs hover:text-coopmaths-action"
+          title={defaultExerciseTitles[num]}
+          onclick={() => {
+            onSetExerciseTitle?.(num, null)
+            openTitle = null
+          }}
+        >
+          Titre par défaut
+        </button>
+        <button
+          type="button"
+          class="px-2 py-0.5 text-xs hover:text-coopmaths-action"
+          onclick={() => submitTitle(num)}
+        >
+          Valider
         </button>
       </div>
     </div>
@@ -1540,10 +1612,12 @@
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
         class:typst-pill-force-visible={(openInsertion?.space === 'exo' &&
           openInsertion.num === insertGapNum) ||
-          openWritingLines === widget.num}
+          openWritingLines === widget.num ||
+          openTitle === widget.num}
         class:z-20={(openInsertion?.space === 'exo' &&
           openInsertion.num === insertGapNum) ||
-          openWritingLines === widget.num}
+          openWritingLines === widget.num ||
+          openTitle === widget.num}
         style="top: {widget.top}%; left: {columnRight - 0.3}%;"
         data-testid="typst-overlay-exo"
       >
@@ -1632,6 +1706,19 @@
           >
             <i class="bx bx-pencil"></i>
           </button>
+        {/if}
+        {#if showExerciseTitles && !mergedExercises.includes(widget.num)}
+          <button
+            type="button"
+            title="Modifier le titre de cet exercice"
+            aria-label="Titre de l'exercice {widget.num}"
+            aria-expanded={openTitle === widget.num}
+            data-testid="typst-overlay-title"
+            onclick={() => toggleTitle(widget.num)}
+          >
+            <i class="bx bx-heading"></i>
+          </button>
+          {@render titlePanel(widget.num)}
         {/if}
         {#if !canMode}
           <button
