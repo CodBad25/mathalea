@@ -1189,6 +1189,22 @@ n'écarte que les _résultats_ périmés. Trois garde-fous dans `Typst.svelte` :
 lorsque le registre a changé (`setStaticImageBytes`), et non avant chaque
 compilation.
 
+### Mémoire du compilateur WASM : figures à labels
+
+Le WASM est limité à 4 Go. Une fiche de quelques centaines de labels
+mathématiques (ex. 6N2E : multiplications posées, 3 000 labels sur 5 pages)
+peut l'épuiser : typst.ts échoue alors avec `RuntimeError: unreachable` (« Unreachable
+code should not be executed … typstcompileworld_get_artifact »), alors que la
+même source compile avec le CLI natif (qui consomme ~5 Go).
+Chaque label coûte un `context` + `measure()` (centrage), la règle d'équation
+inline en ajoute deux, et `mathalea-figure-block` mesurait en plus toute la
+figure avant de la remettre en page. Pour une figure à labels, le générateur
+passe donc `natural-width:` (la largeur de la boîte de `mathalea-figure`) :
+c'est la seule économie qui laisse le rendu identique au pixel près. Les
+pistes testées qui déplaçaient les labels (`move(dx: -50%)`, centrage par
+`align(horizon)`) ne sont pas équivalentes. Pour reproduire : compiler la
+source via `compileTypstToSvg` dans le navigateur, le CLI ne plante pas.
+
 ### Un seul sujet dans l'aperçu
 
 Sur une fiche à plusieurs sujets (`nbVersions`), l'aperçu ne compile que le

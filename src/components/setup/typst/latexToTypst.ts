@@ -92,9 +92,17 @@ export const MATHALEA_FIT_HELPER = `#let mathalea-fit(body, zoom: 1.0) = layout(
  * une figure, quitte à déborder de la colonne). Seul le zoom du professeur
  * reste appliqué. Par défaut à `false`, il ne change rien aux appels
  * existants.
+ *
+ * `natural-width` (posé pour une figure à labels, dont `mathalea-figure` fixe
+ * la largeur de la boîte) évite de `measure()` toute la figure : cette
+ * mesure met en page une première fois chaque label (un `context` et
+ * plusieurs `measure()` par formule), avant la mise en page définitive. Sur
+ * une fiche de plusieurs centaines de labels (multiplications posées), ce
+ * doublon épuisait la mémoire du compilateur WASM (« unreachable »).
+ * Par défaut à `auto` (mesure), il ne change rien aux appels existants.
  */
-export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, alignment, zoom, body, force-true-size: false) = layout(size => {
-  let natural = measure(body).width
+export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, alignment, zoom, body, force-true-size: false, natural-width: auto) = layout(size => {
+  let natural = if natural-width == auto { measure(body).width } else { natural-width }
   let f = if force-true-size { zoom } else if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
   let scaled = if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
   let content-width = natural * f
@@ -2678,10 +2686,17 @@ function mathalea2dContainerToTypst(
   // le repère invisible de la palette de mise en page au coin haut-droit de
   // son rendu final — sauf si `vraieGrandeur` (voir mathalea2d.ts) impose la
   // taille physique réelle quel que soit le nombre de colonnes
+  // la boîte de `mathalea-figure` a pour largeur celle de la figure : la
+  // passer évite à `mathalea-figure-block` de la mesurer (voir
+  // `MATHALEA_FIGURE_BLOCK_HELPER`)
+  const options = [
+    ...(forceTrueSize ? ['force-true-size: true'] : []),
+    ...(labels.length > 0 ? [`natural-width: ${widthPt}pt`] : []),
+  ]
   return [
     `#mathalea-figure-block(${figureIndex}, ${alignVar}, ${zoomVar},`,
     body,
-    forceTrueSize ? ', force-true-size: true)' : ')',
+    options.length > 0 ? `, ${options.join(', ')})` : ')',
   ].join('\n')
 }
 
