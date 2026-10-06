@@ -5,6 +5,9 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import ce, {
+  fonctionComparaison,
+} from '../../lib/interactif/comparisonFunctions'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -30,6 +33,55 @@ export const refs = {
   'fr-fr': ['4C33-0'],
   'fr-ch': ['9NO1D-1'],
 }
+/**
+ * Crée la fonction de comparaison d'une saisie pour « écrire sans notation puissance ».
+ * Les écritures prévues dans `variantes` sont acceptées telles quelles.
+ * Toute autre écriture mathématiquement égale, composée du bon nombre de facteurs
+ * (donc du bon nombre de signes ×) tous égaux à la base au signe près,
+ * est acceptée avec un feedback précisant qu'elle n'est pas l'écriture attendue.
+ * Ex : -(-4)^2 = -4 × 4 ou (-4)^2 = 4 × 4
+ */
+function comparaisonProduit(
+  base: number,
+  exposant: number,
+  variantes: string[],
+) {
+  return (saisie: string) => {
+    for (const variante of variantes) {
+      if (fonctionComparaison(saisie, variante, { texteSansCasse: true }).isOk)
+        return { isOk: true, feedback: '' }
+    }
+    const nettoyee = saisie
+      .replaceAll(/\\left|\\right|\\lparen|\\rparen|\\,|\\ /g, (m) =>
+        m === '\\lparen' ? '(' : m === '\\rparen' ? ')' : '',
+      )
+      .replaceAll(/\s/g, '')
+      .replaceAll(/\\cdot|\*|×/g, '\\times')
+    let produit = nettoyee
+    if (exposant < 0) {
+      const fraction = nettoyee.match(/^-?\\[dt]?frac\{-?1\}\{(.*)\}$/)
+      if (fraction == null) return { isOk: false, feedback: '' }
+      produit = fraction[1]
+    }
+    const facteurs = produit.split('\\times')
+    if (
+      facteurs.length !== Math.abs(exposant) ||
+      !facteurs.every(
+        (f) => f.replaceAll(/[()-]/g, '') === String(Math.abs(base)),
+      )
+    )
+      return { isOk: false, feedback: '' }
+    const memeValeur = ce.parse(nettoyee).isEqual(ce.parse(variantes[0]))
+    return memeValeur
+      ? {
+          isOk: true,
+          feedback:
+            "Cette écriture est juste mais ce n'est pas celle qui était attendue.",
+        }
+      : { isOk: false, feedback: '' }
+  }
+}
+
 export default class NotationPuissance extends Exercice {
   classe: number
   constructor() {
@@ -234,43 +286,51 @@ export default class NotationPuissance extends Exercice {
             }
             texteCorr += `${listeSignes[i] + pl + base + pr}$`
 
+            const variantes = [listeSignes[i] + pl + base + pr]
             handleAnswers(this, i, {
               reponse: {
-                value: listeSignes[i] + pl + base + pr,
+                value: variantes,
+                compare: comparaisonProduit(base, exposant, variantes),
                 options: { texteSansCasse: true },
               },
             })
           } else if (exposant > 1) {
             texteCorr += listeSignes[i] + produit + '$'
+            const variantes = [
+              listeSignes[i] + produit,
+              listeSignes[i] + produitAlt,
+              listeSignes[i] + produitSansParenthesesInitiales,
+              listeSignes[i] + produitSansParenthesesInitialesEtSansFois,
+            ]
             handleAnswers(this, i, {
               reponse: {
-                value: [
-                  listeSignes[i] + produit,
-                  listeSignes[i] + produitAlt,
-                  listeSignes[i] + produitSansParenthesesInitiales,
-                  listeSignes[i] + produitSansParenthesesInitialesEtSansFois,
-                ],
+                value: variantes,
+                compare: comparaisonProduit(base, exposant, variantes),
                 options: { texteSansCasse: true },
               },
             })
           } else if (exposant === -1) {
             texteCorr += `${listeSignes[i]}\\dfrac{1}{${base}}$`
+            const variantes = [`${listeSignes[i]}\\frac{1}{${base}}`]
             handleAnswers(this, i, {
               reponse: {
-                value: `${listeSignes[i]}\\frac{1}{${base}}`,
+                value: variantes,
+                compare: comparaisonProduit(base, exposant, variantes),
                 options: { texteSansCasse: true },
               },
             })
           } else if (exposant < -1) {
             texteCorr += `${listeSignes[i]}\\dfrac{1}{${produit}}$`
+            const variantes = [
+              `${listeSignes[i]}\\frac{1}{${produit}}`,
+              `${listeSignes[i]}\\frac{1}{${produitAlt}}`,
+              `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitiales}}`,
+              `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitialesEtSansFois}}`,
+            ]
             handleAnswers(this, i, {
               reponse: {
-                value: [
-                  `${listeSignes[i]}\\frac{1}{${produit}}`,
-                  `${listeSignes[i]}\\frac{1}{${produitAlt}}`,
-                  `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitiales}}`,
-                  `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitialesEtSansFois}}`,
-                ],
+                value: variantes,
+                compare: comparaisonProduit(base, exposant, variantes),
                 options: { texteSansCasse: true },
               },
             })
