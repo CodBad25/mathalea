@@ -620,6 +620,25 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrectio
 
 `reponsesMisesEnEvidence` renvoie les réponses trouvées dans leur ordre d'apparition, dédoublonnées ; le tableau des réponses du diaporama s'en sert aussi (voir [Vue Diaporama](diaporama.md#tableau-des-réponses)). `minimalCorrection` les réémet telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
 
+## Titres et exemples corrigés
+
+Avec [exercise-bank 0.6.5](https://typst.app/universe/package/exercise-bank/),
+la case « Afficher le titre des exercices » des réglages du document ajoute
+l'intitulé MathALÉA après « Exercice N » (`showExerciseTitles`, `title:`).
+Elle est décochée par défaut. Un groupe fusionné reprend le titre de son
+premier exercice. Les titres conservent la mise en forme du style de badge.
+
+Dans les réglages d'un exercice, « Exemple corrigé (correction sous l'énoncé) »
+active `worked: true` : la correction reste visible sous l'énoncé même sur une
+fiche élève, et n'est pas répétée dans la section finale « Corrections ».
+Le réglage (`TypstCarryOver.workedExamples`, marqueurs `mathalea:worked`)
+survit à la régénération, au partage par URL et aux déplacements ; une copie
+hérite du réglage. Il est commun aux sujets A, B… et s'applique à tout un
+groupe fusionné si l'un de ses membres est un exemple corrigé.
+
+Ces deux réglages sont désactivés dans les modes de fusion globale et
+« Course aux nombres », qui n'utilisent pas de bloc `exo` par exercice.
+
 ## Styles d'exercice (badges exercise-bank)
 
 Le réglage « Style des exercices » expose les **douze** styles de badge du paquet `exercise-bank` (`BADGE_STYLES`, `buildTypstDocument.ts`), rangés en deux groupes (`<optgroup>` de la liste, même ordre que la constante) :

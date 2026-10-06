@@ -779,6 +779,8 @@ export interface TypstCarryOver {
    * titre pour le groupe) et leurs questions continuent la numérotation.
    */
   merges?: number[]
+  /** Exercices dont la correction est affichée sous l'énoncé (exemples corrigés). */
+  workedExamples?: number[]
   /** Zoom de chaque figure (`#let fig-N-zoom = ...`), par numéro de figure */
   figureZoom?: Record<number, number>
   /**
@@ -1321,6 +1323,9 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
     exerciseZoom,
     exerciseCorrectionZoom,
     merges,
+    workedExamples: [...code.matchAll(/^\/\/ mathalea:worked\((\d+)\)$/gm)].map(
+      (match) => Number(match[1]),
+    ),
     codeOverrides,
     codeOverridesCorrection,
     codeOverridesCan,
@@ -1338,6 +1343,8 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
 export interface TypstExerciseInput {
   /** Référence affichée à côté du titre (ex : 6e23-1) */
   ref: string
+  /** Intitulé affiché quand l'option « Afficher le titre des exercices » est active. */
+  title?: string
   /**
    * Lien vers l'exercice seul sur MathALÉA (avec ses réglages et sa graine),
    * encodé dans un QR-code quand `showQrCode` est actif. Absent si l'exercice
@@ -1463,6 +1470,8 @@ export interface TypstDocumentOptions {
   questionsGutter: number
   /** Affiche la référence du référentiel à côté de la numérotation */
   showExerciseRefs: boolean
+  /** Affiche l'intitulé MathALÉA après « Exercice N ». */
+  showExerciseTitles: boolean
   /**
    * Ajoute au coin de chaque exercice un QR-code pointant vers l'exercice
    * seul sur MathALÉA (comme la sortie LaTeX). Sans effet en mode fusionné.
@@ -1478,7 +1487,7 @@ export interface TypstDocumentOptions {
   showQrCodeFiche: boolean
   /**
    * Affiche la correction dans le document généré (`#let corrige`). Décochée,
-   * seuls les énoncés sont rendus, sans bloc « Corrections » ni titre associé.
+   * seuls les énoncés et les exemples corrigés sont rendus, sans section finale.
    */
   showCorrections: boolean
   /** Nombre de colonnes du document (1, 2 ou 3) */
@@ -1936,6 +1945,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   questionsColumns: 'auto',
   questionsGutter: 1.2,
   showExerciseRefs: false,
+  showExerciseTitles: false,
   showCorrections: true,
   columns: 1,
   pageFormat: 'a4',
@@ -3294,6 +3304,8 @@ function buildVersionContent(
         groups.push({ head: k, members: [k] })
       }
     }
+    const isWorkedGroup = (group: ExerciseGroup) =>
+      group.members.some((k) => carryOver.workedExamples?.includes(k + 1))
 
     /**
      * Contenu de l'énoncé d'un membre du groupe. Les membres autres que la
@@ -3331,6 +3343,11 @@ function buildVersionContent(
         bankLines.push(`// ----- Exercice ${k + 1}${suffix} -----`)
       }
       bankLines.push(`#let ${varPrefix}ex${group.head + 1} = exo.with(`)
+      const title = exercises[group.head].title
+      if (options.showExerciseTitles && title) {
+        bankLines.push(`  title: [${htmlToTypst(title)}],`)
+      }
+      if (isWorkedGroup(group)) bankLines.push('  worked: true,')
       // la référence et le QR-code ne sont affichés que pour un groupe d'un
       // seul exercice (ils ne peuvent pas représenter tout un groupe fusionné)
       if (group.members.length === 1) {
@@ -3356,7 +3373,8 @@ function buildVersionContent(
       // le champ `solution:` reste renseigné : `display: "sol"` (PDF
       // « corrigé seul », voir corrigeCode dans Typst.svelte) en dépend pour
       // imprimer la correction directement à l'appel de `#exN()`. En mode
-      // normal (« both »), `exo()` la mettrait aussi en attente (corr-loc:
+      // normal (« both », hors exemples corrigés), `exo()` la mettrait aussi
+      // en attente (corr-loc:
       // "end-chapter") mais rien ne relit plus cette file : la correction
       // affichée dans la section Corrections vient de l'appel direct à
       // `exo-solution-box` plus bas, qui garde un point d'insertion avant
@@ -3366,6 +3384,9 @@ function buildVersionContent(
       )
       if (correctionMembers.length > 0) {
         bankLines.push('  solution: [')
+        if (isWorkedGroup(group) && emitAnchors) {
+          bankLines.push(`    #mathalea-anchor("corr", ${group.head + 1})`)
+        }
         const correctionBody = correctionMembers
           .map((k) => built[k].correction as string)
           .join('\n\n')
@@ -3408,7 +3429,13 @@ function buildVersionContent(
     }
     renderLines.push(']')
     renderLines.push('')
-    if (hasCorrections) {
+    if (
+      groups.some(
+        (group) =>
+          !isWorkedGroup(group) &&
+          group.members.some((k) => built[k].correction != null),
+      )
+    ) {
       renderLines.push('// ----- Corrections -----')
       renderLines.push('#if corrige [')
       renderLines.push('  // les corrections commencent sur une nouvelle page')
@@ -3429,6 +3456,7 @@ function buildVersionContent(
       // aussi ce qu'incrémente `exo-counter` en interne (un exercice fusionné
       // avec le précédent ne consomme pas de numéro à lui).
       groups.forEach((group, groupIndex) => {
+        if (isWorkedGroup(group)) return
         const num = groupIndex + 1
         const correctionMembers = group.members.filter(
           (k) => built[k].correction != null,
@@ -3553,6 +3581,7 @@ export function buildTypstDocument(
             figureAlign: stableCarryOver.figureAlign,
             exerciseZoom: stableCarryOver.exerciseZoom,
             exerciseCorrectionZoom: stableCarryOver.exerciseCorrectionZoom,
+            workedExamples: stableCarryOver.workedExamples,
           },
           versionExercises.length,
         ),
@@ -4009,6 +4038,11 @@ export function buildTypstDocument(
       )
     }
     lines.push('')
+  }
+  if (!exportMode) {
+    for (const num of stableCarryOver.workedExamples ?? []) {
+      lines.push(`// mathalea:worked(${num})`)
+    }
   }
   if (totalVersions > 1) lines.push('// mathalea:banque(0)')
   lines.push(...primary.bankLines)
