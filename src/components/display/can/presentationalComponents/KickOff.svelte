@@ -1,20 +1,22 @@
 <script lang="ts">
   import { assignmentDataFromCapytale } from '../../../../lib/handleCapytale'
+  import type { QuestionScore } from '../../../../lib/types'
   import type { CanState } from '../../../../lib/types/can'
   import ButtonTextAction from '../../../shared/forms/ButtonTextAction.svelte'
   export let state: CanState
   export let title = 'Course aux Nombres'
   export let subTitle = '2023'
   export let canStart = true
+  export let recordedScore: QuestionScore | undefined = undefined
 
   /**
    * Construit la chaîne qui sera affichée pour le score
    * nombre de points obtenu / nombre de questions
    */
   function buildStringScore(): string {
-    const score = getScore()
+    const score = recordedScore?.nbBonnesReponses ?? getScore()
     if (assignmentDataFromCapytale?.resultsByQuestion !== undefined) {
-      return `Meilleur score : ${score} / ${assignmentDataFromCapytale?.resultsByQuestion.length} en ${assignmentDataFromCapytale?.duration} s`
+      return `Meilleur score : ${score} / ${recordedScore?.nbReponses ?? assignmentDataFromCapytale?.resultsByQuestion.length} en ${assignmentDataFromCapytale?.duration} s`
     } else {
       return ''
     }

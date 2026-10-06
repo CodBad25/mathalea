@@ -895,6 +895,11 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     return {}
   }
 
+  if (recorder === 'capytale' && es === undefined) {
+    setInteractive = '1'
+    isInteractiveFree = false
+  }
+
   const newExercisesParamsFiltered = newExercisesParams.filter(
     (e) => e.uuid || e.id,
   )

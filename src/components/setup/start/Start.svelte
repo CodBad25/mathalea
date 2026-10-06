@@ -19,7 +19,10 @@
   import { get } from 'svelte/store'
   import { qcmCamExportAll } from '../../../../src/lib/qcmCam'
   import appsTierce from '../../../json/referentielAppsTierce.json'
-  import { buildEsParams, buildMathAleaURL } from '../../../lib/components/urls'
+  import {
+    buildCapytalePreviewURL,
+    buildMathAleaURL,
+  } from '../../../lib/components/urls'
   import { downloadFile } from '../../../lib/files'
   import handleCapytale from '../../../lib/handleCapytale'
   import { sendActivityParams } from '../../../lib/handleRecorder'
@@ -161,61 +164,9 @@
 
   // Gestion de la graine
   function buildUrlAndOpenItInNewTab(status: 'eleve' | 'usual') {
-    const url = new URL('https://coopmaths.fr/alea/')
-    for (const ex of $exercicesParams) {
-      url.searchParams.append('uuid', ex.uuid)
-      if (ex.id !== undefined) url.searchParams.append('id', ex.id)
-      if (ex.nbQuestions !== undefined) {
-        url.searchParams.append('n', ex.nbQuestions.toString())
-      }
-      if (ex.duration !== undefined) {
-        url.searchParams.append('d', ex.duration.toString())
-      }
-      if (ex.sup !== undefined) url.searchParams.append('s', ex.sup)
-      if (ex.sup2 !== undefined) url.searchParams.append('s2', ex.sup2)
-      if (ex.sup3 !== undefined) url.searchParams.append('s3', ex.sup3)
-      if (ex.sup4 !== undefined) url.searchParams.append('s4', ex.sup4)
-      if (ex.sup5 !== undefined) url.searchParams.append('s5', ex.sup5)
-      if (ex.alea !== undefined) url.searchParams.append('alea', ex.alea)
-      if (ex.interactif === '1') url.searchParams.append('i', '1')
-      if (ex.cd !== undefined) url.searchParams.append('cd', ex.cd)
-      if (ex.calc != null && ex.calc !== '0')
-        url.searchParams.append('calc', ex.calc)
-      if (ex.cols !== undefined) {
-        url.searchParams.append('cols', ex.cols.toString())
-      }
-    }
-    switch (status) {
-      case 'eleve':
-        if ($canOptions.isChoosen) {
-          url.searchParams.append('v', 'can')
-        } else {
-          url.searchParams.append('v', 'eleve')
-        }
-        break
-      default:
-        break
-    }
-    url.searchParams.append('title', $globalOptions.title ?? '')
-    const presMode =
-      $exercicesParams.length === 1 ? 'liste_exos' : 'un_exo_par_page'
-    url.searchParams.append('es', buildEsParams(presMode))
-
-    if ($canOptions.isChoosen) {
-      if ($canOptions.durationInMinutes !== 0) {
-        url.searchParams.append(
-          'canD',
-          $canOptions.durationInMinutes.toString(),
-        )
-      }
-      if ($canOptions.subTitle !== '') {
-        url.searchParams.append('canT', $canOptions.subTitle)
-      }
-      url.searchParams.append('canSA', $canOptions.solutionsAccess ? '1' : '0')
-      if ($canOptions.solutionsAccess) {
-        url.searchParams.append('canSM', $canOptions.solutionsMode)
-      }
-    }
+    const view =
+      status === 'eleve' ? ($canOptions.isChoosen ? 'can' : 'eleve') : undefined
+    const url = buildCapytalePreviewURL(view)
     window.open(url, '_blank')?.focus()
   }
 
@@ -370,6 +321,12 @@
   let isAddExerciseModalOpen = false
 
   function addExerciseFromModal(params: InterfaceParams) {
+    if (
+      $globalOptions.recorder === 'capytale' ||
+      $globalOptions.setInteractive === '1'
+    ) {
+      params = { ...params, interactif: '1' }
+    }
     exercicesParams.update((list) => [...list, params])
   }
 

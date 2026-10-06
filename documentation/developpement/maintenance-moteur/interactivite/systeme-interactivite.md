@@ -377,7 +377,7 @@ Les paramètres d'un exercice affiché en interactif proposent un réglage « Ba
 
 - le coefficient est porté par `exercice.coeffBareme`, sauvegardé dans `exercicesParams` et dans l'URL sous le paramètre `coef` (absent quand il vaut 1) ;
 - il est appliqué au moment de l'affichage du score par `afficheScore()`, qui multiplie la note obtenue **et** la note maximale : un 3/5 avec un coefficient 2 devient 6/10, dans la vue prof comme dans la vue élève et dans ce qui est transmis au LMS (`numberOfPoints` / `numberOfQuestions`) ;
-- la vue Course aux nombres a son propre calcul de score (`gestionCan.ts`) et n'est pas concernée.
+- la vue Course aux nombres applique également ce coefficient aux points obtenus et possibles de chaque question (`canScore.ts`), en conservant les points partiels renvoyés par la correction. Le même total est affiché et transmis au recorder. Capytale conserve ces points pondérés dans `assignmentData.scoresByQuestion`, en plus des booléens `resultsByQuestion` utilisés pour le feedback ; les anciennes copies sans ce champ restent lisibles.
 
 ### Stabilité du barème face au tirage aléatoire
 

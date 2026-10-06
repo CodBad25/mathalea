@@ -15,6 +15,17 @@ Capytale sauvegarde les paramètres de séance et les réponses d'élèves. Math
 
 Le code d'intégration côté MathALÉA est dans `src/lib/handleCapytale.ts`.
 
+## Réglages par défaut et aperçu
+
+Une nouvelle séance utilise « Tout interactif » par défaut. Les exercices ajoutés
+par le menu ou par la recherche `Ctrl/Cmd+K` sont interactifs par défaut.
+Les réglages d'une séance déjà enregistrée sont conservés.
+
+L'aperçu reprend les paramètres des exercices (dont le barème) et les réglages
+Course aux nombres : interactivité, chronomètre global ou par question,
+chronomètre désactivé et feedback après chaque question. Comme dans Capytale,
+l'élève ne peut pas modifier l'interactivité dans cet aperçu.
+
 ## Réglages de séance : aller-retour avec Capytale
 
 `toolGetActivityParams` (Capytale → MathALÉA) fournit l'activité enregistrée,
