@@ -126,3 +126,118 @@ export function isEquivalentInequality(options: CheckOverrides = {}): Check {
     },
   }
 }
+
+type Bound = { value: number; strict: boolean; tex: string }
+type IntervalCondition = { inf?: Bound; sup?: Bound }
+type ParsedCondition = IntervalCondition | 'unreadable' | 'mixedDirections'
+
+function parseBound(value: string): number | null {
+  const cleaned = value.replaceAll('{,}', '.')
+  if (/^\+?\\infty$/.test(cleaned)) return Infinity
+  if (/^-\\infty$/.test(cleaned)) return -Infinity
+  if (/[a-z]/i.test(cleaned.replace(/\\[a-z]+/gi, ''))) return null
+  return evaluate(cleaned, {})
+}
+
+// Lit une inégalité (x<5, 3\leqslant x) ou un encadrement (-3<x\leqslant 5)
+// portant sur `variable`, et la ramène à des bornes inférieure et supérieure.
+function parseIntervalCondition(
+  value: string,
+  variable: string,
+): ParsedCondition {
+  const normalized = normalizeRelation(
+    value
+      .replaceAll('$', '')
+      .replaceAll('\\left', '')
+      .replaceAll('\\right', '')
+      .replaceAll('\\,', '')
+      .replaceAll('\\lt', '<')
+      .replaceAll('\\gt', '>')
+      .replaceAll('⩽', '≤')
+      .replaceAll('⩾', '≥')
+      .replace(/\s+/g, ''),
+  )
+  const relations = [...normalized.matchAll(/<=|>=|<|>/g)].map(
+    (match) => match[0] as Relation,
+  )
+  const members = normalized.split(/<=|>=|<|>/)
+  if (relations.length < 1 || relations.length > 2) return 'unreadable'
+  if (members.some((member) => member === '')) return 'unreadable'
+
+  const variableIndex = members.indexOf(variable)
+  if (variableIndex === -1) return 'unreadable'
+  if (relations.length === 2 && variableIndex !== 1) return 'unreadable'
+  const isIncreasing = (relation: Relation) => relation.startsWith('<')
+  if (
+    relations.length === 2 &&
+    isIncreasing(relations[0]) !== isIncreasing(relations[1])
+  )
+    return 'mixedDirections'
+
+  const condition: IntervalCondition = {}
+  for (const [index, member] of members.entries()) {
+    if (index === variableIndex) continue
+    const bound = parseBound(member)
+    if (bound == null) return 'unreadable'
+    const relation =
+      index < variableIndex ? relations[index] : reverse(relations[index - 1])
+    // relation se lit maintenant « member relation x »
+    const isLower = isIncreasing(relation)
+    if ((isLower && bound === Infinity) || (!isLower && bound === -Infinity))
+      return 'unreadable'
+    if (Math.abs(bound) === Infinity) continue
+    const side = isLower ? 'inf' : 'sup'
+    if (condition[side] != null) return 'unreadable'
+    condition[side] = {
+      value: bound,
+      strict: !relation.endsWith('='),
+      tex: member,
+    }
+  }
+  if (condition.inf == null && condition.sup == null) return 'unreadable'
+  return condition
+}
+
+function boundFeedback(input?: Bound, answer?: Bound): string | undefined {
+  if (input == null && answer == null) return undefined
+  if (input == null) return 'Il manque une inégalité.'
+  if (answer == null) return `Il y a une erreur avec la valeur $${input.tex}$.`
+  if (Math.abs(input.value - answer.value) > tolerance)
+    return `Il y a une erreur avec la valeur $${input.tex}$.`
+  if (input.strict !== answer.strict)
+    return `Il y a une erreur avec le symbole en $${input.tex}$.`
+  return undefined
+}
+
+export function sameIntervalCondition(
+  options: CheckOverrides & { variable?: string } = {},
+): Check {
+  const variable = options.variable ?? 'x'
+  return {
+    name: options.name ?? 'sameIntervalCondition',
+    weight: options.weight,
+    feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
+    run: (input, answer) => {
+      const parsedInput = parseIntervalCondition(input, variable)
+      const parsedAnswer = parseIntervalCondition(answer, variable)
+      let feedbackKo: string | undefined
+      if (typeof parsedAnswer === 'string') {
+        feedbackKo = 'Erreur dans la réponse attendue.'
+      } else if (parsedInput === 'unreadable') {
+        feedbackKo = 'Écrire une inégalité ou un encadrement.'
+      } else if (parsedInput === 'mixedDirections') {
+        feedbackKo = 'Les deux inégalités ne sont pas dans le même sens.'
+      } else {
+        feedbackKo =
+          boundFeedback(parsedInput.inf, parsedAnswer.inf) ??
+          boundFeedback(parsedInput.sup, parsedAnswer.sup)
+      }
+      return {
+        passed: feedbackKo == null,
+        feedbackKo: options.feedbackKo ?? feedbackKo ?? '',
+        feedbackOk: options.feedbackOk,
+      }
+    },
+  }
+}

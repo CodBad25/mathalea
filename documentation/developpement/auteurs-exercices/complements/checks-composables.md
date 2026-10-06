@@ -103,17 +103,17 @@ isEqual({ tolerance: -2 }) // accepte un écart jusqu'à 10^-2
 isEqual({ comparisonOptions: { fractionEgale: true } })
 ```
 
-| Option              | Rôle                                                                                        |
-| ------------------- | ------------------------------------------------------------------------------------------- |
+| Option              | Rôle                                                                                                                                                                 |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `tolerance`         | Exposant : accepte un écart jusqu'à `10^tolerance`. Saisie et réponse doivent être des expressions arithmétiques (pas de `\pi`) ou des monômes simples comme `2.5x`. |
-| `comparisonOptions` | [Options](options-de-comparaison.md) transmises à `fonctionComparaison()`                   |
+| `comparisonOptions` | [Options](options-de-comparaison.md) transmises à `fonctionComparaison()`                                                                                            |
 
-| Saisie      | Réponse attendue | Option            | Verdict |
-| ----------- | ---------------- | ----------------- | ------- |
-| `\sqrt{36}` | `6`              |                   | ✓       |
-| `1,5`       | `1.5`            |                   | ✓       |
-| `3.14`      | `3.1416`         | `tolerance: -2`   | ✓       |
-| `3.1`       | `3.1416`         | `tolerance: -2`   | ✗       |
+| Saisie      | Réponse attendue | Option          | Verdict |
+| ----------- | ---------------- | --------------- | ------- |
+| `\sqrt{36}` | `6`              |                 | ✓       |
+| `1,5`       | `1.5`            |                 | ✓       |
+| `3.14`      | `3.1416`         | `tolerance: -2` | ✓       |
+| `3.1`       | `3.1416`         | `tolerance: -2` | ✗       |
 
 Message de réussite par défaut : « La valeur est correcte. ».
 
@@ -136,17 +136,17 @@ Le second argument reçoit les [options communes](#options-communes).
 Grandeurs avec unités, conversions autorisées (option `unite` de
 `fonctionComparaison()`).
 
-| Option           | Rôle                                                     |
-| ---------------- | -------------------------------------------------------- |
-| `precision`      | Tolérance, transmise à `precisionUnite`                  |
-| `strictSameUnit` | Exige l'unité de la réponse attendue                     |
+| Option           | Rôle                                    |
+| ---------------- | --------------------------------------- |
+| `precision`      | Tolérance, transmise à `precisionUnite` |
+| `strictSameUnit` | Exige l'unité de la réponse attendue    |
 
-| Saisie                            | Réponse attendue | Option                 | Verdict                                                                 |
-| --------------------------------- | ---------------- | ---------------------- | ----------------------------------------------------------------------- |
-| `100\operatorname{\mathrm{cm}}`   | `1m`             |                        | ✓                                                                       |
-| `1,5\operatorname{\mathrm{kg}}`   | `1500g`          |                        | ✓                                                                       |
-| `2\operatorname{\mathrm{km}}`     | `1m`             |                        | ✗                                                                       |
-| `100\operatorname{\mathrm{cm}}`   | `1m`             | `strictSameUnit: true` | ✗ La grandeur est correcte mais l'unité attendue n'est pas respectée.   |
+| Saisie                          | Réponse attendue | Option                 | Verdict                                                               |
+| ------------------------------- | ---------------- | ---------------------- | --------------------------------------------------------------------- |
+| `100\operatorname{\mathrm{cm}}` | `1m`             |                        | ✓                                                                     |
+| `1,5\operatorname{\mathrm{kg}}` | `1500g`          |                        | ✓                                                                     |
+| `2\operatorname{\mathrm{km}}`   | `1m`             |                        | ✗                                                                     |
+| `100\operatorname{\mathrm{cm}}` | `1m`             | `strictSameUnit: true` | ✗ La grandeur est correcte mais l'unité attendue n'est pas respectée. |
 
 #### `sameCoordinates`
 
@@ -198,18 +198,18 @@ Deux expressions décrivent-elles le même ensemble quand leur variable parcourt
 $\mathbb{Z}$ ? Utile pour les solutions d'équations trigonométriques ou les
 congruences.
 
-| Option                     | Rôle                                                                    |
-| -------------------------- | ----------------------------------------------------------------------- |
-| `variable`                 | Variable entière ; déduite des expressions si absente                   |
-| `allowMultipleExpressions` | Accepte une liste de plusieurs progressions                            |
+| Option                     | Rôle                                                  |
+| -------------------------- | ----------------------------------------------------- |
+| `variable`                 | Variable entière ; déduite des expressions si absente |
+| `allowMultipleExpressions` | Accepte une liste de plusieurs progressions           |
 
-| Saisie     | Réponse attendue | Verdict                                              |
-| ---------- | ---------------- | ---------------------------------------------------- |
-| `2k\pi`    | `2k\pi-2\pi`     | ✓                                                    |
-| `4n+1`     | `4n-3`           | ✓                                                    |
-| `2x+2`     | `2x`             | ✓                                                    |
-| `2x`       | `4x`             | ✗ Les expressions ne décrivent pas le même ensemble. |
-| `2x+1`     | `2x+2`           | ✗                                                    |
+| Saisie  | Réponse attendue | Verdict                                              |
+| ------- | ---------------- | ---------------------------------------------------- |
+| `2k\pi` | `2k\pi-2\pi`     | ✓                                                    |
+| `4n+1`  | `4n-3`           | ✓                                                    |
+| `2x+2`  | `2x`             | ✓                                                    |
+| `2x`    | `4x`             | ✗ Les expressions ne décrivent pas le même ensemble. |
+| `2x+1`  | `2x+2`           | ✗                                                    |
 
 #### `sameAffineSignTable`
 
@@ -220,16 +220,16 @@ fonction à partir de son tableau de signes. Un préfixe `f(x)=` dans la saisie
 est ignoré. `coefficientsAffines(latex)`, exporté par le même fichier, renvoie
 les coefficients `[a, b]` d'une expression affine.
 
-| Option     | Rôle                       |
-| ---------- | -------------------------- |
-| `variable` | Variable, `x` par défaut   |
+| Option     | Rôle                     |
+| ---------- | ------------------------ |
+| `variable` | Variable, `x` par défaut |
 
-| Saisie        | Réponse attendue | Verdict                                                        |
-| ------------- | ---------------- | -------------------------------------------------------------- |
-| `-2(x-3)`     | `-x+3`           | ✓                                                              |
-| `6-2x`        | `-x+3`           | ✓                                                              |
-| `x-3`         | `-x+3`           | ✗ Cette fonction affine ne convient pas.                       |
-| `-x^2+9`      | `-x+3`           | ✗ La réponse doit être de la forme $ax+b$ avec $a\neq 0$.      |
+| Saisie    | Réponse attendue | Verdict                                                   |
+| --------- | ---------------- | --------------------------------------------------------- |
+| `-2(x-3)` | `-x+3`           | ✓                                                         |
+| `6-2x`    | `-x+3`           | ✓                                                         |
+| `x-3`     | `-x+3`           | ✗ Cette fonction affine ne convient pas.                  |
+| `-x^2+9`  | `-x+3`           | ✗ La réponse doit être de la forme $ax+b$ avec $a\neq 0$. |
 
 Exemples : `src/exercices/1e/1A-C14-3.ts`, `src/exercices/1e/1A-C14-5.ts`.
 
@@ -243,13 +243,13 @@ ou `2`.
 
 Pour `{"point":[1,1,-1],"direction":[-3,0,4]}` :
 
-| Saisie                                                    | Verdict                                                   |
-| --------------------------------------------------------- | --------------------------------------------------------- |
-| `\begin{cases}x=1-3t\\y=1\\z=-1+4t\end{cases}`            | ✓                                                         |
-| `\begin{cases}x=1-6s\\y=1\\z=-1+8s\end{cases}`            | ✓ vecteur directeur colinéaire                            |
-| `\begin{cases}x=-2-3u\\y=1\\z=3+4u\end{cases}`            | ✓ autre point de la droite                                |
-| `\begin{cases}x=1-3t\\y=2\\z=-1+4t\end{cases}`            | ✗ La représentation paramétrique ne décrit pas la droite attendue. |
-| `\begin{cases}x=1-3t^2\\y=1\\z=-1+4t\end{cases}`          | ✗ expression non affine                                   |
+| Saisie                                           | Verdict                                                            |
+| ------------------------------------------------ | ------------------------------------------------------------------ |
+| `\begin{cases}x=1-3t\\y=1\\z=-1+4t\end{cases}`   | ✓                                                                  |
+| `\begin{cases}x=1-6s\\y=1\\z=-1+8s\end{cases}`   | ✓ vecteur directeur colinéaire                                     |
+| `\begin{cases}x=-2-3u\\y=1\\z=3+4u\end{cases}`   | ✓ autre point de la droite                                         |
+| `\begin{cases}x=1-3t\\y=2\\z=-1+4t\end{cases}`   | ✗ La représentation paramétrique ne décrit pas la droite attendue. |
+| `\begin{cases}x=1-3t^2\\y=1\\z=-1+4t\end{cases}` | ✗ expression non affine                                            |
 
 Pour une saisie répartie dans plusieurs champs, voir
 `sameParametricLineFromFieldsCallback()` dans
@@ -266,10 +266,10 @@ les valeurs sont correctes mais il en manque 1. ») ; `\{1;1;2\}` est refusé
 
 Le système paramétrique saisi utilise une seule variable.
 
-| Option                    | Rôle                                                                       |
-| ------------------------- | -------------------------------------------------------------------------- |
-| `dimension`               | `3` (défaut) ou `2`                                                        |
-| `expectedParameter`       | Nom ou liste de noms attendus                                              |
+| Option                    | Rôle                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------- |
+| `dimension`               | `3` (défaut) ou `2`                                                                   |
+| `expectedParameter`       | Nom ou liste de noms attendus                                                         |
 | `strictExpectedParameter` | `true` : un autre nom fait échouer le check ; `false` (défaut) : simple avertissement |
 
 Associé à `feedbackOnSuccess: true`, l'avertissement s'affiche même quand la
@@ -356,7 +356,7 @@ sont acceptés ; `[1+1;3]` et `[\frac{4}{2};3]` sont refusés. Combiner avec
 
 Comparaison textuelle, sans interprétation mathématique. Options `trim` et
 `ignoreCase` (défaut `false`). Avec `{ ignoreCase: true, trim: true }`,
-` Vrai ` est accepté pour `vrai`. `stringComparison()` est un alias.
+`Vrai` est accepté pour `vrai`. `stringComparison()` est un alias.
 
 #### `contains`
 
@@ -428,6 +428,31 @@ pour `x=3`.
 
 Un membre est nul : `2x-6=0` et `0=x+1` sont acceptés ; `2x=6` refusé.
 
+### Inéquations
+
+#### `isEquivalentInequality`
+
+Inéquation équivalente à la réponse attendue, testée en plusieurs points :
+`2x<6` et `-x>-3` sont acceptés pour `x<3` ; `x>3` et `x\leqslant 3` sont
+refusés.
+
+#### `sameIntervalCondition`
+
+Inégalité ou encadrement qui décrit le même intervalle que la réponse attendue,
+dans un sens ou dans l'autre. Option : `variable` (défaut `x`).
+
+| Saisie                     | Réponse attendue  | Verdict                                              |
+| -------------------------- | ----------------- | ---------------------------------------------------- |
+| `5\geqslant x>-3`          | `-3<x\leqslant 5` | ✓                                                    |
+| `3<x`                      | `x>3`             | ✓                                                    |
+| `-3\leqslant x\leqslant 5` | `-3<x\leqslant 5` | ✗ Il y a une erreur avec le symbole en $-3$.         |
+| `-2<x\leqslant 5`          | `-3<x\leqslant 5` | ✗ Il y a une erreur avec la valeur $-2$.             |
+| `x\leqslant 5`             | `-3<x\leqslant 5` | ✗ Il manque une inégalité.                           |
+| `-3<x>5`                   | `-3<x\leqslant 5` | ✗ Les deux inégalités ne sont pas dans le même sens. |
+| `]-3;5]`                   | `-3<x\leqslant 5` | ✗ Écrire une inégalité ou un encadrement.            |
+
+Exemple dans le dépôt : `src/exercices/2e/2N12-3.ts`.
+
 ### Appartenance
 
 #### `valueInInterval`
@@ -443,11 +468,11 @@ Ces checks comparent des fonctions par
 (défaut `c`), `domaine` (défaut `[-3, 3]`, à choisir dans le domaine de
 définition).
 
-| Check                              | Vérifie                                                                 | Exemple                                                                    |
-| ---------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `samePrimitiveUpToConstant`        | Même fonction que la réponse attendue à une constante près              | Pour `x^2` : `x^2+c` et `x^2+5` ✓ ; `x^3` ✗                                 |
-| `integrationConstantPresence`      | Présence de la constante (ou absence avec `expected: false`)            | `x^2+c` ✓ ; `x^2` ✗ « Il manque la constante d'intégration $+c$. »          |
-| `sameFunctionWithConstantFeedback` | Égalité stricte, avec un message dédié si seule la constante diffère   | Pour `x^2+3` : `x^2+5` ✗ « … son terme constant ne vérifie pas la condition demandée. » |
+| Check                              | Vérifie                                                              | Exemple                                                                                 |
+| ---------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `samePrimitiveUpToConstant`        | Même fonction que la réponse attendue à une constante près           | Pour `x^2` : `x^2+c` et `x^2+5` ✓ ; `x^3` ✗                                             |
+| `integrationConstantPresence`      | Présence de la constante (ou absence avec `expected: false`)         | `x^2+c` ✓ ; `x^2` ✗ « Il manque la constante d'intégration $+c$. »                      |
+| `sameFunctionWithConstantFeedback` | Égalité stricte, avec un message dédié si seule la constante diffère | Pour `x^2+3` : `x^2+5` ✗ « … son terme constant ne vérifie pas la condition demandée. » |
 
 `samePrimitiveUpToConstant({ requireConstantEffect: true })` exige en plus que
 la saisie dépende de la constante.

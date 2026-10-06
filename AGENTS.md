@@ -43,6 +43,16 @@ set a `bareme` with a fixed total in `handleAnswers()` (e.g.
 `toutAUnPoint`. Check this rule whenever you touch interactivity. See
 `documentation/developpement/auteurs-exercices/interactivite-simple.md`.
 
+## Adding a check or a comparison option
+
+A new check (`src/lib/interactif/checks/`) is exported from `checks/index.ts`,
+registered on the check-test page (`src/components/devtools/CheckTest.svelte`)
+and documented in the catalogue of
+`documentation/developpement/auteurs-exercices/complements/checks-composables.md`
+under a heading with its exact name. A new `fonctionComparaison()` option is
+documented in `options-de-comparaison.md`. Feedback messages follow the tone of
+the existing ones: short, and instructions in the infinitive.
+
 ## Modifying a published exercise
 
 Shared links carry the exercise uuid, the random seed and the chosen parameters

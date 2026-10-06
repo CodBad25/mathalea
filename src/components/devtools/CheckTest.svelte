@@ -17,6 +17,7 @@
     isEqual,
     isEquation,
     isEquivalentEquation,
+    isEquivalentInequality,
     isFraction,
     isPowerForm,
     isReduced,
@@ -32,6 +33,7 @@
     sameDuration,
     sameIntegerProgressionSet,
     sameInterval,
+    sameIntervalCondition,
     sameNumberList,
     sameNumberTuple,
     sameOrderedNumberList,
@@ -74,6 +76,8 @@
     | 'isEquation'
     | 'isEquivalentEquation'
     | 'hasZeroMember'
+    | 'isEquivalentInequality'
+    | 'sameIntervalCondition'
     | 'sameDuration'
     | 'sameCoordinates'
     | 'sameInterval'
@@ -143,6 +147,8 @@
     isEquation: 'isEquation',
     isEquivalentEquation: 'isEquivalentEquation',
     hasZeroMember: 'hasZeroMember',
+    isEquivalentInequality: 'isEquivalentInequality',
+    sameIntervalCondition: 'sameIntervalCondition',
     sameDuration: 'sameDuration',
     sameCoordinates: 'sameCoordinates',
     sameInterval: 'sameInterval',
@@ -195,6 +201,9 @@
     isEquivalentEquation:
       'Vérifie que deux équations sont équivalentes après passage dans un seul membre',
     hasZeroMember: "Vérifie qu'une équation est écrite avec un membre nul",
+    isEquivalentInequality: 'Vérifie que deux inéquations sont équivalentes',
+    sameIntervalCondition:
+      "Vérifie qu'une inégalité ou un encadrement décrit le même intervalle",
     sameDuration: 'Compare deux durées au format HMS',
     sameCoordinates: 'Compare deux listes de coordonnées',
     sameInterval: "Compare deux intervalles ou réunions d'intervalles",
@@ -322,6 +331,16 @@
     hasZeroMember: {
       accepted: ['x-2=0', '2x+1=0'],
       refused: ['x=2', '2x=-1'],
+    },
+    isEquivalentInequality: {
+      accepted: ['2x<6', '-x>-3', '3>x'],
+      refused: ['x>3', 'x\\leqslant 3'],
+      reference: 'x<3',
+    },
+    sameIntervalCondition: {
+      accepted: ['-3<x\\leqslant 5', '5\\geqslant x>-3'],
+      refused: ['-3\\leqslant x\\leqslant 5', '-3<x', ']-3;5]'],
+      reference: '-3<x\\leqslant 5',
     },
     sameDuration: {
       accepted: ['1h30min', '2min15s'],
@@ -456,6 +475,10 @@
     {
       title: 'Équations',
       checks: ['isEquation', 'isEquivalentEquation', 'hasZeroMember'],
+    },
+    {
+      title: 'Inéquations',
+      checks: ['isEquivalentInequality', 'sameIntervalCondition'],
     },
     {
       title: 'Appartenance / paramétrage',
@@ -819,6 +842,10 @@
         return isEquivalentEquation(overrides)
       case 'hasZeroMember':
         return hasZeroMember(overrides)
+      case 'isEquivalentInequality':
+        return isEquivalentInequality(overrides)
+      case 'sameIntervalCondition':
+        return sameIntervalCondition(overrides)
       case 'sameDuration':
         return sameDuration(overrides)
       case 'sameCoordinates':
