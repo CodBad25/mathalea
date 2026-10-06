@@ -184,6 +184,9 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
     const format = this.getAttribute('format') ?? 'case'
     const propositionStyle = this.getAttribute('proposition-style') ?? ''
 
+    // Le contenu est composé de blocs : un élément inline ferait justifier
+    // la dernière ligne de l'énoncé qui le précède (text-justify de la vue élève).
+    this.style.display = 'block'
     this.replaceChildren()
     const propositionsContainer = document.createElement('div')
     propositionsContainer.className = 'my-3'
