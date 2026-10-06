@@ -30,6 +30,7 @@ export default class ValeursDefPourcentage extends ExerciceSimple {
     this.spacing = 1.5
     this.spacingCorr = 1.5
     this.versionQcmDisponible = true
+    this.versionQcmOptions = { radio: true, compact: true }
   }
 
   nouvelleVersion() {

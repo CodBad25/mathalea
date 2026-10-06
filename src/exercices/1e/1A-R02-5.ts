@@ -18,7 +18,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 
 // ============================================================================
 // MÉTADONNÉES
@@ -30,8 +30,8 @@ export const refs = {
 }
 export const interactifReady = true
 
-export const amcReady = 'true'
-export const amcType = 'qcmMono'
+export const amcReady = true
+export const amcType = 'AMCNum'
 export const titre =
   'Déterminer une valeur manquante dans un tableau de proportionnalité'
 export const dateDePublication = '17/09/2025'
@@ -58,7 +58,7 @@ interface DonneesExercice {
 // ============================================================================
 // CLASSE PRINCIPALE
 // ============================================================================
-export default class Auto1AR7 extends ExerciceQcmA {
+export default class Auto1AR7 extends ExerciceSimple {
   // ==========================================================================
   // 1. DONNÉES STATIQUES
   // ==========================================================================
@@ -213,6 +213,11 @@ export default class Auto1AR7 extends ExerciceQcmA {
     const vY2 = pos === 4 ? bonne : y2
     const verification = `$${texNombre(vX1, 1)}\\times ${texNombre(vY2, 1)} = ${texNombre(vX1 * vY2, 1)} \\text{ et } ${texNombre(vX2, 1)}\\times ${texNombre(vY1, 1)} = ${texNombre(vX2 * vY1, 1)}$`
 
+    const astuce = this.versionQcm
+      ? '<br>' +
+        texteItalique('Astuce : sans calculatrice') +
+        ", un ordre de grandeur du produit en croix à obtenir permet souvent de déterminer la seule proposition qui permet de l'approcher."
+      : ''
     return (
       'On a $y = k\\times x$.<br>' +
       texteItalique('Méthode 1 – avec le coefficient de proportionnalité') +
@@ -222,9 +227,8 @@ export default class Auto1AR7 extends ExerciceQcmA {
       texteItalique('Méthode 2 – les produits en croix sont égaux') +
       ' :<br>' +
       `${methode2}.<br>` +
-      `Vérification : ${verification}<br>` +
-      texteItalique('Astuce : sans calculatrice') +
-      ", un ordre de grandeur du produit en croix à obtenir permet souvent de déterminer la seule proposition qui permet de l'approcher."
+      `Vérification : ${verification}` +
+      astuce
     )
   }
 
@@ -233,9 +237,19 @@ export default class Auto1AR7 extends ExerciceQcmA {
   // ==========================================================================
   constructor() {
     super()
-    this.versionAleatoire()
-    this.spacing = 1.5
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.besoinFormulaireCaseACocher = ['Sujet original', false]
+    this.sup = false
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+    this.spacing = 1
     this.spacingCorr = 1.5
+  }
+
+  nouvelleVersion(): void {
+    if (this.sup) this.versionOriginale()
+    else this.versionAleatoire()
   }
 
   // ==========================================================================
@@ -325,7 +339,7 @@ export default class Auto1AR7 extends ExerciceQcmA {
     // ========================================================================
     const tableau = this.construireTableau(x1, x2, y1, y2, pos)
 
-    this.enonce =
+    this.question =
       'Les valeurs de $y$ sont proportionnelles à celles de $x$.<br>' +
       'Déterminer la valeur manquante (?) dans le tableau ci-dessous.<br>' +
       tableau
@@ -351,12 +365,15 @@ export default class Auto1AR7 extends ExerciceQcmA {
 
     const [d1, d2, d3] = this.calcDistracteurs(pos, x1, x2, y1, y2, k)
 
-    this.reponses = [
-      this.formatRep(bonne, 1),
+    this.reponse = this.versionQcm ? this.formatRep(bonne, 1) : bonne
+    this.distracteurs = [
       this.formatRep(d1, 1),
       this.formatRep(d2, 1),
       this.formatRep(d3, 1),
     ]
+    this.optionsChampTexte = { texteAvant: 'Valeur manquante : ' }
+    this.canEnonce = this.question
+    this.canReponseACompleter = '$? = \\ldots$'
 
     // ========================================================================
     // CONSTRUCTION CORRECTION

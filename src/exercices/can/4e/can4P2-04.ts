@@ -33,7 +33,7 @@ export default class PoucentageP2 extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.spacing = 1.5
+    this.spacing = 1
     this.spacingCorr = 1.5
     this.versionQcmDisponible = true
   }
