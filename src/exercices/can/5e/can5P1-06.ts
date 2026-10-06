@@ -60,21 +60,21 @@ export default class CalculPartieAvecTout extends ExerciceSimple {
     ]
 
     this.question = `Dans un lycée, il y a $${texNombre(total, 0)}$ élèves inscrits. <br>
-    $${taux}\\,\\%$ d'entre eux étudient ${matiere}.<br>
-      Le nombre d'élèves qui étudient ${matiere} est égal à :`
+    $${taux}\\,\\%$ d'entre eux étudient ${matiere}.<br>`
+    this.question += this.versionQcm
+      ? `Le nombre d'élèves qui étudient ${matiere} est égal à :`
+      : `Combien d'élèves étudient ${matiere} ?`
 
     this.correction = correctionCommune
+    this.optionsChampTexte = { texteAvant: '<br>' }
 
     this.reponse = this.versionQcm ? `$${texNombre(partie, 0)}$` : `${partie}`
 
     this.distracteurs = distracteursCommuns
 
-    this.canEnonce = `Dans un lycée, il y a $${texNombre(total, 0)}$ élèves inscrits. $${taux}\\,\\%$ d'entre eux étudient ${matiere}.<br>`
+    this.canEnonce = `Dans un lycée, il y a $${texNombre(total, 0)}$ élèves inscrits. $${taux}\\,\\%$ d'entre eux étudient ${matiere}.<br>
+    Combien d'élèves étudient ${matiere} ?`
 
-    this.canReponseACompleter = `Le nombre d'élèves qui étudient ${matiere} est égal à : $\\ldots$`
-
-    if (!this.interactif && !this.versionQcm) {
-      this.question += ' $\\ldots$'
-    }
+    this.canReponseACompleter = '$\\ldots$'
   }
 }
