@@ -1069,12 +1069,24 @@
     for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
       figureZoom[Number(match[1])] = Number(match[2])
     }
+    // figure d'un autre sujet qui suit celle du sujet A
+    // (`#let fig-5-zoom = fig-1-zoom`, voir `sharedFigureNumber`)
+    for (const match of code.matchAll(
+      /^#let fig-(\d+)-zoom = fig-(\d+)-zoom$/gm,
+    )) {
+      figureZoom[Number(match[1])] = figureZoom[Number(match[2])] ?? 1
+    }
     figureZoomValues = figureZoom
     const figureAlign: Record<number, 'left' | 'center' | 'right'> = {}
     for (const match of code.matchAll(
       /^#let fig-(\d+)-align = (left|center|right)/gm,
     )) {
       figureAlign[Number(match[1])] = match[2] as 'left' | 'center' | 'right'
+    }
+    for (const match of code.matchAll(
+      /^#let fig-(\d+)-align = fig-(\d+)-align$/gm,
+    )) {
+      figureAlign[Number(match[1])] = figureAlign[Number(match[2])] ?? 'center'
     }
     figureAlignValues = figureAlign
     const exerciseZoom: Record<number, number> = {}
@@ -1223,9 +1235,27 @@
 
   /** Pas d'ajustement du zoom d'une figure, et bornes (20 % à 300 %) */
   const FIGURE_ZOOM_STEP = 0.1
+  /**
+   * Figure dont la variable porte le réglage : une figure d'un sujet B, C...
+   * qui suit celle du sujet A (`#let fig-5-zoom = fig-1-zoom`) se règle sur
+   * celle-ci, et le réglage vaut pour tous les sujets
+   */
+  function figureSettingTarget(
+    doc: string,
+    figNum: number,
+    setting: 'zoom' | 'align',
+  ): number {
+    const alias = new RegExp(
+      `^#let fig-${figNum}-${setting} = fig-(\\d+)-${setting}$`,
+      'm',
+    ).exec(doc)
+    return alias != null ? Number(alias[1]) : figNum
+  }
+
   function adjustFigureZoom(figNum: number, delta: number) {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
+    figNum = figureSettingTarget(doc, figNum, 'zoom')
     const match = new RegExp(`^#let fig-${figNum}-zoom = .*$`, 'm').exec(doc)
     if (match == null) return
     const current = figureZoomValues[figNum] ?? 1
@@ -1317,6 +1347,7 @@
   function setFigureAlign(figNum: number, align: 'left' | 'center' | 'right') {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
+    figNum = figureSettingTarget(doc, figNum, 'align')
     const match = new RegExp(`^#let fig-${figNum}-align = .*$`, 'm').exec(doc)
     if (match == null) return
     dispatchPaletteEdit({
