@@ -2044,6 +2044,30 @@ export function normalizeTypstLayoutOptions(
 }
 
 /**
+ * Figure du sujet A dont une figure d'un autre sujet reprend le zoom et
+ * l'alignement : les figures sont numérotées à la suite, sujet après sujet
+ * (`figureOffsets` : premier indice de chaque sujet B, C...). Quand un sujet
+ * a autant de figures que le sujet A (mêmes exercices, mêmes figures), sa
+ * k-ième figure suit la k-ième du sujet A ; sinon (nombre de figures tiré au
+ * hasard) elle garde ses propres réglages. Renvoie `undefined` pour une
+ * figure du sujet A ou sans correspondante.
+ */
+export function sharedFigureNumber(
+  figNum: number,
+  figureOffsets: number[],
+  figureCount: number,
+): number | undefined {
+  const primaryCount = figureOffsets[0] ?? figureCount
+  for (let v = figureOffsets.length - 1; v >= 0; v--) {
+    const start = figureOffsets[v]
+    if (figNum <= start) continue
+    const end = figureOffsets[v + 1] ?? figureCount
+    return end - start === primaryCount ? figNum - start : undefined
+  }
+  return undefined
+}
+
+/**
  * Saut de page ouvrant une partie du document (bloc « Corrections », sujet
  * suivant). Avec le réglage « Corrigés et sujets suivants sur une page
  * impaire », Typst insère au besoin une page blanche pour que la partie tombe
@@ -4036,11 +4060,18 @@ export function buildTypstDocument(
       lines.push(
         `#let fig-${figNum} = ${applyDocumentFontsToFigure(figure, options)}`,
       )
+      // figure d'un sujet B, C... : zoom et alignement de la figure
+      // correspondante du sujet A (voir `sharedFigureNumber`)
+      const shared = sharedFigureNumber(figNum, figureOffsets, figures.length)
       lines.push(
-        `#let fig-${figNum}-zoom = ${stableCarryOver.figureZoom?.[figNum] ?? 1}`,
+        shared != null
+          ? `#let fig-${figNum}-zoom = fig-${shared}-zoom`
+          : `#let fig-${figNum}-zoom = ${stableCarryOver.figureZoom?.[figNum] ?? 1}`,
       )
       lines.push(
-        `#let fig-${figNum}-align = ${stableCarryOver.figureAlign?.[figNum] ?? 'center'}`,
+        shared != null
+          ? `#let fig-${figNum}-align = fig-${shared}-align`
+          : `#let fig-${figNum}-align = ${stableCarryOver.figureAlign?.[figNum] ?? 'center'}`,
       )
     }
     lines.push('')
