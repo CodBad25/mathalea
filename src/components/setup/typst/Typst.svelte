@@ -849,6 +849,7 @@
   let exerciseCorrectionZoomValues: Record<number, number> = $state({})
   /** Exercice dont la modale de réglages (panneau Settings) est ouverte */
   let settingsExerciseIndex: number | null = $state(null)
+  let workedExamples: number[] = $state([])
   const settingsExercise = $derived(
     settingsExerciseIndex !== null
       ? (exercises[settingsExerciseIndex] ?? null)
@@ -1052,6 +1053,7 @@
     insertionValues = harvested.insertions ?? {}
     insertionCorrectionValues = harvested.insertionsCorrection ?? {}
     mergedExercises = harvested.merges ?? []
+    workedExamples = harvested.workedExamples ?? []
     codeOverrideValues = harvested.codeOverrides ?? {}
     codeOverrideCorrectionValues = harvested.codeOverridesCorrection ?? {}
     codeOverrideCanValues = harvested.codeOverridesCan ?? {}
@@ -1510,6 +1512,9 @@
       insertions,
       insertionsCorrection,
       merges,
+      workedExamples: (carryOver.workedExamples ?? [])
+        .filter((n) => n !== removed)
+        .map((n) => (n > removed ? n - 1 : n)),
       codeOverrides,
       codeOverridesCorrection,
       // surcharges de ligne « Course aux nombres » (par numéro de ligne, pas
@@ -1590,6 +1595,10 @@
       // la copie n'est pas fusionnée avec ce qui la précède : ce serait
       // fusionner l'original avec son double
       merges: (carryOver.merges ?? []).map(shift),
+      workedExamples: [
+        ...(carryOver.workedExamples ?? []).map(shift),
+        ...(carryOver.workedExamples?.includes(original) ? [inserted] : []),
+      ],
       codeOverrides: shiftMap(carryOver.codeOverrides),
       codeOverridesCorrection: shiftMap(carryOver.codeOverridesCorrection),
       // surcharges « Course aux nombres » : indexées par ligne du tableau, pas
@@ -1874,6 +1883,7 @@
       insertions,
       insertionsCorrection,
       merges,
+      workedExamples: (carryOver.workedExamples ?? []).map(swapNum),
       codeOverrides,
       codeOverridesCorrection,
       // surcharges de ligne « Course aux nombres » : voir le même
@@ -2255,6 +2265,26 @@
       primary,
       documentOptions,
       allCarryOver,
+      extraVersions,
+      { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
+    )
+    setEditorContent(code)
+    scheduleCompile(code, PALETTE_COMPILE_DELAY)
+  }
+
+  /** L'exemple corrigé garde sa solution sous l'énoncé, y compris en version élève. */
+  function setWorkedExample(num: number, worked: boolean) {
+    if (!confirmOverwrite()) return
+    const carryOver = harvestCarryOver(currentCode())
+    carryOver.workedExamples = (carryOver.workedExamples ?? []).filter(
+      (n) => n !== num,
+    )
+    if (worked) carryOver.workedExamples.push(num)
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const code = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
       extraVersions,
       { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
@@ -2869,6 +2899,7 @@
     const params = get(exercicesParams)
     return exercises.map((exercise, k) => {
       const input: TypstExerciseInput = {
+        title: exercise?.titre ?? '',
         // un exercice statique n'a pas d'id de référentiel de compétences :
         // sa référence affichée (réglage « Afficher la référence des
         // exercices ») est alors son titre (ex. « DNB Juin 2026... Ex 1 »)
@@ -4426,6 +4457,22 @@
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
+                bind:checked={documentOptions.showExerciseTitles}
+                disabled={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+                onchange={applyDocumentOptions}
+              />
+              <span
+                class:opacity-50={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+              >
+                Afficher le titre des exercices
+              </span>
+            </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
                 bind:checked={documentOptions.showExerciseRefs}
                 disabled={documentOptions.mergeExercises ||
                   documentOptions.canMode}
@@ -5239,6 +5286,25 @@
             }}
             on:clickSettings={() => (settingsExerciseIndex = null)}
           />
+          <label
+            class="flex items-center gap-2 p-4 text-sm md:text-normal font-light text-coopmaths-struct dark:text-coopmathsdark-struct cursor-pointer"
+            title="Afficher la correction sous l'énoncé, même en version élève. En cas de fusion, ce réglage s'applique à tout le groupe."
+          >
+            <input
+              type="checkbox"
+              checked={workedExamples.includes(settingsExerciseIndex + 1)}
+              disabled={documentOptions.mergeExercises ||
+                documentOptions.canMode}
+              onchange={(event) => {
+                if (settingsExerciseIndex !== null)
+                  setWorkedExample(
+                    settingsExerciseIndex + 1,
+                    event.currentTarget.checked,
+                  )
+              }}
+            />
+            Exemple corrigé (correction sous l'énoncé)
+          </label>
         {/key}
       </div>
     </div>

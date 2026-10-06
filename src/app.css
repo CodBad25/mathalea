@@ -1068,7 +1068,11 @@ math-field:not(.metaInteractif2d):not(.fillInTheBlanks):not(
   border: 1px solid rgba(213, 206, 206, 0.917);
 }
 math-field::part(content) {
-  padding: 0;
+  /* La zone de contenu est en overflow: hidden : sans marge verticale, le haut
+     d'un numérateur (ex. 2/21) peut être rogné. Le padding agrandit la zone
+     visible, la marge négative compense pour ne pas changer la hauteur du champ. */
+  padding: 2px 0;
+  margin: -2px 0;
 }
 
 .dark math-field {

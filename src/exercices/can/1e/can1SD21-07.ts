@@ -46,7 +46,7 @@ export default class EquationSecondDegreParticuliere extends ExerciceSimple {
       ? `L'équation ${equation} a pour ensemble de solutions :`
       : this.interactif
         ? `L'équation ${equation} a pour ensemble de solutions :<br>$S=$`
-        : `Résoudre dans $\\mathbb{R}$ l'équation ${equation}.`
+        : `Résoudre, dans $\\mathbb{R}$, l'équation ${equation}.`
     if (-b * a < 0) {
       this.reponse = this.versionQcm
         ? `$\\left\\{${f.texFractionSimplifiee}\\,;\\,0\\right\\}$`

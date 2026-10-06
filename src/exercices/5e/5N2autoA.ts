@@ -149,29 +149,31 @@ export default class OperationsSurDecimaux extends Exercice {
           signe = '+'
           reponse = arrondi(a + b)
           break
-        case 2:
+        case 2: {
+          // Sans retenue impossible si le 2e nombre a plus de décimales que le 1er
+          const sansRetenue =
+            this.sup4 && nbDecimalesDeuxiemeNombre <= nbDecimalesPremierNombre
           unitea = randint(1, 9)
           dixiemea =
-            nbDecimalesPremierNombre >= 1 ? randint(this.sup4 ? 2 : 1, 9) : 0
+            nbDecimalesPremierNombre >= 1 ? randint(sansRetenue ? 2 : 1, 9) : 0
           centiemea =
-            nbDecimalesPremierNombre === 2 ? randint(this.sup4 ? 2 : 1, 9) : 0
+            nbDecimalesPremierNombre === 2 ? randint(sansRetenue ? 2 : 1, 9) : 0
           a = arrondi(unitea + dixiemea / 10 + centiemea / 100, 2)
-          if (nbDecimalesDeuxiemeNombre > nbDecimalesPremierNombre)
-            this.sup4 = false
           uniteb = randint(0, unitea - 1)
           dixiemeb =
             nbDecimalesDeuxiemeNombre >= 1
-              ? randint(1, this.sup4 ? dixiemea - 1 : 9)
+              ? randint(1, sansRetenue ? dixiemea - 1 : 9)
               : 0
           centiemeb =
             nbDecimalesDeuxiemeNombre === 2
-              ? randint(1, this.sup4 ? Math.max(1, centiemea - 1) : 9)
+              ? randint(1, sansRetenue ? Math.max(1, centiemea - 1) : 9)
               : 0
           b = arrondi(uniteb + dixiemeb / 10 + centiemeb / 100, 2)
 
           signe = '-'
           reponse = arrondi(a - b)
           break
+        }
         case 3:
           do {
             unitea = randint(nbDecimalesPremierNombre === 0 ? 2 : 0, 9)

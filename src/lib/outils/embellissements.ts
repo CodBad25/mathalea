@@ -362,6 +362,10 @@ export function texteCode(texte: string) {
 }
 
 export function texteEnBoite(texte: string) {
+  if (context.isTypst) {
+    // le convertisseur HTML → Typst ignore les styles : on passe par `\fbox`, qu'il sait encadrer
+    return `\\fbox{${texte}}`
+  }
   if (context.isHtml) {
     return `<div style="display: inline-block; max-width: fit-content; border: 2px solid #444; border-radius: 4px; padding: 10px;">${texte}</div>`
   }

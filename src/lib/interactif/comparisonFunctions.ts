@@ -3150,7 +3150,10 @@ export function fonctionComparaison(
       : fail('Une réponse doit être saisie.')
 
   // Indispensable pour ceux qui font du copier-coller
-  saisie = saisie.replaceAll('×', '\\times')
+  // L'espace évite que \timesc (× collé à une lettre) soit lu comme une commande inconnue.
+  saisie = saisie
+    .replaceAll(/×(?=[a-zA-Z])/g, '\\times ')
+    .replaceAll('×', '\\times')
 
   if (
     options.sansTrigo &&
@@ -3271,6 +3274,10 @@ export function fonctionComparaison(
     options.facteursPremierDegre
   )
     return handleFactorisation(saisie, answer, options)
+
+  // Une variable saisie en romain (c_\mathrm{n}, \mathrm{c}_n) reste la même variable
+  // (i et e sont exclus : ce sont des constantes).
+  saisie = saisie.replaceAll(/\\mathrm\{([a-df-hj-zA-DF-HJ-Z])\}/g, ' $1')
 
   // Development
   if (options.developpementEgal) return handleDeveloppementEgal(saisie, answer)

@@ -107,7 +107,7 @@ async function testTimerPerQuestion(page: Page) {
 
 /** Chronomètre par question et feedback après chaque question. */
 async function testTimerPerQuestionWithFeedback(page: Page) {
-  await startCan(page, '&canQ=4&canFB=1&recorder=moodle')
+  await startCan(page, '&canQ=4&canFB=1&recorder=moodle&coef=2')
   await expect(page.locator('#can-primary-btn')).toHaveText('Valider')
   await expect(page.locator('#race-ended-by-user-btn')).toHaveCount(0)
   // bonne réponse : 2 × 1,5 = 3
@@ -136,7 +136,27 @@ async function testTimerPerQuestionWithFeedback(page: Page) {
   await expect(page.locator('#can-primary-btn')).toHaveText('Terminer')
   expect(await scoreMessages(page)).toBe(1)
   await page.locator('#can-primary-btn').click()
-  await finishAndCheckEnd(page, '1/30')
+  await finishAndCheckEnd(page, '2/60')
+  const recorded = await page.evaluate(() => {
+    const messages = (
+      window as unknown as {
+        scoreMessages: {
+          resultsByExercice: {
+            numberOfPoints: number
+            numberOfQuestions: number
+          }[]
+        }[]
+      }
+    ).scoreMessages
+    return messages[0].resultsByExercice.reduce(
+      (total, result) => ({
+        points: total.points + result.numberOfPoints,
+        maximum: total.maximum + result.numberOfQuestions,
+      }),
+      { points: 0, maximum: 0 },
+    )
+  })
+  expect(recorded).toEqual({ points: 2, maximum: 60 })
   // « Terminer » n'envoie pas une seconde fois le score
   expect(await scoreMessages(page)).toBe(1)
   return true

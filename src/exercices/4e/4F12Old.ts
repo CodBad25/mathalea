@@ -707,7 +707,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 }),
             )
             this.listeCorrections.push(
-              `Il fait le plus chaud à $${miseEnEvidence(hmax + sp() + '\\text{h}')}$ et le plus froid à $${miseEnEvidence(hmin + sp() + '\\text{h}')}$, car ce sont les abscisses des points les plus hauts et les plus bas de la courbe.`,
+              `Il fait le plus chaud à $${miseEnEvidence(hmax + sp() + '\\text{h}')}$ et le plus froid à $${miseEnEvidence(hmin + sp() + '\\text{h}')}$, car ce sont les abscisses respectives des points les plus hauts et les plus bas de la courbe.`,
             )
           } else {
             this.listeQuestions.push('À quelle heure fait-il le plus chaud ?')

@@ -29,6 +29,10 @@ L'éditeur est CodeMirror 6, configuré par `editor/typstEditorSetup.ts` (`typst
 - **Sélection** : `app.css` redéfinit globalement `::selection` avec une couleur de texte noire, illisible sur le fond sombre de l'éditeur. `drawSelection()` dessine le fond de sélection et un correctif de thème (`Prec.highest`) rétablit `color: inherit` sur le texte sélectionné.
 - **Repliage** : il n'y a pas d'arbre syntaxique exploitable, le `foldService` se fonde donc sur l'indentation — ce qui correspond à la structure du code généré (exercices, corrections et listes de questions sont des blocs indentés).
 
+## Réponses mises en évidence (orange et gras)
+
+`miseEnEvidence()` produit `{\color{#F15929}\boldsymbol{…}}`, converti en `text(fill: …, bold(…))`. `bold()` ne met en gras que les lettres et les chiffres : la police de maths n'a pas de variante grasse pour les opérateurs, parenthèses et radicaux (`\boldsymbol` LaTeX les épaissit tous). `latexToTypst.ts` ajoute donc à ces formules un contour de la couleur du texte (`stroke: #stroke(paint: …, thickness: 0.025em)`), ce qui donne un gras homogène avec n'importe quelle police de maths.
+
 ## Réglages numériques de mise en page
 
 `normalizeTypstLayoutOptions` valide la taille du texte, l'interligne et les
@@ -616,6 +620,25 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrectio
 
 `reponsesMisesEnEvidence` renvoie les réponses trouvées dans leur ordre d'apparition, dédoublonnées ; le tableau des réponses du diaporama s'en sert aussi (voir [Vue Diaporama](diaporama.md#tableau-des-réponses)). `minimalCorrection` les réémet telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
 
+## Titres et exemples corrigés
+
+Avec [exercise-bank 0.6.5](https://typst.app/universe/package/exercise-bank/),
+la case « Afficher le titre des exercices » des réglages du document ajoute
+l'intitulé MathALÉA après « Exercice N » (`showExerciseTitles`, `title:`).
+Elle est décochée par défaut. Un groupe fusionné reprend le titre de son
+premier exercice. Les titres conservent la mise en forme du style de badge.
+
+Dans les réglages d'un exercice, « Exemple corrigé (correction sous l'énoncé) »
+active `worked: true` : la correction reste visible sous l'énoncé même sur une
+fiche élève, et n'est pas répétée dans la section finale « Corrections ».
+Le réglage (`TypstCarryOver.workedExamples`, marqueurs `mathalea:worked`)
+survit à la régénération, au partage par URL et aux déplacements ; une copie
+hérite du réglage. Il est commun aux sujets A, B… et s'applique à tout un
+groupe fusionné si l'un de ses membres est un exemple corrigé.
+
+Ces deux réglages sont désactivés dans les modes de fusion globale et
+« Course aux nombres », qui n'utilisent pas de bloc `exo` par exercice.
+
 ## Styles d'exercice (badges exercise-bank)
 
 Le réglage « Style des exercices » expose les **douze** styles de badge du paquet `exercise-bank` (`BADGE_STYLES`, `buildTypstDocument.ts`), rangés en deux groupes (`<optgroup>` de la liste, même ordre que la constante) :
@@ -970,7 +993,9 @@ Deux différences avec les listes de questions :
     pleines sauf la dernière : 4, 2 ou 1 pour quatre propositions) où la
     proposition la plus large tient sur une ligne. Quatre fractions courtes
     s'étalent sur quatre, des phrases moyennes passent sur deux lignes de deux,
-    une phrase longue retombe sur une colonne. L'`auto-fit` de `taskize`
+    une phrase longue retombe sur une colonne (y compris quand aucune proposition
+    ne tient sur une ligne : `mathalea-colonnes-equilibrees` renvoie alors `1`,
+    et non `none`, que `taskize` refuse comme nombre de colonnes). L'`auto-fit` de `taskize`
     pouvait choisir trois colonnes (la quatrième proposition seule sur sa
     ligne) ou, en mode `fill`, étaler une proposition sur plusieurs colonnes ;
   - **au moins une proposition est une figure : 1 colonne.** `auto-fit` serait
@@ -1182,6 +1207,22 @@ n'écarte que les _résultats_ périmés. Trois garde-fous dans `Typst.svelte` :
 `mapStaticImages` ne recopie les images scannées dans la mémoire WASM que
 lorsque le registre a changé (`setStaticImageBytes`), et non avant chaque
 compilation.
+
+### Mémoire du compilateur WASM : figures à labels
+
+Le WASM est limité à 4 Go. Une fiche de quelques centaines de labels
+mathématiques (ex. 6N2E : multiplications posées, 3 000 labels sur 5 pages)
+peut l'épuiser : typst.ts échoue alors avec `RuntimeError: unreachable` (« Unreachable
+code should not be executed … typstcompileworld_get_artifact »), alors que la
+même source compile avec le CLI natif (qui consomme ~5 Go).
+Chaque label coûte un `context` + `measure()` (centrage), la règle d'équation
+inline en ajoute deux, et `mathalea-figure-block` mesurait en plus toute la
+figure avant de la remettre en page. Pour une figure à labels, le générateur
+passe donc `natural-width:` (la largeur de la boîte de `mathalea-figure`) :
+c'est la seule économie qui laisse le rendu identique au pixel près. Les
+pistes testées qui déplaçaient les labels (`move(dx: -50%)`, centrage par
+`align(horizon)`) ne sont pas équivalentes. Pour reproduire : compiler la
+source via `compileTypstToSvg` dans le navigateur, le CLI ne plante pas.
 
 ### Un seul sujet dans l'aperçu
 

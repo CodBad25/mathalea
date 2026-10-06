@@ -1,7 +1,10 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  combinaisonListes,
+  sortRandomlyLikeV8,
+} from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   obtenirListeFacteursPremiers,
@@ -67,7 +70,7 @@ export default class PPCMDecompositionFacteursPremiers extends Exercice {
         // puis une variante parmi :
         //   1. A = p×q,   B = p×r
         //   2. A = p²×q,  B = p×r  (si < 100)
-        const shuffled = [...primes].sort(() => Math.random() - 0.5)
+        const shuffled = sortRandomlyLikeV8([...primes])
         const [p, q, r] = shuffled
         const variante = randint(1, 2)
         if (variante === 2 && p * p * q < 100) {

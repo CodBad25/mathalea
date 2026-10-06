@@ -11,15 +11,19 @@ import FractionCredit from '../../src/exercices/1e/1A-C15-2'
 import CalculFacture from '../../src/exercices/1e/1A-C15-4'
 import MasseHuile from '../../src/exercices/1e/1A-C15-9'
 
-describe('Automatismes avec saisie courte et mode QCM', () => {
+describe('Automatismes avec saisie courte et Version QCM', () => {
   it('attend un nombre sans unité par défaut pour une conversion', () => {
     const exercice = new ConvertirCelsius()
     exercice.interactif = true
     exercice.nouvelleVersion()
 
-    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')
+    expect(exercice.autoCorrection[0].formatInteractif).toBe(
+      'mathalea-mathfield',
+    )
     expect(exercice.autoCorrection[0].valeur).toBeDefined()
-    expect(JSON.stringify(exercice.autoCorrection[0].valeur)).not.toContain('circ')
+    expect(JSON.stringify(exercice.autoCorrection[0].valeur)).not.toContain(
+      'circ',
+    )
     expect(exercice.listeQuestions[0]).toContain('mathalea-mathfield')
     expect(exercice.listeQuestions[0]).not.toContain('qcmMult')
   })
@@ -32,7 +36,9 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
 
     expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-qcm')
     expect(exercice.autoCorrection[0].propositions?.length).toBe(4)
-    expect(exercice.listeQuestions[0]).toContain('Calculer la température correspondante')
+    expect(exercice.listeQuestions[0]).toContain(
+      'Calculer la température correspondante',
+    )
   })
 
   it.each([SigneAffine, SigneProduit])(
@@ -42,9 +48,15 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
       exercice.interactif = true
       exercice.nouvelleVersion()
 
-      expect(exercice.listeQuestions[0]).toContain('Déterminer le tableau de signes de $f$.')
-      expect(exercice.autoCorrection[0].formatInteractif).toBe('tableau-signes-variations')
-      expect(exercice.autoCorrection[0].valeur?.bareme?.([1, 1, 1])).toEqual([1, 1])
+      expect(exercice.listeQuestions[0]).toContain(
+        'Déterminer le tableau de signes de $f$.',
+      )
+      expect(exercice.autoCorrection[0].formatInteractif).toBe(
+        'tableau-signes-variations',
+      )
+      expect(exercice.autoCorrection[0].valeur?.bareme?.([1, 1, 1])).toEqual([
+        1, 1,
+      ])
     },
   )
 
@@ -55,8 +67,12 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
 
     expect(exercice.listeQuestions[0]).toContain('vérifiant ces conditions')
     expect(exercice.autoCorrection[0].valeur?.reponse?.compare).toBeDefined()
-    expect(exercice.listeQuestions[0]).not.toContain('Parmi les quatre expressions')
-    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')
+    expect(exercice.listeQuestions[0]).not.toContain(
+      'Parmi les quatre expressions',
+    )
+    expect(exercice.autoCorrection[0].formatInteractif).toBe(
+      'mathalea-mathfield',
+    )
   })
 
   it('accepte toute fonction affine ayant le tableau de signes donné', () => {
@@ -65,8 +81,12 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
     exercice.nouvelleVersion()
 
     expect(exercice.listeQuestions[0]).toContain('ayant ce tableau de signes')
-    expect(exercice.listeQuestions[0]).not.toContain('Parmi les quatre expressions')
-    expect(exercice.autoCorrection[0].formatInteractif).toBe('mathalea-mathfield')
+    expect(exercice.listeQuestions[0]).not.toContain(
+      'Parmi les quatre expressions',
+    )
+    expect(exercice.autoCorrection[0].formatInteractif).toBe(
+      'mathalea-mathfield',
+    )
 
     expect(exercice.autoCorrection[0].valeur?.reponse?.compare).toBeDefined()
   })
@@ -78,7 +98,9 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
 
     const conversion = new ConvertirCelsius()
     conversion.nouvelleVersion()
-    expect(conversion.listeQuestions[0]).toContain('Calculer la température correspondante')
+    expect(conversion.listeQuestions[0]).toContain(
+      'Calculer la température correspondante',
+    )
 
     const expressions = new ExprimerVariable()
     expressions.nouvelleVersion()
@@ -87,7 +109,9 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
 
     const inequation = new ResoudreInequation()
     inequation.nouvelleVersion()
-    expect(inequation.listeQuestions[0]).toContain("Déterminer l'ensemble des solutions")
+    expect(inequation.listeQuestions[0]).toContain(
+      "Déterminer l'ensemble des solutions",
+    )
 
     const credit = new FractionCredit()
     credit.nouvelleVersion()
@@ -95,7 +119,9 @@ describe('Automatismes avec saisie courte et mode QCM', () => {
 
     const facture = new CalculFacture()
     facture.nouvelleVersion()
-    expect(facture.listeQuestions[0]).toContain('Écrire le calcul permettant de déterminer')
+    expect(facture.listeQuestions[0]).toContain(
+      'Écrire le calcul permettant de déterminer',
+    )
 
     const huile = new MasseHuile()
     huile.nouvelleVersion()

@@ -23,6 +23,7 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { sortRandomlyLikeV8 } from '../../lib/outils/arrayOutils'
 
 export const titre = "Lire l'abscisse relative d'un point"
 export const interactifReady = true
@@ -113,8 +114,7 @@ export default class LireAbscisseRelative extends Exercice {
             .map((d) => abs0 + d)
             .filter((v) => v !== 0 && v !== 1)
           // Tirage de 3 valeurs distinctes, triées
-          const choisis = candidats
-            .sort(() => Math.random() - 0.5)
+          const choisis = sortRandomlyLikeV8(candidats)
             .slice(0, 3)
             .sort((a, b) => a - b)
           abs1 = choisis[0]

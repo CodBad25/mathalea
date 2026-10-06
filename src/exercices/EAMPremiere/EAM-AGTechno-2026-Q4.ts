@@ -23,11 +23,14 @@ export const dateDePublication = '29/06/2026'
  *
  */
 export default class AutoQ4AGt2026 extends ExerciceQcmA {
+  protected temperatureCelsius = 0
+
   private appliquerLesValeurs(
     temperatureCelsius: number,
     debutPhrase: string,
     finPhrase: string,
   ): void {
+    this.temperatureCelsius = temperatureCelsius
     const sol = texNombre(1.8 * temperatureCelsius + 32, 2)
     const dist1 = texNombre(temperatureCelsius + 32, 2) // oubli du × 1,8
     const dist2 = texNombre(0.18 * temperatureCelsius + 32, 2)

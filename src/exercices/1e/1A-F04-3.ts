@@ -333,7 +333,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
               texteCorrection: `${texteEnCouleurEtGras("L'inéquation ")}$${miseEnEvidence('f(x) < 0')}$${texteEnCouleurEtGras(' a pour ensemble de solutions ')}$${miseEnEvidence('[-4\\,;\\,-3[\\cup ]-1\\,;\\,5]')}$${texteEnCouleurEtGras('.')}`,
               correction:
                 AFC +
-                "Les solutions de l'inéquation $f(x) < 0$ sont les abscisses des points de la courbe situés strictement en dessous de l'axe des abscissses.",
+                "Les solutions de l'inéquation $f(x) < 0$ sont les abscisses respectives des points de la courbe situés strictement en dessous de l'axe des abscissses.",
               estCorrecte: true,
             },
           ]
@@ -379,7 +379,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
                 "L'inéquation $f(x) < 0$ a pour ensemble de solutions $[-4\\,;\\,-3]\\cup [-1\\,;\\,5]$.",
               correction:
                 AFF +
-                "Les solutions de l'inéquation $f(x) < 0$ sont les abscisses des points situés strictement en dessous de l'axe des abscissses, ce qui n'est pas le cas de $-3$ par exemple.",
+                "Les solutions de l'inéquation $f(x) < 0$ sont les abscisses respectives des points situés strictement en dessous de l'axe des abscissses, ce qui n'est pas le cas de $-3$ par exemple.",
               estCorrecte: true,
             },
             {
@@ -387,7 +387,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
                 "L'inéquation $f(x) \\geqslant 0$ a pour ensemble de solutions $]-3\\,;\\,-1[$.",
               correction:
                 AFF +
-                `Les solutions de l'inéquation $f(x)\\geqslant 0$ sont les abscisses des points situés strictement au dessus ou sur  l'axe des abscissses.<br>
+                `Les solutions de l'inéquation $f(x)\\geqslant 0$ sont les abscisses respectives des points situés strictement au dessus ou sur  l'axe des abscissses.<br>
               $-3$ et $-1$ sont donc solutions de l'inéquation.`,
               estCorrecte: true,
             },
@@ -520,7 +520,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
               texteCorrection: `${texteEnCouleurEtGras("L'inéquation ")}$${miseEnEvidence('f(x) \\leqslant 0')}$${texteEnCouleurEtGras(' a pour ensemble de solutions ')}$${miseEnEvidence('[-3\\,;\\,2]')}$${texteEnCouleurEtGras('.')}`,
               correction:
                 AFC +
-                "Les solutions de l'inéquation $f(x) \\leqslant 0$ sont les abscisses des points de la courbe situés en dessous ou sur l'axe des abscissses.",
+                "Les solutions de l'inéquation $f(x) \\leqslant 0$ sont les abscisses respectives des points de la courbe situés en dessous ou sur l'axe des abscissses.",
               estCorrecte: true,
             },
             {
@@ -581,7 +581,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
                 "L'inéquation $f(x) \\leqslant 0$ a pour ensemble de solutions $[-3\\,;\\,-2[\\cup]-2\\,;\\,2]$.",
               correction:
                 AFF +
-                "Les solutions de l'inéquation $f(x) \\leqslant 0$ sont les abscisses des points de la courbe situés en dessous ou sur l'axe des abscissses.",
+                "Les solutions de l'inéquation $f(x) \\leqslant 0$ sont les abscisses respectives des points de la courbe situés en dessous ou sur l'axe des abscissses.",
               estCorrecte: true,
             },
             {

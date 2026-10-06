@@ -138,7 +138,7 @@ export default class AutoQ8CEns2026 extends ExerciceQcmA {
     const positionLigne = isSuperieur ? 'au-dessus de' : 'en-dessous de'
     const positionCourbe = isSuperieur ? 'au-dessus' : 'en-dessous'
 
-    this.correction = `Pour résoudre graphiquement l'inéquation $f(x) ${symbole} ${k}$, on cherche les abscisses des points de la courbe situés ${positionLigne} la droite horizontale d'équation $y = ${k}$ (ou sur cette droite).<br>`
+    this.correction = `Pour résoudre graphiquement l'inéquation $f(x) ${symbole} ${k}$, on cherche les abscisses respectives des points de la courbe situés ${positionLigne} la droite horizontale d'équation $y = ${k}$ (ou sur cette droite).<br>`
     this.correction += `La courbe coupe cette droite en deux points d'abscisses $x = ${x1}$ et $x = ${x2}$.<br>`
     this.correction += `Elle est située ${positionCourbe} de cette droite pour les abscisses appartenant à l'ensemble $${miseEnEvidence(correct)}$.<br>`
   }

@@ -117,7 +117,7 @@ export default class auto1AF4e extends ExerciceQcmA {
       solutionInverse1,
       solutionInverse2,
     ]
-    this.correction = `Les solutions de l'inéquation sont les abscisses des points de $C_f$ qui se situent ${texteSolution}.`
+    this.correction = `Les solutions de l'inéquation sont les abscisses respectives des points de $C_f$ qui se situent ${texteSolution}.`
   }
 
   versionAleatoire = () => {
@@ -374,7 +374,7 @@ export default class auto1AF4e extends ExerciceQcmA {
       solutionInverse1,
       solutionInverse2,
     ]
-    this.correction = `Les solutions de l'inéquation sont les abscisses des points de $C_f$ qui se situent ${texteSolution}.`
+    this.correction = `Les solutions de l'inéquation sont les abscisses respectives des points de $C_f$ qui se situent ${texteSolution}.`
   }
 
   constructor() {

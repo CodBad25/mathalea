@@ -72,7 +72,7 @@ Quelle est l'expression de $f$ ?`
       (proposition) => `$f(x)=${proposition.expression}$`,
     )
 
-    this.correction = `Les abscisses des points $A$ et $B$ sont distinctes, donc le coefficient directeur de la droite est :
+    this.correction = `les abscisses respectives des points $A$ et $B$ sont distinctes, donc le coefficient directeur de la droite est :
 $\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${ecritureParentheseSiNegatif(yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=${a}$.<br>
 La fonction est donc de la forme $f(x)=ax+b$.<br>
 Comme $A$ appartient à la représentation graphique de $f$, on a $${yA}=${a}\\times ${ecritureParentheseSiNegatif(xA)}+b$, donc $b=${yA}-${ecritureParentheseSiNegatif(a * xA)}=${b}$.<br>

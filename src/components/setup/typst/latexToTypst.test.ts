@@ -121,7 +121,7 @@ describe('latexMathToTypst', () => {
     )
     expect(result).not.toContain('text paren.l')
     expect(result).not.toContain('bold()')
-    expect(result).toContain('text(fill: #rgb("#F15929"), bold(-3))')
+    expect(result).toContain('text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(-3))')
     expect((result.match(/\(/g) ?? []).length).toBe(
       (result.match(/\)/g) ?? []).length,
     )
@@ -240,9 +240,9 @@ describe('latexMathToTypst', () => {
     const highlightedClose = latexMathToTypst(
       '{\\color{#f15929}\\boldsymbol{]}}',
     )
-    expect(highlightedOpen).toBe('text(fill: #rgb("#f15929"), bold(bracket.l))')
+    expect(highlightedOpen).toBe('text(fill: #rgb("#f15929"), stroke: #stroke(paint: rgb("#f15929"), thickness: 0.025em), bold(bracket.l))')
     expect(highlightedClose).toBe(
-      'text(fill: #rgb("#f15929"), bold(bracket.r))',
+      'text(fill: #rgb("#f15929"), stroke: #stroke(paint: rgb("#f15929"), thickness: 0.025em), bold(bracket.r))',
     )
     for (const result of [highlightedOpen, highlightedClose]) {
       expect(result).not.toContain('text paren.l')
@@ -690,7 +690,7 @@ describe('htmlToTypst', () => {
     // miseEnEvidence() produit {\color{…}\boldsymbol{…}} : \boldsymbol est du
     // gras *italique*, contrairement à \mathbf
     expect(htmlToTypst('$={\\color{#F15929}\\boldsymbol{x(3x+1)}}$')).toBe(
-      '$= text(fill: #rgb("#F15929"), bold(x(3 x + 1)))$',
+      '$= text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(x(3 x + 1)))$',
     )
   })
 
@@ -846,7 +846,7 @@ describe('htmlToTypst', () => {
 
   it('conserve l’espace avant une formule mise en évidence', () => {
     expect(htmlToTypst('Ainsi, ${\\color{#f15929}\\boldsymbol{x=2}}$')).toBe(
-      'Ainsi, $text(fill: #rgb("#f15929"), bold(x = 2))$',
+      'Ainsi, $text(fill: #rgb("#f15929"), stroke: #stroke(paint: rgb("#f15929"), thickness: 0.025em), bold(x = 2))$',
     )
   })
 
@@ -914,6 +914,16 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('78∘')
     expect(figures).toHaveLength(1)
     expect(figures[0]).toContain('image(bytes("<svg')
+  })
+
+  it('passe la largeur naturelle à mathalea-figure-block pour une figure à labels, sans la mesurer', () => {
+    const figures: string[] = []
+    const result = htmlToTypst(
+      '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"><line x1="0" y1="0" x2="10" y2="10"/></svg><div class="divLatex" style="position: absolute; top: 10px; left: 20px; transform: translate(-50%,-50%) rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">{\\color{black} \\scriptsize{78^\\circ}}</annotation></semantics></math></span><span class="katex-html">78∘</span></span></div></div></div>',
+      figures,
+    )
+    expect(result).toContain('mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (')
+    expect(result).toContain('))\n, natural-width: 72.0pt)')
   })
 
   it('passe force-true-size: true à mathalea-figure-block pour une figure `vraieGrandeur` (construction/mesure), sans plafonner sa taille', () => {
@@ -1218,7 +1228,7 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('\\color')
     expect(result).not.toContain('boldsymbol')
     expect(result).toBe(
-      'Donc l\'ensemble de définition de $h$ est $text(fill: #rgb("#F15929"), bold(RR))$.',
+      'Donc l\'ensemble de définition de $h$ est $text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(RR))$.',
     )
   })
 })

@@ -53,7 +53,7 @@ const formulaire: FormulaireComplexe = {
     {
       type: 'case',
       nom: 'pointsDonnes',
-      label: "Donner les abscisses des points d'intersection",
+      label: "Donner les abscisses respectives des points d'intersection",
       defaut: false,
     },
   ],
@@ -86,7 +86,7 @@ type Tirage = {
   racines: Borne[]
   /** Résolution de f(x) = g(x) jusqu'aux solutions, vide si l'équation n'est pas résoluble algébriquement. */
   resolutionTex: string
-  /** Vrai quand les abscisses des points d'intersection doivent toujours être données. */
+  /** Vrai quand les abscisses respectives des points d'intersection doivent toujours être données. */
   pointsToujoursDonnes?: boolean
   morceaux: Morceau[]
   aireTex: string

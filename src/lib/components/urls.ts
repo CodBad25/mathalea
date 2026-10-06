@@ -1,5 +1,6 @@
 import { get } from 'svelte/store'
 import { CALCULATRICES_NON_FORCEES } from '../calculatrices'
+import { normaliseCoeffBareme } from '../interactif/baremeExercice'
 import {
   type InterfaceGlobalOptions,
   type InterfaceParams,
@@ -134,6 +135,8 @@ export function appendExerciseParams(url: URL, ex: InterfaceParams): void {
   if (ex.sup4 != null) url.searchParams.append('s4', ex.sup4)
   if (ex.sup5 != null) url.searchParams.append('s5', ex.sup5)
   if (ex.versionQcm != null) url.searchParams.append('qcm', ex.versionQcm)
+  const coeff = normaliseCoeffBareme(ex.coeffBareme)
+  if (coeff !== 1) url.searchParams.append('coef', coeff.toString())
   if (ex.alea != null) url.searchParams.append('alea', ex.alea)
   if (ex.interactif === '1') url.searchParams.append('i', '1')
   if (ex.cd != null) url.searchParams.append('cd', ex.cd)
@@ -246,6 +249,27 @@ export function buildMathAleaURL(options: {
     ? encrypt(url.toString())
     : url.toString()
   return new URL(cryptedUrl)
+}
+
+/** Aperçu autonome d'une séance Capytale, avec les réglages de l'enseignant. */
+export function buildCapytalePreviewURL(view?: 'eleve' | 'can'): URL {
+  const url = buildMathAleaURL({
+    view,
+    mode: get(exercicesParams).length === 1 ? 'liste_exos' : 'un_exo_par_page',
+    recorder: true,
+  })
+  if (view) {
+    const es = url.searchParams.get('es')!
+    // L'élève ne peut pas modifier l'interactivité imposée par la séance.
+    url.searchParams.set('es', es.slice(0, 3) + '0' + es.slice(4))
+  }
+  if (view === 'can') {
+    url.searchParams.set(
+      'canI',
+      get(globalOptions).setInteractive === '1' ? '1' : '0',
+    )
+  }
+  return url
 }
 
 /**

@@ -136,8 +136,8 @@ function libelle(cle: string): string {
   return cle === '' ? 'paramètres par défaut' : cle
 }
 
-/** Sélecteurs d'automatismes (y compris leurs archives `-old`) : exclus du contrôle. */
-const SELECTEURS_AUTOMATISMES = /(^|\/)[123]a-automatismes(-old\d*)?\.ts$/
+/** Sélecteurs d'automatismes (`1a-`, `2a-`, `3a-`, `6a-automatismes`, archives `-old` comprises) : exclus du contrôle. */
+const SELECTEURS_AUTOMATISMES = /(^|\/)[^/]*-automatismes(-old\d*)?\.ts$/
 
 /** Les entrées techniques du catalogue ne sont pas des exercices à empreinter. */
 function estExerciceControlable(chemin: string): boolean {

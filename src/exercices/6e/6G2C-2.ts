@@ -10,6 +10,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { sortRandomlyLikeV8 } from '../../lib/outils/arrayOutils'
 
 export const interactifReady = true
 export const dateDePublication = '22/08/2026'
@@ -114,14 +115,12 @@ function creerForme(typeForme: (typeof formes)[number]): FormeIep {
       break
     }
     case 'Ligne brisée': {
-      const longueurs = [
+      const longueurs = sortRandomlyLikeV8([
         randint(18, 24),
         randint(25, 29),
         randint(30, 34),
         randint(35, 39),
-      ]
-        .sort(() => Math.random() - 0.5)
-        .map((longueur) => longueur / 10)
+      ]).map((longueur) => longueur / 10)
       const angle1 = randint(30, 90)
       const angle2 = randint(30, 90)
       const signe = randint(0, 1) === 0 ? -1 : 1

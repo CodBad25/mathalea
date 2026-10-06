@@ -219,7 +219,7 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
       const reponse2 = fraction2.reduire(tab2 * 2).texFraction
       const reponse3 = fraction3.reduire(tab3 * 2).texFraction
       texte +=
-        'Donner les abscisses des points ' +
+        'Donner les abscisses respectives des points ' +
         (motFractionnaire ? 'sous forme fractionnaire ' : '') +
         ': '
       let textePourRemplisLesBlancs = ''

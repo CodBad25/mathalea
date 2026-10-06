@@ -47,6 +47,16 @@ catalogues figés dans `src/lib/automatismesCatalogues/` ; les sélecteurs coura
 ont de nouveaux `uuid`. Le cache des classes chargées doit distinguer les
 entrées des deux catalogues, même lorsqu'elles portent la même référence.
 
+### Mélanges par `sort(() => Math.random() - 0.5)`
+
+Ce tri n'est pas portable : le résultat dépend de l'algorithme du moteur
+JavaScript (V8 d'un côté, Firefox et Safari de l'autre), donc une même graine
+peut donner des valeurs différentes selon le navigateur. Pour les exercices déjà
+publiés qui l'utilisaient, `sortRandomlyLikeV8` (`src/lib/outils/arrayOutils.ts`)
+reproduit exactement le tri de V8 dans tous les navigateurs ; un test unitaire
+(`tests/unit/sortRandomlyLikeV8.test.ts`) le compare au tri natif. Ne pas la
+modifier, et utiliser `shuffle` dans les nouveaux exercices.
+
 ## La règle
 
 > Pour un `uuid` et une graine donnés, les valeurs numériques de l'énoncé ne
@@ -312,8 +322,8 @@ le choisit fige son navigateur. Ils se corrigent à part, dans l'exercice.
 ## Limites
 
 - Les entrées techniques du catalogue (`apps/`, `ressources/` et outils Svelte)
-  sont explicitement exclues, ainsi que les sélecteurs `1a-automatismes`,
-  `2a-automatismes` et `3a-automatismes` (archives `-old` comprises) : leur
+  sont explicitement exclues, ainsi que tous les sélecteurs `*-automatismes`
+  (`1a-`, `2a-`, `3a-`, `6a-automatismes`, archives `-old` comprises) : leur
   catalogue évolue à chaque ajout d'automatisme, ce qui les faisait échouer sans
   qu'un tirage ait été déplacé. Un exercice ordinaire qui ne se charge pas dans
   l'environnement de test fait échouer le contrôle.

@@ -1,11 +1,11 @@
-import calculPuissancesAvecn from '../can/2e/can2N4-06'
+import calculPuissancesAvecn from '../can/2e/can2N4-05'
 export const titre = 'Déterminer une puissance dans une égalité'
 export const dateDePublication = '23/03/2026'
 export const amcReady = true
 export const interactifReady = true
 
 /**
- * Clone de can2N4-06 pour les auto 1er
+ * Clone de can2N4-05 pour les auto 1er
  * @author Gilles Mora
  */
 

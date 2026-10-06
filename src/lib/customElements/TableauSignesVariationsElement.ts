@@ -619,6 +619,9 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
 
   private fullRender() {
     if (!this.shadowRoot) return
+    // Libère les écouteurs globaux de la barre d'outils précédente avant de la recréer.
+    this._toolbar?.destroy()
+    this._toolbar = null
     this.shadowRoot.innerHTML = ''
 
     const katexStyle = document.createElement('style')

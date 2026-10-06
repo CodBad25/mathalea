@@ -313,7 +313,7 @@ export default class auto1AF4d extends ExerciceQcmA {
       `$[1\\,;\\,2]$`,
       `$[-2\\,;\\,-1]\\cap [1\\,;\\,2]$`,
     ]
-    this.correction = `Les solutions de l'inéquation sont les abscisses des points de $C_g$ qui se situent en dessous de $C_f$ ou sur $C_f$, soit $${miseEnEvidence(`[-2\\,;\\,-1]\\cup [1\\,;\\,2]`)}$.`
+    this.correction = `Les solutions de l'inéquation sont les abscisses respectives des points de $C_g$ qui se situent en dessous de $C_f$ ou sur $C_f$, soit $${miseEnEvidence(`[-2\\,;\\,-1]\\cup [1\\,;\\,2]`)}$.`
   }
 
   versionAleatoire = () => {
@@ -389,7 +389,7 @@ export default class auto1AF4d extends ExerciceQcmA {
 
     this.enonce += `L'ensemble des solutions de l'inéquation $f(x)${symbole} g(x)$ est : `
     this.reponses = solutions.map((s) => `$${s}$`)
-    this.correction = `Les solutions de l'inéquation sont les abscisses des points de $C_f$ qui se situent ${textesSolutions[symbole]} $C_g$, soit $${miseEnEvidence(solutions[0])}$.`
+    this.correction = `Les solutions de l'inéquation sont les abscisses respectives des points de $C_f$ qui se situent ${textesSolutions[symbole]} $C_g$, soit $${miseEnEvidence(solutions[0])}$.`
   }
 
   constructor() {
