@@ -867,7 +867,7 @@
         "essai erreur",
         "2008D6"
       ],
-      "etoiles": 2,
+      "etoiles": 3,
       "png": "png/autoreference-6.png",
       "pngCor": "png/autoreference-6_cor.png",
       "typ": "typ/autoreference-6.typ",
@@ -907,7 +907,7 @@
         "essai erreur",
         "2016D5"
       ],
-      "etoiles": 2,
+      "etoiles": 3,
       "png": "png/autoreference-8.png",
       "pngCor": "png/autoreference-8_cor.png",
       "typ": "typ/autoreference-8.typ",
@@ -927,7 +927,7 @@
         "essai erreur",
         "2001Q15"
       ],
-      "etoiles": 3,
+      "etoiles": 5,
       "png": "png/cadres-autoreferents.png",
       "pngCor": "png/cadres-autoreferents_cor.png",
       "typ": "typ/cadres-autoreferents.typ",
@@ -1411,6 +1411,24 @@
       "texCor": "tex/images-de-mathilde_cor.tex"
     },
     {
+      "id": "nombre-annee",
+      "titre": "Les nombres de l’année",
+      "categorie": "Système simple",
+      "tags": [
+        "retranche",
+        "équations",
+        "systèmes",
+        "2004Q12"
+      ],
+      "etoiles": 4,
+      "png": "png/nombre-annee.png",
+      "pngCor": "png/nombre-annee_cor.png",
+      "typ": "typ/nombre-annee.typ",
+      "typCor": "typ/nombre-annee_cor.typ",
+      "tex": "tex/nombre-annee.tex",
+      "texCor": "tex/nombre-annee_cor.tex"
+    },
+    {
       "id": "poste-et-vous",
       "titre": "La poste et vous",
       "categorie": "Système simple",
@@ -1427,6 +1445,24 @@
       "typCor": "typ/poste-et-vous_cor.typ",
       "tex": "tex/poste-et-vous.tex",
       "texCor": "tex/poste-et-vous_cor.tex"
+    },
+    {
+      "id": "reserve",
+      "titre": "La réserve",
+      "categorie": "Système simple",
+      "tags": [
+        "réserve",
+        "équations",
+        "systèmes",
+        "2004Q9"
+      ],
+      "etoiles": 3,
+      "png": "png/reserve.png",
+      "pngCor": "png/reserve_cor.png",
+      "typ": "typ/reserve.typ",
+      "typCor": "typ/reserve_cor.typ",
+      "tex": "tex/reserve.tex",
+      "texCor": "tex/reserve_cor.tex"
     },
     {
       "id": "sapin_1",
