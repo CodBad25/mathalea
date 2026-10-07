@@ -56,6 +56,7 @@
     getGeneratedCanRowCode,
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
+    exerciseTitleLine,
     harvestCarryOver,
     subjectEditorCode,
     normalizeTypstLayoutOptions,
@@ -891,6 +892,8 @@
   let codeOverrideCorrectionValues: Record<number, string> = $state({})
   /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
   let writingLinesValues: Record<number, WritingLinesSetting> = $state({})
+  /** Titres d'exercice modifiés dans la palette (`TypstCarryOver.exerciseTitles`) */
+  let exerciseTitleValues: Record<number, string> = $state({})
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
   let codeEditNum: number | null = $state(null)
   /** Partie éditée par la modale : énoncé ou correction de `codeEditNum` */
@@ -1059,11 +1062,19 @@
     codeOverrideCanValues = harvested.codeOverridesCan ?? {}
     codeOverrideCanReponseValues = harvested.codeOverridesCanReponse ?? {}
     writingLinesValues = harvested.writingLines ?? {}
+    exerciseTitleValues = harvested.exerciseTitles ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
     const figureZoom: Record<number, number> = {}
     for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
       figureZoom[Number(match[1])] = Number(match[2])
+    }
+    // figure d'un autre sujet qui suit celle du sujet A
+    // (`#let fig-5-zoom = fig-1-zoom`, voir `sharedFigureNumber`)
+    for (const match of code.matchAll(
+      /^#let fig-(\d+)-zoom = fig-(\d+)-zoom$/gm,
+    )) {
+      figureZoom[Number(match[1])] = figureZoom[Number(match[2])] ?? 1
     }
     figureZoomValues = figureZoom
     const figureAlign: Record<number, 'left' | 'center' | 'right'> = {}
@@ -1071,6 +1082,11 @@
       /^#let fig-(\d+)-align = (left|center|right)/gm,
     )) {
       figureAlign[Number(match[1])] = match[2] as 'left' | 'center' | 'right'
+    }
+    for (const match of code.matchAll(
+      /^#let fig-(\d+)-align = fig-(\d+)-align$/gm,
+    )) {
+      figureAlign[Number(match[1])] = figureAlign[Number(match[2])] ?? 'center'
     }
     figureAlignValues = figureAlign
     const exerciseZoom: Record<number, number> = {}
@@ -1219,9 +1235,27 @@
 
   /** Pas d'ajustement du zoom d'une figure, et bornes (20 % à 300 %) */
   const FIGURE_ZOOM_STEP = 0.1
+  /**
+   * Figure dont la variable porte le réglage : une figure d'un sujet B, C...
+   * qui suit celle du sujet A (`#let fig-5-zoom = fig-1-zoom`) se règle sur
+   * celle-ci, et le réglage vaut pour tous les sujets
+   */
+  function figureSettingTarget(
+    doc: string,
+    figNum: number,
+    setting: 'zoom' | 'align',
+  ): number {
+    const alias = new RegExp(
+      `^#let fig-${figNum}-${setting} = fig-(\\d+)-${setting}$`,
+      'm',
+    ).exec(doc)
+    return alias != null ? Number(alias[1]) : figNum
+  }
+
   function adjustFigureZoom(figNum: number, delta: number) {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
+    figNum = figureSettingTarget(doc, figNum, 'zoom')
     const match = new RegExp(`^#let fig-${figNum}-zoom = .*$`, 'm').exec(doc)
     if (match == null) return
     const current = figureZoomValues[figNum] ?? 1
@@ -1243,6 +1277,27 @@
    * Zoom d'un exercice statique sans source .typ (image scannée seule),
    * mêmes bornes/pas que `adjustFigureZoom`
    */
+  /**
+   * Titre de l'exercice `num` saisi dans la palette (`null` : retour au titre
+   * MathALÉA, chaîne vide : pas de titre). Édition ciblée de la ligne
+   * `#let exo-N-titre = ...`, sans régénération.
+   */
+  function setExerciseTitle(num: number, value: string | null) {
+    if (editorView == null) return
+    const doc = subjectEditorCode(currentCode(), previewVersion)
+    const match = new RegExp(`^#let exo-${num}-titre = .*$`, 'm').exec(doc)
+    if (match == null) return
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: exerciseTitleLine(
+        num,
+        exercises[num - 1]?.titre ?? '',
+        value ?? undefined,
+      ),
+    })
+  }
+
   function adjustExerciseZoom(num: number, delta: number) {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
@@ -1292,6 +1347,7 @@
   function setFigureAlign(figNum: number, align: 'left' | 'center' | 'right') {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
+    figNum = figureSettingTarget(doc, figNum, 'align')
     const match = new RegExp(`^#let fig-${figNum}-align = .*$`, 'm').exec(doc)
     if (match == null) return
     dispatchPaletteEdit({
@@ -1488,6 +1544,12 @@
       if (n === removed) continue
       exerciseZoom[n > removed ? n - 1 : n] = value
     }
+    const exerciseTitles: NonNullable<typeof carryOver.exerciseTitles> = {}
+    for (const [key, value] of Object.entries(carryOver.exerciseTitles ?? {})) {
+      const n = Number(key)
+      if (n === removed) continue
+      exerciseTitles[n > removed ? n - 1 : n] = value
+    }
     const exerciseCorrectionZoom: NonNullable<
       typeof carryOver.exerciseCorrectionZoom
     > = {}
@@ -1527,6 +1589,7 @@
       writingLines,
       exerciseZoom,
       exerciseCorrectionZoom,
+      exerciseTitles,
       imageCuts: Object.fromEntries(
         Object.entries(carryOver.imageCuts ?? {})
           .filter(([key]) => Number(key) !== removed)
@@ -1608,6 +1671,7 @@
       writingLines: shiftMap(carryOver.writingLines),
       exerciseZoom: shiftMap(carryOver.exerciseZoom),
       exerciseCorrectionZoom: shiftMap(carryOver.exerciseCorrectionZoom),
+      exerciseTitles: shiftMap(carryOver.exerciseTitles),
       imageCuts: shiftMap(carryOver.imageCuts),
     }
   }
@@ -1857,6 +1921,10 @@
     for (const [key, value] of Object.entries(carryOver.writingLines ?? {})) {
       writingLines[swapNum(Number(key))] = value
     }
+    const exerciseTitles: NonNullable<typeof carryOver.exerciseTitles> = {}
+    for (const [key, value] of Object.entries(carryOver.exerciseTitles ?? {})) {
+      exerciseTitles[swapNum(Number(key))] = value
+    }
     const exerciseZoom: NonNullable<typeof carryOver.exerciseZoom> = {}
     for (const [key, value] of Object.entries(carryOver.exerciseZoom ?? {})) {
       exerciseZoom[swapNum(Number(key))] = value
@@ -1894,6 +1962,7 @@
       writingLines,
       exerciseZoom,
       exerciseCorrectionZoom,
+      exerciseTitles,
       imageCuts: Object.fromEntries(
         Object.entries(carryOver.imageCuts ?? {}).map(([key, value]) => [
           swapNum(Number(key)),
@@ -5045,6 +5114,22 @@
                     onAdjustGutter={adjustGutter}
                     onAdjustFigureZoom={adjustFigureZoom}
                     onAdjustExerciseZoom={adjustExerciseZoom}
+                    showExerciseTitles={documentOptions.showExerciseTitles &&
+                      !documentOptions.mergeExercises &&
+                      !documentOptions.canMode}
+                    exerciseTitles={Object.fromEntries(
+                      exercises.map((exercise, k) => [
+                        k + 1,
+                        exerciseTitleValues[k + 1] ?? exercise?.titre ?? '',
+                      ]),
+                    )}
+                    defaultExerciseTitles={Object.fromEntries(
+                      exercises.map((exercise, k) => [
+                        k + 1,
+                        exercise?.titre ?? '',
+                      ]),
+                    )}
+                    onSetExerciseTitle={setExerciseTitle}
                     onCutImage={openImageCuts}
                     onAdjustExerciseCorrectionZoom={adjustExerciseCorrectionZoom}
                     onSetFigureAlign={setFigureAlign}

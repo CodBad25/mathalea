@@ -31,7 +31,7 @@ import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceSimple from '../ExerciceSimple'
 
 // ============================================================================
 // MÉTADONNÉES
@@ -40,8 +40,8 @@ export const uuid = 'a4b8f'
 export const refs = { 'fr-fr': ['1A-R02-6', '2A-R2-6'], 'fr-ch': ['9FA2B-24'] }
 export const interactifReady = true
 
-export const amcReady = 'true'
-export const amcType = 'qcmMono'
+export const amcReady = true
+export const amcType = 'AMCNum'
 export const titre = 'Calculer un prix dans une situation de proportionnalité'
 export const dateDePublication = '22/09/2025'
 
@@ -62,7 +62,8 @@ interface LieuContexte {
 }
 
 interface ModelePhrase {
-  phrase: string
+  phrase: string // version QCM
+  phraseNonQcm: string // version non QCM : se termine par une question
   utilise_lieu_debut: boolean
   utilise_lieu_milieu: boolean
   utilise_prenom: boolean
@@ -85,6 +86,7 @@ interface DonneesExercice {
   bonneReponse: number
   distracteurs: [number, number, number]
   enoncePersonnalise?: string
+  enoncePersonnaliseNonQcm?: string
   modele?: ModelePhrase
   prenom?: { nom: string; pronom: string } | null
 }
@@ -92,7 +94,7 @@ interface DonneesExercice {
 // ============================================================================
 // CLASSE PRINCIPALE
 // ============================================================================
-export default class Auto1AR71 extends ExerciceQcmA {
+export default class Auto1AR71 extends ExerciceSimple {
   // ==========================================================================
   // 1. DONNÉES STATIQUES
   // ==========================================================================
@@ -346,12 +348,16 @@ export default class Auto1AR71 extends ExerciceQcmA {
     {
       phrase:
         '#LIEU_DEBUT, le prix de #Q1 #OBJET est #PRIX1 €.<br>Le prix de #Q2 #OBJET est donc :',
+      phraseNonQcm:
+        '#LIEU_DEBUT, le prix de #Q1 #OBJET est #PRIX1 €.<br>Quel est le prix de #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: false,
     },
     {
       phrase:
+        "#LIEU_DEBUT, l'offre du jour annonce : #Q1 #OBJET pour #PRIX1 €.<br>Combien coûteront #Q2 #OBJET ?",
+      phraseNonQcm:
         "#LIEU_DEBUT, l'offre du jour annonce : #Q1 #OBJET pour #PRIX1 €.<br>Combien coûteront #Q2 #OBJET ?",
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
@@ -360,6 +366,8 @@ export default class Auto1AR71 extends ExerciceQcmA {
     {
       phrase:
         "#PRENOM a acheté #Q1 #OBJET #LIEU_MILIEU au prix de #PRIX1 €.<br>Le prix qu'#PRONOM_SUJET aurait payé pour #Q2 #OBJET est :",
+      phraseNonQcm:
+        '#PRENOM a acheté #Q1 #OBJET #LIEU_MILIEU au prix de #PRIX1 €.<br>Quel prix aurait-#PRONOM_SUJET payé pour #Q2 #OBJET ?',
       utilise_lieu_debut: false,
       utilise_lieu_milieu: true,
       utilise_prenom: true,
@@ -367,6 +375,8 @@ export default class Auto1AR71 extends ExerciceQcmA {
     {
       phrase:
         '#PRENOM remarque #LIEU_MILIEU que #Q1 #OBJET coûtent #PRIX1 €.<br>Pour acheter #Q2 #OBJET, #PRONOM_SUJET devra payer :',
+      phraseNonQcm:
+        '#PRENOM remarque #LIEU_MILIEU que #Q1 #OBJET coûtent #PRIX1 €.<br>Combien devra-t-#PRONOM_SUJET payer pour acheter #Q2 #OBJET ?',
       utilise_lieu_debut: false,
       utilise_lieu_milieu: true,
       utilise_prenom: true,
@@ -374,12 +384,16 @@ export default class Auto1AR71 extends ExerciceQcmA {
     {
       phrase:
         '#LIEU_DEBUT, #PRENOM calcule :<br> si #Q1 #OBJET coûtent #PRIX1 €, alors #Q2 #OBJET coûteront :',
+      phraseNonQcm:
+        '#LIEU_DEBUT, #PRENOM constate que #Q1 #OBJET coûtent #PRIX1 €.<br>Combien coûteront #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: true,
     },
     {
       phrase:
+        '#LIEU_DEBUT, pour #PRIX1 €, on peut acheter #Q1 #OBJET.<br>Combien coûteront #Q2 #OBJET ?',
+      phraseNonQcm:
         '#LIEU_DEBUT, pour #PRIX1 €, on peut acheter #Q1 #OBJET.<br>Combien coûteront #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
@@ -388,6 +402,8 @@ export default class Auto1AR71 extends ExerciceQcmA {
     {
       phrase:
         "#LIEU_DEBUT, l'étiquette indique : #PRIX1 € les #Q1 #OBJET.<br>Le prix de #Q2 #OBJET sera donc :",
+      phraseNonQcm:
+        "#LIEU_DEBUT, l'étiquette indique : #PRIX1 € les #Q1 #OBJET.<br>Quel sera le prix de #Q2 #OBJET ?",
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: false,
@@ -395,6 +411,8 @@ export default class Auto1AR71 extends ExerciceQcmA {
     {
       phrase:
         'Avec un budget de #PRIX1 €, #PRENOM peut acheter #Q1 #OBJET.<br>Pour #Q2 #OBJET, #PRONOM_SUJET devra payer :',
+      phraseNonQcm:
+        'Avec un budget de #PRIX1 €, #PRENOM peut acheter #Q1 #OBJET.<br>Combien devra-t-#PRONOM_SUJET payer pour #Q2 #OBJET ?',
       utilise_lieu_debut: false,
       utilise_lieu_milieu: false,
       utilise_prenom: true,
@@ -402,6 +420,8 @@ export default class Auto1AR71 extends ExerciceQcmA {
     {
       phrase:
         '#LIEU_DEBUT, la promotion annonce : #PRIX1 € pour #Q1 #OBJET !<br>À ce prix, #Q2 #OBJET coûteront :',
+      phraseNonQcm:
+        '#LIEU_DEBUT, la promotion annonce : #PRIX1 € pour #Q1 #OBJET !<br>À ce prix, combien coûteront #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: false,
@@ -563,9 +583,20 @@ export default class Auto1AR71 extends ExerciceQcmA {
   // ==========================================================================
   constructor() {
     super()
-    this.versionAleatoire()
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.besoinFormulaireCaseACocher = ['Sujet original', false]
+    this.sup = false
+    this.versionQcmDisponible = true
+    this.versionQcm = false
+    this.versionQcmOptions = { radio: true, compact: true }
     this.spacing = 1.5
     this.spacingCorr = 1.5
+  }
+
+  nouvelleVersion(): void {
+    if (this.sup) this.versionOriginale()
+    else this.versionAleatoire()
   }
 
   // ==========================================================================
@@ -587,6 +618,8 @@ export default class Auto1AR71 extends ExerciceQcmA {
       distracteurs: [60, 8, 8.5],
       enoncePersonnalise:
         'Quatre croissants coûtent $6$ euros.<br>Dix croissants coûtent :',
+      enoncePersonnaliseNonQcm:
+        'Quatre croissants coûtent $6$ euros.<br>Combien coûtent dix croissants ?',
     })
   }
 
@@ -629,6 +662,7 @@ export default class Auto1AR71 extends ExerciceQcmA {
       bonneReponse,
       distracteurs,
       enoncePersonnalise,
+      enoncePersonnaliseNonQcm,
       modele,
     } = donnees
 
@@ -636,9 +670,14 @@ export default class Auto1AR71 extends ExerciceQcmA {
     // CONSTRUCTION ÉNONCÉ
     // ========================================================================
     if (enoncePersonnalise) {
-      this.enonce = enoncePersonnalise
+      this.question = this.versionQcm
+        ? enoncePersonnalise
+        : (enoncePersonnaliseNonQcm ?? enoncePersonnalise)
     } else {
-      this.enonce = this.remplacerChamps(modele!.phrase, donnees)
+      this.question = this.remplacerChamps(
+        this.versionQcm ? modele!.phrase : modele!.phraseNonQcm,
+        donnees,
+      )
     }
 
     // ========================================================================
@@ -681,11 +720,16 @@ export default class Auto1AR71 extends ExerciceQcmA {
     // ========================================================================
     // CONSTRUCTION RÉPONSES
     // ========================================================================
-    this.reponses = [
-      `$${texNombre(bonneReponse, 2)}$ €`,
+    this.reponse = this.versionQcm
+      ? `$${texNombre(bonneReponse, 2)}$ €`
+      : bonneReponse
+    this.distracteurs = [
       `$${texNombre(distracteurs[0], 2)}$ €`,
       `$${texNombre(distracteurs[1], 2)}$ €`,
       `$${texNombre(distracteurs[2], 2)}$ €`,
     ]
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
+    this.canEnonce = this.question
+    this.canReponseACompleter = '$\\ldots$ €'
   }
 }

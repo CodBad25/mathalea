@@ -23,6 +23,7 @@
   export let resultsByQuestion: QuestionResult[] = []
   const numberOfQuestions: number = questions.length
   let timerComponent: Timer
+  let keyboardHeight = 0
 
   // Chronomètre par question : chaque question a son propre décompte et on ne
   // peut plus revenir en arrière.
@@ -202,8 +203,9 @@
 
 <div
   class="w-full h-full flex flex-col justify-between items-center overflow-y-auto bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
+  style:padding-bottom="{$keyboardState.isVisible ? keyboardHeight : 0}px"
 >
-  <div class="w-full flex flex-col">
+  <div class="w-full flex flex-col shrink-0">
     {#if isPerQuestionTimer}
       {#key current}
         <Timer
@@ -232,14 +234,7 @@
   </div>
   <div
     id="questions-container"
-    class="flex flex-col justify-center items-center font-light text-coopmaths-corpus dark:text-coopmathsdark-corpus text-3xl md:text-5xl
-     {$keyboardState.isVisible && !$keyboardState.isInLine
-      ? 'h-[calc(100%-30rem)]'
-      : ''}
-     {$keyboardState.isVisible && $keyboardState.isInLine
-      ? 'h-[calc(100%-20rem)]'
-      : ''}
-     {!$keyboardState.isVisible ? 'h-full' : ''} w-full"
+    class="flex flex-1 min-h-0 flex-col justify-center items-center overflow-y-auto font-light text-coopmaths-corpus dark:text-coopmathsdark-corpus text-3xl md:text-5xl w-full"
   >
     {#each [...Array(numberOfQuestions).keys()] as i}
       <Question
@@ -263,14 +258,7 @@
       />
     {/key}
   {/if}
-  <div
-    class="flex justify-center w-full {$keyboardState.isVisible &&
-    $keyboardState.isInLine
-      ? 'mb-20'
-      : ''} {$keyboardState.isVisible && !$keyboardState.isInLine
-      ? 'mb-52'
-      : ''}"
-  >
+  <div class="flex justify-center w-full shrink-0">
     <NavigationButtons
       bind:current
       {numberOfQuestions}
@@ -283,5 +271,5 @@
       resultsByQuestion={[]}
     />
   </div>
-  <Keyboard />
+  <Keyboard bind:height={keyboardHeight} />
 </div>

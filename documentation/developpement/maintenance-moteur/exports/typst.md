@@ -91,6 +91,15 @@ Fonctionnement :
 
 Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Exception : l'icône de l'étiquette de version régénère tout le code (`toggleVersionLabel` → `applyDocumentOptions`), la présence de l'étiquette dans la grille (voir « En-tête et pied de page ») étant structurelle plutôt qu'une simple valeur de variable. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait. Avec plusieurs sujets, chacun porte ses repères et ses marqueurs de relecture. `subjectEditorCode` masque les autres sujets (banques et rendus) sans déplacer les positions dans CodeMirror ; `harvestCarryOver` relit séparément leurs ajustements dans `versions`, afin de préserver les insertions et les surcharges de chaque sujet.
 
+Le zoom et l'alignement d'une figure sont communs aux sujets. Les figures sont
+numérotées à la suite, sujet après sujet ; quand un sujet B, C… a autant de
+figures que le sujet A (mêmes exercices), sa k-ième figure reprend les
+variables de la k-ième figure du sujet A (`#let fig-5-zoom = fig-1-zoom`, voir
+`sharedFigureNumber`). Régler une figure depuis n'importe quel sujet modifie la
+ligne de la figure du sujet A (`figureSettingTarget` dans `Typst.svelte`), donc
+tous les sujets. Si le nombre de figures diffère (tirage au hasard), chaque
+sujet garde ses propres réglages.
+
 À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. Les sauts de page ou de colonne sont normalisés à un exemplaire par repère (`stabilizeStructuralInsertions`, espaces `exo` et `corr`) et, entre les exercices, supprimés après le dernier, où ils n'ont aucun contenu suivant à déplacer ; cela répare aussi les anciens `typstParam` qui en contiennent des copies. « Réinitialiser les réglages du document » efface tout le carry-over.
 
 ## Ajouter un exercice depuis l'aperçu
@@ -627,6 +636,17 @@ la case « Afficher le titre des exercices » des réglages du document ajoute
 l'intitulé MathALÉA après « Exercice N » (`showExerciseTitles`, `title:`).
 Elle est décochée par défaut. Un groupe fusionné reprend le titre de son
 premier exercice. Les titres conservent la mise en forme du style de badge.
+
+Chaque titre est déclaré dans le préambule (`#let exo-N-titre = [...]`) et
+`exo.with` y renvoie (`title: exo-N-titre`). Quand la case est cochée, le
+bouton « Titre » (`bx-heading`) de la barre d'outils de l'exercice ouvre un
+champ prérempli avec le titre : la validation (Entrée ou « Valider ») modifie
+seulement cette ligne (`setExerciseTitle`, pas de régénération), un champ vide
+retire le titre de cet exercice (`none`), « Titre par défaut » rétablit le
+titre MathALÉA. Un titre modifié porte le marqueur `// mathalea:titre-perso`,
+relu par `harvestCarryOver` (`TypstCarryOver.exerciseTitles`) : il survit à la
+régénération et suit l'exercice à la suppression, à la duplication et au
+déplacement. Il est saisi en texte simple (littéral `"..."`, sans formule).
 
 Dans les réglages d'un exercice, « Exemple corrigé (correction sous l'énoncé) »
 active `worked: true` : la correction reste visible sous l'énoncé même sur une

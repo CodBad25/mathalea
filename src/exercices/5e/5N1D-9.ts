@@ -243,7 +243,7 @@ export default class AppliquerUnProgrammeDeCalcul extends Exercice {
           )
           .join('<br>')
       }
-      texteCorr += `<br>Le résultat du programme est donc $${miseEnEvidence(resultat)}$.`
+      texteCorr += `<br>Le résultat du programme est donc $${miseEnEvidence(resultat)}$ si le nombre de départ est $${depart}$.`
 
       handleAnswers(
         this,

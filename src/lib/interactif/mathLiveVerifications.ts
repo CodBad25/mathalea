@@ -301,9 +301,10 @@ export function verifyFillInTheBlankMathLive(
             }
           } else {
             const firstChar = compareFeedback.charAt(0)
-            const lowerFirst = /[a-zA-Z]/.test(firstChar)
-              ? firstChar.toLowerCase()
-              : firstChar
+            const lowerFirst =
+              fieldNumber !== '' && /[a-zA-Z]/.test(firstChar)
+                ? firstChar.toLowerCase()
+                : firstChar
             result.feedback = `${fieldNumber}${lowerFirst + compareFeedback.slice(1)}<br>`
           }
         }

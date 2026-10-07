@@ -371,7 +371,9 @@ ensembles prédéfinis (`\mathbb{R}`, `\mathbb{N}`…) et l'ensemble vide :
 | `'\\emptyset'`              | `\emptyset`, `\{\}`, `∅`                         | `vide`                                                                    |
 | `'\\mathbb{R}'`             | `\mathbb{R}`                                     | `]-\infty;+\infty[` (La bonne réponse était cet ensemble : $\mathbb{R}$.) |
 
-Pour un singleton, utiliser `ensembleDeNombres`.
+Pour un singleton, utiliser `ensembleDeNombres`. Pour une inégalité ou un
+encadrement (`-3<x\leqslant 5`), utiliser le check
+[`sameIntervalCondition`](checks-composables.md#sameintervalcondition).
 
 `estDansIntervalle` accepte tout nombre de l'intervalle donné en `value`. Avec
 `value: '[1;2['` : `1`, `1.2`, `\frac76`, `\sqrt{3}` sont acceptés ; `2` et

@@ -84,22 +84,21 @@ Ainsi,  $N=${multiplicateur}\\times ${partie}$ élèves soit
       `$${texNombre(total - 100, 1)}$`,
     ]
 
-    this.question = `Dans un lycée, $${partie}$ élèves étudient ${matiere}, ${context.isDiaporama ? '<br>' : ''}ce qui représente $${taux}\\,\\%$ du nombre d'élèves inscrits ${context.isDiaporama ? '<br>' : ''}dans ce lycée.<br>
-      Le nombre d'élèves inscrits dans ce lycée est égal à :`
+    this.question = `Dans un lycée, $${partie}$ élèves étudient ${matiere}, ${context.isDiaporama ? '<br>' : ''}ce qui représente $${taux}\\,\\%$ du nombre d'élèves inscrits ${context.isDiaporama ? '<br>' : ''}dans ce lycée.<br>`
+    this.question += this.versionQcm
+      ? "Le nombre d'élèves inscrits dans ce lycée est égal à :"
+      : "Combien d'élèves sont inscrits dans ce lycée ?"
 
     this.correction = correctionCommune
+    this.optionsChampTexte = { texteAvant: '<br>' }
 
     this.reponse = this.versionQcm ? `$${texNombre(total, 1)}$` : `${total}`
 
     this.distracteurs = distracteursCommuns
 
-    this.canEnonce = `Dans un lycée, $${partie}$ élèves étudient ${matiere}, ce qui représente $${taux}\\,\\%$ du nombre d'élèves inscrits dans ce lycée.<br>`
+    this.canEnonce = `Dans un lycée, $${partie}$ élèves étudient ${matiere}, ce qui représente $${taux}\\,\\%$ du nombre d'élèves inscrits dans ce lycée.<br>
+    Combien d'élèves sont inscrits dans ce lycée ?`
 
-    this.canReponseACompleter =
-      "Le nombre d'élèves inscrits dans ce lycée est égal à : $\\ldots$"
-
-    if (!this.interactif && !this.versionQcm) {
-      this.question += ' $\\ldots$'
-    }
+    this.canReponseACompleter = '$\\ldots$'
   }
 }

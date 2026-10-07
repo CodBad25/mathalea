@@ -69,6 +69,24 @@ function entreDeux(a: number, b: number) {
   else return arrondi(b + ((a - b) * randint(10, 90)) / 100, 2)
 }
 
+/**
+ * Retourne la correction de la comparaison des périmètres
+ * @param {boolean} coloriePlusGrand true si le périmètre de la figure coloriée est plus grand que celui du rectangle hachuré
+ * @param {string} comparePerimetre 'grand' ou 'petit', selon la question posée
+ * @returns {string}
+ */
+function correctionPerimetre(
+  coloriePlusGrand: boolean,
+  comparePerimetre: string,
+) {
+  const explication = `Il faut parcourir ${coloriePlusGrand ? 'plus' : 'moins'} de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré.`
+  const reponseEstColoriee = coloriePlusGrand === (comparePerimetre === 'grand')
+  const reponse = reponseEstColoriee
+    ? `la figure coloriée a un périmètre plus ${comparePerimetre} que celui du rectangle hachuré`
+    : `le rectangle hachuré a un périmètre plus ${comparePerimetre} que celui de la figure coloriée`
+  return `${explication} Donc, ${texteEnCouleurEtGras(reponse)}.`
+}
+
 export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
   constructor() {
     super()
@@ -221,14 +239,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("le rectangle hachuré a une aire plus grande que celle de la figure coloriée")}.`
+                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('le rectangle hachuré a une aire plus grande que celle de la figure coloriée')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {
@@ -292,14 +310,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire plus grande que celle du rectangle hachuré")}.`
+                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire plus grande que celle du rectangle hachuré')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {
@@ -428,14 +446,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre autant de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire égale à celle du rectangle hachuré")}.`
+                ? `Le rectangle hachuré couvre autant de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire égale à celle du rectangle hachuré')}.`
                 : ''
             if (
               this.sup2 === 2 ||
@@ -627,19 +645,19 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr += aleaDemiDisque
               ? this.sup2 === 2 ||
                 this.sup2 === 3 ||
                 aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire plus grande que celle du rectangle hachuré")}.`
+                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire plus grande que celle du rectangle hachuré')}.`
                 : ''
               : this.sup2 === 2 ||
                   this.sup2 === 3 ||
                   aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("le rectangle hachuré a une aire plus grande que celle de la figure coloriée")}.`
+                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('le rectangle hachuré a une aire plus grande que celle de la figure coloriée')}.`
                 : ''
             if (
               this.sup2 === 2 ||
@@ -831,14 +849,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire plus grande que celle du rectangle hachuré")}.`
+                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire plus grande que celle du rectangle hachuré')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {
@@ -972,14 +990,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("le rectangle hachuré a une aire plus grande que celle de la figure coloriée")}.`
+                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('le rectangle hachuré a une aire plus grande que celle de la figure coloriée')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {
@@ -1013,14 +1031,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir moins de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("le rectangle hachuré a un périmètre plus grand que celui de la figure coloriée")}.`
+                ? correctionPerimetre(false, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("le rectangle hachuré a une aire plus grande que celle de la figure coloriée")}.`
+                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('le rectangle hachuré a une aire plus grande que celle de la figure coloriée')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {
@@ -1071,14 +1089,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire plus grande que celle du rectangle hachuré")}.`
+                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire plus grande que celle du rectangle hachuré')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {
@@ -1219,14 +1237,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre autant de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire égale à celle du rectangle hachuré")}.`
+                ? `Le rectangle hachuré couvre autant de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire égale à celle du rectangle hachuré')}.`
                 : ''
             objets = []
             if (
@@ -1480,7 +1498,7 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
@@ -1488,12 +1506,12 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
                 ? this.sup2 === 2 ||
                   this.sup2 === 3 ||
                   aireOuPerimetre !== 'Perimetre'
-                  ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire plus grande que celle du rectangle hachuré")}.`
+                  ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire plus grande que celle du rectangle hachuré')}.`
                   : ''
                 : this.sup2 === 2 ||
                     this.sup2 === 3 ||
                     aireOuPerimetre !== 'Perimetre'
-                  ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("le rectangle hachuré a une aire plus grande que celle de la figure coloriée")}.`
+                  ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('le rectangle hachuré a une aire plus grande que celle de la figure coloriée')}.`
                   : ''
             if (
               this.sup2 === 2 ||
@@ -1737,14 +1755,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("la figure coloriée a une aire plus grande que celle du rectangle hachuré")}.`
+                ? `Le rectangle hachuré couvre moins de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('la figure coloriée a une aire plus grande que celle du rectangle hachuré')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {
@@ -1897,14 +1915,14 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
             texteCorr = this.sup2 === 3 ? numAlpha(0) : ''
             texteCorr +=
               this.sup2 === 1 || this.sup2 === 3 || aireOuPerimetre !== 'Aire'
-                ? `Il faut parcourir plus de chemin pour effectuer le tour de la figure coloriée que le tour du rectangle hachuré. Donc, ${texteEnCouleurEtGras("la figure coloriée a un périmètre plus grand que celui du rectangle hachuré")}.`
+                ? correctionPerimetre(true, comparePerimetre)
                 : ''
             texteCorr += this.sup2 === 3 ? '<br>' + numAlpha(1) : ''
             texteCorr +=
               this.sup2 === 2 ||
               this.sup2 === 3 ||
               aireOuPerimetre !== 'Perimetre'
-                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras("le rectangle hachuré a une aire plus grande que celle de la figure coloriée")}.`
+                ? `Le rectangle hachuré couvre plus de surface que la figure coloriée. Donc, ${texteEnCouleurEtGras('le rectangle hachuré a une aire plus grande que celle de la figure coloriée')}.`
                 : ''
             // QCM interactif
             if (this.interactif) {

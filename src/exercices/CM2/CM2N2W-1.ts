@@ -1,3 +1,7 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import {
   combinaisonListesSansChangerOrdre,
   shuffle,
@@ -10,6 +14,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Encadrer un décimal par deux entiers consécutifs'
+export const interactifReady = true
+export const dateDeModifImportante = '06/10/2026'
 
 /**
  * * Encadrer_un_decimal_par_deux_entiers_consecutifs
@@ -39,6 +45,7 @@ export default class EncadrerUnDecimalParDeuxEntiersConsecutifs extends Exercice
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posées --> à remettre comme ci-dessus
+    const questionStatements: string[] = []
 
     for (
       let i = 0, texte, texteCorr, cpt = 0;
@@ -78,8 +85,32 @@ export default class EncadrerUnDecimalParDeuxEntiersConsecutifs extends Exercice
       texte = `${enonces[listeTypeDeQuestions[i]].enonce}`
       texteCorr = `${enonces[listeTypeDeQuestions[i]].correction}`
 
-      if (this.listeQuestions.indexOf(texte) === -1) {
+      if (!questionStatements.includes(texte)) {
         // Si la question n'a jamais été posée, on en crée une autre
+        questionStatements.push(texte)
+        const lowerBound = m * 1000 + c * 100 + d * 10 + u
+        handleAnswers(
+          this,
+          i,
+          {
+            bareme: toutPourUnPoint,
+            champ1: { value: lowerBound },
+            champ2: { value: lowerBound + 1 },
+          },
+          { formatInteractif: 'fill-in-the-blank' },
+        )
+        if (this.interactif && context.isHtml) {
+          texte = remplisLesBlancs(
+            this,
+            i,
+            texte
+              .trim()
+              .slice(1, -1)
+              .replace('\\ldots\\ldots', '%{champ1}')
+              .replace('\\ldots\\ldots', '%{champ2}'),
+            KeyboardType.clavierNumbers,
+          )
+        }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

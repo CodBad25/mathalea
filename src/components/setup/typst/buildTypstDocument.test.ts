@@ -7,9 +7,11 @@ import {
   buildTypstDocument,
   COVER_TEMPLATE_DEFAULTS,
   defaultTypstDocumentOptions,
+  exerciseTitleLine,
   getGeneratedCanRowCode,
   getGeneratedExerciseCode,
   harvestCarryOver,
+  sharedFigureNumber,
   normalizeTypstLayoutOptions,
   subjectEditorCode,
   type TypstDocumentOptions,
@@ -3366,4 +3368,83 @@ describe('page de garde', () => {
       }
     },
   )
+})
+
+describe('zoom des figures commun aux sujets', () => {
+  it('fait correspondre les figures de même rang quand les sujets en ont autant', () => {
+    // sujet A : figures 1-2, sujet B : 3-4, sujet C : 5-6
+    expect(sharedFigureNumber(1, [2, 4], 6)).toBeUndefined()
+    expect(sharedFigureNumber(3, [2, 4], 6)).toBe(1)
+    expect(sharedFigureNumber(4, [2, 4], 6)).toBe(2)
+    expect(sharedFigureNumber(6, [2, 4], 6)).toBe(2)
+    // sujet B avec trois figures (tirage différent) : réglages propres
+    expect(sharedFigureNumber(4, [2], 5)).toBeUndefined()
+    // un seul sujet
+    expect(sharedFigureNumber(1, [], 2)).toBeUndefined()
+  })
+
+  it('reprend le zoom et l’alignement du sujet A pour le sujet B', () => {
+    const svg =
+      '<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5" /></svg>'
+    const inputs = [exercise({ questions: [svg, svg] })]
+    const code = buildTypstDocument(
+      inputs,
+      { ...defaultTypstDocumentOptions, nbVersions: 2 },
+      { figureZoom: { 1: 0.5, 2: 0.4 }, figureAlign: { 1: 'left' } },
+      [inputs],
+    )
+    expect(code).toContain('#let fig-1-zoom = 0.5')
+    expect(code).toContain('#let fig-1-align = left')
+    expect(code).toContain('#let fig-3-zoom = fig-1-zoom')
+    expect(code).toContain('#let fig-4-zoom = fig-2-zoom')
+    expect(code).toContain('#let fig-4-align = fig-2-align')
+    // les alias ne sont pas relus comme des réglages propres au sujet B
+    expect(harvestCarryOver(code).figureZoom).toEqual({ 1: 0.5, 2: 0.4 })
+  })
+})
+
+describe('titres des exercices', () => {
+  const options = { ...defaultTypstDocumentOptions, showExerciseTitles: true }
+  const inputs = [
+    exercise({ title: 'Calculer une somme', questions: ['$1+1$'] }),
+    exercise({ title: 'Calculer un produit', questions: ['$2 \\times 3$'] }),
+  ]
+
+  it('déclare le titre MathALÉA de chaque exercice dans le préambule', () => {
+    const code = buildTypstDocument(inputs, options)
+    expect(code).toContain('#let exo-1-titre = [Calculer une somme]')
+    expect(code).toContain('title: exo-1-titre,')
+    expect(code).toContain('#let exo-2-titre = [Calculer un produit]')
+  })
+
+  it("n'ajoute rien quand les titres ne sont pas affichés", () => {
+    const code = buildTypstDocument(inputs, defaultTypstDocumentOptions)
+    expect(code).not.toContain('exo-1-titre')
+  })
+
+  it('garde un titre modifié ou retiré après une régénération', () => {
+    const first = buildTypstDocument(inputs, options, {
+      exerciseTitles: { 1: 'Mon "titre"', 2: '' },
+    })
+    expect(first).toContain(
+      '#let exo-1-titre = "Mon \\"titre\\"" // mathalea:titre-perso',
+    )
+    expect(first).toContain('#let exo-2-titre = none // mathalea:titre-perso')
+    const harvested = harvestCarryOver(first)
+    expect(harvested.exerciseTitles).toEqual({ 1: 'Mon "titre"', 2: '' })
+    expect(buildTypstDocument(inputs, options, harvested)).toBe(first)
+  })
+
+  it('ne garde pas un titre MathALÉA comme titre modifié', () => {
+    const code = buildTypstDocument(inputs, options)
+    expect(harvestCarryOver(code).exerciseTitles).toEqual({})
+  })
+
+  it('écrit la ligne de titre attendue pour la palette', () => {
+    expect(exerciseTitleLine(3, 'Titre')).toBe('#let exo-3-titre = [Titre]')
+    expect(exerciseTitleLine(3, '')).toBe('#let exo-3-titre = none')
+    expect(exerciseTitleLine(3, 'Titre', '')).toBe(
+      '#let exo-3-titre = none // mathalea:titre-perso',
+    )
+  })
 })
