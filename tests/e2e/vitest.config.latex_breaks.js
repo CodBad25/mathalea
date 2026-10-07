@@ -7,15 +7,8 @@ import viteConfig from './vite.config'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const sanitizedViteConfig = {
-  ...viteConfig,
-  plugins: (viteConfig.plugins ?? []).filter(
-    (plugin) => !plugin?.name?.includes('dynamic-import'),
-  ),
-}
-
 export default mergeConfig(
-  sanitizedViteConfig,
+  viteConfig,
   defineConfig({
     resolve: {
       alias: {

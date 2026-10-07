@@ -681,6 +681,19 @@ playwright-interactivity:
       when: manual
     - when: never
 
+audit-dependances:
+  stage: planified
+  needs: []
+  allow_failure: false
+  script:
+    # Ne nécessite pas d'installation : pnpm audit lit uniquement pnpm-lock.yaml.
+    - npm install -g pnpm@12.6.0
+    - pnpm audit
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: always
+    - when: never
+
 tests-unitaires:
   stage: planified
   extends: .pnpm_setup
