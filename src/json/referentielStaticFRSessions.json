@@ -624,6 +624,18 @@
       "lieu": "Nouvelle Calédonie",
       "typeExercice": "dnb"
     },
+    "dnb_2026_07_polynesie": {
+      "annee": "2026",
+      "mois": "Juillet",
+      "lieu": "Polynésie",
+      "typeExercice": "dnb"
+    },
+    "dnb_2026_09_metropole": {
+      "annee": "2026",
+      "mois": "Septembre",
+      "lieu": "Métropole",
+      "typeExercice": "dnb"
+    },
     "dnbpro_2023_06_metropole": {
       "annee": "2023",
       "mois": "Juin",
@@ -1403,6 +1415,27 @@
       "typeExercice": "eam",
       "filiere": "Technologique"
     },
+    "eam_technologique_2026_09_antilles": {
+      "annee": "2026",
+      "mois": "Septembre",
+      "lieu": "Antilles",
+      "typeExercice": "eam",
+      "filiere": "Technologique"
+    },
+    "eam_technologique_2026_09_metropole": {
+      "annee": "2026",
+      "mois": "Septembre",
+      "lieu": "Métropole",
+      "typeExercice": "eam",
+      "filiere": "Technologique"
+    },
+    "eam_technologique_2026_09_polynesie": {
+      "annee": "2026",
+      "mois": "Septembre",
+      "lieu": "Polynésie",
+      "typeExercice": "eam",
+      "filiere": "Technologique"
+    },
     "bac_2021_01_sujet0": {
       "annee": "2021",
       "mois": "Janvier",
@@ -2076,6 +2109,13 @@
       "annee": "2026",
       "mois": "Juin",
       "lieu": "Polynésie",
+      "jour": "J2",
+      "typeExercice": "bac"
+    },
+    "bac_2026_09_sujet2_metropole": {
+      "annee": "2026",
+      "mois": "Septembre",
+      "lieu": "Métropole",
       "jour": "J2",
       "typeExercice": "bac"
     },
