@@ -15,6 +15,7 @@ type ExerciceAvecSaisie = ExerciceQcmA & {
   correctionCourte?: () => string
   clavierReponseCourte?: string
   optionsChampReponseCourte?: OptionsChamp
+  champReponseCourteEnLigne?: boolean
   compareReponseCourte?: CompareFunction
 }
 
@@ -37,7 +38,7 @@ export function genereReponsesCourtes(exercice: ExerciceAvecSaisie) {
       exercice.listeQuestions[i] =
         enonce +
         (exercice.interactif
-          ? `<br>${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase, exercice.optionsChampReponseCourte)}`
+          ? `${exercice.champReponseCourteEnLigne ? '' : '<br>'}${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase, exercice.optionsChampReponseCourte)}`
           : '')
       exercice.listeCorrections[i] =
         exercice.correctionCourte?.() ?? exercice.correction ?? ''
@@ -101,6 +102,8 @@ export default class ExerciceQcmACourt extends ExerciceQcmA {
   correctionCourte?: () => string
   clavierReponseCourte?: string
   optionsChampReponseCourte?: OptionsChamp
+  /** Place le champ de saisie à la suite de l'énoncé, sans retour à la ligne. */
+  champReponseCourteEnLigne?: boolean
   compareReponseCourte?: CompareFunction
 
   constructor() {
