@@ -102,7 +102,10 @@ On obtient $k=\\dfrac{${texPrix(prix2)}}{${texPrix(prix1)}} = ${new FractionEten
         break
     }
     if (!this.interactif && !this.versionQcm) {
-      this.question += ' .... '
+      // La consigne se place entre la situation et la phrase à compléter (pas de consigne en diaporama)
+      this.question = context.isDiaporama
+        ? `${this.question} .... `
+        : `${this.question.replace('.<br>', '.<br>Compléter :<br>')} .... `
     }
   }
 }
