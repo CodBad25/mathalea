@@ -6,14 +6,21 @@ import {
   type InstructionIep,
   type TypeInstructionIep,
 } from '../../lib/customElements/ElementIepEditeur'
+import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
+import { codageSegments } from '../../lib/2d/CodageSegment'
+import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { nommePolygone, polygone } from '../../lib/2d/polygones'
+import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
+import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Construire un quadrilatère aux instruments'
+export const titre = 'Construire un quadrilatère'
 
 export const interactifReady = true
 export const dateDePublication = '23/08/2026'
@@ -463,26 +470,50 @@ function programmeConstruction(figure: FigureAConstruire): InstructionIep[] {
   ]
 }
 
-function enonceFigure(figure: FigureAConstruire) {
+function figureCorrection(figure: FigureAConstruire) {
+  const [A, B, C, D] = figure.points.map((point) =>
+    pointAbstrait(point.x, point.y, point.nom),
+  )
+  const contour = polygone(A, B, C, D)
+  const sommets = nommePolygone(contour, figure.noms.join(''))
+  const codageCotes =
+    figure.type === 'Rectangle'
+      ? [
+          codageSegments('|', bleuMathalea, A, B, C, D),
+          codageSegments('||', bleuMathalea, B, C, D, A),
+        ]
+      : [codageSegments('|', bleuMathalea, A, B, B, C, C, D, D, A)]
+  const codageAngles =
+    figure.type === 'Losange'
+      ? []
+      : [
+          codageAngleDroit(D, A, B),
+          codageAngleDroit(A, B, C),
+          codageAngleDroit(B, C, D),
+          codageAngleDroit(C, D, A),
+        ]
+  const objets = [contour, sommets, ...codageCotes, ...codageAngles]
+  return mathalea2d({ ...fixeBordures(objets), scale: 0.6 }, objets)
+}
+
+function enonceFigure(figure: FigureAConstruire, interactif: boolean) {
   const [A, B, C, D] = figure.noms
   const longueurAB = texNombre(distance(figure.points[0], figure.points[1]), 1)
   const longueurBC = texNombre(distance(figure.points[1], figure.points[2]), 1)
   let consigne = ''
   switch (figure.type) {
     case 'Carré':
-      consigne = `Construire aux instruments le carré $${A}${B}${C}${D}$ de côté $${longueurAB}$ cm, puis coder les côtés de même longueur et les angles droits.`
+      consigne = `Construire le carré $${A}${B}${C}${D}$ de côté $${longueurAB}$ cm, puis coder les côtés de même longueur et les angles droits.`
       break
     case 'Rectangle':
-      consigne = `Construire aux instruments le rectangle $${A}${B}${C}${D}$ tel que $${A}${B}=${longueurAB}$ cm et $${B}${C}=${longueurBC}$ cm, puis coder les côtés de même longueur et les angles droits.`
+      consigne = `Construire le rectangle $${A}${B}${C}${D}$ tel que $${A}${B}=${longueurAB}$ cm et $${B}${C}=${longueurBC}$ cm, puis coder les côtés de même longueur et les angles droits.`
       break
     case 'Losange':
-      consigne = `Construire aux instruments le losange $${A}${B}${C}${D}$ de côté $${longueurAB}$ cm, puis coder les côtés de même longueur.`
+      consigne = `Construire le losange $${A}${B}${C}${D}$ de côté $${longueurAB}$ cm, puis coder les côtés de même longueur.`
       break
   }
-  return (
-    consigne +
-    `<br>Le polygone devra être tracé avec l'instruction "Tracer un polygone à la règle".`
-  )
+  if (!interactif) return consigne
+  return `${consigne}<br>Le polygone devra être tracé avec l'instruction « Tracer un polygone à la règle ».`
 }
 
 /**
@@ -506,6 +537,13 @@ export default class ConstruireQuadrilatereAuxInstruments extends Exercice {
       typesFigures[this.sup - 1] ??
       typesFigures[randint(0, typesFigures.length - 1)]
     const figure = creerFigure(typeFigure)
+    const sortieStatique = !context.isHtml || context.isTypst
+    if (!this.interactif && sortieStatique) {
+      this.listeQuestions[0] = enonceFigure(figure, false)
+      this.listeCorrections[0] = figureCorrection(figure)
+      listeQuestionsToContenu(this)
+      return
+    }
     const programmeAttendu = programmeConstruction(figure)
     const instructionsDisponibles: TypeInstructionIep[] = [
       'point',
@@ -521,40 +559,40 @@ export default class ConstruireQuadrilatereAuxInstruments extends Exercice {
       'segmentCodage',
       'codageAngleDroit',
     ]
-    const editeur = addEditeurIep(this, 0, {
-      instructionsDisponibles,
-      programmeAttendu,
-      verifyCallbackName: VERIFICATION_QUADRILATERE_INSTRUMENTS_CALLBACK_NAME,
-    })
-    handleAnswers(
-      this,
-      0,
-      {
-        reponse: {
-          value: JSON.stringify({
-            type: figure.type,
-            noms: figure.noms,
-            programme: programmeAttendu,
-          } satisfies ReponseAttendue),
-        },
-      },
-      { formatInteractif: 'alea-iep-editeur' },
-    )
-    this.listeQuestions[0] = `${
-      context.isHtml && !context.isTypst
-        ? enonceFigure(figure)
-        : enonceFigure(figure).split('<br>')[0]
-    }<br>${editeur}`
-    this.listeCorrections[0] = `Voici une construction possible :<br>${addEditeurIep(
-      this,
-      0,
-      {
-        id: `IepEditeur-corr-Ex${this.numeroExercice}Q0`,
-        interactivityOn: false,
-        programmeInitial: programmeAttendu,
+    if (this.interactif) {
+      const editeur = addEditeurIep(this, 0, {
         instructionsDisponibles,
-      },
-    )}`
+        programmeAttendu,
+        verifyCallbackName: VERIFICATION_QUADRILATERE_INSTRUMENTS_CALLBACK_NAME,
+      })
+      handleAnswers(
+        this,
+        0,
+        {
+          reponse: {
+            value: JSON.stringify({
+              type: figure.type,
+              noms: figure.noms,
+              programme: programmeAttendu,
+            } satisfies ReponseAttendue),
+          },
+        },
+        { formatInteractif: 'alea-iep-editeur' },
+      )
+      this.listeQuestions[0] = `${enonceFigure(figure, true)}<br>${editeur}`
+    } else {
+      this.listeQuestions[0] = enonceFigure(figure, false)
+    }
+    const correction = addEditeurIep(this, 0, {
+      id: `IepEditeur-corr-Ex${this.numeroExercice}Q0`,
+      interactivityOn: false,
+      masquerProgramme: !this.interactif,
+      programmeInitial: programmeAttendu,
+      instructionsDisponibles,
+    })
+    this.listeCorrections[0] = this.interactif
+      ? `Voici une construction possible :<br>${correction}`
+      : correction
     listeQuestionsToContenu(this)
   }
 }

@@ -262,6 +262,7 @@ export type EditeurIepOptions = {
   loadSaveButtons?: boolean
   allowFullscreen?: boolean
   interactivityOn?: boolean
+  masquerProgramme?: boolean
   tailleLabelsPoints?: number
   verifyCallbackName?: string
   verifyCallback?: ElementIepVerificationCallback
@@ -3122,6 +3123,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     loadSaveButtons = false,
     allowFullscreen = false,
     interactivityOn = true,
+    masquerProgramme = false,
     tailleLabelsPoints,
     verifyCallbackName,
     verifyCallback,
@@ -3171,6 +3173,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       loadSaveButtons,
       allowFullscreen,
       interactivityOn,
+      masquerProgramme,
       tailleLabelsPoints,
       verifyCallbackName: computedCallbackName,
     })
@@ -3282,6 +3285,14 @@ export class ElementIepEditeur extends MathaleaCustomElement {
    */
   private get allowFullscreenActif(): boolean {
     return this.getAttribute('allow-fullscreen') === 'true'
+  }
+
+  /**
+   * Masque la liste du programme de construction : seule l'animation reste visible
+   * @attr {boolean} [masquer-programme=false]
+   */
+  private get masquerProgrammeActif(): boolean {
+    return this.getAttribute('masquer-programme') === 'true'
   }
 
   private get tailleLabelsPoints(): number | undefined {
@@ -3612,13 +3623,16 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     if (this.loadSaveButtonsActif) {
       zoneProgramme.appendChild(this.construireLigneChargerSauvegarder())
     }
+    if (this.masquerProgrammeActif) zoneProgramme.style.display = 'none'
     conteneur.appendChild(zoneProgramme)
 
     // --- Animation ---
     const zoneAnimation = document.createElement('div')
     zoneAnimation.classList.add('flex', 'flex-wrap', 'gap-2')
     this.boutonTester = document.createElement('button')
-    this.boutonTester.innerText = 'Tester l’animation'
+    this.boutonTester.innerText = this.masquerProgrammeActif
+      ? 'Voir l’animation'
+      : 'Tester l’animation'
     this.boutonTester.type = 'button'
     this.boutonTester.classList.add(...classesBouton, 'self-start')
     this.boutonTester.onclick = () => {
