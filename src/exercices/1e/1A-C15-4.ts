@@ -31,7 +31,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
     this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
               Un abonnement annuel et $3,50$ € par mètre cube consommé. <br>
               Une famille a payé une facture de $352,50$ € pour une consommation de $85\\text{ m}^3$.<br>
-            Écrire le calcul permettant de déterminer le prix de l'abonnement.`
+            ${this.sup3 ? "Écrire le calcul permettant de déterminer le prix de l'abonnement." : "On note $a$ le prix de l'abonnement annuel, en euros.<br>Déterminer $a$ sous forme d'un calcul qu'on ne demande pas d'effectuer."}`
 
     this.correction = `La facture s'élève à $352,50$ € pour une consommation de $85\\text{ m}^3$.<br>
                    En notant $a$ le montant de l'abonnement, on obtient : <br>
@@ -59,7 +59,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
           this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
                     un abonnement annuel et $${texNombre(p, 2, true)}$ € par mètre cube consommé. <br>
                     Une famille a payé une facture de $${texNombre(fac, 2, true)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
-                  Écrire le calcul permettant de déterminer le prix de l'abonnement.`
+                  ${this.sup3 ? "Écrire le calcul permettant de déterminer le prix de l'abonnement." : "On note $a$ le prix de l'abonnement annuel, en euros.<br>Déterminer $a$ sous forme d'un calcul qu'on ne demande pas d'effectuer."}`
 
           this.correction = `La facture s'élève à $${texNombre(fac, 3)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
                          En notant $a$ le montant de l'abonnement, on obtient : <br>
@@ -86,7 +86,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
           this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
                     un abonnement annuel de $${texNombre(abo, 2, true)}$ € et un prix par mètre cube consommé. <br>
                     Une famille a payé une facture de $${texNombre(fac, 2, true)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
-                  Écrire le calcul permettant de déterminer le prix du mètre cube consommé.`
+                  ${this.sup3 ? 'Écrire le calcul permettant de déterminer le prix du mètre cube consommé.' : "On note $a$ le prix du mètre cube consommé, en euros.<br>Déterminer $a$ sous forme d'un calcul qu'on ne demande pas d'effectuer."}`
 
           this.correction = `La facture s'élève à $${texNombre(fac, 3)}$ € pour une consommation de $${n}\\text{ m}^3$.<br>
                          En notant $a$ le prix du mètre cube, on obtient : <br>
@@ -114,7 +114,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
           this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
                   un abonnement annuel de $${texNombre(abo, 2, true)}$ € et $${texNombre(p, 2, true)}$ € par mètre cube consommé. <br>
                     Une famille a payé une facture de $${texNombre(fac, 2, true)}$ € pour sa consommation annuelle.<br>
-                  Écrire le calcul permettant de déterminer le nombre de mètres cubes consommés.`
+                  ${this.sup3 ? 'Écrire le calcul permettant de déterminer le nombre de mètres cubes consommés.' : "On note $a$ le nombre de mètres cubes consommés.<br>Déterminer $a$ sous forme d'un calcul qu'on ne demande pas d'effectuer."}`
 
           this.correction = `La facture s'élève à $${texNombre(fac, 3)}$ € pour la consommation annuelle.<br>
                          En notant $a$ le nombre de  mètres cubes consommés, on obtient : <br>
@@ -140,6 +140,7 @@ export default class Auto1C19 extends ExerciceQcmACourt {
     super()
 
     this.versionAleatoire()
+    this.texteAvantReponseCourte = '$a =$'
     this.spacing = 1.5
   }
 }

@@ -118,10 +118,12 @@ describe('Automatismes avec saisie courte et Version QCM', () => {
     expect(credit.listeQuestions[0]).toContain('Déterminer la part du crédit')
 
     const facture = new CalculFacture()
+    facture.interactif = true
     facture.nouvelleVersion()
     expect(facture.listeQuestions[0]).toContain(
-      'Écrire le calcul permettant de déterminer',
+      "Déterminer $a$ sous forme d'un calcul qu'on ne demande pas d'effectuer.",
     )
+    expect(facture.listeQuestions[0]).toContain('$a =$')
 
     const huile = new MasseHuile()
     huile.nouvelleVersion()

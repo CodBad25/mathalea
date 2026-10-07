@@ -1,5 +1,5 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
@@ -83,17 +83,32 @@ export default class Auto1C15r extends ExerciceQcmACourt {
     const reponseTiree = choice([coutEuros, coutCentimes])
     const bonneReponse = this.sup3 ? reponseTiree : coutEuros
 
-    // Construction de la correction
-    let correctionFinale = `La puissance de l'appareil est de $${texNombre(puissance)}$ W, soit $${texNombre(puissanceKW, 1)}$ kW.<br>
-      La durée d'utilisation est de $${duree}$ minutes, soit $${dureeH.texFractionSimplifiee}$ heure.<br>
-      L'énergie consommée est donc : $${texNombre(puissanceKW, 1)}\\times ${dureeH.texFractionSimplifiee}=${texNombre(energie, 3)}$ kWh.<br>
-      Le coût de la consommation est : $${texNombre(energie, 3)}\\times ${texNombre(cout, 2)}=${texNombre(coutTotalEuros, 2)}$ €`
+    // Conserver les valeurs exactes jusqu'à la conclusion.
+    const puissanceExacte = new FractionEtendue(puissance, 1000)
+    const energieExacte = puissanceExacte.produitFraction(dureeH).simplifie()
+    const tarifExact = new FractionEtendue(1, 5)
+    const coutExact = energieExacte.produitFraction(tarifExact).simplifie()
+    let correctionFinale = `La puissance de l'appareil est de $${texNombre(puissance)}\\,\\text{W}$, soit $\\dfrac{${puissance}}{1000}=${puissanceExacte.texFractionSimplifiee}\\,\\text{kW}$.<br>
+      La durée d'utilisation est de $${duree}$ minutes, soit $\\dfrac{${duree}}{60}=${dureeH.texFractionSimplifiee}\\,\\text{h}$.<br>
+      Le prix d'un kilowatt-heure est de $0,2=\\dfrac{1}{5}$ euro.<br>
+      L'énergie consommée est donc $${puissanceExacte.texFractionSimplifiee}\\times ${dureeH.texFractionSimplifiee}=${energieExacte.texFractionSimplifiee}\\,\\text{kWh}$.<br>
+      Le coût de la consommation est $${energieExacte.texFractionSimplifiee}\\times ${tarifExact.texFractionSimplifiee}=${coutExact.texFractionSimplifiee}\\,\\text{€}$.<br>`
 
-    // Si la bonne réponse est en centimes, ajouter la conversion
-    if (bonneReponse === coutCentimes) {
-      correctionFinale += `, soit ${texteEnCouleurEtGras(bonneReponse)}.`
+    // Une écriture décimale finie existe si le dénominateur ne contient que 2 et 5.
+    let denominateur = coutExact.den
+    while (denominateur % 2 === 0) denominateur /= 2
+    while (denominateur % 5 === 0) denominateur /= 5
+    if (denominateur === 1) {
+      const enCentimes = bonneReponse === coutCentimes
+      const valeur = coutExact.valeurDecimale * (enCentimes ? 100 : 1)
+      const unite = enCentimes
+        ? valeur === 1
+          ? "centime d'euro"
+          : "centimes d'euro"
+        : '€'
+      correctionFinale += `Le coût est donc $${miseEnEvidence(`${texNombre(valeur, 3)}\\,\\text{${unite}}`)}$.`
     } else {
-      correctionFinale += `, soit ${texteEnCouleurEtGras(coutEuros)}.`
+      correctionFinale += `Ce coût n'a pas d'écriture décimale finie. La réponse proposée, $${miseEnEvidence(bonneReponse.slice(1, -1))}$, est une valeur approchée arrondie ${bonneReponse === coutCentimes ? 'au centime' : "au centième d'euro"}.`
     }
 
     this.correction = correctionFinale
@@ -140,7 +155,11 @@ export default class Auto1C15r extends ExerciceQcmACourt {
 
   constructor() {
     super()
-    this.enonceCourt = () => this.enonce.replace('Le coût en électricité pour cette utilisation est :', 'Calculer le coût en euros de cette utilisation.')
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        'Le coût en électricité pour cette utilisation est :',
+        'Calculer le coût en euros de cette utilisation.',
+      )
     this.versionAleatoire()
     this.spacing = 1.5
   }
