@@ -3,15 +3,8 @@ import { mergeConfig } from 'vite'
 import { defineConfig } from 'vitest/config'
 import viteConfig from './vite.config'
 
-const sanitizedViteConfig = {
-  ...viteConfig,
-  plugins: (viteConfig.plugins ?? []).filter(
-    (plugin) => !plugin?.name?.includes('dynamic-import'),
-  ),
-}
-
 export default mergeConfig(
-  sanitizedViteConfig,
+  viteConfig,
   defineConfig({
     resolve: {
       alias: {
