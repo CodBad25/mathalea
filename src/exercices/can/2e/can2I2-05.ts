@@ -24,7 +24,7 @@ export const refs = {
 export default class EvolSuccessives extends ExerciceSimple {
   constructor() {
     super()
-    this.optionsChampTexte = { texteApres: '$\\%$' }
+    this.optionsChampTexte = { texteApres: '$\\,\\%$.' }
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
@@ -65,10 +65,14 @@ export default class EvolSuccessives extends ExerciceSimple {
       `$${texNombre(variationPourcent + 5, 2)}\\,\\%$`,
     ]
 
-    this.canEnonce = `Le prix d’un article connait deux ${typeTexte} successives de $${taux}\\,\\%$.`
-    this.canReponseACompleter = "L'évolution globale est :  $\\ldots\\,\\%$"
+    this.canEnonce = `Le prix d’un article connait deux ${typeTexte} successives de $${taux}\\,\\%$.<br>Compléter.`
+    this.canReponseACompleter = "L'évolution globale est :  $\\ldots\\,\\%$."
     if (!this.interactif && !this.versionQcm) {
-      this.question += ' $\\ldots$'
+      // La consigne se place entre la situation et la phrase à compléter (pas en diaporama)
+      if (!context.isDiaporama) {
+        this.question = this.question.replace('. <br>', '. <br>Compléter.<br>')
+      }
+      this.question += ' $\\ldots\\,\\%$.'
     }
   }
 }
