@@ -1,9 +1,10 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const dateDePublication = '22/07/2025'
 export const uuid = '6201b'
@@ -20,12 +21,15 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre =
   "Retrouver le calcul d'un prix après deux évolutions successives"
 
-export default class AugmentationsSuccessives extends ExerciceQcmA {
+export default class AugmentationsSuccessives extends ExerciceQcmACourt {
+  // Pourcentage d'augmentation du dernier tirage (utilisé par la saisie courte)
+  private pourcentage = 20
+
   versionOriginale: () => void = () => {
+    this.pourcentage = 20
     this.enonce =
       "Le prix d'un article est noté $P$. Il connaît deux augmentations de $20\\,\\%$.<br> Le prix, après ces augmentations, est :"
     this.correction = `Après une augmentation de $20\\,\\%$, le nouveau prix est $P \\times 1,2$.<br>
@@ -45,6 +49,7 @@ export default class AugmentationsSuccessives extends ExerciceQcmA {
       // Génération d'un pourcentage d'augmentation (multiples de 5 entre 5 et 50)
       const pourcentagesAugmentation = [10, 20, 25, 30, 40, 50, 60, 70]
       const pourcentage = choice(pourcentagesAugmentation)
+      this.pourcentage = pourcentage
 
       // Génération du nombre d'augmentations (2 ou 3)
       const nombreAugmentations = 2
@@ -130,6 +135,31 @@ export default class AugmentationsSuccessives extends ExerciceQcmA {
 
   constructor() {
     super()
+    // Version sans QCM : l'élève complète « P × … » par le coefficient multiplicateur global
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        'Le prix, après ces augmentations, est :',
+        this.interactif
+          ? 'Compléter par un nombre ou par un calcul :<br>Le prix après ces augmentations est donné par $P\\times$'
+          : 'Compléter par un nombre ou par un calcul :<br>Le prix après ces augmentations est donné par : $P\\times \\ldots$.',
+      )
+    this.reponseCourte = () => `${(100 + this.pourcentage) / 100}^2`
+    this.clavierReponseCourte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+    this.optionsChampReponseCourte = { texteApres: '.' }
+    this.champReponseCourteEnLigne = true
+    this.correctionCourte = () => {
+      const coefficient = texNombre((100 + this.pourcentage) / 100, 4)
+      const coefficientTotal = texNombre(
+        ((100 + this.pourcentage) / 100) ** 2,
+        4,
+      )
+      return `Après une augmentation de $${this.pourcentage}\\,\\%$, le nouveau prix est $P \\times ${coefficient}$.<br>
+ Après une deuxième augmentation de $${this.pourcentage}\\,\\%$, le prix devient : <br>
+ $(P \\times ${coefficient}) \\times ${coefficient} = P \\times ${coefficient}^2 = P \\times ${miseEnEvidence(coefficientTotal)}$.<br>
+ On peut aussi compléter avec $${coefficient}^2$ ou $\\left(1 + \\dfrac{${this.pourcentage}}{100}\\right)^2$.`
+    }
+    this.options.compact = true // moins d'espace avant les propositions du QCM
     this.versionAleatoire()
   }
 }

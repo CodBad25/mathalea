@@ -1,9 +1,11 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const titre = 'Retrouver le calcul après une augmentation'
 export const dateDePublication = '04/08/2026'
@@ -17,18 +19,23 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 
 /**
  * Retrouver le calcul donnant une valeur initiale après une augmentation.
  * @author Stéphane Guyon
  */
-export default class Auto1AE026 extends ExerciceQcmA {
+export default class Auto1AE026 extends ExerciceQcmACourt {
+  // Valeurs du dernier tirage (utilisées par la saisie courte)
+  private pourcentage = 0
+  private prixFinal = 0
+
   private appliquerLesValeurs(
     article: string,
     prixFinal: number,
     pourcentage: number,
   ): void {
+    this.pourcentage = pourcentage
+    this.prixFinal = prixFinal
     const coefficientMultiplicateur = (100 + pourcentage) / 100
     const coefficientTexte = texNombre(coefficientMultiplicateur, 2)
     const coefficientDeDiminutionTexte = texNombre((100 - pourcentage) / 100, 2)
@@ -95,6 +102,25 @@ export default class Auto1AE026 extends ExerciceQcmA {
     super()
     this.besoinFormulaireCaseACocher = false
 
+    // Version sans QCM : l'élève complète « prix ÷ … » par le coefficient multiplicateur (nombre décimal)
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        'Le prix initial en euros est donné par le calcul :',
+        `Compléter  :<br>Le prix initial en euros est donné par : $${texNombre(this.prixFinal)}\\div${this.interactif ? '' : ' \\ldots'}$${this.interactif ? '' : '.'}`,
+      )
+    this.reponseCourte = () => `${(100 + this.pourcentage) / 100}`
+    this.clavierReponseCourte = KeyboardType.clavierDeBase
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { nombreDecimalSeulement: true })
+    this.optionsChampReponseCourte = { texteApres: '.' }
+    this.champReponseCourteEnLigne = true
+    this.correctionCourte = () => {
+      const coefficient = texNombre((100 + this.pourcentage) / 100, 2)
+      return `Augmenter de $${this.pourcentage}\\,\\%$ revient à multiplier par $1 + \\dfrac{${this.pourcentage}}{100} = ${coefficient}$ (coefficient multiplicateur).<br>
+Si $V_I$ est le prix initial, on a : $V_I \\times ${coefficient} = ${texNombre(this.prixFinal)}$.<br>
+Pour retrouver le prix initial, on divise le prix final par ce coefficient : $${texNombre(this.prixFinal)} \\div ${miseEnEvidence(coefficient)}$.`
+    }
+    this.options.compact = true // moins d'espace avant les propositions du QCM
     this.versionAleatoire()
   }
 }
