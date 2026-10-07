@@ -71,7 +71,7 @@ function droiteIntervalle(a: number, b: number, ouvert: boolean): string {
   const marqueCentre = segment(
     pointAbstrait(xC, -0.15),
     pointAbstrait(xC, 0.35),
-    bleuMathalea,
+    'red',
   )
   marqueCentre.epaisseur = 2
   const objets: NestedObjetMathalea2dArray = [
@@ -82,7 +82,7 @@ function droiteIntervalle(a: number, b: number, ouvert: boolean): string {
     marqueCentre,
     latex2d(`${a}`, xG, -0.7, { color: 'black' }),
     latex2d(`${b}`, xD, -0.7, { color: 'black' }),
-    latex2d(texNombre(centre, 1), xC, -0.7, { color: bleuMathalea }),
+    latex2d(`a=${texNombre(centre, 1)}`, xC, -0.9, { color: 'red' }),
   ]
   for (const [xFin, signe] of [
     [xG, '-'],
@@ -117,7 +117,7 @@ function droiteIntervalle(a: number, b: number, ouvert: boolean): string {
     )
   }
   return mathalea2d(
-    { xmin: -0.3, xmax: 11, ymin: -1.1, ymax: 2, pixelsParCm: 40, scale: 0.7 },
+    { xmin: -0.3, xmax: 11, ymin: -1.7, ymax: 2, pixelsParCm: 40, scale: 0.7 },
     objets,
   )
 }
@@ -158,6 +158,7 @@ export default class TableauIntervallesValeurAbsolue extends Exercice {
       '\\text{Intervalle}',
       '\\text{Inégalité}',
       '\\text{Valeur absolue}',
+      "\\text{Centre de l'intervalle}",
     ]
     const lignes: string[] = []
     const contenu: string[] = []
@@ -183,7 +184,12 @@ export default class TableauIntervallesValeurAbsolue extends Exercice {
       const intervalle = `${ouvert ? ']' : '['}${a}\\,;\\,${b}${ouvert ? '[' : ']'}`
       const inegalite = `${a}${symbole} x${symbole}${b}`
       const valeurAbsolue = `\\lvert x${centre === 0 ? '' : ecritureAlgebrique(-centre)}\\rvert${symbole}${texNombre(rayon, 1)}`
-      const valeurs = [intervalle, inegalite, valeurAbsolue]
+      const valeurs = [
+        `x\\in${intervalle}`,
+        inegalite,
+        valeurAbsolue,
+        texNombre(centre, 1),
+      ]
       const type = types[ligne]
       const colonneDonnee = Number(type) - 1
       lignes.push(`${ligne + 1}`)
@@ -195,43 +201,52 @@ export default class TableauIntervallesValeurAbsolue extends Exercice {
         )
         if (!donnee) {
           reponses[`L${ligne + 1}C${colonne + 1}`] = {
-            value: valeurs[colonne],
+            value: colonne === 0 ? intervalle : valeurs[colonne],
             ...(colonne === 0 ? { options: { intervalle: true } } : {}),
           }
         }
       }
+      const calculCentre =
+        colonneDonnee === 2
+          ? `Pour déterminer $a$, écrire la valeur absolue sous la forme $\\lvert x-a\\rvert$ : $\\lvert x${centre === 0 ? '' : ecritureAlgebrique(-centre)}\\rvert=\\lvert x-(${texNombre(centre, 1)})\\rvert$. Ainsi, $a=${miseEnEvidence(texNombre(centre, 1))}$.`
+          : `Le centre est le milieu des extrémités de l'intervalle. Donc $a=\\dfrac{${a}+(${b})}{2}=${miseEnEvidence(texNombre(centre, 1))}$.`
       details.push(
         `Ligne $${ligne + 1}$ :<br>` +
+          calculCentre +
+          '<br>' +
+          `La distance à $a$ s'écrit $\\lvert x-a\\rvert$. Avec $a=${texNombre(centre, 1)}$, on obtient $\\lvert x-a\\rvert=\\lvert x-(${texNombre(centre, 1)})\\rvert=\\lvert x${centre === 0 ? '' : ecritureAlgebrique(-centre)}\\rvert$.<br>` +
           `$x\\in${intervalle}\\iff ${inegalite}\\iff ${valeurAbsolue}$<br>` +
           droiteIntervalle(a, b, ouvert),
       )
       ligne++
     }
 
-    const rappel =
-      '<br>La dernière colonne donne une inégalité avec une valeur absolue.'
     if (this.interactif) {
+      const cellules = AddTabDbleEntryMathlive.convertTclToTableauMathlive(
+        entetes,
+        lignes,
+        contenu,
+      )
+      for (const ligne of cellules.raws) {
+        if (ligne[0].texte === '') {
+          ligne[0].options = { texteAvant: '$x\\in$' }
+        }
+      }
       const tableauInteractif = AddTabDbleEntryMathlive.create(
         this.numeroExercice ?? 0,
         0,
-        AddTabDbleEntryMathlive.convertTclToTableauMathlive(
-          entetes,
-          lignes,
-          contenu,
-        ),
+        cellules,
         'clavierEnsemble clavierCompare clavierPersonnalisable',
         true,
         {},
       ).output
       // Le tableau ne transmet pas encore dataKeys dans les options des cellules.
-      this.listeQuestions[0] =
-        tableauInteractif.replaceAll(
-          '<math-field ',
-          `<math-field data-keys='${JSON.stringify(['\\lvert#0\\rvert'])}' `,
-        ) + rappel
+      this.listeQuestions[0] = tableauInteractif.replaceAll(
+        '<math-field ',
+        `<math-field data-keys='${JSON.stringify(['\\lvert#0\\rvert'])}' `,
+      )
     } else {
-      this.listeQuestions[0] =
-        tableauColonneLigne(entetes, lignes, contenu, 2) + rappel
+      this.listeQuestions[0] = tableauColonneLigne(entetes, lignes, contenu, 2)
     }
     handleAnswers(
       this,
