@@ -27,6 +27,9 @@
   import type { KeyCap } from './types/keycap'
   import { isPageKey } from './types/keycap'
 
+  /** Hauteur réelle du clavier pour réserver sa place dans la vue CAN. */
+  export let height: number = 0
+
   let innerWidth: number = 0
   let pages: KeyboardBlock[][] = []
   let usualBlocks: KeyboardBlock[] = []
@@ -35,6 +38,7 @@
   let divKeyboard: HTMLDivElement
   let alphanumericDisplayed: boolean = false
   let isVisible = false
+  $: if (!isVisible) height = 0
   let isInLine = false
   let pageType: AlphanumericPages = 'AlphaLow'
   let matrixSelectorVisible = false
@@ -264,6 +268,7 @@
     role="none"
     transition:fly|global={{ y: '100%', opacity: 1 }}
     bind:this={divKeyboard}
+    bind:clientHeight={height}
     id="mathalea-virtual-keyboard"
     class=" bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark p-2 md:p-4 w-full fixed bottom-0 left-0 right-0 z-[9999] drop-shadow-[0_-3px_5px_rgba(130,130,130,0.25)] dark:drop-shadow-[0_-3px_5px_rgba(250,250,250,0.25)]"
   >

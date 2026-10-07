@@ -95,9 +95,11 @@
 
 <div
   use:swipe
-  class="w-full pb-8 md:pb-10 px-10 space-y-4 flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] items-center"
+  class="w-full {state === 'race'
+    ? 'pb-1 gap-y-2'
+    : 'pb-8 md:pb-10 space-y-4'} px-10 flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] items-center"
 >
-  <div></div>
+  <div class={state === 'race' ? 'hidden md:block' : ''}></div>
   {#if isLinear}
     <div class="flex flex-row items-center space-x-10">
       <ShortPagination {current} {state} {resultsByQuestion} />
@@ -183,7 +185,12 @@
       </button>
     </div>
   {/if}
-  <div class="md:justify-self-end">
+  <div
+    class="md:justify-self-end {state === 'race' &&
+    !(showEndButton && current === numberOfQuestions - 1)
+      ? 'hidden md:block'
+      : ''}"
+  >
     {#if state === 'race' && showEndButton && current === numberOfQuestions - 1}
       <button
         id="race-ended-by-user-btn"
