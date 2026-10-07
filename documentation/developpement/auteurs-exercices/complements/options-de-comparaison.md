@@ -298,6 +298,13 @@ davantage factorisée. » ; (f) « Une factorisation par 1 a peu d'intérêt. »
 
 ### Égalités
 
+Sans option, `fonctionComparaison()` utilise la comparaison symbolique du
+Compute Engine. Elle peut accepter des équations transformées : pour
+`value: '6x=5.7'`, `12x=11.4`, `6x-5.7=0` et `x=0.95` sont acceptées.
+Cette comparaison est utilisée par défaut pour les réponses courtes de
+`ExerciceQcmACourt`. Elle ne permet donc pas d'exiger que l'élève conserve
+la forme de l'équation qui traduit directement la situation.
+
 `egaliteExpression` compare deux égalités, quelles que soient les lettres
 utilisées. Avec `value: 'n=6b'` : `n=6b`, `6b=n`, `n=3b+b+2b`, `n=3\times2b`,
 `n=\frac{18}{3}b` sont acceptées ; `6b` est refusée avec « Incorrect car une

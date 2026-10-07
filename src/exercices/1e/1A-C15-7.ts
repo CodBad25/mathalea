@@ -21,7 +21,7 @@ export const dateDePublication = '15/12/2025'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
- * @author Gilles Mora
+ * @author Gilles Mora, version hors QCM  : Stéphane Guyon
  *
  */
 export default class AutoC15g extends ExerciceQcmACourt {
@@ -34,11 +34,11 @@ export default class AutoC15g extends ExerciceQcmACourt {
     this.enonce = `Pour le petit déjeuner, ${prenom} a acheté $${nbViennoiseries}$ viennoiseries.<br>
 Il a payé $${texPrix(prixTotal)}$ €.<br>
 On désigne par $x$ le prix d'une viennoiserie.<br>
-Parmi les équations suivantes, une seule modélise la situation. Laquelle ?`
+Parmi les équations suivantes, une seule modélise la situation. Laquelle ?<br>On ne demande ni de résoudre l’équation, ni de donner les solutions.`
 
     this.correction = `Le prix total est égal au nombre de viennoiseries multiplié par le prix unitaire.<br>
-On a donc : $${nbViennoiseries} \\times x = ${texPrix(prixTotal)}$<br>
-L'équation qui modélise la situation est $${miseEnEvidence(`${nbViennoiseries}x=${texPrix(prixTotal)}`)}$.`
+On a donc : $${nbViennoiseries} \\times x = ${texPrix(prixTotal)}$.<br>
+Une équation qui modélise la situation est : $${miseEnEvidence(`${nbViennoiseries}x=${texPrix(prixTotal)}`)}$.`
 
     this.reponses = [
       `$${nbViennoiseries}x=${texPrix(prixTotal)}$`,
@@ -60,14 +60,13 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbViennoiseries}
     this.enonce = `Pour le petit déjeuner, ${prenom} a acheté $${nbBrioches}$ brioches et $${nbCroissants}$ croissants.<br>
 Le prix d'un croissant est $${texPrix(prixCroissant)}$ € et il a payé au total $${texPrix(prixTotal)}$ €.<br>
 On désigne par $x$ le prix d'une brioche.<br>
-Parmi les équations suivantes, une seule modélise la situation. Laquelle ?`
+Parmi les équations suivantes, une seule modélise la situation. Laquelle ?<br>On ne demande ni de résoudre l’équation, ni de donner les solutions.`
 
     this.correction = `Le prix total est égal au prix des brioches plus le prix des croissants.<br>
-Prix des brioches : $${nbBrioches}x$<br>
-Prix des croissants : $${nbCroissants} \\times ${texPrix(prixCroissant)} = 
- ${choix ? `` : `${texPrix(nbCroissants * prixCroissant)}`}$<br>
-${choix ? `Comme le nombre de brioches est égal au nombre de croissants, on a donc : $${nbBrioches}(x+${texPrix(prixCroissant)})=${texPrix(prixTotal)}$<br>` : ``}
-L'équation qui modélise la situation est ${choix ? `$${miseEnEvidence(`${nbBrioches}(x+${texPrix(prixCroissant)})=${texPrix(prixTotal)}`)}$` : `$${miseEnEvidence(`${nbBrioches}x+${texPrix(nbCroissants * prixCroissant)}=${texPrix(prixTotal)}`)}$`}.`
+Le prix des brioches, en euros, est $${nbBrioches}x$.<br>
+Le prix des croissants, en euros, est $${nbCroissants} \\times ${texPrix(prixCroissant)} = ${texPrix(nbCroissants * prixCroissant)}$.<br>
+${choix ? `Comme le nombre de brioches est égal au nombre de croissants, on a donc : $${nbBrioches}(x+${texPrix(prixCroissant)})=${texPrix(prixTotal)}$.<br>` : ``}
+Une équation qui modélise la situation est : ${choix ? `$${miseEnEvidence(`${nbBrioches}(x+${texPrix(prixCroissant)})=${texPrix(prixTotal)}`)}$` : `$${miseEnEvidence(`${nbBrioches}x+${texPrix(nbCroissants * prixCroissant)}=${texPrix(prixTotal)}`)}$`}.`
 
     this.reponses = [
       choix
@@ -88,13 +87,13 @@ L'équation qui modélise la situation est ${choix ? `$${miseEnEvidence(`${nbBri
     this.enonce = `Pour le petit déjeuner, Yassine a acheté $1$ brioche et $${nbCroissants}$ croissants.<br>
 Le prix d'un croissant est $${texPrix(prixCroissant)}$ € et il a payé au total $${texPrix(prixTotal)}$ €.<br>
 On désigne par $x$ le prix d'une brioche.<br>
-Parmi les équations suivantes, une seule modélise la situation. Laquelle ?`
+Parmi les équations suivantes, une seule modélise la situation. Laquelle ?<br>On ne demande ni de résoudre l’équation, ni de donner les solutions.`
 
     this.correction = `Le prix total est égal au prix de la brioche plus le prix des croissants.<br>
-Prix de la brioche : $x$<br>
-Prix des croissants : $${nbCroissants} \\times ${texPrix(prixCroissant)} = ${texPrix(nbCroissants * prixCroissant)}$<br>
-On a donc : $x + ${texPrix(nbCroissants * prixCroissant)} = ${texPrix(prixTotal)}$<br>
-L'équation qui modélise la situation est $${miseEnEvidence(`x+${texPrix(nbCroissants * prixCroissant)}=${texPrix(prixTotal)}`)}$.`
+Le prix de la brioche, en euros, est $x$.<br>
+Le prix des croissants, en euros, est $${nbCroissants} \\times ${texPrix(prixCroissant)} = ${texPrix(nbCroissants * prixCroissant)}$.<br>
+On a donc : $x + ${texPrix(nbCroissants * prixCroissant)} = ${texPrix(prixTotal)}$.<br>
+Une équation qui modélise la situation est : $${miseEnEvidence(`x+${texPrix(nbCroissants * prixCroissant)}=${texPrix(prixTotal)}`)}$.`
 
     this.reponses = [
       `$x+${texPrix(nbCroissants * prixCroissant)}=${texPrix(prixTotal)}$`,
@@ -119,13 +118,13 @@ Il a acheté ${texteMultiplicateur} plus de croissants que de brioches.<br>
 Le prix d'un croissant est $${texPrix(prixCroissant)}$ € et celui d'une brioche est $${texPrix(prixBrioche)}$ €.<br>
 Il a payé au total $${texPrix(prixTotal)}$ €.<br>
 On désigne par $x$ le nombre de brioches achetées.<br>
-Parmi les équations suivantes, une seule modélise la situation. Laquelle ?`
+Parmi les équations suivantes, une seule modélise la situation. Laquelle ?<br>On ne demande ni de résoudre l’équation, ni de donner les solutions.`
 
-    this.correction = `Nombre de brioches : $x$<br>
-Nombre de croissants : $${multiplicateur}x$<br>
-Prix des brioches : $x \\times ${texPrix(prixBrioche)} = ${texPrix(prixBrioche)}x$<br>
-Prix des croissants : $${multiplicateur}x \\times ${texPrix(prixCroissant)} = ${texPrix(multiplicateur * prixCroissant)}x$<br>
-L'équation qui modélise la situation est $${miseEnEvidence(`${texPrix(prixBrioche)}x+${texPrix(multiplicateur * prixCroissant)}x=${texPrix(prixTotal)}`)}$.`
+    this.correction = `Le nombre de brioches est $x$.<br>
+Le nombre de croissants est $${multiplicateur}x$.<br>
+Le prix des brioches, en euros, est $x \\times ${texPrix(prixBrioche)} = ${texPrix(prixBrioche)}x$.<br>
+Le prix des croissants, en euros, est $${multiplicateur}x \\times ${texPrix(prixCroissant)} = ${texPrix(multiplicateur * prixCroissant)}x$.<br>
+Une équation qui modélise la situation est : $${miseEnEvidence(`${texPrix(prixBrioche)}x+${texPrix(multiplicateur * prixCroissant)}x=${texPrix(prixTotal)}`)}$.`
 
     this.reponses = [
       `$${texPrix(prixBrioche)}x+${texPrix(multiplicateur * prixCroissant)}x=${texPrix(prixTotal)}$`,
@@ -149,13 +148,13 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${texPrix(prixBrio
 Le prix d'une brioche est $${centimes}$ centimes plus cher que celui d'un croissant.<br>
 Il a payé au total $${texPrix(prixTotal)}$ €.<br>
 On désigne par $x$ le prix d'un croissant.<br>
-Parmi les équations suivantes, une seule modélise la situation. Laquelle ?`
+Parmi les équations suivantes, une seule modélise la situation. Laquelle ?<br>On ne demande ni de résoudre l’équation, ni de donner les solutions.`
 
-    this.correction = `Prix d'un croissant : $x$<br>
-Prix d'une brioche : $x + ${texPrix(supplementBrioche)}$<br>
-Prix des croissants : $${nbCroissants}x$<br>
-Prix des brioches : $${nbBrioches}(x + ${texPrix(supplementBrioche)}) = ${nbBrioches}x + ${texPrix(nbBrioches * supplementBrioche)}$<br>
-L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants + nbBrioches}x+${texPrix(nbBrioches * supplementBrioche)}=${texPrix(prixTotal)}`)}$.`
+    this.correction = `Le prix d’un croissant, en euros, est $x$.<br>
+Le prix d’une brioche, en euros, est $x + ${texPrix(supplementBrioche)}$.<br>
+Le prix des croissants, en euros, est $${nbCroissants}x$.<br>
+Le prix des brioches, en euros, est $${nbBrioches}(x + ${texPrix(supplementBrioche)}) = ${nbBrioches}x + ${texPrix(nbBrioches * supplementBrioche)}$.<br>
+Une équation qui modélise la situation est : $${miseEnEvidence(`${nbCroissants + nbBrioches}x+${texPrix(nbBrioches * supplementBrioche)}=${texPrix(prixTotal)}`)}$.`
 
     this.reponses = [
       `$${nbCroissants + nbBrioches}x+${texPrix(nbBrioches * supplementBrioche)}=${texPrix(prixTotal)}$`,
@@ -177,13 +176,13 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants + n
 Le prix d'un croissant est $${texPrix(prixCroissant)}$ € et celui d'une brioche est $${texPrix(prixBrioche)}$ €.<br>
 Il a payé au total $${texPrix(prixTotal)}$ €.<br>
 On désigne par $x$ le nombre de croissants achetés.<br>
-Parmi les équations suivantes, une seule modélise la situation. Laquelle ?`
+Parmi les équations suivantes, une seule modélise la situation. Laquelle ?<br>On ne demande ni de résoudre l’équation, ni de donner les solutions.`
 
-    this.correction = `Nombre de croissants : $x$<br>
-Nombre de brioches : $${nbTotal} - x$<br>
-Prix des croissants : $${texPrix(prixCroissant)}x$<br>
-Prix des brioches : $${texPrix(prixBrioche)}(${nbTotal} - x)$<br>
-L'équation qui modélise la situation est $${miseEnEvidence(`${texPrix(prixCroissant)}x+${texPrix(prixBrioche)}(${nbTotal}-x)=${texPrix(prixTotal)}`)}$.`
+    this.correction = `Le nombre de croissants est $x$.<br>
+Le nombre de brioches est $${nbTotal} - x$.<br>
+Le prix des croissants, en euros, est $${texPrix(prixCroissant)}x$.<br>
+Le prix des brioches, en euros, est $${texPrix(prixBrioche)}(${nbTotal} - x)$.<br>
+Une équation qui modélise la situation est : $${miseEnEvidence(`${texPrix(prixCroissant)}x+${texPrix(prixBrioche)}(${nbTotal}-x)=${texPrix(prixTotal)}`)}$.`
 
     this.reponses = [
       `$${texPrix(prixCroissant)}x+${texPrix(prixBrioche)}(${nbTotal}-x)=${texPrix(prixTotal)}$`,
@@ -204,12 +203,12 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${texPrix(prixCroi
 Il bénéficie d'une réduction de $${texPrix(reduction)}$ € sur le prix total.<br>
 Il paie (réduction déduite) $${texPrix(prixTotal)}$ €.<br>
 On désigne par $x$ le prix d'un croissant.<br>
-Parmi les équations suivantes, une seule modélise la situation. Laquelle ?`
+Parmi les équations suivantes, une seule modélise la situation. Laquelle ?<br>On ne demande ni de résoudre l’équation, ni de donner les solutions.`
 
-    this.correction = `Prix sans réduction : $${nbCroissants}x$<br>
-Réduction : $${texPrix(reduction)}$ €<br>
-Prix payé : $${nbCroissants}x - ${texPrix(reduction)} = ${texPrix(prixTotal)}$<br>
-L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants}x-${texPrix(reduction)}=${texPrix(prixTotal)}`)}$.`
+    this.correction = `Le prix total avant réduction, en euros, est $${nbCroissants}x$.<br>
+Le montant de la réduction est $${texPrix(reduction)}$ €.<br>
+Le prix payé est donc donné par l’égalité $${nbCroissants}x - ${texPrix(reduction)} = ${texPrix(prixTotal)}$.<br>
+Une équation qui modélise la situation est : $${miseEnEvidence(`${nbCroissants}x-${texPrix(reduction)}=${texPrix(prixTotal)}`)}$.`
 
     this.reponses = [
       `$${nbCroissants}x-${texPrix(reduction)}=${texPrix(prixTotal)}$`,
@@ -331,7 +330,11 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants}x-$
   constructor() {
     super()
     this.clavierReponseCourte = 'lycee'
-    this.enonceCourt = () => this.enonce.replace(/Parmi les équations suivantes, une seule modélise la situation\. Laquelle \?/, 'Écrire une équation qui modélise la situation.')
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        /Parmi les équations suivantes, une seule modélise la situation\. Laquelle \?/,
+        'Écrire une équation qui modélise la situation.',
+      )
     this.versionAleatoire()
     this.spacing = 1.5
   }
