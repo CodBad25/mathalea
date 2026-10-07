@@ -8,7 +8,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import { nombreElementsDifferents } from '../ExerciceQcm'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const uuid = '97101'
 export const refs = {
@@ -18,14 +18,17 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = "Calculer un taux d'évolution entre deux grandeurs"
 export const dateDePublication = '10/07/2025'
 /**
  * @author Stéphane Guyon
  */
 
-export default class TauxEvolution extends ExerciceQcmA {
+export default class TauxEvolution extends ExerciceQcmACourt {
+  // Données du dernier tirage, utilisées par la saisie courte
+  private taux = 0
+  private correctionSaisie = ''
+
   private appliquerLesValeurs(
     valeurInitiale: number,
     valeurFinale: number,
@@ -60,6 +63,13 @@ export default class TauxEvolution extends ExerciceQcmA {
     $t=\\dfrac{${texNombre(valeurFinale)} - ${texNombre(valeurInitiale)}}{${texNombre(valeurInitiale)}}  = ${texNombre(taux / 100, 4)}=${new FractionEtendue(taux, 100).texFractionSignee}=${texNombre(taux)}\\,\\%  $<br>
     Le taux d'évolution est donc ${bonneReponseColoree}.`
     this.reponse = ` $${texNombre(Math.round(abs(taux)))}\\, \\%$`
+
+    this.taux = taux
+    this.correctionSaisie = `Le taux d'évolution $t$ est donné par la formule :<br>
+    $t = \\dfrac{\\text{valeur finale} - \\text{valeur initiale}}{\\text{valeur initiale}}$<br><br>
+    Ici :
+    $t=\\dfrac{${texNombre(valeurFinale)} - ${texNombre(valeurInitiale)}}{${texNombre(valeurInitiale)}}  = ${texNombre(taux / 100, 4)}=${new FractionEtendue(taux, 100).texFractionSignee}$.<br>
+    Le taux d'évolution est donc $t=${miseEnEvidence(texNombre(taux))}\\,\\%$ : c'est une ${evo} de $${texNombre(abs(taux))}\\,\\%$.`
   }
 
   versionOriginale: () => void = () => {
@@ -102,6 +112,19 @@ export default class TauxEvolution extends ExerciceQcmA {
   constructor() {
     super()
     this.options.vertical = true
+    this.options.compact = true // moins d'espace avant les propositions du QCM
+    // Version sans QCM : l'élève donne le taux d'évolution (signé) en pourcentage
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        "L'évolution est :",
+        "Quel est le taux d'évolution de cette grandeur ?",
+      )
+    this.reponseCourte = () => String(this.taux)
+    this.optionsChampReponseCourte = {
+      texteAvant: '$t=$',
+      texteApres: '$\\,\\%$',
+    }
+    this.correctionCourte = () => this.correctionSaisie
     this.versionAleatoire()
   }
 }
