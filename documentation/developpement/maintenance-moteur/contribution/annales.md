@@ -9,7 +9,7 @@ exercice par exercice pour être proposées dans MathALÉA. La procédure utilis
 - `tasks/dicosDnbBacE3c/dicosManage.py`, dans ce dépôt, qui ajoute les
   exercices découpés aux dictionnaires de MathALÉA.
 
-Python 3 est nécessaire. Sous macOS, installer aussi `poppler` et
+Python 3 et Node.js (la version du projet) sont nécessaires. Sous macOS, installer aussi `poppler` et
 `imagemagick` (`brew install poppler imagemagick`).
 
 | Objectif | Étapes |
@@ -108,6 +108,55 @@ fichier ne se termine pas par l'accolade fermante de l'objet exporté.
 
 Supprimer ensuite les sujets copiés dans `tasks/dicosDnbBacE3c` : ils ne
 doivent pas être committés dans MathALÉA.
+
+### Déclarer les nouvelles sessions et vérifier la génération
+
+`dicosManage.py` complète aussi `src/json/referentielStaticFRSessions.json`
+depuis les métadonnées du dictionnaire sélectionné, y compris celles des
+entrées déjà présentes. Depuis l'allègement du référentiel FR, cette table
+est nécessaire pour reconstruire les métadonnées des annales. Elle se trouve
+dans le dépôt MathALÉA, pas dans les dépôts de fichiers découpés.
+
+Pour chaque nouvelle session d'examen, le script ajoute une entrée dans l'objet
+`sessions` de ce fichier. La clé est l'uuid sans son dernier segment : les
+exercices `dnb_2026_09_metropole_1`, `dnb_2026_09_metropole_2` et
+`dnb_2026_09_metropole_automatismes` partagent ainsi une seule entrée :
+
+```json
+"dnb_2026_09_metropole": {
+  "annee": "2026",
+  "mois": "Septembre",
+  "lieu": "Métropole",
+  "typeExercice": "dnb"
+}
+```
+
+Le script reprend exactement les métadonnées du dictionnaire, y compris `jour`
+et `filiere` lorsqu'ils sont présents. Il complète les exceptions de
+numérotation (`numeroOverrides`) et les métadonnées distinctes d'exercices
+partageant une nouvelle clé de session (`entryOverrides`). Les entrées
+existantes de la table sont conservées. En cas de conflit, il signale l'uuid
+concerné et n'écrit pas la table : vérifier alors le dictionnaire et la table.
+FlashBAC n'est pas concerné par le référentiel statique FR.
+
+Une session déjà déclarée ne nécessite pas une nouvelle entrée pour chaque
+exercice ajouté. Une correction des fichiers LaTeX ou des étiquettes ne
+nécessite pas de modifier cette table. Les ajouts manuels aux dictionnaires
+doivent aussi déclarer leurs nouvelles sessions, ou être suivis d'une
+exécution de la moulinette sur le dictionnaire concerné.
+
+Depuis la racine de MathALÉA, lancer ensuite `pnpm makeJson` avant de pousser.
+Cette commande vérifie la table et génère les référentiels ; elle ne complète
+pas automatiquement les sessions manquantes. Committer les modifications du
+dictionnaire et de la table ensemble. Pour les exceptions de numérotation ou
+de métadonnées, voir la
+[procédure détaillée des référentiels](../architecture/menu-exercices.md#allègement-de-referentielstaticfrjson--champs-déduits-de-luuid).
+
+Les tests de la synchronisation utilisent la bibliothèque standard Python :
+
+```sh
+python3 -m unittest discover -s tests/python -p 'test_dicos_manage.py'
+```
 
 ## 5. Modifier les étiquettes
 

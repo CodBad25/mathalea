@@ -10,6 +10,9 @@ pass
 
 # On importe la librairie os pour gérer les fichiers
 import os
+import json
+import re
+from pathlib import Path
 # Pour lancer Prettier sur le dictionnaire modifié
 import subprocess
 
@@ -273,6 +276,8 @@ def insertNewEntries(pathName:str,dicoPath:str,dicoType:str):
     if not lines or lines[-1].strip() != '}':
         raise SystemExit(f"{dicoPath} doit se terminer par une ligne '}}' : fichier non modifié.")
     del lines[-1]
+    while lines and lines[-1].strip() == '':
+        del lines[-1]
     # On ouvre le fichier en écriture
     # On le réécrit complètement sans l'accolade fermante
     content = open(dicoPath,'w',encoding='utf8')
@@ -302,7 +307,66 @@ def insertNewEntries(pathName:str,dicoPath:str,dicoType:str):
     content.writelines(lastAcc)
     content.close()
 
-def manageDico(dicoPath:str,dicoType:str):
+def syncSessions(dicoPath:str, sessionsPath=None):
+    """Complète la table depuis le dictionnaire, sans écraser les corrections manuelles."""
+    if sessionsPath is None:
+        sessionsPath = Path(__file__).resolve().parents[2] / 'src/json/referentielStaticFRSessions.json'
+    sessionsPath = Path(sessionsPath)
+    # Node lit l'objet TypeScript : les étiquettes et métadonnées existantes
+    # restent la source de vérité, plutôt que les seuls noms de fichiers.
+    result = subprocess.run([
+        'node', '--experimental-strip-types', '--input-type=module', '-e',
+        '''import { pathToFileURL } from 'node:url';
+const module = await import(pathToFileURL(process.argv[1]).href);
+const key = Object.keys(module).find(key => key.startsWith('dictionnaire'));
+if (!key) throw new Error('Aucun dictionnaire exporté.');
+console.log(JSON.stringify(module[key]));''',
+        str(Path(dicoPath).resolve()),
+    ], check=True, capture_output=True, text=True)
+    dictionary = json.loads(result.stdout)
+    original = sessionsPath.read_text(encoding='utf8')
+    table = json.loads(original)
+    existingSessions = set(table['sessions'])
+    fields = ['typeExercice', 'annee', 'lieu', 'numeroInitial', 'mois', 'jour', 'filiere']
+    for uuid, entry in dictionary.items():
+        # FlashBAC n'est pas consommé par le référentiel statique FR.
+        if entry['typeExercice'] == 'flashbac':
+            continue
+        infos = {field: entry[field] for field in fields if field in entry}
+        for field in fields[:4]:
+            if field not in infos or not isinstance(infos[field], str):
+                raise ValueError(f'{uuid} : métadonnée {field} absente ou invalide.')
+        if uuid in table['entryOverrides']:
+            if table['entryOverrides'][uuid] != infos:
+                raise ValueError(f'{uuid} : conflit avec entryOverrides. Vérifier les métadonnées.')
+            continue
+        sessionKey, numeroCode = uuid.rsplit('_', 1)
+        session = {key: value for key, value in infos.items() if key != 'numeroInitial'}
+        if sessionKey not in table['sessions']:
+            table['sessions'][sessionKey] = session
+        elif table['sessions'][sessionKey] != session:
+            if sessionKey in existingSessions:
+                raise ValueError(f'{uuid} : conflit avec la session {sessionKey}. Vérifier les métadonnées.')
+            # Certaines annales partagent une clé mais ont des lieux distincts.
+            table['entryOverrides'][uuid] = infos
+            continue
+        numero = numeroCode
+        if entry['typeExercice'] == 'crpe':
+            match = re.fullmatch(r'ex0*(\d+)', numeroCode)
+            if match:
+                numero = match[1]
+            elif numeroCode == 'pb':
+                numero = 'Problème'
+        if uuid in table['numeroOverrides']:
+            if table['numeroOverrides'][uuid] != infos['numeroInitial']:
+                raise ValueError(f'{uuid} : conflit avec numeroOverrides. Vérifier la numérotation.')
+        elif numero != infos['numeroInitial']:
+            table['numeroOverrides'][uuid] = infos['numeroInitial']
+    if table != json.loads(original):
+        sessionsPath.write_text(json.dumps(table, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+        print('Table des sessions mise à jour :', sessionsPath)
+
+def manageDico(dicoPath:str,dicoType:str, sessionsPath=None):
     """Une procedure pour la gestion du dico
 
     **Paramètres**
@@ -348,6 +412,8 @@ def manageDico(dicoPath:str,dicoType:str):
         subprocess.run([prettier, '--write', dicoPath], check=False)
     else:
         print(f'Penser à formater {dicoPath} avec "pnpm exec prettier --write".')
+
+    syncSessions(dicoPath, sessionsPath)
 
 # Script principal
 def main():
@@ -432,4 +498,3 @@ Taper 1, 2, 3, 4, 5, 6, 7, 8 ou 9 pour lancer le script --> """)
  
 if __name__ == "__main__":
     main()
-
