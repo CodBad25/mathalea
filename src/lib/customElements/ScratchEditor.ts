@@ -11,19 +11,21 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
+// Couleurs principale, secondaire et tertiaire (contour) de Scratch 3.
+// Le contour distingue visuellement les blocs imbriqués les uns dans les autres.
 const scratchCategoryColours = {
-  control: '#FFAB19',
-  data: '#FF8C1A',
-  data_lists: '#FF661A',
-  sounds: '#CF63CF',
-  motion: '#4C97FF',
-  looks: '#9966FF',
-  event: '#FFBF00',
-  sensing: '#5CB1D6',
-  pen: '#0FBD8C',
-  operators: '#59C059',
-  more: '#FF6680',
-  textField: '#FFFFFF',
+  control: ['#FFAB19', '#EC9C13', '#CF8B17'],
+  data: ['#FF8C1A', '#FF8000', '#DB6E00'],
+  data_lists: ['#FF661A', '#FF5500', '#E64D00'],
+  sounds: ['#CF63CF', '#C94FC9', '#BD42BD'],
+  motion: ['#4C97FF', '#4280D7', '#3373CC'],
+  looks: ['#9966FF', '#855CD6', '#774DCB'],
+  event: ['#FFBF00', '#E6AC00', '#CC9900'],
+  sensing: ['#5CB1D6', '#47A8D1', '#2E8EB8'],
+  pen: ['#0FBD8C', '#0DA57A', '#0B8E69'],
+  operators: ['#59C059', '#46B946', '#389438'],
+  more: ['#FF6680', '#FF4D6A', '#FF3355'],
+  textField: ['#FFFFFF', '#FFFFFF', '#FFFFFF'],
 }
 
 // Le moteur Scratch 2 attend une couleur tertiaire pour chaque style Blockly.
@@ -44,12 +46,12 @@ const scratchTheme = scratchBlocks.Theme.defineTheme('mathalea-scratch', {
       ),
     ),
     ...Object.fromEntries(
-      Object.entries(scratchCategoryColours).map(([name, colour]) => [
+      Object.entries(scratchCategoryColours).map(([name, colours]) => [
         name,
         {
-          colourPrimary: colour,
-          colourSecondary: colour,
-          colourTertiary: colour,
+          colourPrimary: colours[0],
+          colourSecondary: colours[1],
+          colourTertiary: colours[2],
         },
       ]),
     ),

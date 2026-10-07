@@ -307,6 +307,161 @@ export function evaluateArithmeticAst(node: ArithmeticAst): number {
   return left / right
 }
 
+const arithmeticOperationNames: Record<ArithmeticOperation, string> = {
+  plus: "l'addition",
+  moins: 'la soustraction',
+  multi: 'la multiplication',
+  divise: 'la division',
+}
+
+/**
+ * Indique si le calcul `node` est écrit entre parenthèses dans `arithmeticAstToLatex()`.
+ */
+function isArithmeticNodeWrapped(
+  node: ArithmeticAst,
+  parent: ArithmeticAst | null,
+  isRightChild: boolean,
+  preferDivToFrac: boolean,
+): boolean {
+  if (node.type === 'number' || parent == null || parent.type === 'number') {
+    return false
+  }
+  if (node.op === 'divise' && !preferDivToFrac) return false
+  if (parent.op === 'divise' && !preferDivToFrac) return false
+  const precedence = getArithmeticPrecedence(node.op)
+  const parentPrecedence = getArithmeticPrecedence(parent.op)
+  return (
+    precedence < parentPrecedence ||
+    (isRightChild && precedence === parentPrecedence && node.op !== 'plus')
+  )
+}
+
+/**
+ * Décrit l'ordre des calculs puis l'imbrication des blocs correspondant à `ast`.
+ * Chaque élément du tableau est une ligne de la correction (le LaTeX est entre `$`).
+ */
+export function describeArithmeticAstCorrection(
+  ast: ArithmeticAst,
+  preferDivToFrac: boolean,
+): string[] {
+  if (ast.type === 'number') return []
+  const latex = (node: ArithmeticAst) =>
+    `$${arithmeticAstToLatex(node, preferDivToFrac)}$`
+
+  // Opérations dans l'ordre où on les effectue (les calculs internes d'abord)
+  const steps: {
+    node: ArithmeticAst
+    reason: string
+  }[] = []
+  const walk = (
+    node: ArithmeticAst,
+    parent: ArithmeticAst | null,
+    isRightChild: boolean,
+  ): void => {
+    if (node.type === 'number') return
+    walk(node.left, node, false)
+    walk(node.right, node, true)
+    let reason = ''
+    if (parent != null && parent.type === 'operation') {
+      if (parent.op === 'divise' && !preferDivToFrac) {
+        reason = isRightChild
+          ? ' (calcul du dénominateur)'
+          : ' (calcul du numérateur)'
+      } else if (
+        isArithmeticNodeWrapped(node, parent, isRightChild, preferDivToFrac)
+      ) {
+        reason = ' (calcul entre parenthèses)'
+      } else if (
+        (node.op === 'multi' || node.op === 'divise') &&
+        (parent.op === 'plus' || parent.op === 'moins')
+      ) {
+        reason = ` (prioritaire sur ${arithmeticOperationNames[parent.op]})`
+      }
+    }
+    steps.push({ node, reason })
+  }
+  walk(ast, null, false)
+
+  const lines: string[] = []
+  if (steps.length === 1) {
+    lines.push(`Il n'y a qu'une seule opération : ${arithmeticOperationNames[ast.op]}.`)
+  } else {
+    steps.forEach(({ node, reason }, index) => {
+      if (node.type === 'number') return
+      const rank =
+        index === 0
+          ? 'En premier'
+          : index === steps.length - 1
+            ? 'En dernier'
+            : 'Ensuite'
+      lines.push(
+        `${rank}, on effectue ${arithmeticOperationNames[node.op]} ${latex(node)}${reason}.`,
+      )
+    })
+  }
+
+  // Imbrication des blocs, de la dernière opération vers les premières
+  const describeChild = (child: ArithmeticAst): string =>
+    child.type === 'number'
+      ? `le nombre $${child.value}$`
+      : `le bloc de ${arithmeticOperationNames[child.op]} ${latex(child)}`
+  lines.push(
+    `Dans le bloc « dire », on place le bloc de la dernière opération : ${arithmeticOperationNames[ast.op]}.`,
+  )
+  const nest = (node: ArithmeticAst): void => {
+    if (node.type === 'number') return
+    lines.push(
+      `Le bloc de ${arithmeticOperationNames[node.op]} ${latex(node)} contient à gauche ${describeChild(node.left)} et à droite ${describeChild(node.right)}.`,
+    )
+    nest(node.left)
+    nest(node.right)
+  }
+  nest(ast)
+  return lines
+}
+
+function collectArithmeticNumbers(node: ArithmeticAst, acc: number[]): number[] {
+  if (node.type === 'number') acc.push(node.value)
+  else {
+    collectArithmeticNumbers(node.left, acc)
+    collectArithmeticNumbers(node.right, acc)
+  }
+  return acc
+}
+
+/**
+ * Message d'aide à l'élève dont le programme ne correspond pas au calcul attendu.
+ * Il rappelle le calcul réellement codé (indiscernable à l'œil sur les blocs imbriqués)
+ * puis oriente vers l'erreur la plus probable.
+ */
+export function arithmeticMismatchFeedback(
+  studentAst: ArithmeticAst,
+  expectedAst: ArithmeticAst,
+  preferDivToFrac: boolean,
+): string {
+  const parts = [
+    `Ton programme calcule $${arithmeticAstToLatex(studentAst, preferDivToFrac)}$ alors que le calcul à traduire est $${arithmeticAstToLatex(expectedAst, preferDivToFrac)}$.`,
+  ]
+  const sortedNumbers = (node: ArithmeticAst) =>
+    collectArithmeticNumbers(node, []).sort((a, b) => a - b).join(',')
+  if (sortedNumbers(studentAst) !== sortedNumbers(expectedAst)) {
+    parts.push('Vérifie les nombres utilisés.')
+  } else if (
+    studentAst.type === 'operation' &&
+    expectedAst.type === 'operation' &&
+    studentAst.op !== expectedAst.op
+  ) {
+    parts.push(
+      `Le bloc placé directement dans « dire » doit être celui de la dernière opération effectuée : ${arithmeticOperationNames[expectedAst.op]}.`,
+    )
+  } else {
+    parts.push(
+      "Vérifie quel bloc est placé dans quel autre : le bloc d'une opération prioritaire ou entre parenthèses doit être placé à l'intérieur du bloc de l'opération suivante.",
+    )
+  }
+  return parts.join('<br>')
+}
+
 export function hasAtLeastTwoOperationOccurrences(
   node: ArithmeticAst,
   operation: ArithmeticOperation,
