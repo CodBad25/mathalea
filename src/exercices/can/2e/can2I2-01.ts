@@ -108,7 +108,10 @@ export default class TauxCoeff extends ExerciceSimple {
     }
 
     if (!this.interactif && !this.versionQcm) {
-      this.question += ' .... '
+      // Pas de consigne en diaporama : la phrase à compléter suffit
+      this.question = context.isDiaporama
+        ? `${this.question} .... `
+        : `Compléter :<br>${this.question} .... `
     }
   }
 }
