@@ -459,8 +459,8 @@ export default class CourseAuxNombresCM extends Exercice {
               break
             case 3:
               texte = `Le quadruple du double de $${a}$`
-              texteCorr = `$${a} \\times 4=${miseEnEvidence(arrondi(a * 4))}$`
-              handleAnswers(this, i, { reponse: { value: arrondi(a * 4) } })
+              texteCorr = `$${a} \\times 2 \\times 4=${miseEnEvidence(arrondi(a * 8))}$`
+              handleAnswers(this, i, { reponse: { value: arrondi(a * 8) } })
               break
           }
           break
