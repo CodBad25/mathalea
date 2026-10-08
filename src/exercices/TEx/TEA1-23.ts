@@ -1,6 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -54,11 +55,11 @@ export default class DivisionEuclidienneSelonEntier extends Exercice {
       ],
       ['0', '1'],
       [
-        `${dividendConstant}`,
-        `${divisorConstant}`,
-        miseEnEvidence(remainderAtZero),
-        `${dividendAtOne}`,
-        `${divisorAtOne}`,
+        `${texNombre(dividendConstant)}`,
+        `${texNombre(divisorConstant)}`,
+        miseEnEvidence(texNombre(remainderAtZero)),
+        `${texNombre(dividendAtOne)}`,
+        `${texNombre(divisorAtOne)}`,
         miseEnEvidence('0'),
       ],
       1.5,
@@ -69,18 +70,18 @@ export default class DivisionEuclidienneSelonEntier extends Exercice {
 
     this.listeCorrections[0] = `Soit $n\\in \\mathbb{N}$. <br>
     L'écriture de la division euclidienne est unique : Il existe un unique couple d'entiers naturels $(q,r)$ vérifiant $${dividend}=q(${divisor})+r$ et $0\\leqslant r<${divisor}$.<br>
-    Si $q=${quotient}$, $${quotient}(${divisor})=${reduireAxPlusB(quotient * divisorCoefficient, quotient * divisorConstant, 'n')}$.<br>
-    Si $q=${quotient + 1}$, $${quotient + 1}(${divisor})=${reduireAxPlusB((quotient + 1) * divisorCoefficient, (quotient + 1) * divisorConstant, 'n')}$.<br>
-    On prend $q=${quotient}$. <br>
-    $${dividend}=${quotient}(${divisor})+(${remainder})$.<br>
-    Cette égalité traduit la division euclidienne de $${dividend}$ par $${divisor}$ si et seulement si $0\\leqslant ${remainder}<${divisor}$.<br>
-    Comme $n$ est un entier naturel, $${remainder}$ est toujours positif. La condition équivaut donc à :<br>
-    $${remainder}\\lt ${divisor}\\iff ${difference}\\lt ${reduireAxPlusB(difference, 0, 'n')}\\iff n>1$.<br>
-    Ainsi, pour $n\\geqslant2$, on obtient bien la division euclidienne, avec $${miseEnEvidence(`q=${quotient}`)}$ et $${miseEnEvidence(`r=${remainder}`)}$.<br>
+    On prend $q=${texNombre(quotient)}$.<br>
+    On cherche un entier naturel $r$ tel que $0\\leqslant r<${divisor}$, qui vérifie $${dividend}=${texNombre(quotient)}(${divisor})+r$.<br>
+    Il vient $r=${dividend}-${texNombre(quotient)}(${divisor})=${remainder}$.<br>
+    On obtient donc $${dividend}=${texNombre(quotient)}(${divisor})+(${remainder})$.<br>
+    Comme $n$ est un entier naturel, $r=${remainder}>0$.<br>
+    La condition $0\\leqslant r<${divisor}$ est donc équivalente à la suivante.<br>
+    $${remainder}\\lt ${divisor}\\iff ${texNombre(difference)}\\lt ${reduireAxPlusB(difference, 0, 'n')}\\iff n>1$<br>
+    Ainsi, pour $n\\geqslant2$, on obtient bien la division euclidienne, avec $${miseEnEvidence(`q=${texNombre(quotient)}`)}$ et $${miseEnEvidence(`r=${remainder}`)}$.<br>
     Il reste à examiner séparément les cas $n=0$ et $n=1$, pour lesquels cette condition n'est pas vérifiée.<br><br>
     ${tableauCasParticuliers}<br>
-    Pour $n=0$, $${dividendConstant}=${quotientAtZero}\\times${divisorConstant}+${remainderAtZero}$, donc $${miseEnEvidence(`q=${quotientAtZero}`)}$.<br>
-    Pour $n=1$, $${dividendAtOne}=${quotientAtOne}\\times${divisorAtOne}+0$, donc $${miseEnEvidence(`q=${quotientAtOne}`)}$.`
+    Pour $n=0$, alors $${texNombre(dividendConstant)}=${texNombre(quotientAtZero)}\\times${texNombre(divisorConstant)}+${texNombre(remainderAtZero)}$, donc $${miseEnEvidence(`q=${texNombre(quotientAtZero)}`)}$.<br>
+    Pour $n=1$, alors $${texNombre(dividendAtOne)}=${texNombre(quotientAtOne)}\\times${texNombre(divisorAtOne)}+0$, donc $${miseEnEvidence(`q=${texNombre(quotientAtOne)}`)}$.`
 
     listeQuestionsToContenu(this)
   }

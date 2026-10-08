@@ -3,6 +3,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -33,23 +34,23 @@ export default class QuotientEgalAuReste extends Exercice {
     const diviseur = randint(3, 7)
     const restes = Array.from({ length: diviseur }, (_, reste) => reste)
     const solutions = restes.map((reste) => (diviseur + 1) * reste)
-    const reponse = `\\{${solutions.join(';')}\\}`
+    const reponse = `\\{${solutions.map((solution) => texNombre(solution)).join(';')}\\}`
     const cas = restes.map(
       (reste) =>
-        `Si $r=${reste}$, alors $q=${reste}$ et $n=${diviseur}\\times ${reste}+${reste}=${(diviseur + 1) * reste}$.`,
+        `Si $r=${texNombre(reste)}$, alors $q=${texNombre(reste)}$ et $n=${texNombre(diviseur)}\\times ${texNombre(reste)}+${texNombre(reste)}=${texNombre((diviseur + 1) * reste)}$`,
     )
 
     this.listeQuestions[0] =
-      `Déterminer tous les entiers naturels $n$ qui, dans la division euclidienne par $${diviseur}$, donnent un quotient égal au reste.<br>` +
+      `Déterminer tous les entiers naturels $n$ qui, dans la division euclidienne par $${texNombre(diviseur)}$, donnent un quotient égal au reste.<br>` +
       ajouteChampTexteMathLive(this, 0, KeyboardType.clavierEnsemble, {
         texteAvant: ' $S=$',
       })
 
-    this.listeCorrections[0] = `Soit $n\\in\\mathbb N$. La division euclidienne de $n$ par $${diviseur}$ s’écrit $n=${diviseur}q+r$, avec $q\\in\\mathbb N$ et $r\\in\\{${restes.join(';')}\\}$.<br>
-    Le quotient étant égal au reste, on a $q=r$. Il suffit donc d’examiner toutes les valeurs possibles de $r$ :<br>
+    this.listeCorrections[0] = `Soit $n\\in\\mathbb N$. La division euclidienne de $n$ par $${texNombre(diviseur)}$ s’écrit $n=${texNombre(diviseur)}q+r$, avec $q\\in\\mathbb N$ et $r\\in\\{${restes.map((reste) => texNombre(reste)).join(';')}\\}$.<br>
+    Le quotient étant égal au reste, on a $q=r$ ; il suffit donc d’examiner toutes les valeurs possibles de $r$ :<br>
     ${createList({ items: cas, style: 'fleches' })}<br>
-    Dans chacune de ces égalités, on a $0\\leqslant r<${diviseur}$. Il s’agit donc bien de la division euclidienne de $n$ par $${diviseur}$. Son unicité garantit que la liste obtenue est exhaustive.<br>
-    Ainsi, l’ensemble des solutions est $S=${miseEnEvidence(reponse)}$.`
+    Dans chacune de ces égalités, on a $0\\leqslant r<${texNombre(diviseur)}$. Il s’agit donc bien de la division euclidienne de $n$ par $${texNombre(diviseur)}$. Son unicité garantit que la liste obtenue est exhaustive.<br>
+    Ainsi, l’ensemble des solutions est $S=${miseEnEvidence(reponse)}$`
 
     handleAnswers(this, 0, {
       reponse: { value: reponse, options: { ensembleDeNombres: true } },
