@@ -1,23 +1,25 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 7b84f continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 06/10/2026 (commit 4fd5a93fe).
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
-import ExerciceSimple from '../ExerciceSimple'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const titre = "Calculer le pourcentage d'une partie restante"
 export const dateDePublication = '09/07/2026'
-export const dateDeModifImportante = '06/10/2026'
-
-export const uuid = '28588'
+export const uuid = '7b84f'
 // @Author Stéphane Guyon
 export const refs = {
-  'fr-fr': ['1A-R01-8', '2A-R1-8'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 
 type Categorie = 'cadres' | 'techniciens' | 'employés'
 
@@ -71,7 +73,7 @@ function completePropositions(
   return propositions.slice(0, 4)
 }
 
-export default class PourcentagePartieRestante extends ExerciceSimple {
+export default class PourcentagePartieRestanteOld extends ExerciceQcmA {
   private appliquerLesValeurs({
     total,
     categorieEffectif,
@@ -83,6 +85,7 @@ export default class PourcentagePartieRestante extends ExerciceSimple {
   }: Donnees): void {
     const effectif = (total * pourcentageEffectif) / 100
     const pourcentageDemande = 100 - pourcentageEffectif - pourcentageFraction
+    const effectifDemandee = (total * pourcentageDemande) / 100
 
     const propositions: string[] = []
     ajoutePourcentageUnique(propositions, pourcentageDemande)
@@ -92,12 +95,10 @@ export default class PourcentagePartieRestante extends ExerciceSimple {
     ajoutePourcentageUnique(propositions, 100 - pourcentageFraction)
     ajoutePourcentageUnique(propositions, effectif)
 
-    this.question = `Une entreprise de $${total}$ salariés est composée de cadres, de techniciens et d'employés.<br>
+    this.enonce = `Une entreprise de $${total}$ salariés est composée de cadres, de techniciens et d'employés.<br>
     On compte $${effectif}$ ${categorieEffectif}.<br>
-    La proportion ${categorieFraction[0] === 'e' ? `d'${categorieFraction}` : `de ${categorieFraction}`} est égale à $${fraction.texFraction}$.<br>`
-    this.question += this.versionQcm
-      ? `Le pourcentage ${categorieDemandee[0] === 'e' ? `d'${categorieDemandee}` : `de ${categorieDemandee}`} parmi les salariés de l'entreprise est égal à :`
-      : `Quel est le pourcentage ${categorieDemandee[0] === 'e' ? `d'${categorieDemandee}` : `de ${categorieDemandee}`} parmi les salariés de l'entreprise ?`
+    La proportion ${categorieFraction[0] === 'e' ? `d'${categorieFraction}` : `de ${categorieFraction}`} est égale à $${fraction.texFraction}$.<br><br>
+    Le pourcentage ${categorieDemandee[0] === 'e' ? `d'${categorieDemandee}` : `de ${categorieDemandee}`} parmi les salariés de l'entreprise est égal à :`
 
     this.correction = `La proportion ${categorieEffectif[0] === 'e' ? `d'${categorieEffectif}` : `de ${categorieEffectif}`} est égale à :
     $\\dfrac{${effectif}}{${total}}=\\dfrac{${pourcentageEffectif}}{100}=${formatPourcentage(pourcentageEffectif)}$.<br>
@@ -106,19 +107,10 @@ export default class PourcentagePartieRestante extends ExerciceSimple {
     $100\\,\\%-${formatPourcentage(pourcentageEffectif)}-${formatPourcentage(pourcentageFraction)}=${formatPourcentage(pourcentageDemande)}$.<br>
     Donc $${miseEnEvidence(formatPourcentage(pourcentageDemande))}$ des salariés sont des ${categorieDemandee}.`
 
-    this.reponse = this.versionQcm
-      ? `$${formatPourcentage(pourcentageDemande)}$`
-      : pourcentageDemande
-    this.distracteurs = completePropositions(
-      propositions,
-      pourcentageDemande,
-    ).slice(1)
-    this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
-    this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots\\,\\%$'
+    this.reponses = completePropositions(propositions, pourcentageDemande)
   }
 
-  nouvelleVersion(): void {
+  versionAleatoire = (): void => {
     const categories: Categorie[] = ['cadres', 'techniciens', 'employés']
     const [categorieEffectif, categorieFraction, categorieDemandee] = choice([
       categories,
@@ -158,9 +150,7 @@ export default class PourcentagePartieRestante extends ExerciceSimple {
 
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.versionQcmDisponible = true
-    this.versionQcm = false
+    this.besoinFormulaireCaseACocher = false
+    this.versionAleatoire()
   }
 }
