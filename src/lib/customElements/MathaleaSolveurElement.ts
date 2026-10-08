@@ -16,6 +16,7 @@ import {
   IntervalleDroiteElement,
   type IntervalleDroiteValue,
 } from './IntervalleDroiteElement'
+import { evenementSolveurTermine } from './solveurTermine'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -181,9 +182,14 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     const expectedValues = Array.isArray(expected)
       ? expected.map(String)
       : [String(expected ?? '')]
-    const isSolved = expectedValues.some((candidate) =>
-      isConformToExpected(actual, candidate, element?.kind ?? 'equation'),
-    )
+    // Une étape équivalente à la solution (ex : `x+3-3=7-3`) ne suffit pas :
+    // la dernière ligne doit être la forme résolue, sans calcul à poursuivre.
+    const kind = element?.kind ?? 'equation'
+    const isSolved =
+      isSolvedForm(actual, kind, element?.getAttribute('variable') ?? 'x') &&
+      expectedValues.some((candidate) =>
+        isConformToExpected(actual, candidate, kind),
+      )
     const hasWrongStep = (element?.nbEtapesFausses ?? 0) > 0
     // En mode entrainement, le second « champ » vaut 1 si aucune étape n'est fausse.
     const points =
@@ -428,6 +434,10 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
       this.render()
     }
     this.dispatchEvent(new Event('change', { bubbles: true }))
+    if (!this.interactivityOn)
+      this.dispatchEvent(
+        new Event(evenementSolveurTermine, { bubbles: true, composed: true }),
+      )
   }
 
   private findPreviousValidLine(beforeIndex: number): string {
@@ -520,9 +530,22 @@ function isFinalNumber(expression: string, variable: string): boolean {
     .replace(/\s/g, '')
   const unsigned = '\\d+(?:[.,]\\d+)?'
   const signed = `[+-]?${unsigned}`
-  return new RegExp(
-    `^(?:${signed}|[+-]?\\\\[dt]?frac\\{${signed}\\}\\{${signed}\\})$`,
-  ).test(compact)
+  if (new RegExp(`^${signed}$`).test(compact)) return true
+  const fraction = new RegExp(
+    `^[+-]?\\\\[dt]?frac\\{(${signed})\\}\\{(${signed})\\}$`,
+  ).exec(compact)
+  if (fraction == null) return false
+  // Une fraction n'est terminale que si elle est irréductible (`6/2` ou `6/4`
+  // restent à simplifier).
+  const numerateur = Math.abs(Number(fraction[1].replace(',', '.')))
+  const denominateur = Math.abs(Number(fraction[2].replace(',', '.')))
+  if (!Number.isInteger(numerateur) || !Number.isInteger(denominateur))
+    return true
+  return denominateur > 1 && pgcd(numerateur, denominateur) === 1
+}
+
+function pgcd(a: number, b: number): number {
+  return b === 0 ? a : pgcd(b, a % b)
 }
 
 function splitEquation(

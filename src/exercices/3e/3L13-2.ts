@@ -261,7 +261,8 @@ $${texNombre(c, 4)}\\times ${inc} = ${texNombre(a, 2)}\\times ${ecritureParenthe
 ${texteEnCouleurEtGras(`On divise les deux membres par ${texNombre(c, 2)}`, bleuMathalea)}.<br>
 $\\dfrac{${texNombre(c, 4)}\\times ${inc}}{${texNombre(c, 4)}}= \\dfrac{${texNombre(a, 4)}\\times ${ecritureParentheseSiNegatif(b)}}{${texNombre(c, 4)}}$<br>
 ${texteEnCouleurEtGras('On simplifie et on calcule.', bleuMathalea)}<br>
-$${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
+$${inc}=${texNombre((b * a) / c, 4)}$<br>
+La solution de l'équation $${situations[k].eq}$ est $${miseEnEvidence(texNombre((b * a) / c, 4))}$.`,
           correctionInteractif: [((b * a) / c).toFixed(4)],
         })
       }
