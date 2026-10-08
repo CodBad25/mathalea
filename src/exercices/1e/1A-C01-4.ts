@@ -1,12 +1,18 @@
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { propositionsQcm } from '../../lib/interactif/qcm'
+import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
-import ExerciceSimple from '../ExerciceSimple'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import Exercice from '../Exercice'
 
-export const uuid = '46af7'
+export const uuid = '8cc86'
 export const refs = {
   'fr-fr': ['1A-C01-4', '2A-N1-3'],
   'fr-ch': [],
@@ -17,13 +23,13 @@ export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre = 'Ordonner des nombres par ordre croissant'
 export const dateDePublication = '28/08/2025'
-export const dateDeModifImportante = '02/10/2026'
+export const dateDeModifImportante = '08/10/2026'
 
 type Nombre = { tex: string; val: number }
 
 const mille = texNombre(1000)
 // Triplets de nombres à ranger : fractions et nombres décimaux mélangés
-const triplets: [Nombre, Nombre, Nombre][] = [
+const listeTriplets: [Nombre, Nombre, Nombre][] = [
   [
     { tex: '\\dfrac{2}{5}', val: 0.4 },
     { tex: '\\dfrac{37}{100}', val: 0.37 },
@@ -131,16 +137,14 @@ const triplets: [Nombre, Nombre, Nombre][] = [
  * @author Gilles Mora
  *
  */
-export default class OrdonnerCroissant extends ExerciceSimple {
+export default class OrdonnerCroissant extends Exercice {
   constructor() {
     super()
-    this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacing = 1.5
     this.spacingCorr = 1
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.versionQcmDisponible = true
-    this.versionQcm = false
+    this.besoinFormulaireCaseACocher = ['Version QCM', false]
+    this.sup = false
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     Pour comparer des nombres, selon les situations, il est souvent plus pratique de tous les écrire :
@@ -174,53 +178,102 @@ export default class OrdonnerCroissant extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    if (context.isAmc) this.versionQcm = true
-    this.formatInteractif = this.versionQcm ? 'mathlive' : 'fillInTheBlank'
+    const versionQcm = context.isAmc || Boolean(this.sup)
+    this.consigne = versionQcm
+      ? ''
+      : "Ranger les trois nombres dans l'ordre croissant."
+    const triplets = combinaisonListes(listeTriplets, this.nbQuestions)
 
-    const [a, b, c] = this.quotaChoice('triplet', triplets)
-    const nombresTries = [a, b, c].sort((x, y) => x.val - y.val)
-    const ordreCorrect = nombresTries
-      .map((n) => miseEnEvidence(n.tex))
-      .join(' < ')
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
+      const [a, b, c] = triplets[i]
+      const nombresTries = [a, b, c].sort((x, y) => x.val - y.val)
+      const ordre = (nombres: Nombre[]) => nombres.map((n) => n.tex).join(' < ')
+      const bonOrdre = ordre(nombresTries)
 
-    this.correction =
-      'Pour comparer ces trois nombres, on les écrit sous forme décimale :<br>' +
-      [a, b, c].map((n) => this.ligneCorrection(n)).join('') +
-      `On a donc : $${nombresTries.map((n) => texNombre(n.val, 3)).join(' < ')}$.<br>` +
-      `Finalement : $${ordreCorrect}$.`
+      const texteCorr =
+        'Pour comparer ces trois nombres, on les écrit sous forme décimale :<br>' +
+        [a, b, c].map((n) => this.ligneCorrection(n)).join('') +
+        `On a donc : $${nombresTries.map((n) => texNombre(n.val, 3)).join(' < ')}$.<br>` +
+        `Finalement : $${nombresTries.map((n) => miseEnEvidence(n.tex)).join(' < ')}$.`
+      let texte: string
+      let texteCorrFinale = texteCorr
 
-    if (this.versionQcm) {
-      this.consigne = ''
-      this.question = `Voici trois nombres.<br>$${a.tex}$ ${sp(6)} $${b.tex}$ ${sp(6)} $${c.tex}$<br>
+      if (versionQcm) {
+        texte = `Voici trois nombres.<br>$${a.tex}$ ${sp(6)} $${b.tex}$ ${sp(6)} $${c.tex}$<br>
     Le classement par ordre croissant de ces trois nombres est :`
-      this.reponse = `$${ordreCorrect}$`
-      this.distracteurs = [
-        `${a.tex} < ${b.tex} < ${c.tex}`,
-        `${a.tex} < ${c.tex} < ${b.tex}`,
-        `${b.tex} < ${a.tex} < ${c.tex}`,
-        `${b.tex} < ${c.tex} < ${a.tex}`,
-        `${c.tex} < ${a.tex} < ${b.tex}`,
-        `${c.tex} < ${b.tex} < ${a.tex}`,
-      ]
-        .filter((ordre) => ordre !== ordreCorrect)
-        .slice(0, 3)
-        .map((ordre) => `$${ordre}$`)
-    } else {
-      // Les nombres sont hors du champ : dans un tableau (`array`), MathLive affiche les fractions
-      // saisies en petit (\frac au lieu de \dfrac) et le smiley est décalé par rapport à la ligne de réponse.
-      this.consigne = `Ranger les trois nombres dans l'ordre croissant.<br><br>$${a.tex}\\qquad ${b.tex}\\qquad ${c.tex}$`
-      // Les pointillés ne s'affichent en HTML que si l'exercice est interactif
-      // (champs à remplir) ; en Typst et en LaTeX, ils servent de blancs à compléter.
-      this.question =
-        context.isHtml && !context.isTypst && !this.interactif
-          ? ''
-          : '%{champ1}<%{champ2}<%{champ3}'
-      this.reponse = {
-        bareme: toutPourUnPoint,
-        champ1: { value: nombresTries[0].tex },
-        champ2: { value: nombresTries[1].tex },
-        champ3: { value: nombresTries[2].tex },
+        const distracteurs = [
+          [a, b, c],
+          [a, c, b],
+          [b, a, c],
+          [b, c, a],
+          [c, a, b],
+          [c, b, a],
+        ]
+          .map(ordre)
+          .filter((o) => o !== bonOrdre)
+          .slice(0, 3)
+        const propositions = shuffle([bonOrdre, ...distracteurs]).map((o) => ({
+          texte: `$${o}$`,
+          statut: o === bonOrdre,
+        }))
+        const qcmOptions = { radio: true, vertical: true }
+        handleAnswers(
+          this,
+          i,
+          {
+            qcm: {
+              enonce: texte,
+              propositions,
+              correction: texteCorr,
+              options: qcmOptions,
+            },
+          },
+          { formatInteractif: 'mathalea-qcm' },
+        )
+        if (context.isHtml) {
+          texte += addMathaleaQcm(this, i, {
+            ...qcmOptions,
+            interactivityOn: this.interactif,
+          })
+        } else if (!context.isAmc) {
+          const qcmLatex = propositionsQcm(this, i)
+          texte += qcmLatex.texte
+          texteCorrFinale += qcmLatex.texteCorr
+        }
+      } else {
+        texte = `$${a.tex} ; ${b.tex} ; ${c.tex}.$`
+        // Les blancs n'apparaissent pas en HTML non interactif (pas de champ à remplir).
+        if (this.interactif || !context.isHtml || context.isTypst) {
+          texte +=
+            '<br><br>' +
+            remplisLesBlancs(
+              this,
+              i,
+              '%{champ1}<%{champ2}<%{champ3}',
+              'fillInTheBlank ' + KeyboardType.clavierDeBaseAvecFraction,
+            )
+        }
+        if (this.interactif) {
+          handleAnswers(
+            this,
+            i,
+            {
+              bareme: toutPourUnPoint,
+              champ1: { value: nombresTries[0].tex },
+              champ2: { value: nombresTries[1].tex },
+              champ3: { value: nombresTries[2].tex },
+            },
+            { formatInteractif: 'fillInTheBlank' },
+          )
+        }
+      }
+
+      if (this.questionJamaisPosee(i, a.tex, b.tex, c.tex)) {
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorrFinale
+        i++
       }
     }
+    listeQuestionsToContenu(this)
   }
 }
