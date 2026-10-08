@@ -903,14 +903,21 @@ le motif de `label` reprenant le style de numérotation choisi dans les
 Réglages du document (`1)` par défaut — voir [Styles des
 questions](#styles-des-questions-réglage-du-document)).
 
-- Une liste dont toutes les questions tiennent en ligne est passée telle
-  quelle au paquet (aucun changement de rendu).
-- Sinon, l'enrobage numérote lui-même : chaque question est décalée du
+- L'enrobage numérote lui-même chaque liste : chaque question est décalée du
   retrait de son étiquette (`pad`), et le numéro, posé en tête de la première
   ligne dans une boîte de largeur nulle, est ramené dans la marge ainsi
   libérée (`move`) — il partage la ligne du texte, donc sa ligne de base,
   quelle que soit la hauteur de celle-ci. Le paquet ne s'occupe alors plus
   que des colonnes (`label: none`).
+- Pour une liste dont toutes les questions sont en ligne, le retrait est celui
+  que le paquet aurait appliqué (largeur du numéro + écart, puis écart) : le
+  rendu est le même. Ces listes ne sont pas passées au paquet, car son chemin
+  « en ligne » met le numéro dans le paragraphe, à côté de la formule. Or le
+  `#show math.equation` du préambule enrobe chaque formule en ligne dans une
+  boîte insécable (pour caler sa ligne de base) : une formule presque aussi
+  large que la ligne ne tenait plus à côté du numéro et passait en dessous,
+  laissant « a) » seul sur sa ligne (décompositions d'entiers `CM2N1D-3`).
+  Avec un numéro de largeur nulle, la boîte tient dans la ligne.
 - Une question qui **commence** par un bloc (figure, tableau) n'a pas de
   ligne de texte où poser le numéro : elle garde la présentation en deux
   cellules alignées par le haut.
