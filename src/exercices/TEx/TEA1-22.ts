@@ -1,14 +1,16 @@
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import { choice } from '../../lib/outils/arrayOutils'
-import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { createList } from '../../lib/format/lists'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Déterminer si deux nombres sont congrus'
+export const titre =
+  'Déterminer des entiers à partir du quotient et du reste d’une division euclidienne'
+export const dateDePublication = '23/09/2026'
+export const uuid = '568c2'
 export const interactifReady = true
-export const dateDePublication = '04/09/2026'
-export const uuid = 'd0027'
 
 export const refs = {
   'fr-fr': ['TEA1-22'],
@@ -16,54 +18,42 @@ export const refs = {
 }
 
 /**
- * @author Arnaud Meistermann
+ * Déterminer les entiers naturels dont le quotient est égal au reste dans une
+ * division euclidienne par un entier aléatoire.
+ * @author Stéphane Guyon
  */
-export default class ExerciceCongruence extends Exercice {
+export default class QuotientEgalAuReste extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 2
+    this.nbQuestions = 1
+    this.nbQuestionsModifiable = false
   }
 
-  nouvelleVersion() {
-    this.consigne =
-      this.nbQuestions === 1
-        ? "L'affirmation suivante est-elle vraie ou fausse ?"
-        : 'Les affirmations suivantes sont-elles vraies ou fausses ?'
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
-      const a = randint(-50, 50)
-      const c = choice([3, 4, 5, 6, 7, 8, 9])
-      const resteDeA = ((a % c) + c) % c
-      const estVraie = choice([true, false])
-      const quotient = choice([-2, -1, 1, 2])
-      const b = estVraie ? a + c * quotient : (resteDeA + choice([1, 2])) % c
-      const difference = b - a
-      const texte = `$${a} \\equiv ${b} \\, [${c}]$`
-      const correction = estVraie
-        ? `Rappel : $a \\equiv b \\, [c]$ si et seulement si $b-a$ est divisible par $c$.<br>
-        $${ecritureParentheseSiMoins(b)}-${ecritureParentheseSiMoins(a)}=${difference}$<br>
-        Or, $${difference}$ est divisible par $${c}$.<br>${texteEnCouleurEtGras("L'affirmation est vraie.")}`
-        : `Rappel : $a \\equiv b \\, [c]$ si et seulement si $b-a$ est divisible par $c$.<br>
-        $${ecritureParentheseSiMoins(b)}-${ecritureParentheseSiMoins(a)}=${difference}$<br>
-        Or, $${difference}$ n'est pas divisible par $${c}$.<br>${texteEnCouleurEtGras("L'affirmation est fausse.")}`
+  nouvelleVersion(): void {
+    const diviseur = randint(3, 7)
+    const restes = Array.from({ length: diviseur }, (_, reste) => reste)
+    const solutions = restes.map((reste) => (diviseur + 1) * reste)
+    const reponse = `\\{${solutions.join(';')}\\}`
+    const cas = restes.map(
+      (reste) =>
+        `Si $r=${reste}$, alors $q=${reste}$ et $n=${diviseur}\\times ${reste}+${reste}=${(diviseur + 1) * reste}$.`,
+    )
 
-      this.autoCorrection[i] = {
-        options: { ordered: true, vertical: false, radio: true },
-        enonce: texte,
-        propositions: [
-          { texte: 'Vrai', statut: estVraie },
-          { texte: 'Faux', statut: !estVraie },
-        ],
-      }
-      const props = propositionsQcm(this, i)
-      const texteInteractif = this.interactif ? texte + props.texte : texte
+    this.listeQuestions[0] =
+      `Déterminer tous les entiers naturels $n$ qui, dans la division euclidienne par $${diviseur}$, donnent un quotient égal au reste.<br>` +
+      ajouteChampTexteMathLive(this, 0, KeyboardType.clavierEnsemble, {
+        texteAvant: ' $S=$',
+      })
 
-      if (this.questionJamaisPosee(i, texte)) {
-        this.listeQuestions[i] = texteInteractif
-        this.listeCorrections[i] = correction
-        i++
-      }
-      cpt++
-    }
+    this.listeCorrections[0] = `Soit $n\\in\\mathbb N$. La division euclidienne de $n$ par $${diviseur}$ s’écrit $n=${diviseur}q+r$, avec $q\\in\\mathbb N$ et $r\\in\\{${restes.join(';')}\\}$.<br>
+    Le quotient étant égal au reste, on a $q=r$. Il suffit donc d’examiner toutes les valeurs possibles de $r$ :<br>
+    ${createList({ items: cas, style: 'fleches' })}<br>
+    Dans chacune de ces égalités, on a $0\\leqslant r<${diviseur}$. Il s’agit donc bien de la division euclidienne de $n$ par $${diviseur}$. Son unicité garantit que la liste obtenue est exhaustive.<br>
+    Ainsi, l’ensemble des solutions est $S=${miseEnEvidence(reponse)}$.`
+
+    handleAnswers(this, 0, {
+      reponse: { value: reponse, options: { ensembleDeNombres: true } },
+    })
     listeQuestionsToContenu(this)
   }
 }
