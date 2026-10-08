@@ -38,6 +38,166 @@ export const refs = {
   'fr-fr': ['2I11-1', 'BP2SP8', 'BP1SP04'],
   'fr-ch': ['10FA2B-19'],
 }
+
+type Situation = 'spectacle' | 'cadeau' | 'réserve' | 'entreprise'
+type TypeDeQuestion = 'sous-population' | 'proportion' | 'population-totale'
+
+// Pourcentages qui permettent de retrouver facilement le total de tête (× 20, × 10, × 5, × 4, × 2)
+const tauxFacilesPourLeTotal = [5, 10, 20, 25, 50]
+
+/**
+ * Tire un effectif total et un pourcentage simples, calculables sans calculatrice :
+ * pourcentages usuels (10 %, 25 %, 50 %…) et effectifs « ronds » pour que la
+ * sous-population soit entière et facile à obtenir de tête.
+ * Pour retrouver la population totale, seuls les pourcentages les plus simples sont proposés.
+ * @returns [effectif total, pourcentage]
+ */
+function valeursSansCalculatrice(
+  situation: Situation,
+  typeDeQuestion: TypeDeQuestion,
+): [number, number] {
+  const tauxPossibles = (liste: number[]) =>
+    typeDeQuestion === 'population-totale'
+      ? liste.filter((taux) => tauxFacilesPourLeTotal.includes(taux))
+      : liste
+  switch (situation) {
+    case 'spectacle':
+      return [
+        100 * randint(2, 30),
+        choice(tauxPossibles([5, 10, 20, 25, 30, 40, 50, 75])),
+      ]
+    case 'réserve':
+      return [100 * randint(5, 30), choice([5, 10, 20, 25, 50])]
+    case 'cadeau': {
+      const taux = choice([10, 20, 25, 50])
+      return [choice([20, 40, 60, 80, 100, 120, 160, 200]), taux]
+    }
+    case 'entreprise':
+    default: {
+      const taux = choice(tauxPossibles([2, 5, 10, 20, 25, 30, 40, 50]))
+      const totale = choice(
+        [50, 100, 150, 200, 250, 300, 400, 500].filter(
+          (effectif) => (effectif * taux) % 100 === 0,
+        ),
+      )
+      return [totale, taux]
+    }
+  }
+}
+const pgcd = (a: number, b: number): number => (b === 0 ? a : pgcd(b, a % b))
+
+/**
+ * Calcul mental de taux % de total, présenté étape par étape.
+ * @returns [texte de la démarche, résultat]
+ */
+function pourcentageDeTete(taux: number, total: number): [string, number] {
+  const resultat = (taux * total) / 100
+  const t = texNombre(total, 0)
+  const r = texNombre(resultat, 0)
+  const pourcent = `$${taux}\\,\\%$`
+  switch (taux) {
+    case 50:
+      return [
+        `Prendre ${pourcent} d'une quantité, c'est en prendre la moitié : $${t} \\div 2 = ${r}$.`,
+        resultat,
+      ]
+    case 25:
+      return [
+        `Prendre ${pourcent} d'une quantité, c'est en prendre le quart : $${t} \\div 4 = ${r}$.`,
+        resultat,
+      ]
+    case 75: {
+      const quart = texNombre(total / 4, 0)
+      return [
+        `Prendre ${pourcent} d'une quantité, c'est en prendre les trois quarts.<br>Le quart de $${t}$ est $${t} \\div 4 = ${quart}$, donc les trois quarts sont $${quart} \\times 3 = ${r}$.`,
+        resultat,
+      ]
+    }
+    case 10:
+      return [
+        `Prendre ${pourcent} d'une quantité, c'est la diviser par $10$, soit $${t} \\div 10 = ${r}$.`,
+        resultat,
+      ]
+    case 5: {
+      const dix = texNombre(total / 10, 0)
+      return [
+        `$10\\,\\%$ de $${t}$, c'est $${t} \\div 10 = ${dix}$.<br>${pourcent}, c'est la moitié de $10\\,\\%$ : $${dix} \\div 2 = ${r}$.`,
+        resultat,
+      ]
+    }
+    default: {
+      if (taux % 10 === 0) {
+        const dix = texNombre(total / 10, 0)
+        return [
+          `$10\\,\\%$ de $${t}$, c'est $${t} \\div 10 = ${dix}$.<br>${pourcent}, c'est $${taux / 10}$ fois plus : $${dix} \\times ${taux / 10} = ${r}$.`,
+          resultat,
+        ]
+      }
+      const un = texNombre(total / 100, 0)
+      return [
+        `$1\\,\\%$ de $${t}$, c'est $${t} \\div 100 = ${un}$.<br>${pourcent}, c'est $${taux}$ fois plus : $${un} \\times ${taux} = ${r}$.`,
+        resultat,
+      ]
+    }
+  }
+}
+
+/**
+ * Démarche de calcul mental pour la correction « Sans calculatrice ».
+ * Le résultat final est laissé à la phrase de conclusion de la situation.
+ */
+function correctionDeTete(
+  typeDeQuestion: TypeDeQuestion,
+  taux: number,
+  total: number,
+  sous: number,
+  complement: boolean,
+): string {
+  switch (typeDeQuestion) {
+    case 'sous-population': {
+      const [demarche, resultat] = pourcentageDeTete(taux, total)
+      if (!complement) return demarche
+      return `${demarche}<br>Ce sont les personnes mineures ; les personnes majeures sont les autres : $${texNombre(total, 0)} - ${texNombre(resultat, 0)} = ${texNombre(total - resultat, 0)}$.`
+    }
+    case 'population-totale': {
+      const facteur = 100 / taux
+      const detail =
+        taux === 5
+          ? `, c'est-à-dire multiplier par $2$ puis par $10$, soit $${texNombre(sous, 0)} \\times 2 = ${texNombre(2 * sous, 0)}$ et $${texNombre(2 * sous, 0)} \\times 10 = ${texNombre(total, 0)}$`
+          : `, soit $${texNombre(sous, 0)} \\times ${facteur} = ${texNombre(total, 0)}$`
+      return `$${texNombre(sous, 0)}$ représente $${taux}\\,\\%$ du total. <br>Comme $${taux}\\,\\% \\times ${facteur} = 100\\,\\%$, il suffit de multiplier par $${facteur}$${detail}.`
+    }
+    case 'proportion':
+    default: {
+      const s = texNombre(sous, 0)
+      const t = texNombre(total, 0)
+      let calcul: string
+      if (total === 100) {
+        calcul = `$\\dfrac{${s}}{100}$`
+      } else if (total % 100 === 0 && total / 100 <= 10) {
+        const k = total / 100
+        calcul = `$\\dfrac{${s}}{${t}} = \\dfrac{${s} \\div ${k}}{${t} \\div ${k}} = \\dfrac{${taux}}{100}$`
+      } else if (100 % total === 0) {
+        const k = 100 / total
+        calcul = `$\\dfrac{${s}}{${t}} = \\dfrac{${s} \\times ${k}}{${t} \\times ${k}} = \\dfrac{${taux}}{100}$`
+      } else {
+        // On reconnaît d'abord une fraction simple, puis on se ramène à un dénominateur 100
+        const d = pgcd(sous, total)
+        const a = sous / d
+        const b = total / d
+        const k = 100 / b
+        const dTex = texNombre(d, 0)
+        calcul = `$\\dfrac{${s}}{${t}} = \\dfrac{${a} \\times ${dTex}}{${b} \\times ${dTex}} = \\dfrac{${a}}{${b}}`
+        calcul +=
+          k === 1
+            ? '$'
+            : ` = \\dfrac{${a} \\times ${k}}{${b} \\times ${k}} = \\dfrac{${taux}}{100}$`
+      }
+      return `La proportion est donnée par le quotient de l'effectif de la sous-population par l'effectif total.<br> On l'écrit sous la forme d'une fraction de dénominateur $100$ :<br>${calcul}.`
+    }
+  }
+}
+
 export default class Proportions extends Exercice {
   constructor() {
     super()
@@ -47,17 +207,18 @@ export default class Proportions extends Exercice {
       "1 : Déterminer l'effectif d'une sous-population \n2 : Calculer une proportion en pourcentage\n3 : Calculer l'effectif de la population totale \n4 : Mélange",
     ]
 
+    this.besoinFormulaire2CaseACocher = ['Sans calculatrice', false]
+
     this.nbQuestions = 2
 
     this.sup = 4 // type de questions mettre 4
+    this.sup2 = false
 
     this.spacingCorr = 2
   }
 
   nouvelleVersion() {
-    let typesDeQuestionsDisponibles: (
-      'sous-population' | 'proportion' | 'population-totale'
-    )[] = []
+    let typesDeQuestionsDisponibles: TypeDeQuestion[] = []
     if (this.sup === 1) {
       typesDeQuestionsDisponibles = ['sous-population']
     }
@@ -81,7 +242,7 @@ export default class Proportions extends Exercice {
         'population-totale',
       ]
     }
-    const situationsDisponibles = [
+    const situationsDisponibles: Situation[] = [
       'spectacle',
       'cadeau',
       'réserve',
@@ -107,26 +268,34 @@ export default class Proportions extends Exercice {
       let texteCorr = ''
       let reponse: number = 0
       let paramAMC
+      let complement = false // question portant sur le complémentaire (personnes majeures)
       switch (typesDeSituations[i]) {
         case 'spectacle':
           // Le nombre de spectateurs doit être entier
           // Multiple de 50 et multiple de 2%
           // Multiple de 20 et multiple de 5%
           // Multiple de 100 et n%
-          switch (randint(1, 3)) {
-            case 1:
-              totale = 50 * randint(2, 60)
-              taux = 2 * randint(3, 30)
-              break
-            case 2:
-              totale = 20 * randint(5, 150)
-              taux = 5 * randint(1, 16)
-              break
-            case 3:
-            default:
-              totale = 100 * randint(1, 30)
-              taux = randint(10, 80)
-              break
+          if (this.sup2) {
+            ;[totale, taux] = valeursSansCalculatrice(
+              'spectacle',
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                totale = 50 * randint(2, 60)
+                taux = 2 * randint(3, 30)
+                break
+              case 2:
+                totale = 20 * randint(5, 150)
+                taux = 5 * randint(1, 16)
+                break
+              case 3:
+              default:
+                totale = 100 * randint(1, 30)
+                taux = randint(10, 80)
+                break
+            }
           }
           p = taux / 100
           sous = p * totale
@@ -143,6 +312,7 @@ export default class Proportions extends Exercice {
                   break
                 case 2:
                   texte = `$${texNombre(totale, 0)}$ personnes assistent à un concert. $${taux}~\\%$ ont moins de $18$ ans. <br>Calculer le nombre de personnes majeures dans le public.`
+                  complement = true
                   texteCorr = `On commence par déterminer la proportion de personnes majeures avec ce calcul : <br> $100-${taux}=${100 - taux}$.<br>`
                   texteCorr +=
                     'Pour appliquer une proportion à une valeur, on multiplie celle-ci par la proportion $p$.'
@@ -178,20 +348,27 @@ export default class Proportions extends Exercice {
           }
           break
         case 'cadeau':
-          switch (randint(1, 3)) {
-            case 1:
-              totale = 50 * randint(1, 3, 2)
-              taux = 2 * randint(3, 17)
-              break
-            case 2:
-              totale = 20 * randint(2, 8, 5)
-              taux = 5 * randint(2, 7)
-              break
-            case 3:
-            default:
-              totale = 10 * randint(1, 15)
-              taux = 10 * randint(1, 3)
-              break
+          if (this.sup2) {
+            ;[totale, taux] = valeursSansCalculatrice(
+              'cadeau',
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                totale = 50 * randint(1, 3, 2)
+                taux = 2 * randint(3, 17)
+                break
+              case 2:
+                totale = 20 * randint(2, 8, 5)
+                taux = 5 * randint(2, 7)
+                break
+              case 3:
+              default:
+                totale = 10 * randint(1, 15)
+                taux = 10 * randint(1, 3)
+                break
+            }
           }
           p = taux / 100
           sous = p * totale
@@ -257,20 +434,27 @@ export default class Proportions extends Exercice {
           }
           break
         case 'réserve':
-          switch (randint(1, 3)) {
-            case 1:
-              totale = 50 * randint(10, 60)
-              taux = 2 * randint(3, 20)
-              break
-            case 2:
-              totale = 20 * randint(25, 150)
-              taux = 5 * randint(1, 9)
-              break
-            case 3:
-            default:
-              totale = 100 * randint(5, 30)
-              taux = randint(8, 40)
-              break
+          if (this.sup2) {
+            ;[totale, taux] = valeursSansCalculatrice(
+              'réserve',
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                totale = 50 * randint(10, 60)
+                taux = 2 * randint(3, 20)
+                break
+              case 2:
+                totale = 20 * randint(25, 150)
+                taux = 5 * randint(1, 9)
+                break
+              case 3:
+              default:
+                totale = 100 * randint(5, 30)
+                taux = randint(8, 40)
+                break
+            }
           }
           p = taux / 100
           sous = p * totale
@@ -318,20 +502,27 @@ export default class Proportions extends Exercice {
 
         case 'entreprise':
         default:
-          switch (randint(1, 3)) {
-            case 1:
-              totale = 50 * randint(1, 9, 2)
-              taux = 2 * randint(3, 17)
-              break
-            case 2:
-              totale = 50 * randint(1, 9, 2)
-              taux = 2 * randint(3, 29)
-              break
-            case 3:
-            default:
-              totale = 10 * randint(3, 25)
-              taux = 10 * randint(1, 4)
-              break
+          if (this.sup2) {
+            ;[totale, taux] = valeursSansCalculatrice(
+              'entreprise',
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                totale = 50 * randint(1, 9, 2)
+                taux = 2 * randint(3, 17)
+                break
+              case 2:
+                totale = 50 * randint(1, 9, 2)
+                taux = 2 * randint(3, 29)
+                break
+              case 3:
+              default:
+                totale = 10 * randint(3, 25)
+                taux = 10 * randint(1, 4)
+                break
+            }
           }
           p = taux / 100
           sous = p * totale
@@ -368,6 +559,21 @@ export default class Proportions extends Exercice {
               break
           }
           break
+      }
+      if (this.sup2) {
+        // Correction « Sans calculatrice » : démarche de calcul mental, puis la conclusion de la situation
+        let conclusion = texteCorr.slice(texteCorr.lastIndexOf('<br>'))
+        if (listeTypeDeQuestions[i] === 'proportion') {
+          conclusion = conclusion.replace(/^<br>\$[^$]*\$\. /, '<br>')
+        }
+        texteCorr =
+          correctionDeTete(
+            listeTypeDeQuestions[i],
+            taux,
+            totale,
+            sous,
+            complement,
+          ) + conclusion
       }
       handleAnswers(this, i, { reponse: { value: reponse.toString() } })
       if (context.isAmc) {
