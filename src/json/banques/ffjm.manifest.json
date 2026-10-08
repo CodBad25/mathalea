@@ -14,7 +14,7 @@
     {
       "id": "balai-furieux",
       "titre": "Au balai furieux",
-      "categorie": "Chronologie",
+      "categorie": "Chrono-logique",
       "tags": [
         "durée",
         "2005Q4"
@@ -30,7 +30,7 @@
     {
       "id": "bonne-cuisson",
       "titre": "Bonne cuisson",
-      "categorie": "Chronologie",
+      "categorie": "Chrono-logique",
       "tags": [
         "durée",
         "minimum",
@@ -47,7 +47,7 @@
     {
       "id": "decalage-horaire",
       "titre": "Décalage horaire",
-      "categorie": "Chronologie",
+      "categorie": "Chrono-logique",
       "tags": [
         "durée",
         "fuseau horaire",
@@ -65,7 +65,7 @@
     {
       "id": "demain",
       "titre": "Demain",
-      "categorie": "Chronologie",
+      "categorie": "Chrono-logique",
       "tags": [
         "énigme",
         "demain",
@@ -83,7 +83,7 @@
     {
       "id": "mon-anniversaire",
       "titre": "Mon anniversaire",
-      "categorie": "Chronologie",
+      "categorie": "Chrono-logique",
       "tags": [
         "équation",
         "âge",
@@ -1272,6 +1272,24 @@
       "typCor": "typ/courses_cor.typ",
       "tex": "tex/courses.tex",
       "texCor": "tex/courses_cor.tex"
+    },
+    {
+      "id": "la_fraction",
+      "titre": "La fraction",
+      "categorie": "Méli-Mélo",
+      "tags": [
+        "fraction",
+        "ensemble",
+        "simplification",
+        "2000Q12"
+      ],
+      "etoiles": 4,
+      "png": "png/la_fraction.png",
+      "pngCor": "png/la_fraction_cor.png",
+      "typ": "typ/la_fraction.typ",
+      "typCor": "typ/la_fraction_cor.typ",
+      "tex": "tex/la_fraction.tex",
+      "texCor": "tex/la_fraction_cor.tex"
     },
     {
       "id": "petite-grenouille",
