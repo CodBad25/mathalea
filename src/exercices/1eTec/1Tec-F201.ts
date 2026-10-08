@@ -18,7 +18,7 @@ export const titre = 'Associer une expression algébrique à une parabole'
 export const uuid = '203cf'
 
 export const refs = {
-  'fr-fr': ['1Tec-F201'],
+  'fr-fr': ['1Tec-F25'],
   'fr-ch': [],
 }
 
