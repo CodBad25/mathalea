@@ -261,12 +261,27 @@ const quotient = function (a: unknown, b: unknown) {
 }
 
 export type CoeffType = NombreType | [number, boolean]
+
+/** Convertir un coefficient sans arrondi ni limitation arbitraire du dénominateur. */
+function exactFraction(value: NombreType): FractionEtendue {
+  if (value instanceof FractionEtendue) return value.simplifie()
+  const decimal = value instanceof Decimal ? value : new Decimal(value)
+  if (!decimal.isFinite()) {
+    throw new RangeError('Un coefficient rationnel doit être fini.')
+  }
+  const [num, den] = decimal.toFraction().map(Number)
+  if (!Number.isSafeInteger(num) || !Number.isSafeInteger(den)) {
+    throw new RangeError(
+      'Le numérateur et le dénominateur doivent être des entiers sûrs.',
+    )
+  }
+  return new FractionEtendue(num, den).simplifie()
+}
 /**
- * Avertissement ! pour l'instant la classe ne gère pas les coefficients fractionnaires !
- * @param {boolean} useFraction laissé à false pour l'instant (les coefficients fractionnaires ne sont pas encore utilisé et
- * @param {boolean} useDecimal useFraction a prévalence sur useDecimal pour avoir des décimaux, il faut que useFraction soit false (valeur par défaut donc c'est bon)
- * le code n'est pas dépourvu de problème si on utilise des coefficients fractionnaires !
- * rendant l'expression mathématique inutilisable avec Algebrite et aussi dans la définition de la fonction x=>f(x)
+ * Les méthodes historiques peuvent convertir des coefficients fractionnaires en nombres.
+ * Pour le calcul rationnel exact, utiliser fromRationalCoefficients(), multiplyExact() et evaluateExact().
+ * @param {boolean} useFraction Conserver les coefficients FractionEtendue fournis au constructeur.
+ * @param {boolean} useDecimal Conserver les coefficients Decimal ; useFraction a prévalence sur useDecimal.
  * @param {boolean} rand Donner true si on veut un polynôme aléatoire
  * @param {number} deg à fournir >=0 en plus de rand === true pour fixer le degré
  * @param coeffs liste de coefficients par ordre de degré croissant OU liste de couples [valeurMax, relatif?]
@@ -282,6 +297,56 @@ export class Polynome {
   useFraction: boolean
   useDecimal: boolean
   letter: string
+
+  /** Construire un polynôme rationnel réduit, sans modifier le tableau fourni. */
+  static fromRationalCoefficients(
+    coeffs: NombreType[],
+    letter = 'x',
+  ): Polynome {
+    const values =
+      coeffs.length > 0
+        ? coeffs.map(exactFraction)
+        : [new FractionEtendue(0, 1)]
+    while (values.length > 1 && values.at(-1)!.num === 0) values.pop()
+    return new Polynome({ coeffs: values, useFraction: true, letter })
+  }
+
+  /** Copier en coefficients rationnels et retirer les coefficients dominants nuls. */
+  toRational(): Polynome {
+    return Polynome.fromRationalCoefficients(this.monomes, this.letter)
+  }
+
+  /** Multiplier exactement par un scalaire ou un polynôme, en conservant des fractions. */
+  multiplyExact(q: NombreType | Polynome): Polynome {
+    const left = this.monomes.map(exactFraction)
+    const right =
+      q instanceof Polynome ? q.monomes.map(exactFraction) : [exactFraction(q)]
+    const coeffs = Array.from(
+      { length: Math.max(1, left.length + right.length - 1) },
+      () => new FractionEtendue(0, 1),
+    )
+    for (const [i, a] of left.entries()) {
+      for (const [j, b] of right.entries()) {
+        coeffs[i + j] = coeffs[i + j]
+          .sommeFraction(a.produitFraction(b))
+          .simplifie()
+      }
+    }
+    return Polynome.fromRationalCoefficients(coeffs, this.letter)
+  }
+
+  /** Évaluer par Horner en arithmétique rationnelle, sans conversion en flottant. */
+  evaluateExact(x: NombreType): FractionEtendue {
+    const point = exactFraction(x)
+    return this.monomes.reduceRight(
+      (value: FractionEtendue, c) =>
+        value
+          .produitFraction(point)
+          .sommeFraction(exactFraction(c))
+          .simplifie(),
+      new FractionEtendue(0, 1),
+    )
+  }
 
   constructor({
     rand = false,

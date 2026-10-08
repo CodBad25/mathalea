@@ -37,6 +37,48 @@ affiche les produits de départ, dégage des diviseurs communs strictement infé
 représenter la fraction sur laquelle la méthode est appelée. Elle complète
 `texSimplificationAvecEtapes()` sans modifier ses deux méthodes historiques.
 
+## `Polynome` et calcul rationnel exact
+
+`Polynome` est définie dans `src/lib/mathFonctions/Polynome.ts`. Les coefficients
+sont rangés par degré croissant : `[1, 2, 3]` représente $3x^2+2x+1$.
+`add()`, `multiply()`, `derivee()` et `primitive0()` sont les opérations
+historiques ; `image()` et `fonction()` renvoient une valeur numérique.
+La multiplication historique peut convertir des fractions en nombres pendant
+l'accumulation des coefficients. Pour un résultat rationnel exact, utiliser
+les méthodes explicites suivantes.
+
+| Méthode | Contrat |
+| --- | --- |
+| `Polynome.fromRationalCoefficients(coeffs, letter = 'x')` | Construire avec des `FractionEtendue` simplifiées et retirer les coefficients dominants exactement nuls. Un tableau vide représente le polynôme nul de degré zéro. |
+| `p.toRational()` | Créer une copie normalisée à coefficients rationnels, en conservant la variable de `p`. |
+| `p.multiplyExact(q)` | Multiplier par un scalaire ou un polynôme en arithmétique rationnelle ; renvoyer un polynôme normalisé avec la variable de `p`. |
+| `p.evaluateExact(x)` | Évaluer par Horner en une borne rationnelle et renvoyer une `FractionEtendue`, sans arrondi intermédiaire. |
+
+Ces méthodes acceptent des `number`, des `Decimal` et des `FractionEtendue`.
+Elles ne modifient ni les tableaux fournis ni les polynômes de départ.
+La conversion d'un nombre ou d'un `Decimal` n'impose aucune borne artificielle
+au dénominateur : elle rejette les valeurs non finies et les numérateurs ou
+dénominateurs qui dépassent les entiers sûrs de JavaScript. Pour une fraction
+comme $1/3$, fournir une `FractionEtendue` plutôt que le flottant `1 / 3`.
+Les calculs restent soumis à la capacité entière de `FractionEtendue`.
+
+```ts
+const p = Polynome.fromRationalCoefficients([
+  0,
+  new FractionEtendue(2, 3),
+])
+const carre = p.multiplyExact(p) // 4x²/9.
+const valeur = carre.evaluateExact(3) // FractionEtendue(4, 1).
+const primitive = carre.primitive0()
+const integrale = primitive.evaluateExact(3)
+  .differenceFraction(primitive.evaluateExact(0))
+  .simplifie()
+```
+
+Les cas rationnels, décimaux, signés et nuls sont testés dans
+`tests/unit/polynome.test.ts`. L'exercice `src/exercices/ch/4mInt-9.ts` utilise
+cette API pour les volumes de révolution.
+
 ## `Complexe`
 
 `Complexe` est définie dans `src/lib/mathFonctions/Complexe.ts`. La classe encapsule les opérations usuelles sur les nombres complexes et leur affichage : formes algébriques, modules, arguments, opérations, textes symboliques.
