@@ -217,6 +217,12 @@ export function updateGlobalOptionsInURL(url: URL) {
   } else {
     url.searchParams.delete('title')
     url.searchParams.delete('es')
+    // Choix « Numérique » de la conception de document : tous les exercices
+    // en interactif, y compris ceux ajoutés ensuite (dans la vue élève, ce
+    // réglage est porté par `es`)
+    if (options.setInteractive === '1' && !options.recorder) {
+      url.searchParams.append('numerique', '1')
+    }
     url.searchParams.delete('iframe')
     url.searchParams.delete('answers')
     url.searchParams.delete('recorder')

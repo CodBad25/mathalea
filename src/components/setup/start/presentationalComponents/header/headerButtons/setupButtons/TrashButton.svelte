@@ -1,11 +1,11 @@
 <script lang="ts">
-  import ButtonIconTooltip from '../../../../../../shared/forms/ButtonIconTooltip.svelte'
+  import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   export let trash: () => void
 </script>
 
-<ButtonIconTooltip
-  icon="bx-trash text-3xl"
+<ToolbarIconButton
+  icon="bx-trash"
   tooltip="Supprimer tous les exercices"
   on:click={trash}
 />

@@ -12,6 +12,12 @@ La création d'un composant suit la
 
 Un exercice peut définir `interactifObligatoire = true` lorsqu'il ne possède pas de version HTML non interactive. Dans les vues HTML, ce drapeau impose `interactif = true`, remplace un éventuel paramètre URL `i=0` par `i=1` et masque le bouton de bascule. Les exports papier restent libres de désactiver l'interactivité pour leur rendu.
 
+## Choix Papier / Numérique de la conception de document
+
+Le sélecteur Papier / Numérique de la barre d'outils (`FormatToggle.svelte`) appelle `setAllInteractive()` de `Start.svelte` : il fixe `globalOptions.setInteractive` (`'1'` en numérique, `'0'` en papier) et rend interactifs, ou non, tous les exercices de la liste ainsi que ceux ajoutés ensuite.
+
+Le choix numérique est porté dans l'URL de la vue prof par `numerique=1` (hors vues élève, où `es` porte déjà `setInteractive`, et hors intégrations `recorder`). Il est aussi mémorisé dans le `localStorage` (clé `mathalea-format-numerique`, `src/lib/stores/storage.ts`) : une nouvelle visite sans exercice dans l'URL reprend le dernier choix, alors qu'un lien avec des exercices fait foi.
+
 ## Interactivité dans la vue Course aux nombres
 
 La vue Course aux nombres (`src/components/display/can/Can.svelte`) impose son propre réglage d'interactivité à tous les exercices de la liste, sans tenir compte des réglages individuels (`i` dans l'URL) : le paramètre d'URL `canI` (`canOptions.isInteractive`) fixe `globalOptions.setInteractive` puis `exercice.interactif` pour chaque exercice, avant le découpage en questions.
