@@ -2061,7 +2061,10 @@ function latexSegmentToTypst(
   // les `protect*Containers` pour repérer figures/QCM/tableaux/KaTeX) et se
   // retrouver ré-échappé en `&amp;` avant d'atteindre ce segment : aucun texte
   // LaTeX destiné à ce convertisseur ne contient légitimement `&amp;`.
-  tex = tex.replace(/&amp;/g, '&')
+  // Même chose pour `>` et `<`, ré-échappés en `&gt;`/`&lt;` : sans cela, les
+  // modificateurs de colonnes `>{...}` d'un `tabularx` ne sont plus reconnus
+  // et les traits verticaux du tableau disparaissent.
+  tex = tex.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&')
   const table = latexVisualTableToTypst(tex, figures)
   if (table != null) return table
   const converted = latexMathToTypst(tex)
