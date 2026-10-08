@@ -1,27 +1,27 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid f9d32 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 07/10/2026 (commit c93cc0ca5).
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 import { texNombre } from '../../lib/outils/texNombre'
 
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '07/10/2026'
-
-export const uuid = '116e8'
+export const uuid = 'f9d32'
 export const refs = {
-  'fr-fr': ['1A-E03-3', '2A-E3-3'],
-  'fr-ch': ['9QCM-21', '10QCM-45'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
 export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const titre = "Calculer un taux d'évolution particulier"
 export const dateDePublication = '19/01/2026'
 
-export default class TauxEvolution extends ExerciceQcmACourt {
-  // Pourcentage attendu au dernier tirage, utilisé par la saisie courte
-  private pourcentage = 100
-
+export default class TauxEvolutionOld extends ExerciceQcmA {
   private appliquerLesValeurs(
     typeEvolution: string,
     pourcentageBonneReponse: number,
@@ -78,7 +78,6 @@ export default class TauxEvolution extends ExerciceQcmACourt {
     }
 
     const params = parametres[typeEvolution]
-    this.pourcentage = pourcentageBonneReponse
 
     this.enonce = `${params.phraseEnonce}. Cela signifie que le prix a ${params.typeAction} de :`
 
@@ -140,11 +139,9 @@ export default class TauxEvolution extends ExerciceQcmACourt {
   }
 
   versionOriginale: () => void = () => {
-    this.pourcentage = 100
     this.enonce = `Un prix a doublé. Cela signifie que le prix a augmenté de :`
 
-    // La bonne réponse doit être la première proposition
-    this.reponses = ['$100\\,\\%$', '$50\\,\\%$', '$150\\,\\%$', '$200\\,\\%$']
+    this.reponses = ['$50\\,\\%$', '$100\\,\\%$', '$150\\,\\%$', '$200\\,\\%$']
 
     this.correction = `Si un prix a doublé, cela signifie que le coefficient multiplicateur est $CM = 2$.<br>
     Le taux d'évolution $T$  vérifie : $T = CM - 1 = 2 - 1 = 1 = 100\\,\\%$.<br>
@@ -167,14 +164,5 @@ export default class TauxEvolution extends ExerciceQcmACourt {
 
   constructor() {
     super()
-    this.options.compact = true // moins d'espace avant les propositions du QCM
-    // Version sans QCM : l'élève donne le pourcentage d'augmentation ou de diminution
-    this.enonceCourt = () =>
-      this.enonce.replace(
-        /Cela signifie que le prix a (augmenté|diminué) de :/,
-        'De quel pourcentage le prix a-t-il $1 ?',
-      )
-    this.reponseCourte = () => String(this.pourcentage)
-    this.optionsChampReponseCourte = { texteApres: '$\\,\\%$' }
   }
 }

@@ -1,23 +1,27 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid c8369 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 07/10/2026 (commit b7c3576a0).
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
-import { abs, arrondi } from '../../lib/outils/nombres'
+import { abs } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import { nombreElementsDifferents } from '../ExerciceQcm'
-import ExerciceQcmACourt from '../ExerciceQcmACourt'
+// import ExerciceQcmA from '../../ExerciceQcmA'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '07/10/2026'
-
-export const uuid = '9262a'
+export const uuid = 'c8369'
 export const refs = {
-  'fr-fr': ['1A-E04-1'],
-  'fr-ch': ['10QCM-46', '11QCM-48'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
 export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const titre = 'Déterminer une évolution globale'
 export const dateDePublication = '10/07/2025'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
@@ -26,11 +30,7 @@ export const dateDePublication = '10/07/2025'
  * @author Stéphane Guyon
  *
  */
-export default class Automatismes extends ExerciceQcmACourt {
-  // Données du dernier tirage, utilisées par la saisie courte
-  private taux = 0
-  private correctionSaisie = ''
-
+export default class AutomatismesOld extends ExerciceQcmA {
   // Ceci est la fonction qui s'occupe d'écrire l'énoncé, la correction et les réponses
   // Elle factorise le code qui serait dupliqué dans versionAleatoire et versionOriginale
   private appliquerLesValeurs(p1: number, p2: number): void {
@@ -77,8 +77,6 @@ export default class Automatismes extends ExerciceQcmACourt {
       this.correction += ` et  $CM_2 = 1 - \\dfrac{${abs(p2)}}{100}=${texNombre((100 + p2) / 100)}$.<br>`
     }
     this.correction += ` Le coefficient multiplicateur global est : <br> $CM = CM_1 \\times CM_2 = ${texNombre((100 + p1) / 100)} \\times ${texNombre((100 + p2) / 100)} = ${texNombre((100 + p) / 100)}$ `
-    this.taux = arrondi(p, 2)
-    this.correctionSaisie = `${this.correction}<br>Le taux d'évolution global est donc $t = CM - 1 = ${texNombre((100 + p) / 100)} - 1 = ${texNombre(this.taux / 100)}$, soit $t=${miseEnEvidence(texNombre(this.taux))}\\,\\%$ : c'est une ${evo} de $${texNombre(abs(p))}\\,\\%$.`
     this.correction += `<br>Or, multiplier par $${texNombre((100 + p) / 100)}$ revient à avoir ${texteEnCouleurEtGras('une')} ${texteEnCouleurEtGras(evo)} ${texteEnCouleurEtGras('de')} $${miseEnEvidence(`${texNombre(abs(p))}\\,\\%`)}$.`
     this.reponse = ` ${p} %`
   }
@@ -111,19 +109,6 @@ export default class Automatismes extends ExerciceQcmACourt {
   constructor() {
     super()
     this.options.vertical = true
-    this.options.compact = true // moins d'espace avant les propositions du QCM
-    // Version sans QCM : l'élève donne le taux d'évolution global (signé) en pourcentage
-    this.enonceCourt = () =>
-      this.enonce.replace(
-        /\s*équivaut à :$/,
-        ".<br>Quel est le taux d'évolution global ?",
-      )
-    this.reponseCourte = () => String(this.taux)
-    this.optionsChampReponseCourte = {
-      texteAvant: '$t=$',
-      texteApres: '$\\,\\%$',
-    }
-    this.correctionCourte = () => this.correctionSaisie
     this.versionAleatoire()
   }
 }
